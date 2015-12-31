@@ -12,9 +12,9 @@ body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 #resistor { display: flex; text-align: center }
 #resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0}
 #resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 }
-#resistor > .stripe + .stripe { border-left: 1px solid white }
+/*#resistor > .stripe + .stripe { border-left: 1px solid #AA967B } */
 #resistor .label, #input > * {
-	background-color: black; color:white ; display:inline-block;
+	background-color: black; color: #AA967B ; display:inline-block;
 	font-size: x-large;
 	padding: 2rem 0 2rem 0;
 	width: 100%;
@@ -44,7 +44,7 @@ body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 }
 
 #input #inputdata { border: 1px solid black ; transition: 0.2s ease-in-out; }
-#input.invalid #inputdata{ border: 1px solid white }
+#input.invalid #inputdata{ border: 1px solid #AA967B }
 
 #input > * { margin: auto; pointer-events: all }
 #inputdata > * { font-size: 4rem }
@@ -189,8 +189,8 @@ function renderSi(n, mul) {
 	var unit = unit[0];
 
 	return unit.length > 2 ?
-		n + " " + unit:
-		n + "" + unit;
+		Math.round(n) + " " + unit:
+		Math.round(n) + "" + unit;
 }
 
 function Resistor(resistance, tolerance) {
@@ -355,6 +355,7 @@ function updateResistor(r, keepText) {
 				.classed("label", true)
 				.attr("contentEditable", true)
 				.text( function(d) { return d } )
+				
 				.on("keyup", function() {
 
 	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe .label")[0].map(function(v) { return v.innerText }));
