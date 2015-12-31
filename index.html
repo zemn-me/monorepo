@@ -362,7 +362,7 @@ function updateResistor(r, keepText, keepColours) {
 				.text( function(d) { return d } )
 				.on("keyup", function() {
 
-	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe .label")[0].map(function(v) { return v.innerText.toLowerCase() }));
+	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) { return v.innerText.toLowerCase() }));
 	if (nR.invalid()) {
 		input.className = "invalid";
 	} else {
