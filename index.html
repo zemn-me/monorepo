@@ -1,0 +1,393 @@
+<!DOCTYPE HTML>
+<head>
+<title>Resistor colours</title>
+<meta charset="utf8">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+<style type="text/css">
+body { font-family: 'Open Sans', sans-serif;; }
+body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
+* { transition: all 1s ease-in-out }
+#resistor { display: flex; text-align: center }
+#resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0}
+#resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 }
+#resistor > .stripe + .stripe { border-left: 1px solid white }
+#resistor .label, #input > * {
+	background-color: black; color:white ; display:inline-block;
+	font-size: xx-large;
+	padding: 0.2em;
+	margin: 0.2em;
+}
+
+#resistance:after {
+	content: "Ω";
+}
+
+#tolerance:before {
+	content: "(±";
+}
+
+#tolerance:after {
+	content: "%)";
+}
+
+#input {
+	position:fixed;
+	text-align:center;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	display:flex;
+	pointer-events: none;
+}
+
+#input #inputdata { border: 1px solid black ; transition: 0.2s ease-in-out; }
+#input.invalid #inputdata{ border: 1px solid white }
+
+#input > * { margin: auto; pointer-events: all }
+#inputdata > * { font-size: 4rem }
+#tolerance { font-size: 100%; vertical-align: super }
+</style>
+</head>
+<body>
+	<div id="resistor">
+
+	</div>
+
+	<div id="input">
+		<div id="inputdata">
+		<span id="resistance" contentEditable="true">Please enable javascript</span> <span id="tolerance" contentEditable="true">thanks :^)</span>
+		</div>
+	</div>
+<!--VE.NO.MS-->
+	<script>
+function invertMap(m) {
+	var o = {};
+
+	var set = function(k, v) {
+		if (k in o) {
+			if (o[k] instanceof Array) {
+				o[k].push(v)
+			} else o[k] = [o[k], v];
+		} else o[k] = v;
+	}
+	for (var k in m)
+		if (m[k] instanceof Array) {
+			for (var i in m[k])
+				set(m[k][i], k)
+		} else set(m[k], k);
+
+	return o;
+}
+
+var siMultipliers = {
+	24: ["Y", "yotta"],
+	21: ["Z", "zetta"],
+	18: ["E", "exa"],
+	15: ["P", "peta"],
+	12: ["T", "tera"],
+	9: ["G", "giga"],
+	6: ["M", "mega"],
+	3: ["k", "kilo"],
+	2: ["h", "hecto"],
+	1: ["da", "deca"],
+	0: [""],
+
+	"-1": ["d", "deci"],
+	"-2": ["c", "centi"],
+	"-3": ["m", "mili"],
+	"-6": ["μ", "u", "micro"],
+	"-9": ["n", "nano"],
+	"-12": ["p", "pico"],
+	"-15": ["f", "femto"],
+	"-18": ["a", "atto"],
+	"-21": ["z", "zepto"],
+	"-24": ["y", "yocto"]
+};
+
+//since nobody calls 10ohm 1da ohm??
+var realisticSiMultipliers =
+	[0, 34, 21, 18, 15, 12, 9, 6, 3, -3, -6, -9, -12, -15, -18, -21, -24];
+
+function subset(ks, o) {
+	var o2 = {};
+	for (var i in ks) o2[ks[i]] = o[ks[i]];
+
+	return o2;
+};
+
+realisticSiMultipliers = subset(realisticSiMultipliers,
+	siMultipliers);
+
+
+
+var reverseSiMultipliers = invertMap(siMultipliers);
+
+function scientificNotation(n) {
+	var e = 0;
+	var k = 0;
+	while( (k = n / Math.pow(10, e)) > 1 )
+		e+=1
+	e-=1
+	k *= 10
+
+
+	return [k, e];
+}
+
+function renderScientificSi(n) {
+	return renderSi.apply(0, scientificNotation(n));
+}
+
+function parseSi(s) {
+	var g = /([\d\.]+) ?(.*)/.exec(s);
+	if (g == null) return undefined;
+
+	var n = g[1], unit = g[2];
+
+	var unit = reverseSiMultipliers[unit];
+	if (unit == undefined) return undefined;
+
+	return n * Math.pow(10, unit);
+}
+
+function renderSi(n, mul) {
+	// find the _closest_ unit
+	var closest = Object.keys(realisticSiMultipliers)
+		.map(function(v){
+			return -(v - mul)
+		}).filter (function(v){
+			return !(v < 0)
+		});
+
+	var closest = Math.min.apply(0, closest);
+
+	if (closest == undefined)
+		throw "this probably shouldn't happen";
+
+	if (closest < 0)
+		throw "this should never happen " + closest;
+
+	// we recover the actual index from
+	// the difference by adding mul back again
+	var i = (-closest) + mul;
+
+	var unit = siMultipliers[i];
+
+
+	if (unit == undefined || unit[0] == undefined)
+		throw "this should never happen (" + (i) + ")";
+
+	// if we didn't manage to find a power that
+	// worked exactly, we need to add the difference to
+	// the significant figures
+	n *= Math.pow(10, closest);
+
+
+	var unit = unit[0];
+
+	return unit.length > 2 ?
+		n + " " + unit:
+		n + "" + unit;
+}
+
+function Resistor(resistance, tolerance) {
+	this.resistance = resistance;
+	this.tolerance = tolerance;
+	this.multiplier = 0;
+
+	if (resistance == 0) return;
+	switch(this.resistance < 1){
+	case true:
+		while((this.resistance % (Math.pow(10, this.multiplier -= 1))) != 0 );
+		break;
+	case false:
+		while((this.resistance % (Math.pow(10, this.multiplier += 1))) == 0 );
+		this.multiplier -= 1;
+		break;
+	default:
+		throw "this should not happen";
+	}
+
+}
+
+Resistor.resistanceFromBands = function(vbands) {
+	var bands = Array.prototype.slice.apply(arguments);
+	var multiplier = Resistor.prototype.reverseNumericColorMap[bands.pop()];
+	var fail = false;
+
+	if (multiplier == undefined) return undefined;
+
+	for (var i in bands) 
+		if ((bands[i] = Resistor.prototype.reverseNumericColorMap[bands[i]]) == undefined)
+			return undefined;
+
+	return Math.pow(10,multiplier) *  bands.join("");
+}
+
+Resistor.fromBands = function(vbands) {
+	var bands = Array.prototype.slice.apply(arguments);
+	var tolerance = Resistor.prototype.reverseToleranceMap[bands.pop()];
+
+	var resistance = Resistor.resistanceFromBands.apply(0,bands);
+
+	return new Resistor(resistance, tolerance);
+}
+
+Resistor.prototype.toleranceMap = {
+	5: "gold",
+	10: "silver",
+	20 : "transparent"
+}
+
+Resistor.prototype.reverseToleranceMap =
+	invertMap(Resistor.prototype.toleranceMap);
+
+Resistor.prototype.numericColorMap = {
+	0: "black",
+	1: "brown",
+	2: "red",
+	3: "orange",
+	4: "yellow",
+	5: "green",
+	6: "blue",
+	7: "violet",
+	8: "gray",
+	9: "white",	
+
+	"-1": "gold",
+	"-2": "silver"
+};
+
+var niceColours = {
+	"navy": "#001F3F",
+	"blue": "#0074D9",
+	"aqua": "#7FDBFF",
+	"teal": "#39CCCC",
+	"olive": "#3D9970",
+	"green": "#2ECC40",
+	"lime": "#01FF70",
+	"yellow": "#FFDC00",
+	"orange": "#FF851B",
+	"red": "#FF4136",
+	"fuchsia": "#F012BE",
+	"purple": "#B10DC9",
+	"maroon": "#85144B",
+	"white": "#FFFFFF",
+	"gray": "#AAAAAA",
+	"silver": "#DDDDDD",
+	"black": "#111111"
+};
+
+
+Resistor.prototype.reverseNumericColorMap =
+	invertMap(Resistor.prototype.numericColorMap);
+
+Resistor.prototype.toleranceband = function() {
+	return this.toleranceMap[this.tolerance];
+}
+
+Resistor.prototype.invalid = function() {
+	return this.bands().some(function(v){ return v == undefined })
+}
+
+Resistor.prototype.resistanceBands = function() {
+	var mul = this.multiplier;
+	var self = this;
+	var sfString = (this.resistance / Math.pow(10,this.multiplier)).toString();
+
+	var mul = this.multiplier;
+
+	// if we don't have enough significant
+	// figures, (resistors don't generally go below 2)
+	// consume a multiplier of 10 and add a zero.
+	if (this.resistance != 0 && sfString.length < 2) {
+		sfString += "0";
+		mul -= 1
+	}
+
+	var s = sfString
+		.split("")
+		.map(function(v){ return self.numericColorMap[v] });
+
+	if (this.resistance != 0)
+		s.push(self.numericColorMap[mul]);
+
+	return s;
+}
+
+Resistor.prototype.bands = function() {
+	return this.resistanceBands().concat(this.toleranceband());
+};
+
+var resistance = document.getElementById("resistance");
+var tolerance = document.getElementById("tolerance");
+var input = document.getElementById("input");
+function updateResistor(r, keepText) {
+	window.resistor = r;
+	if (!keepText) {
+		resistance.innerText = renderScientificSi(r.resistance);
+		tolerance.innerText = r.tolerance;
+	}
+
+	var bands = d3.select("#resistor").selectAll(".stripe")
+		.data(r.bands());
+
+	// update existing
+
+	var backgroundColorSetter = function(d) { return d in niceColours? niceColours[d]: d };
+
+	bands
+		.style("background-color", backgroundColorSetter )
+		.classed("removed", false)
+
+		.select(".label")
+			.text( function(d) { return d } );
+
+	bands.enter()
+		.append("div")
+			.classed("stripe", true)
+			.style("background-color", backgroundColorSetter)
+
+			.append("div")
+				.classed("label", true)
+				.attr("contentEditable", true)
+				.text( function(d) { return d } )
+				.on("keyup", function() {
+
+	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe .label")[0].map(function(v) { return v.innerText }));
+	if (nR.invalid()) {
+		input.className = "invalid";
+	} else {
+		input.className = "";
+		updateResistor(nR, false);
+	}
+
+				});
+
+
+
+	bands.exit()
+		.classed("removed", true)
+}
+
+d3.selectAll("#input [contentEditable=true]").on("keyup", function() {
+	var nR = new Resistor(parseSi(resistance.innerText), tolerance.innerText);
+
+	if (nR.invalid()) {
+		input.className = "invalid";
+	} else {
+		input.className = "";
+		updateResistor(nR, true);
+	}
+})
+
+// initialize with a 100K 4 band 5% tolerance Resistor
+updateResistor(new Resistor(100E3, 5));
+
+
+
+
+	</script>
+</body>
