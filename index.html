@@ -9,10 +9,6 @@
 body { font-family: 'Open Sans', sans-serif;; }
 body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 * { transition: all 1s ease-in-out }
-#resistor { display: flex; text-align: center }
-#resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0}
-#resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 }
-/*#resistor > .stripe + .stripe { border-left: 1px solid #AA967B } */
 #resistor .label, #input > * {
 	background-color: black; color: #AA967B ; display:inline-block;
 	font-size: x-large;
@@ -20,6 +16,9 @@ body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 	width: 100%;
 }
 
+#resistor { display: flex; text-align: center }
+#resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0 }
+#resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 ; overflow: hidden; white-space: nowrap ; color: transparent }
 #resistance:after {
 	content: "Ω";
 }
@@ -325,7 +324,7 @@ Resistor.prototype.bands = function() {
 var resistance = document.getElementById("resistance");
 var tolerance = document.getElementById("tolerance");
 var input = document.getElementById("input");
-function updateResistor(r, keepText) {
+function updateResistor(r, keepText, keepColours) {
 	window.resistor = r;
 	if (!keepText) {
 		resistance.innerText = renderScientificSi(r.resistance);
@@ -339,12 +338,18 @@ function updateResistor(r, keepText) {
 
 	var backgroundColorSetter = function(d) { return d in niceColours? niceColours[d]: d };
 
-	bands
-		.style("background-color", backgroundColorSetter )
-		.classed("removed", false)
+	if (keepColours) {
+		bands
+			.style("background-color", backgroundColorSetter )
+			.classed("removed", false)
 
-		.select(".label")
-			.text( function(d) { return d } );
+			.select(".label");
+	} else bands
+			.style("background-color", backgroundColorSetter )
+			.classed("removed", false)
+
+			.select(".label")
+				.text( function(d) { return d } );
 
 	bands.enter()
 		.append("div")
@@ -355,15 +360,14 @@ function updateResistor(r, keepText) {
 				.classed("label", true)
 				.attr("contentEditable", true)
 				.text( function(d) { return d } )
-				
 				.on("keyup", function() {
 
-	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe .label")[0].map(function(v) { return v.innerText }));
+	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe .label")[0].map(function(v) { return v.innerText.toLowerCase() }));
 	if (nR.invalid()) {
 		input.className = "invalid";
 	} else {
 		input.className = "";
-		updateResistor(nR, false);
+		updateResistor(nR, false, true);
 	}
 
 				});
@@ -371,11 +375,12 @@ function updateResistor(r, keepText) {
 
 
 	bands.exit()
-		.classed("removed", true)
+		.classed("removed", true);
+
 }
 
 d3.selectAll("#input [contentEditable=true]").on("keyup", function() {
-	var nR = new Resistor(parseSi(resistance.innerText), tolerance.innerText);
+	var nR = new Resistor(parseSi(resistance.innerText.toLowerCase()), tolerance.innerText);
 
 	if (nR.invalid()) {
 		input.className = "invalid";
@@ -386,6 +391,7 @@ d3.selectAll("#input [contentEditable=true]").on("keyup", function() {
 })
 
 // initialize with a 100K 4 band 5% tolerance Resistor
+updateResistor(new Resistor(123456789E3, 5));
 updateResistor(new Resistor(100E3, 5));
 
 
