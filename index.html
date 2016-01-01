@@ -19,6 +19,14 @@ body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 	width: 100%;
 }
 
+input,
+textarea,
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+
 #resistor { display: flex; text-align: center }
 #resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0 }
 #resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 ; overflow: hidden; white-space: nowrap ; color: transparent }
@@ -445,6 +453,10 @@ updateResistor(new Resistor(100E3, 5));
 	    <li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
 	    <li>Precision is guessed; 1k and 11k are four band, 111k is five band (usually blue cased in real life).</li>
 	    <li>You can see all the colours by typing 1023456789. Tolerance comes in gold, silver and transparent for 5% 10% 20% respectively.</li>
+	    <li>Has an icon assigned for adding to your iOS homepage. Press the up arrow in a box icon in Safari.</li>
+	    <li>There's a fairly useful Javascript API for dealing with resistors. Type "resistor" in your Javascript console to get the current
+	    resistor, or use new Resistor(resistance, tolerance) to make a new Resistor object. You can use Resistor.bands() to get
+	    the coloured bands.</li>
 	  </ul>
 	</footer>
 </body>
