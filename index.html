@@ -386,7 +386,7 @@ function updateResistor(r, keepText, keepColours) {
 				.classed("label", true)
 				.attr("contentEditable", true)
 				.text( function(d) { return d } )
-				.on("keydown", function() { if (d3.event.keyCode == 13) d3.event.preventDefault() })
+				.on("keydown", function() { if (d3.event.keyCode == 13) this.blur(), d3.event.preventDefault() })
 				.on("focus", selectAllFocus)
 				.on("keyup", function(e) {
 
@@ -409,8 +409,10 @@ function updateResistor(r, keepText, keepColours) {
 
 }
 
+
+
 d3.selectAll("#input [contentEditable=true]")
-	.on("keydown", function() { if (d3.event.keyCode == 13) d3.event.preventDefault() })
+	.on("keydown", function() { if (d3.event.keyCode == 13) this.blur(), d3.event.preventDefault() })
 	.on("focus", selectAllFocus)
 	.on("keyup", function() {
 		var nR = new Resistor(parseSi(resistance.textContent), tolerance.textContent);
@@ -447,6 +449,7 @@ updateResistor(new Resistor(100E3, 5));
 	  <ul>
 	    <li>Click on a field such as resistance, tolerance or a colour to edit it, the band colours will be updated corresponding
 	      to the colour on a resistor in real time.</li>
+	    <li>Press this dialog to close it.</li>
 	    <li>Tolerance band 20% is called "transparent" because it was easier to code. "absent", "none" and "empty" also work.</li>
 	    <li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
 	    <li>Precision is guessed; 1k and 11k are four band resistors, 111k is five band (usually blue cased in real life).</li>
