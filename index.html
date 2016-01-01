@@ -380,7 +380,7 @@ function updateResistor(r, keepText, keepColours) {
 }
 
 d3.selectAll("#input [contentEditable=true]").on("keyup", function() {
-	var nR = new Resistor(parseSi(resistance.innerText.toLowerCase()), tolerance.innerText);
+	var nR = new Resistor(parseSi(resistance.innerText), tolerance.innerText);
 
 	if (nR.invalid()) {
 		input.className = "invalid";
