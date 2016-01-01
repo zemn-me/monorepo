@@ -34,9 +34,10 @@ a.img { border: none }
 #input > * { margin: auto; pointer-events: all }
 #inputdata > * { font-size: 4rem }
 #tolerance { font-size: 100%; vertical-align: super }
-#qmark { display: none; line-height: 4rem; flex-grow: 0; flex-basis: 0; font-size: 3rem; float: right; margin-right: 3rem; position: absolute; right: 0;
+#qmark { display: none; line-height: 4rem; flex-grow: 0; flex-basis: 0; font-size: 3rem; float: right; position: absolute; right: 0;
     /* had no idea how to make this go inline, so just cheated */
-  font-size: 3rem; top: 50%; margin-top: -2rem; width: 4rem; height: 4rem ; display: inline-block ; background-color: white ; color:black }
+  font-size: 3rem; width: 4rem; height: 4rem ; display: inline-block ; background-color: white ; color:black; margin: 3rem ; bottom: 0;
+  text-align: center }
 label[for] { cursor: pointer }
 
 footer { width: 100%;  color: #AA967B; background-color:black; position: fixed; bottom: 0; right: 0; height:100%; overflow: auto }
@@ -65,7 +66,6 @@ footer .head { width: 100%; text-align: center ; margin-bottom: 2rem }
 	<div id="input">
 		<div id="inputdata">
 		<span id="resistance" contentEditable="true">Please enable javascript</span> <span id="tolerance" contentEditable="true">thanks :^)</span>
-		<label id="qmark" for="showfooter">?</label>
 		</div>
 	</div>
 <!--VE.NO.MS-->
@@ -438,6 +438,7 @@ updateResistor(new Resistor(100E3, 5));
 
 	</script>
 
+	<label id="qmark" for="showfooter">?</label>
 	<input id="showfooter" type="checkbox" style="display:none">
 	<label for="showfooter">
 	<footer>
