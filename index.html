@@ -3,6 +3,7 @@
 <title>Resistor Colour Identifier / Calculator</title>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="Description" content="A resistor colour calculator that works in reverse, is free, works on mobile, is easy to use and doesn't look like crap.">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 <link rel="icon" type="image/png" href="i.png" />
 <link rel="apple-touch-icon" href="i-lrg.png" />
@@ -50,6 +51,9 @@ body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 #input > * { margin: auto; pointer-events: all }
 #inputdata > * { font-size: 4rem }
 #tolerance { font-size: 100%; vertical-align: super }
+
+footer { display: none; padding: 2rem; color: #AA967B; background-color:black; opacity: 1 ; position: fixed; bottom: 0; right: 0 ; width: 20rem }
+footer .logo { width: auto; height: 1.5em ; vertical-align: middle }
 </style>
 </head>
 <body>
@@ -393,7 +397,9 @@ function updateResistor(r, keepText, keepColours) {
 				.on("focus", selectAllFocus)
 				.on("keyup", function(e) {
 
-	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) { return v.innerText.trim().toLowerCase() }));
+	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) {
+	  return v.innerText.trim().toLowerCase().replace(/none|empty|absent/, "transparent")
+	}));
 	if (nR.invalid()) {
 		input.className = "invalid";
 	} else {
@@ -432,4 +438,13 @@ updateResistor(new Resistor(100E3, 5));
 
 
 	</script>
+	<footer>
+	  made by <a href="//ve.no.ms"><svg class="logo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 446.31 347.69"><g transform="translate(-148.28 -442.12)"><path fill="#AA967B" vector-effect="non-scaling-stroke" d="m322.12 442.12-119.56 119.57 32.85 32.84 119.56-119.53-32.85-32.88zm98.625 0l-32.83 32.88 119.56 119.53 32.84-32.84-119.56-119.57zm-49.3 59.26-114.6 114.59 114.6 114.59 114.59-114.59-114.59-114.59zm-190.32 81.74-32.84 32.85 32.84 32.84 32.85-32.84-32.85-32.85zm380.62 0-32.844 32.844l32.85 32.85 32.84-32.84-32.84-32.85zm-326.33 54.29-32.85 32.84 119.56 119.56 32.85-32.87-119.56-119.53zm272.06 0l-119.56 119.53 32.84 32.87 119.56-119.56-32.84-32.84z"/></g></svg></a> <br/>
+	  <ul>
+	    <li>Tolerance band 20% is called "transparent" because it was easier to code. "absent", "none" and "empty" also work.</li>
+	    <li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
+	    <li>Precision is guessed; 1k and 11k are four band, 111k is five band (usually blue cased in real life).</li>
+	    <li>You can see all the colours by typing 1023456789. Tolerance comes in gold, silver and transparent for 5% 10% 20% respectively.</li>
+	  </ul>
+	</footer>
 </body>
