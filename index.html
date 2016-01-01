@@ -360,10 +360,10 @@ function updateResistor(r, keepText, keepColours) {
 				.classed("label", true)
 				.attr("contentEditable", true)
 				.text( function(d) { return d } )
-				.on("keydown", function(e) {
-	if (d3.event.keyCode == 13) d3.event.preventDefault();
+				.on("keydown", function() { if (d3.event.keyCode == 13) d3.event.preventDefault() })
+				.on("keyup", function(e) {
 
-	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) { return v.innerText.toLowerCase() }));
+	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) { return v.innerText.trim().toLowerCase() }));
 	if (nR.invalid()) {
 		input.className = "invalid";
 	} else {
@@ -380,18 +380,18 @@ function updateResistor(r, keepText, keepColours) {
 
 }
 
-d3.selectAll("#input [contentEditable=true]").on("keydown", function() {
+d3.selectAll("#input [contentEditable=true]")
+	.on("keydown", function() { if (d3.event.keyCode == 13) d3.event.preventDefault() })
+	.on("keyup", function() {
+		var nR = new Resistor(parseSi(resistance.innerText), tolerance.innerText);
 
-	if (d3.event.keyCode == 13) d3.event.preventDefault();
-	var nR = new Resistor(parseSi(resistance.innerText), tolerance.innerText);
-
-	if (nR.invalid()) {
-		input.className = "invalid";
-	} else {
-		input.className = "";
-		updateResistor(nR, true);
-	}
-})
+		if (nR.invalid()) {
+			input.className = "invalid";
+		} else {
+			input.className = "";
+			updateResistor(nR, true);
+		}
+	})
 
 // initialize with a 100K 4 band 5% tolerance Resistor
 updateResistor(new Resistor(123456789E3, 5));
