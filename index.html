@@ -12,12 +12,7 @@
 body { font-family: 'Open Sans', sans-serif; }
 body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
 * { transition: all 1s ease-in-out }
-#resistor .label, #input > * {
-	background-color: black; color: #AA967B ; display:inline-block;
-	font-size: x-large;
-	padding: 2rem 0 2rem 0;
-	width: 100%;
-}
+#resistor .label, #input > * { background-color: black; color: #AA967B ; display:inline-block; font-size: x-large; padding: 2rem 0 2rem 0; width: 100% }
 
 * { -webkit-user-select: none; user-select: none }
 input,textarea, [contenteditable] { -webkit-user-select: text; user-select: text }
@@ -31,24 +26,17 @@ a:link, a:visited { color: inherit; text-decoration: none; border-bottom: 1px so
 a:visited { border-bottom-style: dotted }
 a.img { border: none }
 
-#input {
-	position:fixed;
-	text-align:center;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	display:flex;
-	pointer-events: none;
-}
+#input { position:fixed; text-align:center; top:0; left:0; width:100%; height:100%; display:flex; pointer-events: none }
 
 #input #inputdata { border: 1px solid black ; border-width: 1px 0 1px 0; transition: 0.2s ease-in-out; }
 #input.invalid #inputdata{ border-color: #AA967B }
 
 #input > * { margin: auto; pointer-events: all }
 #inputdata > * { font-size: 4rem }
-#tolerance, #qmark { font-size: 100%; vertical-align: super }
-#qmark { color: white }
+#tolerance { font-size: 100%; vertical-align: super }
+#qmark { line-height: 4rem; flex-grow: 0; flex-basis: 0; font-size: 3rem; float: right; margin-right: 3rem; position: absolute; right: 0;
+    /* had no idea how to make this go inline, so just cheated */
+  font-size: 3rem; top: 50%; margin-top: -2rem; width: 4rem; height: 4rem ; display: inline-block ; background-color: white ; color:black }
 label[for] { cursor: pointer }
 
 footer { width: 100%;  color: #AA967B; background-color:black; position: fixed; bottom: 0; right: 0; height:100%; overflow: auto }
