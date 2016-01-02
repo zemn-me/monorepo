@@ -391,7 +391,9 @@ function updateResistor(r, keepText, keepColours) {
 				.on("keyup", function(e) {
 
 	var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) {
-	  return v.textContent.trim().toLowerCase().replace(/none|empty|absent/, "transparent")
+	  return v.textContent.trim().toLowerCase()
+	  	.replace(/none|empty|absent/, "transparent")
+	  	.replace(/grey/, "gray")
 	}));
 	if (nR.invalid()) {
 		input.className = "invalid";
