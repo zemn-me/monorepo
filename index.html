@@ -446,24 +446,25 @@ updateResistor(new Resistor(100E3, 5));
 	<footer>
 	  <div>
 	  <div class="head">&mdash; <a href="//ve.no.ms" class="img"><svg class="logo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 446.31 347.69"><g transform="translate(-148.28 -442.12)"><path fill="#AA967B" vector-effect="non-scaling-stroke" d="m322.12 442.12-119.56 119.57 32.85 32.84 119.56-119.53-32.85-32.88zm98.625 0l-32.83 32.88 119.56 119.53 32.84-32.84-119.56-119.57zm-49.3 59.26-114.6 114.59 114.6 114.59 114.59-114.59-114.59-114.59zm-190.32 81.74-32.84 32.85 32.84 32.84 32.85-32.84-32.85-32.85zm380.62 0-32.844 32.844l32.85 32.85 32.84-32.84-32.84-32.85zm-326.33 54.29-32.85 32.84 119.56 119.56 32.85-32.87-119.56-119.53zm272.06 0l-119.56 119.53 32.84 32.87 119.56-119.56-32.84-32.84z"/></g></svg></a> &mdash;</div>
-	  <ul>
-	    <li>Click on a field such as resistance, tolerance or a colour to edit it, the band colours will be updated corresponding
-	      to the colour on a resistor in real time.</li>
-	    <li>Press this dialog to close it.</li>
-	    <li>Tolerance band 20% is called "transparent" because it was easier to code. "absent", "none" and "empty" also work.</li>
-	    <li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
-	    <li>Precision is guessed; 1k and 11k are four band resistors, 111k is five band (usually blue cased in real life).</li>
-	    <li>You can see all the colours by typing 1023456789. Tolerance comes in gold, silver and transparent for 5% 10% 20% respectively.</li>
-	    <li>Has an icon assigned for adding to your iOS homepage. Press the up arrow in a box icon in Safari.</li>
-	    <li>Some older versions of iOS do not support contentEditable, an HTML5 technology which is used for input here,
-	    check <a href="http://caniuse.com/#feat=contenteditable">here</a> for a list of supported / unsupported browsers</li>
-	    <li>There's a fairly useful Javascript API for dealing with resistors. Type "resistor" in your Javascript console to get the current
-	    resistor, or use new Resistor(resistance, tolerance) to make a new Resistor object. You can use Resistor.bands() to get
-	    the coloured bands.</li>
-	    <li>The full code is on github <a href="//github.com/venoms/resistor-colours">here</a>, I&rsquo;m
-	    happy to take issues and pull requests there.</li>
-	  </ul>
-	  </div>
+		<ul>
+			<li>Click on a field such as resistance, tolerance or a colour to edit it, the band colours will be updated corresponding
+			to the colour on a resistor in real time.</li>
+			<li>Press this dialog to close it.</li>
+			<li>For extra bands, just type a number of non-zero numbers into the resistance input, eg "111" will give you 5 bands.</li>
+			<li>Tolerance band 20% is called "transparent" because it was easier to code. "absent", "none" and "empty" also work.</li>
+			<li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
+			<li>Precision is guessed; 1k and 11k are four band resistors, 111k is five band (usually blue cased in real life).</li>
+			<li>You can see all the colours by typing 1023456789. Tolerance comes in gold, silver and transparent for 5% 10% 20% respectively.</li>
+			<li>Has an icon assigned for adding to your iOS homepage. Press the up arrow in a box icon in Safari.</li>
+			<li>Some older versions of iOS do not support contentEditable, an HTML5 technology which is used for input here,
+			check <a href="http://caniuse.com/#feat=contenteditable">here</a> for a list of supported / unsupported browsers</li>
+			<li>There's a fairly useful Javascript API for dealing with resistors. Type "resistor" in your Javascript console to get the current
+			resistor, or use new Resistor(resistance, tolerance) to make a new Resistor object. You can use Resistor.bands() to get
+			the coloured bands.</li>
+			<li>The full code is on github <a href="//github.com/venoms/resistor-colours">here</a>, I&rsquo;m
+			happy to take issues and pull requests there.</li>
+		</ul>
+		</div>
 	</footer>
 	</label>
 </body>
