@@ -47,6 +47,12 @@ footer .head { width: 100%; text-align: center ; margin-bottom: 2rem }
 #showfooter:not(:checked) ~ label > footer { overflow: hidden; height: 0; padding:0 }
 #footericon { font-size: 4rem; bottom: 0; right: 0; position: fixed; z-index: 10; background-color: black; padding: 1rem; color: #AA967B; box-sizing: border-box;
   width: 10rem; height: 10rem; text-align: center }
+
+#colourdrawer { width: 100%; height: 100%; bottom:0; right:0; overflow: auto; display: flex }
+#showcolourdrawer:not(:checked) ~ #colourdrawer { overflow: hidden; height: 0; padding: 0 }
+
+#colourselector { max-width: 20rem; max-height: 20rem ; display: flex; padding: 3rem }
+#colourselector .swatch { flex-grow: 1; flex-basis: 0 }
 </style>
 </head>
 <body>
