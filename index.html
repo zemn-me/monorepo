@@ -436,7 +436,7 @@ var colourClick = noop;
 
 var mobile = false;
 
-if (mobile = true || /mobile/g.test(navigator.userAgent.toLowerCase())) {
+if (mobile = /mobile/g.test(navigator.userAgent.toLowerCase())) {
 
   var labels = d3.set(Object.keys(Resistor.prototype.reverseNumericColorMap)
 	  .concat(Object.keys(Resistor.prototype.reverseToleranceMap)));
