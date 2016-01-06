@@ -477,6 +477,7 @@ function updateResistor(r, keepText, keepColours) {
 	if (!keepText) {
 		resistance.textContent = renderScientificSi(r.resistance);
 		tolerance.textContent = r.tolerance;
+		console.log("hi");
 	}
 
 	var bands = d3.select("#resistor").selectAll(".stripe")
@@ -498,8 +499,7 @@ function updateResistor(r, keepText, keepColours) {
 				.on("keydown", function() { if (d3.event.keyCode == 13) this.blur(), d3.event.preventDefault() })
 				.on("focus", selectAllFocus)
 				.on("click", colourClick)
-				.on("keyup", updateResistorFromColours);
-
+				.on("keyup", updateResistorFromColours.bind(0, false, false));
 	if (keepColours) {
 		bands
 			.style("background-color", backgroundColorSetter )
