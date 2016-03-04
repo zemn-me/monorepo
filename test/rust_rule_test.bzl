@@ -15,15 +15,12 @@
 """Tests for rust rules."""
 
 load(
-    "//tools/build_rules/rust:rust.bzl",
+    "//rust:rust.bzl",
     "rust_library",
     "rust_binary",
     "rust_test",
 )
-load(
-    "//tools/build_rules:test_rules.bzl",
-    "rule_test",
-)
+load("@bazel_tools//tools/build_rules:test_rules.bzl", "rule_test")
 
 def _rust_library_test(package):
   rule_test(
@@ -47,8 +44,8 @@ def _rust_test_test(package):
   """Issue rule tests for rust_test."""
   rule_test(
       name = "greeting_rule_test",
-      generates = ["greeting"],
-      rule = package + "/hello_lib:greeting",
+      generates = ["libhello_lib.rlib"],
+      rule = package + "/hello_lib:hello_lib",
   )
 
 def rust_rule_test(package):
