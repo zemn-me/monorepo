@@ -22,7 +22,10 @@ rust_test(
 rust_bench_test(
     name = "fibonacci_bench",
     srcs = ["benches/fibonacci_bench.rs"],
-    tags = ["manual"],
+    tags = [
+        "manual",
+        "noci",
+    ],
     deps = [":fibonacci"],
 )
 
