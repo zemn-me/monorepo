@@ -746,16 +746,16 @@ filegroup(
 def rust_repositories():
   native.new_http_archive(
       name = "rust_linux_x86_64",
-      url = "https://static.rust-lang.org/dist/rust-1.6.0-x86_64-unknown-linux-gnu.tar.gz",
-      strip_prefix = "rust-1.6.0-x86_64-unknown-linux-gnu",
-      sha256 = "8630cc02432b4423d64eeae4ef071ec58e5dd1f3d555a3a3cc34b759202813f6",
+      url = "https://static.rust-lang.org/dist/rust-1.9.0-x86_64-unknown-linux-gnu.tar.gz",
+      strip_prefix = "rust-1.9.0-x86_64-unknown-linux-gnu",
+      sha256 = "288ff13efa2577e81c77fc2cb6e2b49b1ed0ceab51b4fa12f7efb87039ac49b7",
       build_file_content = RUST_BUILD_FILE,
   )
 
   native.new_http_archive(
       name = "rust_darwin_x86_64",
-      url = "https://static.rust-lang.org/dist/rust-1.6.0-x86_64-apple-darwin.tar.gz",
-      strip_prefix = "rust-1.6.0-x86_64-apple-darwin",
-      sha256 = "8c6897ed37ef6fd2890b176afa65306cc8943e3c770c9530a701f1aefd3942b1",
+      url = "https://static.rust-lang.org/dist/rust-1.9.0-x86_64-apple-darwin.tar.gz",
+      strip_prefix = "rust-1.9.0-x86_64-apple-darwin",
+      sha256 = "d59b5509e69c1cace20a57072e3b3ecefdbfd8c7e95657b0ff2ac10aa1dfebe6",
       build_file_content = RUST_BUILD_FILE,
   )
