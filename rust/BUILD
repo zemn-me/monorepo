@@ -6,6 +6,7 @@ skylark_doc(
     name = "rust-docs",
     srcs = ["rust.bzl"],
     format = "html",
+    site_root = "https://bazelbuild.github.io/rules_rust",
 )
 
 config_setting(
