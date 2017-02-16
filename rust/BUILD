@@ -1,13 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_skydoc//skylark:skylark.bzl", "skylark_doc")
-
-skylark_doc(
-    name = "rust-docs",
-    srcs = ["rust.bzl"],
-    format = "html",
-    site_root = "https://bazelbuild.github.io/rules_rust",
-)
+exports_files(["rust.bzl"])
 
 config_setting(
     name = "darwin",

@@ -5,6 +5,11 @@ local_repository(
     path = "examples",
 )
 
+local_repository(
+    name = "docs",
+    path = "docs",
+)
+
 # TODO: Move this to examples/WORKSPACE when recursive repositories are enabled.
 load("//rust:rust.bzl", "rust_repositories")
 
