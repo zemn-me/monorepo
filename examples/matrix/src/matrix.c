@@ -17,7 +17,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 Matrix* matrix_new(size_t rows, size_t cols, const uint64_t* data) {
   if (data == NULL) {
     return NULL;

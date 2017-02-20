@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "matrix/src/matrix.h"
+
 #include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
-
 #include <stdio.h>
-
-#include "matrix/src/matrix.h"
 
 void matrix_print(const Matrix* m) {
   for (size_t i = 0; i < m->rows; ++i) {

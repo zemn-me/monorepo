@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef MATRIX_SRC_MATRIX_H_
+#define MATRIX_SRC_MATRIX_H_
+
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -41,3 +44,5 @@ int matrix_equal(const Matrix* a, const Matrix* b);
 
 // Frees the matrix.
 void matrix_free(Matrix* matrix);
+
+#endif  // MATRIX_SRC_MATRIX_H_
