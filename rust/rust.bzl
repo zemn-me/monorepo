@@ -110,7 +110,8 @@ def _create_setup_cmd(lib, deps_dir, in_runfiles):
       deps_dir + "/" + lib.basename + "\n"
   )
 
-def _setup_deps(deps, name, working_dir, is_library=False, in_runfiles=False):
+def _setup_deps(deps, name, working_dir, allow_cc_deps=False,
+                in_runfiles=False):
   """
   Walks through dependencies and constructs the necessary commands for linking
   to all the necessary dependencies.
@@ -119,8 +120,8 @@ def _setup_deps(deps, name, working_dir, is_library=False, in_runfiles=False):
     deps: List of Labels containing deps from ctx.attr.deps.
     name: Name of the current target.
     working_dir: The output directory for the current target's outputs.
-    is_library: True if the current target is a rust_library target, False
-        otherwise.
+    allow_cc_deps: True if the current target is allowed to depend on cc_library
+        targets, false otherwise.
     in_runfiles: True if the setup commands will be run in a .runfiles
         directory. In this case, the working dir should be '.', and the deps
         will be symlinked into the .deps dir from the runfiles tree.
@@ -156,8 +157,9 @@ def _setup_deps(deps, name, working_dir, is_library=False, in_runfiles=False):
       has_rlib = True
 
     elif hasattr(dep, "cc"):
-      if not is_library:
-        fail("Only rust_library targets can depend on cc_library")
+      if not allow_cc_deps:
+        fail("Only rust_library, rust_binary, and rust_test targets can " +
+             "depend on cc_library")
 
       # This dependency is a cc_library
       native_libs = A_FILETYPE.filter(dep.cc.libs)
@@ -168,9 +170,8 @@ def _setup_deps(deps, name, working_dir, is_library=False, in_runfiles=False):
       has_native = True
 
     else:
-      fail(("rust_library" if is_library else "rust_binary and rust_test") +
-           " targets can only depend on rust_library " +
-           ("or cc_library " if is_library else "") + "targets")
+      fail("rust_library, rust_binary and rust_test targets can only depend " +
+           "on rust_library or cc_library targets.")
 
   for symlinked_lib in symlinked_libs:
     setup_cmd += [_create_setup_cmd(symlinked_lib, deps_dir, in_runfiles)]
@@ -312,7 +313,7 @@ def _rust_library_impl(ctx):
   depinfo = _setup_deps(ctx.attr.deps,
                         ctx.label.name,
                         output_dir,
-                        is_library=True)
+                        allow_cc_deps=True)
 
   # Build rustc command
   cmd = _build_rustc_command(
@@ -366,7 +367,7 @@ def _rust_binary_impl(ctx):
   depinfo = _setup_deps(ctx.attr.deps,
                         ctx.label.name,
                         output_dir,
-                        is_library=False)
+                        allow_cc_deps=False)
 
   # Build rustc command.
   cmd = _build_rustc_command(ctx = ctx,
@@ -431,7 +432,7 @@ def _rust_test_common(ctx, test_binary):
   depinfo = _setup_deps(target.deps,
                         target.name,
                         output_dir,
-                        is_library=False)
+                        allow_cc_deps=True)
 
   cmd = _build_rustc_command(ctx = ctx,
                              crate_name = test_binary.basename,
@@ -515,7 +516,7 @@ def _rust_doc_impl(ctx):
   depinfo = _setup_deps(target.deps,
                         target.name,
                         output_dir,
-                        is_library=False)
+                        allow_cc_deps=False)
 
   # Rustdoc flags.
   doc_flags = _build_rustdoc_flags(ctx)
@@ -585,7 +586,7 @@ def _rust_doc_test_impl(ctx):
   depinfo = _setup_deps(target.deps,
                         target.name,
                         working_dir=".",
-                        is_library=False,
+                        allow_cc_deps=False,
                         in_runfiles=True)
 
   # Construct rustdoc test command, which will be written to a shell script
