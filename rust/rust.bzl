@@ -1366,16 +1366,16 @@ def rust_repositories():
   """Adds the external dependencies needed for the Rust rules."""
   native.new_http_archive(
       name = "rust_linux_x86_64",
-      url = "http://bazel-mirror.storage.googleapis.com/static.rust-lang.org/dist/rust-1.11.0-x86_64-unknown-linux-gnu.tar.gz",
-      strip_prefix = "rust-1.11.0-x86_64-unknown-linux-gnu",
-      sha256 = "f4ebbd6d9494cb8fa6c410cb58954e1913546c2bca8963faebc424591547d83f",
+      url = "http://bazel-mirror.storage.googleapis.com/static.rust-lang.org/dist/rust-1.15.1-x86_64-unknown-linux-gnu.tar.gz",
+      strip_prefix = "rust-1.15.1-x86_64-unknown-linux-gnu",
+      sha256 = "b1e7c818a3cc8b010932f0efc1cf0ede7471958310f808d543b6e32d2ec748e7",
       build_file_content = RUST_BUILD_FILE,
   )
 
   native.new_http_archive(
       name = "rust_darwin_x86_64",
-      url = "http://bazel-mirror.storage.googleapis.com/static.rust-lang.org/dist/rust-1.11.0-x86_64-apple-darwin.tar.gz",
-      strip_prefix = "rust-1.11.0-x86_64-apple-darwin",
-      sha256 = "2cdbc47438dc86ecaf35298317b77d735956eb160862e3f6d0fda0da656ecc35",
+      url = "http://bazel-mirror.storage.googleapis.com/static.rust-lang.org/dist/rust-1.15.1-x86_64-apple-darwin.tar.gz",
+      strip_prefix = "rust-1.15.1-x86_64-apple-darwin",
+      sha256 = "38606e464b31a778ffa7d25d490a9ac53b472102bad8445b52e125f63726ac64",
       build_file_content = RUST_BUILD_FILE,
   )
