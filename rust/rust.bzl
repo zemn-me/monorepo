@@ -220,8 +220,6 @@ def _rust_proto_library_impl(ctx):
   # Although this is dumb, we can only support single proto files for now.
   if len(ctx.files.srcs) != 1:
     fail("I expected to get exactly one protobuf file!")
-    return None
-
   proto_file = ctx.files.srcs[0].path
 
   library_name = ctx.attr.name
