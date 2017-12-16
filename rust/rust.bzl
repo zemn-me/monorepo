@@ -53,6 +53,8 @@ load(":toolchain.bzl", "build_rustc_command", "build_rustdoc_command", "build_ru
 
 RUST_FILETYPE = FileType([".rs"])
 
+PROTO_FILETYPE = FileType([".proto"])
+
 A_FILETYPE = FileType([".a"])
 
 LIBRARY_CRATE_TYPES = [
@@ -211,6 +213,94 @@ def _crate_root_src(ctx, file_names=["lib.rs"]):
   else:
     return ctx.file.crate_root
 
+def _rust_proto_library_impl(ctx):
+  rust_lib = ctx.outputs.rust_lib
+  output_dir = rust_lib.dirname
+
+  # Although this is dumb, we can only support single proto files for now.
+  if len(ctx.files.srcs) != 1:
+    fail("I expected to get exactly one protobuf file!")
+    return None
+
+  proto_file = ctx.files.srcs[0].path
+
+  library_name = ctx.attr.name
+
+  toolchain = _find_toolchain(ctx)
+
+  temporary_proto_file = "%s/%s.proto" % (output_dir, library_name)
+
+  # First, generate the rust code.
+  lib_rs   = ctx.actions.declare_file("%s/lib.rs" % output_dir)
+  proto_rs = ctx.actions.declare_file("%s/%s.rs" % (output_dir, library_name))
+
+  cmd = ";\n".join([
+    "set -e",
+    "cp %s %s" % (proto_file, temporary_proto_file),
+    "protoc --rust_out='%s' %s" % \
+      (proto_rs.dirname, temporary_proto_file),
+      "echo 'pub mod %s; pub use %s::*; extern crate protobuf;' > %s" % (library_name, library_name, lib_rs.path),
+  ])
+
+  ctx.actions.run_shell(
+      inputs = ctx.files.srcs,
+      outputs = [lib_rs, proto_rs],
+      mnemonic = "GenerateProtoLibrary",
+      command = cmd,
+      arguments = [],
+      use_default_shell_env = True,
+      progress_message = ("Compiling %s (rust proto library)..." % (ctx.label.name))
+  )
+
+  depinfo = _setup_deps(ctx.attr.deps,
+                        ctx.label.name,
+                        output_dir,
+                        allow_cc_deps=True)
+
+  cmd = build_rustc_command(ctx = ctx,
+    toolchain = toolchain,
+    crate_name = ctx.label.name,
+    crate_type = 'lib',
+    src = lib_rs,
+    depinfo=depinfo,
+    output_dir = output_dir
+  )
+
+  # Compile action.
+  compile_inputs = depset(
+      [lib_rs, proto_rs] +
+      depinfo.libs +
+      depinfo.transitive_libs +
+      [toolchain.rustc] +
+      toolchain.rustc_lib +
+      toolchain.rust_lib +
+      toolchain.crosstool_files
+  )
+
+  ctx.actions.run_shell(
+      inputs = compile_inputs,
+      outputs = [rust_lib],
+      mnemonic = "CompileProtoLibrary",
+      arguments = [],
+      command = ";\n".join([
+          "set -e",
+          cmd,
+      ]),
+      use_default_shell_env = True,
+      progress_message = ("Compiling %s (rust proto library)..." % (ctx.label.name))
+  )
+
+  rust_lib = ctx.outputs.rust_lib
+  output_dir = rust_lib.dirname
+
+  return struct(
+      files = depset([rust_lib]),
+      crate_type = "lib",
+      rust_srcs = [],
+      rust_deps = [],
+      transitive_libs = [],
+      rust_lib = rust_lib)
+
 def _rust_library_impl(ctx):
   """
   Implementation for rust_library Skylark rule.
@@ -328,6 +418,46 @@ def _rust_binary_impl(ctx):
   return struct(rust_srcs = ctx.files.srcs,
                 crate_root = main_rs,
                 rust_deps = ctx.attr.deps)
+
+def _cargo_crate_impl(ctx):
+  rust_lib = ctx.outputs.rust_lib
+  output_dir = rust_lib.dirname
+
+  library_name = ctx.attr.name
+  library_version = ctx.attr.version
+
+  toolchain = _find_toolchain(ctx)
+
+  ctx.actions.run_shell(
+      inputs = [ toolchain.rustc ],
+      outputs = [rust_lib],
+      mnemonic = "ImportFromCratesIO",
+      arguments = [],
+      command = ";\n".join([
+          "set -e",
+          "wget https://crates.io/api/v1/crates/%s/%s/download --directory-prefix=%s" % \
+            (library_name, library_version, output_dir),
+          "tar xzvf %s/download -C %s" % (output_dir, output_dir),
+          "mkdir %s/.cargo" % (output_dir),
+          "(cd %s/%s-%s && CARGO_HOME=%s/.cargo cargo build)" % \
+              (output_dir, library_name, library_version, output_dir),
+          "cp %s/%s-%s/target/debug/lib%s.rlib %s" % \
+              (output_dir, library_name, library_version, library_name, rust_lib.path)
+      ]),
+      use_default_shell_env = True,
+      progress_message = ("Importing crate %s from crates.io..." % (ctx.label.name))
+  )
+
+  rust_lib = ctx.outputs.rust_lib
+  output_dir = rust_lib.dirname
+
+  return struct(
+      files = depset([rust_lib]),
+      crate_type = "lib",
+      rust_srcs = [],
+      rust_deps = [],
+      transitive_libs = [],
+      rust_lib = rust_lib)
 
 def _rust_test_common(ctx, test_binary):
   """Builds a Rust test binary.
@@ -527,14 +657,35 @@ _rust_common_attrs = {
     "rustc_flags": attr.string_list(),
 }
 
+_rust_proto_library_attrs = {
+    "srcs": attr.label_list(allow_files = PROTO_FILETYPE),
+    "deps": attr.label_list(),
+    "crate_features": attr.string_list(),
+    "rustc_flags": attr.string_list(),
+}
+
 _rust_library_attrs = {
     "crate_type": attr.string(),
+}
+
+_cargo_crate_attrs = {
+    "version": attr.string(),
 }
 
 rust_library = rule(
     _rust_library_impl,
     attrs = dict(_rust_common_attrs.items() +
                  _rust_library_attrs.items()),
+    host_fragments = ["cpp"],
+    outputs = {
+        "rust_lib": "lib%{name}.rlib",
+    },
+    toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
+)
+
+rust_proto_library = rule(
+    _rust_proto_library_impl,
+    attrs = _rust_proto_library_attrs,
     host_fragments = ["cpp"],
     outputs = {
         "rust_lib": "lib%{name}.rlib",
@@ -645,6 +796,17 @@ rust_binary = rule(
     attrs = _rust_common_attrs,
     executable = True,
     host_fragments = ["cpp"],
+    toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
+)
+
+cargo_crate = rule(
+    _cargo_crate_impl,
+    attrs = dict(_rust_common_attrs.items() +
+                 _cargo_crate_attrs.items()),
+    executable = False,
+    outputs = {
+        "rust_lib": "lib%{name}.rlib",
+    },
     toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
 )
 
