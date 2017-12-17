@@ -426,8 +426,15 @@ def _cargo_crate_impl(ctx):
 
   toolchain = _find_toolchain(ctx)
 
+  compile_inputs = depset(
+      [toolchain.rustc, toolchain.cargo] +
+      toolchain.rustc_lib +
+      toolchain.rust_lib +
+      toolchain.crosstool_files
+  )
+
   ctx.actions.run_shell(
-      inputs = [ toolchain.rustc ],
+      inputs = compile_inputs,
       outputs = [rust_lib],
       mnemonic = "ImportFromCratesIO",
       arguments = [],
@@ -437,8 +444,16 @@ def _cargo_crate_impl(ctx):
             (library_name, library_version, output_dir),
           "tar xzvf %s/download -C %s" % (output_dir, output_dir),
           "mkdir %s/.cargo" % (output_dir),
-          "(cd %s/%s-%s && CARGO_HOME=%s/.cargo cargo build)" % \
-              (output_dir, library_name, library_version, output_dir),
+          "export MY_PWD=$PWD",
+          "export CARGO_HOME=%s/.cargo" % output_dir,
+          #"export RUSTC=$PWD/%s" % toolchain.rustc.path,
+          #"export CARGO_BINARY=$PWD/%s" % toolchain.cargo.path,
+          "export CARGO_BINARY=cargo",
+          "export LD_LIBRARY_PATH=$PWD/%s:$PWD/%s" % (toolchain.rust_lib[0].dirname, toolchain.rustc_lib[0].dirname),
+          "export DYLD_LIBRARY_PATH=$PWD/%s:$PWD/%s" % (toolchain.rust_lib[0].dirname, toolchain.rustc_lib[0].dirname),
+          "echo $LIBRARY_PATH",
+          "(cd %s/%s-%s && $CARGO_BINARY build --verbose)" % \
+              (output_dir, library_name, library_version),
           "cp %s/%s-%s/target/debug/lib%s.rlib %s" % \
               (output_dir, library_name, library_version, library_name, rust_lib.path)
       ]),

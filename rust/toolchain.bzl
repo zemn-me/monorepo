@@ -139,6 +139,7 @@ def _rust_toolchain_impl(ctx):
   toolchain = platform_common.ToolchainInfo(
       rustc = _get_first_file(ctx.attr.rustc),
       rust_doc = _get_first_file(ctx.attr.rust_doc),
+      cargo = _get_first_file(ctx.attr.cargo),
       rustc_lib = _get_files(ctx.attr.rustc_lib),
       rust_lib = _get_files(ctx.attr.rust_lib),
       crosstool_files = ctx.files._crosstool)
@@ -148,6 +149,7 @@ rust_toolchain = rule(
     _rust_toolchain_impl,
     attrs = {
         "rustc": attr.label(allow_files = True),
+        "cargo": attr.label(allow_files = True),
         "rust_doc": attr.label(allow_files = True),
         "rustc_lib": attr.label_list(allow_files = True),
         "rust_lib": attr.label_list(allow_files = True),
