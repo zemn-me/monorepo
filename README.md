@@ -34,7 +34,7 @@ http_archive(
         "https://github.com/bazelbuild/rules_rust/archive/0.0.5.tar.gz",
     ],
 )
-load("@io_bazel_rules_rust//rust:rust.bzl", "rust_repositories")
+load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
 
 rust_repositories()
 ```
