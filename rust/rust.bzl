@@ -107,6 +107,15 @@ def _create_setup_cmd(lib, deps_dir, in_runfiles):
       deps_dir + "/" + lib.basename + "\n"
   )
 
+def _out_dir_setup_cmd(out_dir_tar):
+  if out_dir_tar:
+    return [
+        "mkdir ./out_dir/\n",
+        "tar -xzf %s -C ./out_dir\n" % out_dir_tar.path,
+    ]
+  else:
+     return []
+
 def _setup_deps(deps, name, working_dir, allow_cc_deps=False,
                 in_runfiles=False):
   """
@@ -279,6 +288,9 @@ def _rust_library_impl(ctx):
       toolchain.rust_lib +
       toolchain.crosstool_files)
 
+  if ctx.file.out_dir_tar:
+    compile_inputs = compile_inputs + [ctx.file.out_dir_tar]
+
   ctx.action(
       inputs = compile_inputs,
       outputs = [rust_lib],
@@ -333,6 +345,9 @@ def _rust_binary_impl(ctx):
       toolchain.rustc_lib +
       toolchain.rust_lib +
       toolchain.crosstool_files)
+
+  if ctx.file.out_dir_tar:
+    compile_inputs = compile_inputs + [ctx.file.out_dir_tar]
 
   ctx.action(
       inputs = compile_inputs,
@@ -401,6 +416,9 @@ def _rust_test_common(ctx, test_binary):
                     toolchain.rustc_lib +
                     toolchain.rust_lib +
                     toolchain.crosstool_files)
+
+  if ctx.file.out_dir_tar:
+    compile_inputs = compile_inputs + [ctx.file.out_dir_tar]
 
   ctx.action(
       inputs = compile_inputs,
@@ -518,6 +536,7 @@ def _rust_doc_test_impl(ctx):
                         allow_cc_deps=False,
                         in_runfiles=True)
 
+
   # Construct rustdoc test command, which will be written to a shell script
   # to be executed to run the test.
   toolchain = _find_toolchain(ctx)
@@ -550,6 +569,13 @@ _rust_common_attrs = {
     "deps": attr.label_list(),
     "crate_features": attr.string_list(),
     "rustc_flags": attr.string_list(),
+    "out_dir_tar": attr.label(
+        allow_files = [
+            ".tar",
+            ".tar.gz",
+        ],
+        single_file = True,
+    ),
 }
 
 _rust_library_attrs = {
@@ -599,6 +625,11 @@ Args:
     configuration option. The features listed here will be passed to `rustc`
     with `--cfg feature="${feature_name}"` flags.
   rustc_flags: List of compiler flags passed to `rustc`.
+  out_dir_tar: An optional tar or tar.gz file unpacked and passed as OUT_DIR.
+
+    Many library crates in the Rust ecosystem require sources to be provided
+    to them in the form of an OUT_DIR argument. This argument can be used to
+    supply the contents of this directory.
 
 Example:
   Suppose you have the following directory structure for a simple Rust library
@@ -704,6 +735,11 @@ Args:
     configuration option. The features listed here will be passed to `rustc`
     with `--cfg feature="${feature_name}"` flags.
   rustc_flags: List of compiler flags passed to `rustc`.
+  out_dir_tar: An optional tar or tar.gz file unpacked and passed as OUT_DIR.
+
+    Many library crates in the Rust ecosystem require sources to be provided
+    to them in the form of an OUT_DIR argument. This argument can be used to
+    supply the contents of this directory.
 
 Example:
   Suppose you have the following directory structure for a Rust project with a
@@ -830,6 +866,11 @@ Args:
     configuration option. The features listed here will be passed to `rustc`
     with `--cfg feature="${feature_name}"` flags.
   rustc_flags: List of compiler flags passed to `rustc`.
+  out_dir_tar: An optional tar or tar.gz file unpacked and passed as OUT_DIR.
+
+    Many library crates in the Rust ecosystem require sources to be provided
+    to them in the form of an OUT_DIR argument. This argument can be used to
+    supply the contents of this directory.
 
 Examples:
   Suppose you have the following directory structure for a Rust library crate

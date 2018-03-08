@@ -60,7 +60,7 @@ The master branch should always be current with the latest bazel, as such you ca
 ## rust_library
 
 ```python
-rust_library(name, srcs, crate_root, crate_type, deps, data, crate_features, rustc_flags)
+rust_library(name, srcs, crate_root, crate_type, deps, data, crate_features, rustc_flags, out_dir_tar)
 ```
 
 <table class="table table-condensed table-bordered table-params">
@@ -176,6 +176,18 @@ rust_library(name, srcs, crate_root, crate_type, deps, data, crate_features, rus
         <p>List of compiler flags passed to <code>rustc</code>.</p>
       </td>
     </tr>
+    <tr>
+      <td><code>out_dir_tar</code></td>
+      <td>
+        <code>A single compressed tar or tar.gz file</code>
+        <p>
+          A prepared .tar.gz file to be unpacked and supplied to
+          <code>rustc</code> as an "OUT_DIR" environment variable. Commonly
+          used by Rust sources for outputs of code generation. Crates accept
+          only a single out dir tar to retain parity with Cargo.
+        </p>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -249,7 +261,7 @@ INFO: Elapsed time: 1.245s, Critical Path: 1.01s
 ## rust_binary
 
 ```
-rust_binary(name, srcs, deps, data, crate_features, rustc_flags)
+rust_binary(name, srcs, deps, data, crate_features, rustc_flags, out_dir_tar)
 ```
 
 <table class="table table-condensed table-bordered table-params">
@@ -347,6 +359,18 @@ rust_binary(name, srcs, deps, data, crate_features, rustc_flags)
         <p>List of compiler flags passed to <code>rustc</code>.</p>
       </td>
     </tr>
+    <tr>
+      <td><code>out_dir_tar</code></td>
+      <td>
+        <code>A single compressed tar or tar.gz file</code>
+        <p>
+          A prepared .tar.gz file to be unpacked and supplied to
+          <code>rustc</code> as an "OUT_DIR" environment variable. Commonly
+          used by Rust sources for outputs of code generation. Crates accept
+          only a single out dir tar to retain parity with Cargo.
+        </p>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -440,7 +464,7 @@ Hello world
 ## rust_test
 
 ```python
-rust_test(name, srcs, deps, data, crate_features, rustc_flags)
+rust_test(name, srcs, deps, data, crate_features, rustc_flags, out_dir_tar)
 ```
 
 <table class="table table-condensed table-bordered table-params">
@@ -536,6 +560,18 @@ rust_test(name, srcs, deps, data, crate_features, rustc_flags)
       <td>
         <code>List of strings, optional</code>
         <p>List of compiler flags passed to <code>rustc</code>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><code>out_dir_tar</code></td>
+      <td>
+        <code>A single compressed tar or tar.gz file</code>
+        <p>
+          A prepared .tar.gz file to be unpacked and supplied to
+          <code>rustc</code> as an "OUT_DIR" environment variable. Commonly
+          used by Rust sources for outputs of code generation. Crates accept
+          only a single out dir tar to retain parity with Cargo.
+        </p>
       </td>
     </tr>
   </tbody>
@@ -669,7 +705,7 @@ Run the test with `bazel build //hello_lib:hello_lib_test`.
 ## rust\_bench\_test
 
 ```python
-rust_bench_test(name, srcs, deps, data, crate_features, rustc_flags)
+rust_bench_test(name, srcs, deps, data, crate_features, rustc_flags, out_dir_tar)
 ```
 
 **Warning**: This rule is currently experimental. [Rust Benchmark
@@ -774,6 +810,18 @@ easy to use a custom Rust toolchain, such as a nightly release.
       <td>
         <code>List of strings, optional</code>
         <p>List of compiler flags passed to <code>rustc</code>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><code>out_dir_tar</code></td>
+      <td>
+        <code>A single compressed tar or tar.gz file</code>
+        <p>
+          A prepared .tar.gz file to be unpacked and supplied to
+          <code>rustc</code> as an "OUT_DIR" environment variable. Commonly
+          used by Rust sources for outputs of code generation. Crates accept
+          only a single out dir tar to retain parity with Cargo.
+        </p>
       </td>
     </tr>
   </tbody>
