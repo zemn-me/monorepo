@@ -6,7 +6,7 @@ ZIP_PATH = "/usr/bin/zip"
 
 # Utility methods that use the toolchain provider.
 def build_rustc_command(ctx, toolchain, crate_name, crate_type, src, output_dir,
-                         depinfo, rust_flags=[]):
+                         depinfo, output_hash=None, rust_flags=[]):
   """
   Constructs the rustc command used to build the current target.
   """
@@ -26,6 +26,10 @@ def build_rustc_command(ctx, toolchain, crate_name, crate_type, src, output_dir,
   # Construct features flags
   features_flags = _get_features_flags(ctx.attr.crate_features)
 
+  extra_filename = ""
+  if output_hash:
+    extra_filename = "-%s" % output_hash
+
   return " ".join(
       ["set -e;"] +
       depinfo.setup_cmd +
@@ -37,6 +41,9 @@ def build_rustc_command(ctx, toolchain, crate_name, crate_type, src, output_dir,
           "--crate-name %s" % crate_name,
           "--crate-type %s" % crate_type,
           "-C opt-level=3",
+          # Disambiguate this crate from similarly named ones
+          "-C metadata=%s" % extra_filename,
+          "-C extra-filename='%s'" % extra_filename,
           "--codegen ar=%s" % ar,
           "--codegen linker=%s" % cc,
           "--codegen link-args='%s'" % ' '.join(cpp_fragment.link_options),
