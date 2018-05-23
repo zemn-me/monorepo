@@ -124,6 +124,7 @@ rust_toolchain(
     rustc_lib = ["@rust_linux_x86_64//:rustc_lib"],
     staticlib_ext = ".a",
     dylib_ext = ".so",
+    os = "linux",
     visibility = ["//visibility:public"],
 )
 
@@ -149,6 +150,7 @@ rust_toolchain(
     rustc_lib = ["@rust_darwin_x86_64//:rustc_lib"],
     staticlib_ext = ".a",
     dylib_ext = ".dylib",
+    os = "mac os x",
     visibility = ["//visibility:public"],
 )
 
@@ -174,6 +176,7 @@ rust_toolchain(
     rustc_lib = ["@rust_freebsd_x86_64//:rustc_lib"],
     staticlib_ext = ".a",
     dylib_ext = ".so",
+    os = "freebsd",
     visibility = ["//visibility:public"],
 )
 """
