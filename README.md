@@ -604,9 +604,13 @@ impl Greeter {
     pub fn new(greeting: &str) -> Greeter {
         Greeter { greeting: greeting.to_string(), }
     }
+ 
+    pub fn greeting(&self, thing: &str) -> String {
+        return format!("{} {}", &self.greeting, thing);
+    }
 
     pub fn greet(&self, thing: &str) {
-        println!("{} {}", &self.greeting, thing);
+        println!("{}", self.greeting(thing))
     }
 }
 
