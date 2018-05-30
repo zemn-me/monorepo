@@ -6,6 +6,25 @@ load(":utils.bzl", "relative_path")
 
 ZIP_PATH = "/usr/bin/zip"
 
+def _get_rustc_env(ctx):
+  version = ctx.attr.version if hasattr(ctx.attr, "version") else "0.0.0"
+  v1, v2, v3 = version.split(".")
+  if "-" in v3:
+    v3, pre = v3.split("-")
+  else:
+    pre = ""
+  return [
+    "CARGO_PKG_VERSION=" + version,
+    "CARGO_PKG_VERSION_MAJOR=" + v1,
+    "CARGO_PKG_VERSION_MINOR=" + v2,
+    "CARGO_PKG_VERSION_PATCH=" + v3,
+    "CARGO_PKG_VERSION_PRE=" + pre,
+    "CARGO_PKG_AUTHORS=",
+    "CARGO_PKG_NAME=" + ctx.label.name,
+    "CARGO_PKG_DESCRIPTION=",
+    "CARGO_PKG_HOMEPAGE=",
+  ]
+
 # Utility methods that use the toolchain provider.
 def build_rustc_command(ctx, toolchain, crate_name, crate_type, src, output_dir,
                          depinfo, output_hash=None, rust_flags=[]):
@@ -40,6 +59,7 @@ def build_rustc_command(ctx, toolchain, crate_name, crate_type, src, output_dir,
       ['if [ ! -z "${TMPDIR+x}" ]; then mkdir -p $TMPDIR; fi;'] +
       depinfo.setup_cmd +
       _out_dir_setup_cmd(ctx.file.out_dir_tar) +
+      _get_rustc_env(ctx) +
       [
           "LD_LIBRARY_PATH=%s" % _get_path_str(_get_dir_names(toolchain.rustc_lib)),
           "DYLD_LIBRARY_PATH=%s" % _get_path_str(_get_dir_names(toolchain.rustc_lib)),

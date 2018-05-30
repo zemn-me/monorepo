@@ -563,6 +563,7 @@ _rust_common_attrs = {
     "deps": attr.label_list(),
     "crate_features": attr.string_list(),
     "rustc_flags": attr.string_list(),
+    "version": attr.string(default = "0.0.0"),
     "out_dir_tar": attr.label(
         allow_files = [
             ".tar",
@@ -619,6 +620,7 @@ Args:
     configuration option. The features listed here will be passed to `rustc`
     with `--cfg feature="${feature_name}"` flags.
   rustc_flags: List of compiler flags passed to `rustc`.
+  version: a version to inject in the cargo environment variable.
   out_dir_tar: An optional tar or tar.gz file unpacked and passed as OUT_DIR.
 
     Many library crates in the Rust ecosystem require sources to be provided
@@ -729,6 +731,7 @@ Args:
     configuration option. The features listed here will be passed to `rustc`
     with `--cfg feature="${feature_name}"` flags.
   rustc_flags: List of compiler flags passed to `rustc`.
+  version: a version to inject in the cargo environment variable.
   out_dir_tar: An optional tar or tar.gz file unpacked and passed as OUT_DIR.
 
     Many library crates in the Rust ecosystem require sources to be provided
