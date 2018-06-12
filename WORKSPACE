@@ -1,4 +1,6 @@
 workspace(name = "io_bazel_rules_rust")
+load("@bazel_tools//tools/build_defs/repo:git.bzl",
+     "git_repository", "new_git_repository")
 
 local_repository(
     name = "examples",
@@ -18,7 +20,7 @@ new_git_repository(
     name = "libc",
     remote = "https://github.com/rust-lang/libc",
     tag = "0.2.20",
-    build_file = "libc.BUILD",
+    build_file = "//:libc.BUILD",
 )
 
 # Used for documenting Rust rules.
