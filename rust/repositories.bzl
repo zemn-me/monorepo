@@ -1,3 +1,5 @@
+load(":known_shas.bzl", "FILE_KEY_TO_SHA")
+
 RUST_DARWIN_BUILD_FILE = """
 filegroup(
     name = "rustc",
@@ -193,7 +195,7 @@ def rust_repositories():
         name = "rust_linux_x86_64",
         url = "https://static.rust-lang.org/dist/rust-1.26.1-x86_64-unknown-linux-gnu.tar.gz",
         strip_prefix = "rust-1.26.1-x86_64-unknown-linux-gnu",
-        sha256 = "b7e964bace1286696d511c287b945f3ece476ba77a231f0c31f1867dfa5080e0",
+        sha256 = FILE_KEY_TO_SHA.get("rust-1.26.1-x86_64-unknown-linux-gnu") or "",
         build_file_content = RUST_LINUX_BUILD_FILE,
     )
 
@@ -201,7 +203,7 @@ def rust_repositories():
         name = "rust_darwin_x86_64",
         url = "https://static.rust-lang.org/dist/rust-1.26.1-x86_64-apple-darwin.tar.gz",
         strip_prefix = "rust-1.26.1-x86_64-apple-darwin",
-        sha256 = "ebf898b9fa7e2aafc53682a41f18af5ca6660ebe82dd78f28cd9799fe4dc189a",
+        sha256 = FILE_KEY_TO_SHA.get("rust-1.26.1-x86_64-apple-darwin") or "",
         build_file_content = RUST_DARWIN_BUILD_FILE,
     )
 
@@ -209,7 +211,7 @@ def rust_repositories():
         name = "rust_freebsd_x86_64",
         url = "https://static.rust-lang.org/dist/rust-1.26.1-x86_64-unknown-freebsd.tar.gz",
         strip_prefix = "rust-1.26.1-x86_64-unknown-freebsd",
-        sha256 = "910128f60c680e175ae93722272f491c6835f27652f9f3fe415dc0d9c482e204",
+        sha256 = FILE_KEY_TO_SHA.get("rust-1.26.1-x86_64-unknown-freebsd") or "",
         build_file_content = RUST_FREEBSD_BUILD_FILE,
     )
 
