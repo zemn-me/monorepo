@@ -125,7 +125,7 @@ def build_rustdoc_command(ctx, toolchain, rust_doc_zip, depinfo, lib_rs, target,
         ] + doc_flags +
         depinfo.search_flags +
         # rustdoc can't do anything with native link flags, and blows up on them
-        [f for f in depinfo.link_flags if f.startswith("--extern")]+
+        [f for f in depinfo.link_flags if f.startswith("--extern")] +
         [
             "&&",
             "(cd %s" % docs_dir,
@@ -252,7 +252,7 @@ rust_toolchain = rule(
         "exec_triple": attr.string(),
         "target_triple": attr.string(),
         "_crosstool": attr.label(
-            default = Label("//tools/defaults:crosstool"),
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
         "opt_level": attr.string_dict(default = {
             "opt": "3",
