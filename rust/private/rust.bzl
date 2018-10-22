@@ -192,6 +192,7 @@ _rust_common_attrs = {
         ],
         single_file = True,
     ),
+    "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),
 }
 
 _rust_library_attrs = {
@@ -202,6 +203,7 @@ rust_library = rule(
     _rust_library_impl,
     attrs = dict(_rust_common_attrs.items() +
                  _rust_library_attrs.items()),
+    fragments = ["cpp"],
     host_fragments = ["cpp"],
     toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
 )
@@ -318,6 +320,7 @@ rust_binary = rule(
     _rust_binary_impl,
     attrs = _rust_common_attrs,
     executable = True,
+    fragments = ["cpp"],
     host_fragments = ["cpp"],
     toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
 )
@@ -449,6 +452,7 @@ rust_test = rule(
     _rust_test_impl,
     attrs = _rust_common_attrs,
     executable = True,
+    fragments = ["cpp"],
     host_fragments = ["cpp"],
     test = True,
     toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
@@ -618,6 +622,7 @@ rust_benchmark = rule(
     _rust_benchmark_impl,
     attrs = _rust_common_attrs,
     executable = True,
+    fragments = ["cpp"],
     host_fragments = ["cpp"],
     toolchains = ["@io_bazel_rules_rust//rust:toolchain"],
 )
