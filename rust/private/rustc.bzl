@@ -190,7 +190,8 @@ def rustc_compile_action(
 
     rpaths = _compute_rpaths(toolchain, output_dir, depinfo)
 
-    if versions.is_at_least("0.18.0", BAZEL_VERSION):
+    if (len(BAZEL_VERSION) == 0 or
+        versions.is_at_least("0.18.0", BAZEL_VERSION)):
         user_link_flags = ctx.fragments.cpp.linkopts
     else:
         user_link_flags = depset(ctx.fragments.cpp.linkopts)
