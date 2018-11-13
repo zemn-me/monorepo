@@ -24,10 +24,7 @@ def _rust_doc_test_impl(ctx):
 
     toolchain = find_toolchain(ctx)
 
-    dep_info = collect_deps(
-        [ctx.attr.dep],
-        toolchain,
-    )
+    dep_info = ctx.attr.dep[DepInfo]
 
     # Construct rustdoc test command, which will be written to a shell script
     # to be executed to run the test.
@@ -67,8 +64,9 @@ def _build_rustdoc_test_script(toolchain, dep_info, crate):
     link_flags = []
     link_search_flags = []
 
+    link_flags += ["--extern " + crate.name + "=" + crate.output.short_path]
     link_flags += ["--extern " + c.name + "=" + c.output.short_path for c in d.direct_crates]
-    link_search_flags += ["-Ldependency={}".format(dirname(c.output.short_path)) for c in d.indirect_crates]
+    link_search_flags += ["-Ldependency={}".format(dirname(c.output.short_path)) for c in d.transitive_crates]
 
     link_flags += ["-ldylib=" + get_lib_name(lib) for lib in d.transitive_dylibs.to_list()]
     link_search_flags += ["-Lnative={}".format(dirname(lib.short_path)) for lib in d.transitive_dylibs]
@@ -93,7 +91,7 @@ set -e;
 rust_doc_test = rule(
     _rust_doc_test_impl,
     attrs = {
-        "dep": attr.label(mandatory = True),
+        "dep": attr.label(mandatory = True, providers=[CrateInfo]),
     },
     executable = True,
     test = True,
