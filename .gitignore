@@ -3,6 +3,10 @@
 
 # bazel
 /bazel-*
+/examples/bazel-*
 
 # rustfmt
 *.rs.bk
+
+# protobuf cargo-raze files
+/proto/raze/target

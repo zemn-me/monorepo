@@ -111,7 +111,7 @@ def collect_deps(deps, toolchain):
             transitive_dylibs += dylibs
             transitive_staticlibs += staticlibs
         else:
-            fail("rust targets can only depend on rust_library or cc_library targets." + str(dep), "deps")
+            fail("rust targets can only depend on rust_library, rust_*_library or cc_library targets." + str(dep), "deps")
 
     crate_list = transitive_crates.to_list()
     transitive_libs = depset([c.output for c in crate_list]) + transitive_staticlibs + transitive_dylibs
@@ -182,7 +182,7 @@ def rustc_compile_action(
 
     compile_inputs = (
         crate_info.srcs +
-        ctx.files.data +
+        getattr(ctx.files, "data", []) +
         dep_info.transitive_libs +
         [toolchain.rustc] +
         toolchain.rustc_lib +
@@ -208,9 +208,10 @@ def rustc_compile_action(
     args.add("--emit=dep-info,link")
     args.add("--color", "always")
     args.add("--target", toolchain.target_triple)
-    args.add_all(ctx.attr.crate_features, before_each = "--cfg", format_each = 'feature="%s"')
+    if hasattr(ctx.attr, "crate_features"):
+        args.add_all(getattr(ctx.attr, "crate_features"), before_each = "--cfg", format_each = 'feature="%s"')
     args.add_all(rust_flags)
-    args.add_all(ctx.attr.rustc_flags)
+    args.add_all(getattr(ctx.attr, "rustc_flags", []))
 
     # Link!
     rpaths = _compute_rpaths(toolchain, output_dir, dep_info)
@@ -238,11 +239,11 @@ def rustc_compile_action(
         env = _get_rustc_env(ctx),
         arguments = [args],
         mnemonic = "Rustc",
-        progress_message = "Compiling Rust {} {} ({} files)".format(crate_info.type, ctx.label.name, len(ctx.files.srcs)),
+        progress_message = "Compiling Rust {} {} ({} files)".format(crate_info.type, ctx.label.name, len(crate_info.srcs)),
     )
 
     runfiles = ctx.runfiles(
-        files = dep_info.transitive_dylibs.to_list() + ctx.files.data,
+        files = dep_info.transitive_dylibs.to_list() + getattr(ctx.files, "data", []),
         collect_data = True,
     )
 
@@ -257,7 +258,7 @@ def rustc_compile_action(
     ]
 
 def _create_out_dir_action(ctx):
-    tar_file = ctx.file.out_dir_tar
+    tar_file = getattr(ctx.file, "out_dir_tar", None)
     if not tar_file:
         return None
 
