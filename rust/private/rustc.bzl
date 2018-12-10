@@ -38,7 +38,6 @@ CrateInfo = provider(
 DepInfo = provider(
     fields = {
         "direct_crates": "depset[CrateInfo]",
-        "indirect_crates": "depset[CrateInfo]",
         "transitive_crates": "depset[CrateInfo]",
         "transitive_dylibs": "depset[File]",
         "transitive_staticlibs": "depset[File]",
@@ -102,30 +101,26 @@ def collect_deps(deps, toolchain):
         if CrateInfo in dep:
             # This dependency is a rust_library
             direct_crates += [dep[CrateInfo]]
-            transitive_crates += [dep[CrateInfo]]
-            transitive_crates += dep[DepInfo].transitive_crates
-            transitive_dylibs += dep[DepInfo].transitive_dylibs
-            transitive_staticlibs += dep[DepInfo].transitive_staticlibs
+            transitive_crates = depset([dep[CrateInfo]], transitive = [transitive_crates])
+            transitive_crates = depset(transitive = [transitive_crates, dep[DepInfo].transitive_crates])
+            transitive_dylibs = depset(transitive = [transitive_dylibs, dep[DepInfo].transitive_dylibs])
+            transitive_staticlibs = depset(transitive = [transitive_staticlibs, dep[DepInfo].transitive_staticlibs])
         elif hasattr(dep, "cc"):
             # This dependency is a cc_library
-            dylibs = [l for l in dep.cc.libs if l.basename.endswith(toolchain.dylib_ext)]
-            staticlibs = [l for l in dep.cc.libs if l.basename.endswith(toolchain.staticlib_ext)]
-            transitive_dylibs += dylibs
-            transitive_staticlibs += staticlibs
+            dylibs = [l for l in dep.cc.libs.to_list() if l.basename.endswith(toolchain.dylib_ext)]
+            staticlibs = [l for l in dep.cc.libs.to_list() if l.basename.endswith(toolchain.staticlib_ext)]
+            transitive_dylibs = depset(transitive = [transitive_dylibs, depset(dylibs)])
+            transitive_staticlibs = depset(transitive = [transitive_staticlibs, depset(staticlibs)])
         else:
             fail("rust targets can only depend on rust_library, rust_*_library or cc_library targets." + str(dep), "deps")
 
-    crate_list = transitive_crates.to_list()
     transitive_libs = depset(
-        [c.output for c in crate_list],
+        [c.output for c in transitive_crates.to_list()],
         transitive = [transitive_staticlibs, transitive_dylibs],
     )
 
-    indirect_crates = depset([crate for crate in crate_list if crate not in direct_crates])
-
     return DepInfo(
         direct_crates = depset(direct_crates),
-        indirect_crates = indirect_crates,
         transitive_crates = transitive_crates,
         transitive_dylibs = transitive_dylibs,
         transitive_staticlibs = transitive_staticlibs,
@@ -186,14 +181,16 @@ def rustc_compile_action(
         toolchain,
     )
 
-    compile_inputs = (
+    compile_inputs = depset(
         crate_info.srcs +
         getattr(ctx.files, "data", []) +
         dep_info.transitive_libs +
         [toolchain.rustc] +
-        toolchain.rustc_lib +
-        toolchain.rust_lib +
-        toolchain.crosstool_files
+        toolchain.crosstool_files,
+        transitive = [
+            toolchain.rustc_lib.files,
+            toolchain.rust_lib.files,
+        ],
     )
 
     args = ctx.actions.args()
@@ -232,7 +229,7 @@ def rustc_compile_action(
     # We awkwardly construct this command because we cannot reference $PWD from ctx.actions.run(executable=toolchain.rustc)
     out_dir = _create_out_dir_action(ctx)
     if out_dir:
-        compile_inputs.append(out_dir)
+        compile_inputs = depset([out_dir], transitive = [compile_inputs])
         out_dir_env = "OUT_DIR=$(pwd)/{} ".format(out_dir.path)
     else:
         out_dir_env = ""
@@ -294,7 +291,7 @@ def _compute_rpaths(toolchain, output_dir, dep_info):
     # Multiple dylibs can be present in the same directory, so deduplicate them.
     return depset([
         relative_path(output_dir, lib_dir)
-        for lib_dir in _get_dir_names(dep_info.transitive_dylibs)
+        for lib_dir in _get_dir_names(dep_info.transitive_dylibs.to_list())
     ])
 
 def _get_dir_names(files):

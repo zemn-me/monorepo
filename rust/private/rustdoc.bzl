@@ -24,19 +24,21 @@ def _rust_doc_impl(ctx):
 
     toolchain = find_toolchain(ctx)
 
-    rustdoc_inputs = (
+    rustdoc_inputs = depset(
         crate.srcs +
-        [c.output for c in dep_info.transitive_crates] +
-        [toolchain.rust_doc] +
-        toolchain.rustc_lib +
-        toolchain.rust_lib
+        [c.output for c in dep_info.transitive_crates.to_list()] +
+        [toolchain.rust_doc],
+        transitive = [
+            toolchain.rustc_lib.files,
+            toolchain.rust_lib.files,
+        ],
     )
 
     output_dir = ctx.actions.declare_directory(ctx.label.name)
     args = ctx.actions.args()
     args.add(crate.root.path)
     args.add("--crate-name", crate.name)
-    args.add("--output", output_dir)
+    args.add("--output", output_dir.path)
 
     # nb. rustdoc can't do anything with native link flags; we must omit them.
     add_crate_link_flags(args, dep_info)
