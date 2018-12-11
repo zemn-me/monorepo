@@ -118,7 +118,7 @@ def _expand_provider(lst, provider):
 
 def _rust_proto_compile(protos, descriptor_sets, imports, crate_name, ctx, grpc, compile_deps):
     # Create all the source in a specific folder
-    toolchain = ctx.toolchains["@io_bazel_rules_rust//proto:toolchain"]
+    proto_toolchain = ctx.toolchains["@io_bazel_rules_rust//proto:toolchain"]
     output_dir = "%s.%s.rust" % (crate_name, "grpc" if grpc else "proto")
 
     # Generate the proto stubs
@@ -128,7 +128,7 @@ def _rust_proto_compile(protos, descriptor_sets, imports, crate_name, ctx, grpc,
         protos = protos,
         imports = imports,
         output_dir = output_dir,
-        proto_toolchain = toolchain,
+        proto_toolchain = proto_toolchain,
         grpc = grpc,
     )
 
@@ -154,6 +154,7 @@ def _rust_proto_compile(protos, descriptor_sets, imports, crate_name, ctx, grpc,
             srcs = srcs,
             deps = compile_deps,
             output = rust_lib,
+            edition = proto_toolchain.edition,
         ),
         output_hash = output_hash,
     )
