@@ -258,7 +258,10 @@ def rustc_compile_action(
     package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
     manifest_dir_env = "CARGO_MANIFEST_DIR=$(pwd)/{} ".format(package_dir)
     command = '{}{}{} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd'.format(
-           manifest_dir_env, out_dir_env, toolchain.rustc.path)
+        manifest_dir_env,
+        out_dir_env,
+        toolchain.rustc.path,
+    )
 
     ctx.actions.run_shell(
         command = command,
