@@ -1,22 +1,4 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import bcrypt from 'bcryptjs';
 
-import styles from './styles.css'
-
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
-
-  render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+export default (...bcrypt_digests) =>
+  (input) => bcrypt_digests.some(digest => bcrypt.compareSync(input, digest)) && input;
