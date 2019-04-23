@@ -31,11 +31,11 @@
 //!     // ...
 //!     ```
 
-use std::io;
-use std::fs;
-use std::path::PathBuf;
-use std::path::Path;
 use std::env;
+use std::fs;
+use std::io;
+use std::path::Path;
+use std::path::PathBuf;
 
 pub struct Runfiles {
     runfiles_dir: PathBuf,
@@ -46,7 +46,9 @@ impl Runfiles {
     ///
     /// Manifest based creation is not currently supported.
     pub fn create() -> io::Result<Self> {
-        Ok(Runfiles { runfiles_dir: find_runfiles_dir()? })
+        Ok(Runfiles {
+            runfiles_dir: find_runfiles_dir()?,
+        })
     }
 
     /// Returns the runtime path of a runfile.
@@ -83,9 +85,9 @@ fn find_runfiles_dir() -> io::Result<PathBuf> {
             // TODO: 1.28 adds Path::ancestors() which is a little simpler.
             let mut next = binary_path.parent();
             while let Some(ancestor) = next {
-                if ancestor.file_name().map_or(false, |f| {
-                    f.to_string_lossy().ends_with(".runfiles")
-                })
+                if ancestor
+                    .file_name()
+                    .map_or(false, |f| f.to_string_lossy().ends_with(".runfiles"))
                 {
                     return Ok(ancestor.to_path_buf());
                 }
@@ -97,29 +99,34 @@ fn find_runfiles_dir() -> io::Result<PathBuf> {
             break;
         }
         // Follow symlinks and keep looking.
-        binary_path = binary_path.read_link()?;
-        if binary_path.is_relative() {
-            binary_path = env::current_dir()?.join(binary_path)
+        let link_target = binary_path.read_link()?;
+        binary_path = if link_target.is_absolute() {
+            link_target
+        } else {
+            let link_dir = binary_path.parent().unwrap();
+            env::current_dir()?.join(link_dir).join(link_target)
         }
     }
 
-    panic!("Failed to find .runfiles directory.");
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        "Failed to find .runfiles directory.",
+    ))
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
 
-    use std::io::prelude::*;
     use std::fs::File;
+    use std::io::prelude::*;
 
     #[test]
     fn test_can_read_data_from_runfiles() {
         let r = Runfiles::create().unwrap();
 
-        let mut f = File::open(r.rlocation(
-            "io_bazel_rules_rust/tools/runfiles/data/sample.txt",
-        )).unwrap();
+        let mut f =
+            File::open(r.rlocation("io_bazel_rules_rust/tools/runfiles/data/sample.txt")).unwrap();
 
         let mut buffer = String::new();
         f.read_to_string(&mut buffer).unwrap();
