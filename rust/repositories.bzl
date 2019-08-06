@@ -93,11 +93,15 @@ def BUILD_for_stdlib(target_triple):
     return """
 filegroup(
     name = "rust_lib-{target_triple}",
-    srcs = glob([
-        "lib/rustlib/{target_triple}/lib/*.rlib",
-        "lib/rustlib/{target_triple}/lib/*{dylib_ext}",
-        "lib/rustlib/{target_triple}/lib/*{staticlib_ext}",
-    ]),
+    srcs = glob(
+        [
+            "lib/rustlib/{target_triple}/lib/*.rlib",
+            "lib/rustlib/{target_triple}/lib/*{dylib_ext}",
+            "lib/rustlib/{target_triple}/lib/*{staticlib_ext}",
+        ],
+        # Some patterns (e.g. `lib/*.a`) don't match anything, see https://github.com/bazelbuild/rules_rust/pull/245
+        allow_empty = True,
+    ),
     visibility = ["//visibility:public"],
 )
 """.format(
