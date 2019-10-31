@@ -43,6 +43,7 @@ _SYSTEM_TO_BINARY_EXT = {
     "darwin": "",
     "windows": ".exe",
     "emscripten": ".js",
+    "unknown": "",
 }
 
 _SYSTEM_TO_STATICLIB_EXT = {
@@ -52,6 +53,7 @@ _SYSTEM_TO_STATICLIB_EXT = {
     # TODO(acmcarther): To be verified
     "windows": ".lib",
     "emscripten": ".js",
+    "unknown": "",
 }
 
 _SYSTEM_TO_DYLIB_EXT = {
@@ -61,6 +63,7 @@ _SYSTEM_TO_DYLIB_EXT = {
     # TODO(acmcarther): To be verified
     "windows": ".dll",
     "emscripten": ".js",
+    "unknown": ".wasm",
 }
 
 def cpu_arch_to_constraints(cpu_arch):
@@ -119,6 +122,9 @@ def triple_to_constraint_set(triple):
 
     if len(component_parts) == 4:
         abi = component_parts[3]
+
+    if cpu_arch == "wasm32":
+        return ["@io_bazel_rules_rust//rust/platform:wasm32"]
 
     constraint_set = []
     constraint_set += cpu_arch_to_constraints(cpu_arch)

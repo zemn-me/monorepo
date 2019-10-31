@@ -15,21 +15,21 @@ def rust_repositories():
     rust_repository_set(
         name = "rust_linux_x86_64",
         exec_triple = "x86_64-unknown-linux-gnu",
-        extra_target_triples = [],
+        extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
     )
 
     rust_repository_set(
         name = "rust_darwin_x86_64",
         exec_triple = "x86_64-apple-darwin",
-        extra_target_triples = [],
+        extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
     )
 
     rust_repository_set(
         name = "rust_freebsd_x86_64",
         exec_triple = "x86_64-unknown-freebsd",
-        extra_target_triples = [],
+        extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
     )
 
@@ -404,3 +404,4 @@ def rust_repository_set(name, version, exec_triple, extra_target_triples, iso_da
 
     # Register toolchains
     native.register_toolchains(*all_toolchain_names)
+    native.register_toolchains("@io_bazel_rules_rust//rust/private/dummy_cc_toolchain:dummy_cc_wasm32_toolchain")

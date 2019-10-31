@@ -22,6 +22,15 @@ This repository provides rules for building [Rust][rust] projects with [Bazel](h
   </ul>
 </div>
 
+#### WebAssembly
+
+To build a `rust_binary` for wasm32-unknown-unknown add the `--platforms=//rust/platform:wasm` flag.
+
+    bazel build @examples//hello_world_wasm --platforms=//rust/platform:wasm
+
+`rust_wasm_bindgen` will automatically transition to the wasm platform and can be used when
+building wasm code for the host target.
+
 ### Protobuf
 <div class="toc">
   <ul>

@@ -37,9 +37,30 @@ http_archive(
     ],
 )
 
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip",
+    strip_prefix = "rules_nodejs-0.16.2",
+    sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0"
+)
+
+load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories", "npm_install")
+node_repositories()
+
+# Dependencies for the @examples//hello_world_wasm example.
+npm_install(
+    name = "npm",
+    package_json = "@io_bazel_rules_rust//:package.json",
+    package_lock_json = "@io_bazel_rules_rust//:package-lock.json",
+)
+
 load("@io_bazel_rules_rust//bindgen:repositories.bzl", "rust_bindgen_repositories")
 
 rust_bindgen_repositories()
+
+load("@io_bazel_rules_rust//wasm_bindgen:repositories.bzl", "rust_wasm_bindgen_repositories")
+
+rust_wasm_bindgen_repositories()
 
 load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
 

@@ -223,6 +223,8 @@ def rustc_compile_action(
         ],
     )
 
+    env = _get_rustc_env(ctx, toolchain)
+
     args = ctx.actions.args()
     args.add(crate_info.root)
     args.add("--crate-name=" + crate_info.name)
@@ -256,10 +258,15 @@ def rustc_compile_action(
     add_edition_flags(args, crate_info)
 
     # Link!
-    rpaths = _compute_rpaths(toolchain, output_dir, dep_info)
-    ld, link_args, link_env = _get_linker_and_args(ctx, rpaths)
-    args.add("--codegen=linker=" + ld)
-    args.add_joined("--codegen", link_args, join_with = " ", format_joined = "link-args=%s")
+
+    # Rust's built-in linker can handle linking wasm files. We don't want to attempt to use the cc
+    # linker since it won't understand.
+    if toolchain.target_arch != "wasm32":
+        rpaths = _compute_rpaths(toolchain, output_dir, dep_info)
+        ld, link_args, link_env = _get_linker_and_args(ctx, rpaths)
+        env.update(link_env)
+        args.add("--codegen=linker=" + ld)
+        args.add_joined("--codegen", link_args, join_with = " ", format_joined = "link-args=%s")
 
     add_native_link_flags(args, dep_info)
 
@@ -300,9 +307,6 @@ def rustc_compile_action(
         toolchain.rustc.path,
     )
 
-    env = _get_rustc_env(ctx, toolchain)
-    env.update(link_env)
-
     ctx.actions.run_shell(
         command = command,
         inputs = compile_inputs,
@@ -312,7 +316,6 @@ def rustc_compile_action(
         mnemonic = "Rustc",
         progress_message = "Compiling Rust {} {} ({} files)".format(crate_info.type, ctx.label.name, len(crate_info.srcs)),
     )
-
     runfiles = ctx.runfiles(
         files = dep_info.transitive_dylibs.to_list() + getattr(ctx.files, "data", []),
         collect_data = True,
@@ -325,6 +328,7 @@ def rustc_compile_action(
             # nb. This field is required for cc_library to depend on our output.
             files = depset([crate_info.output]),
             runfiles = runfiles,
+            executable = crate_info.output if crate_info.type == "bin" else None
         ),
     ]
 

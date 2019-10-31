@@ -14,6 +14,7 @@
 
 load("@io_bazel_rules_rust//rust:private/rustc.bzl", "CrateInfo", "rustc_compile_action")
 load("@io_bazel_rules_rust//rust:private/utils.bzl", "find_toolchain")
+load("@io_bazel_rules_rust//rust:private/transitions.bzl", "wasm_transition")
 
 _OLD_INLINE_TEST_CRATE_MSG = """
 --------------------------------------------------------------------------------
@@ -128,6 +129,11 @@ def _rust_library_impl(ctx):
 def _rust_binary_impl(ctx):
     toolchain = find_toolchain(ctx)
 
+    if (toolchain.target_arch == "wasm32"):
+        output = ctx.actions.declare_file(ctx.label.name + ".wasm")
+    else:
+        output = ctx.actions.declare_file(ctx.label.name)
+
     return rustc_compile_action(
         ctx = ctx,
         toolchain = toolchain,
@@ -137,7 +143,7 @@ def _rust_binary_impl(ctx):
             root = _crate_root_src(ctx, "main.rs"),
             srcs = ctx.files.srcs,
             deps = ctx.attr.deps,
-            output = ctx.outputs.executable,
+            output = output,
             edition = _get_edition(ctx, toolchain),
         ),
     )
@@ -314,6 +320,9 @@ _rust_library_attrs = {
         """),
         default = "rlib",
     ),
+    "_whitelist_function_transition": attr.label(
+        default = "//tools/whitelists/function_transition_whitelist",
+    ),
 }
 
 _rust_test_attrs = {
@@ -334,6 +343,7 @@ rust_library = rule(
                  _rust_library_attrs.items()),
     fragments = ["cpp"],
     host_fragments = ["cpp"],
+    cfg = wasm_transition,
     toolchains = [
         "@io_bazel_rules_rust//rust:toolchain",
         "@bazel_tools//tools/cpp:toolchain_type"

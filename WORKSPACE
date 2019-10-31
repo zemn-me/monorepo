@@ -41,6 +41,9 @@ rust_proto_repositories()
 load("@io_bazel_rules_rust//bindgen:repositories.bzl", "rust_bindgen_repositories")
 rust_bindgen_repositories()
 
+load("@io_bazel_rules_rust//wasm_bindgen:repositories.bzl", "rust_wasm_bindgen_repositories")
+rust_wasm_bindgen_repositories()
+
 # Stardoc and its dependencies
 http_archive(
     name = "io_bazel_skydoc",
@@ -54,8 +57,15 @@ skydoc_repositories()
 load("@io_bazel_rules_sass//:package.bzl", "rules_sass_dependencies")
 rules_sass_dependencies()
 
-load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories")
+load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories", "npm_install")
 node_repositories()
+
+# Dependencies for the @examples//hello_world_wasm example.
+npm_install(
+    name = "npm",
+    package_json = "//:package.json",
+    package_lock_json = "//:package-lock.json",
+)
 
 load("@io_bazel_rules_sass//:defs.bzl", "sass_repositories")
 sass_repositories()
