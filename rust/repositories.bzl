@@ -1,5 +1,7 @@
 load(":known_shas.bzl", "FILE_KEY_TO_SHA")
 load("//rust/platform:triple_mappings.bzl", "system_to_binary_ext", "system_to_dylib_ext", "system_to_staticlib_ext", "triple_to_constraint_set", "triple_to_system")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 DEFAULT_TOOLCHAIN_NAME_PREFIX = "toolchain_for"
 
@@ -11,6 +13,15 @@ def rust_repositories():
     """
 
     RUST_VERSION = "1.35.0"
+
+    maybe(
+        http_archive,
+        name = "rules_cc",
+        url = "https://github.com/bazelbuild/rules_cc/archive/624b5d59dfb45672d4239422fa1e3de1822ee110.zip",
+        sha256 = "8c7e8bf24a2bf515713445199a677ee2336e1c487fa1da41037c6026de04bbc3",
+        strip_prefix = "rules_cc-624b5d59dfb45672d4239422fa1e3de1822ee110",
+        type = "zip",
+    )
 
     rust_repository_set(
         name = "rust_linux_x86_64",
