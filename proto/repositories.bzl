@@ -34,7 +34,10 @@ def rust_proto_repositories():
         name = "rules_python",
         strip_prefix = "rules_python-0.0.1",
         type = "zip",
-        url = "https://github.com/bazelbuild/rules_python/archive/0.0.1.zip",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_python/archive/0.0.1.zip",
+            "https://github.com/bazelbuild/rules_python/archive/0.0.1.zip",
+        ],
         sha256 = "f73c0cf51c32c7aaeaf02669ed03b32d12f2d92e1b05699eb938a75f35a210f4",
     )
 
@@ -42,7 +45,10 @@ def rust_proto_repositories():
         http_archive,
         name = "bazel_skylib",
         strip_prefix = "bazel-skylib-1.0.2",
-        url = "https://github.com/bazelbuild/bazel-skylib/archive/1.0.2.zip",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/1.0.2.zip",
+            "https://github.com/bazelbuild/bazel-skylib/archive/1.0.2.zip",
+        ],
         type = "zip",
         sha256 = "64ad2728ccdd2044216e4cec7815918b7bb3bb28c95b7e9d951f9d4eccb07625",
     )
@@ -53,6 +59,7 @@ def rust_proto_repositories():
         build_file = "@com_google_protobuf//:third_party/six.BUILD",
         sha256 = "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73",
         urls = [
+            "https://mirror.bazel.build/pypi.python.org/packages/source/s/six/six-1.12.0.tar.gz",
             "https://pypi.python.org/packages/source/s/six/six-1.12.0.tar.gz",
         ],
     )
@@ -64,6 +71,7 @@ def rust_proto_repositories():
         sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1",
         strip_prefix = "zlib-1.2.11",
         urls = [
+            "https://mirror.bazel.build/zlib.net/zlib-1.2.11.tar.gz",
             "https://zlib.net/zlib-1.2.11.tar.gz",
         ],
     )
