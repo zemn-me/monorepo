@@ -103,8 +103,9 @@ def _rust_library_impl(ctx):
     # Determine unique hash for this rlib
     output_hash = _determine_output_hash(lib_rs)
 
+    crate_name = ctx.label.name.replace("-", "_")
     rust_lib_name = _determine_lib_name(
-        ctx.attr.name,
+        crate_name,
         ctx.attr.crate_type,
         toolchain,
         output_hash,
@@ -115,7 +116,7 @@ def _rust_library_impl(ctx):
         ctx = ctx,
         toolchain = toolchain,
         crate_info = CrateInfo(
-            name = ctx.label.name,
+            name = crate_name,
             type = ctx.attr.crate_type,
             root = lib_rs,
             srcs = ctx.files.srcs,
@@ -129,17 +130,18 @@ def _rust_library_impl(ctx):
 
 def _rust_binary_impl(ctx):
     toolchain = find_toolchain(ctx)
+    crate_name = ctx.label.name.replace("-", "_")
 
     if (toolchain.target_arch == "wasm32"):
-        output = ctx.actions.declare_file(ctx.label.name + ".wasm")
+        output = ctx.actions.declare_file(crate_name + ".wasm")
     else:
-        output = ctx.actions.declare_file(ctx.label.name)
+        output = ctx.actions.declare_file(crate_name)
 
     return rustc_compile_action(
         ctx = ctx,
         toolchain = toolchain,
         crate_info = CrateInfo(
-            name = ctx.label.name,
+            name = crate_name,
             type = "bin",
             root = _crate_root_src(ctx, "main.rs"),
             srcs = ctx.files.srcs,
