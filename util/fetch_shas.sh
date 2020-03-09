@@ -5,11 +5,15 @@
 #
 # Should be run from workspace root.
 
+export LC_ALL=C
+
 TOOLS="$(cat ./util/fetch_shas_TOOLS.txt)"
 TARGETS="$(cat ./util/fetch_shas_TARGETS.txt)"
 VERSIONS="$(cat ./util/fetch_shas_VERSIONS.txt)"
 BETA_ISO_DATES="$(cat ./util/fetch_shas_BETA_ISO_DATES.txt)"
 NIGHTLY_ISO_DATES="$(cat ./util/fetch_shas_NIGHTLY_ISO_DATES.txt)"
+RUSTFMT_TARGETS="$(cat ./util/fetch_shas_RUSTFMT_TARGETS.txt)"
+RUSTFMT_VERSIONS="$(cat ./util/fetch_shas_RUSTFMT_VERSIONS.txt)"
 
 enumerate_keys() {
   for TOOL in $TOOLS
@@ -34,6 +38,16 @@ enumerate_keys() {
   done
 }
 
+enumerate_rustfmt_keys() {
+    for RUSTFMT_TARGET in $RUSTFMT_TARGETS
+    do
+        for RUSTFMT_VERSION in $RUSTFMT_VERSIONS
+        do
+            echo "$RUSTFMT_VERSION-$RUSTFMT_TARGET"
+        done
+    done
+}
+
 emit_bzl_file_contents() {
   echo "$@" \
     | parallel --trim lr -d ' ' --will-cite 'printf "%s %s\n", {}, $(curl https://static.rust-lang.org/dist/{}.tar.gz.sha256 | cut -f1 --delimiter=" ")' \
@@ -46,4 +60,4 @@ emit_bzl_file_contents() {
   echo "}"
 }
 
-echo "$(emit_bzl_file_contents $(enumerate_keys))" > ./rust/known_shas.bzl
+echo "$(emit_bzl_file_contents $(enumerate_keys) $(enumerate_rustfmt_keys))" > ./rust/known_shas.bzl

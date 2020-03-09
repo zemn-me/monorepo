@@ -54,6 +54,8 @@ FILE_KEY_TO_SHA = {
     "2018-11-09/rustc-nightly-x86_64-apple-darwin": "55ca5ad85b0afd61a419e374f8e6320b4f4fe30f8092005cdec9e63103812ea7",
     "2018-11-09/rustc-nightly-x86_64-unknown-freebsd": "bd6bb0228aeab01f425cb2ad55b2e0409b43e79450c2830183a6878cc2d2bdc4",
     "2018-11-09/rustc-nightly-x86_64-unknown-linux-gnu": "2c475f886123353c9388322da6e13a67b6ae902d8c249f8e95fde67429f7bf37",
+    "2019-11-07/rustfmt-1.4.8-x86_64-apple-darwin": "9ff48a5a0ec693e28a3cf408019ba67544dea4b0ea119ad572c2f83d387d9ae5",
+    "2019-11-07/rustfmt-1.4.8-x86_64-unknown-linux-gnu": "4d6f813ef721821352a5e447ba1b6a69c04e2b43cec24d379e0c7a0528932d26",
     "2020-02-16/rustc-nightly-x86_64-apple-darwin": "db0338b3e1934147dce0bf6420d9c147caa6aef2db1aca44ca8fef47b7247615",
     "2020-02-16/rustc-nightly-x86_64-unknown-freebsd": "c76fa125e6d17b16a96b01a875d826f20849b09970b49ed1183601a0e7803f6f",
     "2020-02-16/rustc-nightly-x86_64-unknown-linux-gnu": "456af585ad4408ab5f0c7500264ebb4a5f6338c0aed642edb81224ec6146b546",

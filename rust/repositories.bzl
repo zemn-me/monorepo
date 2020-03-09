@@ -13,6 +13,7 @@ def rust_repositories():
     """
 
     RUST_VERSION = "1.39.0"
+    RUSTFMT_VERSION = "1.4.8"
 
     maybe(
         http_archive,
@@ -28,6 +29,7 @@ def rust_repositories():
         exec_triple = "x86_64-unknown-linux-gnu",
         extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
+        rustfmt_version = RUSTFMT_VERSION,
     )
 
     rust_repository_set(
@@ -35,6 +37,7 @@ def rust_repositories():
         exec_triple = "x86_64-apple-darwin",
         extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
+        rustfmt_version = RUSTFMT_VERSION,
     )
 
     rust_repository_set(
@@ -42,6 +45,7 @@ def rust_repositories():
         exec_triple = "x86_64-unknown-freebsd",
         extra_target_triples = ["wasm32-unknown-unknown"],
         version = RUST_VERSION,
+        rustfmt_version = RUSTFMT_VERSION,
     )
 
 def _check_version_valid(version, iso_date, param_prefix = ""):
@@ -97,6 +101,31 @@ filegroup(
         target_triple = target_triple,
     )
 
+def BUILD_for_rustfmt(target_triple):
+    """Emits a BUILD file the compiler .tar.gz."""
+
+    system = triple_to_system(target_triple)
+    return """
+load("@io_bazel_rules_rust//rust:toolchain.bzl", "rust_toolchain")
+
+filegroup(
+    name = "rustfmt_bin",
+    srcs = ["bin/rustfmt{binary_ext}"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "rustfmt",
+    srcs = [":rustfmt_bin"],
+    visibility = ["//visibility:public"],
+)
+""".format(
+        binary_ext = system_to_binary_ext(system),
+        staticlib_ext = system_to_staticlib_ext(system),
+        dylib_ext = system_to_dylib_ext(system),
+        target_triple = target_triple,
+    )
+
 def BUILD_for_stdlib(target_triple):
     """Emits a BUILD file the stdlib .tar.gz."""
 
@@ -140,6 +169,7 @@ rust_toolchain(
     rust_doc = "@{workspace_name}//:rustdoc",
     rust_lib = "@{workspace_name}//:rust_lib-{target_triple}",
     rustc = "@{workspace_name}//:rustc",
+    rustfmt = "@{workspace_name}//:rustfmt_bin",
     rustc_lib = "@{workspace_name}//:rustc_lib",
     staticlib_ext = "{staticlib_ext}",
     dylib_ext = "{dylib_ext}",
@@ -237,6 +267,20 @@ def load_arbitrary_tool(ctx, tool_name, param_prefix, tool_subdirectory, version
         stripPrefix = "{}/{}".format(tool_path, tool_subdirectory),
     )
 
+def _load_rustfmt(ctx):
+    target_triple = ctx.attr.exec_triple
+    load_arbitrary_tool(
+        ctx,
+        iso_date = ctx.attr.iso_date,
+        param_prefix = "rustfmt_",
+        target_triple = target_triple,
+        tool_name = "rustfmt",
+        tool_subdirectory = "rustfmt-preview",
+        version = ctx.attr.rustfmt_version,
+    )
+
+    return BUILD_for_rustfmt(target_triple)
+
 def _load_rust_compiler(ctx):
     """Loads a rust compiler and yields corresponding BUILD for it
 
@@ -301,6 +345,10 @@ def _rust_toolchain_repository_impl(ctx):
     _check_version_valid(ctx.attr.version, ctx.attr.iso_date)
 
     BUILD_components = [_load_rust_compiler(ctx)]
+
+    if ctx.attr.rustfmt_version:
+        BUILD_components.append(_load_rustfmt(ctx))
+
     for target_triple in [ctx.attr.exec_triple] + ctx.attr.extra_target_triples:
         BUILD_components.append(_load_rust_stdlib(ctx, target_triple))
 
@@ -342,6 +390,7 @@ Args:
 rust_toolchain_repository = repository_rule(
     attrs = {
         "version": attr.string(mandatory = True),
+        "rustfmt_version": attr.string(),
         "iso_date": attr.string(),
         "exec_triple": attr.string(mandatory = True),
         "extra_target_triples": attr.string_list(),
@@ -372,7 +421,7 @@ rust_toolchain_repository_proxy = repository_rule(
     implementation = _rust_toolchain_repository_proxy_impl,
 )
 
-def rust_repository_set(name, version, exec_triple, extra_target_triples, iso_date = None):
+def rust_repository_set(name, version, exec_triple, extra_target_triples, iso_date = None, rustfmt_version = None):
     """Assembles a remote repository for the given toolchain params, produces a proxy repository
     to contain the toolchain declaration, and registers the toolchains.
 
@@ -395,6 +444,7 @@ def rust_repository_set(name, version, exec_triple, extra_target_triples, iso_da
         iso_date = iso_date,
         toolchain_name_prefix = DEFAULT_TOOLCHAIN_NAME_PREFIX,
         version = version,
+        rustfmt_version = rustfmt_version,
     )
 
     rust_toolchain_repository_proxy(

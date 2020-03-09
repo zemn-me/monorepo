@@ -14,6 +14,7 @@
 
 load("@io_bazel_rules_rust//rust:rust.bzl", "rust_library")
 load("@io_bazel_rules_rust//rust:private/legacy_cc_starlark_api_shim.bzl", "get_libs_for_static_executable")
+load("@io_bazel_rules_rust//rust:private/utils.bzl", "find_toolchain")
 
 def rust_bindgen_library(
         name,
@@ -42,6 +43,8 @@ def rust_bindgen_library(
     )
 
 def _rust_bindgen_impl(ctx):
+    rust_toolchain = find_toolchain(ctx)
+
     # nb. We can't grab the cc_library`s direct headers, so a header must be provided.
     cc_lib = ctx.attr.cc_lib
     header = ctx.file.header
@@ -51,7 +54,7 @@ def _rust_bindgen_impl(ctx):
 
     toolchain = ctx.toolchains["@io_bazel_rules_rust//bindgen:bindgen_toolchain"]
     bindgen_bin = toolchain.bindgen
-    rustfmt_bin = toolchain.rustfmt
+    rustfmt_bin = toolchain.rustfmt or rust_toolchain.rustfmt
     clang_bin = toolchain.clang
     libclang = toolchain.libclang
 
@@ -144,6 +147,7 @@ rust_bindgen = rule(
     outputs = {"out": "%{name}.rs"},
     toolchains = [
         "@io_bazel_rules_rust//bindgen:bindgen_toolchain",
+        "@io_bazel_rules_rust//rust:toolchain",
     ],
 )
 

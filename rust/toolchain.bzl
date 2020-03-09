@@ -15,6 +15,7 @@ def _rust_toolchain_impl(ctx):
     toolchain = platform_common.ToolchainInfo(
         rustc = ctx.file.rustc,
         rust_doc = ctx.file.rust_doc,
+        rustfmt = ctx.file.rustfmt,
         rustc_lib = ctx.attr.rustc_lib,
         rust_lib = ctx.attr.rust_lib,
         staticlib_ext = ctx.attr.staticlib_ext,
@@ -38,6 +39,10 @@ rust_toolchain = rule(
         ),
         "rust_doc": attr.label(
             doc = "The location of the `rustdoc` binary. Can be a direct source or a filegroup containing one item.",
+            allow_single_file = True,
+        ),
+        "rustfmt": attr.label(
+            doc = "The location of the `rustfmt` binary. Can be a direct source or a filegroup containing one item.",
             allow_single_file = True,
         ),
         "rustc_lib": attr.label(
