@@ -86,12 +86,6 @@ filegroup(
 )
 
 filegroup(
-    name = "cargo",
-    srcs = ["cargo/bin/cargo"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
     name = "rustc_lib",
     srcs = glob([
         "lib/*{dylib_ext}",
@@ -125,15 +119,9 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-filegroup(
-    name = "cargo",
-    srcs = ["cargo/bin/cargo"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "rustdoc",
-    srcs = ["rustc/bin/rustdoc"],
+sh_binary(
+    name = "rustfmt",
+    srcs = [":rustfmt_bin"],
     visibility = ["//visibility:public"],
 )
 """.format(
