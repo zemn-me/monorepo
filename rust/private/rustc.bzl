@@ -35,6 +35,7 @@ CrateInfo = provider(
         "aliases": "Dict[Label, String]: Renamed and aliased crates",
         "output": "File: The output File that will be produced, depends on crate type.",
         "edition": "str: The edition of this crate.",
+        "rustc_env": """Dict[String, String]: Additional `"key": "value"` environment variables to set for rustc.""",
     },
 )
 
@@ -329,6 +330,9 @@ def rustc_compile_action(
         formatted_version = " v{}".format(ctx.attr.version)
     else:
         formatted_version = ""
+
+    # Update environment with user provided variables.
+    env.update(crate_info.rustc_env)
 
     ctx.actions.run_shell(
         command = command,

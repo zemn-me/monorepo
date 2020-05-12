@@ -10,3 +10,11 @@ rust_test(
     srcs = ["tests/manifest_dir.rs"],
     data = ["src/manifest_dir_file.txt"],
 )
+
+rust_test(
+    name = "arbitrary_env_test",
+    srcs = ["tests/arbitrary_env.rs"],
+    rustc_env = {
+        "USER_DEFINED_KEY": "USER_DEFINED_VALUE",
+    },
+)
