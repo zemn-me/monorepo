@@ -320,16 +320,40 @@ def rustc_compile_action(
     # and use `$(pwd)` which resolves the `exec_root` at action execution time.
     package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
     manifest_dir_env = "CARGO_MANIFEST_DIR=$(pwd)/{} ".format(package_dir)
-    command = '{}{}{} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd'.format(
+
+    # Handle that the binary name and crate name may be different.
+    # If a target name contains a - then cargo (and rules_rust) will generate a crate name with _ instead.
+    # Accordingly, rustc will generate a output file (executable, or rlib, or whatever) with _ not -.
+    # But when cargo puts a binary in the target/${config} directory, and sets environment variables like
+    # `CARGO_BIN_EXE_${binary_name}` it will use the - version not the _ version.
+    # So we rename the rustc-generated file (with _s) to have -s if needed.
+    maybe_rename = ""
+    if crate_info.type == "bin":
+        generated_file = crate_info.name
+        if toolchain.target_arch == "wasm32":
+            generated_file = generated_file + ".wasm"
+        src = "/".join([output_dir, generated_file])
+        dst = crate_info.output.path
+        if src != dst:
+            maybe_rename = " && /bin/mv {src} {dst}".format(src=src, dst=dst)
+    command = '{}{}{} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd{}'.format(
         manifest_dir_env,
         out_dir_env,
         toolchain.rustc.path,
+        maybe_rename,
     )
 
     if hasattr(ctx.attr, "version") and ctx.attr.version != "0.0.0":
         formatted_version = " v{}".format(ctx.attr.version)
     else:
         formatted_version = ""
+
+    # Make bin crate data deps available to tests.
+    for data in getattr(ctx.attr, "data", []):
+        if CrateInfo in data:
+            dep_crate_info = data[CrateInfo]
+            if dep_crate_info.type == "bin":
+                env["CARGO_BIN_EXE_" + dep_crate_info.output.basename] = dep_crate_info.output.short_path
 
     # Update environment with user provided variables.
     env.update(crate_info.rustc_env)

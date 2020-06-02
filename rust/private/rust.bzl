@@ -144,9 +144,9 @@ def _rust_binary_impl(ctx):
     crate_name = ctx.label.name.replace("-", "_")
 
     if (toolchain.target_arch == "wasm32"):
-        output = ctx.actions.declare_file(crate_name + ".wasm")
+        output = ctx.actions.declare_file(ctx.label.name + ".wasm")
     else:
-        output = ctx.actions.declare_file(crate_name)
+        output = ctx.actions.declare_file(ctx.label.name)
 
     return rustc_compile_action(
         ctx = ctx,
