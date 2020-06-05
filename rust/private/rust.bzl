@@ -148,12 +148,14 @@ def _rust_binary_impl(ctx):
     else:
         output = ctx.actions.declare_file(ctx.label.name)
 
+    crate_type = getattr(ctx.attr, "crate_type")
+
     return rustc_compile_action(
         ctx = ctx,
         toolchain = toolchain,
         crate_info = CrateInfo(
             name = crate_name,
-            type = "bin",
+            type = crate_type,
             root = _crate_root_src(ctx, "main.rs"),
             srcs = ctx.files.srcs,
             deps = ctx.attr.deps,
@@ -454,6 +456,10 @@ _rust_binary_attrs = {
         cfg = "host",
         allow_single_file = True,
     ),
+    "crate_type": attr.string(
+        default = "bin",
+    ),
+    "out_binary": attr.bool(),
 }
 
 rust_binary = rule(
