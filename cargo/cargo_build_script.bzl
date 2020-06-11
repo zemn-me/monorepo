@@ -12,7 +12,9 @@ def _cargo_build_script_run(ctx, script):
         "CARGO_MANIFEST_DIR": manifest_dir,
         "RUSTC": toolchain.rustc.path,
         "TARGET": toolchain.target_triple,
+        "CARGO_CFG_TARGET_ARCH": toolchain.target_arch,
         "OUT_DIR": out_dir.path,
+        "RUST_BACKTRACE": "full",
     }
 
     for f in ctx.attr.crate_features:
