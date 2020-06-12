@@ -20,12 +20,24 @@ def _cargo_build_script_run(ctx, script):
     for f in ctx.attr.crate_features:
         env["CARGO_FEATURE_" + f.upper().replace("-", "_")] = "1"
 
+    tools = depset(
+        direct = [
+            script,
+            ctx.executable._cargo_build_script_runner,
+            toolchain.rustc,
+        ],
+        transitive = [
+            # Needed for rustc to function.
+            toolchain.rustc_lib.files,
+            toolchain.rust_lib.files,
+        ],
+    )
+
     ctx.actions.run(
         executable = ctx.executable._cargo_build_script_runner,
         arguments = [script.path, env_out.path, flags_out.path],
         outputs = [out_dir, env_out, flags_out],
-        tools = [script, ctx.executable._cargo_build_script_runner],
-        inputs = [script, toolchain.rustc],
+        tools = tools,
         mnemonic = "CargoBuildScriptRun",
         env = env,
     )
