@@ -238,30 +238,33 @@ def _get_linker_and_args(ctx, rpaths):
 
 def _add_out_dir_to_compile_inputs(
         ctx,
+        file,
         build_info,
         compile_inputs):
-    out_dir = _create_out_dir_action(ctx, build_info.out_dir if build_info else None)
+    out_dir = _create_out_dir_action(ctx, file, build_info.out_dir if build_info else None)
     if out_dir:
         compile_inputs = depset([out_dir], transitive = [compile_inputs])
     return compile_inputs, out_dir
 
-def _collect_inputs(
+def collect_inputs(
         ctx,
+        file,
+        files,
         toolchain,
         crate_info,
         dep_info,
         build_info):
-    linker_script = getattr(ctx.file, "linker_script") if hasattr(ctx.file, "linker_script") else None
+    linker_script = getattr(file, "linker_script") if hasattr(file, "linker_script") else None
 
     if (len(BAZEL_VERSION) == 0 or
         versions.is_at_least("0.25.0", BAZEL_VERSION)):
         linker_depset = find_cpp_toolchain(ctx).all_files
     else:
-        linker_depset = depset(ctx.files._cc_toolchain)
+        linker_depset = depset(files._cc_toolchain)
 
     compile_inputs = depset(
         crate_info.srcs +
-        getattr(ctx.files, "data", []) +
+        getattr(files, "data", []) +
         dep_info.transitive_libs +
         [toolchain.rustc] +
         toolchain.crosstool_files +
@@ -273,18 +276,19 @@ def _collect_inputs(
             linker_depset,
         ],
     )
-    return _add_out_dir_to_compile_inputs(ctx, build_info, compile_inputs)
+    return _add_out_dir_to_compile_inputs(ctx, file, build_info, compile_inputs)
 
-def _construct_arguments(
+def construct_arguments(
         ctx,
+        file,
         toolchain,
         crate_info,
         dep_info,
         output_hash,
         rust_flags):
-    output_dir = crate_info.output.dirname
+    output_dir = getattr(crate_info.output, "dirname") if hasattr(crate_info.output, "dirname") else None
 
-    linker_script = getattr(ctx.file, "linker_script") if hasattr(ctx.file, "linker_script") else None
+    linker_script = getattr(file, "linker_script") if hasattr(file, "linker_script") else None
 
     env = _get_rustc_env(ctx, toolchain)
 
@@ -296,7 +300,8 @@ def _construct_arguments(
     # Mangle symbols to disambiguate crates with the same name
     extra_filename = "-" + output_hash if output_hash else ""
     args.add("--codegen=metadata=" + extra_filename)
-    args.add("--out-dir=" + output_dir)
+    if output_dir:
+        args.add("--out-dir=" + output_dir)
     args.add("--codegen=extra-filename=" + extra_filename)
 
     compilation_mode = get_compilation_mode_opts(ctx, toolchain)
@@ -313,7 +318,6 @@ def _construct_arguments(
 
     # Gets the paths to the folders containing the standard library (or libcore)
     rust_lib_paths = depset([file.dirname for file in toolchain.rust_lib.files.to_list()]).to_list()
-
     # Tell Rustc where to find the standard library
     args.add_all(rust_lib_paths, before_each = "-L", format_each = "%s")
 
@@ -377,9 +381,13 @@ def _create_command_env(ctx, out_dir):
     package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
     manifest_dir_env = "CARGO_MANIFEST_DIR=$(pwd)/{} ".format(package_dir)
 
-    return out_dir_env + manifest_dir_env
+    # This empty value satisfies Clippy, which otherwise complains about the
+    # sysroot being undefined.
+    sysroot_env= "SYSROOT= "
 
-def _construct_compile_command(
+    return out_dir_env + manifest_dir_env + sysroot_env
+
+def construct_compile_command(
         ctx,
         command,
         toolchain,
@@ -399,7 +407,7 @@ def _construct_compile_command(
     # not the _ version.  So we rename the rustc-generated file (with _s) to
     # have -s if needed.
     maybe_rename = ""
-    if crate_info.type == "bin":
+    if crate_info.type == "bin" and crate_info.output != None:
         generated_file = crate_info.name
         if toolchain.target_arch == "wasm32":
             generated_file = generated_file + ".wasm"
@@ -411,7 +419,7 @@ def _construct_compile_command(
     return '{}{}{} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd{}{}'.format(
         rustc_env_expansion,
         command_env,
-        toolchain.rustc.path,
+        command,
         build_flags_expansion,
         maybe_rename,
     )
@@ -439,16 +447,19 @@ def rustc_compile_action(
         toolchain,
     )
 
-    compile_inputs, out_dir = _collect_inputs(
+    compile_inputs, out_dir = collect_inputs(
         ctx,
+        ctx.file,
+        ctx.files,
         toolchain,
         crate_info,
         dep_info,
         build_info
     )
 
-    args, env = _construct_arguments(
+    args, env = construct_arguments(
         ctx,
+        ctx.file,
         toolchain,
         crate_info,
         dep_info,
@@ -456,7 +467,7 @@ def rustc_compile_action(
         rust_flags
     )
 
-    command = _construct_compile_command(
+    command = construct_compile_command(
         ctx,
         toolchain.rustc.path,
         toolchain,
@@ -508,8 +519,8 @@ def add_edition_flags(args, crate):
     if crate.edition != "2015":
         args.add("--edition={}".format(crate.edition))
 
-def _create_out_dir_action(ctx, build_info_out_dir = None):
-    tar_file = getattr(ctx.file, "out_dir_tar", None)
+def _create_out_dir_action(ctx, file, build_info_out_dir = None):
+    tar_file = getattr(file, "out_dir_tar", None)
     if not tar_file:
         return build_info_out_dir
     else:

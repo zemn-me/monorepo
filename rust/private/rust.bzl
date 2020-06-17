@@ -71,24 +71,28 @@ def _determine_lib_name(name, crate_type, toolchain, lib_hash = ""):
         extension = extension,
     )
 
-def _get_edition(ctx, toolchain):
-    if getattr(ctx.attr, "edition"):
-        return ctx.attr.edition
+def get_edition(attr, toolchain):
+    if getattr(attr, "edition"):
+        return attr.edition
     else:
         return toolchain.default_edition
 
-def _crate_root_src(ctx, file_name = "lib.rs"):
+def crate_root_src(attr, srcs, file_name = "lib.rs"):
     """Finds the source file for the crate root."""
-    srcs = ctx.files.srcs
 
-    crate_root = (
-        ctx.file.crate_root or
-        (srcs[0] if len(srcs) == 1 else None) or
-        _shortest_src_with_basename(srcs, file_name) or
-        _shortest_src_with_basename(srcs, ctx.attr.name + ".rs")
-    )
+    crate_root = None
+    if hasattr(attr, "crate_root"):
+        if attr.crate_root:
+            crate_root = attr.crate_root.files.to_list()[0]
+
     if not crate_root:
-        file_names = [file_name, ctx.attr.name + ".rs"]
+        crate_root = (
+            (srcs[0] if len(srcs) == 1 else None) or
+            _shortest_src_with_basename(srcs, file_name) or
+            _shortest_src_with_basename(srcs, attr.name + ".rs")
+        )
+    if not crate_root:
+        file_names = [file_name, attr.name + ".rs"]
         fail("No {} source file found.".format(" or ".join(file_names)), "srcs")
     return crate_root
 
@@ -105,7 +109,7 @@ def _shortest_src_with_basename(srcs, basename):
 
 def _rust_library_impl(ctx):
     # Find lib.rs
-    lib_rs = _crate_root_src(ctx)
+    lib_rs = crate_root_src(ctx.attr, ctx.files.srcs)
 
     toolchain = find_toolchain(ctx)
 
@@ -133,7 +137,7 @@ def _rust_library_impl(ctx):
             proc_macro_deps = ctx.attr.proc_macro_deps,
             aliases = ctx.attr.aliases,
             output = rust_lib,
-            edition = _get_edition(ctx, toolchain),
+            edition = get_edition(ctx.attr, toolchain),
             rustc_env = ctx.attr.rustc_env,
         ),
         output_hash = output_hash,
@@ -156,13 +160,13 @@ def _rust_binary_impl(ctx):
         crate_info = CrateInfo(
             name = crate_name,
             type = crate_type,
-            root = _crate_root_src(ctx, "main.rs"),
+            root = crate_root_src(ctx.attr, ctx.files.srcs, file_name = "main.rs"),
             srcs = ctx.files.srcs,
             deps = ctx.attr.deps,
             proc_macro_deps = ctx.attr.proc_macro_deps,
             aliases = ctx.attr.aliases,
             output = output,
-            edition = _get_edition(ctx, toolchain),
+            edition = get_edition(ctx.attr, toolchain),
             rustc_env = ctx.attr.rustc_env,
         ),
     )
@@ -205,13 +209,13 @@ def _rust_test_common(ctx, test_binary):
         target = CrateInfo(
             name = test_binary.basename,
             type = "lib",
-            root = _crate_root_src(ctx),
+            root = crate_root_src(ctx.attr, ctx.files.srcs),
             srcs = ctx.files.srcs,
             deps = ctx.attr.deps,
             proc_macro_deps = ctx.attr.proc_macro_deps,
             aliases = ctx.attr.aliases,
             output = test_binary,
-            edition = _get_edition(ctx, toolchain),
+            edition = get_edition(ctx.attr, toolchain),
             rustc_env = ctx.attr.rustc_env,
         )
 
