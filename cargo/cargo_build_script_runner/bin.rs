@@ -16,10 +16,9 @@
 // by rust_library/rust_binary.
 extern crate cargo_build_script_output_parser;
 
-use cargo_build_script_output_parser::BuildScriptOutput;
+use cargo_build_script_output_parser::{BuildScriptOutput, CompileAndLinkFlags};
 use std::env;
-use std::fs::{File, create_dir_all};
-use std::io::Write;
+use std::fs::{create_dir_all, write};
 use std::path::Path;
 use std::process::{exit, Command};
 
@@ -33,13 +32,8 @@ fn main() {
 
     let mut args = env::args().skip(1);
     let manifest_dir_env = env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR was not set");
-    let out_dir_env = env::var("OUT_DIR").expect("OUT_DIR was not set");
-    // For some reason RBE does not creat the output directory, force create it
-    create_dir_all(out_dir_env.clone()).expect(&format!("Failed to create OUT_DIR: {}", out_dir_env));
     let rustc_env = env::var("RUSTC").expect("RUSTC was not set");
-    // Because of the Bazel's sandbox, bazel cannot provide full path, convert all relative path to correct path.
     let manifest_dir = exec_root.join(&manifest_dir_env);
-    let out_dir = exec_root.join(&out_dir_env);
     let rustc = exec_root.join(&rustc_env);
 
     let cc = env::var_os("CC").map(|env_var| {
@@ -51,13 +45,17 @@ fn main() {
         }
     });
 
-    match (args.next(), args.next(), args.next(), args.next(), args.next()) {
-        (Some(progname), Some(crate_name), Some(envfile), Some(flagfile), Some(depenvfile)) => {
+    match (args.next(), args.next(), args.next(), args.next(), args.next(), args.next(), args.next()) {
+        (Some(progname), Some(crate_name), Some(out_dir), Some(envfile), Some(flagfile), Some(linkflags), Some(depenvfile)) => {
+            let out_dir_abs = exec_root.join(&out_dir);
+            // For some reason Google's RBE does not create the output directory, force create it.
+            create_dir_all(&out_dir_abs).expect(&format!("Failed to make output directory: {:?}", out_dir_abs));
+
             let mut command = Command::new(exec_root.join(&progname));
             command
                 .args(args)
                 .current_dir(manifest_dir.clone())
-                .env("OUT_DIR", out_dir)
+                .env("OUT_DIR", out_dir_abs)
                 .env("CARGO_MANIFEST_DIR", manifest_dir)
                 .env("RUSTC", rustc);
 
@@ -66,21 +64,20 @@ fn main() {
             }
 
             let output = BuildScriptOutput::from_command(&mut command);
-            let mut f =
-                File::create(&envfile).expect(&format!("Unable to create file {}", envfile));
-            f.write_all(BuildScriptOutput::to_env(&output).as_bytes())
-                .expect(&format!("Unable to write file {}", envfile));
-            let mut f =
-                File::create(&depenvfile).expect(&format!("Unable to create file {}", depenvfile));
-            f.write_all(BuildScriptOutput::to_dep_env(&output, &crate_name).as_bytes())
-                .expect(&format!("Unable to write file {}", depenvfile));
-            let mut f =
-                File::create(&flagfile).expect(&format!("Unable to create file {}", flagfile));
-            f.write_all(BuildScriptOutput::to_flags(&output).as_bytes())
-                .expect(&format!("Unable to write file {}", flagfile));
+            write(&envfile, BuildScriptOutput::to_env(&output).as_bytes())
+                .expect(&format!("Unable to write file {:?}", envfile));
+            write(&depenvfile, BuildScriptOutput::to_dep_env(&output, &crate_name).as_bytes())
+                .expect(&format!("Unable to write file {:?}", depenvfile));
+
+            let CompileAndLinkFlags { compile_flags, link_flags } = BuildScriptOutput::to_flags(&output, &exec_root.to_string_lossy());
+
+            write(&flagfile, compile_flags.as_bytes())
+                .expect(&format!("Unable to write file {:?}", flagfile));
+            write(&linkflags, link_flags.as_bytes())
+                .expect(&format!("Unable to write file {:?}", linkflags));
         }
         _ => {
-            eprintln!("Usage: $0 progname crate_name envfile flagfile depenvfile [arg1...argn]");
+            eprintln!("Usage: $0 progname crate_name out_dir envfile flagfile linkflagfile depenvfile [arg1...argn]");
             exit(1);
         }
     }

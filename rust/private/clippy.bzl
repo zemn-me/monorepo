@@ -60,7 +60,7 @@ def _clippy_aspect_impl(target, ctx):
         toolchain,
     )
 
-    compile_inputs, out_dir = collect_inputs(
+    compile_inputs, prep_commands, dynamic_env, dynamic_build_flags = collect_inputs(
         ctx,
         ctx.rule.file,
         ctx.rule.files,
@@ -70,14 +70,15 @@ def _clippy_aspect_impl(target, ctx):
         build_info
     )
 
-    args, env = construct_arguments(
+    args, env, dynamic_env = construct_arguments(
         ctx,
         ctx.rule.file,
         toolchain,
         crate_info,
         dep_info,
         output_hash = repr(hash(root.path)),
-        rust_flags = [])
+        rust_flags = [],
+        dynamic_env = dynamic_env)
 
     # A marker file indicating clippy has executed successfully.
     # This file is necessary because "ctx.actions.run" mandates an output.
@@ -89,7 +90,10 @@ def _clippy_aspect_impl(target, ctx):
         toolchain,
         crate_info,
         build_info,
-        out_dir,
+        dep_info,
+        prep_commands,
+        dynamic_env,
+        dynamic_build_flags,
     ) + (" && touch %s" % clippy_marker.path)
 
     # Deny the default-on clippy warning levels.

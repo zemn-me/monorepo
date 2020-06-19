@@ -9,6 +9,7 @@ def _cargo_build_script_run(ctx, script):
     env_out = ctx.actions.declare_file(ctx.label.name + ".env")
     dep_env_out = ctx.actions.declare_file(ctx.label.name + ".depenv")
     flags_out = ctx.actions.declare_file(ctx.label.name + ".flags")
+    link_flags = ctx.actions.declare_file(ctx.label.name + ".linkflags")
     manifest_dir = "%s.runfiles/%s" % (script.path, ctx.label.workspace_name or ctx.workspace_name)
     compilation_mode_opt_level = get_compilation_mode_opts(ctx, toolchain).opt_level
 
@@ -33,10 +34,10 @@ def _cargo_build_script_run(ctx, script):
         "CARGO_MANIFEST_DIR": manifest_dir,
         "HOST": toolchain.exec_triple,
         "OPT_LEVEL": compilation_mode_opt_level,
-        "OUT_DIR": out_dir.path,
         "RUSTC": toolchain.rustc.path,
         "RUST_BACKTRACE": "full",
         "TARGET": toolchain.target_triple,
+        # OUT_DIR is set by the runner itself, rather than on the action.
     }
 
     # Pull in env vars which may be required for the cc_toolchain to work (e.g. on OSX, the SDK version).
@@ -77,8 +78,8 @@ def _cargo_build_script_run(ctx, script):
 
     ctx.actions.run_shell(
         command = cmd,
-        arguments = [ctx.executable._cargo_build_script_runner.path, script.path, crate_name, env_out.path, flags_out.path, dep_env_out.path],
-        outputs = [out_dir, env_out, flags_out, dep_env_out],
+        arguments = [ctx.executable._cargo_build_script_runner.path, script.path, crate_name, out_dir.path, env_out.path, flags_out.path, link_flags.path, dep_env_out.path],
+        outputs = [out_dir, env_out, flags_out, link_flags, dep_env_out],
         tools = tools,
         inputs = dep_env_files,
         mnemonic = "CargoBuildScriptRun",
@@ -91,6 +92,7 @@ def _cargo_build_script_run(ctx, script):
             rustc_env = env_out,
             dep_env = dep_env_out,
             flags = flags_out,
+            link_flags = link_flags,
         ),
     ]
 

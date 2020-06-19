@@ -46,6 +46,7 @@ BuildInfo = provider(
         "out_dir": """File: directory containing the result of a build script""",
         "rustc_env": """File: file containing additional environment variables to set for rustc.""",
         "dep_env": """File: extra build script environment varibles to be set to direct dependencies.""",
+        "link_flags": """File: file containing flags to pass to the linker""",
     },
 )
 
@@ -63,6 +64,7 @@ DepInfo = provider(
         "transitive_dylibs": "depset[File]",
         "transitive_staticlibs": "depset[File]",
         "transitive_libs": "List[File]: All transitive dependencies, not filtered by type.",
+        "transitive_build_infos": "depset[BuildInfo]",
         "dep_env": """File: File with environment variables direct dependencies build scripts rely upon.""",
     },
 )
@@ -143,6 +145,7 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
     transitive_crates = depset()
     transitive_dylibs = depset(order = "topological")  # dylib link flag ordering matters.
     transitive_staticlibs = depset()
+    transitive_build_infos = depset()
     build_info = None
 
     aliases = {k.label: v for k,v in aliases.items()}
@@ -159,6 +162,7 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
             transitive_crates = depset(transitive = [transitive_crates, dep[DepInfo].transitive_crates])
             transitive_dylibs = depset(transitive = [transitive_dylibs, dep[DepInfo].transitive_dylibs])
             transitive_staticlibs = depset(transitive = [transitive_staticlibs, dep[DepInfo].transitive_staticlibs])
+            transitive_build_infos = depset(transitive = [transitive_build_infos, dep[DepInfo].transitive_build_infos])
         elif CcInfo in dep:
             # This dependency is a cc_library
 
@@ -172,6 +176,7 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
             if build_info:
                 fail("Several deps are providing build information, only one is allowed in the dependencies", "deps")
             build_info = dep[BuildInfo]
+            transitive_build_infos = depset([build_info], transitive = [transitive_build_infos])
         else:
             fail("rust targets can only depend on rust_library, rust_*_library or cc_library targets." + str(dep), "deps")
 
@@ -187,6 +192,7 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
             transitive_dylibs = transitive_dylibs,
             transitive_staticlibs = transitive_staticlibs,
             transitive_libs = transitive_libs.to_list(),
+            transitive_build_infos = transitive_build_infos,
             dep_env = build_info.dep_env if build_info else None,
         ),
         build_info,
@@ -236,15 +242,17 @@ def get_linker_and_args(ctx, rpaths):
 
     return ld, link_args, link_env
 
-def _add_out_dir_to_compile_inputs(
+def _process_build_scripts(
         ctx,
         file,
+        crate_info,
         build_info,
+        dep_info,
         compile_inputs):
-    out_dir = _create_out_dir_action(ctx, file, build_info.out_dir if build_info else None)
-    if out_dir:
-        compile_inputs = depset([out_dir], transitive = [compile_inputs])
-    return compile_inputs, out_dir
+    extra_inputs, prep_commands, dynamic_env, dynamic_build_flags = _create_out_dir_action(ctx, file, build_info, dep_info)
+    if extra_inputs:
+        compile_inputs = depset(extra_inputs, transitive = [compile_inputs])
+    return compile_inputs, prep_commands, dynamic_env, dynamic_build_flags
 
 def collect_inputs(
         ctx,
@@ -276,7 +284,7 @@ def collect_inputs(
             linker_depset,
         ],
     )
-    return _add_out_dir_to_compile_inputs(ctx, file, build_info, compile_inputs)
+    return _process_build_scripts(ctx, file, crate_info, build_info, dep_info, compile_inputs)
 
 def construct_arguments(
         ctx,
@@ -285,7 +293,8 @@ def construct_arguments(
         crate_info,
         dep_info,
         output_hash,
-        rust_flags):
+        rust_flags,
+        dynamic_env):
     output_dir = getattr(crate_info.output, "dirname") if hasattr(crate_info.output, "dirname") else None
 
     linker_script = getattr(file, "linker_script") if hasattr(file, "linker_script") else None
@@ -349,23 +358,10 @@ def construct_arguments(
     # Update environment with user provided variables.
     env.update(crate_info.rustc_env)
 
-    return args, env
+    # This empty value satisfies Clippy, which otherwise complains about the
+    # sysroot being undefined.
+    env["SYSROOT"] = ""
 
-def _create_command_env(ctx, out_dir):
-    if out_dir:
-        # We awkwardly construct this command because we cannot reference $PWD
-        # from ctx.actions.run(executable=toolchain.rustc)
-        out_dir_env = "OUT_DIR=$(pwd)/{} ".format(out_dir.path)
-    else:
-        out_dir_env = ""
-
-    # Similar awkward construction to prepend execroot to the crate-root to set `CARGO_MANIFEST_DIR`
-    #
-    # See https://github.com/google/cargo-raze/issues/71#issuecomment-433225853 for the rationale as
-    # to why
-    #
-    # In brief:
-    #
     # Certain rust build processes expect to find files from the environment variable
     # `$CARGO_MANIFEST_DIR`. Examples of this include pest, tera, asakuma.
     #
@@ -379,13 +375,9 @@ def _create_command_env(ctx, out_dir):
     # `exec_root`. Since we cannot (seemingly) get the `exec_root` from skylark, we cheat a little
     # and use `$(pwd)` which resolves the `exec_root` at action execution time.
     package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
-    manifest_dir_env = "CARGO_MANIFEST_DIR=$(pwd)/{} ".format(package_dir)
+    dynamic_env["CARGO_MANIFEST_DIR"] = "${{EXEC_ROOT}}/{}".format(package_dir)
 
-    # This empty value satisfies Clippy, which otherwise complains about the
-    # sysroot being undefined.
-    sysroot_env= "SYSROOT= "
-
-    return out_dir_env + manifest_dir_env + sysroot_env
+    return args, env, dynamic_env
 
 def construct_compile_command(
         ctx,
@@ -393,10 +385,10 @@ def construct_compile_command(
         toolchain,
         crate_info,
         build_info,
-        out_dir):
-    rustc_env_expansion = ("export $(cat %s);" % build_info.rustc_env.path) if build_info else ""
-    command_env = _create_command_env(ctx, out_dir)
-    build_flags_expansion = (" $(cat '%s')" % build_info.flags.path) if build_info else ""
+        dep_info,
+        prep_commands,
+        dynamic_env,
+        dynamic_build_flags):
     # Handle that the binary name and crate name may be different.
     #
     # If a target name contains a - then cargo (and rules_rust) will generate a
@@ -416,11 +408,13 @@ def construct_compile_command(
         if src != dst:
             maybe_rename = " && /bin/mv {src} {dst}".format(src=src, dst=dst)
 
-    return '{}{}{} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd{}{}'.format(
-        rustc_env_expansion,
-        command_env,
+    # Set ${EXEC_ROOT} so that actions which chdir still work.
+    # See https://github.com/google/cargo-raze/issues/71#issuecomment-433225853 for the rationale as
+    # to why.
+    return 'export EXEC_ROOT=$(pwd) && {} && {} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd {}{}'.format(
+        " && ".join(["export {}={}".format(key, value) for key, value in dynamic_env.items()] + prep_commands),
         command,
-        build_flags_expansion,
+        " ".join(dynamic_build_flags),
         maybe_rename,
     )
 
@@ -447,24 +441,25 @@ def rustc_compile_action(
         toolchain,
     )
 
-    compile_inputs, out_dir = collect_inputs(
+    compile_inputs, prep_commands, dynamic_env, dynamic_build_flags = collect_inputs(
         ctx,
         ctx.file,
         ctx.files,
         toolchain,
         crate_info,
         dep_info,
-        build_info
+        build_info,
     )
 
-    args, env = construct_arguments(
+    args, env, dynamic_env = construct_arguments(
         ctx,
         ctx.file,
         toolchain,
         crate_info,
         dep_info,
         output_hash,
-        rust_flags
+        rust_flags,
+        dynamic_env,
     )
 
     command = construct_compile_command(
@@ -473,7 +468,10 @@ def rustc_compile_action(
         toolchain,
         crate_info,
         build_info,
-        out_dir,
+        dep_info,
+        prep_commands,
+        dynamic_env,
+        dynamic_build_flags,
     )
 
     if hasattr(ctx.attr, "version") and ctx.attr.version != "0.0.0":
@@ -519,26 +517,38 @@ def add_edition_flags(args, crate):
     if crate.edition != "2015":
         args.add("--edition={}".format(crate.edition))
 
-def _create_out_dir_action(ctx, file, build_info_out_dir = None):
-    tar_file = getattr(file, "out_dir_tar", None)
-    if not tar_file:
-        return build_info_out_dir
-    else:
-        out_dir = ctx.actions.declare_directory(ctx.label.name + ".out_dir")
-        ctx.actions.run_shell(
-            # TODO: Remove system tar usage
-            command = ";".join([
-                "rm -fr {dir} && mkdir {dir} && tar -xzf {tar} -C {dir}".format(tar = tar_file.path, dir = out_dir.path),
-            ] + (
-                ["pushd {dir}; cp -fr {in_dir}; popd".format(dir = out_dir.path, in_dir = build_info_out_dir.path)
-                ] if build_info_out_dir else []
-            )),
-            progress_message = "Creating OUT_DIR = %s" % out_dir.path,
-            inputs = [tar_file] + (build_info_out_dir or []),
-            outputs = [out_dir],
-            use_default_shell_env = True,  # Sets PATH for tar and gzip (tar's dependency)
-        )
-    return out_dir
+def _create_out_dir_action(ctx, file, build_info, dep_info):
+    tar_file_attr = getattr(file, "out_dir_tar", None)
+    if build_info and tar_file_attr:
+        fail("Target {} has both a build_script dependency and an out_dir_tar - this is not allowed.".format(ctx.label))
+
+    prep_commands = []
+    input_files = []
+    # Env vars and build flags which need to be set in the action's command line, rather than on the action's env,
+    # because they rely on other env vars or commands.
+    dynamic_env = {}
+    dynamic_build_flags = []
+
+    # TODO: Remove system tar usage
+    if build_info:
+        prep_commands.append("export $(cat %s)" % build_info.rustc_env.path)
+        # out_dir will be added as input by the transitive_build_infos loop below.
+        dynamic_env["OUT_DIR"] = "${{EXEC_ROOT}}/{}".format(build_info.out_dir.path)
+        dynamic_build_flags.append("$(cat '%s')" % build_info.flags.path)
+    elif tar_file_attr:
+        out_dir = ".out-dir"
+        prep_commands.append("mkdir -p $OUT_DIR")
+        prep_commands.append("tar -xzf {tar} -C $OUT_DIR".format(tar=tar_file_attr.path))
+        input_files.append(tar_file_attr)
+        dynamic_env["OUT_DIR"] = "${{EXEC_ROOT}}/{}".format(out_dir)
+
+    # This should probably only actually be exposed to actions which link.
+    for dep_build_info in dep_info.transitive_build_infos.to_list():
+        input_files.append(dep_build_info.out_dir)
+        dynamic_build_flags.append("$(cat '{}' | sed -e \"s#\${{EXEC_ROOT}}#${{EXEC_ROOT}}#g\")".format(dep_build_info.link_flags.path))
+        input_files.append(dep_build_info.link_flags)
+
+    return input_files, prep_commands, dynamic_env, dynamic_build_flags
 
 def _compute_rpaths(toolchain, output_dir, dep_info):
     """
