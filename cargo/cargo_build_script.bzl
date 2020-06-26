@@ -35,7 +35,6 @@ def _cargo_build_script_run(ctx, script):
         "HOST": toolchain.exec_triple,
         "OPT_LEVEL": compilation_mode_opt_level,
         "RUSTC": toolchain.rustc.path,
-        "RUST_BACKTRACE": "full",
         "TARGET": toolchain.target_triple,
         # OUT_DIR is set by the runner itself, rather than on the action.
     }

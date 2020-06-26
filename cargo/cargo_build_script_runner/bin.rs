@@ -21,9 +21,9 @@ use std::env;
 use std::ffi::OsString;
 use std::fs::{create_dir_all, write};
 use std::path::Path;
-use std::process::{exit, Command};
+use std::process::Command;
 
-fn main() {
+fn main() -> Result<(), String> {
     // We use exec_root.join rather than std::fs::canonicalize, to avoid resolving symlinks, as
     // some execution strategies and remote execution environments may use symlinks in ways which
     // canonicalizing them may break them, e.g. by having input files be symlinks into a /cas
@@ -49,7 +49,8 @@ fn main() {
                 .current_dir(manifest_dir.clone())
                 .env("OUT_DIR", out_dir_abs)
                 .env("CARGO_MANIFEST_DIR", manifest_dir)
-                .env("RUSTC", rustc);
+                .env("RUSTC", rustc)
+                .env("RUST_BACKTRACE", "full");
 
             if let Some(cc_path) = env::var_os("CC") {
                 command.env("CC", absolutify(&exec_root, cc_path));
@@ -65,7 +66,17 @@ fn main() {
                 }
             }
 
-            let output = BuildScriptOutput::from_command(&mut command);
+            let output = BuildScriptOutput::from_command(&mut command).map_err(|exit_code| {
+                format!(
+                    "Build script process failed{}",
+                    if let Some(exit_code) = exit_code {
+                        format!(" with exit code {}", exit_code)
+                    } else {
+                        String::new()
+                    }
+                )
+            })?;
+
             write(&envfile, BuildScriptOutput::to_env(&output).as_bytes())
                 .expect(&format!("Unable to write file {:?}", envfile));
             write(&depenvfile, BuildScriptOutput::to_dep_env(&output, &crate_name).as_bytes())
@@ -77,10 +88,10 @@ fn main() {
                 .expect(&format!("Unable to write file {:?}", flagfile));
             write(&linkflags, link_flags.as_bytes())
                 .expect(&format!("Unable to write file {:?}", linkflags));
+            Ok(())
         }
         _ => {
-            eprintln!("Usage: $0 progname crate_name out_dir envfile flagfile linkflagfile depenvfile [arg1...argn]");
-            exit(1);
+            Err("Usage: $0 progname crate_name out_dir envfile flagfile linkflagfile depenvfile [arg1...argn]".to_owned())
         }
     }
 }

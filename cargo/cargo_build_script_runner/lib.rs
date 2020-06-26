@@ -50,12 +50,15 @@ impl BuildScriptOutput {
     fn new(line: &str) -> Option<BuildScriptOutput> {
         let split = line.splitn(2, '=').collect::<Vec<_>>();
         if split.len() <= 1 {
+            // Not a cargo directive.
+            print!("{}", line);
             return None;
         }
         let param = split[1].trim().to_owned();
         let key_split = split[0].splitn(2, ':').collect::<Vec<_>>();
         if key_split.len() <= 1 || key_split[0] != "cargo" {
             // Not a cargo directive.
+            print!("{}", line);
             return None
         }
         match key_split[1] {
@@ -97,7 +100,7 @@ impl BuildScriptOutput {
     }
 
     /// Take a [Command], execute it and converts its input into a vector of [BuildScriptOutput]
-    pub fn from_command(cmd: &mut Command) -> Vec<BuildScriptOutput> {
+    pub fn from_command(cmd: &mut Command) -> Result<Vec<BuildScriptOutput>, Option<i32>> {
         let mut child = cmd.stdout(Stdio::piped()).spawn().expect("Unable to start binary");
         let ecode = child.wait().expect("failed to wait on child");
         let reader = BufReader::new(
@@ -106,8 +109,13 @@ impl BuildScriptOutput {
                 .as_mut()
                 .expect("Failed to open stdout"),
             );
-        assert!(ecode.success());
-        Self::from_reader(reader)
+        let output = Self::from_reader(reader);
+        if ecode.success() {
+            Ok(output)
+        } else {
+            Err(ecode.code())
+        }
+
     }
 
     /// Convert a vector of [BuildScriptOutput] into a list of environment variables.
