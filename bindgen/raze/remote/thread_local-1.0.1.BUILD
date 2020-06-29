@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "Apache-2.0,MIT"
+  "notice", # Apache-2.0 from expression "Apache-2.0 OR MIT"
 ])
 
 load(
@@ -27,13 +27,13 @@ load(
 
 rust_library(
     name = "thread_local",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
         "@raze__lazy_static__1_4_0//:lazy_static",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2015",
     rustc_flags = [
         "--cap-lints=allow",
     ],

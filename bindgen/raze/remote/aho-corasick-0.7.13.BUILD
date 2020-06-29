@@ -12,8 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "MIT"
-  "unencumbered", # "Unlicense"
+  "unencumbered", # Unlicense from expression "Unlicense OR MIT"
 ])
 
 load(
@@ -27,17 +26,17 @@ load(
 
 rust_library(
     name = "aho_corasick",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
         "@raze__memchr__2_3_3//:memchr",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2015",
     rustc_flags = [
         "--cap-lints=allow",
     ],
-    version = "0.7.10",
+    version = "0.7.13",
     crate_features = [
         "default",
         "std",

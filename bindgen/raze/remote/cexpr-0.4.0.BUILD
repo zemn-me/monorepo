@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "Apache-2.0,MIT"
+  "notice", # Apache-2.0 from expression "Apache-2.0 OR MIT"
 ])
 
 load(
@@ -26,13 +26,13 @@ load(
 
 rust_library(
     name = "cexpr",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2018",
-    srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__nom__5_1_1//:nom",
+        "@raze__nom__5_1_2//:nom",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],

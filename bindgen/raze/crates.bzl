@@ -17,12 +17,12 @@ def _new_git_repository(name, **kwargs):
 def raze_fetch_remote_crates():
 
     _new_http_archive(
-        name = "raze__aho_corasick__0_7_10",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/aho-corasick/aho-corasick-0.7.10.crate",
+        name = "raze__aho_corasick__0_7_13",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/aho-corasick/aho-corasick-0.7.13.crate",
         type = "tar.gz",
-        sha256 = "8716408b8bc624ed7f65d223ddb9ac2d044c0547b6fa4b0d554f3a9540496ada",
-        strip_prefix = "aho-corasick-0.7.10",
-        build_file = Label("//bindgen/raze/remote:aho-corasick-0.7.10.BUILD"),
+        sha256 = "043164d8ba5c4c3035fec9bbee8647c0261d788f3474306f93bb65901cae0e86",
+        strip_prefix = "aho-corasick-0.7.13",
+        build_file = Label("//bindgen/raze/remote:aho-corasick-0.7.13.BUILD"),
     )
 
     _new_http_archive(
@@ -62,12 +62,12 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__cc__1_0_54",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/cc/cc-1.0.54.crate",
+        name = "raze__cc__1_0_56",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/cc/cc-1.0.56.crate",
         type = "tar.gz",
-        sha256 = "7bbb73db36c1246e9034e307d0fba23f9a2e251faa47ade70c1bd252220c8311",
-        strip_prefix = "cc-1.0.54",
-        build_file = Label("//bindgen/raze/remote:cc-1.0.54.BUILD"),
+        sha256 = "77c1f1d60091c1b73e2b1f4560ab419204b178e625fa945ded7b660becd2bd46",
+        strip_prefix = "cc-1.0.56",
+        build_file = Label("//bindgen/raze/remote:cc-1.0.56.BUILD"),
     )
 
     _new_http_archive(
@@ -125,12 +125,12 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__hermit_abi__0_1_13",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/hermit-abi/hermit-abi-0.1.13.crate",
+        name = "raze__hermit_abi__0_1_14",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/hermit-abi/hermit-abi-0.1.14.crate",
         type = "tar.gz",
-        sha256 = "91780f809e750b0a89f5544be56617ff6b1227ee485bcb06ebe10cdf89bd3b71",
-        strip_prefix = "hermit-abi-0.1.13",
-        build_file = Label("//bindgen/raze/remote:hermit-abi-0.1.13.BUILD"),
+        sha256 = "b9586eedd4ce6b3c498bc3b4dd92fc9f11166aa908a914071953768066c67909",
+        strip_prefix = "hermit-abi-0.1.14",
+        build_file = Label("//bindgen/raze/remote:hermit-abi-0.1.14.BUILD"),
     )
 
     _new_http_archive(
@@ -197,12 +197,12 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__nom__5_1_1",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/nom/nom-5.1.1.crate",
+        name = "raze__nom__5_1_2",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/nom/nom-5.1.2.crate",
         type = "tar.gz",
-        sha256 = "0b471253da97532da4b61552249c521e01e736071f71c1a4f7ebbfbf0a06aad6",
-        strip_prefix = "nom-5.1.1",
-        build_file = Label("//bindgen/raze/remote:nom-5.1.1.BUILD"),
+        sha256 = "ffb4262d26ed83a1c0a33a38fe2bb15797329c85770da05e6b828ddb782627af",
+        strip_prefix = "nom-5.1.2",
+        build_file = Label("//bindgen/raze/remote:nom-5.1.2.BUILD"),
     )
 
     _new_http_archive(
@@ -233,12 +233,12 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__quote__1_0_6",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/quote/quote-1.0.6.crate",
+        name = "raze__quote__1_0_7",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/quote/quote-1.0.7.crate",
         type = "tar.gz",
-        sha256 = "54a21852a652ad6f610c9510194f398ff6f8692e334fd1145fed931f7fbe44ea",
-        strip_prefix = "quote-1.0.6",
-        build_file = Label("//bindgen/raze/remote:quote-1.0.6.BUILD"),
+        sha256 = "aa563d17ecb180e500da1cfd2b028310ac758de548efdd203e18f283af693f37",
+        strip_prefix = "quote-1.0.7",
+        build_file = Label("//bindgen/raze/remote:quote-1.0.7.BUILD"),
     )
 
     _new_http_archive(
@@ -314,21 +314,21 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__unicode_width__0_1_7",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/unicode-width/unicode-width-0.1.7.crate",
+        name = "raze__unicode_width__0_1_8",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/unicode-width/unicode-width-0.1.8.crate",
         type = "tar.gz",
-        sha256 = "caaa9d531767d1ff2150b9332433f32a24622147e5ebb1f26409d5da67afd479",
-        strip_prefix = "unicode-width-0.1.7",
-        build_file = Label("//bindgen/raze/remote:unicode-width-0.1.7.BUILD"),
+        sha256 = "9337591893a19b88d8d87f2cec1e73fad5cdfd10e5a6f349f498ad6ea2ffb1e3",
+        strip_prefix = "unicode-width-0.1.8",
+        build_file = Label("//bindgen/raze/remote:unicode-width-0.1.8.BUILD"),
     )
 
     _new_http_archive(
-        name = "raze__unicode_xid__0_2_0",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/unicode-xid/unicode-xid-0.2.0.crate",
+        name = "raze__unicode_xid__0_2_1",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/unicode-xid/unicode-xid-0.2.1.crate",
         type = "tar.gz",
-        sha256 = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c",
-        strip_prefix = "unicode-xid-0.2.0",
-        build_file = Label("//bindgen/raze/remote:unicode-xid-0.2.0.BUILD"),
+        sha256 = "f7fe0bb3479651439c9112f72b6c505038574c9fbb575ed1bf3b797fa39dd564",
+        strip_prefix = "unicode-xid-0.2.1",
+        build_file = Label("//bindgen/raze/remote:unicode-xid-0.2.1.BUILD"),
     )
 
     _new_http_archive(
@@ -359,12 +359,12 @@ def raze_fetch_remote_crates():
     )
 
     _new_http_archive(
-        name = "raze__winapi__0_3_8",
-        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/winapi/winapi-0.3.8.crate",
+        name = "raze__winapi__0_3_9",
+        url = "https://crates-io.s3-us-west-1.amazonaws.com/crates/winapi/winapi-0.3.9.crate",
         type = "tar.gz",
-        sha256 = "8093091eeb260906a183e6ae1abdba2ef5ef2257a21801128899c3fc699229c6",
-        strip_prefix = "winapi-0.3.8",
-        build_file = Label("//bindgen/raze/remote:winapi-0.3.8.BUILD"),
+        sha256 = "5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419",
+        strip_prefix = "winapi-0.3.9",
+        build_file = Label("//bindgen/raze/remote:winapi-0.3.9.BUILD"),
     )
 
     _new_http_archive(

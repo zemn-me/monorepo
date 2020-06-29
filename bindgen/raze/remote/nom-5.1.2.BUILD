@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "MIT"
+  "notice", # MIT from expression "MIT"
 ])
 
 load(
@@ -49,17 +49,17 @@ load(
 
 rust_library(
     name = "nom",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2018",
-    srcs = glob(["**/*.rs"]),
     deps = [
         "@raze__memchr__2_3_3//:memchr",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],
-    version = "5.1.1",
+    version = "5.1.2",
     crate_features = [
         "alloc",
         "std",

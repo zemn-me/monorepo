@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "restricted", # "MIT OR Apache-2.0"
+  "notice", # MIT from expression "MIT OR Apache-2.0"
 ])
 
 load(
@@ -35,16 +35,16 @@ load(
 
 rust_library(
     name = "regex",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__aho_corasick__0_7_10//:aho_corasick",
+        "@raze__aho_corasick__0_7_13//:aho_corasick",
         "@raze__memchr__2_3_3//:memchr",
         "@raze__regex_syntax__0_6_18//:regex_syntax",
         "@raze__thread_local__1_0_1//:thread_local",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2015",
     rustc_flags = [
         "--cap-lints=allow",
     ],

@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "restricted", # "Unlicense OR MIT"
+  "unencumbered", # Unlicense from expression "Unlicense OR MIT"
 ])
 
 load(
@@ -26,12 +26,12 @@ load(
 
 rust_library(
     name = "termcolor",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2018",
-    srcs = glob(["**/*.rs"]),
     deps = [
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],

@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "Apache-2.0"
+  "notice", # Apache-2.0 from expression "Apache-2.0"
 ])
 
 load(
@@ -22,7 +22,12 @@ load(
     "rust_test",
 )
 
-rust_binary(
+load(
+    "@io_bazel_rules_rust//cargo:cargo_build_script.bzl",
+    "cargo_build_script",
+)
+
+cargo_build_script(
     name = "clang_sys_build_script",
     srcs = glob(["**/*.rs"]),
     crate_root = "build.rs",
@@ -45,57 +50,27 @@ rust_binary(
       "libloading",
       "runtime",
     ],
-    data = glob(["*"]),
+    data = glob(["**"]),
     version = "0.29.3",
     visibility = ["//visibility:private"],
-)
-
-genrule(
-    name = "clang_sys_build_script_executor",
-    srcs = glob(["*", "**/*.rs"]),
-    outs = ["clang_sys_out_dir_outputs.tar.gz"],
-    tools = [
-      ":clang_sys_build_script",
-    ],
-    tags = ["no-sandbox"],
-    cmd = "mkdir -p $$(dirname $@)/clang_sys_out_dir_outputs/;"
-        + " (export CARGO_MANIFEST_DIR=\"$$PWD/$$(dirname $(location :Cargo.toml))\";"
-        # TODO(acmcarther): This needs to be revisited as part of the cross compilation story.
-        #                   See also: https://github.com/google/cargo-raze/pull/54
-        + " export TARGET='x86_64-unknown-linux-gnu';"
-        + " export RUST_BACKTRACE=1;"
-        + " export CARGO_FEATURE_CLANG_6_0=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_3_6=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_3_7=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_3_8=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_3_9=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_4_0=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_5_0=1;"
-        + " export CARGO_FEATURE_GTE_CLANG_6_0=1;"
-        + " export CARGO_FEATURE_LIBLOADING=1;"
-        + " export CARGO_FEATURE_RUNTIME=1;"
-        + " export OUT_DIR=$$PWD/$$(dirname $@)/clang_sys_out_dir_outputs;"
-        + " export BINARY_PATH=\"$$PWD/$(location :clang_sys_build_script)\";"
-        + " export OUT_TAR=$$PWD/$@;"
-        + " cd $$(dirname $(location :Cargo.toml)) && $$BINARY_PATH && tar -czf $$OUT_TAR -C $$OUT_DIR .)"
 )
 
 
 rust_library(
     name = "clang_sys",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
+        ":clang_sys_build_script",
         "@raze__glob__0_3_0//:glob",
         "@raze__libc__0_2_71//:libc",
         "@raze__libloading__0_5_2//:libloading",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2015",
     rustc_flags = [
         "--cap-lints=allow",
     ],
-    out_dir_tar = ":clang_sys_build_script_executor",
     version = "0.29.3",
     crate_features = [
         "clang_6_0",

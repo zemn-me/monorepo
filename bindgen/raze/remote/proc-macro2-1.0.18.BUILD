@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "restricted", # "MIT OR Apache-2.0"
+  "notice", # MIT from expression "MIT OR Apache-2.0"
 ])
 
 load(
@@ -30,13 +30,13 @@ load(
 
 rust_library(
     name = "proc_macro2",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2018",
-    srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__unicode_xid__0_2_0//:unicode_xid",
+        "@raze__unicode_xid__0_2_1//:unicode_xid",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],

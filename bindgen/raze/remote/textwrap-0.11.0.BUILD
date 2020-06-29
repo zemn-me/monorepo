@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "MIT"
+  "notice", # MIT from expression "MIT"
 ])
 
 load(
@@ -29,13 +29,13 @@ load(
 
 rust_library(
     name = "textwrap",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__unicode_width__0_1_7//:unicode_width",
+        "@raze__unicode_width__0_1_8//:unicode_width",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2015",
     rustc_flags = [
         "--cap-lints=allow",
     ],

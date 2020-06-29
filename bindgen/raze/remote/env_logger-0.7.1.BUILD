@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "MIT,Apache-2.0"
+  "notice", # MIT from expression "MIT OR Apache-2.0"
 ])
 
 load(
@@ -31,10 +31,7 @@ load(
 
 rust_library(
     name = "env_logger",
-    crate_root = "src/lib.rs",
     crate_type = "lib",
-    edition = "2018",
-    srcs = glob(["**/*.rs"]),
     deps = [
         "@raze__atty__0_2_14//:atty",
         "@raze__humantime__1_3_0//:humantime",
@@ -42,6 +39,9 @@ rust_library(
         "@raze__regex__1_3_9//:regex",
         "@raze__termcolor__1_1_0//:termcolor",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],

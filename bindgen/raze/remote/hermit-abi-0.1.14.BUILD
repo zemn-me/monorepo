@@ -12,7 +12,7 @@ package(default_visibility = [
 ])
 
 licenses([
-  "notice", # "MIT,Apache-2.0"
+  "notice", # MIT from expression "MIT OR Apache-2.0"
 ])
 
 load(
@@ -25,17 +25,18 @@ load(
 
 
 rust_library(
-    name = "unicode_width",
-    crate_root = "src/lib.rs",
+    name = "hermit_abi",
     crate_type = "lib",
-    edition = "2015",
-    srcs = glob(["**/*.rs"]),
     deps = [
+        "@raze__libc__0_2_71//:libc",
     ],
+    srcs = glob(["**/*.rs"]),
+    crate_root = "src/lib.rs",
+    edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
     ],
-    version = "0.1.7",
+    version = "0.1.14",
     crate_features = [
         "default",
     ],
