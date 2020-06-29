@@ -19,7 +19,7 @@ extern crate cargo_build_script_output_parser;
 use cargo_build_script_output_parser::{BuildScriptOutput, CompileAndLinkFlags};
 use std::env;
 use std::ffi::OsString;
-use std::fs::{create_dir_all, write};
+use std::fs::{create_dir_all, read_to_string, write};
 use std::path::Path;
 use std::process::Command;
 
@@ -45,16 +45,34 @@ fn main() -> Result<(), String> {
 
             let mut command = Command::new(exec_root.join(&progname));
             command
-                .args(args)
                 .current_dir(manifest_dir.clone())
                 .env("OUT_DIR", out_dir_abs)
                 .env("CARGO_MANIFEST_DIR", manifest_dir)
                 .env("RUSTC", rustc)
                 .env("RUST_BACKTRACE", "full");
 
+            while let Some(dep_env_path) = args.next() {
+                if let Ok(contents) = read_to_string(dep_env_path) {
+                    for line in contents.split('\n') {
+                        let mut key_val = line.splitn(2, '=');
+                        match (key_val.next(), key_val.next()) {
+                            (Some(key), Some(value)) => {
+                                command.env(key, value);
+                            }
+                            _ => {
+                                return Err("error: Wrong environment file format, should not happen".to_owned())
+                            }
+                        }
+                    }
+                } else {
+                    return Err("error: Dependency environment file unreadable".to_owned())
+                }
+            }
+
             if let Some(cc_path) = env::var_os("CC") {
                 command.env("CC", absolutify(&exec_root, cc_path));
             }
+            
             if let Some(ar_path) = env::var_os("AR") {
                 // The default OSX toolchain uses libtool as ar_executable not ar.
                 // This doesn't work when used as $AR, so simply don't set it - tools will probably fall back to
