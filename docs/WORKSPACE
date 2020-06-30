@@ -1,1 +1,40 @@
-workspace(name = "docs")
+workspace(name = "io_bazel_rules_rust_docs")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+local_repository(
+    name = "io_bazel_rules_rust",
+    path = "..",
+)
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "9a737999532daca978a158f94e77e9af6a6a169709c0cee274f0a4c3359519bd",
+    strip_prefix = "bazel-skylib-1.0.0",
+    url = "https://github.com/bazelbuild/bazel-skylib/archive/1.0.0.tar.gz",
+)
+
+http_archive(
+    name = "io_bazel_stardoc",
+    urls = [
+        "https://github.com/bazelbuild/stardoc/archive/1ef781ced3b1443dca3ed05dec1989eca1a4e1cd.zip",
+    ],
+    sha256 = "5d7191bb0800434a9192d8ac80cba4909e96dbb087c5d51f168fedd7bde7b525",
+    strip_prefix = "stardoc-1ef781ced3b1443dca3ed05dec1989eca1a4e1cd",
+)
+
+load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
+load("@io_bazel_rules_rust//proto:repositories.bzl", "rust_proto_repositories")
+load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
+load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
+
+rust_repositories()
+rust_proto_repositories()
+bazel_version(name = "bazel_version")
+stardoc_repositories()
+
+# Rules proto does not declare a bzl_library, we stub it there for now.
+# TODO: Remove this hack if/when rules_proto adds a bzl_library.
+local_repository(
+    name = "rules_proto",
+    path = "rules_proto_stub",
+)

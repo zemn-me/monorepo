@@ -44,19 +44,6 @@ rust_bindgen_repositories()
 load("@io_bazel_rules_rust//wasm_bindgen:repositories.bzl", "rust_wasm_bindgen_repositories")
 rust_wasm_bindgen_repositories()
 
-# Stardoc and its dependencies
-http_archive(
-    name = "io_bazel_stardoc",
-    urls = [
-        "https://github.com/bazelbuild/stardoc/archive/f13e3cac7022bd8bdd32233d1dae95a56df01a51.zip",
-    ],
-    sha256 = "d698a413eaaf473c27d57654e4726ddfaab3e29280294ae2d8e11c4cb6f29b5e",
-    strip_prefix = "stardoc-f13e3cac7022bd8bdd32233d1dae95a56df01a51",
-)
-
-load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
-stardoc_repositories()
-
 http_archive(
     name = "build_bazel_rules_nodejs",
     sha256 = "e1a0d6eb40ec89f61a13a028e7113aa3630247253bcb1406281b627e44395145",

@@ -815,7 +815,7 @@ fn bench_fibonacci(b: &mut Bencher) {
 
 To build the benchmark test, add a `rust_benchmark` target:
 
-`fibonacci/BUILD`:\
+`fibonacci/BUILD`:
 ```python
 package(default_visibility = ["//visibility:public"])
 

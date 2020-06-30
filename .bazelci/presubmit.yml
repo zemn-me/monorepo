@@ -2,7 +2,6 @@
 default_targets: &default_targets
 - "--" # Allows negative patterns; hack for https://github.com/bazelbuild/continuous-integration/pull/245
 - "..."
-- "@docs//..."
 - "@examples//..."
 # Bindgen currently only has a working toolchain for 18.04
 - "-@examples//ffi/rust_calling_c/simple/..."
@@ -14,13 +13,11 @@ tasks:
     build_targets: *default_targets
     test_targets:
       - "..."
-      - "@docs//..."
       - "@examples//..."
   macos:
     osx_targets: &osx_targets
     - "--" # Allows negative patterns; hack for https://github.com/bazelbuild/continuous-integration/pull/245
     - "..."
-    - "@docs//..."
     - "@examples//..."
     # Skip tests for dylib support on osx, since we don't support it yet.
     - "-@examples//ffi/rust_calling_c:matrix_dylib_test"
@@ -49,6 +46,18 @@ tasks:
     platform: ubuntu1804
     working_directory: examples
     test_targets:
+    - //...
+  docs_linux:
+    name: Docs
+    platform: ubuntu1804
+    working_directory: docs
+    build_targets:
+    - //...
+  docs_macos:
+    name: Docs
+    platform: macos
+    working_directory: docs
+    build_targets:
     - //...
   clippy_examples:
     name: Clippy on Examples
