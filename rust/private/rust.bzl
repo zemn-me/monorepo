@@ -155,10 +155,7 @@ def _rust_binary_impl(ctx):
     toolchain = find_toolchain(ctx)
     crate_name = ctx.label.name.replace("-", "_")
 
-    if (toolchain.target_arch == "wasm32"):
-        output = ctx.actions.declare_file(ctx.label.name + ".wasm")
-    else:
-        output = ctx.actions.declare_file(ctx.label.name)
+    output = ctx.actions.declare_file(ctx.label.name + toolchain.binary_ext)
 
     crate_type = getattr(ctx.attr, "crate_type")
 
@@ -364,6 +361,12 @@ _rust_common_attrs = {
         ],
     ),
     "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),
+    "_rust_tool_wrapper": attr.label(
+        default = "@io_bazel_rules_rust//rust/private/rust_tool_wrapper:rust_tool_wrapper",
+        executable = True,
+        allow_single_file = True,
+        cfg = "exec",
+    ),
 }
 
 _rust_library_attrs = {

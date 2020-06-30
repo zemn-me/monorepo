@@ -19,6 +19,7 @@ def _rust_toolchain_impl(ctx):
         clippy_driver = ctx.file.clippy_driver,
         rustc_lib = ctx.attr.rustc_lib,
         rust_lib = ctx.attr.rust_lib,
+        binary_ext = ctx.attr.binary_ext,
         staticlib_ext = ctx.attr.staticlib_ext,
         dylib_ext = ctx.attr.dylib_ext,
         target_triple = ctx.attr.target_triple,
@@ -56,6 +57,7 @@ rust_toolchain = rule(
         "rust_lib": attr.label(
             doc = "The rust standard library.",
         ),
+        "binary_ext": attr.string(mandatory = True),
         "staticlib_ext": attr.string(mandatory = True),
         "dylib_ext": attr.string(mandatory = True),
         "os": attr.string(mandatory = True),
@@ -98,6 +100,7 @@ rust_toolchain(
   rustc_lib = "@rust_cpuX//:rustc_lib",
   rust_lib = "@rust_cpuX//:rust_lib",
   rust_doc = "@rust_cpuX//:rustdoc",
+  binary_ext = "",
   staticlib_ext = ".a",
   dylib_ext = ".so",
   os = "linux",

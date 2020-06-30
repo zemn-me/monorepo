@@ -18,7 +18,6 @@ load(
     "collect_deps",
     "collect_inputs",
     "construct_arguments",
-    "construct_compile_command",
 )
 load(
     "@io_bazel_rules_rust//rust:private/rust.bzl",
@@ -60,41 +59,34 @@ def _clippy_aspect_impl(target, ctx):
         toolchain,
     )
 
-    compile_inputs, prep_commands, dynamic_env, dynamic_build_flags = collect_inputs(
+    compile_inputs, out_dir, build_env_file, build_flags_files = collect_inputs(
         ctx,
         ctx.rule.file,
         ctx.rule.files,
         toolchain,
         crate_info,
         dep_info,
-        build_info
+        build_info,
     )
-
-    args, env, dynamic_env = construct_arguments(
-        ctx,
-        ctx.rule.file,
-        toolchain,
-        crate_info,
-        dep_info,
-        output_hash = repr(hash(root.path)),
-        rust_flags = [],
-        dynamic_env = dynamic_env)
 
     # A marker file indicating clippy has executed successfully.
     # This file is necessary because "ctx.actions.run" mandates an output.
     clippy_marker = ctx.actions.declare_file(ctx.label.name + "_clippy.ok")
 
-    command = construct_compile_command(
+    args, env = construct_arguments(
         ctx,
-        toolchain.clippy_driver.path,
+        ctx.file,
         toolchain,
+        toolchain.clippy_driver.path,
         crate_info,
-        build_info,
         dep_info,
-        prep_commands,
-        dynamic_env,
-        dynamic_build_flags,
-    ) + (" && touch %s" % clippy_marker.path)
+        output_hash = repr(hash(root.path)),
+        rust_flags = [],
+        out_dir = out_dir,
+        build_env_file = build_env_file,
+        build_flags_files = build_flags_files,
+        maker_path = clippy_marker.path,
+    )
 
     # Deny the default-on clippy warning levels.
     #
@@ -102,12 +94,12 @@ def _clippy_aspect_impl(target, ctx):
     # result of the aspect to be "success", and Clippy won't be re-triggered
     # unless the source file is modified.
     args.add("-Dclippy::style")
-    args.add("-Dclippy::correctness");
-    args.add("-Dclippy::complexity");
-    args.add("-Dclippy::perf");
+    args.add("-Dclippy::correctness")
+    args.add("-Dclippy::complexity")
+    args.add("-Dclippy::perf")
 
-    ctx.actions.run_shell(
-        command = command,
+    ctx.actions.run(
+        executable = ctx.executable._rust_tool_wrapper,
         inputs = compile_inputs,
         outputs = [clippy_marker],
         env = env,
@@ -131,10 +123,16 @@ rust_clippy_aspect = aspect(
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
+        "_rust_tool_wrapper": attr.label(
+            default = "@io_bazel_rules_rust//rust/private/rust_tool_wrapper:rust_tool_wrapper",
+            executable = True,
+            allow_single_file = True,
+            cfg = "exec",
+        ),
     },
     toolchains = [
         "@io_bazel_rules_rust//rust:toolchain",
-        "@bazel_tools//tools/cpp:toolchain_type"
+        "@bazel_tools//tools/cpp:toolchain_type",
     ],
     implementation = _clippy_aspect_impl,
     doc = """
@@ -166,7 +164,6 @@ Then the targets can be analyzed with clippy using the following command:
 $ bazel build --aspects=@io_bazel_rules_rust//rust:rust.bzl%rust_clippy_aspect \
               --output_groups=clippy_checks //hello_lib:all
 """,
-
 )
 
 def _rust_clippy_rule_impl(ctx):
@@ -176,7 +173,7 @@ def _rust_clippy_rule_impl(ctx):
 rust_clippy = rule(
     implementation = _rust_clippy_rule_impl,
     attrs = {
-        'deps': attr.label_list(aspects = [rust_clippy_aspect]),
+        "deps": attr.label_list(aspects = [rust_clippy_aspect]),
     },
     doc = """
 Executes the clippy checker on a specific target.

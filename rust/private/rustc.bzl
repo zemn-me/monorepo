@@ -122,23 +122,22 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
     for dep in deps:
         if CrateInfo in dep:
             if dep[CrateInfo].type == "proc-macro":
-              fail(
-                  "{} listed {} in its deps, but it is a proc-macro. It should instead be in the bazel property proc_macro_deps.".format(
-                      label,
-                      dep.label,
-                  )
-              )
+                fail(
+                    "{} listed {} in its deps, but it is a proc-macro. It should instead be in the bazel property proc_macro_deps.".format(
+                        label,
+                        dep.label,
+                    ),
+                )
     for dep in proc_macro_deps:
         type = dep[CrateInfo].type
         if type != "proc-macro":
-          fail(
-              "{} listed {} in its proc_macro_deps, but it is not proc-macro, it is a {}. It should probably instead be listed in deps.".format(
-                  label,
-                  dep.label,
-                  type,
-              )
-          )
-
+            fail(
+                "{} listed {} in its proc_macro_deps, but it is not proc-macro, it is a {}. It should probably instead be listed in deps.".format(
+                    label,
+                    dep.label,
+                    type,
+                ),
+            )
 
     # TODO: Fix depset union (https://docs.bazel.build/versions/master/skylark/depsets.html)
     direct_crates = []
@@ -148,7 +147,7 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
     transitive_build_infos = depset()
     build_info = None
 
-    aliases = {k.label: v for k,v in aliases.items()}
+    aliases = {k.label: v for k, v in aliases.items()}
     for dep in deps + proc_macro_deps:
         if CrateInfo in dep:
             # This dependency is a rust_library
@@ -249,10 +248,10 @@ def _process_build_scripts(
         build_info,
         dep_info,
         compile_inputs):
-    extra_inputs, prep_commands, dynamic_env, dynamic_build_flags = _create_out_dir_action(ctx, file, build_info, dep_info)
+    extra_inputs, out_dir, build_env_file, build_flags_files = _create_extra_input_args(ctx, file, build_info, dep_info)
     if extra_inputs:
         compile_inputs = depset(extra_inputs, transitive = [compile_inputs])
-    return compile_inputs, prep_commands, dynamic_env, dynamic_build_flags
+    return compile_inputs, out_dir, build_env_file, build_flags_files
 
 def collect_inputs(
         ctx,
@@ -290,18 +289,71 @@ def construct_arguments(
         ctx,
         file,
         toolchain,
+        tool_path,
         crate_info,
         dep_info,
         output_hash,
         rust_flags,
-        dynamic_env):
+        out_dir,
+        build_env_file,
+        build_flags_files,
+        maker_path):
     output_dir = getattr(crate_info.output, "dirname") if hasattr(crate_info.output, "dirname") else None
 
     linker_script = getattr(file, "linker_script") if hasattr(file, "linker_script") else None
 
     env = _get_rustc_env(ctx, toolchain)
 
+    # Wrapper args first
     args = ctx.actions.args()
+    args.add("--tool-path", tool_path)
+    if out_dir != None:
+        args.add("--out-dir", out_dir)
+
+    if build_env_file != None:
+        args.add("--build-env-file", build_env_file)
+
+    for f in build_flags_files:
+        args.add("--build-flags-file", f)
+
+    # Certain rust build processes expect to find files from the environment variable
+    # `$CARGO_MANIFEST_DIR`. Examples of this include pest, tera, asakuma.
+    #
+    # The compiler and by extension proc-macros see the current working directory as the Bazel exec
+    # root. Therefore, in order to fix this without an upstream code change, we have to set
+    # `$CARGO_MANIFEST_DIR`.
+    #
+    # As such we attempt to infer `$CARGO_MANIFEST_DIR`.
+    # Inference cannot be derived from `attr.crate_root`, as this points at a source file which may or
+    # may not follow the `src/lib.rs` convention. As such we use `ctx.build_file_path` mapped into the
+    # `exec_root`. Since we cannot (seemingly) get the `exec_root` from skylark, we cheat a little
+    # and use `$(pwd)` which resolves the `exec_root` at action execution time.
+    package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
+    args.add("--package-dir", package_dir)
+
+    # Handle that the binary name and crate name may be different.
+    #
+    # If a target name contains a - then cargo (and rules_rust) will generate a
+    # crate name with _ instead.  Accordingly, rustc will generate a output
+    # file (executable, or rlib, or whatever) with _ not -.  But when cargo
+    # puts a binary in the target/${config} directory, and sets environment
+    # variables like `CARGO_BIN_EXE_${binary_name}` it will use the - version
+    # not the _ version.  So we rename the rustc-generated file (with _s) to
+    # have -s if needed.
+    maybe_rename = ""
+    if crate_info.type == "bin" and crate_info.output != None:
+        generated_file = crate_info.name + toolchain.binary_ext
+        src = "/".join([crate_info.output.dirname, generated_file])
+        dst = crate_info.output.path
+        if src != dst:
+            args.add_all(["--rename", src, dst])
+
+    if maker_path != None:
+        args.add("--maker-path", maker_path)
+
+    # Rustc arguments
+    args.add("--")
+
     args.add(crate_info.root)
     args.add("--crate-name=" + crate_info.name)
     args.add("--crate-type=" + crate_info.type)
@@ -362,61 +414,7 @@ def construct_arguments(
     # sysroot being undefined.
     env["SYSROOT"] = ""
 
-    # Certain rust build processes expect to find files from the environment variable
-    # `$CARGO_MANIFEST_DIR`. Examples of this include pest, tera, asakuma.
-    #
-    # The compiler and by extension proc-macros see the current working directory as the Bazel exec
-    # root. Therefore, in order to fix this without an upstream code change, we have to set
-    # `$CARGO_MANIFEST_DIR`.
-    #
-    # As such we attempt to infer `$CARGO_MANIFEST_DIR`.
-    # Inference cannot be derived from `attr.crate_root`, as this points at a source file which may or
-    # may not follow the `src/lib.rs` convention. As such we use `ctx.build_file_path` mapped into the
-    # `exec_root`. Since we cannot (seemingly) get the `exec_root` from skylark, we cheat a little
-    # and use `$(pwd)` which resolves the `exec_root` at action execution time.
-    package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
-    dynamic_env["CARGO_MANIFEST_DIR"] = "${{EXEC_ROOT}}/{}".format(package_dir)
-
-    return args, env, dynamic_env
-
-def construct_compile_command(
-        ctx,
-        command,
-        toolchain,
-        crate_info,
-        build_info,
-        dep_info,
-        prep_commands,
-        dynamic_env,
-        dynamic_build_flags):
-    # Handle that the binary name and crate name may be different.
-    #
-    # If a target name contains a - then cargo (and rules_rust) will generate a
-    # crate name with _ instead.  Accordingly, rustc will generate a output
-    # file (executable, or rlib, or whatever) with _ not -.  But when cargo
-    # puts a binary in the target/${config} directory, and sets environment
-    # variables like `CARGO_BIN_EXE_${binary_name}` it will use the - version
-    # not the _ version.  So we rename the rustc-generated file (with _s) to
-    # have -s if needed.
-    maybe_rename = ""
-    if crate_info.type == "bin" and crate_info.output != None:
-        generated_file = crate_info.name
-        if toolchain.target_arch == "wasm32":
-            generated_file = generated_file + ".wasm"
-        src = "/".join([crate_info.output.dirname, generated_file])
-        dst = crate_info.output.path
-        if src != dst:
-            maybe_rename = " && /bin/mv {src} {dst}".format(src=src, dst=dst)
-
-    # Set ${EXEC_ROOT} so that actions which chdir still work.
-    # See https://github.com/google/cargo-raze/issues/71#issuecomment-433225853 for the rationale as
-    # to why.
-    return 'export EXEC_ROOT=$(pwd) && {} && {} "$@" --remap-path-prefix="$(pwd)"=__bazel_redacted_pwd {}{}'.format(
-        " && ".join(["export {}={}".format(key, value) for key, value in dynamic_env.items()] + prep_commands),
-        command,
-        " ".join(dynamic_build_flags),
-        maybe_rename,
-    )
+    return args, env
 
 def rustc_compile_action(
         ctx,
@@ -441,7 +439,7 @@ def rustc_compile_action(
         toolchain,
     )
 
-    compile_inputs, prep_commands, dynamic_env, dynamic_build_flags = collect_inputs(
+    compile_inputs, out_dir, build_env_file, build_flags_files = collect_inputs(
         ctx,
         ctx.file,
         ctx.files,
@@ -451,27 +449,19 @@ def rustc_compile_action(
         build_info,
     )
 
-    args, env, dynamic_env = construct_arguments(
+    args, env = construct_arguments(
         ctx,
         ctx.file,
         toolchain,
+        toolchain.rustc.path,
         crate_info,
         dep_info,
         output_hash,
         rust_flags,
-        dynamic_env,
-    )
-
-    command = construct_compile_command(
-        ctx,
-        toolchain.rustc.path,
-        toolchain,
-        crate_info,
-        build_info,
-        dep_info,
-        prep_commands,
-        dynamic_env,
-        dynamic_build_flags,
+        out_dir,
+        build_env_file,
+        build_flags_files,
+        maker_path = None,
     )
 
     if hasattr(ctx.attr, "version") and ctx.attr.version != "0.0.0":
@@ -479,8 +469,8 @@ def rustc_compile_action(
     else:
         formatted_version = ""
 
-    ctx.actions.run_shell(
-        command = command,
+    ctx.actions.run(
+        executable = ctx.executable._rust_tool_wrapper,
         inputs = compile_inputs,
         outputs = [crate_info.output],
         env = env,
@@ -493,6 +483,7 @@ def rustc_compile_action(
             len(crate_info.srcs),
         ),
     )
+
     runfiles = ctx.runfiles(
         files = dep_info.transitive_dylibs.to_list() + getattr(ctx.files, "data", []),
         collect_data = True,
@@ -509,7 +500,7 @@ def rustc_compile_action(
             # nb. This field is required for cc_library to depend on our output.
             files = depset([crate_info.output]),
             runfiles = runfiles,
-            executable = crate_info.output if crate_info.type == "bin" or out_binary else None,
+            executable = crate_info.output if crate_info.type == "bin" or "--test" in rust_flags or out_binary else None,
         ),
     ]
 
@@ -517,27 +508,28 @@ def add_edition_flags(args, crate):
     if crate.edition != "2015":
         args.add("--edition={}".format(crate.edition))
 
-def _create_out_dir_action(ctx, file, build_info, dep_info):
-    prep_commands = []
+def _create_extra_input_args(ctx, file, build_info, dep_info):
     input_files = []
-    # Env vars and build flags which need to be set in the action's command line, rather than on the action's env,
-    # because they rely on other env vars or commands.
-    dynamic_env = {}
-    dynamic_build_flags = []
+
+    # Arguments to the commandline line wrapper that are going to be used
+    # to create the final command line
+    out_dir = None
+    build_env_file = None
+    build_flags_files = []
 
     if build_info:
-        prep_commands.append("export $(cat %s)" % build_info.rustc_env.path)
+        out_dir = build_info.out_dir.path
+        build_env_file = build_info.rustc_env.path
         # out_dir will be added as input by the transitive_build_infos loop below.
-        dynamic_env["OUT_DIR"] = "${{EXEC_ROOT}}/{}".format(build_info.out_dir.path)
-        dynamic_build_flags.append("$(cat '%s')" % build_info.flags.path)
+        build_flags_files.append(build_info.flags.path)
 
     # This should probably only actually be exposed to actions which link.
     for dep_build_info in dep_info.transitive_build_infos.to_list():
         input_files.append(dep_build_info.out_dir)
-        dynamic_build_flags.append("$(cat '{}' | sed -e \"s#\${{EXEC_ROOT}}#${{EXEC_ROOT}}#g\")".format(dep_build_info.link_flags.path))
+        build_flags_files.append(dep_build_info.link_flags.path)
         input_files.append(dep_build_info.link_flags)
 
-    return input_files, prep_commands, dynamic_env, dynamic_build_flags
+    return input_files, out_dir, build_env_file, build_flags_files
 
 def _compute_rpaths(toolchain, output_dir, dep_info):
     """
