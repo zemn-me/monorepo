@@ -17,9 +17,11 @@ use std::env;
 
 fn main() {
     let bleh = env::var("CARGO_FEATURE_BLEH").unwrap();
+    let some_env = env::var("SOME_ENV").unwrap();
     let out_dir = env::var("OUT_DIR").unwrap();
     let data = std::fs::read("cargo/test.txt").unwrap();
     assert!(!bleh.is_empty());
+    assert_eq!(some_env, "42");
     println!(r#"cargo:rustc-env=FOO=BAR
 cargo:rustc-env=BAR=FOO
 cargo:rustc-flags=--cfg=blah="bleh"

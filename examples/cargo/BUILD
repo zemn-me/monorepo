@@ -14,6 +14,7 @@ cargo_build_script(
     srcs = ["build_script.rs"],
     data = ["test.txt"],
     crate_features = ["bleh"],
+    build_script_env = {"SOME_ENV": "42"},
 )
 
 rust_library(

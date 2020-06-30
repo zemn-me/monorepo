@@ -57,6 +57,8 @@ def _cargo_build_script_run(ctx, script):
     for f in ctx.attr.crate_features:
         env["CARGO_FEATURE_" + f.upper().replace("-", "_")] = "1"
 
+    env.update(ctx.attr.build_script_env)
+
     tools = depset(
         direct = [
             script,
@@ -113,6 +115,9 @@ _build_script_run = rule(
             cfg = "host",
             doc = "The binary script to run, generally a rust_binary target. ",
         ),
+        "build_script_env": attr.string_dict(
+            doc = "Environment variables for build scripts.",
+        ),
         "crate_name": attr.string(),
         "crate_features": attr.string_list(doc = "The list of rust features that the build script should consider activated."),
         "_cc_toolchain": attr.label(default = Label("@bazel_tools//tools/cpp:current_cc_toolchain")),
@@ -131,7 +136,12 @@ _build_script_run = rule(
     ],
 )
 
-def cargo_build_script(name, crate_name = "", crate_features = [], deps = [], **kwargs):
+def cargo_build_script(name,
+                       crate_name = "",
+                       crate_features = [],
+                       deps = [],
+                       build_script_env = {},
+                       **kwargs):
     """
     Compile and execute a rust build script to generate build attributes
 
@@ -166,6 +176,8 @@ def cargo_build_script(name, crate_name = "", crate_features = [], deps = [], **
         srcs = ["build.rs"],
         # Data are shipped during execution.
         data = ["src/lib.rs"],
+        # Environment variables passed during build.rs execution
+        build_script_env = {"CARGO_PKG_VERSION": "0.1.2"},
     )
 
     rust_library(
@@ -191,5 +203,6 @@ def cargo_build_script(name, crate_name = "", crate_features = [], deps = [], **
         script = ":%s_script_" % name,
         crate_name = crate_name,
         crate_features = crate_features,
+        build_script_env = build_script_env,
         deps = deps,
     )
