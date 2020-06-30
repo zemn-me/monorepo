@@ -518,10 +518,6 @@ def add_edition_flags(args, crate):
         args.add("--edition={}".format(crate.edition))
 
 def _create_out_dir_action(ctx, file, build_info, dep_info):
-    tar_file_attr = getattr(file, "out_dir_tar", None)
-    if build_info and tar_file_attr:
-        fail("Target {} has both a build_script dependency and an out_dir_tar - this is not allowed.".format(ctx.label))
-
     prep_commands = []
     input_files = []
     # Env vars and build flags which need to be set in the action's command line, rather than on the action's env,
@@ -529,18 +525,11 @@ def _create_out_dir_action(ctx, file, build_info, dep_info):
     dynamic_env = {}
     dynamic_build_flags = []
 
-    # TODO: Remove system tar usage
     if build_info:
         prep_commands.append("export $(cat %s)" % build_info.rustc_env.path)
         # out_dir will be added as input by the transitive_build_infos loop below.
         dynamic_env["OUT_DIR"] = "${{EXEC_ROOT}}/{}".format(build_info.out_dir.path)
         dynamic_build_flags.append("$(cat '%s')" % build_info.flags.path)
-    elif tar_file_attr:
-        out_dir = ".out-dir"
-        prep_commands.append("mkdir -p $OUT_DIR")
-        prep_commands.append("tar -xzf {tar} -C $OUT_DIR".format(tar=tar_file_attr.path))
-        input_files.append(tar_file_attr)
-        dynamic_env["OUT_DIR"] = "${{EXEC_ROOT}}/{}".format(out_dir)
 
     # This should probably only actually be exposed to actions which link.
     for dep_build_info in dep_info.transitive_build_infos.to_list():

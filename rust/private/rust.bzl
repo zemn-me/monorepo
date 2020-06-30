@@ -48,6 +48,13 @@ See https://github.com/bazelbuild/rules_rust/pull/203 for more details
 def _determine_output_hash(lib_rs):
     return repr(hash(lib_rs.path))
 
+def _deprecated_attributes(ctx):
+    if getattr(ctx.attr, "out_dir_tar", None):
+        fail(ctx, "".join([
+            "`out_dir_tar` is no longer supported, please use cargo/cargo_build_script.bzl ",
+            "instead. If you used `cargo raze`, please use version 0.3.3 or later.",
+        ]))
+
 def _determine_lib_name(name, crate_type, toolchain, lib_hash = ""):
     extension = None
     if crate_type in ("dylib", "cdylib", "proc-macro"):
@@ -110,6 +117,7 @@ def _shortest_src_with_basename(srcs, basename):
 def _rust_library_impl(ctx):
     # Find lib.rs
     lib_rs = crate_root_src(ctx.attr, ctx.files.srcs)
+    _deprecated_attributes(ctx)
 
     toolchain = find_toolchain(ctx)
 
@@ -180,6 +188,7 @@ def _rust_test_common(ctx, test_binary):
         test_binary: The File object for the test binary.
     """
     toolchain = find_toolchain(ctx)
+    _deprecated_attributes(ctx)
 
     if ctx.attr.crate:
         # Target is building the crate in `test` config
@@ -231,6 +240,7 @@ def _rust_test_impl(ctx):
 
 def _rust_benchmark_impl(ctx):
     bench_script = ctx.outputs.executable
+    _deprecated_attributes(ctx)
 
     # Build the underlying benchmark binary.
     bench_binary = ctx.actions.declare_file(
@@ -347,13 +357,7 @@ _rust_common_attrs = {
         default = "0.0.0",
     ),
     "out_dir_tar": attr.label(
-        doc = _tidy("""
-            An optional tar or tar.gz file unpacked and passed as OUT_DIR.
-
-            Many library crates in the Rust ecosystem require sources to be provided
-            to them in the form of an OUT_DIR argument. This argument can be used to
-            supply the contents of this directory.
-        """),
+        doc = "__Deprecated__, do not use, see [#cargo_build_script] instead.",
         allow_single_file = [
             ".tar",
             ".tar.gz",
