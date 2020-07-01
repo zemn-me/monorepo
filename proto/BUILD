@@ -1,9 +1,8 @@
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//rust:rust.bzl", "rust_binary")
+load(":toolchain.bzl", "rust_proto_toolchain")
 
 package(default_visibility = ["//visibility:public"])
-
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load(":toolchain.bzl", "rust_proto_toolchain")
 
 alias(
     name = "protoc_gen_rust",
@@ -17,9 +16,10 @@ alias(
 
 toolchain_type(name = "toolchain")
 
-py_binary(
+rust_binary(
     name = "optional_output_wrapper",
-    srcs = ["optional_output_wrapper.py"],
+    srcs = ["optional_output_wrapper.rs"],
+    visibility = ["//visibility:public"],
 )
 
 toolchain(
