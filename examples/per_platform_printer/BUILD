@@ -27,6 +27,9 @@ rust_library(
         "@io_bazel_rules_rust//rust/platform:osx": [
             ":print_osx.rs",
         ],
+        "@io_bazel_rules_rust//rust/platform:windows": [
+            ":print_windows.rs",
+        ],
     }),
 )
 

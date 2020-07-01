@@ -39,9 +39,8 @@ _SYSTEM_TO_BUILTIN_SYS_SUFFIX = {
 _SYSTEM_TO_BINARY_EXT = {
     "freebsd": "",
     "linux": "",
-    # TODO(acmcarther): To be verified
-    "darwin": "",
     "windows": ".exe",
+    "darwin": "",
     "emscripten": ".js",
     # This is currently a hack allowing us to have the proper
     # generated extension for the wasm target, similarly to the
@@ -53,7 +52,6 @@ _SYSTEM_TO_STATICLIB_EXT = {
     "freebsd": ".a",
     "linux": ".a",
     "darwin": ".a",
-    # TODO(acmcarther): To be verified
     "windows": ".lib",
     "emscripten": ".js",
     "unknown": "",
@@ -63,7 +61,6 @@ _SYSTEM_TO_DYLIB_EXT = {
     "freebsd": ".so",
     "linux": ".so",
     "darwin": ".dylib",
-    # TODO(acmcarther): To be verified
     "windows": ".dll",
     "emscripten": ".js",
     "unknown": ".wasm",

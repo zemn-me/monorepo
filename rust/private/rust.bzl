@@ -57,6 +57,7 @@ def _deprecated_attributes(ctx):
 
 def _determine_lib_name(name, crate_type, toolchain, lib_hash = ""):
     extension = None
+    prefix = ""
     if crate_type in ("dylib", "cdylib", "proc-macro"):
         extension = toolchain.dylib_ext
     elif crate_type == "staticlib":
@@ -64,6 +65,7 @@ def _determine_lib_name(name, crate_type, toolchain, lib_hash = ""):
     elif crate_type in ("lib", "rlib"):
         # All platforms produce 'rlib' here
         extension = ".rlib"
+        prefix = "lib"
     elif crate_type == "bin":
         fail("crate_type of 'bin' was detected in a rust_library. Please compile " +
              "this crate as a rust_binary instead.")
@@ -72,7 +74,12 @@ def _determine_lib_name(name, crate_type, toolchain, lib_hash = ""):
         fail(("Unknown crate_type: {}. If this is a cargo-supported crate type, " +
               "please file an issue!").format(crate_type))
 
-    return "lib{name}-{lib_hash}{extension}".format(
+    prefix = "lib"
+    if (toolchain.target_triple.find("windows") != -1) and crate_type not in ("lib", "rlib"):
+        prefix = ""
+
+    return "{prefix}{name}-{lib_hash}{extension}".format(
+        prefix = prefix,
         name = name,
         lib_hash = lib_hash,
         extension = extension,
@@ -176,7 +183,7 @@ def _rust_binary_impl(ctx):
         ),
     )
 
-def _rust_test_common(ctx, test_binary):
+def _rust_test_common(ctx, toolchain, output):
     """
     Builds a Rust test binary.
 
@@ -184,43 +191,44 @@ def _rust_test_common(ctx, test_binary):
         ctx: The ctx object for the current target.
         test_binary: The File object for the test binary.
     """
-    toolchain = find_toolchain(ctx)
     _deprecated_attributes(ctx)
+
+    crate_name = ctx.label.name.replace("-", "_")
 
     if ctx.attr.crate:
         # Target is building the crate in `test` config
         # Build the test binary using the dependency's srcs.
         crate = ctx.attr.crate[CrateInfo]
         target = CrateInfo(
-            name = test_binary.basename,
+            name = crate_name,
             type = crate.type,
             root = crate.root,
             srcs = crate.srcs + ctx.files.srcs,
             deps = crate.deps + ctx.attr.deps,
             proc_macro_deps = crate.proc_macro_deps + ctx.attr.proc_macro_deps,
             aliases = ctx.attr.aliases,
-            output = test_binary,
+            output = output,
             edition = crate.edition,
             rustc_env = ctx.attr.rustc_env,
         )
     elif len(ctx.attr.deps) == 1 and len(ctx.files.srcs) == 0:
         dep = ctx.attr.deps[0].label
         msg = _OLD_INLINE_TEST_CRATE_MSG.format(
-            name = test_binary.basename,
+            name = crate_name,
             dep = dep if ctx.label.package != dep.package else ":" + dep.name,
         )
         fail(msg)
     else:
         # Target is a standalone crate. Build the test binary as its own crate.
         target = CrateInfo(
-            name = test_binary.basename,
+            name = crate_name,
             type = "lib",
             root = crate_root_src(ctx.attr, ctx.files.srcs),
             srcs = ctx.files.srcs,
             deps = ctx.attr.deps,
             proc_macro_deps = ctx.attr.proc_macro_deps,
             aliases = ctx.attr.aliases,
-            output = test_binary,
+            output = output,
             edition = get_edition(ctx.attr, toolchain),
             rustc_env = ctx.attr.rustc_env,
         )
@@ -233,36 +241,62 @@ def _rust_test_common(ctx, test_binary):
     )
 
 def _rust_test_impl(ctx):
-    return _rust_test_common(ctx, ctx.outputs.executable)
+    toolchain = find_toolchain(ctx)
+
+    output = ctx.actions.declare_file(
+        ctx.label.name + toolchain.binary_ext,
+    )
+
+    return _rust_test_common(ctx, toolchain, output)
 
 def _rust_benchmark_impl(ctx):
-    bench_script = ctx.outputs.executable
     _deprecated_attributes(ctx)
+
+    toolchain = find_toolchain(ctx)
 
     # Build the underlying benchmark binary.
     bench_binary = ctx.actions.declare_file(
-        "{}_bin".format(bench_script.basename),
+        "{}_bin{}".format(ctx.label.name, toolchain.binary_ext),
         sibling = ctx.configuration.bin_dir,
     )
-    info = _rust_test_common(ctx, bench_binary)
+    info = _rust_test_common(ctx, toolchain, bench_binary)
 
-    # Wrap the benchmark to run it as cargo would.
-    ctx.actions.write(
-        output = bench_script,
-        content = "\n".join([
-            "#!/usr/bin/env bash",
-            "set -e",
-            "{} --bench".format(bench_binary.short_path),
-        ]),
-        is_executable = True,
-    )
+    if toolchain.exec_triple.find("windows") != -1:
+        bench_script = ctx.actions.declare_file(
+            ctx.label.name + ".bat",
+        )
+
+        # Wrap the benchmark to run it as cargo would.
+        ctx.actions.write(
+            output = bench_script,
+            content = "{} --bench || exit 1".format(bench_binary.short_path),
+            is_executable = True,
+        )
+    else:
+        bench_script = ctx.actions.declare_file(
+            ctx.label.name + ".sh",
+        )
+
+        # Wrap the benchmark to run it as cargo would.
+        ctx.actions.write(
+            output = bench_script,
+            content = "\n".join([
+                "#!/usr/bin/env bash",
+                "set -e",
+                "{} --bench".format(bench_binary.short_path),
+            ]),
+            is_executable = True,
+        )
 
     runfiles = ctx.runfiles(
         files = info.runfiles + [bench_binary],
         collect_data = True,
     )
 
-    return struct(runfiles = runfiles)
+    return struct(
+        runfiles = runfiles,
+        executable = bench_script,
+    )
 
 def _tidy(doc_string):
     """Tidy excess whitespace in docstrings to not break index.md"""

@@ -41,6 +41,19 @@ tasks:
     - "-@examples//ffi/rust_calling_c:matrix_dylib_test"
     # rust-lld isn't available on RBE
     - "-@examples//hello_world_wasm:hello_world_wasm_test"
+  windows:
+    build_flags:
+    - "--enable_runfiles" # this is not enabled by default on windows and is necessary for the cargo build scripts
+    windows_targets: &windows_targets
+    - "--" # Allows negative patterns; hack for https://github.com/bazelbuild/continuous-integration/pull/245
+    - "@examples//..."
+    - "-@examples//proto/..." 
+    - "-@examples//hello_world_wasm/..."
+    - "-@examples//hello_sys/..."
+    - "-@examples//ffi/rust_calling_c:matrix_dylib_test"
+    - "-@examples//ffi/rust_calling_c:matrix_dynamically_linked"
+    - "-@examples//ffi/rust_calling_c/simple/..."
+    build_targets: *windows_targets
   examples:
     name: Examples
     platform: ubuntu1804
