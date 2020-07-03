@@ -45,6 +45,26 @@ rust_library(
     crate_type = "staticlib",
 )
 
+# Regression test for #368: static lib with dependencies fail.
+rust_library(
+    name = "hello_test_staticlib",
+    srcs = [
+        "tests/greeting.rs",
+    ],
+    deps = [":hello_lib"],
+    crate_type = "staticlib",
+)
+
+# Regression test for #368: cdylib lib with dependencies fail.
+rust_library(
+    name = "hello_test_cdylib",
+    srcs = [
+        "tests/greeting.rs",
+    ],
+    deps = [":hello_lib"],
+    crate_type = "cdylib",
+)
+
 rust_test(
     name = "hello_lib_test",
     crate = ":hello_lib",
