@@ -54,6 +54,7 @@ tasks:
     - "-@examples//ffi/rust_calling_c:matrix_dynamically_linked"
     - "-@examples//ffi/rust_calling_c/simple/..."
     build_targets: *windows_targets
+    test_targets: *windows_targets
   examples:
     name: Examples
     platform: ubuntu1804
