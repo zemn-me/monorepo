@@ -104,7 +104,7 @@ def _clippy_aspect_impl(target, ctx):
     args.add("-Dclippy::perf")
 
     ctx.actions.run(
-        executable = ctx.executable._rust_tool_wrapper,
+        executable = ctx.executable._process_wrapper,
         inputs = compile_inputs,
         outputs = [clippy_marker],
         env = env,
@@ -128,8 +128,8 @@ rust_clippy_aspect = aspect(
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
-        "_rust_tool_wrapper": attr.label(
-            default = "@io_bazel_rules_rust//rust/private/rust_tool_wrapper:rust_tool_wrapper",
+        "_process_wrapper": attr.label(
+            default = "@io_bazel_rules_rust//util/process_wrapper",
             executable = True,
             allow_single_file = True,
             cfg = "exec",

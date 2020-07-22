@@ -360,8 +360,8 @@ _rust_common_attrs = {
         ],
     ),
     "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),
-    "_rust_tool_wrapper": attr.label(
-        default = "@io_bazel_rules_rust//rust/private/rust_tool_wrapper:rust_tool_wrapper",
+    "_process_wrapper": attr.label(
+        default = "@io_bazel_rules_rust//util/process_wrapper",
         executable = True,
         allow_single_file = True,
         cfg = "exec",

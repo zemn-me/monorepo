@@ -314,15 +314,11 @@ def construct_arguments(
 
     # Wrapper args first
     args = ctx.actions.args()
-    args.add("--tool-path", tool_path)
-    if out_dir != None:
-        args.add("--out-dir", out_dir)
 
     if build_env_file != None:
-        args.add("--build-env-file", build_env_file)
+        args.add("--env-file", build_env_file)
 
-    for f in build_flags_files:
-        args.add("--build-flags-file", f)
+    args.add_all(build_flags_files, before_each = "--arg-file")
 
     # Certain rust build processes expect to find files from the environment variable
     # `$CARGO_MANIFEST_DIR`. Examples of this include pest, tera, asakuma.
@@ -335,9 +331,13 @@ def construct_arguments(
     # Inference cannot be derived from `attr.crate_root`, as this points at a source file which may or
     # may not follow the `src/lib.rs` convention. As such we use `ctx.build_file_path` mapped into the
     # `exec_root`. Since we cannot (seemingly) get the `exec_root` from skylark, we cheat a little
-    # and use `$(pwd)` which resolves the `exec_root` at action execution time.
-    package_dir = ctx.build_file_path[:ctx.build_file_path.rfind("/")]
-    args.add("--package-dir", package_dir)
+    # and use `${pwd}` which resolves the `exec_root` at action execution time.
+    args.add("--subst", "pwd=${pwd}")
+    
+    env["CARGO_MANIFEST_DIR"] = "${pwd}/" + ctx.build_file_path[:ctx.build_file_path.rfind("/")]
+    
+    if out_dir != None:
+        env["OUT_DIR"] = "${pwd}/" + out_dir
 
     # Handle that the binary name and crate name may be different.
     #
@@ -354,14 +354,15 @@ def construct_arguments(
         src = "/".join([crate_info.output.dirname, generated_file])
         dst = crate_info.output.path
         if src != dst:
-            args.add_all(["--rename", src, dst])
+            args.add_all(["--copy-output", src, dst])
 
     if maker_path != None:
-        args.add("--maker-path", maker_path)
+        args.add("--touch-file", maker_path)
+
+    args.add("--")
+    args.add(tool_path)
 
     # Rustc arguments
-    args.add("--")
-
     args.add(crate_info.root)
     args.add("--crate-name=" + crate_info.name)
     args.add("--crate-type=" + crate_info.type)
@@ -482,7 +483,7 @@ def rustc_compile_action(
         formatted_version = ""
 
     ctx.actions.run(
-        executable = ctx.executable._rust_tool_wrapper,
+        executable = ctx.executable._process_wrapper,
         inputs = compile_inputs,
         outputs = [crate_info.output],
         env = env,
