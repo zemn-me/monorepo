@@ -118,11 +118,21 @@ def _rust_bindgen_impl(ctx):
     )
 
     if rustfmt_bin:
-        ctx.actions.run_shell(
-            inputs = depset([rustfmt_bin, unformatted_output]),
+        rustfmt_args = ctx.actions.args()
+        rustfmt_args.add("--stdout-file", output.path)
+        rustfmt_args.add("--")
+        rustfmt_args.add(rustfmt_bin.path)
+        rustfmt_args.add("--emit", "stdout")
+        rustfmt_args.add("--quiet")
+        rustfmt_args.add(unformatted_output.path)
+
+        ctx.actions.run(
+            executable = ctx.executable._process_wrapper,
+            inputs = [unformatted_output],
             outputs = [output],
-            command = "{} --emit stdout --quiet {} > {}".format(rustfmt_bin.path, unformatted_output.path, output.path),
+            arguments = [rustfmt_args],
             tools = [rustfmt_bin],
+            mnemonic = "Rustfmt",
         )
 
 rust_bindgen = rule(
@@ -142,6 +152,12 @@ rust_bindgen = rule(
         ),
         "clang_flags": attr.string_list(
             doc = "Flags to pass directly to the clang executable.",
+        ),
+        "_process_wrapper": attr.label(
+            default = "@io_bazel_rules_rust//util/process_wrapper",
+            executable = True,
+            allow_single_file = True,
+            cfg = "exec",
         ),
     },
     outputs = {"out": "%{name}.rs"},

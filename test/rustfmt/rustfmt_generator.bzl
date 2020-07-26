@@ -5,13 +5,22 @@ def _rustfmt_generator_impl(ctx):
     rustfmt_bin = toolchain.rustfmt
     output = ctx.outputs.out
 
-    ctx.actions.run_shell(
-        inputs = depset([rustfmt_bin, ctx.file.src]),
-        outputs = [output],
-        command = "{} --emit stdout --quiet {} > {}".format(rustfmt_bin.path, ctx.file.src.path, output.path),
-        tools = [rustfmt_bin],
-    )
+    args = ctx.actions.args()
+    args.add("--stdout-file", output.path)
+    args.add("--")
+    args.add(rustfmt_bin.path)
+    args.add("--emit", "stdout")
+    args.add("--quiet")
+    args.add(ctx.file.src.path)
 
+    ctx.actions.run(
+        executable = ctx.executable._process_wrapper,
+        inputs = [ctx.file.src],
+        outputs = [output],
+        arguments = [args],
+        tools = [rustfmt_bin],
+        mnemonic = "Rustfmt",
+    )
 
 rustfmt_generator = rule(
     _rustfmt_generator_impl,
@@ -20,7 +29,13 @@ rustfmt_generator = rule(
         "src": attr.label(
             doc = "The file to be formatted.",
             allow_single_file = True,
-        )
+        ),
+        "_process_wrapper": attr.label(
+            default = "@io_bazel_rules_rust//util/process_wrapper",
+            executable = True,
+            allow_single_file = True,
+            cfg = "exec",
+        ),
     },
     outputs = {"out": "%{name}.rs"},
     toolchains = [
