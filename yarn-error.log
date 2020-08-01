@@ -1,0 +1,36 @@
+Arguments: 
+  /usr/local/Cellar/node/14.6.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js init
+
+PATH: 
+  /usr/local/git/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/X11/bin:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/lib:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/yarn:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/safe-paste:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/golang:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/bazel:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/brew:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/osx:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/vscode:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/tshadwell/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/tshadwell/.antigen/bundles/zsh-users/zsh-completions:/Users/tshadwell/.antigen/bundles/zsh-users/zsh-autosuggestions:/Users/tshadwell/.antigen/bundles/zsh-users/zsh-syntax-highlighting
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  14.6.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:137008:13)
+      at Interface.emit (events.js:314:20)
+      at Interface._ttyWrite (readline.js:875:16)
+      at ReadStream.onkeypress (readline.js:213:10)
+      at ReadStream.emit (events.js:314:20)
+      at emitKeys (internal/readline/utils.js:335:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1144:36)
+      at ReadStream.emit (events.js:314:20)
+      at addChunk (_stream_readable.js:303:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -1,0 +1,15 @@
+{
+  "name": "linear",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Zemnmez/linear.git",
+  "author": "Thomas Shadwell <zemnmez@googlemail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
+}
