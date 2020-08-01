@@ -1,0 +1,48 @@
+{
+  "name": "@zemn.me/storybook-typescript",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "storybook": "start-storybook -p 9009",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@react-workspaces/react-scripts": "https://gitpkg.now.sh/Zemnmez/create-react-app/packages/react-scripts?master",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.15.0",
+    "@typescript-eslint/parser": "^2.15.0",
+    "@zemn.me/bio": "^0.0.0",
+    "@zemn.me/lang": "^0.0.0",
+    "@zemn.me/article": "^0.0.0",
+    "@zemn.me/linear": "^0.0.0",
+    "@zemn.me/timeline": "^0.0.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-react-app": "^5.1.0",
+    "eslint-plugin-flowtype": "^4.5.3",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "husky": "^4.0.6",
+    "lerna": "^3.20.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "typescript": "^3.9.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/helper-call-delegate": "^7.10.4",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/addon-docs": "^5.2.8",
+    "@storybook/addon-info": "^5.2.8",
+    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addons": "^5.2.8",
+    "@storybook/preset-create-react-app": "^3.1.3",
+    "@storybook/react": "^5.2.8",
+    "@storybook/theming": "^5.2.8",
+    "babel-loader": "^8.0.6",
+    "cross-env": "6.0.3",
+    "node-sass": "^4.14.1"
+  }
+}

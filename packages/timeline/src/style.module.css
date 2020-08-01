@@ -1,0 +1,46 @@
+/* ok */
+
+.event > .title {
+    text-transform: lowercase;
+}
+
+.Timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,
+        21rem);
+    justify-content: space-around;
+}
+
+.Year article > time {
+    text-align: center;
+    display: block;
+}
+
+.Month {
+    margin: 0 0 2rem 0;
+}
+
+.Month::before { content: attr(data-month); opacity: .7 }
+
+.Event { margin: 0 0 1rem 1.3rem }
+
+
+.StretchArea {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+}
+
+.VerticalStretchIndicator {
+    display: grid;
+    grid: "." minmax(0, 4rem) "line" 1fr "." minmax(0, 4rem)/ 1fr;
+}
+
+.VerticalStretchIndicator::before {
+    content: "";
+    grid-area: line;
+    height: 100%;
+    display: block;
+    border-left: 1px dotted black;
+    margin: auto;
+}

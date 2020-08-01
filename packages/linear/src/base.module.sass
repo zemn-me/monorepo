@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap')
+
+.blockelement
+    width: 100%
+    height: 100%
+    margin: 0
+    padding: 0
+    display: grid
+
+.multicol
+    display: grid
+    grid-template-columns: repeat(auto-fill, var(--column-width, 21rem))
+    justify-content: space-around
+    
+.linear
+  --eigengrau: #16161D
+  --fgc: black
+  --lightish: rgba(0,0,0,.6)
+  --bgc: white
+  font-family: 'EB Garamond', serif
+  font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
+  color: var(--fgc)
+    
+  $this: &
+  
+  =props
+    &#{$this}, #{$this} &
+      @content
+      
+  @at-root
+    main
+      +props
+        background: var(--bgc)
+        
+    .darkmode
+      +props
+        --bgc: whitesmoke
+        
+    p
+      &::first-letter
+        +props
+          text-transform: capitalize
+        
+    h1, h2, h3, h4, h5, h6
+      +props
+        font-weight: inherit
+        
+    a
+      &:visited, &:link
+        +props
+          color: inherit
+        
+      &:link
+        +props
+          font-style: italic
+          text-decoration: inherit
+
+    input
+      &[type=text]
+        +props
+          padding: 1rem 0
+          text-decoration-color: rgba(0,0,0,.3)
+          
+        &:focus
+          +props
+            border-bottom-color: var(--fgc)
+            border: 0
+            outline: 0
+            
+    strong
+      +props
+        font-weight: 600
+        
+    hr
+      +props
+        border: 0
+        text-align: center
+        display: block
+        margin: 1rem 0
+      
+      &::before
+        +props
+          content: "⁂"
+    
