@@ -1,6 +1,5 @@
 import React from 'react';
-import { Bio } from '@zemn.me/bio';
+import Article from '@zemn.me/article/how-to-hack-icloud';
 
-export const cmpt = () => <>{JSON.stringify(Bio)}</>
-
+export const cmpt = () => <Article />
 export default cmpt;
