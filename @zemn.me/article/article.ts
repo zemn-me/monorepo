@@ -1,4 +1,5 @@
 import { SimpleDate }  from '@zemn.me/simpletime'
+const { MDXProvider, mdx } = require("@mdx-js/react");
 
 export interface Article {
     component: React.ComponentType

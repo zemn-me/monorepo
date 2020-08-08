@@ -22,85 +22,93 @@
   font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
   color: var(--fgc)
   overflow-wrap: break-word
+  text-decoration-skip-ink: auto
     
   $this: &
   
-  =props
+  =linear
     &#{$this}, #{$this} &
       @content
       
   @at-root
+    img
+      +linear
+        max-width: 90%
+        margin: auto
+        display: block
+
     pre
-      +props
+      +linear
         white-space: break-spaces
 
     article
-      +props
+      +linear
         margin: auto
         padding: 0 2em
-        max-width: 36em
+        max-width: 45em
 
     main
-      +props
+      +linear
         background: var(--bgc)
         
     .darkmode
-      +props
+      +linear
         --bgc: whitesmoke
         
     p
-      +props
+      +linear
         &::first-letter
           text-transform: capitalize
           padding-left: 1em
         
     h1, h2, h3, h4, h5, h6
-      +props
+      +linear
         font-weight: inherit
 
     h1
-      +props
+      +linear
         text-align: center
         font-size: 200%
     
     h2
-      +props
+      +linear
         font-size: 180%
         
     a
       &:visited, &:link
-        +props
+        +linear
           color: inherit
         
       &:link
-        +props
-          font-style: italic
-          text-decoration: inherit
+        +linear
 
     input
       &[type=text]
-        +props
+        +linear
           padding: 1rem 0
           text-decoration-color: rgba(0,0,0,.3)
           
         &:focus
-          +props
+          +linear
             border-bottom-color: var(--fgc)
             border: 0
             outline: 0
             
     strong
-      +props
+      +linear
         font-weight: 600
         
     hr
-      +props
+      +linear
         border: 0
         text-align: center
         display: block
         margin: 1rem 0
       
       &::before
-        +props
+        +linear
           content: "⁂"
+
+      
+
     

@@ -1,0 +1,135 @@
+url:
+https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef
+date: Fri Aug 02 2019 14:53:49 GMT+0100 (British Summer Time)
+
+
+# If CORS is just a header, why don’t attackers just ignore it?
+
+Here’s a question from a co-worker I get quite often: > Considering that curl
+requests do not have the restriction of the fetch API, how does this browser
+policy [CORS] prevent circumventing abuse or misuse of server endpoints if an
+attacker can anyways do so by default via curl? And since a bad actor can use
+curl what’s the real world effectiveness of the browser policy in the first
+place?
+
+While ‘Cross Origin Resource Sharing’ is a very important security tool for the
+modern web, it solves a problem that’s very specific to the security
+architecture of the web which leads to many misconceptions.
+
+This question comes down to the crux of why CORS exists. It is often
+misconstrued that CORS is a way of *preventing* different websites from
+receiving information from each other, but it’s quite the opposite. Let’s talk
+about a world without CORS first.
+
+![artist’s rendition: world before
+CORS](https://cdn-images-1.medium.com/max/2000/0*sICI1Q5-QgnC0hSC.jpg)*artist’s
+rendition: world before CORS*
+
+In the time before CORS, as some readers might remember it was not possible
+(with caveats) for *Javascript* to retrieve data such as JSON from another web
+origin in the browser. This restriction is called the ‘same origin policy’
+component of the ‘web origin concept’, and underpins much of the security of web
+browsing.
+
+If I create a website, mywebsite.com, it can use Javascript to request
+information from *only* mywebsite.com. If this were not the case, I’d simply ask
+Javascript to retrieve google.com/account, read your personal information from
+the result and send it back to me. Because Javascript makes the request *as you*
+with *your cookie*, from* your browser*, it gets access to whatever you do, but
+is in control of the website author. Note that this restriction *only* applies
+to requests by Javascript. I can embed images and scripts from other sites all I
+want.
+
+![[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIBUAsYHVICNoHkBOIDmIA7aAYQHsCBjSAB2ACg6BbATwHc0BnMSAOgtMbQAtAD5oqLKVYdIWAFzQW7VF2C9+jAPSEAJpAAePeMEbgGuSQFdqitp258B2gnsPHT0AFYBDAG7eOChxaBgkpGSxhAGILSEgCMSV7NUdGBQBxAFFYW2VVdSdGXk8OcgAdAgAKVjB4W1zkgsF+UgBrEEgASiY7FQcNaNj4sTDpWQUAbWgdb2BvaHJ67wp+SwJgAF1QyTGsISEorEgdfWhcUlJcKFSM7LOLq6bNZdX1iura+vPLqGhwS8I3W+j1S+0Ox1Oowik2ms3mixY0HSD1+L1Ia02dAIpDUC18snEO2hhPCBKOnkgFGAHGgwHgIA4FSOAEdLJAOMBxJTvJYZBUkn0Uhp+d5mNBsZz-t4dBVgdcNAx4jogA)](https://cdn-images-1.medium.com/max/2000/1*4YL3OngigwS20qlsnUheCA.png)*[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIBUAsYHVICNoHkBOIDmIA7aAYQHsCBjSAB2ACg6BbATwHc0BnMSAOgtMbQAtAD5oqLKVYdIWAFzQW7VF2C9+jAPSEAJpAAePeMEbgGuSQFdqitp258B2gnsPHT0AFYBDAG7eOChxaBgkpGSxhAGILSEgCMSV7NUdGBQBxAFFYW2VVdSdGXk8OcgAdAgAKVjB4W1zkgsF+UgBrEEgASiY7FQcNaNj4sTDpWQUAbWgdb2BvaHJ67wp+SwJgAF1QyTGsISEorEgdfWhcUlJcKFSM7LOLq6bNZdX1iura+vPLqGhwS8I3W+j1S+0Ox1Oowik2ms3mixY0HSD1+L1Ia02dAIpDUC18snEO2hhPCBKOnkgFGAHGgwHgIA4FSOAEdLJAOMBxJTvJYZBUkn0Uhp+d5mNBsZz-t4dBVgdcNAx4jogA)*
+
+As a result, before CORS, if I wanted to write a website that retrieved data
+from another, such as a Google API I had to do it via my own backend server.
+Take a look at this flow:
+
+![[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAICFIGYHsBOMDCB5ASgZQFD4C2AngO6QBGAzmJAHQDGSR0AtAHzSUpJnWQUALmikKNOkxYB6EADsAJpAAe9ABbAi4QgHNeAVwAOo8lVrAGzIrMUr1m8NABWAQwBuL6oxQhDwQjx8AijsXGJmklYiAOIAogAqJuLmljJEDE7USHIAOnIAFGRgaiZJERZSrMxIANYgkACUxKYSFVah3Lz8giIA2tAKLsAu0NmlLozM+nLAALoBXcEd4a2pRDEJZauV0jpISDpQ0uD7NUYA-CeMQyDZALwAMtkK2fhySBajboKdQT3QuBc6WgmB8Onk0AACkhwCBGCRoIY0N8ZtQ8vpqNAELxWGgAI76SDUUByHQDIYjBQgNCMCAkPLYljQaL7Q4wCHANQwDGCADkaLkgW6KAANNAstAKNAeaN9Cg8pQJjVIIpxYJviFgEhoPjCcToGBmslIkzONA9gcoJUNokXIYQPQLWydidahcrjd7k9FK8nVb2maVilrdAAN7AEiGSBCABEHtA2RjIrkQOjMe9LzkSfAN2A+iUQgAjAAGEUnUlgfPRksAXyN5TWHSFwT65OG0BclCQ+mA0E5MHjtzkowQ0AzY3mKoUQA)](https://cdn-images-1.medium.com/max/2000/1*_eowCLoom-kYx7WUPhGrpw.png)*[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAICFIGYHsBOMDCB5ASgZQFD4C2AngO6QBGAzmJAHQDGSR0AtAHzSUpJnWQUALmikKNOkxYB6EADsAJpAAe9ABbAi4QgHNeAVwAOo8lVrAGzIrMUr1m8NABWAQwBuL6oxQhDwQjx8AijsXGJmklYiAOIAogAqJuLmljJEDE7USHIAOnIAFGRgaiZJERZSrMxIANYgkACUxKYSFVah3Lz8giIA2tAKLsAu0NmlLozM+nLAALoBXcEd4a2pRDEJZauV0jpISDpQ0uD7NUYA-CeMQyDZALwAMtkK2fhySBajboKdQT3QuBc6WgmB8Onk0AACkhwCBGCRoIY0N8ZtQ8vpqNAELxWGgAI76SDUUByHQDIYjBQgNCMCAkPLYljQaL7Q4wCHANQwDGCADkaLkgW6KAANNAstAKNAeaN9Cg8pQJjVIIpxYJviFgEhoPjCcToGBmslIkzONA9gcoJUNokXIYQPQLWydidahcrjd7k9FK8nVb2maVilrdAAN7AEiGSBCABEHtA2RjIrkQOjMe9LzkSfAN2A+iUQgAjAAGEUnUlgfPRksAXyN5TWHSFwT65OG0BclCQ+mA0E5MHjtzkowQ0AzY3mKoUQA)*
+
+Here, my webpage
+[http://mywebsite.com/index.html](http://mywebsite.com/index.html) requests two
+things: (1) my account info from mywebsite.com/me.json and (2) the latitude and
+longitude of London via api.google.com/lookup. However, Same Origin Policy
+prevents us from requesting Google directly, so we configure our server to make
+the request for us.
+
+CORS introduced a suite of headers that start with Acess-Control- that allow the
+server to state that it’s safe to allow Javascript to retrieve information. For
+example, Access-Control-Allow-Origin: mywebsite.com allows Javascript on
+mywebsite.com to access the response of this request.
+
+![[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIHUwBbQMIHkBKBlAUNgtgJ4DukARgM5iQB0AxgPZ7QC0AfNKQE71HmScAuaIRIUqdRgHoQAOwAmkAB7UEwPOFwBzbgFcADsOJlKwGgzzT5SlWvDQAVgEMAbo-K1OIPcFxcefThZ2Rz0Qak16ek0oCTwhAAkAUQBBABFoELCIqJjzSXBIgGt9AH4C2kdQehkAXgAZarlqgB0ZVE9NWSERY3FzbBl6U2h6Z34Obl5+IWAEGD8pwLdC8laiBEroWZgAsc5yaD16cBBaEEhVmUdOGGqM0PDI6LMpAvpivWpWpLToWTlTpULn9gNAmhcZAByYBrRwyUHbDK0YA6Rx2G7kI4yPhgyqObCZR45F5MNgTfzTaDJWi0C7kZjIarAbjgZjJcAFIjMdogToybpGMSmWIDIa3Pb3LJPXKMISE7LPWJbSAcg7bVoLAJbDagnpCkmtCoyJG08hqhAgA6QeRHWQwq7yaA3RxyEEHOR47Ca8Zk+XSklCADiiQAKpKiYq8m8PmV6BUqrUGvIWm0Ol1DKITCTRcNRuNvYJoIMiBkiNcYGBoBsDnp+HhLZQU4iC8JHIVgYibgBHHQXHx+4lKskFoTQADauOAjgypHoOgRc2g5UqIDu9AAZtAk01jQBdbDWuRAA)](https://cdn-images-1.medium.com/max/2000/1*wZX1WLy8YgU20O3xrtTP4g.png)*[live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIHUwBbQMIHkBKBlAUNgtgJ4DukARgM5iQB0AxgPZ7QC0AfNKQE71HmScAuaIRIUqdRgHoQAOwAmkAB7UEwPOFwBzbgFcADsOJlKwGgzzT5SlWvDQAVgEMAbo-K1OIPcFxcefThZ2Rz0Qak16ek0oCTwhAAkAUQBBABFoELCIqJjzSXBIgGt9AH4C2kdQehkAXgAZarlqgB0ZVE9NWSERY3FzbBl6U2h6Z34Obl5+IWAEGD8pwLdC8laiBEroWZgAsc5yaD16cBBaEEhVmUdOGGqM0PDI6LMpAvpivWpWpLToWTlTpULn9gNAmhcZAByYBrRwyUHbDK0YA6Rx2G7kI4yPhgyqObCZR45F5MNgTfzTaDJWi0C7kZjIarAbjgZjJcAFIjMdogToybpGMSmWIDIa3Pb3LJPXKMISE7LPWJbSAcg7bVoLAJbDagnpCkmtCoyJG08hqhAgA6QeRHWQwq7yaA3RxyEEHOR47Ca8Zk+XSklCADiiQAKpKiYq8m8PmV6BUqrUGvIWm0Ol1DKITCTRcNRuNvYJoIMiBkiNcYGBoBsDnp+HhLZQU4iC8JHIVgYibgBHHQXHx+4lKskFoTQADauOAjgypHoOgRc2g5UqIDu9AAZtAk01jQBdbDWuRAA)*
+
+So why don’t attackers ignore the Access-Control-Allow-Origin header? Because it
+doesn’t get them anything. If I’m forming an HTTP request with CuRL, all the
+information I’m sending to the server is already known to me, and everything I’m
+accessing I already had access to. What the attacker really wants is for the
+victim’s browser to relinquish some of the information it has about the victim.
+
+Partially for legacy reasons, requests in browsers have certain ambient
+privileges (“ambient authority”). My website in the browser will be sending the
+request from the user’s IP address, potentially with the user’s own login
+session. CORS navigates allowing access to certain resources that have stated
+that they’re aware of what this might entail via Access-Control-Allow-Origin and
+preventing old applications using legacy behavior becoming insecure.
+
+### Why don’t we just let anything request anything else and block cookies?
+
+![[source](https://fazzeai.tumblr.com/post/178416661759)](https://cdn-images-1.medium.com/max/2560/1*ahbo8nFu5MSqTyfQttnEug.png)*[source](https://fazzeai.tumblr.com/post/178416661759)*
+
+This may sound to an extent like anarchy, but can’t we just block cookies for
+CORS requests and let anyone load anyone else? At that point, I’m not going to
+be able to get information about someone’s logged in account, right?
+
+This is not at all a bad idea. In fact, it’s actually part of CORS.
+Access-Control-Allow-Origin: * does exactly this: it allows any website to load
+your resource, but prevents cookies from being sent. It still has to be opted
+into, however. The world of Access-Control-Allow-Origin: * is arguably
+significantly more secure, because it eliminates the entire category of CSRF
+vulnerabilities nearly entirely.
+
+But it’s still opt-in because there are, unfortunately plenty of systems that
+use something other than cookies for authentication. For example, many printers
+and home routers do not bother with cookie based sessions, because it is assumed
+that if you can make a connection to the service you are already in the network.
+The same goes for many web servers that software starts on your computer.
+
+This is an incorrect assumption because of CSRF — it’s still possible to tell
+the browser to load the resource via an HTML tag like `<img
+src=your.router/logout/>` and it’ll still execute and log the current user out
+but there’s no way to retrieve a response. If one could retrieve a response,
+it’d be significantly worse.
+
+CORS also provides functionality to the browser Javascript to set headers on
+requests via Access-Control-Allow-Headers in a similar vein: there are many
+headers that Javascript can’t control that are important to web security —
+Origin probably being the most dangerous but there’s also Cookie , Host and all
+sorts.
+
+I hope this article helps shed some light on why CORS exists and how it fits
+into browser security. The security benefits of CORS are not inherent to the
+CORS protocol itself — after all, as noted you can avoid it completely — but the
+alternatives it avoids.
+
+A final point I’d like to make is that CORS is often thought of as a complex
+protocol requiring a backend, and this makes it a huge pain for a lot of people
+serving certian kinds of assets. Many implementations of CORS use the requesting
+Origin header to determine if the request should be allowed, and return that
+same origin if it is.
+
+For the most part, CORS is completely static, and one can just send
+Access-Control-Allow-Origin: myorigin or Access-Control-Allow-Origin: * in
+response to any request. In earlier drafts of Access-Control-Allow-Origin, this
+was more apparent as the header could include multiple origins at once, and
+Access-Control-Max-Age facilitates caching of a static CORS policy for a time.
+
+I don’t quite know why Access-Control-Allow-Origin now doesn’t allow a list of
+whitelisted origins. For a time, Firefox allowed this pattern. My guess is that
+early implementations of CORS allowed only one origin and that pattern stuck.
+Content Security Policy headers use this pattern for its killer feature
+allow-src and its successor to X-Frame-Options , the frame-ancestors directive
+amongst others.
+
+Thomas

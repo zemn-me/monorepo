@@ -1,104 +1,233 @@
 How To Hack iCloud
 ==================
-[How To Hack iCloud]: #how-to-hack-icloud 
+
+[How To Hack iCloud]: #how-to-hack-icloud
 [§0]: #how-to-hack-icloud
 
 Preamble
---------
+---------
+
 [§1]: #preamble
 [Preamble]: #preamble
 
-The intersection of internet and identity is one with a long and fascinating history because it's imbued with so many ideals about how people's real lives interact with their internet lives. Software and security architectures are always created with a particular idea of technical morality which gets encoded into the algorithms that underpin the systems themselves.
+The intersection of internet and identity is one with a long and fascinating
+history because it's imbued with so many ideals about how people's real lives
+interact with their internet lives. Software and security architectures are
+always created with a particular idea of technical morality which gets encoded
+into the algorithms that underpin the systems themselves.
 
-One idea I tend to think about a lot when it comes to people and their interaction with information security systems is one I've never been able to find the source of. It may well be false or apocryphal but it sticks with me still.
+One idea I tend to think about a lot when it comes to people and their
+interaction with information security systems is one I've never been able to
+find the source of. It may well be false or apocryphal but it sticks with me
+still.
 
-It said the invention of Public Key Cryptography was due, at least in part to the understanding that in the future, people would have ever more meaningful relationships online. In a world before cryptography between individuals was a meaningful thing, a relationship had online -- as friends or otherwise -- was a relationship had in the open.
+It said the invention of Public Key Cryptography was due, at least in part to
+the understanding that in the future, people would have ever more meaningful
+relationships online. In a world before cryptography between individuals was a
+meaningful thing, a relationship had online -- as friends or otherwise -- was a
+relationship had in the open.
 
-One can absolutely debate forever about to what extent someone's representation of themselves on social media, or their favourite gaming platform is an indirect, curated representation of themselves but one thing that is for sure is that whatever's in your iCloud is a pretty raw representation of self.
+One can absolutely debate forever about to what extent someone's representation
+of themselves on social media, or their favourite gaming platform is an
+indirect, curated representation of themselves but one thing that is for sure is
+that whatever's in your iCloud is a pretty raw representation of self.
 
-That's fascinating to me. For most of the time I used the internet my email was full of weird junk and my social media accounts had some platitudes about whatever was funny online. The closest these profiles came to being 'real' was the rare profile picture I might have of my face.
+That's fascinating to me. For most of the time I used the internet my email was
+full of weird junk and my social media accounts had some platitudes about
+whatever was funny online. The closest these profiles came to being 'real' was
+the rare profile picture I might have of my face.
 
-If you hacked these accounts, or you got my computer you might mull over the number of image macros I had bookmarked, but you wouldn't really have much of an idea of what my life was like. Now I talk to all of my friends on a medium that's recorded forever and I have every photo I ever took of my life and my relationships back to 2014.
+If you hacked these accounts, or you got my computer you might mull over the
+number of image macros I had bookmarked, but you wouldn't really have much of an
+idea of what my life was like. Now I talk to all of my friends on a medium
+that's recorded forever and I have every photo I ever took of my life and my
+relationships back to 2014.
 
-Often discussion of this comes with a heavy-handed sense of fear that such things are 'online' but that's not something I fear, or what I'm trying to draw attention to. To me, what's fascinating is that someone's real life history and identity is online at all, that between me and knowing everything about you are a few security systems.
+Often discussion of this comes with a heavy-handed sense of fear that such
+things are 'online' but that's not something I fear, or what I'm trying to draw
+attention to. To me, what's fascinating is that someone's real life history and
+identity is online at all, that between me and knowing everything about you are
+a few security systems.
 
-When, in 2014 ["a collection of almost 500 private pictures of various celebrities, mostly women, and with many containing nudity, were posted on the imageboard 4chan [...] initially believed to have been obtained via a breach of Apple's cloud services suite iCloud"][1] -- I had this realisation that the people whose lives were 'online' weren't the people who sent sexts over MySpace chat anymore, it was everyone. Like hacking someone's 'Cyberbrain' in Ghost In The Shell, hacking someone's personal cloud storage was like peering directly into their life and seeing it from their eyes.
+When, in 2014 ["a collection of almost 500 private pictures of various
+celebrities, mostly women, and with many containing nudity, were posted on the
+imageboard 4chan [...] initially believed to have been obtained via a breach of
+Apple's cloud services suite iCloud"][1] -- I had this realisation that the
+people whose lives were 'online' weren't the people who sent sexts over MySpace
+chat anymore, it was everyone. Like hacking someone's 'Cyberbrain' in Ghost In
+The Shell, hacking someone's personal cloud storage was like peering directly
+into their life and seeing it from their eyes.
 
 [1]: https://en.wikipedia.org/wiki/ICloud_leaks_of_celebrity_photos
 
-In this article I'll be describing and demonstrating to the best of my ability a now patched series of exploits on the Apple identity systems idmsa.apple.com.
+In this article I'll be describing and demonstrating to the best of my ability a
+now patched series of exploits on the Apple identity systems idmsa.apple.com.
 
-There's a particular framework in which I want such issues to be understood, though. It's an angle on my understanding of the context of issues I find that I've thought a lot about, but never tried to write down before.
+There's a particular framework in which I want such issues to be understood,
+though. It's an angle on my understanding of the context of issues I find that
+I've thought a lot about, but never tried to write down before.
 
-Over the years as I've grown and matured the stuff I've hacked has only grown in impact. Consider, for example my [2017 hack of a nation's tax system][2]. When people hear about this stuff, the first thing they think is 'oh no! what if it happened to me'. And they think about how *bad* security must be to get there.
+Over the years as I've grown and matured the stuff I've hacked has only grown in
+impact. Consider, for example my [2017 hack of a nation's tax system][2]. When
+people hear about this stuff, the first thing they think is 'oh no! what if it
+happened to me'. And they think about how *bad* security must be to get there.
 
 [2]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
 
-That's something that I think is maybe even harmful to the general public's understanding of security. It puts all vulnerabilities on the same table. In reality, I see vulnerabilities as running along this asymtotic curve of *complexity* vs *impact*. It's the landscape representing all the bugs that are out there.
+That's something that I think is maybe even harmful to the general public's
+understanding of security. It puts all vulnerabilities on the same table. In
+reality, I see vulnerabilities as running along this asymtotic curve of
+*complexity* vs *impact*. It's the landscape representing all the bugs that are
+out there.
 
-The more complicated a security bug is, the less likely it is to be discovered, but also the more likely it is to be really dangerous if found. There's literally hundreds if not thousands of extremely high complexity security vulnerabilities in any system, software or otherwise. But the reason that all our shit doesn't fall apart is because high complexity means *difficult to find*.
+The more complicated a security bug is, the less likely it is to be discovered,
+but also the more likely it is to be really dangerous if found. There's
+literally hundreds if not thousands of extremely high complexity security
+vulnerabilities in any system, software or otherwise. But the reason that all
+our shit doesn't fall apart is because high complexity means *difficult to
+find*.
 
-This puts the bugs I find in a fairly uncomfortable place. Sure, the bugs are really impactful, and really bad on the surface but the fact that they exist doesn't necessarily indicate a severe flaw in the underlying security system.
+This puts the bugs I find in a fairly uncomfortable place. Sure, the bugs are
+really impactful, and really bad on the surface but the fact that they exist
+doesn't necessarily indicate a severe flaw in the underlying security system.
 
-That doesn't mean the bugs weren't worth finding either -- really complicated bugs are the kind that might one day absolutely ruin you if put in the hands of some wealthy organized crime syndicate that bought it at auction or an authoritarian state actor you've crossed.
+That doesn't mean the bugs weren't worth finding either -- really complicated
+bugs are the kind that might one day absolutely ruin you if put in the hands of
+some wealthy organized crime syndicate that bought it at auction or an
+authoritarian state actor you've crossed.
 
-My heavily laboured point is that it's important to differentiate security issues that need to get written by someone who is likely already an industry professional versus bugs that can be dug up by anyone pasting from the 'XSS Evasion Cheat Sheet'.
+My heavily laboured point is that it's important to differentiate security
+issues that need to get written by someone who is likely already an industry
+professional versus bugs that can be dug up by anyone pasting from the 'XSS
+Evasion Cheat Sheet'.
 
-The former is much scarier *when found* than the latter, but the latter is much scarier in general because it's far, far more likely to happen in a malicious context. *HeartBleed* is a terrifying bug. But bug categories need to be worried about versus their likelihood of happening. If we drop the whole security budget on preventing the next HeartBleed by porting all our systems to SELinux, a 16 year old HackForums reader named 'm4rshv1perX' is going to XSS our admins and dump our SQL database online.
+The former is much scarier *when found* than the latter, but the latter is much
+scarier in general because it's far, far more likely to happen in a malicious
+context. *HeartBleed* is a terrifying bug. But bug categories need to be worried
+about versus their likelihood of happening. If we drop the whole security budget
+on preventing the next HeartBleed by porting all our systems to SELinux, a 16
+year old HackForums reader named 'm4rshv1perX' is going to XSS our admins and
+dump our SQL database online.
 
-Though bug bounties are currently fodder for 10,000 medium severity issues on staging.john.production.com this is what I always saw bug bounties and vulnerability disclosure as perfect for: scooping up the vulnerabilities produced by people who just happen to have some special research that breaches that area of high complication.
+Though bug bounties are currently fodder for 10,000 medium severity issues on
+staging.john.production.com this is what I always saw bug bounties and
+vulnerability disclosure as perfect for: scooping up the vulnerabilities
+produced by people who just happen to have some special research that breaches
+that area of high complication.
 
-Just a few minutes attention from some Project Zero guys is worth tens of thousands of dollars if I could only tempt them with my fine selection of bounty shirts and glass tumblers with company logos.
+Just a few minutes attention from some Project Zero guys is worth tens of
+thousands of dollars if I could only tempt them with my fine selection of bounty
+shirts and glass tumblers with company logos.
 
 The Very Worst Thing
 --------------------
+
 [The Very Worst Thing]: #the-very-worst-thing
+
 [§2]: #the-very-worst-thing
 
-A few days ago when I was sick with flu and researching Apple security to distract me from the aches and pains of my failing mortal body I found an XSS deep in an apple.com subdomain. That's to say, I could inject some code into a website somewhere on apple.com, which, to a user's web browser looked like it was written by Apple. In such cases, my code is granted all the privilages associated with Being Code That Apple Wrote inside a web browser, such as being able to talk to Apple servers on the user's behalf.
+A few days ago when I was sick with flu and researching Apple security to
+distract me from the aches and pains of my failing mortal body I found an XSS
+deep in an apple.com subdomain. That's to say, I could inject some code into a
+website somewhere on apple.com, which, to a user's web browser looked like it
+was written by Apple. In such cases, my code is granted all the privilages
+associated with Being Code That Apple Wrote inside a web browser, such as being
+able to talk to Apple servers on the user's behalf.
 
-Typically, for an XSS on the subdomain `users.bradsdrinks.com` we only get access to whatever `bradsdrinks.com` can do. Which means if Brad's Great Drinks, USA owns another fine website, `bradsbetterdrinks.com` we can't mess with that. For `apple.com`, this means I can steal the 'apple session', which indicates who you are to Apple, and do bad stuff you wouldn't want me to do, like purchase gifts for myself in the apple store with *your* credit card.
+Typically, for an XSS on the subdomain `users.bradsdrinks.com` we only get
+access to whatever `bradsdrinks.com` can do. Which means if Brad's Great Drinks,
+USA owns another fine website, `bradsbetterdrinks.com` we can't mess with that.
+For `apple.com`, this means I can steal the 'apple session', which indicates who
+you are to Apple, and do bad stuff you wouldn't want me to do, like purchase
+gifts for myself in the apple store with *your* credit card.
 
-At this point, trying to think of the worst thing that could possibly happen with this vulnerability as I often seem to be doing I thought -- well, what if I get into iCloud? That would be really, really terrible right?
+At this point, trying to think of the worst thing that could possibly happen
+with this vulnerability as I often seem to be doing I thought -- well, what if I
+get into iCloud? That would be really, really terrible right?
 
-But then, I recall the oddity that icloud is *not* on `apple.com`. A rather sensible decision. If, for example instead of using your `apple.com` session, `iCloud.com` used a special, iCloud specific session negotiated *with* `apple.com` requiring your username and password input then hacking the much larger and thus easier to attack `apple.com` wouldn't leak my nudes.
+But then, I recall the oddity that icloud is *not* on `apple.com`. A rather
+sensible decision. If, for example instead of using your `apple.com` session,
+`iCloud.com` used a special, iCloud specific session negotiated *with*
+`apple.com` requiring your username and password input then hacking the much
+larger and thus easier to attack `apple.com` wouldn't leak my nudes.
 
-I never truly verified if this is the case -- that is, whether I can derive an iCloud session from an `apple.com` session. But I did get a hankering to investigate, and my investigation proved a lot of my intuition correct at least.
+I never truly verified if this is the case -- that is, whether I can derive an
+iCloud session from an `apple.com` session. But I did get a hankering to
+investigate, and my investigation proved a lot of my intuition correct at least.
 
-**********************************************************************
+********************************************************************************
 
-A telltale oddity on `icloud.com`: if I am logged into `apple.com`, and I try to log into `icloud.com`, the login dialog presents my email on the email line without my ever entering it. How is this possible? Well, it turns out that the apple login system is located at `idmsa.apple.com` and is _embedded_ into icloud. Since `idmsa.apple.com` inherits the `*.apple.com` session cookie, it already knows my email. By the looks of it though, it needs my confirmation to grant a special iCloud session so I can log into my iCloud. Which is a pretty sensible decision, as previously mentioned.
+A telltale oddity on `icloud.com`: if I am logged into `apple.com`, and I try to
+log into `icloud.com`, the login dialog presents my email on the email line
+without my ever entering it. How is this possible? Well, it turns out that the
+apple login system is located at `idmsa.apple.com` and is _embedded_ into
+icloud. Since `idmsa.apple.com` inherits the `*.apple.com` session cookie, it
+already knows my email. By the looks of it though, it needs my confirmation to
+grant a special iCloud session so I can log into my iCloud. Which is a pretty
+sensible decision, as previously mentioned.
 
-We've all embedded something before. Come to think of it, I _hope_ we've all embedded something before. Not so many people pasting embed code into their personal websites these days I guess. That's probably a good thing (not you, Google Tag Manager!!).
+We've all embedded something before. Come to think of it, I _hope_ we've all
+embedded something before. Not so many people pasting embed code into their
+personal websites these days I guess. That's probably a good thing (not you,
+Google Tag Manager!!).
 
-If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)][3] video from YouTube I might want to put in a video player. and (thank the gods) the 'share' button _still_ has an 'embed' option with some HTML code after 10 years or however long YouTube has been around for.
+If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A
+Presses (Commentated)][3] video from YouTube I might want to put in a video
+player. and (thank the gods) the 'share' button _still_ has an 'embed' option
+with some HTML code after 10 years or however long YouTube has been around for.
 
 [3]: https://www.youtube.com/watch?v=kpk2tdsPh0A
 
 ```HTML
-<iframe width="560" height="315" src="https://www.youtube.com/embed/kpk2tdsPh0A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/kpk2tdsPh0A" frameborder="0"
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+
 ```
 
-The iframe is a classic great web idea that has survived the ages. I indicate to your web browser in my web page with some HTML that I want *another* webpage to be included in my webpage. In this case, a YouTube video.
+The iframe is a classic great web idea that has survived the ages. I indicate to
+your web browser in my web page with some HTML that I want *another* webpage to
+be included in my webpage. In this case, a YouTube video.
 
-But I put this to you: if I could just embed *anything* on my website, we'd be having a bad time. If I could just tell your web browser to embed your bank on my page, I could just stick a bunch of stuff over the top and, I don't know make you click a button you can't see that actually donates a bunch of money to my man, YouTuber pannenkoek2012.
+But I put this to you: if I could just embed *anything* on my website, we'd be
+having a bad time. If I could just tell your web browser to embed your bank on
+my page, I could just stick a bunch of stuff over the top and, I don't know make
+you click a button you can't see that actually donates a bunch of money to my
+man, YouTuber pannenkoek2012.
 
-The first way browsers started to deal with this 'Clickjacking' problem is the `X-Frame-Options` header. It has two possible values: `DENY`, which prevents the page from ever being embedded, or `sameorigin`, which only allows it to embed itself. If you are developing a website you should *always* set this to `DENY` unless you really know what you're doing.
+The first way browsers started to deal with this 'Clickjacking' problem is the
+`X-Frame-Options` header. It has two possible values: `DENY`, which prevents the
+page from ever being embedded, or `sameorigin`, which only allows it to embed
+itself. If you are developing a website you should *always* set this to `DENY`
+unless you really know what you're doing.
 
-I actually lied wen I said `X-Frame-Options` only has two possible values. There's a third, `allow-from [domain]`, which existed for a little while in a handful of browsers. The idea was you'd set `allow-from mywebsite2.com` and then *just* `mywebsite2.com` can embed your webpage. `idmsa.apple.com` is actually the *only* place I have *ever* seen this header used. Apple sets it to:
+I actually lied wen I said `X-Frame-Options` only has two possible values.
+There's a third, `allow-from [domain]`, which existed for a little while in a
+handful of browsers. The idea was you'd set `allow-from mywebsite2.com` and then
+*just* `mywebsite2.com` can embed your webpage. `idmsa.apple.com` is actually
+the *only* place I have *ever* seen this header used. Apple sets it to:
 
-```HTTP
-X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
+```
+HTTP X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
 ```
 
-What does this do? Absolutely nothing in any mordern browser. It's not even equivalent to `DENY`. it lets any website embed you.
+What does this do? Absolutely nothing in any mordern browser. It's not even
+equivalent to `DENY`. it lets any website embed you.
 
-This would be really bad, and I'd say uncharaceristically bad for Apple. Apple backs the old-timey `X-Frame-Options: ALLOW-FROM` with the new hotness, Content Security Policy `frame-ancestors`.
+This would be really bad, and I'd say uncharaceristically bad for Apple. Apple
+backs the old-timey `X-Frame-Options: ALLOW-FROM` with the new hotness, Content
+Security Policy `frame-ancestors`.
 
-Give me a few seconds to gush about how great Content Security Policy is. `X-Frame-Options` only kinda worked. Let's say I check the incoming website loading us to see if it's `mywebsite2.com`, that is:
+Give me a few seconds to gush about how great Content Security Policy is.
+`X-Frame-Options` only kinda worked. Let's say I check the incoming website
+loading us to see if it's `mywebsite2.com`, that is:
 
-```HTTP
-GET /watch_for_rolling_rocks_embed HTTP/1.1
+```
+HTTP GET /watch_for_rolling_rocks_embed
+
+HTTP/1.1
 Host: mywebsite1.com
 Origin: https://mywebsite2.com
 Referer: https://mywebsite2.com/pannenkoek2012fanpage.html
@@ -106,30 +235,41 @@ Accept: text/html
 
 HTTP/1.1 200 OK
 <!DOCTYPE HTML>
-<head>
-    <title> check out this video!!!! </title>
-    ...
+    <head>
+    <title> check out this video!!!! </title> ...
+
 ```
 
-In this very oversimplified case, `mywebsite1.com` notices that it's being embedded by `mywebsite2.com` and doesn't send `X-Frame-Options: DENY`. But what if `mywebsite2.com` itself forgets to send `X-Frame-Options: DENY` when visited? Then `mywebsite2.com` can now be used to embed `mywebsite1.com`, and bypass our `X-Frame-Options` setting. We can make an embed of `mywebsite2.com` and `mywebsite1.com` comes along for the ride.
+In this very oversimplified case, `mywebsite1.com` notices that it's being
+embedded by `mywebsite2.com` and doesn't send `X-Frame-Options: DENY`. But what
+if `mywebsite2.com` itself forgets to send `X-Frame-Options: DENY` when visited?
+Then `mywebsite2.com` can now be used to embed `mywebsite1.com`, and bypass our
+`X-Frame-Options` setting. We can make an embed of `mywebsite2.com` and
+`mywebsite1.com` comes along for the ride.
 
-That's just one way `frame-ancestors` improves on `X-Frame-Options`. With `frame-ancestors`, it checks that all the embedding pages all the way up are allowed to embed the content.
+That's just one way `frame-ancestors` improves on `X-Frame-Options`. With
+`frame-ancestors`, it checks that all the embedding pages all the way up are
+allowed to embed the content.
 
 URL Parsing, My Old Friend
 --------------------------
+
 [URL Parsing, My Old Friend]: #url-parsing-my-old-friend
 [§3]: #url-parsing-my-old-friend
 
-Alright, so the iCloud login page is allowed to be embedded in iCloud.com because it negotiates a `frame-ancestors https://www.icloud.com;` Content Security Policy directive. But how is it negotiated? Let's take a look at the actual URL which is embedded.
+Alright, so the iCloud login page is allowed to be embedded in iCloud.com
+because it negotiates a `frame-ancestors https://www.icloud.com;` Content
+Security Policy directive. But how is it negotiated? Let's take a look at the
+actual URL which is embedded.
 
 ```URL
 https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fwww.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB
 ```
 
-And break it down a bit because not everyone's brain is as broken as mine to be able to read that:
+And break it down a bit because not everyone's brain is as broken as mine to be
+able to read that:
 
-```
-Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
+``` Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
 Parameters:
     client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d
 
@@ -144,54 +284,113 @@ Parameters:
     locale=en_GB
 ```
 
-This looks a lot like a request with the OAuth authorization protocol. Probably because `idmsa.apple.com` is the Apple ID server. OAuth is also perfect because OAuth generates tokens that are specific to each `client_id`, that is, the tokens correspond to the `client_id`, which represents the app requesting Apple ID, in this case iCloud and they are not usually interchangable. I couldn't, then, if this were implemented correctly take your iMessage authentication token and use it to get into your iCloud.
+This looks a lot like a request with the OAuth authorization protocol. Probably
+because `idmsa.apple.com` is the Apple ID server. OAuth is also perfect because
+OAuth generates tokens that are specific to each `client_id`, that is, the
+tokens correspond to the `client_id`, which represents the app requesting Apple
+ID, in this case iCloud and they are not usually interchangable. I couldn't,
+then, if this were implemented correctly take your iMessage authentication token
+and use it to get into your iCloud.
 
-`response_type=code` is an OAuth specific parameter asking for an OAuth code which the iCloud servers can exchange for an Apple ID credential.
+`response_type=code` is an OAuth specific parameter asking for an OAuth code
+which the iCloud servers can exchange for an Apple ID credential.
 
-`redirect_uri` is also an OAuth specific concept -- of where the token (in this case the iCloud Apple ID authorization) goes to. But `redirect_uri` doesn't make sense in this concept because we're already on `icloud.com` so unless some weird stuff is going on I'm not expecting this frame to redirect to `icloud.com`.
+`redirect_uri` is also an OAuth specific concept -- of where the token (in this
+case the iCloud Apple ID authorization) goes to. But `redirect_uri` doesn't make
+sense in this concept because we're already on `icloud.com` so unless some weird
+stuff is going on I'm not expecting this frame to redirect to `icloud.com`.
 
-`response_mode=web_message` appears to be the special indicator to the Apple ID server that we don't want normal OAuth, we want an embedded page that passes us the token eventually. 'web message' in this case likely refers to the `postMessage` API which is used to securely communicate between embeds and other webpages.
+`response_mode=web_message` appears to be the special indicator to the Apple ID
+server that we don't want normal OAuth, we want an embedded page that passes us
+the token eventually. 'web message' in this case likely refers to the
+`postMessage` API which is used to securely communicate between embeds and other
+webpages.
 
-`locale` just indicates the language to show the login dialog in. `frame_id` I think is just to help differentiate cases where there may be multiple different embedded pages.
+`locale` just indicates the language to show the login dialog in. `frame_id` I
+think is just to help differentiate cases where there may be multiple different
+embedded pages.
 
-Considering that this was a big factor in [How to Hack the UK Tax System], this might make me awfully predictable but the first thing I tried was sneaking an @ into `redirect_uri`.
+Considering that this was a big factor in [How to Hack the UK Tax System], this
+might make me awfully predictable but the first thing I tried was sneaking an @
+into `redirect_uri`.
 
 ```
-    redirect_uri=https%3A%2F%2Fthomas@www.icloud.com
+redirect_uri=https%3A%2F%2Fthomas@www.icloud.com
 ```
 
-This is an old and extremely not supposed to be used syntax called 'HTTP Simple Authentication URL Syntax'. The idea is that you could specify *in* the url how you wanted to login. For example, if I wanted to log into `google.com` as my account 'thomas', I'd open up in my browser `https://thomas@google.com` and the webpage might ask for the password for my account `thomas`.
+This is an old and extremely not supposed to be used syntax called 'HTTP Simple
+Authentication URL Syntax'. The idea is that you could specify *in* the url how
+you wanted to login. For example, if I wanted to log into `google.com` as my
+account 'thomas', I'd open up in my browser `https://thomas@google.com` and the
+webpage might ask for the password for my account `thomas`.
 
-The 'great' thing about this syntax when it comes to hacking websites is that HTTP Simple Authentication URL syntax is *not* part of the URL specification, meaning that even the most advanced URL parser is not meant to understand it, and will give you wrong answers.
+The 'great' thing about this syntax when it comes to hacking websites is that
+HTTP Simple Authentication URL syntax is *not* part of the URL specification,
+meaning that even the most advanced URL parser is not meant to understand it,
+and will give you wrong answers.
 
-For example, if I give `https://google.com@evil.com` to a normal URL parser, it doesn't know what the `@` means and might assume the URL goes a resource called `@evil.com` at `https://google.com`, when in fact if you give this to any modern browser it'll recognise the URL using its HTTP specific parser as going to `https://evil.com`.
+For example, if I give `https://google.com@evil.com` to a normal URL parser, it
+doesn't know what the `@` means and might assume the URL goes a resource called
+`@evil.com` at `https://google.com`, when in fact if you give this to any modern
+browser it'll recognise the URL using its HTTP specific parser as going to
+`https://evil.com`.
 
-In this case, when `idmsa.apple.com` accepts `redirect_uri=https://thomas@www.icloud.com`, it's actually *correct* in thinking that this URL is actually just `https://icloud.com` and letting the request through. But we've injected some extra characters in that might mess up some other part of the system.
+In this case, when `idmsa.apple.com` accepts
+`redirect_uri=https://thomas@www.icloud.com`, it's actually *correct* in
+thinking that this URL is actually just `https://icloud.com` and letting the
+request through. But we've injected some extra characters in that might mess up
+some other part of the system.
 
-OK, so, great, if I load `https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fthomas@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB` containing the `redirect_uri` `https://thomas@icloud.com` what `frame-ancestors` header do we get?
+OK, so, great, if I load
+`https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fthomas@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB`
+containing the `redirect_uri` `https://thomas@icloud.com` what `frame-ancestors`
+header do we get?
 
-```HTTP
+``` HTTP
 Content-Security-Policy: frame-ancestors https://thomas@icloud.com
 ```
 
-Hmm. That doesn't look like it should be there. `frame-ancestors` is defined to accept a list of [HTTP origins][4], a very strict type of website specifier designed for security that `https://thomas@icloud.com` most certianly is not.
+Hmm. That doesn't look like it should be there. `frame-ancestors` is defined to
+accept a list of [HTTP origins][4], a very strict type of website specifier
+designed for security that `https://thomas@icloud.com` most certianly is not.
 
-[4]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+[4]:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
 
-When I see stuff like this it makes me think for two reasons: (1) if `frame-ancestors` is consuming something that isn't an HTTP Origin then the authors probably didn't expect what I'm currently doing and (2) since the origin isn't extracted from the URL, they're *validating* the URL rather than *transforming* it.
+When I see stuff like this it makes me think for two reasons: (1) if
+`frame-ancestors` is consuming something that isn't an HTTP Origin then the
+authors probably didn't expect what I'm currently doing and (2) since the origin
+isn't extracted from the URL, they're *validating* the URL rather than
+*transforming* it.
 
-Transformation rather than validation is something I personally try to push a lot. Almost always in a system, one's own understanding of everything about the technology you're working with is incomplete. For example, here the authors of the Apple ID login system didn't know about this URL syntax. If we *transform* the inputs we get including only the information we expect and understand, we strip out a lot of potential for esoteric functionality to bypass our security controls.
+Transformation rather than validation is something I personally try to push a
+lot. Almost always in a system, one's own understanding of everything about the
+technology you're working with is incomplete. For example, here the authors of
+the Apple ID login system didn't know about this URL syntax. If we *transform*
+the inputs we get including only the information we expect and understand, we
+strip out a lot of potential for esoteric functionality to bypass our security
+controls.
 
-Since Apple *validated* rather than transforming, the URL met their criteria for what a 'safe' URL looked like and passed through. But -- based on my tests, Apple definitely actually *checks and validates* the origin of the submitted `redirect_uri`.
+Since Apple *validated* rather than transforming, the URL met their criteria for
+what a 'safe' URL looked like and passed through. But -- based on my tests,
+Apple definitely actually *checks and validates* the origin of the submitted
+`redirect_uri`.
 
-If, instead of deciding if the URL is good or not, they instead *also* extracted which part they thought was good (`https://icloud.com`) then I wouldn't be able to inject characters here. I think of this as 'baking in' our understanding of what a URL looks like and forcing it conform to that understanding.
+If, instead of deciding if the URL is good or not, they instead *also* extracted
+which part they thought was good (`https://icloud.com`) then I wouldn't be able
+to inject characters here. I think of this as 'baking in' our understanding of
+what a URL looks like and forcing it conform to that understanding.
 
 Content Insecurity Policy
 -------------------------
+
 [Content Insecurity Policy]: #content-insecurity-policy
 [§4]: #content-insecurity-policy
 
-With the knowledge that I could sneak extra characters into the `frame-ancestors` directive that validates who can embed the iCloud (really Apple ID) login form, I, well, immediately tried to inject something that would break and/or change the action of `frame-ancestors`.
+With the knowledge that I could sneak extra characters into the
+`frame-ancestors` directive that validates who can embed the iCloud (really
+Apple ID) login form, I, well, immediately tried to inject something that would
+break and/or change the action of `frame-ancestors`.
 
 Let's try:
 
@@ -199,13 +398,17 @@ Let's try:
 redirect_uri=https://thomas;@www.icloud.com
 ```
 
-This should be a totally valid HTTP Simple Authentication URL with the username `thomas;`, but `;` is an important character in `Content-Security-Policy` as it is used to mark the end of each policy segment, for example:
+This should be a totally valid HTTP Simple Authentication URL with the username
+`thomas;`, but `;` is an important character in `Content-Security-Policy` as it
+is used to mark the end of each policy segment, for example:
 
-```HTTP
+``` HTTP
 Content-Security-Policy: default-src https://google.com; frame-ancestors https://mywebsite2.com
 ```
 
-This Content Security Policy dictates that valid resources can only be loaded from the HTTP origin `https://google.com`, and that this page can only be embedded by `https://mywebsite2.com`.
+This Content Security Policy dictates that valid resources can only be loaded
+from the HTTP origin `https://google.com`, and that this page can only be
+embedded by `https://mywebsite2.com`.
 
 I digressed: what actually happens? Check it out:
 
@@ -213,107 +416,149 @@ I digressed: what actually happens? Check it out:
 Content-Security-Policy: frame-ancestors https://thomas;@www.icloud.com
 ```
 
-That's gotta break something, right? Correct. The Google Chrome console tells me, helpfully:
+That's gotta break something, right? Correct. The Google Chrome console tells
+me, helpfully:
 
 ```
 Unrecognised Content-Security-Policy directive '@www.icloud.com'
 ```
 
-This means the browser now thinks a valid origin to embed the iCloud athentication dialog at `idmsa.apple.com` is `https://thomas`.
+This means the browser now thinks a valid origin to embed the iCloud
+athentication dialog at `idmsa.apple.com` is `https://thomas`.
 
-If you want to replicate this moment as I experienced it, close your eyes; imagine yourself really sick with flu and say 'fuck. oh my god. what the fuck.'. Now you understand.
+If you want to replicate this moment as I experienced it, close your eyes;
+imagine yourself really sick with flu and say 'fuck. oh my god. what the fuck.'.
+Now you understand.
 
-Alright. I realise I forgot to tell you to open your eyes again. If they're still closed you should open them.
+Alright. I realise I forgot to tell you to open your eyes again. If they're
+still closed you should open them.
 
-Next step: embed the iCloud login page in our page and pretend to be iCloud (easy right?) if we can do this, we should just be able to steal the icloud token it returns.
+Next step: embed the iCloud login page in our page and pretend to be iCloud
+(easy right?) if we can do this, we should just be able to steal the icloud
+token it returns.
 
-Going from this to having an actual `redirect_uri` we can use takes quite a bit of doing since Apple is so stringent on the characters we're allowed to use. Typically, we'd just send ` '*'` to tell `frame-ancestors` anything is OK to embed this page, but `'` is disallowed. Instead we'll try to make `https://*`, which means 'any website over HTTPS.
+Going from this to having an actual `redirect_uri` we can use takes quite a bit
+of doing since Apple is so stringent on the characters we're allowed to use.
+Typically, we'd just send ` '*'` to tell `frame-ancestors` anything is OK to
+embed this page, but `'` is disallowed. Instead we'll try to make `https://*`,
+which means 'any website over HTTPS.
 
-```HTML
-<iframe src="https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2F*;@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB"></iframe>
+```HTML <iframe
+src="https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2F*;@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB"></iframe>
 ```
 
-If you go back in time to before this was fixed and you use this HTML code you will notice two things: (1) the `frame-ancestors` directive is correctly sent as `frame-ancestors https://*;@www.icloud.com` and (2) all we get from the world's most overengineered embed is a big, slightly off-white box.
+If you go back in time to before this was fixed and you use this HTML code you
+will notice two things: (1) the `frame-ancestors` directive is correctly sent as
+`frame-ancestors https://*;@www.icloud.com` and (2) all we get from the world's
+most overengineered embed is a big, slightly off-white box.
 
 It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
 
-[whitebox]: ./box.png
+import box from './box.png';
 
-![whitebox]
+<img src={box}/>
 
 
 A Big, Slightly Off-White Box
 -----------------------------
+
 [A Big, Slightly Off-White Box]: #url-parsing-my-old-friend
-[§5]: #url-parsing-my-old-frien
 
-There are readers among us, I imagine who see the previous few hundreds of words and think 'oh, good, we must be reaching the end, we've done the impossible and embedded Apple ID Signin. The author is so great i rate all of their blog posts 10 out of 10 what an amazing blogger'.
+[§5]: #url-parsing-my-old-friend
 
-But you'd be wrong. We arrive only at the beginninning of by far the longest vulnerability I have ever found in a web application. It starts with this white box.
+There are readers among us, I imagine who see the previous few hundreds of words
+and think 'oh, good, we must be reaching the end, we've done the impossible and
+embedded Apple ID Signin. The author is so great i rate all of their blog posts
+10 out of 10 what an amazing blogger'.
+
+But you'd be wrong. We arrive only at the beginninning of by far the longest
+vulnerability I have ever found in a web application. It starts with this white
+box.
 
 Let's engage in a socratic diaglogue. I'll be Euclid.
 
 > EUCLID: Why is there a white box?
 >
-> YOU: Why am I in this? I thought I was the reader.
+> YOU: Why am I in this? I thought I was
+the reader.
 >
 > EUCLID: Why is there a white box?
 >
 > YOU: Cancel. Quit. ^C
 >
 > EUCLID: Why is there a white box?
-> 
-> YOU (sighing): Because even though we've loaded the Apple ID signin page, it hasn't loaded any content
+>
+> YOU (sighing): Because even though we've
+loaded the Apple ID signin page, it hasn't loaded any content
 >
 > EUCLID: Why hasn't it loaded any content?
 >
-> YOU: I don't know? You tell me. It's your article dude
+> YOU: I don't know? You tell me. It's your
+article dude
 >
 > EUCLID (me): ok sure whatever
 >
-> [EUCLID] has quit [Leaving...]
+> [EUCLID] has quit
+[Leaving...]
 
-You're right. The box is still white because it hasn't loaded any content. Why? Likely as a security measure, the login dialog expects initialization.
+You're right. The box is still white because it hasn't loaded any content. Why?
+Likely as a security measure, the login dialog expects initialization.
 
-I guessed early and correctly that the dialog probably needs `postMessage` initialization, especially considering the designation of the auth flow as `web_message`.
+I guessed early and correctly that the dialog probably needs `postMessage`
+initialization, especially considering the designation of the auth flow as
+`web_message`.
 
-I spent a lot of time trying to reverse engineer the `idmsa.apple.com`  code, which is all highly compressed and minified.
+I spent a lot of time trying to reverse engineer the `idmsa.apple.com`  code,
+which is all highly compressed and minified.
 
-A key observation that led me through the 47,128 lines of code in `app.js` which power the Apple ID signin process was that because my 'client' that was embedding the Apple ID system was 'misconfigured' (i.e. fucking broken) Apple ID sent a message to a log system every time telling it something that went wrong.
+A key observation that led me through the 47,128 lines of code in `app.js` which
+power the Apple ID signin process was that because my 'client' that was
+embedding the Apple ID system was 'misconfigured' (i.e. fucking broken) Apple ID
+sent a message to a log system every time telling it something that went wrong.
 
 ```json
 {"type":"ERROR","title":"PMRPErrorMessageSequence","message":"APPLE ID : PMRPC Message Sequence log fail at AuthWidget.","iframeId":"601683d3-4d35-4edf-a33e-6d3266709de3","details":"{\"m\":\"a:28632989 b:DEA2CA08 c:req h:rPR e:wSR:SR|a:28633252 b:196F05FD c:req h:rPR e:wSR:SR|a:28633500 b:DEA2CA08 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28633598 b:B74DD348 c:req h:rPR e:wSR:SR|a:28633765 b:196F05FD c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28634110 b:BE7671A8 c:req h:rPR e:wSR:SR|a:28634110 b:B74DD348 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28634621 b:BE7671A8 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28635123 b:E6F267A9 c:req h:rPR e:wSR:SR|a:28635130 b:25A38CEC c:req h:r e:wSR:SR|a:28635635 b:E6F267A9 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28636142 b:25A38CEC c:rRE f:Application error. Destination unavailable. 1000 h:r e:f2:rRE\",\"pageVisibilityState\":\"visible\"}"}
 ```
 
-As you can probably tell, this mesage is completely useless for telling us what exactly we need to change to make our client work, but we can leverage a techique I used for my [Steam Remote Code Execution][5]. If an application does something, and we want to know why (in this case, why it won't load), we can set an 'XHR/fetch breakpoint' in Chrome Developer Tools's 'Sources' pane which looks for that action -- in this case, loading `https://idmsa.apple.com/appleauth/jslog`. 
+As you can probably tell, this mesage is completely useless for telling us what
+exactly we need to change to make our client work, but we can leverage a
+techique I used for my [Steam Remote Code Execution][5]. If an application does
+something, and we want to know why (in this case, why it won't load), we can set
+an 'XHR/fetch breakpoint' in Chrome Developer Tools's 'Sources' pane which looks
+for that action -- in this case, loading
+`https://idmsa.apple.com/appleauth/jslog`. 
 
 [5]: https://hackerone.com/reports/409850
 
-When the breakpoint fires (when the error occurs), the Javascript application will be paused until we tell it to continue again, allowing us to look at what's going on. We can then use the call stack, representing the sequence of function calls that got us there to look at all the things that happened to lead up to this error.
+When the breakpoint fires (when the error occurs), the Javascript application
+will be paused until we tell it to continue again, allowing us to look at what's
+going on. We can then use the call stack, representing the sequence of function
+calls that got us there to look at all the things that happened to lead up to
+this error.
 
 
 The breakpoint fires on a code context that looks like this:
 
 ```javascript
-                        e.details && (e.details = JSON.stringify(e.details)),
-                        t && r(t);
-                        try {
-                            var o = new XMLHttpRequest;
-                            o.open(a.METHOD, d, !0),
-                            o.setRequestHeader("Content-type", "application/json"),
-                            o.setRequestHeader("Accept", "application/json"),
-                            o.setRequestHeader("scnt", p),
-                            o.setRequestHeader("x-csrf-token", m),
-                            o.addEventListener("error", n),
-                            o.addEventListener("abort", n),
-                            o.onreadystatechange = function() {
-                                o.status
-                            }
-                            ,
-                            "OFF" !== c && ("INFO" === c || "ERROR" === c ? "ERROR" !== e.type.toUpperCase().trim() && "INFO" !== e.type.toUpperCase().trim() || o.send(JSON.stringify(e)) : "DEBUG" === c && o.send(JSON.stringify(e)))
-                        } catch (e) {}
-                    }
-                },
+e.details && (e.details = JSON.stringify(e.details)),
+t && r(t);
+try {
+    var o = new XMLHttpRequest;
+    o.open(a.METHOD, d, !0),
+    o.setRequestHeader("Content-type", "application/json"),
+    o.setRequestHeader("Accept", "application/json"),
+    o.setRequestHeader("scnt", p),
+    o.setRequestHeader("x-csrf-token", m),
+    o.addEventListener("error", n),
+    o.addEventListener("abort", n),
+    o.onreadystatechange = function() {
+        o.status
+    }
+    ,
+    "OFF" !== c && ("INFO" === c || "ERROR" === c ? "ERROR" !== e.type.toUpperCase().trim() && "INFO" !== e.type.toUpperCase().trim() || o.send(JSON.stringify(e)) : "DEBUG" === c && o.send(JSON.stringify(e)))
+} catch (e) {}
+
+
 ```
 
 The Javascript code readers out there will probably be able to tell that this is just some pretty simple code which sends some arbitrary kind of information to the server.
@@ -321,52 +566,44 @@ The Javascript code readers out there will probably be able to tell that this is
 If we step up in the call stack we get:
 
 ```javascript
-            x(),
-            b.a.log({
-                type: ot.JSLOG.TYPES.INFO,
-                title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
-                message: "Launching AppleAuth application.",
-                iframeId: p.a.iframeId || ""
-            });
-            try {
-                s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
-                    ft()
-                }, p.a.meta.FEConfiguration.appLoadDelay)
-            } catch (t) {
-                b.a.log({
-                    type: ot.JSLOG.TYPES.ERROR,
-                    title: t.name,
-                    message: t.message,
-                    stacktrace: t.stack,
-                    details: {
-                        file: t.fileName,
-                        lineno: t.lineNumber,
-                        colno: t.columnNumber,
-                        caught: "YES"
-                    },
-                    iframeId: p.a.iframeId || ""
-                }),
-                ut()
-            }
-        } else
-            b.a.log({
-                type: ot.JSLOG.TYPES.INFO,
-                title: ot.JSLOG.TITLES.APPLE_AUTH_WILL_NOT_START,
-                message: "Invalid condition to start application.",
-                iframeId: p.a.iframeId || ""
-            })
-    }("#content");
-    e.default = null
+x(),
+b.a.log({
+    type: ot.JSLOG.TYPES.INFO,
+    title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
+    message: "Launching AppleAuth application.",
+    iframeId: p.a.iframeId || ""
+});
+try {
+    s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
+        ft()
+    }, p.a.meta.FEConfiguration.appLoadDelay)
+} catch (t) {
+    b.a.log({
+        type: ot.JSLOG.TYPES.ERROR,
+        title: t.name,
+        message: t.message,
+        stacktrace: t.stack,
+        details: {
+            file: t.fileName,
+            lineno: t.lineNumber,
+            colno: t.columnNumber,
+            caught: "YES"
+        },
+        iframeId: p.a.iframeId || ""
+    }),
+    ut()
+}
+
 ```
 
 We're clearly getting somewhere. It looks like the server logging was triggered by a call to `b.a.log()`, which lets the system know what it's trying to do. The error we are likely seeing is from the `try{} catch() {}` clause. Well, what are we trying?
 
 ```javascript
-            try {
-                s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
-                    ft()
-                }, p.a.meta.FEConfiguration.appLoadDelay)
-            } catch (t) {
+try {
+    s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
+        ft()
+    }, p.a.meta.FEConfiguration.appLoadDelay)
+} catch (t) {
 ```
 
 There are two outcomes of this code: (1) the function ft() gets run immediately or (2) it gets run after a timeout specified by `p.a.meta.FEConfiguration.applLoadDelay`. What's `ft()`? `ft()`, is, and I can't put this any other way -- a very beefy boy.
@@ -377,134 +614,47 @@ Analysing the 'Beefy Boy'
 [§6]: #url-parsing-my-old-frie
 
 ```javascript
-    function ft() {
-        return regeneratorRuntime.async(function(t) {
-            for (; ; )
-                switch (t.prev = t.next) {
-                case 0:
-                    if (s.a.USE_AUTH_EVENTS)
-                        return s.a.on("config", function(e) {
-                            return regeneratorRuntime.async(function(t) {
-                                for (; ; )
-                                    switch (t.prev = t.next) {
-                                    case 0:
-                                        return t.prev = 0,
-                                        p.a.envConfigFromConsumer = $(e),
-                                        t.next = 4,
-                                        regeneratorRuntime.awrap(lt(p.a.envConfigFromConsumer.context));
-                                    case 4:
-                                        Q(),
-                                        Y(p.a, pt),
-                                        t.next = 12;
-                                        break;
-                                    case 8:
-                                        t.prev = 8,
-                                        t.t0 = t.catch(0),
-                                        b.a.log({
-                                            type: ot.JSLOG.TYPES.ERROR,
-                                            title: ot.JSLOG.TITLES.PMRPC_MESSAGE_SEQUENCE_ERROR,
-                                            message: "PMRPC Message Sequence log fail at AuthWidget.",
-                                            iframeId: p.a.iframeId || "",
-                                            details: {
-                                                m: s.a.getLogs()
-                                            }
-                                        }),
-                                        "object" === rt(c()(t.t0, "jqXHR", void 0)) ? ct(void 0, Object(v.b)(m.a.FAILED_TO_VALIDATE_CONTEXT, "Provided context [ ".concat(p.a.envConfigFromConsumer.context, " ] is not supported for this application."))) : (b.a.log({
-                                            type: ot.JSLOG.TYPES.ERROR,
-                                            title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
-                                            message: c()(t.t0, "message", "Unexpected error."),
-                                            stacktrace: c()(t.t0, "stack", "Stacktrace not found."),
-                                            iframeId: p.a.iframeId || ""
-                                        }),
-                                        ut(t.t0));
-                                    case 12:
-                                    case "end":
-                                        return t.stop()
-                                    }
-                            }, null, null, [[0, 8]])
-                        }),
+) {
+egeneratorRuntime.async(function(t) {
+(; ; )
+switch (t.prev = t.next) {
+case 0:
+    if (s.a.USE_AUTH_EVENTS)
+        return s.a.on("config", function(e) {
+            return regeneratorRuntime.async(function(t) {
+                for (; ; )
+                    switch (t.prev = t.next) {
+                    case 0:
+                        return t.prev = 0,
+                        p.a.envConfigFromConsumer = $(e),
                         t.next = 4,
-                        regeneratorRuntime.awrap(s.a.connect());
-                    t.next = 8;
-                    break;
-                case 4:
-                    s.a.emit("setTitle", {
-                        iframeTitle: d.a.getString("iframeTitle")
-                    }),
-                    s.a.emit("getConfig"),
-                    t.next = 9;
-                    break;
-                case 8:
-                    new Promise(function(e, n) {
-                        it.call({
-                            destination: window.parent,
-                            publicProcedureName: "ready",
-                            params: [{
-                                iframeTitle: d.a.getString("iframeTitle")
-                            }],
-                            onSuccess: function(t) {
-                                e(t)
-                            },
-                            onError: function(t) {
-                                n(t)
-                            },
-                            retries: p.a.meta.FEConfiguration.pmrpcRetryCount,
-                            timeout: p.a.meta.FEConfiguration.pmrpcTimeout,
-                            destinationDomain: p.a.destinationDomain
-                        })
-                    }
-                    ).then(function(t) {
-                        return at(t.publicProcedureName),
-                        new Promise(function(e, n) {
-                            it.call({
-                                destination: window.parent,
-                                publicProcedureName: "config",
-                                params: [],
-                                onSuccess: function(t) {
-                                    e(t)
-                                },
-                                onError: function(t) {
-                                    n(t)
-                                },
-                                retries: p.a.meta.FEConfiguration.pmrpcRetryCount,
-                                timeout: p.a.meta.FEConfiguration.pmrpcTimeout,
-                                destinationDomain: p.a.destinationDomain
-                            })
-                        }
-                        )
-                    }).then(function(t) {
-                        return at(t.publicProcedureName, t.returnValue.data),
-                        p.a.envConfigFromConsumer = $(t.returnValue.data),
-                        lt(p.a.envConfigFromConsumer.context)
-                    }).then(function(t) {
+                        regeneratorRuntime.awrap(lt(p.a.envConfigFromConsumer.context));
+                    case 4:
                         Q(),
-                        Y(p.a, pt)
-                    }).catch(function(t) {
-                        "function" == typeof it.getMessageLog && b.a.log({
+                        Y(p.a, pt),
+                        t.next = 12;
+                        break;
+                    case 8:
+                        t.prev = 8,
+                        t.t0 = t.catch(0),
+                        b.a.log({
                             type: ot.JSLOG.TYPES.ERROR,
                             title: ot.JSLOG.TITLES.PMRPC_MESSAGE_SEQUENCE_ERROR,
                             message: "PMRPC Message Sequence log fail at AuthWidget.",
                             iframeId: p.a.iframeId || "",
                             details: {
-                                m: it.getMessageStringLog()
+                                m: s.a.getLogs()
                             }
                         }),
-                        c()(t, "publicProcedureName") ? (st(t),
-                        ut(t)) : "object" === rt(c()(t, "jqXHR", void 0)) ? ct(void 0, Object(v.b)(m.a.FAILED_TO_VALIDATE_CONTEXT, "Provided context [ ".concat(p.a.envConfigFromConsumer.context, " ] is not supported for this application."))) : (b.a.log({
+                        "object" === rt(c()(t.t0, "jqXHR", void 0)) ? ct(void 0, Object(v.b)(m.a.FAILED_TO_VALIDATE_CONTEXT, "Provided context [ ".concat(p.a.envConfigFromConsumer.context, " ] is not supported for this application."))) : (b.a.log({
                             type: ot.JSLOG.TYPES.ERROR,
                             title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
-                            message: c()(t, "message", "Unexpected error."),
-                            stacktrace: c()(t, "stack", "Stacktrace not found."),
+                            message: c()(t.t0, "message", "Unexpected error."),
+                            stacktrace: c()(t.t0, "stack", "Stacktrace not found."),
                             iframeId: p.a.iframeId || ""
                         }),
-                        ut(t))
-                    });
-                case 9:
-                case "end":
-                    return t.stop()
-                }
-        })
-    }
+                        ut(t.t0));
+// ... way more after this ...
 ```
 
 This is code that no human was ever meant to read, produced by thousands of lines of machine optimization. And I'm sorry. But I love reading this stuff.
@@ -518,25 +668,24 @@ We also don't need to worry about anything but `case 8` here because that's wher
 Case 8 is a sequence of `Promise().then().then()`s which are another way other than `async`/`await` of managing asynchronous operations. If any `then()` operation fails, the `catch()` clause is called, which results in us seeing the error we're seeing. Here's the first operation:
 
 ```javascript
-                case 8:
-                    new Promise(function(e, n) {
-                        it.call({
-                            destination: window.parent,
-                            publicProcedureName: "ready",
-                            params: [{
-                                iframeTitle: d.a.getString("iframeTitle")
-                            }],
-                            onSuccess: function(t) {
-                                e(t)
-                            },
-                            onError: function(t) {
-                                n(t)
-                            },
-                            retries: p.a.meta.FEConfiguration.pmrpcRetryCount,
-                            timeout: p.a.meta.FEConfiguration.pmrpcTimeout,
-                            destinationDomain: p.a.destinationDomain
-                        })
-                    }
+new Promise(function(e, n) {
+    it.call({
+        destination: window.parent,
+        publicProcedureName: "ready",
+        params: [{
+            iframeTitle: d.a.getString("iframeTitle")
+        }],
+        onSuccess: function(t) {
+            e(t)
+        },
+        onError: function(t) {
+            n(t)
+        },
+        retries: p.a.meta.FEConfiguration.pmrpcRetryCount,
+        timeout: p.a.meta.FEConfiguration.pmrpcTimeout,
+        destinationDomain: p.a.destinationDomain
+    })
+}
 ```
 
 `window.parent` is the key here. `window.parent` is a reference to the embedding window (i.e. in the correct case, iCloud). and it's calling "ready". I imagine it expects a response and since we're not giving one it's failing. As far as this gets us, it's kind of something we could already intuit as it's how all these systems really work. We're going to have to snoop on a successful initialization conversation and try to replicate it.
