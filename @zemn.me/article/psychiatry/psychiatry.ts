@@ -1,8 +1,6 @@
-import { importMDX } from 'mdx.macro';
 import React from 'react';
 import { ReadonlyArticle as Article } from '../article';
-
-const Document = React.lazy(() => importMDX('./psychiatry.mdx'));
+import Document from './psychiatry.mdx';
 
 
 const article: Article = {

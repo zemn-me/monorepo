@@ -1,3 +1,5 @@
+export default 1;
+/*
 import { Scale } from 'linear/component/art/scale';
 
 export interface Config {
@@ -82,7 +84,7 @@ export const props:
          * a^2/|b^2
          *  -c^2
          * d^2 = w^2 + h^2
-         */
+         *//*
         const d = Math.sqrt(width ** 2 + height ** 2);
         const scale = width / d;
         const diff = (width -(scale * width)) /2;
@@ -103,3 +105,4 @@ const self = {
 export const scaled = Scale(self, 'bigSquare', 'gap', 'smallSquare');
 
 export default self;
+*/

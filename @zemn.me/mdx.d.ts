@@ -42,5 +42,6 @@ declare module '@mdx-js/react' {
 }
 
 declare module "*.mdx" {
-    export default React.ComponentType;
+    const cmp: React.ComponentType;
+    export default cmp;
 }

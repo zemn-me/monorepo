@@ -64,7 +64,7 @@ export const Parse:
     (s: SimpleDate) => Date
     =
     date => {
-        let dateOf: Dates[Month] = 0,
+        let dateOf: Dates[Month] = 1,
             monthName: ValueOf<MonthNames> | undefined,
             year: number = 0;
 

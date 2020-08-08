@@ -1,3 +1,4 @@
+/*
 import { Load, LoadProps } from 'linear/component/art/Zemnmez/load';
 import { classes } from 'linear/dom/classes';
 import style from './loading.module.css';
@@ -12,3 +13,6 @@ export const Loading:
     }}/>
 ;
 
+*/
+
+export default 1;

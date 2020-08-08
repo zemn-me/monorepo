@@ -21,6 +21,7 @@
   font-family: 'EB Garamond', serif
   font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
   color: var(--fgc)
+  overflow-wrap: break-word
     
   $this: &
   
@@ -29,6 +30,16 @@
       @content
       
   @at-root
+    pre
+      +props
+        white-space: break-spaces
+
+    article
+      +props
+        margin: auto
+        padding: 0 2em
+        max-width: 36em
+
     main
       +props
         background: var(--bgc)
@@ -38,13 +49,23 @@
         --bgc: whitesmoke
         
     p
-      &::first-letter
-        +props
+      +props
+        &::first-letter
           text-transform: capitalize
+          padding-left: 1em
         
     h1, h2, h3, h4, h5, h6
       +props
         font-weight: inherit
+
+    h1
+      +props
+        text-align: center
+        font-size: 200%
+    
+    h2
+      +props
+        font-size: 180%
         
     a
       &:visited, &:link

@@ -8,7 +8,6 @@ export const classes:
     =
 
     (...classes) => {
-        console.log(classes);
         const definedClasses = [...iter.uniq(iter.filter(
             classes, (v: string | undefined): v is string => v !== undefined && v.trim() != ""
         ))];

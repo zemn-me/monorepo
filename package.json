@@ -7,11 +7,25 @@
   "license": "MIT",
   "dependencies": {
     "@mdx-js/loader": "^1.6.16",
-    "@next/mdx": "^9.5.1",
     "next": "^9.5.1",
+    "next-build-id": "^3.0.0",
+    "next-mdx-enhanced": "^3.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "sass": "^1.26.10"
+    "remark-sub-super": "^1.0.19",
+    "remark-textr": "^4.0.0",
+    "remark-validate-links": "^10.0.2",
+    "retext": "^7.0.1",
+    "sass": "^1.26.10",
+    "ts-toolbelt": "^6.15.0",
+    "typographic-apostrophes": "^1.1.1",
+    "typographic-apostrophes-for-possessive-plurals": "^1.0.5",
+    "typographic-base": "^1.0.4",
+    "typographic-ellipses": "^1.0.11",
+    "typographic-em-dashes": "^1.0.2",
+    "typographic-math-symbols": "^1.1.5",
+    "typographic-quotes": "^2.0.1",
+    "unified": "^9.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",

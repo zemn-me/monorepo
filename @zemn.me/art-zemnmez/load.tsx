@@ -1,7 +1,8 @@
+/*
 import { scaled as RotPath, Config } from './zemnmez_rot';
-import log from '@zemnmez/macros/log.macro';
 import React from 'react';
-import { SizedPathSVG } from '../svg';
+
+const log = <T extends any>(...a: T[]) => console.log(...a);
 
 export interface LoadProps {
     className?: string,
@@ -40,3 +41,7 @@ export const Load:
         }}/>
     }
 ;
+
+*/
+
+export default 1;

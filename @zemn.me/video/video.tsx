@@ -1,3 +1,4 @@
+/*
 import * as React from 'react';
 import poster from './ash.jpg';
 import ashVideo from './ash.mp4';
@@ -26,3 +27,5 @@ const video:
     </video>
 
 export const Video = ErrorBoundary(video);
+*/
+export default 1;

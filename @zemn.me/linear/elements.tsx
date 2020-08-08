@@ -4,6 +4,7 @@ import React from 'react';
 import style from './style';
 import classes from './classes';
 import * as classProvider from './classprovider';
+import * as env from './env';
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
@@ -24,49 +25,6 @@ interface LinearGlobals extends DarkMode { }
  */
 interface LinearProps extends LinearGlobals { }
 
-const LinearContext = React.createContext<LinearProps | undefined>(void 0);
-
-const linearPropkeys = ['dark'] as (keyof LinearProps)[];
-const globalPropKeys = linearPropkeys;
-
-const useDarkMode:
-    (props: DarkMode) => string | undefined
-    =
-    ({ dark }) => dark ? style.darkmode : undefined
-    ;
-
-const Pick:
-    <T, V extends keyof T>(v: T, ...keys: V[]) => Pick<T, V>
-    =
-    (v, ...keys) => PickOmit(v, ...keys)[0];
-;
-
-const Omit:
-    <T, V extends keyof T>(v: T, ...keys: V[]) => Omit<T, V>
-    =
-    (v, ...keys) => PickOmit(v, ...keys)[1];
-
-
-
-const PickOmit:
-
-    <T, V extends keyof T>(v: T, ...keys: V[]) => [Pick<T, V>, Omit<T, V>]
-
-    =
-
-    (v, ...keys) => {
-        let pick = {} as any;
-        let omit = { ...v } as any;
-        for (const key of keys) {
-            delete omit[key];
-            pick[key] = v[key]
-        }
-        return [pick, omit];
-    }
-
-    ;
-
-
 const objectIsEmpty =
     (v: object): v is {} => !Object.entries(v).some(([, v]) => v !== undefined);
 
@@ -75,7 +33,7 @@ interface LinearifyChildProps extends LinearProps {
     className?: string
 }
 
-const Wraps = Symbol();
+const Wraps = '__wraps_component_' as const;
 
 export type LinearifyProps<P extends { className?: string }> =
     { [Wraps]: React.ReactElement<P> } & P & LinearProps
@@ -84,26 +42,23 @@ const Linearify:
     <P extends { className?: string }>(props: LinearifyProps<P>) => React.ReactElement
 =
     ({ [Wraps]: children, dark, ...extraProps }) => {
-        if (!children) throw new Error("missing children");
+        const [ classes1, wrap1 ] = classProvider.useClass({
+            context: linearClassContext  
+        });
 
-        let rsp: React.ReactElement;
+        const [ classes2, wrap2 ] = classProvider.useClass({
+            context: darkModeClassContext,
+            disabled: !dark
+        });
 
-        let withLinearClass = <classProvider.UseClass {...{
-            ctx: linearClassContext,
-            ...extraProps as any
-        }}>
-            {children}
-        </classProvider.UseClass>;
+        return wrap1(wrap2(
+            React.cloneElement(children, {
+                ...children.props,
+                ...extraProps,
+                ...classes(children.props.className, ...classes1, ...classes2),
+            })
+        ))
 
-        rsp = withLinearClass;
-
-        if (dark) rsp = <classProvider.UseClass {...{
-            ctx: darkModeClassContext,
-        }}>
-            {withLinearClass}
-        </classProvider.UseClass>;
-
-        return rsp;
     }
 ;
 
@@ -146,7 +101,7 @@ export const H1:
     (props: H1Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <H1/>,
+        [Wraps]: <h1/>,
         ...props
     }}/>
 
@@ -156,7 +111,7 @@ export const H2:
     (props: H2Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <H2/>,
+        [Wraps]: <h2/>,
         ...props
     }}/>
     ;
@@ -168,7 +123,7 @@ export const H3:
     (props: H3Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <H3/>,
+        [Wraps]: <h3/>,
         ...props
     }}/>
 
@@ -178,7 +133,7 @@ export const H4:
     (props: H4Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <H4/>,
+        [Wraps]: <h4/>,
         ...props
     }}/>
 
@@ -188,7 +143,7 @@ export const H5:
     (props: H5Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <H5/>,
+        [Wraps]: <h5/>,
         ...props
     }}/>
     ;
@@ -199,7 +154,7 @@ export const Strong:
     (props: StrongProps) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <Strong/>,
+        [Wraps]: <strong/>,
         ...props
     }}/>
 
@@ -251,14 +206,18 @@ export const Main:
 export interface AProps extends PropsOf<'a'>, LinearProps { }
 
 const trimLink:
-    (link: string) => string
+    (link: string, origin?: string, protocol?: string) => string
     =
-    link => {
-        if (link.startsWith(window.location.origin))
-            return link.slice(window.location.origin.length);
+    (
+        link,
+        origin = env.origin,
+        protocol = env.protocol) => {
 
-        if (link.startsWith(window.location.protocol))
-            return link.slice(window.location.protocol.length);
+        if (link.startsWith(origin))
+            return link.slice(origin.length);
+
+        if (link.startsWith(protocol))
+            return link.slice(protocol.length);
 
         return link;
     }
@@ -293,5 +252,66 @@ export const Time:
     }}/>
 
     ;
+
+export interface LiProps extends PropsOf<'li'>, LinearProps {}
+
+export const Li:
+    (props: LiProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <li/>,
+        ...props
+    }}/>
+;
+
+export interface UlProps extends PropsOf<'ul'>, LinearProps {}
+
+export const Ul:
+    (props: UlProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <ul/>,
+        ...props
+    }}/>
+;
+
+export interface OlProps extends PropsOf<'ol'>, LinearProps {}
+
+export const Ol:
+    (props: OlProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <ol/>,
+        ...props
+    }}/>
+;
+
+
+export interface ArticleProps extends PropsOf<'article'>, LinearProps {}
+
+export const Article:
+    (props: ArticleProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <article/>,
+        ...props
+    }}/>
+;
+
+export interface PreProps extends PropsOf<'pre'>, LinearProps {}
+
+export const Pre:
+    (props: ArticleProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <pre/>,
+        ...props
+    }}/>
+;
+
+
+
+
+
 
 

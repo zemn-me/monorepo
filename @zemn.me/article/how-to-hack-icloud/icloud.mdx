@@ -1,53 +1,7 @@
----
-title: How To Hack iCloud
-created: 27 Nov 2019
-updated: 27 Jun 2020
----
-
 How To Hack iCloud
 ==================
 [How To Hack iCloud]: #how-to-hack-icloud 
 [§0]: #how-to-hack-icloud
-
-[iCloud image]: ./iCloud.svg
-![iCloud image]
-
-|§0 | [How to Hack iCloud]  | 
-| ---- | ---- |
-|§1 | [Preamble]  | 
-|§2 | [The Very Worst Thing]  | 
-|§3 | [Url Parsing, My Old Friend] |
-| §4 | [Content Insecurity Policy] |
-| §5 | [A Big, Slightly Off-White Box]  |
-| §6 | [Analysing the 'Beefy Boy'] |
-| §7| [PostMessage Fans, You'd Be Correct.] |
-| §8| [It's Not Always That You Need to Read The Spec, But That Always is Today.]  |
-| §9 | [Stealing the Bank From an ATM] |
-| §10 | [Conclusion] |
-
-**By Exploit / Impact**
-
-1. URL Manipulation ([§3])
-    * Inject extra unsanitized characters into `redirect_uri` while maintaining HTTP origin
-2. Content Security Policy injection ([§4])
-    * Remove / add / replace Content Security Policy controls preventing cross-site scripting attacks
-    * Remove / add / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
-    * Leverage existing information this page has such as the user email
-    * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
-2. `postMessage`, send access control list bypass ([§7])
-    * Push information across the origin trust boundary.
-3. `postMessage`, receive access control list bypass. ([§8])
-    * Recieve information intended expressly for iCloud and other Apple ID applications
-    * In conjunction with (2), impersonate arbitary Apple ID applications.
-    * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
-    * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
-4. XSS via JSONRPC 'config' method ([§9])
-    * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
-    * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
-    * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
-    * Near full control of the function and display of `idmsa.apple.com` Apple ID login pages.
-
-
 
 Preamble
 --------

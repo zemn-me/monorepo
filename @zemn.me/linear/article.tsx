@@ -1,5 +1,6 @@
 import React from 'react';
 import * as elements from './elements';
+import { Article as HTMLArticle } from './elements';
 import { MDXProvider } from '@mdx-js/react';
 
 export interface Article {
@@ -27,9 +28,9 @@ const components = fromEntries(Object.entries(elements).map( ([k, v]) =>
 export const Article:
     (props: Article) => React.ReactElement
 =
-    ({ title, written, children: Component }) => <MDXProvider {...{
+    ({ title, written, children: Component }) => <HTMLArticle><MDXProvider {...{
         components
     }}><Component {...{
         components: components as any
-    }}/></MDXProvider>
+    }}/></MDXProvider></HTMLArticle>
 ;
