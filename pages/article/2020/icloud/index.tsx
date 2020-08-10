@@ -1,11 +1,8 @@
 import Child from './icloud.mdx';
-import { Article } from '@zemn.me/linear/article';
+import { Article } from '@zemn.me/linear/archetype';
 
 
-const A = () => <Article {...{
-    title: "ok",
-    written: null as any
-}}>{Child}</Article>;
+const A = () => <Article><Child/></Article>;
 
 
 export default A;

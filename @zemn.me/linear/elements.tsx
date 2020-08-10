@@ -5,6 +5,10 @@ import style from './style';
 import classes from './classes';
 import * as classProvider from './classprovider';
 import * as env from './env';
+import * as indexer from './indexer';
+import { useProvideSection } from './indexer';
+import { fromEntries } from './fromEntries';
+import { MDXProvider } from '@mdx-js/react';
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
@@ -25,15 +29,8 @@ interface LinearGlobals extends DarkMode { }
  */
 interface LinearProps extends LinearGlobals { }
 
-const objectIsEmpty =
-    (v: object): v is {} => !Object.entries(v).some(([, v]) => v !== undefined);
-
-interface LinearifyChildProps extends LinearProps {
-    children?: React.ReactNode
-    className?: string
-}
-
 const Wraps = '__wraps_component_' as const;
+
 
 export type LinearifyProps<P extends { className?: string }> =
     { [Wraps]: React.ReactElement<P> } & P & LinearProps
@@ -101,9 +98,23 @@ export const H1:
     (props: H1Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <h1/>,
+        [Wraps]: <H1Impl/>,
         ...props
     }}/>
+
+
+const H1Impl:
+    (props: H1Props) => React.ReactElement
+=
+    props => {
+        const [ref, title] = useProvideSection(1);
+
+        return <h1 {...{
+            id: title,
+            ...props
+        }} ref={ref}></h1>
+    }
+;
 
 export interface H2Props extends PropsOf<'h2'>, LinearProps { }
 
@@ -111,10 +122,25 @@ export const H2:
     (props: H2Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <h2/>,
+        [Wraps]: <H2Impl/>,
         ...props
     }}/>
     ;
+
+const H2Impl:
+    (props: H2Props) => React.ReactElement
+=
+    props => {
+        const [ref, title] = useProvideSection(2);
+
+        return <h2 {...{
+            id: title,
+            ...props
+        }} ref={ref}></h2>
+    }
+;
+
+
 
 
 export interface H3Props extends PropsOf<'h3'>, LinearProps { }
@@ -123,9 +149,24 @@ export const H3:
     (props: H3Props) => React.ReactElement
     =
     props => <L {...{
-        [Wraps]: <h3/>,
+        [Wraps]: <H3Impl/>,
         ...props
     }}/>
+
+const H3Impl:
+    (props: H3Props) => React.ReactElement
+=
+    props => {
+        const [ref, title] = useProvideSection(3);
+
+        return <h3 {...{
+            id: title,
+            ...props
+        }} ref={ref}></h3>
+    }
+;
+
+
 
 export interface H4Props extends PropsOf<'h4'>, LinearProps { }
 
@@ -286,6 +327,10 @@ export const Ol:
     }}/>
 ;
 
+const components = fromEntries(Object.entries(import('@zemn.me/linear/elements')).map( ([k, v]) => 
+    [k[0].toLowerCase()+k.slice(1), v]
+));
+
 
 export interface ArticleProps extends PropsOf<'article'>, LinearProps {}
 
@@ -293,9 +338,25 @@ export const Article:
     (props: ArticleProps) => React.ReactElement
 =
     props => <L {...{
-        [Wraps]: <article/>,
+        [Wraps]: <ArticleImpl/>,
         ...props
     }}/>
+;
+
+const ArticleImpl:
+    (props: ArticleProps) => React.ReactElement
+=
+    ({ children, ...props}) => {
+        return <article {...props}>
+            {/*
+                could do this type safe but not in this file
+                w/o a cyclic import...
+            */}
+            <MDXProvider components={components}>
+                {children}
+            </MDXProvider>
+        </article>
+    }
 ;
 
 export interface PreProps extends PropsOf<'pre'>, LinearProps {}
@@ -309,10 +370,71 @@ export const Pre:
     }}/>
 ;
 
+export interface IndexProps {
+    children: React.FC<{
+        index?: indexer.Index
+    }>
+}
+
+const sectionDepthContext = React.createContext<number>(0);
+
+export interface SectionProps extends PropsOf<'section'>, LinearProps {}
+
+export const Section:
+    (props: SectionProps) => React.ReactElement
+=
+    ({ ...props }) => {
+        const depth = React.useContext(sectionDepthContext);
+
+        return <sectionDepthContext.Provider value={depth+1}>
+            <L {...{
+                [Wraps]: <section/>,
+                ...props
+            }}/>
+        </sectionDepthContext.Provider>
+    }
+;
+
+export interface HeaderProps extends PropsOf<'h1'>, LinearProps {
+    children: [
+        title: React.ReactChild,
+        ...etc: React.ReactChild[]
+    ] | React.ReactChild
+}
+
+const headerByDepth = [
+    H1, H2, H3, H4, H5
+] as const;
+
+export const Header:
+    (props: HeaderProps) => React.ReactElement
+=
+    ({ children, ...props}) => {
+        const [title, ...others] = children instanceof Array?
+            children: [children];
+        const depth = React.useContext(sectionDepthContext);
+        const Heading = headerByDepth[depth] ?? H5;
 
 
+        return <L {...{
+            [Wraps]: <header>
+                <Heading>{title}</Heading>
+                {others}
+            </header>,
+            ...props
+        }}/>
+    }
+;
 
+export interface NavProps extends PropsOf<'nav'>, LinearProps {
 
+}
 
-
-
+export const Nav:
+    (props: NavProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <nav/>,
+        ...props
+    }}/>
+;

@@ -269,7 +269,8 @@ https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251
 And break it down a bit because not everyone's brain is as broken as mine to be
 able to read that:
 
-``` Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
+```
+Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
 Parameters:
     client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d
 
@@ -443,7 +444,8 @@ Typically, we'd just send ` '*'` to tell `frame-ancestors` anything is OK to
 embed this page, but `'` is disallowed. Instead we'll try to make `https://*`,
 which means 'any website over HTTPS.
 
-```HTML <iframe
+```HTML
+<iframe
 src="https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2F*;@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB"></iframe>
 ```
 
