@@ -47,7 +47,6 @@ export class Ctx {
     private reg = new Set<((index: Index) => void)>();
     private nodes = new Map<Node, RegisterProps>();
     private sects: readonly RegisterProps[] = [];
-    private deepSects: DeepIndex;
     register(...props: RegisterProps): [unregister: () => void] {
         const [,,,node] = props;
         this.nodes.set(node, props);

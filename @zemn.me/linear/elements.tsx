@@ -7,8 +7,6 @@ import * as classProvider from './classprovider';
 import * as env from './env';
 import * as indexer from './indexer';
 import { useProvideSection } from './indexer';
-import { fromEntries } from './fromEntries';
-import { MDXProvider } from '@mdx-js/react';
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
@@ -52,7 +50,7 @@ const Linearify:
             React.cloneElement(children, {
                 ...children.props,
                 ...extraProps,
-                ...classes(children.props.className, ...classes1, ...classes2),
+                ...classes(children.props.className, extraProps.className, ...classes1, ...classes2),
             })
         ))
 
@@ -327,37 +325,20 @@ export const Ol:
     }}/>
 ;
 
-const components = fromEntries(Object.entries(import('@zemn.me/linear/elements')).map( ([k, v]) => 
-    [k[0].toLowerCase()+k.slice(1), v]
-));
-
 
 export interface ArticleProps extends PropsOf<'article'>, LinearProps {}
 
-export const Article:
-    (props: ArticleProps) => React.ReactElement
-=
-    props => <L {...{
-        [Wraps]: <ArticleImpl/>,
-        ...props
-    }}/>
+export const Article =
+    React.forwardRef<HTMLElement,  ArticleProps>(({ children, ...props }, ref) => <L {...{
+        [Wraps]: <article ref={ref} {...props}>
+                {children}
+        </article>
+    }}/>)
 ;
 
-const ArticleImpl:
-    (props: ArticleProps) => React.ReactElement
-=
-    ({ children, ...props}) => {
-        return <article {...props}>
-            {/*
-                could do this type safe but not in this file
-                w/o a cyclic import...
-            */}
-            <MDXProvider components={components}>
-                {children}
-            </MDXProvider>
-        </article>
-    }
-;
+Article.displayName = Object.keys({Article})[0]
+
+
 
 export interface PreProps extends PropsOf<'pre'>, LinearProps {}
 

@@ -1,18 +1,34 @@
 import React from 'react';
 import * as elements from './elements';
 import * as indexer from './indexer';
+import PullDown from './pullDown';
 import style from './archetype.module.sass';
+import MDXProvider from './MDXProvider'
+import classes from './classes';
+
+export interface IndexItemProps {
+    anchor: string, title: string, level: number, node: Node
+}
+
+export const IndexItem:
+    (props: IndexItemProps) => React.ReactElement
+=
+    ({ anchor, title, level }) => <div {...{
+        className: style.indexItem
+    }}>{title}</div>
+;
+
 
 export interface IndexProps {
-
+    className?: string
 }
 
 export const Index:
     (props: IndexProps) => React.ReactElement | null
 =
-    () => {
+    ({ className }) => {
         const ind = React.useContext(indexer.context);
-        const [ index, setIndex ] = React.useState<indexer.Index>();
+        const [ index = [], setIndex ] = React.useState<indexer.Index>();
 
 
         React.useEffect(() => {
@@ -21,10 +37,13 @@ export const Index:
             return destroy;
         }, [ ind, setIndex ]);
 
-        if (!ind) return null;
 
-        return <elements.Nav>
-
+        return <elements.Nav {...{
+            ...classes(className)  
+        }}>
+            { index.map(([anchor, title, level, node], i) => <React.Fragment key={i}>
+                <IndexItem {...{anchor, title, level, node}}/>
+            </React.Fragment>)}
         </elements.Nav>
     }
 ;
@@ -51,8 +70,11 @@ export const Article:
 
 export interface KitchenSinkProps {
     children: readonly [
-        localNav: React.ReactChild,
-        content: React.ReactChild
+        localNav: React.ReactElement<{ className?: string}>,
+        content: React.ReactElement<{
+            className?: string,
+            ref: React.Ref<Pick<Element, 'scrollIntoView'>>
+        }>
     ]
 }
 
@@ -61,12 +83,9 @@ export const Base:
     React.FC<KitchenSinkProps>
 =
     ({ children: [localNav, content] }) => <>
-        <PullDown>{localNav}{content}</PullDown>
+        <MDXProvider>
+            <PullDown>{localNav}{content}</PullDown>
+        </MDXProvider>
 </>
 ;
 
-export const PullDown:
-    React.FC
-=
-    ({ children }) => <>{children}</>
-;
