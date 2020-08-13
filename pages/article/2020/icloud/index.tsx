@@ -1,8 +1,3 @@
-import Child from './icloud.mdx';
-import { Article } from '@zemn.me/linear/archetype';
+export * from './icloud.mdx';
 
-
-const A = () => <Article><Child/></Article>;
-
-
-export default A;
+export { default as Component } from './icloud.mdx';

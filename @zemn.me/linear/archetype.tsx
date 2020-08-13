@@ -1,7 +1,6 @@
 import React from 'react';
 import * as elements from './elements';
 import * as indexer from './indexer';
-import PullDown from './pullDown';
 import style from './archetype.module.sass';
 import MDXProvider from './MDXProvider'
 import classes from './classes';
@@ -28,40 +27,65 @@ export const Index:
 =
     ({ className }) => {
         const ind = React.useContext(indexer.context);
-        const [ index = [], setIndex ] = React.useState<indexer.Index>();
+        let [ tree = {}, setTree ] = React.useState<indexer.TreeNode>();
 
+        if (tree.children?.length == 1) tree = {
+            children: tree.children[0].children
+        }
 
         React.useEffect(() => {
             if (!ind) return;
-            const [destroy] = ind.onChange(setIndex);
+            const [destroy] = ind.onChange(setTree);
             return destroy;
-        }, [ ind, setIndex ]);
+        }, [ ind, setTree ]);
 
 
         return <elements.Nav {...{
             ...classes(className)  
         }}>
-            { index.map(([anchor, title, level, node], i) => <React.Fragment key={i}>
-                <IndexItem {...{anchor, title, level, node}}/>
-            </React.Fragment>)}
+            <IndexSection {...tree}/>
         </elements.Nav>
     }
 ;
 
+const IndexSectionHeader:
+    (props: indexer.RegisterProps) => React.ReactElement
+=
+    ({ title, anchor }) => <elements.A href={`#${anchor}`}>{title}</elements.A>
+;
+
+interface IndexSectionProps extends indexer.TreeNode {
+}
+
+const IndexSection:
+    (props: IndexSectionProps) => React.ReactElement
+=
+    ({self, children}) => <>
+        {self?<li><IndexSectionHeader {...self}/></li>:null}
+        {children&&children.length?<ol>
+            {children.map((child, i) => <IndexSection key={i} {...child}/>)}
+        </ol>:null}
+    </>
+;
+
 export interface ArticleProps {
-    children: React.ReactElement
+    children: [
+        globalNav: React.ReactElement<{ className?: string }>,
+        article: React.ReactElement
+    ]
 }
 
 export const Article:
     (props: ArticleProps) => React.ReactElement
 =
-    ({ children }) => {
+    ({ children: [ globalNav, article ] }) => {
         const index = React.useMemo(() => new indexer.Ctx, []);
         return <indexer.context.Provider value={index}>
             <Base>
+                {globalNav}
                 <Index/>
                 <elements.Article>
-                    {children}
+                    {article}
                 </elements.Article>
             </Base>
         </indexer.context.Provider>
@@ -70,6 +94,7 @@ export const Article:
 
 export interface KitchenSinkProps {
     children: readonly [
+        globalNav: React.ReactElement<{ className?: string }>,
         localNav: React.ReactElement<{ className?: string}>,
         content: React.ReactElement<{
             className?: string,
@@ -82,9 +107,9 @@ export interface KitchenSinkProps {
 export const Base:
     React.FC<KitchenSinkProps>
 =
-    ({ children: [localNav, content] }) => <>
+    ({ children: [globalNav, localNav, content] }) => <>
         <MDXProvider>
-            <PullDown>{localNav}{content}</PullDown>
+            {globalNav}{localNav}{content}
         </MDXProvider>
 </>
 ;

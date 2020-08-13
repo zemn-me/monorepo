@@ -1,21 +1,19 @@
 import React from 'react';
 import { must } from './guard';
 
-export type RegisterProps = readonly [
+export type RegisterProps = {
     anchor: string,
     title: string,
     level: number,
     node: Node
-]
+}
 
 export type Index = readonly RegisterProps[]
 
-
 export interface Ctx {
-    register(...Props: RegisterProps): [unregister: () => void]
-    onChange(then: (index: Index) => void): [removeEventListener: () => void]
+    register(Props: RegisterProps): [unregister: () => void]
+    onChange(then: (index: TreeNode) => void): [removeEventListener: () => void]
 }
-
 
 const DOCUMENT_POSITION_DISCONNECTED = 1 as const;
 const DOCUMENT_POSITION_PRECEDING = 2 as const;
@@ -24,31 +22,19 @@ const DOCUMENT_POSITION_CONTAINS = 8 as const;
 const DOCUMENT_POSITION_CONTAINED_BY = 16 as const;
 const DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC = 32 as const;
 
-export type DeepIndex = readonly [
-    item: RegisterProps,
-    children: readonly DeepIndex[]
-];
-
-type DeepIndexRootNode = DeepIndex | null;
-
-type MutableDeepIndex = [
-    item: RegisterProps,
-    children: DeepIndex[],
-    parent: MutableDeepIndex
-];
-
-type MutableDeepRootNode = [
-    item: undefined,
-    children: MutableDeepIndex[],
-    parent?: undefined
-] | undefined;
+export interface TreeNode {
+    self?: RegisterProps;
+    children?: TreeNode[];
+    parent?: TreeNode
+}
 
 export class Ctx {
-    private reg = new Set<((index: Index) => void)>();
+    private reg = new Set<((index: TreeNode) => void)>();
     private nodes = new Map<Node, RegisterProps>();
     private sects: readonly RegisterProps[] = [];
-    register(...props: RegisterProps): [unregister: () => void] {
-        const [,,,node] = props;
+    private tree: TreeNode = {};
+    register(props: RegisterProps): [unregister: () => void] {
+        const { node } = props;
         this.nodes.set(node, props);
         this.handleChange();
         return [() => this.unregister(node)]
@@ -59,15 +45,15 @@ export class Ctx {
         this.handleChange();
     }
 
-    onChange(then: ((index: Index) => void)): [ removeEventListener: () => void] {
+    onChange(then: ((index: TreeNode) => void)): [ removeEventListener: () => void] {
         this.reg.add(then);
-        then(this.sects);
+        then(this.tree);
         return [() => this.reg.delete(then)]
     }
 
 
     private handleChange() {
-        this.sects = [...this.nodes.values()].sort(([,,,a], [,,,b]) => {
+        this.sects = [...this.nodes.values()].sort(({ node: a }, { node: b }) => {
             const cmp = a.compareDocumentPosition(b);
             for (const i of [
                 DOCUMENT_POSITION_DISCONNECTED,
@@ -83,7 +69,31 @@ export class Ctx {
             throw new Error();
         });
 
-        [...this.reg.values()].forEach(fn => fn(this.sects));
+
+        const root: TreeNode = {};
+
+        let cur = root;
+
+        for (let sect of this.sects) {
+            while (!(cur?.self?.level == undefined || cur?.self?.level < sect.level)) {
+                console.log(cur.self.level, sect.level);
+                if (cur.parent == undefined) throw new Error();
+                cur = cur.parent;
+            }
+
+            if (cur.parent !== undefined && sect.level == cur?.self?.level) cur = cur.parent;
+
+            const n = { self: sect, parent: cur };
+
+            cur.children = [...(cur.children??[]), n];
+
+            cur = n
+        }
+
+        this.tree = root;
+
+
+        [...this.reg.values()].forEach(fn => fn(this.tree));
 
         
         // TODO!!
@@ -108,7 +118,7 @@ export const useProvideSection:
             if (!title) return;
 
             setTitle(title);
-            const [unregister] = ind.register(title, title, level, node);
+            const [unregister] = ind.register({anchor: title, title, level, node});
             return unregister;
         }, [])
         return [ref, title];

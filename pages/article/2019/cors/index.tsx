@@ -1,11 +1,2 @@
-import Child from './CORS.mdx';
-import { Article } from '@zemn.me/linear/article';
-
-
-const A = () => <Article {...{
-    title: "ok",
-    written: null as any
-}}>{Child}</Article>;
-
-
-export default A;
+export * from './CORS.mdx';
+export { default as Component } from './CORS.mdx';

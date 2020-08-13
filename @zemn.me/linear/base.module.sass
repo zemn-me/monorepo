@@ -23,6 +23,7 @@
   color: var(--fgc)
   overflow-wrap: break-word
   text-decoration-skip-ink: auto
+  font-size: clamp(1rem, 1vw, 1.5rem)
     
   $this: &
   
@@ -36,16 +37,17 @@
         max-width: 90%
         margin: auto
         display: block
-
-    pre
+    
+    pre, code
       +linear
         white-space: break-spaces
+        font-size: 80%
 
     article
       +linear
         margin: auto
         padding: 0 2em
-        max-width: 45em
+        max-width: 45rem
 
     main
       +linear
