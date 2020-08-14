@@ -25,5 +25,6 @@ config = require('next-mdx-enhanced')({
 })(config);
 
 config = require('next-images')(config);
+config = require('next-videos')(config);
 
 module.exports = config;
