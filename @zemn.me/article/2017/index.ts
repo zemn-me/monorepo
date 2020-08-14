@@ -1,5 +1,3 @@
 import * as design from './design';
 
-export {
-    design
-}
+export { design };
