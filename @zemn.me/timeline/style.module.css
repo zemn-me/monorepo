@@ -7,7 +7,7 @@
 .Timeline {
     display: grid;
     grid-template-columns: repeat(auto-fill,
-        21rem);
+        21em);
     justify-content: space-around;
 }
 
@@ -17,12 +17,12 @@
 }
 
 .Month {
-    margin: 0 0 2rem 0;
+    margin: 0 0 2em 0;
 }
 
 .Month::before { content: attr(data-month); opacity: .7 }
 
-.Event { margin: 0 0 1rem 1.3rem }
+.Event { margin: 0 0 1rem 1.3em }
 
 
 .StretchArea {
@@ -33,7 +33,7 @@
 
 .VerticalStretchIndicator {
     display: grid;
-    grid: "." minmax(0, 4rem) "line" 1fr "." minmax(0, 4rem)/ 1fr;
+    grid: "." minmax(0, 4em) "line" 1fr "." minmax(0, 4rem)/ 1fr;
 }
 
 .VerticalStretchIndicator::before {

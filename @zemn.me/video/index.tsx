@@ -1,17 +1,14 @@
-/*
 import * as React from 'react';
 import poster from './ash.jpg';
 import ashVideo from './ash.mp4';
 import style from './video.module.css';
-import classes from 'linear/dom/classes';
-import { ErrorBoundary } from 'linear/component/ErrorBoundary';
-import { ElementProperties } from 'linear/util';
+import classes from '@zemn.me/linear/classes';
 
-export interface Video extends ElementProperties<"video"> {
+export interface Video {
 
 }
 
-const video:
+const Video:
     React.FC<Video>
 = ({ className, ...etc }) => <video
     {...{
@@ -26,6 +23,4 @@ const video:
         <source src={ashVideo} type="video/mp4"/>
     </video>
 
-export const Video = ErrorBoundary(video);
-*/
-export default 1;
+export default Video;

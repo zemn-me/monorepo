@@ -101,6 +101,15 @@ export const Bio: Bio = {
     ],
     "timeline": [
         {
+            date: date(23, 'jul', 2020),
+            title: en`Senior Information Security Enginer, Google ISE hardening`
+        },
+        {
+            date: date(9, 'aug', 2020),
+            title: en`HackFortress DefCon 2020 Champions`,
+            description: en`Defended the HackFortress title again!`
+        },
+        {
             date: date(16, 'jun', 2019),
             title: en`react-oauth2-hook`,
             url: url`https://github.com/Zemnmez/react-oauth2-hook`,
@@ -133,7 +142,7 @@ export const Bio: Bio = {
         },
         {
             date: date(1, 'feb', 2020),
-            title: en`HackFortress Shmoocon 2019 Champions`,
+            title: en`HackFortress Shmoocon 2020 Champions`,
             tags: [en`accolade`, en`security`, en`gaming`],
             description: en`defended title for hybrid gaming ctf`
         },
@@ -257,7 +266,7 @@ export const Bio: Bio = {
         },
         {
             date: date(22, 'jan', 2018),
-            description: en`advisory position. Provided expertise to UK cyber advisory / defence group on Go and building security analysis systems`,
+            description: en`advisory position. Provided expertise to UK cyber advisory / defence group on Go and building security analysis systems. Launched world's first government-wide responsible disclosure program.`,
             until: "ongoing",
             priority: 8,
             tags: [
@@ -528,7 +537,7 @@ export const Bio: Bio = {
                 security,
                 work
             ],
-            title: en`Security Engineer, Twitch`,
+            title: en`Senior Application Security Engineer, Twitch`,
             url: url`https://twitch.tv`
         },
         {

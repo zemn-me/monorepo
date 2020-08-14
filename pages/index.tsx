@@ -1,16 +1,15 @@
+import { Timeline, makeYears } from '@zemn.me/timeline/components';
+import { Bio } from '@zemn.me/bio';
+import { Main } from '@zemn.me/linear';
+import Video from '@zemn.me/video';
 import React from 'react';
-import { A, Div } from '@zemn.me/linear/elements';
 
+export const Home = () => <Main>
+    <Video/>
+    <Timeline {...{
+        years: makeYears(Bio.timeline),
+        lang: 'en-GB'
+    }} />
+</Main>
 
-export interface NavProps {
-    className?: string
-}
-
-export const Nav = ({className}: NavProps) => <Div className={className}>
-    <A href="/">Home</A>
-    <A href="/article">Articles</A>
-</Div>
-
-export const cmp = () => <div>ok</div>;
-
-export default cmp;
+export default Home;

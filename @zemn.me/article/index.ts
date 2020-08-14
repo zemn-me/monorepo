@@ -3,17 +3,16 @@ import * as y2019 from './2019';
 import * as y2020 from './2020';
 
 export const years = {
-    y2017, y2019, y2020
-} as const;
+    2017: y2017,
+    2019: y2019,
+    2020: y2020
+} as {
+    readonly [year: number]: {
+        readonly [name: string]: {
+            readonly title?: string,
+            readonly medium?: URL,
+            readonly Component: React.Component | any
+        }
+    }
+}
 
-export const all = [
-    ...Object.values(y2019),
-    ...Object.values(y2020),
-    ...Object.values(y2017)
-] as readonly {
-    date?: Date,
-    medium?: URL,
-    inShort?: string
-}[];
-
-export default all;
