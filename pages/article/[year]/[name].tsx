@@ -4,6 +4,19 @@ import { useRouter } from 'next/router'
 import { years } from '@zemn.me/article';
 import Error from 'pages/error/[code]'
 import { Article } from '@zemn.me/linear/archetype';
+import { must } from '@zemn.me/linear/guard';
+
+export interface DatedProps {
+    date: Date
+}
+
+export const Dated:
+    (props: DatedProps) => React.ReactElement
+=
+    ({ date }) => <>
+        {date.getMonth()} {date.getFullYear()}
+    </>
+;
 
 const X = () => {
     const { query: { year, name } } = useRouter();
@@ -27,7 +40,10 @@ const X = () => {
         </Head>
         <Article>
         <></>
-        <article.Component/>
+        <>
+            <Dated date={must(article.date)}/>
+            <article.Component/>
+        </>
         </Article>
     </>
 

@@ -419,3 +419,16 @@ export const Nav:
         ...props
     }}/>
 ;
+
+export interface FracProps extends PropsOf<'span'>, LinearProps { }
+
+export const Frac:
+    (props: FracProps) => React.ReactElement
+=
+    props => <L {...{
+        [Wraps]: <Span {...{
+            className: style.frac,
+            ...props
+        }}/>
+    }}/>
+;

@@ -11,7 +11,8 @@ export const years = {
         readonly [name: string]: {
             readonly title?: string,
             readonly medium?: URL,
-            readonly Component: React.Component | any
+            readonly Component: React.Component | any,
+            readonly date?: Date
         }
     }
 }

@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Lora:400,400i&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap')
-
 .blockelement
     width: 100%
     height: 100%
@@ -31,6 +28,8 @@
       @content
       
   @at-root
+    .frac
+      font-variant-numeric: diagonal-fractions
     img
       +linear
         max-width: 90%
@@ -47,6 +46,9 @@
         margin: auto
         padding: 0 2em
         max-width: 45rem
+        h1
+          padding-bottom: 1rem
+          border-bottom: 1px solid black
 
     main
       +linear
@@ -74,6 +76,7 @@
     h2
       +linear
         font-size: 180%
+
         
     a
       &:visited, &:link
@@ -82,6 +85,8 @@
         
       &:link
         +linear
+          text-decoration: none
+          border-bottom: 1px solid black
 
 
     input
@@ -98,7 +103,9 @@
             
     strong
       +linear
-        font-weight: 600
+        //font-weight: 600
+        font-variant: small-caps
+        font-weight: inherit
         
     hr
       +linear
@@ -110,7 +117,3 @@
       &::before
         +linear
           content: "⁂"
-
-      
-
-    

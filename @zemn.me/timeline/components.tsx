@@ -151,7 +151,7 @@ export const Event:
             {title}
         </Text>
 
-        {": "}
+        {" "}
 
         {description ?
             <Text into={<Span className={style.description} />} lang={lang}>
@@ -181,7 +181,7 @@ const StretchIndicatorArea:
     (props: StretchIndicatorAreaProps) => React.ReactElement
     =
     ({ className, children }) => <Div {...{
-        ...classes(className, style.StretchArea, "egg")
+        ...classes(className, style.StretchArea)
     }}>
 
         {children}
