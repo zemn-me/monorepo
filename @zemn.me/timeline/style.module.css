@@ -1,8 +1,3 @@
-/* ok */
-
-.event > .title {
-    text-transform: lowercase;
-}
 
 .Timeline {
     display: grid;
@@ -22,7 +17,14 @@
 
 .Month::before { content: attr(data-month); opacity: .7 }
 
-.Event { margin: 0 0 1rem 1.3em }
+.Event {
+    margin: 0 0 1rem 1.3em
+}
+
+.Event a:link {
+    text-decoration: none;
+    border-bottom: 1px solid black;
+}
 
 
 .StretchArea {
@@ -33,7 +35,7 @@
 
 .VerticalStretchIndicator {
     display: grid;
-    grid: "." minmax(0, 4em) "line" 1fr "." minmax(0, 4rem)/ 1fr;
+    grid: "." fit-content(4rem) "line" 1fr "." fit-content(4rem)/ 1fr;
 }
 
 .VerticalStretchIndicator::before {
