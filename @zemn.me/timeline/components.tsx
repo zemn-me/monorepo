@@ -70,14 +70,15 @@ export const makeYears:
 
 export interface TimelineProps {
     readonly years: readonly Year[]
-    readonly lang: lang.Lang
+    readonly lang: lang.Lang,
+    className?: string
 }
 
 export const Timeline:
     (props: TimelineProps) => React.ReactElement
     =
-    ({ years, lang }) => <Div {...{
-        className: style.Timeline
+    ({ years, lang, className }) => <Div {...{
+        ...classes(className, style.Timeline)
     }}> {years.map(year =>
         <Year key={year.year} {...year} lang={lang} />
     )} </Div>
@@ -97,9 +98,8 @@ export const Year:
         }} >
             <StretchIndicatorArea>
                 <article>
-                    <Time dateTime={new Date(new Date(0).setFullYear(year))}>
-                        {year}
-                    </Time>
+                    <YearDisplay
+                        year={new Date(new Date(0).setFullYear(year))}/>
 
                     {months.map((month) =>
                         <Month lang={lang} key={month.month} {...month} />
@@ -109,6 +109,67 @@ export const Year:
 
         </Div>
     ;
+
+const numerals = [
+    [3000, "MMM"],
+    [2000, "MM"],
+    [1000, "M"],
+    [900, "CM"],
+    [800, "DCCC"],
+    [700, "DCC"],
+    [600, "DC"],
+    [500, "D"],
+    [400, "CD"],
+    [300, "CCC"],
+    [200, "CC"],
+    [100, "C"],
+    [90, "XC"],
+    [80, "LXXX"],
+    [70, "LXX"],
+    [60, "LX"],
+    [50, "L"],
+    [40, "XL"],
+    [30, "XXX"],
+    [20, "XX"],
+    [10, "X"],
+    [9, "IX"],
+    [8, "VIII"],
+    [7, "VII"],
+    [6, "VI"],
+    [5, "V"],
+    [3, "III"],
+    [4, "IV"],
+    [2, "II"],
+    [1, "I"],
+] as const;
+
+const romanize:
+    (n: number) => string
+    =
+    n => {
+        if (n == 0) return "";
+        for (const [val, str] of numerals)
+            if (n >= val) return str + romanize(n - val);
+
+        throw new Error("this should never happen");
+    }
+    ;
+
+
+const YearDisplay: React.FC<{ year: Date }> = ({ year: date }) => {
+    const year = date.getFullYear();
+    const age = year - 1994;
+
+    return <Time className={style.yearDisplay}
+            dateTime={new Date(new Date(0).setFullYear(year))}>
+            <Div className={style.yearDisplayRoman}>
+                {romanize(year)}
+            </Div>
+            <Div className={style.yearDisplayYear}>{year}</Div>
+            <Div className={style.yearDisplayAge}>{romanize(age)}</Div>
+        </Time>
+
+}
 
 export interface Month {
     readonly month: simpletime.Month
@@ -123,13 +184,22 @@ export const Month:
     (props: MonthProps) => React.ReactElement
     =
     ({ month, events, lang }) => <Div {...{
-        className: style.Month,
-        children: events.map((event, i) =>
+        className: style.Month }}>
+
+        <MonthIndicator month={month}/>
+        {events.map((event, i) =>
             <Event lang={lang} key={i} {...event} />
-        ),
-        "data-month": simpletime.Month[month]
-    }} />
+        )}
+    </Div>
     ;
+
+export const MonthIndicator: React.FC<{ month: simpletime.Month }> =
+    ({ month }) => <Div className={style.monthIndicator}
+        aria-label={simpletime.fullMonth[month]}>
+        <span aria-hidden>{simpletime.Month[month]}</span>
+    </Div>
+
+;
 
 export interface EventProps extends BioEvent {
     lang: lang.Lang

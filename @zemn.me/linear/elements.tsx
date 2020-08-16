@@ -236,7 +236,7 @@ export interface MainProps extends PropsOf<'main'>, LinearProps { }
 export const Main:
     (props: MainProps) => React.ReactElement
     =
-    ({ className, ...props }) => <L {...{
+    ({ ...props }) => <L {...{
         [Wraps]: <main/>,
         ...props
     }}/>
@@ -425,10 +425,9 @@ export interface FracProps extends PropsOf<'span'>, LinearProps { }
 export const Frac:
     (props: FracProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <Span {...{
-            className: style.frac,
-            ...props
-        }}/>
+    ({ className, ...props }) => <L {...{
+        [Wraps]: <Span />,
+        ...classes(style.frac, className),
+        ...props
     }}/>
 ;

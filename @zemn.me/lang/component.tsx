@@ -8,7 +8,7 @@ interface IntoProp {
 
 interface TextProps extends IntoProp {
     children: lang.Text,
-    lang: lang.Lang,
+    lang?: lang.Lang,
 
 }
 

@@ -5,6 +5,7 @@
 
 import { N, L, O } from 'ts-toolbelt';
 
+
 export enum Month {
     jan,
     feb,
@@ -19,6 +20,22 @@ export enum Month {
     nov,
     dec,
 }
+
+
+export const fullMonth = {
+    [Month.jan]: "january",
+    [Month.feb]: "february",
+    [Month.mar]: "march",
+    [Month.apr]: "april",
+    [Month.may]: "may",
+    [Month.jun]: "june",
+    [Month.jul]: "jul",
+    [Month.aug]: "august",
+    [Month.sep]: "september",
+    [Month.oct]: "october",
+    [Month.nov]: "november",
+    [Month.dec]: "december"
+} as const;
 
 
 type MonthNames =

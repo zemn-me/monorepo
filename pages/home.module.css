@@ -1,0 +1,68 @@
+.home {
+    --navbar-height: 8vh;
+    --bgc: white;
+    display: grid;
+    grid: "h h h" 100vh
+        ". . ." 3rem
+        "v v v" var(--navbar-height)
+        ". . ." 1rem
+        ". n ." auto
+        ". . ." 3rem
+        "t t t" 1fr / 1fr 1fr 1fr;
+    
+}
+
+.navBar {
+    grid-area: v;
+    display: grid;
+    --s: 10%;
+    grid: 
+        ". . ." var(--s)
+        ". e ." 1fr
+        ". . ." var(--s)  / 1fr 30vw 1fr;
+    top: 0;
+    background: var(--bgc);
+}
+
+.eyeContainer {
+    grid-area: e;
+    top: 0;
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+.eye {
+    margin: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.timeline {
+    grid-area: t;
+}
+
+.header {
+    grid-area: h;
+    display: grid;
+    grid: "all";
+}
+
+.header > video {
+    grid-area: all;
+    z-index: -1;
+}
+
+.title {
+    grid-area: all;
+    padding: .2em;
+    margin: auto;
+    font-size:  5vh;
+    background-color: white;
+}
+
+.name {
+    text-transform: lowercase;
+    grid-area: n;
+    text-align: center;
+}

@@ -34,6 +34,7 @@ export type Timeline = Event[];
 
 export interface Who {
     handle: Text,
+    fullName: Text,
     name: Text
 }
 
@@ -107,7 +108,6 @@ export const Bio: Bio = {
         {
             date: date(9, 'aug', 2020),
             title: en`HackFortress DefCon 2020 Champions`,
-            description: en`Defended the HackFortress title again!`
         },
         {
             date: date(16, 'jun', 2019),
@@ -555,6 +555,7 @@ export const Bio: Bio = {
     ],
     who: {
         handle: en`zemnmez`,
-        name: en`Thomas Neil James Shadwell`
+        fullName: en`Thomas Neil James Shadwell`,
+        name: en`Thomas NJ Shadwell`
     }
 }

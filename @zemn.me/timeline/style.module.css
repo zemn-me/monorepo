@@ -6,16 +6,36 @@
     justify-content: space-around;
 }
 
-.Year article > time {
-    text-align: center;
-    display: block;
-}
-
 .Month {
     margin: 0 0 2em 0;
 }
 
-.Month::before { content: attr(data-month); opacity: .7 }
+.yearDisplay {
+    display: grid;
+    grid: "r y a" 1fr / 1fr 1fr 1fr;
+    text-align: center;
+}
+
+.yearDisplayYear {
+    grid-area: y;
+    margin: auto
+}
+
+.yearDisplayAge {
+    grid-area: a;
+}
+
+.yearDisplayAge, .yearDisplayRoman {
+    font-size: small;
+    color: grey;
+    margin: auto
+}
+
+.yearDisplayRoman {
+    grid-area: r;
+    display: none
+}
+
 
 .Event {
     margin: 0 0 1rem 1.3em
