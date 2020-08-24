@@ -1,4 +1,6 @@
-const domain = new URL(process.env.NODE_ENV == "production"?
+const production = process.env.NODE_ENV == "production";
+
+const domain = new URL(production?
     "https://zemn.me": "http://localhost:3000");
 
 
@@ -47,7 +49,11 @@ module.exports = {
 					l.options = {
 						...l.options,
                         modules: {
-                            getLocalIdent: uniqIdent
+                            ...(
+                                production
+                                ? { getLocalIdent: uniqIdent}
+                                : {}
+                            )
                         }
 					}
 				}

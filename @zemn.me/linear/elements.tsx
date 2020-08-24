@@ -242,7 +242,9 @@ export const Main:
     }}/>
     ;
 
-export interface AProps extends PropsOf<'a'>, LinearProps { }
+export interface AProps extends Omit<PropsOf<'a'>, 'href'>, LinearProps {
+    href?: PropsOf<'a'>["href"] | URL
+}
 
 const trimLink:
     (link: string, origin?: string, protocol?: string) => string
@@ -266,12 +268,16 @@ const trimLink:
 export const A:
     (props: AProps) => React.ReactElement
     =
-    ({ href, ...props }) => <L {...{
-        [Wraps]: <a {...{
-            href: href? trimLink(href): href,
-        }}/>,
-        ...props
-    }}/>
+    ({ href, ...props }) => {
+        if (href instanceof URL) href = href.toString()
+    
+        return <L {...{
+            [Wraps]: <a {...{
+                href: href? trimLink(href): href,
+            }}/>,
+            ...props
+        }}/>
+    }
  
 
 export interface TimeProps extends Omit<PropsOf<'time'>, 'dateTime'>, LinearProps {
@@ -428,6 +434,18 @@ export const Frac:
     ({ className, ...props }) => <L {...{
         [Wraps]: <Span />,
         ...classes(style.frac, className),
+        ...props
+    }}/>
+;
+
+export interface MathSymbolProps extends PropsOf<'span'>, LinearProps {}
+
+export const MathSymbol:
+    (props: MathSymbolProps) => React.ReactElement
+=
+    ({ className, ...props }) => <L {...{
+        [Wraps]: <Span/>,
+        ...classes(style.math, className),
         ...props
     }}/>
 ;

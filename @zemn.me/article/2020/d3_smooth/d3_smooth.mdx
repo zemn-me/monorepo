@@ -1,0 +1,318 @@
+export const date = new Date("Sun Aug 23 2020 18:34:58 GMT+0100 (British Summer Time)");
+export const title = "Fluid, Responsive Graphs With d3"
+export const inShort = "Walkthrough on making GPU accelerated scalable graphs in d3"
+export const hidden = true;
+
+import { Frac, MathSymbol } from '@zemn.me/linear';
+
+Fluid, Respnsive Graphs with d3
+===============================
+
+Preramble: Video Games
+---------------------
+
+I've always been somewhat fascinated by the particular aesthetic of displaying information in print. My first foray into that canon was fiddling with LaTeX and LaTeX diagrams. There's this zen to transforming data into something that can be reasoned about with visual space, and a certian allure to encapsulating an idea in that way.
+
+Some years ago, I discovered [d3], which scratched an uncomfortable itch I always had with the typical graph: graph tools are *constraining*. To explain why I felt this way, I'd like to use an unnecessarily elaborate parallel thread: computer interfaces as they pertain to video games, and 'modern' user interface design.
+
+[d3]: https://d3js.org/ "d3.js - Data-Driven Documents"
+
+Picture this: it's 1999, and you're running Windows 95. User interfaces are starting to get big, but you'll notice they have this fascinatingly 'samey' look:
+
+import Win95Img from './win95.png';
+
+<img src={Win95Img} alt="Windows 95" />
+
+See, a huge innovation in the preceeding decades was the idea of *user interface components*. The computer interfaces of yesteryear were the blinking black and white text terminals you're probably familiar with. Then came graphics, and graphics acceleration and suddenly you're drawing pictures to the screen:
+
+import EliteImg from './ELITE.jpg';
+
+<img src={EliteImg} alt="The Archimedes version of the video game ELITE"/>
+
+The thing is, when this game, ELITE is drawing pictures to the screen, it's doing it very directly. The underlying software almost certianly is shifting around little coloured pixel blocks to make the images. And every graphical application of this period looked pretty different, because putting something on the screen meant telling the computer exactly where to put the colours.
+
+By contrast, Windows 95 somewhat changed UI design forever by defining these *components* that made up the interface. You had sliders, text boxes, buttons and all sorts of amazing stuff to throw up there.
+
+Something I should stress is that these components didn't just exist to give a visual rhythm to the operating system, though that was definitely a side effect; there's this old adage that 'software architecture reflects the structure of the company that built it', and I think this also extends in a similar way to UI design. UIs of the ELITE years didn't just say *how* to draw themselves on the screen, but also *when*.
+
+You may know that computers render stuff to the screen at some kind of 'FPS', or 'frames per second', and the thing is, exactly zero programming languages at the time were developed to be able to express this kind of action. Of course, almost all languages are general purpose, but some ideas come more easily than others. Low-level graphics programming is pretty frustrating for this reason. You don't say 'there is a square, and it moves left and right' -- you have to say 'every <Frac>1/30</Frac>th of a second, draw these pixels shifted by some tiny bit to the right, until you get to the edge, then do the opposite'.
+
+So a lot of graphics code ended up looking like this:
+
+```javascript
+var second = 1000; // milliseconds
+
+function main() {
+    setInterval(renderFrame, second / 30) // 30fps
+}
+
+var offset = 0; // offset of the square
+function renderFrame() {
+    offset = offset + 1; // move a little bit
+
+    // move the rectangle back if it goes off
+    // the screen
+    if (offset > screen.width) {
+        offset = 0;
+    }
+
+    screen.clear(); // clear the screen
+    screen.draw.rectangle(0 + offset, 0, "red");
+}
+```
+
+This logic being so intertwined with frame drawing is why if you play virtually any old PC games like [Lego Island] you'll find they have some super weird glitches resulting from your computer simply drawing the game *too fast*, such that its framerate-tied logic starts going wrong:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2CmqbccCqI0?start=29" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[Lego Island]: https://en.wikipedia.org/wiki/Lego_Island
+
+This kind of expression really sucks for making complex interfaces, because instead of expressing your interface at the 'I want a box' level, you have to express it at the 'put these pixels here at this time' level, and people were kind of trying to work out how user interfaces should be expressed. Attempts like Tk said 'OK, what if we make a language especially for making UIs' and mostly failed, but attempts like GTK and the Windows 95 UI components largely succeeded.
+
+Ultimately, the annoyance of these ways of building applications is that it's somewhat constraining. Take a look at this code to do some stuff with buttons in Win95:
+
+```c++
+CheckDlgButton(hDlg, IDC_CO_DATE_TIME, showDateTime); 
+CheckDlgButton(hDlg, IDC_CO_FILE_NAME, showFileName); 
+CheckDlgButton(hDlg, IDC_CO_FILE_TYPE, showFileType); 
+CheckDlgButton(hDlg, IDC_CO_PALETTE, forcePalette); 
+CheckDlgButton(hDlg, IDC_CO_ORDER_RANDOM, shufflePlay); 
+CheckDlgButton(hDlg, IDC_CO_ORDER_ALPHA, !shufflePlay);
+CheckDlgButton(hDlg, IDC_CO_POS_RANDOM, randomPosition); 
+CheckDlgButton(hDlg, IDC_CO_POS_CENTRE, !randomPosition);
+SetDlgItemText(hDlg, IDC_CO_PATH, slidePath);
+```
+
+I mean, it's great and all that you can make a button, but these same primitives don't extend to, say, drawing a picture of a man or something, God knows -- I'm running out of sane examples here. That's why everything in Windows for such a long time looked so *samey*. But video games, -- and here I finally get to my point -- were cut from a different cloth; they're descended from an ancestor, pre-dating UI controls and as such, there's been a time, a long one where video game UIs just looked significantly *cooler* than all the rest of your computer that I think is now starting to end.
+
+I don't have a picture of this because I hate embedding images, but take a look at Discord sometime. It would have been essentially impossible to make such a thing at any other time in history with the budget and scale discord has. In contrast:
+
+import Aoe2Img from './aoe2.jpg';
+
+<img src={Aoe2Img} alt="Screenshot of Age of Empires 2 (1999)"/>
+
+Look at this shit. In 1999 when you launch age of empires you're going to be fucking blown away, no doubt about it. None of the stuff you're looking at even *remotely* resembles the grey, fixed UI controls you're familiar with.
+
+The advent of the web did something rather fascinating and interesting, which underlies one of the main reasons that so many UIs are 'just the web' these days. The web *started out* as a bunch of `<title>Title Of My Page</title>` components and then became *more powerful* over time to the point of being able to express the kind of things we were used to from powerful, fully-featured graphics languages like Tk and, eventually languages specialised for graphics processors like [GLSL].
+
+[GLSL]: https://en.wikipedia.org/wiki/OpenGL_Shading_Language
+
+I think a lot of the real stuff that makes programming better or easier is this kind of thing. On one end, you have a really super generalised expression of an idea where you can kind of do anything, and on the other end you have a system where all you can say is one particular kind of thing, like 'make this thing', 'then make this thing'. And far on the former of that, everything is possible, but many things are hard to describe, and on the other end of that, very few things are possible, but they're very easy to describe. Somewhere in the complex inbetween are virtually all the tools we use to be productive.
+
+We exist in an amazing time now where the web has pushed standards to the point where I no longer have to push pixels to the screen representing just English letters and pray -- I can easily write some text in an arbitrary font, arbitrary, size, colour, kerning, rotation, whatever I want and it's still going to work with screen readers for the blind, braille for the deaf, translation systems for those speaking other languages, going to be able to scale and resize to many potential screen sizes and be understood by most devices.
+
+Graphs have sort of lagged behind in a lot of ways, in part, I think because the low-level aspects of drawing one are so simple and intuitive, but the deeper parts are so complex. Every programmer knows they can just throw a bunch of data at a canvas via <MathSymbol>x</MathSymbol> and <MathSymbol>y</MathSymbol> coordinates, and every spreadsheet user knows they can click a button to get a scattergraph. But what about if you want a line of best fit? What if you're plotting that data on a map of the United States? What if you want dots that get redder or bluer depending on their value?
+
+The Language of Data Graphics: d3
+---------------------------------
+
+If you look at the source code for say, Google sheets, it's going to be expressed in terms of that kind of imperitive, low-level logic that video games were described in in comparison to Windows 95. The code's going to say 'here's how you take some points and draw this particular kind of pie chart', with a bunch of extra parameters for colours and stuff.
+
+But d3 breaks that question down. Instead of marching through the data to make a particular *kind* of diagram, d3 is a whole toolkit for expressing ideas about how data *become* their representation. This idea is extremely powerful.
+
+Let's take some data. Here I have some points which we want to graph.
+
+```typescript
+export const d3Ex = () => {
+    const points = [
+        [0,1], [1,1], [2,1]
+    ]
+}
+```
+
+Now, with d3, instead of saying 'make a scatter graph of these points', we instead try to express how the data points relate to the presentation of the data. This is going to look just a little odd because I'm making a react component.
+
+import * as d3Select from 'd3-selection';
+import * as d3Scale from 'd3-scale';
+
+export const d3 = {...d3Select, ...d3Scale};
+
+The way we import d3 here is a bit odd, but something you'll realise later is that this reflects how d3 works: it's not a framework, or really a library; it's a collection of high-level ideas about data that we can use in our project. Here we use the concept of ['scales'][d3-scale] (like scales on a graph) and ['selections'][d3-selection] (like selections of components in a page).
+
+[d3-selection]: https://www.npmjs.com/package/d3-selection
+[d3-scale]: https://www.npmjs.com/package/d3-scale
+
+```jsx
+import * as d3Select from 'd3-selection';
+import * as d3Scale from 'd3-scale';
+
+const d3 = {...d3Select, ...d3Scale};
+
+const d3Ex = () => {
+    // get a handle on the <div/> we're
+    // adding
+    const ref = React.useRef();
+    const points = [
+        [0,1], [1,1], [2,1]
+    ];
+
+    return <svg ref={ref}/>
+}
+```
+
+Here I also put the scaffolding in to control the `<ref>` element with React. Hope that doesn't confuse too much.
+
+```jsx
+import * as d3Select from 'd3-selection';
+import * as d3Scale from 'd3-scale';
+
+const d3 = {...d3Select, ...d3Scale};
+
+const d3Ex = () => {
+    // get a handle on the <ref/> we're
+    // adding
+    const ref = React.useRef();
+    const points = [
+        [0, 0], [0, 10], [10, 10], [10, 0], [5, 5]
+    ];
+
+    // this happens when we draw the component.
+    // this needs to be in a useEffect() because
+    // d3 is operating here on elements which
+    // won't exist until a draw attempt is made
+    React.useEffect(() => {
+        d3.select(ref.current)
+            .selectAll("circle")
+            .data(points);
+    }, []);
+
+    return <svg ref={ref}/>
+}
+```
+
+This code is basically broken at this point, but it's a good time to explain how d3 thinks about data, or more particularly, how `d3-select` thinks about data. Here, we select all `<circle/>`s inside our `<svg/>` graphic element. Of course, at the start there are none! Then, we let d3 know what our data is. At this juncture, d3 will then take every data point we've given it, for example `[0, 1]`, and ask itself if there's already a `<circle/>` (the literal representatin of a circle in our page) already there corresponding to it. This is called a join. In english, I might say: "Every point corresponds to a circle".
+
+```jsx
+const d3Ex = () => {
+    const ref = React.useRef();
+    const points = [
+        [0, 0], [0, 10], [10, 10], [10, 0], [5, 5]
+    ];
+
+    React.useEffect(() => {
+        const selection = d3.select(ref.current)
+            .selectAll("circle")
+            .data(points);
+
+        selection.enter()
+            .append("circle")
+            .attr("cx", point => point[0])
+            .attr("cy", point => point[1])
+            .attr("r", () => 1)
+
+    }, []);
+
+    return <svg ref={ref}/>
+}
+```
+
+Now we're cooking with gasoline! We describe how to make the data into elements. We've already said that every point (`[0, 1]`) corresponds to a single `<circle/>`. Now we define `enter()`, which is simply the answer to the question 'What do we do when there's no `<circle/>` that corresponds to our point?'.
+
+The answer to this question is we add (`append()`) a circle, and we set two dynamic `attr`(-ibutes) of the circle, its `x` and `y`. These correspond directly to the `0`th and `1`st elements of each point. -- And then one static attribute, `r`, the radius of each circle.
+
+Note, by the way that `point` here is just a totally arbitrary name, and it just represents an individual data point. Here's what we get:
+
+export const D3Ex1 = () => {
+    const ref = React.useRef();
+    const points = [
+        [0, 0], [0, 10], [10, 10], [10, 0], [5, 5]
+    ]
+    ;
+    React.useEffect(() => {
+        const selection = d3.select(ref.current)
+            .selectAll("circle")
+            .data(points);
+        ;
+        selection.enter()
+            .append("circle")
+            .attr("cx", point => point[0])
+            .attr("cy", point => point[1])
+            .attr("r", () => "1")
+        ;
+    }, []);
+    ;
+    return <svg ref={ref}/>
+}
+
+<D3Ex1/>
+
+You may notice we have a weird looking blob in a corner. This is not because d3 has been unfaithful in drawing our points, but because we've not set the size of the graphical space we're drawing to, let's quickly correct that:
+
+```jsx
+const d3Ex = () => {
+    const ref = React.useRef();
+    const points = [
+        [0, 0], [0, 10], [10, 10], [10, 0], [5, 5]
+    ];
+
+    // some little space around our graph :)
+    const width = Math.max(
+        points.map(([x, y]) => x));
+
+    const height = Math.max(
+        points.map(([x, y]) => y));
+
+    React.useEffect(() => {
+        const selection = d3.select(ref.current)
+            .selectAll("circle")
+            .data(points);
+
+        selection.enter()
+            .append("circle")
+            .attr("cx", point => point[0])
+            .attr("cy", point => point[1])
+            .attr("r", () => 1)
+
+    }, []);
+
+    return <svg ref={ref} width={width} height={height} />
+}
+```
+
+export const D3Ex2 = () => {
+    const ref = React.useRef();
+    const circleRadius = 1;
+    ;
+    const points = [
+        [0, 0], [0, 10], [10, 10], [10, 0], [5, 5]
+    ];
+    ;
+    // some little space around our graph :)
+    const width = Math.max(
+        ...points.map(([x, y]) => x));
+    ;
+    const height = Math.max(
+        ...points.map(([x, y]) => y));
+    ;
+    React.useEffect(() => {
+        const selection = d3.select(ref.current)
+            .selectAll("circle")
+            .data(points);
+    ;
+        selection.enter()
+            .append("circle")
+            .attr("cx", point => point[0])
+            .attr("cy", point => point[1])
+            .attr("r", () => circleRadius)
+    ;
+    }, []);
+    ;
+    return <svg ref={ref} viewBox={`0 0 ${width} ${height}`}/>
+}
+
+<D3Ex2/>
+
+I've gone ahead and added some code to find what our biggest <MathSymbol>x</MathSymbol> and <MathSymbol>y</MathSymbol> point is and set those as the box we're drawing inside. You might notice we have a die face now, but the edge circles are kind of weird. That's because `cx` and `cy` stand for 'center x' and 'center y' respectively, so the center of the circles on the edge is exactly on the edges of the picture. Well, whatever, you get the idea.
+
+Fluid, Responsive Graphs with d3
+--------------------------------
+
+The problem with d3 graphs is that typically, they do not follow the canon of component based encapsulation that so captivates UI development at the moment, in the sense that d3 graphs mostly have to be aware of the dimensions they're rendered at. Pay it no mind. I have an idea. Let's begin with a crack at a graph of all the stuff on the timeline of this website.
+
+import { Bio } from '@zemn.me/bio';
+
+```typescript
+import { Bio } from '@zemn.me/bio';
+```
+
+

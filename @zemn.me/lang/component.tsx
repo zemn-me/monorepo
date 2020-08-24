@@ -1,12 +1,13 @@
 import * as lang from '.';
+import * as i8n from '@zemn.me/linear/i8n';
 import React from 'react';
 
-interface IntoProp {
+export interface IntoProp {
     into?:
     React.ReactElement<{ lang?: string, children?: React.ReactChild }>
 }
 
-interface TextProps extends IntoProp {
+export interface TextProps extends IntoProp {
     children: lang.Text,
     lang?: lang.Lang,
 
@@ -19,7 +20,10 @@ interface TextProps extends IntoProp {
 export const Text:
     (props: TextProps) => React.ReactElement
     =
-    ({ children, lang: _lang, into }) => {
+    ({ children, lang: __lang, into }) => {
+        const ctxLang = React.useContext(i8n.locale);
+        const _lang = __lang ?? ctxLang;
+
         if (lang.textIsTaggedText(children)) return <Tagged {...{
             lang: children[0], children: children[1], into
         }} />
@@ -48,7 +52,7 @@ interface TaggedTextContext {
     lang: string
 }
 
-const TaggedTextContext = React.createContext<TaggedTextContext | undefined>(undefined);
+export const TaggedTextContext = React.createContext<TaggedTextContext | undefined>(undefined);
 
 
 export const Tagged:
@@ -57,13 +61,20 @@ export const Tagged:
     ({ lang, children, into = <span /> }) => {
         const ctx = React.useContext(TaggedTextContext);
 
-        let child = React.cloneElement(
-            into, { ...into.props, lang, children });
 
+
+        const dissimilar = lang !== ctx?.lang;
+
+        console.log(lang, ctx?.lang, dissimilar);
+
+        let child = React.cloneElement(
+            into, { ...into.props,
+                ...dissimilar?{lang}:{},
+                children });
 
         // if we already have a contextual lang, and it's this
         // one, there's nothing special to do.
-        if (lang == ctx?.lang) return child;
+        if (dissimilar) return child;
 
         // otherwise, we need to assign a lang to ourselves
         // and our children

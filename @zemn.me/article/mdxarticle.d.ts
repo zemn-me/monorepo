@@ -4,4 +4,5 @@ export const medium: URL | undefined;
 export const date: Date | undefined;
 export const inShort: string | undefined;
 export const title: string | undefined;
+export const hidden: boolean | undefined;
 export default React.Component

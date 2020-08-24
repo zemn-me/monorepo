@@ -30,16 +30,22 @@
   @at-root
     .frac
       font-variant-numeric: diagonal-fractions
-    img
+
+    .math
+      font-style: italic
+
+
+    article
       +linear
-        max-width: 90%
-        margin: auto
-        display: block
-    
+        img, iframe, svg
+          max-width: 90%
+          margin: 2rem auto
+          display: block
+
     pre, code
       +linear
         white-space: break-spaces
-        font-size: 80%
+        font-size: 90%
 
     article
       +linear

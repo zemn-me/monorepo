@@ -1,10 +1,10 @@
 import { Bio, Event as BioEvent } from '@zemn.me/bio';
 import { Span, Div, A, Time, classes } from '@zemn.me/linear';
-import { Text } from '@zemn.me/lang/component';
-import * as lang from '@zemn.me/lang';
 import * as simpletime from '@zemn.me/simpletime';
 import React from 'react';
 import style from './style.module.css';
+import * as i8n from '@zemn.me/linear/i8n';
+import { Text } from '@zemn.me/linear/i8n';
 
 
 const setFallback:
@@ -59,6 +59,7 @@ export const makeYears:
                 year,
                 months: [...months].map(([month, events]) => ({
                     month,
+                    year,
                     events: events.sort(({ date: a }, { date: b }) => +b - +a)
                 })).sort(({ month: a }, { month: b }) => a - b)
             })).sort(({ year: a }, { year: b }) => b - a);
@@ -70,7 +71,7 @@ export const makeYears:
 
 export interface TimelineProps {
     readonly years: readonly Year[]
-    readonly lang: lang.Lang,
+    readonly lang: i8n.Lang,
     className?: string
 }
 
@@ -85,7 +86,7 @@ export const Timeline:
     ;
 
 export interface YearProps extends Year {
-    readonly lang: lang.Lang
+    readonly lang: i8n.Lang
 }
 
 export const Year:
@@ -156,53 +157,76 @@ const romanize:
     ;
 
 
-const YearDisplay: React.FC<{ year: Date }> = ({ year: date }) => {
-    const year = date.getFullYear();
-    const age = year - 1994;
+const YearDisplay:
+    React.FC<{ year: Date }>
+=
+    ({ year: date }) => {
+        const year = date.getFullYear();
+        const age = year - 1994;
 
-    return <Time className={style.yearDisplay}
+        return <Time className={style.yearDisplay}
             dateTime={new Date(new Date(0).setFullYear(year))}>
             <Div className={style.yearDisplayRoman}>
                 {romanize(year)}
             </Div>
-            <Div className={style.yearDisplayYear}>{year}</Div>
+            <i8n.Date {...{
+                date: date,
+                into: <Div className={style.yearDisplayYear}/>,
+                year: "numeric"
+            }}/>
             <Div className={style.yearDisplayAge}>{romanize(age)}</Div>
         </Time>
 
-}
+    }
+;
 
 export interface Month {
     readonly month: simpletime.Month
+    readonly year: number
     readonly events: readonly BioEvent[]
 }
 
 export interface MonthProps extends Month {
-    readonly lang: lang.Lang
+    readonly lang: i8n.Lang
 }
 
 export const Month:
     (props: MonthProps) => React.ReactElement
     =
-    ({ month, events, lang }) => <Div {...{
+    ({ month, events, lang, year }) => <Div {...{
         className: style.Month }}>
 
-        <MonthIndicator month={month}/>
+        <MonthIndicator month={month} year={year}/>
         {events.map((event, i) =>
             <Event lang={lang} key={i} {...event} />
         )}
     </Div>
     ;
 
-export const MonthIndicator: React.FC<{ month: simpletime.Month }> =
-    ({ month }) => <Div className={style.monthIndicator}
-        aria-label={simpletime.fullMonth[month]}>
-        <span aria-hidden>{simpletime.Month[month]}</span>
-    </Div>
+export const MonthIndicator:
+    React.FC<{ year: number, month: simpletime.Month }>
+=
+    ({ month, year }) => {
+        const [l] = React.useContext(i8n.locale);
+        const d = new Date(0);
+        d.setFullYear(year);
+        d.setMonth(month);
+        const longMonth = d.toLocaleDateString(l, {
+            month: "long"
+        });
 
+        return <i8n.Date {...{
+            date: d,
+            into: <Time
+                className={style.MonthIndicator}
+                aria-label={longMonth} dateTime={d}/>,
+            month: "short"
+        }}/>
+    }
 ;
 
 export interface EventProps extends BioEvent {
-    lang: lang.Lang
+    lang: i8n.Lang
 }
 
 export const Event:

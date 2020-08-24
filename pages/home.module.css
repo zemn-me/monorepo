@@ -5,10 +5,12 @@
     grid: "h h h" 100vh
         ". . ." 3rem
         "v v v" var(--navbar-height)
-        ". . ." 1rem
         ". n ." auto
+        ". . ." 1rem
+        ". l ." auto
         ". . ." 3rem
-        "t t t" 1fr / 1fr 1fr 1fr;
+        "t t t" 1fr
+        ". . ." 10rem / 1fr fit-content(80%) 1fr;
     
 }
 
@@ -23,6 +25,17 @@
     top: 0;
     background: var(--bgc);
 }
+
+.links {
+    grid-area: l;
+    display: flex;
+    justify-content: space-around;
+}
+
+.links > * {
+    margin: 0 .5em;
+}
+
 
 .eyeContainer {
     grid-area: e;

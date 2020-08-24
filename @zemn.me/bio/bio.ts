@@ -3,6 +3,7 @@ import { Text, tag } from '@zemn.me/lang';
 
 const en = tag('en-GB');
 const nl = tag('nl');
+
 const date = (...params: SimpleDate) =>
     Parse(params);
 
@@ -102,6 +103,12 @@ export const Bio: Bio = {
     ],
     "timeline": [
         {
+            date: date(11, 'apr', 2020),
+            title: en`do-sync`,
+            description: en`Async to sync library for encapsulated javascript macros`,
+            url: url`https://github.com/Zemnmez/do-sync`
+        },
+        {
             date: date(23, 'jul', 2020),
             title: en`Senior Information Security Enginer, Google ISE hardening`
         },
@@ -115,7 +122,7 @@ export const Bio: Bio = {
             url: url`https://github.com/Zemnmez/react-oauth2-hook`,
             description: en`An entirely clientside implementation of an oauth2 implicit client, with React hooks`
         },
-        {
+        { 
             date: date(25, 'feb', 2020),
             title: en`SVGShot`,
             url: url`https://github.com/Zemnmez/svgshot`,
@@ -143,21 +150,21 @@ export const Bio: Bio = {
         {
             date: date(1, 'feb', 2020),
             title: en`HackFortress Shmoocon 2020 Champions`,
-            tags: [en`accolade`, en`security`, en`gaming`],
+            tags: [accolade, security, gaming],
             description: en`defended title for hybrid gaming ctf`
         },
         {
             date: date(17, 'may', 2019),
             title: en`Full Steam Ahead: Remotely Executing Code in Modern Desktop Applications`,
             description: en`technical talk at offensive AppSec conference Infiltrate summarising through example research into hybrid web / desktop application security`,
-            tags: [en`talk`, en`security`, en`gaming`],
+            tags: [en`talk`, security, gaming],
             url: url`https://vimeo.com/335206831`
         },
         {
             date: date(11, 'jul', 2019),
             title: en`National Cyber Security Centre 'Turing' challenge coin`,
             priority: 5,
-            tags: [en`accolade`, en`security`],
+            tags: [accolade, security],
             url: url`https://twitter.com/zemnmez/status/1149278890969456640`,
             description: en`award for my work on UK government vulnerability disclosure policy and my responsible disclosure of vulnerabilities in the UK tax system.`
         },
@@ -524,7 +531,10 @@ export const Bio: Bio = {
                 software,
                 comment
             ],
-            title: nl`MozFest: Rewired State geeft jonge programmeurs een kans`,
+            title: [
+                nl`MozFest: Rewired State geeft jonge programmeurs een kans`,
+                en`MozFest: Rewired State gives young programmers a chance`
+            ],
             url: url`http://www.denieuwereporter.nl/2011/11/mozfest-rewired-state-geeft-jonge-programmeurs-een-kans/`
         },
         {

@@ -12,7 +12,10 @@ export const years = {
             readonly title?: string,
             readonly medium?: URL,
             readonly Component: React.Component | any,
-            readonly date?: Date
+            readonly date?: Date,
+            readonly inShort?: string,
+            readonly tags?: string[],
+            readonly hidden?: boolean
         }
     }
 }

@@ -36,9 +36,13 @@
     display: none
 }
 
-
 .Event {
     margin: 0 0 1rem 1.3em
+}
+
+.MonthIndicator {
+    color: gray;
+    text-transform: lowercase;
 }
 
 .Event a:link {
