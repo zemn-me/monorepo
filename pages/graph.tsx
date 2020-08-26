@@ -27,42 +27,21 @@ enum ScaleKind {
     TIME
 }
 
-interface ScalePipPropsContinuous extends PropsOf<'line'> {
-    readonly d3Scale: scale.ScaleContinuousNumeric<readonly [0, 100], number>
-    readonly label: readonly [{ valueOf(): number }, i8n.Text]
-    readonly axisLabels: AxisLabels
-    readonly pipLength?: number
-    readonly scaleKind: ScaleKind.CONTINUOUS
-}
 
-interface ScalePipPropsBand<T extends { toString(): string }> extends PropsOf<'line'> {
-    readonly d3Scale: scale.ScaleBand<T>
-    readonly label: readonly [T, i8n.Text]
-    readonly axisLabels: AxisLabels
-    readonly pipLength?: number
-    readonly scaleKind: ScaleKind.BAND
-}
-
-type ScalePipProps<T extends { toString(): string }> = ScalePipPropsBand<T> | ScalePipPropsContinuous
-
-const getPipMeta = <T extends { toString(): string }>(props: ScalePipProps<T>) => {
-    if (props.scaleKind == ScaleKind.BAND) {
-        return {
-            key: props.label[0].toString(),
-            yPos: props.d3Scale(props.label[0])! + (props.d3Scale.bandwidth() / 2)
-        } as const;
-    }
-
-    return {
-        key: props.label[0].valueOf().toString(),
-        yPos: props.d3Scale(props.label[0])
-    }
+interface ScalePip {
+    pipLength?: number
+    label?: i8n.Text
+    className?: string
+    orientation: Orientation
+    t: number
 }
 
 const ScalePip:
     <T extends { toString(): string }>(props: ScalePipProps<T>) => React.ReactElement<React.Attributes>
 =
     p => {
+    
+
 
     const { axisLabels: [ x, y, x1, y1, x2, y2 ], pipLength = 5, label: [, text] } = p;
     const { key, yPos } = getPipMeta(p);

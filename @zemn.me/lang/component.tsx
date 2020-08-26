@@ -8,7 +8,7 @@ export interface IntoProp {
 }
 
 export interface TextProps extends IntoProp {
-    children: lang.Text,
+    children?: lang.Text,
     lang?: lang.Lang,
 
 }
@@ -18,11 +18,12 @@ export interface TextProps extends IntoProp {
  * to a concrete value.
  */
 export const Text:
-    (props: TextProps) => React.ReactElement
+    (props: TextProps) => React.ReactElement | null
     =
     ({ children, lang: __lang, into }) => {
         const ctxLang = React.useContext(i8n.locale);
         const _lang = __lang ?? ctxLang;
+        if (!children) return null;
 
         if (lang.textIsTaggedText(children)) return <Tagged {...{
             lang: children[0], children: children[1], into
