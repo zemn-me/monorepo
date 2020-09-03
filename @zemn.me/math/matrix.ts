@@ -41,16 +41,16 @@ export const col:
 export const mul:
     <I1 extends number, J1 extends number,
     I2 extends number, J2 extends number>(m1: Matrix<I1, J1>, m2: Matrix<I2, J2>) =>
-        Matrix<I1, J2>
+        Matrix<I2, J1>
 =
     <I1 extends number, J1 extends number, I2 extends number, J2 extends number>(
         m1: Matrix<I1, J1>,
         m2: Matrix<I2, J2>) => {
-        const [i1, ] = size(m1);
-        const [, j2] = size(m2);
+        const [i1, j1 ] = size(m1);
+        const [i2, j2] = size(m2);
 
-        return vec.map(vec.New<J2>(j2), (_, i) =>
-            vec.map(vec.New<I1>(i1), (_, j) => vec.dot(row(m1, i), col(m2, j))));
+        return vec.map(vec.New<J1>(j1), (_, i) =>
+            vec.map(vec.New<I2>(i2), (_, j) => vec.dot(row(m1, i), col(m2, j))));
     }
 ;
 

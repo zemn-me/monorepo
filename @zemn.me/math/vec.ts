@@ -6,6 +6,7 @@ export interface Vector<I extends number = number, T = number> extends ReadonlyA
     length: I
 }
 
+
 type mapFn<I extends number, T> = <U>(callbackFn: (value: T, index: number, array: Vector<I, T>) => U, thisArg?: any) =>
         Vector<I, U>;
 

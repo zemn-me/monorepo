@@ -2,6 +2,7 @@ import * as matrix from './matrix';
 import * as vec from './vec';
 
 test.each([
+
     [
         matrix.as<3, 2>([
             [1,2,3],
@@ -27,6 +28,7 @@ test.each([
             [3]
         ] as const)
     ]
+
 ] as const)("matrix.transpose(%p) => %p", (a, b) => {
     expect(matrix.transpose(a)).toEqual(b)
 })
@@ -81,8 +83,9 @@ test.each([
         ] as const)
     ],
     [
-        matrix.as<1,1>([
-            [1]
+        matrix.as<2,2>([
+            [1, 0],
+            [0, 1]
         ]as const),
 
         matrix.as<2, 2>([

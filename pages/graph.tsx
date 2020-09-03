@@ -13,7 +13,6 @@ enum Orientation {
     HORIZONTAL, VERTICAL
 }
 
-
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
 const regularAxisLabels = [ "x", "y", "x1", "y1", "x2", "y2" ] as const;
@@ -27,8 +26,7 @@ enum ScaleKind {
     TIME
 }
 
-
-interface ScalePip {
+interface ScalePipProps {
     pipLength?: number
     label?: i8n.Text
     className?: string
@@ -37,39 +35,25 @@ interface ScalePip {
 }
 
 const ScalePip:
-    <T extends { toString(): string }>(props: ScalePipProps<T>) => React.ReactElement<React.Attributes>
+    (props: ScalePipProps) => React.ReactElement
 =
-    p => {
-    
-
-
-    const { axisLabels: [ x, y, x1, y1, x2, y2 ], pipLength = 5, label: [, text] } = p;
-    const { key, yPos } = getPipMeta(p);
-
-    return <React.Fragment key={key}>
-        {/* the actual label */}
+    ({ pipLength = 5, label, className, orientation, t }) => <>
         <i8n.Text {...{
             into: <text {...{
-                [x]: "0%",
-                [y]: `${yPos}%`,
-                // this might not work...
-                textLength: `${100-pipLength}%`,
+                ...orientation == Orientation.HORIZONTAL?
+                { x: `${t + pipLength}%`, y: `0` }:
+                { y: `${t + pipLength}%`, x: `0` }
             }}/>,
-            children: text,
+            children: label
         }}/>
 
-        {/* the little 'pip' marker */}
         <line {...{
-            // where it attaches to the main line
-            [x1]: "100%",
-            [y1]: `${yPos}%`,
-            [y2]: `${yPos}%`,
-            [x2]: `${100-pipLength}%`
+
         }}/>
-    
-    </React.Fragment>
-    }
+    </>
 ;
+
+
 
 
 interface ScaleContinuousProps extends PropsOf<'svg'> {
