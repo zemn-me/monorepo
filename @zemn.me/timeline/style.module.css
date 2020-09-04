@@ -27,7 +27,7 @@
 
 .yearDisplayAge, .yearDisplayRoman {
     font-size: small;
-    color: grey;
+    color: var(--mgc);
     margin: auto
 }
 
@@ -41,13 +41,13 @@
 }
 
 .MonthIndicator {
-    color: gray;
+    color: var(--mgc);
     text-transform: lowercase;
 }
 
 .Event a:link {
     text-decoration: none;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--fgc);
 }
 
 
@@ -67,6 +67,6 @@
     grid-area: line;
     height: 100%;
     display: block;
-    border-left: 1px dotted black;
+    border-left: 1px dotted var(--fgc);
     margin: auto;
 }

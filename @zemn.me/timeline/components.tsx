@@ -100,7 +100,8 @@ export const Year:
             <StretchIndicatorArea>
                 <article>
                     <YearDisplay
-                        year={new Date(new Date(0).setFullYear(year))}/>
+                        year={new Date(new Date(0).setFullYear(year))}
+                        n={months.length}/>
 
                     {months.map((month) =>
                         <Month lang={lang} key={month.month} {...month} />
@@ -157,17 +158,26 @@ const romanize:
     ;
 
 
+const s = (n: number) => {
+    if (n > 7) return "✵";
+    if (n > 5) return "✴";
+    if (n > 3) return "✳";
+    if (n > 2) return "✲";
+}
+
 const YearDisplay:
-    React.FC<{ year: Date }>
+    React.FC<{ year: Date, n: number }>
 =
-    ({ year: date }) => {
+    ({ year: date, n }) => {
         const year = date.getFullYear();
         const age = year - 1994;
 
         return <Time className={style.yearDisplay}
             dateTime={new Date(new Date(0).setFullYear(year))}>
             <Div className={style.yearDisplayRoman}>
-                {romanize(year)}
+                {
+                    s(n)
+                }
             </Div>
             <i8n.Date {...{
                 date: date,

@@ -20,3 +20,4 @@ export const years = {
     }
 }
 
+export default years;

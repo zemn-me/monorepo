@@ -110,7 +110,7 @@ export const Bio: Bio = {
         },
         {
             date: date(23, 'jul', 2020),
-            title: en`Senior Information Security Enginer, Google ISE hardening`
+            title: en`Senior Information Security Engineer, Google ISE hardening`
         },
         {
             date: date(9, 'aug', 2020),

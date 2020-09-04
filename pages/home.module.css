@@ -1,6 +1,6 @@
 .home {
     --navbar-height: 8vh;
-    --bgc: white;
+    --bgc: var(--bgc);
     display: grid;
     grid: "h h h" 100vh
         ". . ." 3rem
@@ -63,15 +63,16 @@
 
 .header > video {
     grid-area: all;
-    z-index: -1;
+    z-index: 1;
 }
 
 .title {
+    z-index: 2;
     grid-area: all;
     padding: .2em;
     margin: auto;
-    font-size:  5vh;
-    background-color: white;
+    font-size:  3rem;
+    background-color: var(--bgc);
 }
 
 .name {

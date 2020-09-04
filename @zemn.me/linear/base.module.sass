@@ -11,16 +11,44 @@
     justify-content: space-around
     
 .linear
-  --eigengrau: #16161D
-  --fgc: black
-  --lightish: rgba(0,0,0,.6)
-  --bgc: white
   font-family: 'EB Garamond', serif
   font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
-  color: var(--fgc)
   overflow-wrap: break-word
   text-decoration-skip-ink: auto
-    
+
+  // colours!!
+  // dark mode
+  --dark-sand: #887f75
+  --eigensand: #181719
+  --med-sand: #bfb6a9
+  // light mode
+  --white: white
+  --black: black
+  --grey: grey
+  --greylike: #b7b7b7
+  --lightish: rgba(0,0,0,.6)
+
+
+  // colour schemes
+  @media (prefers-color-scheme: dark)
+    --fgc: var(--med-sand) 
+    --mgc: var(--dark-sand)
+    --bgc: var(--eigensand)
+    --fgc-o: var(--bgc)
+    --mgc-o: var(--bgc)
+    --bgc-o: var(--fgc)
+
+  @media (not (prefers-color-scheme: light))
+    --fgc: var(--black)
+    --bgc: var(--white)
+    --mgc: var(--grey)
+    --fgc-o: var(--bgc)
+    --mgc-o: var(--bgc)
+    --bgc-o: var(--fgc)
+
+
+  color: var(--fgc)
+
   $this: &
   
   =linear
@@ -34,6 +62,9 @@
     .math
       font-style: italic
 
+    main
+      +linear
+        background: var(--bgc)
 
     article
       +linear
@@ -49,17 +80,29 @@
 
     article
       +linear
+        counter-reset: h1 0 h2 0 h3 0 h4 0 h5 0 h6 0
         margin: auto
         padding: 0 2em
         max-width: 45rem
         h1
           padding-bottom: 1rem
-          border-bottom: 1px solid black
+          border-bottom: 1px solid var(--fgc)
+          counter-increment: h1
+        h2
+          counter-increment: h2
+        h3
+          counter-increment: h3
+        h4
+          counter-increment: h4
+        h2
+          margin: 4rem 0 1rem 0
+          &::before
+            content: counter(h2) ". "
+        h3
+          &::before
+            content: counter(h2) counter(h3, lower-latin) ". "
 
-    .darkmode
-      +linear
-        --bgc: whitesmoke
-        
+
     p
       +linear
         &::first-letter
@@ -78,6 +121,7 @@
     h2
       +linear
         font-size: 180%
+        display: inline-block
 
         
     a
@@ -88,7 +132,7 @@
       &:link
         +linear
           text-decoration: none
-          border-bottom: 1px solid black
+          border-bottom: 1px solid var(--fgc)
 
 
     input
@@ -119,3 +163,5 @@
       &::before
         +linear
           content: "⁂"
+
+

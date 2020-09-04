@@ -1,5 +1,6 @@
 import { Vector } from './vec';
 import * as vec from './vec';
+import { I } from 'ts-toolbelt';
 
 export interface Matrix<I extends number = number, J extends number = number, T = number> extends Vector<J, Vector<I, T>> {
 
@@ -28,6 +29,11 @@ export const row:
     }
 ;
 
+export const rows:
+    <I extends number, J extends number, T>(v: Matrix<I, J, T>, r: number) => Iterable<Vector<I, T>>
+=
+    v => v
+;
 
 export const col:
     <I extends number, J extends number, T>(v: Matrix<I, J, T>, i: number) => Iterable<T>
@@ -41,7 +47,7 @@ export const col:
 export const mul:
     <I1 extends number, J1 extends number,
     I2 extends number, J2 extends number>(m1: Matrix<I1, J1>, m2: Matrix<I2, J2>) =>
-        Matrix<I2, J1>
+        Multiply<Matrix<I1, J1>, Matrix<I2, J2>>
 =
     <I1 extends number, J1 extends number, I2 extends number, J2 extends number>(
         m1: Matrix<I1, J1>,
@@ -53,6 +59,35 @@ export const mul:
             vec.map(vec.New<I2>(i2), (_, j) => vec.dot(row(m1, i), col(m2, j))));
     }
 ;
+
+
+/**
+ * `Multiply` gives the type of the matrix made by multiplying 2 given matricies.
+ */
+export type Multiply<
+    A extends Matrix<number, number, unknown>, B extends Matrix<number, number, unknown>, O = number
+    >
+    
+    =
+        [ A, B ] extends [ Matrix<infer I1, infer J1, unknown>, Matrix<infer I2, infer J2, unknown> ]
+            ? Matrix<I2, J1, O>
+            : never;
+
+/**
+ * `TransformTo` gives the type of the matrix that can be used to transform an input matrix
+ * into an output matrix
+ */
+export type TransformTo<
+    In extends Matrix<number, number, unknown>, Out extends Matrix<number, number, unknown>, O = number
+>
+=
+    [ In, Out ] extends [ Matrix<infer I1, infer J1, unknown>, Matrix<infer I2, infer J2, unknown> ]
+    ? J2 extends J1
+        ?  Matrix<I2, any>
+        : never // it isn't possible for these to be different
+    : never
+;
+
 
 export const size:
     <I extends number, J extends number>(m: Matrix<I, J, any>) =>

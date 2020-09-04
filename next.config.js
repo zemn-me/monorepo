@@ -21,8 +21,7 @@ const base_config = {
     }),
     env: {
         origin: domain.origin,
-        protocol: domain.protocol,
-        jest: "???"
+        protocol: domain.protocol
     }
 };
 
