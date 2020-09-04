@@ -1,16 +1,9 @@
 
 .sadIcon {
-  --sad-white: var(--mgc, white);
-  --sad-black: var(--bgc, black);
+  --sad-white: var(--figure-fill, white);
+  --sad-black: var(--figure-stroke, black);
 
   fill:none;
-}
-
-@media (prefers-color-scheme: light) {
-  .sadIcon {
-  --sad-white: var(--bgc, white);
-  --sad-black: var(--fgc, black);
-  }
 }
 
 .sadIcon * { stroke: var(--sad-black) }

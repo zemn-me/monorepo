@@ -1,6 +1,5 @@
 .home {
     --navbar-height: 8vh;
-    --bgc: var(--bgc);
     display: grid;
     grid: "h h h" 100vh
         ". . ." 3rem
@@ -23,7 +22,6 @@
         ". e ." 1fr
         ". . ." var(--s)  / 1fr 30vw 1fr;
     top: 0;
-    background: var(--bgc);
 }
 
 .links {

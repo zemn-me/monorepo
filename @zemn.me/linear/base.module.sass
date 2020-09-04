@@ -16,12 +16,19 @@
   overflow-wrap: break-word
   text-decoration-skip-ink: auto
 
+  transition: all 1s ease-in-out
+  transition-property: color, fill, stroke, background-color, border-color
+
   // colours!!
   // dark mode
   --dark-sand: #887f75
   --eigensand: #181719
   --med-sand: #bfb6a9
   // light mode
+  --daylight: #fffff7
+  --arbor: #020202
+  --cover: #fffff7
+
   --white: white
   --black: black
   --grey: grey
@@ -37,14 +44,18 @@
     --fgc-o: var(--bgc)
     --mgc-o: var(--bgc)
     --bgc-o: var(--fgc)
+    --figure-fill: var(--mgc)
+    --figure-stroke: var(--mgc-o)
 
-  @media (not (prefers-color-scheme: light))
-    --fgc: var(--black)
-    --bgc: var(--white)
-    --mgc: var(--grey)
+  @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
+    --fgc: var(--arbor)
+    --bgc: var(--daylight)
+    --mgc: var(--cover)
     --fgc-o: var(--bgc)
     --mgc-o: var(--bgc)
     --bgc-o: var(--fgc)
+    --figure-fill: var(--bgc)
+    --figure-stroke: var(--bgc-o)
 
 
   color: var(--fgc)
