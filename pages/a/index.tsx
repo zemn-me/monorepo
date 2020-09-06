@@ -1,9 +1,4 @@
-import Eye from '@zemn.me/art/time';
-import * as i8n from '@zemn.me/linear/i8n';
-import Head from 'next/head';
-import { years } from '@zemn.me/article';
-import Error from 'pages/error/[code]'
-import { must } from '@zemn.me/linear/guard';
+import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
 import * as articles from '@zemn.me/article';
 import style from './s.module.sass';
 import * as indexer from '@zemn.me/linear/indexer'
@@ -11,7 +6,8 @@ import MDXProvider from '@zemn.me/linear/MDXProvider';
 import React from 'react';
 import { classes } from '@zemn.me/linear/classes';
 import { useRouter } from 'next/router';
-import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
+
+
 
 export interface IndexProps {
     className?: string
@@ -61,9 +57,9 @@ const IndexSectionHeader:
     (props: indexer.RegisterProps) => React.ReactElement
 =
     ({ title, anchor }) => {
-        const u = new URL(document.location!.toString());
-        u.hash = anchor;
-        return <A href={u}>{title}</A>
+        return <A href={new URL(
+            `#${anchor}`, 
+        )}>{title}</A>
     }
 ;
 
@@ -73,18 +69,7 @@ interface PostProps {
     date: React.ReactElement
     article: React.ReactElement
     author: React.ReactElement
-}
-
-const M: React.FC = ({ children }) => {
-    const index = React.useMemo(() => new indexer.Ctx, []);
-    
-    return <Main className={style.Main}>
-        <MDXProvider>
-            <indexer.context.Provider value={index}>
-                {children}
-            </indexer.context.Provider>
-        </MDXProvider>
-    </Main>
+    wordCount: React.ReactElement
 }
 
 const Post:
@@ -111,49 +96,27 @@ const Post:
     </M>
 ;
 
-
-
-
-export interface DatedProps {
-    date: Date
+const M: React.FC = ({ children }) => {
+    const index = React.useMemo(() => new indexer.Ctx, []);
+    
+    return <Main className={style.Main}>
+        <MDXProvider>
+            <indexer.context.Provider value={index}>
+                {children}
+            </indexer.context.Provider>
+        </MDXProvider>
+    </Main>
 }
 
-export const Dated:
-    (props: DatedProps) => React.ReactElement
-=
-    ({ date }) => <>
-        {date.getMonth()} {date.getFullYear()}
-    </>
-;
-
-const X = () => {
-    const { query: { year, name } } = useRouter();
-
-    if (year == undefined || year instanceof Array ||
-        name == undefined || name instanceof Array)
-        return <Error code="404"/>
 
 
-    const article = years?.[+year]?.[name];
+const E = () => <Post {...{
+    title: <>How To Hack iCloud</>,
+    subtitle: <>An exploration</>,
+    date: <>September 12<Ord>th</Ord> 2020</>,
+    article: <articles.y2020.icloud.Component/>,
+    author: <>Thomas Neil James Shadwell</>,
+    wordCount: <>5000</>
+}}/>
 
-    if (article == undefined) return <Error code="404"/>
-
-
-
-    return <>
-        <Head>
-            <title>{article.title}</title>
-        </Head>
-        <Post {...{
-            title: <>{article.title}</>,
-            subtitle: <>{article.inShort}</>,
-            date: <i8n.Date date={article.date!}/>,
-            article: <article.Component/>,
-            author: <>{"nobody"}</>,
-
-        }}/>
-    </>
-
-}
-
-export default X;
+export default E;

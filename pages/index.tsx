@@ -10,7 +10,6 @@ import * as i8n from '@zemn.me/linear/i8n';
 import { TaggedTextContext } from '@zemn.me/lang/component';
 import * as articles from '@zemn.me/article';
 
-// file://1
 
 let articleEvents = [];
 
@@ -21,13 +20,11 @@ for (const [year, ars] of Object.entries(articles.years)) {
             title: ["en-GB", article.title!],
             description: ["en-GB", article.inShort!],
             date: article.date!,
-            url: new URL(`https://zemn.me/${year}/${ident}`)
+            url: `article/${year}/${ident}` as any
 
         })
     }
 }
-
-console.log(articleEvents);
 
 const timeline = [
     ...Bio.timeline,

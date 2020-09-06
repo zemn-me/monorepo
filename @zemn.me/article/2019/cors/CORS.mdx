@@ -7,12 +7,13 @@ export const tags = ["security"];
 
 # If CORS is just a header, why don’t attackers just ignore it?
 
-Here’s a question from a co-worker I get quite often: > Considering that curl
-requests do not have the restriction of the fetch API, how does this browser
-policy [CORS] prevent circumventing abuse or misuse of server endpoints if an
-attacker can anyways do so by default via curl? And since a bad actor can use
-curl what’s the real world effectiveness of the browser policy in the first
-place?
+Here’s a question from a co-worker I get quite often:
+
+> Considering that curl requests do not have the restriction of the fetch API,
+how does this browser policy [CORS] prevent circumventing abuse or misuse of
+server endpoints if an attacker can anyways do so by default via curl?
+And since a bad actor can use curl what’s the real world effectiveness
+of the browser policy in the first place?
 
 While ‘Cross Origin Resource Sharing’ is a very important security tool for the
 modern web, it solves a problem that’s very specific to the security
@@ -77,7 +78,7 @@ session. CORS navigates allowing access to certain resources that have stated
 that they’re aware of what this might entail via Access-Control-Allow-Origin and
 preventing old applications using legacy behavior becoming insecure.
 
-### Why don’t we just let anything request anything else and block cookies?
+## Why don’t we just let anything request anything else and block cookies?
 
 ![[source](https://fazzeai.tumblr.com/post/178416661759)](https://cdn-images-1.medium.com/max/2560/1*ahbo8nFu5MSqTyfQttnEug.png)*[source](https://fazzeai.tumblr.com/post/178416661759)*
 
@@ -86,9 +87,9 @@ CORS requests and let anyone load anyone else? At that point, I’m not going to
 be able to get information about someone’s logged in account, right?
 
 This is not at all a bad idea. In fact, it’s actually part of CORS.
-Access-Control-Allow-Origin: * does exactly this: it allows any website to load
+`Access-Control-Allow-Origin: *` does exactly this: it allows any website to load
 your resource, but prevents cookies from being sent. It still has to be opted
-into, however. The world of Access-Control-Allow-Origin: * is arguably
+into, however. The world of `Access-Control-Allow-Origin: *` is arguably
 significantly more secure, because it eliminates the entire category of CSRF
 vulnerabilities nearly entirely.
 
@@ -99,8 +100,8 @@ that if you can make a connection to the service you are already in the network.
 The same goes for many web servers that software starts on your computer.
 
 This is an incorrect assumption because of CSRF — it’s still possible to tell
-the browser to load the resource via an HTML tag like `<img
-src=your.router/logout/>` and it’ll still execute and log the current user out
+the browser to load the resource via an HTML tag like `<img src=your.router/logout/>`
+and it’ll still execute and log the current user out
 but there’s no way to retrieve a response. If one could retrieve a response,
 it’d be significantly worse.
 
@@ -122,16 +123,16 @@ Origin header to determine if the request should be allowed, and return that
 same origin if it is.
 
 For the most part, CORS is completely static, and one can just send
-Access-Control-Allow-Origin: myorigin or Access-Control-Allow-Origin: * in
+`Access-Control-Allow-Origin: myorigin` or `Access-Control-Allow-Origin: *` in
 response to any request. In earlier drafts of Access-Control-Allow-Origin, this
 was more apparent as the header could include multiple origins at once, and
 Access-Control-Max-Age facilitates caching of a static CORS policy for a time.
 
-I don’t quite know why Access-Control-Allow-Origin now doesn’t allow a list of
+I don’t quite know why `Access-Control-Allow-Origin` now doesn’t allow a list of
 whitelisted origins. For a time, Firefox allowed this pattern. My guess is that
 early implementations of CORS allowed only one origin and that pattern stuck.
 Content Security Policy headers use this pattern for its killer feature
-allow-src and its successor to X-Frame-Options , the frame-ancestors directive
+allow-src and its successor to `X-Frame-Options`, the `frame-ancestors` directive
 amongst others.
 
 Thomas

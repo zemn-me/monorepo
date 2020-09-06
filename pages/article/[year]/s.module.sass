@@ -1,0 +1,23 @@
+.Main
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(0, 40rem))
+    justify-content: space-around
+
+.Sticker
+    position: sticky
+    top: 0
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(0, 20rem))
+    align-content: start
+
+.Header
+    h1, h2, h3, h4, h5
+        grid-column: 1 / -1
+        margin-bottom: inherit
+
+.Subtitle
+    color: var(--mgc)
+    grid-column: 1 / -1
+    line-height: 80%
+    margin-bottom: .4rem
+

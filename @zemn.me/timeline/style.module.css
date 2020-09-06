@@ -1,8 +1,7 @@
 
 .Timeline {
     display: grid;
-    grid-template-columns: repeat(auto-fill,
-        21em);
+    grid-template-columns: repeat(auto-fill, 21em);
     justify-content: space-around;
 }
 

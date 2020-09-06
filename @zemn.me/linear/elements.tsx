@@ -7,6 +7,10 @@ import * as classProvider from './classprovider';
 import * as env from './env';
 import * as indexer from './indexer';
 import { useProvideSection } from './indexer';
+import * as i8n from '@zemn.me/linear/i8n';
+
+export type Child = React.ReactElement | i8n.Text;
+export type Node = Child | React.ReactFragment | React.ReactPortal | null | undefined
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
@@ -15,90 +19,87 @@ interface DarkMode {
 }
 
 const linearClassContext = classProvider.New(style.linear);
-const darkModeClassContext = classProvider.New(style.darkmode);
 
 /**
  * These are special props which propagate to children via context.
  */
 interface LinearGlobals extends DarkMode { }
 
-/**
- * These props are added to all linear elements
- */
-interface LinearProps extends LinearGlobals { }
+type LinearProps<T extends { className?: string }> = (
+    T extends { children: any }
+        ? Omit<T, 'children'> & { children?: Node | Node[] }
+        : T
+    ) & LinearGlobals;
+
+type exampleProps = LinearProps<{
+    size: number,
+    className?: string
+}>
 
 const Wraps = '__wraps_component_' as const;
 
 
-export type LinearifyProps<P extends { className?: string }> =
-    { [Wraps]: React.ReactElement<P> } & P & LinearProps
+export interface LinearifyProps<P extends { className?: string }> {
+    children: React.ReactElement<LinearProps<P>>
+}
 
 const Linearify:
     <P extends { className?: string }>(props: LinearifyProps<P>) => React.ReactElement
 =
-    ({ [Wraps]: children, dark, ...extraProps }) => {
+    ({ children }) => {
         const [ classes1, wrap1 ] = classProvider.useClass({
             context: linearClassContext  
         });
 
-        const [ classes2, wrap2 ] = classProvider.useClass({
-            context: darkModeClassContext,
-            disabled: !dark
-        });
 
-        return wrap1(wrap2(
+        return wrap1(
             React.cloneElement(children, {
-                ...children.props,
-                ...extraProps,
-                ...classes(children.props.className, extraProps.className, ...classes1, ...classes2),
-            })
-        ))
+                ...classes(children.props.className, ...classes1),
+            } as any)
+        )
 
     }
 ;
 
+type ElProps<s extends keyof JSX.IntrinsicElements, props = PropsOf<s>> = LinearProps<props>
+
 const L = Linearify;
 
-export interface DivProps extends PropsOf<'div'>, LinearProps { }
+export interface DivProps extends ElProps<'div'> { }
 
 export const Div:
     (props: DivProps) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <div/>,
-        ...props
-    }}/>
+    props => <L><div {...props}/></L>
 
 
-export interface PProps extends PropsOf<'p'>, LinearProps { }
+export interface PProps extends ElProps<'p'> { }
 
 export const P:
     (props: PProps) => React.ReactElement
     =
 
-    props => <L {...{
-        [Wraps]: <p/>,
-        ...props
-    }}/>
+    props =><L><p {...props}/></L>
 
-export interface InputProps extends PropsOf<'input'>, LinearProps { }
+export interface InputProps extends ElProps<'input'> { }
 
 export const Input:
     (props: InputProps) => React.ReactElement
-    = props => <L {...{
-        [Wraps]: <input/>,
-        ...props
-    }}/>
+    = props => <L><input {...props}/></L>
 
-export interface H1Props extends PropsOf<'h1'>, LinearProps { }
+export interface H1Props extends ElProps<'h1'> { }
 
-export const H1:
+
+/**
+ * `H1_` is the true H1 element. You likely want to use
+ * `H1`, which is the same but is an h1 *relative* to the
+ * current context; that is: `<Section><Section><H1>Hi!</H1></Section></Section>`
+ * is actually an H2.
+ */
+export const H1_:
     (props: H1Props) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <H1Impl/>,
-        ...props
-    }}/>
+    props => <L><H1Impl {...props}/></L>
 
 
 const H1Impl:
@@ -114,15 +115,20 @@ const H1Impl:
     }
 ;
 
-export interface H2Props extends PropsOf<'h2'>, LinearProps { }
+type p = { [k in keyof HeaderProps]: HeaderProps[k] }
 
-export const H2:
+export const H1:
+    (props: H1Props) => React.ReactElement
+=
+    ({  ...props }) => <Heading depth={1} {...props}/>
+;
+
+export interface H2Props extends ElProps<'h2'> { }
+
+export const H2_:
     (props: H2Props) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <H2Impl/>,
-        ...props
-    }}/>
+    props => <L><H2Impl {...props}/></L>
     ;
 
 const H2Impl:
@@ -138,18 +144,18 @@ const H2Impl:
     }
 ;
 
+export const H2:
+    (props: H2Props) => React.ReactElement
+=
+    props => <Heading depth={2} {...props}/>
+;
 
+export interface H3Props extends ElProps<'h3'> { }
 
-
-export interface H3Props extends PropsOf<'h3'>, LinearProps { }
-
-export const H3:
+export const H3_:
     (props: H3Props) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <H3Impl/>,
-        ...props
-    }}/>
+    props => <L><H3Impl {...props}/></L>
 
 const H3Impl:
     (props: H3Props) => React.ReactElement
@@ -164,86 +170,109 @@ const H3Impl:
     }
 ;
 
+export const H3:
+    (props: H3Props) => React.ReactElement
+=
+    props => <Heading depth={3} {...props}/>
+;
 
+export interface H4Props extends ElProps<'h4'> { }
 
-export interface H4Props extends PropsOf<'h4'>, LinearProps { }
+export const H4_:
+    (props: H4Props) => React.ReactElement
+    =
+    props => <L><H4Impl {...props}/></L>
+
+;
+
+const H4Impl:
+    (props: H4Props) => React.ReactElement
+=
+    props => {
+        const [ref, title] = useProvideSection(4);
+
+        return <h4 {...{
+            id: title,
+            ...props
+        }} ref={ref}></h4>
+    }
+;
 
 export const H4:
     (props: H4Props) => React.ReactElement
-    =
-    props => <L {...{
-        [Wraps]: <h4/>,
-        ...props
-    }}/>
+=
+    props => <Heading depth={4} {...props}/>
+;
 
-export interface H5Props extends PropsOf<'h5'>, LinearProps { }
+export interface H5Props extends ElProps<'h5'> { }
+
+export const H5_:
+    (props: H5Props) => React.ReactElement
+    =
+    props => <L><H5Impl/></L>
+    ;
 
 export const H5:
     (props: H5Props) => React.ReactElement
-    =
-    props => <L {...{
-        [Wraps]: <h5/>,
-        ...props
-    }}/>
-    ;
+=
+    props => <Heading depth={5} {...props}/>
+;
 
-export interface StrongProps extends PropsOf<'strong'>, LinearProps { }
+const H5Impl:
+    (props: H5Props) => React.ReactElement
+=
+    props => {
+        const [ref, title] = useProvideSection(5);
+
+        return <h5 {...{
+            id: title,
+            ...props
+        }} ref={ref}></h5>
+    }
+;
+
+export interface StrongProps extends ElProps<'strong'> { }
 
 export const Strong:
     (props: StrongProps) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <strong/>,
-        ...props
-    }}/>
+    props => <L><strong {...props}/></L>
 
-export interface EmProps extends PropsOf<'em'>, LinearProps { }
+export interface EmProps extends ElProps<'em'> { }
 
 export const Em:
     (props: EmProps) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <em/>,
-        ...props
-    }}/>
+    props => <L><em {...props}/></L>
     ;
 
-export interface SpanProps extends PropsOf<'span'>, LinearProps { }
+export interface SpanProps extends ElProps<'span'> { }
 
 export const Span:
     (props: SpanProps) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <span/>,
-        ...props
-    }}/>
+    props => <L><span {...props}/></L>
 
     ;
 
-export interface HrProps extends Omit<PropsOf<'hr'>, 'children'>, LinearProps { }
+export interface HrProps extends ElProps<'hr', Omit<PropsOf<'hr'>, 'children'>> { }
 
 export const Hr:
     (props: HrProps) => React.ReactElement
     =
-    props => <L {...{
-        [Wraps]: <hr/>,
-        ...props
-    }}/>
+    props => <L><hr {...props}/></L>
     ;
 
-export interface MainProps extends PropsOf<'main'>, LinearProps { }
+export interface MainProps extends ElProps<'main'> { }
 
 export const Main:
     (props: MainProps) => React.ReactElement
     =
-    ({ ...props }) => <L {...{
-        [Wraps]: <main/>,
-        ...props
-    }}/>
+    ({ ...props }) => <L><main {...props}/></L>
     ;
 
-export interface AProps extends Omit<PropsOf<'a'>, 'href'>, LinearProps {
-    href?: PropsOf<'a'>["href"] | URL
+export interface AProps extends ElProps<'a', Omit<PropsOf<'a'>, 'href'>> {
+    href?: URL
 }
 
 const trimLink:
@@ -257,6 +286,9 @@ const trimLink:
         if (link.startsWith(origin))
             return link.slice(origin.length);
 
+        if (link.startsWith("about:blank"))
+            return link.slice("about:blank".length)
+
         if (link.startsWith(protocol))
             return link.slice(protocol.length);
 
@@ -269,93 +301,81 @@ export const A:
     (props: AProps) => React.ReactElement
     =
     ({ href, ...props }) => {
-        if (href instanceof URL) href = href.toString()
     
-        return <L {...{
-            [Wraps]: <a {...{
-                href: href? trimLink(href): href,
-            }}/>,
-            ...props
-        }}/>
+        return <L>
+             <a {...{
+                href: href? trimLink(href.toString()): href,
+                ...props
+            }}/>
+        </L>
     }
  
 
-export interface TimeProps extends Omit<PropsOf<'time'>, 'dateTime'>, LinearProps {
-    dateTime?: Date | PropsOf<'time'>["dateTime"]
+export interface TimeProps extends ElProps<'time', Omit<PropsOf<'time'>, 'dateTime'>> {
+    dateTime?: Date
 }
 
 export const Time:
     (props: TimeProps) => React.ReactElement
     =
-    ({ dateTime, ...props }) => <L {...{
-        [Wraps]: <time {...{
-                dateTime: dateTime instanceof Date ?
-                    dateTime.toDateString() : dateTime
-            }} />,
-            dark: true,
-            ...props
-    }}/>
+    ({ dateTime, ...props }) => <L>
+            <time {...{
+                dateTime: dateTime?.toString(),
+                ...props
+            }} />
+        </L>
 
     ;
 
-export interface LiProps extends PropsOf<'li'>, LinearProps {}
+export interface LiProps extends ElProps<'li'> {}
 
 export const Li:
     (props: LiProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <li/>,
-        ...props
-    }}/>
+    props => <L><li {...props}/></L>
 ;
 
-export interface UlProps extends PropsOf<'ul'>, LinearProps {}
+export interface UlProps extends ElProps<'ul'> {}
 
 export const Ul:
     (props: UlProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <ul/>,
-        ...props
-    }}/>
+    props => <L><ul {...props}/></L>
 ;
 
-export interface OlProps extends PropsOf<'ol'>, LinearProps {}
+export interface OlProps extends ElProps<'ol'>{}
 
 export const Ol:
     (props: OlProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <ol/>,
-        ...props
-    }}/>
+    props => <L><ol {...props}/></L>
 ;
 
 
-export interface ArticleProps extends PropsOf<'article'>, LinearProps {}
+export interface ArticleProps extends ElProps<'article'> {}
 
 export const Article =
-    React.forwardRef<HTMLElement,  ArticleProps>(({ children, ...props }, ref) => <L {...{
-        [Wraps]: <article ref={ref} {...props}>
-                {children}
-        </article>
-    }}/>)
+    React.forwardRef<HTMLElement,  ArticleProps>(({ ...props }, ref) =>
+            <L><article ref={ref} {...props}/></L>
+    )
 ;
 
 Article.displayName = Object.keys({Article})[0]
 
+export interface ProseProps extends ArticleProps { }
 
+export const Prose =
+    React.forwardRef<HTMLElement, ProseProps>(({ ...props }, ref) =>
+            <Article className={style.prose} {...props} ref={ref}/>
+    )
+;
 
-export interface PreProps extends PropsOf<'pre'>, LinearProps {}
+export interface PreProps extends ElProps<'pre'> {}
 
 export const Pre:
-    (props: ArticleProps) => React.ReactElement
+    (props: PreProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <pre/>,
-        ...props
-    }}/>
-;
+    props => <L><pre {...props}/></L>
 
 export interface IndexProps {
     children: React.FC<{
@@ -363,9 +383,9 @@ export interface IndexProps {
     }>
 }
 
-const sectionDepthContext = React.createContext<number>(0);
+export const sectionDepthContext = React.createContext<number>(0);
 
-export interface SectionProps extends PropsOf<'section'>, LinearProps {}
+export interface SectionProps extends ElProps<'section'> {}
 
 export const Section:
     (props: SectionProps) => React.ReactElement
@@ -374,78 +394,80 @@ export const Section:
         const depth = React.useContext(sectionDepthContext);
 
         return <sectionDepthContext.Provider value={depth+1}>
-            <L {...{
-                [Wraps]: <section/>,
-                ...props
-            }}/>
+            <L><section {...props}/></L>
         </sectionDepthContext.Provider>
     }
 ;
 
-export interface HeaderProps extends PropsOf<'h1'>, LinearProps {
-    children: [
-        title: React.ReactChild,
-        ...etc: React.ReactChild[]
-    ] | React.ReactChild
+export interface HeadingProps extends ElProps<'h1'> {
+    depth?: 0 | 1 | 2 | 3 | 4 | 5
 }
 
 const headerByDepth = [
-    H1, H2, H3, H4, H5
+    H1_, H2_, H3_, H4_, H5_
 ] as const;
 
-export const Header:
-    (props: HeaderProps) => React.ReactElement
+export const Heading:
+    (props: HeadingProps) => React.ReactElement
 =
-    ({ children, ...props}) => {
-        const [title, ...others] = children instanceof Array?
-            children: [children];
-        const depth = React.useContext(sectionDepthContext);
-        const Heading = headerByDepth[depth] ?? H5;
+    ({ children, depth: depthOffset = 1, ...props}) => {
+        const depth = React.useContext(sectionDepthContext) + depthOffset;
+        const H = headerByDepth[depth -1] ?? H5;
 
-
-        return <L {...{
-            [Wraps]: <header>
-                <Heading>{title}</Heading>
-                {others}
-            </header>,
-            ...props
-        }}/>
+        return <L><H {...props}>{children}</H></L>
     }
 ;
 
-export interface NavProps extends PropsOf<'nav'>, LinearProps {
+export interface HeaderProps extends ElProps<'header'> { }
 
-}
+export const Header:
+    (props: HeadingProps) => React.ReactElement
+=
+    props => <L><header {...props}/></L>
+;
+
+export interface NavProps extends ElProps<'nav'> { }
 
 export const Nav:
     (props: NavProps) => React.ReactElement
 =
-    props => <L {...{
-        [Wraps]: <nav/>,
-        ...props
-    }}/>
-;
+    props => <L><nav {...props}/></L>
 
-export interface FracProps extends PropsOf<'span'>, LinearProps { }
+export interface FracProps extends ElProps<'span'> { }
 
 export const Frac:
     (props: FracProps) => React.ReactElement
 =
-    ({ className, ...props }) => <L {...{
-        [Wraps]: <Span />,
-        ...classes(style.frac, className),
-        ...props
-    }}/>
+    ({ className, ...props }) => <L>
+        <Span {...{
+            ...classes(style.frac, className),
+            ...props
+        }}/>
+    </L>
 ;
 
-export interface MathSymbolProps extends PropsOf<'span'>, LinearProps {}
+export interface MathSymbolProps extends ElProps<'span'> {}
 
 export const MathSymbol:
     (props: MathSymbolProps) => React.ReactElement
 =
-    ({ className, ...props }) => <L {...{
-        [Wraps]: <Span/>,
-        ...classes(style.math, className),
-        ...props
-    }}/>
+    ({ className, ...props }) => <L>
+        <Span {...{
+            ...classes(style.math, className),
+            ...props
+        }}/>
+    </L>
+;
+
+export interface OrdProps extends ElProps<'span'> {}
+
+export const Ord:
+    (props: OrdProps) => React.ReactElement
+=
+    ({ className, ...props }) => <L>
+        <Span {...{
+            ...classes(style.ord, className),
+            ...props
+        }}/>
+    </L>
 ;

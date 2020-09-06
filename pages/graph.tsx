@@ -19,7 +19,6 @@ const regularAxisLabels = [ "x", "y", "x1", "y1", "x2", "y2" ] as const;
 const inverseAxisLabels = ["y", "x", "y1", "x1", "y2", "x2" ] as const;
 type AxisLabels = typeof regularAxisLabels | typeof inverseAxisLabels;
 
-
 enum ScaleKind {
     CONTINUOUS,
     BAND,
@@ -33,6 +32,7 @@ interface ScalePipProps {
     orientation: Orientation
     t: number
 }
+
 
 const ScalePip:
     (props: ScalePipProps) => React.ReactElement

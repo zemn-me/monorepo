@@ -76,7 +76,6 @@ export class Ctx {
 
         for (let sect of this.sects) {
             while (!(cur?.self?.level == undefined || cur?.self?.level < sect.level)) {
-                console.log(cur.self.level, sect.level);
                 if (cur.parent == undefined) throw new Error();
                 cur = cur.parent;
             }
