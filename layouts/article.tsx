@@ -6,6 +6,7 @@ import MDXProvider from '@zemn.me/linear/MDXProvider';
 import React from 'react';
 import { classes } from '@zemn.me/linear/classes';
 import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
+import { PathNav } from '@zemn.me/linear/pathnav';
 
 interface TOCNode {
     readonly id?: string
@@ -91,6 +92,9 @@ const Post:
     ({ title, subtitle, date, article, author, tags }) => <M>
             <Header className={style.Header}>
                 <div className={style.Sticker}>
+                    <Div>
+                        <PathNav/>
+                    </Div>
                     <Heading>{title}</Heading>
                     {subtitle?<Div className={style.Subtitle}>{subtitle}</Div>:null}
                     {author?<Div className={style.Author}>{author}</Div>: null}

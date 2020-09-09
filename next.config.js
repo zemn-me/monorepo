@@ -1,4 +1,6 @@
 const production = process.env.NODE_ENV == "production";
+const glob = require("glob");
+const path = require("path");
 
 const domain = new URL(production?
     "https://zemn.me": "http://localhost:3000");
@@ -21,7 +23,14 @@ const base_config = {
     }),
     env: {
         origin: domain.origin,
-        protocol: domain.protocol
+        protocol: domain.protocol,
+        routes: glob.sync("pages/**/*.@(mdx|tsx)").map(
+            v => {
+                if (/\w+.(?:mdx|tsx)$/g.test(v)) return path.dirname(v); 
+
+                return v.slice(0, -path.extname(v).length)
+            }
+        ).map(v => "/" + v.slice("pages/".length))
     }
 };
 
