@@ -6,7 +6,6 @@ import classes from './classes';
 import * as classProvider from './classprovider';
 import * as env from './env';
 import * as indexer from './indexer';
-import { useProvideSection } from './indexer';
 import * as i8n from '@zemn.me/linear/i8n';
 
 export type Child = React.ReactElement | i8n.Text;
@@ -99,21 +98,8 @@ export interface H1Props extends ElProps<'h1'> { }
 export const H1_:
     (props: H1Props) => React.ReactElement
     =
-    props => <L><H1Impl {...props}/></L>
+    props => <L><h1 {...props}/></L>
 
-
-const H1Impl:
-    (props: H1Props) => React.ReactElement
-=
-    props => {
-        const [ref, title] = useProvideSection(1);
-
-        return <h1 {...{
-            id: title,
-            ...props
-        }} ref={ref}></h1>
-    }
-;
 
 type p = { [k in keyof HeaderProps]: HeaderProps[k] }
 
@@ -128,21 +114,10 @@ export interface H2Props extends ElProps<'h2'> { }
 export const H2_:
     (props: H2Props) => React.ReactElement
     =
-    props => <L><H2Impl {...props}/></L>
+    props => <L><h2 {...props}/></L>
     ;
 
-const H2Impl:
-    (props: H2Props) => React.ReactElement
-=
-    props => {
-        const [ref, title] = useProvideSection(2);
 
-        return <h2 {...{
-            id: title,
-            ...props
-        }} ref={ref}></h2>
-    }
-;
 
 export const H2:
     (props: H2Props) => React.ReactElement
@@ -155,20 +130,10 @@ export interface H3Props extends ElProps<'h3'> { }
 export const H3_:
     (props: H3Props) => React.ReactElement
     =
-    props => <L><H3Impl {...props}/></L>
-
-const H3Impl:
-    (props: H3Props) => React.ReactElement
-=
-    props => {
-        const [ref, title] = useProvideSection(3);
-
-        return <h3 {...{
-            id: title,
-            ...props
-        }} ref={ref}></h3>
-    }
+    props => <L><h3 {...props}/></L>
 ;
+
+
 
 export const H3:
     (props: H3Props) => React.ReactElement
@@ -181,21 +146,8 @@ export interface H4Props extends ElProps<'h4'> { }
 export const H4_:
     (props: H4Props) => React.ReactElement
     =
-    props => <L><H4Impl {...props}/></L>
+    props => <L><h4 {...props}/></L>
 
-;
-
-const H4Impl:
-    (props: H4Props) => React.ReactElement
-=
-    props => {
-        const [ref, title] = useProvideSection(4);
-
-        return <h4 {...{
-            id: title,
-            ...props
-        }} ref={ref}></h4>
-    }
 ;
 
 export const H4:
@@ -209,7 +161,7 @@ export interface H5Props extends ElProps<'h5'> { }
 export const H5_:
     (props: H5Props) => React.ReactElement
     =
-    props => <L><H5Impl/></L>
+    props => <L><h5 {...props}/></L>
     ;
 
 export const H5:
@@ -218,18 +170,6 @@ export const H5:
     props => <Heading depth={5} {...props}/>
 ;
 
-const H5Impl:
-    (props: H5Props) => React.ReactElement
-=
-    props => {
-        const [ref, title] = useProvideSection(5);
-
-        return <h5 {...{
-            id: title,
-            ...props
-        }} ref={ref}></h5>
-    }
-;
 
 export interface StrongProps extends ElProps<'strong'> { }
 

@@ -42,6 +42,14 @@ declare module '@mdx-js/react' {
 }
 
 declare module "*.mdx" {
+    interface TOCNode {
+      readonly id?: string
+      readonly level: number
+      readonly title: string
+      readonly children: readonly TOCNode[]
+    }
+
     const cmp: React.ComponentType;
+    function tableofContents(): TOCNode[];
     export default cmp;
 }

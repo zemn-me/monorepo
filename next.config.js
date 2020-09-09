@@ -31,14 +31,24 @@ config = require('next-mdx-enhanced')({
     remarkPlugins: [
         require('remark-validate-links'),
         require('remark-sub-super'),
+        require('remark-heading-id'),
+        require('remark-footnotes'),
+        require('@silvenon/remark-smartypants'),
         [require('remark-textr'), { plugins: [
             require('typographic-base')
-        ] }]
-    ]
+        ] }],
+    ],
 })(config);
 
 config = require('next-images')(config);
 config = require('next-videos')(config);
+
+const mdxOpts = {
+    // https://github.com/frontarm/mdx-util/blob/d236b4a805e5cfc656b6851a0e707a9d26cf0d29/packages/mdx-loader/index.js#L30
+    compilers: [
+        require('mdx-table-of-contents')
+    ],
+};
 
 module.exports = {
     ...config,
@@ -56,10 +66,34 @@ module.exports = {
                             )
                         }
 					}
-				}
+                }
+                
 			});
-		});
+        });
+        
         conf.node = { fs: "empty" };
-		return config.webpack(conf, ...a);
+        const c = config.webpack(conf, ...a);
+        // now, with the config modified we can make our own changes...
+
+        conf.module.rules.forEach(( rule ) => {
+            if (!rule.use) return;
+            if (!rule.use.forEach) return;
+            rule.use.forEach(useConf => {
+                if (!useConf.loader) return;
+                if ( !useConf.loader.includes("@mdx-js/loader") ) return;
+
+                /*
+                useConf.options = {
+                    ...useConf.options,
+                    ...mdxOpts
+                }
+                */
+
+                console.log(useConf);
+
+
+            })
+        })
+        return c
 	}, 
 }

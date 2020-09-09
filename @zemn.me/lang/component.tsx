@@ -66,8 +66,6 @@ export const Tagged:
 
         const dissimilar = lang !== ctx?.lang;
 
-        console.log(lang, ctx?.lang, dissimilar);
-
         let child = React.cloneElement(
             into, { ...into.props,
                 ...dissimilar?{lang}:{},

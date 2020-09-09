@@ -1,9 +1,17 @@
+---
+layout: article
+title: How To Hack iCloud
+language: en-GB
+subtitle:
+    Disclosure of a severe bug allowing client-side takeover of
+    Apple's central AppleID server.
+tags:
+ - security
+ - disclosure
+---
+
 import { Frac, Chem } from '@zemn.me/linear';
 export const date = new Date("Thu Aug 13 2020 19:52:18 GMT+0100 (British Summer Time)")
-export const inShort = "epic essay disclosing a bug that allowed client-side takeover of Apple's central AppleID server";
-export const title = "How To hack iCloud";
-export const tags = ["security", "disclosure"];
-export const language = "en-GB";
 
 How To Hack iCloud
 ==================
@@ -11,8 +19,8 @@ How To Hack iCloud
 [How To Hack iCloud]: #how-to-hack-icloud
 [§0]: #how-to-hack-icloud
 
-Preamble
----------
+Preamble {#preamble}
+--------------------
 
 [§1]: #preamble
 [Preamble]: #preamble
@@ -119,12 +127,12 @@ Just a few minutes attention from some Project Zero guys is worth tens of
 thousands of dollars if I could only tempt them with my fine selection of bounty
 shirts and glass tumblers with company logos.
 
-The Very Worst Thing
---------------------
+The Very Worst Thing {#the_very_worst_thing}
+--------------------------------------------
 
-[The Very Worst Thing]: #the-very-worst-thing
+[The Very Worst Thing]: #the_very_worst_thing
 
-[§2]: #the-very-worst-thing
+[§2]: #the_very_worst_thing
 
 A few days ago when I was sick with flu and researching Apple security to
 distract me from the aches and pains of my failing mortal body I found an XSS
@@ -251,11 +259,11 @@ That's just one way `frame-ancestors` improves on `X-Frame-Options`. With
 `frame-ancestors`, it checks that all the embedding pages all the way up are
 allowed to embed the content.
 
-URL Parsing, My Old Friend
+URL Parsing, My Old Friend {#url_parsing,_my_old_friend}
 --------------------------
 
-[URL Parsing, My Old Friend]: #url-parsing-my-old-friend
-[§3]: #url-parsing-my-old-friend
+[URL Parsing, My Old Friend]: #url_parsing,_my_old_friend 
+[§3]: #url_parsing,_my_old_friend
 
 Alright, so the iCloud login page is allowed to be embedded in iCloud.com
 because it negotiates a `frame-ancestors https://www.icloud.com;` Content
@@ -352,10 +360,10 @@ Content-Security-Policy: frame-ancestors https://thomas@icloud.com
 ```
 
 Hmm. That doesn't look like it should be there. `frame-ancestors` is defined to
-accept a list of [HTTP origins][4], a very strict type of website specifier
+accept a list of [HTTP origins][frame-ancestors], a very strict type of website specifier
 designed for security that `https://thomas@icloud.com` most certianly is not.
 
-[4]:
+[frame-ancestors]:
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
 
 When I see stuff like this it makes me think for two reasons: (1) if
@@ -382,11 +390,11 @@ which part they thought was good (`https://icloud.com`) then I wouldn't be able
 to inject characters here. I think of this as 'baking in' our understanding of
 what a URL looks like and forcing it conform to that understanding.
 
-Content Insecurity Policy
+Content Insecurity Policy {#content_insecurity_policy}
 -------------------------
 
-[Content Insecurity Policy]: #content-insecurity-policy
-[§4]: #content-insecurity-policy
+[Content Insecurity Policy]: #content_insecurity_policy
+[§4]: #content_insecurity_policy
 
 With the knowledge that I could sneak extra characters into the
 `frame-ancestors` directive that validates who can embed the iCloud (really

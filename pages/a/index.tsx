@@ -63,60 +63,8 @@ const IndexSectionHeader:
     }
 ;
 
-interface PostProps {
-    title: React.ReactElement
-    subtitle: React.ReactElement
-    date: React.ReactElement
-    article: React.ReactElement
-    author: React.ReactElement
-    wordCount: React.ReactElement
-}
-
-const Post:
-    (props: PostProps) => React.ReactElement
-=
-    ({ title, subtitle, date, article, author }) => <M>
-            <Header className={style.Header}>
-                <div className={style.Sticker}>
-                    <Heading>{title}</Heading>
-                    <Div className={style.Subtitle}>{subtitle}</Div>
-                    <Div className={style.Author}>{author}</Div>
-                    <Div className={style.Date}>{date}</Div>
-                    <Div className={style.Index}>
-                        <Index/>
-                    </Div>
-                </div>
-            </Header>
-            <Section className={style.Article}>
-                <Prose>
-                {article}
-                </Prose>
-            </Section>
-
-    </M>
-;
-
-const M: React.FC = ({ children }) => {
-    const index = React.useMemo(() => new indexer.Ctx, []);
-    
-    return <Main className={style.Main}>
-        <MDXProvider>
-            <indexer.context.Provider value={index}>
-                {children}
-            </indexer.context.Provider>
-        </MDXProvider>
-    </Main>
-}
 
 
 
-const E = () => <Post {...{
-    title: <>How To Hack iCloud</>,
-    subtitle: <>An exploration</>,
-    date: <>September 12<Ord>th</Ord> 2020</>,
-    article: <articles.y2020.icloud.Component/>,
-    author: <>Thomas Neil James Shadwell</>,
-    wordCount: <>5000</>
-}}/>
 
 export default E;
