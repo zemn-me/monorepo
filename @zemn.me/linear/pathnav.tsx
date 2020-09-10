@@ -2,7 +2,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React from 'react';
 import style from './pathnav.module.sass';
-import { Div, Span } from '@zemn.me/linear';
+import { Div, Span, A } from '@zemn.me/linear';
+import { routes, routeTrie, Trie } from '@zemn.me/linear/env';
+import next from 'next';
+import { timingSafeEqual } from 'crypto';
 
 export const PathNav:
     () => React.ReactElement
@@ -14,7 +17,7 @@ export const PathNav:
             <DisplayRoute {...{
                 pathname: router.pathname.split("/"),
                 asPath: router.asPath.split("/"),
-                routes: process.env.routes as unknown as readonly string[]
+                routes: routes.map(route =>  route.split("/"))
             }}/>
         </>
     }
@@ -24,43 +27,40 @@ const DisplayRoute:
     (props: {
         pathname: readonly string[],
         asPath: readonly string[],
-        depth?: number,
-        routes: readonly string[]
+        depth?: number
     }) => React.ReactElement
 =
-    ({ pathname, asPath, depth = 0, routes }) => {
-        let pathnametail = [...pathname];
-        const ours = pathnametail.pop()!;
+    ({ pathname, asPath, depth = 0 }) => {
 
-        let aspathtail = [...asPath];
-        const oursaspath = aspathtail.pop()!;
-        const isDynamicRoute = /^\[[^\]]*\]/.test(ours);
-        const isHome = ours == "";
+        const path = {
+            name: {
+                head: pathname.slice(0, depth),
+                part: pathname[depth]
+            },
 
-        const [ ourValue, setOurValue ] = React.useState(oursaspath);
+            asPath: {
+                tail: asPath.slice(depth),
+                part: asPath[depth]
+            }
+        } as const
 
-        const validRoutes = routes.filter(route => route.startsWith(pathnametail.join("/")));
+        const displayName = path.asPath.part == ""? "home": path.asPath.part;
 
-        console.log(process.env.routes);
+
+        const a = <a>{displayName}</a>;
 
         return <>
-            {aspathtail.length?<><DisplayRoute {...{
-                pathname: pathnametail,
-                asPath: aspathtail,
-                depth: depth+1,
-                routes: validRoutes
-            }}/> <Span className={style.arrow} aria-label="then">
-                <Span aria-hidden="true">{">"}</Span>    
-            </Span> </>: null} 
-
-            {depth>0?
-                <Link {...{
-                    as: pathname.join("/"),
-                    href: asPath.join("/")
-                }}>
-                    <a>{isHome?"🏠":ourValue}</a>
-                </Link>: <>{isHome?"🏠":ourValue}</>
+            {path.name.head.length>0
+                ? <Link href={pathname.slice(0, -depth+1).join("/")}
+                    as={asPath.slice(0, -depth+1).join("/")}>{a}</Link>
+                : a
             }
+            {depth < pathname.length-1? <>
+                {">"}
+                <DisplayRoute {...{
+                    pathname, asPath, depth: depth+1, 
+                }}/>
+            </>: null}
         </>
     }
 ;
