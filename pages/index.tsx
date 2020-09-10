@@ -1,37 +1,22 @@
 import { Timeline, makeYears } from '@zemn.me/timeline/components';
 import Eye from '@zemn.me/art/time';
 import { Text } from '@zemn.me/lang/component';
-import { Bio, Event } from '@zemn.me/bio';
+import { Bio } from '@zemn.me/bio';
 import { Main, Div, A } from '@zemn.me/linear';
 import Video from '@zemn.me/video';
 import React from 'react';
 import style from './home.module.css';
 import * as i8n from '@zemn.me/linear/i8n';
 import { TaggedTextContext } from '@zemn.me/lang/component';
-import * as articles from '@zemn.me/article';
+import * as bio from 'lib/bio';
 
-
-let articleEvents = [];
-
-for (const [year, ars] of Object.entries(articles.years)) {
-    for (const [ident, article] of Object.entries(ars)) {
-        if (article.hidden) continue;
-        articleEvents.push({
-            title: ["en-GB", article.title!],
-            description: ["en-GB", article.inShort!],
-            date: article.date!,
-            url: `article/${year}/${ident}` as any
-
-        })
-    }
+interface HomeProps {
+    filter?: (event: bio.Event) => boolean
 }
 
-const timeline = [
-    ...Bio.timeline,
-    ...articleEvents
-];
-
-const Home = () => {
+const Home:
+    (props: HomeProps) => React.ReactElement
+= ({ filter }) => {
     const [langs, setLang] = React.useState<readonly string[]>(["en-gb"]);
     React.useEffect(() => {
         const onLangChange = () => setLang(navigator.languages);
@@ -41,8 +26,14 @@ const Home = () => {
         return () => window.removeEventListener('languagechange', onLangChange);
     }, [ setLang ]);
 
+    const tl = React.useMemo(() => {
+        if (filter == undefined) return bio.timeline;
+        return bio.timeline.filter(filter)
+    }, [ filter ]);
+
+    const years = React.useMemo(() => makeYears(tl), [tl])
+
     const [l] = langs;
-    console.log(langs);
 
     const content = <>
         <Div className={style.header}>
@@ -65,7 +56,7 @@ const Home = () => {
         <Text into={<Div className={style.name}/>}>{Bio.who.name}</Text>
 
         <Timeline {...{
-            years: makeYears(timeline),
+            years,
             lang: 'en-GB',
             className: style.timeline
         }} />

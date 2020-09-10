@@ -1,4 +1,5 @@
 import * as i8n from '@zemn.me/linear/i8n';
+import * as jsx from '@zemn.me/linear/jsx';
 import Head from 'next/head';
 import style from './s.module.sass';
 import * as indexer from '@zemn.me/linear/indexer'
@@ -7,6 +8,7 @@ import React from 'react';
 import { classes } from '@zemn.me/linear/classes';
 import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
 import { PathNav } from '@zemn.me/linear/pathnav';
+import { mustExpectedMeta } from 'lib/article';
 
 interface TOCNode {
     readonly id?: string
@@ -130,76 +132,11 @@ export const Dated:
     </>
 ;
 
-interface YAMLObject {
-    [key: string]: YAMLValue
-}
-
-interface YAMLArray extends ReadonlyArray<YAMLValue> {}
-
-type YAMLValue = YAMLObject | number | string | YAMLArray | undefined
-
-interface FrontMatter {
-    [key: string]: YAMLValue
-}
-
-interface ExpectedMetadata extends YAMLObject {
-    readonly layout: string,
-    readonly title: string,
-    readonly language: string,
-    readonly subtitle?: string,
-    readonly tags?: readonly string[],
-    readonly author?: string
-}
-
-const isArrayOfStringsOrUndefined:
-    (v: YAMLValue | undefined) => v is undefined | readonly string[]
-=
-    (v: YAMLValue | undefined): v is undefined | readonly string[] => {
-        if (v == undefined) return true;
-        if (!(v instanceof Array)) return false;
-        if (!(v.every(((value): value is string => typeof value == "string"))))
-            return false;
-
-        return true;
-    }
-;
-
-const layoutNotString = Symbol();
-const titleNotString = Symbol();
-const languageNotString = Symbol();
-const subtitleNotUndefinedOrString = Symbol();
-const authorNotUndefinedorString = Symbol();
-const tagsNotArrayOfStringsOrUndefined = Symbol();
-
-const symError:
-    (v: { [key: string]: symbol }) => Error
-=
-    v => new Error(Object.keys(v)[0])
-;
-
-const mustExpectedMeta:
-    (data: FrontMatter) => ExpectedMetadata
-=
-    data => {
-        const { layout, title, language, subtitle, tags, author } = data;
-        if (!(typeof layout == "string")) throw symError({ layoutNotString });
-        if (!(typeof title == "string")) throw symError({ titleNotString })
-        if (!(typeof language == "string")) throw symError({ languageNotString });
-        if (subtitle !== undefined)
-            if (!(typeof subtitle == "string")) throw symError({ subtitleNotUndefinedOrString });
 
 
-        if (author !== undefined)
-            if (!(typeof author == "string")) throw symError({ authorNotUndefinedorString });
-
-        if (!isArrayOfStringsOrUndefined(tags)) throw symError({ tagsNotArrayOfStringsOrUndefined });
-
-        return { layout, title, language, subtitle, tags, author }
-    }
-;
 
 const X: 
-    (frontmatter: FrontMatter) => React.FC<{
+    (frontmatter: jsx.FrontMatter) => React.FC<{
         date?: Date
     }>
 =
@@ -210,7 +147,6 @@ const X:
         const { children, date =  new Date(), ...etc } = props;
 
         console.log("metadata", { frontMatter, etc });
-
         return <>
             <Head>
                 <title>{meta.title}</title>

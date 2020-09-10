@@ -39,6 +39,7 @@ export interface Who {
     name: Text
 }
 
+export type Tag = Text;
 
 export interface Employment {
     since: Date,
@@ -49,7 +50,7 @@ export interface Employment {
 export interface Event {
     date: Date,
     description?: Text,
-    tags?: Text[],
+    tags?: Tag[],
     title: Text,
     url?: URL,
     priority?: number,
@@ -58,9 +59,8 @@ export interface Event {
 
 
 // tags
-const
+export const
     gaming = en`gaming`,
-    article = en`article`,
     accolade = en`accolade`,
     talk = en`talk`,
     software = en`software`,
@@ -145,7 +145,7 @@ export const Bio: Bio = {
             title: en`If CORS is just a header, why don’t attackers just ignore it?`,
             url: url`https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef?source=your_stories_page---------------------------`,
             description: en`article on common security misconceptions around CORS`,
-            tags: [article, security]
+            tags: [writing, security]
         },
         {
             date: date(1, 'feb', 2020),
@@ -288,8 +288,7 @@ export const Bio: Bio = {
             priority: 6,
             tags: [
                 security,
-                talk,
-                writing
+                talk
             ],
             title: en`how to hack the uk tax system: the talk`,
             url: url`https://twitter.com/zemnmez/status/933847040198574080`

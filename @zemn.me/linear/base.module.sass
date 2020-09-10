@@ -95,31 +95,7 @@
         white-space: break-spaces
         font-size: 90%
 
-    article
-      .prose
-        +linear
-          font-size: 2.4rem
-          counter-reset: h1 0 h2 0 h3 0 h4 0 h5 0 h6 0
-          margin: auto
-          padding: 0 2em
-          h1
-            text-align: center
-            padding-bottom: 1rem
-            border-bottom: 1px solid var(--fgc)
-            counter-increment: h1
-          h2
-            counter-increment: h2
-          h3
-            counter-increment: h3
-          h4
-            counter-increment: h4
-          h2
-            margin: 4rem 0 1rem 0
-            &::before
-              content: counter(h2) ". "
-          h3
-            &::before
-              content: counter(h2) counter(h3, lower-latin) ". "
+
 
     ol
       +linear
@@ -197,4 +173,38 @@
         +linear
           content: "⁂"
 
+    article
+      .prose
+        +linear
+          font-size: 2.4rem
+          counter-reset: h1 0 h2 0 h3 0 h4 0 h5 0 h6 0
+          margin: auto
+          padding: 0 2em
 
+          h1
+            text-align: center
+            padding-bottom: 1rem
+            border-bottom: 1px solid var(--fgc)
+            counter-increment: h1
+          h2
+            counter-increment: h2
+          h3
+            counter-increment: h3
+          h4
+            counter-increment: h4
+          h2
+            margin: 4rem 0 1rem 0
+            &::before
+              content: counter(h2) ". "
+          h3
+            &::before
+              content: counter(h2) counter(h3, lower-latin) ". "
+
+
+    :global
+      .footnote-ref, .footnote-backref
+        +linear
+          color: var(--mgc) !important
+          border: initial !important
+
+  //1

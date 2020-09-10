@@ -1,5 +1,14 @@
-url: https://medium.com/@Zemnmez/%C3%BCbersicht-remote-code-execution-spotify-takeover-a5f6fd6809d0
-date: Sat Dec 15 2018 19:28:59 GMT+0000 (Greenwich Mean Time)
+---
+layout: article
+title: Übersicht Remote Code Execution, Spotify takeover
+language: en-GB
+subtitle: on the security implications of locally hosted web services
+tags:
+ - security
+ - disclosure
+ - writing
+date: [ 15, 'dec', 2018 ]
+---
 
 
 # Übersicht Remote Code Execution, Spotify takeover
@@ -28,7 +37,7 @@ Often, these web servers offer the ability for websites to access functionality 
 
 Let’s quickly dissect how this works. We can use this amusing proof of concept I made way back in August 2016 that plays a rickroll you can’t close without opening Spotify desktop:
 
-<iframe src="https://medium.com/media/5f2e050def8602a6a876df97fad804b6" frameborder=0></iframe>
+<img src="https://medium.com/media/5f2e050def8602a6a876df97fad804b6" />
 
 Ok, so we have a big black space with a button, and if you click it, it makes your Spotify account play the Rick Astley classic from whatever device is currently supposed to play music (might even be your fancy wi-fi speakers). **NB: this was fixed at some point**
 
@@ -54,7 +63,7 @@ Are you ready? Take a deep breath. Encryption on the internet by giving each web
 
 In an incredibly mind-bending security trick, Spotify actually gives every single Spotify user in the entire world a secret key that allows them to attest to the undeniable fact that *they, themselves are spotilocal.com*. How do I know? I dumped it out of the Spotify program and — following some shenanigans with Spotify security I’ll mention later — posted it online!
 
-<iframe src="https://medium.com/media/cf59a51726f4b5df3b82fa696c251283" frameborder=0></iframe>
+<img src="https://medium.com/media/cf59a51726f4b5df3b82fa696c251283"/>
 
 Isn’t it a bad idea to give a private certificate for a domain to essentially everyone? I thought so too, and I pondered it, and I reported it to Spotify.com’s security team way back. Way, waaay back. Just before I posted the certificate online, actually.
 
@@ -309,4 +318,4 @@ at some point I’ll finish writing up the bug steam paid me $8k for i promise. 
 
 jan 8, 2020: turns out, despite being ‘Won’t fix’ at the time for Spotify, spotilocal.com no longer is embedded into the Spotify binary — and the certificate breaks some serious web of trust policies:
 
-<iframe src="https://medium.com/media/63b5e0a5be1eb097830da2897986af6c" frameborder=0></iframe>
+<img src="https://medium.com/media/63b5e0a5be1eb097830da2897986af6c" />

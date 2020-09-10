@@ -411,3 +411,12 @@ export const Ord:
         }}/>
     </L>
 ;
+
+
+export interface SupProps extends ElProps<'sup'> { }
+
+export const Sup:
+    (props: SupProps) => React.ReactElement
+=
+    props => <L><sup {...props}/></L>
+;

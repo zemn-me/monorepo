@@ -1,1 +1,0 @@
-export * from '@zemn.me/article/mdxarticle'

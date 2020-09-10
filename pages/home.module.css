@@ -8,7 +8,7 @@
         ". . ." 1rem
         ". l ." auto
         ". . ." 3rem
-        "t t t" 1fr
+        "t t t" minmax(100vh, min-content)
         ". . ." 10rem / 1fr fit-content(80%) 1fr;
     
 }

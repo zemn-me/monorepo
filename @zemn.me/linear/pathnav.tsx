@@ -23,6 +23,12 @@ export const PathNav:
     }
 ;
 
+const flatPath:
+    (path: readonly string[]) => string
+=
+    p => (p.length == 1? ["", ...p]: p).join("/")
+;
+
 const DisplayRoute:
     (props: {
         pathname: readonly string[],
@@ -50,9 +56,9 @@ const DisplayRoute:
         const a = <a>{displayName}</a>;
 
         return <>
-            {path.name.head.length>0
-                ? <Link href={pathname.slice(0, -depth+1).join("/")}
-                    as={asPath.slice(0, -depth+1).join("/")}>{a}</Link>
+            {depth < pathname.length-1
+                ? <Link href={flatPath(pathname.slice(0, depth+1))}
+                    as={flatPath(asPath.slice(0, depth+1))}>{a}</Link>
                 : a
             }
             {depth < pathname.length-1? <>
