@@ -21,7 +21,8 @@ interface ExpectedMetadata {
     readonly subtitle?: string,
     readonly tags?: readonly string[],
     readonly author?: string,
-    readonly date: Date
+    readonly date: Date,
+    readonly hidden?: boolean
 }
 
 const layoutNotString = Symbol();
@@ -72,4 +73,5 @@ export const articles =
             console.log(e, md);
             return undefined   
         }
-    }).filter(<T>(v: T | undefined): v is T => v !== undefined)
+    }).filter(<T>(v: T | undefined): v is T => v !== undefined).filter(v =>
+        (! ("hidden" in v) && v.hidden) )

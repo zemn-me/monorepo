@@ -14,5 +14,18 @@ export const Provider:
     </MDXProvider>
 ;
 
+export const Prose:
+    React.FC
+=
+    ({ children }) => <MDXProvider {...{
+        components: {
+            ...components,   
+            img: elements.ProseImg
+        },
+    }}>
+        {children}
+    </MDXProvider>
+;
+
 export default Provider;
 

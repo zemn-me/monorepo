@@ -3,7 +3,7 @@ import * as jsx from '@zemn.me/linear/jsx';
 import Head from 'next/head';
 import style from './s.module.sass';
 import * as indexer from '@zemn.me/linear/indexer'
-import MDXProvider from '@zemn.me/linear/MDXProvider';
+import * as MDXProvider from '@zemn.me/linear/MDXProvider';
 import React from 'react';
 import { classes } from '@zemn.me/linear/classes';
 import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
@@ -80,11 +80,11 @@ const M: React.FC = ({ children }) => {
     const index = React.useMemo(() => new indexer.Ctx, []);
     
     return <Main className={style.Main}>
-        <MDXProvider>
+        <MDXProvider.Provider>
             <indexer.context.Provider value={index}>
                 {children}
             </indexer.context.Provider>
-        </MDXProvider>
+        </MDXProvider.Provider>
     </Main>
 }
 
@@ -111,11 +111,13 @@ const Post:
                     </Div>
                 </div>
             </Header>
-            <Section className={style.Article}>
+            <Div className={style.Article}>
                 <Prose>
-                {article}
+                    <MDXProvider.Prose>
+                        {article}
+                    </MDXProvider.Prose>
                 </Prose>
-            </Section>
+            </Div>
 
     </M>
 ;

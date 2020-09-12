@@ -15,19 +15,13 @@ date: [ 15, 'dec', 2018 ]
 
 on the security implications of locally hosted web services
 
-    I. [Spotify’s All Singing, All Dancing Musical Backdoor](#b9ef)
-
-    II. [The Übersicht RCE](#ef5d)
-
-    III. [Wrapping Up](#73e9)
-
 I try to bring this up whenever I have the chance to talk about application security architecture: the way we think about networks as boundaries is useful, but inadequate in 2018 and this has serious implications for how we design our apps.
 
 The unfortunate poster child I’m using to contextualise this is übersicht, a MacOS widget host similar in use to Windows’s Rainmeter (anyone else remember putting that on their desktop in, like 2007?).
 
 Übersicht like many applications these days is essentially a web browser running web apps with special privileges. One of these privileges is being able to run commands on your computer. Webapp widgets are run on a locally hosted website only accessible by the user’s computer. I’m sorry. I just got word this article is about Spotify too. Let’s pause for a moment and talk about that.
 
-![this *blew my mind in 2007*](https://cdn-images-1.medium.com/max/2200/0*7blXAjfwb4BJX57h.png)*this *blew my mind in 2007**
+![this blew my mind in 2007](https://cdn-images-1.medium.com/max/2200/0*7blXAjfwb4BJX57h.png)
 
 ## I ⧸ Spotify’s All Singing, All Dancing Musical Backdoor
 
@@ -73,7 +67,7 @@ Why do we have certificates and all that in the first place? Well, a big part of
 
 It actually happens *all the time*, and it’s definitely happened to *you*. When you go to an internet café, or Starbucks, or take your transatlantic flight to San Francisco or whatever and connect to the Wi-Fi, it hijacks DNS to tell your computer that any website you visit is the site you need to visit to log-on to the Wi-Fi. This is a terrifying dark incantation called in whispers — by some — [Captive Portal](https://en.wikipedia.org/wiki/Captive_portal).
 
-![e-excquse me…. pwease log onto our wifi uwu](https://cdn-images-1.medium.com/max/2000/0*iWzl8DxZkKGyuUFE.png)*e-excquse me…. pwease log onto our wifi uwu*
+![e-excquse me…. pwease log onto our wifi uwu](https://cdn-images-1.medium.com/max/2000/0*iWzl8DxZkKGyuUFE.png)
 
 “Why isn’t this a huge deal?” I hear your brain turning over and over, sleepless, comfortless in this knowledge. There’s a couple of reasons. If the website is encrypted, then even though you can send back a response *as* google.com, you can’t send back one that can be *verified as* google.com.
 
@@ -85,7 +79,7 @@ If you’re not a security anorak, I’ll add in one more security gem to blow y
 
 So, let’s say, just as a hypothetical I sit down in a Starbucks one day with a terrifying fruit of cyber-warfare: the [WiFi Pineapple®](https://www.wifipineapple.com/). I can tell everyone in Starbucks that, actually, I’m the starbucks WiFi, connect to me please and they’ll be none the wiser. Then, I can see all their unencrypted internet browsing habits.
 
-![this is literally how they advertised the WiFi Pineapple® at DEFCON. my industry is very weird](https://cdn-images-1.medium.com/max/2000/0*42YgDrSmnL23IA64.jpg)*this is literally how they advertised the WiFi Pineapple® at DEFCON. my industry is very weird*
+![this is literally how they advertised the WiFi Pineapple® at DEFCON. my industry is very weird](https://cdn-images-1.medium.com/max/2000/0*42YgDrSmnL23IA64.jpg)
 
 Taking this a step further and using it to take over coffee goers’ Facebook sessions and others was the concept that underpinned the [Firesheep](https://en.wikipedia.org/wiki/Firesheep) software that I believe quite literally changed the world by making people wake up and realise an unencrypted internet is garbage.
 
@@ -189,7 +183,7 @@ They can, with a little hacking, some javascript, and a custom website:
 
 First, I apologise for writing my code in ES6 Javascript, which has a similar effect on legacy Javascript programmers to speaking to an Englishman in old English.
 
-![nope.](https://cdn-images-1.medium.com/max/2000/1*NwCX1dEMrvijxF4rcwxfpw.png)*nope.*
+![nope.](https://cdn-images-1.medium.com/max/2000/1*NwCX1dEMrvijxF4rcwxfpw.png)
 
 I’m just making an HTML form in Javascript, the code of which looks like this, and should be easier to understand:
 
@@ -292,7 +286,7 @@ First, we specify enctype="text/plain" . This indicates that we *don’t* want o
 
 And this… is a perfectly valid shell command that opens the calculator!
 
-![Boom. You got calculated](https://cdn-images-1.medium.com/max/2000/1*1jsQYUu9P03YlnCnoLmfcA.png)*Boom. You got calculated*
+![Boom. You got calculated](https://cdn-images-1.medium.com/max/2000/1*1jsQYUu9P03YlnCnoLmfcA.png)
 
 I mean, obviously if this wasn’t a proof of concept I’d be running code that did more than open a calculator.
 

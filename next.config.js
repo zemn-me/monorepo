@@ -44,7 +44,16 @@ config = require('next-mdx-enhanced')({
         require('remark-footnotes'),
         require('@silvenon/remark-smartypants'),
         [require('remark-textr'), { plugins: [
-            require('typographic-base')
+            require('typographic-apostrophes'),
+            require('typographic-quotes'),
+            require('typographic-arrows'),
+            require('typographic-copyright'),
+            require('typographic-ellipses'),
+            require('typographic-em-dashes'),
+            require('typographic-en-dashes'),
+            require('typographic-math-symbols'),
+            require('typographic-registered-trademark'),
+            require('typographic-trademark')
         ] }],
     ],
 })(config);
@@ -68,9 +77,10 @@ module.exports = {
 					l.options = {
 						...l.options,
                         modules: {
+                            ...l.options.modules,
                             ...(
                                 production
-                                ? { getLocalIdent: uniqIdent}
+                                ? { getLocalIdent: uniqIdent }
                                 : {}
                             )
                         }

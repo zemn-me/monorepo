@@ -19,6 +19,11 @@ interface DarkMode {
 
 const linearClassContext = classProvider.New(style.linear);
 
+const specialClasses: Readonly<Record<string,string>> = {
+    "footnote-ref": style.footnoteRef,
+    "footnote-backref": style.footnoteBackref
+};
+
 /**
  * These are special props which propagate to children via context.
  */
@@ -50,10 +55,16 @@ const Linearify:
             context: linearClassContext  
         });
 
+        const cls = classes(children.props.className, ...classes1);
+
+        if ("className" in cls) cls.className =
+            cls.className.split(" ").map(c => c in specialClasses?
+                    specialClasses[c]: c).join(" ");
+
 
         return wrap1(
             React.cloneElement(children, {
-                ...classes(children.props.className, ...classes1),
+                ...cls
             } as any)
         )
 
@@ -419,4 +430,18 @@ export const Sup:
     (props: SupProps) => React.ReactElement
 =
     props => <L><sup {...props}/></L>
+;
+
+export interface ProseImgProps extends ElProps<'img'> {}
+
+export const ProseImg:
+    (props: ProseImgProps) => React.ReactElement
+=
+    ({ alt, src, ...props }) => {
+        if (!alt) return <L><img {...props}/></L>
+        return <L><figure {...props}>
+            <img {...{ alt, src}}/>
+        <figcaption>{alt}</figcaption>
+        </figure></L>
+    }
 ;

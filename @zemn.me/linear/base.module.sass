@@ -25,6 +25,8 @@
   --dark-sand: #887f75
   --eigensand: #181719
   --med-sand: #bfb6a9
+  --purplish-sand: #bf47ab
+
   // light mode
   --daylight: #fffff7
   --arbor: #020202
@@ -47,6 +49,7 @@
     --bgc-o: var(--fgc)
     --figure-fill: var(--mgc)
     --figure-stroke: var(--mgc-o)
+    --visited-link: var(--purplish-sand)
 
   @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
     --fgc: var(--arbor)
@@ -93,20 +96,26 @@
     pre, code
       +linear
         white-space: break-spaces
-        font-size: 90%
+        font-size: 100%
 
 
 
     ol
-      +linear
-        counter-reset: li
+      &.linear, .linear &
         list-style: none
+        position: relative
 
-    li
-      +linear
-        counter-increment: li
+        ol
+            counter-reset: ol
+
+    ol > li
+      &.linear, .linear &
+        counter-increment: ol
         &::before
-          content: counters(li, '.') ". "
+          position: absolute
+          height: 1em
+          left: 0
+          content: counters(ol, '.') ". "
           color: var(--mgc)
 
     p
@@ -134,7 +143,11 @@
 
         
     a
-      &:visited, &:link
+      &:visited
+        +linear
+          color: inherit
+
+      &:link
         +linear
           color: inherit
         
@@ -142,6 +155,11 @@
         +linear
           text-decoration: none
           border-bottom: 1px solid var(--fgc)
+
+    th
+      &.linear, .linear &
+        font-weight: inherit
+
 
 
     input
@@ -174,37 +192,40 @@
           content: "⁂"
 
     article
-      .prose
-        +linear
-          font-size: 2.4rem
-          counter-reset: h1 0 h2 0 h3 0 h4 0 h5 0 h6 0
-          margin: auto
-          padding: 0 2em
-
+      &.linear, .linear &
+        &.prose, .prose &
           h1
             text-align: center
-            padding-bottom: 1rem
-            border-bottom: 1px solid var(--fgc)
-            counter-increment: h1
+            margin-bottom: 2rem
+
           h2
-            counter-increment: h2
+            font-size: 150%
+            text-align: center
+            margin: 2rem auto
+            text-align: center
+            display: block
+
           h3
-            counter-increment: h3
-          h4
-            counter-increment: h4
-          h2
-            margin: 4rem 0 1rem 0
-            &::before
-              content: counter(h2) ". "
-          h3
-            &::before
-              content: counter(h2) counter(h3, lower-latin) ". "
+            font-size: 120%
 
 
-    :global
-      .footnote-ref, .footnote-backref
-        +linear
-          color: var(--mgc) !important
-          border: initial !important
+
+      .footnoteRef, .footnoteBackref
+        color: var(--mgc) !important
+        border: initial !important
+
+      .footnoteBackref
+        &::before
+          content: " ("
+        &::after
+          content: ")"
+        
+
+    
+    figure
+      &.linear, .linear &
+        figcaption
+          text-align: center
+          font-style: italic
 
   //1

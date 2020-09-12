@@ -1552,22 +1552,22 @@ Conclusion
 We've done a ton of work. What has it gained us? Power. Fame. Strength. Everything a hero needs.
 
 1. Content Security Policy injection ([§3])
-    * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
-    * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
-    * Leverage existing information this page has such as the user email
-    * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
+   * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
+   * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
+   * Leverage existing information this page has such as the user email
+   * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
 2. `postMessage`, send access control list bypass ([§7])
-    * Push information across the origin trust boundary.
+   * Push information across the origin trust boundary.
 3. `postMessage`, receive access control list bypass. ([§8])
-    * Recieve information intended expressly for iCloud and other Apple ID applications
-    * In conjunction with (2), impersonate arbitary Apple ID applications.
-    * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
-    * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
+   * Recieve information intended expressly for iCloud and other Apple ID applications
+   * In conjunction with (2), impersonate arbitary Apple ID applications.
+   * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
+   * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
 4. XSS via JSONRPC 'config' method ([§9])
-    * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
-    * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
-    * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
-    * Near full control of the function and display of `idmsa.apple.com` Apple ID login pages.
+   * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
+   * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
+   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
+   * Near full control of the function and display of `idmsa.apple.com` Apple ID login pages.
 
 
 
