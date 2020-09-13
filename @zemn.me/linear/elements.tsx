@@ -7,6 +7,7 @@ import * as classProvider from './classprovider';
 import * as env from './env';
 import * as indexer from './indexer';
 import * as i8n from '@zemn.me/linear/i8n';
+import CodeHelper from '@zemn.me/linear/codehelper'
 
 export type Child = React.ReactElement | i8n.Text;
 export type Node = Child | React.ReactFragment | React.ReactPortal | null | undefined
@@ -326,7 +327,25 @@ export interface PreProps extends ElProps<'pre'> {}
 export const Pre:
     (props: PreProps) => React.ReactElement
 =
-    props => <L><pre {...props}/></L>
+    props => {
+
+        /**
+         * fix an annoying thing where mdx makes code blocks into
+         * `<pre><code/></pre>` instead of the more sensible
+         * <code><pre/></code>
+         */
+        if (React.Children.count(props.children) == 1) {
+            const childProps = (React.Children.only(props.children) as any).props as {
+                mdxType?: string   
+            };
+
+            if (childProps.mdxType == "code") {
+                return <>{React.Children.only(props.children)}</>
+            }
+        }
+    
+        return <L><pre {...props}/></L>
+    }
 
 export interface IndexProps {
     children: React.FC<{
@@ -443,5 +462,23 @@ export const ProseImg:
             <img {...{ alt, src}}/>
         <figcaption>{alt}</figcaption>
         </figure></L>
+    }
+;
+
+export interface CodeProps extends ElProps<'code'> {
+    CodeCommentHelper?: string
+}
+
+export const Code:
+    (props: CodeProps) => React.ReactElement
+=
+    ({ CodeCommentHelper, children, ...props }) => {
+
+        if (CodeCommentHelper) return <L><CodeHelper {...{
+            prefix: CodeCommentHelper,
+            ...props  
+        }}>{children as string}</CodeHelper></L>
+
+        return <L><code {...props}>{children}</code></L>
     }
 ;

