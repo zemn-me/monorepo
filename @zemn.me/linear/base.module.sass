@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap')
+  
 .blockelement
-    width: 100%
-    height: 100%
-    margin: 0
-    padding: 0
-    display: grid
+  width: 100%
+  height: 100%
+  margin: 0
+  padding: 0
+  display: grid
 
 .multicol
     display: grid
@@ -28,9 +30,9 @@
   --purplish-sand: #bf47ab
 
   // light mode
-  --daylight: #fffff7
-  --arbor: #020202
-  --cover: #fffff7
+  --daylight: #e7e8e6
+  --arbor:  #404956
+  --cover: #77808a
 
   --white: white
   --black: black
@@ -44,6 +46,7 @@
     --fgc: var(--med-sand) 
     --mgc: var(--dark-sand)
     --bgc: var(--eigensand)
+    --highlight: var(--arbor)
     --fgc-o: var(--bgc)
     --mgc-o: var(--bgc)
     --bgc-o: var(--fgc)
@@ -55,6 +58,7 @@
     --fgc: var(--arbor)
     --bgc: var(--daylight)
     --mgc: var(--cover)
+    --highlight: var(--dark-sand)
     --fgc-o: var(--bgc)
     --mgc-o: var(--bgc)
     --bgc-o: var(--fgc)
@@ -93,20 +97,59 @@
           margin: 2rem auto
           display: block
 
+    blockquote
+      +linear
+        font-style: italic
+
+    p
+      +linear
+        &::first-letter
+          text-transform: capitalize
+          padding-left: 1em
+
+
+    code pre, pre code
+      +linear
+        color: var(--mgc)
+
     pre, code
       +linear
         white-space: break-spaces
-        font-size: 100%
+        font-size: 90%
+        font-family: 'Inconsolata', monospace
+
+    li
+      +linear
+        &>*
+          &, &::first-letter
+            margin-left: 0
+            padding-left: 0
+
+    ul
+      +linear
+        list-style: none
 
 
+    li + li
+      +linear
+        margin-top: 1rem
 
-    ol
+    ol, ul
       &.linear, .linear &
         list-style: none
         position: relative
+        margin: 0
+        padding-left: 2rem
 
-        ol
+        li
+          &::before
+            content: " – "
+            position: absolute
+            left: 0
+            color: var(--mgc)
+        ol, ul
             counter-reset: ol
+            margin-left: inherit
 
     ol > li
       &.linear, .linear &
@@ -118,11 +161,7 @@
           content: counters(ol, '.') ". "
           color: var(--mgc)
 
-    p
-      +linear
-        &::first-letter
-          text-transform: capitalize
-          padding-left: 1em
+
 
     // these styles are intentionally fairly basic, and do not do
     // anything weird with alignment, so we can more specifically use
@@ -150,11 +189,8 @@
       &:link
         +linear
           color: inherit
-        
-      &:link
-        +linear
           text-decoration: none
-          border-bottom: 1px solid var(--fgc)
+          border-bottom: 1px solid var(--highlight)
 
     th
       &.linear, .linear &
@@ -182,6 +218,8 @@
         
     hr
       +linear
+        &::before
+          content: "⁂"
         border: 0
         text-align: center
         display: block

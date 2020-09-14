@@ -35,110 +35,22 @@ const CodeHelper:
         }
 
 
-        return <ScrollAnnotator pairs={ast.map(({ text, caption }) => [
-            caption?<>{caption.split(/\n\s*\n/g).map((t, i) => <p key={i.toString()}>{t}</p>)}</>:undefined,
-            <>{text}</>
-        ])}/>
-    }
-;
-
-interface ScrollAnnotatorProps {
-    pairs: readonly [React.ReactElement | undefined, React.ReactElement][]
-}
-
-
-// todo: make another element with commentary, that scrolls in tandem
-const ScrollAnnotator:
-    (props: ScrollAnnotatorProps) => React.ReactElement
-=
-    ({ pairs }) => {
-        const [ visible, setVisible ] = React.useState<boolean>(false);
-        const onVisibilityChanged = React.useCallback(([{ isIntersecting: v }]: {isIntersecting:boolean}[]) => {
-            if (v != visible) setVisible(() => v);
-        }, [setVisible])
-
-
-        const [ observer, setObserver ] = React.useState<IntersectionObserver>();
-        
-        React.useEffect(() => {
-            setObserver(new IntersectionObserver(onVisibilityChanged, {
-                // until we're at least 50% intersecting, nothing can be centered
-                threshold: [0, 0.5]   
-            }));
-            return () => observer?.disconnect();
-        }, [ setObserver ]);
-
-        const onRootMount = React.useCallback((el: Element | null) =>
-            {if(el) observer?.observe(el)}, [observer]);
-
-        const [ children, setChildren ] = React.useState<{
-            readonly fromEl: Map<Element, number>,
-            readonly toEl: Map<number, Element>
-        }>({ fromEl: new Map(), toEl: new Map() });
-        const onChildMount = React.useCallback((idx: number) => (el: Element | null) => {
-            if (!(el && !children.fromEl.has(el))) return;
-
-            children.fromEl.set(el, idx);
-            children.toEl.set(idx, el);
-        }, [setChildren]);
-
-
-        const [ highlightedChild, setHighlightedChild ] = React.useState<number | undefined>();
-        const onScroll = React.useCallback(() => {
-            const center = window.innerHeight / 2;
-            for (const [child, idx] of children.fromEl) {
-                const { top, bottom } = child.getBoundingClientRect();
-                const intersects = center > top && center < bottom;
-                if (intersects) return setHighlightedChild(idx);
-            }
-        }, [ children ]);
-
-        const highlightedChildHasCaption = highlightedChild && pairs[highlightedChild][0] !== undefined
-
-        React.useEffect(() => console.log("visibility changed to", visible), [visible]);
-
-        React.useEffect(() => {
-            if (visible) window.addEventListener('scroll', onScroll);
-            return () => {
-                window.removeEventListener('scroll', onScroll);
-            }
-        }, [ visible, onScroll ]);
-
-
-        return <div {...{
-        style: {
-            position: "relative",
-            display: "block"
-        }
+        return <div style={{
         }}>
-            {<div {...{
-                style: {
-                    position: "absolute",
-                    background: "var(--bgc)",
-                    borderBottom: "1px solid var(--fgc)",
-                    ...highlightedChild !== undefined?
-                        {
-                            top: `${children.toEl.get(highlightedChild)!.offsetTop}px`
-                        }
-                        :{}
-                }
-            }}>{highlightedChild!==undefined?pairs[highlightedChild][0]:null}</div>}
-            
-            <code ref={onRootMount}>
-                {pairs.map(([cap, code], idx) => 
-                    <div ref={onChildMount(idx)} {...{
-                        style: {
-                            ...highlightedChildHasCaption !== undefined && highlightedChild == idx
-                                ? { background: "var(--mgc)" }
-                                : {}
-                        }
-                    }}>{code}</div>
-                )}
-            </code>
+            {ast.map(({ text, caption: cap }, i) => <React.Fragment key={i.toString()}>
+                <div style={{
+                    margin: "auto",
+                    padding: ".2rem"
+                }}></div>
+                <code style={{
+                    width: "100%",
+                    overflow: "hidden",
+                }}><pre>{text}</pre></code>
+                {cap?<div style={{
+                    color: "var(--mgc)"
+                }}>{cap.split(/\n\s*\n/g).map((t, i) => <p key={i}>{t}</p>)}</div>:null}
+            </React.Fragment>)}
         </div>
-       
-        
-
     }
 ;
 

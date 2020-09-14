@@ -1,4 +1,5 @@
 const production = process.env.NODE_ENV == "production";
+const unistVisit = require('unist-util-visit');
 const glob = require("glob");
 const path = require("path");
 
@@ -34,7 +35,6 @@ const base_config = {
     }
 };
 
-
 let config = base_config;
 config = require('next-mdx-enhanced')({
     remarkPlugins: [
@@ -42,9 +42,18 @@ config = require('next-mdx-enhanced')({
         require('remark-sub-super'),
         require('remark-heading-id'),
         require('remark-footnotes'),
+        require('remark-lint-no-undefined-references'),
+        require('remark-lint-no-heading-like-paragraph'),
+        [require('remark-captions'), {
+            internal: {
+                image: 'Figure:'
+            }
+        }],
         require('@silvenon/remark-smartypants'),
         [require('remark-textr'), { plugins: [
             require('typographic-apostrophes'),
+            require('typographic-quotes'),
+            /*[require('typographic-quotes'), { locale: 'en-GB' }],*/
             require('typographic-quotes'),
             require('typographic-arrows'),
             require('typographic-copyright'),

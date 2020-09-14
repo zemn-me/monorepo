@@ -456,12 +456,8 @@ export interface ProseImgProps extends ElProps<'img'> {}
 export const ProseImg:
     (props: ProseImgProps) => React.ReactElement
 =
-    ({ alt, src, ...props }) => {
-        if (!alt) return <L><img {...props}/></L>
-        return <L><figure {...props}>
-            <img {...{ alt, src}}/>
-        <figcaption>{alt}</figcaption>
-        </figure></L>
+    props => {
+        return <L><img {...props}/></L>
     }
 ;
 

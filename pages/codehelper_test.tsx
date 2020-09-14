@@ -2,7 +2,7 @@
 
 const cmp = () => <div style={{
     display: "grid",
-    gridAutoColumns: "1fr 1fr"
+    gridTemplateColumns: "1fr 1fr"
 }}>
     <code><pre>{`
 window.addEventListener("message", e => {
