@@ -6,46 +6,54 @@ import * as indexer from '@zemn.me/linear/indexer'
 import * as MDXProvider from '@zemn.me/linear/MDXProvider';
 import React from 'react';
 import { classes } from '@zemn.me/linear/classes';
-import { A, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
+import { A, Li, Ol, Nav, Ord, Prose, Section, Header, Main, Div, Heading } from '@zemn.me/linear';
 import { PathNav } from '@zemn.me/linear/pathnav';
 import { mustExpectedMeta } from 'lib/article';
+import { SectionsProvider, SectionsContext, Record as SectionsRecord } from '@zemn.me/linear/sectiontracker';
 
-interface TOCNode {
-    readonly id?: string
-    readonly level: number
-    readonly title: string
-    readonly children: readonly TOCNode[]
+
+interface IndexSectionProps {
+    sections: readonly SectionsRecord[]
 }
-
-export interface IndexProps {
-    className?: string,
-    tree: TOCNode[]
-}
-
-
-interface IndexSectionProps extends TOCNode { }
 
 const IndexSection:
     (props: IndexSectionProps) => React.ReactElement
 =
-    ({ id, level, title, children}) => <>
-        {self?<li><IndexSectionHeader {...{ title, anchor: title }}/></li>:null}
-        {children&&children.length?<ol>
-            {children.map((child, i) => <IndexSection key={i} {...child}/>)}
-        </ol>:null}
+    ({ sections }) => <>
+        {sections.map((s, i) => <>
+            <Li key={i.toString()} {...{
+                ...classes(
+                    s.visible? style.IndexSectionVisible: style.IndexSection   
+                )
+            }}><a href={`#${s.id}`}>{s.title}</a></Li>
+
+            {s.children?.length?<Ol><IndexSection sections={s.children}/></Ol>:null}
+
+        </>)}
     </>
 ;
 
-
+export interface IndexProps {
+    className?: string,
+}
 
 export const Index:
     (props: IndexProps) => React.ReactElement | null
 =
-    ({ className, tree }) => {
+    ({ className }) => {
+        let sections = React.useContext(SectionsContext);
+
+        // cull parent nodes from the sections
+        // until there is more than one child
+        while(sections.length == 1 && sections[0].children) sections = sections[0].children
+
+
         return <Nav {...{
             ...classes(className)  
         }}>
-            <IndexSection {...tree[0]}/>
+            <Ol>
+                <IndexSection sections={sections}/>
+            </Ol>
         </Nav>
     }
 ;
@@ -72,7 +80,6 @@ interface PostProps {
     date: React.ReactElement
     article: React.ReactElement
     author?: React.ReactElement
-    toc: TOCNode[]
     tags?: readonly string[]
 }
 
@@ -81,9 +88,9 @@ const M: React.FC = ({ children }) => {
     
     return <Main className={style.Main}>
         <MDXProvider.Provider>
-            <indexer.context.Provider value={index}>
+            <SectionsProvider>
                 {children}
-            </indexer.context.Provider>
+            </SectionsProvider>
         </MDXProvider.Provider>
     </Main>
 }
@@ -105,9 +112,7 @@ const Post:
                         {tags.map(tag => <li key={tag}>{tag}</li>)}
                     </ul>: null}
                     <Div className={style.Index}>
-                        {/*<Index {...{
-                            tree: toc
-                        }} />*/}
+                        <Index/>
                     </Div>
                 </div>
             </Header>

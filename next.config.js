@@ -64,6 +64,7 @@ config = require('next-mdx-enhanced')({
             require('typographic-registered-trademark'),
             require('typographic-trademark')
         ] }],
+        require('./compiletime/sectionize.js'),
     ],
 })(config);
 

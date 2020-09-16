@@ -1,4 +1,5 @@
 import { frontMatter } from '../pages/article/**/*.mdx';
+import * as guards from 'lib/guards';
 import * as jsx from '@zemn.me/linear/jsx';
 import { trustedRelativeURL } from '@zemn.me/linear/url';
 import * as simpledate from '@zemn.me/simpletime/date';
@@ -23,45 +24,90 @@ interface ExpectedMetadata {
     readonly author?: string,
     readonly date: Date,
     readonly hidden?: boolean
+    readonly autonumber?: AutoNumber
 }
 
-const layoutNotString = Symbol();
-const titleNotString = Symbol();
-const languageNotString = Symbol();
-const subtitleNotUndefinedOrString = Symbol();
-const authorNotUndefinedorString = Symbol();
-const tagsNotArrayOfStringsOrUndefined = Symbol();
-const dateNotArray = Symbol();
+const AUTO_NUMBER_SEQUENCE_TYPE = [ "alphanumeric" ] as const;
+type AutoNumberSequence = (typeof AUTO_NUMBER_SEQUENCE_TYPE) extends
+    ReadonlyArray<infer A> ? A : never;
 
-const symError:
-    (v: { [key: string]: symbol }) => Error
+function isAutoNumberSequence(v: unknown): v is AutoNumberSequence {
+   return AUTO_NUMBER_SEQUENCE_TYPE.some(val => val == v)
+}
+
+interface AutoNumber extends jsx.YAMLObject {
+    sequence: (typeof AUTO_NUMBER_SEQUENCE_TYPE) extends ReadonlyArray<infer A>
+        ? A
+        : never;
+
+    separator: string
+    prefix?: string
+}
+
+export const mustAutoNumber:
+    (v: jsx.YAMLObject) => AutoNumber
 =
-    v => new Error(Object.keys(v)[0])
-;
+    ({ sequence, separator, prefix }): AutoNumber => {
+        guards.must(isAutoNumberSequence, sequence);
 
+        guards.must(guards.isString, separator);
+
+        guards.must(guards.any(guards.isUndefined, guards.isString), prefix);
+
+        return { sequence, separator, prefix }
+
+    }
+    
+;
 
 
 export const mustExpectedMeta:
     (data: jsx.FrontMatter) => ExpectedMetadata
 =
     data => {
-        const { layout, title, language, subtitle, tags, author, date } = data;
-        console.log(typeof layout);
-        if (!(typeof layout == "string")) throw symError({ layoutNotString });
-        if (!(typeof title == "string")) throw symError({ titleNotString })
-        if (!(typeof language == "string")) throw symError({ languageNotString });
-        if (subtitle !== undefined)
-            if (!(typeof subtitle == "string")) throw symError({ subtitleNotUndefinedOrString });
+        const { layout, title, language, subtitle, tags, author, date,
+            autonumber } = data;
+        guards.must(guards.isString, layout);
+        guards.must(guards.isString, title);
+        guards.must(guards.isString, language);
+        guards.must(guards.any(
+            guards.isString,
+            guards.isUndefined), subtitle);
 
+        guards.must(guards.any(
+            guards.isString,
+            guards.isUndefined), author);
 
-        if (author !== undefined)
-            if (!(typeof author == "string")) throw symError({ authorNotUndefinedorString });
+        guards.must(
+            guards.any(
+                guards.all(
+                    guards.isArray,
+                    guards.isArrayOf(
+                        guards.isString
+                    )
+                ),
+                guards.isUndefined
+            ),
+            tags
+        )
 
-        if (!jsx.isArrayOfStringsOrUndefined(tags)) throw symError({ tagsNotArrayOfStringsOrUndefined });
+        guards.must(
+            guards.all(
+                guards.isArray,
+                guards.isArrayOf(
+                    guards.any(
+                        guards.isString,
+                        guards.isNumber
+                    )
+                )
+            ),
+            date
+        );
 
-        if (!(date instanceof Array)) throw symError({ dateNotArray });
+        const an = autonumber !== undefined? mustAutoNumber(autonumber as any): undefined;
 
-        return { layout, title, language, subtitle, tags, author,
+  
+        return { layout, title, language, subtitle, tags, author, autonumber: an,
             date: simpledate.Parse(date as any as simpledate.SimpleDate)
          }
     }

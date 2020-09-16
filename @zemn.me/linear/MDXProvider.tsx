@@ -2,9 +2,21 @@ import { fromEntries } from './fromEntries';
 import * as elements from './elements';
 import { MDXProvider } from '@mdx-js/react';
 
-const components = fromEntries(Object.entries(elements).map( ([k, v]) => 
+export const components = fromEntries(Object.entries(elements).map( ([k, v]) => 
     [k[0].toLowerCase()+k.slice(1), v]
 ));
+
+export const proseComponents = {
+    ...components,
+    img: elements.ProseImg,
+    h1: elements.Heading,
+    h2: elements.Heading,
+    h3: elements.Heading,
+    h4: elements.Heading,
+    h5: elements.Heading,
+    section: elements.ProseSection
+};
+
 
 export const Provider:
     React.FC
@@ -18,10 +30,7 @@ export const Prose:
     React.FC
 =
     ({ children }) => <MDXProvider {...{
-        components: {
-            ...components,   
-            img: elements.ProseImg
-        },
+        components: proseComponents,
     }}>
         {children}
     </MDXProvider>

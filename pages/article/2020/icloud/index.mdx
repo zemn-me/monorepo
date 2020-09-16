@@ -14,7 +14,10 @@ autonumber:
     sequence: alphanumeric
     separator: "."
     prefix: §
+words: 10000
 ---
+
+import box from './box.png';
 
 How To Hack iCloud {#how-to-hack-icloud}
 ==================
@@ -469,12 +472,11 @@ most overengineered embed is a big, slightly off-white box.
 
 It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
 
-import box from './box.png';
 
 <img src={box}/>
 
 
-A Big, Slightly Off-White Box
+A Big, Slightly Off-White Box {#off_white_box}
 -----------------------------
 
 [A Big, Slightly Off-White Box]: #url-parsing-my-old-friend
@@ -623,10 +625,10 @@ try {
 
 There are two outcomes of this code: (1) the function ft() gets run immediately or (2) it gets run after a timeout specified by `p.a.meta.FEConfiguration.applLoadDelay`. What's `ft()`? `ft()`, is, and I can't put this any other way -- a very beefy boy.
 
-Analysing the 'Beefy Boy'
+Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
 -------------------------
-[Analysing the 'Beefy Boy']: #url-parsing-my-old-friend
-[§6]: #url-parsing-my-old-frie
+[Analysing the 'Beefy Boy']: #analysing-the-beefy-boy
+[§6]: #analysing-the-beefy-boy
 
 ```javascript
 ) {
@@ -973,10 +975,10 @@ Our `nullPageCode` waits for a config indicating what the index of `idmsa.apple.
 ```
 
 
-It's Not Always That You Need to Read The Spec, But That Always is Today.
+It's Not Always That You Need to Read The Spec, But That Always is Today. {#reading_the_spec}
 ------------------------------------------------------------------
-[It's Not Always That You Need to Read The Spec, But That Always is Today.]: #its-not-always-that-you-need-to-read-the-spec-but-that-always-is-today
-[§8]: #its-not-always-that-you-need-to-read-the-spec-but-that-always-is-today
+[It's Not Always That You Need to Read The Spec, But That Always is Today.]: #reading_the_spec
+[§8]: #reading_the_spec
 
 Now we have a sneaky way to push data to `idmsa.apple.com` without getting checked by the access control list. But how do we receive messages without being `icloud.com`?
 
@@ -1042,7 +1044,7 @@ We've compromised the trust between `idmsa.apple.com` and iCloud. But there's mo
 
 If we manage to get XSS from the position we're in now, we could open a popup from our compromised, embedded page into a 'real' `idmsa.apple.com` page, and attack the popup from our embedded window. Once we've taken over the popup, we can use `window.location.assign('https://apple.com')` to destroy our entry in the user history so it's not possible for the user to see that they were ever on a non-apple website.
 
-Stealing the Bank From an ATM
+Stealing the Bank From an ATM {#stealing_the_bank_from_an_ATM}
 -----------------------------
 [Stealing the Bank From an ATM]: #stealing-the-bank-from-an-atm
 [§9]: #stealing-the-bank-from-an-atm
@@ -1543,7 +1545,7 @@ We also make this minor change to our 'message' listener to destroy ourselves af
       if (e.data == "CLOSE") window.location.replace("https://apple.com")
 ```
 
-Conclusion
+Conclusion {#conclusion}
 ----------
 [Conclusion]: #conclusion
 [§10]: #conclusion

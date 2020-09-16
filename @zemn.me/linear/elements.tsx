@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-has-content */
 
+
+import { SectionManager } from './sectiontracker';
 import React from 'react';
 import style from './style';
 import classes from './classes';
@@ -99,7 +101,6 @@ export const Input:
     = props => <L><input {...props}/></L>
 
 export interface H1Props extends ElProps<'h1'> { }
-
 
 /**
  * `H1_` is the true H1 element. You likely want to use
@@ -353,20 +354,21 @@ export interface IndexProps {
     }>
 }
 
-export const sectionDepthContext = React.createContext<number>(0);
+export const sectionDepthContext = React.createContext<
+    -1 | 0 | 1 | 2 | 3 | 4 | 5>(-1);
 
 export interface SectionProps extends ElProps<'section'> {}
 
-export const Section:
-    (props: SectionProps) => React.ReactElement
-=
-    ({ ...props }) => {
+export const Section =
+    React.forwardRef<HTMLElement, SectionProps>(({ ...props }, ref) => {
         const depth = React.useContext(sectionDepthContext);
 
-        return <sectionDepthContext.Provider value={depth+1}>
-            <L><section {...props}/></L>
+        return <sectionDepthContext.Provider value={
+            depth < 5? (depth+1) as (0 | 1 | 2 | 3 | 4| 5) : 5
+        }>
+            <L><section ref={ref} {...props}/></L>
         </sectionDepthContext.Provider>
-    }
+    })
 ;
 
 export interface HeadingProps extends ElProps<'h1'> {
@@ -380,9 +382,15 @@ const headerByDepth = [
 export const Heading:
     (props: HeadingProps) => React.ReactElement
 =
-    ({ children, depth: depthOffset = 1, ...props}) => {
+    ({ children, depth: depthOffset = 0, ...props}) => {
         const depth = React.useContext(sectionDepthContext) + depthOffset;
-        const H = headerByDepth[depth -1] ?? H5;
+        const realHeader = 
+            depth < 0
+                ? 0
+                : depth > 5
+                    ? 5
+                    : depth;
+        const H = headerByDepth[realHeader];
 
         return <L><H {...props}>{children}</H></L>
     }
@@ -477,4 +485,25 @@ export const Code:
 
         return <L><code {...props}>{children}</code></L>
     }
+;
+
+export interface ProseSectionProps extends Omit<SectionProps, 'ref'> {
+    "data-depth"?: number
+    "data-for"?: string
+    children: [ React.ReactElement<HeadingProps>, ...React.ReactNode[] ]
+}
+
+export const ProseSection:
+    (props: ProseSectionProps) => React.ReactElement
+=
+    ({ "data-for": f0r, "data-depth": depth, children: [first, ...children], ...props }) => <SectionManager {...{
+        title: <>{first.props.children}</>,
+        id: f0r ?? "fakeid123"
+    }}>
+        <Section {...{
+            ...f0r? { "aria-labelledby": f0r }: {},
+            ...props,
+            children: [first, ...children]
+        }} />
+    </SectionManager>
 ;
