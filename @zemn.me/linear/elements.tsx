@@ -487,6 +487,16 @@ export const Code:
     }
 ;
 
+export const InlineCode:
+    (props: CodeProps) => React.ReactElement
+=
+    ({ className, ...props }) => <Code {...{
+        ...classes(style.inline, className),
+        ...props
+    }}/>
+;
+
+
 export interface ProseSectionProps extends Omit<SectionProps, 'ref'> {
     "data-depth"?: number
     "data-for"?: string

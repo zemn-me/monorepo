@@ -1,6 +1,6 @@
 ---
 layout: article
-title: How To Hack iCloud
+title: How To Hack Apple ID
 language: en-GB
 subtitle:
     Disclosure of a severe bug allowing client-side takeover of
@@ -14,19 +14,41 @@ autonumber:
     sequence: alphanumeric
     separator: "."
     prefix: §
-words: 10000
 ---
 
 import box from './box.png';
 
-How To Hack iCloud {#how-to-hack-icloud}
-==================
 
-[How To Hack iCloud]: #how-to-hack-icloud
-[§0]: #how-to-hack-icloud
+How To Hack Apple ID
+====================
+
+## Abstract
+
+This article discusses the technical detail around a chain of vulnerabilities (shown below) that allowed an attacker to steal an Apple user's Apple ID account, and the story around how these vulnerabilities were found.
+
+1. Content Security Policy injection ([§3])
+   * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
+   * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
+   * Leverage existing information this page has such as the user email
+   * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
+2. `postMessage`, send access control list bypass ([§7])
+   * Push information across the origin trust boundary.
+3. `postMessage`, receive access control list bypass. ([§8])
+   * Recieve information intended expressly for iCloud and other Apple ID applications
+   * In conjunction with (2), impersonate arbitary Apple ID applications.
+   * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
+   * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
+4. XSS via JSONRPC 'config' method ([§9])
+   * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
+   * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
+   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
+   * Near full control of the function and display of `idmsa.apple.com` Apple ID login pages.
+
 
 Preamble {#preamble}
---------------------
+--------
+
+### Fear, Romance, and Vulnerability
 
 [§1]: #preamble
 [Preamble]: #preamble
@@ -133,14 +155,11 @@ Just a few minutes attention from some Project Zero guys is worth tens of
 thousands of dollars if I could only tempt them with my fine selection of bounty
 shirts and glass tumblers with company logos.
 
-II. The Very Worst Thing {#the_very_worst_thing}
---------------------------------------------
+## Shit, let's be ~~santa~~ iCloud {#shit_lets_be_santa}
 
-[The Very Worst Thing]: #the_very_worst_thing
+[santa]: https://www.homestuck.com/sweet-bro-and-hella-jeff/16
 
-[§2]: #the_very_worst_thing
-
-A few days ago when I was sick with flu and researching Apple security to
+Some time ago when I was sick with flu and researching Apple security to
 distract me from the aches and pains of my failing mortal body I found an XSS
 deep in an apple.com subdomain. That's to say, I could inject some code into a
 website somewhere on apple.com, which, to a user's web browser looked like it
@@ -156,34 +175,23 @@ you are to Apple, and do bad stuff you wouldn't want me to do, like purchase
 gifts for myself in the apple store with *your* credit card.
 
 At this point, trying to think of the worst thing that could possibly happen
-with this vulnerability as I often seem to be doing I thought -- well, what if I
+with this vulnerability I thought -- well, what if I
 get into iCloud? That would be really, really terrible right?
 
-But then, I recall the oddity that icloud is *not* on `apple.com`. A rather
-sensible decision. If, for example instead of using your `apple.com` session,
-`iCloud.com` used a special, iCloud specific session negotiated *with*
-`apple.com` requiring your username and password input then hacking the much
-larger and thus easier to attack `apple.com` wouldn't leak my nudes.
+But then, I recall the oddity that icloud is *not* on `apple.com`. iCloud has its own domain, `icloud.com`. This means that a bug in `apple.com` won't affect `iCloud.com`. Probably.
 
-I never truly verified if this is the case -- that is, whether I can derive an
-iCloud session from an `apple.com` session. But I did get a hankering to
-investigate, and my investigation proved a lot of my intuition correct at least.
-
-********************************************************************************
-
-A telltale oddity on `icloud.com`: if I am logged into `apple.com`, and I try to
+If I am logged into `apple.com`, and I try to
 log into `icloud.com`, the login dialog presents my email on the email line
-without my ever entering it. How is this possible? Well, it turns out that the
+without my ever entering it. How is this possible? These domains can't mess with each other.
+
+As it turns out the
 apple login system is located at `idmsa.apple.com` and is _embedded_ into
-icloud. Since `idmsa.apple.com` inherits the `*.apple.com` session cookie, it
-already knows my email. By the looks of it though, it needs my confirmation to
-grant a special iCloud session so I can log into my iCloud. Which is a pretty
-sensible decision, as previously mentioned.
+icloud -- and since `idmsa.apple.com` inherits the `*.apple.com` session cookie, it
+already knows my email.
 
 We've all embedded something before. Come to think of it, I _hope_ we've all
 embedded something before. Not so many people pasting embed code into their
-personal websites these days I guess. That's probably a good thing (not you,
-Google Tag Manager!!).
+personal websites these days I guess. That's probably a good thing.
 
 If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A
 Presses (Commentated)][3] video from YouTube I might want to put in a video
@@ -218,10 +226,10 @@ itself. If you are developing a website you should *always* set this to `DENY`
 unless you really know what you're doing.
 
 I actually lied when I said `X-Frame-Options` only has two possible values.
+
 There's a third, `allow-from [domain]`, which existed for a little while in a
-handful of browsers. The idea was you'd set `allow-from mywebsite2.com` and then
-*just* `mywebsite2.com` can embed your webpage. `idmsa.apple.com` is actually
-the *only* place I have *ever* seen this header used. Apple sets it to:
+handful of browsers. The idea was you'd set '`allow-from mywebsite2.com`' and then
+*just* '`mywebsite2.com`' can embed your webpage. `idmsa.apple.com` is actually, amusingly, the *only* place I have *ever* seen this header used. Apple sets it to:
 
 ```
 HTTP X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
@@ -230,13 +238,13 @@ HTTP X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
 What does this do? Absolutely nothing in any mordern browser. It's not even
 equivalent to `DENY`. it lets any website embed you.
 
-This would be really bad, and I'd say uncharaceristically bad for Apple. Apple
-backs the old-timey `X-Frame-Options: ALLOW-FROM` with the new hotness, Content
+This would be really bad, and I'd say uncharaceristically bad for Apple. But Apple, eternal in its wisdom, backs up the old-timey `X-Frame-Options: ALLOW-FROM` with the new hotness, Content
 Security Policy `frame-ancestors`.
 
-Give me a few seconds to gush about how great Content Security Policy is.
+Give me a few seconds to gush about how great Content Security Policy is:
+
 `X-Frame-Options` only kinda worked. Let's say I check the incoming website
-loading us to see if it's `mywebsite2.com`, that is:
+loading us to see if it's '`mywebsite2.com`', that is:
 
 ```
 HTTP GET /watch_for_rolling_rocks_embed
@@ -265,8 +273,7 @@ That's just one way `frame-ancestors` improves on `X-Frame-Options`. With
 `frame-ancestors`, it checks that all the embedding pages all the way up are
 allowed to embed the content.
 
-URL Parsing, My Old Friend {#url_parsing,_my_old_friend}
---------------------------
+## All-Access Ancestor Pass {#all_access_ancestor_pass}
 
 [URL Parsing, My Old Friend]: #url_parsing,_my_old_friend 
 [§3]: #url_parsing,_my_old_friend
@@ -300,12 +307,11 @@ Parameters:
 ```
 
 This looks a lot like a request with the OAuth authorization protocol. Probably
-because `idmsa.apple.com` is the Apple ID server. OAuth is also perfect because
-OAuth generates tokens that are specific to each `client_id`, that is, the
-tokens correspond to the `client_id`, which represents the app requesting Apple
-ID, in this case iCloud and they are not usually interchangable. I couldn't,
-then, if this were implemented correctly take your iMessage authentication token
-and use it to get into your iCloud.
+because `idmsa.apple.com` is the Apple ID server.
+
+OAuth is a great choice for the way iCloud works. Because OAuth tokens are not interchangable between clients, if I hacked e.g. your iMessage, it might be issued a different token to your iCloud, and I couldn't use the less scary one to get into the more scary one.
+
+Let's break down what these parameters mean:
 
  - `response_type=code` is an OAuth specific parameter asking for an OAuth code
 which the iCloud servers can exchange for an Apple ID credential.
@@ -769,42 +775,60 @@ The technique that I've found to work best is to use Google Chrome Dev tools' 'A
 This gives us the other half of the conversation, because `app.js` runs *as soon as the singin page loads*.
 
 Here's a full, successful annotated conversation between parent (iCloud) and child (Apple ID):
-```json
 
-I'm ready, are you ready?
+> -> I'm ready, are you ready?
 
+```
 child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["ready"],"id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2"}
+```
 
-yeah bro im ready . lets do this
+Parent:
 
+> <- yeah bro im ready . lets do this
+
+```
 parent: pmrpc.{"jsonrpc":"2.0","id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2","result":true}
+```
 
-alright. i am calling myself "Sign In With Your Apple ID"
+> <- alright. i am calling myself "Sign In With Your Apple ID"
 
+```
 child: pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign In with Your Apple ID"}],"id":"E0236187-9F33-42BC-AD1C-4F3866803C55"}
+```
 
-cool bro. cool bro. very cool. keep it coming
+> -> cool bro. cool bro. very cool. keep it coming
 
+```
 parent : pmrpc.{"jsonrpc":"2.0","id":"E0236187-9F33-42BC-AD1C-4F3866803C55","result":true}
+```
 
-ok bro, let me know how i should configure the login dialog. that cool bro
+> <- ok bro, let me know how i should configure the login dialog. that cool bro
 
+```
 child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["config"],"id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD"}
+```
 
-yeah bro. very cool. very cool.
+> -> yeah bro. very cool. very cool.
 
+```
 parent: pmrpc.{"jsonrpc":"2.0","id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD","result":true}
+```
 
-ok dude hit me with that config stuff
+> <- ok dude hit me with that config stuff
 
+```
 child: pmrpc.{"jsonrpc":"2.0","method":"config","params":[],"id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B"}
+```
 
-no worries my dude. make sure theres a remember me box. and uh. don't need a link to create an account. that wouldn't make sense. do need a link for if they forget their password. call the dialog "sign in with iCloud". heres the logo. keep it fresh my man.
+> -> no worries my dude. make sure theres a remember me box. and uh. don't need a link to create an account. that wouldn't make sense. do need a link for if they forget their password. call the dialog "sign in with iCloud". heres the logo. keep it fresh my man.
 
+```
 parent: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":{"data":{"features":{"rememberMe":true,"createLink":false,"iForgotLink":true,"pause2FA":false},"signInLabel":"Sign in to iCloud","serviceKey":"d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d","defaultAccountNameAutoFillDomain":"icloud.com","trustTokens":["HSARMTnl/S90E=SRVX"],"rememberMeLabel":"keep-me-signed-in","theme":"dark","waitAnimationOnAuthComplete":false,"logo":{"src":"data:image/png;base64,[ ... ]ErkJggg==","width":"100px"}}}}
+```
 
-and I'm out
+> <- and I'm out
 
+```
 parent sends: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":true}
 ```
 
@@ -1545,40 +1569,188 @@ We also make this minor change to our 'message' listener to destroy ourselves af
       if (e.data == "CLOSE") window.location.replace("https://apple.com")
 ```
 
-Conclusion {#conclusion}
-----------
-[Conclusion]: #conclusion
-[§10]: #conclusion
 
-We've done a ton of work. What has it gained us? Power. Fame. Strength. Everything a hero needs.
+## I'm sick of taking hush money.
 
-1. Content Security Policy injection ([§3])
-   * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
-   * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
-   * Leverage existing information this page has such as the user email
-   * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
-2. `postMessage`, send access control list bypass ([§7])
-   * Push information across the origin trust boundary.
-3. `postMessage`, receive access control list bypass. ([§8])
-   * Recieve information intended expressly for iCloud and other Apple ID applications
-   * In conjunction with (2), impersonate arbitary Apple ID applications.
-   * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
-   * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
-4. XSS via JSONRPC 'config' method ([§9])
-   * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
-   * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
-   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
-   * Near full control of the function and display of `idmsa.apple.com` Apple ID login pages.
+hoops
 
 
+## Closing notes
+
+
+### Timeline
+
+Reporting this bug was a frustrating experience. But, can I really complain about that? These days, it always is. In short: I reported two bugs in late 2019, both of which were fixed within less than a week. The second bug, the Apple ID code injection took 18 weeks to get accepted and 36 weeks to get paid for. The other, as far as I can tell has never been responded to by a human. I have not been publicly credited for either bug.
+
+1. *Friday, November 15th 2019*
+    - First apple bug, an XSS on apple.com reported
+2. *Saturday, November 16th 2019*
+    - Issues noticed in Apple ID
+    - The previous bug I reported has been mitigated, but no email from Apple about it
+2. *Thursday, November 21st 2019, 3:43AM GMT*
+    - First proof of concept sent to Apple demonstrating impersonating iCloud to Apple ID, using it to steal Apple user's information.
+3. *Thursday, November 21st 2019, 6:06AM GMT*
+    - Templated response from Apple, saying they're looking into it
+4. *Thursday, November 21st 2019, 8:20PM GMT*
+    - Provided first Apple ID proof of concept which injects malicious code, along with some video documentation.
+5. *Sunday, November 24th 2019*
+    - The issue is mitigated (partially fixed) by Apple
+6. *Thursday, November 28th 2019*
+    - Ask for updates
+7. *Wednesday, December 4th 2019*
+    - I try to pull some strings with friends to get a reply
+8. *Tuesday, December 3rd 2019*
+    - Apple tells me there is nothing to share with me
+9. *December 10th 2019*
+    - I ask if there is an update
+9. *Friday, January 10th 2019*
+    - I get an automated email saying, in essence (1) don't disclose the bug to the public until 'investigation is complete' and (2) Apple will provide information over the course of the investigation. Email for an update
+9. *Wednesday, January 29th 2020*
+    - Ask for another update (at the 2 month mark)
+10. *Friday, January 31st 2020*
+    - Am asked to check if it's been fixed. Yes, but not exactly in the way I might have liked.
+11. *Sunday, February 2nd 2020*
+    - At Schmoocon, a security conference in Washington DC I happen to meet the director of the responsible disclosure program. I talk about the difficulties I've had.
+11. *Tuesday, February 4th 2020*
+    - Apple confirms the bug as fixed and asks for my name to give credit on the [Apple Hall of Fame] **as of September 2020, I have still not been publicly credited*
+    - I reply asking if this is covered by the bounty program
+    - Apple responds saying that they will let me know later.
+12. *Saturday, February 15th 2020*
+    - I ask for an update on status
+13. *Monday, February 17th 2020*
+    - Apple responds: no updates
+    - I ask when I'll hear back
+99. *Friday, February 21st 2020*
+    - I contact the director of the program with the details I got at schmoo, asking when the expected turnaround on bugs is
+14. *Monday, March 2nd 2020*
+    - Apple responds
+    - They say they have no specfic date
+99. *Tuesday, March 3rd 2020*
+    - The director responds, saying they don't give estimates on timelines, but he'll get it looked into
+15. *Tuesday, March 24th 2020*
+    - Offered $10,000 for the Apple ID code injection vulnerability by Apple
+    - Asked to register as an appple developer so I can get paid through there
+16. *Sunday, March 29th 2020*
+    - Enroll in the Apple Developer program, and ask when I'll be able to disclose publicly.
+17. *Tuesday, March 31st 2020*
+    - Told to accept the terms and set up my account and tax information
+    - (I am not told anything about disclosure)
+18. *Tuesday, March 31st 2020*
+    - Ask for more detailled instructions, because I can't find out how to set up my account and tax information (this is because my Apple Developers application has not yet been accepted)
+19. *Thursday, April 2nd 2020*
+    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account."[^3])
+99. *Tuesday, April 28th*
+    - Apple replies to request for more detailed instructions (it's the same thing, but re-worded)
+20. *May 13th 2020*
+    - I ask for an update
+21. *May 18th 2020*
+    - Am told the money is "in process to be paid", with no exact date but expected in May or early June. They'll get back when they know.
+22. *May 23rd 2020*
+    - I am told my information has been sent to the accounts team, and that Apple will contact me about it when appropriate
+23. *May 18th 2020*
+    - I ask again when I can disclose
+24. *June 8th 2020*
+    - I ask for some kind of update on payment or when I can disclose
+25. *June 10th 2020*
+    - I am informed that there is 'a new process'
+    - The new process means I pay myself for my Apple Developers account, and Apple reimburses me that cost
+    - I tell Apple I did this several months ago, and ask how my bug was classified within the program
+    - I also contact the Apple security director asking if I can get help. He's no longer with Apple
+27. *June 15th 2020*
+    - Apple asks me to provide an 'enrolment ID'
+28. *June 15th 2020*
+    - I send apple a screenshot of what I am seeing. All my application shows is 'Contact us to continue your enrolment'
+    - I say I'm pretty frustrated and threaten to disclose the vulnerability if I am not given some way forward on several questions: (1) how the bug was classified (2) when I can disclose this and (3) what I am missing to get paid
+    - I also [rant about it on twitter](https://twitter.com/zemnmez/status/1272638710832599043), which was probably the most productive thing I did to get a proper response in retrospect
+29. *June 19th 2020* 
+    - Apple gets in touch, saying they've completed the acccount review and now I need to set up a bank account to get paid in
+    - Apple says they're OK with disclosing, as long as the issue is addressed in an update
+    - Apple asks for a draft of my disclosure
+30. *Thursday, July 2nd 2020*
+    - The Apple people are very gracious. They say thanks for the report, and say my writeup is pretty good. Whoever is answering is very surprised by, and asks me to correct where I say I found this bug only "a few days ago" in the draft I wrote 🤔
+31. *July 29th 2020*
+    - I get paid :D
+
+[Apple Bug Bounty Payouts]: https://web.archive.org/web/20191220021517/https://developer.apple.com/security-bounty/payouts/
+
+### Thanks, Farewell {#thanks_farewell}
+
+I've learned that it literally takes me a year to put together a disclosure I like. Sorry about that, but also, it's a lot more fulfilling to just go all in on one article.
+
+Special shout out to [Alex][@mangopdf], who is always encouraging about my writing, despite putting out more and better stuff than me on a regular basis.
+
+Also shoutout to my ex-coworkers at Twitch! Hopefully I can find someone at Google to win a single game of smash against.
+
+[@mangopdf]: https://twitter.com/mangopdf
+
+PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
 
 
 
 
 
+[^3]:
+    Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
 
+    > **Example Payouts**
+    >
+    > Bounty payments are determined by the level of access or execution obtained by the reported issue, modified by the quality of the report. Issues that are unique to designated developer or public betas, including regressions, can result in a 50% additional bonus if the issues were previously unknown to Apple. All security issues with significant impact to users will be considered for Apple Security Bounty payment, even if they do not fit the published bounty categories.
+    > 
+    > |   |    |    |
+    > | --- | --- | --- |
+    > | Unauthorized iCloud Account Access | $25,000 | Limited unauthorized control of an iCloud Account |
+    > | | $25,000 |  Limited unauthorized control of an iCloud account |
+    > | | $100,000 |  Broad unauthorized control of an iCloud account |
+    > | Physical Access to Device: Lock Screen bypass | $25,000 | Access to a small amount of sensitive data from the lock screen (but not including a list of installed apps or the layout of the home screen). |
+    > |  | $50,000 | Partial access to sensitive data from the lock screen. |
+    > |  | $100,000 | Broad access to sensitive data from the lock screen. |
+    > | Physical Access to Device: User Data Extraction | $100,000 | Partial extraction of sensitive data from the locked device after first unlock. |
+    > |   | $250,000 | Broad extraction of sensitive data from the locked device after first unlock. |
+    > | User-Installed App: Unauthorized Access to Sensitive Data | $25,000 | App access to a small amount of sensitive data normally protected by a TCC prompt. |
+    > |     | $50,000  | Partial app access to sensitive data normally protected by a TCC prompt. |
+    > |      | $100,000 | Broad app access to sensitive data normally protected by a TCC prompt or the platform sandbox. |
+    > | User-Installed App: Kernel Code Execution | $100,000 | Kernel code execution reachable from an app. |
+    > |    | $150,000 |  Kernel code execution reachable from an app, including PPL bypass or kernel PAC bypass. |
+    > | User-Installed App: CPU Side-Channel Attack | $250,000 | CPU side-channel attack allowing any sensitive data to be leaked from other processes or higher privilege levels. |
+    > | Network Attack with User Interaction: One-Click Unauthorized Access to Sensitive Data | $75,000  | One-click remote partial access to sensitive data. |
+    > |      | $150,000 | One-click remote broad access to sensitive data. |
+    > | Network Attack with User Interaction: One-Click Kernel Code Execution | $150,000 | One-click remote kernel code execution. | 
+    > |      | $250,000 | One-click remote kernel code execution, including PPL bypass or kernel PAC bypass. |
+    > | Network Attack without User Interaction: Zero-Click Radio to Kernel with Physical Proximity | $50,000 |  Zero-click code execution on a radio (e.g. baseband, Bluetooth or Wi-Fi) with only physical proximity, with no escalation to kernel. |
+    > |    | $200,000 | Zero-click partial access to sensitive data, with only physical proximity. |
+    > |    | $250,000 | Zero-click kernel code execution, with only physical proximity. |
+    > |  Network Attack without User Interaction: Zero-Click Unauthorized Access to Sensitive Data  | $100,000 | Zero-click attack that can turn on and collect information from a sensor (e.g., camera, microphone, or GPS). |
+    > |     | $250,000 | Zero-click partial access to sensitive data, without physical proximity. |
+    > |    | $500,000 | Zero-click broad access to sensitive data. |
+    > | Network Attack without User Interaction: Zero-Click Kernel Code Execution with Persistence and Kernel PAC Bypass | $1,000,000 | Zero-click remote chain with full kernel execution and persistence, including kernel PAC bypass, on latest shipping hardware. |
+    >
+    > *Notes and Definitions*
+    > 
+    > “One-click” refers to an exploit requiring user interaction to successfully gain access or execution. (For example, the user clicks a malicious link or opens a malicious file.)
+    >
+    > “Zero-click” refers to an exploit requiring no user interaction to successfully gain access or execution. (For example, being on a network or in proximity is sufficient.)
+    >
+    > “Sensitive data” access includes gaining a small amount (i.e., one or two items), partial access (i.e., some large number), or broad access (i.e., the full database) from Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data — or similar user data — that would normally be prevented by the system.
+    > 
+    > The top payouts in each category are reserved for high quality reports and are meant to reflect significant effort, and as such are applicable to issues that impact all or most Apple platforms, or that circumvent the full set of latest technology mitigations available. Payouts vary based on available hardware and software mitigations that must be bypassed for successful exploitation.
+    >
+    > There is a $5,000 minimum payout for all categories.
+    >
+    > |    | Topic | Maximum Payout |
+    > | -- | ----- | -------------- |
+    > | iCloud | Unauthorized access to iCloud account data on Apple Servers | $100,000 |
+    > |  Device attack via physical access | Lock screen bypass | $100,000 |
+    > |                                    | User Data Extraction | $250,000 |
+    > | Device attack via user-installed app | Unauthorized access to sensitive data** | $100,000 |
+    > |                                    | Kernel code execution | $150,000 |
+    > |                                    | CPU side channel attack | $250,000 |
+    > | Network attack with user interaction | One-click unauthorized access to sensitive data** | $150,000 |
+    > |                                 | One-click kernel code execution | $250,000|
+    > | Network attack without user interaction | Zero-click radio to kernel with physical proximity | $250,000 |
+    > |            | Zero-click unauthorized access to sensitive data** | $500,000 |
+    > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
+    > 
+    > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
 
-
-
-
-
+[Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
+[Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536

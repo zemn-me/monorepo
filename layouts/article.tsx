@@ -25,9 +25,11 @@ const IndexSection:
                 ...classes(
                     s.visible? style.IndexSectionVisible: style.IndexSection   
                 )
-            }}><a href={`#${s.id}`}>{s.title}</a></Li>
+            }}><a href={`#${s.id}`}>{s.title}</a>
 
             {s.children?.length?<Ol><IndexSection sections={s.children}/></Ol>:null}
+
+            </Li>
 
         </>)}
     </>

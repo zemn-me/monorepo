@@ -74,6 +74,9 @@
   =linear
     &#{$this}, #{$this} &
       @content
+
+  =indented-block
+    margin: 1em 2em
       
   @at-root
     .frac
@@ -100,8 +103,17 @@
 
     blockquote
       +linear
+        @include indented-block
         font-style: italic
 
+    code
+      +linear
+        @include indented-block
+      
+    code.inline
+      margin: 0
+    
+      
 
     p
       +linear
@@ -132,9 +144,9 @@
         list-style: none
 
 
-    li + li
+    * + li, ol ol, ul ul
       +linear
-        margin-top: 1rem
+        margin-top: .5rem
 
     ol, ul
       &.linear, .linear &
