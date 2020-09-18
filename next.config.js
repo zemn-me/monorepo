@@ -1,5 +1,4 @@
 const production = process.env.NODE_ENV == "production";
-const unistVisit = require('unist-util-visit');
 const glob = require("glob");
 const path = require("path");
 
@@ -68,8 +67,12 @@ config = require('next-mdx-enhanced')({
     ],
 })(config);
 
+config = require('next-videos')({
+    // i cannot explain why this makes it work, but it does
+    assetDirectory: 'static',
+    ...config
+});
 config = require('next-images')(config);
-config = require('next-videos')(config);
 
 const mdxOpts = {
     // https://github.com/frontarm/mdx-util/blob/d236b4a805e5cfc656b6851a0e707a9d26cf0d29/packages/mdx-loader/index.js#L30
@@ -109,7 +112,7 @@ module.exports = {
             if (!rule.use.forEach) return;
             rule.use.forEach(useConf => {
                 if (!useConf.loader) return;
-                if ( !useConf.loader.includes("@mdx-js/loader") ) return;
+                if ( !useConf.loader.includes("file-loader") ) return;
 
                 /*
                 useConf.options = {
