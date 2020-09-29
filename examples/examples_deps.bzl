@@ -1,8 +1,10 @@
 """Define dependencies for `rules_rust` examples"""
 
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "npm_install")
-load("@examples//hello_sys:workspace.bzl", "remote_deps")
+load("@examples//hello_sys/raze:crates.bzl", "rules_rust_examples_hello_sys_fetch_remote_crates")
 load("@io_bazel_rules_rust//:workspace.bzl", "rust_workspace")
 load("@io_bazel_rules_rust//bindgen:repositories.bzl", "rust_bindgen_repositories")
 load("@io_bazel_rules_rust//proto:repositories.bzl", "rust_proto_repositories")
@@ -47,8 +49,20 @@ def deps():
 
     rust_workspace()
 
-    remote_deps()
+    rules_rust_examples_hello_sys_fetch_remote_crates()
 
     rules_proto_dependencies()
 
     rules_proto_toolchains()
+
+    maybe(
+        http_archive,
+        name = "libc",
+        build_file = "@examples//ffi:libc.BUILD",
+        sha256 = "1ac4c2ac6ed5a8fb9020c166bc63316205f1dc78d4b964ad31f4f21eb73f0c6d",
+        strip_prefix = "libc-0.2.20",
+        urls = [
+            "https://mirror.bazel.build/github.com/rust-lang/libc/archive/0.2.20.zip",
+            "https://github.com/rust-lang/libc/archive/0.2.20.zip",
+        ],
+    )
