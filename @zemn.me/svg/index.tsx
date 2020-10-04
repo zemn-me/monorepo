@@ -6,11 +6,51 @@ import { L } from 'ts-toolbelt';
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
-export class Percent extends math.Number {
-    toString() { return `${this.valueOf()}%` }
+export enum SVGNodeType {
+    Path,
+    Text,
 }
 
-export type Scalar = math.Number;
+
+export interface Percent extends math.Number {
+    mul: math.Number["mul"] & {
+        (p: Percent): Percent
+    }
+}
+
+export class Percent extends math.Number implements SVGUnit {
+    toString(){ return `${this.valueOf()}%` }
+    svgUnit() { return this }
+
+    mul(a: any) {
+        return 1
+    }
+
+}
+
+export class Absolute extends math.Number {
+    svgUnit() { return this }
+    mul(p: Percent): Percent
+}
+
+export abstract class SVGUnit {
+    abstract svgUnit(): Percent | Absolute
+}
+
+export interface PathNode extends Omit<PropsOf<'line'>, 'x1' | 'y1' | 'x2' | 'y2' | 'path'> {
+    kind: SVGNodeType.Path
+    path: Path
+}
+
+export interface TextNode extends Omit<PropsOf<'text'>, 'x' | 'y'> {
+    pos: Point
+}
+
+export type Node = PathNode | TextNode;
+
+export interface Canvas extends ReadonlyArray<Node> {}
+
+export type Scalar = SVGUnit;
 export type Path<L extends number = number, N = Scalar> = matrix.Matrix<2, L, N>;
 export type Point<N = Scalar> = Path<1, N>;
 
