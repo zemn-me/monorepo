@@ -72,7 +72,8 @@ export const sum:
     v => [...v].reduce((a, c) => a+c, 0)
 ;
 
-export const zip:
+
+const _zip:
     <T1, T2, T3 >(v1: Iterable<T1>, v2: Iterable<T2>, fb: T3) => Iterable<[T1 | T3, T2 | T3]>
 =
     function*(v1, v2, fb) {
@@ -89,3 +90,8 @@ export const zip:
         }
     }
 ;
+
+export const zip: {
+    <T1, T2, L extends number>(v1: ReadonlyArrayOfLength<T1, L>, v2: ReadonlyArrayOfLength<T2, L>): Iterable<[T1, T2]>
+    <T1, T2, T3 >(v1: Iterable<T1>, v2: Iterable<T2>, fb: T3): Iterable<[T1 | T3, T2 | T3]>
+} = _zip as any;

@@ -60,6 +60,13 @@ export const mul:
     }
 ;
 
+export const map:
+    <I extends number, J extends number, T, O>(m: Matrix<I, J, T>,
+        f: (v: T) => O) => Matrix<I, J, O>
+=
+    (m, f) => vec.map(m, v => vec.map(v, f))
+;
+
 
 /**
  * `Multiply` gives the type of the matrix made by multiplying 2 given matricies.
