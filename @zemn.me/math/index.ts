@@ -1,4 +1,4 @@
-import { N } from 'ts-toolbelt'
+import { N, I, O, B } from 'ts-toolbelt'
 import * as matrix from '@zemn.me/math/matrix';
 import * as vec from '@zemn.me/math/vec';
 
@@ -6,18 +6,6 @@ export interface Iterable<T, R = any, N = undefined> {
     [Symbol.iterator](): Iterator<T, R, N>
 }
 
-export const add:
-    <B, O>(a: { add(B: B): O }, B: B) => O
-=
-    (a, b) => a.add(b)
-;
-
-
-export const mul:
-    <B, O>(a: { mul(B: B): O }, B: B) => O
-=
-    (a, b) => a.mul(b)
-;
 
 const apply:
     <T>(f: (a: T, B: T) => T, ...b: T[]) => T
@@ -28,12 +16,203 @@ const apply:
     }
 ;
 
+
+
 abstract class Valued<T> {
     value: T
     constructor(v: T) { this.value = v }
     valueOf(): T { return this.value }
 }
 
+/**
+ * Classes that extend Number are assumed to be scalar forms.
+ * It's abstract because you should just use `number` unless
+ * you're doing something smart.
+ */
+export abstract class AbstractNumber extends Valued<number> { }
+export type Number = number | AbstractNumber;
+
+export const isNumber = (v: any): v is Number =>
+    (typeof v == "number") ||
+    (v instanceof Number);
+
+export class Vector<I extends number, T> extends Valued<vec.Vector<I, T>> {
+    map<U>(f: (v: T, i: number, a: Vector<I, T>) => U): Vector<I, U> {
+        return new Vector(vec.map(this.valueOf(), (v, i, a) => f(v, i, this)))
+    }
+
+    index(i: number) { return this.valueOf()[i] }
+
+    [Symbol.iterator]() { return this.valueOf()[Symbol.iterator]() }
+}
+
+export class Matrix<I extends number, J extends number, T> extends Valued<matrix.Matrix<I, J, T>> {
+    map<U>(f: (v: T, pos: [i: number, j: number], a: Matrix<I, J, T>) => U): Matrix<I, J, U> {
+        return new Matrix(vec.map(this.valueOf(), (row, i) =>
+            vec.map(row, (cell, j) => f(cell, [i, j], this))));
+    }
+
+    index(i: number, j: number) { return this.valueOf()[i][j] }
+}
+
+type CanAdd<A, B, O> = { add(a: A, b: B): O };
+type CanMul<A, B, O> = { mul(a: A, b: B): O };
+type CanSum<T> = { sum(v: Vector<number, T>): T }
+
+export class Math {
+
+
+    // adding two vectors adds their components
+    add<
+        I extends number, T1,
+        T2, O
+    >(this: CanAdd<T1, T2, O>, a: Vector<I, T1>, b: Vector<I, T2>): Vector<I, O>
+
+    // adding two matricies adds their components
+    add<
+        I extends number, J extends number, T1, T2, O
+    >(this: CanAdd<T1, T2, O>, a: Matrix<I, J, T1>, b: Matrix<I, J, T2>): Matrix<I, J, O>
+
+    // add a number, get a number
+    add(a: Number, b: Number): number
+
+    add(a: any, b: any) {
+        if (a instanceof AbstractNumber && b instanceof AbstractNumber) return this.addNums(a, b);
+        if (a instanceof Vector && b instanceof Vector) return this.addVecs(a, b);
+        if (a instanceof Matrix && b instanceof Matrix) return this.addMatricies(a, b);
+        if (typeof a == "number" && typeof b == "number") return this.addNums(a, b);
+    }
+
+    private addNums(a: number | Number, b: number | Number): number {
+        return a.valueOf() + b.valueOf()
+    }
+
+    private addVecs<
+        I extends number, T1,
+        T2, O
+    >(this: CanAdd<T1, T2, O>, a: Vector<I, T1>, b: Vector<I, T2>): Vector<I, O> {
+        return a.map((v, i) => this.add(v, b.index(i)));
+    }
+
+    private addMatricies<
+        I extends number, J extends number, T1, T2, O
+    >(this: CanAdd<T1, T2, O>, a: Matrix<I, J, T1>, b: Matrix<I, J, T2>): Matrix<I, J, O> {
+        return a.map((v, pos) => this.add(v, b.index(...pos)));
+    }
+
+    // sum a vector
+    sum<T>(this: CanAdd<T, T, T>, v: Vector<number, T>) {
+        const [ first, ...etc ] = v;
+
+        return etc.reduce((p, c) => this.add(p, c), first);
+    }
+ 
+    // multiply numbers and numbers
+    mul(a: Number, b: Number): number
+
+    // multiply numbers and vectors
+    // two defs because this is not a commutative operation
+    // unless the subordinate, internal multiplication
+    // operation is commutative
+    mul<
+        N extends Number, I extends number, T, O
+    >(this: CanMul<T, N, O>, a: Vector<I, T>, b: N): Vector<I, O>
+
+    mul<
+        N extends Number, I extends number, T, O
+    >(this: CanMul<N, T, O>, a: N, b: Vector<I, T>): Vector<I, O>
+
+    // multiply numbers and matricies
+    mul<
+        N extends Number, I extends number, J extends number, T, O
+    >(this: CanMul<N, T, O>, a: N, b: Matrix<I, J, T>): Matrix<I, J, O>
+
+    mul<
+        N extends Number, I extends number, J extends number, T, O
+    >(this: CanMul<T, N, O>, a: Matrix<I, J, T>, b: N): Matrix<I, J, O>
+
+    // multiply vectors (dot product)
+    mul<
+        I extends number, T1, T2, O
+    >(this: CanMul<T1, T2, O> & CanAdd<O, O, O>, a: Vector<I, T1>, b: Vector<I, T2>):
+        Vector<I, O> 
+
+    mul(a: any, b: any) {
+        if (isNumber(a) && isNumber(b)) return this.mulNum(a, b);
+
+        if (isNumber(a) && b instanceof Vector)
+            return this.mulVecNum(a, b);
+
+        if (a instanceof Vector && isNumber(b))
+            return this.mulNumVec(a, b);
+
+        if (a instanceof Matrix && isNumber(b))
+            return this.mulMatNum(a, b);
+        
+        if (isNumber(a) && b instanceof Matrix)
+            return this.mulNumMat(a, b);
+
+        if (a instanceof Vector && b instanceof Vector)
+            return this.mulVec(a, b);
+
+    }
+
+    private mulNum(a: Number, b: Number): number {
+        return a.valueOf() * b.valueOf()
+    }
+
+    private mulNumVec<
+        B extends Vector<I, T>,
+        N extends Number, I extends number, T,
+    >(this: CanMul<N, T, T>, a: N, b: B): Vector<I, T> {
+        return b.map(v => this.mul(a, v));
+    }
+
+    private mulVecNum<
+        I extends number,
+        N extends Number,
+        T,
+    >(this: this extends {
+        mul(a: T, b: N): infer O
+    }? CanMul<T, N, O>: never, a: Vector<I, T>, b: N): Vector<I, O> {
+        return a.map(v => this.mul(v, b));
+    }
+
+    private mulNumMat<
+        N extends Number, I extends number, J extends number, T, O
+    >(this: CanMul<N, T, O>, a: N, b: Matrix<I, J, T>): Matrix<I, J, O> {
+        return b.map(b => this.mul(a, b));
+    }
+
+   private mulMatNum<
+        N extends Number, I extends number, J extends number, T, O
+    >(this: CanMul<N, T, O>, a: Matrix<I, J, T>, b: N): Matrix<I, J, O> {
+        return a.map(a => this.mul(b, a));
+    }
+
+    private mulVec<
+        I extends number, T1, T2, O
+    >(this: CanMul<T1, T2, O> & CanSum<O>, a: Vector<I, T1>, b: Vector<I, T2>):
+        O {
+        return this.sum(a.map((a, pos) => this.mul(a, b.index(pos))))
+    }
+
+    private _() {
+        const x: Vector<2, number> =
+            this.mulNumVec(1, new Vector<2, number>([1,2 as number] as const));
+    }
+}
+
+type Assert<A extends B, B> = A;
+
+const defaultMath = new Math();
+export default defaultMath;
+
+defaultMath.add(1, 2);
+defaultMath.mul(1, 2);
+defaultMath.mul(1, new Vector([1,2] as const));
+
+/*
 export class Num extends Valued<number> {
     add(n: Num): Num { return new Num(this.valueOf() + n.valueOf()) }
 
@@ -54,9 +233,6 @@ export class Num extends Valued<number> {
 }
 
 export class Vector<I extends number, T> extends Valued<vec.Vector<I, T>> {
-    map<U>(f: (v: T, i: number, a: Vector<I, T>) => U): Vector<I, U> {
-        return new Vector(vec.map(this.valueOf(), (v, i, a) => f(v, i, this)))
-    }
 
     add<V extends { add(B: T2): O }, O, T2>(this: Vector<I, V>, b: Vector<I, T2>): Vector<I, O> {
         return this.map((v, i) => add(v, b.valueOf()[i]))
@@ -132,9 +308,6 @@ class VectorIterator<I extends number, T> extends Valued<Vector<I, T>> {
 }
 
 export class Matrix<I extends number, J extends number, T> extends Valued<matrix.Matrix<I, J, T>> {
-    /**
-     * Return the matrix as a sequence of vectors instead
-     */
     asVectors(): Vector<J, Vector<I, T>> {
         return new Vector(this.valueOf()).map(v => new Vector(v))
     }
@@ -146,16 +319,12 @@ export class Matrix<I extends number, J extends number, T> extends Valued<matrix
         );
     }
 
-    /**
-     * returns the row matrix corresponding to the given number
-     */
+/
     row(i: number): Matrix<I, 1, T> {
         return new Matrix([ this.valueOf()[i] ] as const)
     }
 
-    /**
-     * returns the column matrix corresponding to the given number
-     */
+
     column(j: number): Matrix<1, J, T> {
         return new Matrix(this.asVectors().map(v => [v.valueOf()[j]] as const).valueOf())
     }
@@ -194,6 +363,7 @@ export class Matrix<I extends number, J extends number, T> extends Valued<matrix
 
 }
 
-export { Num as Number }
+*/
+
 
 
