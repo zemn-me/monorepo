@@ -57,44 +57,58 @@ export const Ticks:
         const ticks = scale.ticks(nTicks).sort();
         const percScale = d3Scale.scaleLinear()
             .domain(scale.domain())
-            .range([ 0 , 100 ]);
+            .range([ 20 , 80 ]);
         
-        const axisScale: (n: number) => svg.Percent =
-            n => svg.Perc(percScale(n));
-        
-
         return <>
             <svg.Line {...{
-                path: matrix.map([ [ 0, 0 ], [ 0, 100 ] ] as const, svg.Perc),
+                path: [ [ 0, 0 ], [ 0, 100 ] ] as const,
                 stroke
             }}/>
 
             {
                 ticks.map( tick => {
                     const text = formatter(tick);
-                    const pos = axisScale(tick.valueOf());
-                    const tickBottomPos = [ pos, svg.Perc(10) ] as const;
-                    let tickPath: svg.Path =
-                        [ [ pos, svg.Perc(0) ], tickBottomPos ] as const;
+                    const pos = percScale(tick.valueOf());
+                    const tickLength = 40;
+                    const tickBottomPos = [ pos, tickLength ] as const;
 
-                    let textMiddlePos: svg.Point = [vec.map(
-                        vec.add(vec.map(tickBottomPos, v => v.valueOf()), [ 0, 20 ] as const),
-                        svg.Perc
-                    )] as const;
+                    let tickPath: svg.Path<2> =
+                        [ [ pos, 0 ], tickBottomPos ] as const;
+
+                    let textMiddlePos: svg.Path<1> = [
+                        vec.add(vec.map(tickBottomPos, v => v.valueOf()), [ 0,
+                        direction == DIRECTION.Down? tickLength: tickLength / 2 ] as const),
+                    ] as const;
 
                     // if the direction is upward, reverse everything about
                     // y = 0% by inverting signs and adding the minimum value
                     // on the y axis
 
-                    if (direction = DIRECTION.Up) {
-                        [ tickPath, textMiddlePos ] = [ tickPath, textMiddlePos]
-                                .map(
-                                    v => svg.Matrix2Perc(
-                                        matrix.mul(svg.MatrixFromPerc(tickPath), [ [ 1, 0 ], [ 0, -1 ] ]));
-                            
-                        ];
+                    if (direction === DIRECTION.Up) {
+                        // gets the largest y
+                        const offset: number =
+                            Math.max(...tickPath.map(([x, y]) => y).concat(
+                                textMiddlePos.map(([x, y]) => y)))
 
-                        const [ 
+                        // this transform sets all y values to -y, flipping
+                        // the points in the x axis
+                        // then shifts such that the largest -y is at zero
+                        // once we do that, we want to anchor the positions
+                        // to the bottom instead of the top, so we take every
+                        // position and subtract it from 100
+                        // why am i doing this with matricies?
+                        // I just want to be good at matricies someday...
+                        const transform: matrix.Matrix<3,3> = [
+                            [ 1, 0,  0 ],
+                            [ 0, -1, 0 ],
+                            [ 0, -offset + 180,  1 ]
+                        ] as const;
+
+                        console.log("paths before transform...", tickPath, textMiddlePos);
+
+                        tickPath = svg.homog2Cart(matrix.mul(svg.cart2Homog(tickPath), transform));
+                        textMiddlePos = svg.homog2Cart(matrix.mul(svg.cart2Homog(textMiddlePos), transform));
+                        console.log("paths after transform...", tickPath, textMiddlePos);
                     };
 
 
