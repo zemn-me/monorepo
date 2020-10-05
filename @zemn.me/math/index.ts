@@ -1,5 +1,6 @@
 import * as matrix from '@zemn.me/math/matrix';
 import * as vec from '@zemn.me/math/vec';
+import * as toolbelt from 'ts-toolbelt'
 
 export interface Iterable<T, R = any, N = undefined> {
     [Symbol.iterator](): Iterator<T, R, N>
@@ -14,8 +15,6 @@ const apply:
         return etc.reduce((p, c) => f(p, c), first);
     }
 ;
-
-
 
 abstract class Valued<T> {
     value: T
@@ -42,6 +41,27 @@ export class Vector<I extends number, T> extends Valued<vec.Vector<I, T>> {
 
     index(i: number) { return this.valueOf()[i] }
 
+    zip<I2 extends number, T2, T3>(v2: Vector<I2, T2>, fb: T3):
+        toolbelt.Number.Greater<
+            toolbelt.Number.NumberOf<I>,
+            toolbelt.Number.NumberOf<I2>
+        > extends toolbelt.Boolean.True
+            ? Vector<I, [ T | T3,  T2 | T3 ]>
+            : Vector<I2, [ T | T3,  T2 | T3 ]> {
+
+        let base = [];
+        const [ a, b ] = [ this.valueOf(), v2.valueOf() ];
+        const end = Math.max(a.length, b.length);
+
+        for (let i = 0; i < end; i++) {
+            base.push([ i < a.length? a[i]: fb, i < b.length? b[i]: fb ]);
+        }
+
+        return base as any;
+    }
+
+
+
     [Symbol.iterator]() { return this.valueOf()[Symbol.iterator]() }
 }
 
@@ -58,14 +78,8 @@ type CanAdd<A, B, O> = { add(a: A, b: B): O };
 type CanMul<A, B, O> = { mul(a: A, b: B): O };
 type CanSum<T> = { sum(v: Vector<number, T>): T }
 
-export class Math {
+export class math {
 
-
-    // adding two vectors adds their components
-    add<
-        I extends number, T1,
-        T2, O
-    >(this: CanAdd<T1, T2, O>, a: Vector<I, T1>, b: Vector<I, T2>): Vector<I, O>
 
     // adding two matricies adds their components
     add<
@@ -131,18 +145,28 @@ export class Math {
     >(this: CanMul<T, N, O>, a: Matrix<I, J, T>, b: N): Matrix<I, J, O>
 
     // multiply vectors (dot product)
+    /*
     mul<
         I extends number, T1, T2, O
     >(this: CanMul<T1, T2, O> & CanAdd<O, O, O>, a: Vector<I, T1>, b: Vector<I, T2>):
         Vector<I, O> 
+    */
+
+    mul<
+        I1 extends number, T1,
+        I2 extends number, T2, O
+    >(this: CanMul<T1, T2, O> & CanAdd<O, O, O>, a: Vector<I1, T1>, b: Vector<I2, T2>):
+        toolbelt.Number.Greater<toolbelt.Number.NumberOf<I1>, toolbelt.Number.NumberOf<I2>> extends toolbelt.Boolean.True
+            ? Vector<I1, O>
+            : Vector<I2, O>
 
     mul(a: any, b: any) {
         if (isNumber(a) && isNumber(b)) return this.mulNum(a, b);
 
-        if (isNumber(a) && b instanceof Vector)
+        if (a instanceof Vector && isNumber(b))
             return this.mulVecNum(a, b);
 
-        if (a instanceof Vector && isNumber(b))
+        if (isNumber(a) && b instanceof Vector)
             return this.mulNumVec(a, b);
 
         if (a instanceof Matrix && isNumber(b))
@@ -189,179 +213,28 @@ export class Math {
     }
 
     private mulVec<
-        I extends number, T1, T2, O
-    >(this: CanMul<T1, T2, O> & CanSum<O>, a: Vector<I, T1>, b: Vector<I, T2>):
+        I extends number, T1,
+        I2 extends number, T2, O
+    >(this: CanMul<T1, T2, O> & CanSum<O>, a: Vector<I, T1>, b: Vector<I2, T2>):
         O {
+        
+        return a.zip(b, 
         return this.sum(a.map((a, pos) => this.mul(a, b.index(pos))))
     }
 
-    private _() {
-        const x: Vector<2, number> =
-            this.mulNumVec(1, new Vector<2, number>([1,2 as number] as const));
+    private mulMatMat<
+        I1 extends number, J1 extends number, T1,
+        I2 extends number, J2 extends number, T2,
+        O
+    >(this: { mul(a: Vector<J1, T1>, b: Vector<I1, T2>): Vector<,
+        a: Matrix<I1, J1, T1>, b: Matrix<I2, J2, T2>): Matrix<I2, J1, O> {
+
+        return vec.map(vec.New<J1>(j1), (_, i) =>
+            vec.map(vec.New<I2>(i2), (_, j) =>
+            this.mul(
+            vec.dot(row(m1, i), col(m2, j))
+            
+            ));
     }
 }
-
-type Assert<A extends B, B> = A;
-
-const defaultMath = new Math();
-export default defaultMath;
-
-defaultMath.add(1, 2);
-defaultMath.mul(1, 2);
-defaultMath.mul(1, new Vector([1,2] as const));
-
-/*
-export class Num extends Valued<number> {
-    add(n: Num): Num { return new Num(this.valueOf() + n.valueOf()) }
-
-    mul(n: Num): Num
-    mul<I extends number, V, O, T extends { mul(v: V): O }>(this: T, n: Vector<I, V>): Vector<I, O>
-
-    // basically impossible to prove this
-    // level of overloading to typescript so...
-    mul(v: any): any { 
-        if (v instanceof Num) return this.mulNum(v);
-        if (v instanceof Vector) return this.mulVec(v);
-    }
-
-    private mulNum(v: Num): Num { return new Num(this.valueOf() * v.valueOf()) }
-    private mulVec<I extends number, V, O, T extends { mul(v: V): O }>(this: T, n: Vector<I, V>): Vector<I, O> {
-        return n.map(v => this.mul(v))
-    }
-}
-
-export class Vector<I extends number, T> extends Valued<vec.Vector<I, T>> {
-
-    add<V extends { add(B: T2): O }, O, T2>(this: Vector<I, V>, b: Vector<I, T2>): Vector<I, O> {
-        return this.map((v, i) => add(v, b.valueOf()[i]))
-    }
-
-    mul<B, O extends { add(o: O): O }, I extends number, V extends { mul(b: B): O }>(this: Vector<I, V>, b: Vector<I, B>): O {
-        return this.map((v, i) => mul(v, b.valueOf()[i])).sum()
-    }
-
-
-    sum<V extends { add(b: V): V }>(this: Vector<I, V>): V {
-        return apply(add, ...this.valueOf() as vec.Vector<I, V>)
-    }
-
-    izip<T2>(v2: Vector<I, T2>): Iterable<readonly [ T, T2 ], Vector<I, readonly [ T, T2 ]>> {
-        return { [Symbol.iterator]: () => new ZipVectorIterator([this, v2]) }
-    }
-
-    zip<T2>(v2: Vector<I, T2>): Vector<I, readonly [ T, T2 ]> {
-        return this.map((v, i) => [ v, v2.valueOf()[i] ] as const );
-    }
-
-    get length() { return this.valueOf().length }
-
-    [Symbol.iterator]() { return new VectorIterator(this) }
-}
-
-class ZipVectorIterator<I extends number, T1, T2>
-    extends Valued<readonly [Vector<I, T1>, Vector<I, T2>]>
-    implements Iterator<readonly [T1, T2], Vector<I, readonly [T1, T2]>> {
-
-    private index: number = 0;
-    private sequence: Array<readonly [T1, T2]> = [];
-    private end: number;
-    private finalVector: Vector<I, [T1, T2]> | undefined;
-
-    constructor(v: readonly [Vector<I, T1>, Vector<I, T2>]) {
-        super(v);
-        this.end = v[0].length;
-    }
-
-    next() {
-        if (this.index < this.end) {
-            const r = [
-                this.valueOf()[0].valueOf()[this.index],
-                this.valueOf()[1].valueOf()[this.index]
-            ] as const;
-
-            this.sequence.push(r);
-
-            this.index++;
-
-            return { done: false, value: r } as const;
-        }
-
-        return { done: true, value: this.finalVector ?? (
-            this.finalVector = new Vector<I, [T1, T2]>(this.sequence as any)
-        )} as const
-    }
-}
-
-class VectorIterator<I extends number, T> extends Valued<Vector<I, T>> {
-   private index: number = 0; 
-   next() {
-       if (this.index < this.valueOf().length) {
-           const r = this.valueOf().valueOf()[this.index];
-            this.index++;
-            return { done: false, value: r };
-       }
-
-       return { done: true, value: this.valueOf() }
-   }
-}
-
-export class Matrix<I extends number, J extends number, T> extends Valued<matrix.Matrix<I, J, T>> {
-    asVectors(): Vector<J, Vector<I, T>> {
-        return new Vector(this.valueOf()).map(v => new Vector(v))
-    }
-
-    add<V extends { add(V2: V2): O }, V2, O>(this: Matrix<I, J, V>, m2: Matrix<I, J, V2>): Matrix<I, J, O> {
-        return new Matrix(
-            this.asVectors().zip(m2.asVectors())
-                .map(([a, b]) => a.zip(b).map(([a, b]) => a.add(b)).valueOf()).valueOf()
-        );
-    }
-
-/
-    row(i: number): Matrix<I, 1, T> {
-        return new Matrix([ this.valueOf()[i] ] as const)
-    }
-
-
-    column(j: number): Matrix<1, J, T> {
-        return new Matrix(this.asVectors().map(v => [v.valueOf()[j]] as const).valueOf())
-    }
-
-    nRows(): J {
-        return this.valueOf().length
-    }
-
-    nColumns(): I {
-        return this.valueOf()[0].length
-    }
-
-    mul<
-        V2,
-        O extends { add(O: O): O },
-        I extends number,
-        J extends number,
-        I2 extends number,
-        V extends { mul(v2: V2): O }
-        >(this: Matrix<I, J, V>, m2: Matrix<I2, number, V2>):
-        Matrix<I2, J, O> {
-
-        const j1 = this.nRows();
-        const i2 = m2.nColumns();
-
-        return new Matrix(new Vector(vec.New<J>(j1)).map((_, i) =>
-            new Vector(vec.New<I2>(i2))
-                .map((_, j) =>
-                    new Vector(this.row(i).valueOf()[0])
-                        .mul<V2, O, I, V>(m2.column(j).asVectors().map(v => v.valueOf()[0]))
-                ).valueOf()
-            ).valueOf()
-        );
-    }
-
-
-}
-
-*/
-
-
 
