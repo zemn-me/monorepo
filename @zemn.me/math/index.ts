@@ -1,4 +1,3 @@
-import { N, I, O, B } from 'ts-toolbelt'
 import * as matrix from '@zemn.me/math/matrix';
 import * as vec from '@zemn.me/math/vec';
 
@@ -169,12 +168,11 @@ export class Math {
     }
 
     private mulVecNum<
+        O,
         I extends number,
         N extends Number,
         T,
-    >(this: this extends {
-        mul(a: T, b: N): infer O
-    }? CanMul<T, N, O>: never, a: Vector<I, T>, b: N): Vector<I, O> {
+    >(this: CanMul<T, N, O>, a: Vector<I, T>, b: N): Vector<I, O> {
         return a.map(v => this.mul(v, b));
     }
 
