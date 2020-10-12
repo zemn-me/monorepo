@@ -43,6 +43,7 @@ _SYSTEM_TO_BINARY_EXT = {
     "linux": "",
     "windows": ".exe",
     "darwin": "",
+    "ios": "",
     "emscripten": ".js",
     # This is currently a hack allowing us to have the proper
     # generated extension for the wasm target, similarly to the
@@ -54,6 +55,7 @@ _SYSTEM_TO_STATICLIB_EXT = {
     "freebsd": ".a",
     "linux": ".a",
     "darwin": ".a",
+    "ios": ".a",
     "windows": ".lib",
     "emscripten": ".js",
     "unknown": "",
@@ -63,6 +65,7 @@ _SYSTEM_TO_DYLIB_EXT = {
     "freebsd": ".so",
     "linux": ".so",
     "darwin": ".dylib",
+    "ios": ".dylib",
     "windows": ".dll",
     "emscripten": ".js",
     "unknown": ".wasm",
