@@ -110,6 +110,7 @@ def rust_repositories(
         iso_date = iso_date,
         rustfmt_version = rustfmt_version,
         sha256s = sha256s,
+        edition = edition,
     )
 
 def _check_version_valid(version, iso_date, param_prefix = ""):
