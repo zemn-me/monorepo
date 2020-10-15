@@ -114,9 +114,9 @@ impl BuildScriptOutput {
             .stdout(Stdio::piped())
             .spawn()
             .expect("Unable to start binary");
-        let ecode = child.wait().expect("failed to wait on child");
         let reader = BufReader::new(child.stdout.as_mut().expect("Failed to open stdout"));
         let output = Self::from_reader(reader);
+        let ecode = child.wait().expect("failed to wait on child");
         if ecode.success() {
             Ok(output)
         } else {
