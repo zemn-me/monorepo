@@ -13,7 +13,11 @@
 # limitations under the License.
 
 load("@bazel_skylib//lib:versions.bzl", "versions")
-load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "CPP_LINK_EXECUTABLE_ACTION_NAME")
+load(
+    "@bazel_tools//tools/build_defs/cc:action_names.bzl",
+    "CPP_LINK_EXECUTABLE_ACTION_NAME",
+    "C_COMPILE_ACTION_NAME",
+)
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@bazel_version//:def.bzl", "BAZEL_VERSION")
 load("@io_bazel_rules_rust//rust:private/legacy_cc_starlark_api_shim.bzl", "get_libs_for_static_executable")
@@ -230,6 +234,17 @@ def get_cc_toolchain(ctx):
         **kwargs
     )
     return cc_toolchain, feature_configuration
+
+def get_cc_compile_env(cc_toolchain, feature_configuration):
+    compile_variables = cc_common.create_compile_variables(
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+    )
+    return cc_common.get_environment_variables(
+        feature_configuration = feature_configuration,
+        action_name = C_COMPILE_ACTION_NAME,
+        variables = compile_variables,
+    )
 
 def get_cc_user_link_flags(ctx):
     """Get the current target's linkopt flags

@@ -1,5 +1,5 @@
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
-load("@io_bazel_rules_rust//rust:private/rustc.bzl", "BuildInfo", "DepInfo", "get_cc_toolchain", "get_compilation_mode_opts", "get_linker_and_args")
+load("@io_bazel_rules_rust//rust:private/rustc.bzl", "BuildInfo", "DepInfo", "get_cc_compile_env", "get_cc_toolchain", "get_compilation_mode_opts", "get_linker_and_args")
 load("@io_bazel_rules_rust//rust:private/utils.bzl", "find_toolchain")
 load("@io_bazel_rules_rust//rust:rust.bzl", "rust_binary")
 
@@ -63,6 +63,12 @@ def _build_script_impl(ctx):
     cc_toolchain, feature_configuration = get_cc_toolchain(ctx)
     _, _, linker_env = get_linker_and_args(ctx, cc_toolchain, feature_configuration, None)
     env.update(**linker_env)
+
+    # MSVC requires INCLUDE to be set
+    cc_env = get_cc_compile_env(cc_toolchain, feature_configuration)
+    include = cc_env.get("INCLUDE")
+    if include:
+        env["INCLUDE"] = include
 
     if cc_toolchain:
         toolchain_tools.append(cc_toolchain.all_files)
