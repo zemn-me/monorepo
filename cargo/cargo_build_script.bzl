@@ -40,7 +40,11 @@ def _build_script_impl(ctx):
 
     cc_toolchain = find_cpp_toolchain(ctx)
 
-    env = {
+    # Start with the default shell env, which contains any --action_env
+    # settings passed in on the command line.
+    env = dict(ctx.configuration.default_shell_env)
+
+    env.update({
         "CARGO_MANIFEST_DIR": manifest_dir,
         "CARGO_PKG_NAME": crate_name,
         "HOST": toolchain.exec_triple,
@@ -48,7 +52,7 @@ def _build_script_impl(ctx):
         "RUSTC": toolchain.rustc.path,
         "TARGET": toolchain.target_triple,
         # OUT_DIR is set by the runner itself, rather than on the action.
-    }
+    })
 
     if ctx.attr.version:
         version = ctx.attr.version.split("+")[0].split(".")
