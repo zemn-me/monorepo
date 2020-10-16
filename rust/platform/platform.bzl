@@ -11,16 +11,16 @@ load(
 # All T1 Platforms should be supported, but aren't, see inline notes.
 _SUPPORTED_T1_PLATFORM_TRIPLES = [
     "i686-apple-darwin",
-    "i686-pc-windows-gnu",
+    "i686-pc-windows-msvc",
     "i686-unknown-linux-gnu",
     "x86_64-apple-darwin",
-    "x86_64-pc-windows-gnu",
+    "x86_64-pc-windows-msvc",
     "x86_64-unknown-linux-gnu",
     # N.B. These "alternative" envs are not supported, as bazel cannot distinguish between them
     # and others using existing @platforms// config_values
     #
-    #"i686-pc-windows-msvc",
-    #"x86_64-pc-windows-msvc",
+    #"i686-pc-windows-gnu",
+    #"x86_64-pc-windows-gnu",
 ]
 
 # Some T2 Platforms are supported, provided we have mappings to @platforms// entries.
