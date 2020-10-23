@@ -732,15 +732,10 @@ def _create_extra_input_args(ctx, file, build_info, dep_info):
     if build_info:
         out_dir = build_info.out_dir.path
         build_env_file = build_info.rustc_env.path
-
-        # out_dir will be added as input by the transitive_build_infos loop below.
         build_flags_files.append(build_info.flags.path)
-
-    # This should probably only actually be exposed to actions which link.
-    for dep_build_info in dep_info.transitive_build_infos.to_list():
-        input_files.append(dep_build_info.out_dir)
-        build_flags_files.append(dep_build_info.link_flags.path)
-        input_files.append(dep_build_info.link_flags)
+        build_flags_files.append(build_info.link_flags.path)
+        input_files.append(build_info.out_dir)
+        input_files.append(build_info.link_flags)
 
     return input_files, out_dir, build_env_file, build_flags_files
 
