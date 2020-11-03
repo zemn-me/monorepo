@@ -44,12 +44,7 @@ export const Index:
 =
     ({ className }) => {
         let sections = React.useContext(SectionsContext);
-
-        // cull parent nodes from the sections
-        // until there is more than one child
-        while(sections.length == 1 && sections[0].children) sections = sections[0].children
-
-
+        
         return <Nav {...{
             ...classes(className)  
         }}>
@@ -59,6 +54,26 @@ export const Index:
         </Nav>
     }
 ;
+
+export const Title:
+    () => React.ReactElement | null
+=
+    () => {
+        return <>{useTitle()}</>
+    }
+;
+
+
+export const useTitle:
+    () => string | React.ReactElement
+=
+    () => {
+        console.log("sections context", React.useContext(SectionsContext));
+        return (React.useContext(SectionsContext)[0]?.title) ?? "untitled"
+    }
+ 
+;
+
 
 
 interface IndexSectionHeaderProps {
@@ -106,7 +121,7 @@ const Post:
                     <Div>
                         <PathNav/>
                     </Div>
-                    <Heading>{title}</Heading>
+                    <Heading><Title/></Heading>
                     {subtitle?<Div className={style.Subtitle}>{subtitle}</Div>:null}
                     {author?<Div className={style.Author}>{author}</Div>: null}
                     <Div className={style.Date}>{date}</Div>
@@ -158,10 +173,10 @@ const X:
         console.log("metadata", { frontMatter, etc });
         return <>
             <Head>
-                <title>{meta.title}</title>
+                <title><Title/></title>
             </Head>
             <Post {...{
-                title: <>{meta.title}</>,
+                title: <><Title/></>,
                 subtitle: meta.subtitle?<>{meta.subtitle}</>: meta.subtitle,
                 date: <i8n.Date {...{
                     date: date,

@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface Record {
+    readonly type: "record"
     /**
      * Title of this section
      * @example "My Cool Article"
@@ -45,7 +46,7 @@ interface SectionManagerProps {
     }>
 }
 
-export type SectionsContextType = readonly Record[]
+export type SectionsContextType = Record[]
 
 export const SectionsContext = React.createContext<SectionsContextType>([]);
 
@@ -54,7 +55,19 @@ export const SectionsProvider:
 =
     ({ children: reactChildren }) => {
         const [ children, setChildren ] = React.useState<Map<{}, Record>>(() => new Map());
-        const sectCtx = React.useMemo(() => [...children.values()], [children])
+        let sections = [...children] as any;
+        while(sections.length == 1 && sections[0].children?.length) {
+            debugger;
+            sections = sections[0].children;
+        }
+
+
+        console.log("sections: ", sections.length, [...sections]);
+
+        if(sections[0] && sections[0].children?.length)
+            sections[0].children = sections[0].children.filter((v: any) => v.type == "record");
+
+
 
         console.log("SectionsProvider detected change");
 
@@ -78,7 +91,7 @@ export const SectionsProvider:
 
         const regCtx = React.useMemo(() => ({ register }), [ register ]);
 
-        return <SectionsContext.Provider value={[...children.values()]}>
+        return <SectionsContext.Provider value={sections}>
                 <RegistrationContext.Provider value={regCtx}>
                     {reactChildren}
                 </RegistrationContext.Provider>
@@ -95,6 +108,8 @@ export const SectionManager:
         const [ onChange, setOnChange ] = React.useState<(record: Record) => void>();
         const [ children, setChildren ] = React.useState<Map<{}, Record>>(() => new Map());
 
+
+
         React.useEffect(() => {
             const [ onChange, unregister ] = register();
 
@@ -103,7 +118,7 @@ export const SectionManager:
         }, [ register ]);
 
         React.useEffect(() => {
-            if (onChange) onChange({ title, id, visible, children: [...children.values()] });
+            if (onChange) onChange({ title, type: "record", id, visible, children: [...children.values()] });
         }, [ title, id, visible, children, onChange ]);
 
         const onVisibilityChanged = React.useCallback(([ { isIntersecting: visible } ]) => setVisible(() => visible), [ setVisible ]);

@@ -17,7 +17,6 @@ declare module '../pages/article/**/*.mdx' {
 
 interface ExpectedMetadata {
     readonly layout: string,
-    readonly title: string,
     readonly language: string,
     readonly subtitle?: string,
     readonly tags?: readonly string[],
@@ -68,7 +67,6 @@ export const mustExpectedMeta:
         const { layout, title, language, subtitle, tags, author, date,
             autonumber } = data;
         guards.must(guards.isString, layout);
-        guards.must(guards.isString, title);
         guards.must(guards.isString, language);
         guards.must(guards.any(
             guards.isString,
