@@ -1,4 +1,4 @@
-import * as iter from './itertools';
+import * as iter from './util';
 
 test.each([
     [(i: number): i is 4 => i == 4, [1, 2, 3, 4, 4], [4, 4]],

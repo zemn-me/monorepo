@@ -31,3 +31,26 @@ export const uniq:
         }
     }
     ;
+
+export const classes:
+    (...classes: (string | undefined)[]) => {} | {
+        className: string
+    }
+
+    =
+
+    (...classes) => {
+        const definedClasses = [...uniq(filter(
+            classes, (v: string | undefined): v is string => v !== undefined && v.trim() != ""
+        ))];
+
+        if (!definedClasses.length) return {};
+
+        return { className: definedClasses.join(" ") }
+    }
+
+    ;
+
+export type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
+
+export const prettyAnchor = (s: string | undefined) => s?.replace(/ /g, "_");

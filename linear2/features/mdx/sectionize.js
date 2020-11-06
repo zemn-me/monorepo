@@ -45,10 +45,10 @@ function sectionize (node, ancestors) {
     data: {
       hName: 'section',
       hProperties: {
-        "data-depth": depth,
-        ...start.data && start.data.hProperties && start.data.hProperties.id?
-            { "data-for": start.data.hProperties.id }:
-            {}
+        //"data-depth": depth,
+        //...start.data && start.data.hProperties && start.data.hProperties.id?
+        //    { "data-for": start.data.hProperties.id }:
+        //    {}
       }
     }
   }
