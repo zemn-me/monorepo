@@ -1,7 +1,11 @@
 import { MDXProvider } from '@mdx-js/react';
+import Head from 'next/head';
 import React from 'react';
 import { toComponents } from '../util';
 import * as elements from 'linear2/features/elements';
+import Base from 'linear2/features/layout/base';
+import * as outline from 'linear2/features/elements/headingsAndSections/outlineState';
+import { useRecoilState } from 'recoil';
 
 
 const languagePrefix = "language-" as const;
@@ -39,13 +43,45 @@ const components = {
     pre: Pre
 }
 
+const IndexRoot: () => React.ReactElement = () => {
+    const [ index ] = useRecoilState(outline.state);
+    return <nav><Index node={index}/></nav>
+}
+
+const Index: React.FC<{ node: outline.Root | outline.Node  }>  = ({ node }) => {
+    if (!node) return null;
+
+    return <ol>
+        {node?.element?.props.children ?? null}
+        <ol>
+            {[...node.children].map((v, i) => <li key={i}><Index node={v}/></li>)}
+        </ol>
+    </ol>
+}
+
+const TitleSetter: () => React.ReactElement =  () => {
+    const [ index ] = useRecoilState(outline.state);
+    const titleElement = [...index.children]?.[0]?.element;
+    const [ setText, text ] = elements.useText();
+
+    return <>
+        <div ref={setText}>{titleElement??null}</div>
+        <Head>
+            <title>{text?.trim()??"Untitled"}</title>
+        </Head>
+    </>
+}
 
 export const Article:
     (frontmatter: any) => React.FC
 =
-    () => ({ children }) => <MDXProvider components={components}>
-        {children}
-    </MDXProvider>
+    () => ({ children }) => <article><Base>
+            <MDXProvider components={components}>
+                <TitleSetter/>
+                <IndexRoot/>
+            {children}
+        </MDXProvider>
+    </Base></article>
 ;
 
 export default Article;

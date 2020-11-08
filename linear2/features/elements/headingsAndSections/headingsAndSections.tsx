@@ -19,8 +19,9 @@
  */
 
 import React, { RefAttributes } from 'react';
-import style from './base.module.sass';
-import { classes, PropsOf, prettyAnchor } from './util';
+import style from 'linear2/features/elements/base.module.sass';
+import { classes, PropsOf, prettyAnchor } from '../util';
+import { Provide as ProvideSectionOutline } from './outlineState';
 
 export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -84,8 +85,10 @@ export const useText:
     }
 ;
 
+export type HeadingElement<T extends HeaderComponent = HeaderComponent> = React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>
+
 export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
-    children: [ React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, HeaderComponent>, ...React.ReactElement[]];
+    children: [ HeadingElement, ...React.ReactElement[]];
 }
 
 function mergeRefs<T = any>(
@@ -113,19 +116,26 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
 
         const id = prettyAnchor(heading.props.id ?? headingText);
 
-        return <SectionDepthContext.Provider value={sectionDepth}>
-            <section {...{
-                ...props,
-                ...classes(props.className, style.linear)
-            }} ref={ref} aria-labelledby={id}>
-                {React.cloneElement(heading, {
+        const headingElement = React.cloneElement(heading, {
                     ...heading.props,
                     ref: mergeRefs(...[heading.props.ref, onHeadingMount].filter(isDefined)),
                     id,
-                }, heading.props.children ) }
-                {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
-            </section>
-        </SectionDepthContext.Provider>
+                }, heading.props.children )
+
+        let o = <section {...{
+            ...props,
+            ...classes(props.className, style.linear)
+        }} ref={ref} aria-labelledby={id}>
+            {headingElement}
+            {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
+        </section>;
+
+        o = <SectionDepthContext.Provider value={sectionDepth}>{o}</SectionDepthContext.Provider>;
+        o = <ProvideSectionOutline element={headingElement as HeadingElement}>{o}</ProvideSectionOutline>
+
+
+        return o;
     }
 );
+
 
