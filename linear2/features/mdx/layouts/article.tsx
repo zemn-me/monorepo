@@ -75,7 +75,7 @@ const TitleSetter: () => React.ReactElement =  () => {
 export const Article:
     (frontmatter: any) => React.FC
 =
-    () => ({ children }) => <article><Base>
+    () => ({ children }) => <article style={{ maxWidth: "35rem", margin: "auto" }}><Base>
             <MDXProvider components={components}>
                 <TitleSetter/>
                 <IndexRoot/>

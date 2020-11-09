@@ -1,10 +1,6 @@
 ---
 layout: article
-title: How To Hack Apple ID
 language: en-GB
-subtitle:
-    Disclosure of a severe bug allowing client-side takeover of
-    Apple's central AppleID server.
 tags:
  - security
  - disclosure
@@ -19,9 +15,18 @@ autonumber:
 import box from './box.png';
 import { EventSequence } from '@zemn.me/linear/event-sequence';
 import * as SimpleDate from '@zemn.me/simpletime/date';
+import Head from 'next/head'
+
+<Head>
+    <meta name="author" content="Thomas Neil James Shadwell"/>
+</Head>
 
 How To Hack Apple ID
 ====================
+
+*Disclosure of a severe bug allowing client-side takeover of
+Apple's central AppleID server.*
+
 
 <figure>
     <video style={{
@@ -240,8 +245,8 @@ There's a third, `allow-from [domain]`, which existed for a little while in a
 handful of browsers. The idea was you'd set '`allow-from mywebsite2.com`' and then
 *just* '`mywebsite2.com`' can embed your webpage. `idmsa.apple.com` is actually, amusingly, the *only* place I have *ever* seen this header used. Apple sets it to:
 
-```
-HTTP X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
+```HTTP
+X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
 ```
 
 What does this do? Absolutely nothing in any mordern browser. It's not even
@@ -426,7 +431,7 @@ break and/or change the action of `frame-ancestors`.
 
 Let's try:
 
-```
+```query
 redirect_uri=https://thomas;@www.icloud.com
 ```
 
@@ -1068,8 +1073,12 @@ This is a very tricky URL to construct, as it has to satisfy all systems without
 decodes the `redirect_uri` ‘`https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
 2. It (correctly) determines that the origin is `wwww.icloud.com` and allows the request through.
 2. The Apple ID backend at `idmsa.apple.com` returns the Content-Security Policy directive ‘`frame-ancestors https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
-3. This indicates to the browser the allowed origins `https://s3-eu-west-1.amazonaws.com%3F`, which doesn't exist and `s3-eu-west-1.amazonaws.com` which is *anything we put in our personal S3 bucket web server*.
-3. `idmsa.apple.com` then generates `bootData.destinationDomain = decodeURIComponent('https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com')`. `bootData.destinationDomain` gets set to ‘`https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com`’ when the page loads.
+3. This indicates to the browser the allowed origins:
+    - `https://s3-eu-west-1.amazonaws.com%3F`, which doesn't exist and
+    - `s3-eu-west-1.amazonaws.com` which is *anything we put in our personal S3 bucket web server*.
+3. `idmsa.apple.com` then generates:
+    -  `bootData.destinationDomain = decodeURIComponent('https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com')`
+    - `bootData.destinationDomain` gets set to ‘`https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com`’ when the page loads.
 4. When passed `https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com` as `targetOrigin`, `postMessage` parses out `https://s3-eu-west-1.amazonaws.com` to be the correct target origin, which allows us to get `postMessage`s from our embedded `idmsa.apple.com`
 
 What's at the end of this long road? Having tricked `idmsa.apple.com` into thinking that we're iCloud, when you log in to our embed with your autofilled email we get an authentication for your Apple account. Even if you don't 2FA! This is because an authentication token is granted without passing 2FA for iCloud 'Find My', used for finding your potentially lost phone which you might need to pass 2FA.
@@ -1164,7 +1173,7 @@ A quick and simple ctrl-f in the `signin` HTML gets us this:
 
 First hit is not so promising. The error message is unescaped, sure but they're usually generated from either a static, hard-coded list of HTML error strings, or something returned from a server we can't manipulate.
 
-```HTML
+```handlebars
     {{#if showLearnMoreLink}}
     <div>
         {{{learnMoreLink}}}

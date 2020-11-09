@@ -1,6 +1,6 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {} from './syntaxHighlighting.module.sass'
+import style from './syntaxHighlighting.module.sass'
 
 export interface CodeProps {
     children: string
@@ -8,7 +8,7 @@ export interface CodeProps {
 }
 
 export const CodeBlock: React.FC<CodeProps> =
-    ({ children, language }) => <SyntaxHighlighter
+    ({ children, language }) => <SyntaxHighlighter style={{}} className={style.code}
 
      language={language?.toLowerCase()}>
         {children}
