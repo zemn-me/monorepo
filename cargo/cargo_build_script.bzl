@@ -112,26 +112,30 @@ def _build_script_impl(ctx):
         transitive = toolchain_tools,
     )
 
+    links = ctx.attr.links or ""
+
     # dep_env_file contains additional environment variables coming from
     # direct dependency sys-crates' build scripts. These need to be made
     # available to the current crate build script.
     # See https://doc.rust-lang.org/cargo/reference/build-scripts.html#-sys-packages
     # for details.
     args = ctx.actions.args()
-    args.add_all([script.path, crate_name, out_dir.path, env_out.path, flags_out.path, link_flags.path, dep_env_out.path])
-    dep_env_files = []
+    args.add_all([script.path, crate_name, links, out_dir.path, env_out.path, flags_out.path, link_flags.path, dep_env_out.path])
+    build_script_inputs = []
     for dep in ctx.attr.deps:
         if DepInfo in dep and dep[DepInfo].dep_env:
             dep_env_file = dep[DepInfo].dep_env
             args.add(dep_env_file.path)
-            dep_env_files.append(dep_env_file)
+            build_script_inputs.append(dep_env_file)
+            for dep_build_info in dep[DepInfo].transitive_build_infos.to_list():
+                build_script_inputs.append(dep_build_info.out_dir)
 
     ctx.actions.run(
         executable = ctx.executable._cargo_build_script_runner,
         arguments = [args],
         outputs = [out_dir, env_out, flags_out, link_flags, dep_env_out],
         tools = tools,
-        inputs = dep_env_files,
+        inputs = build_script_inputs,
         mnemonic = "CargoBuildScriptRun",
         env = env,
     )
@@ -164,6 +168,9 @@ _build_script_run = rule(
         ),
         "crate_name": attr.string(
             doc = "Name of the crate associated with this build script target",
+        ),
+        "links": attr.string(
+            doc = "The name of the native library this crate links against.",
         ),
         "deps": attr.label_list(
             doc = "The dependencies of the crate defined by `crate_name`",
@@ -206,6 +213,7 @@ def cargo_build_script(
         deps = [],
         build_script_env = {},
         data = [],
+        links = None,
         **kwargs):
     """Compile and execute a rust build script to generate build attributes
 
@@ -273,6 +281,7 @@ def cargo_build_script(
         deps (list, optional): The dependencies of the crate defined by `crate_name`.
         build_script_env (dict, optional): Environment variables for build scripts.
         data (list, optional): Files or tools needed by the build script.
+        links (str, optional): Name of the native library this crate links against.
         **kwargs: Forwards to the underlying `rust_binary` rule.
     """
     rust_binary(
@@ -290,6 +299,7 @@ def cargo_build_script(
         crate_features = crate_features,
         version = version,
         build_script_env = build_script_env,
+        links = links,
         deps = deps,
         data = data,
     )
