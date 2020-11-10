@@ -20,6 +20,7 @@
 
 import React, { RefAttributes } from 'react';
 import style from 'linear2/features/elements/base.module.sass';
+import fancyStyle from 'linear2/features/elements/fancy.module.sass';
 import { classes, PropsOf, prettyAnchor } from '../util';
 import { Provide as ProvideSectionOutline } from './outlineState';
 
@@ -58,20 +59,15 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         ] as const)[depth + sectionDepth] ?? 'h5';
 
         return React.createElement(elementName, {
-            ...props,
-            ref,
-            ...classes(props.className, style.linear)
-        }, <>
-            {props.id?<>
-                <a href={`#${props.id}`} aria-label="section link">§</a>
-                {" "}
-            </>: null }
-            {children}
-        </>);
+                ...props,
+                ref,
+                ...classes(props.className, style.linear)
+            }, children)
+        ;
     }
 );
 
-type HTMLSectionElement = HTMLElement;
+export type HTMLSectionElement = HTMLElement;
 
 export const useText:
     () => [ ref: (element: { innerText: string } | null) => void, value?: string ]
@@ -87,11 +83,9 @@ export const useText:
 
 export type HeadingElement<T extends HeaderComponent = HeaderComponent> = React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>
 
-export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
-    children: [ HeadingElement, ...React.ReactElement[]];
-}
 
-function mergeRefs<T = any>(
+
+export function mergeRefs<T = any>(
   ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>
 ): React.RefCallback<T> {
   return (value) => {
@@ -105,10 +99,15 @@ function mergeRefs<T = any>(
   };
 }
 
-function isDefined<T>(v: T | undefined): v is T { return v !== undefined }
+export function isDefined<T>(v: T | undefined): v is T { return v !== undefined }
+
+export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
+    children: [ HeadingElement, ...React.ReactElement[]];
+    withSectionMarkers?: boolean
+}
 
 export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
-    ({ children: [ heading, ...children ], ...props}, ref) => {
+    ({ children: [ heading, ...children ], withSectionMarkers, ...props}, ref) => {
         let sectionDepth = React.useContext(SectionDepthContext);
         if (sectionDepth > 5) sectionDepth = 5;
 
@@ -121,12 +120,27 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
                     ref: mergeRefs(...[heading.props.ref, onHeadingMount].filter(isDefined)),
                     id,
                 }, heading.props.children )
+        
+        let o = headingElement;
 
-        let o = <section {...{
+        if (withSectionMarkers) o = <header className={
+            `${fancyStyle.sectionHeader} ${fancyStyle[`h${sectionDepth}`]}`
+        }>
+            <div className={fancyStyle.sectionLink}>
+                <a href={`#${id}`}>§</a>
+            </div>
+            {React.cloneElement(o, {
+                ...o.props,
+                className: o.props.className + ` ${fancyStyle.title}`},
+                o.props.children
+            )}
+        </header>
+
+        o = <section {...{
             ...props,
             ...classes(props.className, style.linear)
         }} ref={ref} aria-labelledby={id}>
-            {headingElement}
+            {o}
             {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
         </section>;
 

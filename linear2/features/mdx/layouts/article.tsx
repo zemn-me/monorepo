@@ -6,7 +6,8 @@ import * as elements from 'linear2/features/elements';
 import Base from 'linear2/features/layout/base';
 import * as outline from 'linear2/features/elements/headingsAndSections/outlineState';
 import { useRecoilState } from 'recoil';
-
+import style from './article.module.sass';
+import * as fancyElements from 'linear2/features/elements/headingsAndSections/fancy';
 
 const languagePrefix = "language-" as const;
 
@@ -29,7 +30,7 @@ const Pre: React.FC = props => {
     if (realProps.originalType !== "code") return <pre {...props}/>;
     if (typeof realProps.children !== "string") return <pre {...props} />
 
-    let codeProps: elements.CodeProps = { children: realProps.children };
+    let codeProps: elements.CodeProps = { ...props, ...realProps, children: realProps.children,  };
 
     if (realProps?.className?.startsWith(languagePrefix)) {
         codeProps.language = realProps.className.slice(languagePrefix.length);
@@ -38,9 +39,41 @@ const Pre: React.FC = props => {
     return <elements.CodeBlock {...codeProps} />
 }
 
+type aprops = JSX.IntrinsicElements["a"]
+interface AProps extends aprops { }
+
+const FootnoteBackref = ({ children, ...props} : AProps) => 
+        <a {...{
+            ...props,
+            className: style.footnoteBackref,
+        }}>
+            <span role="img" aria-label="go back">{children}</span>
+        </a>
+
+const Footnoteref = (props: AProps) => <a {...{
+    ...props,
+    className: style.footnoteRef
+}}/>
+
+const A: (props: AProps) => React.ReactElement = props => {
+    switch (props.className) {
+    case "footnote-backref": return <FootnoteBackref {...props}/>
+    case "footnote-ref": return <Footnoteref {...props}/>
+    }
+
+    return <a {...props}/>
+}
+
+const Footnotes: React.FC = ({ children }) => <div className={style.Footnotes}>
+    {children}
+</div>
+
 const components = {
     ...toComponents(elements),
-    pre: Pre
+    pre: Pre,
+    a: A,
+    Footnotes,
+    section: fancyElements.Section
 }
 
 const IndexRoot: () => React.ReactElement = () => {
@@ -74,14 +107,19 @@ const TitleSetter: () => React.ReactElement =  () => {
 
 export const Article:
     (frontmatter: any) => React.FC
-=
-    () => ({ children }) => <article style={{ maxWidth: "35rem", margin: "auto" }}><Base>
-            <MDXProvider components={components}>
-                <TitleSetter/>
-                <IndexRoot/>
-            {children}
-        </MDXProvider>
-    </Base></article>
-;
+    =
+    () => ({ children }) => <main className={elements.style.root}>
+        <article style={{ maxWidth: "35rem", margin: "auto" }}
+            className={elements.style.linear}>
+            <Base>
+                <MDXProvider components={components}>
+                    <TitleSetter />
+                    <IndexRoot />
+                    {children}
+                </MDXProvider>
+            </Base>
+        </article>
+    </main>
+    ;
 
 export default Article;

@@ -3,3 +3,5 @@
 import React from 'react';
 export * from './headingsAndSections';
 export * from './extraElements';
+export { default as style } from './base.module.sass';
+

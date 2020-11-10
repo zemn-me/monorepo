@@ -652,8 +652,7 @@ Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
 [§6]: #analysing-the-beefy-boy
 
 ```javascript
-) {
-egeneratorRuntime.async(function(t) {
+regeneratorRuntime.async(function(t) {
 (; ; )
 switch (t.prev = t.next) {
 case 0:
@@ -741,7 +740,7 @@ window.addEventListener(
 
 If I do this, then whenever the iCloud page gets a message from the `idmsa.apple.com` frame, it'll print it to the console. With that, we end up with this:
 
-```
+```json
 pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["ready"],"id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2"}
 
 pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign In with Your Apple ID"}],"id":"E0236187-9F33-42BC-AD1C-4F3866803C55"}
@@ -1191,9 +1190,8 @@ Oh now this looks *really* good! From our previous code we already know that `pr
 
 Let's put everything together into one attack page.
 
-```HTML CodeCommentHelper=//
+```HTML name=rewards.html
 <!DOCTYPE HTML>
-//
 <title>Apple Rewards</title>
 <style type="text/css">
 
@@ -1488,7 +1486,6 @@ Warning: this code is really hacky.
 
 ```javascript
 const injection = () => {
-
     // we want to get rid of the evidence as soon as we can.
     // once our popup is initialized, it passes us a message
     // which we then pass onto our parent exploit window.
@@ -1509,9 +1506,9 @@ const injection = () => {
     // we pop this out and escape into it.
     const legitLogin = "https://idmsa.apple.com/IDMSWebAuth/login.html?appIdKey=49bd208126787c17c33ca3b14d2a4f0c92daa10c417c4d686140e4acc04ba5f4&language=US-EN&path=/Login.do%3FmyInfoReturnURL%3DRegisterAgreement.do%253Fskip%253Dyes%253Fskip%253Dyes";
 
-    // create the 'Signi in With Apple' button.
+    // create the 'Sign in With Apple' button.
     const i = document.createElement("img");
-    i.src= appleLoginImage;
+    i.src = appleLoginImage;
 
     // when the button is clicked, we popout our
     // 'legit' login page.
@@ -1717,6 +1714,7 @@ PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
 
 
 
+<!--
 [^3]:
     Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
 
@@ -1779,6 +1777,7 @@ PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
     > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
     > 
     > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
+-->
 
 [Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
 [Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536

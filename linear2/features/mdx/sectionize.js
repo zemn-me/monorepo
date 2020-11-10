@@ -11,7 +11,6 @@ function plugin () {
 }
 
 function transform (tree) {
-
   for (let depth = MAX_HEADING_DEPTH; depth > 0; depth--) {
     visit(
       tree,
@@ -19,6 +18,7 @@ function transform (tree) {
       sectionize
     )
   }
+
 }
 
 function sectionize (node, ancestors) {

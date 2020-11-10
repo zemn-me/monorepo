@@ -1,13 +1,35 @@
 
-const ident = x => x;
+const ramp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+class BaseConverter {
+    constructor(ramp) { this.ramp = ramp }
+    get zero() { return this.ramp[0] }
+    get base() { return this.ramp.length }
+    reverse(s) { return [...s].map((ch, i) => this.value(ch, i)).reduce((a, c) => a + c, 0) }
+    convert(n) {
+        let o = [];
+        for(;;) {
+            const remainder = n % this.base;
+            n = Math.floor(n / this.base);
+
+            o.push(this.ramp[remainder]);
+
+            if (n === 0) break;
+        }
+
+        return o.reverse().join("");
+    }
+}
+
+const conv = new BaseConverter(ramp);
 
 const uniqueClass = (() => {
     let ctr = 0;
     const identsMap = new Map();
     return (context, _, localName) => {
-        const key = [context.resourcePath, localName].join("__");
-        identsMap.set(key, identsMap.get(key) || ctr++);
-        return `c${identsMap.get(key).toString(32)}`
+        const key = [context.resourcePath, localName].join("__").trim();
+        const v = identsMap.get(key);
+        identsMap.set(key, v == undefined? ctr++: v);
+        return conv.convert(identsMap.get(key));
     }
 })()
 
@@ -22,8 +44,8 @@ const cssMinifierPlugin = config => ({
                         modules: {
                             ...l.options.modules,
                             ...(
-                                 //{ getLocalIdent: uniqueClass }
-                                {}
+                                { getLocalIdent: uniqueClass }
+                                //{}
                             )
                         }
 					}
@@ -71,6 +93,24 @@ const mdxPlugin = config => {
             }],
             require('./sectionize.js'),
         ],
+        rehypePlugins: [
+            () => (tree) => require('unist-util-visit-parents')(
+                tree, node => node.type == "element" && node.tagName == "div",
+                (node) => {
+                    node.tagName = "Footnotes"
+                }),
+
+            () => (tree) => {
+                const types = new Set()
+                require('unist-util-visit-parents')(
+                    tree, node => node.type=="jsx",
+                    node => console.log(node)
+                );
+
+                console.log(types);
+
+            }
+        ]
     })(config);
 
     return config;

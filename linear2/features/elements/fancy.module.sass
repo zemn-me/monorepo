@@ -1,0 +1,20 @@
+
+.sectionHeader
+    display: grid
+    grid: "section-link . title" auto / auto 1em 1fr
+    padding: 1em 0
+
+.title
+    grid-area: title
+
+.sectionLink
+    grid-area: section-link
+    border-right: 1px solid var(--fgc)
+    margin: auto
+    height: 70%
+    padding: 0 1em
+    font-size: xx-large
+    display: grid
+
+    > *
+        margin: auto

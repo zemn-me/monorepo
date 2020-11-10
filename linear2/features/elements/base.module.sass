@@ -13,6 +13,57 @@
     grid-template-columns: repeat(auto-fill, var(--column-width, 21rem))
     justify-content: space-around
 
+// colours!!
+// dark mode
+$dark-sand: #887f75
+$eigensand:  #181719
+$med-sand:  #bfb6a9
+$purplish-sand:  #bf47ab
+
+// light mode
+$daylight:  #e7e8e6
+$arbor:  #404956
+$cover: #77808a
+
+$white: white
+$black: black
+$grey: grey
+$greylike:  #b7b7b7
+$lightish:  rgba(0,0,0,.6)
+
+$red: color.scale(red, $saturation: -80%) 
+
+.root
+  --code-tag: #{$red}
+
+  // colour schemes
+  @media (prefers-color-scheme: dark)
+    --fgc: #{$med-sand}
+    --mgc: #{$dark-sand}
+    --bgc: #{$eigensand}
+    background: #{$eigensand}
+    --highlight: #{$arbor}
+    --fgc-o: var(--bgc)
+    --mgc-o: var(--bgc)
+    --bgc-o: var(--fgc)
+    --figure-fill: var(--mgc)
+    --figure-stroke: var(--mgc-o)
+    --visited-link: var(--purplish-sand)
+
+  @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
+    --fgc: var(--arbor)
+    --bgc: var(--daylight)
+    background: #{$daylight}
+    --mgc: var(--cover)
+    --highlight: var(--dark-sand)
+    --fgc-o: var(--bgc)
+    --mgc-o: var(--bgc)
+    --bgc-o: var(--fgc)
+    --figure-fill: var(--bgc)
+    --figure-stroke: var(--bgc-o)
+
+
+
     
 .linear
   font-size: 1.1rem
@@ -24,51 +75,6 @@
   transition: all 1s ease-in-out
   transition-property: color, fill, stroke, background-color, border-color
 
-
-  // colours!!
-  // dark mode
-  --dark-sand: var(--dark-sand, #887f75)
-  --eigensand: var(--eigensand, #181719)
-  --med-sand: var(--med-sand, #bfb6a9)
-  --purplish-sand: var(--purplish-sand, #bf47ab)
-
-  // light mode
-  --daylight: var(--daylight, #e7e8e6)
-  --arbor:  var(--arbor, #404956)
-  --cover: var(--cover, #77808a)
-
-  --white: var(--white, white)
-  --black: var(--black, black)
-  --grey: var(--grey, grey)
-  --greylike: var(--greylike, #b7b7b7)
-  --lightish: var(--lightish, rgba(0,0,0,.6))
-
-  $red: color.scale(red, $saturation: -80%) 
-  --code-tag: #{$red}
-
-  // colour schemes
-  @media (prefers-color-scheme: dark)
-    --fgc: var(--med-sand) 
-    --mgc: var(--dark-sand)
-    --bgc: var(--eigensand)
-    --highlight: var(--arbor)
-    --fgc-o: var(--bgc)
-    --mgc-o: var(--bgc)
-    --bgc-o: var(--fgc)
-    --figure-fill: var(--mgc)
-    --figure-stroke: var(--mgc-o)
-    --visited-link: var(--purplish-sand)
-
-  @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
-    --fgc: var(--arbor)
-    --bgc: var(--daylight)
-    --mgc: var(--cover)
-    --highlight: var(--dark-sand)
-    --fgc-o: var(--bgc)
-    --mgc-o: var(--bgc)
-    --bgc-o: var(--fgc)
-    --figure-fill: var(--bgc)
-    --figure-stroke: var(--bgc-o)
 
 
   color: var(--fgc)

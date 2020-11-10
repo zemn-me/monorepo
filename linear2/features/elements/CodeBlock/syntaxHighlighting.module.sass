@@ -2,23 +2,26 @@
     =light
         opacity: .5
 
-    :global(.attr-name)
+    .attr-name
         font-style: italic
         +light
 
-    :global(.keyword)
+    .keyword
         +light
 
-    :global(.response-status):not(:global(.property)),
-        :global(.operator), :global(.property)
+    .response-status:not(.property),
+        .operator, .property
         +light
 
-    :global(.parameter)
+    .parameter
         font-style: italic
     
-    :global(.null), :global(.nil)
+    .null, .nil
         opacity: 1
 
-pre.code, pre.code code
+    .linenumber
+        +light
+
+pre.code, .code pre, .code code, code.code
     white-space: pre-wrap !important
     word-wrap: break-word
