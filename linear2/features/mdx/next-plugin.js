@@ -75,41 +75,18 @@ const mdxPlugin = config => {
                 }
             }],
             require('@silvenon/remark-smartypants'),
-            [require('remark-textr'), {
-                plugins: [
-                    require('typographic-apostrophes'),
-                    require('typographic-quotes'),
-                    /*[require('typographic-quotes'), { locale: 'en-GB' }],*/
-                    require('typographic-quotes'),
-                    require('typographic-arrows'),
-                    require('typographic-copyright'),
-                    require('typographic-ellipses'),
-                    require('typographic-em-dashes'),
-                    require('typographic-en-dashes'),
-                    require('typographic-math-symbols'),
-                    require('typographic-registered-trademark'),
-                    require('typographic-trademark')
-                ]
-            }],
+            require('./typography.js'),
+
             require('./sectionize.js'),
         ],
         rehypePlugins: [
             () => (tree) => require('unist-util-visit-parents')(
-                tree, node => node.type == "element" && node.tagName == "div",
+                tree, node => node.type == "element" && node.tagName == "div"
+                    && node.properties && node.properties.className == 'footnotes',
                 (node) => {
+                    console.log(node);
                     node.tagName = "Footnotes"
-                }),
-
-            () => (tree) => {
-                const types = new Set()
-                require('unist-util-visit-parents')(
-                    tree, node => node.type=="jsx",
-                    node => console.log(node)
-                );
-
-                console.log(types);
-
-            }
+                })
         ]
     })(config);
 

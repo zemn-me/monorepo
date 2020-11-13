@@ -64,9 +64,9 @@ const A: (props: AProps) => React.ReactElement = props => {
     return <a {...props}/>
 }
 
-const Footnotes: React.FC = ({ children }) => <div className={style.Footnotes}>
+const Footnotes: React.FC = ({ children }) => <aside className={style.Footnotes}>
     {children}
-</div>
+</aside>
 
 const components = {
     ...toComponents(elements),
