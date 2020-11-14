@@ -23,6 +23,7 @@ import style from 'linear2/features/elements/base.module.sass';
 import fancyStyle from 'linear2/features/elements/fancy.module.sass';
 import { classes, PropsOf, prettyAnchor } from '../util';
 import { Provide as ProvideSectionOutline } from './outlineState';
+import { extractText } from '../extractText';
 
 export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -69,13 +70,20 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 
 export type HTMLSectionElement = HTMLElement;
 
+
 export const useText:
     () => [ ref: (element: { innerText: string } | null) => void, value?: string ]
 =
     () => {
         const [ text, setText ] = React.useState<string>();
-        const onElementMount = React.useCallback((v: { innerText: string} | null) =>
-            v !== null? setText(v.innerText): void 0, [ setText ]);
+        const onElementMount = React.useCallback((v: { innerText: string} | null |
+                {textContent: string}) =>
+            v !== null? setText((() => {
+                if ("innerText" in v) return v.innerText;
+                if ("textContent" in v) return v.textContent;
+                return ""
+            })()): void 0, [ setText ]);
+
 
         return [ onElementMount, text ];
     }
@@ -111,27 +119,28 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
         let sectionDepth = React.useContext(SectionDepthContext);
         if (sectionDepth > 5) sectionDepth = 5;
 
-        const [ onHeadingMount, headingText ] = useText();
+        const headingText = extractText(heading as any);
 
         const id = prettyAnchor(heading.props.id ?? headingText);
 
         const headingElement = React.cloneElement(heading, {
                     ...heading.props,
-                    ref: mergeRefs(...[heading.props.ref, onHeadingMount].filter(isDefined)),
                     id,
                 }, heading.props.children )
         
         let o = headingElement;
 
         if (withSectionMarkers) o = <header className={
-            `${fancyStyle.sectionHeader} ${fancyStyle[`h${sectionDepth}`]}`
+            [fancyStyle.sectionHeader, fancyStyle[`h${sectionDepth}`]].filter(isDefined)
+                .join("")
         }>
             <div className={fancyStyle.sectionLink}>
                 <a href={`#${id}`}>§</a>
             </div>
             {React.cloneElement(o, {
                 ...o.props,
-                className: o.props.className + ` ${fancyStyle.title}`},
+                ...classes(o.props.className, fancyStyle.title),
+            },
                 o.props.children
             )}
         </header>

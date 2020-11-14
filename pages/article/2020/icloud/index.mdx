@@ -6,10 +6,6 @@ tags:
  - disclosure
  - writing
 date: [ 13, aug, 2020 ]
-autonumber:
-    sequence: alphanumeric
-    separator: "."
-    prefix: §
 ---
 
 import box from './box.png';
@@ -61,11 +57,10 @@ This article discusses the technical detail around a chain of vulnerabilities (s
 
 Preamble {#preamble}
 --------
-
-### Fear, Romance, and Vulnerability
-
 [§1]: #preamble
 [Preamble]: #preamble
+
+### Fear, Romance, and Vulnerability
 
 The intersection of internet and identity is one with a long and fascinating
 history because it's imbued with so many ideals about how people's real lives
@@ -89,22 +84,11 @@ of themselves on social media, or their favourite gaming platform is an
 indirect, curated representation of themselves but one thing that is for sure is
 that whatever's in your iCloud is a pretty raw representation of self.
 
-That's fascinating to me. For most of the time I used the internet my email was
-full of weird junk and my social media accounts had some platitudes about
-whatever was funny online. The closest these profiles came to being 'real' was
-the rare profile picture I might have of my face.
+That's fascinating to me. For most of the time I used the internet my email was full of weird junk and my social media accounts had some platitudes about whatever was funny online. The closest these profiles came to being 'real' was the rare profile picture I might have of my face.
 
-If you hacked these accounts, or you got my computer you might mull over the
-number of image macros I had bookmarked, but you wouldn't really have much of an
-idea of what my life was like. Now I talk to all of my friends on a medium
-that's recorded forever and I have every photo I ever took of my life and my
-relationships back to 2014.
+If you hacked these accounts, or you got my computer you might mull over the number of image macros I had bookmarked, but you wouldn't really have much of an idea of what my life was like. Now I talk to all of my friends on a medium that's recorded forever and I have every photo I ever took of my life and my relationships back to 2014.
 
-Often discussion of this comes with a heavy-handed sense of fear that such
-things are 'online' but that's not something I fear, or what I'm trying to draw
-attention to. To me, what's fascinating is that someone's real life history and
-identity is online at all, that between me and knowing everything about you are
-a few security systems.
+Often discussion of this comes with a heavy-handed sense of fear that such things are 'online' but that's not something I fear, or what I'm trying to draw attention to. To me, what's fascinating is that someone's real life history and identity is online at all, that between me and knowing everything about you are a few security systems.
 
 When, in 2014 "a collection of almost 500 private pictures of various celebrities, mostly women, and with many containing nudity, were posted on the imageboard 4chan ... initially believed to have been obtained via a breach of Apple's cloud services suite iCloud" ([wiki][1]) -- I had this realisation that the people whose lives were 'online' weren't the people who sent sexts over MySpace chat anymore, it was everyone. Like hacking someone's 'Cyberbrain' in Ghost In The Shell, hacking someone's personal cloud storage was like peering directly into their life and seeing it from their eyes.
 
@@ -113,61 +97,27 @@ When, in 2014 "a collection of almost 500 private pictures of various celebritie
 In this article I'll be describing and demonstrating to the best of my ability a
 now patched series of exploits on the Apple identity systems idmsa.apple.com.
 
-There's a particular framework in which I want such issues to be understood,
-though. It's an angle on my understanding of the context of issues I find that
-I've thought a lot about, but never tried to write down before.
+There's a particular framework in which I want such issues to be understood, though. It's an angle on my understanding of the context of issues I find that I've thought a lot about, but never tried to write down before. 
 
-Over the years as I've grown and matured the stuff I've hacked has only grown in
-impact. Consider, for example my [2017 hack of a nation's tax system][2]. When
-people hear about this stuff, the first thing they think is 'oh no! what if it
-happened to me'. And they think about how *bad* security must be to get there.
+Over the years as I've grown and matured the stuff I've hacked has only grown in impact. Consider, for example my [2017 hack of a nation's tax system][2]. When people hear about this stuff, the first thing they think is 'oh no! what if it happened to me'. And they think about how *bad* security must be to get there.
 
 [2]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
 
-That's something that I think is maybe even harmful to the general public's
-understanding of security. It puts all vulnerabilities on the same table. In
-reality, I see vulnerabilities as running along this asymtotic curve of
-*complexity* vs *impact*. It's the landscape representing all the bugs that are
-out there.
+That's something that I think is maybe even harmful to the general public's understanding of security. It puts all vulnerabilities on the same table. In reality, I see vulnerabilities as running along this asymtotic curve of *complexity* vs *impact*. It's the landscape representing all the bugs that are out there.
 
-The more complicated a security bug is, the less likely it is to be discovered,
-but also the more likely it is to be really dangerous if found. There's
-literally hundreds if not thousands of extremely high complexity security
-vulnerabilities in any system, software or otherwise. But the reason that all
-our shit doesn't fall apart is because high complexity means *difficult to
-find*.
+The more complicated a security bug is, the less likely it is to be discovered, but also the more likely it is to be really dangerous if found. There's literally hundreds if not thousands of extremely high complexity security vulnerabilities in any system, software or otherwise. But the reason that all our shit doesn't fall apart is because high complexity means *difficult to find*.
 
-This puts the bugs I find in a fairly uncomfortable place. Sure, the bugs are
-really impactful, and really bad on the surface but the fact that they exist
-doesn't necessarily indicate a severe flaw in the underlying security system.
+This puts the bugs I find in a fairly uncomfortable place. Sure, the bugs are really impactful, and really bad on the surface but the fact that they exist doesn't necessarily indicate a severe flaw in the underlying security system.
 
-That doesn't mean the bugs weren't worth finding either -- really complicated
-bugs are the kind that might one day absolutely ruin you if put in the hands of
-some wealthy organized crime syndicate that bought it at auction or an
-authoritarian state actor you've crossed.
+That doesn't mean the bugs weren't worth finding either -- really complicated bugs are the kind that might one day absolutely ruin you if put in the hands of some wealthy organized crime syndicate that bought it at auction or an authoritarian state actor you've crossed.
 
-My heavily laboured point is that it's important to differentiate security
-issues that need to get written by someone who is likely already an industry
-professional versus bugs that can be dug up by anyone pasting from the 'XSS
-Evasion Cheat Sheet'.
+My heavily laboured point is that it's important to differentiate security issues that need to get written by someone who is likely already an industry professional versus bugs that can be dug up by anyone pasting from the 'XSS Evasion Cheat Sheet'.
 
-The former is much scarier *when found* than the latter, but the latter is much
-scarier in general because it's far, far more likely to happen in a malicious
-context. *HeartBleed* is a terrifying bug. But bug categories need to be worried
-about versus their likelihood of happening. If we drop the whole security budget
-on preventing the next HeartBleed by porting all our systems to SELinux, a 16
-year old HackForums reader named 'm4rshv1perX' is going to XSS our admins and
-dump our SQL database online.
+The former is much scarier *when found* than the latter, but the latter is much scarier in general because it's far, far more likely to happen in a malicious context. *HeartBleed* is a terrifying bug. But bug categories need to be worried about versus their likelihood of happening. If we drop the whole security budget on preventing the next HeartBleed by porting all our systems to SELinux, a 16 year old HackForums reader named 'm4rshv1perX' is going to XSS our admins and dump our SQL database online.
 
-Though bug bounties are currently fodder for 10,000 medium severity issues on
-staging.john.production.com this is what I always saw bug bounties and
-vulnerability disclosure as perfect for: scooping up the vulnerabilities
-produced by people who just happen to have some special research that breaches
-that area of high complication.
+Though bug bounties are currently fodder for 10,000 medium severity issues on staging.john.production.com this is what I always saw bug bounties and vulnerability disclosure as perfect for: scooping up the vulnerabilities produced by people who just happen to have some special research that breaches that area of high complication. 
 
-Just a few minutes attention from some Project Zero guys is worth tens of
-thousands of dollars if I could only tempt them with my fine selection of bounty
-shirts and glass tumblers with company logos.
+Just a few minutes attention from some Project Zero guys is worth tens of thousands of dollars if I could only tempt them with my fine selection of bounty shirts and glass tumblers with company logos. 
 
 ## Shit, let's be ~~santa~~ iCloud {#shit_lets_be_santa}
 

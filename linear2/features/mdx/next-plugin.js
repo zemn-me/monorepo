@@ -69,22 +69,50 @@ const mdxPlugin = config => {
             require('remark-footnotes'),
             require('remark-lint-no-undefined-references'),
             require('remark-lint-no-heading-like-paragraph'),
+            // addresses a specific 'quotes around code quotes' issue
+            // ex: '`something`'
+            () => (tree) => require('unist-util-visit-parents')(
+                tree, node => node.type == "text"
+                    && (node.value.endsWith("'") || node.value.endsWith('"')),
+                (node, ancestors) => {
+                    const endsWith = node.value.slice(-1)[0];
+                    const parent = ancestors.slice(-1)[0];
+                    const i = parent.children.indexOf(node);
+                    if (i == -1) throw new Error("child not parented to parent");
+                    const [ maybeCodeQuote, maybeText ] = [
+                        parent.children[i+1],
+                        parent.children[i+2]
+                    ];
+
+                    if (!(maybeCodeQuote || maybeText)) return;
+                    if (maybeCodeQuote.type !== "inlineCode") return;
+                    if (maybeText.type !== "text") return;
+                    if (!(maybeText.value.startsWith(endsWith))) return;
+
+                    if (endsWith == "'") {
+                        node.value = node.value.slice(0, -1) + "‘";
+                        maybeText.value = maybeText.value.slice(1) + "’"
+                    }
+            }),
             [require('remark-captions'), {
                 internal: {
-                    image: 'Figure:'
+                    image: 'Figure:',
+                    blockquote: '-- '
                 }
             }],
+
             require('@silvenon/remark-smartypants'),
             require('./typography.js'),
 
             require('./sectionize.js'),
+
+
         ],
         rehypePlugins: [
             () => (tree) => require('unist-util-visit-parents')(
                 tree, node => node.type == "element" && node.tagName == "div"
                     && node.properties && node.properties.className == 'footnotes',
                 (node) => {
-                    console.log(node);
                     node.tagName = "Footnotes"
                 })
         ]

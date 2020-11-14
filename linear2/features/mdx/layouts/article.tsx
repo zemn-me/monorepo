@@ -1,4 +1,5 @@
 import { MDXProvider } from '@mdx-js/react';
+import { extractText } from 'linear2/features/elements/extractText';
 import Head from 'next/head';
 import React from 'react';
 import { toComponents } from '../util';
@@ -65,7 +66,9 @@ const A: (props: AProps) => React.ReactElement = props => {
 }
 
 const Footnotes: React.FC = ({ children }) => <aside className={style.Footnotes}>
-    {children}
+    <small>
+        {children}
+    </small>
 </aside>
 
 const components = {
@@ -92,34 +95,61 @@ const Index: React.FC<{ node: outline.Root | outline.Node  }>  = ({ node }) => {
     </ol>
 }
 
-const TitleSetter: () => React.ReactElement =  () => {
-    const [ index ] = useRecoilState(outline.state);
-    const titleElement = [...index.children]?.[0]?.element;
-    const [ setText, text ] = elements.useText();
-
-    return <>
-        <div ref={setText}>{titleElement??null}</div>
-        <Head>
-            <title>{text?.trim()??"Untitled"}</title>
-        </Head>
-    </>
+interface MDXElementProps {
+    originalType: import('@mdx-js/react').ComponentType
+    children?: MDXElementChildren
 }
 
-export const Article:
-    (frontmatter: any) => React.FC
+type MDXElementChildren = string | React.ReactElement<MDXElementProps>[]
+    | React.ReactElement<MDXElementProps>
+
+
+/**
+ * Returns the first H1 element in an MDX tree, breadth first
+ */
+const findH1:
+    (e: MDXElementChildren) => React.ReactElement<MDXElementProps> | undefined
     =
-    () => ({ children }) => <main className={elements.style.root}>
-        <article style={{ maxWidth: "35rem", margin: "auto" }}
-            className={elements.style.linear}>
-            <Base>
-                <MDXProvider components={components}>
-                    <TitleSetter />
-                    <IndexRoot />
-                    {children}
-                </MDXProvider>
-            </Base>
-        </article>
-    </main>
+    c => {
+        if (c instanceof Array) for (let child of c) {
+            const r = findH1(child);
+            if (r !== undefined) return r;
+        }
+
+        if (typeof c == "string") return undefined;
+        if ("props" in c) {
+            if (c.props.originalType == "h1") return c;
+            if (c.props.children) return findH1(c.props.children)
+        }
+        return undefined;
+    }
+    ;
+
+export const Article:
+    (frontmatter: any) => React.FC<{
+        children: React.ReactElement<MDXElementProps>[]
+    }>
+    =
+    () => ({ children }) => {
+
+        const titleEl = findH1(children)
+        const title = titleEl? extractText(titleEl) : "Untitled";
+
+        return <main className={elements.style.root}>
+            <article style={{ maxWidth: "35rem", margin: "auto" }}
+                className={elements.style.linear}>
+                    <Head>
+                        <title>{title}</title>
+                    </Head>
+                <Base>
+                    <MDXProvider components={components}>
+                        <IndexRoot />
+                        {children}
+                    </MDXProvider>
+                </Base>
+            </article>
+        </main>
+    }
     ;
 
 export default Article;

@@ -1,9 +1,9 @@
 
 
 declare module '@mdx-js/react' {
-  import * as React from 'react'
+  import * as React from 'react';
 
-  type ComponentType =
+  export type ComponentType =
     | 'a'
     | 'blockquote'
     | 'code'
@@ -32,12 +32,13 @@ declare module '@mdx-js/react' {
 
   export type Components = {
     [key in ComponentType]?: React.ComponentType<{children?: React.ReactNode,
-        className?: string }>
+        className?: string }>;
   }
   export interface MDXProviderProps {
     children?: React.ReactNode
     components?: Components
   }
+
   export class MDXProvider extends React.Component<MDXProviderProps> {}
 }
 
