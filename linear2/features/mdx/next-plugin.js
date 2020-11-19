@@ -91,7 +91,8 @@ const mdxPlugin = config => {
 
                     if (endsWith == "'") {
                         node.value = node.value.slice(0, -1) + "‘";
-                        maybeText.value = maybeText.value.slice(1) + "’"
+                        console.log(maybeText.value);
+                        maybeText.value =  "’" + maybeText.value.slice(1)
                     }
             }),
             [require('remark-captions'), {

@@ -51,11 +51,11 @@ $red: color.scale(red, $saturation: -80%)
     --visited-link: var(--purplish-sand)
 
   @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
-    --fgc: var(--arbor)
-    --bgc: var(--daylight)
+    --fgc: #{$arbor}
+    --bgc: #{$daylight}
     background: #{$daylight}
-    --mgc: var(--cover)
-    --highlight: var(--dark-sand)
+    --mgc: #{$cover}
+    --highlight: #{$dark-sand}
     --fgc-o: var(--bgc)
     --mgc-o: var(--bgc)
     --bgc-o: var(--fgc)
@@ -66,7 +66,7 @@ $red: color.scale(red, $saturation: -80%)
 
     
 .linear
-  font-size: 1.1rem
+  font-size: 1.2rem
   font-family: 'EB Garamond', serif
   font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
   overflow-wrap: break-word
@@ -103,7 +103,7 @@ $red: color.scale(red, $saturation: -80%)
 
   code
     font-weight: 400
-    font-size: 80%
+    font-size: 70%
     font-family: "Roboto Mono", monospace
     
   code.inline
@@ -112,7 +112,7 @@ $red: color.scale(red, $saturation: -80%)
   p
     &::first-letter
       text-transform: capitalize
-      padding-left: 1em
+      margin-left: 1em
 
   h1, h2, h3, h4, h5, h6
     font-weight: 300
@@ -133,7 +133,7 @@ $red: color.scale(red, $saturation: -80%)
     &:link
       color: inherit
       text-decoration: none
-      border-bottom: 1px solid var(--fgc)
+      border-bottom: 1px solid var(--highlight)
 
   th
     font-weight: inherit

@@ -71,12 +71,18 @@ const Footnotes: React.FC = ({ children }) => <aside className={style.Footnotes}
     </small>
 </aside>
 
+let h1, h2, h3, h4, h5;
+
+// headings are given contextual depth
+h1 = h2 = h3 = h4 = h5 = elements.Heading;
+
 const components = {
     ...toComponents(elements),
     pre: Pre,
     a: A,
     Footnotes,
-    section: fancyElements.Section
+    section: fancyElements.Section,
+    h1, h2, h3, h4, h5
 }
 
 const IndexRoot: () => React.ReactElement = () => {
@@ -133,22 +139,23 @@ export const Article:
     () => ({ children }) => {
 
         const titleEl = findH1(children)
-        const title = titleEl? extractText(titleEl) : "Untitled";
+        const title = titleEl ? extractText(titleEl) : "Untitled";
 
-        return <main className={elements.style.root}>
-            <article style={{ maxWidth: "35rem", margin: "auto" }}
-                className={elements.style.linear}>
-                    <Head>
-                        <title>{title}</title>
-                    </Head>
-                <Base>
-                    <MDXProvider components={components}>
+        return <Base>
+            <main className={elements.style.root}>
+                <MDXProvider components={components as any}>
+                    <article style={{ maxWidth: "35rem", margin: "auto" }}
+                        className={elements.style.linear}>
+                        <Head>
+                            <title>{title}</title>
+                        </Head>
                         <IndexRoot />
                         {children}
-                    </MDXProvider>
-                </Base>
-            </article>
-        </main>
+                    </article>
+                </MDXProvider>
+            </main>
+
+        </Base>
     }
     ;
 

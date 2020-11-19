@@ -52,11 +52,11 @@ export const H5 = React.forwardRef<HTMLHeadingElement, Omit<HeadingProps, "depth
     (props, ref) => <Heading depth={4} ref={ref} {...props}/>);
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-    ({ depth, children, ...props }, ref) => {
+    ({ depth = 0, children, ...props }, ref) => {
         const sectionDepth = React.useContext(SectionDepthContext);
 
         const elementName = ([
-            'h1', 'h2', 'h3', 'h4', 'h5'
+            'h1', 'h1', 'h2', 'h3', 'h4', 'h5'
         ] as const)[depth + sectionDepth] ?? 'h5';
 
         return React.createElement(elementName, {
@@ -114,9 +114,11 @@ export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
     withSectionMarkers?: boolean
 }
 
+
 export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
     ({ children: [ heading, ...children ], withSectionMarkers, ...props}, ref) => {
         let sectionDepth = React.useContext(SectionDepthContext);
+        sectionDepth = sectionDepth + 1 as any;
         if (sectionDepth > 5) sectionDepth = 5;
 
         const headingText = extractText(heading as any);
@@ -135,7 +137,7 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
                 .join("")
         }>
             <div className={fancyStyle.sectionLink}>
-                <a href={`#${id}`}>§</a>
+                <a href={`#${id}`}></a>
             </div>
             {React.cloneElement(o, {
                 ...o.props,
@@ -147,10 +149,21 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
 
         o = <section {...{
             ...props,
-            ...classes(props.className, style.linear)
+            ...classes(props.className, style.linear,
+                [
+                    fancyStyle.sectionDepth1,
+                    fancyStyle.sectionDepth1,
+                    fancyStyle.sectionDepth2,
+                    fancyStyle.sectionDepth3,
+                    fancyStyle.sectionDepth4,
+                    fancyStyle.sectionDepth5,
+                ][sectionDepth]
+                )
         }} ref={ref} aria-labelledby={id}>
             {o}
-            {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
+            <span className={fancyStyle.sectionWrapper}>
+                {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
+            </span>
         </section>;
 
         o = <SectionDepthContext.Provider value={sectionDepth}>{o}</SectionDepthContext.Provider>;

@@ -1,20 +1,34 @@
 
+
 .sectionHeader
     display: grid
-    grid: "section-link . title" auto / auto 1em 1fr
     padding: 1em 0
+    grid: "section-link . title" auto / auto 1em 1fr
+    a:link
+        border-bottom: 0
 
 .title
     grid-area: title
+    margin: auto 0
 
 .sectionLink
     grid-area: section-link
-    border-right: 1px solid var(--fgc)
     margin: auto
-    height: 70%
-    padding: 0 1em
-    font-size: xx-large
     display: grid
+    opacity: .7
 
     > *
         margin: auto
+
+    :not(.sectionDepth1) > .sectionHeader &
+        >*::after
+            content: counters(section, ".") "."
+
+
+.sectionDepth2, .sectionDepth3, .sectionDepth4, .sectionDepth5
+    counter-increment: section
+
+.sectionWrapper
+    counter-reset: section
+
+        

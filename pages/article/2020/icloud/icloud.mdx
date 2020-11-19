@@ -1,6 +1,5 @@
 ---
 layout: article
-language: en-GB
 tags:
  - security
  - disclosure
@@ -8,10 +7,7 @@ tags:
 date: [ 13, aug, 2020 ]
 ---
 
-import box from './box.png';
-import { EventSequence } from '@zemn.me/linear/event-sequence';
-import * as SimpleDate from '@zemn.me/simpletime/date';
-import Head from 'next/head'
+import Head from 'next/head';
 
 <Head>
     <meta name="author" content="Thomas Neil James Shadwell"/>
@@ -20,44 +16,44 @@ import Head from 'next/head'
 How To Hack Apple ID
 ====================
 
-*Disclosure of a severe bug allowing client-side takeover of
-Apple's central AppleID server.*
+*Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.*
 
-
+<!--
 <video style={{
     borderRadius: "2rem",
     width: "50%",
     float: "right",
     margin: "2rem"
 }} autoPlay loop muted src={require('./exploit_mobile.mp4')}/>
+-->
 
-## Abstract
-
-This article discusses the technical detail around a chain of vulnerabilities (shown below) that allowed an attacker to steal an Apple user's Apple ID account, and the story around how these vulnerabilities were found.
+## Index By Vulnerability
 
 1. Content Security Policy injection ([§3])
    * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
    * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
    * Leverage existing information this page has such as the user email
    * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
+
 2. `postMessage`, send access control list bypass ([§7])
-   * Push information across the origin trust boundary.
+   * Bypass the access control AppleID uses to prevent other origins impersonating authenticating parties.
+   * Impersonate arbitrary AppleID clients, such as iCloud, at least as far
+   as *sending* messages is concerned.
+
 3. `postMessage`, receive access control list bypass. ([§8])
    * Recieve information intended expressly for iCloud and other Apple ID applications
    * In conjunction with (2), impersonate arbitary Apple ID applications.
    * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
    * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
+
 4. XSS via JSONRPC 'config' method ([§9])
    * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
    * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
-   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages.
+   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages, even where the user has not passed 2FA (due to FindMy letting you find your phone without passing 2FA)
 
+## Preamble
 
-
-Preamble {#preamble}
---------
-[§1]: #preamble
-[Preamble]: #preamble
+[§1]: #Preamble
 
 ### Fear, Romance, and Vulnerability
 
@@ -118,96 +114,60 @@ Though bug bounties are currently fodder for 10,000 medium severity issues on st
 
 Just a few minutes attention from some Project Zero guys is worth tens of thousands of dollars if I could only tempt them with my fine selection of bounty shirts and glass tumblers with company logos. 
 
-## Shit, let's be ~~santa~~ iCloud {#shit_lets_be_santa}
+## How to Hack Apple ID
 
-[santa]: https://www.homestuck.com/sweet-bro-and-hella-jeff/16
+Some time ago when I was sick with flu and researching Apple security to distract me from the aches and pains of my failing mortal body I found an XSS deep in an apple.com subdomain.
 
-Some time ago when I was sick with flu and researching Apple security to
-distract me from the aches and pains of my failing mortal body I found an XSS
-deep in an apple.com subdomain. That's to say, I could inject some code into a
-website somewhere on apple.com, which, to a user's web browser looked like it
-was written by Apple. In such cases, my code is granted all the privilages
-associated with Being Code That Apple Wrote inside a web browser, such as being
-able to talk to Apple servers on the user's behalf.
+That's to say, I could inject some code into a website somewhere on apple.com, which, to a user's web browser looked like it was written by Apple.
 
-Typically, for an XSS on the subdomain `users.bradsdrinks.com` we only get
-access to whatever `bradsdrinks.com` can do. Which means if Brad's Great Drinks,
-USA owns another fine website, `bradsbetterdrinks.com` we can't mess with that.
-For `apple.com`, this means I can steal the 'apple session', which indicates who
-you are to Apple, and do bad stuff you wouldn't want me to do, like purchase
-gifts for myself in the apple store with *your* credit card.
+In such cases, my code is granted all the privilages associated with Being Code That Apple Wrote inside a web browser, such as being able to talk to Apple servers on the user's behalf.
 
-At this point, trying to think of the worst thing that could possibly happen
-with this vulnerability I thought -- well, what if I
-get into iCloud? That would be really, really terrible right?
+Typically, for an XSS on the subdomain `users.bradsdrinks.com` we only get access to whatever `bradsdrinks.com` can do. Which means if Brad's Great Drinks, USA owns another fine website, `bradsbetterdrinks.com` we can't mess with that.
 
-But then, I recall the oddity that icloud is *not* on `apple.com`. iCloud has its own domain, `icloud.com`. This means that a bug in `apple.com` won't affect `iCloud.com`. Probably.
+For `apple.com`, this means I can steal the 'apple session', which indicates who you are to Apple, and do bad stuff you wouldn't want me to do, like purchase gifts for myself in the apple store with *your* credit card.
 
-If I am logged into `apple.com`, and I try to
-log into `icloud.com`, the login dialog presents my email on the email line
-without my ever entering it. How is this possible? These domains can't mess with each other.
+At this point, trying to think of the worst thing that could possibly happen with this vulnerability I thought -- well, what if I get into iCloud? That would be really, really terrible right?
 
-As it turns out the
-apple login system is located at `idmsa.apple.com` and is _embedded_ into
-icloud -- and since `idmsa.apple.com` inherits the `*.apple.com` session cookie, it
-already knows my email.
+But I icloud is *not* on `apple.com`. iCloud has its own domain, `icloud.com`. This means that a bug in `apple.com` won't affect `iCloud.com`. Probably. There's a kind of domain-based sandbox that separates `apple.com` from `icloud.com`.
 
-We've all embedded something before. Come to think of it, I _hope_ we've all
-embedded something before. Not so many people pasting embed code into their
-personal websites these days I guess. That's probably a good thing.
+But then -- if I am logged into `apple.com`, and I try to log into `icloud.com`, the login dialog shows my email on the email line without me ever having entered it. How is this possible? 
 
-If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A
-Presses (Commentated)][3] video from YouTube I might want to put in a video
-player. and (thank the gods) the 'share' button _still_ has an 'embed' option
-with some HTML code after 10 years or however long YouTube has been around for.
+As it would turn out, the apple login system is located at `idmsa.apple.com`, so it has access to your Apple login session. And it's _embedded_ into icloud: there's a little bit of `apple.com` in `icloud.com`.
+
+`icloud.com` then negotiates with `idmsa.apple.com` that it should have access to the iCloud servers. That is the crux of the vulnerability.
+
+Let's talk quickly about embedding. If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)][3] video from YouTube I might want to put in a video player. and, thank the gods, the 'share' button _still_ has an 'embed' option with some HTML code after 10 years or however long YouTube has been around for.
 
 [3]: https://www.youtube.com/watch?v=kpk2tdsPh0A
 
 ```HTML
-
 <iframe width="560" height="315"
 src="https://www.youtube.com/embed/kpk2tdsPh0A" frameborder="0"
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 allowfullscreen></iframe>
-
 ```
 
-The iframe is a classic great web idea that has survived the ages. I indicate to
-your web browser in my web page with some HTML that I want *another* webpage to
-be included in my webpage. In this case, a YouTube video.
+The iframe is a world wide web classic. Content can transclude other content, if the content wishes to be so transcluded.
 
 But I put this to you: if I could just embed *anything* on my website, we'd be
-having a bad time. If I could just tell your web browser to embed your bank on
-my page, I could just stick a bunch of stuff over the top and, I don't know make
-you click a button you can't see that actually donates a bunch of money to my
-man, YouTuber pannenkoek2012.
+having a bad time. I'd wake up, have a bad day, decide to do some crimes and embed your bank account right into my site in such a way that clicking in an unassuming place transfers money right into my bank account.
 
-The first way browsers started to deal with this 'Clickjacking' problem is the
-`X-Frame-Options` header. It has two possible values: `DENY`, which prevents the
-page from ever being embedded, or `sameorigin`, which only allows it to embed
-itself. If you are developing a website you should *always* set this to `DENY`
-unless you really know what you're doing.
+Web browsers realised this was a problem pretty fast, thank God and they introduced an HTTP header called `X-Frame-Options`. It was the early 2000s, so they sort of all did it their own way, but luckily they managed to get the sense to have `X-Frame-Options: DENY` and `X-Frame-Options: SAMEORIGIN` work in all notable browsers.
 
-I actually lied when I said `X-Frame-Options` only has two possible values.
+There's secretly a third, `allow-from [domain]`, which existed for a little while in *maybe* one browser. The idea was you'd set '`allow-from mywebsite2.com`' and then *just* '`mywebsite2.com`' can embed your webpage.
 
-There's a third, `allow-from [domain]`, which existed for a little while in a
-handful of browsers. The idea was you'd set '`allow-from mywebsite2.com`' and then
-*just* '`mywebsite2.com`' can embed your webpage. `idmsa.apple.com` is actually, amusingly, the *only* place I have *ever* seen this header used. Apple sets it to:
+`idmsa.apple.com` uses this header, and it's actually, amusingly, the *only* place I have *ever* seen this header used. Apple sets it to:
 
 ```HTTP
 X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
 ```
 
 What does this do? Absolutely nothing in any mordern browser. It's not even
-equivalent to `DENY`. it lets any website embed you.
+equivalent to `DENY`. it lets any website embed you. Such is the problem with designing security controls without consensus.
 
-This would be really bad, and I'd say uncharaceristically bad for Apple. But Apple, eternal in its wisdom, backs up the old-timey `X-Frame-Options: ALLOW-FROM` with the new hotness, Content
-Security Policy `frame-ancestors`.
+This would be really bad, and I'd say uncharaceristically bad for Apple. But Apple, eternal in its wisdom, backs up the old-timey `X-Frame-Options: ALLOW-FROM` with the cool new shiny approach: Content Security Policy `frame-ancestors`.
 
-Give me a few seconds to gush about how great Content Security Policy is:
-
-`X-Frame-Options` only kinda worked. Let's say I check the incoming website
-loading us to see if it's '`mywebsite2.com`', that is:
+For context, `X-Frame-Options` was a bit short sighted for a few reasons that are of course, obvious to us now. Take a look at this short HTTP conversation:
 
 ```HTTP
 HTTP GET /watch_for_rolling_rocks_embed
@@ -224,34 +184,27 @@ HTTP/1.1 200 OK
     <title> check out this video!!!! </title> ...
 
 ```
+In this simplified case, `mywebsite1.com` notices that it's being
+embedded by `mywebsite2.com` and doesn't send `X-Frame-Options: DENY`, so it can be embedded.
 
-In this very oversimplified case, `mywebsite1.com` notices that it's being
-embedded by `mywebsite2.com` and doesn't send `X-Frame-Options: DENY`. But what
-if `mywebsite2.com` itself forgets to send `X-Frame-Options: DENY` when visited?
-Then `mywebsite2.com` can now be used to embed `mywebsite1.com`, and bypass our
-`X-Frame-Options` setting. We can make an embed of `mywebsite2.com` and
-`mywebsite1.com` comes along for the ride.
+But I put to you this: what if `mywebsite2.com` *forgets* to send `X-Frame-Options: DENY`? Can't someone just embed `mywebsite2.com` to embed `mywebsite1.com` indirectly then? Yes.
 
-That's just one way `frame-ancestors` improves on `X-Frame-Options`. With
-`frame-ancestors`, it checks that all the embedding pages all the way up are
-allowed to embed the content.
+Frame ancestors works a bit differently, as a result. With `frame-ancestors`, you specify every possible parent page (or *ancestor*), and if there is a page embedding a page embedding a page ... and so on that is not in that list, your page is blocked from showing. And you'd be safe.
 
-## All-Access Ancestor Pass {#all_access_ancestor_pass}
+### I'm allowed to do this, trust me.
 
 [URL Parsing, My Old Friend]: #url_parsing,_my_old_friend 
 [§3]: #url_parsing,_my_old_friend
 
-Alright, so the iCloud login page is allowed to be embedded in iCloud.com
-because it negotiates a `frame-ancestors https://www.icloud.com;` Content
-Security Policy directive. But how is it negotiated? Let's take a look at the
-actual URL which is embedded.
+The iCloud login page, we now know is secretly handled by the Apple ID login server, `idmsa.apple.com` -- the permission for which is granted by a '`frame-ancestors`' directive. But how does that directive come into being?
+
+Here's an embed URL extracted from a real iCloud login page.
 
 ```URL
 https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fwww.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB
 ```
 
-And break it down a bit because not everyone's brain is as broken as mine to be
-able to read that:
+Let's break that down so we can read it more easily.
 
 ```
 Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
@@ -268,6 +221,13 @@ Parameters:
     
     locale=en_GB
 ```
+
+This is pretty clearly OAuth 2.0, an authentication protocol on which most of the 'federated login' (login with Google / Facebook ... ) systems are built.[^8]
+
+[^8]:
+    Technically speaking, OAuth 2.0, being an authorization (authZ) protocol should not be used for identifying a user. This is a subtle but meaningful nuance that I've spent a lot of my career working with. In particular, OAuth 2.0 is not designed to answer the question 'Who is the current user?', it's meant to answer the question 'What is the current user letting us do?'.
+    
+    OpenID Connect is the authorization (authN) protocol built on OAuth 2.0 that provides that funcionality. It's such a huge and tragic misconceptin that it's worth mentioning. The question of 'Can website X know my name?' vs 'Do you authorise a login to website X?' are just *tragically* different questions, with very different security reprocussions.
 
 This looks a lot like a request with the OAuth authorization protocol. Probably
 because `idmsa.apple.com` is the Apple ID server.
@@ -367,8 +327,7 @@ which part they thought was good (`https://icloud.com`) then I wouldn't be able
 to inject characters here. I think of this as 'baking in' our understanding of
 what a URL looks like and forcing it conform to that understanding.
 
-Content Insecurity Policy {#content_insecurity_policy}
--------------------------
+### Content Insecurity Policy {#content_insecurity_policy}
 
 [Content Insecurity Policy]: #content_insecurity_policy
 [§4]: #content_insecurity_policy
@@ -444,8 +403,7 @@ It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
 
 
 
-A Big, Slightly Off-White Box {#off_white_box}
------------------------------
+### A Big, Slightly Off-White Box {#off_white_box}
 
 [A Big, Slightly Off-White Box]: #url-parsing-my-old-friend
 
@@ -593,8 +551,7 @@ try {
 
 There are two outcomes of this code: (1) the function ft() gets run immediately or (2) it gets run after a timeout specified by `p.a.meta.FEConfiguration.applLoadDelay`. What's `ft()`? `ft()`, is, and I can't put this any other way -- a very beefy boy.
 
-Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
--------------------------
+### Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
 [Analysing the 'Beefy Boy']: #analysing-the-beefy-boy
 [§6]: #analysing-the-beefy-boy
 
@@ -823,8 +780,8 @@ Still with me? Cool bro. Very cool. This conversation is kinda complicated, but 
 
 I know what you're thinking, postMessage fans. Doesn't `postMessage` secure all of its calls by specifying where the messages go to, making this completely useless? postMessage fans, you'd be correct.
 
-PostMessage Fans, You'd Be Correct.
------------------------------------
+### PostMessage Fans, You'd Be Correct.
+
 [PostMessage Fans, You'd Be Correct.]: #postmessage-fans-youd-be-correct
 [§7]: #postmessage-fans-youd-be-correct
 
@@ -960,8 +917,8 @@ Our `nullPageCode` waits for a config indicating what the index of `idmsa.apple.
 ```
 
 
-It's Not Always That You Need to Read The Spec, But That Always is *Today*. {#reading_the_spec}
-------------------------------------------------------------------
+### It's Not Always That You Need to Read The Spec, But That Always is *Today*. {#reading_the_spec}
+
 [It's Not Always That You Need to Read The Spec, But That Always is Today.]: #reading_the_spec
 [§8]: #reading_the_spec
 
@@ -1035,8 +992,8 @@ We've compromised the trust between `idmsa.apple.com` and iCloud. But there's mo
 
 If we manage to get XSS from the position we're in now, we could open a popup from our compromised, embedded page into a 'real' `idmsa.apple.com` page, and attack the popup from our embedded window. Once we've taken over the popup, we can use `window.location.assign('https://apple.com')` to destroy our entry in the user history so it's not possible for the user to see that they were ever on a non-apple website.
 
-Stealing the Bank From an ATM {#stealing_the_bank_from_an_ATM}
------------------------------
+### Stealing the Bank From an ATM {#stealing_the_bank_from_an_ATM}
+
 [Stealing the Bank From an ATM]: #stealing-the-bank-from-an-atm
 [§9]: #stealing-the-bank-from-an-atm
 
@@ -1535,12 +1492,9 @@ We also make this minor change to our 'message' listener to destroy ourselves af
 ```
 
 
-## I'm sick of taking hush money.
+## Postamble
 
-hoops
-
-
-## Timeline
+### Timeline
 
 - Report to fix time: **3 days**
 - Fix to offer time: **4 months, 3 days**
@@ -1640,93 +1594,133 @@ In short: I reported two bugs in late 2019, both of which were fixed within less
 31. *July 29th 2020*
     - I get paid :D
 
-[Apple Bug Bounty Payouts]: https://web.archive.org/web/20191220021517/https://developer.apple.com/security-bounty/payouts/
+### Reporting Vulnerabilties Sucks.
 
-## Thanks, Farewell {#thanks_farewell}
+Like many problems, information security seems deceptively put-together when observed from the outside. Occasionally, through the press you'll hear about some incredibly impactful vulnerability that seems mind-bogglingly complex, an event in-and-of itself to have been found.
 
-I've learned that it literally takes me a year to put together a disclosure I like. Sorry about that, but also, it's a lot more fulfilling to just go all in on one article.
+But behind all that, what doesn't end up being reported is the nitty-gritty of the actual interaction of reporting. When I talk to people about it, the impression I get is that people generally think that companies [and other entities][how to hack the uk tax system] who at least *do* think about security in a positive way should *jump* at the opportunity to fix some danger in their software. If only it were so simple.
 
-Special shout out to [Alex][@mangopdf], who is always encouraging about my writing, despite putting out more and better stuff than me on a regular basis.
+[how to hack the uk tax system]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
 
-Also shout out to all the people who looked at earlier versions of this doc: [Tavis], [Perribus], [Mandatory], [Sam][sam sheffer].
+#### Making a Report
 
-[tavis]: https://twitter.com/taviso
-[perribus]: https://twitter.com/perribus
-[mandatory]: https://twitter.com/iammandatory
-[sam sheffer]: https://twitter.com/samsheffer
+There are many moving parts here, but there are some major players when it comes to this complication, beginning at the actual disclosure point. A disclosure is when someone who has found a security vulnerability tells somebody, usually the 'good guys', who make the software.
 
-[@mangopdf]: https://twitter.com/mangopdf
+There is no standard way of reporting a vulnerability.
 
-PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
+People in the security industry will tell you that usually, there is someone at the end of the 'security@' email address -- someone, hopefully associated with security. Maybe. Other than the somewhat old-world approach of simply [posting the vulnerability in full][buffalo nas remote shutdown] on a mailing list, this is the oldest way of disclosing a vulnerability that has some respect associated with it.
+
+[buffalo nas remote shutdown]: https://packetstormsecurity.com/files/135368/Buffalo-NAS-Remote-Shutdown.html
+
+Some people swear by emailing security@. You'd think that wouldn't be so controversial, but the other approches *usually* incur rather frustrating legal responsibilities.
+
+Oh bug bounties! They were *so* exciting when they first came into being. What must be understood about bug bounties is that they're not what I think most people assume they are, and what most people assumed they'd be when they were first concieved. A bug bounty is not simply a responsible disclosure with a few strings attached and some associated compensation.
+
+Always, or at least virtually always, reporting to a bug bounty program means signing a legal agreement, implicitly or otherwise that the ball is in the court of the program runners as to whether the public gets to know about the vulnerability, and, whether the vulnerability is ultimately of any value. And that's key.
+
+#### Triage
+
+It is difficult to discuss this topic as fully as I'd like, due to the reprocussions I'd have if I mentioned specific events, but in short, people are extremely biased when it comes to assessing the severity of a vulnerability.
+
+In particular, a trend you'll notice is that people consider vulnerabilties that they can intuitively understand the inner workings of to be much more severe than the vulnerabilities they can't -- modified only slightly by the classic calc.exe proof of concept. This is fed continuously by the *culture* of bug bounties.
+
+In the early days, one might have naiively assumed that bug bounties would look like responsible disclosures, in the sense that they'd reflect the capabilties of the seucurity community as a whole. If there are people out there who can mess with a particular system, they'll write a few words on it, pass it over to the bug bounty program and have them fix it for some money and then ideally the ability to inform the wider security community.
+
+A lot of this, in my opinion is about the allocation of security resources in all but the most careful and hands-on programs (by which I probably mean just Google, and then, some of the time). Whatever you're reporting, if it's a long chain of complex vulnerabilities that rely on application-specific security holes, or if it's the 1000th XSS you've reported in a particularly commonly deployed system, it gets the same attention.
+
+In concrete terms, vulnerabilities of the kind I describe here are not really worth it. If you know people in bug bounties, what you'll understand is that the key piece in making good money is not the amount you know about a specific system, though that does come into play -- but it's usually all about recon and knowing the security landscape well.
+
+You want to be reporting ideally the *same* vulnerability 1000 times across many different bounty program providers, because reporting vulnerabilities sucks. You want to find a *category* of vulnerability that covers many disclosure programs and many hosts.
+
+If you report a common pattern of well-understood vulnerability in a shallow vulnerability chain, where it's easy to demonstrate the impact of the vulnerability without having to get into application-specific security guarantees, then you have the best chance of both the triager who goes through a *lot* of these per day and the person who decides whether to release funds wanting to discuss it with you.
+
+This same story has played out in pretty much every notable vulnerability that I've ever reported.
+
+#### The Burden of Proof
+
+A problem that seems simple, but which is not: how much does a vulnerability reporter have to prove to prove that they've found a notable vulnerabilty? The answer is, really: 'it depends on the vulnerability type'.
+
+XSS, has for years had the burden of proof that you simply need to make a call to `alert(1)` in Javascript to demonstrate that you have control over the domain. But in reality, this is more of a convention than a true proof of control. I have had reported to programs that I've run, vulnerabilities which are *deceptively* piss-poor.
+
+For example, I once had someone report an XSS that worked via '`data:`' URIs. When `data:` URIs were first introduced, the concept was that an HTML document could include some data -- for example an image -- *in the same page*, without having to load *another file* from the webserver (a process which in HTTP has non-zero overhead). Here's a simple example:
+
+```HTML
+<img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="3" fill="white" stroke="black"/></svg>'/>
+```
+
+<img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="3" fill="white" stroke="black"/></svg>'/>
+
+This is a simple SVG image that is defined inline in the HTML document. It'd normally, at least at the time that `data:` was introduced need to be a separate file, requested separately.
+
+As `data:` URIs were part of the page they were loaded from, the decision was made that they should inherit the origin (i.e. domain) of the page that they come from. This means that a link, `<a href="data:text/html,Hello!">click me!</a>` when clicked goes to a synthetic `data:` page which is considered in the browser security model to be part of its page it was linked from.
+
+This created a new place that XSS could happen when attacker code gets into a page (what in the industry is called a 'sink'). Since the `data:` assset is part of the parent page, `<a href="data:text/html,<script>alert(1)</script>">click me!</a>` creates a link which runs Javascript code in the context of the parent domain -- it's XSS.
+
+Then, further down the line this was understood to be a mistake, or, at least, unnecessary. Not many people ever needed to make use of these synthetic pages inheriting the parent domain in a non-malicious way, so `data:` URIs got moved to a 'null' origin, and the XSS was solved perhaps. The <a href="#" onClick={() => { window.event.preventDefault(); alert(1) }}>pop-up</a> would still come up, but it'd just be sandboxed into being not all that worrying.
+
+I wasn't aware of this, and someone who I knew was sending this exact vulnerability to every program they had access to sent me a `data:` uri XSS of this kind that popped up `alert(1)`. I paid for it, and then, testing further realised that it had no security effect.
+
+That was pretty frustrating, especially since I realised what an incredibly good idea this was from a bounty perspective as this bug was present in a *ton* of places, and, *maybe* 10% of program runners would know that particular quirk to deny paying you the $500-$1000?
+
+This is all anecdotal, of course but I hope I've illustrated my point that burdens of proof are conventions more than anything.
+
+When I reported my well-covered [Steam code execution][XSS in steam react chat client], I actually initially said this:
+
+[XSS in steam react chat client]: https://hackerone.com/reports/409850
+
+> The Steam chat client both sends and receives bbcode format chat messages. These map to HTML elements, and notably the `[url]` bbcode tag is supported for arbitrary URLs.
+>
+> [...]
+>
+> I strongly believe an attacker could get remote code execution in Steam via this method. The Steam chat client uses the same codebase as the steam web chat client, and, I imagine does so using electron or some other webview system. These systems all expose functions which allow arbitrary calls to system to allow them to be competitive with e.g. windows forms.
+
+The response to this was ... well ... 'sure, you've got an XSS, but you haven't proven Remote Code Execution'. And, I mean -- fair, sure, that actually *is* an accurate description of what I have there. After 10 days more back and forth, and some more research I proved that, yes, being able to have XSS means that you have remote code execution in Steam.
+
+And if it took me 10 days to prove, it would have taken maybe 1 day? 2 days? to check the relevant block of source code which, of course the program managers have access to to see if it's the case. I really hate that.
+
+Sure, I got paid for the bug, but I also don't get out of bed in the morning so I can get paid what amounts to usually hush money by corporations for their security failings. I report this stuff because I find the technical challenge interesting, and because I want people to be secure online. I only really want two things:
+
+1. My exploit to be recognised as as impactful as I think it is, and
+2. To be able to talk about it.
+
+It's somewhat perverse to me that a company can pay me $7,500 for a security vulnerability, but can't afford to pull a single engineer over to read the source code and validate my claim.
+
+I'm sure it sounds like petty complaining, but it matters for security in the long run. Is the issue here really that I can get some XSS in a Steam chat client, or that the XSS in the chat client results in *literally taking over your computer*? If Valve's mitigation is anything to go by, it's the latter, and if I'd just left this as they were that's where we'd still be.
+
+The burden of proof here is not in my favour, because the Steam chat client is simply not a common codebase. It's descended from an embedded web browser that pre-dates the modern offering, [electron](https://electronjs.org).
+
+#### Disclosure
+
+Disclosing vulnerabilities, despite commonly being touted as the most important step in reporting a vulnerability, sucks. In so many ways.
+
+First, if you want to see any kind of compensation for your bug, you better have contacted the software maker via their bug bounty program. But doing so means that you can't disclose the bug unless they want you to. Anyone who knows the history of computer security can see why that's a problem.
+
+Now, I can't say *why* my last, and second $7,500 vulnerability reported to Valve is not disclosed to the public, *or* why the $750 payout below it is not disclosed to the public. That simply wouldn't be allowed.
+
+<img src={require('./valve_disclosure.png')} />
+
+I *can* say that I reached out to the vulnerability disclosure platform myself and was informed that, probably, it's never going to become public. And I *think* I can say that the $7,500 disclosure ticket appears to have a draft of some kind of pinned disclosure notice that attempts to downplay the vulnerability's severity.
+
+Where disclosure is not outright denied, or adversarial it's usually slow. And I mean, on the order of significant fractions of a year slow. That's a bit of a problem for me specifically I suppose. As someone with ADHD, I rarely can engage myself 8+ months after the fact enough to put together something that's worth reading about even the most interesting vulnerabilties I've come up with.
+
+Since the disclosure is granted on the basis of having an actual *disclosure post*, I can't *really* even talk about in passing some of the most exciting vulnerabilities I've ever written.
+
+I've started migitating the *vast* times to disclosure with my own strategy of documenting the vulnerability *before* I disclose it and all the evidence is removed. Such was the case for that unnamed and censored Valve vulnerability. I wrote a full writeup for it with pictures and videos before it was even fixed. This took a lot of time as you can imagine, and I wrote it all in the 'summary' section that is visible to the program manager. Little did I expect that all that work would be for nothing.
+
+### Going Cold Turkey
+
+Here's that last tidbit I was working towards: I found, and then reported this bug to Apple *because* I didn't expect to get paid for it. At the time, sure, Apple did have a bug bounty program, but it was private -- which means that reporting a bug usually only gives you the *chance* to be *invited* to be paid for bugs in future. More importantly, perhaps -- Apple didn't have a proper bug bounty legal agreement, which meant that I couldn't (in theory) be slapped with a lawsuit for disclosing the bug online if they dragged their feet.
+
+I just wanted to find something interesting and write about it. But, well, as you probably know, Apple started a public bug bounty pretty much at the same time as I made my report. In actuality, I made more than one report, if you've read the [timeline]. I had every intention of publishing the disclosure as soon as possible, and Apple be damned, if they dragged their feet I'd just publish online. Well, that didn't happen, and here we are, a year later.
+
+I spent good months arguing about this one, and I still feel like it didn't get the severity rating it deserved, and I still haven't been paid for the two bugs I reported before this one!
 
 
 
 
 
-<!--
-[^3]:
-    Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
 
-    > **Example Payouts**
-    >
-    > Bounty payments are determined by the level of access or execution obtained by the reported issue, modified by the quality of the report. Issues that are unique to designated developer or public betas, including regressions, can result in a 50% additional bonus if the issues were previously unknown to Apple. All security issues with significant impact to users will be considered for Apple Security Bounty payment, even if they do not fit the published bounty categories.
-    > 
-    > |   |    |    |
-    > | --- | --- | --- |
-    > | Unauthorized iCloud Account Access | $25,000 | Limited unauthorized control of an iCloud Account |
-    > | | $25,000 |  Limited unauthorized control of an iCloud account |
-    > | | $100,000 |  Broad unauthorized control of an iCloud account |
-    > | Physical Access to Device: Lock Screen bypass | $25,000 | Access to a small amount of sensitive data from the lock screen (but not including a list of installed apps or the layout of the home screen). |
-    > |  | $50,000 | Partial access to sensitive data from the lock screen. |
-    > |  | $100,000 | Broad access to sensitive data from the lock screen. |
-    > | Physical Access to Device: User Data Extraction | $100,000 | Partial extraction of sensitive data from the locked device after first unlock. |
-    > |   | $250,000 | Broad extraction of sensitive data from the locked device after first unlock. |
-    > | User-Installed App: Unauthorized Access to Sensitive Data | $25,000 | App access to a small amount of sensitive data normally protected by a TCC prompt. |
-    > |     | $50,000  | Partial app access to sensitive data normally protected by a TCC prompt. |
-    > |      | $100,000 | Broad app access to sensitive data normally protected by a TCC prompt or the platform sandbox. |
-    > | User-Installed App: Kernel Code Execution | $100,000 | Kernel code execution reachable from an app. |
-    > |    | $150,000 |  Kernel code execution reachable from an app, including PPL bypass or kernel PAC bypass. |
-    > | User-Installed App: CPU Side-Channel Attack | $250,000 | CPU side-channel attack allowing any sensitive data to be leaked from other processes or higher privilege levels. |
-    > | Network Attack with User Interaction: One-Click Unauthorized Access to Sensitive Data | $75,000  | One-click remote partial access to sensitive data. |
-    > |      | $150,000 | One-click remote broad access to sensitive data. |
-    > | Network Attack with User Interaction: One-Click Kernel Code Execution | $150,000 | One-click remote kernel code execution. | 
-    > |      | $250,000 | One-click remote kernel code execution, including PPL bypass or kernel PAC bypass. |
-    > | Network Attack without User Interaction: Zero-Click Radio to Kernel with Physical Proximity | $50,000 |  Zero-click code execution on a radio (e.g. baseband, Bluetooth or Wi-Fi) with only physical proximity, with no escalation to kernel. |
-    > |    | $200,000 | Zero-click partial access to sensitive data, with only physical proximity. |
-    > |    | $250,000 | Zero-click kernel code execution, with only physical proximity. |
-    > |  Network Attack without User Interaction: Zero-Click Unauthorized Access to Sensitive Data  | $100,000 | Zero-click attack that can turn on and collect information from a sensor (e.g., camera, microphone, or GPS). |
-    > |     | $250,000 | Zero-click partial access to sensitive data, without physical proximity. |
-    > |    | $500,000 | Zero-click broad access to sensitive data. |
-    > | Network Attack without User Interaction: Zero-Click Kernel Code Execution with Persistence and Kernel PAC Bypass | $1,000,000 | Zero-click remote chain with full kernel execution and persistence, including kernel PAC bypass, on latest shipping hardware. |
-    >
-    > *Notes and Definitions*
-    > 
-    > “One-click” refers to an exploit requiring user interaction to successfully gain access or execution. (For example, the user clicks a malicious link or opens a malicious file.)
-    >
-    > “Zero-click” refers to an exploit requiring no user interaction to successfully gain access or execution. (For example, being on a network or in proximity is sufficient.)
-    >
-    > “Sensitive data” access includes gaining a small amount (i.e., one or two items), partial access (i.e., some large number), or broad access (i.e., the full database) from Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data — or similar user data — that would normally be prevented by the system.
-    > 
-    > The top payouts in each category are reserved for high quality reports and are meant to reflect significant effort, and as such are applicable to issues that impact all or most Apple platforms, or that circumvent the full set of latest technology mitigations available. Payouts vary based on available hardware and software mitigations that must be bypassed for successful exploitation.
-    >
-    > There is a $5,000 minimum payout for all categories.
-    >
-    > |    | Topic | Maximum Payout |
-    > | -- | ----- | -------------- |
-    > | iCloud | Unauthorized access to iCloud account data on Apple Servers | $100,000 |
-    > |  Device attack via physical access | Lock screen bypass | $100,000 |
-    > |                                    | User Data Extraction | $250,000 |
-    > | Device attack via user-installed app | Unauthorized access to sensitive data** | $100,000 |
-    > |                                    | Kernel code execution | $150,000 |
-    > |                                    | CPU side channel attack | $250,000 |
-    > | Network attack with user interaction | One-click unauthorized access to sensitive data** | $150,000 |
-    > |                                 | One-click kernel code execution | $250,000|
-    > | Network attack without user interaction | Zero-click radio to kernel with physical proximity | $250,000 |
-    > |            | Zero-click unauthorized access to sensitive data** | $500,000 |
-    > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
-    > 
-    > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
--->
 
-[Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
-[Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536
+
+
+
