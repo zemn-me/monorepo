@@ -222,12 +222,12 @@ Parameters:
     locale=en_GB
 ```
 
-This is pretty clearly OAuth 2.0, an authentication protocol on which most of the 'federated login' (login with Google / Facebook ... ) systems are built.[^8]
+This is pretty clearly OAuth 2.0, an authentication protocol on which most of the 'federated login' (login with Google / Facebook ... ) systems are built.[^1]
 
-[^8]:
+[^1]:
     Technically speaking, OAuth 2.0, being an authorization (authZ) protocol should not be used for identifying a user. This is a subtle but meaningful nuance that I've spent a lot of my career working with. In particular, OAuth 2.0 is not designed to answer the question 'Who is the current user?', it's meant to answer the question 'What is the current user letting us do?'.
     
-    OpenID Connect is the authorization (authN) protocol built on OAuth 2.0 that provides that funcionality. It's such a huge and tragic misconceptin that it's worth mentioning. The question of 'Can website X know my name?' vs 'Do you authorise a login to website X?' are just *tragically* different questions, with very different security reprocussions.
+    OpenID Connect is the authorization (authN) protocol built on OAuth 2.0 that provides that funcionality. It's such a huge and tragic misconception that it's worth mentioning. The question of 'Can website X know my name?' vs 'Do you authorise a login to website X?' are just *tragically* different questions, with very different security reprocussions.
 
 This looks a lot like a request with the OAuth authorization protocol. Probably
 because `idmsa.apple.com` is the Apple ID server.
@@ -924,15 +924,15 @@ Our `nullPageCode` waits for a config indicating what the index of `idmsa.apple.
 
 Now we have a sneaky way to push data to `idmsa.apple.com` without getting checked by the access control list. But how do we receive messages without being `icloud.com`?
 
-I noticed via live debugging that the origin that `idmsa.apple.com` was sending messages to was *not* `icloud.com`, but the full `redirect_uri`, `https://*;@icloud.com`. This is a super odd one because `postMessage` is specified[^1] like this:
+I noticed via live debugging that the origin that `idmsa.apple.com` was sending messages to was *not* `icloud.com`, but the full `redirect_uri`, `https://*;@icloud.com`. This is a super odd one because `postMessage` is specified (**[mdn][postMessage MDN]**) like this:
 
 ```javascript
 targetWindow.postMessage(message, targetOrigin, [transfer]);
 ```
 
-[^1]: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage "Window.postMessage() - Web APIs | MDN"
+[postMessage MDN]: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage "Window.postMessage() - Web APIs | MDN"
 
-`targetOrigin` would indicate that what should be passed in is an HTTP web origin, which has to be very strictly specified and for which, as mentioned before `https://*;@icloud.com` is absolutely *not* valid. In theory, that'd probably just mean that the call should never be able to get to us, but I dived into the `postMessage` specification, which defines[^2] the action of `postMessage` like this:
+`targetOrigin` would indicate that what should be passed in is an HTTP web origin, which has to be very strictly specified and for which, as mentioned before `https://*;@icloud.com` is absolutely *not* valid. In theory, that'd probably just mean that the call should never be able to get to us, but I dived into the `postMessage` specification, which defines ([whatwg][postMessage spec]) the action of `postMessage` like this:
 
  1. Let `targetRealm` be `targetWindow`'s Realm.
  2. Let `incumbentSettings` be the incumbent settings object.
@@ -943,7 +943,7 @@ targetWindow.postMessage(message, targetOrigin, [transfer]);
     2. If `parsedURL` is failure, then throw a "SyntaxError" DOMException.
  6. Set `targetOrigin` to parsedURL's origin.
 
-[^2]: https://html.spec.whatwg.org/multipage/web-messaging.html#posting-messages
+[postMessage spec]: https://html.spec.whatwg.org/multipage/web-messaging.html#posting-messages
 
 
 `targetOrigin` is *not* an origin!! `targetOrigin` is technically a URL, from which an origin is extracted. For us, this is especially useful.
@@ -1561,7 +1561,7 @@ In short: I reported two bugs in late 2019, both of which were fixed within less
 18. *Tuesday, March 31st 2020*
     - Ask for more detailled instructions, because I can't find out how to set up my account and tax information (this is because my Apple Developers application has not yet been accepted)
 19. *Thursday, April 2nd 2020*
-    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account."[^3])
+    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account."[^4])
 99. *Tuesday, April 28th*
     - Apple replies to request for more detailed instructions (it's the same thing, but re-worded)
 20. *May 13th 2020*

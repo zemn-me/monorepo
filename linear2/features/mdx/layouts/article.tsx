@@ -9,6 +9,7 @@ import * as outline from 'linear2/features/elements/headingsAndSections/outlineS
 import { useRecoilState } from 'recoil';
 import style from './article.module.sass';
 import * as fancyElements from 'linear2/features/elements/headingsAndSections/fancy';
+import fancyStyle from 'linear2/features/elements/fancy.module.sass';
 
 const languagePrefix = "language-" as const;
 
@@ -142,7 +143,7 @@ export const Article:
         const title = titleEl ? extractText(titleEl) : "Untitled";
 
         return <Base>
-            <main className={elements.style.root}>
+            <main className={`${elements.style.root} ${fancyStyle.linear}`}>
                 <MDXProvider components={components as any}>
                     <article style={{ maxWidth: "35rem", margin: "auto" }}
                         className={elements.style.linear}>

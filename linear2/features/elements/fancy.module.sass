@@ -1,4 +1,21 @@
 
+.linear
+    ol
+        counter-set: list 0
+        display: grid
+        grid-columns: min-content 1em 1fr
+    ol ol
+        counter-reset: list
+        counter-set: none
+    ol > li
+        counter-increment: list
+        list-style: none
+        &::before
+            opacity: .7
+            float: left
+            padding-right: 1em
+            content: counters(list, ".") "."
+    
 
 .sectionHeader
     display: grid
