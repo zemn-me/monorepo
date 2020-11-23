@@ -1,5 +1,4 @@
-import * as lang from '.';
-import * as i8n from '@zemn.me/linear/i8n';
+import * as i8n from 'linear2/features/i18n/i8n';
 import React from 'react';
 
 export interface IntoProp {
@@ -10,7 +9,6 @@ export interface IntoProp {
 export interface TextProps extends IntoProp {
     children?: lang.Text,
     lang?: lang.Lang,
-
 }
 
 /**

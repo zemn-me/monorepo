@@ -7,14 +7,14 @@ tags:
 date: [ 13, aug, 2020 ]
 ---
 
-import Head from 'next/head';
-
-<Head>
+<head>
     <meta name="author" content="Thomas Neil James Shadwell"/>
-</Head>
+</head>
 
 How To Hack Apple ID
 ====================
+
+<Date/>
 
 *Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.*
 
@@ -238,7 +238,70 @@ The oddity is that OAuth 2.0 is specced out as a full-page redirect. Normally, y
 
 Let's break down what these parameters mean:
 
- - `response_type=code` is an OAuth specific parameter asking for an [OAuth code] -- in essence, a ticket that is exchanged by the iCloud backend for an OAuth token which gives the actual access[^3] -- which the iCloud servers can exchange for an Apple ID credential.
+<dl>
+<dt>
+
+`response_type=code`
+
+</dt>
+<dd>
+
+An OAuth specific parameter asking for an [OAuth code] -- in essence, a ticket that is exchanged by the iCloud backend for an OAuth token which gives the actual access[^3] -- which the iCloud servers can exchange for an Apple ID credential.
+
+</dd>
+
+
+<dt>
+
+`redirect_uri=https://www.icloud.com`
+
+</dt>
+
+<dd>
+
+Also an OAuth specific concept, it kind of exposes the weirdness going on with embedded OAuth.
+
+Typically, once the OAuth dance is complete and the user has granted access, the `redirect_uri` indicates[^4] where the credentials should be sent to, via a full page *redirect*.
+
+You might notice this doesn't happen in apple's embedded iCloud flow, but this parameter still plays something of a role in specifying who the embedding page is (in this case, iCloud).
+
+</dd>
+<dt>
+
+`response_mode=web_message`
+
+</dt>
+
+<dd>
+
+Appears to be the special indicator to the Apple ID server that we don't want normal OAuth, we want an embedded page that passes us the token eventually. 'web message' in this case likely refers to the `postMessage` API which is used to securely communicate between embeds and other webpages.
+
+</dd>
+
+<dt>
+
+`locale`
+
+</dt>
+<dd>
+
+Just indicates the language to show the login dialog in.
+
+</dd>
+
+<dt>
+
+`frame_id`
+
+</dt>
+<dd>
+
+I think is just to help differentiate cases where there may be multiple different embedded pages.
+
+</dd>
+
+
+</dl>
 
 [OAuth code]: https://tools.ietf.org/html/rfc6749#section-1.3.1
 [^3]:
@@ -253,21 +316,12 @@ Let's break down what these parameters mean:
     This is for the same reason. If we kept sending out OAuth tokens with every request from the backend, eventually they'd get compromised because no `https:` yet! Or -- at least, in the modern day logged by some overzealous HTTP reverse proxy. Then, the attacker could just keep using that token after intercepting it / hacking the reverse-proxy server.
 [Firesheep]: https://en.wikipedia.org/wiki/Firesheep
 [refresh token]: https://tools.ietf.org/html/rfc6749#section-6
-
- - `redirect_uri` is also an OAuth specific concept, and it kind of exposes the weirdness going on with embedded OAuth.<br/><br/> Typically, once the OAuth dance is complete and the user has granted access, the `redirect_uri` indicates[^4] where the credentials should be sent to, via a full page *redirect*.<br/><br/> You might notice this doesn't happen in apple's embedded iCloud flow, but this parameter still plays something of a role in specifying who the embedding page is (in this case, iCloud).
-
 [^4]:
     Here with another unsolicited OAuth fact(tm) again. The `redirect_uri` basically does jack shit in most implementations of OAuth 2.0, for pretty good reason. See, the once often implemented original idea is that registered OAuth clients would have some arbitrary mechanism for specifying whole *swathes* of places that the tokens could be redirected to, like `*.google.com`, but this was a huge mistake as -- for various reasons I won't get into here, URL parsing, especially in the HTTP context is a fucking *nightmare*.
 
     So the spec got changed to specify usually a single `redirect_uri`, and *sometimes* a bunch of hard-coded, strictly allowlisted `redirect_uri`s.
 
     This kinda thing comes up often when you have a bunch of staging environments like `my-branch-1.staging.google.tech` and people always ask if they can wildcard like `*.staging.google.tech`. You *can* kinda do this, but be careful as fuck, and if you dont have an expert to hand it's probably, surprisingly, safer to just implement a forwarder.
-    
- - `response_mode=web_message` appears to be the special indicator to the Apple ID server that we don't want normal OAuth, we want an embedded page that passes us the token eventually. 'web message' in this case likely refers to the `postMessage` API which is used to securely communicate between embeds and other webpages.
-
- - `locale` just indicates the language to show the login dialog in.
- 
- - `frame_id` I think is just to help differentiate cases where there may be multiple different embedded pages.
 
 ### Strategy Time
 
@@ -276,9 +330,13 @@ Clearly, our intention here is to do something damaging to this AppleID login di
 In security, you ususally think about this kind of thing in terms of the 'attack surface'. Software systems can be thought of as a series of fuzzy boundaries. As an attacker in the web, we should enumerate the ways we can affect the AppleID dialog code:
 
 1. We can try to send the victim to a special URL on `icloud.com` and hope that it affects the login dialog. If the `redirect_uri` is derived from the location, we might be able to add extra stuff to the url that might be misinterpreted.
+
 2. We can try to embed the AppleID login dialog, but doing so requires:
-    1. Bypassing the `frame-ancestors` directive somehow (`redirect_uri` injection?
+
+    1. Bypassing the `frame-ancestors` directive somehow (`redirect_uri` injection?)
+
     2. Some other sink on the embed frame itself. TBD.
+
 3. We could try attacking the the `postMessage` mechanism the embed uses to communicate with its parent. If it doesn't sufficiently verify the communication to its parent, we could impersonate it and affect its internal state.
 
 

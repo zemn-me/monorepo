@@ -93,6 +93,13 @@ $red: color.scale(red, $saturation: -80%)
 
     .math
       font-style: italic
+    
+
+  li
+    margin-bottom: 1em
+
+    :last-child
+      margin-bottom: 0
 
   main
     background: var(--bgc)
@@ -117,14 +124,12 @@ $red: color.scale(red, $saturation: -80%)
   h1, h2, h3, h4, h5, h6
     font-weight: 300
 
-
   h1
     font-size: 200%
   
   h2
     font-size: 180%
     display: inline-block
-
       
   a
     &:visited
@@ -133,7 +138,8 @@ $red: color.scale(red, $saturation: -80%)
     &:link
       color: inherit
       text-decoration: none
-      border-bottom: 1px solid var(--highlight)
+      border-bottom-width: 1px
+      border-color: var(--highlight)
 
   th
     font-weight: inherit
@@ -165,6 +171,11 @@ $red: color.scale(red, $saturation: -80%)
     figcaption
       text-align: center
       font-style: italic
+
+  // block level elements
+  article
+    > p, > ul, > ol, > img
+      margin: 0 0 1em 0
 
   //1
 

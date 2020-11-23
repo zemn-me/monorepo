@@ -18,6 +18,9 @@ export const Base: React.FC = ({ children }) => <RecoilRoot>
 
         <meta httpEquiv="Cross-Origin-Resource-Policy" content="same-origin"/>
 
+        <meta httpEquiv="Cross-Origin-Opener-Policy" content="same-origin"/>
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff"/>
+
         <meta name="referrer" content="no-referrer"/>
     </Head>
     {children}

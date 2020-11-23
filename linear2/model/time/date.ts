@@ -66,18 +66,18 @@ type Dates = MonthDates;
 
 type ValueOf<T> = T[keyof T];
 
-export type SimpleDate = DateFull | DateYear | DateMonth;
+export type SimpleDate = Full | Year | DateMonth;
 
-export type DateYear = [number];
+export type Year = [number];
 export type DateMonth = ValueOf<{
     [month in Month]: readonly [MonthName<month>, number]
 }>;
 
-export type DateFull = ValueOf<{
+export type Full = ValueOf<{
     [month in Month]: readonly [Dates[month], MonthName<month>, number]
 }>;
 
-export const Parse:
+export const parse:
     (s: SimpleDate) => Date
     =
     date => {

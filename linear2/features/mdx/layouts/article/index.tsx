@@ -2,44 +2,14 @@ import { MDXProvider } from '@mdx-js/react';
 import { extractText } from 'linear2/features/elements/extractText';
 import Head from 'next/head';
 import React from 'react';
-import { toComponents } from '../util';
+import { toComponents } from '../../util';
 import * as elements from 'linear2/features/elements';
+import * as model from 'linear2/model';
 import Base from 'linear2/features/layout/base';
 import * as outline from 'linear2/features/elements/headingsAndSections/outlineState';
 import { useRecoilState } from 'recoil';
 import style from './article.module.sass';
-import * as fancyElements from 'linear2/features/elements/headingsAndSections/fancy';
-import fancyStyle from 'linear2/features/elements/fancy.module.sass';
-
-const languagePrefix = "language-" as const;
-
-const Pre: React.FC = props => {
-    const { children } = props;
-    if (React.Children.count(children) > 1) return <pre {...props}/>
-    const child = React.Children.only(children);
-    if (!child) return <pre {...props}/>;
-    if (!(child instanceof Object)) return <pre {...props}/>;
-    if (!("props" in child)) return <pre {...props}/>;
-    const p = child.props;
-    if (!("originalType" in p)) return <pre {...props}/>;
-    const realProps = p as {
-        parentName?: string,
-        className?: string,
-        children: React.ReactElement
-        originalType?: string
-    };
-
-    if (realProps.originalType !== "code") return <pre {...props}/>;
-    if (typeof realProps.children !== "string") return <pre {...props} />
-
-    let codeProps: elements.CodeProps = { ...props, ...realProps, children: realProps.children,  };
-
-    if (realProps?.className?.startsWith(languagePrefix)) {
-        codeProps.language = realProps.className.slice(languagePrefix.length);
-    }
-
-    return <elements.CodeBlock {...codeProps} />
-}
+import { PropsOf } from 'linear2/features/elements/util';
 
 type aprops = JSX.IntrinsicElements["a"]
 interface AProps extends aprops { }
@@ -72,18 +42,60 @@ const Footnotes: React.FC = ({ children }) => <aside className={style.Footnotes}
     </small>
 </aside>
 
+const Li = React.forwardRef<HTMLLIElement, Omit<PropsOf<'li'>, 'ref'>>(
+    ({ children, ...props }, ref) => {
+        /**
+         * mdx has a thing where it makes <p>
+         * tags when there is a space after an element
+         * in a list.
+         * 
+         * I hate that.
+         */
+        if (React.Children.count(children) == 1) {
+            if ((children as any)?.props?.originalType == 'p')
+            children = (children as any).props.children
+        }
+
+        if (React.Children.count(children) == 2) {
+            const [ a, b ] = React.Children.toArray(children);
+            if ((a as any)?.props?.originalType == 'p' && (
+                (b as any)?.props?.originalType == 'ol' ||
+                (b as any)?.props?.originalType == 'ul'
+            )) children = React.Children.map(children, (c, i) => {
+                if (i == 0) return (c as any).props.children;
+                return c;
+            })
+        }
+
+        return <elements.fancy.Li {...{children, ...props }}/>
+    }
+);
+
 let h1, h2, h3, h4, h5;
 
 // headings are given contextual depth
 h1 = h2 = h3 = h4 = h5 = elements.Heading;
 
+const languagePrefix = "language-" as const;
+const CodeBlock: React.FC<elements.CodeProps & PropsOf<'code'>> = ({ className, ...props }) => {
+    if (className?.startsWith(languagePrefix)) {
+        props.language = className.slice(languagePrefix.length);
+    }
+
+    return <elements.CodeBlock {...props} />
+}
+
 const components = {
     ...toComponents(elements),
-    pre: Pre,
     a: A,
     Footnotes,
-    section: fancyElements.Section,
-    h1, h2, h3, h4, h5
+    section: elements.fancy.Section,
+    li: Li,
+    ol: elements.fancy.Ol,
+    ul: elements.fancy.Ul,
+    h1, h2, h3, h4, h5,
+    CodeBlock,
+    head: Head
 }
 
 const IndexRoot: () => React.ReactElement = () => {
@@ -137,14 +149,27 @@ export const Article:
         children: React.ReactElement<MDXElementProps>[]
     }>
     =
-    () => ({ children }) => {
+    frontmatter => ({ children }) => {
 
         const titleEl = findH1(children)
         const title = titleEl ? extractText(titleEl) : "Untitled";
 
+        let Date;
+
+        if (frontmatter.date) {
+            const date = model.time.date.parse(frontmatter.date)
+            Date = () => <elements.Date
+                date={date}
+                weekday="long"
+                year="numeric"
+                month="long"
+                day="numeric"
+            />
+        }
+
         return <Base>
-            <main className={`${elements.style.root} ${fancyStyle.linear}`}>
-                <MDXProvider components={components as any}>
+            <main className={`${elements.style.root}`}>
+                <MDXProvider components={{...components as any, Date}}>
                     <article style={{ maxWidth: "35rem", margin: "auto" }}
                         className={elements.style.linear}>
                         <Head>
@@ -152,6 +177,15 @@ export const Article:
                         </Head>
                         <IndexRoot />
                         {children}
+                        
+                        {
+                            frontmatter.tags
+                            ? frontmatter.tags.map((tag: any, i: number) =>
+                                <a className={style.tag} href={`../tag/${tag}`} key={i}>{tag}</a>
+                            ): null
+                        }
+
+                        <p> some footer here probably</p>
                     </article>
                 </MDXProvider>
             </main>
