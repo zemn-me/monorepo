@@ -24,6 +24,7 @@ import * as fancy from 'linear2/features/elements/fancy';
 import { classes, PropsOf, prettyAnchor } from '../util';
 import { Provide as ProvideSectionOutline } from './outlineState';
 import { extractText } from '../extractText';
+import * as elements from 'linear2/features/elements';
 
 export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -111,11 +112,13 @@ export function isDefined<T>(v: T | undefined): v is T { return v !== undefined 
 
 export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
     children: [ HeadingElement, ...React.ReactElement[]];
-    withSectionMarkers?: boolean
+    withSectionMarkers?: boolean,
+    sectionChildWrapperClass?: string
 }
 
 export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
-    ({ children: [ heading, ...children ], withSectionMarkers, ...props}, ref) => {
+    ({ children: [ heading, ...children ], withSectionMarkers,
+        sectionChildWrapperClass, ...props}, ref) => {
         let sectionDepth = React.useContext(SectionDepthContext);
         sectionDepth = sectionDepth + 1 as any;
         if (sectionDepth > 5) sectionDepth = 5;
@@ -160,7 +163,12 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps> (
                 )
         }} ref={ref} aria-labelledby={id}>
             {o}
-            <span className={fancy.style.sectionWrapper}>
+            <span {
+                ...elements.util.classes(
+                    fancy.style.sectionWrapper,
+                    sectionChildWrapperClass
+                )
+            }>
                 {children.map((v, i) => <React.Fragment key={i}>{v}</React.Fragment>)}
             </span>
         </section>;

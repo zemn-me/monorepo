@@ -1,3 +1,4 @@
+const mdx = require("@mdx-js/mdx");
 
 const ramp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 class BaseConverter {
@@ -129,7 +130,19 @@ const mdxPlugin = config => {
                     const myIndex = immediateParent.children.indexOf(node);
                     node = immediateParent.children[myIndex] = node.children[0];
                     node.tagName = "CodeBlock"
-                })
+                }),
+
+            // expose page titles as exported elements
+            (() => {
+                const compiler = mdx.createCompiler();
+                return () => tree => require('unist-util-visit-parents')(
+                    tree, node => node.type == 'element' && node.tagName == 'h1', (node, parents) => {
+                        const rootNode = parents.find(nd => nd.type='root')
+                        if (!rootNode) throw new Error("cannot add page title as exported element: no root note found in path to h1");
+                        rootNode.children.push({ type: 'export', value: `export const Title = ${compiler.stringify(node)};` });
+                    }
+                )
+            })()
         ]
     })(config);
 

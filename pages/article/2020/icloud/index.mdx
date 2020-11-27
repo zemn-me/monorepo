@@ -16,7 +16,7 @@ How To Hack Apple ID
 
 <Date/>
 
-*Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.*
+<Description>Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.</Description>
 
 <!--
 <video style={{
@@ -316,6 +316,7 @@ I think is just to help differentiate cases where there may be multiple differen
     This is for the same reason. If we kept sending out OAuth tokens with every request from the backend, eventually they'd get compromised because no `https:` yet! Or -- at least, in the modern day logged by some overzealous HTTP reverse proxy. Then, the attacker could just keep using that token after intercepting it / hacking the reverse-proxy server.
 [Firesheep]: https://en.wikipedia.org/wiki/Firesheep
 [refresh token]: https://tools.ietf.org/html/rfc6749#section-6
+
 [^4]:
     Here with another unsolicited OAuth fact(tm) again. The `redirect_uri` basically does jack shit in most implementations of OAuth 2.0, for pretty good reason. See, the once often implemented original idea is that registered OAuth clients would have some arbitrary mechanism for specifying whole *swathes* of places that the tokens could be redirected to, like `*.google.com`, but this was a huge mistake as -- for various reasons I won't get into here, URL parsing, especially in the HTTP context is a fucking *nightmare*.
 
@@ -1799,16 +1800,6 @@ Here's that last tidbit I was working towards: I found, and then reported this b
 I just wanted to find something interesting and write about it. But, well, as you probably know, Apple started a public bug bounty pretty much at the same time as I made my report. In actuality, I made more than one report, if you've read the [timeline]. I had every intention of publishing the disclosure as soon as possible, and Apple be damned, if they dragged their feet I'd just publish online. Well, that didn't happen, and here we are, a year later.
 
 I spent good months arguing about this one, and I still feel like it didn't get the severity rating it deserved, and I still haven't been paid for the two bugs I reported before this one!
-
-
-
-
-
-
-
-
-
-
 
 ## Thanks, Farewell {#thanks_farewell}
 

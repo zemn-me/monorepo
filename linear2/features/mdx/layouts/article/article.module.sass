@@ -10,12 +10,53 @@
 .Footnotes
     hr
         display: none
-    
     ol
-        column-width: 15rem
+        display: grid
+        grid-template-columns: repeat(auto-fill, 15rem)
+        justify-content: center
 
 a.tag
     &:link, &
         border: 1px solid
         margin: 1em
         padding: .25em .5em
+
+.frac
+    font-variant-numeric: diagonal-fractions
+
+.ss02
+    font-variant-ligatures: discretionary-ligatures
+    font-feature-settings: "ss02"
+    
+.chem
+    font-feature-settings: "sinf"
+
+abbr.chemical
+    text-decoration: none
+    cursor: help
+
+.article
+    .sectionChildren
+        .wider
+            margin-left: auto
+            margin-right: auto
+            max-width: 40em
+
+        > *
+            margin-left: auto
+            margin-right: auto
+
+        >:not(.wider):not(section)
+            margin-left: auto
+            margin-right: auto
+            display: block
+            max-width: 35em
+
+    section > header
+        margin-left: auto
+        margin-right: auto
+        max-width: 35em
+    img
+        max-width:100%
+
+

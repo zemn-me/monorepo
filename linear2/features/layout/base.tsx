@@ -1,5 +1,7 @@
 import React from 'react';
+import Footer from 'pages/footer';
 import Head from 'next/head';
+import * as elements from 'linear2/features/elements';
 
 import {
     RecoilRoot,
@@ -23,7 +25,11 @@ export const Base: React.FC = ({ children }) => <RecoilRoot>
 
         <meta name="referrer" content="no-referrer"/>
     </Head>
-    {children}
+
+    <main className={`${elements.style.root}`}>
+        {children}
+        <Footer/>
+    </main>
 </RecoilRoot>
 
 export default Base;

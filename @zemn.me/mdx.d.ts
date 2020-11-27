@@ -34,6 +34,13 @@ declare module '@mdx-js/react' {
     [key in ComponentType]?: React.ComponentType<{children?: React.ReactNode,
         className?: string }>;
   }
+
+  export interface MDXCreateElementProps {
+    children?: React.ReactElement[]
+    mdxType?: string
+    originalType?: string | Function
+    [key: any]: any
+  }
   export interface MDXProviderProps {
     children?: React.ReactNode
     components?: Components

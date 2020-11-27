@@ -3,7 +3,7 @@ import React from 'react';
 import { classes } from 'linear2/features/elements/util';
 
 
-interface HeadingProps<depth extends 1|2|3|4|5 =1|2|3|4|5> {
+export interface HeadingProps<depth extends 1|2|3|4|5 =1|2|3|4|5> {
     heading: React.ReactElement
     subtitle?: React.ReactElement
     id?: string
@@ -34,7 +34,9 @@ export const Header = React.forwardRef<HTMLElement, FancyHeaderProps>(
     </header>
 );
 
-export const Section = React.forwardRef<base.HTMLSectionElement, base.SectionProps> (
+export type SectionProps = base.SectionProps;
+
+export const Section = React.forwardRef<base.HTMLSectionElement, SectionProps> (
     (props, ref) => <base.Section {...{
         ...props,
         withSectionMarkers: true,
