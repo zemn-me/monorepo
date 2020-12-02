@@ -23,6 +23,7 @@ export const state = atom<Root>({
 const parentCtx = React.createContext<Root | Node | undefined>(undefined);
 
 export const Provide: React.FC<{ element: HeadingElement }> = ({ element, children }) => {
+    return <> {children} </>;
     const [rootState, setRootState] = useRecoilState(state);
     const trueParent = React.useContext(parentCtx);
     const parent = trueParent ?? rootState;

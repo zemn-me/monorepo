@@ -1,4 +1,4 @@
-import { Timeline, makeYears } from '@zemn.me/timeline/components';
+/*import { Timeline, makeYears } from '@zemn.me/timeline/components';
 import Eye from '@zemn.me/art/time';
 import { Text } from '@zemn.me/lang/component';
 import { Bio } from '@zemn.me/bio';
@@ -71,3 +71,6 @@ return <Main lang={l} className={style.home}>
 }
 
 export default Home;
+*/
+
+export default () => "hi"
