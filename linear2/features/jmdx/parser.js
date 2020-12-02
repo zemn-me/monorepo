@@ -60,7 +60,7 @@ export async function parse(file) {
                 return tree
             }
         })
-        //.use(format)
+        .use(format)
 
     return await compiler.run(compiler.parse(file));
 }

@@ -39,5 +39,5 @@ export interface Comment {
     position?: TextRange
 }
 
-export type Node = Element | Text | Root | Comment
+export type Node = any
 
