@@ -1,5 +1,4 @@
 const findAfter = require('unist-util-find-after')
-const fs = require('fs');
 const visit = require('unist-util-visit-parents')
 
 const MAX_HEADING_DEPTH = 6

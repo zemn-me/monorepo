@@ -1,17 +1,54 @@
-import parse from 'linear2/features/jmdx/parse'
 import React from 'react';
-import vfile from 'to-vfile';
 import path from 'path';
 import inspect from 'unist-util-inspect';
 import * as jmdx from 'linear2/features/jmdx';
 import * as elements from 'linear2/features/elements';
+import glob from 'glob';
+import fs from 'fs';
+import util from 'util';
+import vfile from 'to-vfile';
+import parse from 'linear2/features/jmdx/parse';
 
 
-export async function getStaticProps() {
-    const content = 
-            await vfile.read(path.join(process.cwd(), "pages", "article", "2020", "icloud", "index.mdx"))
+export async function getStaticProps(context) {
+    const target = path.join(process.cwd(), "pages", "article", context.params.path.join(path.sep));
+    let content;
+    try {
+        content = await vfile.read(target+".mdx")
+    } catch {
+        content = await vfile.read(path.join(target, "index") + ".mdx")
+    }
 
     return { props: { content: JSON.parse(JSON.stringify(await parse(content)))} }
+}
+
+export async function getRoutes() {
+    return (await new Promise<string[]>( (ok, fail) =>
+            glob(path.join(process.cwd(), "pages", "article", "**/*.mdx"), (err, files) => {
+                if (err) return fail(err);
+                return ok(files);
+            })))
+            .map(p => p.slice(0, -path.extname(p).length))
+            .map(p => path.relative(path.join(process.cwd(), "pages", "article"), p))
+            .map(p => p.split(path.sep).join(path.posix.sep))
+            .map(p => {
+                const basename = path.posix.basename(p);
+                if (basename == "index") p = path.posix.join(p, "..")
+                return p;
+            })
+            .map(p => ({ params: { path: p.split(path.posix.sep) } }))
+}
+
+export async function getStaticPaths(context) {
+    const r = {
+        paths: await getRoutes(),
+
+        fallback: false
+    }
+    console.log(JSON.stringify(r));
+
+    return r;
+
 }
 
 const Renderer:
@@ -19,9 +56,9 @@ const Renderer:
 =
     ({ ...props }) => {
         let position;
-        ({ position, ...props } = props);
-        if (props == undefined) return "(undefined)";
-        const { children, type } = props;
+        let idx, data, type;
+        ({ position, idx, data, type, ...props } = props);
+        const { children } = props;
         switch (type) {
         case 'root': return children;
         case 'thematicBreak': return <jmdx.mdast.ThematicBreak {...props}/>

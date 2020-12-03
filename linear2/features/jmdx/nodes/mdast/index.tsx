@@ -79,7 +79,7 @@ export const RenderHtml:
         switch (node.type) {
         case 'link': node = { ...node, type: 'a', href: node.url }; break
         case 'linkReference': node = { ...node, type: 'a', href: node.url } ; break
-        case 'list': node = { ...node, type: node.ordered? 'ol': 'ul' }; break
+        case 'list': node = { ...node, type: node.ordered? 'ol': 'ul', ordered: undefined }; break
         case 'listItem': node = { ...node, type: 'li' }; break
         case 'inlineCode': node = { ...node, type: 'code' }; break
         case 'image': node = { ...node, type: 'img', src: node.url }; break

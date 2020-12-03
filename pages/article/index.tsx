@@ -1,8 +1,12 @@
 import React from 'react';
+import fs from 'fs';
 import * as mdx from 'linear2/features/mdx';
 import glob from 'glob';
 import path from 'path';
 import Link from 'next/link';
+import visit from 'unist-util-visit';
+import util from 'util';
+import parse from 'linear2/features/jmdx/parse';
 
 const makeLinkLike = (s: string) => {
     const extname = path.extname(s);
@@ -12,22 +16,45 @@ const makeLinkLike = (s: string) => {
     return s;
 }
 
+export async function getRoutes() {
+    return (await new Promise<string[]>( (ok, fail) =>
+            glob(path.join(process.cwd(), "pages", "article", "**/*.mdx"), (err, files) => {
+                if (err) return fail(err);
+                return ok(files);
+            })))
+            .map(p => ({ web: p.slice(0, -path.extname(p).length), local: p }))
+            .map(({ web, ...etc }) => ({
+                    ...etc,
+                    web: path.relative(path.join(process.cwd(), "pages", "article"), web)
+            }))
+            .map(({ web, ...etc }) => ({
+                ...etc,
+                web: web.split(path.sep).join(path.posix.sep)
+            }))
+            .map(({ web, ...etc }) => {
+                const basename = path.posix.basename(web);
+                if (basename == "index") web = path.posix.join(web, "..")
+                return { ...etc, web };
+            })
+}
+
 export async function getStaticProps() {
-    const pagesPath = path.posix.join(process.cwd(), "pages");
-    const articlePath = path.posix.join(pagesPath, "article");
-    const matches = glob.sync(path.posix.join(articlePath, "**", "*.mdx"));
+    return { props: {
+        pages: JSON.parse(JSON.stringify(await Promise.all((await getRoutes())
+            .map(async ({ local, ...etc }) => {
+                const corpus = await util.promisify(fs.readFile)(local);
+                const nodes = await parse(corpus);
 
-    const articles = matches.map(p => {
-        return { linkPath: makeLinkLike(path.posix.relative(pagesPath, p)) }
-    }).filter((v) => v !== undefined);
+                const titles = [];
+                visit(nodes, node => node.type == 'heading' && node.depth == 1, node => titles.push(node));
 
-    return { props: { pages: articles } }
+                return { ...etc, title: titles[0] ?? "untitled" }
+            }))))
+    } }
 }
 
 type props = (ReturnType<typeof getStaticProps> extends Promise<infer Q>? Q: never)["props"];
 
 export default function Dir(props: props) {
-    return props.pages.map((d, i) => <Link key={i} href={d.linkPath}>
-        <a>{d.linkPath}</a>
-    </Link>);
+    return JSON.stringify(props);
 }
