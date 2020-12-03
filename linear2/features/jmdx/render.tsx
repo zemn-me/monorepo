@@ -1,18 +1,6 @@
 import React from 'react';
 import * as types from './types'
-
-export const RenderElement:
-    <P extends { children?: React.ReactNode }>(props: { element: React.ReactElement<P>, props: P}) => React.ReactElement
-=
-    ({ element, props: { children, ...props } }) => {
-        if (React.Children.count(children) > 0) return React.cloneElement(
-            element,
-            { ...element.props, ...props, children },
-        );
-
-        return React.cloneElement(element, { ...element.props , ...props });
-    }
-;
+import * as util from './util';
 
 export const Render:
     (props: { node: types.Node, render: React.ReactElement<types.Node>}) => React.ReactElement
@@ -34,9 +22,8 @@ export const Render:
         } else props = { ...props, ...node };
 
         props = { ...props, type };
-        console.log(props);
 
-        return <RenderElement {...{
+        return <util.RenderElement {...{
             element: render,
             props: {
                 ...props,

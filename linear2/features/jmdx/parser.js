@@ -61,6 +61,59 @@ export async function parse(file) {
             }
         })
         .use(format)
+        // apply 'url' to references
+        .use(() => {
+
+            return tree => {
+                const referenceNames = new Map();
+                visit(tree, node => node.type == 'definition', node => {
+                    //const { identifier, label, title, url }) = node;
+                    referenceNames.set(node.identifier, node);
+                })
+
+                visit(tree, node => node.type == 'linkReference', node => {
+                    const ref = referenceNames.get(node.identifier) || {};
+                    Object.assign(node, {
+                        title: node.title? node.title:  ref.title,
+                        url: node.url? node.url: ref.url
+                    });
+                })
+                return tree;
+            }
+        })
+        // moves all used footnoteDefinitions to the footer
+        .use(() => {
+            const referenceNames = new Map();
+
+            return tree => {
+                visit(tree, node => node.type == 'footnoteDefinition', node => {
+                    referenceNames.set(node.identifier, node);
+                });
+
+                const usages = new Set();
+                visit(tree, node => node.type == 'footnoteDefinition', (node, parents) => {
+                    const immediateParent = parents.slice(-1)[0];
+                    const idx = immediateParent.children.indexOf(node);
+                    immediateParent.children = immediateParent.children.slice(0, idx).concat(
+                        immediateParent.children.slice(idx+1)
+                    );
+                    delete immediateParent.children[immediateParent.children.indexOf(node)];
+                    usages.add(node.identifier);
+                });
+
+                for (const key of referenceNames.keys()) {
+                    if (!usages.has(key)) referenceNames.delete(key);
+                }
+
+                tree.children.push({
+                    type: 'footnotes',
+                    children: [...referenceNames.values()]
+                })
+
+
+                return tree;
+            }
+        })
 
     return await compiler.run(compiler.parse(file));
 }
