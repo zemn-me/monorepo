@@ -28,20 +28,27 @@ export async function getRoutes() {
                 if (err) return fail(err);
                 return ok(files);
             })))
-            .map(p => p.slice(0, -path.extname(p).length))
-            .map(p => path.relative(path.join(process.cwd(), "pages", "article"), p))
-            .map(p => p.split(path.sep).join(path.posix.sep))
-            .map(p => {
-                const basename = path.posix.basename(p);
-                if (basename == "index") p = path.posix.join(p, "..")
-                return p;
+            .map(p => ({ web: p.slice(0, -path.extname(p).length), local: p }))
+            .map(({ web, ...etc }) => ({
+                    ...etc,
+                    web: path.relative(path.join(process.cwd(), "pages", "article"), web)
+            }))
+            .map(({ web, ...etc }) => ({
+                ...etc,
+                web: web.split(path.sep).join(path.posix.sep)
+            }))
+            .map(({ web, ...etc }) => {
+                const basename = path.posix.basename(web);
+                if (basename == "index") web = path.posix.join(web, "..")
+                return { ...etc, web };
             })
-            .map(p => ({ params: { path: p.split(path.posix.sep) } }))
 }
 
 export async function getStaticPaths(context) {
     const r = {
-        paths: await getRoutes(),
+        paths: (await getRoutes())
+            .map(({ web }) =>
+                ({params: { path: web.split(path.posix.sep) } })),
 
         fallback: false
     }
