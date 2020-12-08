@@ -20,6 +20,7 @@ load(
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load(
     "@io_bazel_rules_rust//rust:private/utils.bzl",
+    "expand_locations",
     "get_lib_name",
     "get_libs_for_static_executable",
     "relativize",
@@ -293,24 +294,6 @@ def get_linker_and_args(ctx, cc_toolchain, feature_configuration, rpaths):
 
     return ld, link_args, link_env
 
-def _expand_locations(ctx, env, data):
-    """Performs location-macro expansion on string values.
-
-    Note: Only `$(rootpath ...)` is recommended  as `$(execpath ...)` will fail
-    in the case of generated sources.
-
-    Args:
-        ctx (ctx): The rule's context object
-        env (str): The value possibly containing location macros to expand.
-        data (sequence of Targets): The targets which may be referenced by
-            location macros. This is expected to be the `data` attribute of
-            the target, though may have other targets or attributes mixed in.
-
-    Returns:
-        dict: A dict of environment variables with expanded location macros
-    """
-    return dict([(k, ctx.expand_location(v, data)) for (k, v) in env.items()])
-
 def _process_build_scripts(
         ctx,
         file,
@@ -545,7 +528,7 @@ def construct_arguments(
                 env["CARGO_BIN_EXE_" + dep_crate_info.output.basename] = dep_crate_info.output.short_path
 
     # Update environment with user provided variables.
-    env.update(_expand_locations(
+    env.update(expand_locations(
         ctx,
         crate_info.rustc_env,
         getattr(rule_attrs(ctx, aspect), "data", []),
