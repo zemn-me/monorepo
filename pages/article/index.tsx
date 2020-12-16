@@ -1,6 +1,6 @@
 import React from 'react';
+import { Render } from 'linear2/features/md/render';
 import fs from 'fs';
-import * as mdx from 'linear2/features/mdx';
 import glob from 'glob';
 import path from 'path';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ export async function getRoutes() {
             .map(({ web, ...etc }) => {
                 const basename = path.posix.basename(web);
                 if (basename == "index") web = path.posix.join(web, "..")
-                return { ...etc, web };
+                return { ...etc, web: path.posix.join("article", web) };
             })
 }
 
@@ -47,8 +47,11 @@ export async function getStaticProps() {
 
                 const titles = [];
                 visit(nodes, node => node.type == 'heading' && node.depth == 1, node => titles.push(node));
+                let [ title ] = titles;
+                title = { type: 'root', children: title.children };
 
-                return { ...etc, title: titles[0] ?? "untitled" }
+
+                return { ...etc, title: title ?? "untitled" }
             }))))
     } }
 }
@@ -56,5 +59,7 @@ export async function getStaticProps() {
 type props = (ReturnType<typeof getStaticProps> extends Promise<infer Q>? Q: never)["props"];
 
 export default function Dir(props: props) {
-    return JSON.stringify(props);
+    return <ol>{props.pages.map(({web, title}) => 
+        <li><Link key={web} href={web}><a><Render node={title}/></a></Link></li>
+    )}</ol>
 }

@@ -1,17 +1,20 @@
 import React from 'react';
+import * as unist from 'unist';
 import path from 'path';
-import inspect from 'unist-util-inspect';
-import * as jmdx from 'linear2/features/jmdx';
-import * as elements from 'linear2/features/elements';
 import glob from 'glob';
-import fs from 'fs';
-import util from 'util';
-import vfile from 'to-vfile';
 import parse from 'linear2/features/jmdx/parse';
+import * as next from 'next';
+import vfile from 'to-vfile';
+import Render from 'linear2/features/md/render';
 
+interface StaticPropsContext extends next.GetStaticPropsContext {
+    params: {
+        path: string[]
+    }
+}
 
-export async function getStaticProps(context) {
-    const target = path.join(process.cwd(), "pages", "article", context.params.path.join(path.sep));
+export async function getStaticProps(context: StaticPropsContext) {
+    const target = path.join(process.cwd(), "pages", "article", context?.params?.path?.join(path.sep));
     let content;
     try {
         content = await vfile.read(target+".mdx")
@@ -44,7 +47,9 @@ export async function getRoutes() {
             })
 }
 
-export async function getStaticPaths(context) {
+
+
+export const getStaticPaths: next.GetStaticPaths = async () => {
     const r = {
         paths: (await getRoutes())
             .map(({ web }) =>
@@ -55,53 +60,8 @@ export async function getStaticPaths(context) {
     console.log(JSON.stringify(r));
 
     return r;
-
 }
 
-const Renderer:
-    (props: jmdx.Node) => React.ReactElement
-=
-    ({ ...props }) => {
-        let position;
-        let idx, data, type;
-        ({ position, idx, data, type, ...props } = props);
-        const { children } = props;
-        switch (type) {
-        case 'root': return children;
-        case 'thematicBreak': return <jmdx.mdast.ThematicBreak {...props}/>
-        case 'paragraph': return <jmdx.mdast.Paragraph {...props}/>
-        case 'meta': return <meta {...props}/>
-        case 'text': return <jmdx.mdast.Text {...props}/>
-        case 'list': return <jmdx.mdast.List {...props}/>
-        case 'listItem': return <jmdx.mdast.ListItem {...props}/>
-        case 'section': return <section {...props}/>
-        case 'heading': return <elements.Heading {...props}/>
-        case 'date': return "<Date/>";
-        case 'inlineCode': return <jmdx.mdast.InlineCode {...props}/>
-        case 'code': return <jmdx.mdast.Code {...props}/>
-        case 'definition': return null;
-        case 'comment': return null;
-        case 'ul': case 'ol': case 'li': case 'img': case 'code': case 'em':
-        case 'a': case 'dl': case 'dt': case 'dd': case 'blockquote':
-        case 'strong':
-            return React.createElement(type, props);
-        case 'footnotes':
-            return <footer>{children}</footer>
-        default:
-            console.error("missing definition for", type);
-            return `<${type}/>`
-        }
-    }
-;
-
-export default function Jmdx(props) {
-    return <jmdx.Render
-        node={props.content}
-        render={<jmdx.mdast.RenderHtml render={<Renderer/>}/>}/>
-    //return <>{inspect(props)}</>
-    /*return <RenderDebug fragment={props.content}
-        elements={{
-            elements: elements,
-            //unknown: () => "unknown"
-        }}/>*/
+export default function Jmdx(props: { content: unist.Node }) {
+    return <Render node={props.content}/>
 }
