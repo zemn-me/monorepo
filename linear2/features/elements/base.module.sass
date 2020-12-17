@@ -64,8 +64,121 @@ $red: color.scale(red, $saturation: -80%)
     --figure-stroke: var(--bgc-o)
 
 
+.ord
+  font-size: smaller
+  vertical-align: super
+  color: var(--mgc)
 
+.ss02
+    font-variant-ligatures: discretionary-ligatures
+    font-feature-settings: "ss02"
     
+.chem
+    font-feature-settings: "sinf"
+
+abbr.chemical
+    text-decoration: none
+    cursor: help
+
+.frac
+  font-variant-numeric: diagonal-fractions
+
+.math
+  font-style: italic
+
+@mixin element($name...)
+  #{$name}
+    .linear &, &.linear
+      @content
+
+@mixin indented-block
+  margin: 1em 2em
+
++element(li)
+  margin-bottom: 1em
+
+  :last-child
+    margin-bottom: 0
+
++element(main)
+  background: var(--bgc)
+
++element(blockquote)
+  @include indented-block
+  font-style: italic
+
++element(code)
+  font-weight: 400
+  font-size: 70%
+  font-family: "Roboto Mono", monospace
+
+  .inline
+    margin: 0
+  
++element(p)
+  &::first-letter
+    text-transform: capitalize
+    margin-left: 1em
+
++element(h1, h2, h3, h4, h5, h6)
+    font-weight: 300
+
++element(h1)
+  font-size: 200%
+
++element(h2)
+  font-size: 180%
+  display: inline-block
+      
++element(a)
+  &:visited
+    color: inherit
+
+  &:link
+    color: inherit
+    text-decoration: none
+    border-bottom-width: 1px
+    border-color: var(--highlight)
+
++element(th)
+  font-weight: inherit
+
++element(input)
+  &[type=text]
+    padding: 1rem 0
+    text-decoration-color: rgba(0,0,0,.3)
+      
+    &:focus
+      border-bottom-color: var(--fgc)
+      border: 0
+      outline: 0
+        
++element(strong)
+  //font-weight: 600
+  font-variant: small-caps
+  font-weight: inherit
+    
++element(hr)
+  &::before
+    content: "⁂"
+  border: 0
+  text-align: center
+  display: block
+  margin: 1rem 0
+  
++element(figure)
+  figcaption
+    text-align: center
+    font-style: italic
+
+// block level elements
++element(article)
+  > p, > ul, > ol, > img
+    margin: 0 0 1em 0
+
+
+
+
 .linear
   font-size: 1.2rem
   font-family: 'EB Garamond', serif
@@ -76,106 +189,14 @@ $red: color.scale(red, $saturation: -80%)
   transition: all 1s ease-in-out
   transition-property: color, fill, stroke, background-color, border-color
 
-
-
   color: var(--fgc)
 
-  =indented-block
-    margin: 1em 2em
-      
-  @at-root
-    .ord
-      font-size: smaller
-      vertical-align: super
-      color: var(--mgc)
-
-    .math
-      font-style: italic
     
 
-  li
-    margin-bottom: 1em
 
-    :last-child
-      margin-bottom: 0
 
-  main
-    background: var(--bgc)
 
-  blockquote
-    @include indented-block
-    font-style: italic
 
-  code
-    font-weight: 400
-    font-size: 70%
-    font-family: "Roboto Mono", monospace
-    
-  code.inline
-    margin: 0
-
-  p
-    &::first-letter
-      text-transform: capitalize
-      margin-left: 1em
-
-  h1, h2, h3, h4, h5, h6
-    font-weight: 300
-
-  h1
-    font-size: 200%
-  
-  h2
-    font-size: 180%
-    display: inline-block
-      
-  a
-    &:visited
-      color: inherit
-
-    &:link
-      color: inherit
-      text-decoration: none
-      border-bottom-width: 1px
-      border-color: var(--highlight)
-
-  th
-    font-weight: inherit
-
-  input
-    &[type=text]
-      padding: 1rem 0
-      text-decoration-color: rgba(0,0,0,.3)
-        
-      &:focus
-        border-bottom-color: var(--fgc)
-        border: 0
-        outline: 0
-          
-  strong
-    //font-weight: 600
-    font-variant: small-caps
-    font-weight: inherit
-      
-  hr
-    &::before
-      content: "⁂"
-    border: 0
-    text-align: center
-    display: block
-    margin: 1rem 0
-    
-  figure
-    figcaption
-      text-align: center
-      font-style: italic
-
-  // block level elements
-  article
-    > p, > ul, > ol, > img
-      margin: 0 0 1em 0
-
-  //1
 
 
 

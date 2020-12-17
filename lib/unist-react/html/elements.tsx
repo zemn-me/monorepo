@@ -1,27 +1,6 @@
-import React from 'react';
+import { e, Element, pick } from './util';
 
-type Element<T extends string> = (T extends keyof JSX.IntrinsicElements
-    ? JSX.IntrinsicElements[T]
-    : {}) & { type: T, data?: unknown, position?: unknown, properties?: unknown }
-
-
-
-const pick:
-    <I extends object, K extends keyof I>(i: I, ...k: K[]) =>
-        Pick<I, K>
-=
-    (i, ...k) => k.reduce((a, c) => (a[c] = i[c], a), {} as any);
-;
-
-
-const e:
-    <T extends keyof JSX.IntrinsicElements>(t: T, ...pick: (keyof JSX.IntrinsicElements[T])[] ) =>
-    React.FC<Element<T>>
-=
-    (t, ...k) => p => React.createElement(t, pick(p, ...k))
-;
-
-const s = [ "children", "id"] as const;
+const s = [ "children", "id", "className"] as const;
 
 export const p = e("p", ...s);
 export const ul = e("ul", ...s);
@@ -47,13 +26,12 @@ export const dd = e("dd");
 export const input = e("input", "type", "checked");
 export const figure = e("figure", "id", "children");
 export const figcaption = e("figcaption", "id", "children");
+export const del = e("del", ...s);
 
 export const a: React.FC<Element<"a">> = ({ href, ...a }) => {
     if (!/^https?:\/\/|^#/.test(href??"")) href = undefined;
     return <a {...{href, ...pick(a, "title", ...s) }}/>
 }
 
+
 export const comment: React.FC = () => null;
-
-
-

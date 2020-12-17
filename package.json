@@ -11,6 +11,7 @@
     "@silvenon/remark-smartypants": "^1.0.0",
     "@types/react-syntax-highlighter": "^13.5.0",
     "babel-plugin-import-glob-array": "^0.2.0",
+    "classnames": "^2.2.6",
     "d3": "^5.16.0",
     "d3-axis": "^2.0.0",
     "d3-selection": "^2.0.0",
@@ -24,9 +25,11 @@
     "next-videos": "1.2.0",
     "react": "^16.13.1",
     "react-dom": "^17.0.1",
+    "remark": "^13.0.0",
     "remark-captions": "^2.2.0",
     "remark-description-list": "^1.1.0",
     "remark-footnotes": "^2.0.0",
+    "remark-frontmatter": "^3.0.0",
     "remark-heading-id": "^1.0.0",
     "remark-lint-no-heading-like-paragraph": "^2.0.1",
     "remark-lint-no-undefined-references": "^2.0.1",
@@ -48,6 +51,7 @@
     "unified": "^9.1.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
     "@types/d3-axis": "^1.0.12",
     "@types/d3-scale": "^2.2.0",
     "@types/d3-selection": "^1.4.2",

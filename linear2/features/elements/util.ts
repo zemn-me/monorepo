@@ -54,3 +54,9 @@ export const classes:
 export type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
 export const prettyAnchor = (s: string | undefined) => s?.replace(/ /g, "_");
+
+export const fromEntries:
+    <K extends string | symbol | number, V>(...v: [K, V][]) => Record<K, V>
+=
+    (...v) => v.reduce((p, [k, v]) => (p[k]=v, p), {} as any)
+;

@@ -4,6 +4,13 @@ import React from 'react';
 import { Render, UnifiedNode, Elements } from '.';
 
 export const text: React.FC<mdast.Text> = ({ value }) => <>{value}</>;
+
+
+const del: React.FC<mdast.Delete> = nd =>
+    <Render node={{ ...nd, type: "del" } as UnifiedNode}/>
+
+export { del as delete };
+
 export const thematicBreak: React.FC<mdast.ThematicBreak> = nd =>
     <Render node={{ ...nd, type: "hr" } as UnifiedNode}/>
 

@@ -6,6 +6,8 @@ import parse from 'linear2/features/jmdx/parse';
 import * as next from 'next';
 import vfile from 'to-vfile';
 import Render from 'linear2/features/md/render';
+import exec from 'child_process';
+import util from 'util';
 
 interface StaticPropsContext extends next.GetStaticPropsContext {
     params: {
@@ -13,16 +15,36 @@ interface StaticPropsContext extends next.GetStaticPropsContext {
     }
 }
 
-export async function getStaticProps(context: StaticPropsContext) {
-    const target = path.join(process.cwd(), "pages", "article", context?.params?.path?.join(path.sep));
-    let content;
-    try {
-        content = await vfile.read(target+".mdx")
-    } catch {
-        content = await vfile.read(path.join(target, "index") + ".mdx")
+async function attempt<I extends unknown[], O>(f: (...i: I) => O, ...p: I[]): O {
+    let error: unknown;
+    for (const params of p) {
+        try {
+            return await f(...params);
+        } catch (e) { error = e }
     }
 
-    return { props: { content: JSON.parse(JSON.stringify(await parse(content)))} }
+    throw error;
+}
+
+async function extract(file: string) {
+    const ast = await parse(await vfile.read(file));
+    return { content: JSON.parse(JSON.stringify(ast)) }
+}
+
+
+function loadFile(target: string) {
+    return attempt(extract,
+        [target + ".mdx"],
+        [target + ".md"],
+        [path.join(target, "index") + ".md"],
+        [path.join(target, "index") +".mdx"]
+    )
+}
+
+export async function getStaticProps(context: StaticPropsContext) {
+    const target = path.join(process.cwd(), "pages", "article", context?.params?.path?.join(path.sep));
+
+    return { props: await loadFile(target) }
 }
 
 export async function getRoutes() {

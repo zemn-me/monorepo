@@ -8,6 +8,7 @@ import rawToElement from 'hast-util-raw'
 import visit from 'unist-util-visit-parents';
 import Parser from 'parse5/lib/parser';
 import raw from 'hast-util-raw';
+import frontmatter from 'remark-frontmatter';
 
 
 /*
@@ -26,6 +27,7 @@ export async function parse(file) {
     const compiler = unified()
         .use(markdown)
         .use(remarkPlugins)
+        .use(() => tree => console.log(tree))
         .use(() => {
             let ctr = 0;
             let m = new Map();
