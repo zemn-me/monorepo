@@ -248,7 +248,6 @@ An OAuth specific parameter asking for an [OAuth code] -- in essence, a ticket t
 `redirect_uri=https://www.icloud.com`
 
 </dt>
-
 <dd>
 
 Also an OAuth specific concept, it kind of exposes the weirdness going on with embedded OAuth.
@@ -263,13 +262,11 @@ You might notice this doesn't happen in apple's embedded iCloud flow, but this p
 `response_mode=web_message`
 
 </dt>
-
 <dd>
 
 Appears to be the special indicator to the Apple ID server that we don't want normal OAuth, we want an embedded page that passes us the token eventually. 'web message' in this case likely refers to the `postMessage` API which is used to securely communicate between embeds and other webpages.
 
 </dd>
-
 <dt>
 
 `locale`

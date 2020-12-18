@@ -1,10 +1,16 @@
 @use "sass:color"
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap')
 @import url('./garamond/index.css')
+
+
+@mixin element($name...)
+  #{$name}
+    .linear &, &.linear
+      @content
+
+
   
 .blockelement
-  width: 100%
-  height: 100%
   margin: 0
   padding: 0
   display: grid
@@ -34,7 +40,21 @@ $lightish:  rgba(0,0,0,.6)
 
 $red: color.scale(red, $saturation: -80%) 
 
-.root
+.linear
+  font-size: 1.2rem
+  font-family: 'EB Garamond', serif
+  font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
+  overflow-wrap: break-word
+  text-decoration-skip-ink: auto
+
+  transition: all 1s ease-in-out
+  transition-property: color, fill, stroke, background-color, border-color
+
+  color: var(--fgc)
+
+    
++element(main)
+  min-height: 100vh
   --code-tag: #{$red}
 
   // colour schemes
@@ -64,6 +84,9 @@ $red: color.scale(red, $saturation: -80%)
     --figure-stroke: var(--bgc-o)
 
 
+
+
+
 .ord
   font-size: smaller
   vertical-align: super
@@ -85,12 +108,6 @@ abbr.chemical
 
 .math
   font-style: italic
-
-@mixin element($name...)
-  #{$name}
-    .linear &, &.linear
-      @content
-
 @mixin indented-block
   margin: 1em 2em
 
@@ -167,31 +184,25 @@ abbr.chemical
   margin: 1rem 0
   
 +element(figure)
+  display: grid
+  grid: "." 1em "thing" "." 1em "caption" "." 1em
+
+  >*
+    margin: auto
+    &:first-child
+      grid-area: thing
   figcaption
-    text-align: center
-    font-style: italic
+    grid-area: caption
+
++element(img)
+  max-width: 100%
 
 // block level elements
 +element(article)
   > p, > ul, > ol, > img
-    margin: 0 0 1em 0
+    //margin: 0 0 1em 0
 
 
-
-
-.linear
-  font-size: 1.2rem
-  font-family: 'EB Garamond', serif
-  font-variant-ligatures: historical-ligatures common-ligatures additional-ligatures
-  overflow-wrap: break-word
-  text-decoration-skip-ink: auto
-
-  transition: all 1s ease-in-out
-  transition-property: color, fill, stroke, background-color, border-color
-
-  color: var(--fgc)
-
-    
 
 
 

@@ -95,34 +95,9 @@ const Description: React.FC<{ children: React.ReactElement }> =
 
 const frac: React.FC = ({ children }) => <div className={style.frac}>{children}</div>;
 
-const Ss02: React.FC = ({ children }) => <div className={style.ss02}>
-    {children}
-</div>;
+;
 
-const Fine: React.FC = () => <Ss02>fine</Ss02>;
-const Ok: React.FC = () => <Ss02>ok</Ss02>;
-const Paper: React.FC = () => <Ss02>paper</Ss02>;
-const Scissors: React.FC = () => <Ss02>scissors</Ss02>;
-const Stone: React.FC = () => <Ss02>stone</Ss02>;
 
-function* matchAll(s: string, re: RegExp) {
-    for (;;) {
-        const match = re.exec(s);
-        if (match == null) return;
-        yield match;
-    }
-}
-
-const Chem: React.FC<{ children: string, name?: string }> = ({ children, name }) => 
-    name? <abbr className={style.chemical} title={name}><ChemStr>{children}</ChemStr></abbr>:<ChemStr>{children}</ChemStr>;
-
-const ChemStr: React.FC<{ children: string }> = ({ children }) => <>
-    {[...matchAll((children as string), /[ABCDEFGHIJKLMNOPQRSTUVWXYZ]+|[^ABCDEFGHIJKLMNOPQRSTUVWZYZ]+/g)].map( ([c], i) =>
-        !/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/.test(c)?
-        <span key={i} className={style.chem}>{c}</span>:
-        <React.Fragment key={i}>{c}</React.Fragment>
-    )}
-</>;
 
 const Section = (a: elements.fancy.SectionProps) => <elements.fancy.Section {...a}
         sectionChildWrapperClass={style.sectionChildren}

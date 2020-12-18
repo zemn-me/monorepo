@@ -1,11 +1,11 @@
 import React from 'react';
 import style from './time.module.css';
-import { classes } from '@zemn.me/linear/classes';
+import classNames from 'classnames';
 
 export const TimeEye:
     React.FC<JSX.IntrinsicElements["svg"]>
 =  ({className, ...props}) => <svg {...props}
-  {...classes(className, style.sadIcon)}
+  className={classNames(className, style.sadIcon)}
   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.78 7.81">
   <g transform="translate(-13.03 -62.53)">
     <path className={style.frustum} strokeWidth=".26" d="M16.73 62.66l-3.47 6.02h17.32l-3.47-6.02z"/>

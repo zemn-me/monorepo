@@ -24,7 +24,7 @@ export const listItem: React.FC<mdast.ListItem> = nd =>
     <Render node={{ ...nd,
         ...nd.checked == true || nd.checked == false
             ? { type: "li", children: [
-                { type: "input", checked: nd.checked, fType: "checkbox" }
+                { type: "input", checked: nd.checked, fType: "checkbox", disabled: true }
             ]}
 
             : { type: "li" }

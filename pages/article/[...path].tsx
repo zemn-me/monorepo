@@ -1,4 +1,5 @@
 import React from 'react';
+import style from './style.module.sass';
 import * as unist from 'unist';
 import path from 'path';
 import glob from 'glob';
@@ -84,6 +85,8 @@ export const getStaticPaths: next.GetStaticPaths = async () => {
     return r;
 }
 
-export default function Jmdx(props: { content: unist.Node }) {
-    return <Render node={props.content}/>
+export default function Article(props: { content: unist.Node }) {
+    return <div className={style.Article}>
+        <Render node={props.content}/>
+    </div>
 }

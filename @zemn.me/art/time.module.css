@@ -4,6 +4,8 @@
   --sad-black: var(--figure-stroke, black);
 
   fill:none;
+  width: 100%;
+  height: 100%;
 }
 
 .sadIcon * { stroke: var(--sad-black) }

@@ -35,15 +35,16 @@ const e:
 
 type PropsOf<T extends React.FC<unknown>> = T extends React.FC<infer Q>?Q:never;
 
+
 const s: <P>(i: React.FC<P>) => React.FC<P> = I => p => <Style><I {...p}/></Style>
 
-export const frac: React.FC = ({ children }) => <span className={style.frac}>
+export const frac: React.FC = ({ children }) => <Style><span className={style.frac}>
     {children}
-</span>
+</span></Style>
 
-export const Ss02: React.FC = ({ children }) => <div className={style.ss02}>
+export const Ss02: React.FC = ({ children }) => <Style><div className={style.ss02}>
     {children}
-</div>;
+</div></Style>;
 
 export { Ss02 as ss02 };
 
@@ -51,7 +52,7 @@ export const fine: React.FC = () => <Ss02>fine</Ss02>;
 export const ok: React.FC = () => <Ss02>ok</Ss02>;
 export const paper: React.FC = () => <Ss02>paper</Ss02>;
 export const scissors: React.FC = () => <Ss02>scissors</Ss02>;
-export const stone: React.FC = () => <Ss02>stone</Ss02>
+export const stone: React.FC = () => <Ss02>stone</Ss02>;
 
 export const chem: React.FC<{ formula: string, name?: string }> = ({ formula, name }) => 
     name? <abbr className={style.chemical} title={name}><ChemStr>{formula}</ChemStr></abbr>:<ChemStr>{formula}</ChemStr>;
@@ -98,5 +99,7 @@ export const dd = s(html.dd);
 export const input = s(html.input);
 export const figure = s(html.figure);
 export const figcaption = s(html.figcaption);
+export const div = s(html.div);
+export const main = s(html.main);
 export { text };
 

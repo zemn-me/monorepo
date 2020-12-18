@@ -22,11 +22,13 @@ export const hr = e("hr");
 export const dl = e("dl", ...s);
 export const dt = e("dt", ...s);
 export const img = e("img", "src", "id", "title");
-export const dd = e("dd");
-export const input = e("input", "type", "checked");
+export const dd = e("dd", ...s);
+export const input = e("input", "type", "checked", "disabled");
 export const figure = e("figure", "id", "children");
 export const figcaption = e("figcaption", "id", "children");
 export const del = e("del", ...s);
+export const div = e("div", ...s);
+export const main = e("main", ...s);
 
 export const a: React.FC<Element<"a">> = ({ href, ...a }) => {
     if (!/^https?:\/\/|^#/.test(href??"")) href = undefined;
