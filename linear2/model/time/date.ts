@@ -67,6 +67,7 @@ type Dates = MonthDates;
 type ValueOf<T> = T[keyof T];
 
 export type SimpleDate = Full | Year | DateMonth;
+export type { SimpleDate as Date }
 
 export type Year = [number];
 export type DateMonth = ValueOf<{

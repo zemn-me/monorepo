@@ -1,5 +1,4 @@
 import { e, Element, pick } from './util';
-
 const s = [ "children", "id", "className"] as const;
 
 export const p = e("p", ...s);

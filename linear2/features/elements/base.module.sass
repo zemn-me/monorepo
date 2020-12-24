@@ -1,6 +1,8 @@
 @use "sass:color"
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap')
 @import url('./garamond/index.css')
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300&display=swap')
 
 
 @mixin element($name...)
@@ -52,38 +54,57 @@ $red: color.scale(red, $saturation: -80%)
 
   color: var(--fgc)
 
-    
+@mixin theme
+  --fgc-o: var(--bgc)
+  --bgc-o: var(--bgc)
+  --mgc-o: var(--fgc)
+
+
+@mixin theme-light
+  +theme
+  --fgc: #{$arbor}
+  --bgc: #{$daylight}
+  background: #{$daylight}
+  --mgc: #{$cover}
+  --highlight: #{$dark-sand}
+  --figure-fill: var(--bgc)
+  --figure-stroke: var(--bgc-o)
+
+@mixin theme-dark
+  +theme
+  --fgc: #{$med-sand}
+  --mgc: #{$dark-sand}
+  --bgc: #{$eigensand}
+  background: #{$eigensand}
+  --highlight: #{$arbor}
+  --figure-fill: var(--mgc)
+  --figure-stroke: var(--mgc-o)
+  --visited-link: var(--purplish-sand)
+
+@mixin theme-cyberpunk
+  +theme-dark
+  $fgc: color.adjust(#bb5c5e, $lightness: -10%)
+  $mgc: color.adjust($fgc, $lightness: -40%)
+  --fgc: #{$fgc}
+  --mgc: transparent
+  font-family: monospace
+  font-size: 1.2rem
+  h1, h2, h3, h4, h5, h6
+    font-family: "Source Code Pro", monospace
+    color: #{color.adjust($fgc, $lightness: 10%)}
+
+
+
 +element(main)
   min-height: 100vh
   --code-tag: #{$red}
 
   // colour schemes
   @media (prefers-color-scheme: dark)
-    --fgc: #{$med-sand}
-    --mgc: #{$dark-sand}
-    --bgc: #{$eigensand}
-    background: #{$eigensand}
-    --highlight: #{$arbor}
-    --fgc-o: var(--bgc)
-    --mgc-o: var(--bgc)
-    --bgc-o: var(--fgc)
-    --figure-fill: var(--mgc)
-    --figure-stroke: var(--mgc-o)
-    --visited-link: var(--purplish-sand)
+    +theme-cyberpunk
 
   @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
-    --fgc: #{$arbor}
-    --bgc: #{$daylight}
-    background: #{$daylight}
-    --mgc: #{$cover}
-    --highlight: #{$dark-sand}
-    --fgc-o: var(--bgc)
-    --mgc-o: var(--bgc)
-    --bgc-o: var(--fgc)
-    --figure-fill: var(--bgc)
-    --figure-stroke: var(--bgc-o)
-
-
+    +theme-light
 
 
 

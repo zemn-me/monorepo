@@ -12,7 +12,7 @@ export type TaggedText = readonly [Lang, React.ReactChild];
  * Segment represents a selection of multiple TaggedText pieces,
  * each of which describes a possible choice of language string.
  */
-export type Text = TaggedText | readonly [TaggedText, ...TaggedText[]];
+export type Text = TaggedText;
 
 /**
  * assign a language tag to a given text
@@ -39,12 +39,18 @@ export const textIsTaggedText =
     (text: Text): text is TaggedText =>
         (typeof text[0]) == "string"
 
+export const get:
+    (t: Text) => Lang
+=
+    ([ lang ]) => lang
+;
+
 /**
- * The user's set locale
+ * The user's set locale (the user's language preference)
  */
 export const locale = React.createContext<Lang[]>(["en-GB"]);
 
 /**
- * The contextual lang
+ * The contextual lang (the content's language)
  */
 export const lang = React.createContext<Lang>("en-GB");

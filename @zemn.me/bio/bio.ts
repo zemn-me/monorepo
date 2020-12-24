@@ -1,11 +1,12 @@
-import { SimpleDate, Parse as ParseDate, Parse } from '@zemn.me/simpletime';
-import { Text, tag } from '@zemn.me/lang';
+import * as model from 'linear2/model';
 
-const en = tag('en-GB');
-const nl = tag('nl');
+type Text = model.lang.Text
 
-const date = (...params: SimpleDate) =>
-    Parse(params);
+const en = model.lang.tag('en-GB');
+const nl = model.lang.tag('nl');
+
+const date = (...params: model.time.date.Date) =>
+    model.time.date.parse(params);
 
 const url = (s: TemplateStringsArray, ...f: { toString(): string }[]): URL => {
     let o: string[] = [];

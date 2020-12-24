@@ -17,7 +17,8 @@ export const Render: (props: { node: unist.Node }) => React.ReactElement =
             ...html,
             head: Head,
             ...Elements,
-            meta: html.element("meta", "name", "content")
+            meta: html.element("meta", "name", "content"),
+            comment: () => null
         } as any}>
             <unify.Render node={node as any} />
         </unify.Elements.Provider>

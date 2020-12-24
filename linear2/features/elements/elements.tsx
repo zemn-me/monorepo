@@ -5,6 +5,9 @@ import * as fancy from './fancy';
 import { Style, text } from './style';
 import style from './base.module.sass';
 import * as html from 'lib/unist-react/html/elements';
+
+export { Date as date } from './date';
+
 export { fancy };
 export * from './text';
 export * from './date';
@@ -73,6 +76,7 @@ const ChemStr: React.FC<{ children: string }> = ({ children }) => <>
     )}
 </>;
 
+
 export const p = s(html.p);
 export const ul = s(html.ul);
 export const section = s(html.section);
@@ -82,7 +86,6 @@ export const strong = s(html.strong);
 export const h3 = s(html.h3);
 export const li = s(html.li);
 export const del = s(html.del);
-export const a = s(html.a);
 export const h4 = s(html.h4);
 export const h5 = s(html.h5);
 export const ol = s(html.ol);
@@ -102,4 +105,19 @@ export const figcaption = s(html.figcaption);
 export const div = s(html.div);
 export const main = s(html.main);
 export { text };
+
+export interface AProps extends Omit<elementUtil.PropsOf<"a">, 'href'> {
+    href?: string | elementUtil.PropsOf<"a">
+}
+
+export const a:
+    (props: AProps) => React.ReactElement
+=
+    ({ href, ...etc }) => {
+        const sHref = href?.toString();
+
+        return <html.a {...{...etc, href: sHref}}/>
+    }
+;
+
 
