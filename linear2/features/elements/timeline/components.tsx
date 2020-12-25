@@ -168,14 +168,15 @@ const YearDisplay:
         const age = year - 1994;
 
         return <e.date
-            className={style.yearDisplay}
+            className={classes(style.yearDisplay)}
             date={new Date(new Date(0).setFullYear(year))}>
 
-            <e.dateText {...{
-                date: date,
-                into: <e.div className={style.yearDisplayYear}/>,
-                year: "numeric"
-            }}/>
+            <e.div className={style.yearDisplayYear}>
+                <e.dateText {...{
+                    date: date,
+                    year: "numeric"
+                }}/>
+            </e.div>
 
             <e.div className={style.yearDisplayAge}>{romanize(age)}</e.div>
         </e.date>
@@ -214,7 +215,7 @@ export const MonthIndicator:
         d.setFullYear(year);
         d.setMonth(month);
 
-        return <e.date date={d}>
+        return <e.date date={d} className={style.MonthIndicator}>
             <e.dateText month="short" />.
         </e.date>
     }

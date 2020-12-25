@@ -11,13 +11,13 @@
 
 .yearDisplay {
     display: grid;
-    grid: "r . a" 1fr / 1fr 1fr 1fr;
+    grid: ". y a" 1fr / 1fr 1fr 1fr;
     text-align: center;
 }
 
 .yearDisplayYear {
     grid-area: y;
-    margin: auto
+    margin: auto;
 }
 
 .yearDisplayAge {
@@ -26,8 +26,7 @@
 
 .yearDisplayAge, .yearDisplayRoman {
     font-size: small;
-    color: var(--mgc);
-    margin: auto
+    margin: auto;
 }
 
 .yearDisplayRoman {
@@ -40,7 +39,6 @@
 }
 
 .MonthIndicator {
-    color: var(--mgc);
     text-transform: lowercase;
 }
 
@@ -63,4 +61,7 @@
     display: block;
     border-left: 1px dotted var(--fgc);
     margin: auto;
+}
+
+.MonthIndicator {
 }

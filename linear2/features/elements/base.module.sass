@@ -24,15 +24,11 @@
 
 // colours!!
 // dark mode
-$dark-sand: #887f75
-$eigensand:  #181719
-$med-sand:  #bfb6a9
+
 $purplish-sand:  #bf47ab
 
 // light mode
-$daylight:  #e7e8e6
-$arbor:  #404956
-$cover: #77808a
+
 
 $white: white
 $black: black
@@ -54,46 +50,61 @@ $red: color.scale(red, $saturation: -80%)
 
   color: var(--fgc)
 
-@mixin theme
-  --fgc-o: var(--bgc)
-  --bgc-o: var(--bgc)
-  --mgc-o: var(--fgc)
+@mixin theme($c1, $c2, $c3, $c4, $figureFill, $figureStroke)
+  --c1: #{$c1}
+  --c2: #{$c2}
+  --c3: #{$c3}
+  --c4: #{$c4}
+  --figure-fill: #{$figureFill}
+  --figure-stroke: #{$figureStroke}
+  background: $c4
 
+  --fgc: #{$c1}
+  --mgc: #{$c3}
+  --bgc: #{$c4}
 
 @mixin theme-light
-  +theme
-  --fgc: #{$arbor}
-  --bgc: #{$daylight}
-  background: #{$daylight}
-  --mgc: #{$cover}
-  --highlight: #{$dark-sand}
-  --figure-fill: #{$daylight}
-  --figure-stroke: #{$arbor}
+  $base-white: #e7e8e6
+  $base-black: #404956
+  //$cover: #77808a
+  $c1: $base-black
+  $c2: color.scale($c1, $lightness: 10%)
+  $c3: color.scale($c2, $lightness: 10%)
+  $c4: $base-white
+  +theme($c1, $c2, $c3, $c4, $figureFill: $c4, $figureStroke: $c2)
 
 @mixin theme-dark
-  +theme
-  --fgc: #{$med-sand}
-  --mgc: #{$dark-sand}
-  --bgc: #{$eigensand}
-  background: #{$eigensand}
-  --highlight: #{$arbor}
-  --figure-fill: var(--mgc)
-  --figure-stroke: var(--mgc-o)
-  --visited-link: var(--purplish-sand)
+  $dark-sand: #887f75
+  $eigensand:  #181719
+  $med-sand:  #bfb6a9
+  $c1: $med-sand
+  $c2: $dark-sand
+  $c3: color.scale($c2, $lightness: -10%)
+  $c4: eigensand
+
+  +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c2)
 
 @mixin theme-cyberpunk
-  +theme-dark
   $fgc: color.adjust(#bb5c5e, $lightness: -10%)
-  $mgc: color.adjust($fgc, $lightness: -10%)
-  --fgc: #{$fgc}
-  --mgc: #{$mgc}
-  --figure-fill: transparent
+  $dark-sand: #887f75
+  $eigensand:  #181719
+  $c1: $fgc
+  $c2: color.adjust($c1, $lightness: 10%)
+  $c3: color.adjust($c2, $lightness: 10%)
+  $c4: $eigensand
   font-family: monospace
+  +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c2)
+
   font-size: 1.2rem
+  $em-1: color.adjust($fgc, $lightness: 10%)
+  $em-2: color.adjust($em-1, $lightness: 10%)
+  .em1, em
+    color: #{$em-1}
+  .em2
+    color: #{$em-2}
   h1, h2, h3, h4, h5, h6
     font-family: "Source Code Pro", monospace
     color: #{color.adjust($fgc, $lightness: 10%)}
-
 
 
 +element(main)
@@ -106,8 +117,6 @@ $red: color.scale(red, $saturation: -80%)
 
   @media (prefers-color-scheme: light), (not (prefers-color-scheme: dark))
     +theme-light
-
-
 
 .ord
   font-size: smaller
