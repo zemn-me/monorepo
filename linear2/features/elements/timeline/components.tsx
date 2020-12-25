@@ -15,7 +15,6 @@ const setFallback:
     }
     ;
 
-
 export interface Year {
     readonly year: number,
     readonly months: readonly Month[]
@@ -137,21 +136,22 @@ const numerals = [
     [7, "VII"],
     [6, "VI"],
     [5, "V"],
-    [3, "III"],
     [4, "IV"],
+    [3, "III"],
     [2, "II"],
     [1, "I"],
 ] as const;
 
 const romanize = (n: number) => {
+    const on = n;
     const parts: string [] = [];
-    outer:
     while (n>0) {
         for (const [ value, sym ] of numerals ) {
+            console.log(value, sym, on, n, parts.join(""));
             if (n < value) continue;
             parts.push(sym);
             n -= value;
-            continue outer
+            break;
         }
     }
 
@@ -202,7 +202,7 @@ export const Month:
 
         <MonthIndicator month={month} year={year}/>
         {events.map((event, i) =>
-            <Event lang={lang} key={i} {...event} />
+            <Event key={i} {...event} />
         )}
     </e.div>
     ;
@@ -222,13 +222,22 @@ export const MonthIndicator:
 ;
 
 export interface EventProps extends BioEvent {
-    lang?: string
 }
 
 export const Event:
     (props: EventProps) => React.ReactElement
     =
-    ({ description, title, url, lang }) => <e.div className={style.Event}>
+    ({ description, title, url, tags }) => <e.div className={style.Event}>
+
+        <e.div className={style.Tags}>
+            { tags?.map(tag => <e.WithText text={tag}>
+                <e.span>
+                    <e.Text/>
+                </e.span>
+            </e.WithText>
+            ) ?? null}
+        </e.div>
+
         <e.WithText text={title}>
             <e.a className={style.title} href={url}><e.Text/></e.a>
         </e.WithText>

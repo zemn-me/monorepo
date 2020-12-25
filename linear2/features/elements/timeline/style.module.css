@@ -69,3 +69,19 @@
 .title {
     font-style: italic
 }
+
+
+.Tags {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-left: 15%;
+    flex-wrap: wrap
+}
+
+.Tags > * {
+    margin: .2em;
+    padding: 0 .2em;
+    color: var(--bgc);
+    background: var(--fgc);
+}
+

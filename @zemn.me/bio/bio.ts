@@ -73,7 +73,12 @@ export const
     comment = en`comment`,
     work = en`work`,
     writing = en`writing`,
-    science = en`science`;
+    science = en`science`,
+    design = en`design`,
+    code = en`code`,
+    typescript = en`typescript`,
+    nodejs = en`nodejs`,
+    golang = en`golang`;
 
 export const Bio: Bio = {
     birthdate: date(17, "may", 1994),
@@ -107,52 +112,61 @@ export const Bio: Bio = {
             date: date(1, 'may', 2020),
             title: en`Why We don't we have UIs like the ones in Neon Genesis`,
             description: en`Exploration of how rendering hardware has affected UI design`,
-            url: url`https://medium.com/@Zemnmez/why-we-dont-have-uis-like-the-ones-in-neon-genesis-9b6631dc3714`
+            url: url`https://medium.com/@Zemnmez/why-we-dont-have-uis-like-the-ones-in-neon-genesis-9b6631dc3714`,
+            tags: [ writing, design ]
         },
         {
             date: date(19, 'oct', 2020),
             title: en`Typescript Union Merging`,
             description: en`Using interface merging to write somewhat decentralised Redux actions`,
-            url: url`https://medium.com/@Zemnmez/typescript-union-merging-b2ea332f08f1`
+            url: url`https://medium.com/@Zemnmez/typescript-union-merging-b2ea332f08f1`,
+            tags: [ code, typescript, writing ]
         },
         {
             date: date(11, 'apr', 2020),
             title: en`do-sync`,
             description: en`Async to sync library for encapsulated javascript macros`,
-            url: url`https://github.com/Zemnmez/do-sync`
+            url: url`https://github.com/Zemnmez/do-sync`,
+            tags: [ code, typescript ]
         },
         {
             date: date(23, 'jul', 2020),
             title: en`Senior Information Security Engineer, Google ISE hardening`,
-            description: en`Develop high level security analysis systems and primitives that protect Google`
+            description: en`Develop high level security analysis systems and primitives that protect Google`,
+            tags: [ work, security ]
         },
         {
             date: date(9, 'aug', 2020),
             title: en`HackFortress DefCon 2020 Champions`,
+            tags: [ accolade, security ]
         },
         {
             date: date(16, 'jun', 2019),
             title: en`react-oauth2-hook`,
             url: url`https://github.com/Zemnmez/react-oauth2-hook`,
-            description: en`An entirely clientside implementation of an oauth2 implicit client, with React hooks`
+            description: en`An entirely clientside implementation of an oauth2 implicit client, with React hooks`,
+            tags: [ react, code, security, typescript ]
         },
         { 
             date: date(25, 'feb', 2020),
             title: en`SVGShot`,
             url: url`https://github.com/Zemnmez/svgshot`,
-            description: en`small tool for taking SVG 'screenshots' of webpages`
+            description: en`small tool for taking SVG 'screenshots' of webpages`,
+            tags: [ typescript, code ]
         },
         {
             date: date(4, 'dec', 2019),
             title: en`UK Government Vulnerability Disclosure Initiative`,
             url: url`https://www.ncsc.gov.uk/information/vulnerability-reporting`,
-            description: en`responsible disclosure program created with the UK National Cyber Security Center covering all government assets`
+            description: en`responsible disclosure program created with the UK National Cyber Security Center covering all government assets`,
+            tags: [ work, security ]
         },
         {
             date: date(5, 'sep', 2018),
             title: en`Cross-site information assertion leak via Content Security Policy`,
             url: url`https://hackerone.com/reports/16910`,
-            description: en`CSP1 information leak allowing efficient deanonymisation of internet users`
+            description: en`CSP1 information leak allowing efficient deanonymisation of internet users`,
+            tags: [ security, disclosure ]
         },
         {
             date: date(2, 'aug', 2019),
@@ -218,7 +232,8 @@ export const Bio: Bio = {
             title: en`CSVPretty`,
             url: url`https://github.com/Zemnmez/csvpretty`,
             description: en`typescript pretty printer for the CSV format`,
-            date: date(23, 'jul', 2019)
+            date: date(23, 'jul', 2019),
+            tags: [ golang, code ]
         },
         {
             date: date(7, 'jan', 2019),
@@ -251,8 +266,7 @@ export const Bio: Bio = {
             title: en`hack fortress DEFCON 2018 winners`,
             url: url`https://twitter.com/tf2shmoo/status/1028462663368507392`
         },
-        {
-            date: date(7, 'jan', 2019),
+        { date: date(7, 'jan', 2019),
             description: en`vulnerability to remotely access Steam users' computers`,
             priority: 8,
             tags: [
@@ -267,9 +281,7 @@ export const Bio: Bio = {
             date: date(15, 'dec', 2018),
             description: en`Quick article on the security of modern desktop web applications`,
             priority: 7,
-            tags: [
-                security
-            ],
+            tags: [ security, disclosure ],
             title: en`\u00dcbersicht Remote Code Execution, Spotify takeover`,
             url: url`https://medium.com/@Zemnmez/%C3%BCbersicht-remote-code-execution-spotify-takeover-a5f6fd6809d0`
         },
