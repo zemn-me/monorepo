@@ -1,5 +1,5 @@
 import { e, Element, pick } from './util';
-const s = [ "children", "id", "className"] as const;
+const s = [ "children", "id", "className", "lang"] as const;
 
 export const p = e("p", ...s);
 export const ul = e("ul", ...s);
@@ -28,6 +28,7 @@ export const figcaption = e("figcaption", "id", "children");
 export const del = e("del", ...s);
 export const div = e("div", ...s);
 export const main = e("main", ...s);
+export const span = e("span", ...s);
 
 export const a: React.FC<Element<"a">> = ({ href, ...a }) => {
     if (!/^https?:\/\/|^#/.test(href??"")) href = undefined;

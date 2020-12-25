@@ -7,10 +7,11 @@ import style from './base.module.sass';
 import * as html from 'lib/unist-react/html/elements';
 
 export { Date as date } from './date';
+export { Text as dateText } from './date';
+
+export * from './text';
 
 export { fancy };
-export * from './text';
-export * from './date';
 export * from './headingsAndSections';
 export * from './extraElements';
 import * as elementUtil from 'linear2/features/elements/util';
@@ -104,6 +105,7 @@ export const figure = s(html.figure);
 export const figcaption = s(html.figcaption);
 export const div = s(html.div);
 export const main = s(html.main);
+export const span = s(html.span);
 export { text };
 
 export interface AProps extends Omit<elementUtil.PropsOf<"a">, 'href'> {

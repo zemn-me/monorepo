@@ -67,8 +67,8 @@ $red: color.scale(red, $saturation: -80%)
   background: #{$daylight}
   --mgc: #{$cover}
   --highlight: #{$dark-sand}
-  --figure-fill: var(--bgc)
-  --figure-stroke: var(--bgc-o)
+  --figure-fill: #{$daylight}
+  --figure-stroke: #{$arbor}
 
 @mixin theme-dark
   +theme
@@ -84,9 +84,10 @@ $red: color.scale(red, $saturation: -80%)
 @mixin theme-cyberpunk
   +theme-dark
   $fgc: color.adjust(#bb5c5e, $lightness: -10%)
-  $mgc: color.adjust($fgc, $lightness: -40%)
+  $mgc: color.adjust($fgc, $lightness: -10%)
   --fgc: #{$fgc}
-  --mgc: transparent
+  --mgc: #{$mgc}
+  --figure-fill: transparent
   font-family: monospace
   font-size: 1.2rem
   h1, h2, h3, h4, h5, h6

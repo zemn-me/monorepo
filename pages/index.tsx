@@ -1,8 +1,8 @@
-import { Timeline, makeYears } from '@zemn.me/timeline/components';
+import { Timeline, makeYears } from 'linear2/features/elements/timeline';
 import Eye from '@zemn.me/art/time';
 import { Bio } from '@zemn.me/bio';
 import * as e from 'linear2/features/elements';
-import Video from '@zemn.me/video';
+//import Video from '@zemn.me/video';
 import React from 'react';
 import style from './home.module.css';
 import * as bio from 'lib/bio';
@@ -21,18 +21,17 @@ const Home:
     const years = makeYears(bio.timeline);
 
     const content = <>
-        <e.WithLang lang={lang.get(Bio.who.handle)}>
+        <e.WithText text={Bio.who.handle}>
             <e.div className={style.header}>
-                {Bio.who.handle}
-                <Video/>
+                <e.Text/>
             </e.div>
-        </e.WithLang>
+        </e.WithText>
 
         <e.div className={style.links}>
             {Bio.links.map(([label, link], i) => 
-                <e.WithLang lang={lang.get(label)}>
-                    <e.a href={link}>{label}</e.a>
-                </e.WithLang>
+                <e.WithText text={label}>
+                    <e.a href={link}><e.Text/></e.a>
+                </e.WithText>
             )}
         </e.div>
 
@@ -42,9 +41,9 @@ const Home:
             </e.div>
         </e.div>
 
-        <e.WithLang lang={lang.get(Bio.who.name)}>
-            <e.div className={style.name}>{Bio.who.name}</e.div>
-        </e.WithLang>
+        <e.WithText text={Bio.who.name}>
+            <e.div className={style.name}><e.Text/></e.div>
+        </e.WithText>
 
         <Timeline {...{
             years,

@@ -531,10 +531,7 @@ export const Bio: Bio = {
                 software,
                 comment
             ],
-            title: [
-                nl`MozFest: Rewired State geeft jonge programmeurs een kans`,
-                en`MozFest: Rewired State gives young programmers a chance`
-            ],
+            title: nl`MozFest: Rewired State geeft jonge programmeurs een kans`,
             url: url`http://www.denieuwereporter.nl/2011/11/mozfest-rewired-state-geeft-jonge-programmeurs-een-kans/`
         },
         {

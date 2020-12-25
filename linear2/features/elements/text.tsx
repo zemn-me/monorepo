@@ -4,7 +4,7 @@ import React from 'react';
 
 interface WithLangProps {
     children: React.ReactElement<{ lang?: string }>
-    lang: string
+    lang?: string
 }
 
 /**
@@ -37,8 +37,49 @@ export const useLocaleLang:
 export const WithLang:
     (props: WithLangProps) => React.ReactElement
 =
-    ({ children, lang }) => React.cloneElement(
-        children,
-        { ...children.props, ...useLang(lang) }
-    );
+    ({ children, lang }) =>{
+
+        if (!lang) return children;
+        
+        return React.cloneElement(
+            children,
+            { ...children.props, ...useLang(lang) }
+        );
+    }
 ; 
+
+
+export const withTextContext = React.createContext<model.lang.Text | undefined>(undefined);
+export interface WithTextProps {
+    text?: model.lang.Text
+    children: React.ReactElement<{ lang?: string }>
+}
+
+export const WithText:
+    (props: WithTextProps) => React.ReactElement
+=
+    ({ text, children }) => {
+        if (!text) return children
+
+        const [ lang ] = text;
+
+        return <withTextContext.Provider value={text}>
+            <WithLang lang={lang}>
+                {children}
+            </WithLang>
+        </withTextContext.Provider>
+    }
+;
+
+export interface TextProps {}
+export const Text:
+    (props: TextProps) => React.ReactElement | null
+=
+    () => {
+        const text = React.useContext(withTextContext);
+        if (!text) return null;
+
+        const [, el] = text;
+        return <>{el}</>;
+    }
+;

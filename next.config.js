@@ -1,4 +1,67 @@
 
+
+const ramp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+class BaseConverter {
+    constructor(ramp) { this.ramp = ramp }
+    get zero() { return this.ramp[0] }
+    get base() { return this.ramp.length }
+    reverse(s) { return [...s].map((ch, i) => this.value(ch, i)).reduce((a, c) => a + c, 0) }
+    convert(n) {
+        let o = [];
+        for(;;) {
+            const remainder = n % this.base;
+            n = Math.floor(n / this.base);
+
+            o.push(this.ramp[remainder]);
+
+            if (n === 0) break;
+        }
+
+        return o.reverse().join("");
+    }
+}
+
+const cssMinifierPlugin = config => ({
+    ...config,
+    webpack(wpcfg, ...a) {
+		wpcfg.module.rules[1].oneOf.forEach((moduleLoader, i) => {
+			Array.isArray(moduleLoader.use) && moduleLoader.use.forEach((l) => {
+				if(l.loader.includes("css-loader")) {
+					l.options = {
+						...l.options,
+                        modules: {
+                            ...l.options.modules,
+                            ...(
+                                { getLocalIdent: uniqueClass }
+                                //{}
+                            )
+                        }
+					}
+                }
+			});
+        });
+        
+        wpcfg.node = { fs: "empty" };
+        if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
+        return wpcfg;
+    }
+});
+
+
+
+const conv = new BaseConverter(ramp);
+
+const uniqueClass = (() => {
+    let ctr = 0;
+    const identsMap = new Map();
+    return (context, _, localName) => {
+        const key = [context.resourcePath, localName].join("__").trim();
+        const v = identsMap.get(key);
+        identsMap.set(key, v == undefined? ctr++: v);
+        return conv.convert(identsMap.get(key));
+    }
+})()
+
 const base_config = {
     generateBuildId: () => require('next-build-id')({
         dir: __dirname,
@@ -16,4 +79,4 @@ const base_config = {
   }
 };
 
-module.exports = base_config //require('./linear2/features/mdx/next-plugin').plugin(base_config);
+module.exports = cssMinifierPlugin(base_config) //require('./linear2/features/mdx/next-plugin').plugin(base_config);

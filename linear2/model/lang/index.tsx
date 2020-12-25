@@ -1,7 +1,6 @@
 import React from 'react';
 
-export type Lang =
-    'en-GB' | 'de-DE' | 'ja-JP' | 'nl';
+export type Lang = string;
 
 /**
  * TaggedText represents a Bcp47 tagged textual string.
@@ -45,10 +44,42 @@ export const get:
     ([ lang ]) => lang
 ;
 
+export const text:
+    (t: Text) => React.ReactChild
+=
+    ([ /* lang */, text]) => text
+;
+
 /**
  * The user's set locale (the user's language preference)
  */
-export const locale = React.createContext<Lang[]>(["en-GB"]);
+export const locale = React.createContext<readonly Lang[]>(["en-GB"]);
+
+
+const getLangs = () => {
+    if (typeof navigator !== "undefined") return navigator?.languages ?? [ navigator?.language ]   ;
+
+    return []
+}
+
+
+export const LocaleProvider:
+    React.FC
+=
+    ({children}) => {
+        const [ languages, setLanguages ] = React.useState<readonly string[]>(["en-GB"])
+        React.useEffect(() => {
+            const listener = () => setLanguages(getLangs());
+            window.addEventListener("languagechange", listener);
+            listener();
+            return () => window.removeEventListener("languagechange", listener);
+        }, [ setLanguages ]);
+
+        return <locale.Provider value={languages}>
+            {children}
+        </locale.Provider>
+    }
+;
 
 /**
  * The contextual lang (the content's language)
