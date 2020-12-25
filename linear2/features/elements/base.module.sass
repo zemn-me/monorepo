@@ -93,7 +93,7 @@ $red: color.scale(red, $saturation: -80%)
   $c3: color.adjust($c2, $lightness: 10%)
   $c4: $eigensand
   font-family: monospace
-  +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c2)
+  +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c1)
 
   font-size: 1.2rem
   $em-1: color.adjust($fgc, $lightness: 10%)
@@ -102,6 +102,8 @@ $red: color.scale(red, $saturation: -80%)
     color: #{$em-1}
   .em2
     color: #{$em-2}
+  a:link, a:visited
+    color: $c3
   h1, h2, h3, h4, h5, h6
     font-family: "Source Code Pro", monospace
     color: #{color.adjust($fgc, $lightness: 10%)}

@@ -20,7 +20,7 @@ const Home:
 
     const years = makeYears(bio.timeline);
 
-    const content = <>
+    const content = <e.div className={style.home}>
         <e.WithText text={Bio.who.handle}>
             <e.div className={style.header}>
                 <e.Text/>
@@ -50,7 +50,7 @@ const Home:
             lang: 'en-GB',
             className: style.timeline
         }} />
-    </>
+    </e.div>
     return content;
 }
 

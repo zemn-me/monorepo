@@ -1,15 +1,16 @@
 .home {
     --navbar-height: 8vh;
     display: grid;
-    grid: "h h h" 100vh
-        ". . ." 3rem
+    grid: 
         "v v v" var(--navbar-height)
+        ". h ." auto
+        ". . ." 1rem
         ". n ." auto
         ". . ." 1rem
         ". l ." auto
         ". . ." 3rem
         "t t t" minmax(100vh, min-content)
-        ". . ." 10rem / 1fr fit-content(80%) 1fr;
+        ". . ." 10rem / 1fr 3fr 1fr;
     
 }
 
@@ -26,8 +27,10 @@
 
 .links {
     grid-area: l;
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 10em) ;
+    justify-content: center;
+    text-align: center
 }
 
 .links > * {
@@ -56,8 +59,7 @@
 
 .header {
     grid-area: h;
-    display: grid;
-    grid: "all";
+    text-align: center
 }
 
 .header > video {

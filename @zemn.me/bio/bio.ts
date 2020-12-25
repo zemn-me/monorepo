@@ -104,6 +104,18 @@ export const Bio: Bio = {
     ],
     "timeline": [
         {
+            date: date(1, 'may', 2020),
+            title: en`Why We don't we have UIs like the ones in Neon Genesis`,
+            description: en`Exploration of how rendering hardware has affected UI design`,
+            url: url`https://medium.com/@Zemnmez/why-we-dont-have-uis-like-the-ones-in-neon-genesis-9b6631dc3714`
+        },
+        {
+            date: date(19, 'oct', 2020),
+            title: en`Typescript Union Merging`,
+            description: en`Using interface merging to write somewhat decentralised Redux actions`,
+            url: url`https://medium.com/@Zemnmez/typescript-union-merging-b2ea332f08f1`
+        },
+        {
             date: date(11, 'apr', 2020),
             title: en`do-sync`,
             description: en`Async to sync library for encapsulated javascript macros`,
@@ -111,7 +123,8 @@ export const Bio: Bio = {
         },
         {
             date: date(23, 'jul', 2020),
-            title: en`Senior Information Security Engineer, Google ISE hardening`
+            title: en`Senior Information Security Engineer, Google ISE hardening`,
+            description: en`Develop high level security analysis systems and primitives that protect Google`
         },
         {
             date: date(9, 'aug', 2020),
