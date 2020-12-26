@@ -1,9 +1,11 @@
 import { Bio, Event as BioEvent } from '@zemn.me/bio';
+import { useRouter } from 'next/router';
 import * as e from 'linear2/features/elements';
 import * as model from 'linear2/model';
 import React from 'react';
 import style from './style.module.css';
 import classes from 'classnames';
+import baseStyle from '../base.module.sass';
 
 const setFallback:
     <T1, T2>(k: T1, v: () => T2, m: Map<T1, T2>) => T2
@@ -69,27 +71,29 @@ export const makeYears:
 export interface TimelineProps {
     readonly years: readonly Year[]
     readonly lang: model.lang.Lang,
-    className?: string
+    className?: string,
+    indicateCurrent?: boolean
 }
 
 export const Timeline:
     (props: TimelineProps) => React.ReactElement
     =
-    ({ years, lang, className }) => <e.div
+    ({ years, lang, className, indicateCurrent }) => <e.div
         className={classes(className, style.Timeline)}
     > {years.map(year =>
-        <Year key={year.year} {...year} lang={lang} />
+        <Year key={year.year} {...year} lang={lang} indicateCurrent={indicateCurrent} />
     )} </e.div>
     ;
 
 export interface YearProps extends Year {
     readonly lang: model.lang.Lang
+    indicateCurrent?: boolean
 }
 
 export const Year:
     (props: YearProps) => React.ReactElement
     =
-    ({ year, months, lang }) =>
+    ({ year, months, lang, indicateCurrent }) =>
         <e.div {...{
             className: style.Year,
             "data-year": year
@@ -101,7 +105,8 @@ export const Year:
                         n={months.length}/>
 
                     {months.map((month) =>
-                        <Month lang={lang} key={month.month} {...month} />
+                        <Month lang={lang} key={month.month} {...month}
+                            indicateCurrent={indicateCurrent}/>
                     )}
                 </article>
             </StretchIndicatorArea>
@@ -192,17 +197,18 @@ export interface Month {
 
 export interface MonthProps extends Month {
     readonly lang?: string
+    indicateCurrent?: boolean
 }
 
 export const Month:
     (props: MonthProps) => React.ReactElement
     =
-    ({ month, events, lang, year }) => <e.div {...{
+    ({ month, events, lang, year, indicateCurrent }) => <e.div {...{
         className: style.Month }}>
 
         <MonthIndicator month={month} year={year}/>
         {events.map((event, i) =>
-            <Event key={i} {...event} />
+            <Event key={i} {...event} indicateCurrent={indicateCurrent} />
         )}
     </e.div>
     ;
@@ -222,16 +228,41 @@ export const MonthIndicator:
 ;
 
 export interface EventProps extends BioEvent {
+    indicateCurrent?: boolean
 }
 
 export const Event:
     (props: EventProps) => React.ReactElement
     =
-    ({ description, title, url, tags }) => <e.div className={style.Event}>
+    ({ description, title, url, tags, indicateCurrent }) => {
+        const ref = React.useRef<HTMLDivElement|undefined>(undefined);
+        const router = useRouter();
+        const concernsCurrent = indicateCurrent
+            && url
+            && url.hostname == "zemn.me"
+            && url.pathname == router.asPath;
+
+        console.log(url?.pathname, router.asPath);
+
+        React.useLayoutEffect(() => {
+            if (!concernsCurrent) return;
+            
+            ref?.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center"   
+            });
+        }, []);
+
+        return <e.div className={classes(
+            style.Event,
+            concernsCurrent? style.concernsCurrent: undefined,
+            indicateCurrent? style.indicateCurrent: undefined
+            ) } ref={ref}>
 
         <e.div className={style.Tags}>
             { tags?.map(tag => <e.WithText text={tag}>
-                <e.span>
+                <e.span className={baseStyle.tag}>
                     <e.Text/>
                 </e.span>
             </e.WithText>
@@ -253,7 +284,14 @@ export const Event:
 
         :null}
 
+        {
+            concernsCurrent?
+                <e.Arrow className={style.concernsArrow}/>
+            : null
+        }
+
     </e.div>
+    }
     ;
 
 interface VerticalStretchIndicatorProps {

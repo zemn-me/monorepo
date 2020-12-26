@@ -2,7 +2,8 @@
     --navbar-height: 8vh;
     display: grid;
     grid: 
-        "v v v" var(--navbar-height)
+        /*"v v v" var(--navbar-height)*/
+        ". . ." 1rem
         ". h ." auto
         ". . ." 1rem
         ". n ." auto

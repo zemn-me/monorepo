@@ -35,11 +35,11 @@ const Home:
             )}
         </e.div>
 
-        <e.div className={style.navBar}>
+        {/*<e.div className={style.navBar}>
             <e.div className={style.eyeContainer}>
                 <Eye className={style.eye}/>
             </e.div>
-        </e.div>
+            </e.div>*/}
 
         <e.WithText text={Bio.who.name}>
             <e.div className={style.name}><e.Text/></e.div>

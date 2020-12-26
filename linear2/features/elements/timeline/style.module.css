@@ -78,10 +78,11 @@
     flex-wrap: wrap
 }
 
-.Tags > * {
-    margin: .2em;
-    padding: 0 .2em;
-    color: var(--bgc);
-    background: var(--fgc);
+.concernsCurrent {
+    padding: 0 0 1em 0
+}
+
+.concernsArrow {
+    height: 1em
 }
 

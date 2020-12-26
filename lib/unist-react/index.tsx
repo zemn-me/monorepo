@@ -82,6 +82,7 @@ export const Render:
         const bindings = React.useContext(Elements);
         const fallback = React.useContext(Fallback);
 
+        if (typeof node === "undefined") throw new Error("cannot render undefined tree");
         if (isReactElement(node)) return node;
 
         if (node.type == "element") {

@@ -109,6 +109,13 @@ export const Bio: Bio = {
     ],
     "timeline": [
         {
+            date: date(26, 'dec', 2020),
+            title: en`How to Hack Apple ID`,
+            url: url`//zemn.me/article/2020/icloud`,
+            tags: [ writing, security, disclosure ],
+            description: en`Bypassing cutting-edge web security techniques to hack Apple ID`
+        },
+        {
             date: date(1, 'may', 2020),
             title: en`Why We don't we have UIs like the ones in Neon Genesis`,
             description: en`Exploration of how rendering hardware has affected UI design`,

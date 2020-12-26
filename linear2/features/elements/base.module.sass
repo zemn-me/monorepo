@@ -38,6 +38,11 @@ $lightish:  rgba(0,0,0,.6)
 
 $red: color.scale(red, $saturation: -80%) 
 
+@mixin setupColors
+  color: var(--fgc)
+  stroke: var(--figure-stroke)
+  fill: none
+
 .linear
   font-size: 1.2rem
   font-family: 'EB Garamond', serif
@@ -48,7 +53,7 @@ $red: color.scale(red, $saturation: -80%)
   transition: all 1s ease-in-out
   transition-property: color, fill, stroke, background-color, border-color
 
-  color: var(--fgc)
+  +setupColors
 
 @mixin theme($c1, $c2, $c3, $c4, $figureFill, $figureStroke)
   --c1: #{$c1}
@@ -62,6 +67,7 @@ $red: color.scale(red, $saturation: -80%)
   --fgc: #{$c1}
   --mgc: #{$c3}
   --bgc: #{$c4}
+  +setupColors
 
 @mixin theme-light
   $base-white: #e7e8e6
@@ -72,6 +78,14 @@ $red: color.scale(red, $saturation: -80%)
   $c3: color.scale($c2, $lightness: 10%)
   $c4: $base-white
   +theme($c1, $c2, $c3, $c4, $figureFill: $c4, $figureStroke: $c2)
+
+  .lightOnly
+    visibility: initial
+  .darkOnly
+    visibility: hidden
+  
+  .tag
+    font-variant: petite-caps
 
 @mixin theme-dark
   $dark-sand: #887f75
@@ -84,6 +98,8 @@ $red: color.scale(red, $saturation: -80%)
 
   +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c2)
 
+
+
 @mixin theme-cyberpunk
   $fgc: color.adjust(#bb5c5e, $lightness: -10%)
   $dark-sand: #887f75
@@ -95,19 +111,43 @@ $red: color.scale(red, $saturation: -80%)
   font-family: monospace
   +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c1)
 
+  .lightOnly
+    visibility: hidden
+  .darkOnly
+    visibility: initial
+
   font-size: 1.2rem
   $em-1: color.adjust($fgc, $lightness: 10%)
   $em-2: color.adjust($em-1, $lightness: 10%)
+
   .em1, em
     color: #{$em-1}
+
   .em2
     color: #{$em-2}
+
   a:link, a:visited
-    color: $c3
+    color: var(--c3)
+
   h1, h2, h3, h4, h5, h6
     font-family: "Source Code Pro", monospace
     color: #{color.adjust($fgc, $lightness: 10%)}
 
+  .tag
+    background: var(--fgc)
+    color: var(--bgc)
+
+.Arrow
+  svg
+    width: 100%
+    height: 100%
+    *
+      vector-effect: non-scaling-stroke
+
+
+.tag
+  margin: .2em
+  padding: 0 .2em
 
 +element(main)
   min-height: 100vh

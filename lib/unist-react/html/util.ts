@@ -14,12 +14,22 @@ export const pick:
 ;
 
 
-export const e:
-    <T extends keyof JSX.IntrinsicElements>(t: T, ...pick: (keyof JSX.IntrinsicElements[T])[] ) =>
-    React.FC<Element<T>>
-=
-    (t, ...k) => p => React.createElement(t, pick(p, ...k))
-;
+export function e<N extends keyof JSX.IntrinsicElements>(t: N, ...k: (keyof JSX.IntrinsicElements[N])[]) {
+    type P = JSX.IntrinsicElements[N];
+    type T =
+        P extends
+            React.DetailedHTMLProps<any, infer Q>
+            ? Q
+            : P extends React.SVGProps<infer Z>
+                ? Z
+                : never;
+    
+    return React.forwardRef<T, P>((p, ref) => React.createElement(t,
+        {ref, ...pick(p, ...k) }
+    ));
+}
+
+
 
 export { e as element };
 

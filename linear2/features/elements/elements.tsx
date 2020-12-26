@@ -40,7 +40,11 @@ const e:
 type PropsOf<T extends React.FC<unknown>> = T extends React.FC<infer Q>?Q:never;
 
 
-const s: <P>(i: React.FC<P>) => React.FC<P> = I => p => <Style><I {...p}/></Style>
+function s<T, P = {}>(I: React.ForwardRefExoticComponent<P>) {
+    return React.forwardRef<T, P>((props, ref) => <Style>
+        <I {...{...props, ref }}/>
+    </Style>)
+}
 
 export const frac: React.FC = ({ children }) => <Style><span className={style.frac}>
     {children}
@@ -107,6 +111,7 @@ export const div = s(html.div);
 export const main = s(html.main);
 export const span = s(html.span);
 export { text };
+export { Arrow } from './Arrow';
 
 export interface AProps extends Omit<elementUtil.PropsOf<"a">, 'href'> {
     href?: string | elementUtil.PropsOf<"a">
