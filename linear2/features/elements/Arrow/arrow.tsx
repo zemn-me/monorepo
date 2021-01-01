@@ -15,7 +15,7 @@ export const Arrow = React.forwardRef<HTMLDivElement, JSX.IntrinsicElements["div
             </defs>
             <path className={style.lightOnly} d="M0,50L90,50" marker-end="url(#arrow)" vectorEffect="non-scaling-stroke" />
             <path className={style.darkOnly}
-                d="M0,0L20,100L40,0L40,100L50,0L60,100L70,0L80,100L90,0L100,100"vectorEffect="non-scaling-stroke" />
+                d="M0,0L20,100L40,0L40,100L50,0L60,100L70,0L80,100L90,0L100,100" vectorEffect="non-scaling-stroke" />
         </svg>
     </div>
 );

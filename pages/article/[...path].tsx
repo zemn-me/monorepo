@@ -1,4 +1,4 @@
-
+import { useRouter } from 'next/router';
 import * as articles from 'linear2/features/articles';
 import * as next from 'next';
 import style from './style.module.sass';
@@ -32,11 +32,36 @@ export const getStaticPaths: next.GetStaticPaths = async () => {
     return articles.pathsIn(...articleBase);
 }
 
+
+const writings = bio.timeline.filter(event =>
+    event?.tags?.some( tag => tag == bio.writing )
+).sort(({ date: a }, { date: b }) => (+a) - (+b));
+
+const clamp = (v: number, min = -Infinity, max = Infinity) => {
+    if (v < min) return min;
+    if (v > max) return max;
+    return v;
+}
+
+const lim = 30;
+
 export default function Article(props: { content: unist.Node }) {
+    const router = useRouter();
+    const isInTimeline = writings.findIndex(e => 
+        e.url &&
+        e.url.hostname == "zemn.me" &&
+        e.url.pathname == router.asPath
+    );
+
+    const timeline = isInTimeline == -1
+        ? writings.slice(0, lim)
+        : writings.slice(
+            clamp(isInTimeline - lim, 0),
+            clamp(isInTimeline + lim, writings.length - isInTimeline)
+        )
+
     return <div className={style.ArticlePage}>
-            <Timeline years={makeYears(bio.timeline.filter(event =>
-                event?.tags?.some( tag => tag == bio.writing )
-            ))} lang="en-GB" className={style.Timeline}
+            <Timeline years={makeYears(timeline)} lang="en-GB" className={style.Timeline}
                 indicateCurrent
             />
             <div className={style.Article}>

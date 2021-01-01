@@ -2,14 +2,28 @@
     margin: auto
     padding: 1em
     width: 100%
+    grid-area: A
+    max-width: 40rem
+    margin: auto
 
 .ArticlePage
     display: grid
-    grid-template-columns: 21em 40rem
+    grid: "A" auto "T" 1fr / 1fr
+    justify-content: space-around
+
+
 
 .Timeline
-    position: sticky
+    grid-area: T
     top: 0
     left: 0
-    max-height: 100vh
     overflow: hidden
+
+
+@media (orientation: landscape)
+    .ArticlePage
+        grid: ". . A . T" 1fr/ minmax(0, 21em) 1fr minmax(0,40rem) 1fr minmax(0, 21em)
+    .Timeline
+        position: sticky
+        max-height: 100vh
+    
