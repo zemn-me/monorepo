@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Path from 'path';
 import * as articles from 'linear2/features/articles';
 import * as next from 'next';
 import style from './style.module.sass';
@@ -18,23 +19,18 @@ interface StaticPropsContext extends next.GetStaticPropsContext {
 
 
 export async function getStaticProps(context: StaticPropsContext) {
-    const { content: ast } = await articles.Ast(...articleBase, ...context?.params?.path);
+    const { title, ast, edits } = 
+        new articles.Article({ dirPath: Path.parse(Path.join("pages", "article", ...context?.params?.path)) })
     const content = { props: {
-        ...ast,
-        edits: await articles.Edits(...articleBase, ...context?.params?.path),
-        title: articles.getTitles(ast)[0] ?? { type: "text", value: "Untitled" }
+        ast: await ast,
+        title: await title,
+        edits: await edits
     }};
 
 
 
     return JSON.parse(JSON.stringify(content));
 }
-
-export async function getRoutes() {
-    return articles.In(...articleBase)
-}
-
-
 
 export const getStaticPaths: next.GetStaticPaths = async () => {
     return articles.pathsIn(...articleBase);
@@ -53,7 +49,25 @@ const clamp = (v: number, min = -Infinity, max = Infinity) => {
 
 const lim = 30;
 
-export default function Article(props: { content: unist.Node, title: unist.Node, edits: Date[] }) {
+
+function NiceList({ children, idx = 0, connector = <>and</> }:
+    { children: React.ReactElement[], idx?: number, connector?: React.ReactElement }) {
+
+    if (children.length == 0) return null;
+    if (children.length == 1 && idx > 0) return <>{connector} {children[0]}</>;
+    return <>{children[0]}, <NiceList {...{
+        children: children.slice(1),
+        idx: idx+1,
+        connector
+    }}/></>;
+
+
+}
+
+
+export default function Article(props: { ast: unist.Node, title: unist.Node, edits: Date[] }) {
+    let { edits } = props;
+    edits = edits.sort((a, b) => (+a) - (+b));
     const router = useRouter();
     const isInTimeline = writings.findIndex(e => 
         e.url &&
@@ -73,15 +87,19 @@ export default function Article(props: { content: unist.Node, title: unist.Node,
                 indicateCurrent
             />
             <div className={style.Article}>
-                <Render node={props.content}/>
+                <Render node={props.ast}/>
 
-                {props.title}{props.edits.length
-                    ? <>, <e.date date={props.edits[0]}><e.dateText/></e.date>.</>
+                <Render node={props.title}/>{props.edits.length
+                    ? <> was written on <e.date date={new Date(edits[0])}><e.dateText
+                        year="numeric"
+                        month="long"
+                        day="numeric"
+                    /></e.date></>
                     : null}{
                         props.edits.length > 1
-                            ? <>Edited on {props.edits.map(
-                                (d, i) => <e.date key={i} date={d}><e.dateText/></e.date>
-                            )}</>
+                            ? <> and edited {<NiceList>{edits.map(
+                                (d, i) => <e.date key={i} date={new Date(d)}><e.dateText/></e.date>
+                            )}</NiceList>}.</>
                             :""
                     }
             </div>

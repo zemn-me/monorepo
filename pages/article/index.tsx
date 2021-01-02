@@ -11,16 +11,9 @@ import visit from 'unist-util-visit';
 export const articleBase = [ "pages", "article" ] as const;
 
 export async function getStaticProps() {
-    const articles = await Articles.astAndPathsIn(...articleBase);
+    const articles = await Articles.articlesAndPathsIn(...articleBase);
     const withTitles = await Promise.all(articles.map(
-        async ({ ast: astPromise, params: { path } }) => {
-            const titles: unist.Parent[] = [];
-            const ast = await astPromise
-
-            visit(ast.content,
-                node => node.type == 'heading' && node.depth == 1,
-                node => titles.push({ type: 'root', children: node.children })
-            );
+        async ({article: { titles }, params: { path }}) => {
 
             return { path, titles }
         })
