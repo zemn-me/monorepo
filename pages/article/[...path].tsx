@@ -8,6 +8,7 @@ import { articleBase } from '.';
 import { makeYears, Timeline } from 'linear2/features/elements/timeline';
 
 import * as bio from 'lib/bio';
+import * as e from 'linear2/features/elements';
 
 interface StaticPropsContext extends next.GetStaticPropsContext {
     params: {
@@ -17,7 +18,14 @@ interface StaticPropsContext extends next.GetStaticPropsContext {
 
 
 export async function getStaticProps(context: StaticPropsContext) {
-    const content = { props: await articles.Ast(...articleBase, ...context?.params?.path) };
+    const { content: ast } = await articles.Ast(...articleBase, ...context?.params?.path);
+    const content = { props: {
+        ...ast,
+        edits: await articles.Edits(...articleBase, ...context?.params?.path),
+        title: articles.getTitles(ast)[0] ?? { type: "text", value: "Untitled" }
+    }};
+
+
 
     return JSON.parse(JSON.stringify(content));
 }
@@ -45,7 +53,7 @@ const clamp = (v: number, min = -Infinity, max = Infinity) => {
 
 const lim = 30;
 
-export default function Article(props: { content: unist.Node }) {
+export default function Article(props: { content: unist.Node, title: unist.Node, edits: Date[] }) {
     const router = useRouter();
     const isInTimeline = writings.findIndex(e => 
         e.url &&
@@ -66,7 +74,18 @@ export default function Article(props: { content: unist.Node }) {
             />
             <div className={style.Article}>
                 <Render node={props.content}/>
+
+                {props.title}{props.edits.length
+                    ? <>, <e.date date={props.edits[0]}><e.dateText/></e.date>.</>
+                    : null}{
+                        props.edits.length > 1
+                            ? <>Edited on {props.edits.map(
+                                (d, i) => <e.date key={i} date={d}><e.dateText/></e.date>
+                            )}</>
+                            :""
+                    }
             </div>
+
 
     </div>
 }

@@ -67,7 +67,7 @@ const reactElement: React.FC<ReactNode> = nd => <>{nd.value}</>;
 
 
 export const RenderParent: React.FC<Parent> = ({ children }) =>
-    <>{children.map((c, i) => <><Render node={c as UnifiedNode} key={i}/></>)}</>
+    <>{children}</>
 
 export const Elements = React.createContext<Record<UnifiedNode["type"], React.FC<any>>>({
     react: reactElement,
@@ -96,7 +96,9 @@ export const Render:
 
         return React.createElement(bindings[node.type] ?? fallback, {
             ...node,
-            children: node?.children?.map(c => <Render node={c as Node}/>) ?? node.children as any
+            children: node?.children?.map(c => 
+                Render({ node: c as any })   
+            ) ?? node.children as any
         });
     }
 ;

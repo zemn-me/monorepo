@@ -7,28 +7,28 @@ export const text: React.FC<mdast.Text> = ({ value }) => <>{value}</>;
 
 
 const del: React.FC<mdast.Delete> = nd =>
-    <Render node={{ ...nd, type: "del" } as UnifiedNode}/>
+    Render({ node: { ...nd, type: "del" } as UnifiedNode})
 
 export { del as delete };
 
 export const thematicBreak: React.FC<mdast.ThematicBreak> = nd =>
-    <Render node={{ ...nd, type: "hr" } as UnifiedNode}/>
+    Render({ node: { ...nd, type: "hr" } as UnifiedNode})
 
 export const paragraph: React.FC<mdast.Paragraph> = nd =>
-    <Render node={{ ...nd, type: "p" }}/>
+    Render({ node: { ...nd, type: "p" } })
 
 export const list: React.FC<mdast.List> = nd =>
-    <Render node={{ ...nd, type: nd.ordered?"ol":"ul" }} />
+    Render({ node: { ...nd, type: nd.ordered?"ol":"ul" }})
 
 export const listItem: React.FC<mdast.ListItem> = nd =>
-    <Render node={{ ...nd,
+    Render({ node: { ...nd,
         ...nd.checked == true || nd.checked == false
             ? { type: "li", children: [
                 { type: "input", checked: nd.checked, fType: "checkbox", disabled: true }
             ]}
 
             : { type: "li" }
-        }}/>
+        }})
 
 export const linkReference: React.FC<mdast.LinkReference & mdast.Link> =
     p => React.createElement(link, p)

@@ -7,8 +7,8 @@ import parse from 'linear2/features/jmdx/parse';
 import * as next from 'next';
 import vfile from 'to-vfile';
 import Render from 'linear2/features/md/render';
-import exec from 'child_process';
 import util from 'util';
+import visit from 'unist-util-visit';
 
 class MultiError extends Error {
     errors: unknown[];
@@ -18,6 +18,16 @@ class MultiError extends Error {
         this.errors = errors
         this.name = 'MultiError';
     }
+}
+
+export function getTitles(article: any) {
+    let titles: any[] = [];
+    (visit as any)(article,
+        (node: any) => node.type == 'heading' && node.depth == 1,
+        (node: any) => titles.push({ type: 'root', children: node.children })
+    )
+
+    return titles
 }
 
 async function attempt<I extends unknown[], O>(message: string, f: (...i: I) => O, ...p: I[]): Promise<O> {
@@ -50,6 +60,20 @@ export async function Ast(...targetPath: string[]) {
     const target = path.join(process.cwd(), targetPath.join(path.sep));
 
     return await loadFile(target)
+}
+
+export async function Edits(...targetPath: string[]) {
+    const { stdout: dates } = await util.promisify(require('child_process').execFile)(
+        "git",
+        [
+            "--no-pager",
+            "log",
+            "--pretty=format:%ci",
+            path.join(process.cwd(), targetPath.join(path.sep))+ ".md"
+        ]
+    )
+
+    return dates.split("\n").map(d => Date.parse(d));
 }
 
 export async function In(...basePath: string[]) {
