@@ -97,8 +97,12 @@ export default function Article(props: { ast: unist.Node, title: unist.Node, edi
                     /></e.date></>
                     : null}{
                         props.edits.length > 1
-                            ? <> and edited {<NiceList>{edits.map(
-                                (d, i) => <e.date key={i} date={new Date(d)}><e.dateText/></e.date>
+                            ? <> and edited {<NiceList>{edits.slice(1).map(
+                                (d, i) => <e.date key={i} date={new Date(d)}><e.dateText
+                                    month="short"
+                                    year="numeric"
+                                    day="numeric"
+                                /></e.date>
                             )}</NiceList>}.</>
                             :""
                     }

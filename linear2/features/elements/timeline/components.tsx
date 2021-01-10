@@ -244,7 +244,10 @@ export const Event:
 
         console.log(url?.pathname, router.asPath);
 
-        React.useLayoutEffect(() => {
+        // this just prevents the warning where it gets run on the server
+        // we dont really give a shit since we dont modify the dom nodes
+        // anyway
+        if(typeof window !== "undefined") React.useLayoutEffect(() => {
             if (!concernsCurrent) return;
             
             ref?.current?.scrollIntoView({
@@ -277,9 +280,9 @@ export const Event:
 
         { description?
             <e.WithText text={description}>
-                <e.span className={style.description}>
-                    <e.Text/>
-                </e.span>
+                <e.Void className={style.description}>
+                    <e.span><e.Text/></e.span>
+                </e.Void>
             </e.WithText>
 
         :null}

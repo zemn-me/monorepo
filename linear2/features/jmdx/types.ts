@@ -1,3 +1,4 @@
+import * as mdast from 'mdast';
 
 export interface Pos {
     /** line number in file */
@@ -39,5 +40,4 @@ export interface Comment {
     position?: TextRange
 }
 
-export type Node = any
 

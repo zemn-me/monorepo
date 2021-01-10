@@ -6,6 +6,8 @@ import { Style, text } from './style';
 import style from './base.module.sass';
 import * as html from 'lib/unist-react/html/elements';
 
+export {default as Void } from './void';
+
 export { Date as date } from './date';
 export { Text as dateText } from './date';
 

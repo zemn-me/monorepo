@@ -165,9 +165,10 @@ export class Article extends Struct<{
         })();
     }
 
-    toJSON() {
+    async toJSON() {
         const { title, edits, titles, ast, content, filePath } = this;
-        return { title, edits, titles, ast, content, filePath };
+        return { title: await title, edits: await edits, titles: await titles,
+            ast: await ast, content: await content, filePath: await filePath };
     }
 }
 
@@ -217,9 +218,11 @@ export const pathsIn = async (...basePath: string[]) => {
 
 export const articlesAndPathsIn = async(...basePath: string[]) => {
     const articlePaths = await pathsIn(...basePath);
-    return articlePaths.paths.map(path => {
-        return { ...path, article: new Article({
-            dirPath: Path.parse(Path.join(...path.params.path))}
-        )};
-    });
+    return await Promise.all(articlePaths.paths.map(async path => {
+        const article = await (new Article({
+            dirPath: Path.parse(Path.join("pages", "article", ...path.params.path))}
+        ));
+        const { title, edits } = article;
+        return { ...path, title: await title, edits: await edits };
+    }));
 }
