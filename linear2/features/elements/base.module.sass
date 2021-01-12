@@ -137,9 +137,10 @@ $red: color.scale(red, $saturation: -80%)
     background: var(--fgc)
     color: var(--bgc)
 
-  a:active, a:hover
-    color: var(--bgc)
-    background: var(--fgc)
+  a:link
+    &:active, &:hover
+      color: var(--bgc)
+      background: var(--fgc)
 
 .Arrow
   svg

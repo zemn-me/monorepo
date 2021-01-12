@@ -2,6 +2,7 @@ import * as mdast from 'mdast';
 import * as unist from 'unist';
 import React from 'react';
 import { Render, UnifiedNode, Elements } from '.';
+import { PropsOf } from 'linear2/features/elements/util';
 
 export const text: React.FC<mdast.Text> = ({ value }) => <>{value}</>;
 
@@ -47,7 +48,8 @@ export const inlineCode: React.FC<mdast.InlineCode> =
 export const link: React.FC<mdast.Link> =
     ({ url: href, ...p }) => <Render node={{ ...p, type: 'a', href }}/>
 
-export interface Footnotes extends unist.Node, unist.Parent {
+
+export interface Footnotes extends unist.Node, unist.Parent, Omit<PropsOf<"aside">, 'children'> {
     type: 'footnotes'
 }
 

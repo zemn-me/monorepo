@@ -1,4 +1,7 @@
 import { e, Element, pick } from './util';
+import * as unist from 'unist';
+import { Render } from 'lib/unist-react';
+import { PropsOf } from 'linear2/features/elements/util';
 const s = [ "children", "id", "className", "lang"] as const;
 
 export const p = e("p", ...s);

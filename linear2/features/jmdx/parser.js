@@ -27,12 +27,14 @@ export async function parse(file) {
     const compiler = unified()
         .use(markdown)
         .use(remarkPlugins)
-        .use(() => tree => console.log(tree))
+        //.use(() => tree => console.log(tree))
         .use(() => {
             let ctr = 0;
             let m = new Map();
             
             return tree => {
+                // replace all <head> html with <fakeHead> so the html parser doesnt get confused hopefully
+                visit(tree, node => node.type == 'html', node => node.value = node.value.replace(/<(\/?)head>/gi, "<$1fakehead>"));
                 visit(tree, node => node.type == 'html', node => node.type = 'raw');
                 visit(tree, node =>
                     // omit all elements that are already HAST elements
@@ -59,6 +61,7 @@ export async function parse(file) {
                     Object.assign(node, original, { children });
                 });
 
+                // make all head elements called Head
                 return tree
             }
         })
@@ -115,6 +118,26 @@ export async function parse(file) {
 
                 return tree;
             }
+        })
+        // make all elements into regular nodes
+        .use(() => tree => {
+            visit(tree, node => node.type == "element", node => {
+                const newNode = {
+                    ...node,
+                    ...node.properties,
+                    ...(node.data || {}).hProperties,
+                    properties: undefined,
+                    data: { ...node.data, hProperties: undefined },
+                    type: node.tagName
+                }
+
+                Object.assign(node, newNode);
+            });
+        })
+        // re-replace all <fakeHead>s back to <head>
+        .use(() =>  tree => {
+            visit(tree, node => node.type == 'fakehead', node => node.type = 'head')
+            return tree
         })
 
     return await compiler.run(compiler.parse(file));

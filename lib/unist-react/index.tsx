@@ -58,7 +58,7 @@ export type Root = hast.Root
  * them or render them
  */
 
-const fallback: React.FC<Node> = nd => {
+const Fallback: React.FC<Node> = nd => {
     console.error(`unable to render node of type ${nd.type}`);
     return <p>unable to render node of type {nd.type}</p>;
 }
@@ -69,37 +69,71 @@ const reactElement: React.FC<ReactNode> = nd => <>{nd.value}</>;
 export const RenderParent: React.FC<Parent> = ({ children }) =>
     <>{children}</>
 
-export const Elements = React.createContext<Record<UnifiedNode["type"], React.FC<any>>>({
+
+export const bindingType = Symbol();
+
+export interface RegularComponent extends React.FC<any> {
+    [bindingType]?: never
+}
+export interface TreeBindingComponent extends React.FC<any> {
+   [bindingType]: "tree"
+}
+
+export type Component = RegularComponent | TreeBindingComponent
+
+
+export const Elements = React.createContext<Record<string, Component> & { fallback?: React.FC<any> }>({
     react: reactElement,
     root: RenderParent
 });
 
-export const Fallback = React.createContext<React.FC<Node>>(fallback);
+export interface RenderProps {
+    node: Node
+
+    /**
+     * Whether to build the whole tree at once, without having intermediary Render nodes.
+     * This means that virtually the entire tree is pre-emptively calculated, but, conversely
+     * also means that the full rendereed tree is accessible for introspection e.g. by next/Head.
+     * 
+     * This will break context support.
+     */
+    buildTree?: boolean
+
+    /** to prevent accidental infinite recursion */
+    depth?: number
+}
+
+const DEPTH_MAX = 99999 as const;
+
 export const Render:
-    (props: {node: Node }) => React.ReactElement
+    (props: RenderProps) => React.ReactElement
 =
-    ({ node }) => {
-        const bindings = React.useContext(Elements);
-        const fallback = React.useContext(Fallback);
+    ({ node, buildTree, depth = 0 }) => {
+        if (depth > DEPTH_MAX) throw new Error(`Render depth > ${DEPTH_MAX}`);
+        const render = buildTree?
+            ((node) => Render({ node, buildTree: true })): ((props: RenderProps) => React.createElement(Render, props));
+
+        const { fallback = Fallback, ...elems } = React.useContext(Elements);
 
         if (typeof node === "undefined") throw new Error("cannot render undefined tree");
         if (isReactElement(node)) return node;
 
-        if (node.type == "element") {
-            node = {
-                ...node, ...node?.properties as object | undefined, ...((node?.data) as any)?.hProperties,
-                properties: undefined, data: { ...node.data as object | undefined, hProperties: undefined },
-                type: node.tagName
-            } as
-                UnifiedNode
+        if (node.type in elems) {
+            switch(elems[node.type][bindingType]) {
+            case "tree":
+                return React.createElement(elems[node.type], {
+                    ...node
+                });
+            }
+
+            return React.createElement(elems[node.type], {
+                ...node,
+                children: node?.children?.map(c => render({ depth: depth+1, node: c as any })) ?? node.children as any
+            })
         }
 
-        return React.createElement(bindings[node.type] ?? fallback, {
-            ...node,
-            children: node?.children?.map(c => 
-                Render({ node: c as any })   
-            ) ?? node.children as any
-        });
+        return React.createElement(fallback, node);
+
     }
 ;
 
