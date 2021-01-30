@@ -492,6 +492,9 @@ def construct_arguments(
     args.add("--codegen=opt-level=" + compilation_mode.opt_level)
     args.add("--codegen=debuginfo=" + compilation_mode.debug_info)
 
+    # For determinism to help with build distribution and such
+    args.add("--remap-path-prefix=${pwd}=.")
+
     args.add("--emit=" + ",".join(emit))
     args.add("--color=always")
     args.add("--target=" + toolchain.target_triple)
