@@ -81,6 +81,13 @@ def declare_config_settings():
         actual = ":darwin",
     )
 
+    # Add alias for OSX to "macos" to be consistent with the long-term
+    # direction of `@platforms` in using the OS's modern name.
+    native.alias(
+        name = "macos",
+        actual = ":darwin",
+    )
+
     all_supported_triples = _SUPPORTED_T1_PLATFORM_TRIPLES + _SUPPORTED_T2_PLATFORM_TRIPLES
     for triple in all_supported_triples:
         native.config_setting(
