@@ -138,6 +138,10 @@ def _shortest_src_with_basename(srcs, basename):
 def _rust_library_impl(ctx):
     """The implementation of the `rust_library` rule.
 
+    This rule provides CcInfo, so it can be used everywhere Bazel
+    expects rules_cc, but care must be taken to have the correct
+    dependencies on an allocator and std implemetation as needed.
+
     Args:
         ctx (ctx): The rule's context object
 
@@ -149,6 +153,9 @@ def _rust_library_impl(ctx):
 def _rust_static_library_impl(ctx):
     """The implementation of the `rust_static_library` rule.
 
+    This rule provides CcInfo, so it can be used everywhere Bazel
+    expects rules_cc.
+
     Args:
         ctx (ctx): The rule's context object
 
@@ -159,6 +166,9 @@ def _rust_static_library_impl(ctx):
 
 def _rust_shared_library_impl(ctx):
     """The implementation of the `rust_shared_library` rule.
+
+    This rule provides CcInfo, so it can be used everywhere Bazel
+    expects rules_cc.
 
     Args:
         ctx (ctx): The rule's context object
@@ -643,8 +653,8 @@ _rust_test_attrs = {
     "env": attr.string_dict(
         mandatory = False,
         doc = _tidy("""
-            Specifies additional environment variables to set when the test is executed by bazel test. 
-            Values are subject to `$(execpath)` and 
+            Specifies additional environment variables to set when the test is executed by bazel test.
+            Values are subject to `$(execpath)` and
             ["Make variable"](https://docs.bazel.build/versions/master/be/make-variables.html) substitution.
         """),
     ),
