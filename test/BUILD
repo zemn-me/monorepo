@@ -11,7 +11,10 @@ rule_test(
 
 rule_test(
     name = "hello_world_rule_test",
-    generates = ["hello_world"],
+    generates = select({
+        "//rust/platform:windows": ["hello_world.exe"],
+        "//conditions:default": ["hello_world"],
+    }),
     rule = "@examples//hello_world:hello_world",
 )
 
