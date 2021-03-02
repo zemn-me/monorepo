@@ -23,7 +23,7 @@ load(
     "expand_locations",
     "find_cc_toolchain",
     "get_lib_name",
-    "get_libs_for_static_executable",
+    "get_preferred_artifact",
     "relativize",
     "rule_attrs",
 )
@@ -54,9 +54,8 @@ DepInfo = provider(
         "direct_crates": "depset[CrateInfo]",
         "transitive_build_infos": "depset[BuildInfo]",
         "transitive_crates": "depset[CrateInfo]",
-        "transitive_dylibs": "depset[File]",
         "transitive_libs": "List[File]: All transitive dependencies, not filtered by type.",
-        "transitive_staticlibs": "depset[File]",
+        "transitive_noncrates": "depset[LinkerInput]: All transitive dependencies that aren't crates.",
     },
 )
 
@@ -149,8 +148,8 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
 
     direct_crates = []
     transitive_crates = []
-    transitive_dylibs = []
-    transitive_staticlibs = []
+    transitive_noncrates = []
+    transitive_noncrate_libs = []
     transitive_build_infos = []
     build_info = None
 
@@ -165,26 +164,17 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
             ))
 
             transitive_crates.append(depset([dep[rust_common.crate_info]], transitive = [dep[DepInfo].transitive_crates]))
-            transitive_dylibs.append(dep[DepInfo].transitive_dylibs)
-            transitive_staticlibs.append(dep[DepInfo].transitive_staticlibs)
+            transitive_noncrates.append(dep[DepInfo].transitive_noncrates)
+            transitive_noncrate_libs.append(depset(dep[DepInfo].transitive_libs))
             transitive_build_infos.append(dep[DepInfo].transitive_build_infos)
         elif CcInfo in dep:
             # This dependency is a cc_library
 
             # TODO: We could let the user choose how to link, instead of always preferring to link static libraries.
-            libs = get_libs_for_static_executable(dep)
-
-            transitive_dylibs.append(depset([
-                lib
-                for lib in libs.to_list()
-                # Dynamic libraries may have a version number nowhere, or before (macos) or after (linux) the extension.
-                if lib.basename.endswith(toolchain.dylib_ext) or lib.basename.split(".", 2)[1] == toolchain.dylib_ext[1:]
-            ]))
-            transitive_staticlibs.append(depset([
-                lib
-                for lib in libs.to_list()
-                if lib.basename.endswith(toolchain.staticlib_ext)
-            ]))
+            linker_inputs = dep[CcInfo].linking_context.linker_inputs.to_list()
+            libs = [get_preferred_artifact(lib) for li in linker_inputs for lib in li.libraries]
+            transitive_noncrate_libs.append(depset(libs))
+            transitive_noncrates.append(depset(dep[CcInfo].linking_context.linker_inputs))
         elif BuildInfo in dep:
             if build_info:
                 fail("Several deps are providing build information, only one is allowed in the dependencies", "deps")
@@ -196,18 +186,17 @@ def collect_deps(label, deps, proc_macro_deps, aliases, toolchain):
     transitive_crates_depset = depset(transitive = transitive_crates)
     transitive_libs = depset(
         [c.output for c in transitive_crates_depset.to_list()],
-        transitive = transitive_staticlibs + transitive_dylibs,
+        transitive = transitive_noncrate_libs,
     )
 
     return (
         DepInfo(
             direct_crates = depset(direct_crates),
             transitive_crates = transitive_crates_depset,
-            transitive_dylibs = depset(
-                transitive = transitive_dylibs,
+            transitive_noncrates = depset(
+                transitive = transitive_noncrates,
                 order = "topological",  # dylib link flag ordering matters.
             ),
-            transitive_staticlibs = depset(transitive = transitive_staticlibs),
             transitive_libs = transitive_libs.to_list(),
             transitive_build_infos = depset(transitive = transitive_build_infos),
             dep_env = build_info.dep_env if build_info else None,
@@ -498,7 +487,7 @@ def construct_arguments(
             args.add("--codegen=linker=" + ld)
             args.add_joined("--codegen", link_args, join_with = " ", format_joined = "link-args=%s")
 
-        _add_native_link_flags(args, dep_info, crate_type, cc_toolchain, feature_configuration)
+        _add_native_link_flags(args, dep_info, crate_type, toolchain, cc_toolchain, feature_configuration)
 
     # These always need to be added, even if not linking this crate.
     add_crate_link_flags(args, dep_info)
@@ -611,8 +600,10 @@ def rustc_compile_action(
         ),
     )
 
+    dylibs = [get_preferred_artifact(lib) for linker_input in dep_info.transitive_noncrates.to_list() for lib in linker_input.libraries if _is_dylib(lib)]
+
     runfiles = ctx.runfiles(
-        files = dep_info.transitive_dylibs.to_list() + getattr(ctx.files, "data", []),
+        files = dylibs + getattr(ctx.files, "data", []),
         collect_data = True,
     )
 
@@ -630,6 +621,9 @@ def rustc_compile_action(
             executable = crate_info.output if crate_info.type == "bin" or crate_info.is_test or out_binary else None,
         ),
     ]
+
+def _is_dylib(dep):
+    return not bool(dep.static_library or dep.pic_static_library)
 
 def establish_cc_info(ctx, crate_info, toolchain, cc_toolchain, feature_configuration):
     """If the produced crate is suitable yield a CcInfo to allow for interop with cc rules
@@ -754,18 +748,24 @@ def _compute_rpaths(toolchain, output_dir, dep_info):
     Returns:
         depset: A set of relative paths from the output directory to each dependency
     """
-    if not dep_info.transitive_dylibs:
+    preferreds = [get_preferred_artifact(lib) for linker_input in dep_info.transitive_noncrates.to_list() for lib in linker_input.libraries]
+
+    # TODO(augie): I don't understand why this can't just be filtering on
+    # _is_dylib(lib), but doing that causes failures on darwin and windows
+    # examples that otherwise work.
+    dylibs = [lib for lib in preferreds if lib.basename.endswith(toolchain.dylib_ext) or lib.basename.split(".", 2)[1] == toolchain.dylib_ext[1:]]
+    if not dylibs:
         return depset([])
     if toolchain.os != "linux":
         fail("Runtime linking is not supported on {}, but found {}".format(
             toolchain.os,
-            dep_info.transitive_dylibs,
+            dep_info.transitive_noncrates,
         ))
 
     # Multiple dylibs can be present in the same directory, so deduplicate them.
     return depset([
         relativize(lib_dir, output_dir)
-        for lib_dir in _get_dir_names(dep_info.transitive_dylibs.to_list())
+        for lib_dir in _get_dir_names(dylibs)
     ])
 
 def _get_dir_names(files):
@@ -821,25 +821,78 @@ def _get_crate_dirname(crate):
     """
     return crate.output.dirname
 
-def _add_native_link_flags(args, dep_info, crate_type, cc_toolchain, feature_configuration):
+def _portable_link_flags(lib):
+    if lib.static_library or lib.pic_static_library:
+        return ["-lstatic=%s" % get_lib_name(get_preferred_artifact(lib))]
+    elif _is_dylib(lib):
+        return ["-ldylib=%s" % get_lib_name(get_preferred_artifact(lib))]
+    return []
+
+def _make_link_flags_windows(linker_input):
+    ret = []
+    for lib in linker_input.libraries:
+        if lib.alwayslink:
+            ret.extend(["-C", "link-arg=/WHOLEARCHIVE:%s" % get_preferred_artifact(lib).path])
+        else:
+            ret.extend(_portable_link_flags(lib))
+    return ret
+
+def _make_link_flags_darwin(linker_input):
+    ret = []
+    for lib in linker_input.libraries:
+        if lib.alwayslink:
+            ret.extend([
+                "-C",
+                ("link-arg=-Wl,-force_load,%s" % get_preferred_artifact(lib).path),
+            ])
+        else:
+            ret.extend(_portable_link_flags(lib))
+    return ret
+
+def _make_link_flags_default(linker_input):
+    ret = []
+    for lib in linker_input.libraries:
+        if lib.alwayslink:
+            ret.extend([
+                "-C",
+                "link-arg=-Wl,--whole-archive",
+                "-C",
+                ("link-arg=%s" % get_preferred_artifact(lib).path),
+                "-C",
+                "link-arg=-Wl,--no-whole-archive",
+            ])
+        else:
+            ret.extend(_portable_link_flags(lib))
+    return ret
+
+def _libraries_dirnames(linker_input):
+    return [get_preferred_artifact(lib).dirname for lib in linker_input.libraries]
+
+def _add_native_link_flags(args, dep_info, crate_type, toolchain, cc_toolchain, feature_configuration):
     """Adds linker flags for all dependencies of the current target.
 
     Args:
         args (Args): The Args struct for a ctx.action
         dep_info (DepInfo): Dependency Info provider
         crate_type: Crate type of the current target
+        toolchain (rust_toolchain): The current `rust_toolchain`
         cc_toolchain (CcToolchainInfo): The current `cc_toolchain`
         feature_configuration (FeatureConfiguration): feature configuration to use with cc_toolchain
 
     """
-    native_libs = depset(transitive = [dep_info.transitive_dylibs, dep_info.transitive_staticlibs])
-    args.add_all(native_libs, map_each = _get_dirname, uniquify = True, format_each = "-Lnative=%s")
+    args.add_all(dep_info.transitive_noncrates, map_each = _libraries_dirnames, uniquify = True, format_each = "-Lnative=%s")
 
     if crate_type in ["lib", "rlib"]:
         return
 
-    args.add_all(dep_info.transitive_dylibs, map_each = get_lib_name, format_each = "-ldylib=%s")
-    args.add_all(dep_info.transitive_staticlibs, map_each = get_lib_name, format_each = "-lstatic=%s")
+    if toolchain.os == "windows":
+        make_link_flags = _make_link_flags_windows
+    elif toolchain.os.startswith("mac") or toolchain.os.startswith("darwin"):
+        make_link_flags = _make_link_flags_darwin
+    else:
+        make_link_flags = _make_link_flags_default
+
+    args.add_all(dep_info.transitive_noncrates, map_each = make_link_flags)
 
     if crate_type in ["dylib", "cdylib"]:
         # For shared libraries we want to link C++ runtime library dynamically
