@@ -255,11 +255,11 @@ def _rust_binary_impl(ctx):
     return rustc_compile_action(
         ctx = ctx,
         toolchain = toolchain,
-        crate_type = "bin",
+        crate_type = ctx.attr.crate_type,
         crate_info = rust_common.crate_info(
             name = crate_name,
-            type = "bin",
-            root = crate_root_src(ctx.attr, ctx.files.srcs, crate_type = "bin"),
+            type = ctx.attr.crate_type,
+            root = crate_root_src(ctx.attr, ctx.files.srcs, ctx.attr.crate_type),
             srcs = depset(ctx.files.srcs),
             deps = depset(ctx.attr.deps),
             proc_macro_deps = depset(ctx.attr.proc_macro_deps),
@@ -793,6 +793,15 @@ rust_proc_macro = rule(
 )
 
 _rust_binary_attrs = {
+    "crate_type": attr.string(
+        doc = _tidy("""
+            Crate type that will be passed to `rustc` to be used for building this crate.
+
+            This option is a temporary workaround and should be used only when building
+            for WebAssembly targets (//rust/platform:wasi and //rust/platform:wasm).
+        """),
+        default = "bin",
+    ),
     "linker_script": attr.label(
         doc = _tidy("""
             Link script to forward into linker via rustc options.
