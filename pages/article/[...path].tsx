@@ -89,7 +89,7 @@ export default function Article(props: { ast: unist.Node, title: unist.Node, edi
             <div className={style.Article}>
                 <Render node={props.ast}/>
 
-                <Render node={props.title}/>{props.edits.length
+                &lsquo;<Render node={props.title}/>&rsquo;{props.edits.length
                     ? <> was written on <e.date date={new Date(edits[0])}><e.dateText
                         year="numeric"
                         month="long"

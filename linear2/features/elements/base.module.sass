@@ -10,6 +10,11 @@
     .linear &, &.linear
       @content
 
+@mixin elements($name...)
+  &, #{$name}
+    .linear &, &.linear
+      @content
+
 
   
 .blockelement
@@ -98,7 +103,7 @@ $red: color.scale(red, $saturation: -80%)
 
   +theme($c1, $c2, $c3, $c4, $figureFill: transparent, $figureStroke: $c2)
 
-
+@mixin block-level-element
 
 @mixin theme-cyberpunk
   $fgc: color.adjust(#bb5c5e, $lightness: -10%)
@@ -189,6 +194,7 @@ abbr.chemical
 @mixin indented-block
   margin: 1em 2em
 
+
 +element(li)
   margin-bottom: 1em
 
@@ -277,8 +283,17 @@ abbr.chemical
 
 // block level elements
 +element(article)
-  > p, > ul, > ol, > img
-    //margin: 0 0 1em 0
+
+
+
+
+// block level elements must only pad *between* themselves
++element(p, ul, li, img, figure, aside)
+  margin: 1em 0
+  &:first-child
+    margin-top: 0
+  &:last-child
+    margin-bottom: 0
 
 
 
