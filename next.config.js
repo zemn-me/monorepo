@@ -47,6 +47,28 @@ const cssMinifierPlugin = config => ({
     }
 });
 
+const ClosurePlugin = require('closure-webpack-plugin');
+
+const closureCompilerPlugin = config => ({
+    ...config,
+    webpack(wpcfg, ...a) {
+        wpcfg = {
+            ...wpcfg,
+            optimization: {
+                ...wpcfg.optimization,
+                minimizer: [
+                    ...wpcfg.optimization.minimizer,
+                    new ClosurePlugin({ mode: 'STANDARD' }, {
+
+                    })
+                ]
+            }
+        }
+        if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
+        return wpcfg;
+    }
+})
+
 
 
 const conv = new BaseConverter(ramp);
@@ -80,3 +102,4 @@ const base_config = {
 };
 
 module.exports = cssMinifierPlugin(base_config) //require('./linear2/features/mdx/next-plugin').plugin(base_config);
+module.exports = closureCompilerPlugin(module.exports);
