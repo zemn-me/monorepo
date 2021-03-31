@@ -15,7 +15,7 @@
 # buildifier: disable=module-docstring
 load("//rust/private:common.bzl", "rust_common")
 load("//rust/private:rustc.bzl", "rustc_compile_action")
-load("//rust/private:utils.bzl", "crate_name_from_attr", "determine_output_hash", "expand_locations", "find_toolchain", "name_to_crate_name")
+load("//rust/private:utils.bzl", "crate_name_from_attr", "determine_output_hash", "expand_locations", "find_toolchain")
 
 # TODO(marco): Separate each rule into its own file.
 
@@ -316,9 +316,9 @@ def _create_test_launcher(ctx, toolchain, output, providers):
     # This should be investigated but for now, we generally assume if the target environment is windows,
     # the execution environment is windows.
     if toolchain.os == "windows":
-        launcher = ctx.actions.declare_file(name_to_crate_name(ctx.label.name + ".launcher.exe"))
+        launcher = ctx.actions.declare_file(ctx.label.name + ".launcher.exe")
     else:
-        launcher = ctx.actions.declare_file(name_to_crate_name(ctx.label.name + ".launcher"))
+        launcher = ctx.actions.declare_file(ctx.label.name + ".launcher")
 
     # Because returned executables must be created from the same rule, the
     # launcher target is simply symlinked and exposed.
@@ -450,7 +450,7 @@ def _rust_test_impl(ctx):
     toolchain = find_toolchain(ctx)
 
     output = ctx.actions.declare_file(
-        name_to_crate_name(ctx.label.name) + toolchain.binary_ext,
+        ctx.label.name + toolchain.binary_ext,
     )
 
     return _rust_test_common(ctx, toolchain, output)
