@@ -189,6 +189,10 @@ def name_to_crate_name(name):
     This is a similar conversion as that which cargo does, taking a
     `Cargo.toml`'s `package.name` and canonicalizing it
 
+    Note that targets can specify the `crate_name` attribute to customize their
+    crate name; in situations where this is important, use the
+    crate_name_from_attr() function instead.
+
     Args:
         name (str): The name of the target.
 
@@ -196,3 +200,44 @@ def name_to_crate_name(name):
         str: The name of the crate for this target.
     """
     return name.replace("-", "_")
+
+def _invalid_chars_in_crate_name(name):
+    """Returns any invalid chars in the given crate name.
+
+    Args:
+        name (str): Name to test.
+
+    Returns:
+        list: List of invalid characters in the crate name.
+    """
+
+    return dict([(c, ()) for c in name.elems() if not (c.isalnum() or c == "_")]).keys()
+
+def crate_name_from_attr(attr):
+    """Returns the crate name to use for the current target.
+
+    Args:
+        attr (struct): The attributes of the current target.
+
+    Returns:
+        str: The crate name to use for this target.
+    """
+    if hasattr(attr, "crate_name") and attr.crate_name:
+        invalid_chars = _invalid_chars_in_crate_name(attr.crate_name)
+        if invalid_chars:
+            fail("Crate name '{}' contains invalid character(s): {}".format(
+                attr.crate_name,
+                " ".join(invalid_chars),
+            ))
+        return attr.crate_name
+
+    crate_name = name_to_crate_name(attr.name)
+    invalid_chars = _invalid_chars_in_crate_name(crate_name)
+    if invalid_chars:
+        fail(
+            "Crate name '{}' ".format(crate_name) +
+            "derived from Bazel target name '{}' ".format(attr.name) +
+            "contains invalid character(s): {}\n".format(" ".join(invalid_chars)) +
+            "Consider adding a crate_name attribute to set a valid crate name",
+        )
+    return crate_name

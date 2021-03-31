@@ -20,11 +20,11 @@ load(
 load("//rust/private:common.bzl", "rust_common")
 load(
     "//rust/private:utils.bzl",
+    "crate_name_from_attr",
     "expand_locations",
     "find_cc_toolchain",
     "get_lib_name",
     "get_preferred_artifact",
-    "name_to_crate_name",
     "relativize",
 )
 
@@ -73,8 +73,7 @@ def _get_rustc_env(attr, toolchain):
     return {
         "CARGO_CFG_TARGET_ARCH": toolchain.target_arch,
         "CARGO_CFG_TARGET_OS": toolchain.os,
-        # TODO(martinboehme): Respect a `crate_name` attribute if present.
-        "CARGO_CRATE_NAME": name_to_crate_name(attr.name),
+        "CARGO_CRATE_NAME": crate_name_from_attr(attr),
         "CARGO_PKG_AUTHORS": "",
         "CARGO_PKG_DESCRIPTION": "",
         "CARGO_PKG_HOMEPAGE": "",

@@ -30,6 +30,13 @@ rust_test(
     deps = [":cargo_build_script_env-vars_build_script"],
 )
 
+rust_test(
+    name = "cargo-env-vars-custom-crate-name-test",
+    crate_name = "custom_crate_name",
+    srcs = ["tests/custom_crate_name.rs"],
+    deps = [":cargo_build_script_env-vars_build_script"],
+)
+
 cargo_build_script(
     name = "cargo_build_script_env-vars_build_script",
     srcs = ["src/build.rs"],
