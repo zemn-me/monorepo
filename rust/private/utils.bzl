@@ -135,23 +135,6 @@ def get_preferred_artifact(library_to_link):
         library_to_link.dynamic_library
     )
 
-def rule_attrs(ctx, aspect):
-    """Gets a rule's attributes.
-
-    As per https://docs.bazel.build/versions/master/skylark/aspects.html when we're executing from an
-    aspect we need to get attributes of a rule differently to if we're not in an aspect.
-
-    Args:
-        ctx (ctx): A rule's context object
-        aspect (bool): Whether we're running in an aspect
-
-    Returns:
-        struct: A struct to access the values of the attributes for a
-            [rule_attributes](https://docs.bazel.build/versions/master/skylark/lib/rule_attributes.html#modules.rule_attributes)
-            object.
-    """
-    return ctx.rule.attr if aspect else ctx.attr
-
 def _expand_location(ctx, env, data):
     """A trivial helper for `_expand_locations`
 

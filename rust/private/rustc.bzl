@@ -26,7 +26,6 @@ load(
     "get_preferred_artifact",
     "name_to_crate_name",
     "relativize",
-    "rule_attrs",
 )
 
 BuildInfo = provider(
@@ -55,17 +54,17 @@ ErrorFormatInfo = provider(
     fields = {"error_format": "(string) [" + ", ".join(_error_format_values) + "]"},
 )
 
-def _get_rustc_env(ctx, toolchain):
+def _get_rustc_env(attr, toolchain):
     """Gathers rustc environment variables
 
     Args:
-        ctx (ctx): The current target's rule context object
+        attr (struct): The current target's attributes
         toolchain (rust_toolchain): The current target's rust toolchain context
 
     Returns:
         dict: Rustc environment variables
     """
-    version = ctx.attr.version if hasattr(ctx.attr, "version") else "0.0.0"
+    version = attr.version if hasattr(attr, "version") else "0.0.0"
     major, minor, patch = version.split(".", 2)
     if "-" in patch:
         patch, pre = patch.split("-", 1)
@@ -75,11 +74,11 @@ def _get_rustc_env(ctx, toolchain):
         "CARGO_CFG_TARGET_ARCH": toolchain.target_arch,
         "CARGO_CFG_TARGET_OS": toolchain.os,
         # TODO(martinboehme): Respect a `crate_name` attribute if present.
-        "CARGO_CRATE_NAME": name_to_crate_name(ctx.label.name),
+        "CARGO_CRATE_NAME": name_to_crate_name(attr.name),
         "CARGO_PKG_AUTHORS": "",
         "CARGO_PKG_DESCRIPTION": "",
         "CARGO_PKG_HOMEPAGE": "",
-        "CARGO_PKG_NAME": ctx.label.name,
+        "CARGO_PKG_NAME": attr.name,
         "CARGO_PKG_VERSION": version,
         "CARGO_PKG_VERSION_MAJOR": major,
         "CARGO_PKG_VERSION_MINOR": minor,
@@ -306,6 +305,7 @@ def collect_inputs(
 
 def construct_arguments(
         ctx,
+        attr,
         file,
         toolchain,
         tool_path,
@@ -320,12 +320,12 @@ def construct_arguments(
         build_env_files,
         build_flags_files,
         maker_path = None,
-        aspect = False,
         emit = ["dep-info", "link"]):
     """Builds an Args object containing common rustc flags
 
     Args:
         ctx (ctx): The rule's context object
+        attr (struct): The attributes for the target. These may be different from ctx.attr in an aspect context.
         file (struct): A struct containing files defined in label type attributes marked as `allow_single_file`.
         toolchain (rust_toolchain): The current target's `rust_toolchain`
         tool_path (str): Path to rustc
@@ -340,7 +340,6 @@ def construct_arguments(
         build_env_files (list): Files containing rustc environment variables, for instance from `cargo_build_script` actions.
         build_flags_files (list): The output files of a `cargo_build_script` actions containing rustc build flags
         maker_path (File): An optional clippy marker file
-        aspect (bool): True if called in an aspect context.
         emit (list): Values for the --emit flag to rustc.
 
     Returns:
@@ -352,7 +351,7 @@ def construct_arguments(
 
     linker_script = getattr(file, "linker_script") if hasattr(file, "linker_script") else None
 
-    env = _get_rustc_env(ctx, toolchain)
+    env = _get_rustc_env(attr, toolchain)
 
     # Wrapper args first
     args = ctx.actions.args()
@@ -411,8 +410,8 @@ def construct_arguments(
     args.add(crate_info.root)
     args.add("--crate-name=" + crate_info.name)
     args.add("--crate-type=" + crate_info.type)
-    if hasattr(ctx.attr, "_error_format"):
-        args.add("--error-format=" + ctx.attr._error_format[ErrorFormatInfo].error_format)
+    if hasattr(attr, "_error_format"):
+        args.add("--error-format=" + attr._error_format[ErrorFormatInfo].error_format)
 
     # Mangle symbols to disambiguate crates with the same name
     extra_filename = "-" + output_hash if output_hash else ""
@@ -431,8 +430,8 @@ def construct_arguments(
     args.add("--emit=" + ",".join(emit_with_paths))
     args.add("--color=always")
     args.add("--target=" + toolchain.target_triple)
-    if hasattr(ctx.attr, "crate_features"):
-        args.add_all(getattr(ctx.attr, "crate_features"), before_each = "--cfg", format_each = 'feature="%s"')
+    if hasattr(attr, "crate_features"):
+        args.add_all(getattr(attr, "crate_features"), before_each = "--cfg", format_each = 'feature="%s"')
     if linker_script:
         args.add(linker_script.path, format = "--codegen=link-arg=-T%s")
 
@@ -443,7 +442,7 @@ def construct_arguments(
     args.add_all(rust_lib_paths, before_each = "-L", format_each = "%s")
 
     args.add_all(rust_flags)
-    args.add_all(getattr(ctx.attr, "rustc_flags", []))
+    args.add_all(getattr(attr, "rustc_flags", []))
     add_edition_flags(args, crate_info)
 
     # Link!
@@ -467,7 +466,7 @@ def construct_arguments(
         args.add("proc_macro")
 
     # Make bin crate data deps available to tests.
-    for data in getattr(ctx.attr, "data", []):
+    for data in getattr(attr, "data", []):
         if rust_common.crate_info in data:
             dep_crate_info = data[rust_common.crate_info]
             if dep_crate_info.type == "bin":
@@ -477,8 +476,8 @@ def construct_arguments(
     env.update(expand_locations(
         ctx,
         crate_info.rustc_env,
-        getattr(rule_attrs(ctx, aspect), "data", []) +
-        getattr(rule_attrs(ctx, aspect), "compile_data", []),
+        getattr(attr, "data", []) +
+        getattr(attr, "compile_data", []),
     ))
 
     # This empty value satisfies Clippy, which otherwise complains about the
@@ -535,6 +534,7 @@ def rustc_compile_action(
 
     args, env = construct_arguments(
         ctx,
+        ctx.attr,
         ctx.file,
         toolchain,
         toolchain.rustc.path,
