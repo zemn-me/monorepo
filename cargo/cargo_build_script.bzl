@@ -111,6 +111,8 @@ def _build_script_impl(ctx):
         ar_executable = cc_toolchain.ar_executable
         if ar_executable:
             env["AR"] = ar_executable
+        if cc_toolchain.sysroot:
+            env["SYSROOT"] = cc_toolchain.sysroot
 
     for f in ctx.attr.crate_features:
         env["CARGO_FEATURE_" + f.upper().replace("-", "_")] = "1"
