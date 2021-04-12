@@ -316,9 +316,11 @@ def _create_test_launcher(ctx, toolchain, output, providers):
     # This should be investigated but for now, we generally assume if the target environment is windows,
     # the execution environment is windows.
     if toolchain.os == "windows":
-        launcher = ctx.actions.declare_file(ctx.label.name + ".launcher.exe")
+        launcher_filename = ctx.label.name + ".launcher.exe"
     else:
-        launcher = ctx.actions.declare_file(ctx.label.name + ".launcher")
+        launcher_filename = ctx.label.name + ".launcher"
+
+    launcher = ctx.actions.declare_file(launcher_filename)
 
     # Because returned executables must be created from the same rule, the
     # launcher target is simply symlinked and exposed.
@@ -332,7 +334,7 @@ def _create_test_launcher(ctx, toolchain, output, providers):
     data = getattr(ctx.attr, "data", [])
 
     # Expand the environment variables and write them to a file
-    environ_file = ctx.actions.declare_file(launcher.basename + ".launchfiles/env")
+    environ_file = ctx.actions.declare_file(launcher_filename + ".launchfiles/env")
     environ = expand_locations(
         ctx,
         getattr(ctx.attr, "env", {}),
@@ -1138,6 +1140,80 @@ rust_test_binary = rule(
         See `rust_test` for example usage.
         """),
 )
+
+def rust_test_suite(name, srcs, **kwargs):
+    """A rule for creating a test suite for a set of `rust_test` targets.
+
+    This rule can be used for setting up typical rust [integration tests][it]. Given the following
+    directory structure:
+
+    ```text
+    [crate]/
+        BUILD.bazel
+        src/
+            lib.rs
+            main.rs
+        tests/
+            integrated_test_a.rs
+            integrated_test_b.rs
+            integrated_test_c.rs
+            patterns/
+                fibonacci_test.rs
+    ```
+
+    The rule can be used to generate [rust_test](#rust_test) targets for each source file under `tests`
+    and a [test_suite][ts] which encapsulates all tests.
+
+    ```python
+    load("//rust:defs.bzl", "rust_binary", "rust_library", "rust_test_suite")
+
+    rust_library(
+        name = "math_lib",
+        srcs = ["src/lib.rs"],
+    )
+
+    rust_binary(
+        name = "math_bin",
+        srcs = ["src/main.rs"],
+    )
+
+    rust_test_suite(
+        name = "integrated_tests_suite",
+        srcs = glob(["tests/**"]),
+        deps = [":math_lib"],
+    )
+    ```
+
+    [it]: https://doc.rust-lang.org/rust-by-example/testing/integration_testing.html
+    [ts]: https://docs.bazel.build/versions/master/be/general.html#test_suite
+
+    Args:
+        name (str): The name of the `test_suite`.
+        srcs (list): All test sources, typically `glob(["tests/**/*.rs"])`.
+        **kwargs (dict): Additional keyword arguments for the underyling [rust_test](#rust_test) targets. The
+            `tags` argument is also passed to the generated `test_suite` target.
+    """
+    tests = []
+
+    for src in srcs:
+        if not src.endswith(".rs"):
+            fail("srcs should have `.rs` extensions")
+
+        # The test name should not end with `.rs`
+        test_name = src[:-3]
+        rust_test(
+            name = test_name,
+            crate_name = test_name.replace("/", "_"),
+            srcs = [src],
+            **kwargs
+        )
+        tests.append(test_name)
+
+    native.test_suite(
+        name = name,
+        tests = tests,
+        tags = kwargs.get("tags", None),
+    )
 
 rust_benchmark = rule(
     implementation = _rust_benchmark_impl,
