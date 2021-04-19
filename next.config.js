@@ -67,6 +67,28 @@ const closureCompilerPlugin = config => ({
         if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
         return wpcfg;
     }
+});
+
+const xdmPlugin = config => ({
+    ...config,
+    pageExtensions: [ ...config.pageExtensions ?? [], 'mdx' ],
+    webpack(wpcfg, options, ...a) {
+        wpcfg = {
+            ...wpcfg,
+            module: {
+                ...wpcfg.module,
+                rules: [
+                    ...wpcfg.module.rules,
+                    { test: /\.mdx$/, use: [
+                        {loader: 'xdm/webpack.cjs', options: {}}
+                    ] }
+                ]
+            }
+        }
+
+        if (config.webpack) wpcfg = config.webpack(wpcfg, options, ...a);
+        return wpcfg;
+    }
 })
 
 
@@ -83,6 +105,12 @@ const uniqueClass = (() => {
         return conv.convert(identsMap.get(key));
     }
 })()
+
+
+const productionOnly = plugin => {
+    if (process.env.NODE_ENV !== "production") return a => a;
+    return plugin;
+}
 
 const base_config = {
     generateBuildId: () => require('next-build-id')({
@@ -101,5 +129,6 @@ const base_config = {
   }
 };
 
-module.exports = cssMinifierPlugin(base_config) //require('./linear2/features/mdx/next-plugin').plugin(base_config);
-module.exports = closureCompilerPlugin(module.exports);
+module.exports = productionOnly(cssMinifierPlugin)(base_config) //require('./linear2/features/mdx/next-plugin').plugin(base_config);
+module.exports = productionOnly(closureCompilerPlugin)(module.exports);
+module.exports = xdmPlugin(module.exports);

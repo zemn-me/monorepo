@@ -1,3 +1,4 @@
+{/*
 ---
 layout: article
 title: When Security Generates Insecurity
@@ -8,68 +9,49 @@ tags:
  - writing
 language: en-GB
 ---
+*/}
+
+import { InShort } from 'article';
+
+
 
 WHEN SECURITY GENERATES INSECURITY  
 ==================================
+
+<InShort>
 Detecting login state for almost any website on the internet
 
+For those who don’t know, Content-Security-Policy or CSP is an attempt at mitigating Cross Site Scripting (XSS) attacks which are generally what you aim for when you manipulate a web endpoint – a web page – such that you can inject your own client-side code.
+</InShort>
 
-For those who don’t know, Content-Security-Policy or CSP is an attempt at
-mitigating Cross Site Scripting (XSS) attacks which are generally what you aim
-for when you manipulate a web endpoint – a web page – such that you can inject
-your own client-side code.
+It’s problematic because an unrestricted XSS attacker operates from the trust level of the website the injection was made in, allowing access to user sessions and details; anything the user can access or manipulate the attacker can. 
 
-It’s problematic because an unrestricted XSS attacker operates from the trust
-level of the website the injection was made in, allowing access to user sessions
-and details; anything the user can access or manipulate the attacker can.
-
-With the popularity of content-unaware templating systems such as PHP's built in
-system, security often becomes clumsy to implement, where a programmer would
-like to write (though EOD is more often used over single quotes in this case)
-`<?php echo "<a href=\"$link\">$name</a>"; ?>` for a menu of theirs they
-immediately introduce such exploits if the content of the used variables is not
-already sanitised.
+With the popularity of content-unaware templating systems such as PHP's built in system, security often becomes clumsy to implement, where a programmer would like to write (though EOD is more often used over single quotes in this case) `<?php echo "<a href=\"$link\">$name</a>"; ?>` for a menu of theirs they immediately introduce such exploits if the content of the used variables is not already sanitised.
 
 
-Who is the browser working for? {#who_is_the_browser_working_for}
+
+Who is the browser working for?
 -------------------------------
 
 
-Content-Security-Policy headers take the form of a semicolon separated list of
-statements each describing one aspect of the policy. Each of these statements
-may have several comma separated statements that describe what resources to
-allow. For example, the CSP `Content-Security-Policy: default-src 'self'
-*.google.com; image-src *.akamaihd.net` only allows resources from this origin,
-and images only from some sub-domain of ‘akamaihd.net’.
+Content-Security-Policy headers take the form of a semicolon separated list of statements each describing one aspect of the policy. Each of these statements may have several comma separated statements that describe what resources to allow. For example, the CSP `Content-Security-Policy: default-src 'self' *.google.com; image-src *.akamaihd.net` only allows resources from this origin, and images only from some sub-domain of ‘akamaihd.net’. 
 
-There are additional directives for some other useful features such as
-sandboxing certain features of the web page, but most interestingly a
-`report-uri` directive for specifying a place to send breaches of the policy to.
+There are additional directives for some other useful features such as sandboxing certain features of the web page, but most interestingly a `report-uri` directive for specifying a place to send breaches of the policy to. 
 
 The `report-uri` feature intrigued me, it’s uncharacteristic of such technologies to report back information on what the user navigated to because it leaks information about the user's browsing habits.
 
 
-Detecting a login {#detecting_a_login}
+
+Detecting a login
 -----------------
 
 
-Interest piqued by the `report-uri` feature, I looked into abusing it to glean
-information about user state, my idea was this: when a user is *not* logged into
-Google Calendar, accessing [calendar.google.com] redirects them to
-[accounts.google.com] via a Location header. If I whitelisted
-‘calendar.google.com’ but not ‘accounts.google.com’, accessing that resource
-within my web page would break CSP, subsequently sending me a message telling me
-whether they were logged into Google.
+Interest piqued by the `report-uri` feature, I looked into abusing it to glean information about user state, my idea was this: when a user is *not* logged into Google Calendar, accessing [calendar.google.com] redirects them to [accounts.google.com] via a Location header. If I whitelisted ‘calendar.google.com’ but not ‘accounts.google.com’, accessing that resource within my web page would break CSP, subsequently sending me a message telling me whether they were logged into Google.
 
-[calendar.google.com]: //calendar.google.com "Google Calendar"
-[accounts.google.com]: //calendar.google.com "Google Accounts"
+[calendar.google.com]: https://calendar.google.com "Google Calendar"
+[accounts.google.com]: https://calendar.google.com "Google Accounts"
 
-The implementation was like this: I had a single image on the page `<img
-src="http://calendar.google.com"/>`, and I sent the Content-Security-Policy
-header `Content-Security-Policy: image-src calendar.google.com`. The test was a
-success, I was able to detect login on Google. The same extended to Facebook;
-`apps.facebook.com` would redirect to `www.facebook.com` *only* if the user was
-logged in.
+The implementation was like this: I had a single image on the page `<img src="http://calendar.google.com"/>`, and I sent the Content-Security-Policy header `Content-Security-Policy: image-src calendar.google.com`. The test was a success, I was able to detect login on Google. The same extended to Facebook; `apps.facebook.com` would redirect to `www.facebook.com` *only* if the user was logged in. 
 
 I also looked into detecting the current logged in Facebook user by loading a
 page that would redirect to their user page on a domain that was not
@@ -80,7 +62,7 @@ something I didn't want on the internet, so I did the only thing I could think
 of doing: reporting the exploits in Google and Facebook to Google and Facebook.
 
 
-Communing with the Spirits {#communing_with_the_spirits}
+Communing with the Spirits
 --------------------------
 
 
@@ -96,7 +78,7 @@ After some time, Google replied and told me that an internal discussion had been
 had concerning the exploit and that nothing would be done about it.
 
 
-Detecting who is Logged in {#detecting_who_is_logged_in}
+Detecting who is Logged in
 --------------------------
 
 
@@ -107,7 +89,7 @@ CSP was reported back to my server. I concluded that if a web service would
 redirect to a (sub)domain that indicates something secret about the user, it
 would be a serious exploit.
 
-What I expected to find was an endpoint such as ‘/me’ that you commonly find on
+What I expected to find was an endpoint such as '/me' that you commonly find on
 services hosting user generated content that would refer to a sub-domain owned
 by that user, for example ‘zemnmez.github.io’. In my search I found nothing on a
 Google domain, but I read further into the definition of CSP directives and
@@ -122,17 +104,20 @@ specific admin panels – whether the user does or does not have super user
 privileges to something on the site in the literal sense.
 
 
-Detecting Barack Obama {#detecting_barack_obama}
+Detecting Barack Obama
 ----------------------
 
 
 Obviously, being in the position the eminent President of the United States is,
 I doubt he is logged in personally to Facebook all of the time, but many people
 are. Similar exploits to this apply to every website I tested that you could
-reasonably expect to have logins. By using CSP to whitelist <https://facebook.com/me>
-and <https://facebook.com/barackobama> and embedding ‘http://facebook.com/me’ as an
+reasonably expect to have logins. By using CSP to whitelist [https://facebook.com/me]
+and [https://facebook.com/barackobama] and embedding 'http://facebook.com/me' as an
 image, I can conditionally create a CSP report only if the current user on
 Facebook is not Barack Obama.
+
+[https://facebook.com/me]: https://facebook.com/me
+[https://facebook.com/barackobama: https://facebook.com/barackobama
 
 This proved to be a success (in detecting myself, rather than Barack Obama, I
 didn’t have him on board to test this) which made me much more worried about the
@@ -155,7 +140,7 @@ concerning disclosure of current login on Google Plus.
 [internet bug bounty]: https://hackerone.com/internet
 
 
-Closure {#closure}
+Closure
 -------
 
 Facebook wrote back to me and said that it was an interesting exploit, asking if
@@ -180,7 +165,7 @@ up would be a good idea. The internet bug bounty program has not replied.
 [W3C Mailing List: Remove Paths From CSP?]: https://archive.is/o/UXD8j/lists.w3.org/Archives/Public/public-webappsec/2014Feb/0036.html
 
 
-Closing Remarks {#closing remarks}
+Closing Remarks
 ---------------
 
 This exploit allows in essence the ability to glean the result of a conditional
@@ -194,5 +179,3 @@ The only way to prevent it is, as far as I know not to use ‘Location’ based 
 *Zemnmez*
 
 Monday 7 July 2014
-
-
