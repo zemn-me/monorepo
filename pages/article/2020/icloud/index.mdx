@@ -1,23 +1,22 @@
+import { Head } from 'next/head';
 
-<head>
+<Head>
     <meta name="tags" content="security, disclosure, writing"/>
     <meta name="date" content="13 aug 2020"/>
     <meta name="author" content="Thomas Neil James Shadwell"/>
-</head>
+</Head>
 
 How To Hack Apple ID
 ====================
 
-<Description>Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.</Description>
+{/*<Description>Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.</Description>*/}
 
-<!--
 <video style={{
     borderRadius: "2rem",
     width: "50%",
     float: "right",
     margin: "2rem"
 }} autoPlay loop muted src={require('./exploit_mobile.mp4')}/>
--->
 
 **Index by Vulnerability**
 
@@ -474,8 +473,6 @@ will notice two things: (1) the `frame-ancestors` directive is correctly sent as
 most overengineered embed is a big, slightly off-white box.
 
 It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
-
-
 
 
 ### A Big, Slightly Off-White Box {#off_white_box}
@@ -1811,7 +1808,7 @@ PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
 
 
 
-<!--
+{/*
 [^3]:
     Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
 
@@ -1874,7 +1871,7 @@ PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
     > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
     > 
     > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
--->
+*/}
 
 [Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
 [Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536

@@ -1,5 +1,18 @@
 
 
+/**
+ * Adapts plugins that just operate on an input object
+ * to the function form.
+ */
+const simplePlugin = plugin => 
+    // prev plugin, and arbitrary args
+    (lastPlugin, ...a) =>
+    // plugin function form
+    (...pluginParams) =>
+        // pass the result of the last plugin to our plugin
+        plugin(lastPlugin(...pluginParams), ...a);
+
+
 const ramp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
 class BaseConverter {
     constructor(ramp) { this.ramp = ramp }
@@ -21,7 +34,7 @@ class BaseConverter {
     }
 }
 
-const cssMinifierPlugin = config => ({
+const cssMinifierPlugin = simplePlugin(config => ({
     ...config,
     webpack(wpcfg, ...a) {
 		wpcfg.module.rules[1].oneOf.forEach((moduleLoader, i) => {
@@ -45,11 +58,11 @@ const cssMinifierPlugin = config => ({
         if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
         return wpcfg;
     }
-});
+}));
 
 const ClosurePlugin = require('closure-webpack-plugin');
 
-const closureCompilerPlugin = config => ({
+const closureCompilerPlugin = simplePlugin(config => ({
     ...config,
     webpack(wpcfg, ...a) {
         wpcfg = {
@@ -67,11 +80,11 @@ const closureCompilerPlugin = config => ({
         if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
         return wpcfg;
     }
-});
+}));
 
-const xdmPlugin = config => ({
+const xdmPlugin = simplePlugin(config => ({
     ...config,
-    pageExtensions: [ ...config.pageExtensions ?? [], 'mdx' ],
+    pageExtensions: [ ...config.pageExtensions || [], 'mdx' ],
     webpack(wpcfg, options, ...a) {
         wpcfg = {
             ...wpcfg,
@@ -89,7 +102,7 @@ const xdmPlugin = config => ({
         if (config.webpack) wpcfg = config.webpack(wpcfg, options, ...a);
         return wpcfg;
     }
-})
+}));
 
 
 
@@ -106,18 +119,21 @@ const uniqueClass = (() => {
     }
 })()
 
+const identityPlugin = simplePlugin(a => a);
 
 const productionOnly = plugin => {
-    if (process.env.NODE_ENV !== "production") return a => a;
+    if (process.env.NODE_ENV !== "production") return identityPlugin;
     return plugin;
 }
 
-const base_config = {
+const baseConfig = simplePlugin( config => ({
+    ...config,
     generateBuildId: () => require('next-build-id')({
         dir: __dirname,
         describe: true
     }),
-  webpack: (config, { isServer }) => {
+  webpack: (config, options, ...a) => {
+    const { isServer } = options;
     // Fixes npm packages that depend on `fs` module
     if (!isServer) {
       config.node = {
@@ -125,10 +141,13 @@ const base_config = {
       }
     }
 
+    if (config.webpack) wpcfg = config.webpack(config, options, ...a);
     return config
   }
-};
+}));
 
-module.exports = productionOnly(cssMinifierPlugin)(base_config) //require('./linear2/features/mdx/next-plugin').plugin(base_config);
+module.exports = (phase, { defaultConfig }) => defaultConfig;
+module.exports = baseConfig(module.exports);
+module.exports = productionOnly(cssMinifierPlugin)(module.exports);
 module.exports = productionOnly(closureCompilerPlugin)(module.exports);
 module.exports = xdmPlugin(module.exports);

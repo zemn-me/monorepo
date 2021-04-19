@@ -1,4 +1,10 @@
+import Link from 'next/Link';
+
 # Test
+
+## Transitions
+
+<Link href="test/transition"><a>transition!</a></Link>
 
 ## Lists
 
@@ -66,10 +72,10 @@ https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251
 
 ## Tables
 
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the sec ond column
+| First Header | Second Header |
+| ------------ | ------------- |
+| Content from cell 1 | Content from cell 2 |
+| Content in the first column | Content in the second column |
 
 ## Formatting
 
@@ -126,9 +132,11 @@ eat freef(tm)
 
 5 +- 1
 
+{/*
 2 << 100
 
 999 >> 5
+*/}
 
 ## Image Captions
 
@@ -148,32 +156,12 @@ a
 
 ## Smoke tests
 
-### Weird list Bug
-
-In security, you ususally think about this kind of thing in terms of the 'attack surface'. Software systems can be thought of as a series of fuzzy boundaries. As an attacker in the web, we should enumerate the ways we can affect the AppleID dialog code:
-
-
-1. We can try to send the victim to a special URL on `icloud.com` and hope that it affects the login dialog. If the `redirect_uri` is derived from the location, we might be able to add extra stuff to the url that might be misinterpreted.
-
-2. We can try to embed the AppleID login dialog, but doing so requires:
-
-    1. Bypassing the `frame-ancestors` directive somehow (`redirect_uri` injection?)
-
-    2. Some other sink on the embed frame itself. TBD.
-
-3. We could try attacking the the `postMessage` mechanism the embed uses to communicate with its parent. If it doesn't sufficiently verify the communication to its parent, we could impersonate it and affect its internal state.
-
-#### header
-
-q
-
 
 ## Garamond Features
 
 https://sparanoid.com/lab/opentype-features/#case
 
 ### Dingbats
-
 
 ☞
 
@@ -193,6 +181,8 @@ Qy Th ch ck ct ffb ffj ffh ffi ffj ffk ffl fft fb ff fh fj fk ft
 #### hlig
 
 ffb ffh ffi ffj ffk ffl 
+
+{/*
 
 #### ss02
 
@@ -214,6 +204,7 @@ There are many chemicals known to make you die if you drink them, such as <chem 
 </a>
 </figure>
 
+*/}
 
 
 [^2]: https://www.youtube.com/watch?v=77nYiyLItUE
