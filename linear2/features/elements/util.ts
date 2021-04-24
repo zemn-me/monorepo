@@ -32,7 +32,7 @@ export const uniq: <T>(v: Iterable<T>) => Iterable<T> = function* uniq<T>(
 export const classes: (
 	...classes: (string | undefined)[]
 ) =>
-	| {}
+	| { className: undefined }
 	| {
 			className: string
 	  } = (...classes) => {
@@ -58,6 +58,6 @@ export type PropsOf<
 export const prettyAnchor = (s: string | undefined) => s?.replace(/ /g, '_')
 
 export const fromEntries: <K extends string | symbol | number, V>(
-	...v: [K, V][]
+	...v: readonly (readonly [K, V])[]
 ) => Record<K, V> = (...v) =>
 	v.reduce((p, [k, v]) => ((p[k] = v), p), {} as any)
