@@ -1,5 +1,5 @@
-import * as time from './time';
-import * as iter from './iter';
-import * as lang from './lang';
+import * as time from './time'
+import * as iter from './iter'
+import * as lang from './lang'
 
-export { time, lang, iter };
+export { time, lang, iter }

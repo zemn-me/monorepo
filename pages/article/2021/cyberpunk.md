@@ -2,17 +2,17 @@
 
 The first thing about Cyberpunk 2077 that outsiders to the games industry must understand is who the developers, CD Projekt Red are.
 
-CD Projekt Red is a Polish games developer who are pretty exclusively famous for their *Witcher* series, a series of role-playing games based on the Polish fantasy novel series *Wiedźmin* by Andrzej Sapkowski. These games are, without exeception, critically acclaimed. The most recent of the Witcher series, Witcher 3: The Wild Hunt is considered one of the best games of all time.
+CD Projekt Red is a Polish games developer who are pretty exclusively famous for their _Witcher_ series, a series of role-playing games based on the Polish fantasy novel series _Wiedźmin_ by Andrzej Sapkowski. These games are, without exeception, critically acclaimed. The most recent of the Witcher series, Witcher 3: The Wild Hunt is considered one of the best games of all time.
 
-Two years prior to the release of Witcher 3, CD Projekt Red released a teaser trailer for a game with a completely new setting, totally different from Witcher. The game would be called *Cyberpunk 2077* and be set in a futuristic dystopia. It was understandable, then that expectations were extremely high for Cyberpunk.
+Two years prior to the release of Witcher 3, CD Projekt Red released a teaser trailer for a game with a completely new setting, totally different from Witcher. The game would be called _Cyberpunk 2077_ and be set in a futuristic dystopia. It was understandable, then that expectations were extremely high for Cyberpunk.
 
-While there have been several game series set in the Cyberpunk genre as a whole -- perhaps most notably, the Deus Ex franchise -- none really attempted the open-world RPG style Cyberpunk 2077 was going for. CDPR brought on one *Mike Pondsmith*, who developed the Cyberpunk tabletop role-playing game franchise to advise on the development of this future game. Notably, the second edition of the Cyberpunk TTRPG was called *Cyberpunk 2020*, which is an interesting coincidence considering the 2020 real world release date of Cyberpunk 2077.
+While there have been several game series set in the Cyberpunk genre as a whole -- perhaps most notably, the Deus Ex franchise -- none really attempted the open-world RPG style Cyberpunk 2077 was going for. CDPR brought on one _Mike Pondsmith_, who developed the Cyberpunk tabletop role-playing game franchise to advise on the development of this future game. Notably, the second edition of the Cyberpunk TTRPG was called _Cyberpunk 2020_, which is an interesting coincidence considering the 2020 real world release date of Cyberpunk 2077.
 
-Fans expected a certian kind of gameplay, considering the type of game that CDPR usually produces: beautiful, open-ended games with deep story character interaction, and simple but engaging combat mechanics. Most games, you see, you kind of either win, or lose -- but some games, like Witcher, and in a similar novel adaptation vein, *Metro* allow for more complex game outcomes based on sometimes even subtle actions taken by the player.
+Fans expected a certian kind of gameplay, considering the type of game that CDPR usually produces: beautiful, open-ended games with deep story character interaction, and simple but engaging combat mechanics. Most games, you see, you kind of either win, or lose -- but some games, like Witcher, and in a similar novel adaptation vein, _Metro_ allow for more complex game outcomes based on sometimes even subtle actions taken by the player.
 
 ### A CDPR Case Study: The Whispering Hillock
 
-In Witcher 3, baron named Phillip Strenger, who has established himself as the lord of the local barony whose *de jure* holder fled the province as it became the battleground for warring kingdoms.
+In Witcher 3, baron named Phillip Strenger, who has established himself as the lord of the local barony whose _de jure_ holder fled the province as it became the battleground for warring kingdoms.
 
 Philip is a respected soldier and a deeply troubled man. He fought to defend his homeland, but the war was lost and he became dependent on drink to deal with the trauma. Geralt, the player character visits the baron's stronghold as part of the overarching series of main quests.
 
@@ -34,10 +34,9 @@ If the player does not cut a deal with the spirit, the player needs to remove fr
 
 (2) If the player chooses wrong, the mother bursts into flames and dies. The baron, wracked with guilt and grief takes his own life and the province becomes even more lawless and deprived as the baron's men fight over power.
 
-(3) If the player chooses right, the mother is returned to her normal self, but will soon die as her life is tied to the curse. Philip apologises but ultimately hangs himself as his wife passes away, and the province again descends into chaos. 
+(3) If the player chooses right, the mother is returned to her normal self, but will soon die as her life is tied to the curse. Philip apologises but ultimately hangs himself as his wife passes away, and the province again descends into chaos.
 
-With either of those last two choices, the local village survives, but is left to fend for what little it has left without the witches unholy influence. The orphans *do* escape this time, and manage to eke out a somewhat normal life with their previously enthralled caretaker.
-
+With either of those last two choices, the local village survives, but is left to fend for what little it has left without the witches unholy influence. The orphans _do_ escape this time, and manage to eke out a somewhat normal life with their previously enthralled caretaker.
 
 ## Part 1: The Setting
 
@@ -50,6 +49,3 @@ x
 ## Part 3: The Ending
 
 x
-
-
-

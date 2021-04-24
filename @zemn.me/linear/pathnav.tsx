@@ -1,72 +1,74 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import React from 'react';
-import style from './pathnav.module.sass';
-import { Div, Span, A } from '@zemn.me/linear';
-import { routes, routeTrie, Trie } from '@zemn.me/linear/env';
-import next from 'next';
-import { timingSafeEqual } from 'crypto';
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import React from 'react'
+import style from './pathnav.module.sass'
+import { Div, Span, A } from '@zemn.me/linear'
+import { routes, routeTrie, Trie } from '@zemn.me/linear/env'
+import next from 'next'
+import { timingSafeEqual } from 'crypto'
 
-export const PathNav:
-    () => React.ReactElement
-=
-    () => {
-        const router = useRouter();
+export const PathNav: () => React.ReactElement = () => {
+	const router = useRouter()
 
-        return <>
-            <DisplayRoute {...{
-                pathname: router.pathname.split("/"),
-                asPath: router.asPath.split("/"),
-                routes: routes.map(route =>  route.split("/"))
-            }}/>
-        </>
-    }
-;
+	return (
+		<>
+			<DisplayRoute
+				{...{
+					pathname: router.pathname.split('/'),
+					asPath: router.asPath.split('/'),
+					routes: routes.map((route) => route.split('/')),
+				}}
+			/>
+		</>
+	)
+}
 
-const flatPath:
-    (path: readonly string[]) => string
-=
-    p => (p.length == 1? ["", ...p]: p).join("/")
-;
+const flatPath: (path: readonly string[]) => string = (p) =>
+	(p.length == 1 ? ['', ...p] : p).join('/')
+const DisplayRoute: (props: {
+	pathname: readonly string[]
+	asPath: readonly string[]
+	depth?: number
+}) => React.ReactElement = ({ pathname, asPath, depth = 0 }) => {
+	const path = {
+		name: {
+			head: pathname.slice(0, depth),
+			part: pathname[depth],
+		},
 
-const DisplayRoute:
-    (props: {
-        pathname: readonly string[],
-        asPath: readonly string[],
-        depth?: number
-    }) => React.ReactElement
-=
-    ({ pathname, asPath, depth = 0 }) => {
+		asPath: {
+			tail: asPath.slice(depth),
+			part: asPath[depth],
+		},
+	} as const
 
-        const path = {
-            name: {
-                head: pathname.slice(0, depth),
-                part: pathname[depth]
-            },
+	const displayName = path.asPath.part == '' ? 'home' : path.asPath.part
 
-            asPath: {
-                tail: asPath.slice(depth),
-                part: asPath[depth]
-            }
-        } as const
+	const a = <a>{displayName}</a>
 
-        const displayName = path.asPath.part == ""? "home": path.asPath.part;
-
-
-        const a = <a>{displayName}</a>;
-
-        return <>
-            {depth < pathname.length-1
-                ? <Link href={flatPath(pathname.slice(0, depth+1))}
-                    as={flatPath(asPath.slice(0, depth+1))}>{a}</Link>
-                : a
-            }
-            {depth < pathname.length-1? <>
-                {">"}
-                <DisplayRoute {...{
-                    pathname, asPath, depth: depth+1, 
-                }}/>
-            </>: null}
-        </>
-    }
-;
+	return (
+		<>
+			{depth < pathname.length - 1 ? (
+				<Link
+					href={flatPath(pathname.slice(0, depth + 1))}
+					as={flatPath(asPath.slice(0, depth + 1))}>
+					{a}
+				</Link>
+			) : (
+				a
+			)}
+			{depth < pathname.length - 1 ? (
+				<>
+					{'>'}
+					<DisplayRoute
+						{...{
+							pathname,
+							asPath,
+							depth: depth + 1,
+						}}
+					/>
+				</>
+			) : null}
+		</>
+	)
+}

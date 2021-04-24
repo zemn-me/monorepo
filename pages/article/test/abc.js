@@ -1,3 +1,3 @@
 export default function Main() {
-    return "Ok!"
+	return 'Ok!'
 }

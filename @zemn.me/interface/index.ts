@@ -1,15 +1,15 @@
-import { Text } from '@zemn.me/lang';
+import { Text } from '@zemn.me/lang'
 
-export type { Text as Text };
+export type { Text as Text }
 
 export interface Since {
-    since: Date
+	since: Date
 }
 
 export interface Dated {
-    date: Date
+	date: Date
 }
 
 export interface Described {
-    description: Text
+	description: Text
 }

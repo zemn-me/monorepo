@@ -1,4 +1,25 @@
-export default 1;
+export default 1 /*
+        const d = Math.sqrt(width ** 2 + height ** 2);
+        const scale = width / d;
+        const diff = (width -(scale * width)) /2;
+        return {
+            transform:
+                `translate(${diff} ${diff}) scale(${scale}) ` +
+                `rotate(-45, ${width/2}, ${height/2})`
+        }
+    }
+;
+
+const self = {
+    path: Path,
+    size: size,
+    props
+}
+
+export const scaled = Scale(self, 'bigSquare', 'gap', 'smallSquare');
+
+export default self;
+*/
 /*
 import { Scale } from 'linear/component/art/scale';
 
@@ -84,25 +105,4 @@ export const props:
          * a^2/|b^2
          *  -c^2
          * d^2 = w^2 + h^2
-         *//*
-        const d = Math.sqrt(width ** 2 + height ** 2);
-        const scale = width / d;
-        const diff = (width -(scale * width)) /2;
-        return {
-            transform:
-                `translate(${diff} ${diff}) scale(${scale}) ` +
-                `rotate(-45, ${width/2}, ${height/2})`
-        }
-    }
-;
-
-const self = {
-    path: Path,
-    size: size,
-    props
-}
-
-export const scaled = Scale(self, 'bigSquare', 'gap', 'smallSquare');
-
-export default self;
-*/
+         */

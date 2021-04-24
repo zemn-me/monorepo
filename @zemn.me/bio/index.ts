@@ -1,1 +1,1 @@
-export * from './bio';
+export * from './bio'

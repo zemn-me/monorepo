@@ -1,35 +1,33 @@
-import React from 'react';
+import React from 'react'
 
 export enum RenderMode {
-    Long,
-    Short
+	Long,
+	Short,
 }
 
-export const RenderModeContext = React.createContext<RenderMode>(RenderMode.Long);
+export const RenderModeContext = React.createContext<RenderMode>(
+	RenderMode.Long,
+)
 
 export interface Article {
-    short?: boolean
+	short?: boolean
 }
 
 export const Article: React.FC<{
-    short?: boolean   
-}> = ({short, children}) => {
-    return <RenderModeContext.Provider value={
-        short?RenderMode.Short: RenderMode.Long
-    }>
-        {React.Children.map((child: React.ReactElement) => {
-            
-        }}
-    </RenderModeContext.Provider>
+	short?: boolean
+}> = ({ short, children }) => {
+	return (
+		<RenderModeContext.Provider
+			value={short ? RenderMode.Short : RenderMode.Long}>
+			{children}
+		</RenderModeContext.Provider>
+	)
 }
 
-
-export const Title: React.FC = ({ children }) => <>{children}</>;
+export const Title: React.FC = ({ children }) => <>{children}</>
 
 /**
  * When Article is rendered in 'short' mode, it is rendered
  * only with Blurb and title.
  */
-export function Blurb() {
-    
-}
+export function Blurb() {}

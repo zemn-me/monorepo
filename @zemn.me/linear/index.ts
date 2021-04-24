@@ -1,3 +1,2 @@
-
-export * from './elements';
-export * from './classes';
+export * from './elements'
+export * from './classes'

@@ -1,10 +1,11 @@
-
-
-const cmp = () => <div style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr"
-}}>
-    <code><pre>{`
+const cmp = () => (
+	<div
+		style={{
+			display: 'grid',
+			gridTemplateColumns: '1fr 1fr',
+		}}>
+		<code>
+			<pre>{`
 window.addEventListener("message", e => {
     console.log("RCV", e);
 
@@ -13,7 +14,12 @@ window.addEventListener("message", e => {
     // is ... not entirely kosher but it works for our
     // purposes.
     if (e.data == "ready") return nullPage.postMessage(config, "*");
-`}</pre></code> <div><p>Hello!</p></div>
-</div>
+`}</pre>
+		</code>{' '}
+		<div>
+			<p>Hello!</p>
+		</div>
+	</div>
+)
 
-export default cmp;
+export default cmp

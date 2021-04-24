@@ -1,6 +1,4 @@
-import React from 'react';
-
-
+import React from 'react'
 
 /**
  * Include an element *only* if it has properties, otherwise,
@@ -8,7 +6,7 @@ import React from 'react';
  * child are included on render, but not counted as far as Void
  * is concerned. If a property is set to 'undefined', it is assumed
  * to be unset.
- * 
+ *
  * @example
  * // this evaluates to just 'hello world!'
  * <Void>
@@ -31,15 +29,19 @@ import React from 'react';
  *  <span className="ok">hello world!</span>
  * </Void>
  */
-export const Void:
-    <T>(props: T & { children: React.ReactElement<T & { children?: React.ReactElement}> } ) => React.ReactElement | null
-=
-    ({ children, ...props }) => {
-        if (Object.values(props).filter(<T extends any>(v: T | undefined): v is T => v != undefined)
-            .length == 0) return children.props.children ?? null;
+export const Void: <T>(
+	props: T & {
+		children: React.ReactElement<T & { children?: React.ReactElement }>
+	},
+) => React.ReactElement | null = ({ children, ...props }) => {
+	if (
+		Object.values(props).filter(
+			<T extends any>(v: T | undefined): v is T => v != undefined,
+		).length == 0
+	)
+		return children.props.children ?? null
 
-        return React.cloneElement(children, {...children.props, ...props });
-    }
-;
+	return React.cloneElement(children, { ...children.props, ...props })
+}
 
-export default Void;
+export default Void

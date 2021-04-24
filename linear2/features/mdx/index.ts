@@ -1,3 +1,3 @@
-import * as util from './util';
+import * as util from './util'
 
-export { util };
+export { util }

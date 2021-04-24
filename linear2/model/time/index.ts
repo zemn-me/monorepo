@@ -1,4 +1,3 @@
-import * as date from './date';
+import * as date from './date'
 
 export { date }
-

@@ -1,20 +1,18 @@
-import React from 'react';
-import { useRouter } from 'next/router';
+import React from 'react'
+import { useRouter } from 'next/router'
 
 export interface ErrorProps {
-    code?: number | string
+	code?: number | string
 }
 
-const E:
-    (props: ErrorProps) => React.ReactElement
-= ({ code: queryCode }) => {
-    const router = useRouter();
-    const code = queryCode ?? router.query.code;
-    if (!code) return <E code="404"/>
+const E: (props: ErrorProps) => React.ReactElement = ({ code: queryCode }) => {
+	const router = useRouter()
+	const code = queryCode ?? router.query.code
+	if (!code) return <E code="404" />
 
-    if (code instanceof Array) return <E code="500"/>
+	if (code instanceof Array) return <E code="500" />
 
-    return <>{code}</>
+	return <>{code}</>
 }
 
-export default E;
+export default E

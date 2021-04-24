@@ -1,1 +1,1 @@
-export * from './headingsAndSections';
+export * from './headingsAndSections'

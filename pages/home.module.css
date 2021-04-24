@@ -1,84 +1,82 @@
 .home {
-    --navbar-height: 8vh;
-    display: grid;
-    grid: 
+	--navbar-height: 8vh;
+	display: grid;
+	grid: 
         /*"v v v" var(--navbar-height)*/
-        ". . ." 1rem
-        ". h ." auto
-        ". . ." 1rem
-        ". n ." auto
-        ". . ." 1rem
-        ". l ." auto
-        ". . ." 3rem
-        "t t t" minmax(100vh, min-content)
-        ". . ." 10rem / 1fr 3fr 1fr;
-    
+		'. . .' 1rem
+		'. h .' auto
+		'. . .' 1rem
+		'. n .' auto
+		'. . .' 1rem
+		'. l .' auto
+		'. . .' 3rem
+		't t t' minmax(100vh, min-content)
+		'. . .' 10rem / 1fr 3fr 1fr;
 }
 
 .navBar {
-    grid-area: v;
-    display: grid;
-    --s: 10%;
-    grid: 
-        ". . ." var(--s)
-        ". e ." 1fr
-        ". . ." var(--s)  / 1fr 30vw 1fr;
-    top: 0;
+	grid-area: v;
+	display: grid;
+	--s: 10%;
+	grid:
+		'. . .' var(--s)
+		'. e .' 1fr
+		'. . .' var(--s) / 1fr 30vw 1fr;
+	top: 0;
 }
 
 .links {
-    grid-area: l;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    text-align: center
+	grid-area: l;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	text-align: center;
 }
 
 .links > * {
-    margin: 0 .5em;
+	margin: 0 0.5em;
 }
 
-
 .eyeContainer {
-    grid-area: e;
-    top: 0;
-    display: grid;
-    width: 100%;
-    height: 100%;
+	grid-area: e;
+	top: 0;
+	display: grid;
+	width: 100%;
+	height: 100%;
 }
 
 .eye {
-    margin: auto;
-    height: 100%;
-    width: 100%;
+	margin: auto;
+	height: 100%;
+	width: 100%;
 }
 
 .timeline {
-    grid-area: t;
-    font-size: 90%
+	grid-area: t;
+	font-size: 90%;
 }
 
 .header {
-    grid-area: h;
-    text-align: center
+	grid-area: h;
+	text-align: center;
 }
 
 .header > video {
-    grid-area: all;
-    z-index: 1;
+	grid-area: all;
+	z-index: 1;
 }
 
 .title {
-    z-index: 2;
-    grid-area: all;
-    padding: .2em;
-    margin: auto;
-    font-size:  3rem;
-    background-color: var(--bgc);
+	z-index: 2;
+	grid-area: all;
+	padding: 0.2em;
+	margin: auto;
+	font-size: 3rem;
+	background-color: var(--bgc);
 }
 
 .name {
-    text-transform: lowercase;
-    grid-area: n;
-    text-align: center;
+	text-transform: lowercase;
+	grid-area: n;
+	text-align: center;
 }

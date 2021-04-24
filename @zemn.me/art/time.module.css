@@ -1,15 +1,22 @@
-
 .sadIcon {
-  --sad-white: var(--figure-fill, white);
-  --sad-black: var(--figure-stroke, black);
+	--sad-white: var(--figure-fill, white);
+	--sad-black: var(--figure-stroke, black);
 
-  fill:none;
-  width: 100%;
-  height: 100%;
+	fill: none;
+	width: 100%;
+	height: 100%;
 }
 
-.sadIcon * { stroke: var(--sad-black) }
+.sadIcon * {
+	stroke: var(--sad-black);
+}
 
-.frustum { fill: var(--sad-white); }
-.tear { fill: var(--sad-white); }
-.pupil { fill: var(--sad-black); }
+.frustum {
+	fill: var(--sad-white);
+}
+.tear {
+	fill: var(--sad-white);
+}
+.pupil {
+	fill: var(--sad-black);
+}

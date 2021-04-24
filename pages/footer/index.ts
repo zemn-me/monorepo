@@ -1,2 +1,2 @@
-export * from './footer';
-export { default } from './footer';
+export * from './footer'
+export { default } from './footer'

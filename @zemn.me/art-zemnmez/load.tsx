@@ -44,4 +44,4 @@ export const Load:
 
 */
 
-export default 1;
+export default 1

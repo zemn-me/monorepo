@@ -1,1 +1,1 @@
-export { default } from './base.module.sass';
+export { default } from './base.module.sass'

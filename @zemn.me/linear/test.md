@@ -1,7 +1,7 @@
 <a href="command:ok">1</a>
 <a href="egg:ok">1</a>
 
-cool <command:_markdown.openDocumentLink?%7B%22fromResource%22%3A%22ok%22%2C%22path%22%3A%22https%3A%2F%2Fgoogle.com%22%2C%22fragment%22%3A%22fuck%22%7D> http://google.com
+cool <command:\_markdown.openDocumentLink?%7B%22fromResource%22%3A%22ok%22%2C%22path%22%3A%22https%3A%2F%2Fgoogle.com%22%2C%22fragment%22%3A%22fuck%22%7D> http://google.com
 
 (ok)[http://1]
 
