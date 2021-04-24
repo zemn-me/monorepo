@@ -1,3 +1,4 @@
+/*
 const findAfter = require('unist-util-find-after')
 const fs = require('fs')
 const visit = require('unist-util-visit-parents')
@@ -55,3 +56,7 @@ function sectionize(node, ancestors) {
 
 	parent.children.splice(startIndex, section.children.length, section)
 }
+
+*/
+
+export {}

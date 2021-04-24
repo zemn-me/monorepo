@@ -1,3 +1,4 @@
+/*
 const mdx = require('@mdx-js/mdx')
 
 const mdxPlugin = (config) => {
@@ -138,3 +139,7 @@ module.exports = {
 	plugin,
 	default: plugin,
 }
+
+*/
+
+export {}

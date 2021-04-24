@@ -44,7 +44,7 @@ class BaseConverter {
 const cssMinifierPlugin = simplePlugin((config) => ({
 	...config,
 	webpack(wpcfg, ...a) {
-		wpcfg.module.rules[1].oneOf.forEach((moduleLoader, i) => {
+		wpcfg.module.rules[1].oneOf.forEach((moduleLoader) => {
 			Array.isArray(moduleLoader.use) &&
 				moduleLoader.use.forEach((l) => {
 					if (l.loader.includes('css-loader')) {
@@ -136,16 +136,16 @@ const baseConfig = simplePlugin((config) => ({
 			dir: __dirname,
 			describe: true,
 		}),
-	webpack: (config, options, ...a) => {
+	webpack: (wpcfg, options, ...a) => {
 		const { isServer } = options
 		// Fixes npm packages that depend on `fs` module
 		if (!isServer) {
-			config.node = {
+			wpcfg.node = {
 				fs: 'empty',
 			}
 		}
 
-		if (config.webpack) wpcfg = config.webpack(config, options, ...a)
+		if (wpcfg.webpack) wpcfg = wpcfg.webpack(config, options, ...a)
 		return config
 	},
 }))
