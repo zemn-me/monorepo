@@ -5,5 +5,6 @@ module.exports = {
 		'\\.(css|less|scss|sass)$': 'identity-obj-proxy',
 		'\\.[jt]sx?$': 'babel-jest',
 	},
-	moduleDirectories: ['node_modules', 'src'],
+	moduleDirectories: ['.', 'node_modules'],
+	transformIgnorePatterns: ['/node_modules/'],
 }
