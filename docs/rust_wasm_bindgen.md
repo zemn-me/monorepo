@@ -1,4 +1,5 @@
-# Rust rules
+# Rust Wasm Bindgen
+
 * [rust_wasm_bindgen_repositories](#rust_wasm_bindgen_repositories)
 * [rust_wasm_bindgen_toolchain](#rust_wasm_bindgen_toolchain)
 * [rust_wasm_bindgen](#rust_wasm_bindgen)

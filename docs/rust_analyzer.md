@@ -1,4 +1,5 @@
-# Rust rules
+# Rust Analyzer
+
 * [rust_analyzer](#rust_analyzer)
 * [rust_analyzer_aspect](#rust_analyzer_aspect)
 
