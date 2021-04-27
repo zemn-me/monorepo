@@ -24,12 +24,16 @@ export const add: <I extends number, J extends number>(
 	m2: Matrix<I, J>,
 ) => vec.map(m1, (row, i) => vec.add(row, m2[i]))
 
+/**
+ * Returns a row of a given matrix as an Iterable.
+ * Where the row does not exist, the Iterable is of length 0.
+ */
 export const row: <I extends number, J extends number, T>(
 	v: Matrix<I, J, T>,
 	r: number,
 ) => Iterable<T> = function* (v, i) {
 	const a = v[i]
-	if (!a) return
+	if (!a) return;
 	for (let i = 0; i < a.length; i++) yield a[i]
 }
 

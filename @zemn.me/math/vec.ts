@@ -12,11 +12,17 @@ type mapFn<I extends number, T> = <U>(
 	thisArg?: any,
 ) => Vector<I, U>
 
+/**
+ * Map a Vector, returning a new Vector.
+ */
 export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U,
 ) => Vector<I, U> = (vec, c) => (vec.map as mapFn<any, any>)(c)
 
+/**
+ * Map an Iterable, returning a new Iterable.
+ */
 export const imap: <T, U>(
 	v: Iterable<T>,
 	f: (v: T, i: number) => U,
