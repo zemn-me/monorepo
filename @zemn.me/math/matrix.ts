@@ -33,7 +33,7 @@ export const row: <I extends number, J extends number, T>(
 	r: number,
 ) => Iterable<T> = function* (v, i) {
 	const a = v[i]
-	if (!a) return;
+	if (!a) return
 	for (let i = 0; i < a.length; i++) yield a[i]
 }
 
