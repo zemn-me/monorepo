@@ -23,10 +23,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: prepack
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+      - name: Install deps
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: Tests
+        run: yarn test
+      - name: Coverage
+        run: yarn coverage
+      - name: Build
+        run: yarn build
+      - name: Prepack
+        run: yarn prepack
