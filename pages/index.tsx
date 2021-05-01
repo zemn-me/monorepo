@@ -6,8 +6,8 @@ import * as e from 'linear2/features/elements'
 import React from 'react'
 import style from './home.module.css'
 import * as bio from 'lib/bio'
-import * as elements from 'linear2/features/elements'
-import * as lang from 'linear2/model/lang'
+import { a as Link } from 'modules/elements'
+import * as Url from 'modules/url'
 
 interface HomeProps {
 	filter?: (event: bio.Event) => boolean
@@ -17,33 +17,33 @@ const Home: (props: HomeProps) => React.ReactElement = ({ filter }) => {
 	const years = makeYears(bio.timeline)
 
 	const content = (
-		<e.div className={style.home}>
+		<div className={style.home}>
 			<e.WithText text={Bio.who.handle}>
-				<e.div className={style.header}>
+				<div className={style.header}>
 					<e.Text />
-				</e.div>
+				</div>
 			</e.WithText>
 
-			<e.div className={style.links}>
+			<div className={style.links}>
 				{Bio.links.map(([label, link], i) => (
 					<e.WithText text={label}>
-						<e.a href={link}>
+						<Link href={new Url.URL(link.toString())}>
 							<e.Text />
-						</e.a>
+						</Link>
 					</e.WithText>
 				))}
-			</e.div>
+			</div>
 
-			{/*<e.div className={style.navBar}>
-            <e.div className={style.eyeContainer}>
+			{/*<div className={style.navBar}>
+            <div className={style.eyeContainer}>
                 <Eye className={style.eye}/>
-            </e.div>
-            </e.div>*/}
+            </div>
+            </div>*/}
 
 			<e.WithText text={Bio.who.name}>
-				<e.div className={style.name}>
+				<div className={style.name}>
 					<e.Text />
-				</e.div>
+				</div>
 			</e.WithText>
 
 			<Timeline
@@ -53,7 +53,7 @@ const Home: (props: HomeProps) => React.ReactElement = ({ filter }) => {
 					className: style.timeline,
 				}}
 			/>
-		</e.div>
+		</div>
 	)
 	return content
 }

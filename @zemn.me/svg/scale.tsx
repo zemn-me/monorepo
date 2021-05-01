@@ -88,7 +88,7 @@ export const Ticks: <N extends Num>(
 
 			{ticks.map((tick) => {
 				const text = formatter(tick)
-				const pos = percScale(tick.valueOf())
+				const pos = percScale(tick.valueOf())!
 				const tickLength = 40
 				const tickBottomPos = [pos, tickLength] as const
 

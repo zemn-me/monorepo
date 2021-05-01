@@ -193,6 +193,12 @@ function baseConfig(phase, { defaultConfig: config }) {
 	}
 }
 
+const withProgressBar = require('next-progressbar')
+
+function progressBarPlugin(phase, { defaultConfig: config }) {
+	return withProgressBar(config)
+}
+
 /*const printConfigSetup = (
 	phase,
 	{ defaultConfig: config, ...propEtc },
@@ -210,4 +216,5 @@ module.exports = chain(
 	phase(closureCompilerPlugin, constants.PHASE_PRODUCTION_BUILD),
 	phase(cssMinifierPlugin, constants.PHASE_PRODUCTION_BUILD),
 	xdmPlugin,
+	progressBarPlugin,
 )

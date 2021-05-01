@@ -1,9 +1,9 @@
 import '../styles/globals.css'
 import React from 'react'
-import { Sink } from './sink/sink'
+import { Sink } from 'layouts/sink'
 import Head from 'next/head'
 import { LocaleProvider } from 'linear2/model/lang'
-import Transition from './transition/transition'
+import Transition from 'layouts/transition'
 import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }) {
