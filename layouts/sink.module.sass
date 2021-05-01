@@ -1,0 +1,21 @@
+.Sink
+    display: grid
+    grid: "." 1em "header" minmax(5vh, 4rem) "content" auto / 1fr
+    width: 100%
+
+.header
+    display: grid
+    grid-area: header
+    grid-template-columns: 5em auto auto auto
+    grid-template-rows: 2em
+    >*
+        vertical-align: middle
+        margin: auto
+
+.logo
+    display: grid
+    height: 80%
+
+
+.Content
+    grid-area: content
