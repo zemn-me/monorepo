@@ -101,6 +101,6 @@
 		"fix": "prettier --list-different --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc --ignore-path ./.gitignore .prettierrc --",
 		"coverage": "yarn test --coverage --coverageThreshold 90",
 		"prepack": "concurrently 'yarn lint' 'yarn fix' 'yarn coverage'",
-		"prepare": "git submdule init && git submodule update && husky install"
+		"prepare": "husky install"
 	}
 }
