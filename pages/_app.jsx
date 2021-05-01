@@ -3,8 +3,8 @@ import React from 'react'
 import { Sink } from 'layouts/sink'
 import Head from 'next/head'
 import { LocaleProvider } from 'linear2/model/lang'
-import Transition from 'layouts/transition'
 import { useRouter } from 'next/router'
+import Transition from 'layouts/transition'
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter()

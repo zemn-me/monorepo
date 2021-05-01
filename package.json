@@ -95,13 +95,16 @@
 		"unist-util-inspect": "^6.0.1"
 	},
 	"scripts": {
-		"dev": "concurrently 'next dev' 'yarn test --watch'",
-		"fonts": "node linear2/features/elements/garamond/make.js",
+		"multi": "concurrently --kill-others-on-fail",
+		"dev": "yarn run multi 'next dev' 'yarn test --watch'",
+		"fonts": "node linear2/featureselements/garamond/make.js",
 		"test": "jest",
-		"lint": "eslint  --ignore-path ./.gitignore --fix .",
+		"lint:eslint": "eslint  --ignore-path ./.gitignore --fix .",
+		"lint:prettier": "prettier -c './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc --ignore-path ./.gitignore .prettierrc --",
+		"lint": "yarn run multi 'yarn run lint:eslint' 'yarn run lint:prettier'",
 		"fix": "prettier --list-different --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc --ignore-path ./.gitignore .prettierrc --",
 		"coverage": "yarn test --coverage --coverageThreshold 90",
-		"prepack": "concurrently 'yarn lint' 'yarn fix' 'yarn coverage'",
+		"prepack": "yarn run multi 'yarn run lint' 'yarn run coverage' 'yarn run build'",
 		"prepare": "husky install",
 		"build": "next build --debug"
 	}

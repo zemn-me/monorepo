@@ -296,7 +296,7 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 				)) ?? null}
 			</a>
 			<e.WithText text={title}>
-				<a className={style.title} href={url!.toString()}>
+				<a className={style.title} href={url?.toString()}>
 					<e.Text />
 				</a>
 			</e.WithText>{' '}

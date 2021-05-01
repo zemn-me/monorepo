@@ -15,14 +15,14 @@ export interface LinkProps {
 	children: AElement
 }
 
-export const Link: React.FC<LinkProps> = ({ href, children: child }) => {
+export const Link = ({ href, children: child }: LinkProps) => {
 	return React.cloneElement(
 		child,
 		{
 			...child.props,
 			href: href?.toString(),
 		},
-		...child.props?.children,
+		//...child.props?.children,
 	)
 }
 

@@ -6,7 +6,7 @@ import * as e from 'linear2/features/elements'
 import React from 'react'
 import style from './home.module.css'
 import * as bio from 'lib/bio'
-import { a as Link } from 'modules/elements'
+import { Link } from 'modules/elements'
 import * as Url from 'modules/url'
 
 interface HomeProps {
@@ -28,7 +28,9 @@ const Home: (props: HomeProps) => React.ReactElement = ({ filter }) => {
 				{Bio.links.map(([label, link], i) => (
 					<e.WithText text={label}>
 						<Link href={new Url.URL(link.toString())}>
-							<e.Text />
+							<a>
+								<e.Text />
+							</a>
 						</Link>
 					</e.WithText>
 				))}
