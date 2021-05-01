@@ -1,16 +1,4 @@
----
-layout: article
-title: Übersicht Remote Code Execution, Spotify takeover
-language: en-GB
-subtitle: on the security implications of locally hosted web services
-tags:
- - security
- - disclosure
- - writing
-date: [ 15, 'dec', 2018 ]
----
-
-
+```
 # Übersicht Remote Code Execution, Spotify takeover
 
 on the security implications of locally hosted web services
@@ -131,11 +119,11 @@ When you load 127.0.0.1:41416 you actually get the Übersicht interface that’s
 
 Writing my own overplayed desktop tchatche, I was exploring what stuff I was allowed to hook into, which is defined in [this file](https://github.com/felixhageloh/uebersicht/blob/bbba0f08defc90496238bcb9c7233c41c86ae70c/server/src/uebersicht.js#L5), like this:
 
-    import run from './runShellCommand';
-    import request from 'superagent';
-    import styled, {css} from 'react-emotion';
+import run from './runShellCommand';
+import request from 'superagent';
+import styled, {css} from 'react-emotion';
 
-    export {run, request, css, styled};
+export {run, request, css, styled};
 
 Ok, did that just say ‘run shell command’? I can have my widget update itself by running a command on my computer? Hell Yes!
 
@@ -207,7 +195,7 @@ We only care about the bits starting with ‘>’ or ‘<’, which indicate sen
     > GET / HTTP/1.1
     > Host: oh.no.ms
     > User-Agent: curl/7.58.0
-    > Accept: */*
+    > Accept: */* 
     >
     < HTTP/1.1 200 OK
     < x-amz-id-2: [scrubbed]
@@ -237,8 +225,9 @@ The request can also have a body. In fact, when we do a POST request like Übers
     * Connected to oh.no.ms (52.218.80.156) port 80 (#0)
     > POST / HTTP/1.1
     > Host: oh.no.ms
-    > User-Agent: curl/7.58.0
+    > User-Agent: curl/7.58.0 */}
     > Accept: */*
+    {/*
     > Content-Length: 37
     > Content-Type: application/x-www-form-urlencoded
     >
@@ -313,3 +302,5 @@ at some point I’ll finish writing up the bug steam paid me $8k for i promise. 
 jan 8, 2020: turns out, despite being ‘Won’t fix’ at the time for Spotify, spotilocal.com no longer is embedded into the Spotify binary — and the certificate breaks some serious web of trust policies:
 
 <img src="https://medium.com/media/63b5e0a5be1eb097830da2897986af6c" />
+
+```

@@ -44,7 +44,7 @@ export const Text: (props: TextProps) => React.ReactElement | null = (
 	return (
 		<elements.WithLang lang={dto.resolvedOptions().locale}>
 			<elements.Void>
-				<elements.span>{dto.format(date)}</elements.span>
+				<span>{dto.format(date)}</span>
 			</elements.Void>
 		</elements.WithLang>
 	)

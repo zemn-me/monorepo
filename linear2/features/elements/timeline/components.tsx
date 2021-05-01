@@ -77,7 +77,7 @@ export const Timeline: (props: TimelineProps) => React.ReactElement = ({
 	className,
 	indicateCurrent,
 }) => (
-	<e.div className={classes(className, style.Timeline)}>
+	<div className={classes(className, style.Timeline)}>
 		{' '}
 		{years.map((year) => (
 			<Year
@@ -87,7 +87,7 @@ export const Timeline: (props: TimelineProps) => React.ReactElement = ({
 				indicateCurrent={indicateCurrent}
 			/>
 		))}{' '}
-	</e.div>
+	</div>
 )
 
 export interface YearProps extends Year {
@@ -101,7 +101,7 @@ export const Year: (props: YearProps) => React.ReactElement = ({
 	lang,
 	indicateCurrent,
 }) => (
-	<e.div
+	<a
 		{...{
 			className: style.Year,
 			'data-year': year,
@@ -123,7 +123,7 @@ export const Year: (props: YearProps) => React.ReactElement = ({
 				))}
 			</article>
 		</StretchIndicatorArea>
-	</e.div>
+	</a>
 )
 
 const numerals = [
@@ -186,16 +186,16 @@ const YearDisplay: React.FC<{ year: Date; n: number }> = ({
 		<e.date
 			className={classes(style.yearDisplay)}
 			date={new Date(new Date(0).setFullYear(year))}>
-			<e.div className={style.yearDisplayYear}>
+			<a className={style.yearDisplayYear}>
 				<e.dateText
 					{...{
 						date: date,
 						year: 'numeric',
 					}}
 				/>
-			</e.div>
+			</a>
 
-			<e.div className={style.yearDisplayAge}>{romanize(age)}</e.div>
+			<a className={style.yearDisplayAge}>{romanize(age)}</a>
 		</e.date>
 	)
 }
@@ -217,7 +217,7 @@ export const Month: (props: MonthProps) => React.ReactElement = ({
 	year,
 	indicateCurrent,
 }) => (
-	<e.div
+	<a
 		{...{
 			className: style.Month,
 		}}>
@@ -225,7 +225,7 @@ export const Month: (props: MonthProps) => React.ReactElement = ({
 		{events.map((event, i) => (
 			<Event key={i} {...event} indicateCurrent={indicateCurrent} />
 		))}
-	</e.div>
+	</a>
 )
 
 export const MonthIndicator: React.FC<{
@@ -254,7 +254,7 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 	tags,
 	indicateCurrent,
 }) => {
-	const ref = React.useRef<HTMLDivElement | undefined>(undefined)
+	const ref = React.useRef<HTMLAnchorElement | null>(null)
 	const router = useRouter()
 	const concernsCurrent =
 		indicateCurrent &&
@@ -279,40 +279,40 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 		}, [])
 
 	return (
-		<e.div
+		<a
 			className={classes(
 				style.Event,
 				concernsCurrent ? style.concernsCurrent : undefined,
 				indicateCurrent ? style.indicateCurrent : undefined,
 			)}
 			ref={ref}>
-			<e.div className={style.Tags}>
+			<a className={style.Tags}>
 				{tags?.map((tag) => (
 					<e.WithText text={tag}>
-						<e.span className={baseStyle.tag}>
+						<span className={baseStyle.tag}>
 							<e.Text />
-						</e.span>
+						</span>
 					</e.WithText>
 				)) ?? null}
-			</e.div>
+			</a>
 			<e.WithText text={title}>
-				<e.a className={style.title} href={url}>
+				<a className={style.title} href={url?.toString()}>
 					<e.Text />
-				</e.a>
+				</a>
 			</e.WithText>{' '}
 			{description ? (
 				<e.WithText text={description}>
 					<e.Void className={style.description}>
-						<e.span>
+						<span>
 							<e.Text />
-						</e.span>
+						</span>
 					</e.Void>
 				</e.WithText>
 			) : null}
 			{concernsCurrent ? (
 				<e.Arrow className={style.concernsArrow} />
 			) : null}
-		</e.div>
+		</a>
 	)
 }
 
@@ -323,7 +323,7 @@ interface VerticalStretchIndicatorProps {
 const VerticalStretchIndicator: (
 	props?: VerticalStretchIndicatorProps,
 ) => React.ReactElement = ({ className } = {}) => (
-	<e.div className={classes(className, style.VerticalStretchIndicator)} />
+	<a className={classes(className, style.VerticalStretchIndicator)} />
 )
 interface StretchIndicatorAreaProps {
 	className?: string
@@ -333,8 +333,8 @@ interface StretchIndicatorAreaProps {
 const StretchIndicatorArea: (
 	props: StretchIndicatorAreaProps,
 ) => React.ReactElement = ({ className, children }) => (
-	<e.div className={classes(className, style.StretchArea)}>
+	<a className={classes(className, style.StretchArea)}>
 		{children}
 		<VerticalStretchIndicator />
-	</e.div>
+	</a>
 )

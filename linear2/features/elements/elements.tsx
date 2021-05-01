@@ -4,7 +4,6 @@ import React from 'react'
 import * as fancy from './fancy'
 import { Style, text } from './style'
 import style from './base.module.sass'
-import * as html from 'lib/unist-react/html/elements'
 
 export { default as Void } from './void'
 
@@ -110,43 +109,5 @@ const ChemStr: React.FC<{ children: string }> = ({ children }) => (
 	</>
 )
 
-export const p = s(html.p)
-export const ul = s(html.ul)
-export const section = s(html.section)
-export const h1 = s(html.h1)
-export const h2 = s(html.h2)
-export const strong = s(html.strong)
-export const h3 = s(html.h3)
-export const li = s(html.li)
-export const del = s(html.del)
-export const h4 = s(html.h4)
-export const h5 = s(html.h5)
-export const ol = s(html.ol)
-export const em = s(html.em)
-export const code = s(html.code)
-export const aside = s(html.aside)
-export const blockquote = s(html.blockquote)
-export const sup = s(html.sup)
-export const hr = s(html.hr)
-export const dl = s(html.dl)
-export const dt = s(html.dt)
-export const img = s(html.img)
-export const dd = s(html.dd)
-export const input = s(html.input)
-export const figure = s(html.figure)
-export const figcaption = s(html.figcaption)
-export const div = s(html.div)
-export const main = s(html.main)
-export const span = s(html.span)
 export { text }
 export { Arrow } from './Arrow'
-
-export interface AProps extends Omit<elementUtil.PropsOf<'a'>, 'href'> {
-	href?: string | elementUtil.PropsOf<'a'>
-}
-
-export const a: (props: AProps) => React.ReactElement = ({ href, ...etc }) => {
-	const sHref = href?.toString()
-
-	return <html.a {...{ ...etc, href: sHref }} />
-}

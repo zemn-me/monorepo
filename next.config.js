@@ -110,8 +110,9 @@ function cssMinifierPlugin(phase, { defaultConfig: config }) {
 	}
 }
 
-const ClosurePlugin = require('closure-webpack-plugin')
+//const ClosurePlugin = require('closure-webpack-plugin')
 
+/*
 function closureCompilerPlugin(phase, { defaultConfig: config }) {
 	return {
 		...config,
@@ -131,6 +132,7 @@ function closureCompilerPlugin(phase, { defaultConfig: config }) {
 		},
 	}
 }
+*/
 
 function xdmPlugin(phase, { defaultConfig: config }) {
 	return {
@@ -193,6 +195,12 @@ function baseConfig(phase, { defaultConfig: config }) {
 	}
 }
 
+const withProgressBar = require('next-progressbar')
+
+function progressBarPlugin(phase, { defaultConfig: config }) {
+	return withProgressBar(config)
+}
+
 /*const printConfigSetup = (
 	phase,
 	{ defaultConfig: config, ...propEtc },
@@ -207,7 +215,8 @@ function baseConfig(phase, { defaultConfig: config }) {
 
 module.exports = chain(
 	baseConfig,
-	phase(closureCompilerPlugin, constants.PHASE_PRODUCTION_BUILD),
+	//phase(closureCompilerPlugin, constants.PHASE_PRODUCTION_BUILD),
 	phase(cssMinifierPlugin, constants.PHASE_PRODUCTION_BUILD),
 	xdmPlugin,
+	progressBarPlugin,
 )
