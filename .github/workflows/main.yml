@@ -15,36 +15,11 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    env:
-      YARN_CACHE_FOLDER: yarn-cache-dir
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true # garamond
-      - name: Cache...
-        uses: actions/cache@v2
-        id: yarn-cache
-        with: 
-          path: ${{ env.YARN_CACHE_FOLDER }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install deps
-        run: yarn install 
-    
-  lint:
+  Lint:
     runs-on: ubuntu-latest
     env:
       cache-name: cache1
       YARN_CACHE_FOLDER: yarn-cache-dir
-    needs: [ prepare ]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -59,14 +34,14 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - run: yarn install
       - run: yarn lint
   
-  tests:
+  Tests:
     runs-on: ubuntu-latest
     env:
       cache-name: cache1
       YARN_CACHE_FOLDER: yarn-cache-dir
-    needs: [ prepare ]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -80,14 +55,15 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
+      - run: yarn install
       - run: yarn test
 
   
-  coverage:
+  Coverage:
     runs-on: ubuntu-latest
     env:
       YARN_CACHE_FOLDER: yarn-cache-dir
-    needs: [ prepare ]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -105,13 +81,14 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
+      - run: yarn install
       - run: yarn coverage
 
-  build:
+  Build:
     runs-on: ubuntu-latest
     env:
       YARN_CACHE_FOLDER: yarn-cache-dir
-    needs: [ prepare ]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -125,13 +102,14 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
+      - run: yarn install
       - run: yarn build
 
-  prepack:
+  Prepack:
     runs-on: ubuntu-latest
     env:
       YARN_CACHE_FOLDER: yarn-cache-dir
-    needs: [ prepare ]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -145,4 +123,5 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+      - run: yarn install
       - run: yarn prepack
