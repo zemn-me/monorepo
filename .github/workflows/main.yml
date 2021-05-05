@@ -50,6 +50,7 @@ jobs:
         uses: actions/cache@v2
         with: 
           path: "yarn-cache-dir"
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
