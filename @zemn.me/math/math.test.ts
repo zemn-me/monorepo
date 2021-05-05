@@ -2,6 +2,156 @@ import * as matrix from './matrix'
 import * as vec from './vec'
 
 describe('matrix', () => {
+	describe('.identity', () => {
+		test.each([
+			[[1, 1], matrix.as<1, 1>([[1]] as const)],
+			[
+				[3, 3],
+				matrix.as<3, 3>([
+					[1, 0, 0],
+					[0, 1, 0],
+					[0, 0, 1],
+				] as const),
+			],
+
+			[
+				[2, 3],
+				matrix.as<2, 3>([
+					[1, 0],
+					[0, 1],
+					[0, 0],
+				] as const),
+			],
+		] as const)('(%p) => %p', ([i, j], b) => {
+			expect(matrix.identity(i, j)).toEqual(b)
+		})
+	})
+
+	describe('.transpose', () => {
+		test.each([
+			[
+				matrix.as<3, 2>([
+					[1, 2, 3],
+					[4, 5, 6],
+				] as const),
+
+				matrix.as<2, 3>([
+					[1, 4],
+					[2, 5],
+					[3, 6],
+				] as const),
+			],
+
+			[
+				matrix.as<3, 1>([[1, 2, 3]] as const),
+
+				matrix.as<1, 3>([[1], [2], [3]] as const),
+			],
+		] as const)('(%p) => %p', (a, b) => {
+			expect(matrix.transpose(a)).toEqual(b)
+		})
+	})
+
+	describe('.determinant', () => {
+		test.each([
+			[matrix.zero, 0],
+
+			[
+				matrix.as<2, 2>([
+					[3, 8],
+					[4, 6],
+				] as const),
+
+				-14,
+			],
+
+			[
+				matrix.as<3, 3>([
+					[6, 1, 1],
+					[4, -2, 5],
+					[2, 8, 7],
+				] as const),
+
+				-306,
+			],
+
+			[
+				matrix.as([
+					[6, -7],
+					[-2, 4]
+				] as const),
+				10
+			]
+		] as const)('(%p) => %p', (a, b) => {
+			expect(matrix.determinant(a)).toEqual(b)
+		})
+	})
+
+	describe('.inverse', () => {
+		test.each([
+			[matrix.zero, matrix.zero],
+			
+
+			/*[
+				matrix.as<2, 2>([
+					[3, 3.5],
+					[3.2, 3.6],
+				] as const),
+
+				matrix.as<2, 2>([
+					[-9, 8.75],
+					[8, -7.5],
+				] as const),
+
+				// 1.12, -3.5
+				// -3.2, 1.25
+			],*/
+
+			[
+				matrix.as<2, 2>([
+					[4, 7],
+					[2, 6],
+				] as const),
+
+				matrix.as<2, 2>([
+					[0.6, -0.7],
+					[-0.2, 0.4],
+				] as const),
+			],
+		] as const)('(%p) => %p', (a, b) => {
+			expect(matrix.inverse(a)).toEqual(b)
+		})
+
+		test.each([
+
+			/*[
+				matrix.as<2, 2>([
+					[3, 3.5],
+					[3.2, 3.6],
+				] as const),
+
+				matrix.as<2, 2>([
+					[-9, 8.75],
+					[8, -7.5],
+				] as const),
+
+				// 1.12, -3.5
+				// -3.2, 1.25
+			],*/
+
+			[
+			matrix.as<2, 2>([
+				[4, 7],
+				[2, 6],
+			] as const),
+			]
+
+		] as const)('%p * a => identity', (a) => {
+			const [ij = 0 ] = matrix.size(a);
+			expect(matrix.mul(a, matrix.inverse(a))).toEqual(matrix.identity(ij, ij));
+		})
+	})
+
 	describe('.transpose', () => {
 		test.each([
 			[
@@ -126,11 +276,27 @@ describe('matrix', () => {
 })
 
 describe('vec', () => {
-	test.each([[[1, 2, 3], [3, 2, 1], 10]])('.dot(%p, %p) => %p', (a, b, o) => {
-		expect(vec.dot(a, b)).toEqual(o)
+	describe('.dot', () => {
+		test.each([[[1, 2, 3], [3, 2, 1], 10]])(
+			'.dot(%p, %p) => %p',
+			(a, b, o) => {
+				expect(vec.dot(a, b)).toEqual(o)
+			},
+		)
 	})
 
-	test.each([[2, [3, 2, 1], [6, 4, 2]]])('.mul(%p, %p) => %p', (a, b, o) => {
-		expect(vec.mul(a, b)).toEqual(o)
+	describe('.reverse', () => {
+		test('[1,2,3] => [3,2,1]', () => {
+			expect([...vec.reverse([1, 2, 3])]).toEqual([3, 2, 1])
+		})
+	})
+
+	describe('.mul', () => {
+		test.each([[2, [3, 2, 1], [6, 4, 2]]])(
+			'.mul(%p, %p) => %p',
+			(a, b, o) => {
+				expect(vec.mul(a, b)).toEqual(o)
+			},
+		)
 	})
 })

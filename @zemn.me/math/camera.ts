@@ -5,6 +5,7 @@ export type FocalLength = number
 
 /**
  * Return a camera matrix given a particular focal length
+ * representing a camera about (0, 0, 0)
  */
 export const matrix = (f: FocalLength) =>
 	Matrix.as<4, 3>([
