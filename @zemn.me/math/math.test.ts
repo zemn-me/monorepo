@@ -1,7 +1,41 @@
 import * as matrix from './matrix'
 import * as vec from './vec'
 
+
+function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
+  expect(actual.length).toBe(expected.length)
+  actual.forEach((row, i) => {
+	  row.forEach((v, k) => {
+		expect(v).toBeCloseTo(expected[i][k])
+	  })
+  });
+}
+
 describe('matrix', () => {
+	test('width', () => {
+		expect(matrix.width([[1,2],[2,1]])).toEqual(2)
+	});
+	test('a checkerboard matrix', () =>{
+		const w = 2;
+		expect(matrix.checkerboard([[1,2],[3,4]]))
+			.toEqual([
+				[1, -2],
+				[-3, 4]
+			])
+	});
+	test('.minors', () => {
+		expect(
+			matrix.minors([
+				[3, 0, 2],
+				[2, 0, -2],
+				[0, 1, 1],
+			] as const),
+		).toEqual([
+			[2, 2, 2],
+			[-2, 3, 3],
+			[-0, -10, 0], // dumb
+		])
+	})
 	describe('.identity', () => {
 		test.each([
 			[[1, 1], matrix.as<1, 1>([[1]] as const)],
@@ -22,7 +56,7 @@ describe('matrix', () => {
 					[0, 0],
 				] as const),
 			],
-		] as const)('(%p) => %p', ([i, j], b) => {
+		] as const)('%#: (%p) => %p', ([i, j], b) => {
 			expect(matrix.identity(i, j)).toEqual(b)
 		})
 	})
@@ -47,14 +81,22 @@ describe('matrix', () => {
 
 				matrix.as<1, 3>([[1], [2], [3]] as const),
 			],
-		] as const)('(%p) => %p', (a, b) => {
+		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.transpose(a)).toEqual(b)
 		})
 	})
 
 	describe('.determinant', () => {
 		test.each([
-			[matrix.zero, 0],
+			[matrix.as<1, 1>([[1]] as const), 1],
+
+			[
+				matrix.as([
+					[ 2, 0],
+					[ 0, 5]
+				] as const),
+				10
+			],
 
 			[
 				matrix.as<2, 2>([
@@ -78,20 +120,76 @@ describe('matrix', () => {
 			[
 				matrix.as([
 					[6, -7],
-					[-2, 4]
+					[-2, 4],
 				] as const),
-				10
-			]
-		] as const)('(%p) => %p', (a, b) => {
+				10,
+			],
+		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.determinant(a)).toEqual(b)
 		})
 	})
 
 	describe('.inverse', () => {
 		test.each([
-			[matrix.zero, matrix.zero],
-			
+			//[matrix.zero, matrix.zero],
 
+			[
+				matrix.as([
+					[ 2, 0],
+					[ 0, 5]
+				] as const),
+
+				matrix.as([
+					[ 1/2, 0],
+					[ 0, 1/5]
+				] as const),
+
+			],
+
+			/*[
+				matrix.as<2, 2>([
+					[3, 3.5],
+					[3.2, 3.6],
+				] as const),
+
+				matrix.as<2, 2>([
+					[-9, 8.75],
+					[8, -7.5],
+				] as const),
+
+				// 1.12, -3.5
+				// -3.2, 1.25
+			],*/
+			[
+				matrix.as([
+					[3, 0, 2],
+					[2, 0, -2],
+					[0, 1, 1]
+				] as const),
+
+				matrix.as([
+					[0.2, 0.2, 0],
+					[-0.2, .3, 1],
+					[.2, -.3, 0]
+				] as const),
+			],
+
+			[
+				matrix.as<2, 2>([
+					[4, 7],
+					[2, 6],
+				] as const),
+
+				matrix.as<2, 2>([
+					[0.6, -0.7],
+					[-0.2, 0.4],
+				] as const),
+			],
+		] as const)('%#: (%p) => %p', (a, b) => {
+			expectMatrixSimilar(matrix.inverse(a), b)
+		})
+
+		test.each([
 			/*[
 				matrix.as<2, 2>([
 					[3, 3.5],
@@ -112,43 +210,19 @@ describe('matrix', () => {
 					[4, 7],
 					[2, 6],
 				] as const),
-
-				matrix.as<2, 2>([
-					[0.6, -0.7],
-					[-0.2, 0.4],
+			],
+			[
+				matrix.as([
+					[20, 100, 2],
+					[0.2, -10, 1],
+					[ 4, 3, 1]
 				] as const),
 			],
-		] as const)('(%p) => %p', (a, b) => {
-			expect(matrix.inverse(a)).toEqual(b)
-		})
-
-		test.each([
-
-			/*[
-				matrix.as<2, 2>([
-					[3, 3.5],
-					[3.2, 3.6],
-				] as const),
-
-				matrix.as<2, 2>([
-					[-9, 8.75],
-					[8, -7.5],
-				] as const),
-
-				// 1.12, -3.5
-				// -3.2, 1.25
-			],*/
-
-			[
-			matrix.as<2, 2>([
-				[4, 7],
-				[2, 6],
-			] as const),
-			]
-
-		] as const)('%p * a => identity', (a) => {
-			const [ij = 0 ] = matrix.size(a);
-			expect(matrix.mul(a, matrix.inverse(a))).toEqual(matrix.identity(ij, ij));
+		] as const)('%#: %p * a => identity', (a) => {
+			const [ij = 0] = matrix.size(a)
+			expectMatrixSimilar(matrix.mul(a, matrix.inverse(a)),
+				matrix.identity(ij, ij),
+			)
 		})
 	})
 
@@ -172,7 +246,7 @@ describe('matrix', () => {
 
 				matrix.as<1, 3>([[1], [2], [3]] as const),
 			],
-		] as const)('(%p) => %p', (a, b) => {
+		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.transpose(a)).toEqual(b)
 		})
 	})
@@ -188,7 +262,7 @@ describe('matrix', () => {
 				0,
 				[1, 1, 6],
 			],
-		])('(%p, %p) => %p', (a, b, o) => {
+		])('%#: (%p, %p) => %p', (a, b, o) => {
 			expect([...matrix.col(a, b)]).toEqual(o)
 		})
 	})
@@ -199,7 +273,7 @@ describe('matrix', () => {
 			[matrix.as([[1]]), 1, []],
 			[matrix.as([[1]]), -1, []],
 			[matrix.as([[1]]), Infinity, []],
-		])('(%p, %p) => %p', (a, b, o) => {
+		])('%#: (%p, %p) => %p', (a, b, o) => {
 			expect([...matrix.row(a, b)]).toEqual(o)
 		})
 
@@ -246,7 +320,7 @@ describe('matrix', () => {
 					[10, 9],
 				] as const),
 			],
-		])('(%p, %p) => %p', (a, b, o) => {
+		])('%#: (%p, %p) => %p', (a, b, o) => {
 			expect(matrix.mul(a, b)).toEqual(o)
 		})
 	})
@@ -269,7 +343,7 @@ describe('matrix', () => {
 					[5, 5],
 				]),
 			],
-		])('(%p, %p) => %p', (a, b, o) => {
+		])('%#: (%p, %p) => %p', (a, b, o) => {
 			expect(matrix.add(a, b)).toEqual(o)
 		})
 	})

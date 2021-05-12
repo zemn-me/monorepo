@@ -1,7 +1,7 @@
 import { Vector } from './vec'
 import * as vec from './vec'
-import { I } from 'ts-toolbelt'
 
+// J is effectively the number of ROWS and I is the number of COLUMNS
 export interface Matrix<
 	I extends number = number,
 	J extends number = number,
@@ -17,6 +17,11 @@ export const as: <
 >(
 	v: readonly (readonly T[] & { length: I })[] & { length: J },
 ) => Matrix<I, J, T> = (v) => v as any
+
+const thing = as<3, 2, undefined | null | number>([
+	[ 1, undefined, 2],
+	[ null, 8, 5]
+] as const);
 
 export const zero = as<0, 0>([] as any)
 
@@ -91,9 +96,66 @@ export const mul: <
 
 export const map: <I extends number, J extends number, T, O>(
 	m: Matrix<I, J, T>,
-	f: (v: T, pos: [i: number, j: number], matrix: Matrix<I, J, T>) => O,
+	f: (
+		v: T,
+		pos: readonly [i: number, j: number],
+		matrix: Matrix<I, J, T>,
+	) => O,
 ) => Matrix<I, J, O> = (m, f) =>
 	vec.map(m, (row, j) => vec.map(row, (v, i) => f(v, [i, j], m)))
+
+/**
+ * Unsafely drops values in the matrix that do not make f return true.
+ *
+ * Unsafe in the sense that it may not return a valid matrix (since rows / cols might be incorrect)
+ */
+export const filter: <T>(
+	m: Matrix<number, number, T>,
+	f: (
+		v: T,
+		pos: readonly [i: number, j: number],
+		matrix: Matrix<number, number, T>,
+	) => boolean,
+) => readonly (readonly T[])[] = (m, f) =>
+	m
+		.map((row, rowIndex) =>
+			row.filter((v, colIndex) => f(v, [colIndex, rowIndex], m)),
+		)
+		.filter((row) => row.length !== 0)
+
+
+function is<T>(v: readonly (readonly T[])[]): v is Matrix<number, number, T> {
+	// each row must be of the same size
+
+	return v.every((row, _, a) => row.length == a[0].length)
+}
+
+function mustIs<T>(
+	v: readonly (readonly T[])[],
+): asserts v is Matrix<number, number, T> {
+	if (!is(v)) throw new Error(`${JSON.stringify(v)} is not a valid matrix`)
+
+	return
+}
+
+function matrixIsSquare<T>(
+	m: Matrix<number, number, T>,
+): m is Square<number, T> {
+	const [i, j] = size(m)
+
+	return i == j
+}
+
+function isSquare<T>(m: readonly (readonly T[])[]): m is Square<number, T> {
+	return m.every((row) => row.length == m.length)
+}
+
+function mustIsSquare<T>(
+	v: readonly (readonly T[])[],
+): asserts v is Square<number, T> {
+	if (!isSquare(v))
+		throw new Error(`${JSON.stringify(v)} is not a valid square matrix`)
+}
 
 /**
  * `Multiply` gives the type of the matrix made by multiplying 2 given matricies.
@@ -159,6 +221,7 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = (
 	const [ij] = size(m)
 
 	if ((ij ?? 0) == 0) return 0
+	if (ij == 1) return m[0][0]
 
 	if (ij == 2) {
 		const [[a, b], [c, d]] = m
@@ -177,6 +240,33 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = (
 	}, 0)
 }
 
+//https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
+export const minors: <IJ extends number>(s: Square<IJ>) => Square<IJ> = (s) =>
+	map(s, (v, [column, row], m) => {
+		// form a new matrix omitting the row and column of the selected value
+		const smaller = filter(
+			m,
+			(_, [sColumn, sRow]) => column !== sColumn && row !== sRow,
+		)
+
+		mustIsSquare(smaller)
+
+		return determinant(smaller)
+	})
+
+
+export const width:
+	(m: Matrix) => number
+=
+	m => m?.[0]?.length ?? 0
+;
+
+export const checkerboard:
+	<I extends number, J extends number>(m: Matrix<I, J>) => Matrix<I,J>
+=
+	m => map(m, (n, [col, row]) => (((col + row) % 2) == 0) ? n : -n)
+;
+
 /**
  * Returns the inverse of a matrix of given dimensions
  */
@@ -185,19 +275,12 @@ export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
 >(
 	m: Square<IJ>,
 ) => {
-	// this is just an intuition, i dont know maths
-	const [max] = size(m)
+	const d = 1/determinant(m)
 
-
-	const partial =  map(m, (v, [i, j], m) => {
-		if (i !== j) return -v
-
-		// where i = j, we take the reverse of the sequence
-		// from TR to BL
-		const n = max - i - 1
-		return  m[n][n]!
-	});
-	
-	const des = determinant(partial);
-	return map(partial, v => v / des);
+	return map(
+		transpose(
+			checkerboard(minors(m))
+		),
+		(n) => d * n,
+	)
 }
