@@ -34,6 +34,17 @@ export const imap: <T, U>(
 	}
 }
 
+/**
+ * Returns an iterable on a vector that iterates in reverse
+ */
+export const reverse: <I extends number, T>(
+	v: Vector<I, T>,
+) => Iterable<T> = function* (v) {
+	for (let i = 0; i < v.length; i++) {
+		yield v[v.length - i - 1]
+	}
+}
+
 export const as: <T, L extends number>(
 	v: readonly T[] & { length: L },
 ) => Vector<L, T> = (v) => v as any
