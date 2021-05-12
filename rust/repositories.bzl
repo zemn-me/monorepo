@@ -216,25 +216,6 @@ def BUILD_for_rustfmt(target_triple):
         binary_ext = system_to_binary_ext(system),
     )
 
-_build_file_for_rustc_src = """\
-load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
-
-filegroup(
-    name = "rustc_src",
-    srcs = glob(
-        [
-            "lib/rustlib/src/**/*.rs",
-        ],
-    ),
-    visibility = ["//visibility:public"],
-)
-"""
-
-def BUILD_for_rustc_src():
-    """Emits a BUILD file for the rustc src extracted files."""
-
-    return _build_file_for_rustc_src
-
 _build_file_for_clippy_template = """\
 load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
 
@@ -331,7 +312,7 @@ def BUILD_for_rust_toolchain(
 
     rustc_src = "None"
     if include_rustc_src:
-        rustc_src = "\"@{workspace_name}//:rustc_src\"".format(workspace_name = workspace_name)
+        rustc_src = "\"@{workspace_name}//lib/rustlib/src:rustc_src\"".format(workspace_name = workspace_name)
 
     return _build_file_for_rust_toolchain_template.format(
         toolchain_name = name,
@@ -495,8 +476,6 @@ def _load_rust_src(ctx):
 
     Args:
         ctx (ctx): A repository_ctx.
-    Returns:
-        string: The BUILD file contents for the rust source code
     """
     tool_suburl = produce_tool_suburl("rustc", "src", ctx.attr.version, ctx.attr.iso_date)
     static_rust = ctx.os.environ.get("STATIC_RUST_URL", "https://static.rust-lang.org")
@@ -514,7 +493,15 @@ def _load_rust_src(ctx):
         output = "lib/rustlib/src",
         stripPrefix = tool_path,
     )
-    return BUILD_for_rustc_src()
+    ctx.file(
+        "lib/rustlib/src/BUILD.bazel",
+        """\
+filegroup(
+    name = "rustc_src",
+    srcs = glob(["**/*"]),
+    visibility = ["//visibility:public"],
+)""",
+    )
 
 def _load_rust_stdlib(ctx, target_triple):
     """Loads a rust standard library and yields corresponding BUILD for it
@@ -599,10 +586,10 @@ def _rust_toolchain_repository_impl(ctx):
 
     _check_version_valid(ctx.attr.version, ctx.attr.iso_date)
 
-    build_components = [_load_rust_compiler(ctx)]
-
     if ctx.attr.include_rustc_src:
-        build_components.append(_load_rust_src(ctx))
+        _load_rust_src(ctx)
+
+    build_components = [_load_rust_compiler(ctx)]
 
     if ctx.attr.rustfmt_version:
         build_components.append(_load_rustfmt(ctx))

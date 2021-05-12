@@ -173,7 +173,16 @@ def create_crate(ctx, info, crate_mapping):
 # TODO(djmarcin): Run the cargo_build_scripts to gather env vars correctly.
 def _rust_analyzer_impl(ctx):
     rust_toolchain = find_toolchain(ctx)
-    sysroot_src = _exec_root_tmpl + rust_toolchain.rust_lib.label.workspace_root + "/lib/rustlib/src/library"
+
+    if not rust_toolchain.rustc_src:
+        fail(
+            "Current Rust toolchain doesn't contain rustc sources in `rustc_src` attribute.",
+            "These are needed by rust analyzer.",
+            "If you are using the default Rust toolchain, add `rust_repositories(include_rustc_src = True, ...).` to your WORKSPACE file.",
+        )
+    sysroot_src = rust_toolchain.rustc_src.label.package + "/library"
+    if rust_toolchain.rustc_src.label.workspace_root:
+        sysroot_src = _exec_root_tmpl + rust_toolchain.rustc_src.label.workspace_root + "/" + sysroot_src
 
     # Gather all crates and their dependencies into an array.
     # Dependencies are referenced by index, so leaves should come first.
