@@ -19,9 +19,9 @@ export const as: <
 ) => Matrix<I, J, T> = (v) => v as any
 
 const thing = as<3, 2, undefined | null | number>([
-	[ 1, undefined, 2],
-	[ null, 8, 5]
-] as const);
+	[1, undefined, 2],
+	[null, 8, 5],
+] as const)
 
 export const zero = as<0, 0>([] as any)
 
@@ -122,7 +122,6 @@ export const filter: <T>(
 			row.filter((v, colIndex) => f(v, [colIndex, rowIndex], m)),
 		)
 		.filter((row) => row.length !== 0)
-
 
 function is<T>(v: readonly (readonly T[])[]): v is Matrix<number, number, T> {
 	// each row must be of the same size
@@ -254,18 +253,12 @@ export const minors: <IJ extends number>(s: Square<IJ>) => Square<IJ> = (s) =>
 		return determinant(smaller)
 	})
 
+export const width: (m: Matrix) => number = (m) => m?.[0]?.length ?? 0
 
-export const width:
-	(m: Matrix) => number
-=
-	m => m?.[0]?.length ?? 0
-;
-
-export const checkerboard:
-	<I extends number, J extends number>(m: Matrix<I, J>) => Matrix<I,J>
-=
-	m => map(m, (n, [col, row]) => (((col + row) % 2) == 0) ? n : -n)
-;
+export const checkerboard: <I extends number, J extends number>(
+	m: Matrix<I, J>,
+) => Matrix<I, J> = (m) =>
+	map(m, (n, [col, row]) => ((col + row) % 2 == 0 ? n : -n))
 
 /**
  * Returns the inverse of a matrix of given dimensions
@@ -275,12 +268,7 @@ export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
 >(
 	m: Square<IJ>,
 ) => {
-	const d = 1/determinant(m)
+	const d = 1 / determinant(m)
 
-	return map(
-		transpose(
-			checkerboard(minors(m))
-		),
-		(n) => d * n,
-	)
+	return map(transpose(checkerboard(minors(m))), (n) => d * n)
 }

@@ -1,4 +1,3 @@
+export {}
 
-export {};
-
-type x = number & 1;
+type x = number & 1

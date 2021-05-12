@@ -1,28 +1,36 @@
 import * as matrix from './matrix'
 import * as vec from './vec'
 
-
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
-  expect(actual.length).toBe(expected.length)
-  actual.forEach((row, i) => {
-	  row.forEach((v, k) => {
-		expect(v).toBeCloseTo(expected[i][k])
-	  })
-  });
+	expect(actual.length).toBe(expected.length)
+	actual.forEach((row, i) => {
+		row.forEach((v, k) => {
+			expect(v).toBeCloseTo(expected[i][k])
+		})
+	})
 }
 
 describe('matrix', () => {
 	test('width', () => {
-		expect(matrix.width([[1,2],[2,1]])).toEqual(2)
-	});
-	test('a checkerboard matrix', () =>{
-		const w = 2;
-		expect(matrix.checkerboard([[1,2],[3,4]]))
-			.toEqual([
-				[1, -2],
-				[-3, 4]
-			])
-	});
+		expect(
+			matrix.width([
+				[1, 2],
+				[2, 1],
+			]),
+		).toEqual(2)
+	})
+	test('a checkerboard matrix', () => {
+		const w = 2
+		expect(
+			matrix.checkerboard([
+				[1, 2],
+				[3, 4],
+			]),
+		).toEqual([
+			[1, -2],
+			[-3, 4],
+		])
+	})
 	test('.minors', () => {
 		expect(
 			matrix.minors([
@@ -92,10 +100,10 @@ describe('matrix', () => {
 
 			[
 				matrix.as([
-					[ 2, 0],
-					[ 0, 5]
+					[2, 0],
+					[0, 5],
 				] as const),
-				10
+				10,
 			],
 
 			[
@@ -135,15 +143,14 @@ describe('matrix', () => {
 
 			[
 				matrix.as([
-					[ 2, 0],
-					[ 0, 5]
+					[2, 0],
+					[0, 5],
 				] as const),
 
 				matrix.as([
-					[ 1/2, 0],
-					[ 0, 1/5]
+					[1 / 2, 0],
+					[0, 1 / 5],
 				] as const),
-
 			],
 
 			/*[
@@ -164,13 +171,13 @@ describe('matrix', () => {
 				matrix.as([
 					[3, 0, 2],
 					[2, 0, -2],
-					[0, 1, 1]
+					[0, 1, 1],
 				] as const),
 
 				matrix.as([
 					[0.2, 0.2, 0],
-					[-0.2, .3, 1],
-					[.2, -.3, 0]
+					[-0.2, 0.3, 1],
+					[0.2, -0.3, 0],
 				] as const),
 			],
 
@@ -215,12 +222,13 @@ describe('matrix', () => {
 				matrix.as([
 					[20, 100, 2],
 					[0.2, -10, 1],
-					[ 4, 3, 1]
+					[4, 3, 1],
 				] as const),
 			],
 		] as const)('%#: %p * a => identity', (a) => {
 			const [ij = 0] = matrix.size(a)
-			expectMatrixSimilar(matrix.mul(a, matrix.inverse(a)),
+			expectMatrixSimilar(
+				matrix.mul(a, matrix.inverse(a)),
 				matrix.identity(ij, ij),
 			)
 		})
