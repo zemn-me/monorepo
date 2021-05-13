@@ -2,7 +2,7 @@ workspace(name = "rules_rust")
 
 load("@rules_rust//rust:repositories.bzl", "rust_repositories")
 
-rust_repositories(include_rustc_src = True)
+rust_repositories(include_rustc_srcs = True)
 
 load("@rules_rust//proto:repositories.bzl", "rust_proto_repositories")
 

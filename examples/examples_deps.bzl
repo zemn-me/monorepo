@@ -13,7 +13,7 @@ load("@rules_rust//wasm_bindgen:repositories.bzl", "rust_wasm_bindgen_repositori
 def deps():
     """Define dependencies for `rules_rust` examples"""
 
-    rust_repositories(include_rustc_src = True)
+    rust_repositories(include_rustc_srcs = True)
 
     rust_bindgen_repositories()
 
