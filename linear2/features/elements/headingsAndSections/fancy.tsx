@@ -3,7 +3,7 @@ import React from 'react'
 import { classes } from 'linear2/features/elements/util'
 
 export interface HeadingProps<
-	depth extends 1 | 2 | 3 | 4 | 5 = 1 | 2 | 3 | 4 | 5
+	depth extends 1 | 2 | 3 | 4 | 5 = 1 | 2 | 3 | 4 | 5,
 > {
 	heading: React.ReactElement
 	subtitle?: React.ReactElement

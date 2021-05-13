@@ -39,10 +39,7 @@ type MonthNames = O.Invert<typeof Month>
 
 type MonthName<m extends number> = MonthNames[m]
 
-type range<A extends number, B extends number> = N.Format<
-	L.UnionOf<N.Range<N.NumberOf<A>, N.NumberOf<B>>>,
-	'n'
->
+type range<A extends number, B extends number> = L.UnionOf<N.Range<A, B>>
 
 type MonthDates = {
 	[Month.jan]: range<1, 31>
