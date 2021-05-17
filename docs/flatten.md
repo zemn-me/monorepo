@@ -33,6 +33,8 @@
 * [rust_wasm_bindgen](#rust_wasm_bindgen)
 * [rust_wasm_bindgen_repositories](#rust_wasm_bindgen_repositories)
 * [rust_wasm_bindgen_toolchain](#rust_wasm_bindgen_toolchain)
+* [rustfmt_aspect](#rustfmt_aspect)
+* [rustfmt_test](#rustfmt_test)
 
 
 <a id="#crate_universe"></a>
@@ -1281,6 +1283,25 @@ For additional information, see the [Bazel toolchains documentation][toolchains]
 | <a id="rust_wasm_bindgen_toolchain-bindgen"></a>bindgen |  The label of a <code>wasm-bindgen-cli</code> executable.   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
 
 
+<a id="#rustfmt_test"></a>
+
+## rustfmt_test
+
+<pre>
+rustfmt_test(<a href="#rustfmt_test-name">name</a>, <a href="#rustfmt_test-targets">targets</a>)
+</pre>
+
+A test rule for performing `rustfmt --check` on a set of targets
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="rustfmt_test-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| <a id="rustfmt_test-targets"></a>targets |  Rust targets to run <code>rustfmt --check</code> on.   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
+
+
 <a id="#cargo_build_script"></a>
 
 ## cargo_build_script
@@ -1755,5 +1776,42 @@ $ bazel build --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect           
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="rust_clippy_aspect-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |   |
+
+
+<a id="#rustfmt_aspect"></a>
+
+## rustfmt_aspect
+
+<pre>
+rustfmt_aspect(<a href="#rustfmt_aspect-name">name</a>)
+</pre>
+
+This aspect is used to gather information about a crate for use in rustfmt and perform rustfmt checks
+
+Output Groups:
+
+- `rustfmt_manifest`: A manifest used by rustfmt binaries to provide crate specific settings.
+- `rustfmt_checks`: Executes `rustfmt --check` on the specified target.
+
+The build setting `@rules_rust//:rustfmt.toml` is used to control the Rustfmt [configuration settings][cs]
+used at runtime.
+
+[cs]: https://rust-lang.github.io/rustfmt/
+
+This aspect is executed on any target which provides the `CrateInfo` provider. However
+users may tag a target with `norustfmt` to have it skipped. Additionally, generated
+source files are also ignored by this aspect.
+
+
+**ASPECT ATTRIBUTES**
+
+
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="rustfmt_aspect-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |   |
 
 
