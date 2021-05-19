@@ -29,8 +29,10 @@ export const makeYears: (b: Bio['timeline']) => Year[] = (timeline) => {
 			event,
 		)
 
-	const yearsToMonths: Map<number, Map<model.time.date.Month, BioEvent[]>> =
-		new Map()
+	const yearsToMonths: Map<
+		number,
+		Map<model.time.date.Month, BioEvent[]>
+	> = new Map()
 
 	// i made this operation higher level and it made even
 	// less sense, for which i am sorry

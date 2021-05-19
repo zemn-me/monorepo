@@ -29,7 +29,9 @@ export const uniq: <T>(v: Iterable<T>) => Iterable<T> = function* uniq<T>(
 	}
 }
 
-export const classes: (...classes: (string | undefined)[]) =>
+export const classes: (
+	...classes: (string | undefined)[]
+) =>
 	| { className: undefined }
 	| {
 			className: string
@@ -49,8 +51,9 @@ export const classes: (...classes: (string | undefined)[]) =>
 	return { className: definedClasses.join(' ') }
 }
 
-export type PropsOf<T extends keyof JSX.IntrinsicElements> =
-	JSX.IntrinsicElements[T]
+export type PropsOf<
+	T extends keyof JSX.IntrinsicElements
+> = JSX.IntrinsicElements[T]
 
 export const prettyAnchor = (s: string | undefined) => s?.replace(/ /g, '_')
 

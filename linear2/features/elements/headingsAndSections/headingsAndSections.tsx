@@ -112,8 +112,9 @@ export const useText: () => [
 	return [onElementMount, text]
 }
 
-export type HeadingElement<T extends HeaderComponent = HeaderComponent> =
-	React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>
+export type HeadingElement<
+	T extends HeaderComponent = HeaderComponent
+> = React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>
 
 export function mergeRefs<T = any>(
 	...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>

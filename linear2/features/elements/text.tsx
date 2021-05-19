@@ -33,8 +33,9 @@ export const WithLang: (props: WithLangProps) => React.ReactElement = ({
 	return React.cloneElement(children, { ...children.props, ...useLang(lang) })
 }
 
-export const withTextContext =
-	React.createContext<model.lang.Text | undefined>(undefined)
+export const withTextContext = React.createContext<model.lang.Text | undefined>(
+	undefined,
+)
 export interface WithTextProps {
 	text?: model.lang.Text
 	children: React.ReactElement<{ lang?: string }>

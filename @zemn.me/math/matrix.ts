@@ -5,7 +5,7 @@ import * as vec from './vec'
 export interface Matrix<
 	I extends number = number,
 	J extends number = number,
-	T = number,
+	T = number
 > extends Vector<J, Vector<I, T>> {}
 
 export type Square<IJ extends number, T = number> = Matrix<IJ, IJ, T>
@@ -13,7 +13,7 @@ export type Square<IJ extends number, T = number> = Matrix<IJ, IJ, T>
 export const as: <
 	I extends number = number,
 	J extends number = number,
-	T = number,
+	T = number
 >(
 	v: readonly (readonly T[] & { length: I })[] & { length: J },
 ) => Matrix<I, J, T> = (v) => v as any
@@ -73,7 +73,7 @@ export const mul: <
 	I1 extends number,
 	J1 extends number,
 	I2 extends number,
-	J2 extends number,
+	J2 extends number
 >(
 	m1: Matrix<I1, J1>,
 	m2: Matrix<I2, J2>,
@@ -81,7 +81,7 @@ export const mul: <
 	I1 extends number,
 	J1 extends number,
 	I2 extends number,
-	J2 extends number,
+	J2 extends number
 >(
 	m1: Matrix<I1, J1>,
 	m2: Matrix<I2, J2>,
@@ -162,7 +162,7 @@ function mustIsSquare<T>(
 export type Multiply<
 	A extends Matrix<number, number, unknown>,
 	B extends Matrix<number, number, unknown>,
-	O = number,
+	O = number
 > = [A, B] extends [
 	Matrix<infer I1, infer J1, unknown>,
 	Matrix<infer I2, infer J2, unknown>,
@@ -177,7 +177,7 @@ export type Multiply<
 export type TransformTo<
 	In extends Matrix<number, number, unknown>,
 	Out extends Matrix<number, number, unknown>,
-	O = number,
+	O = number
 > = [In, Out] extends [
 	Matrix<infer I1, infer J1, unknown>,
 	Matrix<infer I2, infer J2, unknown>,
@@ -264,7 +264,7 @@ export const checkerboard: <I extends number, J extends number>(
  * Returns the inverse of a matrix of given dimensions
  */
 export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
-	IJ extends number,
+	IJ extends number
 >(
 	m: Square<IJ>,
 ) => {
