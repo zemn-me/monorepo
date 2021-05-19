@@ -15,17 +15,21 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 
 	const xs = [
 		...(function* () {
-			for (const line of lines)
+			for (const line of lines) {
 				for (const point of line) {
 					yield point[0][0]
 				}
+			}
 		})(),
 	]
 
 	const ys = [
 		...(function* () {
-			for (const line of lines)
-				for (const point of line) yield point[1][0]
+			for (const line of lines) {
+				for (const point of line) {
+					yield point[1][0]
+				}
+			}
 		})(),
 	]
 

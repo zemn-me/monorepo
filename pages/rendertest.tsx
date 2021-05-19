@@ -1,4 +1,4 @@
-import { Canvas } from '../@zemn.me/math/canvas/react'
+import { Canvas } from '../@zemn.me/math/canvas/element'
 import * as Shape from '../@zemn.me/math/shape/3d'
 import React from 'react'
 
