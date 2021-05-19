@@ -21,14 +21,12 @@ export const tag: (
 ) => (
 	text: TemplateStringsArray,
 	...text2: { toString(): string }[]
-) => TaggedText =
-	(lang) =>
-	(text, ...text2) => {
-		let o: string[] = []
-		for (let i = 0; i < Math.max(text.length, text2.length); i++)
-			o.push(text[i] ?? '', (text2[i] ?? '').toString())
-		return [lang, o.join('')] as const
-	}
+) => TaggedText = (lang) => (text, ...text2) => {
+	let o: string[] = []
+	for (let i = 0; i < Math.max(text.length, text2.length); i++)
+		o.push(text[i] ?? '', (text2[i] ?? '').toString())
+	return [lang, o.join('')] as const
+}
 
 /**
  * check if a Text is a TaggedText

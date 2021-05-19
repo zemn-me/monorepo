@@ -41,17 +41,18 @@ class As3D<T extends Canvas.Drawable2D> implements Canvas.Drawable3D {
 	constructor(public readonly target: T) {}
 	public lines3D(): Homog.Line3D[] {
 		return this.target.lines2D().map((line) =>
-			line.map((point: Homog.Point2D): Homog.Point3D => {
-				const [[x], [y], [scale]] = point
-				return [[x], [y], [0], [scale]] as const
-			}),
+			line.map(
+				(point: Homog.Point2D): Homog.Point3D => {
+					const [[x], [y], [scale]] = point
+					return [[x], [y], [0], [scale]] as const
+				},
+			),
 		)
 	}
 }
 
 export class Translate3D<T extends Canvas.Drawable3D>
-	implements Canvas.Drawable3D
-{
+	implements Canvas.Drawable3D {
 	constructor(public readonly target: T, public readonly by: Homog.Point3D) {}
 
 	public lines3D(): Homog.Line3D[] {
