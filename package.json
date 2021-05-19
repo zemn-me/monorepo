@@ -6,8 +6,6 @@
 	"author": "Thomas Shadwell <zemnmez@googlemail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"@mdx-js/loader": "^1.6.16",
-		"@mdx-js/react": "^1.6.16",
 		"@silvenon/remark-smartypants": "^1.0.0",
 		"@types/react-syntax-highlighter": "^13.5.0",
 		"babel-plugin-import-glob-array": "^0.2.0",
@@ -16,7 +14,6 @@
 		"d3-selection": "^2.0.0",
 		"file-loader": "webpack-contrib/file-loader",
 		"glob": "^7.1.7",
-		"mdx-table-of-contents": "^0.1.0",
 		"next": "^10.2.1-canary.12",
 		"next-build-id": "^3.0.0",
 		"next-images": "^1.5.0",
