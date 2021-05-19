@@ -87,21 +87,18 @@ function cssMinifierPlugin(phase, { defaultConfig: config }) {
 	return {
 		...config,
 		webpack(wpcfg, ...a) {
-			wpcfg.module.rules[1].oneOf.forEach((moduleLoader) => {
-				Array.isArray(moduleLoader.use) &&
-					moduleLoader.use.forEach((l) => {
-						if (l.loader.includes('css-loader')) {
-							l.options = {
-								...l.options,
-								modules: {
-									...l.options.modules,
-									...{ getLocalIdent: uniqueClass },
-									//{}
-								},
-							}
-						}
-					})
-			})
+			for (const rule of wpcfg.module.rules) {
+				if (!rule.oneOf) continue
+				for (const choice in rule.oneOf) {
+					if (!(choice.use instanceof Array)) continue
+					for (const loader in choice.use) {
+						if (!loader.loader.includes('css-loader')) continue
+						loader.options = loader.options || {}
+						loader.options.modules = loader.options.modules || {}
+						loader.options.modules.getLocalIdent = uniqueClass
+					}
+				}
+			}
 
 			wpcfg.node = { fs: 'empty' }
 			if (config.webpack) wpcfg = config.webpack(wpcfg, ...a)
