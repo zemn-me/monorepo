@@ -17,7 +17,7 @@
 		"file-loader": "webpack-contrib/file-loader",
 		"glob": "^7.1.7",
 		"mdx-table-of-contents": "^0.1.0",
-		"next": "^9.5.1",
+		"next": "^10.2.1-canary.12",
 		"next-build-id": "^3.0.0",
 		"next-images": "^1.5.0",
 		"react": "^17.0.2",
@@ -50,6 +50,7 @@
 		"xdm": "^1.11.0"
 	},
 	"devDependencies": {
+		"@babel/preset-typescript": "^7.13.0",
 		"@testing-library/dom": "^7.31.0",
 		"@testing-library/jest-dom": "^5.12.0",
 		"@testing-library/react": "^11.2.7",
