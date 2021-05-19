@@ -34,7 +34,8 @@ type Filter<T, T2> = Pick<
 >
 
 export class Generator<cfg extends object>
-	implements Scalable<cfg & { width: number; height: number }> {
+	implements Scalable<cfg & { width: number; height: number }>
+{
 	scalable: Scalable<cfg>
 	keys: (keyof Filter<cfg, number>)[]
 	props: Scalable<cfg & { width: number; height: number }>['props']
@@ -56,7 +57,7 @@ export class Generator<cfg extends object>
 
 		const copy = { ...cfg }
 
-		for (const key of this.keys) ((copy[key] as any) as number) *= k
+		for (const key of this.keys) (copy[key] as any as number) *= k
 		return copy
 	}
 
