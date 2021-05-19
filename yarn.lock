@@ -10106,10 +10106,12 @@ unist-util-generated@^1.0.0, unist-util-generated@^1.1.0:
   resolved "https://registry.yarnpkg.com/unist-util-generated/-/unist-util-generated-1.1.6.tgz#5ab51f689e2992a472beb1b35f2ce7ff2f324d4b"
   integrity sha512-cln2Mm1/CZzN5ttGK7vkoGw+RZ8VcUH6BtGbq98DDtRGquAAOXig1mrBQYelOwMXYS8rK+vZDyyojSjp7JX+Lg==
 
-unist-util-inspect@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/unist-util-inspect/-/unist-util-inspect-6.0.1.tgz#1b6b52bc9af8632eb968227dc8ddaccb349913ad"
-  integrity sha512-odX3qLR7qhUnUYXsVClNNyiKftVcHDnd10fUBMmZekvyFS/M8toMsKhXQr7sW66NsFiEezQTCxX3M0dpGbfM3w==
+unist-util-inspect@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/unist-util-inspect/-/unist-util-inspect-7.0.0.tgz#98426f0219e24d011a27e32539be0693d9eb973e"
+  integrity sha512-2Utgv78I7PUu461Y9cdo+IUiiKSKpDV5CE/XD6vTj849a3xlpDAScvSJ6cQmtFBGgAmCn2wR7jLuXhpg1XLlJw==
+  dependencies:
+    "@types/unist" "^2.0.0"
 
 unist-util-is@^3.0.0:
   version "3.0.0"
@@ -10723,10 +10725,10 @@ x-is-string@^0.1.0:
   resolved "https://registry.yarnpkg.com/x-is-string/-/x-is-string-0.1.0.tgz#474b50865af3a49a9c4657f05acd145458f77d82"
   integrity sha1-R0tQhlrzpJqcRlfwWs0UVFj3fYI=
 
-xdm@^1.5.1:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/xdm/-/xdm-1.9.0.tgz#f25316b2a4343769839a740b752290face356998"
-  integrity sha512-qHn/wxuXqjG324PWWTbiZrrnJBd5atcJ4Zz/CvEyRD1rWFuRz3p60VJRYbJxEv6hvqrpoM9szp+Gi3N6b+0dXg==
+xdm@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/xdm/-/xdm-1.11.0.tgz#a8307c9f94385b43d5dba1902a5a077c81cd0884"
+  integrity sha512-gWPvH5VfO6Tg6SiMQ23EJIh6Hr0ZIrkAo90dl+tW3wS/X053daN91tKhrOkd6CNm9yHdV9esuSCq3Gf5ghXWmg==
   dependencies:
     "@rollup/pluginutils" "^4.0.0"
     "@types/estree-jsx" "^0.0.1"
