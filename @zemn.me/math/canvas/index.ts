@@ -1,4 +1,4 @@
-import * as Homog from './homog'
+import * as Homog from '../homog'
 
 export type Drawable2D = LineDrawable2D
 

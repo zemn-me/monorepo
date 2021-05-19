@@ -1,8 +1,9 @@
 import * as Homog from '../homog'
+import * as Camera from '../camera'
 import * as Matrix from '../matrix'
 import * as Canvas from '../canvas'
 
-class Square implements Canvas.Drawable2D {
+export class Square implements Canvas.Drawable2D {
 	public readonly r: number
 	public readonly d: number
 	get width() {
@@ -40,17 +41,17 @@ class As3D<T extends Canvas.Drawable2D> implements Canvas.Drawable3D {
 	constructor(public readonly target: T) {}
 	public lines3D(): Homog.Line3D[] {
 		return this.target.lines2D().map((line) =>
-			line.map(
-				(point: Homog.Point2D): Homog.Point3D => {
-					const [[x], [y], [scale]] = point
-					return [[x], [y], [0], [scale]] as const
-				},
-			),
+			line.map((point: Homog.Point2D): Homog.Point3D => {
+				const [[x], [y], [scale]] = point
+				return [[x], [y], [0], [scale]] as const
+			}),
 		)
 	}
 }
 
-class Translate3D<T extends Canvas.Drawable3D> implements Canvas.Drawable3D {
+export class Translate3D<T extends Canvas.Drawable3D>
+	implements Canvas.Drawable3D
+{
 	constructor(public readonly target: T, public readonly by: Homog.Point3D) {}
 
 	public lines3D(): Homog.Line3D[] {
@@ -60,7 +61,7 @@ class Translate3D<T extends Canvas.Drawable3D> implements Canvas.Drawable3D {
 	}
 }
 
-class Cube implements Canvas.Drawable3D {
+export class Cube implements Canvas.Drawable3D {
 	private readonly square: Square
 	constructor(public readonly diameter: number) {
 		this.square = new Square(diameter)
@@ -90,5 +91,15 @@ class Cube implements Canvas.Drawable3D {
 			[ABR, BBR],
 			[ABL, BBL],
 		]
+	}
+}
+
+export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
+	constructor(public readonly value: T) {}
+
+	lines2D() {
+		return this.value
+			.lines3D()
+			.map((line) => line.map((point) => Camera.transform(point)))
 	}
 }

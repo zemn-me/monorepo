@@ -24,11 +24,11 @@ declare module 'react-syntax-highlighter' {
 	}
 
 	type Properties<
-		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
+		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
 	> = { className: string[] } & Omit<JSX.IntrinsicElements[T], 'className'>
 
 	type Element<
-		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
+		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
 	> = __Element & { tagName: T }
 
 	type __Element = ValueOf<
@@ -36,7 +36,7 @@ declare module 'react-syntax-highlighter' {
 	>
 
 	interface _Element<
-		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
+		T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
 	> {
 		type: 'element'
 		tagName: T
