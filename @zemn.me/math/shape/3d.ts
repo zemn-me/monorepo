@@ -95,11 +95,16 @@ export class Cube implements Canvas.Drawable3D {
 }
 
 export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
-	constructor(public readonly value: T) {}
+	constructor(
+		public readonly value: T,
+		public readonly focalLength?: number,
+	) {}
 
 	lines2D() {
 		return this.value
 			.lines3D()
-			.map((line) => line.map((point) => Camera.transform(point)))
+			.map((line) =>
+				line.map((point) => Camera.transform(point, this.focalLength)),
+			)
 	}
 }
