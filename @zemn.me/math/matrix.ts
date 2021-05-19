@@ -272,3 +272,9 @@ export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
 
 	return map(transpose(checkerboard(minors(m))), (n) => d * n)
 }
+
+export const asVec = <I extends number>(m: Matrix<1, I>): Vector<I, number> =>
+	[].concat(...(m as any)) as any
+
+export const fromVec = <I extends number>(m: vec.Vector<I>): Matrix<1, I> =>
+	map(New(1, m.length), (_, [i, j]) => m[j])

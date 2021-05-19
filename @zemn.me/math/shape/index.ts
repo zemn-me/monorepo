@@ -61,6 +61,19 @@ export class Translate3D<T extends Canvas.Drawable3D>
 	}
 }
 
+export class Group3D<T extends readonly Canvas.Drawable3D[]>
+	implements Canvas.Drawable3D
+{
+	readonly targets: T
+	constructor(...targets: T) {
+		this.targets = targets
+	}
+
+	public lines3D(): Homog.Line3D[] {
+		return [].concat.apply(this.targets.map((t) => t.lines3D()))
+	}
+}
+
 export class Cube implements Canvas.Drawable3D {
 	private readonly square: Square
 	constructor(public readonly diameter: number) {

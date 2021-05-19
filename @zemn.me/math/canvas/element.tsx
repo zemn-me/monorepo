@@ -56,7 +56,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 						d={d}
 						key={d}
 						style={{ fill: 'none', stroke: 'black' }}
-						vectorEffect="none-scaling-stroke"
+						vectorEffect="non-scaling-stroke"
 					/>
 				)
 			})}

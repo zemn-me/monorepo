@@ -355,6 +355,19 @@ describe('matrix', () => {
 			expect(matrix.add(a, b)).toEqual(o)
 		})
 	})
+
+	describe('.asVec', () => {
+		test('1', () => {
+			const i = [[1], [2], [3]] as const
+			expect(matrix.asVec(i)).toEqual([1, 2, 3])
+		})
+	})
+	describe('.fromVec', () => {
+		test('1', () => {
+			const i = [[1], [2], [3]] as const
+			expect(i).toEqual(matrix.fromVec(matrix.asVec(i)))
+		})
+	})
 })
 
 describe('vec', () => {
@@ -380,5 +393,20 @@ describe('vec', () => {
 				expect(vec.mul(a, b)).toEqual(o)
 			},
 		)
+	})
+
+	describe('.mag', () => {
+		test('1', () => {
+			expect(vec.mag([4,4])).toEqual(Math.sqrt(Math.pow(4,2)+Math.pow(4,2)))
+		});
+	});
+
+	describe('.unit', () => {
+		test('1', () => {
+			expectMatrixSimilar([vec.unit([2,2])], [[1,1]])
+		})
+		test('2', () => {
+			expectMatrixSimilar([vec.unit([1,1])], [[1,1]])
+		});
 	})
 })

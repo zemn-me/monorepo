@@ -61,6 +61,11 @@ export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v2,
 ) => map(v2, (v, i) => v * v1)
 
+export const unit = <T extends number>(vector: Vector<T>): Vector<T> => {
+	const m = mag(vector)
+	return map(vector, (v) => v / m)
+}
+
 export const dot: (v1: Iterable<number>, v2: Iterable<number>) => number = (
 	v1,
 	v2,
@@ -100,3 +105,6 @@ export const zip: {
 		[T1 | T3, T2 | T3]
 	>
 } = _zip as any
+
+export const mag = (v: Vector<number>): number =>
+	Math.sqrt(sum(map(v, v => Math.pow(v, 2))))
