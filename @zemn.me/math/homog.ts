@@ -25,3 +25,10 @@ export function lineToCart(p: Line3D): Cart.Line3D
 export function lineToCart(line: Line2D | Line3D): Cart.Line2D | Cart.Line3D {
 	return line.map((point: any) => pointToCart(point))
 }
+
+export function fromCart(p: Cart.Point2D): Point2D
+export function fromCart(p: Cart.Point3D): Point3D
+
+export function fromCart(p: Cart.Point2D | Cart.Point3D): any {
+    return [...p, [1]]
+}

@@ -11,8 +11,11 @@ import React from 'react'
 class Rain implements Drawable3D {
 	private raindrops: Homog.Point3D[] = []
 	public size: number = 1
-	// in units per second
-	public wind: Cart.Vec3D = [[0], [0], [-1]] as const
+	// in cubes per millisecond
+	public wind: Cart.Vec3D = [[0], [0], [-1/5000]] as const
+	get windGlobal(): Cart.Vec3D {
+		return Matrix.fromVec(Vec.mul(this.size, Matrix.asVec(this.wind)))
+	}
 	public raindropLength: number = 0.1 // in cubes
 	addRainDrop() {
 		const { size } = this
@@ -26,6 +29,21 @@ class Rain implements Drawable3D {
 		const z = size
 
 		this.raindrops.push([[x], [y], [z], [1]] as const)
+	}
+
+	private simulateRaindrop(ms: number) {
+		const windDisplacmentv = Vec.mul(ms, Matrix.asVec(this.windGlobal));
+		this.raindrops = this.raindrops.map(rd => {
+			const rdv = Matrix.asVec(Homog.pointToCart(rd));
+			return Homog.fromCart(Matrix.fromVec(Vec.add(
+				rdv,
+				windDisplacmentv
+			)))
+		});
+	}
+
+	simulate(ms: number) {
+		this.simulateRaindrop(ms);
 	}
 
 
@@ -56,9 +74,16 @@ class Rain implements Drawable3D {
 }
 
 export default function RenderTest() {
-	const [a, setA] = React.useState<number>(0)
-	const [b, setB] = React.useState<number>(0)
-	const [c, setC] = React.useState<number>(0)
+	const [a, setA] = React.useState<number>(3000)
+	const [b, setB] = React.useState<number>(-9735)
+	const [c, setC] = React.useState<number>(-7965)
+	const [rainSim, setRainSim] = React.useState<Rain>(() => {
+		console.log("starting rain sim");
+		const sim = new Rain();
+		sim.addRainDrops(10)
+		return sim;
+	});
+
 
 	const onAChange = React.useCallback(
 		(e: { target: { value: string } }) => {
@@ -84,15 +109,18 @@ export default function RenderTest() {
 		[setC],
 	)
 
-	const space3d = React.useMemo(() => {
-		const r = new Rain()
-		r.size = 10
-		r.addRainDrops(10)
-		return r
-	}, [])
+
+	React.useEffect(() => {
+		const int = 1000/60
+		const hnd = setInterval(() => {
+			rainSim.simulate(int)
+			setRainSim(() => rainSim)
+		}, int);
+		return () => clearInterval(hnd)
+	}, [ rainSim, setRainSim, ]);
 
 	const space2d = new Shape.Project(
-		new Shape.Translate3D(space3d, [
+		new Shape.Translate3D(rainSim, [
 			[a / 1000],
 			[b / 1000],
 			[c / 1000],
@@ -102,16 +130,7 @@ export default function RenderTest() {
 
 	return (
 		<>
-			<h1>A Square!</h1>
-			<Canvas draw={new Shape.Square(10)} />
 			<h1>A Cube!</h1>
-			<input
-				type="range"
-				min="-100000"
-				max="100000"
-				value={a}
-				onChange={onAChange}
-			/>
 			<input
 				type="range"
 				min="-100000"
@@ -126,7 +145,17 @@ export default function RenderTest() {
 				value={c}
 				onChange={onCChange}
 			/>
+			<input
+				type="range"
+				min="-100000"
+				max="100000"
+				value={a}
+				onChange={onAChange}
+			/>
 			<Canvas draw={space2d} />
+			<h1>A Square!</h1>
+			<Canvas draw={new Shape.Square(10)} />
+
 		</>
 	)
 }

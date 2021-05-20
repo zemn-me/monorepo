@@ -61,6 +61,13 @@ export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v2,
 ) => map(v2, (v, i) => v * v1)
 
+export const div: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
+	v1,
+	v2,
+) => map(v2, (v, i) => v / v1)
+
+
+
 export const unit = <T extends number>(vector: Vector<T>): Vector<T> => {
 	const m = mag(vector)
 	return map(vector, (v) => v / m)
