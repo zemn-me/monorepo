@@ -1,10 +1,5 @@
 import * as Vec from '@zemn.me/math/vec'
 
-export type Simulation<D extends number = number> = (
-	particles: Particle<D>[],
-	elapsedSeconds: number,
-) => { done?: true } | undefined
-
 export interface Particle<D extends number = number> {
 	/**
 	 * kg
@@ -64,6 +59,13 @@ export const simulate: <D extends number>(
 	const newDisplacement = Vec.add(particle.displacement, dx)
 	const newSpeed = Vec.add(particle.speed, increaseInSpeed)
 
-	return { ...{displacement: particle.displacement, mass: particle.mass, speed: particle.speed},
-		displacement: newDisplacement, speed: newSpeed }
+	return {
+		...{
+			displacement: particle.displacement,
+			mass: particle.mass,
+			speed: particle.speed,
+		},
+		displacement: newDisplacement,
+		speed: newSpeed,
+	}
 }
