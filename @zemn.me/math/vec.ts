@@ -54,24 +54,27 @@ export const New: <N extends number>(n: number) => Vector<N, undefined> = (n) =>
 export const add: <I extends number>(
 	v1: Vector<I>,
 	v2: Vector<I>,
-) => Vector<I> = (v1, v2) => map(v1, (v, i) => v + v2[i])
+) => Vector<I> = (v1, v2) => {
+	;[v1, v2] = [v1, v2].sort((a, b) => b.length - a.length)
+	return map(v1, (v, i) => v + (i in v2 ? v2[i] : 0))
+}
 
 export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v1,
 	v2,
 ) => map(v2, (v, i) => v * v1)
 
-export const div: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
-	v1,
+export const div: <I extends number>(v1: Vector<I>, v2: number) => Vector<I> = (
 	v2,
+	v1,
 ) => map(v2, (v, i) => v / v1)
 
-
-
+/*
 export const unit = <T extends number>(vector: Vector<T>): Vector<T> => {
 	const m = mag(vector)
 	return map(vector, (v) => v / m)
 }
+*/
 
 export const dot: (v1: Iterable<number>, v2: Iterable<number>) => number = (
 	v1,
@@ -114,4 +117,4 @@ export const zip: {
 } = _zip as any
 
 export const mag = (v: Vector<number>): number =>
-	Math.sqrt(sum(map(v, v => Math.pow(v, 2))))
+	Math.sqrt(sum(map(v, (v) => Math.pow(v, 2))))
