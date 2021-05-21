@@ -22,9 +22,11 @@ class Raindrop implements Particle.Particle<3> {
 	get topHomog() {
 		return Homog.fromCart(Matrix.fromVec(this.top))
 	}
+
 	get bottom() {
-		return Vec.add(this.displacement, [0, this.length, 0] as const)
+		return Vec.add(this.displacement, Vec.mul(this.length, Vec.unit3(this.speed)))
 	}
+
 	get bottomHomog() {
 		return Homog.fromCart(Matrix.fromVec(this.bottom))
 	}
@@ -56,12 +58,12 @@ class Rain implements Drawable3D {
 	}
 
 	private randomVel() {
-		return (Math.random() > 0.5 ? -1 : 1) * 0.1 + Math.random() * 1
+		return (Math.random() > 0.5 ? -1 : 1) * 2 + Math.random() * 1
 	}
 
 	private addRainDrop() {
 		const raindrop = new Raindrop(this.raindropPos())
-		raindrop.speed = [this.randomVel(), 0, this.randomVel()] as const
+		raindrop.speed = [this.randomVel(), this.randomVel(), this.randomVel()] as const
 		this.raindrops.push(raindrop)
 	}
 
@@ -74,7 +76,8 @@ class Rain implements Drawable3D {
 
 	simulate(timeDelta: number) {
 		for (const raindrop of this.raindrops) {
-			Particle.simulate(raindrop, timeDelta, ...this.fields)
+			const np = Particle.simulate(raindrop, timeDelta, ...this.fields);
+			Object.assign(raindrop, np);
 		}
 
 		const newRaindrops = this.raindrops.filter(

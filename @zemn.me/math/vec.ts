@@ -51,13 +51,23 @@ export const as: <T, L extends number>(
 export const New: <N extends number>(n: number) => Vector<N, undefined> = (n) =>
 	[...Array(n)] as any as Vector<any, undefined>
 
+export const compare = <N extends number>(a: Vector<N>, b: Vector<N>, f: (a: number, b: number, i: number, vs: [Vector<N, number>, Vector<N, number>]) => O): Vector<N, O> => {
+	const [longer, shorter] = [a, b].sort((a, b) => b.length - a.length);
+	return map(longer, (_, i) => {
+		const [ v1, v2 ] = [
+			(i in a)?a[i]: 0,
+			(i in b)?b[i]: 0
+		];
+		return f(v1, v2, i, [a, b]);
+	});
+}
+
 export const add: <I extends number>(
 	v1: Vector<I>,
 	v2: Vector<I>,
-) => Vector<I> = (v1, v2) => {
-	;[v1, v2] = [v1, v2].sort((a, b) => b.length - a.length)
-	return map(v1, (v, i) => v + (i in v2 ? v2[i] : 0))
-}
+) => Vector<I> = (v1, v2) => compare(v1, v2, (a, b) => a + b)
+
+export const sub: <I extends number>(v1: Vector<I>, v2: Vector<I>) => Vector<I> = (v1, v2) => compare(v1, v2, (a, b) => a - b)
 
 export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v1,
@@ -118,3 +128,6 @@ export const zip: {
 
 export const mag = (v: Vector<number>): number =>
 	Math.sqrt(sum(map(v, (v) => Math.pow(v, 2))))
+
+export const unit3 = (v: Vector<3>): Vector<3> =>
+	map(v, val => val / Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[2], 2)))
