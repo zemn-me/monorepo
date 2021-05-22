@@ -81,6 +81,7 @@ export const sub: <I extends number>(
 	v2: Vector<I>,
 ) => Vector<I> = (v1, v2) => compare(v1, v2, (a, b) => a - b)
 
+
 export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v1,
 	v2,
