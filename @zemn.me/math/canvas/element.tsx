@@ -43,7 +43,7 @@ type SVGLineElementPropsWithoutPoints = Omit<JSX.IntrinsicElements["line"], "x1"
 export interface LineProps<N extends number = number> extends SVGLineElementPropsWithoutPoints{
 	start: Vec.Vector<N>
 	end: Vec.Vector<N>,
-	children: never
+	children?: never
 }
 
 export const Line3D = (props: LineProps<3>) => {
@@ -58,6 +58,41 @@ export const Line3D = (props: LineProps<3>) => {
 	end2D = use2DCoordinates(end2D);
 	const [ [ x1, y1], [x2, y2]] = [ start2D, end2D ];
 	return <line x1={x1} y1={y1} x2={x2} y2={y2}/>
+}
+
+export interface SquareProps {
+	r: number
+}
+
+export const Square = ({r}: SquareProps) => {
+	const TR: Vec.Vector<3> = [ r, r, 0] as const;
+	const BR: Vec.Vector<3> = [ -r, r, 0] as const;
+	const BL: Vec.Vector<3> = [ -r, -r, 0] as const;
+	const TL: Vec.Vector<3> = [ -r, r, 0 ] as const;
+
+	return <>
+		<Line3D start={TL} end={TR}/>
+		<Line3D start={TR} end={BR}/>
+		<Line3D start={BR} end={BL}/>
+		<Line3D start={BL} end={TL}/>
+	</>
+}
+
+export interface CubeProps {
+	r: number
+}
+
+export const Cube = ({ r }: CubeProps) => {
+	return <>
+		{/*front*/}
+		<Translate3D by={[0, 0, -r] as const}>
+			<Square r={r}/>
+		</Translate3D>
+		{/*back*/}
+		<Translate3D by={[0, 0, r] as const}>
+			<Square r={r}/>
+		</Translate3D>
+	</>
 }
 
 
