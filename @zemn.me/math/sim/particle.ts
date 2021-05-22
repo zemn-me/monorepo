@@ -1,10 +1,5 @@
 import * as Vec from '@zemn.me/math/vec'
 
-export type Simulation<D extends number = number> = (
-	particles: Particle<D>[],
-	elapsedSeconds: number,
-) => { done?: true } | undefined
-
 export interface Particle<D extends number = number> {
 	/**
 	 * kg
@@ -36,10 +31,10 @@ export const Gravity: Field<number> = ({ mass }) => [0, -mass * 10] as const
  * @param time seconds
  */
 export const simulate: <D extends number>(
-	p: Particle<D>,
+	p: Readonly<Particle<D>>,
 	timeDelta: number,
 	...fields: Field<D>[]
-) => void = (particle, timeDelta, ...fields) => {
+) => Particle<D> = (particle, timeDelta, ...fields) => {
 	const [firstForce, ...otherForces] = fields.map((f) =>
 		f(particle, timeDelta),
 	)
@@ -61,18 +56,16 @@ export const simulate: <D extends number>(
 
 	dx = Vec.add(timeTravelledDueToExtantSpeed, timeTravelledDuetoAccel)
 
-	particle.displacement = Vec.add(particle.displacement, dx)
-	particle.speed = Vec.add(particle.speed, increaseInSpeed)
+	const newDisplacement = Vec.add(particle.displacement, dx)
+	const newSpeed = Vec.add(particle.speed, increaseInSpeed)
 
-	/*console.table({
-        mass: particle.mass,
-        speed: particle.speed,
-        position: particle.displacement,
-        "experienced accel.": acc,
-        "under force": resultantForce,
-        dx,
-        timeDelta,
-timeTravelledDueToExtantSpeed ,
-increaseInSpeed
-    });*/
+	return {
+		...{
+			displacement: particle.displacement,
+			mass: particle.mass,
+			speed: particle.speed,
+		},
+		displacement: newDisplacement,
+		speed: newSpeed,
+	}
 }

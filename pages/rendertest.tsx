@@ -10,27 +10,45 @@ import * as Matrix from '@zemn.me/math/matrix'
 import React from 'react'
 import { request } from 'https'
 
-class Raindrop implements Particle.Particle<3> {
+class Line implements Drawable3D {
+	constructor(public top?: Vec.Vector<3>, public bottom?: Vec.Vector<3>) {}
+
+	get bottomHomog() {
+		return this.bottom
+			? Homog.fromCart(Matrix.fromVec(this.bottom))
+			: this.bottom
+	}
+
+	get topHomog() {
+		return this.top ? Homog.fromCart(Matrix.fromVec(this.top)) : this.top
+	}
+
+	lines3D() {
+		if (this.topHomog === undefined || this.bottomHomog === undefined)
+			return []
+		return [[this.topHomog, this.bottomHomog]] as const
+	}
+}
+
+class Raindrop implements Particle.Particle<3>, Drawable3D {
 	public mass = Unit.g * 0.1
 	public length = Unit.cm * 10
 	public speed: Vec.Vector<3> = [0, 0, 0] as const
+	private line = new Line()
+	private oldPos: Vec.Vector<3> | undefined
+
 	constructor(public displacement: Vec.Vector<3>) {}
 
-	get top() {
-		return this.displacement
-	}
-	get topHomog() {
-		return Homog.fromCart(Matrix.fromVec(this.top))
-	}
-	get bottom() {
-		return Vec.add(this.displacement, [0, this.length, 0] as const)
-	}
-	get bottomHomog() {
-		return Homog.fromCart(Matrix.fromVec(this.bottom))
+	simulate(timeDelta: number, ...fields: Particle.Field[]) {
+		const np = Particle.simulate(this, timeDelta, ...fields)
+		this.oldPos = this.displacement
+		Object.assign(this, np)
 	}
 
-	lines3D(): [Homog.Line3D] {
-		return [[this.topHomog, this.bottomHomog]]
+	lines3D() {
+		this.line.top = this.oldPos
+		this.line.bottom = this.displacement
+		return [...this.line.lines3D()]
 	}
 }
 
@@ -56,12 +74,17 @@ class Rain implements Drawable3D {
 	}
 
 	private randomVel() {
-		return (Math.random() > 0.5 ? -1 : 1) * 0.1 + Math.random() * 1
+		return (Math.random() > 0.5 ? -1 : 1) * 2 + Math.random() * 1
 	}
 
 	private addRainDrop() {
 		const raindrop = new Raindrop(this.raindropPos())
-		raindrop.speed = [this.randomVel(), 0, this.randomVel()] as const
+		raindrop.speed = [
+			this.randomVel(),
+			this.randomVel(),
+			this.randomVel(),
+		] as const
+
 		this.raindrops.push(raindrop)
 	}
 
@@ -74,11 +97,16 @@ class Rain implements Drawable3D {
 
 	simulate(timeDelta: number) {
 		for (const raindrop of this.raindrops) {
-			Particle.simulate(raindrop, timeDelta, ...this.fields)
+			raindrop.simulate(timeDelta, ...this.fields)
 		}
 
 		const newRaindrops = this.raindrops.filter(
-			({ bottom: [bx, by, bz] }) => by > -this.ceil,
+			({ displacement: [bx, by, bz] }) =>
+				by > -this.ceil &&
+				bx > -this.ceil &&
+				bx < this.ceil &&
+				bz < this.ceil &&
+				bz > -this.ceil,
 		)
 
 		this.needToSpawn += this.raindrops.length - newRaindrops.length
