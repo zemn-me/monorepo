@@ -1,65 +1,81 @@
 import React from 'react'
+import * as Camera from '../camera';
+import * as Matrix from '../matrix';
 import * as Homog from '../homog'
+import * as Cart from '../cartesian';
 import * as Cnv from '.'
+import * as Vec from '../vec';
 
-export interface CanvasProps {
-	draw: Cnv.Drawable2D
+export const extent2DContext = React.createContext
+
+export const translate3DContext = React.createContext<Vec.Vector<3> | undefined>(undefined);
+export const translate2DContext = React.createContext<Vec.Vector<2> | undefined>(undefined);
+
+export const use3DCoordinates = (coords: Vec.Vector<3>): Vec.Vector<3> => {
+	const transform = React.useContext(translate3DContext);
+	if (transform) coords = Vec.add(transform, coords);
+	return coords;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
-	const lines = [
-		...(function* (a) {
-			for (let i = 0; i < a.length; i++) yield Homog.lineToCart(a[i])
-		})(draw.lines2D()),
-	]
+export interface Translate3DProps {
+	by: Vec.Vector<3>
+}
 
-	const xs = [
-		...(function* () {
-			for (const line of lines) {
-				for (const point of line) {
-					yield point[0][0]
-				}
-			}
-		})(),
-	]
+export const Translate3D: React.FC<Translate3DProps> = ({ by, children }) => {
+	const translate = React.useContext(translate3DContext);
+	if ( translate) by = Vec.add(by, translate);
+	return <translate3DContext.Provider value={translate}>
+		{children}
+	</translate3DContext.Provider>
+}
 
-	const ys = [
-		...(function* () {
-			for (const line of lines) {
-				for (const point of line) {
-					yield point[1][0]
-				}
-			}
-		})(),
-	]
+export const use2DCoordinates = (coords: Vec.Vector<2>): Vec.Vector<2> => {
+	const transform = React.useContext(translate2DContext);
+	if (transform) coords =  Vec.add(transform, coords);
+	return coords;
+}
 
-	const [xMax, yMax] = [Math.max(...xs), Math.max(...ys)]
-	const [xMin, yMin] = [Math.min(...xs), Math.min(...ys)]
+export const useProject = (v: Vec.Vector<3>): Vec.Vector<2> =>
+	Matrix.asVec(Homog.pointToCart(Camera.transform(Homog.fromCart(Matrix.fromVec(v)))));
 
-	const [minX, minY] = [xMin, yMin]
-	const [width, height] = [Math.abs(xMax - xMin), Math.abs(yMax - yMin)]
 
-	return (
-		<svg
-			viewBox={`${minX} ${minY} ${width} ${height}`}
-			style={{ width: '100vw', height: '100vh' }}>
-			{[...lines].map((line) => {
-				const d = line
-					.map(([[x], [y]], i) => {
-						const cmd = i > 0 ? 'L' : 'M'
-						return `${cmd}${x},${y}`
-					})
-					.join('')
+type SVGLineElementPropsWithoutPoints = Omit<JSX.IntrinsicElements["line"], "x1" | "x2" | "y1" | "y2" | "start" | "end">;
+export interface LineProps<N extends number = number> extends SVGLineElementPropsWithoutPoints{
+	start: Vec.Vector<N>
+	end: Vec.Vector<N>,
+	children: never
+}
 
-				return (
-					<path
-						d={d}
-						key={d}
-						style={{ fill: 'none', stroke: 'black' }}
-						vectorEffect="non-scaling-stroke"
-					/>
-				)
-			})}
-		</svg>
-	)
+export const Line3D = (props: LineProps<3>) => {
+	let [ cStart, cEnd ] = [props.start, props.end ];
+	cStart = use3DCoordinates(cStart);
+	cEnd = use3DCoordinates(cEnd);
+	let [ start2D, end2D ] = [
+		useProject(cStart),
+		useProject(cEnd)
+	];
+	start2D = use2DCoordinates(start2D);
+	end2D = use2DCoordinates(end2D);
+	const [ [ x1, y1], [x2, y2]] = [ start2D, end2D ];
+	return <line x1={x1} y1={y1} x2={x2} y2={y2}/>
+}
+
+
+export interface LineElement extends React.ReactElement<LineProps, typeof Line>{}
+
+export type Element = LineElement;
+
+
+export interface CanvasProps {
+	children: React.ReactElement
+}
+
+export const useChildExtent = (): {minX: number, minY: number, maxX: number, maxY: number} => {
+
+}
+
+export const Canvas: React.FC<CanvasProps> = ({ children }) => {
+	return <svg>
+		{children}
+	</svg>
 }
