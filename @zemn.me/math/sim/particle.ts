@@ -31,7 +31,6 @@ export const Gravity: Field<number> = ({ mass }) => [0, -mass * 10] as const
  * @param time seconds
  */
 export const simulate: <D extends number>(
-
 	p: Readonly<Particle<D>>,
 	timeDelta: number,
 	...fields: Field<D>[]
@@ -56,7 +55,6 @@ export const simulate: <D extends number>(
 	const increaseInSpeed = Vec.mul(t, acc)
 
 	dx = Vec.add(timeTravelledDueToExtantSpeed, timeTravelledDuetoAccel)
-
 
 	const newDisplacement = Vec.add(particle.displacement, dx)
 	const newSpeed = Vec.add(particle.speed, increaseInSpeed)

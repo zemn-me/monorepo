@@ -75,7 +75,6 @@ class Rain implements Drawable3D {
 
 	private randomVel() {
 		return (Math.random() > 0.5 ? -1 : 1) * 2 + Math.random() * 1
-
 	}
 
 	private addRainDrop() {
@@ -108,7 +107,6 @@ class Rain implements Drawable3D {
 				bx < this.ceil &&
 				bz < this.ceil &&
 				bz > -this.ceil,
-
 		)
 
 		this.needToSpawn += this.raindrops.length - newRaindrops.length
