@@ -18,11 +18,6 @@ export const as: <
 	v: readonly (readonly T[] & { length: I })[] & { length: J },
 ) => Matrix<I, J, T> = (v) => v as any
 
-const thing = as<3, 2, undefined | null | number>([
-	[1, undefined, 2],
-	[null, 8, 5],
-] as const)
-
 export const zero = as<0, 0>([] as any)
 
 /**
