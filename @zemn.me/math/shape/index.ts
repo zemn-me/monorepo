@@ -2,6 +2,7 @@ import * as Homog from '../homog'
 import * as Camera from '../camera'
 import * as Matrix from '../matrix'
 import * as Canvas from '../canvas'
+import * as Quaternion from '../quaternion'
 
 export class Square implements Canvas.Drawable2D {
 	public readonly r: number
@@ -106,5 +107,47 @@ export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
 			.map((line) =>
 				line.map((point) => Camera.transform(point, this.focalLength)),
 			)
+	}
+}
+
+export class QuaternionMultiply<
+	T extends Canvas.Drawable3D,
+	Q extends Quaternion.Quaternion,
+> implements Canvas.Drawable3D
+{
+	constructor(public readonly value: T, public readonly quaternion: Q) {}
+	lines3D() {
+		return this.value.lines3D().map((line) =>
+			line.map((point) => {
+				let [[x], [y], [z]] = Homog.pointToCart(point)
+				const q1: Quaternion.Quaternion = { r: x, i: y, j: z }
+				const q2 = this.quaternion
+				const n = Quaternion.mul(q1, q2)
+
+				const { r: nx = 0, i: ny = 0, j: nz = 0 } = n
+				return [[nx], [ny], [nz], [1]] as const
+			}),
+		)
+	}
+}
+
+export class QuaternionRotate<
+	T extends Canvas.Drawable3D,
+	Q extends Quaternion.Rotation,
+> implements Canvas.LineDrawable3D
+{
+	constructor(public readonly value: T, public readonly rotation: Q) {}
+	lines3D() {
+		return this.value.lines3D().map((line) =>
+			line.map((point) => {
+				let [[x], [y], [z]] = Homog.pointToCart(point)
+				const q1: Quaternion.Quaternion = { r: x, i: y, j: z }
+				const q2 = this.rotation
+				const n = Quaternion.applyRotation(q2, q1)
+
+				const { r: nx = 0, i: ny = 0, j: nz = 0 } = n
+				return [[nx], [ny], [nz], [1]] as const
+			}),
+		)
 	}
 }

@@ -42,7 +42,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 	return (
 		<svg
 			viewBox={`${minX} ${minY} ${width} ${height}`}
-			style={{ width: '100vw', height: '100vh' }}>
+			style={{ width: '50vw', height: '50vh' }}>
 			{[...lines].map((line) => {
 				const d = line
 					.map(([[x], [y]], i) => {
@@ -56,7 +56,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 						d={d}
 						key={d}
 						style={{ fill: 'none', stroke: 'black' }}
-						vectorEffect="none-scaling-stroke"
+						vectorEffect="non-scaling-stroke"
 					/>
 				)
 			})}

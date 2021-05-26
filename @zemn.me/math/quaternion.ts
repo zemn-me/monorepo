@@ -44,3 +44,54 @@ export function mul(
 		{ k: a1 * d2 + b1 * c2 - c1 * b2 + d2 * a2 },
 	)
 }
+
+/**
+ * A type, similar to a Quaternion where the non-fractional part represents exponentiation
+ */
+export interface Rotation<
+	R extends number = number,
+	I extends number = number,
+	J extends number = number,
+	K extends number = number,
+> {
+	pr?: R
+	pi?: I
+	pj?: J
+	pk?: K
+}
+
+export const applyRotation = (
+	{ pr = 0, pi = 0, pj = 0, pk = 0 }: Rotation,
+	b: Quaternion,
+): Quaternion => {
+	let exp = { r: 1, i: Math.floor(pi), j: Math.floor(pj), k: Math.floor(pk) }
+
+	let i = 0;
+
+	while (/*exp.r > 0 ||*/ exp.i > 0 || exp.j > 0 || exp.k > 0) {
+		let m: Quaternion = {}
+		//if(Math.abs(exp.r) != 0) 
+			//[m.r, exp.r] = exp.r < 0?[-1, exp.r+1]:[1, exp.r-1]
+		
+		if(Math.abs(exp.i) != 0) 
+			[m.i, exp.i] = exp.i < 0?[-1, exp.i+1]:[1, exp.i-1]
+		
+		if(Math.abs(exp.j) != 0) 
+			[m.j, exp.j] = exp.j < 0?[-1, exp.j+1]:[1, exp.j-1]
+		
+		
+		if(Math.abs(exp.k) != 0) 
+			[m.k, exp.k] = exp.k < 0?[-1, exp.k+1]:[1, exp.k-1]
+		
+		b = mul(b, m)
+	}
+
+	const etc: Quaternion = {
+		r:1,
+		i: pi - Math.floor(pi),
+		j: pj - Math.floor(pj),
+		k: pk - Math.floor(pk),
+	}
+
+	return mul(b, etc)
+}
