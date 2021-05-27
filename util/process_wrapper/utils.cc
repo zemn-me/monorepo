@@ -70,7 +70,8 @@ bool ReadFileToArray(const System::StrType& file_path,
     }
 
     // a \ at the end of a line allows us to escape the new line break,
-    // \\ yields a single \, so \\\ translates to a single \ and a new line escape
+    // \\ yields a single \, so \\\ translates to a single \ and a new line
+    // escape
     int end_backslash_count = 0;
     for (std::string::reverse_iterator rit = read_line.rbegin();
          rit != read_line.rend() && *rit == '\\'; ++rit) {
@@ -98,6 +99,6 @@ bool ReadFileToArray(const System::StrType& file_path,
     }
   }
   return true;
-} 
+}
 
 }  // namespace process_wrapper

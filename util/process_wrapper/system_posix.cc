@@ -32,7 +32,7 @@ namespace process_wrapper {
 namespace {
 
 class OutputPipe {
-public:
+ public:
   static constexpr size_t kReadEndDesc = 0;
   static constexpr size_t kWriteEndDesc = 1;
 
@@ -96,7 +96,7 @@ public:
     return true;
   }
 
-private:
+ private:
   void Close(size_t idx) {
     if (output_pipe_desc_[idx] > 0) {
       close(output_pipe_desc_[idx]);
@@ -106,7 +106,7 @@ private:
   int output_pipe_desc_[2] = {-1};
 };
 
-} // namespace
+}  // namespace
 
 System::StrType System::GetWorkingDirectory() {
   const size_t kMaxBufferLength = 4096;

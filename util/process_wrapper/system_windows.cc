@@ -94,7 +94,7 @@ std::string GetLastErrorAsStr() {
 }
 
 class OutputPipe {
-public:
+ public:
   static constexpr size_t kReadEndHandle = 0;
   static constexpr size_t kWriteEndHandle = 1;
 
@@ -181,7 +181,7 @@ public:
     return true;
   }
 
-private:
+ private:
   void Close(size_t idx) {
     if (output_pipe_handles_[idx] != nullptr) {
       ::CloseHandle(output_pipe_handles_[idx]);
@@ -191,7 +191,7 @@ private:
   HANDLE output_pipe_handles_[2] = {nullptr};
 };
 
-} // namespace
+}  // namespace
 
 System::StrType System::GetWorkingDirectory() {
   constexpr DWORD kMaxBufferLength = 4096;
@@ -243,7 +243,7 @@ int System::Exec(const System::StrType& executable,
       /*dwCreationFlags*/ 0
 #if defined(UNICODE)
           | CREATE_UNICODE_ENVIRONMENT
-#endif // defined(UNICODE)
+#endif  // defined(UNICODE)
       ,
       /*lpEnvironment*/ environment_block_win.empty()
           ? nullptr
@@ -277,4 +277,4 @@ int System::Exec(const System::StrType& executable,
   return exit_status;
 }
 
-} // namespace process_wrapper
+}  // namespace process_wrapper

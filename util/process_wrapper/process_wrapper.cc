@@ -157,7 +157,8 @@ int PW_MAIN(int argc, const CharType* argv[], const CharType* envp[]) {
   }
 
   // Have the last values added take precedence over the first.
-  // This is simpler than needing to track duplicates and explicitly override them.
+  // This is simpler than needing to track duplicates and explicitly override
+  // them.
   std::reverse(environment_block.begin(), environment_block.end());
 
   int exit_code = System::Exec(exec_path, arguments, environment_block,
