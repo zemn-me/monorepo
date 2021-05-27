@@ -14,8 +14,8 @@
 
 #![feature(test)]
 
-extern crate test;
 extern crate fibonacci;
+extern crate test;
 
 use test::Bencher;
 

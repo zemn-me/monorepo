@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use std::process::Command;
 use std::vec::Vec;
@@ -11,7 +11,7 @@ use std::os::unix::process::CommandExt;
 /// This string must match the one found in `_create_test_launcher`
 const LAUNCHFILES_ENV_PATH: &'static str = ".launchfiles/env";
 
-/// Load environment variables from a uniquly formatted 
+/// Load environment variables from a uniquly formatted
 fn environ() -> BTreeMap<String, String> {
     let mut environ = BTreeMap::new();
 
@@ -21,7 +21,7 @@ fn environ() -> BTreeMap<String, String> {
     let env_path = std::env::args().nth(0).expect("arg 0 was not set") + LAUNCHFILES_ENV_PATH;
     let file = File::open(env_path).expect("Failed to load the environment file");
 
-    // Variables will have the `${pwd}` variable replaced which is rendered by 
+    // Variables will have the `${pwd}` variable replaced which is rendered by
     // `@rules_rust//rust/private:util.bzl::expand_locations`
     let pwd = std::env::current_dir().expect("Failed to get current working directory");
     let pwd_str = pwd.to_string_lossy();
@@ -35,25 +35,28 @@ fn environ() -> BTreeMap<String, String> {
 
         environ.insert(
             key.expect("Key is not set"),
-            line.expect("Failed to read line").replace("${pwd}", &pwd_str),
+            line.expect("Failed to read line")
+                .replace("${pwd}", &pwd_str),
         );
 
         key = None;
     }
-    
+
     environ
 }
 
 /// Locate the executable based on the name of the launcher executable
 fn executable() -> PathBuf {
     let mut exec_path = std::env::args().nth(0).expect("arg 0 was not set");
-    let stem_index = exec_path.rfind(".launcher").expect("This executable should always contain `.launcher`");
+    let stem_index = exec_path
+        .rfind(".launcher")
+        .expect("This executable should always contain `.launcher`");
 
     // Remove the substring from the exec path
     for _char in ".launcher".chars() {
         exec_path.remove(stem_index);
     }
-    
+
     PathBuf::from(exec_path)
 }
 
@@ -67,9 +70,9 @@ fn args() -> Vec<String> {
 #[cfg(target_family = "unix")]
 fn exec(environ: BTreeMap<String, String>, executable: PathBuf, args: Vec<String>) {
     let error = Command::new(&executable)
-    .envs(environ.iter())
-    .args(args)
-    .exec();
+        .envs(environ.iter())
+        .args(args)
+        .exec();
 
     panic!("Process failed to start: {:?} with {:?}", executable, error)
 }
@@ -79,10 +82,10 @@ fn exec(environ: BTreeMap<String, String>, executable: PathBuf, args: Vec<String
 #[cfg(target_family = "windows")]
 fn exec(environ: BTreeMap<String, String>, executable: PathBuf, args: Vec<String>) {
     let output = Command::new(executable)
-    .envs(environ.iter())
-    .args(args)
-    .output()
-    .expect("Failed to run process");
+        .envs(environ.iter())
+        .args(args)
+        .output()
+        .expect("Failed to run process");
 
     std::process::exit(output.status.code().unwrap_or(1));
 }

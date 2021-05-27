@@ -3,7 +3,7 @@ use structopt::StructOpt;
 #[derive(StructOpt)]
 struct Opt {
     #[structopt(long)]
-    name: String
+    name: String,
 }
 
 fn main() {

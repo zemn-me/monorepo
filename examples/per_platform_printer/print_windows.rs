@@ -1,3 +1,3 @@
 pub fn print() -> String {
-  "Hello Windows!".to_owned()
+    "Hello Windows!".to_owned()
 }

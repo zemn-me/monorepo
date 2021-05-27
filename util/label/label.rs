@@ -255,7 +255,8 @@ mod tests {
         assert_eq!(
             analyze("foo//bar"),
             Err(LabelError(
-                "foo//bar must be a legal label; '//' cannot appear in the middle of the label.".to_string()
+                "foo//bar must be a legal label; '//' cannot appear in the middle of the label."
+                    .to_string()
             ))
         );
         assert_eq!(

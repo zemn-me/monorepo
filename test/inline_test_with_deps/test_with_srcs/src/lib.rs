@@ -8,7 +8,7 @@ mod extra;
 
 #[cfg(test)]
 mod tests {
-    use super::{multiply, extra};
+    use super::{extra, multiply};
     use dep::example_test_dep_fn;
 
     #[test]

@@ -14,7 +14,7 @@
 
 extern crate libc;
 
-extern {
+extern "C" {
     pub fn return_zero() -> libc::c_int;
 }
 
@@ -23,10 +23,9 @@ fn main() {
     println!("Got {} from our shared lib", zero);
 }
 
-
 #[cfg(test)]
 mod test {
-    extern {
+    extern "C" {
         pub fn return_zero() -> libc::c_int;
     }
 
