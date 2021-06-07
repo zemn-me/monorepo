@@ -100,6 +100,10 @@
 		"coverage": "yarn test --coverage --coverageThreshold 90",
 		"prepack": "yarn run multi 'yarn run lint' 'yarn run coverage' 'yarn run build'",
 		"prepare": "husky install",
-		"build": "next build --debug"
+		"build": "next build --debug",
+		"export": "yarn run multi -m 1 'yarn run build' 'yarn run next export'",
+		"stage:apply": "yarn run multi -m 1 'yarn export' 'terraform --chdir=terraform/staging apply'",
+		"stage:plan": "yarn run multi -m 1 'yarn export' 'terraform --chdir=terraform/staging plan'",
+		"stage:destroy": "terraform -chdir=./terraform/staging destroy"
 	}
 }
