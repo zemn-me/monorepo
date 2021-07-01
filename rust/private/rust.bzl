@@ -418,6 +418,7 @@ def _rust_test_common(ctx, toolchain, output):
             edition = crate.edition,
             rustc_env = ctx.attr.rustc_env,
             is_test = True,
+            wrapped_crate_type = crate.type,
         )
     else:
         # Target is a standalone crate. Build the test binary as its own crate.
