@@ -484,9 +484,14 @@ def produce_tool_path(tool_name, target_triple, version):
 def load_arbitrary_tool(ctx, tool_name, tool_subdirectories, version, iso_date, target_triple, sha256 = ""):
     """Loads a Rust tool, downloads, and extracts into the common workspace.
 
-    This function sources the tool from the Rust-lang static file server. The index is available
-    at: https://static.rust-lang.org/dist/index.html (or the path specified by
-    "${STATIC_RUST_URL}/dist/index.html" if the STATIC_RUST_URL envinronment variable is set).
+    This function sources the tool from the Rust-lang static file server. The index is available at:
+    - https://static.rust-lang.org/dist/channel-rust-stable.toml
+    - https://static.rust-lang.org/dist/channel-rust-beta.toml
+    - https://static.rust-lang.org/dist/channel-rust-nightly.toml
+
+    The environment variable `STATIC_RUST_URL` can be used to replace the schema and hostname of
+    the URLs used for fetching assets. `https://static.rust-lang.org/dist/channel-rust-stable.toml`
+    becomes `${STATIC_RUST_URL}/dist/channel-rust-stable.toml`
 
     Args:
         ctx (repository_ctx): A repository_ctx (no attrs required).
@@ -511,7 +516,7 @@ def load_arbitrary_tool(ctx, tool_name, tool_subdirectories, version, iso_date, 
 
     check_version_valid(version, iso_date, param_prefix = tool_name + "_")
 
-    # N.B. See https://static.rust-lang.org/dist/index.html to find the tool_suburl for a given
+    # View the indices mentioned in the docstring to find the tool_suburl for a given
     # tool.
     tool_suburl = produce_tool_suburl(tool_name, target_triple, version, iso_date)
     static_rust = ctx.os.environ.get("STATIC_RUST_URL", "https://static.rust-lang.org")
