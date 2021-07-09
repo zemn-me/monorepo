@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # buildifier: disable=module-docstring
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load(
     "@bazel_tools//tools/build_defs/cc:action_names.bzl",
     "CPP_LINK_EXECUTABLE_ACTION_NAME",
@@ -487,9 +488,8 @@ def construct_arguments(
         data_paths,
     ))
 
-    # This empty value satisfies Clippy, which otherwise complains about the
-    # sysroot being undefined.
-    env["SYSROOT"] = ""
+    # Set the SYSROOT to the directory of the rust_lib files passed to the toolchain
+    env["SYSROOT"] = paths.dirname(toolchain.rust_lib.files.to_list()[0].short_path)
 
     return args, env
 
