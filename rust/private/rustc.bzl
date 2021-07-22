@@ -287,6 +287,7 @@ def collect_inputs(
         [toolchain.rustc] +
         toolchain.crosstool_files +
         ([build_info.rustc_env, build_info.flags] if build_info else []) +
+        ([toolchain.target_json] if toolchain.target_json else []) +
         ([] if linker_script == None else [linker_script]),
         transitive = [
             toolchain.rustc_lib.files,
@@ -430,7 +431,7 @@ def construct_arguments(
 
     args.add("--emit=" + ",".join(emit_with_paths))
     args.add("--color=always")
-    args.add("--target=" + toolchain.target_triple)
+    args.add("--target=" + toolchain.target_flag_value)
     if hasattr(attr, "crate_features"):
         args.add_all(getattr(attr, "crate_features"), before_each = "--cfg", format_each = 'feature="%s"')
     if linker_script:
