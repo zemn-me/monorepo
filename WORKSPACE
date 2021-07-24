@@ -23,3 +23,14 @@ yarn_install(
     package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
 )
+
+
+
+load("@rules_python//python:pip.bzl", "pip_install")
+
+# Create a central external repo, @my_deps, that contains Bazel targets for all the
+# third-party packages specified in the requirements.txt file.
+pip_install(
+   name = "pip",
+   requirements = "//:py_requirements.txt",
+)
