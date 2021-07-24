@@ -40,7 +40,11 @@ function mergeShallow(onto: any, source: any): any {
 }
 
 // takes a set of not-really-json files and merges them shallowly
-async function Main(files: Iterable<string> = process.argv.slice(2)) {
+async function Main(files = process.argv.slice(2)) {
+    if (files.length == 0) {
+        throw new Error("no files provided");
+    }
+
     const output: Object = {}
     for (const file of files) {
         try {
