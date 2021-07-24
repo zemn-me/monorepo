@@ -4,9 +4,11 @@
     "private": true,
     "devDependencies": {
         "@bazel/bazelisk": "latest",
-        "@bazel/ibazel": "latest",
         "@bazel/buildifier": "latest",
+        "@bazel/ibazel": "latest",
         "@bazel/typescript": "latest",
+        "@tsconfig/node14": "^1.0.1",
+        "@types/node": "^16.4.2",
         "typescript": "latest"
     },
     "scripts": {
