@@ -1,0 +1,16 @@
+{
+    "name": "quickcult",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "@bazel/bazelisk": "latest",
+        "@bazel/ibazel": "latest",
+        "@bazel/buildifier": "latest",
+        "@bazel/typescript": "latest",
+        "typescript": "latest"
+    },
+    "scripts": {
+        "build": "bazel build //...",
+        "test": "bazel test //..."
+    }
+}
