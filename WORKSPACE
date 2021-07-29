@@ -14,9 +14,16 @@ load("//tools:bazel_deps.bzl", "fetch_dependencies")
 
 fetch_dependencies()
 
+
+
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
+bazel_skylib_workspace()
+
 # The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
 # It also extracts and installs any Bazel rules distributed in an npm package.
 load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+
 yarn_install(
     # Name this npm so that Bazel Label references look like @npm//package
     name = "npm",
@@ -34,3 +41,9 @@ pip_install(
    name = "pip",
    requirements = "//:py_requirements.txt",
 )
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.16.6")
