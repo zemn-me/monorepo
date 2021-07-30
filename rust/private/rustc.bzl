@@ -290,6 +290,18 @@ def collect_inputs(
 
     linker_depset = cc_toolchain.all_files
 
+    # Pass linker additional inputs (e.g., linker scripts) only for linking-like
+    # actions, not for example where the output is rlib. This avoids quadratic
+    # behavior where transitive noncrates are flattened on each transitive
+    # rust_library dependency.
+    additional_transitive_inputs = []
+    if crate_info.type in ("bin", "dylib", "cdylib"):
+        additional_transitive_inputs = [
+            additional_input
+            for linker_input in dep_info.transitive_noncrates.to_list()
+            for additional_input in linker_input.additional_inputs
+        ]
+
     compile_inputs = depset(
         getattr(files, "data", []) +
         [toolchain.rustc] +
@@ -303,6 +315,7 @@ def collect_inputs(
             linker_depset,
             crate_info.srcs,
             dep_info.transitive_libs,
+            depset(additional_transitive_inputs),
             crate_info.compile_data,
         ],
     )
