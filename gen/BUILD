@@ -1,6 +1,8 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 package(default_visibility = [":__subpackages__", "//solve:__subpackages__"]) 
 
@@ -28,5 +30,20 @@ genrule(
         "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //gen:collate_game_core) > $@",
     message = "generating collated game data"
 )
+
+proto_library (
+    name = "core_proto",
+    srcs = [ "core.proto" ],
+    deps = [ "//proto:cultist_proto", "@com_google_protobuf//:struct_proto" ],
+)
+
+
+py_proto_library (
+    name = "core_py_proto",
+    srcs = [ "core.proto" ],
+    deps = [ "//proto:cultist_py_proto", "@com_google_protobuf//:protobuf_python" ]
+)
+
+
 
 

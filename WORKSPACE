@@ -87,3 +87,12 @@ container_pull(
   tag = "centos",
   digest = "sha256:761c893f5ef7e55b22f7d1d51db7926ad26b60a74b641150b0174cfd9ba86669"
 )
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+rules_proto_dependencies()
+rules_proto_toolchains()
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+

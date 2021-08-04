@@ -5,6 +5,7 @@
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 def fetch_dependencies():
 
     http_archive(
@@ -44,4 +45,21 @@ def fetch_dependencies():
         sha256 = "59d5b42ac315e7eadffa944e86e90c2990110a1c8075f1cd145f487e999d22b3",
         strip_prefix = "rules_docker-0.17.0",
         urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.17.0/rules_docker-v0.17.0.tar.gz"],
+    )
+
+    http_archive(
+        name = "rules_proto",
+        sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
+        strip_prefix = "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+            "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        ],
+    )
+
+    git_repository(
+        name = "com_google_protobuf",
+        remote = "https://github.com/protocolbuffers/protobuf",
+        #tag = "v3.17.3",
+        commit = "909a0f36a10075c4b4bc70fdee2c7e32dd612a72", shallow_since = "1622843222 +0000"
     )
