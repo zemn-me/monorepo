@@ -20,11 +20,11 @@ nodejs_binary(
 
 genrule(
     name = "gen_core",
-    srcs = [ "//gen/cultist_data:steam_gen_cultist_out_zip" ],
+    srcs = [ "//gen/cultist_data:steam_gen_cultist_out.zip" ],
     tools = [ "@bazel_tools//tools/zip:zipper" ],
     exec_tools = [ ":collate_game_core" ],
     outs = [ "core_en.json" ],
-    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //gen/cultist_data:steam_gen_cultist_out_zip) -d $(location :core_en.json)_gamedir_tmp &&" +
+    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //gen/cultist_data:steam_gen_cultist_out.zip) -d $(location :core_en.json)_gamedir_tmp &&" +
         "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //gen:collate_game_core) > $@",
     message = "generating collated game data"
 )
