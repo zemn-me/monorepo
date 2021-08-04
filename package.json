@@ -14,7 +14,7 @@
         "typescript": "latest"
     },
     "scripts": {
-        "build": "yarn bazel build //... --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD",
-        "test": "yarn bazel test //...  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD"
+        "build": "yarn bazel build //... --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
+        "test": "yarn bazel test //...  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures"
     }
 }
