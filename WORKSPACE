@@ -10,7 +10,7 @@ workspace(
     managed_directories = {"@npm": ["node_modules"]},
 )
 
-load("//tools:bazel_deps.bzl", "fetch_dependencies")
+load("//tools/bazel:bazel_deps.bzl", "fetch_dependencies")
 
 fetch_dependencies()
 
