@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
     name: Test
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,5 +12,10 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn build
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       - run: yarn test
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
