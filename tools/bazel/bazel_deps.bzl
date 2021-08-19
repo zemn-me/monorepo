@@ -63,3 +63,12 @@ def fetch_dependencies():
         #tag = "v3.17.3",
         commit = "909a0f36a10075c4b4bc70fdee2c7e32dd612a72", shallow_since = "1622843222 +0000"
     )
+
+    http_archive(
+        name = "rules_typescript_proto",
+        sha256 = "aac6dec2c8d55da2b2c2689b7a2afe44b691555cab32e2eaa2bdd29627d950e9",
+        strip_prefix = "rules_typescript_proto-1.0.1",
+        urls = [
+            "https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
+        ],
+    )

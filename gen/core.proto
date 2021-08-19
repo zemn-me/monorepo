@@ -9,7 +9,6 @@ message Core {
     repeated cultist.Culture cultures = 1;
     repeated cultist.Deck decks = 2;
     repeated cultist.Element elements = 3;
-    repeated cultist.Slot slots = 4;
     repeated cultist.Verb verbs = 5;
     // typo to drop
     repeated cultist.Legacy legcies = 6;

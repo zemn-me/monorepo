@@ -1,19 +1,29 @@
 {
-      "extends": "@tsconfig/node14/tsconfig.json",
-    // If building without sandboxing, we need to prevent TypeScript from descending into
-    // Bazel's external folder which contains third-party Bazel dependencies.
-    "exclude": ["external/*"],
-
-    "compilerOptions": {
-        "rootDirs": [
-            ".",
-            "../../bazel-out/host/bin",
-            "../../bazel-out/darwin-fastbuild/bin",
-            "../../bazel-out/k8-fastbuild/bin",
-            "../../bazel-out/x64_windows-fastbuild/bin",
-            "../../bazel-out/darwin-dbg/bin",
-            "../../bazel-out/k8-dbg/bin",
-            "../../bazel-out/x64_windows-dbg/bin",
-        ]
-    }    
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "exclude": [
+    "external/*"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "declaration": true,
+    "preserveSymlinks": true,
+    "paths": {
+      "*": [
+        "*",
+        "./bazel-out/k8-fastbuild/bin/*",
+        "./bazel-out/x64_windows-fastbuild/bin/*",
+        "./bazel-out/x64_windows-dbg/bin/*",
+        "./bazel-out/k8-dbg/bin/*",
+        "./bazel-out/host/bin/*",
+        "./bazel-out/darwin-fastbuild/bin/*",
+        "./bazel-out/darwin-dbg/bin/*"
+      ]
+    }
+  }
 }

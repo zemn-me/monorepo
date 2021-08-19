@@ -14,7 +14,7 @@ ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
     deps = [
-        "@npm//:node_modules/@tsconfig/node14/tsconfig.json",
+        "@npm//:node_modules/@tsconfig/node12/tsconfig.json",
     ],
 )
 

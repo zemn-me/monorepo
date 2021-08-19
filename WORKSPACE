@@ -96,3 +96,10 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
+load("@rules_typescript_proto//:index.bzl", "rules_typescript_proto_dependencies")
+
+rules_typescript_proto_dependencies()
+
+load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
+
+npm_bazel_labs_dependencies()

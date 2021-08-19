@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export class ParsingFileError extends Error {
-    name = "ParsingFileError"
+    override name = "ParsingFileError"
     constructor(public parent: Error, public file: string) {
         super(`parsing file: ${file}: ${parent}`);
     }
@@ -60,14 +60,14 @@ async function Main(files = process.argv.slice(2)) {
         }
     }
 
-    console.log(JSON.stringify(output));
+    console.log(JSON.stringify(output, null, 2));
 }
 
 
 if (require.main === module) {
     Main().catch(e => {
         console.error(e);
-    
+
         process.exitCode = process.exitCode || 1
     });
 }
