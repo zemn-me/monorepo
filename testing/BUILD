@@ -5,24 +5,24 @@ load("@npm//@bazel/typescript:index.bzl", "ts_project")
 
 go_test(
     name = "go_basic_test",
-    srcs = ["go_basic_test.go"]
+    srcs = ["go_basic_test.go"],
 )
 
 py_test(
-    name="python_basic_test",
-    srcs = ["python_basic_test.py"]
+    name = "python_basic_test",
+    srcs = ["python_basic_test.py"],
 )
 
 ts_project(
     name = "typescript_basic_test_js",
-    srcs = [ "typescript_basic_test.ts" ],
-    tsconfig="//:tsconfig",
-    deps=[
+    srcs = ["typescript_basic_test.ts"],
+    declaration = True,
+    tsconfig = "//:tsconfig",
+    deps = [
+        "@npm//@types/jest",
         "@npm//@types/node",
-        "@npm//@types/jest"
     ],
 )
-
 
 """
 TODO: I literally have no idea why this is broken

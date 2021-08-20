@@ -124,7 +124,7 @@ export interface Slot {
 	description?: string,
 	required?: {[kind:string]: number},
 	forbidden?: {[kind:string]: number},
-	requirements?: {[kind:string]: number},
+	//requirements?: unknown //{[kind:string]: number}, -- I think this is just 'required'
 	greedy?: boolean,
 	actionid?: string,
 	consumes?: boolean,
