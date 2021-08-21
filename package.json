@@ -11,15 +11,12 @@
         "@tsconfig/node14": "^1.0.1",
         "@types/jest": "^26.0.24",
         "@types/node": "^16.4.2",
-
-        "jest-cli": "^27.0.6",
-        "module-alias": "^2.2.2",
-        "ts-patch": "^1.4.2",
-        "ttypescript": "^1.5.12",
-        "typescript-transform-paths": "^3.3.1"
-
         "concurrently": "^6.2.1",
         "jest-cli": "^27.0.6",
+        "module-alias": "^2.2.2",
+        "ts-node": "^10.2.1",
+        "ttypescript": "^1.5.12",
+        "typescript-transform-paths": "^3.3.1",
         "yaml-validator": "^3.0.1"
     },
     "scripts": {
