@@ -1,29 +1,42 @@
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
-  "exclude": [
-    "external/*"
-  ],
-  "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noImplicitThis": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "declaration": true,
-    "preserveSymlinks": true,
-    "paths": {
-      "*": [
-        "*",
-        "./bazel-out/k8-fastbuild/bin/*",
-        "./bazel-out/x64_windows-fastbuild/bin/*",
-        "./bazel-out/x64_windows-dbg/bin/*",
-        "./bazel-out/k8-dbg/bin/*",
-        "./bazel-out/host/bin/*",
-        "./bazel-out/darwin-fastbuild/bin/*",
-        "./bazel-out/darwin-dbg/bin/*"
-      ]
-    }
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2020",
+        "strictFunctionTypes": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "strict": true,
+        "baseUrl": "./",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "declaration": true,
+        "preserveSymlinks": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "//*": [
+                "*",
+                "./bazel-out/k8-fastbuild/bin/*",
+                "./bazel-out/x64_windows-fastbuild/bin/*",
+                "./bazel-out/x64_windows-dbg/bin/*",
+                "./bazel-out/k8-dbg/bin/*",
+                "./bazel-out/host/bin/*",
+                "./bazel-out/darwin-fastbuild/bin/*",
+                "./bazel-out/darwin-dbg/bin/*",
+            ]
+        },
+        "plugins": [
+            { "transform": "typescript-transform-paths" },
+            { "transform": "typescript-transform-paths", "afterDeclarations": true }
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*",
+        "external/*"
+    ],
 }

@@ -3,6 +3,7 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_config")
 
 package(default_visibility = [
     ":__subpackages__",
@@ -13,7 +14,8 @@ ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
     declaration = True,
-    tsconfig = "//:tsconfig",
+    source_map = True,
+    tsconfig = ":tsconfig",
     deps = [
         "@npm//@types/node",
     ],
@@ -60,3 +62,8 @@ py_library(
     deps = ["//gen:core_py_proto"],
 )
 
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [ "//tsconfig:node" ]
+)

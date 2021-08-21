@@ -9,6 +9,7 @@ ts_project(
     name = "jest_reporter_js",
     srcs = ["jest_reporter.ts"],
     declaration = True,
+    source_map = True,
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],
     deps = [
