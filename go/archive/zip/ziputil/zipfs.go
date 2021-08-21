@@ -28,7 +28,7 @@ func ZipFs(w io.Writer, f fs.FS) (err error) {
 
 		_, err = io.Copy(dst, src)
 		if err != nil {
-			return nil
+			return err
 		}
 
 		return nil
