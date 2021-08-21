@@ -17,6 +17,8 @@ ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
     declaration = True,
+    preserve_jsx = False,
+    source_map = True,
     tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/jest",
@@ -24,10 +26,7 @@ ts_project(
     ],
 )
 
-"""
-TODO: I literally have no idea why this is broken
 jest_test(
-    name="typescript_basic_test",
-    srcs=["typescript_basic_test_js"],
+    name = "typescript_basic_test",
+    srcs = ["typescript_basic_test.js"],
 )
-"""

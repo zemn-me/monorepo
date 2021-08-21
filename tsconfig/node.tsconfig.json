@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Node 12",
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "lib": [ "es2020" ],
+        "module": "CommonJS",
+        "target": "ES2020",
+        "esModuleInterop": true,
+        "skipLibCheck": true
+    }
+}
