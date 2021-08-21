@@ -1,9 +1,8 @@
-import * as cultist from './types';
+import * as cultist from '//cultist/types';
 import { quoteIfNotIdentifier } from './util';
-import immutable from 'immutable';
-import fs from 'fs';
+import * as immutable from 'immutable';
+import * as fs from 'fs';
 import * as dot from './dot';
-
 
 export function select<T, S>(values: T[], f: (arg0: T) => S) {
     const cache = new Map<S, T>();
