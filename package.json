@@ -11,7 +11,9 @@
         "@tsconfig/node14": "^1.0.1",
         "@types/jest": "^26.0.24",
         "@types/node": "^16.4.2",
-        "jest-cli": "^27.0.6"
+        "concurrently": "^6.2.1",
+        "jest-cli": "^27.0.6",
+        "yaml-validator": "^3.0.1"
     },
     "scripts": {
         "build": "yarn bazel build //... --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
