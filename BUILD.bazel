@@ -27,6 +27,7 @@ exports_files(
 
 prettier(
 	name = "prettier",
+	args = ["**/*.ts"]
 )
 
 
