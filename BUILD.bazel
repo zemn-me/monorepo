@@ -21,13 +21,12 @@ ts_config(
 
 
 exports_files(
-    ["jest.ts.config.js", ".prettierrc.json", ".gitignore"],
+    ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
     visibility = ["//visibility:public"],
 )
 
 prettier(
 	name = "prettier",
-	args = ["**/*.ts"]
 )
 
 

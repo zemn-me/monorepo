@@ -9,27 +9,29 @@ def ts_project(name, deps = [], srcs = [], **kwargs):
     _ts_project(
         name = name,
         tsc = "@npm//ttypescript/bin:ttsc",
+	srcs = srcs,
         deps = deps + ["@npm//typescript-transform-paths"],
         **kwargs,
     )
-"""
+
     prettier_test(
             name = name + "_prettier",
             data = srcs,
-            args = srcs
+            args = ["$(location %s)" % x for x in srcs]
     )
+
+
 """
-
-
 def prettier(data = [], args = [], **kwargs):
         _prettier(
             data = data + [ "//:.prettierrc.json", "//:.gitignore" ],
-            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)"]
+            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)", "--write", "-l"]
         )
+"""
 
 def prettier_test(name = None, data = [], args = [], **kwargs):
     _prettier_test(
             name = name,
-            data = data + [ "//:.prettierrc.json", "//:.gitignore" ],
-            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)"]
+            data = data + [ "//:.prettierrc.json", "//:.gitignore", "//:.editorconfig" ],
+            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)", "--check"]
     )
