@@ -1,8 +1,7 @@
-import * as cultist from '//cultist/types';
+import * as cultist from '//cultist';
 import { quoteIfNotIdentifier } from './util';
-import * as immutable from 'immutable';
 import * as fs from 'fs';
-import * as dot from './dot';
+import * as dot from '//solve/dot';
 
 export function select<T, S>(values: T[], f: (arg0: T) => S) {
 	const cache = new Map<S, T>();
@@ -50,27 +49,6 @@ interface BoardState {
 	verbs?: cultist.Verb[];
 	legacy?: cultist.Legacy;
 }
-
-enum ActionKind {
-	PassTime,
-	ExecuteRecipe,
-	SelectLegacy,
-}
-
-interface SelectLegacy {
-	kind: ActionKind.SelectLegacy;
-	legacy: cultist.Legacy;
-}
-interface PassTime {
-	kind: ActionKind.PassTime;
-	seconds: number;
-}
-interface ExecuteRecipe {
-	kind: ActionKind.ExecuteRecipe;
-	recipe: [cultist.Recipe, cultist.Element[]];
-	byPlayerAction: boolean;
-}
-type Action = SelectLegacy | PassTime | ExecuteRecipe;
 
 export function initialBoardStateFromLegacy(
 	l: cultist.Legacy,
@@ -401,7 +379,7 @@ export function prettyList(...l: (string | { toString(): string })[]) {
 }
 
 interface StateNode {
-	createdBy?: Action;
+	createdBy?: cultist.Action;
 	state?: BoardState;
 	children?: StateNode[];
 }
@@ -421,7 +399,10 @@ function* SelectLegacy(
 ): Generator<StateNode> {
 	for (const legacy of core.legacies) {
 		yield {
-			createdBy: { kind: ActionKind.SelectLegacy, legacy: legacy },
+			createdBy: {
+				kind: cultist.action.Kind.SelectLegacy,
+				legacy: legacy,
+			},
 			state: initialBoardStateFromLegacy(legacy, verbById, elementById),
 		};
 	}
@@ -469,7 +450,7 @@ function* derivePossibleNextSteps(
 	for (const recipe of availableRecipes(s, core.recipes, verb, element)) {
 		yield {
 			createdBy: {
-				kind: ActionKind.ExecuteRecipe,
+				kind: cultist.action.Kind.ExecuteRecipe,
 				recipe: recipe,
 				byPlayerAction: true,
 			},
@@ -552,14 +533,16 @@ function shortBoardState(
 	);
 }
 
-function actionCaption(action: Action): string {
+function actionCaption(action: cultist.Action): string {
 	switch (action.kind) {
-		case ActionKind.SelectLegacy:
+		case cultist.action.Kind.SelectLegacy:
 			return `legacy: ${caption(action.legacy)}`;
-		case ActionKind.ExecuteRecipe:
+		case cultist.action.Kind.ExecuteRecipe:
 			return `recipe: ${caption(action.recipe[0])}`;
 		default:
-			throw new Error(`unimplemented ${ActionKind[action.kind]}`);
+			throw new Error(
+				`unimplemented ${cultist.action.Kind[action.kind]}`
+			);
 	}
 }
 
