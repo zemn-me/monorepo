@@ -6,8 +6,9 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-package(default_visibility = [":__subpackages__"]) 
+package(default_visibility = [":__subpackages__"])
 load("@npm//@bazel/typescript:index.bzl", "ts_config")
+load("@npm//prettier:index.bzl", "prettier")
 
 
 ts_config(
@@ -20,7 +21,12 @@ ts_config(
 
 
 exports_files(
-    ["jest.ts.config.js"],
+    ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
     visibility = ["//visibility:public"],
 )
+
+prettier(
+	name = "prettier",
+)
+
 
