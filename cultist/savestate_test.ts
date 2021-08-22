@@ -3,5 +3,4 @@ import { SaveState } from '//cultist/savestate';
 
 test('savestate', () => {
 	const test: SaveState = SaveStateExample;
-})
-
+});
