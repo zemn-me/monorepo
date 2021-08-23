@@ -5,18 +5,20 @@ load("@npm//prettier:index.bzl", _prettier_test = "prettier_test", _prettier = "
 def jest_test(**kwargs):
     _jest_test(**kwargs)
 
-def ts_project(name, deps = [], srcs = [], **kwargs):
+def ts_project(name, tags = [], deps = [], srcs = [], **kwargs):
     _ts_project(
         name = name,
         tsc = "@npm//ttypescript/bin:ttsc",
 	srcs = srcs,
         deps = deps + ["@npm//typescript-transform-paths"],
+        tags = tags,
         **kwargs,
     )
 
     prettier_test(
             name = name + "_prettier",
             data = srcs,
+            tags = tags + ["+formatting"],
             args = ["$(location %s)" % x for x in srcs]
     )
 

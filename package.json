@@ -21,12 +21,9 @@
         "yaml-validator": "^3.0.1"
     },
     "scripts": {
-        "build": "yarn bazel_build //...",
-        "test": "yarn bazel_test //...",
-        "bazel_test": "yarn bazel test --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
-        "bazel_build": "yarn bazel build  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
-        "bazel_run": "yarn bazel run  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
-	"fix": "yarn prettier '**/*.ts' --ignore-path .gitignore --config .prettierrc.json --write"
+        "build": "yarn bazel build //...",
+        "test": "yarn bazel test //...",
+		"fix": "yarn prettier '**/*.ts' --ignore-path .gitignore --config .prettierrc.json --write"
     },
     "dependencies": {
         "@bazel/labs": "^3.8.0",
