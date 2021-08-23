@@ -4,10 +4,10 @@ export interface ElementInstance {
 	lastTablePosY?: string;
 	markedForConsumption?: string;
 	elementId?: string;
-	quantity: string;
+	quantity?: string;
 }
 
-export interface SaveState {
+export interface State {
 	elementStacks?: Record<string, ElementInstance>;
 	decks?: Record<string, Deck>;
 	metainfo?: {
@@ -70,12 +70,7 @@ export interface Situation {
 	recipeId?: string | null;
 	situationWindowX?: string;
 	state?: string;
-	situationOutputNotes?: Record<
-		string,
-		{
-			title?: string;
-		}
-	>;
+	situationOutputNotes?: Record<string, { title?: string }>;
 	situationWindowOpen?: string;
 	completioncount?: string;
 }

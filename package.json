@@ -14,6 +14,7 @@
         "concurrently": "^6.2.1",
         "jest-cli": "^27.0.6",
         "module-alias": "^2.2.2",
+        "onchange": "^7.1.0",
         "prettier": "^2.3.2",
         "ts-node": "^10.2.1",
         "ttypescript": "^1.5.12",
@@ -23,7 +24,9 @@
     "scripts": {
         "build": "yarn bazel build //...",
         "test": "yarn bazel test //...",
-		"fix": "yarn prettier '**/*.ts' --ignore-path .gitignore --config .prettierrc.json --write"
+        "fix": "yarn run prettier-cmd '**/*.ts'",
+        "prettier-cmd": "yarn prettier --ignore-path .gitignore --config .prettierrc.json --write",
+        "prettier-watch": "onchange --exclude-path .gitignore '**/*.ts' -- yarn run prettier-cmd --ignore-unknown {{changed}}"
     },
     "dependencies": {
         "@bazel/labs": "^3.8.0",
