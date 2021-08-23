@@ -21,8 +21,8 @@
         "yaml-validator": "^3.0.1"
     },
     "scripts": {
-        "build": "yarn bazel_build //...",
-        "test": "yarn bazel_test //...",
+        "build": "yarn bazel build //...",
+        "test": "yarn bazel test //...",
 		"fix": "yarn prettier '**/*.ts' --ignore-path .gitignore --config .prettierrc.json --write"
     },
     "dependencies": {
