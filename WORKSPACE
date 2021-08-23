@@ -1,5 +1,12 @@
 # Bazel workspace created by @bazel/create 3.7.0
 
+
+# Needed by Protobuf
+bind(
+	name = "python_headers",
+	actual = "@com_google_protobuf//:protobuf_headers",
+)
+
 # Declares that this directory is the root of a Bazel workspace.
 # See https://docs.bazel.build/versions/master/build-ref.html#workspace
 workspace(
@@ -103,3 +110,4 @@ rules_typescript_proto_dependencies()
 load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
 
 npm_bazel_labs_dependencies()
+
