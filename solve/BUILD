@@ -10,12 +10,17 @@ ts_project(
     deps = [
         "@npm//@types/node",
         "@npm//immutable",
-        "//cultist"
+        "//cultist",
+        "//typescript"
     ],
 )
 
 nodejs_binary(
     name = "main",
-    data = ["//gen:core_en.json"],
-    entry_point = "main.js",
+    data = [
+        "//gen:core_en.json",
+        "//typescript",
+        "//cultist"
+    ],
+    entry_point = "main.js"
 )

@@ -2,35 +2,10 @@ import * as cultist from '//cultist';
 import { quoteIfNotIdentifier } from './util';
 import * as fs from 'fs';
 import * as dot from '//solve/dot';
-
-export function select<T, S>(values: T[], f: (arg0: T) => S) {
-	const cache = new Map<S, T>();
-	for (const v of values) cache.set(f(v), v);
-
-	return (v: S): T | undefined => cache.get(v);
-}
-
-export function must<I extends unknown[], O>(
-	f: (...a: I) => O | undefined,
-	e?: (...a: I) => Error
-): (...a: I) => O {
-	return (...a: I) => {
-		const r = f(...a);
-		if (r === undefined) {
-			throw e ? e(...a) : new Error('must');
-		}
-
-		return r;
-	};
-}
-
-function* duplicate<T>(i: Iterable<[T, number]>) {
-	for (const [v, n] of i) {
-		for (let i = 0; i < n; i++) {
-			yield { ...v }; // copy
-		}
-	}
-}
+import { select, must, perhaps } from '//typescript/util';
+import { duplicate, remove, filter, map } from '//typescript/iter';
+import { isDefined } from '//typescript/guard';
+import { walk } from '//typescript/tree';
 
 export function elementsByEffects(
 	effects: Record<string, number>,
@@ -82,18 +57,6 @@ export function textLegacy(
 	return `${l.label}: ${textBoardState(
 		initialBoardStateFromLegacy(l, verbByid, elementById)
 	)}`;
-}
-
-export function* remove<T>(
-	l: Iterable<T>,
-	s: (v: T) => boolean,
-	n: number = Infinity
-) {
-	for (const val of l) {
-		if (n < 1 || !s(val)) yield val;
-
-		n--;
-	}
 }
 
 export function applyCounts(
@@ -180,30 +143,6 @@ function* applyForbidden(
 		}
 		yield element;
 	}
-}
-
-function filter<T, O extends T>(
-	i: Iterable<T>,
-	f: (i: T) => i is O
-): Generator<O>;
-function filter<T>(i: Iterable<T>, f: (i: T) => boolean): Generator<T>;
-
-function* filter<T>(i: Iterable<T>, f: (i: T) => boolean) {
-	for (const it of i) {
-		if (f(it)) yield it;
-	}
-}
-
-function isDefined<T>(i: T | undefined): i is T {
-	return i !== undefined;
-}
-
-function some<T>(i: Iterable<T>, f: (i: T) => boolean) {
-	for (const it of i) {
-		if (f(it)) return true;
-	}
-
-	return false;
 }
 
 function aspectsOf(item: Pick<cultist.Element, 'id' | 'aspects'>) {
@@ -480,34 +419,6 @@ function completeTree(
 			completeTree(child, core, verb, element, toDepth, depth + 1)
 		),
 	};
-}
-
-function* walk<T>(
-	root: T,
-	children: (v: T) => T[],
-	path: T[] = []
-): Generator<T[]> {
-	yield [root, ...path];
-	for (const child of children(root)) {
-		yield* walk(child, children, [root, ...path]);
-	}
-}
-
-function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
-	for (const it of i) yield f(it);
-}
-
-function perhaps<T>(...fs: (() => T)[]): T {
-	let errors = [];
-	for (const f of fs) {
-		try {
-			return f();
-		} catch (e) {
-			errors.push(e);
-		}
-	}
-
-	throw errors;
 }
 
 function shortBoardState(
