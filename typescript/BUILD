@@ -5,8 +5,8 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "typescript",
     srcs = glob(
-        include = ["*.ts"],
-        exclude = ["*_test.ts"],
+        include = ["**/*.ts"],
+        exclude = ["**/*_test.ts"],
     ),
     declaration = True,
     source_map = True,

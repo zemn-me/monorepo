@@ -2,51 +2,60 @@
  * @fileoverview like save state, but more sane.
  */
 
+import { RecordOf } from 'immutable';
 import * as save from '//cultist/save';
+import * as iter from '//typescript/iter';
+import { optionalChain } from '//typescript/util';
+import immutable from 'immutable';
 
-export interface State {
-	elementStacks?: {
-		[name: string]: ElementInstance;
-	};
+type ImmutableRecord<V> = immutable.RecordOf<{
+	[k: string]: V;
+}>;
 
-	decks?: {
+interface MutableState {
+	elementStacks?: immutable.Map<string, ElementInstance>;
+
+	decks?: immutable.RecordOf<{
 		[name: string]: Deck;
-	};
+	}>;
 
-	metainfo?: {
+	metainfo?: immutable.RecordOf<{
 		VERSIONNUMBER?: string;
-	};
+	}>;
 
 	characterDetails?: CharacterDetails;
 
-	situations?: {
+	situations?: immutable.RecordOf<{
 		[name: string]: Situation;
-	};
+	}>;
 }
 
-function dictMap<V, O>(
-	o: { [key: string]: V },
-	f: (v: V) => O
-): { [key: string]: O } {
-	return Object.assign(
-		{},
-		...Object.entries(o).map(([n, el]) => ({ [n]: f(el) }))
-	);
-}
+export type State = immutable.RecordOf<MutableState>;
+
+export const NewState = immutable.Record<MutableState>({
+	elementStacks: undefined,
+	decks: undefined,
+	metainfo: undefined,
+	characterDetails: undefined,
+	situations: undefined,
+});
 
 export function serializeState(s: State): save.State {
 	return {
 		...s,
-		elementStacks: optionalChain(dictMap)(
+		elementStacks: optionalChain(iter.dict.map)(
 			s.elementStacks,
 			serializeElementInstance
 		),
-		decks: optionalChain(dictMap)(s.decks, serializeDeck),
-		situations: optionalChain(dictMap)(s.situations, SerializeSituation),
+		decks: optionalChain(iter.dict.map)(s.decks, serializeDeck),
+		situations: optionalChain(iter.dict.map)(
+			s.situations,
+			SerializeSituation
+		),
 	};
 }
 
-export interface ElementInstance {
+export interface MutableElementInstance {
 	/** Time in seconds */
 	lifetimeRemaining?: number;
 	lastTablePosX?: number;
@@ -57,12 +66,15 @@ export interface ElementInstance {
 	quantity?: number;
 }
 
-function optionalChain<T, O, P extends unknown[]>(f: (v: T, ...a: P) => O) {
-	return (v: T | undefined, ...a: P) => {
-		if (v === undefined) return undefined;
-		return f(v, ...a);
-	};
-}
+export type ElementInstance = immutable.RecordOf<MutableElementInstance>;
+
+export const NewElementInstance = immutable.Record<MutableElementInstance>({
+	lifetimeRemaining: undefined,
+	lastTablePosX: undefined,
+	markedForConsumption: undefined,
+	elementId: undefined,
+	quantity: undefined,
+});
 
 export function serializeBoolean(b: boolean): string {
 	return b ? 'True' : 'False';
@@ -83,10 +95,10 @@ export function serializeElementInstance(
 	};
 }
 
-export interface Deck {
+export type Deck = immutable.RecordOf<{
 	eliminatedCards: string[];
 	cards: string[];
-}
+}>;
 
 function serializeDeck({ eliminatedCards, cards }: Deck): save.Deck {
 	return {
@@ -98,7 +110,7 @@ function serializeDeck({ eliminatedCards, cards }: Deck): save.Deck {
 	};
 }
 
-export interface Levers {
+export type Levers = immutable.RecordOf<{
 	lastheadquarters?: string;
 	lastfollower?: string;
 	lastsignificantpainting?: string;
@@ -108,9 +120,9 @@ export interface Levers {
 	lasttool?: string;
 	lastbook?: string;
 	lastdesire?: string;
-}
+}>;
 
-export interface CharacterDetails {
+export type CharacterDetails = immutable.RecordOf<{
 	name?: string;
 	/**
 	 * Just a label, not an ID.
@@ -130,39 +142,39 @@ export interface CharacterDetails {
 	futureLevers?: Levers;
 
 	activeLegacy?: string;
-}
+}>;
 
-export interface Situation {
-	situationStoredElements?: Record<string, ElementInstance>;
+export type Situation = immutable.RecordOf<{
+	situationStoredElements?: ImmutableRecord<ElementInstance>;
 	verbId?: string;
-	ongoingSlotElements?: Record<string, ElementInstance>;
+	ongoingSlotElements?: ImmutableRecord<ElementInstance>;
 	situationWindowY?: string;
 	title?: string;
 	timeRemaining?: string;
 	recipeId?: string | null;
 	situationWindowX?: string;
 	state?: string;
-	situationOutputNotes?: Record<
-		string,
-		{
+	situationOutputNotes?: ImmutableRecord<
+		immutable.RecordOf<{
 			title?: string;
-		}
+		}>
 	>;
 	situationWindowOpen?: string;
 	completioncount?: string;
-}
+}>;
 
 function SerializeSituation(s: Situation): save.Situation {
 	return {
 		...s,
-		situationStoredElements: optionalChain(dictMap)(
-			s.situationStoredElements,
+		situationStoredElements: optionalChain(iter.dict.map)(
+			s.situationStoredElements?.toJS(),
 			serializeElementInstance
 		),
 
-		ongoingSlotElements: optionalChain(dictMap)(
-			s.ongoingSlotElements,
+		ongoingSlotElements: optionalChain(iter.dict.map)(
+			s.ongoingSlotElements?.toJS(),
 			serializeElementInstance
 		),
+		situationOutputNotes: s.situationOutputNotes?.toJS(),
 	};
 }

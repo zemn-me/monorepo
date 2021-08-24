@@ -46,3 +46,16 @@ export function perhaps<T>(...fs: (() => T)[]): T {
 
 	throw errors;
 }
+
+/**
+ * For a given function whose first parameter is T, returns a new function with the same
+ * airity that can take T | undefined, but where an undefined value returns an undefined output
+ */
+export function optionalChain<T, O, P extends unknown[]>(
+	f: (v: T, ...a: P) => O
+) {
+	return (v: T | undefined, ...a: P) => {
+		if (v === undefined) return undefined;
+		return f(v, ...a);
+	};
+}

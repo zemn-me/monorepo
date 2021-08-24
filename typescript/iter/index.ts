@@ -1,3 +1,5 @@
+export * as dict from './dict';
+
 /**
  * For an iterable set of tuples of something, number
  * returns an iterable over something repeated by number
@@ -47,6 +49,9 @@ export function* filter<T>(
 	}
 }
 
+/**
+ * Returns an iterator over values for which the predicate is false.
+ */
 export function remove<T, O extends T>(
 	l: Iterable<T | O>,
 	s: (v: T | O) => v is O
@@ -88,4 +93,74 @@ export function some<T>(i: Iterable<T>, f: (i: T) => boolean) {
 
 export function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
 	for (const it of i) yield f(it);
+}
+
+/**
+ * Separates an iterator into two iterators in one single loop
+ */
+
+export function divide<I, O extends I>(
+	i: Iterable<I | O>,
+	f: (v: I) => v is O
+): readonly [Iterable<I>, Iterable<O>];
+export function divide<I, O extends I>(
+	i: Iterable<I | O>,
+	f: (v: I) => boolean
+): readonly [Iterable<I>, Iterable<O>];
+
+export function divide<I>(
+	i: Iterable<I>,
+	f: (v: I) => boolean
+): readonly [Iterable<I>, Iterable<I>] {
+	return _divide(i, f as (v: I) => v is I);
+}
+
+export function _divide<I, O extends I>(
+	i: Iterable<I | O>,
+	f: (v: I) => v is O
+): readonly [Iterable<I>, Iterable<O>] {
+	const it = i[Symbol.iterator]();
+	let lstack: I[] = [],
+		rstack: O[] = [];
+
+	return [
+		(function* () {
+			for (;;) {
+				if (lstack.length) {
+					yield lstack.shift()!;
+					continue;
+				}
+
+				const val = it.next();
+
+				if (val.done) break;
+
+				if (!f(val.value)) {
+					yield val.value;
+					continue;
+				}
+
+				rstack.push(val.value);
+			}
+		})(),
+		(function* () {
+			for (;;) {
+				if (rstack.length) {
+					yield rstack.shift()!;
+					continue;
+				}
+
+				const val = it.next();
+
+				if (val.done) break;
+
+				if (f(val.value)) {
+					yield val.value;
+					continue;
+				}
+
+				lstack.push(val.value);
+			}
+		})(),
+	];
 }
