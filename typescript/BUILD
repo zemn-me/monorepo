@@ -9,5 +9,4 @@ ts_project(
         exclude = ["*_test.ts"],
     ),
     declaration = True,
-    source_map = True,
 )

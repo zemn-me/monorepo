@@ -118,10 +118,10 @@ export function divide<I>(
 export function _divide<I, O extends I>(
 	i: Iterable<I | O>,
 	f: (v: I) => v is O
-): readonly [Iterable<I>, Iterable<O>] {
+): readonly [Iterable<O>, Iterable<I>] {
 	const it = i[Symbol.iterator]();
-	let lstack: I[] = [],
-		rstack: O[] = [];
+	let lstack: O[] = [],
+		rstack: I[] = [];
 
 	return [
 		(function* () {
@@ -135,7 +135,7 @@ export function _divide<I, O extends I>(
 
 				if (val.done) break;
 
-				if (!f(val.value)) {
+				if (f(val.value)) {
 					yield val.value;
 					continue;
 				}
@@ -154,7 +154,7 @@ export function _divide<I, O extends I>(
 
 				if (val.done) break;
 
-				if (f(val.value)) {
+				if (!f(val.value)) {
 					yield val.value;
 					continue;
 				}

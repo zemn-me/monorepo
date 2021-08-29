@@ -11,14 +11,12 @@ ts_project(
     name = "cultist",
     srcs = tsfiles,
     declaration = True,
-    source_map = True,
     tsconfig = ":tsconfig",
     deps = [
 	    "//cultist/example",
         "//typescript/iter",
         "//typescript",
         "@npm//immutable",
-        "@npm//uuid",
         "@npm//@types/uuid"
     ]
 )
@@ -27,7 +25,6 @@ ts_project(
 	name = "tests_lib_node",
 	srcs = tstestfiles,
 	declaration = True,
-	source_map = True,
 	tsconfig = ":tsconfig",
 	deps = [
 		"@npm//@types/jest",
@@ -39,7 +36,9 @@ jest_test(
 	name = "test",
 	srcs = [ f[:-len(".ts")] + ".js" for f in tstestfiles ],
 	deps = [
-		"//cultist"
+		"//cultist",
+        "@npm//uuid",
+        "@npm//immutable"
 	]
 )
 

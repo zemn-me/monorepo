@@ -8,7 +8,6 @@ ts_project(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
     ),
-    declaration = True,
-    source_map = True,
+    declaration = True
 )
 
