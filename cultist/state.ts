@@ -30,6 +30,17 @@ interface MutableState {
 	}>;
 }
 
+export function createElement(
+	id: string,
+	tmpl: Partial<Omit<MutableElementInstance, 'id'>> = {}
+): ElementInstance {
+	return NewElementInstance({
+		elementId: id,
+		quantity: 1,
+		...tmpl,
+	});
+}
+
 export type State = immutable.RecordOf<MutableState>;
 
 export const NewState = immutable.Record<MutableState>({
@@ -44,7 +55,7 @@ export function serializeState(s: State): save.State {
 	return {
 		...s,
 		elementStacks: optionalChain(iter.dict.map)(
-			s.elementStacks,
+			optionalChain(iter.dict.fromEntries)(s.elementStacks?.entries()),
 			serializeElementInstance
 		),
 		decks: optionalChain(iter.dict.map)(s.decks, serializeDeck),
@@ -167,14 +178,14 @@ function SerializeSituation(s: Situation): save.Situation {
 	return {
 		...s,
 		situationStoredElements: optionalChain(iter.dict.map)(
-			s.situationStoredElements?.toJS(),
+			s.situationStoredElements?.toJS() as any,
 			serializeElementInstance
 		),
 
 		ongoingSlotElements: optionalChain(iter.dict.map)(
-			s.ongoingSlotElements?.toJS(),
+			s.ongoingSlotElements?.toJS() as any,
 			serializeElementInstance
 		),
-		situationOutputNotes: s.situationOutputNotes?.toJS(),
+		situationOutputNotes: s.situationOutputNotes?.toJS() as any,
 	};
 }

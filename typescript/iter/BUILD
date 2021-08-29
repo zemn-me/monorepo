@@ -3,7 +3,7 @@ load("//:rules.bzl", "ts_project")
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
-    name = "typescript",
+    name = "iter",
     srcs = glob(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
@@ -11,3 +11,4 @@ ts_project(
     declaration = True,
     source_map = True,
 )
+

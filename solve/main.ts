@@ -7,40 +7,13 @@ import { duplicate, remove, filter, map } from '//typescript/iter';
 import { isDefined } from '//typescript/guard';
 import { walk } from '//typescript/tree';
 
-export function elementsByEffects(
-	effects: Record<string, number>,
-	elementById: (id: string) => cultist.Element
-): cultist.Element[] {
-	const elementsAndCounts = Object.entries(effects).map(
-		([id, count]): [cultist.Element, number] => [elementById(id), count]
-	);
-
-	const rets = [...duplicate(elementsAndCounts)];
-	return rets;
-}
-
 interface BoardState {
 	elements?: cultist.Element[];
 	verbs?: cultist.Verb[];
 	legacy?: cultist.Legacy;
 }
 
-export function initialBoardStateFromLegacy(
-	l: cultist.Legacy,
-	verbById: (id: string) => cultist.Verb,
-	elementById: (id: string) => cultist.Element
-): BoardState {
-	let board: BoardState = {
-		verbs:
-			l.startingverbid !== undefined
-				? [verbById(l.startingverbid)]
-				: undefined,
-	};
-	if (l.effects !== undefined)
-		board = applyEffect(board, l.effects, verbById, elementById);
-	board.legacy = l;
-	return board;
-}
+
 
 export function textBoardState(b: BoardState) {
 	return (b.elements ?? [])
@@ -59,43 +32,6 @@ export function textLegacy(
 	)}`;
 }
 
-export function applyCounts(
-	elements: cultist.Element[],
-	effect: Record<string, number>,
-	V: (id: string) => cultist.Verb,
-	E: (id: string) => cultist.Element
-) {
-	for (const [on, value] of Object.entries(effect)) {
-		elements =
-			value > 0
-				? [...elements, ...duplicate([[E(on), value]])]
-				: [...remove(elements, el => el.id == on, value)];
-	}
-
-	return elements;
-}
-
-export function applyEffect(
-	boardState: BoardState,
-	effect: cultist.Effect,
-	verb: (id: string) => cultist.Verb,
-	element: (id: string) => cultist.Element
-) {
-	const newState = { ...boardState };
-	for (const [on, value] of Object.entries(effect)) {
-		if (typeof value == 'string')
-			throw new Error(`Don't know how to apply special effect: ${value}`);
-
-		newState.elements = applyCounts(
-			newState.elements ?? [],
-			{ [on]: value },
-			verb,
-			element
-		);
-	}
-
-	return newState;
-}
 
 export function* filterRecipesByAvailableActions(
 	recipes: Iterable<cultist.Recipe>,

@@ -2,25 +2,41 @@ import * as state from '//cultist/state';
 import immutable from 'immutable';
 import * as cultist from '//cultist/types';
 import * as iter from '//typescript/iter';
-import { must, isDefined } from '//typescript/guard';
 import uuid from 'uuid';
-import { elementsByEffects } from '../bazel-out/k8-fastbuild/bin/solve/main';
-import { apply } from '../typescript/iter/dict';
 
-export function createElement(
-	id: string,
-	tmpl: Partial<Omit<state.MutableElementInstance, 'id'>> = {}
-): state.ElementInstance {
-	return state.NewElementInstance({
-		elementId: id,
-		quantity: 1,
-		...tmpl,
-	});
+export declare enum Kind {
+    PassTime = 0,
+    ExecuteRecipe = 1,
+    SelectLegacy = 2
 }
+export interface SelectLegacy {
+    kind: Kind.SelectLegacy;
+    legacy: cultist.Legacy;
+}
+export interface PassTime {
+    kind: Kind.PassTime;
+    seconds: number;
+}
+export interface ExecuteRecipe {
+    kind: Kind.ExecuteRecipe;
+    recipe: [cultist.Recipe, cultist.Element[]];
+    byPlayerAction: boolean;
+}
+export declare type Action = SelectLegacy | PassTime | ExecuteRecipe;
+
+
+export function* decreaseQuantityBy(id: string, elements: Iterable<readonly [string, state.ElementInstance]>, n: number) {
+	for (let i = 0; i < n; i++ ){
+		elements = decreaseQuantity(id, elements);
+	}
+
+	yield *elements;
+}
+
 
 export function* decreaseQuantity(
 	id: string,
-	elements: Iterable<[string, state.ElementInstance]>
+	elements: Iterable<readonly [string, state.ElementInstance]>
 ): Iterable<[string, state.ElementInstance]> {
 	let done = false;
 	for (const [key, element] of elements) {
@@ -61,7 +77,7 @@ export function applyEffect(
 				);
 			elementStacks = elementStacks.set(
 				uuid.v4(),
-				createElement(name, { quantity })
+				state.createElement(name, { quantity })
 			);
 		}
 

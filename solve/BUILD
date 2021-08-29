@@ -11,7 +11,6 @@ ts_project(
         "@npm//@types/node",
         "@npm//immutable",
         "//cultist",
-        "//typescript"
     ],
 )
 

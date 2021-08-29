@@ -2,28 +2,33 @@ load("//:rules.bzl", "ts_project", "jest_test")
 
 package(default_visibility = [ "//visibility:public" ])
 
-tstests = glob(["*_test.ts"])
-tsfiles = [ f for f in glob(["*.ts"]) if f not in tstests ]
 
 
+tsfiles = glob(["*.ts"], exclude = ["*_test.ts"])
+tstestfiles = glob(["*_test.ts"])
 
 ts_project(
     name = "cultist",
     srcs = tsfiles,
     declaration = True,
     source_map = True,
-    tsconfig = "//:tsconfig",
+    tsconfig = ":tsconfig",
     deps = [
-	    "//cultist/example"
+	    "//cultist/example",
+        "//typescript/iter",
+        "//typescript",
+        "@npm//immutable",
+        "@npm//uuid",
+        "@npm//@types/uuid"
     ]
 )
 
 ts_project(
-	name = "tests_lib",
-	srcs = tstests,
+	name = "tests_lib_node",
+	srcs = tstestfiles,
 	declaration = True,
 	source_map = True,
-	tsconfig = "//:tsconfig",
+	tsconfig = ":tsconfig",
 	deps = [
 		"@npm//@types/jest",
 		":cultist"
@@ -32,10 +37,15 @@ ts_project(
 
 jest_test(
 	name = "test",
-	srcs = [
-		f[:-len(".ts")] + ".js" for f in tstests
-	],
+	srcs = [ f[:-len(".ts")] + ".js" for f in tstestfiles ],
 	deps = [
 		"//cultist"
 	]
 )
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [ "//tsconfig:node" ]
+)
+
