@@ -16,6 +16,7 @@ describe('decreaseQuantity', () => {
 		);
 
 		expect(el.quantity).toEqual(5);
+		expect(el.elementId).toEqual('money');
 	});
 
 	test('unstacked', () => {
