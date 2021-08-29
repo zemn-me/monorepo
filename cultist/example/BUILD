@@ -7,7 +7,6 @@ ts_project(
     name = "example",
     srcs = tsfiles,
     declaration = True,
-    source_map = True,
     tsconfig = "//:tsconfig",
     visibility = [ "//cultist:__subpackages__" ]
 )

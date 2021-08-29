@@ -13,23 +13,11 @@ interface BoardState {
 	legacy?: cultist.Legacy;
 }
 
-
-
 export function textBoardState(b: BoardState) {
 	return (b.elements ?? [])
 		.concat(b.verbs ?? [])
 		.map(e => e.label)
 		.join(', ');
-}
-
-export function textLegacy(
-	l: cultist.Legacy,
-	verbByid: (id: string) => cultist.Verb,
-	elementById: (id: string) => cultist.Element
-) {
-	return `${l.label}: ${textBoardState(
-		initialBoardStateFromLegacy(l, verbByid, elementById)
-	)}`;
 }
 
 
