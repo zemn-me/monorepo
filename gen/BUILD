@@ -1,9 +1,7 @@
-load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("//:rules.bzl", "ts_project", "ts_config", "nodejs_binary")
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
-load("@npm//@bazel/typescript:index.bzl", "ts_config")
 
 package(default_visibility = [
     ":__subpackages__",

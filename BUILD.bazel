@@ -7,7 +7,7 @@
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
 package(default_visibility = [":__subpackages__"])
-load("@npm//@bazel/typescript:index.bzl", "ts_config")
+load("//:rules.bzl", "ts_config")
 load("@npm//prettier:index.bzl", "prettier")
 
 

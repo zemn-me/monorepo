@@ -1,6 +1,14 @@
 load("//tools/jest:jest.bzl",  _jest_test = "jest_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project")
 load("@npm//prettier:index.bzl", _prettier_test = "prettier_test", _prettier = "prettier")
+load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
+load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary")
+
+def nodejs_binary(**kwargs):
+    _nodejs_binary(**kwargs)
+
+def ts_config(**kwargs):
+    _ts_config(**kwargs)
 
 def jest_test(**kwargs):
     _jest_test(**kwargs)
