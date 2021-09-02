@@ -41,6 +41,7 @@ load(
 )
 load(
     "@rules_rust//rust:defs.bzl",
+    _extra_rustc_flags = "extra_rustc_flags",
     _rust_analyzer = "rust_analyzer",
     _rust_analyzer_aspect = "rust_analyzer_aspect",
     _rust_benchmark = "rust_benchmark",
@@ -141,6 +142,7 @@ crate = _crate
 rustfmt_aspect = _rustfmt_aspect
 rustfmt_test = _rustfmt_test
 
+extra_rustc_flags = _extra_rustc_flags
 incompatible_flag = _incompatible_flag
 fail_when_enabled = _fail_when_enabled
 
