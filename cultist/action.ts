@@ -2,9 +2,7 @@ import * as state from '//cultist/state';
 import immutable from 'immutable';
 import * as cultist from '//cultist/types';
 import * as iter from '//typescript/iter';
-import { v4 as v4uuid } from 'uuid';
-
-const uuid = { v4: v4uuid };
+import * as guard from '//typescript/guard';
 
 export declare enum Kind {
 	PassTime = 0,
@@ -59,10 +57,7 @@ export function* decreaseQuantity(
 	}
 }
 
-export function applyEffect(
-	s: state.State,
-	effect: cultist.Effect
-): state.State {
+function applyEffect(s: state.State, effect: cultist.Effect): state.State {
 	return s.withMutations(s => {
 		const ops = Object.entries(effect);
 
@@ -74,19 +69,20 @@ export function applyEffect(
 		let elementStacks =
 			s.elementStacks ?? immutable.Map<string, state.ElementInstance>();
 
-		for (const [name, quantity] of add) {
-			if (typeof quantity == 'string')
-				throw new Error(
-					`Don't know how to handle special effect ${quantity}`
-				);
+		elementStacks = state.addElements(
+			iter.map(
+				iter.filterAssert(add, (v): asserts v is [string, number] => {
+					if (typeof v[1] !== 'string')
+						throw new Error(
+							`Don't know how to ${JSON.stringify(v)}`
+						);
+				}),
 
-			for (let i = 0; i < quantity; i++) {
-				elementStacks = elementStacks.set(
-					uuid.v4(),
-					state.createElement(name, { quantity })
-				);
-			}
-		}
+				([name, count]) =>
+					state.createElement(name, { quantity: count })
+			),
+			elementStacks
+		);
 
 		let elementStacksIter = elementStacks.entries();
 
@@ -103,7 +99,11 @@ export function applyEffect(
 	});
 }
 
-export function applyLegacy(s: state.State, l: cultist.Legacy) {
+export { applyEffect as effect };
+
+function applyLegacy(s: state.State, l: cultist.Legacy) {
 	if (l.effects !== undefined) s = applyEffect(s, l.effects);
 	return s;
 }
+
+export { applyLegacy as legacy };

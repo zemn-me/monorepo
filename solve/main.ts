@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import * as dot from '//solve/dot';
 import { select, must, perhaps } from '//typescript/util';
 import { duplicate, remove, filter, map } from '//typescript/iter';
-import { isDefined } from '//typescript/guard';
 import { walk } from '//typescript/tree';
 
 interface BoardState {
@@ -20,62 +19,8 @@ export function textBoardState(b: BoardState) {
 		.join(', ');
 }
 
-
 // NB: 'required' and 'requirements' imply different matching: a 'required' needs match *only one*
 // and 'requirements' must ALL match
-
-
-function* elementsValidForSlot(s: cultist.Slot, e: Iterable<cultist.Element>) {
-	e = applyForbidden(s, e);
-	e = applyRequirements(s, e);
-	yield* e;
-}
-
-function* elementCombosForVerb(
-	verb: cultist.Verb,
-	slotted: (cultist.Element | undefined)[],
-	elements: cultist.Element[]
-): Generator<[cultist.Verb, (cultist.Element | undefined)[]]> {
-	const slots: cultist.Slot[] = [
-		...slotsOf(filter([verb, ...slotted], isDefined)),
-	];
-
-	yield [verb, slotted];
-
-	let slotIndex = 0;
-	for (const slot of slots) {
-		slotIndex++;
-		// cannot fill a slot which already has an element slotted in it
-		if (slotted[slotIndex - 1] != undefined) continue;
-
-		for (const element of elementsValidForSlot(slot, elements)) {
-			const newSlotted = [...slotted];
-			newSlotted[slotIndex - 1] = element;
-			yield* elementCombosForVerb(verb, newSlotted, [
-				...remove(elements, e => e === element),
-			]);
-		}
-	}
-}
-
-function* elementCombos(verbs: cultist.Verb[], elements: cultist.Element[]) {
-	for (const verb of verbs) yield* elementCombosForVerb(verb, [], elements);
-}
-
-function sumAspects(
-	i: Iterable<Pick<cultist.Element, 'aspects' | 'id'> | undefined>
-): Map<string, number> {
-	const sum = new Map<string, number>();
-	for (const it of i) {
-		if (it === undefined) continue;
-		sum.set(it.id, (sum.get(it.id) ?? 0) + 1);
-		for (const [aspect, intensity] of aspectsOf(it)) {
-			sum.set(aspect, (sum.get(aspect) ?? 0) + intensity);
-		}
-	}
-
-	return sum;
-}
 
 export function displayList(
 	...elements: (Pick<cultist.Element, 'label' | 'id'> | undefined)[]
@@ -83,33 +28,6 @@ export function displayList(
 	return prettyList(
 		elements.map(c => (c == undefined ? 'undefined' : caption(c)))
 	);
-}
-
-export function* availableRecipes(
-	board: BoardState,
-	recipes: Iterable<cultist.Recipe>,
-	verb: (id: string) => cultist.Verb,
-	element: (id: string) => cultist.Element
-) {
-	for (const [verb, elements] of elementCombos(
-		board.verbs ?? [],
-		board.elements ?? []
-	)) {
-		const sum = sumAspects(elements);
-		RECIPE: for (const recipe of recipes) {
-			if (!recipe.craftable) continue RECIPE;
-			if (recipe.actionid !== undefined && verb.id !== recipe.actionid)
-				continue;
-
-			for (const [aspect, intensity] of Object.entries(
-				recipe.requirements ?? {}
-			)) {
-				if ((sum.get(aspect) ?? 0) < intensity) continue RECIPE;
-			}
-
-			yield [recipe, elements] as [cultist.Recipe, cultist.Element[]];
-		}
-	}
 }
 
 export function displayRecipeCombo(

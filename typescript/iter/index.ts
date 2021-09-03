@@ -49,6 +49,17 @@ export function* filter<T>(
 	}
 }
 
+export function* filterAssert<I, O extends I>(
+	i: Iterable<I>,
+	s: (v: I) => asserts v is O
+): Generator<O> {
+	for (const v of i) {
+		s(v);
+
+		yield v;
+	}
+}
+
 /**
  * Returns an iterator over values for which the predicate is false.
  */
@@ -163,4 +174,14 @@ export function _divide<I, O extends I>(
 			}
 		})(),
 	];
+}
+
+export function* range(
+	start: number = 0,
+	end: number = Infinity,
+	step: number = 1
+) {
+	for (let i = start; i < end; i += step) {
+		yield i;
+	}
 }

@@ -7,6 +7,9 @@ import * as save from '//cultist/save';
 import * as iter from '//typescript/iter';
 import { optionalChain } from '//typescript/util';
 import immutable from 'immutable';
+import { v4 as v4uuid } from 'uuid';
+
+const uuid = { v4: v4uuid };
 
 type ImmutableRecord<V> = immutable.RecordOf<{
 	[k: string]: V;
@@ -38,6 +41,21 @@ export function createElement(
 		elementId: id,
 		quantity: 1,
 		...tmpl,
+	});
+}
+
+export function addElements(
+	el: Iterable<ElementInstance>,
+	stacks?: immutable.Map<string, ElementInstance>
+): immutable.Map<string, ElementInstance> {
+	if (stacks === undefined) stacks = immutable.Map<string, ElementInstance>();
+
+	return stacks.withMutations(stacks => {
+		for (const element of el) {
+			stacks.set(uuid.v4(), element);
+		}
+
+		return stacks;
 	});
 }
 

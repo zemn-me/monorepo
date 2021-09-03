@@ -15,3 +15,20 @@ export function must<I, O extends I>(f: (v: I) => v is O): (v: I) => O {
 		return v;
 	};
 }
+
+export function assert<I, O extends I>(f: (i: I) => asserts i is O) {
+	return (v: I): v is O => {
+		f(v);
+
+		return true;
+	};
+}
+
+export function asAssertion<I, O extends I>(
+	f: (i: I) => i is O,
+	e: (i: I) => Error
+) {
+	return (v: I): asserts v is O => {
+		if (!f(v)) throw e(v);
+	};
+}

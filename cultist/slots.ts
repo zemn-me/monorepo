@@ -91,3 +91,14 @@ function matchesElement(
 		return hasRequired;
 	};
 }
+
+/**
+ * Given a slot and a set of elements, return elements that can be put in that slot
+ */
+function* elementsValidForSlot(s: cultist.Slot, e: Iterable<cultist.Element>) {
+	e = forbidding(s, e);
+	e = applyRequirements(s, e);
+	yield* e;
+}
+
+export { elementsValidForSlot as elementsValid };
