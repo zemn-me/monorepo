@@ -21,109 +21,9 @@ export function textBoardState(b: BoardState) {
 }
 
 
-export function* filterRecipesByAvailableActions(
-	recipes: Iterable<cultist.Recipe>,
-	actions: cultist.Verb[]
-) {
-	for (const recipe of recipes) {
-		if (
-			recipe.actionid !== undefined &&
-			!actions.some(v => v.id === recipe.actionid)
-		)
-			continue;
-		yield recipe;
-	}
-}
-
-function* slotsOf(
-	i: Iterable<{ slot?: cultist.Slot } | { slots?: cultist.Slot[] }>
-) {
-	for (const it of i) {
-		if ('slot' in it) {
-			if (it.slot !== undefined) yield it.slot;
-		}
-
-		if ('slots' in it) {
-			yield* it.slots ?? [];
-		}
-	}
-}
-
-function* applyForbidden(
-	slot: Pick<cultist.Slot, 'forbidden' | 'label' | 'id'>,
-	e: Iterable<cultist.Element>
-) {
-	const aspects: string[] = Object.entries(slot.forbidden ?? {}).map(
-		([disallowed]) => disallowed
-	);
-
-	const notAllowed = new Set(aspects);
-
-	OUTER: for (const element of e) {
-		for (const [aspect] of aspectsOf(element)) {
-			if (notAllowed.has(aspect)) {
-				continue OUTER;
-			}
-		}
-		yield element;
-	}
-}
-
-function aspectsOf(item: Pick<cultist.Element, 'id' | 'aspects'>) {
-	return Object.entries({ ...item.aspects, [item.id]: 1 });
-}
-
 // NB: 'required' and 'requirements' imply different matching: a 'required' needs match *only one*
 // and 'requirements' must ALL match
-function matchesRequired(
-	item: Pick<cultist.Slot, 'id' | 'description' | 'label' | 'required'>
-) {
-	const spec = Object.entries(item.required ?? {});
-	const disallowed = new Set();
-	const required = new Map();
 
-	for (const [aspect, intensity] of spec) {
-		if (intensity < 0) {
-			disallowed.add(aspect);
-			continue;
-		}
-
-		// can probably clobber? but I don't think the game ever does this
-		required.set(aspect, intensity);
-	}
-
-	return (
-		compareTo: Pick<
-			cultist.Element,
-			'aspects' | 'description' | 'label' | 'id'
-		>
-	) => {
-		let hasRequired = false;
-		for (const [aspect, intensity] of aspectsOf(compareTo)) {
-			// I don't think anything can have negative intensity, but it doesnt hurt to check
-			if (disallowed.has(aspect) && intensity > 0) {
-				return false;
-			}
-
-			if (
-				hasRequired ||
-				(required.has(aspect) && intensity >= required.get(aspect))
-			) {
-				hasRequired = true;
-			}
-		}
-
-		return hasRequired;
-	};
-}
-
-function* applyRequirements(slot: cultist.Slot, e: Iterable<cultist.Element>) {
-	const matches = matchesRequired(slot);
-
-	for (const element of e) {
-		if (matches(element)) yield element;
-	}
-}
 
 function* elementsValidForSlot(s: cultist.Slot, e: Iterable<cultist.Element>) {
 	e = applyForbidden(s, e);
@@ -256,7 +156,7 @@ function stateNodeCaption(
 }
 
 function* SelectLegacy(
-	core: cultist.Core,
+	core: cultist.cultist,
 	verbById: (id: string) => cultist.Verb,
 	elementById: (id: string) => cultist.Element
 ): Generator<StateNode> {
@@ -302,7 +202,7 @@ function applyRecipe(
 
 function* derivePossibleNextSteps(
 	s: BoardState,
-	core: cultist.Core,
+	core: cultist.cultist,
 	verb: (id: string) => cultist.Verb,
 	element: (id: string) => cultist.Element
 ): Generator<StateNode> {
@@ -324,7 +224,7 @@ function* derivePossibleNextSteps(
 
 function completeTree(
 	s: StateNode,
-	core: cultist.Core,
+	core: cultist.cultist,
 	verb: (id: string) => cultist.Verb,
 	element: (id: string) => cultist.Element,
 	toDepth: number = Infinity,
@@ -402,7 +302,7 @@ function stateNodeToDot(
 }
 
 export const Main = async () => {
-	const core: cultist.Core = JSON.parse(
+	const core: cultist.cultist = JSON.parse(
 		(await fs.promises.readFile('gen/core_en.json')).toString('utf-8')
 	);
 
