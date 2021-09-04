@@ -1,7 +1,7 @@
 // ts proto generation seems bad outside
 // the google spaceship so this'll have to do
 
-export interface Core {
+export interface cultist {
 	cultures: Culture[];
 	decks: Deck[];
 	elements: Element[];
