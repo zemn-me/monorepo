@@ -72,7 +72,7 @@ function applyEffect(s: state.State, effect: cultist.Effect): state.State {
 		elementStacks = state.addElements(
 			iter.map(
 				iter.filterAssert(add, (v): asserts v is [string, number] => {
-					if (typeof v[1] !== 'string')
+					if (typeof v[1] === 'string')
 						throw new Error(
 							`Don't know how to ${JSON.stringify(v)}`
 						);

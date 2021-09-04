@@ -3,6 +3,7 @@
     "display": "Node 12",
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+		"inlineSourceMap": true,
         "lib": [ "ES2019" ],
         "module": "CommonJS",
         "target": "ES2019",

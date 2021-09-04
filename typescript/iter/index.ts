@@ -185,3 +185,19 @@ export function* range(
 		yield i;
 	}
 }
+
+export function reduce<I, R>(
+	i: Iterable<I>,
+	f: (previousValue: R, currentValue: I, currentIndex: number) => R,
+	initialValue: R
+) {
+	let previousValue = initialValue,
+		currentIndex = 0;
+
+	for (const currentValue of i) {
+		previousValue = f(previousValue, currentValue, currentIndex);
+		currentIndex++;
+	}
+
+	return previousValue;
+}

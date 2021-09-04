@@ -12,7 +12,6 @@ ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
     declaration = True,
-    source_map = True,
     tsconfig = ":tsconfig",
     deps = [
         "@npm//@types/node",

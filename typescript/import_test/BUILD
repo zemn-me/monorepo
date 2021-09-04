@@ -1,11 +1,10 @@
-load("//:rules.bzl", "ts_project", "jest_test")
+load("//:rules.bzl", "ts_project", "jest_test", "ts_config")
 
 ts_project(
     name = "a",
     srcs = ["a.ts"],
     declaration = True,
-    source_map = True,
-    tsconfig = "//:tsconfig",
+    tsconfig = ":tsconfig",
     deps = [":b"],
 )
 
@@ -13,16 +12,14 @@ ts_project(
     name = "b",
     srcs = ["b.ts"],
     declaration = True,
-    source_map = True,
-    tsconfig = "//:tsconfig",
+    tsconfig = ":tsconfig",
 )
 
 ts_project(
     name = "import_test_js",
     srcs = ["import_test.ts"],
     declaration = True,
-    source_map = True,
-    tsconfig = "//:tsconfig",
+    tsconfig = ":tsconfig",
     deps = [
         ":a",
         "@npm//@types/jest"
@@ -34,3 +31,10 @@ jest_test(
     srcs = ["import_test.js"],
     deps = [ ":a" ]
 )
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [ "//typescript/config:node" ]
+)
+

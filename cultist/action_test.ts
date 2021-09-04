@@ -1,5 +1,6 @@
 import * as cultist from '//cultist';
 import immutable from 'immutable';
+import * as element from '//cultist/element';
 
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
@@ -40,11 +41,11 @@ describe('applyEffect', () => {
 	test('add', () => {
 		let state = cultist.state.NewState();
 
-		state = cultist.action.applyEffect(state, {
+		state = cultist.action.effect(state, {
 			money: 10,
 		});
 
-		expect(state.elementStacks?.size).toEqual(10);
+		expect(element.count('money', state.elementStacks)).toEqual(10);
 	});
 
 	test('remove', () => {
@@ -58,7 +59,7 @@ describe('applyEffect', () => {
 			),
 		});
 
-		state = cultist.action.applyEffect(state, {
+		state = cultist.action.effect(state, {
 			money: -3,
 		});
 

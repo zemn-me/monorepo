@@ -89,35 +89,6 @@ function* SelectLegacy(
 	}
 }
 
-function applyRecipe(
-	state: BoardState,
-	recipe: [cultist.Recipe, cultist.Element[]],
-	verb: (id: string) => cultist.Verb,
-	element: (id: string) => cultist.Element
-): BoardState {
-	let newElements: Iterable<cultist.Element> = state.elements ?? [];
-
-	const [r, slots] = recipe;
-
-	let slotid = 0;
-	for (const slot of r.slots ?? []) {
-		slotid++;
-		if (slot.consumes) {
-			newElements = remove(newElements, v => v == slots[slotid - 1]);
-		}
-	}
-
-	return applyEffect(
-		{
-			...state,
-			elements: [...newElements],
-		},
-		r.effects ?? {},
-		verb,
-		element
-	);
-}
-
 function* derivePossibleNextSteps(
 	s: BoardState,
 	core: cultist.cultist,

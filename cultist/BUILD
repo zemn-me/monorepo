@@ -45,6 +45,6 @@ jest_test(
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-    deps = [ "//tsconfig:node" ]
+    deps = [ "//typescript/config:node" ]
 )
 

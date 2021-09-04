@@ -7,3 +7,4 @@ export { Action } from '//cultist/action';
 export * as slots from '//cultist/slots';
 export * as recipes from '//cultist/recipe';
 export * as verb from '//cultist/verb';
+export * as element from '//cultist/element';

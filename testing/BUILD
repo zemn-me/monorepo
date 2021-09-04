@@ -1,7 +1,6 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_python//python:defs.bzl", "py_test")
-load("//tools/jest:jest.bzl", "jest_test")
-load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("//:rules.bzl", "jest_test", "ts_project")
 
 go_test(
     name = "go_basic_test",
@@ -18,7 +17,6 @@ ts_project(
     srcs = ["typescript_basic_test.ts"],
     declaration = True,
     preserve_jsx = False,
-    source_map = True,
     tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/jest",

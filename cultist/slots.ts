@@ -74,7 +74,7 @@ function matchesElement(
 		>
 	) => {
 		let hasRequired = false;
-		for (const [aspect, intensity] of Aspects.Of(compareTo)) {
+		for (const [aspect, intensity] of Aspects.of(compareTo)) {
 			// I don't think anything can have negative intensity, but it doesnt hurt to check
 			if (disallowed.has(aspect) && intensity > 0) {
 				return false;
