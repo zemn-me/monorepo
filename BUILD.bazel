@@ -17,6 +17,13 @@ ts_config(
 )
 
 
+ts_config(
+    name = "tsconfig_node",
+    src = "node.tsconfig.json",
+	deps = [ "//typescript/config:node" ]
+)
+
+
 exports_files(
     ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
     visibility = ["//visibility:public"],
