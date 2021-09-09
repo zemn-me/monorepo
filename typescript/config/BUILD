@@ -7,3 +7,9 @@ ts_config(
     src = "node.tsconfig.json",
     deps = [ "//:tsconfig" ]
 )
+
+ts_config(
+    name = "jsx",
+    src = "jsx.tsconfig.json",
+    deps = [ "//:tsconfig" ]
+)
