@@ -12,7 +12,7 @@ ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
     declaration = True,
-    tsconfig = ":tsconfig",
+    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
     ],
@@ -57,10 +57,4 @@ py_library(
     srcs = ["core.py"],
     data = ["//gen:core_en.json"],
     deps = ["//gen:core_py_proto"],
-)
-
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = [ "//typescript/config:node" ]
 )
