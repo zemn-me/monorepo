@@ -1,3 +1,6 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@npm//next:index.bzl", "next")
+
 
 genrule(
     name = "multiplayer",
@@ -12,4 +15,16 @@ genrule(
         $(execpath @npm//next/bin:next) build $$(dirname $(location :next.config.js));
         tar -czvf $@ $$(dirname $(location :next.config.js))
     """
+)
+
+next(
+    name = "next",
+    data = glob(["**/*"]),
+    args = [ "$(location :next.config.js)/.." ]
+)
+
+next(
+    name = "start",
+    data = glob(["**/*"]),
+    args = [ "$(location :next.config.js)/..", "start" ]
 )
