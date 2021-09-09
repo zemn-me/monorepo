@@ -1,5 +1,10 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-load("@npm//next:index.bzl", "next")
+load("@npm//next:index.bzl", "next", "ts_lint")
+
+ts_lint(
+    name = "lint",
+    data = glob(["**/*.ts"])
+)
 
 
 genrule(
