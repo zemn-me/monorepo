@@ -1,5 +1,6 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-load("@npm//next:index.bzl", "next", "ts_lint")
+load("@npm//next:index.bzl", "next")
+load("//:rules.bzl", "ts_lint")
 
 ts_lint(
     name = "lint",
