@@ -14,9 +14,13 @@ load("@npm//prettier:index.bzl", "prettier")
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-    deps = [
-        "@npm//:node_modules/@tsconfig/node12/tsconfig.json",
-    ],
+)
+
+
+ts_config(
+    name = "tsconfig_node",
+    src = "node.tsconfig.json",
+	deps = [ "//typescript/config:node" ]
 )
 
 

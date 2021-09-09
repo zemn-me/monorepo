@@ -18,7 +18,7 @@ ts_project(
 	name = "tests_lib",
 	srcs = tstestfiles,
 	declaration = True,
-	tsconfig = ":tsconfig",
+	tsconfig = "//:tsconfig_node",
 	deps = [
 		"@npm//@types/jest",
         ":iter"
@@ -31,12 +31,6 @@ jest_test(
     deps = [
         ":iter"
     ]
-)
-
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = [ "//typescript/config:node" ]
 )
 
 
