@@ -38,6 +38,7 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
 
     ts_lint(name = name + "_lint", data = srcs, tags = tags)
 
+
 def prettier_test(name = None, data = [], args = [], **kwargs):
     _prettier_test(
             name = name,
