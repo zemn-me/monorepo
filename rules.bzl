@@ -13,6 +13,17 @@ def ts_config(**kwargs):
 def jest_test(**kwargs):
     _jest_test(**kwargs)
 
+def check_formatting(name, srcs = [], tags = [], data = [], **kwargs):
+    prettier_test(
+            name = name,
+            data = srcs + data,
+            tags = tags + ["+formatting"],
+            args = ["$(location %s)" % x for x in srcs],
+            **kwargs
+    )
+
+
+
 def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
         name = name,
@@ -24,11 +35,10 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
         **kwargs,
     )
 
-    prettier_test(
+    check_formatting(
             name = name + "_prettier",
             data = srcs,
-            tags = tags + ["+formatting"],
-            args = ["$(location %s)" % x for x in srcs]
+            tags = tags
     )
 
 
