@@ -14,11 +14,12 @@ def jest_test(**kwargs):
     _jest_test(**kwargs)
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
+    targets = srcs + data
     prettier_test(
             name = name,
-            data = srcs + data,
+            data = targets,
             tags = tags + ["+formatting"],
-            args = ["$(location %s)" % x for x in srcs],
+            args = ["$(location %s)" % x for x in targets],
             **kwargs
     )
 
@@ -35,7 +36,7 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
         **kwargs,
     )
 
-    ts_lint( name = name + "_lint", data = srcs, tags = tags)
+    ts_lint(name = name + "_lint", data = srcs, tags = tags)
 
 def prettier_test(name = None, data = [], args = [], **kwargs):
     _prettier_test(
