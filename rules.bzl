@@ -37,15 +37,6 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
 
     ts_lint( name = name + "_lint", data = srcs, tags = tags)
 
-
-"""
-def prettier(data = [], args = [], **kwargs):
-        _prettier(
-            data = data + [ "//:.prettierrc.json", "//:.gitignore" ],
-            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)", "--write", "-l"]
-        )
-"""
-
 def prettier_test(name = None, data = [], args = [], **kwargs):
     _prettier_test(
             name = name,
