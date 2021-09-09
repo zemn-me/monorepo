@@ -4,7 +4,7 @@ load("//:rules.bzl", "ts_lint")
 
 ts_lint(
     name = "lint",
-    data = glob(["**/*.ts"])
+    data = glob(["**/*.ts", "**/*.js"])
 )
 
 
