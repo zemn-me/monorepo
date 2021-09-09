@@ -11,7 +11,7 @@ ts_lint(
 genrule(
     name = "multiplayer",
     outs = [ "build.tar.gz"],
-    srcs = glob(["**/*"]) + ["//:tsconfig_jsx"],
+    srcs = glob(["**/*"]),
     exec_tools = [
         "@npm//next/bin:next",
         "@npm//:node_modules"
@@ -25,12 +25,12 @@ genrule(
 
 next(
     name = "next",
-    data = glob(["**/*"]) + ["//:tsconfig_jsx"],
+    data = glob(["**/*"]),
     args = [ "$(location :next.config.js)/.." ]
 )
 
 next(
     name = "start",
-    data = glob(["**/*"]) + ["//:tsconfig_jsx"],
+    data = glob(["**/*"]),
     args = [ "$(location :next.config.js)/..", "start" ]
 )
