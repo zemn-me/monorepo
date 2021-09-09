@@ -35,11 +35,7 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
         **kwargs,
     )
 
-def ts_lint(
-            name = name + "_lint",
-            data = srcs,
-            tags = tags
-    )
+    ts_lint( name = name + "_lint", data = srcs, tags = tags)
 
 
 """
