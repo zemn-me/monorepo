@@ -11,7 +11,7 @@ ts_project(
     name = "cultist",
     srcs = tsfiles,
     declaration = True,
-    tsconfig = ":tsconfig",
+    tsconfig = "//:tsconfig_node",
     deps = [
 	    "//cultist/example",
         "//typescript/iter",
@@ -25,7 +25,7 @@ ts_project(
 	name = "tests_lib_node",
 	srcs = tstestfiles,
 	declaration = True,
-	tsconfig = ":tsconfig",
+	tsconfig = "//:tsconfig_node",
 	deps = [
 		"@npm//@types/jest",
 		":cultist"
@@ -42,9 +42,4 @@ jest_test(
 	]
 )
 
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = [ "//typescript/config:node" ]
-)
 
