@@ -8,7 +8,6 @@
 
 package(default_visibility = [":__subpackages__"])
 load("//:rules.bzl", "ts_config")
-load("@npm//prettier:index.bzl", "prettier")
 
 
 ts_config(
@@ -28,9 +27,4 @@ exports_files(
     ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
     visibility = ["//visibility:public"],
 )
-
-prettier(
-	name = "prettier",
-)
-
 
