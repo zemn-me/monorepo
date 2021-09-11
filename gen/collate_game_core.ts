@@ -58,7 +58,10 @@ async function Main(files = process.argv.slice(2)) {
 		try {
 			mergeShallow(output, eval(code));
 		} catch (e) {
-			throw new ParsingFileError(e, file);
+			throw new ParsingFileError(
+				e instanceof Error ? e : new Error(`${e}`),
+				file
+			);
 		}
 	}
 
