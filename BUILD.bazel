@@ -22,6 +22,10 @@ ts_config(
 	deps = [ "//typescript/config:node" ]
 )
 
+ts_config(
+    name = "tsconfig_jsx",
+    src = "jsx.tsconfig.json",
+)
 
 exports_files(
     ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
