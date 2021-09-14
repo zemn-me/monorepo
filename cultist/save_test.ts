@@ -3,4 +3,5 @@ import * as save from '//cultist/save';
 
 test('savestate', () => {
 	const test: save.State = SaveStateExample;
+	console.log(test);
 });
