@@ -1,0 +1,35 @@
+{
+	"$schema": "https://json.schemastore.org/eslintrc",
+	"root": true,
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["prettier", "@typescript-eslint"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:prettier/recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"rules": {
+		"prettier/prettier": "error",
+		"arrow-parens": ["error", "as-needed"],
+		"arrow-spacing": ["error", { "before": true, "after": true }],
+		"prefer-const": ["error", { "destructuring": "all" }],
+		"no-else-return": ["error", { "allowElseIf": false }],
+		"no-extra-bind": "error",
+		"no-multi-spaces": ["error"],
+		"array-bracket-newline": ["error", "consistent"],
+		"array-element-newline": ["error", "consistent"],
+		"block-spacing": ["error", "always"],
+		"brace-style": ["error", "1tbs"],
+		"comma-spacing": ["error"],
+		"computed-property-spacing": ["error"],
+		"key-spacing": ["error"],
+		"keyword-spacing": "error",
+		"object-curly-newline": ["error"],
+		"@typescript-eslint/no-unused-vars": "error"
+	},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2020
+	}
+}

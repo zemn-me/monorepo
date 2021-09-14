@@ -1,43 +1,45 @@
 {
-    "name": "quickcult",
-    "version": "0.1.0",
-    "private": true,
-    "devDependencies": {
-        "@bazel/bazelisk": "latest",
-        "@bazel/buildifier": "latest",
-        "@bazel/ibazel": "latest",
-        "@bazel/typescript": "latest",
-        "@types/jest": "^26.0.24",
-        "@types/node": "^16.4.2",
-        "@types/react": "17.0.20",
-        "@types/uuid": "^8.3.1",
-        "chalk": "^4.1.2",
-        "concurrently": "^6.2.1",
-        "eslint": "7.32.0",
-        "eslint-config-next": "11.1.2",
-        "jest-cli": "^27.0.6",
-        "module-alias": "^2.2.2",
-        "onchange": "^7.1.0",
-        "prettier": "^2.3.2",
-        "ts-node": "^10.2.1",
-        "ttypescript": "^1.5.12",
-        "typescript-transform-paths": "^3.3.1",
-        "uuid": "^8.3.2",
-        "yaml-validator": "^3.0.1"
-    },
-    "scripts": {
-        "build": "yarn bazel build //...",
-        "test": "yarn bazel test //...",
-        "fix": "yarn run prettier-cmd '**/*.ts' '**/*.js'",
-        "prettier-cmd": "yarn prettier --ignore-path .gitignore --config .prettierrc.json --write",
-        "prettier-watch": "onchange --exclude-path .gitignore '**/*.ts' -- yarn run prettier-cmd --ignore-unknown {{changed}}"
-    },
-    "dependencies": {
-        "@bazel/labs": "^3.8.0",
-        "immutable": "^4.0.0-rc.14",
-        "next": "11.1.2",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
-        "typescript": "^4.4.2"
-    }
+	"name": "quickcult",
+	"version": "0.1.0",
+	"private": true,
+	"devDependencies": {
+		"@bazel/bazelisk": "latest",
+		"@bazel/buildifier": "latest",
+		"@bazel/ibazel": "latest",
+		"@bazel/typescript": "latest",
+		"@types/jest": "^26.0.24",
+		"@types/node": "^16.4.2",
+		"@types/react": "17.0.20",
+		"@types/uuid": "^8.3.1",
+		"@typescript-eslint/eslint-plugin": "^4.31.1",
+		"@typescript-eslint/parser": "^4.31.1",
+		"chalk": "^4.1.2",
+		"concurrently": "^6.2.1",
+		"eslint": "^7.32.0",
+		"eslint-config-next": "11.1.2",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"jest-cli": "^27.0.6",
+		"module-alias": "^2.2.2",
+		"onchange": "^7.1.0",
+		"prettier": "^2.4.0",
+		"ts-node": "^10.2.1",
+		"ttypescript": "^1.5.12",
+		"typescript-transform-paths": "^3.3.1",
+		"uuid": "^8.3.2",
+		"yaml-validator": "^3.0.1"
+	},
+	"scripts": {
+		"build": "yarn bazel build //...",
+		"test": "yarn bazel test //...",
+		"fix": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'"
+	},
+	"dependencies": {
+		"@bazel/labs": "^3.8.0",
+		"immutable": "^4.0.0-rc.14",
+		"next": "11.1.2",
+		"react": "17.0.2",
+		"react-dom": "17.0.2",
+		"typescript": "^4.4.2"
+	}
 }

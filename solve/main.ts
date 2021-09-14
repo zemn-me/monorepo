@@ -3,7 +3,7 @@ import { quoteIfNotIdentifier } from './util';
 import * as fs from 'fs';
 import * as dot from '//solve/dot';
 import { select, must, perhaps } from '//typescript/util';
-import { duplicate, remove, filter, map } from '//typescript/iter';
+import { map } from '//typescript/iter';
 import { walk } from '//typescript/tree';
 
 interface BoardState {
@@ -116,8 +116,8 @@ function completeTree(
 	core: cultist.cultist,
 	verb: (id: string) => cultist.Verb,
 	element: (id: string) => cultist.Element,
-	toDepth: number = Infinity,
-	depth: number = 0
+	toDepth = Infinity,
+	depth = 0
 ): StateNode {
 	if (depth >= toDepth) {
 		return s;
