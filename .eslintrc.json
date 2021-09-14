@@ -1,0 +1,30 @@
+{
+	"$schema": "https://json.schemastore.org/eslintrc",
+	"plugins": [ "prettier" ],
+	"extends": [ "eslint:recommended", "plugin:prettier/recommended" ],
+	"rules": {
+		"prettier/prettier": "error",
+		"arrow-parens": [ "error", "as-needed" ],
+		"arrow-spacing": [ "error", { "before": true, "after": true } ],
+		"generator-star-spacing": [ "error", { "before": true, "after": false }],
+		"prefer-const": ["error", { "destructuring": "all" }],
+		"no-else-return": ["error", { "allowElseIf": false }],
+		"no-extra-bind": "error",
+		"no-multi-spaces": [ "error" ],
+		"array-bracket-newline": [ "error", "consistent" ],
+		"array-bracket-spacing": [ "error", "always", {
+			"objectsInArrays": true
+		}, {
+			"arraysInArrays": true
+		}],
+		"array-element-newline": [ "error", "consistent" ],
+		"block-spacing": [ "error", "always" ],
+		"brace-style": [ "error", "1tbs" ],
+		"comma-dangle": [ "error", "always-multiline" ],
+		"comma-spacing": [ "error" ],
+		"computed-property-spacing": [ "error" ],
+		"key-spacing": [ "error" ],
+		"keyword-spacing": "error",
+		"object-curly-newline": [ "error" ]
+	}
+}
