@@ -88,7 +88,7 @@ export function* remove<T>(
 	s: (v: T) => boolean,
 	limit = Infinity
 ): Generator<T> {
-	return filter(l, v => !s(v), limit);
+	yield* filter(l, v => !s(v), limit);
 }
 
 /**
