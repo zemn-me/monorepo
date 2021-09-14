@@ -116,8 +116,8 @@ function completeTree(
 	core: cultist.cultist,
 	verb: (id: string) => cultist.Verb,
 	element: (id: string) => cultist.Element,
-	toDepth: number = Infinity,
-	depth: number = 0
+	toDepth = Infinity,
+	depth = 0
 ): StateNode {
 	if (depth >= toDepth) {
 		return s;

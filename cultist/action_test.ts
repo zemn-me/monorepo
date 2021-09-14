@@ -4,7 +4,7 @@ import * as element from '//cultist/element';
 
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
-		let elements = Object.entries({
+		const elements = Object.entries({
 			someident123: cultist.state.createElement('money', {
 				quantity: 10,
 			}),

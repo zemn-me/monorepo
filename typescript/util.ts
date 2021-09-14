@@ -35,7 +35,7 @@ export function must<I extends unknown[], O>(
  * not throw, or throws all erros at once.
  */
 export function perhaps<T>(...fs: (() => T)[]): T {
-	let errors = [];
+	const errors = [];
 	for (const f of fs) {
 		try {
 			return f();
