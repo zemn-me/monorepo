@@ -1,6 +1,6 @@
 load("//tools/jest:jest.bzl",  _jest_test = "jest_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project")
-load("@npm//prettier:index.bzl", _prettier_test = "prettier_test", _prettier = "prettier")
+load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
 load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary")
 
@@ -15,7 +15,7 @@ def jest_test(**kwargs):
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     targets = srcs + data
-    prettier_test(
+    eslint_test(
             name = name,
             data = targets,
             tags = tags + ["+formatting"],
@@ -38,10 +38,19 @@ def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", 
 
     ts_lint(name = name + "_lint", data = srcs, tags = tags)
 
+def eslint_test(name = None, data = [], args = [], **kwargs):
+    _eslint_test(
+        name = name,
+        data = data + [
+            "//:.prettierrc.json",
+            "//:.gitignore",
+            "//:.editorconfig",
+            "//:.eslintrc.json",
 
-def prettier_test(name = None, data = [], args = [], **kwargs):
-    _prettier_test(
-            name = name,
-            data = data + [ "//:.prettierrc.json", "//:.gitignore", "//:.editorconfig" ],
-            args = args + ["--config", "$(location //:.prettierrc.json)", "--ignore-path", "$(location //:.gitignore)", "--check"]
+            "@npm//eslint-plugin-prettier", "@npm//@typescript-eslint/parser",
+            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier"
+        ],
+        args = args + [ "--ignore-path", "$(location //:.gitignore)" ] +
+            [ "$(location " + x + ")" for x in data ]
     )
+
