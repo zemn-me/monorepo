@@ -18,21 +18,22 @@ genrule(
 
     ] + [],
     cmd = """
-        $(execpath @npm//next/bin:next) build $$(dirname $(location :next-env.d.ts));
-        tar -czvf $@ $$(dirname $(location :next-env.d.ts))
+        $(execpath @npm//next/bin:next) build ./cultist/multiplayer &&
+        $(execpath @npm//next/bin:next) export ./cultist/multiplayer &&
+        tar -czvf $@ ./cultist/multiplayer/out
     """
 )
 
 next(
     name = "next",
     data = glob(["**/*"], exclude=["next.config.ts"]) + [":next.config.js"],
-    args = [ "$(location :next.config.js)/.." ]
+    args = [ "./cultist/multiplayer" ]
 )
 
 next(
     name = "start",
     data = glob(["**/*"], exclude=["next.config.ts"]) + [":next.config.js"],
-    args = [ "$(location :next.config.js)/..", "start" ]
+    args = [ "./cultist/multiplayer", "start" ]
 )
 
 ts_project(
