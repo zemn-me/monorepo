@@ -2,9 +2,8 @@ import * as state from '//cultist/state';
 import immutable from 'immutable';
 import * as cultist from '//cultist/types';
 import * as iter from '//typescript/iter';
-import * as guard from '//typescript/guard';
 
-export declare enum Kind {
+export enum Kind {
 	PassTime = 0,
 	ExecuteRecipe = 1,
 	SelectLegacy = 2,
@@ -63,7 +62,7 @@ function applyEffect(s: state.State, effect: cultist.Effect): state.State {
 
 		const [add, remove] = iter.divide(
 			ops,
-			([n, intensity]) => intensity > 0
+			([, intensity]) => intensity > 0
 		);
 
 		let elementStacks =

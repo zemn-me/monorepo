@@ -1,9 +1,6 @@
 import * as cultist from '//cultist/types';
 import * as aspects from '//cultist/aspects';
 import * as Verb from '//cultist/verb';
-import * as State from '//cultist/state';
-import * as iter from '//typescript/iter';
-import * as Action from '//cultist/action';
 
 /**
  * Given a set of verbs, recipes and elements, return an iterable subset

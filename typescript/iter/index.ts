@@ -41,7 +41,7 @@ export function filter<T, O extends T>(
 export function* filter<T>(
 	l: Iterable<T>,
 	s: (v: T) => boolean,
-	limit: number = Infinity
+	limit = Infinity
 ): Generator<T> {
 	for (const val of l) {
 		if (limit > 0 && s(val)) yield val;
@@ -88,7 +88,7 @@ export function* remove<T>(
 	s: (v: T) => boolean,
 	limit = Infinity
 ): Generator<T> {
-	return filter(l, v => !s(v), limit);
+	yield* filter(l, v => !s(v), limit);
 }
 
 /**
@@ -131,7 +131,7 @@ export function _divide<I, O extends I>(
 	f: (v: I) => v is O
 ): readonly [Iterable<O>, Iterable<I>] {
 	const it = i[Symbol.iterator]();
-	let lstack: O[] = [],
+	const lstack: O[] = [],
 		rstack: I[] = [];
 
 	return [
@@ -176,11 +176,7 @@ export function _divide<I, O extends I>(
 	];
 }
 
-export function* range(
-	start: number = 0,
-	end: number = Infinity,
-	step: number = 1
-) {
+export function* range(start = 0, end = Infinity, step = 1) {
 	for (let i = start; i < end; i += step) {
 		yield i;
 	}

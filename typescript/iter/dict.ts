@@ -18,7 +18,7 @@ export function apply<V, N, A extends unknown[]>(
 	n: (key: string, value: N) => string
 ): (v: { [key: string]: V }, ...a: A) => { [key: string]: N } {
 	return (v: { [key: string]: V }, ...a: A): { [key: string]: N } => {
-		let currentKey: string = '';
+		let currentKey = '';
 		const shim = (function* () {
 			for (const [key, value] of Object.entries(v)) {
 				currentKey = key;
@@ -45,7 +45,7 @@ export function fromEntries<V>(
 		throw new Error(`duplicate key ${k}`);
 	}
 ): { [key: string]: V } {
-	let o: { [key: string]: V } = {};
+	const o: { [key: string]: V } = {};
 	for (let [k, v] of i) {
 		while (k in o) k = onDupe(k, v);
 	}

@@ -47,7 +47,7 @@ async function Main(files = process.argv.slice(2)) {
 		throw new Error('no files provided');
 	}
 
-	const output: Object = {};
+	const output: Record<string, unknown> = {};
 	for (const file of files) {
 		const content = (
 			await fs.promises.readFile(file, { encoding: 'utf-8' })
