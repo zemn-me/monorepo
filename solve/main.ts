@@ -3,7 +3,7 @@ import { quoteIfNotIdentifier } from './util';
 import * as fs from 'fs';
 import * as dot from '//solve/dot';
 import { select, must, perhaps } from '//typescript/util';
-import { duplicate, remove, filter, map } from '//typescript/iter';
+import { map } from '//typescript/iter';
 import { walk } from '//typescript/tree';
 
 interface BoardState {

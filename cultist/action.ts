@@ -62,7 +62,7 @@ function applyEffect(s: state.State, effect: cultist.Effect): state.State {
 
 		const [add, remove] = iter.divide(
 			ops,
-			([n, intensity]) => intensity > 0
+			([, intensity]) => intensity > 0
 		);
 
 		let elementStacks =

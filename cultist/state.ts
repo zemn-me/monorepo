@@ -2,7 +2,6 @@
  * @fileoverview like save state, but more sane.
  */
 
-import { RecordOf } from 'immutable';
 import * as save from '//cultist/save';
 import * as iter from '//typescript/iter';
 import { optionalChain } from '//typescript/util';
