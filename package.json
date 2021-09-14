@@ -32,9 +32,7 @@
     "scripts": {
         "build": "yarn bazel build //...",
         "test": "yarn bazel test //...",
-        "fix": "yarn run prettier-cmd '**/*.ts' '**/*.js'",
-        "prettier-cmd": "yarn prettier --ignore-path .gitignore --config .prettierrc.json --write",
-        "prettier-watch": "onchange --exclude-path .gitignore '**/*.ts' -- yarn run prettier-cmd --ignore-unknown {{changed}}"
+        "fix": "yarn run eslint --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'"
     },
     "dependencies": {
         "@bazel/labs": "^3.8.0",
