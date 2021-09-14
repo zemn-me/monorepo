@@ -18,8 +18,9 @@ genrule(
 
     ] + [],
     cmd = """
-        $(execpath @npm//next/bin:next) build $$(dirname $(location :next.config.js));
-        tar -czvf $@ $$(dirname $(location :next.config.js))
+        $(execpath @npm//next/bin:next) build $$(dirname $(location :next.config.js)) &&
+        $(execpath @npm//next/bin:next) export $$(dirname $(location :next.config.js)) &&
+        tar -czvf $@ $$(dirname $(location :next.config.js))/out
     """
 )
 
