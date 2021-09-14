@@ -25,5 +25,9 @@
 		"key-spacing": [ "error" ],
 		"keyword-spacing": "error",
 		"object-curly-newline": [ "error" ]
+	},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2020
 	}
 }
