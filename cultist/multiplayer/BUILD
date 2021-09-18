@@ -4,42 +4,59 @@ load("//:rules.bzl", "ts_lint", "ts_project")
 
 ts_lint(
     name = "lint",
-    data = glob(["**/*.ts", "**/*.js"])
+    data = glob([
+        "**/*.ts",
+        "**/*.js",
+    ]),
 )
-
 
 genrule(
     name = "multiplayer",
-    outs = [ "build.tar.gz"],
-    srcs = glob(["**/*"], exclude=["next.config.ts"]) + [":next.config.js"],
-    exec_tools = [
-        "@npm//next/bin:next",
-        "@npm//:node_modules"
-
-    ] + [],
+    srcs = glob(
+        ["**/*"],
+        exclude = ["next.config.ts"],
+    ) + [":next.config.js"],
+    outs = ["build.tar.gz"],
     cmd = """
         $(execpath @npm//next/bin:next) build ./cultist/multiplayer &&
         $(execpath @npm//next/bin:next) export ./cultist/multiplayer &&
         tar -czvf $@ ./cultist/multiplayer/out
-    """
+    """,
+    exec_tools = [
+        "@npm//next/bin:next",
+        "@npm//:node_modules",
+    ] + [],
 )
 
 next(
     name = "next",
-    data = glob(["**/*"], exclude=["next.config.ts"]) + [":next.config.js"],
-    args = [ "./cultist/multiplayer" ]
+    args = ["./cultist/multiplayer"],
+    data = glob(
+        ["**/*"],
+        exclude = ["next.config.ts"],
+    ) + [":next.config.js"],
 )
 
 next(
     name = "start",
-    data = glob(["**/*"], exclude=["next.config.ts"]) + [":next.config.js"],
-    args = [ "./cultist/multiplayer", "start" ]
+    args = [
+        "./cultist/multiplayer",
+        "start",
+    ],
+    data = glob(
+        ["**/*"],
+        exclude = ["next.config.ts"],
+    ) + [":next.config.js"],
 )
 
 ts_project(
     name = "config_js",
-    srcs = [ "next.config.ts" ],
+    srcs = ["next.config.ts"],
+    composite = True,
     declaration = True,
     tsconfig = "//:tsconfig_node",
-    deps = [ "@npm//@types/node", "@npm//next" ]
+    deps = [
+        "@npm//@types/node",
+        "@npm//next",
+    ],
 )

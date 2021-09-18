@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project", "ts_config", "nodejs_binary")
+load("//:rules.bzl", "nodejs_binary", "ts_config", "ts_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
@@ -11,6 +11,7 @@ package(default_visibility = [
 ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
+    composite = True,
     declaration = True,
     tsconfig = "//:tsconfig_node",
     deps = [
