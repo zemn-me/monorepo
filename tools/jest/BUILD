@@ -8,6 +8,7 @@ exports_files(
 ts_project(
     name = "jest_reporter_js",
     srcs = ["jest_reporter.ts"],
+    composite = True,
     declaration = True,
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],

@@ -15,6 +15,7 @@ py_test(
 ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
+    composite = True,
     declaration = True,
     preserve_jsx = False,
     tsconfig = "//:tsconfig",
