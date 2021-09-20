@@ -54,6 +54,7 @@ ts_project(
     srcs = ["next.config.ts"],
     composite = True,
     declaration = True,
+    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",

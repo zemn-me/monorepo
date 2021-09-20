@@ -12,6 +12,7 @@ ts_project(
     ),
     composite = True,
     declaration = True,
+    incremental = True,
 )
 
 ts_project(
@@ -19,6 +20,7 @@ ts_project(
     srcs = tstestfiles,
     composite = True,
     declaration = True,
+    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         ":iter",

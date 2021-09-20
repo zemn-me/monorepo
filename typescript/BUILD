@@ -10,4 +10,5 @@ ts_project(
     ),
     composite = True,
     declaration = True,
+    incremental = True,
 )
