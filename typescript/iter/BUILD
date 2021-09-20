@@ -22,8 +22,8 @@ ts_project(
     declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig_node",
+    project_deps = [ ":iter" ],
     deps = [
-        ":iter",
         "@npm//@types/jest",
     ],
 )
@@ -32,6 +32,6 @@ jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
     deps = [
-        ":iter",
+        ":iter_js",
     ],
 )
