@@ -17,6 +17,7 @@ ts_project(
     srcs = ["typescript_basic_test.ts"],
     composite = True,
     declaration = True,
+    incremental = True,
     preserve_jsx = False,
     tsconfig = "//:tsconfig",
     deps = [
