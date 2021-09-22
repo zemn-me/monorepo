@@ -1,4 +1,4 @@
-load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("//:rules.bzl", "ts_project")
 
 exports_files(
     ["jest.ts.config.js"],
@@ -6,7 +6,7 @@ exports_files(
 )
 
 ts_project(
-    name = "jest_reporter_js",
+    name = "jest_reporter",
     srcs = ["jest_reporter.ts"],
     composite = True,
     declaration = True,
