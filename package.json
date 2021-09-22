@@ -32,7 +32,9 @@
 	"scripts": {
 		"build": "yarn bazel build //...",
 		"test": "yarn bazel test //...",
-		"fix": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'"
+		"fix-go": "yarn run bazel run @go_sdk//:bin/gofmt -- -- -s -w .",
+		"fix-js": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'",
+		"fix": "yarn run fix-go && yarn run fix-js"
 	},
 	"dependencies": {
 		"@bazel/labs": "^3.8.0",

@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("//:rules.bzl", "go_binary")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 package(default_visibility = ["//gen:__subpackages__"])
 

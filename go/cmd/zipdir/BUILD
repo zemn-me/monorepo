@@ -1,5 +1,4 @@
-
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("//:rules.bzl", "go_binary")
 
 go_binary(
     name = "zipdir",
