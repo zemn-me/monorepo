@@ -6,20 +6,19 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-package(default_visibility = [":__subpackages__"])
 load("//:rules.bzl", "ts_config")
 
+package(default_visibility = [":__subpackages__"])
 
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
 )
 
-
 ts_config(
     name = "tsconfig_node",
     src = "node.tsconfig.json",
-	deps = [ "//typescript/config:node" ]
+    deps = ["//typescript/config:node"],
 )
 
 ts_config(
@@ -28,7 +27,12 @@ ts_config(
 )
 
 exports_files(
-    ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig", ".eslintrc.json"],
+    [
+        "jest.ts.config.js",
+        ".prettierrc.json",
+        ".gitignore",
+        ".editorconfig",
+        ".eslintrc.json",
+    ],
     visibility = ["//visibility:public"],
 )
-

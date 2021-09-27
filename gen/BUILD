@@ -1,6 +1,5 @@
-load("//:rules.bzl", "nodejs_binary", "ts_config", "ts_project")
+load("//:rules.bzl", "nodejs_binary", "ts_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 package(default_visibility = [
