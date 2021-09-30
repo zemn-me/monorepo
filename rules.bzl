@@ -12,9 +12,18 @@ def nodejs_binary(**kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(project_deps = [], deps = [], **kwargs):
+def jest_test(project_deps = [], jsdom = None, deps = [], **kwargs):
+    extra_deps = [ "@npm//jsdom" ] if jsdom else []
     _jest_test(
-        deps = deps + [ x + "_js" for x in project_deps ],
+        deps = deps + [ x + "_js" for x in project_deps ] + extra_deps,
+        jest_config = "//:jest_config_browser" if jsdom else "//:jest_config_node",
+        **kwargs
+    )
+
+def ts_declarations(name = None, **kwargs):
+    js_library(name = name, **kwargs)
+    ts_lint(
+        name = name + "_lint",
         **kwargs
     )
 
@@ -29,7 +38,7 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 
-def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
     __ts_project(
         name = name + "_ts",
         deps = deps + [dep + "_ts" for dep in project_deps ],
@@ -39,18 +48,44 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
+        resolve_json_module = resolve_json_module,
+        root_dir = root_dir,
+        ignores_lint = ignores_lint,
         **kwargs
     )
+
+    jssrcs = []
+
+    suffixes = {
+        ".d.ts": [],
+        ".tsx": [".js"],
+        ".ts": [".js"]
+    }
+
+    for s in srcs:
+        found = False
+        for suffix, targets in suffixes.items():
+            if found:
+                break
+
+            if s[-len(suffix):] == suffix:
+                for target in targets:
+                    jssrcs.append(
+                        s[:-len(suffix)] + target
+                    )
+                found = True
+
+
 
     js_library(
         name = name + "_js",
         deps = [ dep + "_js" for dep in project_deps ] + deps,
-        srcs = [ src[:src.rfind(".")] + ".js" for src in srcs ],
+        srcs = jssrcs,
         **kwargs
     )
 
 
-def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
         name = name,
         tsc = "@npm//ttypescript/bin:ttsc",
@@ -61,7 +96,7 @@ def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig"
         **kwargs,
     )
 
-    ts_lint(name = name + "_lint", data = srcs, tags = tags)
+    ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint ], tags = tags)
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
     _eslint_test(

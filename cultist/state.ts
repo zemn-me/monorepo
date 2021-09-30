@@ -3,8 +3,8 @@
  */
 
 import * as save from '//cultist/save';
-import * as iter from '//typescript/iter';
-import { optionalChain } from '//typescript/util';
+import * as iter from '//ts/iter';
+import { optionalChain } from '//ts/util';
 import immutable from 'immutable';
 import { v4 as v4uuid } from 'uuid';
 

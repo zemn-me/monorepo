@@ -1,7 +1,7 @@
 import * as state from '//cultist/state';
 import immutable from 'immutable';
 import * as cultist from '//cultist/types';
-import * as iter from '//typescript/iter';
+import * as iter from '//ts/iter';
 
 export enum Kind {
 	PassTime = 0,
