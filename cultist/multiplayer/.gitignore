@@ -9,7 +9,7 @@
 /coverage
 
 # next.js
-.next/
+/.next/
 /out/
 
 # production
@@ -32,15 +32,3 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-#next-mdx-enhanced
-.mdx-data
-
-# submodule
-zemn.me/linear2/features/elements/garamond/EBGaramond12
-.bazelrc.user
-dist
-bazel-out
-node_modules
-external
-yarn-error.log

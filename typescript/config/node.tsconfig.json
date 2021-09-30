@@ -1,0 +1,13 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "../../tsconfig.json",
+	"display": "Node 12",
+	"compilerOptions": {
+		"inlineSourceMap": true,
+		"lib": ["ES2019"],
+		"module": "CommonJS",
+		"target": "ES2019",
+		"esModuleInterop": true,
+		"skipLibCheck": true
+	}
+}
