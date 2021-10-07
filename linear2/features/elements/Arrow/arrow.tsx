@@ -1,6 +1,6 @@
-import React from 'react'
-import classes from 'classnames'
-import style from '../base.module.sass'
+import React from 'react';
+import classes from 'classnames';
+import style from '../base.module.sass';
 
 export const Arrow = React.forwardRef<
 	HTMLDivElement,
@@ -16,7 +16,8 @@ export const Arrow = React.forwardRef<
 					refX="0"
 					refY="3"
 					orient="auto"
-					markerUnits="strokewidth">
+					markerUnits="strokewidth"
+				>
 					<path d="m0,0 l0,6 l9,3 z" style={{ fill: 'var(--fgc)' }} />
 				</marker>
 			</defs>
@@ -33,4 +34,4 @@ export const Arrow = React.forwardRef<
 			/>
 		</svg>
 	</div>
-))
+));

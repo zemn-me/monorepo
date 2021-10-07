@@ -18,20 +18,20 @@
  * they're presented. You can either do 'traditional' h1, h2 etc; or you can just do `<Section/>` and `<Header/>`.
  */
 
-import React, { RefAttributes } from 'react'
-import style from 'linear2/features/elements/base.module.sass'
-import * as fancy from 'linear2/features/elements/fancy'
-import { classes, PropsOf, prettyAnchor } from '../util'
-import { Provide as ProvideSectionOutline } from './outlineState'
-import { extractText } from '../extractText'
-import * as elements from 'linear2/features/elements'
+import React, { RefAttributes } from 'react';
+import style from 'linear2/features/elements/base.module.sass';
+import * as fancy from 'linear2/features/elements/fancy';
+import { classes, PropsOf, prettyAnchor } from '../util';
+import { Provide as ProvideSectionOutline } from './outlineState';
+import { extractText } from '../extractText';
+import * as elements from 'linear2/features/elements';
 
-export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5
+export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 
-export const SectionDepthContext = React.createContext<HeaderDepth>(0)
+export const SectionDepthContext = React.createContext<HeaderDepth>(0);
 
 export interface HeadingProps extends Omit<PropsOf<'h1'>, 'ref'> {
-	depth: HeaderDepth
+	depth: HeaderDepth;
 }
 
 export type HeaderComponent =
@@ -40,41 +40,41 @@ export type HeaderComponent =
 	| typeof H3
 	| typeof H4
 	| typeof H5
-	| typeof Heading
+	| typeof Heading;
 
 export const H1 = React.forwardRef<
 	HTMLHeadingElement,
 	Omit<HeadingProps, 'depth'>
->((props, ref) => <Heading depth={0} ref={ref} {...props} />)
+>((props, ref) => <Heading depth={0} ref={ref} {...props} />);
 
 export const H2 = React.forwardRef<
 	HTMLHeadingElement,
 	Omit<HeadingProps, 'depth'>
->((props, ref) => <Heading depth={1} ref={ref} {...props} />)
+>((props, ref) => <Heading depth={1} ref={ref} {...props} />);
 
 export const H3 = React.forwardRef<
 	HTMLHeadingElement,
 	Omit<HeadingProps, 'depth'>
->((props, ref) => <Heading depth={2} ref={ref} {...props} />)
+>((props, ref) => <Heading depth={2} ref={ref} {...props} />);
 
 export const H4 = React.forwardRef<
 	HTMLHeadingElement,
 	Omit<HeadingProps, 'depth'>
->((props, ref) => <Heading depth={3} ref={ref} {...props} />)
+>((props, ref) => <Heading depth={3} ref={ref} {...props} />);
 
 export const H5 = React.forwardRef<
 	HTMLHeadingElement,
 	Omit<HeadingProps, 'depth'>
->((props, ref) => <Heading depth={4} ref={ref} {...props} />)
+>((props, ref) => <Heading depth={4} ref={ref} {...props} />);
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 	({ depth = 0, children, ...props }, ref) => {
-		const sectionDepth = React.useContext(SectionDepthContext)
+		const sectionDepth = React.useContext(SectionDepthContext);
 
 		const elementName =
 			(['h1', 'h1', 'h2', 'h3', 'h4', 'h5'] as const)[
 				depth + sectionDepth
-			] ?? 'h5'
+			] ?? 'h5';
 
 		return React.createElement(
 			elementName,
@@ -83,60 +83,60 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 				ref,
 				...classes(props.className, style.linear),
 			},
-			children,
-		)
-	},
-)
+			children
+		);
+	}
+);
 
-export type HTMLSectionElement = HTMLElement
+export type HTMLSectionElement = HTMLElement;
 
 export const useText: () => [
 	ref: (element: { innerText: string } | null) => void,
-	value?: string,
+	value?: string
 ] = () => {
-	const [text, setText] = React.useState<string>()
+	const [text, setText] = React.useState<string>();
 	const onElementMount = React.useCallback(
 		(v: { innerText: string } | null | { textContent: string }) =>
 			v !== null
 				? setText(
 						(() => {
-							if ('innerText' in v) return v.innerText
-							if ('textContent' in v) return v.textContent
-							return ''
-						})(),
+							if ('innerText' in v) return v.innerText;
+							if ('textContent' in v) return v.textContent;
+							return '';
+						})()
 				  )
 				: void 0,
-		[setText],
-	)
+		[setText]
+	);
 
-	return [onElementMount, text]
-}
+	return [onElementMount, text];
+};
 
 export type HeadingElement<T extends HeaderComponent = HeaderComponent> =
-	React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>
+	React.ReactElement<HeadingProps & RefAttributes<HTMLHeadingElement>, T>;
 
 export function mergeRefs<T = any>(
 	...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>
 ): React.RefCallback<T> {
-	return (value) => {
-		refs.forEach((ref) => {
+	return value => {
+		refs.forEach(ref => {
 			if (typeof ref === 'function') {
-				ref(value)
+				ref(value);
 			} else if (ref != null) {
-				;(ref as React.MutableRefObject<T | null>).current = value
+				(ref as React.MutableRefObject<T | null>).current = value;
 			}
-		})
-	}
+		});
+	};
 }
 
 export function isDefined<T>(v: T | undefined): v is T {
-	return v !== undefined
+	return v !== undefined;
 }
 
 export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
-	children: [HeadingElement, ...React.ReactElement[]]
-	withSectionMarkers?: boolean
-	sectionChildWrapperClass?: string
+	children: [HeadingElement, ...React.ReactElement[]];
+	withSectionMarkers?: boolean;
+	sectionChildWrapperClass?: string;
 }
 
 export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
@@ -147,15 +147,15 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 			sectionChildWrapperClass,
 			...props
 		},
-		ref,
+		ref
 	) => {
-		let sectionDepth = React.useContext(SectionDepthContext)
-		sectionDepth = (sectionDepth + 1) as any
-		if (sectionDepth > 5) sectionDepth = 5
+		let sectionDepth = React.useContext(SectionDepthContext);
+		sectionDepth = (sectionDepth + 1) as any;
+		if (sectionDepth > 5) sectionDepth = 5;
 
-		const headingText = extractText(heading as any)
+		const headingText = extractText(heading as any);
 
-		const id = prettyAnchor(heading.props.id ?? headingText)
+		const id = prettyAnchor(heading.props.id ?? headingText);
 
 		const headingElement = React.cloneElement(
 			heading,
@@ -163,10 +163,10 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 				...heading.props,
 				id,
 			},
-			heading.props.children,
-		)
+			heading.props.children
+		);
 
-		let o = headingElement
+		let o = headingElement;
 
 		if (withSectionMarkers)
 			o = (
@@ -176,7 +176,8 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 						fancy.style[`h${sectionDepth}`],
 					]
 						.filter(isDefined)
-						.join('')}>
+						.join('')}
+				>
 					<div className={fancy.style.sectionLink}>
 						<a href={`#${id}`}></a>
 					</div>
@@ -186,10 +187,10 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 							...o.props,
 							...classes(o.props.className, fancy.style.title),
 						},
-						o.props.children,
+						o.props.children
 					)}
 				</header>
-			)
+			);
 
 		o = (
 			<section
@@ -205,35 +206,37 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 							fancy.style.sectionDepth3,
 							fancy.style.sectionDepth4,
 							fancy.style.sectionDepth5,
-						][sectionDepth],
+						][sectionDepth]
 					),
 				}}
 				ref={ref}
-				aria-labelledby={id}>
+				aria-labelledby={id}
+			>
 				{o}
 				<span
 					{...elements.util.classes(
 						fancy.style.sectionWrapper,
-						sectionChildWrapperClass,
-					)}>
+						sectionChildWrapperClass
+					)}
+				>
 					{children.map((v, i) => (
 						<React.Fragment key={i}>{v}</React.Fragment>
 					))}
 				</span>
 			</section>
-		)
+		);
 
 		o = (
 			<SectionDepthContext.Provider value={sectionDepth}>
 				{o}
 			</SectionDepthContext.Provider>
-		)
+		);
 		o = (
 			<ProvideSectionOutline element={headingElement as HeadingElement}>
 				{o}
 			</ProvideSectionOutline>
-		)
+		);
 
-		return o
-	},
-)
+		return o;
+	}
+);

@@ -1,1 +1,1 @@
-export * from './arrow'
+export * from './arrow';

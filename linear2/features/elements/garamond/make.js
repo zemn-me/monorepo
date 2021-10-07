@@ -1,44 +1,44 @@
-const glob = require('glob')
-const fs = require('fs').promises
-const path = require('path')
+const glob = require('glob');
+const fs = require('fs').promises;
+const path = require('path');
 
-const fontName = 'EB Garamond'
+const fontName = 'EB Garamond';
 
-const weightName = (n) => {
+const weightName = n => {
 	const weights = {
 		'-Regular': 400,
 		'-Medium': 500,
 		'-SemiBold': 600,
 		'-Bold': 700,
-	}
+	};
 
 	for (const [name, val] of Object.entries(weights)) {
-		if (n.indexOf(name) != -1) return val
+		if (n.indexOf(name) != -1) return val;
 	}
 
-	return weights['-Regular']
-}
+	return weights['-Regular'];
+};
 
-const formatName = (n) =>
+const formatName = n =>
 	({
 		ttf: 'truetype',
 		woff: 'woff',
 		otf: 'opentype',
-	}[n] || n)
+	}[n] || n);
 
-;(async function main() {
-	process.chdir(__dirname)
-	let files = await new Promise((ok, fail) =>
+(async function main() {
+	process.chdir(__dirname);
+	const files = await new Promise((ok, fail) =>
 		glob(`./EBGaramond12/fonts/*/*`, {}, (err, files) => {
-			return err ? fail(err) : ok(files)
-		}),
-	)
+			return err ? fail(err) : ok(files);
+		})
+	);
 
 	// collate different font formats
-	const m = new Map()
+	const m = new Map();
 	for (const file of files) {
-		const key = path.basename(file, path.extname(file))
-		m.set(key, (m.get(key) || []).concat(file))
+		const key = path.basename(file, path.extname(file));
+		m.set(key, (m.get(key) || []).concat(file));
 	}
 
 	const defs = [...m]
@@ -53,16 +53,16 @@ const formatName = (n) =>
         local('${name}'),
         ${fonts
 			.map(
-				(f) =>
+				f =>
 					`url(${f}) format('${formatName(
-						path.extname(f).slice(1),
-					)}')`,
+						path.extname(f).slice(1)
+					)}')`
 			)
 			.join(',\n')};
 }
-        `
+        `;
 		})
-		.join('\n')
+		.join('\n');
 
-	await fs.writeFile('index.css', defs)
-})().catch((e) => console.error(e))
+	await fs.writeFile('index.css', defs);
+})().catch(e => console.error(e));

@@ -1,85 +1,85 @@
 /**
  * @see https://github.com/vercel/next.js/blob/canary/packages/next/next-server/lib/constants.ts#L1-L4
  */
-const constants = require('next/constants')
+const constants = require('next/constants');
 
-const getName = (v) => {
-	let name = v.desc || v.name
-	if (!name) name = v.toString()
-	return name
-}
+const getName = v => {
+	let name = v.desc || v.name;
+	if (!name) name = v.toString();
+	return name;
+};
 
-const guardPluginReturnsUndefined = (plugin) => {
+const guardPluginReturnsUndefined = plugin => {
 	const ret = (...params) => {
-		const ret = plugin(...params)
+		const ret = plugin(...params);
 		if (ret === undefined)
-			throw new Error(`Plugin ${getName(plugin)} returned undefined`)
-		return ret
-	}
+			throw new Error(`Plugin ${getName(plugin)} returned undefined`);
+		return ret;
+	};
 
-	ret.desc = getName(plugin)
-	return ret
-}
+	ret.desc = getName(plugin);
+	return ret;
+};
 
 const chainOne = (first, next) => {
 	const ret = (phase, { defaultConfig, ...propEtc }, ...etc) => {
-		console.info('chainOne: exec plugin', getName(first))
-		const newConfig = first(phase, { defaultConfig, ...propEtc }, ...etc)
-		console.info('chainOne: exec plugin', getName(next))
-		return next(phase, { defaultConfig: newConfig, ...propEtc }, ...etc)
-	}
-	ret.desc = `chainOne(${getName(first)}, ${getName(next)})`
-	return ret
-}
+		console.info('chainOne: exec plugin', getName(first));
+		const newConfig = first(phase, { defaultConfig, ...propEtc }, ...etc);
+		console.info('chainOne: exec plugin', getName(next));
+		return next(phase, { defaultConfig: newConfig, ...propEtc }, ...etc);
+	};
+	ret.desc = `chainOne(${getName(first)}, ${getName(next)})`;
+	return ret;
+};
 
 const phase = (config, phase) => {
 	const ret = (realPhase, { defaultConfig, ...confProps }, ...etc) => {
-		if (phase !== realPhase) return defaultConfig
-		return config(realPhase, { defaultConfig, ...confProps }, ...etc)
-	}
+		if (phase !== realPhase) return defaultConfig;
+		return config(realPhase, { defaultConfig, ...confProps }, ...etc);
+	};
 
-	ret.desc = `phase(${getName(config)}, ${phase})`
-	return ret
-}
+	ret.desc = `phase(${getName(config)}, ${phase})`;
+	return ret;
+};
 
 const chain = (...plugins) => {
-	let config
+	let config;
 	for (let plugin of plugins) {
-		plugin = guardPluginReturnsUndefined(plugin)
-		console.log('chain: installing plugin', getName(plugin))
-		config = config !== undefined ? chainOne(config, plugin) : plugin
+		plugin = guardPluginReturnsUndefined(plugin);
+		console.log('chain: installing plugin', getName(plugin));
+		config = config !== undefined ? chainOne(config, plugin) : plugin;
 	}
-	return config
-}
+	return config;
+};
 
-const ramp = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'
+const ramp = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_';
 class BaseConverter {
 	constructor(ramp) {
-		this.ramp = ramp
+		this.ramp = ramp;
 	}
 	get zero() {
-		return this.ramp[0]
+		return this.ramp[0];
 	}
 	get base() {
-		return this.ramp.length
+		return this.ramp.length;
 	}
 	reverse(s) {
 		return [...s]
 			.map((ch, i) => this.value(ch, i))
-			.reduce((a, c) => a + c, 0)
+			.reduce((a, c) => a + c, 0);
 	}
 	convert(n) {
-		let o = []
+		const o = [];
 		for (;;) {
-			const remainder = n % this.base
-			n = Math.floor(n / this.base)
+			const remainder = n % this.base;
+			n = Math.floor(n / this.base);
 
-			o.push(this.ramp[remainder])
+			o.push(this.ramp[remainder]);
 
-			if (n === 0) break
+			if (n === 0) break;
 		}
 
-		return o.reverse().join('')
+		return o.reverse().join('');
 	}
 }
 
@@ -88,23 +88,23 @@ function cssMinifierPlugin(phase, { defaultConfig: config }) {
 		...config,
 		webpack(wpcfg, ...a) {
 			for (const rule of wpcfg.module.rules) {
-				if (!rule.oneOf) continue
+				if (!rule.oneOf) continue;
 				for (const choice in rule.oneOf) {
-					if (!(choice.use instanceof Array)) continue
+					if (!(choice.use instanceof Array)) continue;
 					for (const loader in choice.use) {
-						if (!loader.loader.includes('css-loader')) continue
-						loader.options = loader.options || {}
-						loader.options.modules = loader.options.modules || {}
-						loader.options.modules.getLocalIdent = uniqueClass
+						if (!loader.loader.includes('css-loader')) continue;
+						loader.options = loader.options || {};
+						loader.options.modules = loader.options.modules || {};
+						loader.options.modules.getLocalIdent = uniqueClass;
 					}
 				}
 			}
 
-			wpcfg.node = { fs: 'empty' }
-			if (config.webpack) wpcfg = config.webpack(wpcfg, ...a)
-			return wpcfg
+			wpcfg.node = { fs: 'empty' };
+			if (config.webpack) wpcfg = config.webpack(wpcfg, ...a);
+			return wpcfg;
 		},
-	}
+	};
 }
 
 //const ClosurePlugin = require('closure-webpack-plugin')
@@ -148,26 +148,26 @@ function xdmPlugin(phase, { defaultConfig: config }) {
 						},
 					],
 				},
-			}
+			};
 
-			if (config.webpack) wpcfg = config.webpack(wpcfg, options, ...a)
-			return wpcfg
+			if (config.webpack) wpcfg = config.webpack(wpcfg, options, ...a);
+			return wpcfg;
 		},
-	}
+	};
 }
 
-const conv = new BaseConverter(ramp)
+const conv = new BaseConverter(ramp);
 
 const uniqueClass = (() => {
-	let ctr = 0
-	const identsMap = new Map()
+	let ctr = 0;
+	const identsMap = new Map();
 	return (context, _, localName) => {
-		const key = [context.resourcePath, localName].join('__').trim()
-		const v = identsMap.get(key)
-		identsMap.set(key, v == undefined ? ctr++ : v)
-		return conv.convert(identsMap.get(key))
-	}
-})()
+		const key = [context.resourcePath, localName].join('__').trim();
+		const v = identsMap.get(key);
+		identsMap.set(key, v == undefined ? ctr++ : v);
+		return conv.convert(identsMap.get(key));
+	};
+})();
 
 function baseConfig(phase, { defaultConfig: config }) {
 	return {
@@ -178,24 +178,24 @@ function baseConfig(phase, { defaultConfig: config }) {
 				describe: true,
 			}),
 		webpack: (wpcfg, options, ...a) => {
-			const { isServer } = options
+			const { isServer } = options;
 			// Fixes npm packages that depend on `fs` module
 			if (!isServer) {
 				wpcfg.node = {
 					fs: 'empty',
-				}
+				};
 			}
 
-			if (config.webpack) wpcfg = config.webpack(config, options, ...a)
-			return wpcfg
+			if (config.webpack) wpcfg = config.webpack(config, options, ...a);
+			return wpcfg;
 		},
-	}
+	};
 }
 
-const withProgressBar = require('next-progressbar')
+const withProgressBar = require('next-progressbar');
 
 function progressBarPlugin(phase, { defaultConfig: config }) {
-	return withProgressBar(config)
+	return withProgressBar(config);
 }
 
 /*const printConfigSetup = (
@@ -215,5 +215,5 @@ module.exports = chain(
 	//phase(closureCompilerPlugin, constants.PHASE_PRODUCTION_BUILD),
 	phase(cssMinifierPlugin, constants.PHASE_PRODUCTION_BUILD),
 	xdmPlugin,
-	progressBarPlugin,
-)
+	progressBarPlugin
+);

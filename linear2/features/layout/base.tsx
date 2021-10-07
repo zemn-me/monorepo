@@ -1,8 +1,8 @@
-import React from 'react'
-import Head from 'next/head'
-import * as elements from 'linear2/features/elements'
+import React from 'react';
+import Head from 'next/head';
+import * as elements from 'linear2/features/elements';
 
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot } from 'recoil';
 
 export const Base: React.FC = ({ children }) => (
 	<RecoilRoot>
@@ -33,6 +33,6 @@ export const Base: React.FC = ({ children }) => (
 
 		<main className={`${elements.style.root}`}>{children}</main>
 	</RecoilRoot>
-)
+);
 
-export default Base
+export default Base;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * Include an element *only* if it has properties, otherwise,
@@ -31,17 +31,17 @@ import React from 'react'
  */
 export const Void: <T>(
 	props: T & {
-		children: React.ReactElement<T & { children?: React.ReactElement }>
-	},
+		children: React.ReactElement<T & { children?: React.ReactElement }>;
+	}
 ) => React.ReactElement | null = ({ children, ...props }) => {
 	if (
 		Object.values(props).filter(
-			<T extends any>(v: T | undefined): v is T => v != undefined,
+			<T extends any>(v: T | undefined): v is T => v != undefined
 		).length == 0
 	)
-		return children.props.children ?? null
+		return children.props.children ?? null;
 
-	return React.cloneElement(children, { ...children.props, ...props })
-}
+	return React.cloneElement(children, { ...children.props, ...props });
+};
 
-export default Void
+export default Void;

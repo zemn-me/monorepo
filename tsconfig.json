@@ -1,22 +1,42 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"baseUrl": ".",
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": false,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
+		"module": "commonjs",
+		"target": "es2020",
+		"strictFunctionTypes": true,
 		"esModuleInterop": true,
-		"downlevelIteration": true,
-		"module": "esnext",
 		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"strict": true
+		"strict": true,
+		"baseUrl": "./",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitThis": true,
+		"declaration": true,
+		"preserveSymlinks": true,
+		"forceConsistentCasingInFileNames": true,
+		"downlevelIteration": true,
+		"composite": true,
+		"incremental": true,
+		"paths": {
+			"//*": [
+				"*",
+				"./bazel-out/k8-fastbuild/bin/*",
+				"./bazel-out/x64_windows-fastbuild/bin/*",
+				"./bazel-out/x64_windows-dbg/bin/*",
+				"./bazel-out/k8-dbg/bin/*",
+				"./bazel-out/host/bin/*",
+				"./bazel-out/darwin-fastbuild/bin/*",
+				"./bazel-out/darwin-dbg/bin/*"
+			]
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths" },
+			{
+				"transform": "typescript-transform-paths",
+				"afterDeclarations": true
+			}
+		]
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "**/node_modules/*", "external/*"]
 }

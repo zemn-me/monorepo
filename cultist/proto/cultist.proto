@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+
+package cultist;
+
+import "google/protobuf/struct.proto";
+
+message Culture {
+    // unique id for this culture
+    // @example "german"
+    string id = 1;
+    string fontscript = 2;
+    bool released = 3;
+    string endonym = 4;
+    string exonym = 5;
+    google.protobuf.Struct uilabels = 6;
+    bool boldallowed = 7;
+}
+
+message Deck {
+    string id = 1;
+    string description = 2;
+    string label = 3;
+    bool resetonexhaustion = 4;
+    // cards in this deck
+    repeated string spec = 5;
+    uint64 draws = 6;
+    string defaultcard = 7;
+    string comments = 8;
+    map<string, string> drawmessages = 9;
+}
+
+message Element {
+    string id = 1;
+    bool isAspect = 2;
+    bool isHidden = 3;
+    string label = 4;
+    string icon = 5;
+    bool unique = 6;
+    // map<string, string> or map<string, []{ id: xxx } etc...
+    google.protobuf.Struct xtriggers = 7;
+    string description = 8;
+    map<string, uint64> aspects = 9;
+    uint64 lifetime = 10;
+    string uniquenessgroup = 11;
+    repeated Slot slots = 12;
+    string decayTo = 13;
+    string comments = 14;
+    bool resaturate = 15;
+    string lever = 16;
+    bool noartneeded = 17;
+    message Induction {
+        string id = 1;
+        int64 chance = 2;
+    }
+    repeated Induction induces = 18;
+    string verbicon = 19;
+    string inherits = 20;
+}
+
+message Recipe {
+    string id = 1;
+    string actionid = 18;
+    string actionid_incorrect = 19 [ json_name = "actionId" ];
+    map<string, int64> aspects = 3;
+    // map<string, int64 | string>
+    google.protobuf.Struct requirements = 8;
+    string description = 4;
+    string label = 5;
+    uint64 warmup = 6;
+    bool craftable = 7;
+    repeated Recipe alt = 9;
+    repeated Slot slots = 10;
+    string startdescription = 11;
+    string comments = 12;
+    message Mutation {
+        string filter = 1;
+        int64 level = 2;
+        string mutate = 3;
+        bool additive = 4;
+    }
+    repeated Mutation mutations = 13;
+    int64 maxexecutions = 14;
+
+    repeated Recipe linked = 15;
+    map<string, int64> tablereqs = 16;
+    // map<string, int64 | string>
+    google.protobuf.Struct effects = 17;
+    Deck internaldeck = 20;
+    map<string, int64> deckeffects = 21;
+    string burnimage = 22;
+    map<string, int64> extantreqs = 23;
+    bool hintonly = 24;
+    string ending = 25;
+    string signalEndingFlavour = 26;
+
+    map<string, int64> purge = 27;
+    map<string, int64> deleteverb = 28;
+    map<string, int64> haltverb = 29;
+
+    int32 chance = 30;
+
+    bool additional = 33;
+
+    message Expulsion {
+        int32 limit = 1;
+        map<string, int64> filter = 2;
+    }
+    Expulsion expulsion = 34;
+    string portaleffect = 35;
+
+    map<string, string> challenges = 36;
+    bool signalimportantloop = 37;
+}
+
+
+message Slot {
+    string id = 1;
+    string label = 2;
+    string description = 3;
+    map<string, int64> required = 4;
+    map<string, int64> forbidden = 5;
+    bool greedy = 6;
+    string actionid = 7;
+    bool consumes = 8;
+    bool noanim = 9;
+}
+
+message Verb {
+    string id = 1;
+    string description = 2;
+    repeated Slot slots = 3;
+    string label = 4;
+    Slot slot = 5;
+}
+
+message Legacy {
+    string id = 1;
+    string label = 2;
+    string fromending = 3;
+    string description = 4;
+    string startdescription = 5;
+    map<string, uint32> effects = 6;
+    string image = 7;
+    string startingverbid = 8;
+    bool newstart = 9;
+    bool availableWithoutEndingMatch = 10;
+    repeated string statusbarelements = 11;
+    string tablecoverimage = 12;
+    repeated string excludesOnEnding = 13;
+}
+
+message Setting {
+    string id = 1;
+    string tabid = 2;
+    string hint = 3;
+    string datatype = 4;
+    int64 minvalue = 5;
+    int64 maxvalue = 6;
+    string defaultvalue = 7;
+    map<int64, string> valuelabels = 8;
+}
