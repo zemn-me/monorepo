@@ -19,7 +19,7 @@ genrule(
     outs = [ "steam_gen_cultist_out.zip" ],
     cmd = "$(location :steam_container) &&" +
 	"mkdir $$(realpath $@)_tmp &&" +
-    	"docker run -v $$(realpath $@)_tmp:/steam_gen_cultist_gen_data bazel/gen/cultist_data:steam_container +login $$STEAM_USERNAME $$STEAM_PASSWORD +force_install_dir /steam_gen_cultist_gen_data +app_update 718670 +quit"
+    	"docker run -v $$(realpath $@)_tmp:/steam_gen_cultist_gen_data bazel/cultist/gen/cultist_data:steam_container +login $$STEAM_USERNAME $$STEAM_PASSWORD +force_install_dir /steam_gen_cultist_gen_data +app_update 718670 +quit"
         +  "&& $(location //go/cmd/zipdir:zipdir) -input $@_tmp -output $@",
     message = "Downloading cultist simulator. Please ensure that --action_env=STEAM_USERNAME and --action_env=STEAM_PASSWORD are both set on the command line and as environment variables"
 )
