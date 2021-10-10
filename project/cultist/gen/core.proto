@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package gen;
 
-import "cultist/proto/cultist.proto";
+import "project/cultist/proto/cultist.proto";
 import "google/protobuf/struct.proto";
 
 message Core {

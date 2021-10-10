@@ -18,9 +18,9 @@ genrule(
     ) + [":next.config.js"],
     outs = ["build.tar.gz"],
     cmd = """
-        $(execpath @npm//next/bin:next) build ./cultist/multiplayer &&
-        $(execpath @npm//next/bin:next) export ./cultist/multiplayer &&
-        tar -czvf $@ ./cultist/multiplayer/out
+        $(execpath @npm//next/bin:next) build ./project/cultist/multiplayer &&
+        $(execpath @npm//next/bin:next) export ./project/cultist/multiplayer &&
+        tar -czvf $@ ./project/cultist/multiplayer/out
     """,
     exec_tools = [
         "@npm//next/bin:next",

@@ -2,7 +2,7 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as save from '//cultist/save';
+import * as save from '//project/cultist/save';
 import * as iter from '//ts/iter';
 import { optionalChain } from '//ts/util';
 import immutable from 'immutable';

@@ -1,6 +1,6 @@
-import * as cultist from '//cultist/types';
-import * as aspects from '//cultist/aspects';
-import * as Verb from '//cultist/verb';
+import * as cultist from '//project/cultist/types';
+import * as aspects from '//project/cultist/aspects';
+import * as Verb from '//project/cultist/verb';
 
 /**
  * Given a set of verbs, recipes and elements, return an iterable subset

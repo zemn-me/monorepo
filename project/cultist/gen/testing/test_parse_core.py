@@ -1,6 +1,6 @@
 import unittest
 #from gen import core_pb2 as core
-import cultist.gen.core
+import project.cultist.gen.core
 
 
 class TestBasic(unittest.TestCase):
