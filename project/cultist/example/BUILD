@@ -11,10 +11,10 @@ ts_project(
     declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig",
-    visibility = ["//cultist:__subpackages__"],
+    visibility = ["//project/cultist:__subpackages__"],
 )
 
 exports_files(
     ["savestate.ts"],
-    ["//cultist:__subpackages__"],
+    ["//project/cultist:__subpackages__"],
 )

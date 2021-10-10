@@ -1,5 +1,5 @@
-import * as cultist from '//cultist/types';
-import * as Slots from '//cultist/slots';
+import * as cultist from '//project/cultist/types';
+import * as Slots from '//project/cultist/slots';
 import { filter, remove } from '//ts/iter';
 import { isDefined } from '//ts/guard';
 

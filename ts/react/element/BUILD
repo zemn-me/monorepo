@@ -11,7 +11,7 @@ ts_project(
     incremental = True,
     tsconfig = "//:tsconfig_jsx",
     project_deps = [
-        "//ts/react/elements/link:link",
+        "//ts/react/element/link:link",
     ],
     resolve_json_module = True,
 )

@@ -1,4 +1,4 @@
-from cultist.gen.core_pb2 import Core
+from project.cultist.gen.core_pb2 import Core
 from google.protobuf import json_format
 
 def load() -> Core:

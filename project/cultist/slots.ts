@@ -1,5 +1,5 @@
-import * as cultist from '//cultist/types';
-import * as Aspects from '//cultist/aspects';
+import * as cultist from '//project/cultist/types';
+import * as Aspects from '//project/cultist/aspects';
 
 export function* of(
 	i: Iterable<{ slot?: cultist.Slot } | { slots?: cultist.Slot[] }>
