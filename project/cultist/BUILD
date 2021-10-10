@@ -16,7 +16,7 @@ ts_project(
     declaration = True,
     incremental = True,
     project_deps = [
-        "//cultist/example:example",
+        "//project/cultist/example:example",
         "//ts:ts",
         "//ts/iter:iter",
     ],

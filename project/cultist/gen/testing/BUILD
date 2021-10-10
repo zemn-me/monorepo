@@ -3,5 +3,5 @@ load("@rules_python//python:defs.bzl", "py_test")
 py_test(
     name = "test_parse_core",
     srcs = ["test_parse_core.py"],
-    deps = ["//cultist/gen:core_py"],
+    deps = ["//project/cultist/gen:core_py"],
 )

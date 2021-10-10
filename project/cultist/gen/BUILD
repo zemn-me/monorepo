@@ -4,7 +4,7 @@ load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 package(default_visibility = [
-    "//cultist:__subpackages__",
+    "//project/cultist:__subpackages__",
 ])
 
 ts_project(
@@ -26,10 +26,10 @@ nodejs_binary(
 
 genrule(
     name = "gen_core",
-    srcs = ["//cultist/gen/cultist_data:steam_gen_cultist_out.zip"],
+    srcs = ["//project/cultist/gen/cultist_data:steam_gen_cultist_out.zip"],
     outs = ["core_en.json"],
-    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //cultist/gen/cultist_data:steam_gen_cultist_out.zip) -d $(location :core_en.json)_gamedir_tmp &&" +
-          "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //cultist/gen:collate_game_core) > $@",
+    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //project/cultist/gen/cultist_data:steam_gen_cultist_out.zip) -d $(location :core_en.json)_gamedir_tmp &&" +
+          "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //project/cultist/gen:collate_game_core) > $@",
     exec_tools = [":collate_game_core"],
     message = "generating collated game data",
     tools = ["@bazel_tools//tools/zip:zipper"],
@@ -39,7 +39,7 @@ proto_library(
     name = "core_proto",
     srcs = ["core.proto"],
     deps = [
-        "//cultist/proto:cultist_proto",
+        "//project/cultist/proto:cultist_proto",
         "@com_google_protobuf//:struct_proto",
     ],
 )
@@ -48,7 +48,7 @@ py_proto_library(
     name = "core_py_proto",
     srcs = ["core.proto"],
     deps = [
-        "//cultist/proto:cultist_py_proto",
+        "//project/cultist/proto:cultist_py_proto",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -56,6 +56,6 @@ py_proto_library(
 py_library(
     name = "core_py",
     srcs = ["core.py"],
-    data = ["//cultist/gen:core_en.json"],
-    deps = ["//cultist/gen:core_py_proto"],
+    data = ["//project/cultist/gen:core_en.json"],
+    deps = ["//project/cultist/gen:core_py_proto"],
 )

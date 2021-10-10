@@ -1,6 +1,6 @@
 load("//:rules.bzl", "go_binary")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-package(default_visibility = ["//cultist:__subpackages__"])
+package(default_visibility = ["//project/cultist:__subpackages__"])
 
 go_binary(
     name = "gen_cultist_data",
