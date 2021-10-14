@@ -1,25 +1,28 @@
-load("//:rules.bzl", "ts_project", "jest_test")
+load("//:rules.bzl", "jest_test", "ts_project")
+
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "svg",
-    srcs = glob(["*.ts", "*.tsx"]),
-    deps = [
-        "@npm//@types/react",
-        "@npm//react",
-        "@npm//d3-scale",
-        "@npm//d3-axis",
-        "@npm//@types/d3-scale",
-        "@npm//@types/d3-axis"
-    ],
-    project_deps = [
-        "//ts/math:math",
-        "//ts:ts"
-    ],
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [
+        "//ts/math:math",
+        "//ts:ts",
+    ],
+    resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
-    resolve_json_module = True
+    deps = [
+        "@npm//@types/d3-axis",
+        "@npm//@types/d3-scale",
+        "@npm//@types/react",
+        "@npm//d3-axis",
+        "@npm//d3-scale",
+        "@npm//react",
+    ],
 )
-

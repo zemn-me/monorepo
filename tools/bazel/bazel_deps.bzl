@@ -6,8 +6,8 @@
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-def fetch_dependencies():
 
+def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
         urls = [
@@ -29,7 +29,6 @@ def fetch_dependencies():
         url = "https://github.com/bazelbuild/rules_python/releases/download/0.3.0/rules_python-0.3.0.tar.gz",
         sha256 = "934c9ceb552e84577b0faf1e5a2f0450314985b4d8712b2b70717dc679fdc01b",
     )
-
 
     http_archive(
         name = "io_bazel_rules_go",
@@ -61,7 +60,8 @@ def fetch_dependencies():
         name = "com_google_protobuf",
         remote = "https://github.com/protocolbuffers/protobuf",
         #tag = "v3.17.3",
-        commit = "909a0f36a10075c4b4bc70fdee2c7e32dd612a72", shallow_since = "1622843222 +0000"
+        commit = "909a0f36a10075c4b4bc70fdee2c7e32dd612a72",
+        shallow_since = "1622843222 +0000",
     )
 
     http_archive(
@@ -70,5 +70,32 @@ def fetch_dependencies():
         strip_prefix = "rules_typescript_proto-1.0.1",
         urls = [
             "https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "bazel_gazelle",
+        sha256 = "62ca106be173579c0a167deb23358fdfe71ffa1e4cfdddf5582af26520f1c66f",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "com_google_protobuf",
+        sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
+        strip_prefix = "protobuf-3.13.0",
+        urls = [
+            "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "com_github_bazelbuild_buildtools",
+        sha256 = "d49976b0b1e81146d79072f10cabe6634afcd318b1bd86b0102d5967121c43c1",
+        strip_prefix = "buildtools-4.2.0",
+        urls = [
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/4.2.0.tar.gz",
         ],
     )

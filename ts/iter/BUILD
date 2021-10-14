@@ -21,8 +21,8 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [":iter"],
     tsconfig = "//:tsconfig_node",
-    project_deps = [ ":iter" ],
     deps = [
         "@npm//@types/jest",
     ],

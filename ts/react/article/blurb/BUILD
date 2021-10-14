@@ -1,24 +1,30 @@
-load("//:rules.bzl", "ts_project", "jest_test")
+load("//:rules.bzl", "jest_test", "ts_project")
+
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "blurb",
-    srcs = glob(["*.ts", "*.tsx"]),
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig_jsx",
     resolve_json_module = True,
-    deps = [ "@npm//react", "@npm//@types/react", "@npm//react-dom",
-    "@npm//@types/react-dom", "@npm//@types/jest" ]
+    tsconfig = "//:tsconfig_jsx",
+    deps = [
+        "@npm//@types/jest",
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//react",
+        "@npm//react-dom",
+    ],
 )
 
 jest_test(
     name = "tests",
-    project_deps = [ ":blurb" ],
-    srcs = [ "blurb_test.js" ],
-    jsdom = True
+    srcs = ["blurb_test.js"],
+    jsdom = True,
+    project_deps = [":blurb"],
 )
-
-
-
