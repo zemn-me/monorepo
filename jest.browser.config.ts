@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
-module.exports = {
-	testEnvironment: 'node',
+export default {
 	haste: {
 		enableSymlinks: true,
 	},
