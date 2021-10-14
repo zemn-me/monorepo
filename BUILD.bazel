@@ -7,7 +7,7 @@
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -34,20 +34,19 @@ ts_config(
     deps = ["//ts/config:jsx"],
 )
 
-js_library(
-    name = "jest_config_node",
-    srcs = ["jest.ts.config.js"],
+
+ts_project(
+	name = "jest_config_node",
+	srcs = [ "jest.node.config.ts" ]
 )
 
-js_library(
-    name = "jest_config_browser",
-    srcs = ["jest.browser.config.js"],
+ts_project(
+	name = "jest_config_browser",
+	srcs = [ "jest.browser.config.ts" ]
 )
 
 exports_files(
     [
-        "jest.ts.config.js",
-        "jest.browser.config.js",
         ".prettierrc.json",
         ".gitignore",
         ".editorconfig",
