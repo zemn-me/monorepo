@@ -7,7 +7,8 @@
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier", "ts_project")
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("//:rules.bzl", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
 

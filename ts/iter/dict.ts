@@ -52,3 +52,7 @@ export function fromEntries<V>(
 
 	return o;
 }
+
+export function toEntries<V>(o: { [key: string]: V }): [string, V][] {
+	return Object.entries(o);
+}
