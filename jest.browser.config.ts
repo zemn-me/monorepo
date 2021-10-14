@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-module.exports = {
-	testEnvironment: 'node',
+export default {
+	testEnvironment: 'jsdom',
 	haste: {
 		enableSymlinks: true,
 	},
@@ -9,5 +9,4 @@ module.exports = {
 	moduleNameMapper: {
 		'examples_jest/(.*)': '<rootDir>/$1',
 	},
-	testEnvironment: 'jsdom',
 };
