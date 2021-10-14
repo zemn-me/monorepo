@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_config", "ts_project")
+load("//:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -21,8 +21,8 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [":iter"],
     tsconfig = "//:tsconfig_node",
-    project_deps = [ ":iter" ],
     deps = [
         "@npm//@types/jest",
     ],
