@@ -1,6 +1,13 @@
-import * as cultist from '//project/cultist';
-import immutable from 'immutable';
+import * as state from '//project/cultist/state';
+import * as action from '//project/cultist/action';
 import * as element from '//project/cultist/element';
+import immutable from 'immutable';
+
+const cultist = {
+	state,
+	action,
+	element,
+} as const;
 
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
@@ -45,7 +52,7 @@ describe('applyEffect', () => {
 			money: 10,
 		});
 
-		expect(element.count('money', state.elementStacks)).toEqual(10);
+		expect(cultist.element.count('money', state.elementStacks)).toEqual(10);
 	});
 
 	test('remove', () => {
