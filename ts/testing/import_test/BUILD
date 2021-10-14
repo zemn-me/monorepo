@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_config", "ts_project")
+load("//:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "a",
@@ -6,8 +6,8 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig_node",
     project_deps = [":b"],
+    tsconfig = "//:tsconfig_node",
 )
 
 ts_project(
@@ -25,10 +25,10 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig_node",
     project_deps = [
-        ":a"
+        ":a",
     ],
+    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/jest",
     ],
