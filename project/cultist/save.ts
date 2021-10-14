@@ -1,10 +1,13 @@
+export type Boolean_ = 'True' | 'False';
+export type Number_ = string;
+
 export interface ElementInstance {
-	lifetimeRemaining?: string;
-	lastTablePosX?: string;
-	lastTablePosY?: string;
-	markedForConsumption?: string;
+	lifetimeRemaining?: Number_;
+	lastTablePosX?: Number_;
+	lastTablePosY?: Number_;
+	markedForConsumption?: Boolean_;
 	elementId?: string;
-	quantity?: string;
+	quantity?: Number_;
 }
 
 export interface State {
@@ -70,7 +73,17 @@ export interface Situation {
 	recipeId?: string | null;
 	situationWindowX?: string;
 	state?: string;
-	situationOutputNotes?: Record<string, { title?: string }>;
+	situationOutputNotes?: Record<string, SituationOutputNote>;
 	situationWindowOpen?: string;
 	completioncount?: string;
 }
+
+export interface SituationOutputNote {
+	title?: string;
+}
+
+export const load: (s: string) => State = s => {
+	s = s.replace(/\bNULL\b/g, 'null');
+
+	return JSON.parse(s);
+};

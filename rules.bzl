@@ -11,7 +11,7 @@ def nodejs_binary(**kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(project_deps = [], jsdom = None, deps = [], **kwargs):
+def jest_test(project_deps = [], jsdom = False, deps = [], **kwargs):
     extra_deps = [ "@npm//jsdom" ] if jsdom else []
     _jest_test(
         deps = deps + [ x + "_js" for x in project_deps ] + extra_deps,

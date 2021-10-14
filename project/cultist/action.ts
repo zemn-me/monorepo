@@ -8,10 +8,12 @@ export enum Kind {
 	ExecuteRecipe = 1,
 	SelectLegacy = 2,
 }
+
 export interface SelectLegacy {
 	kind: Kind.SelectLegacy;
 	legacy: cultist.Legacy;
 }
+
 export interface PassTime {
 	kind: Kind.PassTime;
 	seconds: number;
