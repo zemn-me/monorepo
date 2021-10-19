@@ -1,7 +1,7 @@
 load("//tools/jest:jest.bzl", _jest_test = "jest_test")
 load("//tools/go:go.bzl", _test_go_fmt = "test_go_fmt")
 load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "go_library", _go_test = "go_test")
-load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project", _ts_config = "ts_config")
+load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
 
@@ -12,9 +12,9 @@ def ts_config(**kwargs):
     _ts_config(**kwargs)
 
 def jest_test(project_deps = [], jsdom = None, deps = [], **kwargs):
-    extra_deps = [ "@npm//jsdom" ] if jsdom else []
+    extra_deps = ["@npm//jsdom"] if jsdom else []
     _jest_test(
-        deps = deps + [ x + "_js" for x in project_deps ] + extra_deps,
+        deps = deps + [x + "_js" for x in project_deps] + extra_deps,
         jest_config = "//:jest_config_browser_js" if jsdom else "//:jest_config_node_js",
         **kwargs
     )

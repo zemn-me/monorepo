@@ -35,15 +35,14 @@ ts_config(
     deps = ["//ts/config:jsx"],
 )
 
-
 ts_project(
-	name = "jest_config_node",
-	srcs = [ "jest.node.config.ts" ]
+    name = "jest_config_node",
+    srcs = ["jest.node.config.ts"],
 )
 
 ts_project(
-	name = "jest_config_browser",
-	srcs = [ "jest.browser.config.ts" ]
+    name = "jest_config_browser",
+    srcs = ["jest.browser.config.ts"],
 )
 
 exports_files(
