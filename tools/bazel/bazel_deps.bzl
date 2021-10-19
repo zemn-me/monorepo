@@ -72,3 +72,30 @@ def fetch_dependencies():
             "https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
         ],
     )
+
+    http_archive(
+        name = "bazel_gazelle",
+        sha256 = "62ca106be173579c0a167deb23358fdfe71ffa1e4cfdddf5582af26520f1c66f",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "com_google_protobuf",
+        sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
+        strip_prefix = "protobuf-3.13.0",
+        urls = [
+            "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "com_github_bazelbuild_buildtools",
+        sha256 = "d49976b0b1e81146d79072f10cabe6634afcd318b1bd86b0102d5967121c43c1",
+        strip_prefix = "buildtools-4.2.0",
+        urls = [
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/4.2.0.tar.gz",
+        ],
+    )

@@ -1,7 +1,7 @@
 load("//tools/jest:jest.bzl", _jest_test = "jest_test")
 load("//tools/go:go.bzl", _test_go_fmt = "test_go_fmt")
 load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "go_library", _go_test = "go_test")
-load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
+load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project", _ts_config = "ts_config")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
 
@@ -11,7 +11,7 @@ def nodejs_binary(**kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(project_deps = [], jsdom = False, deps = [], **kwargs):
+def jest_test(project_deps = [], jsdom = None, deps = [], **kwargs):
     extra_deps = [ "@npm//jsdom" ] if jsdom else []
     _jest_test(
         deps = deps + [ x + "_js" for x in project_deps ] + extra_deps,
@@ -36,7 +36,6 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-
 def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
     __ts_project(
         name = name + "_ts",
@@ -58,7 +57,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps
     suffixes = {
         ".d.ts": [],
         ".tsx": [".js"],
-        ".ts": [".js"]
+        ".ts": [".js"],
     }
 
     for s in srcs:
@@ -70,19 +69,16 @@ def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps
             if s[-len(suffix):] == suffix:
                 for target in targets:
                     jssrcs.append(
-                        s[:-len(suffix)] + target
+                        s[:-len(suffix)] + target,
                     )
                 found = True
 
-
-
     js_library(
         name = name + "_js",
-        deps = [ dep + "_js" for dep in project_deps ] + deps,
+        deps = [dep + "_js" for dep in project_deps] + deps,
         srcs = jssrcs,
         **kwargs
     )
-
 
 def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
@@ -95,7 +91,7 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
         **kwargs
     )
 
-    ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint ], tags = tags)
+    ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint], tags = tags)
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
     _eslint_test(

@@ -1,32 +1,34 @@
-load("//:rules.bzl", "ts_project", "jest_test")
+load("//:rules.bzl", "jest_test", "ts_project")
+
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "shape",
-    srcs = glob(["*.ts", "*.tsx"]),
-    deps = [
-        "@npm//@types/jest",
-        "@npm//react-dom",
-        "@npm//react",
-        "@npm//@types/react",
-        "@npm//@types/react-dom"
-    ],
-    project_deps = [
-        "//ts/math:math",
-        "//ts/math/canvas:canvas"
-    ],
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [
+        "//ts/math:math",
+        "//ts/math/canvas:canvas",
+    ],
+    resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
-    resolve_json_module = True
+    deps = [
+        "@npm//@types/jest",
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//react",
+        "@npm//react-dom",
+    ],
 )
 
 jest_test(
     name = "shape",
-    project_deps = [ ":shape" ],
-    srcs = [ "shape_test.js" ],
-    jsdom = True
+    srcs = ["shape_test.js"],
+    jsdom = True,
+    project_deps = [":shape"],
 )
-
-

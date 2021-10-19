@@ -6,9 +6,17 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("//:rules.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("//:rules.bzl", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
+
+buildifier(
+    name = "buildifier",
+)
+
+load("//:rules.bzl", "ts_config")
 
 ts_config(
     name = "tsconfig",
@@ -24,7 +32,7 @@ ts_config(
 ts_config(
     name = "tsconfig_jsx",
     src = "jsx.tsconfig.json",
-	deps = ["//ts/config:jsx"]
+    deps = ["//ts/config:jsx"],
 )
 
 

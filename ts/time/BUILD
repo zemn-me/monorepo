@@ -1,24 +1,27 @@
-load("//:rules.bzl", "ts_project", "jest_test")
+load("//:rules.bzl", "jest_test", "ts_project")
+
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "time",
-    srcs = glob(["*.ts", "*.tsx"]) + [
-        "//css:css_loader.d.ts"
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]) + [
+        "//css:css_loader.d.ts",
     ],
+    composite = True,
+    declaration = True,
+    incremental = True,
+    project_deps = ["//ts:ts"],
     deps = [
         "@npm//@types/jest",
         "@npm//ts-toolbelt",
     ],
-    project_deps = [ "//ts:ts" ],
-    composite = True,
-    declaration = True,
-    incremental = True,
 )
 
 jest_test(
     name = "tests",
-    project_deps = [ ":time" ],
-    srcs = [ "date_test.js" ]
+    srcs = ["date_test.js"],
+    project_deps = [":time"],
 )
-
