@@ -83,7 +83,6 @@ load(
 )
 load(
     "@rules_rust//rust/settings:incompatible.bzl",
-    _fail_when_enabled = "fail_when_enabled",
     _incompatible_flag = "incompatible_flag",
 )
 load(
@@ -147,7 +146,6 @@ rustfmt_test = _rustfmt_test
 error_format = _error_format
 extra_rustc_flags = _extra_rustc_flags
 incompatible_flag = _incompatible_flag
-fail_when_enabled = _fail_when_enabled
 capture_clippy_output = _capture_clippy_output
 
 CrateInfo = _CrateInfo
