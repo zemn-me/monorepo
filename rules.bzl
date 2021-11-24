@@ -110,11 +110,12 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
                ["$(location " + x + ")" for x in data],
     )
 
-def go_binary(name = None, importpath = None, deps = [], **kwargs):
+def go_binary(name = None, embedsrcs = None, importpath = None, deps = [], **kwargs):
     _go_binary(
         name = name,
         deps = deps,
         importpath = importpath,
+        embedsrcs = embedsrcs,
         **kwargs
     )
 

@@ -1,62 +1,21 @@
-load("@npm//next:index.bzl", "next")
-load("//:rules.bzl", "ts_lint", "ts_project")
+load("//:rules.bzl", "go_binary", "ts_lint", "ts_project")
+load("@npm//@bazel/esbuild:index.bzl", "esbuild")
+load("@npm//esbuild:index.bzl", run_esbuild = "esbuild")
 
-ts_lint(
-    name = "lint",
-    data = glob([
-        "**/*.ts",
-        "**/*.js",
-    ]),
-)
-
-genrule(
+esbuild(
     name = "multiplayer",
-    srcs = glob(
-        ["**/*"],
-        exclude = ["next.config.ts"],
-    ) + [":next.config.js"],
-    outs = ["build.tar.gz"],
-    cmd = """
-        $(execpath @npm//next/bin:next) build ./project/cultist/multiplayer &&
-        $(execpath @npm//next/bin:next) export ./project/cultist/multiplayer &&
-        tar -czvf $@ ./project/cultist/multiplayer/out
-    """,
-    exec_tools = [
-        "@npm//next/bin:next",
-        "@npm//:node_modules",
-    ] + [],
+    entry_point = "//project/cultist/multiplayer/pages:index.tsx",
+    minify = True,
+    output_dir = "es_out",
+    splitting = True,
+    deps = ["//project/cultist/multiplayer/pages:pages_ts"],
 )
 
-next(
-    name = "next",
-    args = ["./cultist/multiplayer"],
-    data = glob(
-        ["**/*"],
-        exclude = ["next.config.ts"],
-    ) + [":next.config.js"],
-)
-
-next(
+go_binary(
     name = "start",
-    args = [
-        "./cultist/multiplayer",
-        "start",
-    ],
-    data = glob(
-        ["**/*"],
-        exclude = ["next.config.ts"],
-    ) + [":next.config.js"],
-)
-
-ts_project(
-    name = "config_js",
-    srcs = ["next.config.ts"],
-    composite = True,
-    declaration = True,
-    incremental = True,
-    tsconfig = "//:tsconfig_node",
-    deps = [
-        "@npm//@types/node",
-        "@npm//next",
+    srcs = ["test_server.go"],
+    embedsrcs = [
+        ":multiplayer",
+        "//project/cultist/multiplayer/public:index.html",
     ],
 )
