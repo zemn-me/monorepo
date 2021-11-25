@@ -13,4 +13,10 @@ ts_project(
         "@npm//@types/react",
         "@npm//react",
     ],
+    project_deps = [
+        "//project/cultist/example:example",
+        "//project/cultist/react:react",
+        "//project/cultist/state:state",
+        "//project/cultist:save"
+    ]
 )
