@@ -10,15 +10,13 @@ ts_project(
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//project/cultist/multiplayer/pages:pages_ts",
         "@npm//@types/react",
+        "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
-        "@npm//@types/react-dom",
-        "//project/cultist/multiplayer/pages:pages_ts"
     ],
 )
-
-
 
 esbuild(
     name = "multiplayer",
@@ -26,8 +24,8 @@ esbuild(
     minify = True,
     output_dir = "es_out",
     splitting = True,
+    target = "chrome58",
     deps = [":index_ts"],
-    target = "chrome58"
 )
 
 go_binary(

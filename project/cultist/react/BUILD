@@ -4,7 +4,10 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "react",
-    srcs = ["board.tsx", "index.tsx"],
+    srcs = [
+        "board.tsx",
+        "index.tsx",
+    ],
     project_deps = [
         "//project/cultist:state",
     ],

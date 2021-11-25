@@ -26,12 +26,19 @@ export const Card: React.FC<Readonly<CardProps>> = ({ instance }) => {
 		<div>
 			Card:
 			<ul>
-				{instance.elementId?<li>element: {instance.elementId}</li>:null}
-				{instance.lifetimeRemaining?<li><CardTimeDisplay seconds={instance.lifetimeRemaining} /></li>:null}
-				{instance.quantity? <li>quantity: {instance.quantity}</li> : null}
+				{instance.elementId ? (
+					<li>element: {instance.elementId}</li>
+				) : null}
+				{instance.lifetimeRemaining ? (
+					<li>
+						<CardTimeDisplay seconds={instance.lifetimeRemaining} />
+					</li>
+				) : null}
+				{instance.quantity ? (
+					<li>quantity: {instance.quantity}</li>
+				) : null}
 				<li>{JSON.stringify(instance)}</li>
 			</ul>
-
 		</div>
 	);
 };
