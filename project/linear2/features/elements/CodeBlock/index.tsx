@@ -66,7 +66,7 @@ const Span: (props: highlight.Element<'span'>) => React.ReactElement | null = ({
 }) => {
 	const classes = properties.className
 		.map(k => style[k])
-		.filter(<T extends any>(v: T | undefined): v is T => v !== undefined);
+		.filter(<T, >(v: T | undefined): v is T => v !== undefined);
 
 	if (classes.length === 0)
 		return (
