@@ -36,7 +36,7 @@ export const Void: <T>(
 ) => React.ReactElement | null = ({ children, ...props }) => {
 	if (
 		Object.values(props).filter(
-			<T extends any>(v: T | undefined): v is T => v != undefined
+			<T, >(v: T | undefined): v is T => v != undefined
 		).length == 0
 	)
 		return children.props.children ?? null;
