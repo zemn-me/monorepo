@@ -14,14 +14,3 @@ py_proto_library(
     srcs = ["cultist.proto"],
     deps = ["@com_google_protobuf//:protobuf_python"],
 )
-
-proto_library(
-    name = "core_proto",
-    srcs = ["core.proto"],
-    deps = [
-        "//project/cultist/proto:cultist_proto",
-        "@com_google_protobuf//:struct_proto",
-    ],
-)
-
-
