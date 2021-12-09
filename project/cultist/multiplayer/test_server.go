@@ -21,10 +21,17 @@ func Do() (err error) {
 	}
 	fmt.Println("Starting HTTP server @ http://localhost:8080/index.html")
 	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.FS(nf)))
-	mux.Handle("/index.html", http.HandlerFunc(func(rw http.ResponseWriter, rq *http.Request) {
-		rw.Write(index)
-	}))
+	fileServer := http.FileServer(http.FS(nf))
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			r.URL.Path = "/index.html"
+			w.Write(index)
+			return
+		}
+
+		fileServer.ServeHTTP(w, r)
+	})
+
 	return http.ListenAndServe(
 		":8080",
 		mux,
