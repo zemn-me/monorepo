@@ -6,6 +6,9 @@ import exampleSave from '//project/cultist/example/savestate';
 import * as State from '//project/cultist/state';
 import * as Save from '//project/cultist/save';
 import * as Board from '//project/cultist/react/board';
+import core_en from '//project/cultist/gen/core_en.json';
+
+console.log(core_en);
 
 const Home = (): React.ReactElement => (
 	<>
