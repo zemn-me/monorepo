@@ -1,0 +1,283 @@
+{
+    "legacies": [
+        {
+            "id": "exile",
+            "label": "流亡者",
+            "description": "没人能从清算人首领手里偷东西。但我就这么做了，我有我的理由。",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "trace": 7,
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1
+            },
+            "fromending": "wintersacrifice",
+            "availableWithoutEndingMatch": true,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "newstart": true,
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictorya",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否收获了更为丰厚的回报？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictorya",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictoryb",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否收获了更为丰厚的回报？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictoryb",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictoryc",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否升得更高？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictoryc",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictoryafoeslain",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否收获了更为丰厚的回报？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictoryafoeslain",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictorybfoeslain",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否收获了更为丰厚的回报？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictorybfoeslain",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.obscurityvictorycfoeslain",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否升得更高？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "obscurityvictorycfoeslain",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.foecaughtup",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否能保全性命？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "foecaughtup",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.ascensioncolonel",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否找到了更像是“自由”的东西？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "ascensioncolonel",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.ascensionlionsmith",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否找到了更像是“安宁”的东西？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "ascensionlionsmith",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.ascensionwolf",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我仍是一个毁灭者吗？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "ascensionwolf",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        },
+        {
+            "id": "exile.victoryvelvet",
+            "label": "流亡者",
+            "description": "倘若往昔之事改变，一切又会如何？于另一重历史中，我是否遇见了我的创造者？",
+            "startdescription": "日落时分。是时候动身了。",
+            "image": "exile",
+            "effects": {
+                "decade.stolen": 7,
+                "year.stolen": 7,
+                "ticket.train": 1,
+                "trace": 7
+            },
+            "fromending": "victoryvelvet",
+            "availableWithoutEndingMatch": false,
+            "statusbarelements": [
+                "obscurity",
+                "comfort",
+                "damage.exile",
+                "lifespan.stolen"
+            ],
+            "startingverbid": "use",
+            "tablecoverimage": "table_leather_exile"
+        }
+    ]
+}
+
+

@@ -1,0 +1,1162 @@
+{
+    "recipes": [
+        {
+            "id": "use.first",
+            "actionid": "use",
+            "label": "从他们的眼皮底下逃脱",
+            "startdescription": "我那些老同伙们都出来找我了。我在每个路口拐角都能听到他们的口哨和响指声。考虑到我偷了什么，这也正常。但我已经受够了。",
+            "requirements": {
+                "ticket.train": 1
+            },
+            "effects": {
+                "ticket.train": -1
+            },
+            "internaldeck": {
+                "spec": [
+                    "city.aachen",
+                    "city.prague",
+                    "city.munich",
+                    "city.london",
+                    "city.krakow",
+                    "city.avignon",
+                    "city.venice",
+                    "city.budapest"
+                ],
+                "draws": 1,
+                "defaultcard": "wilderness",
+                "resetonexhaustion": false
+            },
+            "alt": [
+                {
+                    "id": "rkx.first",
+                    "additional": true
+                },
+                {
+                    "id": "turn.begin",
+                    "additional": true
+                },
+                {
+                    "id": "travel.first",
+                    "additional": true
+                }
+            ],
+            "warmup": 2,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "send.investigate.description"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.weapon.underling",
+            "actionid": "use",
+            "label": "攻击我的追兵",
+            "startdescription": "直接攻击我的追兵。[这将消除所有“隐秘”。]",
+            "comments": "Priority>createdefiance, in case someone is actually under attack from a pursuer",
+            "requirements": {
+                "weapon": 1,
+                "op": -1
+            },
+            "extantreqs": {
+                "rkx.foe": -1,
+                "rkx.rank": 1
+            },
+            "slots": [
+                {
+                    "id": "with.lore",
+                    "label": "技艺",
+                    "description": "同时使用<b>刃</b>之技艺和武器将必定命中。",
+                    "actionid": "use",
+                    "required": {
+                        "lore": 1
+                    }
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.attack.underling.combo"
+                }
+            ],
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "use.attack.underling.hit",
+                    "chance": 70
+                },
+                {
+                    "id": "use.attack.underling.miss",
+                    "chance": 100
+                }
+            ]
+        },
+        {
+            "id": "use.attack.lore.underling",
+            "actionid": "use",
+            "label": "攻击我的追兵",
+            "comments": "Priority>createdefiance, in case someone is actually under attack from a pursuer",
+            "startdescription": "使用<b>刃</b>之技艺攻击我的追兵。[这将消除所有“隐秘”。]",
+            "requirements": {
+                "lore": 1,
+                "op": -1
+            },
+            "extantreqs": {
+                "rkx.foe": -1,
+                "rkx.rank": 1
+            },
+            "slots": [
+                {
+                    "id": "with.weapon",
+                    "label": "武器",
+                    "description": "同时使用<b>刃</b>之技艺和武器将必定命中。",
+                    "actionid": "use",
+                    "required": {
+                        "weapon": 1
+                    }
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.attack.underling.combo"
+                }
+            ],
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "use.attack.underling.hit",
+                    "chance": 70
+                },
+                {
+                    "id": "use.attack.underling.miss",
+                    "chance": 100
+                }
+            ]
+        },
+        {
+            "id": "use.attack.underling.combo",
+            "actionid": "use",
+            "requirements": {
+                "lore": 1,
+                "weapon": 1
+            },
+            "label": "钢铁与科学",
+            "purge": {
+                "obscurity": 100
+            },
+            "startdescription": "我比他强，是时候让他知道了。[同时使用<b>刃</b>之技艺和武器的攻击必将命中。]",
+            "linked": [
+                {
+                    "id": "use.attack.underling.hit.combo"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.underling.hit",
+            "actionid": "use",
+            "label": "结结实实的一击",
+            "startdescription": "我打中了此人，然后躲进了城市的人流中！[两道伤口就能干掉大多数清算人，四道则会杀死小头目。]",
+            "aspects": {
+                "striking.underling": 1,
+                "fatiguing": 1,
+                "tracerisk": 1
+            },
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 10,
+            "linked": [
+                {
+                    "id": "use.attack.underboss.slain"
+                },
+                {
+                    "id": "use.attack.underling.slain"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.underling.hit.combo",
+            "actionid": "use",
+            "label": "结结实实的一击",
+            "startdescription": "我打中了此人，然后躲进了城市的人流中！[两道伤口就能干掉大多数清算人，四道则会杀死小头目。]",
+            "comments": "We don't use the base striking aspect because we don't want to generate two wounds",
+            "aspects": {
+                "striking.underling.weapon": 1,
+                "fatiguing": 1,
+                "tracerisk": 1
+            },
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 10,
+            "linked": [
+                {
+                    "id": "use.attack.underboss.slain"
+                },
+                {
+                    "id": "use.attack.underling.slain"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.underling.miss",
+            "actionid": "use",
+            "label": "未命中",
+            "startdescription": "这家伙比我预计得更厉害，或更走运。我没能对他造成伤害。",
+            "purge": {
+                "obscurity": 100
+            },
+            "aspects": {
+                "fatiguing": 1
+            },
+            "warmup": 10
+        },
+        {
+            "id": "use.attack.underboss.slain",
+            "actionid": "use",
+            "label": "我干掉了那个小头目！",
+            "startdescription": "要干掉一个清算人小头目其实也挺难的。但好歹我也算是当过小头目的人。",
+            "description": "要干掉一个清算人小头目其实也挺难的。但好歹我也算是当过小头目的人。[我除掉了追兵。但更多的正在路上。]",
+            "extantreqs": {
+                "rkx.underboss": 1,
+                "damage.underling": 4
+            },
+            "haltverb": {
+                "rkx": 1
+            },
+            "effects": {
+                "trace": 1,
+                "damage.underling": -1
+            },
+            "purge": {
+                "damage.underling": 100,
+                "obscurity": 100
+            },
+            "burnimage": "reckoner.slain",
+            "warmup": 1
+        },
+        {
+            "id": "use.attack.underling.slain",
+            "actionid": "use",
+            "label": "我干掉了追兵！",
+            "startdescription": "清算人并非永生不死。我们只是做岁月的买卖。如果这需要证明的话，今晚我已经证明了。",
+            "description": "清算人并非永生不死。我们只是做岁月的买卖。如果这需要证明的话，今晚我已经证明了。[我除掉了追兵。但更多的正在路上。]",
+            "extantreqs": {
+                "rkx.rank": 1,
+                "damage.underling": 2,
+                "rkx.underboss": -1
+            },
+            "haltverb": {
+                "rkx": 1
+            },
+            "effects": {
+                "trace": 1,
+                "damage.underling": -1
+            },
+            "purge": {
+                "damage.underling": 100,
+                "obscurity": 100
+            },
+            "burnimage": "reckoner.slain",
+            "warmup": 1
+        },
+        {
+            "id": "use.attack.weapon.createdefiance",
+            "actionid": "use",
+            "label": "一件神圣武器",
+            "startdescription": "他们过去常说，要想杀死我的大敌，需要一颗银弹。我目睹过这样的尝试，也见证了其失败。那这个呢？",
+            "description": "没有哪个清算人会愚蠢到进入漫宿的高层。引起真正的长生者——或是其主人——的注意会招致毁灭。但我的大敌确实懂得一些无形之术。或许我也应该去学一些。[贸然行动会引来注意。这将消除所有的“隐秘”并产生一个痕迹。]",
+            "requirements": {
+                "weapon": 1,
+                "uq.weapon.profane": -1,
+                "op": -1
+            },
+            "extantreqs": {
+                "temptation.defiance": -1
+            },
+            "effects": {
+                "temptation.defiance": 1,
+                "trace": 1
+            },
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "foe.weaknesses.generate"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.lore.createdefiance",
+            "actionid": "use",
+            "label": "最致命的武器",
+            "startdescription": "没有一个清算人会愚蠢到进入漫宿的高层。引起真正的长生者——或是其主人的注意会招致毁灭。但我的大敌同抗争与征服之司辰有些交易，他受到了一定的保护。[贸然行动会引来注意。这将消除所有的“隐秘”并将产生一个痕迹。]",
+            "description": "我的大敌确实懂得一些“无形之术”。或许我也是时候去学一些了。",
+            "requirements": {
+                "lore": 1
+            },
+            "extantreqs": {
+                "temptation.defiance": -1
+            },
+            "effects": {
+                "temptation.defiance": 1,
+                "trace": 1
+            },
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "foe.weaknesses.generate"
+                }
+            ]
+        },
+        {
+            "id": "foe.weaknesses.generate",
+            "actionid": "use",
+            "label": "危险的可能性",
+            "startdescription": "即使是我的大敌也有弱点——但他小心地掩盖着它们。[找出能对你大敌生效的分心之物，你就能选择对自己最有利的地点来对付他。]",
+            "deckeffects": {
+                "rkx.weaknesses.environment": 1,
+                "rkx.weaknesses.quirk": 1,
+                "rkx.weaknesses.disfavour": 1
+            }
+        },
+        {
+            "id": "foe.weaknesses.generate.backup",
+            "actionid": "foe.weaknesses.generate.backup",
+            "label": "危险的可能性",
+            "startdescription": "即使是我的大敌也有弱点——但他小心地掩盖着它们。[找出能对你大敌生效的分心之物，你就能选择对自己最有利的地点来对付他。]",
+            "comments": "To be triggered from Defiance use - just in case weaknesses haven't been generated when meeting the Foe",
+            "extantreqs": {
+                "weakness.foe": -1,
+                "weakness.foe.unknown": -1
+            },
+            "deckeffects": {
+                "rkx.weaknesses.environment": 1,
+                "rkx.weaknesses.quirk": 1,
+                "rkx.weaknesses.disfavour": 1
+            }
+        },
+        {
+            "id": "use.attack.weapon.foe",
+            "actionid": "use",
+            "label": "用一件神圣的武器攻击我的大敌",
+            "startdescription": "他现身与我对决，也就暴露了自己……但要战胜他仍不容易。[大多数情况下使用武器的攻击能够命中，但不是必定成功。当大敌在场上时，你不能攻击低阶清算人。这将消除所有“隐秘”。 ]",
+            "requirements": {
+                "weapon": 1,
+                "uq.weapon.profane": -1,
+                "op": -1
+            },
+            "extantreqs": {
+                "rkx.foe": 1
+            },
+            "slots": [
+                {
+                    "id": "with.lore",
+                    "label": "技艺",
+                    "description": "同时使用<b>刃</b>之技艺和武器将必定命中。",
+                    "actionid": "use",
+                    "required": {
+                        "lore": 1
+                    }
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.attack.foe.combo"
+                }
+            ],
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "use.attack.foe.hit",
+                    "chance": 70
+                },
+                {
+                    "id": "use.attack.foe.miss",
+                    "chance": 100
+                }
+            ]
+        },
+        {
+            "id": "use.attack.lore.foe",
+            "actionid": "use",
+            "label": "使用<b>刃</b>之技艺攻击我的大敌",
+            "startdescription": "他现身与我对决，也就暴露了自己……但要战胜他仍不容易。[大多数情况下使用密传的攻击能够命中，但不是必定成功。当大敌在场上时，你不能攻击低阶清算人。这将消除所有“隐秘”。 ]",
+            "requirements": {
+                "lore": 1,
+                "op": -1
+            },
+            "extantreqs": {
+                "rkx.foe": 1
+            },
+            "slots": [
+                {
+                    "id": "with.weapon",
+                    "label": "武器",
+                    "description": "同时使用<b>刃</b>之技艺和武器将必定命中。",
+                    "actionid": "use",
+                    "required": {
+                        "weapon": 1
+                    },
+                    "forbidden": {
+                        "uq.weapon.profane": 1
+                    }
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.attack.foe.combo"
+                }
+            ],
+            "purge": {
+                "obscurity": 100
+            },
+            "warmup": 30,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "use.attack.foe.hit",
+                    "chance": 70
+                },
+                {
+                    "id": "use.attack.foe.miss",
+                    "chance": 100
+                }
+            ]
+        },
+        {
+            "id": "use.attack.foe.combo",
+            "actionid": "use",
+            "requirements": {
+                "lore": 1,
+                "weapon": 1
+            },
+            "label": "钢铁与科学",
+            "startdescription": "他从没教过我这些。[同时使用<b>刃</b>之技艺和武器将必定命中。]",
+            "purge": {
+                "obscurity": 100
+            },
+            "linked": [
+                {
+                    "id": "use.attack.foe.hit.combo"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.foe.hit",
+            "actionid": "use",
+            "label": "我伤到他了！",
+            "startdescription": "“别以为这能阻止我——”",
+            "purge": {
+                "obscurity": 100
+            },
+            "aspects": {
+                "striking.foe": 1,
+                "fatiguing": 1
+            },
+            "warmup": 10,
+            "linked": [
+                {
+                    "id": "use.attack.foe.slain"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.foe.hit.combo",
+            "actionid": "use",
+            "label": "我伤到他了！",
+            "startdescription": "“别以为这能阻止我——”",
+            "comments": "We don't use the base striking aspect because we don't want to generate two wounds",
+            "purge": {
+                "obscurity": 100
+            },
+            "aspects": {
+                "striking.foe.weapon": 1,
+                "fatiguing": 1
+            },
+            "warmup": 10,
+            "linked": [
+                {
+                    "id": "use.attack.foe.slain"
+                }
+            ]
+        },
+        {
+            "id": "use.attack.foe.miss",
+            "actionid": "use",
+            "label": "他避开了我的攻击—— ",
+            "startdescription": "“我还以为我把你教得比这更好呢。”",
+            "purge": {
+                "obscurity": 100
+            },
+            "aspects": {
+                "fatiguing": 1
+            },
+            "warmup": 10
+        },
+        {
+            "id": "use.attack.foe.slain",
+            "actionid": "use",
+            "label": "一场血腥的胜利",
+            "startdescription": "我大敌的身体被七道伤口贯穿，就像城墙洞开七道大门；每个伤口都已不再流血。他的心脏在我染血的手上颤抖。他死了。快结束了。我自己的伤口会结疤。如果运气好的话，其他追兵会为了大敌的势力而争斗起来，不再找我的麻烦。",
+            "extantreqs": {
+                "damage.foe": 7
+            },
+            "haltverb": {
+                "rkx": 1,
+                "rkx.foe": 1
+            },
+            "burnimage": "foe.slain",
+            "effects": {
+                "trace": 1,
+                "rkx.foe.defeated": 1,
+                "wound.foe": -1
+            },
+            "purge": {
+                "damage.foe": 100,
+                "damage.underling": 100
+            }
+        },
+        {
+            "id": "use.attack.weapon.notarget.hint",
+            "actionid": "use",
+            "label": "一把神圣武器？",
+            "startdescription": "这或许能有效对付我大敌的防御。我甚至可以和他决斗，如果他落单，如果我有理由相信我真的能在一场战斗中打败他。[你可以在大敌到达时攻击他。]",
+            "requirements": {
+                "weapon": 1,
+                "uq.weapon.profane": -1,
+                "op": -1,
+                "connection": -1
+            },
+            "extantreqs": {
+                "rkx.foe": -1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.profaneweapon.notarget.hint",
+            "actionid": "use",
+            "label": "一把武器？",
+            "startdescription": "这无法对付我大敌的防御。不过很遗憾，可能得换个人来挨这一枪了。[你可以在清算人到达时攻击他。]",
+            "requirements": {
+                "weapon": 1,
+                "uq.weapon.profane": 1,
+                "op": -1,
+                "connection": -1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.attack.lore.notarget",
+            "actionid": "use",
+            "label": "一种神圣的技艺？",
+            "startdescription": "我了解了一些关于大敌防御之法的情报。我甚至可以和他决斗，如果他落单，如果我有理由相信我真的能在一场战斗中打败他。",
+            "requirements": {
+                "lore": 1,
+                "edge": 4,
+                "op": -1,
+                "connection": -1
+            },
+            "extantreqs": {
+                "rkx.foe": -1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.attack.lore.notarget.notupgraded",
+            "actionid": "use",
+            "label": "办法？",
+            "startdescription": "假如我能了解更多关于大敌防御之法的情报，我甚至可以和他决斗，如果他落单，如果我有理由相信我真的能在一场战斗中打败他。",
+            "requirements": {
+                "lore": 1,
+                "op": -1,
+                "connection": -1
+            },
+            "extantreqs": {
+                "rkx.foe": -1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.dawn",
+            "actionid": "use",
+            "label": "眺望黎明",
+            "startdescription": "什么占据了我的思绪？",
+            "requirements": {
+                "op.dawn": 1
+            },
+            "slots": [
+                {
+                    "id": "temptation",
+                    "label": "诱惑",
+                    "required": {
+                        "desire": 1
+                    }
+                }
+            ],
+            "warmup": 10,
+            "alt": [
+                {
+                    "id": "tourism.tranquillity"
+                },
+                {
+                    "id": "tourism.rage"
+                }
+            ],
+            "effects": {
+                "op.dawn": -1,
+                "fascination": 1
+            },
+            "craftable": true
+        },
+        {
+            "id": "use.sunset",
+            "actionid": "use",
+            "label": "眺望落日",
+            "startdescription": "什么占据了我的思绪？",
+            "requirements": {
+                "op.sunset": 1
+            },
+            "slots": [
+                {
+                    "id": "temptation",
+                    "label": "诱惑",
+                    "required": {
+                        "desire": 1
+                    }
+                }
+            ],
+            "warmup": 10,
+            "alt": [
+                {
+                    "id": "tourism.tranquillity"
+                },
+                {
+                    "id": "tourism.rage"
+                }
+            ],
+            "effects": {
+                "op.sunset": -1,
+                "restlessness": 1
+            },
+            "craftable": true
+        },
+        {
+            "id": "use.night",
+            "actionid": "use",
+            "label": "漫步于夜晚的街道",
+            "startdescription": "什么占据了我的思绪？",
+            "requirements": {
+                "op.night": 1
+            },
+            "slots": [
+                {
+                    "id": "temptation",
+                    "label": "诱惑",
+                    "required": {
+                        "desire": 1
+                    }
+                }
+            ],
+            "warmup": 10,
+            "alt": [
+                {
+                    "id": "tourism.tranquillity"
+                },
+                {
+                    "id": "tourism.rage"
+                }
+            ],
+            "effects": {
+                "op.night": -1,
+                "dread": 1
+            },
+            "craftable": true
+        },
+        {
+            "id": "tourism.tranquillity",
+            "actionid": "use",
+            "label": "寻得安宁",
+            "startdescription": "我已经很久不知道安宁为何物了。此刻也许是新的起点。",
+            "requirements": {
+                "temptation.obscurity": 1
+            },
+            "effects": {
+                "op": -1,
+                "tranquillity": 1
+            }
+        },
+        {
+            "id": "tourism.rage",
+            "actionid": "use",
+            "label": "怒意滋长",
+            "startdescription": "我握紧拳头，感受着其中的力量。我停止逃跑的时刻就要到了。比他们想象得更早。",
+            "requirements": {
+                "temptation.defiance": 1
+            },
+            "effects": {
+                "op": -1,
+                "rage": 1
+            }
+        },
+        {
+            "id": "use.negotiate.hint",
+            "actionid": "use",
+            "label": "谈判？",
+            "startdescription": "[建立适当的人脉。]",
+            "requirements": {
+                "op": 1,
+                "price.connection": 1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.negotiate",
+            "actionid": "use",
+            "label": "一场谈判",
+            "startdescription": "我没有时间以正当的方式完成此事，但幸运的是，我有人脉能以最快的方式解决它。",
+            "description": "@#licence.medical|“早上好，<i>医生</i>。”\n#licence.import|“我们不需要操心这些细节。在朋友间不用。”\n#搞定。|@",
+            "comments": "The slots on the purchaseable item are what restrict to a relevant connection.",
+            "requirements": {
+                "op": 1,
+                "connection": 1
+            },
+            "aspects": {
+                "negotiation": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase.lifespan.radicals.problem",
+            "actionid": "use",
+            "label": "用岁月付款",
+            "startdescription": "这是一个只接受用灰烬帐簿付款的人。但我有个身居高位的朋友，他不会喜欢的。[这将破坏你与掌权者的关系。]",
+            "description": "成了。",
+            "requirements": {
+                "op.connection.radicals": 1,
+                "price.lifespan.stolen": 1,
+                "lifespan.stolen": "price.lifespan.stolen"
+            },
+            "aspects": {
+                "purchase": 1
+            },
+            "extantreqs": {
+                "connection.ruler": 1
+            },
+            "purge": {
+                "connection.ruler": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase.lifespan.ruler.problem",
+            "actionid": "use",
+            "label": "用岁月付款",
+            "startdescription": "这是一个只接受用灰烬帐簿付款的人。但我有些激进的朋友，他们不会喜欢的。[这将破坏你与激进分子的关系。]",
+            "description": "成了。",
+            "requirements": {
+                "op.connection.ruler": 1,
+                "price.lifespan.stolen": 1,
+                "lifespan.stolen": "price.lifespan.stolen"
+            },
+            "aspects": {
+                "purchase": 1
+            },
+            "extantreqs": {
+                "connection.radicals": 1
+            },
+            "purge": {
+                "connection.radicals": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase.lifespan",
+            "actionid": "use",
+            "label": "用岁月付款",
+            "startdescription": "这是一个只接受用灰烬帐簿付款的人。",
+            "description": "成了。",
+            "requirements": {
+                "op": 1,
+                "price.lifespan.stolen": 1,
+                "lifespan.stolen": "price.lifespan.stolen"
+            },
+            "aspects": {
+                "purchase": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase.lifespan.hint",
+            "actionid": "use",
+            "label": "用岁月付款？",
+            "startdescription": "[放入足以付账的岁月。]",
+            "requirements": {
+                "op": 1,
+                "price.lifespan.stolen": 1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.purchase.property.tripoli",
+            "actionid": "use",
+            "label": "购买",
+            "startdescription": "买点实用的东西。",
+            "description": "卖主是一个老人，头戴以珠子装饰的便帽，两颊皱纹深深，脸上留着灰白的胡茬，还有着满含悲伤的乌黑双眸。我们彼此握手以示交易的郑重时，他捧起了我的手，并端详着我的脸。“没错，”他说，“你是她的孩子。要知道，她过去常来这儿。我希望你也有一天能来。”",
+            "requirements": {
+                "op": 1,
+                "price": 1,
+                "worth": "price",
+                "purchase.property": 1
+            },
+            "effects": {
+                "contact.retainer": 1
+            },
+            "extantreqs": {
+                "domicile.tripoli": 1,
+                "contact.retainer": -1,
+                "contact.retainer.exhausted": -1
+            },
+            "aspects": {
+                "purchase": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase",
+            "actionid": "use",
+            "label": "购买",
+            "startdescription": "买点实用的东西。",
+            "description": "@#townhouse|一个用于休息，或者招待我想深化关系之人的好地方。我雇佣了几个谨慎的员工，还在门上安装了好几把锁，但这并不太能阻止我的追兵。\n#villa|这儿离城市足够远，我可以寻得一些安宁。这是一个可以用来恢复，用来在公众视线之外行动，或是用来招待我想要争取的客人的好地方。不过，如果我需要防守此地的话，那将会是一场噩梦。\n#|搞定。@",
+            "requirements": {
+                "op": 1,
+                "price": 1,
+                "worth": "price"
+            },
+            "aspects": {
+                "purchase": 1
+            },
+            "warmup": 10,
+            "craftable": true
+        },
+        {
+            "id": "use.purchase.hint",
+            "actionid": "use",
+            "label": "消费？",
+            "startdescription": "[放入足以付账的有价之物。]",
+            "requirements": {
+                "op": 1,
+                "price": 1
+            },
+            "hintonly": true,
+            "craftable": false
+        },
+        {
+            "id": "use.bookofsuns.restore",
+            "actionid": "use",
+            "label": "修复《骄阳之书》",
+            "startdescription": "被割裂于此的是什么内容？这些书页在黑暗中沉眠了多长时间？",
+            "description": "由贪婪所迫，为冷酷所允，《骄阳之书》遭到了拆解。据说事实便是如此。但这真是全部的原因吗？随着灿金色的图画被重新拼合，风气宁静，天空也放缓了它的呼吸。至少看起来如此。又或许我只是需要多睡一会儿。",
+            "requirements": {
+                "curio.lantern": 3,
+                "cash": 1
+            },
+            "effects": {
+                "curio.lantern": -3,
+                "cash": -1,
+                "rarity.lantern": 1,
+                "fascination": 1
+            },
+            "warmup": 60,
+            "craftable": true,
+            "burnimage": "pentiment",
+            "linked": [
+                {
+                    "id": "use.fatiguing"
+                }
+            ]
+        },
+        {
+            "id": "use.comfort",
+            "actionid": "use",
+            "label": "放松",
+            "startdescription": "@#domicile.tripoli|这座城市让我感到亲切，或许是因为空气、或许是因为光……\n#|我为这笔小钱冒了这么大的险。但我也可以享受它带来的好处。@",
+            "description": "没有什么是永恒的。幸好如此。",
+            "requirements": {
+                "comfort": 1,
+                "price": -1
+            },
+            "effects": {
+                "contentment": "comfort"
+            },
+            "warmup": 60,
+            "craftable": true,
+            "linked": [
+                {
+                    "id": "use.fatiguing"
+                }
+            ]
+        },
+        {
+            "id": "use.renew.op.sea.curio.morgen.used.hint",
+            "actionid": "use",
+            "label": "“只有一次”",
+            "startdescription": "震颤着消逝于空中的悠长鸣啭",
+            "requirements": {
+                "op.sea": 1,
+                "curio.morgen": 1
+            },
+            "craftable": false,
+            "hintonly": true
+        },
+        {
+            "id": "use.renew.op.sea.curio.morgen",
+            "actionid": "use",
+            "label": "联系平旦夫人",
+            "startdescription": "如海鸥长鸣般尖锐的音符自我唇边的长笛中迸出，并随着我移开嘴唇而愈发高昂。整根长笛随即裂开。",
+            "description": "<i>蓝宝石号</i>——平旦夫人的游艇，平稳地驶入港口，仿佛白色的刀刃划过绿色的玻璃。",
+            "requirements": {
+                "op.sea": 1,
+                "curio.morgen": 1,
+                "uses.remaining": 1
+            },
+            "effects": {
+                "op.morgen": 1
+            },
+            "mutations": [
+                {
+                    "filter": "curio.morgen",
+                    "mutate": "uses.remaining",
+                    "level": -1,
+                    "additive": true
+                }
+            ],
+            "warmup": 60,
+            "craftable": true
+        },
+        {
+            "id": "use.renew.op.cats",
+            "actionid": "use",
+            "label": "跟随",
+            "startdescription": "我将更仔细地调查。[这将延长机会卡的持续时间，以备后需。]",
+            "description": "到了。",
+            "requirements": {
+                "op.cats": 1
+            },
+            "slots": [
+                {
+                    "id": "light",
+                    "label": "光明之物",
+                    "description": "“灯烛熄灭之后，所有猫看起来都是灰的。”",
+                    "required": {
+                        "lantern": 1
+                    },
+                    "consumes": true
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.find.nameless"
+                }
+            ],
+            "aspects": {
+                "renewal.exile": 1
+            },
+            "warmup": 30,
+            "craftable": true
+        },
+        {
+            "id": "use.renew.op.horned.candia",
+            "actionid": "use",
+            "label": "拜访枭之神殿",
+            "startdescription": "在艾达山的脚下，米诺斯众门之屋的废墟旁，有一棵巨大的山楂树。我将在深夜时分抵达那里。尽管在周围的乡村中，知了都如同锯子一般聒噪，但在枭之神殿，它们却寂静无声。而当我置身其中时，也会发现自己不敢大声说话。上一次来这里的时候我就已经发现了这一事实——就在知晓我父亲名字的那一夜——",
+            "requirements": {
+                "op.horned": 1
+            },
+            "extantreqs": {
+                "domicile.candia": 1,
+                "memento.knock": -1,
+                "rarity.knock.poison": -1
+            },
+            "linked": [
+                {
+                    "id": "use.renew.op.horned.candia.2"
+                }
+            ],
+            "warmup": 30,
+            "craftable": true
+        },
+        {
+            "id": "use.renew.op.horned.candia.2",
+            "actionid": "use",
+            "label": "在枭之神殿中",
+            "startdescription": "猫头鹰蹲在山楂树上，眼中闪烁着淡金色的光。树脚也有忽隐忽现的光芒透出。一位身穿蛇皮夹克的高个男人刚刚点燃了一只香烟。黝黑，瘦削，火柴的微光中闪出那张我有几分熟悉的面容。“又见面了，”他开口道，“真没想到。不过我想两面双刃之神指引你到此地来一定是有原因的，对吧？她可不希望世界上再出更多对立双刃了……所以，你有什么要给我看的吗？”",
+            "slots": [
+                {
+                    "id": "reference",
+                    "label": "出示",
+                    "description": "一件物证。",
+                    "required": {
+                        "pentiment": 1
+                    }
+                }
+            ],
+            "alt": [
+                {
+                    "id": "use.renew.op.horned.candia.pentiment"
+                }
+            ],
+            "linked": [
+                {
+                    "id": "use.renew.op.horned.candia.3"
+                }
+            ],
+            "warmup": 30
+        },
+        {
+            "id": "use.renew.op.horned.candia.3",
+            "actionid": "use",
+            "label": "在枭之神殿中",
+            "startdescription": "陌生人耸了耸肩。“算了。也许这个对你来说更有用。”他干脆利落地把一口唾沫吐在了一个玻璃瓶里，然后旋紧了盖子。“别跟别人说这是我干的，”他一脸狡黠地说道，“不然我又要惹上麻烦了。”他把瓶子递给我，又在离开时扭头补充道：“记住，狮子要么有主，要么无主。”",
+            "effects": {
+                "rarity.knock.poison": 1,
+                "op.horned": -1
+            },
+            "warmup": 30
+        },
+        {
+            "id": "use.renew.op.horned.candia.pentiment",
+            "actionid": "use",
+            "label": "在枭之神殿中",
+            "requirements": {
+                "pentiment": 1
+            },
+            "startdescription": "陌生人点了点头，把香烟按灭在树干上，转而开始剥一个橘子。“最终一切都会太迟，”他嘴里含着橘子评论道，“但在那之前都并非如此。亚历山德罗斯认为那很重要。但狮子匠可从未有过这种想法。” 他把残余的香烟递给我。“有些事情还是不说为妙，”他在离开时又转头补充道，“很高兴再次见到你。”",
+            "effects": {
+                "memento.knock": 1,
+                "op.horned": -1
+            },
+            "burnimage": "pentiment",
+            "warmup": 30
+        },
+        {
+            "id": "use.rkx.foe.defeated",
+            "actionid": "use",
+            "label": "开始我的新生活",
+            "startdescription": "是时候继续前进了。现在我想做什么……就能做什么了。[你的舒适度越高，胜利的程度就越大。]",
+            "requirements": {
+                "rkx.foe.defeated": 1
+            },
+            "linked": [
+                {
+                    "id": "send.victory.obscurity.c.foeslain"
+                },
+                {
+                    "id": "send.victory.obscurity.b.foeslain"
+                },
+                {
+                    "id": "send.victory.obscurity.a.foeslain"
+                }
+            ],
+            "warmup": 30,
+            "craftable": true
+        },
+        {
+            "id": "use.renew",
+            "actionid": "use",
+            "label": "保存",
+            "startdescription": "我将更仔细地调查。[这将延长机会卡的持续时间，以备后需。]",
+            "description": "到了。",
+            "requirements": {
+                "op": 1,
+                "asset": -1,
+                "price": -1,
+                "price.connection": -1,
+                "price.lifespan.stolen": -1
+            },
+            "aspects": {
+                "renewal.exile": 1
+            },
+            "warmup": 30,
+            "craftable": true
+        },
+        {
+            "id": "use.find.nameless",
+            "actionid": "use",
+            "label": "跟随",
+            "startdescription": "守密者丝毧有一位无名的具名者。在那位具名者的迷雾中，败者能够寻得慰藉。从古至今，那位具名者几乎从未被任何人目击过，唯有跟着某些毛色极灰的猫时才能见到。[这将消耗机会卡和光明之物。]",
+            "description": "日落之后，我跟随一只摇摆着尾巴的灰猫穿过街道。",
+            "requirements": {
+                "lantern": 1
+            },
+            "effects": {
+                "loc.shrine.nameless": 1,
+                "op.cats": -1
+            }
+        },
+        {
+            "id": "use.fatiguing",
+            "label": ".",
+            "actionid": "use",
+            "comments": "Follow-on recipe to fatigue resources and tidy up consumables",
+            "aspects": {
+                "fatiguing": 1
+            }
+        },
+        {
+            "id": "use.connection.official",
+            "actionid": "use",
+            "label": "可能性",
+            "startdescription": "我可以让我的联系人去寻找机遇。当然，需要向他们支付报酬。[这将产生一个购买从医资格证或进口许可证的机会。]",
+            "description": "这会帮上忙。",
+            "requirements": {
+                "connection.official": 1,
+                "worth": 1
+            },
+            "internaldeck": {
+                "spec": [
+                    "op.licence.medical",
+                    "op.licence.import"
+                ],
+                "draws": 1,
+                "resetonexhaustion": true
+            },
+            "aspects": {
+                "fatiguing": 1
+            },
+            "warmup": 60,
+            "craftable": true
+        }
+    ]
+}
+
+

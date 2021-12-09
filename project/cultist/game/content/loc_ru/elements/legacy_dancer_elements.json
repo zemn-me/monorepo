@@ -1,0 +1,262 @@
+{
+    "elements": [
+        {
+            "id": "legacydancerjob",
+            "label": "Контракт в театре Веселья",
+            "description": "Мне удалось устроиться в кордебалет театра Веселья. Место моё, пока не подведёт удача или они не найдут кого-нибудь посимпатичнее... или пока я не найду что-то получше.",
+            "aspects": {
+                "job": 1,
+                "dance": 1,
+                "potentialbenefactorm": 1,
+                "potentialbenefactorf": 1,
+                "potentialecdysiast": 1
+            },
+            "lifetime": 120,
+            "decayTo": "legacydancerjob_suspended",
+            "xtriggers": {
+                "job": "legacydancerjob"
+            },
+            "slots": [
+                {
+                    "id": "health",
+                    "label": "Здоровье",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "legacydancerjob_suspended",
+            "label": "Контракт в театре Веселья: приостановлен",
+            "description": "Слишком много представлений пропущено. Если умолять достаточно убедительно, я ещё могу вернуть себе место.",
+            "aspects": {
+                "job": 1
+            },
+            "lifetime": 300,
+            "xtriggers": {
+                "plead": "legacydancerjob"
+            },
+            "slots": [
+                {
+                    "id": "passion",
+                    "label": "Эмоции",
+                    "actionid": "work",
+                    "required": {
+                        "passion": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "dancerlegacy_plotitem_a",
+            "label": "Смятое стихотворение",
+            "description": "Некто, называющий себя «#LAST_FOLLOWER#», адресовал это стихотворение другой танцовщице. Автор описывает, как они встретились во сне в тёмном лесу. Упоминается также бой барабанов, трепет крыльев, кожа теней и кровь луны. Неудивительно, что стихотворение скомкали и выбросили. Но я вижу: не всё в нём так просто, как кажется на первый взгляд.",
+            "slots": [
+                {
+                    "id": "Approach",
+                    "label": "Подход",
+                    "actionid": "study",
+                    "description": "Удар сердца или плач скрипки?",
+                    "required": {
+                        "heart": 1,
+                        "moth": 1
+                    }
+                }
+            ],
+            "aspects": {
+                "legacyplotitem": 1
+            }
+        },
+        {
+            "id": "dancerjobecdysisa",
+            "label": "Контракт в клубе «Экдизис»",
+            "description": "Я выступаю в клубе «Экдизис» в те ночи, когда он открыт.",
+            "slots": [
+                {
+                    "id": "location",
+                    "label": "Клуб «Экдизис»",
+                    "description": "Клуб «Экдизис», где я инсценирую откровения на глазах у свидетелей.",
+                    "actionid": "work",
+                    "required": {
+                        "locationcabaret": 1
+                    }
+                },
+                {
+                    "id": "purpose",
+                    "label": "Намерение",
+                    "actionid": "work",
+                    "required": {
+                        "changemarks": 1,
+                        "healthskill": 1
+                    },
+                    "description": "Показать своё умение, чтобы танцевать более сложные танцы; использовать желание в стремлении к преображению или просто заработать денег."
+                },
+                {
+                    "id": "abilityfirst",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "influence",
+                    "label": "Влияние",
+                    "description": "Что волнует меня сегодня?",
+                    "actionid": "work",
+                    "required": {
+                        "influence": 1
+                    },
+                    "consumes": true
+                }
+            ],
+            "aspects": {
+                "job": 1,
+                "dance": 1,
+                "ecdysijob": 1
+            }
+        },
+        {
+            "id": "dancerjobecdysisb",
+            "label": "Улучшенный контракт в клубе «Экдизис»",
+            "description": "Теперь я исполняю в клубе «Экдизис» более сложные танцы.",
+            "slots": [
+                {
+                    "id": "location",
+                    "label": "Клуб «Экдизис»",
+                    "description": "Клуб «Экдизис», где я инсценирую откровения на глазах у свидетелей.",
+                    "actionid": "work",
+                    "required": {
+                        "locationcabaret": 1
+                    }
+                },
+                {
+                    "id": "purpose",
+                    "label": "Намерение",
+                    "actionid": "work",
+                    "required": {
+                        "changemarks": 1,
+                        "healthskill": 1
+                    },
+                    "description": "Показать своё умение, чтобы танцевать более сложные танцы; использовать желание в стремлении к преображению или просто заработать денег."
+                },
+                {
+                    "id": "abilityfirst",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "abilitysecond",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "influence",
+                    "label": "Влияние",
+                    "description": "Что волнует меня сегодня?",
+                    "actionid": "work",
+                    "required": {
+                        "influence": 1
+                    },
+                    "consumes": true
+                }
+            ],
+            "aspects": {
+                "job": 1,
+                "dance": 1,
+                "ecdysijob": 1
+            }
+        },
+        {
+            "id": "dancerjobecdysisc",
+            "label": "Особое соглашение с клубом «Экдизис»",
+            "description": "Время от времени мне предлагают большие деньги за особенные танцы для настоящих ценителей.",
+            "slots": [
+                {
+                    "id": "location",
+                    "label": "Клуб «Экдизис»",
+                    "description": "Клуб «Экдизис», где я инсценирую откровения на глазах у свидетелей.",
+                    "actionid": "work",
+                    "required": {
+                        "locationcabaret": 1
+                    }
+                },
+                {
+                    "id": "purpose",
+                    "label": "Намерение",
+                    "actionid": "work",
+                    "required": {
+                        "changemarks": 1,
+                        "healthskill": 1
+                    },
+                    "description": "Использовать желание в стремлении к преображению или просто заработать денег."
+                },
+                {
+                    "id": "abilityfirst",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "abilitysecond",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "abilitythird",
+                    "label": "Способность или шрам",
+                    "description": "Что вылепить мне из себя?",
+                    "actionid": "work",
+                    "required": {
+                        "health": 1,
+                        "passion": 1,
+                        "scar": 1
+                    }
+                },
+                {
+                    "id": "influence",
+                    "label": "Влияние",
+                    "description": "Что волнует меня сегодня?",
+                    "actionid": "work",
+                    "required": {
+                        "influence": 1
+                    },
+                    "consumes": true
+                }
+            ],
+            "aspects": {
+                "job": 1,
+                "dance": 1,
+                "ecdysijob": 1
+            }
+        }
+    ]
+}
