@@ -1,4 +1,4 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project")
+load("//:rules.bzl", "nodejs_binary", "ts_project", "json_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
@@ -21,6 +21,11 @@ ts_project(
 nodejs_binary(
     name = "collate_game_core",
     entry_point = "collate_game_core.js",
+)
+
+json_project(
+    name = "core_en_project",
+    src = "core_en.json",
 )
 
 genrule(
