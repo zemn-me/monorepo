@@ -1,32 +1,35 @@
-export interface Quaternion<
-	R extends number = number,
-	I extends number = number,
-	J extends number = number,
-	K extends number = number
-> {
-	r?: R;
-	i?: I;
-	j?: J;
-	k?: K;
+/**
+ * @fileoverview This file implements Quaternion arithmetic. Quaternions are
+ * a complex number construction analagous to vectors, and which are best used
+ * for handling rotations in 3D space.
+ */
+
+import { Point3D } from './cartesian';
+
+export type Quaternion = [ r: number, i: number, j: number, k: number ];
+export type ReadonlyQuaternion = readonly [ r: number, i: number, j: number, k: number ];
+
+export function fromPoint3D([[x,y,z]]: Point3D): Quaternion {
+	return [ x, y, z, 0 ]
 }
 
 export function add(
-	{ r: r1 = 0, i: i1 = 0, j: j1 = 0, k: k1 = 0 }: Quaternion,
-	{ r: r2 = 0, i: i2 = 0, j: j2 = 0, k: k2 = 0 }: Quaternion
+	[ r1 = 0, i1 = 0, j1 = 0, k1 = 0]: ReadonlyQuaternion,
+	[ r2 = 0, i2 = 0, j2 = 0, k2 = 0]: ReadonlyQuaternion
 ): Quaternion {
-	return { r: r1 + r2, i: i1 + i2, j: j1 + j2, k: k1 + k2 };
+	return [ r1 + r2, i1 + i2, j1 + j2, k1 + k2 ]
 }
 
-export function adds(...q: Quaternion[]): Quaternion {
+export function adds(...q: ReadonlyQuaternion[]): Quaternion {
 	const [first, ...etc] = q;
-	let val = first;
+	let val: Quaternion = [ ... first ];
 	for (const v of etc) val = add(val, v);
 	return val;
 }
 
 export function mul(
-	{ r: r1 = 0, i: i1 = 0, j: j1 = 0, k: k1 = 0 }: Quaternion,
-	{ r: r2 = 0, i: i2 = 0, j: j2 = 0, k: k2 = 0 }: Quaternion
+	[ r1 = 0, i1 = 0, j1 = 0, k1 = 0]: ReadonlyQuaternion,
+	[ r2 = 0, i2 = 0, j2 = 0, k2 = 0]: ReadonlyQuaternion
 ): Quaternion {
 	const a1 = r1,
 		a2 = r2,
@@ -37,63 +40,34 @@ export function mul(
 		d1 = k1,
 		d2 = k2;
 
-	return adds(
-		{ r: a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2 },
-		{ i: a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2 },
-		{ j: a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2 },
-		{ k: a1 * d2 + b1 * c2 - c1 * b2 + d2 * a2 }
-	);
+	return [
+		/* r */ a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2,
+		/* i */ a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2,
+		/* j */ a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2,
+		/* k */ a1 * d2 + b1 * c2 - c1 * b2 + d2 * a2
+	]
 }
 
 /**
- * A type, similar to a Quaternion where the non-fractional part represents exponentiation
+ * conjugate returns, for a given quaternion the same quaternion except with
+ * its complex parts negated.
+ * @see https://en.wikipedia.org/wiki/Complex_conjugate
+ * @see https://en.wikipedia.org/wiki/Quaternion#Conjugation,_the_norm,_and_reciprocal
  */
-export interface Rotation<
-	R extends number = number,
-	I extends number = number,
-	J extends number = number,
-	K extends number = number
-> {
-	pr?: R;
-	pi?: I;
-	pj?: J;
-	pk?: K;
+export function conjugate(
+	[ r = 0, i = 0, j = 0, k = 0]: ReadonlyQuaternion,
+): Quaternion {
+	return [ r, -i, -j, -k ]
 }
 
-export const applyRotation = (
-	{ /*pr = 0,*/ pi = 0, pj = 0, pk = 0 }: Rotation,
-	b: Quaternion
-): Quaternion => {
-	const exp = {
-		r: 1,
-		i: Math.floor(pi),
-		j: Math.floor(pj),
-		k: Math.floor(pk),
-	};
-
-	while (/*exp.r > 0 ||*/ exp.i > 0 || exp.j > 0 || exp.k > 0) {
-		const m: Quaternion = {};
-		//if(Math.abs(exp.r) != 0)
-		//[m.r, exp.r] = exp.r < 0?[-1, exp.r+1]:[1, exp.r-1]
-
-		if (Math.abs(exp.i) != 0)
-			[m.i, exp.i] = exp.i < 0 ? [-1, exp.i + 1] : [1, exp.i - 1];
-
-		if (Math.abs(exp.j) != 0)
-			[m.j, exp.j] = exp.j < 0 ? [-1, exp.j + 1] : [1, exp.j - 1];
-
-		if (Math.abs(exp.k) != 0)
-			[m.k, exp.k] = exp.k < 0 ? [-1, exp.k + 1] : [1, exp.k - 1];
-
-		b = mul(b, m);
-	}
-
-	const etc: Quaternion = {
-		r: 1,
-		i: pi - Math.floor(pi),
-		j: pj - Math.floor(pj),
-		k: pk - Math.floor(pk),
-	};
-
-	return mul(b, etc);
-};
+/**
+ * Rotates a 3d vector p via the rotation quaternion q.
+ *
+ * @see https://liorsinai.github.io/mathematics/2021/12/03/quaternion-3.html
+ */
+export function rotate(
+	p: Point3D,
+	q: Quaternion
+) {
+	return mul(mul(q, fromPoint3D(p)), conjugate(q));
+}
