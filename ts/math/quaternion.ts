@@ -59,13 +59,7 @@ export function mul(
  * @see https://en.wikipedia.org/wiki/Complex_conjugate
  * @see https://en.wikipedia.org/wiki/Quaternion#Conjugation,_the_norm,_and_reciprocal
  */
-export function conjugate([
-	r = 0,
-	i = 0,
-	j = 0,
-	k = 0,
-]: 
-ReadonlyQuaternion): Quaternion {
+export function conjugate([r, i, j, k]: ReadonlyQuaternion): Quaternion {
 	return [r, -i, -j, -k];
 }
 

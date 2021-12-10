@@ -96,8 +96,8 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
 def json_project(name, src, **kwargs):
     native.genrule(
         name = name + "_gen_ts",
-        outs = [ src + ".ts" ],
-        srcs = [ src ],
+        outs = [src + ".ts"],
+        srcs = [src],
         cmd = """
             echo "// @ts-nocheck\nconst d: unknown = $$(cat $<); export default d;" | tee $@ # x
         """,
@@ -106,11 +106,10 @@ def json_project(name, src, **kwargs):
 
     ts_project(
         name = name,
-        srcs = [ src + ".ts" ],
-        ignores_lint = [ src + ".ts" ],
+        srcs = [src + ".ts"],
+        ignores_lint = [src + ".ts"],
         **kwargs
     )
-
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
     _eslint_test(
