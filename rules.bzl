@@ -93,6 +93,25 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
 
     ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint], tags = tags)
 
+def json_project(name, src, **kwargs):
+    native.genrule(
+        name = name + "_gen_ts",
+        outs = [ src + ".ts" ],
+        srcs = [ src ],
+        cmd = """
+            echo "// @ts-nocheck\nconst d: unknown = $$(cat $<); export default d;" | tee $@ # x
+        """,
+        message = "Generating ts for json file " + src,
+    )
+
+    ts_project(
+        name = name,
+        srcs = [ src + ".ts" ],
+        ignores_lint = [ src + ".ts" ],
+        **kwargs
+    )
+
+
 def eslint_test(name = None, data = [], args = [], **kwargs):
     _eslint_test(
         name = name,
