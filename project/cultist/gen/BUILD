@@ -1,4 +1,4 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project", "json_project")
+load("//:rules.bzl", "json_project", "nodejs_binary", "ts_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 

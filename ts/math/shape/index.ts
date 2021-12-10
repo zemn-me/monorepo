@@ -120,11 +120,11 @@ export class QuaternionMultiply<
 		return this.value.lines3D().map(line =>
 			line.map(point => {
 				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = { r: x, i: y, j: z };
+				const q1: Quaternion.Quaternion = [x, y, z, 0];
 				const q2 = this.quaternion;
 				const n = Quaternion.mul(q1, q2);
 
-				const { r: nx = 0, i: ny = 0, j: nz = 0 } = n;
+				const [nx = 0, ny = 0, nz = 0] = n;
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);
@@ -133,7 +133,7 @@ export class QuaternionMultiply<
 
 export class QuaternionRotate<
 	T extends Canvas.Drawable3D,
-	Q extends Quaternion.Rotation
+	Q extends Homog.Point3D
 > implements Canvas.LineDrawable3D
 {
 	constructor(public readonly value: T, public readonly rotation: Q) {}
@@ -141,11 +141,11 @@ export class QuaternionRotate<
 		return this.value.lines3D().map(line =>
 			line.map(point => {
 				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = { r: x, i: y, j: z };
+				const q1: Quaternion.Quaternion = [x, y, z, 0];
 				const q2 = this.rotation;
-				const n = Quaternion.applyRotation(q2, q1);
+				const n = Quaternion.rotate(Homog.pointToCart(q2), q1);
 
-				const { r: nx = 0, i: ny = 0, j: nz = 0 } = n;
+				const [nx = 0, ny = 0, nz = 0] = n;
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);
