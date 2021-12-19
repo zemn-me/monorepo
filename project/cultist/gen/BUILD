@@ -8,7 +8,7 @@ package(default_visibility = [
 
 ts_project(
     name = "gen",
-    srcs = ["collate_game_core.ts"],
+    srcs = ["collate_game_core.mts"],
     composite = True,
     declaration = True,
     incremental = True,
@@ -20,7 +20,7 @@ ts_project(
 
 nodejs_binary(
     name = "collate_game_core",
-    entry_point = "collate_game_core.js",
+    entry_point = "collate_game_core.mjs",
 )
 
 json_project(
