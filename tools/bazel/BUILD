@@ -1,4 +1,7 @@
-# Currently there are no targets in this Bazel package
+sh_binary(
+    name = "affected_files",
+    srcs = [ "run_affected_tests.sh" ]
+)
 
 
 sh_binary(
