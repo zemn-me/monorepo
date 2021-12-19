@@ -6,5 +6,5 @@ yaml_validator_test(
         "$(location :pull_request.yml)",
         "$(location :push.yml)"
         ],
-    data = ["bazel.yml"],
+    data = ["pull_request.yml", "push.yml"],
 )
