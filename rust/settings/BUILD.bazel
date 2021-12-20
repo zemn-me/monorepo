@@ -1,4 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_flag")
 load(":incompatible.bzl", "incompatible_flag")
 
 package(default_visibility = ["//visibility:public"])
@@ -13,6 +14,25 @@ incompatible_flag(
     name = "incompatible_disable_custom_test_launcher",
     build_setting_default = False,
     issue = "https://github.com/bazelbuild/rules_rust/issues/1069",
+)
+
+# A flag controlling whether to rename first-party crates such that their names
+# encode the Bazel package and target name, instead of just the target name.
+#
+# First-party vs. third-party crates are identified using the value of
+# //settings:third_party_dir.
+bool_flag(
+    name = "rename_first_party_crates",
+    build_setting_default = False,
+)
+
+# A flag specifying the location of vendored third-party rust crates within this
+# repository that must not be renamed when `rename_1p_crates` is enabled.
+#
+# Must be specified as a Bazel package, e.g. "//some/location/in/repo".
+string_flag(
+    name = "third_party_dir",
+    build_setting_default = "//third_party/rust",
 )
 
 bzl_library(

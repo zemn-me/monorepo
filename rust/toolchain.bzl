@@ -1,5 +1,6 @@
 """The rust_toolchain rule definition and implementation."""
 
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load("//rust/private:common.bzl", "rust_common")
 load("//rust/private:utils.bzl", "dedent", "find_cc_toolchain", "make_static_lib_symlink")
 load("//rust/settings:incompatible.bzl", "IncompatibleFlagInfo")
@@ -234,6 +235,9 @@ def _rust_toolchain_impl(ctx):
     remove_transitive_libs_from_dep_info = ctx.attr._incompatible_remove_transitive_libs_from_dep_info[IncompatibleFlagInfo]
     disable_custom_test_launcher = ctx.attr._incompatible_disable_custom_test_launcher[IncompatibleFlagInfo]
 
+    rename_first_party_crates = ctx.attr._rename_first_party_crates[BuildSettingInfo].value
+    third_party_dir = ctx.attr._third_party_dir[BuildSettingInfo].value
+
     expanded_stdlib_linkflags = []
     for flag in ctx.attr.stdlib_linkflags:
         expanded_stdlib_linkflags.append(
@@ -286,6 +290,8 @@ def _rust_toolchain_impl(ctx):
         libstd_and_allocator_ccinfo = _make_libstd_and_allocator_ccinfo(ctx, ctx.attr.rust_lib, ctx.attr.allocator_library),
         _incompatible_remove_transitive_libs_from_dep_info = remove_transitive_libs_from_dep_info.enabled,
         _incompatible_disable_custom_test_launcher = disable_custom_test_launcher.enabled,
+        _rename_first_party_crates = rename_first_party_crates,
+        _third_party_dir = third_party_dir,
     )
     return [toolchain]
 
@@ -403,6 +409,12 @@ rust_toolchain = rule(
         ),
         "_incompatible_remove_transitive_libs_from_dep_info": attr.label(
             default = "@rules_rust//rust/settings:incompatible_remove_transitive_libs_from_dep_info",
+        ),
+        "_rename_first_party_crates": attr.label(
+            default = "@rules_rust//rust/settings:rename_first_party_crates",
+        ),
+        "_third_party_dir": attr.label(
+            default = "@rules_rust//rust/settings:third_party_dir",
         ),
     },
     toolchains = [
