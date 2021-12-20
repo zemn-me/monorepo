@@ -79,3 +79,6 @@ if [[ ! -z $tests ]]; then
   echo "Running tests"
   bazel test $tests
 fi
+
+echo "Ensuring all BUILD files are valid..."
+bazel query //...
