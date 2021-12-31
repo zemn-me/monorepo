@@ -2,10 +2,10 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as Save from '//project/cultist/save';
-import * as State from '//project/cultist/state/state';
-import * as Iter from '//ts/iter';
-import { maybe } from '//ts/util';
+import * as Save from 'project/cultist/save';
+import * as State from 'project/cultist/state/state';
+import * as Iter from 'ts/iter';
+import { maybe } from 'ts/util';
 import Immutable from 'immutable';
 
 function intoMap<I, O>(

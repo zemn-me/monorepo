@@ -1,5 +1,5 @@
 import React from 'react';
-import style from '//ts/react/element/time/time.module.css';
+import style from 'ts/react/element/time/time.module.css';
 import classNames from 'classnames';
 
 export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
