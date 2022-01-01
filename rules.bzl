@@ -5,8 +5,8 @@ load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project 
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
 
-def nodejs_binary(**kwargs):
-    _nodejs_binary(**kwargs)
+def nodejs_binary(link_workspace_root = True, **kwargs):
+    _nodejs_binary(link_workspace_root = link_workspace_root, **kwargs)
 
 def ts_config(**kwargs):
     _ts_config(**kwargs)
@@ -49,6 +49,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps
         resolve_json_module = resolve_json_module,
         root_dir = root_dir,
         ignores_lint = ignores_lint,
+        link_workspace_root = True,
         **kwargs
     )
 
@@ -83,7 +84,6 @@ def ts_project(name, ignores_lint = [], resolve_json_module = None, project_deps
 def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
         name = name,
-        tsc = "@npm//ttypescript/bin:ttsc",
         srcs = srcs,
         deps = deps + ["@npm//typescript-transform-paths"],
         tags = tags,

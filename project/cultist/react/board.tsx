@@ -1,5 +1,5 @@
 import React from 'react';
-import State from '//project/cultist/state';
+import State from 'project/cultist/state';
 
 export interface BoardProps {
 	state: State.State;

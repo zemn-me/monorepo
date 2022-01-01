@@ -2,7 +2,7 @@
 import { unmountComponentAtNode } from 'react-dom';
 import { Link } from '.';
 import { act } from 'react-dom/test-utils';
-import * as Url from '//ts/url';
+import * as Url from 'ts/url';
 import ReactDOM from 'react-dom';
 import React from 'react';
 

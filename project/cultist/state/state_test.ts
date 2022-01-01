@@ -1,6 +1,6 @@
-import * as Save from '//project/cultist/save';
-import * as serialize from '//project/cultist/state/serialize';
-import * as deserialize from '//project/cultist/state/deserialize';
+import * as Save from 'project/cultist/save';
+import * as serialize from 'project/cultist/state/serialize';
+import * as deserialize from 'project/cultist/state/deserialize';
 
 const State = {
 	serialize,
