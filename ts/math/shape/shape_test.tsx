@@ -3,8 +3,8 @@
  */
 
 import { unmountComponentAtNode } from 'react-dom';
-import * as Shape from '//ts/math/shape';
-import { Canvas } from '//ts/math/canvas/element';
+import * as Shape from 'ts/math/shape';
+import { Canvas } from 'ts/math/canvas/element';
 import { act } from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import React from 'react';

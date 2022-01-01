@@ -9,4 +9,5 @@ export default {
 	moduleNameMapper: {
 		'examples_jest/(.*)': '<rootDir>/$1',
 	},
+	moduleDirectories: ['node_modules', '.'],
 };
