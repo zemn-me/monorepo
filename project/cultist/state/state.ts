@@ -44,6 +44,7 @@ export type ElementInstance = Immutable.RecordOf<MutableElementInstance>;
 export const NewElementInstance = Immutable.Record<MutableElementInstance>({
 	lifetimeRemaining: undefined,
 	lastTablePosX: undefined,
+	lastTablePosY: undefined,
 	markedForConsumption: undefined,
 	elementId: undefined,
 	quantity: undefined,
@@ -59,7 +60,10 @@ interface MutableDeck {
 
 export type Deck = Immutable.RecordOf<MutableDeck>;
 
-export const NewDeck = Immutable.Record<MutableDeck>({});
+export const NewDeck = Immutable.Record<MutableDeck>({
+	eliminatedCards: undefined,
+	cards: undefined,
+});
 
 export interface MutableLevers {
 	lastheadquarters?: string;
@@ -75,7 +79,17 @@ export interface MutableLevers {
 
 export type Levers = Immutable.RecordOf<MutableLevers>;
 
-export const NewLevers = Immutable.Record<MutableLevers>({});
+export const NewLevers = Immutable.Record<MutableLevers>({
+	lastheadquarters: undefined,
+	lastfollower: undefined,
+	lastsignificantpainting: undefined,
+	lastpersonkilled: undefined,
+	lastcharactername: undefined,
+	lastcult: undefined,
+	lasttool: undefined,
+	lastbook: undefined,
+	lastdesire: undefined,
+});
 
 export interface MutableCharacterDetails {
 	name?: string;
@@ -101,9 +115,18 @@ export interface MutableCharacterDetails {
 
 export type CharacterDetails = Immutable.RecordOf<MutableCharacterDetails>;
 
-export const NewCharacterDetails = Immutable.Record<MutableCharacterDetails>(
-	{}
-);
+export const NewCharacterDetails = Immutable.Record<MutableCharacterDetails>({
+	name: undefined,
+	profession: undefined,
+
+	pastLevers: undefined,
+
+	executions: undefined,
+
+	futureLevers: undefined,
+
+	activeLegacy: undefined,
+});
 
 export interface MutableSituation {
 	situationStoredElements?: Immutable.Map<string, ElementInstance>;
@@ -122,7 +145,20 @@ export interface MutableSituation {
 
 export type Situation = Immutable.RecordOf<MutableSituation>;
 
-export const NewSituation = Immutable.Record<MutableSituation>({});
+export const NewSituation = Immutable.Record<MutableSituation>({
+	situationStoredElements: undefined,
+	verbId: undefined,
+	ongoingSlotElements: undefined,
+	situationWindowY: undefined,
+	title: undefined,
+	timeRemaining: undefined,
+	recipeId: undefined,
+	situationWindowX: undefined,
+	state: undefined,
+	situationOutputNotes: undefined,
+	situationWindowOpen: undefined,
+	completioncount: undefined,
+});
 
 export interface MutableSituationOutputNote {
 	title?: string;
