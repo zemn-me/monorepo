@@ -51,7 +51,7 @@ export function elementInstance(
 	e: Save.ElementInstance
 ): State.ElementInstance {
 	return State.NewElementInstance({
-		...e,
+		elementId: e.elementId,
 		lifetimeRemaining: maybe(number)(e.lifetimeRemaining),
 		lastTablePosX: maybe(number)(e.lastTablePosX),
 		lastTablePosY: maybe(number)(e.lastTablePosY),
