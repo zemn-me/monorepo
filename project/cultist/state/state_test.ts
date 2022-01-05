@@ -1,6 +1,29 @@
 import * as Save from 'project/cultist/save';
 import * as serialize from 'project/cultist/state/serialize';
 import * as deserialize from 'project/cultist/state/deserialize';
+import { maybe } from 'ts/util';
+
+test('maybe', () => {
+	expect(maybe(serialize.number)(10)).toEqual('10');
+
+	expect(maybe(serialize.number)(undefined)).toEqual(undefined);
+});
+
+test('elementInstance serialization issue (?)', () => {
+	const a = deserialize.elementInstance({ lifetimeRemaining: '10' });
+	expect(a.lifetimeRemaining).toEqual(10);
+	const b = serialize.elementInstance(a);
+	expect(b.lifetimeRemaining).toEqual('10');
+
+	expect(
+		roundTrip(
+			deserialize.elementInstance,
+			serialize.elementInstance
+		)({
+			lifetimeRemaining: '10',
+		})
+	).toEqual({ lifetimeRemaining: '10' });
+});
 
 const State = {
 	serialize,
@@ -10,6 +33,27 @@ const State = {
 function roundTrip<I, O>(a: (v: I) => O, b: (v: O) => I): (v: I) => I {
 	return (v: I) => b(a(v));
 }
+
+test('deserialization', () => {
+	const ElementInstanceExample: Save.ElementInstance = {
+		lifetimeRemaining: '10',
+		lastTablePosX: '10',
+		lastTablePosY: '20',
+		elementId: 'egg',
+		quantity: '10',
+	};
+
+	const d = State.deserialize.elementInstance(ElementInstanceExample);
+
+	{
+		expect(d.lifetimeRemaining?.toString()).toEqual(
+			ElementInstanceExample.lifetimeRemaining
+		);
+		expect(d.lastTablePosX?.toString()).toEqual(
+			ElementInstanceExample.lastTablePosX
+		);
+	}
+});
 
 test('round trip serialization', () => {
 	const ElementInstanceExample: Save.ElementInstance = {
@@ -21,13 +65,11 @@ test('round trip serialization', () => {
 	};
 
 	{
-		const st = State.deserialize.elementInstance(ElementInstanceExample);
-		expect(st).toEqual(
-			roundTrip(
-				State.serialize.elementInstance,
-				State.deserialize.elementInstance
-			)(st)
-		);
+		const d = State.deserialize.elementInstance(ElementInstanceExample);
+		expect(d.lifetimeRemaining).toEqual(10);
+		expect(d.elementId).toEqual('egg');
+		const r = State.serialize.elementInstance(d);
+		expect(ElementInstanceExample).toEqual(r);
 	}
 
 	const DeckExample: Save.Deck = {
@@ -38,10 +80,12 @@ test('round trip serialization', () => {
 	};
 
 	{
-		const st = State.deserialize.deck(DeckExample);
-		expect(st).toEqual(
-			roundTrip(State.serialize.deck, State.deserialize.deck)(st)
-		);
+		const d = State.deserialize.deck(DeckExample);
+		expect(d.eliminatedCards).toBeDefined();
+		expect(d.eliminatedCards).toContain('card1');
+		expect(d.cards).toContain('big egg');
+		const r = State.serialize.deck(d);
+		expect(r).toEqual(DeckExample);
 	}
 
 	const Levers: Save.Levers = {
@@ -56,9 +100,8 @@ test('round trip serialization', () => {
 	};
 
 	{
-		const st = State.deserialize.levers(Levers);
-		expect(st).toEqual(
-			roundTrip(State.serialize.levers, State.deserialize.levers)(st)
+		expect(Levers).toEqual(
+			roundTrip(State.deserialize.levers, State.serialize.levers)(Levers)
 		);
 	}
 
@@ -71,18 +114,21 @@ test('round trip serialization', () => {
 		},
 
 		futureLevers: Levers,
+		pastLevers: Levers,
 
 		activeLegacy: 'cult of thr big egg',
 	};
 
 	{
-		const st = State.deserialize.characterDetails(CharacterDetails);
-		expect(st).toEqual(
+		const d = State.deserialize.characterDetails(CharacterDetails);
+		expect(d.name).toEqual('john');
+		expect(d.futureLevers).toBeDefined();
+		expect(
 			roundTrip(
-				State.serialize.characterDetails,
-				State.deserialize.characterDetails
-			)(st)
-		);
+				State.deserialize.characterDetails,
+				State.serialize.characterDetails
+			)(CharacterDetails)
+		).toEqual(CharacterDetails);
 	}
 
 	const Situation: Save.Situation = {
@@ -117,13 +163,24 @@ test('round trip serialization', () => {
 	};
 
 	{
-		const st = State.deserialize.situation(Situation);
-
-		expect(st).toEqual(
+		expect(Situation).toEqual(
 			roundTrip(
-				State.serialize.situation,
-				State.deserialize.situation
-			)(st)
+				State.deserialize.situation,
+				State.serialize.situation
+			)(Situation)
+		);
+	}
+
+	const stateExample: Save.State = {
+		characterDetails: CharacterDetails,
+	};
+
+	{
+		expect(stateExample).toEqual(
+			roundTrip(
+				State.deserialize.state,
+				State.serialize.state
+			)(stateExample)
 		);
 	}
 });
