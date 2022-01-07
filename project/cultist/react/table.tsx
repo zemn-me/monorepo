@@ -1,9 +1,5 @@
 import React from 'react';
 import * as State from 'project/cultist/state';
-import * as d3Scale from 'd3-scale';
-
-const d3 = { scale: d3Scale } as const;
-
 export interface BoardProps {
 	state: State.State;
 }
@@ -80,10 +76,7 @@ export const Board: React.FC<BoardProps> = ({
 				height={cardHeight}
 				width={cardWidth}
 			>
-				<Card
-					xmlns="http://www.w3.org/1999/xhtml"
-					instance={e}
-				/>
+				<Card xmlns="http://www.w3.org/1999/xhtml" instance={e} />
 			</foreignObject>
 		)) ?? null}
 	</svg>
