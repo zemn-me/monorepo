@@ -5,7 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "react",
     srcs = [
-        "board.tsx",
+        "table.tsx",
         "index.tsx",
     ],
     project_deps = [
@@ -16,5 +16,7 @@ ts_project(
     deps = [
         "@npm//@types/react",
         "@npm//react",
+        "@npm//@types/d3-scale",
+        "@npm//d3-scale"
     ],
 )
