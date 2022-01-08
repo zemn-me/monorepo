@@ -1,5 +1,6 @@
 import React from 'react';
 import * as State from 'project/cultist/state';
+
 export interface BoardProps {
 	state: State.State;
 }
@@ -48,10 +49,12 @@ export interface BoardProps {
 	cardHeight?: number;
 	defaultX?: number;
 	defaultY?: number;
+	snapGridWidth?: number;
+	snapGridHeight?: number;
 }
 
 export const Board: React.FC<BoardProps> = ({
-	state: { elementStacks, situations },
+	state: { elementStacks },
 	minX = State.boardMinX,
 	maxX = State.boardMaxX,
 	maxY = State.boardMaxY,
@@ -60,27 +63,67 @@ export const Board: React.FC<BoardProps> = ({
 	defaultY = 0,
 	cardHeight = State.cardHeight,
 	cardWidth = State.cardWidth,
-}) => (
-	<svg
-		viewBox={`${minX} ${minY} ${maxX} ${maxY}`}
-		style={{
-			width: '100vw',
-			height: '100vh',
-		}}
-	>
-		{elementStacks?.map((e, i) => (
-			<foreignObject
-				key={i}
-				x={e.lastTablePosX ?? defaultX}
-				y={e.lastTablePosY ?? defaultY}
-				height={cardHeight}
-				width={cardWidth}
-			>
-				<Card xmlns="http://www.w3.org/1999/xhtml" instance={e} />
-			</foreignObject>
-		)) ?? null}
-	</svg>
-);
+	snapGridWidth = State.cardWidth,
+	snapGridHeight = State.cardHeight,
+}) => {
+	const onDragStart: React.DragEventHandler<SVGSVGElement> =
+		React.useCallback(e => {
+			if (!e.dataTransfer) return;
+			e.dataTransfer.effectAllowed = 'move';
+			e.dataTransfer.setData('text/plain', '[card]');
+		}, []);
+
+	const onDragOver: React.DragEventHandler<HTMLDivElement> =
+		React.useCallback(e => {
+			e.preventDefault();
+		}, []);
+
+	const droppableSlots = [];
+
+	for (let x = minX; x < maxX; x += snapGridWidth) {
+		for (let y = minY; y < maxY; y += snapGridHeight) {
+			droppableSlots.push(
+				<foreignObject
+					x={x}
+					y={y}
+					width={snapGridWidth}
+					height={snapGridHeight}
+					key={`droppable-area-${x}-${y}`}
+				>
+					<div
+						style={{ width: '100%', height: '100%' }}
+						onDragOver={onDragOver}
+					/>
+				</foreignObject>
+			);
+		}
+	}
+
+	/*viewBox={`${minX} ${minY} ${maxX} ${maxY}`}*/
+	return (
+		<svg
+			style={{
+				width: '100vw',
+				height: '100vh',
+			}}
+			onDragStart={onDragStart}
+		>
+			{droppableSlots}
+			{elementStacks?.map((e, i) => (
+				<foreignObject
+					key={i}
+					x={e.lastTablePosX ?? defaultX}
+					y={e.lastTablePosY ?? defaultY}
+					height={cardHeight}
+					width={cardWidth}
+				>
+					<Card xmlns="http://www.w3.org/1999/xhtml" instance={e} />
+				</foreignObject>
+			)) ?? null}
+		</svg>
+	);
+};
+
 
 export interface DeckProps {
 	name: string;
@@ -129,7 +172,9 @@ export const Card: React.FC<Readonly<CardProps>> = ({ instance: i, xmlns }) => {
 				boxSizing: 'border-box',
 				height: '100%',
 				width: '100%',
+				borderRadius: '.2em',
 			}}
+			draggable="true"
 		>
 			{/* needed to inject xmlns */}
 			{i.elementId} ({i.quantity}) ({i.lifetimeRemaining}s)
