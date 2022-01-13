@@ -6,8 +6,8 @@ on:
   push:
     branches: [ main ]
 jobs:
-  all_tests:
-    name: All Tests
+  Test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
