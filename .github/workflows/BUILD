@@ -1,9 +1,6 @@
-load("@npm//yaml-validator:index.bzl", "yaml_validator_test")
+load("//yml:test.bzl", "yaml_lint")
 
-yaml_validator_test(
+yaml_lint(
     name = "validation",
-    args = [
-        "$(location :pull_request.yml)"
-        ],
-    data = ["pull_request.yml"],
+    srcs = glob(["*.yml"])
 )
