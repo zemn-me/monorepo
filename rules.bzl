@@ -83,6 +83,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
 
 def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
+        supports_workers = True,
         name = name,
         srcs = srcs,
         deps = deps + ["@npm//typescript-transform-paths"],
