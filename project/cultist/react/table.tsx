@@ -124,7 +124,6 @@ export const Board: React.FC<BoardProps> = ({
 	);
 };
 
-
 export interface DeckProps {
 	name: string;
 	deck: State.Deck;
