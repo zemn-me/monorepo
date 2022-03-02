@@ -1,6 +1,5 @@
 load("//:rules.bzl", "go_binary", "ts_lint", "ts_project")
-load("@npm//@bazel/esbuild:index.bzl", "esbuild")
-load("@npm//esbuild:index.bzl", run_esbuild = "esbuild")
+load("//ts/react/server:rules.bzl", "web_app")
 
 ts_project(
     name = "index",
@@ -18,21 +17,9 @@ ts_project(
     ],
 )
 
-esbuild(
+web_app(
     name = "multiplayer",
-    entry_point = "//project/cultist/multiplayer:index.tsx",
-    minify = True,
-    output_dir = "es_out",
-    splitting = True,
-    target = "chrome58",
-    deps = [":index_ts"],
-)
-
-go_binary(
-    name = "start",
-    srcs = ["test_server.go"],
-    embedsrcs = [
-        ":multiplayer",
-        "//project/cultist/multiplayer/public:index.html",
-    ],
+    entry_points = [ "//project/cultist/multiplayer:index.tsx" ],
+    esbuild_deps = [":index_ts"],
+    deps = [ ":index.html" ]
 )
