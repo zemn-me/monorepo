@@ -1,11 +1,33 @@
 import React from 'react';
 import * as State from 'project/cultist/state';
 
-export interface BoardProps {
+export interface TableProps {
 	state: State.State;
+	onElementChange: (
+		elementkey: string,
+		newElement: State.ElementInstance
+	) => void;
 }
 
-export const Table: React.FC<Readonly<BoardProps>> = ({ state }) => {
+export const Table: React.FC<Readonly<TableProps>> = ({
+	onElementChange,
+	state,
+}) => {
+	const onElementMove = React.useCallback(
+		(
+			X: number,
+			Y: number,
+			elementKey: string,
+			element: State.ElementInstance
+		) =>
+			onElementChange(
+				elementKey,
+				element.withMutations(el =>
+					el.set('lastTablePosX', X).set('lastTablePosY', Y)
+				)
+			),
+		[onElementChange]
+	);
 	return (
 		<>
 			{state.metainfo ? (
@@ -30,12 +52,48 @@ export const Table: React.FC<Readonly<BoardProps>> = ({ state }) => {
 				</figure>
 			) : null}
 
-			<Board state={state} />
-
-			{[...(state.decks?.entries() ?? [])].map(([name, deck]) => (
-				<Deck key={name} name={name} deck={deck} />
-			))}
+			<Board onElementMove={onElementMove} state={state} />
 		</>
+	);
+};
+
+export interface SlotProps {
+	X: number;
+	Y: number;
+	width: number;
+	height: number;
+	onDrop: (
+		X: number,
+		Y: number,
+		event: React.DragEvent<HTMLDivElement>
+	) => void;
+}
+
+export const Slot: React.FC<SlotProps> = ({
+	X,
+	Y,
+	width,
+	height,
+	onDrop: _onDrop,
+}) => {
+	const onDragOver: React.DragEventHandler<HTMLDivElement> =
+		React.useCallback(e => {
+			e.preventDefault();
+		}, []);
+
+	const onDrop: React.DragEventHandler<HTMLDivElement> = React.useCallback(
+		e => _onDrop(X, Y, e),
+		[X, Y, _onDrop]
+	);
+
+	return (
+		<foreignObject x={X} y={Y} width={width} height={height}>
+			<div
+				style={{ width: '100%', height: '100%' }}
+				onDragOver={onDragOver}
+				onDrop={onDrop}
+			/>
+		</foreignObject>
 	);
 };
 
@@ -53,72 +111,71 @@ export interface BoardProps {
 	snapGridHeight?: number;
 }
 
+export interface BoardProps {
+	state: State.State;
+	onElementMove: (
+		X: number,
+		Y: number,
+		stateKey: string,
+		element: State.ElementInstance
+	) => void;
+}
+
 export const Board: React.FC<BoardProps> = ({
 	state: { elementStacks },
 	minX = State.boardMinX,
 	maxX = State.boardMaxX,
 	maxY = State.boardMaxY,
 	minY = State.boardMinY,
-	defaultX = 0,
-	defaultY = 0,
 	cardHeight = State.cardHeight,
 	cardWidth = State.cardWidth,
 	snapGridWidth = State.cardWidth,
 	snapGridHeight = State.cardHeight,
+	onElementMove,
 }) => {
-	const onDragStart: React.DragEventHandler<SVGSVGElement> =
-		React.useCallback(e => {
-			if (!e.dataTransfer) return;
-			e.dataTransfer.effectAllowed = 'move';
-			e.dataTransfer.setData('text/plain', '[card]');
-		}, []);
-
-	const onDragOver: React.DragEventHandler<HTMLDivElement> =
-		React.useCallback(e => {
-			e.preventDefault();
-		}, []);
+	const onDrop = React.useCallback(
+		(x: number, y: number, event: React.DragEvent<HTMLDivElement>) => {
+			const { elementKey } = JSON.parse(
+				event.dataTransfer.getData('application/json+elementKey')
+			) as { elementKey: string };
+			onElementMove(x, y, elementKey, elementStacks!.get(elementKey)!);
+		},
+		[elementStacks, onElementMove]
+	);
 
 	const droppableSlots = [];
 
 	for (let x = minX; x < maxX; x += snapGridWidth) {
 		for (let y = minY; y < maxY; y += snapGridHeight) {
 			droppableSlots.push(
-				<foreignObject
-					x={x}
-					y={y}
+				<Slot
+					onDrop={onDrop}
+					X={x}
+					Y={y}
+					key={`${x}-${y}`}
 					width={snapGridWidth}
 					height={snapGridHeight}
-					key={`droppable-area-${x}-${y}`}
-				>
-					<div
-						style={{ width: '100%', height: '100%' }}
-						onDragOver={onDragOver}
-					/>
-				</foreignObject>
+				/>
 			);
 		}
 	}
 
-	/*viewBox={`${minX} ${minY} ${maxX} ${maxY}`}*/
 	return (
 		<svg
 			style={{
 				width: '100vw',
 				height: '100vh',
 			}}
-			onDragStart={onDragStart}
 		>
 			{droppableSlots}
 			{elementStacks?.map((e, i) => (
-				<foreignObject
+				<Card
+					elementKey={i}
+					h={cardHeight}
+					w={cardWidth}
 					key={i}
-					x={e.lastTablePosX ?? defaultX}
-					y={e.lastTablePosY ?? defaultY}
-					height={cardHeight}
-					width={cardWidth}
-				>
-					<Card xmlns="http://www.w3.org/1999/xhtml" instance={e} />
-				</foreignObject>
+					element={e}
+				/>
 			)) ?? null}
 		</svg>
 	);
@@ -158,26 +215,53 @@ export const Deck: React.FC<Readonly<DeckProps>> = ({ name, deck }) => (
 );
 
 export interface CardProps {
-	instance: State.ElementInstance;
-	xmlns?: string;
+	element: State.ElementInstance;
+	elementKey: string;
+	h: number;
+	w: number;
 }
 
-export const Card: React.FC<Readonly<CardProps>> = ({ instance: i, xmlns }) => {
+export const Card: React.FC<Readonly<CardProps>> = ({
+	elementKey,
+	h,
+	w,
+	element: e,
+}) => {
+	const onDragStart: React.DragEventHandler<HTMLDivElement> =
+		React.useCallback(ev => {
+			if (!ev.dataTransfer) return;
+			ev.dataTransfer.effectAllowed = 'move';
+			ev.dataTransfer.setData(
+				'application/json+elementKey',
+				JSON.stringify({
+					elementKey,
+				})
+			);
+		}, []);
 	return (
-		<div
-			{...({ xmlns } as unknown)}
-			style={{
-				border: '1px solid black',
-				boxSizing: 'border-box',
-				height: '100%',
-				width: '100%',
-				borderRadius: '.2em',
-			}}
-			draggable="true"
+		<foreignObject
+			x={e.lastTablePosX ?? 0}
+			y={e.lastTablePosY ?? 0}
+			height={h}
+			width={w}
 		>
-			{/* needed to inject xmlns */}
-			{i.elementId} ({i.quantity}) ({i.lifetimeRemaining}s)
-		</div>
+			{/* needed to inject xmlns, not in types */}
+			<div
+				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as unknown)}
+				style={{
+					border: '1px solid black',
+					boxSizing: 'border-box',
+					height: '100%',
+					width: '100%',
+					borderRadius: '.2em',
+				}}
+				draggable="true"
+				onDragStart={onDragStart}
+			>
+				{/* this is thomas again. I have no idea what this ^ was meant to mean */}
+				{e.elementId} ({e.quantity}) ({e.lifetimeRemaining}s)
+			</div>
+		</foreignObject>
 	);
 };
 

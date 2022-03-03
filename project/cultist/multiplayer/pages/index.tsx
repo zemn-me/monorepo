@@ -5,14 +5,29 @@ import * as State from 'project/cultist/state';
 import * as Save from 'project/cultist/save';
 import * as Board from 'project/cultist/react/table';
 
-const Home = (): React.ReactElement => (
-	<React.StrictMode>
-		<Board.Table
-			state={State.deserialize.state(
-				Save.load(JSON.stringify(exampleSave))
-			)}
-		/>
-	</React.StrictMode>
-);
+const Home = (): React.ReactElement => {
+	const [state, setState] = React.useState(
+		State.deserialize.state(Save.load(JSON.stringify(exampleSave)))
+	);
+
+	const onElementChange = React.useCallback(
+		(elementKey: string, newElement: State.ElementInstance) =>
+			setState(s =>
+				s.set(
+					'elementStacks',
+					s.elementStacks!.set(elementKey, newElement)
+				)
+			),
+		[setState]
+	);
+
+	return (
+		<React.StrictMode>
+			<Board.Table onElementChange={onElementChange} state={state} />
+
+			<textarea value={JSON.stringify(State.serialize.state(state))} />
+		</React.StrictMode>
+	);
+};
 
 export default Home;
