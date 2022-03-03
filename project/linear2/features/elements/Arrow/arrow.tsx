@@ -24,7 +24,7 @@ export const Arrow = React.forwardRef<
 			<path
 				className={style.lightOnly}
 				d="M0,50L90,50"
-				marker-end="url(#arrow)"
+				markerEnd="url(#arrow)"
 				vectorEffect="non-scaling-stroke"
 			/>
 			<path

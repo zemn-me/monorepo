@@ -11,7 +11,9 @@ interface WithLangProps {
  * would need to be set for the contextual language
  * to be correct.
  */
-export const useLang: (lang: string) => { lang: string } | {} = lang => {
+export const useLang: (
+	lang: string
+) => { lang: string } | Record<string, never> = lang => {
 	const ctxLang = React.useContext(model.lang.lang);
 
 	if (lang == ctxLang) return {};

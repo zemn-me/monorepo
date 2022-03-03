@@ -123,6 +123,7 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "@npm//@typescript-eslint/parser",
             "@npm//@typescript-eslint/eslint-plugin",
             "@npm//eslint-config-prettier",
+            "@npm//eslint-plugin-react"
         ],
         args = args + ["--ignore-path", "$(location //:.gitignore)"] +
                ["$(location " + x + ")" for x in data],
