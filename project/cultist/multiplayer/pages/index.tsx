@@ -25,7 +25,11 @@ const Home = (): React.ReactElement => {
 		<React.StrictMode>
 			<Board.Table onElementChange={onElementChange} state={state} />
 
-			<textarea value={JSON.stringify(State.serialize.state(state))} />
+			<textarea
+				style={{ width: '100%' }}
+				readOnly
+				value={JSON.stringify(State.serialize.state(state), null, 2)}
+			/>
 		</React.StrictMode>
 	);
 };
