@@ -32,3 +32,17 @@ export function asAssertion<I, O extends I>(
 		if (!f(v)) throw e(v);
 	};
 }
+
+export function either<I, O1 extends I, O2 extends I>(
+	f1: (v: I) => v is O1,
+	f2: (v: I) => v is O2
+) {
+	return (v: I): v is O1 | O2 => f1(v) || f2(v);
+}
+
+export function all<I1, I2, O1 extends I1, O2 extends I2>(
+	f1: (v: I1) => v is O1,
+	f2: (v: I2) => v is O2
+) {
+	return (v: I1 & I2): v is O1 & O2 => f1(v) && f2(v);
+}

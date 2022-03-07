@@ -1,4 +1,5 @@
 export * as dict from './dict';
+export * from './permute';
 
 /**
  * For an iterable set of tuples of something, number
@@ -197,3 +198,20 @@ export function reduce<I, R>(
 
 	return previousValue;
 }
+
+export const zip: <T1, T2, T3>(
+	v1: Iterable<T1>,
+	v2: Iterable<T2>,
+	fb: T3
+) => Iterable<[T1 | T3, T2 | T3]> = function* (v1, v2, fb) {
+	const [a, b] = [v1[Symbol.iterator](), v2[Symbol.iterator]()];
+	for (let i = 0; ; i++) {
+		const [ar, br] = [a.next(), b.next()];
+		const left = ar.done ? fb : ar.value;
+		const right = br.done ? fb : br.value;
+
+		if (ar.done && br.done) break;
+
+		yield [left, right];
+	}
+};

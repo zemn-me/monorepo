@@ -1,11 +1,9 @@
 load("//:rules.bzl", "jest_test", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 tstestfiles = glob(["*_test.ts"])
 
 ts_project(
-    name = "iter",
+    name = "memo",
     srcs = glob(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
@@ -13,8 +11,9 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [ "//ts/iter:iter" ],
     deps = [
-        "@npm//immutable"
+        "@npm//immutable",
     ]
 )
 
@@ -24,7 +23,7 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    project_deps = [":iter"],
+    project_deps = [":memo"],
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/jest",
@@ -35,6 +34,6 @@ jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
     deps = [
-        ":iter_js",
+        ":memo_js",
     ],
 )
