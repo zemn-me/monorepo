@@ -1,4 +1,8 @@
-﻿grant_titles_interaction = {
+﻿# scope:candidate = { change_government = theocracy_government }
+
+
+
+grant_titles_interaction = {
 
 	category = interaction_category_vassal
 	common_interaction = yes
@@ -278,6 +282,15 @@
 			if = {
 				limit = {
 					exists = scope:landed_title
+				}
+				scope:actor = {
+					if = {
+						limit = {
+							has_government = theocracy_government
+						}
+
+						scope:recipient = { change_government = theocracy_government }
+					}
 				}
 				scope:recipient = {
 					if = {
