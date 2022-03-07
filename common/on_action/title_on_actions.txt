@@ -48,30 +48,15 @@ on_title_gain = {
 			add_trait = order_member
 		}
 
-		scope:title.holder = {
-			if = {
-				limit = {
-						liege = {
-							has_government = theocracy_government
-						}
-					}
+		if = {
+			limit = {
+				liege = {
+					has_government = theocracy_government
 				}
-
-				change_government = theocracy_government
 			}
 
-			if = {
-				limit = {
-						liege = {
-							has_government = republic_government
-						}
-					}
-				}
-
-				change_government = republic_government
-			}
+			change_government = theocracy_government
 		}
-
 
 
 		#Did I receive a title from my sibling?
