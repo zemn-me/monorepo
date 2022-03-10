@@ -162,8 +162,10 @@ def get_preferred_artifact(library_to_link, use_pic):
         File: Returns the first valid library type (only one is expected)
     """
     if use_pic:
+        # Order consistent with https://github.com/bazelbuild/bazel/blob/815dfdabb7df31d4e99b6fc7616ff8e2f9385d98/src/main/java/com/google/devtools/build/lib/rules/cpp/CcLinkingContext.java#L437.
         return (
             library_to_link.pic_static_library or
+            library_to_link.static_library or
             library_to_link.interface_library or
             library_to_link.dynamic_library
         )
