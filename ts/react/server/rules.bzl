@@ -15,11 +15,12 @@ def web_app(name, entry_points, esbuild_deps = [], deps = [], **kwargs):
         splitting = True,
         target = "chrome58",
         deps = esbuild_deps,
-        metafile = False
+        metafile = False,
     )
     
     esbuild(
         metafile = False,
+        sources_content = True,
         name = name + "_dev_build",
         entry_points = entry_points,
         minify = False,
