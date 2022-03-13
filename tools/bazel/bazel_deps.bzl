@@ -99,3 +99,14 @@ def fetch_dependencies():
             "https://github.com/bazelbuild/buildtools/archive/refs/tags/4.2.0.tar.gz",
         ],
     )
+
+    http_archive(
+        name = "pulumi_cli",
+        sha256 = "c0e4b0ef05dcc96f2ccd7065afc8e3d6b3b63054fd9978f271a88862664d1547",
+        urls = [
+            "https://get.pulumi.com/releases/sdk/pulumi-v3.26.1-linux-x64.tar.gz"
+        ],
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """
+    )
