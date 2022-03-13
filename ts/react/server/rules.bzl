@@ -21,6 +21,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = [], visibility = [], *
     
     esbuild(
         metafile = False,
+        sources_content = True,
         name = name + "_dev_build",
         entry_points = entry_points,
         minify = False,
