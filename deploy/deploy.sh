@@ -1,3 +1,2 @@
-for v in "$@"; do
-    $v up --yes
-done
+
+$PULUMI_CULTIST_MULTIPLAYER up --yes
