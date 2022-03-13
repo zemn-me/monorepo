@@ -30,6 +30,15 @@ def pulumi_exec(name, config_files = [], data = [], args = [], env = {}, **kwarg
         **kwargs
     )
 
+    native.sh_test(
+        name = name + "_preview",
+        data = [ name ],
+        srcs = [ "//ts/pulumi:pulumi_test.sh" ],
+        env = {
+            "PULUMI_BINARY": "$(location " + name + ")",
+        }
+    )
+
 def pulumi_stack(name, stack_file, stack_name, config_files = [], data = [],  args = [],**kwargs):
     pulumi_exec(
         name = name ,

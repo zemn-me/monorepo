@@ -1,1 +1,1 @@
-exports_files(["pulumi.sh", "pulumi_header.sh"])
+exports_files(["pulumi.sh", "pulumi_header.sh", "pulumi_test.sh"])
