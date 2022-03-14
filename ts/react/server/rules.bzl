@@ -14,6 +14,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = [], visibility = [], *
         output_dir = "es_out",
         splitting = True,
         target = "chrome58",
+        sources_content = True,
         deps = esbuild_deps,
         visibility = visibility,
         metafile = False
