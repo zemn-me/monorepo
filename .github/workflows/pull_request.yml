@@ -18,9 +18,6 @@ jobs:
           node-version: '16'
       - name: Install node deps
         run: yarn install
-        env:
-          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       - name: Directly affected tests
         run: yarn test
         env:
