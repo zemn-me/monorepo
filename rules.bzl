@@ -4,6 +4,7 @@ load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
+load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 
 def nodejs_binary(link_workspace_root = True, **kwargs):
     _nodejs_binary(link_workspace_root = link_workspace_root, **kwargs)
@@ -36,7 +37,8 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+def ts_project(name, entry_points = [], ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+    srcs = srcs + [ "//:css_loader.d.ts" ]
     __ts_project(
         name = name + "_ts",
         deps = deps + [dep + "_ts" for dep in project_deps],
@@ -81,7 +83,18 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         **kwargs
     )
 
-def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+    esbuild(
+        name = name + "_esb",
+        # put the css modules plugin here!
+        srcs = [ name + "_js" ] + [
+            x for x in srcs if x[-len(".module.css"):] == ".module.css"
+        ],
+        target = "chrome58",
+        entry_points = entry_points,
+        **kwargs
+    )
+
+def __ts_project(name, entry_points = [], ignores_lint = [], tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
     _ts_project(
         name = name,
         srcs = srcs,
@@ -91,6 +104,7 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
         tsconfig = tsconfig,
         **kwargs
     )
+
 
     ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint], tags = tags)
 
