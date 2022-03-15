@@ -9,6 +9,7 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//:rules.bzl", "ts_project")
+load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -51,6 +52,15 @@ exports_files(
         ".gitignore",
         ".editorconfig",
         ".eslintrc.json",
+        "css_loader.d.ts"
     ],
     visibility = ["//visibility:public"],
+)
+
+esbuild_config(
+    name = "esbuild_config",
+    config_file = "esbuild.config.mjs",
+    deps = [
+        "@npm//esbuild-css-modules-plugin"
+    ]
 )
