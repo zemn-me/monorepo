@@ -33,7 +33,7 @@ ts_config(
 ts_config(
     name = "tsconfig_jsx",
     src = "jsx.tsconfig.json",
-    deps = ["//ts/config:jsx"],
+    deps = ["//ts/config:jsx", "Global.d.ts"],
 )
 
 ts_project(

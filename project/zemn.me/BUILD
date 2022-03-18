@@ -20,9 +20,3 @@ web_app(
     esbuild_deps = [ ":ts_sources", "@npm//:node_modules" ],
     deps = [ "index.html" ]
 )
-
-http_server(
-    name = "xxx",
-    data = [ "@npm//react:react__all_files", "@npm//react-dom:react-dom__all_files" ] + glob(["*ts", "*.tsx", "*.css"]),
-    args = [ "." ]
-)
