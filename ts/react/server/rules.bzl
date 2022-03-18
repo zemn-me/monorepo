@@ -5,8 +5,6 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], de
 
     if len(project_esbuild_deps) > 0:
         esbuild_deps = esbuild_deps + [ x + "_sources" for x in project_esbuild_deps ]
-        # Workaround to transitive dependency issue I don't know how to fix
-        esbuild_deps = esbuild_deps + [ "@npm//:node_modules" ]
 
     native.filegroup(
         name = name + "_deps",

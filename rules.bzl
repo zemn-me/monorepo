@@ -37,9 +37,10 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
-    native.filegroup(
+    js_library(
         name = name + "_sources",
-        srcs = srcs + deps + [dep + "_sources" for dep in project_deps],
+        srcs = srcs,
+        deps = deps + [dep + "_sources" for dep in project_deps],
     )
 
     # transitive deps not included, not sure how to fix yet
