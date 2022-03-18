@@ -17,6 +17,6 @@ ts_project(
 web_app(
     name = "zemn.me",
     entry_points = [ "index.tsx" ],
-    esbuild_deps = [ ":ts_sources", "@npm//:node_modules" ],
+    project_esbuild_deps = [ ":ts" ],
     deps = [ "index.html" ]
 )

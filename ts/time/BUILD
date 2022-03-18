@@ -7,9 +7,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]) + [
-        "//css:css_loader.d.ts",
-    ],
+    ]),
     composite = True,
     declaration = True,
     incremental = True,
