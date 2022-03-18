@@ -43,8 +43,6 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         deps = deps + [dep + "_sources" for dep in project_deps],
     )
 
-    # transitive deps not included, not sure how to fix yet
-    
     __ts_project(
         name = name + "_ts",
         deps = deps + [dep + "_ts" for dep in project_deps],
