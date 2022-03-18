@@ -17,12 +17,12 @@ ts_project(
 web_app(
     name = "zemn.me",
     entry_points = [ "index.tsx" ],
-    esbuild_deps = [ ":ts_sources" ],
+    esbuild_deps = [ ":ts_sources", "@npm//:node_modules" ],
     deps = [ "index.html" ]
 )
 
 http_server(
     name = "xxx",
-    data = [ ":ts_sources" ],
+    data = [ "@npm//react:react__all_files", "@npm//react-dom:react-dom__all_files" ] + glob(["*ts", "*.tsx", "*.css"]),
     args = [ "." ]
 )

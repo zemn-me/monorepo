@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './root.module.css';
+import style from './style.module.css';
 
 export const Root: React.FC = () => <div className={style.main}>
     Hello, world!
