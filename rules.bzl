@@ -36,11 +36,12 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
     js_library(
         name = name + "_sources",
         srcs = srcs,
         deps = deps + [dep + "_sources" for dep in project_deps],
+        visibility = visibility,
     )
 
     __ts_project(
@@ -56,6 +57,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         root_dir = root_dir,
         ignores_lint = ignores_lint,
         link_workspace_root = True,
+        visibility = visibility,
         **kwargs
     )
 
@@ -84,6 +86,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         name = name + "_js",
         deps = [dep + "_js" for dep in project_deps] + deps,
         srcs = jssrcs,
+        visibility = visibility,
         **kwargs
     )
 
