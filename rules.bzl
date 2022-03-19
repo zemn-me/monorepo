@@ -36,7 +36,13 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, skip_css_defs = False, visibility = None, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+    skip_css_defs = True
+
+    for src in srcs:
+        if src[:-len(".module.css")] == ".module.css":
+            skip_css_defs = False
+
     if not skip_css_defs:
         deps = deps + [ "//:base_defs" ]
 

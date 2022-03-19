@@ -13,7 +13,6 @@ ts_project(
     incremental = True,
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],
-    skip_css_defs = True,
     deps = [
         "@npm//@types/node",
     ],

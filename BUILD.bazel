@@ -44,13 +44,11 @@ js_library(
 ts_project(
     name = "jest_config_node",
     srcs = ["jest.node.config.ts"],
-    skip_css_defs = True
 )
 
 ts_project(
     name = "jest_config_browser",
     srcs = ["jest.browser.config.ts"],
-    skip_css_defs = True
 )
 
 exports_files(
