@@ -40,7 +40,7 @@ def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module =
     skip_css_defs = True
 
     for src in srcs:
-        if src[:-len(".module.css")] == ".module.css":
+        if src[-len(".module.css"):] == ".module.css":
             skip_css_defs = False
 
     if not skip_css_defs:
@@ -112,7 +112,7 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
 
     ts_lint(name = name + "_lint", data = [
         x for x in srcs if x not in ignores_lint and 
-        ( x[:-len(".ts")] == ".ts" or x[:-len(".tsx")] == ".tsx" )
+        ( x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx" )
         ], tags = tags)
 
 def json_project(name, src, **kwargs):
