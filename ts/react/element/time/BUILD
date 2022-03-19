@@ -16,7 +16,6 @@ ts_project(
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
-        "//css:css_loader",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",

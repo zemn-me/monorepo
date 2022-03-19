@@ -36,7 +36,23 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+    skip_css_defs = True
+
+    for src in srcs:
+        if src[-len(".module.css"):] == ".module.css":
+            skip_css_defs = False
+
+    if not skip_css_defs:
+        deps = deps + [ "//:base_defs" ]
+
+    js_library(
+        name = name + "_sources",
+        srcs = srcs,
+        deps = deps + [dep + "_sources" for dep in project_deps],
+        visibility = visibility,
+    )
+
     __ts_project(
         name = name + "_ts",
         deps = deps + [dep + "_ts" for dep in project_deps],
@@ -50,6 +66,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         root_dir = root_dir,
         ignores_lint = ignores_lint,
         link_workspace_root = True,
+        visibility = visibility,
         **kwargs
     )
 
@@ -78,6 +95,7 @@ def ts_project(name, ignores_lint = [], resolve_json_module = True, project_deps
         name = name + "_js",
         deps = [dep + "_js" for dep in project_deps] + deps,
         srcs = jssrcs,
+        visibility = visibility,
         **kwargs
     )
 
@@ -92,7 +110,10 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
         **kwargs
     )
 
-    ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint], tags = tags)
+    ts_lint(name = name + "_lint", data = [
+        x for x in srcs if x not in ignores_lint and 
+        ( x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx" )
+        ], tags = tags)
 
 def json_project(name, src, **kwargs):
     native.genrule(

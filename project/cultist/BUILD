@@ -34,6 +34,13 @@ alias(
     actual = "//project/cultist/state:state_ts",
 )
 
+alias(
+    name = "state_sources",
+    actual = "//project/cultist/state:state_sources",
+)
+
+
+
 ts_project(
     name = "element",
     srcs = ["element.ts"],

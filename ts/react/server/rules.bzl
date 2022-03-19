@@ -1,7 +1,11 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
 
-def web_app(name, entry_points, esbuild_deps = [], deps = [], visibility = [], **kwargs):
+def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], deps = [], visibility = [], **kwargs):
+
+    if len(project_esbuild_deps) > 0:
+        esbuild_deps = esbuild_deps + [ x + "_sources" for x in project_esbuild_deps ]
+
     native.filegroup(
         name = name + "_deps",
         srcs = deps
@@ -12,6 +16,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = [], visibility = [], *
         entry_points = entry_points,
         minify = True,
         output_dir = "es_out",
+        config = "//:esbuild_config",
         splitting = True,
         target = "chrome58",
         sources_content = True,
@@ -25,6 +30,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = [], visibility = [], *
         sources_content = True,
         name = name + "_dev_build",
         entry_points = entry_points,
+        config = "//:esbuild_config",
         minify = False,
         splitting = True,
         visibility = visibility,
