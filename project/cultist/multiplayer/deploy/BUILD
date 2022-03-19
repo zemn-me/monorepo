@@ -24,10 +24,10 @@ ts_project(
 pulumi(
     name = "pulumi",
     config_files = [ ":deploy_js", "Pulumi.yaml" ],
-    data = [ "//project/cultist/multiplayer:multiplayer_dev_bundle" ],
+    data = [ "//project/cultist/multiplayer:multiplayer_prod_bundle" ],
     stacks = [ "Pulumi.prod.yaml" ],
     env = {
-        "DIR_ROOT": "$$(rlocation quickcult/$(rootpath //project/cultist/multiplayer:multiplayer_dev_bundle))"
+        "DIR_ROOT": "$$(rlocation quickcult/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))"
     },
     visibility = [ "//:__subpackages__" ]
 )
