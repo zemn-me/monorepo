@@ -37,6 +37,7 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module = True, project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+    deps = deps + [ "//:base_defs" ]
     js_library(
         name = name + "_sources",
         srcs = srcs,

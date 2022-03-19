@@ -36,6 +36,11 @@ ts_config(
     deps = ["//ts/config:jsx", "Global.d.ts"],
 )
 
+js_library(
+    name = "base_defs",
+    srcs = ["Global.d.ts"]
+)
+
 ts_project(
     name = "jest_config_node",
     srcs = ["jest.node.config.ts"],
