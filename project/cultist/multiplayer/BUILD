@@ -8,8 +8,10 @@ ts_project(
     ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
+    project_deps = [
+        "//project/cultist/multiplayer/pages:pages",
+    ],
     deps = [
-        "//project/cultist/multiplayer/pages:pages_ts",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
