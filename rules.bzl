@@ -110,7 +110,10 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
         **kwargs
     )
 
-    ts_lint(name = name + "_lint", data = [x for x in srcs if x not in ignores_lint], tags = tags)
+    ts_lint(name = name + "_lint", data = [
+        x for x in srcs if x not in ignores_lint and 
+        ( x[:-len(".ts")] == ".ts" or x[:-len(".tsx")] == ".tsx" )
+        ], tags = tags)
 
 def json_project(name, src, **kwargs):
     native.genrule(
