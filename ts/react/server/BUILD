@@ -1,1 +1,2 @@
-# nothing exported from here.
+exports_files([ "index.html" ])
+

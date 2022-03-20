@@ -162,9 +162,7 @@ export const Board: React.FC<BoardProps> = ({
 	}
 
 	return (
-		<svg
-			className={style.table}
-		>
+		<svg className={style.table}>
 			{droppableSlots}
 			{elementStacks?.map((e, i) => (
 				<Card
