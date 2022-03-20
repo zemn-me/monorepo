@@ -1,7 +1,7 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
 
-def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [ "//ts/react/server/index.html" ], deps = [], visibility = [], **kwargs):
+def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], deps =[ "//ts/react/server:index.html" ] , visibility = [], **kwargs):
     if len(project_esbuild_deps) > 0:
         esbuild_deps = esbuild_deps + [ x + "_sources" for x in project_esbuild_deps ]
 
@@ -80,4 +80,3 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [ "//t
         visibility = visibility,
         args = [ "$(location :" + name + "_prod_bundle)" ]
     )
-
