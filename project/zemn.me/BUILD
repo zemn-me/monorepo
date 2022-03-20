@@ -6,11 +6,15 @@ load("@npm//http-server:index.bzl", "http_server")
 ts_project(
     name = "ts",
     srcs = glob(["*.ts", "*.tsx", "*.css"]),
+    project_deps = [
+        "//project/zemn.me/pages:pages"
+    ],
     deps = [
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
+        "@npm//react-router-dom",
     ]
 )
 
