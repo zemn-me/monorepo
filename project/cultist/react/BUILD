@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "table.tsx",
         "index.tsx",
+        "table.module.css"
     ],
     project_deps = [
         "//project/cultist:state",
