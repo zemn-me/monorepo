@@ -8,9 +8,14 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    resolve_json_module = True,
+    project_deps = [
+        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo"
+    ],
+    deps = [
+        "@npm//@types/react",
+        "@npm//react",
+        "@npm//react-router-dom",
+        "@npm//react-dom",
+    ],
     tsconfig = "//:tsconfig_jsx",
 )

@@ -1,12 +1,8 @@
-
 load("//:rules.bzl", "ts_project")
 
 ts_project(
-    name = "pages",
+    name = "ZemnmezLogo",
     srcs = glob(["*.ts", "*.tsx", "*.css"]),
-    project_deps = [
-        "//project/zemn.me/pages/art:art"
-    ],
     deps = [
         "@npm//@types/react",
         "@npm//react",

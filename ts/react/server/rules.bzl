@@ -72,13 +72,13 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], de
         name = name + "_run",
         data = [ ":"+name + "_dev_bundle" ],
         visibility = visibility,
-        args = [ "$(location :" + name + "_dev_bundle)" ]
+        args = [ "--proxy", "http://localhost:8080?", "$(location :" + name + "_dev_bundle)" ]
     )
 
     http_server(
         name = name + "_prod_run",
         data = [ ":"+name + "_prod_bundle" ],
         visibility = visibility,
-        args = [ "$(location :" + name + "_prod_bundle)" ]
+        args = [ "--proxy", "http://localhost:8080?", "$(location :" + name + "_prod_bundle)" ]
     )
 
