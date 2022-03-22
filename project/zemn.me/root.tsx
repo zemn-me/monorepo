@@ -6,11 +6,13 @@ import NavBar from 'project/zemn.me/elements/NavBar';
 // side-effects only.
 import './root.module.css';
 
-export const Root: React.FC = () => (<>
-	<BrowserRouter>
-		<NavBar/>
-		<Routes>{Pages}</Routes>
-	</BrowserRouter>
-</>);
+export const Root: React.FC = () => (
+	<>
+		<BrowserRouter>
+			<NavBar />
+			<Routes>{Pages}</Routes>
+		</BrowserRouter>
+	</>
+);
 
 export default Root;
