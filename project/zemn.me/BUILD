@@ -7,7 +7,8 @@ ts_project(
     name = "ts",
     srcs = glob(["*.ts", "*.tsx", "*.css"]),
     project_deps = [
-        "//project/zemn.me/pages:pages"
+        "//project/zemn.me/pages:pages",
+        "//project/zemn.me/elements/NavBar:NavBar"
     ],
     deps = [
         "@npm//@types/react",
