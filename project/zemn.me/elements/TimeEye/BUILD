@@ -1,19 +1,14 @@
 load("//:rules.bzl", "jest_test", "ts_project")
-load("//css:rules.bzl", "css_module")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
-    name = "time",
+    name = "TimeEye",
     srcs = glob([
         "*.ts",
         "*.tsx",
+        "*.css"
     ]),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    project_deps = [":time_css"],
-    resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",
@@ -22,7 +17,3 @@ ts_project(
     ],
 )
 
-css_module(
-    name = "time_css",
-    srcs = ["time.module.css"],
-)
