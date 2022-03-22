@@ -1,5 +1,4 @@
 import React from 'react';
-import style from './style.module.css';
 import { BrowserRouter, Routes } from 'react-router-dom';
 import Pages from 'project/zemn.me/pages';
 
