@@ -9,7 +9,8 @@ ts_project(
     project_deps = [
         "//project/zemn.me/pages:pages",
         "//project/zemn.me/elements/NavBar:NavBar",
-        "//project/zemn.me/elements/TitlePage:TitlePage"
+        "//project/zemn.me/elements/TitlePage:TitlePage",
+        "//project/zemn.me/elements/DarkModeSwitcher:DarkModeSwitcher"
     ],
     deps = [
         "@npm//@types/react",
