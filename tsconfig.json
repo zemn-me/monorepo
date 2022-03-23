@@ -1,16 +1,17 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "CommonJS",
 		"target": "es2020",
 		"strictFunctionTypes": true,
 		"esModuleInterop": true,
 		"moduleResolution": "node",
 		"strict": true,
+		"jsx": "react",
+		"resolveJsonModule": true,
 		"baseUrl": "./",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
-		"noImplicitOverride": true,
 		"noImplicitThis": true,
 		"declaration": true,
 		"preserveSymlinks": true,
@@ -18,9 +19,11 @@
 		"downlevelIteration": true,
 		"composite": true,
 		"incremental": true,
+		"sourceMap": true,
+		"inlineSources": true,
 		"paths": {
-			"//*": [
-				"*",
+			"*": [
+				"./*",
 				"./bazel-out/k8-fastbuild/bin/*",
 				"./bazel-out/x64_windows-fastbuild/bin/*",
 				"./bazel-out/x64_windows-dbg/bin/*",
@@ -29,14 +32,7 @@
 				"./bazel-out/darwin-fastbuild/bin/*",
 				"./bazel-out/darwin-dbg/bin/*"
 			]
-		},
-		"plugins": [
-			{ "transform": "typescript-transform-paths" },
-			{
-				"transform": "typescript-transform-paths",
-				"afterDeclarations": true
-			}
-		]
+		}
 	},
-	"exclude": ["node_modules", "**/node_modules/*", "external/*"]
+	"exclude": ["node_modules", "dist", "external"]
 }

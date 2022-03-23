@@ -2,10 +2,10 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as Save from '//project/cultist/save';
-import * as State from '//project/cultist/state/state';
-import * as Iter from '//ts/iter';
-import { maybe } from '//ts/util';
+import * as Save from 'project/cultist/save';
+import * as State from 'project/cultist/state/state';
+import * as Iter from 'ts/iter';
+import { maybe } from 'ts/util';
 
 export function elements(
 	s: State.State['elementStacks'] | State.Situation['situationStoredElements']
@@ -18,7 +18,6 @@ export function elements(
 
 export function state(s: State.State): Save.State {
 	return {
-		...s.toJSON(),
 		elementStacks: elements(s.elementStacks),
 		decks: maybe(Iter.dict.map)(
 			maybe(Iter.dict.fromEntries)(s.decks),
@@ -28,6 +27,7 @@ export function state(s: State.State): Save.State {
 			maybe(Iter.dict.fromEntries)(s.situations),
 			situation
 		),
+		characterDetails: maybe(characterDetails)(s.characterDetails),
 	};
 }
 
@@ -43,7 +43,7 @@ export function elementInstance(
 	e: State.ElementInstance
 ): Save.ElementInstance {
 	return {
-		...e.toJSON(),
+		elementId: e.elementId,
 		lifetimeRemaining: maybe(number)(e.lifetimeRemaining),
 		lastTablePosX: maybe(number)(e.lastTablePosX),
 		lastTablePosY: maybe(number)(e.lastTablePosY),
@@ -53,18 +53,22 @@ export function elementInstance(
 }
 
 export function levers(l: State.Levers): Save.Levers {
-	return { ...l.toJSON() };
+	return l.toJSON();
 }
 
 export function characterDetails(
 	d: State.CharacterDetails
 ): Save.State['characterDetails'] {
-	return { ...d.toJSON() };
+	return {
+		...d.toJSON(),
+		futureLevers: maybe(levers)(d.futureLevers),
+		pastLevers: maybe(levers)(d.pastLevers),
+	};
 }
 
 export function deck(d: State.Deck): Save.Deck {
 	const cards = Iter.dict.fromEntries(
-		d.cards?.map((card, index) => [card, number(index)]) ?? []
+		d.cards?.map((card, index) => [number(index), card]) ?? []
 	);
 	return {
 		eliminatedCards: [...(d.eliminatedCards ?? [])],
@@ -75,9 +79,9 @@ export function deck(d: State.Deck): Save.Deck {
 export function situation(s: State.Situation): Save.Situation {
 	return {
 		...s.toJSON(),
-		situationStoredElements: elements(s.situationStoredElements),
+		situationStoredElements: maybe(elements)(s.situationStoredElements),
 
-		ongoingSlotElements: elements(s.ongoingSlotElements),
+		ongoingSlotElements: maybe(elements)(s.ongoingSlotElements),
 		situationOutputNotes: maybe(Iter.dict.map)(
 			maybe(Iter.dict.fromEntries)(s.situationOutputNotes),
 			v => v

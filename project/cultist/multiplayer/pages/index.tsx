@@ -1,23 +1,37 @@
 import React from 'react';
-import exampleSave from '//project/cultist/example/savestate';
+import exampleSave from 'project/cultist/example/savestate';
 
-// local imports (not NPM) seem to be broken...
+import * as State from 'project/cultist/state';
+import * as Save from 'project/cultist/save';
+import * as Board from 'project/cultist/react/table';
 
-import * as State from '//project/cultist/state';
-import * as Save from '//project/cultist/save';
-import * as Board from '//project/cultist/react/board';
-import core_en from '//project/cultist/gen/core_en.json';
+const Home = (): React.ReactElement => {
+	const [state, setState] = React.useState(
+		State.deserialize.state(Save.load(JSON.stringify(exampleSave)))
+	);
 
-console.log(core_en);
+	const onElementChange = React.useCallback(
+		(elementKey: string, newElement: State.ElementInstance) =>
+			setState(s =>
+				s.set(
+					'elementStacks',
+					s.elementStacks!.set(elementKey, newElement)
+				)
+			),
+		[setState]
+	);
 
-const Home = (): React.ReactElement => (
-	<>
-		<Board.Board
-			state={State.deserialize.state(
-				Save.load(JSON.stringify(exampleSave))
-			)}
-		/>
-	</>
-);
+	return (
+		<React.StrictMode>
+			<Board.Table onElementChange={onElementChange} state={state} />
+
+			<textarea
+				style={{ width: '100%' }}
+				readOnly
+				value={JSON.stringify(State.serialize.state(state), null, 2)}
+			/>
+		</React.StrictMode>
+	);
+};
 
 export default Home;

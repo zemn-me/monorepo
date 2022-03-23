@@ -1,6 +1,5 @@
 load("//:rules.bzl", "go_binary", "ts_lint", "ts_project")
-load("@npm//@bazel/esbuild:index.bzl", "esbuild")
-load("@npm//esbuild:index.bzl", run_esbuild = "esbuild")
+load("//ts/react/server:rules.bzl", "web_app")
 
 ts_project(
     name = "index",
@@ -9,8 +8,10 @@ ts_project(
     ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
+    project_deps = [
+        "//project/cultist/multiplayer/pages:pages",
+    ],
     deps = [
-        "//project/cultist/multiplayer/pages:pages_ts",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
@@ -18,21 +19,10 @@ ts_project(
     ],
 )
 
-esbuild(
+web_app(
     name = "multiplayer",
-    entry_point = "//project/cultist/multiplayer:index.tsx",
-    minify = True,
-    output_dir = "es_out",
-    splitting = True,
-    target = "chrome58",
-    deps = [":index_ts"],
-)
-
-go_binary(
-    name = "start",
-    srcs = ["test_server.go"],
-    embedsrcs = [
-        ":multiplayer",
-        "//project/cultist/multiplayer/public:index.html",
-    ],
+    entry_points = [ "//project/cultist/multiplayer:index.tsx" ],
+    project_esbuild_deps = [ ":index" ],
+    deps = [ ":index.html" ],
+    visibility = [ "//project/cultist/multiplayer:__subpackages__" ]
 )

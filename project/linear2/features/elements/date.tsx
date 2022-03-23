@@ -33,22 +33,23 @@ export const Date: (props: DateProps) => React.ReactElement = ({
 
 export type TextProps = Intl.DateTimeFormatOptions;
 
-export const Text: (props: TextProps) => React.ReactElement | null =
-	options => {
-		const locales = React.useContext(model.lang.locale);
-		const date = React.useContext(dateContext);
-		const dto = Intl.DateTimeFormat([...locales], options);
+export const Text: (
+	props: TextProps
+) => React.ReactElement | null = options => {
+	const locales = React.useContext(model.lang.locale);
+	const date = React.useContext(dateContext);
+	const dto = Intl.DateTimeFormat([...locales], options);
 
-		if (!date) return null;
+	if (!date) return null;
 
-		return (
-			<elements.WithLang lang={dto.resolvedOptions().locale}>
-				<elements.Void>
-					<span>{dto.format(date)}</span>
-				</elements.Void>
-			</elements.WithLang>
-		);
-	};
+	return (
+		<elements.WithLang lang={dto.resolvedOptions().locale}>
+			<elements.Void>
+				<span>{dto.format(date)}</span>
+			</elements.Void>
+		</elements.WithLang>
+	);
+};
 
 /**
  * HTML5 date format

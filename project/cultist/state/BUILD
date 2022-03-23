@@ -60,6 +60,7 @@ ts_project(
         ":state_main",
         "//project/cultist:save",
         ":serialize",
+        "//ts:ts",
         ":deserialize",
     ],
     deps = ["@npm//@types/jest"],

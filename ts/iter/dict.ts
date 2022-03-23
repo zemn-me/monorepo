@@ -48,6 +48,7 @@ export function fromEntries<V>(
 	const o: { [key: string]: V } = {};
 	for (let [k, v] of i) {
 		while (k in o) k = onDupe(k, v);
+		o[k] = v;
 	}
 
 	return o;

@@ -7,9 +7,13 @@
 		"eslint:recommended",
 		"plugin:prettier/recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended"
 	],
 	"rules": {
+		"react/prop-types": 0,
+		"react/display-name": 0,
+		"react/no-unescaped-entities": 0,
 		"prettier/prettier": "error",
 		"arrow-parens": ["error", "as-needed"],
 		"arrow-spacing": ["error", { "before": true, "after": true }],
