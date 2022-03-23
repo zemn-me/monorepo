@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from 'classnames';
 import style from './SliderCheckbox.module.css';
 
 type InputProps = React.DetailedHTMLProps<
