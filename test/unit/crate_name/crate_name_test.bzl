@@ -1,8 +1,8 @@
 """Unit tests for crate names."""
 
 load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
-load("//rust:defs.bzl", "rust_binary", "rust_library", "rust_test")
-load("//test/unit:common.bzl", "assert_argv_contains")
+load("//rust:defs.bzl", "rust_binary", "rust_library", "rust_shared_library", "rust_static_library", "rust_test")
+load("//test/unit:common.bzl", "assert_argv_contains", "assert_argv_contains_prefix_not")
 
 def _default_crate_name_library_test_impl(ctx):
     env = analysistest.begin(ctx)
@@ -68,7 +68,20 @@ def _slib_library_name_test_impl(ctx):
     """
     env = analysistest.begin(ctx)
     tut = analysistest.target_under_test(env)
+    assert_argv_contains(env, tut.actions[0], "--codegen=metadata=-2102077805")
     assert_argv_contains(env, tut.actions[0], "--codegen=extra-filename=-2102077805")
+    return analysistest.end(env)
+
+def _no_extra_filename_test_impl(ctx):
+    """Check that no extra filename is used.
+
+    Args:
+      ctx: rule context.
+    """
+    env = analysistest.begin(ctx)
+    tut = analysistest.target_under_test(env)
+    assert_argv_contains_prefix_not(env, tut.actions[0], "--codegen=metadata=")
+    assert_argv_contains_prefix_not(env, tut.actions[0], "--codegen=extra-filename=")
     return analysistest.end(env)
 
 default_crate_name_library_test = analysistest.make(
@@ -99,6 +112,9 @@ invalid_custom_crate_name_test = analysistest.make(
 )
 slib_library_name_test = analysistest.make(
     _slib_library_name_test_impl,
+)
+no_extra_filename_test = analysistest.make(
+    _no_extra_filename_test_impl,
 )
 
 def _crate_name_test():
@@ -153,6 +169,16 @@ def _crate_name_test():
         srcs = ["slib.rs"],
     )
 
+    rust_shared_library(
+        name = "shared_lib",
+        srcs = ["lib.rs"],
+    )
+
+    rust_static_library(
+        name = "static_lib",
+        srcs = ["lib.rs"],
+    )
+
     slib_library_name_test(
         name = "slib_library_name_test",
         target_under_test = ":slib",
@@ -196,6 +222,16 @@ def _crate_name_test():
     invalid_custom_crate_name_test(
         name = "invalid_custom_crate_name_test",
         target_under_test = ":invalid-custom-crate-name",
+    )
+
+    no_extra_filename_test(
+        name = "no_extra_filename_for_shared_library_test",
+        target_under_test = ":shared_lib",
+    )
+
+    no_extra_filename_test(
+        name = "no_extra_filename_for_static_library_test",
+        target_under_test = ":static_lib",
     )
 
 def crate_name_test_suite(name):

@@ -245,14 +245,14 @@ def _rust_library_common(ctx, crate_type):
     toolchain = find_toolchain(ctx)
 
     # Determine unique hash for this rlib.
-    # Note that we don't include a hash for `cdylib` since they are meant to be consumed externally and having a
-    # deterministic name is important since it ends up embedded in the executable. This is problematic when one needs
-    # to include the library with a specific filename into a larger application.
+    # Note that we don't include a hash for `cdylib` and `staticlib` since they are meant to be consumed externally
+    # and having a deterministic name is important since it ends up embedded in the executable. This is problematic
+    # when one needs to include the library with a specific filename into a larger application.
     # (see https://github.com/bazelbuild/rules_rust/issues/405#issuecomment-993089889 for more details)
-    if crate_type != "cdylib":
-        output_hash = determine_output_hash(crate_root, ctx.label)
-    else:
+    if crate_type in ["cdylib", "staticlib"]:
         output_hash = None
+    else:
+        output_hash = determine_output_hash(crate_root, ctx.label)
 
     crate_name = compute_crate_name(ctx.workspace_name, ctx.label, toolchain, ctx.attr.crate_name)
     rust_lib_name = _determine_lib_name(
