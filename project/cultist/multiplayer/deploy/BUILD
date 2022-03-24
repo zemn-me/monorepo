@@ -9,26 +9,28 @@ ts_config(
 
 ts_project(
     name = "deploy",
-    tsconfig = ":tsconfig",
     srcs = glob(["*.ts"]),
+    tsconfig = ":tsconfig",
     deps = [
         "@npm//@pulumi/aws",
         "@npm//@pulumi/awsx",
         "@npm//@pulumi/pulumi",
+        "@npm//@types/mime",
         "@npm//@types/node",
         "@npm//mime",
-        "@npm//@types/mime"
-    ]
+    ],
 )
 
 pulumi(
     name = "pulumi",
-    config_files = [ ":deploy_js", "Pulumi.yaml" ],
-    data = [ "//project/cultist/multiplayer:multiplayer_prod_bundle" ],
-    stacks = [ "Pulumi.prod.yaml" ],
+    config_files = [
+        ":deploy_js",
+        "Pulumi.yaml",
+    ],
+    data = ["//project/cultist/multiplayer:multiplayer_prod_bundle"],
     env = {
-        "DIR_ROOT": "$$(rlocation quickcult/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))"
+        "DIR_ROOT": "$$(rlocation quickcult/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))",
     },
-    visibility = [ "//:__subpackages__" ]
+    stacks = ["Pulumi.prod.yaml"],
+    visibility = ["//:__subpackages__"],
 )
-

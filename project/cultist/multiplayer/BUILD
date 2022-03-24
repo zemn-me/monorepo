@@ -6,11 +6,11 @@ ts_project(
     srcs = [
         "index.tsx",
     ],
-    resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     project_deps = [
         "//project/cultist/multiplayer/pages:pages",
     ],
+    resolve_json_module = True,
+    tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",
         "@npm//@types/react-dom",
@@ -21,8 +21,8 @@ ts_project(
 
 web_app(
     name = "multiplayer",
-    entry_points = [ "//project/cultist/multiplayer:index.tsx" ],
-    project_esbuild_deps = [ ":index" ],
-    deps = [ ":index.html" ],
-    visibility = [ "//project/cultist/multiplayer:__subpackages__" ]
+    entry_points = ["//project/cultist/multiplayer:index.tsx"],
+    project_esbuild_deps = [":index"],
+    visibility = ["//project/cultist/multiplayer:__subpackages__"],
+    deps = [":index.html"],
 )

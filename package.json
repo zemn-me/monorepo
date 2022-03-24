@@ -52,10 +52,7 @@
 	"scripts": {
 		"build": "yarn bazel build //...",
 		"test": "yarn bazel run //tools/bazel:affected_files",
-		"fix-bazel": "yarn bazel run //:buildifier -- -- --lint=fix",
-		"fix-go": "yarn run bazel run @go_sdk//:bin/gofmt -- -- -s -w .",
-		"fix-js": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json'",
-		"fix": "yarn run fix-go ; yarn run fix-js ; yarn run fix-bazel"
+		"fix": "yarn run bazel run //:fix"
 	},
 	"dependencies": {
 		"@bazel/labs": "^4.5.0",

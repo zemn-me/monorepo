@@ -17,6 +17,11 @@ buildifier(
     name = "buildifier",
 )
 
+alias(
+    name = "fix",
+    actual = "//tools/bazel:fix",
+)
+
 load("//:rules.bzl", "ts_config")
 
 ts_config(
@@ -38,7 +43,7 @@ ts_config(
 
 js_library(
     name = "base_defs",
-    srcs = ["Global.d.ts"]
+    srcs = ["Global.d.ts"],
 )
 
 ts_project(
@@ -57,7 +62,7 @@ exports_files(
         ".gitignore",
         ".editorconfig",
         ".eslintrc.json",
-        "css_loader.d.ts"
+        "css_loader.d.ts",
     ],
     visibility = ["//visibility:public"],
 )
@@ -66,6 +71,6 @@ esbuild_config(
     name = "esbuild_config",
     config_file = "esbuild.config.mjs",
     deps = [
-        "@npm//esbuild-css-modules-plugin"
-    ]
+        "@npm//esbuild-css-modules-plugin",
+    ],
 )

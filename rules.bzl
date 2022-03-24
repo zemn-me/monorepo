@@ -44,7 +44,7 @@ def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module =
             skip_css_defs = False
 
     if not skip_css_defs:
-        deps = deps + [ "//:base_defs" ]
+        deps = deps + ["//:base_defs"]
 
     js_library(
         name = name + "_sources",
@@ -111,9 +111,11 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
     )
 
     ts_lint(name = name + "_lint", data = [
-        x for x in srcs if x not in ignores_lint and 
-        ( x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx" )
-        ], tags = tags)
+        x
+        for x in srcs
+        if x not in ignores_lint and
+           (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
+    ], tags = tags)
 
 def json_project(name, src, **kwargs):
     native.genrule(
@@ -145,7 +147,7 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "@npm//@typescript-eslint/parser",
             "@npm//@typescript-eslint/eslint-plugin",
             "@npm//eslint-config-prettier",
-            "@npm//eslint-plugin-react"
+            "@npm//eslint-plugin-react",
         ],
         args = args + ["--ignore-path", "$(location //:.gitignore)"] +
                ["$(location " + x + ")" for x in data],
