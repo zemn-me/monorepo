@@ -121,7 +121,6 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 # gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")
 gazelle_dependencies()
 
-
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
@@ -129,4 +128,3 @@ protobuf_deps()
 load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
 
 esbuild_repositories()
-

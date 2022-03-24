@@ -1,13 +1,13 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
 
-def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], deps =[ "//ts/react/server:index.html" ] , visibility = [], **kwargs):
+def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
     if len(project_esbuild_deps) > 0:
-        esbuild_deps = esbuild_deps + [ x + "_sources" for x in project_esbuild_deps ]
+        esbuild_deps = esbuild_deps + [x + "_sources" for x in project_esbuild_deps]
 
     native.filegroup(
         name = name + "_deps",
-        srcs = deps
+        srcs = deps,
     )
 
     esbuild(
@@ -21,9 +21,9 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], de
         sources_content = True,
         deps = esbuild_deps,
         visibility = visibility,
-        metafile = False
+        metafile = False,
     )
-    
+
     esbuild(
         metafile = False,
         sources_content = True,
@@ -34,49 +34,49 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], de
         splitting = True,
         visibility = visibility,
         target = "chrome58",
-        deps = esbuild_deps
+        deps = esbuild_deps,
     )
 
     native.genrule(
         name = name + "_dev_bundle",
-        srcs = [ ":" + name + "_dev_build", ":" + name + "_deps" ],
-        outs = [ "root_dev" ],
+        srcs = [":" + name + "_dev_build", ":" + name + "_deps"],
+        outs = ["root_dev"],
         visibility = visibility,
-        cmd = "mkdir $@; cp $(location :"+name+"_dev_build)/* $@;"+
-            "cp $(rootpaths :"+name+"_deps) $@"
+        cmd = "mkdir $@; cp $(location :" + name + "_dev_build)/* $@;" +
+              "cp $(rootpaths :" + name + "_deps) $@",
     )
 
     native.genrule(
         name = name + "_prod_bundle",
-        srcs = [ ":" + name + "_prod_build", ":" + name + "_deps" ],
-        outs = [ "root_prod" ],
+        srcs = [":" + name + "_prod_build", ":" + name + "_deps"],
+        outs = ["root_prod"],
         visibility = visibility,
-        cmd = "mkdir $@; cp $(location :"+name+"_prod_build)/* $@;"+
-            "cp $(rootpaths :"+name+"_deps) $@"
+        cmd = "mkdir $@; cp $(location :" + name + "_prod_build)/* $@;" +
+              "cp $(rootpaths :" + name + "_deps) $@",
     )
 
     native.alias(
         name = name,
         visibility = visibility,
-        actual = ":" + name + "_prod_bundle"
+        actual = ":" + name + "_prod_bundle",
     )
-    
+
     native.alias(
         name = name + "_dev",
         visibility = visibility,
-        actual = ":" + name + "_dev_bundle"
+        actual = ":" + name + "_dev_bundle",
     )
 
     http_server(
         name = name + "_run",
-        data = [ ":"+name + "_dev_bundle" ],
+        data = [":" + name + "_dev_bundle"],
         visibility = visibility,
-        args = [ "--proxy", "http://localhost:8080?", "$(location :" + name + "_dev_bundle)" ]
+        args = ["--proxy", "http://localhost:8080?", "$(location :" + name + "_dev_bundle)"],
     )
 
     http_server(
         name = name + "_prod_run",
-        data = [ ":"+name + "_prod_bundle" ],
+        data = [":" + name + "_prod_bundle"],
         visibility = visibility,
-        args = [ "--proxy", "http://localhost:8080?", "$(location :" + name + "_prod_bundle)" ]
+        args = ["--proxy", "http://localhost:8080?", "$(location :" + name + "_prod_bundle)"],
     )

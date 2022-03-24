@@ -9,14 +9,13 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
   { echo>&2 "ERROR: cannot find $f"; exit 1; }; f=; set -e
 # --- end runfiles.bash initialization v2 ---
 
-echo $FIX_JS $FIX_GO $FIX_BAZEL
 
-
+FIX_BAZEL=$(realpath $(rlocation quickcult/buildifier.bash))
 FIX_GO=$(realpath $(rlocation go_sdk/bin/gofmt))
 FIX_JS=$(realpath $(rlocation npm/eslint/bin/eslint.sh))
 
 
-FIX_BAZEL --lint=fix
-cd $INIT_CWD
+(cd $INIT_CWD
 $FIX_GO -s -w .
-$FIX_JS --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json'
+$FIX_JS --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json') || true # ignore failures. it fails often
+$FIX_BAZEL --lint=fix -r $INIT_CWD

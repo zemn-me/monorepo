@@ -2,16 +2,19 @@ load("//:rules.bzl", "ts_project")
 
 ts_project(
     name = "NavBar",
-    srcs = glob(["*.ts", "*.tsx", "*.css"]),
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+        "*.css",
+    ]),
     project_deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo"
+        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
     ],
+    visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "@npm//@types/react",
         "@npm//react",
-        "@npm//react-router-dom",
         "@npm//react-dom",
+        "@npm//react-router-dom",
     ],
-    visibility = [ "//project/zemn.me:__subpackages__" ]
 )
-

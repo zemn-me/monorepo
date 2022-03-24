@@ -1,2 +1,1 @@
-exports_files([ "index.html" ])
-
+exports_files(["index.html"])

@@ -11,7 +11,7 @@ ts_project(
         "//project/cultist/example:example",
         "//project/cultist/react:react",
         "//project/cultist/state:state",
-        "//project/cultist:save"
+        "//project/cultist:save",
     ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",

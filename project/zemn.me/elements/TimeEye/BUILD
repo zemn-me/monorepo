@@ -7,7 +7,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-        "*.css"
+        "*.css",
     ]),
     tsconfig = "//:tsconfig_jsx",
     deps = [
@@ -16,4 +16,3 @@ ts_project(
         "@npm//react",
     ],
 )
-

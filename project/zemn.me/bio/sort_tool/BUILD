@@ -17,5 +17,5 @@ ts_project(
 
 nodejs_binary(
     name = "exec",
-    entry_point = "sort_tool.js"
+    entry_point = "sort_tool.js",
 )

@@ -9,13 +9,13 @@ ts_project(
         "*.tsx",
     ]),
     project_deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo"
+        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
     ],
+    tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",
         "@npm//react",
-        "@npm//react-router-dom",
         "@npm//react-dom",
+        "@npm//react-router-dom",
     ],
-    tsconfig = "//:tsconfig_jsx",
 )
