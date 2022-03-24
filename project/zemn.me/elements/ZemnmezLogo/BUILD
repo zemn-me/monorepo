@@ -13,5 +13,6 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
+        "@npm//classnames",
     ],
 )
