@@ -1,12 +1,12 @@
-.timeEye * {
-	stroke: var(--foreground-color, black);
-	fill: none;
+.time-eye * {
+  stroke: var(--foreground-color, black);
+  fill: none;
 }
 
-.timeEye [data-part=pupil] {
-	fill: var(--foreground-color, black);
+.time-eye [data-part="pupil"] {
+  fill: var(--foreground-color, black);
 }
 
-.timeEye [data-part=tear] {
-	fill: var(--background-color, white);
+.time-eye [data-part="tear"] {
+  fill: var(--background-color, white);
 }

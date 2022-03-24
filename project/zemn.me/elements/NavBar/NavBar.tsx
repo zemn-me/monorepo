@@ -28,7 +28,7 @@ export const NavBar: React.FC<
 		HTMLDivElement
 	>
 > = ({ className, children, ...props }) => (
-	<div className={classes(className, style.navbar)} {...props}>
+	<div className={classes(className, style.navBar)} {...props}>
 		<Link to="/" className={style.logo}>
 			<ZemnmezLogo className={style.logoInner} />
 		</Link>

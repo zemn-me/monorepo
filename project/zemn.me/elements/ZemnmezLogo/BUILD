@@ -10,9 +10,9 @@ ts_project(
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "@npm//@types/react",
+        "@npm//classnames",
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-        "@npm//classnames",
     ],
 )

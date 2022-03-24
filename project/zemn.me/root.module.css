@@ -1,21 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&display=swap");
 
-:global(:root), .force-light {
-    font-family: "Lora", serif;
-    --foreground-color: black;
-    --background-color: white;
-    background-color: white;
+:global(body) {
+  margin: 0;
+  color: var(--foreground-color);
+}
+
+:global(:root),
+.force-light {
+  font-family: Lora, serif;
+
+  --foreground-color: black;
+  --background-color: white;
+
+  background-color: white;
 }
 
 @media (prefers-color-scheme: dark) {
-    :global(:root), .force-dark {
-        --foreground-color: white;
-        --background-color: black;
-        background-color: black;
-    }
-}
+  :global(:root),
+  .force-dark {
+    --foreground-color: white;
+    --background-color: black;
 
-:global(body) {
-    margin: 0;
-    color: var(--foreground-color);
+    background-color: black;
+  }
 }

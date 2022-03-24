@@ -8,10 +8,12 @@ sh_binary(
     srcs = ["fix.sh"],
     data = [
         "//:buildifier",
+        "//css/lint",
         "@go_sdk//:bin/gofmt",
         "@npm//eslint/bin:eslint",
     ],
     env = {
+        "FIX_CSS": "$(rootpath //css/lint)",
         "FIX_BAZEL": "$(rootpath //:buildifier)",
         "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
         "FIX_JS": "$(rootpath @npm//eslint/bin:eslint)",
