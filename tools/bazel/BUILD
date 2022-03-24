@@ -10,11 +10,15 @@ sh_binary(
         "//:buildifier",
         "@go_sdk//:bin/gofmt",
         "@npm//eslint/bin:eslint"
+
+    ],
+    deps = [
+"@bazel_tools//tools/bash/runfiles"
     ],
     env = {
         "FIX_BAZEL": "$(execpath //:buildifier)",
-        "FIX_GO": "$(execpath @go_sdk//:bin/gofmt)",
-        "FIX_JS": "$(execpath @npm//eslint/bin:eslint)"
+        "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
+        "FIX_JS": "$(rootpath @npm//eslint/bin:eslint)"
     },
     srcs = [ "fix.sh" ]
 )

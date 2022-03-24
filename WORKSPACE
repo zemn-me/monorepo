@@ -44,11 +44,13 @@ pip_install(
     requirements = "//:py_requirements.txt",
 )
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies")
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.16")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains")
+
+go_register_toolchains(version = "1.17.2")
 
 load(
     "@io_bazel_rules_docker//toolchains/docker:toolchain.bzl",
@@ -98,10 +100,6 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
-
 load("@rules_typescript_proto//:index.bzl", "rules_typescript_proto_dependencies")
 
 rules_typescript_proto_dependencies()
@@ -123,6 +121,7 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 # gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")
 gazelle_dependencies()
 
+
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
@@ -130,3 +129,4 @@ protobuf_deps()
 load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
 
 esbuild_repositories()
+
