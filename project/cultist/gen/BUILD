@@ -28,15 +28,14 @@ json_project(
     src = "core_en.json",
 )
 
+
 genrule(
     name = "gen_core",
-    srcs = ["//project/cultist/gen/cultist_data:steam_gen_cultist_out.zip"],
+    srcs = ["@cultistsimulator//:core"],
     outs = ["core_en.json"],
-    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //project/cultist/gen/cultist_data:steam_gen_cultist_out.zip) -d $(location :core_en.json)_gamedir_tmp &&" +
-          "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //project/cultist/gen:collate_game_core) > $@",
+    cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
     exec_tools = [":collate_game_core"],
-    message = "generating collated game data",
-    tools = ["@bazel_tools//tools/zip:zipper"],
+    message = "generating collated game data"
 )
 
 proto_library(
