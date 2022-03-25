@@ -127,5 +127,5 @@ filegroup(
 )
 exports_files(glob(["**/*"], exclude_directories=0))
         """,
-    # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
+        # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )

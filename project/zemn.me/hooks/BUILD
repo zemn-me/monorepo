@@ -1,20 +1,17 @@
 load("//:rules.bzl", "ts_project")
 
 ts_project(
-    name = "NavBar",
+    name = "hooks",
     srcs = glob([
         "*.ts",
         "*.tsx",
         "*.css",
     ]),
     project_deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
-        "//project/zemn.me/hooks:hooks",
+        "//ts/iter:iter",
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "@npm//@fortawesome/free-solid-svg-icons",
-        "@npm//@fortawesome/react-fontawesome",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
 import Pages from 'project/zemn.me/pages';
-import NavBar from 'project/zemn.me/elements/NavBar';
+import NavBar, { Hamburger } from 'project/zemn.me/elements/NavBar';
 import TitlePage from 'project/zemn.me/elements/TitlePage';
 import DarkModeSwitcher from 'project/zemn.me/elements/DarkModeSwitcher';
 
@@ -13,7 +13,9 @@ export const Root: React.FC = () => {
 		<>
 			<BrowserRouter>
 				<NavBar>
-					<DarkModeSwitcher />
+					<Hamburger>
+						<DarkModeSwitcher />
+					</Hamburger>
 				</NavBar>
 				<TitlePage />
 				<Routes>{Pages}</Routes>

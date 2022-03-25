@@ -28,14 +28,13 @@ json_project(
     src = "core_en.json",
 )
 
-
 genrule(
     name = "gen_core",
     srcs = ["@cultistsimulator//:core"],
     outs = ["core_en.json"],
     cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
     exec_tools = [":collate_game_core"],
-    message = "generating collated game data"
+    message = "generating collated game data",
 )
 
 proto_library(

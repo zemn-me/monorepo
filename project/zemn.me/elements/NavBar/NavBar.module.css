@@ -6,6 +6,8 @@
     ". .... ..... ......... ." 0.5rem / 0.5rem auto 1fr auto auto;
   border-bottom: 0.2em solid whitesmoke;
   position: sticky;
+  top: 0;
+  background-color: var(--background-color);
 }
 
 .logo {
@@ -19,4 +21,18 @@
 
 .icons {
   grid-area: icons;
+}
+
+.hamburger {
+  background-color: var(--background-color);
+  height: 100vh;
+  z-index: 99;
+  position: fixed;
+  width: 10em;
+  right: - 10em;
+  transition: all 0.2s ease-in-out;
+}
+
+.hamburger-open {
+  right: 0;
 }

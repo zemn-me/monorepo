@@ -197,3 +197,14 @@ export function reduce<I, R>(
 
 	return previousValue;
 }
+
+/**
+ * Walks a chain of values using a selector.
+ */
+export function* walk<T>(i: T, select: (v: T) => T[]): Generator<T> {
+	const cursor: T | undefined = i;
+	yield cursor;
+	for (const next of select(cursor)) {
+		yield* walk(next, select);
+	}
+}
