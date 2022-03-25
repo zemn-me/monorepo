@@ -1,21 +1,22 @@
-.navbar {
-    display: grid;
-    grid:   ". .... ..... ......... ." .5rem
-            ". logo title icons ." 3rem
-            ". .... ..... ......... ." .5rem / .5rem auto 1fr auto auto;
-    border-bottom: .2em solid whitesmoke;
-    position: sticky;
+.nav-bar {
+  display: grid;
+  grid:
+    ". .... ..... ......... ." 0.5rem
+    ". logo title icons ." 3rem
+    ". .... ..... ......... ." 0.5rem / 0.5rem auto 1fr auto auto;
+  border-bottom: 0.2em solid whitesmoke;
+  position: sticky;
 }
 
 .logo {
-    grid-area: logo;
+  grid-area: logo;
 }
 
-.logoInner {
-    height:100%;
-    width: auto;
+.logo-inner {
+  height: 100%;
+  width: auto;
 }
 
 .icons {
-    grid-area: icons;
+  grid-area: icons;
 }

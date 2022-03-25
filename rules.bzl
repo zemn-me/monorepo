@@ -4,6 +4,7 @@ load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
+load("//css/lint:rules.bzl", "css_lint")
 
 def nodejs_binary(link_workspace_root = True, **kwargs):
     _nodejs_binary(link_workspace_root = link_workspace_root, **kwargs)
@@ -109,6 +110,18 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
         tsconfig = tsconfig,
         **kwargs
     )
+
+    css_sources = []
+
+    for source in srcs:
+        if source[-len(".css"):] == ".css":
+            css_sources += [source]
+
+    if len(css_sources) > 0:
+        css_lint(
+            name = name + "_css_lint",
+            srcs = css_sources,
+        )
 
     ts_lint(name = name + "_lint", data = [
         x
