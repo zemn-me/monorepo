@@ -19,6 +19,7 @@
 		"downlevelIteration": true,
 		"composite": true,
 		"incremental": true,
+		"lib": ["DOM", "ESNext"],
 		"sourceMap": true,
 		"inlineSources": true,
 		"paths": {
