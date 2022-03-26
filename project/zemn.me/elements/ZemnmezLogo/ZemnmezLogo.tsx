@@ -2,7 +2,11 @@ import React from 'react';
 import style from './ZemnmezLogo.module.css';
 import classes from 'classnames';
 
-export default ({ className, children, ...props }: React.SVGProps<SVGSVGElement>) => (
+export default ({
+	className,
+	children,
+	...props
+}: React.SVGProps<SVGSVGElement>) => (
 	<svg
 		className={classes(className, style.zemnmezLogo)}
 		width="446"

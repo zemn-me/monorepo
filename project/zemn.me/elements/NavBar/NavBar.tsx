@@ -28,11 +28,11 @@ export const Hamburger: React.FC<
 	const menuRef = React.useRef<HTMLDivElement>(null);
 
 	const [menuOpen, , onMouseOver, onMouseLeave, onToggleIconClick] =
-		useHoverMenu([ iconRef.current, menuRef.current ].filter(isNotNull));
-	
+		useHoverMenu([iconRef.current, menuRef.current].filter(isNotNull));
+
 	const springProps = useSpring({
-		to: { right: menuOpen?"0": "-100%"},
-		from: { right: "-100%" }
+		to: { right: menuOpen ? '0' : '-100%' },
+		from: { right: '-100%' },
 	});
 
 	return (
@@ -50,13 +50,9 @@ export const Hamburger: React.FC<
 				onMouseOver={onMouseOver}
 				onMouseLeave={onMouseLeave}
 				style={springProps}
-				className={classes(
-					className,
-					style.hamburger,
-				)}
+				className={classes(className, style.hamburger)}
 				{...props}
 			/>
-
 		</>
 	);
 };
@@ -69,7 +65,7 @@ export const NavBar: React.FC<
 > = ({ className, children, ...props }) => (
 	<div className={classes(className, style.navBar)} {...props}>
 		<Link to="/" className={style.logo}>
-			<ZemnmezLogo className={style.logoInner} >
+			<ZemnmezLogo className={style.logoInner}>
 				<title>Home</title>
 			</ZemnmezLogo>
 		</Link>
