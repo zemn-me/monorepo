@@ -16,7 +16,7 @@ FIX_GO=$(realpath $(rlocation go_sdk/bin/gofmt))
 FIX_JS=$(realpath $(rlocation npm/eslint/bin/eslint.sh))
 
 
-(cd $INIT_CWD
+(cd $BUILD_WORKSPACE_DIRECTORY
 git ls-files --cached --modified --other --exclude-standard | uniq | grep .css$ | xargs $FIX_CSS --ignore-path .gitignore --fix
 $FIX_GO -s -w .
 $FIX_JS --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json') || true # ignore failures. it fails often
