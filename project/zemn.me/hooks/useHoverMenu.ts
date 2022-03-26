@@ -10,7 +10,7 @@ import React from 'react';
  * - On pointer devices, hovering over either the button or the menu causes it to open
  *   and stay open until hovering stops.
  */
-export const useHoverMenu = (menuRef: Node | null) => {
+export const useHoverMenu = (menuRef: Node[] | null) => {
 	const [menuOpen, setMenuOpen] = React.useState(false);
 
 	const onClickedOffHandler = React.useCallback(() => {

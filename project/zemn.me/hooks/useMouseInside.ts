@@ -6,7 +6,7 @@ import React from 'react';
  * boundaries.
  */
 export const useMouseInside = ({
-	gracePeriodOff = 500,
+	gracePeriodOff = 100,
 	gracePeriodOn = 0,
 }: {
 	gracePeriodOn?: number;

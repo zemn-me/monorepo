@@ -21,6 +21,7 @@
 
 .icons {
   grid-area: icons;
+  margin: auto;
 }
 
 .hamburger {
@@ -28,11 +29,5 @@
   height: 100vh;
   z-index: 99;
   position: fixed;
-  width: 10em;
-  right: - 10em;
-  transition: all 0.2s ease-in-out;
-}
-
-.hamburger-open {
-  right: 0;
+  width: 25vw;
 }

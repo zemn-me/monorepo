@@ -10,6 +10,7 @@ ts_project(
     project_deps = [
         "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
         "//project/zemn.me/hooks:hooks",
+        "//ts:ts",
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
@@ -19,5 +20,6 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
+        "@npm//react-spring"
     ],
 )
