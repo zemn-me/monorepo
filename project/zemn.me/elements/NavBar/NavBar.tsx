@@ -6,6 +6,8 @@ import React from 'react';
 import style from './NavBar.module.css';
 import classes from 'classnames';
 import { Link } from 'react-router-dom';
+import { useSpring, animated } from 'react-spring';
+import { isNotNull } from 'ts/guard';
 
 export const NavBarIcons: React.FC<
 	React.DetailedHTMLProps<
@@ -23,9 +25,15 @@ export const Hamburger: React.FC<
 	>
 > = ({ className, ...props }) => {
 	const iconRef = React.useRef<HTMLDivElement>(null);
+	const menuRef = React.useRef<HTMLDivElement>(null);
 
 	const [menuOpen, , onMouseOver, onMouseLeave, onToggleIconClick] =
-		useHoverMenu(iconRef.current);
+		useHoverMenu([iconRef.current, menuRef.current].filter(isNotNull));
+
+	const springProps = useSpring({
+		to: { right: menuOpen ? '0' : '-100%' },
+		from: { right: '-100%' },
+	});
 
 	return (
 		<>
@@ -37,14 +45,12 @@ export const Hamburger: React.FC<
 			>
 				<FontAwesomeIcon icon={faBars} />
 			</div>
-			<div
+			<animated.div
+				ref={menuRef as any}
 				onMouseOver={onMouseOver}
 				onMouseLeave={onMouseLeave}
-				className={classes(
-					className,
-					style.hamburger,
-					menuOpen ? style.hamburgerOpen : undefined
-				)}
+				style={springProps}
+				className={classes(className, style.hamburger)}
 				{...props}
 			/>
 		</>
@@ -59,7 +65,9 @@ export const NavBar: React.FC<
 > = ({ className, children, ...props }) => (
 	<div className={classes(className, style.navBar)} {...props}>
 		<Link to="/" className={style.logo}>
-			<ZemnmezLogo className={style.logoInner} />
+			<ZemnmezLogo className={style.logoInner}>
+				<title>Home</title>
+			</ZemnmezLogo>
 		</Link>
 
 		<div className={style.icons}>{children}</div>

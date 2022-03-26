@@ -9,12 +9,12 @@ import React from 'react';
  * checks from happening.
  */
 export const useClickedOff = (
-	node?: Node | null,
+	nodes?: Node[] | null,
 	onClickedOff?: ((ev: MouseEvent) => void) | null
 ) => {
 	const windowClickEvent = React.useCallback(
 		(ev: MouseEvent) => {
-			if (!onClickedOff || !node) return;
+			if (!onClickedOff || !nodes || nodes.length === 0) return;
 
 			// if our node is in the bubble chain, ignore
 			// the event.
@@ -25,7 +25,7 @@ export const useClickedOff = (
 							return [];
 						return [v.parentNode];
 					}),
-					e => e === node
+					e => nodes.some(nd => nd === e)
 				)
 			)
 				return;
@@ -33,7 +33,7 @@ export const useClickedOff = (
 			// otherwise, execute the callback
 			onClickedOff(ev);
 		},
-		[onClickedOff, node]
+		[onClickedOff, nodes]
 	);
 
 	React.useEffect(() => {
