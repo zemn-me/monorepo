@@ -1,11 +1,10 @@
-import { Bio, Event as BioEvent } from '@zemn.me/bio';
-import { useRouter } from 'next/router';
+import { Bio, Event as BioEvent } from 'project/zemn.me/bio';
 import * as e from 'linear2/features/elements';
 import * as model from 'linear2/model';
 import React from 'react';
 import style from './style.module.css';
 import classes from 'classnames';
-import baseStyle from '../base.module.sass';
+import baseStyle from 'project/linear2/features/elements/baseStyle.module.sass';
 
 const setFallback: <T1, T2>(k: T1, v: () => T2, m: Map<T1, T2>) => T2 = (
 	k,
@@ -258,37 +257,10 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 	indicateCurrent,
 }) => {
 	const ref = React.useRef<HTMLAnchorElement | null>(null);
-	const router = useRouter();
-	const concernsCurrent =
-		indicateCurrent &&
-		url &&
-		url.hostname == 'zemn.me' &&
-		url.pathname == router.asPath;
-
-	console.log(url?.pathname, router.asPath);
-
-	// this just prevents the warning where it gets run on the server
-	// we dont really give a shit since we dont modify the dom nodes
-	// anyway
-	if (typeof window !== 'undefined')
-		React.useLayoutEffect(() => {
-			if (!concernsCurrent) return;
-
-			ref?.current?.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center',
-				inline: 'center',
-			});
-		}, []);
 
 	return (
 		<a
-			className={classes(
-				style.Event,
-				concernsCurrent ? style.concernsCurrent : undefined,
-				indicateCurrent ? style.indicateCurrent : undefined
-			)}
-			ref={ref}
+			className={classes( style.Event)} ref={ref}
 		>
 			<a className={style.Tags}>
 				{tags?.map(tag => (
@@ -312,9 +284,6 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 						</span>
 					</e.Void>
 				</e.WithText>
-			) : null}
-			{concernsCurrent ? (
-				<e.Arrow className={style.concernsArrow} />
 			) : null}
 		</a>
 	);
