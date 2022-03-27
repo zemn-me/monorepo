@@ -11,7 +11,7 @@ The only prerequisite is `yarn`:
 yarn
 ```
 
-Once yarn is installed, it will pull in `bazel`. There is also `ibazel`, which is the same, but automatically re-runs itself when code is updated.
+Once yarn is installed, it will pull in `bazel`. There is also `ibazel`, which is the same, but automatically re-runs itself when code is updated. Don't get it confused though! This is a polyglot repo that just happens to be bootstrapped by Node.
 
 To list all the available build targets:
 
