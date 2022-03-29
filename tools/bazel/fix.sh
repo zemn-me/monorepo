@@ -10,8 +10,8 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # --- end runfiles.bash initialization v2 ---
 
 
-FIX_BAZEL=$(realpath $(rlocation quickcult/buildifier.bash))
-FIX_CSS=$(realpath $(rlocation quickcult/css/lint/lint.sh))
+FIX_BAZEL=$(realpath $(rlocation monorepo/buildifier.bash))
+FIX_CSS=$(realpath $(rlocation monorepo/css/lint/lint.sh))
 FIX_GO=$(realpath $(rlocation go_sdk/bin/gofmt))
 FIX_JS=$(realpath $(rlocation npm/eslint/bin/eslint.sh))
 

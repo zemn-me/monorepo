@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zemnmez/quickcult/go/flag/flagutil"
+	"github.com/zemnmez/monorepo/go/flag/flagutil"
 )
 
 var output flagutil.FileFlag

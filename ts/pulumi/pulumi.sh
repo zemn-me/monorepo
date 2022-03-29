@@ -29,7 +29,7 @@ longest_common_prefix()
 }
 
 echo $ENTRY_POINTS
-LOCS=$(for x in $ENTRY_POINTS; do rlocation quickcult/$x; done)
+LOCS=$(for x in $ENTRY_POINTS; do rlocation monorepo/$x; done)
 
 echo LOCS $LOCS
 

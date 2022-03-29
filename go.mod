@@ -1,3 +1,3 @@
-module github.com/zemnmez/quickcult
+module github.com/zemnmez/monorepo
 
 go 1.16
