@@ -29,7 +29,7 @@ pulumi(
     ],
     data = ["//project/cultist/multiplayer:multiplayer_prod_bundle"],
     env = {
-        "DIR_ROOT": "$$(rlocation quickcult/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))",
+        "DIR_ROOT": "$$(rlocation monorepo/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))",
     },
     stacks = ["Pulumi.prod.yaml"],
     visibility = ["//:__subpackages__"],

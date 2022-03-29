@@ -10,7 +10,7 @@ bind(
 # See https://docs.bazel.build/versions/master/build-ref.html#workspace
 workspace(
     # How this workspace would be referenced with absolute labels from another workspace
-    name = "quickcult",
+    name = "monorepo",
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {"@npm": ["node_modules"]},
