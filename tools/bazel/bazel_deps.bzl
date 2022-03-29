@@ -75,7 +75,7 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "rules_pkg_new", # Due to apparent conflict otherwise?
+        name = "rules_pkg",
         urls = [
             "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.6.0/rules_pkg-0.6.0.tar.gz",
             "https://github.com/bazelbuild/rules_pkg/releases/download/0.6.0/rules_pkg-0.6.0.tar.gz",

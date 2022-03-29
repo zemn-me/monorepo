@@ -1,4 +1,4 @@
-load("@rules_pkg_new//pkg:pkg.bzl", "pkg_zip")
+load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 
 
 filegroup(

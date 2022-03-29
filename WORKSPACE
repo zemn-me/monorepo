@@ -20,7 +20,7 @@ load("//tools/bazel:bazel_deps.bzl", "fetch_dependencies")
 
 fetch_dependencies()
 
-load("@rules_pkg_new//:deps.bzl", "rules_pkg_dependencies")
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
 
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
