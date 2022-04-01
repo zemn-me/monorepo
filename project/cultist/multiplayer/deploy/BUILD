@@ -19,18 +19,10 @@ ts_project(
         "@npm//@types/node",
         "@npm//mime",
     ],
-)
-
-pulumi(
-    name = "pulumi",
-    config_files = [
-        ":deploy_js",
-        "Pulumi.yaml",
+    data = [
+        "//project/cultist/multiplayer:multiplayer_prod_bundle"
     ],
-    data = ["//project/cultist/multiplayer:multiplayer_prod_bundle"],
-    env = {
-        "DIR_ROOT": "$$(rlocation monorepo/$(rootpath //project/cultist/multiplayer:multiplayer_prod_bundle))",
-    },
-    stacks = ["Pulumi.prod.yaml"],
-    visibility = ["//:__subpackages__"],
+    visibility = [
+        "//:__subpackages__"
+    ]
 )

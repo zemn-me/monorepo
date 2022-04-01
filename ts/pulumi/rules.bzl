@@ -1,7 +1,7 @@
 def pulumi_exec(name, config_files = [], data = [], args = [], env = {}, **kwargs):
     myEnv = {
         "PULUMI_BIN": "$(location @pulumi_cli//:pulumi/pulumi)",
-        "ENTRY_POINTS": " ".join(["$(rootpath " + x + ")" for x in config_files]),
+        "ENTRY_POINTS": " ".join(["$(rootpaths " + x + ")" for x in config_files]),
         "ARGS": " ".join(args),
     }
     myEnv.update(env)
@@ -30,8 +30,16 @@ def pulumi_exec(name, config_files = [], data = [], args = [], env = {}, **kwarg
 
 def pulumi_stack(name, stack_file, stack_name, config_files = [], data = [], args = [], **kwargs):
     pulumi_exec(
-        name = name,
+        name = name + "_interactive",
         args = args + ["-s", stack_name],
+        data = data,
+        config_files = config_files + [stack_file],
+        **kwargs
+    )
+
+    pulumi_exec(
+        name = name,
+        args = args + ["--non-interactive", "-s", stack_name],
         data = data,
         config_files = config_files + [stack_file],
         **kwargs

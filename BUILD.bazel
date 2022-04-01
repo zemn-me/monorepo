@@ -10,8 +10,21 @@ load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//:rules.bzl", "ts_project")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
+load("//ts/pulumi:rules.bzl", "pulumi")
 
 package(default_visibility = [":__subpackages__"])
+
+pulumi(
+    name = "pulumi",
+    stacks = [
+        "Pulumi.prod.yaml",
+    ],
+    config_files = [
+        "//project/cultist/multiplayer/deploy:deploy_sources",
+        "//dns/me/zemn:zemn_sources",
+        "Pulumi.yaml"
+    ]
+)
 
 buildifier(
     name = "buildifier",

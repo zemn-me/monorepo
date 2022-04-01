@@ -1,0 +1,234 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "zemn.me.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z2FDTNDATAQYW2",
+                "DNSName": "drunly91pq6ht.cloudfront.net.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "zemn.me.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "1\tASPMX.L.GOOGLE.COM."
+                },
+                {
+                    "Value": "5\tALT1.ASPMX.L.GOOGLE.COM."
+                },
+                {
+                    "Value": "5\tALT2.ASPMX.L.GOOGLE.COM."
+                },
+                {
+                    "Value": "10\tALT3.ASPMX.L.GOOGLE.COM."
+                },
+                {
+                    "Value": "10\tALT4.ASPMX.L.GOOGLE.COM."
+                }
+            ]
+        },
+        {
+            "Name": "zemn.me.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1701.awsdns-20.co.uk."
+                },
+                {
+                    "Value": "ns-1526.awsdns-62.org."
+                },
+                {
+                    "Value": "ns-816.awsdns-38.net."
+                },
+                {
+                    "Value": "ns-454.awsdns-56.com."
+                }
+            ]
+        },
+        {
+            "Name": "zemn.me.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1701.awsdns-20.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        },
+        {
+            "Name": "zemn.me.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "\"google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY\""
+                }
+            ]
+        },
+        {
+            "Name": "-c.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "oh.no.ms.s3-website-eu-west-1.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "-u-s.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "d1ua4b2nda04z0.cloudfront.net"
+                }
+            ]
+        },
+        {
+            "Name": "-us.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 60,
+            "ResourceRecords": [
+                {
+                    "Value": "d1ua4b2nda04z0.cloudfront.net"
+                }
+            ]
+        },
+        {
+            "Name": "_1e1315b40529c958c61caf9bd59cf6a6.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_bf17f6c0441e1762c3e860b1ec556505.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.zemn.me.",
+            "Type": "TXT",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "\"EbrZ2q0lyQig9bSS2szTwX2+tPD9HnA5fRUb/Vbp8SM=\""
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.zemn.me.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "\"v=DMARC1;p=quarantine;pct=100;fo=1\""
+                }
+            ]
+        },
+        {
+            "Name": "bz65c22xj5boqoqafr2ymkaywu4csblo._domainkey.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "bz65c22xj5boqoqafr2ymkaywu4csblo.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "mcuj4h7n4a735dhce7dcroutuzxjqeiq._domainkey.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "mcuj4h7n4a735dhce7dcroutuzxjqeiq.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "slbut7xvtzx7ir3yrmzin4kchiwh3rrw._domainkey.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "slbut7xvtzx7ir3yrmzin4kchiwh3rrw.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.mail.us-east-1.awsapps.com."
+                }
+            ]
+        },
+        {
+            "Name": "dev.zemn.me.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "18.132.200.187"
+                }
+            ]
+        },
+        {
+            "Name": "factorio.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ec2-52-91-122-41.compute-1.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "game.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ec2-18-204-18-75.compute-1.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "real.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "real-zemn-me.crabdance.com."
+                }
+            ]
+        },
+        {
+            "Name": "s.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "drunly91pq6ht.cloudfront.net"
+                }
+            ]
+        },
+        {
+            "Name": "_174de438dbcfe3bd9be5a39c1b524a3d.s.zemn.me.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_03ac179ca1959340cd16adc6f95ad489.ltfvzjuylp.acm-validations.aws."
+                }
+            ]
+        }
+    ]
+}

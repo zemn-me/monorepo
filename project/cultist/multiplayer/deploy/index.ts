@@ -27,11 +27,9 @@ const bucket = new aws.s3.Bucket('cultist-simulator-multiplayer', {
 	},
 });
 
-const dirRoot = process.env['DIR_ROOT'];
 
-if (!dirRoot) throw new Error(`Please specify DIR_ROOT`);
+const dirRoot = 'project/cultist/multiplayer/dist';
 
-// hack to deal with pulumi's working directory...
 for (const file of fs.readdirSync(dirRoot)) {
 	const absPath = path.join(dirRoot, file);
 	new aws.s3.BucketObject(file, {
