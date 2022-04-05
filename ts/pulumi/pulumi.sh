@@ -5,7 +5,6 @@ LOCS=$(for x in $ENTRY_POINTS; do rlocation monorepo/$(echo $x | sed -e "s/^\.\/
 
 
 
-set -o xtrace
 
 PULUMI_CLI=$(rlocation pulumi cli/pulumi/pulumi)
 

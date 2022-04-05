@@ -14,18 +14,6 @@ load("//ts/pulumi:rules.bzl", "pulumi")
 
 package(default_visibility = [":__subpackages__"])
 
-pulumi(
-    name = "pulumi",
-    stacks = [
-        "Pulumi.prod.yaml",
-    ],
-    config_files = [
-        "//project/cultist/multiplayer/deploy:deploy_sources",
-        "//dns/me/zemn:zemn_sources",
-        "Pulumi.yaml"
-    ]
-)
-
 buildifier(
     name = "buildifier",
 )
@@ -87,3 +75,5 @@ esbuild_config(
         "@npm//esbuild-css-modules-plugin",
     ],
 )
+
+exports_files(["Pulumi.yaml", "Pulumi.prod.yaml"])
