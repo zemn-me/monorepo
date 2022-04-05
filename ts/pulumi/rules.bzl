@@ -1,3 +1,4 @@
+
 def pulumi_exec(name, config_files = [], data = [], args = [], env = {}, **kwargs):
     myEnv = {
         "PULUMI_BIN": "$(location @pulumi_cli//:pulumi/pulumi)",
@@ -47,7 +48,7 @@ def pulumi_stack(name, stack_file, stack_name, config_files = [], data = [], arg
 
 def pulumi(name, config_files = [], data = [], stacks = [], **kwargs):
     for stack in stacks:
-        stack_name = stack[len("Pulumi."):-len(".yaml")]
+        stack_name = Label(stack).name[len("Pulumi."):-len(".yaml")]
         pulumi_stack(
             name = name + "_" + stack_name,
             stack_file = stack,
