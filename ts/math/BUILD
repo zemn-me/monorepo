@@ -1,23 +1,18 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "math",
-    srcs = glob(["*.ts"]),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    deps = [
-        "@npm//@types/jest",
-    ],
+ts_sources(
+    name = "srcs",
+    srcs = glob(["*.ts"])
 )
 
-jest_test(
+ts_project(
+    name = "math",
+    srcs = [ ":srcs" ],
+)
+
+ts_test(
     name = "test",
-    srcs = [
-        "camera_test.js",
-        "math_test.js",
-    ],
-    project_deps = [":math"],
+    srcs = [ ":math" ]
 )

@@ -2,6 +2,11 @@ load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project 
 load("//js:rules.bzl", "js_library", "js_test")
 load("//lint:rules.bzl", "lint")
 
+ambient_deps = [ "@npm//@types/jest" ]
+
+def ts_config(**kwargs):
+    _ts_config(**kwargs)
+
 # maybe this should be called web_sources?
 def ts_sources(name = None, srcs = [], **kwargs):
     js_library(
@@ -15,20 +20,18 @@ def ts_sources(name = None, srcs = [], **kwargs):
         srcs = srcs
     )
 
-def ts_project(resolve_json_module = True, data = [], project_deps = [], deps = [], srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, preserve_jsx = None, root_dir = None, **kwargs):
+def ts_project(deps = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, **kwargs):
     _ts_project(
+        deps = deps + ambient_deps,
         composite = composite,
         declaration = declaration,
         tsconfig = tsconfig,
-        preserve_jsx = preserve_jsx,
         incremental = incremental,
-        resolve_json_module = resolve_json_module,
-        root_dir = root_dir,
         link_workspace_root = True,
         **kwargs
     )
 
 def ts_test(deps = [], **kwargs):
     js_test(
-        deps = deps +  [ "@npm//@types/jest" ]
+        deps = deps + ambient_deps,
         **kwargs)

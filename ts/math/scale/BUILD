@@ -1,29 +1,23 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_sources", "ts_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "scale",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    project_deps = ["//ts:ts"],
-    resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
+ts_sources(
+    name = "srcs",
+    srcs = glob(["*.ts"]),
     deps = [
-        "@npm//@types/jest",
         "@npm//@types/react",
         "@npm//react",
-    ],
+    ]
 )
 
-jest_test(
-    name = "tests",
-    srcs = ["scale_test.js"],
-    jsdom = True,
-    project_deps = [":scale"],
+ts_project(
+    name = "scale",
+    srcs = [ ":srcs" ],
 )
+
+ts_test(
+    name = "test",
+    srcs = [ ":scale" ]
+)
+
