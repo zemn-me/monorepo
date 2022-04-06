@@ -28,7 +28,7 @@ const bucket = new aws.s3.Bucket('cultist-simulator-multiplayer', {
 });
 
 
-const dirRoot = 'project/cultist/multiplayer/dist';
+const dirRoot = 'project/cultist/multiplayer/root_prod';
 
 for (const file of fs.readdirSync(dirRoot)) {
 	const absPath = path.join(dirRoot, file);

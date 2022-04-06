@@ -17,16 +17,8 @@ ts_project(
         "//dns/me/zemn:zemn",
         "//project/cultist/multiplayer/deploy:deploy"
     ],
-    srcs = glob(["*.ts"])
+    srcs = glob(["*.ts"]),
+    visibility = [ "//:__subpackages__" ]
 )
 
-pulumi(
-    name = "deploy",
-    stacks = [
-        "//:Pulumi.prod.yaml",
-    ],
-    config_files = [
-        "//:Pulumi.yaml",
-        ":deploy_ts_sources"
-    ]
-)
+

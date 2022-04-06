@@ -11,7 +11,7 @@ export const zemn_me = aws.route53.getZone({
 for (const recordSet of config.ResourceRecordSets) {
     const base = {
         zoneId: zemn_me.then(domain => domain.zoneId),
-        name: recordSet.Name,
+        name: recordSet.Name + "-" + recordSet.Type,
         type: recordSet.Type,
         ttl: recordSet.TTL
     };

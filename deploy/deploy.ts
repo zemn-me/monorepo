@@ -1,2 +1,2 @@
-import 'project/zemn.me/pulumi/dns';
-import 'project/cultist/multiplayer/deploy';
+import '../dns/me/zemn';
+import '../project/cultist/multiplayer/deploy';

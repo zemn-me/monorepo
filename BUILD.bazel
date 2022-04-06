@@ -77,3 +77,29 @@ esbuild_config(
 )
 
 exports_files(["Pulumi.yaml", "Pulumi.prod.yaml"])
+
+genrule(
+    name = "pulumi_base",
+    outs = [ "index.ts" ],
+    cmd_bash = """
+echo "import './deploy/deploy';" > $@
+    """
+)
+
+ts_project(
+    name = "pulumi_base_ts",
+    srcs = [ ":index.ts" ],
+    project_deps = [ "//deploy:deploy_ts" ]
+)
+
+pulumi(
+    name = "deploy",
+    stacks = [
+        "//:Pulumi.prod.yaml",
+    ],
+    config_files = [
+        "//:Pulumi.yaml",
+        ":pulumi_base_ts_sources",
+        ":tsconfig.json"
+    ]
+)
