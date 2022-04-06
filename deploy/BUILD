@@ -4,9 +4,9 @@ load("//ts/pulumi:rules.bzl", "pulumi")
 sh_binary(
     name = "deploy",
     srcs = ["deploy.sh"],
-    data = ["//project/cultist/multiplayer/deploy:pulumi_prod"],
+    data = ["//:deploy_prod"],
     env = {
-        "DEPLOY_BINARY": "$(location //project/cultist/multiplayer/deploy:deploy_prod)",
+        "DEPLOY_BINARY": "$(location //:deploy_prod)",
     },
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
