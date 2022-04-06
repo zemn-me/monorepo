@@ -6,10 +6,10 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("//:rules.bzl", "ts_project")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
+load("//ts:rules.bzl", "ts_sources", "ts_project")
+load("//js:rules.bzl", "js_library")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -46,14 +46,25 @@ js_library(
     srcs = ["Global.d.ts"],
 )
 
-ts_project(
-    name = "jest_config_node",
+
+ts_sources(
+    name = "jest_config_node_sources",
     srcs = ["jest.node.config.ts"],
 )
 
 ts_project(
-    name = "jest_config_browser",
+    name = "jest_config_node",
+    srcs = [ ":jest_config_node_sources" ]
+)
+
+ts_sources(
+    name = "jest_config_browser_sources",
     srcs = ["jest.browser.config.ts"],
+)
+
+ts_project(
+    name = "jest_config_browser",
+    srcs = [ ":jest_config_browser_sources" ]
 )
 
 exports_files(

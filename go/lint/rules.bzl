@@ -1,4 +1,4 @@
-def test_go_fmt(srcs = [], deps = [], **kwargs):
+def go_lint(srcs = [], deps = [], **kwargs):
     native.sh_test(
         env = {
             "GOFMT": "$(rootpath @go_sdk//:bin/gofmt)",
