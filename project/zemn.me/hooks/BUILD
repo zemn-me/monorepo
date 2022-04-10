@@ -7,14 +7,12 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//ts/iter:iter",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
+        "//ts/iter:iter",
     ],
 )

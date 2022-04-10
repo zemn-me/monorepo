@@ -7,11 +7,9 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//project/zemn.me/elements/SliderCheckbox:SliderCheckbox",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//project/zemn.me/elements/SliderCheckbox:SliderCheckbox",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",

@@ -2,9 +2,9 @@ load("@build_bazel_rules_nodejs//:index.bzl", _js_library = "js_library", nodejs
 load("//lint:rules.bzl", "lint")
 load("//tools/jest:jest.bzl", jest_test = "jest_test")
 
-def js_binary(name = None, srcs = [],**kwargs):
+def js_binary(name = None, **kwargs):
     nodejs_binary(
-        name = name, srcs = srcs,
+        name = name,
         link_workspace_root = True,
         **kwargs
     )

@@ -16,7 +16,6 @@ ts_project(
     srcs = ["import_test.ts"],
     deps = [
         ":a",
-        "@npm//@types/jest",
     ],
 )
 

@@ -2,16 +2,11 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_sources(
-    name = "srcs",
+ts_project(
+    name = "loading",
     srcs = glob([
         "*.ts",
         "*.tsx",
         "*.css",
     ]),
-)
-
-ts_project(
-    name = "loading",
-    srcs = [":srcs"],
 )

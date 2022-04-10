@@ -7,11 +7,6 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
-        "//project/zemn.me/hooks:hooks",
-        "//ts:ts",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "@npm//@fortawesome/free-solid-svg-icons",
@@ -21,5 +16,8 @@ ts_project(
         "@npm//react-dom",
         "@npm//react-router-dom",
         "@npm//react-spring",
+        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
+        "//project/zemn.me/hooks:hooks",
+        "//ts:ts",
     ],
 )

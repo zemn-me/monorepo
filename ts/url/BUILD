@@ -9,14 +9,12 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
-        "@npm//@types/jest",
         "@npm//@types/react",
         "@npm//react",
     ],
 )
 
 ts_test(
-    name = "url",
-    srcs = ["url_test.js"],
-    project_deps = [":url"],
+    name = "tests",
+    srcs = [ ":url" ]
 )

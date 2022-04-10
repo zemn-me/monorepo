@@ -8,18 +8,16 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//project/zemn.me/pages:pages",
-        "//project/zemn.me/elements/NavBar:NavBar",
-        "//project/zemn.me/elements/TitlePage:TitlePage",
-        "//project/zemn.me/elements/DarkModeSwitcher:DarkModeSwitcher",
-    ],
     deps = [
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
+        "//project/zemn.me/pages:pages",
+        "//project/zemn.me/elements/NavBar:NavBar",
+        "//project/zemn.me/elements/TitlePage:TitlePage",
+        "//project/zemn.me/elements/DarkModeSwitcher:DarkModeSwitcher",
     ],
 )
 

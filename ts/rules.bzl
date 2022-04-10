@@ -14,14 +14,11 @@ ambient_deps = [ "@npm//@types/jest" ]
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def ts_project(name = None, srcs = [], deps = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, **kwargs):
-    """
-    We want to separately expose the sources (e.g. for direct compilation)
-    by esbuild and ts_project doesn't support labels, so we gotta automatically
-    make a label. sorry.
-    """
+def ts_project(name = None, srcs = None, deps = [], incremental = True, composite = True, tsconfig = "//:tsconfig", declaration = True, **kwargs):
+    if srcs == None:
+        srcs = native.glob([ "**/*.ts", "**/*.tsx" ])
     _ts_project(
-        name = name,
+        name = name + "_ts",
         srcs = srcs,
         deps = deps + ambient_deps,
         composite = composite,
@@ -30,6 +27,12 @@ def ts_project(name = None, srcs = [], deps = [], incremental = True, composite 
         incremental = incremental,
         link_workspace_root = True,
         **kwargs
+    )
+
+    js_library(
+        name = name,
+        srcs = srcs,
+        deps = deps
     )
 
     lint(

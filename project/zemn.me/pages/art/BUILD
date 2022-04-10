@@ -2,8 +2,8 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_sources(
-    name = "srcs",
+ts_project(
+    name = "art",
     srcs = glob([
         "*.ts",
         "*.tsx",
@@ -15,9 +15,4 @@ ts_sources(
         "@npm//react-dom",
         "@npm//react-router-dom",
     ],
-)
-
-ts_project(
-    name = "art",
-    srcs = [":srcs"],
 )

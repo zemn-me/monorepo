@@ -62,7 +62,7 @@ ts_project(
 )
 
 ts_project(
-    name = "save_test",
+    name = "save_test_ts",
     srcs = ["save_test.ts"],
     project_deps = [
         "//project/cultist/example:example",
@@ -73,7 +73,7 @@ ts_project(
 
 ts_test(
     name = "save_test",
-    srcs = ["save_test.js"],
+    srcs = [":save_test_ts"],
     project_deps = [":save_test"],
 )
 
@@ -91,8 +91,7 @@ ts_project(
 ts_test(
     name = "action_test",
     srcs = ["action_test.js"],
-    project_deps = [":action_test"],
-    deps = ["@npm//@types/jest"],
+    project_deps = [":action_test"]
 )
 
 ts_project(

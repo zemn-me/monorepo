@@ -1,4 +1,4 @@
-load("//js:rules.bzl", "nodejs_binary")
+load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -7,16 +7,13 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    declaration = True,
-    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
     ],
 )
 
-nodejs_binary(
+js_binary(
     name = "exec",
     entry_point = "sort_tool.js",
 )
