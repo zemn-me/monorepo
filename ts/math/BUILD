@@ -1,13 +1,13 @@
-load("//ts:rules.bzl", "jest_test", "ts_test", "ts_project")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "math",
-    srcs = glob(["*.ts"])
+    srcs = glob(["*.ts"]),
 )
 
 ts_test(
     name = "test",
-    srcs = [ ":math" ]
+    srcs = [":math"],
 )

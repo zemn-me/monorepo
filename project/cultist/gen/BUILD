@@ -1,5 +1,5 @@
-load("//ts:rules.bzl", "ts_sources", "ts_project")
 load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "ts_project", "ts_sources")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
@@ -9,15 +9,18 @@ package(default_visibility = [
 
 ts_sources(
     name = "srcs",
-    srcs = [ "*.ts", "*.json" ],
+    srcs = [
+        "*.json",
+        "*.ts",
+    ],
     deps = [
         "@npm//@types/node",
-    ]
+    ],
 )
 
 ts_project(
     name = "collate_game_core_ts",
-    srcs = [ ":srcs" ]
+    srcs = [":srcs"],
 )
 
 js_binary(

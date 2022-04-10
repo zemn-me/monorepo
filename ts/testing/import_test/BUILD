@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_test", "ts_project")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 ts_project(
     name = "a",
@@ -15,8 +15,8 @@ ts_project(
     name = "import_test_js",
     srcs = ["import_test.ts"],
     deps = [
+        ":a",
         "@npm//@types/jest",
-        ":a"
     ],
 )
 

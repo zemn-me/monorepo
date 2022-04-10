@@ -1,5 +1,6 @@
+load("//go:rules.bzl", "go_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@rules_python//python:defs.bzl", "py_test")
-load("//:rules.bzl", "go_test", "jest_test", "ts_project")
 
 go_test(
     name = "go_basic_test",

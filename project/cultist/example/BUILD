@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 tstests = glob(["*_test.ts"])
 

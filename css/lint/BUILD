@@ -1,5 +1,3 @@
-load("//css/lint:rules.bzl", "css_lint")
-
 sh_binary(
     name = "lint",
     srcs = ["lint.sh"],

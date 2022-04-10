@@ -1,8 +1,6 @@
 load("//ts:rules.bzl", "ts_project")
 load("//ts/pulumi:rules.bzl", "pulumi")
 
-
-
 ts_project(
     name = "deploy",
     srcs = glob(["*.ts"]),

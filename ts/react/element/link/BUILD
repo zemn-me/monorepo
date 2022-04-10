@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -9,21 +9,13 @@ ts_project(
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
-    ]
+    ],
 )
-
 
 ts_test(
     name = "test",
-    srcs = [ ":link" ]
+    srcs = [":link"],
 )
-
-
-
-
-
-
-load("//:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -40,7 +32,6 @@ ts_project(
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
-
     ],
 )
 

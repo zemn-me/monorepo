@@ -4,17 +4,19 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_sources(
     name = "canvas_sources",
-    srcs = glob(["*.ts", "*.tsx"]),
-    deps = [ "//ts/math:math_sources" ]
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
+    deps = ["//ts/math:math_sources"],
 )
 
 ts_project(
     name = "canvas",
-    srcs = [ ":canvas_sources" ]
+    srcs = [":canvas_sources"],
 )
 
 ts_test(
     name = "tests",
-    srcs = [ ":canvas" ]
+    srcs = [":canvas"],
 )
-

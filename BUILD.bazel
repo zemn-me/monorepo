@@ -8,7 +8,7 @@
 
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
-load("//ts:rules.bzl", "ts_project", "ts_sources")
+load("//ts:rules.bzl", "ts_config", "ts_project", "ts_sources")
 load("//js:rules.bzl", "js_library")
 
 package(default_visibility = [":__subpackages__"])
@@ -21,8 +21,6 @@ alias(
     name = "fix",
     actual = "//tools/bazel:fix",
 )
-
-load("//:rules.bzl", "//ts:rules.bzl", "jest_test", "ts_config", "ts_test")
 
 ts_config(
     name = "tsconfig",

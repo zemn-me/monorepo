@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_test", "ts_project")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//visibility:public"])
 

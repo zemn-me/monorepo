@@ -1,4 +1,5 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project")
+load("//js:rules.bzl", "nodejs_binary")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "sort_tool",

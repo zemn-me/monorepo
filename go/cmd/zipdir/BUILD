@@ -1,4 +1,4 @@
-load("//:rules.bzl", "go_binary")
+load("//go:rules.bzl", "go_binary")
 
 go_binary(
     name = "zipdir",

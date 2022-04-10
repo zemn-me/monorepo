@@ -1,5 +1,4 @@
-
-load("//ts:rules.bzl",  "ts_test", "ts_project")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -9,11 +8,10 @@ ts_project(
     deps = [
         "@npm//@types/react",
         "@npm//react",
-    ]
+    ],
 )
 
 ts_test(
     name = "test",
-    srcs = [ ":shape" ]
+    srcs = [":shape"],
 )
-

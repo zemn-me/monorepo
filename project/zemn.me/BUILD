@@ -1,6 +1,5 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
-load("@npm//http-server:index.bzl", "http_server")
 
 ts_project(
     name = "ts",
