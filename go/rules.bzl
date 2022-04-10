@@ -13,7 +13,7 @@ def go_binary(name = None, srcs = None,  deps = [], **kwargs):
         srcs = srcs
     )
 
-def go_test(name = None, srcs = None,  deps = [], **kwargs):
+def go_test(name = None, srcs = None, importpath = None,  deps = [], **kwargs):
     _go_test(
         name = name,
         deps = deps,

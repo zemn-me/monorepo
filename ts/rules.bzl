@@ -21,6 +21,7 @@ def ts_project(name = None, srcs = [], deps = [], incremental = True, composite 
     make a label. sorry.
     """
     _ts_project(
+        name = name,
         srcs = srcs,
         deps = deps + ambient_deps,
         composite = composite,
@@ -32,7 +33,7 @@ def ts_project(name = None, srcs = [], deps = [], incremental = True, composite 
     )
 
     lint(
-        name = name,
+        name = name + "_lint",
         srcs = srcs
     )
 
