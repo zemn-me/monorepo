@@ -1,13 +1,10 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "cultist",
     srcs = ["index.ts"],
-    composite = True,
-    declaration = True,
-    incremental = True,
     project_deps = [
         ":action",
         ":types",
@@ -74,7 +71,7 @@ ts_project(
     deps = ["@npm//@types/jest"],
 )
 
-jest_test(
+ts_test(
     name = "save_test",
     srcs = ["save_test.js"],
     project_deps = [":save_test"],
@@ -91,7 +88,7 @@ ts_project(
     deps = ["@npm//@types/jest"],
 )
 
-jest_test(
+ts_test(
     name = "action_test",
     srcs = ["action_test.js"],
     project_deps = [":action_test"],

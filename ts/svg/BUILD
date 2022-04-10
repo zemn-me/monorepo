@@ -1,15 +1,10 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_sources(
-    name = "srcw",
-    srcs = glob(["*.ts", "*.tsx"])
-)
-
 ts_project(
     name = "svg",
-    srcs = [ ":srcs" ],
+    srcs = glob(["*.ts", "*.tsx"])
 )
 
 ts_test(

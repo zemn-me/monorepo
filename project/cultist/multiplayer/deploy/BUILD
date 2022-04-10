@@ -1,11 +1,7 @@
-load("//:rules.bzl", "ts_config", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//ts/pulumi:rules.bzl", "pulumi")
 
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = ["//:tsconfig"],
-)
+
 
 ts_project(
     name = "deploy",

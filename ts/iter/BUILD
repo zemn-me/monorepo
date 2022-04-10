@@ -4,7 +4,6 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_sources(
     name = "srcs",
-    srcs = glob(["*.ts"]),
     deps = [
         "@npm//@types/react",
         "@npm//react",

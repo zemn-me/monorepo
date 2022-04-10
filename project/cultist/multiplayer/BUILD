@@ -1,4 +1,4 @@
-load("//:rules.bzl", "go_binary", "ts_lint", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
 
 ts_project(
