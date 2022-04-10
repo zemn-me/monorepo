@@ -8,7 +8,7 @@
 
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
-load("//ts:rules.bzl", "ts_config", "ts_project", "ts_sources")
+load("//ts:rules.bzl", "ts_config", "ts_project")
 load("//js:rules.bzl", "js_library")
 
 package(default_visibility = [":__subpackages__"])
@@ -44,24 +44,14 @@ js_library(
     srcs = ["Global.d.ts"],
 )
 
-ts_sources(
-    name = "jest_config_node_sources",
+ts_project(
+    name = "jest_config_node",
     srcs = ["jest.node.config.ts"],
 )
 
 ts_project(
-    name = "jest_config_node",
-    srcs = [":jest_config_node_sources"],
-)
-
-ts_sources(
-    name = "jest_config_browser_sources",
-    srcs = ["jest.browser.config.ts"],
-)
-
-ts_project(
     name = "jest_config_browser",
-    srcs = [":jest_config_browser_sources"],
+    srcs = ["jest.browser.config.ts"],
 )
 
 exports_files(
