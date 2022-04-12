@@ -1,6 +1,6 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", _js_library = "js_library")
 load("//lint:rules.bzl", "lint")
-load("//tools/jest:jest.bzl", "jest_test")
+load("//tools/jest:rules.bzl", "jest_test")
 
 def js_binary(name = None, **kwargs):
     nodejs_binary(
