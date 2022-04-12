@@ -16,5 +16,5 @@ ts_project(
 
 ts_test(
     name = "tests",
-    srcs = [ ":url" ]
+    srcs = [":url"],
 )

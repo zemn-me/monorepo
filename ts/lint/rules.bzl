@@ -1,4 +1,4 @@
-load("@npm//eslint:index.bzl", eslint_test = "eslint_test")
+load("@npm//eslint:index.bzl", "eslint_test")
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     targets = srcs + data
@@ -9,4 +9,3 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         args = ["$(location %s)" % x for x in targets],
         **kwargs
     )
-

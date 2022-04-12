@@ -7,9 +7,7 @@ load("//lint:rules.bzl", "lint")
 # - exposes a provider for 'web sources' that is just the source files
 # - exposes the providers that ts_project returns
 
-ambient_deps = [ "@npm//@types/jest" ]
-
-
+ambient_deps = ["@npm//@types/jest"]
 
 def ts_config(**kwargs):
     _ts_config(**kwargs)
@@ -32,10 +30,10 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
         composite: use composite ts compilation (recommended)
         tsconfig: set custom tsconfig
         declaration: output delcaration files (recommended)
-        **kwargs: everything else! 
+        **kwargs: everything else!
     """
     if srcs == None:
-        srcs = native.glob([ "**/*.ts", "**/*.tsx" ])
+        srcs = native.glob(["**/*.ts", "**/*.tsx"])
 
     tsfiles = []
 
@@ -43,7 +41,6 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
         if src.endswith(".ts") or src.endswith(".tsx"):
             tsfiles.append(src)
 
-    
     if tsfiles:
         _ts_project(
             name = name + "_ts",
@@ -65,23 +62,22 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
         name = name + "_js",
         srcs = srcs,
         deps = deps,
-        visibility = visibility
+        visibility = visibility,
     )
 
     js_library(
         name = name,
-        deps = [ name + "_js", name + "_ts" ],
-        visibility = visibility
+        deps = [name + "_js", name + "_ts"],
+        visibility = visibility,
     )
 
     lint(
         name = name + "_lint",
-        srcs = srcs
+        srcs = srcs,
     )
-
-
 
 def ts_test(deps = [], **kwargs):
     js_test(
         deps = deps + ambient_deps,
-        **kwargs)
+        **kwargs
+    )

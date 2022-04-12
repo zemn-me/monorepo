@@ -58,8 +58,8 @@ ts_project(
     name = "save_test_ts",
     srcs = ["save_test.ts"],
     deps = [
-        "//project/cultist/example:example",
         ":save",
+        "//project/cultist/example",
     ],
 )
 
@@ -89,8 +89,8 @@ ts_project(
     name = "slots",
     srcs = ["slots.ts"],
     deps = [
-        ":types",
         ":aspects",
+        ":types",
     ],
 )
 
@@ -104,10 +104,10 @@ ts_project(
     name = "verb",
     srcs = ["verb.ts"],
     deps = [
-        ":types",
         ":slots",
-        "//ts/iter:iter",
-        "//ts:ts",
+        ":types",
+        "//ts",
+        "//ts/iter",
     ],
 )
 
@@ -115,8 +115,8 @@ ts_project(
     name = "action",
     srcs = ["action.ts"],
     deps = [
-        "//project/cultist/state",
         ":types",
+        "//project/cultist/state",
     ],
 )
 

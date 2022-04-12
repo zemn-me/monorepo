@@ -9,7 +9,7 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
+        "//project/zemn.me/elements/ZemnmezLogo",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",

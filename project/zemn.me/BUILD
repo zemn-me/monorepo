@@ -9,15 +9,15 @@ ts_project(
         "*.css",
     ]),
     deps = [
+        "//project/zemn.me/elements/DarkModeSwitcher",
+        "//project/zemn.me/elements/NavBar",
+        "//project/zemn.me/elements/TitlePage",
+        "//project/zemn.me/pages",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-        "//project/zemn.me/pages",
-        "//project/zemn.me/elements/NavBar",
-        "//project/zemn.me/elements/TitlePage",
-        "//project/zemn.me/elements/DarkModeSwitcher",
     ],
 )
 

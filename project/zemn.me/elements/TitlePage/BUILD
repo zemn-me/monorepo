@@ -9,11 +9,11 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//project/zemn.me/elements/TimeEye",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-        "//project/zemn.me/elements/TimeEye:TimeEye",
     ],
 )

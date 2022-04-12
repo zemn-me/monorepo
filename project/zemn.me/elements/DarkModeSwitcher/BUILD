@@ -9,7 +9,7 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/elements/SliderCheckbox:SliderCheckbox",
+        "//project/zemn.me/elements/SliderCheckbox",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
