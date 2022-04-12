@@ -14,10 +14,10 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-        "//project/zemn.me/pages:pages",
-        "//project/zemn.me/elements/NavBar:NavBar",
-        "//project/zemn.me/elements/TitlePage:TitlePage",
-        "//project/zemn.me/elements/DarkModeSwitcher:DarkModeSwitcher",
+        "//project/zemn.me/pages",
+        "//project/zemn.me/elements/NavBar",
+        "//project/zemn.me/elements/TitlePage",
+        "//project/zemn.me/elements/DarkModeSwitcher",
     ],
 )
 

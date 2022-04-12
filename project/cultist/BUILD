@@ -20,8 +20,8 @@ ts_project(
 )
 
 alias(
-    name = "state_js",
-    actual = "//project/cultist/state:state_js",
+    name = "state",
+    actual = "//project/cultist/state",
 )
 
 alias(
@@ -29,16 +29,11 @@ alias(
     actual = "//project/cultist/state:state_ts",
 )
 
-alias(
-    name = "state_sources",
-    actual = "//project/cultist/state:state_sources",
-)
-
 ts_project(
     name = "element",
     srcs = ["element.ts"],
     deps = [
-        ":state",
+        "//project/cultist/state",
         "//ts/iter",
     ],
 )
@@ -120,7 +115,7 @@ ts_project(
     name = "action",
     srcs = ["action.ts"],
     deps = [
-        ":state",
+        "//project/cultist/state",
         ":types",
     ],
 )

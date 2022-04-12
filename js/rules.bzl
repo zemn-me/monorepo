@@ -19,6 +19,6 @@ def js_library(name = None, srcs = [], **kwargs):
 def js_test(deps = [], **kwargs):
     jest_test(
         deps = deps + [ "@npm//jsdom" ],
-        jest_config = "//:jest_config_browser_js",
+        jest_config = "//:jest_config_browser",
         **kwargs
     )

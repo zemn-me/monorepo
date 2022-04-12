@@ -9,7 +9,7 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:srcs",
+        "//project/zemn.me/elements/ZemnmezLogo",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",

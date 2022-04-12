@@ -4,7 +4,6 @@ load("//ts/pulumi:rules.bzl", "pulumi")
 ts_project(
     name = "deploy",
     srcs = glob(["*.ts"]),
-    tsconfig = ":tsconfig",
     deps = [
         "@npm//@pulumi/aws",
         "@npm//@pulumi/awsx",

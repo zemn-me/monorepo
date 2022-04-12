@@ -8,7 +8,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    deps = ["//ts/math:math_sources"],
 )
 
 ts_test(

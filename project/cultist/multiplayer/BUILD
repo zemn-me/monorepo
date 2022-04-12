@@ -6,8 +6,6 @@ ts_project(
     srcs = [
         "index.tsx",
     ],
-    resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//project/cultist/multiplayer/pages",
         "@npm//@types/react",

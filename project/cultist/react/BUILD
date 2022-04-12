@@ -9,10 +9,8 @@ ts_project(
         "table.module.css",
         "table.tsx",
     ],
-    resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
-        "//project/cultist:state",
+        "//project/cultist/state",
         "@npm//@types/d3-scale",
         "@npm//@types/react",
         "@npm//d3-scale",

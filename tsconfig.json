@@ -20,8 +20,8 @@
 		"composite": true,
 		"incremental": true,
 		"lib": ["DOM", "ESNext"],
-		"sourceMap": true,
 		"inlineSources": true,
+		"inlineSourceMap": true,
 		"paths": {
 			"*": [
 				"./*",

@@ -5,7 +5,6 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "iter",
     deps = [
-        "//ts/iter:srcs",
         "@npm//@types/react",
         "@npm//react",
     ],

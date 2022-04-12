@@ -7,8 +7,6 @@ ts_project(
     srcs = [
         "index.tsx",
     ],
-    resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//project/cultist:save",
         "//project/cultist/example",

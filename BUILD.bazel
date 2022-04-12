@@ -45,13 +45,23 @@ js_library(
 )
 
 ts_project(
-    name = "jest_config_node",
+    name = "jest_config_node_all",
     srcs = ["jest.node.config.ts"],
 )
 
+alias(
+    name = "jest_config_node",
+    actual = ":jest_config_node_all_ts"
+)
+
 ts_project(
-    name = "jest_config_browser",
+    name = "jest_config_browser_all",
     srcs = ["jest.browser.config.ts"],
+)
+
+alias(
+    name = "jest_config_browser",
+    actual = ":jest_config_browser_all_ts"
 )
 
 exports_files(

@@ -19,8 +19,9 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
     Declare a set of source files for a typescript project.
 
     This macro outputs multiple tags. For given name "project", it will create:
-        - "project" -- contianing all the sources including non-typescript files
+        - "project" -- all javascript files; all compiled typescript files and all sources
         - "project_ts" -- just the compiled typescript files
+        - "project_js" -- just the compiled javascript files
         - "project_lint_*" -- linting rules for all the sources
     Args:
         name: tag name
@@ -53,6 +54,7 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
             tsconfig = tsconfig,
             incremental = incremental,
             link_workspace_root = True,
+            resolve_json_module = True,
             visibility = visibility,
             **kwargs
         )
@@ -60,9 +62,15 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
         native.alias(name = name + "_ts", actual = name, visibility = visibility)
 
     js_library(
-        name = name,
+        name = name + "_js",
         srcs = srcs,
         deps = deps,
+        visibility = visibility
+    )
+
+    js_library(
+        name = name,
+        deps = [ name + "_js", name + "_ts" ],
         visibility = visibility
     )
 
