@@ -10,7 +10,6 @@ ts_project(
     ]),
     tsconfig = "//:tsconfig_jsx",
     deps = [
-        "@npm//@types/jest",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",
@@ -21,6 +20,5 @@ ts_project(
 ts_test(
     name = "tests",
     srcs = ["blurb_test.js"],
-    jsdom = True,
-    project_deps = [":blurb"],
+    deps = [":blurb"],
 )

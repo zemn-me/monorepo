@@ -1,5 +1,5 @@
 load("//js:rules.bzl", "js_binary")
-load("//ts:rules.bzl", "ts_project", "ts_sources")
+load("//ts:rules.bzl", "ts_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
@@ -7,8 +7,8 @@ package(default_visibility = [
     "//project/cultist:__subpackages__",
 ])
 
-ts_sources(
-    name = "srcs",
+ts_project(
+    name = "collate_game_core_ts",
     srcs = [
         "*.json",
         "*.ts",
@@ -16,11 +16,6 @@ ts_sources(
     deps = [
         "@npm//@types/node",
     ],
-)
-
-ts_project(
-    name = "collate_game_core_ts",
-    srcs = [":srcs"],
 )
 
 js_binary(

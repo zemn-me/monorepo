@@ -5,17 +5,15 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "cultist",
     srcs = ["index.ts"],
-    project_deps = [
-        ":action",
-        ":types",
-        ":verb",
-        ":history",
-        ":recipe",
-        ":element",
-        ":state",
-    ],
     tsconfig = "//:tsconfig_node",
     deps = [
+        ":action",
+        ":element",
+        ":history",
+        ":recipe",
+        ":state",
+        ":types",
+        ":verb",
         "@npm//@types/uuid",
         "@npm//immutable",
     ],
@@ -39,24 +37,24 @@ alias(
 ts_project(
     name = "element",
     srcs = ["element.ts"],
-    project_deps = [
+    deps = [
         ":state",
-        "//ts/iter:iter",
+        "//ts/iter",
     ],
 )
 
 ts_project(
     name = "history",
     srcs = ["history.ts"],
-    project_deps = [":types"],
+    deps = [":types"],
 )
 
 ts_project(
     name = "recipe",
     srcs = ["recipe.ts"],
-    project_deps = [
-        ":types",
+    deps = [
         ":aspects",
+        ":types",
         ":verb",
     ],
 )
@@ -64,40 +62,38 @@ ts_project(
 ts_project(
     name = "save_test_ts",
     srcs = ["save_test.ts"],
-    project_deps = [
+    deps = [
         "//project/cultist/example:example",
         ":save",
     ],
-    deps = ["@npm//@types/jest"],
 )
 
 ts_test(
     name = "save_test",
     srcs = [":save_test_ts"],
-    project_deps = [":save_test"],
+    deps = [":save_test"],
 )
 
 ts_project(
     name = "action_test",
     srcs = ["action_test.ts"],
-    project_deps = [
-        ":state",
-        ":action",
+    deps = [
         "element",
+        ":action",
+        ":state",
     ],
-    deps = ["@npm//@types/jest"],
 )
 
 ts_test(
-    name = "action_test",
+    name = "action_test_tests",
     srcs = ["action_test.js"],
-    project_deps = [":action_test"]
+    deps = [":action_test"],
 )
 
 ts_project(
     name = "slots",
     srcs = ["slots.ts"],
-    project_deps = [
+    deps = [
         ":types",
         ":aspects",
     ],
@@ -106,13 +102,13 @@ ts_project(
 ts_project(
     name = "aspects",
     srcs = ["aspects.ts"],
-    project_deps = [":types"],
+    deps = [":types"],
 )
 
 ts_project(
     name = "verb",
     srcs = ["verb.ts"],
-    project_deps = [
+    deps = [
         ":types",
         ":slots",
         "//ts/iter:iter",
@@ -123,7 +119,7 @@ ts_project(
 ts_project(
     name = "action",
     srcs = ["action.ts"],
-    project_deps = [
+    deps = [
         ":state",
         ":types",
     ],

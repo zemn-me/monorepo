@@ -1,9 +1,9 @@
-load("//ts:rules.bzl", "ts_project", "ts_sources", "ts_test")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_sources(
-    name = "srcs",
+ts_project(
+    name = "iter",
     deps = [
         "//ts/iter:srcs",
         "@npm//@types/react",
@@ -11,10 +11,6 @@ ts_sources(
     ],
 )
 
-ts_project(
-    name = "iter",
-    srcs = [":srcs"],
-)
 
 ts_test(
     name = "test",

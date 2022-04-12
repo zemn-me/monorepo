@@ -7,15 +7,13 @@ ts_project(
     srcs = [
         "index.tsx",
     ],
-    project_deps = [
-        "//project/cultist/example:example",
-        "//project/cultist/react:react",
-        "//project/cultist/state:state",
-        "//project/cultist:save",
-    ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//project/cultist:save",
+        "//project/cultist/example",
+        "//project/cultist/react",
+        "//project/cultist/state",
         "@npm//@types/react",
         "@npm//react",
     ],
