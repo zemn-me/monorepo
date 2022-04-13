@@ -9,16 +9,20 @@ mappings = {
     ".go": go_lint,
 }
 
-"""
-lint lints all the given srcs as per registered mappings.
-
-srcs is expected to be an array of labels. If these labels do
-not have a name ending in an extension (".js"/".ts" etc), they
-will not be linted; that's mostly OK becuase it usually means
-they're not an on-disk file.
-"""
-
 def lint(name = None, srcs = []):
+    """
+    lint lints all the given srcs as per registered mappings.
+
+    srcs is expected to be an array of labels. If these labels do
+    not have a name ending in an extension (".js"/".ts" etc), they
+    will not be linted; that's mostly OK becuase it usually means
+    they're not an on-disk file.
+    Args:
+        name: name
+        srcs: files to lint
+    """
+
+    # files by file type and their linters
     partitions = {}
 
     for src in srcs:
@@ -29,7 +33,6 @@ def lint(name = None, srcs = []):
             name = Label(src).name
 
         for suffix in mappings:
-            linter = mappings[suffix]
             if name.endswith(suffix):
                 if not suffix in partitions:
                     partitions[suffix] = []

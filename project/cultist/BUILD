@@ -66,7 +66,6 @@ ts_project(
 ts_test(
     name = "save_test",
     srcs = [":save_test_ts"],
-    deps = [":save_test"],
 )
 
 ts_project(

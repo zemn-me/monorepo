@@ -44,6 +44,33 @@ js_library(
     srcs = ["Global.d.ts"],
 )
 
+# not technically JS but there is no 'data' for js_library...
+js_library(
+    name = "editor_config",
+    srcs = [ ".editorconfig" ]
+)
+
+js_library(
+    name = "prettier_config",
+    srcs = [ ".prettierrc.json" ],
+    deps = [
+        ":editor_config",
+    ]
+)
+
+js_library(
+    name = "eslint_config",
+    srcs = [ ".eslintrc.json" ],
+    deps = [
+            ":prettier_config",
+            "@npm//eslint-plugin-prettier",
+            "@npm//@typescript-eslint/parser",
+            "@npm//@typescript-eslint/eslint-plugin",
+            "@npm//eslint-config-prettier",
+            "@npm//eslint-plugin-react",
+    ]
+)
+
 ts_project(
     name = "jest_config_node_all",
     srcs = ["jest.node.config.ts"],

@@ -1,16 +1,19 @@
-load("//ts:rules.bzl", "ts_project", "ts_test")
+load("//ts/react:rules.bzl", "react_project", "react_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
+react_project(
     name = "canvas",
     srcs = glob([
         "*.ts",
         "*.tsx",
     ]),
+    deps = [
+        "//ts/math"
+    ]
 )
 
-ts_test(
+react_test(
     name = "tests",
     srcs = [":canvas"],
 )
