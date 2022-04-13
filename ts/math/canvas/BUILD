@@ -9,8 +9,8 @@ react_project(
         "*.tsx",
     ]),
     deps = [
-        "//ts/math"
-    ]
+        "//ts/math",
+    ],
 )
 
 react_test(

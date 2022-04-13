@@ -3,8 +3,7 @@ load("@npm//eslint:index.bzl", "eslint_test")
 eslintrc = "//:eslint_config"
 ambient_data = [
     eslintrc,
-    "//:.gitignore"
-
+    "//:.gitignore",
 ]
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
@@ -13,9 +12,10 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         name = name,
         data = targets + ambient_data,
         tags = tags + ["+formatting"],
-        args = ["$(location %s)" % x for x in targets ] +
-        [
-            "--ignore-path", "$(location //:.gitignore)"
-        ],
+        args = ["$(location %s)" % x for x in targets] +
+               [
+                   "--ignore-path",
+                   "$(location //:.gitignore)",
+               ],
         **kwargs
     )

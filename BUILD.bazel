@@ -47,28 +47,28 @@ js_library(
 # not technically JS but there is no 'data' for js_library...
 js_library(
     name = "editor_config",
-    srcs = [ ".editorconfig" ]
+    srcs = [".editorconfig"],
 )
 
 js_library(
     name = "prettier_config",
-    srcs = [ ".prettierrc.json" ],
+    srcs = [".prettierrc.json"],
     deps = [
         ":editor_config",
-    ]
+    ],
 )
 
 js_library(
     name = "eslint_config",
-    srcs = [ ".eslintrc.json" ],
+    srcs = [".eslintrc.json"],
     deps = [
-            ":prettier_config",
-            "@npm//eslint-plugin-prettier",
-            "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin",
-            "@npm//eslint-config-prettier",
-            "@npm//eslint-plugin-react",
-    ]
+        ":prettier_config",
+        "@npm//@typescript-eslint/eslint-plugin",
+        "@npm//@typescript-eslint/parser",
+        "@npm//eslint-config-prettier",
+        "@npm//eslint-plugin-prettier",
+        "@npm//eslint-plugin-react",
+    ],
 )
 
 ts_project(

@@ -4,7 +4,7 @@ ambient_deps = [
     "@npm//react",
     "@npm//react-dom",
     "@npm//@types/react",
-    "@npm//@types/react-dom"
+    "@npm//@types/react-dom",
 ]
 
 def react_project(name, deps = [], **kwargs):
