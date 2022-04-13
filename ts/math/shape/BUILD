@@ -6,6 +6,8 @@ ts_project(
     name = "shape",
     srcs = glob(["*.ts"]),
     deps = [
+        "//ts/math",
+        "//ts/math/canvas",
         "@npm//@types/react",
         "@npm//react",
     ],

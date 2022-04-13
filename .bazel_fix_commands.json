@@ -1,0 +1,10 @@
+[
+    {
+    "regex": "^(.*)\\(\\d+,\\d+\\): error TS2307: Cannot find module '([^']+)' or its corresponding type declarations.$",
+        "command": "./ts/fix/fix_import.sh",
+        "args": [
+            "$2",
+            "$1"
+        ]
+    }
+]

@@ -59,7 +59,8 @@
 	"scripts": {
 		"build": "yarn bazel build //...",
 		"test": "yarn bazel run //tools/bazel:affected_files",
-		"fix": "yarn run bazel run //:fix"
+		"fix": "yarn run bazel run //:fix",
+		"ib": "yarn run ibazel --run_output --run_output_interactive=false"
 	},
 	"dependencies": {
 		"@bazel/labs": "^4.5.0",

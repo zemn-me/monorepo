@@ -9,10 +9,10 @@ package(default_visibility = [
 
 ts_project(
     name = "collate_game_core_ts",
-    srcs = [
+    srcs = glob([
         "*.json",
         "*.ts",
-    ],
+    ]),
     deps = [
         "@npm//@types/node",
     ],
@@ -27,8 +27,8 @@ genrule(
     name = "gen_core",
     srcs = ["@cultistsimulator//:core"],
     outs = ["core_en.json"],
-    cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
-    exec_tools = [":collate_game_core"],
+    cmd = "./$(execpath //project/cultist/gen:collate_game_core_ts_js) $(locations @cultistsimulator//:core) > $@",
+    exec_tools = [":collate_game_core_ts_js"],
     message = "generating collated game data",
 )
 

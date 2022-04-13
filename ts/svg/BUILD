@@ -9,8 +9,10 @@ react_project(
         "*.tsx",
     ]),
     deps = [
+        "//ts",
         "//ts/math",
-    ]
+        "@npm//d3-scale",
+    ],
 )
 
 react_test(
