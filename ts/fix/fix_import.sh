@@ -3,7 +3,8 @@
 function get_import_path {
 
     FILE_POSSIBILITIES="$(echo $1{{/index,}.{ts,js}{x,},})"
-    QUERY="some(@npm//$1 union kind('ts_project rule', rdeps(//..., set($FILE_POSSIBILITIES), 1)))"
+    PATTERN_QUERIES="$(yarn -s run bazel query "set($FILE_POSSIBILITIES)" --keep_going | xargs -I{} echo "union attr('srcs', {}, //...)")"
+    QUERY="some(@npm//$1 $PATTERN_QUERIES)"
 
     echo "Querying $QUERY" 1>&2
 

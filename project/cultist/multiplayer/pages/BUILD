@@ -12,7 +12,6 @@ ts_project(
         "//project/cultist/example",
         "//project/cultist/react",
         "//project/cultist/state",
-        "@npm//@types/react",
         "@npm//react",
     ],
 )

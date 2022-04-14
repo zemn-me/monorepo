@@ -9,7 +9,5 @@ ts_project(
         "*.tsx",
     ]),
     tsconfig = "//:tsconfig_jsx",
-    deps = [
-        "//ts/react/element/link",
-    ],
+    deps = ["//ts/react/element/link"],
 )

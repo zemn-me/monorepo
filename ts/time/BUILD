@@ -8,9 +8,7 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    deps = [
-        "@npm//ts-toolbelt",
-    ],
+    deps = ["@npm//ts-toolbelt"],
 )
 
 ts_test(

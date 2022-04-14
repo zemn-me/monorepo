@@ -8,9 +8,6 @@ ts_project(
         "*.tsx",
     ]),
     tsconfig = "//:tsconfig_node",
-    deps = [
-        "@npm//@types/node",
-    ],
 )
 
 js_binary(

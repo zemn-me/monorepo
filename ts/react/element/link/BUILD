@@ -6,8 +6,10 @@ ts_project(
     name = "link",
     deps = [
         "//ts/url",
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//react",
         "@npm//react-dom",
-        "@npm//react-dom/test-utils",
     ],
 )
 

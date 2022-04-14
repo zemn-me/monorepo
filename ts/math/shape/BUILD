@@ -8,8 +8,6 @@ ts_project(
     deps = [
         "//ts/math",
         "//ts/math/canvas",
-        "@npm//@types/react",
-        "@npm//react",
     ],
 )
 

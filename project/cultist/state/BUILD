@@ -59,7 +59,6 @@ ts_project(
     deps = [
         ":deserialize",
         ":serialize",
-        ":state_main",
         "//project/cultist:save",
         "//ts",
     ],

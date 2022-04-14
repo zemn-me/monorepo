@@ -12,9 +12,5 @@ ts_project(
     deps = [
         "//ts/react/lang",
         "//ts/time",
-        "@npm//@types/react",
-        "@npm//@types/react-dom",
-        "@npm//react",
-        "@npm//react-dom",
     ],
 )

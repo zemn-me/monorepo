@@ -6,10 +6,7 @@ ts_project(
     srcs = glob(["*.ts"]),
     deps = [
         "@npm//@pulumi/aws",
-        "@npm//@pulumi/awsx",
         "@npm//@pulumi/pulumi",
-        "@npm//@types/mime",
-        "@npm//@types/node",
         "@npm//mime",
     ],
 )

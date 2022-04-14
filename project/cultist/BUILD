@@ -8,14 +8,14 @@ ts_project(
     tsconfig = "//:tsconfig_node",
     deps = [
         ":action",
+        ":aspects",
         ":element",
-        ":history",
         ":recipe",
-        ":state",
+        ":save",
+        ":slots",
         ":types",
         ":verb",
-        "@npm//@types/uuid",
-        "@npm//immutable",
+        "//project/cultist/state",
     ],
 )
 
@@ -72,9 +72,10 @@ ts_project(
     name = "action_test",
     srcs = ["action_test.ts"],
     deps = [
-        "element",
         ":action",
-        ":state",
+        ":element",
+        "//project/cultist/state",
+        "@npm//immutable",
     ],
 )
 
@@ -116,6 +117,8 @@ ts_project(
     deps = [
         ":types",
         "//project/cultist/state",
+        "//ts/iter",
+        "@npm//immutable",
     ],
 )
 

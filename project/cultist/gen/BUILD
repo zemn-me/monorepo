@@ -13,9 +13,6 @@ ts_project(
         "*.json",
         "*.ts",
     ]),
-    deps = [
-        "@npm//@types/node",
-    ],
 )
 
 js_binary(

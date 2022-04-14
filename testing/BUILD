@@ -15,9 +15,6 @@ py_test(
 ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
-    deps = [
-        "@npm//@types/node",
-    ],
 )
 
 ts_test(

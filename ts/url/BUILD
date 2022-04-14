@@ -8,10 +8,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    deps = [
-        "@npm//@types/react",
-        "@npm//react",
-    ],
 )
 
 ts_test(

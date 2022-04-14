@@ -11,9 +11,7 @@ ts_project(
     ],
     deps = [
         "//project/cultist/state",
-        "@npm//@types/d3-scale",
         "@npm//@types/react",
-        "@npm//d3-scale",
         "@npm//react",
     ],
 )

@@ -14,9 +14,7 @@ ts_project(
 ts_project(
     name = "import_test_js",
     srcs = ["import_test.ts"],
-    deps = [
-        ":a",
-    ],
+    deps = [":a"],
 )
 
 ts_test(

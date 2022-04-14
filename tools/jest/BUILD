@@ -10,7 +10,4 @@ ts_project(
     srcs = ["jest_reporter.ts"],
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],
-    deps = [
-        "@npm//@types/node",
-    ],
 )
