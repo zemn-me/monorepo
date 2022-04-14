@@ -1,76 +1,20 @@
 #!/usr/bin/env bash
 
-
-bazel="yarn -s run bazel"
-
-function targets_with_given_source {
-    if fullname=$($bazel query "$1"); then
-        if TARGET="$($bazel query "attr('srcs', $fullname, ${fullname//:*/}:*)" | grep ts | head -1)"; then
-            if [ ! -z "$TARGET" ]; then
-                echo $TARGET | sed -r 's/_js$|_ts$//g'
-                return 0
-            fi
-        fi
-    fi
-    return 1
-}
-
-function is_installed_npm_package {
-    echo "Is $1 an npm package?" 1>&2
-    if yarn why "$1" | grep Found > /dev/null; then
-        echo "Success! $1 is an npm package!" 1>&2
-        return 0
-    fi
-
-    echo "Seems like $1 is not an npm package..." 1>&2
-
-    return 1
-}
-
-function tag_for_file {
-    targets_with_given_source $1
-}
-
-function find_tsjs_module_tag {
-    echo "Trying to find the tsjs module / file for $1..." 1>&2
-    echo "What about just $1?" 1>&2
-    if attempt="$(tag_for_file $1)"; then
-        echo $1$suffix is built by $attempt! 1>&2
-        echo $attempt
-        return 0
-    fi
-    echo "Not just $1..." 1>&2
-
-    for suffix in {/index,}.{ts,js}{x,}; do
-        echo "Does $1$suffix exist?" 1>&2
-        if attempt="$(tag_for_file $1$suffix)"; then
-            echo $1$suffix is built by $attempt! 1>&2
-            echo $attempt
-            return 0
-        fi
-        echo "$1$suffix does not exist..." 1>&2
-    done
-
-    return 1
-}
-
 function get_import_path {
-    echo "Detecting import path for $1" 1>&2
-    if is_installed_npm_package $1; then
-        echo "Looks like $1 is an npm package :)" 1>&2
-        echo "@npm//$1"
-        return 0
-    fi
 
-    
-    if ! import_tag="$(find_tsjs_module_tag $1)"; then
-        echo "Unable to locate module $1" 1>&2
-        return 1
-    fi
+    FILE_POSSIBILITIES="$(echo $1{{/index,}.{ts,js}{x,},})"
+    QUERY="some(@npm//$1 union kind('ts_project rule', rdeps(//..., set($FILE_POSSIBILITIES), 1)))"
 
-    echo Located module $1 at $import_tag 1>&2
+    echo "Querying $QUERY" 1>&2
 
-    echo $import_tag
+    RESULT="$(yarn -s run bazel query "$QUERY" --keep_going | sed -r 's/_js$|_ts$//g')"
+
+
+    echo $RESULT
+    echo $RESULT 1>&2
+    test -n "$RESULT"
+
+    return $?
 }
 
 function fix_missing_module {
@@ -85,8 +29,6 @@ function fix_missing_module {
     fi
     echo "Detected module $1 is imported as $module_import_path" 1>&2
 
-    echo '??' $module_import_path
-    
     file_import_path=""
 
     echo "Detecting file import path for $2" 1>&2
@@ -97,8 +39,6 @@ function fix_missing_module {
     echo "Detected file $2 is imported as $file_import_path" 1>&2
 
 
-    echo '??' $module_import_path
-    
     set -x
     if ! yarn -s run buildozer "add deps $module_import_path" $file_import_path; then
         set +x
