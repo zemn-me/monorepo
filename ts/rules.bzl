@@ -55,8 +55,9 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
             visibility = visibility,
             **kwargs
         )
+
     #else:
-        #native.alias(name = name + "_ts", actual = name, visibility = visibility)
+    #native.alias(name = name + "_ts", actual = name, visibility = visibility)
 
     js_library(
         name = name + "_js",
