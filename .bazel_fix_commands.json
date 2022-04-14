@@ -3,6 +3,16 @@
     "regex": "^(.*)\\(\\d+,\\d+\\): error TS2307: Cannot find module '([^']+)' or its corresponding type declarations.$",
         "command": "./ts/fix/fix_import.sh",
         "args": [
+            "regular",
+            "$2",
+            "$1"
+        ]
+    },
+    {
+    "regex": "(.*)\\(\\d+,\\d+\\): error TS7016: Could not find a declaration file for module '([^']+)'.",
+        "command": "./ts/fix/fix_import.sh",
+        "args": [
+            "types",
             "$2",
             "$1"
         ]

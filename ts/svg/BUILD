@@ -11,6 +11,7 @@ react_project(
     deps = [
         "//ts",
         "//ts/math",
+        "@npm//@types/d3-scale",
         "@npm//d3-scale",
     ],
 )

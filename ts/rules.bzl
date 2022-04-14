@@ -7,7 +7,7 @@ load("//lint:rules.bzl", "lint")
 # - exposes a provider for 'web sources' that is just the source files
 # - exposes the providers that ts_project returns
 
-ambient_deps = ["@npm//@types/jest"]
+ambient_deps = ["@npm//@types/jest", "//:base_defs"]
 
 def ts_config(**kwargs):
     _ts_config(**kwargs)
@@ -55,8 +55,8 @@ def ts_project(name, visibility = None, srcs = None, deps = [], incremental = Tr
             visibility = visibility,
             **kwargs
         )
-    else:
-        native.alias(name = name + "_ts", actual = name, visibility = visibility)
+    #else:
+        #native.alias(name = name + "_ts", actual = name, visibility = visibility)
 
     js_library(
         name = name + "_js",

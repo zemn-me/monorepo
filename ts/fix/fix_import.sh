@@ -3,8 +3,6 @@
 
 bazel="yarn -s run bazel"
 
-echo Fixing missing module $1 in file $2
-
 function targets_with_given_source {
     if fullname=$($bazel query "$1"); then
         if TARGET="$($bazel query "attr('srcs', $fullname, ${fullname//:*/}:*)" | grep ts | head -1)"; then
@@ -107,12 +105,23 @@ function fix_missing_module {
         return 1
     fi
     set +x
-    echo "Probably succeeded!"
+    echo "Probably succeeded!" 2>&1
+    return 0
+}
+
+function perform_fixes {
+    if [[ "$1" == "types" ]]; then
+        fix_missing_module @types/$2 $3
+        return $?
+    fi
+
+    fix_missing_module $3 $2
+    return $?
 }
 
 
 
-fix_missing_module $@
+perform_fixes $@
 
 
 exit $?
