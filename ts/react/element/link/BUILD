@@ -1,15 +1,17 @@
-load("//ts/react:rules.bzl", "react_project", "react_test")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
-react_project(
+ts_project(
     name = "link",
     deps = [
         "//ts/url",
+        "@npm//react-dom",
+        "@npm//react-dom/test-utils",
     ],
 )
 
-react_test(
+ts_test(
     name = "test",
     srcs = [":link"],
 )

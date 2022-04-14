@@ -115,7 +115,7 @@ function perform_fixes {
         return $?
     fi
 
-    fix_missing_module $3 $2
+    fix_missing_module $2 $3
     return $?
 }
 

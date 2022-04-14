@@ -1,8 +1,8 @@
-load("//ts/react:rules.bzl", "react_project", "react_test")
+load("//ts:rules.bzl", "ts_project", "ts_test")
 
 package(default_visibility = ["//:__subpackages__"])
 
-react_project(
+ts_project(
     name = "svg",
     srcs = glob([
         "*.ts",
@@ -12,11 +12,13 @@ react_project(
         "//ts",
         "//ts/math",
         "@npm//@types/d3-scale",
+        "@npm//@types/react",
         "@npm//d3-scale",
+        "@npm//react",
     ],
 )
 
-react_test(
+ts_test(
     name = "test",
     srcs = [":svg"],
 )
