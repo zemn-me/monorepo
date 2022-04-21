@@ -116,7 +116,7 @@ def render_config(
             available format keys are [`{repository}`, `{name}`, `{version}`].
         crates_module_template (str, optional): The pattern to use for the `defs.bzl` and `BUILD.bazel`
             file names used for the crates module. The available format keys are [`{file}`].
-        default_package_name (str, optional): The default package name to in the rendered macros. This affects the
+        default_package_name (str, optional): The default package name to use in the rendered macros. This affects the
             auto package detection of things like `all_crate_deps`.
         platforms_template (str, optional): The base template to use for platform names.
             See [platforms documentation](https://docs.bazel.build/versions/main/platforms.html). The available format
