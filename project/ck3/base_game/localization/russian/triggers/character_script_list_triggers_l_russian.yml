@@ -1,0 +1,14 @@
+﻿l_russian:
+
+ ALL_LIVING_CHARACTERS:0 "Все живые персонажи:"
+ ANY_LIVING_CHARACTER:0 "Любой живой персонаж:"
+
+ ALL_POOL_CHARACTERS:0 "Все доступные персонажи:"
+ ANY_POOL_CHARACTER:0 "Любой доступный персонаж:"
+
+ ANY_OF_CHARACTERS_VASSALS:0 "Любой из [Concept( 'vassals', 'вассалов' )|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]:"
+ ALL_OF_CHARACTERS_VASSALS:0 "Все [vassals|El] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]:"
+ ANY_OF_CHARACTERS_VASSALS_PERCENT:0 "$PARAMETERS$ из [Concept( 'vassals', 'вассалов' )|E] персонажа [CHARACTER.GetShortUIName]:"
+ ANY_OF_CHARACTERS_VASSALS_COUNT:0 "$PARAMETERS$ из [Concept( 'vassals', 'вассалов' )|E] персонажа [CHARACTER.GetShortUIName]:"
+
+ ANY_DYNASTY_MEMBER_COUNT:0 "$PARAMETERS$ из членов [Concept( 'dynasty', 'династии' )|E] [DYNASTY.GetBaseName]:"

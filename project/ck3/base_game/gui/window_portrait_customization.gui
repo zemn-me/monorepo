@@ -1,0 +1,241 @@
+window = {
+	name = "window_portrait_customization"
+	parentanchor = center
+	allow_outside = yes
+	layer = middle
+
+	using = Window_Background
+	using = Window_Decoration
+	using = Window_Size_MainTab
+
+	state = {
+		name = _show
+		using = Animation_FadeIn_Standard
+	}
+
+	state = {
+		name = _hide
+		using = Animation_FadeOut_Standard
+	}
+
+	vbox = {
+		set_parent_size_to_minimum = yes
+		using = Window_Margins
+		spacing = 20
+		datacontext = "[PortraitCustomizationWindow.GetCharacter]"
+		datacontext = "[GetIllustration( 'character_view_bg' )]"
+
+
+
+		background = {
+			using = Background_Bottom_Fade
+			margin = { -38 -20 }
+		}
+
+		background = {
+			texture = "[Illustration.GetTexture( Character.Self )]"
+			fittype = end
+			alpha = 0.5
+			margin = { -39 -20 }
+
+			using = Window_Margins
+
+
+			modify_texture = {
+				texture = "gfx/interface/component_masks/mask_fade_corner.dds"
+				blend_mode = alphamultiply
+			}
+		}
+
+		header_pattern = {
+			layoutpolicy_horizontal = expanding
+			blockoverride "header_text"
+			{
+				text = "PCW_TITLE"
+			}
+
+			blockoverride "button_close"
+			{
+				onclick = "[PortraitCustomizationWindow.Close]"
+			}
+		}
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+
+			margin = { 20 0 }
+
+			portrait_body = {
+				name = "portrait"
+				datacontext = "[PortraitCustomizationWindow.GetCharacter]"
+				size = { 360 470 }
+				
+
+				blockoverride "portrait_button"
+				{
+					alwaystransparent = yes
+					tooltip_enabled = no
+					size = { 364 551 }
+					portrait_texture = "[PortraitCustomizationWindow.GetPortraitTexture('environment_body', 'camera_body', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+				}
+
+				blockoverride "status_icons" {}
+				blockoverride "coa" {}
+				blockoverride "portrait_glow" {}
+			}
+
+			vbox = {
+
+				background = {
+					using = Background_Area
+					margin = { 20 20 }
+				}
+
+				vbox = {
+					name = "accessories_grid"
+					datamodel = "[PortraitCustomizationWindow.GetAccessoryItems]"
+					margin = { 20 20 }
+					spacing = 15
+
+					item = {
+						vbox = {
+							spacing = 10
+
+							hbox = {
+								layoutpolicy_horizontal = expanding
+
+								text_label_left = {
+									text = "[AccessoryItem.GetName]"
+								}
+
+								expand = {}
+							}
+
+							dropdown_menu_standard =
+							{
+								blockoverride "dropdown_properties"
+								{
+								    datamodel = "[AccessoryItem.GetOptions]"
+								    onselectionchanged = "[AccessoryItem.OnSelect]"
+								    selectedindex = "[AccessoryItem.GetSelectedIndex]"
+								}
+
+								blockoverride "dropdown_size"
+								{
+								    size = { 300 32 }
+								}
+
+								blockoverride "dropdown_list_maxsize"
+								{
+								    maximumsize = { 291 250 }
+								}
+
+								blockoverride "dropdown_active_item_properties"
+								{
+									text = "[AccessoryItemOption.GetName]"
+								}
+
+								blockoverride "dropdown_item_properties"
+								{
+									onmousehierarchyenter = "[AccessoryItemOption.OnHover]"
+									text = "[AccessoryItemOption.GetName]"
+								}
+
+								blockoverride "dropdown_list_properties"
+								{
+									onmousehierarchyleave = "[PortraitCustomizationWindow.RestorePreviousPortraitModifierIndex]"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		vbox = {
+			spacing = 5
+			margin = { 20 0 }
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+
+				text_label_left = {
+					name = "hair_color_label"
+					text = "PCW_HAIR_COLOR_LABEL"
+				}
+
+				expand = {}
+			}
+
+			hbox = {
+				name = "hair_colors_grid"
+				datamodel = "[PortraitCustomizationWindow.GetHairColorItems]"
+				margin = { 10 10}
+				spacing = 3
+
+				background = {
+					using = Background_Area
+				}
+
+				item = {
+					hbox = {
+						button_standard_clean = {
+							name = "color_button"
+							visible = "[Not(HairColorItem.IsDefault)]"
+							size = { 75 75 }
+							onclick = "[HairColorItem.OnSelect]"
+							down = "[HairColorItem.IsSelected]"
+
+							icon = {
+								parentanchor = center
+								size = { 60 60  }
+
+								texture = "gfx/interface/colors/white.dds"
+								tintcolor = "[HairColorItem.GetRGBA]"
+								using = Mask_Rough_Edges
+							}
+						}
+
+						button_standard_clean = {
+							name = "default_color_button"
+							visible = "[HairColorItem.IsDefault]"
+							size = { 75 75 }
+							onclick = "[HairColorItem.OnSelect]"
+							down = "[HairColorItem.IsSelected]"
+
+							icon = {
+								parentanchor = center
+								size = { 60 60  }
+
+								texture = "gfx/interface/colors/white.dds"
+								tintcolor = { 1.0 1.0 1.0 0.1 }
+								using = Mask_Rough_Edges
+							}
+
+							text_single = {
+								name = "text"
+								text = "PCW_DEFAULT_HAIR_COLOR"
+								default_format = "#clickable"
+								align = nobaseline
+								parentanchor = center
+							}
+						}
+					}
+				}
+			}
+		}
+
+		vbox = {
+			margin = { 10 10 }
+			margin_bottom = 30
+
+			button_primary = {
+				name = "apply_button"
+				text = "PCW_APPLY"
+				onclick = "[PortraitCustomizationWindow.ApplyAndClose]"
+			}
+		}
+	}
+}
+

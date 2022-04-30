@@ -1,0 +1,699 @@
+# OPEN WITH: gui.CreateDockable gui/debug_menus.gui toolbars_window§
+template editor_text
+{
+	font = StandardGameFont
+	fontsize = 13
+	fontcolor = { 1 1 1 1 }
+}
+
+widget = {
+	name = "language_window"
+	position = { 50 50 }
+	size = { 600 80 }
+	layer = debug
+
+	background = {
+		texture = "gfx/editor_gui/editor_toolbar_background.dds"
+		spriteType = CorneredStretched
+		spriteborder = { 5 5 }
+		shaderfile = "gfx/FX/pdxgui_default.shader"
+		margin = { 5 5 }
+	}
+
+	vbox = {
+		restrictparent_min = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 10 5 }
+			margin_bottom = 10
+
+			editor_textbox = {
+				raw_text = "Switch Languages"
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+			}
+		}
+
+		hbox = {
+			margin = { 5 5 }
+			spacing = 3
+			using = dockable_background
+
+			dockable_button = {
+				size = { 150 35 }
+				raw_text = "English"
+				onclick = "[ExecuteConsoleCommand('switchlanguage english')]"
+			}
+
+			dockable_button = {
+				size = { 150 35 }
+				raw_text = "Latin"
+				onclick = "[ExecuteConsoleCommand('switchlanguage latin')]"
+			}
+
+			dockable_button = {
+				size = { 150 35 }
+				raw_text = "German"
+				onclick = "[ExecuteConsoleCommand('switchlanguage german')]"
+			}
+
+			dockable_button = {
+				size = { 150 35 }
+				raw_text = "French"
+				onclick = "[ExecuteConsoleCommand('switchlanguage french')]"
+			}
+		}
+	}
+}
+
+window = {
+	name = "environment_debug_window"
+	size = { 355 220 }
+	position = { 630 300 }
+	layer = debug
+
+	background = {
+		texture = "gfx/editor_gui/editor_toolbar_background.dds"
+		spriteType = CorneredStretched
+		spriteborder = { 5 5 }
+		shaderfile = "gfx/FX/pdxgui_default.shader"
+		margin = { 5 5 }
+	}
+
+	vbox = {
+		restrictparent_min = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 10 5 }
+			margin_bottom = 10
+
+			editor_textbox = {
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+				raw_text = "Lighting environments"
+			}
+		}
+
+		hbox = {
+			margin = { 5 5 }
+			spacing = 3
+
+			using = dockable_background
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox  = {
+					autoresize = yes
+					raw_text = "Environment Settings"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Standard"
+					onclick = "[ExecuteConsoleCommand('Environment.Debug.LoadEnvironment gfx/map/environment/environment.txt')]"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Neutral"
+					onclick = "[ExecuteConsoleCommand('Environment.Debug.LoadEnvironment gfx/map/environment/environment_neutral.txt')]"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Debug"
+					onclick = "[ExecuteConsoleCommand('Environment.Debug.LoadEnvironment gfx/map/environment/environment_debug.txt')]"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Greyscale"
+					onclick = "[ExecuteConsoleCommand('Environment.Debug.LoadEnvironment gfx/map/environment/environment_greyscale.txt')]"
+				}
+			}
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox  = {
+					autoresize = yes
+					raw_text = "Portrait Environments"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Portrait Standard"
+					onclick = "[ExecuteConsoleCommand('PortraitEnv.Debug.LoadEnvironment gfx/portraits/jomini_environment.txt')]"
+				}
+
+				# dockable_button = {
+				# 	size = { 180 30 }
+				# 	raw_text = "Old"
+				# 	onclick = "[ExecuteConsoleCommand('PortraitEnv.Debug.LoadEnvironment gfx/portraits/jomini_environment_old.txt')]"
+				# }
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Portrait Neutral"
+					onclick = "[ExecuteConsoleCommand('PortraitEnv.Debug.LoadEnvironment gfx/portraits/jomini_environment_neutral.txt')]"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Purge Portrait Cache"
+					onclick = "[ExecuteConsoleCommand('PurgePortraits')]"
+					tintcolor = { 1 0.5 0.1 0.8 }
+					raw_tooltip = "Purge Portrait cache"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Toggle Tonemap Curve"
+					onclick = "[ExecuteConsoleCommand('shader_debug PDX_DEBUG_TONEMAP_CURVE')]"
+					tintcolor = { 200 20 0 0.8 }
+					raw_tooltip = "Toggle Tonemap Curve"
+				}
+			}
+		}
+	}
+}
+
+window = {
+	name = "map_debug_menu"
+	size = { 623 375 }
+	position = { -50 -90 }
+	parentanchor = top|right
+	layer = debug
+
+	background = {
+		texture = "gfx/editor_gui/editor_toolbar_background.dds"
+		spriteType = CorneredStretched
+		spriteborder = { 5 5 }
+		shaderfile = "gfx/FX/pdxgui_default.shader"
+		margin = { 5 5 }
+	}
+
+	vbox = {
+		restrictparent_min = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 10 5 }
+			margin_bottom = 10
+
+			editor_textbox = {
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+				raw_text = "Map Debug Menu"
+			}
+		}
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 5 5 }
+			spacing = 3
+			using = dockable_background
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox = {
+					raw_text = "General"
+					autoresize = yes
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "3D Stats"
+					onclick = "[ExecuteConsoleCommand('3dstats')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Free Camera"
+					onclick = "[ExecuteConsoleCommand('Camera.Restrictions')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Reload Assets"
+					onclick = "[ExecuteConsoleCommand('reload assets')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Reload Texture"
+					onclick = "[ExecuteConsoleCommand('reload texture')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Reload Terrain"
+					onclick = "[ExecuteConsoleCommand('reload terrain')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Add Map Objects"
+					onclick = "[ExecuteConsoleCommand('gui.createwidget gui/debug_menus.gui map_object_menu')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Map Modes (Editor)"
+					onclick = "[ExecuteConsoleCommand('Dockables.Create GameMapModeSelector')]"
+				}
+
+				expand = {}
+			}
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox = {
+					autoresize = yes
+					raw_text = "Show On/Off"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Fog of War"
+					onclick = "[ExecuteConsoleCommand('FogOfWar.Enable')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Borders"
+					onclick = "[ExecuteConsoleCommand('Draw.Borders')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Gradient Borders"
+					onclick = "[ExecuteConsoleCommand('GradientBorders.Enable')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Rivers"
+					onclick = "[ExecuteConsoleCommand('Draw.Rivers')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Water"
+					onclick = "[ExecuteConsoleCommand('Draw.Water')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Bloom"
+					onclick = "[ExecuteConsoleCommand('Bloom.Enable')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Map names"
+					onclick = "[ExecuteConsoleCommand('Draw.MapNames')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Map Objects"
+					onclick = "[ExecuteConsoleCommand('Draw.MapObjects')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Roads"
+					onclick = "[ExecuteConsoleCommand('Draw.Roads')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Shadows"
+					onclick = "[ExecuteConsoleCommand('Mesh.DrawShadows')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Surround Mask"
+					onclick = "[ExecuteConsoleCommand('Draw.Surround')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Post effects Volumes"
+					onclick = "[ExecuteConsoleCommand('Draw.DebugPostEffectVolumes')]"
+				}
+
+				expand = {}
+			}
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox = {
+					autoresize = yes
+					raw_text = "Show Names"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Entity"
+					onclick = "[ExecuteConsoleCommand('entity.names')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Mesh"
+					onclick = "[ExecuteConsoleCommand('mesh.names')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Texture"
+					onclick = "[ExecuteConsoleCommand('mesh.texturenames')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Joint"
+					onclick = "[ExecuteConsoleCommand('mesh.jointnames')]"
+				}
+
+				expand = {}
+			}
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox = {
+					autoresize = yes
+					raw_text = "Tweak"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Water"
+					onclick = "[ExecuteConsoleCommand('tweak water')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Environment"
+					onclick = "[ExecuteConsoleCommand('tweak environment')]"
+				}
+
+				expand = {}
+			}
+
+			vbox = {
+				layoutpolicy_vertical = expanding
+				spacing = 5
+
+				editor_textbox = {
+					autoresize = yes
+					raw_text = "Debug"
+					fontcolor = { 1 1 1 0.5 }
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Collision"
+					onclick = "[ExecuteConsoleCommand('mesh.collisionmeshes')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Normals"
+					onclick = "[ExecuteConsoleCommand('mesh.normals')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Skeleton"
+					onclick = "[ExecuteConsoleCommand('mesh.skeleton')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Mip levels"
+					onclick = "[ExecuteConsoleCommand('mesh.miplevels')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "LOD Levels"
+					onclick = "[ExecuteConsoleCommand('Mesh.LodLevels')]"
+				}
+
+				dockable_button = {
+					size = { 150 25 }
+					raw_text = "Lod Screen Percentage"
+					onclick = "[ExecuteConsoleCommand('Mesh.ScreenPercentage')]"
+				}
+
+				expand = {}
+			}
+		}
+	}
+}
+
+
+window = {
+	name = "flag_preview_window"
+	size = { 500 230 }
+	position = { 850 300 }
+	layer = debug
+
+	background = {
+		texture = "gfx/editor_gui/editor_toolbar_background.dds"
+		spriteType = CorneredStretched
+		spriteborder = { 5 5 }
+		shaderfile = "gfx/FX/pdxgui_default.shader"
+		margin = { 5 5 }
+	}
+
+	vbox = {
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 10 5 }
+			margin_bottom = 10
+
+			editor_textbox = {
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+				raw_text = "Flag Preview"
+			}
+		}
+
+		vbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+
+			using = dockable_background
+
+			visible = "[IsInGame]"
+
+			hbox = {
+
+				coa_realm_huge = {
+					datacontext = "[GetPlayer]"
+				}
+
+				coa_realm_big = {
+					datacontext = "[GetPlayer]"
+				}
+
+				coa_realm_medium = {
+					datacontext = "[GetPlayer]"
+				}
+
+				coa_realm_small = {
+					datacontext = "[GetPlayer]"
+				}
+			}
+
+			hbox = {
+				spacing = 5
+
+				icon = {
+					name = "hourglass"
+					texture = "gfx/interface/icons/temp_icon_search.dds"
+					color = { 0.788235 0.643137 0.419608 1 }
+					size = { 35 35 }
+				}
+
+				editor_textinput = {
+					name = "console_edit"
+					size = { 400 35 }
+					margin = { 5 0 }
+					alwaystransparent = no
+					focuspolicy = all
+					fontsize = 15
+
+					#	onreturnpressed = "[FindTitleView.OnDone]"
+					#	ontextedited = "[FindTitleView.OnEdit]"
+				}
+			}
+		}
+	}
+}
+
+widget = {
+	name = "tweak_window"
+	size = { 200 200 }
+	layer = debug
+
+	background = {
+		texture = "gfx/editor_gui/editor_toolbar_background.dds"
+		spriteType = CorneredStretched
+		spriteborder = { 5 5 }
+		shaderfile = "gfx/FX/pdxgui_default.shader"
+	}
+
+	vbox = {
+		restrictparent_min = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 10 5 }
+			margin_bottom = 10
+
+			editor_textbox = {
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+				raw_text = "Tweak"
+			}
+		}
+
+		vbox = {
+			margin = { 5 5 }
+			spacing = 3
+
+			using = dockable_background
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Rivers"
+				onclick = "[ExecuteConsoleCommand('tweak river')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Environment"
+				onclick = "[ExecuteConsoleCommand('tweak environment')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Borders"
+				onclick = "[ExecuteConsoleCommand('tweak border')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Draw"
+				onclick = "[ExecuteConsoleCommand('tweak draw')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Mesh"
+				onclick = "[ExecuteConsoleCommand('tweak mesh')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Terrain"
+				onclick = "[ExecuteConsoleCommand('tweak terrain')]"
+			}
+
+			dockable_button = {
+				size = { 180 30 }
+				raw_text = "Map objects"
+				onclick = "[ExecuteConsoleCommand('tweak MapObjects')]"
+			}
+
+		}
+	}
+}
+
+widget = {
+	name = "map_object_menu"
+	size = { 100% 100% }
+	position = { 1 1 }
+
+	textbox = {
+		position = { 0 25% }
+		size = { 100% 20 }
+		using = editor_text
+		align = center
+		raw_text = "Click anywhere to place map objects"
+	}
+
+	button = {
+		size = { 100% 100% }
+		onclick = "[ExecuteConsoleCommand('MapObjects.Painter.AddPosition')]"
+	}
+
+	widget = {
+		name = "background"
+		size = { 70 110 }
+		position = { 100 25 }
+
+		vbox = {
+			restrictparent_min = yes
+
+			background = {
+				texture = "gfx/editor_gui/editor_toolbar_background.dds"
+				spriteType = CorneredStretched
+				spriteborder = { 5 5 }
+				shaderfile = "gfx/FX/pdxgui_default.shader"
+				margin = { 5 5 }
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				margin = { 10 5 }
+				margin_bottom = 10
+
+				editor_textbox = {
+					layoutpolicy_horizontal = expanding
+					autoresize = yes
+					raw_text = "Place Map Objects"
+				}
+			}
+
+			vbox = {
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Config"
+					onclick = "[ExecuteConsoleCommand('tweak MapObjects.Painter')]"
+				}
+
+				dockable_button = {
+					size = { 180 30 }
+					raw_text = "Cancel"
+					onclick = "[ExecuteConsoleCommand('GUI.ClearWidgets')]"
+				}
+			}
+		}
+	}
+}
