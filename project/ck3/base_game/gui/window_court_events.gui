@@ -1,0 +1,266 @@
+types RoyalCourtTypes
+{
+	# Requires a CourtEventWindow data context
+	type widget_court_event = widget {
+		allow_outside = yes
+		parentanchor = bottom|right
+
+		background = {
+			texture = "gfx/interface/component_tiles/tile_window_background_subwindow.dds"
+			spriteType = Corneredtiled
+			spriteborder = { 18 18 }
+			margin_left = 20
+			margin_bottom = 20
+			texture_density = 2
+			margin_top = 16
+
+			modify_texture = {
+				name = "overlay"
+				texture = "gfx/interface/component_overlay/overlay_effect.dds"
+				spriteType = Corneredstretched
+				spriteborder = { 0 0 }
+				blend_mode = overlay
+			}
+		}
+
+		widget = {
+			size = { 642 22 }
+
+			icon = {
+				name = "tile_frame_top"
+				texture = "gfx/interface/skinned/component_decoration/decoration_frame_top_clean.dds"
+				spriteType = Corneredtiled
+				spriteborder = { 100 0 }
+				texture_density = 2
+				size = { 643 22 }
+				position = { -43 -22 }
+			}
+		}
+
+		state = {
+			name = _show
+			using = Animation_FadeIn_Quick
+			using = Sound_WindowShow_Standard
+		}
+
+		state = {
+			name = _hide
+			using = Animation_FadeOut_Quick
+			using = Sound_WindowHide_Standard
+		}
+
+		### Event Portraits ###
+		flowcontainer = {
+			name = "event_portraits"
+			datamodel = "[EventWindowData.GetInvolvedCharacters]"
+			parentanchor = bottom|left
+			widgetanchor = bottom|right
+			position = { -25 -60 }
+			direction = vertical
+			spacing = 10
+
+			item = {
+				portrait_head = { }
+			}
+		}
+
+		### Event Information ###
+		vbox = {
+			name = "court_event_data" # name referenced from code to fill in event data
+			margin_bottom = 40
+			alwaystransparent = no
+
+			hbox = {
+				margin_left = -15
+				margin_bottom = -15
+				layoutpolicy_horizontal = expanding
+
+				header_pattern = {
+					layoutpolicy_horizontal = expanding
+
+					blockoverride "header_text"
+					{
+						text = "[EventWindowData.GetTitle]"
+						parentanchor = center
+						align = left
+						position = { -10 -10 }
+
+					}
+
+					blockoverride "button_close"
+					{
+						visible = no
+					}
+				}
+			}
+
+			vbox = {
+				name = "description_and_options"
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				margin_right = 30
+				margin_top = 20
+
+				vbox = {
+					name = "custom_widgets_container"
+					layoutpolicy_horizontal = expanding
+
+					state = {
+						trigger_on_create = yes
+						name = appear_test
+						delay = 0.8
+						using = Animation_Curve_Default
+						alpha = 1
+						duration = 0.6
+					}
+				}
+
+				vbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+
+					background = {
+						using = Background_Area
+
+						margin_left = 15
+					}
+
+					scrollbox = {
+						name = "description_scrollarea"
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						scrollbarpolicy_horizontal = always_off
+
+						scrollbar_vertical = {
+							using = Scrollbar_Vertical
+
+							blockoverride "alpha"{
+								alpha = 0.6
+							}
+						}
+
+						blockoverride "scrollbox_background_fade" {}
+						blockoverride "scrollbox_background" {}
+
+						blockoverride "scrollbox_content"
+						{
+							text_multi = {
+								name = "description"
+								max_width = 510
+								autoresize = yes
+								margin = { 10 20 }
+								text = "[EventWindowData.GetDescription]"
+								fontsize = 16
+							}
+						}
+					}
+				}
+
+
+				vbox = {
+					allow_outside = yes
+					layoutpolicy_horizontal = expanding
+					ignoreinvisible = yes
+					spacing = 5
+					margin_bottom = 15
+					margin_top = 15
+
+					hbox = {
+						spacing = 5
+
+						hbox = {
+							name = "dynamic_birth_name"
+							margin = { 5 0 }
+						}
+					}
+
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						visible = "[EventWindowData.ShouldShowTimeoutInfo]"
+						margin_bottom = 10
+						margin_top = -10
+
+						text_single = {
+							text = "COURT_EVENT_TIME_WARNING"
+							default_format = "#weak"
+						}
+					}
+
+					fixedgridbox = {
+						name = "option_grid"
+						addcolumn = 510
+						addrow = 42
+						datamodel = "[EventWindowData.GetOptions]"
+
+						item = {
+							button_eventoption = {
+								blockoverride "onmousehierarchy_callbacks" {
+									onmousehierarchyenter = "[CourtEventWindow.OnMouseEnterOption(EventOption.Self)]"
+									onmousehierarchyleave = "[CourtEventWindow.OnMouseLeaveOption]"
+								}
+							}
+						}
+					}
+				}
+			}
+
+			hbox = {
+				name = "debug_event_info"
+				visible = "[InDebugMode]"
+
+				button_round = {
+					size = { 40 40 }
+
+					button_icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/flat_icons/data_system.dds"
+						tooltip = "TOGGLE_DATA_SYSTEM"
+						using = tooltip_below
+						onclick = "[ExecuteConsoleCommand('Localization.ToggleSkipDataSystemInLocOutput')]"
+						fontsize = 24
+					}
+				}
+
+				button_round = {
+					size = { 40 40 }
+					button_copy = {
+						parentanchor = center
+						onclick = "[EventWindowData.CopyToClipboard]"
+						tooltip = "COPY_EVENT_CONTENTS"
+					}
+				}
+
+				container = {
+					tooltip = "[EventWindowData.GetTriggerBreakdown]"
+					using = tooltip_below
+					icon = {
+						visible = "[EventWindowData.IsTriggerFulfilled]"
+						size = { 40 40 }
+						texture = "gfx/interface/icons/symbols/icon_check.dds"
+					}
+
+					icon = {
+						visible = "[Not( EventWindowData.IsTriggerFulfilled )]"
+						size = { 40 40 }
+						texture = "gfx/interface/icons/symbols/icon_cross.dds"
+					}
+				}
+
+				button = {
+					name = "debug_icon"
+					size = { 40 40 }
+
+					button = {
+						size = { 100% 100% }
+						tooltip = "[EventWindowData.GetDebugInfo]"
+						using = tooltip_below
+						onclick = "[EventWindowData.CopyToClipboard]"
+						onrightclick = "[EventWindowData.DebugOpen]"
+						button_ignore = none
+						raw_text = "?"
+						fontsize = 24
+					}
+				}
+			}
+		}
+	}

@@ -1,0 +1,58 @@
+﻿# Adds $FLAG$ to the character if a player
+add_achievement_flag_effect = {
+	if = {
+		limit = {
+			is_ai = no
+		}
+		add_character_flag = $FLAG$
+	}
+}
+
+# Adds $VALUE$ to the character $VARIABLE$ if a player, sets to zero first if not already a present variable
+add_achievement_variable_effect = {
+	if = {
+		limit = {
+			is_ai = no
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = $VARIABLE$ }
+			}
+			set_variable = {
+				name = $VARIABLE$
+				value = 0
+			}
+		}
+		change_variable = {
+			name = $VARIABLE$
+			add = $VALUE$
+		}
+	}
+}
+
+# Sets $VALUE$ to the global variable named $VARIABLE$ if a player
+add_achievement_global_variable_effect = {
+	if = {
+		limit = {
+			is_ai = no
+		}
+		set_global_variable = {
+			name = $VARIABLE$
+			value = $VALUE$
+		}
+	}
+}
+
+# Adds $FLAG$ to list of unavailable achievements if a player
+add_to_global_unavailable_achievements_list_effect = {
+	if = {
+		limit = {
+			is_ai = no
+		}
+		add_to_global_variable_list = {
+			name = unavailable_achievements
+			target = $FLAG$
+		}
+	}
+}
+
