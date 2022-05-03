@@ -11,6 +11,7 @@ filegroup(
 pkg_files(
     name = "mod_files",
     srcs = [ ":modded_game" ],
+    prefix = "Recursive Governments",
     strip_prefix = strip_prefix.from_pkg()
 )
 
