@@ -32,7 +32,7 @@ async function main() {
 
 	const ab = await Promise.all(
 		mappings.map(async ([name, file]) =>
-			Github.rest.repos.uploadReleaseAsset({
+			await Github.rest.repos.uploadReleaseAsset({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
 				release_id: (await release).data.id,
