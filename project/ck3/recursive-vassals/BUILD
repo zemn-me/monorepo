@@ -1,6 +1,8 @@
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
+package(default_visibility = ["//deploy:__subpackages__"])
+
 
 
 filegroup(
