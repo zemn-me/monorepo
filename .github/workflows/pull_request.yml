@@ -24,7 +24,9 @@ jobs:
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
           STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       - name: All tests
-        run: yarn bazel test //...
+        # Use npx to try to generate only
+        # bazel generated node_modules
+        run: npx bazelisk test //...
         env:
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
           STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
