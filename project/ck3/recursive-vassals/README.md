@@ -20,6 +20,6 @@ Republican vassals are mostly a PITA. They, like Theocratic vassals, have no par
 
  ## Building
 
- The target `:mod_zip` builds a zip file, i.e. run `yarn bazel build //project/ck3/recursive-vassals:mod_zip`. This is probably not going to be very ergonomic for people who don't know how to use bazel. Sorry.
+ The target `:mod_zip` builds a zip file, i.e. run `yarn bazel build //project/ck3/recursive-vassals:mod_zip`. It is output as a build artifact in each release.
 
  You can also get a patch via `:patch`.
