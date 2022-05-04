@@ -1,32 +1,37 @@
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
-
+package(default_visibility = ["//deploy:__subpackages__"])
 
 filegroup(
     name = "modded_game",
-    srcs =  glob(["**/*"], exclude=["**/BUILD"])
+    srcs = glob(
+        ["**/*"],
+        exclude = ["**/BUILD"],
+    ),
 )
 
 pkg_files(
     name = "mod_files",
-    srcs = [ ":modded_game" ],
-    strip_prefix = strip_prefix.from_pkg()
+    srcs = [":modded_game"],
+    strip_prefix = strip_prefix.from_pkg(),
 )
 
 genrule(
     name = "patch",
-    srcs = [ ":modded_game", "//project/ck3/base_game" ],
-    outs = [ "mod.patch" ],
+    srcs = [
+        ":modded_game",
+        "//project/ck3/base_game",
+    ],
+    outs = ["mod.patch"],
     cmd = """
         LC_ALL=C diff -ur \\
             project/ck3/base_game project/ck3/recursive-vassals | grep -v '^Only in' > $@ || true
     """,
-    message = "Creating patch file..."
+    message = "Creating patch file...",
 )
-
 
 pkg_zip(
     name = "mod_zip",
-    srcs = [ ":mod_files" ]
+    srcs = [":mod_files"],
 )

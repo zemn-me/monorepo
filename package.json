@@ -3,6 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"devDependencies": {
+		"@actions/core": "^1.7.0",
+		"@actions/github": "^5.0.1",
 		"@babel/preset-typescript": "^7.16.5",
 		"@bazel/bazelisk": "1.11.0",
 		"@bazel/buildifier": "4.2.4",

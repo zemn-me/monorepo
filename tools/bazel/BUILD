@@ -16,7 +16,7 @@ sh_binary(
         "FIX_CSS": "$(rootpath //css/lint)",
         "FIX_BAZEL": "$(rootpath //:buildifier)",
         "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
-        "FIX_JS": "$(rootpath @npm//eslint/bin:eslint)",
+        "FIX_JS": "$(location @npm//eslint/bin:eslint)",
     },
     visibility = ["//:__subpackages__"],
     deps = [

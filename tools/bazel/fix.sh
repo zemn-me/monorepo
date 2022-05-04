@@ -19,5 +19,5 @@ FIX_JS=$(realpath $(rlocation npm/eslint/bin/eslint.sh))
 (cd $BUILD_WORKSPACE_DIRECTORY
 git ls-files --cached --modified --other --exclude-standard | uniq | grep .css$ | xargs $FIX_CSS --ignore-path .gitignore --fix
 $FIX_GO -s -w .
-$FIX_JS --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json') || true # ignore failures. it fails often
+$FIX_JS --fix --ignore-pattern 'project/ck3/base_game/*' --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.tsx' '**/*.json') || true # ignore failures. it fails often
 $FIX_BAZEL --lint=fix -r $INIT_CWD
