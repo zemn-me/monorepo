@@ -9,20 +9,21 @@ import { context, getOctokit } from '@actions/github';
 const Github = getOctokit(process.env['GITHUB_TOKEN']!);
 
 async function main() {
+	const syntheticVersion = `v0.0.0-${new Date().getTime()}-${context.sha}`;
 	const release = Github.rest.repos.createRelease({
 		// could probably use a spread operator here
 		// but i also think that would be uglier...
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 
-		tag_name: `v0.0.0-${new Date().getTime()}-${context.sha}`,
+		tag_name: syntheticVersion,
 
 		// TBD: maybe a desc?
 		// body:
 
 		generate_release_notes: true,
 
-		name: context.sha,
+		name: syntheticVersion,
 
 		target_commitish: context.ref,
 	});
