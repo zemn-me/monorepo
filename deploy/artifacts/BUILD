@@ -12,6 +12,7 @@ ts_project(
     name = "release_src",
     srcs = ["release.ts"],
     deps = [
+        "@npm//mime",
         "@npm//@actions/github",
         "@npm//@types/node",
     ],

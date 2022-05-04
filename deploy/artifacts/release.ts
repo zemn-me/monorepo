@@ -37,7 +37,7 @@ async function main() {
 				repo: context.repo.repo,
 				release_id: (await release).data.id,
 				name,
-				data: (await fs.readFile(file)).toString(),
+				data: (await fs.readFile(file)).toString('utf-8'),
 			})
 		)
 	);
