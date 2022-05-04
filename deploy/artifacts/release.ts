@@ -37,7 +37,8 @@ async function main() {
 				repo: context.repo.repo,
 				release_id: (await release).data.id,
 				name,
-				data: (await fs.readFile(file)).toString('utf-8'),
+				// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
+				data: (await fs.readFile(file)) as unknown as string,
 			})
 		)
 	);
