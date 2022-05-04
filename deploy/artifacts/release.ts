@@ -31,15 +31,16 @@ async function main() {
 	const mappings = process.argv.slice(2).map(v => v.split('='));
 
 	const ab = await Promise.all(
-		mappings.map(async ([name, file]) =>
-			await Github.rest.repos.uploadReleaseAsset({
-				owner: context.repo.owner,
-				repo: context.repo.repo,
-				release_id: (await release).data.id,
-				name,
-				// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
-				data: (await fs.readFile(file)) as unknown as string,
-			})
+		mappings.map(
+			async ([name, file]) =>
+				await Github.rest.repos.uploadReleaseAsset({
+					owner: context.repo.owner,
+					repo: context.repo.repo,
+					release_id: (await release).data.id,
+					name,
+					// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
+					data: (await fs.readFile(file)) as unknown as string,
+				})
 		)
 	);
 
