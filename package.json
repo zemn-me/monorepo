@@ -59,7 +59,7 @@
 		"yaml-validator": "^3.0.1"
 	},
 	"scripts": {
-		"bazelisk": "npx @bazel/bazelisk --yes",
+		"bazelisk": "npx --yes @bazel/bazelisk ",
 		"build": "yarn run bazelisk build //...",
 		"test": "yarn run bazelisk run //tools/bazel:affected_files",
 		"fix": "yarn run bazelisk run //:fix"
