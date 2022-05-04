@@ -59,9 +59,10 @@
 		"yaml-validator": "^3.0.1"
 	},
 	"scripts": {
-		"build": "yarn bazel build //...",
-		"test": "npx @bazel/bazelisk run //tools/bazel:affected_files",
-		"fix": "yarn run bazel run //:fix"
+		"bazelisk": "npx @bazel/bazelisk --yes",
+		"build": "yarn run bazelisk build //...",
+		"test": "yarn run bazelisk run //tools/bazel:affected_files",
+		"fix": "yarn run bazelisk run //:fix"
 	},
 	"dependencies": {
 		"@bazel/labs": "^4.5.0",
