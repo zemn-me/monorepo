@@ -16,10 +16,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Install node deps
-        run: yarn install
       - name: Deploy
-        run: yarn bazel run //deploy:deploy
+        # Use npx to try to generate only
+        # bazel generated node_modules
+        run: npx bazelisk run //deploy:deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
