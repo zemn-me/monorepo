@@ -15,14 +15,14 @@ async function main() {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 
-		tag_name: context.ref,
+		tag_name: context.sha,
 
 		// TBD: maybe a desc?
 		// body:
 
 		generate_release_notes: true,
 
-		name: context.ref,
+		name: context.sha,
 
 		target_commitish: context.ref,
 	});
@@ -36,7 +36,7 @@ async function main() {
 				repo: context.repo.repo,
 				release_id: (await release).data.id,
 				name,
-				data: await fs.readFile(file).toString(),
+				data: (await fs.readFile(file)).toString(),
 			})
 		)
 	);
