@@ -15,7 +15,7 @@ async function main() {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 
-		tag_name: context.ref,
+		tag_name: context.sha,
 
 		// TBD: maybe a desc?
 		// body:
