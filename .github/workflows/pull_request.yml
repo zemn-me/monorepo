@@ -16,8 +16,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Install node deps
-        run: yarn install
       - name: Directly affected tests
         run: yarn test
         env:
@@ -26,7 +24,7 @@ jobs:
       - name: All tests
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: npx bazelisk test //...
+        run: yarn run bazelisk test //...
         env:
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
           STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
