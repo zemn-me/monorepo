@@ -60,7 +60,7 @@
 	},
 	"scripts": {
 		"build": "yarn bazel build //...",
-		"test": "yarn bazel run //tools/bazel:affected_files",
+		"test": "npx @bazel/bazelisk run //tools/bazel:affected_files",
 		"fix": "yarn run bazel run //:fix"
 	},
 	"dependencies": {

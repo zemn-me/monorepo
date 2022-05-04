@@ -19,7 +19,7 @@ jobs:
       - name: Deploy
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: npx bazelisk run //deploy:deploy
+        run: npx @bazel/bazelisk run //deploy:deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
