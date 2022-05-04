@@ -15,7 +15,7 @@ async function main() {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 
-		tag_name: context.sha,
+		tag_name: `v0.0.0-${new Date().getTime()}-${context.sha}`,
 
 		// TBD: maybe a desc?
 		// body:
