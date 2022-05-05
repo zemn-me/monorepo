@@ -16,7 +16,7 @@ def jest_test(project_deps = [], jsdom = None, deps = [], **kwargs):
     extra_deps = ["@npm//jsdom"] if jsdom else []
     _jest_test(
         deps = deps + [x + "_js" for x in project_deps] + extra_deps,
-        jest_config = "//:jest_config_browser_js" if jsdom else "//:jest_config_node_js",
+        jest_config = "//ts/jest:config_browser_js" if jsdom else "//ts/jest:config_node_js",
         **kwargs
     )
 
