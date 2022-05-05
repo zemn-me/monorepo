@@ -8,8 +8,8 @@
 
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("//:rules.bzl", "ts_project")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
+load("//:rules.bzl", "ts_config")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -22,7 +22,11 @@ alias(
     actual = "//tools/bazel:fix",
 )
 
-load("//:rules.bzl", "ts_config")
+ts_config(
+    name = "tsconfig_jsx",
+    src = "jsx.tsconfig.json",
+    deps = ["//ts/config:jsx"],
+)
 
 ts_config(
     name = "tsconfig",
@@ -35,25 +39,9 @@ ts_config(
     deps = ["//ts/config:node"],
 )
 
-ts_config(
-    name = "tsconfig_jsx",
-    src = "jsx.tsconfig.json",
-    deps = ["//ts/config:jsx"],
-)
-
 js_library(
     name = "base_defs",
     srcs = ["Global.d.ts"],
-)
-
-ts_project(
-    name = "jest_config_node",
-    srcs = ["jest.node.config.ts"],
-)
-
-ts_project(
-    name = "jest_config_browser",
-    srcs = ["jest.browser.config.ts"],
 )
 
 exports_files(
