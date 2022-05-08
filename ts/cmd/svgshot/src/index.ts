@@ -2,7 +2,7 @@
 import puppeteer from 'puppeteer';
 import * as tmp from 'tmp';
 import { exec } from 'child_process';
-import SVGO from 'svgo'
+import * as svgo from 'svgo'
 import { writeFile, readFile } from 'fs';
 import { promisify } from 'util';
 
@@ -197,15 +197,14 @@ const main = async () => {
             throw new Error(`failed to run ${line} with ${e} -- make sure you have inkscape installed and in your PATH`)
         }
 
-        const svgo = new SVGO({
-            plugins: svgoPlugins
-        });
-
         const title = ((await page.title()).trim() || page.url()).replace(/[^A-z_-]/g, "_");
         const fileName = title + ".svg";
 
         const svgContents = await promisify(readFile)(svgFile, 'utf8');
-        const optimSvg = await svgo.optimize(svgContents.toString(), {path: svgFile});
+        const optimSvg = await svgo.optimize(svgContents.toString(), {
+            path: svgFile,
+            plugins: svgoPlugins
+        });
 
 
         console.warn(`writing ${i+1}/${args.length} ${fileName} (${width} x ${height})`);
