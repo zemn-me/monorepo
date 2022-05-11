@@ -16,6 +16,7 @@ ts_project(
         "@npm//puppeteer",
         "@npm//svgo",
         "@npm//tmp",
+        "@npm//@bazel/runfiles"
     ],
 )
 
@@ -26,6 +27,7 @@ nodejs_binary(
         "$(location //cc/inkscape:bin)",
     ],
     data = [
+        "//cc/inkscape:bin",
         ":project_ts",
     ],
     entry_point = "index.ts",
@@ -39,6 +41,6 @@ jest_test(
         "//cc/inkscape:bin",
     ],
     env = {
-        "INKSCAPE_BIN": "$(location //cc/inkscape:bin)",
+        "INKSCAPE_BIN": "$(rootpath //cc/inkscape:bin)",
     },
 )

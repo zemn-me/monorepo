@@ -45,12 +45,12 @@ const program = new Command()
 		false
 	)
 	.option(
-		'--out',
+		'--out <fileName>',
 		'manually specify an output file name -- this fails if multiple URLs are to be recorded',
 		undefined
 	)
 	.option(
-		'--inkscapeBin',
+		'--inkscapeBin <location>',
 		'specify the location of the inkscape binary',
 		'inkscape'
 	);
@@ -104,7 +104,7 @@ const main = async (argv: string[] = process.argv) => {
 	});
 
 	if (out !== undefined && args.length > 1) {
-		throw new Error('Out file specified and more than one URL to load.');
+		throw new Error(`Out file specified and more than one URL (${args}) to load.`);
 	}
 
 	const captures = map(args, async (url, i) => {
