@@ -7,7 +7,7 @@ sh_binary(
         "stylelint-config.json",
         "@npm//stylelint/bin:stylelint",
     ],
-    visibility = ["//tools/bazel:__subpackages__"],
+    visibility = ["//bzl:__subpackages__"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
