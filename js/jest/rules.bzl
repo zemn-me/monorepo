@@ -14,7 +14,7 @@ def jest_test(name, srcs, deps = [], jest_config = "//:jest.ts.config.js", link_
     for src in srcs:
         templated_args.extend(["--runTestsByPath", "$(rootpath %s)" % src])
 
-    data = [jest_config] + srcs + deps + ["//tools/jest:jest_reporter_js"]
+    data = [jest_config] + srcs + deps + ["//js/jest:jest_reporter_js"]
     _jest_test(
         name = name,
         data = data,
