@@ -19,7 +19,7 @@ buildifier(
 
 alias(
     name = "fix",
-    actual = "//tools/bazel:fix",
+    actual = "//bzl:fix",
 )
 
 ts_config(
