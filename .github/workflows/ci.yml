@@ -1,6 +1,6 @@
 name: CI
 concurrency: 
-  group: ${{ github.head_ref }}
+  group: concurrency-${{ github.head_ref }}
   cancel-in-progress: true
 
 on:
