@@ -1,5 +1,5 @@
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
-load("//tools/go:go.bzl", _test_go_fmt = "test_go_fmt")
+load("//go/lint:rules.bzl", _test_go_fmt = "test_go_fmt")
 load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "go_library", _go_test = "go_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
