@@ -1,5 +1,7 @@
 name: CI
-concurrency: production
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 on:
   push:
@@ -26,20 +28,23 @@ jobs:
 
 
   Test:
-    if: github.event_name == 'pull_request'
+    # This runs on both push and PR – for 
+    # PR, we need to ensure tests pass,
+    # but a PR cannot save a cache due to
+    # security issues. Therefore, we run
+    # post merge to create a cache that
+    # can be picked up by future PRs.
     name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3.0.2
         env:
           cache-name: bazel-cache
         with:
@@ -59,13 +64,13 @@ jobs:
     environment: production
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3.0.2
         env:
           cache-name: bazel-cache
         with:
@@ -76,7 +81,7 @@ jobs:
       - name: Deploy
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazelisk //deploy:deploy
+        run: bazelisk run //deploy:deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
