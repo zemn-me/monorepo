@@ -16,6 +16,7 @@ ts_project(
     deps = [
         "@npm//@types/jest",
         "@npm//@types/react",
+        "@npm//@types/node",
         "@npm//react",
     ],
 )
