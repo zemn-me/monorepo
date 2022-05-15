@@ -2,13 +2,16 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    allow: all
     schedule:
       interval: "daily"
   - package-ecosystem: "gomod"
     directory: "/"
+    allow: all
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
     directory: "/"
+    allow: all
     schedule:
       interval: "daily"
