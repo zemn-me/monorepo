@@ -1,5 +1,4 @@
 name: CI
-concurrency: production
 
 on:
   push:
@@ -26,14 +25,17 @@ jobs:
 
 
   Test:
-    if: github.event_name == 'pull_request'
+    # This runs on both push and PR – for 
+    # PR, we need to ensure tests pass,
+    # but a PR cannot save a cache due to
+    # security issues. Therefore, we run
+    # post merge to create a cache that
+    # can be picked up by future PRs.
     name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Setup node
         uses: actions/setup-node@v2
         with:
