@@ -10,4 +10,4 @@ source "$(grep -sm1 "^$f " "$0.exe.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/
 # --- end runfiles.bash initialization v2 ---
 
 # bypasses FUSE issues on bazel https://github.com/AppImage/AppImageKit/pull/842
-$(rlocation $AppImage) --appimage-extract-and-run $@
+$(rlocation $APP_IMAGE) --appimage-extract-and-run $@
