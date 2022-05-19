@@ -6,13 +6,16 @@ updates:
       - dependency-type: "all"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
   - package-ecosystem: "gomod"
     directory: "/"
     allow:
      - dependency-type: "all"
+    open-pull-requests-limit: 100
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
+    open-pull-requests-limit: 100
     directory: "/"
     allow:
      - dependency-type: "all"
