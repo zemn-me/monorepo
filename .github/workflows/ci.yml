@@ -62,6 +62,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
+    needs: Test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
