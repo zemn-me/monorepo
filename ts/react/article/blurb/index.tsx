@@ -24,9 +24,13 @@ export const Article: React.FC<ArticleProps> = ({ short, children }) => {
 	);
 };
 
-export const Blurb: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const Blurb: React.FC<{ children?: React.ReactNode }> = ({
+	 children,
+}) => <>{children}</>;
 
-export const Main: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+export const Main: React.FC<{ children?: React.ReactNode }> = ({
+	 children,
+}) => {
 	// don't render if in short mode
 	if (React.useContext(RenderModeContext) == RenderMode.Short) return null;
 
