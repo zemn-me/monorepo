@@ -11,7 +11,7 @@ export const RenderModeContext = React.createContext<RenderMode>(
 
 export interface ArticleProps {
 	short?: boolean;
-	children?: React.ReactElement<unknown, typeof Article | typeof Blurb>[];
+	children?: React.ReactElement[];
 }
 
 export const Article: React.FC<ArticleProps> = ({ short, children }) => {
