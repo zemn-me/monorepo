@@ -25,7 +25,7 @@ export const Article: React.FC<ArticleProps> = ({ short, children }) => {
 };
 
 export const Blurb: React.FC<{ children?: React.ReactNode }> = ({
-	 children,
+	children,
 }) => <>{children}</>;
 
 export const Main: React.FC<{ children?: React.ReactNode }> = ({
