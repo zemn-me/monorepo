@@ -1,0 +1,7 @@
+[
+  {
+    "regex": "_lint +FAILED",
+    "command": "yarn",
+    "args": [ "run", "fix" ]
+  }
+]
