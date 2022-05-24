@@ -15,8 +15,8 @@ ts_project(
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/jest",
-        "@npm//@types/react",
         "@npm//@types/node",
+        "@npm//@types/react",
         "@npm//react",
     ],
 )
