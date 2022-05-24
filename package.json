@@ -69,7 +69,7 @@
 	"scripts": {
 		"bazelisk": "npx --yes @bazel/bazelisk",
 		"build": "yarn run bazelisk build //...",
-		"test": "yarn run bazelisk run //tools/bazel:affected_files",
+		"test": "yarn run bazelisk run //bzl:affected_files",
 		"fix": "yarn run bazelisk run //:fix"
 	},
 	"dependencies": {
