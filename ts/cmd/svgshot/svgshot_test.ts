@@ -5,18 +5,19 @@ import { runfiles } from '@bazel/runfiles';
 
 describe('svgshot', () => {
 	it('should render a test URL', async () => {
-		const target = await new Promise<string>((ok, err) =>
-			tmp.file(
-				{
-					// https://docs.bazel.build/versions/main/test-encyclopedia.html#test-interaction-with-the-filesystem
-					tmpdir: process.env['TEST_TMPDIR'] || undefined,
-					postfix: '.svg',
-				},
-				(error, path) => {
-					if (error) return err(error);
-					return ok(path);
-				}
-			)
+		const [target, cleanup] = await new Promise<[string, () => void]>(
+			(ok, err) =>
+				tmp.file(
+					{
+						// https://docs.bazel.build/versions/main/test-encyclopedia.html#test-interaction-with-the-filesystem
+						tmpdir: process.env['TEST_TMPDIR'] || undefined,
+						postfix: '.svg',
+					},
+					(error, path, _, cleanup) => {
+						if (error) return err(error);
+						return ok([path, cleanup]);
+					}
+				)
 		);
 
 		const inkscape =
@@ -35,6 +36,8 @@ describe('svgshot', () => {
 		).resolves.toBeUndefined();
 
 		const result = (await fs.readFile(target)).toString();
+
+		cleanup();
 
 		expect(result).not.toEqual('');
 		expect(result).not.toBeUndefined();

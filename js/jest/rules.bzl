@@ -9,12 +9,14 @@ def jest_test(name, srcs, data = [], deps = [], jest_config = "//:jest.ts.config
         "--no-watchman",
         "--ci",
         "--colors",
+        "--forceExit",
     ]
     templated_args.extend(["--config", "$(rootpath %s)" % jest_config])
     for src in srcs:
         templated_args.extend(["--runTestsByPath", "$(rootpath %s)" % src])
 
-    data = [jest_config] + data + srcs + deps + ["//tools/jest:jest_reporter_js"]
+    data = [jest_config] + data + srcs + deps + ["//js/jest:jest_reporter_js"]
+
     _jest_test(
         name = name,
         data = data,

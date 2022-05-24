@@ -153,22 +153,29 @@ const main = async (argv: string[] = process.argv) => {
 			margin: { top: 0, right: 0, left: 0, bottom: 0 },
 		});
 
-		const [pdfFile, svgFile] = await Promise.all(
-			['.pdf', '.svg'].map(async (extension): Promise<string> => {
-				return new Promise((ok, err) => {
-					tmp.file(
-						{
-							tmpdir: process.env['TEST_TMPDIR'] || undefined,
-							postfix: extension,
-						},
-						(error, path) => {
-							if (error) return err(error);
-							return ok(path);
-						}
-					);
-				});
-			})
+		const [[pdfFile, cleanup1], [svgFile, cleanup2]] = await Promise.all(
+			['.pdf', '.svg'].map(
+				async (extension): Promise<[string, () => void]> => {
+					return new Promise((ok, err) => {
+						tmp.file(
+							{
+								tmpdir: process.env['TEST_TMPDIR'] || undefined,
+								postfix: extension,
+							},
+							(error, path, _, cleanup) => {
+								if (error) return err(error);
+								return ok([path, cleanup]);
+							}
+						);
+					});
+				}
+			)
 		);
+
+		const cleanup = () => {
+			cleanup1();
+			cleanup2();
+		};
 
 		if (pdf.length === 0) {
 			throw new Error('Failed to generate PDF.');
@@ -220,6 +227,8 @@ const main = async (argv: string[] = process.argv) => {
 		);
 
 		await writeFile(fileName, optimSvg.data);
+
+		cleanup();
 
 		return fileName;
 	});

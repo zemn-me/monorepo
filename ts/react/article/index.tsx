@@ -11,10 +11,12 @@ export const RenderModeContext = React.createContext<RenderMode>(
 
 export interface Article {
 	short?: boolean;
+	children?: React.ReactNode;
 }
 
 export const Article: React.FC<{
 	short?: boolean;
+	children?: React.ReactNode;
 }> = ({ short, children }) => {
 	return (
 		<RenderModeContext.Provider
