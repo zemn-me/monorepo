@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # --- begin runfiles.bash initialization v2 ---
 # Copy-pasted from the Bazel Bash runfiles library v2.
 set -uo pipefail; f=bazel_tools/tools/bash/runfiles/runfiles.bash
@@ -10,4 +12,4 @@ source "$(grep -sm1 "^$f " "$0.exe.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/
 # --- end runfiles.bash initialization v2 ---
 
 # bypasses FUSE issues on bazel https://github.com/AppImage/AppImageKit/pull/842
-$(rlocation $APP_IMAGE) --appimage-extract-and-run $@
+$(rlocation inkscape_linux/file/bin) --appimage-extract-and-run $@

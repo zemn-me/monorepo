@@ -104,7 +104,9 @@ const main = async (argv: string[] = process.argv) => {
 	});
 
 	if (out !== undefined && args.length > 1) {
-		throw new Error(`Out file specified and more than one URL (${args}) to load.`);
+		throw new Error(
+			`Out file specified and more than one URL (${args}) to load.`
+		);
 	}
 
 	const captures = map(args, async (url, i) => {
@@ -154,41 +156,64 @@ const main = async (argv: string[] = process.argv) => {
 		const [pdfFile, svgFile] = await Promise.all(
 			['.pdf', '.svg'].map(async (extension): Promise<string> => {
 				return new Promise((ok, err) => {
-					tmp.file({ postfix: extension }, (error, path) => {
-						if (error) return err(error);
-						return ok(path);
-					});
+					tmp.file(
+						{
+							tmpdir: process.env['TEST_TMPDIR'] || undefined,
+							postfix: extension,
+						},
+						(error, path) => {
+							if (error) return err(error);
+							return ok(path);
+						}
+					);
 				});
 			})
 		);
 
+		if (pdf.length === 0) {
+			throw new Error('Failed to generate PDF.');
+		}
+
 		await writeFile(pdfFile, pdf);
 
-		const line = `${inkscapeBin} --without-gui ${pdfFile} --export-plain-svg ${svgFile}`;
+		const line =
+			`${inkscapeBin} --without-gui ${pdfFile} ` +
+			`--export-type=svg --export-plain-svg --export-filename=${svgFile}`;
+		console.warn('running', line);
 		try {
-			await promisify(exec)(line);
+			const result = await promisify(exec)(line);
+			if (result.stderr.length > 0) console.warn(result.stderr);
+			console.info(result.stdout);
 		} catch (e) {
 			throw new Error(
 				`failed to run ${line} with ${e} -- make sure you have inkscape installed and in your PATH`
 			);
 		}
 
-		const title =
+		const fileName =
 			out === undefined
 				? ((await page.title()).trim() || page.url()).replace(
 						/[^A-z_-]/g,
 						'_'
-				  )
+				  ) + '.svg'
 				: out;
 
-		const fileName = title + '.svg';
+		const svgContents = (await readFile(svgFile, 'utf8')).toString();
 
-		const svgContents = await readFile(svgFile, 'utf8');
-		const optimSvg = await svgo.optimize(svgContents.toString(), {
+		if (svgContents.length === 0) {
+			throw new Error('Failed to generate SVG.');
+		}
+
+		const optimSvg = await svgo.optimize(svgContents, {
+			multipass: true,
 			path: svgFile,
 		});
 
-		if (optimSvg.error !== undefined) throw optimSvg.modernError;
+		if (optimSvg.error !== undefined) throw optimSvg.error;
+
+		if (!optimSvg.data) {
+			throw new Error('Failed to optimize SVG.');
+		}
 
 		console.warn(
 			`writing ${i + 1}/${args.length} ${fileName} (${width} x ${height})`

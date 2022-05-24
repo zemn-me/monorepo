@@ -1,22 +1,22 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project", "jest_test")
+load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
 
 ts_project(
     name = "project",
     srcs = [
         "index.ts",
         "lib.ts",
-        "svgshot_test.ts"
+        "svgshot_test.ts",
     ],
     deps = [
+        "@npm//@bazel/runfiles",
+        "@npm//@types/jest",
         "@npm//@types/node",
         "@npm//@types/svgo",
         "@npm//@types/tmp",
-        "@npm//@types/jest",
         "@npm//commander",
         "@npm//puppeteer",
         "@npm//svgo",
         "@npm//tmp",
-        "@npm//@bazel/runfiles"
     ],
 )
 
@@ -27,20 +27,17 @@ nodejs_binary(
         "$(location //cc/inkscape:bin)",
     ],
     data = [
-        "//cc/inkscape:bin",
         ":project_ts",
+        "//cc/inkscape:bin",
     ],
     entry_point = "index.ts",
 )
 
 jest_test(
     name = "tests",
-    srcs = [ "svgshot_test.js" ],
-    project_deps = [ ":project" ],
+    srcs = ["svgshot_test.js"],
     data = [
         "//cc/inkscape:bin",
     ],
-    env = {
-        "INKSCAPE_BIN": "$(rootpath //cc/inkscape:bin)",
-    },
+    project_deps = [":project"],
 )

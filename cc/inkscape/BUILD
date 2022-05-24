@@ -6,9 +6,12 @@ alias(
 
 # Required to bypass FUSE restrictions on bazel.
 sh_binary(
-   name = "bin",
-   srcs = [ "run.sh" ],
-   data = [ ":app_image" ],
-   env = { "APP_IMAGE": "$(location :app_image)" },
-   deps = ["@bazel_tools//tools/bash/runfiles"],
+    name = "bin",
+    srcs = ["run.sh"],
+    data = [":app_image"],
+    env = {"APP_IMAGE": "$(location :app_image)"},
+    visibility = [
+        "//ts/cmd/svgshot:__subpackages__",
+    ],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
