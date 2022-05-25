@@ -53,7 +53,9 @@ const getLangs = () => {
 	return [];
 };
 
-export const LocaleProvider: React.FC = ({ children }) => {
+export const LocaleProvider: React.FC<{
+	children?: React.ReactNode;
+}> = ({ children }) => {
 	const [languages, setLanguages] = React.useState<readonly string[]>([
 		'en-GB',
 	]);

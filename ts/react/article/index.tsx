@@ -27,7 +27,9 @@ export const Article: React.FC<{
 	);
 };
 
-export const Title: React.FC = ({ children }) => <>{children}</>;
+export const Title: React.FC<{
+	children?: React.ReactNode;
+}> = ({ children }) => <>{children}</>;
 
 /**
  * When Article is rendered in 'short' mode, it is rendered
