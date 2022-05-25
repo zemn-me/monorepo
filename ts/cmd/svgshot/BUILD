@@ -1,4 +1,5 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 ts_project(
     name = "project",
@@ -40,4 +41,12 @@ jest_test(
         "//cc/inkscape:bin",
     ],
     project_deps = [":project"],
+)
+
+pkg_npm(
+    name = "npm_pkg",
+    srcs = [ "package.json" ],
+    deps = [ "index.js", "lib.js" ],
+    package_name = "svgshot",
+
 )
