@@ -5,8 +5,9 @@ def css_lint(name = None, srcs = [], **kwargs):
         data = [
             "//css/lint:stylelint-config.json",
             "@npm//stylelint/bin:stylelint",
-            # I am not sure what exactly files it needs.......
-            "@npm//:node_modules",
+            "@npm//stylelint-config-standard",
+            "@npm//stylelint-config-recommended",
+            "@npm//stylelint-config-css-modules",
         ] + srcs,
         env = {
             "LOCAL_FILES": " ".join(["$(rootpaths " + src + ")" for src in srcs]),
