@@ -56,9 +56,6 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains")
 
 go_register_toolchains(version = "1.17.2")
 
-
-container_repositories()
-
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 rules_proto_dependencies()
