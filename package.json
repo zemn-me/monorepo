@@ -75,7 +75,6 @@
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //..."
 	},
 	"dependencies": {
-		"@bazel/labs": "^4.6.1",
 		"eslint-plugin-react": "^7.30.0",
 		"immutable": "^4.1.0",
 		"react": "18.1.0",

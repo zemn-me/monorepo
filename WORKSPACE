@@ -28,16 +28,9 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-# The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
-# It also extracts and installs any Bazel rules distributed in an npm package.
-load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+load("@build_bazel_rules_nodejs//:repositories.bzl", "build_bazel_rules_nodejs_dependencies")
 
-yarn_install(
-    # Name this npm so that Bazel Label references look like @npm//package
-    name = "npm",
-    package_json = "//:package.json",
-    yarn_lock = "//:yarn.lock",
-)
+build_bazel_rules_nodejs_dependencies()
 
 load("@rules_python//python:pip.bzl", "pip_install")
 
@@ -108,16 +101,9 @@ load("@rules_typescript_proto//:index.bzl", "rules_typescript_proto_dependencies
 
 rules_typescript_proto_dependencies()
 
-load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
-
-npm_bazel_labs_dependencies()
-
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories")
 
-node_repositories(
-    node_version = "16.6.2",
-    package_json = ["//:package.json"],
-)
+node_repositories()
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
@@ -131,4 +117,14 @@ protobuf_deps()
 
 load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
 
-esbuild_repositories()
+esbuild_repositories(
+    npm_repository = "npm"
+)
+
+load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+
+yarn_install(
+    name = "npm",
+    package_json = "//:package.json",
+    yarn_lock = "//:yarn.lock",
+)
