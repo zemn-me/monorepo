@@ -1,12 +1,11 @@
-
 load("//:rules.bzl", "nodejs_binary")
 
 def package_json(name, target):
     genquery_name = name + "_deps"
     native.genquery(
         name = genquery_name,
-        scope = [ target ],
-        expression = "deps("+target+")"
+        scope = [target],
+        expression = "deps(" + target + ")",
     )
 
     genrule_name = name + "_gen"
@@ -14,13 +13,15 @@ def package_json(name, target):
         name = genrule_name,
         data = [
             "//:package.json",
-            genquery_name
+            genquery_name,
         ],
         entry_point = "gen_pkgjson.js",
         templated_args = [
-            "--base", "$(rlocation //:package.json)",
-            "--query", "$(rlocation " + genquery_name ")"
-        ]
+            "--base",
+            "$(rlocation //:package.json)",
+            "--query",
+            "$(rlocation " + genquery_name + ")",
+        ],
     )
 
     # TODO: would be nice to have a generic way to capture STDOUT
@@ -29,4 +30,3 @@ def package_json(name, target):
         name = name,
         cmd = "$(execpath " + genrule_name + ")",
     )
-

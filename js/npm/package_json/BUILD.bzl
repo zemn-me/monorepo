@@ -7,7 +7,7 @@ ts_project(
     ],
     deps = [
         "@npm//@types/node",
-        "@npm//commander"
+        "@npm//commander",
     ],
 )
 
