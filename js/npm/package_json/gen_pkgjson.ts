@@ -1,4 +1,7 @@
 import fs from 'fs/promises';
+import { Command } from 'commander';
+import { basename } from 'path';
+
 
 const labelToNpmPackage = (label: string): string => {
     /*
@@ -16,11 +19,25 @@ const labelToNpmPackage = (label: string): string => {
 }
 
 const main = async () => {
-    const deps_list = await fs.readFile('ts/cmd/svgshot/npm_deps');
+    const program = (new Command())
+        .name('gen_pkgjson')
+        .description(
+            'Generate a package.json for a bazel JS tree, using a genquery, ' +
+            'a base package.json, and a template.'
+        )
+        .option('--base <path>', 'The \'base\' package.json from which to draw package versions.')
+        .option('--query <path>', 'The genquery (path) containing a list of line-break separated deps.')
+        .parse(process.argv);
+
+    const opts = program.opts();
+    const basepkg = opts.base, deps = opts.query;
+
+
+    const deps_list = await fs.readFile(deps);
     const pkgs = new Set(deps_list.toString().split("\n")
         .filter(v => v.startsWith("@npm//")).map(v => labelToNpmPackage(v)));
 
-    const pkg_json_buf = await fs.readFile('package.json');
+    const pkg_json_buf = await fs.readFile(basepkg);
     const pkg_json: {
         devDependencies: Record<string, string>,
         dependencies: Record<string, string>
