@@ -47,6 +47,7 @@ js_library(
 exports_files(
     [
         ".prettierrc.json",
+        "package.json",
         ".gitignore",
         ".editorconfig",
         ".eslintrc.json",

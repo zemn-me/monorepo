@@ -45,8 +45,35 @@ jest_test(
 
 pkg_npm(
     name = "npm_pkg",
-    srcs = [ "package.json" ],
-    deps = [ "index.js", "lib.js" ],
     package_name = "svgshot",
+    srcs = ["package.json"],
+    deps = [
+        "index.js",
+        "lib.js",
+    ],
+)
 
+genquery(
+    name = "npm_deps",
+    expression = "deps(//ts/cmd/svgshot:project_ts)",
+    scope = ["//ts/cmd/svgshot:project_ts"],
+)
+
+ts_project(
+    name = "gen_pkgjson",
+    srcs = [
+        "gen_pkgjson.ts",
+    ],
+    deps = [
+        "@npm//@types/node",
+    ],
+)
+
+nodejs_binary(
+    name = "gen_pkgjson_bin",
+    data = [
+        ":npm_deps",
+        "//:package.json",
+    ],
+    entry_point = "gen_pkgjson.js",
 )
