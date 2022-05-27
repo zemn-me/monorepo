@@ -70,7 +70,7 @@ const map: <T, O>(
 	for await (const value of iter) yield (await f)(value, n++);
 };
 
-const main = async (argv: string[] = process.argv) => {
+export const main = async (argv: string[] = process.argv) => {
 	let {
 		background,
 		width,
