@@ -5,17 +5,10 @@ ts_project(
     srcs = [
         "gen_pkgjson.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
+        "@npm//@bazel/runfiles",
         "@npm//@types/node",
         "@npm//commander",
     ],
-)
-
-nodejs_binary(
-    name = "gen_pkgjson_bin",
-    data = [
-        ":npm_deps",
-        "//:package.json",
-    ],
-    entry_point = "gen_pkgjson.js",
 )

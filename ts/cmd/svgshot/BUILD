@@ -1,5 +1,6 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
+load("//js/npm/package_json:rules.bzl", "package_json")
 
 ts_project(
     name = "project",
@@ -51,4 +52,10 @@ pkg_npm(
         "index.js",
         "lib.js",
     ],
+)
+
+package_json(
+    name = "package_json",
+    target = ":project_js",
+    template = ":package.template.json",
 )

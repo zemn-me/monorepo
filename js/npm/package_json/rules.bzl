@@ -1,11 +1,14 @@
 load("//:rules.bzl", "nodejs_binary")
 
-def package_json(name, target):
+def package_json(name, target, template):
+    """
+    Generate a package.json for a given target.
+    """
     genquery_name = name + "_deps"
     native.genquery(
         name = genquery_name,
         scope = [target],
-        expression = "deps(" + target + ")",
+        expression = "deps(" + str(Label("//" + native.package_name()).relative(target)) + ")",
     )
 
     genrule_name = name + "_gen"
@@ -14,19 +17,35 @@ def package_json(name, target):
         data = [
             "//:package.json",
             genquery_name,
+            template,
+            "//js/npm/package_json:gen_pkgjson_js",
         ],
-        entry_point = "gen_pkgjson.js",
-        templated_args = [
-            "--base",
-            "$(rlocation //:package.json)",
-            "--query",
-            "$(rlocation " + genquery_name + ")",
-        ],
+        entry_point = "//js/npm/package_json:gen_pkgjson.js",
     )
 
-    # TODO: would be nice to have a generic way to capture STDOUT
-    # and use in genrule.
     native.genrule(
         name = name,
-        cmd = "$(execpath " + genrule_name + ")",
+        srcs = [
+            "@npm//commander",
+            "//:package.json",
+            genquery_name,
+            template,
+            "@npm//@bazel/runfiles",
+            "//js/npm/package_json:gen_pkgjson_js",
+        ],
+        cmd = "$(execpath " + genrule_name + ") " +
+              " ".join(
+                  [
+                      "--out",
+                      "$@",
+                      "--base",
+                      "$(location //:package.json)",
+                      "--query",
+                      "$(location " + genquery_name + ")",
+                      "--merge",
+                      "$(location " + template + ")",
+                  ],
+              ),
+        outs = ["package.json"],
+        tools = [genrule_name],
     )

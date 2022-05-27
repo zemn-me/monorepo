@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { Command } from 'commander';
-import { basename } from 'path';
 
 
 const labelToNpmPackage = (label: string): string => {
+
     /*
         Eventually, I should actually test this,
         @npm/:node_modules/@bazel/runfiles/LICENSE -> @bazel/runfiles
@@ -25,19 +25,19 @@ const main = async () => {
             'Generate a package.json for a bazel JS tree, using a genquery, ' +
             'a base package.json, and a template.'
         )
-        .option('--base <path>', 'The \'base\' package.json from which to draw package versions.')
-        .option('--query <path>', 'The genquery (path) containing a list of line-break separated deps.')
+        .requiredOption('--base <path>', 'The \'base\' package.json from which to draw package versions.')
+        .requiredOption('--merge <path>', 'The \'template\' package.json to merge deps into.')
+        .requiredOption('--query <path>', 'The genquery (path) containing a list of line-break separated deps.')
+        .requiredOption('--out <path>', 'The output path of the generate package.json.')
         .parse(process.argv);
 
     const opts = program.opts();
-    const basepkg = opts.base, deps = opts.query;
 
-
-    const deps_list = await fs.readFile(deps);
+    const deps_list = await fs.readFile(opts.query);
     const pkgs = new Set(deps_list.toString().split("\n")
         .filter(v => v.startsWith("@npm//")).map(v => labelToNpmPackage(v)));
 
-    const pkg_json_buf = await fs.readFile(basepkg);
+    const pkg_json_buf = await fs.readFile(opts.base);
     const pkg_json: {
         devDependencies: Record<string, string>,
         dependencies: Record<string, string>
@@ -52,7 +52,17 @@ const main = async () => {
         pkgs.has(k)
     );
 
-    console.log(our_deps);
+    const template = JSON.parse((await fs.readFile(opts.merge)).toString());
+
+    await fs.writeFile(
+        opts.out,
+        JSON.stringify(
+            {
+                ...template,
+                dependencies: Object.fromEntries(our_deps)
+            }, null, 2
+        )
+    )
 }
 
 
