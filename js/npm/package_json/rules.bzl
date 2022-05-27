@@ -8,7 +8,7 @@ def package_json(name, target, template):
     native.genquery(
         name = genquery_name,
         scope = [target],
-        expression = "deps(" + str(Label("//" + native.package_name()).relative(target)) + ")",
+        expression = "deps(" + str(Label("//" + native.package_name()).relative(target)) + ", 1)",
     )
 
     genrule_name = name + "_gen"
