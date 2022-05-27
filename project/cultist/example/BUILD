@@ -8,7 +8,6 @@ ts_project(
     name = "example",
     srcs = tsfiles,
     composite = True,
-    declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig",
     visibility = ["//project/cultist:__subpackages__"],

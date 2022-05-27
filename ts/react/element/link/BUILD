@@ -9,7 +9,6 @@ ts_project(
         "*.tsx",
     ]),
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = ["//ts/url:url"],
     resolve_json_module = True,

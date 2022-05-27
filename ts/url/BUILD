@@ -9,7 +9,6 @@ ts_project(
         "*.tsx",
     ]),
     composite = True,
-    declaration = True,
     incremental = True,
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",

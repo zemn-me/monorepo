@@ -6,7 +6,6 @@ ts_project(
     name = "cultist",
     srcs = ["index.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = [
         ":action",

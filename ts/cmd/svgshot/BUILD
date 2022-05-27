@@ -47,10 +47,10 @@ jest_test(
 pkg_npm(
     name = "npm_pkg",
     package_name = "svgshot",
-    srcs = ["package.json"],
     deps = [
-        "index.js",
-        "lib.js",
+        "package.json",
+        "project_ts",
+        "yarn.lock",
     ],
 )
 
@@ -58,4 +58,11 @@ package_json(
     name = "package_json",
     target = ":project_js",
     template = ":package.template.json",
+)
+
+genrule(
+    name = "lockfile",
+    srcs = ["//:yarn.lock"],
+    outs = ["yarn.lock"],
+    cmd = "cp $< $@",
 )

@@ -52,6 +52,7 @@ exports_files(
         ".editorconfig",
         ".eslintrc.json",
         "css_loader.d.ts",
+        "yarn.lock",
     ],
     visibility = ["//visibility:public"],
 )

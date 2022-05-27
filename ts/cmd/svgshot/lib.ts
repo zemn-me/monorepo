@@ -10,7 +10,7 @@ const program = new Command()
 	.name('svgshot')
 	.usage('<url>')
 	.description(
-		'take svg screenshots of webpages. requires the inkscape cli tool'
+		'take svg screenshots of webpages. requires the inkscape cli tool.'
 	)
 	.option(
 		'-s, --scale <scale>',
