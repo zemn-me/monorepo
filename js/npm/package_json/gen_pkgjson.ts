@@ -2,6 +2,13 @@ import fs from 'fs/promises';
 import { Command } from 'commander';
 
 
+const depTypes = {
+    skip: (v: string) => v === "@bazel/runfiles",
+    isDev: (v: string) => v.startsWith("@types")
+    
+}
+
+
 const labelToNpmPackage = (label: string): string => {
 
     /*
@@ -50,7 +57,14 @@ const main = async () => {
 
     const our_deps = [...all_deps].filter(([k, v]) =>
         pkgs.has(k)
-    );
+    ).filter(([pkg]) => !depTypes.skip(pkg));
+
+    const runDeps = new Map<string,string>(), devDeps = new Map<string,string>();
+
+    for (const [ pkgName, pkgVersion ] of our_deps) {
+        [runDeps, devDeps][
+            +depTypes.isDev(pkgName)].set(pkgName, pkgVersion)
+    }
 
     const template = JSON.parse((await fs.readFile(opts.merge)).toString());
 
@@ -59,7 +73,8 @@ const main = async () => {
         JSON.stringify(
             {
                 ...template,
-                dependencies: Object.fromEntries(our_deps)
+                dependencies: Object.fromEntries(runDeps),
+                devDependencies: Object.fromEntries(devDeps)
             }, null, 2
         )
     )
