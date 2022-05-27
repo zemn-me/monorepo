@@ -3,6 +3,8 @@ import tmp from 'tmp';
 import fs from 'fs/promises';
 import { runfiles } from '@bazel/runfiles';
 
+jest.setTimeout(30000);
+
 describe('svgshot', () => {
 	it('should render a test URL', async () => {
 		const [target, cleanup] = await new Promise<[string, () => void]>(
