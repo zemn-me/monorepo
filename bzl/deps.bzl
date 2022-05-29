@@ -145,3 +145,7 @@ exports_files(glob(["**/*"], exclude_directories=0))
         """,
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
+
+
+    https://github.com/attilaolah/bazel-tools <- you should load json_extract and json_test from here
+    and use to extract stuff from package.json
