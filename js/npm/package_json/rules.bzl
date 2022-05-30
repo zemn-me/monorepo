@@ -1,4 +1,5 @@
-load("//:rules.bzl", "nodejs_binary")
+load("//:rules.bzl", "nodejs_binary", "generated_file_test")
+load("@bazel_tools//:defs.bzl", "json_extract",  "json_test")
 
 def package_json(name, targets, template):
     """
@@ -50,18 +51,13 @@ def package_json(name, targets, template):
         tools = [genrule_name],
     )
 
-def _extract_pkg_json_field(ctx):
-    src = ctx.file.src
+    json_test(
+        name = name + "_valid",
+        srcs = [ name ]
+    )
 
-extract_pkg_json_field = rule(
-    implementation = _extract_pkg_json_field,
-    attrs = {
-        "src": attr.label(mandatory = True, allow_single_file = True),
-        "field": attr.label(mandatory = True)
-    }
-)
 
-def pkg_npm(name, pkg_json_base, srcs = []):
+def pkg_npm(name, package_name, pkg_json_base, hash_and_version_golden, srcs = [], deps = []):
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
@@ -70,7 +66,7 @@ def pkg_npm(name, pkg_json_base, srcs = []):
     )
 
     hash_file_name = name + "_digest"
-    genrule(
+    native.genrule(
         name = hash_file_name,
         srcs = srcs,
         cmd_bash = """
@@ -78,12 +74,59 @@ def pkg_npm(name, pkg_json_base, srcs = []):
         """
     )
 
-    package_version_name = name + "_version"
-    genrule(
-        name = package_version_name,
-        srcs = [ pkg_json_base ],
-        cmd_bash = """
+    version_name = name + "_version"
+    json_extract(
+        name = version_name,
+        srcs = [
+            pkg_json_name,
+        ],
+        out = name + "_version.txt",
+        query = ".version",
+        raw = True
+    )
 
+    hash_and_version_name = name + "_hash_and_version"
+    native.genrule(
+        name = hash_and_version_name,
+        srcs = [ version_name, hash_file_name ],
+        out = name + "_hash_and_version.txt",
+        cmd_bash = """
+            echo "
+This is a generated file intended to make tests fail when the contents
+of the npm package is changed, but the version is not bumped.
+
+Package version: $$(cat $(location """ + version_name + """))
+Package hash: $$(cat $(location """ + hash_file_name + """))
+
+If this check fails, consider bumping the version in the package.json
+template, and also updating the golden file." > $@
         """
     )
+
+    generated_file_test(
+        name = name + "_hash_and_version_check",
+        generated = hash_and_version_name,
+        src = hash_and_version_golden,
+    )
+
+    lockfile_name = name + "_lockfile"
+    native.genrule(
+        name = name + "_lockfile",
+        srcs = ["//:yarn.lock"],
+        outs = ["yarn.lock"],
+        cmd = "cp $< $@",
+    )
+
+
+    pkg_npm(
+        name = name,
+        package_name = package_name,
+        srcs = srcs,
+        deps = deps + [
+            pkg_json_name,
+            lockfile_name
+        ]
+    )
+
+
 

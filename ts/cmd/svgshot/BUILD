@@ -1,6 +1,5 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
-load("//js/npm/package_json:rules.bzl", "package_json")
+load("//js/npm/package_json:rules.bzl", "npm_pkg")
 
 ts_project(
     name = "project",
@@ -44,25 +43,8 @@ jest_test(
     project_deps = [":project"],
 )
 
-pkg_npm(
+npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    deps = [
-        "package.json",
-        "project_ts",
-        "yarn.lock",
-    ],
-)
-
-package_json(
-    name = "package_json",
-    target = ":project_js",
-    template = ":package.template.json",
-)
-
-genrule(
-    name = "lockfile",
-    srcs = ["//:yarn.lock"],
-    outs = ["yarn.lock"],
-    cmd = "cp $< $@",
+    deps = [ "project_ts" ]
 )

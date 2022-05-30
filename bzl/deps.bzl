@@ -5,6 +5,7 @@
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 def fetch_dependencies():
     http_archive(
@@ -146,6 +147,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
 
-
-    https://github.com/attilaolah/bazel-tools <- you should load json_extract and json_test from here
-    and use to extract stuff from package.json
+    git_repository(
+        name = "bazel_tools",
+        branch = "master",
+        remote = "git@github.com:attilaolah/bazel-tools.git"
+    )
