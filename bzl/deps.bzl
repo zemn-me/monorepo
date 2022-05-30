@@ -150,5 +150,5 @@ exports_files(glob(["**/*"], exclude_directories=0))
     git_repository(
         name = "bazel_tools",
         branch = "master",
-        remote = "git@github.com:attilaolah/bazel-tools.git"
+        remote = "git@github.com:attilaolah/bazel-tools.git",
     )

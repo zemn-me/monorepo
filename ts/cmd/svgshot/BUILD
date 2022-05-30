@@ -46,5 +46,5 @@ jest_test(
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    deps = [ "project_ts" ]
+    deps = ["project_ts"],
 )

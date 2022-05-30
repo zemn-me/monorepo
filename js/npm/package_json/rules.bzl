@@ -1,5 +1,5 @@
-load("//:rules.bzl", "nodejs_binary", "generated_file_test")
-load("@bazel_tools//:defs.bzl", "json_extract",  "json_test")
+load("//:rules.bzl", "generated_file_test", "nodejs_binary")
+load("@bazel_tools//:defs.bzl", "json_extract", "json_test")
 
 def package_json(name, targets, template):
     """
@@ -9,7 +9,7 @@ def package_json(name, targets, template):
     native.genquery(
         name = genquery_name,
         scope = targets,
-        expression = "deps(" + " ".join([ str(Label("//" + native.package_name()).relative(target)) for target in targets ]) + ", 1)",
+        expression = "deps(" + " ".join([str(Label("//" + native.package_name()).relative(target)) for target in targets]) + ", 1)",
     )
 
     genrule_name = name + "_gen"
@@ -53,16 +53,15 @@ def package_json(name, targets, template):
 
     json_test(
         name = name + "_valid",
-        srcs = [ name ]
+        srcs = [name],
     )
-
 
 def pkg_npm(name, package_name, pkg_json_base, hash_and_version_golden, srcs = [], deps = []):
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
         targets = srcs,
-        template = pkg_json_base
+        template = pkg_json_base,
     )
 
     hash_file_name = name + "_digest"
@@ -71,7 +70,7 @@ def pkg_npm(name, package_name, pkg_json_base, hash_and_version_golden, srcs = [
         srcs = srcs,
         cmd_bash = """
             cat $(SRCS) | sha512sum > $@
-        """
+        """,
     )
 
     version_name = name + "_version"
@@ -82,13 +81,13 @@ def pkg_npm(name, package_name, pkg_json_base, hash_and_version_golden, srcs = [
         ],
         out = name + "_version.txt",
         query = ".version",
-        raw = True
+        raw = True,
     )
 
     hash_and_version_name = name + "_hash_and_version"
     native.genrule(
         name = hash_and_version_name,
-        srcs = [ version_name, hash_file_name ],
+        srcs = [version_name, hash_file_name],
         out = name + "_hash_and_version.txt",
         cmd_bash = """
             echo "
@@ -100,7 +99,7 @@ Package hash: $$(cat $(location """ + hash_file_name + """))
 
 If this check fails, consider bumping the version in the package.json
 template, and also updating the golden file." > $@
-        """
+        """,
     )
 
     generated_file_test(
@@ -117,16 +116,12 @@ template, and also updating the golden file." > $@
         cmd = "cp $< $@",
     )
 
-
     pkg_npm(
         name = name,
         package_name = package_name,
         srcs = srcs,
         deps = deps + [
             pkg_json_name,
-            lockfile_name
-        ]
+            lockfile_name,
+        ],
     )
-
-
-
