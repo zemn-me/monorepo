@@ -1,71 +1,65 @@
-
-
-
 def _api_extractor_impl(ctx):
     output_files = []
     args = []
 
     tsdocMetadata = {
-        "enabled": False
+        "enabled": False,
     }
 
     if ctx.attr.tsdocMetadata != None:
         tsdocMetadata["enabled"] = True
         tsdocMetadata["tsdocMetadataFilePath"] = "<projectFolder>/" + ctx.outputs.tsdocMetadata.path
-        output_files = output_files + [ ctx.outputs.tsdocMetadata ]
+        output_files = output_files + [ctx.outputs.tsdocMetadata]
 
     dtsRollup = {
-        "enabled": False
+        "enabled": False,
     }
 
     if ctx.attr.untrimmedRollup != None:
         dtsRollup["enabled"] = True
         dtsRollup["untrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.untrimmedRollup.path
-        output_files = output_files + [ ctx.outputs.untrimmedRollup ]
+        output_files = output_files + [ctx.outputs.untrimmedRollup]
 
     if ctx.attr.alphaTrimmedRollup != None:
         dtsRollup["enabled"] = True
         dtsRollup["alphaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.alphaTrimmedRollup.path
-        output_files = output_files + [ ctx.outputs.alphaTrimmedRollup ]
+        output_files = output_files + [ctx.outputs.alphaTrimmedRollup]
 
     if ctx.attr.betaTrimmedRollup != None:
         dtsRollup["enabled"] = True
         dtsRollup["betaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.betaTrimmedRollup.path
-        output_files = output_files + [ ctx.outputs.betaTrimmedRollup ]
-
+        output_files = output_files + [ctx.outputs.betaTrimmedRollup]
 
     if ctx.attr.publicTrimmedRollup != None:
         dtsRollup["enabled"] = True
         dtsRollup["betaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.publicTrimmedRollup.path
-        output_files = output_files + [ ctx.outputs.publicTrimmedRollup ]
-
+        output_files = output_files + [ctx.outputs.publicTrimmedRollup]
 
     docModel = {
-        "enabled": False
+        "enabled": False,
     }
 
     if ctx.attr.docModel != None:
         docModel["enabled"] = True
         docModel["apiJsonFilePath"] = "<projectFolder>/" + ctx.outputs.docModel.path
-        output_files = output_files + [ ctx.outputs.docModel ]
+        output_files = output_files + [ctx.outputs.docModel]
 
     apiReport = {
-        "enabled": False
+        "enabled": False,
     }
 
     if ctx.attr.report != None:
         # Will not actually generate unless it thinks it's doing a 'local'
         # build due to intended development flow
-        args += [ '--local' ]
+        args += ["--local"]
         apiReport["enabled"] = True
         apiReport["reportFileName"] = ctx.outputs.report.basename
         apiReport["reportFolder"] = "<projectFolder>/" + ctx.outputs.report.dirname
-        output_files = output_files + [ ctx.outputs.report ]
+        output_files = output_files + [ctx.outputs.report]
 
     compiler = {}
 
     compiler["tsconfigFilePath"] = "<projectFolder>/" + ctx.file.ts_config.path
-
 
     config = {
         "mainEntryPointFilePath": "<projectFolder>/" + ctx.file.entry_point.path,
@@ -73,21 +67,21 @@ def _api_extractor_impl(ctx):
         "compiler": compiler,
         "docModel": docModel,
         "dtsRollup": dtsRollup,
-        "projectFolder": "/".join(['..' for _ in ctx.attr.package_name.split("/") ] + ['..', '..', '..']),
-        "tsdocMetadata": tsdocMetadata
+        "projectFolder": "/".join([".." for _ in ctx.attr.package_name.split("/")] + ["..", "..", ".."]),
+        "tsdocMetadata": tsdocMetadata,
     }
-    
+
     ctx.actions.write(
         output = ctx.outputs.config,
-        content = json.encode_indent(config)
+        content = json.encode_indent(config),
     )
 
-    inputs = ctx.files.srcs + [ ctx.outputs.config, ctx.file.entry_point, ctx.file.ts_config, ctx.file.package_json ]
+    inputs = ctx.files.srcs + [ctx.outputs.config, ctx.file.entry_point, ctx.file.ts_config, ctx.file.package_json]
     ctx.actions.run(
         outputs = output_files,
         inputs = inputs,
         executable = ctx.executable.api_extractor_binary,
-        arguments = [ "run", "--config", ctx.outputs.config.path ] + args,
+        arguments = ["run", "--config", ctx.outputs.config.path] + args,
         mnemonic = "ApiExtractor",
         progress_message = "Running api-extractor (https://api-extractor.com)",
     )
@@ -95,7 +89,7 @@ def _api_extractor_impl(ctx):
 _api_extractor_rule = rule(
     implementation = _api_extractor_impl,
     attrs = {
-        "entry_point": attr.label(mandatory = True, allow_single_file=True),
+        "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
         "srcs": attr.label_list(mandatory = True, allow_empty = False),
         "package_json": attr.label(mandatory = True, allow_single_file = True),
@@ -109,9 +103,8 @@ _api_extractor_rule = rule(
         "tsdocMetadata": attr.output(),
         "config": attr.output(),
         "package_name": attr.string(mandatory = True),
-    }
+    },
 )
-
 
 """
         config="api-extractor.json",
@@ -130,7 +123,6 @@ _api_extractor_rule = rule(
         betaTrimmedRollup= betaTrimmedRollup,
         publicTrimmedRollup=  publicTrimmedRollup,
 """
-
 
 def api_extractor(name, config = "api-extractor.json", **kwargs):
     _api_extractor_rule(

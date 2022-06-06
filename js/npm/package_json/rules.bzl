@@ -65,10 +65,10 @@ def npm_pkg(
         major_version = None,
         minor_version = None,
         patch_version = None,
-        test_version_on_main = False, entry_point = None):
-    
-    external_api_root = entry_point[:entry_point.find('.')]
-    external_api_dts_root = external_api_root + '.d.ts'
+        test_version_on_main = False,
+        entry_point = None):
+    external_api_root = entry_point[:entry_point.find(".")]
+    external_api_dts_root = external_api_root + ".d.ts"
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
@@ -95,11 +95,11 @@ def npm_pkg(
         name = name + "_extracted_api",
         entry_point = external_api_dts_root,
         srcs = srcs + deps,
-        report = "api_gen.md"
+        report = "api_gen.md",
     )
 
     pkg_srcs = srcs
-    pkg_deps = deps + [ pkg_json_name, lockfile_name ]
+    pkg_deps = deps + [pkg_json_name, lockfile_name]
     pkg_npm(
         name = name,
         package_name = package_name,
@@ -121,18 +121,8 @@ def npm_pkg(
     # in API schema occurs.
     bump_on_change_test(
         name = "api_change_lock",
-        srcs = [ "api_gen.md" ],
+        srcs = ["api_gen.md"],
         version = major_version,
         run_on_main = test_version_on_main,
         version_lock = api_lock,
     )
-
-
-
-
-    
-
-
-
-        
-
