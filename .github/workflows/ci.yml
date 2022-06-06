@@ -103,4 +103,6 @@ jobs:
         run: gh pr create -f
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+      - name: Set PR to merge automatically
+        run: gh pr merge --auto --merge
+  
