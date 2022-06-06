@@ -58,7 +58,7 @@ jobs:
         run: bazelisk test //...
 
   deployment:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/versioned'
     runs-on: ubuntu-latest
     needs: Test
     steps:
