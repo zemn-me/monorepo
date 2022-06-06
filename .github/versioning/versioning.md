@@ -42,17 +42,14 @@ sequenceDiagram
     main ->> main: deploy scripts
 ```
 
+## Process
+### Introduce new 'versioned' branch
+ - [ ] Versioned branch copies over all commits from main branch
+### Introduce new 'versioned tests'
+ - [ ] Versioned tests, which are able to determine if a major minor
+       or patch version should be bumped as a result of a change, exist.
 
-## Requisite changes
 
- - [ ] The github action checks and rules on 'main' are moved to 'develop'.
- - [ ] Checks are introduced similar to those in the ['svgshot' branch][svgshot publish pr] to ensure
-       that 'main' always has a version bump when packages are changed.
- - [ ] Github Actions are updated with this test set.
- - [ ] .github/postpush is introduced, which is a binary that runs after commit on 'develop', and
-       creates a PR to 'main'
- - [ ] .github/versioning is introduced, which provides postpush scripts for setting versions, and
-       other helper bazel functions.
- - [ ] dependabot is aware that changes must now be made to 'develop'
+
 
 [svgshot publish pr]: https://github.com/Zemnmez/monorepo/pull/274
