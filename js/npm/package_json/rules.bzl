@@ -1,5 +1,6 @@
-load("//:rules.bzl", "generated_file_test", "nodejs_binary")
-load("@bazel_tools//:defs.bzl", "json_extract", "json_test")
+load("//:rules.bzl", "nodejs_binary")
+load("//bzl/versioning:rules.bzl", "semver_version", "bump_on_change_test")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 def package_json(name, targets, template):
     """
@@ -51,61 +52,29 @@ def package_json(name, targets, template):
         tools = [genrule_name],
     )
 
-    json_test(
-        name = name + "_valid",
-        srcs = [name],
-    )
 
-def pkg_npm(name, package_name, pkg_json_base, hash_and_version_golden, srcs = [], deps = []):
+def npm_pkg(name, package_name, pkg_json_base, srcs = [], deps = [],
+    version_lock = None, major_version = None, minor_version = None, patch_version = None, test_version_on_main = False):
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
-        targets = srcs,
+        targets = srcs + deps,
         template = pkg_json_base,
     )
 
-    hash_file_name = name + "_digest"
-    native.genrule(
-        name = hash_file_name,
-        srcs = srcs,
-        cmd_bash = """
-            cat $(SRCS) | sha512sum > $@
-        """,
+    bump_on_change_test(
+        name = "version_lock",
+        srcs = srcs + deps,
+        version = minor_version,
+        run_on_main = test_version_on_main,
+        version_lock = "version.lock"
     )
 
-    version_name = name + "_version"
-    json_extract(
-        name = version_name,
-        srcs = [
-            pkg_json_name,
-        ],
-        out = name + "_version.txt",
-        query = ".version",
-        raw = True,
-    )
-
-    hash_and_version_name = name + "_hash_and_version"
-    native.genrule(
-        name = hash_and_version_name,
-        srcs = [version_name, hash_file_name],
-        out = name + "_hash_and_version.txt",
-        cmd_bash = """
-            echo "
-This is a generated file intended to make tests fail when the contents
-of the npm package is changed, but the version is not bumped.
-
-Package version: $$(cat $(location """ + version_name + """))
-Package hash: $$(cat $(location """ + hash_file_name + """))
-
-If this check fails, consider bumping the version in the package.json
-template, and also updating the golden file." > $@
-        """,
-    )
-
-    generated_file_test(
-        name = name + "_hash_and_version_check",
-        generated = hash_and_version_name,
-        src = hash_and_version_golden,
+    semver_version(
+        name = "version",
+        major = "version/MAJOR",
+        minor = "version/MINOR",
+        patch = "version/PATCH"
     )
 
     lockfile_name = name + "_lockfile"

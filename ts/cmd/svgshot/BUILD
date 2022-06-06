@@ -46,5 +46,11 @@ jest_test(
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    deps = ["project_ts"],
+    deps = [":project_ts"],
+    test_version_on_main = True,
+    pkg_json_base = "package.template.json",
+    major_version = "version/MAJOR",
+    minor_version = "version/MINOR",
+    patch_version = "version/PATCH"
 )
+
