@@ -98,7 +98,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with versioned
-        run: git merge versioned
+        run: git merge origin/versioned
       - name: Open PR to 'versioned' branch
         run: gh pr create -f
         env:
