@@ -97,8 +97,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Merge with versioned
-        run: git merge origin/versioned
+      - name: Checkout versioned branch
+        run: git switch versioned
+      - name: Merge with main
+        run: git merge main
       - name: Open PR to 'versioned' branch
         run: gh pr create -f
         env:
