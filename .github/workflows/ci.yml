@@ -97,14 +97,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Checkout versioned branch
-        run: git switch versioned
-      - name: Merge with main
-        run: git merge main
       - name: Open PR to 'versioned' branch
-        run: gh pr create -f
+        run: gh pr create -f --head main --base versioned
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set PR to merge automatically
-        run: gh pr merge --auto --merge
+        run: gh pr merge --auto --merge --head main --base versioned
   
