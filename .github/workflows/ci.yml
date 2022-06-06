@@ -98,7 +98,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Checkout 'versioned' branch
-        run: git checkout 
+        run: git checkout versioned
       - name: Merge with our branch
         run: git merge main
       - name: Open PR to 'versioned' branch
