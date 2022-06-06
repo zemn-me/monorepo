@@ -84,6 +84,10 @@ const tempFile = (ext: string) =>
 		)
 	);
 
+/**
+ * @public
+ * Svgshot is a command-line program for generating SVG files.
+ */
 export const main = async (argv: string[] = process.argv) => {
 	let {
 		background,
