@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.2
+        uses: actions/cache@v3.0.3
         env:
           cache-name: bazel-cache
         with:
@@ -57,11 +57,9 @@ jobs:
         # bazel generated node_modules
         run: bazelisk test //...
 
-
   deployment:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/versioned'
     runs-on: ubuntu-latest
-    environment: production
     needs: Test
     steps:
       - name: Checkout code
@@ -71,7 +69,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.2
+        uses: actions/cache@v3.0.3
         env:
           cache-name: bazel-cache
         with:
@@ -89,3 +87,16 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
 
+  copy_to_versioned:
+    name: Copy commits in main to versioned branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: Test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Open PR to 'versioned' branch
+        run: gh pr create -f --base versioned
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
