@@ -11,7 +11,6 @@ ts_project(
         exclude = ["*_test.ts"],
     ),
     composite = True,
-    declaration = True,
     incremental = True,
 )
 
@@ -19,7 +18,6 @@ ts_project(
     name = "tests_lib",
     srcs = tstestfiles,
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = [":iter"],
     tsconfig = "//:tsconfig_node",

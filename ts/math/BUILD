@@ -6,7 +6,6 @@ ts_project(
     name = "math",
     srcs = glob(["*.ts"]),
     composite = True,
-    declaration = True,
     incremental = True,
     deps = [
         "@npm//@types/jest",

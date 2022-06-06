@@ -3,26 +3,26 @@ def _impl(ctx):
     # Actions are run only when the corresponding file is requested.
 
     inputs = ctx.files.srcs
-    arguments = [ file.path for file in ctx.files.srcs ]
+    arguments = [file.path for file in ctx.files.srcs]
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.md5],
         inputs = inputs,
-        command = "md5sum $@ > {}".format( ctx.outputs.md5.path),
+        command = "md5sum $@ > {}".format(ctx.outputs.md5.path),
         arguments = arguments,
     )
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha1],
         inputs = inputs,
-        command = "sha1sum $@ > {}".format( ctx.outputs.sha1.path),
+        command = "sha1sum $@ > {}".format(ctx.outputs.sha1.path),
         arguments = arguments,
     )
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha256],
         inputs = inputs,
-        command = "sha256sum $@ > {}".format( ctx.outputs.sha256.path),
+        command = "sha256sum $@ > {}".format(ctx.outputs.sha256.path),
         arguments = arguments,
     )
 

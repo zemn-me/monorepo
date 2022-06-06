@@ -9,6 +9,5 @@ ts_project(
         exclude = ["*_test.ts"],
     ),
     composite = True,
-    declaration = True,
     incremental = True,
 )

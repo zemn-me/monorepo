@@ -9,7 +9,6 @@ ts_project(
         "*.tsx",
     ]),
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = [
         "//ts/math:math",
@@ -27,7 +26,7 @@ ts_project(
 )
 
 jest_test(
-    name = "shape",
+    name = "shape_test",
     srcs = ["shape_test.js"],
     jsdom = True,
     project_deps = [":shape"],

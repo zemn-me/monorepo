@@ -1,4 +1,5 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//js/npm/package_json:rules.bzl", "npm_pkg")
 
 ts_project(
     name = "project",
@@ -40,4 +41,17 @@ jest_test(
         "//cc/inkscape:bin",
     ],
     project_deps = [":project"],
+)
+
+npm_pkg(
+    name = "npm_pkg",
+    package_name = "svgshot",
+    api_lock = "api.lock",
+    entry_point = "lib.ts",
+    major_version = "version/MAJOR",
+    minor_version = "version/MINOR",
+    patch_version = "version/PATCH",
+    pkg_json_base = "package.template.json",
+    test_version_on_main = True,
+    deps = [":project_ts"],
 )

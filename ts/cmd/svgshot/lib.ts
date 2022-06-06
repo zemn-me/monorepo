@@ -10,7 +10,7 @@ const program = new Command()
 	.name('svgshot')
 	.usage('<url>')
 	.description(
-		'take svg screenshots of webpages. requires the inkscape cli tool'
+		'take svg screenshots of webpages. requires the inkscape cli tool.'
 	)
 	.option(
 		'-s, --scale <scale>',
@@ -70,7 +70,25 @@ const map: <T, O>(
 	for await (const value of iter) yield (await f)(value, n++);
 };
 
-const main = async (argv: string[] = process.argv) => {
+const tempFile = (ext: string) =>
+	new Promise<[filepath: string, destructor: () => void]>((ok, fail) =>
+		tmp.file(
+			{
+				tmpdir: process.env['TEST_TMPDIR'] || undefined,
+				postfix: ext,
+			},
+			(error, path, _, cleanup) => {
+				if (error) return fail(error);
+				return ok([path, cleanup]);
+			}
+		)
+	);
+
+/**
+ * @public
+ * Svgshot is a command-line program for generating SVG files.
+ */
+export const main = async (argv: string[] = process.argv) => {
 	let {
 		background,
 		width,
@@ -153,24 +171,8 @@ const main = async (argv: string[] = process.argv) => {
 			margin: { top: 0, right: 0, left: 0, bottom: 0 },
 		});
 
-		const [[pdfFile, cleanup1], [svgFile, cleanup2]] = await Promise.all(
-			['.pdf', '.svg'].map(
-				async (extension): Promise<[string, () => void]> => {
-					return new Promise((ok, err) => {
-						tmp.file(
-							{
-								tmpdir: process.env['TEST_TMPDIR'] || undefined,
-								postfix: extension,
-							},
-							(error, path, _, cleanup) => {
-								if (error) return err(error);
-								return ok([path, cleanup]);
-							}
-						);
-					});
-				}
-			)
-		);
+		const [pdfFile, cleanup1] = await tempFile('.pdf');
+		const [svgFile, cleanup2] = await tempFile('.svg');
 
 		const cleanup = () => {
 			cleanup1();

@@ -1,7 +1,6 @@
 exports_files(
     [
-        "bump.py"
+        "bump.py",
     ],
     visibility = ["//visibility:public"],
 )
-
