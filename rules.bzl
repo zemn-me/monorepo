@@ -104,7 +104,7 @@ def __ts_project(name, ignores_lint = [], tags = [], deps = [], srcs = [], tscon
     _ts_project(
         name = name,
         srcs = srcs,
-        deps = deps + ["@npm//typescript-transform-paths"],
+        deps = deps,
         tags = tags,
         source_map = True,
         tsconfig = tsconfig,
