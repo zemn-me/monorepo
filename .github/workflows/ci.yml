@@ -102,5 +102,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set PR to merge automatically
-        run: gh pr merge --auto --merge --head main --base versioned
+        run: gh pr merge versioned --auto
   

@@ -1,6 +1,6 @@
 exports_files(
     [
-        "version.tmpl.txt"
+        "bump.py"
     ],
     visibility = ["//visibility:public"],
 )
