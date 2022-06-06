@@ -45,6 +45,7 @@ sequenceDiagram
 ## Process
 ### Introduce new 'versioned' branch
  - [ ] Versioned branch copies over all commits from main branch
+ - [ ] Rule that can be run to bump a version when a set of hashed file(s) changes.
 ### Introduce new 'versioned tests'
  - [ ] Versioned tests, which are able to determine if a major minor
        or patch version should be bumped as a result of a change, exist.
