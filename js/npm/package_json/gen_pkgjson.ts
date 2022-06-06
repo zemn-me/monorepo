@@ -14,7 +14,7 @@ const labelToNpmPackage = (label: string): string => {
         @npm//@ok/thing/file:test.txt -> @ok/thing
         @npm//ok-whatever:fuck -> ok-whatever
     */
-	const match = /^@npm\/\/(?::node_modules\/)?((?:@[^\/:]+\/)?[^\/:]+)/.exec(
+	const match = /^@npm\/\/(?::node_modules\/)?((?:@[^/:]+\/)?[^/:]+)/.exec(
 		label
 	);
 
@@ -72,7 +72,7 @@ const main = async () => {
 	]);
 
 	const our_deps = [...all_deps]
-		.filter(([k, v]) => pkgs.has(k))
+		.filter(([k]) => pkgs.has(k))
 		.filter(([pkg]) => !depTypes.skip(pkg));
 
 	const runDeps = new Map<string, string>(),
