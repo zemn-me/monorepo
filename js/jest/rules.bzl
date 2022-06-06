@@ -12,6 +12,9 @@ def jest_test(name, srcs, data = [], deps = [], jest_config = "//:jest.ts.config
         "--forceExit",
     ]
     templated_args.extend(["--config", "$(rootpath %s)" % jest_config])
+
+    # Bazel already handles timeouts.
+    templated_args.extend(["--testTimeout", str(1000 * 60 * 5)])
     for src in srcs:
         templated_args.extend(["--runTestsByPath", "$(rootpath %s)" % src])
 
