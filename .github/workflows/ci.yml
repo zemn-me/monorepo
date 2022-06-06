@@ -95,8 +95,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Checkout 'versioned' branch
+        run: git checkout 
+      - name: Merge with our branch
+        run: git merge main
       - name: Open PR to 'versioned' branch
-        run: gh pr create -f --base versioned
+        run: gh pr create -f
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
