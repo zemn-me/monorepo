@@ -1,5 +1,5 @@
 load("//:rules.bzl", "nodejs_binary")
-load("//bzl/versioning:rules.bzl", "semver_version", "bump_on_change_test")
+load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 def package_json(name, targets, template):
@@ -52,9 +52,17 @@ def package_json(name, targets, template):
         tools = [genrule_name],
     )
 
-
-def npm_pkg(name, package_name, pkg_json_base, srcs = [], deps = [],
-    version_lock = None, major_version = None, minor_version = None, patch_version = None, test_version_on_main = False):
+def npm_pkg(
+        name,
+        package_name,
+        pkg_json_base,
+        srcs = [],
+        deps = [],
+        version_lock = None,
+        major_version = None,
+        minor_version = None,
+        patch_version = None,
+        test_version_on_main = False):
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
@@ -67,14 +75,14 @@ def npm_pkg(name, package_name, pkg_json_base, srcs = [], deps = [],
         srcs = srcs + deps,
         version = minor_version,
         run_on_main = test_version_on_main,
-        version_lock = "version.lock"
+        version_lock = "version.lock",
     )
 
     semver_version(
         name = "version",
         major = "version/MAJOR",
         minor = "version/MINOR",
-        patch = "version/PATCH"
+        patch = "version/PATCH",
     )
 
     lockfile_name = name + "_lockfile"
