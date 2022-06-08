@@ -1,4 +1,7 @@
-def _api_extractor_impl(ctx):
+load("@build_bazel_rules_nodejs//nodejs:providers.bzl", "DeclarationInfo", "declaration_info")
+
+
+def _api_extractor_raw_impl(ctx):
     output_files = []
     args = []
 
@@ -86,8 +89,8 @@ def _api_extractor_impl(ctx):
         progress_message = "Running api-extractor (https://api-extractor.com)",
     )
 
-_api_extractor_rule = rule(
-    implementation = _api_extractor_impl,
+_api_extractor_raw_rule = rule(
+    implementation = _api_extractor_raw_impl,
     attrs = {
         "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
@@ -106,31 +109,49 @@ _api_extractor_rule = rule(
     },
 )
 
-"""
-        config="api-extractor.json",
-        report= 'report.api.md',
-        docModel = 'model.api.json',
-        untrimmedRollup= 'api.d.ts',
-        alphaTrimmedRollup= 'api-alpha.d.ts',
-        betaTrimmedRollup= 'api-beta.d.ts',
-        publicTrimmedRollup=  'api-public.d.ts',
-        tsdocMetadata= 'tsdoc-metadata.json',
-
-        report= report,
-        untrimmedRollup= untrimmedRollup,
-        docModel = docModel,
-        alphaTrimmedRollup= alphaTrimmedRollup,
-        betaTrimmedRollup= betaTrimmedRollup,
-        publicTrimmedRollup=  publicTrimmedRollup,
-"""
-
-def api_extractor(name, config = "api-extractor.json", **kwargs):
-    _api_extractor_rule(
+def api_extractor_raw(name, config = "api-extractor.json", **kwargs):
+    _api_extractor_raw_rule(
         name = name,
         config = config,
         ts_config = "//:tsconfig",
         api_extractor_binary = "@npm//@microsoft/api-extractor/bin:api-extractor",
         package_json = "//:package.json",
         package_name = native.package_name(),
+        **kwargs
+    )
+
+
+def _decl_summary_gen(ctx):
+    declInfo = [v[DeclarationInfo] for v in ctx.attr.srcs ]
+
+    imports = "\n".join([ "import '" + file.path + "';"  for src in declInfo for file in src.declarations.to_list() ])
+
+    summary_file = ctx.actions.declare_file(ctx.outputs.rollup,
+        depset([x.declarations for x in declInfo] + [x.transitive_declarations for x in declInfo]))
+
+    ctx.actions.write(
+        summary_file, imports
+    )
+
+    return declaration_info(summary_file, ctx.files.srcs + ctx.files.deps)
+
+decl_summary = rule(
+    implementation = _decl_summary_gen,
+    attrs = {
+        "srcs": attr.label_list(allow_empty = False, providers = [ DeclarationInfo ]),
+        "rollup": attr.output()
+    }
+)
+
+def api_extractor(name, srcs = [], rollup_file = "summary.d.ts", **kwargs):
+    decl_summary(
+        name = name + "_decl_summary",
+        srcs = srcs,
+    )
+
+    api_extractor_raw(
+        name = name,
+        entry_point = "summary.d.ts",
+        srcs = [ name + "_decl_summary" ],
         **kwargs
     )

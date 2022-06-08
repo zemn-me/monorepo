@@ -93,7 +93,6 @@ def npm_pkg(
 
     api_extractor(
         name = name + "_extracted_api",
-        entry_point = external_api_dts_root,
         srcs = srcs + deps,
         report = "api_gen.md",
     )
