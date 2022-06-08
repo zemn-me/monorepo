@@ -52,6 +52,5 @@ npm_pkg(
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
-    test_version_on_main = True,
     deps = [":project_ts"],
 )
