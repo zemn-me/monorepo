@@ -23,7 +23,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: 'Merge (if dependabot)'
-      run: gh pr merge versioned --auto --merge
+      run: gh pr merge main --auto --merge
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
