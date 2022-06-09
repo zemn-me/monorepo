@@ -21,7 +21,7 @@ jobs:
       contents: write
     steps:
     - name: 'Merge (if dependabot)'
-      run: gh pr merge versioned --auto
+      run: gh pr merge versioned --auto --merge
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
