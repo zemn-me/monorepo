@@ -21,7 +21,7 @@ jobs:
       contents: write
     steps:
     - name: Checkout code
-        uses: actions/checkout@v3
+      uses: actions/checkout@v3
     - name: 'Merge (if dependabot)'
       run: gh pr merge versioned --auto --merge
       env:
