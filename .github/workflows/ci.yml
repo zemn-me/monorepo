@@ -138,8 +138,11 @@ jobs:
             ~/.cache/bazelisk
             ~/.cache/bazel
           key: ${{ runner.os }}-${{ env.cache-name }}
+      - name: Run all tests that are fixable, and perform fixes.
+        run: ./.github/scripts/fix_any_failing_fixable_tests.sh --test_tag_filters=do_not_run_on_main
       - name: Run special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
+
       - run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
         env:
