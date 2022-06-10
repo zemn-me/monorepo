@@ -86,7 +86,7 @@ jobs:
             ~/.cache/bazelisk
             ~/.cache/bazel
           key: ${{ runner.os }}-${{ env.cache-name }}
-      - name: All tests
+      - name: Special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
 
   deployment:
@@ -129,6 +129,17 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Restore bazel cache
+        uses: actions/cache@v3.0.4
+        env:
+          cache-name: bazel-cache
+        with:
+          path: |
+            ~/.cache/bazelisk
+            ~/.cache/bazel
+          key: ${{ runner.os }}-${{ env.cache-name }}
+      - name: Run special 'versioned' branch tests
+        run: bazelisk test //... --test_tag_filters=do_not_run_on_main
       - run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
         env:
