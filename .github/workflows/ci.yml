@@ -141,6 +141,8 @@ jobs:
       - name: Run all tests that are fixable, and perform fixes.
         # bash prefix just because vscode for web can't chmod
         run: bash ./.github/scripts/fix_any_failing_fixable_tests.sh --test_tag_filters=do_not_run_on_main
+        env:
+          BAZEL_CMD: bazelisk
       - name: Run special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
       - run: ./.github/scripts/copy_to_versioned.sh
