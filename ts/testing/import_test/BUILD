@@ -4,7 +4,6 @@ ts_project(
     name = "a",
     srcs = ["a.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = [":b"],
     tsconfig = "//:tsconfig_node",
@@ -14,7 +13,6 @@ ts_project(
     name = "b",
     srcs = ["b.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig_node",
 )
@@ -23,7 +21,6 @@ ts_project(
     name = "import_test_js",
     srcs = ["import_test.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     project_deps = [
         ":a",

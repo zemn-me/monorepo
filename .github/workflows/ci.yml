@@ -20,8 +20,18 @@ jobs:
       pull-requests: write
       contents: write
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Fetch Dependabot metadata
+      id: dependabot-metadata
+      uses: dependabot/fetch-metadata@v1.3.1
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: 'Merge (if dependabot)'
-      run: gh pr merge versioned --auto
+      run: gh pr merge "$PR_URL" --auto --merge
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_URL: ${{ github.event.pull_request.html_url }}
 
 
   Test:
@@ -41,7 +51,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.3
+        uses: actions/cache@v3.0.4
         env:
           cache-name: bazel-cache
         with:
@@ -68,7 +78,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.3
+        uses: actions/cache@v3.0.4
         env:
           cache-name: bazel-cache
         with:
@@ -91,7 +101,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.3
+        uses: actions/cache@v3.0.4
         env:
           cache-name: bazel-cache
         with:
@@ -121,4 +131,9 @@ jobs:
           fetch-depth: 0
       - run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+
   

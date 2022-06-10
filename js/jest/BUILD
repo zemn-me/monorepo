@@ -9,7 +9,6 @@ ts_project(
     name = "jest_reporter",
     srcs = ["jest_reporter.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],

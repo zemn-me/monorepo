@@ -10,7 +10,6 @@ ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
     composite = True,
-    declaration = True,
     incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [

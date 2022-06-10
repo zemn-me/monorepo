@@ -47,10 +47,12 @@ js_library(
 exports_files(
     [
         ".prettierrc.json",
+        "package.json",
         ".gitignore",
         ".editorconfig",
         ".eslintrc.json",
         "css_loader.d.ts",
+        "yarn.lock",
     ],
     visibility = ["//visibility:public"],
 )
