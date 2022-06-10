@@ -11,4 +11,4 @@ echo "already. But it doesn't really matter."
 git push || true
 
 echo "Setting PR to merge automatically..."
-gh pr merge versioned --auto --merge
+gh pr merge --auto --merge
