@@ -131,4 +131,9 @@ jobs:
           fetch-depth: 0
       - run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+
   
