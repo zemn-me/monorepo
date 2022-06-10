@@ -82,7 +82,7 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
         ],
     )
 
-    alias(
+    native.alias(
         name = name + ".fix",
         actual = name + ".bump",
     )
