@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-BAZEL="${BAZEL:-yarn -s run bazel}"
+BAZEL_CMD="${BAZEL_CMD:-yarn -s run bazel}"
 
-FIXER_TARGETS=$($BAZEL test \
+FIXER_TARGETS=$($BAZEL_CMD test \
     # Only print failing targets
     --test_summary=terse \
     # Only test fixable targets
@@ -15,4 +15,4 @@ FIXER_TARGETS=$($BAZEL test \
     sed 's/$/.fix/g')
 
 # Run all fixers
-$BAZEL run $FIXER_TARGETS
+$BAZEL_CMD run $FIXER_TARGETS
