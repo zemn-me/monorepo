@@ -138,22 +138,23 @@ jobs:
             ~/.cache/bazelisk
             ~/.cache/bazel
           key: ${{ runner.os }}-${{ env.cache-name }}
-      - name: Merge with 'versioned' branch
+      - name: Update versioned branch
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git checkout versioned
           git merge main
-        shell: bash
-      - name: Run all tests that are fixable, and perform fixes.
-        # bash prefix just because vscode for web can't chmod
-        run: bash ./.github/scripts/fix_any_failing_fixable_tests.sh --test_tag_filters=do_not_run_on_main
-        env:
-          BAZEL_CMD: bazelisk
-      - name: Run special 'versioned' branch tests
-        run: bazelisk test //... --test_tag_filters=do_not_run_on_main
-      - name: Commit any changes
-        run: |
+          bazelisk test \
+              --test_summary=terse \
+              --test_tag_filters=fixable \
+              $@ //... | \
+              awk '{print $1}' | \
+              sed 's/$/.fix/g' | \
+              sed -n '/^\/\//p' | xargs bazelisk run
+          # Ensure our tests pass now.
+          bazelisk test //... --test_tag_filters=do_not_run_on_main
+
+          #Commit
           git add .
           git commit -am "Automatic fixes."
           git push
