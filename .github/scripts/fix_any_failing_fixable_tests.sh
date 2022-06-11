@@ -6,7 +6,8 @@ FIXER_TARGETS=$($BAZEL_CMD test \
     --test_tag_filters=fixable \
     $@ //... | \
     awk '{print $1}' | \
-    sed 's/$/.fix/g')
+    sed 's/$/.fix/g' | \
+    sed -n '/^\/\//p' )
 
 # Run all fixers
 $BAZEL_CMD run $FIXER_TARGETS
