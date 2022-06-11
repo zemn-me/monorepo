@@ -146,16 +146,18 @@ jobs:
           git checkout versioned
           git merge main
           echo "[auto-fix] running fixers for all failing tests..."
-          set +e
-          (bazelisk test \
+          TO_RUN=$(bazelisk test \
+              --build_tests_only \
               --test_output=summary \
               --test_summary=terse \
               --test_tag_filters=fixable \
-              $@ //... | \
+              --test_tag_filters=do_not_run_on_main \
+              //... | \
               awk '{print $1}' | \
               sed 's/$/.fix/g' | \
-              sed -n '/^\/\//p' || :) | xargs bazelisk run
-          set -e
+              sed -n '/^\/\//p' || :)
+          echo "[auto fix] running: $TO_RUN"
+          bazelisk run $TO_RUN
           echo "[auto-fix] ensuring tests still run...""
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
