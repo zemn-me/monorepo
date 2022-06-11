@@ -142,19 +142,24 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          echo "[auto-fix] "
           git checkout versioned
           git merge main
-          bazelisk test \
+          echo "[auto-fix] running fixers for all failing tests..."
+          set +e
+          (bazelisk test \
+              --test_output=summary \
               --test_summary=terse \
               --test_tag_filters=fixable \
               $@ //... | \
               awk '{print $1}' | \
               sed 's/$/.fix/g' | \
-              sed -n '/^\/\//p' | xargs bazelisk run
-          # Ensure our tests pass now.
+              sed -n '/^\/\//p' || :) | xargs bazelisk run
+          set -e
+          echo "[auto-fix] ensuring tests still run...""
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
-          #Commit
+          echo "[auto-fix] committing and submitting changes..."
           git add .
           git commit -am "Automatic fixes."
           git push
