@@ -145,7 +145,10 @@ jobs:
           BAZEL_CMD: bazelisk
       - name: Run special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
-      - run: ./.github/scripts/copy_to_versioned.sh
+      - name: Commit any changes
+        run: git commit -am "Automatic fixes."
+      - name: Copy to versioned branch
+        run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
