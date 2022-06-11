@@ -146,7 +146,11 @@ jobs:
       - name: Run special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
       - name: Commit any changes
-        run: git commit -am "Automatic fixes."
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -am "Automatic fixes."
       - name: Copy to versioned branch
         run: ./.github/scripts/copy_to_versioned.sh
         shell: bash
