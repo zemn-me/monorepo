@@ -60,7 +60,7 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
         name = name,
         generated = hashes_name,
         src = version_lock,
-        tags = tags + ["version_check"],
+        tags = tags + ["version_check", "fixable"],
     )
 
     py_binary(
@@ -80,4 +80,9 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
             "--lockfile_out_rootpath",
             "$(rootpath " + version_lock + ")",
         ],
+    )
+
+    native.alias(
+        name = name + ".fix",
+        actual = name + ".bump",
     )
