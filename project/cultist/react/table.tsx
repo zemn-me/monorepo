@@ -244,7 +244,7 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 			{/* needed to inject xmlns, not in types */}
 			{(console.log(style), null)}
 			<div
-				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as unknown)}
+				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as any)}
 				className={style.card}
 				draggable="true"
 				onDragStart={onDragStart}

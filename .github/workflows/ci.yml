@@ -138,25 +138,35 @@ jobs:
             ~/.cache/bazelisk
             ~/.cache/bazel
           key: ${{ runner.os }}-${{ env.cache-name }}
-      - name: Run all tests that are fixable, and perform fixes.
-        # bash prefix just because vscode for web can't chmod
-        run: bash ./.github/scripts/fix_any_failing_fixable_tests.sh --test_tag_filters=do_not_run_on_main
-        env:
-          BAZEL_CMD: bazelisk
-      - name: Run special 'versioned' branch tests
-        run: bazelisk test //... --test_tag_filters=do_not_run_on_main
-      - name: Commit any changes
+      - name: Update versioned branch
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          echo "[auto-fix] "
+          git checkout versioned
+          git merge main
+          echo "[auto-fix] running fixers for all failing tests..."
+          TO_RUN=$(bazelisk test \
+              --build_tests_only \
+              --test_output=summary \
+              --test_summary=terse \
+              --test_tag_filters=fixable \
+              --test_tag_filters=do_not_run_on_main \
+              //... | \
+              awk '{print $1}' | \
+              sed 's/$/.fix/g' | \
+              sed -n '/^\/\//p' || :)
+          echo "[auto fix] running: $TO_RUN"
+          bazelisk run --subcommands --verbose_failures $TO_RUN
+          echo "[auto-fix] ensuring tests still run..."
+          bazelisk test //... --test_tag_filters=do_not_run_on_main
+
+          echo "[auto-fix] committing and submitting changes..."
           git add .
           git commit -am "Automatic fixes."
-      - name: Copy to versioned branch
-        run: ./.github/scripts/copy_to_versioned.sh
+          git push
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-
 
   
