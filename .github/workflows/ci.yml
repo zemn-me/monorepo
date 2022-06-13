@@ -158,7 +158,7 @@ jobs:
               sed -n '/^\/\//p' || :)
           echo "[auto fix] running: $TO_RUN"
           bazelisk run --subcommands --verbose_failures $TO_RUN
-          echo "[auto-fix] ensuring tests still run...""
+          echo "[auto-fix] ensuring tests still run..."
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
           echo "[auto-fix] committing and submitting changes..."
