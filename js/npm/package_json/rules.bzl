@@ -69,7 +69,8 @@ def npm_pkg(
         patch_version = None,
         test_version_on_main = False,
         entry_point = None,
-        tgz = None):
+        tgz = None,
+        visibility = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
 
@@ -110,7 +111,8 @@ def npm_pkg(
         package_name = package_name,
         srcs = pkg_srcs,
         deps = pkg_deps,
-        tgz = tgz
+        tgz = tgz,
+        visibility = visibility,
     )
 
     # Test that ensures at least a minor bump happens when
