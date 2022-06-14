@@ -8,11 +8,13 @@ def package_json(name, targets, template, version):
     """
     Generate a package.json for a given target.
     """
+    query_expression = "deps(" + ", ".join([str(Label("//" + native.package_name()).relative(target)) for target in targets]) + ", 1)"
+    print(query_expression)
     genquery_name = name + "_deps"
     native.genquery(
         name = genquery_name,
         scope = targets,
-        expression = "deps(" + " ".join([str(Label("//" + native.package_name()).relative(target)) for target in targets]) + ", 1)",
+        expression = query_expression
     )
 
     genrule_name = name + "_gen"
@@ -84,7 +86,9 @@ def npm_pkg(
     pkg_json_name = name + "_package_json"
     package_json(
         name = pkg_json_name,
-        targets = srcs + deps,
+        # Won't be srcs I am fairly sure? because srcs are never
+        # generated and so can't have deps
+        targets = deps,
         template = pkg_json_base,
         version = ":version"
     )

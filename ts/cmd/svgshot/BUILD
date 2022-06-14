@@ -47,6 +47,7 @@ npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
     api_lock = "api.lock",
+    srcs = [ "README.md" ],
     entry_point = "lib.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
