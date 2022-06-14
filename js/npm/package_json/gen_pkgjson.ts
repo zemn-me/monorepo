@@ -40,6 +40,10 @@ const main = async () => {
 			"The 'template' package.json to merge deps into."
 		)
 		.requiredOption(
+			'--version <version string>',
+			'The version of the package.json'
+		)
+		.requiredOption(
 			'--query <path>',
 			'The genquery (path) containing a list of line-break separated deps.'
 		)
@@ -83,11 +87,13 @@ const main = async () => {
 	}
 
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
+	const version = (await fs.readFile(opts.version)).toString();
 
 	await fs.writeFile(
 		opts.out,
 		JSON.stringify(
 			{
+				version,
 				...template,
 				dependencies: Object.fromEntries(runDeps),
 				devDependencies: Object.fromEntries(devDeps),

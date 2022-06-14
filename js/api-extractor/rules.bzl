@@ -91,7 +91,7 @@ _api_extractor_rule = rule(
     attrs = {
         "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
-        "srcs": attr.label_list(mandatory = True, allow_empty = False),
+        "srcs": attr.label_list(mandatory = True, allow_empty = False, allow_files = True),
         "package_json": attr.label(mandatory = True, allow_single_file = True),
         "api_extractor_binary": attr.label(mandatory = True, executable = True, cfg = "target"),
         "report": attr.output(),
