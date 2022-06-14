@@ -41,7 +41,7 @@ const main = async () => {
 		)
 		.requiredOption(
 			'--version <version string>',
-			"The version of the package.json"
+			'The version of the package.json'
 		)
 		.requiredOption(
 			'--query <path>',

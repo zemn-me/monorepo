@@ -46,14 +46,14 @@ jest_test(
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
+    srcs = ["README.md"],
     api_lock = "api.lock",
-    srcs = [ "README.md" ],
     entry_point = "lib.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
-    deps = [":project_ts"],
     tgz = "svgshot.tgz",
-    visibility = [ "//deploy:__subpackages__" ]
+    visibility = ["//deploy:__subpackages__"],
+    deps = [":project_ts"],
 )

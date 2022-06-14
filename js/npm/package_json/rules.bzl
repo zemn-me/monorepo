@@ -14,7 +14,7 @@ def package_json(name, targets, template, version):
     native.genquery(
         name = genquery_name,
         scope = targets,
-        expression = query_expression
+        expression = query_expression,
     )
 
     genrule_name = name + "_gen"
@@ -38,7 +38,7 @@ def package_json(name, targets, template, version):
             template,
             "@npm//@bazel/runfiles",
             "//js/npm/package_json:gen_pkgjson_js",
-        ] + [ version ],
+        ] + [version],
         cmd = "$(execpath " + genrule_name + ") " +
               " ".join(
                   [
@@ -51,7 +51,7 @@ def package_json(name, targets, template, version):
                       "--merge",
                       "$(location " + template + ")",
                       "--version",
-                      "$(location " + version + ")"
+                      "$(location " + version + ")",
                   ],
               ),
         outs = ["package.json"],
@@ -90,7 +90,7 @@ def npm_pkg(
         # generated and so can't have deps
         targets = deps,
         template = pkg_json_base,
-        version = ":version"
+        version = ":version",
     )
 
     lockfile_name = name + "_lockfile"
