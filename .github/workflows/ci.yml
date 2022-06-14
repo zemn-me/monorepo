@@ -26,7 +26,8 @@ jobs:
       id: dependabot-metadata
       uses: dependabot/fetch-metadata@v1.3.1
       with:
-        github-token: "${{ secrets.GITHUB_TOKEN }}"
+        # Otherwise actions cannot trigger actions.
+        github-token: "${{ secrets.GH_PAT }}"
     - name: 'Merge (if dependabot)'
       run: gh pr merge "$PR_URL" --auto --merge
       env:
@@ -129,6 +130,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          # Needed to allow an action to trigger another action.
+          token: ${{ secrets.GH_PAT }}
       - name: Restore bazel cache
         uses: actions/cache@v3.0.4
         env:
