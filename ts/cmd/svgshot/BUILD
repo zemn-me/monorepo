@@ -53,4 +53,5 @@ npm_pkg(
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
     deps = [":project_ts"],
+    tgz = "svgshot.tgz"
 )

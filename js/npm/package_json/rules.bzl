@@ -4,7 +4,7 @@ load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 
-def package_json(name, targets, template):
+def package_json(name, targets, template, version):
     """
     Generate a package.json for a given target.
     """
@@ -36,7 +36,7 @@ def package_json(name, targets, template):
             template,
             "@npm//@bazel/runfiles",
             "//js/npm/package_json:gen_pkgjson_js",
-        ],
+        ] + [ version ],
         cmd = "$(execpath " + genrule_name + ") " +
               " ".join(
                   [
@@ -48,6 +48,8 @@ def package_json(name, targets, template):
                       "$(location " + genquery_name + ")",
                       "--merge",
                       "$(location " + template + ")",
+                      "--version",
+                      "$(location " + version + ")"
                   ],
               ),
         outs = ["package.json"],
@@ -66,21 +68,24 @@ def npm_pkg(
         minor_version = None,
         patch_version = None,
         test_version_on_main = False,
-        entry_point = None):
+        entry_point = None,
+        tgz = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
-    pkg_json_name = name + "_package_json"
-    package_json(
-        name = pkg_json_name,
-        targets = srcs + deps,
-        template = pkg_json_base,
-    )
 
     semver_version(
         name = "version",
         major = "version/MAJOR",
         minor = "version/MINOR",
         patch = "version/PATCH",
+    )
+
+    pkg_json_name = name + "_package_json"
+    package_json(
+        name = pkg_json_name,
+        targets = srcs + deps,
+        template = pkg_json_base,
+        version = ":version"
     )
 
     lockfile_name = name + "_lockfile"
@@ -105,6 +110,7 @@ def npm_pkg(
         package_name = package_name,
         srcs = pkg_srcs,
         deps = pkg_deps,
+        tgz = tgz
     )
 
     # Test that ensures at least a minor bump happens when

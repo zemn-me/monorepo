@@ -6,6 +6,7 @@ package(default_visibility = ["//deploy:__subpackages__"])
 BUILD_ARTIFACTS = {
     "recursive_vassals.zip": "//project/ck3/recursive-vassals:mod_zip",
     "recursive_vassals.patch": "//project/ck3/recursive-vassals:patch",
+    "svgshot.tar.gz", "//ts/cmd/svgshot:svgshot.tar.gz"
 }
 
 ts_project(
