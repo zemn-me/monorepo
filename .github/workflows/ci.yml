@@ -33,7 +33,7 @@ jobs:
     - name: 'Merge (if dependabot)'
       run: gh pr merge "$PR_URL" --auto --merge
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         PR_URL: ${{ github.event.pull_request.html_url }}
 
 
