@@ -160,9 +160,13 @@ jobs:
               awk '{print $1}' | \
               sed 's/$/.fix/g' | \
               sed -n '/^\/\//p' || :)
-          echo "[auto fix] running: $TO_RUN"
-          bazelisk run --subcommands --verbose_failures $TO_RUN
-          echo "[auto-fix] ensuring tests still run..."
+          if [ -z "$TO_RUN" ]; then
+            echo "Skipping fixers, none needed." 1>&2
+          else
+            echo "[auto fix] running: $TO_RUN"
+            bazelisk run --subcommands --verbose_failures $TO_RUN
+          fi
+          echo "[auto-fix] ensuring tests are good..."
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
           echo "[auto-fix] committing and submitting changes..."
