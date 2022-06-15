@@ -34,7 +34,7 @@ nodejs_binary(
     name = "release",
     data = BUILD_ARTIFACTS.values(),
     entry_point = "release.js",
-    templated_args = ["$(rootpaths " + tag + ")" for tag in BUILD_ARTIFACTS.items()],
+    templated_args = ["$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
 )
 
 sh_binary(
