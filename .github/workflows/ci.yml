@@ -28,8 +28,7 @@ jobs:
       id: dependabot-metadata
       uses: dependabot/fetch-metadata@v1.3.1
       with:
-        # Otherwise actions cannot trigger actions.
-        github-token: "${{ secrets.GH_PAT }}"
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: 'Merge (if dependabot)'
       run: gh pr merge "$PR_URL" --auto --merge
       env:

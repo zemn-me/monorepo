@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # --- begin runfiles.bash initialization v2 ---
 # Copy-pasted from the Bazel Bash runfiles library v2.
 set -uo pipefail; f=bazel_tools/tools/bash/runfiles/runfiles.bash
