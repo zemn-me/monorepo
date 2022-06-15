@@ -9,6 +9,16 @@ BUILD_ARTIFACTS = {
     "svgshot.tar.gz": "//ts/cmd/svgshot:svgshot.tgz",
 }
 
+RELEASE_MESSAGE = "This release contains the following build artifacts:\n" +[
+    "   - " + output + " ← " + input for output, input in BUILD_ARTIFACTS.items()
+]
+
+genrule(
+    name = "release_message",
+    cmd = "echo '" + RELEASE_MESSAGE + "' > $@ ",
+    outs = [ "release_message.txt" ]
+)
+
 ts_project(
     name = "release_src",
     srcs = ["release.ts"],
@@ -16,6 +26,7 @@ ts_project(
         "@npm//@actions/github",
         "@npm//@types/node",
         "@npm//mime",
+        "@npm//commander"
     ],
 )
 
@@ -23,7 +34,7 @@ nodejs_binary(
     name = "release",
     data = BUILD_ARTIFACTS.values(),
     entry_point = "release.js",
-    templated_args = [name + "=" + "$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
+    templated_args = ["$(rootpath " + tag + ")" for tag in BUILD_ARTIFACTS.items()],
 )
 
 sh_binary(
