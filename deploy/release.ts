@@ -13,11 +13,15 @@ const Github = getOctokit(process.env['GITHUB_TOKEN']!);
 
 program
 	.name('release')
-	.description('performs the action of creating a github release, and associated actions')
-	.argument('<files...>', "Files to publish.")
+	.description(
+		'performs the action of creating a github release, and associated actions'
+	)
+	.argument('<files...>', 'Files to publish.')
 	.requiredOption('--body <file>', 'Release notes etc.')
 	.action(async (files, { body }) => {
-		const syntheticVersion = `v0.0.0-${new Date().getTime()}-${context.sha}`;
+		const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
+			context.sha
+		}`;
 		const release = Github.rest.repos.createRelease({
 			// could probably use a spread operator here
 			// but i also think that would be uglier...
@@ -57,9 +61,7 @@ program
 				upload.data.browser_download_url
 			);
 		}
-
-	})
-
+	});
 
 async function main() {
 	await program.parseAsync(process.argv);
