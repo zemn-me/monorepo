@@ -33,11 +33,12 @@ ts_project(
 
 nodejs_binary(
     name = "release",
-    data = BUILD_ARTIFACTS.values() + [ ":release_message" ],
+    data = BUILD_ARTIFACTS.values() + [":release_message"],
     entry_point = "release.js",
     templated_args = [
-        "--body", "$(rootpath :release_message )",
-    ] + "$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
+        "--body",
+        "$(rootpath :release_message )",
+    ] + ["$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
 )
 
 sh_binary(
