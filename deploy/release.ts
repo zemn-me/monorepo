@@ -37,7 +37,7 @@ program
 
 		const ab = await Promise.all(
 			files.map(
-				async (file) =>
+				async (file: string) =>
 					await Github.rest.repos.uploadReleaseAsset({
 						owner: context.repo.owner,
 						repo: context.repo.repo,

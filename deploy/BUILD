@@ -10,13 +10,14 @@ BUILD_ARTIFACTS = {
 }
 
 RELEASE_MESSAGE = "This release contains the following build artifacts:\n" + "\n".join([
-    "   - " + output + " ← " + input for output, input in BUILD_ARTIFACTS.items()
+    "   - " + output + " ← " + input
+    for output, input in BUILD_ARTIFACTS.items()
 ])
 
 genrule(
     name = "release_message",
+    outs = ["release_message.txt"],
     cmd = "echo '" + RELEASE_MESSAGE + "' > $@ ",
-    outs = [ "release_message.txt" ]
 )
 
 ts_project(
@@ -25,8 +26,8 @@ ts_project(
     deps = [
         "@npm//@actions/github",
         "@npm//@types/node",
+        "@npm//commander",
         "@npm//mime",
-        "@npm//commander"
     ],
 )
 
