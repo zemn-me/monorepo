@@ -9,9 +9,9 @@ BUILD_ARTIFACTS = {
     "svgshot.tar.gz": "//ts/cmd/svgshot:svgshot.tgz",
 }
 
-RELEASE_MESSAGE = "This release contains the following build artifacts:\n" +[
+RELEASE_MESSAGE = "This release contains the following build artifacts:\n" + "\n".join([
     "   - " + output + " ← " + input for output, input in BUILD_ARTIFACTS.items()
-]
+])
 
 genrule(
     name = "release_message",
