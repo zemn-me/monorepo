@@ -17,12 +17,12 @@ svgshot https://en.wikipedia.org
 # writing Wikipedia__the_free_encyclopedia.svg
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[Wikipedia SVG]: ./Wikipedia__the_free_encyclopedia.svg
+[Wikipedia SVG]: ./docs/Wikipedia__the_free_encyclopedia.svg
 ![Wikipedia SVG]
 
 With `--block` for removing text¹:
 
-[Twitch SVG]: ./Twitch.svg
+[Twitch SVG]: ./docs/Twitch.svg
 ![Twitch SVG]
 
 [Examples directory]: ./examples
