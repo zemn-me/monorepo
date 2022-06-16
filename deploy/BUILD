@@ -9,6 +9,10 @@ BUILD_ARTIFACTS = {
     "svgshot.tar.gz": "//ts/cmd/svgshot:svgshot.tgz",
 }
 
+NPM_PACKAGES = [
+    "//ts/cmd/svgshot:npm_pkg.publish"
+]
+
 RELEASE_MESSAGE = "This release contains the following build artifacts:\n" + "\n".join([
     "   - " + output + " ← " + input
     for output, input in BUILD_ARTIFACTS.items()
