@@ -22,13 +22,10 @@ program
 	.action(async (files, { body }) => {
 		console.info('Publishing NPM packages...');
 
-
 		const to_publish = [['svgshot', 'ts/cmd/svgshot/npm_pkg.publish.sh']];
 
 		const published: string[] = [];
 		try {
-			if (!("NPM_TOKEN" in process.env))
-				throw new Error("Missing NPM_TOKEN. We won't be able to publish any npm packages.");
 			for (const [name, target] of to_publish) {
 				child_process.execFileSync(target, {
 					stdio: 'pipe',
@@ -52,7 +49,7 @@ program
 			tag_name: syntheticVersion,
 
 			body:
-				(await fs.readFile(body)).toString() + "\n" +
+				body +
 				`This release also includes the following published NPM packages:\n${published
 					.map(name => `   - ${name}`)
 					.join('\n')}`,
