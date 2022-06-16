@@ -33,7 +33,10 @@ ts_project(
 
 nodejs_binary(
     name = "release",
-    data = BUILD_ARTIFACTS.values() + [":release_message"],
+    data = BUILD_ARTIFACTS.values() + [
+        ":release_message",
+        "//ts/cmd/svgshot:npm_pkg.publish",
+    ],
     entry_point = "release.js",
     templated_args = [
         "--body",
