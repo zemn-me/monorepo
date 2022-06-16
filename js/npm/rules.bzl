@@ -23,9 +23,9 @@ def npm_pkg(
 
     semver_version(
         name = "version",
-        major = "version/MAJOR",
-        minor = "version/MINOR",
-        patch = "version/PATCH",
+        major = major_version,
+        minor = minor_version,
+        patch = patch_version,
     )
 
     pkg_json_name = name + "_package_json"
@@ -71,7 +71,7 @@ def npm_pkg(
         srcs = pkg_srcs + pkg_deps,
         version = minor_version,
         run_on_main = test_version_on_main,
-        version_lock = "version.lock",
+        version_lock = version_lock,
     )
 
     # Test that ensures that a major bump happens when a change
