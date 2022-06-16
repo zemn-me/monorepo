@@ -165,13 +165,13 @@ jobs:
           else
             echo "[auto fix] running: $TO_RUN"
             bazelisk run --subcommands --verbose_failures $TO_RUN
+            git add -A
+            git commit -am "Automatic fixes."
           fi
           echo "[auto-fix] ensuring tests are good..."
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
           echo "[auto-fix] committing and submitting changes..."
-          git add .
-          git commit -am "Automatic fixes."
           git push
         shell: bash
         env:
