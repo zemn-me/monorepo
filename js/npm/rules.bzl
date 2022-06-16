@@ -1,62 +1,7 @@
-load("//:rules.bzl", "nodejs_binary")
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
-load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
-
-def package_json(name, targets, template, version):
-    """
-    Generate a package.json for a given target.
-    """
-    query_expression = "deps(" + ", ".join([str(Label("//" + native.package_name()).relative(target)) for target in targets]) + ", 1)"
-    print(query_expression)
-    genquery_name = name + "_deps"
-    native.genquery(
-        name = genquery_name,
-        scope = targets,
-        expression = query_expression,
-    )
-
-    genrule_name = name + "_gen"
-    nodejs_binary(
-        name = genrule_name,
-        data = [
-            "//:package.json",
-            genquery_name,
-            template,
-            "//js/npm/package_json:gen_pkgjson_js",
-        ],
-        entry_point = "//js/npm/package_json:gen_pkgjson.js",
-    )
-
-    native.genrule(
-        name = name,
-        srcs = [
-            "@npm//commander",
-            "//:package.json",
-            genquery_name,
-            template,
-            "@npm//@bazel/runfiles",
-            "//js/npm/package_json:gen_pkgjson_js",
-        ] + [version],
-        cmd = "$(execpath " + genrule_name + ") " +
-              " ".join(
-                  [
-                      "--out",
-                      "$@",
-                      "--base",
-                      "$(location //:package.json)",
-                      "--query",
-                      "$(location " + genquery_name + ")",
-                      "--merge",
-                      "$(location " + template + ")",
-                      "--version",
-                      "$(location " + version + ")",
-                  ],
-              ),
-        outs = ["package.json"],
-        tools = [genrule_name],
-    )
+load("//js/npm/package_json:rules.bzl", "package_json")
 
 def npm_pkg(
         name,
@@ -78,9 +23,9 @@ def npm_pkg(
 
     semver_version(
         name = "version",
-        major = "version/MAJOR",
-        minor = "version/MINOR",
-        patch = "version/PATCH",
+        major = major_version,
+        minor = minor_version,
+        patch = patch_version,
     )
 
     pkg_json_name = name + "_package_json"
@@ -126,7 +71,7 @@ def npm_pkg(
         srcs = pkg_srcs + pkg_deps,
         version = minor_version,
         run_on_main = test_version_on_main,
-        version_lock = version_lock,
+        version_lock = "version.lock",
     )
 
     # Test that ensures that a major bump happens when a change
