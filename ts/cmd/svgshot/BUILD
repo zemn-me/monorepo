@@ -1,5 +1,7 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
-load("//js/npm/package_json:rules.bzl", "npm_pkg")
+load("//js/npm:rules.bzl", "npm_pkg")
+
+package(default_visibility = ["//deploy:__subpackages__"])
 
 ts_project(
     name = "project",
