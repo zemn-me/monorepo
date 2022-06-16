@@ -54,9 +54,9 @@ npm_pkg(
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
-    version_lock = ".version.lock",
     pkg_json_base = "package.template.json",
     tgz = "svgshot.tgz",
+    version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
     deps = [":project_ts"],
 )
