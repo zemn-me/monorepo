@@ -1,5 +1,5 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
-load("//js/npm/package_json:rules.bzl", "npm_pkg")
+load("//js/npm:rules.bzl", "npm_pkg")
 
 ts_project(
     name = "project",
