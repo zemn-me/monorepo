@@ -4,6 +4,7 @@
  */
 
 import fs from 'fs/promises';
+import child_process from 'child_process';
 import { context, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import path from 'path';
@@ -19,6 +20,23 @@ program
 	.argument('<files...>', 'Files to publish.')
 	.requiredOption('--body <file>', 'Release notes etc.')
 	.action(async (files, { body }) => {
+		console.info('Publishing NPM packages...');
+
+		const to_publish = [['svgshot', 'ts/cmd/svgshot/npm_pkg.publish.sh']];
+
+		const published: string[] = [];
+		try {
+			for (const [name, target] of to_publish) {
+				child_process.execFileSync(target, {
+					stdio: 'pipe',
+				});
+
+				published.push(name);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+
 		const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
 			context.sha
 		}`;
@@ -30,7 +48,11 @@ program
 
 			tag_name: syntheticVersion,
 
-			body,
+			body:
+				body +
+				`This release also includes the following published NPM packages:\n${published
+					.map(name => `   - ${name}`)
+					.join('\n')}`,
 
 			generate_release_notes: true,
 
