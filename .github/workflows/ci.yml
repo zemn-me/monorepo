@@ -114,7 +114,10 @@ jobs:
       - name: Deploy
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazelisk run //deploy:deploy
+        run: |
+          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'> .npmrc
+          bazelisk run //deploy:deploy
+        shell: bash
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
