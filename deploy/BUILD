@@ -49,10 +49,8 @@ sh_binary(
     srcs = ["deploy.sh"],
     data = [
         "//deploy:release",
-        "//project/cultist/multiplayer/deploy:pulumi_prod",
     ],
     env = {
-        "PULUMI_CULTIST_MULTIPLAYER": "$(location //project/cultist/multiplayer/deploy:pulumi_prod)",
         "RELEASE": "$(location //deploy:release)",
     },
     deps = ["@bazel_tools//tools/bash/runfiles"],

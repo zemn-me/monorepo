@@ -1,5 +1,4 @@
 load("//:rules.bzl", "ts_config", "ts_project")
-load("//ts/pulumi:rules.bzl", "pulumi")
 
 ts_config(
     name = "tsconfig",
@@ -21,16 +20,3 @@ ts_project(
     ],
 )
 
-pulumi(
-    name = "pulumi",
-    config_files = [
-        ":deploy_js",
-        "Pulumi.yaml",
-    ],
-    data = ["//project/cultist/multiplayer:multiplayer_prod_bundle"],
-    env = {
-        "DIR_ROOT": package_name(),
-    },
-    stacks = ["Pulumi.prod.yaml"],
-    visibility = ["//:__subpackages__"],
-)
