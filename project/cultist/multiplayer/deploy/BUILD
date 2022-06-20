@@ -19,4 +19,3 @@ ts_project(
         "@npm//mime",
     ],
 )
-
