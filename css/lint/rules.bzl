@@ -1,17 +1,13 @@
+load("@npm//stylelint:index.bzl", "stylelint_test")
+
 def css_lint(name = None, srcs = [], **kwargs):
-    native.sh_test(
+    stylelint_test(
         name = name,
-        srcs = ["//css/lint:lint.sh"],
-        data = [
-            "//css/lint:stylelint-config.json",
-            "@npm//stylelint/bin:stylelint",
-            "@npm//stylelint-config-standard",
-            "@npm//stylelint-config-recommended",
-            "@npm//stylelint-config-css-modules",
-        ] + srcs,
-        env = {
-            "LOCAL_FILES": " ".join(["$(rootpaths " + src + ")" for src in srcs]),
-        },
-        deps = ["@bazel_tools//tools/bash/runfiles"],
+        data = [ "//css/lint:stylelint_config" ] + srcs,
+        templated_args = [
+            "--config", "css/lint/stylelint-config.json"
+        ] + [
+            "$(rootpaths " + x + ")" for x in srcs
+        ],
         **kwargs
     )
