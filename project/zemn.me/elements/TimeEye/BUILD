@@ -1,4 +1,5 @@
 load("//:rules.bzl", "jest_test", "ts_project")
+load("//css:rules.bzl", "css_library")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -7,12 +8,20 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-        "*.css",
-    ]),
+    ]) + [
+        ":css"
+    ],
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",
+        "//:base_defs"
     ],
+)
+
+
+css_library(
+    name = "css",
+    srcs = glob(["*.css"])
 )
