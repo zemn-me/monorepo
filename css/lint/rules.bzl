@@ -7,6 +7,7 @@ def css_lint(name = None, srcs = [], **kwargs):
         templated_args = [
             "--config", "$(rlocation //css/lint:stylelint-config.json)"
         ] + [
-            "$(rlocation " + x + ")" for x in srcs
+            # todo: a rule to collect these?
+            "$(rlocation //" + native.package_name() + ":" + x + ")" for x in srcs
         ]
     )
