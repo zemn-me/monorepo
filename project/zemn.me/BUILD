@@ -1,14 +1,13 @@
 load("//:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
-load("@npm//http-server:index.bzl", "http_server")
-load("//css/lint:rules.bzl", "css_library")
+load("//css:rules.bzl", "css_library")
 
 ts_project(
     name = "ts",
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]),
+    ]) + [ ":css" ],
     project_deps = [
         "//project/zemn.me/pages:pages",
         "//project/zemn.me/elements/NavBar:NavBar",
@@ -20,8 +19,7 @@ ts_project(
         "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
-        "@npm//react-router-dom",
-        ":css"
+        "@npm//react-router-dom"
     ],
 )
 
@@ -35,5 +33,5 @@ web_app(
 
 css_library(
     name = "css",
-    srcs = [ "root.module.css" ]
+    srcs = [ "//project/zemn.me:root.module.css" ]
 )

@@ -1,4 +1,3 @@
-load("//css/lint:rules.bzl", "css_lint")
 
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
