@@ -1,10 +1,13 @@
-load("//css/lint:rules.bzl", "css_lint")
+
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+
+package(default_visibility = ["//:__subpackages__"])
 
 sh_binary(
     name = "lint",
     srcs = ["lint.sh"],
     data = [
-        "stylelint-config.json",
+        ":stylelint_config",
         "@npm//stylelint/bin:stylelint",
     ],
     visibility = ["//bzl:__subpackages__"],
@@ -15,3 +18,15 @@ exports_files([
     "lint.sh",
     "stylelint-config.json",
 ])
+
+
+js_library(
+    name = "stylelint_config",
+    deps = [
+            "@npm//stylelint/bin:stylelint",
+            "@npm//stylelint-config-standard",
+            "@npm//stylelint-config-recommended",
+            "@npm//stylelint-config-css-modules",
+    ],
+    srcs = [ "stylelint-config.json" ],
+)
