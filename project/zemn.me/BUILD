@@ -1,13 +1,13 @@
 load("//:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
 load("@npm//http-server:index.bzl", "http_server")
+load("//css/lint:rules.bzl", "css_library")
 
 ts_project(
     name = "ts",
     srcs = glob([
         "*.ts",
         "*.tsx",
-        "*.css",
     ]),
     project_deps = [
         "//project/zemn.me/pages:pages",
@@ -21,6 +21,7 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
+        ":css"
     ],
 )
 
@@ -29,4 +30,10 @@ web_app(
     entry_points = ["index.tsx"],
     project_esbuild_deps = [":ts"],
     deps = ["index.html"],
+)
+
+
+css_library(
+    name = "css",
+    srcs = [ "root.module.css" ]
 )
