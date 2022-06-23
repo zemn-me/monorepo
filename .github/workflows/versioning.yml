@@ -7,8 +7,7 @@ on:
   - cron: 0 0 * * *
 
 jobs:
-
-  TestForMergeToVersioned:
+  Test:
     # This runs just the tests that are specified not to run on main
     if: github.ref == 'refs/heads/versioned'
     name: Tests (for merging into versioned branch)
@@ -32,12 +31,9 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}
       - name: Special 'versioned' branch tests
         run: bazelisk test //... --test_tag_filters=do_not_run_on_main
-
-
   copy_to_versioned:
     name: Copy commits in main to versioned branch
     runs-on: ubuntu-latest
-    needs: Test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -58,10 +54,10 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          echo "[auto-fix] "
+          echo "[auto-fix] " 1>&2
           git checkout versioned
           git merge main
-          echo "[auto-fix] running fixers for all failing tests..."
+          echo "[auto-fix] running fixers for all failing tests..." 1>&2
           TO_RUN=$(bazelisk test \
               --build_tests_only \
               --test_output=summary \
@@ -80,10 +76,10 @@ jobs:
             git add -A
             git commit -am "Automatic fixes."
           fi
-          echo "[auto-fix] ensuring tests are good..."
+          echo "[auto-fix] ensuring tests are good..." 1>&2
           bazelisk test //... --test_tag_filters=do_not_run_on_main
 
-          echo "[auto-fix] committing and submitting changes..."
+          echo "[auto-fix] committing and submitting changes..." 1>&2
           git push
         shell: bash
         env:
