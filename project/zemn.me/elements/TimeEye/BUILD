@@ -9,19 +9,18 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]) + [
-        ":css"
+        ":css",
     ],
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//:base_defs",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",
-        "//:base_defs"
     ],
 )
 
-
 css_library(
     name = "css",
-    srcs = glob(["*.css"])
+    srcs = glob(["*.css"]),
 )

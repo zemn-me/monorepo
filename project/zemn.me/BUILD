@@ -7,7 +7,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]) + [ ":css" ],
+    ]) + [":css"],
     project_deps = [
         "//project/zemn.me/pages:pages",
         "//project/zemn.me/elements/NavBar:NavBar",
@@ -19,7 +19,7 @@ ts_project(
         "@npm//@types/react-dom",
         "@npm//react",
         "@npm//react-dom",
-        "@npm//react-router-dom"
+        "@npm//react-router-dom",
     ],
 )
 
@@ -30,8 +30,7 @@ web_app(
     deps = ["index.html"],
 )
 
-
 css_library(
     name = "css",
-    srcs = [ "//project/zemn.me:root.module.css" ]
+    srcs = ["//project/zemn.me:root.module.css"],
 )

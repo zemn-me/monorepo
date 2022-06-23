@@ -1,4 +1,3 @@
-
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -19,14 +18,13 @@ exports_files([
     "stylelint-config.json",
 ])
 
-
 js_library(
     name = "stylelint_config",
+    srcs = ["stylelint-config.json"],
     deps = [
-            "@npm//stylelint/bin:stylelint",
-            "@npm//stylelint-config-standard",
-            "@npm//stylelint-config-recommended",
-            "@npm//stylelint-config-css-modules",
+        "@npm//stylelint-config-css-modules",
+        "@npm//stylelint-config-recommended",
+        "@npm//stylelint-config-standard",
+        "@npm//stylelint/bin:stylelint",
     ],
-    srcs = [ "stylelint-config.json" ],
 )
