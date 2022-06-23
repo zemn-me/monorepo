@@ -1,3 +1,9 @@
+name: Version Management
+concurrency: 
+  group: concurrency-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
   copy_to_versioned:
     name: Copy commits in main to versioned branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
