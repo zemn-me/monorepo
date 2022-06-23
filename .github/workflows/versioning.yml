@@ -4,7 +4,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  - cron: 0 0 * * *
+  schedule:
+    - cron: 0 0 * * *
 
 jobs:
   Test:
