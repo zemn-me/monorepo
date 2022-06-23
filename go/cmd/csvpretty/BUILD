@@ -5,4 +5,3 @@ go_binary(
     srcs = glob(["*.go"]),
     visibility = ["//visibility:public"],
 )
-
