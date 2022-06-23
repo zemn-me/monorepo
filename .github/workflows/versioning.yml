@@ -1,0 +1,88 @@
+name: Version Management
+concurrency: 
+  group: concurrency-${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  - cron: 0 0 * * *
+
+jobs:
+  Test:
+    # This runs just the tests that are specified not to run on main
+    if: github.ref == 'refs/heads/versioned'
+    name: Tests (for merging into versioned branch)
+    runs-on: ubuntu-latest
+    needs: Test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Restore bazel cache
+        uses: actions/cache@v3.0.4
+        env:
+          cache-name: bazel-cache
+        with:
+          path: |
+            ~/.cache/bazelisk
+            ~/.cache/bazel
+          key: ${{ runner.os }}-${{ env.cache-name }}
+      - name: Special 'versioned' branch tests
+        run: bazelisk test //... --test_tag_filters=do_not_run_on_main
+  copy_to_versioned:
+    name: Copy commits in main to versioned branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          # Needed to allow an action to trigger another action.
+          token: ${{ secrets.GH_PAT }}
+      - name: Restore bazel cache
+        uses: actions/cache@v3.0.4
+        env:
+          cache-name: bazel-cache
+        with:
+          path: |
+            ~/.cache/bazelisk
+            ~/.cache/bazel
+          key: ${{ runner.os }}-${{ env.cache-name }}
+      - name: Update versioned branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          echo "[auto-fix] " 1>&2
+          git checkout versioned
+          git merge main
+          echo "[auto-fix] running fixers for all failing tests..." 1>&2
+          TO_RUN=$(bazelisk test \
+              --build_tests_only \
+              --test_output=summary \
+              --test_summary=terse \
+              --test_tag_filters=fixable \
+              --test_tag_filters=do_not_run_on_main \
+              //... | \
+              awk '{print $1}' | \
+              sed 's/$/.fix/g' | \
+              sed -n '/^\/\//p' || :)
+          if [ -z "$TO_RUN" ]; then
+            echo "Skipping fixers, none needed." 1>&2
+          else
+            echo "[auto fix] running: $TO_RUN"
+            bazelisk run --subcommands --verbose_failures $TO_RUN
+            git add -A
+            git commit -am "Automatic fixes."
+          fi
+          echo "[auto-fix] ensuring tests are good..." 1>&2
+          bazelisk test //... --test_tag_filters=do_not_run_on_main
+
+          echo "[auto-fix] committing and submitting changes..." 1>&2
+          git push
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
