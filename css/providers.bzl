@@ -1,11 +1,9 @@
-
-
 CSSLibraryInfo = provider(
     doc = "Contains information about a set of CSS import files.",
     fields = {
         "srcs": "A depset of CSS files for this immediate group of CSS files.",
-        "deps": "A depset of CSSLibraryInfo structs for this library's dependencies."
-    }
+        "deps": "A depset of CSSLibraryInfo structs for this library's dependencies.",
+    },
 )
 
 def css_library_info(srcs, deps = []):
