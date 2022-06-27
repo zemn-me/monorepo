@@ -466,6 +466,9 @@ def _rust_test_common(ctx, toolchain, output):
         getattr(ctx.attr, "env", {}),
         data,
     )
+    if ctx.configuration.coverage_enabled:
+        env["RUST_LLVM_COV"] = toolchain.llvm_cov.path
+        env["RUST_LLVM_PROFDATA"] = toolchain.llvm_profdata.path
     providers.append(testing.TestEnvironment(env))
 
     return providers
@@ -648,6 +651,11 @@ _common_attrs = {
     ),
     "_cc_toolchain": attr.label(
         default = "@bazel_tools//tools/cpp:current_cc_toolchain",
+    ),
+    "_collect_cc_coverage": attr.label(
+        default = "//util:collect_coverage",
+        executable = True,
+        cfg = "exec",
     ),
     "_error_format": attr.label(default = "//:error_format"),
     "_extra_exec_rustc_flags": attr.label(default = "//:extra_exec_rustc_flags"),
