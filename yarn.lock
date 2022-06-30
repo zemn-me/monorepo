@@ -1250,10 +1250,10 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.35.1":
-  version "3.35.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.35.1.tgz#63df2cb48b54832beac005c0d1aaa76057515f34"
-  integrity sha512-seWHsBB8gCLgYjhoHFfclYVWPjz0k4lwHkMUr278yoxlD0WT20NDfnEy+0fD7zsBm0XcJrltaYKLrbOCvF2LGw==
+"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.35.2":
+  version "3.35.2"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.35.2.tgz#317a73c57089c7e8ef9b4e5d515aa48519021a9c"
+  integrity sha512-HI17rHJw0N8GrHeuqV2H3n1fnSuGPKR1ckjPq2YF6ijePa3cfqXSrMQu/Zj0SXgMDhElY6nqmJwoS2W3pLeW5w==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
@@ -1266,7 +1266,7 @@
     read-package-tree "^5.3.1"
     require-from-string "^2.0.1"
     semver "^6.1.0"
-    source-map-support "^0.4.16"
+    source-map-support "^0.5.6"
     ts-node "^7.0.1"
     typescript "~3.7.3"
     upath "^1.1.0"
@@ -6327,13 +6327,6 @@ source-map-support@0.5.9:
     buffer-from "^1.0.0"
     source-map "^0.6.0"
 
-source-map-support@^0.4.16:
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.18.tgz#0286a6de8be42641338594e97ccea75f0a2c585f"
-  integrity sha512-try0/JqxPLF9nOjvSta7tVondkP5dwgyLDjVoyMDlmjugT2lRZ1OfsrYTkCd2hkDnJTKRbO/Rl3orm8vlsUzbA==
-  dependencies:
-    source-map "^0.5.6"
-
 source-map-support@^0.5.6:
   version "0.5.21"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
@@ -6341,11 +6334,6 @@ source-map-support@^0.5.6:
   dependencies:
     buffer-from "^1.0.0"
     source-map "^0.6.0"
-
-source-map@^0.5.6:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
-  integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
 source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
