@@ -1,33 +1,9 @@
 {
   "name": "do-sync",
-  "version": "3.0.19",
   "description": "synchronously execute asynchronous functions",
-  "repository": "https://github.com/Zemnmez/do-sync",
-  "main": "dist/index.js",
+  "main": "index.js",
   "author": "zemnmez",
   "license": "MIT",
-  "devDependencies": {
-    "@types/cross-spawn": "^6.0.1",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.4",
-    "@types/sharp": "^0.29.2",
-    "concurrently": "^6.3.0",
-    "jest": "^27.3.1",
-    "sharp": "^0.30.5",
-    "ts-jest": "^27.0.7",
-    "typescript": "^4.4.4",
-    "yaml-validator": "^3.0.1"
-  },
-  "dependencies": {
-    "cross-spawn": "^7.0.2"
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepack": "yarn concurrently 'yarn coverage' 'yarn build' 'yarn validate-actions'",
-    "coverage": "yarn jest --coverageThreshold 100",
-    "test": "yarn concurrently 'yarn jest' 'yarn validate-actions'",
-    "validate-actions": "yarn yaml-validator .github/workflows/*.yml"
-  },
   "keywords": [
     "node",
     "babel-plugin-macros",
