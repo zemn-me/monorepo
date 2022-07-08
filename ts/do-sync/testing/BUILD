@@ -2,7 +2,7 @@ load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
-    "//deploy:__subpackages__",
+    ":__subpackages__",
     "//ts/cmd/svgshot:__subpackages__",
 ])
 

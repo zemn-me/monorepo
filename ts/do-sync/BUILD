@@ -3,7 +3,7 @@ load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
     "//deploy:__subpackages__",
-    "//ts/cmd/svgshot:__subpackages__",
+    ":__subpackages__"
 ])
 
 ts_project(
