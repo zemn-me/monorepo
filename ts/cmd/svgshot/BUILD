@@ -1,7 +1,10 @@
 load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
-package(default_visibility = ["//deploy:__subpackages__"])
+package(default_visibility = [
+    "//deploy:__subpackages__",
+    "//ts/cmd/svgshot:__subpackages__",
+])
 
 ts_project(
     name = "project",
@@ -50,6 +53,7 @@ npm_pkg(
     package_name = "svgshot",
     srcs = ["README.md"] + glob(["docs/**/*"]),
     api_lock = ".api.lock",
+    deps_as_jsfiles = [":project_js"],
     entry_point = "lib.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
