@@ -14,6 +14,7 @@
 		"react/prop-types": 0,
 		"react/display-name": 0,
 		"react/no-unescaped-entities": 0,
+		"@typescript-eslint/no-empty-interface": [ "error", { allowSingleExtends: true } ],
 		"prettier/prettier": "error",
 		"arrow-parens": ["error", "as-needed"],
 		"arrow-spacing": ["error", { "before": true, "after": true }],

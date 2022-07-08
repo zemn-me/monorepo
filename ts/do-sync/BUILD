@@ -9,7 +9,11 @@ package(default_visibility = [
 ts_project(
     name = "project",
     srcs = glob([ "**/*.ts" ]),
-    deps = [],
+    deps = [
+
+		    "@npm//cross-spawn",
+		    "@npm//@types/cross-spawn",
+		    ],
 )
 
 npm_pkg(
