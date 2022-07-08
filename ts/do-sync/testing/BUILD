@@ -21,6 +21,6 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["doSync_test.ts"],
+    srcs = ["doSync_test.js"],
     project_deps = [":project"],
 )
