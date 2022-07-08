@@ -19,7 +19,6 @@ def npm_pkg(
         tgz = None,
         # Whenever I finally refactor ts_project to use proper output types
         # this will be removable.
-        deps_as_jsfiles = None,
         visibility = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
@@ -36,7 +35,7 @@ def npm_pkg(
         name = pkg_json_name,
         # Won't be srcs I am fairly sure? because srcs are never
         # generated and so can't have deps
-        targets = deps_as_jsfiles,
+        targets = deps,
         template = pkg_json_base,
         version = ":version",
     )

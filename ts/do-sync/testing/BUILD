@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
@@ -9,10 +9,8 @@ package(default_visibility = [
 ts_project(
     name = "project",
     srcs = glob(["**/*.ts"]),
-    project_deps = [
-        "//ts/do-sync:project",
-    ],
     deps = [
+		    "//ts/do-sync",
 		    "@npm//@types/sharp",
 		    "@npm//sharp",
 		    "@npm//@types/jest",
@@ -22,5 +20,5 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = ["doSync_test.js"],
-    project_deps = [":project"],
+    deps = [ ":project" ]
 )

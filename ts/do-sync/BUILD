@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
@@ -7,7 +7,7 @@ package(default_visibility = [
 ])
 
 ts_project(
-    name = "project",
+    name = "do-sync",
     srcs = glob(["**/*.ts"]),
     deps = [
         "@npm//@types/cross-spawn",
@@ -20,7 +20,6 @@ npm_pkg(
     package_name = "do-sync",
     srcs = ["README.md"],
     api_lock = ".api.lock",
-    deps_as_jsfiles = [":project_js"],
     entry_point = "index.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
@@ -29,5 +28,5 @@ npm_pkg(
     tgz = "do-sync.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    deps = [":project_ts"],
+    deps = [":do-sync"],
 )
