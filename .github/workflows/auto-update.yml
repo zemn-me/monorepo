@@ -10,6 +10,8 @@ on: push
 
 jobs:
   Auto:
+    # Suppress for dependabot -- bot has to manually resolve lock conflicts etc
+    if: github.actor != 'dependabot[bot]'
     name: Auto-update
     runs-on: ubuntu-latest
     steps:
