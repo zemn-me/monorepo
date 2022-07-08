@@ -1,3 +1,5 @@
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
+
 def _api_extractor_impl(ctx):
     output_files = []
     args = []
@@ -91,7 +93,8 @@ _api_extractor_rule = rule(
     attrs = {
         "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
-        "srcs": attr.label_list(mandatory = True, allow_empty = False, allow_files = True),
+	# must be DeclarationInfo (.d.ts files)
+        "srcs": attr.label_list(mandatory = True, allow_empty = False, allow_files = True, providers = [ DeclarationInfo ]),
         "package_json": attr.label(mandatory = True, allow_single_file = True),
         "api_extractor_binary": attr.label(mandatory = True, executable = True, cfg = "target"),
         "report": attr.output(),
