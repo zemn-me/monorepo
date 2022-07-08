@@ -1,9 +1,24 @@
 import crossSpawn from 'cross-spawn';
 import { SpawnSyncOptions } from 'child_process';
 
+/**
+ * @public
+ */
 export type JSONPrimitive = string | number | boolean | null | undefined;
+
+/**
+ * @public
+ */
 export type JSONValue = JSONObject | JSONArray | JSONPrimitive;
+
+/**
+ * @public
+ */
 export interface JSONObject extends Record<string, JSONValue> {}
+
+/**
+ * @public
+ */
 export type JSONArray = JSONValue[];
 
 type ResponseType = 'success' | 'failure';
@@ -16,11 +31,13 @@ interface Response {
 /**
  * Value represents data that can safely be input to,
  * or returned from a doSync() function.
+ * @public
  */
 export type Value = JSONValue;
 
 /**
  * An AsyncFn can be used with doSync().
+ * @public
  */
 export type AsyncFn<I extends Value[], O extends Value> = (
 	...v: I
@@ -35,6 +52,11 @@ const main = async () => {
 
 main().catch(e => console.log(JSON.stringify({ type: "failure", value: e })));
 `;
+
+/**
+ * @public
+ */
+
 export interface DoSyncOptions extends SpawnSyncOptions {}
 /**
  * doSync returns a synchronous version of certian
@@ -44,6 +66,8 @@ export interface DoSyncOptions extends SpawnSyncOptions {}
  * The input and output types of the function must be serializible
  * to JSON, and the function must not reference any parent
  * scopes (i.e. file-defined variables) to function.
+ *
+ * @public
  */
 export const doSync: <I extends Value[], O extends Value>(
 	f: AsyncFn<I, O>,

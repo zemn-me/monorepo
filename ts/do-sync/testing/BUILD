@@ -10,15 +10,15 @@ ts_project(
     name = "project",
     srcs = glob(["**/*.ts"]),
     deps = [
-		    "//ts/do-sync",
-		    "@npm//@types/sharp",
-		    "@npm//sharp",
-		    "@npm//@types/jest",
+        "//ts/do-sync",
+        "@npm//@types/jest",
+        "@npm//@types/sharp",
+        "@npm//sharp",
     ],
 )
 
 jest_test(
     name = "tests",
     srcs = ["doSync_test.js"],
-    deps = [ ":project" ]
+    deps = [":project"],
 )

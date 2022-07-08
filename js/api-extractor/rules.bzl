@@ -78,13 +78,10 @@ def _api_extractor_impl(ctx):
         content = json.encode_indent(config),
     )
 
-
     inputs = [ctx.outputs.config, ctx.file.entry_point, ctx.file.ts_config, ctx.file.package_json] + ctx.files.srcs
 
-    for deps in [ src[DeclarationInfo].transitive_declarations.to_list() for src in ctx.attr.srcs if DeclarationInfo in src]:
-      inputs += deps
-
-
+    for deps in [src[DeclarationInfo].transitive_declarations.to_list() for src in ctx.attr.srcs if DeclarationInfo in src]:
+        inputs += deps
 
     ctx.actions.run(
         outputs = output_files,
@@ -100,7 +97,7 @@ _api_extractor_rule = rule(
     attrs = {
         "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
-	# must be DeclarationInfo (.d.ts files)
+        # must be DeclarationInfo (.d.ts files)
         "srcs": attr.label_list(mandatory = True, allow_files = True, allow_empty = False),
         "package_json": attr.label(mandatory = True, allow_single_file = True),
         "api_extractor_binary": attr.label(mandatory = True, executable = True, cfg = "target"),

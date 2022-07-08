@@ -11,7 +11,7 @@ def nodejs_binary(link_workspace_root = True, **kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test( jsdom = None, deps = [], **kwargs):
+def jest_test(jsdom = None, deps = [], **kwargs):
     extra_deps = ["@npm//jsdom"] if jsdom else []
     _jest_test(
         deps = deps + extra_deps,
@@ -30,7 +30,6 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module = True, srcs = [], incremental = True, composite = True, tsconfig = "//:tsconfig", preserve_jsx = None, root_dir = None, tags = [], **kwargs):
-
     _ts_project(
         name = name,
         srcs = srcs,
@@ -55,9 +54,6 @@ def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module =
            (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
     ], tags = tags)
 
-
-
-
 def eslint_test(name = None, data = [], args = [], **kwargs):
     _eslint_test(
         name = name,
@@ -75,4 +71,3 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
         args = args + ["--ignore-path", "$(location //:.gitignore)"] +
                ["$(location " + x + ")" for x in data],
     )
-
