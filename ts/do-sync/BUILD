@@ -8,50 +8,14 @@ package(default_visibility = [
 
 ts_project(
     name = "project",
-    srcs = [
-        "index.ts",
-        "lib.ts",
-        "svgshot_test.ts",
-    ],
-    deps = [
-        "@npm//@bazel/runfiles",
-        "@npm//@types/jest",
-        "@npm//@types/node",
-        "@npm//@types/svgo",
-        "@npm//@types/tmp",
-        "@npm//commander",
-        "@npm//puppeteer",
-        "@npm//svgo",
-        "@npm//tmp",
-    ],
-)
-
-nodejs_binary(
-    name = "svgshot",
-    args = [
-        "--inkscapeBin",
-        "$(location //cc/inkscape:bin)",
-    ],
-    data = [
-        ":project_ts",
-        "//cc/inkscape:bin",
-    ],
-    entry_point = "index.ts",
-)
-
-jest_test(
-    name = "tests",
-    srcs = ["svgshot_test.js"],
-    data = [
-        "//cc/inkscape:bin",
-    ],
-    project_deps = [":project"],
+    srcs = glob([ "**/*.ts" ]),
+    deps = [],
 )
 
 npm_pkg(
     name = "npm_pkg",
-    package_name = "svgshot",
-    srcs = ["README.md"] + glob(["docs/**/*"]),
+    package_name = "do-sync",
+    srcs = ["README.md"],
     api_lock = ".api.lock",
     deps_as_jsfiles = [":project_js"],
     entry_point = "lib.ts",
@@ -59,8 +23,14 @@ npm_pkg(
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
-    tgz = "svgshot.tgz",
+    tgz = "do-sync.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
     deps = [":project_ts"],
 )
+
+
+
+
+
+
