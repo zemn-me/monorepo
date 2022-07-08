@@ -24,6 +24,10 @@ const resizeAsync = doSync(
 		target: string,
 		{ width, height, ...jpegOpions }: resizeOpts
 	): Promise<resizeRet> => {
+		// this suppression is required because of the way this function
+		// is removed from scope. I might consider having doSync run a file / module
+		// in future.
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const sharp = require('sharp') as typeof sharpT;
 		const blob = (
 			await sharp(Buffer.from(target, 'base64'))
