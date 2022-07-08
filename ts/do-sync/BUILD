@@ -1,0 +1,35 @@
+load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//js/npm:rules.bzl", "npm_pkg")
+
+package(default_visibility = [
+    ":__subpackages__",
+    "//deploy:__subpackages__",
+])
+
+ts_project(
+    name = "project",
+    srcs = glob(["**/*.ts"]),
+    deps = [
+        "@npm//@types/cross-spawn",
+        "@npm//@types/jest",
+        "@npm//@types/node",
+        "@npm//cross-spawn",
+    ],
+)
+
+npm_pkg(
+    name = "npm_pkg",
+    package_name = "do-sync",
+    srcs = ["README.md"],
+    api_lock = ".api.lock",
+    deps_as_jsfiles = [":project_js"],
+    entry_point = "index.ts",
+    major_version = "version/MAJOR",
+    minor_version = "version/MINOR",
+    patch_version = "version/PATCH",
+    pkg_json_base = "package.template.json",
+    tgz = "svgshot.tgz",
+    version_lock = ".version.lock",
+    visibility = ["//deploy:__subpackages__"],
+    deps = [":project_ts"],
+)
