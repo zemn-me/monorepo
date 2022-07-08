@@ -20,7 +20,7 @@ npm_pkg(
     package_name = "do-sync",
     srcs = ["README.md"],
     api_lock = ".api.lock",
-    entry_point = "index.ts",
+    entry_point = "index.d.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
