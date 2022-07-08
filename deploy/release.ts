@@ -56,7 +56,10 @@ program
 				(await fs.readFile(body)).toString() +
 				'\n' +
 				`This release also includes the following published NPM packages:\n${published
-					.map(name => `   - ${name}`)
+					.map(
+						name =>
+							`   - [${name}](https://npmjs.com/package/${name})`
+					)
 					.join('\n')}`,
 
 			generate_release_notes: true,
