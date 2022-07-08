@@ -1,2 +1,2 @@
 export * from './doSync';
-export { default } from './doSync'
+export { default } from './doSync';

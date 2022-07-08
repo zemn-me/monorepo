@@ -2,18 +2,17 @@ load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
+    ":__subpackages__",
     "//deploy:__subpackages__",
-    ":__subpackages__"
 ])
 
 ts_project(
     name = "project",
-    srcs = glob([ "**/*.ts" ]),
+    srcs = glob(["**/*.ts"]),
     deps = [
-
-		    "@npm//cross-spawn",
-		    "@npm//@types/cross-spawn",
-		    ],
+        "@npm//@types/cross-spawn",
+        "@npm//cross-spawn",
+    ],
 )
 
 npm_pkg(
@@ -22,7 +21,7 @@ npm_pkg(
     srcs = ["README.md"],
     api_lock = ".api.lock",
     deps_as_jsfiles = [":project_js"],
-    entry_point = "lib.ts",
+    entry_point = "index.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
@@ -32,9 +31,3 @@ npm_pkg(
     visibility = ["//deploy:__subpackages__"],
     deps = [":project_ts"],
 )
-
-
-
-
-
-

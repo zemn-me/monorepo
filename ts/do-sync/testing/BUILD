@@ -8,12 +8,15 @@ package(default_visibility = [
 
 ts_project(
     name = "project",
-    srcs = glob( [ "**/*.ts" ]),
-    deps = [
-    ],
+    srcs = glob(["**/*.ts"]),
     project_deps = [
-	"//ts/do-sync:project"
-		   ]
+        "//ts/do-sync:project",
+    ],
+    deps = [
+		    "@npm//@types/sharp",
+		    "@npm//sharp",
+		    "@npm//@types/jest",
+    ],
 )
 
 jest_test(
@@ -21,4 +24,3 @@ jest_test(
     srcs = ["doSync_test.ts"],
     project_deps = [":project"],
 )
-
