@@ -1,27 +1,51 @@
 name: CI
-concurrency: 
-  group: concurrency-${{ github.head_ref }}
-  cancel-in-progress: true
 
 on:
   push:
-    branches:
-      - main
-      - versioned
+    branches: [ master ]
   pull_request:
-    branches:
-      - main
-      - versioned
+    branches: [ master ]
+  release:
+    types: [released]
 
 jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    env:
+      cache-name: cache1
+      YARN_CACHE_FOLDER: yarn-cache-dir
+      NODE_VERSION: 14
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: "yarn-cache-dir"
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: yarn install
+      - run: yarn prepack
   automerge:
     name: Auto-merge
     if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+    needs: test
+>>>>>>> cd8aa31
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
       contents: write
     steps:
+<<<<<<< HEAD
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Fetch Dependabot metadata
@@ -96,3 +120,55 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+=======
+    - name: 'Merge (if dependabot)'
+      uses: fastify/github-action-merge-dependabot@v1
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+  bump-version:
+    # Every push should get a new synthetic version.
+    name: Bump version
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - name: 'Checkout source code'
+      uses: 'actions/checkout@v2'
+      with:
+        ref: ${{ github.ref }}
+    - name: 'Version bump'
+      uses: 'phips28/gh-action-bump-version@master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag-prefix: 'v'
+  publish:
+    name: Yarn publish
+    # When a push happens to a new version tag, upload it to yarn
+    if: github.event_name == 'push'
+    needs: test
+    environment: publish
+    runs-on: ubuntu-latest
+    env:
+      cache-name: cache1
+      YARN_CACHE_FOLDER: yarn-cache-dir
+      NODE_VERSION: 14
+    steps:
+      - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: "yarn-cache-dir"
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: yarn
+      - run: yarn publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
