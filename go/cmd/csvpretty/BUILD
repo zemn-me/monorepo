@@ -9,17 +9,16 @@ go_binary(
 
 genrule(
     name = "csvpretty_integration_gen",
-    tools = [ ":csvpretty" ],
-    srcs = [ ":test.csv" ],
-    outs = [ "test_output.csv" ],
+    srcs = [":test.csv"],
+    outs = ["test_output.csv"],
     cmd = """
 $(execpath :csvpretty) --input $(rootpath :test.csv) --output $@
-    """
+    """,
+    tools = [":csvpretty"],
 )
-
 
 diff_test(
     name = "csvpretty_integration",
     file1 = "test_output.csv",
-    file2 = "test_out.csv"
+    file2 = "test_out.csv",
 )
