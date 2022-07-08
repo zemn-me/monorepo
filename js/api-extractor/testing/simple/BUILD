@@ -3,8 +3,8 @@ load("//:rules.bzl", "ts_project")
 
 api_extractor(
     name = "collate",
-    srcs = ["project_ts"],
-    entry_point = "something.ts",
+    srcs = [":project_ts"],
+    entry_point = "something.d.ts",
     publicTrimmedRollup = "rollup.d.ts",
 )
 
