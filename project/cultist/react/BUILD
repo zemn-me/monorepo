@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -9,12 +9,10 @@ ts_project(
         "table.module.css",
         "table.tsx",
     ],
-    project_deps = [
-        "//project/cultist:state",
-    ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//project/cultist:state",
         "@npm//@types/d3-scale",
         "@npm//@types/react",
         "@npm//d3-scale",

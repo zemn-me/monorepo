@@ -1,4 +1,5 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
+load("//:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -10,13 +11,11 @@ ts_project(
     ]),
     composite = True,
     incremental = True,
-    project_deps = [
-        "//ts/math:math",
-        "//ts:ts",
-    ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//ts",
+        "//ts/math",
         "@npm//@types/d3-axis",
         "@npm//@types/d3-scale",
         "@npm//@types/react",

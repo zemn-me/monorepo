@@ -1,3 +1,5 @@
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
+
 alias(
     name = "app_image",
     actual = "@inkscape_linux//file:bin",

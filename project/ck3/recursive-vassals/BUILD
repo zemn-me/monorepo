@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 

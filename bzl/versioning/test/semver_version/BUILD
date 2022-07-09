@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 load("//bzl/versioning:rules.bzl", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 

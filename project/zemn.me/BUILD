@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
 load("//css:rules.bzl", "css_library")
 
@@ -8,13 +8,11 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]) + [":css"],
-    project_deps = [
-        "//project/zemn.me/pages:pages",
-        "//project/zemn.me/elements/NavBar:NavBar",
-        "//project/zemn.me/elements/TitlePage:TitlePage",
-        "//project/zemn.me/elements/DarkModeSwitcher:DarkModeSwitcher",
-    ],
     deps = [
+        "//project/zemn.me/elements/DarkModeSwitcher",
+        "//project/zemn.me/elements/NavBar",
+        "//project/zemn.me/elements/TitlePage",
+        "//project/zemn.me/pages",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",

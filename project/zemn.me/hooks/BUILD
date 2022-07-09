@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 
 ts_project(
     name = "hooks",
@@ -7,11 +7,9 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//ts/iter:iter",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//ts/iter",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
