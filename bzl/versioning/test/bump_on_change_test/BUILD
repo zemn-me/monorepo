@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "jest_test")
 load("//bzl/versioning:rules.bzl", "bump_on_change_test")
 
 bump_on_change_test(

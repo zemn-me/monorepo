@@ -1,5 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
-load("//:rules.bzl", "jest_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -14,14 +13,13 @@ ts_project(
         ":element",
         ":history",
         ":recipe",
-        "//project/cultist/state",
         ":types",
         ":verb",
+        "//project/cultist/state",
         "@npm//@types/uuid",
         "@npm//immutable",
     ],
 )
-
 
 ts_project(
     name = "element",
@@ -114,8 +112,8 @@ ts_project(
     name = "action",
     srcs = ["action.ts"],
     deps = [
-        "//project/cultist/state",
         ":types",
+        "//project/cultist/state",
     ],
 )
 

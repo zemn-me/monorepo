@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "jest_test")
 load("@rules_python//python:defs.bzl", "py_test")
 
 py_test(

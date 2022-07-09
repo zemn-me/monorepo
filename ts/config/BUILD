@@ -1,3 +1,5 @@
+load("//ts:rules.bzl", "jest_test")
+
 package(default_visibility = ["//visibility:public"])
 
 load("//:rules.bzl", "ts_config")

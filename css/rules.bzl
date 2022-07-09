@@ -1,9 +1,9 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//css:providers.bzl", "CSSLibraryInfo", "css_library_info")
 load("//css/lint:rules.bzl", "css_lint")
 
 def css_module(name = None, srcs = [], **kwargs):
-    tsfilerulename = name + "_gen_ts"
+    tsfilerulename = name + "_gen"
     outputtsfiles = [x + ".ts" for x in srcs]
     native.genrule(
         name = tsfilerulename,

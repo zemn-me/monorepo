@@ -1,9 +1,9 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 
 api_extractor(
     name = "collate",
-    srcs = [":project_ts"],
+    srcs = [":project"],
     entry_point = "something.d.ts",
     publicTrimmedRollup = "rollup.d.ts",
 )

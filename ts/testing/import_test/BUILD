@@ -1,5 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
-load("//:rules.bzl", "jest_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "a",

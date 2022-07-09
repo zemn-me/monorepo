@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "jest_test")
 load("//bzl/versioning:rules.bzl", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 

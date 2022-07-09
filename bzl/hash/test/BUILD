@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "jest_test")
 load("//bzl/hash:rules.bzl", "hashes")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 

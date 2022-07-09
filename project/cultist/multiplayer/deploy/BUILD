@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//:rules.bzl", "ts_config")
 load("//ts/pulumi:rules.bzl", "pulumi")
 
@@ -25,7 +25,7 @@ ts_project(
 pulumi(
     name = "pulumi",
     config_files = [
-        ":deploy_js",
+        ":deploy",
         "Pulumi.yaml",
     ],
     data = ["//project/cultist/multiplayer:multiplayer_prod_bundle"],

@@ -1,5 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
-load("//:rules.bzl", "jest_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -25,5 +24,5 @@ jest_test(
     name = "url_test",
     srcs = ["url_test.js"],
     jsdom = True,
-    project_deps = [":url"],
+    deps = [":url"],
 )
