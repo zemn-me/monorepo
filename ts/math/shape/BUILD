@@ -27,5 +27,5 @@ jest_test(
     name = "shape_test",
     srcs = ["shape_test.js"],
     jsdom = True,
-    project_deps = [":shape"],
+    deps = [":shape"],
 )

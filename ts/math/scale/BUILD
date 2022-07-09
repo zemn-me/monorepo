@@ -24,5 +24,5 @@ jest_test(
     name = "tests",
     srcs = ["scale_test.js"],
     jsdom = True,
-    project_deps = [":scale"],
+    deps = [":scale"],
 )

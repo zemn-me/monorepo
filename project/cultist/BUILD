@@ -8,17 +8,15 @@ ts_project(
     srcs = ["index.ts"],
     composite = True,
     incremental = True,
-    project_deps = [
-        ":action",
-        ":types",
-        ":verb",
-        ":history",
-        ":recipe",
-        ":element",
-        ":state",
-    ],
     tsconfig = "//:tsconfig_node",
     deps = [
+        ":action",
+        ":element",
+        ":history",
+        ":recipe",
+        ":state",
+        ":types",
+        ":verb",
         "@npm//@types/uuid",
         "@npm//immutable",
     ],
@@ -42,24 +40,24 @@ alias(
 ts_project(
     name = "element",
     srcs = ["element.ts"],
-    project_deps = [
+    deps = [
         ":state",
-        "//ts/iter:iter",
+        "//ts/iter",
     ],
 )
 
 ts_project(
     name = "history",
     srcs = ["history.ts"],
-    project_deps = [":types"],
+    deps = [":types"],
 )
 
 ts_project(
     name = "recipe",
     srcs = ["recipe.ts"],
-    project_deps = [
-        ":types",
+    deps = [
         ":aspects",
+        ":types",
         ":verb",
     ],
 )
@@ -67,11 +65,11 @@ ts_project(
 ts_project(
     name = "save_test",
     srcs = ["save_test.ts"],
-    project_deps = [
-        "//project/cultist/example:example",
+    deps = [
         ":save",
+        "//project/cultist/example",
+        "@npm//@types/jest",
     ],
-    deps = ["@npm//@types/jest"],
 )
 
 jest_test(
