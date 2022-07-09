@@ -2,6 +2,7 @@ load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
+load("@build_bazel_rules_nodejs//:providers.bzl", "declaration_info")
 
 def npm_pkg(
         name,
@@ -19,7 +20,6 @@ def npm_pkg(
         tgz = None,
         # Whenever I finally refactor ts_project to use proper output types
         # this will be removable.
-        deps_as_jsfiles = None,
         visibility = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
@@ -36,7 +36,7 @@ def npm_pkg(
         name = pkg_json_name,
         # Won't be srcs I am fairly sure? because srcs are never
         # generated and so can't have deps
-        targets = deps_as_jsfiles,
+        targets = deps,
         template = pkg_json_base,
         version = ":version",
     )
