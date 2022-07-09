@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -10,10 +10,10 @@ ts_project(
     ]),
     composite = True,
     incremental = True,
-    project_deps = ["//ts/url:url"],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//ts/url",
         "@npm//@types/jest",
         "@npm//@types/react",
         "@npm//@types/react-dom",

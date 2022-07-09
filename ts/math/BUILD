@@ -1,4 +1,5 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
+load("//:rules.bzl", "jest_test")
 
 package(default_visibility = ["//:__subpackages__"])
 

@@ -1,4 +1,5 @@
-load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
+load("//:rules.bzl", "jest_test", "nodejs_binary")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [

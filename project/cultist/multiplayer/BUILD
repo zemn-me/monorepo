@@ -1,4 +1,4 @@
-load("//:rules.bzl", "go_binary", "ts_lint", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
 
 ts_project(
@@ -6,12 +6,10 @@ ts_project(
     srcs = [
         "index.tsx",
     ],
-    project_deps = [
-        "//project/cultist/multiplayer/pages:pages",
-    ],
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//project/cultist/multiplayer/pages",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",

@@ -1,5 +1,5 @@
+load("//ts:rules.bzl", "ts_project")
 load("//js/api-extractor:rules.bzl", "api_extractor")
-load("//:rules.bzl", "ts_project")
 
 api_extractor(
     name = "collate",
