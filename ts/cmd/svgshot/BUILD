@@ -62,5 +62,5 @@ npm_pkg(
     tgz = "svgshot.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    deps = [":project_ts"],
+    deps = [":project"],
 )

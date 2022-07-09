@@ -24,21 +24,22 @@ ts_project(
     name = "deserialize",
     srcs = ["deserialize.ts"],
     deps = [
-        "//project/cultist:save",
-        "//ts/iter:iter",
-        "//ts:ts",
         ":state_main",
-    "@npm//immutable"],
+        "//project/cultist:save",
+        "//ts",
+        "//ts/iter",
+        "@npm//immutable",
+    ],
 )
 
 ts_project(
     name = "serialize",
     srcs = ["serialize.ts"],
     deps = [
-        "//ts:ts",
-        "//project/cultist:save",
         ":state_main",
-        "//ts/iter:iter",
+        "//project/cultist:save",
+        "//ts",
+        "//ts/iter",
     ],
 )
 
@@ -46,8 +47,8 @@ ts_project(
     name = "op",
     srcs = ["op.ts"],
     deps = [
+        ":state_main",
         "@npm//@types/uuid",
-    ":state_main",
         "@npm//immutable",
         "@npm//uuid",
     ],
@@ -57,12 +58,13 @@ ts_project(
     name = "state_test",
     srcs = ["state_test.ts"],
     deps = [
+        ":deserialize",
+        ":serialize",
         ":state_main",
         "//project/cultist:save",
-        ":serialize",
-        "//ts:ts",
-        ":deserialize",
-    "@npm//@types/jest"],
+        "//ts",
+        "@npm//@types/jest",
+    ],
 )
 
 jest_test(

@@ -26,5 +26,5 @@ jest_test(
     name = "tests",
     srcs = ["link_test.js"],
     jsdom = True,
-    project_deps = [":link"],
+    deps = [":link"],
 )

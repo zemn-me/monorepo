@@ -22,7 +22,7 @@ ts_project(
 )
 
 jest_test(
-    name = "url",
+    name = "url_test",
     srcs = ["url_test.js"],
     jsdom = True,
     project_deps = [":url"],
