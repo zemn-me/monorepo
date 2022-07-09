@@ -53,7 +53,6 @@ npm_pkg(
     package_name = "svgshot",
     srcs = ["README.md"] + glob(["docs/**/*"]),
     api_lock = ".api.lock",
-    deps_as_jsfiles = [":project_js"],
     entry_point = "lib.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
