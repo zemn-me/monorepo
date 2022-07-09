@@ -1,4 +1,3 @@
-load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 

@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
+load("//:rules.bzl", "ts_project")
 
 ts_project(
     name = "DarkModeSwitcher",
@@ -7,9 +7,11 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
+    project_deps = [
+        "//project/zemn.me/elements/SliderCheckbox:SliderCheckbox",
+    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/elements/SliderCheckbox",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",

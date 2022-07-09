@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
+load("//:rules.bzl", "ts_project")
 
 ts_project(
     name = "SliderCheckbox",
@@ -7,9 +7,11 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
+    project_deps = [
+        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
+    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/elements/ZemnmezLogo",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",

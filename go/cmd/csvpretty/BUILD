@@ -1,4 +1,3 @@
-load("//ts:rules.bzl", "eslint_test", "jest_test", "ts_lint", "ts_project")
 load("//:rules.bzl", "go_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
