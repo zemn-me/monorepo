@@ -1,5 +1,3 @@
-load("//ts:rules.bzl", "jest_test")
-
 alias(
     name = "app_image",
     actual = "@inkscape_linux//file:bin",

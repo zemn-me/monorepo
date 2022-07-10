@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/cultist/multiplayer:__subpackages__"])
 

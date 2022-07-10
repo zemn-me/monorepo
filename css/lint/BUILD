@@ -1,4 +1,3 @@
-load("//ts:rules.bzl", "jest_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = ["//:__subpackages__"])

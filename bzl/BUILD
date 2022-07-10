@@ -1,5 +1,3 @@
-load("//ts:rules.bzl", "jest_test")
-
 sh_binary(
     name = "affected_files",
     srcs = ["run_affected_tests.sh"],

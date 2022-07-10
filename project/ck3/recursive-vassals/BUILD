@@ -1,4 +1,3 @@
-load("//ts:rules.bzl", "jest_test")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 

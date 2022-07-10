@@ -1,8 +1,6 @@
-load("//ts:rules.bzl", "jest_test")
+load("//:rules.bzl", "ts_config")
 
 package(default_visibility = ["//visibility:public"])
-
-load("//:rules.bzl", "ts_config")
 
 ts_config(
     name = "node",

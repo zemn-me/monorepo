@@ -1,5 +1,3 @@
-load("//ts:rules.bzl", "jest_test")
-
 package(default_visibility = ["//:__subpackages__"])
 
 exports_files(
