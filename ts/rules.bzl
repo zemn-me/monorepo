@@ -40,7 +40,6 @@ def ts_project(name, visibility = None, ignores_lint = [], resolve_json_module =
         resolve_json_module = resolve_json_module,
         root_dir = root_dir,
         link_workspace_root = True,
-        source_map = True,
         declaration = True,
         declaration_map = True,
         visibility = visibility,
