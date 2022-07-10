@@ -20,7 +20,7 @@ ts_project(
 web_app(
     name = "multiplayer",
     entry_points = ["//project/cultist/multiplayer:index.tsx"],
-    project_esbuild_deps = [":index"],
+    esbuild_deps = [":index"],
     visibility = ["//project/cultist/multiplayer:__subpackages__"],
     deps = [":index.html"],
 )
