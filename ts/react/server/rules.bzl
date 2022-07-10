@@ -1,7 +1,8 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
 
-def web_app(name, entry_points, esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
+def web_app(name, entry_points, tsconfig = "//:tsconfig", esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
+    deps += [ tsconfig ]
     native.filegroup(
         name = name + "_deps",
         srcs = deps,
@@ -19,6 +20,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = ["//ts/react/server:in
         deps = esbuild_deps,
         visibility = visibility,
         metafile = False,
+        link_workspace_root = True,
     )
 
     esbuild(
@@ -27,6 +29,7 @@ def web_app(name, entry_points, esbuild_deps = [], deps = ["//ts/react/server:in
         name = name + "_dev_build",
         entry_points = entry_points,
         config = "//:esbuild_config",
+        link_workspace_root = True,
         minify = False,
         splitting = True,
         visibility = visibility,
