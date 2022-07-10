@@ -17,5 +17,6 @@ ts_project(
         "@npm//@types/react",
         "@npm//d3-scale",
         "@npm//react",
+        "//:base_defs"
     ],
 )
