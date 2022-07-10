@@ -2,7 +2,6 @@ load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
 
 def web_app(name, entry_points, tsconfig = "//:tsconfig", esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
-    deps += [ tsconfig ]
     native.filegroup(
         name = name + "_deps",
         srcs = deps,
