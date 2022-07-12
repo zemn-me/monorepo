@@ -17,6 +17,8 @@ ts_project(
     ],
 )
 
+"""
+Maybe one day when I get CSS working again, I can remove this.
 web_app(
     name = "multiplayer",
     entry_points = ["//project/cultist/multiplayer:index.tsx"],
@@ -24,3 +26,6 @@ web_app(
     visibility = ["//project/cultist/multiplayer:__subpackages__"],
     deps = [":index.html"],
 )
+
+
+"""

@@ -7,7 +7,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]) + [":css"],
+    ]),
     deps = [
         "//project/zemn.me/elements/DarkModeSwitcher",
         "//project/zemn.me/elements/NavBar",
@@ -21,6 +21,8 @@ ts_project(
     ],
 )
 
+"""
+Currently broken / disabled due to lack of CSS modules support
 web_app(
     name = "zemn.me",
     entry_points = ["index.tsx"],
@@ -28,7 +30,4 @@ web_app(
     deps = ["index.html"],
 )
 
-css_library(
-    name = "css",
-    srcs = ["//project/zemn.me:root.module.css"],
-)
+"""
