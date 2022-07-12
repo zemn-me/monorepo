@@ -2,7 +2,6 @@ load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
-load("@build_bazel_rules_nodejs//:providers.bzl", "declaration_info")
 
 def npm_pkg(
         name,

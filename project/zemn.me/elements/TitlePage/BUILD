@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "TitlePage",
@@ -7,11 +7,9 @@ ts_project(
         "*.tsx",
         "*.css",
     ]),
-    project_deps = [
-        "//project/zemn.me/elements/TimeEye:TimeEye",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//project/zemn.me/elements/TimeEye",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",
