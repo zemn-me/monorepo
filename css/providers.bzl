@@ -8,6 +8,7 @@ CSSLibraryInfo = provider(
 
 def css_library_info(srcs, deps = []):
     transitive_depsets = [srcs]
+
     for dep in deps:
         if CSSLibraryInfo in dep:
             transitive_depsets.append(dep[CSSLibraryInfo].deps)

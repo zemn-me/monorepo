@@ -1,4 +1,5 @@
-load("//:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//:rules.bzl", "nodejs_binary")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
@@ -33,7 +34,7 @@ nodejs_binary(
         "$(location //cc/inkscape:bin)",
     ],
     data = [
-        ":project_ts",
+        ":project",
         "//cc/inkscape:bin",
     ],
     entry_point = "index.ts",
@@ -45,7 +46,7 @@ jest_test(
     data = [
         "//cc/inkscape:bin",
     ],
-    project_deps = [":project"],
+    deps = [":project"],
 )
 
 npm_pkg(
@@ -61,5 +62,5 @@ npm_pkg(
     tgz = "svgshot.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    deps = [":project_ts"],
+    deps = [":project"],
 )

@@ -1,4 +1,4 @@
-load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "declaration_info")
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
 
 def _api_extractor_impl(ctx):
     output_files = []
@@ -53,7 +53,7 @@ def _api_extractor_impl(ctx):
     if ctx.attr.report != None:
         # Will not actually generate unless it thinks it's doing a 'local'
         # build due to intended development flow
-        args += ["--local"]
+        args.append("--local")
         apiReport["enabled"] = True
         apiReport["reportFileName"] = ctx.outputs.report.basename
         apiReport["reportFolder"] = "<projectFolder>/" + ctx.outputs.report.dirname
