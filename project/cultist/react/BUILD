@@ -12,11 +12,11 @@ ts_project(
     resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//:base_defs",
         "//project/cultist/state",
         "@npm//@types/d3-scale",
         "@npm//@types/react",
         "@npm//d3-scale",
         "@npm//react",
-        "//:base_defs"
     ],
 )

@@ -1,14 +1,65 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
+load("//css:providers.bzl", "css_library_info", "CSSLibraryInfo")
+
+def _get_css_deps_aspect(target, ctx):
+    if not hasattr(ctx.rule.attr, "srcs"):
+        return []
+    if not hasattr(ctx.rule.attr, "deps"):
+        return []
+
+    csslibinfo = css_library_info(
+            srcs = depset([ css_file for css_file in ctx.rule.files.srcs if css_file.extension == "css" ]),
+            deps = ctx.rule.attr.deps
+        )
+
+    return [
+        csslibinfo,
+        OutputGroupInfo(all_files = csslibinfo.deps)
+    ]
+
+get_css_deps_aspect = aspect(
+    implementation = _get_css_deps_aspect,
+    attr_aspects = [ "deps" ],
+    doc = """
+        For a given rule, collects any css files in deps or sources.
+    """
+)
+
+def _get_css_deps_rule(ctx):
+    info = css_library_info(deps = ctx.attr.deps)
+    return [
+        info,
+        DefaultInfo(files = info.deps)
+    ]
+
+get_css_deps_rule = rule(
+    implementation = _get_css_deps_rule,
+    attrs = {
+        "deps": attr.label_list(aspects = [get_css_deps_aspect])
+    }
+)
+
 
 def web_app(name, entry_points, tsconfig = "//:tsconfig", esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
-    deps += [ "//:tsconfig.json" ]
+    deps += ["//:tsconfig.json"]
     native.filegroup(
         name = name + "_deps",
         srcs = deps,
     )
 
+    """
+    get_css_deps_rule(
+        name = name + "_css",
+        deps = esbuild_deps,
+    )
+
+    # make sure to include any extracted CSS files
+    esbuild_deps = esbuild_deps + [ ":" + name + "_css" ]
+    """
+
     esbuild(
+        srcs = ["//:tsconfig.json"],
         name = name + "_prod_build",
         entry_points = entry_points,
         minify = True,
@@ -24,6 +75,7 @@ def web_app(name, entry_points, tsconfig = "//:tsconfig", esbuild_deps = [], dep
     )
 
     esbuild(
+        srcs = ["//:tsconfig.json"],
         metafile = False,
         sources_content = True,
         name = name + "_dev_build",

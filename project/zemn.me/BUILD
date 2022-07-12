@@ -24,7 +24,7 @@ ts_project(
 web_app(
     name = "zemn.me",
     entry_points = ["index.tsx"],
-    project_esbuild_deps = [":ts"],
+    esbuild_deps = [":ts"],
     deps = ["index.html"],
 )
 
