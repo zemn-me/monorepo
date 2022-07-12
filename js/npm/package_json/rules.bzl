@@ -19,7 +19,7 @@ def package_json(name, targets, template, version):
             "//:package.json",
             genquery_name,
             template,
-            "//js/npm/package_json:gen_pkgjson_js",
+            "//js/npm/package_json:gen_pkgjson",
         ],
         entry_point = "//js/npm/package_json:gen_pkgjson.js",
     )
@@ -32,7 +32,7 @@ def package_json(name, targets, template, version):
             genquery_name,
             template,
             "@npm//@bazel/runfiles",
-            "//js/npm/package_json:gen_pkgjson_js",
+            "//js/npm/package_json:gen_pkgjson",
         ] + [version],
         cmd = "$(execpath " + genrule_name + ") " +
               " ".join(

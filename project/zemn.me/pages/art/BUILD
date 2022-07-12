@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -8,11 +8,9 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    project_deps = [
-        "//project/zemn.me/elements/ZemnmezLogo:ZemnmezLogo",
-    ],
     tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//project/zemn.me/elements/ZemnmezLogo",
         "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
