@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -19,9 +19,9 @@ ts_project(
     srcs = tstestfiles,
     composite = True,
     incremental = True,
-    project_deps = [":iter"],
     tsconfig = "//:tsconfig_node",
     deps = [
+        ":iter",
         "@npm//@types/jest",
     ],
 )
@@ -30,6 +30,6 @@ jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
     deps = [
-        ":iter_js",
+        ":iter",
     ],
 )

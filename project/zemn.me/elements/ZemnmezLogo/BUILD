@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "ZemnmezLogo",
@@ -9,6 +9,7 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:base_defs",
         "@npm//@types/react",
         "@npm//classnames",
         "@npm//react",
