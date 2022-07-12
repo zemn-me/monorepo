@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "project",
@@ -13,5 +13,5 @@ jest_test(
     name = "tests",
     srcs = ["do_not_depend_on_typescript_test.js"],
     data = ["//ts/cmd/svgshot:package.json"],
-    project_deps = [":project"],
+    deps = [":project"],
 )

@@ -3,5 +3,10 @@
     "regex": "_lint +FAILED",
     "command": "yarn",
     "args": [ "run", "fix" ]
+  },
+  {
+	"regex": "(//[^ ]+): no such attribute 'project_deps'",
+	"command": "yarn",
+	"args": [ "buildozer", "move project_deps deps *", "$1" ]
   }
 ]
