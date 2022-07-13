@@ -13,7 +13,6 @@
 		"noImplicitAny": true,
 		"noImplicitThis": true,
 		"declaration": true,
-		"preserveSymlinks": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
 		"declarationMap": true,
@@ -22,6 +21,7 @@
 		"inlineSources": true,
 		"rootDirs": [
 			".",
+			"../bazel-out/k8-fastbuild/bin",
 			"bazel-out/k8-fastbuild/bin"
 		]
 	},
