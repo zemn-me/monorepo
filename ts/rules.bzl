@@ -38,8 +38,8 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         # uncomment these one day
         #deps = deps + ["@npm//regenerator-runtime"],
         #transpiler = partial.make(
-            swc_transpiler,
-            swcrc = "//:swcrc",
+        #    swc_transpiler,
+        #    swcrc = "//:swcrc",
         #),
         deps = deps,
         preserve_jsx = preserve_jsx,
