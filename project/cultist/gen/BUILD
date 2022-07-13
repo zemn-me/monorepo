@@ -11,9 +11,6 @@ package(default_visibility = [
 ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
-    composite = True,
-    incremental = True,
-    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
     ],
@@ -21,6 +18,9 @@ ts_project(
 
 nodejs_binary(
     name = "collate_game_core",
+    data = [
+        ":gen",
+    ],
     entry_point = "collate_game_core.js",
 )
 

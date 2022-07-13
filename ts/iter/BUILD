@@ -10,16 +10,11 @@ ts_project(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
     ),
-    composite = True,
-    incremental = True,
 )
 
 ts_project(
     name = "tests_lib",
     srcs = tstestfiles,
-    composite = True,
-    incremental = True,
-    tsconfig = "//:tsconfig_node",
     deps = [
         ":iter",
         "@npm//@types/jest",

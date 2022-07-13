@@ -8,10 +8,7 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    incremental = True,
     resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//ts/url",
         "@npm//@types/jest",

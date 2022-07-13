@@ -8,8 +8,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    incremental = True,
     deps = [
         "//ts",
         "@npm//@types/jest",
