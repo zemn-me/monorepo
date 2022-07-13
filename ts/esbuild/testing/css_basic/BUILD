@@ -7,7 +7,6 @@ ts_project(
         "index.ts",
         "test.css",
     ],
-    tsconfig = "//:tsconfig",
     deps = [
         "//:base_defs",
         "@npm//@types/react",

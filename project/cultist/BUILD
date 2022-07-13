@@ -5,7 +5,6 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "cultist",
     srcs = ["index.ts"],
-    tsconfig = "//:tsconfig_node",
     deps = [
         ":action",
         ":element",

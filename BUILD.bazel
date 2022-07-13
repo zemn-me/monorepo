@@ -24,20 +24,8 @@ alias(
 )
 
 ts_config(
-    name = "tsconfig_jsx",
-    src = "jsx.tsconfig.json",
-    deps = ["//ts/config:jsx"],
-)
-
-ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-)
-
-ts_config(
-    name = "tsconfig_node",
-    src = "node.tsconfig.json",
-    deps = ["//ts/config:node"],
 )
 
 js_library(

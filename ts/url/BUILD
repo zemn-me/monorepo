@@ -9,7 +9,6 @@ ts_project(
         "*.tsx",
     ]),
     resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/jest",
         "@npm//@types/node",

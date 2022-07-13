@@ -28,6 +28,7 @@ git ls-files --cached --modified --other --exclude-standard | uniq | grep .css$ 
 echo Fixing Go files... 1>&2
 $FIX_GO -s -w .
 echo Fixing Typescript, Javascript, json files... 1>&2
+# this breaks all the time and yarn run @npm//eslint/bin:eslint fixes it. God only knows why
 $FIX_JS --fix --ignore-pattern 'project/ck3/base_game/*' --ignore-path .gitignore "$BUILD_WORKSPACE_DIRECTORY"'/**/*.ts' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.js' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.tsx' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.json') || true # ignore failures. it fails often
 echo Fixing bazel files... 1>&2
 $FIX_BAZEL --lint=fix -r $INIT_CWD

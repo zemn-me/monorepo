@@ -7,7 +7,6 @@ tsfiles = [f for f in glob(["*.ts"]) if f not in tstests]
 ts_project(
     name = "example",
     srcs = tsfiles,
-    tsconfig = "//:tsconfig",
     visibility = ["//project/cultist:__subpackages__"],
 )
 

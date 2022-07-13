@@ -10,6 +10,7 @@
 		"jsx": "react",
 		"resolveJsonModule": true,
 		"noFallthroughCasesInSwitch": true,
+		"preserveSymlinks": true,
 		"noImplicitAny": true,
 		"noImplicitThis": true,
 		"declaration": true,
@@ -19,11 +20,11 @@
 		"lib": ["DOM", "ESNext"],
 		"inlineSourceMap": true,
 		"inlineSources": true,
-		"rootDirs": [
-			".",
-			"../bazel-out/k8-fastbuild/bin",
-			"bazel-out/k8-fastbuild/bin"
-		]
+		"baseUrl": "./",
+		"rootDirs": ["bazel-out/k8-fastbuild/bin"],
+		"paths": {
+			"*": ["./*", "bazel-out/k8-fastbuild/bin/*"]
+		}
 	},
 	"exclude": ["node_modules", "dist", "external"]
 }

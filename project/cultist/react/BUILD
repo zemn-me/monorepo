@@ -10,7 +10,6 @@ ts_project(
         "table.tsx",
     ],
     resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//:base_defs",
         "//project/cultist/state",

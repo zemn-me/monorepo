@@ -1,8 +1,8 @@
 {
-    "jsc": {
-        "parser": {
-            "syntax": "typescript",
-            "jsx": true,
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "jsx": true,
       "numericSeparator": false,
       "classPrivateProperty": false,
       "privateMethod": false,
@@ -10,8 +10,7 @@
       "functionBind": false,
       "decorators": false,
       "decoratorsBeforeExport": false
-        },
-
+    },
     "transform": {
       "react": {
         "pragma": "React.createElement",
@@ -29,8 +28,8 @@
         }
       }
     }
-    },
-    "module": {
-        "type": "commonjs"
-    }
+  },
+  "module": {
+    "type": "commonjs"
+  }
 }

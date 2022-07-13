@@ -7,7 +7,6 @@ ts_project(
         "hello.ts",
         "index.ts",
     ],
-    tsconfig = "//:tsconfig",
 )
 
 esbuild(

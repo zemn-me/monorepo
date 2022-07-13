@@ -15,7 +15,6 @@ ts_project(
 ts_project(
     name = "tests_lib",
     srcs = tstestfiles,
-    tsconfig = "//:tsconfig_node",
     deps = [
         ":iter",
         "@npm//@types/jest",

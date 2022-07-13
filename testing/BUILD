@@ -16,7 +16,6 @@ ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
     preserve_jsx = False,
-    tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/jest",
         "@npm//@types/node",

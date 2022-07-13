@@ -9,5 +9,4 @@ ts_project(
         "*.tsx",
     ]),
     resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
 )
