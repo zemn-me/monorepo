@@ -73,7 +73,9 @@ jobs:
             echo "Skipping fixers, none needed." 1>&2
           else
             echo "[auto fix] running: $TO_RUN"
-            bazelisk run --subcommands --verbose_failures $TO_RUN
+            for command in $TO_RUN; do
+              bazelisk run --subcommands --verbose_failures $command
+            done
             git add -A
             git commit -am "Automatic fixes."
           fi
