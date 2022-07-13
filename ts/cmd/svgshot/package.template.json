@@ -4,7 +4,11 @@
 	"bin": {
 		"svgshot": "index.js"
 	},
-	"repository": "https://github.com/Zemnmez/monorepo/tree/main/ts/cmd/svgshot",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Zemnmez/monorepo.git",
+		"directory": "ts/cmd/svgshot"
+	},
 	"bugs": {
 		"url": "https://github.com/zemnmez/monorepo/issues"
 	},
