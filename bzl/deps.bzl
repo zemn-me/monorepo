@@ -152,3 +152,10 @@ exports_files(glob(["**/*"], exclude_directories=0))
         branch = "master",
         remote = "git@github.com:attilaolah/bazel-tools.git",
     )
+
+    http_archive(
+        name = "aspect_rules_swc",
+        sha256 = "b5cc3bf8d255ea80f3b15a7d5932729a89922726c852f9c63811cee557227231",
+        strip_prefix = "rules_swc-0.13.0",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.13.0.tar.gz",
+    )

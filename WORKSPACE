@@ -86,3 +86,27 @@ protobuf_deps()
 load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
 
 esbuild_repositories()
+
+load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
+
+rules_swc_dependencies()
+
+# Fetches a pre-built Rust-node binding from
+# https://github.com/swc-project/swc/releases.
+# If you'd rather compile it from source, you can use rules_rust, fetch the project,
+# then register the toolchain yourself. (Note, this is not yet documented)
+load("@aspect_rules_swc//swc:repositories.bzl", "LATEST_VERSION", "swc_register_toolchains")
+
+swc_register_toolchains(
+    name = "swc",
+    swc_version = LATEST_VERSION,
+)
+
+# Fetches a NodeJS interpreter, needed to run the swc CLI.
+# You can skip this if you already register a nodejs toolchain.
+load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
+
+nodejs_register_toolchains(
+    name = "nodejs",
+    node_version = DEFAULT_NODE_VERSION,
+)
