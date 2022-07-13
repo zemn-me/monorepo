@@ -9,45 +9,43 @@ def _get_css_aspect(target, ctx):
         return []
 
     csslibinfo = css_library_info(
-        srcs = depset([ css_file for css_file in ctx.rule.files.srcs if css_file.extension == "css" ]),
-        deps = ctx.rule.attr.deps
+        srcs = depset([css_file for css_file in ctx.rule.files.srcs if css_file.extension == "css"]),
+        deps = ctx.rule.attr.deps,
     )
-
 
     return [
         csslibinfo,
-        OutputGroupInfo(all_files = csslibinfo.deps)
+        OutputGroupInfo(all_files = csslibinfo.deps),
     ]
 
 get_css_aspect = aspect(
     implementation = _get_css_aspect,
-    attr_aspects = [ "deps" ],
+    attr_aspects = ["deps"],
     doc = """
         For a given rule, collects any css files in deps or sources.
-    """
+    """,
 )
 
 def _get_css_rule(ctx):
-
     cssinfo = css_library_info(depset([
-        file for file in ctx.files.srcs
+        file
+        for file in ctx.files.srcs
         if file.extension == "css"
     ]), deps = ctx.attr.deps)
 
     return [
         cssinfo,
         # https://github.com/bazelbuild/rules_nodejs/blob/stable/packages/esbuild/esbuild.bzl
-        DefaultInfo(files = cssinfo.deps, data_runfiles = ctx.runfiles(files = cssinfo.deps.to_list()))
+        DefaultInfo(files = cssinfo.deps, data_runfiles = ctx.runfiles(files = cssinfo.deps.to_list())),
     ]
 
 get_css_rule = rule(
     implementation = _get_css_rule,
     attrs = {
         "srcs": attr.label_list(),
-        "deps": attr.label_list(aspects = [get_css_aspect])
-    }
+        "deps": attr.label_list(aspects = [get_css_aspect]),
+    },
 )
-
 
 def web_app(name, entry_points, srcs = [], tsconfig = "//:tsconfig", esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
     deps += ["//:tsconfig.json"]
@@ -63,7 +61,7 @@ def web_app(name, entry_points, srcs = [], tsconfig = "//:tsconfig", esbuild_dep
     )
 
     # make sure to include any extracted CSS files
-    esbuild_deps = esbuild_deps + [ ":" + name + "_css" ]
+    esbuild_deps = esbuild_deps + [":" + name + "_css"]
 
     esbuild(
         srcs = ["//:tsconfig.json"],

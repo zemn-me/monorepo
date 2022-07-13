@@ -11,7 +11,6 @@ ts_project(
     ]) + [
         ":css",
     ],
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//:base_defs",
         "@npm//@types/react",
