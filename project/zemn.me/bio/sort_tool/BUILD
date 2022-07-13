@@ -7,8 +7,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",

@@ -5,8 +5,6 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "math",
     srcs = glob(["*.ts"]),
-    composite = True,
-    incremental = True,
     deps = [
         "@npm//@types/jest",
     ],

@@ -7,8 +7,6 @@ ts_project(
         "hello.ts",
         "index.ts",
     ],
-    composite = True,
-    incremental = True,
     tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/react",

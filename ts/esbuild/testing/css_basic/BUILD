@@ -7,8 +7,6 @@ ts_project(
         "index.ts",
         "test.css",
     ],
-    composite = True,
-    incremental = True,
     tsconfig = "//:tsconfig",
     deps = [
         "//:base_defs",

@@ -8,8 +8,6 @@ exports_files(
 ts_project(
     name = "jest_reporter",
     srcs = ["jest_reporter.ts"],
-    composite = True,
-    incremental = True,
     tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],
     deps = [
