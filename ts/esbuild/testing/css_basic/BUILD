@@ -5,15 +5,12 @@ ts_project(
     name = "testing",
     srcs = [
         "index.ts",
-        "test.css"
+        "test.css",
     ],
-    composite = True,
-    incremental = True,
-    tsconfig = "//:tsconfig",
     deps = [
+        "//:base_defs",
         "@npm//@types/react",
         "@npm//react",
-        "//:base_defs",
     ],
 )
 

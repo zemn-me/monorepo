@@ -11,16 +11,16 @@ def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
         urls = [
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
         ],
-        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+        sha256 = "f7be3474d42aae265405a592bb7da8e171919d74c16f082a5457840f06054728",
     )
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "4e1a5633267a0ca1d550cced2919dd4148575c0bafd47608b88aea79c41b5ca3",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/4.2.0/rules_nodejs-4.2.0.tar.gz"],
+        sha256 = "0fad45a9bda7dc1990c47b002fd64f55041ea751fafc00cd34efb96107675778",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.0/rules_nodejs-5.5.0.tar.gz"],
     )
 
     # rules_nodejs doesn't depend on skylib, but it's a useful dependency anyway.
@@ -151,4 +151,11 @@ exports_files(glob(["**/*"], exclude_directories=0))
         name = "bazel_tools",
         branch = "master",
         remote = "git@github.com:attilaolah/bazel-tools.git",
+    )
+
+    http_archive(
+        name = "aspect_rules_swc",
+        sha256 = "b5cc3bf8d255ea80f3b15a7d5932729a89922726c852f9c63811cee557227231",
+        strip_prefix = "rules_swc-0.13.0",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.13.0.tar.gz",
     )
