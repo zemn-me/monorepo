@@ -67,6 +67,7 @@
 		"react-router": "^6.3.0",
 		"react-router-dom": "^6.3.0",
 		"react-spring": "^9.4.5",
+		"regenerator-runtime": "^0.13.9",
 		"sharp": "^0.30.7",
 		"stylelint": "^14.9.1",
 		"stylelint-config-css-modules": "^4.1.0",
@@ -87,6 +88,5 @@
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //..."
 	},
-	"dependencies": {},
-	"type": "module"
+	"dependencies": {}
 }

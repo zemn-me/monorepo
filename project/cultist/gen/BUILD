@@ -21,6 +21,9 @@ ts_project(
 
 nodejs_binary(
     name = "collate_game_core",
+    data = [
+        ":gen",
+    ],
     entry_point = "collate_game_core.js",
 )
 
