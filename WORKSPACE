@@ -109,4 +109,3 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
-

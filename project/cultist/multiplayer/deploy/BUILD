@@ -5,4 +5,3 @@ ts_config(
     src = "tsconfig.json",
     deps = ["//:tsconfig"],
 )
-

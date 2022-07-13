@@ -87,5 +87,6 @@
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //..."
 	},
-	"dependencies": {}
+	"dependencies": {},
+	"type": "module"
 }
