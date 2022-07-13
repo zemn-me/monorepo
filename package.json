@@ -1,4 +1,5 @@
 {
+	"$schema": "https://json.schemastore.org/package.json",
 	"name": "monorepo",
 	"version": "0.1.0",
 	"private": true,
@@ -79,7 +80,8 @@
 		"ts-toolbelt": "^9.6.0",
 		"typescript": "^4.7.4",
 		"uuid": "^8.3.2",
-		"yaml-validator": "^4.0.0"
+		"yaml-validator": "^4.0.0",
+		"yarn": "^1.22.19"
 	},
 	"scripts": {
 		"bazelisk": "npx --yes @bazel/bazelisk",
