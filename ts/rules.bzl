@@ -36,7 +36,12 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         composite = composite,
         tsconfig = tsconfig,
         # swc injects this
-        deps = deps + ["@npm//regenerator-runtime"],
+        # uncomment these one day
+        # deps = deps + ["@npm//regenerator-runtime"],
+        # transpiler = partial.make(
+        #    swc_transpiler,
+        #    swcrc = "//:swcrc",
+        #),
         preserve_jsx = preserve_jsx,
         incremental = incremental,
         resolve_json_module = resolve_json_module,
@@ -45,10 +50,7 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         declaration = True,
         declaration_map = True,
         visibility = visibility,
-        transpiler = partial.make(
-            swc_transpiler,
-            swcrc = "//:swcrc",
-        ),
+
         **kwargs
     )
 
