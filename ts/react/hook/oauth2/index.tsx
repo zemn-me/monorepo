@@ -6,41 +6,41 @@
  *
  */
 
-import * as React from 'react'
+import * as React from 'react';
 
 // react-storage-hook.d.ts
-import { useStorage } from 'react-storage-hook'
+import { useStorage } from 'react-storage-hook';
 
-import { Map } from 'immutable'
-import * as PropTypes from 'prop-types'
-
-/**
- * @hidden
- */
-const storagePrefix = 'react-oauth2-hook'
+import { Map } from 'immutable';
+import * as PropTypes from 'prop-types';
 
 /**
  * @hidden
  */
-const oauthStateName = storagePrefix + '-state-token-challenge'
+const storagePrefix = 'react-oauth2-hook';
+
+/**
+ * @hidden
+ */
+const oauthStateName = storagePrefix + '-state-token-challenge';
 
 export interface Options {
-  /**
-   * The OAuth authorize URL to retrieve the token from.
-   */
-  authorizeUrl: string;
-  /**
-   * The OAuth scopes to request.
-   */
-  scope?: string[];
-  /**
-   * The OAuth `redirect_uri` callback.
-   */
-  redirectUri: string;
-  /**
-   * The OAuth `client_id` corresponding to the requesting client.
-   */
-  clientID: string;
+	/**
+	 * The OAuth authorize URL to retrieve the token from.
+	 */
+	authorizeUrl: string;
+	/**
+	 * The OAuth scopes to request.
+	 */
+	scope?: string[];
+	/**
+	 * The OAuth `redirect_uri` callback.
+	 */
+	redirectUri: string;
+	/**
+	 * The OAuth `client_id` corresponding to the requesting client.
+	 */
+	clientID: string;
 }
 
 /**
@@ -112,69 +112,69 @@ export interface Options {
  *}
  */
 export const useOAuth2Token = ({
-  /**
-   * The OAuth authorize URL to retrieve the token
-   * from.
-   */
-  authorizeUrl,
-  /**
-   * The OAuth scopes to request.
-   */
-  scope = [],
-  /**
-   * The OAuth `redirect_uri` callback.
-   */
-  redirectUri,
-  /**
-   * The OAuth `client_id` corresponding to the
-   * requesting client.
-   */
-  clientID
-}: Options): [
-  OAuthToken | undefined,
-  getToken,
-  setToken
-] => {
-  const target = {
-    authorizeUrl, scope, clientID
-  }
+	/**
+	 * The OAuth authorize URL to retrieve the token
+	 * from.
+	 */
+	authorizeUrl,
+	/**
+	 * The OAuth scopes to request.
+	 */
+	scope = [],
+	/**
+	 * The OAuth `redirect_uri` callback.
+	 */
+	redirectUri,
+	/**
+	 * The OAuth `client_id` corresponding to the
+	 * requesting client.
+	 */
+	clientID,
+}: Options): [OAuthToken | undefined, getToken, setToken] => {
+	const target = {
+		authorizeUrl,
+		scope,
+		clientID,
+	};
 
-  const [token, setToken] = useStorage<string>(
-    storagePrefix + '-' + JSON.stringify(target)
-  )
+	const [token, setToken] = useStorage<string>(
+		storagePrefix + '-' + JSON.stringify(target)
+	);
 
-  let [state, setState] = useStorage<string>(
-    oauthStateName
-  )
+	let [state, setState] = useStorage<string>(oauthStateName);
 
-  const getToken = () => {
-    setState(state = JSON.stringify({
-      nonce: cryptoRandomString(),
-      target
-    }))
+	const getToken = () => {
+		setState(
+			(state = JSON.stringify({
+				nonce: cryptoRandomString(),
+				target,
+			}))
+		);
 
-    window.open(OAuth2AuthorizeURL({
-      scope,
-      clientID,
-      authorizeUrl,
-      state,
-      redirectUri
-    }))
-  }
+		window.open(
+			OAuth2AuthorizeURL({
+				scope,
+				clientID,
+				authorizeUrl,
+				state,
+				redirectUri,
+			})
+		);
+	};
 
-  return [token, getToken, setToken]
-}
+	return [token, getToken, setToken];
+};
 
 /**
  * OAuthToken represents an OAuth2 implicit grant token.
  */
-export type OAuthToken = string
+export type OAuthToken = string;
 
 /**
  * getToken is returned by [[useOAuth2Token]].
  * When called, it prompts the user to authorize.
  */
-export type getToken = () => void
+export type getToken = () => void;
 
 /**
  * setToken is returned by [[useOAuth2Token]].
@@ -182,94 +182,100 @@ export type getToken = () => void
  * `setToken(undefined)` can be used to synchronously
  * invalidate all instances of this OAuth token.
  */
-export type setToken = (newValue: OAuthToken | undefined) => void
+export type setToken = (newValue: OAuthToken | undefined) => void;
 
 /**
  * @hidden
  */
 const cryptoRandomString = () => {
-  const entropy = new Uint32Array(10)
-  window.crypto.getRandomValues(entropy)
+	const entropy = new Uint32Array(10);
+	window.crypto.getRandomValues(entropy);
 
-  return window.btoa([...entropy].join(','))
-}
+	return window.btoa([...entropy].join(','));
+};
 
 /**
  * @hidden
  */
 const OAuth2AuthorizeURL = ({
-  scope,
-  clientID,
-  state,
-  authorizeUrl,
-  redirectUri
+	scope,
+	clientID,
+	state,
+	authorizeUrl,
+	redirectUri,
 }: {
-  scope: string[],
-  clientID: string,
-  state: string,
-  authorizeUrl: string,
-  redirectUri: string
-}) => `${authorizeUrl}?${Object.entries({
-  scope: scope.join(','),
-  client_id: clientID,
-  state,
-  redirect_uri: redirectUri,
-  response_type: 'token'
-}).map(([k, v]) => [k, v].map(encodeURIComponent).join('=')).join('&')}`
+	scope: string[];
+	clientID: string;
+	state: string;
+	authorizeUrl: string;
+	redirectUri: string;
+}) =>
+	`${authorizeUrl}?${Object.entries({
+		scope: scope.join(','),
+		client_id: clientID,
+		state,
+		redirect_uri: redirectUri,
+		response_type: 'token',
+	})
+		.map(([k, v]) => [k, v].map(encodeURIComponent).join('='))
+		.join('&')}`;
 
 /**
  * This error is thrown by the [[OAuthCallback]]
  * when the state token recieved is incorrect or does not exist.
  */
-export const ErrIncorrectStateToken = new Error('incorrect state token')
+export const ErrIncorrectStateToken = new Error('incorrect state token');
 
 /**
  * This error is thrown by the [[OAuthCallback]]
  * if no access_token is recieved.
  */
-export const ErrNoAccessToken = new Error('no access_token')
-
+export const ErrNoAccessToken = new Error('no access_token');
 
 /**
  * @hidden
  */
-const urlDecode = (urlString: string): Map<string,string> => Map(urlString.split('&').map<[string,string]>(
-  (param: string): [string,string] => {
-    const sepIndex = param.indexOf("=")
-    const k = decodeURIComponent(param.slice(0, sepIndex))
-    const v = decodeURIComponent(param.slice(sepIndex + 1))
-    return [k, v]
-  }))
+const urlDecode = (urlString: string): Map<string, string> =>
+	Map(
+		urlString
+			.split('&')
+			.map<[string, string]>((param: string): [string, string] => {
+				const sepIndex = param.indexOf('=');
+				const k = decodeURIComponent(param.slice(0, sepIndex));
+				const v = decodeURIComponent(param.slice(sepIndex + 1));
+				return [k, v];
+			})
+	);
 
 /**
  * @hidden
  */
 const OAuthCallbackHandler: React.FunctionComponent<{}> = ({ children }) => {
-  const [state] = useStorage<string>(oauthStateName)
-  const { target } = JSON.parse(state)
-  const [ /* token */, setToken ] = useStorage(
-    storagePrefix + '-' + JSON.stringify(target)
-  )
+	const [state] = useStorage<string>(oauthStateName);
+	const { target } = JSON.parse(state);
+	const [, /* token */ setToken] = useStorage(
+		storagePrefix + '-' + JSON.stringify(target)
+	);
 
-  console.log('rendering OAuthCallbackHandler')
+	console.log('rendering OAuthCallbackHandler');
 
-  React.useEffect(() => {
-    const params: Map<string,string> = Map([
-      ...urlDecode(window.location.search.slice(1)),
-      ...urlDecode(window.location.hash.slice(1))
-    ])
+	React.useEffect(() => {
+		const params: Map<string, string> = Map([
+			...urlDecode(window.location.search.slice(1)),
+			...urlDecode(window.location.hash.slice(1)),
+		]);
 
-    if (state !== params.get('state')) throw ErrIncorrectStateToken
+		if (state !== params.get('state')) throw ErrIncorrectStateToken;
 
-    const token: string | undefined = params.get('access_token')
-    if (token == undefined) throw ErrNoAccessToken
+		const token: string | undefined = params.get('access_token');
+		if (token == undefined) throw ErrNoAccessToken;
 
-    setToken(token)
-    window.close()
-  }, [])
+		setToken(token);
+		window.close();
+	}, []);
 
-  return <React.Fragment>{children || "please wait..."}</React.Fragment>
-}
+	return <React.Fragment>{children || 'please wait...'}</React.Fragment>;
+};
 
 /**
  * OAuthCallback is a React component that handles the callback
@@ -286,43 +292,47 @@ const OAuthCallbackHandler: React.FunctionComponent<{}> = ({ children }) => {
  * <Route exact path="/callback" component={OAuthCallback} />} />
  */
 export const OAuthCallback: React.FunctionComponent<{
-  errorBoundary?: boolean
+	errorBoundary?: boolean;
 }> = ({
-  /**
-   * When set to true, errors are thrown
-   * instead of just closing the window.
-   */
-  errorBoundary = true,
-  children
+	/**
+	 * When set to true, errors are thrown
+	 * instead of just closing the window.
+	 */
+	errorBoundary = true,
+	children,
 }) => {
-  if (errorBoundary === false) return <OAuthCallbackHandler>{children}</OAuthCallbackHandler>
-  return <ClosingErrorBoundary>
-    <OAuthCallbackHandler>{children}</OAuthCallbackHandler>
-  </ClosingErrorBoundary>
-}
+	if (errorBoundary === false)
+		return <OAuthCallbackHandler>{children}</OAuthCallbackHandler>;
+	return (
+		<ClosingErrorBoundary>
+			<OAuthCallbackHandler>{children}</OAuthCallbackHandler>
+		</ClosingErrorBoundary>
+	);
+};
 
 OAuthCallback.propTypes = {
-  errorBoundary: PropTypes.bool
-}
+	errorBoundary: PropTypes.bool,
+};
 
 /**
  * @hidden
  */
 class ClosingErrorBoundary extends React.PureComponent {
-  state = { errored: false }
+	state = { errored: false };
 
-  static getDerivedStateFromError(error: string) {
-    console.log(error)
-    // window.close()
-    return { errored: true }
-  }
+	static getDerivedStateFromError(error: string) {
+		console.log(error);
+		// window.close()
+		return { errored: true };
+	}
 
-  static propTypes = {
-    children: PropTypes.func.isRequired
-  }
+	static propTypes = {
+		children: PropTypes.func.isRequired,
+	};
 
-  render() { return this.state.errored ? null : this.props.children }
+	render() {
+		return this.state.errored ? null : this.props.children;
+	}
 }
 
-
-export default "this module has no default export.";
+export default 'this module has no default export.';
