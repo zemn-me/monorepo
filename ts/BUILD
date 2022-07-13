@@ -8,6 +8,4 @@ ts_project(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
     ),
-    composite = True,
-    incremental = True,
 )

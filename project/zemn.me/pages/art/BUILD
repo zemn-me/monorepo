@@ -8,7 +8,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//project/zemn.me/elements/ZemnmezLogo",
         "@npm//@types/react",

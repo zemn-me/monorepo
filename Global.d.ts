@@ -3,7 +3,6 @@ declare module '*.module.css' {
 	export default content;
 }
 
-
 declare module '*.css' {
 	export default undefined;
 }
