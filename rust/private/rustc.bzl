@@ -206,8 +206,9 @@ def collect_deps(
 
             if "proc-macro" not in [crate_info.type, crate_info.wrapped_crate_type]:
                 transitive_noncrates.append(dep_info.transitive_noncrates)
+                transitive_link_search_paths.append(dep_info.link_search_path_files)
+
             transitive_build_infos.append(dep_info.transitive_build_infos)
-            transitive_link_search_paths.append(dep_info.link_search_path_files)
 
         elif cc_info:
             # This dependency is a cc_library
