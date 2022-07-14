@@ -1,6 +1,6 @@
-load("//yml:test.bzl", "yaml_lint")
+load("//yml:test.bzl", "yaml_lint_test")
 
-yaml_lint(
+yaml_lint_test(
     name = "validation",
     srcs = glob(["*.yml"]),
 )
