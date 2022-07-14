@@ -20,6 +20,10 @@ load("//bzl:deps.bzl", "fetch_dependencies")
 
 fetch_dependencies()
 
+load("@build_bazel_rules_nodejs//:repositories.bzl", "build_bazel_rules_nodejs_dependencies")
+
+build_bazel_rules_nodejs_dependencies()
+
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
@@ -30,7 +34,7 @@ bazel_skylib_workspace()
 
 # The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
 # It also extracts and installs any Bazel rules distributed in an npm package.
-load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 yarn_install(
     # Name this npm so that Bazel Label references look like @npm//package
@@ -48,11 +52,9 @@ pip_install(
     requirements = "//:py_requirements.txt",
 )
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains")
 
 go_register_toolchains(version = "1.17.2")
 
@@ -70,11 +72,11 @@ load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
 
 npm_bazel_labs_dependencies()
 
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories")
+load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
 
-node_repositories(
-    node_version = "16.6.2",
-    package_json = ["//:package.json"],
+nodejs_register_toolchains(
+    # You can choose whatever name you like for the node toolchains, and can register more than one version.
+    name = "nodejs",
 )
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
@@ -89,4 +91,21 @@ protobuf_deps()
 
 load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
 
-esbuild_repositories()
+esbuild_repositories(
+    npm_repository = "npm",
+)
+
+load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
+
+rules_swc_dependencies()
+
+# Fetches a pre-built Rust-node binding from
+# https://github.com/swc-project/swc/releases.
+# If you'd rather compile it from source, you can use rules_rust, fetch the project,
+# then register the toolchain yourself. (Note, this is not yet documented)
+load("@aspect_rules_swc//swc:repositories.bzl", "LATEST_VERSION", "swc_register_toolchains")
+
+swc_register_toolchains(
+    name = "swc",
+    swc_version = LATEST_VERSION,
+)

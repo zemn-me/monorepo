@@ -1,11 +1,11 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "state",
     srcs = ["index.ts"],
-    project_deps = [
+    deps = [
         ":deserialize",
         ":op",
         ":serialize",
@@ -22,31 +22,31 @@ ts_project(
 ts_project(
     name = "deserialize",
     srcs = ["deserialize.ts"],
-    project_deps = [
-        "//project/cultist:save",
-        "//ts/iter:iter",
-        "//ts:ts",
+    deps = [
         ":state_main",
+        "//project/cultist:save",
+        "//ts",
+        "//ts/iter",
+        "@npm//immutable",
     ],
-    deps = ["@npm//immutable"],
 )
 
 ts_project(
     name = "serialize",
     srcs = ["serialize.ts"],
-    project_deps = [
-        "//ts:ts",
-        "//project/cultist:save",
+    deps = [
         ":state_main",
-        "//ts/iter:iter",
+        "//project/cultist:save",
+        "//ts",
+        "//ts/iter",
     ],
 )
 
 ts_project(
     name = "op",
     srcs = ["op.ts"],
-    project_deps = [":state_main"],
     deps = [
+        ":state_main",
         "@npm//@types/uuid",
         "@npm//immutable",
         "@npm//uuid",
@@ -56,18 +56,18 @@ ts_project(
 ts_project(
     name = "state_test",
     srcs = ["state_test.ts"],
-    project_deps = [
+    deps = [
+        ":deserialize",
+        ":serialize",
         ":state_main",
         "//project/cultist:save",
-        ":serialize",
-        "//ts:ts",
-        ":deserialize",
+        "//ts",
+        "@npm//@types/jest",
     ],
-    deps = ["@npm//@types/jest"],
 )
 
 jest_test(
     name = "test",
     srcs = ["state_test.js"],
-    project_deps = [":state_test"],
+    deps = [":state_test"],
 )

@@ -1,4 +1,4 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "gen_pkgjson",

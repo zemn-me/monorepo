@@ -12,4 +12,3 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # --- end runfiles.bash initialization v2 ---
 
 $RELEASE
-$PULUMI_CULTIST_MULTIPLAYER up --yes

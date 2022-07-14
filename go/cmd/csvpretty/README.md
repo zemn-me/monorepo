@@ -51,14 +51,14 @@ Installation
 
 With a working Go setup, and `$GOPATH/bin` in your `$PATH`:
 ```bash
-go get github.com/zemnmez/csvpretty -u
+go get github.com/zemnmez/monorepo/go/cmd/csvpretty -u
 ```
 
 If you want to quickly use `csvpretty` and you have `go` installed, you can
 just:
 
 ```bash
-go run github.com/zemnmez/csvpretty
+go run github.com/zemnmez/monorepo/go/cmd/csvpretty
 ```
 
 With whatever args you desire.

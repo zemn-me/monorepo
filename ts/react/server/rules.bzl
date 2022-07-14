@@ -1,16 +1,70 @@
 load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("@npm//http-server:index.bzl", "http_server")
+load("//css:providers.bzl", "css_library_info")
 
-def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
-    if len(project_esbuild_deps) > 0:
-        esbuild_deps = esbuild_deps + [x + "_sources" for x in project_esbuild_deps]
+def _get_css_aspect(target, ctx):
+    if not hasattr(ctx.rule.attr, "srcs"):
+        return []
+    if not hasattr(ctx.rule.attr, "deps"):
+        return []
 
+    csslibinfo = css_library_info(
+        srcs = depset([css_file for css_file in ctx.rule.files.srcs if css_file.extension == "css"]),
+        deps = ctx.rule.attr.deps,
+    )
+
+    return [
+        csslibinfo,
+        OutputGroupInfo(all_files = csslibinfo.deps),
+    ]
+
+get_css_aspect = aspect(
+    implementation = _get_css_aspect,
+    attr_aspects = ["deps"],
+    doc = """
+        For a given rule, collects any css files in deps or sources.
+    """,
+)
+
+def _get_css_rule(ctx):
+    cssinfo = css_library_info(depset([
+        file
+        for file in ctx.files.srcs
+        if file.extension == "css"
+    ]), deps = ctx.attr.deps)
+
+    return [
+        cssinfo,
+        # https://github.com/bazelbuild/rules_nodejs/blob/stable/packages/esbuild/esbuild.bzl
+        DefaultInfo(files = cssinfo.deps, data_runfiles = ctx.runfiles(files = cssinfo.deps.to_list())),
+    ]
+
+get_css_rule = rule(
+    implementation = _get_css_rule,
+    attrs = {
+        "srcs": attr.label_list(),
+        "deps": attr.label_list(aspects = [get_css_aspect]),
+    },
+)
+
+def web_app(name, entry_points, srcs = [], tsconfig = "//:tsconfig", esbuild_deps = [], deps = ["//ts/react/server:index.html"], visibility = [], **kwargs):
+    deps += ["//:tsconfig.json"]
     native.filegroup(
         name = name + "_deps",
         srcs = deps,
     )
 
+    get_css_rule(
+        name = name + "_css",
+        srcs = srcs,
+        deps = esbuild_deps,
+    )
+
+    # make sure to include any extracted CSS files
+    esbuild_deps = esbuild_deps + [":" + name + "_css"]
+
     esbuild(
+        srcs = ["//:tsconfig.json"],
         name = name + "_prod_build",
         entry_points = entry_points,
         minify = True,
@@ -22,14 +76,17 @@ def web_app(name, entry_points, project_esbuild_deps = [], esbuild_deps = [], de
         deps = esbuild_deps,
         visibility = visibility,
         metafile = False,
+        link_workspace_root = True,
     )
 
     esbuild(
+        srcs = ["//:tsconfig.json"],
         metafile = False,
         sources_content = True,
         name = name + "_dev_build",
         entry_points = entry_points,
         config = "//:esbuild_config",
+        link_workspace_root = True,
         minify = False,
         splitting = True,
         visibility = visibility,

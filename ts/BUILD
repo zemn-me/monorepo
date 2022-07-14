@@ -1,4 +1,4 @@
-load("//:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -8,6 +8,4 @@ ts_project(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
     ),
-    composite = True,
-    incremental = True,
 )

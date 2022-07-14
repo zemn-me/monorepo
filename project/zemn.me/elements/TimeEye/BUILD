@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//css:rules.bzl", "css_library")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -11,7 +11,6 @@ ts_project(
     ]) + [
         ":css",
     ],
-    tsconfig = "//:tsconfig_jsx",
     deps = [
         "//:base_defs",
         "@npm//@types/react",

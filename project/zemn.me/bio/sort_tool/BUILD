@@ -1,4 +1,5 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
+load("//:rules.bzl", "nodejs_binary")
 
 ts_project(
     name = "sort_tool",
@@ -6,9 +7,6 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    incremental = True,
-    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
     ],

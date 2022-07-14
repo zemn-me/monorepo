@@ -1,6 +1,7 @@
 import React from 'react';
 import * as State from 'project/cultist/state';
-import style from './table.module.css';
+// stubbed out because IDK how to fix style issues right now.
+//import style from './table.module.css';
 
 export interface TableProps {
 	state: State.State;
@@ -162,7 +163,7 @@ export const Board: React.FC<BoardProps> = ({
 	}
 
 	return (
-		<svg className={style.table}>
+		<svg>
 			{droppableSlots}
 			{elementStacks?.map((e, i) => (
 				<Card
@@ -242,10 +243,8 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 			width={w}
 		>
 			{/* needed to inject xmlns, not in types */}
-			{(console.log(style), null)}
 			<div
 				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as any)}
-				className={style.card}
 				draggable="true"
 				onDragStart={onDragStart}
 			>

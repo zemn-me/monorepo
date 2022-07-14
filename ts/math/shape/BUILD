@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -8,15 +8,10 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-    composite = True,
-    incremental = True,
-    project_deps = [
-        "//ts/math:math",
-        "//ts/math/canvas:canvas",
-    ],
     resolve_json_module = True,
-    tsconfig = "//:tsconfig_jsx",
     deps = [
+        "//ts/math",
+        "//ts/math/canvas",
         "@npm//@types/jest",
         "@npm//@types/react",
         "@npm//@types/react-dom",
@@ -29,5 +24,5 @@ jest_test(
     name = "shape_test",
     srcs = ["shape_test.js"],
     jsdom = True,
-    project_deps = [":shape"],
+    deps = [":shape"],
 )

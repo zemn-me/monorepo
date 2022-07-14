@@ -1,6 +1,8 @@
-load("//:rules.bzl", "json_project", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
+load("//:rules.bzl", "nodejs_binary")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = [
     "//project/cultist:__subpackages__",
@@ -9,9 +11,6 @@ package(default_visibility = [
 ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
-    composite = True,
-    incremental = True,
-    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
     ],
@@ -19,12 +18,15 @@ ts_project(
 
 nodejs_binary(
     name = "collate_game_core",
+    data = [
+        ":gen",
+    ],
     entry_point = "collate_game_core.js",
 )
 
-json_project(
+js_library(
     name = "core_en_project",
-    src = "core_en.json",
+    srcs = ["core_en.json"],
 )
 
 genrule(

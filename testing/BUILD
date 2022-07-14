@@ -1,5 +1,6 @@
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@rules_python//python:defs.bzl", "py_test")
-load("//:rules.bzl", "go_test", "jest_test", "ts_project")
+load("//:rules.bzl", "go_test")
 
 go_test(
     name = "go_basic_test",
@@ -14,10 +15,7 @@ py_test(
 ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
-    composite = True,
-    incremental = True,
     preserve_jsx = False,
-    tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/jest",
         "@npm//@types/node",

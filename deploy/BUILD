@@ -1,4 +1,5 @@
-load("//:rules.bzl", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "ts_project")
+load("//:rules.bzl", "nodejs_binary")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -49,10 +50,8 @@ sh_binary(
     srcs = ["deploy.sh"],
     data = [
         "//deploy:release",
-        "//project/cultist/multiplayer/deploy:pulumi_prod",
     ],
     env = {
-        "PULUMI_CULTIST_MULTIPLAYER": "$(location //project/cultist/multiplayer/deploy:pulumi_prod)",
         "RELEASE": "$(location //deploy:release)",
     },
     deps = ["@bazel_tools//tools/bash/runfiles"],
