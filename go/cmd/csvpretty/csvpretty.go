@@ -87,10 +87,12 @@ var output string
 var overwrite bool
 var debug bool
 var validate bool
+var comma string
 
 func init() {
 	flag.StringVar(&input, "input", "", "input file")
 	flag.StringVar(&output, "output", "", "output file")
+	flag.StringVar(&comma, "comma", ",", "CSV separator (sometimes ';')")
 	flag.BoolVar(&overwrite, "w", false, "overwrite input with output")
 	flag.BoolVar(&debug, "debug", false, "print debug info")
 	flag.BoolVar(&validate, "validate", false, "Validate the number of fields is the same on every row.")
@@ -157,7 +159,7 @@ func (p PrettyCSV) WriteTo(w io.Writer) (n int64, err error) {
 	tabReplacer := byteReplacer{
 		out:  tabWriter,
 		from: holder,
-		to:   ",\t",
+		to:   comma + "\t",
 	}
 
 	lineReplacer := byteReplacer{
@@ -170,6 +172,7 @@ func (p PrettyCSV) WriteTo(w io.Writer) (n int64, err error) {
 	csvWriter.Comma = holder
 
 	csvRd := csv.NewReader(p.rd)
+	csvRd.Comma = []rune(comma)[0]
 
 	for {
 		var row []string
