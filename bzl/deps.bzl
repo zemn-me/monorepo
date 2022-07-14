@@ -23,11 +23,11 @@ def fetch_dependencies():
         urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.0/rules_nodejs-5.5.0.tar.gz"],
     )
 
-    # rules_nodejs doesn't depend on skylib, but it's a useful dependency anyway.
     http_archive(
         name = "rules_python",
-        url = "https://github.com/bazelbuild/rules_python/releases/download/0.3.0/rules_python-0.3.0.tar.gz",
-        sha256 = "934c9ceb552e84577b0faf1e5a2f0450314985b4d8712b2b70717dc679fdc01b",
+        sha256 = "00b25b02dc4593d620fccdd6c6069a202b87ac56f8446fab1a8101da557da2c2",
+        strip_prefix = "rules_python-0.10.1",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.10.1.tar.gz",
     )
 
     http_archive(
