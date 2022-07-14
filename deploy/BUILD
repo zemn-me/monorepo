@@ -33,7 +33,7 @@ ts_project(
 )
 
 nodejs_binary(
-    name = "release",
+    name = "deploy",
     data = BUILD_ARTIFACTS.values() + [
         ":release_message",
         "//ts/cmd/svgshot:npm_pkg.publish",
@@ -43,16 +43,4 @@ nodejs_binary(
         "--body",
         "$(rootpath :release_message )",
     ] + ["$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
-)
-
-sh_binary(
-    name = "deploy",
-    srcs = ["deploy.sh"],
-    data = [
-        "//deploy:release",
-    ],
-    env = {
-        "RELEASE": "$(location //deploy:release)",
-    },
-    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
