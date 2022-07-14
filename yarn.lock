@@ -1196,10 +1196,10 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.35.2":
-  version "3.35.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.35.2.tgz#317a73c57089c7e8ef9b4e5d515aa48519021a9c"
-  integrity sha512-HI17rHJw0N8GrHeuqV2H3n1fnSuGPKR1ckjPq2YF6ijePa3cfqXSrMQu/Zj0SXgMDhElY6nqmJwoS2W3pLeW5w==
+"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.36.0":
+  version "3.36.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.36.0.tgz#f57b52c3a311cbc550329a410c0634bdb12e52d2"
+  integrity sha512-xQqIZvEXXvhdH6rw/kPOGyGGvpIVrWTXIOi0YsKFFfm5rX/4Ja7PbxtwGLazjCGTy8qUJSCPVQdm5OA2h3+L6A==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
@@ -1556,10 +1556,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@>=12.12.47", "@types/node@^18.0.3":
-  version "18.0.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.3.tgz#463fc47f13ec0688a33aec75d078a0541a447199"
-  integrity sha512-HzNRZtp4eepNitP+BD6k2L6DROIDG4Q0fm4x+dwfsr6LGmROENnok75VGw40628xf+iR24WeMFcHuuBDUAzzsQ==
+"@types/node@*", "@types/node@>=12.12.47", "@types/node@^18.0.4":
+  version "18.0.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.4.tgz#48aedbf35efb3af1248e4cd4d792c730290cd5d6"
+  integrity sha512-M0+G6V0Y4YV8cqzHssZpaNCqvYwlCiulmm0PwpNLF55r/+cT8Ol42CHRU1SEaYFH2rTwiiE1aYg/2g2rrtGdPA==
 
 "@types/node@12.20.24":
   version "12.20.24"
@@ -5883,10 +5883,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-puppeteer@^15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-15.3.2.tgz#62162739044d570ab9907f85b1e1bbcf52adc79e"
-  integrity sha512-6z4fTHCHTpG3Yu7zqP0mLfCmkNkgw5KSUfLAwuBabz9Pkqoe0Z08hqUx5GNxhhMgEo4YVOSPBshePA6zliznWQ==
+puppeteer@^15.4.0:
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-15.4.0.tgz#31f043ee64cc4e1b5cbe99ad900653aab4afb186"
+  integrity sha512-wxJRbofjaycCaQ9fhABlToJobrjxlABiFi6NvdkOPVJMYFblxDlDTjkg+b6bZYi7xN+lEXn84GBZsA5DYb3wfw==
   dependencies:
     cross-fetch "3.1.5"
     debug "4.3.4"
@@ -6826,10 +6826,10 @@ trim-newlines@^3.0.0:
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
-ts-node@^10.8.2:
-  version "10.8.2"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.8.2.tgz#3185b75228cef116bf82ffe8762594f54b2a23f2"
-  integrity sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==
+ts-node@^10.9.1:
+  version "10.9.1"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
+  integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
   dependencies:
     "@cspotcode/source-map-support" "^0.8.0"
     "@tsconfig/node10" "^1.0.7"
