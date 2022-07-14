@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - versioned
+  workflow_dispatch:
 
 jobs:
   automerge:
