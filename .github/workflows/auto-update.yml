@@ -19,10 +19,9 @@ on: push   # yamllint disable-line rule:truthy
 
 jobs:
   Auto:
-    # Suppress for dependabot -- bot has to manually resolve lock conflicts etc
     name: Auto-update
     runs-on: ubuntu-latest
     steps:
       - uses: tibdex/auto-update@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
