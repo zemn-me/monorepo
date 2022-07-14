@@ -288,5 +288,9 @@ func do() (err error) {
 
 	outputFile.Close()
 
+	if err != nil {
+		err = fmt.Errorf("Closing output file: %w", err)
+	}
+
 	return nil
 }
