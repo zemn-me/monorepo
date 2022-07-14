@@ -33,7 +33,7 @@ ts_project(
 )
 
 nodejs_binary(
-    name = "deploy",
+    name = "release",
     data = BUILD_ARTIFACTS.values() + [
         ":release_message",
         "//ts/cmd/svgshot:npm_pkg.publish",
@@ -43,4 +43,9 @@ nodejs_binary(
         "--body",
         "$(rootpath :release_message )",
     ] + ["$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
+)
+
+alias(
+    name = "deploy",
+    actual = "release"
 )
