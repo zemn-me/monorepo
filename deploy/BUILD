@@ -45,14 +45,7 @@ nodejs_binary(
     ] + ["$(rootpaths " + tag + ")" for (name, tag) in BUILD_ARTIFACTS.items()],
 )
 
-sh_binary(
+alias(
     name = "deploy",
-    srcs = ["deploy.sh"],
-    data = [
-        "//deploy:release",
-    ],
-    env = {
-        "RELEASE": "$(location //deploy:release)",
-    },
-    deps = ["@bazel_tools//tools/bash/runfiles"],
+    actual = "release"
 )
