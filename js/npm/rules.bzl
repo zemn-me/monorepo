@@ -46,7 +46,7 @@ def npm_pkg(
         name = lockfile_name,
         lockfile = "//:yarn.lock",
         package_json = pkg_json_name,
-        lockfile_out = "yarn.lock"
+        lockfile_out = "yarn.lock",
     )
 
     api_extractor(
