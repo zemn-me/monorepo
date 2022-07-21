@@ -20,20 +20,22 @@ interface ArtifactInfo {
 	kind: 'artifact';
 	filename: string;
 	buildTag: string;
-	published: Promise<void>;
+	publish: (c: Context) => Promise<void>;
 }
 
 const artifact =
-	(filename: string, buildTag: string) =>
-	async ({ publish }: Context): Promise<ArtifactInfo> => {
+	(filename: string, buildTag: string) => async (): Promise<ArtifactInfo> => {
 		return {
 			kind: 'artifact',
 			filename,
 			buildTag,
-			published: publish(
-				filename,
-				await fs.readFile(runfiles.resolveWorkspaceRelative(buildTag))
-			),
+			publish: async ({ publish }: Context) =>
+				publish(
+					filename,
+					await fs.readFile(
+						runfiles.resolveWorkspaceRelative(buildTag)
+					)
+				),
 		};
 	};
 
@@ -41,27 +43,29 @@ interface NpmPackageInfo {
 	kind: 'npm_publication';
 	package_name: string;
 	buildTag: string;
-	published: Promise<void>;
+	publish: (c: Context) => Promise<void>;
 }
 
 const npmPackage =
 	(packageName: string, buildTag: string) =>
-	async ({ exec }: Context): Promise<NpmPackageInfo> => {
-		if (!('NPM_TOKEN' in process.env))
-			throw new Error(
-				"Missing NPM_TOKEN. We won't be able to publish any NPM packages."
-			);
+	async (): Promise<NpmPackageInfo> => {
 		return {
 			buildTag,
 			kind: 'npm_publication',
 			package_name: packageName,
-			published: exec(runfiles.resolveWorkspaceRelative(buildTag)),
+			async publish({ exec }: Context) {
+				if (!('NPM_TOKEN' in process.env))
+					throw new Error(
+						"Missing NPM_TOKEN. We won't be able to publish any NPM packages."
+					);
+				exec(runfiles.resolveWorkspaceRelative(buildTag));
+			},
 		};
 	};
 
-interface ReleaseProps<T> {
+interface ReleaseProps {
 	dryRun: boolean;
-	releaseNotes: (items: T[]) => string;
+	releaseNotes: (items: (ArtifactInfo | NpmPackageInfo)[]) => string;
 	createRelease(data: { body: string }): Promise<{ release_id: number }>;
 	uploadReleaseAsset(data: {
 		release_id: number;
@@ -71,30 +75,29 @@ interface ReleaseProps<T> {
 }
 
 const release =
-	<T extends { published: Promise<void> }>(
-		...fns: ((c: Context) => Promise<T>)[]
-	) =>
+	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
 	async ({
 		dryRun,
 		createRelease,
 		releaseNotes,
 		uploadReleaseAsset,
-	}: ReleaseProps<T>) => {
-		let set_release_id: ((release_id: number) => void) | undefined;
-		const release_id = new Promise<number>(ok => (set_release_id = ok));
+	}: ReleaseProps) => {
+		const logInfo = await Promise.all(fns.map(f => f()));
 
-		const publish: Context['publish'] = dryRun
-			? async (filename: string, content: Buffer) => {
-					if (!filename) throw new Error('Empty filename.');
-					if (content.length == 0)
-						throw new Error(`Empty content for ${filename}`);
-			  }
-			: async (file: string, content: Buffer) =>
-					uploadReleaseAsset({
-						release_id: await release_id,
-						name: file,
-						data: content,
-					});
+		const { release_id } = await createRelease({
+			body: releaseNotes(logInfo),
+		});
+
+		const publish: Context['publish'] = async (
+			file: string,
+			content: Buffer
+		) =>
+			uploadReleaseAsset({
+				release_id,
+				name: file,
+				data: content,
+			});
+
 		const exec: Context['exec'] = dryRun
 			? async (filename: string) => {
 					if (filename == '')
@@ -103,17 +106,9 @@ const release =
 			: async (filename: string) =>
 					void (await promisify(child_process.execFile)(filename));
 
-		const logInfo = await Promise.all(fns.map(f => f({ publish, exec })));
-
-		const { release_id: concreteReleaseId } = await createRelease({
-			body: releaseNotes(logInfo),
-		});
-
-		if (!set_release_id) throw new Error();
-
-		set_release_id(concreteReleaseId);
-
-		await Promise.all(logInfo.map(itm => itm.published));
+		await Promise.all(
+			logInfo.map(({ publish: p }) => p({ publish, exec }))
+		);
 	};
 
 export const program = Program.name('release')
@@ -130,17 +125,17 @@ export const program = Program.name('release')
 			? getOctokit(process.env['GITHUB_TOKEN']!)
 			: undefined;
 
-		const releaser = release<NpmPackageInfo | ArtifactInfo>(
+		const releaser = release(
 			artifact(
 				'recursive_vassals.zip',
-				'project/ck3/recursive-vassals/mod_zip.zip'
+				'//project/ck3/recursive-vassals/mod_zip.zip'
 			),
 			artifact(
 				'recursive_vassals.patch',
 				'//project/ck3/recursive-vassals/mod.patch'
 			),
-			artifact('svgshot.tar.gz', 'ts/cmd/svgshot/svgshot.tgz'),
-			npmPackage('svgshot', 'ts/cmd/svgshot/npm_pkg.publish.sh')
+			artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
+			npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
 		);
 
 		releaser({
@@ -160,57 +155,68 @@ export const program = Program.name('release')
 						if (!data) throw new Error('data is empty');
 				  },
 
-			createRelease: Github
-				? async ({ body }) => ({
-						release_id: (
-							await Github.rest.repos.createRelease({
-								// could probably use a spread operator here
-								// but i also think that would be uglier...
-								owner: context.repo.owner,
-								repo: context.repo.repo,
+			createRelease:
+				Github !== undefined
+					? async ({ body }) => ({
+							release_id: (
+								await Github.rest.repos.createRelease({
+									// could probably use a spread operator here
+									// but i also think that would be uglier...
+									owner: context.repo.owner,
+									repo: context.repo.repo,
 
-								tag_name: syntheticVersion,
+									tag_name: syntheticVersion,
 
-								body,
+									body,
 
-								generate_release_notes: true,
+									generate_release_notes: true,
 
-								name: syntheticVersion,
+									name: syntheticVersion,
 
-								target_commitish: context.ref,
-							})
-						).data.id,
-				  })
-				: async ({ body }) => {
-						if (body === '')
-							throw new Error('Release body is empty.');
-						return { release_id: 0 };
-				  },
+									target_commitish: context.ref,
+								})
+							).data.id,
+					  })
+					: async ({ body }) => {
+							if (body === '')
+								throw new Error(`Release body is empty.`);
+							return { release_id: 0 };
+					  },
 			dryRun: dryRun,
 			releaseNotes: (notes: (NpmPackageInfo | ArtifactInfo)[]) => {
 				const artifacts: ArtifactInfo[] = [];
 				const npmPackages: NpmPackageInfo[] = [];
 
 				for (const note of notes) {
-					if (note.kind === 'artifact') artifacts.push(note);
-					if (note.kind === 'npm_publication') npmPackages.push(note);
-					throw new Error();
+					if (note.kind === 'artifact') {
+						artifacts.push(note);
+						continue;
+					}
+					if (note.kind === 'npm_publication') {
+						npmPackages.push(note);
+						continue;
+					}
+					throw new Error(`Unknown kind ${(note as any).kind}`);
 				}
 
 				return `${
 					artifacts.length
-						? `This release contains the following artifacts:\n ${artifacts.map(
-								artifact =>
-									` - ${artifact.buildTag} → ${artifact.filename}`
-						  )}`
+						? `This release contains the following artifacts:\n ${artifacts
+								.map(
+									artifact =>
+										` - ${artifact.buildTag} → ${artifact.filename}`
+								)
+								.join('\n')}`
 						: ''
 				}
 ${
 	npmPackages.length
-		? `This release contains the following NPM packages:\n: ${npmPackages.map(
-				pkg =>
-					` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
-		  )}`
+		? `This release contains the following NPM packages:\n ${npmPackages
+				.map(
+					pkg =>
+						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
+				)
+				.join('\n')}`
 		: ''
 }
 `;
