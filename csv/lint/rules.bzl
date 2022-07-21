@@ -14,9 +14,8 @@ def csv_lint_test(name, srcs = [], **kwargs):
             file1 = name + src + "_format",
             file2 = src,
         )
-    
+
     native.test_suite(
         name = name,
-        tests = [name + src + "_test" for src in srcs ]
+        tests = [name + src + "_test" for src in srcs],
     )
-
