@@ -87,7 +87,7 @@
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "Alle $k_england_adj$en [duchies|E], in denen [ntd_nord.GetTitledFirstName] mindestens eine [county|E] hält, werden ein [de_jure|E]-Teil des $k_danelaw$s"
  negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "Alle unabhängigen $k_england_adj$en [duchies|E] mit einer $north_germanic_group$en [culture|E] oder einem [ruler|E] mit $germanic_religion$em [Concept('faith', 'Glauben')|E] werden [de_jure|E] Teil des $k_danelaw$s"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "Alle unabhängigen Herrscher in $k_england$"
- TRUCE_SIGNED_PARTITION:0 "Ein Waffenstillstand wird als Teil der Aufteilung des Königreichs unterzeichnet\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\nEin Waffenstillstand wird als Teil der Aufteilung des Königreichs vereinbart"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "Alle [de_jure|E]-Teile des $k_danelaw$s gehen per [de_jure_drift|E] an $k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$ wird das „$k_danelaw$“-Wappen verwenden."

@@ -7,7 +7,7 @@
 
  seduce_ongoing.1001.t:0 "El baile"
  seduce_ongoing.1001.distant_opening:0 "He llegado a la corte de [court_of_residence.GetNameNoTier] a tiempo para el baile que se celebra en el/la [court_owner.Custom('ResidenceBuilding')]. Conseguí una invitación porque tengo que ver a [target.GetFirstName]."
- seduce_ongoing.1001.close_opening:0 "No solo asisto al baile porque soy [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetLadyLord] del/la [court_owner.Custom('ResidenceBuilding')], sino porque quiero ver allí a [target.GetFirstName]."
+ seduce_ongoing.1001.close_opening:0 "No solo asisto al baile porque soy [ROOT.Char.GetLadyLord] del/la [court_owner.Custom('ResidenceBuilding')], sino porque quiero ver allí a [target.GetFirstName]."
  seduce_ongoing.1001.desc:0 "\n\n[target.GetSheHe|U] tiene un aspecto deslumbrante y, cuando al fin podemos vernos a solas, le hago una propuesta."
  seduce_ongoing.1001.a:0 "¿Venís conmigo a al círculo de danza, mi [target.GetLadyLord]?"
  seduce_ongoing.1001.a.tt:0 "#F Apelo al lado juguetón de [target.GetFirstNameNoTooltip].#!"
@@ -341,7 +341,7 @@
  seduce_ongoing.4001.t:0 "Dedicatoria de [target.Custom('MusicalPerformer')]"
  seduce_ongoing.4001.desc:0 "Un [target.Custom('MusicalPerformer')] actuará pronto para la corte de [court_location.GetNameNoTier]. No sería difícil pedirle que cambiase su actuación para dedicársela a [target.GetFirstName], el objeto de mi afecto."
  seduce_ongoing.4001.desc.court_musician:0 "Un [target.Custom('MusicalPerformer')] actuará pronto para la corte de [court_location.GetNameNoTier]. Podría pedirle simplemente que cambie su actuación para dedicársela a [target.GetFirstName], el objeto de mi afecto.\n\nPor otra parte, si le pido a mi $court_musician_court_position$ que se una, podría hacer que interpretasen piezas que me dejen en buen lugar ante la audiencia de allí."
- seduce_ongoing.4001.a:0 "¡Será una valiente declaración hacia [target.Custom('ES_ElLa')] [target.GetLadyLord]!"
+ seduce_ongoing.4001.a:0 "¡Será una valiente declaración hacia [target.GetLadyLord]!"
  seduce_ongoing.4001.b:0 "Prefiero alusiones veladas a mi deseo por [target.Custom('ES_ElElla')]."
  seduce_ongoing.4001.b.failure:0 "La dedicación pasa desapercibida"
  seduce_ongoing.4001.c:1 "¡El pueblo de [court_location.GetNameNoTierNoTooltip] se deleitará con mi gloria!"
@@ -350,7 +350,7 @@
  seduce_ongoing.4002.desc.opening:0 "Suele haber artistas en la corte, pero esta vez se nos prometió algo especial y, desde luego, así lo viví."
  seduce_ongoing.4002.desc:1 "\n\nCuando el [ROOT.Char.Custom('MusicalPerformer')] comienza otra estrofa, intento disimular lo halagad[ROOT.Char.Custom('ES_OA')] que me siento por esta dedicatoria delante de toda la corte."
  seduce_ongoing.4002.desc.court_musician:0 "\n\nCuando el [ROOT.Char.Custom('MusicalPerformer')] y el $court_musician_court_position$ de [owner.GetTitledFirstName] comienzan otra estrofa, intento no mostrar demasiada admiración al escuchar las hazañas de [owner.GetFirstNameNoTooltip]."
- seduce_ongoing.4002.a:0 "[owner.GetHerselfHimself][owner.GetTitledFirstNameNoTooltip] desde luego se ha superado a sí mism[owner.Custom('ES_OA')]."
+ seduce_ongoing.4002.a:0 "[owner.GetTitledFirstNameNoTooltip] desde luego se ha superado a sí mism[owner.Custom('ES_OA')]."
 
  seduce_ongoing.4003.desc:1 "\n\nCuando el [ROOT.Char.Custom('MusicalPerformer')] comienza otra estrofa, salgo del gran salón avergonzad[ROOT.Char.Custom('ES_OA')]. ¡[owner.GetFirstName] me ha dedicado todas y cada una de las canciones!"
  seduce_ongoing.4003.desc.court_musician:0 "\n\nCuando el [ROOT.Char.Custom('MusicalPerformer')] y el $court_musician_court_position$ de [owner.GetTitledFirstName] comienzan otra estrofa, salgo del gran salón avergonzad[ROOT.Char.Custom('ES_OA')]. ¿¡De verdad [owner.GetFirstNameNoTooltip] ha mandado a su propio $court_musician_court_position$ solo para alabarse a sí mism[owner.Custom('ES_OA')]!?"
@@ -369,7 +369,7 @@
  seduce_ongoing.4006.desc:0 "El [ROOT.Char.Custom('MusicalPerformer')] sigue cantando versos de amor y deseo, y yo trato de disimular lo halagad[ROOT.Char.Custom('ES_OA')] que me siento.\n\nAunque se oculte tras metáforas y alegorías, sé que es una dedicatoria de [owner.GetFirstName] para mí."
  seduce_ongoing.4006.a:0 "Sabéis llamar mi atención, [owner.GetFirstName]."
 
- seduce_ongoing.4007.desc:0 "Puede que la dedicatoria para [target.Custom('ES_ElLa')] [target.GetLadyLord] [target.GetFirstName] fuera demasiado sutil… pues no parece haberse enterado."
+ seduce_ongoing.4007.desc:0 "Puede que la dedicatoria para [target.GetLadyLord] [target.GetFirstName] fuera demasiado sutil… pues no parece haberse enterado."
  seduce_ongoing.4007.a:0 "Qué desperdicio de esfuerzos."
 
  seduce_ongoing.4011.t:0 "Un paseo por [court_location.GetNameNoTierNoTooltip]"
@@ -439,7 +439,7 @@
  seduce_ongoing.4107.a:0 "Podía haber ido mejor…"
  seduce_ongoing.4107.a.tt:0 "#F ¡Tendría que haber pensado mejor lo de acercarme sigilosamente a un[target.Custom('ES_XA')] [target.GetWomanMan] tan paranoic[target.Custom('ES_OA')]!#!"
 
- seduce_ongoing.4108.desc:0 "Me retiro a mis aposentos para pasar la noche y me sorprende el ruido de un guijarro contra mi ventana. Miro al oscuro jardín y veo [SCOPE.Custom('SeductionObjectIndefinite')] en el suelo junto a una nota. Distingo a un[owner.Custom('ES_XA')] [owner.GetWomanMan] que se parece a [owner.GetFirstName] y que se desvanece en la noche.\n\n#EMP Para [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.Custom2('ComplimentAdjective', ROOT.Char)] [ROOT.Char.GetTitledFirstNameNoTooltip], como muestra de mis sentimientos.#!"
+ seduce_ongoing.4108.desc:0 "Me retiro a mis aposentos para pasar la noche y me sorprende el ruido de un guijarro contra mi ventana. Miro al oscuro jardín y veo [SCOPE.Custom('SeductionObjectIndefinite')] en el suelo junto a una nota. Distingo a un[owner.Custom('ES_XA')] [owner.GetWomanMan] que se parece a [owner.GetFirstName] y que se desvanece en la noche.\n\n#EMP Para [ROOT.Char.Custom2('ComplimentAdjective', ROOT.Char)] [ROOT.Char.GetTitledFirstNameNoTooltip], como muestra de mis sentimientos.#!"
  seduce_ongoing.4108.a:0 "¡Dejaré [SCOPE.Custom('SeductionObjectIndefinite')] para que [owner.Custom('ES_ElElla')] encuentre la sorpresa!"
  seduce_ongoing.4108.b:0 "¿Qué se supone que tengo que hacer con esto? ¡Vendedlo!"
 
@@ -450,13 +450,13 @@
  seduce_ongoing.4110.a:0 "¡Mi corazón está tan roto como el/la [SCOPE.Custom('SeductionObject')]!"
 
  seduce_ongoing.5001.t_rival:0 "Mi rival [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('target'))]"
- seduce_ongoing.5001.t:0 "[target.Custom('ES_ElLa')|U] [target.GetWomanMan] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('target'))]"
+ seduce_ongoing.5001.t:0 "[target.GetWomanMan] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('target'))]"
  seduce_ongoing.5001.desc_tier_up:0 "«¿A qué debo este placer, mi #EMP [ROOT.Char.GetTitleTierName]#!?», pregunta [target.GetFirstName] con una sonrisa que no se acerca a la de sus ojos."
  seduce_ongoing.5001.desc_tier_down:0 "«¿Es que nunca podrá dejarme en paz es[ROOT.Char.Custom('ES_EA')] [target.Custom2('RelationDescriptor', ROOT.Char)] [ROOT.Char.GetWomanMan]…?», murmura [target.GetFirstName] entre dientes cuando me acerco. «¿Qué puedo hacer por vos, [ROOT.Char.GetTitledFirstNameNoTooltip]?»."
  seduce_ongoing.5001.desc_ending:0 "\n\nNuestras hostilidades hierven como siempre, pero tengo un plan para domar los sentimientos tormentosos que compartimos…"
  seduce_ongoing.5001.a:0 "¿Qué pensáis sobre [ROOT.GetCharacter.Custom('education_conversation_subject')]?"
  seduce_ongoing.5001.a.tt:0 "#F Apelo al lado intelectual de [target.GetFirstNameNoTooltip]#!"
- seduce_ongoing.5001.b:0 "Sobre [mocked_courtier.Custom('ES_ElLa')] [mocked_courtier.Custom('InsultNoun')] [mocked_courtier.GetFirstNameNoTooltip]…"
+ seduce_ongoing.5001.b:0 "Sobre el/la [mocked_courtier.Custom('InsultNoun')] [mocked_courtier.GetFirstNameNoTooltip]…"
  seduce_ongoing.5001.b.tt:0 "#F Apelo al lado malicioso de [target.GetFirstNameNoTooltip] burlándonos de [mocked_courtier.GetTitledFirstNameNoTooltip]#!"
  seduce_ongoing.5001.c_tier_down:0 "La cuestión es qué puedo #EMP yo#! hacer por #EMP vos#!, mi [target.GetLadyLord]."
  seduce_ongoing.5001.c_tier_up:0 "El placer es mío, mi [target.GetLadyLord]. Deberíamos solucionar eso."
@@ -467,14 +467,14 @@
  seduce_ongoing.5003.t:0 "Mi rival [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('owner'))]"
  seduce_ongoing.5003.opening:0 "Cada paso que [owner.GetFirstName] da hacia mí me agria más el humor. ¿Qué quiere est[owner.Custom('ES_EA')] [owner.Custom('InsultNoun')] ahora?\n\n"
  seduce_ongoing.5003.conversation:0 "Para mi sorpresa, [owner.GetSheHe] entabló conmigo una discusión sobre [ROOT.GetCharacter.Custom('education_conversation_subject')] y, pese a mis reservas iniciales sobre su compañía, ¡fue muy interesante!"
- seduce_ongoing.5003.mockery:0 "«¡[ROOT.Char.GetTitledFirstNameNoTooltip]! ¡No os creeréis lo que [mocked_courtier.Custom('ES_ElLa')] [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] hizo hoy!».\nPara mi sorpresa, disfrutamos de una conversación bastante agradable sobre los muchos defectos de [mocked_courtier.GetFirstName]."
+ seduce_ongoing.5003.mockery:0 "«¡[ROOT.Char.GetTitledFirstNameNoTooltip]! ¡No os creeréis lo que semejante [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] hizo hoy!».\nPara mi sorpresa, disfrutamos de una conversación bastante agradable sobre los muchos defectos de [mocked_courtier.GetFirstName]."
  seduce_ongoing.5003.bodily:0 "Nada pudo prepararme para la tentación de su piel desnuda cuando [owner.GetFirstName] se despojó de su [owner.Custom('GetUpperClothingArticle')]."
  seduce_ongoing.5003.fallback:0 "Para mi sorpresa, pasamos un tarde muy agradable riendo de los asuntos más mundanos y paseando por los jardines."
  seduce_ongoing.5003.a:0 "¡Nunca pensé que [owner.GetSheHe] fuera tan #EMP agradable#!!"
 
  seduce_ongoing.5004.opening:0 "Cada paso que [owner.GetFirstName] da hacia mí me agria más el humor. ¿Qué quiere est[owner.Custom('ES_EA')] [owner.Custom('InsultNoun')] ahora?\n\n"
  seduce_ongoing.5004.conversation:0 "«En cuanto a [owner.Custom('education_conversation_subject')]…».\n\nNo sé por qué [owner.GetSheHe] imaginó que me interesaría el tema, pero pronto dejé claro que no era el caso."
- seduce_ongoing.5004.mockery:0 "«¡[ROOT.Char.GetTitledFirstNameNoTooltip]! ¡No os creeréis lo que [mocked_courtier.Custom('ES_ElLa')] [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] hizo hoy!».\n\nNo me imagino qué [owner.Custom('ES_LoLa')] poseyó para difamar a [mocked_courtier.GetFirstName] delante de mí, pero ¡no se callaba!"
+ seduce_ongoing.5004.mockery:0 "«¡[ROOT.Char.GetTitledFirstNameNoTooltip]! ¡No os creeréis lo que tal [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] hizo hoy!».\n\nNo me imagino qué [owner.GetHerHim] poseyó para difamar a [mocked_courtier.GetFirstName] delante de mí, pero ¡no se callaba!"
  seduce_ongoing.5004.bodily:0 "Cuando [owner.GetSheHe] se me acerca más de la cuenta y procede a levantar sugerentemente su [owner.Custom('GetUpperClothingArticle')], me retiro corriendo."
  seduce_ongoing.5004.fallback:0 "Al parecer, a [owner.GetSheHe] se le había metido en la cabeza pasar el día conmigo, pues se negó a marcharse hasta que le dejé claro cuánto me desagradaba su presencia."
  seduce_ongoing.5004.a:0 "¡Tan repugnante como siempre!"
@@ -487,7 +487,7 @@
  seduce_ongoing.5005.a:0 "¡Le demostraré la buena compañía que puedo ser!"
 
  seduce_ongoing.5006.conversation:0 "Tras casi una hora de conversación incómoda, [target.GetFirstName] parece más aburrid[target.Custom('ES_OA')] que nunca. Cuando cambio el tema de [target.Custom('herhis_subject_of_interest')] a [ROOT.GetCharacter.Custom('education_conversation_subject')], [target.Custom('ES_ElElla')] [target.Custom('quirk_neg_present')] y se excusa."
- seduce_ongoing.5006.mockery:0 "«¡[target.GetTitledFirstNameNoTooltip]! ¿Podéis creer que [mocked_courtier.Custom('ES_ElLa')] [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] en realidad…?».\n\nMe callo rápidamente cuando el desdén en el rostro de [target.GetFirstName] se acentúa más."
+ seduce_ongoing.5006.mockery:0 "«¡[target.GetTitledFirstNameNoTooltip]! ¿Podéis creer que semejante [mocked_courtier.Custom('InsultNoun')] de [mocked_courtier.GetFirstName] en realidad…?».\n\nMe callo rápidamente cuando el desdén en el rostro de [target.GetFirstName] se acentúa más."
  seduce_ongoing.5006.bodily:0 "Cuando me acerco a [target.GetFirstName] sonriendo [ROOT.Char.Custom('quirk_pos_adverb')] y levantando sugerentemente mi [ROOT.Char.Custom('GetUpperClothingArticle')], [target.GetSheHe] retrocede rápidamente con una mirada de asco puro."
  seduce_ongoing.5006.fallback:0 "Me quedo en silencio tratando de pensar algún tema en común con [target.GetFirstName], pero su desdén se hace más pronunciado cada minuto que pasa.\n\nEnseguida se excusa y huye de mi compañía."
  seduce_ongoing.5006.a:0 "¡¿Por qué intento yacer con semejante [target.Custom('InsultNounSexual')]?!"

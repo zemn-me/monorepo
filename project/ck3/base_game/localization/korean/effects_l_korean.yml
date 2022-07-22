@@ -141,6 +141,7 @@
  I_AM_SENT_TO_ACTIVITY:1 "[ACTIVITY.GetName](을)를 하러 감"
  COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName](이)가 끝남"
  I_COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName](이)가 끝남"
+ COMPLETE_ACTIVITY_NEG:0 "활동 종료"
 
  WILL_MARRY_EFFECT:1 "[TARGET_CHARACTER.GetShortUIName](와)과 [marries|E]함"
  I_WILL_MARRY_EFFECT:1 "[TARGET_CHARACTER.GetShortUIName](와)과 [marry|E]함"
@@ -983,6 +984,7 @@
  
  #Are negative values in these loc keys showing for you? Don't add new negative ones, just come out of debug mode and they're fine.
  CHANGE_DEVELOPMENT_LEVEL:0 "[TITLE.GetName]의 [development|E]가 $VALUE|=0+$만큼 변경됨"
+ CHANGE_DEVELOPMENT_LEVEL_PAST:0 "[TITLE.GetName]의 [development|E]가 $VALUE|=0+$만큼 변경됨"
  CHANGE_DEVELOPMENT_PROGRESS:2 "[development|E] 진행도가 $VALUE|0+$만큼 증가함"
  CHANGE_DEVELOPMENT_PROGRESS_NEG:1 "[development|E] 진행도가 $VALUE|0-$만큼 감소함"
  THEY_CHANGE_DEVELOPMENT_PROGRESS:1 "[TITLE.GetName]의 [development|E] 진행도가 $VALUE|0+$만큼 증가함"
@@ -1373,10 +1375,10 @@
  GET_RANDOM_INNOVATION_FROM_EFFECT:2 "[CULTURE.GetName] [culture|E]가 [TARGET_CULTURE.GetName] 문화로부터 임의의 [innovation|E]을 전수받음"
  GOT_RANDOM_INNOVATION_FROM_EFFECT:1 "[CULTURE.GetName] [culture|E]가 [TARGET_CULTURE.GetName] 문화로부터 임의의 [innovation|E]을 전수받음"
 
- ACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier](이)가 [CHARACTER.GetFaith.GetAdjective] [holy_site|E] ($HOLY_SITE$)를 획득함 "
- ACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier](이)가 [CHARACTER.GetFaith.GetAdjective] [holy_site|E] ($HOLY_SITE$)를 획득함 "
- DEACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier](이)가 [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$(을)를 상실함"
- DEACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier](이)가 [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$(을)를 상실함"
+ ACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier](이)가 [FAITH.GetAdjective] [holy_site|E]로 여겨지게 됨"
+ ACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier](이)가 [FAITH.GetAdjective] [holy_site|E]가 됨"
+ DEACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier](이)가 더는 [FAITH.GetAdjective] [holy_site|E]로 여겨지지 않게 됨"
+ DEACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier](이)가 더는 [FAITH.GetAdjective] [holy_site|E]로 여겨지지 않음"
 
  ADD_RANDOM_INNOVATION_EFFECT:1 "[CULTURE.GetCollectiveNoun] 문화권이 $GROUP$ 집합에 속한 무작위의 혁신을 발명함"
  GOT_RANDOM_INNOVATION_EFFECT:0 "[CULTURE.GetCollectiveNoun] 문화권이 $GROUP$ 집합에 속한 무작위의 혁신을 발명함"
@@ -1652,6 +1654,8 @@
  I_CAN_USE_THE_BEFRIEND_SCHEME:2 "[GetScheme('befriend').GetTypeName] [scheme|E]을 사용할 수 있게 됨"
  THEY_CAN_USE_THE_BEFRIEND_SCHEME:1 "[CHARACTER.GetShortUIName|U](이)가 [GetScheme('befriend').GetTypeName] [scheme|E]을 사용할 수 있게 됨"
 
+ unlocks_board_games_interaction_effect:0 "$challenge_to_2p_chess_interaction$ [interaction|E]이 잠금 해제되어 다른 [characters|E]과 친선전을 즐길 수 있게 됨"
+
  EACH_FRIEND_ADDS_STRESS_REDUCTION:2 "[friend|E] 하나마다 부여됨: [stress|E] 획득이 [stress_gain_i]#P -5%#!만큼 감소함"
 
  CHILDREN_ARE_BORN_WITH_EXTRA_STATS:0 "자녀가 추가 [skill|E] 점수를 #P 1#! ~ #P 3#!개 받게 됨"
@@ -1678,6 +1682,8 @@
  CAN_USE_THE_SELL_TITLES_DECISION:0 "[sell_titles|E] [decision|E]을 사용할 수 있게 됨"
 
  COLLECT_TAXES_EFFECTIVENESS_GAIN:0 "[collect_taxes|E] 효과: #P +[EmptyScope.ScriptValue('tax_man_perk_percentage')|0]%#!"
+
+ unlocks_truce_purchasing_interaction_desc:0 "$purchase_truce_interaction$ [interaction|E] 잠금 해제. 선제적으로 [truces|E] 협정을 구매할 수 있음"
 
  CHILDREN_HAVE_CHANCE_OF_IMPROVEMENT:0 "[wards|E]이 추가 [skills|E]을 얻을 수 있으며, [guardian|E]과 [friends|E] 관계가 될 수 있음"
  CHILDREN_I_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:3 "당신의 [wards|E]이 추가 [skills|E]을 얻을 수 있으며, 당신과 [friends|E] 관계가 될 수 있음\n[GetScheme('learn_language').GetTypeName] [success_chance|E]: #P +25%#!"
@@ -1897,8 +1903,8 @@
  JOIN_FACTION_SKIP_CHECK_PAST_EFFECT:0 "(의도적으로) 유효성 검사 없이 [FACTION.GetName|V]에 가담함"
  CREATE_ALLIANCE_EFFECT:0 "[TARGET_CHARACTER.GetShortUIName](와)과 동맹을 결성함"
  CREATE_ALLIANCE_PAST_EFFECT:0 "[TARGET_CHARACTER.GetShortUIName](와)과 동맹을 결성함"
- TITLE_CREATE_FACTION_EFFECT:0 "$TYPE|V$ 파벌을 결성함"
- TITLE_CREATE_FACTION_PAST_EFFECT:0 "$TYPE|V$ 파벌을 결성함"
+ TITLE_CREATE_FACTION_EFFECT:1 "$TYPE|V$ 파벌 결성"
+ TITLE_CREATE_FACTION_PAST_EFFECT:1 "$TYPE|V$ 파벌을 결성함"
  SET_SPECIAL_TITLE_EFFECT:0 "[TITLE.GetName](이)가 특별 작위가 됨"
  SET_SPECIAL_TITLE_PAST_EFFECT:0 "[TITLE.GetName](이)가 특별 작위가 됨"
  SET_PREGNANCY_ASSUMED_FATHER_EFFECT:0 "[TARGET_CHARACTER.GetShortUIName|U](이)가 [CHARACTER.GetShortUIName] 임신 중인 아이의 부친으로 추정됨"
@@ -2002,12 +2008,15 @@
  custom.every_poet:0 "모든 시인"
  custom.every_child_in_court:0 "궁정 내 모든 자녀"
  custom.every_non_callous_or_sadistic_vassal:0 "모든 냉담하지 않거나 가학적인 [vassal|E]"
+ custom.every_zealous_callous_or_sadistic_vassal:0 "모든 열성적이거나 냉담한 [vassal|E]"
  custom.every_feudal_vassal:0 "모든 [feudal|E] [vassal|E]"
  custom.every_opposite_sex_consort:0 "모든 반대 성별의 [spouse|E] 또는 [concubine|E]"
  custom.every_vassal_of_target_culture:0 "모든 [different_culture_vassal.GetCulture.GetName] [vassal|E]"
  custom.every_vassal:0 "모든 [vassal|E]"
  custom.every_female_courtier:0 "모든 여성 [courtier|E]"
  custom.every_male_courtier:0 "모든 남성 [courtier|E]"
+ custom.every_same_culture_vassal:0 "모든 [root_culture.GetName] [vassal|E]"
+ custom.every_different_culture_vassal:0 "모든 [root_culture.GetName]에 속하지 않은 [vassal|E]"
 
  guest_and_family_move_to_specific_pool_effect.tt.family:0 "[character|E] 및 함께 여행 중인 [family|E]"
 
@@ -2130,22 +2139,47 @@
  CREATE_ARTIFACT_EFFECT_FIRST_PAST:0 "[CHARACTER.GetShortUIName|U](이)가 $ARTIFACT_NAME$ [artifact|E] 획득함"
  CREATE_ARTIFACT_EFFECT_THIRD:0 "[CHARACTER.GetShortUIName|U](이)가 $ARTIFACT_NAME$ [artifact|E] 획득"
  CREATE_ARTIFACT_EFFECT_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U](이)가 $ARTIFACT_NAME$ [artifact|E] 획득함"
+
+ START_STRUGGLE_EFFECT:0 "$TYPE|V$ [struggle|E] 시작"
+ ACTIVATE_STRUGGLE_CATALYST:0 "$CATALYST_NAME$ 활성화"
+ CHANGE_STRUGGLE_PHASE_EFFECT:0 "$STRUGGLE_PHASE$(으)로 국면 변경"
+
  SET_ARTIFACT_RARITY_EFFECT:0 "$RARITY$(이)가 됨"
  SET_ARTIFACT_RARITY_EFFECT_PAST:0 "$RARITY$(이)가 됨"
  SET_ARTIFACT_RARITY_EFFECT_THIRD:0 "[ARTIFACT.GetName](이)가 $RARITY$가 됨"
  SET_ARTIFACT_RARITY_EFFECT_PAST_THIRD:0 "[ARTIFACT.GetName](이)가 $RARITY$가 됨"
 
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST`
+ SET_CULTURE_AS_INVOLVED:0 "[CULTURE.GetName] 문화가 [STRUGGLE.GetName]에 연루됨"
+ SET_CULTURE_AS_UNINVOLVED:0 "[CULTURE.GetName] 문화가 [STRUGGLE.GetName](와)과의 연루에서 벗어남"
+ SET_FAITH_AS_INVOLVED:0 "[FAITH.GetName] 신앙이 [STRUGGLE.GetName]에 연루됨"
+ SET_FAITH_AS_UNINVOLVED:0 "[FAITH.GetName] 신앙이 [STRUGGLE.GetName](와)과의 연루에서 벗어남"
 
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST`
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_DESC:1 "[FAITH.GetName] [head_of_faith|E]가 생성됨"
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_PAST_DESC:1 "[FAITH.GetName] [head_of_faith|E]가 생성됨"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_DESC:0 "당신이 [FAITH.GetName]의 [head_of_faith|E]가 됨"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_PAST_DESC:0 "당신이 [FAITH.GetName]의 [head_of_faith|E]가 됨"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U](이)가 [FAITH.GetName]의 [head_of_faith|E]가 됨"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_PAST_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U](이)가 [FAITH.GetName]의 [head_of_faith|E]가 됨"
+ REMOVE_RELIGIOUS_HEAD_TITLE_DESC:0 "[FAITH.GetName]의 [head_of_faith|E]가 제거됨"
+ REMOVE_RELIGIOUS_HEAD_TITLE_PAST_DESC:0 "[FAITH.GetName]의 [head_of_faith|E]가 제거됨"
+ 
+ EQUIP_ARTIFACT_TO_OWNER:0 "[ARTIFACT.GetName](이)가 장착됨"
+ EQUIP_ARTIFACT_TO_OWNER_PAST:0 "[ARTIFACT.GetName](이)가 장착됨"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST:0 "[ARTIFACT.GetName](을)를 장착함"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST:0 "[ARTIFACT.GetName](을)를 장착함"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD:0 "[CHARACTER.GetShortUIName|U](이)가 [ARTIFACT.GetName](을)를 장착함"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U](이)가 [ARTIFACT.GetName](을)를 장착함"
 
+ UNEQUIP_ARTIFACT_FROM_OWNER:0 "[ARTIFACT.GetName](이)가 장착 해제됨"
+ UNEQUIP_ARTIFACT_FROM_OWNER_PAST:0 "[ARTIFACT.GetName](이)가 장착 해제됨"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST:0 "[ARTIFACT.GetName](을)를 장착 해제함"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST:0 "[ARTIFACT.GetName](을)를 장착 해제함"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD:0 "[CHARACTER.GetShortUIName|U](이)가 [ARTIFACT.GetName](을)를 장착 해제함"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U](이)가 [ARTIFACT.GetName](을)를 장착 해제함"
+
+ SET_ETHOS_FROM:0 "[CULTURE.GetName|V](이)가 모든 [TARGET_CULTURE.GetName|V] [ethos|E]을 받아들임"
+ SET_ETHOS_FROM_PAST:0 "[CULTURE.GetName|V](이)가 모든 [TARGET_CULTURE.GetName|V] [ethos|E]을 받아들였음"
+ SET_LANGUAGE_FROM:0 "[CULTURE.GetName|V] 언어가 [TARGET_CULTURE.GetLanguage.GetName|V](이)가 됨"
+ SET_LANGUAGE_FROM_PAST:0 "[CULTURE.GetName|V] 언어가 [TARGET_CULTURE.GetLanguage.GetName|V](이)가 됐음"
+ RESET_CULTURE_CREATION_DATE:0 "[CULTURE.GetName|V] 생성일이 초기화됨"
+ RESET_CULTURE_CREATION_DATE_PAST:0 "[CULTURE.GetName|V] 생성일이 초기화됐음"

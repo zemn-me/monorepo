@@ -153,7 +153,7 @@ house_bas-serra = {
 house_cappai_de_bas = {
 	prefix = "dynnp_de"
 	name = "dynn_Cappai_de_Bas"
-	dynasty = 0 #Cappai
+	dynasty = 1040086 #Cappai
 }
 
 #Somali
@@ -207,7 +207,7 @@ house_squillache = {
 
 house_ruffo_di_licinardo = {
 	name = "dynn_Ruffo_di_Licinardo"
-	dynasty = 1307 #Ruffo
+	dynasty = 13077 #Ruffo
 }
 
 house_montescaglioso = {
@@ -535,11 +535,6 @@ house_british_isles_dalfiachrachsuighe = {
 	dynasty = 9217
 }
 
-house_british_isles_eoganachta = {
-	name = "dynn_EO_ganachta" # (100003)
-	dynasty = 9217
-}
-
 house_british_isles_gabrain = {
 	prefix = "dynnp_mac"
 	name = "dynn_GabrA_in" # (9223)
@@ -625,105 +620,93 @@ house_british_isles_breizh = {
 
 #Iberia
 house_jimena_aragon = {
-    prefix = "dynnp_de"
-    name = "dynn_AragO_n"
-    dynasty = 442 # Jimena
+	prefix = "dynnp_de"
+	name = "dynn_AragO_n"
+	dynasty = 442 # Jimena
 }
 
 house_vela = {
-    name = "dynn_Vela"
-    dynasty = 442 # Jimena
+	name = "dynn_Vela"
+	dynasty = 442 # Jimena
 }
 
 house_sarria = {
-    prefix = "dynnp_de"
-    name = "dynn_Sarria"
-    dynasty = 442 # Jimena
+	prefix = "dynnp_de"
+	name = "dynn_Sarria"
+	dynasty = 442 # Jimena
 }
 
 house_jimena_navarra = {
-    name = "dynn_Navarra"
-    dynasty = 442 # Jimena
+	name = "dynn_Navarra"
+	dynasty = 442 # Jimena
 }
 
 house_asturias = {
-    prefix = "dynnp_de"
-    name = "dynn_Asturias"
-    dynasty = 1046033 # Lywigildinga
+	prefix = "dynnp_de"
+	name = "dynn_Asturias"
+	dynasty = khindaswinthiana # Chindasvinto's Dynasty
 }
 
 house_vimaranes = {
-    name = "dynn_Vimaranes"
-    dynasty = 1046033 # Lywigildinga
+	name = "dynn_Vimaranes"
+	dynasty = erwigiana # Ervigio's Dynasty
 }
 
+#house_aloitez = { #Removed for FP2 bugfixing purposes, but still relevant for hypothetical future bookmarks, so kept as a note. 
+#	name = "dynn_AlO_itez"
+#	dynasty = 1046033 # Lywigildinga #currently a ghost dynasty in the game, since the FP2 history pass 
+#}
+
 house_cantabria = {
-    prefix = "dynnp_de"
-    name = "dynn_Cantabria"
-    dynasty = 1046033 # Lywigildinga
+	prefix = "dynnp_de"
+	name = "dynn_Cantabria"
+	dynasty = erwigiana # Ervigio's Dynasty
 }
 
 house_betotez = {
-    name = "dynn_BetO_tez"
-    dynasty = 1046033 # Lywigildinga
-}
-
-house_castilla = {
-    prefix = "dynnp_de"
-    name = "dynn_Castella"
-    dynasty = 1046033 # Lywigildinga
+	name = "dynn_BetO_tez"
+	dynasty = erwigiana # Ervigio's Dynasty
 }
 
 house_aza = {
-    prefix = "dynnp_de"
-    name = "dynn_Aza"
-    dynasty = 1046033 # Lywigildinga
+	prefix = "dynnp_de"
+	name = "dynn_Aza"
+	dynasty = 1046033 # Lywigildinga
 }
 
 house_amaya = {
-    prefix = "dynnp_de"
-    name = "dynn_Amaya"
-    dynasty = 1046033 # Lywigildinga
-}
-
-house_iniga = {
-    name = "dynn_I_N_iga"
-    dynasty = 388 # Vasconia
-}
-
-house_aragon = {
-    prefix = "dynnp_de"
-    name = "dynn_AragO_n"
-    dynasty = 388 # Vasconia
+	prefix = "dynnp_de"
+	name = "dynn_Amaya"
+	dynasty = 1046033 # Lywigildinga
 }
 
 house_galindid = {
-    name = "dynn_Galindid"
-    dynasty = 388 # Vasconia
+	name = "dynn_Galindid"
+	dynasty = iniga # Íñiga
 }
 
 house_cerdanya = {
-    prefix = "dynnp_de"
-    name = "dynn_Cerdanya"
-    dynasty = 100204 # Barcelona
+	prefix = "dynnp_de"
+	name = "dynn_Cerdanya"
+	dynasty = 100204 # Barcelona
 }
 
 house_besalu = {
-    prefix = "dynnp_de"
-    name = "dynn_BesalU_"
-    dynasty = 100204 # Barcelona
+	prefix = "dynnp_de"
+	name = "dynn_BesalU_"
+	dynasty = 100204 # Barcelona
 }
 
 house_urgell = {
-    prefix = "dynnp_d_"
-    name = "dynn_Urgell"
-    dynasty = 100204 # Barcelona
+	prefix = "dynnp_d_"
+	name = "dynn_Urgell"
+	dynasty = 100204 # Barcelona
 }
 
 house_pallars = {
-    prefix = "dynnp_de"
-    name = "dynn_Pallars"
-    dynasty = 10024 # Ribagorça
+	prefix = "dynnp_de"
+	name = "dynn_Pallars"
+	dynasty = 388 # Vasconia
 }
 
 # CISALPINE
@@ -1355,11 +1338,11 @@ house_hammadid = {
 	dynasty = 595 # Zirid
 }
 
-# Banu Kanz, Rabia cadets
-house_banu_kanz = {
-	name = "dynn_Banu_Kanz"
-	dynasty = bedouindyn003 # Rabia
-}
+## Banu Kanz, Rabia cadets
+#house_banu_kanz = {
+# 	name = "dynn_Banu_Kanz"
+# 	dynasty = bedouindyn003 # Rabia
+#}
 
 # Shaddadid, Hadhabanid cadets
 house_shaddadid = {
@@ -1487,4 +1470,380 @@ house_baduspanid = {
 	name = "dynn_Baduspanid"
 	dynasty = 1029100 # Sassanid
 	forced_coa_religiongroup = "zoroastrian_group"
+}
+# Iberian
+house_musa = {
+	name = "dynn_Musa" #Banu Musa
+	dynasty = 12293 #Banu Qasi
+}
+
+house_danis = {
+	name = "dynn_Danis" #Banu Danis
+	dynasty = baranisdyn002 #Awsaga
+}
+
+house_khali = {
+	name = "dynn_Khali" #Banu Khali
+	dynasty = baranisdyn002 #Awsaga
+}
+
+house_aguiar = {
+	prefix = "dynnp_de"
+	name = "dynn_Aguiar"
+	dynasty = 1020120 # Guedeão
+}
+
+house_anemas = {
+	name = "dynn_Anemas"
+	dynasty = 1029093 # Banu Hafs
+}
+
+house_astarac = {
+	prefix = "dynnp_d_"
+	name = "dynn_Astarac"
+	dynasty = 388 # Vasconia
+}
+
+house_atares = {
+	prefix = "dynnp_de"
+	name = "dynn_Atares"
+	dynasty = 442 # Jimena
+}
+
+house_aura = {
+	prefix = "dynnp_d_"
+	name = "dynn_Aura"
+	dynasty = 388 # Vasconia
+}
+
+house_azevedo = {
+	prefix = "dynnp_de"
+	name = "dynn_Azevedo"
+	dynasty = 7389 # Guideschi
+}
+
+house_baiao = {
+	prefix = "dynnp_de"
+	name = "dynn_BaiA_o"
+	dynasty = 7389 # Guideschi
+}
+
+house_banu_albo = {
+	name = "dynn_Banu_Albo"
+	dynasty = castilla # Castilla
+}
+
+house_banu_shabrit = {
+	name = "dynn_Shabritid"
+	dynasty = 12291 # Banu Amrus
+}
+
+house_banu_sumadih = {
+	name = "dynn_Sumadihid"
+	dynasty = 12194 # Banu Tuyyib
+}
+
+house_bigorre_vasconia = {
+	prefix = "dynnp_de"
+	name = "dynn_Bigorre"
+	dynasty = 388 # Vasconia
+}
+
+house_braganza = {
+	prefix = "dynnp_de"
+	name = "dynn_BraganC_a"
+	dynasty = 1029001 # Prydain
+}
+
+house_cameros = {
+	prefix = "dynnp_de_los"
+	name = "dynn_Cameros"
+	dynasty = 8615 # Ochoa
+}
+
+house_cardona = {
+	prefix = "dynnp_de"
+	name = "dynn_Cardona"
+	dynasty = 12135 # Claramunt
+}
+
+house_cea = {
+	prefix = "dynnp_de"
+	name = "dynn_Cea"
+	dynasty = 442 # Jimena
+}
+
+house_cifuentes = {
+	prefix = "dynnp_de"
+	name = "dynn_Cifuentes"
+	dynasty = 8620 # Flaínez
+}
+
+house_coimbra = {
+	prefix = "dynnp_de"
+	name = "dynn_Coimbra"
+	dynasty = 75 # Menéndez
+}
+
+house_eriz = {
+	name = "dynn_E_riz"
+	dynasty = 12288 # Fernández
+}
+
+house_fezensac = {
+	prefix = "dynnp_de"
+	name = "dynn_Fezensac"
+	dynasty = 388 # Vasconia
+}
+
+house_froilaz = {
+	name = "dynn_Froilaz"
+	dynasty = 12288 # Fernández
+}
+
+house_godesteo_fernandez = {
+	name = "dynn_GodestE_iz" # House of Godesteo Fernández
+	dynasty = 12288 # Fernández
+}
+
+house_la_roca = {
+	prefix = "dynnp_de_la"
+	name = "dynn_Roca"
+	dynasty = girona # Girona
+}
+
+house_labarta = {
+	prefix = "dynnp_de"
+	name = "dynn_Labarta"
+	dynasty = 388 # Vasconia
+}
+
+house_lara = {
+	prefix = "dynnp_de"
+	name = "dynn_Lara"
+	dynasty = 776 # Brañosera
+}
+
+house_lara-castilla = {
+	prefix = "dynnp_de"
+	name = "dynn_Lara" # House of Lara, Counts of Castilla
+	dynasty = 776 # Brañosera
+}
+
+house_lavedan = {
+	prefix = "dynnp_de"
+	name = "dynn_Lavedan"
+	dynasty = 388 # Vasconia
+}
+
+house_leon-spain = {
+	prefix = "dynnp_de"
+	name = "dynn_LeO_n"
+	dynasty = erwigiana # Ervigio's Dynasty
+}
+
+house_leonese_vela = {
+	name = "dynn_Vela" # Second House Vela
+	dynasty = 442 # Jimena
+}
+
+house_lomagne = {
+	prefix = "dynnp_de"
+	name = "dynn_Lomagne"
+	dynasty = 388 # Vasconia
+}
+
+house_maia = {
+	prefix = "dynnp_da"
+	name = "dynn_Maia"
+	dynasty = erwigiana # Ervigio's Dynasty
+}
+
+house_manzanedo = {
+	prefix = "dynnp_de"
+	name = "dynn_Manzanedo"
+	dynasty = 776 # Brañosera
+}
+
+house_marnel = {
+	prefix = "dynnp_de"
+	name = "dynn_Marnel"
+	dynasty = 12288 # Fernández
+}
+
+house_marsan = {
+	prefix = "dynnp_de"
+	name = "dynn_Marsan"
+	dynasty = 388 # Vasconia
+}
+
+house_mendes = {
+	name = "dynn_Mendes"
+	dynasty = erwigiana # Ervigio's Dynasty
+}
+
+house_montcada-girona = {
+	prefix = "dynnp_de"
+	name = "dynn_Montcada"
+	dynasty = girona # Girona
+}
+
+house_montsoriu = {
+	prefix = "dynnp_de"
+	name = "dynn_Montsoriu"
+	dynasty = girona # Girona
+}
+
+house_oca = {
+	prefix = "dynnp_de"
+	name = "dynn_Oca"
+	dynasty = alvarez # Álvarez
+}
+
+house_ordonez = {
+	name = "dynn_OrdO_N_ez"
+	dynasty = erwigiana # Ervigio's Dynasty
+}
+
+house_osorio_gutierrez = {
+	name = "dynn_Osorio" # House of Osorio Gutiérrez
+	dynasty = 75 # Menéndez
+}
+
+house_oviedo = {
+	prefix = "dynnp_de"
+	name = "dynn_Oviedo"
+	dynasty = 8620 # Flaínez
+}
+
+house_pallars-jussa = {
+	prefix = "dynnp_de"
+	name = "dynn_Pallars_Jussa"
+	dynasty = 388 # Vasconia
+}
+
+house_pallars-sobira = {
+	prefix = "dynnp_de"
+	name = "dynn_Pallars_Sobira"
+	dynasty = 388 # Vasconia
+}
+
+house_pombeiro = {
+	prefix = "dynnp_de"
+	name = "dynn_Pombeiro"
+	dynasty = 1020110 # Celanova
+}
+
+house_ribagorza = {
+	prefix = "dynnp_de"
+	name = "dynn_RibagorC_a"
+	dynasty = 388 # Vasconia
+}
+
+house_rocaberti-empuries = {
+	prefix = "dynnp_de"
+	name = "dynn_Rocaberti"
+	dynasty = 393 # Empuries
+}
+
+house_rosello = {
+	prefix = "dynnp_de"
+	name = "dynn_RosellO_"
+	dynasty = 393 # Empuries
+}
+
+house_salvadorez = {
+	name = "dynn_SalvadO_rez"
+	dynasty = 776 # Brañosera
+}
+
+house_sault = {
+	prefix = "dynnp_de"
+	name = "dynn_Sault"
+	dynasty = 388 # Vasconia
+}
+
+house_sousa = {
+	prefix = "dynnp_de"
+	name = "dynn_Sousa"
+	dynasty = ufes # Ufes
+}
+
+house_traba = {
+	prefix = "dynnp_de"
+	name = "dynn_Traba"
+	dynasty = 278 # Trasancos
+}
+
+house_torono = {
+	prefix = "dynnp_de"
+	name = "dynn_ToroN_o"
+	dynasty = 12116 # Limia
+}
+
+house_tudmir = {
+	name = "dynn_Theodemiriana"
+	dynasty = erwigiana # Ervigio's Dynasty
+}
+
+house_velho = {
+	name = "dynn_Velho"
+	dynasty = 7389 # Guideschi
+}
+
+house_viguera = {
+	prefix = "dynnp_de"
+	name = "dynn_Viguera"
+	dynasty = 442 # Jimena
+}
+
+house_vivar = {
+	prefix = "dynnp_de"
+	name = "dynn_Vivar"
+	dynasty = 8620 # Flaínez
+}
+
+house_zuberoa = {
+	prefix = "dynnp_de"
+	name = "dynn_Zuberoa"
+	dynasty = 388 # Vasconia
+}
+
+house_abu_yamra = {
+	name = "dynn_Yamraid"
+	dynasty = 12260 # Banu Jattab
+}
+
+house_al-tawil = {
+	name = "dynn_Tawilid"
+	dynasty = 12291 # Banu Amrur
+}
+
+house_cervera = {
+	prefix = "dynnp_de"
+	name = "dynn_Cervera"
+	dynasty = 8758 # Berga Dynasty
+}
+
+house_galicia = {
+	prefix = "dynnp_de"
+	name = "dynn_Galicia"
+	dynasty = witiziana # Witiza's Dynasty
+}
+
+house_hammudid = {
+	name = "dynn_Hammudid"
+	dynasty = 1029055 # Idrisid
+}
+
+house_mataplana = {
+	prefix = "dynnp_de"
+	name = "dynn_Mataplana"
+	dynasty = 8758 # Berga Dynasty
+}
+
+house_pinos = {
+	prefix = "dynnp_de"
+	name = "dynn_PinO_s"
+	dynasty = 8758 # Berga Dynasty
 }

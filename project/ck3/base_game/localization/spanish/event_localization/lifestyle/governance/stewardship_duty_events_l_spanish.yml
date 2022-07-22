@@ -15,7 +15,7 @@
 
  # Conflict at the Council, by Mathilda Bjarnehed
  stewardship_duty.0017.t:0 "La voz de la razón"
- stewardship_duty.0017.start.desc:0 "Otra reunión del consejo, otro conflicto. [councillor_1.Custom('ES_ElLa')|U] [councillor_1.GetCouncilTitle] [councillor_1.GetFirstName] y [councillor_2.Custom('ES_ElLa')] [councillor_2.GetCouncilTitle] [councillor_2.GetFirstName] discuten violentamente sobre…"
+ stewardship_duty.0017.start.desc:0 "Otra reunión del consejo, otro conflicto. [councillor_1.GetCouncilTitle] [councillor_1.GetFirstName] y [councillor_2.GetCouncilTitle] [councillor_2.GetFirstName] discuten violentamente sobre…"
  stewardship_duty.0017.war.desc:0 "la guerra en curso."
  stewardship_duty.0017.election.desc:0 "la elección de mi sucesor."
  stewardship_duty.0017.building_projects.desc:0 "los próximos proyectos de construcción."
@@ -163,7 +163,7 @@
  stewardship_duty.4043.desc:0 "No fue una negociación, sino una exigencia. Le dejé claro a [my_vassal.GetTitledFirstName] que solo mantiene sus títulos porque me conviene y que si deseaba contar con mi gracia, [my_vassal.GetSheHe] tendría que hacer concesiones.\n\n[my_vassal.GetSheHe|U] aceptó precipitadamente, content[my_vassal.Custom('ES_OA')] de marcharse sin más incidentes."
  stewardship_duty.4043.a:0 "$stewardship_duty.4041.a$"
 
- stewardship_duty.4044.desc:0 "[my_vassal.GetTitledFirstName] se plantó ante mi exigencia de que aceptase un pacto más restrictivo.\n\nMe dijo que aunque yo sea [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] y gobierne en esta tierra, su pacto actual le da derecho a ciertos privilegios que no puedo quitarle sin más… o por lo menos no legítimamente."
+ stewardship_duty.4044.desc:0 "[my_vassal.GetTitledFirstName] se plantó ante mi exigencia de que aceptase un pacto más restrictivo.\n\nMe dijo que aunque yo sea [ROOT.Char.GetTitleAsNameNoTooltip] y gobierne en esta tierra, su pacto actual le da derecho a ciertos privilegios que no puedo quitarle sin más… o por lo menos no legítimamente."
  stewardship_duty.4044.a:0 "$stewardship_duty.4042.a$"
 
  # Faction Organizing — Lower a faction's discontent during wartime, by Sean Hughes
@@ -185,8 +185,8 @@
 
  # A Vassal cheats their contract, by Linnéa Thimrén
  stewardship_duty.5021.t:0 "Vasallo desleal"
- stewardship_duty.5021.desc:0 "Estoy examinando los libros de contabilidad que detallan los ingresos aportados por mis vasallos. Estos números no cuadran… ¡[cheater_vassal.Custom('ES_ElLa')|U] [ROOT.Char.Custom2('DescriptorNegative', SCOPE.sC('cheater_vassal'))] de [cheater_vassal.GetTitledFirstName] me ha tomado por idiota y ha estado pagando demasiado poco!"
- stewardship_duty.5021.a:0 "[cheater_vassal.Custom('ES_ElLa')|U] [cheater_vassal.GetTitleAsNameNoTooltip] deberá pagar lo que le toca."
+ stewardship_duty.5021.desc:0 "Estoy examinando los libros de contabilidad que detallan los ingresos aportados por mis vasallos. Estos números no cuadran… ¡ROOT.Char.Custom2('DescriptorNegative', SCOPE.sC('cheater_vassal'))] de [cheater_vassal.GetTitledFirstName] me ha tomado por idiota y ha estado pagando demasiado poco!"
+ stewardship_duty.5021.a:0 "El/La[cheater_vassal.GetTitleAsNameNoTooltip] deberá pagar lo que le toca."
  stewardship_duty.5021.a.message_1:0 "[cheater_vassal.GetFirstNameNoTooltip] paga lo que me debe"
  stewardship_duty.5021.a.message_2:0 "Sospecho que [cheater_vassal.GetFirstNameNoTooltip] se sigue guardando dinero"
  stewardship_duty.5021.b:0 "¡[cheater_vassal.Custom('ES_LoLa')|U] tendré atad[cheater_vassal.Custom('ES_OA')] en corto a partir de ahora!"
@@ -310,7 +310,7 @@
 
  stewardship_duty_special.1286.end:0 "\n\nSiento un nuevo aprecio por los detalles de mi señorío. ¿Quién hubiera imaginado que las cosas serían tan diferentes de [capital.GetNameNoTier]?"
  stewardship_duty_special.1286.a:0 "Este conocimiento será de gran utilidad."
- stewardship_duty_special.1286.b:0 "¡Soy como [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetLadyLord] de estas tierras!"
+ stewardship_duty_special.1286.b:0 "¡Soy como [ROOT.Char.GetLadyLord] de estas tierras!"
 
  # Vassal Mediation, by Petter Vilberg
  statecraft_mediation_unfair:0 "Esto se verá injusto"
@@ -371,7 +371,7 @@
  stewardship_duty_special.2019.a:0 "Se recaudarán los impuestos pendientes y se dividirán equitativamente."
  stewardship_duty_special.2019.b:0 "¡Os merecéis quedar como idiotas!"
  stewardship_duty_special.2019.c:0 "Ejecutad al jefe de la cantera y quemad la misma."
- stewardship_duty_special.2019.d:0 "¡Es un delito contra [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] y [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] se hará cargo!"
+ stewardship_duty_special.2019.d:0 "¡Es un delito contra [ROOT.Char.GetTitleAsNameNoTooltip] y [ROOT.Char.GetTitleAsNameNoTooltip] se hará cargo!"
  
  stewardship_duty_special.2021.t:0 "Resolución: el festín"
  stewardship_duty_special.2021.desc:0 "[vassal_1.GetTitledFirstName] y [vassal_2.GetTitledFirstName] tienen toda clase de agravios mutuos, grandes y pequeños.\n\n«¡[uninvited.GetFirstName] prohibió a sus hacendados asistir a mi festín de otoño!», se queja [host.GetFirstName].\n\n«Por supuesto. No deseo que mis vasallos se traigan pulgas a casa»."

@@ -26,7 +26,7 @@
  petition_liege.0101.t.faction_war:0 "$petition_liege_header$ 파벌 해체"
  petition_liege.0101.t.county_control:0 "$petition_liege_header$ 집달관 요청"
  petition_liege.0101.t.county_convert:0 "$petition_liege_header$ 사제 후원"
- petition_liege.0101.t.county_opinion:0 "$petition_liege_header$ 왕실의 방문"
+ petition_liege.0101.t.county_opinion:1 "$petition_liege_header$ 왕실의 방문"
  petition_liege.0101.t.fortify_border:0 "$petition_liege_header$ 국경 요새화"
  petition_liege.0101.t.title_liege:0 "$petition_liege_header$ 작위 주장자"
  petition_liege.0101.t.title_vassal:0 "$petition_liege_header$ 봉신 주장자"
@@ -176,7 +176,7 @@
 # Liege asks for something in return
  petition_liege.0205.t:0 "$petition_liege_header$ 역제안"
  petition_liege.0205.desc.intro:0 "$petition_liege.0201.desc.intro$"
- petition_liege.0205.desc.bridge:1 "\n\n내 연설을 들은 주군은 자리에서 조용히 내 탄원을 곱씹었다. \n\n잠시 후 주군이 입을 열었다. "그대 주장에 일리가 있다는 건 인정하오. 하나 그대를 돕는 조건으로 보답을 받아야겠소. 우리가 합의를 보는 편이 서로 득이 된다는 걸 그대는 이해하리라 믿소.""
+ petition_liege.0205.desc.bridge:2 "\n\n내 연설을 들은 주군은 자리에서 조용히 내 탄원을 곱씹었다. \n\n잠시 후 주군이 입을 열었다. "그대 주장에 일리가 있다는 건 인정하오. 하나 그대를 돕는 조건으로 보답을 받아야겠소. 우리가 합의를 보는 편이 서로 득이 된다는 걸 그대는 이해하리라 믿소.""
  petition_liege.0205.counter:0 "주군이시여, 설혹 제 설명에 부족한 부분이 있었습니까?"
  petition_liege.0205.a:0 "합리적인 제안이로군. 수용해야겠어."
  petition_liege.0205.b:0 "장난치는 건가? 안 그래도 한계까지 몰렸거늘!"
@@ -270,7 +270,7 @@
  petition_liege_county_convert_modifier_desc:0 "해당 영지의 소유주가 주군에게 진정한 신앙으로 개종하는 데 필요한 후원을 요청했습니다."
  petition_liege_county_convert_modifier_tt:0 "해당 변화 요소가 적용된 영지에서는 [convert_county|E]이 훨씬 빠르게 진행됨"
  # Opinion
- petition_liege_0101_county_opinion_effect_tt:0 "[county_opinion|E]이 낮은 모든 [petition_vassal.GetShortUINamePossessive] [holdings|E]"
+ petition_liege_0101_county_opinion_effect_tt:1 "[county_opinion|E]이 #negative_value [SCOPE.ScriptValue('petition_county_opinion_value')]#! 이하인 [petition_vassal.GetShortUINamePossessive] 모든 [holdings|E]"
  petition_liege_county_opinion_modifier:0 "왕실의 방문"
  petition_liege_county_opinion_modifier_desc:0 "해당 영지의 소유주가 주군에게 영지를 방문하여 민중에 위용을 과시해 달라고 요청했습니다."
  # Fortify

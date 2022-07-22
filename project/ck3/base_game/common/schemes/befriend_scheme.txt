@@ -5,16 +5,7 @@
 	icon = icon_scheme_personal
 	
 	allow = {
-		OR = {
-			has_perk = befriend_perk
-			AND = {
-				exists = dynasty
-				dynasty = {
-					has_dynasty_perk = fp1_adventure_legacy_5
-				}
-				target_is_vassal_or_below = scope:target
-			}
-		}
+		can_use_befriend_scheme_trigger = { TARGET = scope:target }
 		is_adult = yes
 		is_imprisoned = no
 		scope:target = {

@@ -78,8 +78,8 @@
  spymaster_task.0311.secret_bastard.i_am_real_father:1 "\n\n[bastard.GetTitledFirstName] no solo es bastard[bastard.Custom('ES_OA')] sino que… ¡yo soy su verdadero padre!"
  spymaster_task.0311.secret_bastard.i_am_not_father:1 "\n\n¡[bastard.GetTitledFirstName] no es [bastard.Custom('DaughterSon')] mí[bastard.Custom('ES_OA')], sino de [secret_holder.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)]!"
  spymaster_task.0311.secret_bastard.i_am_not_real_father:0 "\n\n¡[bastard.GetTitledFirstName] no es [bastard.Custom('DaughterSon')] mí[bastard.Custom('ES_OA')], sino de [actual_father.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)]!"
- spymaster_task.0311.secret_bastard.father_is_interesting:1 "\n\n¡[bastard.GetTitledFirstName] es en realidad [bastard.Custom('ES_ElLa')] bastard[bastard.Custom('ES_OA')] de [mother.GetTitledFirstName] y mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actual_father'))], [actual_father.GetTitledFirstName]!"
- spymaster_task.0311.secret_bastard:1 "\n\n¡[bastard.GetTitledFirstName] es en realidad [bastard.Custom('ES_ElLa')] bastard[bastard.Custom('ES_OA')] de [mother.GetTitledFirstName] y [actual_father.GetTitledFirstName]!"
+ spymaster_task.0311.secret_bastard.father_is_interesting:1 "\n\n¡[bastard.GetTitledFirstName] es en realidad bastard[bastard.Custom('ES_OA')] de [mother.GetTitledFirstName] y mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actual_father'))], [actual_father.GetTitledFirstName]!"
+ spymaster_task.0311.secret_bastard:1 "\n\n¡[bastard.GetTitledFirstName] es en realidad bastard[bastard.Custom('ES_OA')] de [mother.GetTitledFirstName] y [actual_father.GetTitledFirstName]!"
  spymaster_task.0350.a.related:0 "¿Cómo pudiste ocultarme esto, [mother.GetFirstNameNoTooltip]?"
  spymaster_task.0350.a:0 "¡Increíble!"
 
@@ -178,4 +178,4 @@
  spymaster_task.3007.a:0 "No sé nada de espías, [target_character.GetFirstNameNoTooltip]."
  spymaster_task.3007.b:0 "¡Se habrán perdido en el camino de vuelta!"
 
- spymaster_task.3009.end:0 "Cuando se le solicitó que los retirara, [councillor_liege.Custom('ES_ElLa')] [councillor_liege.GetTitleTierName] aceptó, pero tendré que estar alerta…"
+ spymaster_task.3009.end:0 "Cuando se le solicitó que los retirara, el/la [councillor_liege.GetTitleTierName] aceptó, pero tendré que estar alerta…"

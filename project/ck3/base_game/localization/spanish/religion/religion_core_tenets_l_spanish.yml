@@ -51,6 +51,14 @@
  gruesome_festivals_active_name:0 "capacidad para celebrar grandes sacrificios"
  doctrine_parameter_gruesome_festivals_active:0 "Capaz de celebrar grandes sacrificios una vez por década para súbditos de la misma [faith|lE] y [county_opinion|lE]"
 
+ tenet_volcanic_veneration_name:0 "Veneración volcánica"
+ tenet_volcanic_veneration_desc:0 "Pocas cosas hay más divinas que la tierra recién nacida que brota de las fosas ardientes de nuestro hogar. Nos pasamos la vida al borde del desastre, siempre a merced del [ROOT.Faith.PantheonTerm]."
+ tenet_cthonic_redoubts_name:0 "Reductos ctónicos"
+ tenet_cthonic_redoubts_desc:0 "No hay mejor refugio que las raíces de la Tierra, ni fortaleza más dura que sus espinas proyectadas, ni peregrinación más sagrada que sus senderos ocultos. Contemplamos la Creación desde estas elevadas cumbres y sentimos el verdadero peso de lo Divino."
+ doctrine_parameter_easier_to_convert_faith_in_mountains:0 "Velocidad de [convert_county|lE] en ([terrain|lE]) de montaña: #P +[EmptyScope.ScriptValue('easier_to_convert_faith_in_mountains_bonus_loc_control')|0] %#!"
+ doctrine_parameter_easier_to_convert_culture_in_same_faith_mountains:0 "Velocidad de [promote_culture|lE] en ([terrain|lE]) de montaña de la misma [faith|lE]: #P +[EmptyScope.ScriptValue('promote_culture_easier_to_convert_culture_in_same_faith_mountains_bonus_loc_control')|0] %#!"
+ doctrine_parameter_harder_to_convert_faith_away_in_mountains:0 "Velocidad de [convert_county|lE] hostil en ([terrain|lE]) de montaña: #P [EmptyScope.ScriptValue('harder_to_convert_faith_away_in_mountains_malus_loc_control')|0] %#!"
+
  tenet_consolamentum_name:1 "Endura"
  tenet_consolamentum_name_alternate:0 "Suicidio ritual"
  tenet_consolamentum_desc:0 "Cuando envejecemos o enfermamos, realizamos un ritual para limpiar nuestras almas de pecados. Una vez hecho, terminamos nuestras vidas rápida y definitivamente para que el pecado no tenga la oportunidad de volver a infectarnos."
@@ -96,6 +104,13 @@
 
  tenet_unrelenting_faith_name:0 "Fe constante"
  tenet_unrelenting_faith_desc:0 "Nuestras convicciones son fuertes y con placer lucharemos y moriremos por nuestra fe. No importa lo malas que sean las oportunidades en nuestra contra, no nos rendiremos."
+
+ tenet_rite_name:0 "Rito"
+ tenet_rite_desc:0 "Nuestras creencias no son muy diferentes de las de nuestra fe materna… ¿Por qué deberíamos discutir sobre los detalles cuando estamos de acuerdo en los principales puntos de la doctrina y, sobre todo, en la autoridad final de arbitraje?"
+ doctrine_parameter_maintains_head_of_faith_on_creation:0 "Al crearse, las nuevas [faiths|lE] mantienen al antiguo [head_of_faith|lE]"
+ doctrine_parameter_ecumenical_christians_keep_ecumenism:0 "[GetPlayer.Custom('GetRiteEcumenismFullOrEmpty')]"
+ GetRiteEcumenismFullOrEmpty_full:0 "Las [faiths|lE] cristianas con [GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName] la mantienen cuando son creadas"
+ GetRiteEcumenismFullOrEmpty_empty:0 ""
 
  #Muslim Tenets
  tenet_struggle_submission_name:0 "Lucha y sumisión"
@@ -202,6 +217,8 @@
 
  tenet_sanctity_of_nature_name:0 "Santidad de la naturaleza"
  tenet_sanctity_of_nature_desc:1 "La naturaleza ha sido creada por un ser divino y nosotros somos meros huéspedes. Debemos respetar y honrar todo árbol, animal e incluso la tierra misma."
+ # This parameter does nothing; it's just here to flag the tenet's nature silently so we can reference it without directly tagging the tenet.
+ doctrine_parameter_believes_in_harmony_with_nature_invisible:0 ""
 
  tenet_mystical_birthright_name:0 "Derechos de nacimiento prometedores"
  tenet_mystical_birthright_alternate:0 "Táltos Születés"
@@ -269,14 +286,24 @@
  #Instead, add these doctrine parameters to appropriate tenets (presently Christian Syncretism & Pastoral Isolation).
  doctrine_parameter_is_christian_faith_bilateral_loc_override:2 "Considera que las [faiths|lE] cristianas son [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] en vez de $hostility_evil_tooltippable$, y viceversa"
  doctrine_parameter_is_christian_faith_pastoral_isolation_loc_override:1 "Siempre considera las [faiths|lE] cristianas [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V], independientemente de las diferencias doctrinales"
+ doctrine_parameter_can_use_christian_artefacts:0 "Se pueden usar [artifacts|lE] cristianos con todos sus beneficios"
  doctrine_parameter_christian_syncretic_actor_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con [faiths|lE] cristianas"
  doctrine_parameter_opinion_of_christian_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_christian_syncretic_recipient_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con [faiths|lE] cuyo [core_tenet|lE] es el $tenet_christian_syncretism_name$"
  doctrine_parameter_opinion_of_christian_syncretic_actor_opinion_active:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_felicitous_doctrine:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_radical_doctrine:0 ""
+ doctrine_parameter_adoptionists_like_ecumenism:0 "Considera que otras [faiths|lE] cristianas con [GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName] son más desviadas que hostiles"
+ doctrine_parameter_adoptionists_are_unilateral_hostile:0 "Otras [faiths|lE] cristianas solo los consideran hostiles, aunque los $adoptionist_adherent_plural$ menos refinados tienen la consideración de malvados"
+ doctrine_parameter_adoptionists_are_unilateral_evil:0 "Otras [faiths|lE] cristianas los consideran malvados"
+ doctrine_parameter_adoptionists_are_mutual_evil:0 "Considera que todos los demás $christianity_religion_adherent_plural$ son malvados (y ellos lo piensan a su vez)"
+ doctrine_parameter_adoptionist_school_removed_on_reformation:0 "Los matices sutiles de esta escuela se pierden #EMP para siempre#! en la [reformation|E]"
+ doctrine_parameter_adoptionists_attractively_intuitive_theology:0 "[EmptyScope.ScriptValue('fp2_lyonese_monk_conversion_bonus_root_value')|=+%0] velocidad de conversión frente a cualquier otra [faith|lE] [GetReligionByKey('christianity_religion').GetAdjective]"
 
  tenet_islamic_syncretism_name:0 "Sincretismo islámico"
  tenet_islamic_syncretism_desc:0 "Las palabras del Profeta son indudablemente sabias y, independientemente de nuestras otras dudas, deberíamos tener en cuenta sus palabras y actos."
  doctrine_parameter_hostility_override_special_doctrine_is_islamic_faith:2 "Considera que las [faiths|lE] islámicas son [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] en vez de $hostility_evil_tooltippable$, y viceversa"
+ doctrine_parameter_can_use_islamic_artefacts:0 "Se pueden usar [artifacts|lE] islámicos con todos sus beneficios"
  doctrine_parameter_islamic_syncretic_actor_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con [faiths|lE] islámicas"
  doctrine_parameter_opinion_of_islamic_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_islamic_syncretic_recipient_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con [faiths|lE] cuyo [core_tenet|lE] es el $tenet_islamic_syncretism_name$"
@@ -285,6 +312,7 @@
  tenet_jewish_syncretism_name:0 "Sincretismo judío"
  tenet_jewish_syncretism_desc:0 "Aunque no estemos de acuerdo con sus afirmaciones sobre el pueblo elegido de Dios, la sabiduría de la Torá judía es innegable y estudiar el texto es siempre productivo."
  doctrine_parameter_hostility_override_special_doctrine_is_jewish_faith:2 "Considera que las [faiths|lE] judías son [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] en vez de $hostility_evil_tooltippable$, y viceversa"
+ doctrine_parameter_can_use_jewish_artefacts:0 "Se pueden usar [artifacts|lE] judíos con todos sus beneficios"
  doctrine_parameter_jewish_syncretic_actor_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con las [faiths|lE] judías"
  doctrine_parameter_opinion_of_jewish_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_jewish_syncretic_recipient_opinion_active:1 "Bonificación mutua de [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] de [opinion|E] con [faiths|lE] cuyo [core_tenet|lE] es el $tenet_jewish_syncretism_name$"
@@ -317,4 +345,12 @@
  tenet_natural_primitivism_desc:0 "La civilización es antinatural, un intento inútil y blasfemo del hombre de imponer orden en una creación inherentemente anárquica. Abracemos el naturismo y vivamos como [ROOT.Faith.PantheonTerm] nos quiso, salvajes y libres."
  doctrine_parameter_naked_adherents_active:0 "Los practicantes no llevan ropa"
  doctrine_parameter_natural_primitivism_law_cost_increase:0 "Coste de leyes: #N +50%#!"
+ doctrine_parameter_unlock_jizya_contract:0 "Desbloquea el [vassal_contract|lE] de yizia"
  
+ tenet_sacrificial_ceremonies_name:0 "Ceremonias de sacrificios"
+ tenet_sacrificial_ceremonies_desc:0 "El sacrificio humano, tanto voluntario como involuntario, nos acerca a lo divino. Es tradicional y virtuoso que alguien se ofrezca voluntario para sacrificarse en la ceremonia. Igualmente virtuoso es sacrificar a quienes han cometido crímenes imperdonables contra los dioses."
+ 
+ tenet_megaliths_name:0 "Construcciones megalíticas"
+ tenet_megaliths_desc:0 "El culto no debe confinarse solo a los templos, construcciones primitivas de los hombres que los distraen de las creaciones divinas que nos rodean a todos. Abrazamos la piedra y el aire libre disponiendo las rocas que el Creador nos dio, de forma que le complazca y nos acerque a la divinidad."
+ doctrine_parameter_can_build_megaliths:0 "Permite la construcción de megalitos en posesiones [Concept( 'temple', 'consagradas' )|E] y grandes megalitos en las capitales ducales."
+ province_is_of_a_megalith_faith_tt:0 "Este [county|lE] debe seguir una [faith|lE] que crea en la importancia de los megalitos."

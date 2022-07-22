@@ -45,9 +45,9 @@
 
  # Culture Clash, by Sean Hughes
  stewardship_domain.1073.t:0 "Столкновение культур"
- stewardship_domain.1073.desc:0 "Большая часть населения владения [target_county.GetNameNoTier] имеет #L [target_ruler.GetCulture.GetName|l]ое#! происхождение. Они гордятся своими традициями и недовольны тем, что им приходится служить чужаку вроде меня, в то время как мой сосед, [target_ruler.GetTitledFirstName], разделяет их культуру и историю."
- stewardship_domain.1073.a:0 "Показать им превосходство [me.GetCulture.GetNameNoTooltip|l]ой культуры!"
- stewardship_domain.1073.a.success:0 "Народ перенимает [me.GetCulture.GetNameNoTooltip|l]ие обычаи"
+ stewardship_domain.1073.desc:0 "Большая часть населения владения [target_county.GetNameNoTier] имеет #L [target_ruler.GetCulture.GetCollectiveNoun|l]ое#! происхождение. Они гордятся своими традициями и недовольны тем, что им приходится служить чужаку вроде меня, в то время как мой сосед, [target_ruler.GetTitledFirstName], разделяет их культуру и историю."
+ stewardship_domain.1073.a:0 "Показать им превосходство [me.GetCulture.GetCollectiveNounNoTooltip|l]ой культуры!"
+ stewardship_domain.1073.a.success:0 "Народ перенимает [me.GetCulture.GetCollectiveNounNoTooltip|l]ие обычаи"
  stewardship_domain.1073.a.failure:0 "Народ не желает приобщаться к цивилизации"
  stewardship_domain.1073.c:0 "Мне плевать, пусть хранят свои странные обычаи."
  stewardship_domain.1073.c.warning:0 "Скорость укрепления культуры: #N -75%#!"

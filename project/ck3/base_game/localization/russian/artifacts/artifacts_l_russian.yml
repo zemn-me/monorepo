@@ -16,9 +16,9 @@
  artifact_name_prefix:1 "[SCOPE.Custom('ArtifactPrefixGeneric')]"
  artifact_name_prefix_owner_name:0 "персонажа [owner.GetTitledFirstNamePossessiveNoTooltip]"
  artifact_name_prefix_inspiration_owner_name:0 "персонажа [inspiration_owner.GetTitledFirstNamePossessiveNoTooltip]"
- artifact_name_prefix_owner_culture:0 "[owner.GetCulture.GetNameNoTooltip|l]ого народа"
- artifact_name_prefix_location_culture:0 "[owner.MakeScope.Var('adventure_artifact_location').Title.GetHolder.GetCulture.GetNameNoTooltip|l]ого народа"
- artifact_name_prefix_owner_dynasty:0 "династии [owner.GetDynasty.GetName]"
+ artifact_name_prefix_owner_culture:0 "[owner.GetCulture.GetCollectiveNounNoTooltip|l]ого народа"
+ artifact_name_prefix_location_culture:0 "[owner.MakeScope.Var('adventure_artifact_location').Title.GetHolder.GetCulture.GetCollectiveNounNoTooltip|l]ого народа"
+ artifact_name_prefix_owner_dynasty:0 "династии [owner.GetDynasty.GetBaseName]"
  artifact_name_prefix_descriptor_high_quality:0 "великолепного качества"
  artifact_name_prefix_descriptor_medium_quality:0 "на века"
  artifact_name_prefix_descriptor_medium_alt_version_quality:0 "превосходного качества"
@@ -27,8 +27,8 @@
 # These are used for when we generate the title after the artifact is already created since we have to use different scopes then
  artifact_name_prefix_artifact_scope:0 "[Artifact.GetOwner.Custom('ArtifactPrefixGenericAfterCreation')|U]"
  artifact_name_prefix_artifact_scope_owner_name:0 "[Artifact.GetOwner.GetTitledFirstNamePossessiveNoTooltip]"
- artifact_name_prefix_artifact_scope_owner_culture:0 "[Artifact.GetOwner.GetCulture.GetNameNoTooltip|l]ого народа"
- artifact_name_prefix_artifact_scope_owner_dynasty:1 "[Artifact.GetOwner.GetDynasty.GetNameNoTooltip]"
+ artifact_name_prefix_artifact_scope_owner_culture:0 "[Artifact.GetOwner.GetCulture.GetCollectiveNounNoTooltip|l]ого народа"
+ artifact_name_prefix_artifact_scope_owner_dynasty:1 "[Artifact.GetOwner.GetDynasty.GetBaseNameNoTooltip]"
 
  placeholder:0 "$holderplace$"
  holder_place:0 "#D Заглушка#!"
@@ -50,20 +50,20 @@
  feature_blade_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_blade_metal_folded_iron:0 "$metal_folded_iron$"
  feature_blade_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_blade_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_blade_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_blade_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_blade_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_head_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_head_metal_folded_iron:0 "$metal_folded_iron$"
  feature_head_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_head_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_head_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_head_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_head_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_handle_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_handle_metal_folded_iron:0 "$metal_folded_iron$"
  feature_handle_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_handle_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_handle_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_handle_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_handle_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  # Precious/decorative metals and metal-based compounds
  metal_gold:0 "золота"
@@ -377,11 +377,11 @@
  feature_decoration_pattern_religious_symbol:0 "[Artifact.GetOwner.GetFaith.ReligiousSymbol]"
  feature_decoration_pattern_gibberish:0 "символы, значение которых ведает лишь их создатель,"
  feature_decoration_pattern_bodies:0 "корчащиеся от боли тела"
- feature_decoration_pattern_culture_symbol:0 "символы, связанные с [ROOT.Char.GetCulture.GetNameNoTooltip|l]ой культурой"
- feature_decoration_pattern_culture_style:0 "орнаменты и узоры, свойственные [ROOT.Char.GetCulture.GetNameNoTooltip|l]ому стилю"
- feature_decoration_pattern_shield:0 "герб дома [Artifact.GetOwner.GetHouse.GetName]"
+ feature_decoration_pattern_culture_symbol:0 "символы, связанные с [Artifact.GetOwner.GetCulture.GetNameNoTooltip|l]ой культурой"
+ feature_decoration_pattern_culture_style:0 "орнаменты и узоры, свойственные [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip|l]ому стилю"
+ feature_decoration_pattern_shield:0 "герб дома [Artifact.GetOwner.GetHouse.GetBaseName]"
  feature_decoration_pattern_dynasty_shield:0 "$feature_decoration_pattern_shield$"
- feature_decoration_pattern_dynasty_motifs:0 "элементы девиза и герба дома [Artifact.GetOwner.GetHouse.GetName]"
+ feature_decoration_pattern_dynasty_motifs:0 "элементы девиза и герба дома [Artifact.GetOwner.GetHouse.GetBaseName]"
  feature_decoration_pattern_beasts:0 "существа из мифов"
  feature_decoration_pattern_religion:0 "религиозные символы"
  feature_decoration_pattern_quotes:0 "вдохновляющие цитаты"
@@ -460,7 +460,7 @@
 
  # Daggers
  artifact_dagger_name:0 "Кинжал [owner.GetTitledFirstNamePossessiveNoTooltip]"
- artifact_dagger_description:1 "Кинжал из [newly_created_artifact.GetFeatureText( 'blade_metal' )], [SCOPE.Custom('ArtifactQuality')] работа. [newly_created_artifact.Custom('ArtifactDaggerDecoration')]"
+ artifact_dagger_description:1 "Кинжал из [newly_created_artifact.GetFeatureText( 'blade_metal' )], работа [SCOPE.Custom('ArtifactQuality')] качества. [newly_created_artifact.Custom('ArtifactDaggerDecoration')]"
  dagger_decoration_hilt_and_blade:0 "$sword_decoration_hilt_and_blade$"
  dagger_decoration_hilt:0 "$sword_decoration_hilt$"
  dagger_decoration_blade:0 "$sword_decoration_blade$"
@@ -468,7 +468,7 @@
 
  # Axe, Spear, Hammer, and Mace components (Heads, Shafts/Hafts)
  feature_head_decoration_etched_pattern:0 "выгравирован узор — [Artifact.GetFeatureText( 'decoration_pattern' )]"
- feature_head_decoration_religious_motifs:0 "выгравированы различные #L [Artifact.GetOwner.GetFaith.GetAdjective|l]ие#! мотивы"
+ feature_head_decoration_religious_motifs:0 "выгравированы различные #L [Artifact.GetOwner.GetFaith.GetName|l]ие#! мотивы"
  feature_shaft_decoration_painted_pattern:0 "нарисованы узоры, напоминающие [Artifact.GetFeatureText( 'decoration_pattern' )]"
  feature_shaft_decoration_inlay:0 "с инкрустацией из [Artifact.GetFeatureText( 'decoration_material_inlay_HSB' )]"
  feature_shaft_decoration_varnish:0 "с лаком, придающим насыщенный темный блеск"
@@ -519,8 +519,8 @@
  # Armor
  artifact_armor_name:0 "[SCOPE.Custom('ArtifactArmorArtifactName')]"
  artifact_armor_name_basic:1 "[newly_created_artifact.GetFeatureText( 'armor_property' )|U] [SCOPE.Custom('ArtifactArmorTypeLowercase')|l] $artifact_name_prefix$"
- artifact_armor_name_culture:0 "[ROOT.Char.GetCulture.GetNameNoTooltip]ий [SCOPE.Custom('ArtifactArmorTypeLowercase')|l]"
- artifact_armor_name_dynasty:1 "[SCOPE.Custom('ArtifactArmorTypeUppercase')|U] рода [ROOT.Char.GetDynasty.GetNameNoTooltip]"
+ artifact_armor_name_culture:0 "[ROOT.Char.GetCulture.GetCollectiveNounNoTooltip]ий [SCOPE.Custom('ArtifactArmorTypeLowercase')|l]"
+ artifact_armor_name_dynasty:1 "[SCOPE.Custom('ArtifactArmorTypeUppercase')|U] рода [ROOT.Char.GetDynasty.GetBaseNameNoTooltip]"
  artifact_armor_name_descriptor:1 "[newly_created_artifact.GetFeatureText( 'armor_property' )|U] [SCOPE.Custom('ArtifactArmorTypeUppercase')|l]"
 
  artifact_armor_mail_lowercase:0 "кольчужный доспех"
@@ -531,8 +531,8 @@
  artifact_armor_scale_uppercase:0 "Чешуйчатый доспех"
  artifact_armor_lamellar_lowercase:0 "ламеллярный доспех"
  artifact_armor_lamellar_uppercase:0 "Ламеллярный доспех"
- artifact_armor_laminar_lowercase:0 "пластинчатый доспех"
- artifact_armor_laminar_uppercase:0 "Пластинчатый доспех"
+ artifact_armor_laminar_lowercase:0 "ламинарный доспех"
+ artifact_armor_laminar_uppercase:0 "Ламинарный доспех"
  artifact_armor_brigandine_lowercase:1 "пластинчатый доспех"
  artifact_armor_brigandine_uppercase:1 "Пластинчатый доспех"
  artifact_armor_shield_lowercase:0 "щит"
@@ -642,17 +642,17 @@
 
  ## fund_inspiration.6001-6006 trinkets from your adventurer
  morin_khuur_ornament_name:0 "Морин хуур в форме лошади"
- morin_khuur_ornament_description:1 "Голова лошади, вырезанная из кости лошади, обычно устанавливается на гриф морин хуура. [owner.GetTitledFirstNameNoTooltip] [Select_CString(ROOT.Char.IsFemale, 'получила', 'получил' )] его из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
+ morin_khuur_ornament_description:1 "Голова лошади, вырезанная из кости лошади, обычно устанавливается на гриф морин хуура. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] его из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
  animal_ring_name:0 "Безвкусное кольцо с тигром"
  animal_ring_description:1 "Украшенное самоцветами и настолько цветастое, что вы скорее ослепите им своих придворных, а не поразите их чувством стиля. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] его из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посетила', 'посетил' )] [inspiration_owner.GetTitledFirstNameNoTooltip] в ходе своих приключений."
  ostrich_shell_necklace_name:0 "Ожерелье из скорлупы страусиных яиц"
- ostrich_shell_necklace_description:1 "Хрупкое украшение безупречно-белого цвета. [owner.GetTitledFirstNameNoTooltip] [Select_CString(ROOT.Char.IsFemale, 'получила', 'получил' )] его из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
+ ostrich_shell_necklace_description:1 "Хрупкое украшение безупречно-белого цвета. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] его из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
  pilgrimage_figurine_name:0 "Костяная фигура Святого Вардана"
- pilgrimage_figurine_description:1 "Фигура Вардана Мамиконяна, армянского военачальника, который отстоял право Армении исповедовать христианство в Аварайрской битве в 451 году. Его шлем украшен вставками из бронзы. [owner.GetTitledFirstNameNoTooltip] [Select_CString(ROOT.Char.IsFemale, 'получила', 'получил' )] эту фигуру из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
+ pilgrimage_figurine_description:1 "Фигура Вардана Мамиконяна, армянского военачальника, который отстоял право Армении исповедовать христианство в Аварайрской битве в 451 году. Его шлем украшен вставками из бронзы. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] эту фигуру из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
  saint_margaret_fingernails_name:0 "Ногти Святой Маргариты"
  saint_margaret_fingernails_description:1 "Святая Маргарита Антиохийская прославилась тем, что победила дракона, используя лишь каблуки своей обуви. Предположительно, эти старые безобразные ногти принадлежали ей. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] эту реликвию из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посетила', 'посетил' )] [inspiration_owner.GetTitledFirstNameNoTooltip] в ходе своих приключений."
  seahorse_brooch_name:0 "Золотая брошь с морским коньком"
- seahorse_brooch_description:1 "Брошь с изящным витым орнаментом под изображением коня с крыльями и рыбьим хвостом. [owner.GetTitledFirstNameNoTooltip] [Select_CString(ROOT.Char.IsFemale, 'получила', 'получил' )] ее из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
+ seahorse_brooch_description:1 "Брошь с изящным витым орнаментом под изображением коня с крыльями и рыбьим хвостом. [owner.GetTitledFirstNameNoTooltip] [Select_CString(owner.IsFemale, 'получила', 'получил' )] ее из далеких земель, которые [Select_CString(inspiration_owner.IsFemale, 'посещала', 'посещал' )] [inspiration_owner.GetTitledFirstNameNoTooltip]."
 
 
  #fund_inspiration.6500- trinkets from your adventurer
@@ -691,7 +691,7 @@
  edmund_head_description:0 "Эдмунд с рождения заявлял, что станет святым. Согласно легенде, он был королем Восточной Англии, который пожертвовал собой ради спасения своего народа от викингов."
  dhammapada_name:0 "Дхаммапада"
  dhammapada_description:1 "Собрание изречений Будды на свитках из пальмовых листьев."
- excalibur_name:0 "«Экскалибур»"
+ excalibur_name:0 "Экскалибур"
  excalibur_description:0 "Едва ли найдется в Британии правитель, который не утверждал бы, будто владеет настоящим Экскалибуром. На деньги от продажи экскалибуров устраивают войны. Остается лишь надеяться, что больше никто не похвалится вашим гостям таким же мечом."
  vinaya_pitaka_name:0 "Виная-питака"
  vinaya_pitaka_description:0 "В первой из трех частей Палийского канона содержатся правила и наставления для монахов и монахинь. "
@@ -807,8 +807,8 @@
  lover_keepsake_shell_description:1 "Памятный подарок, который [original_lover.GetTitledFirstName] [Select_CString(original_lover.IsFemale, 'подарила', 'подарил' )] дорогому человеку. [lover.GetTitledFirstNameNoTooltip] живет далеко, но этот дар будет всегда напоминать [lover.GetHerHim] об их первой встрече."
 
 ## christian_saint_bone pilgrim reward
- christian_saint_bone_name:0 "[saint_bone_owner.Custom('RandomSaintNamePossessive')] [saint_bone_owner.Custom('RandomSaintBone')]"
- christian_saint_bone_description:0 "Знаменитые останки [saint_bone_owner.GetFaith.GetReligion.GetAdjectiveNoTooltip|l]ого святого, которые [saint_bone_owner.GetNameNoTooltip] [Select_CString(saint_bone_owner.IsFemale, 'добыла', 'добыл' )] во время паломничества. [destination_title.GetNameNoTierNoTooltip] — святое место, и этот дар [saint_bone_owner.GetFaith.GetAdherentNamePluralNoTooltip|l] считают символом удачи и благочестия."
+ christian_saint_bone_name:0 "[saint_bone_owner.Custom('RandomSaintBone')|U] [saint_bone_owner.Custom('RandomSaintNamePossessive')]"
+ christian_saint_bone_description:0 "Знаменитые останки [saint_bone_owner.GetFaith.GetReligion.GetNameNoTooltip|l]ого святого, которые [saint_bone_owner.GetNameNoTooltip] [Select_CString(saint_bone_owner.IsFemale, 'добыла', 'добыл' )] во время паломничества. [destination_title.GetNameNoTierNoTooltip] — святое место, и этот дар [saint_bone_owner.GetFaith.GetAdherentNamePluralNoTooltip|l] считают символом удачи и благочестия."
 # bones
  bone_type_knuckle:0 "фаланга пальца"
  bone_type_shin:0 "Шин"
@@ -832,7 +832,7 @@
  translated_arabic_book_de_materia_medica_desc:0 "Иллюстрированный список пятитомника Диоскорида о применении различных растений в медицине, написанный в древней Александрии $translated_arabic_book_shared_desc$"
  translated_arabic_book_on_ascensions_name:0 "#italic О восхождениях#!"
  translated_arabic_book_on_ascensions_desc:0 "Список трактата Гипсикла о движении знаков зодиака по небу, написанный в древней Александрии $translated_arabic_book_shared_desc$"
- translated_arabic_book_elements_name:0 "#italic Элементы#!"
+ translated_arabic_book_elements_name:0 "#italic Начала#!"
  translated_arabic_book_elements_desc:0 "Список трактата Евклида в тринадцати томах о геометрии, логике и их доказательствах, написанный в древней Александрии $translated_arabic_book_shared_desc$"
  translated_arabic_book_on_the_soul_name:0 "#italic О душе#!"
  translated_arabic_book_on_the_soul_desc:0 "Список древнего психологического трактата Аристотеля в трех томах о природе души и ее наклонностей $translated_arabic_book_shared_desc$"
@@ -991,7 +991,7 @@
  artifact_dragvandil_name:0 "Драгвандил"
  artifact_dragvandil_description:0 "Говорят, этот меч некогда принадлежал Эгилю Скаллагримссону, фермеру, поэту и воину, известному по Саге об Эгиле."
  artifact_szczerbiec_name:0 "Щербец"
- artifact_szczerbiec_description:0 "Говорят, что этот меч королю Болеславу Храброму вручил ангел. Этим же мечом был нанесен удар по Золотым воротам Киева. Этот меч обладает большим символическим значением."
+ artifact_szczerbiec_description:1 "Говорят, что этот меч королю Болеславу Храброму вручил ангел. Этим же мечом был нанесен удар по Золотым воротам Киева. Этот меч обладает большим символическим значением."
  artifact_chinese_caligraphy_name:1 "Китайская каллиграфия"
  artifact_chinese_caligraphy_description:0 "Тонкий лист бумаги, покрытый странными, но прекрасными и четкими символами. Говорят, его привезли из далеких земель Китая на востоке."
  artifact_ruyi_name:0 "Жуи"
@@ -1049,8 +1049,8 @@
  st_davids_taper.desc:1 "Похоже, кто-то пытался жечь ее с обеих сторон."
  jira_stick:0 "Мраморный скипетр Джиры"
  jira_stick.desc:0 "Несмотря на частое использование, заостренный кончик всё равно внушает уважение."
- lucky_coin:0 "Счастливая [ROOT.Char.GetCulture.GetNameNoTooltip|l]ая монета"
- lucky_coin.desc:0 "[ROOT.Char.GetCulture.GetNameNoTooltip]ая монета, такие чеканит [ROOT.Char.GetCapitalLocation.GetNameNoTooltip].\n\nНекогда рифленая поверхность стала гладкой из-за частых касаний."
+ lucky_coin:0 "Счастливая [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip|l]ая монета"
+ lucky_coin.desc:0 "[ROOT.Char.GetCulture.GetCollectiveNounNoTooltip]ая монета, такие чеканит [ROOT.Char.GetCapitalLocation.GetNameNoTooltip].\n\nНекогда рифленая поверхность стала гладкой из-за частых касаний."
  lavender_jade_pendant:0 "Лавандовый нефритовый талисман"
  lavender_jade_pendant.desc:0 "Яркие пурпурные полосы вызывают изумление."
  #Rare
@@ -1064,3 +1064,7 @@
  easteregg_artifact_elisabeth_plush_description:0 "Лисье чучело Елизаветы — любимая игрушка, сопровождавшая свою владелицу на протяжении почти всей жизни. Часто видели, как Елизавета общалась с лисой, составляя сложные шифры для своего нанимателя. Чучело успокаивает и вдохновляет владельца уподобиться в хитроумии лисе."
 
  child_toy_template_tt:0 "Только [Concept( 'child', 'ребенок' )|E] может использовать этот [Concept( 'inventory_artifact', 'личный артефакт' )|E]"
+
+ # Blessed Junk
+ fp2_blessed_junk:0 "[ROOT.Char.Custom('TrinketLookAdjective')|U]ая фигурка — $blessed_artifact_modifier$"
+ fp2_blessed_junk_desc:0 "[ROOT.Char.Custom('TrinketLookAdverbFollowup')|U] [ROOT.Char.Custom('TrinketLookAdjective')|l]ый, но в остальном бесполезный артефакт. $blessed_artifact_modifier_desc$."

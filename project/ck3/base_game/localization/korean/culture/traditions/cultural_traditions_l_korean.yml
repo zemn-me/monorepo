@@ -760,7 +760,7 @@
  culture_in_farmlands_or_floodplains_terrain_count_desc:0 "[culture|E]가 농지 또는 범람원 [terrain|E]을 보유한 #V 5#!개 이상의 [Concept( 'counties', '영지' )|E]에 존재하지 않음"
  culture_in_plains_or_steppe_terrain_percentage_desc:0 "[culture|E]에 속한 [Concept( 'counties', '영지' )|E]의 #V 60%#!가 평야 [terrain|E], 초원 [terrain|E], 또는 [GetGeographicalRegion('world_steppe').GetName] [region|E] 내에 있지 않음"
  culture_in_steppe_desc:1 "해당 [culture|E]에 속한 [Concept( 'counties', '영지' )|E]의 #V 40%#! 이상이 [GetGeographicalRegion('world_steppe').GetName] [region|E] 내에 있어야 함"
- culture_on_coast_desc:0 "[culture|E]가 해안 Concept( 'counties', '영지' )|E]에 존재하지 않음"
+ culture_on_coast_desc:0 "[culture|E]가 해안 [Concept( 'counties', '영지' )|E]에 존재하지 않음"
  percentage_of_culture_on_coast_desc:0 "해당 [culture|E]에 속한 [Concept( 'counties', '영지' )|E]의 #V 50%#! 이상이 해안 지형이어야 함"
  culture_acceptance_trigger_desc:0 "#V [EmptyScope.ScriptValue('xenophilic_nr_of_cultures_value')|0]#!개의 다른 문화에 대한 [culture|E]의 [cultural_acceptance|E]이 #V [EmptyScope.ScriptValue('xenophilic_acceptance_value')|0]%#! 이상이 아님"
  culture_not_egalitarian:1 "[culture|E]가 $ethos_egalitarian_name$ [ethos|E]을 보유함"
@@ -786,6 +786,7 @@
  not_bellicose_or_stoic_desc:1 "[culture|E]가 $ethos_bellicose_name$ 또는 $ethos_stoic_name$ [ethos|E]을 보유하지 않음"
  not_bellicose_or_bureaucratic_desc:2 "[culture|E]가 $ethos_bellicose_name$ 또는 $ethos_bureaucratic_name$ [ethos|E]을 보유하지 않음"
  not_bellicose_or_spiritual_desc:1 "[culture|E]가 $ethos_bellicose_name$ 또는 $ethos_spiritual_name$ [ethos|E]을 보유하지 않음"
+ not_bellicose_or_courtly_desc:0 "[culture|E]가 $ethos_bellicose_name$ 또는 $ethos_courtly_name$ [ethos|E]을 보유하지 않음"
  not_stoic_or_bureaucratic_desc:1 "[culture|E]가 $ethos_stoic_name$ 또는 $ethos_bureaucratic_name$ [ethos|E]을 보유하지 않음"
  not_stoic_or_communal_desc:0 "[culture|E]가 $ethos_stoic_name$ 또는 $ethos_communal_name$ [ethos|E]을 보유하지 않음"
  not_stoic_or_spiritual_desc:0 "[culture|E]가 $ethos_stoic_name$ 또는 $ethos_spiritual_name$ [ethos|E]을 보유하지 않음"
@@ -824,6 +825,7 @@
 
  ## Egalitarian.
  not_egalitarian_stoic_or_bureaucratic_desc:1 "[culture|E]가 $ethos_egalitarian_name$, $ethos_stoic_name$, 또는 $ethos_bureaucratic_name$ [ethos|E]을 보유하고 있지 않음"
+ not_egalitarian_or_courtly_desc:0 "[culture|E]가 $ethos_egalitarian_name$ 또는 $ethos_courtly_name$ [ethos|E]을 보유하지 않음"
 
  ## Communal.
  not_communal_or_spiritual_desc:0 "[culture|E]가 공동체주의 또는 영성주의 [ethos|E]을 보유하고 있지 않음"
@@ -918,6 +920,8 @@
  lacks_development_02_innovation_desc:1 "[culture|E]가 #high $innovation_development_02$#! [innovation|E]을 발견하지 않음"
  lacks_baliffs_innovation_desc:0 "[culture|E]가 #high $innovation_baliffs$#! [innovation|E]을 발견하지 않음"
  culture_acceptance_cost_desc:0 "#V [EmptyScope.ScriptValue('xenophilic_nr_of_cultures_cost_value')|0]#!개의 다른 문화에 대한 [culture|E]의 [cultural_acceptance|E]이 #V [EmptyScope.ScriptValue('xenophilic_acceptance_cost_value')|0]%#! 이상이 아님"
+ lack_iberian_heritage_or_language_penalty_desc:0 "[culture|E]가 $heritage_iberian_name$ [heritage|E]을 보유하고 있지 않음. #EMP 또한#!, [culture_head|E]가 $language_iberian_name$ [language|E]를 구사하지 않음"
+ lack_martial_learning_or_chess_board_penalty_desc:0 "최소 [EmptyScope.ScriptValue('very_high_skill_rating')|0]의 [Concept( 'martial', '전투력' )|E]이나 최소 [EmptyScope.ScriptValue('very_high_skill_rating')|0]의 [Concept( 'learning', '학습력' )|E], 또는 [board_games|E]을 둘 수 있게 해주는 [artifact|E]을 보유하고 있지 않음"
 
  culture_head_lacks_storytelling_traits_desc:1 "[GetTrait('poet').GetName( GetNullCharacter )], [GetTrait('arrogant').GetName( GetNullCharacter )] 또는 [GetTrait('journaller').GetName( GetNullCharacter )] [traits|E]을 보유하지 않음"
  rulers_lacks_storytelling_traits_desc:0 "[culture|E]가 [GetTrait('poet').GetName( GetNullCharacter )] 또는 [GetTrait('arrogant').GetName( GetNullCharacter )], [GetTrait('journaller').GetName( GetNullCharacter )] [traits|E]을 가진 [rulers|E]를 #V 5#!명 이상 보유하지 않음"

@@ -63,7 +63,7 @@
  hold_court.7030.a:0 "Mes guerriers sont là pour nous défendre, arrêtez de vous plaindre !"
  hold_court.7030.b:0 "Vous devez rendre votre butin, [troublesome_warrior.GetFirstNameNoTooltip]."
  hold_court.7030.c:0 "J’offre une compensation pour vos pertes, [angry_vassal.GetTitledFirstNameNoTooltip]."
- hold_court.7030.d:0 "Si vous ne pouvez pas maintenir la paix, alors peut-être que ça devrait être ma terre."
+ hold_court.7030.d:0 "Si vous ne pouvez pas maintenir la paix, alors ça devrait être ma terre."
  hold_court_7030b_land_not_restored:0 "[hold_court_7030_county.GetName] continue de souffrir"
  hold_court_7030b_land_not_restored_tt:0 "L’argent que vous avez confisqué [troublesome_warrior.Custom('FR_au_Char_U_Pi')][troublesome_warrior.GetShortUINameNoTooltip] pour le donner [angry_vassal.Custom('FR_au_Char_U_Pi')][angry_vassal.GetShortUINameNoTooltip] n’a pas été utilisé pour restaurer le comté pillé."
  hold_court_7030b_land_restored:0 "[hold_court_7030_county.GetName] a retrouvé la prospérité"
@@ -99,7 +99,7 @@
 # Former soldier has lost his mind and challenges you to a duel, hold_court.7050
  hold_court.7050.title:0 "Les conséquences de la guerre"
  hold_court.7050.desc:1 "De l’agitation se produit au fond de ma Cour. Avant que quiconque ne puisse l’attraper, un[lunatic_soldier.Custom('FR_E')] [lunatic_soldier.GetWomanMan] se précipite vers mon trône et s’arrête devant moi, mais ne me témoigne aucune déférence. Son regard me dit tout ce que j’ai besoin de savoir : [lunatic_soldier.Custom('FR_IlElle')] n’est pas sain[lunatic_soldier.Custom('FR_E')] d’esprit.\n\n« Monstre ! Vous nous avez envoyés à la mort ! Pourquoi n’êtes-vous pas puni[ROOT.Char.Custom('FR_E')] ? »\n\nÀ travers ses divagations, j’ai compris qu’il avait été impliqué d’une manière ou d’une autre dans une de mes guerres, ce qui explique probablement sa détresse. Que va-t-on faire de cette créature perdue ?"
- hold_court.7050.a:1 "Demandez au médecin de la Cour [court_physician.GetNameNoTooltip] de s’occuper d[lunatic_soldier.Custom('FR_EluiElle')]."
+ hold_court.7050.a:1 "Demandez au médecin de la Cour [court_physician.GetFirstNameNoTooltip] de s’occuper d[lunatic_soldier.Custom('FR_EluiElle')]."
  hold_court.7050.b:0 "Donnez-lui la mort qu’[lunatic_soldier.Custom('FR_IlElle')] veut."
  hold_court.7050.b.tt:1 "Vous entrez immédiatement dans un [single_combat_fight|El] avec [lunatic_soldier.Custom('FR_le_Char')][lunatic_soldier.GetName]\n@warning_icon!#X C’est risqué et cela entraînera votre mort si vous perdez#!"
  hold_court.7050.b.victory:1 "Vous gagnez le duel"

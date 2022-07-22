@@ -1,30 +1,30 @@
 ﻿l_french:
- RELIGION_LOC_PLACEHOLDER:0 "#D PLACEHOLDER!#!"
+ RELIGION_LOC_PLACEHOLDER:0 "#D PLACEHOLDER !#!"
 
  FAITH_HOSTILITY_EVIL:1 "[faith_evil|L]"
  FAITH_HOSTILITY_HOSTILE:1 "[faith_hostile|L]"
  FAITH_HOSTILITY_ASTRAY:1 "[faith_astray|L]"
  FAITH_HOSTILITY_RIGHTEOUS:1 "[faith_righteous|L]"
 
- FAITH_DESCRIPTION:0 "#T [faith|E]: [FAITH.GetTextIcon][FAITH.GetNameNoTooltip]#!\n[religion|E]: [FAITH.GetReligion.GetName] #weak ([FAITH.GetReligion.GetFamily.GetName])#!\n[fervor|E]: #V [FAITH.GetFervor|0]%#!"
+ FAITH_DESCRIPTION:0 "#T [faith|E] : [FAITH.GetTextIcon][FAITH.GetNameNoTooltip]#!\n[religion|E]: [FAITH.GetReligion.GetName] #weak ([FAITH.GetReligion.GetFamily.GetName])#!\n[fervor|E]: #V [FAITH.GetFervor|0]%#!"
  FAITH_DESCRIPTION_HOSTILITY:0 "Je les considère comme $HOSTILITY_CATEGORY|V$"
  FAITH_AND_RELIGION:0 "[FAITH.GetTextIcon][FAITH.GetName] - [FAITH.GetReligion.GetName]"
- CHARACTERS_OF_FAITH_MODIFIER:0 "#T Tous les [FAITH.GetAdherentNamePlural]:#!"
- CHARACTERS_OF_FAITH_MODIFIER_SUBHEADER:0 "#S Tous les [FAITH.GetAdherentNamePlural]:#!"
- CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Tous les adhérents:#!"
- CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER_SUBHEADER:0 "#S Tous les adeptes:#!"
- CLERGY_OF_FAITH_MODIFIER:0 "#T Tout le [clergy|El] [FAITH.GetAdherentName]:#!"
- CLERGY_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Tout le [clergy|El] de la foi:#!"
- CHARACTERS_OF_FAITH_HOLY_SITE_MODIFIER:0 "#S Tous les [FAITH.GetAdherentNamePlural]:#!"
+ CHARACTERS_OF_FAITH_MODIFIER:0 "#T Tous les [FAITH.GetAdherentNamePlural] :#!"
+ CHARACTERS_OF_FAITH_MODIFIER_SUBHEADER:0 "#S Tous les [FAITH.GetAdherentNamePlural] :#!"
+ CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Tous les adhérents :#!"
+ CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER_SUBHEADER:0 "#S Tous les adeptes :#!"
+ CLERGY_OF_FAITH_MODIFIER:0 "#T Tout le [clergy|El] [FAITH.GetAdherentName] :#!"
+ CLERGY_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Tout le [clergy|El] de la foi :#!"
+ CHARACTERS_OF_FAITH_HOLY_SITE_MODIFIER:0 "#S Tous les [FAITH.GetAdherentNamePlural] :#!"
  DOCTRINE_ADD_VIRTUE:0 "$EFFECT_LIST_BULLET$Fait du trait « [TRAIT.GetName( GetPlayer )|l] » une [virtue|El]\n"
  DOCTRINE_ADD_SIN:0 "$EFFECT_LIST_BULLET$Fait du trait « [TRAIT.GetName( GetPlayer )|l] » un [sin|El]\n"
- DOCTRINE_ADD_VIRTUES:0 "#indent_newline:2 $EFFECT_LIST_BULLET$Fait des traits suivants des [virtues|El]: $TRAITS$\nAvec les effets suivants:#!\n"
- DOCTRINE_ADD_SINS:0 "#indent_newline:2 $EFFECT_LIST_BULLET$Fait des traits suivants des [sins|El]: $TRAITS$\nAvec les effets suivants:#!\n"
+ DOCTRINE_ADD_VIRTUES:0 "#indent_newline:2 $EFFECT_LIST_BULLET$Fait des traits suivants des [virtues|El] : $TRAITS$\nAvec les effets suivants :#!\n"
+ DOCTRINE_ADD_SINS:0 "#indent_newline:2 $EFFECT_LIST_BULLET$Fait des traits suivants des [sins|El] : $TRAITS$\nAvec les effets suivants :#!\n"
  DOCTRINE_VIRTUE_SIN_TRAIT_ENTRY:0 "[TRAIT.GetName( GetPlayer )]"
  REL_HEAD_TITLE_NAME:1 "[my_faith.ReligiousHeadTitleName|U] [my_faith.GetAdjectiveNoTooltip]"
  HOLY_SITE_UNDER_CONTROL:0 "#P Contrôlé par la foi [FAITH.GetAdjective]#!"
  HOLY_SITE_NOT_UNDER_CONTROL:0 "@warning_icon!#X Non contrôlé par la foi [FAITH.GetAdjective]#!"
- FAITH_WINDOW_HOLY_SITE_TOOLTIP:1 "#T [holy_site|E] de [HolySite.GetName]#!\n[GuiHolySiteItem.GetControlDesc]\nLorsque contrôlé par la foi [GuiHolySiteItem.GetFaith.GetAdjective], les effets suivants s’appliquent:\n[HolySite.GetEffectDesc( GuiHolySiteItem.GetFaith )]\n\n#I Cliquer pour voir [HolySite.GetBarony.GetName]#!"
+ FAITH_WINDOW_HOLY_SITE_TOOLTIP:1 "#T [holy_site|E] de [HolySite.GetName]#!\n[GuiHolySiteItem.GetControlDesc]\nLorsque contrôlé par la foi [GuiHolySiteItem.GetFaith.GetAdjective], les effets suivants s’appliquent :\n[HolySite.GetEffectDesc( GuiHolySiteItem.GetFaith )]\n\n#I Cliquer pour voir [HolySite.GetBarony.GetName]#!"
  FERVOR_GAIN_FROM_HOLY_SITES:0 "Des [holy_sites|El]"
  PIETY_HEAD_OF_FAITH:0 "[head_of_faith|E]"
  FERVOR_GAIN_SIZE_MODIFIER:0 "Taille de la [faith|El]"
@@ -43,6 +43,7 @@
  fervor_gain_almohads:0 "Avènement des Almohades"
  fervor_gain_holy_order_founded:0 "Nouvel ordre sacré fondé"
  fervor_gain_united_africa:0 "Afrique unie"
+ fervor_loss_ruler_converted:0 "Foi de dirigeant convertie"
  fervor_gain_avenged_battle_of_tours:0 "Bataille de Tours vengée"
  fervor_loss_avenged_battle_of_tours:0 "$fervor_gain_avenged_battle_of_tours$"
  fervor_gain_saoshyant:0 "Venue du Saoshyant"
@@ -73,11 +74,12 @@
  fervor_gain_virtous_priest:0 "Exaltation [virtuous_theocrat.GetFaith.GetAdjectiveNoTooltip]"
  fervor_gain_new_heresy:0 "Naissance de l’hérésie [heretic_faith.GetAdjectiveNoTooltip]"
  fervor_gain_defector_heresy:0 "$fervor_gain_new_heresy$"
- fervor_gain_theravada:0 "Réformes religieuses de la foi [theravada_faith.GetAdjective]"
+ fervor_gain_persecuted:0 "Galvanisé par la persécution"
+ fervor_gain_theravada:0 "Réformes religieuses [theravada_faith.GetAdjectiveNoTooltip]"
 
  FAITH_DOCTRINE_GENERAL_TOOLTIP:1 "[FaithDoctrine.GetEffectsDescription( GetPlayer.GetFaith )]\n\n[FaithDoctrine.GetDescription( GetPlayer.GetFaith )|F]"
 
- HOLY_SITE_CHARACTER_MODIFIER_NAME:0 "[holy_site|E]: $NAME$"
+ HOLY_SITE_CHARACTER_MODIFIER_NAME:0 "[holy_site|E] : $NAME$"
  RELIGION_TITLE_TEXT:0 "[Religion.GetNameNoTooltip] #weak ([Religion.GetFamily.GetName])#!"
  
  PIETY_TEXT_ICON:0 "@piety_icon!"
@@ -107,9 +109,11 @@
  faith_conversion_cost_other_religion_family:0 "Conversion en une autre [religious_family|El]"
  faith_conversion_cost_inside_religion_family:0 "Conversion en une autre [religion|El]"
  faith_conversion_cost_sacrificed_hof:0 "A sacrifié le [Concept('head_of_faith','chef')|E] d’une [faith|El] tolérée"
+ faith_conversion_cost_conversion_blocked_till_decision_taken:0 "Cette [faith|El] doit être déverrouillée via une [decision|El]"
+ faith_conversion_cost_conversion_blocked_till_nebulous_circumstances:0 "Cette [faith|El] doit être déverrouillée par des circonstances mystérieuses"
  faith_conversion_cost_unreformed_to_organized:0 "Conversion d’une [faith|El] [GetFaithDoctrine('unreformed_faith_doctrine').GetBaseName|l] en une foi [organized|El]"
 
- MINIMUM_FAITH_CONVERSION_PIETY_COST:0 "Coût minimum: $VALUE|V$[GetLocalPlayerPietyTextIcon]"
+ MINIMUM_FAITH_CONVERSION_PIETY_COST:0 "Coût minimum : $VALUE|V$[GetLocalPlayerPietyTextIcon]"
 
  faith_conversion_cost_fervor_difference:0 "Différence de [fervor|El]"
  faith_creation_cost_fervor_impact:0 "De la [fervor|El] actuelle"
@@ -117,7 +121,7 @@
  #Holy Sites: Christian
  holy_site_jerusalem_name:0 "Jérusalem"
  holy_site_jerusalem_effect_name:0 "Du [holy_site|El] #weak ($holy_site_jerusalem_name$)#!"
- holy_site_jerusalem_effects:0 "Vitesse de conversion comtale: #P +20%#!"
+ holy_site_jerusalem_effects:0 "Vitesse de conversion comtale : #P +20%#!"
  holy_site_rome_name:0 "Rome"
  holy_site_rome_effect_name:0 "Du [holy_site|El] #weak ($holy_site_rome_name$)#!"
  holy_site_cologne_name:0 "Cologne"
@@ -150,7 +154,7 @@
  holy_site_farz_effect_name:0 "Du [holy_site|El] #weak ($holy_site_farz_name$)#!"
  holy_site_kerala_name:0 "Kerala"
  holy_site_kerala_effect_name:0 "Du [holy_site|El] #weak ($holy_site_kerala_name$)#!"
- holy_site_kerala_effects:0 "Vitesse de conversion comtale: #P +50%#!"
+ holy_site_kerala_effects:0 "Vitesse de conversion comtale : #P +50%#!"
  holy_site_suenik_name:0 "Dwin"
  holy_site_suenik_effect_name:0 "Du [holy_site|El] #weak ($holy_site_suenik_name$)#!"
  holy_site_colonea_name:0 "Colonée"
@@ -159,16 +163,21 @@
  holy_site_armagh_effect_name:0 "Du [holy_site|El] #weak ($holy_site_armagh_name$)#!"
  holy_site_iona_name:0 "Iona"
  holy_site_iona_effect_name:0 "Du [holy_site|El] #weak ($holy_site_iona_name$)#!"
- holy_site_iona_effects:0 "Vitesse de conversion comtale dans les Îles Britanniques: #P +30%#!"
+ holy_site_iona_effects:0 "Vitesse de conversion comtale dans les Îles Britanniques : #P +30%#!"
  holy_site_visoki_name:0 "Visoki"
  holy_site_visoki_effect_name:0 "Du [holy_site|El] #weak ($holy_site_visoki_name$)#!"
- holy_site_visoki_effects:1 "Résistance des comtés à la conversion: #P +50%#!"
+ holy_site_visoki_effects:1 "Résistance des comtés à la conversion : #P +50%#!"
  holy_site_ragusa_name:0 "Raguse"
  holy_site_ragusa_effect_name:0 "Du [holy_site|El] #weak ($holy_site_ragusa_name$)#!"
  holy_site_esztergom_name:0 "Esztergom"
  holy_site_esztergom_effect_name:0 "Du [holy_site|El] #weak ($holy_site_esztergom_name$)#!"
  holy_site_albi_name:0 "Albi"
  holy_site_albi_effect_name:0 "Du [holy_site|El] #weak ($holy_site_albi_name$)#!"
+ holy_site_toledo_mozarabic_name:0 "Tolède"
+ holy_site_toledo_mozarabic_effect_name:0 "Du [holy_site|El] #weak ($holy_site_toledo_name$)#!"
+ holy_site_carthage_adoptionist_name:0 "Carthage"
+ holy_site_lyon_name:0 "Lyon"
+ holy_site_lyon_effect_name:0 "Du [holy_site|El] #weak ($holy_site_lyon_name$)#!"
 
  #Holy Sites: Islam
  holy_site_mecca_name:0 "Mecque"
@@ -177,7 +186,7 @@
  holy_site_medina_effect_name:0 "Du [holy_site|El] #weak ($holy_site_medina_name$)#!"
  holy_site_cordoba_name:0 "Cordoue"
  holy_site_cordoba_effect_name:0 "Du [holy_site|El] #weak ($holy_site_cordoba_name$)#!"
- holy_site_cordoba_effects:0 "Vitesse de conversion comtale: #P +20%#!"
+ holy_site_cordoba_effects:0 "Vitesse de conversion comtale : #P +20%#!"
  holy_site_sinai_name:0 "Sinaï"
  holy_site_sinai_effect_name:0 "Du [holy_site|El] #weak ($holy_site_sinai_name$)#!"
  holy_site_fes_name:0 "Fes"
@@ -377,7 +386,7 @@
  holy_site_perm_effect_name:0 "Du [holy_site|El] #weak ($holy_site_perm_name$)#!"
 
  #Holy Sites: Slavic
- holy_site_kiev_name:0 "Kiev"
+ holy_site_kiev_name:1 "Kiev"
  holy_site_kiev_effect_name:0 "Du [holy_site|El] #weak ($holy_site_kiev_name$)#!"
  holy_site_novgorod_name:0 "Novgorod"
  holy_site_novgorod_effect_name:0 "Du [holy_site|El] #weak ($holy_site_novgorod_name$)#!"
@@ -432,6 +441,14 @@
  holy_site_olkhon_name:0 "Olkhon"
  holy_site_olkhon_effect_name:0 "Du [holy_site|El] #weak ($holy_site_olkhon_name$)#!"
  
+ #Holy Sites: Basque
+ holy_site_viscaya_name:0 "$c_viscaya$"
+ holy_site_viscaya_effect_name:0 "Du [holy_site|El] #weak ($holy_site_viscaya_name$)#!"
+ holy_site_aneto_name:0 "Aneto"
+ holy_site_aneto_effect_name:0 "Du [holy_site|El] #weak ($holy_site_aneto_name$)#!"
+ holy_site_bordeaux_name:0 "$c_bordeaux$"
+ holy_site_bordeaux_effect_name:0 "Du [holy_site|El] #weak ($holy_site_bordeaux_name$)#!"
+
  #Holy Sites: Hellenic
  holy_site_athens_name:0 "Athènes"
  holy_site_athens_effect_name:0 "Du [holy_site|El] #weak ($holy_site_athens_name$)#!"
@@ -516,11 +533,19 @@
  holy_site_aswan_effect_name:0 "Du [holy_site|El] #weak ($holy_site_aswan_name$)#!"
  holy_site_wadi_el_milk_name:0 "Wadi el-Milk"
  holy_site_wadi_el_milk_effect_name:0 "Du [holy_site|El] #weak ($holy_site_wadi_el_milk_name$)#!"
- holy_site_wadi_el_milk_effects:0 "Résistance à la conversion comtale: #P +50%#!"
+ holy_site_wadi_el_milk_effects:0 "Résistance à la conversion comtale : #P +50%#!"
  holy_site_naqis_name:0 "Naqis"
  holy_site_naqis_effect_name:0 "Du [holy_site|El] #weak ($holy_site_naqis_name$)#!"
  holy_site_sennar_name:0 "$c_sennar$"
  holy_site_sennar_effect_name:0 "Du [holy_site|El] #weak ($holy_site_sennar_name$)#!"
+
+ #Holy Sites: Achamism
+ holy_site_tenerife_name:0 "Mont Teide" # [LocEditor:ForFutureBatchExport]
+ holy_site_tenerife_effect_name:0 "Du [holy_site|El] #weak ($holy_site_tenerife_name$)#!" # [LocEditor:ForFutureBatchExport]
+ holy_site_madiera_name:0 "Madère" # [LocEditor:ForFutureBatchExport]
+ holy_site_madiera_effect_name:0 "Du [holy_site|El] #weak ($holy_site_madiera_name$)#!" # [LocEditor:ForFutureBatchExport]
+ holy_site_cartagena_name:0 "Carthagène" # [LocEditor:ForFutureBatchExport]
+ holy_site_cartagena_effect_name:0 "Du [holy_site|El] #weak ($holy_site_cartagena_name$)#!" # [LocEditor:ForFutureBatchExport]
 
  #Holy Sites: Waaqism
  holy_site_danakil_name:0 "$c_danakil$"
@@ -547,9 +572,9 @@
  doctrine_parameter_marriage_event:0 "Les dirigeants obtiennent un bonus significatif lorsqu’ils se marient pour la première fois"
  doctrine_parameter_spouse_piety_loss:0 "Avoir trop peu de [spouses|El] engendre une pénalité en [piety|El]"
  doctrine_parameter_number_of_consorts:0 "Les dirigeants, si la [gender_law|El] le permet, peuvent avoir jusqu’à $VALUE|V0$ [concubines|El]"
- doctrine_parameter_male_dominated_law:0 "Permet les [laws|El] de succession: [GetLaw('male_only_law').GetName|l] et [GetLaw('male_preference_law').GetName|l]"
- doctrine_parameter_gender_equal_law:0 "Permet les [laws|El] de succession: [GetLaw('male_preference_law').GetName|l], [GetLaw('equal_law').GetName|l], et [GetLaw('female_preference_law').GetName|l]"
- doctrine_parameter_female_dominated_law:0 "Permet les [laws|El] de succession: [GetLaw('female_only_law').GetName|l] et [GetLaw('female_preference_law').GetName|l]"
+ doctrine_parameter_male_dominated_law:0 "Permet les [laws|El] de succession : [GetLaw('male_only_law').GetName|l] et [GetLaw('male_preference_law').GetName|l]"
+ doctrine_parameter_gender_equal_law:0 "Permet les [laws|El] de succession : [GetLaw('male_preference_law').GetName|l], [GetLaw('equal_law').GetName|l], et [GetLaw('female_preference_law').GetName|l]"
+ doctrine_parameter_female_dominated_law:0 "Permet les [laws|El] de succession : [GetLaw('female_only_law').GetName|l] et [GetLaw('female_preference_law').GetName|l]"
  doctrine_parameter_hostility_same_religion:2 "Les [faiths|El] de la même [religion|El] sont considérées comme [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl]#L #V s#!#!"
  doctrine_parameter_hostility_same_family:2 "Les [faiths|El] de la même [religious_family|El] sont considérées comme [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl]#L #V s#!#!"
  doctrine_parameter_hostility_others:2 "Les [faiths|El] des autres [religious_families|El] sont considérées comme [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl]#L #V s#!#!"
@@ -569,10 +594,13 @@
  doctrine_parameter_combatant_must_be_female:1 "Seules les femmes peuvent être [commander|El] ou [GetPlayer.Custom('KnightCulture')|l]"
  doctrine_parameter_fervor_per_holy_site:1 "$VALUE|+=2$ en [fervor|El] annuelle par [holy_site|El] détenu"
  doctrine_parameter_warmonger:0 "[at_peace_opinion|E] au lieu de [offensive_war_opinion|El]"
- doctrine_parameter_increased_dynasty_prestige_birth_mult:0 "[prestige|E] du [dynasty_prestige_level|El] pour les nouveau-nés: $VALUE|+=%0$"
- doctrine_parameter_increased_dynasty_prestige_marriage_mult:0 "[prestige|E] du [dynasty_prestige_level|El] lors du [marriage|El]: $VALUE|+=%0$"
- doctrine_parameter_increased_dynasty_prestige_long_reign_mult:0 "Bonus d’opinion maximal de [long_reign|El]: $VALUE|+=%0$"
- 
+ doctrine_parameter_increased_dynasty_prestige_birth_mult:0 "[prestige|E] du [dynasty_prestige_level|El] pour les nouveau-nés : $VALUE|+=%0$"
+ doctrine_parameter_increased_dynasty_prestige_marriage_mult:0 "[prestige|E] du [dynasty_prestige_level|El] lors du [marriage|El] : $VALUE|+=%0$"
+ doctrine_parameter_increased_dynasty_prestige_long_reign_mult:0 "Bonus d’opinion maximal de [long_reign|El] : $VALUE|+=%0$"
+ doctrine_parameter_combatant_must_be_female_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_must_be_female', '' )]"
+ doctrine_parameter_combatant_must_be_male_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_must_be_male', '' )]"
+ doctrine_parameter_combatant_can_be_either_gender_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_can_be_either_gender', '' )]"
+
  doctrine_homosexuality_name:1 "Homosexualité"
  doctrine_homosexuality_crime_name:1 "Criminelle"
  doctrine_homosexuality_crime_desc:0 "Les désirs pécheurs des sodomites sont un danger pour la société, ils seront donc punis et enfermés pour leurs transgressions."
@@ -632,11 +660,11 @@
  
  hostility_group_name:0 "Groupe d’hostilité"
  abrahamic_hostility_doctrine_name:0 "Abrahamique"
- abrahamic_hostility_doctrine_desc:0 "Les religions suivantes sont abrahamiques:\n[GetReligionFamily('rf_abrahamic').GetReligions]"
+ abrahamic_hostility_doctrine_desc:0 "Les religions suivantes sont abrahamiques :\n[GetReligionFamily('rf_abrahamic').GetReligions]"
  pagan_hostility_doctrine_name:0 "Païen"
- pagan_hostility_doctrine_desc:0 "Les religions suivantes sont païennes:\n[GetReligionFamily('rf_pagan').GetReligions]"
+ pagan_hostility_doctrine_desc:0 "Les religions suivantes sont païennes :\n[GetReligionFamily('rf_pagan').GetReligions]"
  eastern_hostility_doctrine_name:0 "Oriental"
- eastern_hostility_doctrine_desc:0 "Les religions suivantes sont orientales:\n[GetReligionFamily('rf_eastern').GetReligions]"
+ eastern_hostility_doctrine_desc:0 "Les religions suivantes sont orientales :\n[GetReligionFamily('rf_eastern').GetReligions]"
  
  special_tolerance_name:0 "Tolérance spéciale"
  special_doctrine_ecumenical_christian_name:0 "Œcuménisme"
@@ -750,7 +778,7 @@
  doctrine_parameter_hostility_towards_us_mult:0 "Les adeptes des autres [faiths|El] auront une pénalité d’opinion de $VALUE|%V0$"
  doctrine_pluralism_fundamentalist_name:0 "Fondamentaliste"
  doctrine_pluralism_fundamentalist_desc:0 "Notre foi est la seule vraie foi, notre parole la seule vraie parole. Tout écart par rapport à ce qui se trouve dans [ROOT.Faith.ReligiousText] est blasphématoire."
- doctrine_parameter_pluralism_fundamentalist_proselytization_bonus:0 "Vitesse de conversion comtale: #P +20%#!"
+ doctrine_parameter_pluralism_fundamentalist_proselytization_bonus:0 "Vitesse de conversion comtale : #P +20%#!"
  doctrine_parameter_pluralism_fundamentalist_revocation_tyranny_minimal:2 "Peut #P révoquer des titres terriens#! d’infidèles $hostility_hostile_tooltippable$#L #V s#!#! ou $hostility_evil_tooltippable$#L #V s#!#! sans encourir de [tyranny|El]"
  doctrine_parameter_pluralism_fundamentalist_faction_join_chance:1 "Les [counties|El] d’une autre [faith|El] sont #N plus susceptibles#! de rejoindre des [factions|El]"
  doctrine_parameter_pluralism_fundamentalist_vulnerable_to_heresy:0 "#N Augmentation du danger#! des hérésies en cas de faible [fervor|El]"
@@ -759,7 +787,7 @@
  doctrine_parameter_pluralism_righteous_revocation_tyranny_reduced:2 "Peut #P révoquer des titres terriens#! d’infidèles $hostility_evil_tooltippable$#L #V s#!#! sans encourir de [tyranny|El]"
  doctrine_pluralism_pluralistic_name:0 "Pluraliste"
  doctrine_pluralism_pluralistic_desc:0 "C’est une pure folie de dire qu’il n’y a qu’une seule bonne interprétation de la volonté divine et que toutes les autres opinions sont fausses. Chacun de nous a sa propre manière d’adorer [ROOT.Faith.HighGodName]."
- doctrine_parameter_pluralism_pluralistic_proselytization_penalty:0 "Vitesse de conversion comtale: #N -20%#!"
+ doctrine_parameter_pluralism_pluralistic_proselytization_penalty:0 "Vitesse de conversion comtale : #N -20%#!"
  doctrine_parameter_pluralism_pluralistic_faction_join_chance:1 "Les comtés d’une autre [faith|El] sont #P moins susceptibles#! de rejoindre des [factions|El]"
  doctrine_parameter_pluralism_pluralistic_resistant_to_heresy:0 "#P Réduction du danger#! des hérésies en cas de faible [fervor|El]"
  doctrine_parameter_pluralism_pluralistic_holy_wars_preserve_vassals:0 "Gagner une [holy_war|El] vassalise les [rulers|El] infidèles dans la zone cible au lieu de s’emparer de leurs terres"
@@ -822,6 +850,9 @@
  unreformed_faith_doctrine_desc:1 "Une foi non réformée n’a pas de clergé organisé et de doctrines canoniques établies. Différentes communautés peuvent théoriquement suivre la même foi tout en ayant des pratiques et des croyances religieuses extrêmement différentes."
  doctrine_parameter_unreformed:1 "Empêche les [rulers|El] tribaux de changer de type de [Concept( 'government', 'gouvernement' )|E]\n$EFFECT_LIST_BULLET$Donne le [unreformed_pagan_combat_bonus|El]"
  doctrine_parameter_hostility_override_tenet_unreformed_syncretism:2 "Les [faiths|El] non païennes avec le principe $tenet_unreformed_syncretism_name$ sont considérées comme [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl]#L #V s#!#! au lieu de $hostility_evil_tooltippable$#L #V s#!#!"
+
+ west_african_unreformed_faith_doctrine_name:0 "$unreformed_faith_doctrine_name$" # [LocEditor:ForFutureBatchExport]
+ west_african_unreformed_faith_doctrine_desc:0 "$unreformed_faith_doctrine_desc$" # [LocEditor:ForFutureBatchExport]
  
  heresy_hostility_name:0 "Opinion sur l’hérésie"
  heresy_hostility_doctrine_name:0 "Hérésie"
@@ -830,8 +861,16 @@
  divine_destiny_name:0 "Destin divin"
  divine_destiny_doctrine_name:0 "Justes dirigeants du monde"
  divine_destiny_doctrine_desc:0 "Nous sommes ceux qui inaugureront une ère de paix et de prospérité pour tous les peuples. Nous sommes les dirigeants légitimes du monde."
- doctrine_parameter_divine_destiny_holy_war_cost_reduction:0 "Coût en [piety|El] des guerres saintes: #P -50%#!"
+ doctrine_parameter_divine_destiny_holy_war_cost_reduction:0 "Coût en [piety|El] des guerres saintes : #P -50%#!"
  
+ adoptionist_school_name:0 "Credo adoptianiste"
+ special_doctrine_adoptionist_school_elipandic_doctrine_name:0 "École élipandienne"
+ special_doctrine_adoptionist_school_elipandic_doctrine_desc:0 "Préférant se concentrer sur les variations subtiles de la christologie, la variante élipandienne de l’adoptianisme souligne l’importance des différences précises par rapport au dogme trinitaire. Une distinction complexe bien faite est considérée comme infiniment meilleure qu’une explication simple mal justifiée."
+ special_doctrine_adoptionist_school_felicitous_doctrine_name:0 "École félicienne"
+ special_doctrine_adoptionist_school_felicitous_doctrine_desc:0 "Les adoptiens féliciens croient au pragmatisme plutôt qu’en la pureté, et comprennent qu’ils doivent travailler au sein de systèmes hostiles pour les miner. Un mensonge odieux au service d’une noble cause vaut mieux que mille vérités brutales."
+ special_doctrine_adoptionist_school_radical_doctrine_name:0 "École radicale"
+ special_doctrine_adoptionist_school_radical_doctrine_desc:0 "Les $adoptionist_adherent_plural$ radicaux n’admettent aucun autre Dieu que le Père, n’acceptent aucune divinité de chair mortelle, et ne reconnaissent pas de $christianity_religion_adherent_plural$ à part eux-mêmes. Recevoir le Christ sans être d’accord sur chaque lettre du canon, c’est reconnaître l’apostasie."
+
  special_doctrine_is_christian_faith_name:0 "Enseignements de Jésus"
  is_christian_faith_name:0 "$special_doctrine_is_christian_faith_name$"
  special_doctrine_is_christian_faith_desc:0 "Il y a des gens qui adhèrent aux enseignements de Jésus sans reconnaître sa divinité. Bien que ce positionnement soit blasphématoire, nous devrions toujours faire preuve de compassion envers ces âmes égarées, car elles pourraient un jour se convertir à la vraie foi."
@@ -856,6 +895,8 @@
  is_gnostic_faith_name:0 "$special_doctrine_is_gnostic_faith_name$"
  special_doctrine_is_gnostic_faith_desc:0 "$tenet_gnosticism_desc$"
 
+ doctrine_parameter_same_hof_hostility_override:0 "Considère les [faiths|El] qui ont le même [Concept('head_of_faith','chef')|E] comme [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl]#L #V s#!#!"
+
  TOO_FEW_SPOUSES_PIETY:0 "Trop peu de conjoints"
 
  CRUSADER_STATE_CRUSADER_TITLE_NAME:1 "[target_kingdom.GetNameNoTierNoTooltip] croisé"
@@ -873,8 +914,8 @@
 
  FAITH_CREATION_DUCHY_OR_HIGHER_FIRST_NOT:1 "Votre plus haut [title|El] #bold n’est pas#! au moins un duché"
  
- FAITH_HOSTILITY_OPINION:0 "$BULLET_WITH_TAB$ [opinion|E] de personnage: $VALUE|=+$"
- FAITH_HOSTILITY_COUNTY_OPINION:1 "$BULLET_WITH_TAB$ Pénalité maximale d’[county_opinion|El]: $VALUE|=+$"
+ FAITH_HOSTILITY_OPINION:0 "$BULLET_WITH_TAB$ [opinion|E] de personnage : $VALUE|=+$"
+ FAITH_HOSTILITY_COUNTY_OPINION:1 "$BULLET_WITH_TAB$ Pénalité maximale d’[county_opinion|El] : $VALUE|=+$"
  FAITH_HOSTILITY_NO_USURP:0 "$BULLET_WITH_TAB$ Ne peut pas [usurp|El] leurs [titles|El]"
  FAITH_HOSTILITY_GHW:0 "$BULLET_WITH_TAB$ Ne peut pas déclarer des [great_holy_wars|El] contre eux"
  FAITH_HOSTILITY_USURP:0 "$BULLET_WITH_TAB$ Peut [usurp|El] leurs [titles|El]"
@@ -942,7 +983,3 @@
  hostility_astray_tooltippable:0 "[GetHostilityLevelName( '(int32)1' )|Vl]"
  hostility_hostile_tooltippable:0 "[GetHostilityLevelName( '(int32)2' )|Vl]"
  hostility_evil_tooltippable:0 "[GetHostilityLevelName( '(int32)3' )|Vl]"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- holy_site_mosul_name:0 "$c_mosul$"
- holy_site_mosul_effect_name:0 "Du [holy_site|El] #weak ($holy_site_mosul_name$)#!"

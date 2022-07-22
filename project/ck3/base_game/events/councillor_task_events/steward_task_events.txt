@@ -1796,6 +1796,9 @@ steward_task.3301 = {
 			councillor_positive_event_opinion_trigger = yes
 			stewardship > mediocre_skill_rating
 		}
+		# different culture
+		exists = scope:county
+		NOT =  { scope:county.culture = root.culture }
 	}
 
 	weight_multiplier = {

@@ -42,7 +42,7 @@
  # # Sartorial Sting
  court.8020.t:0 "Une pique vestimentaire"
  court.8020.desc:0 "Occupé[ROOT.Char.Custom('FR_E')] par une autre journée à la Cour, j’entends le ton irrité de m[couture_spouse.Custom('FR_OnA')] [couture_spouse.GetWifeHusband] [couture_spouse.Custom('FR_le_Char_Pi')][couture_spouse.GetTitledFirstName]. [couture_guest.Custom('FR_le_Char_Pi')|U][couture_guest.GetTitledFirstName] semble profondément l’agacer.\n\nEn m’approchant de plus près, je vois mon invité[couture_guest.Custom('FR_E')] railler avec suffisance : « Ces prétendues modes sont une honte, elles ne conviendraient qu’aux domestiques et aux enfants de n’importe quelle Cour [couture_guest.GetCulture.GetNameNoTooltip] respectable. »\n\nM[couture_spouse.Custom('FR_OnA')] [couture_spouse.GetWifeHusband] rougit et s’écrie : « J’en ai assez de vous. Je me moque que vous soyez l’invité[couture_guest.Custom('FR_E')] [ROOT.Char.Custom('FR_du_Char_L')][ROOT.Char.GetTitleAsNameNoTooltip] ! », à la grande surprise de [couture_guest.GetFirstNameNoTooltip].\n\nMe tirant à part, [couture_spouse.GetFirstNameNoTooltip] gémit amèrement : « C[couture_guest.Custom('FR_EEtte')] [couture_guest.Custom('InsultNoun')] ingrat[couture_guest.Custom('FR_E')] ne cesse de se moquer de nous. Hier, mes domestiques l’ont entendu[couture_guest.Custom('FR_E')] dire que notre mode était ringarde ! »"
- court.8020.a:0 "Allons, il ne fait que nous taquiner."
+ court.8020.a:0 "Allons, [couture_guest.Custom('FR_IlElle')] ne fait que nous taquiner."
  court.8020.b:0 "Je suppose que nous pourrions faire un peu plus d’efforts..."
  court.8020.d:0 "Ringarde ? #EMP RINGARDE ?!#!"
 

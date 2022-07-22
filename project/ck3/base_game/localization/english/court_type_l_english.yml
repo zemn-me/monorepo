@@ -35,9 +35,9 @@
  court_scholarly:0 "Scholarly Court"
  court_scholarly_desc:1 "#low A Court is all about attracting cultivated minds and people of exceptional skill. \n\nCourtiers gain the [GetTrait('scholarly_court_1').GetName( GetNullCharacter )] traits.#!"
  court_scholarly_tooltip_desc:0 "Knowledge and diligent study is valued in a $court_scholarly$."
- court_tribal: "Tribal Court"
- court_tribal_desc: "#low At court, might makes right – and the halls shall be decked with loot and plunder! \n\nCourtiers gain the [GetTrait('warlike_court_1').GetName( GetNullCharacter )] traits.#!"
- court_tribal_tooltip_desc: "Martial prowess and resilience is valued in a $court_tribal$."
+ court_tribal:0 "Tribal Court"
+ court_tribal_desc:0 "#low At court, might makes right – and the halls shall be decked with loot and plunder! \n\nCourtiers gain the [GetTrait('warlike_court_1').GetName( GetNullCharacter )] traits.#!"
+ court_tribal_tooltip_desc:0 "Martial prowess and resilience is valued in a $court_tribal$."
 
  COURT_TYPE_GENERAL_TOOLTIP:0 "[CourtType.GetTooltipDesc]\n\n[CourtType.GetEffectDesc]"
  

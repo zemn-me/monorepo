@@ -5,6 +5,7 @@
  PORTRAIT_MODIFIER_headgear:1 "왕관"
  PORTRAIT_MODIFIER_custom_headgear:0 "모자"
  PORTRAIT_MODIFIER_props:0 "소품"
+ PORTRAIT_MODIFIER_custom_special:0 "얼굴 아이템"
  
  # PORTRAIT_MODIFIER_clothes_western_commoners: "Western commoner"
  # PORTRAIT_MODIFIER_clothes_western_low_nobles: "Western low noble"
@@ -307,6 +308,42 @@
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp1_war_nobility_01:0 "북해의 군주 갑옷"
 
 
+############################
+### FP2 - Fate of Iberia ###
+############################
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_common_01:1 "이베리아 기독교 평민 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_common_01:1 "이베리아 이슬람 평민 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_low:0 "이베리아 기독교 하층 귀족 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_high:0 "이베리아 기독교 고위 귀족 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_low:0 "이베리아 이슬람교 하층 귀족 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_high:0 "이베리아 이슬람교 고위 귀족 복장 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_low:0 "이베리아 기독교 하층 귀족 복장 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_high:0 "이베리아 기독교 고위 귀족 복장 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_low:0 "이베리아 이슬람교 하층 귀족 복장 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_high:0 "이베리아 이슬람교 고위 귀족 복장 2"
+
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_war_nobility_01:0 "이베리아 이슬람 갑옷"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_war_nobility_01:0 "이베리아 기독교 갑옷"
+
+
+### Female ###
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_common_01:1 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_common_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_common_01:1 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_common_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_01_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_01_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_01_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_01_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_02_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_02_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_02_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_02_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_high$"
+
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_war_nobility_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_war_nobility_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_war_nobility_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_war_nobility_01$"
+
+
 ##########################################
 ################ Headgear ################
 ##########################################
@@ -517,6 +554,59 @@
  PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp1_royalty_01:0 "노르드 고리관"
  PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp1_imperial_01:0 "바랑인 제국 왕관"
 
+###########
+### FP2 ###
+###########
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_common_01:1 "평민의 솜브레로"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_common_01_low:0 "카피예 머리 스카프"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_common_01_high:0 "귀족 카피예 머리 스카프"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_nobility_01_low:0 "자수 장식 코이프"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_nobility_01_high:0 "자수 장식 비단 코이프"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_nobility_01:1 "안달루시아 궁정 신하의 터번"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_high_nobility_01_low:0 "평민의 카피엘로"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_high_nobility_01_high:0 "귀족의 카피엘로"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_high_nobility_01:1 "무어인 터번과 타부슈"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_royalty_01:1 "산초 4세의 왕관"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_royalty_01:1 "사이드 왕관"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_war_nobility_01:1 "체르벨레라 투구"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_war_nobility_01:1 "안달루시아 장식 투구"
+
+### Female ###
+ 
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_common_01:1 "쐐기 모양 토카도"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_common_01:1 "안달루시아 머리 스카프"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_nobility_01_low:0 "주름 장식 필레"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_nobility_01_high:0 "귀족 주름 장식 필레"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_nobility_01:1 "머리 스카프와 보석 장식 머리끈"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_high_nobility_01:1 "길쭉한 주름 토카도"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_high_nobility_01_low:0 "안달루시아 머리 스카프와 리탐"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_high_nobility_01_high:0 "귀족 안달루시아 머리 스카프와 리탐"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_royalty_01:1 "도나의 왕관"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_royalty_01:1 "세이다의 왕실 왕관"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_war_nobility_01:1 "$PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_war_nobility_01$"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_war_nobility_01:1 "$PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_war_nobility_01$"
+
+###############
+### Special ###
+###############
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01:0 "안경"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_special_spectacles_01:0 "$PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01$"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_eye_patch_01:0 "외눈 안대"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_blindfold_01:0 "안대"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_face_mask_01:0 "얼굴 가면"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_head_bandage_01:0 "머리 붕대"
+
+### Female ###
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_spectacles_01:0 "안경"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_special_spectacles_01:0 "$PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01$"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_eye_patch_01:0 "외눈 안대"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_blindfold_01:0 "안대"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_face_mask_01:0 "얼굴 가면"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_head_bandage_01:0 "머리 붕대"
 
 ######################################
 ################ Hair ################
@@ -597,7 +687,7 @@
  PORTRAIT_MODIFIER_custom_hair_male_hair_fp1_08:0 "땋은 머리가 두 가닥인 장발"
  PORTRAIT_MODIFIER_custom_hair_male_hair_fp1_09:0 "한 가닥으로 길게 땋은 머리"
 
-### Female FP2 ###
+### Female FP1 ###
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_01:0 "땋은 옆머리"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_02:0 "엉망진창 땋은 머리"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_03:0 "돼지 꼬리"
@@ -605,6 +695,27 @@
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_05:0 "리본 달린 장발"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_06:0 "도적의 딸"
 
+### Male FP2 Hair ###
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_01:1 "보통 테두리 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_01:1 "보통 짧은 웨이브"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_02:1 "보통 흘러내린 머리"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_02:1 "긴 가운데 가르마 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_03:1 "낮은 단일 땋은 머리"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_03:1 "긴 산발"
+
+ ### Female FP2 Hair ###
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_01:1 "하녀의 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_01:2 "귀걸이 프레이밍 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_02:1 "가운데 가르마 긴 생머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_02:1 "머리끈을 두른 섬세한 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_03:1 "어깨 길이 웨이브"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_03:1 "보석 장식 네 갈래 땋은 머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_01_common:0 "프레이밍 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_02_common:0 "섬세한 곱슬머리"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_03_common:0 "네 갈래 땋은 머리"
+
+ ### Male Special ###
+ PORTRAIT_MODIFIER_custom_hair_male_hair_special_01:0 "레게머리"
 
 #######################################
 ################ Beard ################
@@ -647,6 +758,15 @@
  PORTRAIT_MODIFIER_custom_beards_male_beard_fp1_04:0 "중후한 땋은 수염"
  PORTRAIT_MODIFIER_custom_beards_male_beard_fp1_05:0 "반백의 바랑인"
 
+ ### FP2 Beards ###
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_01:1 "잘 관리한 짧은 턱수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_01:1 "우거진 수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_02:1 "이베리아 염소 수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_02:1 "학자의 수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_03:1 "카바예로의 수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_03:1 "갈래 수염"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_04:0 "늘어진 콧수염"
+
 #######################################
 ################ Cloak ################
 #######################################
@@ -669,7 +789,7 @@
  PORTRAIT_MODIFIER_custom_cloaks_female_furs_secular_fp1_nobility_01:0 "$PORTRAIT_MODIFIER_custom_cloaks_male_furs_secular_fp1_nobility_01$"
  PORTRAIT_MODIFIER_custom_cloaks_female_furs_secular_fp1_nobility_02:0 "$PORTRAIT_MODIFIER_custom_cloaks_male_furs_secular_fp1_nobility_02$"
  PORTRAIT_MODIFIER_custom_cloaks_female_furs_secular_fp1_nobility_03:0 "$PORTRAIT_MODIFIER_custom_cloaks_male_furs_secular_fp1_nobility_03$"
- PORTRAIT_MODIFIER_custom_cloaks_female_cloaks_secular_fp1_nobility_01:0 "스캴드메르 망토"
+ PORTRAIT_MODIFIER_custom_cloaks_female_cloaks_secular_fp1_nobility_01:0 "스칼드메르 망토"
  PORTRAIT_MODIFIER_custom_cloaks_female_cloaks_secular_fp1_nobility_02:0 "여족장 망토"
  PORTRAIT_MODIFIER_custom_cloaks_female_cloaks_secular_fp1_nobility_03:0 "노르드 어깨 덧대"
 
@@ -708,15 +828,15 @@
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_catholic_head_01:0 "교황 법복"
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_african_high_01_common:0 "아프리카 종교 의상"
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_african_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_african_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01_common:0 "노르드 종교 의상"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_northern_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_hindu_devoted_01_common:0 "동방 종교 법복 1"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_hindu_devoted_01_common:0 "동방 종교 법복"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_buddhist_high_01_common:0 "동방 종교 법복 2"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01_common:0 "사원 법복"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_zoroastrian_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_head_01_common:0 "코헨 가돌 법복"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_high_01_common:0 "유대교 종교 의상"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01:0 "노르드 종교 의상"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_northern_high_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01$"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_hindu_devoted_01:0 "동방 종교 법복 1"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_hindu_devoted_01:0 "동방 종교 법복"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_buddhist_high_01:0 "동방 종교 법복 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01:0 "사원 법복"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_zoroastrian_high_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01$"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_head_01:0 "코헨 가돌 법복"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_high_01:0 "유대교 종교 의상"
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_steppe_high_01_common:0 "초원 지대 종교 의상"
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_steppe_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_steppe_high_01_common$"
  

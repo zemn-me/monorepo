@@ -23,7 +23,7 @@
  middle_europe_decisions.0005.t:0 "El sueño de Carlomagno"
  middle_europe_decisions.0005.desc:0 "Europa está completa de nuevo. Todos los descendientes de los francos han sido congregados bajo una misma bandera y se mantienen unidos contra los infieles del oeste y los paganos del este.\n\nPor la gracia de [scoped_ruler.GetFaith.HighGodName], a mi familia se le ha concedido el privilegio de ostentar la corona de este imperio carolingio restaurado. Y, a diferencia de los que nos precedieron, no permitiremos que las disputas dinásticas desgarren este gran reino."
  middle_europe_decisions.0005.a:0 "¡Alabado sea [scoped_ruler.GetFaith.HighGodName]!"
- middle_europe_decisions.0006.desc:0 "[scoped_ruler.GetTitledFirstName] y sus ejércitos de francos han ocupado tantas tierras imperiales que ha empezado a proclamar que es [scoped_ruler.Custom('ES_ElLa')] auténtic[scoped_ruler.Custom('ES_OA')] hereder[scoped_ruler.Custom('ES_OA')] de Carlomagno y que el Sacro Imperio Romano no es más que una pálida imitación de la gloria carolingia.\n\nCon todas las provincias originales y gran parte de Europa Occidental bajo su control, resulta difícil que alguien niegue tal afirmación."
+ middle_europe_decisions.0006.desc:0 "[scoped_ruler.GetTitledFirstName] y sus ejércitos de francos han ocupado tantas tierras imperiales que ha empezado a proclamar que es el/la auténtic[scoped_ruler.Custom('ES_OA')] hereder[scoped_ruler.Custom('ES_OA')] de Carlomagno y que el Sacro Imperio Romano no es más que una pálida imitación de la gloria carolingia.\n\nCon todas las provincias originales y gran parte de Europa Occidental bajo su control, resulta difícil que alguien niegue tal afirmación."
  middle_europe_decisions.0006.a:0 "¡Cómo se atreve!"
  middle_europe_decisions.0006.b:0 "¿Y cuánto durará este imperio?"
 
@@ -71,7 +71,7 @@
  establish_the_electorate_of_saxony_decision_desc:0 "Las tierras orientales del interior han permanecido demasiado tiempo fuera del alcance del Imperio. Debemos reunir estos títulos en una nueva Sajonia para cimentar nuestro dominio sobre la región."
  establish_the_electorate_of_saxony_decision_tooltip:0 "$establish_the_electorate_of_saxony_decision_desc$"
  establish_the_electorate_of_saxony_decision_confirm:0 "¡Forjar una nueva Sajonia!"
- # [LocEditor:UntranslatedKey] `polabia_must_be_hre_culture_tt`
+ polabia_must_be_hre_culture_tt:0 "Un mínimo de 12 [counties|lE] en [GetGeographicalRegion('custom_polabia').GetName] son bien de tu cultura o de la cultura de tu [liege|lE]."
  polabia_held_or_nonexistent.tt:0 "$k_sorbia$ no existe o te pertenece."
  middle_europe_decision.0017.tt:0 "Como emperador, cuando se cree Sajonia, se entregará a un [vassal|lE] o [courtier|lE]."
  middle_europe_decisions.0017.t:0 "El Electorado de Sajonia"

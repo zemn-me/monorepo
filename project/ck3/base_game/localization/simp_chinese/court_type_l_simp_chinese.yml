@@ -35,9 +35,9 @@
  court_scholarly:0 "学识型宫廷"
  court_scholarly_desc:1 "#low 宫廷就是要吸引温文尔雅、拥有杰出能力的人才。\n\n廷臣会获得[GetTrait('scholarly_court_1').GetName( GetNullCharacter )]特质。#!"
  court_scholarly_tooltip_desc:0 "$court_scholarly$重视知识和勤奋学习。"
- court_tribal: "部落宫廷"
- court_tribal_desc: "#low 在宫廷里，强权就是正义——大厅里应该摆满战利品和掠夺物！\n\n廷臣获得[GetTrait('warlike_court_1').GetName( GetNullCharacter )]特质。#!"
- court_tribal_tooltip_desc:"在$court_tribal$中，勇武和坚韧被视为重要之事。"
+ court_tribal:0 "部落宫廷"
+ court_tribal_desc:0 "#low 宫廷中，强权即是真理——大厅理应装饰着战利品和财物！\n\n廷臣获得[GetTrait('warlike_court_1').GetName( GetNullCharacter )]特质。#!"
+ court_tribal_tooltip_desc:0 "军事勇武和韧性在$court_tribal$中都很重要。"
 
  COURT_TYPE_GENERAL_TOOLTIP:0 "[CourtType.GetTooltipDesc]\n\n[CourtType.GetEffectDesc]"
  

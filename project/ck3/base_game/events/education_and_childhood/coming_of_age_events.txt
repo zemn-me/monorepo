@@ -257,6 +257,13 @@ coming_of_age.0001 = {
 				has_focus = education_stewardship
 			}
 		}
+		NOR = {  # In case a character start with an education trait from the ruler designer
+			has_trait = education_learning
+			has_trait = education_diplomacy
+			has_trait = education_intrigue
+			has_trait = education_martial
+			has_trait = education_stewardship
+		}
 	}
 
 	immediate = {
@@ -396,6 +403,7 @@ coming_of_age.0001 = {
 				}
 			}
 		}
+		dynasty_perk_secondary_education_trait_effect = yes
 		post_education_bonuses_effect = yes
 		save_childhood_trait_as_variable_effect = yes
 		education_complete_notification_effect = yes
@@ -656,6 +664,13 @@ coming_of_age.0002 = {
 	
 	trigger = {
 		has_focus = education_stewardship
+		NOR = {  # In case a character start with an education trait from the ruler designer
+			has_trait = education_learning
+			has_trait = education_diplomacy
+			has_trait = education_intrigue
+			has_trait = education_martial
+			has_trait = education_stewardship
+		}
 	}
 
 	immediate = {
@@ -707,6 +722,7 @@ coming_of_age.0002 = {
 				rank = 4
 			}
 		}
+		dynasty_perk_secondary_education_trait_effect = yes
 		post_education_bonuses_effect = yes
 		save_childhood_trait_as_variable_effect = yes
 		education_complete_notification_effect = yes
@@ -996,6 +1012,13 @@ coming_of_age.0003 = {
 	
 	trigger = {
 		has_focus = education_martial
+		NOR = {  # In case a character start with an education trait from the ruler designer
+			has_trait = education_learning
+			has_trait = education_diplomacy
+			has_trait = education_intrigue
+			has_trait = education_martial
+			has_trait = education_stewardship
+		}
 	}
 
 	immediate = {
@@ -1235,6 +1258,7 @@ coming_of_age.0003 = {
 				}
 			}
 		}
+		dynasty_perk_secondary_education_trait_effect = yes
 		post_education_bonuses_effect = yes
 		save_childhood_trait_as_variable_effect = yes
 		education_complete_notification_effect = yes
@@ -1495,6 +1519,13 @@ coming_of_age.0004 = {
 	
 	trigger = {
 		has_focus = education_intrigue
+		NOR = {  # In case a character start with an education trait from the ruler designer
+			has_trait = education_learning
+			has_trait = education_diplomacy
+			has_trait = education_intrigue
+			has_trait = education_martial
+			has_trait = education_stewardship
+		}
 	}
 
 	immediate = {
@@ -1546,6 +1577,7 @@ coming_of_age.0004 = {
 				rank = 4
 			}
 		}
+		dynasty_perk_secondary_education_trait_effect = yes
 		post_education_bonuses_effect = yes
 		save_childhood_trait_as_variable_effect = yes
 		education_complete_notification_effect = yes
@@ -1805,6 +1837,13 @@ coming_of_age.0005 = {
 	
 	trigger = {
 		has_focus = education_diplomacy
+		NOR = {  # In case a character start with an education trait from the ruler designer
+			has_trait = education_learning
+			has_trait = education_diplomacy
+			has_trait = education_intrigue
+			has_trait = education_martial
+			has_trait = education_stewardship
+		}
 	}
 
 	immediate = {
@@ -1856,6 +1895,7 @@ coming_of_age.0005 = {
 				rank = 4
 			}
 		}
+		dynasty_perk_secondary_education_trait_effect = yes
 		post_education_bonuses_effect = yes
 		save_childhood_trait_as_variable_effect = yes
 		education_complete_notification_effect = yes

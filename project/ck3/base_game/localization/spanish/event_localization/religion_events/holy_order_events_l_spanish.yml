@@ -35,7 +35,7 @@
  holy_order.0202.b:0 "De un alma devota a otra… ¡Por favor, dadme más tiempo!"
  holy_order.0202.b.tt:0 "[recipient.GetTitledFirstNameNoTooltip] te dará cinco años más"
  holy_order.0202.c:0 "¿No podríamos encontrar una forma de pago alternativo…?"
- holy_order.0202.c.tt:0 "@warning_icon!#X [recipient.Custom('ES_ElLa')|U] [recipient.GetTitleAsNameNoTooltip] te pedirá algo#!"
+ holy_order.0202.c.tt:0 "@warning_icon!#X El/La [recipient.GetTitleAsNameNoTooltip] te pedirá algo#!"
  holy_order.0202.d:0 "¡El oro es más útil en mis manos!"
 
  holy_order.0203.desc:0 "Ni [ROOT.Char.GetFaith.HighGodNameAlternate] ni yo vemos con buenos ojos a quienes incumplen su palabra. Para corregir este desaire, nos arrendaréis [province.GetName] para que podamos seguir realizando la obra [ROOT.Char.GetFaith.HighGodNamePossessive]."
@@ -79,7 +79,7 @@
  holy_order.2004.b:0 "No. Aquí ya no hay sitio para ti."
 
  holy_order.2005.t:0 "Un regreso al hogar"
- holy_order.2005.desc:0 "La visita de [child.GetTitledFirstName] se alarga más de lo normal. Cuando mi [child.Custom('DaughterSon')] lleva días ocupando el gran salón atiborrándose de mi comida y molestando a mis sirvientes, menciono el asunto de su vuelta con la orden de [holy_order.GetName]. Desgraciadamente, su respuesta fue entusiasta.\n\n«¿No os habéis enterado, [ROOT.Char.Custom('MotherFather')]? ¡[grandmaster.Custom('ES_ElLa')|U] [grandmaster.GetTitledFirstName] ha tenido la generosidad de liberarme de mis deberes para con el [child.GetFaith.GetName]! He vuelto a casa al fin para servir a mi familia»."
+ holy_order.2005.desc:0 "La visita de [child.GetTitledFirstName] se alarga más de lo normal. Cuando mi [child.Custom('DaughterSon')] lleva días ocupando el gran salón atiborrándose de mi comida y molestando a mis sirvientes, menciono el asunto de su vuelta con la orden de [holy_order.GetName]. Desgraciadamente, su respuesta fue entusiasta.\n\n«¿No os habéis enterado, [ROOT.Char.Custom('MotherFather')]? ¡El/La [grandmaster.GetTitledFirstName] ha tenido la generosidad de liberarme de mis deberes para con el [child.GetFaith.GetName]! He vuelto a casa al fin para servir a mi familia»."
  holy_order.2005.a:0 "Así que has… ¿venido a quedarte?"
 
  holy_order.destroyed_title:0 "Orden militar disuelta"

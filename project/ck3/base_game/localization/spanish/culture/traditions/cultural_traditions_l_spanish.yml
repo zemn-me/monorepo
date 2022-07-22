@@ -606,7 +606,7 @@
  culture_parameter_no_limit_to_kingdom_level_holy_wars:0 "No hay límite al número de [holy_wars|lE] de nivel [kingdom|lE] que puede declarar cualquier [ruler|lE]"
  culture_parameter_cb_lower_piety_level_requirement:0 "Todos los [casus_belli|lE] que necesiten un [piety_level|lE] específico, necesitan uno menos"
 
- culture_parameter_just_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('just').GetName( GetNullCharacter ) tiene bonificaciones extra"
+ culture_parameter_just_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('just').GetName( GetNullCharacter )] tiene bonificaciones extra"
  culture_parameter_trade_port_building_bonuses:1 "La línea de [buildings|lE] #V $building_type_common_tradeport_01$#! generará impuestos extras en [counties|lE] de esta [culture|lE]"
  culture_parameter_peat_quarries_building_bonuses:0 "La línea de [buildings|lE] #V $building_type_peat_quarries_01$#! tiene bonificaciones extra en [counties|lE] de esta [culture|lE]"
  culture_parameter_trade_ports_give_control_growth:0 "La línea de [buildings|lE] #V $building_type_common_tradeport_01$#! aumentará el #V crecimiento del control#! en [counties|lE] de esta [culture|lE]"
@@ -620,7 +620,7 @@
  culture_parameter_number_of_spouses:0 "$doctrine_parameter_number_of_spouses$"
  culture_parameter_number_of_spouses_1:0 "$doctrine_parameter_number_of_spouses_1$"
  culture_parameter_number_of_consorts:0 "$doctrine_parameter_number_of_consorts$"
- culture_parameter_poet_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('poet').GetName( GetNullCharacter ) tiene bonificaciones extra"
+ culture_parameter_poet_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('poet').GetName( GetNullCharacter )] tiene bonificaciones extra"
  culture_parameter_poet_trait_more_common:0 "El [trait|lE] [GetTrait('poet').GetName( GetNullCharacter )] es más común"
  culture_parameter_piety_gain_on_building_complete_in_forest_taiga:1 "Se gana [piety|lE] [piety_i] al terminar [buildings|lE] en [holdings|lE] con [terrain|lE] de #V bosques#! o #V taiga#!"
  culture_parameter_piety_gain_on_building_complete_in_mountains:1 "Se gana [piety|lE] [piety_i] al terminar [buildings|lE] en [holdings|lE] con [terrain|lE] de #V montañas#! o #V montaña desértica#!"
@@ -632,7 +632,7 @@
  culture_parameter_less_likely_to_force_conversion:0 "Es menos probable que los [rulers|lE] exijan conversión a sus [vassals|lE]"
  culture_parameter_enables_unite_africa_decision:0 "Activa la [decision|lE] Unir África para culturas sin [heritage|lE] africana"
  culture_parameter_hunting_archery_building_bonuses:0 "La línea de [buildings|lE] #V $building_type_hunting_grounds_01$#! mejorará a los #V arqueros#!"
- culture_parameter_gregarious_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('gregarious').GetName( GetNullCharacter ) tiene bonificaciones extra"
+ culture_parameter_gregarious_trait_gives_bonuses:0 "El [trait|lE] [GetTrait('gregarious').GetName( GetNullCharacter )] tiene bonificaciones extra"
 
  culture_parameter_building_barracks_piety_bonuses:1 "Los personajes de esta [culture|lE] ganan [piety|lE] [piety_i] por la línea de [buildings|lE] #V $building_type_barracks_01$#!"
  culture_parameter_can_build_quarries_in_hills:2 "La línea de [buildings|lE] #V $building_type_quarries_01$#! se puede construir en [holdings|lE] de [terrain|lE] de colinas en [counties|lE] de esta [culture|lE]"
@@ -786,6 +786,7 @@
  not_bellicose_or_stoic_desc:1 "La [culture|lE] no tiene la [ethos|lE] belicosa o estoica"
  not_bellicose_or_bureaucratic_desc:2 "La [culture|lE] no tiene la [ethos|lE] belicosa o burocrática"
  not_bellicose_or_spiritual_desc:1 "La [culture|lE] no tiene la [ethos|lE] belicosa o espiritual"
+ not_bellicose_or_courtly_desc:0 "La [culture|lE] no tiene la [ethos|lE] belicosa o refinada"
  not_stoic_or_bureaucratic_desc:1 "La [culture|lE] no tiene la [ethos|lE] estoica o burocrática"
  not_stoic_or_communal_desc:0 "La [culture|lE] no tiene la [ethos|lE] estoica o comunal"
  not_stoic_or_spiritual_desc:0 "La [culture|lE] no tiene la [ethos|lE] estoica o espiritual"
@@ -824,6 +825,7 @@
 
  ## Egalitarian.
  not_egalitarian_stoic_or_bureaucratic_desc:1 "La [culture|lE] no tiene la [ethos|lE] igualitaria, estoica o burocrática"
+ not_egalitarian_or_courtly_desc:0 "La [culture|lE] no tiene la [ethos|lE] igualitaria o refinada"
 
  ## Communal.
  not_communal_or_spiritual_desc:0 "La [culture|lE] no tiene la [ethos|lE] comunal o espiritual"
@@ -918,6 +920,8 @@
  lacks_development_02_innovation_desc:1 "La [culture|lE] carece de la [innovation|lE] #high $innovation_development_02$#!"
  lacks_baliffs_innovation_desc:0 "La [culture|lE] carece de la [innovation|lE] #high $innovation_baliffs$#!"
  culture_acceptance_cost_desc:0 "La [culture|lE] no tiene al menos un #V [EmptyScope.ScriptValue('xenophilic_acceptance_cost_value')|0] %#! de [cultural_acceptance|lE] con #V [EmptyScope.ScriptValue('xenophilic_nr_of_cultures_cost_value')|0]#! otras culturas"
+ lack_iberian_heritage_or_language_penalty_desc:0 "La [culture|lE] carece de [heritage|lE] $heritage_iberian_name$ #EMP y#! el [culture_head|lE] no habla el [language|lE] $language_iberian_name$"
+ lack_martial_learning_or_chess_board_penalty_desc:0 "No tienes ni un mínimo de [EmptyScope.ScriptValue('very_high_skill_rating')|0] en [martial|lE], un mínimo de [EmptyScope.ScriptValue('very_high_skill_rating')|0] en [learning|lE], ni un [artifact|lE] que te permita jugar a [board_games|lE]"
 
  culture_head_lacks_storytelling_traits_desc:1 "No tienes los [traits|lE] [GetTrait('poet').GetName( GetNullCharacter )], [GetTrait('arrogant').GetName( GetNullCharacter )] ni [GetTrait('journaller').GetName( GetNullCharacter )]"
  rulers_lacks_storytelling_traits_desc:0 "La [culture|lE] no tiene #V 5#! [rulers|lE]con los [traits|lE] [GetTrait('poet').GetName( GetNullCharacter )], [GetTrait('arrogant').GetName( GetNullCharacter )] o [GetTrait('journaller').GetName( GetNullCharacter )]"
@@ -946,9 +950,9 @@
  culture_emergence_events.0002.desc:0 "Mi pueblo, los [ROOT.Char.GetCulture.GetCollectiveNoun], son un pueblo orgulloso y extendido.\n\nPor mucho que nos parezcamos, no puedo negar que mis súbditos han empezado a actuar distinto de los [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] de otros lugares. A veces hasta hay disputas entre [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] de visita y aquellos bajo mi gobierno.\n\nEstamos desarrollando una nueva identidad, somos [ROOT.Char.GetCulture.GetCollectiveNoun]… pero a la vez no lo somos. ¿Deberíamos animar esta evolución?"
  culture_emergence_events.0002.a:0 "¡Construiremos una identidad más nueva y fuerte!"
  culture_emergence_events.0002.b:0 "¡Somos [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] y nada más! ¡Todos en la misma línea!"
- new_divergent_culture_tt:0 "Aparecerá una [divergent_culture|lE] que comparta la mayoría de [traditions|lE y [culture_pillars|lE] con la [culture|lE] [ROOT.Char.GetCulture.GetName], pero con una nueva [ethos|lE] y que reemplaza algunas tradiciones."
+ new_divergent_culture_tt:0 "Aparecerá una [divergent_culture|lE] que comparta la mayoría de [traditions|lE] y [culture_pillars|lE] con la [culture|lE] [ROOT.Char.GetCulture.GetName], pero con una nueva [ethos|lE] y que reemplaza algunas tradiciones."
  culture_emergence_events.0002.new_divergence:0 "Tus tierras y tú adoptaréis una [divergent_culture|lE] recién aparecida"
- culture_emergence_events.vassals:0 "Los [vassals|lE pueden unirse o no"
+ culture_emergence_events.vassals:0 "Los [vassals|lE] pueden unirse o no"
  
  culture_emergence_events.0003.desc:0 "[culture_check_2.GetName]\n[duchy_title.GetName]\n[diverge_dummy.GetFullName]"
  
@@ -1054,12 +1058,12 @@
  culture_tradition_events.0101.a:0 "Por supuesto, noble [mendicant_mystic.GetFaith.PriestNeuter]. Ahora bajad el bastón, por favor."
  culture_tradition_events.0101.a.tt:0 "Todos los [children|lE] disponibles de la [court|lE] reciben un estímulo a su [education|lE] en curso"
  culture_tradition_events.0101.b:0 "¿No es demasiado para la obra [mendicant_mystic.GetFaith.HighGodNamePossessive]?"
- culture_tradition_events.0101.b.tt.success:0 "Ganas la discusión con [mendicant_mystic.Custom('ES_ElLa')] místic[mendicant_mystic.Custom('ES_OA')]"
- culture_tradition_events.0101.b.tt.failure:0 "[mendicant_mystic.Custom('ES_ElLa')|U] místic[mendicant_mystic.Custom('ES_OA')] abandona tu corte, asquead[mendicant_mystic.Custom('ES_OA')]"
+ culture_tradition_events.0101.b.tt.success:0 "Ganas la discusión con tal místic[mendicant_mystic.Custom('ES_OA')]"
+ culture_tradition_events.0101.b.tt.failure:0 "Tal místic[mendicant_mystic.Custom('ES_OA')] abandona tu corte, asquead[mendicant_mystic.Custom('ES_OA')]"
  culture_tradition_events.0101.c:0 "¡Largo, pordioser[mendicant_mystic.Custom('ES_OA')], que quiero cenar!"
 
  culture_tradition_events.0111.t:0 "Un discurso místico"
- culture_tradition_events.0111.desc:0 "«… por eso debemos someternos a la beneficencia de [mendicant_mystic.GetFaith.HighGodName] en cada momento de cada día de nuestras vidas. ¿Lo veis? ¿Continúo?»\n\nDos-horas-enteras.\n\nNi siquiera sé cómo [mendicant_mystic.GetName] consiguió llegar a mis aposentos, pero [mendicant_mystic.Custom('ES_ElLa')] [mendicant_mystic.GetFaith.PriestNeuter] me ha estado sermoneando sobre los puntos más delicados de la teología [mendicant_mystic.GetFaith.GetAdjective] durante #EMP dos-horas-enteras.#!\n\nPor fin, se calla y me mira en busca de una respuesta. Siento que un ojo me empieza a temblar."
+ culture_tradition_events.0111.desc:0 "«… por eso debemos someternos a la beneficencia de [mendicant_mystic.GetFaith.HighGodName] en cada momento de cada día de nuestras vidas. ¿Lo veis? ¿Continúo?»\n\nDos-horas-enteras.\n\nNi siquiera sé cómo [mendicant_mystic.GetName] consiguió llegar a mis aposentos, pero tal [mendicant_mystic.GetFaith.PriestNeuter] me ha estado sermoneando sobre los puntos más delicados de la teología [mendicant_mystic.GetFaith.GetAdjective] durante #EMP dos-horas-enteras.#!\n\nPor fin, se calla y me mira en busca de una respuesta. Siento que un ojo me empieza a temblar."
  culture_tradition_events.0111.a:0 "¡Qué palabras más inspiradoras!"
  culture_tradition_events.0111.b:0 "Habéis dado vuestra opinión, ahora daré la mía…"
  culture_tradition_events.0111.a.tt.success:0 "Desmontas los argumentos [mendicant_mystic.Custom('ES_DelDela')] místic[mendicant_mystic.Custom('ES_OA')]"
@@ -1067,7 +1071,7 @@
  culture_tradition_events.0111.c:0 "¿Quién ha dejado entrar a este vagabundo en mi hogar? ¡Guardias! ¡AUXILIO!"
 
  culture_tradition_events.0121.t:0 "El servicio de un místico"
- culture_tradition_events.0121.desc:0 "De forma casi inusual para su profesión, [mendicant_mystic.GetFirstName] ha esperado pacientemente en una antecámara hasta que pude darle audiencia.\n\n[mendicant_mystic.Custom('ES_ElLa')|U] [mendicant_mystic.GetFaith.PriestNeuter] parece nervios[mendicant_mystic.Custom('ES_OA')] cuando entro, pero aun así se lanza a un discurso apresurado en cuanto llego.\n\n«Mi [ROOT.Char.GetLadyLord], hace tiempo que soy mendicante, y aunque es el trabajo [mendicant_mystic.GetFaith.HighGodNamePossessive], es tan agotador para la mente y el cuerpo como nutritivo para el alma».\n\n«Si me acogéis, colgaré mi bastón de vagabund[mendicant_mystic.Custom('ES_OA')] y os serviré en la corte lo mejor que pueda. ¿M-me acogéis?»"
+ culture_tradition_events.0121.desc:0 "De forma casi inusual para su profesión, [mendicant_mystic.GetFirstName] ha esperado pacientemente en una antecámara hasta que pude darle audiencia.\n\nTal [mendicant_mystic.GetFaith.PriestNeuter] parece nervios[mendicant_mystic.Custom('ES_OA')] cuando entro, pero aun así se lanza a un discurso apresurado en cuanto llego.\n\n«Mi [ROOT.Char.GetLadyLord], hace tiempo que soy mendicante, y aunque es el trabajo [mendicant_mystic.GetFaith.HighGodNamePossessive], es tan agotador para la mente y el cuerpo como nutritivo para el alma».\n\n«Si me acogéis, colgaré mi bastón de vagabund[mendicant_mystic.Custom('ES_OA')] y os serviré en la corte lo mejor que pueda. ¿M-me acogéis?»"
  culture_tradition_events.0121.a:0 "Desde luego me vendría bien un[mendicant_mystic.Custom('ES_XA')] [mendicant_mystic.GetWomanMan] de vuestros talentos…"
  culture_tradition_events.0121.b:0 "Un[mendicant_mystic.Custom('ES_XA')] [mendicant_mystic.GetFaith.PriestNeuter] leal, decís…"
  culture_tradition_events.0121.c:0 "¿Con ese aspecto y con ese #EMP olor#! queréis vivir aquí?"
@@ -1076,8 +1080,8 @@
  # Big credit to the greatest NPC of 2011.
  culture_tradition_events.0131.desc:0 "«¿[ROOT.Char.GetTitleAsNameNoTooltip]? ¡No eres más que un gusano #EMP retorciéndose en la inmundicia#! de su propia corrupción! ¡Arrepiéntete de tus pecados a ojos de [mendicant_mystic.GetFaith.HighGodName]! ¡[mendicant_mystic.GetFaith.HighGodName] el Poderoso! ¡[mendicant_mystic.GetFaith.HighGodName] el Infalible! ¡[mendicant_mystic.GetFaith.HighGodName] el Intratable!»\n\nMaldita sea y que se vaya por ahí est[mendicant_mystic.Custom('ES_EA')] irritante [mendicant_mystic.GetFaith.PriestNeuter]. Ya era malo tener[mendicant_mystic.Custom('ES_LoLa')] en una esquina de la calle. Como #EMP un día#! descubra quién dejó entrar a [mendicant_mystic.GetFirstName] en mi #EMP casa#!, le arrancaré los ojos. Lleva aquí menos de diez minutos y ya tengo una migraña horrible.\n\nNo puedo aguantar mucho más la invectiva [mendicant_mystic.Custom('ES_DelDela')] mendig[mendicant_mystic.Custom('ES_OA')], tengo que actuar rápidamente cuando haya una pausa natural en su diatriba."
  culture_tradition_events.0131.a:0 "¿#EMP Mis#! pecados? Hablemos sobre #EMP vos#!."
- culture_tradition_events.0131.a.tt.success:0 "Demuestras que [mendicant_mystic.Custom('ES_ElLa')] místic[mendicant_mystic.Custom('ES_OA')] es un[mendicant_mystic.Custom('ES_XA')] hipócrita total"
- culture_tradition_events.0131.a.tt.failure:0 "[mendicant_mystic.Custom('ES_ElLa')] místic[mendicant_mystic.Custom('ES_OA')] te demuestra que eres un[ROOT.Char.Custom('ES_XA')] neci[ROOT.Char.Custom('ES_OA')]"
+ culture_tradition_events.0131.a.tt.success:0 "Demuestras que tal místic[mendicant_mystic.Custom('ES_OA')] es un[mendicant_mystic.Custom('ES_XA')] hipócrita total"
+ culture_tradition_events.0131.a.tt.failure:0 "Tal místic[mendicant_mystic.Custom('ES_OA')] te demuestra que eres un[ROOT.Char.Custom('ES_XA')] neci[ROOT.Char.Custom('ES_OA')]"
  culture_tradition_events.0131.b:0 "Me… ¿me enseñaréis a ser mejor?"
  culture_tradition_events.0131.b.tt.success:0 "El místic[mendicant_mystic.Custom('ES_OA')] te ayuda a superar tus defectos"
  culture_tradition_events.0131.b.tt.failure:0 "La angustia mental te domina"

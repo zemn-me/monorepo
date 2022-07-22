@@ -1166,7 +1166,6 @@ hunter_2 = {
 		lazy = @neg_compat_low
 	}
 }
-
 hunter_3 = {
 	lifestyle = yes
 	prowess = 6
@@ -4296,7 +4295,6 @@ hashishiyah = { # Substance Abuse (Hashish)
 	compatibility = {
 		temperate = @neg_compat_low
 	}
-
 }
 
 rakish = { # Brothel-frequenter.
@@ -7093,7 +7091,6 @@ scaly = {
 			desc = trait_scaly_character_desc
 		}
 	}
-
 }
 
 albino = {
@@ -7123,7 +7120,6 @@ albino = {
 			desc = trait_albino_character_desc
 		}
 	}
-
 }
 
 wheezing = { #asthma
@@ -7484,7 +7480,7 @@ devoted = {
 sayyid = {
 	fame = yes
 	
-	same_faith_opinion = 5
+	islam_religion_opinion = 5
 	
 	ruler_designer_cost = 25
 	
@@ -7527,7 +7523,7 @@ saoshyant = {
 	learning = 2
 	prowess = 2
 
-	same_faith_opinion = 5
+	zoroastrianism_religion_opinion = 10
 	
 	shown_in_ruler_designer = no
 	
@@ -7554,7 +7550,7 @@ saoshyant_descendant = {
 	}
 	learning = 1
 
-	same_faith_opinion = 5
+	zoroastrianism_religion_opinion = 5
 	
 	shown_in_ruler_designer = no
 	
@@ -7569,7 +7565,6 @@ saoshyant_descendant = {
 			desc = trait_saoshyant_descendant_character_desc
 		}
 	}
-
 }
 
 # Generic version of Saoshyant, Mahdi, Messiah, etc.
@@ -7620,7 +7615,6 @@ divine_blood = {
 			desc = trait_divine_blood_character_desc
 		}
 	}
-
 }
 
 # Generic version of Sayyid. Dynasties can now be marked with "Prophetic Blood", which will automatically grant this trait to all members.
@@ -8163,7 +8157,6 @@ wild_oat = {
 			desc = trait_wild_oat_character_desc
 		}
 	}
-
 }
 
 bastard_founder = {
@@ -8214,7 +8207,6 @@ twin = {
 			desc = trait_twin_character_desc
 		}
 	}
-
 }
 
 kinslayer_1 = {
@@ -8677,7 +8669,6 @@ viking = {
 	prowess = 3
 	monthly_prestige = 0.3
 	
-	#same_faith_opinion = 10
 	same_opinion = 5
 	
 	ruler_designer_cost = 25
@@ -9738,7 +9729,9 @@ chakravarti = {
 	learning = 2
 	martial = 1
 
-	same_faith_opinion = 20
+	jainism_religion_opinion = 20
+	hinduism_religion_opinion = 20
+	buddhism_religion_opinion = 20
 	
 	shown_in_ruler_designer = no
 	
@@ -10245,4 +10238,101 @@ scholarly_court_2 = {
 		warlike_court_1 = @neg_compat_low
 		warlike_court_2 = @neg_compat_low
 	}
+}
+
+# URBANISM DYNASTY PERK SPECIALS
+education_republican_knowledge_1 = {
+	minimum_age = 16
+	learning = 1
+	stewardship = 1
+	#education = yes
+
+	shown_in_ruler_designer = no
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOT = { exists = this }
+				}
+				desc = trait_education_republican_knowledge_1_desc
+			}
+			desc = trait_education_republican_knowledge_1_character_desc
+		}
+	}
+
+	group = education_republican_knowledge
+	level = 1
+}
+
+education_republican_knowledge_2 = {
+	minimum_age = 16
+	learning = 2
+	stewardship = 2
+	#education = yes
+
+	shown_in_ruler_designer = no
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOT = { exists = this }
+				}
+				desc = trait_education_republican_knowledge_2_desc
+			}
+			desc = trait_education_republican_knowledge_2_character_desc
+		}
+	}
+
+	group = education_republican_knowledge
+	level = 2
+}
+
+education_republican_knowledge_3 = {
+	minimum_age = 16
+	learning = 3
+	stewardship = 3
+	#education = yes
+
+	shown_in_ruler_designer = no
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOT = { exists = this }
+				}
+				desc = trait_education_republican_knowledge_3_desc
+			}
+			desc = trait_education_republican_knowledge_3_character_desc
+		}
+	}
+
+	group = education_republican_knowledge
+	level = 3
+}
+
+education_republican_knowledge_4 = {
+	minimum_age = 16
+	learning = 4
+	stewardship = 4
+	#education = yes
+
+	shown_in_ruler_designer = no
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOT = { exists = this }
+				}
+				desc = trait_education_republican_knowledge_4_desc
+			}
+			desc = trait_education_republican_knowledge_4_character_desc
+		}
+	}
+
+	group = education_republican_knowledge
+	level = 4
 }

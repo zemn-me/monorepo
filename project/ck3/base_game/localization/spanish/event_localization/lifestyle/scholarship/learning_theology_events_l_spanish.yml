@@ -11,7 +11,7 @@
 
 # Flatter your court chaplain with some bible verses, by Mathilda Bjarnehed
  learning_theology.2020.t:0 "El poder del/de la [ROOT.Char.GetFaith.ReligiousText|U]"
- learning_theology.2020.desc:0 "[court_chaplain.Custom('ES_ElLa')lU] [court_chaplain.GetCouncilTitle] [court_chaplain.GetFirstName] suele citar a menudo textos del/de la [ROOT.Char.GetFaith.ReligiousText] sobre las virtudes sagradas. Debo demostrar que he prestado atención citando un texto por mí mism[ROOT.Char.Custom('ES_OA')], preferiblemente uno que halague su personalidad.\n\nMe lo aprenderé de memoria y recitaré un párrafo sobre…"
+ learning_theology.2020.desc:0 "[court_chaplain.GetCouncilTitle] [court_chaplain.GetFirstName] suele citar a menudo textos del/de la [ROOT.Char.GetFaith.ReligiousText] sobre las virtudes sagradas. Debo demostrar que he prestado atención citando un texto por mí mism[ROOT.Char.Custom('ES_OA')], preferiblemente uno que halague su personalidad.\n\nMe lo aprenderé de memoria y recitaré un párrafo sobre…"
  learning_theology.2020.brave:0 "el valor."
  learning_theology.2020.just:0 "la justicia."
  learning_theology.2020.temperate:0 "la moderación."
@@ -36,7 +36,7 @@
  learning_theology.2020.neutral.desc:0 "[court_chaplain.GetCouncilTitle|U] [court_chaplain.GetFirstNameNoTooltip] está satisfech[court_chaplain.Custom('ES_OA')]"
  learning_theology.2020.failure.desc:0 "[court_chaplain.GetCouncilTitle|U] [court_chaplain.GetFirstNameNoTooltip] cree que me burlo de [court_chaplain.Custom('ES_ElElla')]"
 
- learning_theology.2021.desc:0 "Estoy segur[ROOT.Char.Custom('ES_OA')] de que [court_chaplain.Custom('ES_ElLa')] [court_chaplain.GetCouncilTitle] [court_chaplain.GetFirstName] dijo algo sobre las virtudes de ser [SCOPE.Custom('virtue_choice')]. No recuerdo sus palabras exactamente, así que me permití algo de creatividad.\n\nPor desgracia, [court_chaplain.Custom('ES_ElLa')] [court_chaplain.GetCouncilTitle] es bastante conservador[court_chaplain.Custom('ES_XA')]. «¿Qué estáis diciendo?», dice con sorna. «¡Esas no son las palabras de [ROOT.Char.GetFaith.HighGodName]!»"
+ learning_theology.2021.desc:0 "Estoy segur[ROOT.Char.Custom('ES_OA')] de que [court_chaplain.GetCouncilTitle] [court_chaplain.GetFirstName] dijo algo sobre las virtudes de ser [SCOPE.Custom('virtue_choice')]. No recuerdo sus palabras exactamente, así que me permití algo de creatividad.\n\nPor desgracia, [court_chaplain.GetCouncilTitle] es bastante conservador[court_chaplain.Custom('ES_XA')]. «¿Qué estáis diciendo?», dice con sorna. «¡Esas no son las palabras de [ROOT.Char.GetFaith.HighGodName]!»"
  learning_theology.2021.a:0 "A lo mejor debería leer el/la [ROOT.Char.GetFaith.ReligiousText] más a menudo…"
 
  learning_theology.3002.t:0 "La edad del mundo"
@@ -172,7 +172,7 @@
  learning_theology.3055.b:0 "A lo mejor la interpretación no es lo mío…"
 
  learning_theology.3054.a.tt:0 "Intentarás superar en ingenio a [passion_playwright.GetName] usando tu [diplomacy_skill|l]."
- learning_theology.3054.b.tt:0 "[family_actor.GetName] intentará superar en ingenio a [passion_playwright.GetName] usando tu [diplomacy_skill|l]]."
+ learning_theology.3054.b.tt:0 "[family_actor.GetName] intentará superar en ingenio a [passion_playwright.GetName] usando tu [diplomacy_skill|l]."
  learning_theology.3054.c.tt:0 "[random_actor.GetName] intentará superar en ingenio a [passion_playwright.GetName] usando tu [diplomacy_skill|l]."
 
 # Find old text, by Linnéa Thimrén & Flavio Verna
@@ -200,14 +200,14 @@
  learning_theology_special.1002.b.desc:0 "No fue fácil convencer primero [vassal_pope.Custom('ES_AlAla')] [vassal_pope.GetTitledFirstName] de la autenticidad del texto y luego a los otros representantes principales de la fe [ROOT.Char.GetFaith.GetAdjective] por debajo de [vassal_pope.Custom('ES_ElElla')], pero me impuse gracias a mi pasión y a conocimiento de temas teológicos.\n\nAlgunos representantes notables de nuestro clero aún se mofan de este cambio insólito en nuestras doctrinas, pero, gracias a mi elocuencia, la mayoría de los teócratas influyentes han quedado convencidos de su legitimidad."
  learning_theology_special.1002.a:0 "¡Es obvio que [ROOT.Char.GetFaith.HighGodName] en persona me llevó a este libro!"
 
- learning_theology_special.1003.a.desc:0 "En su inmensa sabiduría, [player_pope.GetTitledFirstName] descubrió un texto religioso antiguo que cambia significativamente el dogma [ROOT.Char.GetFaith.GetAdherentName].\n\nTras debatir sus hallazgos con miembros notables del clero, [player_pope.Custom('ES_ElLa')] [player_pope.GetTitleTierName] ha decidido integrar los contenidos del libro en la doctrina oficial de la fe."
- learning_theology_special.1003.b.desc:0 "Tras una laboriosa búsqueda y horas interminables de estudios teológicos, [pope_liege.GetTitledFirstName] descubrió un texto religioso antiguo que cambia significativamente el dogma [ROOT.Char.GetFaith.GetAdherentName].\n\nTras presentar sus hallazgos ante [vassal_pope.GetTitledFirstName], [vassal_pope.Custom('ES_ElLa')] [vassal_pope.GetTitleTierName] ha decidido integrar los contenidos del libro en la doctrina oficial de la fe."
+ learning_theology_special.1003.a.desc:0 "En su inmensa sabiduría, [player_pope.GetTitledFirstName] descubrió un texto religioso antiguo que cambia significativamente el dogma [ROOT.Char.GetFaith.GetAdherentName].\n\nTras debatir sus hallazgos con miembros notables del clero, [player_pope.GetTitleTierName] ha decidido integrar los contenidos del libro en la doctrina oficial de la fe."
+ learning_theology_special.1003.b.desc:0 "Tras una laboriosa búsqueda y horas interminables de estudios teológicos, [pope_liege.GetTitledFirstName] descubrió un texto religioso antiguo que cambia significativamente el dogma [ROOT.Char.GetFaith.GetAdherentName].\n\nTras presentar sus hallazgos ante [vassal_pope.GetTitledFirstName], [vassal_pope.GetTitleTierName] ha decidido integrar los contenidos del libro en la doctrina oficial de la fe."
  learning_theology_special.1003.a:0 "¿Y qué significa esto para el resto de nosotros?"
 
 # Learned scholar come to your court, by Linnéa Thimrén
  learning_theology_special.1101.t:0 "Comentarios"
- learning_theology_special.1101.desc:0 "«Las bendiciones sean con vos, mi [ROOT.Char.GetLadyLord]. Me llamo [scholar.GetTitledFirstName]». [scholar.Custom('ES_ElLa')|U] rabin[scholar.Custom('ES_OA')|U] que tengo delante hace una reverencia respetuosa.\n\n«He dedicado mi vida a estudiar y escribir comentarios sobre la Tanaj y el Talmud. Tal vez mis escritos y mi orientación os sean de utilidad en vuestros propios estudios de la [ROOT.Char.GetFaith.ReligiousText]»."
- learning_theology_special.1101.desc.fallback:0 "«Saludos, mi [ROOT.Char.GetLadyLord]. Me llamo [scholar.GetTitledFirstName]». [scholar.Custom('ES_ElLa')|U] sacerdo[scholar.Custom('ES_TeTisa')] que tengo delante hace una reverencia respetuosa.\n\n«He dedicado mi vida a estudiar y escribir el/la [ROOT.Char.GetFaith.ReligiousText]. Tal vez mis escritos y mi orientación os sean de utilidad en vuestros propios estudios»."
+ learning_theology_special.1101.desc:0 "«Las bendiciones sean con vos, mi [ROOT.Char.GetLadyLord]. Me llamo [scholar.GetTitledFirstName]». El/La rabin[scholar.Custom('ES_OA')|U] que tengo delante hace una reverencia respetuosa.\n\n«He dedicado mi vida a estudiar y escribir comentarios sobre la Tanaj y el Talmud. Tal vez mis escritos y mi orientación os sean de utilidad en vuestros propios estudios de la [ROOT.Char.GetFaith.ReligiousText]»."
+ learning_theology_special.1101.desc.fallback:0 "«Saludos, mi [ROOT.Char.GetLadyLord]. Me llamo [scholar.GetTitledFirstName]». El/La sacerdo[scholar.Custom('ES_TeTisa')] que tengo delante hace una reverencia respetuosa.\n\n«He dedicado mi vida a estudiar y escribir el/la [ROOT.Char.GetFaith.ReligiousText]. Tal vez mis escritos y mi orientación os sean de utilidad en vuestros propios estudios»."
  learning_theology_special.1101.a:0 "Escribamos comentarios sobre el/la [ROOT.Char.GetFaith.ReligiousText]!"
  learning_theology_special.1101.b:0 "Tengo asuntos urgentes sobre el mundo #emp real#!."
  learning_theology_special.1101.c:0 "¡Nunca alojaré a un[scholar.Custom('ES_XA')] hereje bajo mi techo!"

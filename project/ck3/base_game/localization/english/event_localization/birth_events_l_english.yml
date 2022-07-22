@@ -76,6 +76,7 @@
  birth.1006.a.message_desc:0 "Real Father Knows"
  birth.1006.a.mother_message:0 "[real_father.GetTitledFirstName] has learned that [real_father.GetSheHe] is the true father"
  birth.1006.b:0 "The world will know of my child!"
+ birth.1006.bastard_explanation:0 "You learned of [child.GetFirstName]'s birth, the mother, [mother.GetShortUIName] gains the [secret.GetName] Secret"
 
  birth.1010.t:0 "Child of My Dynasty"
  birth.1010.t_twins:0 "Children of My Dynasty"
@@ -223,9 +224,9 @@
  
  birth.9004.t:0 "What's in a Name?"
  birth.9004.desc.me:0 "[ROOT.Char.GetFirstNameNoTooltip].\n\nSuch a drab name, I sometimes think, pondering how it will read to future historians.\n\nYet I am a [ROOT.Char.GetTitleAsNameNoTooltip], and if I wish to be called differently, surely I need only let the world know?"
- birth.9004.desc: "[child.GetFirstNameNoTooltip].\n\nInitially I was fond of the name, but now it seems strange to my ears. What will [child.GetSheHe] think of [child.GetHerHis] name once grown up?\n\nMaybe I should change it to something better?"
+ birth.9004.desc:0 "[child.GetFirstNameNoTooltip].\n\nInitially I was fond of the name, but now it seems strange to my ears. What will [child.GetSheHe] think of [child.GetHerHis] name once grown up?\n\nMaybe I should change it to something better?"
  birth.9004.a:0 "Ah, a #EMP much#! better name!"
  birth.9004.b:0 "On second thoughts, I think [ROOT.Char.GetFirstNameNoTooltip] is fine..."
- birth.9004.b.other: "Actually [child.GetFirstNameNoTooltip] is pretty good, after all..."
+ birth.9004.b.other:0 "Actually [child.GetFirstNameNoTooltip] is pretty good, after all..."
  birth.9004.b.tt:0 "You keep your old name"
- birth.9004.b.tt.other: "[child.GetFirstNameNoTooltip] keeps [child.GetHerHis] old name"
+ birth.9004.b.tt.other:0 "[child.GetFirstNameNoTooltip] keeps [child.GetHerHis] old name"

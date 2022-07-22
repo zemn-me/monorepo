@@ -59,7 +59,8 @@ artifact_region_trigger = {
 			}
 		}
 	}
-	trigger_else = {
+	trigger_else_if = {
+		limit = { exists = scope:artifact.artifact_owner }
 		scope:artifact.artifact_owner = {
 			trigger_if = {
 				limit = {
@@ -74,6 +75,21 @@ artifact_region_trigger = {
 			trigger_else = {
 				#no location
 			}
+		}
+	}
+	trigger_else = {
+		trigger_if = {
+			limit = {
+				exists = capital_province
+			}
+			capital_province = { geographical_region = $REGION$ }
+		}
+		trigger_else_if = {
+			limit = { exists = location }
+			location = { geographical_region = $REGION$ }
+		}
+		trigger_else = {
+			#no location
 		}
 	}
 }
@@ -204,7 +220,12 @@ artifact_use_indian_unit_visuals_trigger = {
 }
 
 artifact_use_mena_unit_visuals_trigger = {
-	culture = { has_unit_gfx = mena_unit_gfx }
+	culture = {
+		OR = {
+			has_unit_gfx = mena_unit_gfx
+			has_unit_gfx = iberian_muslim_unit_gfx
+		}
+	}
 }
 
 artifact_use_northern_unit_visuals_trigger = {
@@ -223,12 +244,24 @@ artifact_use_mongol_unit_visuals_trigger = {
 }
 
 artifact_use_western_unit_visuals_trigger = {
+	exists = culture
 	culture = {
 		OR = {
 			has_unit_gfx = western_unit_gfx
 			has_unit_gfx = eastern_unit_gfx
+			has_unit_gfx = iberian_christian_unit_gfx
 		}
 	}
+}
+
+artifact_use_iberian_muslim_unit_visuals_trigger = {
+	exists = culture
+	culture = {	has_unit_gfx = iberian_muslim_unit_gfx }
+}
+
+artifact_use_iberian_christian_unit_visuals_trigger = {
+	exists = culture
+	culture = {	has_unit_gfx = iberian_christian_unit_gfx }
 }
 
 # BuildingGFX-based triggers
@@ -245,6 +278,11 @@ artifact_use_mena_building_visuals_trigger = {
 artifact_use_mediterranean_building_visuals_trigger = {
 	exists = culture
 	culture = { has_building_gfx = mediterranean_building_gfx }
+}
+
+artifact_use_iberian_building_visuals_trigger = {
+	exists = culture
+	culture = { has_building_gfx = iberian_building_gfx }
 }
 
 artifact_use_western_building_visuals_trigger = {
@@ -283,7 +321,16 @@ artifact_should_use_gfx_type_trigger = {
 }
 
 artifact_low_rarity_trigger = {
-	scope:artifact = {
+	trigger_if = {
+		limit = { exists = scope:artifact }
+		scope:artifact = {
+			OR = {
+				rarity = masterwork
+				rarity = common
+			}
+		}
+	}
+	trigger_else = {
 		OR = {
 			rarity = masterwork
 			rarity = common
@@ -292,7 +339,16 @@ artifact_low_rarity_trigger = {
 }
 
 artifact_medium_rarity_trigger = {
-	scope:artifact = {
+	trigger_if = {
+		limit = { exists = scope:artifact }
+		scope:artifact = {
+			OR = {
+				rarity = masterwork
+				rarity = famed
+			}
+		}
+	}
+	trigger_else = {
 		OR = {
 			rarity = masterwork
 			rarity = famed
@@ -301,7 +357,16 @@ artifact_medium_rarity_trigger = {
 }
 
 artifact_high_rarity_trigger = {
-	scope:artifact = {
+	trigger_if = {
+		limit = { exists = scope:artifact }
+		scope:artifact = {
+			OR = {
+				rarity = famed
+				rarity = illustrious
+			}
+		}
+	}
+	trigger_else = {
 		OR = {
 			rarity = famed
 			rarity = illustrious
@@ -400,14 +465,16 @@ portrait_should_wield_sword_trigger = {
 # ash
 artifact_feature_wood_ash_trigger = {
 	trigger_if = {
-		artifact_value_trigger = { VALUE = scope:wealth MIN = 0 MAX = 50 }
+		limit = { exists = scope:wealth }
+		scope:wealth < 50
+		scope:wealth >= 0
 		NOT = { artifact_region_trigger = { CHARACTER = scope:owner REGION = material_woods_subsaharan } }
 	}
 	trigger_else = {
 		artifact_low_rarity_trigger = yes
 		NOT = { artifact_region_trigger = { CHARACTER = scope:artifact.artifact_owner REGION = material_woods_subsaharan } }
 	}
-}	
+}
 
 # oak
 artifact_feature_wood_oak_trigger = {
@@ -1188,11 +1255,11 @@ artifact_feature_metal_bulat_steel_trigger = {
 			exists = scope:owner
 		}
 		artifact_value_trigger = { VALUE = scope:wealth MIN = 80 MAX = 999 }
-		artifact_region_trigger = { CHARACTER = scope:owner REGION = material_metal_bulat }	
+		artifact_region_trigger = { CHARACTER = scope:owner REGION = material_metal_bulat }
 	}
 	trigger_else = {
 		artifact_high_rarity_trigger = yes
-		artifact_region_trigger = { CHARACTER = scope:artifact.artifact_owner REGION = material_metal_bulat }	
+		artifact_region_trigger = { CHARACTER = scope:artifact.artifact_owner REGION = material_metal_bulat }
 	}
 }
 
@@ -1768,6 +1835,8 @@ sword_unique_gfx_trigger = {
 			has_clothing_gfx = indian_clothing_gfx
 			has_clothing_gfx = african_clothing_gfx
 			has_clothing_gfx = mena_clothing_gfx
+			has_clothing_gfx = iberian_christian_clothing_gfx
+			has_clothing_gfx = iberian_muslim_clothing_gfx
 		}
 	}
 }
@@ -1779,8 +1848,131 @@ spear_unique_gfx_trigger = {
 			has_clothing_gfx = mongol_clothing_gfx
 			has_clothing_gfx = african_clothing_gfx
 			has_clothing_gfx = mena_clothing_gfx
+			has_clothing_gfx = iberian_christian_clothing_gfx
+			has_clothing_gfx = iberian_muslim_clothing_gfx
 		}
 	}
 }
 
+# Scientific Apparatus Availability
 
+eligible_for_scientific_apparatus_armillary_sphere_trigger = {
+	has_fp2_dlc_trigger = yes
+	$CHARACTER$ = {
+		culture = { has_innovation = innovation_armilary_sphere }
+		OR = {
+			# Wide spread in the Arabic world fairly early.
+			knows_language = language_arabic
+			# Becomes commonplace towards the end of the period.
+			culture = { has_cultural_era_or_later = culture_era_late_medieval }
+			trigger_if = {
+				limit = { has_royal_court = yes }
+				OR = {
+					has_court_language = language_arabic
+					# Nerds can import the knowledge.
+					has_court_type = court_scholarly
+				}
+			}
+		}
+	}
+}
+
+# Relic War Validity
+
+relic_war_valid_religious_artefact_trigger = {
+	exists = var:relic
+	scope:attacker = {
+		can_benefit_from_artifact = prev
+	}
+	NOT = {
+		scope:defender = {
+			can_benefit_from_artifact = prev
+		}
+	}
+}
+
+relic_war_valid_struggle_artefact_trigger = {
+	exists = var:relic
+	var:relic = flag:iberian_struggle
+	scope:attacker = {
+		any_character_struggle = { is_struggle_type = iberian_struggle }
+		# Plus one of the valid using faiths.
+		OR = {
+			islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:attacker }
+			christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:attacker }
+		}
+	}
+	NOT = { scope:attacker.faith = scope:defender.faith }
+
+}
+
+relic_war_valid_against_defender_trigger = {
+	any_character_artifact = {
+		exists = var:relic
+		OR = {
+			# Standard relics.
+			AND = {
+				scope:attacker = {
+					can_benefit_from_artifact = prev
+				}
+				NOT = {
+					scope:defender = {
+						can_benefit_from_artifact = prev
+					}
+				}
+			}
+			# Struggle relics.
+			## The Bells of Santiago de Compostela.
+			AND = {
+				var:relic = flag:iberian_struggle
+				scope:attacker = {
+					any_character_struggle = { is_struggle_type = iberian_struggle }
+					# Plus one of the valid using faiths.
+					OR = {
+						islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:attacker }
+						christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:attacker }
+					}
+				}
+				NOT = { scope:attacker.faith = scope:defender.faith }
+			}
+		}
+	}
+}
+
+relic_war_valid_against_defender_vassal_trigger = {
+	any_vassal_or_below = {
+		NOT = {
+			faith = scope:attacker.faith
+		}
+		any_character_artifact = {
+			exists = var:relic
+			OR = {
+				# Standard relics.
+				AND = {
+					scope:attacker = {
+						can_benefit_from_artifact = prev
+					}
+					NOT = {
+						scope:defender = {
+							can_benefit_from_artifact = prev
+						}
+					}
+				}
+				# Struggle relics.
+				## The Bells of Santiago de Compostela.
+				AND = {
+					var:relic = flag:iberian_struggle
+					scope:attacker = {
+						any_character_struggle = { is_struggle_type = iberian_struggle }
+						# Plus one of the valid using faiths.
+						OR = {
+							islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:attacker }
+							christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:attacker }
+						}
+					}
+					NOT = { scope:attacker.faith = scope:defender.faith }
+				}
+			}
+		}
+	}
+}

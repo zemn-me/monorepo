@@ -38,6 +38,7 @@ commander_wounded = {
 	type = commander
 
 	is_valid = {
+		exists = root
 		has_trait_rank = {
 			trait = wounded
 			rank <= 3
@@ -138,6 +139,7 @@ commander_maimed = {
 	type = commander
 
 	is_valid = {
+		exists = root
 		NAND = {
 			has_trait = one_legged
 			has_trait = disfigured
@@ -245,6 +247,7 @@ commander_killed = {
 	type = commander
 
 	is_valid = {
+		exists = root
 		#Commanders cannot be killed outright unless...
 		OR = {
 			#...they are already wounded...

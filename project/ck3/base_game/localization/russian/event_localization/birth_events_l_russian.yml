@@ -27,7 +27,7 @@
  birth.1001.twins_heir.desc:0 "Мои милые дети. Один из вас вырастет, чтобы принять мое наследие, другому же суждено вечно пребывать в тени. Надеюсь, вы будете любить друг друга не смотря ни на что."
  birth.1001.twins.desc:0 "Кем вы станете, мои дорогие, и как я назову вас?"
  birth.1001.taltos.desc:0 "[Select_CString(child.IsFemale, 'Моя дочь', 'Мой сын' )] несет на себе [child.Custom('GetBirthOmen')]. Это свидетельство того, что [Select_CString(child.IsFemale, 'она', 'он' )] — [child.Custom('GetTaltosTerm')] и [child.GetFaith.PantheonTerm] имеют особые планы на [Select_CString(child.IsFemale, 'нее', 'него' )]. Хотя пока что эти планы никому неведомы, мне стоит дать моему ребенку подходящее имя."
- birth.1001.taltos_unfaithful.desc:0 "[Select_CString(child.IsFemale, 'Моя дочь', 'Мой сын' )] несет на себе [child.Custom('GetBirthOmen')]. #L [child.GetFaith.GetAdjective]ие#! [child.Custom('DefaultPriestTitlePlural')] уверяют, что [child.GetHerHim] уготована особая судьба. Я не понимаю, что они имеют в виду, но мне все равно нужно выбрать имя для [Select_CString(child.IsFemale, 'моей дочери', 'моего сына' )]..."
+ birth.1001.taltos_unfaithful.desc:0 "[Select_CString(child.IsFemale, 'Моя дочь', 'Мой сын' )] несет на себе [child.Custom('GetBirthOmen')]. #L [child.GetFaith.GetName]ие#! [child.Custom('DefaultPriestTitlePlural')] уверяют, что [child.GetHerHim] уготована особая судьба. Я не понимаю, что они имеют в виду, но мне все равно нужно выбрать имя для [Select_CString(child.IsFemale, 'моей дочери', 'моего сына' )]..."
 
  birth.1001.desc:0 "У меня [Select_CString(child.IsFemale, 'родилась очаровательная', 'родился очаровательный' )] [child.Custom('GetDaughterSon')]!"
  birth.1001.desc.twin:0 "У меня родились очаровательные [child.Custom('TwinDaughtersSonsChildren')]!"
@@ -76,6 +76,7 @@
  birth.1006.a.message_desc:0 "Настоящий отец знает"
  birth.1006.a.mother_message:0 "[real_father.GetTitledFirstName] узнал, что является настоящим отцом"
  birth.1006.b:0 "Мир узнает о моем ребенке!"
+ birth.1006.bastard_explanation:0 "Вы узнали, что родился ребенок: [child.GetFirstName]. Мать, [mother.GetShortUIName], получает секрет: [secret.GetName]"
 
  birth.1010.t:0 "Дитя моей династии"
  birth.1010.t_twins:0 "Дети моей династии"
@@ -85,8 +86,8 @@
  birth.1100.title:0 "[child.Custom('GetTaltosTerm')] [Select_CString(child.IsFemale, 'родилась', 'родился' )]"
  birth.1100.message:0 "[child.Custom('DefaultPriestTitlePlural')|U] определили, что [child.Custom2('MyCharacterIntroduction', ROOT.Char)] — [child.Custom('GetTaltosTerm')].\n\n[child.GetFaith.PantheonTerm|U] готовят загадочную судьбу для этого ребенка... Кто знает, что ждет [Select_CString(child.IsFemale, 'её', 'его' )] в будущем?"
 
- known_bastard_birth_event_tooltip:0 "[child.GetFirstNameNoTooltip] станет [Concept( 'bastard', 'бастардом' )|E] дома [child.GetHouse.GetName]"
- legitimized_known_bastard_birth_event_tooltip:0 "[child.GetFirstNameNoTooltip] теперь [legitimized_bastard|El] дома [child.GetHouse.GetName]"
+ known_bastard_birth_event_tooltip:0 "[child.GetFirstNameNoTooltip] станет [Concept( 'bastard', 'бастардом' )|E] дома [child.GetHouse.GetBaseName]"
+ legitimized_known_bastard_birth_event_tooltip:0 "[child.GetFirstNameNoTooltip] теперь [legitimized_bastard|El] дома [child.GetHouse.GetBaseName]"
 
  birth.2001.t:0 "Благословенное неведение"
  birth.2001.desc.mother.standard:0 "[Select_CString(child.IsFemale, 'Моя новорожденная дочь', 'Мой новорожденный сын' )] спит так сладко, пребывая в блаженном неведении о проклятии, которое будет преследовать [child.GetHerHis] до конца жизни. Нелегко быть бастардом в этом мире, нелегко быть матерью бастарда.\n\nМой младенец уснул, но мне не спится: я все думаю о решении, которое мне предстоит принять."
@@ -121,7 +122,7 @@
  birth.2004.a.twins:0 "Пусть они гордятся вами, дети мои."
 
  birth.2011.t:0 "[Select_CString(child.IsFemale, 'Моя', 'Мой' )] [child.Custom('GetDaughterSon')]"
- birth.2011.desc:0 "Хоть и [Select_CString(child.IsFemale, 'зачатая', 'зачатый' )] вне брака, [Select_CString(child.IsFemale, 'моя новорожденная', 'мой новорожденный' )] [child.Custom('GetDaughterSon')] успешно [Select_CString(child.IsFemale, 'появилась', 'появился' )] на свет.\n\n[child.GetSheHe|U] [Select_CString(child.IsFemale, 'родилась', 'родился' )] в доме [legitimizer.GetHouse.GetName], и именно так [child.GetSheHe] будет воспитываться."
+ birth.2011.desc:0 "Хоть и [Select_CString(child.IsFemale, 'зачатая', 'зачатый' )] вне брака, [Select_CString(child.IsFemale, 'моя новорожденная', 'мой новорожденный' )] [child.Custom('GetDaughterSon')] успешно [Select_CString(child.IsFemale, 'появилась', 'появился' )] на свет.\n\n[child.GetSheHe|U] [Select_CString(child.IsFemale, 'родилась', 'родился' )] в доме [legitimizer.GetHouse.GetBaseName], и именно так [child.GetSheHe] будет воспитываться."
 
 
  birth.2102.t:0 "[real_father.GetTitledFirstNameNoTooltip] плодит новых ублюдков"
@@ -226,6 +227,6 @@
  birth.9004.desc:0 "[child.GetFirstNameNoTooltip].\n\nСперва имя мне нравилось, но теперь мне кажется, оно звучит странно. Что будет, когда [child.GetSheHe] вырастет?\n\nМожет, стоит поменять, пока не поздно?"
  birth.9004.a:0 "Да, это имя #EMP намного#! лучше!"
  birth.9004.b:0 "Но если подумать, [ROOT.Char.GetFirstNameNoTooltip] тоже звучит неплохо..."
- birth.9004.b.other:0 "А вообще-то «[child.GetFirstNameNoTooltip]» и неплохо звучит…"
+ birth.9004.b.other:0 "А вообще-то «[child.GetFirstNameNoTooltip]» и неплохо звучит..."
  birth.9004.b.tt:0 "Вы оставляете свое старое имя"
  birth.9004.b.tt.other:0 "[child.GetFirstNameNoTooltip] сохраняет свое старое имя"

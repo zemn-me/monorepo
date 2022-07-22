@@ -1,7 +1,7 @@
 ﻿l_german:
  hunt_header:0 "Jagd:"
  hunt.1001.t:1 "$hunt_header$ Die Jagdbeute"
- hunt.1001.desc:0 "Mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('hunting_courtier_1'))] [hunting_courtier_1.GetTitledFirstName] sieht das Tier zuerst. [ROOT.Char.Custom('LocalAnimalPlural')] kann man nur schwer von ihrer Umgebung unterscheiden, aber das Tier beobachtet uns aus dem Dickicht.\n\nIch sehe ihm in die Augen, und fast scheint es, als könne es meine Absicht spüren, denn plötzlich läuft es los!"
+ hunt.1001.desc:0 "Mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('hunting_courtier_1'))] [hunting_courtier_1.GetTitledFirstName] sieht das Tier zuerst. [ROOT.Char.Custom('LocalAnimal_DE_Plural')] kann man nur schwer von ihrer Umgebung unterscheiden, aber das Tier beobachtet uns aus dem Dickicht.\n\nIch sehe ihm in die Augen, und fast scheint es, als könne es meine Absicht spüren, denn plötzlich läuft es los!"
  hunt.1001.a:0 "Wir reiten!"
  hunt.1001.b:0 "Jetzt aber langsam, diese Klippe sieht steil aus."
 
@@ -71,29 +71,29 @@
  hunt.1022.b:0 "Ihr solltet mit mir kommen und bei mir am Hof leben."
 
  hunt.1023.t:1 "$hunt_header$ Jagdhund"
- hunt.1023.desc:0 "Mein Hund [ROOT.Char.Custom('DogStoryName')] läuft neben mir her und hat augenscheinlich Spaß an seiner Zeit im Freien.\n\nPlötzlich hält er inne, und beginnt zu bellen: Wenige Augenblicke später hört man etwas durch das Unterholz laufen. Etwas Großes.\n\nAus dem Bellen wird ein Knurren, als ein gewaltiges Tier auf unseren Weg springt! Ich wusste gar nicht, dass [ROOT.Char.Custom('LocalAnimalPlural')] so groß werden können …"
+ hunt.1023.desc:0 "Mein Hund [ROOT.Char.Custom('DogStoryName')] läuft neben mir her und hat augenscheinlich Spaß an seiner Zeit im Freien.\n\nPlötzlich hält er inne, und beginnt zu bellen: Wenige Augenblicke später hört man etwas durch das Unterholz laufen. Etwas Großes.\n\nAus dem Bellen wird ein Knurren, als ein gewaltiges Tier auf unseren Weg springt! Ich wusste gar nicht, dass [ROOT.Char.Custom('LocalAnimal_DE_Plural')] so groß werden können …"
  hunt.1023.a:0 "Los, [ROOT.Char.Custom('DogStoryName')], fass!"
  hunt.1023.a.good:0 "[ROOT.Char.Custom('DogStoryName')] erledigt das Tier"
  hunt.1023.a.bad:0 "[ROOT.Char.Custom('DogStoryName')] stirbt im Kampf"
  hunt.1023.b:0 "Ich werde das Tier besiegen, [ROOT.Char.GetWomanMan] gegen [ROOT.Char.Custom('LocalAnimal')]."
 
  hunt.4001.t:1 "$hunt_header$ Der Schuss"
- hunt.4001.desc_1:0 "Es ist schon majestätisch, wie [ROOT.Char.Custom('LocalAnimalPlural')] so über die Landschaft blicken. Von hinter den Büschen ziele ich mit dem Bogen auf meine Beute.\n\nMein[hunt_guest.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('hunt_guest'))] [hunt_guest.GetTitledFirstName] erwidert den Blick, den ich [hunt_guest.Custom('DE_ART_DEF_S_D')] lautlos zuwerfe."
- hunt.4001.desc_2:0 "Der Speer liegt perfekt ausbalanciert in meiner Hand, als ich die Entfernung zu meiner Beute abschätze; wie gerne mach ich doch Jagd auf [ROOT.Char.Custom('LocalAnimalPlural')].\n\nMein[hunt_guest.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('hunt_guest'))] [hunt_guest.GetTitledFirstName] kauert neben mir und hat [hunt_guest.Custom('DE_PRO_POS_S_3P')]en eigenen Speer erhoben."
+ hunt.4001.desc_1:0 "Es ist schon majestätisch, wie [ROOT.Char.Custom('LocalAnimal_DE_Plural')] so über die Landschaft blicken. Von hinter den Büschen ziele ich mit dem Bogen auf meine Beute.\n\nMein[hunt_guest.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('hunt_guest'))] [hunt_guest.GetTitledFirstName] erwidert den Blick, den ich [hunt_guest.Custom('DE_ART_DEF_S_D')] lautlos zuwerfe."
+ hunt.4001.desc_2:0 "Der Speer liegt perfekt ausbalanciert in meiner Hand, als ich die Entfernung zu meiner Beute abschätze; wie gerne mach ich doch Jagd auf [ROOT.Char.Custom('LocalAnimal_DE_Plural')].\n\nMein[hunt_guest.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('hunt_guest'))] [hunt_guest.GetTitledFirstName] kauert neben mir und hat [hunt_guest.Custom('DE_PRO_POS_S_3P')]en eigenen Speer erhoben."
  hunt.4001.a:0 "Ich werde das Stück erlegen!"
  hunt.4001.b:0 "Gebt Euch Mühe, [hunt_guest.GetFirstNameNoTooltip]"
  hunt.4001.c:0 "Erlegt es, [hunt_guest.GetFirstNameNoTooltip], während es noch arglos ist."
  hunt.4001.c.tt:1 "Wenn Ihr auf diesen Ast tretet und die Beute verschreckt, wird [hunt_guest.GetFirstNameNoTooltip] das Ziel sicher verfehlen."
 
  hunt.4002.t:1 "$hunt_header$ Gerüchte"
- hunt.4002.desc:1 "Der Lärm der anderen ist in weiter Ferne, als [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('secret_sharer'))] [secret_sharer.GetTitledFirstName] und ich uns an unsere Beute anpirschen; nur die größten [ROOT.Char.Custom('LocalAnimalPlural')] sind unserer würdig.\n\nWir sind fast schon in Reichweite, als [secret_sharer.GetFirstNameNoTooltip] mir zuflüstert: „Nun, da wir endlich unter uns sind … Es gibt da etwas, was ich Euch über [secret_owner.GetTitledFirstName] erzählen muss …“"
+ hunt.4002.desc:1 "Der Lärm der anderen ist in weiter Ferne, als [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('secret_sharer'))] [secret_sharer.GetTitledFirstName] und ich uns an unsere Beute anpirschen; nur die größten [ROOT.Char.Custom('LocalAnimal_DE_Plural')] sind unserer würdig.\n\nWir sind fast schon in Reichweite, als [secret_sharer.GetFirstNameNoTooltip] mir zuflüstert: „Nun, da wir endlich unter uns sind … Es gibt da etwas, was ich Euch über [secret_owner.GetTitledFirstName] erzählen muss …“"
  hunt.4002.a:0 "Keine Zeit für Plaudereien, ich hole mir diese Trophäe!"
  hunt.4002.b:0 "Wie bitte? Erzählt mir mehr …"
  hunt.4002.b.tt:1 "Die Beute kommt davon."
  hunt.4002.b.reveal:0 "Ich erfahre von dem Geheimnis, das [secret_owner.GetFirstNameNoTooltip] hat"
 
  hunt.4003.t:1 "$hunt_header$ Verbotene Beute"
- hunt.4003.desc:0 "Wilderer, hier in den Wäldern [land_owner.Custom('DE_ART_DEF_S_G')] [land_owner.GetTitleTierName]? Sie kauern eng beieinander, als ich mit meinen Wachen zu ihnen reite, und verbergen damit kaum das tote Tier hinter ihnen; [ROOT.Char.Custom('LocalAnimalPlural')] sind dem Adel vorbehalten.\n\n„Das waren wir nicht, Euer Gnaden.“ Ihre Klingen und Bögen strafen sie Lügen."
+ hunt.4003.desc:0 "Wilderer, hier in den Wäldern [land_owner.Custom('DE_ART_DEF_S_G')] [land_owner.GetTitleTierName]? Sie kauern eng beieinander, als ich mit meinen Wachen zu ihnen reite, und verbergen damit kaum das tote Tier hinter ihnen; [ROOT.Char.Custom('LocalAnimal_DE_Plural')] sind dem Adel vorbehalten.\n\n„Das waren wir nicht, Euer Gnaden.“ Ihre Klingen und Bögen strafen sie Lügen."
  hunt.4003.a:0 "Sie werden hängen, und ihre Dörfer werden für den Schaden aufkommen."
  hunt.4003.b:0 "„Ihr scheint mir allesamt hervorragende Schützen zu sein …“"
  hunt.4003.c:0 "Die Beute gehört mir, genau wie die Strafzahlung im Gegenzug für ihre Leben."
@@ -101,7 +101,7 @@
  hunt.4003.c.tt_failure:0 "Öffentlicher Aufschrei"
 
  hunt.4004.t:1 "$hunt_header$ Sieg über die Bestie"
- hunt.4004.desc:0 "Man könnte das Tier für eine Kreatur der Legende halten, vielleicht gar für eine Gottheit in verwandelter Gestalt. [ROOT.Char.Custom('LocalAnimalPlural')] werden groß, aber so gewaltig? Auch nachdem die Bestie verwundet war, dauerte die Verfolgungsjagd einen halben Tag lang.\n\nSie ist nach wie vor ein beeindruckender Anblick, auch tot am Boden vor mir."
+ hunt.4004.desc:0 "Man könnte das Tier für eine Kreatur der Legende halten, vielleicht gar für eine Gottheit in verwandelter Gestalt. [ROOT.Char.Custom('LocalAnimal_DE_Plural')] werden groß, aber so gewaltig? Auch nachdem die Bestie verwundet war, dauerte die Verfolgungsjagd einen halben Tag lang.\n\nSie ist nach wie vor ein beeindruckender Anblick, auch tot am Boden vor mir."
  hunt.4004.credit_receiver:0 "[credit_receiver.GetTitledFirstName] ist ebenso von Ehrfurcht ergriffen. „So etwas habe ich noch nie gesehen, mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.GetLadyLord].“"
  hunt.4004.a:0 "Der Kopf wird sich prächtig machen in meiner großen Halle!"
  hunt.4004.b:0 "Das wird eine Trophäe, die mein[trophy_recipient.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('trophy_recipient'))] bekommen soll."
@@ -141,7 +141,7 @@
  hunt.4007.c:0 "Auch nicht schwieriger zu handhaben als ein brüskierter Höfling!"
 
  hunt.4008.t:1 "$hunt_header$ Der abtrünnige Erbe"
- hunt.4008.desc:0 "Mein[heir_participant.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('heir_participant'))], [heir_participant.GetTitledFirstName], ritt vor, um unsere Beute zu verfolgen. Ich folge [heir_participant.Custom('DE_PRO_PER_S_3P_D')], und als ich [heir_participant.Custom('DE_PRO_PER_S_3P_A')] erreiche, zieht [heir_participant.Custom('DE_PRO_PER_S_3P_N')] gerade einen Pfeil aus einem zu Boden gegangenen Bauern. Als [heir_participant.Custom('DE_PRO_PER_S_3P_N')] mich sieht, versteckt [heir_participant.Custom('DE_PRO_PER_S_3P_N')] den Pfeil hinter dem Rücken.\n\n„Das war das Tier, [heir_participant.Custom2('RelationToMeShort', ROOT.Char)]. Wirklich! [ROOT.Char.Custom('LocalAnimalPlural')] sind gefährlich!“\n\nBald wird der Rest der Gruppe uns erreichen und eine Erklärung verlangen."
+ hunt.4008.desc:0 "Mein[heir_participant.Custom('DE_END_PRO_S_N')] [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('heir_participant'))], [heir_participant.GetTitledFirstName], ritt vor, um unsere Beute zu verfolgen. Ich folge [heir_participant.Custom('DE_PRO_PER_S_3P_D')], und als ich [heir_participant.Custom('DE_PRO_PER_S_3P_A')] erreiche, zieht [heir_participant.Custom('DE_PRO_PER_S_3P_N')] gerade einen Pfeil aus einem zu Boden gegangenen Bauern. Als [heir_participant.Custom('DE_PRO_PER_S_3P_N')] mich sieht, versteckt [heir_participant.Custom('DE_PRO_PER_S_3P_N')] den Pfeil hinter dem Rücken.\n\n„Das war das Tier, [heir_participant.Custom2('RelationToMeShort', ROOT.Char)]. Wirklich! [ROOT.Char.Custom('LocalAnimal_DE_Plural')] sind gefährlich!“\n\nBald wird der Rest der Gruppe uns erreichen und eine Erklärung verlangen."
  hunt.4008.a:0 "[heir_participant.GetFirstNameNoTooltip] hat tapfer gekämpft, um den Bauern zu retten! Ich habe es gesehen!"
  hunt.4008.a.success:0 "Alle glauben mir"
  hunt.4008.a.failure:0 "Die Leute kaufen mir die Lüge nicht ab"
@@ -186,7 +186,7 @@
  hunt.4011.b:0 "Aber was ist mit der Beute …?"
 
  hunt.4012.t:1 "$hunt_header$ [ROOT.Char.Custom('LocalAnimal')|U] in Weiß"
- hunt.4012.desc:1 "Ich reite vor der Gruppe, als es plötzlich leise wird um mich herum. Die Stille ist fast greifbar, und ich höre kaum mehr die Schritte der Pferde.\n\nAls ich gerade kehrtmachen und die anderen suchen möchte, sehe ich es vor mir, verschwommen wie in einem Traum: [ROOT.Char.Custom('LocalAnimalPlural')] sind von Natur aus anmutig, doch dies ist ein Prachtstück, weiß wie Schnee."
+ hunt.4012.desc:1 "Ich reite vor der Gruppe, als es plötzlich leise wird um mich herum. Die Stille ist fast greifbar, und ich höre kaum mehr die Schritte der Pferde.\n\nAls ich gerade kehrtmachen und die anderen suchen möchte, sehe ich es vor mir, verschwommen wie in einem Traum: [ROOT.Char.Custom('LocalAnimal_DE_Plural')] sind von Natur aus anmutig, doch dies ist ein Prachtstück, weiß wie Schnee."
  hunt.4012.a:0 "Wie aus einem Märchen … Ich muss dieses Tier haben!"
  hunt.4012.a.tt:1 "Ihr werdet darauf Jagd machen"
  hunt.4012.b:0 "Ein ganz gewöhnliches Tier. Jage ich eben ein anderes."
@@ -213,12 +213,12 @@
 
  hunt.4016.t:1 "$hunt_header$ Die Trophäe"
  hunt.4016.desc:0 "Ich habe jetzt schon jeden Stein zwei Mal umgedreht, und noch immer keinerlei Spur von Jagdwild … Alle erwarten von mir, dass ich triumphierend mit einer Trophäe zurückkehre, doch derzeit sieht es danach aus, dass ich nur Schande mit nach Hause bringe."
- hunt.4016.a:0 "Auf dem nächsten Markt sollte man [ROOT.Char.Custom('LocalAnimalPlural')] kaufen können …"
+ hunt.4016.a:0 "Auf dem nächsten Markt sollte man [ROOT.Char.Custom('LocalAnimal_DE_Plural')] kaufen können …"
  hunt.4016.b.success:0 "Die Leute fallen auf meine List herein"
  hunt.4016.b.failure:0 "Man durchschaut mich"
  hunt.4016.c:0 "So tief werde ich nicht sinken. Lieber kehre ich mit leeren Händen zurück!"
 
- hunt.4017.desc:0 "Ich lasse mein Gefolge hinter mir und durchsuche die Wälder nach dem weißen Tier, das mir keine Ruhe lässt. Solche [ROOT.Char.Custom('LocalAnimalPlural')] sind selten.\n\nPlötzlich fühle ich mich, als wäre ich unter Wasser: Alle Geräusche sind gedämpft, das Licht scheint leicht verzerrt. Und da! Da steht das Tier vor mir, um es herum alles wie erstarrt, und ich habe das Gefühl, als schaute es mir direkt in meine #EMP Seele#!."
+ hunt.4017.desc:0 "Ich lasse mein Gefolge hinter mir und durchsuche die Wälder nach dem weißen Tier, das mir keine Ruhe lässt. Solche [ROOT.Char.Custom('LocalAnimal_DE_Plural')] sind selten.\n\nPlötzlich fühle ich mich, als wäre ich unter Wasser: Alle Geräusche sind gedämpft, das Licht scheint leicht verzerrt. Und da! Da steht das Tier vor mir, um es herum alles wie erstarrt, und ich habe das Gefühl, als schaute es mir direkt in meine #EMP Seele#!."
  hunt.4017.a:0 "Jetzt zählt es! Ich ziele …"
  hunt.4017.a.tt:0 "Das Tier versucht nicht einmal zu fliehen."
 

@@ -18,4 +18,4 @@
 
  MUST_HAVE_MALE_DOMINATED_OR_EQUAL:0 "El [CHARACTER.GetFaith.GetName] no tiene las doctrinas [GetFaithDoctrine('doctrine_gender_equal').GetBaseName] o [GetFaithDoctrine('doctrine_gender_male_dominated').GetBaseName]"
  MUST_HAVE_FEMALE_DOMINATED_OR_EQUAL:0 "El [CHARACTER.GetFaith.GetName] no tiene las doctrinas [GetFaithDoctrine('doctrine_gender_equal').GetBaseName] o [GetFaithDoctrine('doctrine_gender_female_dominated').GetBaseName]"
- has_law_allowing_succession_law_change:0 "Tiene al menos [crown_authority|lE [high|E] o [tribal_authority|lE] [limited_tribal|lE]"
+ has_law_allowing_succession_law_change:0 "Tiene al menos [crown_authority|lE] [high|E] o [tribal_authority|lE] [limited_tribal|lE]"

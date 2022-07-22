@@ -10883,9 +10883,9 @@
 	179.1.1 = {
 		birth = "179.1.1"
 	}
-	210.1.1 = { #We don't know when Eógan Mór (83603) founded the house
-		dynasty_house = house_british_isles_eoganachta
-	}
+	#210.1.1 = { #We don't know when Eógan Mór (83603) founded the house
+	#	dynasty_house = house_british_isles_eoganachta
+	#} #CD Ola Jentzsch note: Removed to make Eoganachta a dynasty, rather than a house. 
 	255.1.1 = {
 		death = "255.1.1"
 	}
@@ -10895,7 +10895,7 @@
 	name = "EO_gan_MO_r"
 	father = 83601
 	mother = 83602
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	197.1.1 = {
@@ -10909,7 +10909,7 @@
 83604 = {
 	name = "Fiachu_Mullethan"
 	father = 83603
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	220.1.1 = {
@@ -10923,7 +10923,7 @@
 83605 = {
 	name = "Aillil_Fland_Becc"
 	father = 83604
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	250.1.1 = {
@@ -10937,7 +10937,7 @@
 83606 = {
 	name = "Luigthech"
 	father = 83605
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	300.1.1 = {
@@ -10951,7 +10951,7 @@
 83607 = {
 	name = "Conall_Corc"
 	father = 83606
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	340.1.1 = {
@@ -10965,7 +10965,7 @@
 83608 = {
 	name = "Nad-Froich"
 	father = 83607
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003 
 	religion = "pagan"
 	culture = "irish"
 	380.1.1 = {
@@ -10979,7 +10979,7 @@
 83609 = {
 	name = "O_engus"
 	father = 83608
-	dynasty_house = house_british_isles_eoganachta
+	dynasty= 100003 
 	religion = "insular_celtic"
 	culture = "irish"
 	445.1.1 = {
@@ -12200,7 +12200,7 @@
 83693 = {
 	name = "Mac-Cass"
 	father = 83607 #Conall Corc
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "pagan"
 	culture = "irish"
 	384.1.1 = {
@@ -12214,7 +12214,7 @@
 83694 = {
 	name = "Echu"
 	father = 83693
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "pagan"
 	culture = "irish"
 	430.1.1 = {
@@ -12777,7 +12777,7 @@
 83735 = {
 	name = "Ailill"
 	father = 83608 #Nad Froich
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "pagan"
 	culture = "irish"
 	440.1.1 = {
@@ -12791,7 +12791,7 @@
 83736 = {
 	name = "Crimthann"
 	father = 83735 #Ailill son of Nad Froich
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "insular_celtic"
 	culture = "irish"
 	460.1.1 = {
@@ -12805,7 +12805,7 @@
 83737 = {
 	name = "E_ndae"
 	father = 83736
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "insular_celtic"
 	culture = "irish"
 	480.1.1 = {
@@ -13409,7 +13409,7 @@
 83778 = {
 	name = "Coirpe_Luachra"
 	father = 83607 #Conall Corcc
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "pagan"
 	culture = "irish"
 	400.1.1 = {
@@ -13423,7 +13423,7 @@
 83779 = {
 	name = "Maithne"
 	father = 83778
-	dynasty_house = house_british_isles_eoganachta
+	dynasty = 100003
 	religion = "pagan"
 	culture = "irish"
 	430.1.1 = {

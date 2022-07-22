@@ -40,6 +40,14 @@ fp1_county_has_stele_trigger = {
 	}
 }
 
+fp1_eligible_for_yearly_events_trigger = {
+	has_fp1_dlc_trigger = yes
+	OR = {
+		culture = { has_cultural_pillar = heritage_north_germanic }
+		religion = religion:germanic_religion
+	}
+}
+
 ##################################################
 # Cultural & Regional Triggers
 
@@ -88,11 +96,15 @@ fp1_remove_stele_new_holder_trigger = {
 	# And would the new holder want to tear down the stele?
 	$NEW_HOLDER$ = {
 		OR = {
-			# E.g., because they're a different family and won't maintain it.
-			NOT = { dynasty = $PREVIOUS_HOLDER$.dynasty }
+			AND = {
+				exists = dynasty
+				# E.g., because they're a different family and won't maintain it.
+				NOT = { dynasty = $PREVIOUS_HOLDER$.dynasty }
+			}
 			# Or because they're subject of the runestone, which means it's memorialising their defeat.
 			## ... Unless they're a ghost. Damned proctors, I guess.
 			AND = {
+				NOT = { scope:stele_type = flag:promotion } # We don't want to compare a character with a title
 				exists = $TITLE$.var:stele_container
 				this = $TITLE$.var:stele_container
 			}
@@ -260,7 +272,7 @@ gruesome_sacrifices_grand_blot_can_continue_trigger = {
 
 fp1_valid_norse_faith_for_jomsvikings_trigger = {
 	religion = religion:germanic_religion
-	has_doctrine = unreformed_faith_doctrine
+	has_doctrine_parameter = unreformed
 }
 
 fp1_jomsvikings_have_not_existed_trigger = {

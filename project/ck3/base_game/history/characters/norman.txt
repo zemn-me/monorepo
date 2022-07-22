@@ -1374,7 +1374,7 @@
 	trait = just
 	trait = cynical
 	trait = education_stewardship_2
-	trait = bastard
+	trait = bastard_founder
 	1060.1.2 = {
 		birth = "1060.1.2"
 	}
@@ -1542,6 +1542,7 @@
 	culture = "norman"
 	trait = arrogant
 	trait = bastard
+	trait = disinherited
 	trait = education_learning_2
 	father = 160403
 	1041.1.2 = {
@@ -7882,3 +7883,17 @@ norman0018 = {
 	}
 }
 
+71535 = {
+	name = "Plaisance" # Placencia de Normandía, wife of King Sancho IV of Navarra (106000 - basque.txt)
+	female = yes
+	religion = catholic
+	culture = norman
+	trait = education_diplomacy_1
+
+	1050.1.1 = {
+		birth = yes
+	}
+	1088.4.14 = {
+		death = yes
+	}
+}

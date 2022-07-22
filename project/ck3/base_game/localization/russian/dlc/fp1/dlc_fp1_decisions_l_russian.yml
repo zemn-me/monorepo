@@ -28,7 +28,7 @@
  hold_gruesome_festival_decision_confirm:0 "За смертью следует перерождение."
 
  raise_stele_decision_name:0 "Воздвигнуть рунный камень"
- raise_stele_decision_desc:0 "У [GetPlayer.GetCulture.GetNameNoTooltip|l]ого народа принято увековечивать важные события в виде резных монументов. Смерть возлюбленного, завершение конфликта, обретение земли и так далее. Возможно, мне пригодился бы такой камень..."
+ raise_stele_decision_desc:0 "У [GetPlayer.GetCulture.GetCollectiveNounNoTooltip|l]ого народа принято увековечивать важные события в виде резных монументов. Смерть возлюбленного, завершение конфликта, обретение земли и так далее. Возможно, мне пригодился бы такой камень..."
  raise_stele_decision_tt.effects_list:0 "Одно из ваших [Concept( 'counties', 'графств' )|E] получит [Concept( 'modifiers', 'модификатор' )|E] из этого списка:\n#indent_newline:0 $EFFECT_LIST_BULLET$[GetModifier('fp1_stele_ancestors_strong').GetNameWithTooltip]\n#indent_newline:0 $EFFECT_LIST_BULLET$[GetModifier('fp1_stele_conquest_strong').GetNameWithTooltip]\n#indent_newline:0 $EFFECT_LIST_BULLET$[GetModifier('fp1_stele_promotion_strong').GetNameWithTooltip]"
  raise_stele_decision_tt.variable_strength:0 "Усиливаются все модификаторы, построенные [Concept( 'cultures', 'культурами' )|E], использующими рунные камни"
  raise_stele_decision_tooltip:0 "Заплатите за создание рунного камня в одном из ваших графств"

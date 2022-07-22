@@ -7,8 +7,8 @@
  education_martial_4_outcome_description:0 "C’est impressionnant de voir un tel talent chez quelqu’un d’aussi jeune. [ROOT.Char.Custom('FR_IlElle')|U] affiche un niveau de perspicacité rare, même parmi les commandants vétérans !"
  
  martial_good_trait_match_bad_outcome:0 "On pensait que la nature énergique de [ROOT.Char.GetFirstName] était le signe d’une affinité pour la guerre et le combat, mais ce devait être une illusion."
- martial_bad_trait_match_bad_outcome:1 "[ROOT.Char.GetFirstName] n’a jamais montré beaucoup d’intérêt pour le sujet de la guerre, mais j’ai toujours espéré que cela n’était qu’une phase passagère. J’ai été naï[ROOT.Char.Custom('FR_FVe')]."
- martial_neutral_trait_match_bad_outcome:1 "J’ai longtemps espéré qu’une bonne tutelle suffirait pour enseigner à [ROOT.Char.GetFirstName] les subtilités de la guerre. J’ai été naï[ROOT.Char.Custom('FR_FVe')]."
+ martial_bad_trait_match_bad_outcome:1 "[ROOT.Char.GetFirstName] n’a jamais montré beaucoup d’intérêt pour le sujet de la guerre, mais j’ai toujours espéré que cela n’était qu’une phase passagère. J’ai été naï[GetPlayer.Custom('FR_FVe')]."
+ martial_neutral_trait_match_bad_outcome:1 "J’ai longtemps espéré qu’une bonne tutelle suffirait pour enseigner à [ROOT.Char.GetFirstName] les subtilités de la guerre. J’ai été naï[GetPlayer.Custom('FR_FVe')]."
  education_martial_1_outcome_description:2 "[ROOT.Char.Custom('FR_IlElle')|U] a montré peu de compréhension sur le sujet, mais au moins, [ROOT.Char.Custom('FR_IlElle')] sait comment tenir une épée et peut même distinguer la piétaille d’un $knight_culture_player_no_tooltip_lowercase$."
  education_martial_2_outcome_description:1 "[ROOT.Char.Custom('FR_IlElle')|U] a seulement acquis quelques notions sur le sujet, mais au moins, [ROOT.Char.Custom('FR_IlElle')] a appris les bases de la gestion d’une armée. Je ne peux qu’espérer que le reste viendra avec l’expérience."
 

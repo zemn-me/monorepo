@@ -41,8 +41,8 @@
  party_baron.1002.desc:0 "Благодарю вас за столь великодушное приветствие! Приятно поговорить с человеком, который тоже видит наивысшее счастье в том, чтобы доставлять радость другим.\n\nНадеюсь, однажды вы станете моим почетным гостем, и тешу себя надеждой — хотя это и дерзость с моей стороны, — что в один прекрасный день вы сможете назвать меня другом."
  party_baron.1002.a:0 "[party_baron.GetSheHe|U] весьма [Select_CString(party_baron.IsFemale, 'мила', 'мил' )], даже судя по письму!"
 
- party_baron.1003.desc:0 "Вот так моргнуть не успеешь, а [party_baron.GetFirstName] уже сбрасывает лохмотья мелкого баронства. Теперь [party_baron.GetSheHe] [Select_CString(party_baron.IsFemale, 'моя', 'мой' )] [party_baron_header.GetTitleAsName]...\n\nМир перевернулся с ног на голову быстрее, чем можно было ожидать."
- party_baron.1003.a:0 "Зато теперь у меня есть [Select_CString(party_baron.IsFemale, 'щедрая', 'щедрый' )] [party_baron.GetTitleAsName]."
+ party_baron.1003.desc:0 "Вот так моргнуть не успеешь, а [party_baron.GetFirstName] уже сбрасывает лохмотья мелкого баронства. Теперь [party_baron.GetSheHe] [Select_CString(party_baron.IsFemale, 'моя', 'мой' )] [party_baron_header.GetTitleAsName|l]...\n\nМир перевернулся с ног на голову быстрее, чем можно было ожидать."
+ party_baron.1003.a:0 "Зато теперь у меня есть [Select_CString(party_baron.IsFemale, 'щедрая', 'щедрый' )] [party_baron.GetTitleAsName|l]."
  party_baron.1003.b:0 "Притворимся, что моих слов не было..."
 
  party_baron.2001.t:0 "$party_baron_header$"
@@ -87,11 +87,11 @@
  party_baron.3001.b:0 "Наверное, резковато получилось..."
 
  party_baron.3002.t:0 "$party_baron_header$"
- party_baron.3002.desc:0 "Мало того что [party_baron.GetTitledFirstName] пользуется всеобщей любовью, так #EMP мне#! тоже нужно [party_baron.GetHerHis] любить?\n\nНесколько моих вассалов прислали мне письмо с требованием прекратить говорить гадости о бесполезном отребье по имени [party_baron.GetTitleAsName]!"
+ party_baron.3002.desc:0 "Мало того что [party_baron.GetTitledFirstName] пользуется всеобщей любовью, так #EMP мне#! тоже нужно [party_baron.GetHerHis] любить?\n\nНесколько моих вассалов прислали мне письмо с требованием прекратить говорить гадости о бесполезном отребье по имени [party_baron.GetTitleAsName|l]!"
  party_baron.3002.a:0 "Я покажу этим нахалам такие «гадости»..."
  party_baron.3002.b:0 "Можно вести себя повежливее. На людях."
 
- party_baron.3003.desc:0 "Все, что я о [Select_CString(party_baron.IsFemale, 'ней', 'нем' )] говорю, уходит в пустоту: [party_baron.GetTitledFirstName] [Select_CString(party_baron.IsFemale, 'непоколебима', 'непоколебим' )]. [party_baron.GetSheHe|U] даже осмеливается обратиться ко мне на пиру с глазу на глаз.\n\n«Мне кажется, я вам не очень-то по нраву». Я фыркаю. [party_baron.GetSheHe|U] может повторить. Но [party_baron.GetSheHe], конечно же, не моргнув глазом продолжает: «Мы можем поговорить?»\n\nВсе, что происходит потом, немного туманно, но более замечательных пиров я что-то не припоминаю. Пожалуй, [party_baron.GetTitleAsName] все же не так уж [Select_CString(party_baron.IsFemale, 'плоха', 'плох' )]..."
+ party_baron.3003.desc:0 "Все, что я о [Select_CString(party_baron.IsFemale, 'ней', 'нем' )] говорю, уходит в пустоту: [party_baron.GetTitledFirstName] [Select_CString(party_baron.IsFemale, 'непоколебима', 'непоколебим' )]. [party_baron.GetSheHe|U] даже осмеливается обратиться ко мне на пиру с глазу на глаз.\n\n«Мне кажется, я вам не очень-то по нраву». Я фыркаю. [party_baron.GetSheHe|U] может повторить. Но [party_baron.GetSheHe], конечно же, не моргнув глазом продолжает: «Мы можем поговорить?»\n\nВсе, что происходит потом, немного туманно, но более замечательных пиров я что-то не припоминаю. Пожалуй, [party_baron.GetTitleAsName|l] все же не так уж [Select_CString(party_baron.IsFemale, 'плоха', 'плох' )]..."
  party_baron.3003.a:0 "Подумать только, как ловко ты [Select_CString(party_baron.IsFemale, 'сумела', 'сумел' )] до меня достучаться, [party_baron.GetFirstNameNoTooltip]!"
  party_baron.3003.b:0 "Нет! Ничего не изменилось!"
 

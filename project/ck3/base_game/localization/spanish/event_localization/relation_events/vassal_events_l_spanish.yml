@@ -1,12 +1,12 @@
 ﻿l_spanish:
  vassal.1001.t:0 "Como [ROOT.Char.GetFaith.HighGodName|U] desee"
- vassal.1001.desc:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_liege'))], [religious_liege.Custom('ES_ElLa')] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('religious_liege'))] [religious_liege.GetTitledFirstName], recorre mis dominios. Cuando revisa los edificios [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('religious_liege'))], frunce el ceño.\n\n«¿Sabéis qué le falta a esta vista? Un/a [religious_liege.GetFaith.HouseOfWorship], ¡un monumento glorioso a [religious_liege.GetFaith.HighGodName]!»."
+ vassal.1001.desc:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_liege'))], el/la [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('religious_liege'))] [religious_liege.GetTitledFirstName], recorre mis dominios. Cuando revisa los edificios [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('religious_liege'))], frunce el ceño.\n\n«¿Sabéis qué le falta a esta vista? Un/a [religious_liege.GetFaith.HouseOfWorship], ¡un monumento glorioso a [religious_liege.GetFaith.HighGodName]!»."
  vassal.1001.a:0 "¡Os prometo que se construirá un/a [ROOT.Char.GetFaith.HouseOfWorship]!"
  vassal.1001.a.tt:0 "#F [religious_liege.GetFirstNameNoTooltip] recordará la promesa y me deberá un [favor|lE] si se cumple en diez años#!"
  vassal.1001.b_zealous:0 "¿Quién os creéis que sois para hablar en nombre de [ROOT.Char.GetFaith.HighGodName]?"
  vassal.1001.b:0 "No hace falta algo así."
 
- vassal.1010.desc:0 "«Os habéis superado esta vez, [ROOT.Char.GetFirstNameNoTooltip]. Es un edificio verdaderamente magnífico». Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_liege'))], [religious_liege.Custom('ES_ElLa')] [religious_liege.GetTitledFirstName], [religious_liege.Custom('quirk_pos_present')], y señala a tu reciente [religious_liege.GetFaith.HouseOfWorship].\n\n«¡Seguro que a [religious_liege.GetFaith.HighGodName] le ha causado tanta impresión como a mí!»."
+ vassal.1010.desc:0 "«Os habéis superado esta vez, [ROOT.Char.GetFirstNameNoTooltip]. Es un edificio verdaderamente magnífico». Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_liege'))], [religious_liege.GetTitledFirstName], [religious_liege.Custom('quirk_pos_present')], y señala a tu reciente [religious_liege.GetFaith.HouseOfWorship].\n\n«¡Seguro que a [religious_liege.GetFaith.HighGodName] le ha causado tanta impresión como a mí!»."
  vassal.1010.a:0 "Solo vivo para servir a [religious_liege.GetFaith.HighGodName]."
 
  vassal.1020.desc_religious:0 "«Que un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetWomanMan] devot[ROOT.Char.Custom('ES_OA')] haga promesas vacías… ¡Y sobre construir un/a [religious_liege.GetFaith.HouseOfWorship] a [religious_liege.GetFaith.HighGodName] nada menos!»."
@@ -16,10 +16,10 @@
  vassal.1020.a_religious:0 "Espero que [religious_liege.GetFaith.HighGodName] me perdone…"
  vassal.1020.a.tt:0 "#F Igual debí cumplir la promesa y construir ese/a [THIS.Char.GetFaith.HouseOfWorship]…#!"
 
- vassal.1101.desc:0 "«Mi [ROOT.Char.GetLadyLord], he visto que hay lugar para un/a [religious_vassal.GetFaith.HouseOfWorship] en vuestros dominios».\n\nMi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_vassal'))], [religious_vassal.Custom('ES_ElLa')] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('religious_vassal'))] [religious_vassal.GetTitledFirstName], [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('religious_vassal'))] antes de seguir. «Si construís un/a, seguramente tendréis la gratitud [religious_vassal.GetFaith.HighGodNameAlternatePossessive], así como la mía."
+ vassal.1101.desc:0 "«Mi [ROOT.Char.GetLadyLord], he visto que hay lugar para un/a [religious_vassal.GetFaith.HouseOfWorship] en vuestros dominios».\n\nMi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_vassal'))], [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('religious_vassal'))] [religious_vassal.GetTitledFirstName], [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('religious_vassal'))] antes de seguir. «Si construis uno/a, seguramente tendréis la gratitud [religious_vassal.GetFaith.HighGodNameAlternatePossessive], así como la mía."
  vassal.1101.a.tt:0 "#F [religious_vassal.GetFirstNameNoTooltip] recordará la promesa y me deberá un [favor|lE] si se cumple en diez años#!"
 
- vassal.1110.desc:0 "«Os habéis superado esta vez, mi [ROOT.Char.GetLadyLord]. Es un edificio magnífico». Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_vassal'))], [religious_liege.Custom('ES_ElLa')] [religious_vassal.GetTitledFirstName], [religious_vassal.Custom('quirk_pos_present')] y señala a tu [religious_vassal.GetFaith.HouseOfWorship] de reciente construcción.\n\n«Seguro que impresiona a [religious_vassal.GetFaith.HighGodName] tanto como a mí!»."
+ vassal.1110.desc:0 "«Os habéis superado esta vez, mi [ROOT.Char.GetLadyLord]. Es un edificio magnífico». Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('religious_vassal'))], [religious_vassal.GetTitledFirstName], [religious_vassal.Custom('quirk_pos_present')] y señala a tu [religious_vassal.GetFaith.HouseOfWorship] de reciente construcción.\n\n«Seguro que impresiona a [religious_vassal.GetFaith.HighGodName] tanto como a mí!»."
  vassal.1110.a:0 "Vivo para servir a [religious_vassal.GetFaith.HighGodName]."
 
  vassal.1120.desc_religious:0 "«Que un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetWomanMan] devot[ROOT.Char.Custom('ES_OA')] como vos haga promesas vacías… ¡Y sobre construir un/a [religious_vassal.GetFaith.HouseOfWorship] a [religious_vassal.GetFaith.HighGodName], nada menos!»."
@@ -29,7 +29,7 @@
  vassal.1120.a.tt:0 "#F Igual debí cumplir la promesa y construir ese/a [THIS.Char.GetFaith.HouseOfWorship]…#!"
 
  vassal.2001.t:0 "Enseñando a los jóvenes"
- vassal.2001.desc:0 "«Mi [ROOT.Char.GetLadyLord], creo que [child_to_educate.Custom('ES_ElLa')] joven [child_to_educate.GetFirstName] aprendería mucho si tuviera la oportunidad de estudiar bajo vuestra tutela».\n\n[child_to_educate.Custom('ES_ElLa')] [vassal_proposing_education.Custom2('RelationToMe', SCOPE.sC('child_to_educate'))] [vassal_proposing_education.Custom('ES_DelDela')] [vassal_proposing_education.GetTitledFirstName] [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('child_to_educate'))] antes de saludarnos."
+ vassal.2001.desc:0 "«Mi [ROOT.Char.GetLadyLord], creo que tal joven [child_to_educate.GetFirstName] aprendería mucho si tuviera la oportunidad de estudiar bajo vuestra tutela».\n\n[vassal_proposing_education.Custom2('RelationToMe', SCOPE.sC('child_to_educate'))] [vassal_proposing_education.Custom('ES_DelDela')] [vassal_proposing_education.GetTitledFirstName] [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('child_to_educate'))] antes de saludarnos."
  vassal.2001.a:0 "Claro, [child_to_educate.Custom('ES_LoLa')] educaré."
  vassal.2001.b:0 "¡Tu [child_to_educate.Custom('GetDaughterSon')] es responsabilidad tuya!"
 
@@ -62,10 +62,10 @@
  vassal.2205.desc_inherited:0 "«Mi [ROOT.Char.GetLadyLord], mi difunt[original_lender.Custom('ES_OA')] [vassal_loan_holder.Custom2('RelationToMe', SCOPE.sC('original_lender'))] os hizo un préstamo en el pasado».\n\n[vassal_loan_holder.GetFirstName] [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('vassal_loan_holder'))] antes de continuar. «Como su sucesor[vassal_loan_holder.Custom('ES_XA')], tengo que pediros que lo devolváis»."
  vassal.2205.desc_inherited_loan:0 "«Mi [ROOT.Char.GetLadyLord], presté en el pasado una suma de oro a vuestr[original_loaner.Custom('ES_OA')] difunt[original_loaner.Custom('ES_OA')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('original_loaner'))]».\n\n[vassal_loan_holder.GetFirstName] [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('vassal_loan_holder'))] antes de continuar. «Como su sucesor, el deber de devolverlo recae ahora sobre vos»."
  vassal.2205.desc_all_new_char:0 "«Mi [ROOT.Char.GetLadyLord], mi difunt[original_lender.Custom('ES_OA')] [vassal_loan_holder.Custom2('RelationToMe', SCOPE.sC('original_lender'))] prestó en el pasado una suma de oro a vuestr[original_loaner.Custom('ES_OA')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('original_loaner'))]».\n\n[vassal_loan_holder.GetFirstName] [ROOT.Char.Custom2('QuirkPresentPosOrNeg', SCOPE.sC('vassal_loan_holder'))] antes de continuar. «Ahora, el deber de devolverlo recae ahora sobre vos»."
- vassal.2205.desc_first_time:0 "«Mi [ROOT.Char.GetLadyLord], ¿os resultó útil el préstamo?».\n\n[vassal_loan_holder.Custom('ES_ElLa')|U] [vassal_loan_holder.GetTitledFirstName] ha venido pidiendo la devolución del oro que me proporcionó."
+ vassal.2205.desc_first_time:0 "«Mi [ROOT.Char.GetLadyLord], ¿os resultó útil el préstamo?».\n\n[vassal_loan_holder.GetTitledFirstName] ha venido pidiendo la devolución del oro que me proporcionó."
  vassal.2205.desc_second_time:0 "«Mi [ROOT.Char.GetLadyLord], no disfruto con este juego. Me debéis dinero y confío en que vuestra promesa de reembolso no fuera una mentira».\n\n[vassal_loan_holder.GetFirstName] [vassal_loan_holder.Custom('quirk_neg_present')] cuando se presenta ante mi por segunda vez."
- vassal.2205.desc_three_times:0 "«¡Me estoy cansando, mi [ROOT.Char.GetLadyLord]! Esta es la última vez que os lo pido de un modo civilizado. ¿Dónde está el dinero que me debéis?».\n\n[vassal_loan_holder.Custom('quirk_neg_pp')|U], [vassal_loan_holder.Custom('ES_ElLa')] [vassal_loan_holder.GetTitledFirstName] irradia enojo y ha perdido la paciencia."
- vassal.2205.desc_more_times:0 "«De haber sabido que erais un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.Custom('InsultNoun')] tan [ROOT.Char.Custom('InsultAdjectiveArticle')] y mendaz, jamás os habría hecho este favor».\n\nEl dinero que hay en mi tesorería es de poco consuelo cuando [vassal_loan_holder.Custom('ES_ElLa')] [vassal_loan_holder.GetTitledFirstName] [vassal_loan_holder.Custom('quirk_neg_present')] antes de marcharse."
+ vassal.2205.desc_three_times:0 "«¡Me estoy cansando, mi [ROOT.Char.GetLadyLord]! Esta es la última vez que os lo pido de un modo civilizado. ¿Dónde está el dinero que me debéis?».\n\n[vassal_loan_holder.Custom('quirk_neg_pp')|U], [vassal_loan_holder.GetTitledFirstName] irradia enojo y ha perdido la paciencia."
+ vassal.2205.desc_more_times:0 "«De haber sabido que erais un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.Custom('InsultNoun')] tan [ROOT.Char.Custom('InsultAdjectiveArticle')] y mendaz, jamás os habría hecho este favor».\n\nEl dinero que hay en mi tesorería es de poco consuelo cuando [vassal_loan_holder.GetTitledFirstName] [vassal_loan_holder.Custom('quirk_neg_present')] antes de marcharse."
  vassal.2205.z:0 "¡Ten! ¡Tómalo y vete!"
  vassal.2205.a:0 "¡Por supuesto que tendréis vuestro oro!"
  vassal.2205.a.tt:0 "#F ¡Debo pagarle lo antes posible!#!"
@@ -106,7 +106,7 @@
  vassal.2501.t:0 "Una solicitud de paz"
  vassal.2501.desc:0 "«Mi [ROOT.Char.GetLadyLord], esta guerra…». Mi [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('peaceful_vassal'))] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('peaceful_vassal'))], [peaceful_vassal.GetFirstName], suspira antes de continuar. «Es muy dura para las tropas… y dura para todos nosotros. Debo admitir que tengo dudas».\n\n¿Debería hacer algo para aliviar sus crecientes recelos?"
  vassal.2501.a:0 "Aplicar menos presión sobre [peaceful_vassal.Custom('ES_ElElla')] podría ayudar."
- vassal.2501.b:0 "¿Debo recordaros quién es [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName]?"
+ vassal.2501.b:0 "¿Debo recordaros quién es [ROOT.Char.GetTitleTierName]?"
  vassal.2501.c:0 "Debéis aprender a contener vuestras dudas."
 
  vassal.2601.t:0 "Deseando la guerra"
@@ -160,7 +160,7 @@
  vassal.3001.a:0 "¡A lo mejor [vassal_to_ask.GetFirstNameNoTooltip] puede darme algunas pistas!"
  vassal.3001.b:0 "Es un asunto privado."
 
- vassal.3002.desc:1 "«[ROOT.Char.GetFirstNameNoTooltip], se os ha bendecido con múltiples [ROOT.Char.Custom('ChildChildrenGender')], y yo no he tenido la misma suerte. ¿Tenéis algún consejo sobre cómo… remediarlo?».\n\n¡No me lo puedo creer! ¡Mi [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('liege_with_trouble'))] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('liege_with_trouble'))], [liege_with_trouble.Custom('ES_ElLa')] [liege_with_trouble.GetTitledFirstName], pidiéndome consejos de alcoba!"
+ vassal.3002.desc:1 "«[ROOT.Char.GetFirstNameNoTooltip], se os ha bendecido con múltiples [ROOT.Char.Custom('ChildChildrenGender')], y yo no he tenido la misma suerte. ¿Tenéis algún consejo sobre cómo… remediarlo?».\n\n¡No me lo puedo creer! ¡Mi [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('liege_with_trouble'))] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('liege_with_trouble'))], [liege_with_trouble.GetTitledFirstName], pidiéndome consejos de alcoba!"
  vassal.3002.a:1 "¿Qué os parecen unas criadillas de cerdo curadas y un vino?"
  vassal.3002.a.critical_success:0 "Mi consejo da resultados asombrosos"
  vassal.3002.a.success:0 "Mi consejo da buenos resultados"

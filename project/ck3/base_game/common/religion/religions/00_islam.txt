@@ -57,7 +57,7 @@
 	}
 
 	custom_faith_icons = {
-		custom_faith_1 custom_faith_2 custom_faith_3 custom_faith_4 custom_faith_5 custom_faith_6 custom_faith_7 custom_faith_8 custom_faith_9 custom_faith_10 dualism_custom_1 zoroastrian_custom_1 zoroastrian_custom_2 buddhism_custom_1 buddhism_custom_2 buddhism_custom_3 buddhism_custom_4 taoism_custom_1 yazidi_custom_1 sunni_custom_2 sunni_custom_3 sunni_custom_4 ibadi_custom muhakkima_1 muhakkima_2 muhakkima_4 muhakkima_5 muhakkima_6 judaism_custom_1 custom_faith_fp1_fenrir custom_faith_fp1_irminsul custom_faith_fp1_jormungandr custom_faith_fp1_odins_ravens custom_faith_fp1_runestone_moon custom_faith_fp1_thors_hammer custom_faith_fp1_valknut custom_faith_fp1_yggdrasil
+		custom_faith_1 custom_faith_2 custom_faith_3 custom_faith_4 custom_faith_5 custom_faith_6 custom_faith_7 custom_faith_8 custom_faith_9 custom_faith_10 dualism_custom_1 zoroastrian_custom_1 zoroastrian_custom_2 buddhism_custom_1 buddhism_custom_2 buddhism_custom_3 buddhism_custom_4 taoism_custom_1 yazidi_custom_1 sunni_custom_2 sunni_custom_3 sunni_custom_4 muhakkima_1 muhakkima_2 muhakkima_4 muhakkima_5 muhakkima_6 judaism_custom_1 custom_faith_fp1_fenrir custom_faith_fp1_irminsul custom_faith_fp1_jormungandr custom_faith_fp1_odins_ravens custom_faith_fp1_runestone_moon custom_faith_fp1_thors_hammer custom_faith_fp1_valknut custom_faith_fp1_yggdrasil
 	}
 
 	holy_order_names = {
@@ -269,6 +269,7 @@
 		muwalladi = { # Iberian Sunni Islam
 			color = { 0 0.4 0 }
 			icon = muwalladi
+			religious_head = d_sunni
 
 			holy_site = mecca
 			holy_site = medina
@@ -293,6 +294,7 @@
 		maturidi = { # Persian Sunni Islam
 			color = { 0.1 0.5 0.3 }
 			icon = maturidi
+			religious_head = d_sunni
 
 			holy_site = mecca
 			holy_site = medina
@@ -306,8 +308,6 @@
 			doctrine = tenet_literalism
 
 			#DOCTRINES
-			#Very closely aligned to the Ashari caliphate.
-			doctrine = doctrine_no_head
 			#Sunni
 			doctrine = muhammad_succession_sunni_doctrine
 			#Pluralistic
@@ -345,6 +345,7 @@
 		mutazila = { # Rationalist school of Sunni Islam. Dominant between 8th and 10th centuries in the Abbassid Caliphate (Persia).
 			color = { 0 0.7 0.5 }
 			icon = mutazila
+			religious_head = d_sunni
 
 			holy_site = mecca
 			holy_site = medina
@@ -360,8 +361,6 @@
 			#DOCTRINES:
 			#Sunni
 			doctrine = muhammad_succession_sunni_doctrine
-
-			doctrine = doctrine_no_head
 			doctrine = doctrine_divorce_allowed
 			doctrine = doctrine_witchcraft_shunned
 		}
@@ -558,7 +557,6 @@
 			#Homosexuality is a sin
 			#Witchcraft is a sin
 			doctrine = muhammad_succession_shia_doctrine
-			doctrine = doctrine_no_head
 			doctrine = doctrine_witchcraft_shunned
 
 			localization = {		
@@ -582,6 +580,7 @@
 		ghulat = {
 			color = { 0.4 0.8 0.3 }
 			icon = ghulat
+			religious_head = d_shiite
 
 			holy_site = mecca
 			holy_site = medina
@@ -597,7 +596,6 @@
 			#No religious head
 			#Witchcraft is a sin
 			doctrine = muhammad_succession_zandaqa_doctrine	#Technically Shia
-			doctrine = doctrine_no_head
 			doctrine = doctrine_witchcraft_shunned
 
 			localization = {		
@@ -633,10 +631,10 @@
 			#Adultery is a crime
 			#Clergy - equal
 			doctrine = muhammad_succession_zandaqa_doctrine	#Technically Shia
-			doctrine = doctrine_spiritual_head
 			doctrine = doctrine_monogamy
 			doctrine = doctrine_divorce_allowed
 			doctrine = doctrine_adultery_men_crime
+			doctrine = doctrine_spiritual_head
 			doctrine = doctrine_adultery_women_crime
 			doctrine = doctrine_clerical_gender_either
 
@@ -724,7 +722,6 @@
 
 			doctrine = doctrine_monogamy
 			doctrine = muhammad_succession_zandaqa_doctrine	#Technically Shia
-			doctrine = doctrine_no_head
 			doctrine = doctrine_divorce_allowed
 			doctrine = doctrine_adultery_women_crime
 			doctrine = doctrine_adultery_men_crime
@@ -875,6 +872,45 @@
 			doctrine = doctrine_witchcraft_shunned
 			doctrine = doctrine_gender_equal
 			doctrine = doctrine_clerical_gender_either
+
+			localization = {		
+				PriestMale = islam_shia_priest
+				PriestMalePlural = islam_shia_priest_plural
+				PriestFemale = islam_shia_priest
+				PriestFemalePlural = islam_shia_priest_plural
+				PriestNeuter = islam_shia_priest
+				PriestNeuterPlural = islam_shia_priest_plural
+				ReligiousHeadName = islam_shia_religious_head_title
+				ReligiousHeadTitleName = islam_shia_religious_head_title_name
+			}
+		}
+
+		hafizi = { #Sub-set of Ismaili Shiites that fervently supported the primacy of their caliph.
+			color = { 0.5 0.8 0.4 }
+			icon = ibadi_custom
+			religious_head = d_shiite
+
+			holy_site = mecca
+			holy_site = medina
+			holy_site = jerusalem
+			holy_site = nadjaf
+			holy_site = damascus
+
+			doctrine = tenet_struggle_submission
+			doctrine = tenet_unrelenting_faith
+			doctrine = tenet_tax_nonbelievers
+			
+			# Leadership
+			doctrine = doctrine_temporal_head
+
+			# Shia
+			doctrine = muhammad_succession_shia_doctrine
+			# Main Doctrines
+			doctrine = doctrine_pluralism_fundamentalist
+			# Criminal Doctrines
+			doctrine = doctrine_witchcraft_shunned
+			# Clergy Doctrines
+			doctrine = doctrine_clerical_function_recruitment
 
 			localization = {		
 				PriestMale = islam_shia_priest

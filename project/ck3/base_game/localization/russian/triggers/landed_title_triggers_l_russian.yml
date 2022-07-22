@@ -26,20 +26,20 @@
 
 
 
- ROME_HOLDER_IS_CORRECT_FAITH:0 "Рим под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
- ROME_HOLDER_IS_NOT_CORRECT_FAITH:0 "Рим не под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
+ ROME_HOLDER_IS_CORRECT_FAITH:0 "Рим под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
+ ROME_HOLDER_IS_NOT_CORRECT_FAITH:0 "Рим не под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
 
- ALEXANDRIA_HOLDER_IS_CORRECT_FAITH:0 "Александрия под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
- ALEXANDRIA_HOLDER_IS_NOT_CORRECT_FAITH:0 "Александрия не под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
+ ALEXANDRIA_HOLDER_IS_CORRECT_FAITH:0 "Александрия под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
+ ALEXANDRIA_HOLDER_IS_NOT_CORRECT_FAITH:0 "Александрия не под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
 
- JERUSALEM_HOLDER_IS_CORRECT_FAITH:0 "Иерусалим под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
- JERUSALEM_HOLDER_IS_NOT_CORRECT_FAITH:0 "Иерусалим не под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
+ JERUSALEM_HOLDER_IS_CORRECT_FAITH:0 "Иерусалим под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
+ JERUSALEM_HOLDER_IS_NOT_CORRECT_FAITH:0 "Иерусалим не под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
 
- ANTIOCHEIA_HOLDER_IS_CORRECT_FAITH:0 "Антиохия под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
- ANTIOCHEIA_HOLDER_IS_NOT_CORRECT_FAITH:0 "Антиохия не под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
+ ANTIOCHEIA_HOLDER_IS_CORRECT_FAITH:0 "Антиохия под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
+ ANTIOCHEIA_HOLDER_IS_NOT_CORRECT_FAITH:0 "Антиохия не под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
 
- BYZANTION_HOLDER_IS_CORRECT_FAITH:0 "Константинополь под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
- BYZANTION_HOLDER_IS_NOT_CORRECT_FAITH:0 "Константинополь не под #L [CHARACTER.GetFaith.GetAdjective|l]им#! управлением"
+ BYZANTION_HOLDER_IS_CORRECT_FAITH:0 "Константинополь под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
+ BYZANTION_HOLDER_IS_NOT_CORRECT_FAITH:0 "Константинополь не под #L [CHARACTER.GetFaith.GetName|l]им#! управлением"
 
 
  HRE_HOLDER_IS_OF_MY_DYNASTY:0 "Правитель Священной Римской империи принадлежит к династии [CHARACTER.GetDynastyName]"
@@ -64,25 +64,26 @@
  TITLE_IS_IN_REGION:0 "[PROVINCE.GetName] находится в регионе $REGION$"
  TITLE_IS_NOT_IN_REGION:0 "[PROVINCE.GetName] находится #bold не#! в регионе $REGION$"
 
- JERUSALEM_IS_SAME_FAITH:0 "Иерусалим [CHARACTER.GetFaith.GetAdjective|l]ий"
- JERUSALEM_IS_NOT_SAME_FAITH:0 "Иерусалим #bold не#! [CHARACTER.GetFaith.GetAdjective|l]ий"
+ JERUSALEM_IS_SAME_FAITH:0 "Иерусалим #L [CHARACTER.GetFaith.GetName|l]ий#!"
+ JERUSALEM_IS_NOT_SAME_FAITH:0 "Иерусалим #bold не#! #L [CHARACTER.GetFaith.GetName|l]ий#!"
 
- HIGH_PRIESTHOOD_ENOUGH_HOLY_SITES:1 "Вы контролируете не менее 3 #L [CHARACTER.GetFaith.GetAdjective|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
- HIGH_PRIESTHOOD_NOT_ENOUGH_HOLY_SITES:1 "Вы контролируете менее 3 #L [CHARACTER.GetFaith.GetAdjective|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
+ HIGH_PRIESTHOOD_ENOUGH_HOLY_SITES:1 "Вы контролируете не менее 3 #L [CHARACTER.GetFaith.GetName|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
+ HIGH_PRIESTHOOD_NOT_ENOUGH_HOLY_SITES:1 "Вы контролируете менее 3 #L [CHARACTER.GetFaith.GetName|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
 
  CONSECRATE_BLOODLINE_HIGH_RELIGIOUS_HEAD_OPINION:1 "[CHARACTER.GetFaith.GetReligiousHead.GetShortUINamePossessive] имеет [opinion|El] о вас не ниже 75"
  NOT_CONSECRATE_BLOODLINE_HIGH_RELIGIOUS_HEAD_OPINION:0 ""
  CONSECRATE_BLOODLINE_TEMPORAL_RELIGIOUS_HEAD_OPINION:0 ""
  NOT_CONSECRATE_BLOODLINE_TEMPORAL_RELIGIOUS_HEAD_OPINION:0 ""
 
- CONSECRATE_BLOODLINE_ENOUGH_HOLY_SITES:1 "Вы контролируете как минимум одну #L [CHARACTER.GetFaith.GetAdjective|l]ую#! [Concept( 'holy_site', 'святыню' )|El]"
- CONSECRATE_BLOODLINE_NOT_ENOUGH_HOLY_SITES:1 "Вы #bold не#! контролируете никаких #L [CHARACTER.GetFaith.GetAdjective|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
+ CONSECRATE_BLOODLINE_ENOUGH_HOLY_SITES:1 "Вы контролируете как минимум одну #L [CHARACTER.GetFaith.GetName|l]ую#! [Concept( 'holy_site', 'святыню' )|El]"
+ CONSECRATE_BLOODLINE_NOT_ENOUGH_HOLY_SITES:1 "Вы #bold не#! контролируете никаких #L [CHARACTER.GetFaith.GetName|l]их#! [Concept( 'holy_site', 'святынь' )|El]"
  
  HAS_REVOCABLE_LEASE_TRIGGER:0 "Есть аренда, которую можно отозвать"
  HAS_ORDER_OF_SUCCESSION_TRIGGER:0 "Использует орденское наследование"
  HAS_TITLE_LAW_FLAG_TRIGGER:0 "Есть закон титула: $LAW$"
  IS_TITULAR_TRIGGER:0 "[titular_title|E]"
- FORM_GERMANIA_CHRISTIAN_TRIGGER:0 "Вы — #L [CHARACTER.GetFaith.GetAdjective|l][Select_CString(CHARACTER.IsFemale, 'ая правительница', 'ий правитель' )]#!, и у вас есть еще одна возможная цель для реформирования — $e_hre$"
+ FORM_GERMANIA_CHRISTIAN_TRIGGER:0 "Вы — #L [CHARACTER.GetFaith.GetName|l][Select_CString(CHARACTER.IsFemale, 'ая правительница', 'ий правитель' )]#!, и у вас есть еще одна возможная цель для реформирования — $e_hre$"
+ FORM_HISPANIA_MUST_END_STRUGGLE_TRIGGER:0 "$e_spain$ не может быть объединена, пока не разрешена [iberian_struggle|E]"
  TITLE_HELD_YEARS:0 "Титул $TITLE$ удерживался в течение $VALUE|V0$ лет"
  TITLE_NOT_HELD_YEARS:0 "Титул $TITLE$ #bold НЕ#! удерживался в течение $VALUE|V0$ лет"
  LANDED_TITLE_THIS_EQUAL:0 "#L $TITLE$ая#! культура"
