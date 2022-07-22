@@ -527,7 +527,7 @@ revive_magyar_paganism_decision = {
 		religion:magyar_religion = {
 			any_faith = {
 				count = all
-				has_doctrine = unreformed_faith_doctrine
+				has_doctrine_parameter = unreformed
 			}
 		}
 	}
@@ -983,7 +983,7 @@ found_kingdom_of_livonia_decision = {
 					#Is a Crusader founding the Kingdom
 					root.faith = {
 						NOT = { religion_tag = baltic_religion }
-						NOT = { has_doctrine = unreformed_faith_doctrine }
+						NOT = { has_doctrine_parameter = unreformed }
 					}
 				}
 				capital_province = {

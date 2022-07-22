@@ -198,7 +198,7 @@
  # Important character has dangerous disease events, by Mathilda Bjarnehed
  health.2201.t:2 "[SCOPE.Custom('EventTitleDisease')]: 내 불쌍한 [ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('sick_character'))|U]"
  health.2201.start.desc:1 "나의 [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('sick_character'))] [sick_character.GetFirstName](이)가 병에 걸렸다는 슬픈 소식이 전해졌다. 그 병명은 바로"
- disease_ill_article:0 "$articleblank_blank$"
+ disease_ill_article:0 "$articleblank_article$"
  disease_ill:0 "감기였다."
  disease_pneumonic:0 "폐렴이었다."
  disease_gout_ridden:0 "통풍이었다."
@@ -370,7 +370,7 @@
  health.mystic_treatment_occult.5.desc:0 "[physician.GetTitledFirstName](은)는 내 침대 맡에 서있다. 시종들은 촛불을 켜고 있다. 내 손에는 항아리가 들려졌다. 항아리 속에서 들리는 소리로 판단하건대 아마 겁에 질린 작은 동물이 항아리 속에 갇혀있으리라. "이 짐승이 주군의 병을 대신 떠안을 것입니다." 의사는 설명 후 주문을 외우기 시작한다."
  health.mystic_treatment_questionable.1.desc:0 "[physician.GetFirstName](은)는 큰 거울 앞에 나를 앉혔다. 그 후 나를 둥글게 둘러싼 촛불을 켠다. "또 다른 주군과 접신을 해야 합니다." [physician.GetSheHe]가 별일 아니라는 듯이 말했다. 의문에 겨운 표정을 지으니 [physician.GetFirstName](이)가 내 어깨에 손을 올린다. "어쩌면... 인격이 변하실 수도 있습니다.""
  health.mystic_treatment_questionable.2.desc:1 "촛불만이 방 안을 밝히고 있다. 서쪽으로 난 창문을 향해 [physician.GetTitledFirstName](은)는 기름 방울로 내 손톱을 칠한다. 의사가 촛불 가까이로 내 손을 가져가자 뜨거움이 느껴진다. "가만히 계십시오.  [ROOT.Char.GetFaith.HealthGodName]의 지혜가 몸을 정화할 것입니다.""
- health.mystic_treatment_questionable.3.desc:0 ""달께서 주군의 헌신을 바랍니다." 이윽고 [physician.GetTitledFirstName](이)가 매운 냄새가 나는 뭔가가 담긴 관을 준다. 그것을 몇 모금 들이마신 후 나는 하늘을 바라보며 세상에서 가장 뛰어난 시를 즉흥적으로 지어냈다. 하지만 그때 내가 무어라 말했는지 기억이 안 난다..."
+ health.mystic_treatment_questionable.3.desc:1 ""달께서 주군의 헌신을 바랍니다." 이윽고 [physician.GetTitledFirstName](이)가 매운 냄새가 나는 케이크를 건넸다. 몇 분 동안 케이크를 씹어 삼킨 뒤, 나는 하늘을 바라보며 세상에서 가장 뛰어난 시를 즉흥적으로 지어냈다. 하지만 그때 내가 무어라 말했는지 기억이 안 난다..."
  health.mystic_treatment_questionable.4.desc:0 "[physician.GetTitledFirstName](은)는 매일 밤마다 내게 진한 약물을 마시게 했다. "이 약은 주군의 존재를 흐트러트려 몸 속으로 영혼들이 들어올 수 있게 합니다. 또 확실히... 마음을 편하게 만들어주기도 하죠." [physician.GetTitledFirstName](은)는 이렇게 말하며 나를 보고 씨익 웃는다."
  health.mystic_treatment_questionable.5.desc:0 "[physician.GetFirstName](은)는 [ROOT.Char.GetFaith.ReligiousText](을)를 해석하는 것은 아주 어려운 일이지만 불을 통해 정화하는 것은 이 지구만큼 엄청나게 오래된 요법이라고 한다. 그런데 설마 나를 불타는 숯 위로 걷게 할 줄은 상상도 못했지..."
  health.mystic_treatment_questionable.6.desc:2 "[physician.GetTitledFirstName](은)는 [ROOT.Char.GetFaith.HealthGodName]께서 내 마음을 시험해 보아야겠다고 하신다고 말한다. 함께 작은 호숫가로 가 서로의 손을 붙잡고 같이 물 속으로 들어갔다. [physician.GetFirstNameNoTooltip](이)가 내 어깨를 잡고 물 속으로 밀어 넣으니 깜짝 놀랐다. 아마 의식을 잃은 것 같다. 그 후에 무슨 일이 일어났는지 기억하지 못 하는 것을 보면..."

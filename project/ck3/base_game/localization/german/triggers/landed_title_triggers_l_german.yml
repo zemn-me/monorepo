@@ -83,6 +83,7 @@
  HAS_TITLE_LAW_FLAG_TRIGGER:0 "Hat Titelgesetz: $LAW$"
  IS_TITULAR_TRIGGER:0 "Ist [titular_title|E]"
  FORM_GERMANIA_CHRISTIAN_TRIGGER:0 "Als [CHARACTER.GetFaith.GetAdjective]er Herrscher könnt Ihr stattdessen das $e_hre$ neu gründen"
+ FORM_HISPANIA_MUST_END_STRUGGLE_TRIGGER:0 "$e_spain$ kann nicht gebildet werden, bis das [Concept('iberian_struggle', 'Iberische Ringen')] abgeschlossen ist"
  TITLE_HELD_YEARS:0 "$TITLE$ wurde $VALUE|V0$ Jahre gehalten"
  TITLE_NOT_HELD_YEARS:0 "$TITLE$ wurde #bold NICHT#! $VALUE|V0$ Jahre gehalten"
  LANDED_TITLE_THIS_EQUAL:0 "Ist $TITLE$"

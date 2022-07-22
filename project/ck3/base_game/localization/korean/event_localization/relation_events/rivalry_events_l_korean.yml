@@ -103,22 +103,22 @@
  rivalry.1024.tt:0 "굴욕적인 패배"
 
  rivalry.1021.t:0 "득의양양한 승리"
- rivalry.1021.desc:1 "결투를 시작할 때부터 [from_rival.GetTitledFirstName]에게 우위를 점한 상태였다. 그 이점을 파고들어서 녀석의 균형을 무너뜨리고자 했다. 얼마 지나지 않아 [duel_target.GetTitledFirstName](이)가 실수를 하면서 틈을 보였고, 그 기회를 노려 녀석의 팔을 [ROOT.GetCharacter.Custom('SignatureWeaponCritical')]버리면서 결투를 마무리 지었다!\n\n신속하고 과감한 승리를 거뒀다는 사실에 훨씬 기분이 좋아졌다."
- rivalry.1021.a:1 "[from_rival.GetFirstNamePossessiveNoTooltip] 실력이 내게 미치지 못함을 증명해냈다!"
+ rivalry.1021.desc:2 "결투를 시작할 때부터 [duel_loser.GetTitledFirstName]에게 우위를 점한 상태였다. 그 이점을 파고들어서 녀석의 균형을 무너뜨리고자 했다. 얼마 지나지 않아 [duel_target.GetTitledFirstName](이)가 실수를 하면서 틈을 보였고, 그 기회를 노려 녀석의 팔을 [ROOT.GetCharacter.Custom('SignatureWeaponCritical')]버리면서 결투를 마무리 지었다!\n\n신속하고 과감한 승리를 거뒀다는 사실에 훨씬 기분이 좋아졌다."
+ rivalry.1021.a:2 "[duel_loser.GetFirstNamePossessiveNoTooltip] 실력이 내게 미치지 못함을 증명해냈다!"
 
  rivalry.1022.t:0 "아슬아슬한 승리"
- rivalry.1022.desc:2 "결투가 시작되고서야, [duel_loser.GetTitledFirstName](이)가 예상만큼 만만한 상대가 아니라는 걸 깨달을 수 있었다. 몇 차례나 공방을 주고받았음에도 확실히 우위를 점하는 사람은 나오지 않았다.\n\n그렇게 서로 기진맥진한 상태로 힘들어하던 와중에 녀석이 틈을 보였다. 난 그 틈을 노려 놈의 다리를 [ROOT.GetCharacter.Custom('SignatureWeaponCritical')]버리면서 결투를 마무리했다!"
+ rivalry.1022.desc:3 "결투가 시작되고서야, [duel_loser.GetTitledFirstName](이)가 예상만큼 만만한 상대가 아니라는 걸 깨달을 수 있었다. 몇 차례나 공방을 주고받았음에도 확실히 우위를 점하는 사람은 나오지 않았다.\n\n그렇게 서로 기진맥진한 상태로 힘들어하던 와중에 녀석이 틈을 보였다. 난 그 틈을 노려 놈의 다리를 [ROOT.GetCharacter.Custom('SignatureWeaponCritical')]버리면서 결투를 마무리했다!"
  rivalry.1022.a:0 "승리로써 내가 옳았단 사실을 증명해냈다."
 
  rivalry.1023.t:0 "아슬아슬한 패배"
- rivalry.1023.desc:2 "결투가 시작되고서야, [from_rival.GetTitledFirstName](이)가 예상보다 훨씬 강인한 상대라는 사실을 깨달았다. 막상막하의 결투였다. 서로의 틈을 찾으면서 몇 차례 공방이 오갔다.\n\n기진맥진해져서 힘들어하던 와중에 내 방어 태세가 잠깐 무너졌다. 그 기회를 노려 [from_rival.GetFirstName](이)가 휘두른[from_rival.Custom('signature_weapon')]이 내 팔을 [from_rival.Custom('SignatureWeaponCritical')]버렸다."
+ rivalry.1023.desc:3 "결투가 시작되고서야, [duel_winner.GetTitledFirstName](이)가 예상보다 훨씬 강인한 상대라는 사실을 깨달았다. 막상막하의 결투였다. 서로의 틈을 찾으면서 몇 차례 공방이 오갔다.\n\n기진맥진해져서 힘들어하던 와중에 내 방어 태세가 잠깐 무너졌다. 그 기회를 노려 [duel_winner.GetFirstName](이)가 휘두른[duel_winner.Custom('signature_weapon')]이 내 팔을 [duel_winner.Custom('SignatureWeaponCritical')]버렸다."
  rivalry.1023.desc.end:0 "피를 심하게 흘리는 상황이었던지라, 패배를 인정하는 수밖에 없었다."
  rivalry.1023.desc.death:0 "상처에 시달리던 몸뚱아리가 그대로 바닥에 고꾸라졌다."
- rivalry.1023.a:1 "다음에는 내가 이길 거다, [from_rival.GetTitledFirstNameNoTooltip]!"
+ rivalry.1023.a:2 "다음에는 내가 이길 거다, [duel_winner.GetTitledFirstNameNoTooltip]!"
  rivalry.1023.a.death:0 "어두컴컴하기만 한데..."
 
  rivalry.1024.t:0 "굴욕적인 패배"
- rivalry.1024.desc:2 "결투가 시작되자마자, [from_rival.GetTitledFirstName](은)는 낭비할 시간이 없다는 듯이 곧장 덤벼들었다! 미처 대비하지 못했던 나는 어떻게든 기세를 되찾으려 애썼다. [from_rival.GetFirstNamePossessive] 거듭되는 공격 때문에 그 상황을 만회할 여지가 보이지 않았다.\n\n얼마 지나지 않아 방어 태세를 무너뜨린 [duel_target.GetTitledFirstName](이)가 휘두른 [from_rival.Custom('signature_weapon')](이)가 내 다리를 [from_rival.Custom('SignatureWeaponCriticalPresent')]버렸다."
+ rivalry.1024.desc:3 "결투가 시작되자마자, [duel_winner.GetTitledFirstName](은)는 낭비할 시간이 없다는 듯이 곧장 덤벼들었다! 미처 대비하지 못했던 나는 어떻게든 기세를 되찾으려 애썼다. [duel_winner.GetFirstNamePossessive] 거듭되는 공격 때문에 그 상황을 만회할 여지가 보이지 않았다.\n\n얼마 지나지 않아 방어 태세를 무너뜨린 [duel_target.GetTitledFirstName](이)가 휘두른 [duel_winner.Custom('signature_weapon')](이)가 내 다리를 [duel_winner.Custom('SignatureWeaponCriticalPresent')]버렸다."
  rivalry.1024.desc.end:0 "그렇게 결투는 그대로 마무리되었다. 난처하기 짝이 없는 패배에 굴욕감과 수치심을 느꼈다!"
  rivalry.1024.desc.death:0 "이내 자세가 무너져서 바닥에 고꾸라질 수밖에 없었다."
  rivalry.1024.a:0 "수치스러운 마음으로 절뚝이며 집으로 향해야 했다."

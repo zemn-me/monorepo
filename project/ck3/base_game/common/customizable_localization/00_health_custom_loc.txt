@@ -99,6 +99,20 @@ GetYoungMiddleAgedOld = {
 	}
 }
 
+GetYoungOld = {
+	type = character
+
+	text = {
+		trigger = { age < scope:second.age }
+		localization_key = age_young
+	}
+
+	text = {
+		trigger = { age >= scope:second.age }
+		localization_key = age_old
+	}
+}
+	
 RandomDisease = {
 	type = character
 

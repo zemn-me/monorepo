@@ -24,7 +24,7 @@
  action_reactive_advice_royal_court_click:0 "$click_to_open_lesson$"
 
  ra_rc_intro:0 "왕실 궁정"
- ra_rc_intro_desc:1 "이제 당신만의 [royal_court|E]을 이용할 수 있습니다!\n\n왕실 궁정은 특별한 유형의 궁정으로, 세계 무대에 화려하게 등장한 당신을 나타내는 상징과도 같습니다. 바로 이 왕실 궁정에서 다양한 신규 선택지와 혜택을 누릴 수 있습니다.\n\n[GetGovernment( 'feudal_government' ).GetName] 및 [GetGovernment( 'clan_government' ).GetName] [government|E]의 [kings|E]과 [emperors|E]가 왕실 궁정을 이용할 수 있습니다."
+ ra_rc_intro_desc:2 "이제 당신만의 [royal_court|E]을 이용할 수 있습니다!\n\n왕실 궁정은 특별한 유형의 궁정으로, 세계 무대에 화려하게 등장한 당신을 나타내는 상징과도 같습니다. 바로 이 왕실 궁정에서 다양한 신규 선택지와 혜택을 누릴 수 있습니다.\n\n[GetGovernment( 'feudal_government' ).GetName], [GetGovernment( 'clan_government' ).GetName], [GetGovernment( 'tribal_government' ).GetName] [government|E]의 [kings|E]과 [emperors|E]가 왕실 궁정을 이용할 수 있습니다."
 
  ra_rc_open:0 "$ra_rc_intro$"
  ra_rc_open_desc:0 "[royal_court|E]에서는 수많은 활동을 할 수 있습니다. 그러니 다양한 선택지를 직접 살펴보시기 바랍니다!\n\n일단은 이용할 수 있는 여러 구획을 빠르게 둘러보겠습니다."

@@ -12,3 +12,27 @@ major_story_owner_advantage = 50
 minor_target_rival_advantage = -10
 medium_target_rival_advantage = -30
 major_target_rival_advantage = -50
+
+# Existing Relationship Tallies
+sum_friends_and_rivals_tally_value = {
+	value = 0
+	every_relation = {
+		type = friend
+		add = 1
+	}
+	every_relation = {
+		type = rival
+		add = 1
+	}
+}
+sum_potential_friends_and_potential_rivals_tally_value = {
+	value = 0
+	every_relation = {
+		type = potential_friend
+		add = 1
+	}
+	every_relation = {
+		type = potential_rival
+		add = 1
+	}
+}

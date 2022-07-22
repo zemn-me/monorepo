@@ -99,7 +99,7 @@ house_arrest_ongoing.0002 = {
 	theme = prison
 	left_portrait = {
 		character = root
-		animation = angry
+		animation = anger
 	}
 	right_portrait = {
 		character = scope:prison_holder
@@ -367,6 +367,7 @@ house_arrest_ongoing.0003 = {
 		name = house_arrest_ongoing.0003.d
 		trigger = {
 			has_character_flag = lover
+			is_adult = yes
 			NOT = { scope:friendly_prisoner = root }
 		}
 		if = {
@@ -536,7 +537,7 @@ house_arrest_ongoing.0005 = {
 	theme = prison
 	left_portrait = {
 		character = root
-		animation = angry
+		animation = anger
 	}
 	right_portrait = {
 		character = scope:rival_at_court

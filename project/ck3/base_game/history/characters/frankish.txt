@@ -454,36 +454,6 @@
 		death = "782.1.1"
 	}
 }
-200141 = {
-	name = "Rampon"
-
-	religion = catholic
-	culture = frankish
-
-	774.1.1 = {
-		birth = yes
-	}
-	825.1.1 = {
-		death = yes
-	}
-}
-
-200142 = {
-	name = "Aldedramn"
-	dynasty_house = house_orleans
-
-	father = 200143
-
-	religion = catholic
-	culture = frankish
-
-	833.1.1 = {
-		birth = yes
-	}
-	851.1.1 = {
-		death = yes
-	}
-}
 
 200143 = {
 	name = "Guilhelm"
@@ -498,38 +468,6 @@
 		birth = yes
 	}
 	850.1.1 = {
-		death = yes
-	}
-}
-
-200144 = {
-	name = "Isembard"
-
-	religion = catholic
-	culture = frankish
-
-	800.1.1 = {
-		birth = yes
-	}
-	852.1.1 = {
-		death = yes
-	}
-}
-
-200145 = {
-	name = "Odelric"
-	dynasty = 1046011
-
-	father = 200146
-	mother = 200147
-
-	religion = catholic
-	culture = frankish
-
-	828.1.1 = {
-		birth = yes
-	}
-	860.1.1 = {
 		death = yes
 	}
 }
@@ -571,75 +509,6 @@
 	}
 }
 
-200148 = {
-	name = "Hunifred"
-	dynasty = 12110
-
-	father = 167790
-
-	religion = catholic
-	culture = frankish
-
-	831.1.1 = {
-		birth = yes
-	}
-	866.1.1 = {
-		death = yes
-	}
-}
-
-200152 = {
-	name = "Gaucelm"
-	dynasty = 100217
-
-	father = 168130
-
-	religion = catholic
-	culture = frankish
-
-	798.1.1 = {
-		birth = yes
-	}
-	834.1.1 = {
-		death = yes
-	}
-}
-73784 = {
-	name = "Guilhelm"
-	dynasty = 100217
-
-	father = 163063
-	mother = 168141
-
-	religion = catholic
-	culture = frankish
-
-	826.11.29 = {
-		birth = yes
-	}
-	850.1.1 = {
-		death = yes
-	}
-}
-163063 = {
-	name = "Bernard"
-	dynasty = 100217
-
-	father = 168130
-
-	religion = catholic
-	culture = frankish
-
-	796.1.1 = {
-		birth = yes
-	}
-	824.1.1 = {
-		add_spouse = 168141
-	}
-	844.5.1 = {
-		death = yes
-	}
-}
 190412 = {
 	name = "Arnold"
 	dynasty = 25061 #Karling
@@ -4658,5 +4527,201 @@ frankish0004 = {
 	}
 	904.1.1 = {
 		death = yes
+	}
+}
+
+frankish0005 = {
+	name = "Aureolus" # Conde Aureolo, Duke of Aragón (799-806) & Count of Alto Aragón (799-806)
+	dynasty = frankish_aragon # Frankish Aragón Dynasty
+	religion = "catholic"
+	culture = "frankish"
+	trait = education_martial_2
+
+	756.1.1 = {
+		birth = yes
+	}
+	856.1.1 = {
+		death = yes
+	}
+}
+
+frankish0006 = {
+	name = "Romilla" # Romilla Gellones, wife of Duke Bera of Barcelona (70140)
+	female = yes
+	dynasty = 100217 # Gellones Dynasty
+	religion = "catholic"
+	culture = "frankish"
+	trait = education_diplomacy_1
+
+	771.1.1 = {
+		birth = yes
+	}
+	822.1.1 = {
+		death = yes
+	}
+}
+
+73784 = {
+	name = "Guilhelm" # Guillaume de Septimanie, Duke of Barcelona (848-850) & Count of Barcelona, Empuries & Rousillon (848-850)
+	dynasty = 100217 # Gellones Dynasty
+	religion = catholic
+	culture = frankish
+	trait = education_intrigue_3
+
+	father = 163063 # Duke Bernard de Septimanie of Barcelona
+	mother = 168141 # Duchess Duoda Sanche de Vasconie
+
+
+	826.11.29 = {
+		birth = yes
+	}
+	840.6.20 = {
+		name = "GuilhE_m"
+		culture = occitan
+	}
+	850.1.1 = {
+		death = yes
+	}
+}
+
+163063 = {
+	name = "Bernard" # Bernard de Septimanie, Duke of Barcelona (825-832 & 835-844) & Toulouse (835-864) & Count of Barcelona, Girona, Ibiza, Mallorca & Menorca (825-832 & 835-844) & Toulouse (835-844)
+	dynasty = 100217 # Gellones Dynasty
+	religion = catholic
+	culture = frankish
+	trait = education_diplomacy_3
+
+	father = 168130 # Duke Guillaume I of Toulouse
+
+	796.1.1 = {
+		birth = yes
+	}
+	824.1.1 = {
+		add_spouse = 168141 # Duoda Sanche de Vasconie
+	}
+	840.6.20 = {
+		name = "Bernat"
+		culture = occitan
+	}
+	844.5.1 = {
+		death = yes
+	}
+}
+
+200141 = {
+	name = "Rampon" # Rampon, Count of Barcelona, Duke of Barcelona (820-825) & Count of Barcelona, Girona, Ibiza, Mallorca & Menorca (820-825)
+	dynasty = ramponing
+	religion = catholic
+	culture = frankish
+	trait = education_martial_2
+
+	774.1.1 = {
+		birth = yes
+	}
+	825.1.1 = {
+		death = yes
+	}
+}
+
+200142 = {
+	name = "Aldedramn" # Alderan de Troyes, Duke of Barcelona (850-851) & Count of Barcelona, Empuries & Rousillon (850-851)
+	dynasty_house = house_orleans
+	religion = catholic
+	culture = frankish
+	trait = education_martial_1
+
+	father = 303422
+
+	833.1.1 = {
+		birth = yes
+	}
+	840.6.20 = {
+		name = "Aleram"
+		culture = french
+	}
+	851.1.1 = {
+		death = {
+			death_reason = death_battle
+		}
+	}
+}
+
+200144 = {
+	name = "Isembard" # Isembard d'Autun, Duke of Barcelona (851-852) & Count of Barcelona, Empuries & Rousillon (851-852)
+	religion = catholic
+	culture = frankish
+	trait = education_stewardship_1
+
+	800.1.1 = {
+		birth = yes
+	}
+	840.6.20 = {
+		culture = french
+	}
+	852.1.1 = {
+		death = yes
+	}
+}
+
+200145 = {
+	name = "Odelric" # Odelric, Count of Barcelona, Duke of Barcelona (852-860) & Count of Barcelona, Girona, Empuries & Rousillon (852-860)
+	dynasty = 1046011 # Argengau Dynasty
+	religion = catholic
+	culture = frankish
+	trait = education_diplomacy_1
+
+	father = 200146 # Odelric von Argengau
+	mother = 200147 # Ingitrude
+
+	828.1.1 = {
+		birth = yes
+	}
+	840.6.20 = {
+		name = "Odalric"
+		culture = occitan
+	}
+	860.1.1 = {
+		death = yes
+	}
+}
+
+200148 = {
+	name = "Hunifred" # Humfrid, Count of Barcelona, Duke of Barceloa (858-866) & Count of Barcelona, Girona, Empuries & Rousillon (858-866)
+	dynasty = 12110 # Unrouchinger Dynasty
+	religion = catholic
+	culture = frankish
+	trait = education_intrigue_3
+
+	father = 167790
+	mother = 200147 # Ingitrude
+
+	831.1.1 = {
+		birth = yes
+	}
+	840.6.20 = {
+		name = "Humfrid"
+		culture = franconian
+	}
+	866.1.1 = {
+		death = yes
+	}
+}
+
+200152 = {
+	name = "Gaucelm" # Gaucelm de Toulouse, Count of Rousillon (812-832) & Empuries (817-832)
+	dynasty = 100217 # Gellones Dynasty
+	religion = catholic
+	culture = frankish
+	trait = education_intrigue_1
+
+	father = 168130 # Duke Guillaume I de Toulouse
+
+	798.1.1 = {
+		birth = yes
+	}
+	834.1.1 = {
+		death = {
+			death_reason = death_decapitated
+		}
 	}
 }

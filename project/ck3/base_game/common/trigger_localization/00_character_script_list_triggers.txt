@@ -33,3 +33,10 @@ any_in_de_jure_hierarchy_percent_greater_or_equal = {
 	third = NOT_HAS_51_PERCENT_OF_A_DE_JURE_TITLE
 	third_not = NOT_HAS_51_PERCENT_OF_A_DE_JURE_TITLE
 }
+
+any_in_de_jure_hierarchy_all = {
+	global = ANY_IN_DE_JURE_ALL_GLOBAL
+	global_not = NOT_ANY_IN_DE_JURE_ALL_GLOBAL
+	third = ANY_IN_DE_JURE_ALL_THIRD
+	third_not = NOT_ANY_IN_DE_JURE_ALL_THIRD
+}

@@ -24,7 +24,7 @@
  action_reactive_advice_royal_court_click:0 "$click_to_open_lesson$"
 
  ra_rc_intro:0 "Königshof"
- ra_rc_intro_desc:1 "Ihr habt Euren eigenen [Concept('royal_court', 'Königshof')|E] zur Verfügung!\n\nDer Königshof ist eine besondere Art von Hof, der Euch auf der großen Weltbühne präsentiert und Euch Zugriff auf neue Möglichkeiten und Vorzüge gewährt.\n\nEr steht [Concept('king', 'Königen')|E] und [Concept('emperor', 'Kaisern')|E] mit den [Concept('government', 'Regierungsformen')|E] [GetGovernment('clan_government').GetName] und [GetGovernment('feudal_government').GetName] zur Verfügung."
+ ra_rc_intro_desc:2 "Ihr verfügt nun über Euren eigenen [Concept('royal_court', 'Königshof')|E]!\n\nDer Königshof ist eine besondere Art von Hof, der Euch auf der großen Weltbühne präsentiert und Euch Zugriff auf neue Möglichkeiten und Vorzüge gewährt.\n\nEr steht [Concept('king', 'Königen')|E] und [Concept('emperor', 'Kaisern')|E] mit den [Concept('government', 'Regierungsformen')|E] „[GetGovernment('feudal_government').GetName]“, [GetGovernment( 'clan_government' ).GetName] und „[GetGovernment('tribal_government').GetName]“ zur Verfügung."
 
  ra_rc_open:0 "$ra_rc_intro$"
  ra_rc_open_desc:0 "Am eigenen [royal_court|E] kann man viele Dinge tun. Also erkundet nach Belieben die Möglichkeiten!\n\nFürs Erste wollen wir kurz die neuen Aktionen durchgehen, die Euch zur Verfügung stehen."

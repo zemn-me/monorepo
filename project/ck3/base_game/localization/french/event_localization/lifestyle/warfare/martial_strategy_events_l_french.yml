@@ -47,7 +47,7 @@
 
  #Developing cunning/manipulative tactics (Intrigue skill challenge), Sean Hughes
  martial_strategy.2020.t:0 "Est-ce que tout est loyal ?"
- martial_strategy.2020.opening:0 "De nombreux traités ont été écrits sur la conduite honorable à tenir en temps de guerre, mais la vie de ces auteurs n’était pas en jeu lorsqu’ils ont mis leur plume sur le papier.\n\n"
+ martial_strategy.2020.opening:0 "De nombreux traités ont été écrits sur la conduite honorable à tenir en temps de guerre, mais la vie de ces auteurs n’était pas en jeu lorsqu’ils ont posé leur plume sur le papier.\n\n"
  martial_strategy.2020.desc:0 "Si je veux maximiser mes chances de gagner au combat, il peut être intéressant pour moi d’envisager d’employer des stratégies... peu orthodoxes."
  martial_strategy.2020.desc.ambitious:0 "Pour m’assurer de la victoire, je dois profiter du moindre avantage sur le champ de bataille, même si cela signifie recourir à des tactiques qui peuvent être considérées comme déloyales."
  martial_strategy.2020.desc.martial:0 "Je sais par expérience que la meilleure façon de vaincre ses ennemis est de s’assurer d’engager le combat selon ses propres conditions ! La question est de savoir lesquelles seraient les plus avantageuses."
@@ -187,9 +187,9 @@
  martial_strategy_special.1399.t:0 "$martial_strategy_special.1301.t$ : prendre d’assaut un [ROOT.Char.Custom('FortifiedBuilding')]"
  martial_strategy_special.1399.desc_win:0 "Le [ROOT.Char.Custom('FortifiedBuilding')] est nôtre !"
  martial_strategy_special.1399.desc_loose:0 "La bataille est perdue, les défenseurs l’emporte."
- martial_strategy_special.1399.desc:0 "Parmi les soldats qui célèbrent, je trouve [siege_proposer.Custom('FR_le_Char_Pi')][siege_proposer.GetTitledFirstName] qui me félicite pour une charge bien menée."
- martial_strategy_special.1399.desc_win2:0 "\n\n« Regardez-les, [ROOT.Char.Custom('FR_MonseigneurMadame')|U]. Le changement de rythme leur a fait du bien. Vous-même semblez revigoré[ROOT.Char.Custom('FR_E')], bien que votre [ROOT.Char.Custom('FortifiedBuilding')] ait été pris par les attaquants ! »"
- martial_strategy_special.1399.desc_loose2:0 "\n\n« Même si vous n’avez pas réussi à prendre le [ROOT.Char.Custom('FortifiedBuilding')], [ROOT.Char.Custom('FR_MonseigneurMadame')|U], les soldats et vous-même semblez revigorés par le changement de rythme ! »\n\nJe ne peux qu’être d’accord. De plus, il est réconfortant de savoir que mon [ROOT.Char.Custom('FortifiedBuilding')] ne sera pas envahi si facilement !"
+ martial_strategy_special.1399.desc:0 "Parmi les soldats en liesse, je trouve [siege_proposer.Custom('FR_le_Char_Pi')][siege_proposer.GetTitledFirstName] qui me félicite pour une charge bien menée."
+ martial_strategy_special.1399.desc_win2:0 "\n\n« Regardez-les, [ROOT.Char.Custom('FR_MonseigneurMadame')|U]. L’activité intense leur a fait du bien. Vous-même semblez revigoré[ROOT.Char.Custom('FR_E')], bien que votre [ROOT.Char.Custom('FortifiedBuilding')] ait été pris par les attaquants ! »"
+ martial_strategy_special.1399.desc_loose2:0 "\n\n« Même si vous n’avez pas réussi à prendre le [ROOT.Char.Custom('FortifiedBuilding')], [ROOT.Char.Custom('FR_MonseigneurMadame')|U], les soldats et vous-même semblez revigorés par l’activité intense ! »\n\nJe ne peux qu’être d’accord. De plus, il est réconfortant de savoir que mon [ROOT.Char.Custom('FortifiedBuilding')] ne sera pas envahi si facilement !"
  martial_strategy_special.1399.a:0 "Nos ennemis n’auront aucune chance !"
  martial_strategy_special.1399.b:0 "Nous sommes de redoutables défenseurs !"
 

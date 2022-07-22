@@ -2378,6 +2378,11 @@
 		add_pressed_claim = title:c_tall_basma
 	}
 	1066.9.14 = {
+		add_character_flag = {
+			flag = recent_nation_fracturing_faction_war
+			years = faction_nation_fracturing_war_defeat_cooldown
+		}
+
 		effect = {
 			spawn_army = {
 				name = event_troop_default_name

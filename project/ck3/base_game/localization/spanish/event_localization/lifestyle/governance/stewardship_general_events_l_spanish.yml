@@ -65,7 +65,7 @@
 
  # Build a fish pond, by Linnéa Thimrén
  stewardship_general.5011.t:0 "Las carpas"
- stewardship_general.5011.desc:0 "«Si es un estanque para carpas lo que os interesa, puedo construiros uno estupendo, mi [ROOT.Char.GetLadyLadyLord|U]».\n\nEl constructor que hay ante mí tiene buenas credenciales y mis cortesanos parecen muy entusiasmados con la idea…"
+ stewardship_general.5011.desc:0 "«Si es un estanque para carpas lo que os interesa, puedo construiros uno estupendo, mi [ROOT.Char.GetLadyLord]».\n\nEl constructor que hay ante mí tiene buenas credenciales y mis cortesanos parecen muy entusiasmados con la idea…"
  stewardship_general.5011.a:0 "¡Tendrás todos los recursos que necesites!"
  stewardship_general.5011.b:0 "¿Es #EMP de veras#! lo mejor que puedes ofrecerme?"
  stewardship_general.5011.b.message_1:0 "Haces un gran trato."
@@ -80,8 +80,8 @@
  # Catch a servant stealing from me, by Linnéa Thimrén
  stewardship_general.5041.t:0 "Sirviente sin escrúpulos"
  stewardship_general.5041.desc:0 "¡Un[servant_character.Custom('ES_XA')] [ROOT.GetCharacter.Custom('lowly_servant_type')] de baja estofa ha estado robando en mi casa!"
- stewardship_general.5041.desc_highgod:0 "[servant_character.Custom('ES_ElLa')] [servant_character.GetWomanMan] se encoje ante mí, lloriqueando acerca de niños hambrientos y clemencia en nombre de [ROOT.Char.GetFaith.HighGodName]."
- stewardship_general.5041.desc_other:0 "[servant_character.Custom('ES_ElLa')] [servant_character.GetWomanMan] se encoje ante mí, lloriqueando acerca de niños hambrientos y suplicando clemencia."
+ stewardship_general.5041.desc_highgod:0 "Esta persona se encoje ante mí, lloriqueando acerca de niños hambrientos y clemencia en nombre de [ROOT.Char.GetFaith.HighGodName]."
+ stewardship_general.5041.desc_other:0 "Esta persona se encoje ante mí, lloriqueando acerca de niños hambrientos y suplicando clemencia."
  stewardship_general.5041.desc_ending:0 "\n\n«Por favor, mi [ROOT.Char.GetLadyLord], ¡haré lo que me pidáis!»."
  stewardship_general.5041.a:0 "[servant_character.GetHerHim|U] enseño qué es pasar hambre de verdad."
  stewardship_general.5041.b:0 "[servant_character.Custom('ES_LoLa')|U] hago encarcelar."

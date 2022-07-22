@@ -51,6 +51,14 @@
  gruesome_festivals_active_name:0 "대규모 희생제 개최"
  doctrine_parameter_gruesome_festivals_active:0 "10년에 한 번꼴로 대규모 희생제를 개최하여 동일한 [faith|E]을 지닌 신하와 [county_opinion|E]을 보듬습니다."
 
+ tenet_volcanic_veneration_name:0 "화산 숭배"
+ tenet_volcanic_veneration_desc:0 "갓 태어나 불을 뿜어대는 대지보다 거룩한 광경은 없을 것입니다. 우리는 재앙의 끝자락에서 살아가며, 목숨은 [ROOT.Faith.PantheonTerm]의 자비에 달려 있을 뿐입니다."
+ tenet_cthonic_redoubts_name:0 "지하의 보루"
+ tenet_cthonic_redoubts_desc:0 "이 세상에 지구의 뿌리보다 더 나은 은신처는 없으며, 툭 튀어나온 지구의 척추보다 더 견고한 요새는 없습니다. 그리고 지구의 숨겨진 길을 따르는 것보다 숭고한 순례는 없다고 할 수 있겠죠. 우린 아득히 높은 정상에서 창조의 소산을 내려다보며 진정한 신의 무게를 느낍니다."
+ doctrine_parameter_easier_to_convert_faith_in_mountains:0 "산악 [terrain|E]에서의 [convert_county|E] 속도: #P +[EmptyScope.ScriptValue('easier_to_convert_faith_in_mountains_bonus_loc_control')|0]%#!"
+ doctrine_parameter_easier_to_convert_culture_in_same_faith_mountains:0 "[faith|E]이 같은 산악 [terrain|E]에서의 [promote_culture|E] 속도: #P +[EmptyScope.ScriptValue('promote_culture_easier_to_convert_culture_in_same_faith_mountains_bonus_loc_control')|0]%#!"
+ doctrine_parameter_harder_to_convert_faith_away_in_mountains:0 "산악 [terrain|E]에서의 적대적인 [convert_county|E] 속도: #P [EmptyScope.ScriptValue('harder_to_convert_faith_away_in_mountains_malus_loc_control')|0]%#!"
+
  tenet_consolamentum_name:1 "엔듀라"
  tenet_consolamentum_name_alternate:0 "자살 의식"
  tenet_consolamentum_desc:0 "늙거나 병이 들면 의식을 통해 죄악에 물든 영혼을 씻어내야 합니다. 의식이 끝나면 죄악이 다시 한번 우리를 타락시키지 않도록 빠르고 확실하게 목숨을 끊습니다."
@@ -96,6 +104,13 @@
 
  tenet_unrelenting_faith_name:0 "사그라지지 않는 믿음"
  tenet_unrelenting_faith_desc:0 "우리의 신념은 굳건하니 기꺼이 믿음을 지키기 위해 싸우고 죽을 것입니다. 그 어떤 역경이 닥친다 한들 우리는 절대 굴하지 않습니다."
+
+ tenet_rite_name:0 "예식"
+ tenet_rite_desc:0 "우리의 믿음은 근본이 되는 신앙과 그리 다르지 않습니다... 중요한 교리는 물론이요, 중재를 도맡을 궁극적인 권위도 합의할 수 있는 문제 아니겠습니까. 그런데 굳이 사소한 부분 하나하나 따지고 들 필요가 있을까요?"
+ doctrine_parameter_maintains_head_of_faith_on_creation:0 "새로운 [faiths|E] 생성 시 기존 [head_of_faith|E]를 유지함"
+ doctrine_parameter_ecumenical_christians_keep_ecumenism:0 "[GetPlayer.Custom('GetRiteEcumenismFullOrEmpty')]"
+ GetRiteEcumenismFullOrEmpty_full:0 "생성 시 [GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName] 보유 기독교 [faiths|E]은 유지함"
+ GetRiteEcumenismFullOrEmpty_empty:0 ""
 
  #Muslim Tenets
  tenet_struggle_submission_name:0 "투쟁과 복종"
@@ -202,6 +217,8 @@
 
  tenet_sanctity_of_nature_name:0 "자연의 존엄함"
  tenet_sanctity_of_nature_desc:1 "자연은 신이 창조한 세계이며 우리는 그저 손님으로서 있을 뿐입니다. 그러니 나무며, 동물이며 대지 그 자체도 공경하고 존중해야만 합니다."
+ # This parameter does nothing; it's just here to flag the tenet's nature silently so we can reference it without directly tagging the tenet.
+ doctrine_parameter_believes_in_harmony_with_nature_invisible:0 ""
 
  tenet_mystical_birthright_name:0 "상서로운 생득권"
  tenet_mystical_birthright_alternate:0 "탈토스 쉴에테스"
@@ -269,14 +286,24 @@
  #Instead, add these doctrine parameters to appropriate tenets (presently Christian Syncretism & Pastoral Isolation).
  doctrine_parameter_is_christian_faith_bilateral_loc_override:2 "우리가 기독교계 [faiths|E]을, 또 기독교계 $game_concept_faiths$이 우리를 $hostility_evil_tooltippable$ 신앙이 아닌 [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] 신앙으로 간주함"
  doctrine_parameter_is_christian_faith_pastoral_isolation_loc_override:1 "교리의 차이와는 상관없이 다른 기독교 [faiths|E]을 항상 [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] 신앙으로 간주함"
+ doctrine_parameter_can_use_christian_artefacts:0 "기독교 [artifacts|E]의 이로운 효과를 온전히 받음"
  doctrine_parameter_christian_syncretic_actor_opinion_active:1 "기독교계 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
  doctrine_parameter_opinion_of_christian_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_christian_syncretic_recipient_opinion_active:1 "$tenet_christian_syncretism_name$ [core_tenet|E]를 가진 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
  doctrine_parameter_opinion_of_christian_syncretic_actor_opinion_active:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_felicitous_doctrine:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_radical_doctrine:0 ""
+ doctrine_parameter_adoptionists_like_ecumenism:0 "[GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName] 교리를 따르는 $christianity_religion_adj$ [faiths|E]을 $hostility_hostile_tooltippable$인 것이 아닌 $hostility_astray_tooltippable$ 것으로 여김"
+ doctrine_parameter_adoptionists_are_unilateral_hostile:0 "다른 $christianity_religion_adj$ [faiths|E]은 이들을 오직 $hostility_hostile_tooltippable$으로 여김. 반면에 덜 세련된 $adoptionist_adherent_plural$(은)는 $hostility_evil_tooltippable$(으)로 간주됨"
+ doctrine_parameter_adoptionists_are_unilateral_evil:0 "다른 $christianity_religion_adj$ [faiths|E]은 이들을 $hostility_evil_tooltippable$으로 간주함"
+ doctrine_parameter_adoptionists_are_mutual_evil:0 "우리가, 또 다른 이들이 $christianity_religion_adherent_plural$(을)를 $hostility_evil_tooltippable$으로 간주함"
+ doctrine_parameter_adoptionist_school_removed_on_reformation:0 "[reformation|E] 시 이 종파는 미묘한 차이를 #EMP 영구적으로#! 상실하게 됨"
+ doctrine_parameter_adoptionists_attractively_intuitive_theology:0 "다른 [GetReligionByKey('christianity_religion').GetAdjective] [faiths|E]에 대한 [EmptyScope.ScriptValue('fp2_lyonese_monk_conversion_bonus_root_value')|=+%0] 개종 속도"
 
  tenet_islamic_syncretism_name:0 "이슬람 융화주의"
  tenet_islamic_syncretism_desc:0 "선지자의 말은 의심할 여지 없이 현명하고 정당하매, 의심을 떠나 그의 생각과 행동에 주의를 기울여야 함은 확실합니다."
  doctrine_parameter_hostility_override_special_doctrine_is_islamic_faith:2 "우리가 이슬람계 [faiths|E]을, 또 이슬람계 $game_concept_faiths$이 우리를 $hostility_evil_tooltippable$ 신앙이 아닌 [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] 신앙으로 간주함"
+ doctrine_parameter_can_use_islamic_artefacts:0 "이슬람 [artifacts|E]의 이로운 효과를 온전히 받음"
  doctrine_parameter_islamic_syncretic_actor_opinion_active:1 "이슬람계 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
  doctrine_parameter_opinion_of_islamic_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_islamic_syncretic_recipient_opinion_active:1 "$tenet_islamic_syncretism_name$ [core_tenet|E]를 가진 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
@@ -285,6 +312,7 @@
  tenet_jewish_syncretism_name:0 "유대교 융화주의"
  tenet_jewish_syncretism_desc:0 "자신들이 신의 선택을 받은 민족이라는 주장은 동의하기 어렵지만, 유대교의 토라는 부정할 수 없는 지혜로 가득하며 배울 것이 참 많습니다."
  doctrine_parameter_hostility_override_special_doctrine_is_jewish_faith:2 "우리가 유대교 [faiths|E]을, 또 유대교 $game_concept_faiths$이 우리를 $hostility_evil_tooltippable$ 신앙이 아닌 [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V] 신앙으로 간주함"
+ doctrine_parameter_can_use_jewish_artefacts:0 "유대교 [artifacts|E]의 이로운 효과를 온전히 받음"
  doctrine_parameter_jewish_syncretic_actor_opinion_active:1 "유대교 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
  doctrine_parameter_opinion_of_jewish_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_jewish_syncretic_recipient_opinion_active:1 "$tenet_jewish_syncretism_name$ [core_tenet|E]를 가진 [faiths|E]과의 상호 [EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0] [opinion|E] 보너스"
@@ -317,4 +345,12 @@
  tenet_natural_primitivism_desc:0 "문명은 부자연스러운 것으로 본질적으로 무질서한 창조물에 질서를 부여하려는 인류의 부질없으면서도 신성모독적인 산물입니다. 우린 자연을 품으면서 [ROOT.Faith.PantheonTerm]께서 의도하심을 따라 자유롭고 자연스럽게 살아야 합니다."
  doctrine_parameter_naked_adherents_active:0 "신도들이 옷을 입지 않음"
  doctrine_parameter_natural_primitivism_law_cost_increase:0 "법률 비용: #N +50%#!"
+ doctrine_parameter_unlock_jizya_contract:0 "지즈야 [vassal_contract|E] 잠금 해제"
  
+ tenet_sacrificial_ceremonies_name:0 "희생제"
+ tenet_sacrificial_ceremonies_desc:0 "자발적이든 비자발적이든 인신 공양은 신에게 가까워지는 수단입니다. 의식에서 자발적으로 자기 자신을 희생하는 행위는 하나의 관례요, 미덕이라고도 할 수 있겠습니다. 신에게 용서받지 못할 죄악을 저지른 자를 희생시키는 것도 그만큼 고결한 일이지요."
+ 
+ tenet_megaliths_name:0 "거석 건설"
+ tenet_megaliths_desc:0 "자고로 숭배란 사원의 비좁은 경계 안에서 이루어져서는 안 되는 법입니다. 사원은 오히려 우리 주위를 감싸는 온갖 신성한 피조물에서 멀어지게 만드는 미개한 구조물에 지나지 않습니다. 창조주께서 베풀어 주신 돌과 공기, 열석을 받아들여 그분들께 기쁨을 선사하면 신성성에 가까워질 수 있습니다."
+ doctrine_parameter_can_build_megaliths:0 "[temple|E] 봉토에 거석 건설 가능, 공작령 수도에 위대한 거석 건설 가능"
+ province_is_of_a_megalith_faith_tt:0 "해당 [Concept( 'counties', '영지' )|E]가 거석의 중요성을 믿는 [faith|E]을 따라야 함"

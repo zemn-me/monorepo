@@ -13,6 +13,3 @@
  game_concept_trial_by_combat_trial:0 "jugement"
  game_concept_trial_by_combat_combat:0 "Combat"
  game_concept_trial_by_combat_desc:0 "Dans certaines [cultures|El], les problèmes qui ne peuvent être réglés par des mots ou par la guerre sont un motif pour un duel judiciaire. Si celui-ci est accepté, les deux [characters|El] s’engagent dans un [single_combat_duel|El] dont les termes sont définis à l’avance. Si la partie fautive gagne, elle prouve son innocence.\n\nLes conditions requises pour un tel jugement sont:\n$EFFECT_LIST_BULLET$Vous devez tous deux être d’une culture appropriée\n$EFFECT_LIST_BULLET$Vous devez avoir un [imprisonment_reason|El] contre lui (il sera alors consommé).\n$EFFECT_LIST_BULLET$Il ne doit pas être votre [liege|El], [vassal|El], ni même l’[guest|El] ou le [courtier|El] de vous-même ou de l’un de vos vassaux.\n\nLes personnages qui ne sont pas aptes à se battre eux-mêmes peuvent être défiés tant que ce sont des [rulers|El]. Ils désignent alors un [knight|El] pour se battre en leur nom.\n\nUn combat à [character_death_death|El] n’est possible que si la partie lésée est [Concept('tribal','tribale')|E] et que les deux personnages se battent en personne dans le duel."
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- game_concept_designate_chief_sacrifice_or_who:0 "qui"

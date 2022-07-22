@@ -141,7 +141,7 @@
  I_AM_SENT_TO_ACTIVITY:1 "You will go to [ACTIVITY.GetName]"
  COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] ends"
  I_COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] ends"
- COMPLETE_ACTIVITY_NEG: "The Activity ends"
+ COMPLETE_ACTIVITY_NEG:0 "The Activity ends"
 
  WILL_MARRY_EFFECT:1 "[marries|E] [TARGET_CHARACTER.GetShortUIName]"
  I_WILL_MARRY_EFFECT:1 "You [marry|E] [TARGET_CHARACTER.GetShortUIName]"
@@ -984,6 +984,7 @@
  
  #Are negative values in these loc keys showing for you? Don't add new negative ones, just come out of debug mode and they're fine.
  CHANGE_DEVELOPMENT_LEVEL:0 "The [development|E] level in [TITLE.GetName] will change by $VALUE|=0+$"
+ CHANGE_DEVELOPMENT_LEVEL_PAST:0 "The [development|E] level in [TITLE.GetName] changed by $VALUE|=0+$"
  CHANGE_DEVELOPMENT_PROGRESS:2 "[development|E] progress increases by $VALUE|0+$"
  CHANGE_DEVELOPMENT_PROGRESS_NEG:1 "[development|E] progress decreases by $VALUE|0-$"
  THEY_CHANGE_DEVELOPMENT_PROGRESS:1 "The [development|E] progress in [TITLE.GetName] will increase by $VALUE|0+$"
@@ -1374,10 +1375,10 @@
  GET_RANDOM_INNOVATION_FROM_EFFECT:2 "[CULTURE.GetName] [culture|E] receives random [innovation|E] from [TARGET_CULTURE.GetName] culture"
  GOT_RANDOM_INNOVATION_FROM_EFFECT:1 "[CULTURE.GetName] [culture|E] received random [innovation|E] from [TARGET_CULTURE.GetName] culture"
 
- ACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] gets the [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$"
- ACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] got the [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] loses the [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] lost the [CHARACTER.GetFaith.GetAdjective] [holy_site|E] $HOLY_SITE$"
+ ACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier] will be considered a [FAITH.GetAdjective] [holy_site|E]"
+ ACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier] became a [FAITH.GetAdjective] [holy_site|E]"
+ DEACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier] will no longer be considered a [FAITH.GetAdjective] [holy_site|E]"
+ DEACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier] stopped being considered a [FAITH.GetAdjective] [holy_site|E]"
 
  ADD_RANDOM_INNOVATION_EFFECT:1 "[CULTURE.GetCollectiveNoun] develop a random $GROUP$ group [innovation|E]"
  GOT_RANDOM_INNOVATION_EFFECT:0 "[CULTURE.GetCollectiveNoun] developed a random $GROUP$ group [innovation|E]"
@@ -1653,6 +1654,8 @@
  I_CAN_USE_THE_BEFRIEND_SCHEME:2 "You can use the [GetScheme('befriend').GetTypeName] [scheme|E]"
  THEY_CAN_USE_THE_BEFRIEND_SCHEME:1 "[CHARACTER.GetShortUIName|U] can use the [GetScheme('befriend').GetTypeName] [scheme|E]"
 
+ unlocks_board_games_interaction_effect:0 "Unlocks the $challenge_to_2p_chess_interaction$ [interaction|E], allowing you to play friendly games with other [characters|E]"
+
  EACH_FRIEND_ADDS_STRESS_REDUCTION:2 "Each [friend|E] adds: [stress_gain_i]#P -5%#! [stress|E] Gain"
 
  CHILDREN_ARE_BORN_WITH_EXTRA_STATS:0 "Children receive #P 1#! to #P 3#! extra [skill|E] points"
@@ -1679,6 +1682,8 @@
  CAN_USE_THE_SELL_TITLES_DECISION:0 "Can use the [sell_titles|E] [decision|E]"
 
  COLLECT_TAXES_EFFECTIVENESS_GAIN:0 "[collect_taxes|E] Effectiveness: #P +[EmptyScope.ScriptValue('tax_man_perk_percentage')|0]%#!"
+
+ unlocks_truce_purchasing_interaction_desc:0 "Unlocks the $purchase_truce_interaction$ [interaction|E], allowing [truces|E] to be bought preemptively"
 
  CHILDREN_HAVE_CHANCE_OF_IMPROVEMENT:0 "[wards|E] can get additional [skills|E], and can become [friends|E] with their [guardian|E]"
  CHILDREN_I_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:3 "Your [wards|E] can get additional [skills|E], and can become your [friends|E]\n[GetScheme('learn_language').GetTypeName] [success_chance|E]: #P +25%#!"
@@ -1898,8 +1903,8 @@
  JOIN_FACTION_SKIP_CHECK_PAST_EFFECT:0 "Joined the [FACTION.GetName|V] without checking validity (intentionally)"
  CREATE_ALLIANCE_EFFECT:0 "Forms an alliance with [TARGET_CHARACTER.GetShortUIName]"
  CREATE_ALLIANCE_PAST_EFFECT:0 "Formed an alliance with [TARGET_CHARACTER.GetShortUIName]"
- TITLE_CREATE_FACTION_EFFECT:0 "Starts a $TYPE|V$ Faction"
- TITLE_CREATE_FACTION_PAST_EFFECT:0 "Started a $TYPE|V$ Faction"
+ TITLE_CREATE_FACTION_EFFECT:1 "Starts a $TYPE|V$"
+ TITLE_CREATE_FACTION_PAST_EFFECT:1 "Started a $TYPE|V$"
  SET_SPECIAL_TITLE_EFFECT:0 "[TITLE.GetName] becomes the special title"
  SET_SPECIAL_TITLE_PAST_EFFECT:0 "[TITLE.GetName] became the special title"
  SET_PREGNANCY_ASSUMED_FATHER_EFFECT:0 "[TARGET_CHARACTER.GetShortUIName|U] becomes the assumed father of [CHARACTER.GetShortUINamePossessive] pregnancy"
@@ -2003,12 +2008,15 @@
  custom.every_poet:0 "Every poet"
  custom.every_child_in_court:0 "Every child in court"
  custom.every_non_callous_or_sadistic_vassal:0 "Every non-callous or sadistic [vassal|E]"
+ custom.every_zealous_callous_or_sadistic_vassal:0 "Every zealous or callous [vassal|E]"
  custom.every_feudal_vassal:0 "Every [feudal|E] [vassal|E]"
  custom.every_opposite_sex_consort:0 "Every opposite sex [spouse|E] or [concubine|E]"
  custom.every_vassal_of_target_culture:0 "Every [different_culture_vassal.GetCulture.GetName] [vassal|E]"
  custom.every_vassal:0 "Every [vassal|E]"
  custom.every_female_courtier:0 "Every female [courtier|E]"
  custom.every_male_courtier:0 "Every male [courtier|E]"
+ custom.every_same_culture_vassal:0 "Every [root_culture.GetName] [vassal|E]"
+ custom.every_different_culture_vassal:0 "Every non-[root_culture.GetName] [vassal|E]"
 
  guest_and_family_move_to_specific_pool_effect.tt.family:0 "The [character|E] and any [family|E] traveling with them"
 
@@ -2131,11 +2139,30 @@
  CREATE_ARTIFACT_EFFECT_FIRST_PAST:0 "[CHARACTER.GetShortUIName|U] gained $ARTIFACT_NAME$ [artifact|E]"
  CREATE_ARTIFACT_EFFECT_THIRD:0 "[CHARACTER.GetShortUIName|U] gains $ARTIFACT_NAME$ [artifact|E]"
  CREATE_ARTIFACT_EFFECT_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U] gained $ARTIFACT_NAME$ [artifact|E]"
+
+ START_STRUGGLE_EFFECT:0 "Starts a $TYPE|V$ [struggle|E]"
+ ACTIVATE_STRUGGLE_CATALYST:0 "Activate $CATALYST_NAME$"
+ CHANGE_STRUGGLE_PHASE_EFFECT:0 "Change phase to $STRUGGLE_PHASE$"
+
  SET_ARTIFACT_RARITY_EFFECT:0 "Becomes $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_PAST:0 "Became $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_THIRD:0 "[ARTIFACT.GetName] becomes $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_PAST_THIRD:0 "[ARTIFACT.GetName] became $RARITY$"
 
+ SET_CULTURE_AS_INVOLVED:0 "[CULTURE.GetName] becomes involved in [STRUGGLE.GetName]"
+ SET_CULTURE_AS_UNINVOLVED:0 "[CULTURE.GetName] becomes uninvolved in [STRUGGLE.GetName]"
+ SET_FAITH_AS_INVOLVED:0 "[FAITH.GetName] becomes involved in [STRUGGLE.GetName]"
+ SET_FAITH_AS_UNINVOLVED:0 "[FAITH.GetName] becomes uninvolved in [STRUGGLE.GetName]"
+
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_DESC:1 "A [head_of_faith|E] is created for [FAITH.GetName]"
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_PAST_DESC:1 "A [head_of_faith|E] was created for [FAITH.GetName]"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_DESC:0 "You become the [head_of_faith|E] of [FAITH.GetName]"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_PAST_DESC:0 "You became the [head_of_faith|E] of [FAITH.GetName]"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] becomes the [head_of_faith|E] of [FAITH.GetName]"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_PAST_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] became the [head_of_faith|E] of [FAITH.GetName]"
+ REMOVE_RELIGIOUS_HEAD_TITLE_DESC:0 "[FAITH.GetName]'s [head_of_faith|E] is removed"
+ REMOVE_RELIGIOUS_HEAD_TITLE_PAST_DESC:0 "[FAITH.GetName]'s [head_of_faith|E] was removed"
+ 
  EQUIP_ARTIFACT_TO_OWNER:0 "[ARTIFACT.GetName] becomes equipped"
  EQUIP_ARTIFACT_TO_OWNER_PAST:0 "[ARTIFACT.GetName] was equipped"
  EQUIP_ARTIFACT_TO_OWNER_FIRST:0 "You equip [ARTIFACT.GetName]"
@@ -2150,3 +2177,9 @@
  UNEQUIP_ARTIFACT_FROM_OWNER_THIRD:0 "[CHARACTER.GetShortUIName|U] unequips [ARTIFACT.GetName]"
  UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U] unequipped [ARTIFACT.GetName]"
 
+ SET_ETHOS_FROM:0 "[CULTURE.GetName|V] adopts every [TARGET_CULTURE.GetName|V] [ethos|E]"
+ SET_ETHOS_FROM_PAST:0 "[CULTURE.GetName|V] adopted every [TARGET_CULTURE.GetName|V] [ethos|E]"
+ SET_LANGUAGE_FROM:0 "The [CULTURE.GetName|V] language becomes [TARGET_CULTURE.GetLanguage.GetName|V]"
+ SET_LANGUAGE_FROM_PAST:0 "The [CULTURE.GetName|V] language became [TARGET_CULTURE.GetLanguage.GetName|V]"
+ RESET_CULTURE_CREATION_DATE:0 "The creation date of [CULTURE.GetName|V] is reset"
+ RESET_CULTURE_CREATION_DATE_PAST:0 "The creation date of [CULTURE.GetName|V] was reset"

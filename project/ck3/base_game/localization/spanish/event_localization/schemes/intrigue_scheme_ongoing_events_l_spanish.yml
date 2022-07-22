@@ -23,7 +23,7 @@
  intrigue_scheme_ongoing.1004.toast.failure:0 "[agent_in_question.GetFirstNameNoTooltip] es descubiert[agent_in_question.Custom('ES_OA')]"
 
  intrigue_scheme_ongoing.1006.t:0 "Limpieza"
- intrigue_scheme_ongoing.1006.desc:0 "¡Pues claro que es[agent_in_question.Custom('ES_EA')] [agent_in_question.GetTitledFirstName] [agent_in_question.Custom('InsultAdjective')] causaría problemas!\n\nEs incapaz de tomar precauciones cuando se mueve por la corte [scheme.GetTarget.Custom('ES_DelDela')] [scheme.GetTarget.GetTitledFirstName] y [target.Custom('ES_ElLa')] [SCOPE.sScheme('scheme').GetTarget.GetTitleAsNameNoTooltip] se está empezando a dar cuenta. ¡Tarde o temprano [agent_in_question.Custom('ES_LoLa')] descubrirán!"
+ intrigue_scheme_ongoing.1006.desc:0 "¡Pues claro que es[agent_in_question.Custom('ES_EA')] [agent_in_question.GetTitledFirstName] [agent_in_question.Custom('InsultAdjective')] causaría problemas!\n\nEs incapaz de tomar precauciones cuando se mueve por la corte [scheme.GetTarget.Custom('ES_DelDela')] [scheme.GetTarget.GetTitledFirstName] y [SCOPE.sScheme('scheme').GetTarget.GetTitleAsNameNoTooltip] se está empezando a dar cuenta. ¡Tarde o temprano [agent_in_question.Custom('ES_LoLa')] descubrirán!"
  intrigue_scheme_ongoing.1006.elope.desc:0 "¡Por supuesto que es[agent_in_question.Custom('ES_EA')] [agent_in_question.Custom('InsultAdjective')] de [agent_in_question.GetTitledFirstName] causaría problemas!\n\nEs incapaz de tomar precauciones cuando se mueve por la corte [scheme.GetTarget.Custom('ES_DelDela')] [scheme.GetTarget.GetTitledFirstName] y su [scheme.GetTarget.GetLiege.Custom2('CharacterIntroduction', scheme.GetTarget)] se está empezando a dar cuenta. ¡Tarde o temprano [agent_in_question.Custom('ES_LoLa')] descubrirán!"
  intrigue_scheme_ongoing.1006.a.success:0 "[agent_in_question.GetFirstNameNoTooltip] sigue sin ser descubiert[agent_in_question.Custom('ES_OA')]"
  intrigue_scheme_ongoing.1006.a.failure:0 "[agent_in_question.GetFirstNameNoTooltip] es descubiert[agent_in_question.Custom('ES_OA')]"
@@ -44,13 +44,13 @@
  intrigue_scheme_ongoing.1008.c:1 "Gracias a [ROOT.Char.GetFaith.HighGodNameAlternate] que [councillor.GetTitledFirstName] está ahí y puede intervenir."
 
  intrigue_scheme_ongoing.1009.t:0 "Ayuda"
- intrigue_scheme_ongoing.1009.desc:1 "[potential_agent.Custom('ES_ElLa')|U] [potential_agent.GetTitledFirstName] vino a verme, con una mirada decidida.\n\n«Mi [potential_agent.Custom2('RelationToMe', ROOT.Char)], he sido reaci[potential_agent.Custom('ES_OA')] a unirme a vuestros planes contra mi [potential_agent.Custom2('RelationToMe', SCOPE.sC('target'))], [target.Custom('ES_ElLa')] [target.GetTitledFirstName], pero creo que es hora de hacer caso a vuestro juicio en este asunto»."
- intrigue_scheme_ongoing.1009.elope.desc:0 "[potential_agent.Custom('ES_ElLa')|U] [potential_agent.GetTitledFirstName] vino a verme, con una mirada decidida.\n\n«Mi [potential_agent.Custom2('RelationToMe', ROOT.Char)], había sido reaci[potential_agent.Custom('ES_OA')] a unirme a vuestros planes para fugaros con [target.GetTitledFirstName], pero ahora veo que [target.Custom('ES_ElElla')] os importa de verdad»."
+ intrigue_scheme_ongoing.1009.desc:1 "[potential_agent.GetTitledFirstName] vino a verme, con una mirada decidida.\n\n«Mi [potential_agent.Custom2('RelationToMe', ROOT.Char)], he sido reaci[potential_agent.Custom('ES_OA')] a unirme a vuestros planes contra mi [potential_agent.Custom2('RelationToMe', SCOPE.sC('target'))], [target.GetTitledFirstName], pero creo que es hora de hacer caso a vuestro juicio en este asunto»."
+ intrigue_scheme_ongoing.1009.elope.desc:0 "[potential_agent.GetTitledFirstName] vino a verme, con una mirada decidida.\n\n«Mi [potential_agent.Custom2('RelationToMe', ROOT.Char)], había sido reaci[potential_agent.Custom('ES_OA')] a unirme a vuestros planes para fugaros con [target.GetTitledFirstName], pero ahora veo que [target.GetSheHe] os importa de verdad»."
  intrigue_scheme_ongoing.1009.a:0 "Apoyad mi causa, por favor, [potential_agent.GetFirstNameNoTooltip]."
  intrigue_scheme_ongoing.1009.b:0 "Solo os pediré un pequeño favor…"
 
  intrigue_scheme_ongoing.2001.t:0 "Confianza equivocada"
- intrigue_scheme_ongoing.2001.desc:0 "La naturaleza confiada de [scheme.GetTarget.GetFirstName] ha facilitado más de lo esperado [agent_in_question.Custom('ES_AlAla')] [agent_in_question.GetTitledFirstName] el congraciarse con [target.Custom('ES_ElLa')] [scheme.GetTarget.GetTitleTierName], dado que [agent_in_question.GetFirstName] ofrece muchos consejos y [scheme.GetTarget.GetFirstName] escucha muy a menudo."
+ intrigue_scheme_ongoing.2001.desc:0 "La naturaleza confiada de [scheme.GetTarget.GetFirstName] ha facilitado más de lo esperado [agent_in_question.Custom('ES_AlAla')] [agent_in_question.GetTitledFirstName] el congraciarse con [scheme.GetTarget.GetTitleTierName], dado que [agent_in_question.GetFirstName] ofrece muchos consejos y [scheme.GetTarget.GetFirstName] escucha muy a menudo."
  intrigue_scheme_ongoing.2001.a:0 "[agent_in_question.GetSheHe|U] debe seguir ofreciendo consejos sensatos, hasta que…"
  intrigue_scheme_ongoing.2001.b:0 "[agent_in_question.GetFirstName] puede garantizar que otros agentes vayan y vengan."
 
@@ -87,8 +87,8 @@
  intrigue_scheme_ongoing.leave_with_target.3003.desc:0 "una ruta segura para sacar [target.Custom('ES_AlAla')] [target.GetTitledFirstName] del/la [defender.Custom('ResidenceBuilding')] de [defender.GetTitledFirstName]."
  intrigue_scheme_ongoing.end.3003.desc:0 "Un mapa detallado del/la [defender.Custom('TerrainType')] local, con todos sus sendas y cuevas ocultas, sería un recurso valiosísimo."
  intrigue_scheme_ongoing.3003.a:0 "Pagas a un cazador de [scheme_location.GetNameNoTooltip] para que dibuje un mapa."
- intrigue_scheme_ongoing.3003.a.success:0 "[hunter.Custom('ES_ElLa')|U] cazador[hunter.Custom('ES_XA')] [hunter.GetShortUIName] es discret[hunter.Custom('ES_OA')]"
- intrigue_scheme_ongoing.3003.a.failure:0 "[hunter.Custom('ES_ElLa')|U] cazador[hunter.Custom('ES_XA')] [hunter.GetShortUIName] presume de su riqueza recién obtenida"
+ intrigue_scheme_ongoing.3003.a.success:0 "El/La cazador[hunter.Custom('ES_XA')] [hunter.GetShortUIName] es discret[hunter.Custom('ES_OA')]"
+ intrigue_scheme_ongoing.3003.a.failure:0 "El/La cazador[hunter.Custom('ES_XA')] [hunter.GetShortUIName] presume de su riqueza recién obtenida"
  intrigue_scheme_ongoing.3003.d:0 "Le preguntas a tu amig[hunter.Custom('ES_OA')] [hunter.GetTitledFirstNameNoTooltip]."
  intrigue_scheme_ongoing.3003.b:0 "Exploras el terreno en persona."
  intrigue_scheme_ongoing.3003.b.success:0 "Trazas el mapa del área que rodea [scheme_location.GetNameNoTooltip]"
@@ -98,7 +98,7 @@
  intrigue_scheme_ongoing.3003.e:0 "Le preguntas a tu $master_of_hunt_court_position$ [hunter.GetTitledFirstNameNoTooltip]."
 
  intrigue_scheme_ongoing.3004.t:0 "El mapa"
- intrigue_scheme_ongoing.3004.desc:0 "Mis espías me han informado de un[hunter.Custom('ES_XA')] cazador[hunter.Custom('ES_XA')] que ha causado un alboroto en la taberna local. Ha gastado grandes cantidades de oro presumiendo en voz alta sobre el gran negocio que hizo con «un[owner.Custom('ES_XA')] elegante [owner.GetLadyLord] con perlas y seda».\n\nAl parecer, realizó un mapa del/la [defender.Custom('TerrainType')] local para un[owner.Custom('ES_XA')] noble desconocid[owner.Custom('ES_OA')]. Los espías creen que [owner.Custom('ES_ElLa')] [owner.GetLadyLord] debe estar conspirando contra mí o contra uno de mis súbditos."
+ intrigue_scheme_ongoing.3004.desc:0 "Mis espías me han informado de un[hunter.Custom('ES_XA')] cazador[hunter.Custom('ES_XA')] que ha causado un alboroto en la taberna local. Ha gastado grandes cantidades de oro presumiendo en voz alta sobre el gran negocio que hizo con «un[owner.Custom('ES_XA')] elegante [owner.GetLadyLord] con perlas y seda».\n\nAl parecer, realizó un mapa del/la [defender.Custom('TerrainType')] local para un[owner.Custom('ES_XA')] noble desconocid[owner.Custom('ES_OA')]. Los espías creen que [owner.GetLadyLord] debe estar conspirando contra mí o contra uno de mis súbditos."
  intrigue_scheme_ongoing.3004.a:0 "Gracias por ponerme al tanto de este asunto."
  intrigue_scheme_ongoing.3004.b:0 "¡Es[hunter.Custom('ES_EA')] idiota debe acabar en mis mazmorras!"
  intrigue_scheme_ongoing.3004.c:0 "Traédme[hunter.Custom('ES_LoLa')]. Creo que le puedo refrescar la memoria…"
@@ -118,9 +118,9 @@
 
 
  intrigue_scheme_ongoing.4001.t:0 "Un adulto responsable"
- intrigue_scheme_ongoing.4001.desc:0 "[agent_in_question.Custom('ES_ElLa')|U] [agent_in_question.GetTitledFirstName] me ha dicho que le han pedido que cuide de unos niños que juegan en la corte.\nQué suerte la nuestra que [scheme.GetTarget.Custom('ES_ElLa')] [scheme.GetTarget.GetTitledFirstName] esté entre ellos.\n\nuna gran oportunidad para que [agent_in_question.GetTitledFirstName] mueva ficha."
+ intrigue_scheme_ongoing.4001.desc:0 "[agent_in_question.GetTitledFirstName] me ha dicho que le han pedido que cuide de unos niños que juegan en la corte.\nQué suerte la nuestra que [scheme.GetTarget.GetTitledFirstName] esté entre ellos.\n\nuna gran oportunidad para que [agent_in_question.GetTitledFirstName] mueva ficha."
  intrigue_scheme_ongoing.4001.a:0 "Les enseñas la costumbre de jugar lejos de miradas vigilantes."
- intrigue_scheme_ongoing.4001.b:0 "Intentas trabar amistad con [scheme.GetTarget.Custom('ES_ElLa')] [scheme.GetTarget.GetTitledFirstName] para que confíe en ti."
+ intrigue_scheme_ongoing.4001.b:0 "Intentas trabar amistad con [scheme.GetTarget.GetTitledFirstName] para que confíe en ti."
 
  intrigue_scheme_ongoing.4002.t:0 "La ingenuidad de los niños"
  intrigue_scheme_ongoing.4002.desc:0 "[target.GetTitledFirstName] ni siquiera puede entender que alguien pueda tener planes deshonestos, pese a la agitada corte que [target.GetHerHim] rodea.\n\n¡Por nuestra conversación, creo que confía en mí de verdad!"
@@ -128,7 +128,7 @@
  intrigue_scheme_ongoing.4002.b:0 "¿Un escondite secreto? ¿Me lo enseñas?"
 
  intrigue_scheme_ongoing.4003.t:0 "Reconsideración"
- intrigue_scheme_ongoing.4003.desc:0 "[agent_in_question.Custom('ES_ElLa')|U] [agent_in_question.GetTitledFirstName] vino a verme preocupad[agent_in_question.Custom('ES_OA')] por la conjura en la que [agent_in_question.GetHerHim] he involucrado. ¡Es verdad que le pedí que se hiciera amig[agent_in_question.Custom('ES_OA')] [scheme.GetTarget.Custom('ES_DelDela')] [scheme.GetTarget.GetTitledFirstName], pero nunca pretendí que se involucrase emocionalmente!\n\nEmpiezo a dudar de si puedo confiar en [agent_in_question.Custom('ES_ElElla')]…"
+ intrigue_scheme_ongoing.4003.desc:0 "[agent_in_question.GetTitledFirstName] vino a verme preocupad[agent_in_question.Custom('ES_OA')] por la conjura en la que [agent_in_question.GetHerHim] he involucrado. ¡Es verdad que le pedí que se hiciera amig[agent_in_question.Custom('ES_OA')] [scheme.GetTarget.Custom('ES_DelDela')] [scheme.GetTarget.GetTitledFirstName], pero nunca pretendí que se involucrase emocionalmente!\n\nEmpiezo a dudar de si puedo confiar en [agent_in_question.GetSheHe]…"
  intrigue_scheme_ongoing.4003.a:0 "«¡Que no tenga que recordarte por qué me estás ayudando!»."
  intrigue_scheme_ongoing.4003.b:0 "Reduciré silenciosamente su participación en mi complot."
 
@@ -157,7 +157,7 @@
  intrigue_scheme_ongoing.5004.a:0 "En fin… ¿Gracias?"
 
  intrigue_scheme_ongoing.5005.t:0 "Todo lo que reluce"
- intrigue_scheme_ongoing.5005.desc:0 "Mi [spymaster.GetCouncilTitle], [spymaster.GetTitledFirstName], se me acerca con una sonrisa retorcida.\n\n«Mi [ROOT.Char.GetLadyLord], esta bolsa contiene un polvo muy perverso. Si se rocía encima de algo… por ejemplo, un regalo para [target.Custom('ES_ElLa')] [target.GetTitledFirstName], no dejará rastro, pero afectará con debilidad y malos humores a cualquiera que lo toque»."
+ intrigue_scheme_ongoing.5005.desc:0 "Mi [spymaster.GetCouncilTitle], [spymaster.GetTitledFirstName], se me acerca con una sonrisa retorcida.\n\n«Mi [ROOT.Char.GetLadyLord], esta bolsa contiene un polvo muy perverso. Si se rocía encima de algo… por ejemplo, un regalo para [target.GetTitledFirstName], no dejará rastro, pero afectará con debilidad y malos humores a cualquiera que lo toque»."
  intrigue_scheme_ongoing.5005.a:0 "Vaya, vaya, vaya… Yo diría que [target.GetFirstName] se merece un regalo."
  intrigue_scheme_ongoing.5005.b:0 "¡[target.GetFirstName] no recibirá oro de mi parte!"
 
@@ -167,11 +167,11 @@
 
  intrigue_scheme_ongoing.5007.t:0 "Oro ponzoñoso"
  intrigue_scheme_ongoing.5007.desc_opening:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('poisoned'))], [poisoned.GetTitledFirstName], se me acerca con el sudor perlando su frente y una cara muy pálida.\n\n"
- intrigue_scheme_ongoing.5007.desc:0 "«[ROOT.Char.GetMotherFather], me pasa algo. Mis humores están desequilibrados desde que os ayudé a empaquetar ese regalo para [target.Custom('ES_ElLa')] [target.GetTitledFirstName]…»."
+ intrigue_scheme_ongoing.5007.desc:0 "«[ROOT.Char.GetMotherFather], me pasa algo. Mis humores están desequilibrados desde que os ayudé a empaquetar ese regalo para [target.GetTitledFirstName]…»."
  intrigue_scheme_ongoing.5007.a:0 "¿Qué podría ser…? ¡El oro emponzoñado!"
  intrigue_scheme_ongoing.5007.a.tt:0 "¡Que [ROOT.Char.GetFaith.HighGodName] le ayude!"
 
- intrigue_scheme_ongoing.5008.desc:0 "«Mi [ROOT.Char.GetLadyLord], mis humores están desequilibrados desde que os ayudé a empaquetar ese regalo para [target.Custom('ES_ElLa')] [target.GetTitledFirstName]… Temo que la ponzoña del oro también me haya afectado»."
+ intrigue_scheme_ongoing.5008.desc:0 "«Mi [ROOT.Char.GetLadyLord], mis humores están desequilibrados desde que os ayudé a empaquetar ese regalo para [target.GetTitledFirstName]… Temo que la ponzoña del oro también me haya afectado»."
  intrigue_scheme_ongoing.5008.a:0 "Maldición."
 
  intrigue_scheme_ongoing.5009.t:0 "El túnel"
@@ -185,7 +185,7 @@
  intrigue_scheme_ongoing.5010.b:0 "*Tos* ¡Gracias, amigas mías! Pero esta peste…"
 
  intrigue_scheme_ongoing.5011.t:0 "El animalito"
- intrigue_scheme_ongoing.5011.desc:0 "Una gran variedad de criaturas venenosas me saludan en el puesto de un comerciante y me llega la inspiración. ¿No sería una de estas exquisitas criaturas el regalo perfecto para [target.Custom('ES_ElLa')] [target.GetTitledFirstName]?"
+ intrigue_scheme_ongoing.5011.desc:0 "Una gran variedad de criaturas venenosas me saludan en el puesto de un comerciante y me llega la inspiración. ¿No sería una de estas exquisitas criaturas el regalo perfecto para [target.GetTitledFirstName]?"
  intrigue_scheme_ongoing.5011.a:0 "Una de las criaturas más morta… más interesantes, por favor."
  intrigue_scheme_ongoing.5011.a.tt:0 "¡[target.GetSheHe|U] ni lo verá venir!"
  intrigue_scheme_ongoing.5011.b:0 "Dadme ese ejemplar de [SCOPE.Custom('VenomousCreature')] para un estudio."
@@ -220,11 +220,11 @@
  intrigue_scheme_ongoing.5017.desc:0 "No puedo contener mi regocijo cuando me encuentro a [spouse.GetTitledFirstName], [target.Custom2('RelationToMe', SCOPE.sC('spouse'))] [target.Custom('ES_DelDela')] [target.GetTitledFirstName], esperándome con un pequeño equipaje. Si consiguiera que #EMP [spouse.Custom('ES_ElElla')]#! me ayudase en mi conjura…\n\n«¿Me han dicho que queríais verme, mi [ROOT.Char.GetLadyLord]?»."
  intrigue_scheme_ongoing.5017.a:1 "Vuestr[spouse.Custom('ES_OA')] [spouse.Custom2('RelationToMe', SCOPE.sC('target'))] os ha estado llamando [spouse.Custom('InsultNoun')] [spouse.Custom('InsultNoun')]"
  intrigue_scheme_ongoing.5017.a.success:0 "[spouse.GetTitledFirstNameNoTooltip] me cree"
- intrigue_scheme_ongoing.5017.a.failure:0 "[target.Custom('ES_ElLa')|U] [target.GetTitleAsNameNoTooltip] [spouse.GetHerHim] convence de que es mentira"
+ intrigue_scheme_ongoing.5017.a.failure:0 "[target.GetTitleAsNameNoTooltip] [spouse.GetHerHim] convence de que es mentira"
  intrigue_scheme_ongoing.5017.b:0 "¡Por favor, habladme de vuestro/a [target.Custom('ResidenceBuilding')]!"
 
  intrigue_scheme_ongoing.5018.t:0 "Partidarios"
- intrigue_scheme_ongoing.5018.desc:0 "[target.Custom('ES_ElLa')|U] [target.Custom('InsultAdjective')] [target.Custom('ES_DelDela')] [target.GetTitledFirstName] está en guerra.\n\nSe encuentra actualmente acampad[target.Custom('ES_OA')] en [location.GetName] y mis fuentes me dicen que recibirá más partidarios pronto… ¡Es una oportunidad perfecta para meter a mi gente en su campamento!"
+ intrigue_scheme_ongoing.5018.desc:0 "[target.Custom('InsultAdjective')] [target.Custom('ES_DelDela')] [target.GetTitledFirstName] está en guerra.\n\nSe encuentra actualmente acampad[target.Custom('ES_OA')] en [location.GetName] y mis fuentes me dicen que recibirá más partidarios pronto… ¡Es una oportunidad perfecta para meter a mi gente en su campamento!"
  intrigue_scheme_ongoing.5018.a:0 "Inadvertidos entre la multitud, me informarán."
  intrigue_scheme_ongoing.5018.b:0 "Harina, trigo, carne… Quemadlo todo."
  intrigue_scheme_ongoing.5018.msg.t:0 "Suministros quemados en un accidente"
@@ -262,7 +262,7 @@
  intrigue_scheme_ongoing.5024.b:0 "¡No malgastaré dinero en [target.Custom('ES_ElElla')]!"
 
  intrigue_scheme_ongoing.5026.t:0 "Una mano amiga"
- intrigue_scheme_ongoing.5026.desc:0 "Como todos los [target.GetFaith.GetAdherentNamePluralNoTooltip], [target.Custom2('MyCharacterIntroduction', ROOT.Char)] comparte más con [target.GetFaith.HighGodName] y, por extensión con [court_chaplain.GetTitledFirstName], que con el resto de los mortales.\n\n¡Si consiguiera que [court_chaplain.Custom('ES_ElLa')] [court_chaplain.GetCouncilTitle] me transmitiera algunos de los miedos y planes de [target.GetTitledFirstNameNoTooltip]!…"
+ intrigue_scheme_ongoing.5026.desc:0 "Como todos los [target.GetFaith.GetAdherentNamePluralNoTooltip], [target.Custom2('MyCharacterIntroduction', ROOT.Char)] comparte más con [target.GetFaith.HighGodName] y, por extensión con [court_chaplain.GetTitledFirstName], que con el resto de los mortales.\n\n¡Si consiguiera que [court_chaplain.GetCouncilTitle] me transmitiera algunos de los miedos y planes de [target.GetTitledFirstNameNoTooltip]!…"
  intrigue_scheme_ongoing.5026.a:0 "«¡Es por el bien de la fe!»."
  intrigue_scheme_ongoing.5026.a.success:0 "[court_chaplain.GetSheHe|U] me ayuda"
  intrigue_scheme_ongoing.5026.a.failure:0 "[court_chaplain.GetSheHe|U] se niega"

@@ -137,5 +137,12 @@
  VASSAL_OPINION_DUCHIES_OVERRUN:0 "Zu viele [duchies|E]"
  MY_REALM_WINDOW_VASSAL_OPINION:0 "Vasallen-Meinung: [MyRealmWindow.GetVassalOpinion|=+]"
  MY_REALM_WINDOW_VASSAL_OPINION_TT:0 "#T Vasallen-[opinion|E]: [MyRealmWindow.GetVassalOpinion|=+]\n#!Das ist die Summe der Meinungen, die sich auf all Eure [vassals|E] auswirken. Wenn dieser Wert niedrig ist, werden sich Euch wahrscheinlich [factions|E] entgegenstellen!\n\n#S Quellen#!\n[MyRealmWindow.GetVassalOpinionBreakdown]"
- MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:0 "#T Keine Einzelpflichten\n#!Nur [Concept('feudal', 'Feudale')|E] [vassals|E] ([barons|E] ausgenommen) können Einzel-[obligations|E] haben"
+ MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:1 "#T Keine Einzelpflichten\n#!Nur [Concept('feudal', 'Feudale')|E] und [Concept('clan', 'Clans')|E]-[vassals|E] ([barons|E] ausgenommen) können Einzel-[obligations|E] haben"
  MY_REALM_WINDOW_ABSOLUTE_COUNTY_CONTROL:0 "[control|E]: $ABSOLUTE_COUNTY_CONTROL$"
+
+ VASSAL_CONTRACT:0 "Vasallenbande"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_NO_EFFECT:0 "Dies sind die derzeitigen [vassal_contract|E] und [obligations|E]"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE:0 "Steuerstufe"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE_LEVIES:0 "Aufgebotsstufe"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_ONLY_ONCE:0 "#weak Ihr könnt die [vassal_contract|E] für jeden Charakter nur einmal ändern#!"
+

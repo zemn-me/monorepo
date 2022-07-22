@@ -43,7 +43,7 @@
  bookmark.0101.desc_intro:0 "Веками [hausaland.GetNameNoTier] находится под управлением Магаджии, династии правящих матриархов, и я последняя из них.\n\nНаши традиции служили нам во благо, но мир меняется. Подвиги, что свершил мой [ROOT.Char.Custom2('RelationToMeShort', bayajidda)] [bayajidda.GetFirstName], принесли [bayajidda.GetHerHim] богатство и уважение... И в то же время [bayajidda.GetHerHis] успехи в далеких землях означают, что настало время перемен для моего народа.\n\n"
  bookmark.0101.desc_living:1 "Мой сын, [bewo.GetTitledFirstName], стал для отца настоящей отрадой. Пока он лишь дитя, но мне интересно, станет ли он похож на своего храброго родителя, всегда готового отправиться на поиски приключений, или сохранит верность традициям, как это делаю я?"
  bookmark.0101.desc_dead:1 "Мой сын, [bewo.GetTitledFirstName], был для отца настоящей отрадой. Пока он всего лишь дитя, но мне интересно, увлечется ли он историями об отце, который всегда был готов отправиться на поиски приключений, или сохранит верность традициям, как это делаю я?"
- bookmark.0101.a:1 "[bewo.GetFirstNameNoTooltip] продолжит [ROOT.Char.GetCulture.GetNameNoTooltip|l]ие традиции в новой эпохе."
+ bookmark.0101.a:1 "[bewo.GetFirstNameNoTooltip] продолжит [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip|l]ие традиции в новой эпохе."
  bookmark.0101.a.tt:1 "[bewo.GetUIName] теперь [player_heir|El] вашей [Concept( 'dynasty', 'династии' )|E]"
  bookmark.0101.b:1 "Мой сын остается моим сыном, независимо от его имени и культуры."
  bookmark.0101.b.tt:1 "#warning @warning_icon! Этот вариант может оставить вашу [Concept( 'dynasty', 'династию' )|E] без [Concept( 'player_heir', 'игрока-наследника' )|E]!#!"

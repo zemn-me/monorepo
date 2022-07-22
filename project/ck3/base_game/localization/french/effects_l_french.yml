@@ -11,8 +11,8 @@
  CHARACTER_DIED_EFFECT_KILLER:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a été tué[CHARACTER.Custom('FR_E')] par [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  CHARACTER_DIED_EFFECT_KILLER_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a été tué[CHARACTER.Custom('FR_E')] par [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  CHARACTER_DIED_EFFECT_KILLER_FIRST:1 "Vous avez été tué[CHARACTER.Custom('FR_E')] par [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- RANDOM_LIST_EFFECT:0 "1 chose sur $SIZE$ va arriver: \n"
- RANDOM_EFFECT:0 "$CHANCE$% de chance de: "
+ RANDOM_LIST_EFFECT:0 "1 chose sur $SIZE$ va arriver : \n"
+ RANDOM_EFFECT:0 "$CHANCE$% de chance de : "
  NO_EFFECT:0 "#weak Rien ne se produit#!"
  EVERY_ACTIVITY_PARTICIPANT_EFFECT:0 "Chaque participant"
  RANDOM_ACTIVITY_PARTICIPANT_EFFECT:0 "Participant aléatoire"
@@ -56,10 +56,10 @@
  I_GAINED_HOOK_EFFECT_STRONG:1 "Vous avez obtenu un [strong_hook|El] #weak ($TYPE|l$)#! contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  THEY_GAIN_HOOK_EFFECT_STRONG:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient un [strong_hook|El] #weak ($TYPE|l$)#! contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  THEY_GAINED_HOOK_EFFECT_STRONG:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu un [strong_hook|El] #weak ($TYPE|l$)#! contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- REMOVE_HOOK_EFFECT:0 "Perd un [hook|El] $TYPE$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- REMOVE_HOOK_EFFECT_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] perd un [hook|El] $TYPE$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- REMOVE_HOOK_EFFECT_FIRST:2 "Vous perdez votre [hook|El] $TYPE$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- REMOVED_HOOK_EFFECT_FIRST:0 "Vous avez perdu votre [hook|El] $TYPE$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ REMOVE_HOOK_EFFECT:0 "Perd un [hook|El] $TYPE|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ REMOVE_HOOK_EFFECT_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] perd un [hook|El] $TYPE|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ REMOVE_HOOK_EFFECT_FIRST:2 "Vous perdez votre [hook|El] $TYPE|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ REMOVED_HOOK_EFFECT_FIRST:0 "Vous avez perdu votre [hook|El] $TYPE|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  
  USE_HOOK_EFFECT:1 "Utilise un [hook|El] faible ($TYPE|l$) contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  USE_HOOK_EFFECT_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] utilise son [hook|El] faible ($TYPE|l$) contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
@@ -106,7 +106,7 @@
  ADD_MORALE_EFFECT_NEGATIVE:0 "Perd $VALUE|-$ en moral"
  ADD_SCHEME_PROGRESS_EFFECT_POSITIVE:0 "Ajoute $VALUE|+0$#P %#! de progression"
  ADD_SCHEME_PROGRESS_EFFECT_NEGATIVE:0 "Retire $VALUE|-0$#N %#! de progression"
- IN_ADDITION_EFFECT_TOOLTIP:0 "En outre:"
+ IN_ADDITION_EFFECT_TOOLTIP:0 "En outre :"
 
  REMOVE_SCHEME_MODIFIER_EFFECT:0 "Perd « $MODIFIER$ »"
  LOST_SCHEME_MODIFIER_EFFECT:0 "A perdu « $MODIFIER$ »"
@@ -141,6 +141,7 @@
  I_AM_SENT_TO_ACTIVITY:1 "Vous allez [ACTIVITY.GetName|l]"
  COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] prend fin"
  I_COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] prend fin"
+ COMPLETE_ACTIVITY_NEG:0 "L’activité prend fin"
 
  WILL_MARRY_EFFECT:1 "[Concept( 'marriage', 'Épouse' )|E] [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  I_WILL_MARRY_EFFECT:1 "Vous [Concept( 'marriage', 'épousez' )|E] [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
@@ -297,14 +298,14 @@
  I_LOST_DREAD_EFFECT:1 "Vous avez perdu $VALUE|-0$ en [dread|El]"
  THEY_GAINED_DREAD_EFFECT:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu $VALUE|V0$ en [dread|El]"
  THEY_LOST_DREAD_EFFECT:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a perdu $VALUE|V0$ en [dread|El]"
- RANDOM_LIST_EFFECT_HEADER:0 "#S $DESC$:#!"
+ RANDOM_LIST_EFFECT_HEADER:0 "#S $DESC$ :#!"
  RANDOM_LIST_DEFAULT_DESC:0 "Conséquences possibles"
  RANDOM_LIST_DEFAULT_MULTIPLE_DESC:0 "Résultats possibles, choisit n’importe quelle combinaison de $VALUE|V0$ résultats"
  RANDOM_LIST_DEFAULT_MULTIPLE_UNIQUE_DESC:0 "Résultats possibles, choisit $VALUE|V0$ résultats uniques"
- RANDOM_LIST_EFFECT_ENTRY:0 "#D Conséquence sans nom:#!"
- RANDOM_LIST_EFFECT_ENTRY_CHANCE:0 "$CHANCE|0$%:"
- RANDOM_LIST_EFFECT_ENTRY_DESC:0 "$DESC|F$:"
- RANDOM_LIST_EFFECT_ENTRY_DESC_CHANCE:0 "$CHANCE|0$% #F – $DESC$:#!"
+ RANDOM_LIST_EFFECT_ENTRY:0 "#D Conséquence sans nom :#!"
+ RANDOM_LIST_EFFECT_ENTRY_CHANCE:0 "$CHANCE|0$% :"
+ RANDOM_LIST_EFFECT_ENTRY_DESC:0 "$DESC|F$ :"
+ RANDOM_LIST_EFFECT_ENTRY_DESC_CHANCE:0 "$CHANCE|0$% #F – $DESC$ :#!"
  PAYS_GOLD_EFFECT:0 "[TARGET_CHARACTER.LocalPlayerString( 'Vous paie', 'Paie' )] $VALUE|0V$[gold_i][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_au_GetShortUIName' )]"
  PAYS_GOLD_EFFECT_NEG:0 "Reçoit $VALUE|0V$[gold_i] [TARGET_CHARACTER.Custom('FR_du_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  PAID_GOLD_EFFECT:0 "[TARGET_CHARACTER.LocalPlayerString( 'Vous a payé', 'A payé' )] $VALUE|0V$[gold_i][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_au_GetShortUIName' )]"
@@ -320,7 +321,7 @@
  SET_SECRET_OWNER_EFFECT:1 "Sera le détenteur du secret [SECRET.GetName|Vl]"
  MY_SET_SECRET_OWNER_EFFECT:2 "Vous serez le détenteur du secret [SECRET.GetName|Vl]"
  THEIR_SET_SECRET_OWNER_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_P')|U][CHARACTER.GetUIName] sera [CHARACTER.Custom('FR_LeLa')] détent[CHARACTER.Custom('FR_EurRice')] du secret [SECRET.GetName|Vl]"
- EFFECT_CHARACTER_HEADER:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUINameNoTooltip]:\n"
+ EFFECT_CHARACTER_HEADER:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUINameNoTooltip] :\n"
  MAKE_CONCUBINE_EFFECT:4 "Prend [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] comme [Concept('concubine','concubin')|E][TARGET_CHARACTER.Custom('FR_E')|E]"
  MADE_CONCUBINE_EFFECT:0 "A pris [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] comme [Concept('concubine','concubin')|E][TARGET_CHARACTER.Custom('FR_E')|E]"
  I_MADE_CONCUBINE_EFFECT:2 "Vous prenez [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] comme [TARGET_CHARACTER.Custom('ConcubineWomanManGameConcept')]"
@@ -459,7 +460,7 @@
  MY_ADD_SECRET_PARTICIPANT:1 "Vous serez ajouté comme participant au secret [SECRET.GetName|Vl]"
  THEIR_ADD_SECRET_PARTICIPANT:0 "[CHARACTER.Custom('FR_le_Char_U_P')|U][CHARACTER.GetUIName] sera ajouté[CHARACTER.Custom('FR_E')] comme participant[CHARACTER.Custom('FR_E')] au secret [SECRET.GetName|Vl]"
  
- ADD_TRAIT:1 "Obtient le trait [TRAIT.GetName( GetNullCharacter )|LVl]"
+ ADD_TRAIT:1 "Obtient le [trait|El] [TRAIT.GetName( GetNullCharacter )|LVl]"
  ADD_MY_TRAIT:2 "Vous obtenez le [trait|El] [TRAIT.GetName( CHARACTER.Self )|LVl]"
  ADD_THEIR_TRAIT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient le [trait|El] [TRAIT.GetName( CHARACTER.Self )|LVl]"
  ADDED_TRAIT:1 "A obtenu le [trait|El] [TRAIT.GetName( GetNullCharacter )|LVl]"
@@ -490,18 +491,18 @@
  ADD_PROGRESS_TO_SCHEME:0 "Obtient de la progression"
  LOSE_PROGRESS_TO_MY_SCHEME:1 "Votre [SCHEME.GetName|l] perd de la progression"
  LOST_PROGRESS_TO_MY_SCHEME:1 "Votre [SCHEME.GetName|l] a perdu de la progression"
- THEY_LOSE_PROGRESS_TO_SCHEME:1 "Le [SCHEME.GetName|l] perd de la progression\nTemps estimé: [SCHEME.BuildEstimatedRemainingTimeDescModified( FixedPointToInt( '(CFixedPoint)$VALUE$' ) )]"
+ THEY_LOSE_PROGRESS_TO_SCHEME:1 "Le [SCHEME.GetName|l] perd de la progression\nTemps estimé : [SCHEME.BuildEstimatedRemainingTimeDescModified( FixedPointToInt( '(CFixedPoint)$VALUE$' ) )]"
  LOSE_PROGRESS_TO_SCHEME:0 "Perd de la progression"
 
  SET_FOCUS_NO_EFFECT:0 "Retirer l’intérêt actuel"
  SET_FOCUS_EFFECT:0 "Ajouter l’intérêt $FOCUSTYPE|V$"
  
- CHANGE_TRAIT_RANK:0 "Obtient un trait: [TRAIT.GetName( GetNullCharacter )|LVl]"
- I_CHANGE_TRAIT_RANK:1 "Vous obtenez un trait: [TRAIT.GetName( CHARACTER.Self )|Ll]"
- THEY_CHANGE_TRAIT_RANK:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient un trait: [TRAIT.GetName( CHARACTER.Self )|Ll]"
- CHANGED_TRAIT_RANK:0 "A obtenu un trait: [TRAIT.GetName( GetNullCharacter )|LVl]"
- I_CHANGED_TRAIT_RANK:1 "Vous avez obtenu un trait: [TRAIT.GetName( CHARACTER.Self )|Ll]"
- THEY_CHANGED_TRAIT_RANK:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu un trait: [TRAIT.GetName( CHARACTER.Self )|Ll]"
+ CHANGE_TRAIT_RANK:0 "Obtient un trait : [TRAIT.GetName( GetNullCharacter )|LVl]"
+ I_CHANGE_TRAIT_RANK:1 "Vous obtenez un trait : [TRAIT.GetName( CHARACTER.Self )|Ll]"
+ THEY_CHANGE_TRAIT_RANK:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient un trait : [TRAIT.GetName( CHARACTER.Self )|Ll]"
+ CHANGED_TRAIT_RANK:0 "A obtenu un trait : [TRAIT.GetName( GetNullCharacter )|LVl]"
+ I_CHANGED_TRAIT_RANK:1 "Vous avez obtenu un trait : [TRAIT.GetName( CHARACTER.Self )|Ll]"
+ THEY_CHANGED_TRAIT_RANK:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu un trait : [TRAIT.GetName( CHARACTER.Self )|Ll]"
  
  THEY_STRESS_IMPACT_GAIN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient $VALUE|V0$[stress_gain_i] de [stress|El] $TRAITS$"
  THEY_STRESS_IMPACT_LOSS:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] perd $VALUE|V0$[stress_loss_i] de [stress|El] $TRAITS$"
@@ -524,7 +525,7 @@
  STRESS_IMPACT_GAIN_CRITICAL:0 "Obtient $VALUE|V0$[stress_critical_i] de [stress|El] (critique) $TRAITS$"
  
  ADD_GUEST_COURTIER_EFFECT:0 "[COURTIER.Custom('FR_le_Char_U_P')|U][COURTIER.GetUIName], de la Cour [EMPLOYER.Custom('FR_du_Char_U_Pi')][EMPLOYER.GetShortUIName], devient un invité[COURTIER.Custom('FR_E')] de la Cour [HOST.Custom('FR_du_Char_U_Pi')][HOST.GetShortUIName]"
- STRESS_IMPACT_TRAIT_LIST:3 "car [Select_CString( CHARACTER.IsLocalPlayer, 'vous êtes', 'ce personnage est' )]: $TRAITS$"
+ STRESS_IMPACT_TRAIT_LIST:3 "car [Select_CString( CHARACTER.IsLocalPlayer, 'vous êtes', 'ce personnage est' )] : $TRAITS$"
  STRESS_IMPACT_ONLY:0 "seulement "
  STRESS_IMPACT_INCREASED:0 ""
 
@@ -539,8 +540,8 @@
  THEY_ADD_FOCUS_PROGRESS:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] ajoute $VALUE|V1$ de progression à son intérêt"
  THEY_MULTIPLY_FOCUS_PROGRESS:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] multiplie la progression dans son intérêt par $VALUE|V2$"
  THEY_SET_FOCUS_PROGRESS:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] définit la progression de son intérêt sur $VALUE|V1$"
- THEY_GET_A_GUARDIAN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] devient [TARGET_CHARACTER.LocalPlayerString( 'votre', 'le' )] [ward|El][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
- THEY_GOT_A_GUARDIAN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] est devenu[CHARACTER.Custom('FR_E')] [TARGET_CHARACTER.LocalPlayerString( 'votre', 'le' )] [ward|El][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
+ THEY_GET_A_GUARDIAN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] [CHARACTER.LocalPlayerString( 'devenez', 'devient' )] [TARGET_CHARACTER.LocalPlayerString( 'votre', 'le' )] [ward|El][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
+ THEY_GOT_A_GUARDIAN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] [CHARACTER.LocalPlayerString( 'êtes', 'est' )] devenu[CHARACTER.Custom('FR_E')] [TARGET_CHARACTER.LocalPlayerString( 'votre', 'le' )] [ward|El][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  THEY_LOSE_A_GUARDIAN:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] n’est plus [TARGET_CHARACTER.LocalPlayerString( 'votre', 'le' )] [ward|El][TARGET_CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  GLOBAL_LOSE_A_GUARDIAN:0 "Perd [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] comme [Concept('guardian','tut')|E][TARGET_CHARACTER.Custom('FR_EurRice')|E]"
  GLOBAL_LOST_A_GUARDIAN:0 "A perdu [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] comme [Concept('guardian','tut')|E][TARGET_CHARACTER.Custom('FR_EurRice')|E]"
@@ -752,16 +753,16 @@
  SAT_CUTLURE_OF_CHARACTER_SAME_AS:0 "A changé la culture [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] à la même culture que [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] ([TARGET_CHARACTER.GetCulture.GetName|V])"
  
  I_ENTERED_CHALLENGE_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$"
- THEY_ENTERED_CHALLENGE_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName]:\n @$SKILL_ICON$!Défi en $SKILL|l$"
+ THEY_ENTERED_CHALLENGE_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] :\n @$SKILL_ICON$!Défi en $SKILL|l$"
  ENTERED_CHALLENGE_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$"
  I_ENTER_CHALLENGE_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$"
- THEY_ENTER_CHALLENGE_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName]:\n @$SKILL_ICON$!Défi en $SKILL|l$"
+ THEY_ENTER_CHALLENGE_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] :\n @$SKILL_ICON$!Défi en $SKILL|l$"
  ENTERS_CHALLENGE_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$"
  I_ENTERED_DUEL_AGAINST_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- THEY_ENTERED_DUEL_AGAINST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName]:\n@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ THEY_ENTERED_DUEL_AGAINST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] :\n@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  ENTERED_DUEL_AGAINST_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  I_ENTER_DUEL_AGAINST_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- THEY_ENTER_DUEL_AGAINST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName]:\n@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
+ THEY_ENTER_DUEL_AGAINST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] :\n@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  ENTERS_DUEL_AGAINST_EFFECT:1 "@$SKILL_ICON$!Défi en $SKILL|l$ contre [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  
  I_RECEIVED_MODIFIER_EFFECT:1 "Vous avez obtenu « $MODIFIER|V$ »"
@@ -881,17 +882,17 @@
  CHANGE_PRISON_TYPE:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] est déplacé[CHARACTER.Custom('FR_E')] en $TYPE|Vl$"
 
  I_GAINED_TYRANNY_EFFECT:2 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] de vos sujets à votre égard#!"
- I_LOST_TYRANNY_EFFECT:2 "#P A réduit la [tyranny|El]: Tout le monde dans votre pays a gagné $VALUE|+0$ d’[opinion|El] envers vous#!"
+ I_LOST_TYRANNY_EFFECT:2 "#P A réduit la [tyranny|El] : tout le monde dans votre pays a gagné $VALUE|+0$ d’[opinion|El] envers vous#!"
  THEY_GAINED_TYRANNY_EFFECT:1 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] des sujets [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] à son égard#!"
- THEY_LOST_TYRANNY_EFFECT:1 "#P A réduit la [tyranny|El]: Tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] a gagné $VALUE|V0$ d’[opinion|El] à son égard#!"
+ THEY_LOST_TYRANNY_EFFECT:1 "#P A réduit la [tyranny|El] : tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] a gagné $VALUE|V0$ d’[opinion|El] à son égard#!"
  GAINED_TYRANNY_EFFECT:1 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] de tous les sujets#!"
- LOST_TYRANNY_EFFECT:1 "#P A réduit la [tyranny|El]: Tout le monde dans le pays a gagné $VALUE|V0$ d’[opinion|El]#!"
+ LOST_TYRANNY_EFFECT:1 "#P A réduit la [tyranny|El] : tout le monde dans le pays a gagné $VALUE|V0$ d’[opinion|El]#!"
  I_GAIN_TYRANNY_EFFECT:2 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] de vos sujets à votre égard#!"
- I_LOSE_TYRANNY_EFFECT:2 "#P Réduit la [tyranny|El]: Tout le monde dans votre pays gagne $VALUE|+0$ d’[opinion|El] envers vous#!"
+ I_LOSE_TYRANNY_EFFECT:2 "#P Réduit la [tyranny|El] : tout le monde dans votre pays gagne $VALUE|+0$ d’[opinion|El] envers vous#!"
  THEY_GAIN_TYRANNY_EFFECT:1 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] des sujets [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] à son égard#!"
- THEY_LOSE_TYRANNY_EFFECT:1 "#P Réduit la [tyranny|El]: Tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] gagne $VALUE|V0$ d’[opinion|El] à son égard#!"
+ THEY_LOSE_TYRANNY_EFFECT:1 "#P Réduit la [tyranny|El] : tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] gagne $VALUE|V0$ d’[opinion|El] à son égard#!"
  GAIN_TYRANNY_EFFECT:1 "@warning_icon!#X C’est un acte de [tyranny|El] qui diminue de $VALUE|-0$ l’[opinion|El] de tous les sujets#!"
- LOSE_TYRANNY_EFFECT:1 "#P Réduit la [tyranny|El]: Tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] gagne $VALUE|V0$ d’[opinion|El] à son égard#!"
+ LOSE_TYRANNY_EFFECT:1 "#P Réduit la [tyranny|El] : tout le monde dans le pays [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] gagne $VALUE|V0$ d’[opinion|El] à son égard#!"
 
  CREATE_CHARACTER_EFFECT:0 "Créer un nouveau personnage"
  CREATE_NAMED_CHARACTER_EFFECT:1 "Créer un nouveau personnage nommé $NAME$"
@@ -983,6 +984,7 @@
  
  #Are negative values in these loc keys showing for you? Don't add new negative ones, just come out of debug mode and they're fine.
  CHANGE_DEVELOPMENT_LEVEL:0 "Le niveau de [development|El] en [TITLE.GetName] changera de $VALUE|=0+$"
+ CHANGE_DEVELOPMENT_LEVEL_PAST:0 "Le niveau de [development|El] en [TITLE.GetName] a changé de $VALUE|=0+$" # [LocEditor:ForFutureBatchExport]
  CHANGE_DEVELOPMENT_PROGRESS:2 "La progression du [development|El] augmente de $VALUE|0+$"
  CHANGE_DEVELOPMENT_PROGRESS_NEG:1 "La progression du [development|El] diminue de $VALUE|0-$"
  THEY_CHANGE_DEVELOPMENT_PROGRESS:1 "La progression du [development|El] en [TITLE.GetName] augmentera de $VALUE|0+$"
@@ -1179,19 +1181,19 @@
  ENTERS_MY_SERVICE:2 "[TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')|U][TARGET_CHARACTER.GetShortUIName] rejoint votre Cour"
  ENTERS_THEIR_SERVICE:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] rejoint la Cour [TARGET_CHARACTER.Custom('FR_du_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  
- GIVE_NICKNAME_GLOBAL:1 "Obtient un [nickname|El]: #V $NICKNAME|U$#!"
- GIVE_NICKNAME_FIRST:2 "Vous obtenez un [nickname|El]: #V $NICKNAME|U$#!"
- GIVE_NICKNAME_THIRD:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient un [nickname|El]: #V $NICKNAME|U$#!"
- GAVE_NICKNAME_GLOBAL:1 "A obtenu un [nickname|El]: #V $NICKNAME|U$#!"
- GAVE_NICKNAME_FIRST:2 "Vous avez obtenu un [nickname|El]: #V $NICKNAME|U$#!"
- GAVE_NICKNAME_THIRD:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu un [nickname|El]: #V $NICKNAME|U$#!"
+ GIVE_NICKNAME_GLOBAL:1 "Obtient un [nickname|El] : #V $NICKNAME|U$#!"
+ GIVE_NICKNAME_FIRST:2 "Vous obtenez un [nickname|El] : #V $NICKNAME|U$#!"
+ GIVE_NICKNAME_THIRD:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] obtient un [nickname|El] : #V $NICKNAME|U$#!"
+ GAVE_NICKNAME_GLOBAL:1 "A obtenu un [nickname|El] : #V $NICKNAME|U$#!"
+ GAVE_NICKNAME_FIRST:2 "Vous avez obtenu un [nickname|El] : #V $NICKNAME|U$#!"
+ GAVE_NICKNAME_THIRD:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a obtenu un [nickname|El] : #V $NICKNAME|U$#!"
 
- REMOVE_NICKNAME_GLOBAL:0 "Perd le [nickname|El]: [CHARACTER.GetNickname|V]"
- REMOVE_NICKNAME_FIRST:0 "Vous perdez le [nickname|El]: [CHARACTER.GetNickname|V]"
- REMOVE_NICKNAME_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] perd le [nickname|El]: [CHARACTER.GetNickname|V]"
- REMOVED_NICKNAME_GLOBAL:0 "A perdu le [nickname|El]: [CHARACTER.GetNickname|V]"
- REMOVED_NICKNAME_FIRST:0 "Vous avez perdu le [nickname|El]: [CHARACTER.GetNickname|V]"
- REMOVED_NICKNAME_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a perdu le [nickname|El]: [CHARACTER.GetNickname|V]"
+ REMOVE_NICKNAME_GLOBAL:0 "Perd le [nickname|El] : [CHARACTER.GetNickname|V]"
+ REMOVE_NICKNAME_FIRST:0 "Vous perdez le [nickname|El] : [CHARACTER.GetNickname|V]"
+ REMOVE_NICKNAME_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] perd le [nickname|El] : [CHARACTER.GetNickname|V]"
+ REMOVED_NICKNAME_GLOBAL:0 "A perdu le [nickname|El] : [CHARACTER.GetNickname|V]"
+ REMOVED_NICKNAME_FIRST:0 "Vous avez perdu le [nickname|El] : [CHARACTER.GetNickname|V]"
+ REMOVED_NICKNAME_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a perdu le [nickname|El] : [CHARACTER.GetNickname|V]"
 
  SPAWN_ARMY_GLOBAL:0 "Une armée de $ARMY_SIZE|V0$ hommes se rassemble en [PROVINCE.GetName]"
  SPAWN_ARMY_FIRST:1 "Vous obtenez une armée de $ARMY_SIZE|V0$ hommes en [PROVINCE.GetName]"
@@ -1355,28 +1357,28 @@
  SET_REALM_CAPITAL_DESC:1 "[TARGET_TITLE.GetName] devient sa nouvelle capitale du pays"
  SET_REALM_CAPITAL_FIRST_DESC:0 "[TARGET_TITLE.GetName] devient votre nouvelle capitale du pays"
  SET_REALM_CAPITAL_THIRD_DESC:0 "[TARGET_TITLE.GetName] devient la nouvelle capitale du pays [CHARACTER.Custom('FR_du_Char')][CHARACTER.GetName]"
- ADD_INNOVATION_EFFECT:1 "La culture [CULTURE.GetName] découvre: $INNOVATION_TYPE|V$"
- ADDED_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] a découvert: $INNOVATION_TYPE|V$"
- REMOVE_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] perd la connaissance de: $INNOVATION_TYPE|V$"
- REMOVED_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] a perdu la connaissance de: $INNOVATION_TYPE|V$"
+ ADD_INNOVATION_EFFECT:1 "La culture [CULTURE.GetName] découvre : $INNOVATION_TYPE|V$"
+ ADDED_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] a découvert : $INNOVATION_TYPE|V$"
+ REMOVE_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] perd la connaissance de : $INNOVATION_TYPE|V$"
+ REMOVED_INNOVATION_EFFECT:0 "La culture [CULTURE.GetName] a perdu la connaissance de : $INNOVATION_TYPE|V$"
 
- ADD_DOCTRINE_GLOBAL_DESC:1 "Obtient $DOCTRINE_GROUP$: $DOCTRINE$"
- ADD_DOCTRINE_GLOBAL_PAST_DESC:1 "A obtenu $DOCTRINE_GROUP$: $DOCTRINE$"
- ADD_DOCTRINE_THIRD_DESC:1 "La foi [FAITH.GetAdjective] obtient $DOCTRINE_GROUP$: $DOCTRINE$"
- ADD_DOCTRINE_THIRD_PAST_DESC:1 "La foi [FAITH.GetAdjective] a obtenu $DOCTRINE_GROUP$: $DOCTRINE$"
+ ADD_DOCTRINE_GLOBAL_DESC:1 "Obtient $DOCTRINE_GROUP$ : $DOCTRINE$"
+ ADD_DOCTRINE_GLOBAL_PAST_DESC:1 "A obtenu $DOCTRINE_GROUP$ : $DOCTRINE$"
+ ADD_DOCTRINE_THIRD_DESC:1 "La foi [FAITH.GetAdjective] obtient $DOCTRINE_GROUP$ : $DOCTRINE$"
+ ADD_DOCTRINE_THIRD_PAST_DESC:1 "La foi [FAITH.GetAdjective] a obtenu $DOCTRINE_GROUP$ : $DOCTRINE$"
 
- REMOVE_DOCTRINE_GLOBAL_DESC:1 "Perd $DOCTRINE_GROUP$: $DOCTRINE$"
- REMOVE_DOCTRINE_GLOBAL_PAST_DESC:1 "A perdu $DOCTRINE_GROUP$: $DOCTRINE$"
- REMOVE_DOCTRINE_THIRD_DESC:1 "La foi [FAITH.GetAdjective] perd $DOCTRINE_GROUP$: $DOCTRINE$"
- REMOVE_DOCTRINE_THIRD_PAST_DESC:1 "La foi [FAITH.GetAdjective] a perdu $DOCTRINE_GROUP$: $DOCTRINE$"
+ REMOVE_DOCTRINE_GLOBAL_DESC:1 "Perd $DOCTRINE_GROUP$ : $DOCTRINE$"
+ REMOVE_DOCTRINE_GLOBAL_PAST_DESC:1 "A perdu $DOCTRINE_GROUP$ : $DOCTRINE$"
+ REMOVE_DOCTRINE_THIRD_DESC:1 "La foi [FAITH.GetAdjective] perd $DOCTRINE_GROUP$ : $DOCTRINE$"
+ REMOVE_DOCTRINE_THIRD_PAST_DESC:1 "La foi [FAITH.GetAdjective] a perdu $DOCTRINE_GROUP$ : $DOCTRINE$"
 
  GET_RANDOM_INNOVATION_FROM_EFFECT:2 "La [culture|El] [CULTURE.GetName] reçoit une [innovation|El] aléatoire de la culture [TARGET_CULTURE.GetName]"
  GOT_RANDOM_INNOVATION_FROM_EFFECT:1 "La [culture|El] [CULTURE.GetName] a reçu une [innovation|El] aléatoire de la culture [TARGET_CULTURE.GetName]"
 
- ACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] obtient le [holy_site|El] [CHARACTER.GetFaith.GetAdherentName] $HOLY_SITE$"
- ACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] a obtenu le [holy_site|El] [CHARACTER.GetFaith.GetAdherentName] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] perd le [holy_site|El] [CHARACTER.GetFaith.GetAdherentName] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] a perdu le [holy_site|El] [CHARACTER.GetFaith.GetAdherentName] $HOLY_SITE$"
+ ACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] sera considéré comme un [holy_site|El] [FAITH.GetAdherentName]" # [LocEditor:ForFutureBatchExport]
+ ACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] est devenu un [holy_site|El] [FAITH.GetAdherentName]" # [LocEditor:ForFutureBatchExport]
+ DEACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] ne sera plus considéré comme un [holy_site|El] [FAITH.GetAdherentName]" # [LocEditor:ForFutureBatchExport]
+ DEACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] n’est plus considéré comme un [holy_site|El] [FAITH.GetAdherentName]" # [LocEditor:ForFutureBatchExport]
 
  ADD_RANDOM_INNOVATION_EFFECT:1 "Les [CULTURE.GetCollectiveNoun] développent une [innovation|El] aléatoire du groupe $GROUP|l$"
  GOT_RANDOM_INNOVATION_EFFECT:0 "Les [CULTURE.GetCollectiveNoun] ont développé une [innovation|El] aléatoire du groupe $GROUP|l$"
@@ -1407,15 +1409,15 @@
  UNLEARN_LANGUAGE_THIRD:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] oublie la [language|El] [CULTURE_PILLAR.GetName]"
  UNLEARN_LANGUAGE_GLOBAL:1 "Oublie la [language|El] [CULTURE_PILLAR.GetName]"
 
- GAINS_THE_BUILDING_NAME:0 "Obtient le bâtiment: [BUILDING.GetName|l]"
- GAINED_THE_BUILDING_NAME:0 "A obtenu le bâtiment: [BUILDING.GetName|l]"
- PROVINCE_GAINS_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] obtient le bâtiment: [BUILDING.GetName|l]"
- PROVINCE_GAINED_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] a obtenu le bâtiment: [BUILDING.GetName|l]"
+ GAINS_THE_BUILDING_NAME:0 "Obtient le bâtiment : [BUILDING.GetName|l]"
+ GAINED_THE_BUILDING_NAME:0 "A obtenu le bâtiment : [BUILDING.GetName|l]"
+ PROVINCE_GAINS_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] obtient le bâtiment : [BUILDING.GetName|l]"
+ PROVINCE_GAINED_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] a obtenu le bâtiment : [BUILDING.GetName|l]"
 
- LOSES_THE_BUILDING_NAME:0 "Perd le bâtiment: [BUILDING.GetName]"
- LOST_THE_BUILDING_NAME:0 "A perdu le bâtiment: [BUILDING.GetName]"
- PROVINCE_LOSES_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] perd le bâtiment: [BUILDING.GetName]"
- PROVINCE_LOST_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] a perdu le bâtiment: [BUILDING.GetName]"
+ LOSES_THE_BUILDING_NAME:0 "Perd le bâtiment : [BUILDING.GetName]"
+ LOST_THE_BUILDING_NAME:0 "A perdu le bâtiment : [BUILDING.GetName]"
+ PROVINCE_LOSES_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] perd le bâtiment : [BUILDING.GetName]"
+ PROVINCE_LOST_THE_BUILDING_NAME:0 "La propriété de [PROVINCE.GetName] a perdu le bâtiment : [BUILDING.GetName]"
 
  GAINS_BUILDING_SLOT:0 "Obtient $VALUE|V0$ emplacement de bâtiment"
  GAINED_BUILDING_SLOT:0 "A obtenu $VALUE|V0$ emplacement de bâtiment"
@@ -1425,15 +1427,15 @@
  SET_HOLDING_TYPE_EFFECT_GLOBAL:0 "Faire de [PROVINCE.GetName] une propriété de type $NEW_HOLDING_TYPE_NAME|l$"
  SET_HOLDING_TYPE_EFFECT_GLOBAL_PAST:0 "A fait de [PROVINCE.GetName] une propriété de type $NEW_HOLDING_TYPE_NAME|l$"
  
- ADD_SPECIAL_BUILDING_SLOT_EFFECT_GLOBAL:0 "Obtient un emplacement de [special_building|El] pour: [BUILDING.GetName|l]"
- ADDED_SPECIAL_BUILDING_SLOT_EFFECT_GLOBAL:0 "A obtenu un emplacement de [special_building|El] pour: [BUILDING.GetName|l]"
- ADD_SPECIAL_BUILDING_SLOT_EFFECT_THIRD:0 "[PROVINCE.GetName] obtient un emplacement de [special_building|El] pour: [BUILDING.GetName|l]"
- ADDED_SPECIAL_BUILDING_SLOT_EFFECT_THIRD:0 "[PROVINCE.GetName] a obtenu un emplacement de [special_building|El] pour: [BUILDING.GetName|l]"
+ ADD_SPECIAL_BUILDING_SLOT_EFFECT_GLOBAL:0 "Obtient un emplacement de [special_building|El] pour : [BUILDING.GetName|l]"
+ ADDED_SPECIAL_BUILDING_SLOT_EFFECT_GLOBAL:0 "A obtenu un emplacement de [special_building|El] pour : [BUILDING.GetName|l]"
+ ADD_SPECIAL_BUILDING_SLOT_EFFECT_THIRD:0 "[PROVINCE.GetName] obtient un emplacement de [special_building|El] pour : [BUILDING.GetName|l]"
+ ADDED_SPECIAL_BUILDING_SLOT_EFFECT_THIRD:0 "[PROVINCE.GetName] a obtenu un emplacement de [special_building|El] pour : [BUILDING.GetName|l]"
  
- ADD_SPECIAL_BUILDING_EFFECT_GLOBAL:0 "Obtient le [special_building|El]: [BUILDING.GetName|l]"
- ADDED_SPECIAL_BUILDING_EFFECT_GLOBAL:0 "A obtenu le [special_building|El]: [BUILDING.GetName|l]"
- ADD_SPECIAL_BUILDING_EFFECT_THIRD:0 "La propriété de [PROVINCE.GetName] obtient le [special_building|El]: [BUILDING.GetName|l]"
- ADDED_SPECIAL_BUILDING_EFFECT_THIRD:0 "La propriété de [PROVINCE.GetName] a obtenu le [special_building|El]: [BUILDING.GetName|l]"
+ ADD_SPECIAL_BUILDING_EFFECT_GLOBAL:0 "Obtient le [special_building|El] : [BUILDING.GetName|l]"
+ ADDED_SPECIAL_BUILDING_EFFECT_GLOBAL:0 "A obtenu le [special_building|El] : [BUILDING.GetName|l]"
+ ADD_SPECIAL_BUILDING_EFFECT_THIRD:0 "La propriété de [PROVINCE.GetName] obtient le [special_building|El] : [BUILDING.GetName|l]"
+ ADDED_SPECIAL_BUILDING_EFFECT_THIRD:0 "La propriété de [PROVINCE.GetName] a obtenu le [special_building|El] : [BUILDING.GetName|l]"
 
  CHANGE_DE_JURE_DRIFT_PROGRESS_EFFECT:0 "Modifie le glissement de jure du [TITLE.GetName] vers le [TARGET_TITLE.GetName] de $VALUE|V0$"
 
@@ -1463,10 +1465,10 @@
  leave_faction_with_cooldown_effect_first.tt:2 "Vous ne pouvez pas rejoindre une autre [faction|El] pendant #V $VALUE|0$ ans#!"
  leave_faction_with_cooldown_effect_global.tt:0 "Ne peut pas rejoindre une autre [faction|El] pendant #V $VALUE|0$ ans#!"
 
- CHARACTER_LEAVES_COURT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] quitte la [court|E] [CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.Custom('FR_du_Char_U_Pi')][CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.GetShortUIName]"
- LEFT_COURT:0 "A quitté la [court|E] [CHARACTER.GetLiege.Custom('FR_du_Char_U_Pi')][CHARACTER.GetLiege.GetShortUIName]"
+ CHARACTER_LEAVES_COURT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] quitte [CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.LocalPlayerString( 'votre ', 'la ' )][court|E][CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
+ LEFT_COURT:0 "A quitté [CHARACTER.GetLiege.LocalPlayerString( 'votre ', 'la ' )][court|E][CHARACTER.GetLiege.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  LEAVES_COURT:1 "Quitte [CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.LocalPlayerString( 'votre ', 'la ' )][court|E][CHARACTER.GetCurrentLocation.GetCounty.GetTitle.GetHolder.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
- CHARACTER_LEFT_COURT:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a quitté la [court|E] [CHARACTER.GetLiege.Custom('FR_du_Char_U_Pi')][CHARACTER.GetLiege.GetShortUIName]"
+ CHARACTER_LEFT_COURT:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a quitté [CHARACTER.GetLiege.LocalPlayerString( 'votre ', 'la ' )][court|E][CHARACTER.GetLiege.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  RECRUIT_COURTIER_EFFECT:1 "Recrute [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] à la [court|E]"
  THEY_RECRUIT_COURTIER_EFFECT:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] recrute [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] à sa [court|E]"
  I_RECRUIT_COURTIER_EFFECT:1 "Vous recrutez [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] à votre [court|E]"
@@ -1575,52 +1577,52 @@
  INCREASED_CHANCE_OF_MY_LOVERS_SAVING_ME:2 "Vos [lovers|El] sont moins susceptibles de rejoindre les [schemes|El] visant à [GetScheme('murder').GetActionName|l] à votre encontre\nLes amants sont plus susceptibles de vous sauver d’une tentative de meurtre"
  INCREASED_CHANCE_OF_THEIR_LOVERS_SAVING_THEM:1 "Les [lovers|El] [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] sont moins susceptibles de rejoindre les [schemes|El] visant à [GetScheme('murder').GetActionName|l] contre [CHARACTER.Custom('FR_LuiElle')]\nLes amants sont plus susceptibles de [CHARACTER.Custom('FR_LeLa')] sauver d’une tentative de meurtre"
  
- INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre ses propres [courtiers|El] et [guests|El]: #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
- INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_MY_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre vos [courtiers|El] et [guests|El]: #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
- INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_THEIR_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre ses [courtiers|El] et [guests|El]: #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre ses propres [courtiers|El] et [guests|El] : #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_MY_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre vos [courtiers|El] et [guests|El] : #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_AGAINST_THEIR_COURTIERS:1 "La [success_chance|El] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] contre ses [courtiers|El] et [guests|El] : #P +[EmptyScope.ScriptValue('home_advantage_perk_bonus')|0]%#!"
 
  CAN_NO_LONGER_CRITICALLY_FAIL_SEDUCTION_SCHEMES:2 "Ne peut plus [critically_fail|El] aux [schemes|El] visant à [GetScheme('seduce').GetActionName|l]"
  I_CAN_NO_LONGER_CRITICALLY_FAIL_SEDUCTION_SCHEMES:3 "Vous ne pouvez plus [critically_fail|El] aux [schemes|El] visant à [GetScheme('seduce').GetActionName|l]"
  THEY_CAN_NO_LONGER_CRITICALLY_FAIL_SEDUCTION_SCHEMES:2 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] ne peut plus [critically_fail|El] aux [schemes|El] visant à [GetScheme('seduce').GetActionName|l]"
 
- INCREASED_SEDUCE_SUCCESS_CHANCE_25:2 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l]: #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nPeut apprendre #V 1#! [language|El] supplémentaire sans pénalité"
- INCREASED_SEDUCE_SUCCESS_CHANCE_25_YOU:1 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l]: #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nVous pouvez apprendre #V 1#! [language|El] supplémentaire sans pénalité"
- INCREASED_SEDUCE_SUCCESS_CHANCE_25_THEY:1 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l]: #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nPeut apprendre #V 1#! [language|El] supplémentaire sans pénalité"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_25:2 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] : #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nPeut apprendre #V 1#! [language|El] supplémentaire sans pénalité"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_25_YOU:1 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] : #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nVous pouvez apprendre #V 1#! [language|El] supplémentaire sans pénalité"
+ INCREASED_SEDUCE_SUCCESS_CHANCE_25_THEY:1 "[success_chance|E] du [scheme|El] visant à [GetScheme('seduce').GetActionName|l] : #P +[EmptyScope.ScriptValue('smooth_operator_perk_bonus')|0]%#!\nPeut apprendre #V 1#! [language|El] supplémentaire sans pénalité"
 
  ESPIONAGE_MAY_FABRICATE_HOOKS:0 "[espionage|E] peut également fabriquer des [hooks|El]"
  ENABLE_FABRICATE_HOOK_SCHEME:1 "Permet le [scheme|El] visant à [GetScheme('fabricate_hook').GetActionName|l]"
  
- ESPIONAGE_COUNCILLOR_TASK_BONUS_25:0 "Vitesse de progression de la tâche visant à [espionage|El]: #P +[EmptyScope.ScriptValue('digging_for_dirt_perk_percentage')|0]%#!"
+ ESPIONAGE_COUNCILLOR_TASK_BONUS_25:0 "Vitesse de progression de la tâche visant à [espionage|El] : #P +[EmptyScope.ScriptValue('digging_for_dirt_perk_percentage')|0]%#!"
 
  ENABLE_ABDUCTION_SCHEME:1 "Permet le [scheme|El] visant à [GetScheme('abduct').GetActionName|l]"
  I_ENABLE_ABDUCTION_SCHEME:2 "Vous pouvez utiliser le [scheme|El] visant à [GetScheme('abduct').GetActionName|l]"
  THEY_ENABLE_ABDUCTION_SCHEME:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] peut utiliser le [scheme|El] visant à [GetScheme('abduct').GetActionName|l]"
 
- DISRUPT_SCHEMES_COUNCILLOR_TASK_BONUS_25:0 "Efficacité de la tâche visant à [disrupt_schemes|El]: #P +[EmptyScope.ScriptValue('court_of_shadows_perk_percentage')|0]%#!"
+ DISRUPT_SCHEMES_COUNCILLOR_TASK_BONUS_25:0 "Efficacité de la tâche visant à [disrupt_schemes|El] : #P +[EmptyScope.ScriptValue('court_of_shadows_perk_percentage')|0]%#!"
 
- ENEMY_HOSTILE_SCHEME_TARGETING_COURTIER_REDUCTION:1 "[success_chance|E] du [hostile_scheme|El] de l’ennemi contre vos [courtiers|El]: #P -[EmptyScope.ScriptValue('prepared_for_anything_perk_secondary_percentage')|0]#!"
+ ENEMY_HOSTILE_SCHEME_TARGETING_COURTIER_REDUCTION:1 "[success_chance|E] du [hostile_scheme|El] de l’ennemi contre vos [courtiers|El] : #P -[EmptyScope.ScriptValue('prepared_for_anything_perk_secondary_percentage')|0]#!"
  
- SKILL_POINT_FROM_TORTURE_GAIN_CHANCE:1 "La [torturing|El] donne:\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El]"
- SKILL_POINT_FROM_ME_TORTURING_GAIN_CHANCE:3 "Lorsque vous [Concept( 'torture', 'torturez' )|E] quelqu’un:\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El] (Max. 5 chacun)"
- SKILL_POINT_FROM_THEM_TORTURING_GAIN_CHANCE:1 "Lorsqu’[CHARACTER.GetSheHe] [Concept( 'torture', 'torture' )|E] quelqu’un:\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El]"
+ SKILL_POINT_FROM_TORTURE_GAIN_CHANCE:1 "La [torturing|El] donne :\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El]"
+ SKILL_POINT_FROM_ME_TORTURING_GAIN_CHANCE:3 "Lorsque vous [Concept( 'torture', 'torturez' )|E] quelqu’un :\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El] (Max. 5 chacun)"
+ SKILL_POINT_FROM_THEM_TORTURING_GAIN_CHANCE:1 "Lorsqu’[CHARACTER.GetSheHe] [Concept( 'torture', 'torture' )|E] quelqu’un :\n$TAB$#V [EmptyScope.ScriptValue('dark_insights_stat_increase_chance')|0]%#! de chance d’obtenir #P 1#![intrigue_i] en [intrigue|El] ou #P 1#![prowess_i] en [prowess|El]"
 
  NO_PIETY_OR_OPINION_LOSS_FROM_TORTURE:0 "Pas de perte de [piety|El] ou d’[opinion|El] de la part du [clergy|El] en cas de [torturing|El] ou d’[execution|El]"
  I_DO_NOT_LOSE_PIETY_OR_TEMPLE_VASSAL_OPINION_FROM_TORTURE:1 "Vous ne perdez pas de [piety|El] ou d’[opinion|El] de la part du [clergy|El] en cas de [torturing|El] ou d’[execution|El]"
  THEY_DO_NOT_LOSE_PIETY_OR_TEMPLE_VASSAL_OPINION_FROM_TORTURE:0 "[CHARACTER.GetSheHe|U] ne perd pas de [piety|El] ou d’[opinion|El] de la part du [clergy|El] en cas de [torturing|El] ou d’[execution|El]"
 
- INCREASED_IMPRISONMENT_CHANCE_AGAINST_OTHERS:0 "Probabilité d’[imprisonment|El]: #P +50%#!"
+ INCREASED_IMPRISONMENT_CHANCE_AGAINST_OTHERS:0 "Probabilité d’[imprisonment|El] : #P +50%#!"
  
- COUNCIL_TASK_INCREASE_CONTROL_PROGRESS_INCREASE:0 "Gain de progression pour « [increase_control|El] »: #P +[EmptyScope.ScriptValue('strict_organization_percentage')|0]%#!"
+ COUNCIL_TASK_INCREASE_CONTROL_PROGRESS_INCREASE:0 "Gain de progression pour « [increase_control|El] » : #P +[EmptyScope.ScriptValue('strict_organization_percentage')|0]%#!"
 
- COURTING_PERK_SUCCESS_CHANCE_BONUS:2 "[success_chance|E] du [scheme|El] visant à [GetScheme('courting').GetActionName|l]: #P +[EmptyScope.ScriptValue('courtship_court_success_chance_bonus_value')|0]%#!\n[success_chance|E] du complot visant à [GetScheme('elope').GetActionName|l]: #P +[EmptyScope.ScriptValue('elope_court_success_chance_bonus_value')|0]%#!"
+ COURTING_PERK_SUCCESS_CHANCE_BONUS:2 "[success_chance|E] du [scheme|El] visant à [GetScheme('courting').GetActionName|l] : #P +[EmptyScope.ScriptValue('courtship_court_success_chance_bonus_value')|0]%#!\n[success_chance|E] du complot visant à [GetScheme('elope').GetActionName|l] : #P +[EmptyScope.ScriptValue('elope_court_success_chance_bonus_value')|0]%#!"
 
- MARRIAGE_ACCEPTANCE_FOR_SELF_AND_EXTENDED_FAMILY:1 "Acceptation des [marriages|El] pour soi: #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour la [close_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour la [extended_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
- MARRIAGE_ACCEPTANCE_FOR_ME_AND_MY_EXTENDED_FAMILY:2 "Acceptation des [marriages|El] pour vous-même: #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour votre [close_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour votre [extended_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
- MARRIAGE_ACCEPTANCE_FOR_THEM_AND_THEIR_EXTENDED_FAMILY:1 "Acceptation des [marriages|El] pour [CHARACTER.Custom('FR_LuiElle')]-même: #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour sa [close_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour sa [extended_family|El]: #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
+ MARRIAGE_ACCEPTANCE_FOR_SELF_AND_EXTENDED_FAMILY:1 "Acceptation des [marriages|El] pour soi : #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour la [close_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour la [extended_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
+ MARRIAGE_ACCEPTANCE_FOR_ME_AND_MY_EXTENDED_FAMILY:2 "Acceptation des [marriages|El] pour vous-même : #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour votre [close_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour votre [extended_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
+ MARRIAGE_ACCEPTANCE_FOR_THEM_AND_THEIR_EXTENDED_FAMILY:1 "Acceptation des [marriages|El] pour [CHARACTER.Custom('FR_LuiElle')]-même : #P +[EmptyScope.ScriptValue('promising_prospects_self_value')|0]#!\nAcceptation des [marriages|El] pour sa [close_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!\nAcceptation des [marriages|El] pour sa [extended_family|El] : #P +[EmptyScope.ScriptValue('promising_prospects_other_value')|0]#!"
 
- PEACE_OFFER_ACCEPTANCE:0 "Acceptation de la [peace|El]: #P +[EmptyScope.ScriptValue('peacemaker_value')|0]#!"
+ PEACE_OFFER_ACCEPTANCE:0 "Acceptation de la [peace|El] : #P +[EmptyScope.ScriptValue('peacemaker_value')|0]#!"
 
- SEND_GIFT_OPINION_GAIN_DOUBLED:0 "Gain d’opinion de l’interaction « $gift_interaction$ »: #P +100%#!"
+ SEND_GIFT_OPINION_GAIN_DOUBLED:0 "Gain d’opinion de l’interaction « $gift_interaction$ » : #P +100%#!"
 
  UNLOCK_DUCAL_CONQUEST_CB:0 "Débloquer le [ducal_conquest_casus_belli|El]"
  I_AM_ABLE_TO_USE_DUCAL_CONQUEST_CB:1 "Vous pouvez utiliser le [ducal_conquest_casus_belli|El]"
@@ -1630,34 +1632,36 @@
  I_AM_ABLE_TO_USE_FORCED_VASSALAGE_CB:1 "Vous pouvez utiliser le [vassalize_casus_belli|El]"
  THEY_ARE_ABLE_TO_USE_THE_FORCED_VASSALAGE_CB:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] peut utiliser le [vassalize_casus_belli|El]"
 
- FOREIGN_AFFAIRS_TASK_EFFECTIVENESS:0 "Efficacité de la tâche visant à [foreign_affairs|El]: #P +[EmptyScope.ScriptValue('adaptive_traditions_perk_impact_percent')|0]%#!"
+ FOREIGN_AFFAIRS_TASK_EFFECTIVENESS:0 "Efficacité de la tâche visant à [foreign_affairs|El] : #P +[EmptyScope.ScriptValue('adaptive_traditions_perk_impact_percent')|0]%#!"
 
- SELECT_GENETIC_TRAIT_FOR_BLOODLINE:0 "Choisir un trait [congenital|El] pour qu’il soit plus commun dans la dynastie:\n$BULLET_WITH_TAB$[GetTrait('beauty_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('intellect_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('physique_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('fecund').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('giant').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('dwarf').GetName( GetNullCharacter )]"
+ SELECT_GENETIC_TRAIT_FOR_BLOODLINE:0 "Choisir un trait [congenital|El] pour qu’il soit plus commun dans la dynastie :\n$BULLET_WITH_TAB$[GetTrait('beauty_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('intellect_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('physique_good_1').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('fecund').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('giant').GetName( GetNullCharacter )]\n$BULLET_WITH_TAB$[GetTrait('dwarf').GetName( GetNullCharacter )]"
 
  SELECT_GENETIC_TRAIT_FOR_BLOODLINE_NO_BULLETTAB:1 "Choisir un trait [congenital|El] pour le rendre plus fréquent dans la dynastie"
 
- CASUS_BELLI_COST_PERK_REDUCTION:0 "Coût des [casus_belli|El]: #P -[EmptyScope.ScriptValue('bellum_justum_discount_percentage')|0]%#!"
- CASUS_BELLI_COST_DYNASTY_PERK_REDUCTION:0 "Coût des [casus_belli|El]: #P -20%#!"
+ CASUS_BELLI_COST_PERK_REDUCTION:0 "Coût des [casus_belli|El] : #P -[EmptyScope.ScriptValue('bellum_justum_discount_percentage')|0]%#!"
+ CASUS_BELLI_COST_DYNASTY_PERK_REDUCTION:0 "Coût des [casus_belli|El] : #P -20%#!"
  BETTER_KNIGHTS_DYNASTY_PERK_REDUCTION:0 "Les membres de la [dynasty|El] sont moins susceptibles de mourir ou d’être blessés dans une [battle|El], et ont plus de chances de gagner de la [prowess|El] en étant des [knights|El]"
 
  PERK_CAN_SIGN_ALLIANCE:0 "Peut proposer une [alliance|El] sans [marriage|El]"
  
  PERK_TRUCE_BREAKING_COST_REDUCTION:0 "[truces|E] plus courtes et pas de pénalité de [prestige|El] pour les briser"
 
- EACH_ALLIANCE_GRANTS_DIPLOMACY:1 "Chaque [alliance|El] octroie: #P +1#![diplomacy_i] ([EmptyScope.ScriptValue('embassies_max')|0] au maximum)"
+ EACH_ALLIANCE_GRANTS_DIPLOMACY:1 "Chaque [alliance|El] octroie : #P +1#![diplomacy_i] ([EmptyScope.ScriptValue('embassies_max')|0] au maximum)"
 
- FABRICATE_CLAIM_SPEED_GAIN:1 "Vitesse pour [fabricate_claim|El]: #P +[EmptyScope.ScriptValue('accomplished_forger_percentage')|0]%#!\nDébloque l’[buy_artifact_claim_interaction|El]"
+ FABRICATE_CLAIM_SPEED_GAIN:1 "Vitesse pour [fabricate_claim|El] : #P +[EmptyScope.ScriptValue('accomplished_forger_percentage')|0]%#!\nDébloque l’[buy_artifact_claim_interaction|El]"
 
  UNLOCK_BEFRIEND_SCHEME:1 "Débloque le [scheme|El] visant à [GetScheme('befriend').GetActionName|l]"
  I_CAN_USE_THE_BEFRIEND_SCHEME:2 "Vous pouvez utiliser le [scheme|El] visant à [GetScheme('befriend').GetActionName|l]"
  THEY_CAN_USE_THE_BEFRIEND_SCHEME:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] peut utiliser le [scheme|El] visant à [GetScheme('befriend').GetActionName|l]"
 
- EACH_FRIEND_ADDS_STRESS_REDUCTION:2 "Chaque [friend|El] ajoute: #P -5%#![stress_gain_i] au gain de [stress|El]"
+ unlocks_board_games_interaction_effect:0 "Débloque l’[interaction|El] $challenge_to_2p_chess_interaction$ vous permettant de jouer à des jeux amicaux avec d’autres [characters|El]"
+
+ EACH_FRIEND_ADDS_STRESS_REDUCTION:2 "Chaque [friend|El] ajoute : #P -5%#![stress_gain_i] au gain de [stress|El]"
 
  CHILDREN_ARE_BORN_WITH_EXTRA_STATS:0 "Les enfants reçoivent de #P 1#! à #P 3#! points d’[skill|El] supplémentaires"
 
- BEFRIEND_SUCCESS_CHANCE_AGAINST_FAMILY:0 "[success_chance|E] de [personal_scheme|El]: #P +[EmptyScope.ScriptValue('thicker_than_water_bonus')|0]%#! contre les membres de la famille"
- PERSONAL_SCHEME_SUCCESS_CHANCE_AGAINST_DYNASTY:0 "[success_chance|E] de [personal_scheme|El]: #P +[EmptyScope.ScriptValue('kin_legacy_4_success_chance')|0]%#! contre les membres de la [dynasty|El]"
+ BEFRIEND_SUCCESS_CHANCE_AGAINST_FAMILY:0 "[success_chance|E] de [personal_scheme|El] : #P +[EmptyScope.ScriptValue('thicker_than_water_bonus')|0]%#! contre les membres de la famille"
+ PERSONAL_SCHEME_SUCCESS_CHANCE_AGAINST_DYNASTY:0 "[success_chance|E] de [personal_scheme|El] : #P +[EmptyScope.ScriptValue('kin_legacy_4_success_chance')|0]%#! contre les membres de la [dynasty|El]"
 
  GAIN_SKILL_FROM_AGING:1 "Augmente les [skills|El] avec l’âge"
  
@@ -1669,7 +1673,7 @@
 
  EACH_LIVING_CHILD_ADDS_RANDOM_SKILL_POINT:3 "Chaque enfant vivant vous donne #P 1#! point d’une [skill|El] aléatoire ([EmptyScope.ScriptValue('sound_foundations_max')|0] au maximum)"
 
- OFFER_VASSALIZATION_ACCEPTANCE_INCREASE:0 "Acceptation de l’[offer_vassalization|El]: #P +[EmptyScope.ScriptValue('true_ruler_value')|0]#!"
+ OFFER_VASSALIZATION_ACCEPTANCE_INCREASE:0 "Acceptation de l’[offer_vassalization|El] : #P +[EmptyScope.ScriptValue('true_ruler_value')|0]#!"
 
  REDUCED_CHANCE_OF_BEING_WOUNDED_KILLED_OR_IMPRISONED_IN_BATTLE:1 "[command_modifier_i|E]Réduit les risques liés au fait de [commanding|El] des [armies|El]"
 
@@ -1677,10 +1681,12 @@
 
  CAN_USE_THE_SELL_TITLES_DECISION:0 "Peut utiliser la [decision|El] « [sell_titles|El] »"
 
- COLLECT_TAXES_EFFECTIVENESS_GAIN:0 "Efficacité de la tâche visant à [collect_taxes|El]: #P +[EmptyScope.ScriptValue('tax_man_perk_percentage')|0]%#!"
+ COLLECT_TAXES_EFFECTIVENESS_GAIN:0 "Efficacité de la tâche visant à [collect_taxes|El] : #P +[EmptyScope.ScriptValue('tax_man_perk_percentage')|0]%#!"
+
+ unlocks_truce_purchasing_interaction_desc:0 "Déverrouille l’[interaction|El] $purchase_truce_interaction$ qui permet des [truces|El] à acheter de manière préventive"
 
  CHILDREN_HAVE_CHANCE_OF_IMPROVEMENT:0 "Les [wards|El] peuvent obtenir des [skills|El] supplémentaires et peuvent devenir [friends|El] avec leur [guardian|El]"
- CHILDREN_I_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:3 "Vos [wards|El] peuvent obtenir des [skills|El] supplémentaires et peuvent devenir vos [friends|El]\n[success_chance|E] du [scheme|El] visant à [GetScheme('learn_language').GetActionName|l]: #P +25%#!"
+ CHILDREN_I_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:3 "Vos [wards|El] peuvent obtenir des [skills|El] supplémentaires et peuvent devenir vos [friends|El]\n[success_chance|E] du [scheme|El] visant à [GetScheme('learn_language').GetActionName|l] : #P +25%#!"
  CHILDREN_THEY_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:0 "Les [wards|El] [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName] peuvent obtenir des [skills|El] supplémentaires et peuvent devenir ses [friends|El]"
  
  open_minded_perk_effect:1 "Peut apprendre #V 2#! [languages|El] supplémentaires sans pénalité"
@@ -1689,7 +1695,7 @@
 
  CHEAPER_COURT_PHYSICIAN_AND_BETTER_OUTCOMES:2 "Un [GetCourtPositionType('court_physician_court_position').GetName()|l] coûte moins cher à embaucher\nSes traitement donnent de meilleurs résultats"
 
- MENTAL_BREAK_SPACING:0 "Temps entre les [mental_breaks|El]: #P +3#! ans"
+ MENTAL_BREAK_SPACING:0 "Temps entre les [mental_breaks|El] : #P +3#! ans"
 
  UNLOCKS_CELIBACY_DECISIONS:0 "Déverrouille les [decisions|El] « [embrace_celibacy|El] » et « [abandon_celibacy|El] »"
  I_CAN_USE_CELIBACY_DECISIONS:1 "Vous pouvez prendre les [decisions|El] « [embrace_celibacy|El] » et « [abandon_celibacy|El] »"
@@ -1699,7 +1705,7 @@
  I_WILL_RECEIVE_WARNING_OF_NATURAL_DEATH:1 "Vous recevrez un avertissement lorsque vous serez à #V 1#! an d’une [character_death_death|El] de cause naturelle"
  THEY_WILL_RECEIVE_WARNING_OF_NATURAL_DEATH:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] recevra un avertissement lorsqu’[CHARACTER.Custom('FR_IlElle')] sera à #V 1#! an d’une [character_death_death|El] de cause naturelle"
 
- CONVERT_COUNTY_NO_NEGATIVE_FERVOR_MODIFIERS:3 "[convert_county|E]: le temps nécessaire pour convertir un [county|El] n’est plus augmenté si la [faith|El] a une [fervor|El] plus élevée que la vôtre"
+ CONVERT_COUNTY_NO_NEGATIVE_FERVOR_MODIFIERS:3 "[convert_county|E] : le temps nécessaire pour convertir un [county|El] n’est plus augmenté si la [faith|El] a une [fervor|El] plus élevée que la vôtre"
 
  REDUCED_DISEASE_FREQUENCY_AT_COURT:0 "Probabilité réduite de contracter des [illnesses|El]\nProbabilité réduite pour les [courtiers|El] de contracter des [illnesses|El]"
 
@@ -1715,27 +1721,27 @@
  I_CAN_USE_THE_CLAIM_THRONE_INTERACTION:2 "Vous pouvez utiliser le [scheme|El] visant à [GetScheme('claim_throne').GetActionName|l] contre votre [liege|El]"
  THEY_CAN_USE_THE_CLAIM_THRONE_INTERACTION:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] peut utiliser le [scheme|El] visant à [GetScheme('claim_throne').GetActionName|l] contre son seigneur lige"
 
- DOMESTIC_AFFAIRS_EFFICIENCY_BONUS:0 "Efficacité de la tâche visant à [domestic_affairs|El]: #P +[EmptyScope.ScriptValue('chains_of_loyalty_percentage')|0]%#!"
+ DOMESTIC_AFFAIRS_EFFICIENCY_BONUS:0 "Efficacité de la tâche visant à [domestic_affairs|El] : #P +[EmptyScope.ScriptValue('chains_of_loyalty_percentage')|0]%#!"
 
  VASSALS_LESS_LIKELY_TO_JOIN_INDEPENDENCE_FACTIONS:0 "Les [vassals|El] sont moins susceptibles de rejoindre les [independence_factions|El]"
  MY_VASSALS_ARE_MUCH_LESS_LIKELY_TO_JOIN_INDEPENDENCE_FACTIONS:0 "Vos [vassals|El] sont moins susceptibles de rejoindre les [independence_factions|El]"
  THEIR_VASSALS_ARE_MUCH_LESS_LIKELY_TO_JOIN_INDEPENDENCE_FACTIONS:0 "Les [vassals|El] [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUINameNoTooltip] sont moins susceptibles de rejoindre les [independence_factions|El]"
 
- RELIGIOUS_RELATIONS_EFFICIENCY_GAIN:0 "Efficacité de la tâche visant à [religious_relations|El]: #P +[EmptyScope.ScriptValue('clerical_justifications_percentage')|0]%#!"
+ RELIGIOUS_RELATIONS_EFFICIENCY_GAIN:0 "Efficacité de la tâche visant à [religious_relations|El] : #P +[EmptyScope.ScriptValue('clerical_justifications_percentage')|0]%#!"
 
- FACTION_DISCONTENT_TARGET_REDUCTION:1 "Le seuil de [faction_military_power|El] pour les [vassals|El]: #P +[EmptyScope.ScriptValue('hard_rule_military_power_increase')|0]#!"
+ FACTION_DISCONTENT_TARGET_REDUCTION:1 "Le seuil de [faction_military_power|El] pour les [vassals|El] : #P +[EmptyScope.ScriptValue('hard_rule_military_power_increase')|0]#!"
 
  COUNCILLORS_GRANT_SKILL_BONUS:0 "Obtient #P [EmptyScope.ScriptValue('learn_on_the_job_percentage')|0]%#! des principales [skills|El] des [councillors|El]"
  I_GAIN_COUNCILLORS_SKILL_MYSELF:1 "#P [EmptyScope.ScriptValue('learn_on_the_job_percentage')|0]%#! des principales [skills|El] des [councillors|El] sont ajoutées aux vôtres"
  THEY_GAIN_COUNCILLORS_SKILL_THEMSELVES:0 "#P [EmptyScope.ScriptValue('learn_on_the_job_percentage')|0]%#! des principales [skills|El] des [councillors|El] sont ajoutées aux siennes"
 
- CONVERT_COUNTY_SPEED_BONUS:0 "Vitesse de progression de la tâche visant à [convert_county|El]: #P +[EmptyScope.ScriptValue('zealous_proselytizer_percentage')|0]%#!"
+ CONVERT_COUNTY_SPEED_BONUS:0 "Vitesse de progression de la tâche visant à [convert_county|El] : #P +[EmptyScope.ScriptValue('zealous_proselytizer_percentage')|0]%#!"
 
  UNLOCK_BUY_CLAIM_INTERACTION:0 "Débloque l’interaction « [buy_claim|El] »"
  I_CAN_USE_BUY_CLAIM_INTERACTION:1 "Vous pouvez utiliser l’interaction « [buy_claim|El] »"
  THEY_CAN_USE_BUY_CLAIM_INTERACTION:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] peut utiliser l’interaction « [buy_claim|El] »"
 
- DEVELOP_COUNTY_EFFICIENCY_INCREASE:0 "Efficacité de la tâche visant à [develop_county|El]: #P +[EmptyScope.ScriptValue('planned_cultivation_percentage')|0]%#!"
+ DEVELOP_COUNTY_EFFICIENCY_INCREASE:0 "Efficacité de la tâche visant à [develop_county|El] : #P +[EmptyScope.ScriptValue('planned_cultivation_percentage')|0]%#!"
  
  NO_CONTROL_LOSS_ON_OCCUPATION:0 "Les [occupations|El] ennemies ne diminuent pas le [control|El]"
 
@@ -1746,30 +1752,30 @@
  HOUSE_GUARD_UNLOCK_DESCRIPTION:0 "Peut recruter des [GetMaA('house_guard').GetName] comme [men_at_arms|El]"
  HOUSE_GUARD_DESCRIPTION:1 "#weak Un seul régiment de Gardes de la Maison peut être recruté (jusqu’à la taille 5)#!"
  
- CHEAPER_HUNTS_AND_FEASTS:0 "Coût de la [hunt|El] et du [feast|El]: #P -30%#![gold_i]"
+ CHEAPER_HUNTS_AND_FEASTS:0 "Coût de la [hunt|El] et du [feast|El] : #P -30%#![gold_i]"
  
- MARRIAGE_ACCEPTANCE_LEGACY_FOR_SELF:0 "Acceptation du [marriage|El]: #P +[EmptyScope.ScriptValue('glory_legacy_1_marriage_acceptance')|0]#!"
+ MARRIAGE_ACCEPTANCE_LEGACY_FOR_SELF:0 "Acceptation du [marriage|El] : #P +[EmptyScope.ScriptValue('glory_legacy_1_marriage_acceptance')|0]#!"
  FEWER_FACTIONS_LEGACY:0 "Les [vassals|El] sont moins enclins à rejoindre les [claimant_factions|El] et les [liberty_factions|El]#!"
- BETTER_GUESTS_LEGACY:1 "De meilleurs [guests|El] seront attirés\nCoût de recrutement des invités: #P -30%#![gold_i]"
- MORE_PIETY_FROM_PILGRIMAGES_LEGACY:0 "[piety|E] des [pilgrimages|El]: #P +30%#![piety_i]"
- LEGACY_IMPROVED_COUNCIL_TASKS:1 "Progression de base et impact de l’aptitude du [councillor|El] sur les [councillor_tasks|El]: #P +10%#!"
- LEGACY_DYNASTY_MEMBERS_MORE_LIKELY_TO_ACCEPT_CONVERSIONS:1 "Acceptation par un membre de la [dynasty|El] des [Concept('demand_conversion','demandes de conversion')|E]: #P +50#!"
- LEGACY_DYNASTY_MEMBERS_KIDNAP_AFTER_SIEGES_BETTER:1 "[gold|E] des rançons: [gold_i]#P +50%#!\nGain de [prestige|El] [prestige_i] en rançonnant des [prisoners|El]\nProbabilité accrue d’[imprison|El] des [characters|El] après un [siege|El] ou un [raid|El] réussi"
+ BETTER_GUESTS_LEGACY:1 "De meilleurs [guests|El] seront attirés\nCoût de recrutement des invités : #P -30%#![gold_i]"
+ MORE_PIETY_FROM_PILGRIMAGES_LEGACY:0 "[piety|E] des [pilgrimages|El] : #P +30%#![piety_i]"
+ LEGACY_IMPROVED_COUNCIL_TASKS:1 "Progression de base et impact de l’aptitude du [councillor|El] sur les [councillor_tasks|El] : #P +10%#!"
+ LEGACY_DYNASTY_MEMBERS_MORE_LIKELY_TO_ACCEPT_CONVERSIONS:1 "Acceptation par un membre de la [dynasty|El] des [Concept('demand_conversion','demandes de conversion')|E] : #P +50#!"
+ LEGACY_DYNASTY_MEMBERS_KIDNAP_AFTER_SIEGES_BETTER:1 "[gold|E] des rançons : [gold_i]#P +50%#!\nGain de [prestige|El] [prestige_i] en rançonnant des [prisoners|El]\nProbabilité accrue d’[imprison|El] des [characters|El] après un [siege|El] ou un [raid|El] réussi"
  LEGACY_ENEMIES_LOSE_EXTRA_CONTROL_WHEN_OCCUPIED:0 "Les [counties|El] ennemis perdent substantiellement plus de [control|El] lorsqu’ils sont [Concept('occupied','occupés')|E]"
- LEGACY_MORE_PRESTIGE_FROM_BATTLES:0 "Gain de [prestige|El] et de [prestige_experience|El] des [battles|El]: #P +100%#![prestige_i]"
+ LEGACY_MORE_PRESTIGE_FROM_BATTLES:0 "Gain de [prestige|El] et de [prestige_experience|El] des [battles|El] : #P +100%#![prestige_i]"
  LEGACY_GOLD_FROM_BATTLES:0 "Gain d’[gold|El][gold_i] des [battles|El] #weak (5 or pour 100 [dead_soldiers|El])#!"
- CHEAPER_AGENTS_LEGACY:0 "Coût de corruption d’[agent|El]: #P -50%#![gold_i]"
- LEGACY_SEDUCE_BONUSES:1 "Coût de l’[Concept('send_gift','envoi d’un cadeau')|E]: #P -50%#![gold_i]\n[success_chance|E] d’un [scheme|El] visant à [GetScheme('seduce').GetActionName|l]: #P +[EmptyScope.ScriptValue('fp1_adventure_legacy_2_success_chance_seduction')|0]%#!\nGain de [prestige|El][prestige_i] pour les [schemes|El] visant à [GetScheme('seduce').GetActionName|l] réussis\n#weak (Plus la séduction est risquée, plus le prestige augmente)#!"
+ CHEAPER_AGENTS_LEGACY:0 "Coût de corruption d’[agent|El] : #P -50%#![gold_i]"
+ LEGACY_SEDUCE_BONUSES:1 "Coût de l’[Concept('send_gift','envoi d’un cadeau')|E] : #P -50%#![gold_i]\n[success_chance|E] d’un [scheme|El] visant à [GetScheme('seduce').GetActionName|l] : #P +[EmptyScope.ScriptValue('fp1_adventure_legacy_2_success_chance_seduction')|0]%#!\nGain de [prestige|El][prestige_i] pour les [schemes|El] visant à [GetScheme('seduce').GetActionName|l] réussis\n#weak (Plus la séduction est risquée, plus le prestige augmente)#!"
  LEGACY_BONUS_PER_FRIEND:1 "Peut [GetScheme('befriend').GetActionName|l] avec les [vassals|El]\nChacune de vos relations [Concept('friend','amicales')|E] vous donne #P +3#! en [opinion|El] de la part du [vassal|El], #P +2#! d’[county_opinion|El], et #P +1%#! de [modifier_contribution|El] du [vassal|El] en [tax|El][gold_i]\n#weak (Jusqu’à 5 [friends|l])#!"
  LEGACY_MORE_LIKELY_TO_GET_TRADE_EVENTS_WHEN_RAIDING:0 "Probabilité accrue d’obtenir des événements commerciaux lors d’un [Concept('raiding','pillage')|E]"
 
- ALL_DYNASTY_MEMBERS_HAVE_MURDER_SAVE:2 "Importante probabilité d’[prevented_murder_prevent|El] un [scheme|El] visant à [GetScheme('murder').GetActionName|l] contre un membre de la [dynasty|El]\nAcceptation d’une [interaction|El] de la part d’un personnage [intimidated|El][intimidated_i] ou [cowed|El][terrified_i]: #P +100%#!"
- LEGACY_DYNASTY_MEMBERS_GAIN_BONUS_TROOPS_WHEN_VARANGIAN_ADVENTURING:0 "Reçoit des troupes au-delà de la limite en partant à l’[varangian_adventuring|El]\n[dynast_interaction|E]: #V Envoyer à la Garde varègue#!\n#weak Le [dynast|El] obtient la capacité de dépenser du [prestige|El][prestige_i] afin de faire partir les membres adultes sans terre de la [dynasty|El] et qu’ils obtiennent potentiellement des [skills|El] et des [traits|El]#!"
+ ALL_DYNASTY_MEMBERS_HAVE_MURDER_SAVE:2 "Importante probabilité d’[prevented_murder_prevent|El] un [scheme|El] visant à [GetScheme('murder').GetActionName|l] contre un membre de la [dynasty|El]\nAcceptation d’une [interaction|El] de la part d’un personnage [intimidated|El][intimidated_i] ou [cowed|El][terrified_i] : #P +100%#!"
+ LEGACY_DYNASTY_MEMBERS_GAIN_BONUS_TROOPS_WHEN_VARANGIAN_ADVENTURING:0 "Reçoit des troupes au-delà de la limite en partant à l’[varangian_adventuring|El]\n[dynast_interaction|E] : #V Envoyer à la Garde varègue#!\n#weak Le [dynast|El] obtient la capacité de dépenser du [prestige|El][prestige_i] afin de faire partir les membres adultes sans terre de la [dynasty|El] et qu’ils obtiennent potentiellement des [skills|El] et des [traits|El]#!"
  
  SET_ABSOLUTE_COUNTY_CONTROL:0 "Permet le [absolute_control|El] des [counties|El]"
  
- intrigue_skulduggery_focus_effect:0 "Acceptation d’[agent|El]: #P +10#!"
- stewardship_duty_focus_effect:0 "Acceptation d’[agent|El] ennemi: #P -5#!"
+ intrigue_skulduggery_focus_effect:0 "Acceptation d’[agent|El] : #P +10#!"
+ stewardship_duty_focus_effect:0 "Acceptation d’[agent|El] ennemi : #P -5#!"
 
  SET_SEXUALITY_EFFECT:0 "Prend conscience d’être $SEXUALITY$"
  REALIZED_SEXUALITY_EFFECT:0 "A pris conscience d’être $SEXUALITY$"
@@ -1897,8 +1903,8 @@
  JOIN_FACTION_SKIP_CHECK_PAST_EFFECT:0 "A rejoint la [FACTION.GetName|Vl] sans vérifier la validité (intentionnellement)"
  CREATE_ALLIANCE_EFFECT:0 "Forme une alliance avec [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
  CREATE_ALLIANCE_PAST_EFFECT:0 "A formé une alliance avec [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName]"
- TITLE_CREATE_FACTION_EFFECT:0 "Forme une faction $TYPE|Vl$"
- TITLE_CREATE_FACTION_PAST_EFFECT:0 "A formé une faction $TYPE|Vl$"
+ TITLE_CREATE_FACTION_EFFECT:1 "Forme une $TYPE|Vl$"
+ TITLE_CREATE_FACTION_PAST_EFFECT:1 "A formé une $TYPE|Vl$"
  SET_SPECIAL_TITLE_EFFECT:0 "[TITLE.GetName] devient le titre spécial"
  SET_SPECIAL_TITLE_PAST_EFFECT:0 "[TITLE.GetName] est devenu le titre spécial"
  SET_PREGNANCY_ASSUMED_FATHER_EFFECT:0 "[TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')|U][TARGET_CHARACTER.GetShortUIName] devient le père supposé de l’enfant à naître [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName]"
@@ -2002,12 +2008,15 @@
  custom.every_poet:0 "Chaque poète"
  custom.every_child_in_court:0 "Chaque enfant à la Cour"
  custom.every_non_callous_or_sadistic_vassal:0 "Chaque [vassal|El] qui n’est ni sans cœur ni sadique"
+ custom.every_zealous_callous_or_sadistic_vassal:0 "Chaque [vassal|El] zélé ou sans cœur"
  custom.every_feudal_vassal:0 "Tout [vassal|El] [feudal|El]"
  custom.every_opposite_sex_consort:0 "[Concept('spouse','Conjoint(e)')|E] ou [Concept('concubine','concubin(e)')|E] de sexe opposé"
  custom.every_vassal_of_target_culture:0 "Tout [vassal|El] de culture [different_culture_vassal.GetCulture.GetName|l]"
  custom.every_vassal:0 "Tout [vassal|El]"
  custom.every_female_courtier:0 "Tout [courtier|El] de sexe féminin"
  custom.every_male_courtier:0 "Tout [courtier|El] de sexe masculin"
+ custom.every_same_culture_vassal:0 "Tout [vassal|El] [root_culture.GetName]"
+ custom.every_different_culture_vassal:0 "Tout [vassal|El] non [root_culture.GetName]"
 
  guest_and_family_move_to_specific_pool_effect.tt.family:0 "Le [character|El] et toute [family|El] voyageant avec lui"
 
@@ -2073,10 +2082,10 @@
  HAS_ADDED_HOUSE_ARTIFACT_CLAIM:0 "La [house|E] [DYNASTY_HOUSE.GetName|V] a obtenu une [Concept('house_artifact_claim','revendication')|E] sur l’artefact [ARTIFACT.GetName]"
  HAS_ADDED_HOUSE_ARTIFACT_CLAIM_GLOBAL:0 "A obtenu une [Concept('house_artifact_claim','revendication')|E] de [house|E] sur l’artefact [ARTIFACT.GetName]"
 
- ADD_ARTIFACT_MODIFIER_GLOBAL:0 "L’artefact [ARTIFACT.GetName] obtient: $MODIFIER$"
- REMOVE_ARTIFACT_MODIFIER_GLOBAL:0 "L’artefact [ARTIFACT.GetName] perd: $MODIFIER$"
- COPY_ARTIFACT_MODIFIERS_GLOBAL:0 "Obtient les modificateurs:\n$MODIFIER_DESC$"
- COPY_ARTIFACT_MODIFIERS_THIRD:0 "L’artefact [ARTIFACT.GetName] obtient les modificateurs:\n$MODIFIER_DESC$"
+ ADD_ARTIFACT_MODIFIER_GLOBAL:0 "L’artefact [ARTIFACT.GetName] obtient : $MODIFIER$"
+ REMOVE_ARTIFACT_MODIFIER_GLOBAL:0 "L’artefact [ARTIFACT.GetName] perd : $MODIFIER$"
+ COPY_ARTIFACT_MODIFIERS_GLOBAL:0 "Obtient les modificateurs :\n$MODIFIER_DESC$"
+ COPY_ARTIFACT_MODIFIERS_THIRD:0 "L’artefact [ARTIFACT.GetName] obtient les modificateurs :\n$MODIFIER_DESC$"
  
  I_GAINED_COURT_GRANDEUR_EFFECT:0 "Vous avez gagné $VALUE|+0$ en [court_grandeur|El]"
  I_LOST_COURT_GRANDEUR_EFFECT:0 "Vous avez dépensé $VALUE|-0$ en [court_grandeur|El]"
@@ -2102,19 +2111,19 @@
  APPOINT_COURT_POSITION:0 "#D TODO_CD#!"
 
 # revoke_court_position 
- I_REVOKE_COURT_POSITION_EFFECT:1 "Vous renverrez [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûtera: $REVOKE_COST$\n$REVOKE_EFFECT$"
- I_REVOKE_COURT_POSITION_PAST_EFFECT:1 "Vous avez renvoyé [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûte: $REVOKE_COST$\n$REVOKE_EFFECT$"
- THEY_REVOKE_COURT_POSITION_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] renverra [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûtera: $REVOKE_COST$\n$REVOKE_EFFECT$"
- THEY_REVOKE_COURT_POSITION_PAST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a renvoyé [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûte: $REVOKE_COST$\n$REVOKE_EFFECT$"
+ I_REVOKE_COURT_POSITION_EFFECT:1 "Vous renverrez [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûtera : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ I_REVOKE_COURT_POSITION_PAST_EFFECT:1 "Vous avez renvoyé [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûte : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ THEY_REVOKE_COURT_POSITION_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] renverra [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûtera : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ THEY_REVOKE_COURT_POSITION_PAST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a renvoyé [TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')][TARGET_CHARACTER.GetShortUIName] du poste de [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûte : $REVOKE_COST$\n$REVOKE_EFFECT$"
  REVOKE_COURT_POSITION_EFFECT:0 "[TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')|U][TARGET_CHARACTER.GetShortUIName] est démis[TARGET_CHARACTER.Custom('FR_E')] de ses fonctions en tant que [COURT_POSITION_TYPE.GetName|l] [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName]"
  REVOKE_COURT_POSITION_PAST_EFFECT:0 "[TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')|U][TARGET_CHARACTER.GetShortUIName] a été démis[TARGET_CHARACTER.Custom('FR_E')] de ses fonctions en tant que [COURT_POSITION_TYPE.GetName|l] [CHARACTER.Custom('FR_du_Char_U_Pi')][CHARACTER.GetShortUIName]"
  REVOKE_COURT_POSITION:0 "#D TODO_CD#!"
 
 # replace_court_position 
- I_REPLACE_COURT_POSITION_EFFECT:1 "Vous remplacerez $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûtera: $REVOKE_COST$\n$REVOKE_EFFECT$"
- I_REPLACE_COURT_POSITION_PAST_EFFECT:1 "Vous avez remplacé $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûte: $REVOKE_COST$\n$REVOKE_EFFECT$"
- THEY_REPLACE_COURT_POSITION_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] remplacera $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûtera: $REVOKE_COST$\n$REVOKE_EFFECT$"
- THEY_REPLACE_COURT_POSITION_PAST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a remplacé $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûte: $REVOKE_COST$\n$REVOKE_EFFECT$"
+ I_REPLACE_COURT_POSITION_EFFECT:1 "Vous remplacerez $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûtera : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ I_REPLACE_COURT_POSITION_PAST_EFFECT:1 "Vous avez remplacé $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela vous coûte : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ THEY_REPLACE_COURT_POSITION_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] remplacera $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûtera : $REVOKE_COST$\n$REVOKE_EFFECT$"
+ THEY_REPLACE_COURT_POSITION_PAST_EFFECT:1 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] a remplacé $HOLDER$ par $REPLACEMENT$ en tant que [COURT_POSITION_TYPE.GetName|l]\n• Cela lui coûte : $REVOKE_COST$\n$REVOKE_EFFECT$"
  REPLACE_COURT_POSITION_EFFECT:0 "$HOLDER$ est remplacé par $REPLACEMENT$ en tant que [CHARACTER.LocalPlayerString( 'votre ', '' )][COURT_POSITION_TYPE.GetName|l][CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  REPLACE_COURT_POSITION_PAST_EFFECT:0 "$HOLDER$ a été remplacé par $REPLACEMENT$ en tant que [CHARACTER.LocalPlayerString( 'votre ', '' )][COURT_POSITION_TYPE.GetName|l][CHARACTER.LocalPlayerString( '', 'Loc_FR_du_GetShortUIName' )]"
  REPLACE_COURT_POSITION:0 "#D TODO_CD#!"
@@ -2130,22 +2139,47 @@
  CREATE_ARTIFACT_EFFECT_FIRST_PAST:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] avez obtenu l’[artifact|El] $ARTIFACT_NAME$"
  CREATE_ARTIFACT_EFFECT_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] obtient l’[artifact|El] $ARTIFACT_NAME$"
  CREATE_ARTIFACT_EFFECT_THIRD_PAST:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] a obtenu l’[artifact|El] $ARTIFACT_NAME$"
+
+ START_STRUGGLE_EFFECT:0 "Démarre une [struggle|El] $TYPE|Vl$"
+ ACTIVATE_STRUGGLE_CATALYST:0 "Activer $CATALYST_NAME|l$"
+ CHANGE_STRUGGLE_PHASE_EFFECT:0 "Changer la phase en $STRUGGLE_PHASE|l$"
+
  SET_ARTIFACT_RARITY_EFFECT:0 "Devient $RARITY|l$"
  SET_ARTIFACT_RARITY_EFFECT_PAST:0 "Est devenu $RARITY|l$"
  SET_ARTIFACT_RARITY_EFFECT_THIRD:0 "L’[artifact|El] [ARTIFACT.GetName] devient $RARITY|l$"
  SET_ARTIFACT_RARITY_EFFECT_PAST_THIRD:0 "L’[artifact|El] [ARTIFACT.GetName] est devenu $RARITY|l$"
 
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST`
+ SET_CULTURE_AS_INVOLVED:0 "La culture [CULTURE.GetName] s’implique dans la [STRUGGLE.GetName]"
+ SET_CULTURE_AS_UNINVOLVED:0 "La culture [CULTURE.GetName] n’est plus impliquée dans la [STRUGGLE.GetName]"
+ SET_FAITH_AS_INVOLVED:0 "La foi [FAITH.GetAdjective] s’implique dans la [STRUGGLE.GetName]"
+ SET_FAITH_AS_UNINVOLVED:0 "La foi [FAITH.GetAdjective] n’est plus impliquée dans la [STRUGGLE.GetName]"
 
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST`
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_DESC:1 "Un [head_of_faith|El] [FAITH.GetAdjective] est créé"
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_PAST_DESC:1 "Un [head_of_faith|El] [FAITH.GetAdjective] a été créé"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_DESC:0 "Vous devenez le [head_of_faith|El] [FAITH.GetAdjective]"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_PAST_DESC:0 "Vous êtes devenu le [head_of_faith|El] [FAITH.GetAdjective]"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] devient le [head_of_faith|El] [FAITH.GetAdjective]"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_PAST_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] est devenu[TARGET_TITLE.GetHolder.Custom('FR_E')] le [head_of_faith|El] [FAITH.GetAdjective]"
+ REMOVE_RELIGIOUS_HEAD_TITLE_DESC:0 "Le [head_of_faith|El] [FAITH.GetAdjective] est déposé"
+ REMOVE_RELIGIOUS_HEAD_TITLE_PAST_DESC:0 "Le [head_of_faith|El] [FAITH.GetAdjective] a été déposé"
+ 
+ EQUIP_ARTIFACT_TO_OWNER:0 "L’artefact [ARTIFACT.GetName] devient équipé"
+ EQUIP_ARTIFACT_TO_OWNER_PAST:0 "L’artefact [ARTIFACT.GetName] était équipé"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST:0 "Vous êtes équipé de l’artefact [ARTIFACT.GetName]"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST:0 "Vous étiez équipé de l’artefact [ARTIFACT.GetName]"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] [CHARACTER.LocalPlayerString( 'vous équipez', 's’équipe' )] de l’artefact [ARTIFACT.GetName]"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] [CHARACTER.LocalPlayerString( 'vous équipiez', 's’équipait' )] de l’artefact [ARTIFACT.GetName]"
 
+ UNEQUIP_ARTIFACT_FROM_OWNER:0 "L’artefact [ARTIFACT.GetName] n’est plus équipé"
+ UNEQUIP_ARTIFACT_FROM_OWNER_PAST:0 "L’artefact [ARTIFACT.GetName] n’était pas équipé"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST:0 "Vous ne vous équipez plus de l’artefact [ARTIFACT.GetName]"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST:0 "Vous ne vous équipiez plus de l’artefact [ARTIFACT.GetName]"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] ne [CHARACTER.LocalPlayerString( 'vous équipez', 's’équipe' )] pas de l’artefact [ARTIFACT.GetName]"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName|U] ne [CHARACTER.LocalPlayerString( 'vous équipiez', 's’équipait' )] pas de l’artefact [ARTIFACT.GetName]"
+
+ SET_ETHOS_FROM:0 "La culture [CULTURE.GetName|V] adopte chaque [ethos|El] [TARGET_CULTURE.GetName|V]"
+ SET_ETHOS_FROM_PAST:0 "La culture [CULTURE.GetName|V] a adopté chaque [ethos|El] [TARGET_CULTURE.GetName|V]"
+ SET_LANGUAGE_FROM:0 "La langue [CULTURE.GetName|V] devient la langue [TARGET_CULTURE.GetLanguage.GetName|V]"
+ SET_LANGUAGE_FROM_PAST:0 "La langue [CULTURE.GetName|V] est devenue la langue [TARGET_CULTURE.GetLanguage.GetName|V]"
+ RESET_CULTURE_CREATION_DATE:0 "La date de création de la culture [CULTURE.GetName|V] est réinitialisée"
+ RESET_CULTURE_CREATION_DATE_PAST:0 "La date de création de la culture [CULTURE.GetName|V] a été réinitialisée"

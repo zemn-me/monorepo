@@ -146,3 +146,49 @@ negotiate_the_danelaw_valid_danelaw_opponent_trigger = {
 		}
 	}
 }
+
+##################################################
+# Favour the Countryside Basques Triggers
+
+favour_the_countryside_basques_counts_as_basque_trigger = {
+	culture = {
+		OR = {
+			this = culture:basque
+			any_parent_culture = { this = culture:basque }
+		}
+	}
+}
+
+## We keep these isolated so that we can maintain easy parity between the decision rationales & the event desc rationales.
+favour_the_countryside_basques_rationale_negative_piety_level_trigger = {
+	piety_level < low_piety_level
+}
+
+favour_the_countryside_basques_rationale_sinful_traits_trigger = {
+	num_sinful_traits >= 2
+}
+
+favour_the_countryside_basques_rationale_virtuous_basque_pagan_traits_trigger = {
+	num_virtuous_traits = {
+		value >= favour_the_countryside_basques_decision_basque_pagan_virtues_tally_value
+		faith = faith:basque_pagan
+	}
+}
+
+favour_the_countryside_basques_rationale_excommunicated_trigger = {
+	has_trait = excommunicated
+}
+
+favour_the_countryside_basques_rationale_naked_cynicism_trigger = {
+	trigger_if = {
+		limit = { is_ai = no }
+		has_trait = cynical
+	}
+}
+
+favour_the_countryside_basques_rationale_hof_rivalry_trigger = {
+	AND = {
+		exists = faith.religious_head
+		has_relation_rival = faith.religious_head
+	}
+}

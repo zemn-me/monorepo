@@ -2,7 +2,7 @@
 
  ##################################################
  # #Misc Keys
- TRUCE_TRADE_DEAL:0 "Se firma una tregua a cambio de detener el asalto\n\n"
+ TRUCE_TRADE_DEAL:1 "\nSe firma una tregua a cambio de detener el asalto"
 
  ##################################################
  # #Standard Trade Events
@@ -54,7 +54,7 @@
  fp1_trade_events.0021.d:0 "Apartad, forasteros, mi acuerdo es con [partner.GetFirstNameNoTooltip]."
 
  fp1_trade_events.0031.t:0 "$fp1_trade_events.0021.t$"
- fp1_trade_events.0031.desc:0 "Los asaltantes de [raider.GetTitledFirstNameNoTooltip] son aterradores, tanto que agradezco que los consideremos unos amigos con reservas en lugar de unos enemigos sanguinarios.\n\nUno de los más #EMP feroces#! de sus filas es [warrior.GetFirstName], cuya reputación no es precisamente pequeña.\n\nCuando [warrior.GetSheHe] me pidió audiencia, poco menos que me esperaba que intentara asesinarme, pero me sorprendió #EMP gratamente#! descubrir que [warrior.Custom('ES_ElLa')] joven guerrer[warrior.Custom('ES_OA')] deseaba ofrecerme sus servicios."
+ fp1_trade_events.0031.desc:0 "Los asaltantes de [raider.GetTitledFirstNameNoTooltip] son aterradores, tanto que agradezco que los consideremos unos amigos con reservas en lugar de unos enemigos sanguinarios.\n\nUno de los más #EMP feroces#! de sus filas es [warrior.GetFirstName], cuya reputación no es precisamente pequeña.\n\nCuando [warrior.GetSheHe] me pidió audiencia, poco menos que me esperaba que intentara asesinarme, pero me sorprendió #EMP gratamente#! descubrir que tal joven guerrer[warrior.Custom('ES_OA')] deseaba ofrecerme sus servicios."
  fp1_trade_events.0031.a:0 "¡[warrior.Custom('ES_LoLa')|U]s espadachin[warrior.Custom('ES_EA')]s de [raider.GetPrimaryTitle.GetNameNoTierNoTooltip] son legendari[warrior.Custom('ES_OA')]s!"
  fp1_trade_events.0031.b:0 "Atrás, bandid[warrior.Custom('ES_OA')]."
 

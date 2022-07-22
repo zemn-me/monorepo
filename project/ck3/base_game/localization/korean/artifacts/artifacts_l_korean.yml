@@ -50,20 +50,20 @@
  feature_blade_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_blade_metal_folded_iron:0 "$metal_folded_iron$"
  feature_blade_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_blade_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_blade_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_blade_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_blade_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_head_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_head_metal_folded_iron:0 "$metal_folded_iron$"
  feature_head_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_head_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_head_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_head_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_head_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_handle_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_handle_metal_folded_iron:0 "$metal_folded_iron$"
  feature_handle_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_handle_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_handle_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_handle_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_handle_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  # Precious/decorative metals and metal-based compounds
  metal_gold:0 "황금"
@@ -286,8 +286,8 @@
  gem_moonstone_plural:0 "월장석"
  gem_flourite:0 "형석"
  gem_flourite_plural:0 "형석"
- gem_adventurine:0 "어드벤처린"
- gem_adventurine_plural:0 "어드벤처린"
+ gem_adventurine:0 "사금석"
+ gem_adventurine_plural:0 "사금석"
  gem_amethyst:0 "자수정"
  gem_amethyst_plural:0 "자수정"
  gem_carnelian:0 "홍옥수"
@@ -691,7 +691,7 @@
  edmund_head_description:0 "에드먼드는 태어난 순간부터 본인을 성자에 봉할 것을 요구했습니다. 전설에 따르면 에드먼드는 이스트 앵글리아의 왕이었으며, 백성들을 학살당하게 두느니 자발적으로 자기 자신을 바이킹에게 제물로 바쳤다고 합니다."
  dhammapada_name:0 "법구경"
  dhammapada_description:1 "부처의 말씀을 한데 모은 서책입니다. 섬세한 종려 잎으로 엮었습니다."
- excalibur_name:0 "'엑스칼리버'"
+ excalibur_name:0 "엑스칼리버"
  excalibur_description:0 "영국에서 자신이 진정한 엑스칼리버의 주인이라 주장하지 않는 영주는 사실상 없다고 봐도 무방합니다. 엑스칼리버를 팔아 전쟁 자금을 충당할 수도 있겠죠. 물론 다른 검을 전시했다는 사실을 문객이 눈치채지 않기를 빌어야겠지만."
  vinaya_pitaka_name:0 "율장"
  vinaya_pitaka_description:0 "팔리어 대장경을 이루는 세 불교 경전 중 하나입니다. 승려와 비구니가 따라야 하는 규율이 서술되어 있습니다."
@@ -991,7 +991,7 @@
  artifact_dragvandil_name:0 "드라그반딜"
  artifact_dragvandil_description:0 "농부이자 시인, 그리고 전사였으며 에길의 사가를 통해 알려진 에길 스칼라그림손이 지녔다고 전해지는 검입니다."
  artifact_szczerbiec_name:0 "슈체르비에크"
- artifact_szczerbiec_description:0 "용감공 볼레스와프 왕이 천사에게 받았다는 전설을 지닌 검입니다. 키예프 황금문을 공격할 때 사용되었다고도 합니다. 막대한 상징성을 지니고 있습니다."
+ artifact_szczerbiec_description:1 "용감공 볼레스와프 왕이 천사에게 받았다는 전설을 지닌 검입니다. 키이우 황금문을 공격할 때 사용되었다고도 합니다. 막대한 상징성을 지니고 있습니다."
  artifact_chinese_caligraphy_name:1 "중국 붓글씨"
  artifact_chinese_caligraphy_description:0 "낯설지만 아름답고 정갈한 상징이 섬세한 종이를 뒤덮고 있습니다. 머나먼 극동의 중국에서 여기까지 흘러온 물건입니다."
  artifact_ruyi_name:0 "루이"
@@ -1064,3 +1064,7 @@
  easteregg_artifact_elisabeth_plush_description:0 "엘리자베스의 봉제 여우는 큰 사랑을 받은 장난감으로, 엘리자베스의 일생 대부분을 함께했습니다. 엘리자베스가 고용되어 치밀한 암호를 만들 때 종종 이 봉제 인형과 대화를 나누는 모습이 목격되기도 했습니다. 무척이나 아늑하며, 소유자로 하여금 여우의 영민함을 흉내 내게 합니다."
 
  child_toy_template_tt:0 "[inventory_artifact|E]로 장착하려면 [child|E]여야 합니다."
+
+ # Blessed Junk
+ fp2_blessed_junk:0 "[ROOT.Char.Custom('TrinketLookAdjective')|U] $blessed_artifact_modifier$"
+ fp2_blessed_junk_desc:0 "[ROOT.Char.Custom('TrinketLookAdverbFollowup')] [ROOT.Char.Custom('TrinketLookAdjective')](으)로, 별다를 것 없는 무의미한 유물입니다. $blessed_artifact_modifier_desc$."

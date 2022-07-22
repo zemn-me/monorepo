@@ -25,7 +25,12 @@ deceitful_progress_hostile_schemes_decision = {
 	cooldown = { days = @deceitful_progress_hostile_schemes_cooldown_time }
 
 	is_shown = {
-		has_trait = deceitful
+		OR = {
+			has_trait = deceitful
+			any_character_struggle = {
+				has_struggle_phase_parameter = unlocks_expedite_scheme_decision
+			}
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -71,7 +76,20 @@ deceitful_progress_hostile_schemes_decision = {
 	}
 	
 	ai_potential = {
-		has_trait = deceitful
+		OR = {
+			has_trait = deceitful
+			has_trait = vengeful
+			has_trait = sadistic
+			has_trait = schemer
+			has_trait = impatient
+			has_trait = ambitious
+			has_trait = diligent
+			has_trait = arbitrary
+		}
+		NOR = {
+			has_trait = calm
+			has_trait = patient
+		}
 		any_scheme = {
 			is_hostile = yes
 			save_temporary_scope_as = current_hostile_scheme

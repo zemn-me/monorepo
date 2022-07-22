@@ -80,7 +80,7 @@
 
  #Practice duel (Prowess skill challenge), Petter Vilberg
  martial_chivalry.2010.t:0 "挑战"
- martial_chivalry.2010.start.desc:1 "我正在与我的一名士兵比试拳脚，汗水布满了我的额头， 因为我感到一种被监视的可怕感觉。我回头一看，只见[challenger.Custom2('MyCharacterIntroduction', ROOT.Char)]"
+ martial_chivalry.2010.start.desc:1 "我正在与我的一名士兵比试拳脚，汗水布满了我的额头， 因为我感到一种被监视的可怕感觉。在警惕中，我看到了[challenger.Custom2('MyCharacterIntroduction', ROOT.Char)]，"
  martial_chivalry.2010.like.desc:0 "正在向我招手。我于是走过去和[challenger.GetHerHim]打招呼。\n\n我们讨论了一会儿武器训练，并交流了技巧和建议。正当我准备离别进行下一轮时，[challenger.GetTitledFirstNamePossessive]满脸容光焕发，随后[challenger.GetSheHe]建议我们一起训练。"
  martial_chivalry.2010.dislike.desc:0 "这人的眼睛直视着我，同时漠然地前后摇晃[challenger.GetHerHis]的[challenger.Custom('signature_weapon')]。\n\n“[ROOT.Char.GetTitleTierName]大人！”[challenger.GetFirstNamePossessive]的声音在庭院中炸开。“你是否愿意转而用我来考验你的技巧？”"
  martial_chivalry.2010.a:0 "接受挑战！"

@@ -57,6 +57,7 @@
 	right_portrait = scope:target
 
 	trigger = {
+		exists = scope:scheme
 		scope:scheme = {
 			scheme_number_of_agents > 0
 			any_scheme_agent = {
@@ -2253,7 +2254,10 @@ intrigue_scheme_ongoing.3005 = { #by Mathilda Bjarnehed
 	}
 	desc = intrigue_scheme_ongoing.3005.desc
 	theme = generic_intrigue_scheme
-	left_portrait = scope:pigeon_recipient
+	left_portrait = {
+		character = scope:pigeon_recipient
+		animation = scheme
+	}
 	right_portrait = scope:right_portrait
 	widget = {
 		gui = "event_window_widget_scheme"
@@ -2905,6 +2909,7 @@ intrigue_scheme_ongoing.5001 = {
 		scope:target = {
 			is_landed = yes
 			is_ai = yes # We don't want to spontaneously create mystery servant characters for players
+			is_adult = yes
 		}
 	}
 
@@ -4132,7 +4137,10 @@ intrigue_scheme_ongoing.5019 = {
 	}
 	desc = intrigue_scheme_ongoing.5019.desc
 	theme = generic_intrigue_scheme
-	left_portrait = scope:agent
+	left_portrait = {
+		character = scope:agent
+		animation = scheme
+	}
 	right_portrait = scope:target
 	widget = {
 		gui = "event_window_widget_scheme"

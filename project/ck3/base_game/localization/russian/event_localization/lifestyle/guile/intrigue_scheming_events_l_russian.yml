@@ -177,7 +177,7 @@
 
 # Fabricate Bastardy, by Petter Vilberg
  intrigue_scheming.3061.t:0 "Запутанное происхождение"
- intrigue_scheming.3061.desc:0 "На протяжении многих дней меня занимала родословная династии [target.GetDynasty.GetName], и теперь я знаю наверняка: [target.GetTitledFirstName] ни за что не сможет доказать, что [target.GetHerHis] [target.Custom2('RelationToMe', SCOPE.sC('heir'))] [heir.GetTitledFirstName] — [target.GetHerHis] по крови!\n\nНехватку свидетельств всегда можно восполнить подлогом... Пора мне написать новую правду о том, от кого ведет свой род [heir.GetFirstNamePossessive]!"
+ intrigue_scheming.3061.desc:0 "На протяжении многих дней меня занимала родословная династии [target.GetDynasty.GetBaseName], и теперь я знаю наверняка: [target.GetTitledFirstName] ни за что не сможет доказать, что [target.GetHerHis] [target.Custom2('RelationToMe', SCOPE.sC('heir'))] [heir.GetTitledFirstName] — [target.GetHerHis] по крови!\n\nНехватку свидетельств всегда можно восполнить подлогом... Пора мне написать новую правду о том, от кого ведет свой род [heir.GetFirstNamePossessive]!"
  intrigue_scheming.3061.a:0 "[new_father.GetTitledFirstNameNoTooltip] отлично подойдет на роль отца."
  intrigue_scheming.3061.b:0 "[mother.GetTitledFirstName] спала со слугой?! Какой позор!"
  intrigue_scheming.3061.c:0 "И у меня будет главная роль!"
@@ -406,7 +406,7 @@
  intrigue_scheming.1803.b:0 "Отмахнуться от информации."
 
  intrigue_scheming.1804.genuine_info_desc:0 "Только что прибыли новости от моих войск, осаждающих владение [barony.GetName] в ходе войны против персонажа [enemy.GetTitledFirstName]. Они сообщают, что сведения, полученные от неизвестного информатора, были правдивыми!\n\nБлагодаря знанию оборонительной тактики, которую применяет [enemy.GetFirstNameNoTooltip], им удалось завершить осаду в рекордные сроки. Победа практически обеспечена!"
- intrigue_scheming.1804.fake_info_desc:0 "Только что прибыли новости от моих войск, осаждающих владение [barony.GetName] в ходе войны против персонажа [enemy.GetTitledFirstName]. Они сообщают, что сведения, полученные от неизвестного информатора, были ложью!\n\nВладение они все же захватили, но война предстоит непростая."
+ intrigue_scheming.1804.fake_info_desc:0 "Только что прибыли новости от моих войск, осаждающих владение [barony.GetName] в ходе войны против персонажа [enemy.GetTitledFirstName]. Они сообщают, что сведения, полученные от неизвестного информатора, были ложью!\n\nВладение они всё же захватили, но война предстоит непростая."
  intrigue_scheming.1804.rejected_fake_info_desc:0 "Только что прибыли новости от моих войск, осаждающих владение [barony.GetName] в ходе войны против персонажа [enemy.GetTitledFirstName]. Они сообщают, что сведения, полученные от неизвестного информатора, были ложью!\n\nНо [ROOT.Char.GetFaith.HighGodName] уберег меня от решения действовать, опираясь на эту подделку!"
  intrigue_scheming.1804.a:0 "Хорошее приобретение, как мне кажется."
  intrigue_scheming.1804.b:0 "Нужно проявить стойкость!"

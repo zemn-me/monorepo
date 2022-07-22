@@ -2,7 +2,7 @@
  child_return_from_playdate_title:0 "Возвращение ребенка"
  child_return_from_playdate_desc:0 "[child_scope.GetShortUIName] возвращается после встречи с ровесниками при дворе персонажа [host.GetShortUIName]"
 
- playdate_header:0 "Встреча с ровесниками:"
+ playdate_header:0 "Встреча с ровесниками"
  playdate.0010.desc:0 "Не понимаю, зачем было принимать мое приглашение, а потом отправляться на встречу, что устраивает [other_host.GetTitledFirstName]?! Знайте, я этого не забуду."
  playdate.0010.a:0 "Ой."
 
@@ -20,7 +20,7 @@
  playdate.1002.a:0 "Разумеется, [child_scope.GetSheHe] там будет."
  playdate.1002.b:0 "Не могу принять ваше приглашение."
 
- playdate.2001.t:0 "$playdate_header$ Сбор"
+ playdate.2001.t:0 "$playdate_header$: Сбор"
  playdate.2001.desc_opening:0 "Гости прибыли!\n\nВсе эти маленькие лорды и леди приводят меня в восторг."
  playdate.2001.desc_guest_of_interest_1_2_3:0 "Мне очень приятно, что и [guest_of_interest_1.Custom2('MyCharacterIntroduction', ROOT.Char)|l], и [guest_of_interest_2.Custom2('MyCharacterIntroduction', ROOT.Char)|l] смогли приехать, и в особенности [guest_of_interest_3.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)|l]!"
  playdate.2001.desc_guest_of_interest_1_and_2:0 "Мне очень приятно, что и [guest_of_interest_1.Custom2('MyCharacterIntroduction', ROOT.Char)|l], и [guest_of_interest_2.Custom2('MyCharacterIntroduction', ROOT.Char)|l] смогли приехать!"
@@ -138,7 +138,7 @@
  playdate.3011.a:0 "Только если мы будем родителями!"
  playdate.3011.b:0 "Конечно. А [disliked_participant.GetFirstNameNoTooltip] будет собакой!"
  playdate.3011.c:0 "Нет, это глупо. Сыграем лучше в шахматы."
- playdate.3011.c.tt:0 "Вы продвигаетесь в изучении такого искусства, как [ROOT.Char.Custom('education_focus_child')]"
+ playdate.3011.c.tt:0 "Вы продвигаетесь в изучении такого искусства, как [THIS.Char.Custom('education_focus_child')]"
 
  playdate.3012.t:0 "$playdate_header$: Отвага — $knight_culture_player_plural_no_tooltip$"
  playdate.3012.desc_knight:0 "[participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] и я наблюдаем за тем, как $knight_culture_player_plural_no_tooltip_lowercase$ практикуются во дворе, когда [knight.Custom2('MyCharacterIntroduction', ROOT.Char)|l] с улыбкой подходит к нам."
@@ -174,7 +174,7 @@
  playdate.4001.desc.pensive:0 "«Прости... #EMP "Хижина"#!. Она вернулась в скромную хижину, а не к скорому хищнику». Несмотря на хорошие манеры, [participant.GetTitledFirstName] печально хмурится."
  playdate.4001.desc:0 "\n\n[ROOT.Char.GetCulture.GetLanguage.GetName] и [participant.GetCulture.GetLanguage.GetName|l] имеют больше различий, чем сходства, поэтому нам затруднительно общаться.\n\nМогу ли я как-то исправить положение, чтобы мы могли играть и не ссориться, или надеяться, что все решится само собой?"
  playdate.4001.a:0 "Я буду говорить медленно и громко! Это должно помочь!"
- playdate.4001.b:0 "Быть может, [participant.GetFirstNameNoTooltip] сумеет научить меня [participant.GetCulture.GetName|l]ому?"
+ playdate.4001.b:0 "Быть может, [participant.GetFirstNameNoTooltip] сумеет научить меня #L [participant.GetCulture.GetCollectiveNoun|l]ому#!?"
  playdate.4001.c:0 "Пф, что мне за дело? Я просто хочу веселиться!"
 
  playdate.9001.t:0 "$playdate_header$ Конец веселья"

@@ -35,9 +35,9 @@
  court_scholarly:0 "Corte erudita"
  court_scholarly_desc:1 "#low Una corte consiste sobre todo en atraer mentes cultas y gente de talento excepcional. \n\nLos cortesanos ganan los rasgos [GetTrait('scholarly_court_1').GetName( GetNullCharacter )].#!"
  court_scholarly_tooltip_desc:0 "El conocimiento y el estudio diligente se valoran en una $court_scholarly$"
- court_tribal: "Corte tribal"
- court_tribal_desc: "#low En la corte, la fuerza da la razón ¡y los salones se engalanarán con el botín y el saqueo! \n\nLos cortesanos ganan los rasgos [GetTrait('warlike_court_1').GetName( GetNullCharacter )].#!"
- court_tribal_tooltip_desc: "En una $court_tribal|l$ se valora la destreza marcial y la resistencia."
+ court_tribal:0 "Corte tribal"
+ court_tribal_desc:0 "#low En la corte, la fuerza da la razón ¡y los salones se engalanarán con el botín y el saqueo! \n\nLos cortesanos ganan los rasgos [GetTrait('warlike_court_1').GetName( GetNullCharacter )].#!"
+ court_tribal_tooltip_desc:0 "En una $court_tribal$ se valora la destreza marcial y la resistencia."
 
  COURT_TYPE_GENERAL_TOOLTIP:0 "[CourtType.GetTooltipDesc]\n\n[CourtType.GetEffectDesc]"
  

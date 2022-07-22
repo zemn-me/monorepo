@@ -73,7 +73,7 @@
  fund_inspiration.0031.skill_option_learning:0 "$fund_inspiration.0031.skill_option$los asuntos académicos."
  fund_inspiration.0031.skill_option_intrigue:0 "$fund_inspiration.0031.skill_option$la intriga."
  fund_inspiration.0031.relationship_soulmate:0 "¡El amor que siento por [relationship_scope.GetTitledFirstName] es material de leyendas!"
- fund_inspiration.0031.relationship_nemesis:0 "¡El odio que siento hacia [relationship_scope.GetTitledFirstName] podría llenar muchos volúmenes!"
+ fund_inspiration.0031.relationship_nemesis:0 "¡El odio que siento hacia [relationship_scope.GetTitledFirstName] podría llenar muchos volúmenes."
  fund_inspiration.0031.dynasty:0 "Escribirás sobre la gloriosa dinastía [ROOT.Char.GetDynasty.GetName]."
  fund_inspiration.0031.mystical_animal:0 "Volveré a contar la caza de ese animal blanco."
  fund_inspiration.0031.pet_option_cat:0 "Por favor, ¡escribe sobre mi querido gato [ROOT.Char.Custom('CatStoryName')]!"
@@ -138,6 +138,7 @@
  fund_inspiration.0061.diwan:0 "Un hermoso y cómodo diván."
  fund_inspiration.0061.table:0 "¡Me apetece una mesa, sofisticada, pero robusta!"
  fund_inspiration.0061.throne:0 "¡Crea un gran trono digno de mis salones!"
+ fund_inspiration.0061.scientific_apparatus:0 "¿Tal vez un instrumento de aprendizaje y conocimiento?"
 
  fund_inspiration.0062.t:0 "Inspiración artesana financiada"
 
@@ -147,6 +148,7 @@
  fund_inspiration.0071.regalia:0 "Haz unos adornos dignos de mi estatura."
  fund_inspiration.0071.crown:0 "¡Una corona real, digna de descansar sobre mi cabeza!"
  fund_inspiration.0071.goblet:0 "Un cáliz exquisito."
+ fund_inspiration.0071.aquamanile:0 "Un aguamanil decorado para la limpieza ritual."
 
  fund_inspiration.0072.t:0 "Inspiración metalera financiada"
 
@@ -341,7 +343,7 @@
  fund_inspiration.2005.b:0 "¡Es una forja perfectamente buena!"
 
  fund_inspiration.2006.t:0 "$fund_inspiration.title$ Un erudito errante"
- fund_inspiration.2006.desc:0 "Mi alquimista [inspiration_owner.GetTitledFirstName] me presenta a un[scholar_character.Custom('ES_XA')] [scholar_character.GetWomanMan], sin dejar de sonreír y halagar.\n\n«Se trata de [scholar_character.GetTitledFirstName], un[scholar_character.Custom('ES_XA')] erudit[scholar_character.Custom('ES_OA')] muy respetad[scholar_character.Custom('ES_OA')] en mis círculos».\n\n[scholar_character.Custom(''ES_ElLa')|U] [scholar_character.GetWomanMan] se inclina y consigue parecer encantad[scholar_character.Custom('ES_OA')] y avergonzad[scholar_character.Custom('ES_OA')] a la vez. «Por favor, no hace falta todo esto. Estoy aquí para ofreceros mis servicios, mi [ROOT.Char.GetLadyLord], si os place»."
+ fund_inspiration.2006.desc:0 "Mi alquimista [inspiration_owner.GetTitledFirstName] me presenta a un[scholar_character.Custom('ES_XA')] [scholar_character.GetWomanMan], sin dejar de sonreír y halagar.\n\n«Se trata de [scholar_character.GetTitledFirstName], un[scholar_character.Custom('ES_XA')] erudit[scholar_character.Custom('ES_OA')] muy respetad[scholar_character.Custom('ES_OA')] en mis círculos».\n\nTal [scholar_character.GetWomanMan] se inclina y consigue parecer encantad[scholar_character.Custom('ES_OA')] y avergonzad[scholar_character.Custom('ES_OA')] a la vez. «Por favor, no hace falta todo esto. Estoy aquí para ofreceros mis servicios, mi [ROOT.Char.GetLadyLord], si os place»."
  fund_inspiration.2006.a:0 "Me place. Ayudad a [inspiration_owner.GetFirstNameNoTooltip]."
  fund_inspiration.2006.b:0 "Desde luego. Seréis mi instructor[scholar_character.Custom('ES_XA')] personal"
  fund_inspiration.2006.c:0 "No hay sitio aquí para vos."
@@ -351,11 +353,11 @@
  fund_inspiration.2021.b:0 "No te daré más oro."
 
  fund_inspiration.2030.t:0 "$fund_inspiration.title$ Una palabra amistosa"
- fund_inspiration.2030.desc:0 "Mi amig[friend.Custom('ES_OA')] [friend.GetTitledFirstName] me detiene en el pasillo con una sonrisa deslumbrante. \n\n«¡Ah, #EMP aquí#! estás, [ROOT.Char.GetFirstNameNoTooltip]! ¡Acabo de hablar con [inspiration_owner.Custom('ES_ElLa')] [inspiration_owner.GetTitledFirstName]! Me he enterado que está [inspiration_owner.Custom('InspirationTypeDescriptionFuturePresent')] para ti y no pude resistir visitar su [inspiration_owner.Custom('GetInspirationTypeRoom')]!».\n\n«¡He hablado con [inspiration_owner.GetSheHe] sobre cómo satisfacer tus expectativas y creo que te gustarán los resultados!»."
+ fund_inspiration.2030.desc:0 "Mi amig[friend.Custom('ES_OA')] [friend.GetTitledFirstName] me detiene en el pasillo con una sonrisa deslumbrante. \n\n«¡Ah, #EMP aquí#! estás, [ROOT.Char.GetFirstNameNoTooltip]! ¡Acabo de hablar con [inspiration_owner.GetTitledFirstName]! Me he enterado que está [inspiration_owner.Custom('InspirationTypeDescriptionFuturePresent')] para ti y no pude resistir visitar su [inspiration_owner.Custom('GetInspirationTypeRoom')]!».\n\n«¡He hablado con [inspiration_owner.GetSheHe] sobre cómo satisfacer tus expectativas y creo que te gustarán los resultados!»."
  fund_inspiration.2030.a:0 "«¡Vaya!, ¡gracias, [friend.GetFirstNameNoTooltip]!»"
 
  fund_inspiration.2040.t:0 "$fund_inspiration.title$ Sabotaje"
- fund_inspiration.2040.desc:0 "Los gritos exasperados [inspiration_owner.Custom('ES_DelDela')] [inspiration_owner.GetTitledFirstName] echan a perder un momento de tranquilidad: «¿¡Cómo voy a [inspiration_owner.Custom('InspirationTypeDescription')] cuando no hago más que perder mi [inspiration_owner.Custom('GetInspirationTypeTool')]?!» \n\n[inspiration_owner.GetFirstName] acude corriendo a mí. «Mi [ROOT.Char.GetLadyLord], ¡cada vez que progreso un poco, algo sale mal! ¡Estoy convencid[inspiration_owner.Custom('ES_OA')] de que alguien en la corte sabotea mi obra!» \n\n[inspiration_owner.Custom('ES_ElLa')|U] [inspiration_owner.Custom('GetInspirationOwnerType')] resopla con frustración y abandona el salón hech[inspiration_owner.Custom('ES_OA')] una furia, de vuelta a su [inspiration_owner.Custom('GetInspirationTypeRoom')]."
+ fund_inspiration.2040.desc:0 "Los gritos exasperados de [inspiration_owner.GetTitledFirstName] echan a perder un momento de tranquilidad: «¿¡Cómo voy a [inspiration_owner.Custom('InspirationTypeDescription')] cuando no hago más que perder mi [inspiration_owner.Custom('GetInspirationTypeTool')]?!» \n\n[inspiration_owner.GetFirstName] acude corriendo a mí. «Mi [ROOT.Char.GetLadyLord], ¡cada vez que progreso un poco, algo sale mal! ¡Estoy convencid[inspiration_owner.Custom('ES_OA')] de que alguien en la corte sabotea mi obra!» \n\n[inspiration_owner.Custom('GetInspirationOwnerType')] resopla con frustración y abandona el salón hech[inspiration_owner.Custom('ES_OA')] una furia, de vuelta a su [inspiration_owner.Custom('GetInspirationTypeRoom')]."
  fund_inspiration.2040.a:0 "Aficionados…"
  fund_inspiration.2040.b:0 "¡Pago por calidad, no por dramas!"
  fund_inspiration.2040.c:0 "¿Podría ser…? No… #EMP ¿[rival.GetFirstNameNoTooltip]?#!"
@@ -449,7 +451,7 @@
 
  fund_inspiration.2090.t:0 "$fund_inspiration.title$ El toque de un[event_spouse.Custom('ES_XA')] [event_spouse.GetWifeHusband|U]"
  fund_inspiration.2090.desc:0 "Veo a mi [event_spouse.GetWifeHusband], [event_spouse.GetFirstName], charlar animosamente con [inspiration_owner.GetTitledFirstName], enumerar ideas y sugerencias para su [inspiration_owner.Custom('GetInspirationTypeObject')]. Mi [inspiration_owner.Custom('GetInspirationOwnerType')] apenas oculta su desdén, claramente irritad[inspiration_owner.Custom('ES_OA')] por la interferencia de mi espos[event_spouse.Custom('ES_OA')]. \n\n«y como sois [inspiration_owner.Custom('InspirationTypeDescription')]», sigue [event_spouse.GetSheHe], «¡también podría hacer juego con ese chisme viejo de mi abuel[event_spouse.Custom('ES_OA')], su [inspiration_owner.Custom('GetInspirationTypeObject')]!» \n\nUna parte del alma de [inspiration_owner.GetFirstNameNoTooltip] parece morirse."
- fund_inspiration.2090.a:0 "«Oíd bien, [inspiration_owner.GetFirstNameNoTooltip], ¡mi [event_spouse.GetWifeHusband] debe ser escuchad[[event_spouse.Custom('ES_OA')]!»"
+ fund_inspiration.2090.a:0 "«Oíd bien, [inspiration_owner.GetFirstNameNoTooltip], ¡mi [event_spouse.GetWifeHusband] debe ser escuchad[event_spouse.Custom('ES_OA')]!»"
  fund_inspiration.2090.b:0 "«Ven, cariño, dejemos trabajar [nspiration_owner.Custom('ES_AlAla')] expert[nspiration_owner.Custom('ES_OA')]»."
  fund_inspiration.2090.success:0 "[event_spouse.GetFirstNameNoTooltip] mejora el trabajo de [inspiration_owner.GetFirstNameNoTooltip]"
  fund_inspiration.2090.failure:0 "[event_spouse.GetFirstNameNoTooltip] ahoga a [inspiration_owner.GetFirstNameNoTooltip]"
@@ -473,7 +475,7 @@
  fund_inspiration.2110.desc.generous:0 "[generous_vassal.GetFirstNameNoTooltip] tiene fama de ser una persona generosa y parece que ha encontrado una nueva salida para sus gastos…"
  fund_inspiration.2110.desc.dweeb:0 "[generous_vassal.GetFirstNameNoTooltip] siente interés por muchas cosas, entre ellas los artefactos preciosos y las mentes que los producen…"
  fund_inspiration.2110.desc.friend:0 "[generous_vassal.GetFirstNameNoTooltip] sonríe calurosamente, con una bolsa de monedas que cuelga de su mano."
- fund_inspiration.2110.desc.rich:0 "[generous_vassal.Custom('ES_ElLa')] pobre [generous_vassal.GetFirstNameNoTooltip] debe de tener tanto dinero que no sabe qué hacer con él…"
+ fund_inspiration.2110.desc.rich:0 "Pobre [generous_vassal.GetFirstNameNoTooltip], tiene tanto dinero que no sabe qué hacer con él…"
  fund_inspiration.2110.a:0 "«¡Cuánta generosidad!»"
  fund_inspiration.2110.b:0 "«¡Sí, me #EMP aseguraré#! de que lo recibe!»"
  fund_inspiration.2110.b.flavor:0 "Esto me será útil…"
@@ -505,7 +507,7 @@
  fund_inspiration.2120.leave_flavor:0 "Te marchas apresuradamente"
 
  fund_inspiration.2130.t:0 "$fund_inspiration.title$ Acicate voluble"
- fund_inspiration.2130.desc:1 "Me tropiezo con un[inspiration_owner.Custom('ES_XA')] [inspiration_owner.GetTitledFirstName] de aspecto muy serio, mi [inspiration_owner.Custom('GetInspirationOwnerType')], y espero que no traiga malas noticias sobre el/la inmejorable [inspiration_owner.Custom('GetInspirationTypeObject')] que pronto debería terminar para mí. \n\n«Oh, sois vos, mi señor[ROOT.Char.Custom('ES_XA')]… Me he topado con un muro en mi trabajo… ¡nada importante! Mis ideas se han ido al traste a medida que aumenta la presión», ríe nerviosamente. \n\n«Solo necesito un poco de… ¡inspiración! Poderos[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetTitleAsNameNoTooltip], ¿no tendréis algunos… ejemplos anteriores que pueda examinar?»"
+ fund_inspiration.2130.desc:1 "Me tropiezo con un[inspiration_owner.Custom('ES_XA')] [inspiration_owner.GetTitledFirstName] de aspecto muy serio, mi [inspiration_owner.Custom('GetInspirationOwnerType')], y espero que no traiga malas noticias sobre el/la inmejorable [inspiration_owner.Custom('GetInspirationTypeObject')] que pronto debería terminar para mí. \n\n«Oh, sois vos, mi señor[ROOT.Char.Custom('ES_XA')]… Me he topado con un muro en mi trabajo… ¡Nada importante! Mis ideas se han ido al traste a medida que aumenta la presión», ríe nerviosamente. \n\n«Solo necesito un poco de… ¡inspiración! Poderos[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetTitleAsNameNoTooltip], ¿no tendréis algunos… ejemplos anteriores que pueda examinar?»."
  fund_inspiration.2130.a.library:0 "«¡A la biblioteca!»"
  fund_inspiration.2130.a.armory:0 "«¡A la armería!»"
  fund_inspiration.2130.a.hall:0 "«¡Al gran salón!»"
@@ -532,9 +534,9 @@
  fund_inspiration.2131.desc_great_hall:0 "Paseo a [inspiration_owner.GetTitledFirstName] por mi gran sala, enorgulleciéndome de su lujo y las distintas riquezas que se exhiben."
  fund_inspiration.2131.desc_antiquarian:0 "[second.GetTitledFirstName] insistió en venir y vigila a distancia, retorciéndose de dolor cada vez que se manipula o identifica mal un objeto.\n\n"
  fund_inspiration.2131.artificer:0 "[second.GetTitledFirstName] nos acompaña con alegría, siempre interesad[second.Custom('ES_OA')] en los procesos creativos de sus colegas.\n\n"
- fund_inspiration.2131.desc_equipped:0 "[inspiration_owner.Custom('ES_ElLa')|U] [inspiration_owner.Custom('GetInspirationOwnerType')] se detiene, como pasmad[inspiration_owner.Custom('ES_OA')], al examinar mi [artifact_1.GetName]. «Cuánta finura, mi señor[ROOt.Char.Custom('ES_XA')]… Podría… ¿podría utilizar su [inspiration_owner.Custom('GetInspirationMaterialType')]?»"
+ fund_inspiration.2131.desc_equipped:0 "[inspiration_owner.Custom('GetInspirationOwnerType')] se detiene, como pasmad[inspiration_owner.Custom('ES_OA')], al examinar mi [artifact_1.GetName]. «Cuánta finura, mi señor[ROOt.Char.Custom('ES_XA')]… Podría… ¿podría utilizar su [inspiration_owner.Custom('GetInspirationMaterialType')]?»"
  fund_inspiration.2131.desc_unequipped:0 "En la tienda [inspiration_owner.Custom('GetInspirationOwnerType')] se detiene de repente y examina detenidamente mi [artifact_1.GetName]. «Sí… [inspiration_owner.Custom('GetInspirationMaterialType')] debería servir… ¿Aún… queréis esto, mi señor[ROOt.Char.Custom('ES_XA')]?»"
- fund_inspiration.2131.desc_fallback:1 "Se da un par de vueltas por la habitación antes de volver a mí, abatid[inspiration_owner.Custom('ES_OA')]. «Mi señor[ROOt.Char.Custom('ES_XA')], aquí no hay nada que me llame la atención… ¿no hay nada más?»"
+ fund_inspiration.2131.desc_fallback:1 "Se da un par de vueltas por la habitación antes de volver a mí, abatid[inspiration_owner.Custom('ES_OA')]. «Mi señor[ROOT.Char.Custom('ES_XA')], aquí no hay nada que me llame la atención… ¿no hay nada más?»"
  fund_inspiration.2131.a:0 "«¿Mi [artifact_1.GetNameNoTooltip]? Está bien…»"
  fund_inspiration.2131.b:0 "«¿Y qué tal mi [artifact_2.GetNameNoTooltip]?»"
  fund_inspiration.2131.c:0 "«Habrá alguna chatarra por ahí…»"
@@ -622,7 +624,7 @@
  fund_inspiration.3031.b:0 "[prev_soulmate.GetSheHe|U] no merece el esfuerzo."
 
  fund_inspiration.4001.t:0 "$fund_inspiration.title$ Urdimbre y relleno"
- fund_inspiration.4001.desc:0 "«¡[inspiration_owner.Custom2('YourCharacterIntroduction', ROOT.Char)|U] ha #EMP destrozado#! mi nuevo atuendo!»\n\n[courtier.Custom2('MyCharacterIntroduction', ROOT.Char)|U] irrumpe en el salón, con [inspiration_owner.Custom('ES_ElLa')] tejedor[inspiration_owner.Custom('ES_XA')] detrás. La pieza de tela que [courtier.GetFirstName] lleva en las manos está tan cortada que no puedo imaginar qué era.\n\n«¡Estáis exagerando! Tan solo estudiaba el tejido de la tela; es importante para mi proyecto»."
+ fund_inspiration.4001.desc:0 "«¡[inspiration_owner.Custom2('YourCharacterIntroduction', ROOT.Char)|U] ha #EMP destrozado#! mi nuevo atuendo!»\n\n[courtier.Custom2('MyCharacterIntroduction', ROOT.Char)|U] irrumpe en el salón, con el tejedor detrás. La pieza de tela que [courtier.GetFirstName] lleva en las manos está tan cortada que no puedo imaginar qué era.\n\n«¡Estáis exagerando! Tan solo estudiaba el tejido de la tela; es importante para mi proyecto»."
  fund_inspiration.4001.a:0 "Vas demasiado lejos, ¡estudia tus propias ropas si tienes que hacerlo!"
  fund_inspiration.4001.b:0 "Si [inspiration_owner.GetSheHe] dice que es necesario, es que es necesario."
 
@@ -667,7 +669,7 @@
 #Africa
 
  fund_inspiration.6003.t:0 "Sueño con el desierto"
- fund_inspiration.6003.desc:0 "Señor[inspiration_sponsor.Custom('ES_XA')] mí[inspiration_sponsor.Custom('ES_OA')], mi viaje por África sigue en marcha, y me he unido a una caravana de camellos que atraviesa sus tierras de lado a lado.\n\nOs envío una alhaja que me regaló uno de mis compañeros de viaje: un delicadísimo collar de cuentas de huevos de avestruz. Supongo que nunca habéis visto un avestruz."
+ fund_inspiration.6003.desc:0 "Señor[inspiration_sponsor.Custom('ES_XA')] mí[inspiration_sponsor.Custom('ES_OA')], mi viaje por África sigue en marcha, y me he unido a una caravana de camellos que atraviesa sus tierras de lado a lado.\n\nOs envío un alhaja que me regaló uno de mis compañeros de viaje: un delicadísimo collar de cuentas de huevos de avestruz. Supongo que no habéis visto un avestruz."
  fund_inspiration.6003.a:0 "¡Un gran descubrimiento! ¡Lo llevaré en persona!"
  fund_inspiration.6003.b:1 "Se lo daré [event_spouse.Custom('ES_AlAla')] [event_spouse.GetTitledFirstNameNoTooltip]."
 
@@ -782,7 +784,7 @@
  fund_inspiration.6400.b:0 "¡Embuster[inspiration_owner.Custom('ES_OA')]! ¡No te pagaré ni un trago más!"
  fund_inspiration.6400.a.success:0 "Convences [inspiration_owner.Custom('ES_AlAla')] aventurer[inspiration_owner.Custom('ES_OA')] para que se recomponga"
  fund_inspiration.6400.a.success_continue:0 "¡La aventura continúa!"
- fund_inspiration.6400.a.failure:0 "¡[inspiration_owner.Custom('ES_ElLa')] aventurer[inspiration_owner.Custom('ES_OA')] se escapa con el oro!"
+ fund_inspiration.6400.a.failure:0 "¡Mi aventurer[inspiration_owner.Custom('ES_OA')] se escapa con el oro!"
 
  fund_inspiration.6500.t:0 "$fund_inspiration.title$ Llevando la música a la selva"
  fund_inspiration.6500.introduction:0 "Recibo una misiva de mi aventurer[inspiration_owner.Custom('ES_OA')] con unas palabras tan adornadas que casi puedo ver[inspiration_owner.Custom('ES_LoLa')] en mi cabeza."
@@ -791,19 +793,19 @@
  fund_inspiration.6500.a:0 "¡Empezasteis a cantar y os los ganasteis!"
  fund_inspiration.6500.b:0 "Huisteis a tierras más civilizadas."
  fund_inspiration.6500.c:0 "¡Un gato enorme saltó entre vuestros atacantes y vos!"
- fund_inspiration.6500.a.success:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] embelesa a los habitantes de la selva"
- fund_inspiration.6500.a.failure:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] irrita a los habitantes de la selva"
- fund_inspiration.6500.b.success:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] sale disparad[inspiration_owner.Custom('ES_OA')]"
- fund_inspiration.6500.b.failure:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] no huye lo bastante rápido"
- fund_inspiration.6500.c.tt:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] ayuda a rechazar al leopardo"
- fund_inspiration.6500.c.tt_failure:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] resulta herid[inspiration_owner.Custom('ES_OA')] al intentar escapar"
+ fund_inspiration.6500.a.success:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] embelesa a los habitantes de la selva"
+ fund_inspiration.6500.a.failure:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] irrita a los habitantes de la selva"
+ fund_inspiration.6500.b.success:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] sale disparad[inspiration_owner.Custom('ES_OA')]"
+ fund_inspiration.6500.b.failure:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] no huye lo bastante rápido"
+ fund_inspiration.6500.c.tt:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] ayuda a rechazar al leopardo"
+ fund_inspiration.6500.c.tt_failure:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] resulta herid[inspiration_owner.Custom('ES_OA')] al intentar escapar"
 
  fund_inspiration.6501.t:0 "$fund_inspiration.title$ Viaje por tierra"
  fund_inspiration.6501.desc:1 "\n\n«Habíamos estado navegando por ríos en torno a las sinuosas colinas. Pero los lugareños nos dijeron que el río por el que viajábamos se había secado más adelante por culpa de la sequía.\n\n«En lugar de rendirme o dar marcha atrás, intentamos lo imposible. Ordené a mi equipo que empezara a construir un mecanismo de vías y poleas y empezamos a arrastrar nuestro bote por la tierra hacia el siguiente río. Navegó en un mar de hierba y margaritas."
  fund_inspiration.6501.a:0 "Espero que dierais la vuelta y cortaseis por lo sano."
  fund_inspiration.6501.b:0 "El bote sobrevivió al viaje por los pelos."
- fund_inspiration.6501.b.success:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] arrastra un bote por un acantilado"
- fund_inspiration.6501.b.failure:0 "[inspiration_owner.Custom('ES_ElLa')|U] aventurer[inspiration_owner.Custom('ES_OA')] varad[inspiration_owner.Custom('ES_OA')] intentando reparar un bote roto."
+ fund_inspiration.6501.b.success:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] arrastra un bote por un acantilado"
+ fund_inspiration.6501.b.failure:0 "Mi aventurer[inspiration_owner.Custom('ES_OA')] varad[inspiration_owner.Custom('ES_OA')] intentando reparar un bote roto."
  fund_inspiration.6501.c:0 "Los lugareños se compadecieron y te dieron un bote nuevo rebajado de precio."
 
  fund_inspiration.6502.t:0 "$fund_inspiration.title$ Sed ardiente"
@@ -844,7 +846,7 @@
 # Adventurer unhappy about being in the swamp
  fund_inspiration.6506.t:0 "$fund_inspiration.title$ Miseria no irrazonable"
  fund_inspiration.6506.introduction:0 "Recibo una misiva de mi aventurer[adventurer.Custom('ES_OA')]. Está tan cubierta de barro que tengo que abrirla con un cuchillo.\n\n"
- fund_inspiration.6506.desc:1 "«Mi [ROOT.Char.GetLadyLord], estoy en un pantano húmedo, y todos mis años de formación no me han preparado para ello. Me veo vadeando lodos noche y día. Anoche soñé con abrazar a mi amante, y al despertarme descubrí que en mis labios había un tritón en lugar de una lengua.\n\n«Me preguntaba si había una mínima posibilidad de ir a un lugar más #EMP civilizado#!. Como muestra de lo espantoso que es este lugar, he enviado junto a mi mensaje un frasco con las huevas que una rana puso en mis botas empapadas»."
+ fund_inspiration.6506.desc:1 "Mi [ROOT.Char.GetLadyLord], estoy en un pantano húmedo, y todos mis años de formación no me han preparado para ello. Me veo vadeando lodos noche y día. Anoche soñé con abrazar a mi amante, y al despertarme descubrí que en mis labios había un tritón en lugar de una lengua.\n\n«Me preguntaba si habría una mínima posibilidad de ir a un lugar más #EMP civilizado#!. Como muestra de lo espantoso que es este sitio, he enviado junto a mi mensaje un frasco con las huevas que una rana puso en mis botas empapadas»."
  fund_inspiration.6506.a:0 "¡Eso crea carácter!"
  fund_inspiration.6506.b:0 "Si deseáis ir a tierras más suaves, podéis."
 
@@ -898,11 +900,11 @@
 
  fund_inspiration.6512.t:0 "$fund_inspiration.title$ [ROOT.Char.GetTitleAsNameNoTooltip|U] del Monte"
  fund_inspiration.6512.intro_desc:0 "Recibo una misiva de mi aventurer[inspiration_owner.Custom('ES_OA')] y está cubierta de polvo rojizo, por su viaje por las montañas desérticas."
- fund_inspiration.6512.desc:1 "\n\n«He escalado otra bestia, y sobre estas miles de mesetas planas, no he visto ninguna señal de que otr[inspiration_owner.Custom('ES_OA')] [inspiration_owner.GetWomanMan] haya pisado esta roca. Hoy, he afrontado la mayor altura que haya escalado hasta ahora.\n\n«Creo que la roca pide a gritos un nombre digno, para conmemorar este logro supervisado por [ROOT.Char.Custom('ES_ElLa')] mejor [ROOT.Char.GetTitleAsNameNoTooltip] del cosmos»."
+ fund_inspiration.6512.desc:1 "\n\n«He escalado otra bestia, y sobre estas miles de mesetas planas, no he visto ninguna señal de que otr[inspiration_owner.Custom('ES_OA')] [inspiration_owner.GetWomanMan] haya pisado esta roca. Hoy, he afrontado la mayor altura que haya escalado hasta ahora.\n\n«Creo que la roca pide a gritos un nombre digno, para conmemorar este logro supervisado por mejor [ROOT.Char.GetTitleAsNameNoTooltip] del cosmos»."
  fund_inspiration.6512.a:0 "Seguro que la gente del lugar ya le ha dado un nombre a la montaña."
  fund_inspiration.6512.b:0 "¡Rocosa, qué estupidez de nombre!"
- fund_inspiration.6512.c:0 "«La espada [ROOT.Char.GetFaith.WarGodNamePossessive]»"
- fund_inspiration.6512.d:0 "«Guantelete [ROOT.Char.GetFaith.FateGodNamePossessive]»"
+ fund_inspiration.6512.c:0 "La espada [ROOT.Char.GetFaith.WarGodNamePossessive]"
+ fund_inspiration.6512.d:0 "Guantelete [ROOT.Char.GetFaith.FateGodNamePossessive]"
  fund_inspiration.6512.e:0 "El nombre de mi amad[lover.Custom('ES_OA')] [lover.GetFirstNameNoTooltip]."
  fund_inspiration.6512.f:0 "¡Diente de [ROOT.Char.GetFirstNameNoTooltip]!"
  fund_inspiration.6512.g:0 "¡Bastón de [ROOT.Char.GetFirstNameNoTooltip]!"
@@ -1029,7 +1031,7 @@
  fund_inspiration.8013.b_tt:0 "Le das el libro a [inspiration_owner.GetShortUIName]"
  fund_inspiration.8013.c:0 "¡Qué descubrimiento! Seguro que sacará un precio elevado."
 
- fund_inspiration.8014.t:0 "$fund_inspiration.title$ [inspiration_owner.Custom('ES_ElLa')|U] Pensador[inspiration_owner.Custom('ES_XA')]"
+ fund_inspiration.8014.t:0 "$fund_inspiration.title$ El/La Pensador[inspiration_owner.Custom('ES_XA')]"
  fund_inspiration.8014.desc:0 "[inspiration_owner.Custom2('MyCharacterIntroduction', ROOT.Char)|U] no parece realizar ningún experimento ni producir nada digno de mención. Solo se sienta a lado de la ventana día sí, día también.\n\nCuando exijo saber qué estoy financiando, se encoge de hombros y señala la ventana. «Estoy reflexionando sobre la naturaleza del mundo, mi [ROOT.Char.GetLadyLord]. ¡Es un mundo muy grande, así que hay mucho que considerar!»."
  fund_inspiration.8014.a:0 "¡No te pago para que te quedes sentad[inspiration_owner.Custom('ES_OA')]!"
  fund_inspiration.8014.b:0 "Tómate tu tiempo."
@@ -1042,7 +1044,7 @@
  fund_inspiration.8015.b:0 "No. ¡Me traerás de vuelta a [loved_one.GetFirstName]!"
  fund_inspiration.8015.b.tt:0 "[inspiration_owner.GetShortUINameNoTooltip)] intentará lo imposible"
 
- fund_inspiration.8016.desc:0 "Me dirijo con paso ligero al laboratorio de mi alquimista [inspiration_owner.GetTitledFirstName]. Oh [loved_one.GetFirstName], ¡por fin te volveré a ver! Sin embargo, cuando [inspiration_owner.GetTitledFirstName] abre la puerta mi corazón se desploma al verle la cara. ¿Y por qué no me deja entrar en la habitación?\n\n«[ROOT.Char.GetLadyLord|U] mí[ROOT.Char.Custom('ES_OA'), os he fallado. Por favor, no…».\n\n[inspiration_owner.GetHerHim|U] aparto y entro en el laboratorio, y lo que veo… No puedo comprenderlo. Tendones, montones de carne, polvos y hierbas, todo empapado de sangre y esparcido en un círculo por el suelo. Y encima, un solo mechón de pelo del mismo tono que el que adornaba la cabeza de [loved_one.GetFirstNameNoTooltip]."
+ fund_inspiration.8016.desc:0 "Me dirijo con paso ligero al laboratorio de mi alquimista [inspiration_owner.GetTitledFirstName]. Oh [loved_one.GetFirstName], ¡por fin te volveré a ver! Sin embargo, cuando [inspiration_owner.GetTitledFirstName] abre la puerta mi corazón se desploma al verle la cara. ¿Y por qué no me deja entrar en la habitación?\n\n«[ROOT.Char.GetLadyLord|U] mí[ROOT.Char.Custom('ES_OA')], os he fallado. Por favor, no…».\n\n[inspiration_owner.GetHerHim|U] aparto y entro en el laboratorio, y lo que veo… No puedo comprenderlo. Tendones, montones de carne, polvos y hierbas, todo empapado de sangre y esparcido en un círculo por el suelo. Y encima, un solo mechón de pelo del mismo tono que el que adornaba la cabeza de [loved_one.GetFirstNameNoTooltip]."
  fund_inspiration.8016.a:0 "Creo que voy a vomitar."
  fund_inspiration.8016.b:0 "¿Te atreves a burlarte de mi pena? ¡Guardias! ¡Atrapad[inspiration_owner.GetHerHim]!"
 
@@ -1052,7 +1054,7 @@
  fund_inspiration.8017.b:0 "Vergüenza debería daros; ¡a trabajar!"
 
  fund_inspiration.9000.t:0 "$fund_inspiration.title$ Bandidos en el camino"
- fund_inspiration.9000.desc:0 "«Mi señor[ROOT.Char.Custom('ES_XA')], [adventurer.GetFirstName], [adventurer.Custom('ES_ElLa')] aventurer[adventurer.Custom('ES_OA')] os escribe!», exclama el sirviente con una carta en la mano.\n\n«Diez días y diez noches mi grupo y yo llevamos escondidos. [bandit.Custom('ES_ElLa')|U] [bandit.GetLadyLord] bandid[bandit.Custom('ES_OA')] [bandit.GetFirstName] ha cerrado el camino por el que debemos pasar. ¿Qué nos aconsejáis? ¿Precaución? ¿O luchar contra ellos, confiando en que [adventurer.GetFaith.HighGodName] nos mantenga a salvo? Firmado, [adventurer.GetFirstName]», dice el pergamino.\n\nParece que se encuentra en todo un apuro."
+ fund_inspiration.9000.desc:0 "«Mi señor[ROOT.Char.Custom('ES_XA')], [adventurer.GetFirstName], aventurer[adventurer.Custom('ES_OA')] os escribe!», exclama el sirviente con una carta en la mano.\n\n«Diez días y diez noches mi grupo y yo llevamos escondidos. El/La [bandit.GetLadyLord] bandid[bandit.Custom('ES_OA')] [bandit.GetFirstName] ha cerrado el camino por el que debemos pasar. ¿Qué nos aconsejáis? ¿Precaución? ¿O luchar contra ellos, confiando en que [adventurer.GetFaith.HighGodName] nos mantenga a salvo? Firmado, [adventurer.GetFirstName]», dice el pergamino.\n\nParece que se encuentra en todo un apuro."
  fund_inspiration.9000.a:0 "Seguid oculto, al final se acabarán yendo."
  fund_inspiration.9000.b:0 "¡No hay gloria sin dolor! Que paguen por hacerme perder el tiempo."
  fund_inspiration.9000.c:0 "Este oro será bastante soborno para que os dejen pasar."

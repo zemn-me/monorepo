@@ -72,7 +72,7 @@
 
  court.5050.t:0 "Негодование при дворе"
  court.5050.desc:2 "«Почему [Select_CString(courtier_given_title.IsFemale, 'эта', 'этот' )] [courtier_given_title.Custom('InsultNoun')] [courtier_given_title.GetTitledFirstName] получает положение при дворе, а я нет?\n\n[courtier.Custom2('MyCharacterIntroduction', ROOT.Char)|U] пребывает в страшном гневе. Судя по всему, [courtier.GetSheHe] [Select_CString(courtier.IsFemale, 'была уверена', 'был уверен' )], что титул достанется [courtier.GetHerHim], и никому другому."
- court.5050.a:0 "Да брось!"
+ court.5050.a:0 "Да бросьте!"
  court.5050.b:1 "Вы правы, вы действительно заслуживаете должность!"
  court.5050.c:0 "Продолжайте шутить в том же духе, и я буду платить вам за это!"
 

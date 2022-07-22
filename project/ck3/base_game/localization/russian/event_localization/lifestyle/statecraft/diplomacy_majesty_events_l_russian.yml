@@ -71,29 +71,29 @@
 
  # Lure of Language
  diplomacy_majesty.4070.t:0 "Заманчивый язык"
- diplomacy_majesty.4070.desc:0 "Довольно трудно править, когда [ROOT.Char.GetPrimaryTitle.GetName] служит домом людям разных культур. Иноземцы часто чувствуют себя чужими, когда не могут говорить при дворе на своем языке, что порождает обиды.\n\n[my_vassal.Custom2('MyCharacterIntroduction', ROOT.Char)|U] предлагает мне выучить язык, на котором говорят [SCOPE.sC('my_vassal').GetCulture.GetCollectiveNoun|l], и тем самым значительно улучшить отношения с ними."
+ diplomacy_majesty.4070.desc:0 "Довольно трудно править, когда [ROOT.Char.GetPrimaryTitle.GetName] служит домом людям разных культур. Иноземцы часто чувствуют себя чужими, когда не могут говорить при дворе на своем языке, что порождает обиды.\n\n[my_vassal.Custom2('MyCharacterIntroduction', ROOT.Char)|U] предлагает мне выучить язык, на котором говорят [SCOPE.sC('my_vassal').GetCulture.GetName|l], и тем самым значительно улучшить отношения с ними."
  diplomacy_majesty.4070.a:0 "Пора садиться за книги!"
  diplomacy_majesty.4070.b:0 "Нанять наставника."
- diplomacy_majesty.4070.c:0 "А зачем? Превосходство [ROOT.Char.GetCulture.GetNameNoTooltip|l]ой культуры очевидно."
+ diplomacy_majesty.4070.c:0 "А зачем? Превосходство [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip|l]ой культуры очевидно."
  diplomacy_majesty.4070.d:0 "Мой придворный наставник может помочь мне!"
- diplomacy_majesty.4070.success:0 "Мне удалось освоить #L [my_vassal.GetCulture.GetName|l]ий#! язык"
+ diplomacy_majesty.4070.success:0 "Мне удалось освоить #L [my_vassal.GetCulture.GetCollectiveNoun|l]ий#! язык"
  diplomacy_majesty.4070.failure:0 "Мне не удалось освоить новый язык"
  diplomacy_majesty.4070.failure.tt:1 "При желании вы можете продолжить обучение"
 
  diplomacy_majesty.4071.t:1 "$diplomacy_majesty.4070.t$: выученный язык"
- diplomacy_majesty.4071.desc:0 "После нескольких месяцев учебы я наконец осваиваю основы #L [my_vassal.GetCulture.GetName|l]ого#! языка.\n\nДальнейшая практика укрепит мое владение языком, но даже основ достаточно, чтобы улучшить отношения с моими [my_vassal.GetCulture.GetNameNoTooltip|l]ими подданными."
+ diplomacy_majesty.4071.desc:0 "После нескольких месяцев учебы я наконец осваиваю основы #L [my_vassal.GetCulture.GetCollectiveNoun|l]ого#! языка.\n\nДальнейшая практика укрепит мое владение языком, но даже основ достаточно, чтобы улучшить отношения с моими [my_vassal.GetCulture.GetCollectiveNounNoTooltip|l]ими подданными."
  diplomacy_majesty.4071.a:0 "Время потрачено с пользой."
  diplomacy_majesty.4071.b:0 "Какая интересная культура... Я хочу узнать больше!"
  diplomacy_majesty.4070.b.custom:1 "Все [Concept( 'close_family', 'близкие родственники' )|E], придворные, дети и прямые вассалы"
 
  diplomacy_majesty.4072.t:1 "$diplomacy_majesty.4070.t$: «Непостижимо!»"
- diplomacy_majesty.4072.desc:0 "Несмотря на месяцы учебы, я не могу освоить #L [my_vassal.GetCulture.GetName|l]ий#! язык. Мне удалось запомнить несколько слов, но вот грамматика и построение предложений... в этом я ничего не понимаю. Мне кажется, я зря этим занимаюсь."
+ diplomacy_majesty.4072.desc:0 "Несмотря на месяцы учебы, я не могу освоить #L [my_vassal.GetCulture.GetCollectiveNoun|l]ий#! язык. Мне удалось запомнить несколько слов, но вот грамматика и построение предложений... в этом я ничего не понимаю. Мне кажется, я зря этим занимаюсь."
  diplomacy_majesty.4072.a:0 "Нужно продолжать обучение!"
  diplomacy_majesty.4072.b:0 "Лучше потратить время на что-нибудь другое."
  diplomacy_majesty.4072.c:0 "$diplomacy_majesty.4070.b$"
 
  diplomacy_majesty.4073.t:1 "$diplomacy_majesty.4070.t$: бесплодные усилия"
- diplomacy_majesty.4073.desc:0 "Мне неприятно это признавать, но мне кажется, я никогда не смогу освоить #L [my_vassal.GetCulture.GetName|l]ий#! язык. Несмотря на все мои старания, я не вижу никакого прогресса... Мне просто нужно принять это."
+ diplomacy_majesty.4073.desc:0 "Мне неприятно это признавать, но мне кажется, я никогда не смогу освоить #L [my_vassal.GetCulture.GetCollectiveNoun|l]ий#! язык. Несмотря на все мои старания, я не вижу никакого прогресса... Мне просто нужно принять это."
  diplomacy_majesty.4073.a:0 "Я сдаюсь."
 
  # Trappings of Majesty

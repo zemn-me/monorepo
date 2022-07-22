@@ -230,7 +230,7 @@
  intrigue_scheme_ongoing.5018.msg.t:0 "Припасы случайно сгорели"
 
  intrigue_scheme_ongoing.5019.t:0 "Тайный тоннель"
- intrigue_scheme_ongoing.5019.desc:1 "Мой агент [agent.GetTitledFirstName] подходит ко мне с пачкой пергамента.\n\n«Я [Select_CString(agent.IsFemale, 'нашла', 'нашел' )] старые чертежи, где среди прочего есть [target.Custom('ResidenceBuilding')], где сейчас проживает [target.GetTitleAsName]! Возможно, чертежи немного устарели, но смотрите-ка...»"
+ intrigue_scheme_ongoing.5019.desc:1 "Мой агент [agent.GetTitledFirstName] подходит ко мне с пачкой пергамента.\n\n«Я [Select_CString(agent.IsFemale, 'нашла', 'нашел' )] старые чертежи, где среди прочего есть [target.Custom('ResidenceBuilding')], где сейчас проживает [target.GetTitleAsName|l]! Возможно, чертежи немного устарели, но смотрите-ка...»"
  intrigue_scheme_ongoing.5019.a:0 "Похоже, мы сможем воспользоваться этим тоннелем!"
  intrigue_scheme_ongoing.5019.b:1 "Ах, если бы у меня было столько потайных мест... Позовите каменщика."
  intrigue_scheme_ongoing.5019.b.tt:0 "[Select_CString(architect.IsFemale, 'Ваша', 'Ваш' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('architect'))] [architect.GetFirstNameNoTooltip] проследит за ходом строительства."

@@ -74,7 +74,7 @@
 
  #Defend their honor through duel or diplomacy, by Mathilda Bjarnehed
  court_ongoing.1010.t:1 "$court_event_title$ l’honneur d’un[target.Custom('FR_E')] [target.GetLadyLord]"
- court_ongoing.1010.desc:1 "« Par [insulter.GetFaith.HighGodName], [target.Custom('FR_le_Char_Pi')][target.GetTitledFirstName] est un[target.Custom('FR_E')] [target.Custom('InsultNoun')] insupportable ! Avez-vous vu comment [target.Custom('FR_IlElle')] [target.Custom('quirk_neg_present')] ? Ridicule ! »\n\n[insulter.Custom2('MyCharacterIntroduction', ROOT.Char)|U] penche sa tête en arrière en riant méchamment.\n\n[target.GetFirstNameNoTooltip] parle toujours avec ses amis, mais je peux dire qu’[target.Custom('FR_IlElle')] a entendu. Je déteste [target.Custom('FR_LeLa')] voir blessé[target.Custom('FR_E')]."
+ court_ongoing.1010.desc:1 "« Par [insulter.GetFaith.HighGodName], [target.Custom('FR_le_Char_Pi')][target.GetTitledFirstName] est un[target.Custom('FR_E')] [target.Custom('InsultNoun')] insupportable ! Avez-vous vu comment [target.Custom('FR_IlElle')] [target.Custom('quirk_neg_present')] ? Ridicule ! »\n\n[insulter.Custom2('MyCharacterIntroduction', ROOT.Char)|U] penche sa tête en arrière en riant méchamment.\n\n[target.GetFirstNameNoTooltip] continue de parler avec ses amis mais je ne doute pas qu’[target.Custom('FR_IlElle')] a entendu. Je déteste [target.Custom('FR_LeLa')] voir blessé[target.Custom('FR_E')]."
  court_ongoing.1010.a:0 "« De vils mensonges ! Dégainez votre épée, [insulter.Custom('InsultNoun')] ! »"
  court_ongoing.1010.b:0 "« Vous devez vous excuser auprès [target.Custom('FR_DuDela')] [target.GetLadyLord]. »"
  court_ongoing.1010.c:0 "« Oh, [target.GetFirstNameNoTooltip]. [insulter.GetSheHe|U] ne peut pas avoir plus tort ! »"

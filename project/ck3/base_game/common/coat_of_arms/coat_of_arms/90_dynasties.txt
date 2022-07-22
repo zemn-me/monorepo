@@ -1,4 +1,4 @@
-@smErmine = 0.27
+﻿@smErmine = 0.27
 @smLysX = 0.23
 @smLysY = 0.26
 
@@ -25,6 +25,45 @@
 98 = c_perigord
 
 240 = c_savoie
+
+278 = { #Traba
+	pattern="pattern__solid_designer.dds"
+	color1=yellow_light
+	color2=white
+	color3=red
+	colored_emblem={
+		color1=blue_light
+		texture="ce_chain.dds"
+		instance={
+			position={ 0.680000 0.700000 }
+			scale={ 0.360000 0.360000 }
+		}
+
+		instance={
+			position={ 0.320000 0.700000 }
+			scale={ 0.360000 0.360000 }
+			depth=1.010000
+		}
+
+		instance={
+			position={ 0.680000 0.200000 }
+			scale={ 0.360000 0.360000 }
+			depth=2.010000
+		}
+
+		instance={
+			position={ 0.500000 0.450000 }
+			scale={ 0.360000 0.360000 }
+			depth=3.010000
+		}
+
+		instance={
+			position={ 0.320000 0.200000 }
+			scale={ 0.360000 0.360000 }
+			depth=4.010000
+		}
+	}
+}
 
 364 = { # de Clare
 	pattern = "pattern_solid.dds"	
@@ -159,6 +198,31 @@ house_estrid = { # Estridsen
 	}
 }	
 
+597 ={ # Umayyad
+	pattern="pattern_solid.dds"
+	color1=white
+	color2=yellow
+	color3=green
+	colored_emblem={
+		color1=black
+		texture="ce_octogon_frame.dds"
+		instance={
+			position={ 0.500000 0.490000 }
+			scale={ 0.730000 0.730000 }
+		}
+	}
+
+	colored_emblem={
+		color1=black
+		texture="ce_arabic_allah.dds"
+		instance={
+			position={ 0.500000 0.510000 }
+			scale={ 0.520000 0.520000 }
+			depth=1.010000
+		}
+	}
+}
+
 626 = d_norfolk # "of East Anglia"
 
 678 = { # "Hauteville" # TODO
@@ -285,6 +349,79 @@ vanity_oltner = { # Oltner
 		color1 = "white"
 		instance = { position = { 0.36 0.14 }	scale = { 0.02 0.02 }  }
 	}
+}
+
+vanity_carlberg = { # Carlberg
+	pattern="pattern_waves_01.dds"
+	color1=yellow
+	color2=blue
+	color3=red
+	colored_emblem={
+		color1=rgb { 38 119 220 }
+		texture="ce_snake.dds"
+		instance={
+			scale={ 0.700000 0.700000 }
+		}
+
+	}
+}
+
+vanity_berg_hulthen = { 
+	pattern="pattern__solid_designer.dds"
+	color1=white
+	color2=blue_light
+	color3=black
+	colored_emblem={
+		color1=blue_light
+		texture="ce_african_frame_bg_12.dds"
+		instance={
+			depth=5.010000
+		}
+	}
+	colored_emblem={
+		color1=black
+		color2=black
+		texture="ce_diamond_01.dds"
+		instance={
+			position={ 0.500000 0.490000 }
+			scale={ 0.980000 0.410000 }
+			depth=3.010000
+		}
+	}
+	colored_emblem={
+		color1=black
+		texture="ce_wolf_head.dds"
+		instance={
+			position={ 0.670000 0.500000 }
+			scale={ -0.510000 0.510000 }
+			depth=1.010000
+		}
+		instance={
+			position={ 0.330000 0.500000 }
+			scale={ 0.510000 0.510000 }
+			depth=2.010000
+		}
+	}
+	colored_emblem={
+		color1=red
+		texture="ce_triskel_02.dds"
+		instance={
+			position={ 0.500000 0.500000 }
+			scale={ 0.380000 0.380000 }
+		}
+	}
+}
+
+house_lara-castilla = { # Lara, Dukes of Castille
+    pattern = "pattern_solid.dds"
+    color1 = "white"
+    color2 = "black"
+    colored_emblem = {
+        texture = "ce_eagle.dds"
+        color1 = "black"
+        color2 = "black"
+        instance = { position = { 0.5 0.52 } scale = { 1.1 1.1 }  }        
+    }
 }
 
 jamshid = { # for artifacts
@@ -1288,6 +1425,48 @@ vanity_holmgren = { # Holmgren
 	}
 }
 
+vanity_carrick = { # Carrick
+	pattern="pattern__solid_designer.dds"
+	color1=yellow_light
+	color2=black
+	color3=black
+	colored_emblem={
+		color1=black
+		color2=yellow_light
+		texture="ce_fess_dancetty.dds"
+		instance={
+			position={ 0.500000 0.480000 }
+			scale={ 1.000000 0.840000 }
+			depth=3.010000
+		}
+	}
+	colored_emblem={
+		color1=black
+		color3=white
+		texture="ce_hound.dds"
+		instance={
+			position={ 0.280000 0.210000 }
+			scale={ 0.370000 0.370000 }
+			depth=2.010000
+		}
+	}
+	colored_emblem={
+		color1=black
+		color2=red
+		color3=white
+		texture="ce_hound.dds"
+		instance={
+			position={ 0.500000 0.790000 }
+			scale={ 0.390000 0.390000 }
+		}
+		instance={
+			position={ 0.720000 0.210000 }
+			scale={ 0.360000 0.360000 }
+			depth=1.010000
+		}
+	}
+}
+
 
 # Using some CoA for now to suppress warning "house had no founder for coat of arms generation, it should have a pre-scripted coat of arms instead"
 
@@ -1922,6 +2101,219 @@ house_este = { # Este
 
 # Existing entry
 100204 = k_aragon # Barcelona
+
+# FP2 Bookmark entries
+
+12293 = { #Banu Qasi #ahistorical, uses elements from the ancient CoA of Tudela, their ancestral seat 
+	pattern="temp_pattern_bendy_special.dds"
+	color1=blue
+	color2=yellow
+	color3=green
+	colored_emblem={
+		color1=white
+		color2=yellow_light
+		texture="ce_crescent_mask_02.dds"
+		instance={
+			scale={ 0.700000 0.700000 }
+		}
+	}
+}
+
+12305 = {	#Al-Yiliqi, "Of Galicia" - made-up shield, implementing symbols of Galicia and their holding Merida, with an islamic twist 
+	pattern="pattern_diagonal_split_01.dds"
+	color1=blue_light
+	color2=orange
+	color3=black
+	colored_emblem={
+		color1=yellow
+		texture="ce_castle_random.dds"
+		instance={
+			position={ 0.660000 0.690000 }
+			scale={ 0.390000 0.390000 }
+		}
+	}
+
+	colored_emblem={
+		color1=yellow
+		texture="ce_india_doted_frame_02.dds"
+		instance={
+			position={ 0.660000 0.560000 }
+			scale={ 0.230000 0.230000 }
+			depth=2.010000
+		}
+	}
+
+	colored_emblem={
+		color1=yellow
+		texture="ce_mena_chalice_axe_penbox.dds"
+		instance={
+			position={ 0.350000 0.290000 }
+			scale={ 0.440000 0.440000 }
+			depth=1.010000
+		}
+	}
+}
+
+baranisdyn002 = { #The Berber Awsaga dynasty (ahistorical shield)
+	pattern="pattern_solid.dds"
+	color1=green
+	color2=yellow
+	color3=green
+	colored_emblem={
+		color1=yellow
+		texture="ce_frame_circle_broa.dds"
+		instance={
+			position={ 0.500000 0.470000 }
+			scale={ 0.850000 0.850000 }
+		}
+	}
+
+	colored_emblem={
+		color1=yellow
+		texture="ce_african_star_gurma.dds"
+		instance={
+			position={ 0.500000 0.470000 }
+			scale={ 0.640000 0.640000 }
+			depth=1.010000
+		}
+	}
+}
+
+house_danis = { #Banu Danis (ahistorical shield)
+	pattern="pattern__solid_designer.dds"
+	color1=green
+	color2=white
+	color3=green
+	colored_emblem={
+		color1=yellow
+		color2=yellow
+		texture="ce_rosetta_08.dds"
+		instance={
+			position={ 0.500000 0.460000 }
+			scale={ 0.690000 0.690000 }
+			depth=1.010000
+		}
+	}
+
+	colored_emblem={
+		color1=white
+		texture="ce_polylobe_frame.dds"
+		instance={
+			position={ 0.500000 0.460000 }
+			scale={ 0.740000 0.740000 }
+		}
+	}
+} 
+
+
+
+75 = { #Menendez dynasty - Mendo Guterres Bookmark Character
+	pattern="pattern__solid_designer.dds"
+	color1=white
+	color2=white
+	color3=red
+	colored_emblem={
+		color1=black
+		texture="ce_orle.dds"
+		instance={
+			position={ 0.500000 0.510000 }
+			scale={ 0.710000 0.710000 }
+			depth=8.010000
+		}
+
+	}
+
+	colored_emblem={
+		color1=red
+		texture="ce_cross_08.dds"
+		instance={
+			position={ 0.500000 0.470000 }
+			scale={ 0.340000 0.340000 }
+			depth=9.010000
+		}
+
+	}
+
+	colored_emblem={
+		color1=blue_light
+		color2=white
+		texture="ce_shield_portugal.dds"
+		instance={
+			position={ 0.500000 0.890000 }
+			scale={ 0.260000 0.260000 }
+		}
+
+		instance={
+			position={ 0.240000 0.720000 }
+			scale={ 0.250000 0.250000 }
+			depth=1.010000
+		}
+
+		instance={
+			position={ 0.740000 0.730000 }
+			scale={ 0.250000 0.250000 }
+			depth=2.010000
+		}
+
+		instance={
+			position={ 0.800000 0.440000 }
+			scale={ 0.250000 0.250000 }
+			depth=3.010000
+		}
+
+		instance={
+			position={ 0.200000 0.440000 }
+			scale={ 0.250000 0.250000 }
+			depth=4.010000
+		}
+
+		instance={
+			position={ 0.800000 0.130000 }
+			scale={ 0.250000 0.250000 }
+			depth=5.010000
+		}
+
+		instance={
+			position={ 0.500000 0.130000 }
+			scale={ 0.250000 0.250000 }
+			depth=6.010000
+		}
+
+		instance={
+			position={ 0.200000 0.130000 }
+			scale={ 0.250000 0.250000 }
+			depth=7.010000
+		}
+	}
+}
+
+house_musa = { #Banu Musa, ahistorical shield, uses elements from Zaragosa and Tudela
+	pattern="temp_pattern_bendy_special.dds"
+	color1=blue
+	color2=yellow
+	color3=red
+	colored_emblem={
+		color1=blue
+		color2=orange
+		color3=white
+		texture="ce_eagle_islamic_double.dds"
+		instance={
+			scale={ 0.600000 0.600000 }
+		}
+	}
+
+	colored_emblem={
+		color1=yellow
+		color2=blue
+		texture="ce_polylobe_angles.dds"
+		instance={
+			position={ 0.510000 0.490000 }
+			scale={ 0.910000 0.910000 }
+			depth=1.010000
+		}
+	}
+}
+
 
 # Existing entry
 721 = { # Blois
@@ -4358,6 +4750,34 @@ house_british_isles_mailsechlainn = 9205
 	}			
 }
 
+10025 = { #House Cardona
+	pattern= "pattern__solid_designer.dds"
+	color1= red
+	color2= yellow
+	color3= black
+	colored_emblem = {
+		color1=yellow
+		color2=yellow
+		color3=yellow
+		texture="ce_thistle_grass.dds"
+		instance= { scale= { 0.800000 0.870000 } }
+	}
+}
+
+10029 = { #House Cardona
+	pattern = "pattern__solid_designer.dds"
+	color1 = red
+	color2 = yellow
+	color3 = black
+	colored_emblem = {
+		color1=yellow
+		color2=yellow
+		color3=yellow
+		texture="ce_thistle_grass.dds"
+		instance= { scale= { 0.800000 0.870000 } }
+	}
+}
+
 101677 = { # Gilla-Patraic
 	pattern = "pattern_solid.dds"
 	color1 = "black"	
@@ -6586,6 +7006,20 @@ house_habsburg = { # Habsburg
 		color2 = "yellow"
 		instance = { position = { 0.5 0.48 } scale = { 0.5 0.5 }  }					
 	}
+}
+
+1046033 = {	#Lywigildiana, also known as the Astur-Leone dynasty
+	pattern="pattern__solid_designer.dds"
+	color1=black
+	color2=yellow
+	color3=red
+	colored_emblem={
+		color1=yellow
+		texture="ce_cross_asturias.dds"
+		instance={
+			scale={ 0.700000 0.700000 }
+		}
+	}		
 }
 
 2001106 = { # Karachahnid
@@ -11150,6 +11584,8 @@ house_rochechouart = { # Rochechouart
 	}
 }
 
+
+
 1020111 = { # Ribadouro
 	pattern = "pattern_solid.dds"	
 	color1 = "white"	
@@ -11191,6 +11627,8 @@ house_rochechouart = { # Rochechouart
 		instance = { position = { 0.694 0.80 } scale = { 1.54 1.54 }  }		
 	}	
 }
+
+
 
 ## Italy
 
@@ -11567,6 +12005,48 @@ vanity_beaumont = { # Beaumont
 	}
 }
 
+vanity_cortell = { # Cortell
+	pattern="pattern_bend_01.dds"
+	color1=rgb { 133 166 0 }
+	color2=rgb { 179 21 0 }
+	color3=blue
+	colored_emblem={
+		color1=rgb { 46 140 0 }
+		color2=rgb { 232 102 0 }
+		color3=rgb { 241 34 0 }
+		texture="ce_dragon_bundle.dds"
+		instance={
+			position={ 0.960000 1.380000 }
+			scale={ -1.600000 1.600000 }
+			depth=2.010000
+			rotation=120
+		}
+
+		instance={
+			position={ -0.200000 -0.350000 }
+			scale={ -1.600000 -1.600000 }
+			depth=3.010000
+			rotation=280
+		}
+	}
+}
+
+vanity_arvidsson_radestig = {
+	pattern="pattern__solid_designer.dds"
+	color1=rgb { 191 155 47 }
+	color2=white
+	color3=green
+	colored_emblem={
+		color1=black
+		color2=brown
+		color3=white
+		texture="ce_wolf_head.dds"
+		instance={
+			scale={ 0.700000 0.700000 }
+		}
+	}
+}
+
 ### FP1
 
 1043305 = { # Hordaland
@@ -11734,6 +12214,9 @@ swabian_von_konstanz = b_konstanz # von Konstanz
 		instance = { position = { 0.5 0.48 } scale = { 0.75 0.75 }  }
 	}
 }
+
+bedouindyn003 = k_egypt # Rabia dynasty
+# house_banu_kanz = bedouindyn003 # Rabia house
 house_seljuk = 613 # Oghuz cadets
 house_almoravid = 7274 # Lamtuna cadets
 house_rawwadid = 101868 # Hadhabanid cadets
@@ -11766,3 +12249,134 @@ house_bagrationi = { # Bagratuni
 house_taronites = 101510 # Bagratuni cadets
 house_marwanid = 101686 # Dustakid cadets
 house_mirdasid = 101685 # Amirid cadets
+
+### FP2
+
+house_asturias = k_asturias
+
+galinda = {
+    pattern = "pattern_solid.dds"
+    color1 = "blue"
+    color2 = "yellow"    
+    colored_emblem = {
+        texture = "ce_pile_mask_thin.dds"
+        color1 = "yellow"
+        color2 = "yellow"
+        instance = { position = { 0.5 0.8 } rotation = 180 scale = { 0.6 0.3 }  }                    
+    }
+    colored_emblem = {
+        texture = "ce_block_02.dds"
+        color1 = "blue"
+        color2 = "blue"
+        instance = { position = { 0.5 0.65 } rotation = 180 scale = { 0.6 0.3 }  }                    
+    }        
+    colored_emblem = {
+        texture = "ce_cross_patty.dds"
+        color1 = "yellow"    
+        color2 = "yellow"    
+        instance = { position = { 0.5 0.48 } scale = { 1.0 1.0 }  }        
+    }    
+}
+
+house_leon-spain = c_leon
+
+iniga = d_aragon
+
+629 = c_barcelona
+
+house_baiao = { # Baião
+    pattern = "pattern_solid.dds"
+    color1 = "yellow"
+    color2 = "black"
+    colored_emblem = {
+        texture = "ce_goat_02.dds"
+        color1 = "black"
+        color2 = "red"
+        instance = { position = { 0.5 0.27 } scale = { 0.55 0.55 }  }
+        instance = { position = { 0.5 0.70 } scale = { 0.55 0.55 }  }
+    }
+}
+
+house_maia = { # Maia
+    pattern = "pattern_solid.dds"
+    color1 = "red"
+    color2 = "black"
+    colored_emblem = {
+        texture = "ce_eagle.dds"
+        color1 = "black"
+        color2 = "yellow"
+        instance = { position = { 0.5 0.52 } scale = { 1.1 1.1 }  }        
+    }
+}
+
+house_sousa = 770
+
+house_lara = 776
+
+
+
+vanity_af_brantevik={
+	pattern="pattern__solid_designer.dds"
+	color1=black
+	color2=white
+	color3=black
+	colored_emblem={
+		color1=blue_light
+		color2=rgb { 17 154 30 }
+		texture="ce_gankyil_chakra.dds"
+		instance={
+			position={ 0.460000 0.490000 }
+			scale={ 0.500000 0.500000 }
+		}
+
+	}
+
+	colored_emblem={
+		color1=yellow
+		color2=black
+		texture="ce_frame_circle_urnes_runes.dds"
+		instance={
+			position={ 0.490000 0.480000 }
+			scale={ 0.850000 0.850000 }
+			depth=1.010000
+		}
+
+	}
+
+}
+
+vanity_runge_moller={
+	pattern="pattern__solid_designer.dds"
+	color1=blue_light
+	color2=white
+	color3=black
+	colored_emblem={
+		color1=white
+		texture="ce_shrub.dds"
+		instance={
+			position={ 0.510000 0.420000 }
+			scale={ 0.980000 0.750000 }
+			depth=2.010000
+		}
+
+	}
+
+	colored_emblem={
+		color1=white
+		texture="ce_anchor.dds"
+		instance={
+			position={ 0.640000 0.790000 }
+			scale={ 0.300000 0.300000 }
+			rotation=311
+		}
+
+		instance={
+			position={ 0.380000 0.800000 }
+			scale={ 0.300000 0.300000 }
+			depth=1.010000
+			rotation=45
+		}
+
+	}
+
+}

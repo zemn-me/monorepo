@@ -46,7 +46,7 @@
  warhorse.1001.e:0 "관심 없소."
  warhorse.1001.e.tt:1 "#F "나 말곤 제격인 훈련사가 없다네!"#!"
  warhorse.1001.f:0 "이러려고 $master_of_horse_court_position$에게 봉급을 지불하는 것 아닌가!"
- warhorse.1001.f.tt:0 "당신의 $master_of_horse_court_position$이 [ROOT.Char.Custom('HorseStoryMareStallion')](을)를 훈련시키기 시작함"
+ warhorse.1001.f.tt:1 "당신의 $master_of_horse_court_position$이 [THIS.Char.Custom('WarhorseStoryName')](을)를 훈련시키기 시작함"
  warhorse.1001.f.failure:0 "당신은 $master_of_horse_court_position$의 능력을 과대평가함"
  warhorse.1001.f.failure.tt:0 "[m_horse.GetTitledFirstNameNoTooltip](이)가 [ROOT.Char.Custom('WarhorseStoryName')](을)를 훈련시키는 데 실패함"
 

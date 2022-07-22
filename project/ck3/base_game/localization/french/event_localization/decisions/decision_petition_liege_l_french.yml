@@ -114,7 +114,7 @@
 
  # Development
  petition_liege_decision_option_development:0 "Relocaliser des sujets\n#low Augmenter le [development|El] de la [capital|El]#!"
- petition_liege_development_desc:0 "Demander [ROOT.Char.GetLiege.Custom('FR_au_Char_Pi')][ROOT.Char.GetLiege.GetTitledFirstName] de transférer une fraction de la population sa [capital|El] vers la vôtre"
+ petition_liege_development_desc:0 "Demander [ROOT.Char.GetLiege.Custom('FR_au_Char_Pi')][ROOT.Char.GetLiege.GetTitledFirstName] de transférer une fraction de la population de sa [capital|El] vers la vôtre"
  petition_liege_development_tooltip:0 "$petition_liege_decision_second_tooltip$"
  petition_liege_development_tt:0 "#X Votre [capital|El] a déjà plus de 66% du [development|El] de celui de votre [liege|El]#!"
  petition_liege_decision_effects_development:0 "[THIS.Char.GetLiege.Custom('FR_IlElle')|U] peut transférer une part du [development|El] de sa [capital|El] vers la vôtre"
@@ -124,7 +124,4 @@
  petition_liege_holding_tt:0 "#X Votre [liege|El] ne peut pas se permettre de construire une [holding|El]#!"
  
  petition_liege_debt_tt:0 "#X Votre [liege|El] est [Concept('debt','endetté')|E]#!"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- petition_liege_war_aid_me_tt:0 "#X Vous n'êtes pas en [war|El]#!"
- petition_liege_at_war_with_another_vassal:0 "Vous n'êtes pas en guerre avec un des vassaux de votre seigneur lige"
+ petition_liege_council_no_petition_valid_tt:0 "#X Il n'y a rien que vous puissiez demander à votre seigneur lige#!"

@@ -1,5 +1,5 @@
 ﻿l_spanish:
- stress_threshold_cooldown_message:1 "Si sigues [Concept( 'stressed', 'estresad[ROOT.Char.Custom('ES_OA')]' )|E] durante [SCOPE.ScriptValue('stress_threshold_cooldown_duration_in_years')|V0] años, puedes sufrir otro [mental_break|lE]"
+ stress_threshold_cooldown_message:1 "Si sigues [Concept( 'stressed', 'estresad' )|E][ROOT.Char.Custom('ES_OA')] durante [SCOPE.ScriptValue('stress_threshold_cooldown_duration_in_years')|V0] años, puedes sufrir otro [mental_break|lE]"
 
  # System Messages
  stress_threshold.0010.toast:2 "Adquieres un [stress_level|lE]"
@@ -18,7 +18,7 @@
  stress_threshold.1001.drunkard.gain:0 "¿Quizás un par de tragos ayuden?"
  stress_threshold.1001.drunkard.effect:0 "Beberé hasta que estos pensamientos desaparezcan."
  stress_threshold.1001.hashishiyah.gain:0 "Un poco de hachís me tranquilizará…"
- stress_threshold.1001.hashishiyah.effect:0 "Una noche relajante con mi pipa ayudará."
+ stress_threshold.1001.hashishiyah.effect:1 "Una noche relajante con una bandeja de pasteles de hachís ayudará."
  stress_threshold.1001.journaller.gain:0 "Escribir mis preocupaciones me ayudará a concentrarme."
  stress_threshold.1001.journaller.effect:0 "Necesito una noche a solas en mi estudio."
  stress_threshold.1001.endure:0 "¡Debo ser fuerte y resistir estos impulsos!"
@@ -110,7 +110,7 @@
  stress_threshold.1601.drunkard.gain:0 "Me sentiré más centrado después de un trago…"
  stress_threshold.1601.drunkard.effect:0 "Siempre me siento más centrad[ROOT.Char.Custom('ES_OA')] después de un trago."
  stress_threshold.1601.hashishiyah.gain:0 "Con suerte, algo hachís me calmará la mente…"
- stress_threshold.1601.hashishiyah.effect:0 "No me siento más tranquil[ROOT.Char.Custom('ES_OA')] que tras una velada con mi pipa."
+ stress_threshold.1601.hashishiyah.effect:1 "No me siento más tranquil[ROOT.Char.Custom('ES_OA')] que tras una velada con unos pasteles de hachís."
  stress_threshold.1601.journaller.gain:0 "Poner mis pensamientos por escrito debería darme algo de claridad…"
  stress_threshold.1601.journaller.effect:0 "¡Poner mis pensamientos por escrito siempre me trae claridad!"
  stress_threshold.1601.endure_no_option:0 "He de… he de aguantar. No puedo hacer nada…"
@@ -149,7 +149,7 @@
  # Level 2 Stress Events
  stress_threshold.2001.t:0 "Ataque de nervios: ingratitud"
  stress_threshold.2001.desc:0 "¡Malditos desagradecidos! ¿No saben los sacrificios que hago por su bien?\n\nCada día trabajo sin cesar como un[ROOT.Char.Custom('ES_XA')] esclav[ROOT.Char.Custom('ES_OA')] para hacer que este señorío prospere, pero ¡lo único que hacen todos es quejarse y pedir más!"
- stress_threshold.2001.arbitrary.gain:0 "¡Yo soy [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip], mi palabra es la ley!"
+ stress_threshold.2001.arbitrary.gain:0 "¡Yo soy [ROOT.Char.GetTitleAsNameNoTooltip], mi palabra es la ley!"
  stress_threshold.2001.arbitrary.effect:0 "¡Yo decido cómo se hacen las cosas aquí!"
  stress_threshold.2001.imprison_victim:0 "¡Veamos lo agradecid[victim.Custom('ES_OA')] que se siente [victim.GetFirstNameNoTooltip] en las mazmorras!"
  stress_threshold.2001.endure:0 "Debo ser paciente con ellos…"
@@ -159,7 +159,7 @@
  stress_threshold.2101.witch.gain:0 "Soy un[ROOT.Char.Custom('ES_XA')] marginad[ROOT.Char.Custom('ES_OA')], como [ROOT.Char.GetFaith.WitchGodName]."
  stress_threshold.2101.witch.effect:0 "Al menos sé que [ROOT.Char.GetFaith.WitchGodName] me entiende."
  stress_threshold.2101.drunkard.effect:0 "El vino es mi único amigo verdadero."
- stress_threshold.2101.hashishiyah.effect:0 "Al menos la pipa no me juzga."
+ stress_threshold.2101.hashishiyah.effect:1 "Al menos este pastel con cobertura de hachís no me juzgará."
  stress_threshold.2101.endure:0 "Puede que me lo esté imaginando todo…"
 
  stress_threshold.2201.t:0 "Ataque de nervios: ira ardiente"

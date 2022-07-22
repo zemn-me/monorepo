@@ -7,7 +7,7 @@
 
  # Indebt Guest Loc
  indebt_guest_interaction:0 "빚을 진 문객"
- indebt_guest_interaction_desc:0 "[Concept('court_amenities','Servants')|E]에게 명령하여 [recipient.GetShortUINamePossessive] 체류 기간 동안 소모된 막대한 비용을 증언하게 #EMP 한 후,#! 빠져나갈 방도를 제시합니다..."
+ indebt_guest_interaction_desc:0 "[Concept( 'court_amenities', '하인' )|E]에게 명령하여 [recipient.GetShortUINamePossessive] 체류 기간 동안 소모된 막대한 비용을 증언하게 #EMP 한 후,#! 빠져나갈 방도를 제시합니다..."
  indebt_guest_interaction.tt.direct_indebted_guest:0 "일정 확률로 [recipient.GetTitledFirstName](을)를 다른 장소로 보낼 수 있습니다."
  indebt_guest_interaction.tt.failure:0 "[recipient.GetTitledFirstName](이)가 압박을 느끼지 못하고 도망칠 것입니다."
  INDEBT_GUEST_INTRIGUE_ACTOR:0 "[actor.GetShortUINamePossessive|U] [Concept( 'intrigue', '계책력' )|E]: $VALUE|=+0$"

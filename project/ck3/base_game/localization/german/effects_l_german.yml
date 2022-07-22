@@ -141,6 +141,7 @@
  I_AM_SENT_TO_ACTIVITY:1 "Ihr nehmt an der Aktivität [ACTIVITY.GetName] teil"
  COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] endet"
  I_COMPLETE_ACTIVITY:0 "[ACTIVITY.GetName] endet"
+ COMPLETE_ACTIVITY_NEG:0 "Die Aktivität endet"
 
  WILL_MARRY_EFFECT:1 "[Concept('marries', 'Heiratet')|E] [TARGET_CHARACTER.GetShortUIName]"
  I_WILL_MARRY_EFFECT:1 "Ihr [Concept('marries', 'Heiratet')|E] [TARGET_CHARACTER.GetShortUIName]"
@@ -983,6 +984,7 @@
  
  #Are negative values in these loc keys showing for you? Don't add new negative ones, just come out of debug mode and they're fine.
  CHANGE_DEVELOPMENT_LEVEL:0 "Die [Concept('development', 'Entwicklungs')|E]-Stufe in [title.GetName] wird sich um $VALUE|=0+$ ändern"
+ CHANGE_DEVELOPMENT_LEVEL_PAST:0 "Die [Concept('development', 'Entwicklungsstufe')|E] in [TITLE.GetName] wurde um $VALUE|=0+$ geändert"
  CHANGE_DEVELOPMENT_PROGRESS:2 "[Concept('development', 'Entwicklungs')|E]-Fortschritt wird um $VALUE|0+$ erhöht"
  CHANGE_DEVELOPMENT_PROGRESS_NEG:1 "[Concept('development', 'Entwicklungs')|E]-Fortschritt wird um $VALUE|0-$ gesenkt"
  THEY_CHANGE_DEVELOPMENT_PROGRESS:1 "Der [Concept('development', 'Entwicklungs')|E]-Fortschritt in [TITLE.GetName] wird um $VALUE|0+$ erhöht"
@@ -1305,12 +1307,12 @@
  GHW_CHANGE_TARGET_EFFECT:0 "[GREAT_HOLY_WAR.GetFaith.Custom('GHWName')] wird [TARGET_CHARACTER.GetName] zum Ziel haben"
  GHW_SET_BENEFICIARY_EFFECT:2 "Wählt [TARGET_CHARACTER.GetShortUIName] als Euren [beneficiary|E] aus"
 
- LEASE_OUT_TO_HOLY_ORDER_EFFECT:1 "Verpachtet [Title.GetName] an einen Kriegerorden ([holy_order.GetName])"
- I_LEASE_OUT_TO_HOLY_ORDER_EFFECT:0 "Ich verpachte [Title.GetName] an einen Kriegerorden ([holy_order.GetName])"
- THEY_LEASE_OUT_TO_HOLY_ORDER_EFFECT:0 "[TITLE.GetHolder.GetShortUIName] verpachtet [Title.GetName] an einen Kriegerorden ([holy_order.GetName])"
- LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "Hat [Title.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
- I_LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "Ich habe [Title.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
- THEY_LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "[TITLE.GetHolder.GetShortUIName] hat [Title.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
+ LEASE_OUT_TO_HOLY_ORDER_EFFECT:1 "Verpachtet [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName])"
+ I_LEASE_OUT_TO_HOLY_ORDER_EFFECT:0 "Ich verpachte [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName])"
+ THEY_LEASE_OUT_TO_HOLY_ORDER_EFFECT:0 "[TITLE.GetHolder.GetShortUIName] verpachtet [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName])"
+ LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "Hat [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
+ I_LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "Ich habe [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
+ THEY_LEASED_OUT_TO_HOLY_ORDER_EFFECT:0 "[TITLE.GetHolder.GetShortUIName] hat [TITLE.GetName] an einen Kriegerorden ([holy_order.GetName]) verpachtet"
  REVOKE_LEASE_FROM_HOLY_ORDER_EFFECT:0 "Beendet die Pacht von [TITLE.GetName] an [HOLY_ORDER.GetName]"
  CHANGE_WAR_CHEST_GOLD:0 "Die Kriegskasse erhält [gold_i]$VALUE|V0$"
  CHANGED_WAR_CHEST_GOLD:0 "Die Kriegskasse erhielt [gold_i]$VALUE|V0$"
@@ -1373,10 +1375,10 @@
  GET_RANDOM_INNOVATION_FROM_EFFECT:2 "Die [CULTURE.GetName|l]e [culture|E] erhält eine zufällige [innovation|E] aus der [TARGET_CULTURE.GetName]en Kultur"
  GOT_RANDOM_INNOVATION_FROM_EFFECT:1 "Die [CULTURE.GetName|l]e [culture|E] hat eine zufällige [innovation|E] aus der [TARGET_CULTURE.GetName]en Kultur erhalten"
 
- ACTIVATE_HOLY_SITE_DESC:0 "[title.GetNameNoTier] erhält die [CHARACTER.GetFaith.GetAdjective]e [holy_site|E] $HOLY_SITE$"
- ACTIVATE_HOLY_SITE_PAST_DESC:0 "[title.GetNameNoTier] erhielt die [CHARACTER.GetFaith.GetAdjective]e [holy_site|E] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_DESC:0 "[TITLE.GetNameNoTier] verliert die [CHARACTER.GetFaith.GetAdjective]e [holy_site|E] $HOLY_SITE$"
- DEACTIVATE_HOLY_SITE_PAST_DESC:0 "[TITLE.GetNameNoTier] hat die [CHARACTER.GetFaith.GetAdjective]e [holy_site|E] $HOLY_SITE$ verloren"
+ ACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier] wird als [FAITH.GetAdjective|l]e [holy_site|E] gelten"
+ ACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier] wurde [FAITH.GetAdjective|l]e [holy_site|E]"
+ DEACTIVATE_HOLY_SITE_DESC:1 "[TITLE.GetNameNoTier] wird nicht mehr als [FAITH.GetAdjective|l]e [holy_site|E] gelten"
+ DEACTIVATE_HOLY_SITE_PAST_DESC:1 "[TITLE.GetNameNoTier] hat aufgehört, als [FAITH.GetAdjective|l]e [holy_site|E] zu gelten"
 
  ADD_RANDOM_INNOVATION_EFFECT:1 "[CULTURE.GetCollectiveNoun] entwickelt eine zufällige [innovation|E] aus der $GROUP$-Gruppe"
  GOT_RANDOM_INNOVATION_EFFECT:0 "[CULTURE.GetCollectiveNoun] hat eine zufällige [innovation|E] aus der $GROUP$-Gruppe entwickelt"
@@ -1652,6 +1654,8 @@
  I_CAN_USE_THE_BEFRIEND_SCHEME:2 "Ihr könnt das [GetScheme('befriend').GetTypeName]-[scheme|E] nutzen"
  THEY_CAN_USE_THE_BEFRIEND_SCHEME:1 "[CHARACTER.GetShortUIName|U] kann das [GetScheme('befriend').GetTypeName]-[scheme|E] nutzen"
 
+ unlocks_board_games_interaction_effect:0 "Schaltet die [interaction|E] „$challenge_to_2p_chess_interaction$“ frei, sodass Ihr Freundschaftsspiele mit anderen [Concept('characters','Charakteren')|E] spielen könnt"
+
  EACH_FRIEND_ADDS_STRESS_REDUCTION:2 "Jeder [friend|E] gibt [stress_gain_i]#P -5 %#! [Concept('stress', 'Anspannungs')|E]-Zuwachs"
 
  CHILDREN_ARE_BORN_WITH_EXTRA_STATS:0 "Kinder erhalten #P 1#! bis #P 3#! zusätzliche [skill|E]-Punkte"
@@ -1678,6 +1682,8 @@
  CAN_USE_THE_SELL_TITLES_DECISION:0 "Kann die [decision|E] [sell_titles|E] nutzen"
 
  COLLECT_TAXES_EFFECTIVENESS_GAIN:0 "[collect_taxes|E]-Effektivität: #P +[EmptyScope.ScriptValue('tax_man_perk_percentage')|0] %#!"
+
+ unlocks_truce_purchasing_interaction_desc:0 "Erlaubt die [interaction|E] „$purchase_truce_interaction$“, sodass [truces|E] im Vorfeld gekauft werden können"
 
  CHILDREN_HAVE_CHANCE_OF_IMPROVEMENT:0 "[wards|E] können zusätzliche [skills|E] erhalten und [friends|E] ihres [Concept('guardian', 'Vormunds')|E] werden"
  CHILDREN_I_EDUCATE_HAVE_CHANCE_OF_IMPROVEMENT:3 "Eure [wards|E] können zusätzliche [skills|E] erhalten und Eure [friends|E] werden.\n[GetScheme('learn_language').GetTypeName]-[success_chance|E]: #P +25 %#!"
@@ -1760,7 +1766,7 @@
  LEGACY_GOLD_FROM_BATTLES:0 "Zuwachs an [gold|E][gold_i] durch [battles|E] #weak (5 Gold für je 100 tote [soldiers|E])#!"
  CHEAPER_AGENTS_LEGACY:0 "[Concept('agent', 'Agenten')|E]-Bestechungskosten: [gold_i]#P -50 %#!"
  LEGACY_SEDUCE_BONUSES:1 "[Concept('send_gift', 'Geschenkentsendungs')|E]-Kosten: [gold_i]#P -50 %#!\n[GetScheme('seduce').GetTypeName] -[success_chance|E]: #P +[EmptyScope.ScriptValue('fp1_adventure_legacy_2_success_chance_seduction')|0] %#!\nZuwachs an [prestige|E] [prestige_i] durch erfolgreiche [seduce_schemes|E]\n#weak (Je riskanter die Verführung, desto höher das gewonnene Prestige)#!"
- LEGACY_BONUS_PER_FRIEND:1 "Kann das [scheme|E] „[GetScheme('befriend').GetTypeName]“ gegen [vassals|E] einsetzen\nJede Eurer [Concept('friend', 'Freundes')|E]-Beziehungen gibt #P 3#! [Concept('vasall', 'Vasallen')|E]-[opinion|E], #P 2#! [Concept('county', 'Grafschafts')|E]-Meinung sowie #P +1 %#! [gold_i] [vassal|E[Concept('vasall', 'Vasallen')|E]-[tax|E] ([modifier_contribution|E])\n#weak (Für bis zu 5 [friends|E])#!"
+ LEGACY_BONUS_PER_FRIEND:1 "Kann das [GetScheme('befriend').GetTypeName]-[scheme|E] gegen [vassals|E] einsetzen\nJede Eurer [Concept('friend', 'Freundes')|E]-Beziehungen gibt #P 3#! [Concept('vasall', 'Vasallen')|E]-[opinion|E], #P 2#! [Concept('county', 'Grafschafts')|E]-Meinung sowie #P +1 %#! [gold_i] [vassal|E][Concept('vasall', 'Vasallen')|E]-[tax|E] ([modifier_contribution|E])\n#weak (Für bis zu 5 [friends|E])#!"
  LEGACY_MORE_LIKELY_TO_GET_TRADE_EVENTS_WHEN_RAIDING:0 "Handelsereignisse treten bei [Concept('raids', 'Überfällen')|E] häufiger auf"
 
  ALL_DYNASTY_MEMBERS_HAVE_MURDER_SAVE:2 "Hohe Chance, jeweils ein versuchtes [GetScheme('murder').GetTypeName]-[scheme|E] an einem [dynasty|E]-Mitglied zu [prevented_murder_prevent|E]\n[Concept('interaction', 'Interaktions')|E]-Akzeptanz durch [intimidated_i][Concept('intimidated', 'Einschüchterung')|E] oder [terrified_i][Concept('terrified', 'Verschreckung')|E]: #P +100 %#!"
@@ -1897,8 +1903,8 @@
  JOIN_FACTION_SKIP_CHECK_PAST_EFFECT:0 "Ist [FACTION.GetName|V] beigetreten, ohne die Gültigkeit zu prüfen"
  CREATE_ALLIANCE_EFFECT:0 "Geht ein Bündnis mit [TARGET_CHARACTER.GetShortUIName] ein"
  CREATE_ALLIANCE_PAST_EFFECT:0 "Ist ein Bündnis mit [TARGET_CHARACTER.GetShortUIName] eingegangen"
- TITLE_CREATE_FACTION_EFFECT:0 "Gründet eine Fraktion ($TYPE|V$)"
- TITLE_CREATE_FACTION_PAST_EFFECT:0 "Hat eine Fraktion gegründet ($TYPE|V$)"
+ TITLE_CREATE_FACTION_EFFECT:1 "Eine Fraktion ($TYPE|V$) gründen"
+ TITLE_CREATE_FACTION_PAST_EFFECT:1 "Eine Fraktion ($TYPE|V$) gegründet"
  SET_SPECIAL_TITLE_EFFECT:0 "[TITLE.GetName] wird der Sondertitel"
  SET_SPECIAL_TITLE_PAST_EFFECT:0 "[TITLE.GetName] ist der Sondertitel geworden"
  SET_PREGNANCY_ASSUMED_FATHER_EFFECT:0 "[TARGET_CHARACTER.GetShortUIName|U] wird der angenommene Vater der Schwangerschaft von [CHARACTER.GetShortUIName]"
@@ -2002,12 +2008,15 @@
  custom.every_poet:0 "Jeder Dichter"
  custom.every_child_in_court:0 "Jedes Kind am Hof"
  custom.every_non_callous_or_sadistic_vassal:0 "Jeder [vassal|E], der nicht gefühllos oder sadistisch ist"
+ custom.every_zealous_callous_or_sadistic_vassal:0 "Alle [Concept('vassal', 'Vasallen')|E], die Eifrig oder Gefühllos sind"
  custom.every_feudal_vassal:0 "Jeder [feudal|E]-[vassal|E]:"
  custom.every_opposite_sex_consort:0 "Jeder [spouse|E] oder jede [concubine|E] des anderen Geschlechts"
  custom.every_vassal_of_target_culture:0 "Jeder [different_culture_vassal.GetCulture.GetName]e [vassal|E]"
  custom.every_vassal:0 "Jeder [vassal|E]"
  custom.every_female_courtier:0 "Jeder weibliche [courtier|E]"
  custom.every_male_courtier:0 "Jeder männliche [courtier|E]"
+ custom.every_same_culture_vassal:0 "Alle [root_culture.GetAdjective|l]en [Concept('vassal', 'Vasallen')|E]"
+ custom.every_different_culture_vassal:0 "Jeder nicht-[root_culture.GetAdjective|l]e [vassal|E]"
 
  guest_and_family_move_to_specific_pool_effect.tt.family:0 "Der [character|E] und etwaige [family|E], die mit ihm unterwegs ist"
 
@@ -2130,22 +2139,47 @@
  CREATE_ARTIFACT_EFFECT_FIRST_PAST:0 "[CHARACTER.GetShortUIName|U] hat $ARTIFACT_NAME$-[artifact|E] erhalten"
  CREATE_ARTIFACT_EFFECT_THIRD:0 "[CHARACTER.GetShortUIName|U] erhält $ARTIFACT_NAME$-[artifact|E]"
  CREATE_ARTIFACT_EFFECT_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U] hat $ARTIFACT_NAME$-[artifact|E] erhalten"
+
+ START_STRUGGLE_EFFECT:0 "Ein [struggle|E] ($TYPE|V$) beginnen"
+ ACTIVATE_STRUGGLE_CATALYST:0 "$CATALYST_NAME$ aktivieren"
+ CHANGE_STRUGGLE_PHASE_EFFECT:0 "Phase zu $STRUGGLE_PHASE$ ändern"
+
  SET_ARTIFACT_RARITY_EFFECT:0 "Wird $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_PAST:0 "Wurde $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_THIRD:0 "[artifact.GetName] wird $RARITY$"
  SET_ARTIFACT_RARITY_EFFECT_PAST_THIRD:0 "[ARTIFACT.GetName] wurde $RARITY$"
 
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST`
+ SET_CULTURE_AS_INVOLVED:0 "[Culture.GetName] wird in [STRUGGLE.GetName] verwickelt"
+ SET_CULTURE_AS_UNINVOLVED:0 "[Culture.GetName] ist nicht mehr in [STRUGGLE.GetName] verwickelt"
+ SET_FAITH_AS_INVOLVED:0 "[FAITH.GetName] wird in [STRUGGLE.GetName] verwickelt"
+ SET_FAITH_AS_UNINVOLVED:0 "[FAITH.GetName] ist nicht mehr in [STRUGGLE.GetName] verwickelt"
 
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD`
- # [LocEditor:UntranslatedKey] `UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST`
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_DESC:1 "Ein [head_of_faith|E] wird für [FAITH.GetName] erschaffen"
+ SET_RELIGIOUS_HEAD_TITLE_GLOBAL_PAST_DESC:1 "Ein [head_of_faith|E] wurde für [FAITH.GetName] erschaffen"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_DESC:0 "Ihr werdet [head_of_faith|E] ([FAITH.GetName])"
+ SET_RELIGIOUS_HEAD_TITLE_FIRST_PAST_DESC:0 "Ihr wurdet [head_of_faith|E] ([FAITH.GetName])"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] wird [head_of_faith|E] ([FAITH.GetName])"
+ SET_RELIGIOUS_HEAD_TITLE_THIRD_PAST_DESC:0 "[TARGET_TITLE.GetHolder.GetShortUIName|U] wurde [head_of_faith|E] ([FAITH.GetName])"
+ REMOVE_RELIGIOUS_HEAD_TITLE_DESC:0 "[head_of_faith|E] ([FAITH.GetName]) wird entfernt"
+ REMOVE_RELIGIOUS_HEAD_TITLE_PAST_DESC:0 "[head_of_faith|E] ([FAITH.GetName]) wurde entfernt"
+ 
+ EQUIP_ARTIFACT_TO_OWNER:0 "Artefakt „[artifact.GetName]“ wird ausgerüstet"
+ EQUIP_ARTIFACT_TO_OWNER_PAST:0 "Artefakt „[artifact.GetName]“ wurde ausgerüstet"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST:0 "Ihr rüstet das Artefakt „[artifact.GetName]“ aus"
+ EQUIP_ARTIFACT_TO_OWNER_FIRST_PAST:0 "Ihr habt das Artefakt „[artifact.GetName]“ ausgerüstet"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD:0 "[CHARACTER.GetShortUIName|U] rüstet das Artefakt „[artifact.GetName]“ aus"
+ EQUIP_ARTIFACT_TO_OWNER_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U] hat das Artefakt „[artifact.GetName]“ ausgerüstet"
 
+ UNEQUIP_ARTIFACT_FROM_OWNER:0 "Artefakt „[artifact.GetName]“ wird abgelegt"
+ UNEQUIP_ARTIFACT_FROM_OWNER_PAST:0 "Artefakt „[artifact.GetName]“ wurde abgelegt"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST:0 "Ihr legt das Artefakt „[artifact.GetName]“ ab"
+ UNEQUIP_ARTIFACT_FROM_OWNER_FIRST_PAST:0 "Ihr habt das Artefakt „[artifact.GetName]“ abgelegt"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD:0 "[CHARACTER.GetShortUIName|U] legt das Artefakt „[artifact.GetName]“ ab"
+ UNEQUIP_ARTIFACT_FROM_OWNER_THIRD_PAST:0 "[CHARACTER.GetShortUIName|U] hat das Artefakt „[artifact.GetName]“ abgelegt"
+
+ SET_ETHOS_FROM:0 "[CULTURE.GetName|V] nimmt jeden [ethos|E] von [TARGET_CULTURE.GetName|V] an"
+ SET_ETHOS_FROM_PAST:0 "[CULTURE.GetName|V] hat jeden [ethos|E] von [TARGET_CULTURE.GetName|V] angenommen"
+ SET_LANGUAGE_FROM:0 "Die [CULTURE.GetName|V]e Sprache wird [TARGET_CULTURE.GetLanguage.GetName|V]"
+ SET_LANGUAGE_FROM_PAST:0 "Die [CULTURE.GetName|V]e Sprache wurde [TARGET_CULTURE.GetLanguage.GetName|V]"
+ RESET_CULTURE_CREATION_DATE:0 "Das Erschaffungsdatum von [CULTURE.GetName|V] wird zurückgesetzt"
+ RESET_CULTURE_CREATION_DATE_PAST:0 "Das Erschaffungsdatum von [CULTURE.GetName|V] wurde zurückgesetzt"

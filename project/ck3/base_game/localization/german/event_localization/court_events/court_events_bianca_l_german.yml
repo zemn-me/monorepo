@@ -54,7 +54,7 @@
 
  #Latrine disaster events
  court.3020.t:0 "Ein übler Gestank"
- court.3020.desc.opening:1 "„[ROOT.Char.Custom2('RelationToMeAddress', latrine_chancellor)|U], auf ein Wort bitte.“\n\nMein [latrine_chancellor.GetCouncilTitle] [latrine_chancellor.GetTitledFirstName] kommt während einer kurzen Pause von Hofangelegenheiten auf mich zu. [latrine_chancellor.Custom('DE_PRO_PER_S_3P_N')|U] deutet in Richtung einer weniger belebten Stelle im Raum und ich folge [latrine_chancellor.Custom('DE_PRO_PER_S_3P_D')] dorthin.\n\n„Ich bin über den Zustand "
+ court.3020.desc.opening:1 "„[ROOT.Char.Custom2('RelationToMeAddress', latrine_chancellor)|U]. Auf ein Wort bitte.“\n\nMein [latrine_chancellor.GetCouncilTitle] [latrine_chancellor.GetTitledFirstName] nähert sich mir während einer kleinen Flaute, in der ich mich nicht um die Angelegenheiten meines Hofs zu kümmern habe. [latrine_chancellor.Custom('DE_PRO_PER_S_3P_N')|U] deutet auf einen weniger bevölkerten Ort im Saal, und ich folge [latrine_chancellor.Custom('DE_PRO_PER_S_3P_D')] dorthin.\n\n„Ich bin wegen "
  court.3020.desc.castle:0 "der Burg von [capital.GetNameNoTooltip] beunruhigt."
  court.3020.desc.city:0 "des Rathauses von [capital.GetNameNoTooltip] beunruhigt."
  court.3020.desc.temple:0 "des Gotteshauses in [capital.GetNameNoTooltip] beunruhigt."

@@ -134,7 +134,7 @@
  ### COURT CHAPLAIN WANTS TO TREAT YOU ###
  trait_specific_ongoing.2015.t:0 "Por [ROOT.Char.GetFaith.HighGodName] sea curad[ROOT.Char.Custom('ES_OA')]"
  trait_specific_ongoing.2015.desc:0 "Los pilares del lugar de culto empiezan a doblarse cuando me sobreviene otro episodio. No hago ningún ruido, pero sé que el [chaplain.Custom2('MyCharacterIntroduction', ROOT.Char)] sabe cuando algo va mal.\n\nDespués de [ROOT.Char.Custom('GetReligiousRite')], se me acerca con una mirada de preocupación. «Deben de ser [ROOT.Char.GetFaith.DevilName] y sus secuaces los que toman posesión de vuestro cuerpo, mi [ROOT.Char.GetLadyLord]. ¡Debéis acudir a [ROOT.Char.GetFaith.HighGodName] para salvaros, antes de que sea demasiado tarde!»"
- trait_specific_ongoing.2015.physician.desc:0 "\n\n[physician.Custom2('MyCharacterIntroduction', ROOT.Char)|U] debe de haber[chaplain.GetHerHim] oído. «Lo que [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] necesita es paz y tranquilidad, ¡no amenazas de condenación!»"
+ trait_specific_ongoing.2015.physician.desc:0 "\n\n[physician.Custom2('MyCharacterIntroduction', ROOT.Char)|U] debe de haber[chaplain.GetHerHim] oído. «Lo que [ROOT.Char.GetTitleAsNameNoTooltip] necesita es paz y tranquilidad, ¡no amenazas de condenación!»"
  trait_specific_ongoing.2015.a:0 "Rezaré para que la oscuridad desaparezca."
  trait_specific_ongoing.2015.a.success:0 "Las oraciones son efectivas"
  trait_specific_ongoing.2015.a.failure:0 "Sigues teniendo ataques"
@@ -180,7 +180,7 @@
  trait_specific_ongoing.2020.end.desc:0 "se me viene encima cuando el suelo empieza a retorcerse y a doblarse bajo mis pies. A pesar de que me he librado durante bastante tiempo, reconozco inmediatamente las señales.\n\nHuyo a mis aposentos antes de empezar a llorar… o perder completamente el control de mi cuerpo."
 
  trait_specific_ongoing.2025.t:0 "Ningún lugar donde esconderse"
- trait_specific_ongoing.2025.start.desc:0 "[dummy_gender.Custom('ES_ElLa')|U] [dummy_gender.GetWomanMan] ante mí tiene un aspecto raro. Tiene el rostro retorcido… ¿se retuerce? ¿Es siquiera human[dummy_gender.Custom('ES_OA')]\n\nLa realidad se #EMP tambalea#!, y me doy cuenta que estoy teniendo otro [ROOT.Char.Custom('PossessedEpisode')]… delante de toda mi corte. Cuando"
+ trait_specific_ongoing.2025.start.desc:0 "La persona que tengo enfrente tiene un aspecto raro. Tiene el rostro retorcido… ¿se retuerce? ¿Es siquiera human[dummy_gender.Custom('ES_OA')]\n\nLa realidad se #EMP tambalea#!, y me doy cuenta que estoy teniendo otro [ROOT.Char.Custom('PossessedEpisode')]… delante de toda mi corte. Cuando"
  trait_specific_ongoing.2025.end.desc:0 "me llena las fosas nasales, intento hablar pero mis labios no se mueven."
  trait_specific_ongoing.2025.a:0 "¡Necesito salir de aquí, antes de que empeore!"
  trait_specific_ongoing.2025.b:0 "Soy [ROOT.Char.GetTitleAsNameNoTooltip]. No me importa lo que piensen."

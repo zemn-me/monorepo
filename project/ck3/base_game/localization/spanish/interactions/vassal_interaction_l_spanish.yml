@@ -71,7 +71,7 @@
  ASK_FOR_PARDON_NOTIFICATION:0 "Os pido humildemente que me concedáis el perdón por mis delitos."
  
  pardon_interaction:0 "Otorgar perdón"
- pardon_interaction_desc:1 "Consideras a [recipient.GetName] un[recipient.Custom('ES_XA')] [criminal|lE] ([recipient.GetImprisonmentReasons( actor.Self )]), lo que te permite [Concept( 'imprison', 'encarcelar' )|E][recipient.Custom('ES_LoLa')] en cualquier momento sin que se considere [tyranny|lE].\n\nSi prefieres que siga libre, puedes elegir perdonar[recipient.Custom('ES_LoLa')]. Esto retirará todos y cada uno de los motivos que tengas para [Concept( 'imprison', 'encarcelar' )|E][recipient.Custom('ES_LoLa')] y mejorará su [opinion|lE] sobre ti."
+ pardon_interaction_desc:1 "Consideras a [recipient.GetName] un[recipient.Custom('ES_XA')] [criminal|lE] ([recipient.GetImprisonmentReasons( actor.Self )]), lo que te permite [Concept( 'imprison', 'encarcelar' )|E][recipient.Custom('ES_LoLa')] en cualquier momento sin que se considere [tyranny|lE].\n\nSi prefieres que siga libre, puedes elegir perdonar[recipient.Custom('ES_LoLa')]. Esto quitará todos y cada uno de los motivos que tengas para [Concept( 'imprison', 'encarcelar' )|E][recipient.Custom('ES_LoLa')] y mejorará su [opinion|lE] sobre ti."
  pardon_interaction_toast:0 "¡Tu benevolente señor[actor.Custom('ES_XA')], [actor.GetFirstName], ha perdonado tus crímenes!"
 
  county_must_have_city_tt:0 "[CHARACTER.GetPrimaryTitle.GetNameNoTooltip] debe contener una [city|lE] o tener un nivel de [development|lE] por encima de 20."

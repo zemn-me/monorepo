@@ -89,6 +89,53 @@ on_death = {
 			destroy_title = title:e_mongol_empire
 		}
 
+		# Fix gods-damned Bavaria splitting from East Francia in an ugly fashion in 867.
+		if = {
+			limit = {
+				# Make sure we're looking at the right guy & that the circumstances haven't changed too much.
+				this = character:90107
+				highest_held_title_tier = tier_kingdom
+				has_realm_law = confederate_partition_succession_law
+				# Bavaria should be in a fit state for interfering with the handout order.
+				title:k_bavaria = {
+					OR = {
+						is_title_created = no
+						holder = root
+					}
+					any_in_de_jure_hierarchy = {
+						tier = tier_county
+						# More than 50%.
+						count >= 22
+						holder = {
+							any_liege_or_above = { this = root }
+						}
+					}
+				}
+				NOT = { has_primary_title = title:k_bavaria }
+				# Players can sort this themselves: you just need to have Bavaria as your primary title and it's all fine.
+				is_ai = yes
+			}
+			# If we've got no Bavaria, create it.
+			if = {
+				limit = {
+					title:k_bavaria = { is_title_created = no }
+				}
+				create_title_and_vassal_change = {
+					type = created
+					save_scope_as = change
+				}
+				title:k_bavaria = {
+					change_title_holder = {
+						holder = root
+						change = scope:change
+					}
+				}
+				resolve_title_and_vassal_change = scope:change
+			}
+			# Then switch around.
+			set_primary_title_to = title:k_bavaria
+		}
+
 		invalidate_claimant_factions_on_death_effect = yes
 
 		# Event Setup
@@ -179,6 +226,52 @@ on_death = {
 				every_equipped_character_artifact = {
 					limit = { ep1_artifact_is_court_artifact_trigger = yes }
 					set_variable = equipped_court_succession
+				}
+			}
+		}
+
+		# Ritual best friends have a bad, bad, *bad* time.
+		if = {
+			limit = {
+				valid_ritualised_best_friendship_one_way_trigger = { ACTOR_FRIEND = root }
+			}
+			random_relation = {
+				type = best_friend
+				limit = { culture_valid_for_ritualised_best_friends_trigger = yes }
+				# Save a flag for the death management event's ease.
+				add_character_flag = dead_ritual_best_friend
+			}
+		}
+
+		# Best friend loses synergy
+		if = {
+			limit = { has_any_best_friend_synergy_bonus_modifier_trigger = yes }
+			remove_every_best_friend_synergy_bonus_modifier_effect = yes
+		}
+		random_relation = {
+			type = best_friend
+			if = {
+				limit = { has_any_best_friend_synergy_bonus_modifier_trigger = yes }
+				remove_every_best_friend_synergy_bonus_modifier_effect = yes
+			}
+		}
+
+		# Struggle Catalyst
+		if = {
+			limit = {
+				# we verify that the death is not natural
+				exists = scope:killer
+				is_important_or_vip_struggle_character = yes
+				any_character_struggle = {
+					involvement = involved
+					phase_has_catalyst = catalyst_unnatural_death_important_character
+				}
+			}
+			every_character_struggle = {
+				involvement = involved
+				activate_struggle_catalyst = {
+					catalyst = catalyst_unnatural_death_important_character
+					character = root
 				}
 			}
 		}

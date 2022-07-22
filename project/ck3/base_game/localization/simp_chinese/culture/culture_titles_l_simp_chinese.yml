@@ -253,7 +253,7 @@
  count_theocracy_female_hellenism_religion:0 "大维斯塔贞女"
  duke_theocracy_male_hellenism_religion:0 "大祭司"
  duke_theocracy_female_hellenism_religion:0 "大祭司"
- duchy_theocracy_hellenism_religion:0 "祭司领"
+ duchy_theocracy_hellenism_religion:0 "大祭司领"
  king_theocracy_male_hellenism_religion:0 "神谕使"
  king_theocracy_female_hellenism_religion:0 "西彼拉"
  emperor_theocracy_male_hellenism_religion:0 "大神谕使"
@@ -603,6 +603,12 @@
  king_feudal_female_grand_duke_independent:0 "女大公"
  kingdom_feudal_grand_duke_independent:0 "大公国"
 
+### Taifas ###
+# Feudal / Clan
+ duke_feudal_male_andalusian_independent:0 "埃米尔"
+ duke_feudal_female_andalusian_independent:0 "埃米拉"
+ duchy_feudal_andalusian_independent:0 "泰法"
+
 ### Lombard ###
 # Feudal
  duke_feudal_male_lombard_independent:0 "亲王"
@@ -794,6 +800,18 @@
  emperor_feudal_muslim_male_dravidian_group:0 "帕迪沙阿"
  emperor_feudal_muslim_female_dravidian_group:1 "沙阿巴努"
  empire_feudal_muslim_dravidian_group:0 "$empire_feudal_arabic_group$"
+
+### GUANCHE (Canary Islands) ###
+ duchy_guanche:0 "门塞约"
+ kingdom_guanche:0 "大门塞约"
+ count_male_guanche:0 "科兰"
+ duke_male_guanche:0 "门塞亚托"
+ king_male_guanche:0 "高门塞亚托"
+ emperor_male_guanche:0 "大父门塞亚托"
+ count_female_guanche:0 "查玛托"
+ duke_female_guanche:0 "门塞亚塔"
+ king_female_guanche:0 "高门塞亚塔"
+ emperor_female_guanche:0 "大母门塞亚塔"
 
 ### OBSOLETE with new division ### West-African ###
 # Feudal / Clan / Tribal
