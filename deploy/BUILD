@@ -7,6 +7,7 @@ ts_project(
     name = "release_src",
     srcs = [
         "deploy_test.ts",
+        "mocks.ts",
         "program.ts",
         "release.ts",
     ],
