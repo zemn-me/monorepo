@@ -1,6 +1,6 @@
 ﻿l_spanish:
  warhorse.0001.t:0 "El caballo de guerra"
- warhorse.0001.desc:0 "Mientras admiro [HorseStoryMareStallion.Custom('ES_AlLa')] [ROOT.Char.Custom('HorseStoryMareStallion')] que ahora sigue todas mi órdenes, me pregunto qué nombre ponerle…"
+ warhorse.0001.desc:0 "Mientras admiro [HorseStoryMareStallion.Custom('ES_AlALa')] [ROOT.Char.Custom('HorseStoryMareStallion')] que ahora sigue todas mi órdenes, me pregunto qué nombre ponerle…"
  warhorse.0001.a:0 "¡Un nombre inspirado en la historia!"
  warhorse.0001.b:0 "¡La mitología esta llena de nombres de caballos muy inspiradores!"
  warhorse.0001.c:0 "Solo es un caballo y basta con llamarlo así."
@@ -46,7 +46,7 @@
  warhorse.1001.e:0 "No me interesa."
  warhorse.1001.e.tt:1 "#F «¡[THIS.Char.Custom('WarhorseStoryName')] no necesita más adiestrador que yo!»#!"
  warhorse.1001.f:0 "¡Para eso pago a un $master_of_horse_court_position$!"
- warhorse.1001.f.tt:0 "Tu $master_of_horse_court_position$ empieza a adiestrar a tu [ROOT.Char.Custom('HorseStoryMareStallion')]."
+ warhorse.1001.f.tt:1 "Tu $master_of_horse_court_position$ empieza a adiestrar a [THIS.Char.Custom('WarhorseStoryName')]"
  warhorse.1001.f.failure:0 "Sobrestimaste a tu $master_of_horse_court_position$"
  warhorse.1001.f.failure.tt:0 "[m_horse.GetTitledFirstNameNoTooltip] fracasa en el adiestramiento de [ROOT.Char.Custom('WarhorseStoryName')]."
 

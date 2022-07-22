@@ -26,7 +26,7 @@
  
  #Events
  councillor_spouse_learning.2601.t:1 "Cónyuge: Educación continua"
- councillor_spouse_learning.2601.not_scholarly.desc:0 "«No te haría daño leer un libro de vez en cuando», suele decirme mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))], [councillor.Custom('ES_ElLa')] estudios[councillor.Custom('ES_OA')] [councillor.GetTitledFirstName]. Se ha ofrecido a ser mi tutor[councillor.Custom('ES_XA')], por si necesito ayuda para empezar."
+ councillor_spouse_learning.2601.not_scholarly.desc:0 "«No te haría daño leer un libro de vez en cuando», suele decirme mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))], estudios[councillor.Custom('ES_OA')] [councillor.GetTitledFirstName]. Se ha ofrecido a ser mi tutor[councillor.Custom('ES_XA')], por si necesito ayuda para empezar."
  councillor_spouse_learning.2601.scholarly.desc:0 "Cada vez que mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))] [councillor.GetTitledFirstName] me encuentra inclinad[ROOT.Char.Custom('ES_OA')] sobre un libro, se entusiasma notablemente.\n\n«¿Quieres que te ayude con los estudios? ¿Alguien con quien intercambiar ideas o nuevos volúmenes? ¡Acabo de adquirir un tomo con un análisis excelente de [ROOT.Char.Custom('education_conversation_subject')]!»."
  councillor_spouse_learning.2601.a:0 "Sí, agradecería tu orientación."
  councillor_spouse_learning.2601.b:0 "[tutoring_student_1.GetTitledFirstNameNoTooltip] necesita más tu ayuda que yo."
@@ -63,7 +63,7 @@
 
  councillor_spouse_learning.2602.t:1 "Cónyuge: Ampliando horizontes"
  councillor_spouse_learning.2602.not_root.desc:0 "Aunque mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('student'))] [student.GetTitledFirstName] sabe un par de cosas sobre [student.Custom('highest_skill_noun')], [councillor.GetTitledFirstName] cree que es hora de que amplíe sus horizontes.\n\n«Podría adquirir nuevos libros, preparar deberes, darle unas cuantas lecciones. ¿Qué tema beneficiaría más a [student.GetFirstNameNoTooltip]?»."
- councillor_spouse_learning.2602.root.desc:0 "«Aunque ya sabes un par de cosas sobre [student.Custom('highest_skill_noun')], [student.Custom('ES_ElLa')] [student.GetTitleTierName] de [student.GetPrimaryTitle.GetNameNoTierNoTooltip] debe tener una gran variedad de habilidades», dice mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))], [ROOT.Char.Custom2('QuirkPPPosOrNeg', SCOPE.sC('councillor'))].\n\n«Podría adquirir nuevos libros, preparar deberes, darte unas cuantas lecciones. ¿Qué tema te interesa más?»"
+ councillor_spouse_learning.2602.root.desc:0 "«Aunque ya sabes un par de cosas sobre [student.Custom('highest_skill_noun')], [student.GetTitleTierName] de [student.GetPrimaryTitle.GetNameNoTierNoTooltip] debe tener una gran variedad de habilidades», dice mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))], [ROOT.Char.Custom2('QuirkPPPosOrNeg', SCOPE.sC('councillor'))].\n\n«Podría adquirir nuevos libros, preparar deberes, darte unas cuantas lecciones. ¿Qué tema te interesa más?»"
  councillor_spouse_learning.2602.a:0 "Diplomacia."
  councillor_spouse_learning.2602.b:0 "Teoría militar."
  councillor_spouse_learning.2602.c:0 "Economía del señorío."

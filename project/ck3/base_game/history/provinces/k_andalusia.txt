@@ -1,3 +1,5 @@
+# Visigothic culture break-up moved backwards in time to around ~800; probably still being a bit overly-generous at that, but it's a decent date for it.
+
 ###c_moura
 1837 = {	# MOURA
 	# Misc
@@ -7,8 +9,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -27,9 +29,7 @@
 	holding = castle_holding
 	
 	# History
-	929.1.1 = {
-		culture = andalusian
-	}
+	800.1.1 = { culture = andalusian }
 	1263.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -50,10 +50,12 @@
 	
 	holding = castle_holding
 	
-	# History
-	929.1.1 = {
-		culture = andalusian
+	1.1.1 = { #Actually 20 million years ago... ... 
+		special_building = rock_of_gibraltar_01
 	}
+	
+	# History
+	800.1.1 = { culture = andalusian }
 	1263.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -79,8 +81,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	811.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1066.1.1 = {
 		buildings = {
 			hill_forts_01
@@ -104,15 +106,21 @@
 1919 = {	# TOLEDO
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
-	
+
 	# History
+	650.1.1 = { #Most of the construction was done under the visigothic king Wamba 
+		special_building = city_wall_of_toledo_01
+	}
+	
+	800.1.1 = { culture = andalusian }
 	867.1.1 = {
 		buildings = {
 			regimental_grounds_01
 		}
+		duchy_capital_building = blacksmiths_01
 	}
 	955.1.1 = { culture = castilian }
 	1066.1.1 = {
@@ -134,11 +142,12 @@
 1923 = {	# MADRID
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	955.1.1 = { culture = castilian }
 }
 1927 = {	# GUDALAJARA
@@ -155,11 +164,12 @@
 1935 = {	# MOLINA
 	#Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	950.1.1 = { culture = castilian }
 }
 1930 = {	# SIGUENZA
@@ -176,13 +186,13 @@
 1947 = {	# 1947 - CUENCA
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -202,13 +212,13 @@
 1952 = {	# UCLES
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -228,13 +238,13 @@
 1960 = {	# MALAGON
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -259,8 +269,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -282,8 +292,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
 	1280.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -315,6 +325,7 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	811.1.1 = {
 		religion = muwalladi
 		special_building = alhambra_01
@@ -323,9 +334,6 @@
 		buildings = {
 			hill_forts_01
 		}
-	}
-	934.1.1 = {
-		culture = andalusian
 	}
 	1066.1.1 = {
 		buildings = {
@@ -351,9 +359,7 @@
 	holding = castle_holding
 	
 	# History
-	929.1.1 = {
-		culture = andalusian
-	}
+	800.1.1 = { culture = andalusian }
 	1263.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -372,14 +378,12 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	867.1.1 = {
 		buildings = {
 			farm_estates_01
 			military_camps_01
 		}
-	}
-	929.1.1 = {
-		culture = andalusian
 	}
 	1066.1.1 = {
 		buildings = {
@@ -417,9 +421,7 @@
 	holding = castle_holding
 	
 	# History
-	929.1.1 = {
-		culture = andalusian
-	}
+	800.1.1 = { culture = andalusian }
 	1263.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -445,8 +447,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -465,8 +467,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -491,6 +493,7 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
 	867.1.1 = {
 		special_building_slot = holy_site_great_mosque_of_cordoba_01
@@ -502,7 +505,6 @@
 			cereal_fields_01
 		}
 	}
-	934.1.1 = { culture = andalusian }
 	1066.1.1 = {
 		buildings = {
 			castle_02

@@ -26,7 +26,7 @@
  petition_liege.0101.t.faction_war:0 "$petition_liege_header$ Fraktionsauflösung"
  petition_liege.0101.t.county_control:0 "$petition_liege_header$ Landvogtbitte"
  petition_liege.0101.t.county_convert:0 "$petition_liege_header$ Priesterförderung"
- petition_liege.0101.t.county_opinion:0 "$petition_liege_header$ Besuchbitte"
+ petition_liege.0101.t.county_opinion:1 "$petition_liege_header$ Königlicher Besuch"
  petition_liege.0101.t.fortify_border:0 "$petition_liege_header$ Grenzbefestigung"
  petition_liege.0101.t.title_liege:0 "$petition_liege_header$ Titelanspruchsteller"
  petition_liege.0101.t.title_vassal:0 "$petition_liege_header$ Vasallenanspruchsteller"
@@ -176,7 +176,7 @@
 # Liege asks for something in return
  petition_liege.0205.t:0 "$petition_liege_header$ Gegenangebot"
  petition_liege.0205.desc.intro:0 "$petition_liege.0201.desc.intro$"
- petition_liege.0205.desc.bridge:1 "\n\nNachdem [petition_liege.Custom('DE_PRO_PER_S_3P_N')] sich die Ansprache angehört hat, sitzt [petition_liege.Custom('DE_PRO_PER_S_3P_N')] einige Augenblicke lang schweigend da und bedenkt meine Bitte.\n\nSchließlich spricht [petition_liege.Custom('DE_PRO_PER_S_3P_N')] mich an: „Ihr habt einige gute Punkte vorgetragen, doch wenn ich Eurer Bitte stattgeben soll, brauche ich etwas als Gegenleistung. Gewiss erkennt Ihr, wie wir beide einen Gewinn daraus ziehen könnten, wenn wir zu einer Übereinkunft kämen?“"
+ petition_liege.0205.desc.bridge:2 "\n\nNachdem [petition_liege.Custom('DE_PRO_PER_S_3P_N')] sich die Ansprache angehört hat, sitzt [petition_liege.Custom('DE_PRO_PER_S_3P_N')] einige Augenblicke lang schweigend da und bedenkt meine Bitte.\n\nSchließlich spricht [petition_liege.Custom('DE_PRO_PER_S_3P_N')] mich an: „Ihr habt einige gute Punkte vorgetragen, doch wenn ich Eurer Bitte stattgeben soll, brauche ich etwas als Gegenleistung. Gewiss erkennt Ihr, wie wir beide einen Gewinn daraus zögen, wenn wir zu einer Übereinkunft kämen?“"
  petition_liege.0205.counter:0 "Mein[petition_liege.Custom('DE_END_PRO_S_N')] [petition_liege.GetTitleAsNameNoTooltip], vielleicht habe ich das schlecht erklärt …"
  petition_liege.0205.a:0 "Ein faires Angebot – ich nehme es an."
  petition_liege.0205.b:0 "Treibt Ihr Scherze? Ich werde doch jetzt schon an meine Grenzen getrieben!"
@@ -186,7 +186,7 @@
  petition_liege.0209.t:0 "$petition_liege_header$ abgelehnt"
  petition_liege.0209.desc.intro:0 "$petition_liege.0201.desc.intro$"
  petition_liege.0209.desc.bridge:0 "\n\nNachdem [petition_liege.Custom('DE_PRO_PER_S_3P_N')] sich die Rede angehört hat, runzelt [petition_liege.Custom('DE_PRO_PER_S_3P_N')] die Stirn und weist mich zurück."
- petition_liege.0209.desc.bridge.apologetic:1 "$petition_liege.0209.desc.bridge$ „Ich bitte um Entschuldigung, doch zum Wohle von [petition_liege.GetPrimaryTitleNoTierNoTooltip] muss ich Eure Bitte ablehnen.“"
+ petition_liege.0209.desc.bridge.apologetic:1 "$petition_liege.0209.desc.bridge$ „Ich bitte um Entschuldigung, doch zum Wohle von [petition_liege.GetPrimaryTitle.GetNameNoTierNoTooltip] muss ich Eure Bitte ablehnen.“"
  petition_liege.0209.desc.bridge.unapologetic:1 "$petition_liege.0209.desc.bridge$ „#EMP Das#! ist die dringende Angelegenheit, die Ihr mit mir besprechen musstet? Nein. Auf keinen Fall. Wenn Ihr mich jetzt entschuldigen würde. Ich habe mich um Dinge zu kümmern, die tatsächlich #EMP wichtig#! sind.“"
  petition_liege.0209.desc.bridge.favor:0 "$petition_liege.0209.desc.bridge$ „Es tut mir aufrichtig leid, doch ich werde nicht in der Lage sein, diese Bitte zu erfüllen. Wenn ich könnte, würde ich Euch geben, was Ihr wünscht, aber bitte lasst es mit diesem Versprechen eines zukünftigen Gefallens genug sein.“"
  petition_liege.0209.counter:0 "Wartet, mein[petition_liege.Custom('DE_END_PRO_S_N')] [petition_liege.GetLadyLord]! Hört mich an!"
@@ -270,7 +270,7 @@
  petition_liege_county_convert_modifier_desc:0 "Der Träger dieser Grafschaft hat seinen Lehnsherrn darum gebeten, ihre Bekehrung zum wahren Glauben zu finanzieren."
  petition_liege_county_convert_modifier_tt:0 "[Concept('convert_county', 'Das Bekehren von Grafschaften')|E] wird in solchen mit diesem Modifikator schneller voranschreiten"
  # Opinion
- petition_liege_0101_county_opinion_effect_tt:0 "Alle [holdings|E] von [petition_vassal.GetShortUIName] mit niedriger [county_opinion|E]"
+ petition_liege_0101_county_opinion_effect_tt:1 "Alle [holdings|E] von [petition_vassal.GetShortUIName] mit einer [county_opinion|E] von #negative_value [SCOPE.ScriptValue('petition_county_opinion_value')]#! oder weniger"
  petition_liege_county_opinion_modifier:0 "Königlicher Besuch"
  petition_liege_county_opinion_modifier_desc:0 "Der Träger dieser Grafschaft hat seinen Herrn um einen Besuch und ein Spektakel für das Volk gebeten."
  # Fortify

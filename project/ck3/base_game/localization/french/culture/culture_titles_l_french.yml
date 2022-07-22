@@ -603,6 +603,12 @@
  king_feudal_female_grand_duke_independent:0 "Grande duchesse"
  kingdom_feudal_grand_duke_independent:0 "Grand duché"
 
+### Taifas ###
+# Feudal / Clan
+ duke_feudal_male_andalusian_independent:0 "Émir"
+ duke_feudal_female_andalusian_independent:0 "Émiresse"
+ duchy_feudal_andalusian_independent:0 "Taïfa"
+
 ### Lombard ###
 # Feudal
  duke_feudal_male_lombard_independent:0 "Prince"
@@ -645,7 +651,7 @@
  count_feudal_female_arabic_group:0 "Cheika"
  county_feudal_arabic_group:0 "Cheikat"
  duke_feudal_male_arabic_group:0 "Émir"
- duke_feudal_female_arabic_group:0 "Émira"
+ duke_feudal_female_arabic_group:0 "Émiresse"
  duchy_feudal_arabic_group:0 "Émirat"
  king_feudal_male_arabic_group:1 "Malik"
  king_feudal_female_arabic_group:1 "Malika"
@@ -795,6 +801,18 @@
  emperor_feudal_muslim_female_dravidian_group:1 "Chahbanou"
  empire_feudal_muslim_dravidian_group:0 "$empire_feudal_arabic_group$"
 
+### GUANCHE (Canary Islands) ###
+ duchy_guanche:0 "Menceyo" # [LocEditor:ForFutureBatchExport]
+ kingdom_guanche:0 "Haut menceyo" # [LocEditor:ForFutureBatchExport]
+ count_male_guanche:0 "Coran" # [LocEditor:ForFutureBatchExport]
+ duke_male_guanche:0 "Menceyato" # [LocEditor:ForFutureBatchExport]
+ king_male_guanche:0 "Haut menceyato" # [LocEditor:ForFutureBatchExport]
+ emperor_male_guanche:0 "Petut menceyato" # [LocEditor:ForFutureBatchExport]
+ count_female_guanche:0 "Chamato" # [LocEditor:ForFutureBatchExport]
+ duke_female_guanche:0 "Menceyata" # [LocEditor:ForFutureBatchExport]
+ king_female_guanche:0 "Haut menceyata" # [LocEditor:ForFutureBatchExport]
+ emperor_female_guanche:0 "Mayec menceyata" # [LocEditor:ForFutureBatchExport]
+
 ### OBSOLETE with new division ### West-African ###
 # Feudal / Clan / Tribal
  baron_feudal_male_west_african_group:0 "Tigui"
@@ -937,7 +955,7 @@
  count_feudal_female_berber_group_independent:0 "Cheika"
  county_feudal_berber_group_independent:0 "Cheikat"
  duke_feudal_male_berber_group:0 "Émir"
- duke_feudal_female_berber_group:0 "Émira"
+ duke_feudal_female_berber_group:0 "Émiresse"
  duchy_feudal_berber_group:0 "Émirat"
  king_feudal_male_berber_group:0 "Amīr al-umarā"
  king_feudal_female_berber_group:0 "Amīra al-umarā"
@@ -1040,7 +1058,7 @@
  count_feudal_male_beja:0 "Nazir"
  count_feudal_female_beja:0 "Nazira"
  duke_feudal_male_beja:0 "Émir"
- duke_feudal_female_beja:0 "Émira"
+ duke_feudal_female_beja:0 "Émiresse"
  king_feudal_male_beja:0 "Malik"
  king_feudal_female_beja:0 "Malika"
  emperor_feudal_male_beja:0 "Sultan"

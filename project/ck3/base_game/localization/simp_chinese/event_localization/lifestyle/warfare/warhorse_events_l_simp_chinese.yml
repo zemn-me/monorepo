@@ -46,7 +46,7 @@
  warhorse.1001.e:0 "我不感兴趣。"
  warhorse.1001.e.tt:1 "#F “[THIS.Char.Custom('WarhorseStoryName')]除了我以外不需要任何驯马人！”#!"
  warhorse.1001.f:0 "这正是我付钱给$master_of_horse_court_position$的目的！"
- warhorse.1001.f.tt:0 "你的$master_of_horse_court_position$开始训练你的[ROOT.Char.Custom('HorseStoryMareStallion')]。"
+ warhorse.1001.f.tt:1 "你的$master_of_horse_court_position$开始训练[THIS.Char.Custom('WarhorseStoryName')]"
  warhorse.1001.f.failure:0 "你高估了你的$master_of_horse_court_position$"
  warhorse.1001.f.failure.tt:0 "[m_horse.GetTitledFirstNameNoTooltip]训练[ROOT.Char.Custom('WarhorseStoryName')]失败。"
 

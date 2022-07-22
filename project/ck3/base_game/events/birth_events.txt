@@ -1392,9 +1392,13 @@ birth.1006 = {
 
 	immediate = {
 		play_music_cue = mx_cue_seduction
-		scope:secret = {
-			reveal_to_without_events_effect = {
-				CHARACTER = root
+
+		custom_tooltip = birth.1006.bastard_explanation
+		hidden_effect = {
+			scope:secret = {
+				reveal_to_without_events_effect = {
+					CHARACTER = root
+				}
 			}
 		}
 	}
@@ -1716,6 +1720,7 @@ birth.2001 = {
 			}
 			if = {
 				limit = {
+					NOT = { is_courtier_of = ROOT } # Check that char is not already at your court (theoretical fix)
 					OR = {
 						this = court_owner
 						is_courtier_of = court_owner
@@ -2736,6 +2741,7 @@ birth.8011 = {
 			OR = {
 				AND = {	#Landless mothers must be actually at court to use the chamber.
 					is_ruler = no
+					exists = location # Security check
 					location = title:c_byzantion.title_province
 				}
 				AND = {	#Landed rulers can be assumed to make the journey, unless they have some extremely pressing reason not to.

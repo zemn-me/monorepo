@@ -44,4 +44,7 @@
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_GLOBAL:0 "#bold 没#!有[special_building|E]"
  HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName]拥有[special_building|E]"
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName]没有[special_building|E]"
+
+ HAS_HOLDING_DESC:0 "[PROVINCE.GetName]拥有一处[holding|E]"
+ NOT_HAS_HOLDING_DESC:0 "[PROVINCE.GetName]#bold 没有#![holding|E]"
  

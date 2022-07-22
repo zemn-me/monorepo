@@ -15,7 +15,7 @@
  hold_court.5001.desc_ending:0 "S’il vous plaît, libérez-moi de cette obligation, [ROOT.Char.Custom('FR_MonseigneurMadame')|U]. »"
  hold_court.5001.a:0 "Je comprends. Vous êtes libéré[complainer.Custom('FR_E')] d[complainer_betrothed.Custom('FR_EluiElle')]."
  hold_court.5001.b:0 "Un accord est un accord."
- hold_court.5001.b_close_family:0 "C’est de m[ROOT.Char.Custom2('FR_RelationToMeShort_OnA', SCOPE.sC('complainer_betrothed'))]#! dont vous parlez !"
+ hold_court.5001.b_close_family:0 "C’est de m[ROOT.Char.Custom2('FR_RelationToMeShort_OnA', SCOPE.sC('complainer_betrothed'))] dont vous parlez !"
  hold_court.5001.c:0 "Alors vous ne vous marierez #EMP jamais#! !"
 
  hold_court.5010.t:0 "$hold_court_header$ [county.GetNameNoTierNoTooltip] hors de contrôle"

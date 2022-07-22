@@ -338,7 +338,7 @@
  seduce_ongoing.3004.desc:0 "Offenbar weiß [target.GetFirstName] nichts von meiner Großzügigkeit, in deren Genuss [target.Custom('DE_PRO_POS_S_3P')][close_character.Custom('DE_END_PRO_S_N')] [target.Custom2('RelationToMe', SCOPE.sC('close_character'))] kam. Wenigstens ist [close_character.GetFirstName] mir dankbar"
  seduce_ongoing.3004.a:0 "Was muss ich denn noch tun?"
 
- seduce_ongoing.4001.t:0 "Die Hingabe [dummy_musician_gender.Custom('DE_ART_DEF_S_G')] [target.Custom('MusicalPerformer‘)]"
+ seduce_ongoing.4001.t:0 "Die Hingabe [dummy_musician_gender.Custom('DE_ART_DEF_S_G')] [target.Custom('MusicalPerformerPossessive')|U]"
  seduce_ongoing.4001.desc:0 "[dummy_musician_gender.Custom('DE_ART_IND_N')|U] [target.Custom('MusicalPerformer')] wird bald am Hof von [court_location.GetNameNoTier] auftreten. Man könnte [dummy_musician_gender.Custom('DE_PRO_PER_S_3P_A')] einfach bitten, die Vorstellung zu ändern und sie [target.GetTitledFirstName] zu widmen. [target.Custom('DE_PRO_PER_S_3P_D')] gilt meine Liebe."
  seduce_ongoing.4001.desc.court_musician:0 "[dummy_musician_gender.Custom('DE_ART_IND_N')|U] [target.Custom('MusicalPerformer')] wird bald am Hof von [court_location.GetNameNoTier] auftreten. Man könnte [dummy_musician_gender.Custom('DE_PRO_PER_S_3P_A')] einfach bitten, die Vorstellung zu ändern und sie [target.GetTitledFirstName] zu widmen. [target.Custom('DE_PRO_PER_S_3P_D')] gilt meine Zuneigung.\n\nWahlweise könnte ich meinen $court_musician_court_position$ bitten, sich dem Auftritt anzuschließen. Gemeinsam könnten sie Stücke spielen, die mich vor dem Publikum hier gut aussehen lassen."
  seduce_ongoing.4001.a:0 "Das wird eine mutige Erklärung an das Objekt meiner Begierde!"

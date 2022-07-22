@@ -83,7 +83,7 @@
  #Success
  learn_commander_trait.1301.desc:0 "[teacher.GetTitledFirstName] подъезжает ко мне. «Здорово! — кричит [teacher.GetSheHe]. — Мои войска и близко не подошли к вашему обозу»."
  #Failure
- learn_commander_trait.1401.desc:0 "Казалось, все было хорошо — ровно до того момента, когда до меня дошло, что конница выполняла отвлекающий маневр!\n\nИ вот уже [teacher.GetTitledFirstName] держит в руке яблоко с одной из моих телег. «Думаю, я [Select_CString(teacher.IsFemale, 'поняла', 'понял' )], в чем вы ошиблись», — предполагает [teacher.GetSheHe] [teacher.Custom('quirk_pos_pp')]."
+ learn_commander_trait.1401.desc:0 "Казалось, все было хорошо — ровно до того момента, когда до меня дошло, что конница выполняла отвлекающий маневр!\n\nИ вот уже [teacher.GetTitledFirstName] держит в руке яблоко с одной из моих телег. «Думаю, я [Select_CString(teacher.IsFemale, 'поняла', 'понял' )], в чем вы ошиблись», — предполагает [teacher.GetSheHe] и [teacher.Custom('quirk_pos_pp')]."
 
 #Military Engineer
  learn_commander_trait.02.t:0 "Отработка мастерства"

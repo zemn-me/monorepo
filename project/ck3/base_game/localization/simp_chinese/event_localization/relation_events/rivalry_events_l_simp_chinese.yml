@@ -103,22 +103,22 @@
  rivalry.1024.tt:0 "耻辱败北"
 
  rivalry.1021.t:0 "大获全胜"
- rivalry.1021.desc:1 "从我与[from_rival.GetTitledFirstName]的决斗开始后，显然我占了上风。我抓住优势，不断打乱[from_rival.GetHerHim]的平衡。很快[from_rival.GetSheHe]犯了一个错误，空门大开，我很快抓住机会[ROOT.GetCharacter.Custom('SignatureWeaponCritical')][from_rival.GetHerHis]的手臂，结束了这次比试！\n\n事实证明，我的胜利快速而明确，让一切都变好多了。"
- rivalry.1021.a:1 "我证明了我自己比[from_rival.GetFirstNamePossessiveNoTooltip]强！"
+ rivalry.1021.desc:2 "从我与[duel_loser.GetTitledFirstName]的决斗开始后，显然我占了上风。我抓住优势，不断打乱[duel_loser.GetHerHim]的平衡。很快[duel_loser.GetSheHe]犯了一个错误，空门大开，我很快抓住机会[ROOT.GetCharacter.Custom('SignatureWeaponCritical')][duel_loser.GetHerHis]的手臂，结束了这次比试！\n\n事实证明，我的胜利快速而明确，让一切都变好多了。"
+ rivalry.1021.a:2 "我证明了我自己比[duel_loser.GetFirstNamePossessiveNoTooltip]强！"
 
  rivalry.1022.t:0 "险胜"
- rivalry.1022.desc:2 "与[duel_loser.GetTitledFirstName]的决斗开始后，我才意识到我们比我所预料的更加旗鼓相当。我们经过数轮交锋，击打格挡、进击后退，两人都无法保有持续优势。\n\n最终，我们都开始陷入精疲力尽的苦战，而对手突然间空门大开，让我有机会[ROOT.GetCharacter.Custom('SignatureWeaponCritical')]到[from_rival.GetHerHis]的腿，从而结束了这场比试！"
+ rivalry.1022.desc:3 "与[duel_loser.GetTitledFirstName]的决斗开始后，我才意识到我们比我所预料的更加旗鼓相当。我们经过数轮交锋，击打格挡、进击后退，两人都无法保有持续优势。\n\n最终，我们都开始陷入精疲力尽的苦战，而对手突然间空门大开，让我有机会[ROOT.GetCharacter.Custom('SignatureWeaponCritical')]到[duel_loser.GetHerHis]的腿，从而结束了这场比试！"
  rivalry.1022.a:0 "我的胜利证明了我的正确性。"
 
  rivalry.1023.t:0 "惜败"
- rivalry.1023.desc:2 "当[from_rival.GetTitledFirstName]和我开始决斗后我才意识到[from_rival.GetSheHe]比我预想中的更强大。战斗很激烈，我们两人互相击打格挡，同时找寻对方的空门。\n\n最终我开始感到体力耗尽的折磨，我的防备稍稍走神了一小会儿，此时[from_rival.GetFirstName]抓住机会用[from_rival.GetHerHis]的[from_rival.Custom('signature_weapon')][from_rival.Custom('SignatureWeaponCritical')]我的手臂。"
+ rivalry.1023.desc:3 "当[duel_winner.GetTitledFirstName]和我开始决斗后我才意识到[duel_winner.GetSheHe]比我预想中的更强大。战斗很激烈，我们两人互相击打格挡，同时找寻对方的空门。\n\n最终我开始感到体力耗尽的折磨，我的防备稍稍走神了一小会儿，此时[duel_winner.GetFirstName]抓住机会用[duel_winner.GetHerHis]的[duel_winner.Custom('signature_weapon')][duel_winner.Custom('SignatureWeaponCritical')]我的手臂。"
  rivalry.1023.desc.end:0 "由于失血严重，我别无选择只能承认比试失败。"
  rivalry.1023.desc.death:0 "我的伤势压垮了我，我一下子瘫倒在地。"
- rivalry.1023.a:1 "我下次会赢你，[from_rival.GetTitledFirstNameNoTooltip]！"
+ rivalry.1023.a:2 "我下次会赢你，[duel_winner.GetTitledFirstNameNoTooltip]！"
  rivalry.1023.a.death:0 "眼前好黑……"
 
  rivalry.1024.t:0 "耻辱败北"
- rivalry.1024.desc:2 "[from_rival.GetTitledFirstName]和我会面，决斗一开始，[from_rival.GetSheHe]就没有浪费时间，直接展开行动！由于毫无防备，我只能仓皇应对，而[from_rival.GetFirstNamePossessive]无休止的攻击让我没有扭转形势的空间。\n\n很快[from_rival.GetSheHe]就掠过了我的防备，并用[from_rival.GetHerHis]的[from_rival.Custom('signature_weapon')][from_rival.Custom('SignatureWeaponCriticalPresent')]了我的大腿，"
+ rivalry.1024.desc:3 "[duel_winner.GetTitledFirstName]和我会面，决斗一开始，[duel_winner.GetSheHe]就没有浪费时间，直接展开行动！由于毫无防备，我只能仓皇应对，而[duel_winner.GetFirstNamePossessive]无休止的攻击让我没有扭转形势的空间。\n\n很快[duel_winner.GetSheHe]就掠过了我的防备，并用[duel_winner.GetHerHis]的[duel_winner.Custom('signature_weapon')][duel_winner.Custom('SignatureWeaponCriticalPresent')]了我的大腿，"
  rivalry.1024.desc.end:0 "显然这是比试结束的标记。我令人尴尬的失败让我无地自容，羞愧万分！"
  rivalry.1024.desc.death:0 "让我瘫倒在地。"
  rivalry.1024.a:0 "我在耻辱中一瘸一拐地回家了。"

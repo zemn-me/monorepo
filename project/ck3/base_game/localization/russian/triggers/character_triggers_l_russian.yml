@@ -323,29 +323,29 @@
 
  BYZANTINE_CLAIMANT_IS_CELIBATE:1 "[CHARACTER.GetShortUIName] [Select_CString(CHARACTER.IsFemale, 'должна быть способна', 'должен быть способен' )] произвести на свет наследника"
 
- IS_THEOCRATIC_COURT_CHAPLAIN:1 "[CHARACTER.GetShortUIName] — [GetFaithDoctrine('doctrine_theocracy_temporal').GetName] [CHARACTER.GetCouncilTitle|l]"
- NOT_IS_THEOCRATIC_COURT_CHAPLAIN:1 "[CHARACTER.GetShortUIName] — НЕ [GetFaithDoctrine('doctrine_theocracy_temporal').GetName] [CHARACTER.GetCouncilTitle|l]"
+ IS_THEOCRATIC_COURT_CHAPLAIN:1 "[CHARACTER.GetShortUIName] — [GetFaithDoctrine('doctrine_theocracy_temporal').GetBaseName] [CHARACTER.GetCouncilTitle|l]"
+ NOT_IS_THEOCRATIC_COURT_CHAPLAIN:1 "[CHARACTER.GetShortUIName] — НЕ [GetFaithDoctrine('doctrine_theocracy_temporal').GetBaseName] [CHARACTER.GetCouncilTitle|l]"
 
  PARTITION_PRIMARY_HEIR_UNFAIR:2 "[GetLaw('partition_succession_law').GetName] гласит, что [Concept( 'heir', Select_CString(recipient.IsFemale, 'ваша наследница' 'ваш наследник' ))|E] [CHARACTER.GetShortUIName] не может получить титул, который не положен [CHARACTER.GetHerHim] по наследству"
 
  GHW_DAYS_UNTIL_LAUNCH:0 "До начала войны осталось $NUM|V$ дн."
  NOT_GHW_DAYS_UNTIL_LAUNCH:0 "До начала войны осталось менее $NUM|V$ дн."
 
- HAS_FAITH_TRIGGER:0 "[faith|E]: [FAITH.GetName]"
- DOES_NOT_HAVE_FAITH_TRIGGER:0 "[faith|E]: НЕ [FAITH.GetName|l]"
- I_HAVE_FAITH_TRIGGER:1 "Ваша [faiths|El]: [FAITH.GetName]"
- I_DO_NOT_HAVE_FAITH_TRIGGER:1 "Ваша [faith|El] не [FAITH.GetName|l]"
+ HAS_FAITH_TRIGGER:0 "[faith|E]: [FAITH.GetAdjective]"
+ DOES_NOT_HAVE_FAITH_TRIGGER:0 "[faith|E]: НЕ [FAITH.GetAdjective|l]"
+ I_HAVE_FAITH_TRIGGER:1 "Ваша [faiths|El]: [FAITH.GetAdjective]"
+ I_DO_NOT_HAVE_FAITH_TRIGGER:1 "Ваша [faith|El] не [FAITH.GetAdjective|l]"
 
- THEY_HAVE_FAITH_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]: [FAITH.GetName]"
- THEY_DO_NOT_HAVE_FAITH_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]: НЕ [FAITH.GetName|l]"
+ THEY_HAVE_FAITH_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]: [FAITH.GetAdjective]"
+ THEY_DO_NOT_HAVE_FAITH_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )]: НЕ [FAITH.GetAdjective|l]"
 
- HAS_RELIGION_TRIGGER:1 "[faith|E] входит в [RELIGION.GetName|l]"
- DOES_NOT_HAVE_RELIGION_TRIGGER:2 "[faith|E] НЕ входит в [RELIGION.GetName|l]"
+ HAS_RELIGION_TRIGGER:1 "[faith|E] входит в [RELIGION.GetAdjective|l]"
+ DOES_NOT_HAVE_RELIGION_TRIGGER:2 "[faith|E] НЕ входит в [RELIGION.GetAdjective|l]"
  I_HAVE_RELIGION_TRIGGER:2 "Ваша [faith|El] входит в #L [RELIGION.GetName|l]ую#! группу"
  I_DO_NOT_HAVE_RELIGION_TRIGGER:3 "Ваша [faith|El] не входит в #L [RELIGION.GetName|l]ую#! группу"
 
- THEY_HAVE_RELIGION_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )] входит в [RELIGION.GetName|l]"
- THEY_DO_NOT_HAVE_RELIGION_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )] НЕ входит в [RELIGION.GetName|l]"
+ THEY_HAVE_RELIGION_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )] входит в [RELIGION.GetAdjective|l]"
+ THEY_DO_NOT_HAVE_RELIGION_GROUP_TRIGGER:0 "[faith|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )] НЕ входит в [RELIGION.GetAdjective|l]"
 
  I_AM_INDEPENDENT_RULER_TRIGGER:1 "Вы [Concept( 'independent', 'независимый' )|E] правитель"
  CHARACTER_IS_INDEPENDENT_RULER_TRIGGER:0 "[CHARACTER.GetShortUIName|V] — [independent|El] правитель"
@@ -389,12 +389,12 @@
  CAN_MODIFY_VASSAL_CONTRACT_THIRD:0 "[CHARACTER.GetShortUINamePossessive] может изменить свой [feudal_contract|El]"
  NOT_CAN_MODIFY_VASSAL_CONTRACT_THIRD:0 "[CHARACTER.GetShortUINamePossessive] #bold не#! может изменить свой [feudal_contract|El]"
 
- IS_RELIGIOUS_HEAD:0 "#L [CHARACTER.GetFaith.GetAdjective]ий#! глава религии"
- NOT_IS_RELIGIOUS_HEAD:0 "#bold Не#! глава #L [CHARACTER.GetFaith.GetAdjective|l]ой#! религии"
- I_AM_RELIGIOUS_HEAD:1 "Вы глава #L [CHARACTER.GetFaith.GetAdjective|l]ой#! религии"
- NOT_I_AM_RELIGIOUS_HEAD:1 "Вы #bold не#! глава #L [CHARACTER.GetFaith.GetAdjective|l]ой#! религии"
- THEY_IS_RELIGIOUS_HEAD:0 "[CHARACTER.GetShortUIName|U] — глава #L [CHARACTER.GetFaith.GetAdjective|l]ой#! религии"
- NOT_THEY_IS_RELIGIOUS_HEAD:0 "[CHARACTER.GetShortUIName|U] #bold не#! глава #L [CHARACTER.GetFaith.GetAdjective|l]ой#! религии"
+ IS_RELIGIOUS_HEAD:0 "#L [CHARACTER.GetFaith.GetName]ий#! глава религии"
+ NOT_IS_RELIGIOUS_HEAD:0 "#bold Не#! глава #L [CHARACTER.GetFaith.GetName|l]ой#! религии"
+ I_AM_RELIGIOUS_HEAD:1 "Вы глава #L [CHARACTER.GetFaith.GetName|l]ой#! религии"
+ NOT_I_AM_RELIGIOUS_HEAD:1 "Вы #bold не#! глава #L [CHARACTER.GetFaith.GetName|l]ой#! религии"
+ THEY_IS_RELIGIOUS_HEAD:0 "[CHARACTER.GetShortUIName|U] — глава #L [CHARACTER.GetFaith.GetName|l]ой#! религии"
+ NOT_THEY_IS_RELIGIOUS_HEAD:0 "[CHARACTER.GetShortUIName|U] #bold не#! глава #L [CHARACTER.GetFaith.GetName|l]ой#! религии"
 
  DIPLOMACY_IS_AT_LEAST:2 "[diplomacy|E] не ниже [diplomacy_i]$NUM|V0$"
  MY_DIPLOMACY_IS_AT_LEAST:3 "Ваш уровень [Concept( 'diplomacy', 'дипломатии' )|E] не ниже [diplomacy_i]$NUM|V0$"
@@ -544,22 +544,22 @@
  CHARACTER_DOES_NOT_HAVE_A_WEAK_HOOK_ON_CHARACTER:0 "[CHARACTER.GetShortUIName|U] не имеет [weak_hook|El] на [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
  I_DO_NOT_HAVE_A_WEAK_HOOK_ON_CHARACTER:1 "У вас #bold нет#! [Concept( 'weak_hook', 'слабого влияния' )|E] на персонажа [TARGET_CHARACTER.GetShortUIName]"
 
- HAS_THIS_OPINION_OF_CHARACTER_OR_ABOVE:0 "[opinion|E] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
- TARGET_HAS_THIS_OPINION_OF_CHARACTER_OR_ABOVE:0 "[TARGET_CHARACTER.GetShortUINamePossessive] имеет [opinion|El] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
+ HAS_THIS_OPINION_OF_CHARACTER_OR_ABOVE:0 "[opinion|E] о [Select_CString(CHARACTER.IsPlayer, '', 'персонаже ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
+ TARGET_HAS_THIS_OPINION_OF_CHARACTER_OR_ABOVE:0 "[opinion|E] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )] о [Select_CString(CHARACTER.IsPlayer, '', 'персонаже ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
 
  HAS_THIS_OPINION_OF_TARGET_OR_ABOVE:0 "[opinion|E] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
  I_HAVE_THIS_OPINION_OF_TARGET_OR_ABOVE:1 "Ваше [opinion|El] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
- CHARACTER_HAS_THIS_OPINION_OF_TARGET_OR_ABOVE:0 "[CHARACTER.GetShortUINamePossessive] имеет [opinion|El] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
+ CHARACTER_HAS_THIS_OPINION_OF_TARGET_OR_ABOVE:0 "[opinion|E] [Select_CString(CHARACTER.IsPlayer, '', 'персонажа ' )][CHARACTER.GetNamePossessiveOrMy][Select_CString(CHARACTER.IsPlayer, 'его персонажа', '' )] о [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонаже ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'ем персонаже', '' )] $COMPARATOR$ $NUM|V0$"
 
  STRESS_LEVEL_IS_AT_LEAST:1 "[stress_level|E] не ниже [stress_i]$NUM|V0$"
  MY_STRESS_LEVEL_IS_AT_LEAST:2 "Ваш [stress_level|El] не ниже [stress_i]$NUM|V0$"
- THEIR_STRESS_LEVEL_IS_AT_LEAST:1 "[CHARACTER.GetShortUINamePossessive|V] имеет [stress_level|E] не ниже [stress_i]$NUM|V0$"
+ THEIR_STRESS_LEVEL_IS_AT_LEAST:1 "[CHARACTER.GetShortUINamePossessive|V] имеет [stress_level|El] не ниже [stress_i]$NUM|V0$"
  STRESS_LEVEL_IS_LESS_THAN:1 "Имеет [stress_level|El] ниже [stress_i]$NUM|V0$"
  MY_STRESS_LEVEL_IS_LESS_THAN:2 "Ваш [stress_level|El] ниже [stress_i]$NUM|V0$"
  THEIR_STRESS_LEVEL_IS_LESS_THAN:2 "[CHARACTER.GetShortUIName|V] имеет [stress_levelEl] ниже [stress_i]$NUM|V0$"
 
  IS_THE_SPOUSE_OF_CHARACTER:0 "[spouse|E] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
- CHARACTER_IS_THE_SPOUSE_OF_CHARACTER:0 "[CHARACTER.GetShortUIName|U] — [spouse|E] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
+ CHARACTER_IS_THE_SPOUSE_OF_CHARACTER:0 "[CHARACTER.GetShortUIName|U] — [spouse|El] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
  I_AM_THE_SPOUSE_OF_CHARACTER:1 "Вы и [TARGET_CHARACTER.GetShortUINamePossessive] — [Concept( 'spouse', 'супруги' )|E]"
  IS_NOT_THE_SPOUSE_OF_CHARACTER:0 "#bold Не#! [spouse|El] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
  CHARACTER_IS_NOT_THE_SPOUSE_OF_CHARACTER:0 "[CHARACTER.GetShortUIName|U] и [TARGET_CHARACTER.GetShortUINamePossessive] #bold не#! [Concept( 'spouse', 'супруги' )|E]"
@@ -724,10 +724,10 @@
  NOT_TYRANNY_TRIGGER_FIRST:1 "У вас менее $NUM|E$ [Concept( 'tyranny', 'тирании' )|E]"
  NOT_TYRANNY_TRIGGER_THIRD:1 "[CHARACTER.GetShortUIName|U] имеет менее $NUM|E$ [Concept( 'tyranny', 'тирании' )|E]"
  
- WOMENMEN_ARE_ALLOWED_TO_BE_WARRIORS_IN_FAITH:0 "[TARGET_CHARACTER.GetFaith.GetName] считает, что [CHARACTER.GetWomenMen|U] могут сражаться"
- WOMENMEN_ARE_NOT_ALLOWED_TO_BE_WARRIORS_IN_FAITH:0 "[TARGET_CHARACTER.GetFaith.GetName] считает, что [CHARACTER.GetWomenMen|U] #bold не#! могут сражаться"
- WOMENMEN_ARE_ALLOWED_TO_BE_WARRIORS_IN_CULTURE:0 "#L [TARGET_CHARACTER.GetCulture.GetName]ая#! [Concept( 'culture', 'культура' )|E] позволяет, чтобы [CHARACTER.GetWomenMen] были воинами"
- WOMENMEN_ARE_NOT_ALLOWED_TO_BE_WARRIORS_IN_CULTURE:0 "#L [TARGET_CHARACTER.GetCulture.GetName]ая#! [Concept( 'culture', 'культура' )|E] #bold не#! позволяет, чтобы [CHARACTER.GetWomenMen] были воинами"
+ WOMENMEN_ARE_ALLOWED_TO_BE_WARRIORS_IN_FAITH:0 "[TARGET_CHARACTER.GetFaith.GetAdjective] считает, что [CHARACTER.GetWomenMen|U] могут сражаться"
+ WOMENMEN_ARE_NOT_ALLOWED_TO_BE_WARRIORS_IN_FAITH:0 "[TARGET_CHARACTER.GetFaith.GetAdjective] считает, что [CHARACTER.GetWomenMen|U] #bold не#! могут сражаться"
+ WOMENMEN_ARE_ALLOWED_TO_BE_WARRIORS_IN_CULTURE:0 "#L [TARGET_CHARACTER.GetCulture.GetCollectiveNoun]ая#! [Concept( 'culture', 'культура' )|E] позволяет, чтобы [CHARACTER.GetWomenMen] были воинами"
+ WOMENMEN_ARE_NOT_ALLOWED_TO_BE_WARRIORS_IN_CULTURE:0 "#L [TARGET_CHARACTER.GetCulture.GetCollectiveNoun]ая#! [Concept( 'culture', 'культура' )|E] #bold не#! позволяет, чтобы [CHARACTER.GetWomenMen] были воинами"
  
  #has_imprisonment_reason
  HAS_AN_IMPRISONMENT_REASON_ON_CHARACTER:0 "Имеет законный [Concept( 'imprisonment_reason', 'повод для заточения' )|E] [Select_CString(TARGET_CHARACTER.IsPlayer, '', 'персонажа ' )][TARGET_CHARACTER.GetNamePossessiveOrMy][Select_CString(TARGET_CHARACTER.IsPlayer, 'его персонажа', '' )]"
@@ -747,7 +747,7 @@
 
  character_this_equal:1 "Цель — [CHARACTER.GetShortUIName]"
  character_scope_equal:1 "Цель — [CHARACTER.GetShortUIName]"
- none_this_equal:1 "Цель — [CHARACTER.GetShortUIName]"
+ none_this_equal:2 "Цель неизвестна"
  
  #completely_controls
  YOU_COMPLETELY_CONTROL_TITLE_DESC:0 "Вы [Concept( 'completely_control', 'полностью контролируете' )|E] титул [TARGET_TITLE.GetNameNoTier]"
@@ -816,7 +816,7 @@
 
  CHARACTER_HAS_COMMANDER_TRAIT_SCOPE_DOES_NOT_TRIGGER:0 "[TARGET_CHARACTER.GetShortUIName|U] [Select_CString(TARGET_CHARACTER.IsPlayer, 'обладаете', 'обладает' )] свойством командира, которого не имеет [CHARACTER.GetShortUIName|U]"
 
- BELONGS_TO_CULTURE_TRIGGER:0 "Принадлежит к #L [CHARACTER.Culture.GetName|l]ой#! [Concept( 'culture', 'культуре' )|E]"
+ BELONGS_TO_CULTURE_TRIGGER:0 "Принадлежит к #L [CHARACTER.Culture.GetCollectiveNoun|l]ой#! [Concept( 'culture', 'культуре' )|E]"
 
  SAME_SEX_AS_CHARACTER_TRIGGER:0 "Того же пола, что и [CHARACTER.GetShortUIName|U]"
  

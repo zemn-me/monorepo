@@ -1,8 +1,8 @@
 ﻿l_french:
- death_management.1000.killed.tt:0 "Votre [THIS.Char.Custom2('RelationToMe', SCOPE.sC('dead_character'))] [dead_character.Custom('FR_le_Char_Pi')][dead_character.GetTitledFirstName] a été tué[dead_character.Custom('FR_E')] par [killer.Custom('FR_le_Char_Pi')][killer.GetTitledFirstName]."
+ death_management.1000.killed.tt:0 "[dead_character.Custom('FR_le_Char_Pi')|U][dead_character.GetTitledFirstName] a été tué[dead_character.Custom('FR_E')] par [killer.Custom('FR_le_Char_Pi')][killer.GetTitledFirstName]." # [LocEditor:ForFutureBatchExport]
  death_management.1000.t:0 "Jusqu’à ce que la mort nous sépare"
  death_management.1000.murder:0 "[dead_character.Custom('FR_le_Char_Pi')|U][dead_character.GetTitledFirstName] a été assassiné[dead_character.Custom('FR_E')] !\n\n"
- death_management.1000.like:0 "Je demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint. Oh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]. La vie ne sera pas la même sans vous."
+ death_management.1000.like:0 "Je me demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint. Oh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]. La vie ne sera pas la même sans vous."
  death_management.1000.neutral:0 "M[dead_character.Custom('FR_OnA')] ch[dead_character.Custom('FR_ErEre')] [dead_character.GetFirstName]. Je ne vous ai peut-être pas aimé, mais votre trépas me touche plus que je ne l’aurais cru. Vous avez toujours été là. Ai-je pensé que vous le seriez définitivement ? Il y a tant de choses que je n’ai pas dites..."
  death_management.1000.dislike:0 "Alors que m[dead_character.Custom('FR_OnA')] [dead_character.GetWifeHusband] a rendu l’âme, le soulagement m’envahit. Je devrais peut-être avoir honte, mais en vérité, il n’y a pas eu d’amour entre nous. Je suis enfin libre de recommencer ma vie !"
  death_management.1000.a:0 "Au moins les souvenirs restent."
@@ -29,6 +29,7 @@
 
  death_management.1005.t:0 "Les souvenirs restent"
  death_management.1005.desc:0 "Oh, [dead_character.GetFirstName]. Si vous étiez toujours avec moi, je sais que vous me diriez d’être fort[ROOT.Char.Custom('FR_E')] et que je finirais par aller mieux. Et vous auriez raison, comme toujours, mais je dois d’abord maudire et pleurer. Comment pourrais-je ne pas le faire alors que vous avez quitté ce monde ?"
+ death_management.1005.desc.ritual_best_friend:0 "[dead_character.GetFirstName] est mort[dead_character.Custom('FR_E')] ! M[dead_character.Custom('FR_OnA')] meilleur[dead_character.Custom('FR_E')] et plus fidèle ami[dead_character.Custom('FR_E')] a été emporté[dead_character.Custom('FR_E')] par la froide étreinte [ROOT.Char.GetFaith.DeathDeityNamePossessive]. Je pleure, je gémis, j'arrache mes cheveux et mes vêtements, mais je sais que je ne [dead_character.Custom('FR_LeLa')] reverrai jamais.\n\nComment... comment pourrais-je continuer ?\n\n[dead_character.GetFirstNameNoTooltip], m[dead_character.Custom('FR_OnA')] ch[dead_character.Custom('FR_ErEre')] [dead_character.GetFirstNameNoTooltip] le voudrait, et je dois espérer que son souvenir me soutiendra en ces temps sombres, mais sans [dead_character.Custom('FR_LuiElle')], la vie ressemble à une bougie sans flamme."
  death_management.1005.a:0 "Vous ne serez jamais oublié[dead_character.Custom('FR_E')], mon ami[dead_character.Custom('FR_E')]."
  death_management.1005.a.tt:3 "Votre ami[dead_character.Custom('FR_E')] [dead_character.Custom('FR_le_Char_Pi')][dead_character.GetTitledFirstName] a [THIS.Char.Custom('DiedHouse_arrest')]."
  death_management.friend.desc:4 "Votre ami[dead_character.Custom('FR_E')] [dead_character.Custom('FR_le_Char_Pi')][dead_character.GetTitledFirstName] est mort[dead_character.Custom('FR_E')]."
@@ -86,7 +87,7 @@
  death_management.2000.t.root_killer:0 "Jusqu’à ce que je nous sépare"
  death_management.2000.t.no_killer:0 "Arraché[dead_character.Custom('FR_E')]"
  death_management.2000.murderer:0 "Oh, [dead_character.GetFirstName], notre vie ensemble aurait pu être plus longue, mais cela devait se passer ainsi.\n\nJe ne me réjouis pas d’avoir votre sang sur les mains, mais je sais que si vous pouviez le dire, vous auriez voulu que je passe à autre chose et que je trouve le bonheur."
- death_management.2000.like:0 "Je demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint.\n\nOh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]."
+ death_management.2000.like:0 "Je me demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint.\n\nOh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]."
  death_management.2000.like_end_killer:0 "Je ne peux pas me sortir de la tête l’image [prison_holder.Custom('FR_du_Char_Pi')][prison_holder.GetTitledFirstName] qui met fin à votre vie."
  death_management.2000.like_end:0 "Je ne peux pas me sortir de la tête l’image de votre trépas dans les cachots [prison_holder.Custom('FR_du_Char_Pi')][prison_holder.GetTitledFirstName]."
  death_management.2000.neutral:0 "M[dead_character.Custom('FR_OnA')] ch[dead_character.Custom('FR_ErEre')] [dead_character.GetFirstName]. Je ne vous ai peut-être pas aimé, mais votre trépas me touche plus que je ne l’aurais cru. Vous avez toujours été là."
@@ -203,7 +204,7 @@
  death_management.prisoner.desc:0 "M[dead_character.Custom('FR_OnA')] prisonni[dead_character.Custom('FR_ErEre')], [dead_character.Custom('FR_le_Char_Pi')][dead_character.GetTitledFirstName], est mort[dead_character.Custom('FR_E')] dans mes cachots."
 
  death_management.4000.t:0 "Jusqu’à ce que la mort nous sépare"
- death_management.4000.like_opening:0 "Je demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint.\n\n"
+ death_management.4000.like_opening:0 "Je me demande comment un cœur peut supporter une telle souffrance. C’est impossible ! Pourtant, je suis là, le cœur battant tandis que le vôtre s’est éteint.\n\n"
  death_management.4000.like_my_prison:0 "Oh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]. Me croiriez-vous si je vous disais que vous m’êtes toujours ch[dead_character.Custom('FR_ErEre')] ? Même après tout ce que j’ai fait ?"
  death_management.4000.like:0 "Oh, [dead_character.GetFirstName], [dead_character.Custom('LoverPetName_possessive')]. Je ne peux pas me sortir de la tête l’image de votre trépas, alors que vous étiez enfermé[dead_character.Custom('FR_E')] par [house_arrest_holder.Custom('FR_le_Char_Pi')][house_arrest_holder.GetTitledFirstName]."
  death_management.4000.neutral_opening:0 "M[dead_character.Custom('FR_OnA')] ch[dead_character.Custom('FR_ErEre')] [dead_character.GetFirstName]. Je ne vous ai peut-être pas aimé, mais votre trépas me touche plus que je ne l’aurais cru.\n\n"

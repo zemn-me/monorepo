@@ -48,7 +48,7 @@
  tradition_legalistic_desc:1 "Diese Kultur betrachtet Recht und Gesetz sowie die Kodifikation von Gesetzen als den wichtigsten Baustein für eine zivilisierte Gesellschaft."
  tradition_warrior_culture_name:0 "Kriegerkultur"
  tradition_warrior_culture_desc:0 "Dieser Kultur sind Kriegsführung und Stärke wichtiger als alles andere. Kindern wird schon früh beigebracht, wie man kämpft, und ihnen wird vom Werdegang eines Gelehrten abgeraten. Schwäche wird nicht toleriert."
- tradition_philosopher_culture_name:0 "Denkerkultur"
+ tradition_philosopher_culture_name:0 "Philosophische kultur"
  tradition_philosopher_culture_desc:0 "Diese Kultur fördert die Nachdenklichkeit und die Selbstreflexion."
  tradition_chivalry_name:0 "Ritterlichkeit"
  tradition_chivalry_desc:1 "Diese Kultur hat die Ritterlichkeit und den ritterlichen Verhaltenskodex als gesellschaftliches Mittel zur Regelung des Verhaltens verinnerlicht. Kampfgeschick, Pflicht, Ehre und moralisches Handeln werden hoch angesehen, ebenso wie schlechte Dichtkunst und romantische Literatur."
@@ -350,10 +350,10 @@
  culture_parameter_adulterer_fornicator_penalties:0 "Die [traits|E] [GetTrait('adulterer').GetName(GetNullCharacter)] und [GetTrait('fornicator').GetName(GetNullCharacter)] werden verachtet."
  culture_parameter_hostile_scheme_success_chance_vs_spouse_penalty:0 "[success_chance|E] für [hostile_scheme|E] gegen [spouses|E]: #N -50 %#!."
  culture_parameter_cannot_divorce:0 "Kann keine [Concept('divorce', 'Ehescheidungs')|E]-[traits|E]-[interactions|E] verwenden."
- culture_parameter_strong_traits_more_common:0 "The [trait|E] [GetTrait('strong').GetName(GetNullCharacter)] ist verbreiteter."
+ culture_parameter_strong_traits_more_common:0 "Die [trait|E] [GetTrait('strong').GetName(GetNullCharacter)] ist verbreiteter."
  culture_parameter_minimum_prowess_for_knights:0 "[knights|E] #EMP müssen#! mindestens [prowess_i]#V 12#! [prowess|E] haben."
  culture_parameter_blademaster_trait_bonuses:0 "Die [traits|E]-Reihe [GetTrait('blademaster_2').GetName(GetNullCharacter)] erhält weitere Boni."
- culture_parameter_prowess_from_martial_education:0 "The [martial|E]-[Concept('education', 'Ausbildungs')|E]-[traits|E] gewähren auch [prowess|E]."
+ culture_parameter_prowess_from_martial_education:0 "Die [martial|E]-[Concept('education', 'Ausbildungs')|E]-[traits|E] gewähren auch [prowess|E]."
  culture_parameter_martial_education_more_valued:0 "Die [martial|E]-[Concept('education', 'Ausbildungs')|E]-[traits|E] sind höher angesehen."
  culture_parameter_high_prowess_ignores_knight_restrictions:0 "Die meisten Einschränkungen dazu, wer ein [knight|E] sein kann, entfallen für Charaktere mit [prowess_i]#V 10#! oder mehr [prowess|E]."
  culture_parameter_blademaster_traits_more_common:0 "[knights|E] erlangen in Schlachten öfter die [traits|E] [GetTrait('blademaster_2').GetName(GetNullCharacter)]."
@@ -786,6 +786,7 @@
  not_bellicose_or_stoic_desc:1 "Die [culture|E] hat nicht das [ethos|E] $ethos_bellicose_name$ oder $ethos_stoic_name$."
  not_bellicose_or_bureaucratic_desc:2 "Die [culture|E] hat nicht das [ethos|E] $ethos_bellicose_name$ oder $ethos_bureaucratic_name$."
  not_bellicose_or_spiritual_desc:1 "Die [culture|E] hat nicht das [ethos|E] $ethos_bellicose_name$ oder $ethos_spiritual_name$."
+ not_bellicose_or_courtly_desc:0 "Die [culture|E] hat nicht das [ethos|E] „$ethos_bellicose_name$“ oder „$ethos_courtly_name$“."
  not_stoic_or_bureaucratic_desc:1 "Die [culture|E] hat nicht das [ethos|E] $ethos_stoic_name$ oder $ethos_bureaucratic_name$."
  not_stoic_or_communal_desc:0 "Die [culture|E] hat nicht das [ethos|E] $ethos_stoic_name$ oder $ethos_communal_name$."
  not_stoic_or_spiritual_desc:0 "Die [culture|E] hat nicht das [ethos|E] $ethos_stoic_name$ oder $ethos_spiritual_name$."
@@ -824,6 +825,7 @@
 
  ## Egalitarian.
  not_egalitarian_stoic_or_bureaucratic_desc:1 "Die [culture|E] hat nicht das [ethos|E] $ethos_egalitarian_name$, $ethos_stoic_name$ oder $ethos_bureaucratic_name$."
+ not_egalitarian_or_courtly_desc:0 "Die [culture|E] hat nicht das [ethos|E] „$ethos_egalitarian_name$“ oder „$ethos_courtly_name$“."
 
  ## Communal.
  not_communal_or_spiritual_desc:0 "Die [culture|E] hat nicht das [ethos|E] Gemeinschaftlich oder Spirituell."
@@ -918,6 +920,8 @@
  lacks_development_02_innovation_desc:1 "Die [culture|E] hat die [innovation|E] #high $innovation_development_02$#! noch nicht entdeckt."
  lacks_baliffs_innovation_desc:0 "Die [culture|E] hat die [innovation|E] #high $innovation_baliffs$#! noch nicht entdeckt."
  culture_acceptance_cost_desc:0 "Die [culture|E] hat nicht mindestens #V [EmptyScope.ScriptValue('xenophilic_acceptance_cost_value')|0] %#! [cultural_acceptance|E] bei #V [EmptyScope.ScriptValue('xenophilic_nr_of_cultures_value')|0]#! anderen Kulturen."
+ lack_iberian_heritage_or_language_penalty_desc:0 "Der [culture|E] fehlt eine $heritage_iberian_name$e [heritage|E] #EMP und#! das [culture_head|E] spricht nicht die $language_iberian_name$e [language|E]."
+ lack_martial_learning_or_chess_board_penalty_desc:0 "Ihr habt weder mindestens [EmptyScope.ScriptValue('very_high_skill_rating')|0] [martial|E] noch mindestens [EmptyScope.ScriptValue('very_high_skill_rating')|0] [learning|E] noch ein [artifact|E], das Euch [board_games|E] spielen lässt."
 
  culture_head_lacks_storytelling_traits_desc:1 "Ihr habt nicht die [traits|E] [GetTrait('poet').GetName(GetNullCharacter)], [GetTrait('arrogant').GetName(GetNullCharacter)] oder [GetTrait('journaller').GetName(GetNullCharacter)]."
  rulers_lacks_storytelling_traits_desc:0 "Die [culture|E] hat nicht mindestens #V 5#! [rulers|E] mit den [traits|E] [GetTrait('poet').GetName(GetNullCharacter)], [GetTrait('arrogant').GetName(GetNullCharacter)] oder [GetTrait('journaller').GetName(GetNullCharacter)]."

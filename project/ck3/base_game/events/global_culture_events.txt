@@ -16,9 +16,12 @@
 # global_culture.0001-0009																#
 #########################################################################################
 
+# Disabled per the axing of Visigothic: to reenable, remove the "always = no" on the trigger for this in yearly_on_actions.
+
 global_culture.0001 = {
 	type = empty
 	hidden = yes
+	orphan = yes
 	
 	immediate = {
 		# Save scopes for player notification events.

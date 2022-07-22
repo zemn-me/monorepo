@@ -43,10 +43,10 @@
  #START EVENT: For Owner (target's reaction)
  court_ongoing.court_start_song.intro.0503.desc:1 "¡He encontrado una clásica balada de amor [target.GetCulture.GetNameNoTooltip] que encaja perfectamente con [target.GetFirstName]! Practico una y otra vez, ¡todo debe ser perfecto!\n\n Encuentro a mi [target.Custom('LoverPetName')] paseando por los jardines de [target_location.GetNameNoTooltip], rodead[target.Custom('ES_OA')] por sus amistades. Con el corazón batiendo como un martillo, me arrodillo ante [target.Custom('ES_ElElla')] y canto."
  court_ongoing.court_start_song.success.0503.desc:1 "\n\nLas mejillas de [target.GetFirstNameNoTooltip] se tornan de un tono rojo granada, pero no me interrumpe. Sus acompañantes parecen contentos o celosos, ¡seguramente sea una buena señal!\n\n«Tenéis una voz hermosa, mi [ROOT.Char.Custom('ES_SennorSennora')]», dice antes de marcharse corriendo. Sus amistades [target.Custom('ES_LoLa')] siguen. Me pongo de pie, pero me tiemblan las piernas al ver a todo el mundo desaparecer entre los setos. El corazón late más fuerte que nunca."
- court_ongoing.court_start_sneaky_love_letter.intro.0503.desc:0 "Mi declaración de amor es solo para [target.Custom('ES_ElLa')] [target.GetTitledFirstName]. ¡Nada más importa! Por fin pongo por escrito mis sentimientos en páginas y más páginas. La tinta apenas acaba de secarse cuando voy a sus aposentos.\n\nDejo suavemente el pergamino en su cabezal. ¿Se acostará aquí esta noche, pensando en mí?"
+ court_ongoing.court_start_sneaky_love_letter.intro.0503.desc:0 "Mi declaración de amor es solo para [target.GetTitledFirstName]. ¡Nada más importa! Por fin pongo por escrito mis sentimientos en páginas y más páginas. La tinta apenas acaba de secarse cuando voy a sus aposentos.\n\nDejo suavemente el pergamino en su cabezal. ¿Se acostará aquí esta noche, pensando en mí?"
  court_ongoing.court_start_sneaky_love_letter.success.0503.desc:1 "\n\nLa espera es insoportable. ¡Pensar en un posible rechazo me revuelve el estómago! Cuando llega su respuesta, rompo el sello con manos temblorosas.\n\n«Aunque no puedo alentaros, [owner.Custom2('RelationToMeAddress', ROOT.Char)], os agradezco vuestras amables palabras. Os saluda atentamente, [target.GetFirstNameNoTooltip]»."
  court_ongoing.court_start_poem_love_letter.intro.0503.desc:0 "La vela está casi consumida cuando termino el poema. Antes de enviarlo, lo leo por última vez.\n\n«[owner.Custom2('love_letter', SCOPE.sC('target'))]»."
- court_ongoing.court_start_sparring.same_locaton_intro.0503.desc:0 "Recluto a uno de mis soldados más veteranos y practico con [sparring_soldier.Custom('ES_ElElla')] tres días seguidos. Cuando cree que estoy list[ROOT.Char.Custom('ES_OA')], vamos al patio principal.\n\nNada más empezar el combate de entrenamiento, se congrega la gente y sus gritos pronto atraen nada menos que [target.Custom('ES_AlAla')] [target.Custom('RomanticComplimentAdjective')] [target.GetTitledFirstName].\n\n[sparring_soldier.Custom('ES_ElLa')|U] soldado lucha con valor, pero [sparring_soldier.Custom('ES_LoLa')] desarmo con una estocada final perfecta. Me arrodillo ante [target.GetFirstNameNoTooltip] y proclamo mis nobles intenciones. «Os dedico esta victoria, [target.GetTitledFirstNameNoTooltip]. ¡Honraros es mi único deseo!».\n\n"
+ court_ongoing.court_start_sparring.same_locaton_intro.0503.desc:0 "Recluto a uno de mis soldados más veteranos y practico con [sparring_soldier.GetSheHe] tres días seguidos. Cuando cree que estoy list[ROOT.Char.Custom('ES_OA')], vamos al patio principal.\n\nNada más empezar el combate de entrenamiento, se congrega la gente y sus gritos pronto atraen nada menos que [target.Custom('ES_AlAla')] [target.Custom('RomanticComplimentAdjective')] [target.GetTitledFirstName].\n\nTal soldado lucha con valor, pero [sparring_soldier.GetHerHim] desarmo con una estocada final perfecta. Me arrodillo ante [target.GetFirstNameNoTooltip] y proclamo mis nobles intenciones. «Os dedico esta victoria, [target.GetTitledFirstNameNoTooltip]. ¡Honraros es mi único deseo!».\n\n"
  court_ongoing.court_start_sparring.other_locaton_intro.0503.desc:2 "Recluto a uno de mis soldados más experimentados y partimos hacia [target_location.GetNameNoTooltip]. Practicamos la rutina tras la cabalgata de cada día.\n\nAl llegar, empezamos a luchar en el patio central. Se reúne una muchedumbre cuyos gritos atraen la atención de mi [target.Custom('RomanticComplimentAdjective')] [target.GetTitledFirstName].\n\nEl soldado lucha con valor, pero logro desarmarlo con una estocada perfecta. Me inclino ante [target.GetFirstNameNoTooltip] y declaro mis nobles intenciones. «Os dedico esta victoria, [target.Custom2('RelationToMeAddress', ROOT.Char)]. ¡Honraros es todo cuanto anhelo!».\n\n"
  court_ongoing.court_start_sparring.success.0503.desc:0 "Mi [ROOT.Char.Custom('LoverPetName')] se ha quedado sin palabras, pero es evidente que se siente halagad[target.Custom('ES_OA')]. ¿Por qué sonreiría, si no?"
  court_ongoing.public_sodomy_rejection.0503.desc:1 "La reacción de [target.GetFirstNameNoTooltip] no es la que esperaba. «¡¿Habéis perdido la cabeza, [ROOT.Char.Custom2('RelationToMeAddress', target)]?! ¿Qué estáis insinuando?»."
@@ -65,7 +65,7 @@
  court_ongoing.1000.desc:1 "He conseguido que me inviten a un banquete en [location.GetNameNoTooltip], y sentarme cerca de [target.GetFirstName]. Pese a mis intentos decididos, no consigo entablar conversación. Seguro que la intensidad de mis sentimientos [target.Custom('ES_LoLa')] ha dejado sin palabras.\n\nDe repente, se oye en nuestra mesa el pedo más fuerte que he oído jamás. Un par de invitados miran a [target.GetFirstNameNoTooltip]. ¡Debo salvar[target.Custom('ES_LoLa')]!"
  court_ongoing.1000.a:0 "¡Fui yo! ¡Yo me tiré el pedo!"
  court_ongoing.1000.a.success:0 "[target.GetFirstNameNoTooltip] se siente aliviad[target.Custom('ES_OA')] y agradecid[target.Custom('ES_OA')]"
- court_ongoing.1000.a.failure:0 "[target.GetFirstNameNoTooltip] no fue [target.Custom('ES_ElLa')] responsable del pedo"
+ court_ongoing.1000.a.failure:0 "[target.GetFirstNameNoTooltip] no fue responsable del pedo"
  court_ongoing.1000.b:0 "¡[scapegoat.GetTitledFirstNameNoTooltip]! ¡Serás guarr[scapegoat.Custom('ES_OA')] y [scapegoat.Custom('InsultNoun')]!"
  court_ongoing.1000.b.rl:0 "Intento culpar a [scapegoat.GetTitledFirstNameNoTooltip]"
  court_ongoing.1000.b.failure:0 "[target.GetFirstNameNoTooltip] se siente muy mal por [scapegoat.GetTitledFirstNameNoTooltip]"
@@ -74,9 +74,9 @@
 
  #Defend their honor through duel or diplomacy, by Mathilda Bjarnehed
  court_ongoing.1010.t:1 "$court_event_title$ El honor de un[target.Custom('ES_XA')] [target.GetLadyLord]"
- court_ongoing.1010.desc:1 "«¡Por [insulter.GetFaith.HighGodName]! ¡[target.Custom('ES_ElLa')|U] [target.GetTitledFirstName] es un[target.Custom('ES_XA')] [target.Custom('InsultNoun')] insufrible! ¿Has visto cómo [target.Custom('quirk_neg_present')]? ¡Qué ridículo!».\n\n[insulter.Custom2('MyCharacterIntroduction', ROOT.Char)|U] se parte de risa maliciosamente.\n\n[target.GetFirstNameNoTooltip] sigue conversando con sus amigos, pero veo que ha oído todo. No me gusta ver su dolor."
+ court_ongoing.1010.desc:1 "«¡Por [insulter.GetFaith.HighGodName]! ¡[target.GetTitledFirstName] es un[target.Custom('ES_XA')] [target.Custom('InsultNoun')] insufrible! ¿Has visto cómo [target.Custom('quirk_neg_present')]? ¡Qué ridículo!».\n\n[insulter.Custom2('MyCharacterIntroduction', ROOT.Char)|U] se parte de risa maliciosamente.\n\n[target.GetFirstNameNoTooltip] sigue conversando con sus amigos, pero veo que ha oído todo. No me gusta ver su dolor."
  court_ongoing.1010.a:0 "¡Mentiras viles! ¡Desenvainad, [insulter.Custom('InsultNoun')]!"
- court_ongoing.1010.b:0 "Disculpaos con [target.Custom('ES_ElLa')] [target.GetLadyLord]."
+ court_ongoing.1010.b:0 "Disculpaos con [target.GetLadyLord]."
  court_ongoing.1010.c:0 "Oh, [target.GetFirstNameNoTooltip]. ¡[insulter.GetFirstNameNoTooltip] no podría equivocarse más!"
 
  court_ongoing.1010.a.success:0 "Vences a [insulter.GetFirstNameNoTooltip] en un duelo"
@@ -122,7 +122,7 @@
  court_ongoing.1022.c.master_of_hunt.failure:0 "[master_of_hunt.GetFirstNameNoTooltip] encuentra una piel de lobo a la venta"
  court_ongoing.1022.d:0 "«Lo siento, no puedo hacerlo»."
 
- court_ongoing.1023.desc:0 "Uno de mis perros favoritos ha desaparecido de la perrera. Su responsable organizó una búsqueda anoche, pero volvió con las manos vacías. «No sé cómo pudo escaparse», dice [dummy_gender.Custom('ES_ElLa')] [dummy_gender.GetWomanMan] de pelo gris, suspirando. «Los perros no pueden abrir una puerta…».\n\n«¡[ROOT.Char.GetLadyLord] [ROOT.Char.GetFirstNameNoTooltip]!». Cuando me giro, me encuentro con la amplia sonrisa [owner.Custom('ES_DelDela')] [owner.GetTitledFirstName]. En sus manos hay una piel resplandeciente…"
+ court_ongoing.1023.desc:0 "Uno de mis perros favoritos ha desaparecido de la perrera. Su responsable organizó una búsqueda anoche, pero volvió con las manos vacías. «No sé cómo pudo escaparse», dice esa figura de pelo gris, suspirando. «Los perros no pueden abrir una puerta…».\n\n«¡[ROOT.Char.GetLadyLord] [ROOT.Char.GetFirstNameNoTooltip]!». Cuando me giro, me encuentro con la amplia sonrisa de [owner.GetTitledFirstName]. En sus manos hay una piel resplandeciente…"
  court_ongoing.1023.a:0 "Déjame en paz. Necesito tiempo para pensar…"
  court_ongoing.1023.b:0 "¡Asesin[ROOT.Char.Custom('ES_OA')]! ¡No quiero volver a verte!"
 
@@ -140,11 +140,11 @@
  court_ongoing.1030.b.failure:0 "A [target.GetShortUINameNoTooltip] no le gusta el perro"
  court_ongoing.1030.c:0 "«¡No temáis, siempre estaré a vuestro lado!»."
 
- court_ongoing.1031.start.desc:0 "«Lo estuve pensando mucho, mi [ROOT.Char.Custom('LoverPetName')]», dice [owner.Custom('ES_ElLa')] [owner.GetTitledFirstName] mientras pone una canasta sobre mi mesa. «¿Cuál sería la compañía perfecta para una persona tan leal, enérgica y sociable como vos? Y entonces se me ocurrió, ¡nada encajaría mejor que un perro!».\n\n¡[owner.GetFirstNameNoTooltip|U] quita la manta que cubre la canasta, dejando ver un cachorrito! Salta hacia mí, tropezando con el borde de la cesta de pura emoción."
+ court_ongoing.1031.start.desc:0 "«Lo estuve pensando mucho, mi [ROOT.Char.Custom('LoverPetName')]», dice [owner.GetTitledFirstName] mientras pone una canasta sobre mi mesa. «¿Cuál sería la compañía perfecta para una persona tan leal, enérgica y sociable como vos? Y entonces se me ocurrió, ¡nada encajaría mejor que un perro!».\n\n¡[owner.GetFirstNameNoTooltip|U] quita la manta que cubre la canasta, dejando ver un cachorrito! Salta hacia mí, tropezando con el borde de la cesta de pura emoción."
  court_ongoing.1031.a:0 "¡Oooh! ¡Voy a cuidar muy bien de ti!"
  court_ongoing.1031.b:0 "Esto… no es lo que esperaba."
 
- court_ongoing.1032.desc:0 "«Lo estuve pensando mucho, mi [ROOT.Char.Custom('LoverPetName')]», dice [owner.Custom('ES_ElLa')] [owner.GetTitledFirstName] mientras pone una canasta sobre mi mesa. «¿Cuál sería la compañía perfecta para una persona tan inteligente e independiente como vos? Y entonces se me ocurrió, ¡nada encajaría mejor que un gato!».\n\n[owner.GetFirstNameNoTooltip|U] quita la manta que cubre la canasta dejando ver a un gatito que me mira con sus grandes ojos de color [ROOT.Char.Custom('RandomCatEyeColor')] y empieza a ronronear."
+ court_ongoing.1032.desc:0 "«Lo estuve pensando mucho, mi [ROOT.Char.Custom('LoverPetName')]», dice [owner.GetTitledFirstName] mientras pone una canasta sobre mi mesa. «¿Cuál sería la compañía perfecta para una persona tan inteligente e independiente como vos? Y entonces se me ocurrió, ¡nada encajaría mejor que un gato!».\n\n[owner.GetFirstNameNoTooltip|U] quita la manta que cubre la canasta dejando ver a un gatito que me mira con sus grandes ojos de color [ROOT.Char.Custom('RandomCatEyeColor')] y empieza a ronronear."
 
  #GIFT: Necklace, by Mathilda Bjarnehed
  court_ongoing.1040.t:1 "$court_event_title$ Oro deslumbrante"
@@ -182,7 +182,7 @@
 
  #COMPLIMENT POEM, by Mathilda Bjarnehed
  court_ongoing.1100.t:1 "$court_event_title$ Licencia poética"
- court_ongoing.1100.desc:0 "¡No hay [target.GetWomanMan] más adorable que [target.Custom('ES_ElLa')] [target.GetTitledFirstName]! En su presencia, me faltan las palabras y ninguno de mis halagos le hace justicia. ¿Quizás una poesía escrita con mimo captaría sus virtudes?\n\nEscribiré sobre su…"
+ court_ongoing.1100.desc:0 "¡No hay [target.GetWomanMan] más adorable que [target.GetTitledFirstName]! En su presencia, me faltan las palabras y ninguno de mis halagos le hace justicia. ¿Quizás una poesía escrita con mimo captaría sus virtudes?\n\nEscribiré sobre su…"
  court_ongoing.1100.compliment.tt:0 "La respuesta [target.Custom('ES_DelDela')] [target.GetTitledFirstName] se basará en lo bien que el poema encaje con [target.GetSheHe]."
  court_ongoing.1100.success.tt:0 "[target.GetFirstNameNoTooltip] responde positivamente"
  court_ongoing.1100.neutral.tt:0 "[target.GetFirstNameNoTooltip] no responde"
@@ -252,7 +252,7 @@
  court_ongoing.1112.desc:0 "¡[competitor.GetTitledFirstName] no tuvo nada que hacer contra mi fuerza! Seguro que su derrota fue bastante humillante, ¡y mi [target.Custom('LoverPetName')] [target.GetFirstName] lo vio todo! Desde entonces, no ha vuelto a prestarle atención."
  court_ongoing.1112.a:0 "¡Otro rival derrotado!"
 
- court_ongoing.1113.desc:0 "Parece que subestimé las habilidades [competitor.Custom('ES_DelDela')]  [competitor.GetTitledFirstName] y mi derrota a sus manos fue dolorosa y humillante por igual. Mi único consuelo es que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] no estuvo allí para verlo."
+ court_ongoing.1113.desc:0 "Parece que subestimé las habilidades [competitor.Custom('ES_DelDela')] [competitor.GetTitledFirstName] y mi derrota a sus manos fue dolorosa y humillante por igual. Mi único consuelo es que [target.GetTitledFirstName] no estuvo allí para verlo."
  court_ongoing.1113.a:0 "Olvidemos todo esto…"
  court_ongoing.1113.b:0 "¡Me vengaré! ¡Creed lo que os digo!"
 
@@ -268,7 +268,7 @@
 
  # Boring party guest
  court_ongoing.1120.t:0 "$court_event_title$ $court_ongoing.1121.t$"
- court_ongoing.1120.desc:0 "Asisto a un baile en [target_location.GetNameNoTooltip] para pasar un rato con [target.Custom('ES_ElLa')] [target.GetTitledFirstName]. ¡La sola idea de tocar sus manos me acelera el corazón! Al llegar, [target.Custom('ES_LoLa')] veo atrapad[target.Custom('ES_OA')] en una conversación con [unpleasant_guest.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)].\n\n[unpleasant_guest.Custom('ES_ElLa')] [unpleasant_guest.Custom('InsultAdjective')] [unpleasant_guest.GetWomanMan] parlotea sin ser consciente de la incomodidad que siente [target.GetFirstNameNoTooltip]."
+ court_ongoing.1120.desc:0 "Asisto a un baile en [target_location.GetNameNoTooltip] para pasar un rato con [target.GetTitledFirstName]. ¡La sola idea de tocar sus manos me acelera el corazón! Al llegar, [target.GetHerHim] veo atrapad[target.Custom('ES_OA')] en una conversación con [unpleasant_guest.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)].\n\nTal [unpleasant_guest.Custom('InsultAdjective')] [unpleasant_guest.GetWomanMan] parlotea sin ser consciente de la incomodidad que siente [target.GetFirstNameNoTooltip]."
  court_ongoing.1120.a:0 "Parece apropiada una pequeña #EMP «distracción»#!."
  court_ongoing.1120.a.failure:0 "La conversación es insoportablemente aburrida"
  court_ongoing.1120.b:0 "¡Mis encantos mejoran cualquier conversación!"
@@ -279,9 +279,9 @@
 
  court_ongoing.1121.t:0 "Cortesías desagradables"
  court_ongoing.1121.start.desc:0 "Cuando envié invitaciones para el baile, esperaba una noche de diversión frívola en buena compañía. Sin embargo, me encuentro atrapad[ROOT.Char.Custom('ES_OA')] en una horrible conversación con [unpleasant_guest.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)]…\n\n"
- court_ongoing.1121.diplomacy.desc:0 "«Buenas noches», saluda una voz familiar. [owner.Custom('ES_ElLa')|U] [owner.GetTitledFirstName] se une a la conversación. Sabe escuchar y pronto la atención de [unpleasant_guest.GetFirstNameNoTooltip] está centrada en [owner.Custom('ES_ElElla')]. Soy libre para escapar."
+ court_ongoing.1121.diplomacy.desc:0 "«Buenas noches», saluda una voz familiar. [owner.GetTitledFirstName] se une a la conversación. Sabe escuchar y pronto la atención de [unpleasant_guest.GetFirstNameNoTooltip] está centrada en [owner.GetSheHe]. Soy libre para escapar."
  court_ongoing.1121.intrigue.desc:1 "«Mis más sinceras disculpas, hay un asunto urgente para el que necesito vuestra presencia, [unpleasant_guest.Custom2('RelationToMeAddress', owner)]». Es la familiar voz [owner.Custom('ES_DelDela')] [owner.GetTitledFirstName]. Me guiña un ojo e indica con un ademán a [unpleasant_guest.GetFirstNameNoTooltip] que [owner.GetHerHim] siga."
- court_ongoing.1121.insult.desc:1 "«Creo que mi [ROOT.Char.GetLadyLord] ya ha tenido bastante», interrumpe un[owner.Custom('ES_XA')] [owner.GetWomanMan]. ¡Es [owner.Custom('ES_ElLa')] [owner.GetTitledFirstName]! «¿No veis que se está aburriendo, [unpleasant_guest.Custom2('RelationToMeAddress', owner)]?»."
+ court_ongoing.1121.insult.desc:1 "«Creo que mi [ROOT.Char.GetLadyLord] ya ha tenido bastante», interrumpe un[owner.Custom('ES_XA')] [owner.GetWomanMan]. ¡Es [owner.GetTitledFirstName]! «¿No veis que se está aburriendo, [unpleasant_guest.Custom2('RelationToMeAddress', owner)]?»."
  court_ongoing.1121.a:0 "¡Una lección de diplomacia útil, aunque desagradable!"
  court_ongoing.1121.a.critical_success:0 "Aprendes un nuevo truco diplomático"
  court_ongoing.1121.a.success:0 "Comprendes mejor las artes diplomáticas"
@@ -297,7 +297,7 @@
 
  #EXTREME REQUEST — CHOOSE, by Linnéa Thimrén
  court_ongoing.1201.t:0 "La petición"
- court_ongoing.1201.desc:0 "«¡[target.GetLadyLord|U] [target.GetFirstName], dejad que os demuestre mi devoción de cualquier modo que estiméis necesario!». [owner.Custom('ES_ElLa')|U] [owner.GetTitledFirstName] me implora que ponga a prueba su devoción, con una prueba a mi gusto. Haré que se abstenga durante varios días de…"
+ court_ongoing.1201.desc:0 "«¡[target.GetLadyLord|U] [target.GetFirstName], dejad que os demuestre mi devoción de cualquier modo que estiméis necesario!». [owner.GetTitledFirstName] me implora que ponga a prueba su devoción, con una prueba a mi gusto. Haré que se abstenga durante varios días de…"
  court_ongoing.1201.a:0 "Dormir: ¡protegedme de las pesadillas!"
  court_ongoing.1201.a_success:0 "Gracias a su vigilia, puedo descansar en paz"
  court_ongoing.1201.a_failure:0 "Ha fracasado en su deber"

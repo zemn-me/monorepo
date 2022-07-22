@@ -12,7 +12,7 @@
  spymaster_task.0341.a.detached:0 "Крайне отвратительно, но знать не помешает."
 
  spymaster_task.0342.t:0 "Шпионаж: содомия"
- spymaster_task.0311.sodomy.accepted:1 "\n\n[Select_CString(secret_holder.IsFemale, 'Ей', 'Ему' )] доставляют удовольствие другие [secret_holder.GetWomenMen]. [Select_CString(secret_holder.IsFemale, 'Ее', 'Его' )] #L [secret_holder.GetFaith.GetAdjective|l]ие#! единоверцы считают это смертным грехом. Это, конечно, бессмыслица, но она дает мне необходимые рычаги давления..."
+ spymaster_task.0311.sodomy.accepted:1 "\n\n[Select_CString(secret_holder.IsFemale, 'Ей', 'Ему' )] доставляют удовольствие другие [secret_holder.GetWomenMen]. [Select_CString(secret_holder.IsFemale, 'Ее', 'Его' )] #L [secret_holder.GetFaith.GetName|l]ие#! единоверцы считают это смертным грехом. Это, конечно, бессмыслица, но она дает мне необходимые рычаги давления..."
  spymaster_task.0311.secret_sodomy.illegal_shared:0 "\n\n[secret_holder.GetHerHim|U] доставляют удовольствие другие [secret_holder.GetWomenMen]. В отличие от меня [secret_holder.GetFirstName] не слишком тщательно скрывает свои грешки."
  spymaster_task.0311.secret_sodomy.illegal:0 "\n\n[secret_holder.GetHerHim|U] доставляют удовольствие другие [secret_holder.GetWomenMen]. Глупо думать, что [ROOT.Char.GetFaith.HighGodName] не заметит подобный грех..."
  spymaster_task.0342.a:0 "Ты пожалеешь о своих желаниях, [secret_holder.GetFirstNameNoTooltip]."
@@ -55,8 +55,8 @@
  spymaster_task.0347.t:0 "Шпионаж: безверие"
  spymaster_task.0311.secret_non_believer.shared:0 "\n\nКак и я, [secret_holder.GetSheHe] сомневается, что [ROOT.Char.GetFaith.HighGodName] нуждается в нашем поклонении, но — в отличие от меня — не умеет должным образом скрывать это."
  spymaster_task.0311.secret_non_believer.other_faith:1 "\n\nПохоже, [secret_holder.GetSheHe] начинает понимать, что на самом деле являет собой ложное божество [secret_holder.GetFaith.HighGodName]. Разумеется, [secret_holder.GetHerHis] единоверцы вряд ли поймут это."
- spymaster_task.0311.secret_non_believer.other_sect:0 "\n\nПохоже, [secret_holder.GetSheHe] начинает сходить с [ROOT.Char.GetFaith.GetAdjective|l]ого пути, принимая учение, которому следуют [secret_holder.GetFaith.GetAdherentNamePlural|l]. [secret_holder.GetFaith.HighGodName], должно быть, плачет при виде того, как исказили [secret_holder.GetFaith.HighGodHerHis] учение."
- spymaster_task.0311.secret_non_believer:0 "\n\nПохоже, [secret_holder.GetSheHe] сомневается в истинности #L [secret_holder.GetFaith.GetAdjective|l]ой#! доктрины. О, [secret_holder.GetFirstNameNoTooltip]... Что бы на это сказали [secret_holder.GetFaith.AltPriestTermPlural]?"
+ spymaster_task.0311.secret_non_believer.other_sect:0 "\n\nПохоже, [secret_holder.GetSheHe] начинает сходить с #L [ROOT.Char.GetFaith.GetName|l]ого#! пути, принимая учение, которому следуют [secret_holder.GetFaith.GetAdherentNamePlural|l]. [secret_holder.GetFaith.HighGodName], должно быть, плачет при виде того, как исказили [secret_holder.GetFaith.HighGodHerHis] учение."
+ spymaster_task.0311.secret_non_believer:0 "\n\nПохоже, [secret_holder.GetSheHe] сомневается в истинности #L [secret_holder.GetFaith.GetName|l]ой#! доктрины. О, [secret_holder.GetFirstNameNoTooltip]... Что бы на это сказали [secret_holder.GetFaith.AltPriestTermPlural]?"
  spymaster_task.0347.a:0 "Признак человека, слабого душой."
 
  spymaster_task.0348.t:0 "Шпионаж: инцест"

@@ -108,8 +108,3 @@
  COMBAT_ON_MAP_TOOLTIP:0 "#T [Combat.GetName]#!\n[soldiers|E]: [Combat.GetLeftSide.GetCurrentFightingMen|0] contre [Combat.GetRightSide.GetCurrentFightingMen|0]\n#I Cliquez pour voir#!"
  COMMANDER_ADVANTAGE_DESC:1 "#T [advantage|E] du commandant: $ADVANTAGE$#!\nAptitude martiale: $SKILL|+=$\n$MODIFIERS$"
  #COMMANDER_ADVANTAGE_ADJUSTED_DESC:2 "" # <DELETE THIS KEY>
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- COMMANDER_ADVANTAGE_ADJUSTED_DESC:1 "#T [advantage|E] du commandant: $ADVANTAGE$#!\nAptitude martiale: $SKILL|+=$\n$MODIFIERS$$ADJUSTMENT$"
- ATTACKER_LEADER:0 "Meneur du camp attaquant"
- DEFENDER_LEADER:0 "Meneur du camp défenseur"

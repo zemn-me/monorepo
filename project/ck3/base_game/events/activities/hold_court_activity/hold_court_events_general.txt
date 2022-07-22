@@ -806,6 +806,7 @@ hold_court.1031 = {
 			years = 10
 		}
 
+		random_neighboring_and_across_water_top_liege_realm = { save_scope_as = foreign_realm }
 		random_courtier_or_guest = {
 			limit = { hold_court_2011_valid_traitor = yes }
 
@@ -819,12 +820,17 @@ hold_court.1031 = {
 					value = ai_honor
 					multiplier = -0.01 # At 50 honor, 0% chance to be picked. At -100 honor, x3 as likely to be picked.
 				}
+				modifier = {
+					scope:foreign_realm.holder.top_liege.religion = religion # More likely if same faith as the ones they spy for
+					add = 0.2
+				}
+				modifier = {
+					scope:foreign_realm.holder.top_liege.faith = faith
+					add = 0.3 # Total sum = 0.5
+				}
 			}
 			save_scope_as = traitor
 			court_event_character_flag_effect = yes
-		}
-		random_neighboring_and_across_water_top_liege_realm = {
-			save_scope_as = foreign_realm
 		}
 
 		hidden_effect = {
@@ -5288,6 +5294,16 @@ hold_court.4200 = {
 
 	trigger = {
 		any_ally = {
+			OR = {
+				has_trait = ambitious
+				has_trait = vengeful
+				has_trait = humble
+				has_trait = trusting
+			}
+			opinion = {
+				target = root
+				value >= high_positive_opinion
+			}
 			is_ai = yes
 			this.liege = { NOT = { this = root } }
 			is_at_war = no
@@ -5310,6 +5326,16 @@ hold_court.4200 = {
 	immediate = {
 		random_ally = {
 			limit = {
+				OR = {
+					has_trait = ambitious
+					has_trait = vengeful
+					has_trait = humble
+					has_trait = trusting
+				}
+				opinion = {
+					target = root
+					value >= high_positive_opinion
+				}
 				is_ai = yes
 				this.liege = { NOT = { this = root } }
 				is_at_war = no
@@ -10437,11 +10463,14 @@ hold_court.6000 = {
 				years = 10
 			}
 		}
-		scope:6000_count = {
-			add_opinion = {
-				target = root
-				modifier = grateful_opinion
-				opinion = 30
+		if = {
+			limit = { exists = scope:6000_count }
+			scope:6000_count = {
+				add_opinion = {
+					target = root
+					modifier = grateful_opinion
+					opinion = 30
+				}
 			}
 		}
 		add_hook = {
@@ -18581,62 +18610,6 @@ hold_court.6190 = {
 
 	weight_multiplier = {
 		base = 1
-		modifier = {
-			add = 20
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_focus_or_focus_trait_trigger = { FOCUS = intrigue_intimidation_focus }
-			}
-		}
-		modifier = {
-			add = 20
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_focus_or_focus_trait_trigger = { FOCUS = learning_medicine_focus }
-			}
-		}
-		modifier = {
-			add = 10
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_trait = physician_3
-			}
-		}
-		modifier = {
-			add = 10
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_trait = ambitious
-			}
-		}
-		modifier = {
-			add = 20
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_trait = cynical
-			}
-		}
-		modifier = {
-			add = 20
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_trait = callous
-			}
-		}
-		modifier = {
-			add = 10
-			employs_court_position = court_physician_court_position
-			any_court_position_holder = {
-				type = court_physician_court_position
-				has_trait = sadistic
-			}
-		}
 
 		# Court weightings.
 		ep1_weight_up_for_court_type_modifier = { COURT_TYPE = court_scholarly }
@@ -20920,6 +20893,7 @@ scripted_trigger court_7000_rival_trigger = {
 		type = rival
 		has_court_event_flag = no
 		top_liege = root
+		NOT = { this = root }
 	}
 }
 
@@ -21043,6 +21017,7 @@ hold_court.7000 = {
 					limit = {
 						has_court_event_flag = no
 						top_liege = root
+						NOT = { this = root }
 					}
 					save_scope_as = rival_2
 					court_event_character_flag_effect = yes
@@ -21059,6 +21034,7 @@ hold_court.7000 = {
 					limit = {
 						has_court_event_flag = no
 						top_liege = root
+						NOT = { this = root }
 					}
 					save_scope_as = rival_2
 					court_event_character_flag_effect = yes
@@ -23481,6 +23457,13 @@ hold_court.7050 = {
 	}
 
 	trigger = {
+		any_court_position_holder = {
+			type = court_physician_court_position
+			has_court_event_flag = no
+			is_available_ai_adult = yes
+		}
+		is_available_healthy_adult = yes
+		days_of_continuous_peace < 1800
 		NOT = { has_character_flag = had_hold_court_event_7050 }
 	}
 
@@ -25525,7 +25508,7 @@ hold_court.8020 = {
 		}
 		faith = {
 			has_doctrine = doctrine_theocracy_temporal
-			NOT = { has_doctrine = unreformed_faith_doctrine }
+			NOT = { has_doctrine_parameter = unreformed }
 		}
 		any_realm_county = { # Less than 10% theocratic counties in realm
 			percent <= 0.1
@@ -26568,7 +26551,7 @@ scripted_trigger hold_court_8040_vassal_trigger = {
 	has_court_event_flag = no
 	NOT = { faith = root.faith }
 	faith = {
-		NOT = { has_doctrine = unreformed_faith_doctrine }
+		NOT = { has_doctrine_parameter = unreformed }
 	}
 	has_government = feudal_government
 	vassal_contract_obligation_level_can_be_increased = religious_rights
@@ -26626,7 +26609,7 @@ hold_court.8040 = {
 
 	trigger = {
 		faith = {
-			NOT = { has_doctrine = unreformed_faith_doctrine }
+			NOT = { has_doctrine_parameter = unreformed }
 		}
 		any_vassal = { hold_court_8040_vassal_trigger = yes }
 		exists = cp:councillor_court_chaplain
@@ -27967,7 +27950,7 @@ hold_court.8060 = {
 		gold > hold_court_holding_cost_double_value
 		faith = {
 			has_doctrine = doctrine_theocracy_temporal
-			NOT = { has_doctrine = unreformed_faith_doctrine }
+			NOT = { has_doctrine_parameter = unreformed }
 		}
 		OR = {
 			any_held_title = {
@@ -31175,6 +31158,7 @@ scripted_trigger hold_court_8100_child_trigger = {
 	has_court_event_flag = no
 	is_available_ai_child = yes # Children only
 	age < 14 # Not already almost done with education, sets time which must be invested to get rewards
+	NOT = { is_child_of = root } # Is not your child
 	NOT = { has_relation_ward = root } # Is not already a ward of the player
 	NOT = {
 		root = { has_strong_hook = prev } # prev = scope:ward
@@ -32428,7 +32412,7 @@ scripted_trigger hold_court_8120_syncretic_faith_trigger = {
 			faith = { has_doctrine = tenet_eastern_syncretism }
 		}
 		AND = { # Pagan
-			scope:peasant.faith = { has_doctrine = unreformed_faith_doctrine }
+			scope:peasant.faith = { has_doctrine_parameter = unreformed }
 			faith = { has_doctrine = tenet_unreformed_syncretism }
 		}
 		AND = { # Christian
@@ -32635,7 +32619,7 @@ hold_court.8120 = {
 		else_if = {
 			limit = {
 				AND = { 
-					scope:peasant.faith = { has_doctrine = unreformed_faith_doctrine }
+					scope:peasant.faith = { has_doctrine_parameter = unreformed }
 					faith = { has_doctrine = tenet_unreformed_syncretism }
 				}
 			}
@@ -37134,7 +37118,7 @@ hold_court.8180 = {
 					any_character_artifact = { exists = yes }
 				}
 				ordered_character_artifact = {
-					order_by = var:quality
+					order_by = artifact_rarity
 					save_scope_as = vassal_artifact
 				}
 			}
@@ -38367,7 +38351,7 @@ scripted_trigger hold_court_8200_infidel_trigger = {
 			root.faith = { has_doctrine = tenet_eastern_syncretism }
 		}
 		AND = { # Pagan
-			faith = { has_doctrine = unreformed_faith_doctrine }
+			faith = { has_doctrine_parameter = unreformed }
 			root.faith = { has_doctrine = tenet_unreformed_syncretism }
 		}
 		AND = { # Christian
@@ -43521,7 +43505,12 @@ hold_court.8260 = {
 			else = {
 				faction_war = { end_war = attacker }
 			}
-			hidden_effect = { destroy_faction = yes }
+			hidden_effect = {
+				if = {
+					limit = {exists = scope:vassal_faction }
+					destroy_faction = yes
+				}
+			}
 		}
 		stress_impact = {
 			paranoid = medium_stress_impact_gain

@@ -44,4 +44,7 @@
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_GLOBAL:0 "N’a pas un [special_building|El]"
  HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName] a un [special_building|El]"
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName] n’a pas un [special_building|El]"
+
+ HAS_HOLDING_DESC:0 "[PROVINCE.GetName] contient une [holding|El]" # [LocEditor:ForFutureBatchExport]
+ NOT_HAS_HOLDING_DESC:0 "[PROVINCE.GetName] ne contient pas une [holding|El]" # [LocEditor:ForFutureBatchExport]
  

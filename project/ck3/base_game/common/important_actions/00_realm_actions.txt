@@ -525,7 +525,10 @@ action_can_use_hook_to_change_contract = {
 				vassal_contract_has_modifiable_obligations = yes
 				vassal_contract_is_blocked_from_modification = no
 				is_diplomatically_available = yes
-				NOT = { is_at_war_with = root } 
+				NOT = { is_at_war_with = root }
+				NOT = {
+					has_government = clan_government
+				}
 			}
 			try_create_important_action = {
 				important_action_type = action_can_use_hook_to_change_contract

@@ -273,7 +273,7 @@
  childhood.2100.b_hash:0 "Не, я лучше побегу играть!"
  learn_language_ongoing.2100.a.success:0 "Вы выучили язык, на котором говорит [educator.GetFirstNameNoTooltip]"
  learn_language_ongoing.2100.a.success_parent:0 "[ward.Custom('GetDaughterSon')|U] постигает язык!"
- learn_language_ongoing.2100.a.success_parent_desc:0 "[educator.GetFirstNamePossessiveNoTooltip] — хороший преподаватель, и теперь [ward.GetFirstName] знает [educator.GetCulture.GetLanguage.GetName]ий [language|El]"
+ learn_language_ongoing.2100.a.success_parent_desc:0 "[educator.GetFirstNamePossessiveNoTooltip] — хороший преподаватель, и теперь [ward.GetFirstName] знает [educator.GetCulture.GetLanguage.GetName|l] [language|El]"
  learn_language_ongoing.2100.a.failure:0 "Вам не удалось выучить язык, на котором говорит [educator.GetFirstNameNoTooltip]"
 
  childhood.2200.t:0 "Вы говорите на моем языке?"
@@ -282,7 +282,7 @@
  childhood.2200.b:2 "Это скучно, пойдет и [ROOT.GetCulture.GetLanguage.GetName|l]!"
 
  childhood.2300.t:0 "Языки, на которых говорили у нас в роду"
- childhood.2300.desc:0 "[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('parent'))] время от времени перемежает речь [parent.GetCulture.GetNameNoTooltip]ими словечками, и я чувствую, что начинаю лучше понимать этот язык. Пожалуй, если проявить чуть больше усердия, я и [ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('parent'))] начнем общаться гораздо свободнее!"
+ childhood.2300.desc:0 "[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('parent'))] время от времени перемежает речь [parent.GetCulture.GetCollectiveNounNoTooltip|l]ими словечками, и я чувствую, что начинаю лучше понимать этот язык. Пожалуй, если проявить чуть больше усердия, я и [ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('parent'))] начнем общаться гораздо свободнее!"
  childhood.2300.a:0 "Я могу говорить точь-в-точь как [parent.Custom('GetMamaPapa')]!"
  childhood.2300.b:0 "Скукотища! Зачем вообще нужен этот [parent.GetCulture.GetLanguage.GetName]?"
  childhood.2300.a.success_parent_desc:0 "[ward.GetFirstName] постигает [ROOT.Char.GetCulture.GetLanguage.GetName] [language|El] благодаря внимательности."

@@ -1,3 +1,5 @@
+# Visigothic culture break-up moved backwards in time to around ~800; probably still being a bit overly-generous at that, but it's a decent date for it.
+
 ###c_leon
 1816 = {	# LEON
 	# Misc
@@ -7,7 +9,7 @@
 	holding = castle_holding
 	
 	#History
-	945.1.1 = { culture = asturleonese }
+	800.1.1 = { culture = asturleonese }
 	1066.1.1 = {
 		buildings = {
 			pastures_01
@@ -42,7 +44,7 @@
 	holding = castle_holding
 	
 	#History
-	945.1.1 = { culture = asturleonese }
+	800.1.1 = { culture = asturleonese }
 }
 1827 = {	# ZAMORA
 	holding = church_holding
@@ -57,7 +59,7 @@
 	holding = castle_holding
 	
 	#History
-	945.1.1 = { culture = asturleonese }
+	800.1.1 = { culture = asturleonese }
 }
 1895 = {	# TORO
 	holding = church_holding
@@ -70,11 +72,12 @@
 1913 = {	# BEJAR
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	955.1.1 = { culture = asturleonese }
 }
 1828 = {	# SALAMANCA
@@ -88,11 +91,12 @@
 1912 = {	# AVILA
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	955.1.1 = { culture = asturleonese }
 }
 1914 = {	# MEDINA DEL CAMPO
@@ -114,9 +118,7 @@
 	holding = castle_holding
 	
 	# History
-	950.1.1 = {
-		culture = asturleonese
-	}
+	800.1.1 = { culture = asturleonese }
 }
 1817 = {	# RIANO
 	holding = church_holding
@@ -137,9 +139,7 @@
 	holding = castle_holding
 	
 	# History
-	950.1.1 = {
-		culture = asturleonese
-	}
+	800.1.1 = { culture = asturleonese }
 }
 1794 = {	# LUARCA
 	holding = church_holding

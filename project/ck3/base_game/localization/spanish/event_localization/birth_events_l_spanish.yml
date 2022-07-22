@@ -52,7 +52,7 @@
 
  birth.1003.loves_mother.desc:1 "¡Oh, [mother.GetFirstName], has sido tan valiente! ¡Tan fuerte! ¡Las palabras no pueden describir mi amor hacia ti y ahora tenemos"
  birth.1003.likes_mother.desc:0 "¡Con una sonrisa cansada, pero feliz, [mother.GetFirstName] me presenta a"
- birth.1003.dislikes_mother.desc:1 "Alabemos a [ROOT.Char.GetFaith.FertilityGodName], [mother.GetFirstNameNoTooltip] a dado luz a"
+ birth.1003.dislikes_mother.desc:1 "Alabemos a [ROOT.Char.GetFaith.FertilityGodName], [mother.GetFirstNameNoTooltip] ha dado luz a"
  birth.1003.sondaughter.desc:0 "nuestr[child.Custom('ES_OA')] [child.Custom('GetDaughterSon')] perfect[child.Custom('ES_OA')]!\n\n"
  birth.1003.daughters.desc:0 "nuestras hijitas perfectas!\n\n"
  birth.1003.sons.desc:0 "nuestros hijitos perfectos!\n\n"
@@ -76,6 +76,7 @@
  birth.1006.a.message_desc:0 "El verdadero padre lo sabe"
  birth.1006.a.mother_message:0 "[real_father.GetTitledFirstName] ha sabido que es el verdadero padre"
  birth.1006.b:0 "¡El mundo lo sabrá!"
+ birth.1006.bastard_explanation:0 "Te enteraste del nacimiento de [child.GetFirstName]. La madre, [mother.GetShortUIName] gana el secreto [secret.GetName]"
 
  birth.1010.t:0 "Vástago de mi dinastía"
  birth.1010.t_twins:0 "Vástagos de mi dinastía"
@@ -107,7 +108,7 @@
  birth.2002.a:0 "El futuro aún alberga esperanza."
 
  birth.2003.t:0 "Un comienzo difícil"
- birth.2003.desc.standard_start:0 "Ojalá pudiera celebrar el nacimiento de nuestr[child.Custom('ES_OA')] [child.Custom('GetDaughterSon')], pero [legitimizer.GetTitledFirstName] ha dejado claro que [child.Custom('ES_ElLa')] bebé no será considerad[child.Custom('ES_OA')] verdader[child.Custom('ES_OA')] miembro de su casa."
+ birth.2003.desc.standard_start:0 "Ojalá pudiera celebrar el nacimiento de nuestr[child.Custom('ES_OA')] [child.Custom('GetDaughterSon')], pero [legitimizer.GetTitledFirstName] ha dejado claro que tal bebé no será considerad[child.Custom('ES_OA')] verdader[child.Custom('ES_OA')] miembro de su casa."
  birth.2003.desc.twin_start:0 "Ojalá pudiera celebrar el nacimiento de nuestros hijos, pero [legitimizer.GetTitledFirstName] ha dejado claro que los bebés no serán considerados verdaderos miembros de su casa."
  birth.2003.desc.landed_end:0 "\n\nLa marca de la bastardía nunca se va del todo, aunque el reconocimiento de un[legitimizer.Custom('ES_XA')] [legitimizer.GetTitleTierName] habría ayudado…"
  birth.2003.desc.unlanded_end:0 "\n\nLa marca de la bastardía nunca se va del todo, aunque el reconocimiento de un[legitimizer.Custom('ES_OA')] [legitimizer.Custom('ES_SennorSennora')] habría ayudado…"
@@ -163,8 +164,8 @@
  birth.3022.a.buddhism:0 "¿Qué hemos hecho para merecer esto?"
 
  birth.3031.t:0 "Acunado por la enfermedad"
- birth.3031.start.desc:0 "Todos los bebés lloran, pero con [child.Custom('ES_ElLa')] pequeñ[child.Custom('ES_OA')] [child.GetFirstName] las lágrimas no paran. Quiero desesperadamente que la comadrona alivie mis preocupaciones, pero su ceño fruncido lo empeora todo.\n\n"
- birth.3031.princessprince.desc:0 "«[child.Custom('ES_ElLa')|U] pequeñ[child.Custom('ES_OA')] [child.GetTitleAsNameNoTooltip]"
+ birth.3031.start.desc:0 "Todos los bebés lloran, pero con mi pequeñ[child.Custom('ES_OA')] [child.GetFirstName] las lágrimas no paran. Quiero desesperadamente que la comadrona alivie mis preocupaciones, pero su ceño fruncido lo empeora todo.\n\n"
+ birth.3031.princessprince.desc:0 "«Pequeñ[child.Custom('ES_OA')] [child.GetLadyLord]"
  birth.3031.daughterson.desc:0 "«Tu [child.Custom('DaughterSon')]"
  birth.3031.end.desc:0 "no gana el peso que debería. Nos ocuparemos bien de [child.Custom('ES_ElElla')], mi [ROOT.Char.Custom('ES_SennorSennora')], pero al final, su vida está en manos [ROOT.Char.GetFaith.FateGodNamePossessive]»."
  birth.3031.a:0 "¡Vamos, [child.GetFirstNameNoTooltip]! ¡No llores, por favor!"
@@ -205,7 +206,7 @@
  birth.9002.religious_godess.desc:0 "deberíamos llamar[child.Custom('ES_LoLa')] [SCOPE.GetFlagName('name_suggestion')], en honor a la gran Diosa!»"
  birth.9002.religious_apostle.desc:0 "deberíamos llamar[child.Custom('ES_LoLa')] [SCOPE.GetFlagName('name_suggestion')], en honor al piadoso apóstol»."
  birth.9002.religious_holy_virgin.desc:0 "deberíamos llamar[child.Custom('ES_LoLa')] [SCOPE.GetFlagName('name_suggestion')], en honor a la Santa Virgen»."
- birth.9002.religious_fallback.desc:0 "deberíamos llamar[child.Custom('ES_LoLa')], ¡como [child.Custom('ES_ElLa')] glorios[child.Custom('ES_OA')] [SCOPE.GetFlagName('name_suggestion')]!»"
+ birth.9002.religious_fallback.desc:0 "deberíamos llamar[child.Custom('ES_LoLa')], ¡como tal glorios[child.Custom('ES_OA')] [SCOPE.GetFlagName('name_suggestion')]!»"
  birth.9002.lunatic.desc:0 "¡Tengo una idea genial! ¡Deberíamos llamar[child.Custom('ES_LoLa')] [SCOPE.GetFlagName('name_suggestion')]! ¿Acaso no parece un[child.Custom('ES_XA')] pequeñ[child.Custom('ES_OA')] [SCOPE.GetFlagName('name_suggestion')]?»"
  birth.9002.creator.desc:0 "llamemos a nuestro bebé [SCOPE.GetFlagName('name_suggestion')], ¡en honor a nuestro creador!»"
  birth.9002.possessed.desc:0 "He sentido Su presencia. Exige que llamemos a nuestr[child.Custom('ES_OA')] [child.Custom('DaughterSon')] [SCOPE.GetFlagName('name_suggestion')]»."

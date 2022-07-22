@@ -804,6 +804,7 @@ culture_emergence_events.0003 = { # Emergent Divergences, based on adjacency to 
 						factor = 0
 						scope:culture_check_2 = culture:greek
 						any_in_de_jure_hierarchy = {
+							exists = holder.top_liege
 							holder.top_liege = {
 								culture = {
 									has_cultural_pillar = heritage_byzantine

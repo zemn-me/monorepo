@@ -1,5 +1,5 @@
 ﻿l_russian:
- tutorial_lesson_button_skip:2 "Пропустить"
+ tutorial_lesson_button_skip:2 "Пропустить урок"
  tutorial_lesson_button_next:2 "Далее"
  tutorial_lesson_button_continue:0 "Продолжить"
  
@@ -50,6 +50,25 @@
  lesson_step_6_of_8:0 "6/8"
  lesson_step_7_of_8:0 "7/8"
  lesson_step_8_of_8:0 "8/8"
+ lesson_step_1_of_9:0 "1/9"
+ lesson_step_2_of_9:0 "2/9"
+ lesson_step_3_of_9:0 "3/9"
+ lesson_step_4_of_9:0 "4/9"
+ lesson_step_5_of_9:0 "5/9"
+ lesson_step_6_of_9:0 "6/9"
+ lesson_step_7_of_9:0 "7/9"
+ lesson_step_8_of_9:0 "8/9"
+ lesson_step_9_of_9:0 "9/9"
+ lesson_step_1_of_10:0 "1/10"
+ lesson_step_2_of_10:0 "2/10"
+ lesson_step_3_of_10:0 "3/10"
+ lesson_step_4_of_10:0 "4/10"
+ lesson_step_5_of_10:0 "5/10"
+ lesson_step_6_of_10:0 "6/10"
+ lesson_step_7_of_10:0 "7/10"
+ lesson_step_8_of_10:0 "8/10"
+ lesson_step_9_of_10:0 "9/10"
+ lesson_step_10_of_10:0 "10/10"
 
 #Lesson names
  lesson_basics:0 "I. Основы"
@@ -237,7 +256,7 @@
  lesson_basics_vassals_concept_greyed_out_desc:0 "Здесь вы можете менять [feudal_contracts|El], которые определяют, какие [taxes|El] и [levies|El] предоставляет вам феодальный [vassal|El]."
 
  lesson_basics_happy_vassals:0 "$lesson_basics_vassals_concept$"
- lesson_basics_happy_vassals_desc:2 "Имеет смысл заботиться о благополучии вассалов. Когда [vassals|El] счастливы, они не устраивают [scheme|El] и не образуют против вас [factions|El].\n\nДаже если ваш [character|El] — невероятно могущественный [ruler|El], не допускайте, чтобы вся [realm|El] восстала против вас. Неугодного властителя ждут [Concept( 'depose', 'низвержение' )|El], [war|El] или [Concept( 'murder', 'смерть' )|El] во сне — в любом случае долго его правление не продлится.\n\n#TUT Некоторые вассалы могут заседать в вашем [Concept( 'council', 'совете' )|El] и выполнять [councillor_tasks|El], так что [opinion|El] и доверие таких вассалов особенно важно.#!"
+ lesson_basics_happy_vassals_desc:2 "Имеет смысл заботиться о благополучии вассалов. Когда [vassals|El] счастливы, они не устраивают [scheme|El] и не образуют против вас [factions|El].\n\nДаже если ваш [character|El] — невероятно могущественный [ruler|El], не допускайте, чтобы вся [realm|El] восстала против вас. Неугодного властителя ждут [Concept( 'depose', 'низвержение' )|El], [war|El] или [GetScheme('murder').GetTypeName|l] во сне — в любом случае долго его правление не продлится.\n\n#TUT Некоторые вассалы могут заседать в вашем [Concept( 'council', 'совете' )|El] и выполнять [councillor_tasks|El], так что [opinion|El] и доверие таких вассалов особенно важно.#!"
  lesson_basics_vassal_limit:0 "Лимит вассалов ($lesson_basics_vassals$)"
  lesson_basics_vassal_limit_desc:2 "Число [Concept( 'vassals', 'вассалов' )|El], которых вы можете собрать под своим крылом, прежде чем [realm|El] станет неуправляемой, ограничено. Превышение [Concept( 'vassal_limit', 'максимального количества вассалов' )|El] влияет на [taxes|El] и [levies|El].\n\nВо время обучения такого не случится, но когда вы начнете строить собственное королевство, не допускайте слишком резкого роста.\n\n#TUT Если максимум все же превышен, вы можете раздать вассалам титулы низкого ранга. Иногда вы можете даже [create|El] #EMP новые#! титулы более высокого уровня, чтобы упрочить свою власть в регионе над титулами низкого ранга, [de_jure|El] относящиеся к вашему новому титулу.#!"
 
@@ -259,12 +278,12 @@
 # Schemes & Hooks
  lesson_basics_schemes_concept:0 "Происки ($lesson_basics_schemes$)"
  lesson_basics_schemes_concept_complete:0 "$lesson_basics_schemes_concept$"
- lesson_basics_schemes_concept_desc:4 "[schemes|E] — это долговременные действия, направленные на других персонажей. Они могут быть как враждебными (например, [GetScheme('murder').GetTypeName] или [GetScheme('abduct').GetTypeName]), так и более социальными, например [GetScheme('befriend').GetTypeName]."
+ lesson_basics_schemes_concept_desc:4 "[schemes|E] — это долговременные действия, направленные на других персонажей. Они могут быть как враждебными (например, [GetScheme('murder').GetTypeName|l] или [GetScheme('abduct').GetTypeName|l]), так и более социальными, например [GetScheme('befriend').GetTypeName|l]."
  lesson_basics_intrigue_view_tt:0 "Откройте окно «Интриги» (оно подсвечено)"
  lesson_basics_schemes_tab_tt:1 "Взгляните на вкладку «Происки» (по умолчанию она открыта)"
  lesson_basics_hooks_and_secrets_tab_tt:0 "Ознакомьтесь с вкладкой «Влияние и секреты»"
  lesson_basics_schemes_murder:0 "$lesson_basics_schemes_concept$"
- lesson_basics_schemes_murder_desc:3 "[scheme|E] могут оказаться особенно полезными, когда вас не очень устраивает [line_of_succession|El] — одним из способов продвинуться ближе к цели может быть простое #EMP устранение#! конкурентов.\n\nБез шума, без суеты, без свидетелей.\n\n#TUT Попытка [Concept( 'murder_scheme', 'заговора с целью убийства' )|El] может быть раскрыт. Если план не сработает, на вас будут косо смотреть — в первую очередь сама несостоявшаяся жертва.#!  "
+ lesson_basics_schemes_murder_desc:3 "[scheme|E] могут оказаться особенно полезными, когда вас не очень устраивает [line_of_succession|El] — одним из способов продвинуться ближе к цели может быть простое #EMP устранение#! конкурентов.\n\nБез шума, без суеты, без свидетелей.\n\n#TUT Попытка покушения на[GetScheme('murder').GetTypeName|l] может быть раскрыт. Если план не сработает, на вас будут косо смотреть — в первую очередь сама несостоявшаяся жертва.#!  "
  lesson_basics_schemes_sway:0 "$lesson_basics_schemes_concept$"
  lesson_basics_schemes_sway_desc:0 "[scheme|E] «Влияние» повышают чье-то [opinion|El] о вашем персонаже. Давайте посмотрим!"
  lesson_basics_schemes_sway_complete:0 "$lesson_basics_schemes_concept$"
@@ -278,12 +297,12 @@
 # Culture
  lesson_basics_culture_open_view:1 "Культуры"
  lesson_basics_culture_open_view_desc:0 "Все [Concept( 'characters', 'персонажи' )|E] и [Concept( 'county', 'графства' )|E] принадлежат к определенной [Concept( 'culture', 'культуре' )|E]. [SelectLocalization( GetPlayer.IsValid, 'lesson_basics_culture_open_view_desc_INGAME', '' )]"
- lesson_basics_culture_open_view_desc_INGAME:0 "\n\nВаш нынешний [Concept( 'ruler', 'правитель' )|E] принадлежит к [GetPlayer.GetCulture.GetNameNoTooltip|l]ой культуре, что показано в левом нижнем углу."
+ lesson_basics_culture_open_view_desc_INGAME:0 "\n\nВаш нынешний [Concept( 'ruler', 'правитель' )|E] принадлежит к [GetPlayer.GetCulture.GetCollectiveNounNoTooltip|l]ой культуре, что показано в левом нижнем углу."
  lesson_basics_culture_open_view_trigger:0 "Откройте окно «Культура» (выделено)"
  
  lesson_basics_culture_elements:0 "Культуры"
  lesson_basics_culture_elements_desc:0 "[culture|E] определяется [Concept( 'ethos', 'моральными принципами' )|E], [Concept( 'culture_pillars', 'столпами' )|E] и [Concept( 'traditions', 'традициями' )|E]. Каждый из этих аспектов культуры накладывает на всех ее представителей определенные бонусы или штрафы.\n\n#V Моральные принципы#! описывают главные ценности культуры, и их нельзя менять. Принципы задают, какие традиции доступны культуре. [SelectLocalization( GetPlayer.IsValid, 'lesson_basics_culture_elements_desc_INGAME', '' )]\n\n#V Столпы культуры#! отражают ее происхождение, и их тоже нельзя изменить. Они оказывают значительное влияние на [Concept( 'cultural_acceptance', 'терпимость' )|E] к другим культурам, но в целом не столь значимы, как принципы.\n\n#V Традиции#! культуры более гибкие, но их роль не стоит недооценивать. В отличие от принципов и столпов, традиции могут быть изменены культурным идеологом, о чем мы и поговорим в следующей теме."
- lesson_basics_culture_elements_desc_INGAME:1 "Ваш народ, [GetPlayer.GetCulture.GetCollectiveNounNoTooltip|l], следует следующим моральным принципам: [GetPlayer.GetCulture.GetEthos.GetName]."
+ lesson_basics_culture_elements_desc_INGAME:1 "Ваш народ, [GetPlayer.GetCulture.GetNameNoTooltip|l], следует следующим моральным принципам: [GetPlayer.GetCulture.GetEthos.GetName]."
  lesson_basics_culture_culture_head:0 "Культуры (Культурный идеолог)"
  lesson_basics_culture_culture_head_desc:0 "[culture_head|E] — это [Concept( 'ruler', 'правитель' )|E] данной [Concept( 'culture', 'культуры' )|E] с самой большой [Concept( 'realm', 'державой' )|E]. [SelectLocalization( GetPlayer.IsValid, 'lesson_basics_culture_culture_head_desc_INGAME', '' )]\n\nКультурный идеолог может закладывать новые традиции своей культуры.\n\nОн также играет важную роль в техническом и общественном развитии своей культуры, что и станет нашей следующей темой."
  lesson_basics_culture_culture_head_desc_INGAME:0 "[SelectLocalization(ObjectsEqual(GetPlayer, GetPlayer.GetCulture.GetCultureHead), 'lesson_basics_culture_culture_head_desc_YOU', 'lesson_basics_culture_culture_head_desc_OTHER' )]"

@@ -93,7 +93,7 @@
  war_declaration_rights:0 "Kriegserklärungsrecht"
  war_declaration_rights_default:0 "Übliches $war_declaration_rights$"
  war_declaration_rights_default_short:0 "Üblich"
- war_declaration_rights_allowed:0 "Gebilligte $war_declaration_rights$"
+ war_declaration_rights_allowed:0 "Gebilligtes $war_declaration_rights$"
  war_declaration_rights_allowed_desc:1 "#emphasis #bold [vassals|E]-Privileg:#!#!\nDer [vassal|E] kann den [war|E] unabhängig von der [crown_authority|E] des [Concept('liege', 'Lehnsherrn')|E] erklären.\nDer [vassal|E] zahlt #high [EmptyScope.ScriptValue('war_declaration_rights_allowed_cost_reduction_tooltip')0] %#! weniger für [casus_bellis|E] innerhalb des [Concept('realm', 'Reiches')|E]\n\n#flavor Der [vassal|E] muss kein [hook|E] einsetzen, wenn die [crown_authority|E] des [Concept('liege', 'Lehnsherrn')|E] ihn daran hindert, Krieg zu führen. Diese Sonderbehandlung macht es auch leichter für den [vassal|E], Kriege innerhalb des [Concept('realm', 'Reiches')|E] zu erklären, sodass die Kosten dafür um #high [EmptyScope.ScriptValue('war_declaration_rights_allowed_cost_reduction_tooltip')0] %#! sinken.#!"
  war_declaration_rights_allowed_short:0 "Gebilligt"
  
@@ -173,4 +173,32 @@
  
  CONTRACT_LIEGE_SIGNATURE:0 "Der Lehnsherr,\n[VassalContract.GetLiege.GetTitledFirstNameNoTooltip]\nvon Haus [VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip]"
  CONTRACT_VASSAL_SIGNATURE:0 "Der Vasall,\n[VassalContract.GetVassal.GetTitledFirstNameNoTooltip]\nvon Haus [VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip]"
- 
+
+
+ jizya_special_rights:0 "Dschizya-Status"
+ jizya_special_rights_default:0 "Üblicher $jizya_special_rights$"
+ jizya_special_rights_default_short:0 "Üblich"
+ jizya_special_rights_granted:0 "Durchgesetzter $jizya_special_rights$"
+ jizya_special_rights_granted_desc:0 "#emphasis #bold [Concept('vassal', 'Vasallenprivileg')|E]:#!#!\nDer [liege|E] kann vom [vassal|E] keine [demand_conversion|E].\nDer [liege|E] kann im Land des [Concept('vassal', 'Vasallen')|E] „[convert_county|E]“ nicht einsetzen.\nDer [liege|E] kann [Concept('faith', 'Glauben')|E] nicht nutzen, um [tyranny|E] zu vermeiden, wenn er Titel widerruft.\nThe [liege|E] kann die [titles|E] von [vassals|E] nicht widerrufen.\n\n#flavor [Concept('vassal', 'Vasallen')|E] wird der Besitz ihrer [titles|E] garantiert, sodass der [liege|E] sie nicht widerrufen kann – ungeachtet dessen, ob der $game_concept_liege$ einen [revoke_title_reason|E] hat oder nicht.\nDer $game_concept_vassal$ erhält einen besonderen Schutzstatus, da das Reich offiziell sein Recht anerkannt hat, den eigenen [Concept('faith', 'Glauben')|E] zu praktizieren.#!"
+ jizya_special_rights_granted_short:0 "Gewährt"
+
+ iqta_special_rights:0 "Iqta-Darlehen"
+ iqta_special_rights_default:0 "Übliches $iqta_special_rights$"
+ iqta_special_rights_default_short:0 "Üblich"
+ iqta_special_rights_granted:0 "Gewährtes $iqta_special_rights$"
+ iqta_special_rights_granted_desc:0 "#flavor Der [vassal|E] hat niedrige Verpflichtungen, stellt dem [Concept('liege', 'Lehnsherrn')|E] aber [men_at_arms|E] zur Verfügung.#!"
+ iqta_special_rights_granted_short:0 "Gewährt"
+
+ ghazi_special_rights:0 "Ghāzī-Status"
+ ghazi_special_rights_default:0 "Üblicher $ghazi_special_rights$"
+ ghazi_special_rights_default_short:0 "Üblich"
+ ghazi_special_rights_granted:0 "Gewährter $ghazi_special_rights$"
+ ghazi_special_rights_granted_desc:0 "#emphasis #bold [Concept('vassal', 'Vasallenprivileg')|E]:#!#!\nDer [vassal|E] zahlt weniger [piety|E] für die Verwendung des [Concept('casus_belli', 'Kriegsgrunds')|E] „[holy_war|E]“, aber mehr [prestige_i][prestige|E] für andere [casus_bellis|E].\n\n#flavor Der [vassal|E] wurde vom [Concept('liege', 'Lehnsherrn')|E] als [Concept('faith', 'Glaubenskrieger')|E] ausgewählt und damit beauftragt, die Grenzen durch einen [Concept('holy_war', 'Religionskrieg')|E] auszuweiten.#!"
+ ghazi_special_rights_granted_short:0 "Gewährt"
+
+ marriage_favor_rights:0 "Heiratsgunst"
+ marriage_favor_rights_default:0 "Übliche $marriage_favor_rights$"
+ marriage_favor_rights_default_short:0 "Üblich"
+ marriage_favor_rights_granted:0 "Gewährte $marriage_favor_rights$"
+ marriage_favor_rights_granted_desc:0 "#emphasis #bold [Concept('vassal', 'Vasallenprivileg')|E]:#!#!\nDer [liege|E] verpflichtet sich, seine engen Familienangehörigen zu verheiraten, um ein Bündnis zu besiegeln, bevor er sie mit irgendjemand anderem verheiratet.\n\n#flavor Der [vassal|E] gehört zu den Günstlingen des [Concept('liege', 'Lehnsherrn')|E] und sollte sich durch Heirat ein Bündnis sichern können.#!"
+ marriage_favor_rights_granted_short:0 "Gewährt"

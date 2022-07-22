@@ -82,7 +82,7 @@
  murder_save.1008.a:0 "Без тебя меня бы убили, [THIS.Char.Custom('DogStoryName')]!"
 
  murder_save.0009.t:1 "$murder_save_header$ Семейные связи"
- murder_save.0009.desc:0 "Когда все готово, когда [target.GetTitledFirstName] должен вот-вот [Select_CString(target.IsFemale, 'должна', 'должен' )] умереть, все вдруг рассыпается!\n\nПохоже, в дело вмешались сторонники династии [target.GetDynasty.GetName], и одной судьбоносной ночью все участники заговора выявлены и так и не приводят свой план в действие"
+ murder_save.0009.desc:0 "Когда все готово, когда [target.GetTitledFirstName] должен вот-вот [Select_CString(target.IsFemale, 'должна', 'должен' )] умереть, все вдруг рассыпается!\n\nПохоже, в дело вмешались сторонники династии [target.GetDynasty.GetBaseName], и одной судьбоносной ночью все участники заговора выявлены и так и не приводят свой план в действие"
  murder_save.0009.a:0 "Нужно отступить, пока они не решили мне отомстить!"
  murder_save.0009.b:0 "Я восстановлю все утраченное."
  murder_save.targets_guile_legacy_save_used_up:0 "[target.GetShortUIName|U] не может снова рассчитывать, что [GetDynastyPerk( 'guile_legacy_5' ).GetName] помогут [Select_CString(target.IsFemale, 'ей', 'ему' )]"
@@ -126,7 +126,7 @@
  murder_save.1013.desc:0 "Я готовлюсь приступить к трапезе, когда замечаю необычный запах, исходящий от моего любимого блюда. В привычном аромате присутствуют кислые нотки, и с пряностями явно что-то не так... После разговора с поваром, заверившим, что пища готовилась так же, как и всегда, осталась только одна возможность: кто-то пытался отравить меня!"
 
  murder_save.0014.t:0 "$murder_save_header$ Смертельное понимание"
- murder_save.0014.desc:0 "[target.GetTitledFirstName] по-прежнему [Select_CString(target.IsFemale, 'жива', 'жив' )]! Мое покушение провалилось!\n\nЭти глупые убийцы не знали, что [target.GetSheHe] понимает [owner.GetCulture.GetLanguage.GetNameNoTooltip|l] и обсуждали свои планы прямо у н[target.GetHerHis] под носом."
+ murder_save.0014.desc:0 "[target.GetTitledFirstName] по-прежнему [Select_CString(target.IsFemale, 'жива', 'жив' )]! Мое покушение провалилось!\n\nЭти глупые убийцы не знали, что [target.GetSheHe] понимает [owner.GetCulture.GetLanguage.GetNameNoTooltip|l], и обсуждали свои планы прямо у н[target.GetHerHis] под носом."
 
  murder_save.1014.desc:0 "Вечером, уже готовясь ко сну, я вдруг слышу, как двое слуг о чем-то шепчутся вполголоса. До меня не сразу доходит, что они используют [ROOT.Char.GetCulture.GetLanguage.GetNameNoTooltip|l], а не [owner.GetCulture.GetLanguage.GetNameNoTooltip|l]. При этом они явно не осознают, что я их понимаю.\n\n«Подождем, пока [ROOT.Char.GetSheHe] уснет. Ты посматривай по сторонам, а я перережу [ROOT.Char.GetHerHim] горло».\n\nЯ быстро покидаю покои и сообщаю страже, что в моей комнате убийцы. О [ROOT.Char.GetFaith.HighGodName], как же хорошо, что я знаю [owner.GetCulture.GetLanguage.GetNameNoTooltip|l]!"
 

@@ -111,6 +111,7 @@
  MOD_SAME_CULTURE_MERCENARY_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_MERCENARY_HIRE_COST_ADD$"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD:0 "Coût d’embauche des [Concept( 'holy_order', 'ordres' )|E] de même [culture|El]"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD$"
+ holy_order_government_levy_contribution_add:0 "[modifier_contribution|E] en [levy|El] [vassal|El] d’[holy_order|El]"
  
  desert_advantage:1 "[command_modifier_i|E][advantage|E] dans le désert"
  desert_attrition_mult:1 "[command_modifier_i|E][attrition|E] subie dans le désert"
@@ -534,6 +535,7 @@
  MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR:1 "Croissance du [development|El]"
  plains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans les plaines ([terrain|El])"
  farmlands_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans les terres arables ([terrain|El])"
+ farmlands_development_growth:0 "$farmlands_development_growth_factor$"
  hills_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans les collines ([terrain|El])"
  mountains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans les montagnes ([terrain|El])"
  desert_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans le désert ([terrain|El])"
@@ -552,6 +554,8 @@
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH$"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR:1 "Augmentation du [control|El]"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR$"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_AT_WAR:0 "Croissance du [control|E] en temps de [war|E]"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_AT_WAR:0 "Croissance du [control|E] en temps de [war|E]"
  MOD_CONSTRUCTION_PRESTIGE_COST:1 "Coût de construction de [building|El]"
  MOD_DOMAIN_LIMIT:0 "[domain_limit|E]"
  MOD_DOMAIN_LIMIT_WITH_VALUE:0 "[domain_limit|E]: $VALUE|0=+$"
@@ -807,6 +811,7 @@
  seduce_scheme_power_mult:1 "[scheme_power|E] visant à [GetScheme('seduce').GetActionName|l]"
  courting_scheme_power_add:1 "[scheme_power|E] visant à [GetScheme('courting').GetActionName|l]"
  max_courting_schemes_add:0 "Max. de [schemes|El] visant à [GetScheme('courting').GetActionName|l]"
+ befriend_scheme_power_add:0 "[scheme_power|E] visant à [GetScheme('befriend').GetActionName|l]"
  seduce_scheme_power_add:0 "$seduce_scheme_power_mult$"
  murder_scheme_power_add:0 "$murder_scheme_power_mult$"
  courting_scheme_power_mult:1 "[scheme_power|E] visant à [GetScheme('courting').GetActionName|l]"
@@ -891,9 +896,4 @@
  CUSTOM_MOD_ENABLES_STRESS_LOSS_DECISIONS:0 "Permet une [decision|El] spéciale qui #P réduit#! le [stress|El]"
 
  # RoCo
- world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans la [region|El] [GetGeographicalRegion('world_innovation_elephants').GetName]"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- scheme_impaired_judgement_modifier:0 "Le jugement de la cible est altéré"
- MODIFIER_VALUE_SUMMARY_WITH_NAME:0 "$HEADER$: $VALUE$"
- MODIFIER_VALUE_SUMMARY_WITHOUT_NAME:0 "$VALUE$"
+ world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ dans la [region|El] d'[GetGeographicalRegion('world_innovation_elephants').GetName]"

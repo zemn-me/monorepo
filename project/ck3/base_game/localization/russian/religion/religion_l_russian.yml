@@ -6,14 +6,14 @@
  FAITH_HOSTILITY_ASTRAY:1 "[faith_astray|L]"
  FAITH_HOSTILITY_RIGHTEOUS:1 "[faith_righteous|L]"
 
- FAITH_DESCRIPTION:0 "#T [faith|E]: [FAITH.GetTextIcon][FAITH.GetNameNoTooltip]#!\n[religion|E]: [FAITH.GetReligion.GetName] #weak ([FAITH.GetReligion.GetFamily.GetName])#!\n[fervor|E]: #V [FAITH.GetFervor|0]%#!"
+ FAITH_DESCRIPTION:0 "#T [faith|E]: [FAITH.GetTextIcon][FAITH.GetAdjectiveNoTooltip]#!\n[religion|E]: [FAITH.GetReligion.GetAdjective] #weak ([FAITH.GetReligion.GetFamily.GetName])#!\n[fervor|E]: #V [FAITH.GetFervor|0]%#!"
  FAITH_DESCRIPTION_HOSTILITY:0 "Мое мнение о них: $HOSTILITY_CATEGORY|V$"
- FAITH_AND_RELIGION:0 "[FAITH.GetTextIcon][FAITH.GetName] — [FAITH.GetReligion.GetName]"
+ FAITH_AND_RELIGION:0 "[FAITH.GetTextIcon][FAITH.GetAdjective] — [FAITH.GetReligion.GetAdjective]"
  CHARACTERS_OF_FAITH_MODIFIER:0 "#T Все [FAITH.GetAdherentNamePlural|l]:#!"
  CHARACTERS_OF_FAITH_MODIFIER_SUBHEADER:0 "#S Все [FAITH.GetAdherentNamePlural|l]:#!"
  CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Все последователи:#!"
  CHARACTERS_OF_UNKNOWN_FAITH_MODIFIER_SUBHEADER:0 "#S Все последователи:#!"
- CLERGY_OF_FAITH_MODIFIER:0 "#T Всё #L [FAITH.GetAdjective|l]ое#! [clergy|El]:#!"
+ CLERGY_OF_FAITH_MODIFIER:0 "#T Всё #L [FAITH.GetName|l]ое#! [clergy|El]:#!"
  CLERGY_OF_UNKNOWN_FAITH_MODIFIER:0 "#T Всё [Concept( 'clergy', 'духовенство' )|E] конфессии:#!"
  CHARACTERS_OF_FAITH_HOLY_SITE_MODIFIER:0 "#S Все [FAITH.GetAdherentNamePlural|l]:#!"
  DOCTRINE_ADD_VIRTUE:0 "$EFFECT_LIST_BULLET$ Делает «[TRAIT.GetName( GetPlayer )]» [Concept( 'virtue', 'добродетелью' )|E]\n"
@@ -21,10 +21,10 @@
  DOCTRINE_ADD_VIRTUES:0 "#indent_newline:2 $EFFECT_LIST_BULLET$ Делает [Concept( 'virtues', 'добродетелями' )|E] следующие свойства: $TRAITS$\nПрименяются следующие эффекты:#!\n"
  DOCTRINE_ADD_SINS:0 "#indent_newline:2 $EFFECT_LIST_BULLET$ Делает [Concept( 'sins', 'грехами' )|E] следующие свойства: $TRAITS$\nПрименяются следующие эффекты:#!\n"
  DOCTRINE_VIRTUE_SIN_TRAIT_ENTRY:0 "[TRAIT.GetName( GetPlayer )]"
- REL_HEAD_TITLE_NAME:1 "[my_faith.GetAdjectiveNoTooltip|U]ий [my_faith.ReligiousHeadTitleName|U]"
- HOLY_SITE_UNDER_CONTROL:0 "#P [FAITH.GetName] контролирует#!"
- HOLY_SITE_NOT_UNDER_CONTROL:0 "@warning_icon!#X [FAITH.GetName] не контролирует#!"
- FAITH_WINDOW_HOLY_SITE_TOOLTIP:1 "#T [holy_site|E] [HolySite.GetName]#!\n[GuiHolySiteItem.GetControlDesc]\nЕсли контролирует [GuiHolySiteItem.GetFaith.GetName|l], применяются следующие эффекты:\n[HolySite.GetEffectDesc( GuiHolySiteItem.GetFaith )]\n\n#I Нажмите, чтобы посмотреть: [HolySite.GetBarony.GetName]#!"
+ REL_HEAD_TITLE_NAME:1 "[my_faith.GetNameNoTooltip|U]ий [my_faith.ReligiousHeadTitleName|U]"
+ HOLY_SITE_UNDER_CONTROL:0 "#P [FAITH.GetAdjective] контролирует#!"
+ HOLY_SITE_NOT_UNDER_CONTROL:0 "@warning_icon!#X [FAITH.GetAdjective] не контролирует#!"
+ FAITH_WINDOW_HOLY_SITE_TOOLTIP:1 "#T [holy_site|E] [HolySite.GetName]#!\n[GuiHolySiteItem.GetControlDesc]\nЕсли контролирует [GuiHolySiteItem.GetFaith.GetAdjective|l], применяются следующие эффекты:\n[HolySite.GetEffectDesc( GuiHolySiteItem.GetFaith )]\n\n#I Нажмите, чтобы посмотреть: [HolySite.GetBarony.GetName]#!"
  FERVOR_GAIN_FROM_HOLY_SITES:0 "От [Concept('vassal', 'вассалов' )|E]"
  PIETY_HEAD_OF_FAITH:0 "[head_of_faith|E]"
  FERVOR_GAIN_SIZE_MODIFIER:0 "Размер [faiths|El]"
@@ -32,8 +32,8 @@
  #One-time fervor changes
  fervor_gain_built_temple_holding:0 "Новые храмовые владения в провинции [temple_location.GetName]"
  fervor_gain_upgraded_temple_holding_culture_parameter:0 "Улучшенные храмовые владения #weak (от [Concept( 'tradition', 'традиций' )|E])#!"
- fervor_loss_religious_war:0 "Титул [war_goal_title.GetName] захвачен у #L [defender.GetFaith.GetAdjective|l]их#! защитников в ходе священной войны"
- fervor_gain_religious_war:0 "Титул [war_goal_title.GetName] потерян в ходе #L [attacker.GetFaith.GetAdjective|l]ой#! священной войны"
+ fervor_loss_religious_war:0 "Титул [war_goal_title.GetName] захвачен у #L [defender.GetFaith.GetName|l]их#! защитников в ходе священной войны"
+ fervor_gain_religious_war:0 "Титул [war_goal_title.GetName] потерян в ходе #L [attacker.GetFaith.GetName|l]ой#! священной войны"
  fervor_loss_great_holy_war:0 "Титул [war_goal_title.GetName] захвачен в ходе войны «[attacker.GetFaith.Custom('GHWName')]»"
  fervor_gain_great_holy_war:0 "Титул [war_goal_title.GetName] потерян в ходе войны «[attacker.GetFaith.Custom('GHWName')]»"
  fervor_loss_lost_great_holy_war:0 "[the_faith.Custom('GHWName')] за титул [target_kingdom.GetName] заканчивается поражением"
@@ -43,6 +43,7 @@
  fervor_gain_almohads:0 "Восхождение Альмохадов"
  fervor_gain_holy_order_founded:0 "Основан новый священный орден"
  fervor_gain_united_africa:0 "Африка объединена"
+ fervor_loss_ruler_converted:0 "Правитель сменил конфессию"
  fervor_gain_avenged_battle_of_tours:0 "Битва при Пуатье отомщена"
  fervor_loss_avenged_battle_of_tours:0 "$fervor_gain_avenged_battle_of_tours$"
  fervor_gain_saoshyant:0 "Явление Саошьянта"
@@ -55,10 +56,10 @@
  fervor_gain_formed_outremer:0 "Создан титул [outremer_title.GetName]"
  fervor_gain_restored_sunni_caliphate:0 "[sunni_caliphate.GetName] восстановлен"
  fervor_gain_holy_bloodline:0 "Святой род персонажа [progenitor_holy_blood.GetName]"
- fervor_gain_magyar_revivalism:0 "Конфессия [magyar_faith.GetName] возрождена"
+ fervor_gain_magyar_revivalism:0 "Конфессия [magyar_faith.GetAdjective|l] возрождена"
  fervor_gain_defenders_of_highgod:0 "Защитили [highgod_faith_scope.HighGodNamePossessive]"
- fervor_gain_stewardship_of_sacred_rivers:0 "#L [ganges_faith.GetAdjective]ий#! служитель Ганги"
- fervor_gain_recreated_hof:0 "Создан [title|El] #L [faith.GetAdjective|l]ого#! [Concept( 'head_of_faith', 'духовного лидера' )|E]"
+ fervor_gain_stewardship_of_sacred_rivers:0 "#L [ganges_faith.GetName]ий#! служитель Ганги"
+ fervor_gain_recreated_hof:0 "Создан [title|El] #L [faith.GetName|l]ого#! [Concept( 'head_of_faith', 'духовного лидера' )|E]"
  fervor_sacrificed_our_head_of_faith:0 "[sacrificed_hof.GetName] приносится в жертву"
  fervor_gain_israel_recreated:0 "Титул [israel_title.GetName] восстановлен"
  fervor_gain_priesthood_recreated:0 "Высшее духовенство восстановлено"
@@ -70,15 +71,16 @@
  fervor_loss_ecumenical_patriarchate:0 "$fervor_gain_ecumenical_patriarchate$"
  fervor_loss_scandalous_priest:0 "Жрец в центре скандала"
  fervor_loss_scandalous_hof:0 "[head_of_faith|E] в центре скандала"
- fervor_gain_virtous_priest:0 "[virtuous_theocrat.GetFaith.GetAdjectiveNoTooltip]ий восторг"
- fervor_gain_new_heresy:0 "Рождение [heretic_faith.GetAdjectiveNoTooltip|l]ой ереси"
+ fervor_gain_virtous_priest:0 "[virtuous_theocrat.GetFaith.GetNameNoTooltip]ий восторг"
+ fervor_gain_new_heresy:0 "Рождение [heretic_faith.GetNameNoTooltip|l]ой ереси"
  fervor_gain_defector_heresy:0 "$fervor_gain_new_heresy$"
- fervor_gain_theravada:0 "[theravada_faith.GetAdjective]ие религиозные реформы"
+ fervor_gain_persecuted:0 "Возмущение в ответ на преследования"
+ fervor_gain_theravada:0 "#L [theravada_faith.GetName]ие#! религиозные реформы"
 
  FAITH_DOCTRINE_GENERAL_TOOLTIP:1 "[FaithDoctrine.GetEffectsDescription( GetPlayer.GetFaith )]\n\n[FaithDoctrine.GetDescription( GetPlayer.GetFaith )|F]"
 
  HOLY_SITE_CHARACTER_MODIFIER_NAME:0 "[holy_site|E]: $NAME$"
- RELIGION_TITLE_TEXT:0 "[Religion.GetNameNoTooltip] #weak ([Religion.GetFamily.GetName])#!"
+ RELIGION_TITLE_TEXT:0 "[Religion.GetAdjectiveNoTooltip] #weak ([Religion.GetFamily.GetName])#!"
  
  PIETY_TEXT_ICON:0 "@piety_icon!"
  PIETY_TEXT_ICON_christian:0 "@piety_icon_christian!"
@@ -93,8 +95,8 @@
  faith_conversion_cost_clan_converting_to_unreformed:0 "Правитель клана переходит в нереформированную конфессию"
  faith_conversion_cost_republic_converting_to_unreformed:0 "Республиканский правитель переходит в нереформированную конфессию"
  faith_conversion_cost_existing_faith:1 "Обращение в существующую [Concept( 'faith', 'конфессию' )|E]"
- faith_conversion_cost_pluralists:0 "У обеих [Concept( 'faith', 'конфессий' )|E] есть доктрина «[GetFaithDoctrine('doctrine_pluralism_pluralistic').GetName]»"
- faith_conversion_cost_pluralist:0 "Ваш [primary_title|El] — [GetFaithDoctrine('doctrine_pluralism_pluralistic').GetName]"
+ faith_conversion_cost_pluralists:0 "У обеих [Concept( 'faith', 'конфессий' )|E] есть доктрина «[GetFaithDoctrine('doctrine_pluralism_pluralistic').GetBaseName]»"
+ faith_conversion_cost_pluralist:0 "Ваш [primary_title|El] — [GetFaithDoctrine('doctrine_pluralism_pluralistic').GetBaseName]"
  faith_conversion_cost_unreformed_converting_to_reformed:1 "Переход из нереформированной конфессии в [Concept( 'organized', 'организованную' )|E]"
  faith_conversion_cost_spouse:0 "Переход в конфессию супруга/супруги"
  faith_conversion_cost_present:0 "Эта [faith|E] присутствует в вашей [Concept( 'realm', 'державе' )|E] или где-то поблизости"
@@ -107,7 +109,9 @@
  faith_conversion_cost_other_religion_family:0 "Переход в иную [Concept( 'religious_family', 'религиозную систему' )|E]"
  faith_conversion_cost_inside_religion_family:0 "Обращение в иную [Concept( 'religion', 'религию' )|E]"
  faith_conversion_cost_sacrificed_hof:0 "Принесение в жертву [Concept( 'head_of_faith', 'главы' )|E] допустимой [Concept( 'faith', 'конфессии' )|E]"
- faith_conversion_cost_unreformed_to_organized:0 "[GetFaithDoctrine('unreformed_faith_doctrine').GetName] [Concept( 'faith', 'конфессия' )|E] обращается в [Concept( 'organized', 'организованную' )|E]"
+ faith_conversion_cost_conversion_blocked_till_decision_taken:0 "Эта [Concept( 'faith', 'конфессия' )|E] разблокируется особым [Concept( 'decision', 'решением' )|E]"
+ faith_conversion_cost_conversion_blocked_till_nebulous_circumstances:0 "Эта [Concept( 'faith', 'конфессия' )|E] разблокируется при #EMP загадочных обстоятельствах#!"
+ faith_conversion_cost_unreformed_to_organized:0 "[GetFaithDoctrine('unreformed_faith_doctrine').GetBaseName] [Concept( 'faith', 'конфессия' )|E] обращается в [Concept( 'organized', 'организованную' )|E]"
 
  MINIMUM_FAITH_CONVERSION_PIETY_COST:0 "Минимальная стоимость: [GetLocalPlayerPietyTextIcon] $VALUE|V$"
 
@@ -169,6 +173,11 @@
  holy_site_esztergom_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_esztergom_name$)#!"
  holy_site_albi_name:0 "Альби"
  holy_site_albi_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak ($holy_site_albi_name$)#!"
+ holy_site_toledo_mozarabic_name:0 "Толедо"
+ holy_site_toledo_mozarabic_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak ($holy_site_toledo_name$)#!"
+ holy_site_carthage_adoptionist_name:0 "Карфаген"
+ holy_site_lyon_name:0 "Лион"
+ holy_site_lyon_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_lyon_name$)#!"
 
  #Holy Sites: Islam
  holy_site_mecca_name:0 "Мекка"
@@ -377,7 +386,7 @@
  holy_site_perm_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_perm_name$)#!"
 
  #Holy Sites: Slavic
- holy_site_kiev_name:0 "Киев"
+ holy_site_kiev_name:1 "Киев"
  holy_site_kiev_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_kiev_name$)#!"
  holy_site_novgorod_name:0 "Новгород"
  holy_site_novgorod_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_novgorod_name$)#!"
@@ -432,6 +441,14 @@
  holy_site_olkhon_name:0 "Ольхон"
  holy_site_olkhon_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_olkhon_name$)#!"
  
+ #Holy Sites: Basque
+ holy_site_viscaya_name:0 "$c_viscaya$"
+ holy_site_viscaya_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak ($holy_site_viscaya_name$)#!"
+ holy_site_aneto_name:0 "Ането"
+ holy_site_aneto_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak ($holy_site_aneto_name$)#!"
+ holy_site_bordeaux_name:0 "$c_bordeaux$"
+ holy_site_bordeaux_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak ($holy_site_bordeaux_name$)#!"
+
  #Holy Sites: Hellenic
  holy_site_athens_name:0 "Афины"
  holy_site_athens_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_athens_name$)#!"
@@ -522,6 +539,14 @@
  holy_site_sennar_name:0 "Сеннар"
  holy_site_sennar_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_sennar_name$)#!"
 
+ #Holy Sites: Achamism
+ holy_site_tenerife_name:0 "Гора Тейде"
+ holy_site_tenerife_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_tenerife_name$)#!"
+ holy_site_madiera_name:0 "Мадейра"
+ holy_site_madiera_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_madiera_name$)#!"
+ holy_site_cartagena_name:0 "Картахена"
+ holy_site_cartagena_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_cartagena_name$)#!"
+
  #Holy Sites: Waaqism
  holy_site_danakil_name:0 "Данакиль"
  holy_site_danakil_effect_name:0 "От [Concept( 'holy_site', 'святыни' )|E] #weak  ($holy_site_danakil_name$)#!"
@@ -562,17 +587,20 @@
  doctrine_parameter_women_cannot_be_granted_titles:0 "Женщины не могут получать [titles|El] в дар"
  doctrine_parameter_men_cannot_be_granted_titles:0 "Мужчины не могут получать [titles|El] в дар"
  doctrine_parameter_men_cannot_inherit_implicit_claims:1 "Мужчины не получают [implicit_claims|El] на титулы их родителей"
- doctrine_parameter_combatant_must_be_male:1 "[commanders|E] и $knight_culture_player_plural$ могут быть только мужчинами"
+ doctrine_parameter_combatant_must_be_male:1 "$knight_culture_player_plural$ и [commanders|El] могут быть только мужчинами"
  doctrine_parameter_male_dominated_council:0 "Только мужчины и [vassals|El] могут быть [Concept( 'chancellors', 'канцлерами' )|El], [Concept( 'stewards', 'управляющими' )|El] и [Concept( 'marshals', 'маршалами' )|El]"
  doctrine_parameter_female_dominated_council:0 "Только женщины и [vassals|El] могут быть [Concept( 'chancellors', 'канцлерами' )|El], [Concept( 'stewards', 'управляющими' )|El] и [Concept( 'marshals', 'маршалами' )|El]"
- doctrine_parameter_combatant_can_be_either_gender:0 "[commanders|E] и [knights|El] могут быть как мужчинами, так и женщинами"
- doctrine_parameter_combatant_must_be_female:1 "[commanders|E] и $knight_culture_player_plural$ могут быть только женщинами"
+ doctrine_parameter_combatant_can_be_either_gender:0 "[knights|E] и [commanders|El] могут быть как мужчинами, так и женщинами"
+ doctrine_parameter_combatant_must_be_female:1 "$knight_culture_player_plural$ и [commanders|El] могут быть только женщинами"
  doctrine_parameter_fervor_per_holy_site:1 "[fervor|E]: $VALUE|+=2$/год. за каждое [Concept( 'holy_site', 'священное место' )|E] во владении"
  doctrine_parameter_warmonger:0 "[at_peace_opinion|E], а не [offensive_war_opinion|El]"
  doctrine_parameter_increased_dynasty_prestige_birth_mult:0 "[prestige|E] новорожденных, полученный от [Concept( 'dynasty_prestige_level', 'уровня величия' )|E]: $VALUE|+=%0$"
  doctrine_parameter_increased_dynasty_prestige_marriage_mult:0 "[prestige|E], который дает [dynasty_prestige_level|El] при заключении [Concept( 'married', 'брака' )|El]: $VALUE|+=%0$"
  doctrine_parameter_increased_dynasty_prestige_long_reign_mult:0 "Максимальный бонус к мнению за [long_reign|El]: $VALUE|+=%0$"
- 
+ doctrine_parameter_combatant_must_be_female_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_must_be_female', '' )]"
+ doctrine_parameter_combatant_must_be_male_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_must_be_male', '' )]"
+ doctrine_parameter_combatant_can_be_either_gender_if_no_roco:0 "[SelectLocalization( Not(HasDlcFeature( 'diverge_culture' )), 'doctrine_parameter_combatant_can_be_either_gender', '' )]"
+
  doctrine_homosexuality_name:1 "Однополые отношения"
  doctrine_homosexuality_crime_name:1 "Преступление"
  doctrine_homosexuality_crime_desc:0 "Греховные желания содомитов несут угрозу самому обществу. Этих людей следует карать и отправлять в тюрьму за их грехи."
@@ -821,7 +849,10 @@
  unreformed_faith_name:0 "$unreformed_faith_doctrine_name$"
  unreformed_faith_doctrine_desc:1 "В нереформированной конфессии отсутствует организованное духовенство и каноны. Различные сообщества могут номинально исповедовать одну веру, но при этом практиковать совершенно разные религиозные обряды и суеверия."
  doctrine_parameter_unreformed:1 "Племенные [rulers|El] не могут менять тип [Concept( 'government', 'правительства' )|E]\n$EFFECT_LIST_BULLET$Дает [unreformed_pagan_combat_bonus|El]"
- doctrine_parameter_hostility_override_tenet_unreformed_syncretism:2 "Неязыческие [faiths|El] с догматом $tenet_unreformed_syncretism_name$ воспринимаются как [GetHostilityLevelName( FAITH_DOCTRINE_PARAMETER.GetIntValue )|Vl], а не $hostility_evil_tooltippable$"
+ doctrine_parameter_hostility_override_tenet_unreformed_syncretism:2 "Неязыческие [faiths|El] с догматом $tenet_unreformed_syncretism_name$ воспринимаются как [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V], а не $hostility_evil_tooltippable$"
+
+ west_african_unreformed_faith_doctrine_name:0 "$unreformed_faith_doctrine_name$"
+ west_african_unreformed_faith_doctrine_desc:0 "$unreformed_faith_doctrine_desc$"
  
  heresy_hostility_name:0 "Отношение к ереси"
  heresy_hostility_doctrine_name:0 "Ересь"
@@ -832,17 +863,25 @@
  divine_destiny_doctrine_desc:0 "Мы несем мир и процветание всем народам. Мы — законные владыки мира."
  doctrine_parameter_divine_destiny_holy_war_cost_reduction:0 "Затраты [Concept( 'piety', 'благочестия' )|E] для начала священной войны: #P -50%#!"
  
+ adoptionist_school_name:0 "Адопцианское кредо"
+ special_doctrine_adoptionist_school_elipandic_doctrine_name:0 "Элипандистская школа"
+ special_doctrine_adoptionist_school_elipandic_doctrine_desc:0 "Уделяя внимание нюансам христологии, $adoptionist$ в элипандистском варианте подчеркивает важность #EMP точных#! отличий от тринитарной догмы. Сложное и тщательно продуманное отличие считается намного предпочтительней простого и неубедительного доказательства."
+ special_doctrine_adoptionist_school_felicitous_doctrine_name:0 "Феликсианская школа"
+ special_doctrine_adoptionist_school_felicitous_doctrine_desc:0 "Феликсианский $adoptionist$ ставит практичность выше чистоты и понимает необходимость работать внутри враждебной системы, чтобы подорвать ее. Гнусная ложь ради благородных целей считается с тысячи раз ценнее, чем слепая правда."
+ special_doctrine_adoptionist_school_radical_doctrine_name:0 "Радикальная школа"
+ special_doctrine_adoptionist_school_radical_doctrine_desc:0 "Радикальные $adoptionist_adherent_plural$ не признают иного бога, кроме Отца, не приемлют божественность смертной плоти и считают, что лишь они настоящие $christianity_religion_adherent_plural$. Принять Христа, не согласившись с #EMP каждой#! буквой канона, считается отступничеством."
+
  special_doctrine_is_christian_faith_name:0 "Учение Иисуса"
  is_christian_faith_name:0 "$special_doctrine_is_christian_faith_name$"
  special_doctrine_is_christian_faith_desc:0 "В мире есть те, кто признает учение Иисуса, но не святость его самого. Мы не должны сурово обрушиваться на этих заблудших, ибо однажды они могут оставить кощунственные идеи и обратиться в истинную веру."
  doctrine_parameter_hostility_override_tenet_christian_syncretism:3 "Нехристианские [faiths|El] с догматом «$tenet_christian_syncretism_name$» воспринимаются как [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl], а не $hostility_evil_tooltippable$"
 
- special_doctrine_is_islamic_faith_name:0 "Учения Пророка"
+ special_doctrine_is_islamic_faith_name:0 "Учение Пророка"
  is_islamic_faith_name:0 "$special_doctrine_is_islamic_faith_name$"
  special_doctrine_is_islamic_faith_desc:0 "Хотя не все люди в этом мире следуют заветам Пророка, многие усердно служат воле Аллаха, сами того не подозревая. Быть может, со временем эти дикари смогут очиститься от скверны и стать правоверными мусульманами!"
  doctrine_parameter_hostility_override_tenet_islamic_syncretism:3 "Неисламские [faiths|El] с догматом «$tenet_islamic_syncretism_name$» воспринимаются как [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl], а не $hostility_evil_tooltippable$"
 
- special_doctrine_is_jewish_faith_name:0 "Учения Моисея"
+ special_doctrine_is_jewish_faith_name:0 "Учение Моисея"
  is_jewish_faith_name:0 "$special_doctrine_is_jewish_faith_name$"
  special_doctrine_is_jewish_faith_desc:0 "Не все иноверцы пребывают во грехе. Среди них есть те, кто уважает избранный народ, а значит, заслуживает уважения в ответ."
  doctrine_parameter_hostility_override_tenet_jewish_syncretism:3 "Неиудейские [faiths|El] с догматом «$tenet_jewish_syncretism_name$» воспринимаются как [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|Vl], а не $hostility_evil_tooltippable$"
@@ -856,10 +895,12 @@
  is_gnostic_faith_name:0 "$special_doctrine_is_gnostic_faith_name$"
  special_doctrine_is_gnostic_faith_desc:0 "$tenet_gnosticism_desc$"
 
+ doctrine_parameter_same_hof_hostility_override:0 "Воспринимает другие [faiths|El] с общим [Concept( 'head_of_faith', 'главой конфессии' )|E] как [GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V]"
+
  TOO_FEW_SPOUSES_PIETY:0 "Слишком мало супругов/супруг"
 
  CRUSADER_STATE_CRUSADER_TITLE_NAME:1 "[target_kingdom.GetNameNoTierNoTooltip] крестоносцев"
- CRUSADER_STATE_FAITH_TITLE_NAME:1 "[title_recipient.GetFaith.GetAdjective|U]. [target_kingdom.GetNameNoTierNoTooltip|U]"
+ CRUSADER_STATE_FAITH_TITLE_NAME:1 "[title_recipient.GetFaith.GetName|U]. [target_kingdom.GetNameNoTierNoTooltip|U]"
 
  religion_the_gods:0 "боги"
  religion_the_gods_2:0 "$religion_the_gods$" # Optional translation alt

@@ -398,6 +398,18 @@ on_birth_child = {
 				}
 			}
 		}
+
+		hidden_effect = { # Track El Cid's Lineage (FP2) for achievement
+			if = {
+				limit = { 
+					OR = {
+						scope:real_father = { has_character_flag = fp2_el_cid_blood_relation_legacy }
+						scope:mother = { has_character_flag = fp2_el_cid_blood_relation_legacy }
+					}
+				}				
+				scope:child = { add_character_flag = fp2_el_cid_blood_relation_legacy }
+			}
+		}
 	}
 }
 

@@ -16,7 +16,7 @@
  sway_ongoing.1004.desc:0 "Nuestra reciente correspondencia ha dejado mucho que desear. Absteneos de hacer comentarios personales en el futuro."
  sway_ongoing.1004.a:0 "Ay, no…"
 
- sway_ongoing.1005.t:0 "Influencia: [target.Custom('ES_ElLa')] buen[target.Custom('ES_XA')] [target.GetTitleAsNameNoTooltip]"
+ sway_ongoing.1005.t:0 "Influencia: buen[target.Custom('ES_XA')] [target.GetTitleAsNameNoTooltip]"
  sway_ongoing.1005.desc:0 "Como recibía la visita de damas y caballeros de señoríos de todas partes, tuve varias oportunidades de dar buena imagen de [target.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)].\n\n«Mi [ROOT.Char.GetLadyLord], decidme, ¿quién es la persona más [target.Custom('FormalComplimentAdjective')] que conocéis?»."
  sway_ongoing.1005.a:0 "¡[target.GetTitledFirstNameNoTooltip], sin duda alguna!"
  sway_ongoing.1005.b:0 "Bueno, ¡yo, por supuesto!"
@@ -120,7 +120,7 @@
  sway_ongoing.5013.desc_library_success:0 "Libros doblados, documentos perdidos, lomos pintados… Tras un gran trabajo de reorganización, hay algo de orden en el caos de la biblioteca de [target.GetTitledFirstNameNoTooltip]."
  sway_ongoing.5013.desc_library_failure:0 "Libros doblados, documentos perdidos, lomos pintados… Por mucho que lo intento, no encuentro ningún sentido al desbarajuste de biblioteca que tiene [target.GetTitledFirstNameNoTooltip]. "
  sway_ongoing.5013.desc_gold_success:0 "Cuando explico los peligros de tener un cofre de oro a la vista, a [target.GetTitledFirstNameNoTooltip] se le abren los ojos como platos.\n\n«¡Ay, por supuesto que no debería estar ahí! Gracias, [ROOT.Char.GetTitledFirstNameNoTooltip]»."
- sway_ongoing.5013.desc_gold_failure:0 "Mientras intentaba explicar los peligros de tener un cofre de oro a la vista, veo que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] entrecierra los ojos.\n\n«¿Y exactamente #EMP por qué#! estabas mirando mi oro?»."
+ sway_ongoing.5013.desc_gold_failure:0 "Mientras intentaba explicar los peligros de tener un cofre de oro a la vista, veo que [target.GetTitledFirstName] entrecierra los ojos.\n\n«¿Y exactamente #EMP por qué#! estabas mirando mi oro?»."
  sway_ongoing.5013.desc_steal_success:0 "«¡Mi oro! ¿Dónde está mi oro?».\n\nEncuentro a un[target.Custom('ES_XA')] [target.GetTitledFirstName] consternad[target.Custom('ES_OA')] de pie en un pasillo, delante de un cofre vacío. «Oh, [ROOT.Char.GetTitledFirstNameNoTooltip], ¡si te hubiera hecho caso…!»."
  sway_ongoing.5013.desc_end_good:0 "\n\nHice todo lo que estaba en mi mano para ayudar[target.Custom('ES_LoLa')]."
  sway_ongoing.5013.desc_end_bad:0 "\n\nFue una experiencia difícil, pero he hecho todo lo que pude para ayudar[target.Custom('ES_LoLa')]."

@@ -1,6 +1,6 @@
 ﻿l_spanish:
  lover.0001.t:0 "El fin de la pasión"
- lover.0001.desc_opening:1 "«Mi [ROOT.Char.Custom('LoverPetName')], esto… ¡esto ya no funciona!».\n\nMi amante, [lover.Custom('ES_ElLa')] [lover.GetTitledFirstName], se aparta de mí,"
+ lover.0001.desc_opening:1 "«Mi [ROOT.Char.Custom('LoverPetName')], esto… ¡esto ya no funciona!».\n\nMi amante, [lover.GetTitledFirstName], se aparta de mí,"
  lover.0001.desc_murder:0 "«La chispa entre nosotros ha ido menguando… Y pensar que asesinarías… ¡Ya es demasiado!»."
  lover.0001.desc:0 "«La chispa entre nosotros es… es como si hubiera muerto»."
  lover.0001.a:1 "Estoy de acuerdo, es hora de seguir caminos distintos."
@@ -10,7 +10,7 @@
  lover.0002.t:0 "El fin de la pasión"
  lover.0002.still_in_love:0 "Las palabras [first_lover.Custom('ES_DelDela')] [first_lover.GetTitledFirstName] siguen resonando en mis oídos. Por el tono sombrío con el que me habló, no puedo evitar pensar que intentaba hacerme daño.\n\n«Pero… ¡yo te quiero!», logré decir con la garganta seca. Mis súplicas no convencieron a su corazón."
  lover.0002.still_likes:0 "Las palabras [first_lover.Custom('ES_DelDela')] [first_lover.GetTitledFirstName] dolieron, pero intenté tragármelo.\n\nSi [first_lover.GetSheHe] cree que es lo mejor, no le impediré marcharse."
- lover.0002.neutral:0 "«Todo tiene su fin», me dijo [first_lover.Custom('ES_ElLa')] [first_lover.GetTitledFirstName]. Me apena pensar en todo lo que compartimos y lo que ahora hemos perdido pero, en el fondo, esto es lo mejor."
+ lover.0002.neutral:0 "«Todo tiene su fin», me dijo [first_lover.GetTitledFirstName]. Me apena pensar en todo lo que compartimos y lo que ahora hemos perdido pero, en el fondo, esto es lo mejor."
  lover.0002.dislike:0 "[first_lover.GetTitledFirstName] se me acercó, con inseguridad. Cuando me di cuenta de que había venido a decirme que ya no podíamos seguir viéndonos, no sentí enfado. Solo alivio."
  lover.0002.hate:0 "[first_lover.GetTitledFirstName] vino a verme y dijo que tenía que hablar de algo serio. Pero antes de que hablase, le solté una larga diatriba sobre cómo me había decepcionado una y otra vez.\n\nCasi me alegré cuando me dijo que no quería volver a verme."
  lover.0002.like.vengeful:0 "A medida que [first_lover.GetTitledFirstName] iba relatando una mala excusa tras otro, empezó a arderme la tripa de odio. ¿Así que no soy lo bastante buen[ROOT.Char.Custom('ES_OA')] para [first_lover.GetSheHe]? Me las pagará, recordad mis palabras…"
@@ -61,7 +61,7 @@
  lover.0101.t:0 "Capurad[ROOT.Char.Custom('ES_OA')] por [lover.GetSheHe]"
  lover.0101.desc_dungeon:0 "Apenas veo los barrotes por el velo de lágrimas que me cubre los ojos. ¿Por qué me hace esto mi [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('lover'))]? [lover.GetTitledFirstName], mi [lover.Custom('LoverPetName')] déjame salir, por favor…"
  lover.0101.desc_house_arrest:0 "Aunque piso las mismas salas que mi [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('lover'))] [lover.GetTitledFirstName], nuestros corazones nunca habían estado más lejos. Mi [lover.Custom('LoverPetName')], déjame salir, por favor…"
- lover.0101.a:0 "¡[lover.Custom('ES_ElLa')|U] [lover.GetWomanMan] a la que amo no me haría esto!"
+ lover.0101.a:0 "¡La persona que amo no me haría esto!"
  lover.0101.b:0 "No es más que otro obstáculo que debemos superar."
 
  lover.0102.t:0 "En prisión"
@@ -151,7 +151,7 @@
  lover.3113.a:0 "¡Solo me importas tú!"
  lover.3113.a.tt:0 "#F ¡Nunca amaré a nadie como a [lover.GetFirstNameNoTooltip]!#!"
 
- lover.3114.desc:0 "«Te tengo aprecio, [ROOT.Char.GetFirstNameNoTooltip], pero no estoy list[lover.Custom('ES_OA')] para prometerme contigo».\n\n[lover.Custom('ES_ElLa')|U] [lover.GetTitledFirstName] [lover.Custom('quirk_neg_present')] mientras surge un silencio incómodo."
+ lover.3114.desc:0 "«Te tengo aprecio, [ROOT.Char.GetFirstNameNoTooltip], pero no estoy list[lover.Custom('ES_OA')] para prometerme contigo».\n\n[lover.GetTitledFirstName] [lover.Custom('quirk_neg_present')] mientras surge un silencio incómodo."
  lover.3114.a:0 "¿Cómo pude equivocarme así con [lover.GetSheHe]?"
 
 
@@ -170,7 +170,7 @@
  lover.1002.b:0 "No me puedo permitir involucrar en esto a [lover.GetFirstNameNoTooltip]."
 
  lover.1003.t:0 "El consuelo de un amante"
- lover.1003.desc:0 "La carga de ser [ROOT.Char.GetTitleTierName] me ha pesado últimamente y solo el cálido abrazo de mi [ROOT.Char.Custom2('RelationToMe' , SCOPE.sC('lover') )], [lover.Custom('ES_ElLa')] [lover.GetTitledFirstName], parece aliviarme.\n\n«Por favor, [ROOT.Char.Custom('LoverPetName')] mí[ROOT.Char.Custom('ES_OA')], deja que te ayude a relajarte»."
+ lover.1003.desc:0 "La carga de ser [ROOT.Char.GetTitleTierName] me ha pesado últimamente y solo el cálido abrazo de mi [ROOT.Char.Custom2('RelationToMe' , SCOPE.sC('lover') )], [lover.GetTitledFirstName], parece aliviarme.\n\n«Por favor, [ROOT.Char.Custom('LoverPetName')] mí[ROOT.Char.Custom('ES_OA')], deja que te ayude a relajarte»."
  lover.1003.a:0 "¿Qué haría yo sin ti y tú sin mí, amor mío?"
  lover.1003.b:0 "¡Justo lo que necesitaba!"
 
@@ -207,7 +207,7 @@
  lover.1007.b_1:0 "Consigo un trato mejor"
  lover.1007.b_2:0 "[lover.GetFirstNameNoTooltip] no aprecia mi codicia"
 
- lover.1008.t:0 "Llega [lover.Custom('ES_ElLa')] [lover.GetTitleTierName]"
+ lover.1008.t:0 "Llega [lover.GetTitleTierName]"
  lover.1008.desc:0 "Cuando voy dar la bienvenida a [capital.GetNameNoTier] a mi [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('lover'))] [lover.GetTitledFirstName], se ve rodead[lover.Custom('ES_OA')] de dignatarios y responsables que reclaman su ayuda y participación."
  lover.1008.a:0 "¡Dispersaos! ¡Ha venido a verme a mí!"
  lover.1008.b:0 "Su opinión en estos asuntos sería útil…"
@@ -232,8 +232,8 @@
  lover.2004.b:0 "Confío en [lover.Custom('ES_ElElla')]."
  lover.2004.b.tt:0 "#F ¡Mi amor jamás me mentiría!#!"
 
- lover.2005.desc:0 "«Mi [ROOT.Char.Custom('LoverPetName')], las tiernas miradas que he visto entre [lovers_lover.Custom('ES_ElLa')] [lovers_lover.GetTitledFirstName] y tú solo son un malentendido, ¿verdad?».\n\nMi [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('original_lover'))] [original_lover.GetFirstName] está preocupad[original_lover.Custom('ES_OA')] desde que me casé por la promesa de devoción personal que nos hicimos…"
- lover.2005.a:0 "No te preocupes, mi amor. ¡Eres [original_lover.Custom('ES_ElLa')] únic[original_lover.Custom('ES_OA')] para mí!"
+ lover.2005.desc:0 "«Mi [ROOT.Char.Custom('LoverPetName')], las tiernas miradas que he visto entre [lovers_lover.GetTitledFirstName] y tú solo son un malentendido, ¿verdad?».\n\nMi [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('original_lover'))] [original_lover.GetFirstName] está preocupad[original_lover.Custom('ES_OA')] desde que me casé por la promesa de devoción personal que nos hicimos…"
+ lover.2005.a:0 "No te preocupes, mi amor. ¡Eres únic[original_lover.Custom('ES_OA')] para mí!"
  lover.2005.b:0 "No tienes nada que decir en mi matrimonio."
 
  lover.3103.desc_married:1 "Aunque [lover.GetFirstName] contrajo matrimonio con es[lover.Custom('ES_EA')] [ROOT.Char.Custom2('DescriptorNegative', SCOPE.sC('lovers_lover'))] [lovers_lover.GetTitledFirstName], me asegura que solo me quiere a mí.\n\n«[lover.Custom('LoverPetName')|U], no tienes por qué preocuparte. Lo eres todo para mí, nunca sería capaz de amar a otra persona»."
@@ -286,7 +286,7 @@
  lover.3205.a.tt:0 "#F ¡¿Me rompe el corazón con una #EMP carta#!?!#!"
 
  lover.3206.t:0 "Al otro lado del campo de batalla"
- lover.3206.desc:0 "Oh, [lover.Custom('ES_ElLa')] [lover.GetTitledFirstName], amor mío, ¿sobreviviremos a esta guerra?\n\nUna cosa es que mi [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('attacker'))] [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('attacker'))] [attacker.GetTitledFirstName] me reclame en esta guerra, pero tener que alzarme en armas en contra de mi amor es…"
+ lover.3206.desc:0 "Oh, [lover.GetTitledFirstName], amor mío, ¿sobreviviremos a esta guerra?\n\nUna cosa es que mi [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('attacker'))] [ROOT.Char.Custom2('RelationToMe',SCOPE.sC('attacker'))] [attacker.GetTitledFirstName] me reclame en esta guerra, pero tener que alzarme en armas en contra de mi amor es…"
  lover.3206.a:0 "Todo vale en el amor y la guerra… No puedo hacer nada."
  lover.3206.b:0 "¡Obstaculizaré los esfuerzos de [attacker.GetFirstNameNoTooltip]!"
  lover.3206.b.tt:0 "#F ¡Lo que sea para mantener a salvo a mi [lover.GetFirstNameNoTooltip]!#!"
@@ -362,7 +362,7 @@
 
  lover.3216.desc:0 "Un [lover.Custom('MusicalPerformer')] llegó a la corte, oficialmente para entretener y divertirnos, pero pronto se me acerca para contarme el auténtico motivo de su visita."
  lover.3216.desc_fancy_troubadour:0 "Un [lover.Custom('MusicalPerformer')] llegó a la corte cantando con una voz digna de un dios y con una prosa tan fluida como un río. Pronto se me acerca para revelar el auténtico motivo de su visita."
- lover.3216.desc_ending:0 "\n\n«Me envía [original_lover.Custom('ES_ElLa')] [original_lover.GetTitledFirstName] para dar fe de su amor y actuar para vos, mi [ROOT.Char.GetLadyLord]?»."
+ lover.3216.desc_ending:0 "\n\n«Me envía [original_lover.GetTitledFirstName] para dar fe de su amor y actuar para vos, mi [ROOT.Char.GetLadyLord]?»."
  lover.3216.a:0 "¡Qué maravilla!"
  lover.3216.b:0 "¿Por qué tiene que enviar a otra persona para cortejarme?"
 
@@ -413,13 +413,13 @@
  lover.7002.t:0 "Mi amig[proposing_friend.Custom('ES_OA')] [proposing_friend.Custom2('ComplimentAdjective', ROOT.Char)]"
  lover.7002.desc:0 "Sentad[ROOT.Char.Custom('ES_OA')] al lado de [proposing_friend.GetTitledFirstName], hablamos sobre [ROOT.Char.Custom('subject_of_interest')], veo cómo se fija en mí cuando sonrío… De repente la tensión es palpable y, a juzgar por cómo se sonroja, esta sensación no es solo cosa mía."
 
- lover.7003.t:0 "[potential_lover.Custom('ES_ElLa')|U] rival [potential_lover.Custom('InsultAdjective')]"
+ lover.7003.t:0 "El/La rival [potential_lover.Custom('InsultAdjective')]"
  lover.7003.desc:0 "[potential_lover.GetTitledFirstName] vuelve a lanzar otra diatriba sobre [potential_lover.Custom('herhis_subject_of_interest')] y yo, dejando la mente volar, no puedo evitar fijarme en que realidad es bastante [potential_lover.Custom2('ComplimentAdjective', ROOT.Char)].\n\nLa tensión que compartimos no es nueva pero, cuando nuestros ojos se encuentran, siento que el corazón me late con algo que no es odio…"
  lover.7003.a:0 "¿Qué hechizo me ha echado es[potential_lover.Custom('ES_EA')] [potential_lover.Custom('InsultNoun')]?"
  lover.7003.a.tt:0 "#F Debo investigar más a fondo este extraño sentimiento…#!"
  lover.7003.b:0 "Debe ser odio lo que siento."
 
- lover.7004.t:0 "[proposing_rival.Custom('ES_ElLa')|U] rival [proposing_rival.Custom('InsultAdjective')]"
+ lover.7004.t:0 "El/La rival [proposing_rival.Custom('InsultAdjective')]"
  lover.7004.desc_opening:0 "En el medio de nuestra apasionante discusión sobre [ROOT.Char.Custom('subject_of_interest')] veo a [proposing_rival.GetTitledFirstName] al otro lado de la habitación con el ceño fruncido.\n\n"
  lover.7004.desc_potential_lover_is_go:0 "Cuando nuestros ojos se encuentran, para mi sorpresa, [proposing_rival.Custom('ES_ElElla')] sonríe [proposing_rival.Custom('quirk_pos_adverb')]. ¿Siempre había sido un[proposing_rival.Custom('ES_XA')] [proposing_rival.GetWomanMan] tan [proposing_rival.Custom2('ComplimentAdjective', ROOT.Char)]?"
  lover.7004.desc_not:0 "Cuando nuestros ojos se encuentran, [proposing_rival.GetSheHe] frunce el ceño y aparta la mirada rápidamente. ¡Es tan [proposing_rival.Custom('InsultNoun')] como siempre!"

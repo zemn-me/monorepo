@@ -78,7 +78,7 @@
  stewardship_wealth.5002.start.desc:0 "Я прогуливаюсь между рыночными палатками во владении [capital.GetNameNoTooltip] с тяжелым кошелем на поясе. Как я воспользуюсь этими монетами?\n\nКогда я рассматриваю товары местного "
  stewardship_wealth.5002.safe_smithy.desc:0 "кузнеца, — отличная сталь,"
  stewardship_wealth.5002.safe_mason.desc:0 "каменщика, — идеальная геометрия,"
- stewardship_wealth.5002.safe_religious_sculptor.desc:0 "скульптора, — [ROOT.Char.GetFaith.GetAdjectiveNoTooltip|l]ие образы,"
+ stewardship_wealth.5002.safe_religious_sculptor.desc:0 "скульптора, — [ROOT.Char.GetFaith.GetNameNoTooltip|l]ие образы,"
  stewardship_wealth.5002.safe_jeweler.desc:0 "ювелира, — филигранная работа,"
  stewardship_wealth.5002.middle.desc:1 "прекрасное вложение», — ко мне вдруг подходит [investor.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)].\n\n«Небольшой совет, если позволите, [ROOT.Char.Custom2('RelationToMeAddress', investor)]. Взгляните на"
  stewardship_wealth.5002.risky_smithy.desc:0 "кузницу"
@@ -108,4 +108,4 @@
  stewardship_wealth.6001.c:0 "Я поговорю с [Select_CString(stall_owner.IsFemale, 'ней', 'ним' )] и, возможно, смогу что-то узнать о торговле."
 
  small_religious_carving:0 "Небольшой резной религиозный символ"
- small_religious_carving_desc:0 "Маленький, но затейливый резной [stall_owner.GetFaith.GetReligion.GetAdjectiveNoTooltip]ий символ — [stall_owner.GetFaith.ReligiousSymbol]."
+ small_religious_carving_desc:0 "Маленький, но затейливый резной [stall_owner.GetFaith.GetReligion.GetNameNoTooltip]ий символ — [stall_owner.GetFaith.ReligiousSymbol]."

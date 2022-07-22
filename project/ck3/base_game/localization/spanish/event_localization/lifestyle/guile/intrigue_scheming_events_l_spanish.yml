@@ -85,7 +85,7 @@
  intrigue_scheming.2101.a:0 "Podría tener algún trabajo para vos."
  intrigue_scheming.2101.b:0 "No sois la persona adecuada para el trabajo."
 
- intrigue_scheming.2102.t:0 "[sneaky_person.Custom('ES_ElLa')|U] leal [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('sneaky_person') )]"
+ intrigue_scheming.2102.t:0 "Mi leal [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('sneaky_person') )]"
  intrigue_scheming.2102.desc:0 "Estoy en las sombras del pasillo, viendo cómo mi nuev[sneaky_person.Custom('ES_OA')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('sneaky_person') )] [sneaky_person.GetTitledFirstName] desaparece en medio de la noche.\n\nOtra velada, otra reunión misteriosa, y mis sospechas hacia est[sneaky_person.Custom('ES_EA')] [sneaky_person.GetWomanMan] no hacen más que aumentar."
  intrigue_scheming.2102.a:0 "[sneaky_person.GetFirstNameNoTooltip], ¿qué tramáis?"
  intrigue_scheming.2102.a.tt:1 "[sneaky_person.GetSheHe|U] no descubre tu investigación"
@@ -100,10 +100,10 @@
 
 # Servants and Masters, by Petter Vilberg
  intrigue_scheming.3001.t:0 "Siervos y amos"
- intrigue_scheming.3001.desc:0 "[hooked_courtier.GetTitledFirstName], [new_target.Custom2('RelationToMe', SCOPE.sC('hooked_courtier'))] de [new_target.GetTitledFirstName], está a mi merced. Sin embargo, con la estrategia adecuada, puedo aumentar mi ventaja aún más.\n\n¿Podría usar a [hooked_courtier.GetFirstName] para incrementar mi influencia sobre [new_target.Custom('ES_ElLa')] [new_target.GetTitleTierName]?"
+ intrigue_scheming.3001.desc:0 "[hooked_courtier.GetTitledFirstName], [new_target.Custom2('RelationToMe', SCOPE.sC('hooked_courtier'))] de [new_target.GetTitledFirstName], está a mi merced. Sin embargo, con la estrategia adecuada, puedo aumentar mi ventaja aún más.\n\n¿Podría usar a [hooked_courtier.GetFirstName] para incrementar mi influencia sobre el/la [new_target.GetTitleTierName]?"
  intrigue_scheming.3001.a:0 "¡Enviaré a [hooked_courtier.GetFirstNameNoTooltip] como espía personal!"
  intrigue_scheming.3001.a.tt:1 "Si [new_target.GetFirstNameNoTooltip] tiene algún secreto:\n   Te revela uno sus secretos"
- intrigue_scheming.3001.b:0 "Aquí tenemos como te asegurarás de descubrir los secretos de [new_target.GetFirstNameNoTooltip]…"
+ intrigue_scheming.3001.b:0 "Así es como te asegurarás de descubrir los secretos de [new_target.GetFirstNameNoTooltip]…"
  intrigue_scheming.3001.b.tt:1 "Si [new_target.GetFirstNameNoTooltip] tiene algún secreto:\n   Te revela uno sus secretos\nSi no:"
  intrigue_scheming.3001.b.success:0 "Secreto inventado"
  intrigue_scheming.3001.b.success_tt:0 "[hooked_courtier.GetFirstNameNoTooltip] «encuentra pruebas» de uno de los secretos de [new_target.GetFirstNameNoTooltip]"
@@ -128,7 +128,7 @@
  intrigue_scheming.3013.desc:0 "[hooked_courtier.GetTitledFirstName] no puedo encontrar información incriminatoria sobre [new_target.GetTitledFirstName], así que menos mal que preparé algunas.\n\nDe improviso, [new_target.GetFirstName] parece acosad[hooked_courtier.Custom('ES_OA')] por rumores malévolos, y resulta que yo tengo las pruebas de ellos."
  intrigue_scheming.3013.a:0 "[ROOT.Char.GetFaith.TricksterGodName] ayuda a quien se ayuda."
 
- intrigue_scheming.3014.desc:0 "[hooked_courtier.GetTitledFirstName] no puedo encontrar información incriminatoria sobre [new_target.GetTitledFirstName]. Por desgracia, los rumores que sembré tan cuidadosamente no parecen haber cuajado y nadie cree las acusaciones que preparé contra [new_target.Custom('ES_ElLa')] [new_target.GetTitleTierName].\n\nEs más, ¡han rastreado los rumores falsos hasta mí!"
+ intrigue_scheming.3014.desc:0 "[hooked_courtier.GetTitledFirstName] no puedo encontrar información incriminatoria sobre [new_target.GetTitledFirstName]. Por desgracia, los rumores que sembré tan cuidadosamente no parecen haber cuajado y nadie cree las acusaciones que preparé contra el/la [new_target.GetTitleTierName].\n\nEs más, ¡han rastreado los rumores falsos hasta mí!"
  intrigue_scheming.3014.a:0 "¿Qué son unas mentirijillas inofensivas entre amigos?"
 
  intrigue_scheming.3021.desc:0 "Los gritos se pueden oír por todo el edificio. Sirvientes apurados dejan [new_target.Custom('ES_AlAla')] ofuscad[new_target.Custom('ES_OA')] [new_target.GetTitledFirstName] mirando el cadáver ensangrentado de [hooked_courtier.GetTitledFirstName] tendido en sus aposentos, con su cuchillo al lado.\n\n«¡Estaba sol[new_target.Custom('ES_OA')] en el jardín, debéis creerme!», insiste [new_target.Custom('ES_ElElla')] a la multitud reunida de cortesanos. ¿Quién creería una excusa tan endeble?"
@@ -137,10 +137,10 @@
  intrigue_scheming.3022.desc:0 "¡Mis intentos por culpar a [new_target.GetTitledFirstName] han terminado en desastre! [hooked_courtier.GetFirstName] seguía respirando cuando los sirvientes [hooked_courtier.Custom('ES_Lola')] encontraron sangrando en los aposentos [new_target.Custom('ES_DelDela')] [new_target.GetTitleTierName].\n\nCuando llegó [new_target.GetFirstName], a [hooked_courtier.GetFirstName] le quedaba un último aliento. «[ROOT.Char.GetTitledFirstName]…»"
  intrigue_scheming.3022.a:0 "¡Es para matar[hooked_courtier.Custom('ES_LoLa')], si no lo hubiera hecho ya!"
 
- intrigue_scheming.3023.desc:0 "Tenía que ser perfecto, y sin embargo… Tenían que encontrar a [hooked_courtier.GetTitledFirstName] en los aposentos [new_target.Custom('ES_DelDela')] [new_target.GetTitleTierName], con la garganta rajada por el cuchillo de [new_target.GetTitleTierName] en un momento en que [new_target.Custom('ES_ElLa')] [new_target.GetTitleTierName] no tuviera coartada.\n\nSin embargo, media docena de sirvientes pudieron confirmar que [new_target.GetTitledFirstName] estuvo cabalgando ese día, lo que hace imposible que [new_target.Custom('ES_ElElla')] sea [new_target.Custom('ES_ElLa')] asesin[new_target.Custom('ES_OA')]."
+ intrigue_scheming.3023.desc:0 "Tenía que ser perfecto, y sin embargo… Tenían que encontrar a [hooked_courtier.GetTitledFirstName] en los aposentos [new_target.Custom('ES_DelDela')] [new_target.GetTitleTierName], con la garganta rajada por el cuchillo de [new_target.GetTitleTierName] en un momento en que [new_target.GetTitleTierName] no tuviera coartada.\n\nSin embargo, media docena de sirvientes pudieron confirmar que [new_target.GetTitledFirstName] estuvo cabalgando ese día, lo que hace imposible que [new_target.GetSheHe] sea mi asesin[new_target.Custom('ES_OA')]."
  intrigue_scheming.3023.a:0 "¡Qué desperdicio de víctima!"
 
- intrigue_scheming.3031.desc:0 "Mi reputación de conseguir lo que quiero por cualquier medio me beneficia enormemente. Con tantos vasallos y sirvientes míos acobardándose ante mí, no hace falta mucho para convencer a los demás de hacer lo mismo.\n\n[hooked_courtier.GetTitledFirstName] solo tuvo que encontrar a solas a [new_target.GetTitledFirstName] una tarde y pasarle una carta con mi sello. [new_target.Custom('ES_ElLa')|U] [new_target.GetTitleTierName] entiende cuán fácilmente me es llegar hasta [new_target.Custom('ES_ElElla')]."
+ intrigue_scheming.3031.desc:0 "Mi reputación de conseguir lo que quiero por cualquier medio me beneficia enormemente. Con tantos vasallos y sirvientes míos acobardándose ante mí, no hace falta mucho para convencer a los demás de hacer lo mismo.\n\n[hooked_courtier.GetTitledFirstName] solo tuvo que encontrar a solas a [new_target.GetTitledFirstName] una tarde y pasarle una carta con mi sello. [new_target.GetTitleTierName] entiende cuán fácilmente me es llegar hasta [new_target.GetSheHe]."
  intrigue_scheming.3031.a:0 "Es casi una pena. Me encana convencer a la gente…"
 
  intrigue_scheming.3032.desc:0 "[hooked_courtier.GetTitledFirstName] encontró una noche a solas a [new_target.GetTitledFirstName] y le entregó una carta con mi sello, para dejar claro hasta dónde soy capaz de llegar. Sin embargo, no tuvo el efecto esperado. Al contrario, ¡[new_target.Custom('ES_AlAla')] [new_target.GetTitleTierName] le encanta contar a todo el mundo mis «amenazas vacías»!"
@@ -162,7 +162,7 @@
  intrigue_scheming.3042.desc:0 "[liege_target.GetTitledFirstName] parece horrorizad[liege_target.Custom('ES_OA')], como si la traición de [vassal_target.GetTitledFirstName] fuera una #EMP absoluta#! sorpresa. «¡¿Vais a apoyar cualquier demanda de est[ROOT.Char.Custom('ES_EA')]… est[ROOT.Char.Custom('ES_EA')] [ROOT.Char.Custom('InsultNoun')]?!»\n\n[vassal_target.GetFirstName] sigue el juego, asintiendo severamente… tal como estaba previsto. Yo sonrío ante mi futuro nuevo peón. «Ni por un momento creáis que [vassal_target.Custom('ES_ElElla')] está sol[vassal_target.Custom('ES_OA')]»."
  intrigue_scheming.3042.a:0 "Veamos, qué me gustaría que hicieras…"
 
- intrigue_scheming.3043.desc:0 "«¡No creáis que se me coacciona tan fácilmente!», afirma [liege_target.GetTitledFirstName]. [vassal_target.GetTitledFirstName] parece encogerse ante [liege_target.Custom('ES_ElElla')], sin la confianza con la se ofreció a apoyar mis demandas.\n\n[liege_target.Custom('ES_ElLa')|U] [liege_target.GetTitleTierName] frustra mis últimas esperanzas. «Mis vasallos conocen su lugar», y [vassal_target.GetFirstName] lo confirma con su silencio."
+ intrigue_scheming.3043.desc:0 "«¡No creáis que se me coacciona tan fácilmente!», afirma [liege_target.GetTitledFirstName]. [vassal_target.GetTitledFirstName] parece encogerse ante [liege_target.GetSheHe], sin la confianza con la se ofreció a apoyar mis demandas.\n\n[liege_target.GetTitleTierName] frustra mis últimas esperanzas. «Mis vasallos conocen su lugar», y [vassal_target.GetFirstName] lo confirma con su silencio."
  intrigue_scheming.3043.a:0 "Me parece que he jugado mal mis cartas…"
 
  intrigue_scheming.3051.desc:0 "Había atraído a [liege_target.GetTitledFirstName] a las mazmorras de [vassal_target.GetTitledFirstName], por invitación de su [vassal_target.GetTitleTierName]. Allí estaba esperando, list[ROOT.Char.Custom('ES_OA')] para torturar a nuestro invitado como exhibición de mi poder. [liege_target.GetFirstName] no reaccionó como esperaba.\n\n«¡Alguien pensaría que jamás lo habéis hecho!»\nObservé impresionad[ROOT.Char.Custom('ES_OA')] como [liege_target.Custom('ES_ElElla')] se puso al mando e hizo que [vassal_target.GetFirstName] durase hasta el amanecer. Pero no más."
@@ -240,10 +240,10 @@
 # Information Brokering, by Sean Hughes
  intrigue_scheming.4050.t:0 "Negociando con información"
  intrigue_scheming.4050.desc.start:0 "Espero que a [buyer.GetTitledFirstName] le interese vivamente la información que tengo y que indica que…"
- intrigue_scheming.4050.desc.lover:1 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.GetTitledFirstName] se acuesta con [target.GetTitledFirstName]…"
- intrigue_scheming.4050.desc.incest:2 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.Custom('ES_ElLa')] [owner.GetTitledFirstName] y su [owner.Custom2('RelationToMeShort', SCOPE.sC('target'))], [target.Custom('ES_ElLa')] [target.GetTitledFirstName] mantienen relaciones sexuales…"
- intrigue_scheming.4050.desc.pregnancy:1 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.GetTitledFirstName] está embarazada de [target.GetTitledFirstName]…"
- intrigue_scheming.4050.desc.bastard:3 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName] fue engendrad[buyer.Custom('ES_OA')] en realidad por [target.GetRealFather.Custom('ES_ElLa')] [target.GetRealFather.GetTitledFirstName]…"
+ intrigue_scheming.4050.desc.lover:1 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], se acuesta con [target.GetTitledFirstName]…"
+ intrigue_scheming.4050.desc.incest:2 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], y [owner.Custom2('RelationToMeShort', SCOPE.sC('target'))] de [owner.GetFirstNameNoTooltip], [target.GetTitledFirstName], mantienen relaciones sexuales…"
+ intrigue_scheming.4050.desc.pregnancy:1 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], está embarazada de [target.GetTitledFirstName]…"
+ intrigue_scheming.4050.desc.bastard:3 "su [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName] fue engendrad[buyer.Custom('ES_OA')] en realidad por [target.GetRealFather.GetTitledFirstName]…"
  intrigue_scheming.4050.desc.murderattempt:0 "[owner.GetTitledFirstName] estuvo detrás de un intento fallido de asesinar a [target.GetTitledFirstName]…"
  intrigue_scheming.4050.desc.murderattemptself:0 "[owner.GetTitledFirstName] estuvo detrás de una conspiración fracasada para asesinar[target.Custom('ES_LoLa')]…"
  intrigue_scheming.4050.desc.murder:0 "[owner.GetTitledFirstName] asesinó a su [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName]…"
@@ -283,13 +283,13 @@
  intrigue_scheming.4053.a:0 "Deberé encontrar otros modos de usar esta información…"
 
  intrigue_scheming.4054.desc.start:0 "Tras examinar los documentos que he recibido de [seller.GetTitledFirstName], queda claro que"
- intrigue_scheming.4054.desc.lover:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.GetTitledFirstName] se acuesta con [target.GetTitledFirstName]!"
- intrigue_scheming.4054.desc.incest:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.GetTitledFirstName] y mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName] han estado manteniendo relaciones sexuales!"
- intrigue_scheming.4054.desc.pregnancy:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))] [owner.GetTitledFirstName] está embarazada de [target.GetTitledFirstName]!"
- intrigue_scheming.4054.desc.bastard:2 "mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))], [target.Custoom('ES_ElLa')] [target.GetTitledFirstName], fue engendrad[target.Custom('ES_OA')] en realidad por [real_father.GetTitledFirstName]!"
+ intrigue_scheming.4054.desc.lover:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], se acuesta con [target.GetTitledFirstName]!"
+ intrigue_scheming.4054.desc.incest:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], y mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName] han estado manteniendo relaciones sexuales!"
+ intrigue_scheming.4054.desc.pregnancy:1 "¡mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))], [owner.GetTitledFirstName], está embarazada de [target.GetTitledFirstName]!"
+ intrigue_scheming.4054.desc.bastard:2 "mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))], [target.GetTitledFirstName], fue engendrad[target.Custom('ES_OA')] en realidad por [real_father.GetTitledFirstName]!"
  intrigue_scheming.4054.desc.murderattempt:0 "¡[owner.GetTitledFirstName] estuvo detrás de un intento de asesinato de [target.GetTitledFirstName]!"
  intrigue_scheming.4054.desc.murderattemptself:0 "¡[owner.GetTitledFirstName] estuvo detrás de un intento de asesinarme!"
- intrigue_scheming.4054.desc.murder:1 "¡[owner.GetTitledFirstName] asesinó a mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))] [target.GetTitledFirstName]!"
+ intrigue_scheming.4054.desc.murder:1 "¡[owner.GetTitledFirstName] asesinó a mi [buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))], [target.GetTitledFirstName]!"
  intrigue_scheming.4054.a:0 "Al menos ahora lo sé."
  intrigue_scheming.4054.a.incest:0 "¡Contra natura! ¡Una afrenta a [ROOT.Char.GetFaith.HighGodName]!"
  intrigue_scheming.4054.a.incest.deviant:0 "¡Ooh, qué atrayente!"

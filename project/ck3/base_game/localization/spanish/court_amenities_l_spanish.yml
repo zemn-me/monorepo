@@ -111,7 +111,7 @@
 
 
  COURT_AMENITIES_CONFIRM_TITLE:1 "Cambiar niveles de comodidades"
- COURT_AMENITIES_CONFIRM_DESC:1 "Si cambias las [court_amenities|lE] de tu corte real, no podrás cambiarla de nuevo durante [DATE.GetTimeToDate] ([DATE.GetStringLongV]).\nEl nuevo conjunto de comodidades costará $COST$"
+ COURT_AMENITIES_CONFIRM_DESC:1 "Si cambias las [court_amenities|lE] de tu corte real, no podrás cambiarla de nuevo durante [DATE.GetTimeToDate] ([DATE.GetStringLong]).\nEl nuevo conjunto de comodidades costará $COST$"
  COURT_AMENITIES_CONFIRM_ACCEPT:0 "Cambiar"
  COURT_AMENITIES_COOLTIP_ABOVE_DESCRIPTION:0 "Mantenimiento: [CourtAmenitiesSetting.GetCostDescription( GetPlayer )]\n[CourtAmenitiesSetting.GetEffectDescription]"
  COURT_AMENITIES_NEED_CHANGE:0 "@warning_icon!#X No se han cambiado comodidades#!"
@@ -119,6 +119,6 @@
  AMENITIES_RESET_TOOLTIP:0 "#T Reiniciar comodidades#!\n[AddTextIf( Not( CourtAmenitiesWindow.HasChangedAnyAmenity ), '$COURT_AMENITIES_NEED_CHANGE$\n' )]Descartar los cambios seleccionados"
 
  COURT_AMENITIES_CHANGED_NOTIFICATION_HEADER:0 "Has cambiado las [Concept( 'court_amenities', 'comodidades' )|E] de tu corte"
- # [LocEditor:UntranslatedKey] `COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT`
+ COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT:0 "@warning_icon!#X Esta no es tu [royal_court|lE]#!"
 
  BONUS_TO_AGENT_RECRUITMENT_FROM_AMENITIES:0 "$court_lodging_standards$: $VALUE|=+0$"

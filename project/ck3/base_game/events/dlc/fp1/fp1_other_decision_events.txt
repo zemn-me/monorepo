@@ -1607,11 +1607,11 @@ fp1_other_decisions.0003 = {
 			limit = {
 				OR = {
 					NOT = {
-						scope:gf_faith = { has_doctrine = unreformed_faith_doctrine }
+						scope:gf_faith = { has_doctrine_parameter = unreformed }
 					}
 					AND = {
-						scope:old_faith = { has_doctrine = unreformed_faith_doctrine }
-						scope:gf_faith = { has_doctrine = unreformed_faith_doctrine }
+						scope:old_faith = { has_doctrine_parameter = unreformed }
+						scope:gf_faith = { has_doctrine_parameter = unreformed }
 					}
 				}
 			}

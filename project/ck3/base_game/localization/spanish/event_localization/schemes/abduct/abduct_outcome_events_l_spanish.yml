@@ -4,7 +4,7 @@
  do_not_execute_abduct_tooltip:0 "No intento el secuestro"
 
  abduct_outcome.1001.t:0 "$abduct_event_title$ Secuestro en el camino"
- abduct_outcome.1001.opening:0 "Mis agentes me dicen que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] planea viajar"
+ abduct_outcome.1001.opening:0 "Mis agentes me dicen que [target.GetTitledFirstName] planea viajar"
  abduct_outcome.1001.arrival:0 "de [departure.GetNameNoTierNoTooltip] a [arrival.GetNameNoTierNoTooltip]."
  abduct_outcome.1001.no_arrival:0 "por el [departure.GetNameNoTier]."
  abduct_outcome.1001.ending:0 "\n\nHe encargado que algunos salteadores intercepten su viajecito y se aseguren de que, en lugar de eso, llegue aquí."
@@ -12,7 +12,7 @@
  abduct_outcome.1001.b:0 "No, el riesgo es demasiado grande."
 
  abduct_outcome.1002.t:0 "$abduct_event_title$ en el camino"
- abduct_outcome.1002.desc:1 "¡La oportunidad perfecta se ha presentado sola! [target.Custom('ES_ElLa')|U] [target.GetTitledFirstName] viajará desde la residencia a la ciudad vecina casi sin guardias.\n\nSe creerá que está a salvo…"
+ abduct_outcome.1002.desc:1 "¡La oportunidad perfecta se ha presentado sola! [target.GetTitledFirstName] viajará desde la residencia a la ciudad vecina casi sin guardias.\n\nSe creerá que está a salvo…"
  abduct_outcome.1002.a:0 "¡El momento perfecto para atacar!"
 
  abduct_outcome.1003.t:0 "$abduct_event_title$ invitados indeseados"
@@ -22,7 +22,7 @@
  abduct_outcome.2001.desc:0 "¡Éxito! Los salteadores hicieron su trabajo espléndidamente y [target.GetTitledFirstName] está en mis manos sin incidentes."
  abduct_outcome.2001.a:0 "Espero que le guste su nuevo alojamiento…"
 
- abduct_outcome.2002.desc:0 "¡Mis agentes se hicieron con [target.Custom('ES_ElLa')] [target.GetTitledFirstName] antes de que se enterase siquiera de lo que estaba pasando! Al fin está en mis manos."
+ abduct_outcome.2002.desc:0 "¡Mis agentes se hicieron con [target.GetTitledFirstName] antes de que se enterase siquiera de lo que estaba pasando! Al fin está en mis manos."
 
  abduct_outcome.2003.desc:1 "¡No me puedo creer que funcionase! Fue tan simple como dejar entrar a algunos aliados míos en la residencia en plena noche. \n\n[target.GetTitledFirstName] estará sin duda tirándose de los pelos por la falta de seguridad. Por suerte, la del lugar donde está ahora es mucho mejor."
 

@@ -1,3 +1,5 @@
+# Visigothic culture break-up moved backwards in time to around ~800; probably still being a bit overly-generous at that, but it's a decent date for it.
+
 ###c_silves
 1747 = {	# SILVES
 	# Misc
@@ -7,8 +9,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	811.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
 	1264.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -30,9 +32,7 @@
 	holding = castle_holding
 	
 	# History
-	939.1.1 = {
-		culture = andalusian
-	}
+	800.1.1 = { culture = andalusian }
 	1264.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -46,13 +46,11 @@
 1752 = {	# ALCACER DO SAL
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	# History
-	939.1.1 = {
-		culture = andalusian
-		religion = muwalladi
-	}
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1233.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -72,15 +70,13 @@
 1754 = {	# Lisboa
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	944.1.1 = {
-		culture = andalusian
-		religion = muwalladi
-	}
+	800.1.1 = { culture = andalusian }
+	944.1.1 = { religion = muwalladi }
 	1163.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -97,15 +93,13 @@
 1776 = {	# ELVAS
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	944.1.1 = {
-		culture = andalusian
-		religion = muwalladi
-	}
+	800.1.1 = { culture = andalusian }
+	944.1.1 = { religion = muwalladi }
 	1163.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -131,8 +125,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	811.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
 	1253.1.1 = {
 		culture = portuguese
 		religion = catholic
@@ -146,11 +140,12 @@
 1831 = {	# PLASENCIA/Hervas
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	955.1.1 = { culture = asturleonese }
 }
 1830 = {	# 1830 - CORIA
@@ -164,13 +159,13 @@
 1954 = {	# CACERES
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -192,8 +187,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -210,13 +205,13 @@
 1834 = {	# MERIDA
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -241,8 +236,8 @@
 	religion = catholic
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic

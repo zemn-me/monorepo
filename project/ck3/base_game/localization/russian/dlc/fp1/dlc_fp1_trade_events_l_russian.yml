@@ -2,7 +2,7 @@
 
  ##################################################
  # #Misc Keys
- TRUCE_TRADE_DEAL:0 "В обмен на отказ от набегов подписано перемирие\n\n"
+ TRUCE_TRADE_DEAL:1 "\nВ обмен на отказ от набегов подписано перемирие"
 
  ##################################################
  # #Standard Trade Events
@@ -65,7 +65,7 @@
  fp1_trade_events.0041.partner_gets_raid_aid.tt:0 "[partner.GetFirstNameNoTooltip] получает защиту от [Concept( 'raid', 'налетов' )|E] в одном из своих уязвимых [Concept( 'duchies', 'герцогств' )|E]"
  fp1_trade_events.0041.raider_gets_civic_aid.tt:0 "[raider.GetFirstNameNoTooltip] получает прирост развития и скидку на строительство в своем [Concept( 'domain', 'домене' )|E]"
  fp1_trade_events.0041.partner.benefiting_counties.tt:0 "[counties|E], входящие в означенное [Concept( 'duchy', 'герцогство' )|E]"
- fp1_trade_events.0041.a.advanced:0 "Они смогут построить мне дворец в [partner.GetCulture.GetNameNoTooltip|l]ом стиле?"
+ fp1_trade_events.0041.a.advanced:0 "Они смогут построить мне дворец в [partner.GetCulture.GetCollectiveNounNoTooltip|l]ом стиле?"
  fp1_trade_events.0041.a.fallback:0 "Мы всегда рады умелым рукам..."
  fp1_trade_events.0041.a.offer_accepted:0 "$fp1_trade_events.0011.a.accepted$"
  fp1_trade_events.0041.a.offer_rejected:0 "$fp1_trade_events.0011.a.rejected$"
@@ -92,9 +92,9 @@
  fp1_trade_events.1131.d.tt:0 "Вы сражаетесь со скандинавами по старинке"
 
  fp1_trade_events.1171.t:0 "$fp1_trade_events.0000.t$: Священная рука помощи"
- fp1_trade_events.1171.desc:0 "Несмотря на #EMP необычные#! обстоятельства нашего знакомства, [partner.GetTitledFirstName] и я со временем сильно сблизились.\n\nКуда сильнее, чем мне казалось, поскольку [partner.GetHerHis] недавнее письмо было полно беспокойства о судьбе моей души.\n\nВ попытке убедить меня принять [partner.GetFaith.GetName], [partner.GetFirstNameNoTooltip] предлагает мне руку [Select_CString(prospective_spouse.IsFemale, 'своей дочери', 'своего сына' )], грандиозную церемонию в честь принятия новой веры #EMP #! внушительное приданое."
+ fp1_trade_events.1171.desc:0 "Несмотря на #EMP необычные#! обстоятельства нашего знакомства, [partner.GetTitledFirstName] и я со временем сильно сблизились.\n\nКуда сильнее, чем мне казалось, поскольку [partner.GetHerHis] недавнее письмо было полно беспокойства о судьбе моей души.\n\nВ попытке убедить меня принять [partner.GetFaith.GetAdjective|l], [partner.GetFirstNameNoTooltip] предлагает мне руку [Select_CString(prospective_spouse.IsFemale, 'своей дочери', 'своего сына' )], грандиозную церемонию в честь принятия новой веры #EMP #! внушительное приданое."
  fp1_trade_events.1171.a:0 "[partner.GetSheHe|U] #EMP умеет#! убеждать..."
  fp1_trade_events.1171.b:0 "Какая щедрость! Наша дружба будет вечной!"
  fp1_trade_events.1171.b.tt:0 "Все из перечисленного, а еще..."
  fp1_trade_events.1171.c.cynical:0 "Ха, мне казалось, что взятка будет внушительнее."
- fp1_trade_events.1171.c.fallback:0 "Никакая взятка не заставить меня отринуть [raider.GetFaith.GetNameNoTooltip]."
+ fp1_trade_events.1171.c.fallback:0 "Никакая взятка не заставить меня отринуть [raider.GetFaith.GetAdjectiveNoTooltip|l]."

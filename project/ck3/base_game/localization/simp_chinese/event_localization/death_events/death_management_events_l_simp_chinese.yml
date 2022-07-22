@@ -1,5 +1,5 @@
 ﻿l_simp_chinese:
- death_management.1000.killed.tt:0 "我的[THIS.Char.Custom2('RelationToMe', SCOPE.sC('dead_character'))][dead_character.GetTitledFirstName]被[killer.GetTitledFirstName]所杀。"
+ death_management.1000.killed.tt:1 "[dead_character.GetTitledFirstName]被[killer.GetTitledFirstName]所杀。"
  death_management.1000.t:0 "至死不渝"
  death_management.1000.murder:0 "[dead_character.GetTitledFirstName]已被谋杀！\n\n"
  death_management.1000.like:0 "一颗心在承受了这样的痛苦之后怎能不破碎？不可能！然而，我还在活着，我的心仍在跳动，而你的却停止了。哦，[dead_character.GetFirstName]，我的[dead_character.Custom('LoverPetName')]。我的生活不能没有你。"
@@ -29,6 +29,7 @@
 
  death_management.1005.t:0 "记忆犹在"
  death_management.1005.desc:0 "哦，[dead_character.GetFirstName]。如果你还和我在一起，我知道你会告诉我要坚强。一切都会好起来的。你总是对的，你一直如此。但首先我必须诅咒和哭泣，当你离开这个世界时，我又怎能不如此呢？"
+ death_management.1005.desc.ritual_best_friend:0 "[dead_character.GetFirstName]去世了！我最好最真心的朋友倒下了，在[dead_character.GetHerHis]寿数耗尽之前就被[ROOT.Char.GetFaith.DeathDeityName]冰冷的怀抱带走。我流泪、我恸哭、我的眼泪沾湿了我的头发和衣裳，但我知道我再也见不到[dead_character.GetHerHim]了。\n\n我……我要怎样继续活着？\n\n[dead_character.GetFirstNameNoTooltip]，亲爱的，甜美的[dead_character.GetFirstNameNoTooltip]会希望我，而我也不得不希望[dead_character.GetHerHis]的记忆能支撑我度过这黑暗的日子，但失去了[dead_character.GetHerHim]的生命就像蜡烛失去了火焰。"
  death_management.1005.a:0 "我永远不会忘记你，老朋友。"
  death_management.1005.a.tt:3 "你的朋友[dead_character.GetTitledFirstName]已[THIS.Char.Custom('DiedHouse_arrest')]。"
  death_management.friend.desc:4 "你的朋友[dead_character.GetTitledFirstName]已过世。"

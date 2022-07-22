@@ -49,7 +49,7 @@
  feudal_levies_extortionate:0 "Énorme contribution en levées"
  feudal_levies_extortionate_short:0 "Énorme"
  
- special_contract:3 "#color_black [Concept( 'feudal_contract', 'Contrat spécial' )|BU]#!"
+ special_contract:3 "#color_black [Concept( 'feudal_contract', 'Contrat spécial' )|B]#!"
  special_contract_none:0 "Pas de contrat spécial"
  special_contract_scutage:0 "Contrat d’écuage"
  special_contract_scutage_desc:1 "#flavor Le [vassal|El] fournit #high [EmptyScope.ScriptValue('scutage_contract_tax_tooltip')|0]%#! d’[tax|El] en plus, mais #high [EmptyScope.ScriptValue('scutage_contract_levies_tooltip')|0]%#! de [levies|El] en moins que ce que dictent ses [obligations|El] féodales.#!"
@@ -173,12 +173,32 @@
  
  CONTRACT_LIEGE_SIGNATURE:0 "Le seigneur lige,\n[VassalContract.GetLiege.GetTitledFirstNameNoTooltip]\nde la Maison [VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip]"
  CONTRACT_VASSAL_SIGNATURE:0 "Le vassal,\n[VassalContract.GetVassal.GetTitledFirstNameNoTooltip]\nde la Maison [VassalContract.GetVassal.GetHouse.GetBaseNameNoTooltip]"
- 
 
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- special_family_entrepreneurship:0 "Contrat d'affaire familiale"
- special_family_entrepreneurship_desc:0 "#flavor Le [vassal|El] paie #high [EmptyScope.ScriptValue('family_entrepreneurship_tax_tooltip')|0]%#! d'[tax|El] en plus que ce que dicte son [obligation|El] féodale, mais ne fournit pas de [levies|El]. Il paye moins pour la construction des [holdings|El] et des [buildings|El].#!"
- special_family_entrepreneurship_short:0 "Affaire familiale"
- special_centralized_power:0 "Contrat de développement soutenu"
- special_centralized_power_desc:0 "#flavor Le [vassal|El] fournit #high [EmptyScope.ScriptValue('centralized_power_levies_tooltip')|0]%#! de [levies|El] en plus que ce que dicte son [obligation|El] féodale, mais ne paie pas d'[tax|El]. Le vassal obtient également un bonus à son [development|El].#!"
- special_centralized_power_short:0 "Développement soutenu"
+
+ jizya_special_rights:0 "Statut de djizîa"
+ jizya_special_rights_default:0 "Statut de djizîa normal"
+ jizya_special_rights_default_short:0 "Normal"
+ jizya_special_rights_granted:0 "Statut de djizîa imposé"
+ jizya_special_rights_granted_desc:0 "#emphasis #bold Privilèges du [vassal|El]:#!#!\nLe [liege|El] ne peut pas [demand_conversion|El] du [vassal|El]\nLe [liege|El] ne peut faire de [convert_county|El] dans les terres des [vassals|El]\nLe [liege|El] ne peut pas utiliser la [faith|El] comme un motif pour éviter la pénalité de [tyranny|El] lors de la révocation de titres\nLe [liege|El] ne peut pas révoquer les [titles|El] des [vassals|El]\n\n#flavor Le [vassal|El] est assuré d’être propriétaire de ses [titles|l], puisque le [liege|El] ne peut pas les révoquer, qu’il ait un [Concept('revoke_title_reason','motif')|E] ou non.\nLe vassal bénéficie également d’un statut de protection spécial, le pays lui reconnaissant officiellement le droit de pratiquer sa propre [faith|El].#!"
+ jizya_special_rights_granted_short:0 "Accordé"
+
+ iqta_special_rights:0 "Iqta"
+ iqta_special_rights_default:0 "Iqta normal"
+ iqta_special_rights_default_short:0 "Normal"
+ iqta_special_rights_granted:0 "Iqta accordé"
+ iqta_special_rights_granted_desc:0 "#flavor Le [vassal|El] a des obligations moindres mais contribue aux [men_at_arms|El] pour le [liege|El].#!"
+ iqta_special_rights_granted_short:0 "Accordé"
+
+ ghazi_special_rights:0 "Statut de ghazi"
+ ghazi_special_rights_default:0 "Statut de ghazi normal"
+ ghazi_special_rights_default_short:0 "Normal"
+ ghazi_special_rights_granted:0 "Statut de ghazi accordé"
+ ghazi_special_rights_granted_desc:0 "#emphasis #bold Privilèges du [vassal|El]:#!#!\nLe [vassal|El] paie moins de [piety|El] pour utiliser les [casus_bellis|El] de [holy_war|El], mais plus de [prestige|El][prestige_i] pour tout autre casus belli\n\n#flavor Le [vassal|El] est choisi comme guerrier de la [faith|El] par le [liege|El] et chargé de repousser les frontières par des guerres saintes.#!"
+ ghazi_special_rights_granted_short:0 "Accordé"
+
+ marriage_favor_rights:0 "Faveur du mariage"
+ marriage_favor_rights_default:0 "Faveur du mariage normale"
+ marriage_favor_rights_default_short:0 "Normale"
+ marriage_favor_rights_granted:0 "$marriage_favor_rights$ accordée"
+ marriage_favor_rights_granted_desc:0 "#emphasis #bold Privilèges du [vassal|El]:#!#!\nLe [liege|El] s’engage à marier sa famille proche pour sceller des alliances, avant de les marier à quelqu’un d’autre.\n\n#flavor Le [vassal|El] est l’un des favoris du [liege|El] et devrait être capable de sceller une alliance par le mariage.#!"
+ marriage_favor_rights_granted_short:0 "Accordé"

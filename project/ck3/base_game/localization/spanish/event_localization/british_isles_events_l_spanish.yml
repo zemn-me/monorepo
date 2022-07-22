@@ -6,7 +6,7 @@
  british_isles.0001.custom:0 "Todos los [counties|lE] de Britania"
  british_isles.0001.a:0 "¡Alabados sean los antepasados!"
 
- british_isles.0002.desc:0 "[reclaimer.Custom('ES_ElLa')|U] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('reclaimer'))] [reclaimer.GetName] ha anunciado oficialmente el renacimiento de una Britania celta.\n\nTras siglos de dominio extranjero, las islas han vuelto al control de sus dueños originales."
+ british_isles.0002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('reclaimer'))] [reclaimer.GetName] ha anunciado oficialmente el renacimiento de una Britania celta.\n\nTras siglos de dominio extranjero, las islas han vuelto al control de sus dueños originales."
  british_isles.0002.a:0 "Una plaga [reclaimer.GetCulture.GetNameNoTooltip] cae sobre la tierra…"
  british_isles.0002.b:0 "¡Britania vuelve a ser nuestra!"
 
@@ -17,7 +17,7 @@
 
  british_isles.1002.t:0 "El Danelaw"
  british_isles.1002.desc_same_culture:0 "¡El Danelaw ha renacido gracias a los esfuerzos de [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName]! Una vez más, la gran isla está bajo el dominio [restorer.GetCulture.GetName]."
- british_isles.1002.desc:0 "[restorer.Custom('ES_ElLa')|U] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] y sus viles saqueadores han creado un nuevo señorío en las islas y lo han llamado el Reino del Danelaw renacido.\n\nAún queda por ver si este intento de restaurar la dominación [restorer.GetCulture.GetName] sobre Inglaterra tendrá más éxito que el anterior…"
+ british_isles.1002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] y sus viles saqueadores han creado un nuevo señorío en las islas y lo han llamado el Reino del Danelaw renacido.\n\nAún queda por ver si este intento de restaurar la dominación [restorer.GetCulture.GetName] sobre Inglaterra tendrá más éxito que el anterior…"
  british_isles.1002.a:0 "Una plaga [restorer.GetCulture.GetNameNoTooltip] cae sobre la tierra."
  british_isles.1002.b:0 "¡Una victoria para la [restorer.GetCulture.GetNameNoTooltip]!"
  british_isles.1002.c:0 "Mm, ¿así que [restorer.GetCulture.GetNameNoTooltip]? ¡Apuntadme!"
@@ -27,7 +27,7 @@
  british_isles.2001.desc:0 "Los tiempos en que la nación [embracer.GetCulture.GetNameNoTooltip] consideraba Francia su hogar pasaron hace mucho. Nuestros hijos nacieron aquí, rodeados por sajones, y para ellos, Normandía no es más que una línea borrosa al otro lado de las brumosas costas de Britania.\n\nY según hacemos propias algunas de las costumbres locales, también se extiende por tierras sajonas el legado de nuestra cultura, dando nacimiento a una nueva identidad inglesa."
  british_isles.2001.a:0 "¡Vivan los ingleses!"
 
- british_isles.2002.desc:0 "[embracer.Custom('ES_ElLa')|U] [ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('embracer'))] [embracer.GetName], sus vasallos y toda su familia han respondido a la llamada de Albión y abrazado la cultura inglesa."
+ british_isles.2002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('embracer'))] [embracer.GetName], sus vasallos y toda su familia han respondido a la llamada de Albión y abrazado la cultura inglesa."
  british_isles.2002.a:0 "Solo era cuestión de tiempo."
  british_isles.2002.b:0 "¡Traidores!"
 
@@ -54,7 +54,7 @@
  british_isles.1011.t:0 "Una oferta impensable"
  british_isles.1011.nord:0 "$k_england$ es una tierra difícil, pero generosa: los inviernos son suaves y los veranos húmedos, un lugar perfecto para que prosperen colonos y guerreros.\n\nSin embargo, la competencia de otros nórdicos y la resistencia de los restantes estados autóctonos es cada vez mayor. Todos luchamos por afianzarnos, labrando feudos y reinos minúsculos, incapaces de conseguir un verdadero dominio."
  british_isles.1011.brit:0 "Con cada año, las rapiñas nórdicas empeoran. Envían a más colonos, depredan más allá de nuestras costas y masacran más a nuestro clero.\n\nPese a esto, es difícil unirse contra la amenaza extranjera. Entre conquistadores nórdicos y el orgullo de todo señor $anglo_saxon$, parece que nunca tendremos un[ntd_actor.Custom('ES_XA')] [ntd_actor.Custom('QueenKing')] de $k_england$."
- british_isles.1011.outro:0 "\n\nMi enemig[ntd_recipient.Custom('ES_OA')] [ntd_recipient.GetTitledFirstName] es [ntd_recipient.Custom('ES_ElLa')] primer[ntd_recipient.Custom('ES_OA')] de mis contendientes para el control de la tierras. Si aceptase una #EMP partición#! del país, en lugar de competir por él, pocos podrían oponerse a nuestra fuerza combinada…"
+ british_isles.1011.outro:0 "\n\nMi enemig[ntd_recipient.Custom('ES_OA')] [ntd_recipient.GetTitledFirstName] es está en primer lugar entre mis contendientes para el control de las tierras. Si aceptase una #EMP partición#! del país, en lugar de competir por él, pocos podrían oponerse a nuestra fuerza combinada…"
  british_isles.1011.a:0 "Hum. Enviad la carta."
  british_isles.1011.a.tt:0 ""
  british_isles.1011.b:0 "La carta y una mano abierta a la amistad."
@@ -87,7 +87,7 @@
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "Todos los [duchies|lE] $k_england_adj$s en los que [ntd_nord.GetTitledFirstName] posea al menos un [county|lE] se convertirán en parte [de_jure|lE] de $k_danelaw_article$$k_danelaw$"
  negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "Todos los [duchies|lE] $k_england_adj$s con un [ruler|lE] de [culture|lE] del grupo $north_germanic_group$ o una fe $germanic_religion_adj$ se convierten en parte [de_jure|E] del $k_danelaw$"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "Todos los gobernantes independientes dentro de $k_england$"
- TRUCE_SIGNED_PARTITION:0 "Firmada una tregua como parte de dividir el reino\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\nFirmada una tregua como parte de la división del reino"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "Todas las partes [de_jure|E] del $k_danelaw$ quedan [Concept( 'de_jure_drift_drifted', 'derivadas' )|E] dentro de $k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$ usará el escudo de armas del $k_danelaw$"
@@ -113,7 +113,7 @@
  british_isles.1052.a.tt:0 "$british_isles.1051.a.tt$"
 
  british_isles.1053.t:0 "$british_isles.1051.t$"
- british_isles.1053.desc:0 "Asuntos recientes han dejado a [victor.GetTitledFirstName] como únic[victor.Custom('ES_OA')] contendiente seri[victor.Custom('ES_OA')] al trono $k_england_adj$. Aunque no todos se inclinan de buen grado ante [victor.Custom('ES_ElLa')] monarca exultante, al menos se puede decir que $k_england$ está, en espíritu, unida de nuevo."
+ british_isles.1053.desc:0 "Asuntos recientes han dejado a [victor.GetTitledFirstName] como únic[victor.Custom('ES_OA')] contendiente seri[victor.Custom('ES_OA')] al trono $k_england_adj$. Aunque no todos se inclinan de buen grado ante el monarca exultante, al menos se puede decir que $k_england$ está, en espíritu, unida de nuevo."
  british_isles.1053.a:0 "¿Estabilidad al fin para $k_england$?"
  british_isles.1053.a.tt:0 "$british_isles.1051.a.tt$"
 

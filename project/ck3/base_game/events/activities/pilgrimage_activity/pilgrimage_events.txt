@@ -311,9 +311,6 @@ pilgrimage.1001 = {
 		}
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = root
 
 	weight_multiplier = {
@@ -348,9 +345,6 @@ pilgrimage.2001 = {
 	title = pilgrimage.2001.t
 	desc = pilgrimage.2001.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		triggered_animation = {
@@ -550,9 +544,6 @@ pilgrimage.2002 = {
 	title = pilgrimage.2002.t
 	desc = pilgrimage.2002.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		animation = disapproval
@@ -654,9 +645,6 @@ pilgrimage.2003 = {
 	title = pilgrimage.2003.t
 	desc = pilgrimage.2003.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		animation = worry
@@ -749,9 +737,6 @@ pilgrimage.2004 = {
 	title = pilgrimage.2004.t
 	desc = pilgrimage.2004.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:potential_friend
 		animation = happiness
@@ -847,9 +832,6 @@ pilgrimage.2005 = {
 		}
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		triggered_animation = {
@@ -954,9 +936,6 @@ pilgrimage.2006 = {
 	title = pilgrimage.2006.t
 	desc = pilgrimage.2006.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		triggered_animation = {
@@ -1020,9 +999,6 @@ pilgrimage.2007 = {
 	title = pilgrimage.2007.t
 	desc = pilgrimage.2007.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		animation = personality_content
@@ -1108,9 +1084,6 @@ pilgrimage.2008 = {
 	title = pilgrimage.2008.t
 	desc = pilgrimage.2008.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		animation = sick
@@ -1198,9 +1171,6 @@ pilgrimage.2009 = {
 	title = pilgrimage.2009.t
 	desc = pilgrimage.2009.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = root
 		animation = sick
@@ -1295,9 +1265,6 @@ pilgrimage.2010 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2010.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = personality_rational
@@ -1348,6 +1315,7 @@ pilgrimage.2010 = {
 			create_character = {
 				template = default_mystic_character
 				location = scope:mystic_home_owner.capital_province
+				culture = scope:mystic_home_owner.culture
 				save_scope_as = mystic
 			}
 		}
@@ -1402,9 +1370,6 @@ pilgrimage.2011 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2011.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = personality_rational
@@ -1462,9 +1427,6 @@ pilgrimage.2012 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2012.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = personality_rational
@@ -1491,9 +1453,6 @@ pilgrimage.2013 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2013.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = happiness
@@ -1534,9 +1493,6 @@ pilgrimage.2014 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2014.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = personality_rational
@@ -1581,9 +1537,6 @@ pilgrimage.2015 = {
 	title = pilgrimage.2010.t
 	desc = pilgrimage.2015.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:mystic
 		animation = personality_rational
@@ -2000,9 +1953,6 @@ pilgrimage.2501 = {
 		}
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:beggar
 		animation = beg
@@ -2163,9 +2113,6 @@ pilgrimage.2502 = {
 		desc = pilgrimage.2502.desc.end
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:beggar
 		animation = beg
@@ -2269,9 +2216,6 @@ pilgrimage.2503 = {
 	title = pilgrimage.2503.t
 	desc = pilgrimage.2503.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:beggar
 		animation = beg
@@ -2317,9 +2261,6 @@ pilgrimage.2504 = {
 	title = pilgrimage.2504.t
 	desc = pilgrimage.2504.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:beggar
 		animation = beg
@@ -2516,9 +2457,6 @@ pilgrimage.2511 = {
 		}
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:lordling
 		animation = anger
@@ -2754,9 +2692,6 @@ pilgrimage.3001 = {
 	title = pilgrimage.3001.t
 	desc = pilgrimage.3001.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:zealous_priest
 		animation = personality_zealous
@@ -2841,9 +2776,6 @@ pilgrimage.3002 = {
 	title = pilgrimage.3002.t
 	desc = pilgrimage.3002.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:naked_preacher
 		animation = personality_zealous
@@ -3080,9 +3012,6 @@ pilgrimage.3003 = {
 	title = pilgrimage.3003.t
 	desc = pilgrimage.3003.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	override_background = {
 		event_background = market
 	}
@@ -3160,9 +3089,6 @@ pilgrimage.3101 = {
 	title = pilgrimage.3101.t
 	desc = pilgrimage.3101.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = root
 	
 	trigger = {
@@ -3270,9 +3196,6 @@ pilgrimage.3102 = {
 	title = pilgrimage.3102.t
 	desc = pilgrimage.3102.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = root
 	
 	trigger = {
@@ -3380,9 +3303,6 @@ pilgrimage.3201 = {
 	title = pilgrimage.3201.t
 	desc = pilgrimage.3201.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = root
 
 	trigger = {
@@ -3455,9 +3375,6 @@ pilgrimage.3202 = {
 		desc = pilgrimage.3202.desc.end
 	}
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = root
 
 	trigger = {
@@ -3523,9 +3440,6 @@ pilgrimage.3301 = {
 	title = pilgrimage.3301.t
 	desc = pilgrimage.3301.desc
 	theme = pilgrimage_activity
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
-	}
 	left_portrait = {
 		character = scope:wanderer
 		animation = personality_zealous
@@ -4648,9 +4562,6 @@ pilgrimage.9001 = {
 	theme = pilgrimage_activity
 	override_background = {
 		event_background = terrain_activity
-	}
-	override_icon = {
-		reference = "gfx/interface/icons/event_types/type_faith.dds"
 	}
 
 	trigger = {

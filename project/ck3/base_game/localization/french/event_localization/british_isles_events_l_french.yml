@@ -7,7 +7,7 @@
  british_isles.0001.a:0 "Loués soient les ancêtres !"
 
  british_isles.0002.desc:0 "[reclaimer.Custom('FR_le_Char')|U][reclaimer.GetName] a officiellement annoncé la renaissance d’une Grande-Bretagne celtique.\n\nAprès des siècles sous domination étrangère, les îles sont retournées sous le contrôle de leurs propriétaires d’origine."
- british_isles.0002.a:0 "Cette culture [restorer.GetCulture.GetNameNoTooltip] est un fléau."
+ british_isles.0002.a:0 "Cette culture [reclaimer.GetCulture.GetNameNoTooltip] est un fléau."
  british_isles.0002.b:0 "La Grande-Bretagne est de nouveau nôtre !"
 
 # Restoring the Danelaw, by Linnéa Thimrén
@@ -87,7 +87,7 @@
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "Tous les [duchies|El] d’$k_england$ dans lesquels [ntd_nord.Custom('FR_le_Char_Pi')][ntd_nord.GetTitledFirstName] détient au moins un [county|El] deviennent un territoire [de_jure|El] du $k_danelaw$"
  negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "Tous les [duchies|El] indépendants d’$k_england$ avec un [ruler|El] de [culture|El] $north_germanic_group$ ou de [faith|El] $germanic_religion_adj$ deviennent un territoire [de_jure|El] du $k_danelaw$"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "Tous les dirigeants indépendants en $k_england$"
- TRUCE_SIGNED_PARTITION:0 "Signature d’une trêve dans le cadre du partage du royaume\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\nSignature d’une trêve dans le cadre du partage du royaume"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "Tous les territoires [de_jure|El] du $k_danelaw$ [Concept('de_jure_drift_drifted','glissent')|E] en $k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$ utilisera les armoiries du $k_danelaw$"
