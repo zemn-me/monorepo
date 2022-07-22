@@ -184,9 +184,9 @@
  setting_default_realm_stability:0 "Standard"
  setting_default_realm_stability_desc:1 "Die Standardmenge von [factions|E] taucht auf."
  setting_lesser_realm_stability:0 "#high Niedrigere Stabilität#!"
- setting_lesser_realm_stability_desc:1 "Eine größere Menge von [factions|E] taucht auf."
+ setting_lesser_realm_stability_desc:1 "Es tauchen mehr [factions|E] auf."
  setting_higher_realm_stability:0 "#high Höhere Stabilität#!"
- setting_higher_realm_stability_desc:1 "Eine kleinere Menge von [factions|E] taucht auf."
+ setting_higher_realm_stability_desc:1 "Es tauchen weniger [factions|E] auf."
  setting_extreme_realm_stability:0 "#high Extreme Stabilität#!"
  setting_extreme_realm_stability_desc:1 "Eine sehr kleine Menge von [factions|E] taucht auf."
 
@@ -317,3 +317,11 @@
  setting_no_hybrid_and_divergence_cooldowns_desc:0 "Es gibt keine Abklingzeiten, bis eine [culture|E] wieder [diverge|E] oder [hybridize|E] kann."
  setting_faster_hybrid_and_divergence_cooldowns:0 "#high Schneller#!"
  setting_faster_hybrid_and_divergence_cooldowns_desc:0 "[cultures|E] können nur [diverge|E], nachdem sie #V 50#! Jahre Bestand hatten, und nur [hybridize|E], wenn sie #V 25#! Jahre Bestand hatten."
+
+ rule_dissolution_umayyad:0 "Der Fall von Al-Andalus"
+ setting_dissolution_unconstrained:0 "#high Keine Beschränkungen#!"
+ setting_dissolution_unconstrained_desc:0 "Die [dissolution_faction|E] kann das Königreich von Al-Andalus schon zu Beginn des Spiels treffen."
+ setting_dissolution_after_caliph_death:0 "#high Der Tod des Kalifen#!"
+ setting_dissolution_after_caliph_death_desc:0 "Die [dissolution_faction|E] kann das Königreich von Al-Andalus nur nach dem Tod von Sultan Mohammed $Abd-al-Rahman$ treffen."
+ setting_dissolution_historical_date:0 "#high Historischer Zeitrahmen#!"
+ setting_dissolution_historical_date_desc:0 "Die [dissolution_faction|E] kann für das Königreich von Al-Andalus erst nach dem Jahr 1020 aktiviert werden."

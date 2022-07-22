@@ -119,6 +119,6 @@
  AMENITIES_RESET_TOOLTIP:0 "#T 重置舒适方案#!\n[AddTextIf( Not( CourtAmenitiesWindow.HasChangedAnyAmenity ), '$COURT_AMENITIES_NEED_CHANGE$\n' )]放弃选中的改变"
 
  COURT_AMENITIES_CHANGED_NOTIFICATION_HEADER:0 "你已更改你的[court_amenities|E]"
- # [LocEditor:UntranslatedKey] `COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT`
+ COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT:0 "@warning_icon!#X 这里不是你的[royal_court|E]#!"
 
  BONUS_TO_AGENT_RECRUITMENT_FROM_AMENITIES:0 "$court_lodging_standards$：$VALUE|=+0$"

@@ -3,7 +3,7 @@
  #Common Christian Localization
  christianity_religion:0 "基督教"
  christianity_religion_adj:0 "基督教"
- christianity_religion_adjerent:0 "基督徒"
+ christianity_religion_adherent:0 "基督徒"
  christianity_religion_adherent_plural:0 "基督徒"
  christianity_religion_desc:0 "基督教专注于纳匝肋人耶稣的生活和教导，以救恩概念为中心，其信徒在来世获得赦罪和神的欣然接受。"
  christianity_high_god_name:0 "神"
@@ -45,11 +45,11 @@
  christianity_bishop:0 "主教"
  christianity_bishop_plural:0 "主教"
  christianity_positive_afterlife:0 "天堂"
- christianity_positive_afterlife_2:0 "$christianity_positive_afterlife$" # Optional translation alt
- christianity_positive_afterlife_3:0 "$christianity_positive_afterlife$" # Optional translation alt
+ christianity_positive_afterlife_2:1 "乐园" # Optional translation alt
+ christianity_positive_afterlife_3:1 "$christianity_high_god_name_possessive$的国" # Optional translation alt
  christianity_negative_afterlife:0 "地狱"
- christianity_negative_afterlife_2:0 "$christianity_negative_afterlife$" # Optional translation alt
- christianity_negative_afterlife_3:0 "$christianity_negative_afterlife$" # Optional translation alt
+ christianity_negative_afterlife_2:1 "深渊" # Optional translation alt
+ christianity_negative_afterlife_3:1 "火狱" # Optional translation alt
  christianity_witchgodname_the_horned_god:0 "有角邪神"
  christianity_witchgodname_the_horned_god_possessive:0 "有角邪神"
 
@@ -121,7 +121,7 @@
  lollard_adherent_plural:0 "罗拉德派信徒"
  lollard_desc:0 "罗拉德派遣责许多通行的基督教圣事，如洗礼和告解，信徒坚信圣经是基督教义的唯一坚实基础，任何不直接基于圣经的教导都本质上不合法。"
 
- insular_celtic:0 "海岛基督教"
+ insular_celtic:1 "海岛基督教"
  insular_celtic_adj:0 "海岛基督教"
  insular_celtic_adherent:0 "海岛基督徒"
  insular_celtic_adherent_plural:0 "海岛基督徒"
@@ -167,8 +167,8 @@
  bosnian_church_desc:0 "波斯尼亚高地上的基督教会长久以来同时被天主教和东正教遗忘，他们比同胞更宽容，但缺乏正式的架构。他们保留了基督教的古老元素，常常被同教人轻蔑对待，如果真的有人记得他们的话。"
 
  bosnian_house_of_worship:0 "希扎"
- bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$" # Optional translation alt
- bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$" # Optional translation alt
+ bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$"
+ bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$"
  bosnian_house_of_worship_plural:0 "希扎"
  bosnian_religious_head_title:0 "普拉杰德"
  bosnian_religious_head_title_name:0 "奥比泰利"
@@ -191,6 +191,20 @@
  bosnian_bishop_female_plural:0 "巴卡"
  bosnian_bishop_neuter:0 "杰德"
  bosnian_bishop_neuterplural:0 "杰德"
+
+ mozarabic_church:0 "穆扎赖卜派"
+ mozarabic_church_adj:0 "穆扎赖卜派"
+ mozarabic_church_adherent:0 "穆扎赖卜人"
+ mozarabic_church_adherent_plural:0 "穆扎赖卜人"
+ mozarabic_church_desc:0 "穆扎赖卜派基督教承继了早期伊比利亚礼仪，由于几个世纪以来一直处于伊斯兰教的统治之下，该派相对于罗马维持着一定程度的独立。他们与其他信仰长期共存，这使得他们比更为基要主义的派别更能接受差异。"
+
+ adoptionist:0 "嗣子论派"
+ adoptionist_adj:0 "嗣子论派"
+ adoptionist_adherent:0 "嗣子论派信徒"
+ adoptionist_adherent_plural:0 "嗣子论派信徒"
+ adoptionist_desc:0 "嗣子论派伊比利亚支系的源头可以追溯到托莱多总主教区及其周边教区、几个世纪前的北非清教运动、以及九世纪早期数个魅力非凡异端头目等互相独立的思想的结合。\n\n尽管该派的思想形式多种多样，从极其微妙到彻底直白均有，但统一的教义观点是对圣子永恒的神性持怀疑态度。"
+ adoptionist_religious_head_title:0 "总主教"
+ adoptionist_religious_head_title_name:0 "总主教区"
 
  conversos:0 "皈依派"
  conversos_adj:0 "皈依派"

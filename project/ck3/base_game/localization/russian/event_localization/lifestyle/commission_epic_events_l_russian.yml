@@ -40,7 +40,7 @@
  CommissionEpicComposerHasHave_have:0 "имеют"
 
  commission_epic.0001.t:0 "Семейный эпос"
- commission_epic.0001.desc:0 "Мне нужна классическая история о величии моей семьи, — [ROOT.Char.Custom('CompositionType')] о происхождении династии [ROOT.Char.GetDynasty.GetName] и ожидающей ее славе!\n\nОсталось лишь найти человека, знающего, как рассказать историю..."
+ commission_epic.0001.desc:0 "Мне нужна классическая история о величии моей семьи, — [ROOT.Char.Custom('CompositionType')] о происхождении династии [ROOT.Char.GetDynasty.GetBaseName] и ожидающей ее славе!\n\nОсталось лишь найти человека, знающего, как рассказать историю..."
  commission_epic.0001.a:1 "[writer.GetTitledFirstNameNoTooltip] — [Select_CString(writer.IsFemale, 'умелая рассказчица', 'умелый рассказчик' )]!"
  writer_writes_epic:0 "[writer.GetTitledFirstName] слагает эпос"
  commission_epic.0001.b:0 "Я велю, чтобы собрались лучшие [ROOT.Char.Custom('CommissionEpicScribes')]."
@@ -61,12 +61,16 @@
  commission_epic.0002.writer:0 "Написание моего семейного эпоса продвигается хорошо, и по звучанию некоторых строк уже можно сказать, что их будут цитировать на протяжении десятилетий, но [writer.GetTitledFirstName] часто спрашивает, вокруг чего будет вращаться история.\n\nБыло бы проще ответить, если бы [writer.GetSheHe] сначала ее [Select_CString(writer.IsFemale, 'написала', 'написал' )]! Тогда можно было бы просто указать, что мне не нравится, но [writer.GetSheHe] настаивает, что ответ нужен уже сейчас."
  commission_epic.0002.servant:0 "Похоже, [servant.GetFirstName], слуга, [Select_CString(servant.IsFemale, 'нанятая', 'нанятый' )] мной для написания истории моей семьи, испытывает небольшие трудности. Удивительно, что н[servant.GetHerHis] вообще хоть что-то получается! Как оказалось, [servant.GetSheHe] вообще не умеет ни писать, ни складывать рифму.\n\nИ все же [servant.GetSheHe] трудится денно и нощно, и сейчас обращается ко мне с важным вопросом: «О чем должна рассказывать эта поэма, [ROOT.Char.GetLadyLord]?»"
  commission_epic.0002.scribes:0 "Мои [ROOT.Char.Custom('CommissionEpicScribes')] начали работать над семейным эпосом, но уже столкнулись с проблемой: они не могут договориться о центральном сюжете истории, и каждый [ROOT.Char.Custom('CommissionEpicScribe')] настаивает, что именно его части нужно уделить наибольшее внимание.\n\n«Мы не хотим быть навязчивыми, [ROOT.Char.GetLadyLord], но вы #EMP должны#! разрешить наш спор, пока мы не порвали друг друга в клочья!»"
- commission_epic.0002.a:0 "Разумеется, основное внимание нужно уделить мне и моей судьбе!"
+ commission_epic.0002.iberia_epic.a:0 "Напишите о том, что моя династия должна по праву властвовать над Иберией!"
+ commission_epic.0002.a:1 "Сосредоточьтесь на наследственных претензиях моей династии."
+ commission_epic.propaganda:0 "Когда эпос будет готов, я получу [claims|El] на соседние титулы"
+ commission_epic.0002.b:1 "Разумеется, основное внимание нужно уделить мне и моей судьбе!"
  commission_epic.more_prestige:0 "Я увеличу свой [prestige|El], когда эпос будет готов"
- commission_epic.0002.b:0 "Это #EMP семейная#! история, так что не скупитесь на эпитеты."
+ commission_epic.0002.c:1 "Это #EMP семейная#! история, так что не скупитесь на эпитеты."
  commission_epic.more_dynasty_prestige:0 "Я увеличу [dynasty_prestige|El], когда эпос будет готов"
- commission_epic.0002.c:0 "Пусть история будет как можно более правдивой."
+ commission_epic.0002.d:0 "Пусть история будет как можно более правдивой."
  commission_epic.more_piety:0 "По завершении эпоса я также получу [Concept( 'piety', 'благочестие' )|E]"
+
 
  commission_epic.1001.t:0 "Семейный эпос: вопрос времени"
  commission_epic.1001.opening:0 "Мне уже несколько недель не показывали новых вариантов семейного эпоса. Либо процесс занимает слишком много времени, либо"
@@ -161,13 +165,60 @@
  commission_epic.2005.b.tt:0 "После завершения вы получите семейный эпос — [Concept( 'artifact', 'артефакт' )|E], повышающий [Concept( 'success_chance', 'шанс успеха' )|E] [Concept( 'personal_scheme', 'личных происков' )|E]"
 
  commission_epic.2006.t:0 "Семейный эпос: связанные верой"
- commission_epic.2006.desc:0 "Я не знаю, испытывать мне облегчение или беспокойство из-за энтузиазма, что выказывает [Select_CString(court_chaplain.IsFemale, 'моя', 'мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('court_chaplain'))] [court_chaplain.GetTitledFirstName], прочитав законченные части моего семейного эпоса.\n\n«Это весьма поучительная история! — заявляет [court_chaplain.GetSheHe]. — Династия [ROOT.Char.GetDynasty.GetName] всегда достигала величия, прислушиваясь к советам духовенства, и сталкивалась с несчастьями, стоило только проигнорировать такие советы! Надеюсь, вы извлечете из этого урок»."
+ commission_epic.2006.desc:0 "Я не знаю, испытывать мне облегчение или беспокойство из-за энтузиазма, что выказывает [Select_CString(court_chaplain.IsFemale, 'моя', 'мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('court_chaplain'))] [court_chaplain.GetTitledFirstName], прочитав законченные части моего семейного эпоса.\n\n«Это весьма поучительная история! — заявляет [court_chaplain.GetSheHe]. — Династия [ROOT.Char.GetDynasty.GetBaseName] всегда достигала величия, прислушиваясь к советам духовенства, и сталкивалась с несчастьями, стоило только проигнорировать такие советы! Надеюсь, вы извлечете из этого урок»."
  commission_epic.2006.a:0 "Конечно. Я это слишком хорошо знаю."
  commission_epic.2006.a.tt:0 "После завершения вы получите семейный эпос — [Concept( 'artifact', 'артефакт' )|E], повышающий [Concept( 'piety', 'благочестие' )|E] и налоги с [Concept( 'faith', 'единоверцев' )|E]"
  commission_epic.2006.b:0 "Ха! Все совсем наоборот."
  commission_epic.2006.b.flavor:0 "Это мы указывали, каким путем будут следовать [ROOT.Char.GetFaith.AltPriestTermPlural]."
  commission_epic.2006.c:0 "Нам обоим известно, что в таких случаях семья превыше всего."
  commission_epic.2006.c.same_dynasty:0 "Этот вариант доступен, потому что [court_chaplain.GetFirstNameNoTooltip] и я — члены одной [dynasties|El]"
+
+ commission_epic.6001.t:0 "Давайте немного приукрасим"
+ commission_epic.6001.writerservant:0 "Некоторое время [composer.GetName] работает над моей хроникой, затем просит об аудиенции.\n\n«[Select_CString(ROOT.Char.IsFemale,'Миледи','Сир')], — начинает [composer.GetSheHe], — признаюсь честно, хотя ваша династия поистине велика, наследственные претензии, на которые вы надеялись... оказалось не так-то легко обосновать. Мне нужно больше времени и ресурсов, чтобы более подробно разобрать старые записи. Иначе мне придется слегка #italic приукрасить#! истории, отчего претензии станут несколько менее убедительными...»"
+ commission_epic.6001.scribes:0 "Днями и ночами мои писари не отрывались от древних манускриптов в поисках претензий на территории моих предков, которые можно было бы выгодно представить в хрониках.\n\n«Увы, — был их ответ, — пожалуй, нам придется немного... приукрасить истинное положение дел и допустить немного вольностей в описаниях деяний и владений ваших праотцов. Вы ведь понимаете, о чем речь, [Select_CString(ROOT.Char.IsFemale,'миледи','сир')]?»"
+ commission_epic.6001.a:0 "Приукрашивайте сколько вздумается, главное, чтобы труд был готов!"
+ commission_epic.6001.b:0 "Вот вам еще золото, продолжайте исследования."
+ commission_epic.less_credible:0 "Хроника будет менее достоверной"
+ commission_epic.more_credible:0 "Хроника может оказаться более достоверной"
+
+ commission_epic.6003.t:0 "Импровизированные претензии"
+ commission_epic.6003.writer:0 "[composer.GetName] скрупулезно работает над моей хроникой, и с каждым днем она становится всё более величественной и всё менее достоверной.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.GetLadyLord], — говорит [composer.GetSheHe], — я [Select_CString(composer.IsFemale, 'нашла', 'нашел' )] старую потрепанную рукопись, где говорится, что [Select_CString(ancestor_1.IsFemale,'queen','king')] по имени [ancestor_1.GetFirstNameNoTooltip] некогда [Select_CString(ancestor_1.IsFemale, 'правила', 'правил' )] державами [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] и [neighboring_county_3.GetNameNoTier]. Я могу составить более подробные генеалогические таблицы и внести, скажем так, #italic творческие дополнения#!, которые подтвердят, что [ancestor_1.GetSheHe] [Select_CString(ancestor_1.IsFemale, 'была', 'был' )] вашим предком. Тогда [ancestor_1.GetHerHis] история поможет вам получить более достоверные претензии на часть этих территорий... а может, и на все...»"
+ commission_epic.6003.servant:0 "[composer.GetName] скрупулезно работает над моей хроникой, и с каждым днем она становится всё сомнительнее.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.GetLadyLord], — говорит [composer.GetSheHe], — я [Select_CString(composer.IsFemale, 'нашла', 'нашел' )] потрепанную дарственную, которую [Select_CString(ancestor_1.IsFemale, 'написала сама', 'написал сам' )] [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale,'Охотница','Локетек')] — [Select_CString(ancestor_1.IsFemale,'queen','king')], что в древние времена [Select_CString(ancestor_1.IsFemale, 'правила', 'правил' )] державами [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] и [neighboring_county_3.GetNameNoTier]. Я могу внести в ваше родовое древо несколько творческих дополнений, которые позволят утверждать, что [ancestor_1.GetSheHe] [Select_CString(ancestor_1.IsFemale, 'была', 'был' )] вашим предком. Если при этом я внесу соответствующие изменения в хронику, вы получите достойную претензию на часть этих территорий, а может, и на все»."
+ commission_epic.6003.scribes:0 "Писари изо всех сил трудятся над моей хроникой, и с каждым днем она становится всё затейливее.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.GetLadyLord], — обращается ко мне один из них, — мы нашли заметку на полях древней рукописи, где говорится, что в древние времена [Select_CString(ancestor_1.IsFemale, 'некая', 'некий' )] [ancestor_1.GetWomanMan] по имени [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale,'Щедрая','Одноглазый')], [Select_CString(ancestor_1.IsFemale, 'обладала', 'обладал' )] определенным влиянием в державах [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] и [neighboring_county_3.GetNameNoTier]. Мы можем провести творческую работу и более глубокие генеалогические изыскания, и тогда #italic не останется сомнений#!, что [ancestor_1.GetSheHe] [Select_CString(ancestor_1.IsFemale, 'была', 'был' )] вашим предком. Тогда хроники позволят вам претендовать на часть этих территорий... а может, и на все...»"
+ commission_epic.6003.a:0 "Все! До единой!"
+ commission_epic.6003.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip] в это время года выглядит чудесно!"
+ commission_epic.6003.c:0 "[neighboring_county_2.GetNameNoTierNoTooltip] — вот чего я хочу!"
+ commission_epic.6003.d:0 "[neighboring_county_3.GetNameNoTierNoTooltip] будет принадлежать мне."
+ commission_epic.paranoid_neighbors:0 "Когда ваши соседи узнают об этой хронике, они очень расстроятся."
+
+ commission_epic.6004.t:0 "Достоверные претензии"
+ commission_epic.6004.writerservant:0 "[composer.GetName] скрупулезно работает над моей хроникой, и с каждым днем она становится всё обширнее.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.GetLadyLord], — говорит [composer.GetSheHe], — мне попался старинный документ о налогах и правах — довольно тоскливое чтиво, но в нем упоминается [ancestor_1.GetLadyLord] по имени [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale,'Высокая','Плешивый')], [Select_CString(ancestor_1.IsFemale, 'которая правила', 'который правил' )] в древние времена державами [neighboring_county_1.GetNameNoTier] и [neighboring_county_2.GetNameNoTier]. Мне удалось проследить [ancestor_1.GetHerHis] род от поздней античности до вас! Таким образом, вы можете претендовать на любую из этих территорий, и претензия будет столь достоверна, что никто не посмеет ее оспорить»."
+ commission_epic.6004.scribes:0 "Писцы изо всех сил трудятся над моей хроникой, и с каждым днем она становится всё толще и обширнее.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.GetLadyLord], — обращается ко мне один из них, — мы нашли очень древнюю королевскую хартию, согласно которой [Select_CString(ancestor_1.IsFemale, 'некая', 'некий' )] [ancestor_1.GetLadyLord] по имени [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale,'Добрая','Удачливый')] [Select_CString(ancestor_1.IsFemale, 'получала', 'получал' )] власть над державами [neighboring_county_1.GetNameNoTier] и [neighboring_county_2.GetNameNoTier]. Не без помощи [ROOT.GetCharacter.GetFaith.HighGodNamePossessive] нам удалось проследить вашу родословную как раз до н[ancestor_1.GetHerHis], и наши исследования уже занесены в хронику. Это означает, что любая из этих территорий по праву принадлежит вам»."
+ commission_epic.6004.a:0 "А почему не сразу обе?"
+ commission_epic.6004.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip] — точно мое наследие."
+ commission_epic.6004.c:0 "I have always felt like [neighboring_county_2.GetNameNoTierNoTooltip] будет принадлежать мне!"
+
+ commission_epic.6005.t:0 "Незавершенный эпос"
+ commission_epic.6005.writerservant:0 "Я давно подозреваю, что в моей хронике чего-то не хватает. И вот [composer.GetName] с тревогой обращается ко мне.\n\n«Увы, [Select_CString(ROOT.Char.IsFemale, 'моя', 'мой' )] [ROOT.Char.GetLadyLord], — говорит [composer.GetSheHe], — сколько я ни пытаюсь, история не знает достойных поводов для вас претендовать на иные территории. Я не могу продолжать работу. Однако у меня получилась хроника, которая превозносит достоинства вашей династии. Прошу, удовольствуйтесь этим и не велите наказывать меня за неудачу...»"
+ commission_epic.6005.scribes:0 "Писари бьются над моей хроникой изо всех сил, но явно испытывают затруднения. И вот они с тревогой обращаются ко мне.\n\n«Увы, — говорят они, — сколько мы ни пытаемся, история не знает достойных поводов для вас претендовать на иные территории. Мы не можем продолжать работу. Однако у нас получилась хроника, которая превозносит достоинства вашей династии. Пожалуйста, удовольствуйтесь этим и не карайте нас за неудачу...»"
+ commission_epic.6005.a:0 "В темницу!"
+ commission_epic.6005.b:0 "Дурачье и неумехи..."
+ commission_epic.6005.c:0 "Неужели [ROOT.GetCharacter.GetFaith.HighGodName] наказывает меня за гордыню?"
+ commission_epic.6005.d:0 "Что ж, по крайней мере, хроника у меня есть..."
+
+ commission_epic.6006.t:0 "Могущественная пропаганда"
+ commission_epic.6006.writerservant:0 "«Готово, [Select_CString(ROOT.Char.IsFemale, 'моя', 'мой' )] [ROOT.Char.GetLadyLord], — говорит [composer.GetName], с заметным облегчением вручая мне объемистый фолиант. — Вот хроника дома [ROOT.Char.GetDynastyHouseNameNoTooltip] с крайне подробным описанием его правления на различных территориях, которые вы пожелали упомянуть. [Select_CString(composer.IsFemale, 'Уверена', 'Уверен' )], никто не посмеет оспорить ваши законные претензии!»"
+ commission_epic.6006.scribes:0 "Писари наконец-то закончили хронику с должной долей пропаганды. С явным облегчением они вручают мне невероятно толстый фолиант.\n\n«Примите, [Select_CString(ROOT.Char.IsFemale,'миледи','сир')], великую хронику дома [ROOT.Char.GetDynastyHouseNameNoTooltip] с подробным перечислением всех ваших претензий. Да принесет она вам процветание»."
+ commission_epic.6006.a:0 "Само совершенство!"
+
+ propaganda_chronicle_name:0 "Хроника-пропаганда дома [ROOT.Char.GetDynastyHouseNameNoTooltip]"
+ propaganda_chronicle_desc:0 "На страницах этого увесистого фолианта красочно воспевается слава дома [ROOT.Char.GetDynastyHouseNameNoTooltip] и его многочисленные территориальные претензии разной степени экстравагантности."
+ 
+ half_baked_propaganda_chronicle_name:0 "Незавершенная хроника-пропаганда"
+ half_baked_propaganda_chronicle_desc:0 "Эта книга могла бы снискать дурную славу, если бы ее завершили. В своем нынешнем состоянии она крайне неубедительно и безуспешно пытается убедить читателя, будто ее главный герой может претендовать на некие территории. Но эти жалкие попытки компенсируются вычурными дифирамбами в адрес династии [ROOT.Char.GetDynastyNameNoTooltip] и ее предполагаемых добродетелей."
+ 
+
+
 
  commission_epic.9001.t:0 "Семейный эпос"
  commission_epic.9001.writer:1 "Эпическая [ROOT.Char.Custom('CompositionType')] моей семьи наконец-то завершена! [composer.GetTitledFirstName] может собой гордиться!"

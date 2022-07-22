@@ -1,4 +1,6 @@
 ﻿##################################################
+# Decisions
+##################################################
 
 secure_high_kingdom_north_sea_scripted_effect = {
 	scope:founder = {
@@ -423,10 +425,11 @@ forge_the_jomsvikings_scripted_effect = {
 		save_scope_as = leader
 	}
 	# Create the actual holy order.
-	create_holy_order = {
-		leader = scope:leader
-		capital = scope:leased_barony
-		save_scope_as = new_holy_order
+	create_holy_order_neutral_effect = {
+		LEADER = scope:leader
+		CAPITAL = scope:leased_barony
+		NEW_HO_SCOPE = new_holy_order
+		FOUNDER = scope:founder
 	}
 	hidden_effect = {
 		scope:leader = {

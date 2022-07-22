@@ -86,7 +86,7 @@
  adultery.1002.worried:0 "« Dites-moi, est-ce vraiment le mien ? », demande [adultery_spouse.Custom('FR_le_Char_Pi')][adultery_spouse.GetTitledFirstName] d’un air désemparé. Les yeux inquiets de m[ROOT.Char.Custom2('FR_RelationToMe_OnA', SCOPE.sC('adultery_spouse'))] croisent les miens."
  adultery.1002.desc_sadistic:0 "« Vous n’êtes pas enceinte d’un autre homme, n’est-ce pas ? », dit m[ROOT.Char.Custom2('FR_RelationToMe_OnA', SCOPE.sC('spouse'))] en me regardant avec sévérité. « Vous savez que ce serait presque aussi mauvais pour vous que de me mentir, n’est-ce pas ? », dit-il en souriant."
  adultery.1002.desc_lunatic:0 "« Est-ce que l’enfant est le mien ?! », demande [adultery_spouse.Custom('FR_le_Char_Pi')][adultery_spouse.GetTitledFirstName], les yeux qui regardent dans tous les coins. « Ils me le diront, vous savez ! »"
- adultery.1002.conclusion:0 "\n\n[ROOT.Char.Custom2('QuirkPersonalTowardsOther', SCOPE.sC('adultery_spouse'))]."
+ adultery.1002.conclusion:0 "\n\nJe [ROOT.Char.Custom2('QuirkPersonalTowardsOther', SCOPE.sC('adultery_spouse'))]."
  adultery.1002.a:0 "Je dois vous dire la vérité."
  adultery.1002.a.confession_tt:0 "[adultery_spouse.Custom('FR_le_Char_U_Pi')|U][adultery_spouse.GetShortUIName] va apprendre la vérité"
  adultery.1002.b:0 "Bien sûr que c’est le vôtre, [adultery_spouse.GetFirstNameNoTooltip] !"
@@ -127,7 +127,7 @@
  adultery.1006.a:0 "Et maintenant ?"
 
  adultery.1009.t:0 "Fin des suspicions"
- adultery.1009.desc:0 "Il semble que mes craintes n’étaient pas fondées. Malgré tous les efforts de mes espions, je n’ai trouvé aucune indication que [mother.Custom('FR_le_Char_Pi')][mother.GetTitledFirstName] ait été infidèle.\n\n#EMP Malheureusement, [mother.GetSheHe] a découvert mes suspicions et est très déçue par moi."
+ adultery.1009.desc:0 "Il semble que mes craintes n’étaient pas fondées. Malgré tous les efforts de mes espions, je n’ai trouvé aucune indication que [mother.Custom('FR_le_Char_Pi')][mother.GetTitledFirstName] ait été infidèle.\n\nMalheureusement, [mother.GetSheHe] a découvert mes suspicions et est très déçue par moi."
  adultery.1009.a:0 "Bien sûr que je vous ai fait confiance, tout le temps, ma chère !"
  adultery.1009.a.flavor_tt:0 "Je devais seulement en être certain."
 

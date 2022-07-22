@@ -142,8 +142,8 @@
  signature_weapon_dagger_FR_Un:0 "une dague"
 
  daughter_in_law_FR_OnA:0 "a belle-fille"
- relation_acquaintance_female_FR_OnA:1 "a connaissance" # formerly #D debug
- relation_acquaintance_male_FR_OnA:1 "a connaissance" # formerly #D debug
+ relation_acquaintance_female_FR_OnA:1 "a connaissance"
+ relation_acquaintance_male_FR_OnA:1 "a connaissance"
  relation_agent_FR_OnA:0 "on agent"
  relation_aunt_FR_OnA:0 "a tante"
  relation_brother_bully_FR_OnA:0 "on frère et petite brute"
@@ -293,8 +293,8 @@
  relation_chief_qadi_male_FR_OnA:0 "on chef cadi"
 
  daughter_in_law_FR_Le:0 "la belle-fille"
- relation_acquaintance_female_FR_Le:1 "la connaissance" # formerly #D debug
- relation_acquaintance_male_FR_Le:1 "la connaissance" # formerly #D debug
+ relation_acquaintance_female_FR_Le:1 "la connaissance"
+ relation_acquaintance_male_FR_Le:1 "la connaissance"
  relation_agent_FR_Le:0 "l’agent"
  relation_aunt_FR_Le:0 "la tante"
  relation_brother_FR_Le:0 "le frère"
@@ -750,38 +750,38 @@
  crime_infidel_FR_nickname:0 "[ROOT.Char.Custom('FR_LeLa')] Mécréant[ROOT.Char.Custom('FR_E')]"
  crime_fallback_FR_nickname:0 "[ROOT.Char.Custom('FR_LeLa')] Crimine[ROOT.Char.Custom('FR_LLle')]"
  # FR_GetMAAType1_On & FR_GetMAAType2_On
- light_footmen_FR_On:0 "a " # Piétaille
- bowmen_FR_On:0 "es " # Archers
- light_horsemen_FR_On:0 "es " # Cavaliers légers
- pikemen_unit_FR_On:0 "es " # Piquiers
- armored_footmen_FR_On:0 "a " # Piétaille en armure
- armored_horsemen_FR_On:0 "es " # Cavaliers en armure
- war_elephant_FR_On:0 "es " # Éléphants de guerre
- camel_rider_FR_On:0 "es " # Chameliers de combat
- horse_archers_FR_On:0 "es " # Archers à cheval
+ light_footmen_FR_On:0 "a "
+ bowmen_FR_On:0 "es "
+ light_horsemen_FR_On:0 "es "
+ pikemen_unit_FR_On:0 "es "
+ armored_footmen_FR_On:0 "a "
+ armored_horsemen_FR_On:0 "es "
+ war_elephant_FR_On:0 "es "
+ camel_rider_FR_On:0 "es "
+ horse_archers_FR_On:0 "es "
  # FR_ThisArtifactType_Le
- artifact_type_helmet_FR_Le:0 "la " # couronne
- artifact_type_primary_armament_FR_Le:0 "l’" # arme
- artifact_type_armor_FR_Le:0 "l’" # armure
- artifact_type_regalia_FR_Le:0 "l’" # insigne royal
- artifact_type_trinket_FR_Le:0 "le" # souvenir
- artifact_type_wall_big_FR_Le:0 "la " # décoration suspendue
- artifact_type_wall_small_FR_Le:0 "la " # $artifact_type_wall_big$
- artifact_type_throne_FR_Le:0 "le " # trône
- artifact_type_sculpture_FR_Le:0 "l’" # œuvre d’exposition
- artifact_type_book_FR_Le:0 "le " # livre
- artifact_type_pedestal_FR_Le:0 "l’" # $artifact_type_sculpture$
- artifact_type_elixir_FR_Le:0 "l’" # élixir
+ artifact_type_helmet_FR_Le:0 "la "
+ artifact_type_primary_armament_FR_Le:0 "l’"
+ artifact_type_armor_FR_Le:0 "l’"
+ artifact_type_regalia_FR_Le:0 "l’"
+ artifact_type_trinket_FR_Le:0 "le"
+ artifact_type_wall_big_FR_Le:0 "la "
+ artifact_type_wall_small_FR_Le:0 "la "
+ artifact_type_throne_FR_Le:0 "le "
+ artifact_type_sculpture_FR_Le:0 "l’"
+ artifact_type_book_FR_Le:0 "le "
+ artifact_type_pedestal_FR_Le:0 "l’"
+ artifact_type_elixir_FR_Le:0 "l’"
  # FR_GetInspirationOwnerType_OnA
- inspiration_owner_type_writer_FR_On: "on " # écrivain[ROOT.Char.Custom('FR_E')]
- inspiration_owner_type_weaponsmith_FR_On: "[ROOT.Char.Custom('FR_OnA')] " # forgero[ROOT.Char.Custom('FR_NNne')] d’armes
- inspiration_owner_type_armorer_FR_On: "on " # armuri[ROOT.Char.Custom('FR_ErEre')]
- inspiration_owner_type_weaver_FR_On: "[ROOT.Char.Custom('FR_OnA')] " # tisserand[ROOT.Char.Custom('FR_E')]
- inspiration_owner_type_adventurer_FR_On: "on " # aventuri[ROOT.Char.Custom('FR_ErEre')]
- inspiration_owner_type_artisan_FR_On: "[ROOT.Char.Custom('FR_OnA')] " # [ROOT.Char.Custom('InspirationArtisanJobType')]
- inspiration_owner_type_metalsmith_FR_On: "on " # orfèvre
- inspiration_owner_type_alchemist_FR_On: "on " # alchimiste
- inspiration_owner_type_fallback_FR_On: "[ROOT.Char.Custom('FR_OnA')] " # bénéficiaire
+ inspiration_owner_type_writer_FR_On:0 "on "
+ inspiration_owner_type_weaponsmith_FR_On:0 "[ROOT.Char.Custom('FR_OnA')] "
+ inspiration_owner_type_armorer_FR_On:0 "on "
+ inspiration_owner_type_weaver_FR_On:0 "[ROOT.Char.Custom('FR_OnA')] "
+ inspiration_owner_type_adventurer_FR_On:0 "on "
+ inspiration_owner_type_artisan_FR_On:0 "[ROOT.Char.Custom('FR_OnA')] "
+ inspiration_owner_type_metalsmith_FR_On:0 "on "
+ inspiration_owner_type_alchemist_FR_On:0 "on "
+ inspiration_owner_type_fallback_FR_On:0 "[ROOT.Char.Custom('FR_OnA')] "
  # FR_GetInspirationTypeRoom_OnA
  inspiration_type_room_study_FR_On:0 "on "
  inspiration_type_room_smithy_FR_On:0 "a "
@@ -841,32 +841,32 @@
  inspiration_type_material_ingredients_FR_On:0 "es "
  inspiration_type_material_fallback_FR_On:0 "es "
  # FR_GetInspirationTypeObject_OnA
- inspiration_type_object_book_FR_On:0 "on " # livre
- inspiration_type_object_weapon_FR_On:0 "[ROOT.Char.Custom('FR_ArtifactWeaponBaseType_OnA')]" # [ROOT.Char.Custom('ArtifactWeaponBaseType')]
- inspiration_type_object_armor_FR_On:0 "[ROOT.Char.Custom('FR_ArtifactArmorTypeLowercase_OnA')]" # [ROOT.Char.Custom('ArtifactArmorTypeLowercase')]
- inspiration_type_object_tapestry_FR_On:0 "a " # tapisserie
- inspiration_type_object_banner_FR_On:0 "a " # bannière
- inspiration_type_object_journey_FR_On:0 "on " # voyage
- inspiration_type_object_artisan_FR_On:0 "[ROOT.Char.Custom('FR_InspirationArtisanBaseType_OnA')]" # [ROOT.Char.Custom('InspirationArtisanBaseType')]
- inspiration_type_object_smith_FR_On:0 "[ROOT.Char.Custom('FR_InspirationSmithBaseType_OnA')]" # [ROOT.Char.Custom('InspirationSmithBaseType')]
- inspiration_type_object_alchemy_FR_On:0 "a " # teinture
- inspiration_type_object_fallback_FR_On:0 "on " # projet
+ inspiration_type_object_book_FR_On:0 "on "
+ inspiration_type_object_weapon_FR_On:0 "[ROOT.Char.Custom('FR_ArtifactWeaponBaseType_OnA')]"
+ inspiration_type_object_armor_FR_On:0 "[ROOT.Char.Custom('FR_ArtifactArmorTypeLowercase_OnA')]"
+ inspiration_type_object_tapestry_FR_On:0 "a "
+ inspiration_type_object_banner_FR_On:0 "a "
+ inspiration_type_object_journey_FR_On:0 "on "
+ inspiration_type_object_artisan_FR_On:0 "[ROOT.Char.Custom('FR_InspirationArtisanBaseType_OnA')]"
+ inspiration_type_object_smith_FR_On:0 "[ROOT.Char.Custom('FR_InspirationSmithBaseType_OnA')]"
+ inspiration_type_object_alchemy_FR_On:0 "a "
+ inspiration_type_object_fallback_FR_On:0 "on "
  # FR_GetInspirationTypeObject_Le
- inspiration_type_object_book_FR_Le:0 "le " # livre
- inspiration_type_object_weapon_FR_Le:0 "[ROOT.Char.Custom('FR_ArtifactWeaponBaseType_Le')]" # [ROOT.Char.Custom('ArtifactWeaponBaseType')]
- inspiration_type_object_armor_FR_Le:0 "[ROOT.Char.Custom('FR_ArtifactArmorTypeLowercase_Le')]" # [ROOT.Char.Custom('ArtifactArmorTypeLowercase')]
- inspiration_type_object_tapestry_FR_Le:0 "la " # tapisserie
- inspiration_type_object_banner_FR_Le:0 "la " # bannière
- inspiration_type_object_journey_FR_Le:0 "le " # voyage
- inspiration_type_object_artisan_FR_Le:0 "[ROOT.Char.Custom('FR_InspirationArtisanBaseType_Le')]" # [ROOT.Char.Custom('InspirationArtisanBaseType')]
- inspiration_type_object_smith_FR_Le:0 "[ROOT.Char.Custom('FR_InspirationSmithBaseType_Le')]" # [ROOT.Char.Custom('InspirationSmithBaseType')]
- inspiration_type_object_alchemy_FR_Le:0 "la " # teinture
- inspiration_type_object_fallback_FR_Le:0 "le " # projet
+ inspiration_type_object_book_FR_Le:0 "le "
+ inspiration_type_object_weapon_FR_Le:0 "[ROOT.Char.Custom('FR_ArtifactWeaponBaseType_Le')]"
+ inspiration_type_object_armor_FR_Le:0 "[ROOT.Char.Custom('FR_ArtifactArmorTypeLowercase_Le')]"
+ inspiration_type_object_tapestry_FR_Le:0 "la "
+ inspiration_type_object_banner_FR_Le:0 "la "
+ inspiration_type_object_journey_FR_Le:0 "le "
+ inspiration_type_object_artisan_FR_Le:0 "[ROOT.Char.Custom('FR_InspirationArtisanBaseType_Le')]"
+ inspiration_type_object_smith_FR_Le:0 "[ROOT.Char.Custom('FR_InspirationSmithBaseType_Le')]"
+ inspiration_type_object_alchemy_FR_Le:0 "la "
+ inspiration_type_object_fallback_FR_Le:0 "le "
  # FR_InspirationSmithBaseType_OnA
- inspiration_smith_base_type_brooch_FR_On:0 "a " # broche
- inspiration_smith_base_type_regalia_FR_On:0 "on " # insigne royal
- inspiration_smith_base_type_crown_FR_On:0 "a " # couronne
- inspiration_smith_base_type_goblet_FR_On:0 "a " # coupe
+ inspiration_smith_base_type_brooch_FR_On:0 "a "
+ inspiration_smith_base_type_regalia_FR_On:0 "on "
+ inspiration_smith_base_type_crown_FR_On:0 "a "
+ inspiration_smith_base_type_goblet_FR_On:0 "a "
  # FR_get_region_flower_type_plural_Fix
  flower_type_jasmine_FR_Fix:0 "jasmins"
  flower_type_lavender_FR_Fix:0 "lavandes"
@@ -891,60 +891,60 @@
  flower_type_orchid_plural_FR_Fix:0 "orchidées"
  flower_type_aster_plural_FR_Fix:0 "asters"
  # FR_InspirationSmithBaseType_Le
- inspiration_smith_base_type_brooch_FR_Le:0 "la " # broche
- inspiration_smith_base_type_regalia_FR_Le:0 "l’" # insigne royal
- inspiration_smith_base_type_crown_FR_Le:0 "la " # couronne
- inspiration_smith_base_type_goblet_FR_Le:0 "la " # coupe
+ inspiration_smith_base_type_brooch_FR_Le:0 "la "
+ inspiration_smith_base_type_regalia_FR_Le:0 "l’"
+ inspiration_smith_base_type_crown_FR_Le:0 "la "
+ inspiration_smith_base_type_goblet_FR_Le:0 "la "
  # FR_InspirationArtisanBaseType_Le
- inspiration_artisan_base_type_chest_FR_Le:0 "le " # coffre
- inspiration_artisan_base_type_box_FR_Le:0 "la " # boîte
- inspiration_artisan_base_type_sculpture_FR_Le:0 "la " # sculpture
- inspiration_artisan_base_type_cabinet_FR_Le:0 "le " # meuble de rangement
- inspiration_artisan_base_type_throne_FR_Le:0 "le " # trône
+ inspiration_artisan_base_type_chest_FR_Le:0 "le "
+ inspiration_artisan_base_type_box_FR_Le:0 "la "
+ inspiration_artisan_base_type_sculpture_FR_Le:0 "la "
+ inspiration_artisan_base_type_cabinet_FR_Le:0 "le "
+ inspiration_artisan_base_type_throne_FR_Le:0 "le "
  # FR_InspirationArtisanBaseType_OnA
- inspiration_artisan_base_type_chest_FR_On:0 "on " # coffre
- inspiration_artisan_base_type_box_FR_On:0 "a " # boîte
- inspiration_artisan_base_type_sculpture_FR_On:0 "a " # sculpture
- inspiration_artisan_base_type_cabinet_FR_On:0 "on " # meuble de rangement
- inspiration_artisan_base_type_throne_FR_On:0 "on " # trône
+ inspiration_artisan_base_type_chest_FR_On:0 "on "
+ inspiration_artisan_base_type_box_FR_On:0 "a "
+ inspiration_artisan_base_type_sculpture_FR_On:0 "a "
+ inspiration_artisan_base_type_cabinet_FR_On:0 "on "
+ inspiration_artisan_base_type_throne_FR_On:0 "on "
  # FR_ArtifactArmorTypeLowercase_Le
- artifact_armor_mail_lowercase_FR_Le:0 "la " # cotte de mailles
- artifact_armor_plate_lowercase_FR_Le:0 "l’" # armure de plates
- artifact_armor_scale_lowercase_FR_Le:0 "l’" # armure en écailles
- artifact_armor_lamellar_lowercase_FR_Le:0 "l’" # armure lamellaire
- artifact_armor_laminar_lowercase_FR_Le:0 "l’" # armure laminaire
- artifact_armor_brigandine_lowercase_FR_Le:1 "l’" # armure segmentée
- artifact_armor_shield_lowercase_FR_Le:0 "le " # bouclier
+ artifact_armor_mail_lowercase_FR_Le:0 "la "
+ artifact_armor_plate_lowercase_FR_Le:0 "l’"
+ artifact_armor_scale_lowercase_FR_Le:0 "l’"
+ artifact_armor_lamellar_lowercase_FR_Le:0 "l’"
+ artifact_armor_laminar_lowercase_FR_Le:0 "l’"
+ artifact_armor_brigandine_lowercase_FR_Le:1 "l’"
+ artifact_armor_shield_lowercase_FR_Le:0 "le "
  # FR_ArtifactArmorTypeLowercase_E
- artifact_armor_mail_lowercase_FR_E:0 "e" # cotte de mailles
- artifact_armor_plate_lowercase_FR_E:0 "e" # armure de plates
- artifact_armor_scale_lowercase_FR_E:0 "e" # armure en écailles
- artifact_armor_lamellar_lowercase_FR_E:0 "e" # armure lamellaire
- artifact_armor_laminar_lowercase_FR_E:0 "e" # armure laminaire
- artifact_armor_brigandine_lowercase_FR_E:1 "e" # armure segmentée
- artifact_armor_shield_lowercase_FR_E:0 "" # bouclier
+ artifact_armor_mail_lowercase_FR_E:0 "e"
+ artifact_armor_plate_lowercase_FR_E:0 "e"
+ artifact_armor_scale_lowercase_FR_E:0 "e"
+ artifact_armor_lamellar_lowercase_FR_E:0 "e"
+ artifact_armor_laminar_lowercase_FR_E:0 "e"
+ artifact_armor_brigandine_lowercase_FR_E:1 "e"
+ artifact_armor_shield_lowercase_FR_E:0 ""
  # FR_ArtifactArmorTypeLowercase_OnA
- artifact_armor_mail_lowercase_FR_On:0 "a " # cotte de mailles
- artifact_armor_plate_lowercase_FR_On:0 "on " # armure de plates
- artifact_armor_scale_lowercase_FR_On:0 "on " # armure en écailles
- artifact_armor_lamellar_lowercase_FR_On:0 "on " # armure lamellaire
- artifact_armor_laminar_lowercase_FR_On:0 "on " # armure laminaire
- artifact_armor_brigandine_lowercase_FR_On:1 "on " # armure segmentée
- artifact_armor_shield_lowercase_FR_On:0 "on " # bouclier
+ artifact_armor_mail_lowercase_FR_On:0 "a "
+ artifact_armor_plate_lowercase_FR_On:0 "on "
+ artifact_armor_scale_lowercase_FR_On:0 "on "
+ artifact_armor_lamellar_lowercase_FR_On:0 "on "
+ artifact_armor_laminar_lowercase_FR_On:0 "on "
+ artifact_armor_brigandine_lowercase_FR_On:1 "on "
+ artifact_armor_shield_lowercase_FR_On:0 "on "
  # FR_ArtifactWeaponBaseType_Le
- weapon_axe_inspiration_name_FR_Le:0 "la " # hache"
- weapon_dagger_inspiration_name_FR_Le:0 "la " # dague"
- weapon_hammer_inspiration_name_FR_Le:0 "le " # marteau d’armes"
- weapon_mace_inspiration_name_FR_Le:0 "la " # masse d’armes"
- weapon_spear_inspiration_name_FR_Le:0 "la " # lance"
- weapon_sword_inspiration_name_FR_Le:0 "l’" # épée"
+ weapon_axe_inspiration_name_FR_Le:0 "la "
+ weapon_dagger_inspiration_name_FR_Le:0 "la "
+ weapon_hammer_inspiration_name_FR_Le:0 "le "
+ weapon_mace_inspiration_name_FR_Le:0 "la "
+ weapon_spear_inspiration_name_FR_Le:0 "la "
+ weapon_sword_inspiration_name_FR_Le:0 "l’"
  # FR_ArtifactWeaponBaseType_OnA
- weapon_axe_inspiration_name_FR_On:0 "a " # hache"
- weapon_dagger_inspiration_name_FR_On:0 "a " # dague"
- weapon_hammer_inspiration_name_FR_On:0 "on " # marteau d’armes"
- weapon_mace_inspiration_name_FR_On:0 "a " # masse d’armes"
- weapon_spear_inspiration_name_FR_On:0 "a " # lance"
- weapon_sword_inspiration_name_FR_On:0 "on " # épée"
+ weapon_axe_inspiration_name_FR_On:0 "a "
+ weapon_dagger_inspiration_name_FR_On:0 "a "
+ weapon_hammer_inspiration_name_FR_On:0 "on "
+ weapon_mace_inspiration_name_FR_On:0 "a "
+ weapon_spear_inspiration_name_FR_On:0 "a "
+ weapon_sword_inspiration_name_FR_On:0 "on "
  # FR_InspirationTypeDescription_Inf
  book_inspiration_description_FR_Inf:0 "écrire un livre magnifique"
  book_subject_inspiration_description_FR_Inf:0 "écrire sur [ROOT.Char.Custom('ArtifactBookSubject')]"
@@ -979,6 +979,16 @@
  trait_physique_good_3_FR_On:0 "on physique divin"
  trait_pure_blooded_FR_On:0 "on sang pur"
  trait_fecund_FR_On:0 "a fécondité"
+ # FR_au_BG_GameType
+ bg_gametype_pachisi_FR_Au:0 "au pachisi"
+ bg_gametype_hnefatafl_FR_Au:0 "au hnefatafl"
+ bg_gametype_tabula_FR_Au:0 "au tablier"
+ bg_gametype_chess_FR_Au:0 "aux échecs"
+ # FR_de_BG_GameType
+ bg_gametype_pachisi_FR_De:0 "de pachisi"
+ bg_gametype_hnefatafl_FR_De:0 "de hnefatafl"
+ bg_gametype_tabula_FR_De:0 "de tablier"
+ bg_gametype_chess_FR_De:0 "d'échecs"
 
  ############################################################################################
  ############################################################################################

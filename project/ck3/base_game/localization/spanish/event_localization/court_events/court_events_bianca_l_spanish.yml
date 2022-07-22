@@ -20,7 +20,7 @@
 
  # A courtier shows you their written work after being inspired by other writers
  court.3010.t:0 "Obra inspirada"
- court.3010.desc.opening:1 "«¡[ROOT.Char.Custom2('RelationToMeAddress', inspired_writer)|U]!». [inspired_writer.GetTitledFirstName] se me acerca, agarrando con fuerza un manuscrito. «He escrito una obra de ficción tras leer la literatura más popular de vuestra corte. ¡Por favor, aceptad el honor de ser [ROOT.Char.Custom('ES_ElLa')] primer[ROOT.Char.Custom('ES_OA')] en leer mis palabras!». Tomo el manuscrito y ojeo algunas de las líneas.\n\n"
+ court.3010.desc.opening:1 "«¡[ROOT.Char.Custom2('RelationToMeAddress', inspired_writer)|U]!». [inspired_writer.GetTitledFirstName] se me acerca, agarrando con fuerza un manuscrito. «He escrito una obra de ficción tras leer la literatura más popular de vuestra corte. ¡Por favor, aceptad el honor de ser primer[ROOT.Char.Custom('ES_OA')] en leer mis palabras!». Tomo el manuscrito y ojeo algunas de las líneas.\n\n"
  court.3010.desc.low_learning:0 "En todas las descripciones del protagonista se mencionan sus «hermosos y enormes orbes azules» y [inspired_writer.GetFirstNameNoTooltip] hace hincapié en ello incluso en situaciones inapropiadas."
  court.3010.desc.shy_or_chaste:0 "Mis ojos se posan en la descripción de una escena nocturna. Dos amantes enlazan tiernamente los meñiques, ya que son demasiado tímidos para tomarse de la mano. Susurran palabras dulces mientras caminan bajo un mar de estrellas infinitas."
  court.3010.desc.lustful:0 "Cada frase en la que se describe a una mujer es extremadamente detallista y siempre incluye palabras como «rebotan» o «bambolean». No es solo cosa de las mujeres, también de los hombres: sus descripciones se centran en sus abultados músculos y sus cinceladas barbillas."
@@ -118,14 +118,14 @@
  court.3060.d:0 "Esta vez no hay gato."
  
  #Royal Court
- court.3070.t:0 "[ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] desconocid[ROOT.Char.Custom('ES_OA')]"
- court.3070.desc.opening:0 "«¡Y ni te imaginas qué pasó después!». Mi invitad[court_enjoyer.Custom('ES_OA')], [court_enjoyer.GetTitledFirstName], no deja de hablar sobre sí mism[court_enjoyer.Custom('ES_OA')] y todas las cosas que [court_enjoyer.GetHerHim] han pasado. Además de su parloteo incesante, no me siento a gusto con que un[court_enjoyer.Custom('ES_XA')] extrañ[court_enjoyer.Custom('ES_OA')] me hable de un modo tan informal.\n\nIntento excusarme con [court_enjoyer.Custom('ES_ElLa')] invitad[court_enjoyer.Custom('ES_OA')] diciendo que tengo otros asuntos y personas a las que atender, pero me interrumpe para preguntarme a qué me dedico o si estoy aquí para "
+ court.3070.t:0 "[ROOT.Char.GetTitleTierName] desconocid[ROOT.Char.Custom('ES_OA')]"
+ court.3070.desc.opening:0 "«¡Y ni te imaginas qué pasó después!». Mi invitad[court_enjoyer.Custom('ES_OA')], [court_enjoyer.GetTitledFirstName], no deja de hablar sobre sí mism[court_enjoyer.Custom('ES_OA')] y todas las cosas que [court_enjoyer.GetHerHim] han pasado. Además de su parloteo incesante, no me siento a gusto con que un[court_enjoyer.Custom('ES_XA')] extrañ[court_enjoyer.Custom('ES_OA')] me hable de un modo tan informal.\n\nIntento excusarme con tal invitad[court_enjoyer.Custom('ES_OA')] diciendo que tengo otros asuntos y personas a las que atender, pero me interrumpe para preguntarme a qué me dedico o si estoy aquí para "
  court.3070.desc.opening_food:0 "disfrutar de la buena comida como el resto de invitados."
  court.3070.desc.opening_lodging:0 "disfrutar de los buenos lechos como el resto de invitados."
- court.3070.desc.opening_fashion:0 "vestir como [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] por un día como el resto de invitados."
+ court.3070.desc.opening_fashion:0 "vestir como [ROOT.Char.GetTitleAsNameNoTooltip] por un día como el resto de invitados."
  court.3070.desc.opening_servants:0 "que me traten como [ROOT.Char.Custom('ES_AlAla')] [ROOT.Char.GetTitleAsNameNoTooltip] por un día como al resto de invitados."
- court.3070.desc.middle:1 "\n\nConfundid[ROOT.Char.Custom('ES_OA')], consigo responder: «¡Soy [ROOT.Char.Custom('ES_ElLa')] #EMP [ROOT.Char.GetTitleAsNameNoTooltip]#!!…».\n\nEl rostro de [court_enjoyer.GetSheHe] empalidece y empieza a tartamudear.\n\n«¡Ruego me disculpéis, mi [ROOT.Char.GetLadyLord]! ¡O-os prometo que no estoy aquí para aprovecharme de vuestra fortuna y "
- court.3070.desc.closing_food:0 "comer como [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip]!"
+ court.3070.desc.middle:1 "\n\nConfundid[ROOT.Char.Custom('ES_OA')], consigo responder: «¡Soy #EMP [ROOT.Char.GetTitleAsNameNoTooltip]#!!…».\n\nEl rostro de [court_enjoyer.GetSheHe] empalidece y empieza a tartamudear.\n\n«¡Ruego me disculpéis, mi [ROOT.Char.GetLadyLord]! ¡O-os prometo que no estoy aquí para aprovecharme de vuestra fortuna y "
+ court.3070.desc.closing_food:0 "comer como [ROOT.Char.GetTitleAsNameNoTooltip]!"
  court.3070.desc.closing_lodging:0 "albergarme en los mejores alojamientos del señorío!"
  court.3070.desc.closing_fashion:0 "estar en compañía de la gente más a la moda del señorío!"
  court.3070.desc.closing_servants:0 "tener sirvientes que atiendan todas mis necesidades en una breve estancia!"

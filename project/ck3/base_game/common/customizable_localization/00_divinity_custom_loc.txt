@@ -1135,6 +1135,14 @@ GetActualBishopTitle = {
 		localization_key = councillor_court_chaplain_christian_county
 	}
 
+	#Basque Paganism
+	text = {
+		trigger = {
+			religion = religion:basque_religion
+		}
+		localization_key = council_basque_priest
+	}
+
 	#Paganism
 	text = {
 		trigger = {
@@ -1846,5 +1854,25 @@ GetReligiousRite = {
 		}
 		fallback = yes
 		localization_key = rite_worship
+	}
+}
+
+# Doctrine Parameters
+GetRiteEcumenismFullOrEmpty = {
+	type = character
+
+	text = {
+		trigger = {
+			faith = { has_doctrine = special_doctrine_ecumenical_christian }
+		}
+		localization_key = GetRiteEcumenismFullOrEmpty_full
+	}
+	text = {
+		trigger = {
+			NOT = {
+				faith = { has_doctrine = special_doctrine_ecumenical_christian }
+			}
+		}
+		localization_key = GetRiteEcumenismFullOrEmpty_empty
 	}
 }

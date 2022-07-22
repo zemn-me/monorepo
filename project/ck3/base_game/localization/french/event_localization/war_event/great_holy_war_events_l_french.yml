@@ -54,7 +54,7 @@
  great_holy_war.0003.b:0 "Je contribuerai volontiers au financement de cette cause sacrée."
  great_holy_war.0003.c:0 "Peut-être devrais-je envisager d’y participer..."
  great_holy_war.0003.a.lifted_excommunication:0 "Mon [excommunication|El] sera levée"
- great_holy_war.0023.desc:0 "Notre attention a été attirée sur le fait que vous n’avez pas encore annoncé votre soutien à la prochaine [scoped_pope.GetFaith.GHWName|l]. Dois-je vous rappeler que c’est votre devoir sacré de [ROOT.GetCharacter.GetTitleTierName|l] [ROOT.GetCharacter.Custom('FR_FaithGenderedAdj')] de faire la guerre contre les incroyants et les [target_character.Custom('GetUnbelieverNamePlural')] ?"
+ great_holy_war.0023.desc:0 "Notre attention a été attirée sur le fait que vous n’avez pas encore annoncé votre soutien à la prochaine [scoped_pope.GetFaith.GHWName|l]. Dois-je vous rappeler qu’il est du devoir sacré d’un[ROOT.Char.Custom('FR_E')] [ROOT.GetCharacter.GetTitleTierName|l] [ROOT.GetCharacter.Custom('FR_FaithGenderedAdj')] de faire la guerre contre les incroyants et les [target_character.Custom('GetUnbelieverNamePlural')] ?"
  great_holy_war.0023.desc.hooked:0 "Notre attention a été attirée sur le fait que vous n’avez pas encore annoncé votre soutien à la prochaine [scoped_pope.GetFaith.GHWName|l]. C’est inacceptable ! J’exige que vous rejoigniez immédiatement notre grande guerre contre les incroyants et les [target_character.Custom('GetUnbelieverNamePlural')]."
  great_holy_war.0003.a.hooked:0 "Je n’ai pas vraiment le choix, j’imagine."
  great_holy_war.0023.c:0 "Je remplis déjà ma part en combattant les [target_character.Custom('GetUnbelieverNamePlural')] !"

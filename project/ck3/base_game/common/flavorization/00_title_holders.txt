@@ -3063,6 +3063,39 @@ kingdom_feudal_grand_duke_independent = {
 	name_lists = { name_list_lithuanian }
 }
 
+### Taifas ###
+duke_feudal_male_andalusian_independent = {
+	type = character
+	gender = male
+	special = holder
+	tier = duchy
+	priority = 60
+	only_independent = yes
+	titles = { d_cordoba d_granada d_sevilla d_toledo d_beja d_badajoz d_algarve d_valencia d_mallorca d_murcia d_castilla d_cantabria d_aragon d_barcelona d_navarra d_viscaya d_leon d_asturias d_galicia d_porto d_coimbra  }
+	governments = { clan_government feudal_government }
+	religions = { islam_religion }
+}
+duke_feudal_female_andalusian_independent = {
+	type = character
+	gender = female
+	special = holder
+	tier = duchy
+	priority = 60
+	only_independent = yes
+	titles = { d_cordoba d_granada d_sevilla d_toledo d_beja d_badajoz d_algarve d_valencia d_mallorca d_murcia d_castilla d_cantabria d_aragon d_barcelona d_navarra d_viscaya d_leon d_asturias d_galicia d_porto d_coimbra  }
+	governments = { clan_government feudal_government }
+	religions = { islam_religion }
+}
+duchy_feudal_andalusian_independent = {
+	type = title
+	tier = duchy
+	priority = 60
+	titles = { d_cordoba d_granada d_sevilla d_toledo d_beja d_badajoz d_algarve d_valencia d_mallorca d_murcia d_castilla d_cantabria d_aragon d_barcelona d_navarra d_viscaya d_leon d_asturias d_galicia d_porto d_coimbra  }
+	governments = { clan_government feudal_government }
+	only_independent = yes
+	religions = { islam_religion }
+}
+
 ### West African/Guinean ###
 count_feudal_male_west_african_group_independent = {
 	type = character
@@ -3083,6 +3116,104 @@ count_feudal_female_west_african_group_independent = {
 	only_independent = yes
 	governments = { feudal_government clan_government tribal_government }
 	heritages = { heritage_west_african }
+}
+
+### Canarian ###
+duchy_guanche = {
+	type = title
+	tier = duchy
+	priority = 47
+	governments = { feudal_government clan_government tribal_government }
+	only_independent = yes
+	name_lists = { name_list_guanches }
+}
+kingdom_guanche = {
+	type = title
+	tier = kingdom
+	priority = 47
+	governments = { feudal_government clan_government tribal_government }
+	only_independent = yes
+	name_lists = { name_list_guanches }
+}
+count_male_guanche = {
+	type = character
+	gender = male
+	special = holder
+	tier = county
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+duke_male_guanche = { #Mencey
+	type = character
+	gender = male
+	special = holder
+	tier = duchy
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+king_male_guanche = {
+	type = character
+	gender = male
+	special = holder
+	tier = kingdom
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+emperor_male_guanche = {
+	type = character
+	gender = male
+	special = holder
+	tier = empire
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+count_female_guanche = {
+	type = character
+	gender = female
+	special = holder
+	tier = county
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+duke_female_guanche = { #Mencey
+	type = character
+	gender = female
+	special = holder
+	tier = duchy
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+king_female_guanche = {
+	type = character
+	gender = female
+	special = holder
+	tier = kingdom
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
+}
+emperor_female_guanche = {
+	type = character
+	gender = female
+	special = holder
+	tier = empire
+	priority = 47
+	only_independent = no
+	governments = { feudal_government clan_government tribal_government }
+	name_lists = { name_list_guanches }
 }
 
 ### Sardinian

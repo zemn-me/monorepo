@@ -497,9 +497,12 @@ scripted_trigger great_holy_war_0010_rome_reason_trigger = {
 
 scripted_trigger great_holy_war_0010_byzantion_reason_trigger = {
 	OR = {
-		title:e_byzantium.holder.religion = {
-			NOT = {
-				this = religion:christianity_religion
+		trigger_if = { # Byzantine Empire
+			limit = { exists = title:e_byzantium.holder } # Make sure a holder exists beforehand
+			title:e_byzantium.holder.religion = {
+				NOT = {
+					this = religion:christianity_religion
+				}
 			}
 		}
 		title:c_byzantion.holder.top_liege.religion = { # Constantinople

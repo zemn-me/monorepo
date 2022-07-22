@@ -3,7 +3,7 @@
  #Common Christian Localization
  christianity_religion:0 "기독교"
  christianity_religion_adj:0 "기독교"
- christianity_religion_adjerent:0 "기독교인"
+ christianity_religion_adherent:0 "기독교인"
  christianity_religion_adherent_plural:0 "기독교인"
  christianity_religion_desc:0 "나사렛 출신의 예수 그리스도의 삶과 가르침에 방점을 두는 기독교는 신자들이 죄의 사함을 받고 내세에서 하느님의 품 안에 안길 수 있다는 구원의 교리를 중시합니다."
  christianity_high_god_name:0 "하느님"
@@ -45,11 +45,11 @@
  christianity_bishop:0 "주교"
  christianity_bishop_plural:0 "주교"
  christianity_positive_afterlife:0 "천국"
- christianity_positive_afterlife_2:0 "$christianity_positive_afterlife$" # Optional translation alt
- christianity_positive_afterlife_3:0 "$christianity_positive_afterlife$" # Optional translation alt
+ christianity_positive_afterlife_2:1 "낙원" # Optional translation alt
+ christianity_positive_afterlife_3:1 "$christianity_high_god_name_possessive$ 왕국" # Optional translation alt
  christianity_negative_afterlife:0 "지옥"
- christianity_negative_afterlife_2:0 "$christianity_negative_afterlife$" # Optional translation alt
- christianity_negative_afterlife_3:0 "$christianity_negative_afterlife$" # Optional translation alt
+ christianity_negative_afterlife_2:1 "무저갱" # Optional translation alt
+ christianity_negative_afterlife_3:1 "게헨나" # Optional translation alt
  christianity_witchgodname_the_horned_god:0 "뿔 달린 신"
  christianity_witchgodname_the_horned_god_possessive:0 "뿔 달린 신의"
 
@@ -121,7 +121,7 @@
  lollard_adherent_plural:0 "롤라드파 신도"
  lollard_desc:0 "롤라드파는 세례와 고해성사 같은 기독교의 일상적인 성례를 배격하면서 오직 성경만이 기독교 교리의 뿌리이며 성경에 근거하지 않은 가르침은 본질적으로 이단이라고 주장했습니다."
 
- insular_celtic:0 "켈트 교회"
+ insular_celtic:1 "켈트 교회"
  insular_celtic_adj:0 "켈트 교회"
  insular_celtic_adherent:0 "켈트 교회 신도"
  insular_celtic_adherent_plural:0 "켈트 교회 신도"
@@ -167,8 +167,8 @@
  bosnian_church_desc:0 "보스니아 고원 지대의 크르스티야니는 가톨릭과 정교회로부터 오래도록 소외되면서 다른 유명한 기독교계와는 달리 형식은 많이 잃되 더 관대한 형태를 갖추게 됐습니다. 옛 기독교의 요소들을 많이 간직하고 있기에 입에 오르면 같은 기독교 신자들이 멸시하는 경향이 있습니다."
 
  bosnian_house_of_worship:0 "히자"
- bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$" # Optional translation alt
- bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$" # Optional translation alt
+ bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$"
+ bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$"
  bosnian_house_of_worship_plural:0 "히자"
  bosnian_religious_head_title:0 "프라제드"
  bosnian_religious_head_title_name:0 "오비텔리"
@@ -191,6 +191,20 @@
  bosnian_bishop_female_plural:0 "바카"
  bosnian_bishop_neuter:0 "디예드"
  bosnian_bishop_neuterplural:0 "디예드"
+
+ mozarabic_church:0 "모사라베"
+ mozarabic_church_adj:0 "모사라베"
+ mozarabic_church_adherent:0 "모사라베 신자"
+ mozarabic_church_adherent_plural:0 "모사라베 신자"
+ mozarabic_church_desc:0 "모사라베 기독교 신도들은 초기 이베리아 예식 신도들의 후손으로, 수백 년이나 이슬람의 지배 아래 있었기에 로마로부터 어느 정도 독립되어 존재해 왔습니다. 이들은 오랜 세월 다른 신앙과 섞여 살아왔기에 차이를 인정하는 융통성이 웬만한 근본주의 종파보다 넉넉한 편입니다."
+
+ adoptionist:0 "기독교 양자론"
+ adoptionist_adj:0 "기독교 양자론자"
+ adoptionist_adherent:0 "기독교 양자론자"
+ adoptionist_adherent_plural:0 "기독교 양자론자"
+ adoptionist_desc:0 "이베리아의 기독교 양자론은 톨레도 대주교령과 수백 년 전 북아프리카의 금욕주의, 9세기 초 극단적 기독교 우파를 하나로 아우른 사상에 뿌리를 두고 있습니다.\n\n심히 모호한 형태부터 있는 그대로의 원색적인 형태까지 기독교 양자론의 모습은 다양하기 이를 데 없지만, 이 모든 종파의 기저에는 성자의 영원한 신성성에 대한 의문이 깔려 있습니다."
+ adoptionist_religious_head_title:0 "대주교"
+ adoptionist_religious_head_title_name:0 "대주교령"
 
  conversos:0 "콘베르소"
  conversos_adj:0 "콘베르소"

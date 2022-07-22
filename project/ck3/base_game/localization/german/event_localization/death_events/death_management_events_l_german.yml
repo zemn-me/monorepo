@@ -1,5 +1,5 @@
 ﻿l_german:
- death_management.1000.killed.tt:0 "Mein[dead_character.Custom('DE_END_PRO_S_N')] [THIS.Char.Custom2('RelationToMe', SCOPE.sC('dead_character'))] [dead_character.GetTitledFirstName] wurde ermordet von [killer.GetTitledFirstName]."
+ death_management.1000.killed.tt:1 "[dead_character.GetTitledFirstName] wurde von [killer.GetTitledFirstName] ermordet."
  death_management.1000.t:0 "Bis dass der Tod uns scheidet"
  death_management.1000.murder:0 "[dead_character.GetTitledFirstName] wurde ermordet!\n\n"
  death_management.1000.like:0 "Wie kann ein Herz nur solchen Schmerz erleiden, ohne zu brechen? Ein Ding der Unmöglichkeit! Und doch bin ich hier, mein Herz schlägt weiter, während das Eure verstummt ist. O [dead_character.GetFirstName], mein Augenstern. Ohne Euch wird das Leben nicht dasselbe sein."
@@ -29,6 +29,7 @@
 
  death_management.1005.t:0 "Die Erinnerungen bleiben"
  death_management.1005.desc:0 "O [dead_character.GetFirstName]. Wenn Ihr noch bei mir wärt, Ihr würdet mir sagen, ich solle stark sein. Würdet erklären, dass alles besser werde. Und Ihr hättet recht damit, wie immer, aber zuerst muss ich fluchen und weinen. Wie sollte ich auch anders, nun, wo Ihr nicht mehr in dieser Welt seid?"
+ death_management.1005.desc.ritual_best_friend:0 "[dead_character.GetFirstName] ist tot! Mein[dead_character.Custom('DE_END_PRO_S_N')] best[dead_character.Custom('DE_END_ADJ_IND_S_N')] und treuest[dead_character.Custom('DE_END_ADJ_IND_S_N')] Freund[dead_character.Custom('DE_END_NOU_S_GS_N')] niedergestreckt und vor [dead_character.Custom('DE_PRO_POS_S_3P')]er Zeit in die kalte Umarmung von [ROOT.Char.GetFaith.DeathDeityName] geholt. Ich schluchze, ich heule, ich zerzause mir Haar und Kleidung, doch ich weiß, ich werde [dead_character.Custom('DE_PRO_PER_S_3P_A')] nie wiedersehen.\n\nWie … Wie soll ich jetzt noch weiterleben?\n\n[dead_character.GetFirstNameNoTooltip] – [dead_character.Custom('DE_ART_DEF_S_N')] lieb[dead_character.Custom('DE_END_ADJ_IND_S_N')], süß[dead_character.Custom('DE_END_ADJ_IND_S_N')] [dead_character.GetFirstNameNoTooltip] würde wollen, dass ich es tue, und ich muss hoffen, dass meine Erinnerung an [dead_character.Custom('DE_PRO_PER_S_3P_A')] mich durch diese dunklen Zeiten trägt, doch ohne [dead_character.Custom('DE_PRO_PER_S_3P_A')] kommt mir das Leben vor wie eine Kerze ohne Flamme."
  death_management.1005.a:0 "Ich werde Euch niemals vergessen. Unsere Freundschaft war mir so wichtig."
  death_management.1005.a.tt:3 "Euer Freund [dead_character.GetTitledFirstName] [THIS.Char.Custom('DiedHouse_arrest')]."
  death_management.friend.desc:4 "[dead_character.Custom('DE_PRO_POS_P_2P_N')|U] Freund[dead_character.Custom('DE_END_NOU_S_GS_N')] [dead_character.GetTitledFirstName] ist verstorben."

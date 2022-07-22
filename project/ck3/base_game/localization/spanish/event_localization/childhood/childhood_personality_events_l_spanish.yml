@@ -18,7 +18,7 @@
  child_personality.0002.c:0 "¿Agua? ¡Espero que también valga el barro!"
 
  child_personality.0003.t:0 "¡Pillado!"
- child_personality.0003.guardian:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('guardian'))] [guardian.GetTitledFirstName] me pilló robando del cofre de viaje de [robbed_guest.GetTitledFirstName] durante su visita al castillo.   [guardian.GetFirstName] amenazó con castigarme y me exigió una explicación."
+ child_personality.0003.guardian:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('guardian'))] [guardian.GetTitledFirstName] me pilló robando del cofre de viaje de [robbed_guest.GetTitledFirstName] durante su visita al castillo. [guardian.GetFirstName] amenazó con castigarme y me exigió una explicación."
  child_personality.0003.no_guardian:0 "Me pillaron robando del cofre de viaje de [robbed_guest.GetTitledFirstName] durante su visita al castillo. [robbed_guest.GetFirstName] amenazó con castigarme y me exigió una explicación."
  child_personality.0003.a:0 "Uno de los otros niños me… desafió en un juego."
  child_personality.0003.b:0 "Creí que podría salirme con la mía, pero no lo volveré a hacer."
@@ -115,7 +115,7 @@
  child_personality.0028.desc:0 "Mis días pasan borrosos entre los barrotes. Me despierto. Camino por la habitación. A veces, me dan comida...\n\nPara llenar mis días, he aprendido a imponerme tareas y a completarlas debidamente."
  child_personality.0028.a:0 "¡La clave es la diligencia!"
 
- child_personality.0029.desc:0 "Esos estúpidos guardias que vigilan mis pasos, [imprisoner.Custom('ES_ElLa')] [imprisoner.Custom('InsultAdjective')][imprisoner.Custom('InsultNoun')]de [imprisoner.GetTitledFirstName] que me tiene encerrado, las ratas que corren por los oscuros rincones... En mi interior crece la ira, ¡que cobra fuerzas a cada día que pasa!"
+ child_personality.0029.desc:0 "Esos estúpidos guardias que vigilan mis pasos, [imprisoner.Custom('InsultAdjective')][imprisoner.Custom('InsultNoun')]de [imprisoner.GetTitledFirstName] que me tiene encerrado, las ratas que corren por los oscuros rincones... En mi interior crece la ira, ¡que cobra fuerzas a cada día que pasa!"
  child_personality.0029.a:0 "Es... Me... ¡ARGH!"
 
  child_personality.0030.desc:0 "Poco hay que pueda hacer respecto a mi situación, tanto en el día a día como en general. Tengo pocas cosas que hacer y menos que decir."
@@ -312,7 +312,7 @@
  child_personality.108.confirm_greedy:0 "Estas son las formas de poder que gobiernan nuestro mundo."
  child_personality.108.confirm_gregarious:0 "Hacer amigos nunca viene mal."
  child_personality.108.confirm_lustful:0 "Oh, así que es[child.Custom('ES_EA')] granuja se está haciendo mayor, ¿eh?"
- child_personality.108.greedy_change:0 "¿Has visto que el verdadero valor de las cosas reside en los símbolos de poder más caros?"
+ child_personality.108.greedy_change:0 "El verdadero valor de las cosas reside en los símbolos de poder más caros."
  child_personality.108.gregarious_change:0 "¡Le enseñaré a hacer amigos en un banquete!"
  child_personality.108.lustful_change:0 "Ya vi cómo mirabas a es[child.Custom('ES_EAOpp')] sirvient[child.Custom('ES_EAOpp')], [child.GetFirstNameNoTooltip]."
  child_personality.1091.t:0 "Un atasco"
@@ -394,9 +394,9 @@
 
  child_personality.2006.t:0 "Mi rescatador"
  child_personality.2006.opening:0 "Intentaba enseñar a los otros niños lo que sabía de Dios cuando empezaron a burlarse y levantar sus puños contra mí."
- child_personality.2006.bully:0 "A pesar de cómo me había tratado en el pasado, [child.GetTitledFirstName] fue [child.Custom('ES_ElLa')] únic[child.Custom('ES_OA')] que se atrevió a intervenir y me defendió."
- child_personality.2006.victim:0 "A pesar de cómo [child.GetCustom('ES_LoLa')] traté en el pasado, [child.GetTitledFirstName] fue [child.Custom('ES_ElLa')] únic[child.Custom('ES_OA')] que se atrevió a intervenir y me defendió."
- child_personality.2006.desc:0 "[child.GetTitledFirstName] fue [child.Custom('ES_ElLa')] únic[child.Custom('ES_OA')] que se atrevió a intervenir y me defendió."
+ child_personality.2006.bully:0 "A pesar de cómo me había tratado en el pasado, solamente [child.GetTitledFirstName] se atrevió a intervenir y me defendió."
+ child_personality.2006.victim:0 "A pesar de cómo [child.GetCustom('ES_LoLa')] traté en el pasado, solo [child.GetTitledFirstName] se atrevió a intervenir y me defendió."
+ child_personality.2006.desc:0 "Solo [child.GetTitledFirstName] se atrevió a intervenir y me defendió."
  child_personality.2006.a:0 "Desde entonces, somos inseparables."
 
  child_personality.2007.t:0 "Un encuentro"

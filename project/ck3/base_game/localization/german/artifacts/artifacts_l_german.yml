@@ -50,20 +50,20 @@
  feature_blade_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_blade_metal_folded_iron:0 "$metal_folded_iron$"
  feature_blade_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_blade_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_blade_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_blade_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_blade_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_head_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_head_metal_folded_iron:0 "$metal_folded_iron$"
  feature_head_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_head_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_head_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_head_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_head_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_handle_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_handle_metal_folded_iron:0 "$metal_folded_iron$"
  feature_handle_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_handle_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_handle_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_handle_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_handle_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  # Precious/decorative metals and metal-based compounds
  metal_gold:0 "Gold"
@@ -691,7 +691,7 @@
  edmund_head_description:0 "Edmund soll schon kurz nach seiner Geburt nachgesagt worden sein, dass er ein Heiliger wäre. Der Legende nach war er ein König von Ostanglien, der sich den Wikingern als Opfer anbot, anstatt seine Leute von ihnen abschlachten zu lassen."
  dhammapada_name:0 "Dhammapada"
  dhammapada_description:1 "Dies ist eine Sammlung von Sprüchen Buddhas, die zu einem feinen Palmenblattmanuskript gebunden wurde."
- excalibur_name:0 "„Excalibur“"
+ excalibur_name:0 "Excalibur"
  excalibur_description:0 "Kaum ein Herrscher in Britannien hat nicht für sich beansprucht, das wahre Excalibur zu besitzen. Kriege werden bezahlt, indem man Excalibure verkauft, und man kann nur hoffen, dass die Gäste niemand anderen kennen, der Excalibur ausstellt."
  vinaya_pitaka_name:0 "Vinayapitaka"
  vinaya_pitaka_description:0 "Eine buddhistische Schrift aus den drei Werken des Pali-Kanons. Dieser Text ist eine Anleitung für das Verhalten von Mönchen und Nonnen im Kloster."
@@ -991,7 +991,7 @@
  artifact_dragvandil_name:0 "Dragvandil"
  artifact_dragvandil_description:0 "Ein Schwert, das einst Egil Skallagrimsson gehört haben soll, dem aus Egils Saga bekannten Bauern, Dichter und Krieger."
  artifact_szczerbiec_name:0 "Szczerbiec"
- artifact_szczerbiec_description:0 "König Boleslaw der Tapfere soll dieses Schwert von einem Engel erhalten und damit das Goldene Tor von Kiew zerschlagen haben. Es hat eine ungeheure symbolische Bedeutung."
+ artifact_szczerbiec_description:1 "König Boleslaw der Tapfere soll dieses Schwert von einem Engel erhalten und damit das Goldene Tor von Kyiv zerschlagen haben. Es hat eine ungeheure symbolische Bedeutung."
  artifact_chinese_caligraphy_name:1 "Chinesische Kalligrafie"
  artifact_chinese_caligraphy_description:0 "Diese feine Stück Papier ist voller seltsamer und doch wunderschöner und sehr präziser Symbole. Man sagt, es stammt aus den Landen von China im Fernen Osten."
  artifact_ruyi_name:0 "Ruyi"
@@ -1064,3 +1064,7 @@
  easteregg_artifact_elisabeth_plush_description:0 "Elisabeths ausgestopfter Fuchs ist ein heiß geliebtes Spielzeug und hat sie den Großteil ihres Lebens begleitet. Oft sah man Elisabeth, wie sie mit ihm sprach, während sie die schmuckvollen Chiffren für ihre Arbeitgeber wob. Es ist beruhigend und ermutigt den Besitzer, es dem schlauen Fuchs gleich zu tun."
 
  child_toy_template_tt:0 "Muss ein [child|E] sein, um Ausrüstung als [inventory_artifact|E] verwenden zu können."
+
+ # Blessed Junk
+ fp2_blessed_junk:0 "[ROOT.Char.Custom('TrinketLookAdjective')|U]e Figurine ($blessed_artifact_modifier$)"
+ fp2_blessed_junk_desc:0 "Ein [ROOT.Char.Custom('TrinketLookAdverbFollowup')] [ROOT.Char.Custom('TrinketLookAdjective')|l]es, aber ansonsten nutzloses Artefakt. $blessed_artifact_modifier_desc$."

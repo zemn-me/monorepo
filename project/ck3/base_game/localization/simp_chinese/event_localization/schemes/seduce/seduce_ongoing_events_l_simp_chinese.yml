@@ -454,7 +454,7 @@
  seduce_ongoing.5001.desc_tier_up:0 "“我何德何能，居然有如此荣幸，我的#EMP [ROOT.Char.GetTitleTierName]#!？”[target.GetTitledFirstName]脸上挂着微笑，问道，然而[target.GetHerHis]的双眼里却没有任何笑意。"
  seduce_ongoing.5001.desc_tier_down:0 "“那个[target.Custom2('RelationDescriptor', ROOT.Char)][ROOT.Char.GetWomanMan]能做到永远不让我一个人孤单吗……”当我靠近时，[target.GetTitledFirstName]用比[target.GetHerHis]呼吸还轻的声音咕哝道。“[ROOT.Char.GetTitledFirstNameNoTooltip]，我能为你做什么？”"
  seduce_ongoing.5001.desc_ending:0 "\n\n我们之间的敌意如同往常一样一触即发，但我有个主意来安抚我们之间酝酿的风暴……"
- seduce_ongoing.5001.a:0 "你对于[ROOT.GetCharacter.Custom('education_conversation_subject')]有什么想法？"
+ seduce_ongoing.5001.a:0 "你对于[ROOT.GetCharacter.Custom('education_conversation_subject')]这门学问有什么看法？"
  seduce_ongoing.5001.a.tt:0 "#F 迎合[target.GetFirstNamePossessiveNoTooltip]好学的一面。#!"
  seduce_ongoing.5001.b:0 "关于[mocked_courtier.Custom('InsultNoun')][mocked_courtier.GetFirstNameNoTooltip]……"
  seduce_ongoing.5001.b.tt:0 "#F 一起嘲讽[target.GetFirstNamePossessiveNoTooltip]，来迎合[mocked_courtier.GetTitledFirstNameNoTooltip]恶毒的一面。#!"

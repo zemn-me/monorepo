@@ -367,7 +367,7 @@ set_up_next_pilgrimage_event_effect = {
 	}
 
 	if = {
-		limit = { # TODO: Is any fallback handling needed in an else here?
+		limit = { # TODO_CD Is any fallback handling needed in an else here?
 			exists = scope:activity
 		}
 		if = {

@@ -45,7 +45,7 @@
 
  # Culture Clash, by Sean Hughes
  stewardship_domain.1073.t:0 "Choque cultural"
- stewardship_domain.1073.desc:0 "La mayoría de los plebeyos que viven en [target_county.GetName] tienen ascendencia [target_ruler.GetCulture.GetName]. Orgullosos de sus tradiciones, no les sienta bien tener que servir a un[me.Char.Custom('ES_XA')] extranjer[me.Char.Custom('ES_OA')] como yo cuando mi vecin[target_ruler.Custom('ES_OA')] [target_ruler.GetTitledFirstName] comparte su cultura e historia."
+ stewardship_domain.1073.desc:0 "La mayoría de los plebeyos que viven en [target_county.GetName] tienen ascendencia [target_ruler.GetCulture.GetName]. Orgullosos de sus tradiciones, no les sienta bien tener que servir a alguien de fuera como yo cuando mi vecin[target_ruler.Custom('ES_OA')] [target_ruler.GetTitledFirstName] comparte su cultura e historia."
  stewardship_domain.1073.a:0 "¡Enseñadles la superioridad de la cultura [me.GetCulture.GetNameNoTooltip]!"
  stewardship_domain.1073.a.success:0 "Los plebeyos adoptan las costumbres de la cultura [me.GetCulture.GetNameNoTooltip]"
  stewardship_domain.1073.a.failure:0 "Los plebeyos se niegan a ser civilizados"
@@ -88,7 +88,7 @@
  stewardship_domain.6013.a:0 "«Entonces, tenemos un acuerdo»."
  stewardship_domain.6013.b:0 "Seguro que puedo encontrar albañiles más baratos en otro lado."
 
- stewardship_domain.6014.desc:0 "«¡Me insultáis a mí y a toda mi profesión, mi [ROOT.Char.GetLadyLord]!». El albañil jefe no está nada contento con lo que estoy dispuesto a ofrecer. «De hecho, los precios están subiendo. Solo por el coste de la mano de obra, por supuesto. Seguro que [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] lo entiende»."
+ stewardship_domain.6014.desc:0 "«¡Me insultáis a mí y a toda mi profesión, mi [ROOT.Char.GetLadyLord]!». El albañil jefe no está nada contento con lo que estoy dispuesto a ofrecer. «De hecho, los precios están subiendo. Solo por el coste de la mano de obra, por supuesto. Seguro que [ROOT.Char.GetTitleTierName] lo entiende»."
  stewardship_domain.6014.a:0 "«Lo entiendo perfectamente»."
  stewardship_domain.6014.b:1 "¡El [county.GetTierAsNameNoTooltip|l] está a mi servicio y los gremios también lo estarán!"
 
@@ -298,7 +298,7 @@
  stewardship_domain_special.1401.b.tt:0 "Yo en persona dirigiré la investigación"
  stewardship_domain_special.1401.c:0 "Las pueblos desaparecen constantemente. No es para tanto."
 
- stewardship_domain_special.1411.desc:0 "[collector.GetTitledFirstName], [collector.Custom('ES_ElLa')] recaudador[collector.Custom('ES_XA')] de [county.GetName] se desvivió por recalcar cuán importante era que viniera a ver personalmente el pueblo «perdido».\n\nTras días de viaje, llego finalmente allí. Parece como cualquier otro sucio asentamiento. Sin embargo, [collector.GetTitledFirstName] insiste. «Mi [ROOT.Char.Custom('ES_SennorSennora')], permitid que os muestre este lugar, os lo ruego. Es mi hogar»."
+ stewardship_domain_special.1411.desc:0 "[collector.GetTitledFirstName], recaudador[collector.Custom('ES_XA')] de [county.GetName] se desvivió por recalcar cuán importante era que viniera a ver personalmente el pueblo «perdido».\n\nTras días de viaje, llego finalmente allí. Parece como cualquier otro sucio asentamiento. Sin embargo, [collector.GetTitledFirstName] insiste. «Mi [ROOT.Char.GetLadyLord], permitid que os muestre este lugar, os lo ruego. Es mi hogar»."
  stewardship_domain_special.1411.a:0 "Está bien, mostrádmelo."
  stewardship_domain_special.1411.a.tt:0 "[collector.GetTitledFirstName] me muestra su pueblo"
  stewardship_domain_special.1411.b:0 "¡Ya me has hecho perder bastante tiempo!"
@@ -325,10 +325,10 @@
  stewardship_domain_special.1421.a.tt:0 "Aquí podría haber cualquier cosa"
  stewardship_domain_special.1421.b:0 "Nos marchamos. Ya."
 
- stewardship_domain_special.1422.desc:0 "El guardia de los gritos sale de una puerta podrida con un niño bajo el brazo. [foundling.Custom('ES_ElLa')] [foundling.Custom('GirlBoy')] intentaba ocultarse en el fondo de la casa.\n\nAunque exijo respuestas, no dice qué le ha pasado al pueblo… es más, no dice nada de nada."
+ stewardship_domain_special.1422.desc:0 "El guardia de los gritos sale por una puerta podrida con alguien bajo el brazo. Un/a [foundling.Custom('GirlBoy')] intentaba ocultarse en el fondo de la casa.\n\nAunque exijo respuestas, no dice qué le ha pasado al pueblo… es más, no dice nada de nada."
  stewardship_domain_special.1422.a:0 "Pobre [foundling.Custom('GirlBoy')] ya no tiene hogar… ¡[foundling.Custom('ES_LoLa')|U] adoptaré!"
- stewardship_domain_special.1422.b:0 "Dejar al niño en el pueblo más cercano."
- stewardship_domain_special.1422.c:0 "Quemar el pueblo con el niño maldito dentro."
+ stewardship_domain_special.1422.b:0 "Dejar[foundling.Custom('ES_LoLa')] en el pueblo más cercano."
+ stewardship_domain_special.1422.c:0 "Quemar el pueblo con esa criatura dentro."
 
  stewardship_domain_special.1423.foundling:0 "[foundling.GetTitledFirstName] ya está a salvo en la corte, juega… e incluso habla con los otros niños.\n\n"
  stewardship_domain_special.1423.no_foundling:0 "El ruido y el parloteo en la corte no sirven de mucho para distraerme de lo que he visto."
@@ -348,13 +348,13 @@
  stewardship_domain_special.1426.desc:0 "No es ceremonioso, pero el fuego hace lo que debe hacerse. Observo las llamas consumir las casas abandonadas hace tiempo, pero no durante mucho tiempo. He visto todo lo que necesitaba ver aquí."
  stewardship_domain_special.1426.a:0 "Es hora de volver a casa."
 
- stewardship_domain_special.1431.desc:0 "Tras días de viaje, llego al pueblo que falta en mis registros. No solo prospera… ¡lo hace a lo grande! Pero sus pobladores insisten en que #EMP sí#! pagan sus impuestos.\n\n[collector.GetTitledFirstName], [collector.Custom('ES_ElLa')] recaudador[collector.Custom('ES_XA')] de la baronía no ha sido totalmente sincer[collector.Custom('ES_OA')]."
+ stewardship_domain_special.1431.desc:0 "Tras días de viaje, llego al pueblo que falta en mis registros. No solo prospera… ¡lo hace a lo grande! Pero sus pobladores insisten en que #EMP sí#! pagan sus impuestos.\n\n[collector.GetTitledFirstName], recaudador[collector.Custom('ES_XA')] de la baronía no ha sido totalmente sincer[collector.Custom('ES_OA')]."
  stewardship_domain_special.1431.a:0 "[collector.GetFirstNameNoTooltip] tiene mucho que responder…"
  stewardship_domain_special.1431.a.tt:0 "Me enfrentaré a [collector.GetFirstName]"
  stewardship_domain_special.1431.b:0 "Reunid a los aldeanos. Pagarán de nuevo."
 
 
- stewardship_domain_special.1432.desc:0 "«¡Estos fondos eran vitales para, ah, la defensa de [county.GetNameNoTier]!» [collector.GetTitledFirstName], [collector.Custom('ES_ElLa')] recaudador[collector.Custom('ES_XA')] de impuestos en [barony.GetNameNoTier] está aterrorizad[collector.Custom('ES_OA')] y no solo por los descomunales soldados que he traído llevado su mansión.\n\n«¡Por favor, haré lo que sea para ganarme vuestro perdón!»."
+ stewardship_domain_special.1432.desc:0 "«¡Estos fondos eran vitales para, ah, la defensa de [county.GetNameNoTier]!» [collector.GetTitledFirstName], recaudador[collector.Custom('ES_XA')] de impuestos en [barony.GetNameNoTier] está aterrorizad[collector.Custom('ES_OA')] y no solo por los descomunales soldados que he traído llevado su mansión.\n\n«¡Por favor, haré lo que sea para ganarme vuestro perdón!»."
  stewardship_domain_special.1432.a:0 "Pasarás el resto de vuestros días en la oscuridad."
  stewardship_domain_special.1432.b:0 "Me vendría bien alguien que me deba la vida."
  stewardship_domain_special.1432.b.collector_loyal:0 "Gratitud y lealtad"

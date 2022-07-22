@@ -26,7 +26,7 @@
  petition_liege.0101.t.faction_war:0 "$petition_liege_header$ démanteler la faction"
  petition_liege.0101.t.county_control:0 "$petition_liege_header$ demande de baillis"
  petition_liege.0101.t.county_convert:0 "$petition_liege_header$ financer des prêtres"
- petition_liege.0101.t.county_opinion:0 "$petition_liege_header$ visite royale"
+ petition_liege.0101.t.county_opinion:1 "$petition_liege_header$ visite royale"
  petition_liege.0101.t.fortify_border:0 "$petition_liege_header$ fortifier la frontière"
  petition_liege.0101.t.title_liege:0 "$petition_liege_header$ prétendre au titre"
  petition_liege.0101.t.title_vassal:0 "$petition_liege_header$ prétendre au titre du vassal"
@@ -176,7 +176,7 @@
 # Liege asks for something in return
  petition_liege.0205.t:0 "$petition_liege_header$ contre-offre"
  petition_liege.0205.desc.intro:0 "$petition_liege.0201.desc.intro$"
- petition_liege.0205.desc.bridge:1 "\n\nAprès avoir écouté le discours, [petition_liege.Custom('FR_IlElle')] reste assis[petition_liege.Custom('FR_E')] en silence pendant quelques instants. \n\nFinalement, [petition_liege.Custom('FR_IlElle')] s’adresse à moi : « Vous avez de bons arguments, mais si j’accepte, j’aurai besoin de quelque chose en retour. Vous pouvez certainement voir à quel point il serait bénéfique pour nous deux de trouver un arrangement ? »"
+ petition_liege.0205.desc.bridge:2 "\n\nAprès avoir écouté le discours, [petition_liege.Custom('FR_IlElle')] reste assis[petition_liege.Custom('FR_E')] en silence pendant quelques instants. \n\nFinalement, [petition_liege.Custom('FR_IlElle')] s’adresse à moi : « Vous avez de bons arguments, mais si j’accepte, j’aurai besoin de quelque chose en retour. Vous pouvez certainement voir à quel point il serait bénéfique pour nous deux de trouver un arrangement ? »"
  petition_liege.0205.counter:0 "[petition_liege.Custom('FR_MonseigneurMadame')|U], peut-être l’ai-je mal expliqué..."
  petition_liege.0205.a:0 "Une offre équitable. J’accepte."
  petition_liege.0205.b:0 "Vous plaisantez ? Mes limites sont déjà dépassées !"
@@ -270,7 +270,7 @@
  petition_liege_county_convert_modifier_desc:0 "Le détenteur de ce comté a demandé à son seigneur lige de financer sa conversion à la vraie foi."
  petition_liege_county_convert_modifier_tt:0 "[convert_county|E] progressera plus rapidement dans les comtés avec ce modificateur"
  # Opinion
- petition_liege_0101_county_opinion_effect_tt:0 "Toutes les [holdings|El] [petition_vassal.Custom('FR_du_Char_U_Pi')][petition_vassal.GetShortUIName] avec une [county_opinion|El] basse"
+ petition_liege_0101_county_opinion_effect_tt:1 "Toutes les [holdings|El] [petition_vassal.Custom('FR_du_Char_U_Pi')][petition_vassal.GetShortUIName] avec une [county_opinion|El] de #negative_value [SCOPE.ScriptValue('petition_county_opinion_value')]#! ou moins"
  petition_liege_county_opinion_modifier:0 "Visite royale"
  petition_liege_county_opinion_modifier_desc:0 "Le détenteur de ce comté a demandé à son seigneur lige de venir se montrer au peuple."
  # Fortify

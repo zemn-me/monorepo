@@ -50,20 +50,20 @@
  feature_blade_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_blade_metal_folded_iron:0 "$metal_folded_iron$"
  feature_blade_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_blade_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_blade_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_blade_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_blade_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_head_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_head_metal_folded_iron:0 "$metal_folded_iron$"
  feature_head_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_head_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_head_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_head_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_head_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_handle_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_handle_metal_folded_iron:0 "$metal_folded_iron$"
  feature_handle_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_handle_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_handle_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_handle_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_handle_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  # Precious/decorative metals and metal-based compounds
  metal_gold:0 "oro"
@@ -991,7 +991,7 @@
  artifact_dragvandil_name:0 "Dragvandil"
  artifact_dragvandil_description:0 "Una espada que se dice que perteneció a Egill Skallagrimsson, granjero, poeta y guerrero, famoso por la Saga de Egill."
  artifact_szczerbiec_name:0 "Szczerbiec"
- artifact_szczerbiec_description:0 "De esta espada, supuestamente entregada por un ángel al rey Boleslao el Valiente, se afirma que es con la que golpeó la puerta dorada de Kiev. Tiene un significado simbólico inmenso"
+ artifact_szczerbiec_description:1 "De esta espada, supuestamente entregada por un ángel al rey Boleslao el Valiente, se afirma que es con la que golpeó la puerta dorada de Kyiv. Tiene un significado simbólico inmenso."
  artifact_chinese_caligraphy_name:1 "Caligrafía china"
  artifact_chinese_caligraphy_description:0 "Este delicado trozo de papel está cubierto de símbolos extraños, pero hermosos y muy exactos. Se dice que procede de las tierras de China, en el lejano Oriente."
  artifact_ruyi_name:0 "Ruyi"
@@ -1025,7 +1025,7 @@
  stained_glass_shard:0 "Trozo de vidrio «tintado» santificado"
  stained_glass_shard.desc:0 "Parece tintado de un curioso color sanguíneo…"
  xylospongium:0 "Esponja en un palo"
- xylospongium.desc:1 "Su origen y finalidad no están claros, pero emite un olor tenue y desagradable."
+ xylospongium.desc:1 "Su origen y finalidad no están claros… pero emite un olor tenue y desagradable."
  #Common
  st_davids_morsel:1 "Bocado de San David"
  st_davids_morsel.desc:0 "Parece ser un trozo de carne seca. La edad y el origen no están claros."
@@ -1064,3 +1064,7 @@
  easteregg_artifact_elisabeth_plush_description:0 "El zorro de peluche de Elisabeth es un juguete muy querido que estuvo con ella durante casi toda su vida. A menudo se veía a Elisabeth hablar con él mientras tejía intrincadas claves para quien contratara sus servicios. Es reconfortante e inspira a su poseedor a imitar la astucia del zorro."
 
  child_toy_template_tt:0 "Debe ser [child|lE] para equiparse como [inventory_artifact|lE]"
+
+ # Blessed Junk
+ fp2_blessed_junk:0 "$blessed_artifact_modifier$[ROOT.Char.Custom('TrinketLookAdjective')]"
+ fp2_blessed_junk_desc:0 "Un artefacto [ROOT.Char.Custom('TrinketLookAdverbFollowup')] [ROOT.Char.Custom('TrinketLookAdjective')] aunque, por lo demás, inútil, $blessed_artifact_modifier_desc$."

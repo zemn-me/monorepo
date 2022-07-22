@@ -1,30 +1,30 @@
 ﻿l_russian:
 
 # Reclaiming Britannia, by Linnéa Thimrén
- british_isles.0001.t:0 "[reclaimer.GetCulture.GetNameNoTooltip]ая Британия"
+ british_isles.0001.t:0 "[reclaimer.GetCulture.GetCollectiveNounNoTooltip]ая Британия"
  british_isles.0001.desc:0 "Слишком долго наш великий остров оставался под властью чужаков, и наконец он снова в руках кельтов! Я смотрю на поля, и кажется, будто впервые за долгие годы здесь выглянуло солнце, словно земля изобилия и процветания, Тир на Ног, вновь открылась нам. Холмы и долины наших предков вновь в руках #L [ROOT.Char.GetCulture|l]ой#! культуры."
  british_isles.0001.custom:0 "Все [counties|El] в Британии"
  british_isles.0001.a:0 "Слава предкам!"
 
  british_isles.0002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('reclaimer'))] [reclaimer.GetName] официально [Select_CString(reclaimer.IsFemale, 'объявила', 'объявил' )] возрождение Кельтской Британии. \n\nПосле столетий чужеземного владычества острова вновь в руках исконных властителей."
- british_isles.0002.a:0 "[reclaimer.GetCulture.GetNameNoTooltip]ое иго..."
+ british_isles.0002.a:0 "[reclaimer.GetCulture.GetCollectiveNounNoTooltip]ое иго..."
  british_isles.0002.b:0 "Британия вновь наша!"
 
 # Restoring the Danelaw, by Linnéa Thimrén
  british_isles.1001.t:0 "Законы восстановлены"
- british_isles.1001.desc:0 "Денло восстановлено моими усилиями — эти земли вновь узнают #L [restorer.GetCulture.GetName|l]ую#! власть!\n\nЯ следую по стопам легенд прошлого, таких как Гутрум и Эрик Кровавая Секира, и [restorer.GetFaith.WarGodName] мне свидетель, я не допущу, чтобы королевство вновь попало под власть англо-саксов!"
+ british_isles.1001.desc:0 "Денло восстановлено моими усилиями — эти земли вновь узнают #L [restorer.GetCulture.GetCollectiveNoun|l]ую#! власть!\n\nЯ следую по стопам легенд прошлого, таких как Гутрум и Эрик Кровавая Секира, и [restorer.GetFaith.WarGodName] мне свидетель, я не допущу, чтобы королевство вновь попало под власть англо-саксов!"
  british_isles.1001.a:0 "Наступает новая эпоха!"
 
  british_isles.1002.t:0 "Денло"
- british_isles.1002.desc_same_culture:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] своими руками [Select_CString(restorer.IsFemale, 'восстановила', 'восстановил' )] Денло! Великий остров вновь в #L [restorer.GetCulture.GetName|l]их#! руках."
- british_isles.1002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] и [restorer.GetHerHis] мерзкие налетчики создали новое государство на островах и провозгласили его возрожденным королевством Денло.\n\nБудущее покажет, окажется ли эта попытка восстановить #L [restorer.GetCulture.GetName|l]ое#! правление в Англии удачнее прежних..."
- british_isles.1002.a:0 "[restorer.GetCulture.GetNameNoTooltip]ое иго..."
- british_isles.1002.b:0 "[restorer.GetCulture.GetNameNoTooltip]ая победа!"
- british_isles.1002.c:0 "Хм, [restorer.GetCulture.GetNameNoTooltip|l]ий народ, говорите? Я в деле!"
+ british_isles.1002.desc_same_culture:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] своими руками [Select_CString(restorer.IsFemale, 'восстановила', 'восстановил' )] Денло! Великий остров вновь в #L [restorer.GetCulture.GetCollectiveNoun|l]их#! руках."
+ british_isles.1002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))] [restorer.GetName] и [restorer.GetHerHis] мерзкие налетчики создали новое государство на островах и провозгласили его возрожденным королевством Денло.\n\nБудущее покажет, окажется ли эта попытка восстановить #L [restorer.GetCulture.GetCollectiveNoun|l]ое#! правление в Англии удачнее прежних..."
+ british_isles.1002.a:0 "[restorer.GetCulture.GetCollectiveNounNoTooltip]ое иго..."
+ british_isles.1002.b:0 "[restorer.GetCulture.GetCollectiveNounNoTooltip]ая победа!"
+ british_isles.1002.c:0 "Хм, [restorer.GetCulture.GetCollectiveNounNoTooltip|l]ий народ, говорите? Я в деле!"
 
 # Embrace English Culture, by Linnéa Thimrén
- british_isles.2001.t:0 "Больше не [embracer.GetCulture.GetCollectiveNounNoTooltip|l]"
- british_isles.2001.desc:0 "Времена, когда мы, [embracer.GetCulture.GetCollectiveNounNoTooltip|l], считали Францию своей родиной, давно прошли. Наши дети рождаются здесь, в окружении саксов, и для них Нормандия всегда будет лишь размытой линией за туманными водами.\n\nМы принимаем некоторые из местных обычаев, но одновременно наши обычаи распространяются по саксонским землям, порождая нечто новое — английскую культуру."
+ british_isles.2001.t:0 "Больше не [embracer.GetCulture.GetNameNoTooltip|l]"
+ british_isles.2001.desc:0 "Времена, когда мы, [embracer.GetCulture.GetNameNoTooltip|l], считали Францию своей родиной, давно прошли. Наши дети рождаются здесь, в окружении саксов, и для них Нормандия всегда будет лишь размытой линией за туманными водами.\n\nМы принимаем некоторые из местных обычаев, но одновременно наши обычаи распространяются по саксонским землям, порождая нечто новое — английскую культуру."
  british_isles.2001.a:0 "Да здравствуют англичане!"
 
  british_isles.2002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('embracer'))] [embracer.GetName], [embracer.GetHerHis] вассалы и вся [embracer.GetHerHis] семья услышали голос Альбиона и приняли английскую культуру."
@@ -33,10 +33,10 @@
 
 # Request Laudabiliter, by Flavio Verna
  british_isles.3001.t:0 "Мы провозглашаем во всеуслышание!"
- british_isles.3001.desc:0 "Ваше желание расширить священную власть Вселенской Церкви на варварские племена Ирландии — деяние благочестивое и законное. А потому Святая Римская Церковь приказывает вам овладеть островом, исполнив тем самым волю Господа.\n\nЕсли вы в силу досадной неудачи умрете до завершения этой священной кампании, этот священный мандат перейдет вашим законным преемникам. Пусть дом [scoped_ruler.GetHouse.GetNameNoTooltip] продолжает это святое начинание, покуда не исполниться божественная воля и Ирландия не будет объединена под [scoped_ruler.GetCulture.GetNameNoTooltip|l]ой властью."
+ british_isles.3001.desc:0 "Ваше желание расширить священную власть Вселенской Церкви на варварские племена Ирландии — деяние благочестивое и законное. А потому Святая Римская Церковь приказывает вам овладеть островом, исполнив тем самым волю Господа.\n\nЕсли вы в силу досадной неудачи умрете до завершения этой священной кампании, этот священный мандат перейдет вашим законным преемникам. Пусть дом [scoped_ruler.GetHouse.GetBaseNameNoTooltip] продолжает это святое начинание, покуда не исполниться божественная воля и Ирландия не будет объединена под [scoped_ruler.GetCulture.GetCollectiveNounNoTooltip|l]ой властью."
  british_isles.3001.a:0 "Готовьте флот!"
  british_isles.3002.t:0 "Претензия на Ирландию"
- british_isles.3002.desc.irish:0 "Своей милостью [Select_CString(scoped_pope.IsFemale, 'Ее', 'Его' )] Святейшество [scoped_pope.GetFirstName], викарий Иисуса Христа и наследник престола Святого Петра, провозглашает, что [scoped_ruler.GetFullName] [Select_CString(scoped_ruler.IsFemale, 'получила', 'получил' )] божественное право на власть над Эйре и всеми народами, ее населяющими.\n\nЛюбой ирландский властитель, отказавшийся исполнить папский указ и склониться, узнает на себе, на что способны в гневе [scoped_ruler.GetTitledFirstName], [scoped_ruler.GetHerHis] #L [scoped_ruler.GetCulture.GetName|l]ие#! войска и Господь всемогущий."
+ british_isles.3002.desc.irish:0 "Своей милостью [Select_CString(scoped_pope.IsFemale, 'Ее', 'Его' )] Святейшество [scoped_pope.GetFirstName], викарий Иисуса Христа и наследник престола Святого Петра, провозглашает, что [scoped_ruler.GetFullName] [Select_CString(scoped_ruler.IsFemale, 'получила', 'получил' )] божественное право на власть над Эйре и всеми народами, ее населяющими.\n\nЛюбой ирландский властитель, отказавшийся исполнить папский указ и склониться, узнает на себе, на что способны в гневе [scoped_ruler.GetTitledFirstName], [scoped_ruler.GetHerHis] #L [scoped_ruler.GetCulture.GetCollectiveNoun|l]ие#! войска и Господь всемогущий."
  british_isles.3002.a:0 "Это мы еще посмотрим!"
  british_isles.3002.b:0 "Ясно..."
 
@@ -45,7 +45,7 @@
  british_isles.4001.desc:0 "[founder.GetPrimaryTitle.GetNameNoTierNoTooltip] не слишком жалует завоевателей — любых. Веками мы боролись с ними, сражались, чтобы вернуть свой дом. Благодаря хитроумию и таланту мне удалось вернуть земли древней Думнонии и восстановить королевство [founder.GetPrimaryTitle.GetNameNoTierNoTooltip].\n\nМы выстояли против иноземной угрозы, пережили упадок древней Британии, и теперь я достойно встречу любые испытания, которые только готовит нам [founder.GetFaith.DevilName]. Что бы ни случилось, [founder.GetPrimaryTitle.GetNameNoTierNoTooltip] выстоит."
  british_isles.4001.a:0 "Я словно возрожденный Кориней!"
  british_isles.4001.b:0 "Мое королевство — единственный надел, который имеет значение."
- british_isles.4002.desc:0 "После вековой борьбы [founder.GetFullName] [Select_CString(founder.IsFemale, 'восстановила', 'восстановил' )] древнее королевство Думнония, которое его обитатели называют [founder.GetPrimaryTitle.GetNameNoTier], и [Select_CString(founder.IsFemale, 'отбросила', 'отбросил' )] иноземных завоевателей.\n\nДругие владыки Британских островов вряд ли по своей воле отдадут земли, которые считают своими. Впрочем, [founder.GetPrimaryTitle.GetAdjective|l]ий народ сумел выстоять пред жесточайшим врагом нынешней эпохи и сможет оказать достойный отпор любому, кто попытается изменить расклад сил."
+ british_isles.4002.desc:0 "После вековой борьбы [founder.GetFullName] [Select_CString(founder.IsFemale, 'восстановила', 'восстановил' )] древнее королевство Думнония, которое его обитатели называют [founder.GetPrimaryTitle.GetNameNoTier], и [Select_CString(founder.IsFemale, 'отбросила', 'отбросил' )] иноземных завоевателей.\n\nДругие владыки Британских островов вряд ли по своей воле отдадут земли, которые считают своими. Впрочем, #L [founder.GetPrimaryTitle.GetAdjective|l]ий#! народ сумел выстоять пред жесточайшим врагом нынешней эпохи и сможет оказать достойный отпор любому, кто попытается изменить расклад сил."
  british_isles.4002.a:0 "Onen hag oll!"
  british_isles.4002.b:1 "Мы загоним их на край земли."
  british_isles.4002.c:0 "Малые королевства появляются и исчезают."
@@ -85,9 +85,9 @@
  negotiate_the_danelaw_each-way_effect.rejected:0 "Если предложение отвергнуто"
  negotiate_the_danelaw_accept_effect.partition_active.tt:0 "$k_england$ и $k_danelaw_article$$k_danelaw$ будут [Concept( 'de_jure', 'де-юре' )|E] разделены"
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "$k_danelaw_article$$k_danelaw$ [Concept( 'de_jure', 'де-юре' )|E] получает все $k_england_adj$ие [Concept( 'duchies', 'герцогства' )|E], где [ntd_nord.GetTitledFirstName] владеет хотя бы одним [concept( 'county', 'графством' )]"
- negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "$k_danelaw_article$$k_danelaw$ [Concept( 'de_jure', 'де-юре' )|E] получает все независимые $k_england_adj$ие [Concept( 'duchies', 'герцогства' )|E], где правитель принадлежит $north_germanic_group$ой [Concept( 'culture', 'культуре' )|E] или исповедует религию $germanic_religion$"
+ negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "$k_danelaw_article$$k_danelaw$ [Concept( 'de_jure', 'де-юре' )|E] получает все независимые $k_england_adj$ие [Concept( 'duchies', 'герцогства' )|E], где правитель принадлежит $north_germanic_group_collective_noun$ой [Concept( 'culture', 'культуре' )|E] или исповедует религию $germanic_religion$"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "Все независимые правители в державе $k_england$"
- TRUCE_SIGNED_PARTITION:0 "При разделении королевства заключено перемирие\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\nПри разделении королевства заключено перемирие"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "Статус всех территорий, которыми [de_jure|E] владеет $k_danelaw_article$$k_danelaw$, [Concept( 'de_jure_drift_drifted', 'меняется' )|E] в пользу державы $k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$ получит герб, который использует $k_danelaw_article$$k_danelaw$"

@@ -19,7 +19,7 @@
  hold_court.5001.c:0 "¡Pues #EMP nunca#! te casarás!"
 
  hold_court.5010.t:0 "$hold_court_header$ [county.GetNameNoTierNoTooltip] fuera de control"
- hold_court.5010.desc_marshal:0 "«[marshal.Custom('ES_ElLa')] [marshal.GetCouncilTitle] [marshal.GetTitledFirstName] nos está cazando, colgando y… podríamos mantener el orden, mi [ROOT.Char.GetLadyLord]. #EMP Por favor#!, ¡podemos organizarnos sin tanta muerte!».\n\n"
+ hold_court.5010.desc_marshal:0 "«[marshal.GetCouncilTitle] [marshal.GetTitledFirstName] nos está cazando, colgando y… podríamos mantener el orden, mi [ROOT.Char.GetLadyLord]. #EMP Por favor#!, ¡podemos organizarnos sin tanta muerte!».\n\n"
  hold_court.5010.desc:0 "«Nos están cazando, colgando y… podríamos mantener el orden, mi [ROOT.Char.GetLadyLord]. #EMP Por favor#!, ¡podemos organizarnos sin tanta muerte!».\n\n"
  hold_court.5010.desc_vassal_holder:0 "Un[peasant.Custom('ES_XA')] campesin[peasant.Custom('ES_OA')] del [county.GetName], una región asolada por el descontento que pertenece a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('vassal'))] [vassal.GetTitledFirstName], me asegura que se puede restaurar el control sin excesivo derramamiento de sangre."
  hold_court.5010.desc_holder:0 "Un[peasant.Custom('ES_XA')] campesin[peasant.Custom('ES_OA')] del [county.GetName], una región asolada por el descontento, me asegura que se puede restaurar el control sin excesivo derramamiento de sangre."
@@ -50,5 +50,5 @@
  hold_court.5030.desc_you:0 "\n\n¡No puedo evitar imaginar cuánta libertad concederá tal lenguaje!"
  hold_court.5030.a:0 "¡Qué gran idea!"
  hold_court.5030.courtiers:0 "Tod[courtier.Custom('ES_OA')]s [courtier.Custom('ES_LoLa')]s cortesan[courtier.Custom('ES_OA')]s"
- hold_court.5030.b:0 "[court_tutor.GetFirstNameNoTooltip], [court_tutor.Custom('ES_ElLa')] tutor[court_tutor.Custom('ES_XA')] de la corte, te ayudará a enseñarlo."
+ hold_court.5030.b:0 "[court_tutor.GetFirstNameNoTooltip], tutor[court_tutor.Custom('ES_XA')] de la corte, te ayudará a enseñarlo."
  hold_court.5030.c:0 "¡Podemos aprovechar mejor tu talento!"

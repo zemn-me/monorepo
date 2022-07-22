@@ -41,8 +41,3 @@
  court_chaplain_task.3004.opening:0 "[target.Custom2('AppropriateGreeting', ROOT.Char)]"
  court_chaplain_task.3004.desc:0 "Il est devenu évident que votre [councillor.GetCouncilTitle|l] œuvre à établir une fausse revendication sur le [county.GetName]. Ne pensez pas que ce genre d’action déshonorante restera sans réponse."
  court_chaplain_task.3004.a:0 "Oh, mais il #EMP existe#! une raison suffisante pour une revendication."
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- court_chaplain_task.0201.county_complete:0 "Les habitants du [county.GetName] ont enfin été convaincus de se convertir à la vraie foi !\n\nIl n'y a pratiquement plus d'hérétiques !"
- court_chaplain_task.0201.a:0 "C'est du bon travail, [councillor.GetFirstNameNoTooltip] !"
- court_chaplain_task.0201.b:0 "Euh, quelle foi est-ce, maintenant ?"

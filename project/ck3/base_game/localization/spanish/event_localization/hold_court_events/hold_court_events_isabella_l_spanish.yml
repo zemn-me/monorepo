@@ -43,7 +43,7 @@
 
 ## Foreign ally is usurped and asks for sanctuary by Isabella Welch
  hold_court.4200.t:0 "Santuario"
- hold_court.4200.desc:0 "Mi aliad[fleeing_ally.Custom('ES_OA')], [fleeing_ally.Custom('ES_ElLa')] antañ[fleeing_ally.Custom('ES_OA')] poderos[fleeing_ally.Custom('ES_OA')] [fleeing_ally.GetTitledFirstName], llega sin avisar a mi trono, ahora cubiert[fleeing_ally.Custom('ES_OA')] de suciedad y estiércol.\n\n«Esa rata flatulenta, mi antigu[usurping_heir.Custom('ES_OA')] hereder[usurping_heir.Custom('ES_OA')] [usurping_heir.GetTitledFirstName], me ha expulsado de mi señorío y se ha apoderado de mis tierras. He huido aquí temiendo por mi vida».\n\nY se arrodilla ante mí. «A menos que un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetWomanMan] tan temible como vos me dé un techo bajo el que vivir, sé que acabaré en una zanja. Por favor, si tenéis algo de corazón, concededme santuario»."
+ hold_court.4200.desc:0 "Mi aliad[fleeing_ally.Custom('ES_OA')], el/la antañ[fleeing_ally.Custom('ES_OA')] poderos[fleeing_ally.Custom('ES_OA')] [fleeing_ally.GetTitledFirstName], llega sin avisar a mi trono, ahora cubiert[fleeing_ally.Custom('ES_OA')] de suciedad y estiércol.\n\n«Esa rata flatulenta, mi antigu[usurping_heir.Custom('ES_OA')] hereder[usurping_heir.Custom('ES_OA')] [usurping_heir.GetTitledFirstName], me ha expulsado de mi señorío y se ha apoderado de mis tierras. He huido aquí temiendo por mi vida».\n\nY se arrodilla ante mí. «A menos que un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetWomanMan] tan temible como vos me dé un techo bajo el que vivir, sé que acabaré en una zanja. Por favor, si tenéis algo de corazón, concededme santuario»."
  hold_court.4200.a:0 "Estás entre amigos, te nombraré mi coper[fleeing_ally.Custom('ES_OA')]."
  hold_court.4200.b:0 "Tendrás un sitio justo al lado de mi trono… ¡como escabel!"
  hold_court.4200.c:0 "¡Contádselo enseguida a [usurping_heir.GetTitledFirstNameNoTooltip]! ¡Le va a encantar!"
@@ -104,7 +104,7 @@
  hold_court.4600.b:0 "¡Qué concepto más encantador! ¡[chancellor.GetCouncilTitle]! Difundid que soy un demonio."
  hold_court.4600.b.tt:0 "Para bien o para mal, se conocerá tu parentesco con [THIS.GetCharacter.GetFaith.DevilName]."
  hold_court.4600.c:0 "¿De verdad he sido tan abominable?"
- hold_court.4600.c.tt:1 "No es demasiado tarde para cambiar"
+ hold_court.4600.c.tt:1 "No es demasiado tarde para cambiar."
  hold_court.4600.d:0 "¡Tonterías! ¡[ROOT.Char.GetFaith.WitchGodName|U] es superior a [ROOT.GetCharacter.GetFaith.DevilName]!"
  hold_court.4600.d.success:0 "La corte se ríe de tu broma"
  hold_court.4600.d.failure:0 "Los cortesanos sospechan que no era una broma"
@@ -118,7 +118,7 @@
 
 ### Sophisticated Cannibal dinner by Isabella Welch
  hold_court.4602.t:0 "Mi delicios[ROOT.GetCharacter.Custom('ES_OA')] [ROOT.GetCharacter.GetLadyLord]"
- hold_court.4602.desc:0 "Apenas unas cuantas velas titilantes iluminan la morada [cannibal_vassal.Custom('ES_DelDela')] [cannibal_vassal.GetTitledFirstNameNoTooltip]. Me sienta ante una mesa de banquete donde no hay más platos aparte de montones de carne apenas cocinada.\n\n[cannibal_vassal.GetFirstNameNoTooltip] merodea sobre mi asiento, esperando a que elija algo de comida. Al cabo de un rato, se inclina junto a mi cabeza, enseñando los dientes.\n\n«Esta noche tenemos grandes [ROOT.GetCharacter.GetWomenMen] cocinad[ROOT.Char.Custom('ES_OA')]s ante nosotros, ¡pero ningun[ROOT.Char.Custom('ES_OA')] tan delicios[ROOT.Char.Custom('ES_OA')] como tú!»."
+ hold_court.4602.desc:0 "Apenas unas cuantas velas titilantes iluminan la morada de [cannibal_vassal.GetFirstNameNoTooltip]. Me sienta ante una mesa de banquetes donde no hay más platos aparte de montones de carne apenas cocinada.\n\n[cannibal_vassal.GetFirstNameNoTooltip] merodea sobre mi asiento, esperando a que elija algo de comida. Al cabo de un rato, se inclina junto a mi cabeza, enseñando los dientes.\n\n«Esta noche tenemos grandes [ROOT.GetCharacter.GetWomenMen] cocinad[ROOT.Char.Custom('ES_OA')]s ante nosotros, ¡pero ningun[ROOT.Char.Custom('ES_OA')] tan delicios[ROOT.Char.Custom('ES_OA')] como tú!»"
  hold_court.4602.a:0 "¿A quién debo comer para empezar?"
  hold_court.4602.b:0 "Está bien, puedes dar un mordisco."
  hold_court.4602.c:0 "¡Me marcho! ¡Esto es de muy mal gusto!"
@@ -147,7 +147,7 @@
  hold_court.4800.c.tt:0 "Quienes estén bajo arresto domiciliario podrán salir de sus aposentos bajo vigilancia."
  hold_court.4800.c:0 "El arresto domiciliario significa dignidad, que den una vuelta por las tierras."
  hold_court.4800.d:0 "¡[incompetent_guard.GetTitledFirstNameNoTooltip], no eres dign[incompetent_guard.Custom('ES_OA')] de ser [ROOT.GetCharacter.Custom('KnightCultureNoTooltipLowercase')]!"
- hold_court.4800.d.tt:0 "[incompetent_guard.Custom('ES_ElLa')] [incompetent_guard.GetTitledFirstName] es despedid[incompetent_guard.Custom('ES_OA')]"
+ hold_court.4800.d.tt:0 "[incompetent_guard.GetTitledFirstName] es despedid[incompetent_guard.Custom('ES_OA')]"
  hold_court.4800.e:0 "¡A las mazmorras contigo!"
 
 ## Shady genealogist offers to prove you are descended from mythical heroes by Isabella Welch
@@ -166,4 +166,4 @@
  hold_court.4901.a:0 "Es hora de una siesta. Soñaré con mi propia gloria."
  hold_court.4901.a.tt:0 "Dejas que el resto de la corte que escuche atentamente"
  hold_court.4901.b:0 "¡Es más emocionante que ninguna balada! ¡Estoy al borde del trono!"
- hold_court.4901.c:0 "«¡Basta! [ROOT.Char.Custom('ES_ElLa') [ROOT.Char.GetPrimaryTitle.GetBaseNameNoTooltip] está en deuda por vuestros servicios»."
+ hold_court.4901.c:0 "«¡Basta! [ROOT.Char.GetPrimaryTitle.GetBaseNameNoTooltip] está en deuda por vuestros servicios»."

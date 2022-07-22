@@ -13,7 +13,7 @@
  religious_interaction.2.adultery:0 "на основании того, что они попрали священные узы брака и предавались плотскому греху с другими."
  
  religious_interaction.3.desc:0 "Рассмотрев вашу просьбу, я принимаю решение исполнить ее."
- religious_interaction.3.defensive_war:0 "Пусть эти деньги помогут вам защитить веру, ибо ей угрожают [war_target.GetTitledFirstName] и [war_target.GetHerHis] стремительные #L [war_target.GetFaith.GetAdjective|l]ие#! орды!"
+ religious_interaction.3.defensive_war:0 "Пусть эти деньги помогут вам защитить веру, ибо ей угрожают [war_target.GetTitledFirstName] и [war_target.GetHerHis] стремительные #L [war_target.GetFaith.GetName|l]ие#! орды!"
  religious_interaction.2.offensive_war:0 "Пусть эти деньги позволят выиграть войну, что ведете вы и [war_target.GetTitledFirstName]!"
  religious_interaction.3.fallback:0 "Пусть эти деньги помогут вам распространить истинную веру на ваши земли!"
  religious_interaction.3.a:0 "Славься, [ROOT.Char.GetFaith.WealthGodName], вот и возврат налога!"
@@ -52,7 +52,7 @@
 
  religious_interaction.1001.t.fatwa:0 "Выпущена фетва!"
  religious_interaction.1001.t:0 "Законное отлучение!"
- religious_interaction.1001.desc:1 "[Select_CString(actor.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actor'))] [actor.GetTitledFirstName] [Select_CString(actor.IsFemale, 'добилась', 'добился' )] того, что [actor.GetHerHis] [actor.GetFaith.PriestNeuterPlural] формально предъявили мне обвинение в грехе!\n\nЭто обвинение можно законным образом использовать для того, чтобы лишить меня власти над #L [recipient.GetFaith.GetAdjective|l]ими#! землями."
+ religious_interaction.1001.desc:1 "[Select_CString(actor.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actor'))] [actor.GetTitledFirstName] [Select_CString(actor.IsFemale, 'добилась', 'добился' )] того, что [actor.GetHerHis] [actor.GetFaith.PriestNeuterPlural] формально предъявили мне обвинение в грехе!\n\nЭто обвинение можно законным образом использовать для того, чтобы лишить меня власти над #L [recipient.GetFaith.GetName|l]ими#! землями."
  religious_interaction.1001.a:0 "Не будь [actor.GetSheHe] моим сюзереном, я бы..."
  religious_interaction.1001.a.revoke_tt:0 "[actor.GetTitledFirstName] может [revoke|El] один из моих титулов"
 
@@ -60,11 +60,11 @@
  religious_interaction.1010:0 "Похвально, что вы стремитесь искупить свои грехи. Я принимаю ваше щедрое пожертвование и дарую вам благословение."
  religious_interaction.1011:0 "Ваши проступки слишком серьезны, чтобы их можно было искупить золотом. Если вы и впрямь хотите искупить свои грехи, измените свою жизнь и докажите мне, что вы действительно ищете прощения. Только тогда я приму ваше пожертвование."
  religious_interaction.1020:0 "[actor.GetTitledFirstName] [Select_CString(actor.IsFemale, 'сообщила', 'сообщил' )] мне тревожные новости о ваших злодеяниях."
- religious_interaction.1021:0 "Вы считаете, что вы [actor.GetFaith.GetAdherentName|l], но ваши действия показывают, что вы не следуете пути [actor.GetFaith.HighGodNamePossessive]. И поскольку я не могу позволить вам скрывать свое безнравственное поведение за маской #L [actor.GetFaith.GetAdjective|l]ой#! добродетели, мне придется отлучить вас. И да смилостивится [actor.GetFaith.HighGodName] над вашей душой."
- religious_interaction.1022:0 "Меня весьма обеспокоил ваш рассказ о злодеяниях, что творит [secondary_recipient.GetTitledFirstName]. С сожалением приходится признать, что ради блага #L [actor.GetFaith.GetAdjective|l]ой#! веры [secondary_recipient.GetHerHis] необходимо отлучить."
- religious_interaction.1023:0 "Что вы получите, если честный [actor.GetFaith.GetAdherentName|l] будет отлучен?! #L [actor.GetFaith.GetAdjective]ая#! вера — не инструмент для политических игр. Радуйтесь, что я не отлучу вас за подобную просьбу. "
- religious_interaction.1024:0 "Вижу, вы действительно раскаялись в своих грехах и пошли на многое ради искупления. И хотя ваши прегрешения против #L [actor.GetFaith.GetAdjective|l]ой#! веры были поистине ужасны, ваши недавние действия заставили меня поверить в то, что вы заслуживаете прощения.\n\nПосему я снимаю с вас отлучение и вновь приветствую в рядах #L [actor.GetFaith.GetAdjective|l]ой#! веры."
- religious_interaction.1025:0 "Вы думаете, я отлучаю людей просто так? Что неискренних извинений хватит, чтобы заслужить прощение? Просите сколько угодно, но вы не вернетесь в лоно #L [actor.GetFaith.GetAdjective|l]ой#! веры, пока не докажете, что отреклись от своего неправедного образа жизни."
+ religious_interaction.1021:0 "Вы считаете, что вы [actor.GetFaith.GetAdherentName|l], но ваши действия показывают, что вы не следуете пути [actor.GetFaith.HighGodNamePossessive]. И поскольку я не могу позволить вам скрывать свое безнравственное поведение за маской #L [actor.GetFaith.GetName|l]ой#! добродетели, мне придется отлучить вас. И да смилостивится [actor.GetFaith.HighGodName] над вашей душой."
+ religious_interaction.1022:0 "Меня весьма обеспокоил ваш рассказ о злодеяниях, что творит [secondary_recipient.GetTitledFirstName]. С сожалением приходится признать, что ради блага #L [actor.GetFaith.GetName|l]ой#! веры [secondary_recipient.GetHerHis] необходимо отлучить."
+ religious_interaction.1023:0 "Что вы получите, если честный [actor.GetFaith.GetAdherentName|l] будет отлучен?! #L [actor.GetFaith.GetName]ая#! вера — не инструмент для политических игр. Радуйтесь, что я не отлучу вас за подобную просьбу. "
+ religious_interaction.1024:0 "Вижу, вы действительно раскаялись в своих грехах и пошли на многое ради искупления. И хотя ваши прегрешения против #L [actor.GetFaith.GetName|l]ой#! веры были поистине ужасны, ваши недавние действия заставили меня поверить в то, что вы заслуживаете прощения.\n\nПосему я снимаю с вас отлучение и вновь приветствую в рядах #L [actor.GetFaith.GetName|l]ой#! веры."
+ religious_interaction.1025:0 "Вы думаете, я отлучаю людей просто так? Что неискренних извинений хватит, чтобы заслужить прощение? Просите сколько угодно, но вы не вернетесь в лоно #L [actor.GetFaith.GetName|l]ой#! веры, пока не докажете, что отреклись от своего неправедного образа жизни."
  religious_interaction.1030:0 "После долгих размышлений я понимаю: в ваших словах есть истина и мудрость. Я присоединюсь к монашескому ордену и начну новую жизнь на службе [actor.GetFaith.HighGodNamePossessive]."
  religious_interaction.1031:0 "Отринуть мирские блага и сбежать в какой-то удаленный монастырь? Что за вздор! Мне нравится моя жизнь, и я не собираюсь менять ее."
  religious_interaction.1000.positive:0 "Хорошо, что [recipient.GetFirstNameNoTooltip] [Select_CString(recipient.IsFemale, 'осознала', 'осознал' )] мудрость моего предложения."
@@ -72,7 +72,7 @@
  religious_interaction.1000.strong_negative:0 "Проклятье!"
  religious_interaction.1024.positive:0 "Хорошо, что [recipient.GetFirstNameNoTooltip] [Select_CString(recipient.IsFemale, 'осознала', 'осознал' )] мудрость этого решения."
 
- religious_interaction.2002.desc:0 "Я хочу следовать за вами к свету истинной веры. [ROOT.Char.GetFaith.GetName] — моя новая конфессия!"
+ religious_interaction.2002.desc:0 "Я хочу следовать за вами к свету истинной веры. [ROOT.Char.GetFaith.GetAdjective|l] — моя новая конфессия!"
  religious_interaction.2002.a:0 "[ROOT.Char.GetFaith.HighGodName], славься!"
 
  religious_interaction.2003.desc:0 "Моя вера слишком крепка, чтобы поколебать ее жалкими речами простого смертного. Для меня важнее награда, что готовит мне [recipient.GetFaith.DivineRealm]."
@@ -88,12 +88,12 @@
  religious_interaction.2011.c:0 "Вы будете делать это не ради золота: есть нечто куда более ценное."
 
  religious_interaction.2012.desc:0 "Я вижу мудрость вашей веры, но надеюсь, что вы понимаете: путь из тьмы к свету долог и извилист.\n\nВозможно, обещание поддерживать меня всеми средствами сделало бы этот путь немного легче."
- religious_interaction.2012.a:0 "Я поддержу вас, и пусть [ROOT.Char.GetFaith.GetNameNoTooltip|l] процветает всюду."
+ religious_interaction.2012.a:0 "Я поддержу вас, и пусть [ROOT.Char.GetFaith.GetAdjectiveNoTooltip|l] процветает всюду."
  religious_interaction.2012.b:0 "Я не буду торговаться ради вашей души!"
  religious_interaction.2012.c:0 "Сперва расплатитесь со мной по другим долгам."
 
  religious_interaction.2021.opening:0 "[actor.Custom2('AppropriateGreeting', ROOT.Char)]"
- religious_interaction.2021.desc:0 "[actor.Custom2('AppropriateGreeting', ROOT.Char)]\nПора вам последовать за мной к свету, [Select_CString(recipient.IsFemale, 'моя', 'мой' )] [actor.Custom2('RelationToMe', SCOPE.sC('recipient'))]. Учитывая, чем вы мне обязаны, я требую немедленно принять [actor.GetFaith.GetName]!"
+ religious_interaction.2021.desc:0 "[actor.Custom2('AppropriateGreeting', ROOT.Char)]\nПора вам последовать за мной к свету, [Select_CString(recipient.IsFemale, 'моя', 'мой' )] [actor.Custom2('RelationToMe', SCOPE.sC('recipient'))]. Учитывая, чем вы мне обязаны, я требую немедленно принять [actor.GetFaith.GetAdjective|l]!"
  religious_interaction.2021.a:0 "Я... хорошо, [Select_CString(actor.IsFemale, 'моя', 'мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actor'))]."
  
 #######################################
@@ -133,7 +133,7 @@
 ##############################################
 
  religious_interaction.2400.t:0 "Великий спор"
- religious_interaction.2400.desc:0 "Дрожащим от страха голосом [recipient.GetSheHe] зачитывает мне гневное письмо, в котором [actor.GetTitledFirstName] вызывает меня на публичный спор о добродетелях и пороках нашей общей конфессии: [actor.GetSheHe] сомневается, что я следую догматам, на которых зиждется [recipient.GetFaith.GetNameNoTooltip].\n\nСлуга заикается, проглатывая слова, поскольку тон письма ясно дает понять, какого [actor.GetShortUINameNoTooltip] мнения о моем благочестии."
+ religious_interaction.2400.desc:0 "Дрожащим от страха голосом [recipient.GetSheHe] зачитывает мне гневное письмо, в котором [actor.GetTitledFirstName] вызывает меня на публичный спор о добродетелях и пороках нашей общей конфессии: [actor.GetSheHe] сомневается, что я следую догматам, на которых зиждется [recipient.GetFaith.GetAdjectiveNoTooltip|l].\n\nСлуга заикается, проглатывая слова, поскольку тон письма ясно дает понять, какого [actor.GetShortUINameNoTooltip] мнения о моем благочестии."
  religious_interaction.2400.a:0 "Вот собака! Вызов принят!"
  religious_interaction.2400.a.tt_success:0 "[actor.GetShortUINameNoTooltip] [Select_CString(actor.IsFemale, 'унижена', 'унижен' )] в ходе публичных дебатов"
  religious_interaction.2400.a.tt_fail:0 "[actor.GetShortUINameNoTooltip] успешно ставит под сомнение мою веру"
@@ -150,7 +150,7 @@
  religious_interaction.2401.desc_won:0 "Всего через час [recipient.GetTitledFirstName] сдается: я успешно ставлю под сомнение [recipient.GetHerHis] благочестие и [recipient.GetHerHis] представление о добродетелях. Я наношу удар по самой [recipient.GetHerHis] вере в [actor.GetFaith.HighGodNamePossessive]. Толпа неистовствует, и [recipient.GetTitledFirstNameNoTooltip] бежит из зала после обрушившегося на н[recipient.GetHerHis] града тухлых яиц и заплесневелой капусты."
  religious_interaction.2401.desc_lost:0 "[recipient.GetTitledFirstName] немедленно идет в нападение, не оставляя мне шансов оправдаться, и вскоре толпа определяет победителя.\n\nНесколько мгновений я храбро стою под градом из гнилых овощей; когда же кто-то из крестьян кидает мне в голову живую курицу, мне приходится отступить."
  religious_interaction.2401.a_won:0 "Разве [actor.GetFaith.HighGodName] не любит меня?"
- religious_interaction.2401.a_lost:0 "Этим людям не понять [actor.GetFaith.GetReligion.GetNameNoTooltip]!"
+ religious_interaction.2401.a_lost:0 "Этим людям не понять [actor.GetFaith.GetReligion.GetAdjectiveNoTooltip]!"
 
  religious_interaction.2402.desc_won:0 "Хотя на дебаты [actor.GetTitledFirstName] [Select_CString(actor.IsFemale, 'вызывала', 'вызывал' )] меня со всей возможной самоуверенностью, [actor.GetHerHis] решимость тает под натиском моих уничижительных слов и благочестивой критики. Вскоре присоединяется толпа, и мой оппонент бежит из зала под градом из гнилых овощей и одного особенно яростного петуха."
  religious_interaction.2402.desc_lost:0 "Несмотря на все мои усилия, [actor.GetTitledFirstName] не теряется и ясными доводами тут же завоевывает симпатии толпы. [actor.GetSheHe|U] же продолжает нападать на меня, более часа перечисляя все мои мыслимые грехи. [actor.GetSheHe|U] даже сомневается в том, что я искренне почитаю [recipient.GetFaith.HighGodNamePossessive].\n\nВ конечном счете я отступаю под градом гнилых овощей, который обрушивает на меня толпа."

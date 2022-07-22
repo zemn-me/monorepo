@@ -49,7 +49,7 @@
  feudal_levies_extortionate:0 "매우 높은 $game_concept_levy$ 부과"
  feudal_levies_extortionate_short:0 "매우 높음"
  
- special_contract:3 "#color_black [Concept( 'feudal_contract', 'Special Contract' )|BU]#!"
+ special_contract:3 "#color_black [Concept( 'feudal_contract', '특수 계약' )|BU]#!"
  special_contract_none:0 "특수 계약 없음"
  special_contract_scutage:0 "병역 대납 계약"
  special_contract_scutage_desc:1 "#flavor [vassal|E]이 $special_contract_scutage$ 계약을 맺으면 [tax|E]을 기존 $feudal_government_taxes$ [obligation|E]가 부과한 것에 비해 #high [EmptyScope.ScriptValue('scutage_contract_tax_tooltip')|0]%#!를 더 헌납하지만, 동시에 $feudal_government_levies$ [obligation|E]가 부과하는 것에 비해 #high [EmptyScope.ScriptValue('scutage_contract_levies_tooltip')|0]%#! 적은 [levies|E]을 헌납합니다.#!"
@@ -173,4 +173,32 @@
  
  CONTRACT_LIEGE_SIGNATURE:0 "주군,\n[VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip] 집안의\n[VassalContract.GetLiege.GetTitledFirstNameNoTooltip]\n"
  CONTRACT_VASSAL_SIGNATURE:0 "봉신,\n[VassalContract.GetVassal.GetHouse.GetBaseNameNoTooltip] 집안의\n[VassalContract.GetVassal.GetTitledFirstNameNoTooltip]"
- 
+
+
+ jizya_special_rights:0 "지즈야 상태"
+ jizya_special_rights_default:0 "기본 $jizya_special_rights$"
+ jizya_special_rights_default_short:0 "기본"
+ jizya_special_rights_granted:0 "$jizya_special_rights$ 강제"
+ jizya_special_rights_granted_desc:0 "#emphasis #bold [vassal|E] 특권:#!#!\n[liege|E] [vassal|E]에게 [demand_conversion|E]를 할 수 없음\n[liege|E] [vassals|E]의 영지에 [convert_county|E]을 사용할 수 없음\n[liege|E]이 작위를 박탈할 때 [faith|E]을 사유로 내세워 [tyranny|E] 행위를 모면할 수 없음\n[liege|E]이 [vassals_possessive|E] [titles|E]를 박탈할 수 없음\n\n#flavor [vassal|E]에게 [titles]의 소유권이 보장되어 $game_concept_liege$에게 [revoke_title_reason|E]가 있든 없든 [liege|E]에 의해 작위를 박탈당하지 않습니다.\n$game_concept_vassal$이 특수한 보호 지위를 얻게 되며 봉역은 공식적으로 봉신들의 권리를 인정해줘 신봉하는 [faith|E] 의례를 집전할 수 있게 해줍니다.#!"
+ jizya_special_rights_granted_short:0 "수여"
+
+ iqta_special_rights:0 "이크타 수여"
+ iqta_special_rights_default:0 "기본 $iqta_special_rights$"
+ iqta_special_rights_default_short:0 "기본"
+ iqta_special_rights_granted:0 "$iqta_special_rights$ 수여"
+ iqta_special_rights_granted_desc:0 "#flavor [vassal|E]이 낮은 수준의 책무를 지지만 [liege|E]에게 [men_at_arms|E]을 지원하는 데 힘을 보탭니다.#!"
+ iqta_special_rights_granted_short:0 "수여"
+
+ ghazi_special_rights:0 "가지 상태"
+ ghazi_special_rights_default:0 "기본 $ghazi_special_rights$"
+ ghazi_special_rights_default_short:0 "기본"
+ ghazi_special_rights_granted:0 "$ghazi_special_rights$ 수여"
+ ghazi_special_rights_granted_desc:0 "#emphasis #bold [vassal|E] 특권:#!#!\n[vassal|E]이 적은 [piety|E] 비용으로 [holy_war|E] [casus_bellis|E]을 사용할 수 있지만 다른 [casus_bellis|E] 사용 시 [prestige_i][prestige|E]을 추가로 소모함 \n\n#flavor [vassal|E]이 [liege|E]에 의해 [faith|E]의 대전사로 선택되어 [holy_war|E]을 통해 국경을 확장하는 의무를 수행합니다.#!"
+ ghazi_special_rights_granted_short:0 "수여"
+
+ marriage_favor_rights:0 "결혼 호의"
+ marriage_favor_rights_default:0 "기본 $marriage_favor_rights$"
+ marriage_favor_rights_default_short:0 "기본"
+ marriage_favor_rights_granted:0 "$marriage_favor_rights$ 수여"
+ marriage_favor_rights_granted_desc:0 "#emphasis #bold [vassal|E] 특권:#!#!\n[liege|E]이 식구가 다른 인물과 결혼하기 전에 동맹 강화 차원에서 결혼 상대로 내어줌\n\n#flavor [vassal|E]은 [liege|E]의 총애를 받는 대상으로서 혼례 동맹을 결성할 수 있습니다.#!"
+ marriage_favor_rights_granted_short:0 "수여"

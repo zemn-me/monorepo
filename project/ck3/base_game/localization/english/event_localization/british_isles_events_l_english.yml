@@ -87,7 +87,7 @@
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "All $k_england_adj$ [duchies|E] that [ntd_nord.GetTitledFirstName] holds at least one [county|E] in become [de_jure|E] part of $k_danelaw_article$$k_danelaw$"
  negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "All independent $k_england_adj$ [duchies|E] with a $north_germanic_group$-[culture|E] or $germanic_religion$-[faith|E] [ruler|E] become [de_jure|E] part of $k_danelaw_article$$k_danelaw$"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "All independent rulers within $k_england$"
- TRUCE_SIGNED_PARTITION:0 "Truce signed as part of partitioning the kingdom\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\nTruce signed as part of partitioning the kingdom"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "All [de_jure|E] parts of $k_danelaw_article$$k_danelaw$ are [de_jure_drift_drifted|E] into $k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$ will use $k_danelaw_article$$k_danelaw$ Coat-of-Arms"

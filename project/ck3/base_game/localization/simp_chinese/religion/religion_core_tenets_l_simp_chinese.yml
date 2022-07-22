@@ -51,6 +51,14 @@
  gruesome_festivals_active_name:0 "可以组织大献祭"
  doctrine_parameter_gruesome_festivals_active:0 "可以每十年举行一次大献祭，以获得相同[faith|E]臣民和[county_opinion|E]"
 
+ tenet_volcanic_veneration_name:0 "火山崇拜"
+ tenet_volcanic_veneration_desc:0 "新生的泥土从我们家园内的汹涌坑洞中喷涌而出，没有比这更加神圣的事物。我们在灾难的边缘度过人生，永远仰仗[ROOT.Faith.PantheonTerm]的仁慈。"
+ tenet_cthonic_redoubts_name:0 "地下堡垒"
+ tenet_cthonic_redoubts_desc:0 "没有比大地之根更优秀的避难所，没有比隆起的山脊更坚固的要塞，也没有比隐蔽的山径更庄严的朝圣之路。我们自这些高耸的山峰上凝望下方的造物，感受神赐的真正重量。"
+ doctrine_parameter_easier_to_convert_faith_in_mountains:0 "山地[terrain|E]的[convert_county|E]速度：#P +[EmptyScope.ScriptValue('easier_to_convert_faith_in_mountains_bonus_loc_control')|0]%#!"
+ doctrine_parameter_easier_to_convert_culture_in_same_faith_mountains:0 "同样信仰[faith|E]的山地[terrain|E]的[promote_culture|E]速度：#P +[EmptyScope.ScriptValue('promote_culture_easier_to_convert_culture_in_same_faith_mountains_bonus_loc_control')|0]%#!"
+ doctrine_parameter_harder_to_convert_faith_away_in_mountains:0 "有敌意的山地[terrain|E]的[convert_county|E]速度：#P [EmptyScope.ScriptValue('harder_to_convert_faith_away_in_mountains_malus_loc_control')|0]%#!"
+
  tenet_consolamentum_name:1 "禁食"
  tenet_consolamentum_name_alternate:0 "自杀圣礼"
  tenet_consolamentum_desc:0 "若年老或重病，我们将举行仪式洁净自己罪恶的灵魂。仪式完成后，我们就快速坚决地结束生命，令罪恶没有机会再次侵袭我们。"
@@ -96,6 +104,13 @@
 
  tenet_unrelenting_faith_name:0 "不屈信仰"
  tenet_unrelenting_faith_desc:0 "我们有强大的信念，我们乐于为信仰奋斗至死。不论情势如何危急，我们决不投降，"
+
+ tenet_rite_name:0 "礼仪"
+ tenet_rite_desc:0 "我们的信仰与我们的母体信仰并没什么太大不同……我们既然在重大教义观点、以及最重要的是、我们在最终仲裁权威上都能达成一致，我们又何必为细节争论不休呢？"
+ doctrine_parameter_maintains_head_of_faith_on_creation:0 "新[faiths|E]创建后保留原[head_of_faith|E]"
+ doctrine_parameter_ecumenical_christians_keep_ecumenism:0 "[GetPlayer.Custom('GetRiteEcumenismFullOrEmpty')]"
+ GetRiteEcumenismFullOrEmpty_full:0 "拥有[GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName]的基督教[faiths|E]创建新信仰时保留该教义"
+ GetRiteEcumenismFullOrEmpty_empty:0 ""
 
  #Muslim Tenets
  tenet_struggle_submission_name:0 "斗争与顺服"
@@ -202,6 +217,8 @@
 
  tenet_sanctity_of_nature_name:0 "圣洁自然"
  tenet_sanctity_of_nature_desc:1 "自然世界是神明的造物，我们只是其中的过客。我们必须尊敬每一棵树木，每一只动物甚至每一片土地。"
+ # This parameter does nothing; it's just here to flag the tenet's nature silently so we can reference it without directly tagging the tenet.
+ doctrine_parameter_believes_in_harmony_with_nature_invisible:0 ""
 
  tenet_mystical_birthright_name:0 "生而兴旺"
  tenet_mystical_birthright_alternate:0 "天生塔尔托什"
@@ -269,14 +286,24 @@
  #Instead, add these doctrine parameters to appropriate tenets (presently Christian Syncretism & Pastoral Isolation).
  doctrine_parameter_is_christian_faith_bilateral_loc_override:2 "缓和与基督教[faiths|E]的关系，彼此视对方为[GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V]而非$hostility_evil_tooltippable$的$game_concept_faiths$"
  doctrine_parameter_is_christian_faith_pastoral_isolation_loc_override:1 "不管教义上的分歧，总是视其他基督教[faiths|E]为[GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V]的信仰"
+ doctrine_parameter_can_use_christian_artefacts:0 "可以获得基督教[artifacts|E]的完整收益"
  doctrine_parameter_christian_syncretic_actor_opinion_active:1 "与基督教[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
  doctrine_parameter_opinion_of_christian_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_christian_syncretic_recipient_opinion_active:1 "与拥有$tenet_christian_syncretism_name$[core_tenet|E]的[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
  doctrine_parameter_opinion_of_christian_syncretic_actor_opinion_active:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_felicitous_doctrine:0 ""
+ doctrine_parameter_hostility_override_special_doctrine_adoptionist_school_radical_doctrine:0 ""
+ doctrine_parameter_adoptionists_like_ecumenism:0 "将拥有[GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName]的$christianity_religion_adj$[faiths|E]视为$hostility_astray_tooltippable$而非$hostility_hostile_tooltippable$"
+ doctrine_parameter_adoptionists_are_unilateral_hostile:0 "其他$christianity_religion_adj$[faiths|E]仅将其视为$hostility_hostile_tooltippable$，但是未经改进的$adoptionist_adherent_plural$被视为$hostility_evil_tooltippable$"
+ doctrine_parameter_adoptionists_are_unilateral_evil:0 "其他$christianity_religion_adj$[faiths|E]将其视为$hostility_evil_tooltippable$"
+ doctrine_parameter_adoptionists_are_mutual_evil:0 "与其他所有$christianity_religion_adherent_plural$交恶，彼此视对方为$hostility_evil_tooltippable$"
+ doctrine_parameter_adoptionist_school_removed_on_reformation:0 "[reformation|E]后，该学派的微妙差异将#EMP 永远#!消失"
+ doctrine_parameter_adoptionists_attractively_intuitive_theology:0 "针对其他[GetReligionByKey('christianity_religion').GetAdjective][faiths|E]时改信速度[EmptyScope.ScriptValue('fp2_lyonese_monk_conversion_bonus_root_value')|=+%0]"
 
  tenet_islamic_syncretism_name:0 "伊斯兰综摄主义"
  tenet_islamic_syncretism_desc:0 "先知的圣训必定是明智且正义的，不论我们有什么其他疑虑，我们都必须听从他的思想与行为。"
  doctrine_parameter_hostility_override_special_doctrine_is_islamic_faith:2 "缓和与伊斯兰[faiths|E]的关系，彼此视对方为[GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V]而非$hostility_evil_tooltippable$的$game_concept_faiths$"
+ doctrine_parameter_can_use_islamic_artefacts:0 "可以获得伊斯兰教[artifacts|E]的完整收益"
  doctrine_parameter_islamic_syncretic_actor_opinion_active:1 "与伊斯兰教[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
  doctrine_parameter_opinion_of_islamic_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_islamic_syncretic_recipient_opinion_active:1 "与拥有$tenet_islamic_syncretism_name$[core_tenet|E]的[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
@@ -285,6 +312,7 @@
  tenet_jewish_syncretism_name:0 "犹太教综摄主义"
  tenet_jewish_syncretism_desc:0 "虽然我们不同意这种关于上主特选的民族的说法，不过犹太教的妥拉是不可否认的，而且这本经典非常值得学习。"
  doctrine_parameter_hostility_override_special_doctrine_is_jewish_faith:2 "缓和与犹太教[faiths|E]的关系，彼此视对方为[GetHostilityLevelName( TOKEN_PARAMETER.GetIntValue )|V]而非$hostility_evil_tooltippable$的$game_concept_faiths$"
+ doctrine_parameter_can_use_jewish_artefacts:0 "可以获得犹太教[artifacts|E]的完整收益"
  doctrine_parameter_jewish_syncretic_actor_opinion_active:1 "与犹太教[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
  doctrine_parameter_opinion_of_jewish_syncretic_recipient_opinion_active:0 ""
  doctrine_parameter_jewish_syncretic_recipient_opinion_active:1 "与拥有$tenet_jewish_syncretism_name$[core_tenet|E]的[faiths|E]之间有[EmptyScope.ScriptValue('syncretic_mutual_opinion_bonus_value')|=+0]的双向[opinion|E]加成"
@@ -317,4 +345,12 @@
  tenet_natural_primitivism_desc:0 "文明是违反自然的，人类徒劳而亵渎地想要对本质上无序的造物施加秩序。我们拥抱自然，按照[ROOT.Faith.PantheonTerm]的旨意生活，狂野而自由。"
  doctrine_parameter_naked_adherents_active:0 "信徒赤身露体"
  doctrine_parameter_natural_primitivism_law_cost_increase:0 "法律花费：#N +50%#!"
+ doctrine_parameter_unlock_jizya_contract:0 "解锁吉兹亚[vassal_contract|E]"
  
+ tenet_sacrificial_ceremonies_name:0 "献祭仪式"
+ tenet_sacrificial_ceremonies_desc:0 "活人的献祭，无论是自愿还是非自愿，都会缩短我们与神性的距离。一个人在仪式中自愿牺牲自己，这既是习俗，也是美德；同时，我们献祭那些犯下忤逆神明的不可饶恕罪的人，也一样是一种美德。"
+ 
+ tenet_megaliths_name:0 "巨石建筑"
+ tenet_megaliths_desc:0 "对神明的膜拜不应仅仅局限于神殿之中，这些只是人力所为的简陋构造，让我们无暇关注环绕身边的真正的神造之物。我们应当接纳石头和流动的空气，将石头按照造物主降下的旨意摆放，唯有这样才能取悦他们，让我们离神性更近一步。"
+ doctrine_parameter_can_build_megaliths:0 "可以在[temple|E]地产内修建巨石阵，在公爵领首府修建伟大巨石阵。"
+ province_is_of_a_megalith_faith_tt:0 "[county|E]必须追随一个将巨石阵视作重要之物的[faith|E]。"

@@ -14570,6 +14570,7 @@
 		birth = "847.1.2"
 	}
 	866.1.30 = {
+		effect = { give_nickname = nick_the_child }
 		death = "866.1.30"
 	}
 }
@@ -35629,21 +35630,22 @@
 	}
 }
 
-127055 = {
-	name = "BE_renger" #Taillefer
-	# AKA: Berenger
-	dynasty = 541
-	religion = "catholic"
-	culture = french
-	father = 40102 #Audouin
-	mother = 127054 #Alaisia de Gascogne
-	1022.1.1 = {
-		birth = "1022.1.1"
-	}
-	1036.1.1 = {
-		death = "1036.1.1"
-	}
-}
+#TODO_CD_ERCC; needs further research - we've got a timeline discrepancy here *somewhere*.
+#127055 = {
+	#name = "BE_renger" #Taillefer
+	## AKA: Berenger
+	#dynasty = 541
+	#religion = "catholic"
+	#culture = french
+	#father = 40102 #Audouin
+	#mother = 127054 #Alaisia de Gascogne
+	#1022.1.1 = {
+		#birth = "1022.1.1"
+	#}
+	#1036.1.1 = {
+		#death = "1036.1.1"
+	#}
+#}
 
 40104 = {
 	name = "Guillaume" #Taillefer
@@ -42866,20 +42868,6 @@
 	}
 }
 
-163067 = {
-	name = "Bernard"
-	dynasty = 3135
-	religion = "catholic"
-	culture = french
-	820.1.1 = {
-		birth = "820.1.1"
-	}
-	880.1.1 = {
-		death = "880.1.1"
-	}
-}
-
-
 163093 = {
 	name = "Matfried"
 	dynasty = 667
@@ -46413,22 +46401,9 @@
 		death = yes
 	}
 }
-73786 = {
-	name = "Salomon"
-	dynasty = 629
 
-	religion = catholic
-	culture = french
-
-	815.1.1 = {
-		birth = yes
-	}
-	870.1.1 = {
-		death = yes
-	}
-}
 127019 = {
-	name = "Bernard"	#Bernard II of Gothia
+	name = "Bernard"
 	dynasty = 100217
 	father = 163063
 	mother = 168141
@@ -46983,5 +46958,57 @@ french0005 = {
 	}
 	1105.1.1 = {
 		death = yes
+	}
+}
+
+71380 = {
+	name = "Bertrand" # Bertrand de Reynel
+	dynasty = 8780
+	religion = catholic
+	culture = french
+	trait = education_stewardship_2
+
+	#father = Guy de Conflans
+	#mother = Hildegarde de Reynel
+
+	1100.1.1 = {
+		birth = yes
+	}
+	1113.1.1 = {
+		name = "BeltrA_n"
+		culture = castilian
+	}
+	1119.1.1 = {
+		add_spouse = 72552 # Urraca Muñoz (castilian.txt)
+	}
+	1134.1.1 = {
+		add_spouse = 207654 # Elvira Pérez de Lara (castilian.txt)
+	}
+	1134.9.7 = {
+		death = {
+			death_reason = death_battle
+		}
+	}
+}
+
+70189 = {
+	name = "LlU_cia"
+	female = yes
+	martial = 5
+	diplomacy = 5
+	intrigue = 7
+	stewardship = 7
+	religion = "catholic"
+	culture = "catalan"
+	trait = ill
+	trait = education_stewardship_2
+	1050.1.1 = {
+		birth = "1050.1.1"
+	}
+	1066.4.1 = {
+		employer = 110550
+	}
+	1078.1.1 = {
+		death = "1078.1.1"
 	}
 }

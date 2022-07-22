@@ -14,7 +14,7 @@
  #generatepoem_title_romance_04: "[SadAction] in [Season]"
  generatepoem_title_romance_04:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Activity')|U] en [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Season')]"
  #generatepoem_title_romance_05: "The [SubjectTitle] of my [MetaphoricalPlace]"
- generatepoem_title_romance_05:0 "[ROOT.Var('poem_subject').Char.Custom('ES_ElLa')|U] [ROOT.Var('poem_subject').Char.GetTitleAsNameNoTooltip] de mi [ROOT.Char.Custom('GeneratePoem_Title_Fragment_MetaphoricalPlace')]"
+ generatepoem_title_romance_05:0 "El/La [ROOT.Var('poem_subject').Char.GetTitleAsNameNoTooltip] de mi [ROOT.Char.Custom('GeneratePoem_Title_Fragment_MetaphoricalPlace')]"
  ## Mourning
  #generatepoem_title_mourning_01: "[SadEmotion] in [SadPatheticFallacy]"
  generatepoem_title_mourning_01:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Emotion')|U] en [ROOT.Char.Custom('GeneratePoem_Title_Fragment_PatheticFallacy')]"
@@ -36,7 +36,7 @@
  #generatepoem_title_legacy_04: "That [SubjectTitle] of [SubjectPrimaryTitle]"
  generatepoem_title_legacy_04:0 "Es[ROOT.Var('poem_subject').Char.Custom('ES_EA')] [ROOT.Var('poem_subject').Char.GetTitleAsNameNoTooltip] de [ROOT.Var('poem_subject').Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
  #generatepoem_title_legacy_05: "A Lament for the [SubjectTitle]"
- generatepoem_title_legacy_05:0 "Un lamento por [ROOT.Var('poem_subject').Char.Custom('ES_ElLa')] [ROOT.Var('poem_subject').Char.GetTitleAsNameNoTooltip]"
+ generatepoem_title_legacy_05:0 "Un lamento por el/la [ROOT.Var('poem_subject').Char.GetTitleAsNameNoTooltip]"
  ## Strife
  #generatepoem_title_strife_01: "[WarNoun] & [WarEmotion]"
  generatepoem_title_strife_01:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Emotion')|U] y [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Emotion')]"
@@ -50,13 +50,13 @@
  generatepoem_title_strife_05:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')|U] en [ROOT.Var('poem_subject').Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
  ## Incompetence
  #generatepoem_title_incompetence_01: "The [InsultNoun] of [SubjectPrimaryTitle]"
- generatepoem_title_incompetence_01:0 "[ROOT.Var('poem_subject').Char.Custom('ES_ElLa')|U] [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')] de [ROOT.Var('poem_subject').Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
+ generatepoem_title_incompetence_01:0 "El/La [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')] de [ROOT.Var('poem_subject').Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
  #generatepoem_title_incompetence_02: "A Most Peculiar [InsultNoun]"
  generatepoem_title_incompetence_02:0 "Un[ROOT.Var('poem_subject').Char.Custom('ES_XA')] [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')|U] muy particular"
  #generatepoem_title_incompetence_03: "[InsultVerb] [IntensityAdjective] this [Season]"
  generatepoem_title_incompetence_03:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Verb')] [ROOT.Char.Custom('GeneratePoem_Title_Fragment_IntensityAdjective')] en [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Season')]"
  #generatepoem_title_incompetence_04: "The [InsultNoun] Crowned"
- generatepoem_title_incompetence_04:0 "[ROOT.Var('poem_subject').Char.Custom('ES_ElLa')|U] [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')|U] y su corona"
+ generatepoem_title_incompetence_04:0 "El/La [ROOT.Char.Custom('GeneratePoem_Title_Fragment_Noun')|U] y su corona"
  #generatepoem_title_incompetence_05: "[InsultVerb] all over [SubjectPrimaryTitle]"
  generatepoem_title_incompetence_05:0 "[ROOT.Char.Custom('GeneratePoem_Title_Fragment_Verb')] sobre [ROOT.Var('poem_subject').Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
 
@@ -234,7 +234,7 @@
  GeneratePoem_Intro_Rhyming_Mourning_03_B_02:0 "Por abandonar[ROOT.Var('poem_subject').Char.GetHerHim] de un modo tal,"
  GeneratePoem_Intro_Rhyming_Mourning_03_B_03:0 "Por dejarnos a todos en este trance fatal,"
  ## Legacy
- GeneratePoem_Intro_Rhyming_Legacy_01_A_01:0 "[ROOT.Var('poem_subject').Char.Custom('ES_ElLa')|U] [ROOT.Var('poem_subject').Char.GetWomenMen] más poderos[ROOT.Var('poem_subject').Char.Custom('ES_OA')] esta Tierra ha abandonado"
+ GeneratePoem_Intro_Rhyming_Legacy_01_A_01:0 "El/La [ROOT.Var('poem_subject').Char.GetWomenMen] más poderos[ROOT.Var('poem_subject').Char.Custom('ES_OA')] esta Tierra ha abandonado"
  GeneratePoem_Intro_Rhyming_Legacy_01_A_02:0 "$GeneratePoem_Intro_Rhyming_Legacy_01_A_01$"
  GeneratePoem_Intro_Rhyming_Legacy_01_A_03:0 "$GeneratePoem_Intro_Rhyming_Legacy_01_A_01$"
  GeneratePoem_Intro_Rhyming_Legacy_01_B_01:0 "Sus hechos, sus actos, su valor nunca imitado"

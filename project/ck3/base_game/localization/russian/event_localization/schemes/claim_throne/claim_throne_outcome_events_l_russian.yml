@@ -14,8 +14,8 @@
  claim_throne_outcome.2001.b:0 "[target.GetFirstNameNoTooltip] может жаловаться, сколько захочет! Это ничего не изменит."
 
  claim_throne_outcome.4001.opening:0 "Никто не верит моим притязаниям на державу [target_title.GetName]!"
- claim_throne_outcome.4001.owner_discovered:0 "\n\nХуже того, [target.GetTitledFirstName] теперь знает о моих попытках сфальсифицировать записи о браке между династией [ROOT.Char.GetDynasty.GetName] и династией, некогда правившей державой [target_title.GetNameNoTierNoTooltip]!"
- claim_throne_outcome.4001.owner_secret:0 "\n\nХотя записи о браке между династией [ROOT.Char.GetDynasty.GetName] и династией, некогда правившей державой [target_title.GetNameNoTierNoTooltip], были признаны недостоверными, никто не узнал о моей причастности к их созданию."
+ claim_throne_outcome.4001.owner_discovered:0 "\n\nХуже того, [target.GetTitledFirstName] теперь знает о моих попытках сфальсифицировать записи о браке между династией [ROOT.Char.GetDynasty.GetBaseName] и династией, некогда правившей державой [target_title.GetNameNoTierNoTooltip]!"
+ claim_throne_outcome.4001.owner_secret:0 "\n\nХотя записи о браке между династией [ROOT.Char.GetDynasty.GetBaseName] и династией, некогда правившей державой [target_title.GetNameNoTierNoTooltip], были признаны недостоверными, никто не узнал о моей причастности к их созданию."
  claim_throne_outcome.4001.a:0 "«Мне лишь хотелось приобщиться к славе вашей семьи!»"
  claim_throne_outcome.4001.b:0 "Я подожду сколько нужно."
  claim_throne_outcome.4001.c:0 "Я веду слишком опасную игру."

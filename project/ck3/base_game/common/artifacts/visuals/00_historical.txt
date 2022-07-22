@@ -92,11 +92,21 @@ pedestal_christian_relic = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {
@@ -161,6 +171,7 @@ pedestal_islamic_relic = {
 			OR = {
 				artifact_should_use_gfx_type_trigger = { TYPE = mena_building }
 				artifact_should_use_gfx_type_trigger = { TYPE = steppe_building }
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
 			}
 		}
 		reference = ep1_mena_box_reliquary_01_a_entity
@@ -170,6 +181,7 @@ pedestal_islamic_relic = {
 			OR = {
 				artifact_should_use_gfx_type_trigger = { TYPE = mena_building }
 				artifact_should_use_gfx_type_trigger = { TYPE = steppe_building }
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }				
 			}
 		}
 		reference = ep1_mena_box_reliquary_02_a_entity
@@ -202,7 +214,12 @@ pedestal_buddhism_relic = {
 		reference = ep1_indian_urn_fancy_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_urn_fancy_01_a_entity
 	}
 	asset = {
@@ -252,11 +269,21 @@ pedestal_branch_relic_zoroastr = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {
@@ -308,11 +335,21 @@ pedestal_branch_relic_germanic = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {
@@ -364,11 +401,21 @@ pedestal_branch_relic_slavic = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {
@@ -420,11 +467,21 @@ pedestal_branch_relic_boog = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {
@@ -472,7 +529,12 @@ pedestal_branch_relic_hinduism = {
 		reference = ep1_indian_urn_fancy_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_urn_fancy_01_a_entity
 	}
 	asset = {
@@ -516,11 +578,21 @@ head = {
 		reference = ep1_indian_box_reliquary_02_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_01_a_entity
 	}
 	asset = {
-		trigger = { artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } }
+		trigger = {
+			OR = {
+				artifact_should_use_gfx_type_trigger = { TYPE = mediterranean_building } 
+				artifact_should_use_gfx_type_trigger = { TYPE = iberian_building }
+			}
+		}
 		reference = ep1_mediterranean_box_reliquary_02_a_entity
 	}
 	asset = {

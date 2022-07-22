@@ -2,18 +2,18 @@
  # Debug
  test_artifact_name:0 "Artefact [ROOT.Char.Custom('FR_du_Char_Pi')][ROOT.Char.GetTitledFirstNameNoTooltip]"
  test_artifact_desc:0 "Cet artefact porte le blason héraldique [ROOT.Char.GetDynasty.GetName]."
- debug_test_artifact_cloth_option:0 "So soft! So smooth!"
+ debug_test_artifact_cloth_option:0 "So soft ! So smooth !"
  
  # Notification localization
  artifact_lost_toast:0 "Artefact perdu"
- artifact_lost_in_siege:0 "[SAISE_artifact.GetName] a été volé par [SAISE_attacker.Custom('FR_le_Char_U_Pi')][SAISE_attacker.GetShortUINameNoTooltip] lors du siège de [SAISE_location.GetNameNoTooltip]"
- artifact_lost_in_raid:0 "[SAISE_artifact.GetName] a été volé par [SAISE_attacker.Custom('FR_le_Char_U_Pi')][SAISE_attacker.GetShortUINameNoTooltip] lors de son pillage de [SAISE_location.GetNameNoTooltip]"
+ artifact_lost_in_siege:0 "L’artefact [SAISE_artifact.GetName] a été volé par [SAISE_attacker.Custom('FR_le_Char_U_Pi')][SAISE_attacker.GetShortUINameNoTooltip] lors du siège de [SAISE_location.GetNameNoTooltip]"
+ artifact_lost_in_raid:0 "L’artefact [SAISE_artifact.GetName] a été volé par [SAISE_attacker.Custom('FR_le_Char_U_Pi')][SAISE_attacker.GetShortUINameNoTooltip] lors de son pillage de [SAISE_location.GetNameNoTooltip]"
  artifact_seized_toast:0 "Artefact saisi"
- artifact_seized_in_siege:0 "J’ai saisi [SAISE_artifact.GetName] après le siège de [SAISE_location.GetNameNoTooltip]"
- artifact_seized_in_raid:0 "J’ai saisi [SAISE_artifact.GetName] lors de mon pillage de [SAISE_location.GetNameNoTooltip]"
+ artifact_seized_in_siege:0 "J’ai saisi l’artefact [SAISE_artifact.GetName] après le siège de [SAISE_location.GetNameNoTooltip]"
+ artifact_seized_in_raid:0 "J’ai saisi l’artefact [SAISE_artifact.GetName] lors de mon pillage de [SAISE_location.GetNameNoTooltip]"
  artifact_damaged_toast:0 "Artefact endommagé"
- artifact_damaged_in_siege:0 "Mon [DAIBE_artifact.GetName] a pris [DAIBE_artifact.MakeScope.Var('DAIBE_damage').GetValue|V0] en dommage lors du siège de [DAIBE_location.GetNameNoTooltip]"
- artifact_damaged_in_duel:0 "Mon [DAIBE_artifact.GetName] a pris [DAIBE_artifact.MakeScope.Var('DAIBE_damage').GetValue|V0] en dommage lors de mon duel avec [DAIBE_opponent.Custom('FR_le_Char_U_Pi')][DAIBE_opponent.GetShortUINameNoTooltip]"
+ artifact_damaged_in_siege:0 "Mon artefact [DAIBE_artifact.GetName] a reçu [DAIBE_artifact.MakeScope.Var('DAIBE_damage').GetValue|V0] de dommage lors du siège de [DAIBE_location.GetNameNoTooltip]"
+ artifact_damaged_in_duel:0 "Mon artefact [DAIBE_artifact.GetName] a reçu [DAIBE_artifact.MakeScope.Var('DAIBE_damage').GetValue|V0] de dommage lors de mon duel avec [DAIBE_opponent.Custom('FR_le_Char_U_Pi')][DAIBE_opponent.GetShortUINameNoTooltip]"
  artifact_claim_gained_notification:0 "Revendication d’artefact obtenue"
  artifact_claim_lost_notification:0 "Revendication d’artefact perdue"
 
@@ -30,6 +30,7 @@
  artifact.1001.desc.weapon:0 "\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U], pendant que je nettoyais l’armurerie, j’ai remarqué que [SCOPE.Custom('FR_ThisArtifactType_Le')][SCOPE.Custom('ThisArtifactType')] avait rouillé. Que devons-nous en faire ? »\n\nJe regarde l’arme. Bien qu’aucun travail de reforgement ne puisse la rendre à nouveau apte au combat, il serait possible de la nettoyer et de la préserver pour l’exposer à peu de frais."
  artifact.1001.desc.other:0 "\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U], pendant que je nettoyais la réserve, j’ai remarqué que [SCOPE.Custom('FR_ThisArtifactType_Le')][SCOPE.Custom('ThisArtifactType')] a pris de l’âge et tombe pratiquement en ruine ! Que devrions-nous en faire ? »\n\nJe regarde l’artefact. Bien qu’aucun raccommodage ne puisse le rendre à nouveau utilisable, il serait possible de le nettoyer et de le préserver pour l’exposer à peu de frais."
  artifact.1001.a:0 "Un effort qui en vaut la peine."
+ artifact.1001.a.tt.free:0 "#instruction Cet [artifact|El] peut être transformé gratuitement !#!"
  artifact.1001.a.tt:1 "[this_artifact.GetName] est converti en [court_artifact|El] ne donnant que de la [grandeur|El] et du [prestige|El]"
  artifact.1001.b:0 "Non, c’est trop cher."
 
@@ -52,7 +53,7 @@
  artifact.3000.b:0 "On peut encore le sauver !"
  artifact.3000.c:0 "Je parie que c’est vous qui l’avez cassé !"
  
- artifact.3001.t:0 "Inspiration: la réutilisation"
+ artifact.3001.t:0 "Inspiration : la réutilisation"
  artifact.3001.desc:0 "[inspiration_owner.GetFirstName] s’approche à grands pas.\n\n« [ROOT.GetCharacter.Custom('FR_MonseigneurMadame')|U] ! J’étais en train de fouiller parmi les objets mis au rebut et les bibelots cassés dans vos débarras à la recherche d’inspiration quand je suis tombé[inspiration_owner.Custom('FR_E')] sur un trésor inattendu. Il semble que vous ayez mis de côté des matériaux provenant d’un artefact démantelé. Si je les utilisais pour mon projet, la qualité n’en souffrirait pas et je pourrais vous rendre une partie de l’or prévu pour l’achat de matériaux ! »"
  artifact.3001.a:0 "C’est une excellente nouvelle !"
 
@@ -215,7 +216,3 @@
  relic_name_health:0 "[ROOT.Char.GetFaith.HealthGodNamePossessive]"
  relic_name_symbol:0 "[ROOT.Char.GetFaith.ReligiousSymbol3]"
  relic_name_text:0 "[ROOT.Char.GetFaith.ReligiousText3]"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- destroy_random_artifact_interaction:0 "Destroy Random Artifact in Inventory"
- artifact_gained_toast:0 "Vous avez obtenu un [artifact|El]"

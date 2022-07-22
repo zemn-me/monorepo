@@ -786,6 +786,7 @@
  not_bellicose_or_stoic_desc:1 "该[culture|E]没有$ethos_bellicose_name$或$ethos_stoic_name$的[ethos|E]"
  not_bellicose_or_bureaucratic_desc:2 "该[culture|E]没有$ethos_bellicose_name$或$ethos_bureaucratic_name$的[ethos|E]"
  not_bellicose_or_spiritual_desc:1 "该[culture|E]没有$ethos_bellicose_name$或$ethos_spiritual_name$的[ethos|E]"
+ not_bellicose_or_courtly_desc:0 "该[culture|E]没有$ethos_bellicose_name$或$ethos_courtly_name$[ethos|E]"
  not_stoic_or_bureaucratic_desc:1 "该[culture|E]没有$ethos_stoic_name$或$ethos_bureaucratic_name$的[ethos|E]"
  not_stoic_or_communal_desc:0 "该[culture|E]没有$ethos_stoic_name$或$ethos_communal_name$的[ethos|E]"
  not_stoic_or_spiritual_desc:0 "该[culture|E]没有$ethos_stoic_name$或$ethos_spiritual_name$的[ethos|E]"
@@ -824,6 +825,7 @@
 
  ## Egalitarian.
  not_egalitarian_stoic_or_bureaucratic_desc:1 "该[culture|E]没有$ethos_egalitarian_name$、$ethos_stoic_name$或$ethos_bureaucratic_name$的[ethos|E]"
+ not_egalitarian_or_courtly_desc:0 "该[culture|E]没有$ethos_egalitarian_name$或$ethos_courtly_name$的[ethos|E]"
 
  ## Communal.
  not_communal_or_spiritual_desc:0 "该[culture|E]没有$ethos_communal_name$或$ethos_spiritual_name$的[ethos|E]"
@@ -918,6 +920,8 @@
  lacks_development_02_innovation_desc:1 "该[culture|E]尚未发现#high $innovation_development_02$#![innovation|E]"
  lacks_baliffs_innovation_desc:0 "该[culture|E]尚未发现#high $innovation_baliffs$#![innovation|E]"
  culture_acceptance_cost_desc:0 "该[culture|E]与#V [EmptyScope.ScriptValue('xenophilic_nr_of_cultures_cost_value')|0]#!种其他文化间的[cultural_acceptance|E]低于#V [EmptyScope.ScriptValue('xenophilic_acceptance_cost_value')|0]%#!"
+ lack_iberian_heritage_or_language_penalty_desc:0 "该[culture|E]缺少$heritage_iberian_name$[heritage|E]，#EMP 并且#![culture_head|E]不会说$language_iberian_name$[language|E]"
+ lack_martial_learning_or_chess_board_penalty_desc:0 "你既没有至少[EmptyScope.ScriptValue('very_high_skill_rating')|0][martial|E]，至少[EmptyScope.ScriptValue('very_high_skill_rating')|0][learning|E]，也没有让你能玩[board_games|E]的[artifact|E]"
 
  culture_head_lacks_storytelling_traits_desc:1 "你没有[GetTrait('poet').GetName( GetNullCharacter )]、[GetTrait('arrogant').GetName( GetNullCharacter )]或[GetTrait('journaller').GetName( GetNullCharacter )][traits|E]"
  rulers_lacks_storytelling_traits_desc:0 "该[culture|E]没有至少#V 5#!位拥有[GetTrait('poet').GetName( GetNullCharacter )]、[GetTrait('arrogant').GetName( GetNullCharacter )]或[GetTrait('journaller').GetName( GetNullCharacter )][traits|E]的[rulers|E]"

@@ -94,7 +94,7 @@
 
  learning_scholarship_special.2013.desc:0 "Estaba haciendo que me leyeran las notas de mi traducción de [ROOT.Char.Custom('TranslationBook')] cuando, de repente, lo comprendo. «¡Escribano! Añade el siguiente comentario…»"
  learning_scholarship_special.2013.a:0 "«Al contrario que el/la [ROOT.Char.GetFaith.ReligiousText], esta obra plantea que…»"
- learning_scholarship_special.2013.b:0 "«Como es evidente por la voluntad [ROOT.Char.GetFaith.HighGodName]…»"
+ learning_scholarship_special.2013.b:0 "«Como es evidente por la voluntad de [ROOT.Char.GetFaith.HighGodName]…»"
 
  learning_scholarship_special.2014.desc:0 "Estaba haciendo que me leyeran las notas de mi traducción de [ROOT.Char.Custom('TranslationBook')] cuando…\n\n«¿Mi [ROOT.Char.GetLadyLord]? Perdonadme, por favor, pero… ¿os habéis quedado dormid[ROOT.Char.Custom('ES_OA')]?»\n\n¡Por Dios, este «clásico» es una bobada absoluta!"
  learning_scholarship_special.2014.a:0 "¡Da igual, me obligaré a seguir!"
@@ -191,14 +191,14 @@
  learning_scholarship.4000.a:0 "Como quieras."
  learning_scholarship.4000.b:0 "Igual podríamos leer en pareja algunos extractos"
  learning_scholarship.4000.c:0 "Tengo que trabajar hasta tarde para preparar las lecciones de mi querid[child_educated.Custom('ES_OA')] [child_educated.GetFirstNameNoTooltip]."
- learning_scholarship.4000.c.tt:0 "[spouse_uninterested_in_study.GetFirstName] no es [spouse_uninterested_in_study.Custom('ES_ElLa')] [spouse_uninterested_in_study.GetMotherFather] de [child_educated.GetFirstNameNoTooltip]."
+ learning_scholarship.4000.c.tt:0 "[spouse_uninterested_in_study.GetFirstName] no es [spouse_uninterested_in_study.GetMotherFather] de [child_educated.GetFirstNameNoTooltip]."
  learning_scholarship.4000.d:0 "No necesito yacer contigo, ¡tengo el cálido abrazo del saber!"
 
 # Bibliomancy by Chad Uhl
  bibliomancy_chain_header:0 "Un texto sagrado:"
 
  learning_scholarship.5000.t:0 "Un texto sagrado"
- learning_scholarship.5000.desc:0 "Mientras daba un paseo por el mercado, un[merchant_mystic.Custom('ES_XA')] comerciante me llama, insistiendo en que tiene algo que despertará mi interés.\n\nEl olor a hierbas secas y tinturas extrañas abruma mis sentidos cuando me acerco al puesto. [merchant_mystic.Custom('ES_ElLa')|U] comerciante rebusca en su colección de tomos polvorientos y otros tesoros.\n\nDespués de indagar un poco, saca un viejo libro e insiste en que lo necesito para «lo que está por venir»."
+ learning_scholarship.5000.desc:0 "Mientras daba un paseo por el mercado, un[merchant_mystic.Custom('ES_XA')] comerciante me llama, insistiendo en que tiene algo que despertará mi interés.\n\nEl olor a hierbas secas y tinturas extrañas abruma mis sentidos cuando me acerco al puesto. El/La comerciante rebusca en su colección de tomos polvorientos y otros tesoros.\n\nDespués de indagar un poco, saca un viejo libro e insiste en que lo necesito para «lo que está por venir»."
  learning_scholarship.5000.a:0 "Está bien, picaré."
  learning_scholarship.5000.b:0 "Quizás podamos llegar a un acuerdo."
  learning_scholarship.5000.c:0 "Tomo lo que necesito"
@@ -258,4 +258,4 @@
  learning_scholarship.5006.a:0 "El miedo es la pequeña muerte que conduce a la destrucción total."
 
  learning_scholarship_paranoid_trait.tt:0 "Has ganado este rasgo porque fuiste incapaz de encontrar sentido al pasaje de tu [sacred_text.GetName]"
- learning_scholarship_paranoid_trait_possible:0 "Puedes ganar el trait|lE] [GetTrait('paranoid').GetName( GetNullCharacter )]"
+ learning_scholarship_paranoid_trait_possible:0 "Puedes ganar el [trait|lE] [GetTrait('paranoid').GetName( GetNullCharacter )]"

@@ -173,4 +173,32 @@
  
  CONTRACT_LIEGE_SIGNATURE:0 "El señor,\n[VassalContract.GetLiege.GetTitledFirstNameNoTooltip]\nde Casa [VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip]"
  CONTRACT_VASSAL_SIGNATURE:0 "El vasallo,\n[VassalContract.GetVassal.GetTitledFirstNameNoTooltip]\nde Casa [VassalContract.GetVassal.GetHouse.GetBaseNameNoTooltip]"
- 
+
+
+ jizya_special_rights:0 "Estatuto de yizia"
+ jizya_special_rights_default:0 "$jizya_special_rights$ predeterminado"
+ jizya_special_rights_default_short:0 "Predeterminado"
+ jizya_special_rights_granted:0 "$jizya_special_rights$ impuesto"
+ jizya_special_rights_granted_desc:0 "#emphasis #bold Privilegios de [vassal|lE]:#!#!\nEl [liege|lE] no puede [Concept( 'demand_conversion', 'exigir la conversión' )|E] del [vassal|lE]\nEl [liege|lE] no puede usar [convert_county|lE] en las tierras del [vassal|lE]\nEl [liege|lE] no puede revocar los [titles|lE] del [vassal|lE]\n\n#flavor El [vassal|lE] tiene garantizada la propiedad de sus [titles|lE] e impide que el [liege|lE] pueda revocarlos, tenga un [Concept( 'revoke_title_reason', 'motivo de revocación' )|E] o no.\nAl [vassal|lE] se le concede un estatuto especial protegido dentro del señorío que reconoce oficialmente el derecho a practicar su propia [faith|lE].#!"
+ jizya_special_rights_granted_short:0 "Concedido"
+
+ iqta_special_rights:0 "Concesión de iqta"
+ iqta_special_rights_default:0 "$iqta_special_rights$ predeterminada"
+ iqta_special_rights_default_short:0 "Predeterminada"
+ iqta_special_rights_granted:0 "$iqta_special_rights$ concedida"
+ iqta_special_rights_granted_desc:0 "#flavor El [vassal|lE] tiene menos obligaciones, pero ayuda contribuyendo [men_at_arms|lE] al [liege|lE].#!"
+ iqta_special_rights_granted_short:0 "Concedida"
+
+ ghazi_special_rights:0 "Estatuto de ghazi"
+ ghazi_special_rights_default:0 "$ghazi_special_rights$ predeterminado"
+ ghazi_special_rights_default_short:0 "Predeterminado"
+ ghazi_special_rights_granted:0 "$ghazi_special_rights$ concedido"
+ ghazi_special_rights_granted_desc:0 "#emphasis #bold Privilegios de [vassal|lE]:#!#!\nEl [vassal|lE] paga menos [piety|lE] por usar el [casus_belli|lE] de [holy_war|lE], pero más [prestige|lE][prestige_i] por otros [casus_bellis|lE] \n\n#flavor El [vassal|lE] será elegido como guerrero de la [faith|lE] por su [liege|lE], y tendrá la misión de extender las fronteras mediante una [holy_war|lE].#!"
+ ghazi_special_rights_granted_short:0 "Concedido"
+
+ marriage_favor_rights:0 "Favor matrimonial"
+ marriage_favor_rights_default:0 "$marriage_favor_rights$ predeterminado"
+ marriage_favor_rights_default_short:0 "Predeterminado"
+ marriage_favor_rights_granted:0 "$marriage_favor_rights$ concedido"
+ marriage_favor_rights_granted_desc:0 "#emphasis #bold Privilegio de [vassal|lE]:#!#!\nEl [liege|lE] se compromete a casar a sus familiares cercanos para sellar una alianza antes que casarlos con cualquier otro.\n\n#flavor El [vassal|lE] se encuentra entre los favoritos del [liege|lE] y debería ser capaz de sellar una alianza mediante el matrimonio.#!"
+ marriage_favor_rights_granted_short:0 "Concedido"

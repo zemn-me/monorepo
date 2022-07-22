@@ -111,6 +111,7 @@
  MOD_SAME_CULTURE_MERCENARY_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_MERCENARY_HIRE_COST_ADD$"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD:0 "Coste de contratar una [Concept( 'holy_order', 'orden militar' )|E] de la misma [Concept( 'culture', 'cultura' )|E]"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD$"
+ holy_order_government_levy_contribution_add:0 "[modifier_contribution|E] [levy|lE] de [holy_order|lE]"
  
  desert_advantage:1 "[command_modifier_i|E] [advantage|E] en desierto"
  desert_attrition_mult:1 "[command_modifier_i|E] [attrition|E] sufrido en desierto"
@@ -534,6 +535,7 @@
  MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR:1 "Crecimiento del [development|lE]"
  plains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en llanura ([terrain|lE])"
  farmlands_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en tierras de cultivo ([terrain|lE])"
+ farmlands_development_growth:0 "$farmlands_development_growth_factor$"
  hills_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en colina ([terrain|lE])"
  mountains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en montañas ([terrain|lE])"
  desert_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en desierto ([terrain|lE])"
@@ -552,6 +554,8 @@
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH$"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR:1 "Crecimiento de [control|lE]"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR$"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_AT_WAR:0 "Crecimiento del [control|lE] durante una [war|lE]"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_AT_WAR:0 "Crecimiento del [control|lE] durante una [war|lE]"
  MOD_CONSTRUCTION_PRESTIGE_COST:1 "Coste de construcción de [building|lE]"
  MOD_DOMAIN_LIMIT:0 "[domain_limit|E]"
  MOD_DOMAIN_LIMIT_WITH_VALUE:0 "[domain_limit|E]: $VALUE|0=+$"
@@ -807,6 +811,7 @@
  seduce_scheme_power_mult:1 "[scheme_power|E] de [GetScheme('seduce').GetTypeName]"
  courting_scheme_power_add:1 "[scheme_power|E] de [GetScheme('courting').GetTypeName]"
  max_courting_schemes_add:0 "Máximo de [schemes|lE] de [GetScheme('courting').GetTypeName]"
+ befriend_scheme_power_add:0 "[scheme_power|E] para [GetScheme('befriend').GetTypeName]"
  seduce_scheme_power_add:0 "$seduce_scheme_power_mult$"
  murder_scheme_power_add:0 "$murder_scheme_power_mult$"
  courting_scheme_power_mult:1 "[scheme_power|E] de [GetScheme('courting').GetTypeName]"
@@ -819,7 +824,7 @@
  learn_language_scheme_power_mult:0 "$learn_language_scheme_power_add$"
  learn_language_schemes_add:1 "Máximo de [schemes|lE] de [GetScheme('learn_language').GetTypeName]"
  max_learn_language_schemes_add:0 "$learn_language_schemes_add$"
- max_sway_schemes_add:1 "Máx. [schemes|lE] de GetScheme('sway').GetTypeName]"
+ max_sway_schemes_add:1 "Máx. [schemes|lE] de [GetScheme('sway').GetTypeName]"
 
  #County modifiers
  occupation_modifier:0 "Ocupado"
@@ -891,4 +896,4 @@
  CUSTOM_MOD_ENABLES_STRESS_LOSS_DECISIONS:0 "Activa una [decision|lE] especial que #P reduce#! el [stress|lE]"
 
  # RoCo
- world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en la [region|lE] [GetGeographicalRegion('world_innovation_elephants').GetName]"
+ world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ en [GetGeographicalRegion('world_innovation_elephants').GetName]"

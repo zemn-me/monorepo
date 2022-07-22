@@ -173,4 +173,32 @@
  
  CONTRACT_LIEGE_SIGNATURE:0 "领主，\n[VassalContract.GetLiege.GetTitledFirstNameNoTooltip]\n[VassalContract.GetLiege.GetHouse.GetBaseNameNoTooltip]家族"
  CONTRACT_VASSAL_SIGNATURE:0 "封臣，\n[VassalContract.GetVassal.GetTitledFirstNameNoTooltip]\n[VassalContract.GetVassal.GetHouse.GetBaseNameNoTooltip]家族"
- 
+
+
+ jizya_special_rights:0 "吉兹亚地位"
+ jizya_special_rights_default:0 "默认$jizya_special_rights$"
+ jizya_special_rights_default_short:0 "默认"
+ jizya_special_rights_granted:0 "执行$jizya_special_rights$"
+ jizya_special_rights_granted_desc:0 "#emphasis #bold [vassal|E]特权：#!#!\n[liege|E]不能对该[vassal|E][demand_conversion|E]\n[liege|E]不能对该[vassals|E]的土地使用[convert_county|E]\n[liege|E]不能用[faith|E]为理由在剥夺头衔时避免[tyranny|E]\n[liege|E]不能剥夺该[vassals_possessive|E]的[titles|E]\n\n#flavor 该[vassal|E]对其[titles]的所有权得到保证，[liege|E]不能剥夺头衔——无论$game_concept_liege$是否拥有[revoke_title_reason|E]。\n$game_concept_vassal$也被赐予特殊保护地位，领地正式确认其奉行自己[faith|E]的权利。#!"
+ jizya_special_rights_granted_short:0 "已赐予"
+
+ iqta_special_rights:0 "赋予伊克塔制"
+ iqta_special_rights_default:0 "默认$iqta_special_rights$"
+ iqta_special_rights_default_short:0 "默认"
+ iqta_special_rights_granted:0 "已赐予$iqta_special_rights$"
+ iqta_special_rights_granted_desc:0 "#flavor [vassal|E]的义务较低，但要贡献[men_at_arms|E]给[liege|E]。#!"
+ iqta_special_rights_granted_short:0 "已赐予"
+
+ ghazi_special_rights:0 "加齐地位"
+ ghazi_special_rights_default:0 "默认$ghazi_special_rights$"
+ ghazi_special_rights_default_short:0 "默认"
+ ghazi_special_rights_granted:0 "已赐予$ghazi_special_rights$"
+ ghazi_special_rights_granted_desc:0 "#emphasis #bold [vassal|E]特权：#!#!\n[vassal|E]使用[holy_war|E][casus_bellis|E]花费的[piety|E]降低，但使用其他[casus_bellis|E]花费的[prestige_i][prestige|E]增加\n\n#flavor 该[vassal|E]被[liege|E]选为[faith|E]勇士，负责通过[holy_war|E]开疆拓土。#!"
+ ghazi_special_rights_granted_short:0 "已赐予"
+
+ marriage_favor_rights:0 "婚姻恩宠"
+ marriage_favor_rights_default:0 "默认$marriage_favor_rights$"
+ marriage_favor_rights_default_short:0 "默认"
+ marriage_favor_rights_granted:0 "已赐予$marriage_favor_rights$"
+ marriage_favor_rights_granted_desc:0 "#emphasis #bold [vassal|E]特权：#!#!\n[liege|E]承诺要以至亲与其约为婚姻、缔结同盟，之后才会考虑与其他人结亲。\n\n#flavor 该[vassal|E]最受[liege|E]宠爱，定能通过婚姻缔结同盟。#!"
+ marriage_favor_rights_granted_short:0 "已赐予"

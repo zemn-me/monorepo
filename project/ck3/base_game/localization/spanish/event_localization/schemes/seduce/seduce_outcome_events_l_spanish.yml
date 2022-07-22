@@ -24,15 +24,15 @@
  seduce_outcome.0003.e.tt:0 "Nadie intentará seducirme durante #V 10#! años"
  
  seduce_outcome.0004.t:0 "Mi [target.Custom('LoverPetName_uppercase')]"
- seduce_outcome.0004.desc:0 "Cuando miro a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target') )], [target.Custom('ES_ElLa')] [ROOT.Char.Custom2('DescriptorPositive', SCOPE.sC('target'))] [target.GetTitledFirstName], durmiendo en mis brazos, sonrío de pura satisfacción y alegría.\n\n¡Siente el mismo afecto y devoción por mí que yo por [target.Custom('ES_ElElla')]!"
- seduce_outcome.0004.a:0 "¡Soy [ROOT.Custom('ES_ElLa')] [ROOT.Char.GetWomanMan] más afortunad[ROOT.Custom('ES_OA')] del mundo!"
+ seduce_outcome.0004.desc:0 "Cuando miro a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target') )], [ROOT.Char.Custom2('DescriptorPositive', SCOPE.sC('target'))] [target.GetTitledFirstName], durmiendo en mis brazos, sonrío de pura satisfacción y alegría.\n\n¡Siente el mismo afecto y devoción por mí que yo por [target.Custom('ES_ElElla')]!"
+ seduce_outcome.0004.a:0 "¡Soy la persona con más suerte del mundo!"
 
  seduce_outcome.0005.t:0 "Fin trágico"
  seduce_outcome.0005.desc:0 "Tras la muerte de mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target') )] [target.GetTitledFirstName], mis planes para nuestro futuro ya no tienen importancia.\n\nDa igual lo que pudo haber sido, [target.GetTitledFirstName] ha muerto."
  seduce_outcome.0005.a:0 "¡Ojalá me hubiera ganado antes su afecto!"
 
  seduce_outcome.2000.t:0 "La bendición secreta"
- seduce_outcome.2000.desc:0 "Mis encuentros clandestinos con [target.Custom('ES_ElLa')] sum[target.Custom('ES_OA')] pontífice me encandilan y generan un deseo más carnal que espiritual en mí. Seguro que nadie más ha recibido semejante bendición de su santidad.\n\nEstira la mano, cierro los ojos y me arrodillo…"
+ seduce_outcome.2000.desc:0 "Mis encuentros clandestinos con sum[target.Custom('ES_OA')] pontífice me encandilan y generan un deseo más carnal que espiritual en mí. Seguro que nadie más ha recibido semejante bendición de su santidad.\n\nEstira la mano, cierro los ojos y me arrodillo…"
  seduce_outcome.2000.a:0 "[target.Custom('ES_ElElla')|U] tiene la llave de mi reino."
  seduce_outcome.2000.b:0 "He recibido mi bendición."
  
@@ -129,7 +129,7 @@
  seduce_outcome.3901.desc:0 "Reconozco la preocupación en el rostro de mi sirviente. Ha venido a darme malas noticias.\n\n«¡Mi [ROOT.Char.GetLadyLord], debéis venir! ¡Rápido! ¡Acaban de ver a [owner.Custom2('YourCharacterIntroduction', ROOT.Char)] saliendo de los aposentos de [target.Custom2('YourCharacterIntroductionNoComma', ROOT.Char)]!»."
  seduce_outcome.3900.a:0 "¡Esto solo puede significar una cosa!"
 
- seduce_outcome.3000.desc:0 "Mis encuentros clandestinos con [target.Custom('ES_ElLa')] sum[target.Custom('ES_OA')] pontífice me encandilan y generan un deseo más carnal que espiritual en mí. Seguro que nadie más ha recibido semejante bendición de su santidad.\n\nEstira la mano, cierro los ojos y me arrodillo…"
+ seduce_outcome.3000.desc:0 "Mis encuentros clandestinos con sum[target.Custom('ES_OA')] pontífice me encandilan y generan un deseo más carnal que espiritual en mí. Seguro que nadie más ha recibido semejante bendición de su santidad.\n\nEstira la mano, cierro los ojos y me arrodillo…"
  seduce_outcome.3000.a:0 "Tiene la llave de mi reino."
 
  seduce_outcome.3010.desc:0 "[owner.GetFirstName] llega a mis aposentos, evidentemente con dos tipos de sed y con vino para saciar la primera de ellas. Cuesta poco demostrar que tengo la misma idea que [owner.GetSheHe].\n\nEl primer beso sella el pacto y pasamos el día y la noche siguiente bebiendo, amándonos, bebiendo, amándonos más…"

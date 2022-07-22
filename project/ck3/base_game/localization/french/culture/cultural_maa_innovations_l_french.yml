@@ -20,6 +20,7 @@
  culture_parameter_unlock_maa_varangian_veterans:0 "Peut recruter des [GetMaA('varangian_veterans').GetName] comme [men_at_arms|El]"
  culture_parameter_unlock_maa_longbowmen:0 "Peut recruter des [GetMaA('longbowmen').GetName] comme [men_at_arms|El]"
  culture_parameter_unlock_maa_huscarls:0 "Peut recruter des [GetMaA('huscarl').GetName] comme [men_at_arms|El]"
+ culture_parameter_unlock_maa_huanch_vaulter:0 "Peut recruter des [GetMaA('guanch_vaulter').GetName] comme [men_at_arms|El]" # [LocEditor:ForFutureBatchExport]
 
  # Early Medieval Era
  culture_parameter_unlock_maa_khandayat:0 "Peut recruter des [GetMaA('khandayat').GetName] comme [men_at_arms|El]"
@@ -163,6 +164,5 @@
  innovation_men_at_arms:0 "Hommes d’armes"
  innovation_men_at_arms_desc:0 "Entraîner et équiper des armées permanentes qui restent à la disposition de nos dirigeants aidera à la centralisation de notre pouvoir."
 
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- innovation_longbows:0 "Arc long"
- innovation_longbows_desc:0 "Tirant parti du fort bois d'if qui pousse ici, nos archers ont appris à fabriquer des arcs longs si puissants qu'ils ont besoin d'une formation spécialisée dès leur plus jeune âge pour les utiliser efficacement. Cet investissement en vaut la peine, car nos archers peuvent tirer avec des flèches qui volent plus loin et pénètrent plus profondément que celles qui dont tirées par les autres archers."
+ innovation_pole_vault:0 "Saut à la perche" # [LocEditor:ForFutureBatchExport]
+ innovation_pole_vault_desc:0 "Le saut à la perche, est une invention simple qui demande beaucoup de pratique pour être maîtrisée. Un sauteur habile sera capable de se propulser par-dessus de grands espaces et de hauts rochers, ainsi que par-dessus certaines fortifications." # [LocEditor:ForFutureBatchExport]

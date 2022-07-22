@@ -339,10 +339,10 @@
  THEY_HAVE_FAITH_GROUP_TRIGGER:0 "[CHARACTER.GetShortUIName|U] gehört dem [Concept('faith', 'Glauben')|E] „[FAITH.GetName]“ an"
  THEY_DO_NOT_HAVE_FAITH_GROUP_TRIGGER:0 "[CHARACTER.GetShortUIName|U] gehört NICHT dem [Concept('faith', 'Glauben')|E] „[FAITH.GetName]“ an"
 
- HAS_RELIGION_TRIGGER:1 "Gehört zu einem [RELIGION.GetAdjective|]en [faith|E]"
- DOES_NOT_HAVE_RELIGION_TRIGGER:2 "Gehört #bold nicht#! zu einem [RELIGION.GetAdjective|]en [Concept('faith','Glauben')|E]"
- I_HAVE_RELIGION_TRIGGER:2 "Ihr gehört zu einem [RELIGION.GetAdjective|]en [faith|E]"
- I_DO_NOT_HAVE_RELIGION_TRIGGER:3 "Ihr gehört #bold nicht#! zu einem [RELIGION.GetAdjective|]en [Concept('faith','Glauben')|E]"
+ HAS_RELIGION_TRIGGER:1 "Gehört zu einem [RELIGION.GetAdjective|l]en [faith|E]"
+ DOES_NOT_HAVE_RELIGION_TRIGGER:2 "Gehört #bold nicht#! zu einem [RELIGION.GetAdjective|l]en [Concept('faith','Glauben')|E]"
+ I_HAVE_RELIGION_TRIGGER:2 "Ihr gehört zu einem [RELIGION.GetAdjective|l]en [faith|E]"
+ I_DO_NOT_HAVE_RELIGION_TRIGGER:3 "Ihr gehört #bold nicht#! zu einem [RELIGION.GetAdjective|l]en [Concept('faith','Glauben')|E]"
 
  THEY_HAVE_RELIGION_GROUP_TRIGGER:0 "[CHARACTER.GetShortUIName|U] gehört einem [RELIGION.GetName]-[Concept('faith', 'Glauben')|E] an"
  THEY_DO_NOT_HAVE_RELIGION_GROUP_TRIGGER:0 "[CHARACTER.GetShortUIName|U] gehört NICHT einem [RELIGION.GetName]-[Concept('faith', 'Glauben')|E] an"
@@ -747,7 +747,7 @@
 
  character_this_equal:1 "Ziel ist [CHARACTER.GetShortUIName]"
  character_scope_equal:1 "Ziel ist [CHARACTER.GetShortUIName]"
- none_this_equal:1 "Ziel ist [CHARACTER.GetShortUIName]"
+ none_this_equal:2 "Ziel ist unbekannt"
  
  #completely_controls
  YOU_COMPLETELY_CONTROL_TITLE_DESC:0 "Ihr [Concept('completely_control', 'Kontrolliert')|E] [TARGET_TITLE.GetNameNoTier] vollständig"

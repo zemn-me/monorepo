@@ -1,3 +1,5 @@
+# Visigothic culture break-up moved backwards in time to around ~800; probably still being a bit overly-generous at that, but it's a decent date for it.
+
 ###c_burgos
 1906 = {	# BURGOS
 	# Misc
@@ -7,7 +9,7 @@
 	holding = castle_holding
 	
 	# History
-	945.1.1 = { culture = castilian }
+	800.1.1 = { culture = castilian }
 	1066.1.1 = {
 		buildings = {
 			curtain_walls_01
@@ -30,12 +32,13 @@
 1897 = {	# VALLADOLID
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	945.1.1 = { culture = castilian }
+	800.1.1 = { culture = castilian }
+	950.1.1 = { faith = catholic }
 }
 1896 = {	# SIMANCAS
 	holding = none
@@ -52,12 +55,13 @@
 1901 = {	# SORIA
 	#Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	950.1.1 = { culture = castilian }
+	800.1.1 = { culture = castilian }
+	950.1.1 = { faith = catholic }
 }
 1899 = {	# SAN ESTEBAN
 	holding = church_holding
@@ -73,12 +77,15 @@
 1924 = {	# SEGOVIA
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
+	867.1.1 = { special_building_slot = alcazar_of_segovia_01 }
 	955.1.1 = { culture = castilian }
+	1120.1.1 = { special_building_slot = alcazar_of_segovia_01 }
 }
 1925 = {	# CUELLAR
 	holding = church_holding
@@ -91,11 +98,12 @@
 1915 = {	# OLMEDO
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	955.1.1 = { culture = asturleonese }
 }
 1922 = {	# CORACERA
@@ -113,9 +121,7 @@
 	religion = catholic
 	
 	# History
-	945.1.1 = {
-		culture = castilian
-	}
+	800.1.1 = { culture = castilian }
 }
 1802 = {	# SANTANDER
 	holding = city_holding
@@ -140,7 +146,7 @@
 	holding = castle_holding
 	
 	# History
-	945.1.1 = { culture = castilian }
+	800.1.1 = { culture = castilian }
 }
 1813 = {	# MIRANDA DE EBRO
 	holding = city_holding

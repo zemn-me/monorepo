@@ -17,7 +17,7 @@
 
  greeting_family_positive:1 "[ROOT.Char.Custom2('GreetingToFamilyPositive', second)]"
  greeting_family_negative:1 "[ROOT.Char.Custom2('GreetingToFamilyNegative', second)]"
- greeting_family_liked:1 "Mi querid[second.Custom('ES_OA')] [ROOT.Char.Custom2('RelationToMeShort', second)],"
+ greeting_family_liked:1 "Mi querid[crush.Custom('ES_OA')] [ROOT.Char.Custom2('RelationToMeShort', second)],"
  greeting_family_fallback:1 "Saludos, [ROOT.Char.Custom2('RelationToMeShort', second)]:"
   
  greeting_foreign_ruler:1 "Saludos, [second.GetNameNoTooltip]:"
@@ -25,8 +25,8 @@
  greeting_foreign_ruler_positive:1 "[ROOT.Char.Custom('ES_AlAla')|U] [second.Custom('ComplimentAdjective')] de [second.GetNameNoTooltip],"
 
  greeting_generic:1 "Saludos, [second.GetNameNoTooltip]:"
- greeting_generic_negative:0 "[second.Custom('ES_AlAla')|U] [second.Custom('InsultAdjective')] [second.GetFirstNameNoTooltip],"
- greeting_generic_positive:0 "[second.Custom('ES_AlAla')|U] [second.Custom('ComplimentAdjective')] [second.GetFirstNameNoTooltip],"
+ greeting_generic_negative:0 "[target.Custom('ES_AlAla')|U] [second.Custom('InsultAdjective')] [second.GetFirstNameNoTooltip],"
+ greeting_generic_positive:0 "[ROOT.Char.Custom('ES_AlAla')|U] [second.Custom('ComplimentAdjective')] [second.GetFirstNameNoTooltip],"
 
  greeting_appropriate_positive_liege:1 "[ROOT.Char.Custom2('GreetingToLiegePositive', second)]"
  greeting_appropriate_positive_vassal:1 "[ROOT.Char.Custom2('GreetingToVassalPositive', second)]"

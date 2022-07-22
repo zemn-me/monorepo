@@ -50,7 +50,7 @@
  holy_order.0205.a:0 "Проклятье!"
 
  holy_order_letter.opening:0 "Собрат служитель [ROOT.Char.GetFaith.HighGodNameAlternatePossessive]"
- holy_order.1001.intro:1 "Наш орден [holy_order.GetName] разрастается, и ему требуется больше земель, откуда он будет защищать #L [ROOT.Char.GetFaith.GetAdjective|l]ую#! веру."
+ holy_order.1001.intro:1 "Наш орден [holy_order.GetName] разрастается, и ему требуется больше земель, откуда он будет защищать #L [ROOT.Char.GetFaith.GetName|l]ую#! веру."
  holy_order.1001.end:0 "\n\nБаронство [target_barony.GetName] отлично нам подходит, и мы хотели бы взять это владение в аренду во имя наших целей."
  holy_order.1001.a:0 "Ваша просьба исполнена. Во имя [ROOT.Char.GetFaith.HighGodNamePossessive]!"
  holy_order.1001.b:0 "Возможно, [alternative_barony.GetNameNoTierNoTooltip] тоже подойдет для ваших целей?"
@@ -66,7 +66,7 @@
  holy_order.2002.b:0 "Разумеется, ты этого #EMP не#! сделаешь!"
 
  holy_order.2003.opening:0 "[grandmaster.Custom2('AppropriateGreetingPositive', ROOT.Char)|U]"
- holy_order.2003.desc:1 "Истинные воины, которые могли бы защитить #L [grandmaster.GetFaith.GetAdjective|l]ую#! веру, будут нужны всегда.\nОбладая многими талантами и ничтожными шансами унаследовать хоть что-либо, [Select_CString(child.IsFemale, 'ваша', 'ваш' )] [child.Custom('DaughterSon')] [child.GetTitledFirstName], как мне кажется, разумно распорядится своей жизнью, вступив в орден [holy_order_scope.GetName]. С нами [child.GetSheHe] будет тренироваться, учиться и сделает честь вашему имени."
+ holy_order.2003.desc:1 "Истинные воины, которые могли бы защитить #L [grandmaster.GetFaith.GetName|l]ую#! веру, будут нужны всегда.\nОбладая многими талантами и ничтожными шансами унаследовать хоть что-либо, [Select_CString(child.IsFemale, 'ваша', 'ваш' )] [child.Custom('DaughterSon')] [child.GetTitledFirstName], как мне кажется, разумно распорядится своей жизнью, вступив в орден [holy_order_scope.GetName]. С нами [child.GetSheHe] будет тренироваться, учиться и сделает честь вашему имени."
  holy_order.2003.a:0 "[Select_CString(child.IsFemale, 'Она', 'Он' )] будет жить как истинный [child.GetFaith.GetAdherentName|l]."
  holy_order.2003.child_joins_order:0 "[child.GetFirstName] получает качество «[GetTrait('order_member').GetName( child.Self )]» и присоединяется ко двору персонажа [grandmaster.GetTitledFirstNameNoTooltip]"
  holy_order.2003.b:0 "Возможно, у вас может учиться [alternative_child.GetFirstNameNoTooltip]?"

@@ -61,12 +61,16 @@
  commission_epic.0002.writer:0 "L’épopée de ma famille semble bien progresser et certaines lignes devraient être citées pendant longtemps, mais [writer.Custom('FR_le_Char_Pi')][writer.GetTitledFirstName] se pose beaucoup de questions sur le sujet de l’histoire. Il serait plus facile d’y répondre [writer.Custom('FR_SilSielle')] écrivait tout d’abord. Je pourrais alors lui dire ce que je n’aime pas, mais [writer.Custom('FR_IlElle')] insiste sur le fait qu’[writer.Custom('FR_IlElle')] a besoin de réponses maintenant."
  commission_epic.0002.servant:0 "[servant.GetFirstName], [servant.Custom('FR_LeLa')] domestique à qui j’ai ordonné de travailler sur l’histoire de ma famille, semble avoir quelques difficultés. Qu’[servant.Custom('FR_IlElle')] fasse le moindre progrès est cependant assez impressionnant. Il s’avère qu’[servant.Custom('FR_IlElle')] ne sait ni lire ni rimer. Pourtant, [servant.Custom('FR_IlElle')] travaille jour et nuit, et [servant.Custom('FR_IlElle')] est maintenant venu[servant.Custom('FR_E')] me poser une question importante. « De quoi cela devrait-il parler exactement, [ROOT.Char.Custom('FR_MonseigneurMadame')|U] ? »"
  commission_epic.0002.scribes:0 "Mes [ROOT.Char.Custom('CommissionEpicScribes')] ont commencé à travailler sur l’épopée de ma famille, mais ils ont déjà des problèmes. Ils ne parviennent pas à se mettre d’accord sur le thème de l’histoire, car chaque [ROOT.Char.Custom('CommissionEpicScribe')] affirme que son propre domaine de responsabilité doit être le plus important. « Il serait bénéfique que vous tranchiez la question, [ROOT.Char.Custom('FR_MonseigneurMadame')|U], avant que nos désaccords ne nous paralysent »."
- commission_epic.0002.a:0 "Elle devrait se focaliser sur moi et sur mon destin, bien sûr !"
+ commission_epic.0002.iberia_epic.a:0 "Écrivez sur le droit de ma dynastie à régner sur l’Ibérie !"
+ commission_epic.0002.a:1 "Racontez les histoires des revendications ancestrales de ma dynastie."
+ commission_epic.propaganda:0 "Vous obtiendrez des [claims|El] sur des titres voisins lorsque l’épopée sera terminée"
+ commission_epic.0002.b:1 "Elle devrait se focaliser sur moi et sur mon destin, bien sûr !"
  commission_epic.more_prestige:0 "Vous obtiendrez personnellement plus de [prestige|El] lorsque l’épopée sera terminée"
- commission_epic.0002.b:0 "C’est une histoire #EMP familiale#!, alors soyez généreux."
+ commission_epic.0002.c:1 "C’est une histoire #EMP familiale#!, alors soyez généreux."
  commission_epic.more_dynasty_prestige:0 "Vous obtiendrez plus de [dynasty_prestige|El] lorsque l’épopée sera terminée"
- commission_epic.0002.c:0 "Racontez l’histoire aussi fidèlement que possible."
+ commission_epic.0002.d:0 "Racontez l’histoire aussi fidèlement que possible."
  commission_epic.more_piety:0 "Vous obtiendrez également de la [piety|El] lorsque l’épopée sera terminée"
+
 
  commission_epic.1001.t:0 "L’épopée familiale : une question de temps"
  commission_epic.1001.opening:0 "Cela fait des semaines que l’on ne m’a pas présenté de nouveau travail sur l’épopée de ma famille. Soit le processus prend trop de temps, soit"
@@ -168,6 +172,53 @@
  commission_epic.2006.b.flavor:0 "Nous avons toujours montré la voie aux [ROOT.Char.GetFaith.AltPriestTermPlural]."
  commission_epic.2006.c:0 "Nous savons tou[ROOT.Char.Custom2('FR_STes' , SCOPE.sC('court_chaplain'))] les deux que la famille passe avant tout."
  commission_epic.2006.c.same_dynasty:0 "Cette option est disponible, car [court_chaplain.GetFirstNameNoTooltip] est de la même [dynasty|El] que vous"
+
+ commission_epic.6001.t:0 "Quelques petits embellissements"
+ commission_epic.6001.writerservant:0 "Après avoir travaillé sur ma chronique pendant un certain temps, [composer.Custom('FR_le_Char')][composer.GetName] vient me voir.\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit-[composer.Custom('FR_IlElle')], « je dois avouer que, bien que votre dynastie soit en effet grande, les revendications ancestrales que vous espériez trouver pourraient ne pas être... aussi faciles à corroborer. J’ai besoin de plus de temps, et de plus de ressources, pour fouiller plus profondément dans les anciens textes. Sinon, je devrai faire quelques petits #italic embellissements#! aux histoires, et vos revendications pourraient finir par être moins convaincantes... »"
+ commission_epic.6001.scribes:0 "Mes scribes ont travaillé jour et nuit à fouiller dans les vieux manuscrits à la recherche de revendications territoriales de mes ancêtres à exalter dans la chronique...\n\n« Hélas », disent-ils, « nous pourrions avoir à faire quelques petits embellissements quant à la vérité de cette affaire, les actes et les domaines de vos ancêtres, et ainsi de suite. Vous comprenez sûrement cela, [ROOT.Char.Custom('FR_MonseigneurMadame')|U] ? »."
+ commission_epic.6001.a:0 "Embellissez ce que vous voulez, mais finissons-en !"
+ commission_epic.6001.b:0 "Prenez cet or et faites plus de recherches."
+ commission_epic.less_credible:0 "La chronique sera moins crédible"
+ commission_epic.more_credible:0 "La chronique peut finir par être plus crédible"
+
+ commission_epic.6003.t:0 "Des revendications hasardeuses"
+ commission_epic.6003.writer:0 "[composer.Custom('FR_le_Char')|U][composer.GetName] travaille assidûment sur ma chronique, qui devient de plus en plus grandiose et... discutable.\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit-[composer.Custom('FR_IlElle')], « j’ai trouvé un vieux texte tout abîmé où il est dit qu’un[ancestor_1.Custom('FR_E')] [Select_CString(ancestor_1.IsFemale, 'reine', 'roi')] appelé[ancestor_1.Custom('FR_E')] [ancestor_1.GetFirstNameNoTooltip] régnait autrefois sur [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] et [neighboring_county_3.GetNameNoTier]. Je pourrais me plonger dans les tableaux généalogiques et faire quelques »ajouts« pour établir qu’[ancestor_1.Custom('FR_IlElle')] est l’un de vos ancêtres. Ensuite, je pourrais utiliser son histoire pour vous donner des revendications plus ou moins crédibles sur certaines de ces terres, voire sur toutes... »"
+ commission_epic.6003.servant:0 "[composer.Custom('FR_le_Char')|U][composer.GetName] a travaillé assidûment sur ma chronique de plus en plus discutable. « [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit-[composer.Custom('FR_IlElle')], « j’ai trouvé une inscription votive de [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale, 'la Chasseresse', 'le Coude haut')], [Select_CString(ancestor_1.IsFemale, 'reine', 'roi')] de [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] et [neighboring_county_3.GetNameNoTier] dans les temps anciens. Je pourrais faire quelques »ajouts« à votre arbre généalogique pour établir qu’[ancestor_1.Custom('FR_IlElle')] est l’un de vos ancêtres. Ensuite, dans la chronique, je pourrais faire quelques petites embellissements et ainsi de suite, pour établir fermement votre droit à certaines de ces terres, ou même à toutes. »"
+ commission_epic.6003.scribes:0 "Mes scribes ont travaillé dur sur ma chronique de plus en plus alambiquée.« [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit l’un d’eux, « nous avons trouvé une note marginale dans un ancien manuscrit qui fait référence à un[ancestor_1.Custom('FR_E')] [ancestor_1.GetWomanMan] appelé[ancestor_1.Custom('FR_E')] [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale, 'la Généreuse', 'le Borgne')], qui avait une certaine influence en [neighboring_county_1.GetNameNoTier], [neighboring_county_2.GetNameNoTier] et [neighboring_county_3.GetNameNoTier] dans les temps anciens. Nous pourrions nous plonger dans les tableaux généalogiques pour établir de façon créative qu’[ancestor_1.Custom('FR_IlElle')] est l’un de vos ancêtres. Ensuite, dans la chronique, nous pourrions l’utiliser pour corroborer votre droit à gouverner certaines de ces terres, ou même toutes... »"
+ commission_epic.6003.a:0 "Toutes ces terres !"
+ commission_epic.6003.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip] Ça semble bon à cette époque de l’année !"
+ commission_epic.6003.c:0 "[neighboring_county_2.GetNameNoTierNoTooltip] est ce que je veux !"
+ commission_epic.6003.d:0 "[neighboring_county_3.GetNameNoTierNoTooltip] doit être à moi."
+ commission_epic.paranoid_neighbors:0 "Vos voisins seront très mécontents lorsqu’ils apprendront l’existence de cette chronique..."
+
+ commission_epic.6004.t:0 "Des revendications crédibles"
+ commission_epic.6004.writerservant:0 "[composer.Custom('FR_le_Char')|U][composer.GetName] a travaillé assidûment sur ma chronique, dont l’envergure et le volume ne cessent de croître.\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit-[composer.Custom('FR_IlElle')], « j’ai trouvé un vieux document sur les droits fiscaux et fonciers, une lecture plutôt ennuyeuse, mais il mentionne un[ancestor_1.Custom('FR_E')] [ancestor_1.GetLadyLord] appelé[ROOT.Char.Custom('FR_E')] [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale, 'la Grande', 'le Chauve')], qui a régné sur [neighboring_county_1.GetNameNoTier] et [neighboring_county_2.GetNameNoTier] dans les temps anciens. J’ai réussi à retracer sa lignée depuis l’antiquité tardive jusqu’à vous ! Je peux donc vous donner des revendications sur l’une ou l’autre de ces terres, si crédibles que personne ne pourra les contester. »"
+ commission_epic.6004.scribes:0 "Mes scribes ont travaillé d’arrache-pied sur ma chronique, qui s’agrandit de jour en jour.\n\n« [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit l’un d’eux, « Nous avons trouvé une charte royale d’origine très ancienne, donnant la souveraineté sur [neighboring_county_1.GetNameNoTier] et [neighboring_county_2.GetNameNoTier] à un[ROOT.Char.Custom('FR_E')] [ancestor_1.GetLadyLord] appelé[ROOT.Char.Custom('FR_E')] [ancestor_1.GetFirstNameNoTooltip] [Select_CString(ancestor_1.IsFemale, 'la Bonne', 'le Chanceux')]. Grâce [ROOT.GetCharacter.GetFaith.HighGodName2], nous avons pu retracer votre lignée jusqu’à [ancestor_1.Custom('FR_LuiElle')], et nous nous sommes assurés de le faire dans la chronique. L’une ou l’autre de ces terres vous revient de droit. »"
+ commission_epic.6004.a:0 "Pourquoi pas les deux ?"
+ commission_epic.6004.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip] fait certainement partie de mon héritage."
+ commission_epic.6004.c:0 "J’ai toujours pensé que [neighboring_county_2.GetNameNoTierNoTooltip] devait m’appartenir !"
+
+ commission_epic.6005.t:0 "Une épopée inachevée"
+ commission_epic.6005.writerservant:0 "« Je soupçonne depuis longtemps que quelque chose ne va pas avec ma chronique, et en effet, [composer.Custom('FR_le_Char')][composer.GetName] vient me voir, l’air inqui[composer.Custom('FR_EtEte')].\n\n »Hélas, [ROOT.Char.Custom('FR_MonseigneurMadame')|U]« , dit-[composer.Custom('FR_IlElle')], »j’ai beau essayer, je n’ai pas pu trouver d’histoire de revendications assez bonnes pour être étayées. Je ne peux pas continuer ce travail. J’ai quand même produit une chronique qui vante les vertus de votre dynastie. Puissiez-vous vous en contenter et ne pas me punir pour mon échec... »"
+ commission_epic.6005.scribes:0 "Mes scribes semblent avoir eu du mal avec ma chronique et viennent me voir, l’air inquiets... « Hélas », dit l’un d’eux, « nous n’avons pas pu trouver d’histoire suffisamment bonne pour être corroborée. Nous avons essayé, mais c’était au-delà de nos capacités. Nous avons quand même produit une chronique qui vante les mérites de votre dynastie. Puissiez-vous vous en contenter et ne pas nous punir pour notre échec... »"
+ commission_epic.6005.a:0 "Aux oubliettes !"
+ commission_epic.6005.b:0 "Imbéciles incompétents..."
+ commission_epic.6005.c:0 "Suis-je puni[ROOT.Char.Custom('FR_E')] par [ROOT.GetCharacter.GetFaith.HighGodName] pour ma vanité ?"
+ commission_epic.6005.d:0 "Au moins, j’ai une chronique..."
+
+ commission_epic.6006.t:0 "Propagande convaincante"
+ commission_epic.6006.writerservant:0 "« C’est terminé, [ROOT.Char.Custom('FR_MonseigneurMadame')|U] », dit [composer.Custom('FR_le_Char')][composer.GetName] avec un certain soulagement, en me tendant un gros volume. « C’est la chronique de la Maison [ROOT.Char.GetDynastyHouseNameNoTooltip], décrivant dans les moindres détails l’histoire de son règne sur les différentes terres que vous désiriez. Il est certain que personne ne pourra contester vos justes revendications ! »"
+ commission_epic.6006.scribes:0 "Enfin, mes scribes ont terminé la chronique de propagande. Ils ont l’air soulagé en me tendant un livre extrêmement volumineux.\n\n« Le voici, [ROOT.Char.Custom('FR_MonseigneurMadame')|U], la grande chronique de la Maison [ROOT.Char.GetDynastyHouseNameNoTooltip], qui détaille toutes vos revendications. Puisse-t-elle vous apporter de grandes choses. »"
+ commission_epic.6006.a:0 "Parfait !"
+
+ propaganda_chronicle_name:0 "Chronique de propagande de la Maison [ROOT.Char.GetDynastyHouseNameNoTooltip]."
+ propaganda_chronicle_desc:0 "Cet imposant volume expose avec trop de détails la gloire de la Maison [ROOT.Char.GetDynastyHouseNameNoTooltip] et ses diverses revendications territoriales, plus ou moins étranges."
+ 
+ half_baked_propaganda_chronicle_name:0 "Chronique de propagande inachevée"
+ half_baked_propaganda_chronicle_desc:0 "Ce livre aurait pu être couvert d’infamie, s’il avait été achevé. En l’état actuel des choses, il ne parvient pas à convaincre le lecteur des revendications territoriales de son commanditaire, mais s’attarde sur les prétendues vertus de la dynastie [ROOT.Char.GetDynastyNameNoTooltip]."
+ 
+
+
 
  commission_epic.9001.t:0 "Une épopée familiale"
  commission_epic.9001.writer:1 "[composer.Custom('FR_le_Char_Pi')|U][composer.GetTitledFirstName] a terminé [ROOT.Char.Custom('FR_CompositionType_lela')] épique de ma famille et [composer.Custom('FR_IlElle')] a de quoi être fi[composer.Custom('FR_ErEre')] !"

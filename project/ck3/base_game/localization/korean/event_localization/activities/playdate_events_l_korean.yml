@@ -138,7 +138,7 @@
  playdate.3011.a:0 "우리가 부모 역할 아니면 안 해!"
  playdate.3011.b:0 "좋지. 강아지 역할은 [disliked_participant.GetFirstNameNoTooltip](이)가 해야 해!"
  playdate.3011.c:0 "바보 같아. 그냥 체스나 두자."
- playdate.3011.c.tt:0 "[ROOT.Char.Custom('education_focus_child')]에 관한 학식이 높아짐"
+ playdate.3011.c.tt:0 "[THIS.Char.Custom('education_focus_child')]에 관한 학식이 높아짐"
 
  playdate.3012.t:0 "$playdate_header$ 용감한 $knight_culture_player_plural_no_tooltip$"
  playdate.3012.desc_knight:0 "[participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U](와)과 함께 뜰에서 훈련 중인 $knight_culture_player_plural_no_tooltip_lowercase$(을)를 지켜보고 있을 때였다. [knight.Custom2('MyCharacterIntroduction', ROOT.Char)](이)가 미소를 머금고 우리에게 다가온 것이다."

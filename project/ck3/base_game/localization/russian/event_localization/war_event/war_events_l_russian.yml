@@ -53,7 +53,7 @@
 
  #Holy wars "soft invalidated" by faith change
  war_event.3101.t:0 "Новообретенная вера"
- war_event.3101.desc:0 "До меня докатилась новость, что [defender.GetTitledFirstNamePossessive] [Select_CString(defender.IsFemale, 'обратилась', 'обратился' )] в [defender.GetFaith.GetNameNoTooltip]. [ROOT.Char.GetFaith.HighGodName] больше не позволяет мне воевать с [Select_CString(defender.IsFemale, 'ней', 'ним' )]. [defender.GetPrimaryTitle.GetNameNoTierNoTooltip] не может принадлежать мне по праву."
+ war_event.3101.desc:0 "До меня докатилась новость, что [defender.GetTitledFirstNamePossessive] [Select_CString(defender.IsFemale, 'обратилась', 'обратился' )] в [defender.GetFaith.GetAdjectiveNoTooltip|l]. [ROOT.Char.GetFaith.HighGodName] больше не позволяет мне воевать с [Select_CString(defender.IsFemale, 'ней', 'ним' )]. [defender.GetPrimaryTitle.GetNameNoTierNoTooltip] не может принадлежать мне по праву."
  war_event.3101.a:0 "Пришло время опустить клинки."
  war_event.3101.b.tt:0 "[war.GetName] продолжается"
  war_event.3101.b:0 "[defender.GetSheHe|U] думает, что меня это остановит? Ха!"

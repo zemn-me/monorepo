@@ -9,7 +9,7 @@
  hold_court.4001.heir_diplomacy_failure:0 "[annoying_heir.GetSheHe|U] отказывается приходить на встречи, и на вопрос “почему” отвечает, что [annoying_heir.GetHerHim] там, мол, “скучно, и лучше бы мы там убивали друг друга — было бы веселее”»."
  hold_court.4001.heir_hated:0 "[annoying_heir.GetSheHe|U] — [Select_CString(annoying_heir.IsFemale, 'противная хвастунья', 'противный хвастун' )] и не упускает возможности сообщить мне, что нимало не волнуется о нашей к н[annoying_heir.GetHerHim] неприязни»."
  hold_court.4001.protective_parent:0 "\n\n[protective_parent.GetTitledFirstNameNoTooltip] в ужасе охает. «[Select_CString(annoying_heir.IsFemale, 'Моя', 'Мой' )] [annoying_heir.Custom('PetName')] на такое не «[Select_CString(annoying_heir.IsFemale, 'способна', 'способен' )]!»"
- hold_court.4001.accusation_default:0 "\n\n[annoyed_vassal.GetSheHe|U] вздыхает. Но [annoying_heir.GetSheHe], конечно же, будет все отрицать»."
+ hold_court.4001.accusation_default:0 "\n\n[annoyed_vassal.GetSheHe|U] вздыхает: «Но [annoying_heir.GetSheHe], конечно же, будет все отрицать»."
  hold_court.4001.heir_admission:0 "\n\n[annoying_heir.GetTitledFirstNameNoTooltip] по-волчьи ухмыляется. «О да, все было именно так»."
  hold_court.4001.a:0 "Как мило, [annoying_heir.GetSheHe] [Select_CString(annoying_heir.IsFemale, 'вся', 'весь' )] в [Select_CString(ROOT.Char.IsFemale, 'мать', 'отца' )]!"
  hold_court.4001.b:0 "Это последняя капля! Пусть будет [preferred_heir.GetTitledFirstNameNoTooltip]."
@@ -118,7 +118,7 @@
 
 ### Sophisticated Cannibal dinner by Isabella Welch
  hold_court.4602.t:0 "[Select_CString(ROOT.Char.IsFemale, 'Аппетитнейшая', 'Аппетитнейший' )] [ROOT.GetCharacter.GetLadyLord|U]"
- hold_court.4602.desc:0 "[cannibal_vassal.Custom('FortifiedBuilding')], где обитает [cannibal_vassal.GetTitledFirstNameNoTooltip], подсвечен лишь несколькими мерцающими свечами. [cannibal_vassal.GetSheHe|U] сидит передо мной за обеденным столом, который, куда ни глянь, завален ломтями едва приготовленного мяса.\n\n[cannibal_vassal.GetSheHe|U] мнется за спиной в ожидании моего выбора. Через некоторое время [cannibal_vassal.GetSheHe] склоняется к моей голове и оскаливает зубы:\n\n«Все эти [ROOT.GetCharacter.GetWomenMen] приготовлены для нас, но нет никого аппетитнее вас!»"
+ hold_court.4602.desc:0 "[cannibal_vassal.Custom('FortifiedBuilding')|U], где обитает [cannibal_vassal.GetTitledFirstNameNoTooltip], подсвечен лишь несколькими мерцающими свечами. [cannibal_vassal.GetSheHe|U] сидит передо мной за обеденным столом, который, куда ни глянь, завален ломтями едва приготовленного мяса.\n\n[cannibal_vassal.GetSheHe|U] мнется за спиной в ожидании моего выбора. Через некоторое время [cannibal_vassal.GetSheHe] склоняется к моей голове и оскаливает зубы:\n\n«Все эти [ROOT.GetCharacter.GetWomenMen] приготовлены для нас, но нет никого аппетитнее вас!»"
  hold_court.4602.a:0 "Кого бы мне съесть для начала?"
  hold_court.4602.b:0 "Ладно, можешь чуть-чуть откусить."
  hold_court.4602.c:0 "Мне пора! Это безвкусно!"
@@ -128,7 +128,7 @@
  hold_court.4700.desc:0 "[prison_challenger_vassal.GetTitledFirstName] слегка кланяется. «[ROOT.Char.Custom2('RelationToMeAddress', prison_challenger_vassal)|U], мне доводилось слышать весьма кровавые истории о ваших подземельях — надо заметить, из первых рук, ибо [imprisoned_family_character.GetTitledFirstName] [Select_CString(imprisoned_family_character.IsFemale, 'имела', 'имел' )] неудовольствие там пребывать. Так вот, вы уверены, что"
  hold_court.4700.desc.gruel:0 "[ROOT.Char.Custom('PrisonContentsGruel')]"
  hold_court.4700.desc.default:0 "[ROOT.Char.Custom('RandomPrisonContentsSingular')]"
- hold_court.4700.desc.2:0 "требуется там в #EMP таком#! количестве? Куда девать все эти [ROOT.Char.Custom('RandomPrisonContentsPlural')]?»\n\n[prison_challenger_vassal.GetSheHe|U] вздыхает. «У заключенных нет даже тарелок, им приходится есть прямо с земли, как животным! Знаете, я не прочь вложить часть собственных средств в обновление тюрьмы»."
+ hold_court.4700.desc.2:0 "требуется там в #EMP таком#! количестве? На что нам сдались все эти [ROOT.Char.Custom('RandomPrisonContentsPlural')]?»\n\n[prison_challenger_vassal.GetSheHe|U] вздыхает. «У заключенных нет даже тарелок, им приходится есть прямо с земли, как животным! Знаете, я не прочь вложить часть собственных средств в обновление тюрьмы»"
  hold_court.4700.a:0 "Если бы я [Select_CString(ROOT.Char.IsFemale, 'хотела', 'хотел' )], чтобы им хорошо жилось, [Select_CString(ROOT.Char.IsFemale, 'оставила', 'оставил' )] бы их под домашним арестом!"
  hold_court.4700.b:0 "В подземелье свои традиции, но я — [ROOT.Char.GetTitleAsNameNoTooltip|l] свежих взглядов."
  hold_court.4700.c:0 "Что ж, оживим обстановку — добавим больше блестящих пыточных инструментов!"
@@ -153,7 +153,7 @@
 ## Shady genealogist offers to prove you are descended from mythical heroes by Isabella Welch
 
  hold_court.4900.t:0 "Дела давно минувших дней"
- hold_court.4900.desc:1 "К трону подходит [Select_CString(suspicious_genealogist.IsFemale, 'древняя старуха', 'древний старик' )]. Каждому [suspicious_genealogist.GetHerHis] шагу вторит постукивание трости.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.GetCharacter.GetLadyLord|U], я исследую родословные, а вы, как известно, знатного происхождения. Но знатность еще не говорит о божественном или легендарном происхождении. Я хочу составить свиток, где прослежу вашу родословную до зари времен и явлю вам и миру истину: [ROOT.GetCharacter.Custom('GetMythicalFounder')] — действительно ваш прямой предок!»  "
+ hold_court.4900.desc:1 "К трону подходит [Select_CString(suspicious_genealogist.IsFemale, 'древняя старуха', 'древний старик' )]. Каждому [suspicious_genealogist.GetHerHis] шагу вторит постукивание трости.\n\n«[Select_CString(ROOT.Char.IsFemale, 'Моя', 'Мой' )] [ROOT.GetCharacter.GetLadyLord|U], я исследую родословные, а вы, как известно, знатного происхождения. Но знатность еще не говорит о божественном или легендарном происхождении. Я хочу составить свиток, где прослежу вашу родословную до зари времен и явлю вам и миру истину: [ROOT.GetCharacter.Custom('GetMythicalFounder')] — действительно среди ваших прямых предков!»  "
  hold_court.4900.a:0 "Мне для этого бумажки не нужны!"
  hold_court.4900.b:0 "Прекрасно! И список должен быть очень длинным!"
  hold_court.4900.c:0 "[ROOT.GetCharacter.Custom('GetMythicalFounder')]? Ничтожество в сравнении со мной!"
@@ -166,4 +166,4 @@
  hold_court.4901.a:0 "Пора вздремнуть. Пусть во сне мне явится моя собственная слава."
  hold_court.4901.a.tt:0 "...А внимательно слушают пусть остальные придворные"
  hold_court.4901.b:0 "Это увлекательнее любой баллады! Я подпрыгиваю на троне!"
- hold_court.4901.c:0 "«Довольно! [ROOT.Char.GetPrimaryTitle.GetNameNoTooltip] благодарит тебя за услугу»."
+ hold_court.4901.c:0 "«Довольно! [ROOT.Char.GetPrimaryTitle.GetBaseNameNoTooltip] благодарит тебя за услугу»."

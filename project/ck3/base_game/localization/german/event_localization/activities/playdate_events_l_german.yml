@@ -138,7 +138,7 @@
  playdate.3011.a:0 "Nur wenn wir die Eltern sind!"
  playdate.3011.b:0 "Na sicher. Und [disliked_participant.GetFirstNameNoTooltip] ist der Hund!"
  playdate.3011.c:0 "Nein, das ist doch kindisch. Spielen wir lieber Schach."
- playdate.3011.c.tt:0 "Ihr treibt Eure Studien in Sachen [ROOT.Char.Custom('education_focus_child')] voran!"
+ playdate.3011.c.tt:0 "Ihr treibt Eure Studien in Sachen [THIS.Char.Custom('education_focus_child')] voran!"
 
  playdate.3012.t:0 "$playdate_header$ Tapfere $knight_culture_player_plural_no_tooltip$"
  playdate.3012.desc_knight:0 "[participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] und ich sehen zu, wie die $knight_culture_player_plural_no_tooltip$ im Hof üben, als [knight.Custom2('MyCharacterIntroduction', ROOT.Char)] mit einem Lächeln an uns herantritt."

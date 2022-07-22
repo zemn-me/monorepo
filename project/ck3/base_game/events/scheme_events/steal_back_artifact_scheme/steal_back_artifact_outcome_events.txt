@@ -27,16 +27,30 @@ steal_back_artifact_outcome.1001 = {
 	}
 	
 	immediate = {
+		if = {
+			limit = { exists =  scope:target.capital_province }
+			set_local_variable = {
+				name = location
+				value = scope:target.capital_province
+			}
+		}
+		else = {
+			set_local_variable = {
+				name = location
+				value = scope:target.location
+			}
+		}
+
 		scope:artifact = {
 			save_scope_as = artifact_to_steal
 			hidden_effect = {
 				set_owner = {
-					target = scope:owner 
+					target = scope:owner
 					history = {
 						type = stolen
 						actor = scope:target #stolen from
 						recipient = scope:owner #stealer
-						location = scope:target.capital_province
+						location = var:location
 					}
 				}
 				if = {

@@ -988,14 +988,14 @@ easteregg_joacim_carlberg = {
 	stewardship = 14
 	intrigue = 8
 	learning = 10
-	prowess = 15
+	prowess = 10
 	health = 7
 	#Education
 	trait = education_stewardship_2
 	#Personality
 	trait = patient
 	trait = generous
-	trait = gluttonous
+	trait = honest
 	#Other
 	trait = legitimized_bastard
 	trait = intellect_good_1
@@ -1006,6 +1006,7 @@ easteregg_joacim_carlberg = {
 	#trait = compassionate
 	trait = flexible_leader
 
+	sexuality = heterosexual
 	disallow_random_traits = yes
 
 	1035.10.20 = {
@@ -3506,45 +3507,45 @@ easteregg_struan_mccallum = {
 
 # QA
 easteregg_riad_deneche = {
-    name = "Riad"
-    dna = easteregg_riad_deneche
-    dynasty = vanity_deneche
-    religion = "ashari"
-    culture = "baranis"
-    female = no
+	name = "Riad"
+	dna = easteregg_riad_deneche
+	dynasty = vanity_deneche
+	religion = "ashari"
+	culture = "baranis"
+	female = no
 
-    #Skills
-    diplomacy = 7
-    
-    #Education
-    trait = education_diplomacy_4
+	#Skills
+	diplomacy = 7
+	
+	#Education
+	trait = education_diplomacy_4
 
-    #Personality Traits
-    trait = forgiving
-    trait = honest
-    trait = wrathful
-    
-    #Other Traits
-    trait = irritable
-    trait = comfort_eater
-    
-    sexuality = heterosexual
-    disallow_random_traits = yes
-    
-    1040.8.4 = {
-        birth = yes
-        effect = {
+	#Personality Traits
+	trait = forgiving
+	trait = honest
+	trait = wrathful
+	
+	#Other Traits
+	trait = irritable
+	trait = comfort_eater
+	
+	sexuality = heterosexual
+	disallow_random_traits = yes
+	
+	1040.8.4 = {
+		birth = yes
+		effect = {
 			add_character_flag = has_scripted_appearance
 			add_character_flag = has_scripted_weight
 			add_character_flag = no_headgear
 		}
-    }
-    1066.1.1 = {
-        employer = 155173 # High Chiefdom of Zab
-    }
-    1066.9.16 = {
-        death = yes
-    }
+	}
+	1066.1.1 = {
+		employer = 155173 # High Chiefdom of Zab
+	}
+	1066.9.16 = {
+		death = yes
+	}
 }
 
 # QA
@@ -3624,8 +3625,8 @@ easteregg_james_beaumont = {
 	trait = rough_terrain_expert
 	trait = physique_good_2
 	trait = comfort_eater
-    
-    sexuality = homosexual
+	
+	sexuality = homosexual
 
 	#disallow_random_traits = yes
 
@@ -3649,6 +3650,654 @@ easteregg_james_beaumont = {
 			change_current_weight = 100
 		}
 	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# Programmer
+easteregg_bahar_shefket = {
+	name = "Bahar"
+	dna = easteregg_bahar_shefket
+	dynasty = vanity_shefket
+	religion = "ashari"
+	culture = "turkish"
+	sexuality = bisexual
+	female = yes
+
+	trait = education_learning_3
+	
+	trait = lazy
+	trait = humble
+	trait = just
+	
+	trait = scholar
+	
+	trait = depressed_1	
+
+	diplomacy = 4
+	martial = 8
+	stewardship = 10
+	intrigue = 6
+	learning = 15
+	prowess = 5
+
+	disallow_random_traits = yes
+
+	1033.09.21 = {
+		birth=yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		} 
+	}
+	
+	1066.1.1 = {
+		employer = 302629 #Mangyshlak
+	}
+	
+	1066.9.16 = {
+		death = "1066.9.16"
+	}
+}
+
+
+easteregg_ola_jentzsch = { # Content Design
+	name = "Ola"
+	dna = easteregg_ola_jentzsch
+	dynasty = vanity_af_brantevik
+	religion = "catholic"
+	culture = "norse"
+	sexuality = heterosexual
+	female = no
+
+	trait = education_learning_3
+	
+	trait = craven 
+	trait = forgiving 
+	trait = gregarious
+	
+	trait = devoted 
+	trait = scholar
+	trait = comfort_eater
+	trait = journaller 
+	trait = deviant 
+	trait = poet
+	trait = pilgrim 
+	trait = mystic_1 
+	trait = wild_oat
+
+	diplomacy = 8
+	martial = 4
+	stewardship = 10
+	intrigue = 8
+	learning = 3
+	prowess = 4
+
+	disallow_random_traits = yes
+
+	1027.01.25 = {
+		birth=yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+		} 
+	}
+
+	1055.1.4 = {
+		effect = {
+			set_character_faith = faith:mahayana 
+			learn_language_of_culture = culture:tangut 
+			learn_language_of_culture = culture:han
+			learn_language_of_culture = culture:persian
+			add_character_modifier = {
+				modifier = cosmic_insights_modifier
+ 				days = 3650
+			}
+		}
+	}
+	
+	1066.1.1 = {
+		employer = 206651 #the king of Western Xia   	
+	}
+	1066.9.16 = {
+		death = {
+			death_reason = death_literalist_debate
+		} 
+	}
+}
+
+
+easteregg_hugo_cortell = { # Content Designer, Paradox Thalassic. Olympic-level script commentor.
+	name = "Hugo"
+	dna = easteregg_hugo_cortell # (Notice: I am *much* uglier in person)
+	dynasty = vanity_cortell
+	religion = "catholic" # Buddhism would have been cool too
+	culture = "catalan"
+
+	# Epic Designer Skills
+	diplomacy = 7 # I can start arguments, but winning them is an different matter
+	martial = 7 # Every game designer knows how to besiege a napoleonic bastion fort... right?
+	stewardship = 3 # Today's generation does not understand the value of money
+	intrigue = 7 # This one is hard to justify to be honest... or is it?
+	learning = 5 # I love learning, but never actually learn anything
+	prowess = 2 # I have the combat capabilities of a very threatening desk lamp
+
+	# "Education"
+	trait = education_stewardship_1 # In another life, I might have learnt business 
+
+	# Questionable Personality
+	trait = ambitious # Can never seem to have enough
+	trait = arbitrary # Can never seem to decide what is enough
+	trait = paranoid # Can never seem to trust having enough
+
+	# Concerning Additions
+	trait = lunatic_genetic # Look at my events and tell me this is not warranted
+	trait = military_engineer # I am not legally obliged to elaborate further
+	trait = physician_1 # I can perform the first half of an amputation procedure
+	trait = adventurer # I've travelled half the world, but just want to stay put
+	
+	sexuality = heterosexual
+	disallow_random_traits = yes
+
+	1047.5.5 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear # Goodbye sombrero, you will be missed
+
+			add_secret = { type = secret_deviant } # Can be added as trait, but secret has more gameplay value
+		}
+	}
+	
+	1066.1.1 = { # By game start, I am of the age at which I started working (and I am now)
+		employer = andalusian0059 # Starting back at home
+		effect = {
+			remove_short_term_gold = { 4 46 }
+			if = { # Book condemning the immorality of board games and their harmful effects on the youth
+				limit = { has_dlc_feature = royal_court } # Source: I made it up
+				create_inspiration = book_inspiration
+			}
+		}
+	}
+	1066.9.16 = {
+		death = { death_reason = death_beaten_by_mob }
+	}
+}
+
+# Content Design
+easteregg_alexander_newcombe = {
+	name = "Alexander"
+	dna = easteregg_alexander_newcombe_dna
+	dynasty = vanity_newcombe
+	religion = "mozarabic_church"
+	culture = "anglo_saxon"
+	
+	#Skills & Health
+
+	#Education
+	## Newkie didn't give himself an education but we know him to be a creature of learning and renown - ECC.
+	trait = education_learning_4
+
+	#Personality
+
+	trait = wrathful
+	trait = generous
+	trait = just
+
+	# Coping
+
+	trait = confider
+    
+    sexuality = bisexual
+
+	1030.12.19 = {
+		birth = yes
+	}
+	1066.1.1 = {
+		employer = 3934 # Emir al-Muqtadir of Zaragoza
+		learn_language = language_arabic
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# Character Artist
+easteregg_elena_zenko = {
+	name = "HelenE_"
+	dynasty = vanity_zenko
+	dna = easteregg_elena_zenko
+	religion = "slavic_pagan"
+	culture = "russian"
+	female = yes
+
+	#Skills
+	diplomacy = 5
+	martial = 2
+    stewardship = 2
+	intrigue = 12
+	learning = 10
+	prowess = 0
+	
+	#Education
+	trait = education_stewardship_4
+
+	#Personality Traits
+	trait = deceitful
+	trait = calm
+	trait = cynical
+	
+	#Other Traits
+	trait = schemer
+	trait = irritable
+	trait = possessed_1
+	trait = shrewd
+	trait = murderer
+	trait = beauty_good_1
+	
+	
+	sexuality = bisexual
+	disallow_random_traits = yes
+	
+	1038.5.17 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		} 
+	}
+	1066.1.1 = {
+		employer = 302180 #Lviv
+
+		effect = {
+			add_secret = {
+				type = secret_witch
+			}
+		}
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# 3D Environment Artist
+easteregg_stina_arvidsson_radestig = {
+	name = "Stina"
+	dna = easteregg_stina_arvidsson_radestig
+	dynasty = vanity_arvidsson_radestig
+	martial = 6
+	diplomacy = 10
+	intrigue = 5
+	stewardship = 5
+	learning = 9
+	prowess = 4
+
+	religion = "norse_pagan"
+	culture = "swedish"
+	sexuality = heterosexual
+	disallow_random_traits = yes
+	female = yes
+
+	trait = education_learning_3
+	trait = humble
+	trait = shy
+	trait = impatient
+	trait = adventurer
+	trait = athletic
+	trait = architect
+	trait = mystic_1
+	trait = reveler_1
+	trait = wild_oat
+
+	1040.4.14 = {
+		birth = "1040.4.14"
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = has_scripted_weight
+		}	
+	}
+	1066.1.1 = {
+		employer = 242505
+	}
+	1066.9.16 = {
+		death = { death_reason = death_flight_attempt }
+	}
+}
+
+easteregg_sandra_runge_moller = { #QA
+	name = "Sandra"
+	dynasty = vanity_runge_moller
+	dna = easteregg_sandra_runge_moller
+	religion = "catholic"
+	culture = "danish"
+	female = yes
+
+	#Skills
+	diplomacy = 8
+	martial = 3
+    stewardship = 8
+	intrigue = 5
+	learning = 7
+	prowess = 0
+	
+	#Education
+	trait = education_stewardship_3
+
+	#Personality Traits
+	trait = content
+	trait = compassionate
+	trait = stubborn
+	
+	#Other Traits
+	trait = poet
+	trait = comfort_eater
+	
+	
+	sexuality = bisexual
+	disallow_random_traits = yes
+	
+	1037.10.11 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		} 
+	}
+	1065.1.1 = {
+		employer = 168643
+
+		effect = {
+			add_secret = { type = secret_non_believer	}
+			learn_language_of_culture = culture:anglo_saxon
+		}		
+	}
+	1066.1.1 = {
+		move_to_pool = yes 
+	}
+
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+easteregg_stella_carrick = {
+	name = "Stella"
+	dna = easteregg_stella_carrick_dna
+	dynasty = vanity_carrick
+	religion = "catholic"
+	culture = "scottish"
+	female = yes
+
+	#Education
+	trait = education_intrigue_3
+
+	#Personality
+	trait = impatient
+	trait = diligent
+	trait = ambitious
+
+	#Other
+	trait = confider
+	trait = family_first
+	trait = intellect_good_1
+    
+  	sexuality = heterosexual
+
+	disallow_random_traits = yes
+
+	1045.8.5 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = has_scripted_weight
+			add_character_flag = no_headgear
+		}	
+	}
+	
+	1066.1.1 = {
+		employer = 984 # King Malcolm 3 of Scotland
+	}
+
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# Concept Artist
+easteregg_alessandro_bragalini = {
+	name = "Alessandro"
+	dna = easteregg_alessandro_bragalini
+	dynasty = vanity_bragalini
+	religion = "catholic"
+	culture = "greek"
+
+	#Skills
+	diplomacy = 3
+	martial = 8
+	stewardship = 4
+	intrigue = 6
+	learning = 7
+	prowess = 6
+	
+	#Education
+	trait = education_martial_3
+
+	#Personality Traits
+	trait = diligent
+	trait = cynical
+	trait = vengeful
+	
+	#Other Traits
+	trait = blademaster_2
+	
+	sexuality = heterosexual
+	disallow_random_traits = yes
+	
+	1027.7.17 = {
+		birth = yes
+		effect = { 
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		}
+	}
+	1066.9.15 = {
+		employer = cisalpine0661
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# User Researcher
+easteregg_jenny_wickman = {
+	name = "Jenny"
+	dynasty = vanity_wickman
+	religion = "catholic"
+	culture = "swedish"
+	female = yes
+
+	#Skills
+	diplomacy = 8
+	martial = 6
+	stewardship = 2
+	intrigue = 4
+	learning = 8
+	prowess = 9
+	
+	#Education
+	trait = education_diplomacy_3
+
+	#Personality Traits
+	trait = gregarious
+	trait = gluttonous
+	trait = diligent
+	
+	#Other Traits
+	trait = comfort_eater
+	trait = mystic_3
+	trait = lunatic_1
+
+	sexuality = bisexual
+	disallow_random_traits = yes
+	
+	1037.6.1 = {
+		birth = yes
+	}
+	1066.1.1 = {
+		give_nickname = nick_the_mountain_dweller
+	}
+	1066.9.15 = {
+		employer = 100525 # Sweden
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+# 2D UI Artist
+easteregg_jon_astrup_hallkvist = {
+	name = "Jon"
+	dna = easteregg_jon_astrup_hallkvist
+	dynasty = vanity_astrup_hallkvist
+	religion = "catholic"
+	culture = "norse"
+	female = no
+
+	#Skills
+	diplomacy = 6
+	martial = 5
+	stewardship = 11
+	intrigue = 5
+	learning = 8
+	prowess = 5
+	
+	#Education
+	trait = education_stewardship_3
+
+	#Personality Traits
+	trait = honest
+	trait = stubborn
+	trait = generous
+	
+	#Other Traits
+	trait = reveler_1
+	trait = organizer
+
+	sexuality = heterosexual
+	disallow_random_traits = yes
+	
+	1034.8.9 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		}
+	}
+	1066.9.15 = {
+		employer = 100525 # Sweden
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+easteregg_maxence_voleau = { # Game Director
+	name = "Maxentius"
+	dynasty = vanity_voleau
+	dna = easteregg_maxence_voleau
+	religion = "catholic"
+	culture = "breton"
+
+	#Skills
+	diplomacy = 15
+	martial = 5
+    stewardship = 18
+	intrigue = 0
+	learning = 16
+	prowess = 2
+
+	#Education
+	trait = education_stewardship_4
+
+	#Personality Traits
+	trait = compassionate
+	trait = honest
+	trait = generous
+
+	#Other Traits
+	trait = reveler_2
+	trait = drunkard
+	trait = lisping
+	trait = profligate
+
+
+	sexuality = heterosexual
+	disallow_random_traits = yes
+
+	1032.5.17 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = no_headgear
+		}
+	}
+	1066.1.1 = {
+		employer = 178 #Hoël nab Judhael of Cornouaille
+	}
+	1066.9.16 = {
+		death = yes
+	}
+}
+
+easteregg_fei_berg_hulthen = { # Technical Animator
+	name = "Fei"
+	dna = easteregg_fei_berg_hulthen
+	dynasty = vanity_berg_hulthen
+	religion = "norse_pagan"
+	culture = "swedish"
+	sexuality = bisexual
+	female = no
+
+	# Education
+	trait = education_learning_2
+
+	# Personality
+	trait = chaste
+	trait = diligent
+	trait = ambitious
+	trait = patient
+
+	# Other Traits
+	trait = intellect_good_1
+	trait = depressed_1
+	trait = legitimized_bastard
+
+	diplomacy = 7
+	martial = 4
+	stewardship = 6
+	intrigue = 5
+	learning = 9
+	prowess = 0
+
+	disallow_random_traits = yes
+
+	1044.12.2 = {
+		birth = yes
+		effect = {
+			add_character_flag = has_scripted_appearance
+			add_character_flag = has_scripted_weight
+			add_character_flag = no_headgear
+		}
+	}
+	
+	1066.1.1 = {
+		employer = 34156 # Denmark, to be Sweden
+		effect = {
+			add_secret = { type = secret_deviant }
+			add_secret = { type = secret_non_believer }
+		}
+	}
+	
 	1066.9.16 = {
 		death = yes
 	}
