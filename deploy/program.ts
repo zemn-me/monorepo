@@ -5,9 +5,10 @@
 import fs from 'fs/promises';
 import child_process from 'child_process';
 import { promisify } from 'util';
-import { context, getOctokit } from '@actions/github';
+import { context as githubCtx, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
+import { Github as mockGithub, context as mockContext } from './mocks';
 
 const Program = new Command();
 
@@ -74,6 +75,45 @@ interface ReleaseProps {
 	}): Promise<void>;
 }
 
+export function releaseNotes(notes: (NpmPackageInfo | ArtifactInfo)[]) {
+	const artifacts: ArtifactInfo[] = [];
+	const npmPackages: NpmPackageInfo[] = [];
+
+	for (const note of notes) {
+		if (note.kind === 'artifact') {
+			artifacts.push(note);
+			continue;
+		}
+		if (note.kind === 'npm_publication') {
+			npmPackages.push(note);
+			continue;
+		}
+		throw new Error(`Unknown kind ${(note as any).kind}`);
+	}
+
+	return `${
+		artifacts.length
+			? `This release contains the following artifacts:\n ${artifacts
+					.map(
+						artifact =>
+							` - ${artifact.buildTag} → ${artifact.filename}`
+					)
+					.join('\n')}`
+			: ''
+	}
+${
+	npmPackages.length
+		? `This release contains the following NPM packages:\n ${npmPackages
+				.map(
+					pkg =>
+						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
+				)
+				.join('\n')}`
+		: ''
+}
+`;
+}
+
 const release =
 	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
 	async ({
@@ -117,13 +157,14 @@ export const program = Program.name('release')
 	)
 	.option('--dryRun <bool>', 'Perform a dry run.', false)
 	.action(async dryRun => {
+		const context = dryRun ? mockContext : githubCtx;
+		const Github = dryRun
+			? mockGithub
+			: getOctokit(process.env['GITHUB_TOKEN']!);
+
 		const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
 			context.sha
 		}`;
-
-		const Github = !dryRun
-			? getOctokit(process.env['GITHUB_TOKEN']!)
-			: undefined;
 
 		const releaser = release(
 			artifact(
@@ -139,88 +180,40 @@ export const program = Program.name('release')
 		);
 
 		releaser({
-			uploadReleaseAsset: Github
-				? async ({ name, release_id, data }) =>
-						void (await Github.rest.repos.uploadReleaseAsset({
-							owner: context.repo.owner,
-							repo: context.repo.repo,
-							release_id: await release_id,
-							name,
-							// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
-							data: data as unknown as string,
-						}))
-				: async ({ name, release_id, data }) => {
-						if (name === '') throw new Error('Name is empty');
-						if (!release_id) throw new Error('Release_id is empty');
-						if (!data) throw new Error('data is empty');
-				  },
+			uploadReleaseAsset: async ({ name, release_id, data }) =>
+				void (await Github.rest.repos.uploadReleaseAsset({
+					owner: context.repo.owner,
+					repo: context.repo.repo,
+					release_id: await release_id,
+					name,
+					// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
+					data: data as unknown as string,
+				})),
 
-			createRelease:
-				Github !== undefined
-					? async ({ body }) => ({
-							release_id: (
-								await Github.rest.repos.createRelease({
-									// could probably use a spread operator here
-									// but i also think that would be uglier...
-									owner: context.repo.owner,
-									repo: context.repo.repo,
+			createRelease: async ({ body }) => ({
+				release_id: (
+					await Github.rest.repos.createRelease({
+						// could probably use a spread operator here
+						// but i also think that would be uglier...
+						owner: context.repo.owner,
+						repo: context.repo.repo,
 
-									tag_name: syntheticVersion,
+						tag_name: syntheticVersion,
 
-									body,
+						body,
 
-									generate_release_notes: true,
+						generate_release_notes: true,
 
-									name: syntheticVersion,
+						name: syntheticVersion,
 
-									target_commitish: context.ref,
-								})
-							).data.id,
-					  })
-					: async ({ body }) => {
-							if (body === '')
-								throw new Error(`Release body is empty.`);
-							return { release_id: 0 };
-					  },
+						target_commitish: context.ref,
+					})
+				).data.id,
+			}),
+
 			dryRun: dryRun,
-			releaseNotes: (notes: (NpmPackageInfo | ArtifactInfo)[]) => {
-				const artifacts: ArtifactInfo[] = [];
-				const npmPackages: NpmPackageInfo[] = [];
 
-				for (const note of notes) {
-					if (note.kind === 'artifact') {
-						artifacts.push(note);
-						continue;
-					}
-					if (note.kind === 'npm_publication') {
-						npmPackages.push(note);
-						continue;
-					}
-					throw new Error(`Unknown kind ${(note as any).kind}`);
-				}
-
-				return `${
-					artifacts.length
-						? `This release contains the following artifacts:\n ${artifacts
-								.map(
-									artifact =>
-										` - ${artifact.buildTag} → ${artifact.filename}`
-								)
-								.join('\n')}`
-						: ''
-				}
-${
-	npmPackages.length
-		? `This release contains the following NPM packages:\n ${npmPackages
-				.map(
-					pkg =>
-						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
-				)
-				.join('\n')}`
-		: ''
-}
-`;
-			},
+			releaseNotes,
 		});
 	});
 
