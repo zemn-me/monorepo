@@ -74,6 +74,45 @@ interface ReleaseProps {
 	}): Promise<void>;
 }
 
+export function releaseNotes(notes: (NpmPackageInfo | ArtifactInfo)[]) {
+	const artifacts: ArtifactInfo[] = [];
+	const npmPackages: NpmPackageInfo[] = [];
+
+	for (const note of notes) {
+		if (note.kind === 'artifact') {
+			artifacts.push(note);
+			continue;
+		}
+		if (note.kind === 'npm_publication') {
+			npmPackages.push(note);
+			continue;
+		}
+		throw new Error(`Unknown kind ${(note as any).kind}`);
+	}
+
+	return `${
+		artifacts.length
+			? `This release contains the following artifacts:\n ${artifacts
+					.map(
+						artifact =>
+							` - ${artifact.buildTag} → ${artifact.filename}`
+					)
+					.join('\n')}`
+			: ''
+	}
+${
+	npmPackages.length
+		? `This release contains the following NPM packages:\n ${npmPackages
+				.map(
+					pkg =>
+						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
+				)
+				.join('\n')}`
+		: ''
+}
+`;
+}
+
 const release =
 	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
 	async ({
@@ -121,9 +160,10 @@ export const program = Program.name('release')
 			context.sha
 		}`;
 
-		const Github = !dryRun
-			? getOctokit(process.env['GITHUB_TOKEN']!)
-			: undefined;
+		const Github =
+			dryRun == false
+				? getOctokit(process.env['GITHUB_TOKEN']!)
+				: undefined;
 
 		const releaser = release(
 			artifact(
@@ -138,22 +178,27 @@ export const program = Program.name('release')
 			npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
 		);
 
+		if (!dryRun && Github === undefined)
+			throw new Error('Unable to initialize Github API.');
+
 		releaser({
-			uploadReleaseAsset: Github
-				? async ({ name, release_id, data }) =>
-						void (await Github.rest.repos.uploadReleaseAsset({
-							owner: context.repo.owner,
-							repo: context.repo.repo,
-							release_id: await release_id,
-							name,
-							// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
-							data: data as unknown as string,
-						}))
-				: async ({ name, release_id, data }) => {
-						if (name === '') throw new Error('Name is empty');
-						if (!release_id) throw new Error('Release_id is empty');
-						if (!data) throw new Error('data is empty');
-				  },
+			uploadReleaseAsset:
+				dryRun == false && Github !== undefined
+					? async ({ name, release_id, data }) =>
+							void (await Github.rest.repos.uploadReleaseAsset({
+								owner: context.repo.owner,
+								repo: context.repo.repo,
+								release_id: await release_id,
+								name,
+								// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
+								data: data as unknown as string,
+							}))
+					: async ({ name, release_id, data }) => {
+							if (name === '') throw new Error('Name is empty');
+							if (!release_id)
+								throw new Error('Release_id is empty');
+							if (!data) throw new Error('data is empty');
+					  },
 
 			createRelease:
 				Github !== undefined
@@ -183,44 +228,8 @@ export const program = Program.name('release')
 							return { release_id: 0 };
 					  },
 			dryRun: dryRun,
-			releaseNotes: (notes: (NpmPackageInfo | ArtifactInfo)[]) => {
-				const artifacts: ArtifactInfo[] = [];
-				const npmPackages: NpmPackageInfo[] = [];
 
-				for (const note of notes) {
-					if (note.kind === 'artifact') {
-						artifacts.push(note);
-						continue;
-					}
-					if (note.kind === 'npm_publication') {
-						npmPackages.push(note);
-						continue;
-					}
-					throw new Error(`Unknown kind ${(note as any).kind}`);
-				}
-
-				return `${
-					artifacts.length
-						? `This release contains the following artifacts:\n ${artifacts
-								.map(
-									artifact =>
-										` - ${artifact.buildTag} → ${artifact.filename}`
-								)
-								.join('\n')}`
-						: ''
-				}
-${
-	npmPackages.length
-		? `This release contains the following NPM packages:\n ${npmPackages
-				.map(
-					pkg =>
-						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
-				)
-				.join('\n')}`
-		: ''
-}
-`;
-			},
+			releaseNotes,
 		});
 	});
 
