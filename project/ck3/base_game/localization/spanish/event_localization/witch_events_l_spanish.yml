@@ -43,7 +43,7 @@
  witch.2003.b.tt:0 "[target.GetShortUIName] debe conocer tu [secret|lE] para que se le invite al $activity_witch_ritual$"
  witch.2003.c:0 "[target.Custom('ES_ElElla')|U] tendrá que encontrar su propio camino."
 
- witch.2003.message:0 "[owner.Custom('ES_ElLa')|U] bruj[target.Custom('ES_OA')] se revela ante mí"
+ witch.2003.message:0 "El/La bruj[target.Custom('ES_OA')] se revela ante mí"
 
  witch.2004.t:1 "$convert_to_witch$: Mente cerrada, corazón frío"
  witch.2004.start.desc:0 "[target.GetFirstName] se revuelve en sueños mientras trepo por su ventana. «¿Quién va?», dice con voz temblorosa.\n\n«Mi nombre no importa. Estoy aquí para servir a [owner.GetFaith.WitchGodName]».\n\n"
@@ -170,7 +170,7 @@
  witch.3014.b.learning:0 "de la poesía."
  witch.3014.c:0 "Compartiré Sus regalos carnales con alguien."
  witch.3014.c.tt:1 "Intentas encontrar alguien con un ansia similar"
- witch.3014.d:0 "Me atrae [new_guest.Custom('ES_ElLa')] [new_guest.Custom('ComplimentAdjective')] [new_guest.GetFirstNameNoTooltip]."
+ witch.3014.d:0 "Me atrae el/la [new_guest.Custom('ComplimentAdjective')] [new_guest.GetFirstNameNoTooltip]."
  witch.3014.e:0 "¿Dónde está mi [sex_partner.Custom('LoverPetName')]? Anhelo su tacto…"
  witch.3014.d.move_in:0 "Nos llevamos espléndidamente"
  witch.3014.d.friend:0 "Nos llevamos bien"
@@ -244,8 +244,8 @@
  witch.4002.gluttonous.desc:0 "[annoying_clergy.GetTitledFirstName] se atiborró con los pasteles mezclados con drogas que envié a sus aposentos. Entonces, ¡se puso a vagar por la ciudad con la boca embadurnada de mermelada y pastel antes de caer dormid[annoying_clergy.Custom('ES_OA')] en la escalinata de su [annoying_clergy.GetFaith.HouseOfWorship]!"
  witch.4002.lustful.desc:0 "Escribí un poema especialmente explícito sobre [lustful_desc.Custom2('MyCharacterIntroduction', ROOT.Char)] y su «[lustful_desc.Custom('ObjectifiedFeature')]», falsificando la firma de [annoying_clergy.GetTitledFirstName] y la dejé en los aposentos [lustful_desc.Custom('ES_DelDela')] [lustful_desc.GetLadyLord]. A [lustful_desc.GetFirstName] #EMP no#! le agradó la dedicatoria y tampoco se calló al respecto."
  witch.4002.craven.desc:0 "Mientras [annoying_clergy.GetTitledFirstName] dormía, metí una rata entre sus sábanas. Casi no tuve tiempo de esconderme antes de que se despertara gritando, saltase de la cama y saliera corriendo… ¡tan desnud[annoying_clergy.Custom('ES_OA')] como vino al mundo!"
- witch.4002.vengeful.desc:0 "Soborné a un escribano para convencer a [annoying_clergy.GetTitledFirstName] de que [vengeful_desc.Custom2('MyCharacterIntroduction', ROOT.Char)] le había estado insultando a sus espaldas. Los días siguientes, cada vez que tuvo oportunidad, [annoying_clergy.GetFirstNameNoTooltip] fue increíblemente groser[annoying_clergy.Custom('ES_OA')] con [vengeful_desc.Custom('ES_ElLa')] pobre [vengeful_desc.GetFirstNameNoTooltip]. Al final, [vengeful_desc.GetFirstNameNoTooltip] se enfrentó a [annoying_clergy.Custom('ES_ElElla')] por su comportamiento malicioso. [annoying_clergy.GetFirstNameNoTooltip] no tuvo nada que decir en su defensa."
- witch.4002.wrathful.desc:0 "Resulta que sé que [annoying_clergy.GetTitledFirstName] es un[annoying_clergy.Custom('ES_XA')] alcohólic[annoying_clergy.Custom('ES_OA')] redomad[annoying_clergy.Custom('ES_OA')] y que está un poco encaprichad[annoying_clergy.Custom('ES_OA')] de un[wrathful_desc.Custom('ES_OA')] de mis sirvientes. Hice que [wrathful_desc.Custom('ES_ElElla')] le llevara una botella de licor muy caro y fuerte a los aposentos de [annoying_clergy.GetTitledFirstNameNoTooltip]. Motivad[annoying_clergy.Custom('ES_OA')] con la promesa de un ascenso, [wrathful_desc.Custom('ES_ElLa')] [wrathful_desc.GetWomanMan] [annoying_clergy.Custom('ES_LoLa')] emborrachó justo a tiempo para el [annoying_clergy.Custom ('GetReligiousRite')]."
+ witch.4002.vengeful.desc:0 "Soborné a un escribano para convencer a [annoying_clergy.GetTitledFirstName] de que [vengeful_desc.Custom2('MyCharacterIntroduction', ROOT.Char)] le había estado insultando a sus espaldas. Los días siguientes, cada vez que tuvo oportunidad, [annoying_clergy.GetFirstNameNoTooltip] fue increíblemente groser[annoying_clergy.Custom('ES_OA')] con el/la pobre [vengeful_desc.GetFirstNameNoTooltip]. Al final, [vengeful_desc.GetFirstNameNoTooltip] se enfrentó a [annoying_clergy.GetSheHe] por su comportamiento malicioso. [annoying_clergy.GetFirstNameNoTooltip] no tuvo nada que decir en su defensa."
+ witch.4002.wrathful.desc:0 "Resulta que sé que [annoying_clergy.GetTitledFirstName] es un[annoying_clergy.Custom('ES_XA')] alcohólic[annoying_clergy.Custom('ES_OA')] redomad[annoying_clergy.Custom('ES_OA')] y que está un poco encaprichad[annoying_clergy.Custom('ES_OA')] de un[wrathful_desc.Custom('ES_OA')] de mis sirvientes. Hice que [wrathful_desc.GetSheHe] le llevara una botella de licor muy caro y fuerte a los aposentos de [annoying_clergy.GetTitledFirstNameNoTooltip]. Motivad[annoying_clergy.Custom('ES_OA')] con la promesa de un ascenso, [wrathful_desc.GetSheHe] [annoying_clergy.GetHerHim] emborrachó justo a tiempo para el [annoying_clergy.Custom ('GetReligiousRite')]."
  witch.4002.arrogant.desc:0 "Aunque intenta ocultarlo, sé que a [annoying_clergy.GetTitledFirstName] le preocupa mucho su aspecto. Guarda una pomada en sus aposentos que se aplica religiosamente todas las mañanas. Me asomé a sus habitaciones y le agregué algunas hierbas irritantes. Al día siguiente, ¡tenía la cara cubierta de sarpullidos!"
  witch.4002.end.desc:0 "\n\nMis cortesanos no hablaron de otra cosa anoche. ¡[annoying_clergy.GetFirstNameNoTooltip] nunca lo superará!"
  witch.4002.a:0 "¡Le está bien empleado!"

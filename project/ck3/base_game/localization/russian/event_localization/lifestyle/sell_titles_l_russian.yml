@@ -26,7 +26,7 @@
  sell_titles.0006.a:0 "Вы смеете упрекать меня?!"
 
  sell_titles.1002.t:0 "Продажа титулов: умеренное предложение"
- sell_titles.1002.desc:1 "[Select_CString(merchant.IsFemale, 'Некая', 'Некий' )] [merchant.GetTitledFirstName], [Select_CString(merchant.IsFemale, 'богатая торговка', 'богатый торговец' )], [Select_CString(merchant.IsFemale, 'услышала', 'услышал' )] о моих попытках продать малые титулы. [merchant.GetSheHe|U] же выдвигает более смелое предложение:\n\n«Если я докажу свое дальнее родство с династией [ROOT.Char.GetDynasty.GetName], поддержите ли вы мои притязания?»\n\nПредложение совершенно нелепо, но всё же [merchant.GetSheHe] обладает совершенно неимоверным богатством…"
+ sell_titles.1002.desc:1 "[Select_CString(merchant.IsFemale, 'Некая', 'Некий' )] [merchant.GetTitledFirstName], [Select_CString(merchant.IsFemale, 'богатая торговка', 'богатый торговец' )], [Select_CString(merchant.IsFemale, 'услышала', 'услышал' )] о моих попытках продать малые титулы. [merchant.GetSheHe|U] же выдвигает более смелое предложение:\n\n«Если я докажу свое дальнее родство с династией [ROOT.Char.GetDynasty.GetBaseName], поддержите ли вы мои притязания?»\n\nПредложение совершенно нелепо, но всё же [merchant.GetSheHe] обладает совершенно неимоверным богатством…"
  sell_titles.1002.a.muslim:0 "Даже Мухаммед был торговцем!"
  sell_titles.1002.a:0 "Давайте отпразднуем возвращение [Select_CString(merchant.IsFemale, 'моей давно потерянной сестры', 'моего давно потерянного брата' )]!"
  sell_titles.1002.b:0 "Мое имя не продается, ни при каких обстоятельствах!"

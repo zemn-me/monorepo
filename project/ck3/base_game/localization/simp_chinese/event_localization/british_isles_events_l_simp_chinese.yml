@@ -16,8 +16,8 @@
  british_isles.1001.a:0 "新时代的曙光！"
 
  british_isles.1002.t:0 "丹麦法区"
- british_isles.1002.desc_same_culture:0 "得益于[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))][restorer.GetName]的运作，丹麦法区得以重建！这片岛屿再一次回到了[restorer.GetCulture.GetName]人的统治之下。"
- british_isles.1002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))][restorer.GetName]和[restorer.GetHerHis]的无耻暴徒们在这片土地上成立了一个新的国度，并宣称其为丹麦法区王国的重生。\n\n我们将拭目以待，这一恢复[restorer.GetCulture.GetName]人在英格兰统治的举措是否能够比之前那次成功……"
+ british_isles.1002.desc_same_culture:0 "得益于[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))][restorer.GetName]的运作，丹麦法区得以重建！这片岛屿再一次回到了[restorer.GetCulture.GetName]的统治之下。"
+ british_isles.1002.desc:0 "[ROOT.Char.Custom2('RelationDescriptor', SCOPE.sC('restorer'))][restorer.GetName]和[restorer.GetHerHis]的无耻暴徒们在这片土地上成立了一个新的国度，并宣称其为丹麦法区王国的重生。\n\n我们将拭目以待，这一恢复[restorer.GetCulture.GetName]在英格兰统治的举措是否能够比之前那次成功……"
  british_isles.1002.a:0 "[restorer.GetCulture.GetNameNoTooltip]之灾荼毒大地。"
  british_isles.1002.b:0 "[restorer.GetCulture.GetNameNoTooltip]人的胜利！"
  british_isles.1002.c:0 "唔，你刚刚说到了[restorer.GetCulture.GetNameNoTooltip]？叫上我一个！"
@@ -87,7 +87,7 @@
  negotiate_the_danelaw_accept_effect.de_jure_holdings_recognised.tt:0 "[ntd_nord.GetTitledFirstName]控制至少一个[county|E]的$k_england_adj$[duchies|E]都会成为$k_danelaw_article$$k_danelaw$的[de_jure|E]部分"
  negotiate_the_danelaw_accept_effect.independent_holdings_recognised.tt:0 "[ruler|E]为$north_germanic_group$[culture|E]或$germanic_religion$[faith|E]的所有独立$k_england_adj$[duchies|E]成为$k_danelaw_article$$k_danelaw$的[de_jure|E]部分"
  negotiate_the_danelaw_accept_effect.riled_independents_list:0 "$k_england$内所有独立统治者"
- TRUCE_SIGNED_PARTITION:0 "分割王国同时也会签署停战协议\n\n"
+ TRUCE_SIGNED_PARTITION:1 "\n分割王国同时也会签署停战协议"
 
  resolve_danelaw_partition_effect.adjust_de_jures.tt:0 "$k_danelaw_article$$k_danelaw$所有[de_jure|E]领土[de_jure_drift_drifted|E]至$k_england$"
  resolve_danelaw_partition_effect.coa_changed.tt:0 "$k_england$将使用$k_danelaw_article$$k_danelaw$纹章"

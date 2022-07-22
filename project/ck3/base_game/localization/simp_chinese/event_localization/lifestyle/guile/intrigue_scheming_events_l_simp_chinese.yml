@@ -241,7 +241,7 @@
  intrigue_scheming.4050.t:0 "情报掮客"
  intrigue_scheming.4050.desc.start:0 "我期待[buyer.GetTitledFirstName]会对我所获得的情报非常感兴趣，它指出了"
  intrigue_scheming.4050.desc.lover:1 "[buyer.GetHerHis]的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]和[target.GetTitledFirstName]上床了……"
- intrigue_scheming.4050.desc.incest:2 "[buyer.GetHerHis]的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]和[owner.GetFirstNamePossessiveNoTooltip]的[owner.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]发生了性关系……"
+ intrigue_scheming.4050.desc.incest:2 "[buyer.GetHerHis]的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]和[owner.GetFirstNamePossessiveNoTooltip]的[owner.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]一直保持着性关系……"
  intrigue_scheming.4050.desc.pregnancy:1 "[buyer.GetHerHis]的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]怀上了[target.GetTitledFirstName]的孩子……"
  intrigue_scheming.4050.desc.bastard:3 "[buyer.GetHerHis]的[buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]事实上是[target.GetRealFather.GetTitledFirstName]的种……"
  intrigue_scheming.4050.desc.murderattempt:0 "[owner.GetTitledFirstName]是谋杀[target.GetTitledFirstName]的未遂阴谋的幕后黑手……"
@@ -284,7 +284,7 @@
 
  intrigue_scheming.4054.desc.start:0 "仔细检查了[seller.GetTitledFirstName]给我的证据，一切昭然若揭，"
  intrigue_scheming.4054.desc.lover:1 "我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]一直在与[target.GetTitledFirstName]上床！"
- intrigue_scheming.4054.desc.incest:1 "我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]和我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]之间有性关系！"
+ intrigue_scheming.4054.desc.incest:1 "我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]和我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]之间一直有性关系！"
  intrigue_scheming.4054.desc.pregnancy:1 "我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('owner'))][owner.GetTitledFirstName]怀上了[target.GetTitledFirstName]的孩子！"
  intrigue_scheming.4054.desc.bastard:2 "我的[buyer.Custom2('RelationToMeShort', SCOPE.sC('target'))][target.GetTitledFirstName]事实上是[target.GetRealFather.GetTitledFirstName]的种！"
  intrigue_scheming.4054.desc.murderattempt:0 "[owner.GetTitledFirstName]是谋杀[target.GetTitledFirstName]的未遂阴谋的幕后黑手……"

@@ -341,12 +341,12 @@
  child_personality.110.confirm_sadistic:0 "C’est juste un animal."
  child_personality.110.confirm_paranoid:1 "Oui, c’était une épreuve. Bien joué, [child.GetFirstNameNoTooltip]."
  child_personality.110.ambitious_change:0 "Montrez-moi que vous pourriez abattre une bête vous-même !"
- child_personality.110.sadistic_change:0 "Il y a toujours quelqu’un qui souffre. Assurez-vous juste que ce ne soit pas vous."
+ child_personality.110.sadistic_change:0 "Il y a toujours des victimes. Faites en sorte de ne pas en être une."
  child_personality.110.paranoid_change:0 "C’était un test. J’espère que vous ferez mieux la prochaine fois."
  child_personality.1111.t:0 "Assez satisfait[child.Custom('FR_E')]"
  child_personality.1112.t:0 "Un avis changeant"
  child_personality.1113.t:0 "Me faire confiance"
- child_personality.111.desc:0 "[child.Custom('FR_le_Char_Pi')|U][child.GetTitledFirstName] me demande [child.Custom('child_object_of_interest_indefinite')] depuis longtemps, alors je lui ai dit que je lui en procurerais un dans trois mois [child.Custom('FR_SilSielle')] faisait preuve d’une plus grande concentration dans ses études."
+ child_personality.111.desc:0 "[child.Custom('FR_le_Char_Pi')|U][child.GetTitledFirstName] me demande [child.Custom('child_object_of_interest_indefinite')] depuis longtemps, alors je lui ai dit que je lui procurerai ce jouet dans trois mois [child.Custom('FR_SilSielle')] faisait preuve d’une plus grande concentration dans ses études."
  child_personality.111.content:0 "\n\n[child.GetSheHe|U] a répondu que son degré d’investissement dans ses études [child.Custom('FR_LeLa')] satisfaisait, récompense ou non."
  child_personality.111.fickle:1 "\n\n[child.GetSheHe|U] a simplement écarté mon offre en disant qu’[child.Custom('FR_IlElle')] n’était plus intéressé[child.Custom('FR_E')]."
  child_personality.111.trusting:0 "\n\nDepuis que j’ai fait cette promesse, [child.Custom('FR_IlElle')] a redoublé d’efforts dans ses études."
@@ -410,7 +410,7 @@
 
  child_personality.3001.message:0 "M[ROOT.Char.Custom2('FR_RelationToMe_OnA', personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] pose toujours plein de questions !"
 
- child_personality.3002.desc:1 "Il n’y a jamais un moment de calme ! M[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child) ] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] pose plein de questions ! Je fais de mon mieux pour encourager sa curiosité, mais parfois je suis juste épuisé[ROOT.Char.Custom('FR_E')] par le flot incessant de réflexions et d’interrogations."
+ child_personality.3002.desc:1 "Il n’y a jamais un moment de calme ! M[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] pose plein de questions ! Je fais de mon mieux pour encourager sa curiosité, mais parfois je suis juste épuisé[ROOT.Char.Custom('FR_E')] par le flot incessant de réflexions et d’interrogations."
  child_personality.3002.a:1 "Quand un père et une mère s’aiment beaucoup..."
 
  #Rowdy
@@ -421,7 +421,7 @@
  child_personality.3003.message:0 "M[ROOT.Char.Custom2('FR_RelationToMe_OnA',personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] manigance toujours quelque chose !"
 
  child_personality.3004.t:0 "Un[personality_child.Custom('FR_E')] faut[personality_child.Custom('FR_EurRice')] de troubles"
- child_personality.3004.desc:0 "Quand ce n’est pas une farce, c’est une bagarre, un tuteur mécontent ou des genoux éraflés en raison d’une aventure qui a mal tourné. J’en suis arrivé[ROOT.Char.Custom('FR_E')] à m’attendre à des bêtises de la part de m[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child) ] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName]. Sa créativité me tient en alerte."
+ child_personality.3004.desc:0 "Quand ce n’est pas une farce, c’est une bagarre, un tuteur mécontent ou des genoux éraflés en raison d’une aventure qui a mal tourné. J’en suis arrivé[ROOT.Char.Custom('FR_E')] à m’attendre à des bêtises de la part de m[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName]. Sa créativité me tient en alerte."
  child_personality.3004.a:0 "On ne s’ennuie jamais !"
 
 #Bossy
@@ -431,7 +431,7 @@
 
  child_personality.3005.message:0 "M[ROOT.Char.Custom2('FR_RelationToMe_OnA',personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] sait vraiment ce qu’[personality_child.Custom('FR_IlElle')] veut !"
 
- child_personality.3006.desc:0 "Il n’y a pas de limite aux opinions et aux besoins de m[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child) ] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName]. La moitié du temps, [personality_child.Custom('FR_IlElle')] essaie de me dire quoi faire, comme si nos rôles étaient inversés !"
+ child_personality.3006.desc:0 "Il n’y a pas de limite aux opinions et aux besoins de m[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName]. La moitié du temps, [personality_child.Custom('FR_IlElle')] essaie de me dire quoi faire, comme si nos rôles étaient inversés !"
  child_personality.3006.a:0 "Impressionnant ou exaspérant, il n’y a qu’un pas entre les deux."
 
  #Charming
@@ -453,7 +453,7 @@
  child_personality.3009.message:0 "M[ROOT.Char.Custom2('FR_RelationToMe_OnA',personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] est souvent perdu[personality_child.Custom('FR_E')] dans ses pensées !"
 
  child_personality.3010.t:1 "Perdu[personality_child.Custom('FR_E')] dans ses pensées"
- child_personality.3010.desc:1 "M[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] est un[personality_child.Custom('FR_E')] enfant étrangement calme. Quand les autres jouent, [personality_child.Custom('FR_IlElle')] se tient souvent à l’écart. [personality_child.Custom('FR_IlElle')|U] ne parle pas beaucoup, mais je peux dire qu’[personality_child.Custom('FR_IlElle')] pense toujours à quelque chose."
+ child_personality.3010.desc:1 "M[ROOT.GetCharacter.Custom2('FR_RelationToMe_OnA' , personality_child)] [personality_child.Custom('FR_le_Char_Pi')][personality_child.GetTitledFirstName] est un[personality_child.Custom('FR_E')] enfant étrangement calme. Quand les autres jouent, [personality_child.Custom('FR_IlElle')] se tient souvent à l’écart. [personality_child.Custom('FR_IlElle')|U] ne parle pas beaucoup, mais je me doute qu’[personality_child.Custom('FR_IlElle')] pense toujours à quelque chose."
  child_personality.3010.a:1 "Je me demande ce qu’[personality_child.Custom('FR_IlElle')] a en tête ?"
 
 

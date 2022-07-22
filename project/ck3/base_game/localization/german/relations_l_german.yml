@@ -425,7 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T Dies seid Ihr#!"
  FRAME_RELATION_MY_HEIR:2 "#T Dies ist Euer [player_heir|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_MY_LIEGE`
+ FRAME_RELATION_MY_LIEGE:0 "#T Dies ist Euer [liege|E]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T [dynast|E] Eurer [dynasty|E]\n#!$TT_DYNAST_DESC$"
@@ -448,7 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T Mächtiger Vasall#!\nDieser [ruler|E] ist ein [powerful_vassal|E], der nichts von Euch erwartet"
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T Mächtiger Vasall#!\nDieser [ruler|E] ist ein [powerful_vassal|E], der erwartet, im [council|E] zu bleiben"
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T Mächtiger Vasall#!\n@warning_icon!#X Dieser [ruler|E] ist ein [powerful_vassal|E], dessen [opinion|E] über Euch schlechter ausfällt, weil Ihr ihm keinen Posten im [council|E] gewährt habt#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_NON_POWERFUL_VASSAL`
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T Vasall#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "mein Schatz"

@@ -123,7 +123,7 @@
  spouse.2013.opening:0 "Mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('first_spouse'))] [first_spouse.GetFirstName] me lleva aparte y me mira con expresión seria."
  spouse.2013.secret_about_me:0 "\n\n«Tengo que confesarte un secreto», dijo. Cuando se inclina y me susurra al oído, abro los ojos como platos."
  spouse.2013.secret_about_spouse:0 "\n\n«Tienes que saber una cosa», dice. Cuando se inclina y me susurra al oído, abro los ojos como platos."
- spouse.2013.secret_about_other:0 "\n\n«Tengo que contarte algo», dice. «Algo sobre [owner_of_secret.Custom('ES_ElLa')] [owner_of_secret.GetTitledFirstName]». \nCuando se inclina y me susurra al oído, abro los ojos como platos."
+ spouse.2013.secret_about_other:0 "\n\n«Tengo que contarte algo», dice. «Algo sobre [owner_of_secret.GetTitledFirstName]». \nCuando se inclina y me susurra al oído, abro los ojos como platos."
  spouse.2013.a:0 "¿De verdad? ¡Jamás lo habría pensado!"
  spouse.2014.t:0 "¿Una amenaza?"
  spouse.2014.desc:0 "Hay algo raro en el comportamiento de [agent.GetTitledFirstName] con mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('spouse'))] cuando cree que nadie [agent.GetHerHim] mira. Veo cómo mira de reojo, deambula por los pasillos vacíos y presta mucha atención a todos los movimientos de [spouse.GetFirstName].\n\nMe preocupa que esté tramando algo."
@@ -161,7 +161,7 @@
  spouse.3002.b:0 "No puedo actuar así, a espaldas de mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('spouse'))]."
 
  spouse.3003.t:0 "Una conversación preocupante"
- spouse.3003.opening:0 "Durante una visita reciente, pasé un rato hablando con [initial_spouse.GetTitledFirstName], [initial_spouse.Custom('ES_ElLa')] [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('spouse'))] de [spouse.GetTitledFirstName]."
+ spouse.3003.opening:0 "Durante una visita reciente, pasé un rato hablando con [initial_spouse.GetTitledFirstName],  [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('spouse'))] de [spouse.GetTitledFirstName]."
  spouse.3003.exceptional:0 "\n\nTenía a [spouse.GetFirstName] en alta estima, ¡pero lo que [initial_spouse.Custom('ES_ElElla')] me contó prácticamente me horrorizó!"
  spouse.3003.a:1 "¡Demasiado amable he sido, [spouse.GetFirstNameNoTooltip]!"
  spouse.3004.t:0 "Una conversación preocupante"

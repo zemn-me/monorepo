@@ -1,3 +1,5 @@
+# Visigothic culture break-up moved backwards in time to around ~800; probably still being a bit overly-generous at that, but it's a decent date for it.
+
 # 1806 - PAMPLONA
 1806 = {	# PAMPLONA
 	# Misc
@@ -24,9 +26,12 @@
 1811 = {	# NAJERA
 	# Misc
 	culture = basque
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
+
+	# History
+	950.1.1 = { faith = catholic }
 }
 1810 = {	# LOGRONO
 	holding = city_holding
@@ -39,12 +44,16 @@
 1902 = {	# TUDELA
 	#Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	950.1.1 = { culture = castilian }
+	800.1.1 = { culture = andalusian }
+	950.1.1 = {
+		culture = castilian
+		faith = catholic
+	}
 }
 1890 = {	# TARAZONA/Olite
 	holding = city_holding

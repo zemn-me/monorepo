@@ -4,11 +4,11 @@
  learning_medicine.2001.t:0 "Les secrets de la nature"
  learning_medicine.2001.pool.desc:0 "J’ai reçu une offre [herbalist.Custom2('FR_du_MyCharacterIntroductionNoComma', ROOT.Char)]. À en croire la lettre, c’est un[herbalist.Custom('FR_E')] herboriste expérimenté[herbalist.Custom('FR_E')] qui serait disposé[herbalist.Custom('FR_E')] à partager ses connaissances en échange du gîte et du couvert."
  learning_medicine.2001.no_pool.desc:0 "[herbalist.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)|U] est un[herbalist.Custom('FR_E')] herboriste expérimenté[herbalist.Custom('FR_E')], qui connaît aussi bien les plantes médicinales que nocives. À plus d’une occasion, [herbalist.Custom('FR_IlElle')] a proposé de partager son expertise avec moi."
- learning_medicine.2001.chaplain_hates_herbs.desc:1 "\n\nL’offre est intrigante, mais je sais que le [chaplain_hates_herbs.GetCouncilTitle|l] [chaplain_hates_herbs.GetFirstName] se méfie des charmes et des potions. [chaplain_hates_herbs.GetSheHe|U] croit que [ROOT.Char.GetFaith.DevilName] les utilisent pour ses vils desseins..."
+ learning_medicine.2001.chaplain_hates_herbs.desc:1 "\n\nL’offre est intrigante, mais je sais que le [chaplain_hates_herbs.GetCouncilTitle|l] [chaplain_hates_herbs.GetFirstName] se méfie des charmes et des potions. [chaplain_hates_herbs.Custom('FR_IlElle')|U] croit que [ROOT.Char.GetFaith.DevilName] les utilisent pour ses vils desseins..."
 
  learning_medicine.2001.a:0 "Je suis toujours désireu[ROOT.Char.Custom('FR_XSe')] d’apprendre quelque chose de nouveau."
  learning_medicine.2001.b:0 "Une fleur rare ensoleillerait la journée de [flower_receiver.GetFirstNameNoTooltip]."
- learning_medicine.2001.c:0 "[herbalist.GetSheHe|U] pourrait planter des herbes sacrées dans les jardins."
+ learning_medicine.2001.c:0 "[herbalist.Custom('FR_IlElle')|U] pourrait planter des herbes sacrées dans les jardins."
  learning_medicine.2001.d:1 "Je n’ai pas le temps de m’encombrer de terre et de plantes."
  learning_medicine.2001.d.chaplain_hates_herbs:0 "Je me fie au [chaplain_hates_herbs.GetCouncilTitle|l] [chaplain_hates_herbs.GetNameNoTooltip] sur ce sujet."
 
@@ -30,13 +30,13 @@
  learning_medicine.2002.b.failure.t:0 "[herbalist.GetFirstNameNoTooltip] me surprend en train de fouiner"
  learning_medicine.2002.c:0 "Je ne serai pas distrait[ROOT.Char.Custom('FR_E')] par les mythes et les rumeurs."
 
- learning_medicine.2003.desc:0 "« C’est ce que je souhaite apprendre », dis-je alors que je tends le gros volume à [herbalist.GetFirstName]. « M’enseignerez-vous ? »\n\n[herbalist.GetSheHe|U] me regarde longuement et durement. « Êtes-vous vraiment prêt[ROOT.Char.Custom('FR_E')], [ROOT.Char.GetFirstNameNoTooltip] ? Voulez-vous vous consacrer aux mystères [herbalist.GetFaith.WitchGodNamePossessive] en échange de ses bénédictions ? »"
+ learning_medicine.2003.desc:0 "« C’est ce que je souhaite apprendre », dis-je alors que je tends le gros volume à [herbalist.GetFirstName]. « M’enseignerez-vous ? »\n\n[herbalist.Custom('FR_IlElle')|U] me regarde longuement et durement. « Êtes-vous vraiment prêt[ROOT.Char.Custom('FR_E')], [ROOT.Char.GetFirstNameNoTooltip] ? Voulez-vous vous consacrer aux mystères [herbalist.GetFaith.WitchGodNamePossessive] en échange de ses bénédictions ? »"
  learning_medicine.2003.a:0 "Il n’y a rien que je désire plus."
 
 # Improve the skills of your court physician, by Mathilda Bjarnehed
  learning_medicine.2010.t:0 "Une traduction troublante"
  learning_medicine.2010.start.desc:0 "Alors que je franchis le seuil du bureau de m[ROOT.Char.Custom2('FR_RelationToMeShort_OnA', SCOPE.sC('court_physician'))] [court_physician.GetFirstName], je [court_physician.Custom('FR_LeLa')] trouve penché[court_physician.Custom('FR_E')] sur un livre.\n\n« Cette traduction"
- learning_medicine.2010.galen.desc:0 "de Galen"
+ learning_medicine.2010.galen.desc:0 "de Galien"
  learning_medicine.2010.hippocrates.desc:0 "d’Hippocrate"
  learning_medicine.2010.herophilus.desc:0 "d’Hérophile"
  learning_medicine.2010.hildegard.desc:0 "d’Hildegarde de Bingen"
@@ -80,11 +80,11 @@
  learning_medicine.2023.pig_testicles_end.desc:0 "\n\nBien que la poudre ait donné une teinte de moisi au vin, l’expérience a été étonnamment agréable."
  learning_medicine.2023.udder.desc:0 "« Le lait participe à la vie, il faut donc aller à sa source. Les cuisiniers prépareront des mamelles de vache en ragoût pour vous deux. Ne mangez rien d’autre pendant une semaine et vous serez assurément récompensés. »\n\nCe fut une longue semaine."
  learning_medicine.2023.female_orgasm.start.desc:0 "« Comme vous le savez peut-être, le plaisir de la femme est tout aussi important que celui de l’homme."
- learning_medicine.2023.female_orgasm.female.desc:1 "Votre graine doit émerger et se mélanger à celle de votre [spouse.Custom('WifeHusband')]. [spouse.GetSheHe|U] devrait lire ce volume sur les techniques de la chambre à coucher. »\n\nJe n’aurais pas pu espérer un meilleur traitement.\n\n"
+ learning_medicine.2023.female_orgasm.female.desc:1 "Votre graine doit émerger et se mélanger à celle de votre [spouse.Custom('WifeHusband')]. [spouse.Custom('FR_IlElle')|U] devrait lire ce volume sur les techniques de la chambre à coucher. »\n\nJe n’aurais pas pu espérer un meilleur traitement.\n\n"
  learning_medicine.2023.female_orgasm.male.desc:0 "Vous devez faire en sorte que la graine de votre [spouse.Custom('WifeHusband')] émerge, afin qu’elle puisse se mélanger à la vôtre. Vous devriez lire ce volume sur les techniques de la chambre à coucher. »\n\nCe fut beaucoup de travail de maîtriser les méthodes inconnues, mais j’y suis parvenu — du moins à en croire la réaction de [spouse.GetFirstName] !\n\n"
  learning_medicine.2023.milk_bath.desc:0 "« Tous les laits participent à la vie et celui de chèvre est particulièrement puissant. À chaque fois que vous et votre [spouse.Custom('WifeHusband')] voudrez concevoir un enfant, vous devrez d’abord vous baigner dans du lait de chèvre. Vous pourriez même essayer directement dans la baignoire ! »"
  learning_medicine.2023.milk_bath_end.desc:0 "\n\nMême si le lait avait une forte #EMP odeur#!,"
- learning_medicine.2023.end.desc:0 "[physician.GetFirstNameNoTooltip] est très satisfait[physician.Custom('FR_E')] et je me sens très bien ! [physician.GetSheHe|U] nous dit d’être patients, mais je pense que nous pouvons nous attendre à accueillir d’ici quelques mois un nouveau membre de la famille."
+ learning_medicine.2023.end.desc:0 "[physician.GetFirstNameNoTooltip] est très satisfait[physician.Custom('FR_E')] et je me sens très bien ! [physician.Custom('FR_IlElle')|U] nous dit d’être patients, mais je pense que nous pouvons nous attendre à accueillir d’ici quelques mois un nouveau membre de la famille."
  learning_medicine.2023.a:0 "Retirons-nous dans ma chambre, [spouse.GetFirstNameNoTooltip]..."
 
  learning_medicine.2024.end.desc:0 "\n\nBien que j’ai suivi les conseils de [physician.GetFirstName] à la lettre, et qu’[physician.Custom('FR_IlElle')] m’ait dit d’être patient[ROOT.Char.Custom('FR_E')], j’ai de gros doutes. Je me sens nauséeu[ROOT.Char.Custom('FR_XSe')] et faible, et [spouse.GetFirstName] est cloué[spouse.Custom('FR_E')] au lit depuis trois jours."
@@ -128,17 +128,17 @@
 
  #Helping healing hand (medicine friend), by Mathilda Bjarnehed
  learning_medicine.2050.t:0 "Se vider de son sang"
- learning_medicine.2050.start.desc:0 "Je suis en train d’inspecter l’infirmerie de la caserne lorsqu’un soldat gravement blessé y est amené. « [soldier.GetSheHe|U] perd trop de sang ! Où est le médecin ?! »\n\n"
+ learning_medicine.2050.start.desc:0 "Je suis en train d’inspecter l’infirmerie de la caserne lorsqu’un soldat gravement blessé y est amené. « [soldier.Custom('FR_IlElle')|U] perd trop de sang ! Où est le médecin ?! »\n\n"
  learning_medicine.2050.physician.desc:0 "[physician.Custom('FR_le_Char_Pi')|U][physician.GetTitledFirstName] est introuvable."
  learning_medicine.2050.no_physician.desc:0 "Le guérisseur est introuvable."
- learning_medicine.2050.end.desc:0 "Je frissonne à l’idée que je puisse être le seul espoir de c[soldier.Custom('FR_EtEtte')] [soldier.GetWomanMan]\n\nSoudain, sorti[helper.Custom('FR_E')] de nulle part, [helper.Custom2('MyCharacterIntroduction', ROOT.Char)] est à mes côtés. [helper.GetSheHe|U] remonte ses manches et me regarde."
+ learning_medicine.2050.end.desc:0 "Je frissonne à l’idée que je puisse être le seul espoir de c[soldier.Custom('FR_EtEtte')] [soldier.GetWomanMan]\n\nSoudain, sorti[helper.Custom('FR_E')] de nulle part, [helper.Custom2('MyCharacterIntroduction', ROOT.Char)] est à mes côtés. [helper.Custom('FR_IlElle')|U] remonte ses manches et me regarde."
  learning_medicine.2050.a:0 "Passez-moi le garrot !"
  learning_medicine.2050.a.success:0 "[helper.GetFirstNameNoTooltip] et moi sauvons le soldat"
  learning_medicine.2050.a.failure:0 "Malgré nos efforts, nous le perdons"
  learning_medicine.2050.b:0 "#EMP Reculez#! ! C’est #EMP m[ROOT.Char.Custom('FR_OnA')] #!patient[ROOT.Char.Custom('FR_E')] !"
  learning_medicine.2050.b.success:0 "Je sauve le soldat tout[ROOT.Char.Custom('FR_E')] seul[ROOT.Char.Custom('FR_E')]"
  learning_medicine.2050.b.failure:0 "Je suis incapable de le sauver"
- learning_medicine.2050.c:0 "Qu’il saigne. [soldier.GetSheHe|U] ne mérite pas mieux."
+ learning_medicine.2050.c:0 "Qu’[soldier.Custom('FR_IlElle')] saigne. [soldier.Custom('FR_IlElle')|U] ne mérite pas mieux."
 
  learning_medicine.2051.start_our.desc:0 "Notre"
  learning_medicine.2051.start.desc:0 "patient[soldier.Custom('FR_E')] crie et se débat. Même si trois adultes tentent de [soldier.Custom('FR_LeLa')] maintenir, chaque étape est une lutte."
@@ -200,7 +200,7 @@
  learning_medicine_special.1002.b:0 "J’ai juste besoin de trouver des corps... d’une façon ou d’une autre."
  learning_medicine_special.1002.c:0 "C’en est assez ! C’est inconvenant !"
 
- learning_medicine_special.1003.desc_physician:0 "[scoped_physician.GetTitledFirstName] a été ravi[scoped_physician.Custom('FR_E')] d’apprendre que je m’intéressais maintenant à l’anatomie. Avec son aide, j’ai considérablement approfondi ma compréhension du corps humain."
+ learning_medicine_special.1003.desc_physician:0 "[scoped_physician.Custom('FR_le_Char_Pi')|U][scoped_physician.GetTitledFirstName] a été ravi[scoped_physician.Custom('FR_E')] d’apprendre que je m’intéressais maintenant à l’anatomie. Avec son aide, j’ai considérablement approfondi ma compréhension du corps humain."
  learning_medicine_special.1003.desc_fallback:0 "À l’aide de quelques pièces de monnaie judicieusement distribuées et d’un serviteur discret, j’ai obtenu un approvisionnement régulier de corps pour mener des expériences. Je massacrerai malheureusement la plupart d’entre eux, mais on ne fait pas d’omelette sans casser des œufs."
  learning_medicine_special.1003.desc_ending:0 "\n\nJ’aimerais seulement qu’il y ait un moyen d’éviter l’odeur... Je commence à craindre que l’exposition à cet air vicié ne soit néfaste pour ma santé."
  learning_medicine_special.1003.a:0 "Des fleurs pourraient aider."
@@ -208,7 +208,7 @@
  learning_medicine_special.1003.a.bad:0 "L’odeur des cadavres commence à affecter mes humeurs"
  learning_medicine_special.1003.b:0 "Je pense avoir suffisamment appris."
 
- learning_medicine_special.1004.desc:0 "[scoped_physician.Custom('FR_le_Char_Pi')|U][scoped_physician.GetTitledFirstName] n’était pas très content[scoped_physician.Custom('FR_E')] d’apprendre mes expériences. [scoped_physician.GetSheHe|U] a refusé de m’aider et m’a averti que ce genre d’aventure ne relève pas de la compétence d’un[ROOT.Char.Custom('FR_E')] [ROOT.Char.GetTitleTierName|l]."
+ learning_medicine_special.1004.desc:0 "[scoped_physician.Custom('FR_le_Char_Pi')|U][scoped_physician.GetTitledFirstName] n’était pas très content[scoped_physician.Custom('FR_E')] d’apprendre mes expériences. [scoped_physician.Custom('FR_IlElle')|U] a refusé de m’aider et m’a averti que ce genre d’aventure ne relève pas de la compétence d’un[ROOT.Char.Custom('FR_E')] [ROOT.Char.GetTitleTierName|l]."
  learning_medicine_special.1004.unavailable.desc:0 "Puisque [scoped_physician.Custom('FR_le_Char_Pi')][scoped_physician.GetTitledFirstName] ne peut plus m’apporter son aide, je ne peux plus continuer mes expériences sur l’anatomie humaine."
  learning_medicine_special.1004.a:0 "Peut-être avez-vous raison..."
  learning_medicine_special.1004.unavailable.a:0 "Hélas."

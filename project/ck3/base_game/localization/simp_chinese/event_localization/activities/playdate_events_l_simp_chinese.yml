@@ -138,7 +138,7 @@
  playdate.3011.a:0 "要是我们能当父母就好了！"
  playdate.3011.b:0 "好呀。[disliked_participant.GetFirstNameNoTooltip]来扮狗！"
  playdate.3011.c:0 "不要，那太傻了。我们来下棋吧。"
- playdate.3011.c.tt:0 "你对[ROOT.Char.Custom('education_focus_child')]的研究更深入了"
+ playdate.3011.c.tt:0 "你对[THIS.Char.Custom('education_focus_child')]的研究更深入了"
 
  playdate.3012.t:0 "$playdate_header$勇敢的$knight_culture_player_plural_no_tooltip$"
  playdate.3012.desc_knight:0 "[participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U]和我正在观看庭院中的$knight_culture_player_plural_no_tooltip_lowercase$训练，此时[knight.Custom2('MyCharacterIntroduction', ROOT.Char)]面露微笑朝我们走来。"

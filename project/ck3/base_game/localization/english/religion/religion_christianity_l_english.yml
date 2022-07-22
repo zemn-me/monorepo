@@ -3,7 +3,7 @@
  #Common Christian Localization
  christianity_religion:0 "Christianity"
  christianity_religion_adj:0 "Christian"
- christianity_religion_adjerent:0 "Christian"
+ christianity_religion_adherent:0 "Christian"
  christianity_religion_adherent_plural:0 "Christians"
  christianity_religion_desc:0 "Focused on the life and teachings of Jesus of Nazareth, Christianity revolves around the concept of salvation, in which adherents are forgiven for their sins and welcomed by God into the afterlife."
  christianity_high_god_name:0 "God"
@@ -45,11 +45,11 @@
  christianity_bishop:0 "bishop"
  christianity_bishop_plural:0 "bishops"
  christianity_positive_afterlife:0 "heaven"
- christianity_positive_afterlife_2:0 "$christianity_positive_afterlife$" # Optional translation alt
- christianity_positive_afterlife_3:0 "$christianity_positive_afterlife$" # Optional translation alt
+ christianity_positive_afterlife_2:1 "paradise" # Optional translation alt
+ christianity_positive_afterlife_3:1 "$christianity_high_god_name_possessive$ Kingdom" # Optional translation alt
  christianity_negative_afterlife:0 "hell"
- christianity_negative_afterlife_2:0 "$christianity_negative_afterlife$" # Optional translation alt
- christianity_negative_afterlife_3:0 "$christianity_negative_afterlife$" # Optional translation alt
+ christianity_negative_afterlife_2:1 "the Pit" # Optional translation alt
+ christianity_negative_afterlife_3:1 "Gehenna" # Optional translation alt
  christianity_witchgodname_the_horned_god:0 "the Horned God"
  christianity_witchgodname_the_horned_god_possessive:0 "the Horned God's"
 
@@ -121,7 +121,7 @@
  lollard_adherent_plural:0 "Lollards"
  lollard_desc:0 "Denouncing many common Christian sacraments like baptism and confession, Lollards hold that The Holy Bible is the only valid source of Christian doctrine and that any teachings not directly based on it are inherently illegitimate."
 
- insular_celtic:0 "Insular Christianity"
+ insular_celtic:1 "Insularism"
  insular_celtic_adj:0 "Insular"
  insular_celtic_adherent:0 "Insularist"
  insular_celtic_adherent_plural:0 "Insularists"
@@ -167,8 +167,8 @@
  bosnian_church_desc:0 "Long forgotten by Catholic and Orthodox alike, the Krstjani of the Bosnian highlands are more permissive than their better-known compatriots, but lack formal structure. Retaining many archaic elements of Christianity, they are often treated scornfully by coreligionists, if remembered at all."
 
  bosnian_house_of_worship:0 "hiža"
- bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$" # Optional translation alt
- bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$" # Optional translation alt
+ bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$"
+ bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$"
  bosnian_house_of_worship_plural:0 "hiže"
  bosnian_religious_head_title:0 "Pradjed"
  bosnian_religious_head_title_name:0 "Obitelj"
@@ -191,6 +191,20 @@
  bosnian_bishop_female_plural:0 "bake"
  bosnian_bishop_neuter:0 "djed"
  bosnian_bishop_neuterplural:0 "djedi"
+
+ mozarabic_church:0 "Mozarabism"
+ mozarabic_church_adj:0 "Mozarabic"
+ mozarabic_church_adherent:0 "Mozarab"
+ mozarabic_church_adherent_plural:0 "Mozarabs"
+ mozarabic_church_desc:0 "A descendant of the early Iberian rites, Mozarabic Christianity has maintained a level of independence from Rome due to centuries under Islamic rule. Their long cohabitation with other faiths has made them more accepting of differences than more fundamentalist sects."
+
+ adoptionist:0 "Adoptionism"
+ adoptionist_adj:0 "Adoptionist"
+ adoptionist_adherent:0 "Adoptionist"
+ adoptionist_adherent_plural:0 "Adoptionists"
+ adoptionist_desc:0 "The Iberian strand of Adoptionism traces its roots to a combination of independent thinking in the Archbishopric of Toledo and its surrounding sees, the North African puritanism of centuries past, and several extremely charismatic early ninth century heresiarchs.\n\nThough it takes many forms, ranging from the supremely subtle to the utterly blunt, the uniting doctrinal point is a questioning attitude towards the eternal divinity of the Son."
+ adoptionist_religious_head_title:0 "Archbishop"
+ adoptionist_religious_head_title_name:0 "Archbishopric"
 
  conversos:0 "Conversos"
  conversos_adj:0 "Converso"

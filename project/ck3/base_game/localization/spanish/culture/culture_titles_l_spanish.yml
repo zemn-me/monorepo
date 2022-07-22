@@ -603,6 +603,12 @@
  king_feudal_female_grand_duke_independent:0 "Gran duquesa"
  kingdom_feudal_grand_duke_independent:0 "Gran ducado"
 
+### Taifas ###
+# Feudal / Clan
+ duke_feudal_male_andalusian_independent:0 "Emir"
+ duke_feudal_female_andalusian_independent:0 "Emira"
+ duchy_feudal_andalusian_independent:0 "Taifa"
+
 ### Lombard ###
 # Feudal
  duke_feudal_male_lombard_independent:0 "Príncipe"
@@ -794,6 +800,18 @@
  emperor_feudal_muslim_male_dravidian_group:0 "padicha"
  emperor_feudal_muslim_female_dravidian_group:1 "Shahbanou"
  empire_feudal_muslim_dravidian_group:0 "$empire_feudal_arabic_group$"
+
+### GUANCHE (Canary Islands) ###
+ duchy_guanche:0 "Menceyato"
+ kingdom_guanche:0 "Archimenceyato"
+ count_male_guanche:0 "Corán"
+ duke_male_guanche:0 "Mencey"
+ king_male_guanche:0 "Archimencey"
+ emperor_male_guanche:0 "Petut mencey"
+ count_female_guanche:0 "Chamato"
+ duke_female_guanche:0 "Menceya"
+ king_female_guanche:0 "Archimenceya"
+ emperor_female_guanche:0 "Mayec menceya"
 
 ### OBSOLETE with new division ### West-African ###
 # Feudal / Clan / Tribal

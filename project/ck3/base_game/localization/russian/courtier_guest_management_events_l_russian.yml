@@ -2,7 +2,7 @@
  courtier_guest_management.0001.t:4 "[Select_CString(child.IsFemale, 'Ваша', 'Ваш' )] [SCOPE.sC('liege').Custom2('RelationToMeShort', SCOPE.sC('child'))] [child.GetShortUINameNoTooltip] собирается покинуть двор"
  courtier_guest_management.desc:0 "[child.GetTitledFirstName] не имеет причин оставаться при дворе и скоро покинет нас"
 
- courtier_guest_management.0500.t:0 "[Select_CString(GUEST.IsFemale, 'Ваша', 'Ваш' )] [SCOPE.sC('host').Custom2('RelationToMeShort', SCOPE.sC('guest'))] [guest.GetShortUINameNoTooltip] собирается покинуть двор"
+ courtier_guest_management.0500.t:0 "[Select_CString(guest.IsFemale, 'Ваша', 'Ваш' )] [SCOPE.sC('host').Custom2('RelationToMeShort', SCOPE.sC('guest'))] [guest.GetShortUINameNoTooltip] собирается покинуть двор"
  courtier_guest_management.0500.desc:0 "[guest.GetTitledFirstName] не имеет причин оставаться при дворе и скоро покинет нас вместе со своей семьей"
 
  courtier_guest_management.0102.t:0 "Мой последний шанс"

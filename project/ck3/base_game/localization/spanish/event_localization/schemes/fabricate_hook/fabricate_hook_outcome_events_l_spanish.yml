@@ -3,7 +3,7 @@
  fabricate_hook_hook_gained_on_you:0 "¡@warning_icon [owner.GetShortUIName] ha creado un [hook|E] sobre ti!"
 
  fabricate_hook_outcome.0001.t:1 "$fabricate_hook_header$ Un secreto"
- fabricate_hook_outcome.0001.desc:0 "Parece que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] tiene algo que esconder. Por suerte para mí, ya no tengo que emplear la creatividad para tener[target.GetHerHim] bajo mi control."
+ fabricate_hook_outcome.0001.desc:0 "Parece que [target.GetTitledFirstName] tiene algo que esconder. Por suerte para mí, ya no tengo que emplear la creatividad para tener[target.GetHerHim] bajo mi control."
  fabricate_hook_outcome.0001.a:0 "Tan solo tengo que contarle lo que sé…"
  fabricate_hook_outcome.0001.b:0 "Me lo guardaré por el momento."
  fabricate_hook_outcome.0001.c:0 "¡Todo el mundo debería estar al tanto de esto!"
@@ -20,7 +20,7 @@
  fabricate_hook_outcome.1002.a:0 "«Esta es #EMP vuestra#! firma, ¿verdad?»."
 
  fabricate_hook_outcome.1003.t:1 "$fabricate_hook_header$ Un rescate audaz"
- fabricate_hook_outcome.1003.desc:0 "¿No seria maravilloso que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] estuviera en deuda conmigo, no por miedo, sino por gratitud? ¿Y si, por ejemplo, [target.GetHerHim] salvase de unos feroces bandidos en pleno viaje? ¡Sí! Unos feroces bandidos como los hombres que esperan ahora mismo al otro lado de las puertas del castillo.\n\nYo cargaría con mis guardias en el último momento para hacerlos huir. Así, [target.GetFirstNameNoTooltip] estaría en deuda conmigo."
+ fabricate_hook_outcome.1003.desc:0 "¿No seria maravilloso que [target.GetTitledFirstName] estuviera en deuda conmigo, no por miedo, sino por gratitud? ¿Y si, por ejemplo, [target.GetHerHim] salvase de unos feroces bandidos en pleno viaje? ¡Sí! Unos feroces bandidos como los hombres que esperan ahora mismo al otro lado de las puertas del castillo.\n\nYo cargaría con mis guardias en el último momento para hacerlos huir. Así, [target.GetFirstNameNoTooltip] estaría en deuda conmigo."
  fabricate_hook_outcome.1003.a:0 "Sencillo y convincente."
 
  fabricate_hook_outcome.1004.t:1 "$fabricate_hook_header$ Palabras feas"
@@ -39,5 +39,5 @@
  fabricate_hook_outcome.2001.a:0 "Esto no es propio de vos, [owner.GetFirstNameNoTooltip]."
 
  fabricate_hook_outcome.3001.t:1 "$fabricate_hook_header$ Perdiendo la ventaja"
- fabricate_hook_outcome.3001.desc:0 "¡[target.Custom('ES_ElLa')|U] [target.GetTitledFirstName] ha descubierto que intento coaccionar[target.GetHerHim] por medios poco honestos!\n\n¡Debo hacer lo que sea para conservar mi reputación!"
+ fabricate_hook_outcome.3001.desc:0 "¡[target.GetTitledFirstName] ha descubierto que intento coaccionar[target.GetHerHim] por medios poco honestos!\n\n¡Debo hacer lo que sea para conservar mi reputación!"
  fabricate_hook_outcome.3001.a:0 "Con esto se terminan mis intentos…"

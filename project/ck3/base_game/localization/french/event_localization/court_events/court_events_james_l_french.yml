@@ -106,10 +106,3 @@
  court.0112.b:0 "Bientôt, tout [ROOT.Char.GetCapitalLocation.GetTitle.GetNameNoTierNoTooltip] saura ce que vous avez fait !"
  court.0112.c:0 "N’en parlons plus jamais."
  get_regalia_artifact:0 "Vous obtenez un insigne royal comme [artifact|El]"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- court.0105.t:0 "Le plaisir sadique"
- court.0105.desc:0 "À la Cour, j'entends mon bourreau décrire en détail son habituel métier morbide : casser des clous avec des pinces, briser des os sur la roue, et toutes sortes d'actes sombres.\n\nIl semble prendre un plaisir enfantin à commettre ces actes. Cependant, les éloges et la satisfaction à son égard commencent à s'estomper lorsque [executioner.Custom('FR_le_Char')][executioner.GetName] décrit les actes horribles qu'[executioner.Custom('FR_IlElle')] a infligés à une prisonnière enceinte. Bien qu'il ne s'agisse pas d'une règle officielle, la torture des femmes enceintes est considérée comme un acte bestial car elle peut provoquer une violente fausse couche ainsi qu'une grande détresse physique et psychologique pour une femme à la santé fragile. Nombre de mes courtisans affirment que [executioner.Custom('FR_le_Char')][executioner.GetName] a jeté le discrédit sur son métier en commettant cet acte immonde, mais en fin de compte, je suis [ROOT.Char.Custom('FR_le_Char_L')][ROOT.Char.GetTitleAsNameNoTooltip|l] et c'est mon décret qui détermine ce qui est indécent."
- court.0105.a:0 "Tous les criminels sont indignes de sympathie."
- court.0105.b:0 "Jetez-[executioner.Custom('FR_LeLa')] dans la cellule des femmes !"
- court.0105.c:0 "Condamner l'acte malveillant."

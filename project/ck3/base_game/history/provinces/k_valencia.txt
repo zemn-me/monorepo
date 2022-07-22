@@ -7,8 +7,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
 	1259.1.1 = {
 		culture = catalan
 		religion = catholic
@@ -33,21 +33,21 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
 	1280.1.1 = {
 		culture = castilian
 		religion = catholic
 	}
 }
 1851 = {	# CARTAGENA
-	holding = none
+	holding = city_holding
 }
 1850 = {	# AGUILAS
 	holding = none
 }
 1970 = {	# CIEZA
-	holding = city_holding
+	holding = none
 }
 1971 = {	# CARAVACA DE LA CRUZ
 	holding = church_holding
@@ -57,13 +57,13 @@
 1857 = {	# CASTELLON DE LA PLANA
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1259.1.1 = {
 		culture = catalan
 		religion = catholic
@@ -80,13 +80,13 @@
 1937 = {	# TERUEL
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
-	812.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
+	800.1.1 = { culture = andalusian }
+	939.1.1 = { religion = muwalladi }
 	1259.1.1 = {
 		culture = catalan
 		religion = catholic
@@ -108,8 +108,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
 	1259.1.1 = {
 		culture = catalan
 		religion = catholic
@@ -132,8 +132,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	944.1.1 = { culture = andalusian }
 	1259.1.1 = {
 		culture = catalan
 		religion = catholic
@@ -152,8 +152,8 @@
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	939.1.1 = { culture = andalusian }
 	1235.1.1 = {
 		culture = castilian
 		religion = catholic
@@ -176,8 +176,8 @@
 	religion = catholic
 	
 	# History
+	800.1.1 = { culture = andalusian }
 	812.1.1 = { religion = muwalladi }
-	934.1.1 = { culture = andalusian }
 	1245.3.19 = {
 		culture = castilian
 		religion = catholic
@@ -201,34 +201,28 @@
 2000 = {	# IVIZA/Ibiza
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = catalan }
 	928.1.1 = { religion = muwalladi }
-	954.1.1 = { culture = andalusian }
-	1245.1.1 = {
-		culture = catalan
-		religion = catholic
-	}
+	1245.1.1 = { religion = catholic }
 }
 
 ###c_mallorca
 8735 = {	# Palma
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = catalan }
 	928.1.1 = { religion = muwalladi }
-	954.1.1 = { culture = andalusian }
-	1245.1.1 = {
-		culture = catalan
-		religion = catholic
-	}
+	1245.1.1 = { religion = catholic }
 }
 2001 = {	# Alcudia
 	holding = city_holding
@@ -238,15 +232,12 @@
 2002 = {	# MINORCA/Menorca
 	# Misc
 	culture = visigothic
-	religion = catholic
+	religion = mozarabic_church
 	
 	holding = castle_holding
 	
 	# History
+	800.1.1 = { culture = catalan }
 	928.1.1 = { religion = muwalladi }
-	954.1.1 = { culture = andalusian }
-	1245.1.1 = {
-		culture = catalan
-		religion = catholic
-	}
+	1245.1.1 = { religion = catholic }
 }

@@ -76,6 +76,7 @@
  birth.1006.a.message_desc:0 "Le vrai père sait"
  birth.1006.a.mother_message:0 "[real_father.Custom('FR_le_Char_Pi')|U][real_father.GetTitledFirstName] a appris qu’il est le vrai père"
  birth.1006.b:0 "Les gens sauront !"
+ birth.1006.bastard_explanation:0 "Vous avez appris la naissance de [child.GetFirstName] ; la mère, [mother.Custom('FR_le_Char_U_Pi')][mother.GetShortUIName] obtient le secret [secret.GetName|l]"
 
  birth.1010.t:0 "Une descendance pour ma dynastie"
  birth.1010.t_twins:0 "Des enfants de ma dynastie"
@@ -223,9 +224,9 @@
  
  birth.9004.t:0 "L’importance du prénom"
  birth.9004.desc.me:0 "[ROOT.Char.GetFirstNameNoTooltip].\n\nUn prénom si terne, me dis-je parfois, en me demandant ce qu’en penseront les futurs historiens.\n\nJe suis un[ROOT.Char.Custom('FR_E')] [ROOT.Char.GetTitleAsNameNoTooltip|l], donc si je souhaite être appelé[ROOT.Char.Custom('FR_E')] différemment, je n’ai qu’à le faire savoir."
- birth.9004.desc: "[child.GetFirstNameNoTooltip].\n\nAu début, j’aimais bien ce nom, mais maintenant il me semble étrange. Que pensera-t-[child.Custom('FR_IlElle')] de son prénom une fois adulte ?\n\nJe devrais peut-être le changer pour quelque chose de mieux ?"
+ birth.9004.desc:0 "[child.GetFirstNameNoTooltip].\n\nAu début, j’aimais bien ce prénom, mais maintenant il me semble étrange. Que pensera-t-[child.Custom('FR_IlElle')] de son prénom à l’âge adulte ?\n\nJe devrais peut-être le changer pour quelque chose de mieux ?"
  birth.9004.a:0 "Ah, un bien meilleur prénom !"
  birth.9004.b:0 "À la réflexion, [ROOT.Char.GetFirstNameNoTooltip] est bien..."
- birth.9004.b.other: "À la réflexion, [child.GetFirstNameNoTooltip] est bien..."
- birth.9004.b.tt:0 "Vous gardez votre ancien nom"
- birth.9004.b.tt.other: "[child.GetFirstNameNoTooltip] garde son ancien nom"
+ birth.9004.b.other:0 "En fait, [child.GetFirstNameNoTooltip] est bien..."
+ birth.9004.b.tt:0 "Vous gardez votre prénom"
+ birth.9004.b.tt.other:0 "[child.GetFirstNameNoTooltip] garde son prénom"

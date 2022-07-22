@@ -2,8 +2,8 @@
  ### Modifiers
  fired_court_position:0 "Увольнение с придворной должности"
 ## Court Event 7030
- cultural_acceptance_foreign_merchants:0 "Сообщество #L [foreign_merchant.GetCulture.GetName|l]их#! торговцев"
- cultural_acceptance_foreigners_expelled:0 "Изгнание #L [foreign_merchant.GetCulture.GetName|l]их#! торговцев"
+ cultural_acceptance_foreign_merchants:0 "Сообщество #L [foreign_merchant.GetCulture.GetCollectiveNoun|l]их#! торговцев"
+ cultural_acceptance_foreigners_expelled:0 "Изгнание #L [foreign_merchant.GetCulture.GetCollectiveNoun|l]их#! торговцев"
  court_7030_merchant_privileges:0 "Новые привилегии для торговцев"
  court_7030_merchant_privileges_desc:0 "Этот персонаж наделил группу чужеземных торговцев особыми привилегиями в обмен на право пользоваться их обширным торговым флотом."
  foreign_merchant_community:0 "Сообщество чужеземных торговцев"
@@ -13,9 +13,9 @@
  court_7040_ascetic_practices:0 "Практика аскетизма"
  court_7040_ascetic_practices_desc:0 "Этот персонаж практикует аскетизм, чтобы приблизиться к идеалам своей религии."
 ## Court Event 7050
- cultural_artifact_gift_accepted:0 "Подаренный #L [friend.GetCulture.GetName|l]ий#! артефакт"
- cultural_artifact_gift_rejected:0 "Отвергнутый #L [friend.GetCulture.GetName|l]ий#! артефакт"
- cultural_artifact_heretical:0 "#L [friend.GetCulture.GetName]ий#! артефакт признан святотатственным"
+ cultural_artifact_gift_accepted:0 "Подаренный #L [friend.GetCulture.GetCollectiveNoun|l]ий#! артефакт"
+ cultural_artifact_gift_rejected:0 "Отвергнутый #L [friend.GetCulture.GetCollectiveNoun|l]ий#! артефакт"
+ cultural_artifact_heretical:0 "#L [friend.GetCulture.GetCollectiveNoun]ий#! артефакт признан святотатственным"
  intolerance_of_icons:0 "Нетерпимость к неортодоксальным культурам"
  court_7050_listens_to_church:0 "Вера и послушание"
  court_7050_listens_to_church_desc:0 "Этот персонаж фанатично предан своей вере и подчиняется жрецам и религиозным властям."

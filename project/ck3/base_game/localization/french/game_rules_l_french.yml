@@ -9,7 +9,7 @@
  IRONMAN_ENABLED_NO_HEADER:1 "#P Activé#!"
  IRONMAN_DISABLED_NO_HEADER:0 "Désactivé"
  ACHIEVEMENTS_LABEL:0 "Succès"
- ACHIEVEMENTS_EXPLANATION:1 "#indent_newline:2 Les succès ne peuvent être débloqués que si:\n$EFFECT_LIST_BULLET$Vous jouez en solo\n$EFFECT_LIST_BULLET$Le mode Ironman est activé\n$EFFECT_LIST_BULLET$Les fichiers de jeu qui ont une incidence sur la jouabilité ne sont pas modifiés et vous n’utilisez aucune option de lancement spéciale (la somme de contrôle n’est donc pas modifiée)\n$EFFECT_LIST_BULLET$Si vous jouez un personnage créé dans le Créateur de dirigeants et que cela n’a pas dépassé la limite de $RULER_DESIGNER_POINTS_LIMIT_VALUE$ points#!"
+ ACHIEVEMENTS_EXPLANATION:1 "#indent_newline:2 Les succès ne peuvent être débloqués que si :\n$EFFECT_LIST_BULLET$Vous jouez en solo\n$EFFECT_LIST_BULLET$Le mode Ironman est activé\n$EFFECT_LIST_BULLET$Les fichiers de jeu qui ont une incidence sur la jouabilité ne sont pas modifiés et vous n’utilisez aucune option de lancement spéciale (la somme de contrôle n’est donc pas modifiée)\n$EFFECT_LIST_BULLET$Si vous jouez un personnage créé dans le Créateur de dirigeants et que cela n’a pas dépassé la limite de $RULER_DESIGNER_POINTS_LIMIT_VALUE$ points#!"
  ACHIEVEMENTS_ENABLED:3 "#T Succès disponibles\n#!Les succès peuvent actuellement être débloqués en cours de partie.\n\n$ACHIEVEMENTS_EXPLANATION$"
  ACHIEVEMENTS_DISABLED:2 "#T Succès indisponibles#!\nLes succès ne peuvent actuellement pas être débloqués en cours de partie.\n\n$ACHIEVEMENTS_EXPLANATION$"
  ACHIEVEMENTS_ENABLED_NO_HEADER:0 "#P Disponibles#!"
@@ -28,7 +28,7 @@
  GAME_RULES_PRESET_DROPDOWN_NO_SELECTED:0 "Sélectionnez un préréglage enregistré"
  SAVE_PRESET_HEADER:0 "Enregistrer le préréglage"
 
- SAVE_PRESET_SAVE_AS_LABEL:0 "Enregistrer le préréglage sous:"
+ SAVE_PRESET_SAVE_AS_LABEL:0 "Enregistrer le préréglage sous :"
  DELETE_SELECTED_PRESET_BUTTON_TOOLTIP:0 "Supprimer le préréglage sélectionné"
  DELETE_PRESET_WITH_NAME_BUTTON_TOOLTIP:0 "Supprimer le préréglage [JominiGameRules.GetPresetSaveName|i]"
  SAVE_PRESET_BUTTON_TOOLTIP:0 "Enregistrer le préréglage"
@@ -41,13 +41,13 @@
  DELETE_GAME_RULES_PRESET_BODY:0 "Êtes-vous sûr de vouloir supprimer le préréglage $PRESET_NAME|i$ ?"
  DELETE_GAME_RULES_PRESET_ACCEPT:0 "Supprimer"
 
- GAME_RULES_PRESET_DIFFICULTY:0 "Difficulté: [GameRuleSetting.GetName]"
+ GAME_RULES_PRESET_DIFFICULTY:0 "Difficulté : [GameRuleSetting.GetName]"
  
  ACHIEVEMENT_FILTER_BUTTON_ALL:0 "Tous"
  ACHIEVEMENT_FILTER_BUTTON_UNLOCKED:0 "Débloqués"
  ACHIEVEMENT_FILTER_BUTTON_LOCKED:0 "Bloqués"
  ACHIEVEMENT_FILTER_BUTTON_POSSIBLE:0 "Possibles"
- ACHIEVEMENT_FILTER_SHOW:0 "Afficher les succès:"
+ ACHIEVEMENT_FILTER_SHOW:0 "Afficher les succès :"
 
  rule_difficulty:0 "Difficulté"
  setting_easy_difficulty:1 "#high Facile#!"
@@ -69,10 +69,10 @@
  setting_slower_culture_conversion_speed:1 "#high Plus lente#!"
  setting_slower_culture_conversion_speed_desc:0 "La conversion prend environ deux fois plus de temps."
  
- GAME_RULE_FASTER_REASON:1 "Règle du jeu: #P x#![SCOPE.ScriptValue('faster_game_rule_value')|P0]"
- GAME_RULE_SIGNIFICANTLY_FASTER_REASON:1 "Règle du jeu: #P x#![SCOPE.ScriptValue('significantly_faster_game_rule_value')|P0]"
- GAME_RULE_SLOWER_REASON:1 "Règle du jeu: #N x#![SCOPE.ScriptValue('slower_game_rule_value')|N]"
- GAME_RULE_SIGNIFICANTLY_SLOWER_REASON:1 "Règle du jeu: #N x#![SCOPE.ScriptValue('significantly_slower_game_rule_value')|N]"
+ GAME_RULE_FASTER_REASON:1 "Règle du jeu : #P x#![SCOPE.ScriptValue('faster_game_rule_value')|P0]"
+ GAME_RULE_SIGNIFICANTLY_FASTER_REASON:1 "Règle du jeu : #P x#![SCOPE.ScriptValue('significantly_faster_game_rule_value')|P0]"
+ GAME_RULE_SLOWER_REASON:1 "Règle du jeu : #N x#![SCOPE.ScriptValue('slower_game_rule_value')|N]"
+ GAME_RULE_SIGNIFICANTLY_SLOWER_REASON:1 "Règle du jeu : #N x#![SCOPE.ScriptValue('significantly_slower_game_rule_value')|N]"
  
  rule_faith_conversion_speed:0 "Vitesse de conversion de la foi"
  setting_default_faith_conversion_speed:0 "Par défaut"
@@ -159,7 +159,7 @@
  setting_on_limited_de_jure_requirement_desc:0 "Les titres avec des terres de jure seront détruits si un personnage ne détient pas de terres de jure du titre dans son pays. Le titre principal du joueur ne sera jamais détruit."
  setting_off_de_jure_requirement:1 "#high Désactivé#!"
  setting_off_de_jure_requirement_desc:0 "Les titres avec des terres de jure ne seront jamais détruits."
- de_jure_requirement_title:0 "[title_to_destroy.GetName]: titre perdu !"
+ de_jure_requirement_title:0 "[title_to_destroy.GetName] : titre perdu !"
  de_jure_requirement_desc:0 "Je ne peux plus prétendre être [ROOT.Char.Custom('FR_LeLa')] dirigeant[ROOT.Char.Custom('FR_E')] de [title_to_destroy.GetNameNoTierNoTooltip], parce que je ne possède aucune de ses terres de jure."
  
  rule_empire_obscurity_requirement:0 "Disparition des empires"
@@ -169,10 +169,10 @@
  setting_off_empire_obscurity_requirement_desc:0 "Les [empires|El] persisteront quelle que soit la quantité de terres [de_jure|El] que le détenteur contrôle."
  game_rule.4.t:0 "Disparition de [falling_empire.GetBaseNameNoTooltip]"
  game_rule.4.desc:0 "Je ne peux pas nier que mon empire bien-aimé, [falling_empire.GetBaseName], a été déchu...\n\nJe ne contrôle pratiquement aucun de ses territoires traditionnels. Simple ombre de lui-même, mon empire sombre lentement, mais sûrement, dans l’obscurité."
- game_rule.4.a:0 "J'ai juste besoin de plus de temps !"
+ game_rule.4.a:0 "J’ai juste besoin de plus de temps !"
  game_rule.4.b:0 "Adieu, doux empire..."
  
- rule_multiplayer_murder_schemes:1 "Multijoueur: complots de meurtre"
+ rule_multiplayer_murder_schemes:1 "Multijoueur : complots de meurtre"
  setting_default_multiplayer_murder_schemes:0 "Par défaut"
  setting_default_multiplayer_murder_schemes_desc:0 "Les complots hostiles peuvent être utilisés contre les joueurs et leurs familles."
  setting_no_players_multiplayer_murder_schemes:1 "#high Aucun joueur#!"
@@ -318,9 +318,10 @@
  setting_faster_hybrid_and_divergence_cooldowns:0 "#high Plus rapide#!"
  setting_faster_hybrid_and_divergence_cooldowns_desc:0 "Les [cultures|El] ne peuvent [diverge|El] qu’après avoir existé pendant #V 50#! ans, et [hybridize|El] après avoir existé pendant #V 25#! ans."
 
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- rule_nudity:0 "Nudité des personnages"
- setting_default_nudity:0 "Par défaut"
- setting_default_nudity_desc:0 "Les personnages peuvent apparaître nus dans certaines situations ou événements."
- setting_never_nudity:1 "#high Jamais#!"
- setting_never_nudity_desc:0 "Les personnages ne seront jamais affichés nus et les événements contenant de la nudité seront désactivés."
+ rule_dissolution_umayyad:0 "Chute d’Al-Andalus" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_unconstrained:0 "#high Sans limite#!" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_unconstrained_desc:0 "La [dissolution_faction|El] peut attaquer le Royaume d’Al-Andalus dès le début de la partie" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_after_caliph_death:0 "#high Mort du Calife#!" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_after_caliph_death_desc:0 "La [dissolution_faction|El] ne peut attaquer le royaume d’Al-Andalus qu’après la mort du sultan Muhammad $Abd-al-Rahman$" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_historical_date:0 "#high Chronologie historique#!" # [LocEditor:ForFutureBatchExport]
+ setting_dissolution_historical_date_desc:0 "La [dissolution_faction|El] n’est activée qu’après l’an 1020 pour le Royaume d’Al-Andalus" # [LocEditor:ForFutureBatchExport]

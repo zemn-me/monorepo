@@ -425,7 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T 당신입니다.#!"
  FRAME_RELATION_MY_HEIR:2 "#T 당신의 [player_heir|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_MY_LIEGE`
+ FRAME_RELATION_MY_LIEGE:0 "#T 당신의 [liege|E]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T 당신 [dynasty|E]의 [dynast|E]\n#!$TT_DYNAST_DESC$"
@@ -448,7 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T 권세 봉신#!\n이 [ruler|E]는 당신에게 아무것도 기대하지 않는 [powerful_vassal|E]입니다."
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T 권세 봉신#!\n이 [ruler|E]는 [council|E] 위원으로 남고 싶어 하는 [powerful_vassal|E]입니다."
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T 권세 봉신#!\n@warning_icon!#X 이 [ruler|E]는 당신의 [council|E] 위원으로 임명되지 않아 당신을 향한 [opinion|E]이 감소했습니다.#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_NON_POWERFUL_VASSAL`
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T 봉신#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "연인"

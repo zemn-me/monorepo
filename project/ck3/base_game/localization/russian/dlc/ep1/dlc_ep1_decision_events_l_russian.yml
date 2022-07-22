@@ -22,7 +22,7 @@
  promote_other_culture_development_decision_tooltip:0 "Повысить развитие [Concept( 'counties', 'графств' )|E] других [Concept( 'cultures', 'культур' )|E] с высокой [Concept( 'cultural_acceptance', 'терпимостью' )|E]"
  promote_other_culture_development_decision_not_acceptance_tt:0 "В вашей [Concept( 'realm', 'державе' )|E] нет [Concept( 'cultures', 'культур' )|E], [Concept( 'cultural_acceptance', 'терпимость' )|E] к которым выше #V 75%#!"
  promote_other_culture_development_decision_confirm:0 "Распределить деньги"
- promote_other_culture_development_decision_effect_summary:0 "Каждое #L [current_culture.GetName|l]ое#! [Concept( 'county', 'графство' )|E] в [Concept( 'realm', 'державе' )|E] получает модификатор «[GetModifier('promote_culture_modifier' ).GetNameWithTooltip|L]» на 10 лет"
+ promote_other_culture_development_decision_effect_summary:0 "Каждое #L [current_culture.GetCollectiveNoun|l]ое#! [Concept( 'county', 'графство' )|E] в [Concept( 'realm', 'державе' )|E] получает модификатор «[GetModifier('promote_culture_modifier' ).GetNameWithTooltip|L]» на 10 лет"
  promote_other_culture_development_decision_no_effect:0 "Каждое [Concept( 'county', 'графство' )|E] в [Concept( 'realm', 'державе' )|E], где распространена [Concept( 'culture', 'культура' )|E] с [Concept( 'cultural_acceptance', 'терпимостью' )|E] выше #V 75%#!, получает модификатор «[GetModifier('promote_culture_modifier' ).GetNameWithTooltip|L]» на 10 лет"
  promote_culture_leader_modifier:0 "Да здравствует культурное разнообразие"
 

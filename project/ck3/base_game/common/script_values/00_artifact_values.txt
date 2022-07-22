@@ -121,3 +121,9 @@ artifact_rarity = {
 		add = 4
 	}
 }
+
+cheese_artifact_strength = {
+	value = scope:cheese_artifact.artifact_max_durability
+	subtract = scope:cheese_artifact.artifact_durability
+	multiply = -1
+}

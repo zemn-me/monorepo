@@ -1277,6 +1277,7 @@
 	religion = "orthodox"
 	culture = "greek"
 	trait = bastard
+	trait = disinherited
 	father = 1726
 	mother = 41313
 	1035.1.1 = {
@@ -20829,27 +20830,6 @@
 		birth = yes
 	}
 	1205.1.2 = {
-		death = yes
-	}
-}
-
-200238 = {
-	name = "Ardabastos"
-	dynasty = 1046033
-
-	father = 168718
-	mother = 168715
-
-	religion = catholic
-	culture = greek
-
-	600.1.1 = {
-		birth = yes
-	}
-	650.1.1 = {
-		add_spouse = 200239
-	}
-	655.1.1 = {
 		death = yes
 	}
 }

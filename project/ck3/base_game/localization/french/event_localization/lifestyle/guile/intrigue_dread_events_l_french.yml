@@ -194,13 +194,13 @@
 
  intrigue_dread.4200.t:0 "La forêt de mes rêves"
  intrigue_dread.4200.desc.intro:0 "À travers mes efforts pour devenir craint[ROOT.Char.Custom('FR_E')] et respecté[ROOT.Char.Custom('FR_E')], un grand nombre de personnes coupables et déloyales ont fini dans mon cachot."
- intrigue_dread.4200.desc.noble_forest:0 "Mes cellules sont pleines à craquer de rivaux, de traîtres et de criminels. Il est peut-être temps pour eux de rencontrer [ROOT.Char.GetFaith.DeathDeityName] dans [ROOT.Char.GetFaith.NegativeAfterLife], et d’être utiles au pays tant qu’ils y sont !"
+ intrigue_dread.4200.desc.noble_forest:0 "Mes cellules sont pleines à craquer de rivaux, de traîtres et de criminels. Il est peut-être temps pour eux de rencontrer [ROOT.Char.GetFaith.DeathDeityName] dans [ROOT.Char.GetFaith.NegativeAfterLife], et d’être utiles au pays tant qu’ils y sont !" # [LocEditor:ForFutureBatchExport]
  intrigue_dread.4200.desc.commoner_forest:0 "De nombreux égorgeurs et tire-laine des campagnes et des villes attendent leur sort, séparés de la société, mais j’ai peut-être une meilleure idée pour eux."
  intrigue_dread.4200.desc.middle:0 "\n\nDans mes machinations macabres, j’imagine une forêt de voyous et de traîtres empalés entourant [ROOT.Char.GetCapitalLocation.GetTitle.GetNameNoTierNoTooltip] : un sinistre rappel à tous de ce qui se passe lorsque l’on trahit [ROOT.Char.Custom('FR_le_Char_L')][ROOT.Char.GetTitleAsNameNoTooltip]."
  intrigue_dread.4200.desc.noble_forest.outro:0 "Je vois [random_prisoner_scope.Custom('FR_le_Char')][random_prisoner_scope.GetNameNoTooltip] sur une pointe, entouré[random_prisoner_scope.Custom('FR_E')] de roturiers placés de façon identique. Il ne reste plus qu’à faire de ce rêve une réalité !"
  intrigue_dread.4200.desc.commoner_forest.outro:0 "Je vois des rangées de criminels s’étendre à l’horizon, le sol taché de leur sang. Avec un peu de travail, nous pourrions regrouper suffisamment de ces vermines pour que mon rêve devienne réalité."
  intrigue_dread.4200.a:0 "C'est parti !"
- intrigue_dread.4200.b:0 "[random_prisoner_scope.Custom('FR_le_Char')|U][random_prisoner_scope.GetName] et quelques roturiers devraient envoyer un message."
+ intrigue_dread.4200.b:0 "[random_prisoner_scope.Custom('FR_le_Char_Pi')|U][random_prisoner_scope.GetTitledFirstNameNoTooltip] et quelques roturiers devraient envoyer un message." # [LocEditor:ForFutureBatchExport]
  intrigue_dread.4200.c:0 "Une petite série de corps devrait suffire."
  intrigue_dread.4200.d:0 "Tous doivent me craindre !"
  intrigue_dread.4200.e:0 "Par [ROOT.Char.GetFaith.HighGodName] ! Je ne peux pas faire ça !"

@@ -54,7 +54,7 @@
 
  #Latrine disaster events
  court.3020.t:0 "Мерзкий запах"
- court.3020.desc.opening:1 "«[ROOT.Char.Custom2('RelationToMeAddress', latrine_chancellor)|U], на два слова».\n\nКогда собрание придворных ненадолго затихает, ко мне подходит [latrine_chancellor.GetCouncilTitle] [latrine_chancellor.GetTitledFirstName]. [latrine_chancellor.GetSheHe|U] указывает на угол, где поменьше народу, и мы направляемся туда.\n\n«Меня очень волнует состояние, в котором пребывает  "
+ court.3020.desc.opening:1 "«[ROOT.Char.Custom2('RelationToMeAddress', latrine_chancellor)|U], на два слова».\n\nКогда собрание придворных ненадолго затихает, ко мне подходит [latrine_chancellor.GetCouncilTitle] [latrine_chancellor.GetTitledFirstName]. [latrine_chancellor.GetSheHe|U] указывает на угол, где поменьше народу, и мы направляемся туда.\n\n«Меня очень волнует состояние, в котором пребывает "
  court.3020.desc.castle:0 "замок [capital.GetNameNoTooltip]."
  court.3020.desc.city:0 "ратуша в городе [capital.GetNameNoTooltip]."
  court.3020.desc.temple:0 "дом поклонения в городе [capital.GetNameNoTooltip]."
@@ -98,7 +98,7 @@
  court.3040.desc:0 "Я веду светскую беседу при дворе, когда до меня доносится очередной душераздирающий вздох. Специально или нет, но [Select_CString(homesick_parent.IsFemale, 'моя', 'мой' )] [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('homesick_parent'))] умеет обращать на себя внимание своим мрачным настроением.\n\n«А, здравствуй, дитя мое, — обращается [homesick_parent.GetSheHe] ко мне после непродолжительного молчания. Не могу сказать, то ли [homesick_parent.GetTitledFirstNameNoTooltip] разыгрывает мелодраму, то ли выражает свои искренние чувства. — Не обращай на меня внимания, я просто тоскую по дому, вот и все...»\n\nНе успеваю я и рта раскрыть, как [homesick_parent.GetSheHe] издает очередной меланхоличный вздох. Если просто молча уйти, ничего не изменится, поэтому я решаю поговорить."
  court.3040.a:0 "Тогда просто уходи отсюда, неблагодарная пиявка!"
  court.3040.b:1 "Ты поможешь мне выучить [homesick_parent.GetCulture.GetLanguage.GetNameNoTooltip|l] язык?"
- court.3040.c:0 "Мы могли бы завезти немного [homesick_parent.GetCulture.GetNameNoTooltip|l]их деликатесов?"
+ court.3040.c:0 "Мы могли бы завезти немного [homesick_parent.GetCulture.GetCollectiveNounNoTooltip|l]их деликатесов?"
  court.3040.d:0 "Твои чувства — это твоя проблема. Не нужно впутывать в это мой двор."
 
  #Chief Eunuch

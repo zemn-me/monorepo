@@ -60,12 +60,12 @@
  ## Loser, Duel End Result Tooltips
  single_combat.0031.desc.result.skill:0 "#BOL Ergebnis:#! Ich verliere den [single_combat_fight|E] gegen [sc_victor.GetFirstNameNoTooltip] wegen [sc_victor.Custom('DE_PRO_POS_S_3P')]er [single_combat_success_chance_skill|E]"
  single_combat.0031.desc.result.mistake:0 "#BOL Ergebnis:#! Ich verliere den [single_combat_fight|E] gegen [sc_victor.GetFirstNameNoTooltip] wegen meines [Concept('single_combat_injury_chance', 'Verletzungsrisikos')|E]"
- single_combat.0031.desc.result.sudden_death:0 "#BOL Ergebnis:#! Ich verliere den [single_combat_fight|E] gegen [sc_victor.GetFirstNameNoTooltip] aufgrund eines [Concept('single_combat_fight_sudden_death', 'Jähen Todes')|E]"
+ single_combat.0031.desc.result.sudden_death:0 "#BOL Ergebnis:#! Ich verliere den [single_combat_fight|E] gegen [sc_victor.GetFirstNameNoTooltip] aufgrund eines [Concept('single_combat_fight_sudden_death', 'Entscheidungssieges')|E]"
 
  ## Victor, Duel End Result Tooltips
  single_combat.0041.desc.result.skill:0 "#BOL Ergebnis:#! Ich gewinne den [single_combat_fight|E] gegen [sc_loser.GetFirstNameNoTooltip] wegen meiner [single_combat_success_chance_skill|E]"
  single_combat.0041.desc.result.mistake:0 "#BOL Ergebnis:#! Ich gewinne den [single_combat_fight|E] gegen [sc_loser.GetFirstNameNoTooltip] wegen [sc_loser.Custom('DE_PRO_POS_S_3P')]es [Concept('single_combat_injury_chance', 'Verletzungsrisikos')|E]"
- single_combat.0041.desc.result.sudden_death:0 "#BOL Ergebnis:#! Ich gewinne den [single_combat_fight|E] gegen [sc_loser.GetFirstNameNoTooltip] aufgrund eines [Concept('single_combat_fight_sudden_death', 'Jähen Todes')|E]"
+ single_combat.0041.desc.result.sudden_death:0 "#BOL Ergebnis:#! Ich gewinne den [single_combat_fight|E] gegen [sc_loser.GetFirstNameNoTooltip] aufgrund eines [Concept('single_combat_fight_sudden_death', 'Entscheidungssieges')|E]"
 
  ## Other, Duel End Result Tooltips
  single_combat.result.tt.temporary_modifiers_removed:0 "Alle temporären Kampf-[character_modifiers|E] wurden entfernt"

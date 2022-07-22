@@ -76,7 +76,7 @@
  combatant_killed_in_battle_no_killer_friendly_player:1 "[TARGET_CHARACTER.GetUINameNoTooltip] пытается отступить, но один из ваших солдат убивает [TARGET_CHARACTER.GetHerHis]!"
  combatant_killed_in_battle_no_killer_friendly:1 "[TARGET_CHARACTER.GetUINameNoTooltip] пытается отступить, но один из наших солдат [TARGET_CHARACTER.GetHerHis] убивает!"
  combatant_killed_in_battle_no_killer_enemy_player:1 "Во время отступления вас убивает вражеский солдат!"
- combatant_killed_in_battle_no_killer_enemy:0 "Во время отступления [TARGET_CHARACTER.GetUINameNoTooltip] [Select_CString(скоуп.IsFemale, 'убита', 'убит' )] вражеским солдатом!"
+ combatant_killed_in_battle_no_killer_enemy:0 "Во время отступления [TARGET_CHARACTER.GetUINameNoTooltip] [Select_CString(TARGET_CHARACTER.IsFemale, 'убита', 'убит' )] вражеским солдатом!"
 
 
 

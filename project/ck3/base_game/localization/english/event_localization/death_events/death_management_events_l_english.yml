@@ -1,5 +1,5 @@
 ﻿l_english:
- death_management.1000.killed.tt:0 "My [THIS.Char.Custom2('RelationToMe', SCOPE.sC('dead_character'))], [dead_character.GetTitledFirstName], was killed by [killer.GetTitledFirstName]."
+ death_management.1000.killed.tt:1 "[dead_character.GetTitledFirstName] was killed by [killer.GetTitledFirstName]."
  death_management.1000.t:0 "Til Death Do Us Part"
  death_management.1000.murder:0 "[dead_character.GetTitledFirstName] has been murdered!\n\n"
  death_management.1000.like:0 "How can a heart endure this kind of pain without breaking? It cannot be possible! Yet, here I am, my heart beating on whilst yours has gone quiet. Oh, [dead_character.GetFirstName], my [dead_character.Custom('LoverPetName')]. Life will not be the same without you."
@@ -29,6 +29,7 @@
 
  death_management.1005.t:0 "The Memories Remain"
  death_management.1005.desc:0 "Oh, [dead_character.GetFirstName]. If you were still with me, I know you would tell me to be strong. That things will get better. And you would be right, as you always were, but first I must curse and cry. How could I not when you are gone from this world?"
+ death_management.1005.desc.ritual_best_friend:0 "[dead_character.GetFirstName] is dead! My best and truest friend cut down, taken by the cold embrace of [ROOT.Char.GetFaith.DeathDeityName] before [dead_character.GetHerHis] time. I weep, I wail, I tear at my hair and clothing, but I know I'll never see [dead_character.GetHerHim] again.\n\nHow... how can I can go on now?\n\n[dead_character.GetFirstNameNoTooltip], dear, sweet [dead_character.GetFirstNameNoTooltip] would want me to, and I have to hope that [dead_character.GetHerHis] memory can sustain me through these dark times, but life seems like a candle without a flame without [dead_character.GetHerHim]."
  death_management.1005.a:0 "You will never be forgotten, old friend."
  death_management.1005.a.tt:3 "Your friend, [dead_character.GetTitledFirstName], has [THIS.Char.Custom('DiedHouse_arrest')]."
  death_management.friend.desc:4 "Your friend, [dead_character.GetTitledFirstName], died."

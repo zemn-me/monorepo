@@ -425,7 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T 这是你#!"
  FRAME_RELATION_MY_HEIR:2 "#T 这是你的[player_heir|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_MY_LIEGE`
+ FRAME_RELATION_MY_LIEGE:0 "#T 这是你的[liege|E]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T 你[dynasty|E]的[dynast|E]\n#!$TT_DYNAST_DESC$"
@@ -448,7 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T 强力封臣#!\n这个[ruler|E]是个[powerful_vassal|E]，并不期望从你这里得到什么"
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T 强力封臣#!\n这个[ruler|E]是个[powerful_vassal|E]，期望留在[council|E]"
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T 强力封臣#!\n@warning_icon!#X 这个[ruler|E]是个[powerful_vassal|E]，对你的[opinion|E]因未能在你[council|E]获得席位而降低#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_NON_POWERFUL_VASSAL`
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T 封臣#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "我的爱"

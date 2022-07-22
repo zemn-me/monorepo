@@ -3,8 +3,8 @@
  fp1_tbc.0000.t:0 "Суд поединком"
 
  # TbC about to begin.
- fp1_tbc.0001.t:0 "$fp1_tbc.0000.t$: [duel_location.GetNameNoTierNoTooltip]"
- fp1_tbc.0001.desc.intro:0 "Я прихожу вовремя. [duel_location.GetNameNoTier] не пустует — [champion.GetTitledFirstName] с небольшой компанией свидетелей уже ждет меня."
+ fp1_tbc.0001.t:0 "$fp1_tbc.0000.t$: [duel_location.GetBaseNameNoTierNoTooltip]"
+ fp1_tbc.0001.desc.intro:0 "Я прихожу вовремя. [duel_location.GetBaseNameNoTier] не пустует — [champion.GetTitledFirstName] с небольшой компанией свидетелей уже ждет меня."
  fp1_tbc.0001.desc.recipient_fighting:0 "\n\nЧто ни говори, а [champion.GetFirstNameNoTooltip] может сражаться, и [champion.GetSheHe] [Select_CString(champion.IsFemale, 'готова', 'готов' )] встретиться со мной лицом к лицу."
  fp1_tbc.0001.desc.recipient_has_champion:0 "[recipient.GetTitledFirstName] не может сражаться самостоятельно, и [champion.GetFirstNameNoTooltip] будет биться за н[SCOPE.sC('recipient').GetHerHis]."
  fp1_tbc.0001.desc.outro:0 "\n\nПодготовка не занимает много времени. Мы знаем, зачем собрались, а время разговоров давно прошло. Берем оружие, и сопровождающие отступают на безопасное расстояние."

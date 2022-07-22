@@ -16,6 +16,6 @@
 
  HAS_SAME_GOVERNMENT_TRIGGER:0 "Имеет то же правительство, что и [TARGET_CHARACTER.GetShortUIName]"
 
- MUST_HAVE_MALE_DOMINATED_OR_EQUAL:0 "[CHARACTER.GetFaith.GetName] не имеет доктрины [GetFaithDoctrine('doctrine_gender_equal').GetName] или [GetFaithDoctrine('doctrine_gender_male_dominated').GetName]"
- MUST_HAVE_FEMALE_DOMINATED_OR_EQUAL:0 "[CHARACTER.GetFaith.GetName] не имеет доктрины [GetFaithDoctrine('doctrine_gender_equal').GetName] или [GetFaithDoctrine('doctrine_gender_female_dominated').GetName]"
+ MUST_HAVE_MALE_DOMINATED_OR_EQUAL:0 "[CHARACTER.GetFaith.GetAdjective] не имеет доктрины [GetFaithDoctrine('doctrine_gender_equal').GetBaseName] или [GetFaithDoctrine('doctrine_gender_male_dominated').GetBaseName]"
+ MUST_HAVE_FEMALE_DOMINATED_OR_EQUAL:0 "[CHARACTER.GetFaith.GetAdjective] не имеет доктрины [GetFaithDoctrine('doctrine_gender_equal').GetBaseName] или [GetFaithDoctrine('doctrine_gender_female_dominated').GetBaseName]"
  has_law_allowing_succession_law_change:0 "[crown_authority|E] — [high|El] и выше или [tribal_authority|E] — [limited_tribal|El] и выше"

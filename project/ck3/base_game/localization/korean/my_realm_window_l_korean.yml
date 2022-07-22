@@ -137,5 +137,12 @@
  VASSAL_OPINION_DUCHIES_OVERRUN:0 "[duchies|E]이 너무 많음"
  MY_REALM_WINDOW_VASSAL_OPINION:0 "봉신 의견: [MyRealmWindow.GetVassalOpinion|=+]"
  MY_REALM_WINDOW_VASSAL_OPINION_TT:0 "#T 봉신 [opinion|E]: [MyRealmWindow.GetVassalOpinion|=+]\n#!당신의 [vassals|E] 모두에게 영향을 주는 의견의 총합입니다. 수치가 낮으면 당신에게 반하는 [factions|E]이 많이 발생할 수 있습니다!\n\n#S 원천#!\n[MyRealmWindow.GetVassalOpinionBreakdown]"
- MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:0 "#T 개인 책무 불가\n#![barons|E]을 제외한 [feudal|E] [vassals|E]만이 개인 [obligations|E]를 짊어질 수 있습니다."
+ MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:1 "#T 개인 책무 불가\n#![barons|E]을 제외한 [feudal|E] 및 [clan|E] [vassals|E]만이 개인 [obligations|E]를 짊어질 수 있습니다."
  MY_REALM_WINDOW_ABSOLUTE_COUNTY_CONTROL:0 "[control|E]: $ABSOLUTE_COUNTY_CONTROL$"
+
+ VASSAL_CONTRACT:0 "봉신 계약"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_NO_EFFECT:0 "현재 [vassal_contract|E]과 [obligations|E]와 동일함"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE:0 "세금 수준"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE_LEVIES:0 "징집 수준"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_ONLY_ONCE:0 "#weak [vassal_contract|E]은 인물마다 한 번씩 변경할 수 있습니다.#!"
+

@@ -162,10 +162,10 @@
  seduce_ongoing.1311.desc:0 "«[ROOT.Char.GetLadyLord|U], вы не хотите, чтобы мы это сажали?» — Крестьяне стоят передо мной, из ящиков, которые они приволокли, сыпется земля. Цветочный орнамент, который они принесли, выглядит старым и потрепанным."
  seduce_ongoing.1311.a:0 "Чтобы этой гадости и рядом с садами не было."
 
- seduce_ongoing.1212.desc:0 "[owner.GetTitledFirstName] [Select_CString(owner.IsFemale, 'отправила', 'отправил' )] мне подарок — платок с вышитым гербом династии [owner.GetDynasty.GetName].\n\nЕсли я буду носить с собой их эмблему... Интересно, что скажут окружающие на такую вопиющую дерзость?"
+ seduce_ongoing.1212.desc:0 "[owner.GetTitledFirstName] [Select_CString(owner.IsFemale, 'отправила', 'отправил' )] мне подарок — платок с вышитым гербом династии [owner.GetDynasty.GetBaseName].\n\nЕсли я буду носить с собой их эмблему... Интересно, что скажут окружающие на такую вопиющую дерзость?"
  seduce_ongoing.1212.a:0 "Не знаю какое, но впечатление это произведет."
 
- seduce_ongoing.1312.desc:0 "[owner.GetTitledFirstName] [Select_CString(owner.IsFemale, 'отправила', 'отправил' )] мне подарок — платок с вышитым гербом династии [owner.GetDynasty.GetName].\n\n[owner.GetSheHe] всерьез считает, что я буду демонстрировать [owner.GetHerHis] прилюдно? Какая дикая самонадеянность."
+ seduce_ongoing.1312.desc:0 "[owner.GetTitledFirstName] [Select_CString(owner.IsFemale, 'отправила', 'отправил' )] мне подарок — платок с вышитым гербом династии [owner.GetDynasty.GetBaseName].\n\n[owner.GetSheHe] всерьез считает, что я буду демонстрировать [owner.GetHerHis] прилюдно? Какая дикая самонадеянность."
 
  seduce_ongoing.1801.t:0 "[ROOT.Char.Custom('MistressMaster')|U] слова"
  seduce_ongoing.1801.start.desc:0 "Дипломатическое искусство мне не чуждо, и я понимаю, на что способен яркий и уместный комплимент. Подчеркнуть лучшее качество человека и восхититься им — самая прямая дорога к сердцу любого.\n\n"
@@ -366,7 +366,7 @@
  seduce_ongoing.4005.court:0 "двор?!"
  seduce_ongoing.4005.a:0 "Все пошло не так, как надо!"
 
- seduce_ongoing.4006.desc:0 "[ROOT.Char.Custom('MusicalPerformer')] горячо вещает о любви и страсти, а я изо всех сил стараюсь не показывать, насколько это мне льстит.\n\nИ хотя метафоры и аллегории скрывают лицо не хуже вуали, я знаю, что признание предназначено мне, а его автор — [owner.GetTitledFirstName]."
+ seduce_ongoing.4006.desc:0 "[ROOT.Char.Custom('MusicalPerformer')] горячо вещает о любви и страсти, а я изо всех сил стараюсь не показывать, насколько это мне льстит.\n\nИ хотя метафоры и аллегории скрывают лицо не хуже вуали, я знаю, что признание предназначено мне, а его автор — [owner.GetTitledFirstName]."
  seduce_ongoing.4006.a:0 "[owner.GetFirstName], ты умеешь привлечь мое внимание."
 
  seduce_ongoing.4007.desc:0 "Возможно, посвящение было слишком завуалировано. [target.GetLadyLord] [target.GetFirstName], кажется, не [Select_CString(target.IsFemale, 'поняла', 'понял' )] намека."

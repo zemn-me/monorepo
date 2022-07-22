@@ -46,9 +46,9 @@
  warhorse.1001.e:0 "Je ne suis pas intéressé[ROOT.Char.Custom('FR_E')]."
  warhorse.1001.e.tt:1 "#F « [THIS.Char.Custom('WarhorseStoryName')] n’a besoin que de moi comme entraîneu[THIS.Char.Custom('FR_RSe')] ! »#!"
  warhorse.1001.f:0 "C’est pour ça que je paie un grand écuyer !"
- warhorse.1001.f.tt:0 "Votre grand écuyer commence à entraîner votre [ROOT.Char.Custom('HorseStoryMareStallion')]."
+ warhorse.1001.f.tt:1 "Votre grand écuyer commence à entraîner [THIS.Char.Custom('WarhorseStoryName')]"
  warhorse.1001.f.failure:0 "Vous avez surestimé votre grand écuyer"
- warhorse.1001.f.failure.tt:0 "[m_horse.Custom('FR_le_Char_Pi')|U][m_horse.GetTitledFirstNameNoTooltip] échoue à entraîner [ROOT.Char.Custom('WarhorseStoryName')]."
+ warhorse.1001.f.failure.tt:0 "[m_horse.Custom('FR_le_Char_Pi')|U][m_horse.GetTitledFirstNameNoTooltip] échoue à entraîner [THIS.Char.Custom('WarhorseStoryName')]."
 
  warhorse.1002.desc:0 "[ROOT.Char.Custom('WarhorseStoryName')] a suivi son entraînement et les résultats sont déjà visibles !"
  warhorse.1002.a:0 "C’était de l’argent bien dépensé !"
@@ -58,7 +58,7 @@
  warhorse.1101.a:0 "Je dois profiter de chaque instant pour m’entraîner !"
  warhorse.1101.b:0 "La journée est trop belle pour ne pas être appréciée correctement !"
 
- warhorse.1201.t:1 "[ROOT.Char.Custom('WarhorseStoryName')|U] : M[ROOT.Char.Custom('HorseStoryHerHis')|U] [ROOT.Char.Custom('HorseStoryMareStallion')] est malade"
+ warhorse.1201.t:1 "[ROOT.Char.Custom('WarhorseStoryName')|U] : m[ROOT.Char.Custom('HorseStoryHerHis')] [ROOT.Char.Custom('HorseStoryMareStallion')] est malade"
  warhorse.1201.desc:0 "Alors que m[ROOT.Char.Custom('HorseStoryHerHis')] [ROOT.Char.Custom('HorseStoryMareStallion')] [ROOT.Char.Custom('WarhorseStoryName')] sort de l’étable en traînant la patte et en pendant la tête, il ne fait aucun doute qu’[ROOT.Char.Custom('HorseStorySheHe')] est malade.\n\nLe maître des écuries m’assure qu’il y a un remède à ce mal, mais celui-ci a un coût élevé."
  warhorse.1201.a:0 "Aucun prix n’est trop élevé pour m[ROOT.Char.Custom('HorseStoryHerHis')] tendre [ROOT.Char.Custom('WarhorseStoryName')] !"
  warhorse.1201.b:0 "Quoi qu’il arrive, c’est la volonté [ROOT.Char.GetFaith.HighGodNamePossessive]."
@@ -94,7 +94,7 @@
  warhorse.8001.e:0 "Je vais lui permettre de finir ses derniers jours tranquillement."
 
  warhorse.8002.t:1 "[ROOT.Char.Custom('WarhorseStoryName')|U] : Le cercle de la vie"
- warhorse.8002.desc:0 "M[ROOT.Char.Custom('HorseStoryHerHis')|U] fidèle [ROOT.Char.Custom('HorseStoryMareStallion')] [ROOT.Char.Custom('WarhorseStoryName')] a péri, mais [ROOT.Char.Custom('HorseStorySheHe')] laisse un poulain fort ! Je peux déjà voir sa personnalité dans le jeune — mon ami est toujours avec moi dans un sens."
+ warhorse.8002.desc:0 "M[ROOT.Char.Custom('HorseStoryHerHis')] fidèle [ROOT.Char.Custom('HorseStoryMareStallion')] [ROOT.Char.Custom('WarhorseStoryName')] a péri, mais [ROOT.Char.Custom('HorseStorySheHe')] laisse un poulain fort ! Je peux déjà voir sa personnalité dans le jeune — mon ami est toujours avec moi dans un sens."
  warhorse.8002.a:0 "Repose en paix [ROOT.Char.Custom('WarhorseStoryName')]."
 
  warhorse.8003.desc:0 "Me rendant aux écuries, j’apprends avec tristesse que m[ROOT.Char.Custom('HorseStoryHerHis')] fidèle [ROOT.Char.Custom('HorseStoryMareStallion')] [ROOT.Char.Custom('WarhorseStoryName')] a rendu l’âme pendant la nuit. [ROOT.Char.Custom('HorseStorySheHe')|U] laisse un vide dans mon cœur."

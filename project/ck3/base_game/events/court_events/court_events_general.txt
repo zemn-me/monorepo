@@ -1857,11 +1857,13 @@ court.1030 = {
 		cp:councillor_court_chaplain = {
 			is_available_ai_adult = yes
 			has_court_event_flag = no
+			save_temporary_scope_as = chaplain_check
 		}
 		any_courtier = {
 			is_lowborn = no
 			is_available_ai_adult = yes
 			has_court_event_flag = no
+			NOT = { this = scope:chaplain_check }
 		}
 	}
 
@@ -13226,7 +13228,7 @@ court.5057 = {
 	theme = court
 	left_portrait = {
 		character = scope:painter
-		animation = scadenfreude
+		animation = schadenfreude
 	}
 	
 	trigger = {

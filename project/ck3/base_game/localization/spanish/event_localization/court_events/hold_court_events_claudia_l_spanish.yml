@@ -18,7 +18,7 @@
  hold_court.6000.e:0 "Más os vale pagar los impuestos o habrá consecuencias…"
  #Land Grants
  hold_court.6010.t:0 "Concesiones de tierras"
- hold_court.6010.desc:0 "Un[6010_embassy.Custom('ES_XA')] enviad[6010_embassy.Custom('ES_OA')] de una ciudad de provincias, [6010_embassy.Custom2('MyCharacterIntroduction', ROOT.Char)], ha venido a protestar por los abusos que su ciudad viene sufriendo a manos de su vecin[6010_church.Custom('ES_OA')], [6010_church.Custom('ES_ElLa')] [6010_church.GetCouncilTitle] [6010_church.GetFirstNameNoTooltip] bajo la protección de su [ROOT.Char.Custom('ES_SennorSennora')], [6010_count.Custom2('MyCharacterIntroduction', ROOT.Char)].\n\n«¡Ocupan y embargan nuestras tierras de cultivo por la fuerza, y amenazan a los que poseen tierras con condenas espirituales y violencia material para que vendan sus pertenencias! ¡Os ruego, mi [ROOT.Char.GetLadyLord], que nos hagáis justicia!»."
+ hold_court.6010.desc:0 "Un[6010_embassy.Custom('ES_XA')] enviad[6010_embassy.Custom('ES_OA')] de una ciudad de provincias, [6010_embassy.Custom2('MyCharacterIntroduction', ROOT.Char)], ha venido a protestar por los abusos que su ciudad viene sufriendo a manos de su vecin[6010_church.Custom('ES_OA')], [6010_church.GetCouncilTitle] [6010_church.GetFirstNameNoTooltip] bajo la protección de su [ROOT.Char.GetLadyLord], [6010_count.Custom2('MyCharacterIntroduction', ROOT.Char)].\n\n«¡Ocupan y embargan nuestras tierras de cultivo por la fuerza, y amenazan a los que poseen tierras con condenas espirituales y violencia material para que vendan sus pertenencias! ¡Os ruego, mi [ROOT.Char.GetLadyLord], que nos hagáis justicia!»."
  hold_court.6010.a:0 "[6010_church.GetFirstNameNoTooltip] está en su derecho."
  hold_court.6010.b:0 "[6010_church.GetFirstNameNoTooltip] no está por encima de la ley."
  6010_revoke_title_reason:0 "Ganas un [revoke_title_reason|lE] contra [6010_count.GetFirstNameNoTooltip]"
@@ -60,10 +60,10 @@
  hold_court.6040.e:0 "¿A quién le importan los libros?"
  #A Holy Tomb
  hold_court.6050.t:0 "Una tumba santa"
- hold_court.6050.desc:1 "[6050_pop.Custom('ES_ElLa')|U] campesin[6050_pop.Custom('ES_OA')] que tengo delante parece a punto de explotar de emoción.\n\n«¡Mi [ROOT.Char.GetLadyLord]! ¡Los milagros! ¡La santidad! ¡Nos han #EMP BENDECIDO#!!».\n\nSus divagaciones entusiastas son confusas, pero finalmente llego al meollo: quiere que patrocine el culto a un[6050_holy.Custom('ES_XA')] sant[6050_holy.Custom('ES_OA')] local que murió hace poco en [6050_tomb.GetNameNoTooltip]. [6050_holy.GetFirstName] obró milagros en vida y se [6050_holy.Custom('ES_LoLa')] conoce por [6050_holy.Custom('GetMiracle1')] y [6050_holy.Custom('GetMiracle2')]. Su tumba atrae a visitantes devotos de todos los rincones del señorío."
+ hold_court.6050.desc:1 "El/la campesin[6050_pop.Custom('ES_OA')] que tengo delante parece a punto de explotar de emoción.\n\n«¡Mi [ROOT.Char.GetLadyLord]! ¡Los milagros! ¡La santidad! ¡Nos han #EMP BENDECIDO#!!».\n\nSus divagaciones entusiastas son confusas, pero finalmente llego al meollo: quiere que patrocine el culto a un[6050_holy.Custom('ES_XA')] sant[6050_holy.Custom('ES_OA')] local que murió hace poco en [6050_tomb.GetNameNoTooltip]. [6050_holy.GetFirstName] obró milagros en vida y se [6050_holy.GetHerHim] conoce por [6050_holy.Custom('GetMiracle1')] y [6050_holy.Custom('GetMiracle2')]. Su tumba atrae a visitantes devotos de todos los rincones del señorío."
  hold_court.6050.desc_hof:0 "\n\nComo [head_of_faith|lE], estoy en mi derecho de condenar o promover este culto."
  hold_court.6050.a:0 "Su Santidad recibirá la veneración que merece."
- hold_court.6050.b:0 "Lo sabía. [6050_holy.Custom('ES_ElLa')|U] sant[6050_holy.Custom('ES_OA')] me visitó en sueños."
+ hold_court.6050.b:0 "Lo sabía. Tal sant[6050_holy.Custom('ES_OA')] me visitó en sueños."
  hold_court.6050.c:0 "¡Erradicaré esta necedad blasfema ahora mismo!"
  hold_court.6050.d:0 "No me interesan las supersticiones campesinas."
  #A Convenient offer
@@ -155,7 +155,7 @@
  swan_name_angrynipper:0 "Tenaza feroz"
  swan_name_odette:0 "Odette"
  hold_court.6121.t:0 "El día de la verdad: estudio terminado"
- hold_court.6121.desc:1 "«Ya está hecho, mi [ROOT.Char.GetLadyLord]», afirma [6121_responsible.Custom2('MyCharacterIntroduction', ROOT.Char)] mientras se inclina ante mí.\n\n«Hace meses encargasteis un estudio de todas vuestras tierras y ya está terminado; los detalles sobre propiedades y valores de las tierras se han recopilado en este libro. ¡Mientras esta descripción sea fiel a la realidad, la tributación será más eficiente en todo vuestro señorío!»"
+ hold_court.6121.desc:1 "«Ya está hecho, mi [ROOT.Char.GetLadyLord]», afirma [6121_responsible.Custom2('MyCharacterIntroduction', ROOT.Char)] mientras se inclina ante mí.\n\n«Hace meses encargasteis un estudio de todas vuestras tierras y ya está terminado; los detalles sobre propiedades y valores de las tierras se han recopilado en este libro. ¡Mientras esta descripción sea fiel a la realidad, la tributación será más eficiente en todo vuestro señorío!»."
  hold_court.6121.a:0 "¡Un trabajo excelente, [6121_responsible.GetFirstNameNoTooltip]!"
  #The Cadastre
  hold_court.6130.t:0 "El catastro"
@@ -200,7 +200,7 @@
  6140_every_prisoner:0 "Todos los prisioneros de tus celdas"
  #The End Is Nigh!
  hold_court.6150.t:0 "¡El fin se acerca!"
- hold_court.6150.desc:0 "En cuanto llega su turno de hablar, [6150_preacher.Custom('ES_ElLa')] inquiet[6150_preacher.Custom('ES_OA')] [6150_preacher.GetWomanMan] que tengo delante empieza a gritar: «#EMP ¡EL FIN SE ACERCA!#!»\n\n«Las señales son claras y están por doquier:"
+ hold_court.6150.desc:0 "En cuanto llega su turno de hablar, tal inquiet[6150_preacher.Custom('ES_OA')] [6150_preacher.GetWomanMan] que tengo delante empieza a gritar: «#EMP ¡EL FIN SE ACERCA!#!»\n\n«Las señales son claras y están por doquier:"
  hold_court.6150.desc_county:0 "el pueblo de [6150_county.GetName] lo sabe demasiado bien…"
  hold_court.6150.desc_unsafety:0 "¡disturbios, bandidos, ladrones, violencia y la desaparición de la justicia entre los hombres!»"
  hold_court.6150.desc_nature:0 "¡cosechas que se pierden, langostas que invaden los campos, frío interminable, inundaciones y la peste que camina entre nosotros!»"
@@ -263,7 +263,7 @@
  hold_court.6180.f:0 "Preocupaciones sin fundamento. Marchaos."
  #A Shadow in the Night
  hold_court.6190.t:0 "Una sombra en la noche"
- hold_court.6190.desc:1 "[6190_local.Custom('ES_ElLa')|U] [6190_local.GetWomanMan] que se acerca a mi trono es claramente un[6190_local.Custom('ES_XA')] plebey[6190_local.Custom('ES_OA')] . «Mi [ROOT.Char.GetLadyLord]», comienza su disertación, «represento a la comunidad local de [capital.GetNameNoTooltip].\n\n¡En los últimos meses nuestros cementerios se han visto asolados con la desaparición de cuerpos! Han desenterrado a todos sin dejar ni rastro. Al principio temimos que pudiera ser obra de animales salvajes o de poderes oscuros, ¡pero entonces pillamos a vuestr[physician.Custom('ES_OA')] $court_physician_court_position$ [physician.GetTitledFirstName] con las manos en la masa cuando se llevaba a los muertos para sus experimentos!»\n\n«Por favor, poned fin a esta blasfemia!»."
+ hold_court.6190.desc:1 "Quien se acerca a mi trono es claramente un[6190_local.Custom('ES_XA')] plebey[6190_local.Custom('ES_OA')]. «Mi [ROOT.Char.GetLadyLord]», comienza su disertación, «represento a la comunidad local de [capital.GetNameNoTooltip].\n\n¡En los últimos meses nuestros cementerios se han visto asolados con la desaparición de cuerpos! Todos fueron desenterrados sin dejar ni rastro. Al principio temimos que pudiera ser obra de animales salvajes o de poderes oscuros, ¡pero entonces pillamos a vuestr[physician.Custom('ES_OA')] $court_physician_court_position$ [physician.GetTitledFirstName] con las manos en la masa cuando se llevaba a los muertos para sus experimentos!»\n\n«Por favor, poned fin a esta blasfemia!»."
  hold_court.6190.a:0 "Estudiar el cuerpo humano es desgraciadamente necesario."
  hold_court.6190.b:0 "¡¿Por qué no me invitaste, [physician.GetFirstNameNoTooltip]?!"
  hold_court.6190.c:0 "Los cuerpos frescos, #EMP vivos#!, son mejores sujetos de pruebas…"
@@ -303,11 +303,11 @@
  hold_court.6210.a:0 "[steward.GetFirstNameNoTooltip], mostradles el camino a seguir."
  hold_court.6210.b:0 "¡Mostrémosles nuestra grandeza y cambiarán de ideas!"
  hold_court.6210.b.tt:0 "Envías a tu $royal_architect_court_position$ a desarrollar las infraestructuras de los condados."
- hold_court.6210.c:0 "Nos respetamos las tradiciones de todos nuestros súbditos."
+ hold_court.6210.c:0 "Respetamos las tradiciones de todos nuestros súbditos."
  hold_court.6210.d:0 "Me da igual, mientras paguen los impuestos."
  #Studying the Dead
  hold_court.6220.t:0 "El estudio de los muertos"
- hold_court.6220.desc:0 "«¡Mi [ROOT.Char.GetLadyLord], esto es #EMP indignante#!!» Un [6220_vassal.GetTitledFirstName] agitad[6220_vassal.Custom('ES_OA')] se planta ante mi trono.\n\n«¡El cuerpo de mi pobre [6220_vassal.Custom2('RelationToMe', SCOPE.sC('6220_relative'))], [6220_relative.Custom('ES_ElLa')] recién fallecid[6220_relative.Custom('ES_OA')] [6220_relative.GetTitledFirstName], ha sido #EMP violado#! por ese #EMP demonio#! que mantenéis como vuestr[physician.Custom('ES_OA')] $court_physician_court_position$, [physician.GetFirstName]! ¡Ese vil monstruo ha manipulado el cadáver, lo ha utilizado para practicar sus oscuros conocimientos y lo ha dejado desfigurado! ¡Por favor, no puede quedar impune!».\n\nPor supuesto, [physician.GetFirstName] parece adecuadamente ofendid[physician.Custom('ES_OA')] por las acusaciones: «¡No tengo ni idea de qué habla es[6220_vassal.Custom('ES_EA')] [6220_vassal.GetWomanMan], mi [ROOT.Char.GetLadyLord]!»."
+ hold_court.6220.desc:0 "«¡Mi [ROOT.Char.GetLadyLord], esto es #EMP indignante#!!» Un [6220_vassal.GetTitledFirstName] agitad[6220_vassal.Custom('ES_OA')] se planta ante mi trono.\n\n«¡El cuerpo de mi pobre [6220_vassal.Custom2('RelationToMe', SCOPE.sC('6220_relative'))], recién fallecid[6220_relative.Custom('ES_OA')] [6220_relative.GetTitledFirstName], ha sido #EMP violado#! por ese #EMP demonio#! que mantenéis como vuestr[physician.Custom('ES_OA')] $court_physician_court_position$, [physician.GetFirstName]! ¡Ese vil monstruo ha manipulado el cadáver, lo ha utilizado para practicar sus oscuros conocimientos y lo ha dejado desfigurado! ¡Por favor, no puede quedar impune!».\n\nPor supuesto, [physician.GetFirstName] parece adecuadamente ofendid[physician.Custom('ES_OA')] por las acusaciones: «¡No tengo ni idea de qué habla es[6220_vassal.Custom('ES_EA')] [6220_vassal.GetWomanMan], mi [ROOT.Char.GetLadyLord]!»."
  hold_court.6220.a:0 "¡Calumnias! Confío en [physician.GetFirstNameNoTooltip]."
  hold_court.6220.b:0 "¡Qué sacrilegio! ¡Guardias, arrestad a [physician.GetFirstNameNoTooltip]!"
  hold_court.6220.c:0 "¿Quién dice la verdad?"

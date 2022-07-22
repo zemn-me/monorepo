@@ -97,7 +97,7 @@
  stress_trait_coping_decisions.7501.desc:0 "Завершая очередной круг вокруг места, где стоит [ROOT.Char.Custom('ResidenceBuilding')], я уже ощущаю, как вместе с потом меня покидают заботы.\n\nНекоторые говорят, что я бегу от проблем, но я отвечаю: я бегу навстречу решению!"
  stress_trait_coping_decisions.7501.a:0 "Еще один круг!"
 
- stress_trait_coping_decisions.7502.t:0 "$stress_trait_coping_decisions.activity$: Тяжелее значит больше"
+ stress_trait_coping_decisions.7502.t:0 "$stress_trait_coping_decisions.activity$: Тяжелее — значит больше"
  stress_trait_coping_decisions.7502.desc:0 "«Этого мало!» — говорю я себе, откладывая учебное оружие в сторону. Я тренируюсь без перерыва, но не чувствую усталости. Мне нужно испытание посерьезнее!\n\nДа... не [ROOT.Char.Custom('signature_weapon')], а что-то побольше... или потяжелее!\n\nЧто-то, что вымотает меня!"
  stress_trait_coping_decisions.7502.a:0 "[random_artifact.GetNameNoTooltip] подойдет!"
  stress_trait_coping_decisions.7502.b:0 "По моему заказу изготовят [ROOT.Char.Custom('signature_weapon')] с увеличенным весом."
@@ -108,7 +108,7 @@
  stress_trait_coping_decisions.7502.failure:0 "Вы переоцениваете свои силы"
 
  stress_trait_coping_decisions.7503.t:0 "$stress_trait_coping_decisions.activity$ Дружеское состязание"
- stress_trait_coping_decisions.7503.desc:0 "В процессе тренировки я замечаю, что рядом со мной тренируется [random_knight.GetTitledFirstName]. Я внимательно осматриваю [random_knight.GetHerHis] — похоже [random_knight.GetSheHe] не только в добром здравии, но и в отличной форме. Хотелось бы померяться силами, но каким образом?\n\nСтоит ли учитывать множество нюансов ради победы? Грубая сила или сочетание выносливости и хитрости?"
+ stress_trait_coping_decisions.7503.desc:0 "В процессе тренировки я замечаю, что рядом со мной тренируется [random_knight.GetTitledFirstName]. Я внимательно осматриваю [random_knight.GetHerHis] — похоже, [random_knight.GetSheHe] не только в добром здравии, но и в отличной форме. Хотелось бы помериться силами, но каким образом?\n\nСтоит ли учитывать множество нюансов ради победы? Грубая сила или сочетание выносливости и хитрости?"
  stress_trait_coping_decisions.7503.a:0 "Предложить борьбу без оружия."
  stress_trait_coping_decisions.7503.a.tt:0 "Вы считаете, что победите одной лишь силой"
  stress_trait_coping_decisions.7503.b:0 "Вызвать [random_knight.GetHerHis] на учебный поединок"

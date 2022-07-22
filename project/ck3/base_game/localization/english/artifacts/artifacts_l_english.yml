@@ -50,20 +50,20 @@
  feature_blade_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_blade_metal_folded_iron:0 "$metal_folded_iron$"
  feature_blade_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_blade_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_blade_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_blade_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_blade_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_head_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_head_metal_folded_iron:0 "$metal_folded_iron$"
  feature_head_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_head_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_head_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_head_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_head_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  feature_handle_metal_wrought_iron:0 "$metal_wrought_iron$"
  feature_handle_metal_folded_iron:0 "$metal_folded_iron$"
  feature_handle_metal_wootz_steel:0 "$metal_wootz_steel$"
- feature_handle_metal_damascus_steel:0 "$metal_bulat_steel$"
- feature_handle_metal_bulat_steel:0 "$metal_damascus_steel$"
+ feature_handle_metal_damascus_steel:1 "$metal_damascus_steel$"
+ feature_handle_metal_bulat_steel:1 "$metal_bulat_steel$"
 
  # Precious/decorative metals and metal-based compounds
  metal_gold:0 "gold"
@@ -1064,3 +1064,7 @@
  easteregg_artifact_elisabeth_plush_description:0 "Elisabeth's stuffed fox is a much beloved toy and it was with her for most of her life. Elisabeth could often be seen talking to it as she wove intricate ciphers for whomever may employ her services. It is comforting and inspires its holder to mimic the cunning of the fox."
 
  child_toy_template_tt:0 "Must be a [child|E] to equip as an [inventory_artifact|E]"
+
+ # Blessed Junk
+ fp2_blessed_junk:0 "[ROOT.Char.Custom('TrinketLookAdjective')|U] $blessed_artifact_modifier$"
+ fp2_blessed_junk_desc:0 "A [ROOT.Char.Custom('TrinketLookAdverbFollowup')] [ROOT.Char.Custom('TrinketLookAdjective')] though otherwise pointless artifact. $blessed_artifact_modifier_desc$."

@@ -425,7 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T Это вы#!"
  FRAME_RELATION_MY_HEIR:2 "#T Это ваш [player_heir|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_MY_LIEGE`
+ FRAME_RELATION_MY_LIEGE:0 "#T Это ваш [liege|El]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T [dynast|E] вашей [dynasties|El]\n#!$TT_DYNAST_DESC$"
@@ -448,7 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T Могущественный вассал#!\nЭтот [ruler|El] — [powerful_vassal|El] и ничего от вас не ждет"
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T Могущественный вассал#!\nЭтот [ruler|El] — [powerful_vassal|El] и хочет остаться в [Concept( 'council', 'совете' )|E]"
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T Могущественный вассал#!\n@warning_icon!#X Этот [Concept( 'ruler', 'правитель' )|E] является [Concept( 'powerful_vassal', 'могущественным вассалом' )|E], чье [Concept( 'opinion', 'мнение' )|E] о вас оставляет желать лучшего, так как вы не дали ему места в вашем [Concept( 'council', 'совете' )|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_NON_POWERFUL_VASSAL`
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T Вассал#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "моя любовь"

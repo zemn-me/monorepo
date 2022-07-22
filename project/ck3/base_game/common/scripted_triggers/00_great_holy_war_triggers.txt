@@ -21,7 +21,7 @@ suitable_faith_for_undirected_ghw_trigger = {
 	}
 	has_doctrine = doctrine_spiritual_head
 	NOR = {
-		has_doctrine = unreformed_faith_doctrine
+		has_doctrine_parameter = unreformed
 		AND = {
 			has_doctrine = tenet_dharmic_pacifism
 			NOT = { has_doctrine = divine_destiny_doctrine }
@@ -48,7 +48,7 @@ suitable_faith_for_directed_ghw_trigger = {
 	}	
 	has_doctrine = doctrine_temporal_head
 	NOR = {
-		has_doctrine = unreformed_faith_doctrine
+		has_doctrine_parameter = unreformed
 		AND = {
 			has_doctrine = tenet_dharmic_pacifism
 			NOT = { has_doctrine = divine_destiny_doctrine }
@@ -70,7 +70,7 @@ suitable_faith_for_any_ghw_trigger = {
 		has_doctrine = doctrine_spiritual_head
 	}
 	NOR = {
-		has_doctrine = unreformed_faith_doctrine
+		has_doctrine_parameter = unreformed
 		AND = {
 			has_doctrine = tenet_dharmic_pacifism
 			NOT = { has_doctrine = divine_destiny_doctrine }

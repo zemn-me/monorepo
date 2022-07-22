@@ -8,7 +8,7 @@
 
  sway_outcome.1002.t:0 "Влияние: религиозные убеждения"
  sway_outcome.1002.same_faith:0 "Кажется, [target.GetTitledFirstName] еще может встать на мою сторону.\n\nЕсли найти верные слова, я смогу внушить [target.GetHerHim], что действую не только в собственных интересах и что мою волю направляет [ROOT.Char.GetFaith.HighGodHerselfHimself] [ROOT.Char.GetFaith.HighGodNameAlternate]!"
- sway_outcome.1002.other_faith:0 "Кажется, [target.GetTitledFirstName] еще может встать на мою сторону. Возможно, я докажу, что [target.GetFaith.GetAdherentNamePlural|l] должны поддерживать именно меня, а не других #L [ROOT.Char.GetFaith.GetAdjective|l]их#! властителей!"
+ sway_outcome.1002.other_faith:0 "Кажется, [target.GetTitledFirstName] еще может встать на мою сторону. Возможно, я докажу, что [target.GetFaith.GetAdherentNamePlural|l] должны поддерживать именно меня, а не других #L [ROOT.Char.GetFaith.GetName|l]их#! властителей!"
  sway_outcome.1002.a:0 "Думаю, я смогу подобрать весомый аргумент."
  sway_outcome.1002.b:0 "Думаю, стоит прибегнуть к дипломатическим любезностям."
 

@@ -1686,8 +1686,7 @@
 	trait = lustful
 	trait = arrogant
 	trait = zealous
-	trait = legitimized_bastard
-	#Used to be Bastard to avoid him inheriting Milano, new solution needed for that
+	trait = disinherited
 	trait = education_martial_3
 	father = 1118
 	mother = 1529
@@ -3547,21 +3546,6 @@
 	}
 	947.10.2 = {
 		death = "947.2.10"
-	}
-}
-
-168141 = {
-	name = "Dhuoda"
-	female = yes
-	dynasty = 650
-	religion = "catholic"
-	culture = bavarian
-	father = 7985
-	802.1.1 = {
-		birth = "802.1.1"
-	}
-	843.1.1 = {
-		death = "843.1.1"
 	}
 }
 

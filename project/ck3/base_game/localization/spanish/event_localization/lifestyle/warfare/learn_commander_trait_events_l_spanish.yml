@@ -68,7 +68,7 @@
  learn_commander_trait.13.desc:0 "[teacher.GetTitledFirstName] cabalga hasta mí. «¡Impresionante!», grita. Las levas «enemigas» se quedan pasmadas con la eficiencia de mis otras tropas.\n\nHay pocas dudas de que he aprendido qué significa ser [ROOT.Char.Custom('CommanderTraitBeingTaught')]."
  learn_commander_trait.13.a:0 "He aprendido mucho."
  #Failure:
- learn_commander_trait.14.desc:0 "«Puede que aún te queden algunas cosas que aprender…». [teacher.Custom('ES_ElLa')|U] [teacher.GetTitledFirstName] me ofrece su mano para ayudarme a salir del barro.\n\nMis tropas tuvieron una actuación muy poco brillante. Debo confesar que [teacher.GetSheHe] quizás tenga razón."
+ learn_commander_trait.14.desc:0 "«Puede que aún te queden algunas cosas que aprender…» [teacher.GetTitledFirstName] me ofrece la mano para ayudarme a salir del barro.\n\nMis tropas tuvieron una actuación muy poco brillante. Debo confesar que [teacher.GetSheHe] quizás tenga razón."
  learn_commander_trait.14.a:0 "Muéstrame de nuevo cómo lo haces."
  learn_commander_trait.14.a.tt:1 "«Volveré a probar una vez más…»."
  learn_commander_trait.14.b:0 "¡Esto es demasiado difícil!"
@@ -94,7 +94,7 @@
  #Success
  learn_commander_trait.1302.desc:0 "«Vaya, no había pensado en eso», [teacher.GetFirstName] [teacher.Custom('quirk_pos_present')]. ¡No puede encontrar un solo fallo en mi plan!"
  #Failure
- learn_commander_trait.1402.desc:0 "«¿Te has olvidado de esa torre?». [teacher.Custom('ES_ElLa')|U] [teacher.GetTitledFirstName] señala desde las almenas hacia la zona delante de la muralla que estaba describiendo. Ahora veo el terrible fallo de mi plan."
+ learn_commander_trait.1402.desc:0 "«¿Te has olvidado de esa torre?». [teacher.GetTitledFirstName] señala desde las almenas hacia la zona delante de la muralla que estaba describiendo. Ahora veo el terrible fallo de mi plan."
 
 #aggressive_attacker
  learn_commander_trait.03.t:0 "Visión devastadora"

@@ -24,7 +24,7 @@
  action_reactive_advice_royal_court_click:0 "$click_to_open_lesson$"
 
  ra_rc_intro:0 "朝廷"
- ra_rc_intro_desc:1 "你现在可进入属于自己的[royal_court|E]了！\n\n朝廷是一种特殊类型的宫廷，代表你在世界舞台上的隆重登场，让你可以使用一些新选项，获得一些新增益。\n\n只有[GetGovernment( 'feudal_government' ).GetName]和[GetGovernment( 'clan_government' ).GetName][government|E]的[kings|E]和[emperors|E]可以使用朝廷。"
+ ra_rc_intro_desc:2 "你现在可进入属于自己的[royal_court|E]了！\n\n朝廷是一种特殊类型的宫廷，代表你在世界舞台上的隆重登场，让你可以使用一些新选项，获得一些新增益。\n\n只有[GetGovernment( 'feudal_government' ).GetName]、[GetGovernment( 'clan_government' ).GetName]和[GetGovernment( 'tribal_government' ).GetName][government|E]的[kings|E]和[emperors|E]可以使用朝廷。"
 
  ra_rc_open:0 "$ra_rc_intro$"
  ra_rc_open_desc:0 "在[royal_court|E]中你可以做许多事情，自由地探索这些选项吧！\n\n现在，让我们快速浏览一下你可以进行的所有新行动。"

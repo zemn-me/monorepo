@@ -103,22 +103,22 @@
  rivalry.1024.tt:0 "Унизительное поражение"
 
  rivalry.1021.t:0 "Триумфальная победа"
- rivalry.1021.desc:1 "С самого начала поединка становится ясно, что [from_rival.GetTitledFirstName] мне не ровня. Я продолжаю давить, не давая [from_rival.GetHerHim] прийти в себя. Вскоре [from_rival.GetSheHe] совершает ошибку и оставляет брешь в обороне, и я не упускаю возможности [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [from_rival.GetHerHis] руку, тем самым заканчивая бой!\n\nОтлично, что моя победа вышла быстрой и решительной."
- rivalry.1021.a:1 "Мне удалось доказать, что я лучше, чем [from_rival.GetFirstNameNoTooltip]!"
+ rivalry.1021.desc:2 "С самого начала поединка становится ясно, что [duel_loser.GetTitledFirstName] мне не ровня. Я продолжаю давить, не давая [duel_loser.GetHerHim] прийти в себя. Вскоре [duel_loser.GetSheHe] совершает ошибку и оставляет брешь в обороне, и я не упускаю возможности [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] руку, тем самым заканчивая бой!\n\nОтлично, что моя победа вышла быстрой и решительной."
+ rivalry.1021.a:2 "Мне удалось доказать, что я лучше, чем [duel_loser.GetFirstNamePossessiveNoTooltip]!"
 
  rivalry.1022.t:0 "Победа с большим трудом"
- rivalry.1022.desc:2 "Я и [from_rival.GetTitledFirstName] начинаем поединок, и я сразу понимаю, что противник не настолько слабее, как мне казалось. Какое-то время мы обмениваемся ударами и блоками, и никому не удается получить преимущество.\n\nВ конечном счете мы оба начинаем уставать, в [from_rival.GetHerHis] защите возникает брешь, что позволяет мне [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [SCOPE.sCharacter('duel_target').GetHerHis] ногу и закончить бой!"
+ rivalry.1022.desc:3 "Я и [from_rival.GetTitledFirstName] начинаем поединок, и я сразу понимаю, что противник не настолько слаб, как мне казалось. Какое-то время мы обмениваемся ударами и блоками, и никому не удается получить преимущество.\n\nВ конечном счете мы оба начинаем уставать, в [from_rival.GetHerHis] защите возникает брешь, что позволяет мне [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] ногу и закончить бой!"
  rivalry.1022.a:0 "Победа доказывает мою правоту."
 
  rivalry.1023.t:0 "Почти победа"
- rivalry.1023.desc:2 "Когда [from_rival.GetTitledFirstName] и я начинаем поединок, я понимаю, что [from_rival.GetSheHe] куда более серьезный противник, чем мне казалось. Бой напряженный, мы обмениваемся ударами и блоками, ища уязвимое места друг у друга.\n\nВ конечном счете я начинаю уставать, ненадолго ослабляю защиту, и [from_rival.GetFirstName] сполна этим пользуется: [from_rival.Custom('signature_weapon')] в [from_rival.GetHerHis] руке стремительно опускается, чтобы [from_rival.Custom('SignatureWeaponCritical')] мою руку."
+ rivalry.1023.desc:3 "Когда [duel_winner.GetTitledFirstName] и я начинаем поединок, я понимаю, что [duel_winner.GetSheHe] — куда более серьезный противник, чем мне казалось. Бой напряженный, мы обмениваемся ударами и блоками, ища уязвимое места друг у друга.\n\nВ конечном счете я начинаю уставать, ненадолго ослабляю защиту, и [duel_winner.GetFirstName] сполна этим пользуется: [duel_winner.Custom('signature_weapon')] в [duel_winner.GetHerHis] руке стремительно опускается, чтобы [duel_winner.Custom('SignatureWeaponCritical')] мою руку."
  rivalry.1023.desc.end:0 "У меня хлещет кровь, и мне приходится уступить бой."
  rivalry.1023.desc.death:0 "Мои раны дают о себе знать, и я медленно сползаю на землю."
- rivalry.1023.a:1 "В следующий раз я одолею тебя, [from_rival.GetTitledFirstNameNoTooltip]!"
+ rivalry.1023.a:2 "В следующий раз я одолею тебя, [duel_winner.GetTitledFirstNameNoTooltip]!"
  rivalry.1023.a.death:0 "В глазах темнеет..."
 
  rivalry.1024.t:0 "Унизительное поражение"
- rivalry.1024.desc:2 "Когда [from_rival.GetTitledFirstName] и я встречаемся, чтобы начать наш поединок, [from_rival.GetSheHe] не теряет времени и сразу переходит к делу, застигнув меня врасплох! Я изо всех сил стараюсь удержаться, но [from_rival.GetFirstName] своими яростными атаками не дает мне возможности прийти в себя.\n\nВскоре [from_rival.GetSheHe] пробивает мою защиту, и [ROOT.GetCharacter.Custom('signature_weapon')] в [from_rival.GetHerHis] руке опускается, чтобы [ROOT.GetCharacter.Custom('SignatureWeaponCriticalPresent')] мою ногу,"
+ rivalry.1024.desc:3 "Когда [duel_winner.GetTitledFirstName] и я встречаемся, чтобы начать поединок, [duel_winner.GetSheHe] не теряет времени и сразу переходит к делу, застигнув меня врасплох! Я изо всех сил стараюсь удержаться, но [SCOPE.sCharacter('duel_winner').GetFirstName] яростно наносит удар за ударом и не дает мне возможности прийти в себя.\n\nВскоре [duel_winner.GetSheHe] пробивает мою защиту, и [duel_winner.Custom('signature_weapon')] в [duel_winner.GetHerHis] руке опускается, чтобы [duel_winner.Custom('SignatureWeaponCriticalPresent')] мою ногу,"
  rivalry.1024.desc.end:0 "заканчивая бой моим позорным поражением. Я страдаю от стыда и унижения!"
  rivalry.1024.desc.death:0 "после чего я падаю на землю."
  rivalry.1024.a:0 "Мне предстоит с позором хромать домой."
@@ -217,7 +217,7 @@
  rivalry.3002.b:0 "[rival.GetTitledFirstName] не [Select_CString(rival.IsFemale, 'обязана', 'обязан' )] знать о моих чувствах."
 
  rivalry.3003.t:0 "Крысы собираются"
- rivalry.3003.desc:1 "[first_friend.GetTitledFirstName] [Select_CString(ROOT.from.IsFemale, 'отвергла', 'отверг' )] меня за то, что я и [first_friend.GetHerHis] [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sCharacter('friend') )] [friend.GetTitledFirstName] — враги."
+ rivalry.3003.desc:1 "[first_friend.GetTitledFirstName] [Select_CString(first_friend.IsFemale, 'отвергла', 'отверг' )] меня за то, что я и [first_friend.GetHerHis] [first_friend.Custom2('RelationToMe', SCOPE.sC('friend') )] [friend.GetTitledFirstName] — враги."
  rivalry.3003.a:0 "Бе! Стадо баранов."
 
  rivalry.3004.t:0 "Худший человек на свете"

@@ -165,9 +165,9 @@
  #A vassal (or your liege) wants to eat some hashish while visiting your capital, by Ewan Cowhig Croft.
  learning_medicine.2110.t:0 "糕点密语"
  learning_medicine.2110.desc:0 "我的随从与我在短暂出访后漫步回[capital.GetNameNoTooltip]，我们意外碰上了[hashish_vassal_or_liege.Custom2('MyCharacterIntroduction', ROOT.Char)]与[hashish_vassal_or_liege.GetHerHis]的近卫，他们在我的首府附近偷偷摸摸，谋划见不得人的勾当。\n\n"
- learning_medicine.2110.desc_good_terms:0 "“啊，[ROOT.Char.GetFirstNameNoTooltip]！我正要找你呢。说来，离这儿不远的地方，我找到了个最棒的小餐馆。你愿不愿跟我一起整上几杯[ROOT.Char.Custom('GetExpensiveDrink')]，再来点大麻馅儿的蛋糕？”"
+ learning_medicine.2110.desc_good_terms:0 "“啊，[ROOT.Char.GetFirstNameNoTooltip]！我正要找你呢。说来，离这儿不远的地方，我找到了个最棒的小餐馆。你愿不愿跟我一起整上几杯[ROOT.Char.Custom('GetExpensiveDrink')]，再来点大麻陷的蛋糕？”"
  learning_medicine.2110.desc_bad_terms:0 "气氛紧张，一触即发，双方可敬的卫兵气势汹汹，准备开打。“大人，”我身后的一名年轻士兵嘁嘁道，“或许我们应该冷静下来，去那个小餐馆享用些大麻蛋糕？”\n\n双方静了下来，[hashish_vassal_or_liege.GetFirstNameNoTooltip]等着我的回答。"
- learning_medicine.2110.desc_neutral_terms:0 "[hashish_vassal_or_liege.GetFirstNamePossessiveNoTooltip]意外被抓了现行，在难受的片刻之后，眼睛盯着我的身后。\n\n“啊，我的[hashish_vassal_or_liege.Custom2('RelationToMe', ROOT.Char)]，或许你愿意跟我一块儿，忘记这份尴尬，去整几杯[ROOT.Char.Custom('GetExpensiveDrink')]，再来点大麻馅儿的蛋糕？”"
+ learning_medicine.2110.desc_neutral_terms:0 "[hashish_vassal_or_liege.GetFirstNamePossessiveNoTooltip]意外被抓了现行，在难受的片刻之后，眼睛盯着我的身后。\n\n“啊，我的[hashish_vassal_or_liege.Custom2('RelationToMe', ROOT.Char)]，或许你愿意跟我一块儿，忘记这份尴尬，去整几杯[ROOT.Char.Custom('GetExpensiveDrink')]，再来点大麻陷的蛋糕？”"
  learning_medicine.2110.a.good_terms:0 "抱歉，但是我得走了。"
  learning_medicine.2110.a.bad_terms:0 "和这个狗杂种一起？决不！"
  learning_medicine.2110.a.neutral_terms:0 "恐怕我还要去其他地方。"

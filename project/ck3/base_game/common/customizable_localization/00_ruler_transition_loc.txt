@@ -2040,6 +2040,13 @@ GameOverMessageNotableAchievements = {
 			dynasty = global_var:form_portugal_decision.dynasty
 		}
 	}
+	text = {
+		localization_key = SUCCESSION_EVENT_WINDOW_END_DATE_CREATED_CANARIAS_DESC
+		trigger = {
+			exists = global_var:declare_canarias_decision
+			dynasty = global_var:declare_canarias_decision.dynasty
+		}
+	}
 
 	text = {
 		localization_key = SUCCESSION_EVENT_WINDOW_END_DATE_CREATED_BOSNIA_DESC

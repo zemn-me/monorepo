@@ -1775,3 +1775,44 @@ suggestion_request_war_aid_petition = {
 		petition_liege_war_liege_involvement_trigger = yes
 	}
 }
+
+
+# Create a Naton Fracturing Faction
+suggestion_create_nation_fracturing_faction = {
+	weight = {
+		base = 10
+	}
+
+	check_create_suggestion = {
+		try_create_suggestion = {
+			suggestion_type = suggestion_create_nation_fracturing_faction
+		}
+	}
+
+	effect = {
+		open_view_data = {
+			view = factions_window
+		}
+	}
+
+	is_valid = {
+		has_fp2_dlc_trigger = yes
+		is_local_player = yes
+		is_landed = yes
+		is_independent_ruler = no
+		is_a_faction_member = no
+		is_a_faction_leader = no
+		is_powerful_vassal_of = liege
+		NOT  = { is_allied_to = liege }
+
+		any_character_struggle = {
+			involvement = involved
+		}
+		liege = {
+			any_character_struggle = {
+				involvement = involved
+			}
+		}
+		liege.primary_title.tier >= tier_kingdom
+	}
+}
