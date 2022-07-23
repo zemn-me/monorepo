@@ -1423,6 +1423,16 @@ monthly_county_control_change_factor_even_if_baron = {
 	percent = yes
 }
 
+monthly_county_control_change_at_war_add = {
+	decimals = 2
+	suffix = MOD_MONTHLY_POSTFIX
+}
+
+monthly_county_control_change_at_war_mult = {
+	decimals = 0
+	percent = yes
+}
+
 county_opinion_add = {
 	decimals = 0
 }

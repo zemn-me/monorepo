@@ -16,7 +16,7 @@
  claim_throne_ongoing.1003.b:0 "Necesitaré todo mi oro para la lucha que se avecina."
  # Lunatic declares themselves ruler
  claim_throne_ongoing.1004.t:0 "Declaración de señorío"
- claim_throne_ongoing.1004.desc:0 "Puede parecer que tengo que trabajar para reclamar el gobierno sobre [target_title.GetName], pero ya dispongo de un título con una autoridad mucho mayor.\n\n¡Soy [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetLadyLord] de todos los rábanos de [target_title.GetNameNoTierNoTooltip]!"
+ claim_throne_ongoing.1004.desc:0 "Puede parecer que tengo que trabajar para reclamar el gobierno sobre [target_title.GetName], pero ya dispongo de un título con una autoridad mucho mayor.\n\n¡Soy [ROOT.Char.GetLadyLord] de todos los rábanos de [target_title.GetNameNoTierNoTooltip]!"
  claim_throne_ongoing.1004.a:0 "Castellano, ¡mi sello de rábanos!"
  claim_throne_ongoing.1004.b:0 "No, no soy [ROOT.Char.GetLadyLord] de todos los rábanos de [target_title.GetNameNoTierNoTooltip]…"
  claim_throne_ongoing.1004.b_flavor:0 "¡sino del mundo!"
@@ -27,7 +27,7 @@
  claim_throne_ongoing.1005.b:0 "Yo no cometo errores. Todos seguiréis la orden."
 
  claim_throne_ongoing.1006.t:0 "Apoyo incondicional"
- claim_throne_ongoing.1006.desc:0 "Igual que con otras muchas cosas, mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('friend'))] [friend.GetTitledFirstName] coincide conmigo en que [target.Custom('ES_ElLa')] [target.GetTitledFirstName] no es dign[target.Custom('ES_OA')] de gobernar [target_title.GetNameNoTier].\n\n«Se me ocurren candidatos mucho mejores», me hace saber en confianza. «Y tú eres [ROOT.Char.Custom('ES_ElLa')] primer[ROOT.Char.Custom('ES_OA')] de ellos. Da la orden, y tendrás mi apoyo»."
+ claim_throne_ongoing.1006.desc:0 "Igual que con otras muchas cosas, mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('friend'))] [friend.GetTitledFirstName] coincide conmigo en que [target.GetTitledFirstName] no es dign[target.Custom('ES_OA')] de gobernar [target_title.GetNameNoTier].\n\n«Se me ocurren candidatos mucho mejores», me hace saber en confianza. «Y tú eres primer[ROOT.Char.Custom('ES_OA')] de ellos. Da la orden, y tendrás mi apoyo»."
  claim_throne_ongoing.1006.a:0 "La amistad es la forma más honorable de lealtad."
  claim_throne_ongoing.1006.b:0 "Emplea tus esfuerzos en hacer saber a los demás lo dign[ROOT.Char.Custom('ES_OA')] que soy."
 

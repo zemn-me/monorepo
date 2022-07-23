@@ -116,7 +116,7 @@
  #Vassal struggling to train new recruits, Sean Hughes
  martial_chivalry.3000.t:0 "Reclutas indisciplinados"
  martial_chivalry.3000.desc:0 "Hoy estaba observando a [bad_commander.GetTitledFirstName] mientras entrenaba a unas levas nuevas, pero los reclutas a su mando parecían más bien una turba desorganizada que un ejército.\n\nSigo mirando mientras [bad_commander.GetSheHe] intenta recuperar el control de la situación, aunque es obvio que ha llegado a su límite."
- martial_chivalry.3000.desc.callous:0 " ¡Esta muestra de ineptitud es un bochorno para [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetPrimaryTitle.GetName] y no se puede tolerar!"
+ martial_chivalry.3000.desc.callous:0 " ¡Esta muestra de ineptitud es un bochorno para [ROOT.Char.GetPrimaryTitle.GetName] y no se puede tolerar!"
  martial_chivalry.3000.desc.compassionate:0 " He estado en esta situación y sé cuán difícil es trabajar con soldados inexpertos."
  martial_chivalry.3000.desc.fallback:1 " Aunque nunca es fácil entrenar a nuevos soldados, [bad_commander.GetFirstName] necesita de verdad esforzarse algo más."
  martial_chivalry.3000.a:0 "Reprender[bad_commander.GetHerHim] por su fracaso."
@@ -184,7 +184,7 @@
  martial_chivalry_special.1601.b:0 "Un corcel tan bueno alcanzará un precio muy alto."
  martial_chivalry_special.1601.c:1 "Mi maestro de establo aprenderá mucho domándo[dummy_gender.GetHerHim]."
  martial_chivalry_special.1601.a.tt:1 "El caballo se convertirá en tu montura"
- martial_chivalry_special.1601.d:0 "¿No es [m_horse.GetTitledFirstName] [m_horse.Custom('ES_ElLa')] expert[m_horse.Custom('ES_OA')] en caballos?"
+ martial_chivalry_special.1601.d:0 "¿No es [m_horse.GetTitledFirstName] mi expert[m_horse.Custom('ES_OA')] en caballos?"
  martial_chivalry_special.1601.d.tt:0 "Tu $master_of_horse_court_position$ intentará domar al animal. Si tiene éxito, el caballo será tu montura personal."
 
  martial_chivalry_special.1603.desc:1 "El caballo echa atrás las orejas, dejando claro su indiferencia hacia mí. El primer encuentro es importante para ganarme su respeto y confianza, y necesito pensar cómo actuar al respecto."

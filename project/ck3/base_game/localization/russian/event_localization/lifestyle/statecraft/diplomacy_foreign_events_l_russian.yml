@@ -14,7 +14,7 @@
 
  # Religious Refugees, by Sean Hughes
  diplomacy_foreign.1074.t:0 "Религиозные беженцы"
- diplomacy_foreign.1074.desc:0 "[heretic_ruler.GetTitledFirstName] правит соседним графством [target_county.GetNameNoTier], где в большом количестве проживают [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip|l]. Как [heretic_ruler.GetFaith.GetAdherentName|l], [heretic_ruler.GetTitleAsName] может без труда преследовать последователей истинной веры, и долг велит мне не допустить, чтобы [heretic_ruler.GetHerHis] [ROOT.GetCharacter.Custom2('ToleranceValue', SCOPE.sC('heretic_ruler'))] влияло на них."
+ diplomacy_foreign.1074.desc:0 "[heretic_ruler.GetTitledFirstName] правит соседним графством [target_county.GetNameNoTier], где в большом количестве проживают [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip|l]. Исповедуя [heretic_ruler.GetFaith.GetAdjective|l], [heretic_ruler.GetTitleAsName|l] может без труда преследовать последователей истинной веры, и долг велит мне не допустить, чтобы [heretic_ruler.GetHerHis] [ROOT.GetCharacter.Custom2('ToleranceValue', SCOPE.sC('heretic_ruler'))|l] влияли на них."
  diplomacy_foreign.1074.a:0 "Мы не можем позволить [heretic_ruler.GetHerHim] угнетать истинно верующих!"
  diplomacy_foreign.1074.b:0 "Надо сделать все, чтобы [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip|l] незаметно покинули этот край."
  diplomacy_foreign.1074.c:0 "Нужно отправить своего представителя и поговорить об обращении с верующими."
@@ -225,7 +225,7 @@
  diplomacy_foreign.1102.c.tooltip.low:0 "[main_heir.GetTitledFirstName] проявит себя #N неважно#!"
  diplomacy_foreign.1103.start.desc:0 "Наконец, [other_heir.GetTitledFirstName] [Select_CString(other_heir.IsFemale, 'должна', 'должен' )] вернуться домой."
  diplomacy_foreign.1103.culture_conversion.desc:0 "Похоже, во время своего визита [Select_CString(other_heir.IsFemale, 'девушка прониклась', 'юноша проникся' )] нашей культурой и [Select_CString(other_heir.IsFemale, 'решила', 'решил' )] перенять некоторые из моих придворных обычаев."
- diplomacy_foreign.1103.faith_conversion.desc:0 "Мне было приятно узнать, что во время своего визита [Select_CString(other_heir.IsFemale, 'девушка решила', 'юноша решил' )] принять [main_heir.GetFaith.GetName] и отречься от своей старой веры."
+ diplomacy_foreign.1103.faith_conversion.desc:0 "Мне было приятно узнать, что во время своего визита [Select_CString(other_heir.IsFemale, 'девушка решила', 'юноша решил' )] принять [main_heir.GetFaith.GetAdjective|l] и отречься от своей старой веры."
  diplomacy_foreign.1103.present.desc:0 "Перед отъездом [Select_CString(other_heir.IsFemale, 'девушка решила', 'юноша решил' )] почтить нас изысканным подарком."
  diplomacy_foreign.1103.prestige.desc:0 "[other_heir.GetHerHis|U] поразило мое гостеприимство, и [other_heir.GetSheHe] [Select_CString(other_heir.IsFemale, 'пообещала', 'пообещал' )] всем рассказать о престижности моего двора."
  diplomacy_foreign.1103.empty.desc:0 ""

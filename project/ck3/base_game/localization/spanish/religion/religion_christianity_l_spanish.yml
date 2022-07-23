@@ -3,7 +3,7 @@
  #Common Christian Localization
  christianity_religion:0 "Cristianismo"
  christianity_religion_adj:0 "cristiana"
- christianity_religion_adjerent:0 "cristiano"
+ christianity_religion_adherent:0 "cristiano"
  christianity_religion_adherent_plural:0 "cristianos"
  christianity_religion_desc:0 "El cristianismo, centrado en la vida y enseñanzas de Jesús de Nazaret, gira en torno al concepto de la salvación, por la cual los pecados de sus practicantes son perdonados en la otra vida, donde son acogidos por Dios."
  christianity_high_god_name:0 "Dios"
@@ -45,11 +45,11 @@
  christianity_bishop:0 "obispo"
  christianity_bishop_plural:0 "obispos"
  christianity_positive_afterlife:0 "Cielo"
- christianity_positive_afterlife_2:0 "$christianity_positive_afterlife$" # Optional translation alt
- christianity_positive_afterlife_3:0 "$christianity_positive_afterlife$" # Optional translation alt
+ christianity_positive_afterlife_2:1 "paraíso" # Optional translation alt
+ christianity_positive_afterlife_3:1 "Reino $christianity_high_god_name_possessive$" # Optional translation alt
  christianity_negative_afterlife:0 "Infierno"
- christianity_negative_afterlife_2:0 "$christianity_negative_afterlife$" # Optional translation alt
- christianity_negative_afterlife_3:0 "$christianity_negative_afterlife$" # Optional translation alt
+ christianity_negative_afterlife_2:1 "la Fosa" # Optional translation alt
+ christianity_negative_afterlife_3:1 "Gehena" # Optional translation alt
  christianity_witchgodname_the_horned_god:0 "el dios cornudo"
  christianity_witchgodname_the_horned_god_possessive:0 "del dios cornudo"
 
@@ -121,7 +121,7 @@
  lollard_adherent_plural:0 "lolardos"
  lollard_desc:0 "Al denunciar muchos sacramentos cristianos comunes como el bautismo y la confesión, los lolardos sostienen que la Santa Biblia es la única fuente válida de doctrina cristiana y que cualquier enseñanza que no se base directamente en ella es intrínsecamente ilegítima."
 
- insular_celtic:0 "Cristianismo insular"
+ insular_celtic:1 "Insularismo"
  insular_celtic_adj:0 "insular"
  insular_celtic_adherent:0 "insularista"
  insular_celtic_adherent_plural:0 "insularistas"
@@ -167,8 +167,8 @@
  bosnian_church_desc:0 "Olvidados durante mucho tiempo tanto por católicos como por ortodoxos, los krstjani de las tierras altas de Bosnia son más permisivos que sus compatriotas más conocidos, pero carecen de estructura formal. Al conservar muchos elementos arcaicos del cristianismo, son tratados a menudo con desdén por sus correligionarios, si es que se les recuerda."
 
  bosnian_house_of_worship:0 "hiža"
- bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$" # Optional translation alt
- bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$" # Optional translation alt
+ bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$"
+ bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$"
  bosnian_house_of_worship_plural:0 "hiže"
  bosnian_religious_head_title:0 "Pradjed"
  bosnian_religious_head_title_name:0 "Obitelj"
@@ -191,6 +191,20 @@
  bosnian_bishop_female_plural:0 "bake"
  bosnian_bishop_neuter:0 "djed"
  bosnian_bishop_neuterplural:0 "djedi"
+
+ mozarabic_church:0 "Mozarabismo"
+ mozarabic_church_adj:0 "mozárabe"
+ mozarabic_church_adherent:0 "mozárabe"
+ mozarabic_church_adherent_plural:0 "mozárabes"
+ mozarabic_church_desc:0 "Descendiente de los primeros ritos ibéricos, el cristianismo mozárabe ha mantenido una cierta independencia respecto a Roma debido a los siglos bajo dominio islámico. Su larga convivencia con otros credos les ha hecho que acepten más las diferencias que sectas más fundamentalistas."
+
+ adoptionist:0 "Adopcionismo"
+ adoptionist_adj:0 "adopcionista"
+ adoptionist_adherent:0 "adopcionista"
+ adoptionist_adherent_plural:0 "adopcionistas"
+ adoptionist_desc:0 "La vertiente ibérica del adopcionismo hunde sus raíces en una combinación de pensamiento independiente en el arzobispado de Toledo y sus sedes circundantes, el puritanismo norteafricano de siglos pasados y varios heresiarcas extremadamente carismáticos de principios del siglo IX.\n\nAunque adopta muchas formas, desde las más sutiles a las más contundentes, el punto doctrinal que las une es el cuestionamiento de la divinidad eterna del Hijo."
+ adoptionist_religious_head_title:0 "Arzobispo"
+ adoptionist_religious_head_title_name:0 "Arzobispado"
 
  conversos:0 "Criptojudaísmo"
  conversos_adj:0 "criptojudaica"

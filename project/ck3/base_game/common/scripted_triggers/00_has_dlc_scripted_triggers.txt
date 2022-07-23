@@ -7,6 +7,11 @@ has_fp1_dlc_trigger = {
 	has_dlc_feature = the_northern_lords
 }
 
+has_fp2_dlc_trigger = {
+	# Does the host have the appropriate DLC?
+	has_dlc_feature = the_fate_of_iberia
+}
+
 
 ##################################################
 # Expansion Pack Triggers

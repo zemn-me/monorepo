@@ -138,6 +138,7 @@
  fund_inspiration.0061.diwan:0 "一张美丽舒适的沙发椅。"
  fund_inspiration.0061.table:0 "我想要一张华丽但又结实的桌子！"
  fund_inspiration.0061.throne:0 "为我的宫殿制作一尊御座！"
+ fund_inspiration.0061.scientific_apparatus:0 "也许一件学习与知识的工具？"
 
  fund_inspiration.0062.t:0 "资助工艺灵感"
 
@@ -147,6 +148,7 @@
  fund_inspiration.0071.regalia:0 "制作适合我身材的礼器。"
  fund_inspiration.0071.crown:0 "一顶配让我戴在头上的冠冕！"
  fund_inspiration.0071.goblet:0 "一只精致的高脚杯。"
+ fund_inspiration.0071.aquamanile:0 "一件华丽的水壶，用于仪式清洁。"
 
  fund_inspiration.0072.t:0 "资助金属匠灵感"
 
@@ -505,7 +507,7 @@
  fund_inspiration.2120.leave_flavor:0 "你匆忙离开"
 
  fund_inspiration.2130.t:0 "$fund_inspiration.title$虚无缥缈的刺激"
- fund_inspiration.2130.desc:1 "我偶然撞见了我的[inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.GetTitledFirstName]，[inspiration_owner.GetSheHe]的表情看起来非常沉重，希望不是辉煌的[inspiration_owner.Custom('GetInspirationTypeObject')]有什么坏消息，[inspiration_owner.GetSheHe]应该很快就要完工了。\n\n“啊，你在这啊，大人……我的工作遇到了瓶颈——不是大问题！随着压力越来越大，我的灵感和我玩起来了捉迷藏！”[inspiration_owner.GetSheHe|U]紧张地大笑。\n\n“我只是需要一些……灵感！伟大的[ROOT.Char.GetTitleAsNameNoTooltip]，你或许有一些……我可以参考的前例？”"
+ fund_inspiration.2130.desc:1 "我偶然碰见了我的[inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.GetTitledFirstName]，[inspiration_owner.GetSheHe]的神色非常凝重，但愿不是辉煌的[inspiration_owner.Custom('GetInspirationTypeObject')]有了什么坏消息，[inspiration_owner.GetSheHe]本就应该很快为我做好的。\n\n“啊，你在这儿啊，大人……我的工作遇到了瓶颈——不是大问题！随着压力越来越大，我的灵感却和我玩起了捉迷藏！”[inspiration_owner.GetSheHe|U]紧张地大笑。\n\n“我只是需要一些……灵感！伟大的[ROOT.Char.GetTitleAsNameNoTooltip]，或许你有一些……我可以参考的前例？”"
  fund_inspiration.2130.a.library:0 "“去图书馆！”"
  fund_inspiration.2130.a.armory:0 "“去军械库！”"
  fund_inspiration.2130.a.hall:0 "“去大厅！”"
@@ -860,7 +862,7 @@
  fund_inspiration.6508.t:0 "$fund_inspiration.title$大自然的建筑师"
  fund_inspiration.6508.introduction:0 "我收到我探险者的一封信函，来自凉爽的针叶林之地。\n\n"
  fund_inspiration.6508.desc:0 "“我最近一段时间身边陪着一个旅行中的[inspiration_owner.GetWomanMan]所能要求的最好同伴——一群河狸！我托这位信使带给你一册草图编成的书籍，描绘的是河狸们为了在水里抓鱼创造的建筑结构！噢，是种半水栖的啮齿动物！”\n\n"
- fund_inspiration.6508.architect_desc:0 "“我确定至少[court_architect.GetTitledFirstName]能从一只比[court_architect.GetHerHim]还聪明的动物身上学到一两手。”"
+ fund_inspiration.6508.architect_desc:0 "“我确定至少[court_architect.GetTitledFirstName]能从一只比[court_architect.GetHerHim]还聪明的动物身上学到几手。”"
  fund_inspiration.6508.a:0 "我要仔细研究一下这个。"
  fund_inspiration.6508.b:0 "确实，[court_architect.GetTitledFirstNameNoTooltip]可以吸取教训。"
  fund_inspiration.6508.b.tt:0 "[court_architect.GetTitledFirstNamePossessive]担任建筑师的称职度略微提升"
@@ -900,9 +902,9 @@
  fund_inspiration.6512.intro_desc:0 "我收到了我的探险者送来的一封信函，信上满是红色的尘土，来自[inspiration_owner.GetHerHis]旅途中穿过的那些沙漠山丘。"
  fund_inspiration.6512.desc:1 "\n\n“我还登上了另一座高峰，在这数千座平坦的高原之巅，我没看到有别的[inspiration_owner.GetWomanMan]曾经踏上这座山的迹象。今天，我鼓起勇气登上了我平生的最高峰。”\n\n“我感觉到这巨石呼唤着一个配得上的名字，以纪念这份功绩是在全宇宙最优秀的[ROOT.Char.GetTitleAsNameNoTooltip]监督之下完成的。”"
  fund_inspiration.6512.a:0 "想必当地人已经给这座山起了名字。"
- fund_inspiration.6512.b:0 "“落基山”——一个蠢呼呼的名字！"
- fund_inspiration.6512.c:0 "“[ROOT.Char.GetFaith.WarGodNamePossessive]之刃”"
- fund_inspiration.6512.d:0 "“[ROOT.Char.GetFaith.FateGodNamePossessive]的手套”"
+ fund_inspiration.6512.b:0 "石山——好傻的名字！"
+ fund_inspiration.6512.c:0 "[ROOT.Char.GetFaith.WarGodNamePossessive]之刃"
+ fund_inspiration.6512.d:0 "[ROOT.Char.GetFaith.FateGodNamePossessive]的手套"
  fund_inspiration.6512.e:0 "就取我宝贝的名字，[lover.GetFirstNameNoTooltip]。"
  fund_inspiration.6512.f:0 "[ROOT.Char.GetFirstNamePossessiveNoTooltip]之牙！"
  fund_inspiration.6512.g:0 "[ROOT.Char.GetFirstNamePossessiveNoTooltip]之根！"

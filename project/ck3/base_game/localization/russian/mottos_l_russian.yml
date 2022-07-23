@@ -43,7 +43,7 @@
  motto_we_tell_tales_of_x:0 "$1$ в наших преданиях"
  motto_x_is_our_y:0 "$1$ $2$ для нас"
  motto_x_guides_us:0 "$1$ наставляет нас"
- motto_house_was_forged_by_x:0 "Дом [CHARACTER.GetHouse.GetNameNoTooltip] рождает $1$"
+ motto_house_was_forged_by_x:0 "Дом [CHARACTER.GetHouse.GetBaseNameNoTooltip] рождает $1$"
  motto_founder_shares_x:0 "[CHARACTER.GetFirstName] имеет $1$"
  
  # Unique Pool (too cool to skip, but no good to randomize)
@@ -62,17 +62,17 @@
  motto_mourn_rejoice:0 "Часто в печали, редко в радости"
  motto_trust_them:0 "Верь им" # I really don't. This is a real motto though!
  motto_disarmed_man:0 "Никто не нападает на безоружного безнаказанно"
- motto_drink_your_blood:0 "Пей свою кровь, [CHARACTER.Custom('GetDaughterSon')|U] дома [CHARACTER.GetHouse.GetNameNoTooltip]"
+ motto_drink_your_blood:0 "Пей свою кровь, [CHARACTER.Custom('GetDaughterSon')|U] дома [CHARACTER.GetHouse.GetBaseNameNoTooltip]"
  motto_from_great_men:0 "Великие люди порождают сильных и добрых"
  motto_this_sigil:0 "Знак сей да приведет тебя к вершине"
  motto_from_all_my_heart:0 "От всего сердца"
  motto_regret_past:0 "Не сожалею о прошлом, не боюсь будущего"
  motto_do_what_you_must:0 "Делай что должно"
  motto_good_life:0 "У нас была хорошая жизнь"
- motto_more_than_silver:0 "Истинно богаты те, кому доверяет [CHARACTER.GetHouse.GetNameNoTooltip]"
+ motto_more_than_silver:0 "Истинно богаты те, кому доверяет [CHARACTER.GetHouse.GetBaseNameNoTooltip]"
  motto_without_fear:0 "Страха нет!"
  motto_break_bend:0 "Лучше сломаться, чем прогнуться"
- motto_always_a_house:0 "Всегда [CHARACTER.GetHouse.GetNameNoTooltip]"
+ motto_always_a_house:0 "Всегда [CHARACTER.GetHouse.GetBaseNameNoTooltip]"
  motto_firm_as_horn:0 "Тверды, как рога"
  motto_i_die_where_my_heart_belongs:0 "Умру там, куда зовет сердце"
  motto_iron_gold:0 "Железом, не золотом"
@@ -96,7 +96,7 @@
  # Immaterial Nouns
  motto_goodness:0 "Благо"
  motto_honor:0 "Честь"
- motto_truth:0 "Истина"
+ motto_truth:0 "True"
  motto_triumph:0 "Триумф"
  motto_valor:0 "Доблесть"
  motto_strength:0 "Сила"
@@ -154,7 +154,7 @@
  
  # Immaterial Adjectives
  motto_honorable:0 "[Select_CString( CHARACTER.IsFemale, 'Благородная', 'Благородный' )]"
- motto_truthful:0 "Истина"
+ motto_truthful:0 "True"
  motto_triumphant:0 "Триумф"
  motto_valorous:0 "Доблесть"
  motto_strong:0 "Сила"
@@ -430,7 +430,7 @@
  dynn_Anward_motto:0 "Слова могут повергнуть империи"
  dynn_Tisander_motto:0 "Простим, но не забудем"
  dynn_BjO_rk_motto:0 "Больше значит больше"
- dynn_Potapczyk_motto:0 "Твори свои правила"
+ dynn_Potapczyk_motto:1 "Кто вопрошает"
  dynn_Carlberg_motto:0 "Счастливые случайности"
  dynn_Horler_motto:0 "Практически художник"
  dynn_Cowhig_Croft_motto:0 "Мы — океан спокойствия"
@@ -452,6 +452,7 @@
  dynn_Brock_motto:0 "Я надеюсь ускориться"
  dynn_Sorokin_motto:0 "Книга, написанная звездами"
  dynn_Meredith_motto:0 "Veni, Vidi, Castratavi Illegitimos"
+ dynn_Carrick_motto:0 "Покончи с этим!"
  dynn_Riggott_motto:0 "Non Commendatae"
  dynn_Anna_Johansson_motto:0 "Все ужасно"
  dynn_Majewski_motto:0 "Союзу льва и волка не бывать"
@@ -501,4 +502,20 @@
  dynn_Johansson_3_motto:0 "Пришел, увидел, выпил"
  dynn_Beaumont_vanity_motto:0 "О горе, что это?"
  dynn_andriamasinavalona_motto:0 "Мои рисовые поля тянутся до самого моря"
+ dynn_Shefket_vanity_motto:0 "Истина в вине"
+
+ dynn_brantevik_vanity_motto:0 "Обитающий в окружении красоты и тайн земли никогда не одинок и не устает от жизни"
+
+
+ dynn_Cortell_vanity_motto:0 "Семья — это единство, а единство — это сила духа"
+ dynn_Arvidsson_Radestig_motto:0 "Вальхалла подождет"
+ dynn_Newcombe_motto:0 "Слова слова слова"
+ dynn_Zenko_motto:0 "Невинность таит в себе предательство"
+ dynn_Runge_Moller_motto:0 "Здесь разворачиваются утки"
+ dynn_Bragalini_motto:0 "Ничто не будет под запретом"
+ dynn_Wickman_motto:0 "Живи как медведь, умри как волк"
+ dynn_Astrup_Hallkvist_motto:0 "Мечи, а не слова."
+ dynn_Voleau_motto:0 "Не одно так другое"
+ dynn_Berg_Hulthen_vanity_motto:0 "Все нормально"
+ dynn_Stokic_motto:0 "Голый не боится карманников!"
 

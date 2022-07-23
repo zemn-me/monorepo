@@ -60,12 +60,12 @@
  ## Loser, Duel End Result Tooltips
  single_combat.0031.desc.result.skill:0 "#BOL Результат:#! [sc_victor.GetFirstNameNoTooltip] побеждает меня в [Concept( 'single_combat_fight', 'поединке' )|E] благодаря более высоким [Concept( 'single_combat_success_chance_skill', 'шансам на победу' )|E]"
  single_combat.0031.desc.result.mistake:0 "#BOL Результат:#! [sc_victor.GetFirstNameNoTooltip] побеждает меня в [Concept( 'single_combat_fight', 'поединке' )|E] из-за моего высокого [Concept( 'single_combat_injury_chance_injury_risk', 'риска получить ранение' )|E]"
- single_combat.0031.desc.result.sudden_death:0 "#BOL Результат:#! [sc_victor.GetFirstNameNoTooltip] побеждает меня в [Concept( 'single_combat_fight', 'поединке' )|E] благодаря моей [Concept( 'single_combat_fight_sudden_death', 'внезапной смерти' )|E]"
+ single_combat.0031.desc.result.sudden_death:0 "#BOL Результат:#! [sc_victor.GetFirstNameNoTooltip] побеждает меня в [Concept( 'single_combat_fight', 'поединке' )|E] благодаря моему [Concept( 'single_combat_fight_sudden_death', 'риску получить ранение' )|E]"
 
  ## Victor, Duel End Result Tooltips
  single_combat.0041.desc.result.skill:0 "#BOL Результат:#! [sc_loser.GetFirstNameNoTooltip] проигрывает мне в [Concept( 'single_combat_fight', 'поединке' )|E] из-за моего высокого [Concept( 'single_combat_success_chance_skill', 'шанса на победу' )|E]"
  single_combat.0041.desc.result.mistake:0 "#BOL Результат:#! [sc_loser.GetFirstNameNoTooltip] проигрывает мне в [Concept( 'single_combat_fight', 'поединке' )|E] из-за [sc_loser.GetHerHis] высокого [Concept( 'single_combat_injury_chance_injury_risk', 'риска получить ранение' )|E]"
- single_combat.0041.desc.result.sudden_death:0 "#BOL Результат:#! [sc_loser.GetFirstNameNoTooltip] проигрывает мне в [Concept( 'single_combat_fight', 'поединке' )|E] из-за своей [Concept( 'single_combat_fight_sudden_death', 'внезапной смерти' )|E]"
+ single_combat.0041.desc.result.sudden_death:0 "#BOL Результат:#! [sc_loser.GetFirstNameNoTooltip] проигрывает мне в [Concept( 'single_combat_fight', 'поединке' )|E] из-за своего [Concept( 'single_combat_fight_sudden_death', 'риска получить ранение' )|E]"
 
  ## Other, Duel End Result Tooltips
  single_combat.result.tt.temporary_modifiers_removed:0 "Все временные боевые [Concept( 'character_modifiers', 'модификаторы персонажа' )|E] удалены"
@@ -113,7 +113,7 @@
  single_combat.0001.taunt:0 "[Select_CString(my_foe.IsFemale, 'Глупая', 'Глупый' )] [my_foe.Custom('InsultNoun')], и это всё, что вы можете?"
  single_combat.0001.put_the_boot_in:0 "Сначала [myself.Custom('signature_weapon')], а потом сапогом в живот!"
  single_combat.0001.strict_guard:0 "[my_foe.GetWomenMen|U] получше вас погибали в попытках пробить мою защиту!"
- single_combat.0001.confident_attack:0 "Я вам покажу, как #EMP я#! [myself.Custom('SignatureWeaponAction')] свое оружие!"
+ single_combat.0001.confident_attack:0 "#EMP Я кричу#!, [myself.Custom('SignatureWeaponActionPresentParticiple')] свое оружие!"
  single_combat.0001.expert_onslaught:0 "Удар! #EMP Защита!#! #BER Выпад!#!"
  single_combat.0001.attempt_disarm:0 "Посмотрим, что вы будете делать, когда [my_foe.Custom('signature_weapon')] не в ваших руках!"
  single_combat.0001.lightning_assault:0 "Главное — атаковать, атаковать мощно! #EMP К бою!#!"
@@ -198,7 +198,7 @@
  single_combat.0001.desc.my_feedback.guard:0 "Благодаря искусным движениям [myself.Custom('signature_weapon')] в моей руке отбивает несколько выпадов, удерживая противника на расстоянии вытянутой руки."
  single_combat.0001.desc.my_feedback.probing_attack:0 "Тщательно выбирая момент, я наношу несколько быстрых ударов, от которых [my_foe.GetFirstNameNoTooltip] отшатывается то в одну, то в другую сторону, постепенно ослабляя защиту."
  single_combat.0001.desc.my_feedback.onslaught:0 "[myself.Custom('signature_weapon')|U] в моей руке, и я обрушиваю [myself.Custom('SignatureWeaponAttemptedLightPlural')] на противника, не давая [my_foe.GetHerHim] передышки между ударами."
- single_combat.0001.desc.my_feedback.surprise_attack:0 "Заметив уязвимое место, я бросаюсь в атаку, [myself.Custom('SignatureWeaponActionPresentParticiple')] оружием. [my_foe.GetFirstNameNoTooltip] отступает, пропуская [my_foe.Custom('SignatureWeaponAttemptedHeavy')]."
+ single_combat.0001.desc.my_feedback.surprise_attack:0 "Заметив уязвимое место, я бросаюсь в атаку, [myself.Custom('SignatureWeaponActionPresentParticiple')] оружие. [my_foe.GetFirstNameNoTooltip] отступает, пропуская [my_foe.Custom('SignatureWeaponAttemptedHeavy')]."
  single_combat.0001.desc.my_feedback.taunt:1 "«А еще, — кричу я, — ты [my_foe.Custom('InsultAdjectiveArticle')], [my_foe.Custom('InsultAdjective')] [my_foe.Custom('InsultNoun')], а [my_foe.Custom('PointOfRidicule')] у тебя — посмешище для всех!»"
  single_combat.0001.desc.my_feedback.put_the_boot_in:0 "[myself.Custom('signature_weapon')|U] в моей руке наносит [myself.Custom('SignatureWeaponAttemptedHeavy')], и [my_foe.GetFirstNameNoTooltip] отшатывается назад, а потом я делаю шаг вперед и бью [my_foe.GetHerHis] ногой прямо в грудь."
  single_combat.0001.desc.my_feedback.strict_guard:0 "[myself.Custom('signature_weapon')|U] защищает меня лучше любого щита, позволяя парировать, отражать и отклонять любые удары, что обрушивает на меня [my_foe.GetFirstNameNoTooltip]. Неважно, что [my_foe.GetSheHe] делает и с какой стороны приближается [my_foe.GetHerHis] [my_foe.Custom('signature_weapon')]: [myself.Custom('signature_weapon')] в моей руке уже там, готовится встретить нападение."
@@ -597,9 +597,9 @@
  single_combat.0031.a.killed_by_spouse:0 "Смерть... #DIE1 разлучит нас,#! #DIE2 да?#!"
  single_combat.0031.a.killed_by_your_head_of_faith:0 "Так #DIE1 хочет#! #DIE2 [sc_victor.GetFaith.HighGodNamePossessive]?#!"
  single_combat.0031.a.killed_by_another_head_of_faith:0 "[sc_loser.GetFaith.HighGodName] #DIE1 улыбается мне,#! #DIE2 [sc_victor.GetTitleAsNameNoTooltip|l], а ты можешь сказать то же самое?..#!"
- single_combat.0031.a.killed_by_cultural_head:0 "Нет в тебе #DIE1 ничего#! #DIE2 [sc_loser.GetCulture.GetNameNoTooltip|l]ого#!..."
+ single_combat.0031.a.killed_by_cultural_head:0 "Нет в тебе #DIE1 ничего#! #DIE2 [sc_loser.GetCulture.GetCollectiveNounNoTooltip|l]ого#!..."
  single_combat.0031.a.killed_by_house_head:0 "Ты — погибель #DIE1 Дома#! #DIE2 [sc_loser.GetHouse.GetName]#!..."
- single_combat.0031.a.killed_by_dynasty_head:0 "Лучше #DIE1 [sc_loser.GetHouse.GetName],#! #DIE1 чем [sc_loser.GetDynasty.GetNameNoTooltip]#!..."
+ single_combat.0031.a.killed_by_dynasty_head:0 "Лучше #DIE1 [sc_loser.GetHouse.GetBaseName],#! #DIE1 чем [sc_loser.GetDynasty.GetBaseNameNoTooltip]#!..."
  single_combat.0031.a.killed_by_close_or_extended_family:0 "Не #DIE1 [sc_loser.Custom2('RelationToMeShort', sc_victor)]#! #DIE2 ты мне#!..."
  single_combat.0031.a.killed_by_friend_or_lover:0 "[sc_victor.GetFirstNameNoTooltip], #DIE1 но#!... #DIE2 почему?..#!"
  single_combat.0031.a.killed_by_soulmate:0 "Наша любовь... #DIE1 должна была длиться#!... #DIE2 вечно#!..."

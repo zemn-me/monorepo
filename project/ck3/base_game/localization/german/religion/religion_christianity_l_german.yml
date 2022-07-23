@@ -3,7 +3,7 @@
  #Common Christian Localization
  christianity_religion:0 "Christentum"
  christianity_religion_adj:0 "Christlich"
- christianity_religion_adjerent:0 "Christen"
+ christianity_religion_adherent:0 "Christ"
  christianity_religion_adherent_plural:0 "Christen"
  christianity_religion_desc:0 "Das Christentum, das sich auf das Leben und die Lehren von Jesus von Nazareth fokussiert, dreht sich um das Konzept der Erlösung, im Zuge derer Anhängern ihre Sünden vergeben und sie im Jenseits von Gott willkommen geheißen werden."
  christianity_high_god_name:0 "Gott"
@@ -45,11 +45,11 @@
  christianity_bishop:0 "Bischof"
  christianity_bishop_plural:0 "Bischöfe"
  christianity_positive_afterlife:0 "Himmel"
- christianity_positive_afterlife_2:0 "$christianity_positive_afterlife$" # Optional translation alt
- christianity_positive_afterlife_3:0 "$christianity_positive_afterlife$" # Optional translation alt
+ christianity_positive_afterlife_2:1 "Paradies" # Optional translation alt
+ christianity_positive_afterlife_3:1 "Königreich $christianity_high_god_name_possessive$" # Optional translation alt
  christianity_negative_afterlife:0 "Hölle"
- christianity_negative_afterlife_2:0 "$christianity_negative_afterlife$" # Optional translation alt
- christianity_negative_afterlife_3:0 "$christianity_negative_afterlife$" # Optional translation alt
+ christianity_negative_afterlife_2:1 "die Grube" # Optional translation alt
+ christianity_negative_afterlife_3:1 "Gehenna" # Optional translation alt
  christianity_witchgodname_the_horned_god:0 "der Gehörnte Gott"
  christianity_witchgodname_the_horned_god_possessive:0 "des Gehörnten Gottes"
 
@@ -121,7 +121,7 @@
  lollard_adherent_plural:0 "Lollarden"
  lollard_desc:0 "Die Lollarden, die viele der üblichen christlichen Sakramente wie etwa die Taufe und die Beichte ablehnen, sehen in der Bibel die einzige zulässige Quelle der christlichen Doktrin und erachten alle Lehren, die sich nicht unmittelbar auf ihr gründen, als in sich illegitim."
 
- insular_celtic:0 "Inselchristentum"
+ insular_celtic:1 "Inselchristentum"
  insular_celtic_adj:0 "Inselchristlich"
  insular_celtic_adherent:0 "Inselchrist"
  insular_celtic_adherent_plural:0 "Inselchristen"
@@ -167,8 +167,8 @@
  bosnian_church_desc:0 "Die Krstjani aus den bosnischen Hochlanden waren von der katholischen wie der orthodoxen Kirche lange vergessen und daher auch wesentlich offener als ihre bekannteren Glaubensgeschwister. Es fehlte ihnen allerdings an formeller Struktur. Wenn sich andere Gläubige überhaupt an sie erinnern, werden sie und die vielen archaischen Elemente, die sie bewahrt haben, nur mit Hohn bedacht."
 
  bosnian_house_of_worship:0 "Hiža"
- bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$" # Optional translation alt
- bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$" # Optional translation alt
+ bosnian_house_of_worship_2:0 "$bosnian_house_of_worship$"
+ bosnian_house_of_worship_3:0 "$bosnian_house_of_worship$"
  bosnian_house_of_worship_plural:0 "Hiže"
  bosnian_religious_head_title:0 "Pradjed"
  bosnian_religious_head_title_name:0 "Obitelj"
@@ -191,6 +191,20 @@
  bosnian_bishop_female_plural:0 "Bake"
  bosnian_bishop_neuter:0 "Djed"
  bosnian_bishop_neuterplural:0 "Djedi"
+
+ mozarabic_church:0 "Mozarabismus"
+ mozarabic_church_adj:0 "Mozarabisch"
+ mozarabic_church_adherent:0 "Mozaraber"
+ mozarabic_church_adherent_plural:0 "Mozaraber"
+ mozarabic_church_desc:0 "Als Auswuchs der frühen iberischen Riten hat sich das mozarabische Christentum ein gewisses Maß an Unabhängigkeit von Rom bewahrt, da es jahrhundertelang unter islamischer Herrschaft stand. Dieses Zusammenleben mit anderen Religionen sorgt für eine größere Akzeptanz der Unterschiede zwischen ihnen, als es unter fundamentalistischeren Sekten der Fall ist."
+
+ adoptionist:0 "Adoptianismus"
+ adoptionist_adj:0 "Adoptianistisch"
+ adoptionist_adherent:0 "Adoptianist"
+ adoptionist_adherent_plural:0 "Adoptianisten"
+ adoptionist_desc:0 "Der iberische Zweig des Adoptianismus führt seine Wurzeln auf das unabhängige Denken des Erzbischofs von Toledo und der umgebenden Bischofssitze, auf den nordafrikanischen Puritanismus vergangener Jahrhunderte sowie auf mehrere äußerst charismatische Häresiarchen des frühen neunten Jahrhunderts zurück.\n\nObgleich er viele Formen annimmt, die von außerordentlich unauffällig bis vollkommen platt reichen, haben sie doch alle gemein, dass die Beziehung zur ewigen Göttlichkeit des Sohns infrage gestellt wird."
+ adoptionist_religious_head_title:0 "Erzbischof"
+ adoptionist_religious_head_title_name:0 "Erzbistum"
 
  conversos:0 "Conversos"
  conversos_adj:0 "Conversonisch"

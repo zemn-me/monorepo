@@ -1,12 +1,12 @@
 ﻿l_russian:
 
- HAS_INNOVATION_THIRD:0 "#L [CULTURE.GetName]ой#! культуре знакома инновация [INNOVATION.GetName]"
- NOT_HAS_INNOVATION_THIRD:0 "#L [CULTURE.GetName]ая#! культура #bold не#! знакома с инновацией [INNOVATION.GetName]"
+ HAS_INNOVATION_THIRD:0 "#L [CULTURE.GetCollectiveNoun]ой#! культуре знакома инновация [INNOVATION.GetName]"
+ NOT_HAS_INNOVATION_THIRD:0 "#L [CULTURE.GetCollectiveNoun]ая#! культура #bold не#! знакома с инновацией [INNOVATION.GetName]"
 
  MUST_BE_UNLOCKED_BY_DECISION:0 "Необходимо разблокировать решением"
 
- HAS_CULTURAL_ERA_OR_LATER:0 "#L [CULTURE.GetName|U]ая#! культура достигла эпохи $ERA$"
- NOT_HAS_CULTURAL_ERA_OR_LATER:0 "#L [CULTURE.GetName|U]ая#! культура #bold не#! достигла эпохи $ERA$"
+ HAS_CULTURAL_ERA_OR_LATER:0 "#L [CULTURE.GetCollectiveNoun|U]ая#! культура достигла эпохи $ERA$"
+ NOT_HAS_CULTURAL_ERA_OR_LATER:0 "#L [CULTURE.GetCollectiveNoun|U]ая#! культура #bold не#! достигла эпохи $ERA$"
 
  DE_JURE_DRIFTING_TOWARDS_TRIGGER:0 "[TITLE.GetName] меняет де-юре статус в пользу титула [TARGET_TITLE.GetName]"
  NOT_DE_JURE_DRIFTING_TOWARDS_TRIGGER:0 "[TITLE.GetName] #bold не#! меняет де-юре статус в пользу титула [TARGET_TITLE.GetName]"
@@ -31,8 +31,8 @@
  KNOWS_LANGUAGE_OF_CULTURE_GLOBAL:1 "Знает [TARGET_CULTURE.GetLanguage.GetName|l] язык"
  KNOWS_LANGUAGE_OF_CULTURE_GLOBAL_NOT:1 "#bold Не#! знает [TARGET_CULTURE.GetLanguage.GetName|l] язык"
 
- HAS_CULTURAL_TRADITION_FIRST:2 "[CULTURE.GetName|U]ая [culture|El] имеет [Concept( 'tradition', 'традицию' )|E] «[CULTURE_TRADITION.GetName]»"
- HAS_CULTURAL_TRADITION_FIRST_NOT:2 "[CULTURE.GetName|U]ая [culture|El] не имеет [Concept( 'tradition', 'традиции' )|E] «[CULTURE_TRADITION.GetName]»"
+ HAS_CULTURAL_TRADITION_FIRST:2 "[CULTURE.GetCollectiveNoun|U]ая [culture|El] имеет [Concept( 'tradition', 'традицию' )|E] «[CULTURE_TRADITION.GetName]»"
+ HAS_CULTURAL_TRADITION_FIRST_NOT:2 "[CULTURE.GetCollectiveNoun|U]ая [culture|El] не имеет [Concept( 'tradition', 'традиции' )|E] «[CULTURE_TRADITION.GetName]»"
  HAS_CULTURAL_TRADITION_THIRD:0 "$HAS_CULTURAL_TRADITION_FIRST$"
  HAS_CULTURAL_TRADITION_THIRD_NOT:0 "$HAS_CULTURAL_TRADITION_FIRST_NOT$"
 
@@ -49,12 +49,12 @@
  any_ancestor_culture_was_mystical:1 "Хотя бы одна из родительских культур должна обладать [Concept( 'tradition', 'традицией' )|E] $tradition_mystical_ancestors_name$"
  mystical_ancestors_disinherit:0 "Не имеет [traditions|El] «$tradition_mystical_ancestors_name$»"
 
- HAS_CULTURAL_PILLAR_FIRST:1 "[CULTURE.GetName|U]ая [culture|El] имеет [Concept( 'culture_pillar', 'столп' )|E] «[CULTURE_PILLAR.GetName]»"
- HAS_CULTURAL_PILLAR_FIRST_NOT:1 "[CULTURE.GetName|U]ая [culture|El] не имеет [Concept( 'culture_pillar', 'столпа' )|E] «[CULTURE_PILLAR.GetName]»"
+ HAS_CULTURAL_PILLAR_FIRST:1 "[CULTURE.GetCollectiveNoun|U]ая [culture|El] имеет [Concept( 'culture_pillar', 'столп' )|E] «[CULTURE_PILLAR.GetName]»"
+ HAS_CULTURAL_PILLAR_FIRST_NOT:1 "[CULTURE.GetCollectiveNoun|U]ая [culture|El] не имеет [Concept( 'culture_pillar', 'столпа' )|E] «[CULTURE_PILLAR.GetName]»"
  HAS_CULTURAL_PILLAR_THIRD:0 "$HAS_CULTURAL_PILLAR_FIRST$"
  HAS_CULTURAL_PILLAR_THIRD_NOT:0 "$HAS_CULTURAL_PILLAR_FIRST_NOT$"
 
- HAS_CULTURAL_PARAMETER_FIRST:0 "#L [CULTURE.GetName|U]ая#! культура обладает необходимой [Concept( 'tradition', 'традицией' )|E] (#TODO_CD_EP1)"
- HAS_CULTURAL_PARAMETER_FIRST_NOT:0 "#L [CULTURE.GetName|U]ая#! культура не обладает необходимой [Concept( 'tradition', 'традицией' )|E] (#TODO_CD_EP1)"
+ HAS_CULTURAL_PARAMETER_FIRST:0 "#L [CULTURE.GetCollectiveNoun|U]ая#! культура обладает необходимой [Concept( 'tradition', 'традицией' )|E] (#TODO_CD_EP1)"
+ HAS_CULTURAL_PARAMETER_FIRST_NOT:0 "#L [CULTURE.GetCollectiveNoun|U]ая#! культура не обладает необходимой [Concept( 'tradition', 'традицией' )|E] (#TODO_CD_EP1)"
  HAS_CULTURAL_PARAMETER_THIRD:0 "$HAS_CULTURAL_PARAMETER_FIRST$"
  HAS_CULTURAL_PARAMETER_THIRD_NOT:0 "$HAS_CULTURAL_PARAMETER_FIRST_NOT$"

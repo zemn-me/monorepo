@@ -76,6 +76,7 @@
  birth.1006.a.message_desc:0 "生父知晓"
  birth.1006.a.mother_message:0 "[real_father.GetTitledFirstName]得知[real_father.GetSheHe]才是生父"
  birth.1006.b:0 "世界都会知道我的孩子！"
+ birth.1006.bastard_explanation:0 "你获知了[child.GetFirstName]的出生，其母亲[mother.GetShortUIName]获得了[secret.GetName]秘密"
 
  birth.1010.t:0 "吾族的子嗣"
  birth.1010.t_twins:0 "我宗族的孩子"
@@ -223,9 +224,9 @@
  
  birth.9004.t:0 "名字有什么含义？"
  birth.9004.desc.me:0 "[ROOT.Char.GetFirstNameNoTooltip]。\n\n我有时会想，这么单调的名字，未来的史学家会如何看待它。\n\n不过我是[ROOT.Char.GetTitleAsNameNoTooltip]，如果我想换名字，只需要说一声就好了？"
- birth.9004.desc:0 "[child.GetFirstNameNoTooltip]。\n\n一开始我还挺喜欢这个名字，但现在它听起来越来越奇怪了。长大以后会怎么[child.GetSheHe]思考[child.GetHerHis]这个名字呢？\n\n也许我应该改一个更好的"
+ birth.9004.desc:0 "[child.GetFirstNameNoTooltip]。\n\n一开始我还挺喜欢这个名字的，但现在它在我耳中听着越发奇怪了。[child.GetSheHe]长大以后会怎么看待[child.GetHerHis]这个名字呢？\n\n也许我应该改一个更好的？"
  birth.9004.a:0 "啊，一个好#EMP 得多#!的名字！"
  birth.9004.b:0 "考虑再三，我觉得[ROOT.Char.GetFirstNameNoTooltip]这个名字很好……"
  birth.9004.b.other:0 "其实[child.GetFirstNameNoTooltip]也还挺不错的……"
  birth.9004.b.tt:0 "你保留老名字"
- birth.9004.b.tt.other:0 "[child.GetFirstNameNoTooltip]保留[child.GetHerHis]老名字"
+ birth.9004.b.tt.other:0 "[child.GetFirstNameNoTooltip]保留[child.GetHerHis]的老名字"

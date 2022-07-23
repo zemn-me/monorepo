@@ -103,22 +103,22 @@
  rivalry.1024.tt:0 "Défaite humiliante"
 
  rivalry.1021.t:0 "Une victoire triomphale"
- rivalry.1021.desc:1 "Dès le début de mon duel avec [from_rival.Custom('FR_le_Char_Pi')][from_rival.GetTitledFirstName], il est clair que j’ai l’avantage. [from_rival.Custom('FR_IlElle')|U] fait rapidement une erreur et je profite d’une ouverture pour [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] son bras, ce qui met fin au combat !\n\nLe fait que ma victoire ait été rapide et décisive la rend d’autant plus belle."
- rivalry.1021.a:1 "J’ai prouvé que j’étais meilleur[ROOT.Char.Custom('FR_E')] qu[from_rival.Custom('FR_EluiElle')] !"
+ rivalry.1021.desc:2 "Dès le début de mon duel avec [duel_loser.Custom('FR_le_Char_Pi')][duel_loser.GetTitledFirstName], il est clair que j’ai l’avantage. [duel_loser.Custom('FR_IlElle')|U] fait rapidement une erreur et je profite d’une ouverture pour [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] son bras, ce qui met fin au combat !\n\nLe fait que ma victoire ait été rapide et décisive la rend d’autant plus belle."
+ rivalry.1021.a:2 "J’ai prouvé que j’étais meilleur[ROOT.Char.Custom('FR_E')] qu[duel_loser.Custom('FR_EluiElle')] !"
 
  rivalry.1022.t:0 "Une victoire de justesse"
- rivalry.1022.desc:2 "Je commence mon duel avec [duel_loser.Custom('FR_le_Char_Pi')][duel_loser.GetTitledFirstName] et je me rends compte que nous sommes plus du même niveau que prévu. Nous échangeons des coups et des esquives pendant un certain temps, sans arriver à prendre le dessus.\n\nAlors que nous commençons à ressentir la fatigue, [duel_loser.Custom('FR_IlElle')] me laisse une ouverture et j’en profite pour [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] sa jambe, ce qui met fin au combat !"
+ rivalry.1022.desc:3 "Je commence mon duel avec [duel_loser.Custom('FR_le_Char_Pi')][duel_loser.GetTitledFirstName] et je me rends compte que nous sommes plus du même niveau que prévu. Nous échangeons des coups et des esquives pendant un certain temps, sans arriver à prendre le dessus.\n\nAlors que nous commençons à ressentir la fatigue, [duel_loser.Custom('FR_IlElle')] me laisse une ouverture et j’en profite pour [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] sa jambe, ce qui met fin au combat !"
  rivalry.1022.a:0 "Ma victoire prouve que j’avais raison."
 
  rivalry.1023.t:0 "Une défaite de justesse"
- rivalry.1023.desc:2 "Alors que [from_rival.Custom('FR_le_Char_Pi')][from_rival.GetTitledFirstName] et moi commençons notre duel, je me rends compte que c’est un[from_rival.Custom('FR_E')] adversaire plus redoutable que je ne l’avais escompté. Le combat est serré, chacun d’entre nous enchaînant des attaques et des esquives et cherchant une ouverture.\n\nFinalement, alors que je fatigue, je baisse ma garde un instant, et [from_rival.Custom('FR_IlElle')] en profite pour [from_rival.Custom('SignatureWeaponCritical')] mon bras avec s[from_rival.Custom('FR_OnA_signature_weapon')]."
+ rivalry.1023.desc:3 "Alors que [duel_winner.Custom('FR_le_Char_Pi')][duel_winner.GetTitledFirstName] et moi commençons notre duel, je me rends compte que c’est un[duel_winner.Custom('FR_E')] adversaire plus redoutable que je ne l’avais escompté. Le combat est serré, chacun d’entre nous enchaînant des attaques et des esquives et cherchant une ouverture.\n\nFinalement, alors que je fatigue, je baisse ma garde un instant, et [duel_winner.Custom('FR_IlElle')] en profite pour [duel_winner.Custom('SignatureWeaponCritical')] mon bras avec s[duel_winner.Custom('FR_OnA_signature_weapon')]."
  rivalry.1023.desc.end:0 "Saignant abondamment, je n’ai pas d’autre choix que de m’avouer vaincu[ROOT.Char.Custom('FR_E')]."
  rivalry.1023.desc.death:0 "Mes blessures me pèsent lourdement et je m’effondre au sol."
- rivalry.1023.a:1 "Je vous aurai la prochaine fois, [from_rival.GetTitledFirstNameNoTooltip] !"
+ rivalry.1023.a:2 "Je vous aurai la prochaine fois, [duel_winner.GetTitledFirstNameNoTooltip] !"
  rivalry.1023.a.death:0 "Il fait si sombre..."
 
  rivalry.1024.t:0 "Une défaite humiliante"
- rivalry.1024.desc:2 "Lorsque [from_rival.Custom('FR_le_Char_Pi')][from_rival.GetTitledFirstName] et moi nous nous retrouvons pour notre duel, [from_rival.Custom('FR_IlElle')] ne perd pas de temps avant de lancer une attaque ! Pris[ROOT.Char.Custom('FR_E')] de court, je lutte mais mon adversaire ne me laisse aucun répit.\n\nIl ne faudra pas longtemps pour qu’[from_rival.Custom('FR_IlElle')] profite d’une ouverture pour [from_rival.Custom('SignatureWeaponCritical')] ma jambe avec s[from_rival.Custom('FR_OnA_signature_weapon')],"
+ rivalry.1024.desc:3 "Lorsque [duel_winner.Custom('FR_le_Char_Pi')][duel_winner.GetTitledFirstName] et moi nous nous retrouvons pour notre duel, [duel_winner.Custom('FR_IlElle')] ne perd pas de temps avant de lancer une attaque ! Pris[ROOT.Char.Custom('FR_E')] de court, je lutte mais mon adversaire ne me laisse aucun répit.\n\nIl ne faudra pas longtemps pour qu’[duel_winner.Custom('FR_IlElle')] profite d’une ouverture pour [duel_winner.Custom('SignatureWeaponCritical')] ma jambe avec s[duel_winner.Custom('FR_OnA_signature_weapon')],"
  rivalry.1024.desc.end:0 "ce qui marque clairement la fin du combat. Cette défaite me couvre de honte."
  rivalry.1024.desc.death:0 "et je m’effondre au sol."
  rivalry.1024.a:0 "Je rentre chez moi en boitant et couvert[ROOT.Char.Custom('FR_E')] de honte."

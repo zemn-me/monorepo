@@ -56,7 +56,7 @@
  yearly.3012.a:0 "¿Qué es lo próximo que deberíamos hacer?…"
  yearly.3012.b:0 "Fue una gran idea, [vassal.GetFirstNameNoTooltip]."
 
- yearly.3013.desc:0 "Pese a todos las piernas moviéndose en círculos y los brazos girando, [liege.GetTitledFirstName] no parece muy impresionado con los bailarines que [vassal.GetTitledFirstName] y yo contratamos para el banquete. [liege.Custom('ES_ElLa')|U] [liege.GetTitleAsNameNoTooltip] sonríe y los observa un momento, pero luego vuelve su atención a la comida.\n\n[vassal.GetFirstName] me mira con duda, pero [liege.GetFirstName] parece bastante content[liege.Custom('ES_OA')]."
+ yearly.3013.desc:0 "Pese a todos las piernas moviéndose en círculos y los brazos girando, a [liege.GetTitledFirstName] no parecen impresionarle los bailarines que [vassal.GetTitledFirstName] y yo contratamos para el banquete. El/La [liege.GetTitleAsNameNoTooltip] sonríe y los observa un momento, pero luego vuelve su atención a la comida.\n\n[vassal.GetFirstName] me mira con duda, pero [liege.GetFirstName] parece bastante content[liege.Custom('ES_OA')]."
  yearly.3013.a:0 "Sea como sea, cuidaremos el uno del otro."
  yearly.3013.b:0 "Al menos nos esforzamos."
 
@@ -79,7 +79,7 @@
  yearly.3031.a.nemesis_failure:0 "[nemesis.GetFirstNameNoTooltip] me difama"
  yearly.3031.b:0 "Ilustraré que [ROOT.Char.GetFaith.HighGodName] ya me favorece."
  yearly.3031.b.success:0 "Impresiono [liege.Custom('ES_AlAla')] [liege.GetTitleAsNameNoTooltip]"
- yearly.3031.b.failure:0 "[liege.Custom('ES_ElLa')|U] [liege.GetTitleAsNameNoTooltip] queda más impresionad[liege.Custom('ES_OA')] con [fellow_vassal.GetFirstNameNoTooltip]"
+ yearly.3031.b.failure:0 "El/La [liege.GetTitleAsNameNoTooltip] queda más impresionad[liege.Custom('ES_OA')] con [fellow_vassal.GetFirstNameNoTooltip]"
  yearly.3031.c:0 "Sé cómo llamar la atención de [liege.GetFirstNameNoTooltip]…"
  yearly.3031.c.unlock_tt:0 "Esta opción está disponible gracias a la atracción que despierto en [liege.GetTitledFirstNameNoTooltip]"
  yearly.3031.c.consequence:0 "[liege.GetFirstNameNoTooltip] puede seguirme más"
@@ -90,7 +90,7 @@
  yearly.3040.desc:1 "Se me conoce como un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetWomanMan] profundamente piados[ROOT.Char.Custom('ES_OA')]. Seguro que mi devoción por [ROOT.Char.GetFaith.HighGodName] me ayudará también en esta vida y no solo en la siguiente, ¿verdad?\n\nHay una serie de personas a quienes habría que recordarles que cuento con el favor [ROOT.Char.GetFaith.HighGodNameAlternatePossessive]."
  yearly.3040.a:0 "¡Deberían aclamar mi dedicación desde las torres!"
  yearly.3040.b:0 "Este año he sido demasiado indulgente con la [ROOT.Char.GetFaith.HouseOfWorship]…"
- yearly.3040.c:0 "¡Seguro que [religious_head.Custom('ES_ElLa')] [religious_head.GetTitleAsNameNoTooltip] apreciará un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetLadyLord] devot[ROOT.Char.Custom('ES_OA')]!"
+ yearly.3040.c:0 "¡Seguro que el/la [religious_head.GetTitleAsNameNoTooltip] apreciará un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetLadyLord] devot[ROOT.Char.Custom('ES_OA')]!"
  yearly.3040.d:0 "Los [ROOT.Char.Custom('DefaultPriestTitlePlural')] ya sienten un gran respeto por mí."
 
  yearly.3041.opening:0 "[vassal.Custom2('AppropriateGreeting', ROOT.Char)]"
@@ -100,8 +100,8 @@
  yearly.3041.c:0 "¡Soy #EMP yo#! quien hace la obra [ROOT.Char.GetFaith.HighGodNamePossessive]!"
 
  yearly.3051.t:0 "Por derecho"
- yearly.3051.desc:0 "Mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))] me ha informado de una desconocida ley del [county.GetName], según la cual nadie salvo [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] puede ser su protector.\n\nNormalmente, no se haría caso a una ley tan arcaica, pero me ofrece una oportunidad única de poner en su sitio a [vassal.GetTitledFirstName], mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('vassal'))] y gobernante actual del [county.GetNameNoTooltip]."
- yearly.3051.a:0 "La ley es clara, [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip] tiene todos los derechos!"
+ yearly.3051.desc:0 "Mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('councillor'))] me ha informado de una desconocida ley del [county.GetName], según la cual nadie salvo [ROOT.Char.GetTitleAsNameNoTooltip] puede ser su protector.\n\nNormalmente, no se haría caso a una ley tan arcaica, pero me ofrece una oportunidad única de poner en su sitio a [vassal.GetTitledFirstName], mi [ROOT.Char.Custom2('RelationToMeShort', SCOPE.sC('vassal'))] y gobernante actual del [county.GetNameNoTooltip]."
+ yearly.3051.a:0 "La ley es clara, [ROOT.Char.GetTitleAsNameNoTooltip] tiene todos los derechos!"
  yearly.3051.b:0 "[vassal.GetFirstNameNoTooltip] puede quedarse el título, por mi gracia."
 
  yearly.3061.t:0 "A vueltas con los agotes"

@@ -46,7 +46,7 @@
  warhorse.1001.e:0 "Мне это не интересно."
  warhorse.1001.e.tt:1 "#F «[THIS.Char.Custom('WarhorseStoryName')] не нуждается ни в каком берейторе — есть же я!»#!"
  warhorse.1001.f:0 "За это $master_of_horse_court_position$ и получает жалование!"
- warhorse.1001.f.tt:0 "[Select_CString(m_horse.IsFemale, 'Ваша', 'Ваш' )] $master_of_horse_court_position$ берется за дело. [ROOT.Char.Custom('HorseStoryMareStallion')] еще будет ходить в узде!"
+ warhorse.1001.f.tt:1 "[Select_CString(master_of_horse_court_position.IsFemale, 'Ваша', 'Ваш' )] $master_of_horse_court_position$ берется за дело. [THIS.Char.Custom('WarhorseStoryName')] еще будет ходить в узде!"
  warhorse.1001.f.failure:0 "Похоже, $master_of_horse_court_position$ не так [Select_CString(m_horse.IsFemale, 'хороша', 'хорош' )], как вам казалось"
  warhorse.1001.f.failure.tt:0 "[m_horse.GetTitledFirstNameNoTooltip] не [Select_CString(m_horse.IsFemale, 'справилась', 'справился' )]. [ROOT.Char.Custom('WarhorseStoryName')] не хочет ходить под седлом."
 

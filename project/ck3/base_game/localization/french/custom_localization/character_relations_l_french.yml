@@ -146,10 +146,3 @@
  PLAYER_OPINION_UNIMPORTANT_SELF:1 "Puisque [Character.Custom('FR_le_Char_U_Pi')][Character.GetShortUIName] est joué[Character.Custom('FR_E')] par vous, l’opinion ne dicte pas son comportement"
  CHARACTER_IS_KNIGHT:2 "#T $knight_culture_player_no_tooltip$#!\n[Character.Custom('FR_le_Char_U_Pi')|U][Character.GetShortUIName] est un $knight_culture_player$ dans [Character.GetKnightArmy.GetName]"
 
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- OPINION_SAME_CULTURE:0 "Même [culture|El]"
- OPINION_DIFFERENT_CULTURE_SAME_GROUP:0 "[culture|E] différente"
- OPINION_DIFFERENT_CULTURE:0 "[culture|E] différente"
- OPINION_SAME_REALM_DIFFERENT_CULTURE_SAME_GROUP:0 "[culture|E] étrangère"
- OPINION_SAME_REALM_DIFFERENT_CULTURE:1 "[culture_group|E] étranger"

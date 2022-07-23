@@ -74,7 +74,7 @@
  pet_animal.0110.a:0 "Je vais vous dédommager !"
  pet_animal.0110.b:0 "Ce n’est qu’un chat..."
 
- pet_animal.0197.t:0 "[ROOT.Char.Custom('CatStoryName')]: parti[ROOT.Char.Custom('FR_CatStory_e')]"
+ pet_animal.0197.t:0 "[ROOT.Char.Custom('CatStoryName')] : parti[ROOT.Char.Custom('FR_CatStory_e')]"
  pet_animal.0197.desc_court_5020:0 "Depuis que j’ai commencé à limiter les allées et venues de [ROOT.Char.Custom('CatStoryName')] je [ROOT.Char.Custom('FR_CatStory_le')] vois de moins en moins.\n\nCela fait maintenant des semaines que je ne l’ai plus vu[ROOT.Char.Custom('FR_CatStory_e')] et j’ai peur qu’[ROOT.Char.Custom('CatStorySheHe')] m’ait quitté pour de bon.\n\nMes courtisans semblent heureux de leurs quartiers sans sa présence, mais mes genoux ne se sont jamais sentis aussi seuls..."
  pet_animal.0197.desc:0 "[ROOT.Char.Custom('CatStoryName')] a pris l’habitude de s’éloigner de plus en plus et de plus en plus longtemps.\n\nCela fait maintenant des semaines que je ne l’ai plus vu[ROOT.Char.Custom('FR_CatStory_e')] et j’ai peur qu’[ROOT.Char.Custom('CatStorySheHe')] m’ait quitté pour de bon."
  pet_animal.0197.a:0 "S’il te plaît, reviens, [ROOT.Char.Custom('CatStoryName')] !"
@@ -132,7 +132,7 @@
  pet_animal.1109.t:0 "[ROOT.Char.Custom('DogStoryName')] : la rencontre"
  pet_animal.1109.desc:0 "Je me promène avec [ROOT.Char.Custom('DogStoryName')] quand je vois soudain [other_owner.Custom2('MyCharacterIntroduction', ROOT.Char)] s’approcher avec un magnifique chien [other_owner.Custom('DogFurColor')]. Avant que nous n’ayons eu le temps de réagir, [ROOT.Char.Custom('DogStoryName')] et l’autre chien partent ensemble."
  pet_animal.1109.a:0 "Je suis sûr[ROOT.Char.Custom('FR_E')] que tout ira bien."
- pet_animal.1109.a.tt:0 "J'#EMP espère#! que tout ira bien"
+ pet_animal.1109.a.tt:0 "J’#EMP espère#! que tout ira bien"
 
  pet_animal.1110.desc:0 "[other_owner.Custom2('MyCharacterIntroduction', ROOT.Char)|U] et moi retrouvons les deux chiens au bout d’un certain temps, au milieu d’une copulation vigoureuse.\n\n"
  pet_animal.1110.desc_your_dog:0 "« Eh bien, [ROOT.Char.GetTitledFirstNameNoTooltip]... Je suppose que nous serons bientôt liés ! »"
@@ -167,7 +167,7 @@
  pet_animal.1115.desc:2 "« Passons maintenant au point suivant », dit mon [councillor.GetCouncilTitle|l] [councillor.Custom('FR_le_Char_Pi')][councillor.GetTitledFirstName]. « Il est de la plus haute importance que... »\n\n#EMP *Phhffrrt*#!\n\nLe silence n’est rompu que par les aboiements joyeux [ROOT.Char.Custom('DogStoryNamePossessive')], qui vient de faire ses besoins."
  pet_animal.1115.a:0 "Mauvais chien !"
 
- pet_animal.1116.desc_opening:0 "Je sors de la salle de réunion et je découvre que [ROOT.Char.Custom('DogStoryName')] a disparu. Je le cherche partout ; et s’il était perdu et effrayé ?\n\n"
+ pet_animal.1116.desc_opening:0 "Je sors de la salle de réunion et je découvre que [ROOT.Char.Custom('DogStoryName')] a disparu. Je le cherche partout ; et s’il était perdu et effrayé ?\n\n"
  pet_animal.1116.desc:1 "Soudain, je tombe sur [courtier.Custom2('MyCharacterIntroduction', ROOT.Char)] avec un chien pratiquement sur ses genoux à qui [courtier.Custom('FR_IlElle')] gratte vigoureusement le ventre. Un chien qui ressemble étrangement à [ROOT.Char.Custom('DogStoryName')]. « C’est un compagnon précieux que vous avez, [ROOT.Char.GetTitledFirstNameNoTooltip] ! »"
  pet_animal.1116.a:0 "Oh oui. Un très bon compagnon..."
 
@@ -274,12 +274,3 @@
  pet_animal.6051.desc:0 "Je trouve [ROOT.Char.Custom('CatStoryName')] qui dort dans mes appartements, et alors que je m’assieds à ses côtés, j’entends un gazouillis calme et confus. Cependant, lorsque je commence à passer mes doigts dans son pelage [ROOT.Char.Custom('CatFurColor')], [ROOT.Char.Custom('CatStorySheHe')] se met rapidement à ronronner de contentement, et le son semble détendre tout mon être."
 
  pet_animal.6052.desc:0 "Je trouve [ROOT.Char.Custom('CatStoryName')] qui se pavane dans la cour. Dès qu’[ROOT.Char.Custom('CatStorySheHe')] me repère, [ROOT.Char.Custom('CatStorySheHe')] miaule et se frotte contre ma jambe.\n\nJe passe de nombreuses minutes accroupi[ROOT.Char.Custom('FR_E')] à ses côtés, à le caresser et à le gratter sous le menton, et lorsque je me relève, je me sens plus lég[ROOT.Char.Custom('FR_ErEre')]."
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- pet_animal.0198.t:0 "[ROOT.Char.Custom('CatStoryName')] : un nouveau compagnon"
- pet_animal.0198.desc:1 "Je n'avais pas vu le chat [ROOT.Char.Custom('CatFurColor')] de m[ROOT.Char.Custom2('FR_RelationToMe_OnA', SCOPE.sC('original_owner'))] [original_owner.Custom('FR_le_Char_Pi')][original_owner.GetTitledFirstName] depuis son décès, mais soudain l'animal se tient devant moi. « [original_owner.Custom('FR_IlElle')|U] te manque aussi, hein ? », lui dis-je en m'accroupissant pour le caresser."
- pet_animal.1198.t:0 "[ROOT.Char.Custom('DogStoryName')] : un nouveau compagnon"
- pet_animal.1198.desc:0 "Je n'avais pas vu le chien [ROOT.Char.Custom('CatFurColor')] de m[ROOT.Char.Custom2('FR_RelationToMe_OnA', SCOPE.sC('original_owner'))] [original_owner.Custom('FR_le_Char_Pi')][original_owner.GetTitledFirstName] depuis son décès, mais soudain l'animal se tient devant moi. « [original_owner.Custom('FR_IlElle')|U] te manque aussi, hein ? », lui dis-je en m'accroupissant pour le caresser."
- pet_animal.1198.a_girl:0 "Viens ici ma fille."
- pet_animal.1198.a_boy:0 "Viens ici mon garçon."
- pet_animal.1198.b:0 "Bah, je vais te vendre au marché."

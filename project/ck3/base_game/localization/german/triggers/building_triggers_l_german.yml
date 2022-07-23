@@ -44,4 +44,7 @@
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_GLOBAL:0 "Hat #bold kein#! [special_building|E]"
  HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName] hat ein [special_building|E]"
  NOT_HAS_SPECIAL_BUILDING_TRIGGER_THIRD:0 "[PROVINCE.GetName] hat #bold kein#! [special_building|E]"
+
+ HAS_HOLDING_DESC:0 "[province.GetName] enthält bereits ein [holding|E]"
+ NOT_HAS_HOLDING_DESC:0 "[province.GetName] enthält noch #!kein#bold  [holding|E]"
  

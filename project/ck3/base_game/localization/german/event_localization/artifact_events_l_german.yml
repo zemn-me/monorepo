@@ -30,6 +30,7 @@
  artifact.1001.desc.weapon:0 "\n\n„Mein Lehnsherr, beim Aufräumen der Waffenkammer ist mir aufgefallen, dass [SCOPE.Custom('ThisArtifactType_DE_1')] [SCOPE.Custom('ThisArtifactType')] fast völlig verrostet ist. Was soll damit geschehen?“\n\nBei näherer Betrachtung bin ich mir sicher, dass [SCOPE.Custom('ThisArtifactType_DE_ART_DEF_S_N')] [SCOPE.Custom('ThisArtifactType')] durch keine Schmiedearbeit jemals wieder kampftauglich gemacht werden kann. Eine Reinigung und Konservierung zu Zwecken der Zurschaustellung sollte jedoch zumindest möglich sein, und das zu verhältnismäßig geringen Kosten."
  artifact.1001.desc.other:0 "\n\n„Mein Lehnsherr, beim Aufräumen der Vorratskammer ist mir aufgefallen, dass [SCOPE.Custom('ThisArtifactType_DE_1')] [SCOPE.Custom('ThisArtifactType')] so alt ist, dass sie im Grunde auseinanderfällt. Was soll damit geschehen?“\n\nBei näherer Betrachtung bin ich mir sicher, dass es nicht möglich ist, [SCOPE.Custom('ThisArtifactType_DE_ART_DEF_S_N')] [SCOPE.Custom('ThisArtifactType')] so aufzubessern, dass man sie wieder tragen könnte. Eine Reinigung und Konservierung zu Zwecken der Zurschaustellung sollte jedoch zumindest möglich sein, und das zu verhältnismäßig geringen Kosten."
  artifact.1001.a:0 "Ein nutzbringendes Unterfangen."
+ artifact.1001.a.tt.free:0 "#instruction Dieses [artifact|E] kann umsonst umgewandelt werden!#!"
  artifact.1001.a.tt:1 "Das Artefakt „[this_artifact.GetName]“ wird zu einem Hof-Artefakt umgewandelt, was nur [grandeur|E] und [prestige|E] gewährt"
  artifact.1001.b:0 "Nein, das ist zu teuer."
 
@@ -179,7 +180,7 @@
  artifact_duel_weapon_4_desc:0 "[this_artifact.GetDesc]\n\nDiese Waffe, die schon mindestens 30 Gegner in einem Duell besiegt hat, verfügt über ein legendäres Vermächtnis."
  
  artifact.6001.t:0 "Das Feindesbanner"
- artifact.6001.desc.commander:1 "Ich überblicke das Schlachtfeld und überlege, wie man diesem Gefecht wohl gedenken wird, als mein Blick zu den Toten hinüberschweift. Da fällt mir eine Gruppe von Kämpfern auf, die sich artig vor mir verneigen.\n\n"
+ artifact.6001.desc.commander:1 "Ich überblicke das Schlachtfeld und überlege, wie man diesem Gefecht wohl gedenken wird, als mein Blick zu den verbleibenden Toten hinüberschweift. Da fällt mir eine Gruppe von Kämpfern auf, die sich artig vor mir verneigen.\n\n"
  artifact.6001.desc:0 "Die Schlacht von [combat_location.GetName] endete in einem erstaunlichen Sieg! Begierig lausche ich dem Boten, während er den Bericht des Befehlshabers [friendly_commander.GetTitledFirstName] verliest. Dann wende ich mich an die Soldaten vor mir.\n\n"
  artifact.6001.desc.looting:0 "„Herr[ROOT.Char.Custom('DE_END_NOU_S_GS_N')]! Wir sind auf das feindliche Banner gestoßen, während wir das Schlachtfeld … ‚gesäubert‘ haben! Wir hielten es für eine Schande, es zurückzulassen. Vielleicht wollt Ihr es als Trophäe behalten?“"
  artifact.6001.desc.killed_defender:0 "„Herr[ROOT.Char.Custom('DE_END_NOU_S_GS_N')]! Wir haben die restlichen Feinde in die Ecke gedrängt, wo sie uns tapfer die Stirn boten. Sie gaben ihr Leben, um dieses Banner zu verteidigen.“"

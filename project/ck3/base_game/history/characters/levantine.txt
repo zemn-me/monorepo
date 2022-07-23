@@ -633,26 +633,6 @@
 	}
 }
 
-20769 = {
-	name = "Mes_ud"
-	#placeholder
-	dynasty = 577
-	martial = 7
-	diplomacy = 6
-	intrigue = 7
-	stewardship = 8
-	religion = "ismaili"
-	culture = levantine
-	trait = cynical
-	trait = education_learning_2
-	1039.1.1 = {
-		birth = "1039.1.1"
-	}
-	1089.1.1 = {
-		death = "1089.1.1"
-	}
-}
-
 20770 = {
 	name = "Ishaq"
 	#placeholder
@@ -5640,6 +5620,70 @@
 	}
 }
 
+159481 = {
+	name = "Mayzad" #
+	dynasty = 587
+	religion = "ismaili"
+	culture = "levantine"
+	920.1.1 = {
+		birth = "920.1.1" #Unknown
+	}
+	973.1.1 = {
+		death = "973.1.1"
+	}
+}
+159482 = {
+	name = "Ali" #
+	dynasty = 587
+	religion = "ismaili"
+	culture = "levantine"
+	father = 159481
+	955.1.1 = {
+		birth = "955.1.1" #Unknown
+	}
+	1017.1.1 = {
+		death = "1017.1.1"
+	}
+}
+159483 = {
+	name = "Dubays" #
+	dynasty = 587
+	religion = "ismaili"
+	culture = "levantine"
+	father = 159482
+	1000.1.1 = {
+		birth = "1000.1.1" #Unknown
+	}
+	1081.1.1 = {
+		death = "1081.1.1"
+	}
+}
+159484 = {
+	name = "Mansur" #
+	dynasty = 587
+	religion = "ismaili"
+	culture = "levantine"
+	father = 159483
+	1035.1.1 = {
+		birth = "1035.1.1" #Unknown
+	}
+	1086.1.1 = {
+		death = "1086.1.1"
+	}
+}
+159485 = {
+	name = "Sadaka" #
+	dynasty = 587
+	religion = "ismaili"
+	culture = "levantine"
+	father = 159484
+	1060.1.1 = {
+		birth = "1060.1.1" #Unknown
+	}
+	1107.1.1 = {
+		death = "1107.1.1"
+	}
+}
 159486 = {
 	name = "Dubays" #
 	dynasty = 587
@@ -7870,7 +7914,6 @@ levantine000004 = { #fictional ruler of Banu Shayban
 levantine000005 = { #fictional wife 
 	name = "Jamila"
 	female = yes
-	female = yes
 	religion = ashari
 	culture = levantine
 	829.1.1 = {
@@ -8208,6 +8251,11 @@ levantine000010 = { #fictional ruler of Banu Kilab
 		add_pressed_claim = title:d_edessa # Mustazhirids
 		add_pressed_claim = title:d_azerbaijan # Yazidids
 		capital = c_samarra #Capital at the time
+
+		add_character_flag = {
+			flag = recent_nation_fracturing_faction_war
+			years = faction_nation_fracturing_war_defeat_cooldown
+		}
 	}
 	869.1.1 = {
 		death = yes
@@ -8702,141 +8750,16 @@ levantine0001 = {
 	}
 }
 
-200261 = {
-	name = "Yahya"
-	dynasty = 1046029
-
-	religion = ashari
-	culture = levantine
-
-	966.1.1 = {
-		birth = yes
-	}
-	1020.1.1 = {
-		death = yes
-	}
-}
-
-200262 = {
-	name = "Ahmad"
-	dynasty = 1046029
-
-	father = 200261
-
-	religion = ashari
-	culture = levantine
-
-	991.1.1 = {
-		birth = yes
-	}
-	1042.1.1 = {
-		death = yes
-	}
-}
-
-200263 = {
-	name = "al-Abbas"
-	dynasty = 1046029
-
-	father = 200262
-
-	religion = ashari
-	culture = levantine
-
-	1018.1.1 = {
-		birth = yes
-	}
-	1070.1.1 = {
-		death = yes
-	}
-}
-
-200264 = {
-	name = "Muhamad"
-	dynasty = 1046029
-
-	father = 200261
-
-	religion = ashari
-	culture = levantine
-
-	993.1.1 = {
-		birth = yes
-	}
-	1051.1.1 = {
-		death = yes
-	}
-}
-
-200265 = {
-	name = "Jalaf"
-	dynasty = 1046029
-
-	father = 200261
-
-	religion = ashari
-	culture = levantine
-
-	995.1.1 = {
-		birth = yes
-	}
-	1048.1.1 = {
-		death = yes
-	}
-}
-
-200266 = {
-	name = "Fath"
-	dynasty = 1046029
-
-	father = 200265
-
-	religion = ashari
-	culture = levantine
-
-	1026.1.1 = {
-		birth = yes
-	}
-	1049.1.1 = {
-		add_spouse = 200268
-	}
-	1053.1.1 = {
-		employer = 3212 # Abbad Abbadid
-		move_to_pool = yes
-	}
-	1083.1.1 = {
-		death = yes
-	}
-}
-
-200267 = {
-	name = "Nars"
-	dynasty = 1046029
-
-	father = 200266
-	mother = 200268
-
-	religion = ashari
-	culture = levantine
-
-	1051.1.1 = {
-		birth = yes
-	}
-	1107.1.1 = {
-		death = yes
-	}
-}
-
-20740 = {
-	name = "Sulayman"
-	dynasty = 101048
-	martial = 8
-	diplomacy = 8
+20780 = {
+	name = "Muawiyah"
+	dynasty = 101015
+	martial = 7
+	diplomacy = 4
 	intrigue = 4
-	stewardship = 8
-	religion = "ashari"
-	culture = "levantine"
-	trait = education_martial_2
+	stewardship = 5
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
 	1039.1.1 = {
 		birth = "1039.1.1"
 	}
@@ -8845,22 +8768,3438 @@ levantine0001 = {
 	}
 }
 
-20818 = {
-	name = "Mu_ansar"
-	dynasty = 100808
+45001 = {
+	name = "Muhammad" # Muhammad ibn Jahwar, known as al-Rasid, Emir of Córdoba (1043-1063), Sheik of Cabra & Córdoba (1043-1063)
+	dynasty = 101607 # Banu Jahwar Dynasty
 	martial = 4
-	diplomacy = 5
-	intrigue = 6
-	stewardship = 7
-	religion = "ashari"
-	culture = "levantine"
-	trait = diligent
-	trait = education_martial_3
-	trait = cynical
-	1041.1.1 = {
-		birth = "1041.1.1"
+	diplomacy = 12
+	intrigue = 4
+	stewardship = 8
+	religion = muwalladi
+	culture = levantine
+	trait = humble
+	trait = education_stewardship_4
+
+	father = 45000 # Emir Jahwar ibn Muhammad of Córdoba
+
+	1020.1.1 = {
+		birth = yes
 	}
-	1091.1.1 = {
-		death = "1091.1.1"
+	1043.8.6 = {
+		name = "al-Rasid"
+	}
+	1063.1.1 = {
+		death = yes
+	}
+}
+
+73919 = {
+	name = "Musa" # Musa ibn Abd al-Malik, Sheik of Alicante (1006-1030)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_1
+
+	father = 73918 # Sheik Abd al-Malik ibn Walid of Alicante
+
+	969.1.1 = {
+		birth = yes
+	}
+	1030.1.1 = {
+		death = yes
+	}
+}
+
+73920 = {
+	name = "Abu-Bakr" # Abu Bakr ibn Musa
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73919 # Sheik Musa ibn Abd al-Malik of Alicante
+
+	995.1.1 = {
+		birth = yes
+	}
+	1058.1.1 = {
+		death = yes
+	}
+}
+
+73921 = {
+	name = "Fadl" # Fadl ibn Abu Bakr
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_1
+
+	father = 73920 # Abu Bakr ibn Musa
+
+	1015.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1077.1.1 = {
+		death = yes
+	}
+}
+
+73922 = {
+	name = "Abd-al-Wahid" # Abd al-Wahid ibn Fadl
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_intrigue_1
+
+	father = 73921 # Fadl ibn Abu Bakr
+
+	1041.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1100.1.1 = {
+		death = yes
+	}
+}
+
+73923 = {
+	name = "Musa" # Musa ibn Abd al-Wahid
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73922 # Abd al-Wahid ibn Fadl
+
+	1068.1.1 = {
+		birth = yes
+	}
+	1125.1.1 = {
+		death = yes
+	}
+}
+
+73924 = {
+	name = "Hamdun" # Hamdun ibn Musa
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_1
+
+	father = 73923 # Musa ibn Abd al-Wahid
+
+	1096.1.1 = {
+		birth = yes
+	}
+	1157.1.1 = {
+		death = yes
+	}
+}
+
+73925 = {
+	name = "Ibrahim" # Ibrahim ibn Hamdun
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73924 # Hamdun ibn Musa
+
+	1122.1.1 = {
+		birth = yes
+	}
+	1180.1.1 = {
+		death = yes
+	}
+}
+
+73926 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Ibrahim
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73925 # Ibrahim ibn Hamdun
+
+	1150.1.1 = {
+		birth = yes
+	}
+	1216.1.1 = {
+		death = yes
+	}
+}
+
+20852 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Muhammad, known as al-Mansur, Emir of Cordoba (1063-1070) & Sheik of Cabra & Cordoba (1063-1070)
+	dynasty = 101607 # Banu Jahwar Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_2
+
+	father = 45001 # Emir al-Rasid of Cordoba
+
+	1037.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		name = "al-Mansur"
+	}
+	1070.7.27 = {
+		death = yes
+	}
+}
+
+45000 = {
+	name = "Jahwar" # Jahwar ibn Muhammad, Emir of Cordoba (1031-1043) & Sheik of Cabra & Cordoba (1031-1043)
+	dynasty = 101607 # Banu Jahwar Dynasty, Founder
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_4
+
+	1000.1.1 = {
+		birth = yes
+	}
+	1043.8.6 = {
+		death = yes
+	}
+}
+
+45002 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Muhammad
+	dynasty = 101607 # Banu Jahwar Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_2
+ 
+	father = 45001 # Emir al-Rasid of Cordoba
+
+	1036.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		add_pressed_claim = title:d_cordoba
+		add_pressed_claim = title:c_cabra
+		add_pressed_claim = title:c_cordoba
+	}
+	1085.1.1 = {
+		death = yes
+	}
+}
+
+73679 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman (I) ibn Mu'awiya, Sultan of Andalusia (756-788) & Sheik of Cabra & Cordoba (756-788), Almeria (777-788) & Moura (788-777)
+	# The Hawk of Quraysh, the Entrant, Grandson of Caliph Hisham, the Man, the Myth, the Maverick, it's the One-and-Only Abd al-Rahman I, *the* holder of the speed record for conquering (most of) Iberia at just 4 years - and if you're wondering why he gets such an intro, welp, go check out how (and from who) he got the title Hawk of Quraysh.
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_4
+
+	trait = stubborn
+	trait = ambitious
+	trait = brave
+
+	trait = diplomat
+	trait = athletic # You can't say he wasn't willing to walk/ride quite a ways.
+	trait = sayyid
+
+	father = 163000 # Mu'awiya ibn Hisham
+	mother = baranis0062 # Rah (berber.txt)
+
+	731.3.1 = {
+		birth = yes
+	}
+	756.1.1 = {
+		add_concubine = levantine0024 # Hulal
+	}
+	763.1.1= {
+	 	give_nickname = nick_the_hawk_of_quraysh
+	}
+	788.9.29 = {
+		death = yes
+	}
+}
+
+73680 = {
+	name = "Hisham" # Hisam (I) ibn Abd al-Rahman, Sultan of Andalusia (788-796), Walih of Badajoz (778-788) & Sheik of Badajoz, Caceres, Medellin, Merida & Plasencia (778-788), Almeria, Cabra, Cordoba & Moura (788-796)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_3
+
+	father = 73679 # Sultan Abd al-Rahman I of Andalusia
+	mother = levantine0024 # Hulal
+	trait = child_of_concubine_female
+
+	757.4.26 = {
+		birth = yes
+	}
+	770.1.1 = {
+		add_concubine = levantine0025 # Shokouh
+	}
+	774.1.1 = {
+		add_spouse = levantine0013 # Marwa
+	}
+	796.6.12 = {
+		death = yes
+	}
+}
+
+73681 = {
+	name = "al-Hakam" # al-Hakam (I) ibn Hisham, Sultan of Andalusia (796-822) & Sheik of Almeria, Cabra, Cordoba & Moura (796-822)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_4
+
+	father = 73680 # Sultan Hisham I of Andalusia
+	mother = levantine0025 # Shokouh
+	trait = child_of_concubine_female
+
+	770.1.1 = {
+		birth = yes
+	}
+	791.1.1 = {
+		add_concubine = levantine0027 # Heloa
+	}
+	822.5.21 = {
+		death = yes
+	}
+}
+
+73682 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman (II) ibn al-Hakam, Sultan of Andalusia (822-852) & Sheik of Almeria, Cabra, Cordoba & Moura (822-852)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = poet
+	trait = lustful
+	trait = education_stewardship_3
+
+	father = 73681 # Sultan al-Hakam I of Andalusia
+	mother = levantine0027 # Heloa
+	trait = child_of_concubine_female
+
+	792.11.1 = {
+		birth = yes
+	}
+	821.1.1 = {
+		add_spouse = levantine0032 # Buheyr
+	}
+	825.1.1 = {
+		add_concubine = levantine0033 # Tarub
+	}
+	852.9.22 = {
+		death = yes
+	}
+}
+
+73683 = {
+	name = "Muhammad" # Muhammad (I) ibn Abd al-Rahman, Sultan of Andalusia (852-886), Walih of Zaragoza (848-852) & Sheik of Albarracin, Calatayud, Fraga, Lleida, Tarragona & Zaragoza (848-852), Cabra & Cordoba (852-886), Calatrava (873-886), Almeria & Castelo Branco (875-886), Alarcon (876-886), Niebla (878-886) & Granada (883-884)
+	dynasty = 597 # Umayyad Dynasty
+	martial = 5
+	diplomacy = 3
+	intrigue = 3
+	stewardship = 3
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = poet
+	trait = education_martial_1
+
+	father = 73682 # Sultan Abd al-Rahman II of Andalusia
+	mother = levantine0032 # Sultana Buheyr
+
+	823.1.1 = {
+		birth = yes
+	}
+	842.1.1 = {
+		add_spouse = 73927 # Ushar (andalusian.txt)
+	}
+	855.1.1 = {
+		effect = {
+			set_relation_friend = character:73838 # Sheik Izraq ibn Muntil of Madrid
+		}
+	}
+	886.8.4 = {
+		death = yes
+	}
+}
+
+73684 = {
+	name = "al-Mundir" # al-Mundir (I) ibn Muhammad, Sultan of Andalusia (886-888) & Sheik of Malagon (865-888), Alarcon, Almeria, Cabra, Calatrava, Castelo Branco, Cordoba & Niebla (886-888)
+	dynasty = 597 # Umayyad Dynasty
+	martial = 5
+	diplomacy = 3
+	intrigue = 4
+	stewardship = 3
+	religion = ashari
+	culture = levantine
+	trait = twin
+	trait = scarred
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+	mother = 73927 # Sultana Ushar (andalusian.txt)
+
+	844.1.11 = {
+		birth = yes
+	}
+	888.6.24 = {
+		death = {
+			death_reason = death_wounds
+		}
+	}
+}
+
+73685 = {
+	name = "Abdallah" # Abdallah (I) ibn Muhammad, Sultan of Andalusia (888-912), Sheik of Alarcos (867-912), Alarcon, Almeria, Cabra, Calatrava, Castelo Branco, Cordoba, Malagon & Niebla (888-912), Algeciras (891-912), Ibiza, Mallorca & Menorca (903-912)
+	dynasty = 597 # Umayyad Dynasty
+	martial = 3
+	diplomacy = 3
+	intrigue = 5
+	stewardship = 3
+	religion = ashari
+	culture = levantine
+	trait = twin
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+	mother = 73927 # Sultana Ushar (andalusian.txt)
+
+	844.1.11 = {
+		birth = yes
+	}
+	865.1.1 = {
+		add_spouse = 70294 # Óneca Ortiz, known as Durr (basque.txt)
+	}
+	870.1.1 = {
+		add_concubine = levantine0049 # Tamem
+		add_concubine = levantine0051 # Gazalen
+	}
+	877.1.1 = {
+		add_concubine = levantine0055 # Xen
+	}
+	879.1.1 = {
+		remove_spouse = 70294
+	}
+	885.1.1 = {
+		add_concubine = andalusian0084 # Coreix (andalusian.txt)
+		add_concubine = levantine0061 # Fitien
+	}
+	886.1.1 = {
+		add_concubine = levantine0063 # Malika
+	}
+	893.1.1 = {
+		add_concubine = levantine0065 # Mustatarrif
+		add_concubine = levantine0067 # Jadil
+	}
+	894.1.1 = {
+		add_concubine = levantine0069 # Malha
+	}
+	905.1.1 = {
+		add_concubine = levantine0074 # Magin
+	}
+	906.1.1 = {
+		add_concubine = levantine0076 # Xariq
+	}
+	912.10.15 = {
+		death = yes
+	}
+}
+
+73686 = {
+	name = "Muhammad" # Muhammad ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = 70294 # Óneca Ortiz, known as Durr (basque.txt)
+
+	866.1.1 = {
+		birth = yes
+	}
+	882.1.1 = {
+		trait = education_stewardship_1
+	}
+	890.1.1 = {
+		add_concubine = basque0148 # Muzna (basque.txt)
+	}
+	891.1.27 = {
+		death = {
+			death_reason = death_murder_known
+			killer = levantine0045 # al-Mutarrif ibn Abdallah
+		}
+	}
+}
+
+73886 = {
+	name = "Sholah" # Sholah, fictional wife of Sheik A'id ibn Kaysan of Tarragona (73851)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	846.1.1 = {
+		birth = yes
+	}
+	912.1.1 = {
+		death = yes
+	}
+}
+
+73903 = {
+	name = "Ali" # Ali ibn Jattab, Sheik of Alicante (765-789)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0093 # Sheik Jattb ibn Abd al-Yabbar of Alicante
+	mother = 73902 # Countess Adelgundis de Tudmir (visigothic.txt)
+
+	745.1.1 = {
+		birth = yes
+	}
+	789.1.1 = {
+		death = yes
+	}
+}
+
+73904 = {
+	name = "Ghalib" # Ghalib ibn Ali, Sheik of Alicante (789-812)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73903 # Sheik Ali ibn Jattab of Alicante
+
+	765.1.1 = {
+		birth = yes
+	}
+	812.1.1 = {
+		death = yes
+	}
+}
+
+73905 = {
+	name = "Talib" # Talib ibn Ghalib, Sheik of Alicante (812-852)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	father = 73904 # Sheik Ghalib ibn Ali of Alicante
+
+	784.1.1 = {
+		birth = yes
+	}
+	852.1.1 = {
+		death = yes
+	}
+}
+
+73906 = {
+	name = "Abd-al-Yabbar" # Abd al-Yabbar ibn Talib, Sheik of Alicante (852-858)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_1
+
+	father = 73905 # Sheik Talib ibn Ghalib of Alicante
+
+	813.1.1 = {
+		birth = yes
+	}
+	858.1.1 = {
+		death = yes
+	}
+}
+
+73907 = {
+	name = "Reshawna" # Reshawna bint Abd al-Yabbar, wife of Sheik Marwan ibn Abd al-Malik of Alicante (73900)
+	female = yes
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73906 # Sheik Abd al-Yabbar ibn Talib of Alicante
+
+	840.1.1 = {
+		birth = yes
+	}
+	916.1.1 = {
+		death = yes
+	}
+}
+
+73928 = {
+	name = "al-Hakam" # al-Hakam ibn Muhammad, Sheik of Castelo Branco (867-875)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+	mother = 73927 # Sultana Ushar (andalusian.txt)
+
+	850.1.1 = {
+		birth = yes
+	}
+	900.1.1 = {
+		death = yes
+	}
+}
+
+73943 = {
+	name = "Nayih" # Nayih ibn Suleyman, Sheik of Granada (848-880)
+	dynasty = 12302 # Banu Nayih Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_2
+
+	father = 73944 # Suleyman ibn Nayih
+
+	833.1.1 = {
+		birth = yes
+	}
+	860.1.1 = {
+		add_spouse = 73948 # Qamara
+	}
+	889.1.1 = {
+		death = yes
+	}
+}
+
+73944 = {
+	name = "Suleyman" # Suleyman ibn Nayih
+	dynasty = 12302 # Banu Nayih Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73945 # Nayih ibn Suleyman
+
+	815.1.1 = {
+		birth = yes
+	}
+	867.1.1 = {
+		death = yes
+	}
+}
+
+73945 = {
+	name = "Nayih" # Nayih ibn Suleyman
+	dynasty = 12302 # Banu Nayih Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	772.1.1 = {
+		birth = yes
+	}
+	831.1.1 = {
+		death = yes
+	}
+}
+
+73946 = {
+	name = "Amr" # Amr ibn Nayih
+	dynasty = 12302 # Banu Nayih Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73945 # Nayih ibn Suleyman
+
+	823.1.1 = {
+		birth = yes
+	}
+	876.1.1 = {
+		death = yes
+	}
+}
+
+73947 = {
+	name = "Hafs" # Hafs ibn Amr, Sheik of Granada (891-925)
+	dynasty = 12302 # Banu Nayih Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = 73946 # Amr ibn Nayih
+
+	859.1.1 = {
+		birth = yes
+	}
+	925.1.1 = {
+		death = yes
+	}
+}
+
+73948 = {
+	name = "Qamara" # Qamara, fictional wife of Sheik Nayih ibn Suleyman of Granada (73943)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	842.1.1 = {
+		birth = yes
+	}
+	906.1.1 = {
+		death = yes
+	}
+}
+
+200020 = {
+	name = "Suleyman" # Suleyman ibn Abd al-Rahman, Walih of Toledo (767-789) & Sheik of Cuenca, Madrid, Molina & Toledo (767-789)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_2
+
+	father = 73679 # Sultan Abd al-Rahman I of Andalusia
+
+	747.1.1 = {
+		birth = yes
+	}
+	800.1.1 = {
+		death = {
+			death_reason = death_execution
+		}
+	}
+}
+
+200021 = {
+	name = "Abdallah" # Abdallah ibn Abd al-Rahman, Walih of Valencia (803-823), Sheik of Huesca (800), Castellon, Denia, Teruel & Valencia (803-823)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_3
+
+	father = 73679 # Sultan Abd al-Rahman I of Andalusia
+
+	760.1.1 = {
+		birth = yes
+	}
+	823.1.1 = {
+		death = yes
+	}
+}
+
+200022 = {
+	name = "al-Qasim" # al-Qasim ibn Abd al-Rahman
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = bedouin
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73679 # Sultan Abd al-Rahman I of Andalusia
+
+	773.1.1 = {
+		birth = yes
+	}
+	799.1.1 = {
+		death = yes
+	}
+}
+
+200025 = {
+	name = "Abd-al-Yabbar" # Abd al-Yabbar ibn Jattab
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_2
+
+	690.1.1 = {
+		birth = yes
+	}
+	743.1.1 = {
+		death = yes
+	}
+}
+
+73838 = {
+	name = "Izraq" # Izraq ibn Muntil, Sheik of Madrid (855-888)
+	dynasty = 12294 # Banu Muntil Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_2
+
+	father = levantine0002 # Muntil ibn Salim
+
+	838.1.1 = {
+		birth = yes
+	}
+	861.1.1 = {
+		add_spouse = 73837 # Munya bint Musa (basque.txt)
+	}
+	888.1.1 = {
+		death = yes
+	}
+}
+
+levantine0002 = {
+	name = "Muntil" # Muntil ibn Salim
+	dynasty = 12294 # Banu Muntil Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	800.1.1 = {
+		birth = yes
+	}
+	850.1.1 = {
+		death = yes
+	}
+}
+
+levantine0003 = {
+	name = "Mughit" # Mughit, Sheik of Cordoba (711-716)
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_3
+
+	691.1.1 = {
+		birth = yes
+	}
+	741.1.1 = {
+		death = yes
+	}
+}
+
+levantine0004 = {
+	name = "Abd-al-Wahhad" # Abd al-Wahhad ibn Mughit
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	father = levantine0003 # Sheik Mughit of Cordoba
+
+	731.1.1 = {
+		birth = yes
+	}
+	781.1.1 = {
+		death = yes
+	}
+}
+
+levantine0005 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Abd al-Wahhad, Walih of Zaragoza (792-798) & Sheik of Albarracin, Calatayud, Fraga & Zaragoza (792-798)
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_2
+
+	father = levantine0004 # Abd al-Wahhad ibn Mughit
+
+	767.1.1 = {
+		birth = yes
+	}
+	817.1.1 = {
+		death = yes
+	}
+}
+
+levantine0006 = {
+	name = "Abd-al-Karim" # Adb al-Karim ibn Abd al-Wahhad, Walih of Toledo (797) & Sheik of Madrid, Molina & Toledo (797)
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = poet
+	trait = education_martial_3
+
+	father = levantine0004 # Abd al-Wahhad ibn Mughit
+
+	769.1.1 = {
+		birth = yes
+	}
+	817.1.1 = {
+		death = yes
+	}
+}
+
+levantine0007 = {
+	name = "Abd-al-Wahhad" # Abd al-Wahhad ibn Abd al-Malik, known as Wuhayd, Sheik of Tudela (862-871)
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = levantine0005 # Walih Abd al-Malik ibn Abd al-Wahhad of Zaragoza
+
+	800.1.1 = {
+		birth = yes
+	}
+	871.1.1 = {
+		death = yes
+	}
+}
+
+levantine0008 = {
+	name = "Muhammad" # Muhammad ibn Wuhayd, Walih of Zaragoza (860-872), Sheik of Albarracin, Alcañiz, Fraga, Lleida & Zaragoza (860-872)
+	dynasty = banu_mughit # Banu Mughit Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_2
+
+	father = levantine0007 # Sheik Wuhayd of Tudela
+
+	823.1.1 = {
+		birth = yes
+	}
+	873.1.1 = {
+		death = yes
+	}
+}
+
+levantine0009 = {
+	name = "Umar" # Umar ibn Marwan
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 163003 # Caliph Marwan I of Arabia
+
+	659.1.1 = {
+		birth = yes
+	}
+	719.1.1 = {
+		death = yes
+	}
+}
+
+levantine0010 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Umar, Walih of Sevilla (774-777) & Sheik of Sevilla (774-777)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_2
+
+	father = levantine0009 # Umar ibn Marwan
+
+	718.1.1 = {
+		birth = yes
+	}
+	777.12.31 = {
+		death = yes
+	}
+}
+
+levantine0011 = {
+	name = "Abdallah" # Abdallah ibn Abd al-Malik, Sheik of Moura (777-780)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_2
+
+	father = levantine0010 # Walih Abd al-Malik ibn Umar of Sevilla
+
+	730.1.1 = {
+		birth = yes
+	}
+	780.1.1 = {
+		death = yes
+	}
+}
+
+levantine0012 = {
+	name = "Umayyah" # Umayyah ibn Abd al-Malik
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = levantine0010 # Walih Abd al-Malik ibn Umar of Sevilla
+
+	755.1.1 = {
+		birth = yes
+	}
+	774.1.1 = {
+		death = {
+			death_reason = death_decapitated
+			killer = levantine0010 # Walih Abd al-Malik ibn Umar of Seville
+		}
+	}
+}
+
+levantine0013 = {
+	name = "Marwa" # Marwa, real name unknown, ibn Abd al-Malik, wife of Sultan Hisham I of Andalusia (73680)
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = levantine0010 # Walih Abd al-Malik ibn Umar of Sevilla
+
+	757.1.1 = {
+		birth = yes
+	}
+	807.1.1 = {
+		death = yes
+	}
+}
+
+levantine0014 = {
+	name = "Walid" # Walid ibn Mu'awiya
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 163000 # Mu'awiya ibn Hisham
+	mother = baranis0062 # Rah (berber.txt)
+
+	737.1.1 = {
+		birth = yes
+	}
+	787.1.1 = {
+		death = yes
+	}
+}
+
+levantine0015 = {
+	name = "al-Mughira" # al-Mughira ibn Walid
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = levantine0014 # Walid ibn Mu'awiya
+
+	762.1.1 = {
+		birth = yes
+	}
+	783.1.1 = {
+		death = {
+			death_reason = death_execution
+			killer = 73679 # Sultan Abd al-Rahman I of Andalusia
+		}
+	}
+}
+
+levantine0016 = {
+	name = "Ayyub" # Ayyub ibn Suleyman
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 200020 # Walih Suleyman ibn Abd al-Rahman of Toledo
+
+	772.1.1 = {
+		birth = yes
+	}
+	822.1.1 = {
+		death = yes
+	}
+}
+
+levantine0017 = {
+	name = "Ubayd-Allah" # Ubayd Allah ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 200021 # Walih Abadallah ibn Abd al-Rahman of Valencia
+
+	774.1.1 = {
+		birth = yes
+	}
+	824.1.1 = {
+		death = yes
+	}
+}
+
+levantine0018 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 200021 # Walih Abdallah ibn Abd al-Rahman of Valencia
+
+	776.1.1 = {
+		birth = yes
+	}
+	803.1.1 = {
+		add_spouse = levantine0020 # Jalila bint Hisham
+	}
+	826.1.1 = {
+		death = yes
+	}
+}
+
+levantine0019 = {
+	name = "Umar" # Umar ibn Abd al-Rahman
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73679 # Sultan Abd al-Rahman I of Andalusia
+
+	749.1.1 = {
+		birth = yes
+	}
+	768.1.1 = {
+		death = {
+			death_reason = death_execution
+			killer = 70004 # King Fruela I of Asturias
+		}
+	}
+}
+
+levantine0020 = {
+	name = "Jalila" # Jalila, real name unknown ibn Hisham, wife of Abd al-Malik ibn Abdallah (levantine0018)
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73680 # Sultan Hisham I of Andalusia
+	mother = levantine0013 # Sultana Marwa ibn Abd al-Malik
+
+	783.1.1 = {
+		birth = yes
+	}
+	833.1.1 = {
+		death = yes
+	}
+}
+
+levantine0021 = {
+	name = "Mu_awiyah" # Mu'awiyah ibn Hisham
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73680 # Sultan Hisham I of Andalusia
+
+	774.1.1 = {
+		birth = yes
+	}
+	824.1.1 = {
+		death = yes
+	}
+}
+
+levantine0022 = {
+	name = "Muhammad" # Muhammad ibn al-Qasim
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 200022 # al-Qasim ibn Abd al-Rahman
+
+	791.1.1 = {
+		birth = yes
+	}
+	841.1.1 = {
+		death = yes
+	}
+}
+
+levantine0023 = {
+	name = "Sulayman" # Sulayman ibn Hisham, Walih of Valencia (798-801) & Sheik of Castellon, Denia, Teruel & Valencia (798-801)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_2
+
+	father = 73680 # Sultan Hisham I of Andalusia
+
+	770.1.1 = {
+		birth = yes
+	}
+	801.1.1 = {
+		death = {
+			death_reason = death_execution
+			killer = 73681 # Sultan al-Hakam I of Andalusia
+		}
+	}
+}
+
+levantine0024 = {
+	name = "Hulal" # Hulal, concubine of Sultan Abd al-Rahman I of Andalusia (73679)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	740.1.1 = {
+		birth = yes
+	}
+	790.1.1 = {
+		death = yes
+	}
+}
+
+levantine0025 = {
+	name = "Shokouh" # Shokouh, concubine of Sultan Hisham I of Andalusia (73680)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	754.1.1 = {
+		birth = yes
+	}
+	804.1.1 = {
+		death = yes
+	}
+}
+
+levantine0026 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Mu'awiyah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_3
+
+	father = levantine0021 # Mu'awiyah ibn Hisham
+
+	799.1.1 = {
+		birth = yes
+	}
+	849.1.1 = {
+		death = yes
+	}
+}
+
+levantine0027 = {
+	name = "Heloa" # Heloa, concubine of Sultan al-Hakam I of Andalusia (73681)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	772.1.1 = {
+		birth = yes
+	}
+	822.1.1 = {
+		death = yes
+	}
+}
+
+levantine0028 = {
+	name = "al-Mughira" # al-Mughira ibn al-Hakam
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73681 # Sultan al-Hakam I of Andalusia
+
+	790.1.1 = {
+		birth = yes
+	}
+	840.1.1 = {
+		death = yes
+	}
+}
+
+levantine0029 = {
+	name = "Sa_id" # Sa'id ibn al-Hakam
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73681 # Sultan al-Hakam I of Andalusia
+
+	791.1.1 = {
+		birth = yes
+	}
+	841.1.1 = {
+		death = yes
+	}
+}
+
+levantine0030 = {
+	name = "Umayyah" # Umayyah ibn al-Hakam
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73681 # Sultan al-Hakam I of Andalusia
+
+	802.1.1 = {
+		birth = yes
+	}
+	852.1.1 = {
+		death = yes
+	}
+}
+
+levantine0031 = {
+	name = "al-Walid" # al-Walid ibn al-Hakam
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73681 # Sultan al-Hakam I of Andalusia
+
+	813.1.1 = {
+		birth = yes
+	}
+	863.1.1 = {
+		death = yes
+	}
+}
+
+levantine0032 = {
+	name = "Buheyr" # Buheyr, wife of Sultan Abd al-Rahman II of Andalusia (73682)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_3
+
+	803.1.1 = {
+		birth = yes
+	}
+	853.1.1 = {
+		death = yes
+	}
+}
+
+levantine0033 = {
+	name = "Tarub" # Tarub, concubine of Sultan Abd al-Rahaman II of Andalusia
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_2
+
+	806.1.1 = {
+		birth = yes
+	}
+	856.1.1 = {
+		death = yes
+	}
+}
+
+levantine0034 = {
+	name = "Abdallah" # Abdallah ibn Abd al-Rahman, placeholder  Sheik of Moura (852-875)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = 73682 # Sultan Abd al-Rahman II of Andalusia
+	mother = levantine0033 # Tarub
+
+	825.1.1 = {
+		birth = yes
+	}
+	875.1.1 = {
+		death = yes
+	}
+}
+
+levantine0035 = {
+	name = "al-Mutarrif" # al-Mutarrif ibn Abd al-Rahman, Walih of Toledo (872-876) & Sheik of Alarcon (851-876), Cuenca, Madrid, Molina & Toledo (872-876)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_2
+
+	father = 73682 # Sultan Abd al-Rahman II of Andalusia
+
+	826.1.1 = {
+		birth = yes
+	}
+	876.1.1 = {
+		death = yes
+	}
+}
+
+levantine0036 = {
+	name = "al-Mundir" # al-Mundir ibn Abd al-Rahman, placeholder Sheik of Niebla (853-878)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73682 # Sultan Abd al-Rahman II of Andalusia
+
+	828.1.1 = {
+		birth = yes
+	}
+	878.1.1 = {
+		death = yes
+	}
+}
+
+levantine0037 = {
+	name = "Hisham" # Hisham ibn Abd al-Rahman
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73682 # Sultan Abd al-Rahman II of Andalusia
+
+	830.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	880.1.1 = {
+		death = yes
+	}
+}
+
+levantine0038 = {
+	name = "al-Qitt" # al-Qitt ibn Mu'awiyah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = levantine0021 # Mu'awaiyah ibn Hisham
+
+	801.1.1 = {
+		birth = yes
+	}
+	851.1.1 = {
+		death = yes
+	}
+}
+
+levantine0039 = {
+	name = "Mu_awiyah" # Muawiyah ibn al-Qitt, placeholder Sheik of Almeria (8952-875)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = levantine0038 # al-Qitt ibn Mu'awiyah
+
+	825.1.1 = {
+		birth = yes
+	}
+	875.1.1 = {
+		death = yes
+	}
+}
+
+levantine0040 = {
+	name = "Ahmad" # Ahmad ibn Mu'awiyah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_2
+
+	father = levantine0039 # Mu'awiyah ibn al-Qitt
+
+	850.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	901.7.10 = {
+		death = {
+			death_reason = death_decapitated
+		}
+	}
+}
+
+levantine0041 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Muhammad, placeholder sheik of Calatrava (867-873)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_3
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	848.1.1 = {
+		birth = yes
+	}
+	873.1.1 = {
+		death = yes
+	}
+}
+
+levantine0042 = {
+	name = "Hisham" # Hisham ibn Muhammad, placeholder Sheik of Algeciras (867-889)
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	850.1.1 = {
+		birth = yes
+	}
+	900.1.1 = {
+		death = yes
+	}
+}
+
+levantine0043 = {
+	name = "al-Qasim" # al-Qasim ibn Muhammad
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	852.1.1 = {
+		birth = yes
+	}
+	868.1.1 = {
+		trait = education_intrigue_1
+	}
+	902.1.1 = {
+		death = yes
+	}
+}
+
+levantine0044 = {
+	name = "al-Mutarrif" # al-Mutarrif ibn Muhammad
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = poet
+	trait = sayyid
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	854.1.1 = {
+		birth = yes
+	}
+	870.1.1 = {
+		trait = education_diplomacy_1
+	}
+	873.1.1 = {
+		death = yes
+	}
+}
+
+levantine0045 = {
+	name = "al-Mutarrif" # al-Mutarrif ibn Muhammad
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_2
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0051 # Gazalen
+	trait = child_of_concubine_female
+
+	871.1.1 = {
+		birth = yes
+	}
+	895.1.1 = {
+		death = {
+			death_reason = death_execution
+			killer = 73685 # Sultan Abdallah I of Andalusia
+		}
+	}
+}
+
+levantine0046 = {
+	name = "Fatima" # Fatima bint Muhammad
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	861.1.1 = {
+		birth = yes
+	}
+	877.1.1 = {
+		trait = education_stewardship_2
+	}
+	911.1.1 = {
+		death = yes
+	}
+}
+
+levantine0047 = {
+	name = "al-Bahe" # al-Bahe bint Muhammad
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	872.1.1 = {
+		birth = yes
+	}
+	922.1.1 = {
+		death = yes
+	}
+}
+
+levantine0048 = {
+	name = "Fatima" # Fatima ibn Muhammad II
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73683 # Sultan Muhammad I of Andalusia
+
+	877.1.1 = {
+		birth = yes
+	}
+	927.1.1 = {
+		death = yes
+	}
+}
+
+levantine0049 = {
+	name = "Tamem" # Tamen, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	851.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	901.1.1 = {
+		death = yes
+	}
+}
+
+levantine0050 = {
+	name = "Ahmad" # Ahmad ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0049 # Tamem
+	trait = child_of_concubine_female
+
+	871.1.1 = {
+		birth = yes
+	}
+	922.1.1 = {
+		death = yes
+	}
+}
+
+levantine0051 = {
+	name = "Gazalen" # Gazalen, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	853.1.1 = {
+		birth = yes
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	903.1.1 = {
+		death = yes
+	}
+}
+
+levantine0052 = {
+	name = "Suleyman" # Suleyman ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_2
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0051 # Gazalen
+	trait = child_of_concubine_female
+
+	873.1.1 = {
+		birth = yes
+	}
+	923.1.1 = {
+		death = yes
+	}
+}
+
+levantine0053 = {
+	name = "Aiza" # Aiza bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0051 # Gazalen
+	trait = child_of_concubine_female
+
+	875.1.1 = {
+		birth = yes
+	}
+	925.1.1 = {
+		death = yes
+	}
+}
+
+levantine0054 = {
+	name = "as-Sida" # as-Sida bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0051 # Gazalen
+	trait = child_of_concubine_female
+
+	877.1.1 = {
+		birth = yes
+	}
+	927.1.1 = {
+		death = yes
+	}
+}
+
+levantine0055 = {
+	name = "Xen" # Xen, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	860.1.1 = {
+		birth = yes
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	885.1.1 = {
+		death = yes
+	}
+}
+
+levantine0056 = {
+	name = "Aban" # Aban ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0055 # Xen
+	trait = child_of_concubine_female
+
+	879.1.1 = {
+		birth = yes
+	}
+	929.1.1 = {
+		death = yes
+	}
+}
+
+levantine0057 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+
+	881.1.1 = {
+		birth = yes
+	}
+	931.1.1 = {
+		death = yes
+	}
+}
+
+levantine0058 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+
+	883.1.1 = {
+		birth = yes
+	}
+	933.1.1 = {
+		death = yes
+	}
+}
+
+levantine0059 = {
+	name = "as-Sida" # as-Sida bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+
+	885.1.1 = {
+		birth = yes
+	}
+	935.1.1 = {
+		death = yes
+	}
+}
+
+levantine0060 = {
+	name = "Hashima" # Hashima bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_2
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = andalusian0084 # Coreix
+	trait = child_of_concubine_female
+
+	886.1.1 = {
+		birth = yes
+	}
+	936.1.1 = {
+		death = yes
+	}
+}
+
+levantine0061 = {
+	name = "Fitien" # Fitien, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	868.1.1 = {
+		birth = yes
+	}
+	893.1.1 = {
+		death = yes
+	}
+}
+
+levantine0062 = {
+	name = "Esma" # Esma bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0061 # Fitien
+	trait = child_of_concubine_female
+
+	886.1.1 = {
+		birth = yes
+	}
+	933.1.1 = {
+		death = yes
+	}
+}
+
+levantine0063 = {
+	name = "Malika" # Malika, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	868.1.1 = {
+		birth = yes
+	}
+	893.1.1 = {
+		death = yes
+	}
+}
+
+levantine0064 = {
+	name = "Hakima" # Hakima bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0063 # Malika
+	trait = child_of_concubine_female
+
+	887.1.1 = {
+		birth = yes
+	}
+	937.1.1 = {
+		death = yes
+	}
+}
+
+levantine0065 = {
+	name = "Mustatarrif" # Mustatarrif, concubien of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	877.1.1 = {
+		birth = yes
+	}
+	905.1.1 = {
+		death = yes
+	}
+}
+
+levantine0066 = {
+	name = "al-Asi" # al-Asi ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_2
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0065 # Mustatarrif
+	trait = child_of_concubine_female
+
+	894.1.1 = {
+		birth = yes
+	}
+	921.1.1 = {
+		death = {
+			death_reason = death_execution
+			killer = 3200 # Caliph Abd al-Rahman III of Andalusia
+		}
+	}
+}
+
+levantine0067 = {
+	name = "Jadil" # Jadil, concubine of Sultan Abdallah I of Andalusia
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	877.1.1 = {
+		birth = yes
+	}
+	905.1.1 = {
+		death = yes
+	}
+}
+
+levantine0068 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0067 # Jadil
+	trait = child_of_concubine_female
+
+	895.1.1 = {
+		birth = yes
+	}
+	945.1.1 = {
+		death = yes
+	}
+}
+
+levantine0069 = {
+	name = "Malha" # Malha, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_2
+
+	877.1.1 = {
+		birth = yes
+	}
+	927.1.1 = {
+		death = yes
+	}
+}
+
+levantine0070 = {
+	name = "Muhammad" # Muhammad ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_2
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0069 # Malha
+	trait = child_of_concubine_female
+
+	895.1.1 = {
+		birth = yes
+	}
+	945.1.1 = {
+		death = yes
+	}
+}
+
+levantine0071 = {
+	name = "Ahmad" # Ahmad ibn Abdallah
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_martial_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0069 # Malha
+	trait = child_of_concubine_female
+
+	897.1.1 = {
+		birth = yes
+	}
+	947.1.1 = {
+		death = yes
+	}
+}
+
+levantine0072 = {
+	name = "Raqiya" # Raqiya bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0069 # Malha
+	trait = child_of_concubine_female
+
+	899.1.1 = {
+		birth = yes
+	}
+	949.1.1 = {
+		death = yes
+	}
+}
+
+levantine0073 = {
+	name = "Zainab" # Zainab bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_intrigue_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0069 # Malha
+	trait = child_of_concubine_female
+
+	901.1.1 = {
+		birth = yes
+	}
+	951.1.1 = {
+		death = yes
+	}
+}
+
+levantine0074 = {
+	name = "Magin" # Magin, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	887.1.1 = {
+		birth = yes
+	}
+	937.1.1 = {
+		death = yes
+	}
+}
+
+levantine0075 = {
+	name = "Fatima" # Fatima bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0074 # Magin
+	trait = child_of_concubine_female
+
+	906.1.1 = {
+		birth = yes
+	}
+	956.1.1 = {
+		death = yes
+	}
+}
+
+levantine0076 = {
+	name = "Xariq" # Xariq, concubine of Sultan Abdallah I of Andalusia (73685)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	888.1.1 = {
+		birth = yes
+	}
+	938.1.1 = {
+		death = yes
+	}
+}
+
+levantine0077 = {
+	name = "Zainab" # Zainab bint Abdallah
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = ashari
+	culture = levantine
+	trait = sayyid
+	trait = education_diplomacy_1
+
+	father = 73685 # Sultan Abdallah I of Andalusia
+	mother = levantine0076 # Xariq
+	trait = child_of_concubine_female
+
+	908.1.1 = {
+		birth = yes
+	}
+	958.1.1 = {
+		death = yes
+	}
+}
+
+levantine0078 = {
+	name = "Ibrahim" # Ibrahim ibn Jalid, Sheik of Elvas (852-882) & Evora (852-875)
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_2
+
+	804.1.1 = {
+		birth = yes
+	}
+	867.1.1 = {
+		add_spouse = levantine0079 # Sitara
+	}
+	882.1.1 = {
+		death = yes
+	}
+}
+
+levantine0079 = {
+	name = "Sitara" # Sitara, fictional wife of Sheik Ibrahim ibn Jalid of Elvas (levantine0078)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	851.1.1 = {
+		birth = yes
+	}
+	901.1.1 = {
+		death = yes
+	}
+}
+
+levantine0080 = {
+	name = "Ishaq" # Ishaq ibn Ibrahim, Sheik of Elvas (882-922)
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = levantine0078 # Sheik Ibrahim ibn Jalid of Elvas
+	mother = levantine0079 # Sheika Sitara
+
+	872.1.1 = {
+		birth = yes
+	}
+	922.1.1 = {
+		death = yes
+	}
+}
+
+levantine0081 = {
+	name = "Muhammad" # Muhammad ibn Ibrahim, Sheik of Elvas (922-940)
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = levantine0078 # Sheik Ibrahim ibn Jalid of Elvas
+
+	874.1.1 = {
+		birth = yes
+	}
+	940.1.1 = {
+		death = yes
+	}
+}
+
+levantine0082 = {
+	name = "Ibrahim" # Ibrahim ibn Muhammad, Sheik of Elvas (940-961)
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = levantine0081 # Sheik Muhammad ibn Ibrahim of Elvas
+
+	898.1.1 = {
+		birth = yes
+	}
+	961.1.1 = {
+		death = yes
+	}
+}
+
+levantine0083 = {
+	name = "Ahmad" # Ahmad ibn Muhammad, Sheik of Elvas (961-983)
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = levantine0081 # Sheik Muhammad ibn Ibrahim of Elvas
+
+	909.1.1 = {
+		birth = yes
+	}
+	983.1.1 = {
+		death = yes
+	}
+}
+
+levantine0084 = {
+	name = "Abdallah" # Abdallah ibn Muhammad
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	father = levantine0081 # Sheik Muhammad ibn Ibrahim of Elvas
+
+	916.1.1 = {
+		birth = yes
+	}
+	980.1.1 = {
+		death = yes
+	}
+}
+
+levantine0085 = {
+	name = "Sumayl" # Sumayl ibn Ishaq
+	dynasty = banu_jalid # Banu Jalid Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_intrigue_1
+
+	father = levantine0078 # Sheik Ibrahim ibn Jalid of Elvas
+
+	876.1.1 = {
+		birth = yes
+	}
+	926.1.1 = {
+		death = yes
+	}
+}
+
+levantine0086 = {
+	name = "Fatima" # Fatima bint al-Mundir, wife of Caliph Abd al-Rahman III of Andalusia (3200 - andalusian.txt)
+	female = yes
+	dynasty = 597 # Umayyad Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = sayyid
+	trait = education_stewardship_2
+
+	father = 73684 # Sultan al-Mundir I of Andalusia
+
+	888.1.1 = {
+		birth = yes
+	}
+	938.1.1 = {
+		death = yes
+	}
+}
+
+levantine0087 = {
+	name = "Mustaq" # Mustaq, wife of Caliph Abd al-Rahman III of Andalusia (3200 - andalusian.txt)
+	female = yes
+	religion = muwalladi
+	culture = levantine
+	trait = education_intrigue_1
+
+	933.1.1 = {
+		birth = yes
+	}
+	983.1.1 = {
+		death = yes
+	}
+}
+
+levantine0088 = {
+	name = "Muzna" # Muzna, wife of Hisham ibn Abd al-Yabbar (73670 - andalusian.txt)
+	female = yes
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_1
+
+	955.1.1 = {
+		birth = yes
+	}
+	1005.1.1 = {
+		death = yes
+	}
+}
+
+levantine0089 = {
+	name = "Ghaya" # Ghaya, wife of Hisham ibn Abd al-Yabbar (73670 - andalusian.txt)
+	female = yes
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_1
+
+	970.1.1 = {
+		birth = yes
+	}
+	1020.1.1 = {
+		death = yes
+	}
+}
+
+levantine0090 = {
+	name = "Atib" # Atib, wife of Muhammad ibn Abd al-Malik (73677 - andalusian.txt)
+	female = yes
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	956.1.1 = {
+		birth = yes
+	}
+	1006.1.1 = {
+		death = yes
+	}
+}
+
+levantine0091 = {
+	name = "al-Hazm" # al-Hazm ibn Jahwar
+	dynasty = 101607 # Banu Jahwar Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 45000 # Emir Jahwar ibn Muhammad of Cordoba
+
+	1025.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		employer = 20852 # Emir al-Mansur of Cordoba
+	}
+	1075.1.1 = {
+		death = yes
+	}
+}
+
+levantine0092 = {
+	name = "al-Walid" # al-Walid ibn Abd al-Malik
+	dynasty = 101607 # Banu Jahwar Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 45001 # Emir al-Rasid of Cordoba
+
+	1038.1.1 = {
+		birth = yes
+	}
+	1063.1.1 = {
+		employer = 20852 # Emir al-Mansur of Cordoba
+	}
+	1088.1.1 = {
+		death = yes
+	}
+}
+
+levantine0093 = {
+	name = "Jattab" # Jattab ibn Abd al-Yabbar, Sheik of Alicante (743-765)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
+
+	father = 200025 # Abd al-Yabbar ibn Jattab
+
+	715.1.1 = {
+		birth = yes
+	}
+	743.1.1 = {
+		add_spouse = 73902 # Adelgundis de Tudmir (visigothic.txt)
+	}
+	765.1.1 = {
+		death = yes
+	}
+}
+
+levantine0094 = {
+	name = "Marwan" # Marwan ibn Jattab
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_1
+
+	father = levantine0093 # Sheik Jattab ibn Abd al-Yabbar of Alicante
+	mother = 73902 # Countess Adelgundis de Tudmir (visigothic.txt)
+
+	750.1.1 = {
+		birth = yes
+	}
+	800.1.1 = {
+		death = yes
+	}
+}
+
+levantine0095 = {
+	name = "Muhammad" # Muhammad Abu Yamra
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0094 # Marwan ibn Jattab
+
+	780.1.1 = {
+		birth = yes
+	}
+	855.1.1 = {
+		death = yes
+	}
+}
+
+levantine0096 = {
+	name = "Jattab" # Jattab ibn Muhammad Abu Yamra
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0095 # Muhammad Abu Yamra
+
+	810.1.1 = {
+		birth = yes
+	}
+	860.1.1 = {
+		death = yes
+	}
+}
+
+levantine0097 = {
+	name = "Amira" # Amira bint Muhmmada Abu Yamra
+	female = yes
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0095 # Muhammad Abu Yamra
+
+	815.1.1 = {
+		birth = yes
+	}
+	862.1.1 = {
+		death = yes
+	}
+}
+
+levantine0098 = {
+	name = "Marwan" # Marwan ibn Jattab
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0096 # Jattab ibn Muhammad Abu Yamra
+
+	845.1.1 = {
+		birth = yes
+		employer = 73790 # Sheik al-Sabbah ibn Abd al-Rahman of Murcia
+	}
+	895.1.1 = {
+		death = yes
+	}
+}
+
+levantine0099 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Marwan
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0098 # Marwan ibn Jattab
+
+	880.1.1 = {
+		birth = yes
+	}
+	930.1.1 = {
+		death = yes
+	}
+}
+
+levantine0100 = {
+	name = "Ahmad" # Ahmad ibn Abd al-Rahman, Walih of Murcia (985-1008) & Sheik of Alcaraz, Denia & Murcia (985-1008)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0099 # Abd al-Rahman ibn Marwan
+
+	920.1.1 = {
+		birth = yes
+	}
+	1008.1.1 = {
+		death = yes
+	}
+}
+
+levantine0101 = {
+	name = "Musa" # Musa ibn Ahmad, Walih of Murcia (1008-1013) & Sheik of Murcia (1008-1013), Castellon (1008-1009), Alcaraz & Denia (1008-1009), Valencia (1008-1011), Mallorca, Menorca & Ibiza (1008-1015)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0100 # Walih Ahmad ibn Abd al-Rahman of Murcia
+
+	950.1.1 = {
+		birth = yes
+	}
+	1025.1.1 = {
+		death = yes
+	}
+}
+
+levantine0102 = {
+	name = "Muhammad" # Muhammad ibn Jattab
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0096 # Jattab ibn Muhammad Abu Yamra
+
+	850.1.1 = {
+		birth = yes
+		employer = 73790 # Sheik al-Sabbah ibn Abd al-Rahman of Murcia
+	}
+	900.1.1 = {
+		death = yes
+	}
+}
+
+levantine0103 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Muhammad
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0102 # Muhammad ibn Jattab
+
+	890.1.1 = {
+		birth = yes
+	}
+	940.1.1 = {
+		death = yes
+	}
+}
+
+levantine0104 = {
+	name = "Walid" # Walid ibn Abd al-Malik
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0103 # Abd al-Malik ibn Muhammad
+
+	930.1.1 = {
+		birth = yes
+	}
+	1003.3.5 = {
+		death = yes
+	}
+}
+
+levantine0105 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Muhammad Abu Yamra
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0095 # Muhammad Abu Yamra
+
+	820.1.1 = {
+		birth = yes
+	}
+	842.1.1 = {
+		employer = 73790 # Sheik al-Sabbah ibn Abd al-Rahman of Murcia
+	}
+	870.1.1 = {
+		death = yes
+	}
+}
+
+levantine0106 = {
+	name = "Abu-Amr" # Abu Amr ibn Musa, Sheik of Alcaraz (1028-1029)
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_intrigue_1
+
+	father = levantine0101 # Walih Musa ibn Ahmad of Murcia
+
+	975.1.1 = {
+		birth = yes
+	}
+	1050.1.1 = {
+		death = yes
+	}
+}
+
+levantine0107 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Musa, Sheik of Alicante (1030-1038)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = 73919 # Sheik Musa ibn Abd al-Malik of Alicante
+
+	990.1.1 = {
+		birth = yes
+	}
+	1065.1.1 = {
+		death = yes
+	}
+}
+
+levantine0108 = {
+	name = "Muhammad" # Muhammad ibn Abd al-Malik
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0107 # Sheik Abd al-Malik ibn Musa of Alicante
+
+	1046.1.1 = {
+		birth = yes
+	}
+	1065.9.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1126.1.1 = {
+		death = yes
+	}
+}
+
+levantine0109 = {
+	name = "Ahmad" # Ahmad ibn Muhammad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0108 # Muhammad ibn Abd al-Malik
+
+	1080.1.1 = {
+		birth = yes
+	}
+	1130.1.1 = {
+		death = yes
+	}
+}
+
+levantine0110 = {
+	name = "Muhammad" # Muhammad ibn Ahmad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0109 # Ahmad ibn Muhammad
+
+	1110.1.1 = {
+		birth = yes
+	}
+	1160.1.1 = {
+		death = yes
+	}
+}
+
+levantine0111 = {
+	name = "Ahmad" # Ahmad ibn Muhammad, Sheik of Denia
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_3
+
+	father = levantine0110 # Muhammad ibn Ahmad
+
+	1140.1.1 = {
+		birth = yes
+	}
+	1216.1.1 = {
+		death = yes
+	}
+}
+
+levantine0112 = {
+	name = "Ahmad" # Ahmad ibn Abd al-Malik
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0107 # Sheik Abd al-Malik ibn Musa of Alicante
+
+	1010.1.1 = {
+		birth = yes
+	}
+	1060.1.1 = {
+		death = yes
+	}
+}
+
+levantine0113 = {
+	name = "Muhammad" # Muhammad ibn Ahmad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0112 # Ahmad ibn Abd al-Malik
+
+	1030.1.1 = {
+		birth = yes
+	}
+	1080.1.1 = {
+		death = yes
+	}
+}
+
+levantine0114 = {
+	name = "Abu-l-Abbas" # Abu-l-Abbas ibn Muhammad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+
+	father = levantine0113 # Muhammad ibn Ahmad
+
+	1051.1.1 = {
+		birth = yes
+	}
+	1067.1.1 = {
+		trait = education_learning_2
+	}
+	1101.1.1 = {
+		death = yes
+	}
+}
+
+levantine0115 = {
+	name = "al-Abbas" # al-Abbas ibn Abu-l-Abbas
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0114 # Abu-l-Abbas ibn Muhammas
+
+	1080.1.1 = {
+		birth = yes
+	}
+	1130.1.1 = {
+		death = yes
+	}
+}
+
+levantine0116 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Walid
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73917 # Sheik Walid ibn Muhammad of Alicante
+
+	951.1.1 = {
+		birth = yes
+	}
+	1026.1.1 = {
+		death = yes
+	}
+}
+
+levantine0117 = {
+	name = "Ahmad" # Ahmad ibn Abd al-Rahman
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0116 # Abd al-Rahman ibn Walid
+
+	1010.1.1 = {
+		birth = yes
+	}
+	1065.9.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1085.1.1 = {
+		death = yes
+	}
+}
+
+levantine0118 = {
+	name = "Ahmad" # Ahmad ibn Walid
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73917 # Sheik Walid ibn Muhammad of Alicante
+
+	961.1.1 = {
+		birth = yes
+	}
+	1052.10.16 = {
+		death = yes
+	}
+}
+
+levantine0119 = {
+	name = "Hisham" # Hisham ibn Ahmad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_1
+
+	father = levantine0118 # Ahmad ibn Walid
+
+	1036.1.1 = {
+		birth = yes
+	}
+	1065.9.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1113.1.1 = {
+		death = yes
+	}
+}
+
+levantine0120 = {
+	name = "Muhammad" # Muhammad ibn Hisham, Sheik of Granada
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+
+	father = levantine0119 # Hisham ibn Ahmad
+
+	1061.1.1 = {
+		birth = yes
+	}
+	1077.1.1 = {
+		trait = education_learning_3
+	}
+	1136.6.1 = {
+		death = yes
+	}
+}
+
+levantine0121 = {
+	name = "al-Asbag" # al-Asbag ibn Musa
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_martial_1
+
+	father = levantine0118 # Walih Musa ibn Ahmad of Murcia
+
+	980.1.1 = {
+		birth = yes
+	}
+	1030.1.1 = {
+		death = yes
+	}
+}
+
+levantine0122 = {
+	name = "al-Abbas" # al-Abbas ibn Walid
+	dynasty = 12260 # Banu Jattab Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = levantine0104 # Walid ibn Abd al-Malik
+
+	955.1.1 = {
+		birth = yes
+	}
+	1005.1.1 = {
+		death = yes
+	}
+}
+
+levantine0123 = {
+	name = "Marwan" # Marwan ibn Abd al-Malik
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0107 # Sheik Abd al-Malik ibn Musa of Alicante
+
+	1014.1.1 = {
+		birth = yes
+	}
+	1064.1.1 = {
+		death = yes
+	}
+}
+
+levantine0124 = {
+	name = "Walid" # Walid ibn Marwan
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0123 # Marwan ibn Abd al-Malik
+
+	1034.1.1 = {
+		birth = yes
+	}
+	1065.9.1 = {
+		employer = 3910 # Emir Muhammad ibn Ahmad of Murcia
+	}
+	1084.1.1 = {
+		death = yes
+	}
+}
+
+levantine0125 = {
+	name = "Muhammad" # Muhammad ibn Walid
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+
+	father = levantine0124 # Walid ibn Marwan
+
+	1054.1.1 = {
+		birth = yes
+	}
+	 1070.1.1 = {
+		trait = education_learning_2
+	}
+	1104.1.1 = {
+		death = yes
+	}
+}
+
+levantine0126 = {
+	name = "Walid" # Walid ibn Muhammad
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0124 # Muhammad ibn Walid
+
+	1074.1.1 = {
+		birth = yes
+	}
+	1124.1.1 = {
+		death = yes
+	}
+}
+
+levantine0127 = {
+	name = "Ali" # Ali ibn Malik, Sheik of Tarragona (930-950)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73853 # Sheik Malik ibn Yahya of Tarragona
+
+	900.1.1 = {
+		birth = yes
+	}
+	950.1.1 = {
+		death = yes
+	}
+}
+
+levantine0128 = {
+	name = "Umar" # Umar ibn Hafs, Sheik of Granada (925-959)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_2
+
+	father = 73947 # Sheik Hafs ibn Amr of Granada
+
+	889.1.1 = {
+		birth = yes
+	}
+	959.1.1 = {
+		death = yes
+	}
+}
+
+levantine0129 = {
+	name = "Ali" # Ali ibn Umar, Sheik of Granada (959-994)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = muwalladi
+	culture = levantine
+	trait = education_stewardship_2
+
+	father = levantine0128 # Sheik Umar ibn Hafs of Granada
+
+	921.1.1 = {
+		birth = yes
+	}
+	994.1.1 = {
+		death = yes
+	}
+}
+
+73851 = {
+	name = "Aid" # A'id ibn Kaysan, Sheik of Tarragona (860-892)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	839.1.1 = {
+		birth = yes
+	}
+	862.1.1 = {
+		add_spouse = 73886 # Sholah
+	}
+	892.1.1 = {
+		death = yes
+	}
+}
+
+73852 = {
+	name = "Yahya" # Yahya ibn A'id, Sheik of Tarragona (892-898)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+
+	father = 73851 # Sheik A'id ibn Kaysan of Tarragona
+	mother = 73886 # Sheikah Sholah
+
+	865.1.1 = {
+		birth = yes
+	}
+	881.1.1 = {
+		trait = education_stewardship_1
+	}
+	898.1.1 = {
+		death = yes
+	}
+}
+
+73853 = {
+	name = "Malik" # Malik ibn Yahya, Sheik of Tarragona (898-930)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_martial_1
+
+	father = 73852 # Sheik Yahya ibn A'id of Tarragona
+
+	880.1.1 = {
+		birth = yes
+	}
+	930.1.1 = {
+		death = yes
+	}
+}
+
+73899 = {
+	name = "Walid" # Walid ibn Marwan, Sheik of Alicante (887-927)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = ashari
+	culture = levantine
+
+	father = 73900 # Sheik Marwan ibn Abd al-Malik of Alicante
+	mother = 73907 # Sheika Reshawna bint Abd al-Yabbar
+
+	860.1.1 = {
+		birth = yes
+	}
+	876.1.1 = {
+		trait = education_learning_2
+	}
+	927.1.1 = {
+		death = yes
+	}
+}
+
+73900 = {
+	name = "Marwan" # Marwan ibn Abd al-Malik, Sheik of Alicante (858-887)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
+
+	father = levantine0105 # Abd al-Malik bin Muhammad Abu Yamra
+
+	840.1.1 = {
+		birth = yes
+	}
+	858.1.1 = {
+		add_spouse = 73907 # Reshawna bint Abd al-Yabbar
+	}
+	887.1.1 = {
+		death = yes
+	}
+}
+
+73908 = {
+	name = "al-Gazi" # al-Gazi ibn Qays
+	dynasty = 12296 # Banu Qays Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_2
+
+	748.1.1 = {
+		birth = yes
+	}
+	814.1.1 = {
+		death = yes
+	}
+}
+
+73909 = {
+	name = "Abdallah" # Abdallah ibn al-Gazi
+	dynasty = 12296 # Banu Qays Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = 73908 # al-Gazi ibn Qays
+
+	782.1.1 = {
+		birth = yes
+	}
+	845.1.1 = {
+		death = yes
+	}
+}
+
+73910 = {
+	name = "Muhammad" # Muhammad ibn Abdallah
+	dynasty = 12296 # Banu Qays Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_2
+
+	father = 73909 # Abdallah ibn al-Gazi
+
+	817.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	909.1.1 = {
+		death = yes
+	}
+}
+
+73911 = {
+	name = "Abdallah" # Abdallah ibn Muhammad
+	dynasty = 12296 # Banu Qays Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	father = 73910 # Muhammad ibn Abdallah
+
+	849.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	920.1.1 = {
+		death = yes
+	}
+}
+
+73916 = {
+	name = "Muhammad" # Muhammad ibn Walid, Sheik of Alicante (927-943)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = ashari
+	culture = levantine
+	trait = education_learning_2
+
+	father = 73899 # Sheik Walid ibn Marwan of Alicante
+
+	889.1.1 = {
+		birth = yes
+	}
+	943.1.1 = {
+		death = yes
+	}
+}
+
+73917 = {
+	name = "Walid" # Walid ibn Muhammad, Sheik of Alicante (943-980)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = 73916 # Sheik Muhammad ibn Walid of Alicante
+
+	915.1.1 = {
+		birth = yes
+	}
+	980.1.1 = {
+		death = yes
+	}
+}
+
+73918 = {
+	name = "Abd-al-Malik" # Abd al-Malik ibn Walid, Sheik of Alicante (980-1006)
+	dynasty_house = house_abu_yamra # House Banu Abu Yamra
+	religion = muwalladi
+	culture = levantine
+	trait = education_learning_2
+
+	father = 73917 # Sheik Walid ibn Muhammad of Alicante
+
+	941.1.1 = {
+		birth = yes
+	}
+	1006.1.1 = {
+		death = yes
+	}
+}
+
+73976 = {
+	name = "Abdallah" # Abdallah ibn Ubba
+	dynasty = 12311 # Banu Ubba Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_2
+
+	831.1.1 = {
+		birth = yes
+	}
+	852.9.22 = {
+		employer = 73683 # Sultan Muhammad I of Andalusia
+	}
+	855.1.1 = {
+		add_spouse = 73977 # Aiza
+	}
+	894.1.1 = {
+		death = yes
+	}
+}
+
+73977 = {
+	name = "Aiza" # Aiza, fictional wife of Abdallah ibn Ubba (73976)
+	female = yes
+	religion = ashari
+	culture = levantine
+	trait = education_diplomacy_1
+
+	835.1.1 = {
+		birth = yes
+	}
+	902.1.1 = {
+		death = yes
+	}
+}
+
+73978 = {
+	name = "Muhammad" # Muhammad ibn Abdallah
+	dynasty = 12311 # Banu Ubba Dynasty
+	religion = ashari
+	culture = levantine
+
+	father = 73976 # Abdallah ibn Ubba
+	mother = 73977 # Aiza
+
+	856.1.1 = {
+		birth = yes
+	}
+	871.1.1 = {
+		trait = education_martial_1
+	}
+	920.1.1 = {
+		death = yes
+	}
+}
+
+73979 = {
+	name = "Selim" # Selim ibn Abdallah
+	dynasty = 12311 # Banu Ubba Dynasty
+	religion = ashari
+	culture = levantine
+
+	father = 73976 # Abdallh ibn Ubba
+	mother = 73977 # Aiza
+
+	858.1.1 = {
+		birth = yes
+	}
+	873.1.1 = {
+		trait = education_stewardship_1
+	}
+	922.1.1 = {
+		death = yes
+	}
+}
+
+200031 = {
+	name = "Zakariya" # Zakariyya ibn Yahya
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = 73852 # Yahya ibn A'id of Tarragona
+
+	885.1.1 = {
+		birth = yes
+	}
+	935.1.1 = {
+		death = yes
+	}
+}
+
+200041 = {
+	name = "Abd-al-Rahman" # Abd al-Rahman ibn Ali, Sheik of Tarragona (950-978)
+	dynasty = 12289 # Banu A'id Dynasty
+	religion = ashari
+	culture = levantine
+	trait = education_stewardship_1
+
+	father = levantine0127 # Sheik Ali ibn Malik of Tarragona
+
+	932.1.1 = {
+		birth = yes
+	}
+	978.1.1 = {
+		death = yes
 	}
 }

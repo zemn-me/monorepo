@@ -5,6 +5,7 @@
  PORTRAIT_MODIFIER_headgear:1 "Kronen"
  PORTRAIT_MODIFIER_custom_headgear:0 "Kopfbedeckungen"
  PORTRAIT_MODIFIER_props:0 "Requisite"
+ PORTRAIT_MODIFIER_custom_special:0 "Gesichtsschmuck"
  
  # PORTRAIT_MODIFIER_clothes_western_commoners: "Western commoner"
  # PORTRAIT_MODIFIER_clothes_western_low_nobles: "Western low noble"
@@ -307,6 +308,42 @@
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp1_war_nobility_01:0 "Rüstung (Nordische Fürsten)"
 
 
+############################
+### FP2 - Fate of Iberia ###
+############################
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_common_01:1 "Iber. Christen-Gemeinen-Gewandung 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_common_01:1 "Iber. Moslem-Gemeinen-Gewandung 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_low:0 "Niedere Adelsgewandung (Iber. Christen) 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_high:0 "Hochadelsgewandung (Iber. Christen) 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_low:0 "Niedere Adelsgewandung (Iber. Muslime) 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_high:0 "Hochadelsgewandung (Iber. Muslime) 1"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_low:0 "Niedere Adelsgewandung (Iber. Christen) 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_high:0 "Hochadelsgewandung (Iber. Christen) 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_low:0 "Niedere Adelsgewandung (Iber. Muslime) 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_high:0 "Hochadelsgewandung (Iber. Muslime) 2"
+
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_war_nobility_01:0 "Iber. Muslime-Rüstung"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_war_nobility_01:0 "Iber. Christen-Rüstung"
+
+
+### Female ###
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_common_01:1 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_common_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_common_01:1 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_common_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_01_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_01_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_01_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_01_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_01_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_01_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_02_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_nobility_02_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_nobility_02_high$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_02_low:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_low$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_nobility_02_high:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_nobility_02_high$"
+
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_muslim_war_nobility_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_muslim_war_nobility_01$"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_secular_fp2_iberian_christian_war_nobility_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_secular_fp2_iberian_christian_war_nobility_01$"
+
+
 ##########################################
 ################ Headgear ################
 ##########################################
@@ -517,6 +554,59 @@
  PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp1_royalty_01:0 "Nordmannen-Stirnreif"
  PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp1_imperial_01:0 "Waräger-Kaiserkrone"
 
+###########
+### FP2 ###
+###########
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_common_01:1 "Gemeinen-Sombrero"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_common_01_low:0 "Keffiyeh-Kopftuch"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_common_01_high:0 "Keffiyeh-Adelskopftuch"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_nobility_01_low:0 "Bestickte Haube"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_nobility_01_high:0 "Bestickte Seidenhaube"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_nobility_01:1 "Andalusischer Höflingsturban"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_high_nobility_01_low:0 "Gemeinen-Capiello"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_high_nobility_01_high:0 "Adels-Capiello"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_high_nobility_01:1 "Maurischer Turban mit Tarbusch"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_royalty_01:1 "Krone von Sancho IV"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_royalty_01:1 "Sayyiden-Krone"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_war_nobility_01:1 "Cervellera-Helm"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_war_nobility_01:1 "Andalusischer Schmuckhelm"
+
+### Female ###
+ 
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_common_01:1 "Keilförmiger Tocado"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_common_01:1 "Andalusisches Kopftuch"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_nobility_01_low:0 "Bändchen mit Krause"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_nobility_01_high:0 "Adelsbändchen mit Krause"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_nobility_01:1 "Kopftuch mit Juwelen-Stirnreif"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_high_nobility_01:1 "Hoher plissierter Tocado"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_high_nobility_01_low:0 "Andalusisches Kopftuch mit Mundschleier"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_high_nobility_01_high:0 "Andalusisches Adelskopftuch mit Mundschleier"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_royalty_01:1 "Doñas Krone"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_royalty_01:1 "Königskrone der Sayyida"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_christian_war_nobility_01:1 "$PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_christian_war_nobility_01$"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_secular_fp2_iberian_muslim_war_nobility_01:1 "$PORTRAIT_MODIFIER_custom_headgear_male_headgear_secular_fp2_iberian_muslim_war_nobility_01$"
+
+###############
+### Special ###
+###############
+
+### Male ###
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01:0 "Brille"
+ PORTRAIT_MODIFIER_custom_headgear_male_headgear_special_spectacles_01:0 "$PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01$"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_eye_patch_01:0 "Augenklappe"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_blindfold_01:0 "Augenbinde"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_face_mask_01:0 "Gesichtsmaske"
+ PORTRAIT_MODIFIER_custom_special_male_headgear_special_head_bandage_01:0 "Kopfverband"
+
+### Female ###
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_spectacles_01:0 "Brille"
+ PORTRAIT_MODIFIER_custom_headgear_female_headgear_special_spectacles_01:0 "$PORTRAIT_MODIFIER_custom_special_male_headgear_special_spectacles_01$"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_eye_patch_01:0 "Augenklappe"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_blindfold_01:0 "Augenbinde"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_face_mask_01:0 "Gesichtsmaske"
+ PORTRAIT_MODIFIER_custom_special_female_headgear_special_head_bandage_01:0 "Kopfverband"
 
 ######################################
 ################ Hair ################
@@ -597,7 +687,7 @@
  PORTRAIT_MODIFIER_custom_hair_male_hair_fp1_08:0 "Lang mit zwei Zöpfen"
  PORTRAIT_MODIFIER_custom_hair_male_hair_fp1_09:0 "Langer Einzelzopf"
 
-### Female FP2 ###
+### Female FP1 ###
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_01:0 "Geflochtene Seiten"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_02:0 "Zerzauster Zopf"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_03:0 "Rattenschwanz"
@@ -605,6 +695,27 @@
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_05:0 "Lang mit Bändern"
  PORTRAIT_MODIFIER_custom_hair_female_hair_fp1_06:0 "Brigantentochter"
 
+### Male FP2 Hair ###
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_01:1 "Mittel, Lockig mit Pony"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_01:1 "Mittel, Kurzwellig"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_02:1 "Mittel, Fließend"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_02:1 "Lang, Lockig mit Mittelscheitel"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_christian_03:1 "Kurz, Einzelzopf"
+ PORTRAIT_MODIFIER_custom_hair_male_hair_fp2_iberian_muslim_03:1 "Lang, windzerzaust"
+
+ ### Female FP2 Hair ###
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_01:1 "Jungfernlocken"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_01:2 "Rahmende Locken mit Ohrringen"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_02:1 "Lang, Glatt mit Mittelteil"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_02:1 "Feine Locken mit Stirnband"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_christian_03:1 "Wellig schulterlang"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_03:1 "Vier Zöpfe mit Juwelen"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_01_common:0 "Gerahmte Locken"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_02_common:0 "Feine Locken"
+ PORTRAIT_MODIFIER_custom_hair_female_hair_fp2_iberian_muslim_03_common:0 "Vier Zöpfe"
+
+ ### Male Special ###
+ PORTRAIT_MODIFIER_custom_hair_male_hair_special_01:0 "Epische Dreadlocks"
 
 #######################################
 ################ Beard ################
@@ -646,6 +757,15 @@
  PORTRAIT_MODIFIER_custom_beards_male_beard_fp1_03:0 "Bart mir großem Schnurrbart"
  PORTRAIT_MODIFIER_custom_beards_male_beard_fp1_04:0 "Dicker Zopf"
  PORTRAIT_MODIFIER_custom_beards_male_beard_fp1_05:0 "Angegrauter Waräger"
+
+ ### FP2 Beards ###
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_01:1 "Kurzer gut gepflegter Bart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_01:1 "Dichter gestutzter Bart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_02:1 "Iber. Ziegenbart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_02:1 "Gelehrtenbart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_03:1 "Caballero-Bart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_muslim_03:1 "Gabelbart"
+ PORTRAIT_MODIFIER_custom_beards_male_beard_fp2_iberian_christian_04:0 "Herabhängender Schnurrbart"
 
 #######################################
 ################ Cloak ################
@@ -708,15 +828,15 @@
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_catholic_head_01:0 "Papst-Robe"
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_african_high_01_common:0 "Afrikanische religiöse Gewandung"
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_african_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_african_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01_common:0 "Nordische religiöse Gewandung"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_northern_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_hindu_devoted_01_common:0 "Östliche religiöse Robe 1"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_hindu_devoted_01_common:0 "Östliche religiöse Robe"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_buddhist_high_01_common:0 "Östliche religiöse Robe 2"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01_common:0 "Tempel-Roben"
- PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_zoroastrian_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01_common$"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_head_01_common:0 "Kohen-Gadol-Robe"
- PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_high_01_common:0 "Jüdische religiöse Gewandung"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01:0 "Nordische religiöse Gewandung"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_northern_high_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_northern_high_01$"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_hindu_devoted_01:0 "Östliche religiöse Robe 1"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_hindu_devoted_01:0 "Östliche religiöse Robe"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_buddhist_high_01:0 "Östliche religiöse Robe 2"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01:0 "Tempel-Roben"
+ PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_zoroastrian_high_01:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_zoroastrian_high_01$"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_head_01:0 "Kohen-Gadol-Robe"
+ PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_jewish_high_01:0 "Jüdische religiöse Gewandung"
  PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_steppe_high_01_common:0 "Religiöse Gewandung (Steppe)"
  PORTRAIT_MODIFIER_custom_clothes_female_clothes_religious_steppe_high_01_common:0 "$PORTRAIT_MODIFIER_custom_clothes_male_clothes_religious_steppe_high_01_common$"
  

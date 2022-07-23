@@ -278,6 +278,7 @@
  nick_the_one_eyed:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Einäugige"
  nick_the_oppressor:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Unterdrücker[CHARACTER.Custom('DE_END_NOU_S_GS_N')]"
  nick_the_apostate:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Abtrünnige"
+ nick_the_pagan:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Heidnische"
  nick_the_heretic:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Ketzer[CHARACTER.Custom('DE_END_NOU_S_GS_N')]"
  nick_the_savage:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Ungezähmte"
  nick_the_defiant:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Trotzige"
@@ -305,6 +306,7 @@
  nick_father_of_the_baltic:0 "Vater der Balten"
  nick_mother_of_the_baltic:0 "Mutter der Balten"
  nick_scourge_of_the_baltic:0 "Geißel der Balten"
+ nick_the_mountain_king:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Bergkönig[CHARACTER.Custom('DE_END_NOU_S_GS_N')]"
  nick_the_child_killer:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Kindsmörder[CHARACTER.Custom('DE_END_NOU_S_GS_N')]"
  nick_the_anathema:0 "das Anathema"
  nick_the_angel_of_death:1 "der Engel von [CHARACTER.GetFaith.DeathDeityName|U]"
@@ -316,7 +318,11 @@
  nick_the_black_sheep:0 "das Schwarze Schaf"
  nick_sisyphus:0 "[Character.Custom('DE_ART_DEF_S_N')] Sisyphushafte"
  nick_blue_lion:0 "[Character.Custom('DE_ART_DEF_S_N')] Blaue [Select_CString(character.IsFemale,'Löwin','Löwe')] von $b_sheffield$"
+ nick_the_hairy:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Haarige"
+ nick_the_child:0 "das Kind"
  nick_the_wake:0 "die Trauerfeier"
+ nick_the_bearded:0 "[Character.Custom('DE_ART_DEF_S_N')] Bärtige"
+ nick_the_mountain_dweller:0 "[Character.Custom('DE_ART_DEF_S_N')] Bergbewohner[Character.Custom('DE_END_NOU_S_GS_N')]"
  
  # RoCo
  nick_king_of_fashion:0 "[Character.Custom('DE_ART_DEF_S_N')] [Character.GetTitleAsNameNoTooltip] der Mode"
@@ -334,6 +340,15 @@
  nick_the_eloquent:0 "[Character.Custom('DE_ART_DEF_S_N')] Redegewandte"
  nick_the_stud:0 "[Character.Custom('DE_ART_DEF_S_N')] Stecher[Character.Custom('DE_END_NOU_S_GS_N')]"
 
- # Historical
- nick_the_bearded:0 "[Character.Custom('DE_ART_DEF_S_N')] Bärtige"
+ # FP2
+ nick_the_bell_keeper:0 "[Character.Custom('DE_ART_DEF_S_N')] Glockenhüter[Character.Custom('DE_END_NOU_S_GS_N')]"
+ nick_the_requiem:0 "das Requiem"
+ nick_the_King_of_Thieves:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] König[CHARACTER.Custom('DE_END_NOU_S_GS_N')] der Diebe"
+ nick_the_Queen_of_Thieves:0 "die Königin der Diebe"
+ nick_the_Thief_Slayer:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Diebestöter[CHARACTER.Custom('DE_END_NOU_S_GS_N')]"
+ nick_the_flying:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Fliegende"
+ nick_the_flightless:0 "[CHARACTER.Custom('DE_ART_DEF_S_N')] Flügellose"
+ nick_the_cid_campeador:0 "El Cid Campeador"
  nick_benavert:0 "Benavert"
+ nick_the_pragmatic:1 "[Character.Custom('DE_ART_DEF_S_N')] Pragmatische"
+ nick_the_equitable:1 "[Character.Custom('DE_ART_DEF_S_N')] Gerechte"

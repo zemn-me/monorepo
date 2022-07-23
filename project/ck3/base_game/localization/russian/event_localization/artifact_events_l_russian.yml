@@ -30,6 +30,7 @@
  artifact.1001.desc.weapon:0 "\n\n«Ваша милость, мы убирались в оружейной и обнаружили кучу ржавчины. Кажется, это [SCOPE.Custom('ThisArtifactType')], но в ужасном состоянии. Что прикажете делать?»\n\nЯ размышляю. Конечно, [SCOPE.Custom('ThisArtifactType')] уже вряд ли послужит мне в бою. И все же артефакт можно очистить и выставить на почетном месте. Придется уплатить лишь его себестоимость."
  artifact.1001.desc.other:0 "\n\n«Ваша милость, мы убирались в кладовой и обнаружили, что [SCOPE.Custom('ThisArtifactType')] вот-вот развалится. Что прикажете делать?»\n\nЯ размышляю. Конечно, [SCOPE.Custom('ThisArtifactType')] у меня так давно, что залатать артефакт вряд ли получится. И все же его можно почистить и выставить на почетном месте. Придется уплатить лишь его себестоимость."
  artifact.1001.a:0 "Стоящее предприятие."
+ artifact.1001.a.tt.free:0 "#instruction Этот [artifact|El] можно изменить бесплатно!#!"
  artifact.1001.a.tt:1 "[this_artifact.GetName] становится [Concept( 'court_artifact', 'придворным артефактом' )|E] и предоставляет только [Concept( 'grandeur', 'величие' )|E] и [Concept( 'prestige', 'престиж' )|E]"
  artifact.1001.b:0 "Нет, слишком дорого."
 
@@ -144,7 +145,7 @@
  artifact.4030.desc.antiquarian_intro:0 "[Select_CString(antiquarian.IsFemale, 'Моя', 'Мой' )] $antiquarian_court_position$ [antiquarian.GetTitledFirstName] подходит ко мне с улыбкой на губах. В [antiquarian.GetHerHis] руках покоится [this_artifact.GetName]."
  artifact.4030.desc.servant_intro:0 "Слуга, отвечающий за чистку моих самых ценных вещей, подходит ко мне. В [dummy_servant_gender.GetHerHis] руках покоится [this_artifact.GetName]."
  artifact.4030.desc_emperor:1 "\n\n«[ROOT.Char.GetLadyLord|U], вы знали, что после многих поколений, в течение которых эту корону носит [ROOT.Char.GetTitleTierName], в ней стали видеть символ имперской власти?»"
- artifact.4030.desc_kingdom:1 "\n\n«[ROOT.Char.GetLadyLord|U], вы знали, что после многих поколений, в течение которых эту корону носит [ROOT.Char.GetTitleAsNameNoTooltip|l], в ней стали видеть символ, с которым отождествляется [primary_title_scope.GetNameNoTierNoTooltip]?»"
+ artifact.4030.desc_kingdom:1 "\n\n«[ROOT.Char.GetLadyLord|U], вы знали, что после многих поколений, в течение которых эту корону носит [ROOT.Char.GetTitleAsNameNoTooltip|l], в ней стали видеть символ, с которым отождествляется [primary_title_scope.GetBaseNameNoTierNoTooltip]?»"
  artifact_emperors_crown_name:1 "[this_artifact.GetNameNoTooltip] Империи"
  artifact_emperors_crown_desc:1 "[this_artifact.GetDesc]\n\nВ течение многих поколений эта корона принадлежала императорам, что придает ей больший авторитет."
  artifact_crown_special_name:1 "[this_artifact.GetNameNoTooltip] державы [primary_title_scope.GetNameNoTierNoTooltip]"
@@ -196,14 +197,14 @@
 
 
  artifact.4090.t:0 "Реликвия в руке..."
- artifact.4090.desc.antiquarian:0 "[Select_CString(antiquarian.IsFemale, 'Моя хранительница древностей', 'Мой хранитель древностей' )] [antiquarian.GetTitledFirstName] [Select_CString(antiquarian.IsFemale, 'обратилась', 'обратился' )] ко мне с предложением. Если [that_artifact.GetName] окажется в рукояти моего артефакта [this_artifact.GetName], [ROOT.Char.GetFaith.HighGodName] всегда будет со мной.\n\n«[ROOT.Char.GetFaith.PositiveAfterLife] в буквальном смысле будет у вас в руке». — [Select_CString(antiquarian.IsFemale, 'сказала', 'сказал' )] [antiquarian.GetTitledFirstNameNoTooltip] с фанатичным блеском в глазах."
+ artifact.4090.desc.antiquarian:0 "[Select_CString(antiquarian.IsFemale, 'Моя хранительница древностей', 'Мой хранитель древностей' )] [antiquarian.GetTitledFirstName] [Select_CString(antiquarian.IsFemale, 'обратилась', 'обратился' )] ко мне с предложением. Если [that_artifact.GetName] окажется в рукояти моего артефакта [this_artifact.GetName], [ROOT.Char.GetFaith.HighGodName] всегда будет со мной.\n\n«[ROOT.Char.GetFaith.PositiveAfterLife] в буквальном смысле будет у вас в руке», — [Select_CString(antiquarian.IsFemale, 'сказала', 'сказал' )] [antiquarian.GetTitledFirstNameNoTooltip] с фанатичным блеском в глазах."
  artifact.4090.desc:0 "В моих руках лежит [that_artifact.GetName], я рассматриваю артефакт, и вдруг на меня накатывает вдохновение. Если я размещу в рукояти реликвию, [ROOT.Char.GetFaith.HighGodName] всегда будет со мной, пока [this_artifact.GetName] в моей руке."
  artifact.4090.a:0 "[ROOT.Char.GetFaith.HighGodName] всегда будет со мной."
  artifact.4090.b:0 "Это будет неправильно."
 
  artifact.4090.a.tt:0 "Реликвия и оружие совмещены"
 
- artifact_weapon_relic_desc:0 "[this_artifact.GetDesc]\n\n[ROOT.Char.GetFaith.GetName]ая реликвия [that_artifact.GetNameNoTooltip] размещена в рукояти."
+ artifact_weapon_relic_desc:0 "[this_artifact.GetDesc]\n\n#L [ROOT.Char.GetFaith.GetName]ая#! реликвия [that_artifact.GetNameNoTooltip] размещена в рукояти."
 
  relic_weapon_name:0 "[this_artifact.GetType|U]-[ROOT.Char.Custom('artifact_relic_desc')]"
 

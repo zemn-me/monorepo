@@ -111,6 +111,7 @@
  MOD_SAME_CULTURE_MERCENARY_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_MERCENARY_HIRE_COST_ADD$"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD:0 "[holy_order|E]-Anwerbekosten bei gleicher [culture|E]"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD$"
+ holy_order_government_levy_contribution_add:0 "[holy_order|E]-[vassals|E]-[levy|E] ([modifier_contribution|E])"
  
  desert_advantage:1 "[command_modifier_i|E][advantage|E] in Wüsten"
  desert_attrition_mult:1 "[command_modifier_i|E]Erlittene [attrition|E] in Wüsten"
@@ -534,6 +535,7 @@
  MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR:1 "[Concept('development', 'Entwicklungs')|E]-Zuwachs"
  plains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in Ebenen ([terrain|E])"
  farmlands_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ auf Ackerland ([terrain|E])"
+ farmlands_development_growth:0 "$farmlands_development_growth_factor$"
  hills_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in Hügeln ([terrain|E])"
  mountains_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in Bergen ([terrain|E])"
  desert_development_growth_factor:1 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in Wüsten ([terrain|E])"
@@ -552,6 +554,8 @@
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH$"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR:1 "[control|E]-Zuwachs"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR$"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_AT_WAR:0 "[control|E]-Zuwachs im [war|E]"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_AT_WAR:0 "[control|E]-Zuwachs im [war|E]"
  MOD_CONSTRUCTION_PRESTIGE_COST:1 "[building|E]-Baukosten"
  MOD_DOMAIN_LIMIT:0 "[domain_limit|E]"
  MOD_DOMAIN_LIMIT_WITH_VALUE:0 "[domain_limit|E]: $VALUE|0=+$"
@@ -807,6 +811,7 @@
  seduce_scheme_power_mult:1 "[GetScheme('seduce').GetTypeName]-[scheme_power|E]"
  courting_scheme_power_add:1 "[GetScheme('courting').GetTypeName]-[scheme_power|E]"
  max_courting_schemes_add:0 "Maximale [GetScheme('courting').GetTypeName]-[schemes|E]"
+ befriend_scheme_power_add:0 "[GetScheme('befriend').GetTypeName]-[scheme_power|E]"
  seduce_scheme_power_add:0 "$seduce_scheme_power_mult$"
  murder_scheme_power_add:0 "$murder_scheme_power_mult$"
  courting_scheme_power_mult:1 "[GetScheme('courting').GetTypeName]-[scheme_power|E]"
@@ -891,4 +896,4 @@
  CUSTOM_MOD_ENABLES_STRESS_LOSS_DECISIONS:0 "Ermöglicht eine besondere [decision|E], die [stress|E] #P mindert#!"
 
  # RoCo
- world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in der [region|E] „[GetGeographicalRegion('world_innovation_elephants').GetName]“"
+ world_innovation_elephants_development_growth_factor:0 "$MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$ in [GetGeographicalRegion('world_innovation_elephants').GetName]"

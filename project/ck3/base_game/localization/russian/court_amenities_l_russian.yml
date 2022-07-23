@@ -46,10 +46,10 @@
  court_servants_some_desc:0 "При дворе работают профессиональные слуги, гордящиеся своей работой."
  court_servants_many_desc:0 "При дворе есть слуги на все случаи жизни."
  court_servants_endless_desc:0 "При дворе слуг даже больше, чем нужно. При попытке сделать даже самое пустяковое дело тут же появляется слуга с предложением сделать это вместо вас."
- court_servants_few_guest_recruitment:0 "стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -20%#!"
- court_servants_some_guest_recruitment:0 "стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -30%#!"
- court_servants_many_guest_recruitment:0 "стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -40%#!"
- court_servants_endless_guest_recruitment:0 "стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -50%#!"
+ court_servants_few_guest_recruitment:0 "Стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -20%#!"
+ court_servants_some_guest_recruitment:0 "Стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -30%#!"
+ court_servants_many_guest_recruitment:0 "Стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -40%#!"
+ court_servants_endless_guest_recruitment:0 "Стоимость вербовки [Concept( 'guest', 'гостей' )|E]: #P -50%#!"
  court_lodgings_small_inspirations:0 "Небольшой шанс повысить качество завершенного [Concept( 'inspiration', 'вдохновения' )|E]"
  court_lodgings_middling_inspirations:0 "Шанс повысить качество завершенного [Concept( 'inspiration', 'вдохновения' )|E]"
  court_lodgings_spacious_inspirations:0 "Неплохой шанс повысить качество завершенного [Concept( 'inspiration', 'вдохновения' )|E]"
@@ -105,7 +105,7 @@
 
  COURT_AMENITIES_EXPENSES:0 "[court_amenities|E]"
  COURT_AMENITIES_EXPENSES_FOR:0 "$COURT_AMENITY$"
- COURT_AMENITIES_EXPENSES_MONTHLY_COST:1 "Ежемесячная стоимость: [CourtAmenitiesWindow.GetMonthlyCost|1]%"
+ COURT_AMENITIES_EXPENSES_MONTHLY_COST:1 "[CourtAmenitiesWindow.GetMonthlyCost]"
  COURT_AMENITIES_EXPENSES_NEW_MONTHLY_COST:0 "Новая стоимость: [CourtAmenitiesWindow.GetNewMonthlyCost]"
  COURT_AMENITIES_APPLY_WARNING:0 "После подтверждения изменить увеселения можно будет не раньше, #X чем через 12 месяцев#!"
 
@@ -119,6 +119,6 @@
  AMENITIES_RESET_TOOLTIP:0 "#T Сбросить увеселения#!\n[AddTextIf( Not( CourtAmenitiesWindow.HasChangedAnyAmenity ), '$COURT_AMENITIES_NEED_CHANGE$\n' )]Отменить изменения"
 
  COURT_AMENITIES_CHANGED_NOTIFICATION_HEADER:0 "Вы изменили [Concept( 'court_amenities', 'увеселения' )|E]"
- # [LocEditor:UntranslatedKey] `COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT`
+ COURT_AMENITIES_BLOCKER_NOT_YOUR_COURT:0 "@warning_icon!#X Это не ваш [royal_court|El]#!"
 
  BONUS_TO_AGENT_RECRUITMENT_FROM_AMENITIES:0 "$court_lodging_standards$: $VALUE|=+0$"

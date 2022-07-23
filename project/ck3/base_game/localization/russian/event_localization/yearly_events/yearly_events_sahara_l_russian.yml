@@ -36,10 +36,10 @@
  yearly_saharan.0005.c:0 "Этому не бывать, пока я [ROOT.GetCharacter.GetTitleAsNameNoTooltip|l]!"
 
  #[Culture] Nomads Flock to [County]
- yearly_saharan.0021.t:0 "[nomad_leader.GetCulture.GetNameNoTooltip]ие кочевники прибывают во владение [target_county.GetNameNoTierNoTooltip]"
- yearly_saharan.0021.desc:0 "Хотя я [Select_CString(ROOT.Char.IsFemale, 'благородная', 'благородный' )] [ROOT.GetCharacter.GetTitleAsNameNoTooltip|l], есть места столь удаленные, что даже мое имя там не имеет особого веса. Земли, которыми я и не надеюсь править.\n\nВ последнее время кочевники-[nomad_leader.GetCulture.GetCollectiveNounNoTooltip|l] начали выходить из таких удаленных областей Сахары и продвигаться вглубь владения [target_county.GetNameNoTier], без усилий занимая свободные земли и области, с которых ушли местные [target_county.GetProvince.GetCounty.GetCulture.GetCollectiveNounNoTooltip|l].\n\nОдин из их лидеров даже обратился ко мне с просьбой переселить туда всю [nomad_leader.GetHerHis] конфедерацию, которая бы владела землями от моего имени."
+ yearly_saharan.0021.t:0 "[nomad_leader.GetCulture.GetCollectiveNounNoTooltip]ие кочевники прибывают во владение [target_county.GetNameNoTierNoTooltip]"
+ yearly_saharan.0021.desc:0 "Хотя я [Select_CString(ROOT.Char.IsFemale, 'благородная', 'благородный' )] [ROOT.GetCharacter.GetTitleAsNameNoTooltip|l], есть места столь удаленные, что даже мое имя там не имеет особого веса. Земли, которыми я и не надеюсь править.\n\nВ последнее время кочевники-[nomad_leader.GetCulture.GetNameNoTooltip|l] начали выходить из таких удаленных областей Сахары и продвигаться вглубь владения [target_county.GetNameNoTier], без усилий занимая свободные земли и области, с которых ушли местные [target_county.GetProvince.GetCounty.GetCulture.GetNameNoTooltip|l].\n\nОдин из их лидеров даже обратился ко мне с просьбой переселить туда всю [nomad_leader.GetHerHis] конфедерацию, которая бы владела землями от моего имени."
  yearly_saharan.0021.a:0 "Я даже позволю тебе ими править!"
- yearly_saharan.0021.b:0 "[nomad_leader.GetCulture.GetNameNoTooltip]ому народу всегда рады в моих землях!"
+ yearly_saharan.0021.b:0 "[nomad_leader.GetCulture.GetCollectiveNounNoTooltip]ому народу всегда рады в моих землях!"
  yearly_saharan.0021.c:0 "Возможно, вы можете стать моей личной гвардией?"
  yearly_saharan.0021.d:0 "Это возмутительно! Убирайтесь!"
 

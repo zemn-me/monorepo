@@ -172,7 +172,7 @@
  friendship.3006.a:0 "Спасибо, друг мой!"
  friendship.3006.b:0 "Надеюсь, ты воспользуешься этим рычагом давления лучше меня, [friend_on_council.GetFirstNameNoTooltip]."
  friendship.3007.t:0 "Поддержка друга"
- friendship.3007.opening:1 "Очень немногое в этой жизни радует меня больше, чем [SCOPE.sCharacter('friend_for_chilling').GetTitledFirstName] подле меня."
+ friendship.3007.opening:1 "Очень немногое в этой жизни радует меня больше, чем [friend.GetTitledFirstName] подле меня."
  friendship.3007.fallback:1 "\n\nКажется, [SCOPE.sCharacter('friend_for_chilling').GetSheHe] точно знает, как меня отвлечь, когда мой разум отягощен множеством забот. Мне очень помогло, когда на днях [friend.GetSheHe] [Select_CString(friend_for_chilling.IsFemale, 'пригласила', 'пригласил' )] составить [Select_CString(friend_for_chilling.IsFemale, 'ей', 'ему' )] компанию."
  friendship.3007.malicious:0 "\n\nМы провели вечер, докучая слугам, выговаривая им за каждую мелкую ошибку и жалуясь на все подряд. Кто бы мог подумать, что такие мелочные издевательства отлично снимают напряжение!"
  friendship.3007.benevolent:1 "\n\nМы вместе отправились в городок, бросили монетку бедняку и простили наглого карманника. Немного благодеяний и милосердия — и мне удалось отдохнуть."

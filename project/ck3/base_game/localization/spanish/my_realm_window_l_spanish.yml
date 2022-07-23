@@ -137,5 +137,12 @@
  VASSAL_OPINION_DUCHIES_OVERRUN:0 "Demasiados [duchies|lE]"
  MY_REALM_WINDOW_VASSAL_OPINION:0 "Opinión vasallos: [MyRealmWindow.GetVassalOpinion|=+]"
  MY_REALM_WINDOW_VASSAL_OPINION_TT:0 "#T [opinion|E] de vasallos: [MyRealmWindow.GetVassalOpinion|=+]\n#!Esta es la suma de las opiniones que afectarán a todos tus [vassals|lE]. Si el valor es bajo, es probable que tengas muchas [factions|lE] en tu contra.\n\n#S Fuentes#!\n[MyRealmWindow.GetVassalOpinionBreakdown]"
- MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:0 "#T Sin obligaciones individuales\n#!Solo los [vassals|lE] [Concept( 'feudal', 'feudales' )|E] ([barons|lE] no incluidos) pueden tener [obligations|lE] individuales"
+ MY_REALM_WINDOW_NO_FEUDAL_CONTRACT_TT:1 "#T Sin obligaciones individuales\n#!Solo los [vassals|lE] [Concept( 'feudal', 'feudales' )|E] y de [clan|lE] ([barons|lE] no incluidos) pueden tener [obligations|lE] individuales"
  MY_REALM_WINDOW_ABSOLUTE_COUNTY_CONTROL:0 "[control|E]: $ABSOLUTE_COUNTY_CONTROL$"
+
+ VASSAL_CONTRACT:0 "Pacto de vasallaje"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_NO_EFFECT:0 "Este es el [vassal_contract|lE] actual y sus [obligations|lE]"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE:0 "Nivel de impuestos"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATIONS_TITLE_LEVIES:0 "Nivel de levas"
+ NON_FEUDAL_VASSAL_CONTRACT_OBLIGATION_ONLY_ONCE:0 "#weak Solo puedes cambiar el [vassal_contract|lE] una vez por personaje#!"
+

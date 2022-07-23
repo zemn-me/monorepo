@@ -2274,7 +2274,7 @@ fp1_trade_events.1171 = {
 		root.var:fp1_prime_trade_deal = { is_available_adult_or_is_commanding = yes }
 		# Must be of a disorganised faith and separate religion.
 		faith = {
-			has_doctrine = unreformed_faith_doctrine
+			has_doctrine_parameter = unreformed
 			NOT = { religion = root.var:fp1_prime_trade_deal.religion }
 			# For that matter, either root must be unmarried, or scope:partner can't have syncretic folk traditions (and so respect for their marriage.)
 			OR = {

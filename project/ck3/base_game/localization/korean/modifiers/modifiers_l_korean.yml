@@ -111,6 +111,7 @@
  MOD_SAME_CULTURE_MERCENARY_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_MERCENARY_HIRE_COST_ADD$"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD:0 "동일 [culture|E] [holy_order|E] 고용 비용"
  MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_MULT:0 "$MOD_SAME_CULTURE_HOLY_ORDER_HIRE_COST_ADD$"
+ holy_order_government_levy_contribution_add:0 "[holy_order|E] [vassal|E] [levy|E] [modifier_contribution|E]"
  
  desert_advantage:1 "[command_modifier_i|E]사막에서 생기는 [advantage|E]"
  desert_attrition_mult:1 "[command_modifier_i|E]사막에서 받는 [attrition|E] 피해"
@@ -534,6 +535,7 @@
  MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR:1 "[development|E] 성장"
  plains_development_growth_factor:1 "평야 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
  farmlands_development_growth_factor:1 "농지 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
+ farmlands_development_growth:0 "$farmlands_development_growth_factor$"
  hills_development_growth_factor:1 "구릉지 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
  mountains_development_growth_factor:1 "산악 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
  desert_development_growth_factor:1 "사막 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
@@ -548,10 +550,12 @@
  drylands_development_growth_factor:1 "건조지 [terrain|E] 내 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
  world_steppe_development_growth_factor:1 "[GetGeographicalRegion('world_steppe').GetName][region|E]에 속한 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
  DEVELOPMENT_GROWTH_FACTOR_FROM_CAPITAL_TERRAIN:1 "[county_capital|E] ([PROVINCE.GetHolding.GetName])가 $TERRAIN_TYPE$임"
- MOD_MONTHLY_COUNTY_CONTROL_GROWTH:0 "[control|E] 증가"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH:0 "[control|E] 증가율"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH$"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR:1 "[control|E] 증가율"
  MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_EVEN_IF_BARON:0 "$MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR$"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_AT_WAR:0 "[war|E] 시 [control|E] 증가율"
+ MOD_MONTHLY_COUNTY_CONTROL_GROWTH_FACTOR_AT_WAR:0 "[war|E] 시 [control|E] 증가율"
  MOD_CONSTRUCTION_PRESTIGE_COST:1 "[building|E] 건설 비용"
  MOD_DOMAIN_LIMIT:0 "[domain_limit|E]"
  MOD_DOMAIN_LIMIT_WITH_VALUE:0 "[domain_limit|E]: $VALUE|0=+$"
@@ -807,6 +811,7 @@
  seduce_scheme_power_mult:1 "[GetScheme('seduce').GetTypeName] [scheme_power|E]"
  courting_scheme_power_add:1 "[GetScheme('courting').GetTypeName] [scheme_power|E]"
  max_courting_schemes_add:0 "최대 [GetScheme('courting').GetTypeName] [schemes|E]"
+ befriend_scheme_power_add:0 "[GetScheme('befriend').GetTypeName] [scheme_power|E]"
  seduce_scheme_power_add:0 "$seduce_scheme_power_mult$"
  murder_scheme_power_add:0 "$murder_scheme_power_mult$"
  courting_scheme_power_mult:1 "[GetScheme('courting').GetTypeName] [scheme_power|E]"
@@ -891,4 +896,4 @@
  CUSTOM_MOD_ENABLES_STRESS_LOSS_DECISIONS:0 "[stress|E]를 #P 감소#!시키는 특수 [decision|E] 사용 가능"
 
  # RoCo
- world_innovation_elephants_development_growth_factor:0 "[GetGeographicalRegion('world_innovation_elephants').GetName] [region|E]에 속한 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"
+ world_innovation_elephants_development_growth_factor:0 "[GetGeographicalRegion('world_innovation_elephants').GetName]의 $MOD_MONTHLY_DEVELOPMENT_GROWTH_FACTOR$"

@@ -103,22 +103,22 @@
  rivalry.1024.tt:0 "Humiliating defeat"
 
  rivalry.1021.t:0 "Triumphant Victory"
- rivalry.1021.desc:1 "From the start of my duel with [duel_loser.GetTitledFirstName] it's clear that I have the upper hand. I press the advantage, keeping [duel_loser.GetHerHim] off-balance. Soon [duel_loser.GetSheHe] makes a mistake and leaves me an opening, which I seize advantage of to [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] arm, ending the match!\n\nThe fact that my victory was swift and decisive makes it all the better."
- rivalry.1021.a:1 "I have proven myself to be [duel_loser.GetFirstNamePossessiveNoTooltip] better!"
+ rivalry.1021.desc:2 "From the start of my duel with [duel_loser.GetTitledFirstName] it's clear that I have the upper hand. I press the advantage, keeping [duel_loser.GetHerHim] off-balance. Soon [duel_loser.GetSheHe] makes a mistake and leaves me an opening, which I seize advantage of to [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] arm, ending the match!\n\nThe fact that my victory was swift and decisive makes it all the better."
+ rivalry.1021.a:2 "I have proven myself to be [duel_loser.GetFirstNamePossessiveNoTooltip] better!"
 
  rivalry.1022.t:0 "Narrow Victory"
- rivalry.1022.desc:2 "I begin my duel with [duel_loser.GetTitledFirstName] and realize we're more evenly matched than I expected. We trade strikes and parries back and forth for some time, neither gaining an advantage over the other for long.\n\nEventually we both start suffering from exhaustion and he leaves himself open, allowing me to [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] leg and end the match!"
+ rivalry.1022.desc:3 "I begin my duel with [duel_loser.GetTitledFirstName] and realize we're more evenly matched than I expected. We trade strikes and parries back and forth for some time, neither gaining an advantage over the other for long.\n\nEventually we both start suffering from exhaustion and he leaves himself open, allowing me to [ROOT.GetCharacter.Custom('SignatureWeaponCritical')] [duel_loser.GetHerHis] leg and end the match!"
  rivalry.1022.a:0 "My victory proves that I was in the right."
 
  rivalry.1023.t:0 "Narrow Defeat"
- rivalry.1023.desc:2 "As [duel_winner.GetTitledFirstName] and I begin our duel I realize that [duel_winner.GetSheHe] is a greater foe than I anticipated. The battle is close, with each of us trading attacks and parries as we seek an opening.\n\nEventually as I start to suffer from exhaustion my guard slips for just a moment, which [duel_winner.GetFirstName] takes advantage of to [duel_winner.Custom('SignatureWeaponCritical')] my arm with [duel_winner.GetHerHis] [duel_winner.Custom('signature_weapon')]."
+ rivalry.1023.desc:3 "As [duel_winner.GetTitledFirstName] and I begin our duel I realize that [duel_winner.GetSheHe] is a greater foe than I anticipated. The battle is close, with each of us trading attacks and parries as we seek an opening.\n\nEventually as I start to suffer from exhaustion my guard slips for just a moment, which [duel_winner.GetFirstName] takes advantage of to [duel_winner.Custom('SignatureWeaponCritical')] my arm with [duel_winner.GetHerHis] [duel_winner.Custom('signature_weapon')]."
  rivalry.1023.desc.end:0 "Bleeding heavily, I have no choice but to concede the match."
  rivalry.1023.desc.death:0 "My wounds take their toll on me and I crumple to the ground."
  rivalry.1023.a:2 "I will get you next time [duel_winner.GetTitledFirstNameNoTooltip]!"
  rivalry.1023.a.death:0 "It's so dark..."
 
  rivalry.1024.t:0 "Humiliating Defeat"
- rivalry.1024.desc:2 "When [duel_winner.GetTitledFirstName] and I meet to begin our duel [duel_winner.GetSheHe] wastes no time before leaping into action! Caught off-guard, I struggle to regain my ground and [duel_winner.GetFirstNamePossessive] relentless attacks leave me no room to recover.\n\nIt is not long before [duel_winner.GetSheHe] slips past my guard and [duel_winner.Custom('SignatureWeaponCriticalPresent')] my leg with [duel_winner.GetHerHis] [duel_winner.Custom('signature_weapon')],"
+ rivalry.1024.desc:3 "When [duel_winner.GetTitledFirstName] and I meet to begin our duel [duel_winner.GetSheHe] wastes no time before leaping into action! Caught off-guard, I struggle to regain my ground and [duel_winner.GetFirstNamePossessive] relentless attacks leave me no room to recover.\n\nIt is not long before [duel_winner.GetSheHe] slips past my guard and [duel_winner.Custom('SignatureWeaponCriticalPresent')] my leg with [duel_winner.GetHerHis] [duel_winner.Custom('signature_weapon')],"
  rivalry.1024.desc.end:0 "clearly marking the end of the match. My embarrassing defeat has left me humiliated and ashamed!"
  rivalry.1024.desc.death:0 "causing me to crumple and fall to the ground."
  rivalry.1024.a:0 "I must limp home in disgrace."

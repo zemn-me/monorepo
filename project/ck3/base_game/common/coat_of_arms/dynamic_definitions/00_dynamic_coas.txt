@@ -53,3 +53,22 @@ e_north_sea = {
 		coat_of_arms = e_north_sea_england_wessex
 	}
 }
+
+#FP2
+
+e_spain = {
+	item = {
+		trigger = {
+			OR = {
+				holder.faith.religion = religion:islam_religion
+				holder.culture = {
+					OR = {
+						has_coa_gfx = arabic_group_coa_gfx
+						has_coa_gfx = berber_group_coa_gfx
+					}
+				}
+			}
+		}
+		coat_of_arms = e_spain_islamic	
+	}		
+}

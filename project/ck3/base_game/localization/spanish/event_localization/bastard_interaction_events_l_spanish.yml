@@ -25,7 +25,7 @@
  bastard_interaction.0003.a:0 "¡Haz que nos sintamos orgullosos!"
  bastard_interaction.0004.t:0 "Reaparece un viejo fantasma"
  bastard_interaction.0004.desc:0 "Había pensado absurdamente que [secondary_recipient.GetTitledFirstName] era un problema del pasado que jamás volvería para atormentarme. ¿Cómo no supe ver que mi [actor.Custom('InsultAdjective')] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actor'))] [secondary_recipient.Custom('ES_LoLa')] legitimaría? Creía haber sufrido ya bastante…"
- bastard_interaction.0004.newborn_desc:0 "[actor.GetFirstName] no solo tenía un bastardo, ¡sino que también ha decidido darle legitimidad!\n\n[legitimized_bastard.Custom('ES_ElLa')|U] pequeñ[legitimized_bastard.Custom('ES_OA')] [legitimized_bastard.GetTitledFirstName] me atormentará la vida eternamente…"
+ bastard_interaction.0004.newborn_desc:0 "[actor.GetFirstName] no solo tenía un bastardo, ¡sino que también ha decidido darle legitimidad!\n\npequeñ[legitimized_bastard.Custom('ES_OA')] [legitimized_bastard.GetTitledFirstName] me atormentará la vida eternamente…"
  bastard_interaction.0004.a:0 "No olvidaré esta traición."
  bastard_interaction.0005.t:0 "El gran día de [secondary_recipient.GetFirstNameNoTooltip]"
  bastard_interaction.0005.desc.bastard:0 "[ROOT.Char.Custom2('RelationToMe', SCOPE.sC('actor'))|U] ha decidido legitimar a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('secondary_recipient'))] [secondary_recipient.GetTitledFirstName]. No puedo evitar sentir algo de amargura… ¿Recibiré yo la misma aceptación?"
@@ -37,14 +37,14 @@
  every_child_adult_non_bastard_dislike_me:0 "Todos los hijos adultos no bastardos de [THIS.Char.GetFirstName] a los que no les gusto"
  
  bastard_interaction.0006.t:0 "[legitimized_bastard.GetFirstNameNoTooltip] legitimado"
- bastard_interaction.0006.desc:0 "[legitimized_bastard.GetTitledFirstName] ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por [actor.Custom('ES_ElLa')] jef[actor.Custom('ES_EA')] de su casa, [actor.GetTitledFirstName]!"
+ bastard_interaction.0006.desc:0 "[legitimized_bastard.GetTitledFirstName] ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por jef[actor.Custom('ES_EA')] de su casa, [actor.GetTitledFirstName]!"
  bastard_interaction.0006.a:0 "Por fin tiene una familia."
 
- bastard_interaction.0007.desc:0 "[legitimized_bastard.Custom('ES_ElLa')|U] [legitimized_bastard.Custom('GetDaughterSon')] bastard[legitimized_bastard.Custom('ES_OA')] de [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('parent'))], [legitimized_bastard.GetTitledFirstName], ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por [actor.GetTitledFirstName], [actor.Custom('ES_ElLa')] jef[actor.Custom('ES_EA')] de su casa."
+ bastard_interaction.0007.desc:0 "[legitimized_bastard.Custom('GetDaughterSon')] bastard[legitimized_bastard.Custom('ES_OA')] de [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('parent'))], [legitimized_bastard.GetTitledFirstName], ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por [actor.GetTitledFirstName], jef[actor.Custom('ES_EA')] de su casa."
  bastard_interaction.0007.newborn_desc:0 "[parent.GetTitledFirstName] ha traído a este mundo a un bastardo y ha sido legitimado por [actor.GetTitledFirstName], su [legitimized_bastard.Custom2('RelationToMe', SCOPE.sC('actor'))]."
  bastard_interaction.0007.a:0 "Así quede fuera de mi vida para siempre."
 
- bastard_interaction.0008.desc:0 "¡[legitimized_bastard.GetTitledFirstName], [legitimized_bastard.Custom('ES_ElLa')] bastard[legitimized_bastard.Custom('ES_OA')] [legitimized_bastard.Custom('GetDaughterSon')] de mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('parent'))], ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por [actor.Custom('ES_ElLa')] jef[actor.Custom('ES_EA')] de su nueva casa!"
+ bastard_interaction.0008.desc:0 "¡[legitimized_bastard.GetTitledFirstName], bastard[legitimized_bastard.Custom('ES_OA')] [legitimized_bastard.Custom('GetDaughterSon')] de mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('parent'))], ha sido legitimad[legitimized_bastard.Custom('ES_OA')] por jef[actor.Custom('ES_EA')] de su nueva casa!"
  bastard_interaction.0008.a:0 "Como si algún día fuera a ser «legítim[legitimized_bastard.Custom('ES_OA')]»."
 
  bastard_interaction.0009.t:0 "Un heredero en la dinastía"

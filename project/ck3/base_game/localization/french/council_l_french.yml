@@ -20,7 +20,7 @@
  COUNCILLOR_NO_CHARACTER_IN_POSITION:0 "Pas de $POSITION$"
  START_COUNCIL_TASK_SEND_COUNTY:1 "Envoyer votre [COUNCIL_TASK.GetPositionName|l] [COUNCIL_TASK_TYPE.GetName|l] en [COUNTY.GetTitle.GetName]"
  START_COUNCIL_TASK_SEND_COURT:1 "Envoyer votre [COUNCIL_TASK.GetPositionName|l] [COUNCIL_TASK_TYPE.GetName|l] à la Cour [TARGET.Custom('FR_du_Char_U_Pi')][TARGET.GetShortUIName]"
- START_COUNCIL_TASK_ABORTED:1 "\n@warning_icon!#X Votre tâche en cours de [COUNCIL_TASK.GetPositionName|l] ([COUNCIL_TASK.GetTaskType.GetName]) sera annulée.#!"
+ START_COUNCIL_TASK_ABORTED:1 "\n@warning_icon!#X La tâche en cours de votre [COUNCIL_TASK.GetPositionName|l] ([COUNCIL_TASK.GetTaskType.GetName]) sera annulée.#!"
  COUNCILLOR_TASK_ALREADY_IN_PROCESS:0 "La tâche est déjà en cours d’exécution"
  COUNCILLOR_TIMEOUT_FIRE:1 "@warning_icon!#X Le [councillor|El] ne peut pas être renvoyé avant le [DATE.GetString]#!"
  COUNCILLOR_TIMEOUT_REASSIGN:0 "@warning_icon!#X Le [councillor|El] ne peut pas être réassigné avant le [DATE.GetString]#!"
@@ -98,8 +98,8 @@
  councillor_court_chaplain_islam_empire_possessive:0 "du grand allamah"
 
 #Shia
- councillor_court_chaplain_ismaili_county:0 "Qadi"
- councillor_court_chaplain_ismaili_county_possessive:0 "du qadi"
+ councillor_court_chaplain_ismaili_county:0 "Cadi"
+ councillor_court_chaplain_ismaili_county_possessive:0 "du cadi"
  councillor_court_chaplain_ismaili_kingdom:0 "Ayatollah"
  councillor_court_chaplain_ismaili_kingdom_possessive:0 "de l’ayatollah"
  councillor_court_chaplain_ismaili_empire:0 "Grand ayatollah"
@@ -113,7 +113,7 @@
  councillor_court_chaplain_yazidi_kingdom:0 "Cheikh"
  councillor_court_chaplain_yazidi_kingdom_possessive:0 "du cheikh"
  councillor_court_chaplain_yazidi_empire:0 "Baba cheikh"
- councillor_court_chaplain_yazidi_empire_possessive:0 "du Baba cheikh"
+ councillor_court_chaplain_yazidi_empire_possessive:0 "du baba cheikh"
 
 # Bon (Upadhyaya/Upadhyayani) (Purohit) (Banchenpo)
  councillor_court_chaplain_bon_religion_kingdom:0 "Banchenpo"
@@ -291,4 +291,4 @@
  councillor_leaving_court_message_title:0 "Un[councillor.Custom('FR_E')] conseill[councillor.Custom('FR_ErEre')] a quitté la Cour"
  councillor_leaving_court_marriage_notification:0 "Votre [council_task.GetPositionName|l], [councillor.Custom('FR_le_Char_U_Pi')][councillor.GetShortUINameNoTooltip], a quitté son poste et votre cour en raison d’un mariage qui a des terres."
  councillor_leaving_court_landed_notification:0 "Votre [council_task.GetPositionName|l], [councillor.Custom('FR_le_Char_U_Pi')][councillor.GetShortUINameNoTooltip], a quitté son poste et votre cour en raison de l’héritage d’un titre."
- councillor_leaving_court_generic_fallback_notification:0 "Votre [council_task.GetPositionName|l], [councillor.Custom('FR_le_Char_U_Pi')][councillor.GetShortUINameNoTooltip], a quitté son poste et votre cour."
+ councillor_leaving_court_generic_fallback_notification:0 "Votre [council_task.GetPositionName|l], [councillor.Custom('FR_le_Char_U_Pi')][councillor.GetShortUINameNoTooltip], a quitté son poste et votre Cour."

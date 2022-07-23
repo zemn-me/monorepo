@@ -1,8 +1,8 @@
 ﻿l_russian:
- sway_ongoing.1001.t:0 "Влияние: [target.GetCulture.GetNameNoTooltip]ая культура"
- sway_ongoing.1001.desc:2 "Простолюдин [target.GetCulture.GetNameNoTooltip|l]ого происхождения пострадал на улицах города [capital.GetNameNoTooltip] из-за мелких оскорблений.\n\nВыступив в его защиту, я, возможно, смогу добиться того, что [target.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)], [Select_CString(target.IsFemale, 'которая', 'который' )] тоже из [target.GetCulture.GetNameNoTooltip|l]ого народа, поверит в мои хорошие намерения. Однако я рискую отвратить от себя [ROOT.Char.GetCulture.GetNameNoTooltip|l]их сородичей..."
- sway_ongoing.1001.a:1 "[target.GetCulture.GetCollectiveNounNoTooltip] — хорошие люди."
- sway_ongoing.1001.b:1 "[ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] духовно более совершенны!"
+ sway_ongoing.1001.t:0 "Влияние: [target.GetCulture.GetCollectiveNounNoTooltip]ая культура"
+ sway_ongoing.1001.desc:2 "Простолюдин [target.GetCulture.GetCollectiveNounNoTooltip|l]ого происхождения пострадал на улицах города [capital.GetNameNoTooltip] из-за мелких оскорблений.\n\nВыступив в его защиту, я, возможно, смогу добиться того, что [target.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)], [Select_CString(target.IsFemale, 'которая', 'который' )] тоже из [target.GetCulture.GetCollectiveNounNoTooltip|l]ого народа, поверит в мои хорошие намерения. Однако я рискую отвратить от себя [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip|l]их сородичей..."
+ sway_ongoing.1001.a:1 "[target.GetCulture.GetNameNoTooltip] — хорошие люди."
+ sway_ongoing.1001.b:1 "[ROOT.Char.GetCulture.GetNameNoTooltip] духовно более совершенны!"
 
  sway_ongoing.1002.t:0 "Влияние: комплимент"
  sway_ongoing.1002.desc:0 "Чтобы [target.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)] легче [Select_CString(target.IsFemale, 'отзывалась', 'отзывался' )] на мои попытки сближения, я могу добавить комплименты в следующее послание, адресованное [target.GetHerHis] двору.\n\nЯ непременно упомяну [target.GetHerHis]..."

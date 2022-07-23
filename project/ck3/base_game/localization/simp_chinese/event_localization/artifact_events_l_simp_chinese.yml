@@ -30,6 +30,7 @@
  artifact.1001.desc.weapon:0 "\n\n“大人，我在清理军械库的时候注意到我手上这个[SCOPE.Custom('ThisArtifactType')]已经锈到掉渣，几乎没法用了。我们应该拿它咋办？”\n\n我端详着这个[SCOPE.Custom('ThisArtifactType')]。看来无论怎样的能工巧匠都不能让其重返战场了，不过我还是可以把它清理干净挂在架子上作展出用，这么做不会有太多的花销。"
  artifact.1001.desc.other:0 "\n\n“大人，我在清理储藏间的时候注意到这个[SCOPE.Custom('ThisArtifactType')]已经年代久远，几乎都要散架了！我们应该拿它咋办？”\n\n我端详着这个[SCOPE.Custom('ThisArtifactType')]。看来无论怎样的修修补补都不能让其再穿上身了，不过我还是可以把它清理干净挂在架子上作展出用，这么做不会有太多的花销。"
  artifact.1001.a:0 "值得的努力。"
+ artifact.1001.a.tt.free:0 "#instruction 该[artifact|E]可以免费转化！#!"
  artifact.1001.a.tt:1 "[this_artifact.GetName]转变为一件[court_artifact|E]，仅提供[grandeur|E]和[prestige|E]"
  artifact.1001.b:0 "不，这也太贵了。"
 

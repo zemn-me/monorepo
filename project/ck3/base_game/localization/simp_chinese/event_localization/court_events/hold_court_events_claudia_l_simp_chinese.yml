@@ -246,7 +246,7 @@
  hold_court.6160.f:0 "抱歉，我现在也没余钱啊。"
  #Ignoble Imprisonment
  hold_court.6170.t:0 "卑鄙的监禁"
- hold_court.6170.desc:0 "[6170_vassal.Custom2('MyCharacterIntroduction', ROOT.Char)|U]站在我面前，[6170_vassal.GetHerHis]一脸担忧的神色。“[ROOT.Char.GetLadyLord]，我为[6170_relative.Custom2('MyCharacterIntroduction', 6170_vassal)]而来。\n\n“[6170_relative.GetSheHe|U]被[6170_rival.Custom2('YourCharacterIntroduction', 6170_vassal)]以琐碎荒谬的理由卑鄙地囚禁了。我的心为我可怜的[6170_vassal.Custom2('RelationToMe', SCOPE.sC('6170_relative'))]必须忍受的悲惨状况而流血……\n\n“求求您可怜可怜[6170_relative.GetHerHim]，命令释放[6170_relative.GetHerHim]吧！”"
+ hold_court.6170.desc:0 "[6170_vassal.Custom2('MyCharacterIntroduction', ROOT.Char)|U]站在我面前，[6170_vassal.GetHerHis]一脸担忧的神色。“[ROOT.Char.GetLadyLord]，我为[6170_relative.Custom2('MyCharacterIntroduction', 6170_vassal)]而来。”\n\n“[6170_relative.GetSheHe|U]被[6170_rival.Custom2('YourCharacterIntroduction', 6170_vassal)]以琐碎荒谬的理由卑鄙地囚禁了。我的心为我可怜的[6170_vassal.Custom2('RelationToMe', SCOPE.sC('6170_relative'))]必须忍受的悲惨状况而流血……”\n\n“求求您可怜可怜[6170_relative.GetHerHim]，命令释放[6170_relative.GetHerHim]吧！”"
  hold_court.6170.a:0 "把[6170_relative.GetFirstNameNoTooltip]放了！"
  hold_court.6170.b:0 "[6170_rival.GetFirstNameNoTooltip]关押[6170_relative.GetHerHim]肯定有足够的理由。"
  hold_court.6170.c:0 "我只会赐予[6170_relative.GetHerHim]微小的仁慈。"

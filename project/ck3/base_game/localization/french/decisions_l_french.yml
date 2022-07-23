@@ -145,7 +145,7 @@
  renounce_vow_of_poverty_decision_desc:0 "Il ne fait aucun doute que j’ai besoin d’un budget plus important pour gouverner efficacement mon pays. Le pragmatisme exige la révocation de mon vœu de pauvreté."
  renounce_vow_of_poverty_decision_confirm:0 "Renoncer au vœu de pauvreté"
 
- initiate_consolamentum_decision:1 "Consolamentum: initier l’endura"
+ initiate_consolamentum_decision:1 "Consolamentum : initier l’endura"
  initiate_consolamentum_decision_alternate:0 "Mettre en place le suicide rituel"
  initiate_consolamentum_decision_tooltip:0 "Il est temps de se préparer à la fin de cette vie"
  initiate_consolamentum_decision_desc:1 "#F Alors que la fin de ma vie approche, je dois initier le rituel de l’endura pour purifier mon âme du péché et quitter ce monde.#!"
@@ -239,14 +239,14 @@
  commission_artifact_decision_option_furniture:0 "Meuble\n#low Nombre : [Add_int32( ROOT.Char.GetInventory.GetNumberOfArtifactsForSlotTypeString( 'sculpture' ), Add_int32( ROOT.Char.GetInventory.GetNumberOfArtifactsForSlotTypeString( 'pedestal' ), ROOT.Char.GetInventory.GetNumberOfArtifactsForSlotTypeString( 'throne' ) ) )]#!"
  commission_artifact_decision_option_book:0 "Livre\n#low Nombre : [ROOT.Char.GetInventory.GetNumberOfArtifactsForSlotTypeString( 'book' )]#!"
 
- commission_artifact_decision_option_weapon_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'weapon' ).IsEmpty ), Concatenate( 'Actuellement équipé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'primary_armament', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_armor_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'armor' ).IsEmpty ), Concatenate( 'Actuellement équipé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'armor', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_crown_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'helmet' ).IsEmpty ), Concatenate( 'Actuellement équipé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'helmet', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_regalia_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'regalia' ).IsEmpty ), Concatenate( 'Actuellement équipé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'regalia', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_brooch_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'miscellaneous' ), Concatenate( 'Actuellement équipé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'miscellaneous', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_tapestry_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'wall_big' ), Concatenate( 'Actuellement exposé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'wall_big', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
- commission_artifact_decision_option_furniture_desc:0 "[AddTextIf( Or(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'sculpture' ), Or( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'pedestal' ), ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'throne' ) ) ), 'Actuellement exposé:\n' )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'sculpture' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'sculpture', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'pedestal' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'pedestal', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'throne' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'throne', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )]"
- commission_artifact_decision_option_book_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'book' ), Concatenate( '\nActuellement exposé:\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'book', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_weapon_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'weapon' ).IsEmpty ), Concatenate( 'Actuellement équipé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'primary_armament', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_armor_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'armor' ).IsEmpty ), Concatenate( 'Actuellement équipé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'armor', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_crown_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'helmet' ).IsEmpty ), Concatenate( 'Actuellement équipé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'helmet', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_regalia_desc:0 "[AddTextIf( Not( ROOT.Char.GetInventory.GetSlot( 'regalia' ).IsEmpty ), Concatenate( 'Actuellement équipé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'regalia', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_brooch_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'miscellaneous' ), Concatenate( 'Actuellement équipé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'miscellaneous', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_tapestry_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'wall_big' ), Concatenate( 'Actuellement exposé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'wall_big', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
+ commission_artifact_decision_option_furniture_desc:0 "[AddTextIf( Or(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'sculpture' ), Or( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'pedestal' ), ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'throne' ) ) ), 'Actuellement exposé :\n' )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'sculpture' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'sculpture', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'pedestal' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'pedestal', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )][AddTextIf(ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'throne' ), Concatenate( ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'throne', 'NEWLINE', 'NEWLINE', 'NEWLINE' ), '\n') )]"
+ commission_artifact_decision_option_book_desc:0 "[AddTextIf( ROOT.Char.GetInventory.HasEquippedArtifactsInSlotType( 'book' ), Concatenate( '\nActuellement exposé :\n', ROOT.Char.GetInventory.GetEquippedArtifactsInSlotTypeString( 'book', 'NEWLINE', 'NEWLINE', 'NEWLINE' ) ) )]"
 
  commission_weapon_tooltip:0 "#T Arme#! \n$IS_VALID_BLOCKER$\n$DESC$"
  commission_armor_tooltip:0 "#T Armure#! \n$IS_VALID_BLOCKER$\n$DESC$"
@@ -263,10 +263,10 @@
  go_on_pilgrimage_decision_confirm:0 "Se préparer pour le voyage"
  pilgrimage_effect_1:0 "Vous choisissez une destination parmi les [holy_sites|El] de votre [faith|El]"
  pilgrimage_effect_2:0 "Plus vous voyagez loin, plus vous gagnerez en [piety|El]"
- pilgrimage_effect_3:0 "Des voyages plus longs sont plus chers #weak (coût minimum: @gold_icon! [SCOPE.ScriptValue('pilgrimage_minimum_cost')])#!"
- pilgrimage_effect_4:0 "Des voyages plus longs sont plus chers #weak (coût minimum: @gold_icon! [SCOPE.ScriptValue('pilgrimage_medium_extra_cost')])#!"
- pilgrimage_effect_5:1 "Des voyages plus longs sont plus chers #weak (coût minimum: @gold_icon! [SCOPE.ScriptValue('pilgrimage_long_extra_cost')])#!"
- pilgrimage_effect_6:0 "Des voyages plus longs sont plus chers #weak (coût minimum: @gold_icon! [SCOPE.ScriptValue('pilgrimage_very_long_extra_cost')])#!"
+ pilgrimage_effect_3:0 "Des voyages plus longs sont plus chers #weak (coût minimum : @gold_icon! [SCOPE.ScriptValue('pilgrimage_minimum_cost')])#!"
+ pilgrimage_effect_4:0 "Des voyages plus longs sont plus chers #weak (coût minimum : @gold_icon! [SCOPE.ScriptValue('pilgrimage_medium_extra_cost')])#!"
+ pilgrimage_effect_5:1 "Des voyages plus longs sont plus chers #weak (coût minimum : @gold_icon! [SCOPE.ScriptValue('pilgrimage_long_extra_cost')])#!"
+ pilgrimage_effect_6:0 "Des voyages plus longs sont plus chers #weak (coût minimum : @gold_icon! [SCOPE.ScriptValue('pilgrimage_very_long_extra_cost')])#!"
  hajj_exceptionally_long_tt:0 "C’est un #V exceptionnellement long#! pèlerinage de ma capitale à la Mecque"
  hajj_very_long_tt:0 "C’est un #V très long#! pèlerinage de ma capitale à la Mecque"
  hajj_long_tt:0 "C’est un #V long#! pèlerinage de ma capitale à la Mecque"
@@ -363,7 +363,7 @@
  form_switzerland_kingdom_decision_confirm:0 "Nos revendications ne peuvent être refusées !"
  form_switzerland_kingdom_decision_desc:0 "Si tous les cantons alpins sont réunis, l’Empire devra leur reconnaître le statut de confédération."
  form_switzerland_kingdom_decision_tooltip:0 "La Confédération suisse sera fondée."
- form_switzerland_kingdom_decision_effect_tooltip:1 "Si vous contrôlez [Concept( 'complete_control_region', 'complètement' )|E] le [savoy.GetName], il fera partie du [switzerland.GetName]"
+ form_switzerland_kingdom_decision_effect_tooltip:1 "Si vous contrôlez [Concept( 'completely_control', 'complètement' )|E] le [savoy.GetName], il fera partie du [switzerland.GetName]"
 
  form_austria_kingdom_decision:0 "Former l’archiduché d’Autriche"
  form_austria_kingdom_decision_confirm:0 "Former l’archiduché d’Autriche"
@@ -461,7 +461,7 @@
 
  commission_epic_decision:0 "Commander une épopée familiale"
  commission_epic_decision_desc:0 "#F L’histoire de ma famille regorge d’exploits et de bravoure. Si l’on en faisait un unique récit, cela aurait certainement de très bonnes répercussions sur moi !#!"
- COMMISSION_EPIC_ONCE_COMPLETE:0 "Une fois l’épopée terminée:"
+ COMMISSION_EPIC_ONCE_COMPLETE:0 "Une fois l’épopée terminée :"
  COMMISSION_EPIC_POTENTIAL_COST:1 "#F Vous êtes susceptible d’obtenir un meilleur résultat si vous avez plus d’argent à dépenser#!"
  commission_epic_decision_tooltip:1 "Payer de l’or pour du [prestige|El] et peut-être de la [dynasty_prestige|El]"
  commission_epic_decision_confirm:1 "Il est temps de commencer à composer !"
@@ -544,7 +544,7 @@
  create_armenian_empire_decision:0 "Rétablir la Grande Arménie"
  create_armenian_empire_decision_desc:0 "La Grèce et la Perse ne sont pas les seules terres à avoir conservé la dignité impériale. Il y a longtemps, avant que Rome ait un empereur, notre monarque était le roi des rois. Ce temps n’est pas révolu."
  create_armenian_empire_decision_tooltip:0 "L’Arménie devient un [empire|El] [de_jure|El]"
- create_armenian_empire_decision_effects_de_jure_tt_a:0 "Si détenus, les [kingdoms|El] suivants feront partie [de_jure|El] de la [armenian_armenia_empire.GetNameNoTier]:\n[armenian_georgia.GetNameNoTier], [armenian_daylam.GetNameNoTier], [armenian_jazira.GetNameNoTier], [armenian_syria.GetNameNoTier], [armenian_anatolia.GetNameNoTier], [armenian_pontus.GetNameNoTier], [armenian_jerusalem.GetNameNoTier]"
+ create_armenian_empire_decision_effects_de_jure_tt_a:0 "Si détenus, les [kingdoms|El] suivants feront partie [de_jure|El] de la [armenian_armenia_empire.GetNameNoTier] :\n[armenian_georgia.GetNameNoTier], [armenian_daylam.GetNameNoTier], [armenian_jazira.GetNameNoTier], [armenian_syria.GetNameNoTier], [armenian_anatolia.GetNameNoTier], [armenian_pontus.GetNameNoTier], [armenian_jerusalem.GetNameNoTier]"
  create_armenian_empire_decision_effects_de_jure_tt_b:1 "Tous les [duchies|El] en $custom_greater_armenia$ feront [de_jure|El] partie de [armenian_armenia.GetNameNoTier] ou restent des parties de leur [kingdom|El] si vous détenez ce titre"
  create_armenian_empire_decision_confirm:0 "D’une mer à l’autre, une nouvelle fois."
 
@@ -556,7 +556,7 @@
  build_grand_church_decision:0 "Construire une grande église"
  build_grand_church_decision_desc:0 "Il y a un terrain à Barcelone où la communion avec [ROOT.Char.GetFaith.HighGodName] se passe plus facilement. Y construire une [ROOT.Char.GetFaith.HouseOfWorship] honorerait [ROOT.Char.GetFaith.HighGodName] et la Sainte Famille.\n\nQue le bâtiment fini témoigne de la grandeur [ROOT.Char.GetFaith.HighGodNameAlternatePossessive] !"
  build_grand_church_decision_tooltip:0 "Les fondations d’une grande église sont posées"
- build_grand_church_decision_confirm:0 "Nous commençons la construction #EMP immédiatement#!!"
+ build_grand_church_decision_confirm:0 "Nous commençons la construction #EMP immédiatement#! !"
 
  accept_cannibalism_decision:0 "Cannibalisme [ROOT.Char.GetFaith.GetAdherentNameNoTooltip]"
  accept_cannibalism_decision_desc:1 "Notre Créateur [ROOT.Char.GetFaith.CreatorName] nous a crées à son image. En absorbant l’image du divin, nous nous rapprochons [ROOT.Char.GetFaith.HighGodNameAlternatePossessive]."
@@ -642,9 +642,9 @@
  unite_the_western_slavs_decision:1 "Unir les Slaves occidentaux"
  unite_the_western_slavs_decision_tooltip:1 "Unir les Slaves occidentaux derrière un seul dirigeant"
  unite_the_western_slavs_decision_desc:0 "Nous étions un seul peuple lorsque nous sommes arrivés sur ces terres. Au fil des ans, nous nous sommes dispersés et divisés en plusieurs tribus. Alors que des forces étrangères sont à nos portes, il est temps de se unir de nouveau."
- unite_the_western_slavs_decision_tt_1:1 "Votre titre principal est le Royaume de Pologne, de Poméranie, de Sorbie, de Bohème ou de Grande Moravie"
- unite_the_western_slavs_decision_tt_2:1 "Vous êtes empereur et détenez le royaume de Pologne, de Poméranie, de Sorbie, de Bohême ou de Grande Moravie."
- unite_the_western_slavs_decision_titles_tt:2 "Vous obtiendez le [title|El] de $e_west_slavia$"
+ unite_the_western_slavs_decision_tt_1:1 "Votre titre principal est le Royaume de Pologne, de Poméranie, de Sorabie, de Bohème ou de Grande Moravie"
+ unite_the_western_slavs_decision_tt_2:1 "Vous êtes empereur et détenez le royaume de Pologne, de Poméranie, de Sorabie, de Bohême ou de Grande Moravie."
+ unite_the_western_slavs_decision_titles_tt:2 "Vous obtiendrez le [title|El] de $e_west_slavia$"
  unite_the_western_slavs_decision_titles_empire_tt:2 "Les territoires qui composent chaque [title|El] de [kingdom|El] slave occidental deviendront [de_jure|El] ceux de votre [primary_title|El]"
  unite_the_western_slavs_decision_confirm:1 "Unir les Slaves occidentaux"
 
@@ -678,7 +678,7 @@
  unite_the_spanish_thrones_decision_confirm:0 "Unir les trônes"
  unite_the_spanish_thrones_decision_tooltip:0 "Les trônes espagnols seront réunis une fois de plus"
  unite_the_spanish_thrones_decision_titles_tt:1 "Chaque [title|El] de [kingdom|El] espagnol que vous détenez (hormis votre [primary_title|El]) sera détruit et son territoire fera [de_jure|El] partie de votre titre principal ([THIS.Char.GetPrimaryTitle.GetNameNoTier])"
- unite_the_spanish_thrones_decision_primary:0 "Votre [primary_title|El] est un [kingdom|El] ibère"
+ unite_the_spanish_thrones_decision_primary:0 "Votre [primary_title|El] est un [kingdom|El] ibérique"
 
  #UNITE AFRICA
  unite_africa_decision:0 "Unifier l’Afrique"
@@ -711,6 +711,14 @@
  form_portugal_decision_tooltip:0 "Former le [kingdom|El] du Portugal et établir la [culture|El] portugaise"
  form_portugal_decision_effects_de_jure_tt:1 "[title_d_porto.GetNameNoTier], [title_d_coimbra.GetNameNoTier], [title_d_beja.GetNameNoTier], et [title_d_algarve.GetNameNoTier] feront [de_jure|El] partie du #V [title_k_portugal.GetName]#!"
 
+ #FORM CANARIAS
+ declare_canarias_decision:0 "Renforcer les Canaries" # [LocEditor:ForFutureBatchExport]
+ declare_canarias_decision_desc:0 "Depuis des temps immémoriaux, chaque île se considère comme un royaume, mais aujourd’hui nos horizons s’élargissent et le monde commence à se dévoiler devant les Canaries. Il est temps que ces nombreux royaumes soient réunis sous une même couronne." # [LocEditor:ForFutureBatchExport]
+ declare_canarias_decision_confirm:0 "Renforcer les Canaries" # [LocEditor:ForFutureBatchExport]
+ declare_canarias_decision_tooltip:0 "Former le [kingdom|El] des Canaries" # [LocEditor:ForFutureBatchExport]
+ canarias_must_be_developed_tt:0 "Chaque [county|El] des [GetTitleByKey('d_canarias').GetNameNoTier] doit avoir au moins 10 en [development|El]" # [LocEditor:ForFutureBatchExport]
+ canarias_must_be_filled_tt:0 "Chaque [barony|El] des [GetTitleByKey('d_canarias').GetNameNoTier] doit contenir une [holding|El]" # [LocEditor:ForFutureBatchExport]
+
 
  #Form custom kingdom or empire
  found_kingdom_decision:1 "Fonder un nouveau royaume"
@@ -728,6 +736,7 @@
  create_title_every_held_kingdom:2 "Chaque titre de royaume que vous [hold|El] ou [Concept( 'completely_control', 'contrôlez complètement' )|E]"
  create_custom_empire_de_jure_changes:1 "Devient un [kingdom|El] [de_jure|El] de votre nouvel empire"
  NEW_CREATED_TITLE_NAME:0 "[old_title.GetBaseNameNoTierNoTooltip]"
+ SPECIAL_CREATED_TITLE_NAME:0 "[special_duchy.GetBaseNameNoTierNoTooltip]"
 
  #Guest decisions
  invite_knights_decision:1 "Inviter des [GetPlayer.Custom('KnightCulturePluralNoTooltip')|l]"
@@ -746,7 +755,7 @@
  invite_claimants_decision.tt:0 "La probabilité que des [claimants|El] avec des [claims|El] valables arrivent à la Cour comme [guests|El] est augmentée pendant #V 5#! ans"
  invite_claimants_decision_confirm:0 "Envoyer le héraut"
  minor_decisions.0002.t:0 "Un prétendant est arrivé"
- minor_decisions.0002.desc:0 "[claimant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] a entendu mon appel et est maintenant mon invité[knight.Custom('FR_E')] à la cour"
+ minor_decisions.0002.desc:0 "[claimant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] a entendu mon appel et est maintenant mon invité[claimant.Custom('FR_E')] à la cour"
  invite_claimants_decision_tooltip:1 "Les [claimants|El] sont appelés à se rendre à votre Cour"
 
 
@@ -797,7 +806,7 @@
  restore_holy_roman_empire_decision_desc:0 "Le véritable empire d’Occident est en lambeaux et c’est un sort cruel pour l’héritage de Charlemagne. Il faudrait un dirigeant fort et pieux pour rendre à l’Allemagne sa dignité impériale."
  restore_holy_roman_empire_decision_confirm:0 "Renovatio romani imperii !"
  restore_holy_roman_empire_decision_tooltip:0 "Faire revivre l’empire romain d’Occident"
- decision_refound_hre_control_the_electors.tt:0 "Vous devez contrôler ou détenir les titres d’électeurs traditionnels: les duchés de $d_bohemia$, $d_ostmark$, $d_ostfalen$ et $d_east_franconia$, ainsi que les comtés de $c_trier$, $c_mainz$ et $c_cologne$"
+ decision_refound_hre_control_the_electors.tt:0 "Vous devez contrôler ou détenir les titres d’électeurs traditionnels : les duchés de $d_bohemia$, $d_ostmark$, $d_ostfalen$ et $d_east_franconia$, ainsi que les comtés de $c_trier$, $c_mainz$ et $c_cologne$"
  decision_refound_hre_own_three_kingdoms.tt:0 "Vous devez contrôler au moins trois titres de royaume"
  restore_holy_roman_empire_decision_effects_de_jure.tt:0 "Tout royaume complètement contrôlé en dehors de l’$e_italy$ fera de jure partie du $e_hre$"
  restore_holy_roman_empire_decision_effects_vassal_opinion.tt:0 "Tous les vassaux directs"
@@ -822,17 +831,22 @@
  establish_norman_culture_decision_effect.tt:0 "Tous les comtés [old_culture_1.GetCollectiveNoun] et [old_culture_2.GetCollectiveNoun] et les personnages du nord de la France deviennent [new_culture.GetCollectiveNoun]"
  establish_norman_culture_decision_effect.tt.2:0 "[normandy_title.GetName] est renommé en $d_normandy$"
 
+ # Found the Kingdom of Aragon
  form_the_kingdom_of_aragon_decision:0 "Fonder le royaume d’Aragon"
- form_the_kingdom_of_aragon_decision_desc:0 "Le fleuve Aragon traverse mon pays et crée des terres riches et fertiles. Une telle terre mérite d’être un royaume, alors je vais en créer un !"
- form_the_kingdom_of_aragon_decision_confirm:0 "Notre maison, notre royaume !"
+ form_the_kingdom_of_aragon_decision_desc:1 "Les enfants du grand fleuve Ebro ont été mis à l’écart pendant des siècles par les Romains, les Wisigoths, les Francs ou les Arabes. Tant qu’ils travailleront pour des conquérants étrangers et des capitales lointaines, leurs terres ne seront pas vraiment les leurs. Le peuple réclame un royaume local qui lui appartienne."
+ form_the_kingdom_of_aragon_decision_confirm:0 "Notre terre, notre royaume !"
  form_the_kingdom_of_aragon_decision_tooltip:0 "Fonder le royaume d’Aragon"
+ form_the_kingdom_of_aragon_decision.tt.form_aragonese:0 "Vous pourrez choisir de copier les [culture_pillars|El] de la culture [founder_culture.GetName] à la [aragonese_culture.GetName]"
+ form_the_kingdom_of_aragon_decision.tt.drift.d_valencia:0 "Si vous [Concept('completely_control','contrôlez complètement')|E] [d_valencia.GetDefinitiveName], elle [Concept('de_jure_drift_drifted','glissera')|E] dans [k_aragon.GetDefinitiveName]."
+ form_the_kingdom_of_aragon_decision.tt.drift.d_barcelona:0 "Si vous [Concept('completely_control','contrôlez complètement')|E] [d_barcelona.GetDefinitiveName], elle [Concept('de_jure_drift_drifted','glissera')|E] dans [k_aragon.GetDefinitiveName]."
+ form_the_kingdom_of_aragon_decision.tt.drift.d_navarra:0 "Si vous [Concept('completely_control','contrôlez complètement')|E] [d_navarra.GetDefinitiveName], elle [Concept('de_jure_drift_drifted','glissera')|E] dans [k_aragon.GetDefinitiveName]."
 
  # Culture Conversion
  convert_to_local_culture_decision:0 "Adopter la culture locale"
  convert_to_local_culture_decision_desc:0 "À vrai dire, il y a peu de choses qui séparent mes traditions de celles des habitants de ma capitale. Nous observons les mêmes jours saints, les mêmes fêtes publiques, et notre langue est devenue presque la même."
  convert_to_local_culture_decision_confirm:1 "Je reconnais qui je suis"
  convert_to_local_culture_decision_tooltip:0 "Adopter la [culture|El] de votre [capital|El]"
- converted_culture_msg_title:0 "[converting_character.Custom('FR_le_Char_U_Pi')|U][converting_character.GetShortUIName] a changé de [culture|El]"
+ converted_culture_msg_title:0 "[converting_character.Custom('FR_le_Char_U_Pi')|U][converting_character.GetShortUIName] [converting_character.LocalPlayerString( 'avez', 'a' )] changé de [culture|El]"
  converted_from_old_culture_to_new_culture_tt:0 "Passe de la culture [old_culture.GetName] à la culture [new_culture.GetName]"
  every_old_culture_vassal_holding_new_culture_land:0 "Chaque [vassal|El] qui a votre [culture|El] et des [counties|El] de la nouvelle culture"
  every_close_family_member_sharing_your_culture:1 "Chaque membre de la [close_family|El] qui a votre [culture|El]"
@@ -945,7 +959,7 @@
  found_kingdom_of_bosnia_decision_confirm:0 "[ROOT.Char.GetLadyLord|U] de toute la Bosnie !"
 
  accuse_krstjani_of_heresy_decision:0 "Accuser l’$bosnian_church$ d’hérésie"
- accuse_krstjani_of_heresy_decision_desc:0 "Les hautes terres sauvages de Bosnie abritent depuis des années une secte qui n’appartient pas vraiment à l’Orient ou à l’Occident, et pourtant tous les deux semblent se contenter de l’ignorer.\n\nPlus maintenant ! Le [ROOT.Char.GetFaith.ReligiousHeadName] les déclarera officiellement hérétiques, et ils n’auront nulle part où se cacher !"
+ accuse_krstjani_of_heresy_decision_desc:0 "Les hautes terres sauvages de Bosnie abritent depuis des années une branche religieuse qui n’appartient pas vraiment à l’Orient ou à l’Occident, et pourtant tous les deux semblent se contenter de l’ignorer.\n\nPlus maintenant ! Le [ROOT.Char.GetFaith.ReligiousHeadName] la déclarera officiellement hérétique, et ses adeptes n’auront nulle part où se cacher !"
  accuse_krstjani_of_heresy_decision_tooltip:0 "Le monde chrétien ne tolérera plus ces schismatiques !"
  accuse_krstjani_of_heresy_flavour_effect.tt:0 "Vous envoyez une lettre au [GetPlayer.GetFaith.ReligiousHeadName] pour l’implorer d’examiner la question de l’$bosnian_church$..."
  accuse_krstjani_of_heresy_decision_confirm:0 "D’abord la plume, ensuite l’épée !"
@@ -1024,7 +1038,7 @@
  court_already_has_a_fashion_tend_tt:0 "Le tribunal a déjà une tendance à la mode."
 
  #TODO_CD_JB, move over to a separate event file
- court_amenities_interactions.0010.b_turned_down:0 "Tout le monde adore ce nouveau style !"
+ court_amenities_interactions.0010.b_turned_down:0 "Tout le monde adore le nouveau style !"
  court_amenities_interactions.0010.t:0 "Une nouvelle mode à la Cour"
  court_amenities_interactions.0010.desc_intro:0 "[actor.Custom('FR_le_Char')][actor.GetNameNoTooltip] a fait irruption à la Cour, attirant l’attention de tous les seigneurs et dames du pays avec ses vêtements des plus particuliers."
  court_amenities_interactions.0010.desc.flag_big_collar:0 "[actor.Custom('FR_IlElle')|U] a revêtu un habit dont le col a la circonférence d’une roue de chariot"
@@ -1067,14 +1081,94 @@
  convert_to_tribalism_decision_confirm:0 "Suivre le chemin de mon peuple"
  convert_to_tribalism_decision_tooltip:0 "Renoncer à votre [government|El] actuel et devenir [tribal|El]"
  recent_conversion_to_tribalism:0 "Vous n’avez pas adopté un gouvernement [tribal|El] au cours des 5 dernières années"
- found_witch_coven_house_member_count_tt:0 "[SCOPE.ScriptValue('found_witch_coven_member_count_value')|0] [Concept('adult','adultes')|E] membres de votre [house|E] sont des sorciers ou sorcières"
- found_witch_coven_house_member_percent_tt:0 "[SCOPE.ScriptValue('found_witch_coven_member_percent_display_value')|2]% des [Concept('adult','adultes')|E] membres de votre [house|E] sont des sorciers ou sorcières"
+ found_witch_coven_house_member_count_tt:0 "[SCOPE.ScriptValue('found_witch_coven_member_count_value')|0] membres [adults|El] de votre [house|E] pratiquent la sorcellerie"
+ found_witch_coven_house_member_percent_tt:0 "[SCOPE.ScriptValue('found_witch_coven_member_percent_display_value')|2]% des membres [adults|El] de votre [house|E] pratiquent la sorcellerie"
 
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- select_personal_deity_decision:0 "Déterminer votre Bhakti"
- select_personal_deity_decision_tooltip:0 "Penser à [ROOT.Char.GetFaith.PantheonTerm]"
- select_personal_deity_decision_desc:0 "#F Chaque fervent [ROOT.Char.GetFaith.GetAdherentNameNoTooltip] devrait avoir une « bhakti », une dévotion à une divinité spécifique qui entre en résonance avec son âme. Je dois choisir laquelle.#!"
- select_personal_deity_decision_confirm:0 "Choisir la bhakti"
- select_personal_deity_decision_tt:0 "Vous obtenez un modificateur associé à la bhakti choisie"
- start_hunt_decision_tt_header:0 "Une chasse réussie:"
- start_hunt_decision_stress:0 "#P    Réduit votre [stress|El]#!"
+ convert_whole_realm_to_feudalism_west_african_pagan_decision:0 "$convert_whole_realm_to_feudalism_decision$ #weak (païen ouest-africain)#!" # [LocEditor:ForFutureBatchExport]
+ convert_whole_realm_to_feudalism_west_african_pagan_decision_desc:0 "La bonne gouvernance est une simple question d’échelle. Une ville peut n’avoir besoin que d’anciens, mais un empire a besoin d’administrateurs. Nous pouvons faire appel aux érudits au sein de notre peuple pour occuper ces fonctions." # [LocEditor:ForFutureBatchExport]
+ convert_whole_realm_to_feudalism_west_african_pagan_decision_confirm:0 "$convert_whole_realm_to_feudalism_decision_confirm$" # [LocEditor:ForFutureBatchExport]
+ convert_whole_realm_to_feudalism_west_african_pagan_decision_tooltip:0 "$convert_whole_realm_to_feudalism_decision_tooltip$" # [LocEditor:ForFutureBatchExport]
+ convert_whole_realm_to_feudalism_west_african_pagan_decision.tt.vassal_count:0 "Vous avez au moins [EmptyScope.ScriptValue('convert_whole_realm_to_feudalism_west_african_pagan_decision_vassal_count_value')|0] [vassals|El] avec au moins un [rank|El] de [count|El]" # [LocEditor:ForFutureBatchExport]
+ convert_whole_realm_to_feudalism_west_african_pagan_decision.tt.wa_capital_development:0 "Votre [capital|El] est en [GetGeographicalRegion('world_africa_west').GetName] et a au moins [EmptyScope.ScriptValue('convert_whole_realm_to_feudalism_west_african_pagan_decision_wa_capital_development_value')|0] en [development|El]" # [LocEditor:ForFutureBatchExport]
+ faith_qualifies_for_west_african_pagan_feudalisation_trigger.tt:0 "Votre [faith|El] est [GetFaithDoctrine('west_african_unreformed_faith_doctrine').GetBaseName|l]" # [LocEditor:ForFutureBatchExport]
+
+ appoint_a_righteous_caliph_decision:0 "Nommer un calife vertueux"
+ appoint_a_righteous_caliph_decision_desc:0 "[ROOT.Char.GetFaith.GetReligiousHead.Custom('FR_le_Char_Pi')|U][ROOT.Char.GetFaith.GetReligiousHead.GetTitledFirstName] est une personnalité distante, indigne, mal préparée à diriger la oumma. Étant de foi [ROOT.Char.GetFaith.GetReligiousHead.GetFaith.GetAdjective], [ROOT.Char.GetFaith.GetReligiousHead.Custom('FR_IlElle')] ne comprend tout simplement pas nombre de vérités subtiles de la pensée [ROOT.Char.GetFaith.GetAdjective].\n\n[ROOT.Char.GetFaith.GetReligiousHead.Custom('FR_LuiElle')|U] non, mais moi si..."
+ appoint_a_righteous_caliph_decision_confirm:0 "Je suis guidé par [ROOT.Char.GetFaith.PositiveAfterLife] !"
+ appoint_a_righteous_caliph_decision_tooltip:0 "Détourner la foi [ROOT.Char.GetFaith.GetAdjectiveNoTooltip] de la voie [ROOT.Char.GetFaith.GetReligiousHead.GetFaith.GetAdjectiveNoTooltip]"
+ appoint_a_righteous_caliph_decision.tt.you_become_caliph:0 "[THIS.Char.Custom('FR_le_Char_U_Pi')|U][THIS.Char.GetShortUIName|U] [Select_CString(THIS.Char.IsLocalPlayer, 'êtes', 'est' )] le [head_of_faith|El] [THIS.Char.GetFaith.GetAdjective]"
+ appoint_a_righteous_caliph_decision.need_at_least_ten_same_faith_counties:0 "Vous avez au moins [EmptyScope.ScriptValue('appoint_a_righteous_caliph_decision_same_faith_county_count')|0] [counties|El] [CHARACTER.GetFaith.GetAdherentNamePlural]"
+ appoint_a_righteous_caliph_decision.cant_be_caliphal_controller:0 "Vous n’êtes pas le [liege|El] de votre [head_of_faith|El]"
+ appoint_a_righteous_caliph_decision.no_more_than_x_sinful_traits:0 "Vous n’avez pas plus de [EmptyScope.ScriptValue('appoint_a_righteous_caliph_decision_own_max_sins')|0] [traits|El] [Concept( 'sin', 'immoraux' )|E]"
+ appoint_a_righteous_caliph_decision.caliph_not_in_diplo_range:0 "Votre [head_of_faith|El] est hors de [diplomatic_range|El]"
+ appoint_a_righteous_caliph_decision.control_one_holy_site:0 "Vous contrôlez au moins 1 [holy_site|El]"
+ appoint_a_righteous_caliph_decision.control_two_holy_sites:0 "Vous contrôlez au moins 2 [holy_sites|El]"
+ appoint_a_righteous_caliph_decision.caliph_has_x_or_more_traits_sinful_to_your_faith:0 "Votre [head_of_faith|El] a au moins [EmptyScope.ScriptValue('appoint_a_righteous_caliph_decision_hof_min_sins')|0] [traits|El] [Concept( 'sin', 'immoraux' )|E]"
+ appoint_a_righteous_caliph_decision.has_wishes_to_schism_caliphate_flag:0 "Vous aviez prévu de vous diviser davantage lorsque votre [faith|El] a été fondée"
+
+ mozarabic_bind_the_faith_to_rome_decision:0 "Lier la foi à Rome"
+ mozarabic_bind_the_faith_to_rome_decision_desc:0 "Bien que [ROOT.Char.GetFaith.GetReligiousHead.Custom('FR_le_Char_Pi')][ROOT.Char.GetFaith.GetReligiousHead.GetTitledFirstName] reste notre seul vrai pape, l’isolement de la volonté du Vicaire du Christ nous a fait prendre des chemins étranges. L’époque où les grands conclaves du clergé européen se déroulaient à Tolède est révolue. Si notre foi s’est égarée, un berger fort ne pourrait-il pas la ramener au sein du troupeau ?"
+ mozarabic_bind_the_faith_to_rome_decision_tooltip:0 "Lier la [faith|El] [ROOT.Char.GetFaith.GetAdjective] rétive à la [ROOT.Char.GetFaith.GetReligiousHead.GetFaith.GetAdjective]"
+ mozarabic_bind_the_faith_to_rome_decision_confirm:0 "Notre place est au sein de la grande chrétienté"
+ mozarabic_bind_the_faith_to_rome_decision.tt.hof_and_ecumenism_warning:0 "Vous garderez l’[GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName|l], mais garderez #X définitivement#! le [head_of_faith|El] [religious_leader.GetFaith.GetReligiousHead.GetFaith.GetAdjective]"
+ mozarabic_bind_the_faith_to_rome_decision.path_righteous:0 "Si nous réformons notre [faith|El] afin qu’elle soit plus juste"
+ mozarabic_bind_the_faith_to_rome_decision.path_fundamentalist:0 "Si nous réformons notre [faith|El] afin qu’elle soit plus fondamentaliste"
+ mozarabic_bind_the_faith_to_rome_decision.path_pluralist:0 "Si nous réformons notre [faith|El] afin qu’elle soit encore plus pluraliste"
+ mozarabic_fate_county_count.need_at_least_twenty_same_faith_counties:0 "Vous devez détenir au moins [EmptyScope.ScriptValue('mozarabic_fate_county_count')|0] [counties|El] de même [faith|El]"
+
+ mozarabic_break_with_rome_decision:0 "Rompre avec Rome"
+ mozarabic_break_with_rome_decision_desc:0 "Que sait [ROOT.Char.GetFaith.GetReligiousHead.Custom('FR_le_Char_Pi')][ROOT.Char.GetFaith.GetReligiousHead.GetTitledFirstName] de nos vies ou de nos terres ? Rome est un lointain chef suprême temporel, qui ne se soucie pas de nos besoins spirituels et ne les comprend pas.\n\nCe n’est qu’en nous libérant des chaînes de la [ROOT.Char.GetFaith.GetReligiousHeadTitle.GetBaseName] et en se débarrassant de ses derniers mensonges, que la foi [ROOT.Char.GetFaith.GetAdjective] pourra atteindre la perfection."
+ mozarabic_break_with_rome_decision_tooltip:0 "Mener la foi [ROOT.Char.GetFaith.GetAdjective] au schisme pour rompre avec la foi [ROOT.Char.GetFaith.GetReligiousHead.GetFaith.GetAdjective]"
+ mozarabic_break_with_rome_decision_confirm:0 "Une voie juste et pieuse !"
+ mozarabic_break_with_rome_decision.tt.hof_and_ecumenism_warning:0 "Vous créerez un [head_of_faith|El] [religious_leader.GetFaith.GetAdjective], mais perdrez #X définitivement#! l’[GetFaithDoctrine('special_doctrine_ecumenical_christian').GetBaseName|l]"
+ mozarabic_break_with_rome_decision.path_righteous:0 "$mozarabic_bind_the_faith_to_rome_decision.path_righteous$"
+ mozarabic_break_with_rome_decision.path_fundamentalist:0 "$mozarabic_bind_the_faith_to_rome_decision.path_fundamentalist$"
+ mozarabic_break_with_rome_decision.path_pluralist:0 "$mozarabic_bind_the_faith_to_rome_decision.path_pluralist$"
+
+ favour_the_countryside_basques_decision:0 "Défendre la foi des Pays Basques"
+ favour_the_countryside_basques_decision_desc:0 "Les habitants des Pyrénées sont résistants au changement. Dans leurs vallées montagneuses isolées et leurs villages au sommet des collines, nombreux sont ceux qui conservent des éléments de croyances disparues depuis longtemps dans le reste de l’Europe.\n\nPour l’instant, ces syncrétiques montagnards et leur Église populaire sont sans intérêt. Mais avec le bon financeur..."
+ favour_the_countryside_basques_decision_tooltip:0 "Soutenir les croyances populaires des Pyrénées"
+ favour_the_countryside_basques_decision_confirm:0 "Il y a peut-être un autre moyen ?"
+ favour_the_countryside_basques_decision.have_sinful_piety_level:0 "Votre [piety_level|El] n’est pas plus de [GetModifier( 'piety_level_0' ).GetNameWithTooltip|L]"
+ favour_the_countryside_basques_decision.you_have_x_or_more_traits_virtuous_to_basque_paganism:0 "Vous avez [EmptyScope.ScriptValue('favour_the_countryside_basques_decision_basque_pagan_virtues_tally_value')|0] [traits|El] qui sont [virtuous|El] pour la [faith|El] [GetFaithByKey('basque_pagan').GetName]"
+ favour_the_countryside_basques_decision.completely_control_X_counties_from_old_vasconia:0 "Vous devez [Concept('completely_control','contrôler complètement')|E] au moins [EmptyScope.ScriptValue('favour_the_countryside_basques_decision_counties_to_control_value')|0] [counties|El] de l’[GetGeographicalRegion('dlc_fp2_old_vasconia').GetName]"
+ favour_the_countryside_basques_decision.before_last_date:0 "La date est 1200.1.1 ou antérieure"
+ favour_the_countryside_basques_decision.path_default:0 "Si vous laissez la [faith|El] telle quelle"
+ favour_the_countryside_basques_decision.path_fundamentalist:0 "Si vous réformez la [faith|El] pour qu’elle soit plus fondamentaliste"
+ favour_the_countryside_basques_decision.tt.spiritual_hof_acquired:0 "Un religieux adéquat devient le nouveau [head_of_faith|El]"
+ favour_the_countryside_basques_decision.path_righteous:0 "Si vous réformez la [faith|El] pour qu’elle soit plus juste"
+ favour_the_countryside_basques_decision.tt.temporal_hof_acquired:0 "[religious_leader.Custom('FR_le_Char_U_Pi')|U][religious_leader.GetShortUINameNoTooltip|U] [Select_CString(THIS.Char.IsLocalPlayer, 'devenez', 'devient' )] le nouveau [head_of_faith|El]"
+ favour_the_countryside_basques_decision.path_pluralist:0 "Si vous réformez la [faith|El] pour qu’elle soit encore plus pluraliste"
+ favour_the_countryside_basques_decision.tt.all_neighbouring_islamic_rulers:0 "Chaque [ruler|El] voisin musulman"
+ fervour_loss_temporal_meddling:0 "Ingérence temporelle"
+ fervour_gain_unexpected_resurgence:0 "Résurgence inattendue"
+ fp2_friend_of_the_old_ways_modifier:0 "Défenseur des anciennes croyances"
+ fp2_friend_of_the_old_ways_modifier_desc:0 "Ce personnage a consacré beaucoup de temps et d’énergie à la défense de ses anciennes croyances. Avec quelques légères révisions."
+ fp2_champion_of_the_old_ways_modifier:0 "Défenseur zélé des anciennes croyances"
+ fp2_champion_of_the_old_ways_modifier_desc:0 "Ce personnage est considéré comme un défenseur de tout ce qui est bon et saint par sa foi."
+
+ eat_cheese_decision:0 "Manger votre fromage"
+ eat_cheese_decision_desc:0 "Vous mangez votre fromage affiné."
+ eat_cheese_decision_tooltip:0 "Votre fromage affiné est prêt à être consommé."
+ eat_cheese_decision_confirm:0 "Consommer le fromage"
+ eat_cheese_effect_tt:0 "Plus le fromage a été affiné longtemps, plus vous perdrez du stress en le mangeant."
+
+ golden_age_jewish_science_in_iberia_decision:0 "Financer les sciences juives"
+ golden_age_jewish_science_in_iberia_decision_desc:0 "L’Ibérie abrite de nombreux érudits du monde entier. Avec un peu d’argent, nous pourrions inaugurer une ère d’apprentissage et établir un centre de culture et de partage des connaissances qui régnera en maître pendant des décennies."
+ golden_age_jewish_science_in_iberia_decision_hardcoded_trigger_text.a:0 "Votre [culture_head|El] vous approuve"
+ golden_age_jewish_science_in_iberia_decision_hardcoded_trigger_text.b:0 "Vous n’êtes pas le financeur actuel de l’âge d’or en cours"
+ golden_age_jewish_science_in_iberia_decision_tooltip:0 "Financer le début d’un nouvel âge d’or du progrès scientifique"
+ golden_age_jewish_science_in_iberia_decision_confirm:0 "Financer"
+ golden_age_jewish_science_in_iberia_decision.player_notif.t:0 "L’âge d’or a commencé"
+
+ build_holy_pilgrim_roads_decision:0 "Construire des routes de pèlerinage"
+ build_holy_pilgrim_roads_decision_desc:0 "Il ne peut y avoir de pèlerinage sans un chemin vers nos lieux saints, il est donc impératif que nous, les [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip], construisions des routes pour permettre l’accès à nos sites les plus sacrés."
+ build_holy_pilgrim_roads_decision_tooltip:0 "Construire des routes vers un lieu saint détenu par vous"
+ build_holy_pilgrim_roads_decision_confirm:0 "Financer la construction"
+ build_holy_pilgrim_roads_decision_hardcoded_trigger_text.a:0 "Il existe un [holy_site|El] dans votre [realm|El] sans le [modifier|El] chemins de pèlerinage."
+ build_holy_pilgrim_roads_decision_construction_notif.t:0 "Routes de pèlerinage construites en [chosen_location_for_pilgrim_roads.GetNameNoTierNoTooltip]"
+ build_holy_pilgrim_roads_decision_construction_notif.desc:0 "Des routes ont été construites partout en [chosen_location_for_pilgrim_roads.GetName] et mènent à [chosen_holy_site_for_pilgrim_roads.GetNameNoTier], où se trouve un [holy_site|El] [ROOT.Char.GetFaith.GetAdherentName] qui attend de futurs pèlerins." # [LocEditor:ForFutureBatchExport]
+
+ not_can_execute_decision:0 "Vous ne pouvez pas prendre cette [decision|El] en ce moment"
+ can_execute_decision:0 "Vous pouvez prendre cette [decision|El] en ce moment"
+ NO_DECISION_OPTIONS_SELECTED:0 "@warning_icon! #X Sélectionnez une option#!"

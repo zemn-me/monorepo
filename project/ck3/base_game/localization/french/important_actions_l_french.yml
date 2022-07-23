@@ -480,7 +480,7 @@
  action_can_demand_payment_label:0 "Vous pouvez exiger un paiement [recipient.Custom('FR_au_Char_U_Pi')][recipient.GetShortUINameNoTooltip]"
  action_can_demand_payment_combined_label:0 "[recipient.GetUINameNoTooltip]"
  action_can_demand_payment_click:0 "#I Cliquez pour exiger un paiement#!"
- action_can_demand_payment_HELP:0 "\n\n#help Vous pouvez faire ceci, car vous avez l’[perk|El] [GetPerk('golden_obligations_perk').GetName(GetPlayer)|l]\n\nExiger un paiement consomme le hameçon, alors assurez-vous que c’est pour cela que vous voulez l’utiliser !#!"
+ action_can_demand_payment_HELP:0 "\n\n#help Vous pouvez faire ceci, car vous avez l’[perk|El] [GetPerk('golden_obligations_perk').GetName(GetPlayer)|l]\n\nExiger un paiement consomme l’hameçon, alors assurez-vous que c’est pour cela que vous voulez l’utiliser !#!"
  
  action_hook_expiring:0 "Un hameçon expire bientôt"
  action_hook_expiring_combined_group_label:0 "Des hameçons expirent bientôt"
@@ -573,10 +573,3 @@
  action_can_hire_court_physician_label:0 "Vous pouvez embaucher un médecin de la Cour"
  action_can_hire_court_physician_desc:0 "Vous n’employez pas un médecin de la cour à un [court_position|El], vous devriez en embaucher un."
  action_can_hire_court_physician_click:0 "#I Cliquez pour voir#!"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- action_can_take_consort:0 "Prendre un concubin"
- action_can_take_consort_label:0 "$action_can_take_consort$"
- action_can_take_consort_desc:2 "Vous êtes actuellement en deçà du nombre convenable de [Concept( 'concubinage', 'concubins' )|E] pour quelqu'un de votre rang.\n\n#help Prenez-en davantage pour annuler la pénalité de [prestige|El] que vous subissez.#!"
- action_can_take_consort_click:0 "#I Cliquer pour trouver un concubin#!"
- action_close_family_can_marry_combined__unimportant:0 "Sans importance car j'ai beaucoup d'enfants plus âgés"

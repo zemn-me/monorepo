@@ -278,6 +278,7 @@
  nick_the_one_eyed:0 "[CHARACTER.Custom('FR_LeLa')] Borgne"
  nick_the_oppressor:0 "l’Oppresseu[CHARACTER.Custom('FR_RSe')]"
  nick_the_apostate:0 "l’Apostat[CHARACTER.Custom('FR_E')]"
+ nick_the_pagan:0 "[CHARACTER.Custom('FR_LeLa')] Païe[CHARACTER.Custom('FR_NNne')]"
  nick_the_heretic:0 "l’Hérétique"
  nick_the_savage:0 "[CHARACTER.Custom('FR_LeLa')] Sauvage"
  nick_the_defiant:0 "[CHARACTER.Custom('FR_LeLa')] Rebelle"
@@ -305,6 +306,7 @@
  nick_father_of_the_baltic:0 "le Père de la Baltique"
  nick_mother_of_the_baltic:0 "la Mère de la Baltique"
  nick_scourge_of_the_baltic:0 "le Fléau de la Baltique"
+ nick_the_mountain_king:0 "le Roi de la Montagne"
  nick_the_child_killer:0 "[CHARACTER.Custom('FR_LeLa')] Tueu[CHARACTER.Custom('FR_RSe')] d’enfants"
  nick_the_anathema:0 "l’Anathème"
  nick_the_angel_of_death:1 "l’Ange [CHARACTER.GetFaith.DeathDeityNamePossessive]"
@@ -316,7 +318,11 @@
  nick_the_black_sheep:0 "le Mouton noir"
  nick_sisyphus:0 "le Tonneau des Danaïdes"
  nick_blue_lion:0 "le Lion bleu de $b_sheffield$"
- nick_the_wake:0 "l'Éveillé[CHARACTER.Custom('FR_E')]"
+ nick_the_hairy:0 "[CHARACTER.Custom('FR_LeLa')] Velu[CHARACTER.Custom('FR_E')]"
+ nick_the_child:0 "l’Enfant"
+ nick_the_wake:0 "l’Éveillé[CHARACTER.Custom('FR_E')]"
+ nick_the_bearded:0 "le Barbu"
+ nick_the_mountain_dweller:0 "[CHARACTER.Custom('FR_LeLa')] Montagnard[CHARACTER.Custom('FR_E')]" # [LocEditor:ForFutureBatchExport]
  
  # RoCo
  nick_king_of_fashion:0 "[CHARACTER.Custom('FR_le_Char_L')][CHARACTER.GetTitleAsNameNoTooltip] de la Mode"
@@ -334,6 +340,15 @@
  nick_the_eloquent:0 "l’Éloquent[CHARACTER.Custom('FR_E')]"
  nick_the_stud:0 "l’Étalon"
 
- # Historical
- nick_the_bearded:0 "le Barbu"
+ # FP2
+ nick_the_bell_keeper:0 "[CHARACTER.Custom('FR_LeLa')] Gardie[CHARACTER.Custom('FR_NNne')] de la Cloche"
+ nick_the_requiem:0 "le Requiem"
+ nick_the_King_of_Thieves:0 "le Roi des Voleurs"
+ nick_the_Queen_of_Thieves:0 "la Reine des Voleurs"
+ nick_the_Thief_Slayer:0 "[CHARACTER.Custom('FR_LeLa')] Tueu[CHARACTER.Custom('FR_RSe')] de voleurs"
+ nick_the_flying:0 "[CHARACTER.Custom('FR_LeLa')] Volant[CHARACTER.Custom('FR_E')]"
+ nick_the_flightless:0 "l’Incapable de voler"
+ nick_the_cid_campeador:0 "El Cid"
  nick_benavert:0 "Benavert"
+ nick_the_pragmatic:0 "[CHARACTER.Custom('FR_LeLa')] Pragmatique" # [LocEditor:ForFutureBatchExport]
+ nick_the_equitable:0 "l’Équitable" # [LocEditor:ForFutureBatchExport]

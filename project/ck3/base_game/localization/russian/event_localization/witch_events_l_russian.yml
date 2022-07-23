@@ -111,7 +111,7 @@
 
  #Invitation
  witch.3001.t:0 "[Select_CString(ROOT.Char.IsFemale, 'Дорогая', 'Дорогой' )] [ROOT.Char.Custom('SisterBrother')] [ROOT.Char.GetFirstNameNoTooltip],"
- witch.3001.desc:0 "Пришло время ковену дома [host.GetHouse.GetNameNoTooltip] провести $activity_witch_ritual$. Пусть [ROOT.Char.GetFaith.WitchGodName] восславится в наших молитвах в ночь полной луны. Вместе мы будем воспевать [ROOT.Char.GetFaith.WitchGodHerHis] имя и изучать [ROOT.Char.GetFaith.WitchGodHerHis] тайны!"
+ witch.3001.desc:0 "Пришло время ковену дома [host.GetHouse.GetBaseNameNoTooltip] провести $activity_witch_ritual$. Пусть [ROOT.Char.GetFaith.WitchGodName] восславится в наших молитвах в ночь полной луны. Вместе мы будем воспевать [ROOT.Char.GetFaith.WitchGodHerHis] имя и изучать [ROOT.Char.GetFaith.WitchGodHerHis] тайны!"
  witch.3001.a:0 "Жду с нетерпением!"
  witch.3001.b:0 "Да я лучше съем миску слизней."
 

@@ -109,8 +109,3 @@
  steward_task.4101.desc:0 "La mission [councillor.Custom('FR_du_Char_Pi')][councillor.GetTitledFirstName] dans le [county.GetName] commence à porter ses fruits. Les habitants sont impressionnés par nos efforts et nous regardent favorablement."
  steward_task.4101.a:0 "Excellent résultat !"
  steward_task.4101.notification:0 "Prestige obtenu"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- steward_task.0301.opening:0 "[councillor.Custom2('AppropriateGreeting', ROOT.Char)]"
- steward_task.0301.county_complete:0 "Grâce à la venue de colons [ROOT.Char.GetCulture.GetCollectiveNoun|l] et la mise en place d'une nouvelle administration, les habitants en [county.GetNameNoTier] ont pleinement embrassé les traditions [ROOT.Char.GetCulture.GetName]."
- steward_task.0301.a:0 "Bon travail, [councillor.GetFirstNameNoTooltip] !"

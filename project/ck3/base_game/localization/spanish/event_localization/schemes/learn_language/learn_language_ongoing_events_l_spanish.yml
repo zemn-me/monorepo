@@ -13,7 +13,7 @@
  learn_language_ongoing.1000.b:0 "Prefiero pasar el tiempo con otra cosa…"
  
  learn_language_ongoing.1010.t:1 "$learn_language$: Un malentendido amoroso"
- learn_language_ongoing.1010.desc:4 "«… así que [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] discutía [ROOT.Char.Custom('education_conversation_subject')] con el consejo mientras [target.Custom('ES_ElLa')] [target.GetCouncillorPosition( 'councillor_steward' ).GetPositionName] procedía a…».\n\nLevanto la vista del libro de [scheme.GetTarget.GetCulture.GetLanguage.GetName] solo para ver a [lover_target.GetFirstName] sonrojad[lover_target.Custom('ES_OA')], inclinad[lover_target.Custom('ES_OA')] sobre mí.\n\n«Por favor, ¿estás hablando #EMP [scheme.GetTarget.GetCulture.GetLanguage.GetNameNoTooltip]#!?», dice.\n«Bueno… el [scheme.GetTarget.GetCulture.GetLanguage.GetNameNoTooltip] es el idioma del amor y, si no he oído mal, me has llamado [lover_target.Custom('RomanticComplimentNoun')|l] [lover_target.Custom('RomanticComplimentAdjective')]. ¡Qué [ROOT.Char.Custom('RomanticComplimentNoun')] eres!»."
+ learn_language_ongoing.1010.desc:4 "«… así que [ROOT.Char.GetTitleTierName] discutía [ROOT.Char.Custom('education_conversation_subject')] con el consejo mientras [target.GetCouncillorPosition( 'councillor_steward' ).GetPositionName] procedía a…».\n\nLevanto la vista del libro de [scheme.GetTarget.GetCulture.GetLanguage.GetName] solo para ver a [lover_target.GetFirstName] sonrojad[lover_target.Custom('ES_OA')], inclinad[lover_target.Custom('ES_OA')] sobre mí.\n\n«Por favor, ¿estás hablando #EMP [scheme.GetTarget.GetCulture.GetLanguage.GetNameNoTooltip]#!?», dice.\n«Bueno… el [scheme.GetTarget.GetCulture.GetLanguage.GetNameNoTooltip] es el idioma del amor y, si no he oído mal, me has llamado [lover_target.Custom('RomanticComplimentNoun')|l] [lover_target.Custom('RomanticComplimentAdjective')]. ¡Qué [ROOT.Char.Custom('RomanticComplimentNoun')] eres!»."
  learn_language_ongoing.1010.a:0 "… Sí, ¡por supuesto que sí! ¡Es justo lo que quería decir!"
  learn_language_ongoing.1010.b:0 "¡No, no! ¡Ha sido un malentendido!"
  learn_language_ongoing.1010.c:0 "Vade retro, [lover_target.Custom('InsultNounSexual')]. ¡Debo concentrarme!"
@@ -66,7 +66,7 @@
  learn_language_ongoing.1060.d.failure:0 "[offended_character.GetFirstNameNoTooltip] no te cree"
  
  learn_language_ongoing.1070.t:1 "$learn_language$: Literatura libertina"
- learn_language_ongoing.1070.desc:3 "Mientras leo en voz alta el libro de [scheme.GetTarget.GetCulture.GetLanguage.GetName] que [target.GetTitledFirstName] me envió hace un tiempo, veo a un grupo de sirvientes riéndose de mí…\n\n«Por favor, no dejéis de leer!», dicen entre risitas.\n«¡[ROOT.Char.GetSheHe|U] estaba a punto de mostrar su [ROOT.Char.Custom('ObjectifiedFeature')]! Tenemos que saber si [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] y su [target.Custom('lowly_servant_type')] terminan juntos, ¡o si aquel [target.Custom('InsultNounSexual')] se vuelve a interponer entre ellos!».\n\n¿Estoy leyendo… #EMP algo lascivo?#! [ROOT.Char.Custom('CulturalCurse')|U]."
+ learn_language_ongoing.1070.desc:3 "Mientras leo en voz alta el libro de [scheme.GetTarget.GetCulture.GetLanguage.GetName] que [target.GetTitledFirstName] me envió hace un tiempo, veo a un grupo de sirvientes riéndose de mí…\n\n«Por favor, no dejéis de leer!», dicen entre risitas.\n«¡[ROOT.Char.GetSheHe|U] estaba a punto de mostrar su [ROOT.Char.Custom('ObjectifiedFeature')]! Tenemos que saber si [ROOT.Char.GetTitleTierName] y su [target.Custom('lowly_servant_type')] terminan juntos, ¡o si aquel [target.Custom('InsultNounSexual')] se vuelve a interponer entre ellos!».\n\n¿Estoy leyendo… #EMP algo lascivo?#! [ROOT.Char.Custom('CulturalCurse')|U]."
  learn_language_ongoing.1070.a:0 "¡Guardias, libraos de este condenado libro!"
  learn_language_ongoing.1070.b:0 "¡¿Osáis reíros de mí?! #EMP Azotadlos.#!"
  learn_language_ongoing.1070.c:0 "Bueno, en cierto modo #EMP es#! educativo…"
@@ -93,8 +93,8 @@
  learn_language_ongoing.1090.b:0 "¡No importa lo difícil que sea, debo insistir!"
  learn_language_ongoing.1090.c:0 "Necesito un descanso…"
  encouraged_by_friend_modifier:0 "Animado por una amistad"
- learn_language_ongoing.1100.t:1 "$learn_language$: [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] que se preocupa"
- learn_language_ongoing.1100.desc:3 "No es ningún secreto que trabajo duro para aprender el [scheme.GetTarget.GetCulture.GetLanguage.GetName] y parece que se ha vuelto del dominio público entre los campesinos [target.GetCulture.GetCulture.GetCollectiveNounNoTooltip].\n\nHablan de mí como «[ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleTierName] que se preocupa», algo verdaderamente halagador. ¡Hasta los nobles menores alaban mis esfuerzos!\n\nMe siento como si mis esfuerzos hubieran acercado a [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] y [target.GetCulture.GetCollectiveNounNoTooltip]."
+ learn_language_ongoing.1100.t:1 "$learn_language$: [ROOT.Char.GetTitleTierName] que se preocupa"
+ learn_language_ongoing.1100.desc:3 "No es ningún secreto que trabajo duro para aprender el [scheme.GetTarget.GetCulture.GetLanguage.GetName] y parece que se ha vuelto del dominio público entre los campesinos [target.GetCulture.GetCulture.GetCollectiveNounNoTooltip].\n\nHablan de mí como «[ROOT.Char.GetTitleTierName] que se preocupa», algo verdaderamente halagador. ¡Hasta los nobles menores alaban mis esfuerzos!\n\nMe siento como si mis esfuerzos hubieran acercado a [ROOT.Char.GetCulture.GetCollectiveNounNoTooltip] y [target.GetCulture.GetCollectiveNounNoTooltip]."
  learn_language_ongoing.1100.a:3 "¿Y si doy un discurso en [scheme.GetTarget.GetCulture.GetLanguage.GetNameNoTooltip] #EMP y#! en [ROOT.Char.GetCulture.GetLanguage.GetNameNoTooltip]?"
  learn_language_ongoing.1100.b:0 "Que se olviden de mí, no me puedo permitir distracciones."
  learn_language_ongoing.1100.c:0 "¡Qué fortuna la mía!"
@@ -111,7 +111,7 @@
  learn_language_ongoing.1110.a.failure:0 "No sabrías rimar ni para salvar la vida"
  
  learn_language_ongoing.1120.t:1 "$learn_language$: Fábulas infantiles"
- learn_language_ongoing.1120.desc:3 "«…[ROOT.Char.Custom('LocalAnimal')U] sagaz le dijo entonces [ROOT.Char.Custom('ES_AlAla')] niñ[ROOT.Char.Custom('ES_OA')]: «cuidado, hay un…». De repente me interrumpen.\n\n«¡¿Cómo?! ¡[ROOT.Char.Custom('ES_ElLa')|U] gran [ROOT.Char.GetTitleTierName] leyendo #EMP fábulas infantiles!#! ¿No tenéis orgullo?», exclama [insensitive_asshole.GetTitledFirstName].\n«¡Es inaceptable! Si vuestros enemigos lo descubren, creerán que sois de mente débil».\n\nTal vez mi elección de literatura [scheme.GetTarget.GetCulture.GetName] ha sido un poco… decepcionante, a ojos de la corte."
+ learn_language_ongoing.1120.desc:3 "«…[ROOT.Char.Custom('LocalAnimal')U] sagaz le dijo entonces [ROOT.Char.Custom('ES_AlAla')] niñ[ROOT.Char.Custom('ES_OA')]: «cuidado, hay un…». De repente me interrumpen.\n\n«¡¿Cómo?! ¡El/La gran [ROOT.Char.GetTitleTierName] leyendo #EMP fábulas infantiles!#! ¿No tenéis orgullo?», exclama [insensitive_asshole.GetTitledFirstName].\n«¡Es inaceptable! Si vuestros enemigos lo descubren, creerán que sois de mente débil».\n\nTal vez mi elección de literatura [scheme.GetTarget.GetCulture.GetName] ha sido un poco… decepcionante, a ojos de la corte."
  learn_language_ongoing.1120.a:0 "¡No! ¡Son… #EMP clásicos venerados de la cultura [target.GetCulture.GetNameNoTooltip]!#! ¡Nada más!"
  learn_language_ongoing.1120.b:0 "¿Te atreves a insultarme? ¡Ahora verás!"
  learn_language_ongoing.1120.c:0 "Tenéis razón. No son propios de un[ROOT.Char.Custom('ES_XA')] [ROOT.Char.GetTitleTierName]."
@@ -132,7 +132,7 @@
  learn_language_ongoing.1124.a:0 "Un revés en mis estudios…"
  
  learn_language_ongoing.1130.t:1 "$learn_language$: Amor léxico"
- learn_language_ongoing.1130.desc:4 "«Ah, querid[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetFirstNameNoTooltip]! ¿Estás aprendiendo mi adorado [scheme.GetTarget.GetCulture.GetLanguage.GetName]? ¡Me siento tan valorad[lover_to_help.Custom('ES_OA')] por el esfuerzo que haces para entenderme!», dice [lover_to_help.Custom('quirk_pos_pp')] [lover_to_help.GetTitledFirstName].\n\n«¿Puedo ayudarte de algún modo? ¿Te enseño alguna palabra?», me pregunta."
+ learn_language_ongoing.1130.desc:4 "«Ah, querid[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetFirstNameNoTooltip]! ¿Estás aprendiendo mi adorado [scheme.GetTarget.GetCulture.GetLanguage.GetName]? ¡Me siento tan apreciad[lover_to_help.Custom('ES_OA')] por el esfuerzo que haces para entenderme!», dice [lover_to_help.Custom('quirk_pos_pp')] [lover_to_help.GetTitledFirstName].\n\n«¿Puedo ayudarte de algún modo? ¿Te enseño alguna palabra?», me pregunta."
  learn_language_ongoing.1130.a:0 "¡Aceptaré cualquier ayuda que pueda conseguir!"
  learn_language_ongoing.1130.b:0 "¿Cómo se dice: «Ven mi alcoba, desnud[lover_to_help.Custom('ES_OA')]?»."
  learn_language_ongoing.1130.c:0 "Gracias, pero creo que me va bien."
