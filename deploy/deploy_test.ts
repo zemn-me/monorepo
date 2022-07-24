@@ -1,13 +1,20 @@
-import * as program from './program';
+import program, { releaseNotes } from './program';
 
-test('smoke', async () => {
+it('should not break when run in dryRun mode', async () => {
 	process.env.NPM_TOKEN = '123fake';
-	await program.program.parseAsync(['xxx', 'ok', '--dryRun', 'true']);
+	await expect(
+		program().parseAsync(['xxx', 'ok', '--dryRun', 'true'])
+	).resolves.not.toThrow();
+});
+
+it('should break when not in dryRun mode', async () => {
+	process.env.NPM_TOKEN = '123fake';
+	await expect(program().parseAsync(['xxx', 'ok'])).rejects.toThrow();
 });
 
 test('releaseNotes', () => {
 	expect(
-		program.releaseNotes([
+		releaseNotes([
 			{
 				kind: 'npm_publication',
 				buildTag: 'xxx',

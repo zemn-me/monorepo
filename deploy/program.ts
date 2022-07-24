@@ -10,8 +10,6 @@ import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
 
-const Program = new Command();
-
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
 	exec(filename: string): Promise<void>;
@@ -56,10 +54,12 @@ const npmPackage =
 			package_name: packageName,
 			async publish({ exec }: Context) {
 				if (!('NPM_TOKEN' in process.env))
-					throw new Error(
+					console.error(
 						"Missing NPM_TOKEN. We won't be able to publish any NPM packages."
 					);
-				exec(runfiles.resolveWorkspaceRelative(buildTag));
+				return void (await exec(
+					runfiles.resolveWorkspaceRelative(buildTag)
+				));
 			},
 		};
 	};
@@ -143,78 +143,84 @@ const release =
 					if (filename == '')
 						throw new Error('Request to exec empty string');
 			  }
-			: async (filename: string) =>
-					void (await promisify(child_process.execFile)(filename));
+			: async (filename: string) => {
+					console.log('executing', filename);
+					return void (await promisify(child_process.execFile)(
+						filename
+					));
+			  };
 
 		await Promise.all(
 			logInfo.map(({ publish: p }) => p({ publish, exec }))
 		);
 	};
 
-export const program = Program.name('release')
-	.description(
-		'performs the action of creating a github release, and associated actions'
-	)
-	.option('--dryRun <bool>', 'Perform a dry run.', false)
-	.action(async dryRun => {
-		const context = dryRun ? mockContext : githubCtx;
-		const Github = dryRun
-			? mockGithub
-			: getOctokit(process.env['GITHUB_TOKEN']!);
+export const program = () =>
+	new Command()
+		.name('release')
+		.description(
+			'performs the action of creating a github release, and associated actions'
+		)
+		.option('--dryRun <bool>', 'Perform a dry run.', false)
+		.action(async ({ dryRun }) => {
+			const context = dryRun ? mockContext : githubCtx;
+			const Github = dryRun
+				? mockGithub
+				: getOctokit(process.env['GITHUB_TOKEN']!);
 
-		const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
-			context.sha
-		}`;
+			const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
+				context.sha
+			}`;
 
-		const releaser = release(
-			artifact(
-				'recursive_vassals.zip',
-				'//project/ck3/recursive-vassals/mod_zip.zip'
-			),
-			artifact(
-				'recursive_vassals.patch',
-				'//project/ck3/recursive-vassals/mod.patch'
-			),
-			artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
-			npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
-		);
+			const releaser = release(
+				artifact(
+					'recursive_vassals.zip',
+					'//project/ck3/recursive-vassals/mod_zip.zip'
+				),
+				artifact(
+					'recursive_vassals.patch',
+					'//project/ck3/recursive-vassals/mod.patch'
+				),
+				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
+				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
+			);
 
-		releaser({
-			uploadReleaseAsset: async ({ name, release_id, data }) =>
-				void (await Github.rest.repos.uploadReleaseAsset({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
-					release_id: await release_id,
-					name,
-					// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
-					data: data as unknown as string,
-				})),
-
-			createRelease: async ({ body }) => ({
-				release_id: (
-					await Github.rest.repos.createRelease({
-						// could probably use a spread operator here
-						// but i also think that would be uglier...
+			releaser({
+				uploadReleaseAsset: async ({ name, release_id, data }) =>
+					void (await Github.rest.repos.uploadReleaseAsset({
 						owner: context.repo.owner,
 						repo: context.repo.repo,
+						release_id: await release_id,
+						name,
+						// https://github.com/octokit/octokit.js/discussions/2087#discussioncomment-646569
+						data: data as unknown as string,
+					})),
 
-						tag_name: syntheticVersion,
+				createRelease: async ({ body }) => ({
+					release_id: (
+						await Github.rest.repos.createRelease({
+							// could probably use a spread operator here
+							// but i also think that would be uglier...
+							owner: context.repo.owner,
+							repo: context.repo.repo,
 
-						body,
+							tag_name: syntheticVersion,
 
-						generate_release_notes: true,
+							body,
 
-						name: syntheticVersion,
+							generate_release_notes: true,
 
-						target_commitish: context.ref,
-					})
-				).data.id,
-			}),
+							name: syntheticVersion,
 
-			dryRun: dryRun,
+							target_commitish: context.ref,
+						})
+					).data.id,
+				}),
 
-			releaseNotes,
+				dryRun: dryRun,
+
+				releaseNotes,
+			});
 		});
-	});
 
 export default program;
