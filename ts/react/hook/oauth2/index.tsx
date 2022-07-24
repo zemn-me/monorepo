@@ -250,7 +250,7 @@ const urlDecode = (urlString: string): Map<string, string> =>
 /**
  * @hidden
  */
-const OAuthCallbackHandler: React.FunctionComponent<{}> = ({ children }) => {
+const OAuthCallbackHandler: React.FunctionComponent<{ children?: React.ReactElement }> = ({ children }) => {
 	const [state] = useStorage<string>(oauthStateName);
 	const { target } = JSON.parse(state);
 	const [, /* token */ setToken] = useStorage(
@@ -293,6 +293,7 @@ const OAuthCallbackHandler: React.FunctionComponent<{}> = ({ children }) => {
  */
 export const OAuthCallback: React.FunctionComponent<{
 	errorBoundary?: boolean;
+	children?: React.ReactElement
 }> = ({
 	/**
 	 * When set to true, errors are thrown
@@ -317,7 +318,7 @@ OAuthCallback.propTypes = {
 /**
  * @hidden
  */
-class ClosingErrorBoundary extends React.PureComponent {
+class ClosingErrorBoundary extends React.PureComponent<{ children?: React.ReactElement }> {
 	state = { errored: false };
 
 	static getDerivedStateFromError(error: string) {
