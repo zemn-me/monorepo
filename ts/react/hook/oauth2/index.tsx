@@ -9,20 +9,10 @@
 import * as React from 'react';
 
 // react-storage-hook.d.ts
-import { useStorage } from 'react-storage-hook';
+import { useStorageState } from 'react-storage-hooks';
 
 import { Map } from 'immutable';
 import * as PropTypes from 'prop-types';
-
-/**
- * @hidden
- */
-const storagePrefix = 'react-oauth2-hook';
-
-/**
- * @hidden
- */
-const oauthStateName = storagePrefix + '-state-token-challenge';
 
 export interface Options {
 	/**
@@ -41,6 +31,32 @@ export interface Options {
 	 * The OAuth `client_id` corresponding to the requesting client.
 	 */
 	clientID: string;
+
+	/**
+	 * The unique base key used for storing any data in localStorage
+	 */
+	storageKey: string
+}
+
+/**
+ * A JSON-ifiable set of information used to uniquely and securely key a request.
+ */
+interface Target {
+	authorizeUrl: string,
+	scope: string[],
+	clientID: string[]
+}
+
+function targetScopingKey(t: Target): string {
+	return JSON.stringify(
+		[
+			t.authorizeUrl,
+			// this wil be used for keying, sorting prevents collisions due to
+			// ordering.
+			t.scope.sort(),
+			t.clientID
+		]
+	)
 }
 
 /**
@@ -71,11 +87,7 @@ export interface Options {
  * Finally, in advanced cases the user can manually overwrite any
  * stored token by capturing and calling the third item in
  * the reponse array with the new value.
- *
- * @param authorizeUrl The OAuth authorize URL to retrieve the token from.
- * @param scope The OAuth scopes to request.
- * @param redirectUri The OAuth redirect_uri callback URL.
- * @param clientID The OAuth client_id corresponding to the requesting client.
+ * 
  * @example
  *const SpotifyTracks = () => {
  * const [token, getToken] = useOAuth2Token({
@@ -111,26 +123,15 @@ export interface Options {
  *</div>
  *}
  */
-export const useOAuth2Token = ({
-	/**
-	 * The OAuth authorize URL to retrieve the token
-	 * from.
-	 */
+export function useOAuth2Token(options: Options): [token: OAuthToken | undefined, getToken: getToken, setToken: setToken ]
+
+export function useOAuth2Token({
 	authorizeUrl,
-	/**
-	 * The OAuth scopes to request.
-	 */
 	scope = [],
-	/**
-	 * The OAuth `redirect_uri` callback.
-	 */
 	redirectUri,
-	/**
-	 * The OAuth `client_id` corresponding to the
-	 * requesting client.
-	 */
 	clientID,
-}: Options): [OAuthToken | undefined, getToken, setToken] => {
+	storageKey: string
+}: Options): [OAuthToken | undefined, getToken, setToken] {
 	const target = {
 		authorizeUrl,
 		scope,
