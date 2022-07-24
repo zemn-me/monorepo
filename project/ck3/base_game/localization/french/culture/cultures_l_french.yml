@@ -66,6 +66,9 @@
  butr:0 "butr"
  butr_prefix:0 "butro"
  butr_collective_noun:1 "Butrs"
+ guanches:0 "guanche" # [LocEditor:ForFutureBatchExport]
+ guanches_prefix:0 "guancho" # [LocEditor:ForFutureBatchExport]
+ guanches_collective_noun:0 "Guanches" # [LocEditor:ForFutureBatchExport]
  zaghawa:0 "zaghawa"
  zaghawa_prefix:0 "zaghawo"
  zaghawa_collective_noun:0 "Zaghawas"
@@ -260,9 +263,9 @@
  sorko:0 "sorko"
  sorko_prefix:0 "sorko"
  sorko_collective_noun:0 "Sorkos"
- gaw:0 "gaw"
- gaw_prefix:0 "gawo"
- gaw_collective_noun:0 "Gaws"
+ gaw:1 "gaw"
+ gaw_prefix:1 "gawo"
+ gaw_collective_noun:1 "Gaws"
  songhai:0 "songhaï"
  songhai_prefix:0 "songhaï"
  songhai_collective_noun:0 "Songhaïs"
@@ -344,7 +347,7 @@
  portuguese:0 "portugaise"
  portuguese_prefix:0 "luso"
  portuguese_collective_noun:0 "Portugais"
- visigothic:0 "wisigothe"
+ visigothic:0 "wisigothique"
  visigothic_prefix:0 "wisigotho"
  visigothic_collective_noun:1 "Wisigoths"
  #Indo Aryan
@@ -728,6 +731,3 @@
  galician:0 "galicienne"
  galician_prefix:0 "galico"
  galician_collective_noun:0 "Galiciens"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- outremer:0 "outremer"

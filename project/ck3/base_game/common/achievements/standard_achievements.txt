@@ -88,6 +88,8 @@ a_legacy_to_last_the_ages_achievement = {
 				has_dynasty_perk = fp1_adventure_legacy_5
 				has_dynasty_perk = fp1_pillage_legacy_5
 				has_dynasty_perk = ep1_culture_legacy_5
+				has_dynasty_perk = fp2_urbanism_legacy_5
+				has_dynasty_perk = fp2_coterie_legacy_5
 			}
 		}
 	}
@@ -115,6 +117,14 @@ a_legacy_to_last_the_ages_achievement = {
 					AND = {
 						has_dlc_feature = hybridize_culture
 						has_dynasty_perk = ep1_culture_legacy_5
+					}
+					#FP2
+					AND = {
+						has_fp2_dlc_trigger = yes
+						OR = {
+							has_dynasty_perk = fp2_urbanism_legacy_5
+							has_dynasty_perk = fp2_coterie_legacy_5
+						}
 					}
 				}
 			}

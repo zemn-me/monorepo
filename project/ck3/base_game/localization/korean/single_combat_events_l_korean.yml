@@ -603,7 +603,7 @@
  single_combat.0031.a.killed_by_close_or_extended_family:0 "네놈 따위를 #DIE1 [sc_loser.Custom2('RelationToMeShort', sc_victor)]#!(으)로 #DIE2 여기진#! 않겠다."
  single_combat.0031.a.killed_by_friend_or_lover:0 "#DIE1 [sc_victor.GetFirstNameNoTooltip]#!... #DIE2 어째서#!..."
  single_combat.0031.a.killed_by_soulmate:0 "우리의 사랑은... #DIE2 영원#!하리라고... #DIE1 생각#!했는데..."
- single_combat.0031.a.killed_by_best_friend:0 "너를... #DIE1 [Select_CString(sc_victor.IsFemale,'sister','brother')]#!로 여겼다, [sc_victor.GetFirstNameNoTooltip]... 그만큼 #DIE2 애정#!을 베풀었건만..."
+ single_combat.0031.a.killed_by_best_friend:0 "너를... #DIE1 [Select_CString(sc_victor.IsFemale,'자매','형제')]#!로 여겼다, [sc_victor.GetFirstNameNoTooltip]... 그만큼 #DIE2 애정#!을 베풀었건만..."
  single_combat.0031.b:0 "항복할게! 항복한다고!"
  single_combat.0031.c:0 "[sc_loser.GetTitledFirstNameNoTooltip](을)를 쓰러뜨린 것을 후회하게 되리니!"
 

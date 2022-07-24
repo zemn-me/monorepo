@@ -5,7 +5,7 @@
  hunt.1001.a:0 "¡Cabalguemos!"
  hunt.1001.b:0 "Ahora calma y tranquilidad, ese barranco parece empinado."
 
- hunt.1002.desc_wounded_courtier:0 "Según seguimos al ejemplar de [ROOT.Char.Custom('LocalAnimal')] en su huida por el barranco, el caballo de [hunting_courtier_1.GetTitledFirstName] pisa en falso y [hunting_courtier_1.Custom('ES_LoLa')] tira al suelo, gritando.\n\nLa caída no es mortal, pero [hunting_courtier_1.Custom('ES_ElLa')] [hunting_courtier_1.GetTitleTierName] se retuerce de dolor."
+ hunt.1002.desc_wounded_courtier:0 "Según seguimos al ejemplar de [ROOT.Char.Custom('LocalAnimal')] en su huida por el barranco, el caballo de [hunting_courtier_1.GetTitledFirstName] pisa en falso y [hunting_courtier_1.GetHerHim] tira al suelo, gritando.\n\nLa caída no es mortal, pero el/la [hunting_courtier_1.GetTitleTierName] se retuerce de dolor."
  hunt.1002.desc:0 "Mi mundo se reduce a la naturaleza que nos rodea según seguimos a tal [ROOT.Char.Custom('LocalAnimal')] en su huida por el barranco. Al cabalgar codo con codo junto a [hunting_courtier_1.GetTitledFirstName], puedo oír el tronar de las pezuñas, los ladridos de los perros, gritos de los hombres… ¡La emoción fluye en mi interior mientras poco a poco vamos ganando terreno a nuestra presa!"
  hunt.1002.a:0 "¡Seguimos adelante!"
  hunt.1002.b:0 "Hay que darle tiempo a descansar a [hunting_courtier_1.GetFirstNameNoTooltip]."
@@ -21,7 +21,7 @@
 
  hunt.1011.t:1 "$hunt_header$ Vasallos maleducados"
  hunt.1011.desc_horse:0 "Cuando mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('nice_courtier') )] [nice_courtier.GetTitledFirstName] empezó a desmontar con un pie aún en el estribo, mi [ROOT.Char.Custom2('DescriptorNegative', SCOPE.sC('hated_participant'))] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('hated_participant') )] [hated_participant.GetTitledFirstName] se encargó de chocar con el caballo, lo que mandó a [nice_courtier.GetFirstName] dando tumbos al otro lado del campamento."
- hunt.1011.desc_talk:0 "«¡Mirad a es[nice_courtier.Custom('ES_EA')] [SCOPE.sC('nice_courtier').Custom('InsultNoun')][SCOPE.sC('nice_courtier').Custom('InsultAdjective')] [SCOPE.sC('nice_courtier').GetFirstNameNoTooltip]!» Dice entre dientes [hated_participant.Custom('ES_ElLa')] [ROOT.Char.Custom('InsultAdjective')] [SCOPE.sC('hated_participant').GetTitledFirstName] desde su corcel de cacería. Parece que a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('nice_courtier') )] [SCOPE.sC('nice_courtier').GetTitledFirstName] le cuesta aguantar los insultos."
+ hunt.1011.desc_talk:0 "«¡Mirad a es[nice_courtier.Custom('ES_EA')] [SCOPE.sC('nice_courtier').Custom('InsultNoun')][SCOPE.sC('nice_courtier').Custom('InsultAdjective')] [SCOPE.sC('nice_courtier').GetFirstNameNoTooltip]!» Dice entre dientes tal [ROOT.Char.Custom('InsultAdjective')] [SCOPE.sC('hated_participant').GetTitledFirstName] desde su corcel de cacería.\n\nParece que a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('nice_courtier') )] [SCOPE.sC('nice_courtier').GetTitledFirstName] le cuesta aguantar los insultos."
  hunt.1011.a:1 "Tu comportamiento es infantil y se te castigará en consonancia."
  hunt.1011.b:0 "¡Así no se comporta un[hated_participant.Custom('ES_OA')] [hated_participant.GetTitleTierName]!"
  hunt.1011.c:0 "Ja, ¡[nice_courtier.GetFirstNameNoTooltip] se ha puesto rojo como un tomate!"
@@ -247,7 +247,7 @@
  hunt.5002.b:0 "¡Fascinante! ¿Y qué hay de #EMP aquella#! flor?"
  hunt.5002.c:0 "¿Pr-practicas la brujería?…"
 
- hunt.5003.desc:0 "En un raro momento de respiro, paso un rato en silencio, contemplando la belleza de la naturaleza. No puedo evitar pensar que doy por sentada la paz en el desempeño de mis funciones como [ROOT.Char.GetTitleAsName].\n\nMientras dejo que mi estrés se desvanezca, oigo que alguien se acerca. «Amor mío», ríe suavemente [hunting_courtier.Custom('ES_ElLa')] [hunting_courtier.GetTitledFirstName],"
+ hunt.5003.desc:0 "En un raro momento de respiro, paso un rato en silencio, contemplando la belleza de la naturaleza. No puedo evitar pensar que doy por sentada la paz en el desempeño de mis funciones como [ROOT.Char.GetTitleAsName].\n\nMientras dejo que mi estrés se desvanezca, oigo que alguien se acerca. «Amor mío», ríe suavemente [hunting_courtier.GetTitledFirstName],"
  hunt.5003.desc.flower:0 "mientras noto que coloca algo detrás de mi oreja. «Aunque nada iguala vuestra belleza, no he podido evitar pensar en vos al ver esta flor»."
  hunt.5003.desc.animal:0 "mientras sostiene los restos ensangrentados de un/a [ROOT.Char.Custom('LocalAnimal')]. «Abatí a esta bestia en vuestro honor. Por favor, consideradlo una muestra de mi dedicación a luchar siempre a vuestro lado»."
  hunt.5003.desc.ending:0 "\n\n[hunting_courtier.GetFirstName] sonríe mientras da un paso atrás para contemplar su obra. «Parecéis tan en paz. Me alegro». [hunting_courtier.GetFirstNameNoTooltip], me planta precipitadamente un casto beso en la mejilla, como si estuviéramos solos en el mundo."

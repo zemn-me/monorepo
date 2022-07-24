@@ -33,11 +33,11 @@ artifact.0011 = {
 			}
 		}
 		hidden_effect = {
-				if = {
-					limit = { has_variable = desecrated_artifact_var }
-					remove_variable = desecrated_artifact_var
-				}
+			if = {
+				limit = { has_variable = desecrated_artifact_var }
+				remove_variable = desecrated_artifact_var
 			}
+		}
 	}
 }
 
@@ -80,6 +80,159 @@ artifact.0021 = {
 	}
 }
 
+##################################################
+# The Bell Tolls / Peace and Quiet
+# by Ewan Cowhig Croft
+# 0101 - 0110
+##################################################
+
+#	The Bells of Santiago de Compostela get a new lease on life.
+artifact.0101 = {
+	scope = artifact
+	hidden = yes
+
+	trigger = {
+		has_variable = artefact_santiago_bells
+	}
+
+	immediate = {
+		# Islamic conversions.
+		if = {
+			limit = {
+				has_artifact_modifier = bells_of_santiago_modifier
+				scope:owner = {
+					OR = {
+						religion = religion:islam_religion
+						# Non-Christian Islamic syncretics also have a vested interest in getting in on this.
+						AND = {
+							faith = { has_doctrine = tenet_islamic_syncretism }
+							NOT = { religion = religion:christianity_religion }
+						}
+					}
+				}
+			}
+			# Reforge into an aquamanile, for the first time.
+			if = {
+				limit = { var:artefact_santiago_bells = 0 }
+				scope:owner = { save_scope_as = reforger }
+				# We're using the miscellaneous category.
+				if = {
+					limit = { artifact_type = miscellaneous_when_not_court }
+					reforge_artifact = {
+						modifier = former_bells_of_santiago_modifier
+						template = fp2_santiago_aquamanile_template
+						type = miscellaneous_when_not_court
+						visuals = fp2_santiago_aquamanile
+						name = fp2_santiago_aquamanile
+						description = fp2_santiago_aquamanile_desc
+					}
+				}
+				# We're into court artefacts.
+				else = {
+					reforge_artifact = {
+						modifier = former_bells_of_santiago_modifier
+						template = fp2_santiago_aquamanile_template
+						type = jug
+						visuals = fp2_santiago_aquamanile
+						name = fp2_santiago_aquamanile
+						description = fp2_santiago_aquamanile_desc
+					}
+				}
+				change_variable = {
+					name = artefact_santiago_bells
+					add = 1
+				}
+			}
+			# Reforge back into an aquamanile after them dastardly Christians de-jug'd it.
+			else_if = {
+				limit = { var:artefact_santiago_bells >= 1 }
+				scope:owner = { save_scope_as = reforger }
+				# We're using the miscellaneous category.
+				if = {
+					limit = { artifact_type = miscellaneous_when_not_court }
+					reforge_artifact = {
+						modifier = former_bells_of_santiago_modifier
+						template = fp2_santiago_aquamanile_template
+						type = miscellaneous_when_not_court
+						visuals = fp2_santiago_aquamanile
+						name = fp2_santiago_aquamanile
+						description = fp2_santiago_aquamanile_melted_desc
+					}
+				}
+				# We're into court artefacts.
+				else = {
+					reforge_artifact = {
+						modifier = former_bells_of_santiago_modifier
+						template = fp2_santiago_aquamanile_template
+						type = jug
+						visuals = fp2_santiago_aquamanile
+						name = fp2_santiago_aquamanile
+						description = fp2_santiago_aquamanile_melted_desc
+					}
+				}
+				change_variable = {
+					name = artefact_santiago_bells
+					add = 1
+				}
+				# If we're high enough up the melting chain, start a tally.
+				if = {
+					limit = { var:artefact_santiago_bells >= 5 }
+					set_artifact_description = fp2_santiago_aquamanile_melted_tally_desc
+				}
+			}
+		}
+		# Christian conversions.
+		else_if = {
+			limit = {
+				has_artifact_modifier = former_bells_of_santiago_modifier
+				scope:owner = {
+					OR = {
+						religion = religion:christianity_religion
+						# Non-Islamic Christian syncretics also have a vested interest in getting in on this.
+						AND = {
+							faith = { has_doctrine = tenet_christian_syncretism }
+							NOT = { religion = religion:islam_religion }
+						}
+					}
+				}
+			}
+			# Reforge back into bells.
+			scope:owner = { save_scope_as = reforger }
+			# We're using the miscellaneous category.
+			if = {
+				limit = { artifact_type = miscellaneous_when_not_court }
+				reforge_artifact = {
+					modifier = bells_of_santiago_modifier
+					visuals = fp2_santiago_bells
+					template = fp2_santiago_bells_template
+					type = miscellaneous_when_not_court
+					name = fp2_santiago_bells
+					description = fp2_santiago_bells_melted_desc
+				}
+			}
+			# We're into court artefacts.
+			else = {
+				reforge_artifact = {
+					modifier = bells_of_santiago_modifier
+					visuals = fp2_santiago_bells
+					template = fp2_santiago_bells_template
+					type = sculpture
+					name = fp2_santiago_bells
+					description = fp2_santiago_bells_melted_desc
+				}
+			}
+			change_variable = {
+				name = artefact_santiago_bells
+				add = 1
+			}
+			# If we're high enough up the melting chain, start a tally.
+			if = {
+				limit = { var:artefact_santiago_bells >= 4 }
+				set_artifact_description = fp2_santiago_bells_melted_tally_desc
+			}
+		}
+	}
+}
 
 # An artifact is about to change owner from succession
 # Handles damage taken, and notification for the inheritor
@@ -422,7 +575,13 @@ artifact.1001 = {
 
 	option = { 
 		name = artifact.1001.a
-		remove_short_term_gold = medium_gold_value
+		# Flag that this is free for DLC artefacts that could become courtly ones...
+		if = {
+			limit = { exists = scope:this_artifact.var:dlc_potential_court_artefact }
+			custom_tooltip = artifact.1001.a.tt.free
+		}
+		# ... or else costs a nominal fee.
+		else = { remove_short_term_gold = medium_gold_value }
 		scope:this_artifact = {
 			reforge_as_court_artifact_effect = yes 
 		}
@@ -3559,6 +3718,7 @@ artifact.6000 = {
 		combat.location = {
 			save_scope_as = combat_location
 		}
+
 		side_primary_participant = {
 			trigger_event = { id = artifact.6001 }
 		}
@@ -3594,6 +3754,12 @@ artifact.6001 = {
 	artifact = { # To display the artifact in the event-window
 	    target = scope:newly_created_artifact
 	    position = lower_center_portrait
+	}
+
+	trigger = {
+		# based on where the scope is set, they might not exist when the event is fired
+		exists = scope:enemy_commander
+		exists = scope:friendly_commander
 	}
 	
 	immediate = {

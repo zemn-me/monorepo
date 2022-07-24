@@ -36,8 +36,8 @@
  CommissionEpicComposerTheir_composer:0 "[second.GetHerHis]"
  CommissionEpicComposerTheir_scribes:0 "그들의"
 
- CommissionEpicComposerHasHave_has:0 "$articleblank_blank$"
- CommissionEpicComposerHasHave_have:0 "$articleblank_blank$"
+ CommissionEpicComposerHasHave_has:0 "$articleblank_article$"
+ CommissionEpicComposerHasHave_have:0 "$articleblank_article$"
 
  commission_epic.0001.t:0 "가족 서사시"
  commission_epic.0001.desc:0 "우리 가문의 위엄을 드러낼 만한 고전적인 이야기가 필요한데. [ROOT.Char.Custom('CompositionType')](을)를 집필해서 [ROOT.Char.GetDynasty.GetBaseName] 가문의 기원을 밝히고, 우리가 위업을 이룰 운명을 타고났다는 사실을 알리면 되겠군!\n\n문제는 집필을 누구 손에 맡기냐는 건데..."
@@ -61,12 +61,16 @@
  commission_epic.0002.writer:0 "가족 서사시가 순조롭게 집필되고 있다. 벌써부터 앞으로 수십 년은 회자될 법한 문구가 튀어나오고 있을 정도다. [writer.GetTitledFirstName](은)는 이야기의 초점을 어디에 두는 게 좋을지 고민하는 눈치다.\n\n일단 내용을 적어온 다음에 물어보는 편이 답하기 편할 텐데. 그럼 어떤 점이 마음에 들지 않는지를 얘기할 수도 있다고. 그럼에도 [writer.GetSheHe]는 당장에 답변을 받아야겠다는 태도를 고수했다."
  commission_epic.0002.servant:0 "하인인 [servant.GetFirstName]에게 가족사와 관련된 작품을 집필하라고 명했는데, 꽤 골머리를 썩고 있는 모양이다. 조금이라도 진전이 있다면 그것만으로도 대단하다 싶은 상황이다. 제대로 읽지도, 운율을 맞추지도 못하는 사람한테 일을 맡겼으니 당연한 거겠지.\n\n그러던 어느 날, 밤낮을 가리지 않고 애쓰던 [servant.GetSheHe]가 중요한 질문이 있다면서 날 찾아왔다. "작품에 어떤 내용을 담는 게 좋겠습니까, 영주님?""
  commission_epic.0002.scribes:0 "가족 서사시를 집필하겠다고 나선 [ROOT.Char.Custom('CommissionEpicScribes')](이)가 시작과 동시에 난관에 봉착했다. 다들 본인이 담당하는 부분을 강조해야 한다고 주장하는 바람에, 어느 부분에 초점을 맞춰야 할지를 정하지를 못하고 있다.\n\n"폐를 끼치고 싶진 않았지만... 서로를 물고 뜯는 상황이 벌어지기 전에, 영주님께서 이 상황을 #EMP 정리#!해 주셔야 할 것 같습니다.""
- commission_epic.0002.a:0 "당연히 나와 내 운명에 집중해서 전개해야지!"
+ commission_epic.0002.iberia_epic.a:0 "이베리아를 통치할 권리가 내 가문에 있다는 내용으로 집필하도록!"
+ commission_epic.0002.a:1 "내 가문의 옛 명분에 관한 이야기에 집중하도록."
+ commission_epic.propaganda:0 "서사시가 완성될 경우, 이웃 작위에 대한 [claims|E]을 획득함"
+ commission_epic.0002.b:1 "당연히 나와 내 운명에 집중해서 전개해야지!"
  commission_epic.more_prestige:0 "서사시가 완성될 경우, 개인적인 [prestige|E]을 추가로 획득함"
- commission_epic.0002.b:0 "#EMP 가족사#!에 관한 서사시니, 폭넓게 다뤄야겠어."
+ commission_epic.0002.c:1 "#EMP 가족사#!에 관한 서사시니, 폭넓게 다뤄야겠어."
  commission_epic.more_dynasty_prestige:0 "서사시가 완성될 경우, [dynasty_prestige|E]을 추가로 획득함"
- commission_epic.0002.c:0 "되도록 진실만을 담아서 집필하는 게 좋겠군."
+ commission_epic.0002.d:0 "되도록 진실만을 담아서 집필하는 게 좋겠군."
  commission_epic.more_piety:0 "서사시가 완성될 경우, 소량의 [piety|E]를 함께 획득함"
+
 
  commission_epic.1001.t:0 "가족 서사시: 시간 문제"
  commission_epic.1001.opening:0 "벌써 몇 주째 가족 서사시의 신규 작업분을 넘겨받지 못하고 있다. 이대로 간다면 작업 기간이 늘어지거나,"
@@ -168,6 +172,53 @@
  commission_epic.2006.b.flavor:0 "우리 가문은 대대로 [ROOT.Char.GetFaith.AltPriestTermPlural](을)를 인도해왔던 가문이오."
  commission_epic.2006.c:0 "그 무엇보다도 가문이 우선이라는 것쯤은 그대 역시 알 텐데."
  commission_epic.2006.c.same_dynasty:0 "이 선택지는 [court_chaplain.GetFirstNameNoTooltip](이)가 같은 [dynasty|E]에 속해 있을 경우에만 선택할 수 있음"
+
+ commission_epic.6001.t:0 "몇 가지 소소한 각색"
+ commission_epic.6001.writerservant:0 "한동안 나의 연대기를 집필하던 [composer.GetName](이)가 나를 찾았다.\n\n"영주님." [composer.GetSheHe]가 말했다. "다름이 아니오라... 영주님의 가문은 말할 것도 없이 웅장합니다만, 영주님께서 바라신 유서 깊은 명분 같은 건... 확인하는 데 어려움이 따를 듯합니다. 시간과 자원이 더 필요합니다. 고문원을 살펴봐야 할 것 같아요. 아니면 이야기를 소소하게 #italic 각색#!하는 방법도 있지만, 그랬다간 신빙성 측면에서 영주님의 명분이 빛바래는 감이 생길 겁니다...""
+ commission_epic.6001.scribes:0 "나의 필경사들이 연대기에서 강조할 만한 선조들의 영토 명분을 찾아 밤낮으로 고문헌을 헤집어댔다.\n\n"애석하게도..." 필경사들이 입을 모아 말했다. "솔직하게 말씀드리자면... 이야기를 약간 윤색해야 할 것 같습니다. 영주님의 선조분들께서 세운 업적과 왕국에 관한 이야기를 말입니다. 영주님은 도량이 넓은 분이시니 분명 이해하시리라 믿습니다.""
+ commission_epic.6001.a:0 "되는대로 각색해도 좋아. 완성만 하게!"
+ commission_epic.6001.b:0 "돈을 줄 테니 연구를 더 해보게."
+ commission_epic.less_credible:0 "연대기의 신빙성이 떨어짐"
+ commission_epic.more_credible:0 "연대기의 신빙성이 높아질 수도 있음"
+
+ commission_epic.6003.t:0 "옛날의 명분"
+ commission_epic.6003.writer:0 "[composer.GetName](은)는 성실하게 나의 연대기를 만들어 나갔다. 작업이 진행될수록 웅장해지면서 한편으론 의문이 들게 만들었다.\n\n"영주님." [composer.GetSheHe]가 말했다. "닳아 해진 고문헌을 찾았는데, [ancestor_1.GetFirstNameNoTooltip](이)란 이름의 [Select_CString(ancestor_1.IsFemale,'여왕','왕')]이 [neighboring_county_1.GetNameNoTier](와)과 [neighboring_county_2.GetNameNoTier], [neighboring_county_3.GetNameNoTier](을)를 다스렸다고 나와 있더군요. 족보를 잘 살펴 #italic 창발적인 각색#!을 좀 가미하면 [ancestor_1.GetSheHe]를 영주님의 선조로 만들 수 있을 겁니다. 그런 다음 [ancestor_1.GetHerHis] 이야기를 적절히 이용하면 영주님께 앞서 말한 영지 몇 곳, 더 나아가 전체에 대한 명분을 안겨드리는 것도 가능하겠죠...""
+ commission_epic.6003.servant:0 "[composer.GetName](은)는 가면 갈수록 미심쩍어지는 내 연대기를 성실하게 만들어 나갔다.\n\n"영주님." [composer.GetSheHe]가 말했다. "먼 옛날 [neighboring_county_1.GetNameNoTier](와)과 [neighboring_county_2.GetNameNoTier], [neighboring_county_3.GetNameNoTier]의 [Select_CString(ancestor_1.IsFemale,'여왕','왕')]이었던 [Select_CString(ancestor_1.IsFemale,'여사냥꾼','키 작은')] [ancestor_1.GetFirstNameNoTooltip](이)가 봉헌한 명문을 찾았습니다. 이걸 이용해 영주님의 족보에 창의적인 살을 붙이면 [ancestor_1.GetSheHe]를 영주님의 조상으로 만들 수 있을 겁니다. 그리고 연대기에 소소한 각색을 더해서 해당 영토 일부에 대한 영주님의 명분을 확고하게 만드는 거죠. 여차하면 전부 다 주장할 수도 있을 테고요.""
+ commission_epic.6003.scribes:0 "필경사들은 가면 갈수록 지나치게 복잡해지는 내 연대기를 성실하게 만들어 나갔다.\n\n"영주님." 필경사들이 입을 모아 말했다. "고문헌에서 아주 짧은 글귀를 하나 찾았습니다. 먼 옛날 [neighboring_county_1.GetNameNoTier](와)과 [neighboring_county_2.GetNameNoTier], [neighboring_county_3.GetNameNoTier]에 영향력이 있었던 [Select_CString(ancestor_1.IsFemale,'너그러운 자','애꾸눈')] [ancestor_1.GetFirstNameNoTooltip](이)란 [ancestor_1.GetWomanMan]에 관한 내용이더군요. 족보를 잘 살펴 #italic 창발적인 각색#!을 좀 가미하면 [ancestor_1.GetSheHe]를 영주님의 선조로 만들 수 있을 겁니다. 그리고 연대기에서 해당 영토 중 일부, 아니면 전체를 다스릴 권리가 영주님께 있다고 주장하는 근거로 삼는 거죠...""
+ commission_epic.6003.a:0 "모두 내 땅으로 삼겠노라!"
+ commission_epic.6003.b:0 "이맘때 [neighboring_county_1.GetNameNoTierNoTooltip] 풍경이 그렇게 절경이라지?"
+ commission_epic.6003.c:0 "난 [neighboring_county_2.GetNameNoTierNoTooltip]만 있으면 돼!"
+ commission_epic.6003.d:0 "[neighboring_county_3.GetNameNoTierNoTooltip](을)를 반드시 손에 넣어야겠다."
+ commission_epic.paranoid_neighbors:0 "이웃들이 해당 연대기의 존재를 알면 무척이나 분노할 것임"
+
+ commission_epic.6004.t:0 "신빙성 있는 명분"
+ commission_epic.6004.writerservant:0 "[composer.GetName](은)는 가면 갈수록 방대하기 이를 데 없어지는 나의 연대기를 성실하게 만들어 나갔다.\n\n"영주님." [composer.GetSheHe]가 말했다. "세금과 토지권에 관한 고문헌을 하나 찾았습니다. 내용 자체는 제법 따분하지만, 먼 옛날 [neighboring_county_1.GetNameNoTier](와)과 [neighboring_county_2.GetNameNoTier](을)를 다스렸던 영주인 [Select_CString(ancestor_1.IsFemale,'장신왕','대머리왕')] [ancestor_1.GetFirstNameNoTooltip]에 대한 언급이 있었습니다. 고대부터 시작해서 혈통을 쭉 내려오니 아니 웬걸, 영주님과 연관이 있더군요! 그러니 두 영지에 대한 명분을 드릴 수 있을 것 같습니다. 신빙성도 넘쳐나는 수준이니 그 누구도 감히 반대하지 못할 거예요.""
+ commission_epic.6004.scribes:0 "필경사들은 하루가 다르게 비대해지는 나의 연대기를 성실하게 만들어 나갔다.\n\n"영주님." 필경사들이 입을 모아 말했다. "아주 오래된 왕실 인가를 하나 찾았습니다. [Select_CString(ancestor_1.IsFemale,'선량한','행운아')] [ancestor_1.GetFirstNameNoTooltip](이)란 영주에게 [neighboring_county_1.GetNameNoTier](와)과 [neighboring_county_2.GetNameNoTier]에 대한 통치권을 하사하는 내용이 담겨 있더군요. [ROOT.GetCharacter.GetFaith.HighGodName]의 인도를 따라 살펴본 결과, [ancestor_1.GetHerHim]가 영주님의 혈통임을 알 수 있었습니다. 연대기에도 이를 분명히 명시해 두었습니다. 두 영지 모두 영주님이 정당한 주인이십니다.""
+ commission_epic.6004.a:0 "두 곳 모두 갖고 싶다면?"
+ commission_epic.6004.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip](이)야말로 내가 상속한 땅의 일부가 분명해."
+ commission_epic.6004.c:0 "어쩐지. 예전부터 [neighboring_county_2.GetNameNoTierNoTooltip](이)가 내 땅이란 생각이 들더라니!"
+
+ commission_epic.6005.t:0 "미완의 서사시"
+ commission_epic.6005.writerservant:0 "내 연대기에 어딘가 잘못된 부분이 있진 않을까, 먼 옛날부터 의심해 왔었다. 그리고 지금... [composer.GetName](이)가 근심 어린 표정으로 날 찾는다.\n\n"안타까운 일이 생겼습니다, 영주님." [composer.GetSheHe]가 말했다. "살을 발라내고 뼈를 깎는 노력으로 찾아봤습니다만, 실제로 입증할 만한 명분을 찾는 데 실패했습니다. 더 이상의 작업은 불가능할 듯합니다. 그 대신 영주님 가문의 덕행을 극찬하는 연대기를 만들었습니다. 부디 이걸로 만족하시옵고, 소인을 처벌하지 말아 주소서...""
+ commission_epic.6005.scribes:0 "필경사들이 내 연대기를 편찬하는 데 어려움을 겪는 게 보이긴 했다. 아니나 다를까, 그들은 근심 어린 표정으로 날 찾았다.\n\n"안타까운 일이 생겼습니다." 필경사들이 입을 모아 말했다. "실제로 입증할 만한 명분을 찾는 데 실패했습니다. 살을 발라내고 뼈를 깎는 노력을 해봤지만 저희 능력으로는 무리인 듯합니다. 그 대신 영주님 가문의 덕행을 극찬하는 연대기를 만들었습니다. 부디 이걸로 만족하시옵고, 소인들을 처벌하지 말아 주소서...""
+ commission_epic.6005.a:0 "감옥에 처박아주마!"
+ commission_epic.6005.b:0 "이 무능한 모질이들..."
+ commission_epic.6005.c:0 "[ROOT.GetCharacter.GetFaith.HighGodName]께서 나의 허영심에 벌을 내리신 건가?"
+ commission_epic.6005.d:0 "연대기라도 받았으니 다행인가..."
+
+ commission_epic.6006.t:0 "강력한 선전 효과"
+ commission_epic.6006.writerservant:0 ""완성했습니다, 영주님." [composer.GetName](이)가 후련한 어조로 말하며 내게 두꺼운 서적을 건넸다. "[ROOT.Char.GetDynastyHouseNameNoTooltip] 집안의 연대기입니다. 영주님이 바라신 대로 여러 영지를 다스린 역사를 세세하게 써놓았습니다. 누구도 영주님의 정당한 명분을 걸고 넘어지지 못할 겁니다!""
+ commission_epic.6006.scribes:0 "마침내 필경사들이 선전 연대기를 완성했다. 필경사들은 후련한 표정으로 내게 엄청나게 거대한 서적을 건넸다.\n\n"여기 있습니다, 영주님. [ROOT.Char.GetDynastyHouseNameNoTooltip] 집안의 위대한 연대기입니다. 영주님의 명분을 하나도 빠짐없이 세세히 기록해 두었지요. 영주님께 큰 행운을 안겨주길 기원합니다.""
+ commission_epic.6006.a:0 "완벽해!"
+
+ propaganda_chronicle_name:0 "[ROOT.Char.GetDynastyHouseNameNoTooltip] 선전 연대기"
+ propaganda_chronicle_desc:0 "이 거대한 서적에 [ROOT.Char.GetDynastyHouseNameNoTooltip] 집안의 영광과 다채롭고 독특한 영토 명분이 골치 아플 정도로 세세하게 기록되어 있습니다."
+ 
+ half_baked_propaganda_chronicle_name:0 "미완성 선전 연대기"
+ half_baked_propaganda_chronicle_desc:0 "완성만 됐다면 악명을 떨쳤을 책입니다. 지금 상태로는 후원자의 바람대로 영토 명분에 대한 설득력 있는 근거를 제시하지 못하며, 그 대신 [ROOT.Char.GetDynastyNameNoTooltip] 가문의 덕행을 열렬하게 예찬하는 내용만이 담겨 있습니다."
+ 
+
+
 
  commission_epic.9001.t:0 "가족 서사시"
  commission_epic.9001.writer:1 "마침내 우리 가문의 장엄한 [ROOT.Char.Custom('CompositionType')](이)가 완성되었다. [composer.GetTitledFirstName](이)가 자부심을 가질 만한 작품이 탄생한 것이다."

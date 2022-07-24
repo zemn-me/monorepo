@@ -54,7 +54,7 @@
 
  friendship.0015.opening:0 "[original_friend.Custom2('AppropriateGreeting', ROOT.Char)]"
  friendship.0015.desc:0 "¡Censuro la amistad que tan descuidadamente has ridiculizado!\nA pesar de todas tus promesas y gestos para solucionarlo con honor… Conociéndote como te conozco ahora, no debería haberme sorprendido.\n\nTú has provocado este sufrimiento que recae sobre ti."
- friendship.0015.a:0 "Aquí [original_friend.Custom('ES_ElLa')] únic[original_friend.Custom('ES_OA')] idiota eres tú, [original_friend.GetFirstName]."
+ friendship.0015.a:0 "Aquí no hay más idiota que tú, [original_friend.GetFirstName]."
 
  friendship.0018.t:0 "Más amigos que tiempo"
  friendship.0018.desc:0 "[ROOT.GetCharacter.Custom('friendship_metaphor_with_tending')|U].\nCon tantos amigos dispersos por doquier apenas tengo tiempo para mantenerme en contacto por carta, mucho menos darles la atención que merecen.\nIgual sería mejor para mí dejar marchar… a alguno."
@@ -66,7 +66,7 @@
  friendship.0019.t:0 "Cortando la comunicación"
  friendship.0019.desc:0 "Llevo mucho tiempo esperando una nueva carta de [first_friend.GetTitledFirstName], pero nada llega. Le he escrito misivas, pero no he obtenido respuesta.\nLa conclusión inevitable es que ya no me considera un[ROOT.Char.Custom('ES_XA')] amig[ROOT.Char.Custom('ES_OA')] merecedor[ROOT.Char.Custom('ES_XA')] de tiempo y atención."
  friendship.0019.a_1:0 "Soy de los pocos que habría respondido cuando lo hubieras necesitado, [first_friend.GetFirstName]."
- friendship.0019.a_2:0 "Yo tampoco he sido [ROOT.Char.Custom('ES_ElLa')] mejor de [ROOT.Char.Custom('ES_LoLa')]s amig[ROOT.Char.Custom('ES_OA')]s, [first_friend.GetFirstName]."
+ friendship.0019.a_2:0 "Yo tampoco he sido mejor de [ROOT.Char.Custom('ES_LoLa')]s amig[ROOT.Char.Custom('ES_OA')]s, [first_friend.GetFirstName]."
  
  friendship.1002.opening:0 "[sender.Custom2('AppropriateGreeting', ROOT.Char)]"
  friendship.1002.desc:0 "Te hago entrega de este regalo como gesto de agradecimiento por nuestra amistad duradera."
@@ -103,7 +103,7 @@
  friendship.2001.desc:0 "Mis secretos son cargas incómodas que nunca podré soportar. Si los compartiera con alguien, podrían ser más ligeros de llevar.\n\nEstoy segur[ROOT.Char.Custom('ES_OA')] de que [friend_receiving_confession.GetTitledFirstName] me entendería."
  friendship.2001.a:0 "Acércate, [friend_receiving_confession.GetFirstName], tengo algo que confesarte."
  friendship.2002.t:0 "Un secreto contado en el pasado"
- friendship.2002.desc:0 "[confessor.Custom('ES_ElLa')|U] [confessor.GetTitledFirstName] ha venido a verme para compartir algo que ha estado lastrando su espíritu.\n\nHe mostrado la mayor comprensión a mi [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('confessor'))]. Por dentro siento algo más que un poco de curiosidad…"
+ friendship.2002.desc:0 "[confessor.GetTitledFirstName] ha venido a verme para compartir algo que ha estado lastrando su espíritu.\n\nHe mostrado la mayor comprensión a mi [ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('confessor'))]. Por dentro siento algo más que un poco de curiosidad…"
  friendship.2002.a:0 "Haces bien en confiar en mí, [confessor.GetFirstNameNoTooltip]."
  friendship.2002.b:0 "[confessor.GetFirstNameNoTooltip], tengo que confesar algo."
  friendship.2003.t:0 "Un secreto compartido"
@@ -133,7 +133,7 @@
  friendship.2009.a:0 "Lo siento mucho, [friend_interceded_for.GetFirstName]."
  
  friendship.2010.t:0 "Un bochorno"
- friendship.2010.desc:0 "Mientras [friend_doing_interceding.Custom('ES_ElLa')] [friend_doing_interceding.GetTitledFirstName] pasaba un rato con [talking_target.Custom('ES_ElElla')], mi amig[friend_doing_interceding.Custom('ES_OA')] descubrió que [talking_target.Custom('ES_ElLa')] [talking_target.GetTitledFirstName] y yo teníamos una relación… tensa.\n\n¡Al intentar convencer a [talking_target.GetFirstName] de mis virtudes, parece que la cosa se torció aún más!"
+ friendship.2010.desc:0 "Mientras [friend_doing_interceding.GetTitledFirstName] pasaba un rato con [talking_target.GetSheHe], mi amig[friend_doing_interceding.Custom('ES_OA')] descubrió que [talking_target.GetTitledFirstName] y yo teníamos una relación… tensa.\n\n¡Al intentar convencer a [talking_target.GetFirstName] de mis virtudes, parece que la cosa se torció aún más!"
  friendship.2010.a:0 "Ay, no. ¡[friend_doing_interceding.GetFirstNameNoTooltip]!"
  
  friendship.2012.t:0 "Mucho esfuerzo para tan poco resultado"
@@ -145,7 +145,7 @@
  friendship.2013.a:0 "Puede que [friend_interceded_for.GetFirstNameNoTooltip] no sea tan mal[friend_interceded_for.Custom('ES_OA')]."
  
  friendship.2014.t:0 "Recomendaciones"
- friendship.2014.desc:0 "Mientras pasaba un rato con [talking_target.Custom('ES_ElElla')], mi amig[friend_doing_interceding.Custom('ES_OA')], [friend_doing_interceding.Custom('ES_ElLa')] [friend_doing_interceding.GetTitledFirstName], descubrió que [talking_target.GetTitledFirstName] y yo teníamos una relación… tensa.\n\n¡Pero [friend_doing_interceding.GetFirstName] no lo dejó estar y de algún modo convenció a [talking_target.GetTitledFirstName] de que no soy tan mal[ROOT.Char.Custom('ES_OA')] como se cree!"
+ friendship.2014.desc:0 "Mientras pasaba un rato con [talking_target.GetSheHe], mi amig[friend_doing_interceding.Custom('ES_OA')], [friend_doing_interceding.GetTitledFirstName], descubrió que [talking_target.GetTitledFirstName] y yo teníamos una relación… tensa.\n\n¡Pero [friend_doing_interceding.GetFirstName] no lo dejó estar y de algún modo convenció a [talking_target.GetTitledFirstName] de que no soy tan mal[ROOT.Char.Custom('ES_OA')] como se cree!"
  friendship.2014.a:0 "¡Tengo que darle las gracias a mi amig[friend_doing_interceding.Custom('ES_OA')]!"
  friendship.2015.t:0 "Cambios de convicción"
  friendship.2015.desc:0 "Intenté dar la mejor imagen de [friend_interceded_for.GetTitledFirstName] y, poco a poco, [talking_target.GetTitledFirstName] empezó a escuchar con más interés.\n\nCuando murmuró para sí que «no tenía ni idea», supe que había causado una buena impresión."
@@ -182,8 +182,8 @@
  friendship.3007.introverted:0 "\n\nMe tranquilizó la idea de pasar la noche en casa tranquilamente, bebiendo vino y hablando de nuestros problemas."
  friendship.3007.emotional:2 "\n\n[friend.Custom('ES_ElElla')|U] me animó a tirar platos y a gritar contra las almohadas. Cuando pasó la tormenta emocional, me sentí mucho mejor."
  friendship.3007.levelheaded:0 "\n\n[friend_for_chilling.GetTitledFirstName] escuchó en silencio todos mis problemas y me ayudó a ponerlos en perspectiva. Al cabo de un rato me di cuenta que no eran tan malos como me había imaginado."
- friendship.3007.end_chill:1 "\n\nTras el pequeño descanso, volví a sentirme list[ROOT.Char.Custom('ES_OA')] para afrontar mi deber. ¡Es una suerte tener un[friend.Custom('ES_XA')] amig[friend.Custom('ES_OA')] como [friend.Custom('ES_ElLa')] [friend.GetTitledFirstName]!"
- friendship.3007.end_severe:1 "\n\nTras el pequeño descanso, sentí más paz que nunca. ¡Es una suerte tener un[friend.Custom('ES_XA')] amig[friend.Custom('ES_OA')] como [friend.Custom('ES_ElLa')] [friend.GetTitledFirstName]!"
+ friendship.3007.end_chill:1 "\n\nTras el pequeño descanso, volví a sentirme list[ROOT.Char.Custom('ES_OA')] para afrontar mi deber. ¡Es una suerte tener un[friend.Custom('ES_XA')] amig[friend.Custom('ES_OA')] como [friend.GetTitledFirstName]!"
+ friendship.3007.end_severe:1 "\n\nTras el pequeño descanso, sentí más paz que nunca. ¡Es una suerte tener un[friend.Custom('ES_XA')] amig[friend.Custom('ES_OA')] como [friend.GetTitledFirstName]!"
  friendship.3007.a:0 "Un pequeño descanso."
  friendship.3007.b:1 "Pasar tiempo con [friend.GetFirstName] me sienta siempre muy bien."
  friendship.3007.c:1 "No me había dado cuenta de lo mucho que necesitaba esto."

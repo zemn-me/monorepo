@@ -36,8 +36,8 @@
  CommissionEpicComposerTheir_composer:0 "[second.GetHerHis]"
  CommissionEpicComposerTheir_scribes:0 "他们"
 
- CommissionEpicComposerHasHave_has:0 "$articleblank_blank$"
- CommissionEpicComposerHasHave_have:0 "$articleblank_blank$"
+ CommissionEpicComposerHasHave_has:0 "已"
+ CommissionEpicComposerHasHave_have:0 "已"
 
  commission_epic.0001.t:0 "家族史诗"
  commission_epic.0001.desc:0 "我需要的是描绘我家族伟大的经典故事。一部关于[ROOT.Char.GetDynasty.GetBaseName]宗族起源，以及我们如何注定伟大的[ROOT.Char.Custom('CompositionType')]！\n\n我只需要一个懂得如何讲故事的人……"
@@ -61,12 +61,16 @@
  commission_epic.0002.writer:0 "我的家族史诗似乎进展得很顺利，而且某些台词听上去会被援引几十年，不过[writer.GetTitledFirstName]对于故事的重心有许多疑问。\n\n如果[writer.GetSheHe]先把书写完，我可以很容易回答[writer.GetSheHe]的疑问，然后告诉[writer.GetHerHim]我不喜欢哪里，但是[writer.GetSheHe]坚持要求现在就得到回答。"
  commission_epic.0002.servant:0 "[servant.GetFirstName]，我派去创作我的家族史的仆人，看上去有一点纠结。不过[servant.GetSheHe]取得的进展真是让人印象深刻，毕竟[servant.GetSheHe]原来既不能阅读也不懂押韵。\n\n[servant.GetSheHe]日以继夜地工作，现在带着一个重要的问题来找我。“[ROOT.Char.GetLadyLord]，这部书到底应该着重于什么呢？”"
  commission_epic.0002.scribes:0 "我的[ROOT.Char.Custom('CommissionEpicScribes')]已经开始着手创作我的家族史诗，但是他们遇到了麻烦。他们无法就故事的重心达成一致，每个[ROOT.Char.Custom('CommissionEpicScribe')]都恰好坚持自己负责的那部分是最应强调的。\n\n“我们不想勉强别人，[ROOT.Char.GetLadyLord]，但是您#EMP 必须#!钦定一下，不然我们要把彼此撕成碎片了！”"
- commission_epic.0002.a:0 "当然应该着重描述我和我的命运！"
+ commission_epic.0002.iberia_epic.a:0 "书写我的宗族统治伊比利亚的权利！"
+ commission_epic.0002.a:1 "着重于我的宗族先祖宣称的故事。"
+ commission_epic.propaganda:0 "当这部史诗完成后，我会获得相邻头衔的[claims|E]"
+ commission_epic.0002.b:1 "当然应该着重于描述我和我的命运！"
  commission_epic.more_prestige:0 "当这部史诗完成后，我会获得更多个人[prestige|E]"
- commission_epic.0002.b:0 "这是#EMP 家族#!史，大度一点。"
+ commission_epic.0002.c:1 "这是#EMP 家族#!史，大度一点。"
  commission_epic.more_dynasty_prestige:0 "当这部史诗完成后，我会获得更多[dynasty_prestige|E]"
- commission_epic.0002.c:0 "尽可能真实地讲述故事。"
+ commission_epic.0002.d:0 "尽可能真实地讲述故事。"
  commission_epic.more_piety:0 "当这部史诗完成后，我也会获得一些[piety|E]"
+
 
  commission_epic.1001.t:0 "家族史诗：时间问题"
  commission_epic.1001.opening:0 "我已经数周没有收到我的家族史诗的新作了，看来要么是整个过程花费的时间太长，要么就是"
@@ -168,6 +172,53 @@
  commission_epic.2006.b.flavor:0 "我们一直引领着[ROOT.Char.GetFaith.AltPriestTermPlural]的道路。"
  commission_epic.2006.c:0 "我们都知道，族人是第一位的。"
  commission_epic.2006.c.same_dynasty:0 "此选项可用，因为[court_chaplain.GetFirstNameNoTooltip]和我属于同一[dynasty|E]"
+
+ commission_epic.6001.t:0 "一些小润色"
+ commission_epic.6001.writerservant:0 "在替我撰写编年史一段时间后，[composer.GetName]前来找我。\n\n“[Select_CString(ROOT.Char.IsFemale,'女士','大人')]，”[composer.GetSheHe]说道，“我必须坦白，尽管你的宗族确实伟大，但你希望能找到的祖先宣称可能……不太容易证实。我需要更多时间、更多资源，来深挖古老的文献。否则，我将不得不对故事进行一些小#italic 润色#!，这会降低你宣称的可信度……”"
+ commission_epic.6001.scribes:0 "我的书吏们夜以继日地研究古老的手稿，试图将来自我祖先的领土宣称写进编年史。\n\n“唉，”他们说，“在写到……此事的真相，你祖先的地契与领地等等时，我们可能必须进行一些小润色。你一定能理解吧，[Select_CString(ROOT.Char.IsFemale,'女士','大人')]？”"
+ commission_epic.6001.a:0 "随你怎么润色，把它写完！"
+ commission_epic.6001.b:0 "拿走我的钱，多研究一下。"
+ commission_epic.less_credible:0 "编年史会更不可信"
+ commission_epic.more_credible:0 "编年史将更可信"
+
+ commission_epic.6003.t:0 "不易发现的宣称"
+ commission_epic.6003.writer:0 "[composer.GetName]一直在努力为我撰写编年史，编年史变得越来越宏大，但同样也越来越不可信。\n\n“[ROOT.Char.GetLadyLord]，”[composer.GetSheHe]说道，“我找到了一册破烂的古老文本，里面说有一位叫做[ancestor_1.GetFirstNameNoTooltip]的[Select_CString(ancestor_1.IsFemale,'女王','国王')]曾经统治了[neighboring_county_1.GetNameNoTier]、[neighboring_county_2.GetNameNoTier]和[neighboring_county_3.GetNameNoTier]。我可以钻研家谱，进行一些……用我们的话叫#italic 创造性的添加#!，将[ancestor_1.GetSheHe]写成你的祖先。然后，我可以利用[ancestor_1.GetHerHis]的故事，让你对其中一块土地，甚至全部土地拥有多少有些可信的宣称……”"
+ commission_epic.6003.servant:0 "[composer.GetName]一直在努力撰写我那越来越不可信的编年史。\n\n“[ROOT.Char.GetLadyLord]，”[composer.GetSheHe]说道，“我找到了一段古代的[neighboring_county_1.GetNameNoTier]、[neighboring_county_2.GetNameNoTier]和[neighboring_county_3.GetNameNoTier][Select_CString(ancestor_1.IsFemale,'女王','国王')]‘[Select_CString(ancestor_1.IsFemale,'女猎手','一肘高')]’[ancestor_1.GetFirstNameNoTooltip]所写的模糊的还愿铭文。我可以在你的家谱中做一些创造性的添加，将[ancestor_1.GetSheHe]写成你的祖先。然后，我可以在编年史中做一些修饰，确立你对其中一些土地——甚至是全部土地的稳固宣称。”"
+ commission_epic.6003.scribes:0 "我的书吏们一直在努力撰写我那越来越错综复杂的编年史。\n\n“[ROOT.Char.GetLadyLord]，”他们说道，“我们在一份古老手稿中找到了一条旁注，提及在古代有一名叫做‘[Select_CString(ancestor_1.IsFemale,'慷慨者','独眼')]’[ancestor_1.GetFirstNameNoTooltip]的[ancestor_1.GetWomanMan]在[neighboring_county_1.GetNameNoTier]、[neighboring_county_2.GetNameNoTier]和[neighboring_county_3.GetNameNoTier]有一些影响力。我们可以钻研家谱，创造性地将[ancestor_1.GetSheHe]#italic 写成#!你的祖先。然后，我们可以在编年史中坐实你对其中一些土地——甚至是全部土地的统治权……”"
+ commission_epic.6003.a:0 "我全都要！"
+ commission_epic.6003.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip]在今年这个时节看起来很不错！"
+ commission_epic.6003.c:0 "[neighboring_county_2.GetNameNoTierNoTooltip]正是我想要的！"
+ commission_epic.6003.d:0 "[neighboring_county_3.GetNameNoTierNoTooltip]必须属于我。"
+ commission_epic.paranoid_neighbors:0 "你的邻居得知这部编年史后将会非常不满"
+
+ commission_epic.6004.t:0 "可信的宣称"
+ commission_epic.6004.writerservant:0 "[composer.GetName]一直在努力撰写我的编年史，它囊括的范围正越来越广，章节数越来越多。\n\n“[ROOT.Char.GetLadyLord]，”[composer.GetSheHe]说道，“我发现了一份关于税收和土地权的古老文件，读起来有点沉闷，但它提到了一位名为‘[Select_CString(ancestor_1.IsFemale,'高个子','秃头')]’[ancestor_1.GetFirstNameNoTooltip]的[ancestor_1.GetLadyLord]，在过去统治着[neighboring_county_1.GetNameNoTier]和[neighboring_county_2.GetNameNoTier]。我设法将[ancestor_1.GetHerHis]的世系从古典晚期一直追溯到了你！我可以借此赋予你对其中任一快土地的宣称，非常可信的宣称，没人能否认它。”"
+ commission_epic.6004.scribes:0 "我的书吏们一直在努力撰写我的编年史，它囊括的范围正越来越广，章节数越来越多。\n\n“[ROOT.Char.GetLadyLord]，”他们说道，“我们发现了一份非常古老的皇家特许状，将[neighboring_county_1.GetNameNoTier]和[neighboring_county_2.GetNameNoTier]的统治权与一位名为‘[Select_CString(ancestor_1.IsFemale,'好人','好运')]’[ancestor_1.GetFirstNameNoTooltip]的[ancestor_1.GetLadyLord]联系在一起。在[ROOT.GetCharacter.GetFaith.HighGodName]的指引下，我们将你的世系一直向上追溯到了[ancestor_1.GetHerHim]，并写进了编年史。其中任意一块土地都理应属于你。”"
+ commission_epic.6004.a:0 "我全都要！"
+ commission_epic.6004.b:0 "[neighboring_county_1.GetNameNoTierNoTooltip]当然是该我继承的遗产。"
+ commission_epic.6004.c:0 "我一直都觉得[neighboring_county_2.GetNameNoTierNoTooltip]应该属于我！"
+
+ commission_epic.6005.t:0 "史诗未竟"
+ commission_epic.6005.writerservant:0 "我一直怀疑我的编年史出了什么问题，确实，现在[composer.GetName]一脸焦虑地来找我。\n\n“唉，[ROOT.Char.GetLadyLord]，”[composer.GetSheHe]说道，“我尽力了，但依然找不到任何能证实的历史宣称。这活儿我干不下去了。不过，为你的宗族歌功颂德的编年史写好了。请满足于此，不要因为我的失败而惩罚我……”"
+ commission_epic.6005.scribes:0 "我的书吏们似乎因为我的编年史伤透了脑筋，确实，他们现在一脸担忧地来找我。\n\n“唉，”他们说道，“我们找不到任何能证实的历史宣称。我们尽力了，但这超出了我们的能力。不过，我们创作了一部对你的宗族歌功颂德的编年史。请满足于此，不要因为我们的失败而惩罚我们……”"
+ commission_epic.6005.a:0 "下密牢去吧！"
+ commission_epic.6005.b:0 "没用的蠢材……"
+ commission_epic.6005.c:0 "这是[ROOT.GetCharacter.GetFaith.HighGodName]在惩罚我的自负吗？"
+ commission_epic.6005.d:0 "至少我有了一部编年史……"
+
+ commission_epic.6006.t:0 "有力的宣传"
+ commission_epic.6006.writerservant:0 "“完成了，[ROOT.Char.GetLadyLord]，”[composer.GetName]如释重负地说道，递给我一部大部头。“这就是[ROOT.Char.GetDynastyHouseNameNoTooltip]家族的编年史，极其详细地描述了它统治你渴望的各块土地的历史。现在肯定没人能质疑你合法的宣称了！”"
+ commission_epic.6006.scribes:0 "终于，我的书吏完成了宣传编年史。他们如释重负地递给我一部非常大的书。\n\n“给你，[Select_CString(ROOT.Char.IsFemale,'女士','大人')]，[ROOT.Char.GetDynastyHouseNameNoTooltip]家族的伟大编年史，极其详细地阐述了你所有的宣称。希望它能带给你好运。”"
+ commission_epic.6006.a:0 "完美！"
+
+ propaganda_chronicle_name:0 "[ROOT.Char.GetDynastyHouseNameNoTooltip]家族宣传编年史"
+ propaganda_chronicle_desc:0 "这本沉重的书极其详细地阐述了[ROOT.Char.GetDynastyHouseNameNoTooltip]家族的荣耀，以及它多多少少有些离奇的领地宣称。"
+ 
+ half_baked_propaganda_chronicle_name:0 "未完成的宣称编年史"
+ half_baked_propaganda_chronicle_desc:0 "这本书如果完成了或许会臭名昭著。就目前而言，它未能说服任何读者相信其赞助者想要的领土宣称，而是大肆吹捧了[ROOT.Char.GetDynastyNameNoTooltip]宗族的所谓美德。"
+ 
+
+
 
  commission_epic.9001.t:0 "家族史诗"
  commission_epic.9001.writer:1 "我家族的宏伟[ROOT.Char.Custom('CompositionType')]终于完结了，[composer.GetTitledFirstName]有理由为之自豪！"

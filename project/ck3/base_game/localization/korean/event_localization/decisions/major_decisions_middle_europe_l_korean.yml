@@ -71,7 +71,7 @@
  establish_the_electorate_of_saxony_decision_desc:0 "동방의 내륙지는 너무나 오랜 세월을 제국의 권역 바깥에서만 머물러 왔노라. 이제는 작위를 하나로 모아 새로운 작센을 세우고 우리의 권세를 공고히 다져야 한다."
  establish_the_electorate_of_saxony_decision_tooltip:0 "$establish_the_electorate_of_saxony_decision_desc$"
  establish_the_electorate_of_saxony_decision_confirm:0 "새로운 작센을 세우겠다!"
- # [LocEditor:UntranslatedKey] `polabia_must_be_hre_culture_tt`
+ polabia_must_be_hre_culture_tt:0 "[GetGeographicalRegion('custom_polabia').GetName]에 있는 12개 이상의 [Concept( 'counties', '영지' )|E]가 당신 또는 당신 [liege|E]의 문화에 속함"
  polabia_held_or_nonexistent.tt:0 "$k_sorbia$(이)가 존재하지 않거나 당신의 소유임"
  middle_europe_decision.0017.tt:0 "황제로서 작센은 건립 시 [vassal|E] 또는 [courtier|E]에게 수여됨"
  middle_europe_decisions.0017.t:0 "작센 선제후국"

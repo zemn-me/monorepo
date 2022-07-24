@@ -1,5 +1,5 @@
 ﻿l_korean:
- death_management.1000.killed.tt:0 "[THIS.Char.Custom2('RelationToMe', SCOPE.sC('dead_character'))]인 [dead_character.GetTitledFirstName](이)가 [killer.GetTitledFirstName]에게 살해당함"
+ death_management.1000.killed.tt:1 "[dead_character.GetTitledFirstName](이)가 [killer.GetTitledFirstName]에게 살해됨"
  death_management.1000.t:0 "죽음이 우리를 갈라놓을 때까지"
  death_management.1000.murder:0 "[dead_character.GetTitledFirstName](이)가 살해당했다!\n\n"
  death_management.1000.like:0 "이만한 고통을 겪었는데 심장이 남아나긴 할까? 분명 성하지는 않겠지. 그런데도 이렇게 살아 있어. 당신을 떠나보내고도 이 심장은 뛰고 있다고. [dead_character.GetFirstName], 내 [dead_character.Custom('LoverPetName')]. 당신 없이는 이 삶도 예전 같진 않을 거야."
@@ -29,6 +29,7 @@
 
  death_management.1005.t:0 "여전한 기억"
  death_management.1005.desc:0 "[dead_character.GetFirstName], 네가 곁에 있었더라면 더 굳건해지라고 말해줬을 테지. 점차 나아질 거라면서 말이야. 네가 여기 있었다면, 그 말이 옳다고 그랬을지도 몰라. 하지만 지금은 욕을 퍼부으면서 눈물지을 수밖에 없네. 이 세상에서 네가 사라졌는데, 어찌 참으라는 거야?"
+ death_management.1005.desc.ritual_best_friend:0 "[dead_character.GetFirstName](이)가 죽었다! 나의 둘도 없는 진솔한 친구가 제 명을 살지 못하고 싸늘한 [ROOT.Char.GetFaith.DeathDeityName]의 품으로 떠나버리고 말았다. [dead_character.GetHerHim]를 두 번 다시 볼 수 없다는 생각에 나는 흐느끼고, 절규하고, 머리와 옷을 마구 쥐어뜯었다.\n\n이제... 이제 어떻게 살아가지?\n\n[dead_character.GetFirstNameNoTooltip]... 나의 소중한 친우 [dead_character.GetFirstNameNoTooltip](이)라면 내가 추억을 품고 어두운 시기를 헤쳐 나가길 바랐겠지. 하지만... 그 친구를 보내고 나니, 인생이 불 꺼진 양초처럼 보이는구나."
  death_management.1005.a:0 "절대로 잊지 않을게, 친구."
  death_management.1005.a.tt:3 "친구인 [dead_character.GetTitledFirstName](이)가 [THIS.Char.Custom('DiedHouse_arrest')]"
  death_management.friend.desc:4 "친구인 [dead_character.GetTitledFirstName](이)가 사망함"

@@ -35,10 +35,9 @@
  court_scholarly:0 "Gelehrtenhof"
  court_scholarly_desc:1 "#low An diesem Hof geht es nur darum, kultivierte Geister und Menschen mit außerordentlichem Können zu versammeln.\n\nHöflinge erhalten die „[GetTrait('scholarly_court_1').GetName(GetNullCharacter)]“-Eigenschaften.#!"
  court_scholarly_tooltip_desc:0 "Bildung und fleißiges Lernen werden am $court_scholarly$ geschätzt."
- court_tribal: "Stammeshof"
- court_tribal_desc: "#low Am Hof gilt das Recht des Stärkeren – und die Flure werden mit Beute und Plündergut geschmückt! \n\nHöflinge erhalten „[GetTrait('warlike_court_1').GetName(GetNullCharacter)]“-Eigenschaften.#!"
- court_tribal_tooltip_desc: "An einem $court_tribal$ schätzt man Kampfkunst und Durchhaltevermögen."
-
+ court_tribal:0 "Stammeshof"
+ court_tribal_desc:0 "#low Am Hof gilt das Recht des Stärkeren – und die Flure werden mit Beute und Plündergut geschmückt!\n\nHöflinge erhalten „[GetTrait('warlike_court_1').GetName(GetNullCharacter)]“-Eigenschaften.#!"
+ court_tribal_tooltip_desc:0 "An einem $court_tribal$ schätzt man Kampfkunst und Durchhaltevermögen."
 
  COURT_TYPE_GENERAL_TOOLTIP:0 "[CourtType.GetTooltipDesc]\n\n[CourtType.GetEffectDesc]"
  

@@ -401,6 +401,21 @@ task_integrate_title = {
 		scope:county = {
 			de_jure_drifting_towards = scope:councillor_liege.primary_title
 		}
+		# Asturias wants to survive and integrate Castille if possible.
+		trigger_if = {
+			limit = {
+				scope:councillor_liege = {
+					has_title = title:k_asturias
+					NOT = { has_title = title:k_castille }
+					any_sub_realm_county = {
+						any_this_title_or_de_jure_above = { this = title:k_castille }
+					}
+				}
+			}
+			scope:county = {
+				any_this_title_or_de_jure_above = { this = title:k_castille }
+			}
+		}
 	}
 
 	progress = {
@@ -501,6 +516,20 @@ task_integrate_title = {
 
 	ai_will_do = {
 		value = 10 # Prefer this if available
+
+		# Asturias wants to survive and integrate Castille if possible.
+		if = {
+			limit = {
+				scope:councillor_liege = {
+					has_title = title:k_asturias
+					NOT = { has_title = title:k_castille }
+					any_sub_realm_county = {
+						any_this_title_or_de_jure_above = { this = title:k_castille }
+					}
+				}
+			}
+			add = 100000
+		}
 	}
 }
 

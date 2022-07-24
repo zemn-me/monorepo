@@ -480,6 +480,29 @@
  building_monastic_schools_07_desc:1 "Les hospices offrent des soins de longue durée à ceux qui, autrement, n’y arriveraient pas. Les malades chroniques, les handicapés et parfois même les personnes souffrant de démons sont les bienvenus."
  building_monastic_schools_08:1 "Cloîtres"
  building_monastic_schools_08_desc:1 "Le cloître forme une barrière solide contre le monde extérieur, séparant efficacement la vie de ceux qui se trouvent entre ses murs de celle des paysans à l’extérieur."
+
+ building_type_megalith_01:0 "Mégalithe" # [LocEditor:ForFutureBatchExport]
+ building_type_megalith_01_desc:0 "Cette structure est un agencement extérieur de pierres généralement alignées avec les constellations. Les religions qui croient aux monuments mégalithiques fournissent des lieux de culte permanents et peu coûteux pour les fidèles, et attirent ainsi voyageurs et pèlerins." # [LocEditor:ForFutureBatchExport]
+ building_megalith_01:0 "Mégalithe mineur" # [LocEditor:ForFutureBatchExport]
+ building_megalith_01_desc:0 "Ce grand agencement extérieur de pierres fonctionne comme un lieu de culte ouvert et permanent. Cette construction modeste, faite de pierres ordinaires et disposée de manière simple, permet d’accueillir quelques fidèles." # [LocEditor:ForFutureBatchExport]
+ building_megalith_02:0 "Mausolée mégalithique" # [LocEditor:ForFutureBatchExport]
+ building_megalith_02_desc:0 "Le site a été agrandi avec de multiples agencements de pierres afin d’accueillir davantage de fidèles. Parallèlement à l’expansion du mégalithe lui-même, un mausolée souterrain a été construit à proximité pour permettre aux personnes importantes d’être enterrées sur le site." # [LocEditor:ForFutureBatchExport]
+ building_megalith_03:0 "Autels mégalithiques" # [LocEditor:ForFutureBatchExport]
+ building_megalith_03_desc:0 "Ce grand agencement extérieur de pierres fonctionne comme un lieu de culte ouvert et permanent. Ce mégalithe a été construit à partir de pierres exotiques et coûteuses provenant de toute la région et a été équipé d’autels pour les cérémonies." # [LocEditor:ForFutureBatchExport]
+ building_megalith_04:0 "Grand mégalithe" # [LocEditor:ForFutureBatchExport]
+ building_megalith_04_desc:0 "En plus des nombreux autels et objets cérémoniels, ce mégalithe a été agrandi pour inclure des pierres monolithiques de grande taille et vraiment impressionnantes, et recouvertes de symboles sacrés finement sculptés." # [LocEditor:ForFutureBatchExport]
+ building_megalith_05:0 "Mégalithe légendaire" # [LocEditor:ForFutureBatchExport]
+ building_megalith_05_desc:0 "Ce mégalithe est devenu si grand qu’il fait l’objet de légendes locales. Les adorateurs affirment ressentir un lien profond avec leur foi lorsqu’ils se trouvent sur ce site." # [LocEditor:ForFutureBatchExport]
+ building_megalith_06:0 "$building_megalith_05$"
+ building_megalith_06_desc:0 "$building_megalith_05_desc$"
+ building_megalith_07:0 "$building_megalith_05$"
+ building_megalith_07_desc:0 "$building_megalith_05_desc$"
+ building_megalith_08:0 "$building_megalith_05$"
+ building_megalith_08_desc:0 "$building_megalith_05_desc$"
+ building_type_great_megalith_01:0 "Grand mégalithe" # [LocEditor:ForFutureBatchExport]
+ building_type_great_megalith_01_desc:0 "Version extrêmement ambitieuse du mégalithe, le projet du Grand mégalithe consiste à habiller la campagne de petites constructions mégalithiques autour d’une construction gigantesque." # [LocEditor:ForFutureBatchExport]
+ building_great_megalith_01:0 "Grand mégalithe" # [LocEditor:ForFutureBatchExport]
+ building_great_megalith_01_desc:0 "Le Grand mégalithe est un vaste et étonnant cercle de pierres qui s’étend à perte de vue, avec d’innombrables sites plus petits à travers la campagne. Ouvert et accessible à tous, il rapproche les adorateurs et les pèlerins du monde entier du divin." # [LocEditor:ForFutureBatchExport]
  
  building_type_hunting_grounds_01:0 "Terrains de chasse"
  building_type_hunting_grounds_01_desc:1 "Partout dans ces terres se trouvent plusieurs grands gîtes où les chasseurs de gibier sauvage peuvent se rassembler et planifier leurs excursions."
@@ -963,7 +986,7 @@
  building_type_archery_ranges_01:0 "Terrains de tir à l’arc"
  building_type_archery_ranges_01_desc:0 "Des espaces dédiés au tir à l’arc permettent aux gens ordinaires de s’entraîner et aux archers expérimentés de perfectionner leurs aptitudes."
  building_archery_ranges_01:0 "Tir à l’arc"
- building_archery_ranges_01_desc:0 "Riche ou pauvre, tout le monde est le bienvenu au champ de tir à l’arc. La raison est simple: les paysans qui savent tirer à l’arc sont plus utiles en temps de guerre, et les tireurs expérimentés se maintiennent en forme en participant à des tournois."
+ building_archery_ranges_01_desc:0 "Riche ou pauvre, tout le monde est le bienvenu au champ de tir à l’arc. La raison est simple : les paysans qui savent tirer à l’arc sont plus utiles en temps de guerre, et les tireurs expérimentés se maintiennent en forme en participant à des tournois."
  building_archery_ranges_02:0 "Archerie royale"
  building_archery_ranges_02_desc:1 "Les meilleurs fabricants d’arcs sont employés par la Couronne et s’emploient à fabriquer des arcs de la plus haute qualité possible dans des locaux spécialement conçus."
  building_archery_ranges_03:0 "Champs d’archers d’élite"
@@ -1017,8 +1040,8 @@
  building_hotin_fort_02:0 "Forteresse hotin"
  building_hotin_fort_02_desc:0 "Une forteresse impressionnante qui fait pâlir le vieux fort en comparaison. Les fortifications ont été agrandies au fil des siècles pour inclure de hauts murs de pierre, de larges douves et plusieurs tours imposantes. Cette structure défensive tiendra facilement la plupart des assiégeants à distance."
  
- building_type_golden_gate_of_kiev_01:0 "Porte dorée de Kiev"
- building_type_golden_gate_of_kiev_01_desc:0 "Conçue et nommée d’après une porte de Constantinople, la Porte dorée de Kiev sert à la fois d’entrée de la ville et d’arc de triomphe. Le dôme doré de l’église, construit au sommet de la porte, est visible de loin et en fait un symbole de Kiev."
+ building_type_golden_gate_of_kiev_01:1 "Porte dorée de Kiev"
+ building_type_golden_gate_of_kiev_01_desc:1 "Conçue et nommée d’après une porte de Constantinople, la Porte dorée de Kiev sert à la fois d’entrée de la ville et d’arc de triomphe. Le dôme doré de l’église, construit au sommet de la porte, est visible de loin et en fait un symbole de Kiev."
  building_golden_gate_of_kiev_01:0 "$building_type_golden_gate_of_kiev_01$"
  building_golden_gate_of_kiev_01_desc:0 "$building_type_golden_gate_of_kiev_01_desc$"
  
@@ -1043,3 +1066,39 @@
  building_type_danevirke_01_desc:1 "Le Danevirke est une vaste fortification en terre construite pour empêcher les incursions du continent dans les territoires danois et qui a été agrandie à plusieurs reprises"
  building_danevirke_01:0 "$building_type_danevirke_01$"
  building_danevirke_01_desc:0 "$building_type_danevirke_01_desc$"
+
+ building_type_aljaferia_palace_01:0 "Aljaferia"
+ building_type_aljaferia_palace_01_desc:0 "Grand palais-forteresse construit dans la plaine de Saría, l’Aljaferia est un témoignage de la puissance et de la richesse de Saragosse. Imposant et splendide à la fois, il est à la fois une fortification imposante et un joyau de l’architecture ibérique."
+ building_aljaferia_palace_01:0 "$building_type_aljaferia_palace_01$"
+ building_aljaferia_palace_01_desc:0 "$building_type_aljaferia_palace_01_desc$"
+
+ building_type_roman_wall_of_lugo_01:0 "Murs romains de Lugo"
+ building_type_roman_wall_of_lugo_01_desc:0 "Construites par les Romains il y a longtemps, les grandes murailles de Lugo restent un spectacle impressionnant. Les pèlerins passent leurs cinq portes sur le chemin de Saint-Jacques-de-Compostelle, ce qui rend le voyage encore plus profond."
+ building_roman_wall_of_lugo_01:0 "$building_type_roman_wall_of_lugo_01$"
+ building_roman_wall_of_lugo_01_desc:0 "$building_type_roman_wall_of_lugo_01_desc$"
+
+ building_type_rock_of_gibraltar_01:0 "Rocher de Gibraltar"
+ building_type_rock_of_gibraltar_01_desc:0 "Le rocher monolithique de Gibraltar surplombe un détroit étroit qui est la porte d’entrée de la mer Méditerranée. Dans l’Antiquité, il était l’un des piliers d’Hercule, considéré comme marquant la fin du monde connu. En le regardant aujourd’hui, on ne peut s’empêcher de se demander ce qui se trouve au-delà."
+ building_rock_of_gibraltar_01:0 "$building_type_rock_of_gibraltar_01$"
+ building_rock_of_gibraltar_01_desc:0 "$building_type_rock_of_gibraltar_01_desc$"
+
+ building_type_tower_of_hercules_01:0 "Farum brigantium"
+ building_type_tower_of_hercules_01_desc:0 "On dit que ce phare antique s’inspire de celui plus célèbre d’Alexandrie. Ayant guidé les marins pendant des siècles, il reste important pour le commerce côtier de la Galice. Certains prétendent que l’on peut apercevoir la côte verte de l’Irlande du haut de cette tour unique, mais quand on regarde au loin, on ne voit que la mer sans fin."
+ building_tower_of_hercules_01:0 "$building_type_tower_of_hercules_01$"
+ building_tower_of_hercules_01_desc:0 "$building_type_tower_of_hercules_01_desc$"
+
+ building_type_city_wall_of_toledo_01:0 "Murs de la ville de Tolède"
+ building_type_city_wall_of_toledo_01_desc:0 "Construites à l’origine par les Romains, ces murailles massives ont été considérablement agrandies sous le règne de Wabma, roi des Wisigoths. Les premiers dirigeants arabes les ont encore élargies, créant ainsi un système défensif digne de la Cité des Rois."
+ building_city_wall_of_toledo_01:0 "$building_type_city_wall_of_toledo_01$"
+ building_city_wall_of_toledo_01_desc:0 "$building_type_city_wall_of_toledo_01_desc$"
+
+ building_type_alcazar_of_segovia_01:0 "Alcazar de Ségovie"
+ building_type_alcazar_of_segovia_01_desc:0 "S’élevant telle la proue d’un navire depuis une falaise rocheuse, cette forteresse est un spectacle impressionnant. Aussi majestueuse qu’impénétrable, c’est le plus grand de tous les châteaux du royaume des châteaux, la Castille."
+ building_alcazar_of_segovia_01:0 "$building_type_alcazar_of_segovia_01$"
+ building_alcazar_of_segovia_01_desc:0 "$building_type_alcazar_of_segovia_01_desc$"
+
+ building_type_holy_site_basilica_santiago_01:0 "Cathédrale de Saint-Jacques-de-Compostelle"
+ building_type_holy_site_basilica_santiago_01_desc:0 "Construit sur la tombe de Jacques le Majeur, ce splendide édifice est le point final du chemin de Saint-Jacques et le joyau de l’un des plus grands sites de la chrétienté. Les pèlerins de toute l’Europe occidentale et septentrionale arrivent en grand nombre, parlant des dizaines de langues - mais beaucoup deviennent muets d’admiration."
+ building_holy_site_basilica_santiago_01:0 "$building_type_holy_site_basilica_santiago_01$"
+ building_holy_site_basilica_santiago_01_desc:0 "$building_type_holy_site_basilica_santiago_01_desc$"
+

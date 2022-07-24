@@ -1,8 +1,11 @@
-load("@npm//yaml-validator:index.bzl", "yaml_validator_test")
-
-def yaml_lint(name = None, srcs = None):
-    yaml_validator_test(
+def yaml_lint_test(name, srcs = [], **kwargs):
+    native.sh_test(
         name = name,
-        args = ["$(location %s)" % x for x in srcs],
-        data = srcs,
+        env = {
+            "YAMLLINT": "$(rootpath //py/yamllint)",
+        },
+        srcs = ["//yml:test_runner.sh"],
+        data = ["//py/yamllint"] + srcs,
+        args = ["$(rootpath %s)" % x for x in srcs],
+        **kwargs
     )

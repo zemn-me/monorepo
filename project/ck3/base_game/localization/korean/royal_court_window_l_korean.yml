@@ -49,7 +49,7 @@
  ADOPT_COURT_LANGUAGE_CULTURE_WINDOW:0 "#T $COURT_LANGUAGE_NAME$ 궁정 언어 채택#!\n[Character.GetCanAdoptCourtLanguageText( CulturePillar.Self )]"
  COURT_LANGUAGE_BASELINE_BONUS_BREAKDOWN_HEADER:0 "궁정 권위 기준치: [Character.CalculateGrandeurFromCourtLanguage( CulturePillar.Self )|+=]"
 
- ROYAL_COURT_SCREENSHOT_HIDE_CHARACTERS:1 "[Select_CString( RoyalCourtScreenshotWindow.AreCharactersShown, 'Hide Characters', 'Show Characters' )]"
+ ROYAL_COURT_SCREENSHOT_HIDE_CHARACTERS:1 "[Select_CString( RoyalCourtScreenshotWindow.AreCharactersShown, '인물 숨기기', '인물 표시하기' )]"
  ROYAL_COURT_SCREENSHOT_HIDE_CHARACTERS_TOOLTIP:1 "#T 인물 전환#!"
  ROYAL_COURT_SCREENSHOT_HIDE_UI:0 "UI 숨기기"
  ROYAL_COURT_SCREENSHOT_HIDE_UI_TOOLTIP:1 "#T UI 숨기기\n#!#I $ROYAL_COURT_SCREENSHOT_HIDE_UI_NOTIFICATION$#!"
@@ -69,7 +69,7 @@
  ROYAL_COURT_BACK_WALL_VIEW_CAMERA:0 "뒤쪽 벽 시점"
  ROYAL_COURT_RIGHT_WALL_VIEW_CAMERA:0 "오른쪽 벽 시점"
  
- ROYAL_COURT_STATUS_PENDING_EVENTS:2 " 이전 궁정 참석 이후로 #weak ([Character.GetLastTriggeredPendingCourtEventsDate.GetStringLong])#! [Character.GetNumPendingCourtEvents|V]개의 새로운 [Select_CString( GreaterThan_int32( Character.GetNumPendingCourtEvents, '(int32)1' ), 'situations have', 'situation has' )] 출현"
+ ROYAL_COURT_STATUS_PENDING_EVENTS:2 "이전 궁정 참석#weak ([Character.GetLastTriggeredPendingCourtEventsDate.GetStringLong])#! 이후로 [Character.GetNumPendingCourtEvents|V]개의 새로운 상황 발생"
  ROYAL_COURT_STATUS_PENDING_EVENTS_BULLET:0 "$EFFECT_LIST_BULLET$ $ROYAL_COURT_STATUS_PENDING_EVENTS$"
  ROYAL_COURT_STATUS_NEW_COURT_ARTIFACTS_SINGLE:0 "[court_artifact|E]"
  ROYAL_COURT_STATUS_NEW_COURT_ARTIFACTS_PLURAL:0 "[court_artifacts|E]"
@@ -77,7 +77,7 @@
  ROYAL_COURT_STATUS_NEW_COURT_ARTIFACTS_BULLET:0 "$EFFECT_LIST_BULLET$ $ROYAL_COURT_STATUS_NEW_COURT_ARTIFACTS$"
  ROYAL_COURT_STATUS_CGV_EXPECTATIONS:2 " [court_grandeur|E]가 [court_grandeur_expectations|E] 미만임"
  ROYAL_COURT_STATUS_CGV_EXPECTATIONS_BULLET:0 "$EFFECT_LIST_BULLET$ $ROYAL_COURT_STATUS_CGV_EXPECTATIONS$"
- ROYAL_COURT_STATUS_CURRENT_EVENTS:2 " 당신의 궁정 내에 [LocalPlayerCourtEvents.GetNumberCourtEvents|V]개의 미해결 [Select_CString( GreaterThan_int32( LocalPlayerCourtEvents.GetNumberCourtEvents, '(int32)1' ), 'situations', 'situation' )] 존재"
+ ROYAL_COURT_STATUS_CURRENT_EVENTS:2 "당신의 궁정 내에 [LocalPlayerCourtEvents.GetNumberCourtEvents|V]개의 미해결 상황 존재"
  ROYAL_COURT_STATUS_CURRENT_EVENTS_BULLET:0 "$EFFECT_LIST_BULLET$ $ROYAL_COURT_STATUS_CURRENT_EVENTS$"
  
  NEW_ARTIFACTS_SINGLE:0 "[artifact|E]"
@@ -161,11 +161,11 @@
  ROYAL_COURT_ARTIFACT_PLACE_ARTIFACT_FROM_STORAGE_DESC:0 "칸을 클릭하여 유물 배치"
  ROYAL_COURT_ARTIFACT_PLACE_ARTIFACT_IN_SLOT_TOOLTIP:1 "#T [InventorySlot.GetName]#!\n\n[SelectLocalization( And( RoyalCourtWindow.HasSelectedArtifact, RoyalCourtWindow.HasSelectedSlot), 'ROYAL_COURT_SLOT_TOOLTIP_SELECT', 'ROYAL_COURT_SLOT_TOOLTIP_DISPLAY_ARTIFACT' )]"
  ROYAL_COURT_ARTIFACT_STORAGE_EQUIPABLE_HEADER:0 "[RoyalCourtWindow.GetSelectedSlot.GetName] 유물"
- ROYAL_COURT_ARTIFACT_TOOLTIP_INTERACTION_INFO:0 "\n#I [Select_CString( RoyalCourtWindow.IsArtifactSelected( Artifact.Self ), 'Click to go back', 'Click to select' )][Select_CString( Or( Not( RoyalCourtWindow.GetCharacter.IsLocalPlayer ), Or( RoyalCourtWindow.HasSelectedArtifact, RoyalCourtWindow.HasSelectedSlot ) ), '', '\n우클릭하여 보관하기' )]#!"
+ ROYAL_COURT_ARTIFACT_TOOLTIP_INTERACTION_INFO:0 "\n#I  [Select_CString( RoyalCourtWindow.IsArtifactSelected( Artifact.Self ), '클릭하여 돌아가기', '클릭하여 선택하기' )][Select_CString( Or( Not( RoyalCourtWindow.GetCharacter.IsLocalPlayer ), Or( RoyalCourtWindow.HasSelectedArtifact, RoyalCourtWindow.HasSelectedSlot ) ), '', '\n우클릭하여 보관하기' )]#!"
 
  NO_ROCO_HEADER:0 "[royal_court|E] 이용 불가:"
  NO_ROCO_MISSING_DLC:0 "@warning_icon!#X 왕실 궁정 확장팩을 보유하고 있지 않습니다.#!"
  NO_ROCO_NOT_ALIVE:0 "@warning_icon!#X 당신은 죽었습니다.#!"
  NO_ROCO_NOT_LANDED:0 "@warning_icon!#X 당신은 영주가 아닙니다.#!"
  NO_ROCO_WRONG_TIER:0 "@warning_icon!#X 당신은 [king|E] 또는 [emperor|E]가 아닙니다.#!"
- NO_ROCO_WRONG_GOVERNMENT:0 "@warning_icon!#X 당신이 [feudal|E] 또는 [clan|E] [government|E]를 보유하지 않음#!"
+ NO_ROCO_WRONG_GOVERNMENT:1 "@warning_icon!#X 당신이 [feudal|E] 또는 [tribal|E] [government|E]를 보유하지 않음#!"

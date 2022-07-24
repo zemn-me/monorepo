@@ -66,56 +66,57 @@ d_gascogne = {	#AKA Vasconia
 		holder = 168145	#Lop / Loup I
 	}
 	768.1.1 = {
-		holder = 168104	#Lop / Loup II
+		holder = 168104	# Loup II de Gascogne
 		liege = k_france
 	}
+	778.1.1 = {
+		holder = 168106 # Sanche I Loup de Gascogne
+	} 
 	812.1.1 = {
-		holder = 168105	#Semen I Lop
+		holder = 168105	# Semen I Loup de Gascogne
 	}
 	816.1.1 = {
-		holder = 168109	#Garcia I Semen
+		holder = 168109	# Garcia I Semen de Gascogne
 	}
 	818.1.1 = {
-		holder = 168121	#Lope / Loup III
+		holder = 168121	# Loup III Centulle de Gascogne
 	}
 	820.1.1 = {
-		holder = 70300	#Aznar
+		holder = 168111	# Semen II Semen de Gascogne
 	}
-	839.1.1 = {
-		holder = 168111	#Sancho II Sanchez
+	846.1.1 = {
+		holder = 73784 # Guillaume I de Septimanie
 	}
-	#846.1.1 = {
-	#	holder = Gilen I
-	#}
 	848.1.1 = {
-		holder = 168143
+		holder = 168143 # Duke Sanche Sanche of Armagnac
 	}
 	855.1.1 = {
-		holder = 168133	#Arnaud of Vasconia
+		holder = 168133	# Arnaud de Vasconie
 	}
 	864.1.1 = {
-		holder = 163060
+		holder = 163060 # Sanche III Mitarra
 	}
 	893.1.1 = {
-		holder = 7563
+		holder = 7563 # Garcia II Sanche de Gascogne
 	}
 	920.1.1 = {
-		holder = 7562
+		holder = 7562 # Sanche IV Garcie de Gascogne
 	}
 	955.1.1 = {
-		holder = 163061
+		holder = 163061 # Sanche V Sanche de Gascogne
 	}
 	961.1.1 = {
-		holder = 127049 #Guillaume-Sanche de Gascogne
+		holder = 127049 # Guillaume II Sanche de Gascogne
 	}
 	996.12.23 = {
-		holder = 127050 #Bernard-Guillaume de Gascogne
+		holder = 127050 # Bernard-Guillaume de Gascogne
 	}
 	1009.12.25 = {
-		holder = 127051 #Sanche-Guillaume de Gascogne
+		holder = 127051 # Sanche VI Guillaume de Gascogne
 	}
 	1032.10.4 = {
-		holder = 127055 #Bérenger d'Angoulême
+		# Temporarily removed whilst we do some digging.
+		#holder = 127055 #Bérenger d'Angoulême
 	}
 	1036.1.1 = {
 		holder = 228 #Eudes d'Aquitaine
@@ -178,29 +179,66 @@ c_bordeaux = {
 	780.1.1 = {
 		holder = 190500 #Bertrand
 	}
+	781.1.1 = {
+		holder = 168105 # Duke Semen I of Gascogne
+		liege = 0
+	}
+	812.1.1 = {
+		liege = d_gascogne
+	}
+	816.1.1 = {
+		holder = 168111 # Duke Semen II of Gascogne
+		liege = 0
+	}
+	820.1.1 = {
+		liege = d_gascogne
+	}
+	846.1.1 = {
+		holder = 73784 # Duke Guillaume I of Gascogne
+	}
+	848.1.1 = {
+		#unknown norman ruler (848-863)
+		liege = 0
+	}
+	863.1.1 = {
+		holder = 168133 # Duke Arnaut de Vasconie of Gascogne
+		liege = d_gascogne
+	}
 	864.1.1 = {
-		liege = "d_gascogne"
-		holder = 168133 #Arnaut
+		holder = 163060 # Sanche III Mitarra
 	}
-	893.1.1 = {
-		holder = 7563
+	887.1.1 = {
+		#Amalvinus (887-906)
+		liege = 0
 	}
-	927.1.1 = {
-		liege = "d_aquitaine"
+	906.1.1 = {
+		holder = 7563 # Duke Garcia II of Gascogne
+		liege = d_gascogne
 	}
-	927.1.1 = {
-		holder = 90127
+	920.1.1 = {
+		holder = 7562 # Duke Sanche IV of Gascogne
 	}
-	935.1.1 = {
-		holder = 230
+	955.1.1 = {
+		holder = 163061 # Duke Sanche V of Gascogne
+	}	
+	961.1.1 = {
+		holder = 127049 # Duke Guillaume II of Gascogne
 	}
-	963.4.3 = {
-		holder = 232
+	977.1.1 = {
+		#William the Good of Bordeaux (977-988)
+		liege = 0
 	}
-	994.2.3 = {
-		holder = 234
+	988.1.1 = {
+		holder = 127049 # Duke Guillaume II of Gascogne (restored)
+		liege = d_gascogne
 	}
-	1030.2.1 = {
+	996.12.23 = {
+		holder = 127050 # Duke Bernard-Guillaume of Gascogne
+	}
+	1009.12.25 = {
+		holder = 127051 # Duke Sanche VI of Gascogne
+	}
+	1032.10.4 = {
 		holder = 228
 	}
 	1039.3.10 = {
@@ -238,7 +276,6 @@ c_bordeaux = {
 	}
 }
 
-
 c_labourd = {
 	867.1.1 = { change_development_level = 9 }
 	1066.1.1 = { change_development_level = 12 }
@@ -267,36 +304,43 @@ c_labourd = {
 	820.1.1 = {
 		holder = 190490 #Donat Loup
 	}
-	836.1.1 = {
-		holder = 190501 #Guillaume
+	830.1.1 = {
+		holder = 70291 # King Iñigo Arista of Navarra
+		liege = k_navarra
+	}
+	846.1.1 = {
+		#historically ruled by normans from 846 to 982
+		liege = 0
 	}
 	864.1.1 = {
-		liege = "d_gascogne"
-		holder = 168114
+		holder = 163060 # as placeholder
+	}		
+	982.1.1 = {
+		holder = 127049 # Duke Guillaume II of Gascogne
+		liege = d_gascogne
 	}
-	893.1.1 = {
-		holder = 7563
+	996.12.23 ={
+		holder = 127050 # Duke Bernard-Guillaume of Gascogne
 	}
-	955.1.1 = {
-		holder = 163061
+	1009.12.25 = {
+		holder = 127051 # Duke Sanche VI of Gascogne
 	}
-	961.1.1 = {
-		holder = 127049 #Guillaume-Sanche de Gascogne
+	1023.1.1 = {
+		#holder = basque0100 # Loup Sanche
+		liege = d_navarra
 	}
-	985.1.1 = {
-		holder = 138344 #Arnaud Loup I de Dax
+	1035.10.18 = {
+		liege = d_gascogne
 	}
-	1028.11.1 = {
-		holder = 138346 #Arnaud II Loup Fortis de Dax
+	1058.1.1 = {
+		#holder = basque0101 # Fortun I Sanche
 	}
-	1050.1.1 = {
-		holder = 138352 #Garcia Arnaud I de Dax
+	1063.1.1 = {
+		#holder = basque0122 # Fortun II Sanche
+		holder = 40003 #TODO_CD_ERCC; return this to Fortun once we have him.
 	}
-	1065.1.1 = {
-		holder = 138348 #Raymond Arnaud I de Dax
-	}
-	1088.12.3 = {
-		holder = 138350 #Navarre I de Dax
+	1095.1.1 = {
+		holder = basque0151 # Reina Tota
 	}
 	1089.1.1 = {
 		holder = 138354 #Arnaud III Raymond de Dax
@@ -337,8 +381,7 @@ c_labourd = {
 	}
 }
 
-
-c_albret = {
+c_albret = { # Needs to create the Lords of Albret that ruled 820-1572
 	735.1.1 = {
 		holder = 190483 #Hatto
 	}
@@ -423,7 +466,6 @@ c_albret = {
 	}
 }
 
-
 c_marsan = {
 	760.1.1 = {
 		holder = 190499 #Guillaume
@@ -431,42 +473,54 @@ c_marsan = {
 	760.1.1 = {
 		liege = d_aquitaine
 	}
-	780.1.1 = {
-		holder = 190500 #Bertrand
+	768.1.1 = {
+		holder = 168104	# Duke Loup II of Gascogne
+		liege = d_gascogne
+	}
+	778.1.1 = {
+		holder = 168106 # Duke Sanche I of Gascogne
+	} 
+	812.1.1 = {
+		holder = 168105	# Duke Semen I of Gascogne
+	}
+	816.1.1 = {
+		holder = 168109	# Duke Garcia I of Gascogne
+	}
+	818.1.1 = {
+		holder = 168121	# Duke Loup III of Gascogne
+	}
+	820.1.1 = {
+		holder = basque0099 # Duke Aznar-Sanche of Armagnac
+		liege = d_armagnac
+	}
+	836.1.1 = {
+		holder = 168143 # Duke Sanche Sanche of Armagnac
+	}
+	848.1.1 = {
+		liege = d_gascogne
+	}
+	855.1.1 = {
+		holder = 168133	# Duke Arnaud of Gascogne
 	}
 	864.1.1 = {
-		liege = "d_gascogne"
-		holder = 168133 #Arnaut
+		holder = 163060 # Duke Sanche III of Gascogne
 	}
 	893.1.1 = {
-		holder = 7563
+		holder = 7563 # Duke Garcia II of Gascogne
 	}
-	927.1.1 = {
-		liege = "d_aquitaine"
+	920.1.1 = {
+		holder = 7562 # Suke Sanche IV of Gascogne
 	}
-	927.1.1 = {
-		holder = 90127
+	955.1.1 ={
+		holder = occitan0009 # Ezi-Sanche de Marsan
 	}
-	935.1.1 = {
-		holder = 230
+	#Missing Aner I de Marsan (son of Ezi-Sanche: 986-993), Loup I de Marsan (son of Aner I: 993-1009)), Guillaume I (son of Loup I: 1099-1033)
+	1033.1.1 = { 
+		holder = 138246 # Raymond-Guillaume de Marsan
 	}
-	963.4.3 = {
-		holder = 232
-	}
-	994.2.3 = {
-		holder = 234
-	}
-	1030.2.1 = {
-		holder = 228
-	}
-	1039.3.10 = {
-		holder = 238
-	}
-	1058.9.5 = {
-		holder = 240
-	}
+	#Missing Géraud I de Marsan (brother of Raymond-Guillaume: 1055-1077)
 	1066.1.1 = {
-		holder = 138244
+		holder = 138244 # Aner II de Marsan
 	}
 	1086.9.25 = {
 		holder = 205733
@@ -495,10 +549,7 @@ c_marsan = {
 	1327.2.1 = {
 		holder = 454500
 	}
-	
-
 }
-
 
 c_agenais = {
 	860.1.1 = {
@@ -506,28 +557,30 @@ c_agenais = {
 		holder = 168144 #Concordius
 	}
 	864.1.1 = {
-		holder = 163060
+		holder = 163060 # Duke Sanche III of Gascogne
+		liege = d_gascogne
 	}
 	893.1.1 = {
-		holder = 7563
+		holder = 7563 # Duke Garcia II of Gascogne
 	}
 	920.1.1 = {
-		holder = 7562
+		holder = 7562 # Suke Sanche IV of Gascogne
 	}
 	955.1.1 = {
-		holder = 163061
+		holder = 163061 # Sanche V Sanche de Gascogne
 	}
 	961.1.1 = {
-		holder = 127049 #Guillaume-Sanche de Gascogne
+		holder = 127049 # Guillaume II Sanche de Gascogne
 	}
 	996.12.23 = {
-		holder = 127050 #Bernard-Guillaume de Gascogne
+		holder = 127050 # Bernard-Guillaume de Gascogne
 	}
 	1009.12.25 = {
-		holder = 127051 #Sanche-Guillaume de Gascogne
+		holder = 127051 # Sanche VI Guillaume de Gascogne
 	}
 	1032.10.4 = {
-		holder = 127055 #BÃ©renger d'AngoulÃªme
+		# Temporarily removed whilst we do some digging.
+		#holder = 127055 #Bérenger d'Angoulême
 	}
 	1036.1.1 = {
 		holder = 228 #Eudes d'Aquitaine
@@ -1125,7 +1178,6 @@ c_saintonge = {
 	}
 }
 
-
 c_aunis = {
 	678.1.1 = {
 		holder = 190478 #Boggis
@@ -1204,6 +1256,8 @@ c_aunis = {
 		holder = 205730	#Alienor of Aquitaine
 	}
 }
+
+
 
 d_toulouse = {
 	769.1.1 = {
@@ -1698,15 +1752,15 @@ c_albi = {
 }
 
 c_uses = {
-	867.1.1 = {
-		holder = 163067 #Bernard de Gothie
-		#no data, so default to lord of Melgueil (nearby county, not on map for us)
-		liege = d_toulouse
+	865.1.1 = {
+		# Bernard of Gothia is moved to Gothia & Septimania.
+		holder = 168137
 	}
 	
 	#House of Montpellier
 	985.1.1 = {
 		holder = 138285	#Guilhem I de Montpellier
+		liege = d_toulouse
 	}
 	1025.1.1 = {
 		holder = 138286	#Guilhem II
@@ -1744,10 +1798,9 @@ c_uses = {
 }
 
 c_montpellier = {
-	867.1.1 = {
-		holder = 163067 #Bernard de Gothie
-		#no data, so default to lord of Melgueil (nearby county, not on map for us)
-		liege = d_toulouse
+	865.1.1 = {
+		# Bernard of Gothia is moved to Gothia & Septimania.
+		holder = 168137
 	}
 	
 	#House of Montpellier
@@ -1797,21 +1850,35 @@ c_carcassonne = {
 		liege = "k_lotharingia"
 		holder = 91475 #ADELARD, count of Cavalonensis (Languedoc)
 	}
-	815.1.1 = {
-		holder = 190556 #Bernard
+	790.1.1 = {
+		holder = visigothic0018 # Bello de Carcassone
 	}
-	844.1.1 = {
-		holder = 190557 #Bernard
+	812.1.1 = {
+		holder = visigothic0020 # Gisclafred de Carcassone
 	}
-	865.4.16 = {
-		holder = 168118	#Gartzia = Olibia II of Carcassonne ?
-		liege = "d_toulouse"
+	821.1.1 = {
+		holder = visigothic0021 # Olibia I de Carcassone
 	}
-	876.1.1 = {
-		holder = 127025	#Acfred I
+	837.5.10 = {
+		holder = occitan0097 # Olibia II de Carcassone
+		liege = d_barcelona
 	}
-	#906 - Bencio
-	#908 - Acfred II
+	872.1.1 = {
+		holder = 190557 # Bernard
+		liege = d_toulouse
+	}
+	873.6.1 = {
+		holder = occitan0097 # Olibia II de Carcassone (restored)
+	}
+	879.1.1 = {
+		holder = 127025	# Acfred I de Carcassone
+	}
+	906.2.18 = {
+		holder = occitan0099 # Bencio de Carcassone
+	}
+	908.1.1 = {
+		holder = occitan0100 # Acfred II de Carcassone
+	}
 	933.1.1 = {
 		holder = 40180	#Arnaud I de Comminges
 	}
@@ -1878,12 +1945,10 @@ c_carcassonne = {
 }
 
 c_beziers = {
-	867.1.1 = {
-		holder = 163067 #Bernard de Gothie
-		#no data, so default to lord of Melgueil (nearby county, not on map for us)
-		liege = d_toulouse
+	865.1.1 = {
+		# Bernard of Gothia is moved to Gothia & Septimania.
+		holder = 168137
 	}
-	
 	#House of Beziers
 	#881 - Rainard I
 	#897 - Boson
@@ -1979,26 +2044,61 @@ c_foix = {
 	}
 }
 
+
+
+d_armagnac = {
+	820.1.1 = {
+		holder = basque0099 # Aznar-Sanche de Gascogne
+	}
+	836.1.1 = {
+		holder = 168143 # Sanche Sanche de Gascogne
+	}
+	848.1.1 = {
+		holder = 0 # Reincorporated into Gascogne
+	} 
+}
+
 c_armagnac = {
 	759.1.1 = {
 		holder = 190494 #Artgarius
 	}
-	759.1.1 = {
+	768.1.1 = {
+		holder = 168104	# Duke Loup II of Gascogne
 		liege = d_gascogne
 	}
-	768.1.1 = {
-		holder = 168104 #Lope II de Vasconia
+	778.1.1 = {
+		holder = 168106 # Duke Sanche I of Gascogne
+	} 
+	812.1.1 = {
+		holder = 168105	# Duke Semen I of Gascogne
 	}
-	801.1.1 = {
-		holder = 31701
-		liege = "k_aquitaine"
+	816.1.1 = {
+		holder = 168109	# Duke Garcia I of Gascogne
 	}
-	810.1.2 = {
-		holder = 31702
+	818.1.1 = {
+		holder = 168121	# Duke Loup III of Gascogne
+	}
+	820.1.1 = {
+		holder = basque0099 # Duke Aznar-Sanche of Armagnac
+		liege = d_armagnac
+	}
+	836.1.1 = {
+		holder = 168143 # Duke Sanche Sanche of Armagnac
+	}
+	848.1.1 = {
+		liege = d_gascogne
+	}
+	855.1.1 = {
+		holder = 168133	# Duke Arnaud of Gascogne
 	}
 	864.1.1 = {
-		liege = "d_gascogne"
-		holder = 163060
+		holder = 163060 # Duke Sanche III of Gascogne
+	}
+	893.1.1 = {
+		holder = 7563 # Duke Garcia II of Gascogne
+	}
+	920.1.1 = {
+		holder = occitan0002 # Guillaume de Fezensac
 	}
 	965.1.1 = {
 		holder = 40009 #Bernard I d'armagnac
@@ -2079,32 +2179,42 @@ c_bigorre = {
 		holder = 190489 #Loup
 	}
 	820.1.1 = {
-		holder = 190490 #Donat Loup
+		holder = basque0099 # Duke Aznar-Sanche of Armagnac
+		liege = d_armagnac
 	}
 	836.1.1 = {
-		holder = 190501 #Guillaume
+		holder = 168143 # Duke Sanche Sanche of Armagnac
 	}
-	866.1.1 = {
-		liege = "d_gascogne"
-		holder = 138162 #Loup Centule I de BÃ©arn
+	848.1.1 = {
+		liege = d_gascogne
 	}
-	905.1.1 = {
-		holder = 138164 #Centule II de BÃ©arn
+	855.1.1 = {
+		holder = 168122 # Loup Loup de Gascogne
+		liege = d_gascogne
 	}
-	940.1.1 = {
-		holder = 138166 #Gaston I de BÃ©arn
+	865.1.1 = {
+		holder = 168124 # Donat-Loup de Bigorre
 	}
-	984.1.1 = {
-		holder = 138168 #Centule III de BÃ©arn
+	907.1.1 = {
+		holder = 168125 # Dat-Donat de Bigorre
 	}
-	1004.1.1 = {
-		holder = 138170 #Gaston II de BÃ©arn
+	909.1.1 = {
+		holder = occitan0010 # Loup-Donat de Bigorre
 	}
-	1022.1.1 = {
-		holder = 40000 #Centule IV de BÃ©arn
+	910.1.1 = {
+		holder = occitan0011 # Raymond I Dat de Bigorre
 	}
-	1030.1.1 = {
-		holder = 1078 # Bernard I of Bigorre/Gersenda
+	956.1.1 = {
+		holder = occitan0013 # Louis de Bigorre
+	}
+	1000.1.1 = {
+		holder = occitan0015 # Garcia-Arnaud de Bigorre
+	}
+	1032.1.1 = {
+		holder = occitan0017 # Gersenda de Bigorre
+	}
+	1033.1.1 = {
+		holder = 1078 # Bernard I of Bigorre
 	}
 	1034.1.1 = {
 		holder = 40188 # Bernard II of Bigorre
@@ -2188,26 +2298,32 @@ c_bearn = {
 	759.1.1 = {
 		holder = 190484 #Loup
 	}
-	775.1.1 = {
-		holder = 190485 #Adalric
+	768.1.1 = {
+		holder = 168104	# Duke Loup II of Gascogne
+		liege = d_gascogne
 	}
-	800.1.1 = {
-		holder = 190486 #Jimeno
+	778.1.1 = {
+		holder = 168106 # Duke Sanche I of Gascogne
+	} 
+	812.1.1 = {
+		holder = 168105	# Duke Semen I of Gascogne
 	}
 	816.1.1 = {
-		holder = 190489 #Loup
+		holder = 168109	# Duke Garcia I of Gascogne
+	}
+	818.1.1 = {
+		holder = 168121	# Duke Loup III of Gascogne
 	}
 	820.1.1 = {
-		holder = 190490 #Donat Loup
+		holder = 168123 # Centule-Loup de Béarn
+		liege = d_armagnac
 	}
-	836.1.1 = {
-		holder = 190501 #Guillaume
+	848.1.1 = {
+		liege = d_gascogne
 	}
 	866.1.1 = {
-		liege = "d_gascogne"
-		holder = 138162 #Loup Centule I de Béarn
-	}
-	
+		holder = 138162 # Centule I de Béarn
+	}	
 	905.1.1 = {
 		holder = 138164 #Centule II de Béarn
 	}
@@ -2292,27 +2408,36 @@ c_comminges = {
 	759.1.1 = {
 		holder = 190494 #Artgarius
 	}
-	759.1.1 = {
+	768.1.1 = {
+		holder = 168104	# Duke Loup II of Gascogne
 		liege = d_gascogne
 	}
-	768.1.1 = {
-		holder = 168104 #Lope II de Vasconia
+	778.1.1 = {
+		holder = 168106 # Duke Sanche I of Gascogne
+	} 
+	812.1.1 = {
+		holder = basque0099 # Duke Aznar-Sanche of Armagnac
 	}
-	801.1.1 = {
-		holder = 31701
-		liege = "k_aquitaine"
+	820.1.1 = {
+		liege = d_armagnac
 	}
-	810.1.2 = {
-		holder = 31702
+	836.1.1 = {
+		holder = 168143 # Duke Sanche Sanche of Armagnac
 	}
-	864.1.1 = {
-		holder = 163060
+	848.1.1 = {
+		liege = d_gascogne
+	}
+	855.1.1 = {
+		holder = 168118 # Garcia-Sanche de Comminges
+	}
+	890.1.1 = {
+		holder = 168119 # Aznar II de Comminges
 	}
 	905.1.1 = {
-		holder = 168120 # Lope Aznar I 
+		holder = 168120 # Loup Aznar de Comminges 
 	}
 	935.1.1 = {
-		holder = 138188 # Aznar II
+		holder = 138188 # Aznar III de Comminges
 	}
 	946.1.1 = {
 		holder = 40180 # Arnaut I
@@ -2321,7 +2446,6 @@ c_comminges = {
 		holder = 40182 #Roger I the Old Carcassone
 	}
 	988.1.1 = {
-		liege = "d_gascogne"
 		holder = 138192 # Arnaut II Comminges
 	}
 	1011.7.29 = {
@@ -2378,9 +2502,8 @@ c_comminges = {
 	1319.1.1 = {
 		holder = 455640 #Jean I de lomagne
 	}
-	
-
 }
+
 
 d_auvergne = {
 	1337.1.1 = {
@@ -2394,7 +2517,7 @@ d_auvergne = {
 c_auvergne = {
 	864.1.1 = {
 		liege = d_aquitaine
-		holder = 127021	#Bernard I
+		holder = 127019	#Bernard I
 	}
 	
 	#House of Auvergne
@@ -2466,7 +2589,6 @@ c_auvergne = {
 		holder = 455820 #Jeanne d'Auvergne
 	}
 }
-
 
 c_clermont_sur_allier = {
 	864.1.1 = {
@@ -2619,7 +2741,6 @@ c_thiers = {
 		holder = 455820 #Jeanne d'Auvergne
 	}
 }
-
 
 c_velay = {
 	688.1.1 = {
@@ -3068,6 +3189,7 @@ c_la_marche = {
 	}
 }
 
+
 d_poitou = {
 	769.1.1 = {
 		de_jure_liege = k_france
@@ -3167,7 +3289,6 @@ d_poitou = {
 		holder = 455500 # Philippe VI
 	}
 }
-
 
 c_poitiers = {
 	867.1.1 = { change_development_level = 6 }
@@ -3432,7 +3553,6 @@ c_montaigu = {
 		liege = "k_england"
 	}
 }
-
 
 c_thouars = {
 	867.1.1 = {

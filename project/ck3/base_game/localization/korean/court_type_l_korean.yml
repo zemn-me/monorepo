@@ -35,9 +35,9 @@
  court_scholarly:0 "학문 중시 궁정"
  court_scholarly_desc:1 "#low 궁정이란 교양인과 탁월한 능력을 갖춘 이들이 모이는 장소입니다. \n\n궁정 신하가 [GetTrait('scholarly_court_1').GetName( GetNullCharacter )] 특성을 얻습니다.#!"
  court_scholarly_tooltip_desc:0 "$court_scholarly$에서는 지식과 꾸준한 학습이 미덕으로 여겨집니다."
- court_tribal: "부족 궁정"
- court_tribal_desc: "#low 이 궁정에서는 힘이 곧 법도이며, 회당은 전리품과 약탈품으로 가득합니다! \n\n궁정 신하가 [GetTrait('warlike_court_1').GetName( GetNullCharacter )] 특성을 얻습니다.#!"
- court_tribal_tooltip_desc: "$court_tribal$에서는 무예와 끈기가 미덕으로 여겨집니다."
+ court_tribal:0 "부족 궁정"
+ court_tribal_desc:0 "#low 이 궁정에서는 힘이 곧 법도이며, 회당은 전리품과 약탈품으로 가득합니다! \n\n궁정 신하가 [GetTrait('warlike_court_1').GetName( GetNullCharacter )] 특성을 얻습니다.#!"
+ court_tribal_tooltip_desc:0 "$court_tribal$에서는 무예와 끈기가 미덕으로 여겨집니다."
 
  COURT_TYPE_GENERAL_TOOLTIP:0 "[CourtType.GetTooltipDesc]\n\n[CourtType.GetEffectDesc]"
  

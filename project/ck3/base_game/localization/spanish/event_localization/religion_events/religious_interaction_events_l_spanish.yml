@@ -25,8 +25,8 @@
  religious_interaction.32.a:0 "¡Oh, no!"
 
  religious_interaction.4.desc:0 "He reflexionado sobre vuestra petición y he decidido reconocer vuestros derechos sobre [target.GetName]."
- religious_interaction.4.child:0 "Como [secondary_recipient.Custom('ES_ElLa')] [secondary_recipient.GetTitledFirstName] no es más que una criatura, estáis en vuestro derecho de intervenir."
- religious_interaction.4.they_are_female:0 "Como [secondary_recipient.Custom('ES_ElLa')] [secondary_recipient.GetTitledFirstName] es una mujer, estáis en vuestro derecho de intervenir."
+ religious_interaction.4.child:0 "Como el/la [secondary_recipient.GetTitledFirstName] no es más que una criatura, estáis en vuestro derecho de intervenir."
+ religious_interaction.4.they_are_female:0 "Como el/la [secondary_recipient.GetTitledFirstName] es una mujer, estáis en vuestro derecho de intervenir."
  religious_interaction.4.they_are_male:0 "Como [secondary_recipient.GetTitledFirstName] es un hombre, estáis en vuestro derecho de intervenir."
  religious_interaction.4.fallback:0 "Han aparecido pruebas irrefutables de que vuestros antepasados, de hecho, gobernaron esas tierras en tiempos antiguos."
  religious_interaction.4.a:0 "¡Demostraré ser un[ROOT.Char.Custom('ES_XA')] gobernante dign[ROOT.Char.Custom('ES_OA')]!"
@@ -110,7 +110,7 @@
 
 #I have survived!
  religious_interaction.2101.start.desc:0 "¡Agua, necesito agua! La garganta, la cabeza, la piel, ¡todo me arde!\n\n¿Estaba [ROOT.Char.GetFaith.DevilName] realmente aquí, riéndose de mi miseria? ¿[ROOT.Char.GetFaith.WaterGodName] me ofreció una bota de agua? Bebí y bebí, pero no se sació mi sed."
- religious_interaction.2101.end.desc:0 "\n\nCuando [imprisoner.GetTitledFirstName] regresa y me ponen una bota contra los labios, se despeja la neblina de mi mente. [imprisoner.Custom('ES_ElLa')] [imprisoner.GetTitleAsNameNoTooltip] parece decepcionarse cuando me encuentra con vida, pero la divinidad ha hablado."
+ religious_interaction.2101.end.desc:0 "\n\nCuando [imprisoner.GetTitledFirstName] regresa y me ponen una bota contra los labios, se despeja la neblina de mi mente. El/La [imprisoner.GetTitleAsNameNoTooltip] parece decepcionarse cuando me encuentra con vida, pero la divinidad ha hablado."
  religious_interaction.2101.a:0 "¡Soy inocente!"
 
 #They survived...
@@ -126,7 +126,7 @@
  religious_interaction.2103.a:0 "Estoy tan… tan cansad[ROOT.Char.Custom('ES_OA')]…"
 
 #They died!
- religious_interaction.2104.desc:0 "En la víspera final del juicio de [prisoner.GetTitledFirstName], [prisoner.GetSheHe] no se mueve cuando nos acercamos. Uno de los sirvientes le acerca una bota a sus resecos labios, pero el agua corre por su barbilla sin respuesta.\n\n«¡[ROOT.Char.GetFaith.HighGodName|U] ha hablado!», proclama el [ROOT.Char.Custom('DefaultPriestTitle')] con las manos alzadas hacia el cielo. «[prisoner.Custom('ES_ElLa')|U] prisioner[prisoner.Custom('ES_OA')] es culpable!»."
+ religious_interaction.2104.desc:0 "En la víspera final del juicio de [prisoner.GetTitledFirstName], [prisoner.GetSheHe] no se mueve cuando nos acercamos. Uno de los sirvientes le acerca una bota a sus resecos labios, pero el agua corre por su barbilla sin respuesta.\n\n«¡[ROOT.Char.GetFaith.HighGodName|U] ha hablado!», proclama el [ROOT.Char.Custom('DefaultPriestTitle')] con las manos alzadas hacia el cielo. «El/La prisioner[prisoner.Custom('ES_OA')] es culpable!»."
 
 ##############################################
 ### Literalist Debate by Ewan Cowhig Croft ###

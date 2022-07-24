@@ -423,7 +423,7 @@
  feast_default.6302.b.tt_callous:0 "[feast_artifact_culprit.Custom('FR_le_Char_Pi')|U][feast_artifact_culprit.GetTitledFirstNameNoTooltip] est un bel ajout à mes prisonniers."
 
  feast_default.6351.t:0 "$feast_header$ dommage collatéral"
- feast_default.6351.desc_intro:0 "À peine ai-je réussi à m’asseoir sur mon siège que j’entends un hurlement émanant [feast_default_6351_fighter_2.Custom('FR_du_Char_Pi')][feast_default_6351_fighter_2.GetTitledFirstNameNoTooltip]. Il semblerait qu[feast_default_6351_fighter_2.Custom('FR_EluiElle')] et [feast_default_6351_fighter_1.Custom('FR_le_Char_Pi')][feast_default_6351_fighter_1.GetTitledFirstNameNoTooltip] se soient vraiment battu[feast_default_6351_fighter_1.Custom2('FR_E', SCOPE.sC('feast_default_6351_fighter_2'))]s, car [feast_default_6351_fighter_2.GetFirstNameNoTooltip] est en train de se faire malmener par le [feast_default_6351_fighter_1.GetFirstNameNoTooltip]. Je réalise trop tard que leur danse martiale s’est frayée un chemin à travers le [feast_target_artifact.GetName] !"
+ feast_default.6351.desc_intro:0 "À peine ai-je réussi à m’asseoir sur mon siège que j’entends un hurlement émanant [feast_default_6351_fighter_2.Custom('FR_du_Char_Pi')][feast_default_6351_fighter_2.GetTitledFirstNameNoTooltip]. Il semblerait qu[feast_default_6351_fighter_2.Custom('FR_EluiElle')] et [feast_default_6351_fighter_1.Custom('FR_le_Char_Pi')][feast_default_6351_fighter_1.GetTitledFirstNameNoTooltip] se soient vraiment battu[feast_default_6351_fighter_1.Custom2('FR_E', SCOPE.sC('feast_default_6351_fighter_2'))]s, car [feast_default_6351_fighter_2.GetFirstNameNoTooltip] est en train de se faire malmener par [feast_default_6351_fighter_1.GetFirstNameNoTooltip]. Je réalise trop tard que leur danse martiale s’est frayée un chemin à travers le [feast_target_artifact.GetName] !"
  feast_default.6351.desc_calm:0 "\n\nJe fais signe à mes gardes de les séparer."
  feast_default.6351.desc_wrathful:0 "\n\nJe leur crie depuis l’autre côté du hall : « Qu’est-ce que ça veut dire ?! »"
  feast_default.6351.desc_outro:0 "\n\n[feast_default_6351_fighter_1.Custom2('FR_IlsElles', SCOPE.sC('feast_default_6351_fighter_2'))|U] sont présenté[feast_default_6351_fighter_1.Custom2('FR_E', SCOPE.sC('feast_default_6351_fighter_2'))]s devant moi. [feast_default_6351_fighter_1.Custom2('FR_IlsElles', SCOPE.sC('feast_default_6351_fighter_2'))|U] se rejettent mutuellement la faute d’avoir déclenché la bagarre."
@@ -501,8 +501,3 @@
  feast_default.9002.desc:0 "Quel régal ! Je me souviendrai des jours passés chez [host.Custom('FR_le_Char_Pi')][host.GetTitledFirstName]."
  feast_default.9002.desc_ending:1 "\n\nC’est le moment d’effacer les traces de gaieté et de vin, et de reprendre mes fonctions."
  feast_default.9002.a:0 "Au revoir, m[ROOT.Char.Custom2('FR_RelationToMe_OnA', SCOPE.sC('host'))] !"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- feast_default.9001.a.tt:0 "Les opinions de vos invités envers vous s'améliorent."
- feast_default.9002.desc_imprisoned_host:0 "Dommage qu'[host.Custom('FR_IlElle')] n'ait pas pu être là..."
- feast_default.9002.a_imprisoned_host:0 "Au revoir !"

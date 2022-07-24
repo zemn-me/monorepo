@@ -220,7 +220,7 @@
  befriend_ongoing.4080.a:0 "Да будет так!"
   
  befriend_ongoing.4082.t:0 "Дикие ночи"
- befriend_ongoing.4082.desc:1 "[owner.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)] предлагает совместно предаться вину и веселью. Насколько я знаю, [owner.GetSheHe] тоже пользуется репутацией [Select_CString(target.IsFemale, 'заправской', 'заправского' )] гуляки."
+ befriend_ongoing.4082.desc:1 "[owner.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)|U] предлагает совместно предаться вину и веселью. Насколько я знаю, [owner.GetSheHe] тоже пользуется репутацией [Select_CString(target.IsFemale, 'заправской', 'заправского' )] гуляки."
  befriend_ongoing.4082.a:0 "Будет весело!"
  befriend_ongoing.4082.b:0 "[owner.GetFirstNameNoTooltip]? Я лучше напьюсь в одиночестве."
 

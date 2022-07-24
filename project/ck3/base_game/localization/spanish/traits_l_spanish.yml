@@ -445,7 +445,7 @@
  trait_bubonic_plague_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] está acosad[ROOT.GetCharacter.Custom('ES_OA')] por manchas negras en la piel y múltiples bubas; no le queda mucho en este mundo."
  trait_smallpox:0 "Viruela"
  trait_smallpox_desc:0 "Lleno de cicatrices, sarpullidos y protuberancias, este personaje nunca volverá a ser el mismo, aunque sobreviva a la enfermedad."
- trait_smallpox_character_desc:0 "Llen[ROOT.GetCharacter.Custom('ES_OA')] de cicatrices, sarpullidos y protuberancias, [ROOT.GetCharacter.GetFirstNameNoTooltip] nunca volverá a ser [ROOT.GetCharacter.Custom('ES_ElLa')] mism[ROOT.GetCharacter.Custom('ES_OA')], aunque sobreviva a la enfermedad."
+ trait_smallpox_character_desc:0 "Llen[ROOT.GetCharacter.Custom('ES_OA')] de cicatrices, sarpullidos y protuberancias, [ROOT.GetCharacter.GetFirstNameNoTooltip] nunca volverá a ser el/la mism[ROOT.GetCharacter.Custom('ES_OA')], aunque sobreviva a la enfermedad."
  trait_sickly:0 "Enfermizo"
  trait_sickly_desc:0 "Este personaje es propenso a la enfermedad."
  trait_sickly_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es propenso a la enfermedad."
@@ -473,8 +473,8 @@
  trait_beauty_good_1_desc:0 "Este personaje es agradable de mirar."
  trait_beauty_good_1_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es agradable de mirar."
  trait_beauty_good_2:0 "Atractivo"
- trait_beauty_good_male_2:1 "Atractivo" 
- trait_beauty_good_female_2:1 "Atractiva"
+ trait_beauty_good_male_2:0 "Hermoso"
+ trait_beauty_good_female_2:0 "Hermosa"
  trait_beauty_good_2_desc:0 "Este personaje ha sido bendecido con un físico agradable."
  trait_beauty_good_2_character_desc:1 "[ROOT.GetCharacter.GetFirstNameNoTooltip] recibió la bendición de un físico [ROOT.Char.Custom('FemaleMale')] privilegiado."
  trait_beauty_good_3:0 "Hermoso"
@@ -668,7 +668,7 @@
  trait_bastard_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] no nació de la unión legal de sus padres, y tendrá que vivir con la mancha de la ilegitimidad toda su vida."
  trait_twin:0 "Gemelo"
  trait_twin_desc:0 "Este personaje tiene un hermano gemelo."
- trait_twin_character_desc:1 "[ROOT.GetCharacter.GetFirstNameNoTooltip] tiene un[ROOT.GetCharacter.Custom('ES_XA')] [hermanOT.GetCharacter.Custom('ES_OA')] gemel[ROOT.GetCharacter.Custom('ES_OA')]."
+ trait_twin_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] tiene un[ROOT.GetCharacter.Custom('ES_XA')] [hermanOT.GetCharacter.Custom('ES_OA')] gemel[ROOT.GetCharacter.Custom('ES_OA')]."
  trait_legitimized_bastard:0 "Bastardo legitimado"
  trait_legitimized_bastard_desc:0 "Este personaje nació bastardo, pero fue legitimado,"
  trait_legitimized_bastard_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] nació bastard[ROOT.GetCharacter.Custom('ES_OA')], pero fue legitimad[ROOT.GetCharacter.Custom('ES_OA')]."
@@ -740,6 +740,21 @@
  trait_adventurer:0 "Aventurero"
  trait_adventurer_desc:0 "Este personaje ha tenido una vida de valentía y acción como parte de una facción aventurera."
  trait_adventurer_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] ha tenido una vida de valentía y acción como aventurer[ROOT.GetCharacter.Custom('ES_OA')]."
+
+ trait_education_republican_knowledge:0 "Conocimiento republicano"
+ trait_education_republican_knowledge_1:0 "Habitante de ciudad"
+ trait_education_republican_knowledge_1_desc:1 "Este personaje se ha iniciado en la gestión de ciudades."
+ trait_education_republican_knowledge_1_character_desc:1 "[ROOT.GetCharacter.GetFirstNameNoTooltip] se ha iniciado en la gestión de ciudades."
+ trait_education_republican_knowledge_2:0 "Alcalde en prácticas"
+ trait_education_republican_knowledge_2_desc:1 "Este personaje se ha instruido en el arte de la gestión de ciudades"
+ trait_education_republican_knowledge_2_character_desc:2 "[ROOT.GetCharacter.GetFirstNameNoTooltip] se ha instruido en el arte de la gestión de ciudades"
+ trait_education_republican_knowledge_3:0 "Entendido en ciudades"
+ trait_education_republican_knowledge_3_desc:1 "Este personaje ha desarrollado un fuerte sentido de la gestión de ciudades"
+ trait_education_republican_knowledge_3_character_desc:2 "[ROOT.GetCharacter.GetFirstNameNoTooltip] ha desarrollado un fuerte sentido de la gestión de ciudades"
+ trait_education_republican_knowledge_4:0 "Heredero republicano"
+ trait_education_republican_knowledge_4_desc:1 "Este personaje ha dominado los secretos de la gestión de ciudades"
+ trait_education_republican_knowledge_4_character_desc:1 "[ROOT.GetCharacter.GetFirstNameNoTooltip] ha dominado los secretos de la gestión de ciudades"
+
  	# Female version of Child of Concubine
  trait_child_of_concubine:1 "Fruto de concubinato"
  trait_child_of_concubine_desc:0 "Este personaje nació de una concubina."
@@ -760,7 +775,7 @@
   #Heretic Uprisings
  trait_heresiarch:1 "Heresiarca"
  trait_heresiarch_desc:1 "Este personaje es el líder local de una secta herética."
- trait_heresiarch_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es [ROOT.GetCharacter.Custom('ES_ElLa')] líder local de una secta herética."
+ trait_heresiarch_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es el/la líder local de una secta herética."
 
 #Commander Traits
  trait_logistician:0 "Logista"
@@ -837,7 +852,7 @@
  
  trait_augustus:0 "Augusto"
  trait_augustus_desc:0 "Este personaje es el gobernante actual del Imperio romano restaurado y exige el respeto que se le debe a un cargo de tal magnitud."
- trait_augustus_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es [ROOT.GetCharacter.Custom('ES_ElLa')] gobernante actual del Imperio romano restaurado y exige el respeto que se le debe a un cargo de tal magnitud."
+ trait_augustus_character_desc:0 "[ROOT.GetCharacter.GetFirstNameNoTooltip] es el/la gobernante actual del Imperio romano restaurado y exige el respeto que se le debe a un cargo de tal magnitud."
  TRAIT_ENTRY_INHERITANCE_INFO:1 "[MatchmakerTraitInfo.GetInheritanceInfo]"
  TRAIT_INHERITANCE_GUARANTEED_ONE:0 "#weak Como al menos uno de los padres tiene este rasgo, #underline será#! heredado.#!"
  TRAIT_INHERITANCE_GUARANTEED_BOTH:0 "#weak Como ambos padres tienen este rasgo, #underline será#! heredado.#!"

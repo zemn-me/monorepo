@@ -288,7 +288,7 @@
  # # Pariah of Court
  court.8170.t:0 "궁정의 기피 대상"
  court.8170.desc.intro_scary:0 "[criminal.Custom('GetCrime')|U] [criminal.GetFirstName]'(이)가 다가오자 궁정 아이들이 혼비백산해서 도망쳤다. 하물며 열렬하기로는 따라올 이가 없는 [ROOT.Char.GetFaith.BishopNeuterPlural]조차 [criminal.GetFirstName]의 존재감에 위축되었다."
- court.8170.desc.intro_sordid:0 "'[criminal.Custom('GetCrime')|U] [criminal.GetFirstName]'(은)는 궁정에서 경멸받는 대상이다. 사회에서 매장당한 건 말할 것도 없고, 온갖 추악한 농담의 소재로 쓰일 때가 많다."
+ court.8170.desc.intro_sordid:0 "[criminal.Custom('GetCrime')|U] [criminal.GetFirstName](은)는 궁정에서 경멸받는 대상이다. 사회에서 매장당한 건 말할 것도 없고, 온갖 추악한 농담의 소재로 쓰일 때가 많다."
  court.8170.desc.intro_religious:0 "나는 사실상 모든 사람이 기피하는 사악한 신앙의 신자인 '[criminal.Custom('GetCrime')|U] [criminal.GetFirstName]'에게 환대를 베풀었다는 이유로 가혹한 시선을 받아야 했다."
  court.8170.desc.intro_fallback:0 "나는 격식 있는 자리에서 꼴 보기도 싫은 흉물인 '[criminal.Custom('GetCrime')|U] [criminal.GetFirstName]'에게 환대를 베풀었다는 이유로 궁정 사람들의 손가락질을 받아야 했다."
  court.8170.desc.body:0 "\n\n문제의 [criminal.Custom('GetCrimeDesc')](을)를 처벌하지 않으니 이젠 내가 그 존재를 공공연하게 묵인하는 걸로 인식되는 분위기가 형성되고 있다. [ROOT.Char.GetFaith.AltPriestTermPlural](와)과 신도들 사이에서 내 궁정의 위신이 추락하는 건 덤이고...\n\n압박이 들어오는 이상 나도 어쩔 수 없다. 이젠 내 [ROOT.Char.Custom2('RelationToMePossessive', SCOPE.sC('criminal'))] 범죄가 [criminal.GetHerHim]를 향한 내 애정보다 무거운지, 아니면 가벼운지를 결정해야 한다. 결단이 필요한 시점이다."

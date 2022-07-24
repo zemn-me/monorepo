@@ -43,14 +43,28 @@ yarn_install(
     yarn_lock = "//:yarn.lock",
 )
 
-load("@rules_python//python:pip.bzl", "pip_install")
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
-# Create a central external repo, @my_deps, that contains Bazel targets for all the
-# third-party packages specified in the requirements.txt file.
-pip_install(
-    name = "pip",
-    requirements = "//:py_requirements.txt",
+python_register_toolchains(
+    name = "python3_9",
+    # Available versions are listed in @rules_python//python:versions.bzl.
+    # We recommend using the same version your team is already standardized on.
+    python_version = "3.9",
 )
+
+load("@python3_9//:defs.bzl", "interpreter")
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+pip_parse(
+    name = "pip",
+    python_interpreter_target = interpreter,
+    # pip-compile
+    requirements_lock = "//:requirements.txt",
+)
+
+load("@pip//:requirements.bzl", "install_deps")
+
+install_deps()
 
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 

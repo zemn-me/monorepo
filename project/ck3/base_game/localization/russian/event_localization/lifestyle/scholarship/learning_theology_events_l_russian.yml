@@ -63,7 +63,7 @@
 
  #Send fan mail to religious head, by Linnéa Thimrén
  learning_theology.3021.t:0 "Священное письмо"
- learning_theology.3021.desc_opening:0 "Мои недавние теологические изыскания удостоились высокой оценки от представителей [ROOT.Char.GetFaith.HighGodNamePossessive] на земле. Чтобы выразить свои чувства, я напишу письмо: пусть  его увидит [compliment_receiver.GetTitleAsName] [compliment_receiver.GetFirstName].\n\n"
+ learning_theology.3021.desc_opening:0 "Мои недавние теологические изыскания удостоились высокой оценки от представителей [ROOT.Char.GetFaith.HighGodNamePossessive] на земле. Чтобы выразить свои чувства, я напишу письмо: пусть  его увидит [compliment_receiver.GetTitleAsName|l] [compliment_receiver.GetFirstName].\n\n"
  learning_theology.3021.desc_friend:0 "Я и [Select_CString(believer.IsFemale, 'моя', 'мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('believer'))] [believer.GetTitledFirstName] садимся"
  learning_theology.3021.desc:0 "Я присаживаюсь к писцу, "
  learning_theology.3021.desc_christian:0 "и вместе мы составляем великолепное письмо, где подчеркиваем такое качество [compliment_receiver.GetHerHis|U] Святейшества, как..."
@@ -85,7 +85,7 @@
 
 # Deal with county of different faith, by Linnéa Thimrén
  learning_theology.3031.t:0 "Различия в вере"
- learning_theology.3031.desc_opening:0 "В графстве [county.GetNameNoTier] местные жители исповедуют [county.GetProvince.GetCounty.GetFaith.GetNameNoTooltip|l] и в своих молитвах не упоминают имени [ROOT.Char.GetFaith.HighGodNamePossessive].\n\n"
+ learning_theology.3031.desc_opening:0 "В графстве [county.GetNameNoTier] местные жители исповедуют [county.GetProvince.GetCounty.GetFaith.GetAdjectiveNoTooltip|l] и в своих молитвах не упоминают имени [ROOT.Char.GetFaith.HighGodNamePossessive].\n\n"
  learning_theology.3031.desc_bishop:0 "[bishop.GetCouncilTitle|U] [bishop.GetFirstName] считает это ересью, но народ молит о понимании..."
  learning_theology.3031.desc:0 "Многие считают это ересью, но народ молит о понимании..."
  learning_theology.3031.a:0 "Как и кого они почитают, это не мое дело."
@@ -110,7 +110,7 @@
  learning_theology.3043.a:0 "Это-то я и ищу!"
  learning_theology.3043.b:0 "Вряд ли тут есть хоть капля божественного, но мне так спокойно!"
 
- learning_theology.3044.desc:0 "Чем глубже я погружаюсь в древние тексты, тем больше узнаю. Возможно ли, что древние [ROOT.Char.GetFaith.DevoteeNeuterPlural] и их мистические обряды старше, чем [ROOT.Char.GetFaith.GetReligion.GetNameNoTooltip]?\n\nПохоже, мне повезло найти нечто замечательное."
+ learning_theology.3044.desc:0 "Чем глубже я погружаюсь в древние тексты, тем больше узнаю. Возможно ли, что древние [ROOT.Char.GetFaith.DevoteeNeuterPlural] и их мистические обряды старше, чем [ROOT.Char.GetFaith.GetReligion.GetAdjectiveNoTooltip]?\n\nПохоже, мне повезло найти нечто замечательное."
  learning_theology.3044.a:0 "Я открываю столько нового в моей вере!"
  learning_theology.3044.b:0 "Возможно, мне все же стоит немного поэкспериментировать..."
 
@@ -130,11 +130,11 @@
  learning_theology.3047.a:0 "[ROOT.Char.GetFaith.HighGodName] выбирает меня! Я [Select_CString(ROOT.Char.IsFemale, 'избранная', 'избранный' )]!"
 
 # Passion Play fanfiction drama, by James Beaumont
- learning_theology.3051.t:0 "[ROOT.Char.GetFaith.GetReligion.GetAdjectiveNoTooltip]ая пьеса во владении [ROOT.Char.GetCapitalLocation.GetTitle.GetNameNoTierNoTooltip]"
- learning_theology.3051.desc.intro:0 "Мне стало известно, что [passion_playwright.GetName], [Select_CString(passion_playwright.IsFemale, 'известная', 'известный' )] [ROOT.Char.GetFaith.GetReligion.GetAdjectiveNoTooltip|l][Select_CString(passion_playwright.IsFemale, 'ая', 'ый' )] драматург, намеревается устроить спектаклю по своему произведению, именуемому:"
- learning_theology.3051.passion:0 "Страсть [ROOT.Char.GetFaith.random_GoodGodNamePossessive]"
- learning_theology.3051.arabian_nights:0 "2000 [ROOT.Char.GetPrimaryTitle.GetAdjective]их ночей"
- learning_theology.3051.inferno:0 "Пекло [ROOT.Char.GetFaith.random_EvilGodNamePossessive]"
+ learning_theology.3051.t:0 "[ROOT.Char.GetFaith.GetReligion.GetNameNoTooltip]ая пьеса во владении [ROOT.Char.GetCapitalLocation.GetTitle.GetNameNoTierNoTooltip]"
+ learning_theology.3051.desc.intro:0 "Мне стало известно, что [passion_playwright.GetName], [Select_CString(passion_playwright.IsFemale, 'известная', 'известный' )] [ROOT.Char.GetFaith.GetReligion.GetNameNoTooltip|l][Select_CString(passion_playwright.IsFemale, 'ая', 'ый' )] драматург, намеревается устроить спектаклю по своему произведению, именуемому:"
+ learning_theology.3051.passion:0 "Страсть [ROOT.Char.GetFaith.random_GoodGodNames]"
+ learning_theology.3051.arabian_nights:0 "2000 #L [ROOT.Char.GetPrimaryTitle.GetAdjective|l]их#! ночей"
+ learning_theology.3051.inferno:0 "Пекло [ROOT.Char.GetFaith.random_EvilGodNames]"
  learning_theology.3051.my_immortal:0 "[passion_playwright.GetRandomPositiveTrait]"
  learning_theology.3051.desc.passion:0 "«$learning_theology.3051.passion$»."
  learning_theology.3051.desc.arabian_nights:0 "«$learning_theology.3051.arabian_nights$»."
@@ -146,11 +146,11 @@
  learning_theology.3052.desc:0 "Наблюдая за ходом пьесы, я понимаю, почему все считают, что [passion_playwright.GetName] гений литературы. Слова, игра — передо мной словно бы разворачивается [ROOT.Char.GetFaith.ReligiousText], я будто бы вижу руку [ROOT.Char.GetFaith.CreatorNamePossessive]!\n\nКогда пьеса заканчивается, я обнаруживаю, что [passion_playwright.GetNameNoTooltip] стоит рядом со мной."
  learning_theology.3052.a:0 "Вы должны научить меня читать религиозные тексты!"
  learning_theology.3052.b:0 "Я могу написать кое-что получше!"
- learning_theology.3053.desc:0 "Я наблюдаю за ходом пьесы и понимаю, что это полная чушь. Это недостойно называться литературой.\n\nИстория повествует о молодом ученом, изучающем [ROOT.Char.GetFaith.GetReligion.GetAdjectiveNoTooltip|l]ий мистицизм и ведовство, а также постоянно меняющего любовниц и любовников из числа своих коллег.\n\nПьеса и [ROOT.Char.GetFaith.ReligiousText] не имеют почти ничего общего. Другие зрители уже начинают осыпать ее насмешками."
- learning_theology.3053.a:0 "Буу!"
+ learning_theology.3053.desc:0 "Я наблюдаю за ходом пьесы и понимаю, что это полная чушь. Это недостойно называться литературой.\n\nИстория повествует о молодом ученом, изучающем [ROOT.Char.GetFaith.GetReligion.GetNameNoTooltip|l]ий мистицизм и ведовство, а также постоянно меняющего любовниц и любовников из числа своих коллег.\n\nПьеса и [ROOT.Char.GetFaith.ReligiousText] не имеют почти ничего общего. Другие зрители уже начинают осыпать ее насмешками."
+ learning_theology.3053.a:0 "Бу-у!"
  learning_theology.3053.b:0 "Я напишу свою пьесу!"
  learning_theology.3053.c:0 "Эти глупцы не понимают, что [passion_playwright.GetNameNoTooltip] гений!"
- learning_theology.3054.t:0 "Моя собственная [ROOT.Char.GetFaith.GetReligion.GetAdjectiveNoTooltip|l]ая пьеса"
+ learning_theology.3054.t:0 "Моя собственная [ROOT.Char.GetFaith.GetReligion.GetNameNoTooltip|l]ая пьеса"
  learning_theology.3054.desc.intro:0 "Прошло довольно много времени с моего обещания превзойти творчество, которым так гордится [passion_playwright.GetName], и я наслаждаюсь проделанной работой, пока подсыхают чернила моих писарей."
  learning_theology.3054.desc.outro:0 "по моему скромному мнению, заслуживает называться шедевром. Вопрос лишь в том, кто будет играть главную роль?"
  learning_theology.3054.a:0 "Конечно же, я, пусть и тайно!"
@@ -165,10 +165,10 @@
  learning_theology.3055.desc.victory.hired_actor:0 "К моему удовольствию, [lead_actor.GetHerHis] исполнение достойно моих трудов и привело бы в восторг даже [ROOT.Char.GetFaith.GetHighGodNamePossessive]!"
  learning_theology.3055.desc.defeat_writing.hired_actor:0 "К моему ужасу, хоть [lead_actor.GetSheHe] и произносит слова согласно моему замыслу, зрители реагируют свистом и насмешками, а ведь [lead_actor.GetSheHe] так хорошо выступает!"
  learning_theology.3055.desc.defeat_acting.hired_actor:0 "К моему ужасу, [lead_actor.GetSheHe] забывает слова и не в силах выдавить из себя ничего осмысленного. Моя кровь кипит от ярости при виде того, как [lead_actor.GetSheHe] уродует мое творение, а я могу лишь в бессильной ярости слушать насмешки зрителей."
- learning_theology.3055.desc.victory_outro:0 "Толпа взрывается аплодисментами, и я понимаю, что моя работа поистине шедевральна. Теперь [passion_playwright.GetName] увидит, как настоящий [ROOT.Char.GetFaith.GetAdherentNameNoTooltip] пишет пьесы!"
- learning_theology.3055.desc.defeat_outro.solo:0 "Я продолжаю в надежде, что сумею вернуть себе уверенность и спасти выступление, но все напрасно. Я даже не успеваю дойти до конца, как театр пустеет, оставляя меня наедине с позором."
- learning_theology.3055.desc.defeat_outro.hired_actor:0 "\n\n[lead_actor.GetSheHe|U] продолжает в надежде спасти выступление, но все напрасно. Задолго до конца театр пустеет, оставляя меня наедине с позором."
- learning_theology.3055.a:0 "Пусть все [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip] насладятся этим прекрасным вечером!"
+ learning_theology.3055.desc.victory_outro:0 "Толпа взрывается аплодисментами, и я понимаю, что моя работа поистине шедевральна. Теперь [passion_playwright.GetName] увидит, как настоящий [ROOT.Char.GetFaith.GetAdherentNameNoTooltip|l] пишет пьесы!"
+ learning_theology.3055.desc.defeat_outro.solo:0 "Я продолжаю в надежде, что сумею вернуть себе уверенность и спасти выступление, но всё напрасно. Я даже не успеваю дойти до конца, как театр пустеет, оставляя меня наедине с позором."
+ learning_theology.3055.desc.defeat_outro.hired_actor:0 "\n\n[lead_actor.GetSheHe|U] продолжает в надежде спасти выступление, но всё напрасно. Задолго до конца театр пустеет, оставляя меня наедине с позором."
+ learning_theology.3055.a:0 "Пусть все [ROOT.Char.GetFaith.GetAdherentNamePluralNoTooltip|l] насладятся этим прекрасным вечером!"
  learning_theology.3055.b:0 "Возможно, выступления не для меня..."
 
  learning_theology.3054.a.tt:0 "Вы и [passion_playwright.GetName] устроите поединок и попытаетесь победить, опираясь на [Concept( 'diplomacy_skill', 'навык дипломатии' )|E]."
@@ -177,13 +177,13 @@
 
 # Find old text, by Linnéa Thimrén & Flavio Verna
  learning_theology_special.1001.t:0 "Апокриф"
- learning_theology_special.1001.desc:0 "В ненасытной погоне за знаниями мне довелось наткнуться на странный древний текст.\n\nКнига написана древним теологом, на которого редко ссылаются в признанных трудах. Это сочинение разъясняет некоторые аспекты [ROOT.Char.GetFaith.GetNamePossessive]. Мне и в голову не приходило, что нечто подобное может входить в догматы веры."
+ learning_theology_special.1001.desc:0 "В ненасытной погоне за знаниями мне довелось наткнуться на странный древний текст.\n\nКнига написана древним теологом, на которого редко ссылаются в признанных трудах. Это сочинение разъясняет некоторые #L [ROOT.Char.GetFaith.GetName|l]ие#! аспекты. Мне и в голову не приходило, что нечто подобное может входить в догматы веры."
  learning_theology_special.1001.d:0 "Мы должны возродить эти древние обычаи."
- learning_theology_special.1001.d.success:0 "Я успешно включаю свои находки в нынешний список #L [THIS.Char.GetFaith.GetAdjective|l]их#! догматов"
+ learning_theology_special.1001.d.success:0 "Я успешно включаю свои находки в нынешний список #L [THIS.Char.GetFaith.GetName|l]их#! догматов"
  learning_theology_special.1001.d.failure:0 "Мне не удалось убедить остальное духовенство"
  learning_theology_special.1001.d.failure.toast:0 "Мне не удалось ввести апокриф в литургических обиход"
  learning_theology_special.1001.e:0 "[vassal_pope.GetTitledFirstNameNoTooltip] [Select_CString(vassal_pope.IsFemale, 'должна', 'должен' )] узнать об этом!"
- learning_theology_special.1001.e.success:0 "[vassal_pope.GetTitledFirstName] соглашается с необходимостью включить мои находки в современные #L [THIS.Char.GetFaith.GetAdjective|l]ие#! догматы"
+ learning_theology_special.1001.e.success:0 "[vassal_pope.GetTitledFirstName] соглашается с необходимостью включить мои находки в современные #L [THIS.Char.GetFaith.GetName|l]ие#! догматы"
  learning_theology_special.1001.e.failure:0 "[vassal_pope.GetTitledFirstNameNoTooltip] отказывается признать подлинность текста"
  learning_theology_special.1001.e.failure.toast:0 "[vassal_pope.GetTitledFirstName] объявляет текст еретической подделкой"
  learning_theology_special.1001.a:0 "[bishop.GetTitledFirstNameNoTooltip] может помочь мне с изучением текста."
@@ -196,12 +196,12 @@
  learning_theology_special.1001.c:0 "Нужно сжечь эту еретическую мерзость!"
 
  learning_theology_special.1002.t:0 "Новая догма"
- learning_theology_special.1002.a.desc:0 "Включив обряды из старой книги в современные #L [ROOT.Char.GetFaith.GetAdjective|l]ие#! обряды, я оставляю свой след в истории веры. Вряд ли кто-либо из моих предков сможет похвалиться тем же.\n\nНекоторые из видных представителей духовенства продолжают с насмешкой относиться к необычным изменениям в доктрине, но благодаря моему красноречию большинство влиятельных богословов согласились с законностью моей реформы."
- learning_theology_special.1002.b.desc:0 "Поначалу [vassal_pope.GetTitledFirstName] не [Select_CString(vassal_pope.IsFemale, 'желала', 'желал' )] признавать подлинность текста, как и послушные [vassal_pope.GetHerHim] представители #L [ROOT.Char.GetFaith.GetAdjective|l]ой#! веры, но мои страстные речи и знание теологии убедили их.\n\nНекоторые из видных представителей духовенства продолжают с насмешкой относиться к необычным изменениям в доктрине, но большинство влиятельных богословов согласились с законностью моей реформы."
+ learning_theology_special.1002.a.desc:0 "Включив обряды из старой книги в современные #L [ROOT.Char.GetFaith.GetName|l]ие#! обряды, я оставляю свой след в истории веры. Вряд ли кто-либо из моих предков сможет похвалиться тем же.\n\nНекоторые из видных представителей духовенства продолжают с насмешкой относиться к необычным изменениям в доктрине, но благодаря моему красноречию большинство влиятельных богословов согласились с законностью моей реформы."
+ learning_theology_special.1002.b.desc:0 "Поначалу [vassal_pope.GetTitledFirstName] не [Select_CString(vassal_pope.IsFemale, 'желала', 'желал' )] признавать подлинность текста, как и послушные [vassal_pope.GetHerHim] представители #L [ROOT.Char.GetFaith.GetName|l]ой#! веры, но мои страстные речи и знание теологии убедили их.\n\nНекоторые из видных представителей духовенства продолжают с насмешкой относиться к необычным изменениям в доктрине, но большинство влиятельных богословов согласились с законностью моей реформы."
  learning_theology_special.1002.a:0 "Несомненно, воля [ROOT.Char.GetFaith.HighGodNamePossessive] привела меня к этой книге!"
 
- learning_theology_special.1003.a.desc:0 "В своей мудрости [player_pope.GetTitledFirstName] [Select_CString(player_pope.IsFemale, 'обнаружила', 'обнаружил' )] древний религиозный текст, который значительно изменил #L [ROOT.Char.GetFaith.GetAdjective|l]ий#! догмат.\n\nОбсудив свою находку с видными представителями духовенства, [player_pope.GetTitleTierName|l] [Select_CString(player_pope.IsFemale, 'решила', 'решил' )] включить содержимое книги в официальную доктрину веры."
- learning_theology_special.1003.b.desc:0 "После трудоемких исследований и бесконечных часов теологических изысканий [pope_liege.GetTitledFirstName] [Select_CString(pope_liege.IsFemale, 'обнаружила', 'обнаружил' )] древний религиозный текст, значительно меняющий #L [ROOT.Char.GetFaith.GetAdjective|l]ие#! догматы.\n\nПосле знакомства с находкой [vassal_pope.GetTitleTierName|l] [Select_CString(vassal_pope.IsFemale, 'решила', 'решил' )] включить содержимое книги в официальную доктрину веры."
+ learning_theology_special.1003.a.desc:0 "В своей мудрости [player_pope.GetTitledFirstName] [Select_CString(player_pope.IsFemale, 'обнаружила', 'обнаружил' )] древний религиозный текст, который значительно изменил #L [ROOT.Char.GetFaith.GetName|l]ий#! догмат.\n\nОбсудив свою находку с видными представителями духовенства, [player_pope.GetTitleTierName|l] [Select_CString(player_pope.IsFemale, 'решила', 'решил' )] включить содержимое книги в официальную доктрину веры."
+ learning_theology_special.1003.b.desc:0 "После трудоемких исследований и бесконечных часов теологических изысканий [pope_liege.GetTitledFirstName] [Select_CString(pope_liege.IsFemale, 'обнаружила', 'обнаружил' )] древний религиозный текст, значительно меняющий #L [ROOT.Char.GetFaith.GetName|l]ие#! догматы.\n\nПосле знакомства с находкой [vassal_pope.GetTitleTierName|l] [Select_CString(vassal_pope.IsFemale, 'решила', 'решил' )] включить содержимое книги в официальную доктрину веры."
  learning_theology_special.1003.a:0 "И что это означает для всех нас?"
 
 # Learned scholar come to your court, by Linnéa Thimrén

@@ -20,9 +20,9 @@
  realm_maintenance.1001.swear_fealty:0 "Has jurado lealtad a [new_liege.GetTitledFirstName] y te has convertido en su [Concept( 'vassal', 'vasall' )|E][ROOT.Char.Custom('ES_OA')]"
  realm_maintenance.1001.error:1 "[new_liege.GetTitledFirstName] se ha convertido en tu nuev[new_liege.Custom('ES_OA')] [new_liege.Custom('ES_SennorSennora')], ¡pero no sabes por qué!"
  
- realm_maintenance.2001.t:0 "[ROOT.Char.Custom('ES_ElLa')|U] nuev[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetTitleAsNameNoTooltip]"
+ realm_maintenance.2001.t:0 "El/La nuev[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetTitleAsNameNoTooltip]"
  realm_maintenance.2001.desc_murdered:0 "Tras la trágica y #EMP desgraciada#! muerte de [previous_holder.Custom2('MyCharacterIntroduction', ROOT.Char)], ahora recae sobre mis hombros la responsabilidad de dirigir el inmenso [title.GetTierAsNameNoTooltip]."
  realm_maintenance.2001.desc_dead:0 "Tras el fallecimiento de [previous_holder.Custom2('MyCharacterIntroduction', ROOT.Char)], ahora recae sobre mis hombros la responsabilidad de dirigir el inmenso [title.GetTierAsNameNoTooltip]."
  realm_maintenance.2001.desc_alive:0 "Ahora depende de mí dirigir el inmenso [title.GetTierAsNameNoTooltip] que dejó [previous_holder.Custom2('MyCharacterIntroduction', ROOT.Char)]."
  realm_maintenance.2001.desc:0 "\n\nMe presento ante los vasallos, me ajusto mi corona nueva, y [ROOT.Char.Custom('quirk_pos_personal_present')]. ¡Oh, cuántas cosas lograré!"
- realm_maintenance.2001.a:0 "¡Viva [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetTitleAsNameNoTooltip]!"
+ realm_maintenance.2001.a:0 "¡Viva [ROOT.Char.GetTitleAsNameNoTooltip]!"

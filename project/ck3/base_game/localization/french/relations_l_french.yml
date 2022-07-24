@@ -425,7 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T C’est vous#!"
  FRAME_RELATION_MY_HEIR:2 "#T C’est votre [player_heir|El]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_MY_LIEGE`
+ FRAME_RELATION_MY_LIEGE:0 "#T C'est votre [liege|El]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T [dynast|E] de votre [dynasty|El]\n#!$TT_DYNAST_DESC$"
@@ -448,7 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T Vassal puissant#!\nCe [ruler|El] est un [powerful_vassal|El] qui n’attend rien de vous"
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T Vassal puissant#!\nCe [ruler|El] est un [powerful_vassal|El] qui s’attend à rester au [council|E]"
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T Vassal puissant#!\n@warning_icon!#X Ce [ruler|El] est un [powerful_vassal|El] qui a une [opinion|El] diminuée à votre égard car vous ne lui avez pas accordé un poste à votre [council|E]#!"
- # [LocEditor:UntranslatedKey] `FRAME_RELATION_NON_POWERFUL_VASSAL`
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T Vassal#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "m[ROOT.Char.Custom('FR_OnA')] chéri[ROOT.Char.Custom('FR_E')]"
@@ -481,9 +481,3 @@
  lad:0 "garçon"
 
  my:0 "ma"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- relation_court_dwarf_female:0 "naine de la Cour"
- relation_court_dwarf_male:0 "nain de la Cour"
- relation_court_dwarf_female_possessive:0 "court dwarf's"
- relation_court_dwarf_male_possessive:0 "court dwarf's"

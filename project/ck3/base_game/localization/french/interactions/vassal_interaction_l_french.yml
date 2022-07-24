@@ -44,7 +44,7 @@
  force_onto_council_extra_icon:1 "@weak_hook_icon!Disponible parce que vous avez un [hook|El]"
  force_onto_council.notification.strong_hook:0 "Il est dans votre intérêt de m’avoir comme fidèle [council_task.GetPositionName|l]. Vous savez ce qui se passera si vous refusez."
  force_onto_council.notification.fallback:0 "Conformément à notre accord, j’ai l’intention d’agir désormais en tant que [council_task.GetPositionName|l]. Naturellement, cela efface votre dette envers moi."
- force_onto_council.desc.tt:0 "[actor.Custom('FR_le_Char_U_Pi')|U][actor.GetShortUIName] [Select_CString(actor.IsLocalPlayer,'devenez','devient')] un [councillor|El]"
+ force_onto_council.desc.tt:0 "[actor.Custom('FR_le_Char_U_Pi')|U][actor.GetShortUIName|U] [Select_CString(actor.IsLocalPlayer,'devenez','devient')] un [councillor|El]"
  force_onto_council.recipient.tt:0 "[actor.Custom('FR_le_Char_U_Pi')|U][actor.GetShortUIName] est devenu[actor.Custom('FR_E')] votre [council_task.GetPositionName|l]"
  force_onto_council.recipient.tt.duration:2 "[actor.GetSheHe|U] ne peut pas être renvoyé[actor.Custom('FR_E')] pendant [SCOPE.ScriptValue('council_position_locked_value')|0] ans"
  force_onto_council.actor.tt:0 "Vous êtes devenu le [council_task.GetPositionName|l] de votre seigneur lige"

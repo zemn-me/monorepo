@@ -125,10 +125,10 @@
 
  murder_save.1013.desc:0 "Alors que je déguste mon plat préféré, je sens une odeur étrange. Une pointe d’acidité se cache derrière l’arôme habituel, l’équilibre des épices ne semble pas être respecté... Après avoir interrogé le cuisinier, qui m’a dit que tout avait été préparé normalement, une seule pensée me vient à l’esprit : quelqu’un a essayé de m’empoisonner !"
 
- murder_save.0014.t:0 "$murder_save_header$ une compréhension inattendue"
- murder_save.0014.desc:0 "Mon attentat à la vie [target.Custom('FR_du_Char_Pi')][target.GetTitledFirstName] a été déjoué !\n\nIl s’avère que les stupides assassins ne savaient pas qu’[target.Custom('FR_IlElle')] comprenait la langue [owner.GetCulture.GetLanguage.GetNameNoTooltip] et qu’ils ont parlé de leur plan en sa présence."
+ murder_save.0014.t:0 "$murder_save_header$ Sauvé[ROOT.Char.Custom('FR_E')] par la langue"
+ murder_save.0014.desc:0 "Mon attentat à la vie [target.Custom('FR_du_Char_Pi')][target.GetTitledFirstName] a été déjoué !\n\nIl s’avère que ces stupides assassins n’avaient pas réalisé qu’[target.Custom('FR_IlElle')] connaissait la langue [owner.GetCulture.GetLanguage.GetNameNoTooltip] et lui parlaient du complot en sa présence."
 
- murder_save.1014.desc:0 "Un soir, alors que je me prépare à me coucher, j’entends deux de mes serviteurs parler à voix basse. Il me faut un moment pour comprendre qu’ils parlent en langue [owner.GetCulture.GetLanguage.GetNameNoTooltip] plutôt qu’en langue [ROOT.Char.GetCulture.GetLanguage.GetNameNoTooltip]. Ils ne se rendent manifestement pas compte que je peux les comprendre.\n\n« Attends qu’[ROOT.Char.Custom('FR_IlElle')] s’endorme. Puis tu fais le guet pendant que je lui tranche la gorge. »\n\nJe sors rapidement de mes appartements pour informer mes gardes qu’il y a des assassins dans ma chambre. Je remercie [ROOT.Char.GetFaith.HighGodName] de parler cette langue !"
+ murder_save.1014.desc:0 "Un soir, alors que je me prépare à me coucher, j’entends deux de mes serviteurs parler à voix basse. Il me faut un moment pour comprendre qu’ils parlent en langue [owner.GetCulture.GetLanguage.GetNameNoTooltip]. Ils ne se rendent manifestement pas compte que je peux les comprendre.\n\n« Attendons qu’[ROOT.Char.Custom('FR_IlElle')] s’endorme. Puis tu fais le guet pendant que je lui tranche la gorge. »\n\nJe sors rapidement de mes quartiers pour informer mes gardes qu’il y a des assassins dans ma chambre. C’est vraiment une chance que je parle cette langue !"
 
  murder_save.1014.a:0 "Qui enverrait des assassins parlant la langue [owner.GetCulture.GetLanguage.GetNameNoTooltip] ?"
  murder_save.0015.t:0 "$murder_save_header$ l’artefact qui tombe à point nommé"

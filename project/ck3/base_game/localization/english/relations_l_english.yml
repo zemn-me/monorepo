@@ -425,6 +425,7 @@
  #Frame playable
  FRAME_RELATION_ME:1 "#T This is you#!"
  FRAME_RELATION_MY_HEIR:2 "#T This is your [player_heir|E]#!"
+ FRAME_RELATION_MY_LIEGE:0 "#T This is your [liege|E]#!"
 
  #Frame dynasty
  FRAME_RELATION_DYNAST:2 "#T [dynast|E] of your [dynasty|E]\n#!$TT_DYNAST_DESC$"
@@ -447,6 +448,7 @@
  FRAME_RELATION_POWERFUL_VASSAL:1 "#T Powerful Vassal#!\nThis [ruler|E] is a [powerful_vassal|E] who doesn't expect anything from you"
  FRAME_RELATION_HAPPY_POWERFUL_VASSAL:1 "#T Powerful Vassal#!\nThis [ruler|E] is a [powerful_vassal|E] who expects to remain on the [council|E]"
  FRAME_RELATION_UNAHAPPY_POWERFUL_VASSAL:2 "#T Powerful Vassal#!\n@warning_icon!#X This [ruler|E] is a [powerful_vassal|E] who has a lowered [opinion|E] of you because you have not granted them a position on your [council|E]#!"
+ FRAME_RELATION_NON_POWERFUL_VASSAL:0 "#T Vassal#!"
 
  #To address someone (RelationToMeAddress)
  relation_my_love:0 "my love"

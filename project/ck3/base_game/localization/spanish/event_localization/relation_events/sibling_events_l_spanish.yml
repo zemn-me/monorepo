@@ -74,7 +74,7 @@
  sibling.8003.desc:0 "Mi [ROOT.GetCharacter.Custom('trait_lustful_adjective')] [ROOT.Char.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] [sibling.GetTitledFirstName] ha tomado muchas decisiones malas, ¡pero liarse con un[servant_for_romance.Custom('ES_XA')] [sibling.Custom('servant_for_romance')] plebey[servant_for_romance.Custom('ES_OA')] podría ser la peor hasta la fecha!"
  sibling.8003.a:0 "¡Bah! [sibling.GetFirstName] hará lo que le dé la gana."
  risk_of_sibling_producing_bastard_tt:0 "Esto tendrá consecuencias…"
- sibling.8003.b:0 "¡[sibling.Custom('ES_ElElla')|U] no puede volver a verse con [servant_for_romance.Custom('ES_ElLa')] [sibling.Custom('servant_for_romance')]!"
+ sibling.8003.b:0 "¡[sibling.GetSheHe|U] no puede volver a verse con el/la [sibling.Custom('servant_for_romance')]!"
 
  sibling.8004.t:0 "Respeto a los superiores"
  sibling.8004.desc:1 "En su viaje por [province.GetName], mi [ROOT.Char.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] parece haber disgustado enormemente a los campesinos de varios pueblos y aldeas. [sibling.GetTitledFirstName] no solo exigió alojamiento y que [sibling.GetHerHim] trataran como si fuera [ROOT.GetCharacter.Custom2('using_my_title' , SCOPE.sC('sibling') ) ], sino que también castigó a la gente por la más mínima falta de respeto."
@@ -82,7 +82,7 @@
  peasants_dislike_sibling_tt:0 "Los campesinos de [province.GetName] no están contentos"
 
  sibling.8005.t:0 "Una bienvenida desierta"
- sibling.8005.desc:0 "Se suponía que [ROOT.Char.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] [sibling.GetTitledFirstName] tenía que recibir a [vassal.GetTitledFirstName] en su visita a mi corte.\n\nPero [vassal.GetFirstName] se retrasó unos días y, ahora que ha llegado, [sibling.Custom('ES_ElLa')] [ROOT.GetCharacter.Custom('trait_impatient_adjective')] de mi [ROOT.GetCharacter.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] no aparece en ninguna parte y mi invitad[vassal.Custom('ES_OA')] se ha quedado sin recibimiento."
+ sibling.8005.desc:0 "Se suponía que [ROOT.Char.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] [sibling.GetTitledFirstName] tenía que recibir a [vassal.GetTitledFirstName] en su visita a mi corte.\n\nPero [vassal.GetFirstName] se retrasó unos días y, ahora que ha llegado, mi [ROOT.GetCharacter.Custom('trait_impatient_adjective')] de [ROOT.GetCharacter.Custom2('RelationToMeShort' , SCOPE.sC('sibling') )] no aparece en ninguna parte y mi invitad[vassal.Custom('ES_OA')] se ha quedado sin recibimiento."
  sibling.8005.a:0 "Unos cuantos regalos lo compensarán."
  sibling.8005.b:0 "«¡¡[sibling.GetFirstNameNoTooltip]!!»"
 

@@ -747,7 +747,7 @@
 
  character_this_equal:1 "La cible est [CHARACTER.Custom('FR_le_Char_U_Pi')][CHARACTER.GetShortUIName]"
  character_scope_equal:1 "La cible est [CHARACTER.Custom('FR_le_Char_U_Pi')][CHARACTER.GetShortUIName]"
- none_this_equal:1 "La cible est [CHARACTER.Custom('FR_le_Char_U_Pi')][CHARACTER.GetShortUIName]"
+ none_this_equal:1 "La cible est inconnue" # [LocEditor:ForFutureBatchExport]
  
  #completely_controls
  YOU_COMPLETELY_CONTROL_TITLE_DESC:0 "Vous contrôlez [Concept( 'complete_control_region', 'complètement' )|E] [TARGET_TITLE.GetNameNoTier]"
@@ -910,12 +910,3 @@
  NOT_THIRD_IS_DECISION_ON_COOLDOWN:0 "$DECISION_NAME|V$ est disponible pour [CHARACTER.Custom('FR_le_Char_U_Pi')][CHARACTER.GetShortUIName]"
  GLOBAL_IS_DECISION_ON_COOLDOWN:0 "$DECISION_NAME|V$ n’est plus disponible jusqu’au [DATE.GetStringLong]"
  NOT_GLOBAL_IS_DECISION_ON_COOLDOWN:0 "$DECISION_NAME|V$ est disponible"
-
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
- BELONGS_TO_CULTURE_GROUP_TRIGGER:0 "Fait partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- DOES_NOT_BELONG_TO_CULTURE_GROUP_TRIGGER:0 "Ne fait pas partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- I_BELONG_TO_CULTURE_GROUP_TRIGGER:1 "Vous faites partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- I_DO_NOT_BELONG_TO_CULTURE_GROUP:1 "Vous ne faites pas partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- THEY_BELONGS_TO_CULTURE_GROUP:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] fait partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- THEY_DOESNT_BELONG_TO_CULTURE_GROUP:0 "[CHARACTER.Custom('FR_le_Char_U_Pi')|U][CHARACTER.GetShortUIName] ne fait pas partie du [culture_group|El] [CULTURE_GROUP.GetName]"
- BELONGS_TO_CULTURE_GROUP_AS_CHARACTER_TRIGGER:0 "[TARGET_CHARACTER.Custom('FR_le_Char_U_Pi')|U][TARGET_CHARACTER.GetShortUIName] a le même [culture_group|El] que [CHARACTER.Custom('FR_le_Char_U_Pi')][CHARACTER.GetShortUIName]"

@@ -30,6 +30,7 @@
  artifact.1001.desc.weapon:0 "\n\n«Mi [ROOT.Char.Custom('ES_SennorSennora')], mientras limpiaba la armería me di cuenta de que el óxido casi ha hecho desaparecer su… [SCOPE.Custom('ThisArtifactType')]. ¿Qué podemos hacer?».\n\nLe echo un vistazo. Aunque ninguna reforja podrá conseguir que vuelva a ser útil para la batalla, se podría limpiar y conservar para su exhibición con un coste mínimo."
  artifact.1001.desc.other:0 "\n\n«Mi [ROOT.Char.Custom('ES_SennorSennora')], ¡mientras limpiaba el almacén me di cuenta de que su [SCOPE.Custom('ThisArtifactType')] tiene ya tantos años que prácticamente se cae a cachos! ¿Qué podemos hacer?».\n\nLe echo un vistazo. Aunque esté inutilizable por mucho que se repare, se podría limpiar y conservar para su exhibición con un coste mínimo."
  artifact.1001.a:0 "Una empresa que merece la pena."
+ artifact.1001.a.tt.free:0 "#instruction Este [artifact|lE] se puede convertir gratis#!"
  artifact.1001.a.tt:1 "[this_artifact.GetName] se convierte en un [court_artifact|lE] que solo da [grandeur|lE] y [prestige|lE]"
  artifact.1001.b:0 "No, es demasiado caro."
 
@@ -53,7 +54,7 @@
  artifact.3000.c:0 "¡Seguro que fuiste #EMP tú#! quien lo rompió!"
  
  artifact.3001.t:0 "Inspiración: reusar"
- artifact.3001.desc:0 "Hoy se me acerca [inspiration_owner.GetFirstName] con cierto brío en el paso.\n\n«¡Mi ROOT.GetCharacter.GetLadyLord]! Estaba rebuscando entre objetos desechados y cachivaches rotos de vuestros trasteros en busca de inspiración cuando me encontré con un tesoro inesperado. Parece que guardasteis para el futuro algunos materiales de repuesto de un artefacto desmontado… ¡Pues el futuro ya está aquí!\n\nSi pudiera utilizar estas piezas de recambio para mi proyecto, la calidad no se resentiría, ¡y podría devolveros una parte del oro que reservasteis para la compra de materiales!»."
+ artifact.3001.desc:0 "Hoy se me acerca [inspiration_owner.GetFirstName] con cierto brío en el paso.\n\n«¡Mi [ROOT.GetCharacter.GetLadyLord]! Estaba rebuscando entre objetos desechados y cachivaches rotos de vuestros trasteros en busca de inspiración cuando me encontré con un tesoro inesperado. Parece que guardasteis para el futuro algunos materiales de repuesto de un artefacto desmontado… ¡Pues el futuro ya está aquí!\n\nSi pudiera utilizar estas piezas de recambio para mi proyecto, la calidad no se resentiría, ¡y podría devolveros una parte del oro que reservasteis para la compra de materiales!»."
  artifact.3001.a:0 "¡Son noticias excelentes!"
 
  artifact.3010.t:0 "Artefacto degradado: vender"
@@ -68,7 +69,7 @@
  artifact.3020.a:0 "Por lo menos todavía sirve para algo…"
  artifact.3020.b:0 "¡Haz tu trabajo y repáralo!"
  keepsake_trinket_name:0 "Recuerdo de [this_artifact.GetNameNoTooltip]"
- keepsake_trinket_description:0 "Un fragmento del/de la [this_artifact.GetName] perdido/a, que el $antiquarian_court_position$ rescató para [owner.Custom('ES_ElLa')] [owner.GetTitledFirstNameNoTooltip] como recuerdo."
+ keepsake_trinket_description:0 "Un fragmento del/de la [this_artifact.GetName] perdido/a, que el $antiquarian_court_position$ rescató para [owner.GetTitledFirstNameNoTooltip] como recuerdo."
 
  artifact.3030.t:0 "Artefacto degradado: conservar"
  artifact.3030.desc:0 "\n\n«Para salvarlo, tengo una propuesta. Hace poco gané a los dados un pergamino polvoriento a un personaje sospechoso en una feria ambulante. ¡Un buen negocio, ya que su contenido encajaba bien con mi incipiente interés por la alquimia! El antiguo pergamino describe una poción secreta que garantiza que #EMP cualquier artefacto#! quedará mejor que nuevo. ¡Por favor, dejadme probarlo!»"
@@ -142,7 +143,7 @@
  artifact_armor_4_desc:0 "[this_artifact.GetDesc]\n\nUna armadura que ha mantenido a salvo a su dueño en al menos 100 batallas y, por tanto, es considerada un objeto legendario."
  artifact.4030.t:0 "La corona de nuestro pueblo"
  artifact.4030.desc.antiquarian_intro:0 "Mi $antiquarian_court_position$ [antiquarian.GetTitledFirstName] se me acerca con una gran sonrisa en el rostro y mi [this_artifact.GetName] en sus manos."
- artifact.4030.desc.servant_intro:0 "[dummy_servant_gender.Custom('ES_ElLa')|U] sirvient[dummy_servant_gender.Custom('ES_EA')] que se suele encargar de limpiar mis posesiones más valiosas viene a verme con mi [this_artifact.GetName] en las manos."
+ artifact.4030.desc.servant_intro:0 "El/La sirvient[dummy_servant_gender.Custom('ES_EA')] que se suele encargar de limpiar mis posesiones más valiosas viene a verme con mi [this_artifact.GetName] en las manos."
  artifact.4030.desc_emperor:1 "\n\n«Mi [ROOT.Char.GetLadyLord], ¿sabíais que tras tantas generaciones de pertenencia al [ROOT.Char.GetTitleTierName], ahora esta corona se conoce comúnmente como símbolo del poder imperial?»"
  artifact.4030.desc_kingdom:1 "\n\n«Mi [ROOT.Char.GetLadyLord], ¿sabíais que, después de tantas generaciones en el [ROOT.Char.GetTitleAsNameNoTooltip], ahora esta corona se considera parte integral de la identidad de nuestro [primary_title_scope.GetBaseNameNoTierNoTooltip]?»"
  artifact_emperors_crown_name:1 "[this_artifact.GetNameNoTooltip] imperial"
@@ -188,7 +189,7 @@
  artifact.6001.toast:0 "Estandarte perdido en [combat_location.GetNameNoTooltip]"
  
  artifact.7000.a.boil_skull:0 "[skull_boiler.GetFirstName] hierve el cráneo de [skull_to_boil.GetFirstName] y lo convierte en un [court_artifact|lE]"
- artifact_rival_skull:0 "El cráneo de [skull_to_boil.GetTitledFirstName], [skull_to_boil.Custom('ES_ElLa')] rival ejecutad[skull_to_boil.Custom('ES_OA')] de [ROOT.Char.GetTitledFirstName]. Cocido y limpiado por [skull_boiler.GetFirstName]. Se le ha grabado en la frente: «[skull_to_boil.Custom('InsultNoun')] [skull_to_boil.Custom('InsultAdjective')].»"
+ artifact_rival_skull:0 "El cráneo de [skull_to_boil.GetTitledFirstName], rival ejecutad[skull_to_boil.Custom('ES_OA')] de [ROOT.Char.GetTitledFirstName]. Cocido y limpiado por [skull_boiler.GetFirstName]. Se le ha grabado en la frente: «[skull_to_boil.Custom('InsultNoun')] [skull_to_boil.Custom('InsultAdjective')].»"
  artifact.7000.t:0 "Los rivales son para siempre"
  artifact.7000.desc:0 "Ah, gracias a [ROOT.Char.GetFaith.HighGodName] que [skull_to_boil.GetFirstName] ha muerto, ¡y por orden #EMP mía#!, nada menos!\n\nEcharé de menos sus patéticos lloriqueos en mis mazmorras… ¿Y si me guardo una parte de [skull_to_boil.Custom('ES_ElElla')] para tener algo a lo que insultar cuando esté en el trono?\n\nDespués de todo, tampoco es que [skull_boiler.GetFirstName] tenga nada importante que hacer…"
  artifact.7000.a:0 "[skull_boiler.GetFirstNameNoTooltip], cocedme y limpiadme el cráneo de [skull_to_boil.GetFirstNamePossessiveNoTooltip]. Ya."
@@ -196,7 +197,7 @@
 
 
  artifact.4090.t:0 "Reliquia en mano…"
- artifact.4090.desc.antiquarian:0 "Mi anticuari[antiquarian.Custom('ES_OA')] [antiquarian.Custom('ES_ElLa')] [antiquarian.GetTitledFirstName] se me acerca con una idea. Si sellamos mi [that_artifact.GetName] en el mango de mi [this_artifact.GetName], siempre estaré cerca de [ROOT.Char.GetFaith.HighGodName] cuando lo porte.\n\n«Sería como tocar literalmente un pedazo de [ROOT.Char.GetFaith.PositiveAfterLife] cada vez que sostuvierais tal [this_artifact.GetName]». Dice [antiquarian.Custom('ES_ElLa')] [antiquarian.GetTitledFirstNameNoTooltip] con el éxtasis religioso brillando en su mirada."
+ artifact.4090.desc.antiquarian:0 "Mi anticuari[antiquarian.Custom('ES_OA')] [antiquarian.GetTitledFirstName] se me acerca con una idea. Si sellamos mi [that_artifact.GetName] en el mango de mi [this_artifact.GetName], siempre estaré cerca de [ROOT.Char.GetFaith.HighGodName] cuando lo porte.\n\n«Sería como tocar literalmente un pedazo de [ROOT.Char.GetFaith.PositiveAfterLife] cada vez que sostuvierais tal [this_artifact.GetName]». Dice [antiquarian.GetTitledFirstNameNoTooltip] con el éxtasis religioso brillando en su mirada."
  artifact.4090.desc:0 "Un día, mientras contemplaba mi [that_artifact.GetName], me llegó la inspiración. Si incorporo la reliquia dentro de mi [this_artifact.GetName], siempre estaré cerca de [ROOT.Char.GetFaith.HighGodName] a la hora de su uso."
  artifact.4090.a:0 "Siempre estaré cerca de [ROOT.Char.GetFaith.HighGodName]."
  artifact.4090.b:0 "No sería apropiado."

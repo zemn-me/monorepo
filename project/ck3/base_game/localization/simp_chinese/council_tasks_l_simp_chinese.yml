@@ -48,7 +48,7 @@
  spouse_task_intrigue_good_unskilled_notification_tooltip:0 "尽管你的配偶拥有[councillor.Custom('intrigue_skill_level')]的谋略能力，依然发生了这个问题。"
  spouse_task_intrigue_good_skilled_notification_tooltip:0 "这笔意外收获归功于你的配偶[councillor.Custom('intrigue_skill_level')]的谋略能力。"
  spouse_task_learning_good_unskilled_notification_tooltip:0 "尽管你的配偶拥有[councillor.Custom('learning_skill_level')]的学识能力，依然发生了这个问题。"
- spouse_task_learning_good_skilled_notification_tooltip:0 "这笔意外收获归功于你的配偶[active_councillor.Custom('learning_skill_level')]的学识能力。"
+ spouse_task_learning_good_skilled_notification_tooltip:1 "这笔意外收获归功于你的配偶[councillor.Custom('learning_skill_level')]的学识能力。"
 
 #chancellor
  task_foreign_affairs:0 "处理外交事务"
@@ -299,6 +299,7 @@
  STEWARD_PROGRESS_BASE:0 "基础"
  DEVELOP_COUNTY_PERK_BONUS_VALUE:1 "$planned_cultivation_perk_name$"
  STEWARD_PROMOTE_CULTURE_COMMUNAL_IDENTITY_BONUS_MODIFIER:2 "[councillor_liege.GetFaith.GetName]——团体身份"
+ STEWARD_PROMOTE_CULTURE_EASIER_TO_CONVERT_CULTURE_IN_SAME_FAITH_MOUNTAINS_BONUS:0 "[councillor_liege.GetFaith.GetName]——山地[GetFaithDoctrine('tenet_cthonic_redoubts').GetBaseName]"
  STEWARD_PROMOTE_CULTURE_INNOVATION_BONUS_EAST_SETTLING:1 "[councillor_liege.GetCulture.GetName]——东向移民"
  STEWARD_PROMOTE_CULTURE_LOCAL_TRADITIONS_RESPECTED:1 "尊重当地传统"
  STEWARD_PROMOTE_CULTURE_SHUUBIYYA:0 "舒乌比耶"
@@ -331,6 +332,7 @@
  task_conversion_resistance_to_conversion:0 "\n$EFFECT_LIST_BULLET$#N 抵制改信#!"
  task_conversion_opinion_loss:0 "\n$EFFECT_LIST_BULLET$#N 伯爵领好感损失#!"
  task_conversion_notification_tooltip:0 "$task_conversion$产生"
+ task_conversion.tt.forbidden.due_to_struggle_phase:0 "你不能在这个[struggle_phase_phase|E]的[struggle_region_region|E][struggle|E]中进行[convert_county|E]"
 
  task_religious_relations:0 "改善宗教关系"
  task_religious_relations_piety_effect_desc:2 "[piety|E]：@piety_icon!#P +[SCOPE.ScriptValue('court_chaplain_religious_relations_total_piety_gain')]#!/月\n$TAB$[councillor.GetCouncilTitle][councillor.GetShortUINamePossessive]的[learning_skill|E]：#P +[SCOPE.ScriptValue('court_chaplain_religious_relations_modifier')]#!"
@@ -372,10 +374,13 @@
  COURT_CHAPLAIN_CONVERSION_MENDICANT_PREACHERS_MODIFIER:2 "[councillor.GetFaith.GetName]——[GetFaithDoctrine('tenet_mendicant_preachers').GetBaseName]"
  COURT_CHAPLAIN_CONVERSION_COMMUNAL_IDENTITY_BONUS_MODIFIER:3 "[councillor.GetFaith.GetName]——[GetFaithDoctrine('tenet_communal_identity').GetBaseName]"
  COURT_CHAPLAIN_CONVERSION_COMMUNAL_IDENTITY_PENALTY_MODIFIER:3 "[councillor.GetFaith.GetName]——[GetFaithDoctrine('tenet_communal_identity').GetBaseName]"
+ COURT_CHAPLAIN_CONVERSION_EASIER_TO_CONVERT_FAITH_IN_MOUNTAINS_BONUS_MODIFIER:0 "[councillor.GetFaith.GetName]——山地[GetFaithDoctrine('tenet_cthonic_redoubts').GetBaseName]"
+ COURT_CHAPLAIN_CONVERSION_HARDER_TO_CONVERT_FAITH_AWAY_IN_MOUNTAINS_MALUS_MODIFIER:0 "[county.GetFaith.GetName]——山地[GetFaithDoctrine('tenet_cthonic_redoubts').GetBaseName]"
  COURT_CHAPLAIN_CONVERSION_GHW_TENET_NO_HOF_MODIFIER:0 "[ROOT.Char.Custom('ghw_from_which_tenet')]——信仰控制了$game_concept_holy_sites$"
  COURT_CHAPLAIN_CONVERSION_SYNCRETIC_WITH_RELIGION_MODIFIER:0 "与[faith|E]融合"
  COURT_CHAPLAIN_CONVERSION_LOCAL_COUNTY_MODIFIERS:0 "当地[county|E][modifiers|E]"
  COURT_CHAPLAIN_CONVERSION_LIEGE_IS_DEFIANT_HIGH_MONARCH:0 "[liege|E]是狂傲的至高王"
+ fp2_lyonese_monk_faith_conversion_task_desc:0 "[GetFaithByKey('adoptionist').GetAdherentName]皈依其他$christianity_religion_adherent_plural$"
  
  COURT_CHAPLAIN_CONVERSION_HOLY_SITE_JERUSALEM:1 "圣地——耶路撒冷"
  COURT_CHAPLAIN_CONVERSION_HOLY_SITE_KERALA:1 "圣地——喀拉拉"

@@ -1,13 +1,13 @@
 ﻿l_spanish:
  court_chaplain_task.0201.opening:0 "[councillor.Custom2('AppropriateGreeting', ROOT.Char)]"
 
- court_chaplain_task.0301.desc:0 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. ¡Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetLadyLord] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName]!\n\nSolo se precisa un pequeño soborno…"
+ court_chaplain_task.0301.desc:0 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. ¡Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.GetLadyLord] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName]!\n\nSolo se precisa un pequeño soborno…"
  court_chaplain_task.0301.a:0 "¡Adelante!"
  court_chaplain_task.0301.b:0 "No, no puedo."
  court_chaplain_task.0301.b.tt:0 "Pierdes todo el progreso de Inventar derechos"
 
- court_chaplain_task.0302.desc:1 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.Custom('ES_SennorSennora')] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName].\n\n¡De hecho, hasta podría argüir que sois [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.Custom('ES_SennorSennora')] legitim[ROOT.Char.Custom('ES_OA')] del [duchy.GetName]!"
- court_chaplain_task.0302.desc_heretic_addition:0 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.Custom('ES_SennorSennora')|l] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName].\n\nViendo que, por desgracia, [duchy_holder.GetFirstName] insiste en ser #EMP [duchy_holder.GetFaith.GetAdherentName]#!, hasta podría argüir que tenéis derechos sobre el [duchy.GetName]… ¡por derecho divino!"
+ court_chaplain_task.0302.desc:1 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.GetLadyLord] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName].\n\n¡De hecho, hasta podría argüir que sois [ROOT.Char.GetLadyLord] legitim[ROOT.Char.Custom('ES_OA')] del [duchy.GetName]!"
+ court_chaplain_task.0302.desc_heretic_addition:0 "Estuve rebuscando entre documentos antiguos y otros de… procedencia menos segura. Al fin tengo bastante material para apoyar la idea de que sois [ROOT.Char.GetLadyLord|l] legitim[ROOT.Char.Custom('ES_OA')] del [county.GetName].\n\nViendo que, por desgracia, [duchy_holder.GetFirstName] insiste en ser #EMP [duchy_holder.GetFaith.GetAdherentName]#!, hasta podría argüir que tenéis derechos sobre el [duchy.GetName]… ¡por derecho divino!"
  court_chaplain_task.0302.a:0 "Presenta mi reclamación sobre [county.GetNameNoTierNoTooltip]."
  court_chaplain_task.0302.b:0 "¡Sí! ¡Todo [duchy.GetNameNoTierNoTooltip] será mío!"
  

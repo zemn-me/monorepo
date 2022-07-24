@@ -53,7 +53,7 @@
  trait_specific.6001.b:0 "Я выше этого!"
 
  trait_specific.6002.t:0 "Развлечения в постели"
- trait_specific.6002.desc:0 "[Select_CString(lover.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('lover') )] [lover.GetTitledFirstNamePossessive] прямо передо мной. Нас разделяет лишь [lover.Custom('GetUpperClothingArticle')], и я тянусь, чтобы сорвать с н[SCOPE.sC('lover').GetHerHis] эту преграду, но [lover.GetSheHe] внезапно отстраняет меня.\n\n«Я давно уже хочу кое-что попробовать с тобой, [ROOT.Char.Custom('LoverPetName')] [Select_CString(ROOT.Char.IsFemale, 'моя', 'мой' )]», — говорит [lover.GetSheHe], после чего тянется под кровать и возвращается ко мне. В руках у н[SCOPE.sC('lover').GetHerHis] [ROOT.Char.Custom('DeviantObjectArticle')]. «Я [Select_CString(lover.IsFemale, 'подумала', 'подумал' )], почему бы не... попробовать»."
+ trait_specific.6002.desc:0 "[Select_CString(lover.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('lover') )] [lover.GetTitledFirstName] прямо передо мной. Нас разделяет лишь [lover.Custom('GetUpperClothingArticle')], и я тянусь, чтобы сорвать с н[SCOPE.sC('lover').GetHerHis] эту преграду, но [lover.GetSheHe] внезапно отстраняется от меня.\n\n«Я давно уже хочу кое-что попробовать с тобой, [ROOT.Char.Custom('LoverPetName')] [Select_CString(ROOT.Char.IsFemale, 'моя', 'мой' )]», — говорит [lover.GetSheHe], после чего тянется под кровать и возвращается ко мне. В руках у н[SCOPE.sC('lover').GetHerHis] [ROOT.Char.Custom('DeviantObjectArticle')]. «Я [Select_CString(lover.IsFemale, 'подумала', 'подумал' )], почему бы не... попробовать»."
  trait_specific.6002.a:0 "Так чего же мы ждем!"
  trait_specific.6002.b:0 "Тебе нравится такое?!"
  trait_specific.6002.b_known:0 "У [lover.GetHerHis], конечно, бывают странные фантазии, но такое?!"
@@ -88,4 +88,4 @@
  trait_specific.8501.f:0 "Ты легко можешь убедиться, что [ROOT.Char.GetFaith.HealthGodName] тоже шепелявит."
  trait_specific.8501.g:0 "Ты даже не #EMP представляешь#!, что я могу делать этим языком..."
  trait_specific.8501.d.tt:0 "[mean_courtier.GetTitledFirstName] и вы устраиваете [single_combat_duel|El]"
- trait_specific.8501.h:0 "Все в порядке?"
+ trait_specific.8501.h:0 "Всё в порядке?"

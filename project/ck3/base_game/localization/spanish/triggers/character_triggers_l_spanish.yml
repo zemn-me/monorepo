@@ -23,7 +23,7 @@
 
  I_AM_PARENT_OF_TRIGGER:1 "[TARGET_CHARACTER.GetShortUIName|V] es tu hij[TARGET_CHARACTER.Custom('ES_OA')]"
  I_AM_NOT_PARENT_OF_TRIGGER:0 "[TARGET_CHARACTER.GetShortUIName|V] #bold no#! es tu hij[TARGET_CHARACTER.Custom('ES_OA')]"
- THEY_IS_PARENT_OF_TRIGGER:0 "[CHARACTER.GetShortUIName|V] es [CHARACTER.Custom('ES_ElLa')] [CHARACTER.Custom('MotherFather')] de [TARGET_CHARACTER.GetShortUIName|V]"
+ THEY_IS_PARENT_OF_TRIGGER:0 "[CHARACTER.GetShortUIName|V] es [CHARACTER.Custom('MotherFather')] de [TARGET_CHARACTER.GetShortUIName|V]"
  THEY_IS_NOT_PARENT_OF_TRIGGER:0 "[CHARACTER.GetShortUIName|V] #bold no#! es [TARGET_CHARACTER.LocalPlayerString( 'tu ', '' )][CHARACTER.Custom('MotherFather')] [TARGET_CHARACTER.LocalPlayerString( '', 'Loc_ES_de_GetShortUIName' )|V]"
  IS_PARENT_OF:0 "Es uno de [TARGET_CHARACTER.LocalPlayerString( 'tus ', '' )]progenitores[TARGET_CHARACTER.LocalPlayerString( '', 'Loc_ES_de_GetShortUIName' )|V]"
  IS_NOT_PARENT_OF:0 "#bold No#! es uno de [TARGET_CHARACTER.LocalPlayerString( 'tus ', '' )]progenitores[TARGET_CHARACTER.LocalPlayerString( '', 'Loc_ES_de_GetShortUIName' )|V]"
@@ -313,7 +313,7 @@
  CLAIMANT_ALREADY_PRESSING_THEIR_CLAIM_THIRD:1 "[CHARACTER.GetShortUIName] ya está en [war|lE] para reivindicar sus [claims|lE] sobre [TARGET_TITLE.GetName]"
  CLAIMANT_TITLES_HELD_BY_ATTACKER_VASSALS_FIRST:0 "Este [title|lE] está en posesión de tu [vassal|lE] y debe ser [revoked|lE]"
  CLAIMANT_TITLES_HELD_BY_YOU_OR_VASSAL_FIRST:0 "Este [title|lE] está en tus manos o en las de uno de tus [vassals|lE]"
- CLAIMANT_IS_BLIND_THIRD:0 "[CHARACTER.GetShortUIName] está  cieg[CHARACTER.Custom('ES_OA')]"
+ CLAIMANT_IS_BLIND_THIRD:0 "[CHARACTER.GetShortUIName] está cieg[CHARACTER.Custom('ES_OA')]"
 
  CLAIM_TARGET_POSITION_IS_WEAK_THIRD:1 "[CHARACTER.GetShortUIName] no es [TARGET_CHARACTER.Custom( 'weak_claim_requirements' )], algo necesario para reivindicar este derecho"
 
@@ -431,7 +431,7 @@
  STEWARDSHIP_IS_LESS_THAN:1 "Su [stewardship|lE] es menor de $NUM|V0$ [stewardship_i]"
  MY_STEWARDSHIP_IS_LESS_THAN:2 "Tu [stewardship|lE] es menor de $NUM|V0$ [stewardship_i]"
  THEIR_STEWARDSHIP_IS_LESS_THAN:1 "La [stewardship|lE] de [CHARACTER.GetShortUIName|V] es menor de $NUM|V0$ [stewardship_i]"
- STEWARDSHIP_IS_NOT_LESS_THAN:1 "Tiene la [stewardship|lE] por encima de $NUM|V0$[stewardship_i]"
+ STEWARDSHIP_IS_NOT_LESS_THAN:1 "Su [stewardship|lE] es $NUM|V0$ [stewardship_i] o mayor"
  MY_STEWARDSHIP_IS_NOT_LESS_THAN:2 "Tu [stewardship|lE] es $NUM|V0$ [stewardship_i] o mayor"
  THEIR_STEWARDSHIP_IS_NOT_LESS_THAN:1 "La [stewardship|lE] de [CHARACTER.GetShortUIName|V] es$NUM|V0$ [stewardship_i] o mayor"
 
@@ -747,7 +747,7 @@
 
  character_this_equal:1 "El objetivo es [CHARACTER.GetShortUIName]"
  character_scope_equal:1 "El objetivo es [CHARACTER.GetShortUIName]"
- none_this_equal:1 "El objetivo es [CHARACTER.GetShortUIName]"
+ none_this_equal:2 "Se desconoce el objetivo"
  
  #completely_controls
  YOU_COMPLETELY_CONTROL_TITLE_DESC:0 "Controlas [Concept( 'complete_control', 'completamente' )|E] [TARGET_TITLE.GetNameNoTier]"

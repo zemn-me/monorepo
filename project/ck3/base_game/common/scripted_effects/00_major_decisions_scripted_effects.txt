@@ -2147,6 +2147,359 @@ hre_elector_list_save_effect = {
 	}
 }
 
+favour_the_countryside_basques_decision_generic_effects_scripted_effect = {
+	scope:religious_leader = {
+		# If you weren't Basque, become so.
+		if = {
+			limit = { favour_the_countryside_basques_counts_as_basque_trigger = no }
+			# Now, we need to work out which Basque culture you should be.
+			## First, we gather our candidates.
+			### Going through counties.
+			every_sub_realm_county = {
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			### Plus vassals.
+			every_vassal_or_below = {
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			### And those close to you.
+			every_close_or_extended_family_member = {
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			every_consort = {
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			every_relation = {
+				type = friend
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			every_relation = {
+				type = lover
+				limit = {
+					favour_the_countryside_basques_counts_as_basque_trigger = yes
+					NOT = {
+						culture = { is_in_list = realm_basque_cultures_list }
+					}
+				}
+				culture = { add_to_list = realm_basque_cultures_list }
+			}
+			## Next, we process the list.
+			if = {
+				limit = {
+					any_in_list = {
+						list = realm_basque_cultures_list
+						exists = this
+					}
+				}
+				ordered_in_list = {
+					list = realm_basque_cultures_list
+					order_by = {
+						value = 0
+						save_temporary_scope_as = culture_temp
+						# Culture counties are added differently depending on whether they're inside or outside the realm
+						every_culture_county = {
+							# Every culture county in your realm adds 10.
+							if = {
+								limit = {
+									holder = {
+										OR = {
+											this = scope:religious_leader
+											any_liege_or_above = { this = scope:religious_leader  }
+										}
+									}
+								}
+								add = 10
+							}
+							# Every culture county outside your realm adds 5.
+							else = { add = 5 }
+						}
+						scope:religious_leader = {
+							# Vassals add weight depending on their rank.
+							every_vassal = {
+								if = {
+									limit = { culture = scope:culture_temp }
+									# Every king-tier vassal adds 50.
+									if = {
+										limit = { highest_held_title_tier = tier_kingdom }
+										add = 50
+									}
+									# Every duke-tier vassal adds 25.
+									else_if = {
+										limit = { highest_held_title_tier = tier_duchy }
+										add = 25
+									}
+									# Every count-tier vassal adds 10.
+									else_if = {
+										limit = { highest_held_title_tier = tier_county }
+										add = 10
+									}
+									# Barons are unimportant.
+								}
+							}
+							# Every close family member adds 15.
+							every_close_family_member = {
+								limit = { culture = scope:culture_temp }
+								add = 15
+							}
+							# Every extended family members adds 5.
+							every_extended_family_member = {
+								limit = { culture = scope:culture_temp }
+								add = 5
+							}
+							# Every soulmate adds 50.
+							every_relation = {
+								type = soulmate
+								limit = { culture = scope:culture_temp }
+								add = 50
+							}
+							# Every best friend adds 50.
+							every_relation = {
+								type = best_friend
+								limit = { culture = scope:culture_temp }
+								add = 50
+							}
+							# Every lover adds 15.
+							every_relation = {
+								type = lover
+								limit = {
+									culture = scope:culture_temp
+									NOT = { has_relation_soulmate = scope:religious_leader }
+								}
+								add = 15
+							}
+							# Every friend adds 15.
+							every_relation = {
+								type = friend
+								limit = {
+									culture = scope:culture_temp
+									NOT = { has_relation_best_friend = scope:religious_leader }
+								}
+								add = 15
+							}
+						}
+					}
+					save_scope_as = chosen_basque_culture
+				}
+			}
+			## Finally, we try to convert.
+			if = {
+				limit = { exists = scope:chosen_basque_culture }
+				convert_family_culture_and_notify_vassals_effect = {
+					CONVERTER = scope:religious_leader
+					OLD_CULTURE = scope:religious_leader.culture
+					NEW_CULTURE = scope:chosen_basque_culture
+				}
+			}
+			# If this hasn't worked at all, and they've got _any_ counties left, we just switch you to the regular Basque.
+			else_if = {
+				limit = {
+					culture:basque = {
+						any_culture_county = { exists = this }
+					}
+				}
+				convert_family_culture_and_notify_vassals_effect = {
+					CONVERTER = scope:religious_leader
+					OLD_CULTURE = scope:religious_leader.culture
+					NEW_CULTURE = culture:basque
+				}
+			}
+			# Otherwise, we presume that the Basque presence in the region is extinct or negligible (at least on the macro level), so we leave your culture alone.
+		}
+		# Assign a new nickname, if appropriate.
+		if = {
+			limit = {
+				OR = {
+					has_any_nickname = no
+					has_bad_nickname = yes
+				}
+			}
+			# If you're not already a pagan, guess what folks call you?
+			if = {
+				limit = {
+					NOT = {
+						faith = { has_doctrine = pagan_hostility_doctrine }
+					}
+				}
+				give_nickname = nick_the_pagan
+			}
+			# Otherwise, you're probably an invading Viking and you deserve to get memed.
+			else = { give_nickname = nick_the_mountain_king }
+		}
+		# Switch to the new faith.
+		add_character_flag = {
+			flag = delay_player_faith_conversion_notification_event
+			days = 1
+		}
+		# Configure Basque paganism's variable set-up.
+		faith:basque_pagan = {
+			# Remove the restrictions on converting to Basque paganism.
+			remove_variable = block_conversion_till_decision_taken
+			# And, since you're inherently creating a new priestly structure
+			## This is mostly done here for immersive reasons; we don't want to imply that Basque paganism already had a distinct organised religious hierarchy in 867 by just applying this on game start, even though you'll always have to have it to access the faith.
+			set_variable = { name = has_been_reformed }
+			remove_doctrine = unreformed_faith_doctrine
+		}
+		# Finally, convert.
+		## We do this here so that it's reformed by the time you switch (giving you a better chance with vassal conversion rates).
+		set_character_faith_with_conversion = faith:basque_pagan
+	}
+}
+
+favour_the_countryside_basques_decision_fundamentalist_path_scripted_effect = {
+	faith:basque_pagan = {
+		# First, we remove Christian Syncretism & replace it with Warmonger.
+		remove_doctrine = tenet_christian_syncretism
+		add_doctrine = tenet_warmonger
+		# Then, we switch on over from Pluralist to Fundamentalist.
+		## We disguise some of these changes for neatness, as there's a lot to process.
+		hidden_effect = { remove_doctrine = doctrine_pluralism_pluralistic }
+		add_doctrine = doctrine_pluralism_fundamentalist
+		# No HoF becomes a spiritual HoF, so that you can make use of your Warmonger GHWs.
+		hidden_effect = { remove_doctrine = doctrine_no_head }
+		add_doctrine = doctrine_spiritual_head
+		# Plus, set the faith's fervour to a middling/low level, since you've messed with it.
+		change_fervor = {
+			value = -50
+			desc = fervour_loss_temporal_meddling
+		}
+	}
+	# Create the new HoF.
+	hidden_effect = {
+		scope:religious_leader = {
+			set_up_dynamic_spiritual_hof_title_effect = { CREATOR = scope:religious_leader }
+		}
+	}
+	custom_tooltip = favour_the_countryside_basques_decision.tt.spiritual_hof_acquired
+	# We get a small modifier for clergy approval, since they're a bit peeved at the tenet-messing.
+	add_character_modifier = fp2_friend_of_the_old_ways_modifier
+}
+
+favour_the_countryside_basques_decision_righteous_path_scripted_effect = {
+	faith:basque_pagan = {
+		# First, we remove Christian Syncretism & replace it with Sanctity of Nature.
+		remove_doctrine = tenet_christian_syncretism
+		add_doctrine = tenet_sanctity_of_nature
+		# Then, we switch on over from Pluralist to Righteous.
+		## We disguise some of these changes for neatness, as there's a lot to process.
+		hidden_effect = { remove_doctrine = doctrine_pluralism_pluralistic }
+		add_doctrine = doctrine_pluralism_righteous
+		# No HoF becomes you as the temporal HoF, as you're focusing more on the non-Christian parts of the faith.
+		hidden_effect = {
+			remove_doctrine = doctrine_no_head
+			remove_doctrine = doctrine_theocracy_temporal
+			remove_doctrine = doctrine_clerical_succession_spiritual_appointment
+		}
+		add_doctrine = doctrine_temporal_head
+		add_doctrine = doctrine_theocracy_lay_clergy
+		add_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
+		# Plus, set the faith's fervour to a middling/low level, since you've messed with it.
+		change_fervor = {
+			value = -50
+			desc = fervour_loss_temporal_meddling
+		}
+	}
+	# Create the new HoF.
+	hidden_effect = {
+		scope:religious_leader = {
+			set_up_dynamic_temporal_hof_title_effect = { NEW_HOLDER = scope:religious_leader }
+		}
+	}
+	custom_tooltip = favour_the_countryside_basques_decision.tt.temporal_hof_acquired
+	# We get a small modifier for clergy approval, since they're a bit peeved at the tenet-messing.
+	add_character_modifier = fp2_friend_of_the_old_ways_modifier
+}
+
+favour_the_countryside_basques_decision_pluralist_path_scripted_effect = {
+	faith:basque_pagan = {
+		# First, we mostly only need to remove Christian Syncretism & replace it with Islamic Syncretism.
+		remove_doctrine = tenet_christian_syncretism
+		add_doctrine = tenet_islamic_syncretism
+		# Then set the faith's fervour to a middling/low level, since you've messed with it.
+		change_fervor = {
+			value = -50
+			desc = fervour_loss_temporal_meddling
+		}
+	}
+	# Bonus opinion with every neighbouring Islamic ruler & their vassals, who appreciate the direction you're going in.
+	## Compile a list.
+	top_liege = {
+		if = {
+			limit = { religion = religion:islam_religion }
+			add_to_list = pleased_rulers
+		}
+		every_vassal_or_below = {
+			limit = { religion = religion:islam_religion }
+			add_to_list = pleased_rulers
+		}
+	}
+	every_neighboring_and_across_water_top_liege_realm_owner = {
+		if = {
+			limit = { religion = religion:islam_religion }
+			add_to_list = pleased_rulers
+		}
+		every_vassal_or_below = {
+			limit = { religion = religion:islam_religion }
+			add_to_list = pleased_rulers
+		}
+	}
+	## And apply some opinions.
+	every_in_list = {
+		list = pleased_rulers
+		custom = favour_the_countryside_basques_decision.tt.all_neighbouring_islamic_rulers
+		add_opinion = {
+			target = scope:religious_leader
+			modifier = pleased_opinion
+			opinion = 30
+		}
+	}
+	# We get a small modifier for clergy approval, since they're a bit peeved at the tenet-messing.
+	add_character_modifier = fp2_friend_of_the_old_ways_modifier
+}
+
+favour_the_countryside_basques_decision_default_path_scripted_effect = {
+	faith:basque_pagan = {
+		# Here, we're not fiddling with the faith's traditions at all, so we get a chonky fervour bonus for the sudden limelight.
+		change_fervor = {
+			value = 100
+			desc = fervour_gain_unexpected_resurgence
+		}
+	}
+	# Plus a massive chunk of piety experience...
+	add_piety_experience = 2000
+	# ... and a more powerful clergy-approval modifier.
+	add_character_modifier = fp2_champion_of_the_old_ways_modifier
+}
+
 create_kingdom_of_saxony_effect = {
 	if = {
 		limit = {

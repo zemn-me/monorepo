@@ -10,7 +10,7 @@
  hostile_scheme_discovery.1001.desc_other_target_spymaster:0 "Mi [spymaster.GetCouncilTitle] vino a verme con un descubrimiento. ¡Está segur[spymaster.Custom('ES_OA')] de que mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('agent'))], [agent.GetTitledFirstName], conspira contra [spymaster.GetSheHe]!"
  hostile_scheme_discovery.1001.desc_other_target:0 "Mi [spymaster.GetCouncilTitle] vino a contarme cierto descubrimiento. ¡Está segur[spymaster.Custom('ES_OA')] de que mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('agent'))], [agent.GetTitledFirstName], conspira contra mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('targeted_courtier'))] [targeted_courtier.GetTitledFirstName]!"
  hostile_scheme_discovery.1001.desc_no_spymaster_other_target:0 "Me han llegado noticias muy graves. ¡Se ha descubierto que mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('agent'))], [agent.GetTitledFirstName], conspira contra mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('targeted_courtier'))] [targeted_courtier.GetTitledFirstName]!"
- hostile_scheme_discovery.1001.a:0 "Que todos sepan quien es [agent.Custom('ES_ElLa')] traidor[agent.Custom('ES_XA')]."
+ hostile_scheme_discovery.1001.a:0 "Que todos sepan quien es el/la traidor[agent.Custom('ES_XA')]."
  hostile_scheme_discovery.1001.b:0 "¡Mandad[agent.GetHerHim] a la cárcel!"
  hostile_scheme_discovery.1001.c:0 "Sea cierto o no, no acusaré a [agent.GetFirstNameNoTooltip]."
  hostile_scheme_discovery.1001.c.tt:0 "[agent.GetFirstNameNoTooltip] sale libre."
@@ -39,7 +39,7 @@
 
  hostile_scheme_discovery.3001.t:0 "¡Agente descubierto!"
  hostile_scheme_discovery.3001.intro:0 "¡Han descubierto a [agent.GetTitledFirstName], mi agente en la corte de [court_owner.GetTitledFirstName]!"
- hostile_scheme_discovery.3001.imprisoned:0 "\n\n¡Ahora [court_owner.Custom('ES_ElLa')] [court_owner.GetTitleAsName] [agent.GetHerHim] ha encerrado bajo siete llaves!"
+ hostile_scheme_discovery.3001.imprisoned:0 "\n\n¡Ahora el/la [court_owner.GetTitleAsName] [agent.GetHerHim] ha encerrado bajo siete llaves!"
  hostile_scheme_discovery.3001.accused:0 "\n\nAhora saben que [agent.GetSheHe] no es dign[agent.Custom('ES_OA')] de confianza y ya no podrá ayudar más a mi causa."
  hostile_scheme_discovery.3001.a:0 "¡Malditos sean [court_owner.GetTitledFirstNameNoTooltip] y su [spymaster.GetCouncilTitle]!"
 
@@ -57,7 +57,7 @@
  hostile_scheme_discovery.3003.a:0 "¡Tiene que haber algún malentendido!"
 
  hostile_scheme_discovery.4001.t:0 "¡Conjura descubierta!"
- hostile_scheme_discovery.4001.opening:0 "¡Mi complot contra mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target'))], [target.Custom('ES_ElLa')] [target.GetTitledFirstName], ha sido descubierto!"
+ hostile_scheme_discovery.4001.opening:0 "¡Mi complot contra mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target'))], [target.GetTitledFirstName], ha sido descubierto!"
  hostile_scheme_discovery.4001.end:0 "\n\nAhora mis sirvientes rumorean que tengo que recurrir a insidias hasta para gobernar mi propia casa."
  hostile_scheme_discovery.4002.opening:0 "¡Mi conjura para ver muert[target.Custom('ES_OA')] a mi [ROOT.Char.Custom2('RelationToMe', SCOPE.sC('target'))] ha sido descubierta! Ahora todos conocen mi plan para matar [target.Custom('ES_AlAla')] [target.GetTitledFirstName]."
  hostile_scheme_discovery.4001.a:0 "¡Es un gran malentendido!"

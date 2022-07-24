@@ -1,9 +1,11 @@
+---
+
 name: Version Management
-concurrency: 
+concurrency:
   group: concurrency-${{ github.head_ref }}
   cancel-in-progress: true
 
-on:
+on:   # yamllint disable-line rule:truthy
   schedule:
     - cron: 0 0 * * *
   workflow_dispatch:
@@ -22,7 +24,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.4
+        uses: actions/cache@v3.0.5
         env:
           cache-name: bazel-cache
         with:
@@ -43,7 +45,7 @@ jobs:
           # Needed to allow an action to trigger another action.
           token: ${{ secrets.GH_PAT }}
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.4
+        uses: actions/cache@v3.0.5
         env:
           cache-name: bazel-cache
         with:
@@ -87,5 +89,3 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  

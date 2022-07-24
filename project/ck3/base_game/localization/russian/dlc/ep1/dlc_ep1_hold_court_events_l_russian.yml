@@ -74,7 +74,7 @@
  hold_court_7030c_land_restored_tt:0 "[angry_vassal.GetName] [Select_CString(angry_vassal.IsFemale, 'взяла', 'взял' )] ваши деньги и [Select_CString(angry_vassal.IsFemale, 'потратила', 'потратил' )] их на восстановление от ущерба, что [Select_CString(troublesome_warrior.IsFemale, 'причинила', 'причинил' )] [troublesome_warrior.GetName]."
 # Tax Revolt in Frontier Province, hold_court.7040
  hold_court.7040.title:0 "Споры на границе"
- hold_court.7040.desc:1 "Следующий проситель вряд ли часто бывает при дворе, ведь я не узнаю [frontier_leader.GetHerHim], а [marshal.GetCouncilTitle] [marshal.GetFirstName] с самого появления при дворе не сводит с просителя глаз.\n\n«[ROOT.Char.Custom2('RelationToMeAddress', frontier_leader)], я здесь, чтобы сообщить вам: народ владения [frontier_county.GetNameNoTier] отказывается платить навязанные нам налоги. В прошлом наши земли и наш народ обладали правами и привилегиями, но в своих недавних поборах вы игнорируете их. Мы просим вас рассудить наше дело по чести, а иначе вас ждут последствия»."
+ hold_court.7040.desc:1 "Следующий проситель вряд ли часто бывает при дворе, ведь я не узнаю [frontier_leader.GetHerHis], а [marshal.GetCouncilTitle] [marshal.GetFirstName] с самого появления при дворе не сводит с просителя глаз.\n\n«[ROOT.Char.Custom2('RelationToMeAddress', frontier_leader)], я здесь, чтобы сообщить вам: народ владения [frontier_county.GetNameNoTier] отказывается платить навязанные нам налоги. В прошлом наши земли и наш народ обладали правами и привилегиями, но в своих недавних поборах вы игнорируете их. Мы просим вас рассудить наше дело по чести, а иначе вас ждут последствия»."
  hold_court.7040.a:0 "«В темницу [frontier_leader.GetHerHis], [marshal.GetCouncilTitle], а затем раздавите восставший сброд!»"
  hold_court.7040.a.win:0 "Восставшие крестьяне разбиты "
  hold_court.7040.a.win.title:0 "Восстание против налогов подавлено"
@@ -106,7 +106,7 @@
  hold_court.7050.b.defeat:1 "Вы проигрываете в поединке"
  hold_court_7050_victory:0 "[sc_loser.GetFirstNameNoTooltip] терпит поражение в бою."
  hold_court.7050.c:0 "Казнить [lunatic_soldier.GetHerHis]."
- hold_court.7050.d:0 "Вышвырнуть [sneaky_person.GetHerHis]!"
+ hold_court.7050.d:0 "Вышвырнуть [lunatic_soldier.GetHerHis]!"
  hold_court.7052.title:0 "Дань Жнецу"
  hold_court.7052.desc:0 "[Select_CString(killed_pc.IsFemale, 'Моя', 'Мой' )] [ROOT.Char.Custom2('RelationToMe', killed_pc)], [killed_pc.GetName], [Select_CString(killed_pc.IsFemale, 'была убита', 'был убит' )] во время поединка при дворе! Увы, [killed_pc.GetHerHis] убийца, то ли осознав последствия совершенного поступка, то ли под влиянием своего помутившегося рассудка, не надолго [Select_CString(lunatic_soldier.IsFemale, 'пережила', 'пережил' )] свою жертву.\n\nПрежде, чем кто-либо успел остановить [lunatic_soldier.GetHerHis], [lunatic_soldier.GetName] [Select_CString(lunatic_soldier.IsFemale, 'выхватила', 'выхватил' )] свой клинок и [Select_CString(lunatic_soldier.IsFemale, 'вогнала', 'вогнал' )] его себе в сердце. Теперь я сижу на троне, что когда-то [Select_CString(killed_pc.IsFemale, 'занимала', 'занимал' )] [ROOT.Char.Custom2('RelationToMe', killed_pc)], смотрю на помещение, где все это произошло, и раздумываю о превратностях судьбы, что привели к этому несчастью, а также о незримой стоимости войны, которая продолжает приносить страдания моим землям и моему народу."
  hold_court.7052.a:0 "Трагичная и бессмысленная смерть."

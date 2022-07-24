@@ -138,6 +138,7 @@
  fund_inspiration.0061.diwan:0 "Einen schönen und bequemen Diwan hätte ich gern."
  fund_inspiration.0061.table:0 "Ich wünsche mir einen schicken, aber stabilen Tisch."
  fund_inspiration.0061.throne:0 "Baut einen großen Thron, der meiner prächtigen Säle würdig ist!"
+ fund_inspiration.0061.scientific_apparatus:0 "Vielleicht ein Werkzeug des Wissens und der Bildung."
 
  fund_inspiration.0062.t:0 "Handwerk-Inspiration finanziert"
 
@@ -147,6 +148,7 @@
  fund_inspiration.0071.regalia:0 "Macht daraus Insignien, die meiner Statur angemessen sind."
  fund_inspiration.0071.crown:0 "Eine königliche Krone, würdig, auf meinem Haupt zu ruhen!"
  fund_inspiration.0071.goblet:0 "Ein exquisiter Kelch."
+ fund_inspiration.0071.aquamanile:0 "Ein reich verziertes Aquamanile für rituelle Waschungen."
 
  fund_inspiration.0072.t:0 "Metallschmiede-Inspiration finanziert"
 
@@ -324,7 +326,7 @@
  fund_inspiration.2004.desc_elixirs:0 "„Mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.GetLadyLord], seht Euch diese Messbecher an! Solch klares Glas habe ich noch nie zuvor gesehen.“"
  fund_inspiration.2004.desc_fallback:0 "„Mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.GetLadyLord], seht Euch das an! Solch feine Materialien habe ich noch nie zuvor gesehen.“"
  fund_inspiration.2004.desc:0 "\n\n[inspiration_owner.Custom2('MyCharacterIntroduction', ROOT.Char)|U] löst sich aus unserer Prozession über den Markt, um ganz ekstatisch über [inspiration_owner.Custom('DE_PRO_POS_S_3P')]en Fund den Händler anzusprechen, der das verkauft, was [inspiration_owner.Custom('DE_PRO_PER_S_3P_N')] begehrt.\n\n„Hiermit würde mein Vorhaben in ganz neue Höhen vorstoßen. Ich könnte etwas wahrhaftig #EMP Wunderbares#! erschaffen! Bitte, mein[ROOT.Char.Custom('DE_END_PRO_S_N')] [ROOT.Char.GetTitleAsNameNoTooltip], macht mir dieses Geschenk.“"
- fund_inspiration.2004.a:0 "Euer Vorhaben ist es wert, dass man darin investiert!"
+ fund_inspiration.2004.a:0 "Euer Vorhaben ist es wert, dass man in es investiert!"
  fund_inspiration.2004.b:0 "Natürlich, aber wir bekommen doch sicher einen guten Preis?"
  fund_inspiration.2004.b.success:0 "Der Händler wird überzeugt, die Preise zu senken"
  fund_inspiration.2004.b.failure:0 "Der Händler ist nicht überzeugt"
@@ -448,8 +450,8 @@
  fund_inspiration.2080.c:0 "Es ist Zeit für den frischen Hauch von etwas Neuem."
 
  fund_inspiration.2090.t:0 "$fund_inspiration.title$ Die Hand [event_spouse.Custom('DE_ART_IND_G')] Vermählten"
- fund_inspiration.2090.desc:0 "Mein[event_spouse.Custom('DE_END_PRO_S_N')] [event_spouse.GetWifeHusband] [event_spouse.GetFirstName] plaudert angeregt mit [inspiration_owner.GetTitledFirstName] und zählt Ideen und Vorschläge für [inspiration_owner.Custom('DE_PRO_POS_S_3P')] jüngstes Vorhaben ([inspiration_owner.Custom('GetInspirationTypeObject')]) auf. Mein[inspiration_owner.Custom('DE_END_PRO_S_N')] [inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.Custom('DE_END_NOU_S_GS_N')] verhehlt [inspiration_owner.Custom('DE_PRO_POS_S_3P')]e Verachtung kaum und ist von der Einmischung mein[event_spouse.Custom('DE_END_PRO_S_G') Vermählten offenkundig wenig angetan.\n\n„… und wenn Ihr schon an so etwas arbeitet“, fährt dies[event_spouse.Custom('DE_END_ADJ_IND_S_N')] fort, „kann das gute Ding ([inspiration_owner.Custom('GetInspirationTypeObject')]) doch gleich zu dem Erbstück passen, das mir hinterlassen wurde!“\n\nMan meint fast, einen Teil der Seele von [inspiration_owner.GetFirstNameNoTooltip] sterben zu sehen."
- fund_inspiration.2090.a:0 "„Hört gut zu, [inspiration_owner.GetFirstNameNoTooltip] – den Worten mein[event_spouse.Custom('DE_END_PRO_S_G') Vermählten ist Rechnung zu tragen!“"
+ fund_inspiration.2090.desc:0 "Mein[event_spouse.Custom('DE_END_PRO_S_N')] [event_spouse.GetWifeHusband] [event_spouse.GetFirstName] plaudert angeregt mit [inspiration_owner.GetTitledFirstName] und zählt Ideen und Vorschläge für [inspiration_owner.Custom('DE_PRO_POS_S_3P')] jüngstes Vorhaben ([inspiration_owner.Custom('GetInspirationTypeObject')]) auf. Mein[inspiration_owner.Custom('DE_END_PRO_S_N')] [inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.Custom('DE_END_NOU_S_GS_N')] verhehlt [inspiration_owner.Custom('DE_PRO_POS_S_3P')]e Verachtung kaum und ist von der Einmischung mein[event_spouse.Custom('DE_END_PRO_S_G')] Vermählten offenkundig wenig angetan.\n\n„… und wenn Ihr schon an so etwas arbeitet“, fährt dies[event_spouse.Custom('DE_END_ADJ_IND_S_N')] fort, „kann das gute Ding ([inspiration_owner.Custom('GetInspirationTypeObject')]) doch gleich zu dem Erbstück passen, das mir hinterlassen wurde!“\n\nMan meint fast, einen Teil der Seele von [inspiration_owner.GetFirstNameNoTooltip] sterben zu sehen."
+ fund_inspiration.2090.a:0 "„Hört gut zu, [inspiration_owner.GetFirstNameNoTooltip] – den Worten mein[event_spouse.Custom('DE_END_PRO_S_G')] Vermählten ist Rechnung zu tragen!“"
  fund_inspiration.2090.b:0 "„Kommt. Liebling. Überlassen wir diese Sache den Fachleuten.“"
  fund_inspiration.2090.success:0 "[event_spouse.GetFirstNameNoTooltip] verbessert die Arbeit von [inspiration_owner.GetFirstNameNoTooltip]"
  fund_inspiration.2090.failure:0 "[event_spouse.GetFirstNameNoTooltip] behindert [inspiration_owner.GetFirstNameNoTooltip]"
@@ -505,7 +507,7 @@
  fund_inspiration.2120.leave_flavor:0 "Ihr geht eilig"
 
  fund_inspiration.2130.t:0 "$fund_inspiration.title$ Die Unentschlossenheit in Person"
- fund_inspiration.2130.desc:1 "Ich laufe [inspiration_owner.Custom('DE_ART_IND_S_D')] sehr grimmig dreinblickenden [inspiration_owner.GetTitledFirstName] in die Arme, m[generous_vassal.Custom('DE_ART_IND_S_D')] [inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.Custom('DE_END_NOU_S_GS_N')], und hoffe, dass [inspiration_owner.Custom('DE_PRO_PER_S_3P_N')] keine schlechten Nachrichten hinsichtlich der vorzüglichen Arbeit ([inspiration_owner.Custom('GetInspirationTypeObject')]) hat, die bald fertig sein sollte.\n\n„Oh, da seid Ihr ja, Lehnsherr[ROOT.Char.Custom('DE_END_NOU_S_GS_N')] … Es gibt da einen Stolperstein – aber nichts Großes! Meine Einfälle sind abgetaucht, als der Druck immer größer wurde!“, lacht [inspiration_owner.Custom('DE_PRO_PER_S_3P_N')] nervös auf.\n\n„Ich brauche nur mehr… Inspiration! Mächtig[ROOT.Char.Custom('DE_END_ADJ_IND_S_N')] [ROOT.Char.GetTitleAsNameNoTooltip], hättet Ihr vielleicht … eine Vorlage, die ich in Augenschein nehmen könnte?“"
+ fund_inspiration.2130.desc:1 "Ich laufe [inspiration_owner.Custom('DE_ART_IND_S_D')] sehr grimmig dreinblickenden [inspiration_owner.GetTitledFirstName] in die Arme, m[generous_vassal.Custom('DE_ART_IND_S_D')] [inspiration_owner.Custom('GetInspirationOwnerType')][inspiration_owner.Custom('DE_END_NOU_S_GS_N')], und hoffe, dass [inspiration_owner.Custom('DE_PRO_PER_S_3P_N')] keine schlechten Nachrichten hinsichtlich der vorzüglichen Arbeit ([inspiration_owner.Custom('GetInspirationTypeObject')]) hat, die bald fertig sein sollte.\n\n„Oh, da seid Ihr ja, Lehnsherr[ROOT.Char.Custom('DE_END_NOU_S_GS_N')] … Es gibt da einen Stolperstein – aber nichts Großes! Meine Einfälle sind abgetaucht, als der Druck immer größer wurde!“, lacht [inspiration_owner.Custom('DE_PRO_PER_S_3P_N')] nervös auf.\n\n„Ich brauche nur mehr … Inspiration! Mächtig[ROOT.Char.Custom('DE_END_ADJ_IND_S_N')] [ROOT.Char.GetTitleAsNameNoTooltip], hättet Ihr vielleicht … eine Vorlage, die ich in Augenschein nehmen könnte?“"
  fund_inspiration.2130.a.library:0 "„Auf zur Bibliothek!“"
  fund_inspiration.2130.a.armory:0 "„Auf zur Waffenkammer!“"
  fund_inspiration.2130.a.hall:0 "„Auf zur Großen Halle!“"
@@ -859,7 +861,7 @@
 #Adventurer studying beavers in the Taiga
  fund_inspiration.6508.t:0 "$fund_inspiration.title$ Architekten der Natur"
  fund_inspiration.6508.introduction:0 "Ich habe ein Schreiben von mein[inspiration_owner.Custom('DE_END_PRO_S_D')] Abenteurer[inspiration_owner.Custom('DE_END_NOU_S_GS_N')] aus der eisigen Taiga erhalten.\n\n"
- fund_inspiration.6508.desc:0 "„Ich verbrachte eine Weile in der guten Gesellschaft der besten Handwerker, die man sich wünschen könnte: einer Biberkolonie! Mit diesem Kurier übersende ich Euch ein Buch mit Skizzen ihrer Bauwerke, mit denen wir Fische fangen könnten! Ach, wie schön ist das Dasein als halb im Wasser lebendes Nagetier!\n\n"
+ fund_inspiration.6508.desc:0 "„Ich verbrachte eine Weile in der guten Gesellschaft der besten Handwerker, die man sich wünschen könnte: einer Biberkolonie! Mit diesem Kurier übersende ich Euch ein Buch mit Skizzen ihrer Bauwerke, mit denen wir Fische fangen könnten! Ach, wie schön ist das Dasein als halb im Wasser lebendes Nagetier!“\n\n"
  fund_inspiration.6508.architect_desc:0 "Ich bin mir sicher, dass [court_architect.GetTitledFirstName] das eine oder andere von Tieren lernen könnte, die schlauer sind als [court_architect.Custom('DE_PRO_PER_S_3P_N')].“"
  fund_inspiration.6508.a:0 "Ich werde das gleich einmal gründlich durchgehen."
  fund_inspiration.6508.b:0 "In der Tat. [court_architect.GetTitledFirstNameNoTooltip] könnte eine Lektion gebrauchen."
@@ -900,7 +902,7 @@
  fund_inspiration.6512.intro_desc:0 "Ich habe eine Nachricht von mein[inspiration_owner.Custom('DE_END_PRO_S_D')] Abenteurer[inspiration_owner.Custom('DE_END_NOU_S_GS_N')] erhalten, die mit rotem Staub von [inspiration_owner.Custom('DE_PRO_POS_S_3P')]en Reisen durch die Bergwüsten bedeckt ist."
  fund_inspiration.6512.desc:1 "\n\n„Ich habe eine weitere Bestie erklommen, und auf diesen Tausenden von Hochplateaus sah ich keine Spur eines anderen Menschen, der je über diese Felsen gestiegen wäre. Heute wagte ich mich in die höchsten Höhen, die ich je bestieg.\n\nIch glaube, die Felsen rufen nach einem würdigen Namen, um sich an diese Leistung zu erinnern, die [ROOT.Char.Custom('DE_ART_DEF_S_N')] beste [ROOT.Char.GetTitleAsNameNoTooltip] im gesamten Kosmos überwachte.“"
  fund_inspiration.6512.a:0 "Ich bin mir sicher, dass die Einheimischen den Berg schon benannt haben."
- fund_inspiration.6512.b:0 "„Großfels“ – was für ein alberner Name!"
+ fund_inspiration.6512.b:0 "Großfels – was für ein alberner Name!"
  fund_inspiration.6512.c:0 "[ROOT.Char.GetFaith.WarGodName]-Klinge."
  fund_inspiration.6512.d:0 "[ROOT.Char.GetFaith.FateGodName]-Griff."
  fund_inspiration.6512.e:0 "Nach meinem Herzblatt [lover.GetFirstNameNoTooltip]."

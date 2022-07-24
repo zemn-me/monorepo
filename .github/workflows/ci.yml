@@ -1,9 +1,11 @@
+---
+
 name: CI
-concurrency: 
+concurrency:
   group: concurrency-${{ github.head_ref }}
   cancel-in-progress: true
 
-on:
+on:   # yamllint disable-line rule:truthy
   push:
     branches:
       - main
@@ -12,6 +14,7 @@ on:
     branches:
       - main
       - versioned
+  workflow_dispatch:
 
 jobs:
   automerge:
@@ -22,20 +25,20 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Fetch Dependabot metadata
-      id: dependabot-metadata
-      uses: dependabot/fetch-metadata@v1.3.3
-      with:
-        github-token: "${{ secrets.GITHUB_TOKEN }}"
-    - name: 'Merge (if dependabot)'
-      run: gh pr merge "$PR_URL" --auto --merge
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_URL: ${{ github.event.pull_request.html_url }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Fetch Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v1.3.3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: 'Merge (if dependabot)'
+        run: gh pr merge "$PR_URL" --auto --merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
   Test:
-    # This runs on both push and PR – for 
+    # This runs on both push and PR – for
     # PR, we need to ensure tests pass,
     # but a PR cannot save a cache due to
     # security issues. Therefore, we run
@@ -51,7 +54,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.4
+        uses: actions/cache@v3.0.5
         env:
           cache-name: bazel-cache
         with:
@@ -76,7 +79,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.4
+        uses: actions/cache@v3.0.5
         env:
           cache-name: bazel-cache
         with:

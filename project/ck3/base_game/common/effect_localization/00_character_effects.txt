@@ -196,9 +196,9 @@ set_known_bastard_on_pregnancy = {
 	first_neg = SET_MY_UNKNOWN_BASTARD_ON_PREGNANCY
 	third_neg = SET_THEIR_UNKNOWN_BASTARD_ON_PREGNANCY
 	global_neg = SET_UNKNOWN_BASTARD_ON_PREGNANCY
-	first_neg_past = SET_MY_UNKNOWN_BASTARD_ON_PREGNANCY
-	third_neg_past = SET_THEIR_UNKNOWN_BASTARD_ON_PREGNANCY
-	global_neg_past = SET_UNKNOWN_BASTARD_ON_PREGNANCY
+	first_past_neg = SET_MY_UNKNOWN_BASTARD_ON_PREGNANCY
+	third_past_neg = SET_THEIR_UNKNOWN_BASTARD_ON_PREGNANCY
+	global_past_neg = SET_UNKNOWN_BASTARD_ON_PREGNANCY
 }
 
 make_pregnant = {
@@ -398,13 +398,13 @@ stress_impact = {
 	third = THEY_STRESS_IMPACT_GAIN
 	third_neg = THEY_STRESS_IMPACT_LOSS
 	first_past = I_PAST_STRESS_IMPACT_GAIN
-	first_neg_past = I_PAST_STRESS_IMPACT_LOSS
+	first_past_neg = I_PAST_STRESS_IMPACT_LOSS
 	third_past = THEY_PAST_STRESS_IMPACT_GAIN
-	third_neg_past = THEY_PAST_STRESS_IMPACT_LOSS
+	third_past_neg = THEY_PAST_STRESS_IMPACT_LOSS
 	global = STRESS_IMPACT_GAIN
 	global_neg = STRESS_IMPACT_LOSS
 	global_past = PAST_STRESS_IMPACT_GAIN
-	global_neg_past = PAST_STRESS_IMPACT_LOSS
+	global_past_neg = PAST_STRESS_IMPACT_LOSS
 }
 
 stress_impact_critical = {

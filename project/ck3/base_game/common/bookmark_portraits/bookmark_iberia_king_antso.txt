@@ -2,7 +2,7 @@
 # History database id:106000
 bookmark_iberia_king_antso={
 	type=male
-	id=17017
+	id=18626
 	age=0.270000
 	genes={ 		hair_color={ 170 207 100 233 }
  		skin_color={ 179 113 179 113 }
@@ -91,13 +91,13 @@ bookmark_iberia_king_antso={
  		face_detail_nose_tip_def={ "nose_tip_def" 19 "nose_tip_def" 19 }
  		face_detail_temple_def={ "temple_def" 225 "temple_def" 225 }
  		expression_brow_wrinkles={ "brow_wrinkles_04" 71 "brow_wrinkles_04" 71 }
- 		expression_eye_wrinkles={ "eye_wrinkles_01" 255 "eye_wrinkles_01" 170 }
+ 		expression_eye_wrinkles={ "eye_wrinkles_01" 170 "eye_wrinkles_01" 170 }
  		expression_forehead_wrinkles={ "forehead_wrinkles_01" 32 "forehead_wrinkles_01" 32 }
  		expression_other={ "cheek_wrinkles_left_01" 0 "cheek_wrinkles_left_01" 0 }
  		complexion={ "complexion_1" 210 "complexion_1" 210 }
  		gene_height={ "normal_height" 112 "normal_height" 112 }
  		gene_bs_body_type={ "body_fat_head_fat_low" 117 "body_fat_head_fat_low" 115 }
- 		gene_bs_body_shape={ "body_shape_rectangle_full" 107 "body_shape_hourglass_full" 16 }
+ 		gene_bs_body_shape={ "body_shape_rectangle_full" 16 "body_shape_hourglass_full" 16 }
  		gene_bs_bust={ "bust_clothes" 80 "bust_shape_2_half" 101 }
  		gene_age={ "old_4" 160 "old_4" 160 }
  		gene_eyebrows_shape={ "far_spacing_avg_thickness" 253 "far_spacing_avg_thickness" 253 }
@@ -109,13 +109,14 @@ bookmark_iberia_king_antso={
  		teeth_accessory={ "normal_teeth" 0 "normal_teeth" 0 }
  		eyelashes_accessory={ "normal_eyelashes" 33 "normal_eyelashes" 33 }
  		pose={ "" 255 "" 0 }
- 		cloaks={ "western_royalty" 104 "no_cloak" 0 }
- 		clothes={ "western_royalty_clothes" 47 "most_clothes" 0 }
- 		headgear={ "western_royalty" 12 "no_headgear" 0 }
- 		legwear={ "western_common_legwear" 29 "all_legwear" 0 }
+ 		cloaks={ "western_royalty" 198 "no_cloak" 0 }
+ 		clothes={ "fp2_christian_high_nobility_clothes" 125 "most_clothes" 0 }
+ 		headgear={ "fp2_christian_royalty" 55 "no_headgear" 0 }
+ 		legwear={ "western_common_legwear" 177 "all_legwear" 0 }
  		beards={ "scripted_character_beards_01" 51 "no_beard" 0 }
+ 		gene_shrink_body={ "shrink_all" 255 "" 0 }
  		hairstyles={ "scripted_character_hairstyles_01" 61 "all_hairstyles" 0 }
  }
-	entity={ 979141817 979141817 }
+	entity={ 3942081117 3942081117 }
 }
 

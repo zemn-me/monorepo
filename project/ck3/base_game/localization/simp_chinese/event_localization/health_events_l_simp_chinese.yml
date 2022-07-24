@@ -198,7 +198,7 @@
  # Important character has dangerous disease events, by Mathilda Bjarnehed
  health.2201.t:2 "[SCOPE.Custom('EventTitleDisease')]：我可怜的[ROOT.GetCharacter.Custom2('RelationToMeShort', SCOPE.sC('sick_character'))|U]"
  health.2201.start.desc:1 "今天我收到了一则悲痛的消息。我的[ROOT.GetCharacter.Custom2('RelationToMe', SCOPE.sC('sick_character'))][sick_character.GetFirstName]得了"
- disease_ill_article:0 "$articleblank_blank$"
+ disease_ill_article:0 "$articleblank_article$"
  disease_ill:0 "感冒。"
  disease_pneumonic:0 "肺炎。"
  disease_gout_ridden:0 "痛风。"
@@ -370,7 +370,7 @@
  health.mystic_treatment_occult.5.desc:0 "[physician.GetTitledFirstName]站在我的床尾，仆人点燃了蜡烛。一个罐子被放到我手中——从声音判断，里面有一只被吓坏的小动物。“这生物将替您承担您体内的负担。”[physician.GetSheHe]解释道。然后开始吟诵。"
  health.mystic_treatment_questionable.1.desc:0 "[physician.GetFirstName]让我坐在一面高大的镜子前，并点燃我周围的一圈蜡烛。“我们需要联系另一个您。”[physician.GetSheHe]漫不经心地说道。我对着[physician.GetHerHim]扬了扬眉毛，而[physician.GetSheHe]把手放在我肩上。“这可能会……改变您。”"
  health.mystic_treatment_questionable.2.desc:1 "房间只被烛光照亮。面对着西窗，[physician.GetTitledFirstName]用油滴涂抹我的指甲。我感觉自己的皮肤很热，因为[physician.GetSheHe]将我的手移向火焰。“不要担心，[ROOT.Char.GetLadyLord]。通过[ROOT.Char.GetFaith.HealthGodName]的智慧，您将得到净化。”"
- health.mystic_treatment_questionable.3.desc:0 "“月亮需要你的奉献。”[physician.GetTitledFirstName]说道，然后交给我一烟斗带有辛辣香气的东西。我吸了几口，抬头看着夜空，口占出了世上最好的诗。接着，那些辞句便离我而去……"
+ health.mystic_treatment_questionable.3.desc:1 "“月亮需要你的奉献。”[physician.GetTitledFirstName]说道，然后递给我一块带有辛辣香气的蛋糕。吃完几分钟后，我抬头看着夜空，口占出了世上最好的诗。接着，那些辞句便离我而去……"
  health.mystic_treatment_questionable.4.desc:0 "[physician.GetTitledFirstName]让我在每天晚上睡前喝一种特别浓的酒。“这能松开您的构造，让灵魂进入您的身体。”[physician.GetSheHe]向我保证。“但这也能令人……放轻松。”[physician.GetSheHe]承认，朝我咧嘴笑。"
  health.mystic_treatment_questionable.5.desc:0 "[physician.GetFirstName]告诉我解读[ROOT.Char.GetFaith.ReligiousText]是一项艰巨的任务，但用火净化是一种和世界本身同样古老的技艺。当时我还不知道[physician.GetSheHe]会让我走过燃烧的煤炭。"
  health.mystic_treatment_questionable.6.desc:2 "[physician.GetTitledFirstName]告诉我[ROOT.Char.GetFaith.HealthGodName]想要考验我的灵魂。我们一起前行，直到抵达一个小湖。我们手牵手走进湖中。当[physician.GetFirstNameNoTooltip]抓住我的肩膀将我按下去时，我非常震惊。我一定是失去知觉了，因为我不记得后来发生了什么……"

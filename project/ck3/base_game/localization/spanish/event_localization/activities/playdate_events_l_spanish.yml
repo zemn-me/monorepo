@@ -138,7 +138,7 @@
  playdate.3011.a:0 "¡Solo si somos los padres!"
  playdate.3011.b:0 "Vale. ¡Y [disliked_participant.GetFirstNameNoTooltip] será el perro!"
  playdate.3011.c:0 "Que tontería. Prefiero el ajedrez."
- playdate.3011.c.tt:0 "Avanzas tus estudios en el arte de [ROOT.Char.Custom('education_focus_child')]"
+ playdate.3011.c.tt:0 "Avanzas tus estudios en el arte de [THIS.Char.Custom('education_focus_child')]"
 
  playdate.3012.t:0 "$playdate_header$ $knight_culture_player_plural_no_tooltip$ valiente"
  playdate.3012.desc_knight:0 "[participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] y yo estamos viendo cómo entrenan los $knight_culture_player_plural_no_tooltip_lowercase$ en el patio cuando [knight.Custom2('MyCharacterIntroduction', ROOT.Char)] se nos acerca sonriendo."
@@ -158,7 +158,7 @@
  playdate.3013.b:0 "¡Sí, enséñame todo lo que puedas!"
  playdate.3013.c:0 "Eres… ¡eres un[witch.Custom('ES_XA')] bruj[witch.Custom('ES_OA')]! Una mala persona."
 
- playdate.3014.t:0 "$playdate_header$ [priest.Custom('ES_ElLa')|U] [priest.GetCouncilTitle]"
+ playdate.3014.t:0 "$playdate_header$ El/La [priest.GetCouncilTitle]"
  playdate.3014.desc_participant:0 "Mientras exploramos el/la [ROOT.Char.GetFaith.HouseOfWorship] local, [participant.Custom2('MyCharacterIntroduction', ROOT.Char)|U] y yo nos topamos con [priest.Custom2('MyCharacterIntroduction', ROOT.Char)], rodead[priest.Custom('ES_OA')] de pergaminos.\n\n«Son diarios de hace mucho, ¿os interesan estas cosas?»"
  playdate.3014.desc:0 "Estaba explorando el/la [ROOT.Char.GetFaith.HouseOfWorship] local cuando me topo con [priest.Custom2('MyCharacterIntroduction', ROOT.Char)], rodead[priest.Custom('ES_OA')] de pergaminos.\n\n«Son diarios de hace mucho, ¿os interesan estas cosas?»"
  playdate.3014.a:0 "¡Sí! Enseñadme."

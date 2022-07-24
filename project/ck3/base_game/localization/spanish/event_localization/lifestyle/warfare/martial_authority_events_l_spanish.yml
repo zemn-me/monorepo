@@ -19,13 +19,13 @@
  martial_authority.2040.c.hashishiyah:0 "A la porra, voy a por algo de hachís."
 
  martial_authority.2041.t:0 "Resolución"
- martial_authority.2041.desc:0 "Me levanto y doy un discurso sobre cómo luchamos todos juntos por[ROOT.Char.Custom('ES_ElLa')] [ROOT.Char.GetPrimaryTitle.GetName] y cómo debemos mantenernos unidos contra nuestros enemigos porque, si no lo hacemos, muchos son los forasteros que usarían nuestras disputas internas para apoderarse de nuestras tierras e imponernos su dominio.\n\nAvergonzados, [first.GetTitledFirstName] y [second.GetTitledFirstName] piden disculpas y se disponen a pasar la noche."
+ martial_authority.2041.desc:0 "Me levanto y doy un discurso sobre cómo luchamos todos juntos por[ROOT.Char.GetPrimaryTitle.GetName] y cómo debemos mantenernos unidos contra nuestros enemigos porque, si no lo hacemos, muchos son los forasteros que usarían nuestras disputas internas para apoderarse de nuestras tierras e imponernos su dominio.\n\nAvergonzados, [first.GetTitledFirstName] y [second.GetTitledFirstName] piden disculpas y se disponen a pasar la noche."
  martial_authority.2041.a:0 "Somos más fuertes cuando estamos unidos."
 
  martial_authority.2042.t:0 "Bronca"
  martial_authority.2042.desc:0 "Mi ruego para que dejamos a un lado nuestras diferencias cae en saco roto cuando la riña pasa a una reyerta campal.\n\nLa bebida y la comida vuelan por los aires cuando la gente empieza a tirar jarras y platos."
  martial_authority.2042.a:0 "¡Ya que estoy, creo que me uniré!"
- martial_authority.2042.a.success:0 "Acabo como [ROOT.Char.Custom('ES_ElLa')] únic[ROOT.Char.Custom('ES_OA')] vencedor[ROOT.Char.Custom('ES_XA')] de la pelea"
+ martial_authority.2042.a.success:0 "Acabo como únic[ROOT.Char.Custom('ES_OA')] vencedor[ROOT.Char.Custom('ES_XA')] de la pelea"
  martial_authority.2042.a.failure:0 "Me lastimo en la accidentada pelea"
  martial_authority.2042.b:0 "Qué desastre…"
 
@@ -67,7 +67,7 @@
  martial_authority_special.1100.end.desc:0 "intenta convencer a su comandante, [officer.Custom2('MyCharacterIntroductionNoComma', ROOT.Char)], de las ventajas de una estrategia alternativa. [officer.GetFirstNameNoTooltip] no quiere saber nada al respecto. Cuando me acerco, [officer.GetSheHe] levanta el puño con enfado…"
  martial_authority_special.1100.a:0 "Intervengo para defender al soldado."
  martial_authority_special.1100.a.success.tt:1 "Derrotas [officer.Custom('ES_AlAla')] oficial en un combate sin armas"
- martial_authority_special.1100.a.failure.tt:0 "[officer.Custom('ES_ElLa')|U] oficial te derrota en un combate sin armas"
+ martial_authority_special.1100.a.failure.tt:0 "El/La oficial te derrota en un combate sin armas"
  martial_authority_special.1100.b:0 "Medio entre [officer.GetFirstNameNoTooltip] y el soldado."
  martial_authority_special.1100.b.success.tt:1 "Convences a [officer.GetShortUINameNoTooltip]"
  martial_authority_special.1100.b.failure.tt:1 "[officer.GetShortUINameNoTooltip] te echa una bronca descomunal"
@@ -76,11 +76,11 @@
 
  martial_authority_special.1101.desc:0 "El entrenamiento me ha venido bien. Pocos momentos después, tengo agarrad[officer.Custom('ES_OA')] firmemente a [officer.GetTitledFirstName] con una llave. «Que os sirva de lección», proclamo en voz alta, para que todos lo oigan. «Vuestr[ROOT.Char.Custom('ES_OA')] [ROOT.Char.GetTitleTierName] no ve con buenos ojos a los necios de mente estrecha, independientemente de su rango»."
 
- martial_authority_special.1101.end.desc:0 "\n\n[soldier_friend.Custom('ES_ElLa')|U] soldado irradia gratitud. «Gracias, mi [ROOT.Char.GetLadyLord]?. Nunca tendréis un[soldier_friend.Custom('ES_OA')] servidor[soldier_friend.Custom('ES_OA')] más fiel que [soldier_friend.GetFirstName] [soldier_friend.GetDynastyName]»."
+ martial_authority_special.1101.end.desc:0 "\n\nEl/La soldado irradia gratitud. «Gracias, mi [ROOT.Char.GetLadyLord]?. Nunca tendréis un[soldier_friend.Custom('ES_OA')] servidor[soldier_friend.Custom('ES_OA')] más fiel que [soldier_friend.GetFirstName] [soldier_friend.GetDynastyName]»."
  martial_authority_special.1101.a:0 "Adoptas la estrategia de [soldier_friend.GetFirstNameNoTooltip]."
  martial_authority_special.1101.b:0 "Debates la estrategia para aprender más sobre el arte de la guerra."
  
- martial_authority_special.1102.desc:0 "Sabiendo las consecuencias de hacer daño a un comandante, [soldier_friend.Custom('ES_ElLa')] soldado no hace nada por defenderse de los golpes que le caen. Al caer la sangre, me interpongo entre ellos.\n\nQuizás no tendría que haber peleado con un guerrero veterano. Al final, debo desvelar mi identidad a [officer.GetTitledFirstName] para que me deje marchar y me escabullo a mi tienda antes de que corra la noticia…"
+ martial_authority_special.1102.desc:0 "Sabiendo las consecuencias de hacer daño a un comandante, El/La soldado no hace nada por defenderse de los golpes que le caen. Al caer la sangre, me interpongo entre ellos.\n\nQuizás no tendría que haber peleado con un guerrero veterano. Al final, debo desvelar mi identidad a [officer.GetTitledFirstName] para que me deje marchar y me escabullo a mi tienda antes de que corra la noticia…"
  martial_authority_special.1102.a:0 "Al menos he aprendido un par de trucos."
 
  martial_authority_special.1103.desc:0 "El brazo de [officer.GetTitledFirstName] se queda quieto a mitad de un golpe cuando levanto la voz. La intensidad emocional de mis palabras parecen dar en la llaga… y su expresión se suaviza al bochorno. [officer.GetSheHe|U] tartamudea una disculpa y se escabulle."
