@@ -1,4 +1,4 @@
-import { doSync, JSONObject } from 'ts/do-sync';
+import { doSync, JSONObject } from 'ts/do-sync/npm_pkg';
 import sharpT from 'sharp';
 
 const pixel =

@@ -27,6 +27,5 @@ npm_pkg(
     pkg_json_base = "package.template.json",
     tgz = "do-sync.tgz",
     version_lock = ".version.lock",
-    visibility = ["//deploy:__subpackages__"],
     deps = [":do-sync"],
 )
