@@ -1,7 +1,7 @@
 import program from './program';
 
 async function main() {
-	await program.parseAsync(process.argv);
+	await program().parseAsync(process.argv);
 }
 
 main().catch(e => {
