@@ -3,6 +3,7 @@ load("//js/npm/yarn/lock:rules.bzl", "lockfile_minimize")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files", "pkg_mkdirs", "strip_prefix")
 
 def npm_pkg(
         name,
@@ -59,11 +60,28 @@ def npm_pkg(
 
     pkg_srcs = srcs
     pkg_deps = deps + [pkg_json_name, lockfile_name]
+
+    pkg_files(
+        name = name + "_excluding_index_d_ts",
+        srcs = pkg_srcs + pkg_deps,
+        excludes = [ "index.d.ts" ]
+    )
+
+    pkg_files(
+        name = name + "_all_files",
+        srcs = [
+            ":public.d.ts",
+            ":" +name + "_excluding_index_d_ts"
+        ],
+        renames = {
+            "public.d.ts": "index.d.ts"
+        }
+    )
+
     pkg_npm(
         name = name,
         package_name = package_name,
-        srcs = pkg_srcs,
-        deps = pkg_deps,
+        deps = [ ":" +name + "_all_files" ],
         tgz = tgz,
         visibility = visibility,
     )
