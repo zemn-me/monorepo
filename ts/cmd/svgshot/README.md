@@ -2,7 +2,7 @@ svgshot
 =============================================================================
 [svgshot]: #svgshot
 
-Svgshot takes 'screenshots' of webpages as minmised SVGs. This makes them
+Svgshot takes 'screenshots' of webpages as minimised SVGs. This makes them
 great for rendering in videos or webpages.
 
 
