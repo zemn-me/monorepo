@@ -1,4 +1,5 @@
 load("//ts:rules.bzl", "jest_test", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("//:rules.bzl", "nodejs_binary")
 load("//js/npm:rules.bzl", "npm_pkg")
 
@@ -12,11 +13,8 @@ ts_project(
     srcs = [
         "index.ts",
         "lib.ts",
-        "svgshot_test.ts",
     ],
     deps = [
-        "@npm//@bazel/runfiles",
-        "@npm//@types/jest",
         "@npm//@types/node",
         "@npm//@types/svgo",
         "@npm//@types/tmp",
@@ -27,17 +25,17 @@ ts_project(
     ],
 )
 
-nodejs_binary(
-    name = "svgshot",
-    args = [
-        "--inkscapeBin",
-        "$(location //cc/inkscape:bin)",
-    ],
-    data = [
+ts_project(
+    name = "tests_js",
+    srcs = ["svgshot_test.ts"],
+    deps = [
         ":project",
-        "//cc/inkscape:bin",
+        "@npm//@bazel/runfiles",
+        "@npm//@types/jest",
+        "@npm//@types/node",
+        "@npm//@types/tmp",
+        "@npm//tmp",
     ],
-    entry_point = "index.ts",
 )
 
 jest_test(
@@ -46,7 +44,7 @@ jest_test(
     data = [
         "//cc/inkscape:bin",
     ],
-    deps = [":project"],
+    deps = [":tests_js"],
 )
 
 npm_pkg(
@@ -54,7 +52,7 @@ npm_pkg(
     package_name = "svgshot",
     srcs = ["README.md"] + glob(["docs/**/*"]),
     api_lock = ".api.lock",
-    entry_point = "lib.ts",
+    entry_point = "index.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
