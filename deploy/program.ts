@@ -123,57 +123,74 @@ export function releaseNotes(notes: OperationOrFailure[]) {
 		return [op, error];
 	});
 
-	const paragraphs = [
-		`Artifacts exported in this release:\n${nestedListToMarkdown(
-			operationAndFailure
-				.map(([op, error]) =>
-					op.kind === 'artifact' && error === undefined
-						? `${op.buildTag} ⟶ ${op.filename}`
-						: undefined
-				)
-				.filter(isDefined)
-		)}`,
-		`NPM packages included in this release:\n${nestedListToMarkdown(
-			operationAndFailure
-				.map(([op, error]) =>
-					op.kind === 'npm_publication' && error === undefined
-						? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
-						: undefined
-				)
-				.filter(isDefined)
-		)}`,
-		`The following operations were requested:\n${nestedListToMarkdown(
-			operationAndFailure.map(([op, error]) => {
-				const notes: NestedStringList = [];
+	const paragraphs: NestedStringList = [];
 
-				switch (op.kind) {
-					case 'artifact':
-						notes.push(
-							`${error !== undefined ? '❌' : '✔️'} Upload ${
-								op.buildTag
-							} as release artifact ${op.filename}`
-						);
-						break;
-					case 'npm_publication':
-						notes.push(
-							`${error !== undefined ? '❌' : '✔️'}Upload ${
-								op.buildTag
-							} to NPM.`
-						);
-						break;
-					default:
-						throw new Error('invalid kind');
-				}
+	const artifactInfo = operationAndFailure
+		.map(([op, error]) =>
+			op.kind === 'artifact' && error === undefined
+				? `${op.buildTag} ⟶ ${op.filename}`
+				: undefined
+		)
+		.filter(isDefined);
 
-				return notes;
-			})
-		)}`,
-	];
+	if (artifactInfo.length > 0)
+		paragraphs.push(
+			`Artifacts exported in this release:\n${nestedListToMarkdown(
+				artifactInfo
+			)}`
+		);
+
+	const npmInfo = operationAndFailure
+		.map(([op, error]) =>
+			op.kind === 'npm_publication' && error === undefined
+				? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
+				: undefined
+		)
+		.filter(isDefined);
+
+	if (npmInfo.length > 0)
+		paragraphs.push(
+			`NPM packages included in this release:\n${nestedListToMarkdown(
+				npmInfo
+			)}`
+		);
+
+	const operationInfo = operationAndFailure.map(([op, error]) => {
+		const notes: NestedStringList = [];
+
+		switch (op.kind) {
+			case 'artifact':
+				notes.push(
+					`${error !== undefined ? '❌' : '✔️'} Upload ${
+						op.buildTag
+					} as release artifact ${op.filename}`
+				);
+				break;
+			case 'npm_publication':
+				notes.push(
+					`${error !== undefined ? '❌' : '✔️'} Upload ${
+						op.buildTag
+					} to NPM`
+				);
+				break;
+			default:
+				throw new Error('invalid kind');
+		}
+
+		return notes;
+	});
+
+	if (operationInfo.length > 0)
+		paragraphs.push(
+			`The following operations were requested:\n${nestedListToMarkdown(
+				operationInfo
+			)}`
+		);
 
 	return paragraphs.join('\n\n');
 }
 
-const release =
+export const release =
 	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
 	async ({
 		dryRun,
