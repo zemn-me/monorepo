@@ -54,7 +54,7 @@ def npm_pkg(
         entry_point = external_api_dts_root,
         srcs = srcs + deps,
         report = "api_gen.md",
-        publicTrimmedRollup = "public.d.ts"
+        publicTrimmedRollup = "public.d.ts",
     )
 
     pkg_srcs = srcs

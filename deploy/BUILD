@@ -18,6 +18,7 @@ ts_project(
         "//ts/cmd/svgshot:svgshot.tgz",
     ],
     deps = [
+        "//ts",
         "@npm//@actions/github",
         "@npm//@bazel/runfiles",
         "@npm//@types/jest",
