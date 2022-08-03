@@ -9,6 +9,7 @@ import { context as githubCtx, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
+import { isDefined } from 'ts/guard';
 
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
@@ -68,11 +69,16 @@ type Operation = ArtifactInfo | NpmPackageInfo;
 
 class OperationFailure<O extends Operation = Operation> extends Error {
 	constructor(public readonly operation: O, public readonly error: Error) {
-		super(`${operation.kind} ${operation.buildTag}: ${error.message}`, error.cause);
+		super(
+			`${operation.kind} ${operation.buildTag}: ${error.message}`,
+			error.cause
+		);
 	}
 }
 
-type OperationOrFailure<O extends Operation = Operation> = O | OperationFailure<O>
+type OperationOrFailure<O extends Operation = Operation> =
+	| O
+	| OperationFailure<O>;
 
 interface ReleaseProps {
 	dryRun: boolean;
@@ -85,43 +91,86 @@ interface ReleaseProps {
 	}): Promise<void>;
 }
 
-export function releaseNotes(notes: OperationOrFailure[]) {
-	const artifacts: ArtifactInfo[] = [];
-	const npmPackages: NpmPackageInfo[] = [];
+type NestedStringList = (string | NestedStringList)[];
 
-	for (const note of notes) {
-		if (note.kind === 'artifact') {
-			artifacts.push(note);
-			continue;
-		}
-		if (note.kind === 'npm_publication') {
-			npmPackages.push(note);
-			continue;
-		}
-		throw new Error(`Unknown kind ${(note as any).kind}`);
-	}
-
-	return `${
-		artifacts.length
-			? `This release contains the following artifacts:\n ${artifacts
-					.map(
-						artifact =>
-							` - ${artifact.buildTag} → ${artifact.filename}`
-					)
-					.join('\n')}`
-			: ''
-	}
-${
-	npmPackages.length
-		? `This release contains the following NPM packages:\n ${npmPackages
-				.map(
-					pkg =>
-						` - ${pkg.buildTag} → [${pkg.package_name}](https://npmjs.com/package/svgshot)`
-				)
-				.join('\n')}`
-		: ''
+function indent(s: string): string {
+	return s.replace('\n', '\n    ');
 }
-`;
+
+function nestedListToMarkdown(nestedList: NestedStringList): string {
+	return nestedList
+		.map(item =>
+			item instanceof Array
+				? indent(nestedListToMarkdown(item))
+				: indent(`- ${item}`)
+		)
+		.join('\n');
+}
+
+export function releaseNotes(notes: OperationOrFailure[]) {
+	const operationAndFailure: [
+		operation: Operation,
+		error: Error | undefined
+	][] = notes.map(item => {
+		let op: Operation;
+		let error: Error | undefined;
+
+		if (item instanceof OperationFailure) {
+			op = item.operation;
+			error = item.error;
+		} else op = item;
+
+		return [op, error];
+	});
+
+	const paragraphs = [
+		`Artifacts exported in this release:\n${nestedListToMarkdown(
+			operationAndFailure
+				.map(([op, error]) =>
+					op.kind === 'artifact' && error === undefined
+						? `${op.buildTag} ⟶ ${op.filename}`
+						: undefined
+				)
+				.filter(isDefined)
+		)}`,
+		`NPM packages included in this release:\n${nestedListToMarkdown(
+			operationAndFailure
+				.map(([op, error]) =>
+					op.kind === 'npm_publication' && error === undefined
+						? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
+						: undefined
+				)
+				.filter(isDefined)
+		)}`,
+		`The following operations were requested:\n${nestedListToMarkdown(
+			operationAndFailure.map(([op, error]) => {
+				const notes: NestedStringList = [];
+
+				switch (op.kind) {
+					case 'artifact':
+						notes.push(
+							`${error !== undefined ? '❌' : '✔️'} Upload ${
+								op.buildTag
+							} as release artifact ${op.filename}`
+						);
+						break;
+					case 'npm_publication':
+						notes.push(
+							`${error !== undefined ? '❌' : '✔️'}Upload ${
+								op.buildTag
+							} to NPM.`
+						);
+						break;
+					default:
+						throw new Error('invalid kind');
+				}
+
+				return notes;
+			})
+		)}`,
+	];
+
+	return paragraphs.join('\n\n');
 }
 
 const release =
@@ -134,7 +183,7 @@ const release =
 	}: ReleaseProps) => {
 		const logInfo = await Promise.all(fns.map(f => f()));
 
-		let releaseUploads: [file: string, content: Buffer][] = [];
+		const releaseUploads: [file: string, content: Buffer][] = [];
 
 		// defer publication until we have the release_id.
 		// otherwise, we can't tell if publishing would break for the
@@ -157,36 +206,41 @@ const release =
 					));
 			  };
 
-
-
 		const results = await Promise.all(
-			logInfo.map(
-				async info => {
-					try {
-						await info.publish({ publish, exec });
-						return info; // success
-					} catch (e) {
-						return new OperationFailure(info,
-							e instanceof Error
-								? e
-								: new Error(`${e} was thrown but it is not an Error`));
-					}
+			logInfo.map(async info => {
+				try {
+					await info.publish({ publish, exec });
+					return info; // success
+				} catch (e) {
+					return new OperationFailure(
+						info,
+						e instanceof Error
+							? e
+							: new Error(
+									`${e} was thrown but it is not an Error`
+							  )
+					);
 				}
-				)
+			})
 		);
+
+		const notes = releaseNotes(results);
 
 		const { release_id } = await createRelease({
 			body: releaseNotes(results),
 		});
 
-		for (const [file, content] of releaseUploads) await uploadReleaseAsset({
+		for (const [file, content] of releaseUploads)
+			await uploadReleaseAsset({
 				release_id,
 				name: file,
 				data: content,
 			});
+
+		return notes;
 	};
 
-export const program = () =>
+export const program = (outputReleaseNotes?: (notes: string) => void) =>
 	new Command()
 		.name('release')
 		.description(
@@ -216,7 +270,7 @@ export const program = () =>
 				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
 			);
 
-			releaser({
+			const notes = await releaser({
 				uploadReleaseAsset: async ({ name, release_id, data }) =>
 					void (await Github.rest.repos.uploadReleaseAsset({
 						owner: context.repo.owner,
@@ -252,6 +306,8 @@ export const program = () =>
 
 				releaseNotes,
 			});
+
+			if (outputReleaseNotes) outputReleaseNotes(notes);
 		});
 
 export default program;
