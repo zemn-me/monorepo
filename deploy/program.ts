@@ -64,9 +64,19 @@ const npmPackage =
 		};
 	};
 
+type Operation = ArtifactInfo | NpmPackageInfo;
+
+class OperationFailure<O extends Operation = Operation> extends Error {
+	constructor(public readonly operation: O, public readonly error: Error) {
+		super(`${operation.kind} ${operation.buildTag}: ${error.message}`, error.cause);
+	}
+}
+
+type OperationOrFailure<O extends Operation = Operation> = O | OperationFailure<O>
+
 interface ReleaseProps {
 	dryRun: boolean;
-	releaseNotes: (items: (ArtifactInfo | NpmPackageInfo)[]) => string;
+	releaseNotes: (items: OperationOrFailure[]) => string;
 	createRelease(data: { body: string }): Promise<{ release_id: number }>;
 	uploadReleaseAsset(data: {
 		release_id: number;
@@ -75,7 +85,7 @@ interface ReleaseProps {
 	}): Promise<void>;
 }
 
-export function releaseNotes(notes: (NpmPackageInfo | ArtifactInfo)[]) {
+export function releaseNotes(notes: OperationOrFailure[]) {
 	const artifacts: ArtifactInfo[] = [];
 	const npmPackages: NpmPackageInfo[] = [];
 
@@ -124,19 +134,16 @@ const release =
 	}: ReleaseProps) => {
 		const logInfo = await Promise.all(fns.map(f => f()));
 
-		const { release_id } = await createRelease({
-			body: releaseNotes(logInfo),
-		});
+		let releaseUploads: [file: string, content: Buffer][] = [];
 
+		// defer publication until we have the release_id.
+		// otherwise, we can't tell if publishing would break for the
+		// release notes. This could be a promise, but it feels a bit
+		// weird and unnecessary.
 		const publish: Context['publish'] = async (
 			file: string,
 			content: Buffer
-		) =>
-			uploadReleaseAsset({
-				release_id,
-				name: file,
-				data: content,
-			});
+		) => void releaseUploads.push([file, content]);
 
 		const exec: Context['exec'] = dryRun
 			? async (filename: string) => {
@@ -150,9 +157,33 @@ const release =
 					));
 			  };
 
-		await Promise.all(
-			logInfo.map(({ publish: p }) => p({ publish, exec }))
+
+
+		const results = await Promise.all(
+			logInfo.map(
+				async info => {
+					try {
+						await info.publish({ publish, exec });
+						return info; // success
+					} catch (e) {
+						return new OperationFailure(info,
+							e instanceof Error
+								? e
+								: new Error(`${e} was thrown but it is not an Error`));
+					}
+				}
+				)
 		);
+
+		const { release_id } = await createRelease({
+			body: releaseNotes(results),
+		});
+
+		for (const [file, content] of releaseUploads) await uploadReleaseAsset({
+				release_id,
+				name: file,
+				data: content,
+			});
 	};
 
 export const program = () =>
