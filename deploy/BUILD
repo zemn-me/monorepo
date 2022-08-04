@@ -36,9 +36,12 @@ nodejs_binary(
 
 nodejs_test(
     name = "smoke",
+    args = [
+        "--dryRun",
+        "true",
+    ],
     data = [":release_src"],
     entry_point = "release.ts",
-    args = [ "--dryRun", "true" ]
 )
 
 alias(
