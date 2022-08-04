@@ -1,7 +1,7 @@
-import * as state from 'project/cultist/state';
+import * as state from 'monorepo/project/cultist/state';
 import immutable from 'immutable';
-import * as cultist from 'project/cultist/types';
-import * as iter from 'ts/iter';
+import * as cultist from 'monorepo/project/cultist/types';
+import * as iter from 'monorepo/ts/iter';
 
 export enum Kind {
 	PassTime = 0,

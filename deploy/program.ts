@@ -9,7 +9,7 @@ import { context as githubCtx, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
-import { isDefined } from 'ts/guard';
+import { isDefined } from 'monorepo/ts/guard';
 
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;

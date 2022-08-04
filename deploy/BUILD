@@ -1,5 +1,5 @@
 load("//ts:rules.bzl", "jest_test", "ts_project")
-load("//:rules.bzl", "nodejs_binary")
+load("//:rules.bzl", "nodejs_binary", "nodejs_test")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -31,7 +31,17 @@ ts_project(
 nodejs_binary(
     name = "release",
     data = [":release_src"],
-    entry_point = "release.js",
+    entry_point = "release.ts",
+)
+
+nodejs_test(
+    name = "smoke",
+    args = [
+        "--dryRun",
+        "true",
+    ],
+    data = [":release_src"],
+    entry_point = "release.ts",
 )
 
 alias(

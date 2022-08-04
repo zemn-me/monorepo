@@ -1,6 +1,6 @@
 import { Route, Outlet } from 'react-router-dom';
 import React from 'react';
-import Art from 'project/zemn.me/pages/art';
+import Art from 'monorepo/project/zemn.me/pages/art';
 
 export const Home: React.FC = () => <>Hello, world!</>;
 
