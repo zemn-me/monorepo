@@ -1,4 +1,5 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
+load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 load("//js/npm/yarn/lock:rules.bzl", "lockfile_minimize")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
@@ -57,13 +58,20 @@ def npm_pkg(
         publicTrimmedRollup = "public.d.ts",
     )
 
+    copy_to_directory(
+        name = name + "_dir",
+        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts"],
+        replace_prefixes = {
+            "public.d.ts": "index.d.ts",
+        },
+    )
+
     pkg_srcs = srcs
     pkg_deps = deps + [pkg_json_name, lockfile_name]
     pkg_npm(
         name = name,
         package_name = package_name,
-        srcs = pkg_srcs,
-        deps = pkg_deps,
+        deps = [name + "_dir"],
         tgz = tgz,
         visibility = visibility,
     )
