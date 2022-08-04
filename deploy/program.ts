@@ -9,7 +9,9 @@ import { context as githubCtx, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
-import { isDefined } from 'ts/guard';
+// I'm not exactly sure what meant I needed to do this, but I do know that
+// js_binary is not finding its imports correctly.
+import { isDefined } from '../ts/guard';
 
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
