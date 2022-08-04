@@ -1,9 +1,9 @@
 import React from 'react';
-import exampleSave from 'project/cultist/example/savestate';
+import exampleSave from 'monorepo/project/cultist/example/savestate';
 
-import * as State from 'project/cultist/state';
-import * as Save from 'project/cultist/save';
-import * as Board from 'project/cultist/react/table';
+import * as State from 'monorepo/project/cultist/state';
+import * as Save from 'monorepo/project/cultist/save';
+import * as Board from 'monorepo/project/cultist/react/table';
 
 const Home = (): React.ReactElement => {
 	const [state, setState] = React.useState(

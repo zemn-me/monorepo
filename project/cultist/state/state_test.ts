@@ -1,7 +1,7 @@
-import * as Save from 'project/cultist/save';
-import * as serialize from 'project/cultist/state/serialize';
-import * as deserialize from 'project/cultist/state/deserialize';
-import { maybe } from 'ts/util';
+import * as Save from 'monorepo/project/cultist/save';
+import * as serialize from 'monorepo/project/cultist/state/serialize';
+import * as deserialize from 'monorepo/project/cultist/state/deserialize';
+import { maybe } from 'monorepo/ts/util';
 
 test('maybe', () => {
 	expect(maybe(serialize.number)(10)).toEqual('10');

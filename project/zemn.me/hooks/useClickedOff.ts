@@ -1,4 +1,4 @@
-import { walk, some } from 'ts/iter';
+import { walk, some } from 'monorepo/ts/iter';
 import React from 'react';
 
 /**
