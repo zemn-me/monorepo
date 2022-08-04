@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
-import Pages from 'project/zemn.me/pages';
-import NavBar, { Hamburger } from 'project/zemn.me/elements/NavBar';
-import TitlePage from 'project/zemn.me/elements/TitlePage';
-import DarkModeSwitcher from 'project/zemn.me/elements/DarkModeSwitcher';
+import Pages from 'monorepo/project/zemn.me/pages';
+import NavBar, { Hamburger } from 'monorepo/project/zemn.me/elements/NavBar';
+import TitlePage from 'monorepo/project/zemn.me/elements/TitlePage';
+import DarkModeSwitcher from 'monorepo/project/zemn.me/elements/DarkModeSwitcher';
 
 // side-effects only.
 import './root.module.css';

@@ -1,7 +1,7 @@
-import * as cultist from 'project/cultist/types';
-import * as Slots from 'project/cultist/slots';
-import { filter, remove } from 'ts/iter';
-import { isDefined } from 'ts/guard';
+import * as cultist from 'monorepo/project/cultist/types';
+import * as Slots from 'monorepo/project/cultist/slots';
+import { filter, remove } from 'monorepo/ts/iter';
+import { isDefined } from 'monorepo/ts/guard';
 
 function* elementCombosForVerb(
 	verb: cultist.Verb,

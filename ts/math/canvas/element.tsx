@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Homog from 'ts/math/homog';
+import * as Homog from 'monorepo/ts/math/homog';
 import * as Cnv from '.';
 
 export interface CanvasProps {
