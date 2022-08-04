@@ -1,5 +1,5 @@
 import React from 'react';
-import * as State from 'project/cultist/state';
+import * as State from 'monorepo/project/cultist/state';
 // stubbed out because IDK how to fix style issues right now.
 //import style from './table.module.css';
 

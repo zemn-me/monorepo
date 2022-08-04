@@ -23,7 +23,7 @@
 		"baseUrl": "./",
 		"rootDirs": ["bazel-out/k8-fastbuild/bin"],
 		"paths": {
-			"*": ["./*", "bazel-out/k8-fastbuild/bin/*"]
+			"monorepo/*": ["./monorepo/*", "bazel-out/k8-fastbuild/bin/monorepo/*"]
 		}
 	},
 	"exclude": ["node_modules", "dist", "external"]
