@@ -1,5 +1,5 @@
 import React from 'react';
-import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo';
+import ZemnmezLogo from 'monorepo/project/zemn.me/elements/ZemnmezLogo';
 
 const rect = (
 	[x, y]: [number, number],
