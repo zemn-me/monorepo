@@ -425,7 +425,7 @@ def _symlink_for_ambiguous_lib(actions, toolchain, crate_info, lib):
 
     # Take the absolute value of hash() since it could be negative.
     path_hash = abs(hash(lib.path))
-    lib_name = get_lib_name(lib)
+    lib_name = get_lib_name(lib, for_windows = toolchain.os.startswith("windows"))
 
     prefix = "lib"
     extension = ".a"
@@ -488,7 +488,7 @@ def _disambiguate_libs(actions, toolchain, crate_info, dep_info, use_pic):
             if _is_dylib(lib):
                 continue
             artifact = get_preferred_artifact(lib, use_pic)
-            name = get_lib_name(artifact)
+            name = get_lib_name(artifact, for_windows = toolchain.os.startswith("windows"))
 
             # On Linux-like platforms, normally library base names start with
             # `lib`, following the pattern `lib[name].(a|lo)` and we pass
@@ -1523,7 +1523,7 @@ def _get_crate_dirname(crate):
     """
     return crate.output.dirname
 
-def _portable_link_flags(lib, use_pic, ambiguous_libs):
+def _portable_link_flags(lib, use_pic, ambiguous_libs, for_windows = False):
     artifact = get_preferred_artifact(lib, use_pic)
     if ambiguous_libs and artifact.path in ambiguous_libs:
         artifact = ambiguous_libs[artifact.path]
@@ -1544,13 +1544,31 @@ def _portable_link_flags(lib, use_pic, ambiguous_libs):
         # and adding references to these symlinks in the native section A.
         # We rely in the behavior of -Clink-arg to put the linker args
         # at the end of the linker invocation constructed by rustc.
+
+        # We skip adding `-Clink-arg=-l` for libstd and libtest from the standard library, as
+        # these two libraries are present both as an `.rlib` and a `.so` format.
+        # On linux, Rustc adds a -Bdynamic to the linker command line before the libraries specified
+        # with `-Clink-arg`, which leads to us linking against the `.so`s but not putting the
+        # corresponding value to the runtime library search paths, which results in a
+        # "cannot open shared object file: No such file or directory" error at exectuion time.
+        # We can fix this by adding a `-Clink-arg=-Bstatic` on linux, but we don't have that option for
+        # macos. The proper solution for this issue would be to remove `libtest-{hash}.so` and `libstd-{hash}.so`
+        # from the toolchain. However, it is not enough to change the toolchain's `rust_std_{...}` filegroups
+        # here: https://github.com/bazelbuild/rules_rust/blob/a9d5d894ad801002d007b858efd154e503796b9f/rust/private/repository_utils.bzl#L144
+        # because rustc manages to escape the sandbox and still finds them at linking time.
+        # We need to modify the repository rules to erase those files completely.
+        if "lib/rustlib" in artifact.path and (
+            artifact.basename.startswith("libtest-") or artifact.basename.startswith("libstd-") or
+            artifact.basename.startswith("test-") or artifact.basename.startswith("std-")
+        ):
+            return ["-lstatic=%s" % get_lib_name(artifact, for_windows)]
         return [
-            "-lstatic=%s" % get_lib_name(artifact),
-            "-Clink-arg=-l%s" % get_lib_name(artifact),
+            "-lstatic=%s" % get_lib_name(artifact, for_windows),
+            "-Clink-arg=-l%s" % (get_lib_name(artifact) if not for_windows else artifact.basename),
         ]
     elif _is_dylib(lib):
         return [
-            "-ldylib=%s" % get_lib_name(artifact),
+            "-ldylib=%s" % get_lib_name(artifact, for_windows),
         ]
 
     return []
@@ -1562,7 +1580,7 @@ def _make_link_flags_windows(linker_input_and_use_pic_and_ambiguous_libs):
         if lib.alwayslink:
             ret.extend(["-C", "link-arg=/WHOLEARCHIVE:%s" % get_preferred_artifact(lib, use_pic).path])
         else:
-            ret.extend(_portable_link_flags(lib, use_pic, ambiguous_libs))
+            ret.extend(_portable_link_flags(lib, use_pic, ambiguous_libs, for_windows = True))
     return ret
 
 def _make_link_flags_darwin(linker_input_and_use_pic_and_ambiguous_libs):
