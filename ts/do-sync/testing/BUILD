@@ -8,18 +8,15 @@ package(default_visibility = [
 
 ts_project(
     name = "project",
-    srcs = glob(["**/*.ts"]) + [":npm_pkg"],
+    srcs = glob(["**/*.ts"]),
     deps = [
         "@npm//@types/jest",
         "@npm//@types/sharp",
         "@npm//sharp",
+        "//ts/do-sync"
     ],
 )
 
-js_library(
-    name = "npm_pkg",
-    deps = ["//ts/do-sync:npm_pkg"],
-)
 
 jest_test(
     name = "tests",

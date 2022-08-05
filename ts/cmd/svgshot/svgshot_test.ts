@@ -1,4 +1,4 @@
-import main from './lib';
+import main from 'monorepo/ts/cmd/svgshot/lib';
 import tmp from 'tmp';
 import fs from 'fs/promises';
 import { runfiles } from '@bazel/runfiles';
