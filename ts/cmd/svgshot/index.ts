@@ -1,9 +1,9 @@
 /**
- * 
+ *
  * Svgshot takes 'screenshots' of webpages as minimised SVGs. This makes them
  * great for rendering in videos or webpages.
- * 
- * @remarks 
+ *
+ * @remarks
  * For more information, see https://npmjs.com/package/svgshot.
  */
 

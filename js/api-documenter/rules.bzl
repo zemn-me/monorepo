@@ -2,24 +2,23 @@ load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 
 def _api_documenter_impl(ctx):
-
     dir = ctx.actions.declare_directory(
-        ctx.attr.output_directory
+        ctx.attr.output_directory,
     )
 
     ctx.actions.run(
-        outputs = [ dir ],
-        inputs = [ ctx.file.input_directory ],
+        outputs = [dir],
+        inputs = [ctx.file.input_directory],
         executable = ctx.executable.api_documenter_binary,
-        arguments = ["markdown", "-i", ctx.file.input_directory.path, "-o", dir.path ],
+        arguments = ["markdown", "-i", ctx.file.input_directory.path, "-o", dir.path],
         mnemonic = "APIDocumenter",
         progress_message = "Running api-documeneter (https://api-extractor.com)",
     )
 
     return [
         DefaultInfo(
-            files = depset([ dir ])
-        )
+            files = depset([dir]),
+        ),
     ]
 
 _api_documenter_rule = rule(
@@ -34,7 +33,7 @@ _api_documenter_rule = rule(
 def api_documenter(name, docModel = None, **kwargs):
     copy_to_directory(
         name = name + "_docModel_dir",
-        srcs = [ docModel ]
+        srcs = [docModel],
     )
 
     _api_documenter_rule(

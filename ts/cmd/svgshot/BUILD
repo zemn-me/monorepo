@@ -13,7 +13,7 @@ ts_project(
     srcs = [
         "index.ts",
         "lib.ts",
-        "run.ts"
+        "run.ts",
     ],
     deps = [
         "@npm//@types/node",
@@ -51,7 +51,7 @@ jest_test(
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    srcs = glob(["examples/**/*"]) + [ "README.md"],
+    srcs = glob(["examples/**/*"]) + ["README.md"],
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/MAJOR",
