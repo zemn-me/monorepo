@@ -22,6 +22,8 @@
 		"@pulumi/aws": "^4.0.0",
 		"@pulumi/awsx": "^0.32.0",
 		"@pulumi/pulumi": "^3.37.2",
+		"@swc/cli": "^0.1.57",
+		"@swc/core": "^1.2.223",
 		"@testing-library/react": "^13.3.0",
 		"@types/cross-spawn": "^6.0.2",
 		"@types/d3-axis": "^3.0.1",
@@ -89,6 +91,5 @@
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //...",
 		"pr": "gh pr create -f; gh pr merge -md --auto"
-	},
-	"dependencies": {}
+	}
 }
