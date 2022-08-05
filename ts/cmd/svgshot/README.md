@@ -5,6 +5,7 @@ svgshot
 Svgshot takes 'screenshots' of webpages as minimised SVGs. This makes them
 great for rendering in videos or webpages.
 
+[API Reference](./docs/index.md)
 
 Example
 -----------------------------------------------------------------------------
@@ -17,12 +18,12 @@ svgshot https://en.wikipedia.org
 # writing Wikipedia__the_free_encyclopedia.svg
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[Wikipedia SVG]: ./docs/Wikipedia__the_free_encyclopedia.svg
+[Wikipedia SVG]: ./examples/Wikipedia__the_free_encyclopedia.svg
 ![Wikipedia SVG]
 
 With `--block` for removing text¹:
 
-[Twitch SVG]: ./docs/Twitch.svg
+[Twitch SVG]: ./examples/Twitch.svg
 ![Twitch SVG]
 
 [Examples directory]: ./examples
@@ -52,6 +53,7 @@ For temporary usage you might want to use `npx`:
 ```bash
 npx svgshot https://en.wikipedia.org
 ```
+
 
 TODO
 -----------------------------------------------------------------------------
