@@ -35,13 +35,12 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         srcs = srcs,
         tsconfig = tsconfig,
         # swc injects this
-        # uncomment these one day
-        #deps = deps + ["@npm//regenerator-runtime"],
-        #transpiler = partial.make(
-        #    swc_transpiler,
-        #    swcrc = "//:swcrc",
-        #),
-        deps = deps,
+        deps = deps + ["@npm//regenerator-runtime"],
+        transpiler = partial.make(
+            swc_transpiler,
+            swcrc = "//:swcrc",
+            source_maps = "true",
+        ),
         preserve_jsx = preserve_jsx,
         resolve_json_module = resolve_json_module,
         root_dir = root_dir,
