@@ -1,4 +1,5 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
+load("//js/api-documenter:rules.bzl", "api_documenter")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 load("//js/npm/yarn/lock:rules.bzl", "lockfile_minimize")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
@@ -70,11 +71,18 @@ def npm_pkg(
         srcs = srcs + deps,
         report = "api_gen.md",
         publicTrimmedRollup = "public.d.ts",
+        docModel = ".api.json",
+    )
+
+    api_documenter(
+        name = name + "_docs",
+        output_directory = "docs",
+        docModel = ".api.json",
     )
 
     copy_to_directory(
         name = name + "_dir",
-        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts"],
+        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", name + "_docs"],
         replace_prefixes = {
             "public.d.ts": "index.d.ts",
         },
