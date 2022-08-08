@@ -13,7 +13,7 @@ ts_project(
     srcs = [
         "index.ts",
         "lib.ts",
-        "run.ts"
+        "run.ts",
     ],
     deps = [
         "@npm//@types/node",

@@ -9,6 +9,7 @@ ts_project(
     deps = [
         "@npm//@bazel/runfiles",
         "@npm//@types/node",
+        "@npm//@schemastore/package",
         "@npm//commander",
     ],
 )

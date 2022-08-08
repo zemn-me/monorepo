@@ -42,7 +42,6 @@ exports_files(
         ".eslintrc.json",
         "css_loader.d.ts",
         "yarn.lock",
-        ".swcrc",
     ],
     visibility = ["//visibility:public"],
 )
@@ -57,5 +56,5 @@ esbuild_config(
 
 copy_to_bin(
     name = "swcrc",
-    srcs = [".swcrc"],
+    srcs = [".swcrc.json"],
 )
