@@ -2,12 +2,10 @@ import fs from 'fs/promises';
 import { Command } from 'commander';
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 
-
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
 	isDev: (v: string) => v.startsWith('@types'),
 };
-
 
 const labelToNpmPackage = (label: string): string => {
 	/*
@@ -68,7 +66,7 @@ const main = async () => {
 	);
 
 	const pkg_json_buf = await fs.readFile(opts.base);
-	
+
 	// this could be less strict, but it resulted in crashes
 	const pkg_json: packageJson = JSON.parse(pkg_json_buf.toString());
 

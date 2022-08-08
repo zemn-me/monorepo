@@ -8,8 +8,8 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "@npm//@bazel/runfiles",
-        "@npm//@types/node",
         "@npm//@schemastore/package",
+        "@npm//@types/node",
         "@npm//commander",
     ],
 )

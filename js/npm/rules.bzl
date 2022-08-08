@@ -7,17 +7,17 @@ load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
 
 def _exclude_all_external_rule(ctx):
-
     return DefaultInfo(files = depset([
-        file for file in ctx.files.srcs
+        file
+        for file in ctx.files.srcs
         if file.owner.workspace_name == "monorepo"
     ]))
 
 exclude_all_external_rule = rule(
     implementation = _exclude_all_external_rule,
     attrs = {
-        "srcs": attr.label_list(allow_files = True)
-    }
+        "srcs": attr.label_list(allow_files = True),
+    },
 )
 
 def npm_pkg(
@@ -107,7 +107,7 @@ def npm_pkg(
     # a change in files occurs.
     bump_on_change_test(
         name = "version_lock",
-        srcs = [ ":version_lock_files" ],
+        srcs = [":version_lock_files"],
         version = minor_version,
         run_on_main = test_version_on_main,
         version_lock = version_lock,
