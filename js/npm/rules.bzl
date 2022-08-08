@@ -10,7 +10,7 @@ def _exclude_all_external_rule(ctx):
     return DefaultInfo(files = depset([
         file
         for file in ctx.files.srcs
-        if file.owner.workspace_name == "monorepo"
+        if file.owner.workspace_name == ""
     ]))
 
 exclude_all_external_rule = rule(
