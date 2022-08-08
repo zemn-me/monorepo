@@ -1,15 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/swcrc.json",
   "jsc": {
+    "target": "es2022",
     "parser": {
+      "tsx": true,
       "syntax": "typescript",
-      "jsx": true,
-      "numericSeparator": false,
-      "classPrivateProperty": false,
-      "privateMethod": false,
-      "classProperty": false,
-      "functionBind": false,
-      "decorators": false,
-      "decoratorsBeforeExport": false
+      "decorators": false
     },
     "transform": {
       "react": {
