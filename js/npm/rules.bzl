@@ -82,7 +82,7 @@ def npm_pkg(
 
     copy_to_directory(
         name = name + "_dir",
-        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", name + "_docs"],
+        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts"],
         replace_prefixes = {
             "public.d.ts": "index.d.ts",
         },
