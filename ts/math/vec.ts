@@ -7,19 +7,16 @@ export interface Vector<I extends number = number, T = number>
 	length: I;
 }
 
-type mapFn<I extends number, T> = <U>(
-	callbackFn: (value: T, index: number, array: Vector<I, T>) => U,
-	thisArg?: unknown
-) => Vector<I, U>;
-
 /**
  * Map a Vector, returning a new Vector.
  */
 export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
+) => Vector<I, U> = (vec, c) => {
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-) => Vector<I, U> = (vec, c) => (vec.map as mapFn<any, any>)(c);
+	return vec.map(c as any) as any;
+};
 
 /**
  * Map an Iterable, returning a new Iterable.

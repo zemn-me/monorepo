@@ -23,6 +23,8 @@
 		"@pulumi/aws": "^4.0.0",
 		"@pulumi/awsx": "^0.32.0",
 		"@pulumi/pulumi": "^3.37.2",
+		"@schemastore/package": "^0.0.6",
+		"@swc/cli": "^0.1.57",
 		"@testing-library/react": "^13.3.0",
 		"@types/cross-spawn": "^6.0.2",
 		"@types/d3-axis": "^3.0.1",
@@ -30,9 +32,9 @@
 		"@types/jest": "^28.1.6",
 		"@types/mime": "^3.0.1",
 		"@types/node": "^18.6.4",
-		"@types/react": "18.0.15",
+		"@types/react": "18.0.16",
 		"@types/react-dom": "^18.0.6",
-		"@types/sharp": "^0.30.4",
+		"@types/sharp": "^0.30.5",
 		"@types/svgo": "^2.6.3",
 		"@types/tmp": "^0.2.3",
 		"@types/uuid": "^8.3.4",
@@ -63,7 +65,7 @@
 		"module-alias": "^2.2.2",
 		"patch-package": "^6.4.7",
 		"prettier": "^2.7.1",
-		"puppeteer": "^16.0.0",
+		"puppeteer": "^16.1.0",
 		"react": "18.2.0",
 		"react-dom": "^18.2.0",
 		"react-router": "^6.3.0",
@@ -90,6 +92,5 @@
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //...",
 		"pr": "gh pr create -f; gh pr merge -md --auto"
-	},
-	"dependencies": {}
+	}
 }

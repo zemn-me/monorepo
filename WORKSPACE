@@ -11,9 +11,6 @@ bind(
 workspace(
     # How this workspace would be referenced with absolute labels from another workspace
     name = "monorepo",
-    # Map the @npm bazel workspace to the node_modules directory.
-    # This lets Bazel use the same node_modules as other local tooling.
-    managed_directories = {"@npm": ["node_modules"]},
 )
 
 load("//bzl:deps.bzl", "fetch_dependencies")
