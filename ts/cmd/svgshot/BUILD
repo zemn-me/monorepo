@@ -48,10 +48,15 @@ jest_test(
     deps = [":tests_js"],
 )
 
+filegroup(
+    name = "docs",
+    srcs = glob(["examples/**/*"]) + ["README.md"]
+)
+
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    srcs = glob(["examples/**/*"]) + ["README.md"],
+    srcs = [],
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/MAJOR",
