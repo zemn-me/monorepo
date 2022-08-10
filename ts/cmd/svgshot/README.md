@@ -5,8 +5,6 @@ svgshot
 Svgshot takes 'screenshots' of webpages as minimised SVGs. This makes them
 great for rendering in videos or webpages.
 
-[API Reference](./docs/index.md)
-
 Example
 -----------------------------------------------------------------------------
 [Example]: #example
