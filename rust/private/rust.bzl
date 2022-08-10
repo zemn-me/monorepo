@@ -343,6 +343,7 @@ def _rust_library_common(ctx, crate_type):
             metadata = rust_metadata,
             edition = get_edition(ctx.attr, toolchain, ctx.label),
             rustc_env = ctx.attr.rustc_env,
+            rustc_env_files = ctx.files.rustc_env_files,
             is_test = False,
             compile_data = depset(ctx.files.compile_data),
             owner = ctx.label,
@@ -387,6 +388,7 @@ def _rust_binary_impl(ctx):
             output = output,
             edition = get_edition(ctx.attr, toolchain, ctx.label),
             rustc_env = ctx.attr.rustc_env,
+            rustc_env_files = ctx.files.rustc_env_files,
             is_test = False,
             compile_data = depset(ctx.files.compile_data),
             owner = ctx.label,
@@ -431,6 +433,9 @@ def _rust_test_impl(ctx):
             compile_data = depset(ctx.files.compile_data, transitive = [crate.compile_data])
         else:
             compile_data = depset(ctx.files.compile_data)
+        rustc_env_files = ctx.files.rustc_env_files + crate.rustc_env_files
+        rustc_env = dict(crate.rustc_env)
+        rustc_env.update(**ctx.attr.rustc_env)
 
         # Build the test binary using the dependency's srcs.
         crate_info = rust_common.create_crate_info(
@@ -443,7 +448,8 @@ def _rust_test_impl(ctx):
             aliases = ctx.attr.aliases,
             output = output,
             edition = crate.edition,
-            rustc_env = ctx.attr.rustc_env,
+            rustc_env = rustc_env,
+            rustc_env_files = rustc_env_files,
             is_test = True,
             compile_data = compile_data,
             wrapped_crate_type = crate.type,
@@ -474,6 +480,7 @@ def _rust_test_impl(ctx):
             output = output,
             edition = get_edition(ctx.attr, toolchain, ctx.label),
             rustc_env = ctx.attr.rustc_env,
+            rustc_env_files = ctx.files.rustc_env_files,
             is_test = True,
             compile_data = depset(ctx.files.compile_data),
             owner = ctx.label,
