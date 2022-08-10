@@ -18,7 +18,8 @@ ts_project(
 npm_pkg(
     name = "npm_pkg",
     package_name = "do-sync",
-    srcs = ["README.md"],
+    srcs = [],
+    readme = "README.md",
     api_lock = ".api.lock",
     entry_point = "index.d.ts",
     major_version = "version/MAJOR",
