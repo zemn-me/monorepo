@@ -56,7 +56,8 @@ filegroup(
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
-    srcs = ["README.md"], # TODO: add a test to ensure this is present
+    srcs = [],
+    readme = "README.md",
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/MAJOR",
