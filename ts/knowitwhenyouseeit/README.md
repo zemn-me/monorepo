@@ -15,7 +15,7 @@ yarn add knowitwhenyouseeit
 ```jsx
 import allowlisted from 'knowitwhenyouseeit'
 
-const getMessage = whitelisted(
+const getMessage = allowllisted(
   "$2y$12$BcuZ0VfUeLLpoLxOC5Xv7eQQK0r95by8YJsECCldKP4ftPr20rpXW", //hello world
   "$2y$12$hxyWxMx.qap70Snn1QKMwuDp/9XgNM7HpwbrGnsPu/j7dyTEWh0M2" //hewwo world
 )
