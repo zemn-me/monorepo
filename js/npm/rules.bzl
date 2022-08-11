@@ -26,6 +26,8 @@ def npm_pkg(
         pkg_json_base,
         srcs = [],
         deps = [],
+        # Needed so that something shows on NPM
+        readme = None,
         version_lock = None,
         api_lock = None,
         major_version = None,
@@ -82,7 +84,7 @@ def npm_pkg(
 
     copy_to_directory(
         name = name + "_dir",
-        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts"],
+        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", readme],
         replace_prefixes = {
             "public.d.ts": "index.d.ts",
         },
