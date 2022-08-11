@@ -1,17 +1,17 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-  "name": "knowitwhenyouseeit",
-  "version": "1.0.1",
-  "description": "provides functions to render client-side data but only if it matches a secure digest",
-  "author": "zemnmez",
-  "license": "MIT",
+	"name": "knowitwhenyouseeit",
+	"version": "1.0.1",
+	"description": "provides functions to render client-side data but only if it matches a secure digest",
+	"author": "zemnmez",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Zemnmez/monorepo.git",
 		"directory": "ts/knowitwhenyouseeit"
 	},
-  "engines": {
-    "node": ">=8",
-    "npm": ">=5"
-  }
+	"engines": {
+		"node": ">=8",
+		"npm": ">=5"
+	}
 }

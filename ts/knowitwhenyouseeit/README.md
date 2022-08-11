@@ -1,8 +1,8 @@
-# [knowitwhenyouseeit](//zemnmez.github.io/knowitwhenyouseeit)
+# knowitwhenyouseeit
 
 > provides functions to render client-side data but only if it matches a secure digest
 
-[![NPM](https://img.shields.io/npm/v/knowitwhenyouseeit.svg)](https://www.npmjs.com/package/knowitwhenyouseeit) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/knowitwhenyouseeit.svg)](https://www.npmjs.com/package/knowitwhenyouseeit)
 
 ## Install
 
@@ -13,7 +13,7 @@ yarn add knowitwhenyouseeit
 ## Usage
 
 ```jsx
-import whitelisted from 'knowitwhenyouseeit'
+import allowlisted from 'knowitwhenyouseeit'
 
 const getMessage = whitelisted(
   "$2y$12$BcuZ0VfUeLLpoLxOC5Xv7eQQK0r95by8YJsECCldKP4ftPr20rpXW", //hello world
