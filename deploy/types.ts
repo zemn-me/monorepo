@@ -1,4 +1,3 @@
-
 export interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
 	exec(filename: string): Promise<void>;

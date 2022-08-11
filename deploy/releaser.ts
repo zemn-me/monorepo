@@ -1,7 +1,13 @@
 import child_process from 'child_process';
 import fs from 'fs/promises';
 import { promisify } from 'util';
-import { ReleaseProps, OperationFailure, NpmPackageInfo, ArtifactInfo, Context } from 'monorepo/deploy/types';
+import {
+	ReleaseProps,
+	OperationFailure,
+	NpmPackageInfo,
+	ArtifactInfo,
+	Context,
+} from 'monorepo/deploy/types';
 import { runfiles } from '@bazel/runfiles';
 
 export const release =

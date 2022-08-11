@@ -50,20 +50,20 @@ jest_test(
 
 filegroup(
     name = "docs",
-    srcs = glob(["examples/**/*"]) + ["README.md"]
+    srcs = glob(["examples/**/*"]) + ["README.md"],
 )
 
 npm_pkg(
     name = "npm_pkg",
     package_name = "svgshot",
     srcs = [],
-    readme = "README.md",
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
+    readme = "README.md",
     tgz = "svgshot.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],

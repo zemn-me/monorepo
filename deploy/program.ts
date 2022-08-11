@@ -6,7 +6,11 @@ import { context as githubCtx, getOctokit } from '@actions/github';
 import { Command } from 'commander';
 import { Github as mockGithub, context as mockContext } from './mocks';
 import { isDefined } from 'monorepo/ts/guard';
-import { OperationOrFailure, Operation, OperationFailure } from 'monorepo/deploy/types';
+import {
+	OperationOrFailure,
+	Operation,
+	OperationFailure,
+} from 'monorepo/deploy/types';
 import release from 'monorepo/deploy/config';
 
 type NestedStringList = (string | NestedStringList)[];
@@ -108,7 +112,6 @@ export function releaseNotes(notes: OperationOrFailure[]) {
 	return paragraphs.join('\n\n');
 }
 
-
 export const program = (outputReleaseNotes?: (notes: string) => void) =>
 	new Command()
 		.name('release')
@@ -125,7 +128,6 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 			const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
 				context.sha
 			}`;
-
 
 			const notes = await release({
 				uploadReleaseAsset: async ({ name, release_id, data }) =>
