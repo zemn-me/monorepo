@@ -102,7 +102,7 @@ def npm_pkg(
 
     exclude_all_external_rule(
         name = "version_lock_files",
-        srcs = pkg_srcs + pkg_deps,
+        srcs = pkg_srcs + pkg_deps + [readme],
     )
 
     # Test that ensures at least a minor bump happens when
