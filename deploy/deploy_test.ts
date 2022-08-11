@@ -1,4 +1,5 @@
-import program, { release, releaseNotes } from './program';
+import program, { releaseNotes } from './program';
+import { release } from 'monorepo/deploy/releaser';
 
 it('should not break when run in dryRun mode', async () => {
 	process.env.NPM_TOKEN = '123fake';

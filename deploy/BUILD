@@ -5,12 +5,7 @@ package(default_visibility = ["//deploy:__subpackages__"])
 
 ts_project(
     name = "release_src",
-    srcs = [
-        "deploy_test.ts",
-        "mocks.ts",
-        "program.ts",
-        "release.ts",
-    ],
+    srcs = glob(["**/*.ts"]),
     data = [
         "//project/ck3/recursive-vassals:mod_zip",
         "//project/ck3/recursive-vassals:patch",
