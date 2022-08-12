@@ -37,6 +37,13 @@ bool_flag(
     build_setting_default = False,
 )
 
+# A flag to control whether to link rust_binary and rust_test targets using
+# cc_common.link instead of rustc.
+bool_flag(
+    name = "experimental_use_cc_common_link",
+    build_setting_default = False,
+)
+
 bzl_library(
     name = "bzl_lib",
     srcs = glob(["**/*.bzl"]),

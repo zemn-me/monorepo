@@ -428,6 +428,10 @@ def _rust_toolchain_impl(ctx):
     third_party_dir = ctx.attr._third_party_dir[BuildSettingInfo].value
     pipelined_compilation = ctx.attr._pipelined_compilation[BuildSettingInfo].value
 
+    experimental_use_cc_common_link = ctx.attr.experimental_use_cc_common_link[BuildSettingInfo].value
+    if experimental_use_cc_common_link and not ctx.attr.allocator_library:
+        fail("rust_toolchain.experimental_use_cc_common_link requires rust_toolchain.allocator_library to be set")
+
     if ctx.attr.rust_lib:
         # buildifier: disable=print
         print("`rust_toolchain.rust_lib` is deprecated. Please update {} to use `rust_toolchain.rust_std`".format(
@@ -538,6 +542,7 @@ def _rust_toolchain_impl(ctx):
         _rename_first_party_crates = rename_first_party_crates,
         _third_party_dir = third_party_dir,
         _pipelined_compilation = pipelined_compilation,
+        _experimental_use_cc_common_link = experimental_use_cc_common_link,
     )
     return [
         toolchain,
@@ -592,6 +597,10 @@ rust_toolchain = rule(
                 "For more details see: https://docs.bazel.build/versions/master/skylark/rules.html#configurations"
             ),
             mandatory = True,
+        ),
+        "experimental_use_cc_common_link": attr.label(
+            default = Label("//rust/settings:experimental_use_cc_common_link"),
+            doc = "Label to a boolean build setting that controls whether cc_common.link is used to link rust binaries.",
         ),
         "llvm_cov": attr.label(
             doc = "The location of the `llvm-cov` binary. Can be a direct source or a filegroup containing one item. If None, rust code is not instrumented for coverage.",

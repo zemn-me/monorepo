@@ -723,7 +723,22 @@ _common_attrs = {
     ),
 }
 
-_rust_test_attrs = {
+_experimental_use_cc_common_link_attrs = {
+    "experimental_use_cc_common_link": attr.int(
+        doc = (
+            "Whether to use cc_common.link to link rust binaries. " +
+            "Possible values: [-1, 0, 1]. " +
+            "-1 means use the value of the toolchain.experimental_use_cc_common_link " +
+            "boolean build setting to determine. " +
+            "0 means do not use cc_common.link (use rustc instead). " +
+            "1 means use cc_common.link."
+        ),
+        values = [-1, 0, 1],
+        default = -1,
+    ),
+}
+
+_rust_test_attrs = dict({
     "crate": attr.label(
         mandatory = False,
         doc = dedent("""\
@@ -760,7 +775,7 @@ _rust_test_attrs = {
         default = Label("@bazel_tools//tools/cpp:grep-includes"),
         executable = True,
     ),
-}
+}.items() + _experimental_use_cc_common_link_attrs.items())
 
 _common_providers = [
     rust_common.crate_info,
@@ -944,7 +959,7 @@ rust_proc_macro = rule(
         """),
 )
 
-_rust_binary_attrs = {
+_rust_binary_attrs = dict({
     "crate_type": attr.string(
         doc = dedent("""\
             Crate type that will be passed to `rustc` to be used for building this crate.
@@ -976,7 +991,7 @@ _rust_binary_attrs = {
         default = Label("@bazel_tools//tools/cpp:grep-includes"),
         executable = True,
     ),
-}
+}.items() + _experimental_use_cc_common_link_attrs.items())
 
 rust_binary = rule(
     implementation = _rust_binary_impl,

@@ -215,6 +215,7 @@ rust_toolchain(
     llvm_profdata = {llvm_profdata_label},
     rustc_lib = "@{workspace_name}//:rustc_lib",
     rustc_srcs = {rustc_srcs},
+    allocator_library = {allocator_library},
     binary_ext = "{binary_ext}",
     staticlib_ext = "{staticlib_ext}",
     dylib_ext = "{dylib_ext}",
@@ -233,6 +234,7 @@ def BUILD_for_rust_toolchain(
         exec_triple,
         target_triple,
         include_rustc_srcs,
+        allocator_library,
         default_edition,
         include_rustfmt,
         include_llvm_tools,
@@ -245,6 +247,7 @@ def BUILD_for_rust_toolchain(
         exec_triple (str): The rust-style target that this compiler runs on
         target_triple (str): The rust-style target triple of the tool
         include_rustc_srcs (bool, optional): Whether to download rustc's src code. This is required in order to use rust-analyzer support. Defaults to False.
+        allocator_library (str, optional): Target that provides allocator functions when rust_library targets are embedded in a cc_binary.
         default_edition (str): Default Rust edition.
         include_rustfmt (bool): Whether rustfmt is present in the toolchain.
         include_llvm_tools (bool): Whether llvm-tools are present in the toolchain.
@@ -271,6 +274,9 @@ def BUILD_for_rust_toolchain(
     if include_llvm_tools:
         llvm_cov_label = "\"@{workspace_name}//:llvm_cov_bin\"".format(workspace_name = workspace_name)
         llvm_profdata_label = "\"@{workspace_name}//:llvm_profdata_bin\"".format(workspace_name = workspace_name)
+    allocator_library_label = "None"
+    if allocator_library:
+        allocator_library_label = "\"{allocator_library}\"".format(allocator_library = allocator_library)
 
     return _build_file_for_rust_toolchain_template.format(
         toolchain_name = name,
@@ -279,6 +285,7 @@ def BUILD_for_rust_toolchain(
         staticlib_ext = system_to_staticlib_ext(system),
         dylib_ext = system_to_dylib_ext(system),
         rustc_srcs = rustc_srcs,
+        allocator_library = allocator_library_label,
         stdlib_linkflags = stdlib_linkflags,
         system = system,
         default_edition = default_edition,

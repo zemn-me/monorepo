@@ -557,7 +557,8 @@ def collect_inputs(
         dep_info,
         build_info,
         stamp = False,
-        force_depend_on_objects = False):
+        force_depend_on_objects = False,
+        experimental_use_cc_common_link = False):
     """Gather's the inputs and required input information for a rustc action
 
     Args:
@@ -575,6 +576,8 @@ def collect_inputs(
             https://docs.bazel.build/versions/main/user-manual.html#flag--stamp
         force_depend_on_objects (bool, optional): Forces dependencies of this rule to be objects rather than
             metadata, even for libraries. This is used in rustdoc tests.
+        experimental_use_cc_common_link (bool, optional): Whether rules_rust uses cc_common.link to link
+	    rust binaries.
 
     Returns:
         tuple: A tuple: A tuple of the following items:
@@ -634,7 +637,9 @@ def collect_inputs(
         ],
     )
 
-    if crate_info.type in ("bin", "cdylib"):
+    # Register linkstamps when linking with rustc (when linking with
+    # cc_common.link linkstamps are handled by cc_common.link itself).
+    if not experimental_use_cc_common_link and crate_info.type in ("bin", "cdylib"):
         # There is no other way to register an action for each member of a depset than
         # flattening the depset as of 2021-10-12. Luckily, usually there is only one linkstamp
         # in a build, and we only flatten the list on binary targets that perform transitive linking,
@@ -1011,6 +1016,19 @@ def rustc_compile_action(
 
     cc_toolchain, feature_configuration = find_cc_toolchain(ctx)
 
+    # Determine whether to use cc_common.link:
+    #  * either if experimental_use_cc_common_link is 1,
+    #  * or if experimental_use_cc_common_link is -1 and
+    #    the toolchain experimental_use_cc_common_link is true.
+    experimental_use_cc_common_link = False
+    if hasattr(ctx.attr, "experimental_use_cc_common_link"):
+        if ctx.attr.experimental_use_cc_common_link == 0:
+            experimental_use_cc_common_link = False
+        elif ctx.attr.experimental_use_cc_common_link == 1:
+            experimental_use_cc_common_link = True
+        elif ctx.attr.experimental_use_cc_common_link == -1:
+            experimental_use_cc_common_link = toolchain._experimental_use_cc_common_link
+
     dep_info, build_info, linkstamps = collect_deps(
         deps = crate_info.deps,
         proc_macro_deps = crate_info.proc_macro_deps,
@@ -1036,15 +1054,22 @@ def rustc_compile_action(
         dep_info = dep_info,
         build_info = build_info,
         stamp = stamp,
+        experimental_use_cc_common_link = experimental_use_cc_common_link,
     )
 
+    # The types of rustc outputs to emit.
     # If we build metadata, we need to keep the command line of the two invocations
     # (rlib and rmeta) as similar as possible, otherwise rustc rejects the rmeta as
     # a candidate.
     # Because of that we need to add emit=metadata to both the rlib and rmeta invocation.
+    #
+    # When cc_common linking is enabled, emit a `.o` file, which is later
+    # passed to the cc_common.link action.
     emit = ["dep-info", "link"]
     if build_metadata:
         emit.append("metadata")
+    if experimental_use_cc_common_link:
+        emit = ["obj"]
 
     args, env_from_args = construct_arguments(
         ctx = ctx,
@@ -1103,7 +1128,17 @@ def rustc_compile_action(
     else:
         formatted_version = ""
 
+    # Declares the outputs of the rustc compile action.
+    # By default this is the binary output; if cc_common.link is used, this is
+    # the main `.o` file (`output_o` below).
     outputs = [crate_info.output]
+
+    # The `.o` output file, only used for linking via cc_common.link.
+    output_o = None
+    if experimental_use_cc_common_link:
+        obj_ext = ".o"
+        output_o = ctx.actions.declare_file(crate_info.name + obj_ext, sibling = crate_info.output)
+        outputs = [output_o]
 
     # For a cdylib that might be added as a dependency to a cc_* target on Windows, it is important to include the
     # interface library that rustc generates in the output files.
@@ -1178,6 +1213,52 @@ def rustc_compile_action(
                 len(crate_info.srcs.to_list()),
             ),
         )
+
+    if experimental_use_cc_common_link:
+        # Wrap the main `.o` file into a compilation output suitable for
+        # cc_common.link. The main `.o` file is useful in both PIC and non-PIC
+        # modes.
+        compilation_outputs = cc_common.create_compilation_outputs(
+            objects = depset([output_o]),
+            pic_objects = depset([output_o]),
+        )
+
+        # Collect the linking contexts of the standard library and dependencies.
+        linking_contexts = [toolchain.libstd_and_allocator_ccinfo.linking_context, toolchain.stdlib_linkflags.linking_context]
+
+        for dep in crate_info.deps.to_list():
+            if dep.cc_info:
+                linking_contexts.append(dep.cc_info.linking_context)
+
+        # In the cc_common.link action we need to pass the name of the final
+        # binary (output) relative to the package of this target.
+        # We compute it by stripping the path to the package directory,
+        # which is a prefix of the path of `crate_info.output`.
+
+        # The path to the package dir, including a trailing "/".
+        package_dir = ctx.bin_dir.path + "/"
+        if ctx.label.workspace_root:
+            package_dir = package_dir + ctx.label.workspace_root + "/"
+        if ctx.label.package:
+            package_dir = package_dir + ctx.label.package + "/"
+
+        if not crate_info.output.path.startswith(package_dir):
+            fail("The package dir path {} should be a prefix of the crate_info.output.path {}", package_dir, crate_info.output.path)
+
+        output_relative_to_package = crate_info.output.path[len(package_dir):]
+
+        cc_common.link(
+            actions = ctx.actions,
+            feature_configuration = feature_configuration,
+            cc_toolchain = cc_toolchain,
+            linking_contexts = linking_contexts,
+            compilation_outputs = compilation_outputs,
+            name = output_relative_to_package,
+            grep_includes = ctx.file._grep_includes,
+            stamp = ctx.attr.stamp,
+        )
+
+        outputs = [crate_info.output]
 
     coverage_runfiles = []
     if toolchain.llvm_cov and ctx.configuration.coverage_enabled and crate_info.is_test:

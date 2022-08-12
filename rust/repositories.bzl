@@ -92,6 +92,7 @@ def rust_register_toolchains(
         dev_components = False,
         edition = None,
         include_rustc_srcs = False,
+        allocator_library = None,
         iso_date = None,
         register_toolchains = True,
         rustfmt_version = None,
@@ -122,6 +123,7 @@ def rust_register_toolchains(
         edition (str, optional): The rust edition to be used by default (2015, 2018, or 2021). If absent, every target is required to specify its `edition` attribute.
         include_rustc_srcs (bool, optional): Whether to download rustc's src code. This is required in order to use rust-analyzer support.
             See [rust_toolchain_repository.include_rustc_srcs](#rust_toolchain_repository-include_rustc_srcs). for more details
+        allocator_library (str, optional): Target that provides allocator functions when rust_library targets are embedded in a cc_binary.
         iso_date (str, optional): The date of the nightly or beta release (ignored if the version is a specific version).
         register_toolchains (bool): If true, repositories will be generated to produce and register `rust_toolchain` targets.
         rustfmt_version (str, optional): The version of rustfmt. Either "nightly", "beta", or an exact version. Defaults to `version` if not specified.
@@ -166,6 +168,7 @@ def rust_register_toolchains(
             exec_triple = exec_triple,
             extra_target_triples = extra_target_triples,
             include_rustc_srcs = include_rustc_srcs,
+            allocator_library = allocator_library,
             iso_date = iso_date,
             register_toolchain = register_toolchains,
             rustfmt_version = rustfmt_version,
@@ -219,6 +222,7 @@ def _rust_toolchain_tools_repository_impl(ctx):
         name = "rust_toolchain",
         exec_triple = ctx.attr.exec_triple,
         include_rustc_srcs = should_include_rustc_srcs(ctx),
+        allocator_library = ctx.attr.allocator_library,
         target_triple = ctx.attr.target_triple,
         stdlib_linkflags = stdlib_linkflags,
         workspace_name = ctx.attr.name,
@@ -244,6 +248,9 @@ rust_toolchain_tools_repository = repository_rule(
         "selection from toolchain fetching."
     ),
     attrs = {
+        "allocator_library": attr.string(
+            doc = "Target that provides allocator functions when rust_library targets are embedded in a cc_binary.",
+        ),
         "auth": attr.string_dict(
             doc = (
                 "Auth object compatible with repository_ctx.download to use when downloading files. " +
@@ -348,6 +355,7 @@ def rust_toolchain_repository(
         exec_compatible_with = None,
         target_compatible_with = None,
         include_rustc_srcs = False,
+        allocator_library = None,
         iso_date = None,
         rustfmt_version = None,
         edition = None,
@@ -369,6 +377,7 @@ def rust_toolchain_repository(
         exec_compatible_with (list, optional): A list of constraints for the execution platform for this toolchain.
         target_compatible_with (list, optional): A list of constraints for the target platform for this toolchain.
         include_rustc_srcs (bool, optional): Whether to download rustc's src code. This is required in order to use rust-analyzer support.
+        allocator_library (str, optional): Target that provides allocator functions when rust_library targets are embedded in a cc_binary.
         iso_date (str, optional): The date of the tool.
         rustfmt_version (str, optional):  The version of rustfmt to be associated with the
             toolchain.
@@ -395,6 +404,7 @@ def rust_toolchain_repository(
         name = name + "_tools",
         exec_triple = exec_triple,
         include_rustc_srcs = include_rustc_srcs,
+        allocator_library = allocator_library,
         target_triple = target_triple,
         iso_date = iso_date,
         version = version,
@@ -532,6 +542,7 @@ def rust_repository_set(
         version,
         exec_triple,
         include_rustc_srcs = False,
+        allocator_library = None,
         extra_target_triples = [],
         iso_date = None,
         rustfmt_version = None,
@@ -552,6 +563,7 @@ def rust_repository_set(
         version (str): The version of the tool among "nightly", "beta', or an exact version.
         exec_triple (str): The Rust-style target that this compiler runs on
         include_rustc_srcs (bool, optional): Whether to download rustc's src code. This is required in order to use rust-analyzer support. Defaults to False.
+        allocator_library (str, optional): Target that provides allocator functions when rust_library targets are embedded in a cc_binary.
         extra_target_triples (list, optional): Additional rust-style targets that this set of
             toolchains should support. Defaults to [].
         iso_date (str, optional): The date of the tool. Defaults to None.
@@ -575,6 +587,7 @@ def rust_repository_set(
             name = toolchain_name,
             exec_triple = exec_triple,
             include_rustc_srcs = include_rustc_srcs,
+            allocator_library = allocator_library,
             target_triple = target_triple,
             iso_date = iso_date,
             version = version,
