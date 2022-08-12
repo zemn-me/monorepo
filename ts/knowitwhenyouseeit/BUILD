@@ -5,66 +5,51 @@ load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
     "//deploy:__subpackages__",
-    "//ts/cmd/svgshot:__subpackages__",
 ])
 
 ts_project(
     name = "project",
     srcs = [
         "index.ts",
-        "lib.ts",
-        "run.ts",
     ],
     deps = [
+        "@npm//@types/bcryptjs",
         "@npm//@types/node",
-        "@npm//@types/svgo",
-        "@npm//@types/tmp",
-        "@npm//commander",
-        "@npm//puppeteer",
-        "@npm//svgo",
-        "@npm//tmp",
+        "@npm//bcryptjs",
+        "@npm//react",
+        "@npm//react-dom",
     ],
 )
 
 ts_project(
     name = "tests_js",
-    srcs = ["svgshot_test.ts"],
+    srcs = ["main_test.ts"],
     deps = [
         ":project",
-        "@npm//@bazel/runfiles",
         "@npm//@types/jest",
-        "@npm//@types/node",
-        "@npm//@types/tmp",
-        "@npm//tmp",
     ],
 )
 
 jest_test(
     name = "tests",
-    srcs = ["svgshot_test.js"],
-    data = [
-        "//cc/inkscape:bin",
+    srcs = ["main_test.js"],
+    deps = [
+        ":project",
+        ":tests_js",
     ],
-    deps = [":tests_js"],
-)
-
-filegroup(
-    name = "docs",
-    srcs = glob(["examples/**/*"]) + ["README.md"],
 )
 
 npm_pkg(
     name = "npm_pkg",
-    package_name = "svgshot",
-    srcs = [],
+    package_name = "knowitwhenyouseeit",
     api_lock = ".api.lock",
     entry_point = "index.ts",
-    major_version = "version/MAJOR",
-    minor_version = "version/MINOR",
-    patch_version = "version/PATCH",
+    major_version = "version/major",
+    minor_version = "version/minor",
+    patch_version = "version/patch",
     pkg_json_base = "package.template.json",
     readme = "README.md",
-    tgz = "svgshot.tgz",
+    tgz = "knowitwhenyouseeit.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
     deps = [":project"],

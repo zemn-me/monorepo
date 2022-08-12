@@ -284,7 +284,15 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 					'//project/ck3/recursive-vassals/mod.patch'
 				),
 				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
-				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh')
+				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh'),
+				artifact(
+					'knowitwhenyouseeit.tar.gz',
+					'//ts/knowitwhenyouseeit/knowitwhenyouseeit.tgz'
+				),
+				npmPackage(
+					'knowitwhenyouseeit',
+					'//ts/knowitwhenyouseeit/npm_pkg.publish.sh'
+				)
 			);
 
 			const notes = await releaser({
