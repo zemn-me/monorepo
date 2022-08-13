@@ -644,10 +644,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@csstools/selector-specificity@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.1.tgz#b6b8d81780b9a9f6459f4bfe9226ac6aefaefe87"
-  integrity sha512-aG20vknL4/YjQF9BSV7ts4EWm/yrjagAN7OWBNmlbEOUiu0llj4OGrFoOKK3g2vey4/p2omKCoHrWtPxSwV3HA==
+"@csstools/selector-specificity@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
+  integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
 "@esbuild/linux-loong64@0.14.54":
   version "0.14.54"
@@ -2018,9 +2018,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.0.0:
-  version "2.1192.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1192.0.tgz#13fe38ec8dae3232f17d52b370e69daa9c7a0e9c"
-  integrity sha512-6uzrlG1Ow3qcOnL0+et+DBTGhYgJzgNydVvos1Eg01vPc/ZhxR7roZ3epZQcPmOR0thQuzzckTq7FBO6wzZA2w==
+  version "2.1193.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1193.0.tgz#34d3ed3ea19a776dafd954183588169c6daa4764"
+  integrity sha512-nSbljBZhxNn+LmENc14md+y1Z+U8BUcS1LLlOxeJvjYAkkGbPf29Bl8FvzbRsZuoxtF6N1Mkel3AI5XIx7mkew==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2316,13 +2316,6 @@ cliui@^7.0.2:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
-
-clone-regexp@^2.1.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/clone-regexp/-/clone-regexp-2.2.0.tgz#7d65e00885cd8796405c35a737e7a86b7429e36f"
-  integrity sha512-beMpP7BOtTipFuW8hrJvREQ2DrRu3BE7by0ZpibtfBA+qfHYvMGTc2Yb1JMYPKg/JUw0CHYvpg796aNTSW9z7Q==
-  dependencies:
-    is-regexp "^2.0.0"
 
 co@^4.6.0:
   version "4.6.0"
@@ -2854,9 +2847,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.215"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.215.tgz#553372e74bde3164290d61f6792f93e443b16733"
-  integrity sha512-vqZxT8C5mlDZ//hQFhneHmOLnj1LhbzxV0+I1yqHV8SB1Oo4Y5Ne9+qQhwHl7O1s9s9cRuo2l5CoLEHdhMTwZg==
+  version "1.4.216"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.216.tgz#e1b56d3dc81333fbfd74a967b45a03d822e67af8"
+  integrity sha512-jDkyyqIy2n+dtl3isE0Y8znnN936BGobE8SDnwErubJ3zOophPDFPMr7rCoIH+EUae6T7+t1cbBggGtvVf3ZtQ==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -3158,12 +3151,11 @@ eslint-import-resolver-typescript@^2.7.1:
     tsconfig-paths "^3.14.1"
 
 eslint-module-utils@^2.7.3:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.3.tgz#ad7e3a10552fdd0642e1e55292781bd6e34876ee"
-  integrity sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.4.tgz#4f3e41116aaf13a20792261e61d3a2e7e0583974"
+  integrity sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==
   dependencies:
     debug "^3.2.7"
-    find-up "^2.1.0"
 
 eslint-plugin-import@^2.26.0:
   version "2.26.0"
@@ -3381,13 +3373,6 @@ execa@^5.0.0:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
-execall@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/execall/-/execall-2.0.0.tgz#16a06b5fe5099df7d00be5d9c06eecded1663b45"
-  integrity sha512-0FU2hZ5Hh6iQnarpRtQurM/aAvp3RIbfvgLHrcqJYzhXyV2KFruhuChf9NC6waAhiUR7FFtlugkI4p7f2Fqlow==
-  dependencies:
-    clone-regexp "^2.1.0"
-
 exit@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
@@ -3462,7 +3447,7 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fastest-levenshtein@^1.0.12:
+fastest-levenshtein@^1.0.16:
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
   integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
@@ -3501,13 +3486,6 @@ fill-range@^7.0.1:
   integrity sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==
   dependencies:
     to-regex-range "^5.0.1"
-
-find-up@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/find-up/-/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
-  integrity sha1-RdG35QbHF93UgndaK3eSCjwMV6c=
-  dependencies:
-    locate-path "^2.0.0"
 
 find-up@^4.0.0, find-up@^4.1.0:
   version "4.1.0"
@@ -3701,11 +3679,6 @@ get-package-type@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/get-package-type/-/get-package-type-0.1.0.tgz#8de2d803cff44df3bc6c456e6668b36c3926e11a"
   integrity sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==
-
-get-stdin@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-8.0.0.tgz#cbad6a73feb75f6eeb22ba9e01f89aa28aa97a53"
-  integrity sha512-sY22aA6xchAzprjyqmSEQv4UbAAzRN0L2dQB0NlN5acTTK9Don6nhoc3eAbUnpZiCANAMfd/+40kVdKfFygohg==
 
 get-stream@^5.1.0:
   version "5.2.0"
@@ -4290,11 +4263,6 @@ is-regex@^1.1.4:
   dependencies:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
-
-is-regexp@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/is-regexp/-/is-regexp-2.1.0.tgz#cd734a56864e23b956bf4e7c66c396a4c0b22c2d"
-  integrity sha512-OZ4IlER3zmRIoB9AqNhEggVxqIH4ofDns5nRrPS6yQxXE1TPCUpFznBfRQmQa8uC+pXqjMnukiJBxCisIxiLGA==
 
 is-relative@^1.0.0:
   version "1.0.0"
@@ -5103,14 +5071,6 @@ loader-utils@^3.2.0:
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-3.2.0.tgz#bcecc51a7898bee7473d4bc6b845b23af8304d4f"
   integrity sha512-HVl9ZqccQihZ7JM85dco1MvO9G+ONvxoGa9rkhzFsneGLKSUg1gJf9bWzhRhcvm2qChhWpebQhP44qxjKIUCaQ==
 
-locate-path@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
-  integrity sha1-K1aLJl7slExtnA3pw9u7ygNUzY4=
-  dependencies:
-    p-locate "^2.0.0"
-    path-exists "^3.0.0"
-
 locate-path@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-5.0.0.tgz#1afba396afd676a6d42504d0a67a3a7eb9f62aa0"
@@ -5626,13 +5586,6 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-p-limit@^1.1.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.3.0.tgz#b86bd5f0c25690911c7590fcbfc2010d54b3ccb8"
-  integrity sha512-vvcXsLAJ9Dr5rQOPk7toZQZJApBl2K4J6dANSsEuh6QI41JYcsS/qhTGa9ErIUUgK3WNQoJYvylxvjqmiqEA9Q==
-  dependencies:
-    p-try "^1.0.0"
-
 p-limit@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
@@ -5647,13 +5600,6 @@ p-limit@^3.0.2:
   dependencies:
     yocto-queue "^0.1.0"
 
-p-locate@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-2.0.0.tgz#20a0103b222a70c8fd39cc2e580680f3dde5ec43"
-  integrity sha1-IKAQOyIqcMj9OcwuWAaA893l7EM=
-  dependencies:
-    p-limit "^1.1.0"
-
 p-locate@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-4.1.0.tgz#a3428bb7088b3a60292f66919278b7c297ad4f07"
@@ -5667,11 +5613,6 @@ p-locate@^5.0.0:
   integrity sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==
   dependencies:
     p-limit "^3.0.2"
-
-p-try@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/p-try/-/p-try-1.0.0.tgz#cbc79cdbaf8fd4228e13f621f2b1a237c1b207b3"
-  integrity sha1-y8ec26+P1CKOE/Yh8rGiN8GyB7M=
 
 p-try@^2.0.0:
   version "2.2.0"
@@ -5739,11 +5680,6 @@ patch-package@^6.4.7:
     semver "^5.6.0"
     slash "^2.0.0"
     tmp "^0.0.33"
-
-path-exists@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"
-  integrity sha1-zg6+ql94yxiSXqfYENe1mwEP1RU=
 
 path-exists@^4.0.0:
   version "4.0.0"
@@ -5893,7 +5829,7 @@ postcss-value-parser@^4.1.0, postcss-value-parser@^4.2.0:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8.4.12, postcss@^8.4.14:
+postcss@^8.4.12, postcss@^8.4.16:
   version "8.4.16"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.16.tgz#33a1d675fac39941f5f445db0de4db2b6e01d43c"
   integrity sha512-ipHE1XBvKzm5xI7hiHCZJCSugxvsdq2mPnsq5+UF+VHCjiBvtDrlxJfMBToWaP9D5XlgNmcFGqoHmUn0EYEaRQ==
@@ -6713,22 +6649,20 @@ stylelint-scss@^4.2.0:
     postcss-selector-parser "^6.0.6"
     postcss-value-parser "^4.1.0"
 
-stylelint@^14.9.1:
-  version "14.9.1"
-  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-14.9.1.tgz#6494ed38f148b1e75b402d678a3b6a8aae86dfda"
-  integrity sha512-RdAkJdPiLqHawCSnu21nE27MjNXaVd4WcOHA4vK5GtIGjScfhNnaOuWR2wWdfKFAvcWQPOYe311iveiVKSmwsA==
+stylelint@^14.10.0:
+  version "14.10.0"
+  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-14.10.0.tgz#c588f5cd47cd214cf1acee5bc165961b6a3ad836"
+  integrity sha512-VAmyKrEK+wNFh9R8mNqoxEFzaa4gsHGhcT4xgkQDuOA5cjF6CaNS8loYV7gpi4tIZBPUyXesotPXzJAMN8VLOQ==
   dependencies:
-    "@csstools/selector-specificity" "^2.0.1"
+    "@csstools/selector-specificity" "^2.0.2"
     balanced-match "^2.0.0"
     colord "^2.9.2"
     cosmiconfig "^7.0.1"
     css-functions-list "^3.1.0"
     debug "^4.3.4"
-    execall "^2.0.0"
     fast-glob "^3.2.11"
-    fastest-levenshtein "^1.0.12"
+    fastest-levenshtein "^1.0.16"
     file-entry-cache "^6.0.1"
-    get-stdin "^8.0.0"
     global-modules "^2.0.0"
     globby "^11.1.0"
     globjoin "^0.1.4"
@@ -6743,7 +6677,7 @@ stylelint@^14.9.1:
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     picocolors "^1.0.0"
-    postcss "^8.4.14"
+    postcss "^8.4.16"
     postcss-media-query-parser "^0.2.3"
     postcss-resolve-nested-selector "^0.1.1"
     postcss-safe-parser "^6.0.0"
