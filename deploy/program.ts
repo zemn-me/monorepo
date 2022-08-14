@@ -179,7 +179,7 @@ export const releaseNotes =
 			}
 
 			const failureInfo = operationAndFailure
-				.filter(([op, err]) => err !== undefined)
+				.filter(([, /* op */ err]) => err !== undefined)
 				.map(([op, err]) => {
 					return indent(
 						`Operation ${op.buildTag} failed with ${err}.`
