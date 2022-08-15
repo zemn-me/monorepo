@@ -107,88 +107,103 @@ function nestedListToMarkdown(nestedList: NestedStringList): string {
 		.join('\n');
 }
 
-export function releaseNotes(notes: OperationOrFailure[]) {
-	const operationAndFailure: [
-		operation: Operation,
-		error: Error | undefined
-	][] = notes.map(item => {
-		let op: Operation;
-		let error: Error | undefined;
+export const releaseNotes =
+	(logFailures?: (s: string) => void) => (notes: OperationOrFailure[]) => {
+		const operationAndFailure: [
+			operation: Operation,
+			error: Error | undefined
+		][] = notes.map(item => {
+			let op: Operation;
+			let error: Error | undefined;
 
-		if (item instanceof OperationFailure) {
-			op = item.operation;
-			error = item.error;
-		} else op = item;
+			if (item instanceof OperationFailure) {
+				op = item.operation;
+				error = item.error;
+			} else op = item;
 
-		return [op, error];
-	});
+			return [op, error];
+		});
 
-	const paragraphs: NestedStringList = [];
+		const paragraphs: NestedStringList = [];
 
-	const artifactInfo = operationAndFailure
-		.map(([op, error]) =>
-			op.kind === 'artifact' && error === undefined
-				? `${op.buildTag} ⟶ ${op.filename}`
-				: undefined
-		)
-		.filter(isDefined);
+		const artifactInfo = operationAndFailure
+			.map(([op, error]) =>
+				op.kind === 'artifact' && error === undefined
+					? `${op.buildTag} ⟶ ${op.filename}`
+					: undefined
+			)
+			.filter(isDefined);
 
-	if (artifactInfo.length > 0)
-		paragraphs.push(
-			`Artifacts exported in this release:\n${nestedListToMarkdown(
-				artifactInfo
-			)}`
-		);
+		if (artifactInfo.length > 0)
+			paragraphs.push(
+				`Artifacts exported in this release:\n${nestedListToMarkdown(
+					artifactInfo
+				)}`
+			);
 
-	const npmInfo = operationAndFailure
-		.map(([op, error]) =>
-			op.kind === 'npm_publication' && error === undefined
-				? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
-				: undefined
-		)
-		.filter(isDefined);
+		const npmInfo = operationAndFailure
+			.map(([op, error]) =>
+				op.kind === 'npm_publication' && error === undefined
+					? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
+					: undefined
+			)
+			.filter(isDefined);
 
-	if (npmInfo.length > 0)
-		paragraphs.push(
-			`NPM packages included in this release:\n${nestedListToMarkdown(
-				npmInfo
-			)}`
-		);
+		if (npmInfo.length > 0)
+			paragraphs.push(
+				`NPM packages included in this release:\n${nestedListToMarkdown(
+					npmInfo
+				)}`
+			);
 
-	const operationInfo = operationAndFailure.map(([op, error]) => {
-		const notes: NestedStringList = [];
+		const operationInfo = operationAndFailure.map(([op, error]) => {
+			const notes: NestedStringList = [];
 
-		switch (op.kind) {
-			case 'artifact':
-				notes.push(
-					`${error !== undefined ? '❌' : '✔️'} Upload ${
-						op.buildTag
-					} as release artifact ${op.filename}`
+			switch (op.kind) {
+				case 'artifact':
+					notes.push(
+						`${error !== undefined ? '❌' : '✔️'} Upload ${
+							op.buildTag
+						} as release artifact ${op.filename}`
+					);
+					break;
+				case 'npm_publication':
+					notes.push(
+						`${error !== undefined ? '❌' : '✔️'} Upload ${
+							op.buildTag
+						} to NPM`
+					);
+					break;
+				default:
+					throw new Error('invalid kind');
+			}
+
+			const failureInfo = operationAndFailure
+				.filter(([, /* op */ err]) => err !== undefined)
+				.map(([op, err]) => {
+					return indent(
+						`Operation ${op.buildTag} failed with ${err}.`
+					);
+				})
+				.join('\n\n - ');
+
+			if (logFailures && failureInfo.length > 0)
+				logFailures(
+					`Failures occurred as follows:\n${indent(failureInfo)}\n`
 				);
-				break;
-			case 'npm_publication':
-				notes.push(
-					`${error !== undefined ? '❌' : '✔️'} Upload ${
-						op.buildTag
-					} to NPM`
-				);
-				break;
-			default:
-				throw new Error('invalid kind');
-		}
 
-		return notes;
-	});
+			return notes;
+		});
 
-	if (operationInfo.length > 0)
-		paragraphs.push(
-			`The following operations were requested:\n${nestedListToMarkdown(
-				operationInfo
-			)}`
-		);
+		if (operationInfo.length > 0)
+			paragraphs.push(
+				`The following operations were requested:\n${nestedListToMarkdown(
+					operationInfo
+				)}`
+			);
 
-	return paragraphs.join('\n\n');
-}
+		return paragraphs.join('\n\n');
+	};
 
 export const release =
 	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
@@ -329,7 +344,7 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 
 				dryRun: dryRun,
 
-				releaseNotes,
+				releaseNotes: releaseNotes(s => console.error(s)),
 			});
 
 			if (outputReleaseNotes) outputReleaseNotes(notes);

@@ -35,6 +35,9 @@ test('releaseNotes', async () => {
 
 describe('release', () => {
 	it('should allow an operation to fail gracefully', async () => {
+		let failureContent = '';
+		const logFailure = (s: string) => (failureContent += s);
+
 		let success = false;
 		await expect(
 			release(
@@ -43,7 +46,7 @@ describe('release', () => {
 					buildTag: 'fake',
 					filename: 'fake',
 					publish: async () => {
-						throw new Error('failure');
+						throw new Error('failure 2');
 					},
 				}),
 
@@ -70,7 +73,7 @@ describe('release', () => {
 				async createRelease() {
 					return { release_id: 1 };
 				},
-				releaseNotes,
+				releaseNotes: releaseNotes(logFailure),
 				async uploadReleaseAsset() {
 					return undefined;
 				},
@@ -90,5 +93,10 @@ The following operations were requested:
 		).toEqual(
 			"One operation was able to continue despite the other's failure."
 		);
+
+		expect(failureContent).toContain('fake failed with Error: failure');
+		expect(failureContent).toContain('fake failed with Error: failure 2');
+		expect(failureContent).not.toContain('undefined');
+		expect(failureContent).not.toContain('fake failed with undefined');
 	});
 });
