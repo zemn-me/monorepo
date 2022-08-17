@@ -2,6 +2,9 @@ import program, { release, releaseNotes } from './program';
 
 it('should not break when run in dryRun mode', async () => {
 	process.env.NPM_TOKEN = '123fake';
+	process.env.AWS_SECRET_ACCESS_KEY = '123fake';
+	process.env.PULUMI_ACCESS_TOKEN = '123fake';
+	process.env.AWS_ACCESS_KEY_ID = '123fake';
 	let output = '';
 	await expect(
 		program()
@@ -14,11 +17,17 @@ it('should not break when run in dryRun mode', async () => {
 
 it('should break when not in dryRun mode', async () => {
 	process.env.NPM_TOKEN = '123fake';
+	process.env.AWS_SECRET_ACCESS_KEY = '123fake';
+	process.env.PULUMI_ACCESS_TOKEN = '123fake';
+	process.env.AWS_ACCESS_KEY_ID = '123fake';
 	await expect(program().parseAsync(['xxx', 'ok'])).rejects.toThrow();
 });
 
 test('releaseNotes', async () => {
 	process.env.NPM_TOKEN = '123fake';
+	process.env.AWS_SECRET_ACCESS_KEY = '123fake';
+	process.env.PULUMI_ACCESS_TOKEN = '123fake';
+	process.env.AWS_ACCESS_KEY_ID = '123fake';
 	let ok: (v: string) => void;
 	const output = new Promise(o => (ok = o));
 

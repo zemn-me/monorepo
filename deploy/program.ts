@@ -39,6 +39,29 @@ const artifact =
 		};
 	};
 
+interface PulumiDeployInfo {
+	kind: 'pulumi_deploy';
+	buildTag: string;
+	publish: (c: Context) => Promise<void>;
+}
+
+const pulumiDeploy =
+	(buildTag: string) => async (): Promise<PulumiDeployInfo> => {
+		return {
+			buildTag,
+			kind: 'pulumi_deploy',
+			async publish({ exec }: Context) {
+				if (
+					!process.env['AWS_ACCESS_KEY_ID'] ||
+					!process.env['AWS_SECRET_ACCESS_KEY'] ||
+					!process.env['PULUMI_ACCESS_TOKEN']
+				)
+					throw new Error('Missing environment variables.');
+
+				exec(buildTag);
+			},
+		};
+	};
 interface NpmPackageInfo {
 	kind: 'npm_publication';
 	package_name: string;
@@ -65,7 +88,7 @@ const npmPackage =
 		};
 	};
 
-type Operation = ArtifactInfo | NpmPackageInfo;
+type Operation = ArtifactInfo | NpmPackageInfo | PulumiDeployInfo;
 
 class OperationFailure<O extends Operation = Operation> extends Error {
 	constructor(public readonly operation: O, public readonly error: Error) {
@@ -174,6 +197,13 @@ export const releaseNotes =
 						} to NPM`
 					);
 					break;
+				case 'pulumi_deploy':
+					notes.push(
+						`${error !== undefined ? '❌' : '✔️'} Deploy ${
+							op.buildTag
+						} via pulumi`
+					);
+					break;
 				default:
 					throw new Error('invalid kind');
 			}
@@ -206,7 +236,7 @@ export const releaseNotes =
 	};
 
 export const release =
-	(...fns: (() => Promise<ArtifactInfo | NpmPackageInfo>)[]) =>
+	(...fns: (() => Promise<Operation>)[]) =>
 	async ({
 		dryRun,
 		createRelease,
@@ -307,7 +337,8 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 				npmPackage(
 					'knowitwhenyouseeit',
 					'//ts/knowitwhenyouseeit/npm_pkg.publish.sh'
-				)
+				),
+				pulumiDeploy('//dist/bin/ts/pulumi/run.sh')
 			);
 
 			const notes = await releaser({
