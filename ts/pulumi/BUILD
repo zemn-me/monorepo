@@ -4,6 +4,7 @@ package(default_visibility = ["//deploy:__subpackages__"])
 
 TS_FILES = glob(["**/*.ts"])
 
+# TODO (?) this can probably be removed so we can use the JS files directly.
 filegroup(
     name = "ts_files",
     srcs = TS_FILES,
@@ -22,10 +23,9 @@ ts_project(
     name = "lib",
     srcs = TS_FILES,
     deps = [
-        "@npm//@bazel/runfiles",
         "@npm//@pulumi/aws",
-        "@npm//@pulumi/pulumi",
         "@npm//cross-spawn",
+        "@npm//@types/cross-spawn",
     ],
 )
 

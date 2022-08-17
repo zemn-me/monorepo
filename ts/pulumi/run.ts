@@ -1,4 +1,3 @@
-import { runfiles } from '@bazel/runfiles';
 import spawn from 'cross-spawn';
 
 const pulumi_bin = process.env['PULUMI_BIN'];

@@ -1,4 +1,3 @@
-import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 
 export const zemn_me = new aws.route53.Zone(
