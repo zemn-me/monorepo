@@ -89,14 +89,22 @@ const main = async () => {
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
 	const version = (await fs.readFile(opts.version)).toString();
 
+	const toMerge = {
+		version,
+		dependencies: Object.fromEntries(runDeps),
+		devDependencies: Object.fromEntries(devDeps),
+	};
+
+	for (const key in toMerge)
+		if (key in template)
+			throw new Error(`Key ${key} must not be present in ${opts.merge}.`);
+
 	await fs.writeFile(
 		opts.out,
 		JSON.stringify(
 			{
-				version,
 				...template,
-				dependencies: Object.fromEntries(runDeps),
-				devDependencies: Object.fromEntries(devDeps),
+				...toMerge,
 			},
 			null,
 			2
