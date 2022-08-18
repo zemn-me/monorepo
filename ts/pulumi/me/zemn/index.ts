@@ -1,6 +1,6 @@
 import * as aws from '@pulumi/aws';
 
-export const zemn_me = new aws.route53.Zone(
+export const zone = new aws.route53.Zone(
 	'zemn.me',
 	{
 		comment: '',
@@ -21,9 +21,9 @@ export const A = new aws.route53.Record(
 				zoneId: 'Z2FDTNDATAQYW2',
 			},
 		],
-		name: zemn_me.name,
+		name: zone.name,
 		type: 'A',
-		zoneId: zemn_me.zoneId,
+		zoneId: zone.zoneId,
 	},
 	{
 		protect: true,
@@ -33,7 +33,7 @@ export const A = new aws.route53.Record(
 export const MX = new aws.route53.Record(
 	'MX_zemn.me',
 	{
-		name: zemn_me.name,
+		name: zone.name,
 		records: [
 			'10     ALT3.ASPMX.L.GOOGLE.COM.',
 			'10     ALT4.ASPMX.L.GOOGLE.COM.',
@@ -43,7 +43,7 @@ export const MX = new aws.route53.Record(
 		],
 		ttl: 300,
 		type: 'MX',
-		zoneId: zemn_me.zoneId,
+		zoneId: zone.zoneId,
 	},
 	{
 		protect: true,
@@ -53,7 +53,7 @@ export const MX = new aws.route53.Record(
 export const NS = new aws.route53.Record(
 	'NS_zemn.me',
 	{
-		name: zemn_me.name,
+		name: zone.name,
 		records: [
 			'ns-454.awsdns-56.com.',
 			'ns-816.awsdns-38.net.',
@@ -62,7 +62,7 @@ export const NS = new aws.route53.Record(
 		],
 		ttl: 172800,
 		type: 'NS',
-		zoneId: zemn_me.zoneId,
+		zoneId: zone.zoneId,
 	},
 	{
 		protect: true,
@@ -72,13 +72,13 @@ export const NS = new aws.route53.Record(
 export const SOA = new aws.route53.Record(
 	'SOA_zemn.me',
 	{
-		name: zemn_me.name,
+		name: zone.name,
 		records: [
 			'ns-1701.awsdns-20.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400',
 		],
 		ttl: 900,
 		type: 'SOA',
-		zoneId: zemn_me.zoneId,
+		zoneId: zone.zoneId,
 	},
 	{
 		protect: true,
@@ -88,17 +88,17 @@ export const SOA = new aws.route53.Record(
 export const TXT = new aws.route53.Record(
 	'TXT_zemn.me',
 	{
-		name: zemn_me.name,
+		name: zone.name,
 		records: [
 			'google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY',
 		],
 		ttl: 300,
 		type: 'TXT',
-		zoneId: zemn_me.zoneId,
+		zoneId: zone.zoneId,
 	},
 	{
 		protect: true,
 	}
 );
 
-export default zemn_me;
+export default zone;
