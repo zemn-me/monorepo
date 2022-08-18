@@ -18,6 +18,7 @@ ts_project(
         "//ts/cmd/svgshot:svgshot.tgz",
         "//ts/knowitwhenyouseeit:knowitwhenyouseeit.tgz",
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/pulumi:run",
     ],
     deps = [
         "//ts",
