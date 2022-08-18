@@ -2,8 +2,6 @@ load("//ts:rules.bzl", "nodejs_binary", "ts_project")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
-
-
 filegroup(
     name = "pulumi_files",
     srcs = [
@@ -14,11 +12,12 @@ filegroup(
 
 ts_project(
     name = "pulumi",
-    srcs = TS_FILES,
     deps = [
         "//ts/pulumi/dog",
+        "//ts/pulumi/im",
         "//ts/pulumi/me",
-        "//ts/pulumi/im"
+        "@npm//cross-spawn",
+        "@npm//@types/cross-spawn",
     ],
 )
 

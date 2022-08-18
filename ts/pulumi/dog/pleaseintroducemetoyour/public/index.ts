@@ -1,27 +1,32 @@
-import * as aws from "@pulumi/aws";
+import * as aws from '@pulumi/aws';
+import { runfiles } from '@bazel/runfiles';
 import * as pulumi from '@pulumi/pulumi';
-import mime from "mime";
+import mime from 'mime';
+import path from 'path';
 
-const file = (bucket: aws.s3.BucketObjectArgs["bucket"]) => (path: string) => new aws.s3.BucketObject(
-    path,
-    {
-        key: path,
-        bucket,
-        contentType: mime.getType(path) || undefined,
-        source: new pulumi.asset.FileAsset(path)
-    }
-);
+const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public';
 
-const uploadContent = (bucket: aws.s3.BucketObjectArgs["bucket"]) => {
-    let File = file(bucket);
-    File('./index.html');
+const file = (bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
+    const workspacePath = path.posix.join(basePath, relativePath);
+    const absolutePath = runfiles.resolveWorkspaceRelative(workspacePath);
+	return new aws.s3.BucketObject(workspacePath, {
+		key: workspacePath,
+		bucket,
+		contentType: mime.getType(absolutePath) || undefined,
+		source: new pulumi.asset.FileAsset(absolutePath),
+	});
+}
+
+const uploadContent = (bucket: aws.s3.BucketObjectArgs['bucket']) => {
+	const File = file(bucket);
+	File('index.html');
 };
 
-export const bucket = new aws.s3.Bucket("pleaseintroducemetoyour.dog", {
-    acl: "public",
-    website: {
-        indexDocument: "index.html",
-    },
+export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
+	acl: 'public-read',
+	website: {
+		indexDocument: 'index.html',
+	},
 });
 
 uploadContent(bucket);
