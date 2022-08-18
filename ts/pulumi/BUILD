@@ -20,19 +20,19 @@ filegroup(
 )
 
 ts_project(
-    name = "lib",
+    name = "pulumi",
     srcs = TS_FILES,
     deps = [
-        "@npm//@pulumi/aws",
-        "@npm//cross-spawn",
-        "@npm//@types/cross-spawn",
+        "//ts/pulumi/dog",
+        "//ts/pulumi/me",
+        "//ts/pulumi/im"
     ],
 )
 
 nodejs_binary(
     name = "run",
     data = [
-        ":lib",
+        ":pulumi",
         ":pulumi_files",
         "//bin/linux/pulumi",
     ],

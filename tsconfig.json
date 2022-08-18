@@ -15,6 +15,7 @@
 		"noImplicitThis": true,
 		"declaration": true,
 		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
 		"downlevelIteration": true,
 		"declarationMap": true,
 		"lib": ["DOM", "ESNext"],
