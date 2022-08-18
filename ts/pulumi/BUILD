@@ -2,20 +2,13 @@ load("//ts:rules.bzl", "nodejs_binary", "ts_project")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
-TS_FILES = glob(["**/*.ts"])
 
-# TODO (?) this can probably be removed so we can use the JS files directly.
-filegroup(
-    name = "ts_files",
-    srcs = TS_FILES,
-)
 
 filegroup(
     name = "pulumi_files",
     srcs = [
         "Pulumi.prod.yaml",
         "Pulumi.yaml",
-        ":ts_files",
     ],
 )
 
