@@ -16,8 +16,8 @@ ts_project(
         "//ts/pulumi/dog",
         "//ts/pulumi/im",
         "//ts/pulumi/me",
-        "@npm//cross-spawn",
         "@npm//@types/cross-spawn",
+        "@npm//cross-spawn",
     ],
 )
 

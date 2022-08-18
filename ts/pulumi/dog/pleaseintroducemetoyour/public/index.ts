@@ -6,16 +6,17 @@ import path from 'path';
 
 const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public';
 
-const file = (bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
-    const workspacePath = path.posix.join(basePath, relativePath);
-    const absolutePath = runfiles.resolveWorkspaceRelative(workspacePath);
-	return new aws.s3.BucketObject(workspacePath, {
-		key: workspacePath,
-		bucket,
-		contentType: mime.getType(absolutePath) || undefined,
-		source: new pulumi.asset.FileAsset(absolutePath),
-	});
-}
+const file =
+	(bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
+		const workspacePath = path.posix.join(basePath, relativePath);
+		const absolutePath = runfiles.resolveWorkspaceRelative(workspacePath);
+		return new aws.s3.BucketObject(workspacePath, {
+			key: workspacePath,
+			bucket,
+			contentType: mime.getType(absolutePath) || undefined,
+			source: new pulumi.asset.FileAsset(absolutePath),
+		});
+	};
 
 const uploadContent = (bucket: aws.s3.BucketObjectArgs['bucket']) => {
 	const File = file(bucket);
