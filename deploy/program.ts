@@ -58,7 +58,7 @@ const pulumiDeploy =
 				)
 					throw new Error('Missing environment variables.');
 
-				exec(buildTag);
+				exec(runfiles.resolveWorkspaceRelative(buildTag));
 			},
 		};
 	};
@@ -257,12 +257,8 @@ export const release =
 		) => void releaseUploads.push([file, content]);
 
 		const exec: Context['exec'] = dryRun
-			? async (filename: string) => {
-					if (filename == '')
-						throw new Error('Request to exec empty string');
-			  }
+			? async (filename: string) => await fs.access(filename)
 			: async (filename: string) => {
-					console.log('executing', filename);
 					return void (await promisify(child_process.execFile)(
 						filename
 					));
