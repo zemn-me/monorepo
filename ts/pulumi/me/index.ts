@@ -1,1 +1,1 @@
-import 'monorepo/ts/pulumi/me/zemn';
+export * as zemn from 'monorepo/ts/pulumi/me/zemn';
