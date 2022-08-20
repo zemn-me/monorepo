@@ -23,6 +23,25 @@ it('should break when not in dryRun mode', async () => {
 	await expect(program().parseAsync(['xxx', 'ok'])).rejects.toThrow();
 });
 
+it('should not have any errors', async () => {
+	process.env.NPM_TOKEN = '123fake';
+	process.env.AWS_SECRET_ACCESS_KEY = '123fake';
+	process.env.PULUMI_ACCESS_TOKEN = '123fake';
+	process.env.AWS_ACCESS_KEY_ID = '123fake';
+	let output = '';
+	await expect(
+		program({
+			onError: s => {
+				throw new Error(s);
+			},
+		})
+			.configureOutput({
+				writeOut: s => (output += s),
+			})
+			.parseAsync(['xxx', 'ok', '--dryRun', 'true'])
+	).resolves.not.toThrow();
+});
+
 test('releaseNotes', async () => {
 	process.env.NPM_TOKEN = '123fake';
 	process.env.AWS_SECRET_ACCESS_KEY = '123fake';
@@ -32,7 +51,7 @@ test('releaseNotes', async () => {
 	const output = new Promise(o => (ok = o));
 
 	await expect(
-		program(ok!)
+		program({ outputReleaseNotes: ok! })
 			.configureOutput({
 				writeOut: s => console.error(s),
 			})
@@ -103,9 +122,8 @@ The following operations were requested:
 			"One operation was able to continue despite the other's failure."
 		);
 
-		expect(failureContent).toContain('fake failed with Error: failure');
-		expect(failureContent).toContain('fake failed with Error: failure 2');
+		expect(failureContent).toContain('fake: failure');
+		expect(failureContent).toContain('fake: failure 2');
 		expect(failureContent).not.toContain('undefined');
-		expect(failureContent).not.toContain('fake failed with undefined');
 	});
 });
