@@ -30,7 +30,7 @@ const artifact =
 			filename,
 			buildTag,
 			publish: async ({ publish }: Context) =>
-				publish(
+				await publish(
 					filename,
 					await fs.readFile(
 						runfiles.resolveWorkspaceRelative(buildTag)
@@ -58,7 +58,7 @@ const pulumiDeploy =
 				)
 					throw new Error('Missing environment variables.');
 
-				exec(buildTag);
+				return void (await exec(buildTag));
 			},
 		};
 	};
