@@ -26,6 +26,8 @@
 		"no-extra-bind": "error",
 		"no-multi-spaces": ["error"],
 		"array-bracket-newline": ["error", "consistent"],
+		"@typescript-eslint/no-floating-promises": "error",
+		"@typescript-eslint/no-misused-promises": "error",
 		"array-element-newline": ["error", "consistent"],
 		"block-spacing": ["error", "always"],
 		"comma-spacing": ["error"],
@@ -37,6 +39,8 @@
 	},
 	"parserOptions": {
 		"sourceType": "module",
-		"ecmaVersion": 2020
-	}
+		"ecmaVersion": 2020,
+		"project": ["tsconfig.json" ]
+	},
+	"ignorePatterns": [ "tsconfig.json" ]
 }
