@@ -91,7 +91,7 @@
 		"build": "yarn run bazelisk build //...",
 		"test": "yarn run bazelisk run //bzl:affected_files",
 		"fix": "yarn run bazelisk run //:fix",
-		"dev": "yarn run ibazel --run_output --run_output_interactive=false test //...",
+		"dev": "yarn run ibazel --run_output --run_output_interactive=false test",
 		"pr": "gh pr create -f; gh pr merge -md --auto"
 	},
 	"dependencies": {
