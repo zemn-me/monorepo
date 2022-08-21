@@ -9,7 +9,6 @@ def jest_test(name, srcs, data = [], deps = [], jest_config = "//:jest.ts.config
         "--no-watchman",
         "--ci",
         "--colors",
-        "--forceExit",
     ]
     templated_args.extend(["--config", "$(rootpath %s)" % jest_config])
 
