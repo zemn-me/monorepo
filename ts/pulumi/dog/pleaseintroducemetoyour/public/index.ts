@@ -18,11 +18,6 @@ const file =
 		});
 	};
 
-const uploadContent = (bucket: aws.s3.BucketObjectArgs['bucket']) => {
-	const File = file(bucket);
-	File('index.html');
-};
-
 export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	acl: 'public-read',
 	website: {
@@ -30,6 +25,9 @@ export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	},
 });
 
-uploadContent(bucket);
+const File = file(bucket);
+
+export const index = File('index.html');
+
 
 export default bucket;
