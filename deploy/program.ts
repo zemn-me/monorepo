@@ -48,7 +48,7 @@ const artifact =
 			filename,
 			buildTag,
 			publish: async ({ publish }: Context) =>
-				publish(
+				await publish(
 					filename,
 					await fs.readFile(
 						runfiles.resolveWorkspaceRelative(buildTag)
