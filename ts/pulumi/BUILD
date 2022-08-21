@@ -1,7 +1,6 @@
 load("//ts:rules.bzl", "nodejs_binary", "ts_project")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 
-
 package(default_visibility = ["//deploy:__subpackages__"])
 
 filegroup(
@@ -34,11 +33,10 @@ nodejs_binary(
 
 native_test(
     name = "configs_test",
-    data = [ ":configs" ],
+    src = ":configs.sh",
     out = "whatever",
-    src = ":configs.sh"
+    data = [":configs"],
 )
-
 
 nodejs_binary(
     name = "run",
