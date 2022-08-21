@@ -1,4 +1,6 @@
 load("//ts:rules.bzl", "nodejs_binary", "ts_project")
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -20,6 +22,23 @@ ts_project(
         "@npm//cross-spawn",
     ],
 )
+
+nodejs_binary(
+    name = "configs",
+    data = [
+        ":pulumi",
+        ":pulumi_files",
+    ],
+    entry_point = "test.js",
+)
+
+native_test(
+    name = "configs_test",
+    data = [ ":configs" ],
+    out = "whatever",
+    src = ":configs.sh"
+)
+
 
 nodejs_binary(
     name = "run",
