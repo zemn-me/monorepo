@@ -20,7 +20,7 @@ def jest_test(jsdom = None, deps = [], **kwargs):
     )
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
-    targets = srcs + data + [ "//:tsconfig" ]
+    targets = srcs + data + ["//:tsconfig"]
     eslint_test(
         name = name,
         data = targets,
@@ -77,6 +77,3 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
         args = args + ["--ignore-path", "$(location //:.gitignore)"] +
                ["$(location " + x + ")" for x in data],
     )
-
-
-
