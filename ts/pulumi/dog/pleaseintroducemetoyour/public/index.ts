@@ -15,6 +15,7 @@ const file =
 			bucket,
 			contentType: mime.getType(absolutePath) || undefined,
 			source: new pulumi.asset.FileAsset(absolutePath),
+			acl: 'public-read'
 		});
 	};
 
