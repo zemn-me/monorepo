@@ -11,6 +11,24 @@ import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
 import { isDefined } from 'monorepo/ts/guard';
 
+export class Errors<T extends Error[]> extends Error {
+	// must be nullable because we return
+	// a single Error if provided with one.
+	public readonly errors?: T;
+	constructor(errors: T) {
+		// should be able to check this statically but I don't know how yet.
+		if (errors.length == 0) throw new Error('No errors provided');
+		if (errors.length == 1) return errors[0];
+		super(
+			`Several errors occurred:\n${errors
+				.map(e => e.toString())
+				.join('\n\n')}`
+		);
+
+		this.errors = errors;
+	}
+}
+
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
 	exec(filename: string): Promise<void>;
@@ -30,7 +48,7 @@ const artifact =
 			filename,
 			buildTag,
 			publish: async ({ publish }: Context) =>
-				publish(
+				await publish(
 					filename,
 					await fs.readFile(
 						runfiles.resolveWorkspaceRelative(buildTag)
@@ -58,7 +76,9 @@ const pulumiDeploy =
 				)
 					throw new Error('Missing environment variables.');
 
-				exec(buildTag);
+				return void (await exec(
+					runfiles.resolveWorkspaceRelative(buildTag)
+				));
 			},
 		};
 	};
@@ -208,22 +228,18 @@ export const releaseNotes =
 					throw new Error('invalid kind');
 			}
 
-			const failureInfo = operationAndFailure
-				.filter(([, /* op */ err]) => err !== undefined)
-				.map(([op, err]) => {
-					return indent(
-						`Operation ${op.buildTag} failed with ${err}.`
-					);
-				})
-				.join('\n\n - ');
-
-			if (logFailures && failureInfo.length > 0)
-				logFailures(
-					`Failures occurred as follows:\n${indent(failureInfo)}\n`
-				);
-
 			return notes;
 		});
+
+		if (logFailures) {
+			const errors = notes.filter(
+				// this operation should probably not be here because it looks ugly. but i am feeling ugly today
+				<T, Q extends Operation>(
+					v: T | OperationFailure<Q>
+				): v is OperationFailure<Q> => v instanceof OperationFailure
+			);
+			if (errors.length > 0) logFailures(`${new Errors(errors)}`);
+		}
 
 		if (operationInfo.length > 0)
 			paragraphs.push(
@@ -257,12 +273,8 @@ export const release =
 		) => void releaseUploads.push([file, content]);
 
 		const exec: Context['exec'] = dryRun
-			? async (filename: string) => {
-					if (filename == '')
-						throw new Error('Request to exec empty string');
-			  }
+			? async (filename: string) => await fs.access(filename)
 			: async (filename: string) => {
-					console.log('executing', filename);
 					return void (await promisify(child_process.execFile)(
 						filename
 					));
@@ -302,7 +314,15 @@ export const release =
 		return notes;
 	};
 
-export const program = (outputReleaseNotes?: (notes: string) => void) =>
+interface ProgramProps {
+	outputReleaseNotes?(notes: string): void;
+	onError?(error: string): void;
+}
+
+export const program = ({
+	outputReleaseNotes,
+	onError = s => console.error(s),
+}: ProgramProps = {}) =>
 	new Command()
 		.name('release')
 		.description(
@@ -338,7 +358,7 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 					'knowitwhenyouseeit',
 					'//ts/knowitwhenyouseeit/npm_pkg.publish.sh'
 				),
-				pulumiDeploy('//dist/bin/ts/pulumi/run.sh')
+				pulumiDeploy('//ts/pulumi/run.sh')
 			);
 
 			const notes = await releaser({
@@ -375,7 +395,7 @@ export const program = (outputReleaseNotes?: (notes: string) => void) =>
 
 				dryRun: dryRun,
 
-				releaseNotes: releaseNotes(s => console.error(s)),
+				releaseNotes: releaseNotes(onError),
 			});
 
 			if (outputReleaseNotes) outputReleaseNotes(notes);
