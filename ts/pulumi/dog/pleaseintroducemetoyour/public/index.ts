@@ -29,5 +29,4 @@ const File = file(bucket);
 
 export const index = File('index.html');
 
-
 export default bucket;
