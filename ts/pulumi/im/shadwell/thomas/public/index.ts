@@ -4,7 +4,7 @@ import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import path from 'path';
 
-const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public';
+const basePath = 'ts/pulumi/im/shadwell/thomas/public';
 
 const file =
 	(bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
@@ -19,7 +19,7 @@ const file =
 		});
 	};
 
-export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
+export const bucket = new aws.s3.Bucket('thomas.shadwell.im', {
 	acl: 'public-read',
 	website: {
 		indexDocument: 'index.html',
