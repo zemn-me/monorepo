@@ -12,7 +12,6 @@ export const cert = new aws.acm.Certificate(
 
 const second = 1;
 const minute = 60 * second;
-const hour = 60 * minute;
 
 // this code seems stupid but you can't iterate over a list
 // in pulumi outputs so it's necessary.
