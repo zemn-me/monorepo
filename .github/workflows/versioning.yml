@@ -12,8 +12,6 @@ on:   # yamllint disable-line rule:truthy
 
 jobs:
   Test:
-    # This runs just the tests that are specified not to run on main
-    if: github.ref == 'refs/heads/versioned'
     name: Tests (for merging into versioned branch)
     runs-on: ubuntu-latest
     steps:
