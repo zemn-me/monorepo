@@ -1,11 +1,13 @@
 import * as aws from '@pulumi/aws';
+import * as pulumi from '@pulumi/pulumi';
+
 import { bucket, index } from 'monorepo/ts/pulumi/im/shadwell/thomas/public';
-import { zone } from './zone';
+import { zone } from 'monorepo/ts/pulumi/im/shadwell/zone';
 import { arn as acmCertificateArn } from 'monorepo/ts/pulumi/im/shadwell/cert';
 
 const s3OriginId = 'myS3Origin';
 export const distribution: aws.cloudfront.Distribution =
-	new aws.cloudfront.Distribution('s3Distribution', {
+	new aws.cloudfront.Distribution('shadwell-im-s3-distribution', {
 		origins: [
 			{
 				domainName: bucket.bucketRegionalDomainName,
@@ -15,7 +17,7 @@ export const distribution: aws.cloudfront.Distribution =
 		enabled: true,
 		isIpv6Enabled: true,
 		defaultRootObject: index.key,
-		aliases: [zone.name],
+		aliases: [zone.name, pulumi.interpolate`thomas.${zone.name}`],
 		defaultCacheBehavior: {
 			allowedMethods: [
 				'DELETE',

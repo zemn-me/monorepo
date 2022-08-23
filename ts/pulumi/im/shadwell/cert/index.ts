@@ -29,14 +29,22 @@ const record = (
 	});
 
 export const validation0 = record(
-	'cert_validation_0',
+	'shadwell_im_cert_validation_0',
 	cert.domainValidationOptions[0]
 );
 
-export const validation = new aws.acm.CertificateValidation('cert-validation', {
-	certificateArn: cert.arn,
-	validationRecordFqdns: [validation0.fqdn],
-});
+export const validation1 = record(
+	'shadwell_im_cert_validation_1',
+	cert.domainValidationOptions[1]
+);
+
+export const validation = new aws.acm.CertificateValidation(
+	'shadwell_im_cert_validation',
+	{
+		certificateArn: cert.arn,
+		validationRecordFqdns: [validation0.fqdn, validation1.fqdn],
+	}
+);
 
 // should use this one because it waits for the certificate to actualy be validated
 export const arn = validation.certificateArn;
