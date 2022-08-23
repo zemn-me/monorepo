@@ -15,13 +15,9 @@ const file =
 			bucket,
 			contentType: mime.getType(absolutePath) || undefined,
 			source: new pulumi.asset.FileAsset(absolutePath),
+			acl: 'public-read',
 		});
 	};
-
-const uploadContent = (bucket: aws.s3.BucketObjectArgs['bucket']) => {
-	const File = file(bucket);
-	File('index.html');
-};
 
 export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	acl: 'public-read',
@@ -30,6 +26,8 @@ export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	},
 });
 
-uploadContent(bucket);
+const File = file(bucket);
+
+export const index = File('index.html');
 
 export default bucket;
