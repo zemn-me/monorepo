@@ -3,11 +3,8 @@ load("//ts:rules.bzl", "ts_project")
 package(default_visibility = ["//ts/pulumi/im:__subpackages__"])
 
 ts_project(
-    name = "shadwell",
+    name = "zone",
     deps = [
-        "//ts/pulumi/im/shadwell/cert",
-        "//ts/pulumi/im/shadwell/thomas",
-        "//ts/pulumi/im/shadwell/zone",
         "@npm//@pulumi/aws",
     ],
 )

@@ -11,27 +11,6 @@ on:   # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 jobs:
-  Test:
-    name: Tests (for merging into versioned branch)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Restore bazel cache
-        uses: actions/cache@v3.0.8
-        env:
-          cache-name: bazel-cache
-        with:
-          path: |
-            ~/.cache/bazelisk
-            ~/.cache/bazel
-          key: ${{ runner.os }}-${{ env.cache-name }}
-      - name: Special 'versioned' branch tests
-        run: bazelisk test //... --test_tag_filters=do_not_run_on_main
   copy_to_versioned:
     name: Copy commits in main to versioned branch
     runs-on: ubuntu-latest
