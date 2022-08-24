@@ -1,18 +1,11 @@
-#!/usr/bin/env node
-
 /**
- * @fileoverview The main entry point for svgshot.
  *
- * Svgshot is separated out into a lib to allow easier testing.
+ * Svgshot takes 'screenshots' of webpages as minimised SVGs. This makes them
+ * great for rendering in videos or webpages.
  *
- * I wouldn't worry about it too much.
+ * @remarks
+ * For more information, see https://npmjs.com/package/svgshot.
  */
 
-import main from './lib';
-
-main()
-	.catch(e => {
-		console.error(e);
-		process.exit(1);
-	})
-	.then(() => process.exit(0));
+export * from './lib';
+export { default } from './lib';

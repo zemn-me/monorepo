@@ -1,5 +1,5 @@
 load("//ts:rules.bzl", "jest_test", "ts_project")
-load("//:rules.bzl", "nodejs_binary")
+load("//:rules.bzl", "nodejs_binary", "nodejs_test")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -16,8 +16,12 @@ ts_project(
         "//project/ck3/recursive-vassals:patch",
         "//ts/cmd/svgshot:npm_pkg.publish",
         "//ts/cmd/svgshot:svgshot.tgz",
+        "//ts/knowitwhenyouseeit:knowitwhenyouseeit.tgz",
+        "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/pulumi:run.sh",
     ],
     deps = [
+        "//ts",
         "@npm//@actions/github",
         "@npm//@bazel/runfiles",
         "@npm//@types/jest",
@@ -30,7 +34,17 @@ ts_project(
 nodejs_binary(
     name = "release",
     data = [":release_src"],
-    entry_point = "release.js",
+    entry_point = "release.ts",
+)
+
+nodejs_test(
+    name = "smoke",
+    args = [
+        "--dryRun",
+        "true",
+    ],
+    data = [":release_src"],
+    entry_point = "release.ts",
 )
 
 alias(

@@ -1,4 +1,4 @@
-import { doSync, JSONObject } from 'ts/do-sync';
+import { doSync, JSONObject } from 'monorepo/ts/do-sync';
 import sharpT from 'sharp';
 
 const pixel =

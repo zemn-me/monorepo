@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import { Command } from 'commander';
+import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
@@ -65,14 +66,13 @@ const main = async () => {
 	);
 
 	const pkg_json_buf = await fs.readFile(opts.base);
-	const pkg_json: {
-		devDependencies: Record<string, string>;
-		dependencies: Record<string, string>;
-	} = JSON.parse(pkg_json_buf.toString());
+
+	// this could be less strict, but it resulted in crashes
+	const pkg_json: packageJson = JSON.parse(pkg_json_buf.toString());
 
 	const all_deps = new Map([
-		...Object.entries(pkg_json.dependencies),
-		...Object.entries(pkg_json.devDependencies),
+		...Object.entries(pkg_json.dependencies ?? []),
+		...Object.entries(pkg_json.devDependencies ?? []),
 	]);
 
 	const our_deps = [...all_deps]
@@ -89,14 +89,22 @@ const main = async () => {
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
 	const version = (await fs.readFile(opts.version)).toString();
 
+	const toMerge = {
+		version,
+		dependencies: Object.fromEntries(runDeps),
+		devDependencies: Object.fromEntries(devDeps),
+	};
+
+	for (const key in toMerge)
+		if (key in template)
+			throw new Error(`Key ${key} must not be present in ${opts.merge}.`);
+
 	await fs.writeFile(
 		opts.out,
 		JSON.stringify(
 			{
-				version,
 				...template,
-				dependencies: Object.fromEntries(runDeps),
-				devDependencies: Object.fromEntries(devDeps),
+				...toMerge,
 			},
 			null,
 			2

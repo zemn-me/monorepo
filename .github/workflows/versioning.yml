@@ -12,8 +12,6 @@ on:   # yamllint disable-line rule:truthy
 
 jobs:
   Test:
-    # This runs just the tests that are specified not to run on main
-    if: github.ref == 'refs/heads/versioned'
     name: Tests (for merging into versioned branch)
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +22,7 @@ jobs:
         with:
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.0.8
         env:
           cache-name: bazel-cache
         with:
@@ -45,7 +43,7 @@ jobs:
           # Needed to allow an action to trigger another action.
           token: ${{ secrets.GH_PAT }}
       - name: Restore bazel cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.0.8
         env:
           cache-name: bazel-cache
         with:

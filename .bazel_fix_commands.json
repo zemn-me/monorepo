@@ -1,6 +1,6 @@
 [
   {
-    "regex": "_lint +FAILED",
+    "regex": "potentially fixable with the `--fix` option",
     "command": "yarn",
     "args": [ "run", "fix" ]
   },

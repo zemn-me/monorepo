@@ -1,8 +1,24 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
+load("//js/api-documenter:rules.bzl", "api_documenter")
+load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 load("//js/npm/yarn/lock:rules.bzl", "lockfile_minimize")
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
+
+def _exclude_all_external_rule(ctx):
+    return DefaultInfo(files = depset([
+        file
+        for file in ctx.files.srcs
+        if file.owner.workspace_name == ""
+    ]))
+
+exclude_all_external_rule = rule(
+    implementation = _exclude_all_external_rule,
+    attrs = {
+        "srcs": attr.label_list(allow_files = True),
+    },
+)
 
 def npm_pkg(
         name,
@@ -10,6 +26,8 @@ def npm_pkg(
         pkg_json_base,
         srcs = [],
         deps = [],
+        # Needed so that something shows on NPM
+        readme = None,
         version_lock = None,
         api_lock = None,
         major_version = None,
@@ -54,6 +72,22 @@ def npm_pkg(
         entry_point = external_api_dts_root,
         srcs = srcs + deps,
         report = "api_gen.md",
+        publicTrimmedRollup = "public.d.ts",
+        docModel = ".api.json",
+    )
+
+    api_documenter(
+        name = name + "_docs",
+        output_directory = "docs",
+        docModel = ".api.json",
+    )
+
+    copy_to_directory(
+        name = name + "_dir",
+        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", readme],
+        replace_prefixes = {
+            "public.d.ts": "index.d.ts",
+        },
     )
 
     pkg_srcs = srcs
@@ -61,17 +95,21 @@ def npm_pkg(
     pkg_npm(
         name = name,
         package_name = package_name,
-        srcs = pkg_srcs,
-        deps = pkg_deps,
+        deps = [name + "_dir"],
         tgz = tgz,
         visibility = visibility,
+    )
+
+    exclude_all_external_rule(
+        name = "version_lock_files",
+        srcs = pkg_srcs + pkg_deps + [readme],
     )
 
     # Test that ensures at least a minor bump happens when
     # a change in files occurs.
     bump_on_change_test(
         name = "version_lock",
-        srcs = pkg_srcs + pkg_deps,
+        srcs = [":version_lock_files"],
         version = minor_version,
         run_on_main = test_version_on_main,
         version_lock = version_lock,

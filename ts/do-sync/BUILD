@@ -18,15 +18,15 @@ ts_project(
 npm_pkg(
     name = "npm_pkg",
     package_name = "do-sync",
-    srcs = ["README.md"],
+    srcs = [],
     api_lock = ".api.lock",
     entry_point = "index.d.ts",
     major_version = "version/MAJOR",
     minor_version = "version/MINOR",
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
+    readme = "README.md",
     tgz = "do-sync.tgz",
     version_lock = ".version.lock",
-    visibility = ["//deploy:__subpackages__"],
     deps = [":do-sync"],
 )

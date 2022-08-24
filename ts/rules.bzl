@@ -20,7 +20,7 @@ def jest_test(jsdom = None, deps = [], **kwargs):
     )
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
-    targets = srcs + data
+    targets = srcs + data + ["//:tsconfig"]
     eslint_test(
         name = name,
         data = targets,
@@ -29,19 +29,20 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_json_module = True, srcs = [], incremental = True, tsconfig = "//:tsconfig", preserve_jsx = None, root_dir = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_json_module = True, srcs = None, incremental = True, tsconfig = "//:tsconfig", preserve_jsx = None, root_dir = None, tags = [], **kwargs):
+    if srcs == None:
+        srcs = native.glob(["**/*.ts", "**/*.tsx"])
     _ts_project(
         name = name,
         srcs = srcs,
         tsconfig = tsconfig,
         # swc injects this
-        # uncomment these one day
-        #deps = deps + ["@npm//regenerator-runtime"],
-        #transpiler = partial.make(
-        #    swc_transpiler,
-        #    swcrc = "//:swcrc",
-        #),
-        deps = deps,
+        deps = deps + ["@npm//regenerator-runtime"],
+        transpiler = partial.make(
+            swc_transpiler,
+            swcrc = "//:swcrc",
+            source_maps = "true",
+        ),
         preserve_jsx = preserve_jsx,
         resolve_json_module = resolve_json_module,
         root_dir = root_dir,
