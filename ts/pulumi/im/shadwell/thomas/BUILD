@@ -1,0 +1,12 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//ts/pulumi/im/shadwell:__pkg__"])
+
+ts_project(
+    name = "thomas",
+    deps = [
+        "//ts/pulumi/im/shadwell/cert",
+        "//ts/pulumi/im/shadwell/thomas/public",
+        "@npm//@pulumi/aws",
+    ],
+)

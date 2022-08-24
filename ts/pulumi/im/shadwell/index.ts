@@ -1,14 +1,3 @@
-import * as aws from '@pulumi/aws';
-
-export const shadwell_im = new aws.route53.Zone(
-	'shadwell.im',
-	{
-		comment: 'HostedZone created by Route53 Registrar',
-		name: 'shadwell.im',
-	},
-	{
-		protect: true,
-	}
-);
-
-export default shadwell_im;
+export * from 'monorepo/ts/pulumi/im/shadwell/zone';
+export * from 'monorepo/ts/pulumi/im/shadwell/cert';
+export * from 'monorepo/ts/pulumi/im/shadwell/thomas';
