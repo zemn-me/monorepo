@@ -15,5 +15,8 @@ ts_project(
     deps = [
         "@npm//@types/react",
         "@npm//react",
+        "@npm//react-storage-hooks",
+        "@npm//immutable",
+        "@npm//@types/jest"
     ],
 )
