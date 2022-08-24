@@ -2,7 +2,7 @@
 
 name: Version Management
 concurrency:
-  group: concurrency-${{ github.head_ref }}
+  group: concurrency-versioning-${{ github.head_ref }}
   cancel-in-progress: true
 
 on:   # yamllint disable-line rule:truthy
