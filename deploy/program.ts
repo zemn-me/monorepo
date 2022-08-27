@@ -110,11 +110,12 @@ const npmPackage =
 
 type Operation = ArtifactInfo | NpmPackageInfo | PulumiDeployInfo;
 
+
 class OperationFailure<O extends Operation = Operation> extends Error {
 	constructor(public readonly operation: O, public readonly error: Error) {
 		super(
 			`${operation.kind} ${operation.buildTag}: ${error.message}`,
-			error.cause
+			{ cause: error.cause }
 		);
 	}
 }
