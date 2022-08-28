@@ -2,7 +2,7 @@
 
 name: CI
 concurrency:
-  group: concurrency-${{ github.head_ref }}
+  group: concurrency-ci-${{ github.head_ref }}
   cancel-in-progress: true
 
 on:   # yamllint disable-line rule:truthy
