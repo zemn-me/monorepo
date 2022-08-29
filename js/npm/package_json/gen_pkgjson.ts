@@ -26,24 +26,26 @@ const labelToNpmPackage = (label: string): string => {
 };
 
 interface GithubIssueUrlProps {
-	title?: string,
-	body?: string,
-	labels?: string[],
+	title?: string;
+	body?: string;
+	labels?: string[];
 }
-
 
 const githubIssueUrl = (props: GithubIssueUrlProps) => {
 	const params = new URLSearchParams();
-	const modifiedProps = { ...props, labels: props.labels?.map(s => s.replace(",", ""))?.join(",") }
+	const modifiedProps = {
+		...props,
+		labels: props.labels?.map(s => s.replace(',', ''))?.join(','),
+	};
 
 	for (const [key, value] of Object.entries(modifiedProps)) {
-		if(value) params.set(key, value);
+		if (value) params.set(key, value);
 	}
 
-	let url = new URL("https://github.com/zemnmez/monorepo/issues/new");
-	url.search = params.toString()
-	return url.toString()
-}
+	const url = new URL('https://github.com/zemnmez/monorepo/issues/new');
+	url.search = params.toString();
+	return url.toString();
+};
 
 const main = async () => {
 	const program = new Command()
@@ -118,34 +120,27 @@ const main = async () => {
 		dependencies: Object.fromEntries(runDeps),
 		devDependencies: Object.fromEntries(devDeps),
 		repository: {
-			type: "git",
-			url: "https://github.com/Zemnmez/monorepo.git",
-			directory: opts.package_name
+			type: 'git',
+			url: 'https://github.com/Zemnmez/monorepo.git',
+			directory: opts.package_name,
 		},
 		bugs: {
 			url: githubIssueUrl({
-				title: `//${opts.package_name}@${version}: something went wrong!`
-			})
-		}
+				title: `//${opts.package_name}@${version}: something went wrong!`,
+			}),
+		},
 	};
 
 	const out: packageJson = {
 		...template,
-		...toMerge
-	}
+		...toMerge,
+	};
 
 	for (const key in toMerge)
 		if (key in template)
 			throw new Error(`Key ${key} must not be present in ${opts.merge}.`);
 
-	await fs.writeFile(
-		opts.out,
-		JSON.stringify(
-			out,
-			null,
-			2
-		)
-	);
+	await fs.writeFile(opts.out, JSON.stringify(out, null, 2));
 };
 
 main().catch(e => console.error(e));

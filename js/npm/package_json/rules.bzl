@@ -48,7 +48,7 @@ def package_json(name, targets, template, version):
                       "--version",
                       "$(location " + version + ")",
                       "--package_name",
-                      native.package_name()
+                      native.package_name(),
                   ],
               ),
         outs = ["package.json"],
