@@ -16,6 +16,8 @@ ts_project(
         "//project/ck3/recursive-vassals:patch",
         "//ts/cmd/svgshot:npm_pkg.publish",
         "//ts/cmd/svgshot:svgshot.tgz",
+        "//ts/do-sync:do-sync.tgz",
+        "//ts/do-sync:npm_pkg.publish",
         "//ts/knowitwhenyouseeit:knowitwhenyouseeit.tgz",
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
         "//ts/pulumi:run.sh",
