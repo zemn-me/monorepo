@@ -1,5 +1,6 @@
 load("//ts:rules.bzl", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = [
     ":__subpackages__",
@@ -29,4 +30,10 @@ npm_pkg(
     tgz = "do-sync.tgz",
     version_lock = ".version.lock",
     deps = [":do-sync"],
+)
+
+js_library(
+    name = "lib",
+    srcs = ["//ts/do-sync:npm_pkg"],
+    visibility = ["//:__subpackages__"],
 )
