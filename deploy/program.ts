@@ -350,6 +350,8 @@ export const program = ({
 				),
 				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
 				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh'),
+				npmPackage('svgshot', '//ts/do-sync/npm_pkg.publish.sh'),
+				artifact('svgshot.tar.gz', '//ts/do-sync/do-sync.tgz'),
 				artifact(
 					'knowitwhenyouseeit.tar.gz',
 					'//ts/knowitwhenyouseeit/knowitwhenyouseeit.tgz'
