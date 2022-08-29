@@ -25,6 +25,26 @@ const labelToNpmPackage = (label: string): string => {
 	return match[1];
 };
 
+interface GithubIssueUrlProps {
+	title?: string,
+	body?: string,
+	labels?: string[],
+}
+
+
+const githubIssueUrl = (props: GithubIssueUrlProps) => {
+	const params = new URLSearchParams();
+	const modifiedProps = { ...props, labels: props.labels?.map(s => s.replace(",", ""))?.join(",") }
+
+	for (const [key, value] of Object.entries(modifiedProps)) {
+		if(value) params.set(key, value);
+	}
+
+	let url = new URL("https://github.com/zemnmez/monorepo/issues/new");
+	url.search = params.toString()
+	return url.toString()
+}
+
 const main = async () => {
 	const program = new Command()
 		.name('gen_pkgjson')
@@ -51,6 +71,10 @@ const main = async () => {
 		.requiredOption(
 			'--out <path>',
 			'The output path of the generate package.json.'
+		)
+		.requiredOption(
+			'--package_name <path>',
+			'The package_name within the monorepo.'
 		)
 		.parse(process.argv);
 
@@ -93,7 +117,22 @@ const main = async () => {
 		version,
 		dependencies: Object.fromEntries(runDeps),
 		devDependencies: Object.fromEntries(devDeps),
+		repository: {
+			type: "git",
+			url: "https://github.com/Zemnmez/monorepo.git",
+			directory: opts.package_name
+		},
+		bugs: {
+			url: githubIssueUrl({
+				title: `//${opts.package_name}@${version}: something went wrong!`
+			})
+		}
 	};
+
+	const out: packageJson = {
+		...template,
+		...toMerge
+	}
 
 	for (const key in toMerge)
 		if (key in template)
@@ -102,10 +141,7 @@ const main = async () => {
 	await fs.writeFile(
 		opts.out,
 		JSON.stringify(
-			{
-				...template,
-				...toMerge,
-			},
+			out,
 			null,
 			2
 		)
