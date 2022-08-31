@@ -320,7 +320,7 @@ interface ProgramProps {
 }
 
 function memo<T>(f: () => T): () => T {
-	let val:T;
+	let val: T;
 	let has = false;
 
 	return function memo() {
@@ -330,7 +330,7 @@ function memo<T>(f: () => T): () => T {
 		}
 
 		return val;
-	}
+	};
 }
 
 export const program = ({
