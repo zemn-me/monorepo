@@ -319,6 +319,20 @@ interface ProgramProps {
 	onError?(error: string): void;
 }
 
+function memo<T>(f: () => T): () => T {
+	let val: T;
+	let has = false;
+
+	return function memo() {
+		if (!has) {
+			val = f();
+			has = true;
+		}
+
+		return val;
+	};
+}
+
 export const program = ({
 	outputReleaseNotes,
 	onError = s => console.error(s),
@@ -332,8 +346,8 @@ export const program = ({
 		.action(async ({ dryRun }) => {
 			const context = dryRun ? mockContext : githubCtx;
 			const Github = dryRun
-				? mockGithub
-				: getOctokit(process.env['GITHUB_TOKEN']!);
+				? memo(() => mockGithub)
+				: memo(() => getOctokit(process.env['GITHUB_TOKEN']!));
 
 			const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
 				context.sha
@@ -365,7 +379,7 @@ export const program = ({
 
 			const notes = await releaser({
 				uploadReleaseAsset: async ({ name, release_id, data }) =>
-					void (await Github.rest.repos.uploadReleaseAsset({
+					void (await Github().rest.repos.uploadReleaseAsset({
 						owner: context.repo.owner,
 						repo: context.repo.repo,
 						release_id: await release_id,
@@ -376,7 +390,7 @@ export const program = ({
 
 				createRelease: async ({ body }) => ({
 					release_id: (
-						await Github.rest.repos.createRelease({
+						await Github().rest.repos.createRelease({
 							// could probably use a spread operator here
 							// but i also think that would be uglier...
 							owner: context.repo.owner,
