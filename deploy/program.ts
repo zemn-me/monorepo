@@ -92,6 +92,10 @@ interface NpmPackageInfo {
 const npmPackage =
 	(packageName: string, buildTag: string) =>
 	async (): Promise<NpmPackageInfo> => {
+		if (!buildTag.includes(packageName))
+			throw new Error(
+				`Build tag ${buildTag} does not include package name ${packageName}. Are you sure it's correct?`
+			);
 		return {
 			buildTag,
 			kind: 'npm_publication',
@@ -364,7 +368,7 @@ export const program = ({
 				),
 				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
 				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh'),
-				npmPackage('svgshot', '//ts/do-sync/npm_pkg.publish.sh'),
+				npmPackage('do-sync', '//ts/do-sync/npm_pkg.publish.sh'),
 				artifact('svgshot.tar.gz', '//ts/do-sync/do-sync.tgz'),
 				artifact(
 					'knowitwhenyouseeit.tar.gz',
