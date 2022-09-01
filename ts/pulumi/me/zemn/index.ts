@@ -1,5 +1,7 @@
 import * as aws from '@pulumi/aws';
 
+export * as factorio from 'monorepo/ts/pulumi/me/zemn/factorio';
+
 export const zone = new aws.route53.Zone(
 	'zemn.me',
 	{

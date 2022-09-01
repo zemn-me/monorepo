@@ -95,6 +95,7 @@
 		"pr": "gh pr create -f; gh pr merge -md --auto"
 	},
 	"dependencies": {
+		"@pulumi/command": "^0.4.1",
 		"@types/bcryptjs": "^2.4.2"
 	}
 }
