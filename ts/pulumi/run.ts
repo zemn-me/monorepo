@@ -1,11 +1,16 @@
-import { LocalWorkspace } from '@pulumi/pulumi/automation';
+import { LocalWorkspace, UpResult } from '@pulumi/pulumi/automation';
 
-export const run = async () => {
+export const run = async (
+	interactive: boolean,
+	preview: boolean
+): Promise<UpResult | void> => {
 	const logs: any[][] = [];
 
-	function log(...a: any[]) {
+	let log = function log(...a: any[]) {
 		logs.push(a);
-	}
+	};
+
+	if (interactive) log = (...a: any[]) => console.info(...a);
 
 	try {
 		const stack = await LocalWorkspace.createOrSelectStack({
@@ -22,6 +27,11 @@ export const run = async () => {
 
 		// uncomment at your peril
 		//await stack.destroy({ onOutput: log });
+
+		if (preview) {
+			await stack.preview({ onOutput: log });
+			return;
+		}
 
 		const upRes = await stack.up({ onOutput: log, showSecrets: false });
 

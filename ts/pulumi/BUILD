@@ -37,3 +37,12 @@ native_test(
     out = "whatever",
     data = [":configs"],
 )
+
+nodejs_binary(
+    name = "preview",
+    data = [
+        ":pulumi",
+        ":pulumi_files",
+    ],
+    entry_point = "preview.js",
+)
