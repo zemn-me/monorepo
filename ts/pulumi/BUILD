@@ -37,16 +37,3 @@ native_test(
     out = "whatever",
     data = [":configs"],
 )
-
-nodejs_binary(
-    name = "run",
-    data = [
-        ":pulumi",
-        ":pulumi_files",
-        "//bin/linux/pulumi",
-    ],
-    entry_point = "run.js",
-    env = {
-        "PULUMI_BIN": "$(rootpath //bin/linux/pulumi)",
-    },
-)

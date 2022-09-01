@@ -122,8 +122,8 @@ The following operations were requested:
 			"One operation was able to continue despite the other's failure."
 		);
 
-		expect(failureContent).toContain('fake: failure');
-		expect(failureContent).toContain('fake: failure 2');
+		expect(failureContent).toContain('Error: failure');
+		expect(failureContent).toContain('Error: failure 2');
 		expect(failureContent).not.toContain('undefined');
 	});
 });

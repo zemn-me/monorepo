@@ -20,10 +20,10 @@ ts_project(
         "//ts/do-sync:npm_pkg.publish",
         "//ts/knowitwhenyouseeit:knowitwhenyouseeit.tgz",
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
-        "//ts/pulumi:run.sh",
     ],
     deps = [
         "//ts",
+        "//ts/pulumi",
         "@npm//@actions/github",
         "@npm//@bazel/runfiles",
         "@npm//@types/jest",
