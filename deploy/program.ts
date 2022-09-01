@@ -10,6 +10,8 @@ import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
 import { Github as mockGithub, context as mockContext } from './mocks';
 import { isDefined } from 'monorepo/ts/guard';
+import pulumiUp from 'monorepo/ts/pulumi/run';
+import { UpResult } from '@pulumi/pulumi/automation';
 
 export class Errors<T extends Error[]> extends Error {
 	// must be nullable because we return
@@ -20,9 +22,9 @@ export class Errors<T extends Error[]> extends Error {
 		if (errors.length == 0) throw new Error('No errors provided');
 		if (errors.length == 1) return errors[0];
 		super(
-			`Several errors occurred:\n${errors
-				.map(e => e.toString())
-				.join('\n\n')}`
+			`Several errors occurred:\n${nestedListToMarkdown(
+				errors.map(e => e.toString())
+			)}`
 		);
 
 		this.errors = errors;
@@ -32,6 +34,7 @@ export class Errors<T extends Error[]> extends Error {
 interface Context {
 	publish(filename: string, content: Buffer): Promise<void>;
 	exec(filename: string): Promise<void>;
+	dryRun: boolean;
 }
 
 interface ArtifactInfo {
@@ -59,29 +62,37 @@ const artifact =
 
 interface PulumiDeployInfo {
 	kind: 'pulumi_deploy';
-	buildTag: string;
-	publish: (c: Context) => Promise<void>;
+	publish: (c: Context) => Promise<UpResult | void>;
 }
 
-const pulumiDeploy =
-	(buildTag: string) => async (): Promise<PulumiDeployInfo> => {
-		return {
-			buildTag,
-			kind: 'pulumi_deploy',
-			async publish({ exec }: Context) {
-				if (
-					!process.env['AWS_ACCESS_KEY_ID'] ||
-					!process.env['AWS_SECRET_ACCESS_KEY'] ||
-					!process.env['PULUMI_ACCESS_TOKEN']
-				)
-					throw new Error('Missing environment variables.');
+const pulumiDeploy = () => async (): Promise<PulumiDeployInfo> => {
+	return {
+		kind: 'pulumi_deploy',
+		async publish({ dryRun }: Context): Promise<UpResult> {
+			if (!dryRun) return pulumiUp();
 
-				return void (await exec(
-					runfiles.resolveWorkspaceRelative(buildTag)
-				));
-			},
-		};
+			return {
+				stdout: 'some fake pulumi stdout',
+				stderr: 'some fake pulumi stderr',
+				summary: {
+					kind: 'update',
+					startTime: new Date(),
+					message: 'this is fake!',
+					environment: {},
+					config: {},
+					endTime: new Date(),
+					result: 'succeeded',
+					version: 90,
+				},
+				outputs: {
+					abc: { value: 'something', secret: false },
+					abc2: { value: 'something', secret: true },
+				},
+			};
+		},
 	};
+};
+
 interface NpmPackageInfo {
 	kind: 'npm_publication';
 	package_name: string;
@@ -112,20 +123,27 @@ const npmPackage =
 		};
 	};
 
+type OperationData = UpResult | void;
+
 type Operation = ArtifactInfo | NpmPackageInfo | PulumiDeployInfo;
 
 class OperationFailure<O extends Operation = Operation> extends Error {
 	constructor(public readonly operation: O, public readonly error: Error) {
 		super(
-			`${operation.kind} ${operation.buildTag}: ${error.message}`,
-			error.cause
+			`${operation.kind}${
+				'buildTag' in operation ? ' ' + operation.buildTag : ''
+			}: ${error.message}`,
+			{
+				cause: error.cause,
+			}
 		);
 	}
 }
 
-type OperationOrFailure<O extends Operation = Operation> =
-	| O
-	| OperationFailure<O>;
+type OperationOrFailure<O extends Operation = Operation> = {
+	info: O | OperationFailure<O>;
+	data?: OperationData;
+};
 
 interface ReleaseProps {
 	dryRun: boolean;
@@ -141,7 +159,7 @@ interface ReleaseProps {
 type NestedStringList = (string | NestedStringList)[];
 
 function indent(s: string): string {
-	return s.replace('\n', '\n    ');
+	return s.replace(/\n/g, '\n    ');
 }
 
 function nestedListToMarkdown(nestedList: NestedStringList): string {
@@ -158,8 +176,9 @@ export const releaseNotes =
 	(logFailures?: (s: string) => void) => (notes: OperationOrFailure[]) => {
 		const operationAndFailure: [
 			operation: Operation,
+			data: OperationData,
 			error: Error | undefined
-		][] = notes.map(item => {
+		][] = notes.map(({ info: item, data }) => {
 			let op: Operation;
 			let error: Error | undefined;
 
@@ -168,13 +187,13 @@ export const releaseNotes =
 				error = item.error;
 			} else op = item;
 
-			return [op, error];
+			return [op, data, error];
 		});
 
 		const paragraphs: NestedStringList = [];
 
 		const artifactInfo = operationAndFailure
-			.map(([op, error]) =>
+			.map(([op /* data */, , error]) =>
 				op.kind === 'artifact' && error === undefined
 					? `${op.buildTag} ⟶ ${op.filename}`
 					: undefined
@@ -189,11 +208,11 @@ export const releaseNotes =
 			);
 
 		const npmInfo = operationAndFailure
-			.map(([op, error]) =>
-				op.kind === 'npm_publication' && error === undefined
+			.map(([op /* data */, , error]) => {
+				return op.kind === 'npm_publication' && error === undefined
 					? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
-					: undefined
-			)
+					: undefined;
+			})
 			.filter(isDefined);
 
 		if (npmInfo.length > 0)
@@ -203,47 +222,37 @@ export const releaseNotes =
 				)}`
 			);
 
-		const operationInfo = operationAndFailure.map(([op, error]) => {
-			const notes: NestedStringList = [];
+		const operationInfo = operationAndFailure.map(
+			([op /* data */, , error]) => {
+				const notes: NestedStringList = [];
 
-			switch (op.kind) {
-				case 'artifact':
-					notes.push(
-						`${error !== undefined ? '❌' : '✔️'} Upload ${
-							op.buildTag
-						} as release artifact ${op.filename}`
-					);
-					break;
-				case 'npm_publication':
-					notes.push(
-						`${error !== undefined ? '❌' : '✔️'} Upload ${
-							op.buildTag
-						} to NPM`
-					);
-					break;
-				case 'pulumi_deploy':
-					notes.push(
-						`${error !== undefined ? '❌' : '✔️'} Deploy ${
-							op.buildTag
-						} via pulumi`
-					);
-					break;
-				default:
-					throw new Error('invalid kind');
+				switch (op.kind) {
+					case 'artifact':
+						notes.push(
+							`${error !== undefined ? '❌' : '✔️'} Upload ${
+								op.buildTag
+							} as release artifact ${op.filename}`
+						);
+						break;
+					case 'npm_publication':
+						notes.push(
+							`${error !== undefined ? '❌' : '✔️'} Upload ${
+								op.buildTag
+							} to NPM`
+						);
+						break;
+					case 'pulumi_deploy':
+						notes.push(
+							`${error !== undefined ? '❌' : '✔️'} Deploy pulumi`
+						);
+						break;
+					default:
+						throw new Error('invalid kind');
+				}
+
+				return notes;
 			}
-
-			return notes;
-		});
-
-		if (logFailures) {
-			const errors = notes.filter(
-				// this operation should probably not be here because it looks ugly. but i am feeling ugly today
-				<T, Q extends Operation>(
-					v: T | OperationFailure<Q>
-				): v is OperationFailure<Q> => v instanceof OperationFailure
-			);
-			if (errors.length > 0) logFailures(`${new Errors(errors)}`);
-		}
+		);
 
 		if (operationInfo.length > 0)
 			paragraphs.push(
@@ -252,7 +261,34 @@ export const releaseNotes =
 				)}`
 			);
 
-		return paragraphs.join('\n\n');
+		const pulumi_deploys = operationAndFailure.filter(
+			([op]) => op.kind == 'pulumi_deploy'
+		);
+
+		if (pulumi_deploys.length) {
+			for (const [, data] of pulumi_deploys) {
+				const d = data as UpResult;
+				const items = [d.stdout, d.stderr].filter(isDefined);
+				paragraphs.push(
+					`A pulumi ${
+						d.summary.kind
+					} completed:\n${nestedListToMarkdown(items)}`
+				);
+			}
+		}
+
+		const out = paragraphs.join('\n\n');
+		if (logFailures) {
+			const errors = operationAndFailure
+				.map(([, , err]) => err)
+				.filter(isDefined);
+			if (errors.length > 0) {
+				logFailures(`${new Errors(errors)}`);
+				logFailures(out);
+			}
+		}
+
+		return out;
 	};
 
 export const release =
@@ -285,21 +321,31 @@ export const release =
 			  };
 
 		const results = await Promise.all(
-			logInfo.map(async info => {
-				try {
-					await info.publish({ publish, exec });
-					return info; // success
-				} catch (e) {
-					return new OperationFailure(
-						info,
-						e instanceof Error
-							? e
-							: new Error(
-									`${e} was thrown but it is not an Error`
-							  )
-					);
+			logInfo.map(
+				async <T extends Operation>(
+					info: T
+				): Promise<OperationOrFailure<T>> => {
+					try {
+						const data = await info.publish({
+							publish,
+							exec,
+							dryRun,
+						});
+						return { info, data }; // success
+					} catch (e) {
+						return {
+							info: new OperationFailure(
+								info,
+								e instanceof Error
+									? e
+									: new Error(
+											`${e} was thrown but it is not an Error`
+									  )
+							),
+						};
+					}
 				}
-			})
+			)
 		);
 
 		const notes = releaseNotes(results);
@@ -378,7 +424,7 @@ export const program = ({
 					'knowitwhenyouseeit',
 					'//ts/knowitwhenyouseeit/npm_pkg.publish.sh'
 				),
-				pulumiDeploy('//ts/pulumi/run.sh')
+				pulumiDeploy()
 			);
 
 			const notes = await releaser({
