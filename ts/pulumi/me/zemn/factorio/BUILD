@@ -9,6 +9,7 @@ ts_project(
         "startupScript.sh",
     ],
     deps = [
+        "//ts/pulumi/me/zemn/zone",
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",
     ],
