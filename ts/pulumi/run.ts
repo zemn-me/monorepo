@@ -1,19 +1,35 @@
-import spawn from 'cross-spawn';
+import { LocalWorkspace } from '@pulumi/pulumi/automation';
 
-const pulumi_bin = process.env['PULUMI_BIN'];
+export const run = async () => {
+	const logs: any[][] = [];
 
-if (pulumi_bin == undefined) throw new Error('Missing env PULUMI_BIN');
+	function log(...a: any[]) {
+		logs.push(a);
+	}
 
-const main = async () => {
-	let args = process.argv.slice(2);
+	try {
+		const stack = await LocalWorkspace.createOrSelectStack({
+			stackName: 'prod',
+			projectName: 'monorepo-2', // be very, very careful in changing this
+			async program() {
+				require('monorepo/ts/pulumi/index');
+			},
+		});
 
-	if (args.length == 0) args = ['up', '--yes', '--non-interactive'];
+		await stack.workspace.installPlugin('aws', 'v5.13.0'); // can I get rid of this? it seems stupid
+		await stack.setConfig('aws:region', { value: 'us-east-1' });
+		await stack.refresh({ onOutput: log, showSecrets: false });
 
-	spawn.sync(
-		pulumi_bin,
-		['--emoji', '--cwd', 'ts/pulumi', '--logtostderr', ...args],
-		{ stdio: 'inherit' }
-	);
+		// uncomment at your peril
+		//await stack.destroy({ onOutput: log });
+
+		const upRes = await stack.up({ onOutput: log, showSecrets: false });
+
+		return upRes;
+	} catch (e) {
+		logs.forEach(a => console.info(...a));
+		throw e;
+	}
 };
 
-main().catch(e => console.error(e));
+export default run;
