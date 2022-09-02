@@ -1251,14 +1251,15 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.38.0":
-  version "3.38.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.38.0.tgz#8f1a1512670f5426be58ee97997723c0a921737d"
-  integrity sha512-gT6Si48/vCciYelDSG/mpc0jTFprWHhLMANX/IwM3pjDjBNSBgtj4+zDiWIGqSY35fkO2P0E7qBr4hDVE2tEdA==
+"@pulumi/pulumi@^3.0.0", "@pulumi/pulumi@^3.39.0":
+  version "3.39.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.39.0.tgz#6e675ebb4d291653b679c0e1a61d13cd15cf5d33"
+  integrity sha512-Et/SpF32Xmw8FbhYRgigLVl5JXAvMB47auDcggggObRF0Gs7HkqLDIR4Ae/cWozbaN/EujyvCFk0LPkdQainQQ==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
     "@pulumi/query" "^0.3.0"
+    execa "^5.1.0"
     google-protobuf "^3.5.0"
     ini "^2.0.0"
     js-yaml "^3.14.0"
@@ -3396,7 +3397,7 @@ events@1.1.1:
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
   integrity sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==
 
-execa@^5.0.0:
+execa@^5.0.0, execa@^5.1.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/execa/-/execa-5.1.1.tgz#f80ad9cbf4298f7bd1d4c9555c21e93741c411dd"
   integrity sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==
