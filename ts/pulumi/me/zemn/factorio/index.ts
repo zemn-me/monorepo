@@ -59,7 +59,7 @@ export const defaultSaveFile = new pulumi.asset.FileAsset(
 );
 
 export const factorioData = new aws.ebs.Volume('factorio-server-data', {
-	availabilityZone: 'us-east-1',
+	availabilityZone: 'us-east-1a',
 	size: 2,
 });
 
