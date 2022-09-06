@@ -88,7 +88,6 @@ export const Element: React.FC = () => {
 			</p>
 			<svg viewBox={`${-growX} ${-growY} ${maxX} ${maxY}`}>
 				<path
-					transform={`rotate(-45 ${maxX / 2} ${maxY / 2})`}
 					d={SVGPath([
 						// top left small sq
 						square([0, 0], 1),
@@ -126,6 +125,7 @@ export const Element: React.FC = () => {
 						rect([0, 0 + gap + smallSq], smallSq, bigSq),
 					])}
 					fill="black"
+					transform={`rotate(-45 ${maxX / 2} ${maxY / 2})`}
 				/>
 			</svg>
 			<p>Here's the one I hand edited after generation:</p>

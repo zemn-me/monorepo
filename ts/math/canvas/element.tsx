@@ -41,8 +41,8 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 
 	return (
 		<svg
-			viewBox={`${minX} ${minY} ${width} ${height}`}
 			style={{ width: '50vw', height: '50vh' }}
+			viewBox={`${minX} ${minY} ${width} ${height}`}
 		>
 			{[...lines].map(line => {
 				const d = line

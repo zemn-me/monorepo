@@ -18,8 +18,8 @@ export const SliderCheckbox: React.FC = ({ ...props }) => {
 	const uniqueId = React.useMemo(() => getId(), []);
 	const id = `slider-checkbox-${uniqueId}`;
 	return (
-		<label htmlFor={id} className={style.label}>
-			<input id={id} className={style.input} type="checkbox" {...props} />
+		<label className={style.label} htmlFor={id}>
+			<input className={style.input} id={id} type="checkbox" {...props} />
 
 			<div className={style.slider}>
 				<div className={style.sliderDot} />

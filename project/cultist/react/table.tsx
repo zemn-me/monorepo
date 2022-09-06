@@ -89,11 +89,11 @@ export const Slot: React.FC<SlotProps> = ({
 	);
 
 	return (
-		<foreignObject x={X} y={Y} width={width} height={height}>
+		<foreignObject height={height} width={width} x={X} y={Y}>
 			<div
-				style={{ width: '100%', height: '100%' }}
 				onDragOver={onDragOver}
 				onDrop={onDrop}
+				style={{ width: '100%', height: '100%' }}
 			/>
 		</foreignObject>
 	);
@@ -151,12 +151,12 @@ export const Board: React.FC<BoardProps> = ({
 		for (let y = minY; y < maxY; y += snapGridHeight) {
 			droppableSlots.push(
 				<Slot
-					onDrop={onDrop}
 					X={x}
 					Y={y}
-					key={`${x}-${y}`}
-					width={snapGridWidth}
 					height={snapGridHeight}
+					key={`${x}-${y}`}
+					onDrop={onDrop}
+					width={snapGridWidth}
 				/>
 			);
 		}
@@ -167,11 +167,11 @@ export const Board: React.FC<BoardProps> = ({
 			{droppableSlots}
 			{elementStacks?.map((e, i) => (
 				<Card
+					element={e}
 					elementKey={i}
 					h={cardHeight}
-					w={cardWidth}
 					key={i}
-					element={e}
+					w={cardWidth}
 				/>
 			)) ?? null}
 		</svg>
@@ -237,10 +237,10 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 		}, []);
 	return (
 		<foreignObject
-			x={e.lastTablePosX ?? 0}
-			y={e.lastTablePosY ?? 0}
 			height={h}
 			width={w}
+			x={e.lastTablePosX ?? 0}
+			y={e.lastTablePosY ?? 0}
 		>
 			{/* needed to inject xmlns, not in types */}
 			<div

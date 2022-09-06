@@ -4,6 +4,6 @@ import React from 'react';
 
 export default (
 	<>
-		<Route path="logo" element={<Logo />} />
+		<Route element={<Logo />} path="logo" />
 	</>
 );

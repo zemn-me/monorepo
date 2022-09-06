@@ -21,7 +21,7 @@
 import React, { RefAttributes } from 'react';
 import style from 'linear2/features/elements/base.module.sass';
 import * as fancy from 'linear2/features/elements/fancy';
-import { classes, PropsOf, prettyAnchor } from '../util';
+import { PropsOf, classes, prettyAnchor } from '../util';
 import { Provide as ProvideSectionOutline } from './outlineState';
 import { extractText } from '../extractText';
 import * as elements from 'linear2/features/elements';
@@ -179,7 +179,7 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 						.join('')}
 				>
 					<div className={fancy.style.sectionLink}>
-						<a href={`#${id}`}></a>
+						<a href={`#${id}`} />
 					</div>
 					{React.cloneElement(
 						o,
@@ -209,8 +209,8 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 						][sectionDepth]
 					),
 				}}
-				ref={ref}
 				aria-labelledby={id}
+				ref={ref}
 			>
 				{o}
 				<span

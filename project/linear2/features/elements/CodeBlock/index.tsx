@@ -129,12 +129,12 @@ export const CodeBlock: React.FC<CodeProps> = ({
 }) => {
 	let o = (
 		<SyntaxHighlighter
-			style={{}}
 			className={style.code}
 			customStyle={{ backgroundColor: undefined }}
-			showLineNumbers={lineNumbers}
-			renderer={renderer}
 			language={language?.toLowerCase() ?? ''}
+			renderer={renderer}
+			showLineNumbers={lineNumbers}
+			style={{}}
 		>
 			{children.trim()}
 		</SyntaxHighlighter>

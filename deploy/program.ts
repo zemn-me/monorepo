@@ -5,10 +5,10 @@
 import fs from 'fs/promises';
 import child_process from 'child_process';
 import { promisify } from 'util';
-import { context as githubCtx, getOctokit } from '@actions/github';
+import { getOctokit, context as githubCtx } from '@actions/github';
 import { Command } from 'commander';
 import { runfiles } from '@bazel/runfiles';
-import { Github as mockGithub, context as mockContext } from './mocks';
+import { context as mockContext, Github as mockGithub } from './mocks';
 import { isDefined } from 'monorepo/ts/guard';
 import pulumiUp from 'monorepo/ts/pulumi/run';
 import { UpResult } from '@pulumi/pulumi/automation';

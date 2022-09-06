@@ -1,6 +1,6 @@
 import {
-	TransitionGroup,
 	Transition as ReactTransition,
+	TransitionGroup,
 } from 'react-transition-group';
 
 import { ReactChild } from 'react';

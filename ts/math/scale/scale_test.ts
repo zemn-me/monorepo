@@ -1,4 +1,4 @@
-import { Scale, Scalable } from '.';
+import { Scalable, Scale } from '.';
 
 interface SquareProps {
 	h: number;

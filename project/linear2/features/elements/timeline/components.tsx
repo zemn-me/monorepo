@@ -83,8 +83,8 @@ export const Timeline: (props: TimelineProps) => React.ReactElement = ({
 			<Year
 				key={year.year}
 				{...year}
-				lang={lang}
 				indicateCurrent={indicateCurrent}
+				lang={lang}
 			/>
 		))}{' '}
 	</div>
@@ -110,14 +110,14 @@ export const Year: (props: YearProps) => React.ReactElement = ({
 		<StretchIndicatorArea>
 			<article>
 				<YearDisplay
-					year={new Date(new Date(0).setFullYear(year))}
 					n={months.length}
+					year={new Date(new Date(0).setFullYear(year))}
 				/>
 
 				{months.map(month => (
 					<Month
-						lang={lang}
 						key={month.month}
+						lang={lang}
 						{...month}
 						indicateCurrent={indicateCurrent}
 					/>
@@ -240,7 +240,7 @@ export const MonthIndicator: React.FC<{
 	d.setMonth(month);
 
 	return (
-		<e.date date={d} className={style.MonthIndicator}>
+		<e.date className={style.MonthIndicator} date={d}>
 			<e.dateText month="short" />.
 		</e.date>
 	);

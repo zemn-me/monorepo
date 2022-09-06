@@ -6,7 +6,7 @@ import React from 'react';
 import style from './NavBar.module.css';
 import classes from 'classnames';
 import { Link } from 'react-router-dom';
-import { useSpring, animated } from 'react-spring';
+import { animated, useSpring } from 'react-spring';
 import { isNotNull } from 'monorepo/ts/guard';
 
 export const NavBarIcons: React.FC<
@@ -38,19 +38,19 @@ export const Hamburger: React.FC<
 	return (
 		<>
 			<div
-				ref={iconRef}
 				onClick={onToggleIconClick}
-				onMouseOver={onMouseOver}
 				onMouseLeave={onMouseLeave}
+				onMouseOver={onMouseOver}
+				ref={iconRef}
 			>
 				<FontAwesomeIcon icon={faBars} />
 			</div>
 			<animated.div
-				ref={menuRef as any}
-				onMouseOver={onMouseOver}
-				onMouseLeave={onMouseLeave}
-				style={springProps}
 				className={classes(className, style.hamburger)}
+				onMouseLeave={onMouseLeave}
+				onMouseOver={onMouseOver}
+				ref={menuRef as any}
+				style={springProps}
 				{...props}
 			/>
 		</>
@@ -64,7 +64,7 @@ export const NavBar: React.FC<
 	>
 > = ({ className, children, ...props }) => (
 	<div className={classes(className, style.navBar)} {...props}>
-		<Link to="/" className={style.logo}>
+		<Link className={style.logo} to="/">
 			<ZemnmezLogo className={style.logoInner}>
 				<title>Home</title>
 			</ZemnmezLogo>

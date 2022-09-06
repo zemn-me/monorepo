@@ -153,7 +153,7 @@ export const Ticks: <N extends Num>(
 							}}
 						/>
 
-						<svg.Text textAnchor="middle" pos={textMiddlePos}>
+						<svg.Text pos={textMiddlePos} textAnchor="middle">
 							{text}
 						</svg.Text>
 					</React.Fragment>

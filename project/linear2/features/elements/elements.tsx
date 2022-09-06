@@ -101,7 +101,7 @@ const ChemStr: React.FC<{ children: string }> = ({ children }) => (
 			),
 		].map(([c], i) =>
 			!/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/.test(c) ? (
-				<span key={i} className={style.chem}>
+				<span className={style.chem} key={i}>
 					{c}
 				</span>
 			) : (

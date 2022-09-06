@@ -2,7 +2,7 @@ import * as cultist from 'cultist';
 import { quoteIfNotIdentifier } from './util';
 import * as fs from 'fs';
 import * as dot from 'solve/dot';
-import { select, must, perhaps } from 'ts/util';
+import { must, perhaps, select } from 'ts/util';
 import { map } from 'ts/iter';
 import { walk } from 'ts/tree';
 

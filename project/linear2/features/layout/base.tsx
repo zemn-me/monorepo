@@ -8,27 +8,27 @@ export const Base: React.FC = ({ children }) => (
 	<RecoilRoot>
 		<Head>
 			<meta
-				httpEquiv="Content-Security-Policy"
 				content={[
 					"default-src 'self'",
 					"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
 					"img-src 'self' data:",
 					"font-src 'self' https://fonts.gstatic.com",
 				].join('; ')}
+				httpEquiv="Content-Security-Policy"
 			/>
 
 			<meta
+				content="same-origin"
 				httpEquiv="Cross-Origin-Resource-Policy"
-				content="same-origin"
 			/>
 
 			<meta
-				httpEquiv="Cross-Origin-Opener-Policy"
 				content="same-origin"
+				httpEquiv="Cross-Origin-Opener-Policy"
 			/>
-			<meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+			<meta content="nosniff" httpEquiv="X-Content-Type-Options" />
 
-			<meta name="referrer" content="no-referrer" />
+			<meta content="no-referrer" name="referrer" />
 		</Head>
 
 		<main className={`${elements.style.root}`}>{children}</main>

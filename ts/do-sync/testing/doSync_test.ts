@@ -1,4 +1,4 @@
-import { doSync, JSONObject } from 'do-sync';
+import { JSONObject, doSync } from 'do-sync';
 import sharpT from 'sharp';
 
 const pixel =
