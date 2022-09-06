@@ -45,53 +45,48 @@ interface ArtifactInfo {
 }
 
 const artifact =
-	(filename: string, buildTag: string) => async (): Promise<ArtifactInfo> => {
-		return {
-			kind: 'artifact',
-			filename,
-			buildTag,
-			publish: async ({ publish }: Context) =>
-				await publish(
-					filename,
-					await fs.readFile(
-						runfiles.resolveWorkspaceRelative(buildTag)
-					)
-				),
-		};
-	};
+	(filename: string, buildTag: string) =>
+	async (): Promise<ArtifactInfo> => ({
+		kind: 'artifact',
+		filename,
+		buildTag,
+		publish: async ({ publish }: Context) =>
+			await publish(
+				filename,
+				await fs.readFile(runfiles.resolveWorkspaceRelative(buildTag))
+			),
+	});
 
 interface PulumiDeployInfo {
 	kind: 'pulumi_deploy';
 	publish: (c: Context) => Promise<UpResult | void>;
 }
 
-const pulumiDeploy = () => async (): Promise<PulumiDeployInfo> => {
-	return {
-		kind: 'pulumi_deploy',
-		async publish({ dryRun }: Context): Promise<UpResult> {
-			if (!dryRun) return pulumiUp();
+const pulumiDeploy = () => async (): Promise<PulumiDeployInfo> => ({
+	kind: 'pulumi_deploy',
+	async publish({ dryRun }: Context): Promise<UpResult> {
+		if (!dryRun) return pulumiUp();
 
-			return {
-				stdout: 'some fake pulumi stdout',
-				stderr: 'some fake pulumi stderr',
-				summary: {
-					kind: 'update',
-					startTime: new Date(),
-					message: 'this is fake!',
-					environment: {},
-					config: {},
-					endTime: new Date(),
-					result: 'succeeded',
-					version: 90,
-				},
-				outputs: {
-					abc: { value: 'something', secret: false },
-					abc2: { value: 'something', secret: true },
-				},
-			};
-		},
-	};
-};
+		return {
+			stdout: 'some fake pulumi stdout',
+			stderr: 'some fake pulumi stderr',
+			summary: {
+				kind: 'update',
+				startTime: new Date(),
+				message: 'this is fake!',
+				environment: {},
+				config: {},
+				endTime: new Date(),
+				result: 'succeeded',
+				version: 90,
+			},
+			outputs: {
+				abc: { value: 'something', secret: false },
+				abc2: { value: 'something', secret: true },
+			},
+		};
+	},
+});
 
 interface NpmPackageInfo {
 	kind: 'npm_publication';
@@ -208,11 +203,11 @@ export const releaseNotes =
 			);
 
 		const npmInfo = operationAndFailure
-			.map(([op /* data */, , error]) => {
-				return op.kind === 'npm_publication' && error === undefined
+			.map(([op /* data */, , error]) =>
+				op.kind === 'npm_publication' && error === undefined
 					? `${op.buildTag} ⟶ [${op.package_name}](https://npmjs.com/package/${op.package_name})`
-					: undefined;
-			})
+					: undefined
+			)
 			.filter(isDefined);
 
 		if (npmInfo.length > 0)
@@ -320,11 +315,8 @@ export const release =
 
 		const exec: Context['exec'] = dryRun
 			? async (filename: string) => await fs.access(filename)
-			: async (filename: string) => {
-					return void (await promisify(child_process.execFile)(
-						filename
-					));
-			  };
+			: async (filename: string) =>
+					void (await promisify(child_process.execFile)(filename));
 
 		const results = await Promise.all(
 			logInfo.map(

@@ -206,9 +206,8 @@ export const transpose: <I extends number, J extends number>(
 export const identity: <I extends number, J extends number>(
 	I: I,
 	J: J
-) => Matrix<I, J, 1 | 0> = <I extends number, J extends number>(i: I, j: J) => {
-	return map(New<I, J>(i, j), (_, [i, j]) => +!(i - j) as 1 | 0);
-};
+) => Matrix<I, J, 1 | 0> = <I extends number, J extends number>(i: I, j: J) =>
+	map(New<I, J>(i, j), (_, [i, j]) => +!(i - j) as 1 | 0);
 
 // https://www.mathsisfun.com/algebra/matrix-determinant.html
 export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
