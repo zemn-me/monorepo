@@ -269,7 +269,9 @@ export const releaseNotes =
 			for (const [, data] of pulumi_deploys) {
 				const d = data;
 				if (!d) {
-					paragraphs.push(`A Pulumi deploy may have happened. It didn't give us any information, though.`);
+					paragraphs.push(
+						`A Pulumi deploy may have happened. It didn't give us any information, though.`
+					);
 					continue;
 				}
 				const items = [d.stdout, d.stderr].filter(isDefined);
