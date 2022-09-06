@@ -16,8 +16,8 @@ export interface LinkProps {
 export const Link: React.FC<LinkProps> = ({
 	href,
 	children: child,
-}: LinkProps) => {
-	return React.cloneElement(
+}: LinkProps) =>
+	React.cloneElement(
 		child,
 		{
 			...child.props,
@@ -25,6 +25,5 @@ export const Link: React.FC<LinkProps> = ({
 		}
 		//...child.props?.children,
 	);
-};
 
 export default Link;

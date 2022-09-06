@@ -13,10 +13,9 @@ export interface Vector<I extends number = number, T = number>
 export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
-) => Vector<I, U> = (vec, c) => {
+) => Vector<I, U> = (vec, c) =>
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-	return vec.map(c as any) as any;
-};
+	vec.map(c as any) as any;
 
 /**
  * Map an Iterable, returning a new Iterable.
