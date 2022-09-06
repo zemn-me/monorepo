@@ -8,20 +8,18 @@ import DarkModeSwitcher from 'monorepo/project/zemn.me/elements/DarkModeSwitcher
 // side-effects only.
 import './root.module.css';
 
-export const Root: React.FC = () => {
-	return (
-		<>
-			<BrowserRouter>
-				<NavBar>
-					<Hamburger>
-						<DarkModeSwitcher />
-					</Hamburger>
-				</NavBar>
-				<TitlePage />
-				<Routes>{Pages}</Routes>
-			</BrowserRouter>
-		</>
-	);
-};
+export const Root: React.FC = () => (
+	<>
+		<BrowserRouter>
+			<NavBar>
+				<Hamburger>
+					<DarkModeSwitcher />
+				</Hamburger>
+			</NavBar>
+			<TitlePage />
+			<Routes>{Pages}</Routes>
+		</BrowserRouter>
+	</>
+);
 
 export default Root;

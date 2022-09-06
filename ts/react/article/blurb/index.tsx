@@ -14,15 +14,13 @@ export interface ArticleProps {
 	children?: React.ReactElement<unknown, typeof Article | typeof Blurb>[];
 }
 
-export const Article: React.FC<ArticleProps> = ({ short, children }) => {
-	return (
-		<RenderModeContext.Provider
-			value={short ? RenderMode.Short : RenderMode.Long}
-		>
-			{children}
-		</RenderModeContext.Provider>
-	);
-};
+export const Article: React.FC<ArticleProps> = ({ short, children }) => (
+	<RenderModeContext.Provider
+		value={short ? RenderMode.Short : RenderMode.Long}
+	>
+		{children}
+	</RenderModeContext.Provider>
+);
 
 export const Blurb: React.FC<{ children?: React.ReactNode }> = ({
 	children,
