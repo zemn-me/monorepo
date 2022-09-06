@@ -1,6 +1,6 @@
 import * as aws from '@pulumi/aws';
-import fs from 'fs/promises';
 import * as pulumi from '@pulumi/pulumi';
+import fs from 'fs/promises';
 import { zone } from 'monorepo/ts/pulumi/me/zemn/zone';
 
 //import * as command from '@pulumi/command';

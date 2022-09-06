@@ -2,11 +2,11 @@
  * @fileoverview like save state, but more sane.
  */
 
+import Immutable from 'immutable';
 import * as Save from 'monorepo/project/cultist/save';
 import * as State from 'monorepo/project/cultist/state/state';
 import * as Iter from 'monorepo/ts/iter';
 import { maybe } from 'monorepo/ts/util';
-import Immutable from 'immutable';
 
 function intoMap<I, O>(
 	v: { [key: string]: I },

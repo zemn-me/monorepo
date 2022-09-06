@@ -1,11 +1,12 @@
 import { Bio, Event as BioEvent } from '@zemn.me/bio';
-import { useRouter } from 'next/router';
+import classes from 'classnames';
 import * as e from 'linear2/features/elements';
 import * as model from 'linear2/model';
+import { useRouter } from 'next/router';
 import React from 'react';
-import style from './style.module.css';
-import classes from 'classnames';
+
 import baseStyle from '../base.module.sass';
+import style from './style.module.css';
 
 const setFallback: <T1, T2>(k: T1, v: () => T2, m: Map<T1, T2>) => T2 = (
 	k,
@@ -83,8 +84,8 @@ export const Timeline: (props: TimelineProps) => React.ReactElement = ({
 			<Year
 				key={year.year}
 				{...year}
-				lang={lang}
 				indicateCurrent={indicateCurrent}
+				lang={lang}
 			/>
 		))}{' '}
 	</div>
@@ -110,14 +111,14 @@ export const Year: (props: YearProps) => React.ReactElement = ({
 		<StretchIndicatorArea>
 			<article>
 				<YearDisplay
-					year={new Date(new Date(0).setFullYear(year))}
 					n={months.length}
+					year={new Date(new Date(0).setFullYear(year))}
 				/>
 
 				{months.map(month => (
 					<Month
-						lang={lang}
 						key={month.month}
+						lang={lang}
 						{...month}
 						indicateCurrent={indicateCurrent}
 					/>
@@ -240,7 +241,7 @@ export const MonthIndicator: React.FC<{
 	d.setMonth(month);
 
 	return (
-		<e.date date={d} className={style.MonthIndicator}>
+		<e.date className={style.MonthIndicator} date={d}>
 			<e.dateText month="short" />.
 		</e.date>
 	);

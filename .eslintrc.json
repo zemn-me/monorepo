@@ -2,7 +2,7 @@
 	"$schema": "https://json.schemastore.org/eslintrc",
 	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"plugins": ["prettier", "@typescript-eslint"],
+	"plugins": ["prettier", "@typescript-eslint", "simple-import-sort"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:prettier/recommended",
@@ -13,6 +13,9 @@
 	"rules": {
 		"react/prop-types": 0,
 		"react/display-name": 0,
+		"react/prefer-read-only-props": [ "error" ],
+		"react/self-closing-comp": [ "error" ],
+		"react/jsx-sort-props": [ "error" ],
 		"react/no-unescaped-entities": 0,
 		"@typescript-eslint/no-empty-interface": [
 			"error",
@@ -33,6 +36,8 @@
 		"comma-spacing": ["error"],
 		"computed-property-spacing": ["error"],
 		"key-spacing": ["error"],
+		"simple-import-sort/imports": [ "error" ],
+		"simple-import-sort/exports": [ "error" ],
 		"keyword-spacing": "error",
 		"object-curly-newline": ["error"],
 		"@typescript-eslint/no-unused-vars": "error",
@@ -43,5 +48,10 @@
 		"ecmaVersion": 2020,
 		"project": ["tsconfig.json" ]
 	},
-	"ignorePatterns": [ "tsconfig.json" ]
+	"ignorePatterns": [ "tsconfig.json" ],
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	}
 }

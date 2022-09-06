@@ -18,13 +18,14 @@
  * they're presented. You can either do 'traditional' h1, h2 etc; or you can just do `<Section/>` and `<Header/>`.
  */
 
-import React, { RefAttributes } from 'react';
+import * as elements from 'linear2/features/elements';
 import style from 'linear2/features/elements/base.module.sass';
 import * as fancy from 'linear2/features/elements/fancy';
-import { classes, PropsOf, prettyAnchor } from '../util';
-import { Provide as ProvideSectionOutline } from './outlineState';
+import React, { RefAttributes } from 'react';
+
 import { extractText } from '../extractText';
-import * as elements from 'linear2/features/elements';
+import { classes, prettyAnchor, PropsOf } from '../util';
+import { Provide as ProvideSectionOutline } from './outlineState';
 
 export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -179,7 +180,7 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 						.join('')}
 				>
 					<div className={fancy.style.sectionLink}>
-						<a href={`#${id}`}></a>
+						<a href={`#${id}`} />
 					</div>
 					{React.cloneElement(
 						o,
@@ -209,8 +210,8 @@ export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(
 						][sectionDepth]
 					),
 				}}
-				ref={ref}
 				aria-labelledby={id}
+				ref={ref}
 			>
 				{o}
 				<span
