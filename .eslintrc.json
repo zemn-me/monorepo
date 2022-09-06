@@ -40,7 +40,8 @@
 		"sort-imports": [ "error" ],
 		"keyword-spacing": "error",
 		"object-curly-newline": ["error"],
-		"@typescript-eslint/no-unused-vars": "error"
+		"@typescript-eslint/no-unused-vars": "error",
+		"arrow-body-style": ["error", "as-needed"]
 	},
 	"parserOptions": {
 		"sourceType": "module",

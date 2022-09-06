@@ -36,27 +36,25 @@ const getTransitionStyles = {
 const Transition: React.FC<TransitionKind<ReactChild>> = ({
 	children,
 	location,
-}) => {
-	return (
-		<TransitionGroup style={{ position: 'relative' }}>
-			<ReactTransition
-				key={location}
-				timeout={{
-					enter: TIMEOUT,
-					exit: TIMEOUT,
-				}}
-			>
-				{status => (
-					<div
-						style={{
-							...getTransitionStyles[status],
-						}}
-					>
-						{children}
-					</div>
-				)}
-			</ReactTransition>
-		</TransitionGroup>
-	);
-};
+}) => (
+	<TransitionGroup style={{ position: 'relative' }}>
+		<ReactTransition
+			key={location}
+			timeout={{
+				enter: TIMEOUT,
+				exit: TIMEOUT,
+			}}
+		>
+			{status => (
+				<div
+					style={{
+						...getTransitionStyles[status],
+					}}
+				>
+					{children}
+				</div>
+			)}
+		</ReactTransition>
+	</TransitionGroup>
+);
 export default Transition;

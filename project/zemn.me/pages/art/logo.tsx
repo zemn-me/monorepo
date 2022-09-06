@@ -41,15 +41,14 @@ const toSegments = (polys: [number, number][][]) => {
 	return segments;
 };
 
-const segmentsToPath = (segments: (string | number)[]) => {
-	return segments
+const segmentsToPath = (segments: (string | number)[]) =>
+	segments
 		.map(s => s.toString().replace(/0./, '.'))
 		.reduce((p, c) =>
 			// if acc ends with a number, and
 			// current begins with a number, add a comma
 			/\d$/g.test(p) && /^\d/.test(c) ? p + ',' + c : p + c
 		);
-};
 
 const SVGPath = (polys: [number, number][][]) =>
 	segmentsToPath(toSegments(polys));

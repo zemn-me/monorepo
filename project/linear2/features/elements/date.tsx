@@ -16,20 +16,15 @@ export const Date: (props: DateProps) => React.ReactElement = ({
 	date,
 	children,
 	...props
-}) => {
-	return (
-		<dateContext.Provider value={date}>
-			<Style>
-				<time
-					{...(date ? { dateTime: htmlDate(date) } : {})}
-					{...props}
-				>
-					{children}
-				</time>
-			</Style>
-		</dateContext.Provider>
-	);
-};
+}) => (
+	<dateContext.Provider value={date}>
+		<Style>
+			<time {...(date ? { dateTime: htmlDate(date) } : {})} {...props}>
+				{children}
+			</time>
+		</Style>
+	</dateContext.Provider>
+);
 
 export type TextProps = Intl.DateTimeFormatOptions;
 
