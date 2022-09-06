@@ -4,10 +4,11 @@
  * takes on the basic elements and are therefore fancier.
  */
 
-import * as counters from './counters';
-import { PropsOf, classes } from 'linear2/features/elements/util';
-import style from './fancy.module.sass';
+import { classes, PropsOf } from 'linear2/features/elements/util';
 import React from 'react';
+
+import * as counters from './counters';
+import style from './fancy.module.sass';
 
 export { counters };
 export * from '../headingsAndSections/fancy';

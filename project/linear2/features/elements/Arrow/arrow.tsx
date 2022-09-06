@@ -1,5 +1,6 @@
-import React from 'react';
 import classes from 'classnames';
+import React from 'react';
+
 import style from '../base.module.sass';
 
 export const Arrow = React.forwardRef<

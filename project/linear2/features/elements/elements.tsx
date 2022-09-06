@@ -1,20 +1,19 @@
 /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-has-content */
 
 import React from 'react';
+
+import style from './base.module.sass';
 import * as fancy from './fancy';
 import { Style, text } from './style';
-import style from './base.module.sass';
-
-export { default as Void } from './void';
 
 export { Date as date } from './date';
 export { Text as dateText } from './date';
-
 export * from './text';
+export { default as Void } from './void';
 
 export { fancy };
-export * from './headingsAndSections';
 export * from './extraElements';
+export * from './headingsAndSections';
 import * as elementUtil from 'linear2/features/elements/util';
 export { default as style } from './base.module.sass';
 

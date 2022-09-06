@@ -1,5 +1,5 @@
-import crossSpawn from 'cross-spawn';
 import { SpawnSyncOptions } from 'child_process';
+import crossSpawn from 'cross-spawn';
 
 /**
  * JSONPrimitive represents a primitive which can be safely transmitted over JSON.

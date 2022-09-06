@@ -1,9 +1,8 @@
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
-
+import { arn as acmCertificateArn } from 'monorepo/ts/pulumi/im/shadwell/cert';
 import { bucket, index } from 'monorepo/ts/pulumi/im/shadwell/thomas/public';
 import { zone } from 'monorepo/ts/pulumi/im/shadwell/zone';
-import { arn as acmCertificateArn } from 'monorepo/ts/pulumi/im/shadwell/cert';
 
 const s3OriginId = 'myS3Origin';
 export const distribution: aws.cloudfront.Distribution =

@@ -2,16 +2,17 @@
  * @fileoverview Performs a release.
  */
 
-import fs from 'fs/promises';
-import child_process from 'child_process';
-import { promisify } from 'util';
-import { getOctokit, context as githubCtx } from '@actions/github';
-import { Command } from 'commander';
+import { context as githubCtx, getOctokit } from '@actions/github';
 import { runfiles } from '@bazel/runfiles';
-import { context as mockContext, Github as mockGithub } from './mocks';
+import { UpResult } from '@pulumi/pulumi/automation';
+import child_process from 'child_process';
+import { Command } from 'commander';
+import fs from 'fs/promises';
 import { isDefined } from 'monorepo/ts/guard';
 import pulumiUp from 'monorepo/ts/pulumi/run';
-import { UpResult } from '@pulumi/pulumi/automation';
+import { promisify } from 'util';
+
+import { context as mockContext, Github as mockGithub } from './mocks';
 
 export class Errors<T extends Error[]> extends Error {
 	// must be nullable because we return

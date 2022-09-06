@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { unmountComponentAtNode } from 'react-dom';
-import { Link } from '.';
-import { act } from 'react-dom/test-utils';
 import * as Url from 'monorepo/ts/url';
-import ReactDOM from 'react-dom';
 import React from 'react';
+import { unmountComponentAtNode } from 'react-dom';
+import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
+
+import { Link } from '.';
 
 let container: HTMLDivElement | null = null;
 

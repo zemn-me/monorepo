@@ -1,7 +1,8 @@
 import React from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 //import { PrismAsyncLight as SyntaxHighlighter  } from 'react-syntax-highlighter';
 import type * as highlight from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+
 import style from './syntaxHighlighting.module.sass';
 
 declare module 'react-syntax-highlighter' {

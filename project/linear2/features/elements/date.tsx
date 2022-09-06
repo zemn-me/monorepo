@@ -1,8 +1,8 @@
-import React from 'react';
 import * as elements from 'linear2/features/elements';
-import * as model from 'linear2/model';
-import * as elementUtil from 'linear2/features/elements/util';
 import { Style } from 'linear2/features/elements/style';
+import * as elementUtil from 'linear2/features/elements/util';
+import * as model from 'linear2/model';
+import React from 'react';
 
 export const locale = React.createContext<readonly string[]>(['en-gb']);
 

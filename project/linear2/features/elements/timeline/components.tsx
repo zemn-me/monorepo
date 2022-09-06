@@ -1,11 +1,12 @@
 import { Bio, Event as BioEvent } from '@zemn.me/bio';
-import { useRouter } from 'next/router';
+import classes from 'classnames';
 import * as e from 'linear2/features/elements';
 import * as model from 'linear2/model';
+import { useRouter } from 'next/router';
 import React from 'react';
-import style from './style.module.css';
-import classes from 'classnames';
+
 import baseStyle from '../base.module.sass';
+import style from './style.module.css';
 
 const setFallback: <T1, T2>(k: T1, v: () => T2, m: Map<T1, T2>) => T2 = (
 	k,

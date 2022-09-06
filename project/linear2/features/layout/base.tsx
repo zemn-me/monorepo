@@ -1,7 +1,6 @@
-import React from 'react';
-import Head from 'next/head';
 import * as elements from 'linear2/features/elements';
-
+import Head from 'next/head';
+import React from 'react';
 import { RecoilRoot } from 'recoil';
 
 export const Base: React.FC = ({ children }) => (
