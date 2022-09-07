@@ -3,8 +3,9 @@ import {
 	bucket,
 	index,
 } from 'monorepo/ts/pulumi/dog/pleaseintroducemetoyour/public';
-import { zone } from './zone';
+
 import * as cert from './cert';
+import { zone } from './zone';
 
 const s3OriginId = 'myS3Origin';
 export const distribution: aws.cloudfront.Distribution =

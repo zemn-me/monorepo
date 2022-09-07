@@ -1,9 +1,8 @@
-import {
-	TransitionGroup,
-	Transition as ReactTransition,
-} from 'react-transition-group';
-
 import { ReactChild } from 'react';
+import {
+	Transition as ReactTransition,
+	TransitionGroup,
+} from 'react-transition-group';
 
 type TransitionKind<RC> = {
 	children: RC;
@@ -36,27 +35,25 @@ const getTransitionStyles = {
 const Transition: React.FC<TransitionKind<ReactChild>> = ({
 	children,
 	location,
-}) => {
-	return (
-		<TransitionGroup style={{ position: 'relative' }}>
-			<ReactTransition
-				key={location}
-				timeout={{
-					enter: TIMEOUT,
-					exit: TIMEOUT,
-				}}
-			>
-				{status => (
-					<div
-						style={{
-							...getTransitionStyles[status],
-						}}
-					>
-						{children}
-					</div>
-				)}
-			</ReactTransition>
-		</TransitionGroup>
-	);
-};
+}) => (
+	<TransitionGroup style={{ position: 'relative' }}>
+		<ReactTransition
+			key={location}
+			timeout={{
+				enter: TIMEOUT,
+				exit: TIMEOUT,
+			}}
+		>
+			{status => (
+				<div
+					style={{
+						...getTransitionStyles[status],
+					}}
+				>
+					{children}
+				</div>
+			)}
+		</ReactTransition>
+	</TransitionGroup>
+);
 export default Transition;

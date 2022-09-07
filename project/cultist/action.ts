@@ -1,5 +1,5 @@
-import * as state from 'monorepo/project/cultist/state';
 import immutable from 'immutable';
+import * as state from 'monorepo/project/cultist/state';
 import * as cultist from 'monorepo/project/cultist/types';
 import * as iter from 'monorepo/ts/iter';
 

@@ -1,5 +1,5 @@
-import * as aws from '@pulumi/aws';
 import { runfiles } from '@bazel/runfiles';
+import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import path from 'path';

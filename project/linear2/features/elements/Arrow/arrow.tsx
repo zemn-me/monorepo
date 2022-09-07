@@ -1,5 +1,6 @@
-import React from 'react';
 import classes from 'classnames';
+import React from 'react';
+
 import style from '../base.module.sass';
 
 export const Arrow = React.forwardRef<
@@ -7,16 +8,16 @@ export const Arrow = React.forwardRef<
 	JSX.IntrinsicElements['div']
 >(({ className, ...props }, ref) => (
 	<div className={classes(style.Arrow, className)} {...{ ...props, ref }}>
-		<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+		<svg preserveAspectRatio="none" viewBox="0 0 100 100">
 			<defs>
 				<marker
 					id="arrow"
-					markerWidth="10"
 					markerHeight="10"
+					markerUnits="strokewidth"
+					markerWidth="10"
+					orient="auto"
 					refX="0"
 					refY="3"
-					orient="auto"
-					markerUnits="strokewidth"
 				>
 					<path d="m0,0 l0,6 l9,3 z" style={{ fill: 'var(--fgc)' }} />
 				</marker>

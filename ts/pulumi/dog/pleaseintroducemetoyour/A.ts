@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
-import { zone } from './zone';
+
 import { distribution } from './cloudfront';
+import { zone } from './zone';
 
 export const A: aws.route53.Record = new aws.route53.Record(
 	'A_pleaseintroducemetoyour.dog',

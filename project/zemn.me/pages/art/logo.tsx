@@ -1,5 +1,5 @@
-import React from 'react';
 import ZemnmezLogo from 'monorepo/project/zemn.me/elements/ZemnmezLogo';
+import React from 'react';
 
 const rect = (
 	[x, y]: [number, number],
@@ -41,15 +41,14 @@ const toSegments = (polys: [number, number][][]) => {
 	return segments;
 };
 
-const segmentsToPath = (segments: (string | number)[]) => {
-	return segments
+const segmentsToPath = (segments: (string | number)[]) =>
+	segments
 		.map(s => s.toString().replace(/0./, '.'))
 		.reduce((p, c) =>
 			// if acc ends with a number, and
 			// current begins with a number, add a comma
 			/\d$/g.test(p) && /^\d/.test(c) ? p + ',' + c : p + c
 		);
-};
 
 const SVGPath = (polys: [number, number][][]) =>
 	segmentsToPath(toSegments(polys));
@@ -88,7 +87,6 @@ export const Element: React.FC = () => {
 			</p>
 			<svg viewBox={`${-growX} ${-growY} ${maxX} ${maxY}`}>
 				<path
-					transform={`rotate(-45 ${maxX / 2} ${maxY / 2})`}
 					d={SVGPath([
 						// top left small sq
 						square([0, 0], 1),
@@ -126,6 +124,7 @@ export const Element: React.FC = () => {
 						rect([0, 0 + gap + smallSq], smallSq, bigSq),
 					])}
 					fill="black"
+					transform={`rotate(-45 ${maxX / 2} ${maxY / 2})`}
 				/>
 			</svg>
 			<p>Here's the one I hand edited after generation:</p>

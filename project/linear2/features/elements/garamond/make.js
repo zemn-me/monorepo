@@ -29,9 +29,9 @@ const formatName = n =>
 (async function main() {
 	process.chdir(__dirname);
 	const files = await new Promise((ok, fail) =>
-		glob(`./EBGaramond12/fonts/*/*`, {}, (err, files) => {
-			return err ? fail(err) : ok(files);
-		})
+		glob(`./EBGaramond12/fonts/*/*`, {}, (err, files) =>
+			err ? fail(err) : ok(files)
+		)
 	);
 
 	// collate different font formats
@@ -42,8 +42,8 @@ const formatName = n =>
 	}
 
 	const defs = [...m]
-		.map(([name, fonts]) => {
-			return `
+		.map(
+			([name, fonts]) => `
 @font-face {
     font-family: '${fontName}';
     font-style: ${name.endsWith('Italic') ? 'italic' : 'normal'};
@@ -60,8 +60,8 @@ const formatName = n =>
 			)
 			.join(',\n')};
 }
-        `;
-		})
+        `
+		)
 		.join('\n');
 
 	await fs.writeFile('index.css', defs);

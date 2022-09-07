@@ -17,15 +17,13 @@ export interface Article {
 export const Article: React.FC<{
 	short?: boolean;
 	children?: React.ReactNode;
-}> = ({ short, children }) => {
-	return (
-		<RenderModeContext.Provider
-			value={short ? RenderMode.Short : RenderMode.Long}
-		>
-			{children}
-		</RenderModeContext.Provider>
-	);
-};
+}> = ({ short, children }) => (
+	<RenderModeContext.Provider
+		value={short ? RenderMode.Short : RenderMode.Long}
+	>
+		{children}
+	</RenderModeContext.Provider>
+);
 
 export const Title: React.FC<{
 	children?: React.ReactNode;

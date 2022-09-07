@@ -1,9 +1,10 @@
-import * as matrix from 'monorepo/ts/math/matrix';
-import React from 'react';
 import * as d3Scale from 'd3-scale';
-import * as svg from './index';
-import * as vec from 'monorepo/ts/math/vec';
 import { isDefined as defined, must } from 'monorepo/ts/guard';
+import * as matrix from 'monorepo/ts/math/matrix';
+import * as vec from 'monorepo/ts/math/vec';
+import React from 'react';
+
+import * as svg from './index';
 
 export type Num = number | { valueOf(): number };
 
@@ -153,7 +154,7 @@ export const Ticks: <N extends Num>(
 							}}
 						/>
 
-						<svg.Text textAnchor="middle" pos={textMiddlePos}>
+						<svg.Text pos={textMiddlePos} textAnchor="middle">
 							{text}
 						</svg.Text>
 					</React.Fragment>

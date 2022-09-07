@@ -1,5 +1,6 @@
-import { atom, useRecoilState } from 'recoil';
 import React from 'react';
+import { atom, useRecoilState } from 'recoil';
+
 import { HeadingElement } from './headingsAndSections';
 
 export const key = 'elements/headingsAndSections/outline';

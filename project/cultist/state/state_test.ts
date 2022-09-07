@@ -1,6 +1,6 @@
 import * as Save from 'monorepo/project/cultist/save';
-import * as serialize from 'monorepo/project/cultist/state/serialize';
 import * as deserialize from 'monorepo/project/cultist/state/deserialize';
+import * as serialize from 'monorepo/project/cultist/state/serialize';
 import { maybe } from 'monorepo/ts/util';
 
 test('maybe', () => {
