@@ -1,7 +1,8 @@
 import React from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 //import { PrismAsyncLight as SyntaxHighlighter  } from 'react-syntax-highlighter';
 import type * as highlight from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+
 import style from './syntaxHighlighting.module.sass';
 
 declare module 'react-syntax-highlighter' {
@@ -129,12 +130,12 @@ export const CodeBlock: React.FC<CodeProps> = ({
 }) => {
 	let o = (
 		<SyntaxHighlighter
-			style={{}}
 			className={style.code}
 			customStyle={{ backgroundColor: undefined }}
-			showLineNumbers={lineNumbers}
-			renderer={renderer}
 			language={language?.toLowerCase() ?? ''}
+			renderer={renderer}
+			showLineNumbers={lineNumbers}
+			style={{}}
 		>
 			{children.trim()}
 		</SyntaxHighlighter>

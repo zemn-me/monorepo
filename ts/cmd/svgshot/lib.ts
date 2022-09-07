@@ -1,10 +1,10 @@
-import puppeteer from 'puppeteer';
-import * as tmp from 'tmp';
 import { exec } from 'child_process';
-import * as svgo from 'svgo';
-import { writeFile, readFile } from 'fs/promises';
-import { promisify } from 'util';
 import { Command } from 'commander';
+import { readFile, writeFile } from 'fs/promises';
+import puppeteer from 'puppeteer';
+import * as svgo from 'svgo';
+import * as tmp from 'tmp';
+import { promisify } from 'util';
 
 const program = new Command()
 	.name('svgshot')

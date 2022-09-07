@@ -1,5 +1,6 @@
-import React from 'react';
 import * as Homog from 'monorepo/ts/math/homog';
+import React from 'react';
+
 import * as Cnv from '.';
 
 export interface CanvasProps {
@@ -41,8 +42,8 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 
 	return (
 		<svg
-			viewBox={`${minX} ${minY} ${width} ${height}`}
 			style={{ width: '50vw', height: '50vh' }}
+			viewBox={`${minX} ${minY} ${width} ${height}`}
 		>
 			{[...lines].map(line => {
 				const d = line

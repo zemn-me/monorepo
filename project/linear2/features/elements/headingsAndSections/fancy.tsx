@@ -1,6 +1,7 @@
-import * as base from './headingsAndSections';
-import React from 'react';
 import { classes } from 'linear2/features/elements/util';
+import React from 'react';
+
+import * as base from './headingsAndSections';
 
 export interface HeadingProps<
 	depth extends 1 | 2 | 3 | 4 | 5 = 1 | 2 | 3 | 4 | 5

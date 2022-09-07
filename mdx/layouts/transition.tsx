@@ -1,9 +1,8 @@
-import {
-	TransitionGroup,
-	Transition as ReactTransition,
-} from 'react-transition-group';
-
 import { ReactChild } from 'react';
+import {
+	Transition as ReactTransition,
+	TransitionGroup,
+} from 'react-transition-group';
 
 type TransitionKind<RC> = {
 	children: RC;

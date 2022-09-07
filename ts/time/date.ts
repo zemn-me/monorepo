@@ -3,7 +3,7 @@
  *  type checked date syntax for typescript.
  */
 
-import { N, L, O } from 'ts-toolbelt';
+import { L, N, O } from 'ts-toolbelt';
 
 export enum Month {
 	jan,

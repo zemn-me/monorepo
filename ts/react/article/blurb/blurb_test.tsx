@@ -1,8 +1,9 @@
-import { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
-import { Article, Blurb, Main } from '.';
-import { act } from 'react-dom/test-utils';
+import { unmountComponentAtNode } from 'react-dom';
 import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
+
+import { Article, Blurb, Main } from '.';
 
 let container: HTMLDivElement | null = null;
 

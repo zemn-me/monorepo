@@ -1,7 +1,8 @@
-import React from 'react';
-import style from './TitlePage.module.css';
 import classes from 'classnames';
 import TimeEye from 'monorepo/project/zemn.me/elements/TimeEye';
+import React from 'react';
+
+import style from './TitlePage.module.css';
 
 export const Self: React.FC<
 	React.DetailedHTMLProps<

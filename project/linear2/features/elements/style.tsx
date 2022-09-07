@@ -1,6 +1,7 @@
-import React from 'react';
-import style from './base.module.sass';
 import classNames from 'classnames';
+import React from 'react';
+
+import style from './base.module.sass';
 
 export const AmbientClass = React.createContext<boolean>(false);
 
