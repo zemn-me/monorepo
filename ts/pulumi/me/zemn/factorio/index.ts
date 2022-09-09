@@ -8,7 +8,7 @@ import { zone } from 'monorepo/ts/pulumi/me/zemn/zone';
 export const ami = aws.ec2.getAmi({
 	mostRecent: true,
 	// magic number from https://ubuntu.com/server/docs/cloud-images/amazon-ec2
-	owners: ['679593333241'],
+	owners: ['099720109477'],
 	filters: [
 		{
 			name: 'architecture',
@@ -19,8 +19,8 @@ export const ami = aws.ec2.getAmi({
 			values: ['*LTS*'],
 		},
 		{
-			name: 'description',
-			values: ['*Ubuntu*'],
+			name: 'name',
+			values: ['ubuntu/images/ubuntu-*-*-amd64-server-*'],
 		},
 		{
 			name: 'virtualization-type',
