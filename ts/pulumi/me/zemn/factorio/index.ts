@@ -19,8 +19,8 @@ export const ami = aws.ec2.getAmi({
 			values: ['*LTS*'],
 		},
 		{
-			name: "name",
-			values: [ "ubuntu/images/ubuntu-*-*-amd64-server-*" ],
+			name: 'name',
+			values: ['ubuntu/images/ubuntu-*-*-amd64-server-*'],
 		},
 		{
 			name: 'virtualization-type',
