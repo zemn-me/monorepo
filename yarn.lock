@@ -615,20 +615,20 @@
   resolved "https://registry.yarnpkg.com/@bazel/runfiles/-/runfiles-5.5.4.tgz#20ce1395062c947dfa083a2ec79c5460e8b013ab"
   integrity sha512-LMw+i0VtI//+7lNNR0cKs3UgQlGprDJmh8QUu+2io7++MWt96Mqww08QOEvnuyuGpTEEgfU4EE14n4jSSZl2Aw==
 
-"@bazel/typescript@^5.5.3":
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-5.5.3.tgz#3505f92c0bb9598e7ef090dec75f52a1eceab26b"
-  integrity sha512-DGlzz2RmzRrNWhoL1ynr62qsTk5cUzjIJj2MreeQVoYHQZfB3FCCu/TGtDS5xyEbfWhsn7Zwo5qpOxvdYiPWng==
+"@bazel/typescript@^5.5.4":
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-5.5.4.tgz#0e1ed2b930a98e88e471235fb90acd82121e0520"
+  integrity sha512-UyLcon6kiUMcr1PE/Sdyk9D9QEE5WaHPWI6cmaC8kQH0D64fWUWl9BiVwuox9N3DklfaNn9hlK/7SJ6p00gPQw==
   dependencies:
-    "@bazel/worker" "5.5.3"
+    "@bazel/worker" "5.5.4"
     semver "5.6.0"
     source-map-support "0.5.9"
     tsutils "3.21.0"
 
-"@bazel/worker@5.5.3":
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/@bazel/worker/-/worker-5.5.3.tgz#3c23135a4e9d6c8ef05f1de85bc3c0c30df2ad38"
-  integrity sha512-Wm0istBBko5w2ddDwCK4rvDQrWfeFGaWdG3iTNkYAHKfQrkgYeMucMoAbFB6LZ87KZKuBEN9KSDq+fi8MXtGlw==
+"@bazel/worker@5.5.4":
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/@bazel/worker/-/worker-5.5.4.tgz#2949361a44ac20eb6571525bdbf2ecd099cc1394"
+  integrity sha512-d6jOWaR44c1WEDpgGdB0qJyaacwm7HF5yrM+15iirqxnSi2Uuk9FBGJ+O3TniSKZsRzgaA/4if2tkRikFnO9Ng==
   dependencies:
     google-protobuf "^3.6.1"
 
@@ -1603,10 +1603,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^29.0.0":
-  version "29.0.0"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.0.0.tgz#bc66835bf6b09d6a47e22c21d7f5b82692e60e72"
-  integrity sha512-X6Zjz3WO4cT39Gkl0lZ2baFRaEMqJl5NC1OjElkwtNzAlbkr2K/WJXkBkH5VP0zx4Hgsd2TZYdOEfvp2Dxia+Q==
+"@types/jest@^29.0.1":
+  version "29.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.0.1.tgz#b5610ae1a1c5f6e0f6beb132941722da7c493c28"
+  integrity sha512-CAZrjLRZs4xEdIrfrdV74xK1Vo/BKQZwUcjJv3gp6gMeV3BsVxMnXTcgtYOKyphT4DPPo7jxVEVhuwJTQn3oPQ==
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -1668,10 +1668,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@18.0.18":
-  version "18.0.18"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.18.tgz#9f16f33d57bc5d9dca848d12c3572110ff9429ac"
-  integrity sha512-6hI08umYs6NaiHFEEGioXnxJ+oEhY3eRz8VCUaudZmGdtvPviCJB8mgaMxaDWAdPSYd4eFavrPk2QIolwbLYrg==
+"@types/react@*", "@types/react@18.0.19":
+  version "18.0.19"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.19.tgz#269a5f35b9a73c69dfb0c7189017013ab02acbaa"
+  integrity sha512-BDc3Q+4Q3zsn7k9xZrKfjWyJsSlEDMs38gD1qp2eDazLCdcPqAT+vq1ND+Z8AGel/UiwzNUk8ptpywgNQcJ1MQ==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3482,9 +3482,9 @@ fast-diff@^1.1.2:
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
 fast-glob@^3.2.11, fast-glob@^3.2.5, fast-glob@^3.2.9:
-  version "3.2.11"
-  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.11.tgz#a1172ad95ceb8a16e20caa5c5e56480e5129c1d9"
-  integrity sha512-xrO3+1bxSo3ZVHAnqzyuewYT6aMFHRAd4Kcs92MAonjwQZLsK9d0SF1IyQ3k5PoirxTW0Oe/RqFgMQ6TcNE5Ew==
+  version "3.2.12"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.12.tgz#7f39ec99c2e6ab030337142da9e0c18f37afae80"
+  integrity sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==
   dependencies:
     "@nodelib/fs.stat" "^2.0.2"
     "@nodelib/fs.walk" "^1.2.3"
@@ -4246,7 +4246,7 @@ is-docker@^2.0.0:
 is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
-  integrity sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=
+  integrity sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==
 
 is-fullwidth-code-point@^3.0.0:
   version "3.0.0"
