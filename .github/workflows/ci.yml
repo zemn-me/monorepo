@@ -19,7 +19,7 @@ on:   # yamllint disable-line rule:truthy
 jobs:
   automerge:
     name: Auto-merge
-    if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+    if: ( github.actor == 'dependabot[bot]' || github.actor == 'renovate[bot]' ) && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
