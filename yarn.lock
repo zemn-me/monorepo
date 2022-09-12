@@ -1215,10 +1215,10 @@
     "@parcel/css-linux-x64-musl" "1.12.0"
     "@parcel/css-win32-x64-msvc" "1.12.0"
 
-"@pulumi/aws@4.38.1":
-  version "4.38.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-4.38.1.tgz#323de64ed7d563faa20975b5a6fa0c7e6584005c"
-  integrity sha512-WeOprXm/c9n8QmP5qLNEVk1FZTCa7KGgUj/P1drlazJr1LIvrq+KSWcUxayLeFJvpLCbYd19aI2jdyQqZJAjEw==
+"@pulumi/aws@5.13.0":
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.13.0.tgz#922bcac74d9931cec5ec4147ac03f70301a8269d"
+  integrity sha512-aXQik3FmTc/EH7kmzEsAAC/oPw98XwHhf2Sj8lZqKnXZ9NDr6V+sGD4N8c/E5y3lYoMLl1A+c+dCJss1PidkPw==
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
     aws-sdk "^2.0.0"
