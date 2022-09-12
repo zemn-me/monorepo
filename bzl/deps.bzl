@@ -19,8 +19,8 @@ def fetch_dependencies():
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "0fad45a9bda7dc1990c47b002fd64f55041ea751fafc00cd34efb96107675778",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.0/rules_nodejs-5.5.0.tar.gz"],
+        sha256 = "493bb318d98bb7492cb30e534ad33df2fc5539b43d4dcc4e294a5cc60a126902",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.4/rules_nodejs-5.5.4.tar.gz"],
     )
 
     http_archive(
