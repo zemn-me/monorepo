@@ -11,10 +11,10 @@ def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
         ],
-        sha256 = "f7be3474d42aae265405a592bb7da8e171919d74c16f082a5457840f06054728",
+        sha256 = "74d544d96f4a5bb630d465ca8bbcfe231e3594e5aae57e1edbf17a6eb3ca2506",
     )
 
     http_archive(
@@ -58,10 +58,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "3bd7828aa5af4b13b99c191e8b1e884ebfa9ad371b0ce264605d347f135d2568",
-        strip_prefix = "protobuf-3.19.4",
+        sha256 = "d7d204a59fd0d2d2387bd362c2155289d5060f32122c4d1d922041b61191d522",
+        strip_prefix = "protobuf-3.21.5",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v3.19.4.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v3.21.5.tar.gz",
         ],
     )
 
@@ -85,10 +85,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
+        sha256 = "501deb3d5695ab658e82f6f6f549ba681ea3ca2a5fb7911154b5aa45596183fa",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.26.0/bazel-gazelle-v0.26.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.26.0/bazel-gazelle-v0.26.0.tar.gz",
         ],
     )
 
