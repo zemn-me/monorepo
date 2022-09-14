@@ -129,13 +129,11 @@ exports_files(glob(["**/*"]))
         """,
     )
 
-    http_archive(
+    git_repository(
         name = "cultistsimulator",
-        strip_prefix = "cultistsimulator-visible-2022.3.n.1",
-        urls = [
-            "https://github.com/weatherfactory/cultistsimulator-visible/archive/refs/tags/v2022.3.n.1.tar.gz",
-        ],
-        sha256 = "c640c454db8bd2ef4b53cf00edffa959d6c6147718bafce9a43f48db286f2ea2",
+        branch = "public",
+        remote = "git@github.com:weatherfactory/cultistsimulator-visible.git",
+        sha256 = "5da0773102a979330be75e8a56e34bae372d9a30",
         build_file_content = """
 filegroup(
     name = "core",
