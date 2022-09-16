@@ -9,6 +9,7 @@ export default {
 	moduleNameMapper: {
 		'examples_jest/(.*)': '<rootDir>/$1',
 	},
-	moduleDirectories: ['node_modules', '.'],
+	// https://github.com/facebook/jest/issues/12889#issuecomment-1193908448
+	moduleDirectories: ['node_modules', '<rootDir>'],
 	rootDir: '../..',
 };
