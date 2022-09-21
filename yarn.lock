@@ -1340,13 +1340,13 @@
     read-package-tree "^5.2.1"
     resolve "^1.7.1"
 
-"@pulumi/awsx@0.40.0":
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-0.40.0.tgz#14da49be027f9208dfc266e5a1d0c65aae74e0e2"
-  integrity sha512-4xMmVOHT/PZQsqPAPWe1cYguUCdk0ZUJ1JN7wfYUoGy1I3LR7gxPD14IK5I79o20PmZI65BRlAwNuntByVy6xw==
+"@pulumi/awsx@0.40.1":
+  version "0.40.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-0.40.1.tgz#999920bdf360ed6d9f6f809ef0c15fcbf6f4cf33"
+  integrity sha512-ws5pIxq4tghP6keXBHaSMhuEY0mcxD7kO31rJDjgRL10bqnRGTtblXssULEYMM0dQWTfxXhSeXGwWKSTkalLIw==
   dependencies:
     "@pulumi/docker" "^3.0.0"
-    "@types/aws-lambda" "^8.10.23"
+    "@types/aws-lambda" "8.10.93"
     mime "^2.0.0"
 
 "@pulumi/command@4.5.0":
@@ -1628,7 +1628,7 @@
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.2.tgz#ed4e0ad92306a704f9fb132a0cfcf77486dbe2bc"
   integrity sha512-HnYpAE1Y6kRyKM/XkEuiRQhTHvkzMBurTHnpFLYLBGPIylZNPs9jJcuOOYWxPLJCSEtmZT0Y8rHDokKN7rRTig==
 
-"@types/aws-lambda@^8.10.23":
+"@types/aws-lambda@8.10.93":
   version "8.10.93"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.93.tgz#3e2c80894122477040aabf29b7320556f5702a76"
   integrity sha512-Vsyi9ogDAY3REZDjYnXMRJJa62SDvxHXxJI5nGDQdZW058dDE+av/anynN2rLKbCKXDRNw3D/sQmqxVflZFi4A==
