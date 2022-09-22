@@ -2,11 +2,8 @@
  * @module react-oauth2-hook
  */
 
-/**
- *
- */
-
 import * as React from 'react';
+import * as oauth2 from './types';
 
 // react-storage-hook.d.ts
 import { useStorageState } from 'react-storage-hooks';
@@ -14,92 +11,25 @@ import { useStorageState } from 'react-storage-hooks';
 import { Map } from 'immutable';
 import * as PropTypes from 'prop-types';
 
-export interface Options {
-	/**
-	 * The OAuth authorize URL to retrieve the token from.
-	 */
-	authorizeUrl: string;
-	/**
-	 * The OAuth scopes to request.
-	 */
-	scope?: string[];
-	/**
-	 * The OAuth `redirect_uri` callback.
-	 */
-	redirectUri: string;
-	/**
-	 * The OAuth `client_id` corresponding to the requesting client.
-	 */
-	clientID: string;
-
-	/**
-	 * The unique base key used for storing any data in localStorage
-	 */
-	storageKey: string
-}
-
-/**
- * A JSON-ifiable set of information used to uniquely and securely key a request.
- */
-interface Target {
-	authorizeUrl: string,
-	scope: string[],
-	clientID: string
+export interface Options<server extends oauth2.Server = oauth2.Server> {
+	server: oauth2.Server,
+	set: (key: string, value: string) => unknown,
+	get: (key: string) => string
 }
 
 const 
 	tokenScopingKey = "oauth-token",
 	stateScopingKey = "oauth-state";
 
-
-function targetScopingKey(t: Target): string {
-	return JSON.stringify(
-		[
-			t.authorizeUrl,
-			// this wil be used for keying, sorting prevents collisions due to
-			// ordering.
-			t.scope.sort(),
-			t.clientID
-		]
-	)
-}
-
-function joinScopingKeys(...keys: string[]): string {
-	return keys.join("-");
-}
-
-function tokenKey(storageKey: string, t: Target) {
-	return joinScopingKeys(
-		storageKey,
-		tokenScopingKey,
-		targetScopingKey(t)
-	)
+function requestKey<
+	client extends oauth2.Client,
+	server extends oauth2.server
+>(r: oauth2.AuthorizeRequest<client, server>) {
 }
 
 
-function stateKey(storageKey: string, t: Target) {
-	return joinScopingKeys(
-		storageKey,
-		stateScopingKey,
-		targetScopingKey(t)
-	)
-}
 
-function stateToken(t: Target) {
-	return joinScopingKeys(
-		cryptoRandomString(),
-		targetScopingKey(t)
-	)
-
-}
-
-export function useOAuth2Token({
-	authorizeUrl,
-	scope = [],
-	redirectUri,
-	clientID,
-	storageKey
-}: Options): [token: OAuthToken | undefined, getAuthorizeUrl: () => string, setToken: (tok: string) => void] {
+export function useOAuth2Token(opts: Options): [token: OAuthToken | undefined, getAuthorizeUrl: () => string, setToken: (tok: string) => void] {
 
 	const [token, setToken] = useStorageState<string>(
 		localStorage, tokenKey(storageKey, {authorizeUrl, scope, clientID} ));
