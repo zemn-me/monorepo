@@ -41,6 +41,7 @@ def npm_pkg(
         visibility = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
+
     # file containing just deps for this package
     # this is needed to determine if a dep version has changed
     # since if this is the case, we have to publish a new
@@ -62,7 +63,7 @@ def npm_pkg(
         targets = deps,
         template = pkg_json_base,
         version = ":version",
-        depSpec = dep_spec_name
+        depSpec = dep_spec_name,
     )
 
     # I am unware of if npm uses this during publication.
@@ -74,7 +75,7 @@ def npm_pkg(
         name = lockfile_name,
         srcs = "//:yarn.lock",
         cmd_bash = "cp $< $@",
-        outs = "yarn.lock"
+        outs = "yarn.lock",
     )
 
     api_extractor(

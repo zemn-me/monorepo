@@ -50,7 +50,7 @@ def package_json(name, targets, template, version, depSpec):
                       "--package_name",
                       native.package_name(),
                       "--depOnlyOut",
-                      depSpec
+                      depSpec,
                   ],
               ),
         outs = ["package.json", depSpec],
