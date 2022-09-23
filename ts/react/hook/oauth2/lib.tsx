@@ -11,22 +11,48 @@ import { useStorageState } from 'react-storage-hooks';
 import { Map } from 'immutable';
 import * as PropTypes from 'prop-types';
 
-export interface Options<server extends oauth2.Server = oauth2.Server> {
-	server: oauth2.Server,
-	set: (key: string, value: string) => unknown,
-	get: (key: string) => string
+export interface Request extends oauth2.AuthorizeRequest {
+	response_type: 'implicit'
+	client_id: string
+}
+
+export interface Client extends oauth2.Client {
+	type?: 'public'
+}
+
+export interface Server extends oauth2.Server {
+	scopes: string[]
+	code: string
+	authorize_url: URL
 }
 
 const 
 	tokenScopingKey = "oauth-token",
 	stateScopingKey = "oauth-state";
 
-function requestKey<
-	client extends oauth2.Client,
-	server extends oauth2.server
->(r: oauth2.AuthorizeRequest<client, server>) {
+export interface Options {
+	client: Client,
+	server: Server
 }
 
+
+export function authorizeUrl(opts: Options) {
+	return function authorizeUrl(base?: Options["server"]["authorize_url"][number] = opts.server.authorize_url[0]) {
+		
+	}
+}
+
+export function oauth2(opts: Options) {
+	return {
+		useToken(): [token: string | undefined] {
+
+		},
+		authorizeUrl(base?: Options["server"]["authorize_url"][number] = opts.server.authorize_url[0]) {
+					
+		},
+		callback(){}
+	}
+}
 
 
 export function useOAuth2Token(opts: Options): [token: OAuthToken | undefined, getAuthorizeUrl: () => string, setToken: (tok: string) => void] {

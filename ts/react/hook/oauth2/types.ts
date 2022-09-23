@@ -2,22 +2,8 @@
  * @fileoverview types for how oauth2 works. more or less.
  */
 
-export type client_id = string
-
-export const client_type =
-    'confidential' | 'public';
-
-export type redirect_uri = URL;
-
-export type Scope<S extends string = string> = S;
-
-export type Scopes<S extends string = string> = Scope<S>[];
-
-export const serializeScopes =
-    (s: Scopes) => s.join(",");
-
 export interface Server {
-    scopes: Scopes
+    scopes: string[]
     code: string
     authorize_uri: URL
 }
@@ -29,36 +15,35 @@ export interface Client {
      * time, people don't really care.
      * @see https://datatracker.ietf.org/doc/html/rfc6749#section-2.1
      */
-    type?: client_type
+    type?: 'confidential' | 'public'
 
     /**
      * The unique identifier of this client.
      */
-    id: client_id
+    id: string
 
     /**
      * A set of possible recievers for oauth grants.
      */
-    redirect_uri: redirect_uri[]
+    redirect_uri: string[]
 }
+
+export const serializeScopes =
+    (s: Server["scopes"]) => s.join(",");
 
 export const grant_type = 'implicit' | 'code';
 
-export interface AuthorizeRequest<client extends Client = Client, server extends Server = Server> {
-    response_type: grant_type
-    client_id: client["id"]
-    redirect_uri: client["redirect_uri"][number]
+export interface AuthorizeRequest {
+    response_type: 'implicit' | 'code'
+    client_id: Client["id"]
+    redirect_uri: Client["redirect_uri"][number]
     state: string
-    scopes: server["scopes"]
+    scopes: Server["scopes"]
 }
 
-export interface AuthorizeResponse<
-    client extends client = Client,
-    server extends Server = Server,
-    request extends AuthorizeRequest<client, server>
-> {
-    code: server["code"]
-    state: request["state"]
+export interface AuthorizeResponse {
+    code: Server["code"]
+    state: AuthorizeRequest["state"]
 }
 
 export const error = 'invalid_request' | 'unauthorized_client' | 'access_denied' | 'unsupported_response_type' | 'invalid_scope' | 'server_error' | 'temporarily_unavailable'
