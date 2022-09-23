@@ -41,6 +41,11 @@ def npm_pkg(
         visibility = None):
     external_api_root = entry_point[:entry_point.find(".")]
     external_api_dts_root = external_api_root + ".d.ts"
+    # file containing just deps for this package
+    # this is needed to determine if a dep version has changed
+    # since if this is the case, we have to publish a new
+    # minor version
+    dep_spec_name = name + "_deps.json"
 
     semver_version(
         name = "version",
@@ -57,14 +62,19 @@ def npm_pkg(
         targets = deps,
         template = pkg_json_base,
         version = ":version",
+        depSpec = dep_spec_name
     )
 
+    # I am unware of if npm uses this during publication.
+    # It is possible it is used to prevent tampering, but
+    # it forms no part of the final package.
+    # See: https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json/
     lockfile_name = name + "_lockfile"
-    lockfile_minimize(
+    native.genrule(
         name = lockfile_name,
-        lockfile = "//:yarn.lock",
-        package_json = pkg_json_name,
-        lockfile_out = "yarn.lock",
+        srcs = "//:yarn.lock",
+        cmd_bash = "cp $< $@",
+        outs = "yarn.lock"
     )
 
     api_extractor(
@@ -102,7 +112,7 @@ def npm_pkg(
 
     exclude_all_external_rule(
         name = "version_lock_files",
-        srcs = pkg_srcs + pkg_deps + [readme],
+        srcs = pkg_srcs + [dep_spec_name, readme],
     )
 
     # Test that ensures at least a minor bump happens when

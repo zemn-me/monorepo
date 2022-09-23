@@ -74,6 +74,12 @@ const main = async () => {
 			'--out <path>',
 			'The output path of the generate package.json.'
 		)
+		// this could be technically optional, but I do always
+		// expect it to be specified in this context.
+		.requiredOption(
+			'--depOnlyOut <path>',
+			'A path to output only the dep information to (used in version diffing).'
+		)
 		.requiredOption(
 			'--package_name <path>',
 			'The package_name within the monorepo.'
@@ -115,10 +121,14 @@ const main = async () => {
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
 	const version = (await fs.readFile(opts.version)).toString();
 
-	const toMerge = {
-		version,
+	const depData = {
 		dependencies: Object.fromEntries(runDeps),
 		devDependencies: Object.fromEntries(devDeps),
+	}
+
+	const toMerge = {
+		version,
+		...depData,
 		repository: {
 			type: 'git',
 			url: 'https://github.com/Zemnmez/monorepo.git',
@@ -140,7 +150,10 @@ const main = async () => {
 		if (key in template)
 			throw new Error(`Key ${key} must not be present in ${opts.merge}.`);
 
-	await fs.writeFile(opts.out, JSON.stringify(out, null, 2));
+	await Promise.all(
+		fs.writeFile(opts.out, JSON.stringify(out, null, 2)),
+		fs.writeFile(opts.depOnlyOut, JSON.stringify(depData, null, 2))
+	)
 };
 
 main().catch(e => console.error(e));
