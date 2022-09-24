@@ -150,10 +150,10 @@ const main = async () => {
 		if (key in template)
 			throw new Error(`Key ${key} must not be present in ${opts.merge}.`);
 
-	await Promise.all(
+	await Promise.all([
 		fs.writeFile(opts.out, JSON.stringify(out, null, 2)),
 		fs.writeFile(opts.depOnlyOut, JSON.stringify(depData, null, 2))
-	);
+	]);
 };
 
 main().catch(e => console.error(e));
