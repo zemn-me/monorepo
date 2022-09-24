@@ -73,9 +73,9 @@ def npm_pkg(
     lockfile_name = name + "_lockfile"
     native.genrule(
         name = lockfile_name,
-        srcs = [ "//:yarn.lock" ],
+        srcs = ["//:yarn.lock"],
         cmd_bash = "cp $< $@",
-        outs = [ "yarn.lock" ]
+        outs = ["yarn.lock"],
     )
 
     api_extractor(

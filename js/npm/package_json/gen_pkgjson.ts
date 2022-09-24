@@ -152,7 +152,7 @@ const main = async () => {
 
 	await Promise.all([
 		fs.writeFile(opts.out, JSON.stringify(out, null, 2)),
-		fs.writeFile(opts.depOnlyOut, JSON.stringify(depData, null, 2))
+		fs.writeFile(opts.depOnlyOut, JSON.stringify(depData, null, 2)),
 	]);
 };
 
