@@ -13,5 +13,8 @@
 		"**/node_modules/*/**": true,
 		"**/.hg/store/**": true,
 		"**/bazel-out": true
-	}
+	},
+	"githubPullRequests.ignoredPullRequestBranches": [
+		"main"
+	]
 }
