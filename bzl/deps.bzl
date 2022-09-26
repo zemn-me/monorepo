@@ -25,9 +25,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "00b25b02dc4593d620fccdd6c6069a202b87ac56f8446fab1a8101da557da2c2",
-        strip_prefix = "rules_python-0.10.1",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.10.1.tar.gz",
+        sha256 = "8c8fe44ef0a9afc256d1e75ad5f448bb59b81aba149b8958f02f7b3a98f5d9b4",
+        strip_prefix = "rules_python-0.13.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.13.0.tar.gz",
     )
 
     http_archive(
