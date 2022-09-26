@@ -1472,13 +1472,6 @@
     "@types/aws-lambda" "8.10.93"
     mime "^2.0.0"
 
-"@pulumi/command@4.5.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/command/-/command-4.5.0.tgz#80fefae5d13d4557eff9f59a6aa7a7458849bc1c"
-  integrity sha512-o1omwSERsuqsAt7jhokjpF/TOrtx60oimc9u9YdwMIHG+s4WIzLokSDzlgiQMVNVkWWypFOZyWp1Dhvi32NXgQ==
-  dependencies:
-    "@pulumi/pulumi" "^3.0.0"
-
 "@pulumi/docker@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@pulumi/docker/-/docker-3.1.0.tgz#f47e2663ebe227d000db592f01514c28f9ce6cc4"
@@ -1783,11 +1776,6 @@
   integrity sha512-kVzjari1s2YVi77D3w1yuvohV2idweYXMCDzqBiVNN63TcDWrIlTVOYpqVrvbbyOE/IyzBoTKF0fdnLPEORFxA==
   dependencies:
     "@babel/types" "^7.3.0"
-
-"@types/bcryptjs@2.4.2":
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/@types/bcryptjs/-/bcryptjs-2.4.2.tgz#e3530eac9dd136bfdfb0e43df2c4c5ce1f77dfae"
-  integrity sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==
 
 "@types/cross-spawn@6.0.2":
   version "6.0.2"

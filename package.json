@@ -94,9 +94,8 @@
 		"test": "yarn run bazelisk run //bzl:affected_files",
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test",
-		"pr": "gh pr create -f; gh pr merge -md --auto"
-	},
-	"dependencies": {
+		"pr": "gh pr create -f; gh pr merge -md --auto",
+		"ts-pattern": "^4.0.5",
 		"@pulumi/command": "4.5.0",
 		"@types/bcryptjs": "2.4.2"
 	}
