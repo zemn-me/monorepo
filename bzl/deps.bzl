@@ -19,8 +19,8 @@ def fetch_dependencies():
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "493bb318d98bb7492cb30e534ad33df2fc5539b43d4dcc4e294a5cc60a126902",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.4/rules_nodejs-5.5.4.tar.gz"],
+        sha256 = "b011d6206e4e76696eda8287618a2b6375ff862317847cdbe38f8d0cd206e9ce",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.6.0/rules_nodejs-5.6.0.tar.gz"],
     )
 
     http_archive(
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "2498c4ea9ba9490ddd65107501563c28a305667437989b00c1f9e97ef539f01f",
+        sha256 = "c385c529fe1b88b522fa52101b6c0c4d922743a9d596ef4358162031f201a375",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.40.1/pulumi-v3.40.1-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.40.2/pulumi-v3.40.2-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
