@@ -1,6 +1,6 @@
 load("//:rules.bzl", "nodejs_binary")
 
-def package_json(name, targets, template, version):
+def package_json(name, targets, template, version, depSpec):
     """
     Generate a package.json for a given target.
     """
@@ -38,7 +38,7 @@ def package_json(name, targets, template, version):
               " ".join(
                   [
                       "--out",
-                      "$@",
+                      "$(execpath package.json)",
                       "--base",
                       "$(location //:package.json)",
                       "--query",
@@ -49,8 +49,10 @@ def package_json(name, targets, template, version):
                       "$(location " + version + ")",
                       "--package_name",
                       native.package_name(),
+                      "--depOnlyOut",
+                      "$(execpath " + depSpec + ")",
                   ],
               ),
-        outs = ["package.json"],
+        outs = ["package.json", depSpec],
         tools = [genrule_name],
     )

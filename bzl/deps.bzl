@@ -19,15 +19,15 @@ def fetch_dependencies():
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "493bb318d98bb7492cb30e534ad33df2fc5539b43d4dcc4e294a5cc60a126902",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.4/rules_nodejs-5.5.4.tar.gz"],
+        sha256 = "b011d6206e4e76696eda8287618a2b6375ff862317847cdbe38f8d0cd206e9ce",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.6.0/rules_nodejs-5.6.0.tar.gz"],
     )
 
     http_archive(
         name = "rules_python",
-        sha256 = "00b25b02dc4593d620fccdd6c6069a202b87ac56f8446fab1a8101da557da2c2",
-        strip_prefix = "rules_python-0.10.1",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.10.1.tar.gz",
+        sha256 = "8c8fe44ef0a9afc256d1e75ad5f448bb59b81aba149b8958f02f7b3a98f5d9b4",
+        strip_prefix = "rules_python-0.13.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.13.0.tar.gz",
     )
 
     http_archive(
@@ -103,10 +103,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "ae34c344514e08c23e90da0e2d6cb700fcd28e80c02e23e4d5715dddcb42f7b3",
-        strip_prefix = "buildtools-4.2.2",
+        sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
+        strip_prefix = "buildtools-5.1.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/4.2.2.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/5.1.0.tar.gz",
         ],
     )
 
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "2498c4ea9ba9490ddd65107501563c28a305667437989b00c1f9e97ef539f01f",
+        sha256 = "c385c529fe1b88b522fa52101b6c0c4d922743a9d596ef4358162031f201a375",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.40.1/pulumi-v3.40.1-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.40.2/pulumi-v3.40.2-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -155,7 +155,7 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "b5cc3bf8d255ea80f3b15a7d5932729a89922726c852f9c63811cee557227231",
-        strip_prefix = "rules_swc-0.13.0",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.13.0.tar.gz",
+        sha256 = "313307136cb6369f3c9d2992209c1e354b3e2c9989877ee67c688917320fba1f",
+        strip_prefix = "rules_swc-0.17.1",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.17.1.tar.gz",
     )
