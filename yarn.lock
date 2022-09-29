@@ -1655,9 +1655,9 @@
   integrity sha512-uNloNHoyHttSSdeuEkkSC+mdxJXMKlcUPOMb//qhQbIQijXg8x54VmAw3jm6GJZQ5DBtIqGBd66zEQCDCChQVA==
 
 "@sinclair/typebox@^0.24.1":
-  version "0.24.43"
-  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.43.tgz#2e2bce0e5e493aaf639beed0cd6c88cfde7dd3d7"
-  integrity sha512-1orQTvtazZmsPeBroJjysvsOQCYV2yjWlebkSY38pl5vr2tdLjEJ+LoxITlGNZaH2RE19WlAwQMkH/7C14wLfw==
+  version "0.24.44"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.44.tgz#0a0aa3bf4a155a678418527342a3ee84bd8caa5c"
+  integrity sha512-ka0W0KN5i6LfrSocduwliMMpqVgohtPFidKdMEOUjoOFCHcOOYkKsPRxfs5f15oPNHTm6ERAm0GV/+/LTKeiWg==
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
@@ -4750,17 +4750,7 @@ jest-config@^29.1.1:
     slash "^3.0.0"
     strip-json-comments "^3.1.1"
 
-jest-diff@^29.0.3:
-  version "29.0.3"
-  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.0.3.tgz#41cc02409ad1458ae1bf7684129a3da2856341ac"
-  integrity sha512-+X/AIF5G/vX9fWK+Db9bi9BQas7M9oBME7egU7psbn4jlszLFCu0dW63UgeE6cs/GANq4fLaT+8sGHQQ0eCUfg==
-  dependencies:
-    chalk "^4.0.0"
-    diff-sequences "^29.0.0"
-    jest-get-type "^29.0.0"
-    pretty-format "^29.0.3"
-
-jest-diff@^29.1.0:
+jest-diff@^29.0.3, jest-diff@^29.1.0:
   version "29.1.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.1.0.tgz#952639cd73fcf4d34173e2d98a0cd1c20c71ba88"
   integrity sha512-ZJyWG30jpVHwxLs8xxR1so4tz6lFARNztnFlxssFpQdakaW0isSx9rAKs/6aQUKQDZ/DgSpY6HjUGLO9xkNdRw==
@@ -6114,16 +6104,7 @@ pretty-format@^27.0.2:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-pretty-format@^29.0.0, pretty-format@^29.0.3:
-  version "29.0.3"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.0.3.tgz#23d5f8cabc9cbf209a77d49409d093d61166a811"
-  integrity sha512-cHudsvQr1K5vNVLbvYF/nv3Qy/F/BcEKxGuIeMiVMRHxPOO1RxXooP8g/ZrwAp7Dx+KdMZoOc7NxLHhMrP2f9Q==
-  dependencies:
-    "@jest/schemas" "^29.0.0"
-    ansi-styles "^5.0.0"
-    react-is "^18.0.0"
-
-pretty-format@^29.1.0:
+pretty-format@^29.0.0, pretty-format@^29.0.3, pretty-format@^29.1.0:
   version "29.1.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.1.0.tgz#ea3de2feed5b8d19c537a12fe478ddc8b45da6b8"
   integrity sha512-dZ21z0UjKVSiEkrPAt2nJnGfrtYMFBlNW4wTkJsIp9oB5A8SUQ8DuJ9EUgAvYyNfMeoGmKiDnpJvM489jkzdSQ==
