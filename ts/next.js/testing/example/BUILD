@@ -5,7 +5,7 @@ load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
 ts_project(
     name = "ts_sources",
     data = [ "@npm//next/bin:next" ],
-    deps = [ "@npm//@bazel/runfiles" ]
+    deps = [ "@npm//@bazel/runfiles", "@npm//@types/node" ]
 )
 
 run_binary(

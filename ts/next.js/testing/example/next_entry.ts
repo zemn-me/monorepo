@@ -1,9 +1,6 @@
 import { spawnSync } from 'child_process';
 import { runfiles } from "@bazel/runfiles";
-// This path is currently a hack an specific to this projects layout with
-// ../../../../../ being the path from the the next_bin binary runfiles root
-// to the execroot.
-// TODO: Generalize this path in the future.
+
 const entry = require.resolve(
     runfiles.resolve("npm/next/bin/next.sh")
 );
@@ -11,6 +8,7 @@ const entry = require.resolve(
 const args = process.argv.slice(2).concat(["build",
   runfiles.resolve("monorepo/ts/next.js/testing/example")
 ]);
+
 const spawnOptions = {
   shell: process.env.SHELL,
   stdio: [process.stdin, 'ignore', process.stderr],
