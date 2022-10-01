@@ -1,1 +1,5 @@
-# nothing exported here. Yet!
+
+exports_files(
+    [ "next.config.ts" ],
+    visibility = ["//visibility:public" ]
+)

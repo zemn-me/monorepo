@@ -1,7 +1,30 @@
 load("@npm//next:index.bzl", "next")
+load("//ts:rules.bzl", "ts_project")
 
 def next_project(name, distDir, srcs, **kwargs):
     target = "node_modules/monorepo/" + native.package_name()
+
+    # copy the next config over
+    native.genrule(
+        name = name + "_gen_next.config.ts",
+        srcs = [ "//ts/next.js:next.config.ts" ],
+        outs = [ "next.config.ts" ],
+        cmd_bash = "cp $< $@"
+    )
+
+    ts_project(
+        name = name + "_next_config",
+        srcs = [ "next.config.ts" ]
+    )
+
+    srcs = srcs + [ ":" + name + "_next_config" ]
+
+    next(
+        name = name + ".dev",
+        data = srcs,
+        link_workspace_root = True,
+        args = [ "dev", target]
+    )
 
     next(
         name = distDir,
