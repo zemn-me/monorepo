@@ -2,13 +2,10 @@ import { runfiles } from '@bazel/runfiles';
 import { spawnSync } from 'child_process';
 import * as fs from 'fs';
 
-
-
+const dir = process.env.PACKAGE_NAME!;
 
 const entry = require.resolve(`next/dist/bin/next`);
-const build_target = runfiles.resolveWorkspaceRelative('ts/next.js/testing/example');
-
-
+const build_target = runfiles.resolveWorkspaceRelative(dir);
 
 const args = process.argv
 	.slice(2);

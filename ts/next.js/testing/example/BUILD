@@ -20,6 +20,7 @@ run_binary(
     tool = ":next_bin",
     srcs = [ ":ts_sources" ],
     env = {
+        "PACKAGE_NAME": package_name(),
         "OUT": "$(location build)"
     }
 )
