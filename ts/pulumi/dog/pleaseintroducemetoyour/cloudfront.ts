@@ -1,7 +1,6 @@
 import * as aws from '@pulumi/aws';
 import {
 	bucket,
-	index,
 } from 'monorepo/ts/pulumi/dog/pleaseintroducemetoyour/public';
 
 import * as cert from './cert';
@@ -18,7 +17,7 @@ export const distribution: aws.cloudfront.Distribution =
 		],
 		enabled: true,
 		isIpv6Enabled: true,
-		defaultRootObject: index.key,
+		defaultRootObject: 'index.html',
 		aliases: [zone.name],
 		defaultCacheBehavior: {
 			allowedMethods: [

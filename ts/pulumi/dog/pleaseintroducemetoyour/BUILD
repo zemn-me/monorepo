@@ -6,6 +6,5 @@ ts_project(
     name = "pleaseintroducemetoyour",
     deps = [
         "//ts/pulumi/dog/pleaseintroducemetoyour/public",
-        "@npm//glob-promise",
     ],
 )

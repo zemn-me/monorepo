@@ -11,5 +11,6 @@ ts_project(
         "@npm//@pulumi/pulumi",
         "@npm//@types/mime",
         "@npm//mime",
+        "@npm//glob-promise"
     ],
 )
