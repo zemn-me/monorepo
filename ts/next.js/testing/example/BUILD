@@ -5,17 +5,17 @@ ts_project(
     name = "ts_sources",
     data = ["@npm//next/bin:next"],
     deps = [
+        "//ts/math",
         "@npm//@bazel/runfiles",
         "@npm//@types/node",
+        "@npm//@types/react",
         "@npm//react",
         "@npm//react-dom",
-        "@npm//@types/react",
-        "//ts/math",
-    ]
+    ],
 )
 
 next_project(
     name = "example",
+    srcs = [":ts_sources"],
     distDir = "build",
-    srcs = [ ":ts_sources" ]
 )
