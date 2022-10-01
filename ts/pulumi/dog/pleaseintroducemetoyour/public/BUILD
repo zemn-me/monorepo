@@ -10,7 +10,7 @@ ts_project(
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",
         "@npm//@types/mime",
+        "@npm//glob-promise",
         "@npm//mime",
-        "@npm//glob-promise"
     ],
 )
