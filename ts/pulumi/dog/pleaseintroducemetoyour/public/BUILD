@@ -4,12 +4,13 @@ package(default_visibility = ["//ts/pulumi/dog/pleaseintroducemetoyour:__pkg__"]
 
 ts_project(
     name = "public",
-    data = ["index.html"],
+    data = ["//ts/pulumi/dog/pleaseintroducemetoyour/public/static"],
     deps = [
         "@npm//@bazel/runfiles",
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",
         "@npm//@types/mime",
+        "@npm//glob-promise",
         "@npm//mime",
     ],
 )
