@@ -16,9 +16,12 @@ ts_project(
 
 run_binary(
     name = "build",
-    outs = [".next"],
+    outs = ["build"],
     tool = ":next_bin",
-    srcs = [ ":ts_sources" ]
+    srcs = [ ":ts_sources" ],
+    env = {
+        "OUT": "$(location build)"
+    }
 )
 
 nodejs_binary(

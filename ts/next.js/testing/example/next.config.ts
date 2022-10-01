@@ -10,3 +10,6 @@ export const eslint = {
 export const typescript = {
 	tsconfigPath: '../../../tsconfig.json',
 };
+
+
+export const distDir = 'build';

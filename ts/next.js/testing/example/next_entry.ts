@@ -14,15 +14,15 @@ const { spawn } = require('child_process')
 const files = runfiles.resolve('monorepo/ts/next.js/testing/example');
 const entry = require.resolve(`next/dist/bin/next`);
 const build_target = runfiles.resolveWorkspaceRelative('ts/next.js/testing/example');
-
-console.info("build target", build_target);
+console.log('entry', entry, 'build_target', build_target);
 
 //throw new Error(`next, ${next} files ${files} cwd ${process.cwd()}, bin ${process.env.BAZEL_BINDIR}`);
 //throw new Error(spawnSync('ls', ['../../../../../external']).output.toString())
 
+
 const args = process.argv
 	.slice(2)
-	.concat(['dev', build_target ]);
+	.concat(['build', '--debug', build_target ]);
 
 const spawnOptions = {
 	shell: process.env.SHELL,
@@ -35,5 +35,11 @@ if (res.status === null) {
 	throw new Error(`Process terminated unexpectedly: ${res.signal}`);
 }
 
-//spawnSync('sh',[], { stdio: 'inherit' })
+
+//fs.renameSync(build_target + '/build', './ts/next.js/example/build')
+console.error(spawnSync('ls',[ build_target], { stdio: 'inherit' }).output.toString());
+console.error('cwd', process.cwd());
+fs.renameSync(build_target + '/build', process.env.OUT!);
+
+
 process.exit(res.status);
