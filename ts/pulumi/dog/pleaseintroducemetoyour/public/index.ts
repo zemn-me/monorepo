@@ -2,9 +2,10 @@ import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
+import glob from 'glob-promise';
 import path from 'path';
 
-const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public';
+const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out';
 
 const file =
 	(bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
@@ -28,6 +29,15 @@ export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 
 const File = file(bucket);
 
-export const index = File('index.html');
+async function Files() {
+	let ret = [];
+	for (const file of (await glob(basePath + '/*'))) {
+		ret.push(File(file))
+	}
+	return ret;
+}
+
+export const files = Files();
+
 
 export default bucket;

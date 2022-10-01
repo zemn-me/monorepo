@@ -1,7 +1,8 @@
 load("@npm//next:index.bzl", "next")
 load("//ts:rules.bzl", "ts_project")
 
-def next_project(name, distDir, srcs, **kwargs):
+def next_project(name, srcs, **kwargs):
+    distDir = 'build'
     target = "node_modules/monorepo/" + native.package_name()
 
     # copy the next config over

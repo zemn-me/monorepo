@@ -29,6 +29,7 @@
 		"@types/cross-spawn": "6.0.2",
 		"@types/d3-axis": "3.0.1",
 		"@types/d3-scale": "4.0.2",
+		"@types/glob": "^8.0.0",
 		"@types/jest": "29.1.1",
 		"@types/mime": "3.0.1",
 		"@types/node": "^18.7.23",
@@ -99,6 +100,7 @@
 	},
 	"dependencies": {
 		"@pulumi/command": "4.5.0",
-		"@types/bcryptjs": "2.4.2"
+		"@types/bcryptjs": "2.4.2",
+		"glob-promise": "^5.0.0"
 	}
 }
