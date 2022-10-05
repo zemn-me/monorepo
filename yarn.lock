@@ -1465,10 +1465,10 @@
     "@parcel/css-linux-x64-musl" "1.12.0"
     "@parcel/css-win32-x64-msvc" "1.12.0"
 
-"@pulumi/aws@5.16.0":
-  version "5.16.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.16.0.tgz#7047b90bd9c04186a5c6615f3ce8b4217a4100fd"
-  integrity sha512-j8yT4EBq8JOEH9URk0nmXtu5/WaXnOn60ra4poQAa0BijAcAqodgNb7eAtLyUPaTgDlOHa6bpoeqKPGfTfm0Tg==
+"@pulumi/aws@5.16.1":
+  version "5.16.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.16.1.tgz#facc51c7b097724aa4bb97d103d241d7137162e0"
+  integrity sha512-IM1quarNwL46TDMfIicJpcOTm1k1s3bpMJ+fGv6qMALZt3oD6WQRKoLbz3nx0qR5uxOYkW3XMBkGnJygp21y1g==
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
     aws-sdk "^2.0.0"
@@ -1925,10 +1925,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@18.8.0", "@types/node@>=12.12.47":
-  version "18.8.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.0.tgz#b8ee8d83a99470c0661bd899417fcd77060682fe"
-  integrity sha512-u+h43R6U8xXDt2vzUaVP3VwjjLyOJk6uEciZS8OSyziUQGOwmk+l+4drxcsDboHXwyTaqS1INebghmWMRxq3LA==
+"@types/node@*", "@types/node@18.8.1", "@types/node@>=12.12.47":
+  version "18.8.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.1.tgz#33e6759935f7a82821b72fb936e66f6b99a36173"
+  integrity sha512-vuYaNuEIbOYLTLUAJh50ezEbvxrD43iby+lpUA2aa148Nh5kX/AVO/9m1Ahmbux2iU5uxJTNF9g2Y+31uml7RQ==
 
 "@types/node@12.20.24":
   version "12.20.24"
@@ -2400,9 +2400,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.0.0:
-  version "2.1227.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1227.0.tgz#2ef47b77aa104f07bf5b233c06adf51f166cd390"
-  integrity sha512-L6vnopVXVXKEqi0R4i54F6xSemczd/aRy4UscqnfpyvNYr9yLL3jVApFo7OX8hxompe/tgxdQFXvMiNzhkSrwQ==
+  version "2.1228.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1228.0.tgz#8c778ea2ca3fed3b3bfe0ba5f87ef73ab6fb4132"
+  integrity sha512-fc/eQEUiw+rOYl7SoIJBnmigFaET3t1zZiSUlMfnLfmpv2KGuhOoMaBTGQn9KkaFI1sSbeeoUjof7bxItgFDRA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2513,9 +2513,9 @@ bcryptjs@2.4.3:
   integrity sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==
 
 before-after-hook@^2.2.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.2.2.tgz#a6e8ca41028d90ee2c24222f201c90956091613e"
-  integrity sha512-3pZEU3NT5BFUo/AD5ERPWOgQOCZITni6iavr5AUw5AUwQjMlI0kzu5btnyD39AF0gUEsDPwJT+oY1ORBJijPjQ==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.2.3.tgz#c51e809c81a4e354084422b9b26bad88249c517c"
+  integrity sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==
 
 bl@^4.0.3:
   version "4.1.0"
@@ -2808,9 +2808,9 @@ convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
     safe-buffer "~5.1.1"
 
 core-js-pure@^3.20.2:
-  version "3.25.4"
-  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.25.4.tgz#e8642cef4f4246a4e7c15280f5e3926118fff84b"
-  integrity sha512-qRbgm0ADrsNTU66UcW47YMJjXm+ShhUP2gkoEoAShT2BHO3cb5gGqLtmWpjnM6Wx9h5hMSF4uZ+jEV/8+4KCsw==
+  version "3.25.5"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.25.5.tgz#79716ba54240c6aa9ceba6eee08cf79471ba184d"
+  integrity sha512-oml3M22pHM+igfWHDfdLVq2ShWmjM2V4L+dQEBs0DWVIqEm9WHCwGAlZ6BmyBQGy5sFrJmcx+856D9lVKyGWYg==
 
 corser@^2.0.1:
   version "2.0.1"
@@ -3202,9 +3202,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.251:
-  version "1.4.270"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.270.tgz#2c6ea409b45cdb5c3e0cb2c08cf6c0ba7e0f2c26"
-  integrity sha512-KNhIzgLiJmDDC444dj9vEOpZEgsV96ult9Iff98Vanumn+ShJHd5se8aX6KeVxdc0YQeqdrezBZv89rleDbvSg==
+  version "1.4.271"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.271.tgz#2d9f04f6a53c70e1bb1acfaae9c39f07ca40d290"
+  integrity sha512-BCPBtK07xR1/uY2HFDtl3wK2De66AW4MSiPlLrnPNxKC/Qhccxd59W73654S3y6Rb/k3hmuGJOBnhjfoutetXA==
 
 emittery@^0.10.2:
   version "0.10.2"
