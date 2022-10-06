@@ -2291,9 +2291,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.0.0:
-  version "2.1229.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1229.0.tgz#ee2bd959d8cc17d0f7da131026ae86bc5ca15a05"
-  integrity sha512-oe84BuQW2WTxinZAXqcCsWh2uS7ek2C7eaw+tYhni+LBJcpeiqB5gSqOE/OaFlTXIkJlsmWlI23ZkjXcBijNKw==
+  version "2.1230.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1230.0.tgz#d7ebf384f2cb9b312325c537d38bec47e5ba8087"
+  integrity sha512-7Y260dvzr7b8/lZhg6A7h5WyHvfCgdFL0NiBgCuT3/xlw9rvq9b08JNYErEpaJSmo+A5hW35n6wtzii4/FUSTA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -7535,12 +7535,7 @@ write-file-atomic@^4.0.1, write-file-atomic@^4.0.2:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-ws@8.9.0, ws@^8.8.0:
-  version "8.9.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.9.0.tgz#2a994bb67144be1b53fe2d23c53c028adeb7f45e"
-  integrity sha512-Ja7nszREasGaYUYCI2k4lCKIRTt+y7XuqVoHR44YpI49TtryyqbqvDMn5eqfW7e6HzTukDRIsXqzVHScqRcafg==
-
-ws@^8.9.0:
+ws@8.9.0, ws@^8.8.0, ws@^8.9.0:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.9.0.tgz#2a994bb67144be1b53fe2d23c53c028adeb7f45e"
   integrity sha512-Ja7nszREasGaYUYCI2k4lCKIRTt+y7XuqVoHR44YpI49TtryyqbqvDMn5eqfW7e6HzTukDRIsXqzVHScqRcafg==
