@@ -3,5 +3,6 @@ load("//ts:rules.bzl", "ts_project")
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
-    name = "ts",
+    name = "fs",
+    deps = ["@npm//@types/node"],
 )
