@@ -1,9 +1,9 @@
 import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
-import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import { walk } from 'monorepo/ts/fs';
 import path from 'path';
+import { fileAsset } from 'monorepo/ts/pulumi/lib';
 
 const basePath = runfiles.resolveWorkspaceRelative(
 	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'
@@ -18,25 +18,25 @@ function trimPrefix(prefix: string, haystack: string): string {
 	return haystack.slice(prefix.length);
 }
 
-export const indexPage = new pulumi.asset.FileAsset(
+export const indexPage = fileAsset(
 	path.join(basePath, 'index.html')
 );
-export const errorPage = new pulumi.asset.FileAsset(
+export const errorPage = fileAsset(
 	path.join(basePath, '404.html')
 );
 
 export const files = (async function* () {
 	for await (const entity of walk(basePath)) {
 		if (!entity.isFile()) continue;
-		yield new pulumi.asset.FileAsset(entity.name);
+		yield fileAsset(entity.name);
 	}
 })();
 
 export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	acl: 'public-read',
 	website: {
-		indexDocument: indexPage.path.then(path => trimPrefix(basePath, path)),
-		errorDocument: errorPage.path.then(path => trimPrefix(basePath, path)),
+		indexDocument: indexPage.then(async asset => trimPrefix(basePath, await asset.path)),
+		errorDocument: errorPage.then(async asset => trimPrefix(basePath, await asset.path)),
 	},
 });
 
@@ -51,7 +51,5 @@ export const bucketObjects = (async function* () {
 		});
 	}
 })();
-
-throw new Error('fuck');
 
 export default bucket;
