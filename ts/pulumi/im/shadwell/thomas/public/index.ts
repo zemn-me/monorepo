@@ -3,6 +3,7 @@ import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import path from 'path';
+import { fileAsset } from 'monorepo/ts/pulumi/lib';
 
 const basePath = 'ts/pulumi/im/shadwell/thomas/public';
 
@@ -14,7 +15,7 @@ const file =
 			key: workspacePath,
 			bucket,
 			contentType: mime.getType(absolutePath) || undefined,
-			source: new pulumi.asset.FileAsset(absolutePath),
+			source: fileAsset(absolutePath),
 			acl: 'public-read',
 		});
 	};
