@@ -5,7 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "lib",
     deps = [
-        "@npm//@types/node",
         "@npm//@pulumi/pulumi",
+        "@npm//@types/node",
     ],
 )
