@@ -1,6 +1,5 @@
 import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
-import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import { fileAsset } from 'monorepo/ts/pulumi/lib';
 import path from 'path';
