@@ -6,6 +6,7 @@ package(default_visibility = ["//ts/pulumi/dog/pleaseintroducemetoyour/public:__
 ts_project(
     name = "ts",
     deps = [
+        "@npm//@bazel/runfiles",
         "@npm//@types/react",
         "@npm//next",
         "@npm//react",

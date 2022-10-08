@@ -1,6 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//ts/pulumi/im/shadwell:__pkg__"])
+#package(default_visibility = ["//ts/pulumi/im/shadwell:__pkg__"])
+package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "thomas",
