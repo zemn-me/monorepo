@@ -1,6 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 load("//ts/react/server:rules.bzl", "web_app")
 load("//css:rules.bzl", "css_library")
+load("//ts/next.js:rules.bzl", "next_project")
 
 ts_project(
     name = "ts",
@@ -20,6 +21,13 @@ ts_project(
         "@npm//react-router-dom",
     ],
 )
+
+next_project(
+    name = "zemn.me",
+    srcs = [ ":ts" ]
+)
+
+
 
 """
 Currently broken / disabled due to lack of CSS modules support
