@@ -9,7 +9,10 @@ const basePath = runfiles.resolveWorkspaceRelative(
 	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'
 );
 
-async function trimPrefix(prefix: Promise<string> | string, haystack: Promise<string> | string): Promise<string> {
+async function trimPrefix(
+	prefix: Promise<string> | string,
+	haystack: Promise<string> | string
+): Promise<string> {
 	if (!(await haystack).startsWith(await prefix))
 		throw new Error(
 			`Can't trim prefix; ${await haystack} doesn't start with ${await prefix}`
@@ -28,14 +31,13 @@ export const files = (async function* () {
 	}
 })();
 
-
-export const bucket = (async () => webBucket(
-	'pleaseintroducemetoyour.dog',
-	'public-read',
-	trimPrefix(basePath, (await indexPage).path),
-	trimPrefix(basePath, (await errorPage).path)
-))();
-
+export const bucket = (async () =>
+	webBucket(
+		'pleaseintroducemetoyour.dog',
+		'public-read',
+		trimPrefix(basePath, (await indexPage).path),
+		trimPrefix(basePath, (await errorPage).path)
+	))();
 
 export const bucketObjects = (async function* () {
 	for await (const file of files) {

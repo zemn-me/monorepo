@@ -19,9 +19,10 @@ const file =
 		});
 	};
 
-export const bucket = webBucket('thomas.shadwell.im',
+export const bucket = webBucket(
+	'thomas.shadwell.im',
 	'public-read',
-	'index.html',
+	'index.html'
 );
 
 const File = file(bucket);
