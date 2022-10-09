@@ -2,20 +2,20 @@ import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import mime from 'mime';
 import { walk } from 'monorepo/ts/fs';
-import { fileAsset } from 'monorepo/ts/pulumi/lib';
+import { fileAsset, webBucket } from 'monorepo/ts/pulumi/lib';
 import path from 'path';
 
 const basePath = runfiles.resolveWorkspaceRelative(
 	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'
 );
 
-function trimPrefix(prefix: string, haystack: string): string {
-	if (!haystack.startsWith(prefix))
+async function trimPrefix(prefix: Promise<string> | string, haystack: Promise<string> | string): Promise<string> {
+	if (!(await haystack).startsWith(await prefix))
 		throw new Error(
-			`Can't trim prefix; ${haystack} doesn't start with ${prefix}`
+			`Can't trim prefix; ${await haystack} doesn't start with ${await prefix}`
 		);
 
-	return haystack.slice(prefix.length);
+	return (await haystack).slice((await prefix).length);
 }
 
 export const indexPage = fileAsset(path.join(basePath, 'index.html'));
@@ -28,17 +28,14 @@ export const files = (async function* () {
 	}
 })();
 
-export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
-	acl: 'public-read',
-	website: {
-		indexDocument: indexPage.then(async asset =>
-			trimPrefix(basePath, await asset.path)
-		),
-		errorDocument: errorPage.then(async asset =>
-			trimPrefix(basePath, await asset.path)
-		),
-	},
-});
+
+export const bucket = (async () => webBucket(
+	'pleaseintroducemetoyour.dog',
+	'public-read',
+	trimPrefix(basePath, (await indexPage).path),
+	trimPrefix(basePath, (await errorPage).path)
+))();
+
 
 export const bucketObjects = (async function* () {
 	for await (const file of files) {

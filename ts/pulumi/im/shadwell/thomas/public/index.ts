@@ -1,7 +1,7 @@
 import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import mime from 'mime';
-import { fileAsset } from 'monorepo/ts/pulumi/lib';
+import { fileAsset, webBucket } from 'monorepo/ts/pulumi/lib';
 import path from 'path';
 
 const basePath = 'ts/pulumi/im/shadwell/thomas/public';
@@ -19,12 +19,10 @@ const file =
 		});
 	};
 
-export const bucket = new aws.s3.Bucket('thomas.shadwell.im', {
-	acl: 'public-read',
-	website: {
-		indexDocument: 'index.html',
-	},
-});
+export const bucket = webBucket('thomas.shadwell.im',
+	'public-read',
+	'index.html',
+);
 
 const File = file(bucket);
 
