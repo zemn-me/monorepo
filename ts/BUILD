@@ -4,8 +4,4 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "ts",
-    srcs = glob(
-        include = ["*.ts"],
-        exclude = ["*_test.ts"],
-    ),
 )

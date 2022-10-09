@@ -6,6 +6,7 @@ ts_project(
     name = "public",
     data = ["index.html"],
     deps = [
+        "//ts/pulumi/lib",
         "@npm//@bazel/runfiles",
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",

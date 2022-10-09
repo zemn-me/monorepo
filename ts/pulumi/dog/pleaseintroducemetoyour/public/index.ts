@@ -1,42 +1,55 @@
 import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
-import * as pulumi from '@pulumi/pulumi';
-import glob from 'glob-promise';
 import mime from 'mime';
+import { walk } from 'monorepo/ts/fs';
+import { fileAsset } from 'monorepo/ts/pulumi/lib';
 import path from 'path';
 
-const basePath = 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out';
+const basePath = runfiles.resolveWorkspaceRelative(
+	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'
+);
 
-const file =
-	(bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
-		const workspacePath = path.posix.join(basePath, relativePath);
-		const absolutePath = runfiles.resolveWorkspaceRelative(workspacePath);
-		return new aws.s3.BucketObject(workspacePath, {
-			key: workspacePath,
-			bucket,
-			contentType: mime.getType(absolutePath) || undefined,
-			source: new pulumi.asset.FileAsset(absolutePath),
-			acl: 'public-read',
-		});
-	};
+function trimPrefix(prefix: string, haystack: string): string {
+	if (!haystack.startsWith(prefix))
+		throw new Error(
+			`Can't trim prefix; ${haystack} doesn't start with ${prefix}`
+		);
+
+	return haystack.slice(prefix.length);
+}
+
+export const indexPage = fileAsset(path.join(basePath, 'index.html'));
+export const errorPage = fileAsset(path.join(basePath, '404.html'));
+
+export const files = (async function* () {
+	for await (const entity of walk(basePath)) {
+		if (!entity.isFile()) continue;
+		yield fileAsset(entity.name);
+	}
+})();
 
 export const bucket = new aws.s3.Bucket('pleaseintroducemetoyour.dog', {
 	acl: 'public-read',
 	website: {
-		indexDocument: 'index.html',
+		indexDocument: indexPage.then(async asset =>
+			trimPrefix(basePath, await asset.path)
+		),
+		errorDocument: errorPage.then(async asset =>
+			trimPrefix(basePath, await asset.path)
+		),
 	},
 });
 
-const File = file(bucket);
-
-async function Files() {
-	const ret = [];
-	for (const file of await glob(basePath + '/*')) {
-		ret.push(File(file));
+export const bucketObjects = (async function* () {
+	for await (const file of files) {
+		yield new aws.s3.BucketObject(await file.path, {
+			key: trimPrefix(basePath, await file.path),
+			bucket,
+			contentType: mime.getType(await file.path) ?? undefined,
+			source: file,
+			acl: 'public-read',
+		});
 	}
-	return ret;
-}
-
-export const files = Files();
+})();
 
 export default bucket;

@@ -6,6 +6,8 @@ ts_project(
     name = "public",
     data = ["//ts/pulumi/dog/pleaseintroducemetoyour/public/static"],
     deps = [
+        "//ts/fs",
+        "//ts/pulumi/lib",
         "@npm//@bazel/runfiles",
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",
