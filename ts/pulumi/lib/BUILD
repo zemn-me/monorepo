@@ -7,5 +7,6 @@ ts_project(
     deps = [
         "@npm//@pulumi/pulumi",
         "@npm//@types/node",
+        "@npm//@pulumi/aws"
     ],
 )
