@@ -1,12 +1,11 @@
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 load("//css:rules.bzl", "css_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
 
-css_library(
+copy_to_bin(
     name = "css",
-    srcs = glob([
-        "**/*.css"
-    ])
+    srcs = [ "root.module.css" ]
 )
 
 ts_project(
@@ -25,13 +24,13 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-        ":css"
-    ]
+    ],
+    data = [ ":css" ]
 )
 
 next_project(
     name = "zemn.me",
-    srcs = [ ":ts" ]
+    srcs = [ ":ts"]
 )
 
 

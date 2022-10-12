@@ -3,6 +3,7 @@ load("//css:providers.bzl", "CSSLibraryInfo", "css_library_info")
 load("//css/lint:rules.bzl", "css_lint")
 load("@build_bazel_rules_nodejs//:providers.bzl", "js_ecma_script_module_info", "JSEcmaScriptModuleInfo", "declaration_info")
 
+
 def css_module(name = None, srcs = [], **kwargs):
     tsfilerulename = name + "_gen"
     outputtsfiles = [x + ".ts" for x in srcs]
@@ -57,7 +58,7 @@ def _css_library_impl(ctx):
         ts_info,
         js_info,
         DefaultInfo(
-            files = css_info.deps,
+            files = depset(transitive=[css_info.srcs, css_info.deps])
         ),
     ]
 
