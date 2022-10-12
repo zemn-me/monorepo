@@ -1,8 +1,53 @@
-import * as fs from 'node:fs/promises';
+import * as aws from '@pulumi/aws';
+export * as file from './file';
+export * as path from './path';
 
-import * as pulumi from '@pulumi/pulumi';
+/**
+ * Trim a prefix from some strings, potentially asynchronously.
+ */
+export async function trimPrefix(
+	prefix: Promise<string>,
+	haystack: Promise<string>
+): Promise<string> {
+	if (!(await haystack).startsWith(await prefix))
+		throw new Error(
+			`Can't trim prefix; ${await haystack} doesn't start with ${await prefix}`
+		);
 
-export async function fileAsset(file: string | Promise<string>) {
-	await fs.access(await file);
-	return new pulumi.asset.FileAsset(await file);
+	return (await haystack).slice((await prefix).length);
+}
+
+/**
+ * Ensure that the given path is correctly formatted for pulumi / aws.
+ *
+ * It chokes if there is a leading slash...
+ */
+export async function transformDocumentPath(
+	path: Promise<string> | string
+): Promise<string> {
+	if ([...(await path)][0] === '/')
+		return transformDocumentPath((await path).slice(1));
+
+	return path;
+}
+
+/**
+ * Wrapper for aws.s3.Bucket, which ensures website.indexDocument and website.errorDocument
+ * have correctly formatted paths.
+ */
+export function webBucket(
+	name: string,
+	acl: 'public-read',
+	indexDocument: Promise<string> | string,
+	errorDocument?: Promise<string> | string
+) {
+	return new aws.s3.Bucket(name, {
+		acl,
+		website: {
+			indexDocument: transformDocumentPath(indexDocument),
+			...(errorDocument !== undefined
+				? { errorDocument: transformDocumentPath(errorDocument) }
+				: {}),
+		},
+	});
 }
