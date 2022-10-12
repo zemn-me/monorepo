@@ -1,7 +1,13 @@
 load("//ts:rules.bzl", "ts_project")
-load("//ts/react/server:rules.bzl", "web_app")
-load("//css:rules.bzl", "css_library")
 load("//ts/next.js:rules.bzl", "next_project")
+load("//css:rules.bzl", "css_library")
+
+css_library(
+    name = "css",
+    srcs = glob([
+        "**/*.css"
+    ])
+)
 
 ts_project(
     name = "ts",
@@ -19,7 +25,8 @@ ts_project(
         "@npm//react",
         "@npm//react-dom",
         "@npm//react-router-dom",
-    ],
+        ":css"
+    ]
 )
 
 next_project(
