@@ -1,11 +1,20 @@
-import * as fs from 'node:fs/promises';
-
 import * as aws from '@pulumi/aws';
-import * as pulumi from '@pulumi/pulumi';
+export * as file from './file';
+export * as path from './path';
 
-export async function fileAsset(file: string | Promise<string>) {
-	await fs.access(await file);
-	return new pulumi.asset.FileAsset(await file);
+/**
+ * Trim a prefix from some strings, potentially asynchronously.
+ */
+export async function trimPrefix(
+	prefix: Promise<string>,
+	haystack: Promise<string>
+): Promise<string> {
+	if (!(await haystack).startsWith(await prefix))
+		throw new Error(
+			`Can't trim prefix; ${await haystack} doesn't start with ${await prefix}`
+		);
+
+	return (await haystack).slice((await prefix).length);
 }
 
 /**
@@ -22,7 +31,11 @@ export async function transformDocumentPath(
 	return path;
 }
 
-export async function webBucket(
+/**
+ * Wrapper for aws.s3.Bucket, which ensures website.indexDocument and website.errorDocument
+ * have correctly formatted paths.
+ */
+export function webBucket(
 	name: string,
 	acl: 'public-read',
 	indexDocument: Promise<string> | string,
