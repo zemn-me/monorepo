@@ -950,12 +950,12 @@
   resolved "https://registry.yarnpkg.com/@logdna/tail-file/-/tail-file-2.1.0.tgz#7c3d98c3378d15061589e12875ffb7673b0ce82c"
   integrity sha512-8zYzetB1zfa7WA4c0RS1EU9pNKcj1BqilU2fCsEvmKfWgEdpaphff6hk2Rcn3A0qHwynEdw9lTrlYN4sUw2FpA==
 
-"@microsoft/api-documenter@7.19.17":
-  version "7.19.17"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-documenter/-/api-documenter-7.19.17.tgz#f6ca152c478a3a7f7d94c1f3a9f895406d6d18a3"
-  integrity sha512-cR/EZccOhV7WKKa+14/Ire1ruUFCazRVz9IIZmYJ5zmdk6Il6+uoz/o7P58aCDeq3tC+6aNSPqGT6AsgRzAXwA==
+"@microsoft/api-documenter@7.19.18":
+  version "7.19.18"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-documenter/-/api-documenter-7.19.18.tgz#dd182f1a56e7b3bd182e9882cd344445c59be9a8"
+  integrity sha512-jsI9GG0cwu9EhO5rpZB60EUd/vfEeFs8JhZ0cZ1onJaplxl6vbAeB+P1OVjsxSXOQ+rlZQOrYfVGp2SdYfq+6A==
   dependencies:
-    "@microsoft/api-extractor-model" "7.24.4"
+    "@microsoft/api-extractor-model" "7.25.0"
     "@microsoft/tsdoc" "0.14.1"
     "@rushstack/node-core-library" "3.53.1"
     "@rushstack/ts-command-line" "4.12.5"
@@ -963,21 +963,21 @@
     js-yaml "~3.13.1"
     resolve "~1.17.0"
 
-"@microsoft/api-extractor-model@7.24.4":
-  version "7.24.4"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.24.4.tgz#a986b98d5a2afc736356c93dd5b521ca7c140cd8"
-  integrity sha512-xYzRQqxurZVrmEM14BJ2aZqAUq+K46EAFj2Qlf0GkVPSFy1vP4Qf3sa2AbBi26Up2QsSicEVdqcd44eeVt9k9Q==
+"@microsoft/api-extractor-model@7.25.0":
+  version "7.25.0"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.25.0.tgz#8ae54d98a2c238be2dd38eeba0955d67c6c9f7fd"
+  integrity sha512-iGZrBui+7Sde7Rk8vsfnBSIilJ48wiGNxReb4N1ij8OrWCtjSB8fSVkOxL9oR6El7KowrZN51T8SdTzysLAelQ==
   dependencies:
     "@microsoft/tsdoc" "0.14.1"
     "@microsoft/tsdoc-config" "~0.16.1"
     "@rushstack/node-core-library" "3.53.1"
 
-"@microsoft/api-extractor@7.32.1":
-  version "7.32.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.32.1.tgz#b8acacca63e045aa2315ded4774d94db8c579247"
-  integrity sha512-bHijLt3MVIjrk7Uzu1mjvfM6IVt0kwZdBRLrYEnCLBnUqp4dxurV8NeKAovjUV68I70wVz/DMUlEofc4qh1CUA==
+"@microsoft/api-extractor@7.33.0":
+  version "7.33.0"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.33.0.tgz#31d84afe9afe8592295907450217f54c3e99f3ea"
+  integrity sha512-yf0Kzn1o6fQf/xwwkmOZAXHFbj3q1xvmqvTVltO5lDnESh9Nv5KIaALryxcuf8tbytP2auQmd3C7+Zx5SbmZHg==
   dependencies:
-    "@microsoft/api-extractor-model" "7.24.4"
+    "@microsoft/api-extractor-model" "7.25.0"
     "@microsoft/tsdoc" "0.14.1"
     "@microsoft/tsdoc-config" "~0.16.1"
     "@rushstack/node-core-library" "3.53.1"
@@ -2468,10 +2468,10 @@ caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001406:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001418.tgz#5f459215192a024c99e3e3a53aac310fc7cf24e6"
   integrity sha512-oIs7+JL3K9JRQ3jPZjlH6qyYDp+nBTCais7hjh0s+fuBwufc7uZ7hPYMXrDOJhV360KGMTcczMRObk0/iMqZRg==
 
-chalk@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.1.0.tgz#c4b4a62bfb6df0eeeb5dbc52e6a9ecaff14b9976"
-  integrity sha512-56zD4khRTBoIyzUYAFgDDaPhUMN/fC/rySe6aZGqbj/VWiU2eI3l6ZLOtYGFZAV5v02mwPjtpzlrOveJiz5eZQ==
+chalk@5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.1.2.tgz#d957f370038b75ac572471e83be4c5ca9f8e8c45"
+  integrity sha512-E5CkT4jWURs1Vy5qGJye+XwCkNj7Od3Af7CP6SujMetSMkLs8Do2RWJK5yx1wamHV/op8Rz+9rltjaTQWDnEFQ==
 
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
@@ -3031,9 +3031,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.251:
-  version "1.4.276"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.276.tgz#17837b19dafcc43aba885c4689358b298c19b520"
-  integrity sha512-EpuHPqu8YhonqLBXHoU6hDJCD98FCe6KDoet3/gY1qsQ6usjJoHqBH2YIVs8FXaAtHwVL8Uqa/fsYao/vq9VWQ==
+  version "1.4.279"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.279.tgz#84267fec806a8b1c5a1daebf726c4e296e5bcdf9"
+  integrity sha512-xs7vEuSZ84+JsHSTFqqG0TE3i8EAivHomRQZhhcRvsmnjsh5C2KdhwNKf4ZRYtzq75wojpFyqb62m32Oam57wA==
 
 emittery@^0.10.2:
   version "0.10.2"
