@@ -208,3 +208,13 @@ export function* walk<T>(i: T, select: (v: T) => T[]): Generator<T> {
 		yield* walk(next, select);
 	}
 }
+
+/**
+ * Transform a generator into an asynchronous list.
+ */
+export async function unroll<T>(v: AsyncIterable<T>): Promise<T[]> {
+	let arr: T[] = [];
+	for await(const value of v) arr.push(value);
+
+	return arr;
+}

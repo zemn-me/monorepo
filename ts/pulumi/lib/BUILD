@@ -9,5 +9,6 @@ ts_project(
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",
         "@npm//@types/node",
+        "//ts/iter"
     ],
 )

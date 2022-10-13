@@ -11,12 +11,12 @@ const basePath = lib.path.workspace(
 export const indexPage = lib.file.asset(lib.path.join(basePath, 'index.html'));
 export const errorPage = lib.file.asset(lib.path.join(basePath, '404.html'));
 
-export const files = (async function* () {
+export const files = lib.generator((async function* () {
 	for await (const entity of walk(basePath)) {
 		if (!entity.isFile()) continue;
 		yield lib.file.asset(entity.name);
 	}
-})();
+})());
 
 export const bucket = webBucket(
 	'pleaseintroducemetoyour.dog',
@@ -31,8 +31,8 @@ export const bucket = webBucket(
 	)
 );
 
-export const bucketObjects = (async function* () {
-	for await (const file of files) {
+export const bucketObjects = lib.generator((async function* () {
+	for (const file of await files) {
 		yield new aws.s3.BucketObject(await file.path, {
 			key: trimPrefix(basePath, file.path),
 			bucket,
@@ -41,6 +41,6 @@ export const bucketObjects = (async function* () {
 			acl: 'public-read',
 		});
 	}
-})();
+})());
 
 export default bucket;

@@ -1,4 +1,5 @@
 import * as aws from '@pulumi/aws';
+import * as iter from 'monorepo/ts/iter';
 export * as file from './file';
 export * as path from './path';
 
@@ -50,4 +51,14 @@ export function webBucket(
 				: {}),
 		},
 	});
+}
+
+/**
+ * Use a generator to generate some values.
+ * 
+ * Because pulumi doesn't know what a generator means as an export, this
+ * converts it into a simple promise.
+ */
+export async function generator<T>(fn: AsyncGenerator<T>): Promise<T[]> {
+	return iter.unroll(fn)
 }
