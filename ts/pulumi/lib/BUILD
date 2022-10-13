@@ -5,6 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "lib",
     deps = [
+        "//ts/iter",
         "@npm//@bazel/runfiles",
         "@npm//@pulumi/aws",
         "@npm//@pulumi/pulumi",

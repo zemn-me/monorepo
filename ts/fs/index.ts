@@ -1,11 +1,72 @@
-import { Dirent } from 'fs';
-import { readdir } from 'fs/promises';
+import * as path from 'node:path';
 
+import * as fs from 'fs';
+import { readdir } from 'fs/promises';
+import * as iter from 'monorepo/ts/iter';
+
+type Dirent = fs.Dirent;
+
+/**
+ * Given a set of {@link fs.Dirent}s, returns a path from the leftmost
+ * to the rightmost one.
+ */
+export function getPath(...d: Pick<fs.Dirent, 'name'>[]) {
+	return path.join(...d.reverse().map(v => v.name));
+}
+
+/**
+ * Given a path which must be a directory, return all of
+ * its children.
+ */
+async function* _walk(
+	path: Promise<string> | string
+): AsyncGenerator<[value: Dirent, ...parents: Dirent[]], void, unknown> {
+	yield* iter.asyncWalkPath<Dirent>(
+		// this is a fake root dir to make the code simpler.
+		{
+			name: await path,
+			isDirectory() {
+				return true;
+			},
+			isFile() {
+				return false;
+			},
+			isBlockDevice() {
+				return false;
+			},
+			isCharacterDevice() {
+				return false;
+			},
+			isSymbolicLink() {
+				throw new Error('possibly.');
+			},
+			isFIFO() {
+				return false;
+			},
+			isSocket() {
+				return false;
+			},
+		},
+		// if the current node is a directory, walk its children.
+		async ([v, ...parents]) =>
+			v.isDirectory()
+				? readdir(getPath(v, ...parents), {
+						withFileTypes: true,
+				  })
+				: []
+	);
+}
+
+/**
+ * Given a path which must be a directory, return all of
+ * its children.
+ */
 export async function* walk(
 	path: Promise<string> | string
-): AsyncGenerator<Dirent> {
-	for (const entity of await readdir(await path, { withFileTypes: true })) {
-		if (entity.isDirectory()) yield* walk(entity.name);
-		yield entity;
+): AsyncGenerator<
+	[path: [value: Dirent, ...parents: Dirent[]], getPathString: () => string]
+> {
+	for await (const value of _walk(path)) {
+		yield [value, () => getPath(...value)];
 	}
 }
