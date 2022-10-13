@@ -1,6 +1,23 @@
 load("@npm//next:index.bzl", "next")
 load("//ts:rules.bzl", "ts_project")
 
+def _get_files_for_next_impl(ctx):
+    return [
+        DefaultInfo(
+            files = [
+                src[DefaultInfo]
+            ]
+        )
+    ]
+
+_get_files_for_next_rule = rule(
+    implementation = _get_files_for_next_impl,
+    attrs = {
+        "srcs": attr.label(mandatory = True),
+    }
+)
+
+
 def next_project(name, srcs, **kwargs):
     distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
