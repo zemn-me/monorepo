@@ -60,5 +60,10 @@ export function webBucket(
  * converts it into a simple promise.
  */
 export async function generator<T>(fn: AsyncGenerator<T>): Promise<T[]> {
-	return iter.unroll(fn);
+	const ret = await iter.unroll(fn);
+	if (ret.length == 0)
+		throw new Error(
+			'Request to unroll an iterator which has length 0 -- maybe the iterator has some issue?'
+		);
+	return ret;
 }

@@ -1,8 +1,20 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "fs",
-    deps = ["@npm//@types/node"],
+    deps = [
+        "//ts/iter",
+        "@npm//@bazel/runfiles",
+        "@npm//@types/jest",
+        "@npm//@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["fs_test.js"],
+    data = glob(["testfiles/**/*"]),
+    deps = [":fs"],
 )

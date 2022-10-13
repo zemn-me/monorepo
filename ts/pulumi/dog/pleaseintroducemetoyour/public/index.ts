@@ -13,9 +13,9 @@ export const errorPage = lib.file.asset(lib.path.join(basePath, '404.html'));
 
 export const files = lib.generator(
 	(async function* () {
-		for await (const entity of walk(basePath)) {
-			if (!entity.isFile()) continue;
-			yield lib.file.asset(entity.name);
+		for await (const [[entity], getPath] of walk(basePath)) {
+			if (entity.isDirectory()) continue;
+			yield lib.file.asset(getPath());
 		}
 	})()
 );
