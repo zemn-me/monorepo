@@ -1,3 +1,6 @@
+// build and export source maps
+export const productionBrowserSourceMaps = true;
+
 export const reactStrictMode = true;
 export const swcMinify = true;
 
