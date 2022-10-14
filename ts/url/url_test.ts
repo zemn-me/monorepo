@@ -7,6 +7,7 @@ describe('url', () => {
 		});
 
 		it('should work with template syntax', () => {
+			// eslint-disable-next-line no-unused-expressions
 			Url.Local.New`https://google.com`;
 		});
 
@@ -31,6 +32,7 @@ describe('url', () => {
 
 	describe('URL', () => {
 		it('should work with template syntax', () => {
+			// eslint-disable-next-line no-unused-expressions
 			Url.URL.New`https://google.com`;
 		});
 		it('should not allow javascript URIs', () => {
