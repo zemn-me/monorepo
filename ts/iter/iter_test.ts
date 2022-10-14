@@ -19,3 +19,26 @@ describe('fromEntries', () => {
 		});
 	});
 });
+
+describe('walkPath', () => {
+	it('should work in a simple way', () => {
+		type TreeItem = { value: string; children?: TreeItem[] };
+
+		const tree: TreeItem = {
+			value: 'eggs',
+			children: [{ value: 'bacon' }, { value: 'hamburger' }],
+		};
+
+		expect(
+			[...iter.walkPath(tree, v => v.children ?? [])].map(v =>
+				v.map(v => v.value)
+			)
+		).toEqual(
+			expect.arrayContaining([
+				['eggs'],
+				['bacon', 'eggs'],
+				['hamburger', 'eggs'],
+			])
+		);
+	});
+});

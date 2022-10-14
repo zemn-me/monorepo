@@ -202,9 +202,113 @@ export function reduce<I, R>(
  * Walks a chain of values using a selector.
  */
 export function* walk<T>(i: T, select: (v: T) => T[]): Generator<T> {
-	const cursor: T | undefined = i;
+	const cursor: T = i;
 	yield cursor;
 	for (const next of select(cursor)) {
 		yield* walk(next, select);
 	}
+}
+
+export async function* asyncWalk<T>(
+	i: Promise<T> | T,
+	select: (v: T) => Promise<T[]> | T[]
+): AsyncGenerator<T> {
+	const cursor: Promise<T> | T = i;
+	yield cursor;
+	for (const next of await select(await cursor)) {
+		yield* asyncWalk(next, select);
+	}
+}
+
+/**
+ * walkPath walks a chain of values using a selector. It returns a sequence
+ * of those values, starting with the currently selected one.
+ *
+ * This might be somewhat hard to understand in abstract, so for a tree:
+ *
+ * ```
+ *  ┌──►hamburger
+ *  │
+ *  │
+ * eggs
+ *  │
+ *  │
+ *  └──►bacon
+ * ```
+ *
+ * The following values will be generated:
+ * 1. `[eggs]`
+ * 2. `[hamburger, eggs]`
+ * 3. `[bacon, eggs]`
+ *
+ */
+export function* walkPath<T>(
+	i: T,
+	select: (v: T) => T[]
+): Generator<[value: T, ...parents: T[]]> {
+	// The logic here is not very simple or easy to read 🙇‍♂️
+	// the idea is essentially that instead of iterating directly over T,
+	// we iterate over a container of T that is an array of a particular item and
+	// any of its parents.
+	//
+	// Each iteration step has the current item, 'v', and its parents. When `select(v)` gives
+	// us a list of children of T, we return each child with the parent appended to the list of its
+	// parents.
+	yield* walk<[value: T, ...parents: T[]]>([i], ([v, ...parents]) =>
+		select(v).map(v2 => [v2, v, ...parents])
+	);
+}
+
+/**
+ * asyncWalkPath walks a chain of values using a selector. It returns a sequence
+ * of those values, starting with the currently selected one.
+ *
+ * This might be somewhat hard to understand in abstract, so for a tree:
+ *
+ * ```
+ *  ┌──►hamburger
+ *  │
+ *  │
+ * eggs
+ *  │
+ *  │
+ *  └──►bacon
+ * ```
+ *
+ * The following values will be generated:
+ * 1. `[eggs]`
+ * 2. `[hamburger, eggs]`
+ * 3. `[bacon, eggs]`
+ *
+ * Note that this is kind of in reverse? That was probably a mistake and I might
+ * change it one day.
+ *
+ */
+export async function* asyncWalkPath<T>(
+	i: T,
+	select: (v: [value: T, ...parents: T[]]) => Promise<T[]> | T[]
+): AsyncGenerator<[value: T, ...parents: T[]]> {
+	// The logic here is not very simple or easy to read 🙇‍♂️
+	// the idea is essentially that instead of iterating directly over T,
+	// we iterate over a container of T that is an array of a particular item and
+	// any of its parents.
+	//
+	// Each iteration step has the current item, 'v', and its parents. When `select(v)` gives
+	// us a list of children of T, we return each child with the parent appended to the list of its
+	// parents.
+	yield* asyncWalk<[value: T, ...parents: T[]]>(
+		[i],
+		async ([v, ...parents]) =>
+			(await select([v, ...parents])).map(v2 => [v2, v, ...parents])
+	);
+}
+
+/**
+ * Transform a generator into an asynchronous list.
+ */
+export async function unroll<T>(v: AsyncIterable<T>): Promise<T[]> {
+	const arr: T[] = [];
+	for await (const value of v) arr.push(value);
+
+	return arr;
 }
