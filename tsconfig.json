@@ -26,7 +26,8 @@
 			"monorepo/*": [
 				"./*",
 				"./monorepo/*",
-				"bazel-out/k8-fastbuild/bin/monorepo/*"
+				"bazel-out/k8-fastbuild/bin/monorepo/*",
+				"dist/bin/*"
 			]
 		}
 	},

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import * as git from 'monorepo/git';
 
 export default function Main() {
 	return (
@@ -12,6 +13,10 @@ export default function Main() {
 			<p>
 				Until then,{' '}
 				<a href="https://twitter.com/zemnmez">follow me on Twitter</a>?
+			</p>
+
+			<p>
+				Built from <a href={git.head.link}>{git.head.ref}</a>.
 			</p>
 		</>
 	);

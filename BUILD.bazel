@@ -34,6 +34,13 @@ js_library(
 )
 
 exports_files(
+    glob([ ".git/**/*" ]),
+    visibility = ["//visibility:public"],
+)
+
+
+
+exports_files(
     [
         ".prettierrc.json",
         "package.json",
