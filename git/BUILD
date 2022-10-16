@@ -1,5 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 
+package(default_visibility = ["//:__subpackages__"])
+
 genrule(
     name = "HEAD",
     srcs = ["//:.git/HEAD"],
@@ -14,7 +16,12 @@ ts_project(
     name = "git",
     srcs = [
         "head.ts",
-        "head_ref.ts",
-        "index.ts",
+        "index.tsx",
     ],
+    deps = [ "git_genfiles" ]
+)
+
+ts_project(
+    name = "git_genfiles",
+    srcs = [ "head_ref.ts" ]
 )

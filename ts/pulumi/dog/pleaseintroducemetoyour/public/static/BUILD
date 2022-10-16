@@ -11,6 +11,7 @@ ts_project(
         "@npm//@types/react",
         "@npm//next",
         "@npm//react",
+        "//git"
     ],
 )
 
