@@ -2,10 +2,13 @@ load("@npm//next:index.bzl", "next")
 load("//ts:rules.bzl", "ts_project")
 
 def _with_runfiles_impl(ctx):
+    
     return DefaultInfo(
-        files = runfiles.merge_all([
-            depset for depset in [ src[DefaultInfo.files, src[DefaultInfo].runfiles ]
+        files = depset(transitive=[
+            files_container.files
             for src in ctx.attr.srcs
+            for files_container in [ src[DefaultInfo], src[DefaultInfo].default_runfiles ]
+            if files_container != None
         ])
     )
 
@@ -18,6 +21,7 @@ _with_runfiles = rule(
         ])
     }
 )
+
 
 def next_project(name, srcs, **kwargs):
     distDir = "build"
@@ -41,7 +45,7 @@ def next_project(name, srcs, **kwargs):
     next_sources_name = name + "_collated_sources"
     # This should not need a copy_to_bin rule, as the sources themselves should provide one.
     # If they don't, they won't work outside of this rule, which isn't a good look.
-    with_runfiles(
+    _with_runfiles(
         name = next_sources_name,
         srcs = srcs
     )
