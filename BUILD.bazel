@@ -34,11 +34,9 @@ js_library(
 )
 
 exports_files(
-    glob([ ".git/**/*" ]),
+    glob([".git/**/*"]),
     visibility = ["//visibility:public"],
 )
-
-
 
 exports_files(
     [

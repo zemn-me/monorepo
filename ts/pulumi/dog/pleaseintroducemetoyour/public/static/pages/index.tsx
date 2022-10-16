@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import * as git from 'monorepo/git';
+import Head from 'next/head';
 
 export default function Main() {
 	return (
