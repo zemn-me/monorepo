@@ -1,6 +1,28 @@
 load("@npm//next:index.bzl", "next")
 load("//ts:rules.bzl", "ts_project")
 
+def _with_runfiles_impl(ctx):
+    
+    return DefaultInfo(
+        files = depset(transitive=[
+            files_container.files
+            for src in ctx.attr.srcs
+            for files_container in [ src[DefaultInfo], src[DefaultInfo].default_runfiles ]
+            if files_container != None
+        ])
+    )
+
+
+_with_runfiles = rule(
+    implementation = _with_runfiles_impl,
+    attrs = {
+        "srcs": attr.label_list(mandatory = True, doc = "The rule to merge runfiles and compile-time files for.", providers = [
+            DefaultInfo
+        ])
+    }
+)
+
+
 def next_project(name, srcs, **kwargs):
     distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
@@ -20,16 +42,24 @@ def next_project(name, srcs, **kwargs):
 
     srcs = srcs + [":" + name + "_next_config"]
 
+    next_sources_name = name + "_collated_sources"
+    # This should not need a copy_to_bin rule, as the sources themselves should provide one.
+    # If they don't, they won't work outside of this rule, which isn't a good look.
+    _with_runfiles(
+        name = next_sources_name,
+        srcs = srcs
+    )
+
     next(
         name = name + ".dev",
-        data = srcs,
+        data = [ next_sources_name ],
         link_workspace_root = True,
         args = ["dev", target],
     )
 
     next(
         name = distDir,
-        data = srcs,
+        data = [ next_sources_name ],
         link_workspace_root = True,
         args = ["build", target],
         output_dir = True,
@@ -38,7 +68,7 @@ def next_project(name, srcs, **kwargs):
 
     next(
         name = "out",
-        data = [":build"] + srcs,
+        data = [":build", next_sources_name ],
         args = ["export", target],
         link_workspace_root = True,
         output_dir = True,
