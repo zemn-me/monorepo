@@ -4673,7 +4673,7 @@ jest-config@^29.2.0:
     slash "^3.0.0"
     strip-json-comments "^3.1.1"
 
-jest-diff@^29.1.2, jest-diff@^29.2.0:
+jest-diff@^29.2.0:
   version "29.2.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.2.0.tgz#b1e11ac1a1401fc4792ef8ba406b48f1ae7d2bc5"
   integrity sha512-GsH07qQL+/D/GxlnU+sSg9GL3fBOcuTlmtr3qr2pnkiODCwubNN2/7slW4m3CvxDsEus/VEOfQKRFLyXsUlnZw==
@@ -4759,17 +4759,7 @@ jest-leak-detector@^29.2.0:
     jest-get-type "^29.2.0"
     pretty-format "^29.2.0"
 
-jest-matcher-utils@^29.1.2:
-  version "29.1.2"
-  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.1.2.tgz#e68c4bcc0266e70aa1a5c13fb7b8cd4695e318a1"
-  integrity sha512-MV5XrD3qYSW2zZSHRRceFzqJ39B2z11Qv0KPyZYxnzDHFeYZGJlgGi0SW+IXSJfOewgJp/Km/7lpcFT+cgZypw==
-  dependencies:
-    chalk "^4.0.0"
-    jest-diff "^29.1.2"
-    jest-get-type "^29.0.0"
-    pretty-format "^29.1.2"
-
-jest-matcher-utils@^29.2.0:
+jest-matcher-utils@^29.1.2, jest-matcher-utils@^29.2.0:
   version "29.2.0"
   resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.2.0.tgz#d1d73add0e0efb0e316a50f296977505dc053e02"
   integrity sha512-FcEfKZ4vm28yCdBsvC69EkrEhcfex+IYlRctNJXsRG9+WC3WxgBNORnECIgqUtj7o/h1d8o7xB/dFUiLi4bqtw==
