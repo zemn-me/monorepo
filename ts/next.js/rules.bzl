@@ -1,15 +1,24 @@
 load("@npm//next:index.bzl", "next")
 load("//ts:rules.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "JSEcmaScriptModuleInfo")
 
 def _with_runfiles_impl(ctx):
-    
+    deps = []
+
+    for src in ctx.attr.srcs:
+        if DefaultInfo in src:
+            deps += [ src[DefaultInfo].files ]
+            if src[DefaultInfo].default_runfiles != None:
+                deps += [ src[DefaultInfo].default_runfiles.files ]
+        
+        if DeclarationInfo in src:
+            deps += [ src[DeclarationInfo].transitive_declarations ]
+
+        if JSEcmaScriptModuleInfo in src:
+            deps += [ src[JSEcmaScriptModuleInfo].sources ]
+
     return DefaultInfo(
-        files = depset(transitive=[
-            files_container.files
-            for src in ctx.attr.srcs
-            for files_container in [ src[DefaultInfo], src[DefaultInfo].default_runfiles ]
-            if files_container != None
-        ])
+        files = depset(transitive=deps)
     )
 
 
@@ -26,6 +35,7 @@ _with_runfiles = rule(
 def next_project(name, srcs, **kwargs):
     distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
+    #target = "bazel-out/k8-fastbuild/bin/" + native.package_name()
 
     # copy the next config over
     native.genrule(

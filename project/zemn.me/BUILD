@@ -30,7 +30,7 @@ ts_project(
 
 next_project(
     name = "zemn.me",
-    srcs = [ ":ts"]
+    srcs = [ ":ts", "//:tsconfig"]
 )
 
 
