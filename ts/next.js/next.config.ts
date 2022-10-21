@@ -1,14 +1,20 @@
-export const reactStrictMode = true;
-export const swcMinify = true;
+import transpile from 'next-transpile-modules';
 
-export const eslint = {
+let config = {
+	reactStrictMode: true,
+	swcMinify: true,
+	eslint: {
 	// Warning: This allows production builds to successfully complete even if
 	// your project has ESLint errors.
 	ignoreDuringBuilds: true,
-};
+},
 
-export const typescript = {
 	tsconfigPath: '../../../tsconfig.json',
+	distDir: 'build'
 };
 
-export const distDir = 'build';
+export default transpile(['monorepo'])(config)
+
+
+
+
