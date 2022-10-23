@@ -1,1 +1,0 @@
-// linkstamp.cc
