@@ -568,20 +568,20 @@
   resolved "https://registry.yarnpkg.com/@bazel/runfiles/-/runfiles-5.7.1.tgz#1929078bebafcea7a813a0ea8db8720dcf67a6dd"
   integrity sha512-lMovXi/ENs+I8OWcUwAiV+0ZAv5pZJfKM70i2KdVZ5vU3Roc+pgPntH77ArEcPfFh0bJjuiSAgidr6KAMdTZiQ==
 
-"@bazel/typescript@5.7.0":
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-5.7.0.tgz#3f888c603bf5f159dfb4c0c38584fb31d248d5a2"
-  integrity sha512-5c06vi2rQqd75GieqYGsNVon3tnkvbjMlVLJuwJ5/VtC9uOXKlCwrqxV8tbx789PTTtACNYzwKJTVW++58tgDA==
+"@bazel/typescript@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-5.7.1.tgz#e585bcdc54a4ccb23d99c3e1206abf4853cf0682"
+  integrity sha512-MAnAtFxA2znadm81+rbYXcyWX1DEF/urzZ1F4LBq+w27EQ4PGyqIqCM5om7JcoSZJwjjMoBJc3SflRsMrZZ6+g==
   dependencies:
-    "@bazel/worker" "5.7.0"
+    "@bazel/worker" "5.7.1"
     semver "5.6.0"
     source-map-support "0.5.9"
     tsutils "3.21.0"
 
-"@bazel/worker@5.7.0":
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/@bazel/worker/-/worker-5.7.0.tgz#d121261ee1833c5f5858f818f0e4d9a2d8e2c3c5"
-  integrity sha512-VqTG+0gsgXM07q+HiQcSAggNnAzjLei8lzlJQ+mey12KGI4AbNJ1vxlk2pnw9BZdckfe2rRzwkF44B5SNqIgSQ==
+"@bazel/worker@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@bazel/worker/-/worker-5.7.1.tgz#2c4a9bd0e0ef75e496aec9599ff64a87307e7dad"
+  integrity sha512-UndmQVRqK0t0NMNl8I1P5XmxzdPvMA0X6jufszpfwy5gyzjOxeiOIzmC0ALCOx78CuJqOB/8WOI1pwTRmhd0tg==
   dependencies:
     google-protobuf "^3.6.1"
 
@@ -1299,10 +1299,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.7.0.tgz#af80a1ef7cf110ea3a68242acd95648991bcd763"
   integrity sha512-FGBx/Qd09lMaqQcogCHyYrFEpTx4cAjeS+48lMIR12z7LdH+zofGDVQSubN59nL6IpubfKqTeIDu9rNO28iHVA==
 
-"@pulumi/aws@5.18.0":
-  version "5.18.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.18.0.tgz#2ecc1b2e45749aaa03255d6a3f99bec9e30668ec"
-  integrity sha512-pfp9B0Qzlm3DmqxmyCIHdiKu0fJIt7taKhyPn8ddp7k8gqsCoorn6WKzxhTQ6fTYTRtdurjMXCaMRyGGoQrWaQ==
+"@pulumi/aws@5.19.0":
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.19.0.tgz#ea65b59b1688f911a1ca12a1711c59a17bc2768d"
+  integrity sha512-kuSJfRn03AT92nwvKHRt9PFaEkMB3M33BRWWOteHlIFHHQi8ZRQI5b2XLNMADlp4Q3YVnObiuwMjgSTulNdgZQ==
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
     aws-sdk "^2.0.0"
@@ -1335,10 +1335,10 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@3.44.1", "@pulumi/pulumi@^3.0.0":
-  version "3.44.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.44.1.tgz#471f91fa3cf4fe181e3522eaab7f6362e674aaf4"
-  integrity sha512-y/cl6FKGqfcaAwHtVgdGfNh0cvYGluwCZjKHmkc1lZ0ETM+5QnXY9nKhfjw3nAgXoN89Qyqp8kB1mOUudIyxEw==
+"@pulumi/pulumi@3.44.2", "@pulumi/pulumi@^3.0.0":
+  version "3.44.2"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.44.2.tgz#7d13e31ffe711bcfda50de770f24637e584bf056"
+  integrity sha512-CQ+T11yb8hLv0LyEU9CtGhvTVGh/OZuGLG1zu2gybM5+UbOjLdlPv/HwW8/kExnKioQc+l4huDAF3dtAGOOv3w==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
@@ -1759,10 +1759,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@18.11.5", "@types/node@>=12.12.47":
-  version "18.11.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.5.tgz#1bc94cf2f9ab5fe33353bc7c79c797dcc5325bef"
-  integrity sha512-3JRwhbjI+cHLAkUorhf8RnqUbFXajvzX4q6fMn5JwkgtuwfYtRQYI3u4V92vI6NJuTsbBQWWh3RZjFsuevyMGQ==
+"@types/node@*", "@types/node@18.11.7", "@types/node@>=12.12.47":
+  version "18.11.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.7.tgz#8ccef136f240770c1379d50100796a6952f01f94"
+  integrity sha512-LhFTglglr63mNXUSRYD8A+ZAIu5sFqNJ4Y2fPuY7UlrySJH87rRRlhtVmMHplmfk5WkoJGmDjE9oiTfyX94CpQ==
 
 "@types/node@12.20.24":
   version "12.20.24"
@@ -1789,10 +1789,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
 
-"@types/react-dom@18.0.7":
-  version "18.0.7"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.7.tgz#ee7cf8ec4e6977e3f0a7b1d38bd89c75aa2aec28"
-  integrity sha512-HaXc+BbqAZE1RdsK3tC8SbkFy6UL2xF76lT9rQs5JkPrJg3rWA3Ou/Lhw3YJQzEDkBpmJ79nBsfnd05WrBd2QQ==
+"@types/react-dom@18.0.8":
+  version "18.0.8"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.8.tgz#d2606d855186cd42cc1b11e63a71c39525441685"
+  integrity sha512-C3GYO0HLaOkk9dDAz3Dl4sbe4AKUGTCfFIZsz3n/82dPNN8Du533HzKatDxeUYWu24wJgMP1xICqkWk1YOLOIw==
   dependencies:
     "@types/react" "*"
 
@@ -2248,9 +2248,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.0.0:
-  version "2.1240.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1240.0.tgz#9692bdf44b96e8769fad84ee126cd692eda08806"
-  integrity sha512-WmZHnvka7SFKOwnGV0tDwjBPz5j9jJ7KU4BfvOZ/1y+hwcXsUY2JjKj9T7KKMjjG/L3m2H5b9JpS+r/gtcjnog==
+  version "2.1241.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1241.0.tgz#168a716b735f56f5f75cbdc9e3939273fb9ec875"
+  integrity sha512-62Zhl5pVD5GN1ZdzEEyNxdH20zMlJBUaiQ7epCHnt+Zp12nd9y0uOHHiWWGDOrECQX/KAUIcDBiE4B04MeqP4g==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
