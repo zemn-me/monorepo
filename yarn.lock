@@ -1803,10 +1803,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@18.0.23":
-  version "18.0.23"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.23.tgz#4190ecd58b99fa79fe2e67832bdcb287e5f893e4"
-  integrity sha512-R1wTULtCiJkudAN2DJGoYYySbGtOdzZyUWAACYinKdiQC8auxso4kLDUhQ7AJ2kh3F6A6z4v69U6tNY39hihVQ==
+"@types/react@*", "@types/react@18.0.24":
+  version "18.0.24"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.24.tgz#2f79ed5b27f08d05107aab45c17919754cc44c20"
+  integrity sha512-wRJWT6ouziGUy+9uX0aW4YOJxAY0bG6/AOk5AW5QSvZqI7dk6VBIbXvcVgIw/W5Jrl24f77df98GEKTJGOLx7Q==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2248,9 +2248,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.0.0:
-  version "2.1241.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1241.0.tgz#168a716b735f56f5f75cbdc9e3939273fb9ec875"
-  integrity sha512-62Zhl5pVD5GN1ZdzEEyNxdH20zMlJBUaiQ7epCHnt+Zp12nd9y0uOHHiWWGDOrECQX/KAUIcDBiE4B04MeqP4g==
+  version "2.1242.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1242.0.tgz#152ce513a9f97642b4af9b935cf7c07e2fc6348f"
+  integrity sha512-qVpaMafIHw3Mn3Mo7zTY4Xq8lHkTxIRQJFV5ronsi4lTLqhqF1rANoPKSlVWxUPRyG5so/we+ZUIog5wpjSgiw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2481,9 +2481,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001406:
-  version "1.0.30001425"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001425.tgz#52917791a453eb3265143d2cd08d80629e82c735"
-  integrity sha512-/pzFv0OmNG6W0ym80P3NtapU0QEiDS3VuYAZMGoLLqiC7f6FJFe1MjpQDREGApeenD9wloeytmVDj+JLXPC6qw==
+  version "1.0.30001426"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001426.tgz#58da20446ccd0cb1dfebd11d2350c907ee7c2eaa"
+  integrity sha512-n7cosrHLl8AWt0wwZw/PJZgUg3lV0gk9LMI7ikGJwhyhgsd2Nb65vKvmSexCqq/J7rbH3mFG6yZZiPR5dLPW5A==
 
 chalk@5.1.2:
   version "5.1.2"
@@ -3162,10 +3162,10 @@ esbuild-android-arm64@0.15.12:
   resolved "https://registry.yarnpkg.com/esbuild-android-arm64/-/esbuild-android-arm64-0.15.12.tgz#5ee72a6baa444bc96ffcb472a3ba4aba2cc80666"
   integrity sha512-Hc9SEcZbIMhhLcvhr1DH+lrrec9SFTiRzfJ7EGSBZiiw994gfkVV6vG0sLWqQQ6DD7V4+OggB+Hn0IRUdDUqvA==
 
-esbuild-css-modules-plugin@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/esbuild-css-modules-plugin/-/esbuild-css-modules-plugin-2.6.0.tgz#195f95aeb2a39865534dcd522ffef1bb7b350ad4"
-  integrity sha512-21uGJG6O1UY+pHwYVzL0w1edzUubF67NotXP0Y9OroaOqymbojax0DT3cvygVbWKBy9Hj9Vn/EWrkHpqOswaCA==
+esbuild-css-modules-plugin@2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/esbuild-css-modules-plugin/-/esbuild-css-modules-plugin-2.6.2.tgz#f654066393cf8c3eb85d7dc896bfdcb2baa98d1e"
+  integrity sha512-PxXl7/piBCgyspzHq5Jdcot+JrvuR43A0UvA/KnlUntmnJ1/M1gHdFD8xJUrlOySLmxVZwjwqnJEgf5gMBUdUg==
   dependencies:
     fs-extra "^10.1.0"
     lightningcss "^1.16.0"
