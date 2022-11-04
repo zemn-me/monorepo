@@ -19,8 +19,8 @@ def fetch_dependencies():
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "c29944ba9b0b430aadcaf3bf2570fece6fc5ebfb76df145c6cdad40d65c20811",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.7.0/rules_nodejs-5.7.0.tar.gz"],
+        sha256 = "5aae76dced38f784b58d9776e4ab12278bc156a9ed2b1d9fcd3e39921dc88fda",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.7.1/rules_nodejs-5.7.1.tar.gz"],
     )
 
     http_archive(
@@ -77,18 +77,18 @@ def fetch_dependencies():
     http_archive(
         name = "rules_pkg",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.7.1/rules_pkg-0.7.1.tar.gz",
-            "https://github.com/bazelbuild/rules_pkg/releases/download/0.7.1/rules_pkg-0.7.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
         ],
-        sha256 = "451e08a4d78988c06fa3f9306ec813b836b1d076d0f055595444ba4ff22b867f",
+        sha256 = "eea0f59c28a9241156a47d7a8e32db9122f3d50b505fae0f33de6ce4d9b61834",
     )
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "efbbba6ac1a4fd342d5122cbdfdb82aeb2cf2862e35022c752eaddffada7c3f3",
+        sha256 = "448e37e0dbf61d6fa8f00aaa12d191745e14f07c31cabfa731f0c8e8a4f41b97",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.27.0/bazel-gazelle-v0.27.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.27.0/bazel-gazelle-v0.27.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
         ],
     )
 
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "b6fd7633f6d4340dad9c22fa2b86f1390698f6509e7b8b928bb695685411d2dc",
+        sha256 = "5fcd4f1cc825d3c4ca130ec6fd771f3704f9a9d920d55078929b4680cc9d00e1",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.43.0/pulumi-v3.43.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.46.0/pulumi-v3.46.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -155,9 +155,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "313307136cb6369f3c9d2992209c1e354b3e2c9989877ee67c688917320fba1f",
-        strip_prefix = "rules_swc-0.17.1",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.17.1.tar.gz",
+        sha256 = "317e3b3816fa9d3d52c60aa37255b884d206e0842e41017ec861a99f95cbea16",
+        strip_prefix = "rules_swc-0.18.1",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.18.1.tar.gz",
     )
 
     http_archive(
