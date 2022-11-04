@@ -47,8 +47,6 @@ describe('svgshot', () => {
 
 		// would be better in future to parse the svg and calculate its
 		// textContent
-		expect(result).toContain(
-			"Hello, world!"
-		);
+		expect(result).toContain('Hello, world!');
 	});
 });
