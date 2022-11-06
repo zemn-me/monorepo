@@ -120,3 +120,10 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+
+load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
+
+rules_rust_dependencies()
+
+rust_register_toolchains(edition = "2021")
