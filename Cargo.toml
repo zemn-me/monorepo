@@ -1,0 +1,7 @@
+[package]
+name = "monorepo"
+edition = "2021"
+
+[dependencies]
+swc_css_parser = "0.133.16"
+clap = "4.0.19"
