@@ -7,7 +7,7 @@ rust_binary(
     name = "hello_world",
     srcs = ["hello_world.rs"],
     deps = [
-        "@crate_index//:clap"
+        "@cargo//:clap"
     ]
 )
 

@@ -132,7 +132,7 @@ rust_register_toolchains(edition = "2021")
 load("@rules_rust//crate_universe:defs.bzl", "crates_repository", "crate")
 
 crates_repository(
-    name = "crate_index",
+    name = "cargo",
     cargo_lockfile = "//:Cargo.Bazel.lock",
     lockfile = "//:cargo-bazel-lock.json",
     manifests = ["//:Cargo.toml"],
@@ -140,6 +140,6 @@ crates_repository(
     rust_version = "1.60.0",
 )
     
-load("@crate_index//:defs.bzl", "crate_repositories")
+load("@cargo//:defs.bzl", "crate_repositories")
 
 crate_repositories()
