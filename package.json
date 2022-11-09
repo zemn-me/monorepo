@@ -96,7 +96,8 @@
 		"test": "yarn run bazelisk run //bzl:affected_files",
 		"fix": "yarn run bazelisk run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test",
-		"pr": "gh pr create -f; gh pr merge -md --auto"
+		"pr": "gh pr create -f; gh pr merge -md --auto",
+		"repin": "CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
 	},
 	"dependencies": {
 		"@pulumi/command": "4.5.0",

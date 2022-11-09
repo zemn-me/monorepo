@@ -1,0 +1,27 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_doc")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "hello_world",
+    srcs = ["hello_world.rs"],
+    deps = [
+        "@cargo//:clap"
+    ]
+)
+
+genrule(
+    name = "hello_world_output",
+    cmd = """
+    $(location :hello_world) --name thomas --count 8 > $@
+    """,
+    outs = [ "output.txt" ],
+    tools = [ ":hello_world" ]
+)
+
+generated_file_test(
+    name = "hello_world_test",
+    generated = ":hello_world_output",
+    src = "hello_world_expected.txt"
+)
