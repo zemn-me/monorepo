@@ -1,0 +1,12 @@
+load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "module",
+    srcs = ["module.rs"],
+    deps = [
+        "@cargo//:swc_css_parser"
+    ]
+)
