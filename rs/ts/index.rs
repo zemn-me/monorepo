@@ -1,6 +1,5 @@
 /// This file is a sketch of a system for a typescript module like AST,
 /// eventually to be used for generating CSS modules.
-
 use std::io;
 
 trait WriteTo<W>
