@@ -10,25 +10,25 @@ where
 }
 
 #[derive(Copy, Clone)]
-struct TokDoubleQuote;
+pub struct TokDoubleQuote;
 
 impl<W: io::Write> WriteTo<W> for TokDoubleQuote {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
-        return w.write(b"\"");
+        w.write(b"\"")
     }
 }
 
 #[derive(Copy, Clone)]
-struct TokSingleQuote;
+pub struct TokSingleQuote;
 
 impl<W: io::Write> WriteTo<W> for TokSingleQuote {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
-        return w.write(b"'");
+        w.write(b"'")
     }
 }
 
 #[derive(Copy, Clone)]
-enum TokQuote {
+pub enum TokQuote {
     Double(TokDoubleQuote),
     Single(TokSingleQuote),
 }
@@ -42,7 +42,7 @@ impl<W: io::Write> WriteTo<W> for TokQuote {
     }
 }
 
-struct ConstantString {
+pub struct ConstantString {
     value: String,
     quote: TokQuote,
 }
@@ -61,7 +61,7 @@ impl<W: io::Write> WriteTo<W> for ConstantString {
     }
 }
 
-struct ConstantNumber {
+pub struct ConstantNumber {
     value: i64,
 }
 
@@ -71,7 +71,7 @@ impl<W: io::Write> WriteTo<W> for ConstantNumber {
     }
 }
 
-enum Expression {
+pub enum Expression {
     String(ConstantString),
     Number(ConstantNumber),
 }
@@ -95,7 +95,7 @@ impl<W: io::Write> WriteTo<W> for Identifier {
     }
 }
 
-struct Declaration {
+pub struct Declaration {
     name: Identifier,
     value: Option<Expression>,
 }
@@ -119,7 +119,7 @@ impl<W: io::Write> WriteTo<W> for Declaration {
     }
 }
 
-struct ExportImport {
+pub struct ExportImport {
     value: Declaration,
 }
 
@@ -134,7 +134,7 @@ impl<W: io::Write> WriteTo<W> for ExportImport {
     }
 }
 
-enum Statement {
+pub enum Statement {
     Declaration(Declaration),
     ExportImport(ExportImport),
 }
@@ -166,5 +166,6 @@ fn main() {
         },
     });
 
-    val.write_to(&mut io::stdout());
+    val.write_to(&mut io::stdout())
+        .expect("Unable to serialize.");
 }
