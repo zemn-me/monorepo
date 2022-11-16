@@ -1,0 +1,14 @@
+package(default_visibility = ["//:__subpackages__"])
+
+
+alias(
+    name = "rustfmt",
+    actual = "//bin/host/rs:rustfmt",
+)
+
+alias(
+    name = "fmt",
+    actual = ":rustfmt",
+)
+
+
