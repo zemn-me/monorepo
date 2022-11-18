@@ -4,3 +4,16 @@ alias(
     name = "pulumi",
     actual = "@pulumi_cli//:pulumi/pulumi",
 )
+
+sh_test(
+    name = "smoke",
+    data = [ ":pulumi" ],
+    srcs = [ "smoke.sh" ],
+    env = {
+        # the below should become rlocationpath when https://github.com/bazelbuild/bazel/pull/16668 has a release
+        "PULUMI_BIN": "$(rootpath :pulumi)" 
+    },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ]
+)
