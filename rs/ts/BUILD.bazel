@@ -1,9 +1,9 @@
-load("//rs:rules.bzl", "rust_binary", "rust_doc")
+load("//rs:rules.bzl", "rust_library", "rust_doc")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 
 package(default_visibility = ["//visibility:public"])
 
-rust_binary(
+rust_library(
     name = "ts",
-    srcs = ["index.rs"],
+    srcs = glob(["*.rs"]),
 )

@@ -1,0 +1,27 @@
+load("//rs:rules.bzl", "rust_binary", "rust_doc")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "testing",
+    srcs = glob(["*.rs"]),
+    deps = [ "//rs/ts" ]
+)
+
+genrule(
+    name = "output",
+    cmd = """
+    $(location :testing) > $@
+    """,
+    outs = [ "output.ts" ],
+    tools = [ ":testing" ]
+)
+
+
+ts_project(
+    name = "output_ts",
+    srcs = [ "output.ts" ],
+    ignores_lint = [ "output.ts" ]
+)
