@@ -1,0 +1,9 @@
+load("//rs:rules.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "module",
+    srcs = glob(["*.rs"]),
+    deps = [ "@cargo//:swc_css_parser" ]
+)
