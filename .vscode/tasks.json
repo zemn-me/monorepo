@@ -4,7 +4,7 @@
         {
             "label": "Generate rust-project.json",
             "command": "yarn",
-            "args": ["bazel", "run", "//rs:gen_rust_project"],
+            "args": ["run", "bazel", "run", "//rs:gen_rust_project"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },

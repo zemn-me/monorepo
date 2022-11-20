@@ -2,7 +2,7 @@
 /// eventually to be used for generating CSS modules.
 use std::io;
 
-trait WriteTo<W>
+pub trait WriteTo<W>
 where
     W: io::Write,
 {
@@ -43,8 +43,8 @@ impl<W: io::Write> WriteTo<W> for TokQuote {
 }
 
 pub struct ConstantString {
-    value: String,
-    quote: TokQuote,
+    pub value: String,
+    pub quote: TokQuote,
 }
 
 impl<W: io::Write> WriteTo<W> for ConstantString {
@@ -62,7 +62,7 @@ impl<W: io::Write> WriteTo<W> for ConstantString {
 }
 
 pub struct ConstantNumber {
-    value: i64,
+    pub value: i64,
 }
 
 impl<W: io::Write> WriteTo<W> for ConstantNumber {
@@ -85,8 +85,8 @@ impl<W: io::Write> WriteTo<W> for Expression {
     }
 }
 
-struct Identifier {
-    value: String,
+pub struct Identifier {
+    pub value: String,
 }
 
 impl<W: io::Write> WriteTo<W> for Identifier {
@@ -96,8 +96,8 @@ impl<W: io::Write> WriteTo<W> for Identifier {
 }
 
 pub struct Declaration {
-    name: Identifier,
-    value: Option<Expression>,
+    pub name: Identifier,
+    pub value: Option<Expression>,
 }
 
 impl<W: io::Write> WriteTo<W> for Declaration {
@@ -120,7 +120,7 @@ impl<W: io::Write> WriteTo<W> for Declaration {
 }
 
 pub struct ExportImport {
-    value: Declaration,
+    pub value: Declaration,
 }
 
 impl<W: io::Write> WriteTo<W> for ExportImport {
@@ -151,21 +151,4 @@ impl<W: io::Write> WriteTo<W> for Statement {
 
         Result::Ok(ctr)
     }
-}
-
-fn main() {
-    let val = Statement::ExportImport(ExportImport {
-        value: Declaration {
-            name: Identifier {
-                value: "something".to_string(),
-            },
-            value: Some(Expression::String(ConstantString {
-                value: "some value".to_string(),
-                quote: TokQuote::Single(TokSingleQuote),
-            })),
-        },
-    });
-
-    val.write_to(&mut io::stdout())
-        .expect("Unable to serialize.");
 }

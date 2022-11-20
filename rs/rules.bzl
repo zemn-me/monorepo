@@ -1,7 +1,6 @@
-load("@rules_rust//rust:defs.bzl", "rust_clippy", _rust_binary = "rust_binary", _rust_doc = "rust_doc", "rustfmt_test")
+load("@rules_rust//rust:defs.bzl", "rust_clippy", _rust_library = "rust_library", _rust_binary = "rust_binary", _rust_doc = "rust_doc", "rustfmt_test")
 
-def rust_binary(name, **kwargs):
-    _rust_binary(name = name, **kwargs)
+def _rust_source_tests(name, **kwargs):
     rustfmt_test(
         name = name + "_fmt",
         targets = [ name ]
@@ -13,5 +12,13 @@ def rust_binary(name, **kwargs):
         deps = [ name ]
     )
 
+def rust_binary(name, **kwargs):
+    _rust_binary(name = name, **kwargs)
+    _rust_source_tests(name, **kwargs)
+
 def rust_doc(name, **kwargs):
     _rust_doc(name = name, **kwargs)
+
+def rust_library(name, **kwargs):
+    _rust_library(name = name, **kwargs)
+    _rust_source_tests(name, **kwargs)
