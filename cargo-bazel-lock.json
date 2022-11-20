@@ -1,5 +1,5 @@
 {
-  "checksum": "0dbbd940e4bb38f3080d99398f1719bbbf37d74989de490da6f6dbe2e6dc4f33",
+  "checksum": "691ee8c195fe5971194448b7556ea15dd05313f8e814147bf7f855408eb8c28d",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2308,16 +2308,32 @@
               "target": "hex"
             },
             {
+              "id": "serde_json 1.0.88",
+              "target": "serde_json"
+            },
+            {
               "id": "sha2 0.10.6",
               "target": "sha2"
+            },
+            {
+              "id": "swc_atoms 0.4.25",
+              "target": "swc_atoms"
             },
             {
               "id": "swc_common 0.29.15",
               "target": "swc_common"
             },
             {
-              "id": "swc_css 0.140.3",
-              "target": "swc_css"
+              "id": "swc_css_codegen 0.137.3",
+              "target": "swc_css_codegen"
+            },
+            {
+              "id": "swc_css_modules 0.13.3",
+              "target": "swc_css_modules"
+            },
+            {
+              "id": "swc_css_parser 0.136.3",
+              "target": "swc_css_parser"
             }
           ],
           "selects": {}
@@ -4684,64 +4700,6 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_css 0.140.3": {
-      "name": "swc_css",
-      "version": "0.140.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css/0.140.3/download",
-          "sha256": "1e19dce8eb6ecbfe4ceddab39588dcbe27d57704e390367bd04e852574c13f32"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css",
-            "crate_root": "src/lib.rs",
-            "srcs": {
-              "include": [
-                "**/*.rs"
-              ],
-              "exclude": []
-            }
-          }
-        }
-      ],
-      "library_target_name": "swc_css",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "swc_css_ast 0.127.2",
-              "target": "swc_css_ast"
-            },
-            {
-              "id": "swc_css_codegen 0.137.3",
-              "target": "swc_css_codegen"
-            },
-            {
-              "id": "swc_css_parser 0.136.3",
-              "target": "swc_css_parser"
-            },
-            {
-              "id": "swc_css_utils 0.124.2",
-              "target": "swc_css_utils"
-            },
-            {
-              "id": "swc_css_visit 0.126.2",
-              "target": "swc_css_visit"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.140.3"
-      },
-      "license": "Apache-2.0"
-    },
     "swc_css_ast 0.127.2": {
       "name": "swc_css_ast",
       "version": "0.127.2",
@@ -4944,6 +4902,76 @@
         "version": "0.2.0"
       },
       "license": "Apache-2.0/MIT"
+    },
+    "swc_css_modules 0.13.3": {
+      "name": "swc_css_modules",
+      "version": "0.13.3",
+      "repository": {
+        "Http": {
+          "url": "https://crates.io/api/v1/crates/swc_css_modules/0.13.3/download",
+          "sha256": "32818d3936a1c9c0d2caa27bb17b22788443be55031843cf2bd91051a8ae5b1e"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "swc_css_modules",
+            "crate_root": "src/lib.rs",
+            "srcs": {
+              "include": [
+                "**/*.rs"
+              ],
+              "exclude": []
+            }
+          }
+        }
+      ],
+      "library_target_name": "swc_css_modules",
+      "common_attrs": {
+        "compile_data_glob": [
+          "**"
+        ],
+        "deps": {
+          "common": [
+            {
+              "id": "rustc-hash 1.1.0",
+              "target": "rustc_hash"
+            },
+            {
+              "id": "serde 1.0.147",
+              "target": "serde"
+            },
+            {
+              "id": "swc_atoms 0.4.25",
+              "target": "swc_atoms"
+            },
+            {
+              "id": "swc_common 0.29.15",
+              "target": "swc_common"
+            },
+            {
+              "id": "swc_css_ast 0.127.2",
+              "target": "swc_css_ast"
+            },
+            {
+              "id": "swc_css_codegen 0.137.3",
+              "target": "swc_css_codegen"
+            },
+            {
+              "id": "swc_css_parser 0.136.3",
+              "target": "swc_css_parser"
+            },
+            {
+              "id": "swc_css_visit 0.126.2",
+              "target": "swc_css_visit"
+            }
+          ],
+          "selects": {}
+        },
+        "edition": "2021",
+        "version": "0.13.3"
+      },
+      "license": "Apache-2.0"
     },
     "swc_css_parser 0.136.3": {
       "name": "swc_css_parser",
