@@ -9,7 +9,7 @@ use swc_css_codegen::{
     CodeGenerator, CodegenConfig, Emit,
 };
 //use swc_css_modules;
-use swc_css_parser::{self, ParserConfig};
+use swc_css_parser::{self, parser::ParserConfig};
 
 /// Transforms a CSS module file (*.module.css) into
 /// a json file and a css file.
@@ -39,33 +39,33 @@ impl swc_css_modules::TransformConfig for TestConfig {
 
 #[derive(Debug)]
 enum CliError {
-    SwcCssParserError(swc_css_parser::error::Error),
-    SerdeJsonError(serde_json::Error),
-    IoError(io::Error),
-    FmtError(std::fmt::Error),
+    SwcCssParser(swc_css_parser::error::Error),
+    SerdeJson(serde_json::Error),
+    Io(io::Error),
+    Fmt(std::fmt::Error),
 }
 
 impl convert::From<std::fmt::Error> for CliError {
     fn from(error: std::fmt::Error) -> Self {
-        Self::FmtError(error)
+        Self::Fmt(error)
     }
 }
 
 impl convert::From<swc_css_parser::error::Error> for CliError {
     fn from(error: swc_css_parser::error::Error) -> Self {
-        Self::SwcCssParserError(error)
+        Self::SwcCssParser(error)
     }
 }
 
 impl convert::From<serde_json::Error> for CliError {
     fn from(error: serde_json::Error) -> Self {
-        Self::SerdeJsonError(error)
+        Self::SerdeJson(error)
     }
 }
 
 impl convert::From<io::Error> for CliError {
     fn from(error: io::Error) -> Self {
-        Self::IoError(error)
+        Self::Io(error)
     }
 }
 
@@ -120,7 +120,7 @@ fn act() -> Result<(), CliError> {
     fs::write(
         json_file_path,
         serde_json::to_string_pretty(&transform_result.renamed)?,
-    );
+    )?;
 
     Ok(())
 }
