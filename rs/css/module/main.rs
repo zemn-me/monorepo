@@ -29,11 +29,18 @@ struct Args {
     json_file: String,
 }
 
-struct TestConfig {}
+struct FileScopedConfig<'a> {
+    path: &'a std::path::Path,
+}
 
-impl swc_css_modules::TransformConfig for TestConfig {
+impl<'a> swc_css_modules::TransformConfig for FileScopedConfig<'a> {
     fn new_name_for(&self, local: &JsWord) -> JsWord {
-        format!("__local__{}", local).into()
+        format!(
+            "{className}__{filePath}",
+            className = local,
+            filePath = self.path.display()
+        )
+        .into()
     }
 }
 
@@ -84,7 +91,6 @@ fn act() -> Result<(), CliError> {
     let mut ss = swc_css_parser::parse_file(
         &fm,
         ParserConfig {
-            css_modules: true,
             ..Default::default()
         },
         &mut errors,
@@ -92,7 +98,12 @@ fn act() -> Result<(), CliError> {
 
     let _result = swc_css_modules::imports::analyze_imports(&ss);
 
-    let transform_result = swc_css_modules::compile(&mut ss, TestConfig {});
+    let transform_result = swc_css_modules::compile(
+        &mut ss,
+        FileScopedConfig {
+            path: module_file_path,
+        },
+    );
 
     let mut buf = String::new();
     {
