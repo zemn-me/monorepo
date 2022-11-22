@@ -12,10 +12,7 @@ use swc_css_codegen::{
 //use swc_css_modules;
 use swc_css_modules::CssClassName;
 use swc_css_parser::{self, parser::ParserConfig};
-use ts::ts::{
-    ConstantString, Declaration, Export, Expression, Identifier, Import, Module, Statement,
-    TokQuote, TokSingleQuote,
-};
+use ts::ts::{Declare, Export, Import, Module, Statement};
 
 /// Transforms a CSS module file (*.module.css) into
 /// a json file and a css file.
@@ -176,17 +173,13 @@ fn act() -> Result<(), CliError> {
         .into_iter()
         .map(|(key, value)| {
             Ok(match value.first().ok_or(MissingRewrittenValue)? {
-                CssClassName::Local { name } => Ok(vec![Statement::Export(Export {
-                    value: Declaration {
-                        name: Identifier {
-                            value: key.to_string(),
-                        },
-                        value: Some(Expression::String(ConstantString {
-                            value: name.to_string(),
-                            quote: TokQuote::Single(TokSingleQuote),
-                        })),
+                CssClassName::Local { name } => Ok(vec![Export {
+                    value: Declare {
+                        name: key.to_string().into(),
+                        value: Some(name.to_string().into()),
                     },
-                })]),
+                }
+                .into()]),
 
                 CssClassName::Import { .. } => Err(NotYetImplemented),
 
@@ -199,9 +192,10 @@ fn act() -> Result<(), CliError> {
         .collect();
 
     // add import of css file.
-    let mut imports = vec![Statement::Import(Import {
+    let mut imports = vec![Import {
         from: css_file_import,
-    })];
+    }
+    .into()];
 
     let mut statements = vec![];
 

@@ -1,6 +1,6 @@
 /// This file is a sketch of a system for a typescript module like AST,
 /// eventually to be used for generating CSS modules.
-use std::io;
+use std::{convert, default::Default, io};
 
 pub trait WriteTo<W>
 where
@@ -9,7 +9,7 @@ where
     fn write_to(self, w: &mut W) -> io::Result<usize>;
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct TokDoubleQuote;
 
 impl<W: io::Write> WriteTo<W> for TokDoubleQuote {
@@ -18,7 +18,13 @@ impl<W: io::Write> WriteTo<W> for TokDoubleQuote {
     }
 }
 
-#[derive(Copy, Clone)]
+impl convert::From<TokDoubleQuote> for TokQuote {
+    fn from(v: TokDoubleQuote) -> Self {
+        Self::Double(v)
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub struct TokSingleQuote;
 
 impl<W: io::Write> WriteTo<W> for TokSingleQuote {
@@ -27,24 +33,46 @@ impl<W: io::Write> WriteTo<W> for TokSingleQuote {
     }
 }
 
-#[derive(Copy, Clone)]
+impl convert::From<TokSingleQuote> for TokQuote {
+    fn from(v: TokSingleQuote) -> Self {
+        Self::Single(v)
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub enum TokQuote {
     Double(TokDoubleQuote),
     Single(TokSingleQuote),
 }
 
+impl Default for TokQuote {
+    fn default() -> Self {
+        TokSingleQuote.into()
+    }
+}
+
 impl<W: io::Write> WriteTo<W> for TokQuote {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         match self {
-            TokQuote::Double(v) => v.write_to(w),
-            TokQuote::Single(v) => v.write_to(w),
+            Self::Double(v) => v.write_to(w),
+            Self::Single(v) => v.write_to(w),
         }
     }
 }
 
+#[derive(Default, Debug)]
 pub struct ConstantString {
     pub value: String,
     pub quote: TokQuote,
+}
+
+impl convert::From<String> for ConstantString {
+    fn from(value: String) -> Self {
+        Self {
+            value,
+            ..Default::default()
+        }
+    }
 }
 
 impl<W: io::Write> WriteTo<W> for ConstantString {
@@ -61,6 +89,7 @@ impl<W: io::Write> WriteTo<W> for ConstantString {
     }
 }
 
+#[derive(Default, Debug)]
 pub struct ConstantNumber {
     pub value: i64,
 }
@@ -71,22 +100,72 @@ impl<W: io::Write> WriteTo<W> for ConstantNumber {
     }
 }
 
+#[derive(Debug)]
+pub struct Undefined;
+
+impl<W: io::Write> WriteTo<W> for Undefined {
+    fn write_to(self, w: &mut W) -> io::Result<usize> {
+        w.write(b"undefined")
+    }
+}
+
+#[derive(Debug)]
 pub enum Expression {
     String(ConstantString),
     Number(ConstantNumber),
+    Undefined(Undefined),
+}
+
+impl Default for Expression {
+    fn default() -> Self {
+        Undefined.into()
+    }
+}
+
+impl convert::From<String> for Expression {
+    fn from(v: String) -> Self {
+        let x: ConstantString = v.into();
+        x.into()
+    }
+}
+
+impl convert::From<ConstantString> for Expression {
+    fn from(v: ConstantString) -> Self {
+        Self::String(v)
+    }
+}
+
+impl convert::From<ConstantNumber> for Expression {
+    fn from(v: ConstantNumber) -> Self {
+        Self::Number(v)
+    }
+}
+
+impl convert::From<Undefined> for Expression {
+    fn from(v: Undefined) -> Self {
+        Self::Undefined(v)
+    }
 }
 
 impl<W: io::Write> WriteTo<W> for Expression {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         match self {
-            Expression::String(s) => s.write_to(w),
-            Expression::Number(n) => n.write_to(w),
+            Self::Number(n) => n.write_to(w),
+            Self::String(n) => n.write_to(w),
+            Self::Undefined(n) => n.write_to(w),
         }
     }
 }
 
+#[derive(Default, Debug)]
 pub struct Identifier {
     pub value: String,
+}
+
+impl convert::From<String> for Identifier {
+    fn from(value: String) -> Self {
+        Self { value }
+    }
 }
 
 impl<W: io::Write> WriteTo<W> for Identifier {
@@ -95,12 +174,13 @@ impl<W: io::Write> WriteTo<W> for Identifier {
     }
 }
 
-pub struct Declaration {
+#[derive(Debug)]
+pub struct Declare {
     pub name: Identifier,
     pub value: Option<Expression>,
 }
 
-impl<W: io::Write> WriteTo<W> for Declaration {
+impl<W: io::Write> WriteTo<W> for Declare {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         let mut ctr: usize = 0;
         ctr += w.write(b"const ")?;
@@ -119,8 +199,9 @@ impl<W: io::Write> WriteTo<W> for Declaration {
     }
 }
 
+#[derive(Debug)]
 pub struct Export {
-    pub value: Declaration,
+    pub value: Declare,
 }
 
 impl<W: io::Write> WriteTo<W> for Export {
@@ -134,6 +215,7 @@ impl<W: io::Write> WriteTo<W> for Export {
     }
 }
 
+#[derive(Default, Debug)]
 pub struct Import {
     pub from: String,
 }
@@ -151,25 +233,54 @@ impl<W: io::Write> WriteTo<W> for Import {
     }
 }
 
+#[derive(Debug)]
 pub enum Statement {
-    Declaration(Declaration),
+    Declaration(Declare),
     Import(Import),
     Export(Export),
+    // the empty statement (i.e. ";")
+    Empty,
+}
+
+impl convert::From<Declare> for Statement {
+    fn from(v: Declare) -> Self {
+        Self::Declaration(v)
+    }
+}
+
+impl convert::From<Import> for Statement {
+    fn from(v: Import) -> Self {
+        Self::Import(v)
+    }
+}
+
+impl convert::From<Export> for Statement {
+    fn from(v: Export) -> Self {
+        Self::Export(v)
+    }
+}
+
+impl Default for Statement {
+    fn default() -> Self {
+        Self::Empty
+    }
 }
 
 impl<W: io::Write> WriteTo<W> for Statement {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         let mut ctr: usize = 0;
         match self {
-            Statement::Declaration(d) => ctr += d.write_to(w)?,
-            Statement::Import(d) => ctr += d.write_to(w)?,
-            Statement::Export(d) => ctr += d.write_to(w)?,
+            Self::Declaration(d) => ctr += d.write_to(w)?,
+            Self::Import(d) => ctr += d.write_to(w)?,
+            Self::Export(d) => ctr += d.write_to(w)?,
+            Self::Empty => (), // nothing
         }
 
         Result::Ok(ctr)
     }
 }
 
+#[derive(Debug, Default)]
 pub struct Module {
     pub statements: Vec<Statement>,
 }
