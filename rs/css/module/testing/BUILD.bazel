@@ -1,0 +1,30 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+
+genrule(
+    name = "gen_basic_output",
+    srcs = [ "basic.module.css" ],
+    outs = [ "basic.output.compiled.css", "basic.output.json" ],
+    exec_tools = [ "//rs/css/module" ],
+    cmd_bash = "$(location //rs/css/module) " +
+        "--module-file $(location basic.module.css) " +
+        "--css-file $(location basic.output.compiled.css) " +
+        "--json-file $(location basic.output.json)"
+)
+
+
+generated_file_test(
+    name = "testing_css_module_generation",
+    generated = ":basic.output.compiled.css",
+    src = ":basic.compiled.css"
+)
+
+
+generated_file_test(
+    name = "testing_json_generation",
+    src = ":basic.output.golden.json",
+    generated = ":basic.output.json"
+)
+
+test_suite(
+    name = "testing"
+)
