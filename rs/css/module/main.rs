@@ -29,7 +29,7 @@ struct Args {
 
     /// Output json file
     #[arg(short, long)]
-    json_file: String,
+    ts_file: String,
 
     /// Import path for resulting css file
     #[arg(short, long)]
@@ -120,7 +120,7 @@ fn act() -> Result<(), CliError> {
 
     let module_file_path = Path::new(&args.module_file);
     let css_file_path = Path::new(&args.css_file);
-    let json_file_path = Path::new(&args.json_file);
+    let ts_file_path = Path::new(&args.ts_file);
     let css_file_import = args.css_file_import;
 
     let mut errors = vec![];
@@ -208,7 +208,7 @@ fn act() -> Result<(), CliError> {
             .read(false)
             .write(true)
             .create(true)
-            .open(json_file_path)?,
+            .open(ts_file_path)?,
     )?;
 
     Ok(())

@@ -3,12 +3,12 @@ load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 genrule(
     name = "gen_basic_output",
     srcs = [ "basic.module.css" ],
-    outs = [ "basic.output.compiled.css", "basic.output.json" ],
+    outs = [ "basic.output.compiled.css", "basic.output.ts" ],
     exec_tools = [ "//rs/css/module" ],
     cmd_bash = "$(location //rs/css/module) " +
         "--module-file $(location basic.module.css) " +
         "--css-file $(location basic.output.compiled.css) " +
-        "--json-file $(location basic.output.json) " +
+        "--ts-file $(location basic.output.ts) " +
         "--css-file-import ./basic.output.compiled.css"
 )
 
@@ -22,8 +22,8 @@ generated_file_test(
 
 generated_file_test(
     name = "testing_json_generation",
-    src = ":basic.output.golden.json",
-    generated = ":basic.output.json"
+    src = ":basic.output.golden.ts",
+    generated = ":basic.output.ts"
 )
 
 test_suite(
