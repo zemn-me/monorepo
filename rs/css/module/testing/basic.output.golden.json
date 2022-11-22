@@ -1,74 +1,13 @@
-{
-  "class": [
-    {
-      "type": "local",
-      "name": "class__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "class-duplicate-url": [
-    {
-      "type": "local",
-      "name": "class-duplicate-url__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "-top": [
-    {
-      "type": "local",
-      "name": "-top__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "grid": [
-    {
-      "type": "local",
-      "name": "grid__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "on": [
-    {
-      "type": "local",
-      "name": "on__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "-middle": [
-    {
-      "type": "local",
-      "name": "-middle__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "-bottom": [
-    {
-      "type": "local",
-      "name": "-bottom__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "myStyle": [
-    {
-      "type": "local",
-      "name": "myStyle__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "test": [
-    {
-      "type": "local",
-      "name": "test__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "light": [
-    {
-      "type": "local",
-      "name": "light__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "base64": [
-    {
-      "type": "local",
-      "name": "base64__rs/css/module/testing/basic.module.css"
-    }
-  ],
-  "bulb": [
-    {
-      "type": "local",
-      "name": "bulb__rs/css/module/testing/basic.module.css"
-    }
-  ]
-}
+import "./basic.output.compiled.css";
+export const class = 'class__rs/css/module/testing/basic.module.css';
+export const class-duplicate-url = 'class-duplicate-url__rs/css/module/testing/basic.module.css';
+export const on = 'on__rs/css/module/testing/basic.module.css';
+export const top = 'top__rs/css/module/testing/basic.module.css';
+export const grid = 'grid__rs/css/module/testing/basic.module.css';
+export const middle = 'middle__rs/css/module/testing/basic.module.css';
+export const myStyle = 'myStyle__rs/css/module/testing/basic.module.css';
+export const test = 'test__rs/css/module/testing/basic.module.css';
+export const bottom = 'bottom__rs/css/module/testing/basic.module.css';
+export const light = 'light__rs/css/module/testing/basic.module.css';
+export const base64 = 'base64__rs/css/module/testing/basic.module.css';
+export const bulb = 'bulb__rs/css/module/testing/basic.module.css';

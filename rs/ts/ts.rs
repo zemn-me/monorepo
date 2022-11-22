@@ -103,7 +103,7 @@ pub struct Declaration {
 impl<W: io::Write> WriteTo<W> for Declaration {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         let mut ctr: usize = 0;
-        ctr += w.write(b"let ")?;
+        ctr += w.write(b"const ")?;
         ctr += self.name.write_to(w)?;
 
         match self.value {
@@ -119,11 +119,11 @@ impl<W: io::Write> WriteTo<W> for Declaration {
     }
 }
 
-pub struct ExportImport {
+pub struct Export {
     pub value: Declaration,
 }
 
-impl<W: io::Write> WriteTo<W> for ExportImport {
+impl<W: io::Write> WriteTo<W> for Export {
     fn write_to(self, w: &mut W) -> io::Result<usize> {
         let mut ctr: usize = 0;
 
@@ -134,9 +134,27 @@ impl<W: io::Write> WriteTo<W> for ExportImport {
     }
 }
 
+pub struct Import {
+    pub from: String,
+}
+
+impl<W: io::Write> WriteTo<W> for Import {
+    fn write_to(self, w: &mut W) -> io::Result<usize> {
+        let mut ctr: usize = 0;
+
+        ctr += w.write(b"import ")?;
+        ctr += w.write(b"\"")?;
+        ctr += w.write(self.from.as_bytes())?;
+        ctr += w.write(b"\"")?;
+
+        Result::Ok(ctr)
+    }
+}
+
 pub enum Statement {
     Declaration(Declaration),
-    ExportImport(ExportImport),
+    Import(Import),
+    Export(Export),
 }
 
 impl<W: io::Write> WriteTo<W> for Statement {
@@ -144,11 +162,27 @@ impl<W: io::Write> WriteTo<W> for Statement {
         let mut ctr: usize = 0;
         match self {
             Statement::Declaration(d) => ctr += d.write_to(w)?,
-            Statement::ExportImport(d) => ctr += d.write_to(w)?,
+            Statement::Import(d) => ctr += d.write_to(w)?,
+            Statement::Export(d) => ctr += d.write_to(w)?,
         }
 
-        ctr += w.write(b";")?;
-
         Result::Ok(ctr)
+    }
+}
+
+pub struct Module {
+    pub statements: Vec<Statement>,
+}
+
+impl<W: io::Write> WriteTo<W> for Module {
+    fn write_to(self, w: &mut W) -> io::Result<usize> {
+        let mut ctr: usize = 0;
+
+        for statement in self.statements {
+            ctr += statement.write_to(w)?;
+            ctr += w.write(b";\n")?;
+        }
+
+        Ok(ctr)
     }
 }

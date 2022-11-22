@@ -8,7 +8,8 @@ genrule(
     cmd_bash = "$(location //rs/css/module) " +
         "--module-file $(location basic.module.css) " +
         "--css-file $(location basic.output.compiled.css) " +
-        "--json-file $(location basic.output.json)"
+        "--json-file $(location basic.output.json) " +
+        "--css-file-import ./basic.output.compiled.css"
 )
 
 

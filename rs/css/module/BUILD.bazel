@@ -7,7 +7,7 @@ rust_binary(
     name = "module",
     srcs = glob(["*.rs"]),
     deps = [ "@cargo//:serde_json", "@cargo//:swc_css_codegen", "@cargo//:swc_css_modules", "@cargo//:swc_css_parser",
-    "@cargo//:clap", "@cargo//:swc_atoms", "@cargo//:swc_common" ]
+    "@cargo//:clap", "@cargo//:swc_atoms", "@cargo//:swc_common", "//rs/ts" ]
 )
 
 
