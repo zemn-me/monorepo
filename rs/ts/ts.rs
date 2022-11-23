@@ -9,6 +9,49 @@ where
     fn write_to(self, w: &mut W) -> io::Result<usize>;
 }
 
+/// SyntaxElement is some element and / or a comment.
+/// This allows representation of the free placement of comments,
+/// as long as they don't interrupt abstract syntax elements.
+#[derive(Clone, Debug)]
+pub struct CommentableSyntaxElement<T, W>
+where
+    W: io::Write,
+    T: WriteTo<W>,
+{
+    fake: std::marker::PhantomData<W>,
+    comment: Option<MultiLineComment>,
+    element: T,
+}
+
+impl<W: io::Write, T: WriteTo<W>> WriteTo<W> for CommentableSyntaxElement<T, W> {
+    fn write_to(self, w: &mut W) -> io::Result<usize> {
+        let mut ctr: usize = 0;
+        ctr += match self.comment {
+            Some(v) => v.write_to(w)?,
+            None => 0,
+        };
+
+        WriteTo::write_to(self.element, w)?;
+
+        Ok(ctr)
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct MultiLineComment {
+    content: String,
+}
+
+impl<W: io::Write> WriteTo<W> for MultiLineComment {
+    fn write_to(self, w: &mut W) -> io::Result<usize> {
+        let mut ctr: usize = 0;
+        ctr += w.write(b"/*")?;
+        ctr += w.write(self.content.replace("*/", "*\\/").as_bytes())?;
+        ctr += w.write(b"*/")?;
+        Ok(ctr)
+    }
+}
+
 #[derive(Copy, Clone, Debug)]
 pub struct TokDoubleQuote;
 
@@ -234,15 +277,15 @@ impl<W: io::Write> WriteTo<W> for Import {
 }
 
 #[derive(Debug)]
-pub enum Statement {
-    Declaration(Declare),
-    Import(Import),
-    Export(Export),
+pub enum Statement<W: io::Write> {
+    Declaration(CommentableSyntaxElement<Declaration, W>),
+    Import(CommentableSyntaxElement<Import, W>),
+    Export(CommentableSyntaxElement<Export, W>),
     // the empty statement (i.e. ";")
     Empty,
 }
 
-impl convert::From<Declare> for Statement {
+impl<W: io::Write> convert::From<Declare> for Statement<W> {
     fn from(v: Declare) -> Self {
         Self::Declaration(v)
     }
