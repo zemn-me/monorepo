@@ -135,7 +135,6 @@ fn canonicalize_css_to_javascript(s: String) -> String {
 fn act() -> Result<(), CliError> {
     let args: Args = Args::parse();
 
-
     let module_file_path = Path::new(&args.module_file);
     let css_file_path = Path::new(&args.css_file);
     let ts_file_path = Path::new(&args.ts_file);
