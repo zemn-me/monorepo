@@ -1,0 +1,13 @@
+load("//css:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+css_module(
+    name = "css",
+    srcs = [ "example.module.css" ]
+)
+
+
+ts_project(
+    name = "ts",
+    srcs = [ ":example.ts" ]
+)

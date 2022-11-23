@@ -20,19 +20,19 @@ use ts::ts::{Declare, Export, Import, Module, Statement};
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Input css module file
-    #[arg(short, long)]
+    #[arg(long)]
     module_file: String,
 
     /// Output css file
-    #[arg(short, long)]
+    #[arg(long)]
     css_file: String,
 
     /// Output json file
-    #[arg(short, long)]
+    #[arg(long)]
     ts_file: String,
 
     /// Import path for resulting css file
-    #[arg(short, long)]
+    #[arg(long)]
     css_file_import: String,
 }
 
@@ -117,6 +117,7 @@ impl convert::From<io::Error> for CliError {
 
 fn act() -> Result<(), CliError> {
     let args: Args = Args::parse();
+
 
     let module_file_path = Path::new(&args.module_file);
     let css_file_path = Path::new(&args.css_file);
