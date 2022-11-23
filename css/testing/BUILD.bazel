@@ -10,7 +10,8 @@ css_module(
 ts_project(
     name = "ts",
     srcs = [ "example.ts" ],
-    data = [ "example.css" ]
+    data = [ "example.css" ],
+    ignores_lint = [ "example.ts" ]
 )
 
 ts_project(
