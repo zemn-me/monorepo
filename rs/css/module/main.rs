@@ -115,6 +115,23 @@ impl convert::From<io::Error> for CliError {
     }
 }
 
+pub fn capitalize(s: &str) -> String {
+    let mut c = s.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    }
+}
+
+fn canonicalize_css_to_javascript(s: String) -> String {
+    s.split('-')
+        .filter(|v| !v.is_empty())
+        .enumerate()
+        .map(|(i, s)| if i < 1 { s.to_string() } else { capitalize(s) })
+        .collect::<Vec<String>>()
+        .join("")
+}
+
 fn act() -> Result<(), CliError> {
     let args: Args = Args::parse();
 
@@ -176,7 +193,7 @@ fn act() -> Result<(), CliError> {
             Ok(match value.first().ok_or(MissingRewrittenValue)? {
                 CssClassName::Local { name } => Ok(vec![Export {
                     value: Declare {
-                        name: key.to_string().into(),
+                        name: canonicalize_css_to_javascript(key.to_string()).into(),
                         value: Some(name.to_string().into()),
                     },
                 }
