@@ -9,5 +9,12 @@ css_module(
 
 ts_project(
     name = "ts",
-    srcs = [ ":example.ts" ]
+    srcs = [ "example.ts" ],
+    data = [ "example.css" ]
+)
+
+ts_project(
+    name = "importee",
+    srcs = [ "importee.ts" ],
+    deps = [":ts"]
 )
