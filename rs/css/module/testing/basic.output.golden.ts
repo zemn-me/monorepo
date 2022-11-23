@@ -1,6 +1,6 @@
 import "./basic.output.compiled.css";
 export const class = 'class__rs/css/module/testing/basic.module.css';
-export const class-duplicate-url = 'class-duplicate-url__rs/css/module/testing/basic.module.css';
+export const classDuplicateUrl = 'class-duplicate-url__rs/css/module/testing/basic.module.css';
 export const on = 'on__rs/css/module/testing/basic.module.css';
 export const top = 'top__rs/css/module/testing/basic.module.css';
 export const grid = 'grid__rs/css/module/testing/basic.module.css';
