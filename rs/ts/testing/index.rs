@@ -1,23 +1,18 @@
 extern crate ts;
 
 use std::io;
-use ts::ts::{
-    ConstantString, Declaration, ExportImport, Expression, Identifier, Statement, TokQuote,
-    TokSingleQuote,
-};
+use ts::ts::{Declare, Export, Module};
 
 fn main() {
-    let val = Statement::ExportImport(ExportImport {
-        value: Declaration {
-            name: Identifier {
-                value: "something".to_string(),
+    let val = Module {
+        statements: vec![Export {
+            value: Declare {
+                name: "something".to_string().into(),
+                value: Some("some value".to_string().into()),
             },
-            value: Some(Expression::String(ConstantString {
-                value: "some value".to_string(),
-                quote: TokQuote::Single(TokSingleQuote),
-            })),
-        },
-    });
+        }
+        .into()],
+    };
 
     ts::ts::WriteTo::write_to(val, &mut io::stdout()).expect("Unable to serialize.");
 }

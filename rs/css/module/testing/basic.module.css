@@ -36,16 +36,16 @@
   display: flex;
   flex-wrap: wrap;
 }
-.grid.\-top {
+.grid.top {
   align-items: flex-start;
 }
-.grid.-top {
+.grid.top {
   align-items: flex-start;
 }
-.grid.\-middle {
+.grid.middle {
   align-items: center;
 }
-.grid.\-bottom {
+.grid.bottom {
   align-items: flex-end;
 }
 
