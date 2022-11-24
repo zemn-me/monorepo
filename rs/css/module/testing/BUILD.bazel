@@ -1,4 +1,5 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+load("//rs/css/module:rules.bzl", "css_module_rule")
 
 genrule(
     name = "gen_basic_output",
@@ -28,4 +29,10 @@ generated_file_test(
 
 test_suite(
     name = "testing"
+)
+
+
+css_module_rule(
+    name = "gen_css_modules_via_rule",
+    srcs = [ "basic.module.css"]
 )

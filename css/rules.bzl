@@ -1,26 +1,11 @@
 load("//ts:rules.bzl", "ts_project")
 load("//css:providers.bzl", "CSSLibraryInfo", "css_library_info")
 load("//css/lint:rules.bzl", "css_lint")
+load("//rs/css/module:rules.bzl", "css_module_rule")
 
-def css_module(name = None, srcs = [], **kwargs):
-    tsfilerulename = name + "_gen"
-    outputtsfiles = [x + ".ts" for x in srcs]
-    native.genrule(
-        name = tsfilerulename,
-        outs = outputtsfiles,
-        srcs = ["//css:rule.ts"],
-        cmd = """
-            cat $< | tee $@
-        """,
-        message = "Generating typescript declaration files for " +
-                  " ".join(srcs),
-    )
+def css_module(name, srcs, **kwargs):
+    css_module_rule(name = name, srcs = srcs, **kwargs)
 
-    ts_project(
-        name = name,
-        srcs = outputtsfiles + srcs,
-        ignores_lint = srcs,
-    )
 
 def _css_library_impl(ctx):
     css_info = css_library_info(
