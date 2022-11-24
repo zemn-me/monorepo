@@ -155,9 +155,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "3b1d6e21d35f238b4df8f6ce772c82a3f4e801ca2d8bbd11e2ba2261a5b06729",
-        strip_prefix = "rules_swc-0.19.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.2.tar.gz",
+        sha256 = "ad8e15e7714637b09a2e14e8ed3794b4de00e1da29259f93828c5bc80debb36b",
+        strip_prefix = "rules_swc-0.19.3",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.3.tar.gz",
     )
 
     http_archive(
