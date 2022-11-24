@@ -32,10 +32,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
+        sha256 = "ae013bf35bd23234d1dea46b079f1e05ba74ac0321423830119d3e787ec73483",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.36.0/rules_go-v0.36.0.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.36.0/rules_go-v0.36.0.zip",
         ],
     )
 
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "dce55558f3948a422a13c8ba537dbb2ffb02841d0eaab49774d8eb684ce607a3",
+        sha256 = "4ef798dff47dce7a45d7799e389cafc199b8eaf7d817b65e49e96aa058e20206",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.47.2/pulumi-v3.47.2-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.48.0/pulumi-v3.48.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -155,9 +155,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "3b1d6e21d35f238b4df8f6ce772c82a3f4e801ca2d8bbd11e2ba2261a5b06729",
-        strip_prefix = "rules_swc-0.19.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.2.tar.gz",
+        sha256 = "ad8e15e7714637b09a2e14e8ed3794b4de00e1da29259f93828c5bc80debb36b",
+        strip_prefix = "rules_swc-0.19.3",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.3.tar.gz",
     )
 
     http_archive(
