@@ -24,7 +24,7 @@ def _css_module_rule_impl(ctx):
                 "--module-file", file.path,
                 "--css-file", css_file.path,
                 "--ts-file", ts_file.path,
-                "--css-file-import", css_file.short_path
+                "--css-file-import", "monorepo/" + css_file.short_path
             ]
         )
 

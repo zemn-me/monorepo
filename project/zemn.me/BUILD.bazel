@@ -1,4 +1,5 @@
 load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
 load("//ts/react/server:rules.bzl", "web_app")
 load("//css:rules.bzl", "css_library")
 
@@ -21,13 +22,8 @@ ts_project(
     ],
 )
 
-"""
-Currently broken / disabled due to lack of CSS modules support
-web_app(
+next_project(
     name = "zemn.me",
-    entry_points = ["index.tsx"],
-    esbuild_deps = [":ts"],
-    deps = ["index.html"],
+    srcs = [":ts"],
+    distDir = "build",
 )
-
-"""

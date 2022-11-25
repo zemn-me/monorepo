@@ -1,7 +1,6 @@
 import classes from 'classnames';
 import React from 'react';
-
-import style from './ZemnmezLogo.module.css';
+import * as style from 'monorepo/project/zemn.me/elements/ZemnmezLogo/style';
 
 export default ({
 	className,
