@@ -1,9 +1,9 @@
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
-load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary")
 load("@aspect_rules_swc//swc:defs.bzl", "swc_transpiler")
 load("@bazel_skylib//lib:partial.bzl", "partial")
+load("//js/eslint:rules.bzl", "eslint_test")
 
 def nodejs_binary(link_workspace_root = True, **kwargs):
     _nodejs_binary(link_workspace_root = link_workspace_root, **kwargs)
@@ -26,13 +26,11 @@ def jest_test(jsdom = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
-    targets = srcs + data + ["//:tsconfig"]
+def ts_lint(name, srcs = [], data = [], **kwargs):
     eslint_test(
         name = name,
-        data = targets,
-        tags = tags + ["+formatting"],
-        args = ["$(location %s)" % x for x in targets],
+        data = data + ["//:tsconfig"],
+        srcs = srcs,
         **kwargs
     )
 
@@ -67,21 +65,3 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
            (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
     ], tags = tags)
 
-def eslint_test(name = None, data = [], args = [], **kwargs):
-    _eslint_test(
-        name = name,
-        data = data + [
-            "//:.prettierrc.json",
-            "//:.gitignore",
-            "//:.editorconfig",
-            "//:.eslintrc.json",
-            "@npm//eslint-plugin-prettier",
-            "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin",
-            "@npm//eslint-config-prettier",
-            "@npm//eslint-plugin-react",
-            "@npm//eslint-plugin-simple-import-sort",
-        ],
-        args = args + ["--ignore-path", "$(location //:.gitignore)"] +
-               ["$(location " + x + ")" for x in data],
-    )
