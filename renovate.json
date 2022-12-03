@@ -19,7 +19,8 @@
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
 				],
-				"executionMode": "branch"
+				"executionMode": "branch",
+				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ]
 			}
 		}
 	]
