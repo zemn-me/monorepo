@@ -42,6 +42,7 @@ exports_files(
         ".eslintrc.json",
         "css_loader.d.ts",
         "yarn.lock",
+        ".git"
     ],
     visibility = ["//visibility:public"],
 )
@@ -58,3 +59,4 @@ copy_to_bin(
     name = "swcrc",
     srcs = [".swcrc.json"],
 )
+

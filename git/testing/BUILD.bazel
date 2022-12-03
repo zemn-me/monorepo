@@ -1,0 +1,14 @@
+load("//git:rules.bzl", "git_commit_affecting_files")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+
+git_commit_affecting_files(
+    name = "affected_files_basic_ref",
+    srcs = [ "abc.txt" ],
+)
+
+
+generated_file_test(
+    name = "affected_files_basic",
+    generated = ":affected_files_basic_ref",
+    src = "ref.txt"
+)
