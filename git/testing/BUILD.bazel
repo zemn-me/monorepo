@@ -7,12 +7,6 @@ git_commit_affecting_files(
 )
 
 
-generated_file_test(
-    name = "affected_files_basic",
-    generated = ":affected_files_basic_ref",
-    src = "ref.txt"
-)
-
 filegroup(
     name = "test_file_group",
     srcs = [ "abc.txt" ]
