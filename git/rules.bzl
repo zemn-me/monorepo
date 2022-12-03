@@ -1,5 +1,3 @@
-
-
 def git_commit_affecting_files(name, srcs = [], **kwargs):
     native.filegroup(
         name = name + "_srcs",
@@ -27,17 +25,21 @@ def source_files_for_rule(name, rule, **kwargs):
         name = name,
         srcs = [ name + "_labels" ],
         # turn labels into paths (for whatever reason, genquery doesn't let you do this)
-        cmd_bash = "sed 's/\\/\\///;s/:/\\//g' $< > $@",
+        cmd_bash = "sed -r 's/\\/\\///;s/:/\\//g;s/^[\\/]+//' $< > $@",
         outs = [ name + "_labels.out" ]
     )
 
-"""
-def commit_affecting_source_files(name, rule, **kwargs):
-    source_file_for_rule(
-        name = name, rule = rule, **kwargs
+def commit_affecting_rule(name, rule, **kwargs):
+    source_files_for_rule(
+        name = name + "_source_files", rule = rule, **kwargs
     )
 
-    git_commit_affecting_files(
-
+    native.genrule(
+        name = name,
+        srcs = [ "//:.git", ":" + name + "_source_files" ],
+        cmd_bash = """
+git log -n 1 --pretty=format:%H -- $$(cat $(location :""" + name + "_source_files" + """)) > $@
+        """,
+        outs = [ name + ".gitref" ]
     )
-"""
+
