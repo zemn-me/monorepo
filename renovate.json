@@ -14,11 +14,12 @@
 	],
 	"packageRules": [
 		{
-			"matchLanguages": ["rust"],
+			"matchManagers": ["cargo"],
 			"postUpgradeTasks": {
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
-				]
+				],
+				"executionMode": "branch"
 			}
 		}
 	]
