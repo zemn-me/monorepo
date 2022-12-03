@@ -14,7 +14,7 @@
 	],
 	"packageRules": [
 		{
-			"matchManagers": ["cargo"],
+			"matchManagers": ["cargo", "bazel"],
 			"postUpgradeTasks": {
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
