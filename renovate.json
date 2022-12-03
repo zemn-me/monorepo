@@ -4,6 +4,22 @@
 		"config:base"
 	],
     "automerge": true,
+    "autodiscover": true,
+    "autodiscoverFilter": [ "zemnmez/monorepo/*" ],
 	"platformAutomerge": true,
-	"platformCommit": true
+	"platformCommit": true,
+	"allowScripts": true,
+	"allowedPostUpgradeCommands": [
+		"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
+	],
+	"packageRules": [
+		{
+			"matchLanguages": ["rust"],
+			"postUpgradeTasks": {
+				"commands": [
+					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
+				]
+			}
+		}
+	]
 }
