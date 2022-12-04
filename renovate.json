@@ -5,7 +5,7 @@
 	],
     "automerge": true,
     "autodiscover": true,
-    "autodiscoverFilter": [ "zemnmez/monorepo/*" ],
+    "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
@@ -14,11 +14,13 @@
 	],
 	"packageRules": [
 		{
-			"matchLanguages": ["rust"],
+			"matchManagers": ["cargo", "bazel"],
 			"postUpgradeTasks": {
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
-				]
+				],
+				"executionMode": "branch",
+				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ]
 			}
 		}
 	]

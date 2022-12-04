@@ -12,3 +12,6 @@ export const typescript = {
 };
 
 export const distDir = 'build';
+
+// eslint-disable-next-line
+export const generateBuildId = async () => { /*REPLACE*/ throw new Error() /*REPLACE*/ };
