@@ -1311,7 +1311,7 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
-"@pulumi/aws@5.23.0", "@pulumi/aws@^5.3.0":
+"@pulumi/aws@5.23.0", "@pulumi/aws@^5.16.2":
   version "5.23.0"
   resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.23.0.tgz#97993123bf32b3807d03348b64887b1deee977cb"
   integrity sha512-FlH3wwdsjPz/hd3Cm0Bnwndy1XdMlxBpwXzU0Zs3xnWXlFBJ4dYBRbdUfEYB3P9+c2cD6xBDlAeyDrH3mgpkjA==
@@ -1323,13 +1323,13 @@
     read-package-tree "^5.2.1"
     resolve "^1.7.1"
 
-"@pulumi/awsx@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-1.0.0.tgz#9ddb9169a5af385ab2e16a1eecf3ca85a5e98599"
-  integrity sha512-HfGTZviXn9Hx3B74ImiWCRjPhsxS5QYfu9lnWH2+Q8hRbMDOkaYqJjdBgAFCDZrMj0wPeEJsqCVrAFwBbLOWGw==
+"@pulumi/awsx@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-1.0.1.tgz#c9fe5cf885c5cec604b1e15d3f6bcd2ac0344672"
+  integrity sha512-vByyrOikkMLDGgRWXLrplOOcyWNjkMgjETONmWkvJeAUxP8OriwGds5VgTAf7OMf8AAdajC5I+Dvzgp8Ibp4Mg==
   dependencies:
-    "@pulumi/aws" "^5.3.0"
-    "@pulumi/docker" "^3.0.0"
+    "@pulumi/aws" "^5.16.2"
+    "@pulumi/docker" "^3.6.1"
     "@pulumi/pulumi" "^3.0.0"
     "@types/aws-lambda" "^8.10.23"
     mime "^2.0.0"
@@ -1341,10 +1341,10 @@
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
 
-"@pulumi/docker@^3.0.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/docker/-/docker-3.1.0.tgz#f47e2663ebe227d000db592f01514c28f9ce6cc4"
-  integrity sha512-8IQGo+Hj6oxgzP6p4/lhO/GjNDISaIm8YuuecD4W+e0fIt5KfEMKNLLhJD8SD5pSuOBM6EkF5W1kJAQb9CpK0g==
+"@pulumi/docker@^3.6.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/docker/-/docker-3.6.1.tgz#a216c9bd2bbd35dd7091db2827a3a434adff021c"
+  integrity sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
