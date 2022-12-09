@@ -8,7 +8,7 @@
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
-    "autodiscoverFilter": [ "Zemnmez/monorepo/**" ],
+    "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
 	],
