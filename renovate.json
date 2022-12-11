@@ -8,6 +8,7 @@
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
+	"recreateClosed": true,
 	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
     "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"allowedPostUpgradeCommands": [
@@ -21,7 +22,8 @@
 					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
 				],
 				"executionMode": "branch",
-				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ]
+				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ],
+				"recreateClosed": true
 			}
 		}
 	]
