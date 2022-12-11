@@ -8,6 +8,7 @@
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
+	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
     "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
