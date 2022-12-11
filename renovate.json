@@ -5,19 +5,19 @@
 	],
     "automerge": true,
     "autodiscover": true,
-    "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
+    "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"allowedPostUpgradeCommands": [
-		"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
+		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
 	],
 	"packageRules": [
 		{
 			"matchManagers": ["cargo", "bazel"],
 			"postUpgradeTasks": {
 				"commands": [
-					"CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
+					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
 				],
 				"executionMode": "branch",
 				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ]
