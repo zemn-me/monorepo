@@ -18,3 +18,5 @@ jobs:
         with:
           configurationFile: renovate.json
           token: ${{ secrets.GH_PAT }}
+    env:
+      LOG_LEVEL: 'debug'
