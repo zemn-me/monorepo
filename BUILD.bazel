@@ -11,6 +11,7 @@ load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
 load("//:rules.bzl", "ts_config")
 load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
+load("@npm//renovate:index.bzl", "renovate_config_validator_test")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -42,6 +43,7 @@ exports_files(
         ".eslintrc.json",
         "css_loader.d.ts",
         "yarn.lock",
+        ".git"
     ],
     visibility = ["//visibility:public"],
 )
@@ -57,4 +59,10 @@ esbuild_config(
 copy_to_bin(
     name = "swcrc",
     srcs = [".swcrc.json"],
+)
+
+renovate_config_validator_test(
+    name = "validate_renovate_config_test",
+    data = [ "renovate.json" ],
+    args = [ "$(location renovate.json)" ]
 )

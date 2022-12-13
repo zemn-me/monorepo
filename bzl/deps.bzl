@@ -19,23 +19,23 @@ def fetch_dependencies():
 
     http_archive(
         name = "build_bazel_rules_nodejs",
-        sha256 = "5aae76dced38f784b58d9776e4ab12278bc156a9ed2b1d9fcd3e39921dc88fda",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.7.1/rules_nodejs-5.7.1.tar.gz"],
+        sha256 = "c2ad51299792d5af3b258f1dd71b3b57eff9424c2e1797d9c1d65717d95da03a",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.7.3/rules_nodejs-5.7.3.tar.gz"],
     )
 
     http_archive(
         name = "rules_python",
-        sha256 = "a868059c8c6dd6ad45a205cca04084c652cfe1852e6df2d5aca036f6e5438380",
-        strip_prefix = "rules_python-0.14.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.14.0.tar.gz",
+        sha256 = "497ca47374f48c8b067d786b512ac10a276211810f4a580178ee9b9ad139323a",
+        strip_prefix = "rules_python-0.16.1",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.16.1.tar.gz",
     )
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "ae013bf35bd23234d1dea46b079f1e05ba74ac0321423830119d3e787ec73483",
+        sha256 = "56d8c5a5c91e1af73eca71a6fab2ced959b67c86d12ba37feedb0a2dfea441a6",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.36.0/rules_go-v0.36.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.36.0/rules_go-v0.36.0.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.37.0/rules_go-v0.37.0.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.37.0/rules_go-v0.37.0.zip",
         ],
     )
 
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "4ef798dff47dce7a45d7799e389cafc199b8eaf7d817b65e49e96aa058e20206",
+        sha256 = "d96ac680cc0f8aa6774adaf6777f276cb2178c01d398b0f503d443d92124e2f3",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.48.0/pulumi-v3.48.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.49.0/pulumi-v3.49.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -155,14 +155,14 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "ad8e15e7714637b09a2e14e8ed3794b4de00e1da29259f93828c5bc80debb36b",
-        strip_prefix = "rules_swc-0.19.3",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.3.tar.gz",
+        sha256 = "2c979b07bc665a9db376ee80ac31278bbb5e11776f9f076e16abd0eabe8f9ae5",
+        strip_prefix = "rules_swc-0.20.0",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.20.0.tar.gz",
     )
 
     http_archive(
         name = "rules_rust",
-        sha256 = "324c2a86a8708d30475f324846b35965c432b63a35567ed2b5051b86791ce345",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.13.0/rules_rust-v0.13.0.tar.gz"],
+        sha256 = "dd79bd4e2e2adabae738c5e93c36d351cf18071ff2acf6590190acf4138984f6",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.14.0/rules_rust-v0.14.0.tar.gz"],
     )
 
