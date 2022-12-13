@@ -850,9 +850,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "swc_atoms"
-version = "0.4.28"
+version = "0.4.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75dfd9b25b158e21426d5fbc4d13f4418b13fec4eaaf1f1b9a806c75de43d851"
+checksum = "cef7796df1985447f1fb8803ca2a00b445b20abbc65c8e73acb08835d7651ff0"
 dependencies = [
  "once_cell",
  "rustc-hash",
@@ -864,9 +864,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.29.22"
+version = "0.29.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebaf7b56798cf15742796e4f6dbc5a7f942662f896bd35d01cfad930be54cc7b"
+checksum = "811faf77280a5f43fedf06769c391d4f2ed274b1ce9267e3a47e9b13527930b7"
 dependencies = [
  "ahash",
  "ast_node",
