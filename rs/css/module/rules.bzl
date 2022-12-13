@@ -1,4 +1,4 @@
-
+load("//css:providers.bzl", "css_library_info")
 
 # TODO: probably add the css dep support. Curently css modules
 # are processed on their own.
@@ -28,10 +28,14 @@ def _css_module_rule_impl(ctx):
             ]
         )
 
-    return DefaultInfo(
-        files = depset(ctx.outputs.ts_outputs),
-        runfiles = ctx.runfiles(files = ctx.outputs.css_outputs)
-    )
+    return [
+        DefaultInfo(
+            files = depset(ctx.outputs.ts_outputs),
+        ),
+        css_library_info(
+            srcs = depset( ctx.outputs.css_outputs) 
+        )
+    ]
 
 
 
@@ -60,6 +64,7 @@ def css_module_rule(name, srcs, **kwargs):
 
         ts_outputs.append(ts_file)
         css_outputs.append(css_file)
+
     _css_module_rule(
         name = name,
         srcs = srcs,

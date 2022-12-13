@@ -1,4 +1,5 @@
 load("//ts:rules.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "copy_to_bin")
 load("//css:rules.bzl", "css_module")
 
 ts_project(
@@ -20,12 +21,17 @@ ts_project(
 )
 
 css_module(
-    name = "css",
+    name = "css_gen",
     srcs = [ "style.module.css"],
+)
+
+js_library(
+    name = "css",
+    srcs = [ "style.css" ],
 )
 
 ts_project(
     name = "css_ts",
     srcs = [ "style.ts" ],
-    data = [ "style.css"]
+    data = [ "css" ]
 )
