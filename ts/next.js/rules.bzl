@@ -2,9 +2,33 @@ load("@npm//next:index.bzl", "next")
 load("//git:rules.bzl",  "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
 
+def _extract_runfiles_impl(ctx):
+    return [
+        DefaultInfo(
+            files = ctx.runfiles().merge_all([
+                src.default_runfiles
+                for src in ctx.attr.srcs if DefaultInfo in src
+            ]).files
+        )
+    ]
+
+_extract_runfiles_rule = rule(
+    implementation = _extract_runfiles_impl,
+    attrs = {
+        "srcs": attr.label_list(allow_files = True)
+    }
+)
+
 def next_project(name, srcs, **kwargs):
     distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
+
+    _extract_runfiles_rule(
+        name = name + "_extracted_runfiles",
+        srcs = srcs
+    )
+
+    srcs += [ name +  "_extracted_runfiles" ]
 
     native.filegroup(
         name = name + "_git_analysis_srcs",
@@ -30,17 +54,17 @@ def next_project(name, srcs, **kwargs):
 
     # copy the next config over
     native.genrule(
-        name = name + "_gen_next.config.ts",
-        srcs = ["//ts/next.js:next.config.ts", "buildid.sed"],
-        outs = ["next.config.ts"],
+        name = name + "_gen_next.config.js",
+        srcs = ["//ts/next.js:next.config.js", "buildid.sed"],
+        outs = ["next.config.js"],
         cmd_bash = """
-            sed -f $(location buildid.sed) $(location //ts/next.js:next.config.ts) >$@
+            sed -f $(location buildid.sed) $(location //ts/next.js:next.config.js) >$@
         """,
     )
 
     ts_project(
         name = name + "_next_config",
-        srcs = ["next.config.ts"],
+        srcs = ["next.config.js"],
     )
 
     srcs = srcs + [":" + name + "_next_config"]

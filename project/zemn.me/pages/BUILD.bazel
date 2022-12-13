@@ -1,7 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "pages",
+    name = "app",
     srcs = glob([
         "*.ts",
         "*.tsx",
@@ -12,7 +12,5 @@ ts_project(
         "//project/zemn.me/pages/art",
         "@npm//@types/react",
         "@npm//react",
-        "@npm//react-dom",
-        "@npm//react-router-dom",
     ],
 )
