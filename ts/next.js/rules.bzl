@@ -54,17 +54,17 @@ def next_project(name, srcs, **kwargs):
 
     # copy the next config over
     native.genrule(
-        name = name + "_gen_next.config.ts",
-        srcs = ["//ts/next.js:next.config.ts", "buildid.sed"],
-        outs = ["next.config.ts"],
+        name = name + "_gen_next.config.js",
+        srcs = ["//ts/next.js:next.config.js", "buildid.sed"],
+        outs = ["next.config.js"],
         cmd_bash = """
-            sed -f $(location buildid.sed) $(location //ts/next.js:next.config.ts) >$@
+            sed -f $(location buildid.sed) $(location //ts/next.js:next.config.js) >$@
         """,
     )
 
     ts_project(
         name = name + "_next_config",
-        srcs = ["next.config.ts"],
+        srcs = ["next.config.js"],
     )
 
     srcs = srcs + [":" + name + "_next_config"]

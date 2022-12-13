@@ -15,6 +15,6 @@ ts_project(
 )
 
 exports_files(
-    ["next.config.ts"],
+    ["next.config.js"],
     visibility = ["//visibility:public"],
 )
