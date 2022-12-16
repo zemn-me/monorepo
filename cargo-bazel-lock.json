@@ -1,5 +1,5 @@
 {
-  "checksum": "19caf897f403c37b526714f80f242b8a3328aabb97f3c8cc3def0d5e4efa2458",
+  "checksum": "bb36f763de110f2575fed4eb51becb7c87d68f54b502b6472abb089a052ad818",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -453,13 +453,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "cc 1.0.77": {
+    "cc 1.0.78": {
       "name": "cc",
-      "version": "1.0.77",
+      "version": "1.0.78",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/cc/1.0.77/download",
-          "sha256": "e9f73505338f7d905b19d18738976aae232eb46b8efc15554ffc56deb5d9ebe4"
+          "url": "https://crates.io/api/v1/crates/cc/1.0.78/download",
+          "sha256": "a20104e2335ce8a659d6dd92a51a767a0c062599c73b343fd152cb401e828c3d"
         }
       },
       "targets": [
@@ -494,7 +494,7 @@
           "**"
         ],
         "edition": "2018",
-        "version": "1.0.77"
+        "version": "1.0.78"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1224,7 +1224,7 @@
         "deps": {
           "common": [
             {
-              "id": "cc 1.0.77",
+              "id": "cc 1.0.78",
               "target": "cc"
             }
           ],
@@ -7349,7 +7349,7 @@
     }
   },
   "binary_crates": [
-    "cc 1.0.77",
+    "cc 1.0.78",
     "clap 4.0.29",
     "phf_generator 0.10.0"
   ],
