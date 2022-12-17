@@ -1,5 +1,5 @@
 {
-  "checksum": "bb36f763de110f2575fed4eb51becb7c87d68f54b502b6472abb089a052ad818",
+  "checksum": "e656e208fa396c568019e67dad0eab357e97d3aa4955f372484666cd635e20d4",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -4279,13 +4279,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "serde 1.0.150": {
+    "serde 1.0.151": {
       "name": "serde",
-      "version": "1.0.150",
+      "version": "1.0.151",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde/1.0.150/download",
-          "sha256": "e326c9ec8042f1b5da33252c8a37e9ffbd2c9bef0155215b6e6c80c790e05f91"
+          "url": "https://crates.io/api/v1/crates/serde/1.0.151/download",
+          "sha256": "97fed41fc1a24994d044e6db6935e69511a1153b52c15eb42493b26fa87feba0"
         }
       },
       "targets": [
@@ -4328,7 +4328,7 @@
         "deps": {
           "common": [
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "build_script_build"
             }
           ],
@@ -4338,13 +4338,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "serde_derive 1.0.150",
+              "id": "serde_derive 1.0.151",
               "target": "serde_derive"
             }
           ],
           "selects": {}
         },
-        "version": "1.0.150"
+        "version": "1.0.151"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -4353,13 +4353,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_derive 1.0.150": {
+    "serde_derive 1.0.151": {
       "name": "serde_derive",
-      "version": "1.0.150",
+      "version": "1.0.151",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_derive/1.0.150/download",
-          "sha256": "42a3df25b0713732468deadad63ab9da1f1fd75a48a15024b50363f128db627e"
+          "url": "https://crates.io/api/v1/crates/serde_derive/1.0.151/download",
+          "sha256": "255abe9a125a985c05190d687b320c12f9b1f0b99445e608c21ba0782c719ad8"
         }
       },
       "targets": [
@@ -4407,7 +4407,7 @@
               "target": "quote"
             },
             {
-              "id": "serde_derive 1.0.150",
+              "id": "serde_derive 1.0.151",
               "target": "build_script_build"
             },
             {
@@ -4418,7 +4418,7 @@
           "selects": {}
         },
         "edition": "2015",
-        "version": "1.0.150"
+        "version": "1.0.151"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -4482,7 +4482,7 @@
               "target": "ryu"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -4751,7 +4751,7 @@
               "target": "precomputed_hash"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             }
           ],
@@ -4958,7 +4958,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5061,7 +5061,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5151,7 +5151,7 @@
         "deps": {
           "common": [
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5222,7 +5222,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5355,7 +5355,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5429,7 +5429,7 @@
               "target": "lexical"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5487,7 +5487,7 @@
               "target": "once_cell"
             },
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -5553,7 +5553,7 @@
         "deps": {
           "common": [
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
@@ -6208,7 +6208,7 @@
         "deps": {
           "common": [
             {
-              "id": "serde 1.0.150",
+              "id": "serde 1.0.151",
               "target": "serde"
             },
             {
