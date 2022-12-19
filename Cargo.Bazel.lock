@@ -759,9 +759,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.90"
+version = "1.0.91"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8778cc0b528968fe72abec38b5db5a20a70d148116cd9325d2bc5f5180ca3faf"
+checksum = "877c235533714907a8c2464236f5c4b2a17262ef1bd71f38f35ea592c8da6883"
 dependencies = [
  "itoa",
  "ryu",
@@ -850,9 +850,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "swc_atoms"
-version = "0.4.29"
+version = "0.4.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cef7796df1985447f1fb8803ca2a00b445b20abbc65c8e73acb08835d7651ff0"
+checksum = "d20167122f1f8566ec6fc4d34dcbdeed34cbade2e5d3fdcfd6fca6613c88b1ad"
 dependencies = [
  "once_cell",
  "rustc-hash",
@@ -1040,9 +1040,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.106"
+version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09ee3a69cd2c7e06684677e5629b3878b253af05e4714964204279c6bc02cf0b"
+checksum = "1f4064b5b16e03ae50984a5a8ed5d4f8803e6bc1fd170a3cda91a1be4b18e3f5"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -1,5 +1,5 @@
 {
-  "checksum": "a3fa15a42fe44c78c3101bb33516e000488532a2f45c0141530bee3ac9707809",
+  "checksum": "0145ecb9d599f63df26a02411cc8c1199ba5003fd1c9f391e4216a19d80384fa",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -235,7 +235,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -289,7 +289,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -674,7 +674,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -942,7 +942,7 @@
               "target": "strsim"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -992,7 +992,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -1355,7 +1355,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -1822,7 +1822,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -2616,7 +2616,7 @@
               "target": "hex"
             },
             {
-              "id": "serde_json 1.0.90",
+              "id": "serde_json 1.0.91",
               "target": "serde_json"
             },
             {
@@ -2624,7 +2624,7 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -3335,7 +3335,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -3476,7 +3476,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -4411,7 +4411,7 @@
               "target": "build_script_build"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -4427,13 +4427,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_json 1.0.90": {
+    "serde_json 1.0.91": {
       "name": "serde_json",
-      "version": "1.0.90",
+      "version": "1.0.91",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_json/1.0.90/download",
-          "sha256": "8778cc0b528968fe72abec38b5db5a20a70d148116cd9325d2bc5f5180ca3faf"
+          "url": "https://crates.io/api/v1/crates/serde_json/1.0.91/download",
+          "sha256": "877c235533714907a8c2464236f5c4b2a17262ef1bd71f38f35ea592c8da6883"
         }
       },
       "targets": [
@@ -4486,14 +4486,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.90",
+              "id": "serde_json 1.0.91",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2018",
-        "version": "1.0.90"
+        "version": "1.0.91"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -4863,7 +4863,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -4907,13 +4907,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.4.29": {
+    "swc_atoms 0.4.30": {
       "name": "swc_atoms",
-      "version": "0.4.29",
+      "version": "0.4.30",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.4.29/download",
-          "sha256": "cef7796df1985447f1fb8803ca2a00b445b20abbc65c8e73acb08835d7651ff0"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.4.30/download",
+          "sha256": "d20167122f1f8566ec6fc4d34dcbdeed34cbade2e5d3fdcfd6fca6613c88b1ad"
         }
       },
       "targets": [
@@ -4966,7 +4966,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "build_script_build"
             },
             {
@@ -4977,7 +4977,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.4.29"
+        "version": "0.4.30"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -5073,7 +5073,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5155,7 +5155,7 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5226,7 +5226,7 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5309,7 +5309,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -5359,7 +5359,7 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5433,7 +5433,7 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5491,11 +5491,11 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.90",
+              "id": "serde_json 1.0.91",
               "target": "serde_json"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5557,7 +5557,7 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.29",
+              "id": "swc_atoms 0.4.30",
               "target": "swc_atoms"
             },
             {
@@ -5623,7 +5623,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -5677,7 +5677,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -5790,7 +5790,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
@@ -5801,13 +5801,13 @@
       },
       "license": "Apache-2.0"
     },
-    "syn 1.0.106": {
+    "syn 1.0.107": {
       "name": "syn",
-      "version": "1.0.106",
+      "version": "1.0.107",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/syn/1.0.106/download",
-          "sha256": "09ee3a69cd2c7e06684677e5629b3878b253af05e4714964204279c6bc02cf0b"
+          "url": "https://crates.io/api/v1/crates/syn/1.0.107/download",
+          "sha256": "1f4064b5b16e03ae50984a5a8ed5d4f8803e6bc1fd170a3cda91a1be4b18e3f5"
         }
       },
       "targets": [
@@ -5866,7 +5866,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "build_script_build"
             },
             {
@@ -5877,7 +5877,7 @@
           "selects": {}
         },
         "edition": "2018",
-        "version": "1.0.106"
+        "version": "1.0.107"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -6114,7 +6114,7 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.106",
+              "id": "syn 1.0.107",
               "target": "syn"
             }
           ],
