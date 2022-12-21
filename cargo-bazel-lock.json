@@ -1,5 +1,5 @@
 {
-  "checksum": "774578b161425f5203e8b5144e6ce8d126a3b29c2b6cfda001d220141161c2c3",
+  "checksum": "986e7394815560fd6dda2206c61767cb4f7767ca6b97cf6f2b1c733d254155cc",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -531,13 +531,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.0.29": {
+    "clap 4.0.30": {
       "name": "clap",
-      "version": "4.0.29",
+      "version": "4.0.30",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.0.29/download",
-          "sha256": "4d63b9e9c07271b9957ad22c173bae2a4d9a81127680962039296abcd2f8251d"
+          "url": "https://crates.io/api/v1/crates/clap/4.0.30/download",
+          "sha256": "656ad1e55e23d287773f7d8192c300dc715c3eeded93b3da651d11c42cfd74d2"
         }
       },
       "targets": [
@@ -592,7 +592,7 @@
               "target": "clap_lex"
             },
             {
-              "id": "is-terminal 0.4.1",
+              "id": "is-terminal 0.4.2",
               "target": "is_terminal"
             },
             {
@@ -620,7 +620,7 @@
           ],
           "selects": {}
         },
-        "version": "4.0.29"
+        "version": "4.0.30"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1833,13 +1833,13 @@
       },
       "license": "MIT"
     },
-    "is-terminal 0.4.1": {
+    "is-terminal 0.4.2": {
       "name": "is-terminal",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/is-terminal/0.4.1/download",
-          "sha256": "927609f78c2913a6f6ac3c27a4fe87f43e2a35367c0c4b0f8265e8f49a104330"
+          "url": "https://crates.io/api/v1/crates/is-terminal/0.4.2/download",
+          "sha256": "28dfb6c8100ccc63462345b67d1bbc3679177c75ee4bf59bf29c8b1d110b8189"
         }
       },
       "targets": [
@@ -1890,7 +1890,7 @@
           }
         },
         "edition": "2018",
-        "version": "0.4.1"
+        "version": "0.4.2"
       },
       "license": "MIT"
     },
@@ -2608,7 +2608,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.0.29",
+              "id": "clap 4.0.30",
               "target": "clap"
             },
             {
@@ -7350,7 +7350,7 @@
   },
   "binary_crates": [
     "cc 1.0.78",
-    "clap 4.0.29",
+    "clap 4.0.30",
     "phf_generator 0.10.0"
   ],
   "workspace_members": {
