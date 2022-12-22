@@ -1,5 +1,5 @@
 {
-  "checksum": "774578b161425f5203e8b5144e6ce8d126a3b29c2b6cfda001d220141161c2c3",
+  "checksum": "8e873e75913d01b1d45028138951050659ddaaf8226f04ced0d95c86691a45da",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -531,13 +531,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.0.29": {
+    "clap 4.0.30": {
       "name": "clap",
-      "version": "4.0.29",
+      "version": "4.0.30",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.0.29/download",
-          "sha256": "4d63b9e9c07271b9957ad22c173bae2a4d9a81127680962039296abcd2f8251d"
+          "url": "https://crates.io/api/v1/crates/clap/4.0.30/download",
+          "sha256": "656ad1e55e23d287773f7d8192c300dc715c3eeded93b3da651d11c42cfd74d2"
         }
       },
       "targets": [
@@ -592,7 +592,7 @@
               "target": "clap_lex"
             },
             {
-              "id": "is-terminal 0.4.1",
+              "id": "is-terminal 0.4.2",
               "target": "is_terminal"
             },
             {
@@ -620,7 +620,7 @@
           ],
           "selects": {}
         },
-        "version": "4.0.29"
+        "version": "4.0.30"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1833,13 +1833,13 @@
       },
       "license": "MIT"
     },
-    "is-terminal 0.4.1": {
+    "is-terminal 0.4.2": {
       "name": "is-terminal",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/is-terminal/0.4.1/download",
-          "sha256": "927609f78c2913a6f6ac3c27a4fe87f43e2a35367c0c4b0f8265e8f49a104330"
+          "url": "https://crates.io/api/v1/crates/is-terminal/0.4.2/download",
+          "sha256": "28dfb6c8100ccc63462345b67d1bbc3679177c75ee4bf59bf29c8b1d110b8189"
         }
       },
       "targets": [
@@ -1890,7 +1890,7 @@
           }
         },
         "edition": "2018",
-        "version": "0.4.1"
+        "version": "0.4.2"
       },
       "license": "MIT"
     },
@@ -2608,7 +2608,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.0.29",
+              "id": "clap 4.0.30",
               "target": "clap"
             },
             {
@@ -2624,11 +2624,11 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -4907,13 +4907,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.4.31": {
+    "swc_atoms 0.4.32": {
       "name": "swc_atoms",
-      "version": "0.4.31",
+      "version": "0.4.32",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.4.31/download",
-          "sha256": "01f007debbe495e480cc36d06c9192510f059bc0dea8b7209ce4fa9c107c52c7"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.4.32/download",
+          "sha256": "9ad59af21529fcd3f4f8fa6b1ae399c2b183ec42c68347d76d68d6e5b657956e"
         }
       },
       "targets": [
@@ -4966,7 +4966,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "build_script_build"
             },
             {
@@ -4977,7 +4977,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.4.31"
+        "version": "0.4.32"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -4995,13 +4995,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.29.24": {
+    "swc_common 0.29.25": {
       "name": "swc_common",
-      "version": "0.29.24",
+      "version": "0.29.25",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.29.24/download",
-          "sha256": "0b39a19a0c4b7a73ec5ea5ef35df8f5668823054ba9e0297403a3db3f4967326"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.29.25/download",
+          "sha256": "506321cad7393893018aac83a3b3bd25203883e8c47ab0864bb43195d43b22dd"
         }
       },
       "targets": [
@@ -5073,7 +5073,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
@@ -5113,7 +5113,7 @@
           ],
           "selects": {}
         },
-        "version": "0.29.24"
+        "version": "0.29.25"
       },
       "license": "Apache-2.0"
     },
@@ -5155,11 +5155,11 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             }
           ],
@@ -5226,11 +5226,11 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -5359,11 +5359,11 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -5433,11 +5433,11 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -5495,11 +5495,11 @@
               "target": "serde_json"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -5557,11 +5557,11 @@
               "target": "serde"
             },
             {
-              "id": "swc_atoms 0.4.31",
+              "id": "swc_atoms 0.4.32",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.24",
+              "id": "swc_common 0.29.25",
               "target": "swc_common"
             },
             {
@@ -7350,7 +7350,7 @@
   },
   "binary_crates": [
     "cc 1.0.78",
-    "clap 4.0.29",
+    "clap 4.0.30",
     "phf_generator 0.10.0"
   ],
   "workspace_members": {
