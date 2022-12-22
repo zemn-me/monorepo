@@ -1,5 +1,5 @@
 {
-  "checksum": "8e873e75913d01b1d45028138951050659ddaaf8226f04ced0d95c86691a45da",
+  "checksum": "2ec3d302682c6b7f0055425108938aec655be864978f2504aa2a4d2c1df8863f",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -531,13 +531,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.0.30": {
+    "clap 4.0.31": {
       "name": "clap",
-      "version": "4.0.30",
+      "version": "4.0.31",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.0.30/download",
-          "sha256": "656ad1e55e23d287773f7d8192c300dc715c3eeded93b3da651d11c42cfd74d2"
+          "url": "https://crates.io/api/v1/crates/clap/4.0.31/download",
+          "sha256": "cab512b39872b48c5ecf6b3bef2efb56dc0b986630d9da71a21a8c8f6878c334"
         }
       },
       "targets": [
@@ -620,7 +620,7 @@
           ],
           "selects": {}
         },
-        "version": "4.0.30"
+        "version": "4.0.31"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -760,19 +760,19 @@
           "selects": {
             "aarch64-apple-darwin": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"aarch64\", target_os = \"linux\"))": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ]
@@ -1132,19 +1132,19 @@
             ],
             "cfg(target_os = \"hermit\")": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
             "cfg(target_os = \"wasi\")": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
@@ -1208,7 +1208,7 @@
               "target": "build_script_build"
             },
             {
-              "id": "libc 0.2.138",
+              "id": "libc 0.2.139",
               "target": "libc"
             }
           ],
@@ -1488,7 +1488,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ]
@@ -1569,7 +1569,7 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.138",
+              "id": "libc 0.2.139",
               "target": "libc"
             }
           ],
@@ -1753,7 +1753,7 @@
           "selects": {
             "cfg(not(windows))": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
@@ -2344,13 +2344,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "libc 0.2.138": {
+    "libc 0.2.139": {
       "name": "libc",
-      "version": "0.2.138",
+      "version": "0.2.139",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/libc/0.2.138/download",
-          "sha256": "db6d7e329c562c5dfab7a46a2afabc8b987ab9a4834c9d1ca04dc54c1546cef8"
+          "url": "https://crates.io/api/v1/crates/libc/0.2.139/download",
+          "sha256": "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
         }
       },
       "targets": [
@@ -2392,14 +2392,14 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.138",
+              "id": "libc 0.2.139",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2015",
-        "version": "0.2.138"
+        "version": "0.2.139"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -2608,7 +2608,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.0.30",
+              "id": "clap 4.0.31",
               "target": "clap"
             },
             {
@@ -3100,7 +3100,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
@@ -3772,7 +3772,7 @@
           "selects": {
             "cfg(unix)": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ]
@@ -4143,7 +4143,7 @@
             ],
             "cfg(all(not(rustix_use_libc), not(miri), target_os = \"linux\", any(target_arch = \"x86\", all(target_arch = \"x86_64\", target_pointer_width = \"64\"), all(target_endian = \"little\", any(target_arch = \"arm\", all(target_arch = \"aarch64\", target_pointer_width = \"64\"), target_arch = \"powerpc64\", target_arch = \"riscv64\", target_arch = \"mips\", target_arch = \"mips64\")))))": [
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               },
               {
@@ -4158,7 +4158,7 @@
                 "alias": "libc_errno"
               },
               {
-                "id": "libc 0.2.138",
+                "id": "libc 0.2.139",
                 "target": "libc"
               }
             ],
@@ -7350,7 +7350,7 @@
   },
   "binary_crates": [
     "cc 1.0.78",
-    "clap 4.0.30",
+    "clap 4.0.31",
     "phf_generator 0.10.0"
   ],
   "workspace_members": {
