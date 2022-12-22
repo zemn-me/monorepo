@@ -3005,7 +3005,36 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@3.50.0", "@pulumi/pulumi@^3.0.0":
+"@pulumi/pulumi@3.50.2":
+  version "3.50.2"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.50.2.tgz#ad9e7901faf2c324aca1ccca25f4128ab38ad522"
+  integrity sha512-s6i/iGkC6zAbL/p+PkdlyJo5WkcDCZflquU2gxpV3U1M562TqJH7m2SJGCXnmpNBBhcriGYZHBnmdLSYvMNGeQ==
+  dependencies:
+    "@grpc/grpc-js" "~1.3.8"
+    "@logdna/tail-file" "^2.0.6"
+    "@opentelemetry/api" "^1.2.0"
+    "@opentelemetry/exporter-zipkin" "^1.6.0"
+    "@opentelemetry/instrumentation-grpc" "^0.32.0"
+    "@opentelemetry/resources" "^1.6.0"
+    "@opentelemetry/sdk-trace-base" "^1.6.0"
+    "@opentelemetry/sdk-trace-node" "^1.6.0"
+    "@opentelemetry/semantic-conventions" "^1.6.0"
+    "@pulumi/query" "^0.3.0"
+    execa "^5.1.0"
+    google-protobuf "^3.5.0"
+    ini "^2.0.0"
+    js-yaml "^3.14.0"
+    minimist "^1.2.6"
+    normalize-package-data "^2.4.0"
+    read-package-tree "^5.3.1"
+    require-from-string "^2.0.1"
+    semver "^6.1.0"
+    source-map-support "^0.5.6"
+    ts-node "^7.0.1"
+    typescript "~3.8.3"
+    upath "^1.1.0"
+
+"@pulumi/pulumi@^3.0.0":
   version "3.50.0"
   resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.50.0.tgz#71b90ff4044dce81297f79b568d3bb05212408b2"
   integrity sha512-i8tltLcknWyRZWQEbNLGMLydshw1d/jcfeUHT4Bc0nQVPi8WklCiFwBGfjiWRpqvVCt0osqydxnt6F+zOTm+kw==
