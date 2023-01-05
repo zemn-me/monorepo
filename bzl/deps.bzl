@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "b81a9ba570422ba60ba21b0f22d3f2a01b5f4c1888002754911711875403581b",
+        sha256 = "601e5e301f0e1b6f7886d668441c5bce97e26639985dded8e93c460abe3d1f2a",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.50.2/pulumi-v3.50.2-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.51.0/pulumi-v3.51.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -155,9 +155,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "9a68901c258b8a91ce721df1f9b1dc62c9dd6b2822143e31a0280396b98db543",
-        strip_prefix = "rules_swc-0.20.1",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.20.1.tar.gz",
+        sha256 = "814bc08efbbe4d5e238579c9b0cded519b199486fbc26709fcf6d4d47de08f50",
+        strip_prefix = "rules_swc-0.20.2",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.20.2.tar.gz",
     )
 
     http_archive(
