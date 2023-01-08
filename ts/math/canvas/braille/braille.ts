@@ -28,18 +28,32 @@ function* subdivideG<T, F>(cells: Iterable<T>, width: number, newCellWidth: numb
     for (;;) {
         const [ chunk, eof, eofAt ] = head(it, chunkSize, f);
 
-        // so most tests pass here but it looks like there's an issue in the maths
-        // if the w doesn't divide evenly by the chunkSize.
-        //
-        // In this case, it's reading the wrong part of the chunk.
-
-        // if there's nothing at all valid in this chunk, that's it.
         if (eof && eofAt == 0) break
 
         for (let ic = 0; ic < cellsPerChunk; ic++) {
             let newCell: (T|F)[] = [];
 
             for (let nc = 0; nc < oldCellsInNewCell; nc++) {
+                // if the chunk size does not divide evenly into w,
+                // we can attempt to get a value that is out of the bounds
+                // of our input.
+                //
+                // to prevent garbage results, we check if we're reading oob here.
+
+                const y = (nc-(nc%wc))/wc;
+                if (y >= newCellHeight) {
+                    newCell[nc] = f;
+                    continue
+                }
+
+                const x = ic*wc + (nc%wc);
+
+                if (x >= w) {
+                    newCell[nc] = f;
+                    continue;
+                }
+
+
                 newCell[nc] = chunk[(ic * wc + (nc%wc)) + w * (
                     (nc - (nc %wc)) / wc
                 )];
