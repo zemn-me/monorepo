@@ -64,4 +64,3 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         if x not in ignores_lint and
            (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
     ], tags = tags)
-

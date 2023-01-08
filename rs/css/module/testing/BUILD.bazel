@@ -3,36 +3,36 @@ load("//rs/css/module:rules.bzl", "css_module_rule")
 
 genrule(
     name = "gen_basic_output",
-    srcs = [ "basic.module.css" ],
-    outs = [ "basic.output.compiled.css", "basic.output.ts" ],
-    exec_tools = [ "//rs/css/module" ],
+    srcs = ["basic.module.css"],
+    outs = [
+        "basic.output.compiled.css",
+        "basic.output.ts",
+    ],
     cmd_bash = "$(location //rs/css/module) " +
-        "--module-file $(location basic.module.css) " +
-        "--css-file $(location basic.output.compiled.css) " +
-        "--ts-file $(location basic.output.ts) " +
-        "--css-file-import ./basic.output.compiled.css"
+               "--module-file $(location basic.module.css) " +
+               "--css-file $(location basic.output.compiled.css) " +
+               "--ts-file $(location basic.output.ts) " +
+               "--css-file-import ./basic.output.compiled.css",
+    exec_tools = ["//rs/css/module"],
 )
-
 
 generated_file_test(
     name = "testing_css_module_generation",
+    src = ":basic.compiled.css",
     generated = ":basic.output.compiled.css",
-    src = ":basic.compiled.css"
 )
-
 
 generated_file_test(
     name = "testing_json_generation",
     src = ":basic.output.golden.ts",
-    generated = ":basic.output.ts"
+    generated = ":basic.output.ts",
 )
 
 test_suite(
-    name = "testing"
+    name = "testing",
 )
-
 
 css_module_rule(
     name = "gen_css_modules_via_rule",
-    srcs = [ "basic.module.css"]
+    srcs = ["basic.module.css"],
 )

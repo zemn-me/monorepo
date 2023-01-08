@@ -6,7 +6,6 @@ load("//rs/css/module:rules.bzl", "css_module_rule")
 def css_module(name, srcs, **kwargs):
     css_module_rule(name = name, srcs = srcs, **kwargs)
 
-
 def _css_library_impl(ctx):
     css_info = css_library_info(
         srcs = depset(ctx.files.srcs),
