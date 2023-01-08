@@ -86,7 +86,7 @@ export function subdivide<T, F>(
 	];
 }
 
-function eights<T, F>(
+function eights(
 	cells: Iterable<1 | 0>,
 	width: number
 ): [cells: Iterable<(1 | 0)[]>, width: number] {
