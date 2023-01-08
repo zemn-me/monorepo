@@ -1,0 +1,24 @@
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "braille",
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
+    deps = [
+        "@npm//@types/jest",
+        "@npm//@types/react",
+        "@npm//react",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = [
+        "braille_test.js",
+    ],
+    deps = [":braille"],
+)
