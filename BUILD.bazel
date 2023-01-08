@@ -43,7 +43,7 @@ exports_files(
         ".eslintrc.json",
         "css_loader.d.ts",
         "yarn.lock",
-        ".git"
+        ".git",
     ],
     visibility = ["//visibility:public"],
 )
@@ -63,6 +63,6 @@ copy_to_bin(
 
 renovate_config_validator_test(
     name = "validate_renovate_config_test",
-    data = [ "renovate.json" ],
-    args = [ "$(location renovate.json)" ]
+    args = ["$(location renovate.json)"],
+    data = ["renovate.json"],
 )

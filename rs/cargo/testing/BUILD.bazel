@@ -7,21 +7,21 @@ rust_binary(
     name = "hello_world",
     srcs = ["hello_world.rs"],
     deps = [
-        "@cargo//:clap"
-    ]
+        "@cargo//:clap",
+    ],
 )
 
 genrule(
     name = "hello_world_output",
+    outs = ["output.txt"],
     cmd = """
     $(location :hello_world) --name thomas --count 8 > $@
     """,
-    outs = [ "output.txt" ],
-    tools = [ ":hello_world" ]
+    tools = [":hello_world"],
 )
 
 generated_file_test(
     name = "hello_world_test",
+    src = "hello_world_expected.txt",
     generated = ":hello_world_output",
-    src = "hello_world_expected.txt"
 )
