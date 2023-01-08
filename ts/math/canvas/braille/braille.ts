@@ -6,14 +6,14 @@ function head<T, F>(t: Iterator<T>, n: number, f: F): [ value: (T|F)[], eof: boo
 
     for (let i = 0; i < n; i++ ) {
         const v = t.next();
-        if (v.done) {
+        if (v.done && !eof) {
             eof = v.done;
             eofAt = i;
         }
         o.push(v.done?f:v.value)
     }
 
-    return [ o, eof ];
+    return [ o, eof, eofAt ];
 }
 
 function* subdivideG<T, F>(cells: Iterable<T>, width: number, newCellWidth: number, newCellHeight: number, f: F): Iterable<(T|F)[]> {
@@ -23,14 +23,18 @@ function* subdivideG<T, F>(cells: Iterable<T>, width: number, newCellWidth: numb
     const cellsPerChunk = Math.ceil(width / newCellWidth);
     const oldCellsInNewCell = newCellWidth * newCellHeight;
     const wc = newCellWidth;
-    const w = width;
+    let w = width;
 
     for (;;) {
         const [ chunk, eof, eofAt ] = head(it, chunkSize, f);
 
+        // so most tests pass here but it looks like there's an issue in the maths
+        // if the w doesn't divide evenly by the chunkSize.
+        //
+        // In this case, it's reading the wrong part of the chunk.
+
         // if there's nothing at all valid in this chunk, that's it.
         if (eof && eofAt == 0) break
-        console.log(eofAt);
 
         for (let ic = 0; ic < cellsPerChunk; ic++) {
             let newCell: (T|F)[] = [];
@@ -49,7 +53,7 @@ function* subdivideG<T, F>(cells: Iterable<T>, width: number, newCellWidth: numb
     }
 }
 
-function subdivide<T, F>(cells: Iterable<T>, width: number, newCellWidth: number, newCellHeight: number, f: F): [ cells: Iterable<(T|F)[]>, width: number ] {
+export function subdivide<T, F>(cells: Iterable<T>, width: number, newCellWidth: number, newCellHeight: number, f: F): [ cells: Iterable<(T|F)[]>, width: number ] {
     return [ subdivideG(cells, width, newCellWidth, newCellHeight, f), Math.ceil(width / newCellWidth) ]
 }
 
@@ -92,16 +96,31 @@ function encodeBrailleCanon(a: 1|0=0, b: 1|0=0, c: 1|0=0, d: 1|0=0, e: 1|0=0, f:
  * ```
  */
 function encodeBraille(a: 1|0=0, b: 1|0=0, c: 1|0=0, d: 1|0=0, e: 1|0=0, f: 1|0=0 , g: 1|0=0, h: 1|0=0): number {
-    return encodeBrailleCanon(a, c, e, b, d, f,g, h)
+    return encodeBrailleCanon(a, c, e, b, d, f, g, h)
 }
 
-function* splice<T, V>(it: Iterable<T>, count: number, V: V) {
+function* join<T, V>(it: Iterable<Iterable<T>>, by: V): Iterable<V|T> {
+    let k = 0;
+    for (const i of it) {
+        if (k !== 0) yield by
+        yield *i
+        k++
+    }
+}
+
+function* split<T>(it: Iterable<T>, count: number): Iterable<Iterable<T>> {
+    let acc: T[] = [];
     let i = 0;
     for (const v of it) {
-        yield v;
-        if (i > 0 && i%count == 0) yield V;
+        if (i > 0 && i % count == 0) {
+            yield acc;
+            acc = [];
+        }
+        acc.push(v);
         i++;
     }
+
+    if (acc.length > 0) yield acc;
 }
 
 function* map<I, O>(it: Iterable<I>, f: (v: I) => O) {
@@ -114,16 +133,16 @@ const nl = "\n".charCodeAt(0);
  * Encode a coordinate space as some braille characters
  */
 export function plot(v: Iterable<1|0>, width: number): string {
-    const [x, nw] = eights(v, width);
+    const [it, n] = eights(v, width);
+
+    const braille = map(it, ([a,b,c,d,e,f,g,h]) => encodeBraille(a,b,c,d,e,f,g,h));
+    const blocks = split(braille, n);
+
+    const charCodes = join(blocks, nl);
+    
 
     return String.fromCharCode(
-        ...splice(
-            map(
-                x, ([a,b,c,d,e,f,g,h]) => encodeBraille(a,b,c,d,e,f,g,h)
-            ),
-            nw,
-            nl
-        )
+        ...charCodes
     )
 }
 
