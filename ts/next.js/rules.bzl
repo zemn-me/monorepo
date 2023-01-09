@@ -1,5 +1,5 @@
 load("@npm//next:index.bzl", "next")
-load("//git:rules.bzl",  "commit_affecting_rule")
+load("//git:rules.bzl", "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
 
 def next_project(name, srcs, **kwargs):
@@ -8,23 +8,23 @@ def next_project(name, srcs, **kwargs):
 
     native.filegroup(
         name = name + "_git_analysis_srcs",
-        srcs = srcs
+        srcs = srcs,
     )
 
     commit_affecting_rule(
         name = name + "_latest_commit",
-        rule = ":" + name + "_git_analysis_srcs"
+        rule = ":" + name + "_git_analysis_srcs",
     )
 
     # absolutely horrible engineering here. i'm so sorry.
     native.genrule(
         name = name + "_sed_command",
-        outs = [ "buildid.sed" ],
-        srcs = [ name + "_latest_commit" ],
+        outs = ["buildid.sed"],
+        srcs = [name + "_latest_commit"],
         cmd_bash = """
-            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location """
-                + name +
-            """_latest_commit))\\"|g" >$@
+            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location """ +
+                   name +
+                   """_latest_commit))\\"|g" >$@
         """,
     )
 

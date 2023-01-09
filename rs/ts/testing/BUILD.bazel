@@ -7,21 +7,20 @@ package(default_visibility = ["//visibility:public"])
 rust_binary(
     name = "testing",
     srcs = glob(["*.rs"]),
-    deps = [ "//rs/ts" ]
+    deps = ["//rs/ts"],
 )
 
 genrule(
     name = "output",
+    outs = ["output.ts"],
     cmd = """
     $(location :testing) > $@
     """,
-    outs = [ "output.ts" ],
-    tools = [ ":testing" ]
+    tools = [":testing"],
 )
-
 
 ts_project(
     name = "output_ts",
-    srcs = [ "output.ts" ],
-    ignores_lint = [ "output.ts" ]
+    srcs = ["output.ts"],
+    ignores_lint = ["output.ts"],
 )

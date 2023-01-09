@@ -3,19 +3,18 @@ load("//ts:rules.bzl", "ts_project")
 
 css_module(
     name = "css",
-    srcs = [ "example.module.css" ]
+    srcs = ["example.module.css"],
 )
-
 
 ts_project(
     name = "ts",
-    srcs = [ "example.ts" ],
-    data = [ "example.css" ],
-    ignores_lint = [ "example.ts" ]
+    srcs = ["example.ts"],
+    data = ["example.css"],
+    ignores_lint = ["example.ts"],
 )
 
 ts_project(
     name = "importee",
-    srcs = [ "importee.ts" ],
-    deps = [":ts"]
+    srcs = ["importee.ts"],
+    deps = [":ts"],
 )

@@ -7,13 +7,13 @@ alias(
 
 sh_test(
     name = "smoke",
-    data = [ ":pulumi" ],
-    srcs = [ "smoke.sh" ],
+    srcs = ["smoke.sh"],
+    data = [":pulumi"],
     env = {
         # the below should become rlocationpath when https://github.com/bazelbuild/bazel/pull/16668 has a release
-        "PULUMI_BIN": "$(rootpath :pulumi)" 
+        "PULUMI_BIN": "$(rootpath :pulumi)",
     },
     deps = [
         "@bazel_tools//tools/bash/runfiles",
-    ]
+    ],
 )
