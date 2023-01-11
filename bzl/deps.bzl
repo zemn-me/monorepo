@@ -25,9 +25,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "497ca47374f48c8b067d786b512ac10a276211810f4a580178ee9b9ad139323a",
-        strip_prefix = "rules_python-0.16.1",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.16.1.tar.gz",
+        sha256 = "48a838a6e1983e4884b26812b2c748a35ad284fd339eb8e2a6f3adf95307fbcd",
+        strip_prefix = "rules_python-0.16.2",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.16.2.tar.gz",
     )
 
     http_archive(
@@ -103,10 +103,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
-        strip_prefix = "buildtools-5.1.0",
+        sha256 = "05eff86c1d444dde18d55ac890f766bce5e4db56c180ee86b5aacd6704a5feb9",
+        strip_prefix = "buildtools-6.0.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/5.1.0.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.0.0.tar.gz",
         ],
     )
 
