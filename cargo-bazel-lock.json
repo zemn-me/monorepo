@@ -1,5 +1,5 @@
 {
-  "checksum": "1f82b1b58eb3939c896debe1bdfafb73bd7e7dfcfccf26d4c72b5f96ac041ffb",
+  "checksum": "4584ff7d810ac75e3d6c3cd21026db1cbad1f7a19e482137f0ee8ed0329bcc06",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -483,13 +483,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.0.32": {
+    "clap 4.1.0": {
       "name": "clap",
-      "version": "4.0.32",
+      "version": "4.1.0",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.0.32/download",
-          "sha256": "a7db700bc935f9e43e88d00b0850dae18a63773cfbec6d8e070fccf7fef89a39"
+          "url": "https://crates.io/api/v1/crates/clap/4.1.0/download",
+          "sha256": "aa91278560fc226a5d9d736cc21e485ff9aad47d26b8ffe1f54cba868b684b9f"
         }
       },
       "targets": [
@@ -551,23 +551,23 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "clap_derive 4.0.21",
+              "id": "clap_derive 4.1.0",
               "target": "clap_derive"
             }
           ],
           "selects": {}
         },
-        "version": "4.0.32"
+        "version": "4.1.0"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_derive 4.0.21": {
+    "clap_derive 4.1.0": {
       "name": "clap_derive",
-      "version": "4.0.21",
+      "version": "4.1.0",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_derive/4.0.21/download",
-          "sha256": "0177313f9f02afc995627906bbd8967e2be069f5261954222dac78290c2b9014"
+          "url": "https://crates.io/api/v1/crates/clap_derive/4.1.0/download",
+          "sha256": "684a277d672e91966334af371f1a7b5833f9aa00b07c84e92fbce95e00208ce8"
         }
       },
       "targets": [
@@ -615,7 +615,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.0.21"
+        "version": "4.1.0"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2403,7 +2403,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.0.32",
+              "id": "clap 4.1.0",
               "target": "clap"
             },
             {
