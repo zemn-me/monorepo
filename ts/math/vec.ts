@@ -7,6 +7,10 @@ export class Vector<N extends number = number, A extends N[] = N[]> extends Tupl
     constructor(...a: A) {
         super(...a)
     }
+	
+	static override fromIterable<T extends number>(v: Iterable<T>): Vector<T> {
+		return new Vector(...v);
+	}
 }
 
 /**
