@@ -1,21 +1,21 @@
-interface ReadonlyArrayOfLength<T, I extends number> extends ReadonlyArray<T> {
-	length: I;
-}
+import { Tuple } from 'monorepo/ts/math/primitive';
 
-export interface Vector<I extends number = number, T = number>
-	extends ReadonlyArrayOfLength<T, I> {
-	length: I;
+/**
+ * A mathematical structure with n-dimensional magnitude.
+ */
+export class Vector<N extends number = number, A extends N[] = N[]> extends Tuple<N, A> {
+    constructor(...a: A) {
+        super(...a)
+    }
 }
 
 /**
  * Map a Vector, returning a new Vector.
  */
-export const map: <I extends number, T, U>(
-	vec: Vector<I, T>,
-	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
-) => Vector<I, U> = (vec, c) =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-	vec.map(c as any) as any;
+export const map = <N extends number, A extends N[], U extends number>(
+	vec: Vector<N, A>,
+	callbackFn: (value: N, index: number, array: Vector<N, A>) => U
+) => new Vector(...vec.map<U>(callbackFn));
 
 /**
  * Map an Iterable, returning a new Iterable.
@@ -34,7 +34,7 @@ export const imap: <T, U>(
 /**
  * Returns an iterable on a vector that iterates in reverse
  */
-export const reverse: <I extends number, T>(v: Vector<I, T>) => Iterable<T> =
+export const reverse: <I extends T[], T extends number>(v: Vector<I>) => Iterable<T> =
 	function* (v) {
 		for (let i = 0; i < v.length; i++) {
 			yield v[v.length - i - 1];
@@ -90,10 +90,11 @@ const _zip: <T1, T2, T3>(
 		yield [left, right];
 	}
 };
+
 export const zip: {
-	<T1, T2, L extends number>(
-		v1: ReadonlyArrayOfLength<T1, L>,
-		v2: ReadonlyArrayOfLength<T2, L>
+	<T extends number, T2 extends number, L extends number>(
+		v1: Vector<T> & { length: L},
+		v2: Vector<T2> & { length: L}
 	): Iterable<[T1, T2]>;
 	<T1, T2, T3>(v1: Iterable<T1>, v2: Iterable<T2>, fb: T3): Iterable<
 		[T1 | T3, T2 | T3]

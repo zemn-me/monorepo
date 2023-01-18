@@ -1,4 +1,4 @@
-import * as Homog from './homog';
+import * as Homog from './space/homog';
 import * as Matrix from './matrix';
 
 export type FocalLength = number;
