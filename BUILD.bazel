@@ -61,6 +61,11 @@ copy_to_bin(
     srcs = [".swcrc.json"],
 )
 
+copy_to_bin(
+    name = "package_json_in_node_modules",
+    srcs = [ "package.json" ]
+)
+
 renovate_config_validator_test(
     name = "validate_renovate_config_test",
     args = ["$(location renovate.json)"],
