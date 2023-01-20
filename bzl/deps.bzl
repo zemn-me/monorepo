@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "e296d9910cc5b12ad8bb1db525d57aa1bdfe22627709cd7d87b86e80e224e758",
+        sha256 = "fdf976a066af79b4e208df929a5c933c740a7a93e44fc3e793bd6ecc461e57d4",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.52.0/pulumi-v3.52.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.52.1/pulumi-v3.52.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
