@@ -1,0 +1,31 @@
+load("//rs:rules.bzl", "rust_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+load("@rules_rust//rust:defs.bzl", "rust_test")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "sha256",
+    srcs = glob(["*.rs"]),
+    deps = [
+        "@cargo//:hex",
+        "@cargo//:sha2",
+    ],
+)
+
+genrule(
+    name = "gen_digest",
+    srcs = ["example_file.txt"],
+    outs = [
+        "digest.txt",
+    ],
+    cmd_bash = "$(location //rs/cmd/sha256) " +
+               "$< > $@",
+    exec_tools = ["//rs/cmd/sha256"],
+)
+
+generated_file_test(
+    name = "tests",
+    src = ":digest.golden.txt",
+    generated = ":digest.txt",
+)

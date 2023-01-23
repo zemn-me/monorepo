@@ -11,6 +11,12 @@ def _impl(ctx):
         command = "md5sum $@ > {}".format(ctx.outputs.md5.path),
         arguments = arguments,
     )
+    ctx.actions.run_shell(
+        outputs = [ctx.outputs.md5],
+        inputs = inputs,
+        command = "md5sum $@ > {}".format(ctx.outputs.md5.path),
+        arguments = arguments,
+    )
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha1],
@@ -21,8 +27,8 @@ def _impl(ctx):
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha256],
-        inputs = inputs,
-        command = "sha256sum $@ > {}".format(ctx.outputs.sha256.path),
+        inputs = inputs + [ ctx.executable.sha256_bin],
+        command = "{} $@ > {}".format(ctx.executable.sha256_bin.path, ctx.outputs.sha256.path),
         arguments = arguments,
     )
 
@@ -37,6 +43,7 @@ _hashes = rule(
         "md5": attr.output(),
         "sha1": attr.output(),
         "sha256": attr.output(),
+        "sha256_bin": attr.label(mandatory = True, executable = True, cfg = "target")
     },
 )
 
@@ -46,5 +53,6 @@ def hashes(**kwargs):
         md5 = "%s.md5" % name,
         sha1 = "%s.sha1" % name,
         sha256 = "%s.sha256" % name,
+        sha256_bin = "//rs/cmd/sha256",
         **kwargs
     )
