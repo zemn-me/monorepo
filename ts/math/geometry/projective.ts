@@ -1,5 +1,5 @@
 import * as Cart from './cartesian';
-import * as Matrix from './matrix';
+import * as Matrix from '../matrix';
 
 export type Point2D = Matrix.Matrix<1, 3>;
 export type Point3D = Matrix.Matrix<1, 4>;
