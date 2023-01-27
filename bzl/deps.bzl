@@ -25,17 +25,17 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "6dd4f396a48ecdeea6f70fb97be6568d291a8cba9a763d2b880e1c523ea0c997",
-        strip_prefix = "rules_python-0.17.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.17.0.tar.gz",
+        sha256 = "c250deb574a37b5116d5cfc06dbaf2bf09702d72d9e6f53fa599f97ea01a1a0a",
+        strip_prefix = "rules_python-0.17.1",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.17.1.tar.gz",
     )
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "19ef30b21eae581177e0028f6f4b1f54c66467017be33d211ab6fc81da01ea4d",
+        sha256 = "dd926a88a564a9246713a9c00b35315f54cbd46b31a26d5d8fb264c07045f05d",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.38.0/rules_go-v0.38.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.38.0/rules_go-v0.38.0.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
         ],
     )
 
