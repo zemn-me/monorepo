@@ -1,4 +1,4 @@
-load("//bzl/versioning:rules.bzl", "semver_version")
+load("//bzl/versioning:rules.bzl", "semver_version", "bump_bin")
 
 semver_version(
     name = "VERSION",

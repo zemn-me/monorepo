@@ -55,6 +55,9 @@ jobs:
             for command in $TO_RUN; do
               bazelisk run --subcommands --verbose_failures $command
             done
+            # we can't yet detect when a version really changes,
+            # so all monorepo changes are considered major.
+            bazelisk run //VERSION:major.bump
             git add -A
             git commit -am "Automatic fixes."
           fi
