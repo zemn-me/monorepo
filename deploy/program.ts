@@ -397,10 +397,8 @@ export const program = ({
 
 			const version = (
 				await fs.readFile(
-					await fs.readFile(
-						runfiles.resolveWorkspaceRelative(
-							'VERSION/VERSION.version.txt'
-						)
+					runfiles.resolveWorkspaceRelative(
+						'VERSION/VERSION.version.txt'
 					)
 				)
 			).toString('utf-8');

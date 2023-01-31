@@ -1,5 +1,7 @@
 load("//bzl/versioning:rules.bzl", "bump_bin", "semver_version")
 
+package(default_visibility = ["//deploy:__subpackages__"])
+
 semver_version(
     name = "VERSION",
     major = "major",

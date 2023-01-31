@@ -12,6 +12,7 @@ ts_project(
         "release.ts",
     ],
     data = [
+        "//VERSION",
         "//project/ck3/recursive-vassals:mod_zip",
         "//project/ck3/recursive-vassals:patch",
         "//ts/cmd/svgshot:npm_pkg.publish",
