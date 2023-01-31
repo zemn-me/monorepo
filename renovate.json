@@ -16,6 +16,9 @@
 	],
 	"packageRules": [
 		{
+			"addLabels": "dependencies"
+		},
+		{
 			"matchManagers": ["cargo", "bazel"],
 			"postUpgradeTasks": {
 				"commands": [
