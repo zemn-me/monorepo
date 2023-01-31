@@ -395,10 +395,15 @@ export const program = ({
 				? memo(() => mockGithub)
 				: memo(() => getOctokit(process.env['GITHUB_TOKEN']!));
 
-
-			const version = (await fs.readFile(
-				await fs.readFile(runfiles.resolveWorkspaceRelative("VERSION/VERSION.version.txt"))))
-					.toString('utf-8');
+			const version = (
+				await fs.readFile(
+					await fs.readFile(
+						runfiles.resolveWorkspaceRelative(
+							'VERSION/VERSION.version.txt'
+						)
+					)
+				)
+			).toString('utf-8');
 
 			const releaser = release(
 				artifact(

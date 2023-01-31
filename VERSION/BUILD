@@ -1,8 +1,8 @@
-load("//bzl/versioning:rules.bzl", "semver_version", "bump_bin")
+load("//bzl/versioning:rules.bzl", "bump_bin", "semver_version")
 
 semver_version(
     name = "VERSION",
     major = "major",
     minor = "minor",
-    patch = "patch"
+    patch = "patch",
 )

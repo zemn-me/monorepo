@@ -2,7 +2,6 @@ load("//bzl/hash:rules.bzl", "hashes")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 load("@rules_python//python:defs.bzl", "py_binary")
 
-
 def semver_version(name, major = None, minor = None, patch = None, **kwargs):
     _semver_version(
         name = name,
@@ -16,10 +15,8 @@ def semver_version(name, major = None, minor = None, patch = None, **kwargs):
     for version_file in [major, minor, patch]:
         bump_bin(
             name = version_file + ".bump",
-            to_bump = version_file
+            to_bump = version_file,
         )
-
-
 
 def _semver_version_impl(ctx):
     ctx.actions.run_shell(
@@ -73,7 +70,6 @@ def bump_bin(name, to_bump):
         ],
     )
 
-
 def bump_on_change_test(name, srcs = [], version_lock = None, version = None, run_on_main = False):
     tags = []
 
@@ -116,5 +112,3 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
         name = name + ".fix",
         actual = name + ".bump",
     )
-
-
