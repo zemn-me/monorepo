@@ -4,7 +4,7 @@
  */
 
 export interface Process {
-	exitCode?: typeof globalThis.process['exitCode'];
+	exitCode?: (typeof globalThis.process)['exitCode'];
 	on(event: 'exit' | 'uncaughtException', handler: () => unknown): unknown;
 }
 
