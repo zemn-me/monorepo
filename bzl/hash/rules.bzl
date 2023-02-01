@@ -27,7 +27,7 @@ def _impl(ctx):
 
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha256],
-        inputs = inputs + [ ctx.executable.sha256_bin],
+        inputs = inputs + [ctx.executable.sha256_bin],
         command = "{} $@ > {}".format(ctx.executable.sha256_bin.path, ctx.outputs.sha256.path),
         arguments = arguments,
     )
@@ -43,7 +43,7 @@ _hashes = rule(
         "md5": attr.output(),
         "sha1": attr.output(),
         "sha256": attr.output(),
-        "sha256_bin": attr.label(mandatory = True, executable = True, cfg = "target")
+        "sha256_bin": attr.label(mandatory = True, executable = True, cfg = "target"),
     },
 )
 
