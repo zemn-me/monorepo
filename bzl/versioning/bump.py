@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description="Performs the action of a version b
 parser.add_argument('--to_bump_in', required=True, help="The version file to bump, as a root-relative path.", type=str)
 parser.add_argument('--to_bump_out', required=True, help="The version file to bump, as a root-relative path.", type=str)
 parser.add_argument('--lockfile_build_label', required=False, help="A label that points to the generated (new) version lockfile.", type=str)
-parser.add_argument('--lockfile_build_rootpath', required=False help="The path from the repo root that the lockfile is generated into", type=str)
+parser.add_argument('--lockfile_build_rootpath', required=False, help="The path from the repo root that the lockfile is generated into", type=str)
 parser.add_argument('--lockfile_out_rootpath', required=False, help="The location to place the newly minted version lockfile at.", type=str)
 
 # This happens directly on the real workspace -- also, needs to be
