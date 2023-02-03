@@ -17,10 +17,6 @@ load("//bzl:deps.bzl", "fetch_dependencies")
 
 fetch_dependencies()
 
-load("@build_bazel_rules_nodejs//:repositories.bzl", "build_bazel_rules_nodejs_dependencies")
-
-build_bazel_rules_nodejs_dependencies()
-
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
@@ -28,17 +24,6 @@ rules_pkg_dependencies()
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
-
-# The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
-# It also extracts and installs any Bazel rules distributed in an npm package.
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
-
-yarn_install(
-    # Name this npm so that Bazel Label references look like @npm//package
-    name = "npm",
-    package_json = "//:package.json",
-    yarn_lock = "//:yarn.lock",
-)
 
 load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
@@ -83,12 +68,6 @@ load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
 
 npm_bazel_labs_dependencies()
 
-load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
-
-nodejs_register_toolchains(
-    # You can choose whatever name you like for the node toolchains, and can register more than one version.
-    name = "nodejs",
-)
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
@@ -100,11 +79,6 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
-load("@build_bazel_rules_nodejs//toolchains/esbuild:esbuild_repositories.bzl", "esbuild_repositories")
-
-esbuild_repositories(
-    npm_repository = "npm",
-)
 
 load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
 
@@ -146,3 +120,58 @@ crate_repositories()
 load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
 
 rust_analyzer_dependencies()
+
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+
+rules_js_dependencies()
+
+load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
+
+nodejs_register_toolchains(
+    name = "nodejs",
+    node_version = DEFAULT_NODE_VERSION,
+)
+
+load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
+
+npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+)
+
+load("@npm//:repositories.bzl", "npm_repositories")
+
+npm_repositories()
+
+##################
+# rules_ts setup #
+##################
+# Fetches the rules_ts dependencies.
+# If you want to have a different version of some dependency,
+# you should fetch it *before* calling this.
+# Alternatively, you can skip calling this function, so long as you've
+# already fetched all the dependencies.
+load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
+
+rules_ts_dependencies(
+    # This keeps the TypeScript version in-sync with the editor, which is typically best.
+    ts_version_from = "//:package.json",
+
+    # Alternatively, you could pick a specific version, or use
+    # load("@aspect_rules_ts//ts:repositories.bzl", "LATEST_VERSION")
+    # ts_version = LATEST_VERSION
+)
+
+nodejs_register_toolchains(
+    name = "node",
+    node_version = DEFAULT_NODE_VERSION,
+)
+
+# Register aspect_bazel_lib toolchains;
+# If you use npm_translate_lock or npm_import from aspect_rules_js you can omit this block.
+load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolchains", "register_copy_to_directory_toolchains")
+
+register_copy_directory_toolchains()
+
+register_copy_to_directory_toolchains()

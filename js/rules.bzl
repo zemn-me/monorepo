@@ -1,4 +1,4 @@
-load("@build_bazel_rules_nodejs//:index.bzl", _generated_file_test = "generated_file_test", _js_library = "js_library", _nodejs_binary = "nodejs_binary", _nodejs_test = "nodejs_test", _copy_to_bin = "copy_to_bin", _pkg_npm = "pkg_npm")
+load("@aspect_rules_js//:index.bzl", _generated_file_test = "generated_file_test", _js_library = "js_library", _nodejs_binary = "nodejs_binary", _nodejs_test = "nodejs_test", _copy_to_bin = "copy_to_bin", _pkg_npm = "pkg_npm")
 
 def generated_file_test(name, **kwargs):
     _generated_file_test(name = name, **kwargs)

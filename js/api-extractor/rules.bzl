@@ -1,3 +1,4 @@
+# BUG ON THIS LINE!! not sure how to resolve it but i want to go get sushi
 load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
 
 def _api_extractor_impl(ctx):
