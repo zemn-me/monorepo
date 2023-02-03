@@ -46,7 +46,7 @@ def next_project(name, srcs, **kwargs):
         outs = ["buildid.sed"],
         srcs = [name + "_latest_commit"],
         cmd_bash = """
-            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"https://github.com/zemnmez/monorepo/commit/$$(cat $(location """ +
+            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location """ +
                    name +
                    """_latest_commit))\\"|g" >$@
         """,

@@ -2,12 +2,21 @@ load("//bzl/hash:rules.bzl", "hashes")
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 load("@rules_python//python:defs.bzl", "py_binary")
 
-def semver_version(name, **kwargs):
+def semver_version(name, major = None, minor = None, patch = None, **kwargs):
     _semver_version(
         name = name,
-        output = name + ".txt",
+        output = name + ".version.txt",
+        major = major,
+        minor = minor,
+        patch = patch,
         **kwargs
     )
+
+    for version_file in [major, minor, patch]:
+        bump_bin(
+            name = version_file + ".bump",
+            to_bump = version_file,
+        )
 
 def _semver_version_impl(ctx):
     ctx.actions.run_shell(
@@ -43,6 +52,23 @@ def _absolute_label(label):
     if label.startswith(":"):
         return native.repository_name() + "//" + native.package_name() + label
     return native.repository_name() + "//" + native.package_name() + ":" + label
+
+# this should eventually be merged with the implementation in
+# bump_on_change_test. But it's horribly implemented, so probably best
+# to replace when I refactor that.
+def bump_bin(name, to_bump):
+    py_binary(
+        name = name,
+        srcs = ["//bzl/versioning:bump.py"],
+        main = "//bzl/versioning:bump.py",
+        data = [to_bump],
+        args = [
+            "--to_bump_in",
+            "$(rootpath " + to_bump + ")",
+            "--to_bump_out",
+            "$(rootpath " + to_bump + ")",
+        ],
+    )
 
 def bump_on_change_test(name, srcs = [], version_lock = None, version = None, run_on_main = False):
     tags = []

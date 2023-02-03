@@ -11,10 +11,10 @@ def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-1.4.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-1.4.0.tar.gz",
         ],
-        sha256 = "74d544d96f4a5bb630d465ca8bbcfe231e3594e5aae57e1edbf17a6eb3ca2506",
+        sha256 = "f24ab666394232f834f74d19e2ff142b0af17466ea0c69a3f4c276ee75f6efce",
     )
 
     http_archive(
@@ -25,17 +25,17 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "48a838a6e1983e4884b26812b2c748a35ad284fd339eb8e2a6f3adf95307fbcd",
-        strip_prefix = "rules_python-0.16.2",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.16.2.tar.gz",
+        sha256 = "8c15896f6686beb5c631a4459a3aa8392daccaab805ea899c9d14215074b60ef",
+        strip_prefix = "rules_python-0.17.3",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.17.3.tar.gz",
     )
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "56d8c5a5c91e1af73eca71a6fab2ced959b67c86d12ba37feedb0a2dfea441a6",
+        sha256 = "dd926a88a564a9246713a9c00b35315f54cbd46b31a26d5d8fb264c07045f05d",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.37.0/rules_go-v0.37.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.37.0/rules_go-v0.37.0.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
         ],
     )
 
@@ -103,10 +103,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "05eff86c1d444dde18d55ac890f766bce5e4db56c180ee86b5aacd6704a5feb9",
-        strip_prefix = "buildtools-6.0.0",
+        sha256 = "ca524d4df8c91838b9e80543832cf54d945e8045f6a2b9db1a1d02eec20e8b8c",
+        strip_prefix = "buildtools-6.0.1",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.0.0.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.0.1.tar.gz",
         ],
     )
 
@@ -120,9 +120,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "e296d9910cc5b12ad8bb1db525d57aa1bdfe22627709cd7d87b86e80e224e758",
+        sha256 = "a10d5630beb49072a5d63671cdc147ec42d45e142cf14465f02520a320d55eb9",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.52.0/pulumi-v3.52.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.53.1/pulumi-v3.53.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -162,6 +162,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "aaaa4b9591a5dad8d8907ae2dbe6e0eb49e6314946ce4c7149241648e56a1277",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.16.1/rules_rust-v0.16.1.tar.gz"],
+        sha256 = "d125fb75432dc3b20e9b5a19347b45ec607fabe75f98c6c4ba9badaab9c193ce",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.17.0/rules_rust-v0.17.0.tar.gz"],
     )
