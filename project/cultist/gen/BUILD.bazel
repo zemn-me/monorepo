@@ -1,5 +1,5 @@
 load("//ts:rules.bzl", "ts_project")
-load("//:rules.bzl", "nodejs_binary")
+load("//js:rules.bzl", "nodejs_binary")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
