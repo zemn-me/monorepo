@@ -1,6 +1,6 @@
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary")
+load("//js:rules.bzl", _nodejs_binary = "nodejs_binary")
 load("@aspect_rules_swc//swc:defs.bzl", "swc_transpiler")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("//js/eslint:rules.bzl", "eslint_test")

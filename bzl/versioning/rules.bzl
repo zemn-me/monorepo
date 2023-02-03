@@ -1,5 +1,5 @@
 load("//bzl/hash:rules.bzl", "hashes")
-load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+load("//js:rules.bzl", "generated_file_test")
 load("@rules_python//python:defs.bzl", "py_binary")
 
 def semver_version(name, major = None, minor = None, patch = None, **kwargs):

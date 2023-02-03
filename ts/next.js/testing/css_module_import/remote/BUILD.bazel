@@ -1,5 +1,5 @@
 load("//ts:rules.bzl", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
+load("//js:rules.bzl", "copy_to_bin")
 
 package(default_visibility = ["//ts/next.js/testing/css_module_import:__subpackages__"])
 
