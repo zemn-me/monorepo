@@ -1,6 +1,6 @@
 load("//ts:rules.bzl", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("//js:rules.bzl", "js_library")
 
 package(default_visibility = [
     ":__subpackages__",

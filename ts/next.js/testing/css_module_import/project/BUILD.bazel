@@ -6,6 +6,7 @@ ts_project(
     data = ["@npm//next/bin:next"],
     deps = [
         "//ts/math",
+        "//ts/next.js/testing/css_module_import/remote",
         "@npm//@bazel/runfiles",
         "@npm//@types/node",
         "@npm//@types/react",
