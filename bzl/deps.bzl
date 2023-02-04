@@ -162,15 +162,15 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
-        name = "aspect_rules_js",
-        sha256 = "2868c450aaa83ec19ee172015c6445264b6422d6d0d61da6af47ec8a159b0e5a",
-        strip_prefix = "rules_js-1.17.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.17.0/rules_js-v1.17.0.tar.gz",
-    )
-
-    http_archive(
         name = "aspect_rules_ts",
         sha256 = "6c216bb53ab8c475c1ea2a64ab99334b67aa8d49a5dae42c2f064443ce1d6c0e",
         strip_prefix = "rules_ts-1.2.3",
         url = "https://github.com/aspect-build/rules_ts/releases/download/v1.2.3/rules_ts-v1.2.3.tar.gz",
+    )
+
+    # Used only for pkg_npm
+    http_archive(
+        name = "build_bazel_rules_nodejs",
+        sha256 = "dcc55f810142b6cf46a44d0180a5a7fb923c04a5061e2e8d8eb05ccccc60864b",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-5.8.0.tar.gz"],
     )

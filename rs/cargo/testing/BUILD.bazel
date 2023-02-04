@@ -1,5 +1,6 @@
 load("//rs:rules.bzl", "rust_binary")
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+
 
 package(default_visibility = ["//visibility:public"])
 
@@ -20,8 +21,8 @@ genrule(
     tools = [":hello_world"],
 )
 
-generated_file_test(
+diff_test(
     name = "hello_world_test",
-    src = "hello_world_expected.txt",
-    generated = ":hello_world_output",
+    file1 = "hello_world_expected.txt",
+    file2 = ":hello_world_output",
 )

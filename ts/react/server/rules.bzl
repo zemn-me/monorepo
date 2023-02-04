@@ -76,7 +76,6 @@ def web_app(name, entry_points, srcs = [], tsconfig = "//:tsconfig", esbuild_dep
         deps = esbuild_deps,
         visibility = visibility,
         metafile = False,
-        link_workspace_root = True,
     )
 
     esbuild(
@@ -86,7 +85,6 @@ def web_app(name, entry_points, srcs = [], tsconfig = "//:tsconfig", esbuild_dep
         name = name + "_dev_build",
         entry_points = entry_points,
         config = "//:esbuild_config",
-        link_workspace_root = True,
         minify = False,
         splitting = True,
         visibility = visibility,

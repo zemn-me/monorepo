@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -29,7 +29,7 @@ jest_test(
     deps = [":pulumi"],
 )
 
-nodejs_binary(
+js_binary(
     name = "preview",
     data = [
         ":pulumi",

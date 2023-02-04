@@ -7,11 +7,9 @@ specifiers:
   '@bazel/bazelisk': 1.12.1
   '@bazel/buildifier': 6.0.1
   '@bazel/buildozer': 6.0.1
-  '@bazel/esbuild': 5.7.3
   '@bazel/ibazel': latest
   '@bazel/labs': 4.6.1
   '@bazel/runfiles': 5.7.3
-  '@bazel/typescript': 5.7.3
   '@fortawesome/fontawesome-svg-core': 6.2.1
   '@fortawesome/free-solid-svg-icons': 6.2.1
   '@fortawesome/react-fontawesome': 0.2.0
@@ -103,11 +101,9 @@ devDependencies:
   '@bazel/bazelisk': 1.12.1
   '@bazel/buildifier': 6.0.1
   '@bazel/buildozer': 6.0.1
-  '@bazel/esbuild': 5.7.3
   '@bazel/ibazel': 0.16.2
   '@bazel/labs': 4.6.1
   '@bazel/runfiles': 5.7.3
-  '@bazel/typescript': 5.7.3_typescript@4.9.5
   '@fortawesome/fontawesome-svg-core': 6.2.1
   '@fortawesome/free-solid-svg-icons': 6.2.1
   '@fortawesome/react-fontawesome': 0.2.0_z27bm67dtmuyyvss23ckjdrcuy
@@ -1915,11 +1911,6 @@ packages:
     hasBin: true
     dev: true
 
-  /@bazel/esbuild/5.7.3:
-    resolution: {integrity: sha512-SzOmPlvI3rzYz73tHNVl3GlvfSo+NFZzuQQeJWhUq3JMHLYjUU14A9nY0WhBKTamD4MatJg9mUJOdOnXvOVtxQ==}
-    requiresBuild: true
-    dev: true
-
   /@bazel/ibazel/0.16.2:
     resolution: {integrity: sha512-KgqAWMH0emL6f3xH6nqyTryoBMqlJ627LBIe9PT1PRRQPz2FtHib3FIHJPukp1slzF3hJYZvdiVwgPnHbaSOOA==}
     hasBin: true
@@ -1931,27 +1922,6 @@ packages:
 
   /@bazel/runfiles/5.7.3:
     resolution: {integrity: sha512-GKN9mdquGwZZroVJTItoNgzDxjZihQZ78C3dDlLpZVlBqm0FyXsYnKOPpEGrtbuFehO0LSMdqVhS390o/vvTSQ==}
-    dev: true
-
-  /@bazel/typescript/5.7.3_typescript@4.9.5:
-    resolution: {integrity: sha512-GuDTCtEZcxOXZTJAZi0gfi/i3wm4r6Ny6I7NZLj4Xk9tX+yyRG8SBuUHN972S8/NmT5fFxnPymKfJiurXM4Txg==}
-    deprecated: This package is no longer maintained, see https://github.com/aspect-build/rules_ts for replacement
-    hasBin: true
-    requiresBuild: true
-    peerDependencies:
-      typescript: '>=3.0.0'
-    dependencies:
-      '@bazel/worker': 5.7.3
-      semver: 5.6.0
-      source-map-support: 0.5.9
-      tsutils: 3.21.0_typescript@4.9.5
-      typescript: 4.9.5
-    dev: true
-
-  /@bazel/worker/5.7.3:
-    resolution: {integrity: sha512-P3Qo3bTw/NgxkcUNdUTb5j8jm6qIzRvKmFYMMyUyUBN0b7sAB6Qlk0QAP9Lok9+G9TbCXmmbT0dauftsH2x5fQ==}
-    dependencies:
-      google-protobuf: 3.21.2
     dev: true
 
   /@bcoe/v8-coverage/0.2.3:
@@ -10770,11 +10740,6 @@ packages:
     resolution: {integrity: sha512-EjnoLE5OGmDAVV/8YDoN5KiajNadjzIp9BAHOhYeQHt7j0UWxjmgsx4YD48wp4Ue1Qogq38F1GNUJNqF1kKKxA==}
     dev: true
 
-  /semver/5.6.0:
-    resolution: {integrity: sha512-RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==}
-    hasBin: true
-    dev: true
-
   /semver/5.7.1:
     resolution: {integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==}
     hasBin: true
@@ -10986,13 +10951,6 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
-
-  /source-map-support/0.5.9:
-    resolution: {integrity: sha512-gR6Rw4MvUlYy83vP0vxoVNzM6t8MUXqNuRsuBmBHQDu1Fh6X015FrLdgoDKcNdkwGubozq0P4N0Q37UyFVr1EA==}
-    dependencies:
-      buffer-from: 1.1.2
-      source-map: 0.6.1
-    dev: true
 
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}

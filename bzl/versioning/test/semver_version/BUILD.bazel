@@ -1,5 +1,5 @@
 load("//bzl/versioning:rules.bzl", "semver_version")
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 semver_version(
     name = "version",
@@ -8,8 +8,8 @@ semver_version(
     patch = "PATCH",
 )
 
-generated_file_test(
+diff_test(
     name = "version_concat_test",
-    src = "expected.txt",
-    generated = ":version",
+    file1 = "expected.txt",
+    file2 = ":version",
 )

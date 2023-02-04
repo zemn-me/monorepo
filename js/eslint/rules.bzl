@@ -1,7 +1,8 @@
-load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
+load("@npm//:eslint/package_json.bzl", "bin")
+
 
 def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwargs):
-    _eslint_test(
+    bin.eslint_test(
         name = name,
         data = srcs + data + [
             "//:.prettierrc.json",

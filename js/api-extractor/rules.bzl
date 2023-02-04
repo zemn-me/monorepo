@@ -1,5 +1,5 @@
 # BUG ON THIS LINE!! not sure how to resolve it but i want to go get sushi
-load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
+load("@aspect_rules_js//js:providers.bzl", "JsInfo", "js_info")
 
 def _api_extractor_impl(ctx):
     output_files = []
@@ -81,7 +81,7 @@ def _api_extractor_impl(ctx):
 
     inputs = [ctx.outputs.config, ctx.file.entry_point, ctx.file.ts_config, ctx.file.package_json] + ctx.files.srcs
 
-    for deps in [src[DeclarationInfo].transitive_declarations.to_list() for src in ctx.attr.srcs if DeclarationInfo in src]:
+    for deps in [src[JsInfo].transitive_declarations.to_list() for src in ctx.attr.srcs if JsInfo in src]:
         inputs += deps
 
     ctx.actions.run(
@@ -98,7 +98,7 @@ _api_extractor_rule = rule(
     attrs = {
         "entry_point": attr.label(mandatory = True, allow_single_file = True),
         "ts_config": attr.label(mandatory = True, allow_single_file = True),
-        # must be DeclarationInfo (.d.ts files)
+        # must be JsInfo (.d.ts files)
         "srcs": attr.label_list(mandatory = True, allow_files = True, allow_empty = False),
         "package_json": attr.label(mandatory = True, allow_single_file = True),
         "api_extractor_binary": attr.label(mandatory = True, executable = True, cfg = "target"),

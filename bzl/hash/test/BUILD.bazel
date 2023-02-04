@@ -1,5 +1,5 @@
 load("//bzl/hash:rules.bzl", "hashes")
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 hashes(
     name = "hashes",
@@ -9,8 +9,8 @@ hashes(
     ],
 )
 
-generated_file_test(
+diff_test(
     name = "version_concat_test",
-    src = "expected.txt",
-    generated = ":hashes",
+    file1 = "expected.txt",
+    file2 = ":hashes",
 )

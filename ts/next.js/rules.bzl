@@ -1,4 +1,4 @@
-load("@npm//next:index.bzl", "next")
+load("@npm//:next/package_json.bzl", "bin")
 load("//git:rules.bzl", "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
 
@@ -45,27 +45,24 @@ def next_project(name, srcs, **kwargs):
 
     srcs = srcs + [":" + name + "_next_config"]
 
-    next(
+    bin.next(
         name = name + ".dev",
-        data = srcs,
-        link_workspace_root = True,
+        srcs = srcs,
         args = ["dev", target],
     )
 
-    next(
+    bin.next(
         name = distDir,
-        data = srcs,
-        link_workspace_root = True,
+        srcs = srcs,
         args = ["build", target],
         output_dir = True,
         silent_on_success = True,
     )
 
-    next(
+    bin.next(
         name = "out",
-        data = [":build"] + srcs,
+        srcs = [":build"] + srcs,
         args = ["export", target],
-        link_workspace_root = True,
         output_dir = True,
         silent_on_success = True,
     )

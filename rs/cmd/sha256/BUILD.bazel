@@ -1,5 +1,5 @@
 load("//rs:rules.bzl", "rust_binary")
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -23,8 +23,8 @@ genrule(
     exec_tools = ["//rs/cmd/sha256"],
 )
 
-generated_file_test(
+diff_test(
     name = "tests",
-    src = ":digest.golden.txt",
-    generated = ":digest.txt",
+    file1 = ":digest.golden.txt",
+    file2 = ":digest.txt",
 )

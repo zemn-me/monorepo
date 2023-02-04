@@ -1,4 +1,4 @@
-load("//js:rules.bzl", "nodejs_binary")
+load("//js:rules.bzl", "js_binary")
 
 def package_json(name, targets, template, version, depSpec):
     """
@@ -13,7 +13,7 @@ def package_json(name, targets, template, version, depSpec):
     )
 
     genrule_name = name + "_gen"
-    nodejs_binary(
+    js_binary(
         name = genrule_name,
         data = [
             "//:package.json",
