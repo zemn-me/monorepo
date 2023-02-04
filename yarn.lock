@@ -3201,10 +3201,10 @@
   resolved "https://registry.yarnpkg.com/@redis/bloom/-/bloom-1.2.0.tgz#d3fd6d3c0af3ef92f26767b56414a370c7b63b71"
   integrity sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==
 
-"@redis/client@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.0.tgz#aeb3a1a2f72b4f23358ef74693c1b5c1ff420693"
-  integrity sha512-MafrVNQ5LSnii1yYIlzjbz3i6Bw8c9RZkV3g7jNd3As/A1vo6UIn0+29ii631oKxIA+nAEMeACh6+9k9+iup1A==
+"@redis/client@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.2.tgz#ad60561cfcfe6938f64327b913a425739645a661"
+  integrity sha512-NHkrqvyreowlqxZvt9ufA//nEv0/voHohMAybn50S3e/+9Xbc47bXX4djb7QOX6Kupp16NdfG7St8CzhyYA3cg==
   dependencies:
     cluster-key-slot "1.1.2"
     generic-pool "3.9.0"
@@ -10042,13 +10042,13 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redis@4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.0.tgz#53dddba73b3f5c1fa0e289df120410277bd77ace"
-  integrity sha512-QTlRvQtfRM9ZxFRfBmd8UsGGrKZil/cAwlbDTnaSKirCUMfWgXjKQ4VlkhmNBc3mnAbbSgeYw9zs/HcfYGd1Cw==
+redis@4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.1.tgz#7778d888d5fe150a7c453b27a47b0e359fff8252"
+  integrity sha512-cmmO3uqHHRWrvpsT0JrrYl/uqyz6/GNnXZnPbwzp5Hy0Y7z8WBTZnF6TQ8v/ryIverGm9azq5oqzNzpWh8Ab+w==
   dependencies:
     "@redis/bloom" "1.2.0"
-    "@redis/client" "1.5.0"
+    "@redis/client" "1.5.2"
     "@redis/graph" "1.1.0"
     "@redis/json" "1.0.4"
     "@redis/search" "1.1.1"
@@ -10110,10 +10110,10 @@ remark@13.0.0:
     remark-stringify "^9.0.0"
     unified "^9.1.0"
 
-renovate@^34.119.5:
-  version "34.119.5"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.119.5.tgz#7e9e441cf84041399cbda9f622d5adc40f38cce7"
-  integrity sha512-cwpjaw7N+OFFJ+cQ3PvJmNtKVFRRT/5PK+ZMGEz1EWSSw1S3GBpxqGrVLY9NNm5TAIIakuKJPPr1vVurruOjsQ==
+renovate@^34.120.0:
+  version "34.120.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.120.0.tgz#5310709b589ee86e7b5340aa9721b212863d75f1"
+  integrity sha512-R91Q1VDFmi7rTEp2T4vlvV+XlgRlgnm5YMljDFhuiaWOxIDt+FTfXYIMYoyBCCo80eFA9UI9Tp9IBg3F/CdL3Q==
   dependencies:
     "@aws-sdk/client-codecommit" "3.256.0"
     "@aws-sdk/client-ec2" "3.256.0"
@@ -10199,7 +10199,7 @@ renovate@^34.119.5:
     parse-link-header "2.0.0"
     prettier "2.8.3"
     quick-lru "5.1.1"
-    redis "4.6.0"
+    redis "4.6.1"
     remark "13.0.0"
     remark-github "10.1.0"
     safe-stable-stringify "2.4.2"
