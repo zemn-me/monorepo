@@ -1,0 +1,24 @@
+# I got this file from a bad rebase but I'm scared to remove it so it's going to stay.
+
+#load("//ts:rules.bzl", "ts_project")
+#load("//ts/next.js:rules.bzl", "next_project")
+#
+#ts_project(
+#    name = "ts_sources",
+#    data = ["@npm//next/bin:next"],
+#    deps = [
+#        "//ts/math",
+#        "//ts/next.js/testing/css_module_import/remote",
+#        "@npm//@bazel/runfiles",
+#        "@npm//@types/node",
+#        "@npm//@types/react",
+#        "@npm//react",
+#        "@npm//react-dom",
+#    ],
+#)
+
+#next_project(
+#    name = "example",
+#    srcs = [":ts_sources"],
+#    distDir = "build",
+#)
