@@ -6,14 +6,11 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("@npm//:defs.bzl", "link_js_packages")
-
-link_js_packages()
-
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
 load("@npm//:renovate/package_json.bzl", "bin")
+load("@npm//:defs.bzl", "npm_link_all_packages")
 
 
 package(default_visibility = [":__subpackages__"])
@@ -61,3 +58,6 @@ bin.renovate_config_validator_test(
     args = ["$(location renovate.json)"],
     data = ["renovate.json"],
 )
+
+
+npm_link_all_packages()
