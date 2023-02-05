@@ -1,5 +1,4 @@
 load("//ts:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 

@@ -1,0 +1,18 @@
+
+#I think this came out of a bad rebase but I'm worried to delete it
+
+#load("//ts:rules.bzl", "ts_project")
+#load("//js:rules.bzl", "copy_to_bin")
+#
+#package(default_visibility = ["//ts/next.js/testing/css_module_import:__subpackages__"])
+#
+#ts_project(
+#    name = "remote",
+#    data = ["css_sources"],
+#    deps = ["//:base_defs"],
+#)
+
+#copy_to_bin(
+#    name = "css_sources",
+#    srcs = ["module.module.css"],
+#)

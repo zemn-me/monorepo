@@ -1,4 +1,4 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+load("//js:rules.bzl", "generated_file_test")
 load("//rs/css/module:rules.bzl", "css_module_rule")
 
 genrule(

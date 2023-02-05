@@ -1,4 +1,4 @@
-load("//bzl/versioning:rules.bzl", "bump_bin", "semver_version")
+load("//bzl/versioning:rules.bzl", "semver_version")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
