@@ -17,7 +17,7 @@ ts_project(
     srcs = tstestfiles,
     deps = [
         ":iter",
-        "@npm//@types/jest",
+        "@npm//:@types/jest",
     ],
 )
 

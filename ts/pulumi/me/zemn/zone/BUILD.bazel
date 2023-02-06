@@ -5,6 +5,6 @@ package(default_visibility = ["//ts/pulumi/me/zemn:__subpackages__"])
 ts_project(
     name = "zone",
     deps = [
-        "@npm//@pulumi/aws",
+        "@npm//:@pulumi/aws",
     ],
 )

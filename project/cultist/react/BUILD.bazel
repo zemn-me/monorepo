@@ -13,8 +13,8 @@ ts_project(
     deps = [
         "//:base_defs",
         "//project/cultist/state",
-        "@npm//@types/d3-scale",
-        "@npm//@types/react",
-        "@npm//react",
+        "@npm//:@types/d3-scale",
+        "@npm//:@types/react",
+        "@npm//:react",
     ],
 )

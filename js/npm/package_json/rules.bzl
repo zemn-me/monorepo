@@ -27,11 +27,11 @@ def package_json(name, targets, template, version, depSpec):
     native.genrule(
         name = name,
         srcs = [
-            "@npm//commander",
+            "@npm//:commander",
             "//:package.json",
             genquery_name,
             template,
-            "@npm//@bazel/runfiles",
+            "@npm//:@bazel/runfiles",
             "//js/npm/package_json:gen_pkgjson",
         ] + [version],
         cmd = "$(execpath " + genrule_name + ") " +

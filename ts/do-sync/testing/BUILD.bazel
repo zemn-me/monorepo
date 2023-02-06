@@ -10,9 +10,9 @@ ts_project(
     srcs = glob(["**/*.ts"]),
     deps = [
         "//ts/do-sync:lib",
-        "@npm//@types/jest",
-        "@npm//@types/sharp",
-        "@npm//sharp",
+        "@npm//:@types/jest",
+        "@npm//:@types/sharp",
+        "@npm//:sharp",
     ],
 )
 

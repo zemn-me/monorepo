@@ -17,8 +17,8 @@ ts_project(
     srcs = ["typescript_basic_test.ts"],
     preserve_jsx = False,
     deps = [
-        "@npm//@types/jest",
-        "@npm//@types/node",
+        "@npm//:@types/jest",
+        "@npm//:@types/node",
     ],
 )
 

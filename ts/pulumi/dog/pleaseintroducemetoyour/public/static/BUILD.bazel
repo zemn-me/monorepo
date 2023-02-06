@@ -7,10 +7,10 @@ ts_project(
     name = "ts",
     deps = [
         "//ts/next.js",
-        "@npm//@bazel/runfiles",
-        "@npm//@types/react",
-        "@npm//next",
-        "@npm//react",
+        "@npm//:@bazel/runfiles",
+        "@npm//:@types/react",
+        "@npm//:next",
+        "@npm//:react",
     ],
 )
 

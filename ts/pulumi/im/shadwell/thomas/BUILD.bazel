@@ -8,6 +8,6 @@ ts_project(
     deps = [
         "//ts/pulumi/im/shadwell/cert",
         "//ts/pulumi/im/shadwell/thomas/public",
-        "@npm//@pulumi/aws",
+        "@npm//:@pulumi/aws",
     ],
 )

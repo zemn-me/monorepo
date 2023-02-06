@@ -37,7 +37,7 @@ def api_documenter(name, docModel = None, **kwargs):
 
     _api_documenter_rule(
         name = name,
-        api_documenter_binary = "@npm//@microsoft/api-documenter/bin:api-documenter",
+        api_documenter_binary = "@npm//:@microsoft/api-documenter/bin:api-documenter",
         input_directory = ":" + name + "_docModel_dir",
         **kwargs
     )

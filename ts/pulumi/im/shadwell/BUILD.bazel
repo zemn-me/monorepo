@@ -8,6 +8,6 @@ ts_project(
         "//ts/pulumi/im/shadwell/cert",
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/im/shadwell/zone",
-        "@npm//@pulumi/aws",
+        "@npm//:@pulumi/aws",
     ],
 )

@@ -1,5 +1,5 @@
-load("@npm//@bazel/esbuild:index.bzl", "esbuild")
-load("@npm//http-server:index.bzl", "http_server")
+load("@npm//:@bazel/esbuild:index.bzl", "esbuild")
+load("@npm//:http-server:index.bzl", "http_server")
 load("//css:providers.bzl", "css_library_info")
 
 def _get_css_aspect(target, ctx):

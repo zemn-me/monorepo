@@ -33,6 +33,6 @@ _lockfile_minimize_rule = rule(
 def lockfile_minimize(name, **kwargs):
     _lockfile_minimize_rule(
         name = name,
-        yarn = "@npm//yarn/bin:yarn",
+        yarn = "@npm//:yarn/bin:yarn",
         **kwargs
     )

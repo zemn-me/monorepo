@@ -10,11 +10,11 @@ ts_project(
     ]),
     resolve_json_module = True,
     deps = [
-        "@npm//@types/jest",
-        "@npm//@types/react",
-        "@npm//@types/react-dom",
-        "@npm//react",
-        "@npm//react-dom",
+        "@npm//:@types/jest",
+        "@npm//:@types/react",
+        "@npm//:@types/react-dom",
+        "@npm//:react",
+        "@npm//:react-dom",
     ],
 )
 

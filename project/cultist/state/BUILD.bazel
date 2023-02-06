@@ -16,7 +16,7 @@ ts_project(
 ts_project(
     name = "state_main",
     srcs = ["state.ts"],
-    deps = ["@npm//immutable"],
+    deps = ["@npm//:immutable"],
 )
 
 ts_project(
@@ -27,7 +27,7 @@ ts_project(
         "//project/cultist:save",
         "//ts",
         "//ts/iter",
-        "@npm//immutable",
+        "@npm//:immutable",
     ],
 )
 
@@ -47,9 +47,9 @@ ts_project(
     srcs = ["op.ts"],
     deps = [
         ":state_main",
-        "@npm//@types/uuid",
-        "@npm//immutable",
-        "@npm//uuid",
+        "@npm//:@types/uuid",
+        "@npm//:immutable",
+        "@npm//:uuid",
     ],
 )
 

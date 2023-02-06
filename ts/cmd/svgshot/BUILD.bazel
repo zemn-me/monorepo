@@ -14,13 +14,13 @@ ts_project(
         "run.ts",
     ],
     deps = [
-        "@npm//@types/node",
-        "@npm//@types/svgo",
-        "@npm//@types/tmp",
-        "@npm//commander",
-        "@npm//puppeteer",
-        "@npm//svgo",
-        "@npm//tmp",
+        "@npm//:@types/node",
+        "@npm//:@types/svgo",
+        "@npm//:@types/tmp",
+        "@npm//:commander",
+        "@npm//:puppeteer",
+        "@npm//:svgo",
+        "@npm//:tmp",
     ],
 )
 
@@ -29,11 +29,11 @@ ts_project(
     srcs = ["svgshot_test.ts"],
     deps = [
         ":project",
-        "@npm//@bazel/runfiles",
-        "@npm//@types/jest",
-        "@npm//@types/node",
-        "@npm//@types/tmp",
-        "@npm//tmp",
+        "@npm//:@bazel/runfiles",
+        "@npm//:@types/jest",
+        "@npm//:@types/node",
+        "@npm//:@types/tmp",
+        "@npm//:tmp",
     ],
 )
 

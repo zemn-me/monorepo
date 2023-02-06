@@ -6,7 +6,7 @@ ts_project(
     name = "math",
     srcs = glob(["*.ts"]),
     deps = [
-        "@npm//@types/jest",
+        "@npm//:@types/jest",
     ],
 )
 

@@ -8,11 +8,11 @@ ts_project(
     deps = [
         "//ts/fs",
         "//ts/pulumi/lib",
-        "@npm//@bazel/runfiles",
-        "@npm//@pulumi/aws",
-        "@npm//@pulumi/pulumi",
-        "@npm//@types/mime",
-        "@npm//glob-promise",
-        "@npm//mime",
+        "@npm//:@bazel/runfiles",
+        "@npm//:@pulumi/aws",
+        "@npm//:@pulumi/pulumi",
+        "@npm//:@types/mime",
+        "@npm//:glob-promise",
+        "@npm//:mime",
     ],
 )

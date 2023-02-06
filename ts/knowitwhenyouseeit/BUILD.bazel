@@ -11,11 +11,11 @@ ts_project(
         "index.ts",
     ],
     deps = [
-        "@npm//@types/bcryptjs",
-        "@npm//@types/node",
-        "@npm//bcryptjs",
-        "@npm//react",
-        "@npm//react-dom",
+        "@npm//:@types/bcryptjs",
+        "@npm//:@types/node",
+        "@npm//:bcryptjs",
+        "@npm//:react",
+        "@npm//:react-dom",
     ],
 )
 
@@ -24,7 +24,7 @@ ts_project(
     srcs = ["main_test.ts"],
     deps = [
         ":project",
-        "@npm//@types/jest",
+        "@npm//:@types/jest",
     ],
 )
 

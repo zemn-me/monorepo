@@ -13,8 +13,8 @@ ts_project(
         ":types",
         ":verb",
         "//project/cultist/state",
-        "@npm//@types/uuid",
-        "@npm//immutable",
+        "@npm//:@types/uuid",
+        "@npm//:immutable",
     ],
 )
 

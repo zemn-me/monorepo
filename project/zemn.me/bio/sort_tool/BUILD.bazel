@@ -8,7 +8,7 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
-        "@npm//@types/node",
+        "@npm//:@types/node",
     ],
 )
 
