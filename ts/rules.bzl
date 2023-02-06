@@ -1,7 +1,7 @@
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("//js:rules.bzl", _js_binary = "js_binary")
-load("@aspect_rules_swc//swc:defs.bzl", "swc_transpiler")
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("//js/eslint:rules.bzl", "eslint_test")
 
@@ -44,7 +44,7 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         # swc injects this
         deps = deps + ["@npm//:regenerator-runtime"],
         transpiler = partial.make(
-            swc_transpiler,
+            swc,
             swcrc = "//:swcrc",
             source_maps = "true",
         ),

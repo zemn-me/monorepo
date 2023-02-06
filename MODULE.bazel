@@ -25,3 +25,5 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_bazel_lib", version = "1.24.2")
 
+bazel_dep(name = "aspect_rules_swc", version = "0.21.3")
+

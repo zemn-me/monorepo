@@ -70,22 +70,6 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
-
-load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
-
-rules_swc_dependencies()
-
-# Fetches a pre-built Rust-node binding from
-# https://github.com/swc-project/swc/releases.
-# If you'd rather compile it from source, you can use rules_rust, fetch the project,
-# then register the toolchain yourself. (Note, this is not yet documented)
-load("@aspect_rules_swc//swc:repositories.bzl", "LATEST_VERSION", "swc_register_toolchains")
-
-swc_register_toolchains(
-    name = "swc",
-    swc_version = LATEST_VERSION,
-)
-
 load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
 
 rules_rust_dependencies()

@@ -149,13 +149,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
-        name = "aspect_rules_swc",
-        sha256 = "814bc08efbbe4d5e238579c9b0cded519b199486fbc26709fcf6d4d47de08f50",
-        strip_prefix = "rules_swc-0.20.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.20.2.tar.gz",
-    )
-
-    http_archive(
         name = "rules_rust",
         sha256 = "d125fb75432dc3b20e9b5a19347b45ec607fabe75f98c6c4ba9badaab9c193ce",
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.17.0/rules_rust-v0.17.0.tar.gz"],
@@ -173,4 +166,11 @@ exports_files(glob(["**/*"], exclude_directories=0))
         name = "build_bazel_rules_nodejs",
         sha256 = "dcc55f810142b6cf46a44d0180a5a7fb923c04a5061e2e8d8eb05ccccc60864b",
         urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-5.8.0.tar.gz"],
+    )
+
+    # or for core module
+    http_archive(
+        name = "rules_nodejs",
+        sha256 = "08337d4fffc78f7fe648a93be12ea2fc4e8eb9795a4e6aa48595b66b34555626",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-core-5.8.0.tar.gz"],
     )
