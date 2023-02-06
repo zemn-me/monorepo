@@ -62,12 +62,11 @@ ts_project(
         ":state_main",
         "//project/cultist:save",
         "//ts",
-        "@npm//@types/jest",
+        "@npm//:@types/jest",
     ],
 )
 
 jest_test(
     name = "test",
-    srcs = ["state_test.js"],
     deps = [":state_test"],
 )

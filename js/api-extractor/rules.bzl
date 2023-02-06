@@ -132,12 +132,14 @@ _api_extractor_rule = rule(
         publicTrimmedRollup=  publicTrimmedRollup,
 """
 
+
+
 def api_extractor(name, config = "api-extractor.json", **kwargs):
     _api_extractor_rule(
         name = name,
         config = config,
         ts_config = "//:tsconfig",
-        api_extractor_binary = "@npm//@microsoft/api-extractor/bin:api-extractor",
+        api_extractor_binary = "//js/api-extractor:api_extractor",
         package_json = "//:package.json",
         package_name = native.package_name(),
         **kwargs
