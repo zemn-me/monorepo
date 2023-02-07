@@ -60,4 +60,4 @@ bin.renovate_config_validator_test(
 )
 
 
-npm_link_all_packages()
+npm_link_all_packages(name = "node_modules")

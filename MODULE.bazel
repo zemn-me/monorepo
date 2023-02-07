@@ -1,13 +1,18 @@
+
 bazel_dep(name = "aspect_rules_js", version = "1.17.0")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+
 
 npm.npm_translate_lock(
     name = "npm",
     pnpm_lock = "//:pnpm-lock.yaml",
 )
 
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm", dev_dependency = True)
 
+# needed to bootstrap pnpm binary for dev use
+use_repo(pnpm, "pnpm")
 
 use_repo(npm, "npm")
 
@@ -26,4 +31,5 @@ use_repo(rules_ts_ext, "npm_typescript")
 bazel_dep(name = "aspect_bazel_lib", version = "1.24.2")
 
 bazel_dep(name = "aspect_rules_swc", version = "0.21.3")
+
 

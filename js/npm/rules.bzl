@@ -21,7 +21,6 @@ exclude_all_external_rule = rule(
 
 def npm_pkg(
         name,
-        package_name,
         pkg_json_base,
         srcs = [],
         deps = [],
@@ -104,8 +103,7 @@ def npm_pkg(
     pkg_deps = deps + [pkg_json_name, lockfile_name]
     pkg_npm(
         name = name,
-        package_name = package_name,
-        deps = [name + "_dir"],
+        srcs = [name + "_dir"],
         tgz = tgz,
         visibility = visibility,
     )

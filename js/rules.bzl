@@ -1,6 +1,6 @@
 load("@aspect_rules_js//js:defs.bzl", _js_library = "js_library", _js_binary = "js_binary", _js_test = "js_test")
+load("@aspect_rules_js//npm:defs.bzl", _pkg_npm = "npm_package")
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", _copy_to_bin = "copy_to_bin")
-load("@build_bazel_rules_nodejs//:index.bzl", _pkg_npm = "pkg_npm")
 
 
 def js_binary(name, **kwargs):

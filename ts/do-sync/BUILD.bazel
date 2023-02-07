@@ -18,8 +18,6 @@ ts_project(
 
 npm_pkg(
     name = "npm_pkg",
-    package_name = "do-sync",
-    srcs = [],
     api_lock = ".api.lock",
     entry_point = "index.d.ts",
     major_version = "version/MAJOR",
@@ -27,9 +25,8 @@ npm_pkg(
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
     readme = "README.md",
-    tgz = "do-sync.tgz",
     version_lock = ".version.lock",
-    deps = [":do-sync"],
+    srcs = [":do-sync"],
 )
 
 js_library(

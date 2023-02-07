@@ -1,1 +1,5 @@
-# no rules yet!
+load("@npm//:@microsoft/api-documenter/package_json.bzl", "bin")
+
+bin.api_documenter(
+    name = "api_documenter_binary"
+)

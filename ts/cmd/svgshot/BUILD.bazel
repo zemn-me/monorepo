@@ -53,8 +53,6 @@ filegroup(
 
 npm_pkg(
     name = "npm_pkg",
-    package_name = "svgshot",
-    srcs = [],
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/MAJOR",
@@ -62,8 +60,7 @@ npm_pkg(
     patch_version = "version/PATCH",
     pkg_json_base = "package.template.json",
     readme = "README.md",
-    tgz = "svgshot.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    deps = [":project"],
+    srcs = [":project"],
 )
