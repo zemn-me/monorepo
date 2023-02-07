@@ -3043,10 +3043,10 @@
     read-package-tree "^5.2.1"
     resolve "^1.7.1"
 
-"@pulumi/awsx@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-1.0.1.tgz#c9fe5cf885c5cec604b1e15d3f6bcd2ac0344672"
-  integrity sha512-vByyrOikkMLDGgRWXLrplOOcyWNjkMgjETONmWkvJeAUxP8OriwGds5VgTAf7OMf8AAdajC5I+Dvzgp8Ibp4Mg==
+"@pulumi/awsx@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@pulumi/awsx/-/awsx-1.0.2.tgz#d6cc03d8f13ffba964466ebaf469c44c12800f4d"
+  integrity sha512-gT3piAGSa0ErafYYQ3iu7W175+usJ7fWtmoTcJ+oQW2bpnS+fM6uHro/bJlsBup1Ax2A8ep5Ts9AubPGbq01vA==
   dependencies:
     "@pulumi/aws" "^5.16.2"
     "@pulumi/docker" "^3.6.1"
