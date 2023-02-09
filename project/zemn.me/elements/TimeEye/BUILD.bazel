@@ -13,9 +13,9 @@ ts_project(
     ],
     deps = [
         "//:base_defs",
-        "@npm//:@types/react",
-        "@npm//:classnames",
-        "@npm//:react",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
     ],
 )
 

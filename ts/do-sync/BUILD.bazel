@@ -11,8 +11,8 @@ ts_project(
     name = "do-sync",
     srcs = glob(["**/*.ts"]),
     deps = [
-        "@npm//:@types/cross-spawn",
-        "@npm//:cross-spawn",
+        "//:node_modules/@types/cross-spawn",
+        "//:node_modules/cross-spawn",
     ],
 )
 

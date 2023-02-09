@@ -24,9 +24,9 @@ js_library(
     name = "stylelint_config",
     srcs = ["stylelint-config.json"],
     deps = [
-        "@npm//:stylelint-config-css-modules",
-        "@npm//:stylelint-config-recommended",
-        "@npm//:stylelint-config-standard",
+        "//:node_modules/stylelint-config-css-modules",
+        "//:node_modules/stylelint-config-recommended",
+        "//:node_modules/stylelint-config-standard",
         ":stylelint_bin",
     ],
 )

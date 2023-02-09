@@ -12,7 +12,7 @@ ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
     deps = [
-        "@npm//:@types/node",
+        "//:node_modules/@types/node",
     ],
 )
 

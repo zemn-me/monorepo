@@ -10,8 +10,8 @@ ts_project(
     ]),
     deps = [
         "//ts",
-        "@npm//:@types/jest",
-        "@npm//:ts-toolbelt",
+        "//:node_modules/@types/jest",
+        "//:node_modules/ts-toolbelt",
     ],
 )
 

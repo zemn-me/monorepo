@@ -12,11 +12,11 @@ ts_project(
     deps = [
         "//ts",
         "//ts/math",
-        "@npm//:@types/d3-axis",
-        "@npm//:@types/d3-scale",
-        "@npm//:@types/react",
-        "@npm//:d3-axis",
-        "@npm//:d3-scale",
-        "@npm//:react",
+        "//:node_modules/@types/d3-axis",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/react",
+        "//:node_modules/d3-axis",
+        "//:node_modules/d3-scale",
+        "//:node_modules/react",
     ],
 )

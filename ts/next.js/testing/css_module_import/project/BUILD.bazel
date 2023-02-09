@@ -10,11 +10,11 @@ ts_project(
     deps = [
         "//ts/math",
         "//ts/next.js/testing/css_module_import/remote",
-        "@npm//:@bazel/runfiles",
-        "@npm//:@types/node",
-        "@npm//:@types/react",
-        "@npm//:react",
-        "@npm//:react-dom",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
     ],
 )
 

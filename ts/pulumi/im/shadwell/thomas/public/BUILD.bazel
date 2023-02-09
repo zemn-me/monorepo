@@ -7,10 +7,10 @@ ts_project(
     data = ["index.html"],
     deps = [
         "//ts/pulumi/lib",
-        "@npm//:@bazel/runfiles",
-        "@npm//:@pulumi/aws",
-        "@npm//:@pulumi/pulumi",
-        "@npm//:@types/mime",
-        "@npm//:mime",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/mime",
+        "//:node_modules/mime",
     ],
 )

@@ -6,9 +6,9 @@ ts_project(
     name = "fs",
     deps = [
         "//ts/iter",
-        "@npm//:@bazel/runfiles",
-        "@npm//:@types/jest",
-        "@npm//:@types/node",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
     ],
 )
 

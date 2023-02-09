@@ -6,7 +6,7 @@ ts_project(
     name = "zemn",
     deps = [
         "//ts/pulumi/me/zemn/zone",
-        "@npm//:@pulumi/aws",
-        "@npm//:@pulumi/pulumi",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
     ],
 )

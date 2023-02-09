@@ -17,9 +17,9 @@ ts_project(
         "//ts/pulumi/im",
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/me",
-        "@npm//:@types/cross-spawn",
-        "@npm//:@types/jest",
-        "@npm//:cross-spawn",
+        "//:node_modules/@types/cross-spawn",
+        "//:node_modules/@types/jest",
+        "//:node_modules/cross-spawn",
     ],
 )
 

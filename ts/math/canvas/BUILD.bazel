@@ -11,8 +11,8 @@ ts_project(
     resolve_json_module = True,
     deps = [
         "//ts/math",
-        "@npm//:@types/jest",
-        "@npm//:@types/react",
-        "@npm//:react",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
     ],
 )

@@ -12,6 +12,6 @@ ts_project(
     srcs = ["jest.browser.config.ts"],
     deps = [
         # needed for the jsdom plugin
-        "@npm//:jest-environment-jsdom",
+        "//:node_modules/jest-environment-jsdom",
     ],
 )

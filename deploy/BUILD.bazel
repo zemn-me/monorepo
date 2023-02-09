@@ -25,12 +25,12 @@ ts_project(
     deps = [
         "//ts",
         "//ts/pulumi",
-        "@npm//:@actions/github",
-        "@npm//:@bazel/runfiles",
-        "@npm//:@types/jest",
-        "@npm//:@types/node",
-        "@npm//:commander",
-        "@npm//:mime",
+        "//:node_modules/@actions/github",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/commander",
+        "//:node_modules/mime",
     ],
 )
 

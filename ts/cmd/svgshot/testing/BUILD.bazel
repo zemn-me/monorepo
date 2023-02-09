@@ -4,8 +4,8 @@ ts_project(
     name = "project",
     srcs = glob(["*.ts"]),
     deps = [
-        "@npm//:@types/jest",
-        "@npm//:@types/node",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
     ],
 )
 
