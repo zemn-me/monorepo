@@ -58,7 +58,9 @@ def npm_pkg(
         name = pkg_json_name,
         # Won't be srcs I am fairly sure? because srcs are never
         # generated and so can't have deps
-        targets = deps,
+        # nevermind, cause of weird rules_js semantics i added
+        # srcs too.
+        targets = deps + srcs,
         template = pkg_json_base,
         version = ":version",
         depSpec = dep_spec_name,
