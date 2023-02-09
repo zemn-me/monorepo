@@ -5,10 +5,10 @@ def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwarg
     bin.eslint_test(
         name = name,
         data = srcs + data + [
-            "//:.prettierrc.json",
-            "//:.gitignore",
-            "//:.editorconfig",
-            "//:.eslintrc.json",
+            "//:prettierrc",
+            "//:gitignore",
+            "//:editorconfig",
+            "//:eslintrc",
             "//:node_modules/eslint-plugin-prettier",
             "//:node_modules/@typescript-eslint/parser",
             "//:node_modules/@typescript-eslint/eslint-plugin",
@@ -16,7 +16,7 @@ def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwarg
             "//:node_modules/eslint-plugin-react",
             "//:node_modules/eslint-plugin-simple-import-sort",
         ],
-        args = args + ["--ignore-path", "$(location //:.gitignore)"] +
+        args = args + ["--ignore-path", "$(location //:gitignore)"] +
                ["$(location " + x + ")" for x in data + srcs],
         tags = tags + ["+formatting"],
     )

@@ -6,12 +6,12 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
-
 
 package(default_visibility = [":__subpackages__"])
 
@@ -53,11 +53,31 @@ copy_to_bin(
     srcs = [".swcrc.json"],
 )
 
+copy_to_bin(
+    name = "prettierrc",
+    srcs = [".prettierrc.json"],
+)
+
+copy_to_bin(
+    name = "eslintrc",
+    srcs = [".eslintrc.json"],
+)
+
+copy_to_bin(
+    name = "gitignore",
+    srcs = [".gitignore"],
+)
+
+
+copy_to_bin(
+    name = "editorconfig",
+    srcs = [".editorconfig"],
+)
+
 bin.renovate_config_validator_test(
     name = "validate_renovate_config_test",
     args = ["$(location renovate.json)"],
     data = ["renovate.json"],
 )
-
 
 npm_link_all_packages(name = "node_modules")
