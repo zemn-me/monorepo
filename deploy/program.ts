@@ -8,8 +8,8 @@ import { UpResult } from '@pulumi/pulumi/automation';
 import child_process from 'child_process';
 import { Command } from 'commander';
 import fs from 'fs/promises';
-import { isDefined } from 'monorepo/ts/guard';
-import pulumiUp from 'monorepo/ts/pulumi/run';
+import { isDefined } from 'ts/guard';
+import pulumiUp from 'ts/pulumi/run';
 import { promisify } from 'util';
 
 import { context as mockContext, Github as mockGithub } from './mocks';

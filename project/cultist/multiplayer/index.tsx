@@ -1,4 +1,4 @@
-import Home from 'monorepo/project/cultist/multiplayer/pages';
+import Home from 'project/cultist/multiplayer/pages';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

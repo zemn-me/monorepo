@@ -1,4 +1,4 @@
-import Art from 'monorepo/project/zemn.me/pages/art';
+import Art from 'project/zemn.me/pages/art';
 import React from 'react';
 import { Outlet, Route } from 'react-router-dom';
 

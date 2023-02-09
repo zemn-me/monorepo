@@ -1,7 +1,7 @@
 import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import mime from 'mime';
-import * as lib from 'monorepo/ts/pulumi/lib';
+import * as lib from 'ts/pulumi/lib';
 import path from 'path';
 
 const basePath = 'ts/pulumi/im/shadwell/thomas/public';

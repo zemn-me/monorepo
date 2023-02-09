@@ -1,6 +1,6 @@
 import { runfiles } from '@bazel/runfiles';
 import fs from 'fs/promises';
-import main from 'monorepo/ts/cmd/svgshot/lib';
+import main from 'ts/cmd/svgshot/lib';
 import tmp from 'tmp';
 
 jest.setTimeout(30000);

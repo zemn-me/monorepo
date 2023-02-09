@@ -1,8 +1,8 @@
 import * as aws from '@pulumi/aws';
 import mime from 'mime';
-import { walk } from 'monorepo/ts/fs';
-import * as lib from 'monorepo/ts/pulumi/lib';
-import { trimPrefix, webBucket } from 'monorepo/ts/pulumi/lib';
+import { walk } from 'ts/fs';
+import * as lib from 'ts/pulumi/lib';
+import { trimPrefix, webBucket } from 'ts/pulumi/lib';
 
 const basePath = lib.path.workspace(
 	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'

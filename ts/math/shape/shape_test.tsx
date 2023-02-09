@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Canvas } from 'monorepo/ts/math/canvas/element';
+import { Canvas } from 'ts/math/canvas/element';
 import React from 'react';
 import { unmountComponentAtNode } from 'react-dom';
 import ReactDOM from 'react-dom';

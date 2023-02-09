@@ -1,4 +1,4 @@
-import * as Url from 'monorepo/ts/url';
+import * as Url from 'ts/url';
 import React from 'react';
 
 type AElement = React.ReactElement<

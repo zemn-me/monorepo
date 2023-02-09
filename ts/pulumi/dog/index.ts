@@ -1,1 +1,1 @@
-export * as pleaseintroducemetoyour from 'monorepo/ts/pulumi/dog/pleaseintroducemetoyour';
+export * as pleaseintroducemetoyour from 'ts/pulumi/dog/pleaseintroducemetoyour';

@@ -1,7 +1,7 @@
 import immutable from 'immutable';
-import * as action from 'monorepo/project/cultist/action';
-import * as element from 'monorepo/project/cultist/element';
-import * as state from 'monorepo/project/cultist/state';
+import * as action from 'project/cultist/action';
+import * as element from 'project/cultist/element';
+import * as state from 'project/cultist/state';
 
 const cultist = {
 	state,

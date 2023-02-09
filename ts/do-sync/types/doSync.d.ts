@@ -10,6 +10,6 @@
  */
 
 declare module 'do-sync' {
-	export { default } from 'monorepo/ts/do-sync';
-	export * from 'monorepo/ts/do-sync';
+	export { default } from 'ts/do-sync';
+	export * from 'ts/do-sync';
 }

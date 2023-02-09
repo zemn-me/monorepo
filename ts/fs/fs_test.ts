@@ -1,6 +1,6 @@
 import { runfiles } from '@bazel/runfiles';
-import * as fs from 'monorepo/ts/fs';
-import * as iter from 'monorepo/ts/iter';
+import * as fs from 'ts/fs';
+import * as iter from 'ts/iter';
 
 describe('fs', () => {
 	describe('walk', () => {
@@ -8,7 +8,7 @@ describe('fs', () => {
 			const e = (
 				await iter.unroll(
 					fs.walk(
-						runfiles.resolve('monorepo/ts/fs/testfiles/walk_base')
+						runfiles.resolve('ts/fs/testfiles/walk_base')
 					)
 				)
 			)
@@ -17,12 +17,12 @@ describe('fs', () => {
 
 			const [a, b, c] = e;
 
-			expect(a.endsWith('monorepo/ts/fs/testfiles/walk_base')).toBe(true);
+			expect(a.endsWith('ts/fs/testfiles/walk_base')).toBe(true);
 
-			expect(b.endsWith('monorepo/ts/fs/testfiles/walk_base/a.txt')).toBe(
+			expect(b.endsWith('ts/fs/testfiles/walk_base/a.txt')).toBe(
 				true
 			);
-			expect(c.endsWith('monorepo/ts/fs/testfiles/walk_base/b.txt')).toBe(
+			expect(c.endsWith('ts/fs/testfiles/walk_base/b.txt')).toBe(
 				true
 			);
 		});

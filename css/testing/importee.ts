@@ -1,3 +1,3 @@
-import * as style from 'monorepo/css/testing/example';
+import * as style from 'css/testing/example';
 
 console.log(style.myCoolClass);

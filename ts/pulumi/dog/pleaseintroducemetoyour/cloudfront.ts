@@ -1,5 +1,5 @@
 import * as aws from '@pulumi/aws';
-import { bucket } from 'monorepo/ts/pulumi/dog/pleaseintroducemetoyour/public';
+import { bucket } from 'ts/pulumi/dog/pleaseintroducemetoyour/public';
 
 import * as cert from './cert';
 import { zone } from './zone';

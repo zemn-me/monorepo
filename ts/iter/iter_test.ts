@@ -1,4 +1,4 @@
-import * as iter from 'monorepo/ts/iter';
+import * as iter from 'ts/iter';
 
 describe('reduce', () => {
 	test('sum', () => {

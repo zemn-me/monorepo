@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as Url from 'monorepo/ts/url';
+import * as Url from 'ts/url';
 import React from 'react';
 import { unmountComponentAtNode } from 'react-dom';
 import ReactDOM from 'react-dom';

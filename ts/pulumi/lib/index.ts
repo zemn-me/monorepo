@@ -1,5 +1,5 @@
 import * as aws from '@pulumi/aws';
-import * as iter from 'monorepo/ts/iter';
+import * as iter from 'ts/iter';
 export * as file from './file';
 export * as path from './path';
 

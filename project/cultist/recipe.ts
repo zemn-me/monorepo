@@ -1,6 +1,6 @@
-import * as aspects from 'monorepo/project/cultist/aspects';
-import * as cultist from 'monorepo/project/cultist/types';
-import * as Verb from 'monorepo/project/cultist/verb';
+import * as aspects from 'project/cultist/aspects';
+import * as cultist from 'project/cultist/types';
+import * as Verb from 'project/cultist/verb';
 
 /**
  * Given a set of verbs, recipes and elements, return an iterable subset

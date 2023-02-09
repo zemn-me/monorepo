@@ -1,1 +1,1 @@
-export * as zone from 'monorepo/ts/pulumi/me/zemn/zone';
+export * as zone from 'ts/pulumi/me/zemn/zone';

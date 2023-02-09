@@ -1,6 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
-import { zone } from 'monorepo/ts/pulumi/dog/pleaseintroducemetoyour/zone';
+import { zone } from 'ts/pulumi/dog/pleaseintroducemetoyour/zone';
 
 export const cert = new aws.acm.Certificate(
 	'pleaseintroducemetoyour.dog_cert',

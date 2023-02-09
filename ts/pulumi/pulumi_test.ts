@@ -1,7 +1,7 @@
 import '@pulumi/pulumi';
-import 'monorepo/ts/pulumi/setMocks';
+import 'ts/pulumi/setMocks';
 
-import * as tree from 'monorepo/ts/pulumi';
+import * as tree from 'ts/pulumi';
 
 describe('pulumi', () => {
 	test('smoke', async () => {
