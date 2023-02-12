@@ -1,5 +1,5 @@
 load("@npm//:@microsoft/api-documenter/package_json.bzl", "bin")
 
-bin.api_documenter(
+bin.api_documenter_binary(
     name = "api_documenter_binary"
 )
