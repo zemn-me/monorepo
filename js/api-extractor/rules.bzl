@@ -1,5 +1,5 @@
-# BUG ON THIS LINE!! not sure how to resolve it but i want to go get sushi
 load("@aspect_rules_js//js:providers.bzl", "JsInfo")
+load("//js:rules.bzl", "copy_to_bin", "js_library")
 
 def _api_extractor_impl(ctx):
     output_files = []
@@ -88,7 +88,9 @@ def _api_extractor_impl(ctx):
         outputs = output_files,
         inputs = inputs,
         executable = ctx.executable.api_extractor_binary,
-        arguments = ["run", "--config", ctx.outputs.config.path] + args,
+        # these ../ are here because rules_js doesn't run at the bazel execroot, it
+        # runs in the BINDIR.
+        arguments = ["run", "--config", "../../../" + ctx.outputs.config.path] + args,
         mnemonic = "ApiExtractor",
         progress_message = "Running api-extractor (https://api-extractor.com)",
         env = {
@@ -138,6 +140,7 @@ _api_extractor_rule = rule(
 
 
 def api_extractor(name, config = "api-extractor.json", **kwargs):
+
     _api_extractor_rule(
         name = name,
         config = config,
