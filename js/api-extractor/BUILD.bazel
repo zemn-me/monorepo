@@ -1,7 +1,5 @@
-# spooky in here
-
 load("@npm//:@microsoft/api-extractor/package_json.bzl", "bin")
 
-bin.api_extractor(
+bin.api_extractor_binary(
     name = "api_extractor"
 )
