@@ -1,5 +1,5 @@
 # BUG ON THIS LINE!! not sure how to resolve it but i want to go get sushi
-load("@aspect_rules_js//js:providers.bzl", "JsInfo", "js_info")
+load("@aspect_rules_js//js:providers.bzl", "JsInfo")
 
 def _api_extractor_impl(ctx):
     output_files = []
@@ -91,6 +91,9 @@ def _api_extractor_impl(ctx):
         arguments = ["run", "--config", ctx.outputs.config.path] + args,
         mnemonic = "ApiExtractor",
         progress_message = "Running api-extractor (https://api-extractor.com)",
+        env = {
+         "BAZEL_BINDIR": ctx.var["BINDIR"]
+        }
     )
 
 _api_extractor_rule = rule(
