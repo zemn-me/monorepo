@@ -1,7 +1,7 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("//js/api-documenter:rules.bzl", "api_documenter")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
-load("//js:rules.bzl", "pkg_npm")
+load("//js:rules.bzl", "pkg_npm", "copy_to_bin")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
 
@@ -55,7 +55,7 @@ def npm_pkg(
 
     pkg_json_name = name + "_package_json"
     package_json(
-        name = pkg_json_name,
+        name = pkg_json_name + "_gen",
         # Won't be srcs I am fairly sure? because srcs are never
         # generated and so can't have deps
         # nevermind, cause of weird rules_js semantics i added
@@ -66,16 +66,9 @@ def npm_pkg(
         depSpec = dep_spec_name,
     )
 
-    # I am unware of if npm uses this during publication.
-    # It is possible it is used to prevent tampering, but
-    # it forms no part of the final package.
-    # See: https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json/
-    lockfile_name = name + "_lockfile"
-    native.genrule(
-        name = lockfile_name,
-        srcs = ["//:yarn.lock"],
-        cmd_bash = "cp $< $@",
-        outs = ["yarn.lock"],
+    copy_to_bin(
+        name = pkg_json_name,
+        srcs = [ pkg_json_name + "_gen" ],
     )
 
     api_extractor(
@@ -95,14 +88,14 @@ def npm_pkg(
 
     copy_to_directory(
         name = name + "_dir",
-        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", readme],
+        srcs = srcs + deps + [pkg_json_name, "public.d.ts", readme],
         replace_prefixes = {
             "public.d.ts": "index.d.ts",
         },
     )
 
     pkg_srcs = srcs
-    pkg_deps = deps + [pkg_json_name, lockfile_name]
+    pkg_deps = deps + [pkg_json_name]
     pkg_npm(
         name = name,
         srcs = [name + "_dir"],

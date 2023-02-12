@@ -6,7 +6,6 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
@@ -42,7 +41,6 @@ exports_files(
         ".editorconfig",
         ".eslintrc.json",
         "css_loader.d.ts",
-        "yarn.lock",
         ".git",
     ],
     visibility = ["//visibility:public"],
@@ -72,6 +70,11 @@ copy_to_bin(
 copy_to_bin(
     name = "editorconfig",
     srcs = [".editorconfig"],
+)
+
+copy_to_bin(
+    name = "package_json",
+    srcs = [ "package.json" ],
 )
 
 bin.renovate_config_validator_test(
