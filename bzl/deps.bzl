@@ -167,3 +167,17 @@ exports_files(glob(["**/*"], exclude_directories=0))
         sha256 = "08337d4fffc78f7fe648a93be12ea2fc4e8eb9795a4e6aa48595b66b34555626",
         urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-core-5.8.0.tar.gz"],
     )
+
+    http_archive(
+        name = "aspect_rules_js",
+        sha256 = "3ad6684d744ebbc6592d404cc3aa81d0da634eccb3499f6fd198ae122fa28489",
+        strip_prefix = "rules_js-1.19.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
+    )
+
+    http_archive(
+        name = "aspect_rules_ts",
+        sha256 = "db77d904284d21121ae63dbaaadfd8c75ff6d21ad229f92038b415c1ad5019cc",
+        strip_prefix = "rules_ts-1.3.0",
+        url = "https://github.com/aspect-build/rules_ts/releases/download/v1.3.0/rules_ts-v1.3.0.tar.gz",
+    )

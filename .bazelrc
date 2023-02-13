@@ -92,5 +92,3 @@ test --action_env=PULUMI_ACCESS_TOKEN
 
 # be careful with this!
 test --test_tag_filters=-do_not_run_on_main
-# this breaks rules_rust :(
-common --enable_bzlmod
