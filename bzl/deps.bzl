@@ -181,3 +181,10 @@ exports_files(glob(["**/*"], exclude_directories=0))
         strip_prefix = "rules_ts-1.3.0",
         url = "https://github.com/aspect-build/rules_ts/releases/download/v1.3.0/rules_ts-v1.3.0.tar.gz",
     )
+
+    http_archive(
+        name = "aspect_rules_swc",
+        sha256 = "5d13b0123d91d4297f60d8da0ab5771615f6ad6829bdfe69e7dcda9e5c01bc54",
+        strip_prefix = "rules_swc-1.0.0-rc0",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
+    )
