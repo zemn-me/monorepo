@@ -1,5 +1,7 @@
 load("@npm//:@microsoft/api-documenter/package_json.bzl", "bin")
 
+package(default_visibility = ["//:__subpackages__"])
+
 bin.api_documenter_binary(
     name = "api_documenter_binary"
 )
