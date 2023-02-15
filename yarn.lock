@@ -3084,10 +3084,10 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@3.54.0", "@pulumi/pulumi@^3.0.0":
-  version "3.54.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.54.0.tgz#de3abdb09912857f2e4ef30684e23c105ce8320e"
-  integrity sha512-7c56BCsepB9gIN1jOpBHCQyx/aSyURmuW6fV9y6aw1IspgJqBylvLCfE+5tA0i6UedaAvf8xV4R58ckgbFM5Vg==
+"@pulumi/pulumi@3.55.0", "@pulumi/pulumi@^3.0.0":
+  version "3.55.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.55.0.tgz#0e9f85c3404fabda5c70ae2362e0474722174f10"
+  integrity sha512-d2WXfc8XTxeMWjOmrspSQlvlTq9VhxDidhb7CyINeiKhTHpm7imS0BiNFPrJe7wBkqJ4qlVA1itFwF3AvltU1Q==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
@@ -8746,15 +8746,10 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@1.2.8:
+minimist@1.2.8, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
-
-minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
-  integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
