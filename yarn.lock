@@ -3025,10 +3025,10 @@
     write-file-atomic "^5.0.0"
     write-yaml-file "^4.2.0"
 
-"@pulumi/aws@5.29.1":
-  version "5.29.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.29.1.tgz#387f5a6517362b632051def719c3b95a97a73a0f"
-  integrity sha512-IHMSCrdkssoqN1u3SUMOCUOJos0BjVpJ8tkbby6yqASe5p3LCRpkQXwVPoSPRpS7TEoCvJpLw0f8ue+MEcCRdQ==
+"@pulumi/aws@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/aws/-/aws-5.30.0.tgz#a2c9db50d1a43e0472bff6125852131d8c977c4b"
+  integrity sha512-75MsXKJgQZZa34ugt3hAC6uXmh6CLJSUEH3d6lOT92+L8eIfwoqNd9QLuiiRMPZ5/X+vLPNfVk7hdjqtj3Pd0Q==
   dependencies:
     "@pulumi/pulumi" "^3.0.0"
     aws-sdk "^2.0.0"
