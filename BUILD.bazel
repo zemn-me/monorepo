@@ -42,6 +42,7 @@ exports_files(
         ".eslintrc.json",
         "css_loader.d.ts",
         ".git",
+        "jsconfig.json"
     ],
     visibility = ["//visibility:public"],
 )
@@ -75,6 +76,11 @@ copy_to_bin(
 copy_to_bin(
     name = "package_json",
     srcs = [ "package.json" ],
+)
+
+copy_to_bin(
+    name = "jsconfig",
+    srcs = [ "jsconfig.json" ],
 )
 
 bin.renovate_config_validator_test(

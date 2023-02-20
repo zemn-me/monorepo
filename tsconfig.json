@@ -8,6 +8,7 @@
 		"moduleResolution": "node",
 		"strict": true,
 		"jsx": "react-jsx",
+		"allowJs": true,
 		"resolveJsonModule": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
@@ -17,16 +18,7 @@
 		"downlevelIteration": true,
 		"declarationMap": true,
 		"lib": ["DOM", "ESNext"],
-		"baseUrl": "./",
-		"rootDirs": ["bazel-out/k8-fastbuild/bin", "bazel-out/darwin_arm64-fastbuild/bin"],
-		"paths": {
-			"monorepo/*": [
-				"./*",
-				"./monorepo/*",
-				"./dist/out/k8-fastbuild/bin/*",
-				"bazel-out/k8-fastbuild/bin/monorepo/*"
-			]
-		}
+		"baseUrl": "."
 	},
 	"exclude": ["node_modules", "dist", "external"]
 }

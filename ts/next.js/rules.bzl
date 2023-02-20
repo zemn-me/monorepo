@@ -1,9 +1,9 @@
 load("@npm//:next/package_json.bzl", "bin")
 load("//git:rules.bzl", "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "copy_to_bin")
 
 def next_project(name, srcs, **kwargs):
-    distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
 
     native.filegroup(
@@ -43,26 +43,26 @@ def next_project(name, srcs, **kwargs):
         srcs = ["next.config.ts"],
     )
 
-    srcs = srcs + [":" + name + "_next_config"]
+    srcs = srcs + [":" + name + "_next_config", "//:tsconfig",
+        "//:node_modules/@types/react", "//:node_modules/@types/node", "//:node_modules/typescript"]
 
-    bin.next(
-        name = name + ".dev",
-        srcs = srcs,
-        args = ["dev", target],
+    copy_to_bin(
+        name = name + "_sources",
+        srcs = srcs
     )
 
     bin.next(
-        name = distDir,
-        srcs = srcs,
-        args = ["build", target],
+        name = "build",
+        srcs = [ ":" + name + "_sources"],
+        args = ["build", native.package_name()],
         output_dir = True,
         silent_on_success = True,
     )
 
     bin.next(
         name = "out",
-        srcs = [":build"] + srcs,
-        args = ["export", target],
+        srcs = [":build", ":" + name + "_sources"],
+        args = ["export", native.package_name()],
         output_dir = True,
         silent_on_success = True,
     )

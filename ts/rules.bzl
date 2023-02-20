@@ -33,7 +33,7 @@ def ts_lint(name, srcs = [], data = [], **kwargs):
         **kwargs
     )
 
-def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_json_module = True, srcs = None, incremental = True, tsconfig = "//:tsconfig", preserve_jsx = None, root_dir = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
     if srcs == None:
         srcs = native.glob(["**/*.ts", "**/*.tsx"])
 
@@ -50,7 +50,7 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         ),
         preserve_jsx = preserve_jsx,
         resolve_json_module = resolve_json_module,
-        root_dir = root_dir,
+        root_dir = "/".join([".." for x in native.package_name().split("/")]),
         declaration = True,
         declaration_map = True,
         visibility = visibility,
