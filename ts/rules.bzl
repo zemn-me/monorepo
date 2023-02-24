@@ -50,7 +50,6 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         ),
         preserve_jsx = preserve_jsx,
         resolve_json_module = resolve_json_module,
-        root_dir = "/".join([".." for x in native.package_name().split("/")]),
         declaration = True,
         declaration_map = True,
         visibility = visibility,

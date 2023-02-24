@@ -49,7 +49,7 @@ def next_project(name, srcs, **kwargs):
 
     ts_project(
         name = name + "_next_config",
-        srcs = ["next.config.ts"],
+        srcs = ["next.config.ts"]
     )
 
     srcs = srcs + [":" + name + "_next_config", name + "_jsconfig",

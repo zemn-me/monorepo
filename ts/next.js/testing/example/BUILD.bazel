@@ -2,11 +2,8 @@ load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 load("@npm//:next/package_json.bzl", next = "bin")
 
-next.next_binary(name="next")
-
 ts_project(
     name = "ts_sources",
-    data = [":next"],
     deps = [
         "//ts/math",
         "//:node_modules/@bazel/runfiles",
