@@ -1,6 +1,5 @@
 load("@npm//:eslint/package_json.bzl", "bin")
 
-
 def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwargs):
     bin.eslint_test(
         name = name,

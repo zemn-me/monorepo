@@ -111,9 +111,9 @@ load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
 
 npm_translate_lock(
     name = "npm",
+    npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
-    npmrc = "//:.npmrc"
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
@@ -159,7 +159,6 @@ load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolcha
 register_copy_directory_toolchains()
 
 register_copy_to_directory_toolchains()
-
 
 ###################
 # rules_swc setup #

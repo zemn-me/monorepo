@@ -10,9 +10,9 @@ ts_project(
     ]),
     resolve_json_module = True,
     deps = [
-        "//ts/math",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/react",
         "//:node_modules/react",
+        "//ts/math",
     ],
 )

@@ -5,9 +5,9 @@ package(default_visibility = ["//ts/pulumi/im:__subpackages__"])
 ts_project(
     name = "shadwell",
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//ts/pulumi/im/shadwell/cert",
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/im/shadwell/zone",
-        "//:node_modules/@pulumi/aws",
     ],
 )

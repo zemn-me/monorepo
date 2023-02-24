@@ -6,11 +6,11 @@ ts_project(
     name = "public",
     data = ["index.html"],
     deps = [
-        "//ts/pulumi/lib",
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/mime",
         "//:node_modules/mime",
+        "//ts/pulumi/lib",
     ],
 )

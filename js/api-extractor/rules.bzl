@@ -94,8 +94,8 @@ def _api_extractor_impl(ctx):
         mnemonic = "ApiExtractor",
         progress_message = "Running api-extractor (https://api-extractor.com)",
         env = {
-         "BAZEL_BINDIR": ctx.var["BINDIR"]
-        }
+            "BAZEL_BINDIR": ctx.var["BINDIR"],
+        },
     )
 
 _api_extractor_rule = rule(
@@ -137,10 +137,7 @@ _api_extractor_rule = rule(
         publicTrimmedRollup=  publicTrimmedRollup,
 """
 
-
-
 def api_extractor(name, config = "api-extractor.json", **kwargs):
-
     _api_extractor_rule(
         name = name,
         config = config,

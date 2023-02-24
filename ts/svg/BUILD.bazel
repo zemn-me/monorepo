@@ -10,13 +10,13 @@ ts_project(
     ]),
     resolve_json_module = True,
     deps = [
-        "//ts",
-        "//ts/math",
         "//:node_modules/@types/d3-axis",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
         "//:node_modules/d3-axis",
         "//:node_modules/d3-scale",
         "//:node_modules/react",
+        "//ts",
+        "//ts/math",
     ],
 )

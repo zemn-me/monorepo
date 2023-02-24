@@ -9,9 +9,6 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/elements/ZemnmezLogo",
-        "//project/zemn.me/hooks",
-        "//ts",
         "//:node_modules/@fortawesome/free-solid-svg-icons",
         "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/react",
@@ -19,5 +16,8 @@ ts_project(
         "//:node_modules/react-dom",
         "//:node_modules/react-router-dom",
         "//:node_modules/react-spring",
+        "//project/zemn.me/elements/ZemnmezLogo",
+        "//project/zemn.me/hooks",
+        "//ts",
     ],
 )

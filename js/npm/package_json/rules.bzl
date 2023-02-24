@@ -12,7 +12,6 @@ def package_json(name, targets, template, version, depSpec):
         expression = query_expression,
     )
 
-
     js_run_binary(
         name = name,
         tool = "//js/npm/package_json:gen_pkgjson_bin",
@@ -21,23 +20,23 @@ def package_json(name, targets, template, version, depSpec):
             genquery_name,
             "//js/npm/package_json:gen_pkgjson",
             template,
-            version
+            version,
         ],
         args = [
-                      "--out",
-                      "../../../$(execpath package.json)",
-                      "--base",
-                      "../../../$(location //:package_json)",
-                      "--query",
-                      "../../../$(location " + genquery_name + ")",
-                      "--merge",
-                      "../../../$(location " + template + ")",
-                      "--version",
-                      "../../../$(location " + version + ")",
-                      "--package_name",
-                      native.package_name(),
-                      "--depOnlyOut",
-                      "../../../$(execpath " + depSpec + ")",
+            "--out",
+            "../../../$(execpath package.json)",
+            "--base",
+            "../../../$(location //:package_json)",
+            "--query",
+            "../../../$(location " + genquery_name + ")",
+            "--merge",
+            "../../../$(location " + template + ")",
+            "--version",
+            "../../../$(location " + version + ")",
+            "--package_name",
+            native.package_name(),
+            "--depOnlyOut",
+            "../../../$(execpath " + depSpec + ")",
         ],
-        outs = [ "package.json", depSpec ]
+        outs = ["package.json", depSpec],
     )

@@ -1,7 +1,6 @@
 load("//rs:rules.bzl", "rust_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
-
 package(default_visibility = ["//visibility:public"])
 
 rust_binary(

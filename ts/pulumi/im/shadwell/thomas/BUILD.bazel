@@ -6,8 +6,8 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "thomas",
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//ts/pulumi/im/shadwell/cert",
         "//ts/pulumi/im/shadwell/thomas/public",
-        "//:node_modules/@pulumi/aws",
     ],
 )

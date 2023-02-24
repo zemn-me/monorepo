@@ -5,13 +5,13 @@ load("@npm//:next/package_json.bzl", next = "bin")
 ts_project(
     name = "ts_sources",
     deps = [
-        "//ts/math",
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-    ]
+        "//ts/math",
+    ],
 )
 
 next_project(

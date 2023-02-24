@@ -43,18 +43,23 @@ def next_project(name, srcs, **kwargs):
         name = name + "_jsconfig",
         outs = ["jsconfig.json"],
         cmd_bash = """
-            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([ '..' for x in native.package_name().split("/") ]) + """\" }}' > $@
+            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([".." for x in native.package_name().split("/")]) + """\" }}' > $@
         """,
     )
 
     ts_project(
         name = name + "_next_config",
-        srcs = ["next.config.ts"]
+        srcs = ["next.config.ts"],
     )
 
-    srcs = srcs + [":" + name + "_next_config", name + "_jsconfig",
-        "//:node_modules/@types/react", "//:node_modules/@types/node", "//:node_modules/typescript",
-        "//:node_modules/next"]
+    srcs = srcs + [
+        ":" + name + "_next_config",
+        name + "_jsconfig",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/node",
+        "//:node_modules/typescript",
+        "//:node_modules/next",
+    ]
 
     bin.next(
         name = "build",

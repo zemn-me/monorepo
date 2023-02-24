@@ -13,13 +13,13 @@ filegroup(
 ts_project(
     name = "pulumi",
     deps = [
+        "//:node_modules/@types/cross-spawn",
+        "//:node_modules/@types/jest",
+        "//:node_modules/cross-spawn",
         "//ts/pulumi/dog",
         "//ts/pulumi/im",
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/me",
-        "//:node_modules/@types/cross-spawn",
-        "//:node_modules/@types/jest",
-        "//:node_modules/cross-spawn",
     ],
 )
 

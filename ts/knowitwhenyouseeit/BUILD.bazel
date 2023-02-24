@@ -39,6 +39,7 @@ jest_test(
 
 npm_pkg(
     name = "npm_pkg",
+    srcs = [":project"],
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/major",
@@ -48,5 +49,4 @@ npm_pkg(
     readme = "README.md",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    srcs = [":project"],
 )

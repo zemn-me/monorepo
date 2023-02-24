@@ -12,9 +12,9 @@ ts_project(
     resolve_json_module = True,
     deps = [
         "//:base_defs",
-        "//project/cultist/state",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
         "//:node_modules/react",
+        "//project/cultist/state",
     ],
 )

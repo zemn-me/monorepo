@@ -1,10 +1,8 @@
 load("@npm//:eslint/package_json.bzl", "bin")
 
-
 bin.eslint_binary(
     name = "eslint",
 )
-
 
 sh_binary(
     name = "affected_files",
@@ -15,16 +13,17 @@ sh_binary(
     name = "fix",
     srcs = ["fix.sh"],
     data = [
+        ":eslint",
         "//:buildifier",
         "//css/lint",
         "@go_sdk//:bin/gofmt",
-        ":eslint",
     ],
     env = {
         "FIX_CSS": "$(rootpath //css/lint)",
         "FIX_BAZEL": "$(rootpath //:buildifier)",
         "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
         "FIX_JS": "$(location :eslint)",
+        "BAZEL_BINDIR": "dist/bin",
     },
     visibility = ["//:__subpackages__"],
     deps = [

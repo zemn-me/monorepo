@@ -23,14 +23,14 @@ ts_project(
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
     ],
     deps = [
-        "//ts",
-        "//ts/pulumi",
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//:node_modules/mime",
+        "//ts",
+        "//ts/pulumi",
     ],
 )
 

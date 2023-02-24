@@ -18,6 +18,7 @@ ts_project(
 
 npm_pkg(
     name = "npm_pkg",
+    srcs = [":do-sync"],
     api_lock = ".api.lock",
     entry_point = "index.d.ts",
     major_version = "version/MAJOR",
@@ -26,7 +27,6 @@ npm_pkg(
     pkg_json_base = "package.template.json",
     readme = "README.md",
     version_lock = ".version.lock",
-    srcs = [":do-sync"],
 )
 
 js_library(

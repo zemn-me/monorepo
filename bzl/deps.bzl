@@ -17,7 +17,6 @@ def fetch_dependencies():
         sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
     )
 
-
     http_archive(
         name = "rules_python",
         sha256 = "29a801171f7ca190c543406f9894abf2d483c206e14d6acbd695623662320097",

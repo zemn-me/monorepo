@@ -12,9 +12,9 @@ ts_project(
         ":recipe",
         ":types",
         ":verb",
-        "//project/cultist/state",
         "//:node_modules/@types/uuid",
         "//:node_modules/immutable",
+        "//project/cultist/state",
     ],
 )
 
@@ -48,8 +48,8 @@ ts_project(
     srcs = ["save_test.ts"],
     deps = [
         ":save",
-        "//project/cultist/example",
         "//:node_modules/@types/jest",
+        "//project/cultist/example",
     ],
 )
 
@@ -65,8 +65,8 @@ ts_project(
     deps = [
         "element",
         ":action",
-        "//project/cultist/state",
         "//:node_modules/@types/jest",
+        "//project/cultist/state",
     ],
 )
 

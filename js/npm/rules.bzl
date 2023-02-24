@@ -1,7 +1,7 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("//js/api-documenter:rules.bzl", "api_documenter")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
-load("//js:rules.bzl", "pkg_npm", "copy_to_bin")
+load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
 
@@ -68,7 +68,7 @@ def npm_pkg(
 
     copy_to_bin(
         name = pkg_json_name,
-        srcs = [ pkg_json_name + "_gen" ],
+        srcs = [pkg_json_name + "_gen"],
     )
 
     api_extractor(

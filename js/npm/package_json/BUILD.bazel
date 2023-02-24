@@ -23,5 +23,4 @@ js_binary(
         ":gen_pkgjson",
     ],
     entry_point = "//js/npm/package_json:gen_pkgjson.js",
-
 )
