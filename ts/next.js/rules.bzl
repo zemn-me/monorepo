@@ -38,30 +38,34 @@ def next_project(name, srcs, **kwargs):
         """,
     )
 
+    # create a jsconfig allowing imports from root
+    native.genrule(
+        name = name + "_jsconfig",
+        outs = ["jsconfig.json"],
+        cmd_bash = """
+            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([ '..' for x in native.package_name().split("/") ]) + """\" }}' > $@
+        """,
+    )
+
     ts_project(
         name = name + "_next_config",
         srcs = ["next.config.ts"],
     )
 
-    srcs = srcs + [":" + name + "_next_config", "//:tsconfig",
-        "//:node_modules/@types/react", "//:node_modules/@types/node", "//:node_modules/typescript"]
-
-    copy_to_bin(
-        name = name + "_sources",
-        srcs = srcs
-    )
+    srcs = srcs + [":" + name + "_next_config", name + "_jsconfig",
+        "//:node_modules/@types/react", "//:node_modules/@types/node", "//:node_modules/typescript",
+        "//:node_modules/next"]
 
     bin.next(
         name = "build",
-        srcs = [ ":" + name + "_sources"],
-        args = ["build", native.package_name()],
+        srcs = srcs,
+        args = ["build", native.package_name(), "--no-lint"],
         output_dir = True,
-        silent_on_success = True,
     )
 
     bin.next(
         name = "out",
-        srcs = [":build", ":" + name + "_sources"],
+        srcs = [":build"] + srcs,
         args = ["export", native.package_name()],
         output_dir = True,
         silent_on_success = True,
