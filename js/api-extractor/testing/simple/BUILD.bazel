@@ -11,4 +11,5 @@ api_extractor(
 ts_project(
     name = "project",
     srcs = ["something.ts"],
+    deps = [ "//:node_modules/next"]
 )
