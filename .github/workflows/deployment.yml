@@ -23,7 +23,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           node-version: '16'
       - name: Restore bazel cache
-        uses: actions/cache@v3.2.5
+        uses: actions/cache@v3.2.6
         env:
           cache-name: bazel-cache
         with:
