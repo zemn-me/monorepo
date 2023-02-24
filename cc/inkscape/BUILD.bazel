@@ -1,3 +1,5 @@
+load("//js:rules.bzl", "copy_to_bin")
+
 alias(
     name = "app_image",
     actual = "@inkscape_linux//file:bin",
@@ -14,4 +16,13 @@ sh_binary(
         "//ts/cmd/svgshot:__subpackages__",
     ],
     deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+
+copy_to_bin(
+    name = "inkscape_in_bin",
+    srcs = ["bin"],
+    visibility = [
+        "//ts/cmd/svgshot:__subpackages__",
+    ],
 )
