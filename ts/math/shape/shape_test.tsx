@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 
-import { Canvas } from 'ts/math/canvas/element';
 import React from 'react';
 import { unmountComponentAtNode } from 'react-dom';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
+import { Canvas } from 'ts/math/canvas/element';
 import * as Shape from 'ts/math/shape';
 
 let container: HTMLDivElement | null = null;

@@ -23,7 +23,7 @@ sh_binary(
         "FIX_BAZEL": "$(rootpath //:buildifier)",
         "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
         "FIX_JS": "$(location :eslint)",
-        "BAZEL_BINDIR": "dist/bin",
+        "BAZEL_BINDIR": ".",
     },
     visibility = ["//:__subpackages__"],
     deps = [

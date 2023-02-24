@@ -1,5 +1,5 @@
-import * as Homog from 'ts/math/homog';
 import React from 'react';
+import * as Homog from 'ts/math/homog';
 
 import * as Cnv from '.';
 

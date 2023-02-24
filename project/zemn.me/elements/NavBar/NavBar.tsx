@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classes from 'classnames';
 import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo';
 import useHoverMenu from 'project/zemn.me/hooks/useHoverMenu';
-import { isNotNull } from 'ts/guard';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { animated, useSpring } from 'react-spring';
+import { isNotNull } from 'ts/guard';
 
 import style from './NavBar.module.css';
 

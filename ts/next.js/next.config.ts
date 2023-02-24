@@ -1,6 +1,6 @@
 /**
  * This file is automatically copied into every next project root.
- * 
+ *
  * The generateBuildId component is filled by bazel instrumentation.
  */
 

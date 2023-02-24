@@ -141,7 +141,6 @@ const main = async () => {
 		},
 	};
 
-
 	const out: packageJson = {
 		...template,
 		...toMerge,
@@ -157,5 +156,7 @@ const main = async () => {
 	]);
 };
 
-
-main().catch(e => { console.error(e); process.exit(1) } );
+main().catch(e => {
+	console.error(e);
+	process.exit(1);
+});
