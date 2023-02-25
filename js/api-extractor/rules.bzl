@@ -1,6 +1,13 @@
 load("@aspect_rules_js//js:providers.bzl", "JsInfo")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 
+"""
+Trying to make this compatible with rules_js:
+    1. [ ] move config generation into its own action
+    2. [ ] move call into a macro
+    3. [ ] ensure node_modules resolution is correct.
+"""
+
 def _api_extractor_impl(ctx):
     output_files = []
     args = []
