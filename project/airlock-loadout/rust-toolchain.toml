@@ -1,6 +1,2 @@
 [toolchain]
-{% if mcu == "esp32c3" -%}
-channel = "nightly"
-{%- else -%}
 channel = "esp"
-{%- endif %}
