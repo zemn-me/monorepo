@@ -46,14 +46,18 @@ async function awaitBufferingStarted(
 	video: HTMLVideoElement,
 	sampleTimeMs: number
 ): Promise<void> {
-	while (!(await didVideoBufferGrow(video, sampleTimeMs))) {}
+	for (;;) {
+		if (await didVideoBufferGrow(video, sampleTimeMs)) break;
+	}
 }
 
 async function awaitBufferingStopped(
 	video: HTMLVideoElement,
 	sampleTimeMs: number
 ): Promise<void> {
-	while (await didVideoBufferGrow(video, sampleTimeMs)) {}
+	for (;;) {
+		if (!(await didVideoBufferGrow(video, sampleTimeMs))) break;
+	}
 }
 
 function videoTotallyBuffered(v: HTMLVideoElement): boolean {
@@ -83,7 +87,9 @@ async function forceBufferWholeVideo(video: HTMLVideoElement) {
 }
 
 async function main() {
-	forceBufferWholeVideo(document.querySelector('video')!);
+	const video = document.querySelector('video');
+	if (!video) throw new Error('Missing video element.');
+	await forceBufferWholeVideo(video);
 }
 
-main();
+void main().catch(e => console.error(e));
