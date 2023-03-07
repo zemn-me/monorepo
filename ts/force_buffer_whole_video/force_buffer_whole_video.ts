@@ -77,10 +77,10 @@ async function forceBufferWholeVideo(video: HTMLVideoElement) {
 		video.currentTime = lastBufferedTime;
 
 		// wait for buffering to begin
-		await awaitBufferingStarted(video, 100);
+		await awaitBufferingStarted(video, 1000);
 
 		// wait for buffering to complete
-		await awaitBufferingStopped(video, 100);
+		await awaitBufferingStopped(video, 1000);
 	}
 
 	console.info('whole video is buffered.');
