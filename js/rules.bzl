@@ -18,4 +18,4 @@ def pkg_npm(name, **kwargs):
     _pkg_npm(name = name, **kwargs)
 
 def js_run_binary(name, **kwargs):
-    _js_run_binary(name = name, **kwargs)
+    _js_run_binary(name = name, env = { "NODE_PATH": "." }, **kwargs)
