@@ -14,13 +14,20 @@ load("@npm//:defs.bzl", "npm_link_all_packages")
 
 package(default_visibility = [":__subpackages__"])
 
-buildifier(
-    name = "buildifier",
-)
-
+# Useful commands to run!
 alias(
     name = "fix",
     actual = "//bzl:fix",
+)
+
+alias(
+    name = "pnpm",
+    # bazel run -- //:pnpm --dir $PWD
+    actual = "@pnpm//:pnpm",
+)
+
+buildifier(
+    name = "buildifier",
 )
 
 ts_config(

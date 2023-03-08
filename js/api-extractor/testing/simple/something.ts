@@ -1,5 +1,4 @@
-
-import { GetStaticProps } from "next/types";
+import { GetStaticProps } from 'next/types';
 /**
  * @public
  */

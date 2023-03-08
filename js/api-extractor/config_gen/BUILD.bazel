@@ -1,0 +1,20 @@
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+
+ts_project(
+    name = "config_gen_ts",
+    srcs = [
+        "main.ts",
+        "//ts/schemas/microsoft/api-extractor",
+    ],
+    deps = [
+        "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@types/node",
+    ],
+)
+
+
+js_binary(
+    name = "config_gen",
+    entry_point = "main.js"
+)

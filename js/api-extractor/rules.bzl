@@ -3,15 +3,14 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("@npm//:@microsoft/api-extractor/package_json.bzl", "bin")
 
-"""
-Trying to make this compatible with rules_js:
-    1. [ ] move config generation into its own action
-    2. [ ] move call into a macro
-    3. [ ] ensure node_modules resolution is correct.
-"""
+# Re-relativeize a path to BINDIR for compatibility with rules_js
+def re_relativize(ctx, path):
+    BINDIR = ctx.var["BINDIR"]
+    if path.rfind(BINDIR) != -1:
+        return paths.relativize(path, ctx.var["BINDIR"])
+    return path
 
 def _api_extractor_config_impl(ctx):
-
     tsdocMetadata = {
         "enabled": False,
     }
@@ -57,19 +56,19 @@ def _api_extractor_config_impl(ctx):
         # build due to intended development flow
         apiReport["enabled"] = True
         apiReport["reportFileName"] = paths.basename(ctx.attr.report)
-        apiReport["reportFolder"] = "<projectFolder>/" + paths.dirname(ctx.attr.report)
+        apiReport["reportFolder"] = "<projectFolder>/" + re_relativize(ctx, paths.dirname(ctx.attr.report))
 
     compiler = {}
 
     #compiler["tsconfigFilePath"] = "<projectFolder>/" + ctx.file.ts_config.path
 
     config = {
-        "mainEntryPointFilePath": "<projectFolder>/../../../" + ctx.file.entry_point.path,
+        "mainEntryPointFilePath": "<projectFolder>/" + re_relativize(ctx, ctx.file.entry_point.path),
         "apiReport": apiReport,
         "compiler": compiler,
         "docModel": docModel,
         "dtsRollup": dtsRollup,
-        "projectFolder": ".",
+        "projectFolder": "../../../../",
         "tsdocMetadata": tsdocMetadata,
     }
 
@@ -96,11 +95,10 @@ _api_extractor_config = rule(
     },
 )
 
-
 def api_extractor(name, srcs = None, publicTrimmedRollup = None, entry_point = None, config = "api-extractor.json", **kwargs):
     copy_to_bin(
         name = name + "_main_entry_point_in_bin",
-        srcs = [ entry_point ]
+        srcs = [entry_point],
     )
 
     _api_extractor_config(
@@ -115,19 +113,16 @@ def api_extractor(name, srcs = None, publicTrimmedRollup = None, entry_point = N
 
     copy_to_bin(
         name = name + "_config_in_bin",
-        srcs = [ name + "_config" ]
+        srcs = [name + "_config"],
     )
 
     bin.api_extractor(
         name = name,
-        srcs = srcs + [ name + "_config_in_bin" ],
-        args = [ "run", "--config", "$(location " + name + "_config_in_bin)" ], 
-        outs = [ publicTrimmedRollup ],
+        srcs = srcs + [name + "_config_in_bin"],
+        args = ["run", "--config", "../../../$(location " + name + "_config_in_bin)"],
+        outs = [publicTrimmedRollup],
         **kwargs
     )
-
-
-
 
 """
         config="api-extractor.json",

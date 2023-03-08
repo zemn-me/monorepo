@@ -11,5 +11,11 @@ api_extractor(
 ts_project(
     name = "project",
     srcs = ["something.ts"],
-    deps = [ "//:node_modules/next"]
+    # I think node and react are needed as deps here because they're peer dependencies.
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+    ],
 )

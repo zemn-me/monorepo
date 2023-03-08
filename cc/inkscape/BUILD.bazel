@@ -18,7 +18,6 @@ sh_binary(
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
-
 copy_to_bin(
     name = "inkscape_in_bin",
     srcs = ["bin"],

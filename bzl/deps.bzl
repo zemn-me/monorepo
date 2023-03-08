@@ -187,3 +187,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
         strip_prefix = "rules_swc-1.0.0-rc0",
         url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
     )
+
+    git_repository(
+        name = "microsoft_json_schemas",
+        branch = "main",
+        remote = "git@github.com:microsoft/json-schemas.git",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+    )

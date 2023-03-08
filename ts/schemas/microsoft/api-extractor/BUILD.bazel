@@ -1,0 +1,25 @@
+load("@npm//:json-schema-to-typescript/package_json.bzl", "bin")
+
+package(default_visibility = ["//:__subpackages__"])
+
+genrule(
+    name = "copy_schema",
+    srcs = ["@microsoft_json_schemas//:api-extractor/v7/api-extractor.schema.json"],
+    outs = ["api-extractor.schema.json"],
+    cmd = "cp $< $@",
+)
+
+bin.json2ts(
+    name = "gen_ts",
+    srcs = ["api-extractor.schema.json"],
+    outs = ["api-extractor.d.ts"],
+    args = [
+        "../../../$(location :api-extractor.schema.json)",
+        "../../../$(location api-extractor.d.ts)",
+    ],
+)
+
+alias(
+    name = "api-extractor",
+    actual = "gen_ts",
+)
