@@ -5,7 +5,9 @@ api_extractor(
     name = "collate",
     srcs = [":project"],
     entry_point = "something.d.ts",
-    publicTrimmedRollup = "rollup.d.ts",
+    public_trimmed_rollup = "rollup.d.ts",
+    report = "api_gen.md",
+    doc_model = ".api.lock"
 )
 
 ts_project(

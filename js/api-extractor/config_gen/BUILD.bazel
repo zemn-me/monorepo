@@ -1,6 +1,8 @@
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
 
+package(default_visibility = ["//js/api-extractor:__subpackages__"])
+
 ts_project(
     name = "config_gen_ts",
     srcs = [
@@ -10,11 +12,12 @@ ts_project(
     deps = [
         "//:node_modules/@commander-js/extra-typings",
         "//:node_modules/@types/node",
+        "//ts"
     ],
 )
 
-
 js_binary(
     name = "config_gen",
-    entry_point = "main.js"
+    entry_point = "main.js",
+    data =  [ ":config_gen_ts" ]
 )
