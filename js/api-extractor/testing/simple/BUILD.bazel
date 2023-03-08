@@ -4,10 +4,10 @@ load("//js/api-extractor:rules.bzl", "api_extractor")
 api_extractor(
     name = "collate",
     srcs = [":project"],
+    doc_model = ".api.lock",
     entry_point = "something.d.ts",
     public_trimmed_rollup = "rollup.d.ts",
     report = "api_gen.md",
-    doc_model = ".api.lock"
 )
 
 ts_project(

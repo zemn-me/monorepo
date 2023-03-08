@@ -22,7 +22,7 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
     if tsdoc_metadata != None:
         outs.append(tsdoc_metadata)
 
-    project_folder = "/".join([ ".." for x in native.package_name().split("/") ])
+    project_folder = "/".join([".." for x in native.package_name().split("/")])
     api_extractor_config(
         name = name + "_config",
         out = config,
@@ -32,7 +32,7 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
         ts_config = "//:tsconfig",
         project_folder = project_folder,
         doc_model = native.package_name() + "/" + doc_model,
-        tsdoc_metadata = native.package_name() + "/" + tsdoc_metadata
+        tsdoc_metadata = native.package_name() + "/" + tsdoc_metadata,
     )
 
     copy_to_bin(

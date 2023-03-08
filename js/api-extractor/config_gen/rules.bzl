@@ -22,9 +22,9 @@ def api_extractor_config(name, tsdoc_metadata = None, project_folder = None, rep
 
     if doc_model != None:
         args.extend(["--doc-model", doc_model])
-    
+
     if report != None:
-        args.extend(["--report", report ])
+        args.extend(["--report", report])
 
     if project_folder != None:
         args.extend(["--project-folder", project_folder])
