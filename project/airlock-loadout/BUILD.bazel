@@ -1,0 +1,32 @@
+"""
+Attempt to properly bootstrap the somewhat complex build environment of the ESP32
+"""
+
+load("//rs:rules.bzl", "cargo_bootstrap_repository", "cargo_build_script")
+
+
+package(default_visibility = ["//visibility:public"])
+
+cargo_bootstrap_repository(
+    name = "airlock-loadout",
+    cargo_toml = "Cargo.toml",
+    cargo_lockfile = "Cargo.lock",
+
+)
+
+cargo_build_script(
+    name = "build_script",
+    srcs = [ "build.rs" ],
+    rustc_flags = [ "--verbose" ],
+    tools = [] # we'll need to put a lot of stuff in here eventually
+)
+
+
+#rust_binary(
+#    name = "airlock-loadout",
+#    srcs = glob(["*.rs"]),
+#    deps = [
+#        "//rs/ts",
+#        "@cargo//:esp-idf-sys",
+#    ],
+#)
