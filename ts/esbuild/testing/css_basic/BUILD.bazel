@@ -1,4 +1,3 @@
-load("@npm//@bazel/esbuild:index.bzl", "esbuild")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
