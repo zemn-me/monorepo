@@ -1,6 +1,7 @@
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';
+import * as guard from 'monorepo/ts/guard';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
@@ -115,7 +116,10 @@ const main = async () => {
 		devDeps = new Map<string, string>();
 
 	for (const [pkgName, pkgVersion] of our_deps) {
-		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(pkgName, pkgVersion);
+		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(
+			pkgName,
+			guard.must(guard.isDefined)(pkgVersion)
+		);
 	}
 
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
