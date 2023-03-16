@@ -1,12 +1,25 @@
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';
-import * as guard from 'monorepo/ts/guard';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
 	isDev: (v: string) => v.startsWith('@types'),
 };
+
+// Should be mostly identical to guard.must(guard.isDefined)
+// re-implemented here because I don't want to fuck around
+// with rules_nodejs's insane binary runtime.
+//
+// If you're in the future and I've finally ported to rules_js,
+// you can remove this code and replace
+// it with an import of ts/guard
+
+function mustDefined<T>(v: T | undefined): T {
+	if (v === undefined) throw new Error('Must be defined.');
+
+	return v;
+}
 
 const labelToNpmPackage = (label: string): string => {
 	/*
@@ -118,7 +131,7 @@ const main = async () => {
 	for (const [pkgName, pkgVersion] of our_deps) {
 		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(
 			pkgName,
-			guard.must(guard.isDefined)(pkgVersion)
+			mustDefined(pkgVersion)
 		);
 	}
 
