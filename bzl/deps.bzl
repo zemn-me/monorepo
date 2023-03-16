@@ -17,11 +17,12 @@ def fetch_dependencies():
         sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
     )
 
+
     http_archive(
         name = "rules_python",
-        sha256 = "29a801171f7ca190c543406f9894abf2d483c206e14d6acbd695623662320097",
-        strip_prefix = "rules_python-0.18.1",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.18.1.tar.gz",
+        sha256 = "ffc7b877c95413c82bfd5482c017edcf759a6250d8b24e82f41f3c8b8d9e287e",
+        strip_prefix = "rules_python-0.19.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.19.0.tar.gz",
     )
 
     http_archive(
@@ -114,9 +115,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli",
-        sha256 = "3569fc4e1da6d7668044d850713e517631fba6c086fe6ed74e9f24a990dd151d",
+        sha256 = "4b917ffa38e5084074557bdd9a39025676922b6433cab809be26493276f00a67",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.55.0/pulumi-v3.55.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.58.0/pulumi-v3.58.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))

@@ -202,7 +202,11 @@ export const main = async (argv: string[] = process.argv) => {
 		const fileName =
 			out === undefined
 				? ((await page.title()).trim() || page.url()).replace(
-						/[^A-z_-]/g,
+						// https://github.com/Zemnmez/monorepo/security/code-scanning/1
+						// All non-letter unicode bits.
+						// nodejs is not really aware of what parts of the path
+						// are dangerous.
+						/\P{L}/gu,
 						'_'
 				  ) + '.svg'
 				: out;
