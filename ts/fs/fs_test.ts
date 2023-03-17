@@ -7,7 +7,7 @@ describe('fs', () => {
 		it('should see all the expected files.', async () => {
 			const e = (
 				await iter.unroll(
-					fs.walk(runfiles.resolve('ts/fs/testfiles/walk_base'))
+					fs.walk('ts/fs/testfiles/walk_base')
 				)
 			)
 				.map(([, getPath]) => getPath())
