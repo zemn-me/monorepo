@@ -29,13 +29,15 @@ js_library(
     srcs = ["core_en.json"],
 )
 
+# convert this into a js binary rule dumbass!!! TODO
+
 genrule(
     name = "gen_core",
     srcs = ["@cultistsimulator//:core"],
     outs = ["core_en.json"],
-    cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
+    cmd = "BAZEL_BINDIR=$(BINDIR) ./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
     exec_tools = [":collate_game_core"],
-    message = "generating collated game data",
+    message = "generating collated game data"
 )
 
 proto_library(
