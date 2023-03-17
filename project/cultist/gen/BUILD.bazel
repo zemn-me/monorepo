@@ -2,7 +2,10 @@ load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
-load("//js:rules.bzl", "js_library")
+load("//js:rules.bzl", "js_library", "js_run_binary")
+
+
+
 
 package(default_visibility = [
     "//project/cultist:__subpackages__",
@@ -29,16 +32,24 @@ js_library(
     srcs = ["core_en.json"],
 )
 
-# convert this into a js binary rule dumbass!!! TODO
-
+# copy core into the local tree to make rules_js happy
 genrule(
-    name = "gen_core",
-    srcs = ["@cultistsimulator//:core"],
-    outs = ["core_en.json"],
-    cmd = "BAZEL_BINDIR=$(BINDIR) ./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
-    exec_tools = [":collate_game_core"],
-    message = "generating collated game data"
+    name = "core",
+    srcs = [ "@cultistsimulator//:core" ],
+    outs = [ "core" ],
+    cmd = "echo $(locations @cultistsimulator//:core)"
 )
+
+js_run_binary(
+    # Target name
+    name = "gen_core",
+    # The tool to run in the action
+    tool = ":collate_game_core",
+    srcs = [ ":core"],
+    args = ["$(locations @cultistsimulator//:core)"],
+    stdout = "core_en.json"
+)
+
 
 proto_library(
     name = "core_proto",
