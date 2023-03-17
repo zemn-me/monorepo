@@ -3510,7 +3510,7 @@
   resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-3.0.0.tgz#e1ac0f3e9e195135361fa1a1d62f795d87e6e819"
   integrity sha512-sZLCdHvBUcNby1cB6Fd3ZBrABbjz3v1Vm90nysCQ6Vt7vd6e/h9Lt7SiJUoEX0l4Dzc7P5llKyhqSi1ycSf1Hg==
 
-"@types/emscripten@^1.38.0":
+"@types/emscripten@^1.39.6":
   version "1.39.6"
   resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.39.6.tgz#698b90fe60d44acf93c31064218fbea93fbfd85a"
   integrity sha512-H90aoynNhhkQP6DRweEjJp5vfUVdIj7tdPLsu7pq89vODD/lcugKfZOsfgwpvM6XUewEp2N5dCg1Uf3Qe55Dcg==
@@ -3944,11 +3944,11 @@
     tslib "^1.13.0"
 
 "@yarnpkg/libzip@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/libzip/-/libzip-2.2.4.tgz#438744efe3b7ae0514f5db1ead130c1df1e685f6"
-  integrity sha512-QP0vUP+w0d7Jlo7jqTnlRChSnIB/dOF7nJFLD/gsPvFIHsVWLQQuAiolOcXQUD2hezLD1mQd2qb0yOKqPYRcfQ==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/libzip/-/libzip-2.3.0.tgz#fe1e762e47669f6e2c960fc118436608d834e3be"
+  integrity sha512-6xm38yGVIa6mKm/DUCF2zFFJhERh/QWp1ufm4cNUvxsONBmfPg8uZ9pZBdOmF6qFGr/HlT6ABBkCSx/dlEtvWg==
   dependencies:
-    "@types/emscripten" "^1.38.0"
+    "@types/emscripten" "^1.39.6"
     tslib "^1.13.0"
 
 "@yarnpkg/lockfile@^1.1.0":
