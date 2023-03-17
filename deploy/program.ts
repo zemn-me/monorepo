@@ -395,9 +395,13 @@ export const program = ({
 				? memo(() => mockGithub)
 				: memo(() => getOctokit(process.env['GITHUB_TOKEN']!));
 
-			const syntheticVersion = `v0.0.0-${new Date().getTime()}-${
-				context.sha
-			}`;
+			const version = (
+				await fs.readFile(
+					runfiles.resolveWorkspaceRelative(
+						'VERSION/VERSION.version.txt'
+					)
+				)
+			).toString('utf-8');
 
 			const releaser = release(
 				artifact(
@@ -442,13 +446,13 @@ export const program = ({
 							owner: context.repo.owner,
 							repo: context.repo.repo,
 
-							tag_name: syntheticVersion,
+							tag_name: version,
 
 							body,
 
 							generate_release_notes: true,
 
-							name: syntheticVersion,
+							name: version,
 
 							target_commitish: context.ref,
 						})
