@@ -52,17 +52,17 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
 """
         config="api-extractor.json",
         report= 'report.api.md',
-        docModel = 'model.api.json',
+        doc_model = 'model.api.json',
         untrimmedRollup= 'api.d.ts',
         alphaTrimmedRollup= 'api-alpha.d.ts',
         betaTrimmedRollup= 'api-beta.d.ts',
-        publicTrimmedRollup=  'api-public.d.ts',
+        public_trimmed_rollup=  'api-public.d.ts',
         tsdocMetadata= 'tsdoc-metadata.json',
 
         report= report,
         untrimmedRollup= untrimmedRollup,
-        docModel = docModel,
+        doc_model = doc_model,
         alphaTrimmedRollup= alphaTrimmedRollup,
         betaTrimmedRollup= betaTrimmedRollup,
-        publicTrimmedRollup=  publicTrimmedRollup,
+        public_trimmed_rollup=  public_trimmed_rollup,
 """

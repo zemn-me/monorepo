@@ -1,7 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
 
-package(default_visibility = ["//js/api-extractor:__subpackages__"])
+package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "config_gen_ts",

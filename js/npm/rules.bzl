@@ -76,14 +76,14 @@ def npm_pkg(
         entry_point = external_api_dts_root,
         srcs = srcs + deps,
         report = "api_gen.md",
-        publicTrimmedRollup = "public.d.ts",
-        docModel = ".api.json",
+        public_trimmed_rollup = "public.d.ts",
+        doc_model = ".api.json",
     )
 
     api_documenter(
         name = name + "_docs",
         output_directory = "docs",
-        docModel = ".api.json",
+        doc_model = ".api.json",
     )
 
     copy_to_directory(
