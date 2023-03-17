@@ -189,11 +189,14 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
     )
 
-    git_repository(
+
+    # Got no idea why but MS doesn't publish versions of this...
+    http_archive(
         name = "microsoft_json_schemas",
-        branch = "main",
-        remote = "git@github.com:microsoft/json-schemas.git",
+        url = "https://github.com/microsoft/json-schemas/archive/refs/heads/main.zip",
+        strip_prefix = "json-schemas-main",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
     )
+
