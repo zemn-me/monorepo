@@ -14,7 +14,6 @@ impl convert::From<io::Error> for RunError {
 
 fn act() -> Result<(), RunError> {
     let content = args()
-        .into_iter()
         .skip(1)
         .map(|file_name| -> Result<String, RunError> {
             let mut sha = Sha256::new();
