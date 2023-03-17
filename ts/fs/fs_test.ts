@@ -1,4 +1,3 @@
-import { runfiles } from '@bazel/runfiles';
 import * as fs from 'ts/fs';
 import * as iter from 'ts/iter';
 

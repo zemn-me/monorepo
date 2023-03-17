@@ -5,7 +5,6 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "fs",
     deps = [
-        "//:node_modules/@bazel/runfiles",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//ts/iter",
