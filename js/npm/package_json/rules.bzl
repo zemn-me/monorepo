@@ -1,4 +1,4 @@
-load("//js:rules.bzl", "nodejs_binary")
+load("//:rules.bzl", "nodejs_binary")
 
 def package_json(name, targets, template, version, depSpec):
     """

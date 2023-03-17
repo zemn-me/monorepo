@@ -1,3 +1,4 @@
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 
 def _api_documenter_impl(ctx):

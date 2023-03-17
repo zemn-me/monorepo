@@ -22,7 +22,7 @@ jobs:
           # Needed to allow an action to trigger another action.
           token: ${{ secrets.GH_PAT }}
       - name: Restore bazel cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.2.3
         env:
           cache-name: bazel-cache
         with:
@@ -55,9 +55,6 @@ jobs:
             for command in $TO_RUN; do
               bazelisk run --subcommands --verbose_failures $command
             done
-            # we can't yet detect when a version really changes,
-            # so all monorepo changes are considered major.
-            bazelisk run //VERSION:major.bump
             git add -A
             git commit -am "Automatic fixes."
           fi

@@ -1,3 +1,4 @@
+load("//ts:rules.bzl", "ts_project")
 load("//css:providers.bzl", "CSSLibraryInfo", "css_library_info")
 load("//css/lint:rules.bzl", "css_lint")
 load("//rs/css/module:rules.bzl", "css_module_rule")

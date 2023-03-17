@@ -21,7 +21,7 @@
 		"inlineSourceMap": true,
 		"inlineSources": true,
 		"baseUrl": "./",
-		"rootDirs": ["bazel-out/k8-fastbuild/bin", "bazel-out/darwin_arm64-fastbuild/bin"],
+		"rootDirs": ["bazel-out/k8-fastbuild/bin"],
 		"paths": {
 			"monorepo/*": [
 				"./*",

@@ -1,4 +1,4 @@
-load("//go:rules.bzl", "go_library")
+load("//:rules.bzl", "go_library")
 
 go_library(
     name = "flagutil",

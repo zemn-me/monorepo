@@ -6,10 +6,11 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("//js:rules.bzl", "copy_to_bin", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
-load("//ts:rules.bzl", "ts_config")
+load("//:rules.bzl", "ts_config")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
 load("@npm//renovate:index.bzl", "renovate_config_validator_test")
 
 package(default_visibility = [":__subpackages__"])

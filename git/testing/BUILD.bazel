@@ -1,5 +1,5 @@
 load("//git:rules.bzl", "git_commit_affecting_files", "source_files_for_rule")
-load("//js:rules.bzl", "generated_file_test")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 
 git_commit_affecting_files(
     name = "affected_files_basic_ref",

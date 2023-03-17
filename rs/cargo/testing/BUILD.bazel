@@ -1,5 +1,5 @@
-load("//rs:rules.bzl", "rust_binary")
-load("//js:rules.bzl", "generated_file_test")
+load("//rs:rules.bzl", "rust_binary", "rust_doc")
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 
 package(default_visibility = ["//visibility:public"])
 
