@@ -222,8 +222,6 @@ export const main = async (argv: string[] = process.argv) => {
 			path: svgFile,
 		});
 
-		if (optimSvg.error !== undefined) throw optimSvg.error;
-
 		if (!optimSvg.data) {
 			throw new Error('Failed to optimize SVG.');
 		}
