@@ -43,7 +43,7 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
     bin.api_extractor(
         name = name,
         srcs = srcs + [package_json, "//:tsconfig", name + "_config_in_bin", name + "_main_entry_point_in_bin"],
-        args = ["run", "--config", "../../../$(location " + name + "_config_in_bin)"],
+        args = ["run", "--local", "--config", "../../../$(location " + name + "_config_in_bin)"],
         outs = outs,
         **kwargs
     )
