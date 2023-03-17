@@ -27,11 +27,12 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
         name = name + "_config",
         out = config,
         entry_point = name + "_main_entry_point_in_bin",
-        public_trimmed_rollup = native.package_name() + "/" + public_trimmed_rollup,
+        public_trimmed_rollup =
+            native.package_name() + "/" + public_trimmed_rollup if public_trimmed_rollup != None else None,
         report = native.package_name() + "/" + report,
         ts_config = "//:tsconfig",
         project_folder = project_folder,
-        doc_model = native.package_name() + "/" + doc_model,
+        doc_model = native.package_name() + "/" + doc_model if doc_model != None else None,
         tsdoc_metadata = native.package_name() + "/" + tsdoc_metadata,
     )
 
