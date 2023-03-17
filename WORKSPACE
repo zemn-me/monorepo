@@ -142,6 +142,11 @@ rules_ts_dependencies(
     # Alternatively, you could pick a specific version, or use
     # load("@aspect_rules_ts//ts:repositories.bzl", "LATEST_VERSION")
     # ts_version = LATEST_VERSION
+
+    # HEAD is currently further along than rules_ts has patches for.
+    # this will break updates to typescript, so should probably be removed when
+    # rules_ts is updated.
+    ts_integrity = "sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw=="
 )
 
 # Fetch and register node, if you haven't already
