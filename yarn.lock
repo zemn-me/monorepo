@@ -3935,6 +3935,14 @@
     "@yarnpkg/libzip" "^2.2.4"
     tslib "^1.13.0"
 
+"@yarnpkg/fslib@^2.10.2":
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.10.2.tgz#16e419a1412084f152e8eec16183a7f80bc73684"
+  integrity sha512-6WfQrPEV8QVpDPw5kd5s5jsb3QLqwVFSGZy3rEjl3p2FZ3OtIfYcLbFirOxXj2jXiKQDe7XbYsw1WjSf8K94gw==
+  dependencies:
+    "@yarnpkg/libzip" "^2.3.0"
+    tslib "^1.13.0"
+
 "@yarnpkg/json-proxy@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@yarnpkg/json-proxy/-/json-proxy-2.1.1.tgz#47866706061e9bdb15b0d199f6f08dde655bf569"
@@ -3943,7 +3951,7 @@
     "@yarnpkg/fslib" "^2.5.0"
     tslib "^1.13.0"
 
-"@yarnpkg/libzip@^2.2.4":
+"@yarnpkg/libzip@^2.2.4", "@yarnpkg/libzip@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@yarnpkg/libzip/-/libzip-2.3.0.tgz#fe1e762e47669f6e2c960fc118436608d834e3be"
   integrity sha512-6xm38yGVIa6mKm/DUCF2zFFJhERh/QWp1ufm4cNUvxsONBmfPg8uZ9pZBdOmF6qFGr/HlT6ABBkCSx/dlEtvWg==
@@ -3965,12 +3973,12 @@
     tslib "^1.13.0"
 
 "@yarnpkg/pnp@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/pnp/-/pnp-3.3.0.tgz#78be9a718ec58472154da602133826813b8be34c"
-  integrity sha512-ZiNfQIodOEatHODe33KNfWph9Db6aPPDMGrrRaAksrKoQhTN6B22CLK2wVPRKYfRiS5UvMd4SMYEUpdXMAAnmg==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/pnp/-/pnp-3.3.1.tgz#8ce0777f2950cbadc9978ba3bd3407b4b9c2a640"
+  integrity sha512-iA2IKk2hOQqEBBHBZ3j004mCfzsPGx5PNjgGn8kb6/VMXokX4mhZzPNI/q7ipI0+UaIMeDXvIzwdGL2GSmgsTA==
   dependencies:
     "@types/node" "^13.7.0"
-    "@yarnpkg/fslib" "^2.10.1"
+    "@yarnpkg/fslib" "^2.10.2"
 
 "@yarnpkg/shell@^3.2.5":
   version "3.2.5"
