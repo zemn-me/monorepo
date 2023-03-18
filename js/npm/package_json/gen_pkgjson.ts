@@ -7,6 +7,20 @@ const depTypes = {
 	isDev: (v: string) => v.startsWith('@types'),
 };
 
+// Should be mostly identical to guard.must(guard.isDefined)
+// re-implemented here because I don't want to fuck around
+// with rules_nodejs's insane binary runtime.
+//
+// If you're in the future and I've finally ported to rules_js,
+// you can remove this code and replace
+// it with an import of ts/guard
+
+function mustDefined<T>(v: T | undefined): T {
+	if (v === undefined) throw new Error('Must be defined.');
+
+	return v;
+}
+
 const labelToNpmPackage = (label: string): string => {
 	/*
         Eventually, I should actually test this,
@@ -115,7 +129,10 @@ const main = async () => {
 		devDeps = new Map<string, string>();
 
 	for (const [pkgName, pkgVersion] of our_deps) {
-		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(pkgName, pkgVersion);
+		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(
+			pkgName,
+			mustDefined(pkgVersion)
+		);
 	}
 
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
