@@ -36,7 +36,7 @@ js_library(
 genrule(
     name = "core",
     srcs = [ "@cultistsimulator//:core" ],
-    outs = [ "core" ],
+    outs = [ "core_dir" ],
     cmd = "echo $(locations @cultistsimulator//:core)"
 )
 

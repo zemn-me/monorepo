@@ -16,10 +16,10 @@ ts_project(
         "//project/ck3/recursive-vassals:mod_zip",
         "//project/ck3/recursive-vassals:patch",
         "//ts/cmd/svgshot:npm_pkg.publish",
-        "//ts/cmd/svgshot:svgshot.tgz",
-        "//ts/do-sync:do-sync.tgz",
+        "//ts/cmd/svgshot:npm_pkg.tgz",
+        "//ts/do-sync:npm_pkg.tgz",
         "//ts/do-sync:npm_pkg.publish",
-        "//ts/knowitwhenyouseeit:knowitwhenyouseeit.tgz",
+        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
     ],
     deps = [
