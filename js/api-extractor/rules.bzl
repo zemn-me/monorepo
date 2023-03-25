@@ -36,6 +36,12 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
         tsdoc_metadata = native.package_name() + "/" + tsdoc_metadata,
     )
 
+    native.filegroup(
+        name = name + "_types",
+        srcs = srcs,
+        output_group = "types",
+    )
+
     copy_to_bin(
         name = name + "_config_in_bin",
         srcs = [name + "_config"],
@@ -43,7 +49,7 @@ def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdo
 
     bin.api_extractor(
         name = name,
-        srcs = srcs + [package_json, "//:tsconfig", name + "_config_in_bin", name + "_main_entry_point_in_bin"],
+        srcs = srcs + [ name + "_types", package_json, "//:tsconfig", name + "_config_in_bin", name + "_main_entry_point_in_bin"],
         args = ["run", "--local", "--config", "../../../$(location " + name + "_config_in_bin)"],
         outs = outs,
         **kwargs
