@@ -4,70 +4,46 @@
  * for handling rotations in 3D space.
  */
 
-import { Point3D } from './cartesian';
-
-export type Quaternion = [r: number, i: number, j: number, k: number];
-export type ReadonlyQuaternion = readonly [
-	r: number,
-	i: number,
-	j: number,
-	k: number
-];
-
-export function fromPoint3D([[x, y, z]]: Point3D): Quaternion {
-	return [x, y, z, 0];
-}
-
-export function add(
-	[r1 = 0, i1 = 0, j1 = 0, k1 = 0]: ReadonlyQuaternion,
-	[r2 = 0, i2 = 0, j2 = 0, k2 = 0]: ReadonlyQuaternion
-): Quaternion {
-	return [r1 + r2, i1 + i2, j1 + j2, k1 + k2];
-}
-
-export function adds(...q: ReadonlyQuaternion[]): Quaternion {
-	const [first, ...etc] = q;
-	let val: Quaternion = [...first];
-	for (const v of etc) val = add(val, v);
-	return val;
-}
-
-export function mul(
-	[r1 = 0, i1 = 0, j1 = 0, k1 = 0]: ReadonlyQuaternion,
-	[r2 = 0, i2 = 0, j2 = 0, k2 = 0]: ReadonlyQuaternion
-): Quaternion {
-	const a1 = r1,
-		a2 = r2,
-		b1 = i1,
-		b2 = i2,
-		c1 = j1,
-		c2 = j2,
-		d1 = k1,
-		d2 = k2;
-
-	return [
-		/* r */ a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2,
-		/* i */ a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2,
-		/* j */ a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2,
-		/* k */ a1 * d2 + b1 * c2 - c1 * b2 + d2 * a2,
-	];
-}
-
 /**
- * conjugate returns, for a given quaternion the same quaternion except with
- * its complex parts negated.
- * @see https://en.wikipedia.org/wiki/Complex_conjugate
- * @see https://en.wikipedia.org/wiki/Quaternion#Conjugation,_the_norm,_and_reciprocal
+ * A Quaternion is a complex number representing both the position and the
+ * rotation of an object in 3D space.
  */
-export function conjugate([r, i, j, k]: ReadonlyQuaternion): Quaternion {
-	return [r, -i, -j, -k];
+export class Quaternion<X extends number = number, Y extends number = number, Z extends number = number, W extends number = number> {
+	constructor(public x: X, public y: Y, public z: Z, public w: W) { }
+
+	multiply(this: Quaternion, b: Quaternion): Quaternion {
+		const x = this.w * b.x + this.x * b.w + this.y * b.z - this.z * b.y;
+		const y = this.w * b.y - this.x * b.z + this.y * b.w + this.z * b.x;
+		const z = this.w * b.z + this.x * b.y - this.y * b.x + this.z * b.w;
+		const w = this.w * b.w - this.x * b.x - this.y * b.y - this.z * b.z;
+		return new Quaternion(x, y, z, w);
+	}
+
+    add(q: Quaternion): Quaternion {
+        return new Quaternion(this.x + q.x, this.y + q.y, this.z + q.z, this.w + q.w);
+    }
+
+    subtract(q: Quaternion): Quaternion {
+        return new Quaternion(this.x - q.x, this.y - q.y, this.z - q.z, this.w - q.w);
+    }
+
+    length(): number {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    }
+
+	/**
+	 * Return a new Quaternion representing a unit quaternion (i.e. a quaternion
+	 * of length one). This preserves only its rotation in 3D space.
+	 */
+    normalize(): Quaternion {
+        const length = this.length();
+        if (length === 0) {
+            throw new Error('Cannot normalize a quaternion with zero length.');
+        }
+        return new Quaternion(this.x / length, this.y / length, this.z / length, this.w / length);
+    }
+
 }
 
-/**
- * Rotates a 3d vector p via the rotation quaternion q.
- *
- * @see https://liorsinai.github.io/mathematics/2021/12/03/quaternion-3.html
- */
-export function rotate(p: Point3D, q: Quaternion) {
-	return mul(mul(q, fromPoint3D(p)), conjugate(q));
-}
+
+
