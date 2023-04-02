@@ -1,5 +1,7 @@
 import * as Camera from 'monorepo/ts/math/camera';
 import * as Canvas from 'monorepo/ts/math/canvas';
+import * as conv from 'monorepo/ts/math/conv';
+import { EulerAngle } from 'monorepo/ts/math/euler_angle';
 import * as Homog from 'monorepo/ts/math/homog';
 import * as Matrix from 'monorepo/ts/math/matrix';
 import * as Quaternion from 'monorepo/ts/math/quaternion';
@@ -95,6 +97,9 @@ export class Cube implements Canvas.Drawable3D {
 	}
 }
 
+/**
+ * @deprecated
+ */
 export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
 	constructor(
 		public readonly value: T,
@@ -110,6 +115,9 @@ export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
 	}
 }
 
+/**
+ * @deprecated
+ */
 export class QuaternionMultiply<
 	T extends Canvas.Drawable3D,
 	Q extends Quaternion.Quaternion
@@ -120,17 +128,25 @@ export class QuaternionMultiply<
 		return this.value.lines3D().map(line =>
 			line.map(point => {
 				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = [x, y, z, 0];
+				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
+					x,
+					y,
+					z,
+					0
+				);
 				const q2 = this.quaternion;
-				const n = Quaternion.mul(q1, q2);
+				const n = q1.multiply(q2);
 
-				const [nx = 0, ny = 0, nz = 0] = n;
+				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);
 	}
 }
 
+/**
+ * @deprecated
+ */
 export class QuaternionRotate<
 	T extends Canvas.Drawable3D,
 	Q extends Homog.Point3D
@@ -138,14 +154,23 @@ export class QuaternionRotate<
 {
 	constructor(public readonly value: T, public readonly rotation: Q) {}
 	lines3D() {
+		const [[rx], [ry], [rz]] = this.rotation;
+		// this whole class was kind of a mistake. but i preserve this mistake
+		// here so that the tests pass.
+		const rQ = conv.Quaternion.fromEulerAngles(new EulerAngle(rx, ry, rz));
 		return this.value.lines3D().map(line =>
 			line.map(point => {
 				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = [x, y, z, 0];
-				const q2 = this.rotation;
-				const n = Quaternion.rotate(Homog.pointToCart(q2), q1);
+				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
+					x,
+					y,
+					z,
+					0
+				);
+				// technically incorrect. should be removed sometime.
+				const n = q1.multiply(rQ);
 
-				const [nx = 0, ny = 0, nz = 0] = n;
+				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);
