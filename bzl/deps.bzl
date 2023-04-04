@@ -253,5 +253,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
+        sha256 = "bdaa6a6441a05c50952ffb608aac9f45a5dfd05538b5e4fdc4f2f8459bb12d48"
     )
 
