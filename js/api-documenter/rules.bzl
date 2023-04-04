@@ -11,7 +11,10 @@ def _api_documenter_impl(ctx):
         executable = ctx.executable.api_documenter_binary,
         arguments = ["markdown", "-i", ctx.file.input_directory.path, "-o", dir.path],
         mnemonic = "APIDocumenter",
-        progress_message = "Running api-documeneter (https://api-extractor.com)",
+        progress_message = "Running api-documenter (https://api-extractor.com)",
+        env = {
+            "BAZEL_BINDIR": ctx.var["BINDIR"]
+        }
     )
 
     return [
