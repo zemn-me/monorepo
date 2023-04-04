@@ -4,7 +4,7 @@ load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
-load("@npm//:pnpm/package_json.bzl", pnpm = "bin")
+load("@npm//:npm/package_json.bzl", npm = "bin")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 
 def _exclude_all_external_rule(ctx):
@@ -103,13 +103,13 @@ def npm_pkg(
         out = name + ".tgz",
     )
 
-    pnpm.pnpm_binary(
+    npm.npm_binary(
         name = name + ".publish",
         data = [name + "_dir"],
         args = ["publish", "$(location " + name + "_dir)"],
     )
 
-    pnpm.pnpm_test(
+    npm.npm_test(
         name = name + ".publish_test",
         data = [name + "_dir"],
         args = ["publish", "$(location " + name + "_dir)", "--dry-run"],
