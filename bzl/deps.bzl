@@ -114,14 +114,69 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "pulumi_cli",
+        name = "pulumi_cli_linux_x64",
         sha256 = "4b917ffa38e5084074557bdd9a39025676922b6433cab809be26493276f00a67",
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.58.0/pulumi-v3.58.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
-        """,
+""",
+    )
+
+    http_archive(
+        name = "pulumi_cli_darwin_arm64",
+        urls = [
+            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-arm64.tar.gz",
+        ],
+        sha256 = "6726d7dec38e5852650dace98928e6b5dbca650f6f137c829c0f62a12f8addf7",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+""",
+    )
+
+    http_archive(
+        name = "pulumi_cli_darwin_x64",
+        urls = [
+            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-x64.tar.gz",
+        ],
+        
+        build_file_content = """
+exports_files(glob(["**/*"]))
+""",
+    )
+
+    http_archive(
+        name = "pulumi_cli_linux_arm64",
+        urls = [
+            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-linux-arm64.tar.gz",
+        ],
+        sha256 = "28b12b585a080e833471af99ab4b3c1cc9a644c88d952d2a35034fcd143eaf05",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+""",
+    )
+
+    http_archive(
+        name = "pulumi_cli_windows_arm64",
+        urls = [
+            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-arm64.zip",
+        ],
+        
+        build_file_content = """
+exports_files(glob(["**/*"]))
+""",
+    )
+
+    http_archive(
+        name = "pulumi_cli_windows_x64",
+        urls = [
+            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-x64.zip",
+        ],
+        
+        build_file_content = """
+exports_files(glob(["**/*"]))
+""",
     )
 
     http_archive(
