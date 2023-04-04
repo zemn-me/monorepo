@@ -114,6 +114,10 @@ npm_translate_lock(
     npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
+    # tentatative.
+    lifecycle_hooks_exclude = {
+        "puppeteer": ["prepare"]
+    }
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")

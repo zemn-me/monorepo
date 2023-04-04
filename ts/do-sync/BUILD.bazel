@@ -1,19 +1,22 @@
 load("//ts:rules.bzl", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//js:rules.bzl", "js_library")
+load("//js:rules.bzl", "js_library", "npm_link_package")
 
 package(default_visibility = [
     ":__subpackages__",
     "//deploy:__subpackages__",
 ])
 
+DEPS = [
+    "//:node_modules/cross-spawn",
+    "//:node_modules/@types/cross-spawn",
+    "//:node_modules/@types/node",
+]
+
 ts_project(
     name = "do-sync",
     srcs = glob(["**/*.ts"]),
-    deps = [
-        "//:node_modules/@types/cross-spawn",
-        "//:node_modules/cross-spawn",
-    ],
+    deps = DEPS
 )
 
 npm_pkg(
@@ -32,5 +35,6 @@ npm_pkg(
 js_library(
     name = "lib",
     srcs = ["//ts/do-sync:npm_pkg"],
+    deps = DEPS,
     visibility = ["//:__subpackages__"],
 )

@@ -1,4 +1,4 @@
-import { doSync, JSONObject } from 'do-sync';
+import { doSync, JSONObject } from 'ts/do-sync/npm_pkg/npm_pkg_dir';
 import sharpT from 'sharp';
 
 const pixel =
@@ -69,6 +69,6 @@ describe('doSync', () => {
 			doSync(() => {
 				throw 'whoopsie';
 			})()
-		).toThrow('whoopsie' as any);
+		).toThrow('whoopsie');
 	});
 });

@@ -11,6 +11,7 @@ ts_project(
     deps = [
         "//:node_modules/@types/jest",
         "//:node_modules/@types/sharp",
+        "//:node_modules/@types/node",
         "//:node_modules/sharp",
         "//ts/do-sync:lib",
     ],
