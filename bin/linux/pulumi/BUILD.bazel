@@ -1,19 +1,78 @@
 package(default_visibility = ["//:__subpackages__"])
 
-alias(
-    name = "pulumi",
-    actual = "@pulumi_cli//:pulumi/pulumi",
+# the pulumi cli tool
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+
+config_setting(
+    name = "darwin_arm64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:arm64",
+    ],
 )
 
-sh_test(
-    name = "smoke",
-    srcs = ["smoke.sh"],
-    data = [":pulumi"],
-    env = {
-        # the below should become rlocationpath when https://github.com/bazelbuild/bazel/pull/16668 has a release
-        "PULUMI_BIN": "$(rootpath :pulumi)",
-    },
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
+config_setting(
+    name = "darwin_x64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
     ],
+)
+
+config_setting(
+    name = "linux_arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "linux_x64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "windows_arm64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "windows_x64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+
+alias(
+    name = "pulumi",
+    actual = select({
+        ":darwin_arm64": "@pulumi_cli_darwin_arm64//:pulumi/pulumi",
+        ":darwin_x64": "@pulumi_cli_darwin_x64//:pulumi/pulumi",
+        ":linux_arm64": "@pulumi_cli_linux_arm64//:pulumi/pulumi",
+        ":linux_x64": "@pulumi_cli_linux_x64//:pulumi/pulumi",
+        ":windows_arm64": "@pulumi_cli_windows_arm64//:pulumi/pulumi",
+        ":windows_x64": "@pulumi_cli_windows_x64//:pulumi/pulumi",
+        "//conditions:default": "@pulumi_cli_linux_x64//:pulumi/pulumi",
+    }),
+)
+
+
+native_test(
+    # The name of the test rule.
+    name = "smoke",
+    # label; path of the pre-built executable
+    src = ":pulumi",
+    # output; an output name for the copy of the binary
+    out = "pulumi.local",
 )
