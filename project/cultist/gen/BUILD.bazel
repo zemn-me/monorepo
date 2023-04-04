@@ -46,7 +46,7 @@ js_run_binary(
     # The tool to run in the action
     tool = ":collate_game_core",
     srcs = [ ":core"],
-    args = ["$(locations @cultistsimulator//:core)"],
+    args = ["$(locations :core)"],
     stdout = "core_en.json"
 )
 
