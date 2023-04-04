@@ -146,7 +146,10 @@ rules_ts_dependencies(
     # HEAD is currently further along than rules_ts has patches for.
     # this will break updates to typescript, so should probably be removed when
     # rules_ts is updated.
-    ts_integrity = "sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw=="
+    # As per https://docs-legacy.aspect.build/aspect-build/rules_ts/v0.10.0/docs/repositories-docgen.html
+    # Generate via
+    # curl --silent https://registry.npmjs.org/typescript/5.0.3 | jq -r '.dist.integrity'
+    ts_integrity = "sha512-xv8mOEDnigb/tN9PSMTwSEqAnUvkoXMQlicOb0IUVDBSQCgBSaAAROUZYy2IcUy5qU6XajK5jjjO7TMWqBTKZA=="
 )
 
 # Fetch and register node, if you haven't already
