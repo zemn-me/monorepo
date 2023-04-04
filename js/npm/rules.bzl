@@ -98,23 +98,22 @@ def npm_pkg(
 
     pkg_tar(
         name = name + "_tar",
-        srcs = [ name + "_dir"],
+        srcs = [name + "_dir"],
         extension = ".tgz",
-        out = name + ".tgz"
+        out = name + ".tgz",
     )
 
     pnpm.pnpm_binary(
         name = name + ".publish",
-        data = [ name + "_dir" ],
-        args = [ "publish", "$(location " + name + "_dir)" ]
+        data = [name + "_dir"],
+        args = ["publish", "$(location " + name + "_dir)"],
     )
 
     pnpm.pnpm_test(
         name = name + ".publish_test",
-        data = [ name + "_dir" ],
-        args = [ "publish", "$(location " + name + "_dir)", "--dry-run" ]
+        data = [name + "_dir"],
+        args = ["publish", "$(location " + name + "_dir)", "--dry-run"],
     )
-
 
     pkg_srcs = srcs
     pkg_deps = deps + [pkg_json_name]

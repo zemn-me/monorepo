@@ -1,5 +1,5 @@
 load("@aspect_rules_js//js:defs.bzl", _js_binary = "js_binary", _js_library = "js_library", _js_run_binary = "js_run_binary", _js_test = "js_test")
-load("@aspect_rules_js//npm:defs.bzl", _pkg_npm = "npm_package", _npm_link_package = "npm_link_package")
+load("@aspect_rules_js//npm:defs.bzl", _npm_link_package = "npm_link_package", _pkg_npm = "npm_package")
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", _copy_to_bin = "copy_to_bin")
 
 def js_binary(name, **kwargs):
@@ -19,7 +19,6 @@ def pkg_npm(name, **kwargs):
 
 def js_run_binary(name, **kwargs):
     _js_run_binary(name = name, env = {"NODE_PATH": "."}, **kwargs)
-
 
 def npm_link_package(name, **kwargs):
     _npm_link_package(name = name, **kwargs)

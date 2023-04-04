@@ -16,7 +16,7 @@ DEPS = [
 ts_project(
     name = "do-sync",
     srcs = glob(["**/*.ts"]),
-    deps = DEPS
+    deps = DEPS,
 )
 
 npm_pkg(
@@ -35,6 +35,6 @@ npm_pkg(
 js_library(
     name = "lib",
     srcs = ["//ts/do-sync:npm_pkg"],
-    deps = DEPS,
     visibility = ["//:__subpackages__"],
+    deps = DEPS,
 )

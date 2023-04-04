@@ -4,11 +4,7 @@ import * as iter from 'ts/iter';
 describe('fs', () => {
 	describe('walk', () => {
 		it('should see all the expected files.', async () => {
-			const e = (
-				await iter.unroll(
-					fs.walk('ts/fs/testfiles/walk_base')
-				)
-			)
+			const e = (await iter.unroll(fs.walk('ts/fs/testfiles/walk_base')))
 				.map(([, getPath]) => getPath())
 				.sort();
 

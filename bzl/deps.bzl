@@ -17,7 +17,6 @@ def fetch_dependencies():
         sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
     )
 
-
     http_archive(
         name = "rules_python",
         sha256 = "ffc7b877c95413c82bfd5482c017edcf759a6250d8b24e82f41f3c8b8d9e287e",
@@ -140,7 +139,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-x64.tar.gz",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -162,7 +160,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-arm64.zip",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -173,7 +170,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-x64.zip",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -244,7 +240,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
     )
 
-
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
@@ -253,6 +248,5 @@ exports_files(glob(["**/*"], exclude_directories=0))
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "bdaa6a6441a05c50952ffb608aac9f45a5dfd05538b5e4fdc4f2f8459bb12d48"
+        sha256 = "bdaa6a6441a05c50952ffb608aac9f45a5dfd05538b5e4fdc4f2f8459bb12d48",
     )
-

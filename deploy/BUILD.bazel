@@ -17,10 +17,10 @@ ts_project(
         "//project/ck3/recursive-vassals:patch",
         "//ts/cmd/svgshot:npm_pkg.publish",
         "//ts/cmd/svgshot:npm_pkg.tgz",
-        "//ts/do-sync:npm_pkg.tgz",
         "//ts/do-sync:npm_pkg.publish",
-        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
+        "//ts/do-sync:npm_pkg.tgz",
         "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
     ],
     deps = [
         "//:node_modules/@actions/github",

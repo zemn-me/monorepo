@@ -14,7 +14,7 @@ ts_project(
         "//:node_modules/@schemastore/package",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
-        "//ts"
+        "//ts",
     ],
 )
 

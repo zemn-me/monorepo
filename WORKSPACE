@@ -111,13 +111,13 @@ load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
 
 npm_translate_lock(
     name = "npm",
+    # tentatative.
+    lifecycle_hooks_exclude = {
+        "puppeteer": ["prepare"],
+    },
     npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
-    # tentatative.
-    lifecycle_hooks_exclude = {
-        "puppeteer": ["prepare"]
-    }
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
@@ -140,8 +140,6 @@ pnpm_repository(name = "pnpm")
 load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
 
 rules_ts_dependencies(
-    # This keeps the TypeScript version in-sync with the editor, which is typically best.
-    ts_version_from = "//:package.json",
 
     # Alternatively, you could pick a specific version, or use
     # load("@aspect_rules_ts//ts:repositories.bzl", "LATEST_VERSION")
@@ -153,7 +151,9 @@ rules_ts_dependencies(
     # As per https://docs-legacy.aspect.build/aspect-build/rules_ts/v0.10.0/docs/repositories-docgen.html
     # Generate via
     # curl --silent https://registry.npmjs.org/typescript/5.0.3 | jq -r '.dist.integrity'
-    ts_integrity = "sha512-xv8mOEDnigb/tN9PSMTwSEqAnUvkoXMQlicOb0IUVDBSQCgBSaAAROUZYy2IcUy5qU6XajK5jjjO7TMWqBTKZA=="
+    ts_integrity = "sha512-xv8mOEDnigb/tN9PSMTwSEqAnUvkoXMQlicOb0IUVDBSQCgBSaAAROUZYy2IcUy5qU6XajK5jjjO7TMWqBTKZA==",
+    # This keeps the TypeScript version in-sync with the editor, which is typically best.
+    ts_version_from = "//:package.json",
 )
 
 # Fetch and register node, if you haven't already
