@@ -103,10 +103,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "ca524d4df8c91838b9e80543832cf54d945e8045f6a2b9db1a1d02eec20e8b8c",
-        strip_prefix = "buildtools-6.0.1",
+        sha256 = "a75c337f4d046e560298f52ae95add73b9b933e4d6fb01ed86d57313e53b68e6",
+        strip_prefix = "buildtools-6.1.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.0.1.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.1.0.tar.gz",
         ],
     )
 
