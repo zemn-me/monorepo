@@ -2600,13 +2600,6 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/context-async-hooks/-/context-async-hooks-1.9.1.tgz#2a4809a4d0acccc53dd477d2e79fde76abce6c59"
   integrity sha512-HmycxnnIm00gdmxfD5OkDotL15bGqazLYqQJdcv1uNt22OSc5F/a3Paz3yznmf+/gWdPG8nlq/zd9H0mNXJnGg==
 
-"@opentelemetry/core@1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/core/-/core-1.11.0.tgz#3141a0e96a9ade6ee2dcdd794fd0b014e1013dde"
-  integrity sha512-aP1wHSb+YfU0pM63UAkizYPuS4lZxzavHHw5KJfFNN2oWQ79HSm6JR3CzwFKHwKhSzHN8RE9fgP1IdVJ8zmo1w==
-  dependencies:
-    "@opentelemetry/semantic-conventions" "1.11.0"
-
 "@opentelemetry/core@1.12.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/core/-/core-1.12.0.tgz#afa32341b794045c54c979d4561de2f8f00d0da9"
@@ -2719,15 +2712,7 @@
   dependencies:
     "@opentelemetry/core" "1.9.1"
 
-"@opentelemetry/resources@1.11.0", "@opentelemetry/resources@^1.6.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/resources/-/resources-1.11.0.tgz#68e3ca399e63246a6b87bc495f819c5bd9f2c112"
-  integrity sha512-y0z2YJTqk0ag+hGT4EXbxH/qPhDe8PfwltYb4tXIEsozgEFfut/bqW7H7pDvylmCjBRMG4NjtLp57V1Ev++brA==
-  dependencies:
-    "@opentelemetry/core" "1.11.0"
-    "@opentelemetry/semantic-conventions" "1.11.0"
-
-"@opentelemetry/resources@1.12.0":
+"@opentelemetry/resources@1.12.0", "@opentelemetry/resources@^1.6.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/resources/-/resources-1.12.0.tgz#895394c727dc3e7e51d1d2cc50907ec07a626dca"
   integrity sha512-gunMKXG0hJrR0LXrqh7BVbziA/+iJBL3ZbXCXO64uY+SrExkwoyJkpiq9l5ismkGF/A20mDEV7tGwh+KyPw00Q==
@@ -2752,7 +2737,7 @@
     "@opentelemetry/resources" "1.9.1"
     lodash.merge "4.6.2"
 
-"@opentelemetry/sdk-trace-base@1.12.0":
+"@opentelemetry/sdk-trace-base@1.12.0", "@opentelemetry/sdk-trace-base@^1.6.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-trace-base/-/sdk-trace-base-1.12.0.tgz#62b895dbb5900048a85e4899c38fec5585447d4b"
   integrity sha512-pfCOB3tNDlYVoWuz4D7Ji+Jmy9MHnATWHVpkERdCEiwUGEZ+4IvNPXUcPc37wJVmMpjGLeaWgPPrie0KIpWf1A==
@@ -2770,15 +2755,6 @@
     "@opentelemetry/resources" "1.9.1"
     "@opentelemetry/semantic-conventions" "1.9.1"
 
-"@opentelemetry/sdk-trace-base@^1.6.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-trace-base/-/sdk-trace-base-1.11.0.tgz#a962dbe74ae28442501ce804d4a270892e70d862"
-  integrity sha512-DV8e5/Qo42V8FMBlQ0Y0Liv6Hl/Pp5bAZ73s7r1euX8w4bpRes1B7ACiA4yujADbWMJxBgSo4fGbi4yjmTMG2A==
-  dependencies:
-    "@opentelemetry/core" "1.11.0"
-    "@opentelemetry/resources" "1.11.0"
-    "@opentelemetry/semantic-conventions" "1.11.0"
-
 "@opentelemetry/sdk-trace-node@1.9.1", "@opentelemetry/sdk-trace-node@^1.6.0":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-trace-node/-/sdk-trace-node-1.9.1.tgz#1fb067b30997145cb40d81b3859192cfc3e0e950"
@@ -2791,12 +2767,7 @@
     "@opentelemetry/sdk-trace-base" "1.9.1"
     semver "^7.3.5"
 
-"@opentelemetry/semantic-conventions@1.11.0", "@opentelemetry/semantic-conventions@^1.6.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.11.0.tgz#b7ed9a601acb6e0aef67564b37e4f9abad449170"
-  integrity sha512-fG4D0AktoHyHwGhFGv+PzKrZjxbKJfckJauTJdq2A+ej5cTazmNYjJVAODXXkYyrsI10muMl+B1iO2q1R6Lp+w==
-
-"@opentelemetry/semantic-conventions@1.12.0":
+"@opentelemetry/semantic-conventions@1.12.0", "@opentelemetry/semantic-conventions@^1.6.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.12.0.tgz#19c959bdb900986e74939d4227e757aa16936b91"
   integrity sha512-hO+bdeGOlJwqowUBoZF5LyP3ORUFOP1G0GRv8N45W/cztXbT2ZEXaAzfokRS9Xc9FWmYrDj32mF6SzH6wuoIyA==
@@ -2980,10 +2951,10 @@
     "@pulumi/pulumi" "^3.0.0"
     semver "^5.4.0"
 
-"@pulumi/pulumi@3.63.0", "@pulumi/pulumi@^3.0.0":
-  version "3.63.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.63.0.tgz#4f4997ef1a8c33c8de42e7ecbd1576f789c18335"
-  integrity sha512-nPaNYU5eXhgabkxIdLsVOqN7FN5lRdWmJiGUEbSvlS/enXQUp8aprxbCLXSxQtrtzQDdzyl5zd5Z1lrrAxewAA==
+"@pulumi/pulumi@3.64.0", "@pulumi/pulumi@^3.0.0":
+  version "3.64.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.64.0.tgz#8b599b6bb53dcee935192e154e3cf56ae3b30178"
+  integrity sha512-yKEABPiNqOXAlZcGiBSbYElwDrx82IjDUS07R+K3g05EzEttMN5YKv/NjTZsiSWtOGuGscStJnwEWWCjj4GhGQ==
   dependencies:
     "@grpc/grpc-js" "^1.3.8"
     "@logdna/tail-file" "^2.0.6"
