@@ -8,9 +8,5 @@ pathspec==0.11.1
     # via yamllint
 pyyaml==6.0
     # via yamllint
-yamllint==1.30.0
+yamllint==1.31.0
     # via -r requirements.in
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==67.7.0
-    # via yamllint
