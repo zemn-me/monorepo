@@ -13,8 +13,8 @@ def _api_documenter_impl(ctx):
         mnemonic = "APIDocumenter",
         progress_message = "Running api-documenter (https://api-extractor.com)",
         env = {
-            "BAZEL_BINDIR": ctx.var["BINDIR"]
-        }
+            "BAZEL_BINDIR": ctx.var["BINDIR"],
+        },
     )
 
     return [

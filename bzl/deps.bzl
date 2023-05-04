@@ -19,17 +19,17 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "ffc7b877c95413c82bfd5482c017edcf759a6250d8b24e82f41f3c8b8d9e287e",
-        strip_prefix = "rules_python-0.19.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.19.0.tar.gz",
+        sha256 = "a644da969b6824cc87f8fe7b18101a8a6c57da5db39caa6566ec6109f37d2141",
+        strip_prefix = "rules_python-0.20.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.20.0.tar.gz",
     )
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "dd926a88a564a9246713a9c00b35315f54cbd46b31a26d5d8fb264c07045f05d",
+        sha256 = "6b65cb7917b4d1709f9410ffe00ecf3e160edf674b78c54a894471320862184f",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.38.1/rules_go-v0.38.1.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.39.0/rules_go-v0.39.0.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.39.0/rules_go-v0.39.0.zip",
         ],
     )
 
@@ -71,18 +71,18 @@ def fetch_dependencies():
     http_archive(
         name = "rules_pkg",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz",
-            "https://github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.9.0/rules_pkg-0.9.0.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/0.9.0/rules_pkg-0.9.0.tar.gz",
         ],
-        sha256 = "8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675",
+        sha256 = "335632735e625d408870ec3e361e192e99ef7462315caa887417f4d88c4c8fb8",
     )
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
+        sha256 = "727f3e4edd96ea20c29e8c2ca9e8d2af724d8c7778e7923a854b2c80952bc405",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.30.0/bazel-gazelle-v0.30.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.30.0/bazel-gazelle-v0.30.0.tar.gz",
         ],
     )
 
@@ -97,10 +97,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "ca524d4df8c91838b9e80543832cf54d945e8045f6a2b9db1a1d02eec20e8b8c",
-        strip_prefix = "buildtools-6.0.1",
+        sha256 = "a75c337f4d046e560298f52ae95add73b9b933e4d6fb01ed86d57313e53b68e6",
+        strip_prefix = "buildtools-6.1.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.0.1.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/6.1.0.tar.gz",
         ],
     )
 
@@ -114,9 +114,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "4b917ffa38e5084074557bdd9a39025676922b6433cab809be26493276f00a67",
+        sha256 = "4ab2b0dd2ad4dc92cbed71a667ab74eace39b3c8dfd7054719dfa6de2d6f9433",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.58.0/pulumi-v3.58.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.63.0/pulumi-v3.63.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.63.0/pulumi-v3.63.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "6726d7dec38e5852650dace98928e6b5dbca650f6f137c829c0f62a12f8addf7",
+        sha256 = "a33401037f04d728e0fb060415f40c27cb2689cd5f12ef2cd5420a30e462b0a6",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -147,9 +147,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.63.0/pulumi-v3.63.0-linux-arm64.tar.gz",
         ],
-        sha256 = "28b12b585a080e833471af99ab4b3c1cc9a644c88d952d2a35034fcd143eaf05",
+        sha256 = "e2a40e242f0ddd12f4deff3886fa19e722bec6a8b43c4e4e5be15badb11bf885",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,

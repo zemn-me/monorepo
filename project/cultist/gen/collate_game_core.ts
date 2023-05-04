@@ -1,4 +1,5 @@
-import fs from 'fs';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export class ParsingFileError extends Error {
 	override name = 'ParsingFileError';
@@ -43,6 +44,10 @@ function mergeShallow(onto: any, source: any): any {
 
 // takes a set of not-really-json files and merges them shallowly
 async function Main(files = process.argv.slice(2)) {
+	// hackily determine if we are in the weird rules_js runtime
+	files = files.map(file =>
+		file.startsWith('bazel-out') ? path.join('../../../', file) : file
+	);
 	if (files.length == 0) {
 		throw new Error('no files provided');
 	}
