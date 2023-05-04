@@ -1,8 +1,9 @@
 load("//ts:rules.bzl", "ts_project")
-load("//js:rules.bzl", "nodejs_binary")
+load("//js:rules.bzl", "nodejs_binary", "copy_to_bin")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 load("//js:rules.bzl", "js_library")
+load("//project/cultist/gen:copy_to_local.bzl", "copy_to_local")
 
 package(default_visibility = [
     "//project/cultist:__subpackages__",
@@ -29,11 +30,18 @@ js_library(
     srcs = ["core_en.json"],
 )
 
+
+copy_to_local(
+    name = "core_sources",
+    srcs = [ "@cultistsimulator//:core" ],
+    out_dir = "cultist_files"
+)
+
 genrule(
     name = "gen_core",
-    srcs = ["@cultistsimulator//:core"],
+    srcs = [":core_sources"],
     outs = ["core_en.json"],
-    cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations @cultistsimulator//:core) > $@",
+    cmd = "./$(execpath //project/cultist/gen:collate_game_core) $(locations :core_sources) > $@",
     exec_tools = [":collate_game_core"],
     message = "generating collated game data",
 )
