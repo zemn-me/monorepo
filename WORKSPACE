@@ -118,6 +118,15 @@ npm_translate_lock(
     npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
+    # tool just breaks if you remove this lol
+    patch_args = {"*": ["-p1"]},
+    # no idea how to do this yet and while there are docs
+    # the examples have a file called 'patches' that
+    # I don't have and also don't know how to generate
+    # verify_patches = "//patches",
+    data = [
+        "//:patches/svgo@3.0.2.patch"
+    ]
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")

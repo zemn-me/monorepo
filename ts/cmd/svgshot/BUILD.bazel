@@ -15,7 +15,6 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@types/node",
-        "//:node_modules/@types/svgo",
         "//:node_modules/@types/tmp",
         "//:node_modules/commander",
         "//:node_modules/devtools-protocol",  # transitive dependency that weirdly needs to be installed
