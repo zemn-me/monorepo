@@ -6,7 +6,7 @@ def js_binary(name, **kwargs):
     _js_binary(name = name, **kwargs)
 
 def js_test(name, **kwargs):
-    _js_test(name = name, **kwargs)
+    _js_test(name = name, env = {"NODE_PATH": "."}, **kwargs)
 
 def js_library(name, **kwargs):
     _js_library(name = name, **kwargs)
