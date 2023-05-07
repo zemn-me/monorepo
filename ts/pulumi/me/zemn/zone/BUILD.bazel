@@ -6,5 +6,6 @@ ts_project(
     name = "zone",
     deps = [
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@types/node"
     ],
 )
