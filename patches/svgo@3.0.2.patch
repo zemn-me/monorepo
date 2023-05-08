@@ -1,6 +1,6 @@
 diff --git a/lib/types.d.ts b/lib/types.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..88b73182c320e4751e2b5029dffe71d497478294
+index 0000000000000000000000000000000000000000..9a99159bff0998f87df31f3f5f39d11035a193d1
 --- /dev/null
 +++ b/lib/types.d.ts
 @@ -0,0 +1,120 @@
@@ -124,7 +124,4 @@ index 0000000000000000000000000000000000000000..88b73182c320e4751e2b5029dffe71d4
 +};
 +export type DataUri = 'base64' | 'enc' | 'unenc';
 +export {};
-\ No newline at end of file
 diff --git a/lib/types.ts b/lib/types.ts
-deleted file mode 100644
-index f6260c6ab4648a21f41c377e5abb42e4d2004b84..0000000000000000000000000000000000000000

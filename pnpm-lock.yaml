@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 patchedDependencies:
   svgo@3.0.2:
-    hash: w7cdsbgasgatvaxiquzlrkvf64
+    hash: r64k733643zwssf3ga5nep6oo4
     path: patches/svgo@3.0.2.patch
 
 specifiers:
@@ -193,7 +193,7 @@ devDependencies:
   stylelint-config-css-modules: 4.2.0_stylelint@15.6.1
   stylelint-config-recommended: 12.0.0_stylelint@15.6.1
   stylelint-config-standard: 33.0.0_stylelint@15.6.1
-  svgo: 3.0.2_w7cdsbgasgatvaxiquzlrkvf64
+  svgo: 3.0.2_r64k733643zwssf3ga5nep6oo4
   tmp: 0.2.1
   ts-node: 10.9.1_lkdjsgzpfotzgs3njqeqvwrlsu
   ts-toolbelt: 9.6.0
@@ -5782,7 +5782,7 @@ packages:
     resolution: {integrity: sha512-G5qLWNq/rMvSM1EyY4E2iEd+s9km/PxLkzPkA2lghrgWJ2jrVMuB1ZsGOzL4YAWCy5sAoUw7SEQseHE2qypF2w==}
     deprecated: This is a stub types definition. svgo provides its own type definitions, so you do not need this installed.
     dependencies:
-      svgo: 3.0.2_w7cdsbgasgatvaxiquzlrkvf64
+      svgo: 3.0.2_r64k733643zwssf3ga5nep6oo4
     dev: true
 
   /@types/tmp/0.2.3:
@@ -15294,7 +15294,7 @@ packages:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
 
-  /svgo/3.0.2_w7cdsbgasgatvaxiquzlrkvf64:
+  /svgo/3.0.2_r64k733643zwssf3ga5nep6oo4:
     resolution: {integrity: sha512-Z706C1U2pb1+JGP48fbazf3KxHrWOsLme6Rv7imFBn5EnuanDW1GPaA/P1/dvObE670JDePC3mnj0k0B7P0jjQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
