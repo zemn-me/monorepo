@@ -38,7 +38,7 @@ export const bucketObjects = lib.generator(
 		for (const file of await files) {
 			yield new aws.s3.BucketObject(await file.path, {
 				key: trimPrefix(basePath, file.path),
-				bucket,
+				bucket: bucket.id,
 				contentType: mime.getType(await file.path) ?? undefined,
 				source: file,
 				acl: 'public-read',
