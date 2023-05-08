@@ -106,13 +106,13 @@ def npm_pkg(
     npm.npm_binary(
         name = name + ".publish",
         data = [name + "_dir"],
-        args = ["publish", "$(location " + name + "_dir)"],
+        args = ["publish", "$(location " + name + "_dir)", "--cache", "$$TMPDIR"],
     )
 
     npm.npm_test(
         name = name + ".publish_test",
         data = [name + "_dir"],
-        args = ["publish", "$(location " + name + "_dir)", "--dry-run"],
+        args = ["publish", "$(location " + name + "_dir)", "--dry-run", "--cache", "$$TMPDIR"],
     )
 
     pkg_srcs = srcs
