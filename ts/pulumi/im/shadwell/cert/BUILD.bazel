@@ -6,6 +6,7 @@ ts_project(
     name = "cert",
     deps = [
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/im/shadwell/zone",
     ],
 )
