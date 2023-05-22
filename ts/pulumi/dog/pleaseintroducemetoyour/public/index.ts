@@ -1,50 +1,16 @@
-import * as aws from '@pulumi/aws';
-import mime from 'mime';
-import { walk } from 'ts/fs';
-import * as lib from 'ts/pulumi/lib';
-import { trimPrefix, webBucket } from 'ts/pulumi/lib';
+import * as staticwebsite from '@pulumi/aws-static-website';
+import * as asset from '@pulumi/pulumi/asset';
+import * as cert from 'ts/pulumi/dog/pleaseintroducemetoyour/cert';
 
-const basePath = lib.path.workspace(
-	'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out'
-);
-
-export const indexPage = lib.file.asset(lib.path.join(basePath, 'index.html'));
-export const errorPage = lib.file.asset(lib.path.join(basePath, '404.html'));
-
-export const files = lib.generator(
-	(async function* () {
-		for await (const [[entity], getPath] of walk(basePath)) {
-			if (entity.isDirectory()) continue;
-			yield lib.file.asset(getPath());
-		}
-	})()
-);
-
-export const bucket = webBucket(
-	'pleaseintroducemetoyour.dog',
-	'public-read',
-	trimPrefix(
-		basePath,
-		indexPage.then(v => v.path)
-	),
-	trimPrefix(
-		basePath,
-		errorPage.then(v => v.path)
-	)
-);
-
-export const bucketObjects = lib.generator(
-	(async function* () {
-		for (const file of await files) {
-			yield new aws.s3.BucketObject(await file.path, {
-				key: trimPrefix(basePath, file.path),
-				bucket: bucket.id,
-				contentType: mime.getType(await file.path) ?? undefined,
-				source: file,
-				acl: 'public-read',
-			});
-		}
-	})()
-);
-
-export default bucket;
+export const site = new staticwebsite.Website('pleaseintroducemetoyour.dog', {
+	withCDN: true,
+	indexHTML: new asset.FileAsset(
+		'ts/pulumi/dog/pleaseintroducmetoyour/public/static/out/index.html'
+	).path,
+	error404: new asset.FileAsset(
+		'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out/404.html'
+	).path,
+	sitePath: 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out',
+	targetDomain: 'pleaseintroducemetoyour.dog',
+	certificateARN: cert.arn,
+});
