@@ -207,9 +207,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_ts",
-        sha256 = "6c216bb53ab8c475c1ea2a64ab99334b67aa8d49a5dae42c2f064443ce1d6c0e",
-        strip_prefix = "rules_ts-1.2.3",
-        url = "https://github.com/aspect-build/rules_ts/releases/download/v1.2.3/rules_ts-v1.2.3.tar.gz",
+        strip_prefix = "rules_ts-1.4.0",
+        url = "https://github.com/aspect-build/rules_ts/releases/download/v1.4.0/rules_ts-v1.4.0.tar.gz",
     )
 
     # or for core module
@@ -226,12 +225,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
     )
 
-    http_archive(
-        name = "aspect_rules_ts",
-        sha256 = "db77d904284d21121ae63dbaaadfd8c75ff6d21ad229f92038b415c1ad5019cc",
-        strip_prefix = "rules_ts-1.3.0",
-        url = "https://github.com/aspect-build/rules_ts/releases/download/v1.3.0/rules_ts-v1.3.0.tar.gz",
-    )
 
     http_archive(
         name = "aspect_rules_swc",

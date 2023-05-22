@@ -160,7 +160,7 @@ rules_ts_dependencies(
     # As per https://docs-legacy.aspect.build/aspect-build/rules_ts/v0.10.0/docs/repositories-docgen.html
     # Generate via
     # curl --silent https://registry.npmjs.org/typescript/5.0.3 | jq -r '.dist.integrity'
-    ts_integrity = "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
+    #ts_integrity = "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
     # This keeps the TypeScript version in-sync with the editor, which is typically best.
     ts_version_from = "//:package.json",
 )
