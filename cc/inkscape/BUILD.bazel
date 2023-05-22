@@ -17,6 +17,9 @@ ts_project(
     name = "inkscape_wrapper",
     srcs = ["run.ts"],
     data = [":app_image_local"],
+    deps = [
+        "//:node_modules/@types/node"
+    ]
 )
 
 js_binary(
