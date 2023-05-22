@@ -1,4 +1,5 @@
-load("//js:rules.bzl", "copy_to_bin")
+load("//js:rules.bzl", "copy_to_local", "js_binary")
+load("//ts:rules.bzl", "ts_project")
 
 alias(
     name = "app_image",
@@ -6,22 +7,24 @@ alias(
     visibility = ["//:__subpackages__"],
 )
 
-# Required to bypass FUSE restrictions on bazel.
-sh_binary(
-    name = "bin",
-    srcs = ["run.sh"],
-    data = [":app_image"],
-    env = {"APP_IMAGE": "$(location :app_image)"},
-    visibility = [
-        "//ts/cmd/svgshot:__subpackages__",
-    ],
-    deps = ["@bazel_tools//tools/bash/runfiles"],
+copy_to_local(
+    name = "app_image_local",
+    srcs = [":app_image"],
+    out_dir = "app_image_local",
 )
 
-copy_to_bin(
-    name = "inkscape_in_bin",
-    srcs = ["bin"],
-    visibility = [
-        "//ts/cmd/svgshot:__subpackages__",
+ts_project(
+    name = "inkscape_wrapper",
+    srcs = ["run.ts"],
+    data = [":app_image_local"],
+)
+
+js_binary(
+    name = "inkscape",
+    data = [
+        ":app_image_local",
+        ":inkscape_wrapper",
     ],
+    entry_point = "run.js",
+    visibility = ["//:__subpackages__"],
 )

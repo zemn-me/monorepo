@@ -41,7 +41,7 @@ jest_test(
     name = "tests",
     srcs = ["svgshot_test.js"],
     data = [
-        "//cc/inkscape:inkscape_in_bin",
+        "//cc/inkscape",
     ],
     deps = [":tests_js"],
 )

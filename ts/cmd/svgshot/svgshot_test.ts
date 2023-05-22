@@ -1,4 +1,3 @@
-import { runfiles } from '@bazel/runfiles';
 import fs from 'fs/promises';
 import tmp from 'tmp';
 import main from 'ts/cmd/svgshot/lib';
@@ -22,8 +21,7 @@ describe('svgshot', () => {
 				)
 		);
 
-		const inkscape =
-			runfiles.resolveWorkspaceRelative('cc/inkscape/run.sh');
+		const inkscape = 'cc/inkscape/inkscape.sh';
 
 		await expect(
 			main([

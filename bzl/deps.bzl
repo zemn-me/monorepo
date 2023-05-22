@@ -225,7 +225,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
     )
 
-
     http_archive(
         name = "aspect_rules_swc",
         sha256 = "5d13b0123d91d4297f60d8da0ab5771615f6ad6829bdfe69e7dcda9e5c01bc54",
