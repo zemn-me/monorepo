@@ -8,5 +8,6 @@ ts_project(
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/me/zemn/zone",
+        "//ts/pulumi/me/zemn/staging",
     ],
 )
