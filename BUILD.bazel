@@ -8,19 +8,26 @@
 
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("@npm//@bazel/esbuild:esbuild_config.bzl", "esbuild_config")
 load("//ts:rules.bzl", "ts_config")
-load("@npm//renovate:index.bzl", "renovate_config_validator_test")
+load("@npm//:renovate/package_json.bzl", "bin")
+load("@npm//:defs.bzl", "npm_link_all_packages")
 
 package(default_visibility = [":__subpackages__"])
 
-buildifier(
-    name = "buildifier",
-)
-
+# Useful commands to run!
 alias(
     name = "fix",
     actual = "//bzl:fix",
+)
+
+alias(
+    name = "pnpm",
+    # bazel run -- //:pnpm --dir $PWD
+    actual = "@pnpm//:pnpm",
+)
+
+buildifier(
+    name = "buildifier",
 )
 
 ts_config(
@@ -41,18 +48,10 @@ exports_files(
         ".editorconfig",
         ".eslintrc.json",
         "css_loader.d.ts",
-        "yarn.lock",
         ".git",
+        "jsconfig.json",
     ],
     visibility = ["//visibility:public"],
-)
-
-esbuild_config(
-    name = "esbuild_config",
-    config_file = "esbuild.config.mjs",
-    deps = [
-        "@npm//esbuild-css-modules-plugin",
-    ],
 )
 
 copy_to_bin(
@@ -60,8 +59,35 @@ copy_to_bin(
     srcs = [".swcrc.json"],
 )
 
-renovate_config_validator_test(
+copy_to_bin(
+    name = "prettierrc",
+    srcs = [".prettierrc.json"],
+)
+
+copy_to_bin(
+    name = "eslintrc",
+    srcs = [".eslintrc.json"],
+)
+
+copy_to_bin(
+    name = "gitignore",
+    srcs = [".gitignore"],
+)
+
+copy_to_bin(
+    name = "editorconfig",
+    srcs = [".editorconfig"],
+)
+
+copy_to_bin(
+    name = "package_json",
+    srcs = ["package.json"],
+)
+
+bin.renovate_config_validator_test(
     name = "validate_renovate_config_test",
     args = ["$(location renovate.json)"],
     data = ["renovate.json"],
 )
+
+npm_link_all_packages(name = "node_modules")

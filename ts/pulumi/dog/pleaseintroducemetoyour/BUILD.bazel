@@ -1,10 +1,32 @@
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//ts/pulumi/dog:__pkg__"])
+package(default_visibility = ["//ts/pulumi/dog:__subpackages__"])
 
 ts_project(
     name = "pleaseintroducemetoyour",
+    srcs = ["index.ts"],
     deps = [
+        ":cert",
+        ":zone",
         "//ts/pulumi/dog/pleaseintroducemetoyour/public",
+    ],
+)
+
+ts_project(
+    name = "cert",
+    srcs = ["cert.ts"],
+    deps = [
+        ":zone",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+    ],
+)
+
+ts_project(
+    name = "zone",
+    srcs = ["zone.ts"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@types/node",
     ],
 )

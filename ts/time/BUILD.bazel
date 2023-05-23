@@ -9,9 +9,9 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
+        "//:node_modules/@types/jest",
+        "//:node_modules/ts-toolbelt",
         "//ts",
-        "@npm//@types/jest",
-        "@npm//ts-toolbelt",
     ],
 )
 

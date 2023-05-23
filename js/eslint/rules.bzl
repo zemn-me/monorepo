@@ -1,21 +1,21 @@
-load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
+load("@npm//:eslint/package_json.bzl", "bin")
 
 def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwargs):
-    _eslint_test(
+    bin.eslint_test(
         name = name,
         data = srcs + data + [
-            "//:.prettierrc.json",
-            "//:.gitignore",
-            "//:.editorconfig",
-            "//:.eslintrc.json",
-            "@npm//eslint-plugin-prettier",
-            "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin",
-            "@npm//eslint-config-prettier",
-            "@npm//eslint-plugin-react",
-            "@npm//eslint-plugin-simple-import-sort",
+            "//:prettierrc",
+            "//:gitignore",
+            "//:editorconfig",
+            "//:eslintrc",
+            "//:node_modules/eslint-plugin-prettier",
+            "//:node_modules/@typescript-eslint/parser",
+            "//:node_modules/@typescript-eslint/eslint-plugin",
+            "//:node_modules/eslint-config-prettier",
+            "//:node_modules/eslint-plugin-react",
+            "//:node_modules/eslint-plugin-simple-import-sort",
         ],
-        args = args + ["--ignore-path", "$(location //:.gitignore)"] +
+        args = args + ["--ignore-path", "$(location //:gitignore)"] +
                ["$(location " + x + ")" for x in data + srcs],
         tags = tags + ["+formatting"],
     )

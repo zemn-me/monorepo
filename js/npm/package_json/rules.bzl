@@ -1,4 +1,4 @@
-load("//js:rules.bzl", "nodejs_binary")
+load("//js:rules.bzl", "js_binary", "js_run_binary")
 
 def package_json(name, targets, template, version, depSpec):
     """
@@ -12,47 +12,31 @@ def package_json(name, targets, template, version, depSpec):
         expression = query_expression,
     )
 
-    genrule_name = name + "_gen"
-    nodejs_binary(
-        name = genrule_name,
-        data = [
-            "//:package.json",
-            genquery_name,
-            template,
-            "//js/npm/package_json:gen_pkgjson",
-        ],
-        entry_point = "//js/npm/package_json:gen_pkgjson.js",
-    )
-
-    native.genrule(
+    js_run_binary(
         name = name,
+        tool = "//js/npm/package_json:gen_pkgjson_bin",
         srcs = [
-            "@npm//commander",
-            "//:package.json",
+            "//:package_json",
             genquery_name,
-            template,
-            "@npm//@bazel/runfiles",
             "//js/npm/package_json:gen_pkgjson",
-        ] + [version],
-        cmd = "$(execpath " + genrule_name + ") " +
-              " ".join(
-                  [
-                      "--out",
-                      "$(execpath package.json)",
-                      "--base",
-                      "$(location //:package.json)",
-                      "--query",
-                      "$(location " + genquery_name + ")",
-                      "--merge",
-                      "$(location " + template + ")",
-                      "--version",
-                      "$(location " + version + ")",
-                      "--package_name",
-                      native.package_name(),
-                      "--depOnlyOut",
-                      "$(execpath " + depSpec + ")",
-                  ],
-              ),
+            template,
+            version,
+        ],
+        args = [
+            "--out",
+            "../../../$(execpath package.json)",
+            "--base",
+            "../../../$(location //:package_json)",
+            "--query",
+            "../../../$(location " + genquery_name + ")",
+            "--merge",
+            "../../../$(location " + template + ")",
+            "--version",
+            "../../../$(location " + version + ")",
+            "--package_name",
+            native.package_name(),
+            "--depOnlyOut",
+            "../../../$(execpath " + depSpec + ")",
+        ],
         outs = ["package.json", depSpec],
-        tools = [genrule_name],
     )

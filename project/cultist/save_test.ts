@@ -1,5 +1,5 @@
-import SaveStateExample from 'monorepo/project/cultist/example/savestate';
-import * as save from 'monorepo/project/cultist/save';
+import SaveStateExample from 'project/cultist/example/savestate';
+import * as save from 'project/cultist/save';
 
 test('savestate', () => {
 	const test: save.State = SaveStateExample;

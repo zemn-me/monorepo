@@ -1,143 +1,74 @@
-load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo")
+load("@npm//:@microsoft/api-extractor/package_json.bzl", "bin")
+load("//js/api-extractor/config_gen:rules.bzl", "api_extractor_config")
+load("//js:rules.bzl", "copy_to_bin")
 
-def _api_extractor_impl(ctx):
-    output_files = []
-    args = []
-
-    tsdocMetadata = {
-        "enabled": False,
-    }
-
-    if ctx.attr.tsdocMetadata != None:
-        tsdocMetadata["enabled"] = True
-        tsdocMetadata["tsdocMetadataFilePath"] = "<projectFolder>/" + ctx.outputs.tsdocMetadata.path
-        output_files = output_files + [ctx.outputs.tsdocMetadata]
-
-    dtsRollup = {
-        "enabled": False,
-    }
-
-    if ctx.attr.untrimmedRollup != None:
-        dtsRollup["enabled"] = True
-        dtsRollup["untrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.untrimmedRollup.path
-        output_files = output_files + [ctx.outputs.untrimmedRollup]
-
-    if ctx.attr.alphaTrimmedRollup != None:
-        dtsRollup["enabled"] = True
-        dtsRollup["alphaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.alphaTrimmedRollup.path
-        output_files = output_files + [ctx.outputs.alphaTrimmedRollup]
-
-    if ctx.attr.betaTrimmedRollup != None:
-        dtsRollup["enabled"] = True
-        dtsRollup["betaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.betaTrimmedRollup.path
-        output_files = output_files + [ctx.outputs.betaTrimmedRollup]
-
-    if ctx.attr.publicTrimmedRollup != None:
-        dtsRollup["enabled"] = True
-        dtsRollup["betaTrimmedFilePath"] = "<projectFolder>/" + ctx.outputs.publicTrimmedRollup.path
-        output_files = output_files + [ctx.outputs.publicTrimmedRollup]
-
-    docModel = {
-        "enabled": False,
-    }
-
-    if ctx.attr.docModel != None:
-        docModel["enabled"] = True
-        docModel["apiJsonFilePath"] = "<projectFolder>/" + ctx.outputs.docModel.path
-        output_files = output_files + [ctx.outputs.docModel]
-
-    apiReport = {
-        "enabled": False,
-    }
-
-    if ctx.attr.report != None:
-        # Will not actually generate unless it thinks it's doing a 'local'
-        # build due to intended development flow
-        args.append("--local")
-        apiReport["enabled"] = True
-        apiReport["reportFileName"] = ctx.outputs.report.basename
-        apiReport["reportFolder"] = "<projectFolder>/" + ctx.outputs.report.dirname
-        output_files = output_files + [ctx.outputs.report]
-
-    compiler = {}
-
-    compiler["tsconfigFilePath"] = "<projectFolder>/" + ctx.file.ts_config.path
-
-    config = {
-        "mainEntryPointFilePath": "<projectFolder>/" + ctx.file.entry_point.path,
-        "apiReport": apiReport,
-        "compiler": compiler,
-        "docModel": docModel,
-        "dtsRollup": dtsRollup,
-        "projectFolder": "/".join([".." for _ in ctx.attr.package_name.split("/")] + ["..", "..", ".."]),
-        "tsdocMetadata": tsdocMetadata,
-    }
-
-    ctx.actions.write(
-        output = ctx.outputs.config,
-        content = json.encode_indent(config),
+def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdoc-metadata.json", doc_model = None, report = None, srcs = None, public_trimmed_rollup = None, entry_point = None, config = "api-extractor.json", **kwargs):
+    copy_to_bin(
+        name = name + "_main_entry_point_in_bin",
+        srcs = [entry_point],
     )
 
-    inputs = [ctx.outputs.config, ctx.file.entry_point, ctx.file.ts_config, ctx.file.package_json] + ctx.files.srcs
+    outs = []
 
-    for deps in [src[DeclarationInfo].transitive_declarations.to_list() for src in ctx.attr.srcs if DeclarationInfo in src]:
-        inputs += deps
+    if doc_model != None:
+        outs.append(doc_model)
 
-    ctx.actions.run(
-        outputs = output_files,
-        inputs = inputs,
-        executable = ctx.executable.api_extractor_binary,
-        arguments = ["run", "--config", ctx.outputs.config.path] + args,
-        mnemonic = "ApiExtractor",
-        progress_message = "Running api-extractor (https://api-extractor.com)",
+    if report != None:
+        outs.append(report)
+
+    if public_trimmed_rollup != None:
+        outs.append(public_trimmed_rollup)
+
+    if tsdoc_metadata != None:
+        outs.append(tsdoc_metadata)
+
+    project_folder = "/".join([".." for x in native.package_name().split("/")])
+    api_extractor_config(
+        name = name + "_config",
+        out = config,
+        entry_point = name + "_main_entry_point_in_bin",
+        public_trimmed_rollup =
+            native.package_name() + "/" + public_trimmed_rollup if public_trimmed_rollup != None else None,
+        report = native.package_name() + "/" + report,
+        ts_config = "//:tsconfig",
+        project_folder = project_folder,
+        doc_model = native.package_name() + "/" + doc_model if doc_model != None else None,
+        tsdoc_metadata = native.package_name() + "/" + tsdoc_metadata,
     )
 
-_api_extractor_rule = rule(
-    implementation = _api_extractor_impl,
-    attrs = {
-        "entry_point": attr.label(mandatory = True, allow_single_file = True),
-        "ts_config": attr.label(mandatory = True, allow_single_file = True),
-        # must be DeclarationInfo (.d.ts files)
-        "srcs": attr.label_list(mandatory = True, allow_files = True, allow_empty = False),
-        "package_json": attr.label(mandatory = True, allow_single_file = True),
-        "api_extractor_binary": attr.label(mandatory = True, executable = True, cfg = "target"),
-        "report": attr.output(),
-        "docModel": attr.output(),
-        "untrimmedRollup": attr.output(),
-        "alphaTrimmedRollup": attr.output(),
-        "betaTrimmedRollup": attr.output(),
-        "publicTrimmedRollup": attr.output(),
-        "tsdocMetadata": attr.output(),
-        "config": attr.output(),
-        "package_name": attr.string(mandatory = True),
-    },
-)
+    native.filegroup(
+        name = name + "_types",
+        srcs = srcs,
+        output_group = "types",
+    )
+
+    copy_to_bin(
+        name = name + "_config_in_bin",
+        srcs = [name + "_config"],
+    )
+
+    bin.api_extractor(
+        name = name,
+        srcs = srcs + [name + "_types", package_json, "//:tsconfig", name + "_config_in_bin", name + "_main_entry_point_in_bin"],
+        args = ["run", "--local", "--config", "../../../$(location " + name + "_config_in_bin)"],
+        outs = outs,
+        **kwargs
+    )
 
 """
         config="api-extractor.json",
         report= 'report.api.md',
-        docModel = 'model.api.json',
+        doc_model = 'model.api.json',
         untrimmedRollup= 'api.d.ts',
         alphaTrimmedRollup= 'api-alpha.d.ts',
         betaTrimmedRollup= 'api-beta.d.ts',
-        publicTrimmedRollup=  'api-public.d.ts',
+        public_trimmed_rollup=  'api-public.d.ts',
         tsdocMetadata= 'tsdoc-metadata.json',
 
         report= report,
         untrimmedRollup= untrimmedRollup,
-        docModel = docModel,
+        doc_model = doc_model,
         alphaTrimmedRollup= alphaTrimmedRollup,
         betaTrimmedRollup= betaTrimmedRollup,
-        publicTrimmedRollup=  publicTrimmedRollup,
+        public_trimmed_rollup=  public_trimmed_rollup,
 """
-
-def api_extractor(name, config = "api-extractor.json", **kwargs):
-    _api_extractor_rule(
-        name = name,
-        config = config,
-        ts_config = "//:tsconfig",
-        api_extractor_binary = "@npm//@microsoft/api-extractor/bin:api-extractor",
-        package_json = "//:package.json",
-        package_name = native.package_name(),
-        **kwargs
-    )

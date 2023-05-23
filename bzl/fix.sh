@@ -16,11 +16,10 @@ function realpath {
   readlink -f -- "$@"
 }
 
-
-FIX_BAZEL=$(realpath $(rlocation monorepo/buildifier.bash))
-FIX_CSS=$(realpath $(rlocation monorepo/css/lint/lint.sh))
-FIX_GO=$(realpath $(rlocation go_sdk/bin/gofmt))
-FIX_JS=$(realpath $(rlocation npm/eslint/bin/eslint.sh))
+FIX_CSS="$(realpath $FIX_CSS)"
+FIX_GO="$(realpath $FIX_GO)"
+FIX_JS="$(realpath $FIX_JS)"
+FIX_BAZEL="$(realpath $FIX_BAZEL)"
 
 echo Fixing CSS files... 1>&2
 (cd $BUILD_WORKSPACE_DIRECTORY
@@ -28,7 +27,6 @@ git ls-files --cached --modified --other --exclude-standard | uniq | grep .css$ 
 echo Fixing Go files... 1>&2
 $FIX_GO -s -w .
 echo Fixing Typescript, Javascript, json files... 1>&2
-# this breaks all the time and yarn run @npm//eslint/bin:eslint fixes it. God only knows why
 $FIX_JS --fix --ignore-pattern 'project/ck3/base_game/*' --ignore-path .gitignore "$BUILD_WORKSPACE_DIRECTORY"'/**/*.ts' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.js' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.tsx' "$BUILD_WORKSPACE_DIRECTORY"'/**/*.json') || true # ignore failures. it fails often
 echo Fixing bazel files... 1>&2
 $FIX_BAZEL --lint=fix -r $INIT_CWD

@@ -8,8 +8,8 @@ import { UpResult } from '@pulumi/pulumi/automation';
 import child_process from 'child_process';
 import { Command } from 'commander';
 import fs from 'fs/promises';
-import { isDefined } from 'monorepo/ts/guard';
-import pulumiUp from 'monorepo/ts/pulumi/run';
+import { isDefined } from 'ts/guard';
+import pulumiUp from 'ts/pulumi/run';
 import { promisify } from 'util';
 
 import { context as mockContext, Github as mockGithub } from './mocks';
@@ -412,13 +412,13 @@ export const program = ({
 					'recursive_vassals.patch',
 					'//project/ck3/recursive-vassals/mod.patch'
 				),
-				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/svgshot.tgz'),
+				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/npm_pkg.tgz'),
 				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh'),
 				npmPackage('do-sync', '//ts/do-sync/npm_pkg.publish.sh'),
-				artifact('svgshot.tar.gz', '//ts/do-sync/do-sync.tgz'),
+				artifact('svgshot.tar.gz', '//ts/do-sync/npm_pkg.tgz'),
 				artifact(
 					'knowitwhenyouseeit.tar.gz',
-					'//ts/knowitwhenyouseeit/knowitwhenyouseeit.tgz'
+					'//ts/knowitwhenyouseeit/npm_pkg.tgz'
 				),
 				npmPackage(
 					'knowitwhenyouseeit',

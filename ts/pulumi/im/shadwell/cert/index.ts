@@ -1,6 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
-import { zone } from 'monorepo/ts/pulumi/im/shadwell/zone';
+import { zone } from 'ts/pulumi/im/shadwell/zone';
 
 export const cert = new aws.acm.Certificate('shadwell.im_cert', {
 	domainName: zone.name,

@@ -1,5 +1,5 @@
-import { some, walk } from 'monorepo/ts/iter';
 import React from 'react';
+import { some, walk } from 'ts/iter';
 
 /**
  * useClickedOff sets up an event handler for if a click happened *not* on

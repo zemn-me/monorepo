@@ -1,4 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+
+package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "gen_pkgjson",
@@ -7,10 +10,18 @@ ts_project(
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@schemastore/package",
+        "//:node_modules/@types/node",
+        "//:node_modules/commander",
         "//ts",
-        "@npm//@bazel/runfiles",
-        "@npm//@schemastore/package",
-        "@npm//@types/node",
-        "@npm//commander",
     ],
+)
+
+js_binary(
+    name = "gen_pkgjson_bin",
+    data = [
+        ":gen_pkgjson",
+    ],
+    entry_point = "//js/npm/package_json:gen_pkgjson.js",
 )

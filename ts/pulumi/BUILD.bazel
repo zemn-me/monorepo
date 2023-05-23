@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "jest_test", "nodejs_binary", "ts_project")
+load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 
 package(default_visibility = ["//deploy:__subpackages__"])
 
@@ -13,13 +13,13 @@ filegroup(
 ts_project(
     name = "pulumi",
     deps = [
+        "//:node_modules/@types/cross-spawn",
+        "//:node_modules/@types/jest",
+        "//:node_modules/cross-spawn",
         "//ts/pulumi/dog",
         "//ts/pulumi/im",
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/me",
-        "@npm//@types/cross-spawn",
-        "@npm//@types/jest",
-        "@npm//cross-spawn",
     ],
 )
 
@@ -29,7 +29,7 @@ jest_test(
     deps = [":pulumi"],
 )
 
-nodejs_binary(
+js_binary(
     name = "preview",
     data = [
         ":pulumi",

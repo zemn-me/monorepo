@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export * as config from 'monorepo/ts/next.js/next.config';
+export * as config from 'ts/next.js/next.config';
 
 export function HeaderTags() {
 	return (

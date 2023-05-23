@@ -78,11 +78,11 @@
 		"regenerator-runtime": "0.13.11",
 		"renovate": "^34.159.2",
 		"sharp": "0.32.1",
-		"svgo": "3.0.2",
 		"stylelint": "15.6.2",
 		"stylelint-config-css-modules": "4.2.0",
 		"stylelint-config-recommended": "12.0.0",
 		"stylelint-config-standard": "33.0.0",
+		"svgo": "3.0.2",
 		"tmp": "0.2.1",
 		"ts-node": "10.9.1",
 		"ts-toolbelt": "9.6.0",
@@ -97,11 +97,24 @@
 		"fix": "yarn bazel run //:fix",
 		"dev": "yarn run ibazel --run_output --run_output_interactive=false test",
 		"pr": "gh pr create -f; gh pr merge -md --auto",
-		"repin": "CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo"
+		"repin": "CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo",
+		"pnpm": "bazel run -- @pnpm//:pnpm --dir $PWD"
 	},
 	"dependencies": {
+		"@commander-js/extra-typings": "^10.0.3",
+		"@pulumi/aws-static-website": "^0.4.0",
 		"@pulumi/command": "4.5.0",
 		"@types/bcryptjs": "2.4.2",
-		"glob-promise": "6.0.2"
+		"csstype": "^3.1.1",
+		"devtools-protocol": "^0.0.1116775",
+		"glob-promise": "6.0.2",
+		"json-schema-to-typescript": "^12.0.0",
+		"npm": "^9.5.1",
+		"pnpm": "^7.30.3"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"svgo@3.0.2": "patches/svgo@3.0.2.patch"
+		}
 	}
 }

@@ -1,6 +1,6 @@
 load("//bzl/hash:rules.bzl", "hashes")
-load("//js:rules.bzl", "generated_file_test")
 load("@rules_python//python:defs.bzl", "py_binary")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 def semver_version(name, major = None, minor = None, patch = None, **kwargs):
     _semver_version(
@@ -82,10 +82,10 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
         srcs = srcs + [version],
     )
 
-    generated_file_test(
+    diff_test(
         name = name,
-        generated = hashes_name,
-        src = version_lock,
+        file1 = hashes_name,
+        file2 = version_lock,
         tags = tags + ["version_check", "fixable"],
     )
 

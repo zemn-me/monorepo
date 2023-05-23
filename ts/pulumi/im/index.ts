@@ -1,1 +1,1 @@
-export * as shadwell from 'monorepo/ts/pulumi/im/shadwell';
+export * as shadwell from 'ts/pulumi/im/shadwell';

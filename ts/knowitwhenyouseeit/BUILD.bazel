@@ -11,11 +11,11 @@ ts_project(
         "index.ts",
     ],
     deps = [
-        "@npm//@types/bcryptjs",
-        "@npm//@types/node",
-        "@npm//bcryptjs",
-        "@npm//react",
-        "@npm//react-dom",
+        "//:node_modules/@types/bcryptjs",
+        "//:node_modules/@types/node",
+        "//:node_modules/bcryptjs",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
     ],
 )
 
@@ -24,7 +24,7 @@ ts_project(
     srcs = ["main_test.ts"],
     deps = [
         ":project",
-        "@npm//@types/jest",
+        "//:node_modules/@types/jest",
     ],
 )
 
@@ -39,7 +39,7 @@ jest_test(
 
 npm_pkg(
     name = "npm_pkg",
-    package_name = "knowitwhenyouseeit",
+    srcs = [":project"],
     api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/major",
@@ -47,8 +47,6 @@ npm_pkg(
     patch_version = "version/patch",
     pkg_json_base = "package.template.json",
     readme = "README.md",
-    tgz = "knowitwhenyouseeit.tgz",
     version_lock = ".version.lock",
     visibility = ["//deploy:__subpackages__"],
-    deps = [":project"],
 )

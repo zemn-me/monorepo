@@ -1,10 +1,10 @@
-load("@npm//stylelint:index.bzl", "stylelint_test")
+load("@npm//:stylelint/package_json.bzl", "bin")
 
 def css_lint(name = None, srcs = [], **kwargs):
-    stylelint_test(
+    bin.stylelint_test(
         name = name,
         data = ["//css/lint:stylelint_config"] + srcs,
-        templated_args = [
+        args = [
             "--config",
             "css/lint/stylelint-config.json",
         ] + [

@@ -9,9 +9,12 @@ def _api_documenter_impl(ctx):
         outputs = [dir],
         inputs = [ctx.file.input_directory],
         executable = ctx.executable.api_documenter_binary,
-        arguments = ["markdown", "-i", ctx.file.input_directory.path, "-o", dir.path],
+        arguments = ["markdown", "-i", "../../../" + ctx.file.input_directory.path, "-o", dir.path],
         mnemonic = "APIDocumenter",
-        progress_message = "Running api-documeneter (https://api-extractor.com)",
+        progress_message = "Running api-documenter (https://api-extractor.com)",
+        env = {
+            "BAZEL_BINDIR": ctx.var["BINDIR"],
+        },
     )
 
     return [
@@ -29,15 +32,15 @@ _api_documenter_rule = rule(
     },
 )
 
-def api_documenter(name, docModel = None, **kwargs):
+def api_documenter(name, doc_model = None, **kwargs):
     copy_to_directory(
-        name = name + "_docModel_dir",
-        srcs = [docModel],
+        name = name + "_doc_model_dir",
+        srcs = [doc_model],
     )
 
     _api_documenter_rule(
         name = name,
-        api_documenter_binary = "@npm//@microsoft/api-documenter/bin:api-documenter",
-        input_directory = ":" + name + "_docModel_dir",
+        api_documenter_binary = "//js/api-documenter:api_documenter_binary",
+        input_directory = ":" + name + "_doc_model_dir",
         **kwargs
     )

@@ -1,5 +1,5 @@
 load("//git:rules.bzl", "git_commit_affecting_files", "source_files_for_rule")
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 git_commit_affecting_files(
     name = "affected_files_basic_ref",
@@ -16,8 +16,8 @@ source_files_for_rule(
     rule = ":test_file_group",
 )
 
-generated_file_test(
+diff_test(
     name = "source_files_for_rule_test",
-    src = "source_files_for_rule.golden",
-    generated = ":test_source_files_for_rule_gen",
+    file1 = "source_files_for_rule.golden",
+    file2 = ":test_source_files_for_rule_gen",
 )

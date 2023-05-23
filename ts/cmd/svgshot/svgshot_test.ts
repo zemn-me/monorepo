@@ -1,7 +1,6 @@
-import { runfiles } from '@bazel/runfiles';
 import fs from 'fs/promises';
-import main from 'monorepo/ts/cmd/svgshot/lib';
 import tmp from 'tmp';
+import main from 'ts/cmd/svgshot/lib';
 
 jest.setTimeout(30000);
 
@@ -22,8 +21,7 @@ describe('svgshot', () => {
 				)
 		);
 
-		const inkscape =
-			runfiles.resolveWorkspaceRelative('cc/inkscape/run.sh');
+		const inkscape = 'cc/inkscape/inkscape.sh';
 
 		await expect(
 			main([

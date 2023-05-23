@@ -1,5 +1,6 @@
-load("//js:rules.bzl", "generated_file_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 load("//rs/css/module:rules.bzl", "css_module_rule")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 genrule(
     name = "gen_basic_output",
@@ -16,16 +17,16 @@ genrule(
     exec_tools = ["//rs/css/module"],
 )
 
-generated_file_test(
+diff_test(
     name = "testing_css_module_generation",
-    src = ":basic.compiled.css",
-    generated = ":basic.output.compiled.css",
+    file1 = ":basic.compiled.css",
+    file2 = ":basic.output.compiled.css",
 )
 
-generated_file_test(
+diff_test(
     name = "testing_json_generation",
-    src = ":basic.output.golden.ts",
-    generated = ":basic.output.ts",
+    file1 = ":basic.output.golden.ts",
+    file2 = ":basic.output.ts",
 )
 
 test_suite(

@@ -24,7 +24,7 @@ export async function run(
 			stackName: 'prod',
 			projectName: 'monorepo-2', // be very, very careful in changing this
 			async program() {
-				require('monorepo/ts/pulumi/index');
+				require('ts/pulumi/index');
 			},
 		});
 

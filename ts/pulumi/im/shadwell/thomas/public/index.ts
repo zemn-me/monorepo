@@ -1,32 +1,13 @@
-import { runfiles } from '@bazel/runfiles';
-import * as aws from '@pulumi/aws';
-import mime from 'mime';
-import * as lib from 'monorepo/ts/pulumi/lib';
-import path from 'path';
+import * as staticwebsite from '@pulumi/aws-static-website';
+import * as asset from '@pulumi/pulumi/asset';
+import * as cert from 'ts/pulumi/im/shadwell/cert';
 
-const basePath = 'ts/pulumi/im/shadwell/thomas/public';
-
-const file =
-	(bucket: aws.s3.BucketObjectArgs['bucket']) => (relativePath: string) => {
-		const workspacePath = path.posix.join(basePath, relativePath);
-		const absolutePath = runfiles.resolveWorkspaceRelative(workspacePath);
-		return new aws.s3.BucketObject(workspacePath, {
-			key: workspacePath,
-			bucket,
-			contentType: mime.getType(absolutePath) || undefined,
-			source: lib.file.asset(absolutePath),
-			acl: 'public-read',
-		});
-	};
-
-export const bucket = lib.webBucket(
-	'thomas.shadwell.im',
-	'public-read',
-	'index.html'
-);
-
-const File = file(bucket);
-
-export const index = File('index.html');
-
-export default bucket;
+export const site = new staticwebsite.Website('thomas.shadwell.im', {
+	withCDN: true,
+	indexHTML: new asset.FileAsset(
+		'ts/pulumi/im/shadwell/thomas/public/index.html'
+	).path,
+	sitePath: 'ts/pulumi/im/shadwell/thomas/public',
+	targetDomain: 'thomas.shadwell.im',
+	certificateARN: cert.arn,
+});

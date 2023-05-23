@@ -5,10 +5,10 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "lib",
     deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
         "//ts/iter",
-        "@npm//@bazel/runfiles",
-        "@npm//@pulumi/aws",
-        "@npm//@pulumi/pulumi",
-        "@npm//@types/node",
     ],
 )

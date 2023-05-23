@@ -1,9 +1,9 @@
-load("@npm//next:index.bzl", "next")
+load("@npm//:next/package_json.bzl", "bin")
 load("//git:rules.bzl", "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "copy_to_bin")
 
 def next_project(name, srcs, **kwargs):
-    distDir = "build"
     target = "node_modules/monorepo/" + native.package_name()
 
     native.filegroup(
@@ -38,34 +38,40 @@ def next_project(name, srcs, **kwargs):
         """,
     )
 
+    # create a jsconfig allowing imports from root
+    native.genrule(
+        name = name + "_jsconfig",
+        outs = ["jsconfig.json"],
+        cmd_bash = """
+            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([".." for x in native.package_name().split("/")]) + """\" }}' > $@
+        """,
+    )
+
     ts_project(
         name = name + "_next_config",
         srcs = ["next.config.ts"],
     )
 
-    srcs = srcs + [":" + name + "_next_config"]
+    srcs = srcs + [
+        ":" + name + "_next_config",
+        name + "_jsconfig",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/node",
+        "//:node_modules/typescript",
+        "//:node_modules/next",
+    ]
 
-    next(
-        name = name + ".dev",
-        data = srcs,
-        link_workspace_root = True,
-        args = ["dev", target],
-    )
-
-    next(
-        name = distDir,
-        data = srcs,
-        link_workspace_root = True,
-        args = ["build", target],
+    bin.next(
+        name = "build",
+        srcs = srcs,
+        args = ["build", native.package_name(), "--no-lint"],
         output_dir = True,
-        silent_on_success = True,
     )
 
-    next(
+    bin.next(
         name = "out",
-        data = [":build"] + srcs,
-        args = ["export", target],
-        link_workspace_root = True,
+        srcs = [":build"] + srcs,
+        args = ["export", native.package_name()],
         output_dir = True,
         silent_on_success = True,
     )

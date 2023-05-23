@@ -10,6 +10,6 @@ ts_project(
     srcs = ["jest_reporter.ts"],
     visibility = ["//visibility:public"],
     deps = [
-        "@npm//@types/node",
+        "//:node_modules/@types/node",
     ],
 )

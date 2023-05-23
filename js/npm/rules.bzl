@@ -1,9 +1,11 @@
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("//js/api-documenter:rules.bzl", "api_documenter")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
-load("//js:rules.bzl", "pkg_npm")
+load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
+load("@npm//:npm/package_json.bzl", npm = "bin")
+load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 
 def _exclude_all_external_rule(ctx):
     return DefaultInfo(files = depset([
@@ -21,7 +23,6 @@ exclude_all_external_rule = rule(
 
 def npm_pkg(
         name,
-        package_name,
         pkg_json_base,
         srcs = [],
         deps = [],
@@ -56,25 +57,20 @@ def npm_pkg(
 
     pkg_json_name = name + "_package_json"
     package_json(
-        name = pkg_json_name,
+        name = pkg_json_name + "_gen",
         # Won't be srcs I am fairly sure? because srcs are never
         # generated and so can't have deps
-        targets = deps,
+        # nevermind, cause of weird rules_js semantics i added
+        # srcs too.
+        targets = deps + srcs,
         template = pkg_json_base,
         version = ":version",
         depSpec = dep_spec_name,
     )
 
-    # I am unware of if npm uses this during publication.
-    # It is possible it is used to prevent tampering, but
-    # it forms no part of the final package.
-    # See: https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json/
-    lockfile_name = name + "_lockfile"
-    native.genrule(
-        name = lockfile_name,
-        srcs = ["//:yarn.lock"],
-        cmd_bash = "cp $< $@",
-        outs = ["yarn.lock"],
+    copy_to_bin(
+        name = pkg_json_name,
+        srcs = [pkg_json_name + "_gen"],
     )
 
     api_extractor(
@@ -82,30 +78,48 @@ def npm_pkg(
         entry_point = external_api_dts_root,
         srcs = srcs + deps,
         report = "api_gen.md",
-        publicTrimmedRollup = "public.d.ts",
-        docModel = ".api.json",
+        public_trimmed_rollup = "public.d.ts",
+        doc_model = ".api.json",
     )
 
     api_documenter(
         name = name + "_docs",
         output_directory = "docs",
-        docModel = ".api.json",
+        doc_model = ".api.json",
     )
 
     copy_to_directory(
         name = name + "_dir",
-        srcs = srcs + deps + [pkg_json_name, lockfile_name, "public.d.ts", readme],
+        srcs = srcs + deps + [pkg_json_name, "public.d.ts", readme],
         replace_prefixes = {
             "public.d.ts": "index.d.ts",
         },
     )
 
+    pkg_tar(
+        name = name + "_tar",
+        srcs = [name + "_dir"],
+        extension = ".tgz",
+        out = name + ".tgz",
+    )
+
+    npm.npm_binary(
+        name = name + ".publish",
+        data = [name + "_dir"],
+        args = ["publish", "$(location " + name + "_dir)", "--cache", "$$TMPDIR"],
+    )
+
+    npm.npm_test(
+        name = name + ".publish_test",
+        data = [name + "_dir"],
+        args = ["publish", "$(location " + name + "_dir)", "--dry-run", "--cache", "$$TMPDIR"],
+    )
+
     pkg_srcs = srcs
-    pkg_deps = deps + [pkg_json_name, lockfile_name]
+    pkg_deps = deps + [pkg_json_name]
     pkg_npm(
         name = name,
-        package_name = package_name,
-        deps = [name + "_dir"],
+        srcs = [name + "_dir"],
         tgz = tgz,
         visibility = visibility,
     )

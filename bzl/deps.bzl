@@ -18,12 +18,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "build_bazel_rules_nodejs",
-        sha256 = "94070eff79305be05b7699207fbac5d2608054dd53e6109f7d00d923919ff45a",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.2/rules_nodejs-5.8.2.tar.gz"],
-    )
-
-    http_archive(
         name = "rules_python",
         sha256 = "94750828b18044533e98a129003b6a68001204038dc4749f40b195b24c38f49f",
         strip_prefix = "rules_python-0.21.0",
@@ -145,7 +139,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-x64.tar.gz",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -167,7 +160,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-arm64.zip",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -178,7 +170,6 @@ exports_files(glob(["**/*"]))
         urls = [
             "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-x64.zip",
         ],
-        
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -209,14 +200,45 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
-        name = "aspect_rules_swc",
-        sha256 = "814bc08efbbe4d5e238579c9b0cded519b199486fbc26709fcf6d4d47de08f50",
-        strip_prefix = "rules_swc-0.20.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.20.2.tar.gz",
-    )
-
-    http_archive(
         name = "rules_rust",
         sha256 = "50272c39f20a3a3507cb56dcb5c3b348bda697a7d868708449e2fa6fb893444c",
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.22.0/rules_rust-v0.22.0.tar.gz"],
+    )
+
+    http_archive(
+        name = "aspect_rules_ts",
+        strip_prefix = "rules_ts-1.4.0",
+        url = "https://github.com/aspect-build/rules_ts/releases/download/v1.4.0/rules_ts-v1.4.0.tar.gz",
+    )
+
+    # or for core module
+    http_archive(
+        name = "rules_nodejs",
+        sha256 = "08337d4fffc78f7fe648a93be12ea2fc4e8eb9795a4e6aa48595b66b34555626",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-core-5.8.0.tar.gz"],
+    )
+
+    http_archive(
+        name = "aspect_rules_js",
+        sha256 = "3ad6684d744ebbc6592d404cc3aa81d0da634eccb3499f6fd198ae122fa28489",
+        strip_prefix = "rules_js-1.19.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
+    )
+
+    http_archive(
+        name = "aspect_rules_swc",
+        sha256 = "5d13b0123d91d4297f60d8da0ab5771615f6ad6829bdfe69e7dcda9e5c01bc54",
+        strip_prefix = "rules_swc-1.0.0-rc0",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
+    )
+
+    # Got no idea why but MS doesn't publish versions of this...
+    http_archive(
+        name = "microsoft_json_schemas",
+        url = "https://github.com/microsoft/json-schemas/archive/80a53a431ec7f450ec5ccff95ae5d6c7330e368c.zip",
+        strip_prefix = "json-schemas-80a53a431ec7f450ec5ccff95ae5d6c7330e368c",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "08af3e0cac15205cdeae2fab73ff106278a58a1c50f18349e6333e4834bbb2b0",
     )
