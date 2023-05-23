@@ -1,5 +1,4 @@
 import * as vec from 'ts/math/vec';
-
 import style from 'ts/next.js/testing/example/pages/index.module.css';
 
 export default function Home() {
