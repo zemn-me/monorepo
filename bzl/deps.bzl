@@ -220,9 +220,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "3ad6684d744ebbc6592d404cc3aa81d0da634eccb3499f6fd198ae122fa28489",
-        strip_prefix = "rules_js-1.19.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
+        sha256 = "08061ba5e5e7f4b1074538323576dac819f9337a0c7d75aee43afc8ae7cb6e18",
+        strip_prefix = "rules_js-1.26.1",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.26.1/rules_js-v1.26.1.tar.gz",
     )
 
     http_archive(
