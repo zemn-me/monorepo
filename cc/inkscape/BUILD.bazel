@@ -18,8 +18,8 @@ ts_project(
     srcs = ["run.ts"],
     data = [":app_image_local"],
     deps = [
-        "//:node_modules/@types/node"
-    ]
+        "//:node_modules/@types/node",
+    ],
 )
 
 js_binary(

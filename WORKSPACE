@@ -118,11 +118,6 @@ npm_translate_lock(
     data = [
         "//:patches/svgo@3.0.2.patch",
     ],
-    npmrc = "//:.npmrc",
-    # tool just breaks if you remove this lol
-    patch_args = {"*": ["-p1"]},
-    pnpm_lock = "//:pnpm-lock.yaml",
-    verify_node_modules_ignored = "//:.bazelignore",
     # https://github.com/aspect-build/rules_js/blob/11d3c4655b07d3094e0682a75402e972e8dae361/WORKSPACE#L139
     lifecycle_hooks_execution_requirements = {
         "puppeteer": [
@@ -130,8 +125,13 @@ npm_translate_lock(
             # Workaround Engflow not honoring requires-network on build actions
             "no-remote-exec",
             "requires-network",
-      ],
-    }
+        ],
+    },
+    npmrc = "//:.npmrc",
+    # tool just breaks if you remove this lol
+    patch_args = {"*": ["-p1"]},
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
