@@ -36,8 +36,10 @@ ts_project(
 
 js_binary(
     name = "release",
-    data = [":release_src"],
-    entry_point = "release.ts",
+    data = [
+        ":release_src"
+    ],
+    entry_point = "release.js",
 )
 
 js_test(
