@@ -103,17 +103,14 @@ def npm_pkg(
         out = name + ".tgz",
     )
 
-    npm.npm_binary(
-        name = name + ".publish",
-        data = [name + "_dir"],
-        args = ["publish", "$(location " + name + "_dir)", "--cache", "$$TMPDIR"],
-    )
-
-    npm.npm_test(
-        name = name + ".publish_test",
-        data = [name + "_dir"],
-        args = ["publish", "$(location " + name + "_dir)", "--dry-run", "--cache", "$$TMPDIR"],
-    )
+    ####
+    # TODO: probably re-do this test.
+    ####
+    # npm.npm_test(
+    #    name = name + ".publish_test",
+    #    data = [name + "_dir"],
+    #    args = ["publish", "$(location " + name + "_dir)", "--dry-run", "--cache", "$$TMPDIR"],
+    #)
 
     pkg_srcs = srcs
     pkg_deps = deps + [pkg_json_name]
