@@ -21,32 +21,34 @@ export function getPath(...d: Pick<fs.Dirent, 'name'>[]) {
 async function* _walk(
 	path: Promise<string> | string
 ): AsyncGenerator<[value: Dirent, ...parents: Dirent[]], void, unknown> {
+	const fakeRootDir = {
+		name: await path,
+		isDirectory() {
+			return true;
+		},
+		isFile() {
+			return false;
+		},
+		isBlockDevice() {
+			return false;
+		},
+		isCharacterDevice() {
+			return false;
+		},
+		isSymbolicLink() {
+			throw new Error('possibly.');
+		},
+		isFIFO() {
+			return false;
+		},
+		isSocket() {
+			return false;
+		},
+		path: await path,
+	};
 	yield* iter.asyncWalkPath<Dirent>(
 		// this is a fake root dir to make the code simpler.
-		{
-			name: await path,
-			isDirectory() {
-				return true;
-			},
-			isFile() {
-				return false;
-			},
-			isBlockDevice() {
-				return false;
-			},
-			isCharacterDevice() {
-				return false;
-			},
-			isSymbolicLink() {
-				throw new Error('possibly.');
-			},
-			isFIFO() {
-				return false;
-			},
-			isSocket() {
-				return false;
-			},
-		},
+		fakeRootDir,
 		// if the current node is a directory, walk its children.
 		async ([v, ...parents]) =>
 			v.isDirectory()
