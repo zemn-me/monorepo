@@ -19,9 +19,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "94750828b18044533e98a129003b6a68001204038dc4749f40b195b24c38f49f",
-        strip_prefix = "rules_python-0.21.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.21.0.tar.gz",
+        sha256 = "863ba0fa944319f7e3d695711427d9ad80ba92c6edd0b7c7443b84e904689539",
+        strip_prefix = "rules_python-0.22.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.22.0.tar.gz",
     )
 
     http_archive(
@@ -79,10 +79,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "727f3e4edd96ea20c29e8c2ca9e8d2af724d8c7778e7923a854b2c80952bc405",
+        sha256 = "29d5dafc2a5582995488c6735115d1d366fcd6a0fc2e2a153f02988706349825",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.30.0/bazel-gazelle-v0.30.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.30.0/bazel-gazelle-v0.30.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.31.0/bazel-gazelle-v0.31.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.31.0/bazel-gazelle-v0.31.0.tar.gz",
         ],
     )
 
@@ -214,15 +214,15 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # or for core module
     http_archive(
         name = "rules_nodejs",
-        sha256 = "08337d4fffc78f7fe648a93be12ea2fc4e8eb9795a4e6aa48595b66b34555626",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.0/rules_nodejs-core-5.8.0.tar.gz"],
+        sha256 = "764a3b3757bb8c3c6a02ba3344731a3d71e558220adcb0cf7e43c9bba2c37ba8",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.2/rules_nodejs-core-5.8.2.tar.gz"],
     )
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "3ad6684d744ebbc6592d404cc3aa81d0da634eccb3499f6fd198ae122fa28489",
-        strip_prefix = "rules_js-1.19.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.19.0/rules_js-v1.19.0.tar.gz",
+        sha256 = "d8827db3c34fe47607a0668e86524fd85d5bd74f2bfca93046d07f890b5ad4df",
+        strip_prefix = "rules_js-1.27.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.27.0/rules_js-v1.27.0.tar.gz",
     )
 
     http_archive(
@@ -235,10 +235,10 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/80a53a431ec7f450ec5ccff95ae5d6c7330e368c.zip",
-        strip_prefix = "json-schemas-80a53a431ec7f450ec5ccff95ae5d6c7330e368c",
+        url = "https://github.com/microsoft/json-schemas/archive/0b8a83674e086e5bd51dc1b05db92ff80f876a83.zip",
+        strip_prefix = "json-schemas-0b8a83674e086e5bd51dc1b05db92ff80f876a83",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "08af3e0cac15205cdeae2fab73ff106278a58a1c50f18349e6333e4834bbb2b0",
+        sha256 = "d442f17739758f9e3af21afe337f2661711161ebade6b20516110ed207c6a94e",
     )
