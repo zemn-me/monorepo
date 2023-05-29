@@ -1,4 +1,3 @@
-
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
@@ -6,13 +5,13 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "public",
+    assets = glob(["**/*.css"]),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
-        "//ts/next.js"
+        "//ts/next.js",
     ],
-    assets = glob(["**/*.css"])
 )
 
 next_project(

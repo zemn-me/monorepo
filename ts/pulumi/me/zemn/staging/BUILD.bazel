@@ -5,12 +5,12 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "staging",
+    assets = glob(["**/*.css"]),
     data = ["//ts/pulumi/me/zemn/staging/public:public_next"],
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/aws-static-website",
         "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@pulumi/aws",
-        "//ts/pulumi/me/zemn/zone"
+        "//ts/pulumi/me/zemn/zone",
     ],
-    assets = glob(["**/*.css"])
 )
