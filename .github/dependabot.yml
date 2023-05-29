@@ -15,13 +15,6 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: "daily"
-  - package-ecosystem: "npm"
-    open-pull-requests-limit: 100
-    directory: "/"
-    allow:
-      - dependency-type: "all"
-    schedule:
-      interval: "daily"
   - package-ecosystem: "pip"
     directory: "/"
     allow:
