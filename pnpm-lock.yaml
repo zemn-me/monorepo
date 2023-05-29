@@ -22,8 +22,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   devtools-protocol:
-    specifier: ^0.0.1148337
-    version: 0.0.1148337
+    specifier: ^0.0.1149535
+    version: 0.0.1149535
   glob-promise:
     specifier: 6.0.2
     version: 6.0.2(glob@8.1.0)
@@ -216,8 +216,8 @@ devDependencies:
     specifier: 29.5.0
     version: 29.5.0
   jsdom:
-    specifier: 22.0.0
-    version: 22.0.0
+    specifier: 22.1.0
+    version: 22.1.0
   mime:
     specifier: 3.0.0
     version: 3.0.0
@@ -8239,8 +8239,8 @@ packages:
     resolution: {integrity: sha512-39fCpE3Z78IaIPChJsP6Lhmkbf4dWXOmzLk/KFTdRkNk/0JymRIfUynDVRndV9HoDz8PyalK1UH21ST/ivwW5Q==}
     dev: true
 
-  /devtools-protocol@0.0.1148337:
-    resolution: {integrity: sha512-Hd0SMGwOKRxuCwB/07o5YZw0+2J60Yv4E89xACe7NaHpZifMBAaX3HEjxivFU4KlTQpJRrE60npU3vVEcZog9w==}
+  /devtools-protocol@0.0.1149535:
+    resolution: {integrity: sha512-vpM8tGaYz2nrN9n8rvUEhQCgU05ocejO5WIJySsftEHxUahQ/fWuNyPxXuQNBEmaISYyMZkxCunhjtSEyBl/Dg==}
     dev: false
 
   /dezalgo@1.0.4:
@@ -11417,8 +11417,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /jsdom@22.0.0:
-    resolution: {integrity: sha512-p5ZTEb5h+O+iU02t0GfEjAnkdYPrQSkfuTSMkMYyIoMvUNEHsbG0bHHbfXIcfTqD2UfvjQX7mmgiFsyRwGscVw==}
+  /jsdom@22.1.0:
+    resolution: {integrity: sha512-/9AVW7xNbsBv6GfWho4TTNjEo9fe6Zhf9O7s0Fhhr3u+awPwAJMKwAMXnkk5vBxflqLW9hTHX/0cs+P3gW+cQw==}
     engines: {node: '>=16'}
     peerDependencies:
       canvas: ^2.5.0
