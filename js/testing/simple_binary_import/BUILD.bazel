@@ -8,7 +8,7 @@ load("//js:rules.bzl", "js_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 ts_project(
-    name = "simple_binary_import"
+    name = "simple_binary_import",
 )
 
 # Executing a binary in a genrule
@@ -21,17 +21,14 @@ js_binary(
 
 genrule(
     name = "hello_gen",
-    tools = [ ":binary" ],
-    cmd = """BAZEL_BINDIR=$(BINDIR) $(location :binary) > $@""",
+    srcs = [":simple_binary_import"],
     outs = ["hello_gen_out.txt"],
-    srcs = [":simple_binary_import"]
+    cmd = """BAZEL_BINDIR=$(BINDIR) $(location :binary) > $@""",
+    tools = [":binary"],
 )
 
 diff_test(
     name = "hello_gen_test",
     file1 = "golden.txt",
-    file2 = "hello_gen_out.txt"
+    file2 = "hello_gen_out.txt",
 )
-
-
-
