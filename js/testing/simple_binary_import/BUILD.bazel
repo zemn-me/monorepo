@@ -1,0 +1,34 @@
+#
+# Regression test for 'can I run a JS binary' and 'do JS binary imports
+# work at runtime.
+#
+
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+
+ts_project(
+    name = "simple_binary_import",
+)
+
+# Executing a binary in a genrule
+
+js_binary(
+    name = "binary",
+    data = [":simple_binary_import"],
+    entry_point = "main.js",
+)
+
+genrule(
+    name = "hello_gen",
+    srcs = [":simple_binary_import"],
+    outs = ["hello_gen_out.txt"],
+    cmd = """BAZEL_BINDIR=$(BINDIR) $(location :binary) > $@""",
+    tools = [":binary"],
+)
+
+diff_test(
+    name = "hello_gen_test",
+    file1 = "golden.txt",
+    file2 = "hello_gen_out.txt",
+)
