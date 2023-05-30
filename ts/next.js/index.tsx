@@ -9,6 +9,14 @@ export function HeaderTags() {
 				content="default-src 'self'"
 				httpEquiv="Content-Security-Policy"
 			/>
+			{
+				process?.env?.NODE_ENV === "development"
+					? <meta
+						content="default-src 'self' 'unsafe-inline' 'unsafe-eval'" 
+						httpEquiv='Content-Security-Policy'/>
+					: null
+				
+			}
 		</Head>
 	);
 }
