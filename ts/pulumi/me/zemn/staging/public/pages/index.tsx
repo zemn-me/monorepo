@@ -6,14 +6,17 @@ export default function Main() {
 		<>
 			<Head>
 				<title>zemn.me</title>
-				<meta name="go-import" content="zemn.me git https://github.com/zemnmez/go.git"/>
+				<meta
+					content="zemn.me git https://github.com/zemnmez/go.git"
+					name="go-import"
+				/>
 			</Head>
 
 			<header>
 				<h1>zemnmez</h1>
 			</header>
 			<main>
-				<TimeEye/>
+				<TimeEye />
 			</main>
 		</>
 	);

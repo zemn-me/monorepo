@@ -27,14 +27,12 @@ export function HeaderTags() {
 			<meta content="nosniff" httpEquiv="X-Content-Type-Options" />
 
 			<meta content="no-referrer" name="referrer" />
-			{
-				process?.env?.NODE_ENV === "development"
-					? <meta
-						content="default-src 'self' 'unsafe-inline' 'unsafe-eval'" 
-						httpEquiv='Content-Security-Policy'/>
-					: null
-				
-			}
+			{process?.env?.NODE_ENV === 'development' ? (
+				<meta
+					content="default-src 'self' 'unsafe-inline' 'unsafe-eval'"
+					httpEquiv="Content-Security-Policy"
+				/>
+			) : null}
 		</Head>
 	);
 }

@@ -5,12 +5,11 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "TimeEye",
+    assets = ["TimeEye.module.css"],
     deps = [
         "//:base_defs",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
     ],
-    assets = [ "TimeEye.module.css" ]
 )
-
