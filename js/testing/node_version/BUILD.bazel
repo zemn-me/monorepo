@@ -1,0 +1,16 @@
+load("//ts:rules.bzl", "jest_test", "ts_project")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+
+ts_project(
+    name = "node_version",
+    deps = [
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = ["node_version_test.js"],
+    data = [":node_version"],
+)
