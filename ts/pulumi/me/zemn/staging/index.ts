@@ -50,12 +50,12 @@ export const arn = validation.certificateArn;
 export const site = new staticwebsite.Website('staging.zemn.me', {
 	withCDN: true,
 	indexHTML: new asset.FileAsset(
-		'ts/pulumi/me/zemn/staging/public/out/index.html'
+		'project/zemn.me/next/out/index.html'
 	).path,
 	error404: new asset.FileAsset(
-		'ts/pulumi/me/zemn/staging/public/out/404.html'
+		'project/zemn.me/next/out/404.html'
 	).path,
-	sitePath: 'ts/pulumi/me/zemn/staging/public/out',
+	sitePath: 'project/zemn.me/next/out',
 	targetDomain: 'staging.zemn.me',
 	certificateARN: arn,
 });
