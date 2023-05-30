@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "Generate rust-project.json",
-            "command": "yarn",
+            "command": "npm",
             "args": ["run", "bazel", "run", "//rs:gen_rust_project"],
             "options": {
                 "cwd": "${workspaceFolder}"
