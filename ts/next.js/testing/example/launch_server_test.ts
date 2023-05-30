@@ -27,7 +27,7 @@ test('next.js dev server launch!', async () => {
 		output,
 	})) {
 		console.info(line);
-		const m = /https:\/\/localhost\:\d+/g.exec(line);
+		const m = /https:\/\/localhost:\d+/g.exec(line);
 		if (m?.[0]) {
 			// attempt to connect to the port
 			const resp: http.IncomingMessage = await new Promise(ok =>
