@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_project", "jest_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 load("@npm//:next/package_json.bzl", next = "bin")
 
@@ -10,8 +10,8 @@ ts_project(
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//ts",
         "//ts/math",
-        "//ts"
     ],
 )
 
@@ -20,12 +20,15 @@ next_project(
     srcs = [":ts_sources"],
 )
 
-
 jest_test(
     name = "test_running_dev_server",
-    data = [ ":ts_sources", ":dev" ],
-    srcs = [ "launch_server_test.js" ],
+    srcs = ["launch_server_test.js"],
+    data = [
+        ":dev",
+        ":ts_sources",
+    ],
     env = {
-        "NEXT_SERVER_BINARY": "../../$(location :dev)"
-    }
+        "NEXT_SERVER_BINARY": "../../../$(location :dev)",
+        "BAZEL_BINDIR": "$(BINDIR)",
+    },
 )

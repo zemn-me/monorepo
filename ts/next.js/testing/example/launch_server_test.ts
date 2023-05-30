@@ -1,34 +1,41 @@
-import { isDefined, must } from "ts/guard";
 import child_process from 'node:child_process';
-import * as readline from 'node:readline/promises';
 import http from 'node:http';
+import * as readline from 'node:readline/promises';
+
+import { isDefined, isNotNull, must } from 'ts/guard';
 
 test('next.js dev server launch!', async () => {
-    throw process.version
-    const next_server_binary = must(isDefined)(process?.env?.NEXT_SERVER_BINARY);
-    const BAZEL_BINDIR = must(isDefined)(process?.env?.BAZEL_BINDIR);
+	const next_server_binary = 'ts/next.js/testing/example/dev.sh';
+	const BAZEL_BINDIR = must(isDefined)(process?.env?.BAZEL_BINDIR);
 
+	const proc = child_process.execFile(next_server_binary, {
+		env: { BAZEL_BINDIR },
+	});
 
-    const proc = child_process.execFile(next_server_binary, {
-        env: {BAZEL_BINDIR},
-    });
+	console.info('Waiting for process to go up...');
 
+	await new Promise((ok, err) => {
+		proc.once('error', err);
+		proc.once('spawn', ok);
+	});
 
-    /*
-    for await (const line of readline.createInterface({
-        input: proc.stdout, // not really needed, we're not asking Qs.
-        output: proc.stdout
-    })) {
-        const m = /https:\/\/localhost\:\d+/.exec(line)
-        if (m?.[0]) {
-            // attempt to connect to the port
-            const resp: http.IncomingMessage = await new Promise(ok => http.get(m?.[0], resp => ok(resp)))
-            expect(resp.statusCode).toBe(200);
+	const output: NodeJS.WritableStream = must(isNotNull)(proc.stdin);
+	const input: NodeJS.ReadableStream = must(isNotNull)(proc.stdout);
 
-            break;
-        }
-    }
-    */
+	for await (const line of readline.createInterface({
+		input, // not really needed, we're not asking Qs.
+		output,
+	})) {
+		console.info(line);
+		const m = /https:\/\/localhost\:\d+/g.exec(line);
+		if (m?.[0]) {
+			// attempt to connect to the port
+			const resp: http.IncomingMessage = await new Promise(ok =>
+				http.get(m?.[0], resp => ok(resp))
+			);
+			expect(resp.statusCode).toBe(200);
 
-
+			break;
+		}
+	}
 });
