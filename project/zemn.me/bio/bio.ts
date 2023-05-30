@@ -101,6 +101,8 @@ export const Bio: Bio = {
 		en`code review`,
 		en`cryptography`,
 		en`reversing`,
+		en`starlark`,
+		en`bazel`,
 	],
 	timeline: [
 		// BEGIN TOOL ASSISTED SORT
