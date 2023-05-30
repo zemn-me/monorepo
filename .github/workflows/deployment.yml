@@ -22,19 +22,18 @@ jobs:
         with:
           registry-url: 'https://registry.npmjs.org'
           node-version: '16'
-      - name: Restore bazel cache
-        uses: actions/cache@v3.3.1
-        env:
-          cache-name: bazel-cache
-        with:
-          path: |
-            ~/.cache/bazelisk
-            ~/.cache/bazel
-          key: ${{ runner.os }}-${{ env.cache-name }}
+    - name: Cache Bazel
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/bazel
+        key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE', 'WORKSPACE.bazel', 'MODULE.bazel') }}
+        restore-keys: |
+          ${{ runner.os }}-bazel-
       - name: Deploy
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazelisk run //deploy:deploy
+        run: bazel run //deploy:deploy
         shell: bash
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
