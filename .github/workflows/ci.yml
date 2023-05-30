@@ -53,16 +53,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Restore bazel cache
-        uses: actions/cache@v3.3.1
-        env:
-          cache-name: bazel-cache
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
         with:
           path: |
-            ~/.cache/bazelisk
             ~/.cache/bazel
-          key: ${{ runner.os }}-${{ env.cache-name }}
+          key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE', 'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
       - name: All tests
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazelisk test //...
+        run: bazel test //...
