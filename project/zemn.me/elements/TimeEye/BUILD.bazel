@@ -5,21 +5,12 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "TimeEye",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]) + [
-        ":css",
-    ],
     deps = [
         "//:base_defs",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
     ],
+    assets = [ "TimeEye.module.css" ]
 )
 
-css_library(
-    name = "css",
-    srcs = glob(["*.css"]),
-)

@@ -6,6 +6,9 @@ export function App({ Component, pageProps }: AppProps) {
 		<>
 			<HeaderTags />
 			<Component {...pageProps} />
+			<meta name="twitter:site" content="@zemnmez"/>
+			<meta name="twitter:creator" content="@zemnnmez"/>
+			<meta name="author" content="zemnmez"/>
 		</>
 	);
 }
