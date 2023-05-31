@@ -1,7 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as staticwebsite from '@pulumi/aws-static-website';
 import * as pulumi from '@pulumi/pulumi';
-import * as asset from '@pulumi/pulumi/asset';
 import * as zone from 'ts/pulumi/me/zemn/zone';
 
 const domainName = pulumi.interpolate`staging.${zone.zone.name}`;
