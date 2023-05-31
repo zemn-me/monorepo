@@ -99,7 +99,7 @@
 		"fix": "npm run bazel run //:fix",
 		"dev": "npm run ibazel --run_output --run_output_interactive=false test",
 		"pr": "gh pr create -f; gh pr merge -md --auto",
-		"repin": "CARGO_BAZEL_REPIN=1 npm run bazel sync --only=cargo",
+		"repin": "CARGO_BAZEL_REPIN=1 npm run -- bazel sync --only=cargo",
 		"pnpm": "npm run -- bazel run -- @pnpm//:pnpm --dir $PWD"
 	},
 	"dependencies": {
