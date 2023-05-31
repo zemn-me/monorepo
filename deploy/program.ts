@@ -396,23 +396,23 @@ export const program = ({
 			const releaser = release(
 				artifact(
 					'recursive_vassals.zip',
-					'//project/ck3/recursive-vassals/mod_zip.zip'
+					'project/ck3/recursive-vassals/mod_zip.zip'
 				),
 				artifact(
 					'recursive_vassals.patch',
-					'//project/ck3/recursive-vassals/mod.patch'
+					'project/ck3/recursive-vassals/mod.patch'
 				),
-				artifact('svgshot.tar.gz', '//ts/cmd/svgshot/npm_pkg.tgz'),
-				npmPackage('svgshot', '//ts/cmd/svgshot/npm_pkg.publish.sh'),
-				npmPackage('do-sync', '//ts/do-sync/npm_pkg.publish.sh'),
-				artifact('svgshot.tar.gz', '//ts/do-sync/npm_pkg.tgz'),
+				artifact('svgshot.tar.gz', 'ts/cmd/svgshot/npm_pkg.tgz'),
+				npmPackage('svgshot', 'ts/cmd/svgshot/npm_pkg.publish.sh'),
+				npmPackage('do-sync', 'ts/do-sync/npm_pkg.publish.sh'),
+				artifact('svgshot.tar.gz', 'ts/do-sync/npm_pkg.tgz'),
 				artifact(
 					'knowitwhenyouseeit.tar.gz',
-					'//ts/knowitwhenyouseeit/npm_pkg.tgz'
+					'ts/knowitwhenyouseeit/npm_pkg.tgz'
 				),
 				npmPackage(
 					'knowitwhenyouseeit',
-					'//ts/knowitwhenyouseeit/npm_pkg.publish.sh'
+					'ts/knowitwhenyouseeit/npm_pkg.publish.sh'
 				),
 				pulumiDeploy()
 			);
