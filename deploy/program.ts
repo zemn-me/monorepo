@@ -3,7 +3,6 @@
  */
 
 import { context as githubCtx, getOctokit } from '@actions/github';
-import { runfiles } from '@bazel/runfiles';
 import { UpResult } from '@pulumi/pulumi/automation';
 import child_process from 'child_process';
 import { Command } from 'commander';
@@ -52,10 +51,7 @@ const artifact =
 		filename,
 		buildTag,
 		publish: async ({ publish }: Context) =>
-			await publish(
-				filename,
-				await fs.readFile(runfiles.resolveWorkspaceRelative(buildTag))
-			),
+			await publish(filename, await fs.readFile(buildTag)),
 	});
 
 interface PulumiDeployInfo {
@@ -112,9 +108,7 @@ const npmPackage =
 					console.error(
 						"Missing NPM_TOKEN. We won't be able to publish any NPM packages."
 					);
-				return void (await exec(
-					runfiles.resolveWorkspaceRelative(buildTag)
-				));
+				return void (await exec(buildTag));
 			},
 		};
 	};
@@ -396,11 +390,7 @@ export const program = ({
 				: memo(() => getOctokit(process.env['GITHUB_TOKEN']!));
 
 			const version = (
-				await fs.readFile(
-					runfiles.resolveWorkspaceRelative(
-						'VERSION/VERSION.version.txt'
-					)
-				)
+				await fs.readFile('VERSION/VERSION.version.txt')
 			).toString('utf-8');
 
 			const releaser = release(
