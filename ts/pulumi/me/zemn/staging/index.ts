@@ -1,7 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as staticwebsite from '@pulumi/aws-static-website';
 import * as pulumi from '@pulumi/pulumi';
-import * as asset from '@pulumi/pulumi/asset';
 import * as zone from 'ts/pulumi/me/zemn/zone';
 
 const domainName = pulumi.interpolate`staging.${zone.zone.name}`;
@@ -49,8 +48,8 @@ export const arn = validation.certificateArn;
 
 export const site = new staticwebsite.Website('staging.zemn.me', {
 	withCDN: true,
-	indexHTML: new asset.FileAsset('project/zemn.me/next/out/index.html').path,
-	error404: new asset.FileAsset('project/zemn.me/next/out/404.html').path,
+	indexHTML: 'index.html',
+	error404: '404.html',
 	sitePath: 'project/zemn.me/next/out',
 	targetDomain: 'staging.zemn.me',
 	certificateARN: arn,
