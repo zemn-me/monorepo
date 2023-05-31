@@ -76,7 +76,7 @@
 		"react-router-dom": "6.11.2",
 		"react-spring": "9.7.1",
 		"regenerator-runtime": "0.13.11",
-		"renovate": "^34.159.2",
+		"renovate": "^35.0.0",
 		"sharp": "0.32.1",
 		"stylelint": "15.6.2",
 		"stylelint-config-css-modules": "4.2.0",
@@ -91,14 +91,16 @@
 		"yarn": "1.22.19"
 	},
 	"scripts": {
+		"bazel": "npm run -- bazelisk",
 		"bazelisk": "npx --yes @bazel/bazelisk",
-		"build": "yarn run bazelisk build //...",
-		"test": "yarn run bazelisk run //bzl:affected_files",
-		"fix": "yarn bazel run //:fix",
-		"dev": "yarn run ibazel --run_output --run_output_interactive=false test",
+		"ibazel": "npx --yes @bazel/ibazel",
+		"build": "npm run bazel build //...",
+		"test": "npm run bazel run //bzl:affected_files",
+		"fix": "npm run bazel run //:fix",
+		"dev": "npm run ibazel --run_output --run_output_interactive=false test",
 		"pr": "gh pr create -f; gh pr merge -md --auto",
-		"repin": "CARGO_BAZEL_REPIN=1 yarn bazel sync --only=cargo",
-		"pnpm": "bazel run -- @pnpm//:pnpm --dir $PWD"
+		"repin": "CARGO_BAZEL_REPIN=1 npm run bazel sync --only=cargo",
+		"pnpm": "npm run -- bazel run -- @pnpm//:pnpm --dir $PWD"
 	},
 	"dependencies": {
 		"@commander-js/extra-typings": "^10.0.3",
