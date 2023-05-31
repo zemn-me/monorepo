@@ -4,9 +4,7 @@ import * as cert from 'ts/pulumi/im/shadwell/cert';
 
 export const site = new staticwebsite.Website('thomas.shadwell.im', {
 	withCDN: true,
-	indexHTML: new asset.FileAsset(
-		'ts/pulumi/im/shadwell/thomas/public/index.html'
-	).path,
+	indexHTML: 'index.html',
 	sitePath: 'ts/pulumi/im/shadwell/thomas/public',
 	targetDomain: 'thomas.shadwell.im',
 	certificateARN: cert.arn,
