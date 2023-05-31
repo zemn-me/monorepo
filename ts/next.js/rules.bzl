@@ -1,5 +1,4 @@
 load("@npm//:next/package_json.bzl", "bin")
-load("//git:rules.bzl", "commit_affecting_rule")
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "copy_to_bin")
 
@@ -11,20 +10,13 @@ def next_project(name, srcs, **kwargs):
         srcs = srcs,
     )
 
-    commit_affecting_rule(
-        name = name + "_latest_commit",
-        rule = ":" + name + "_git_analysis_srcs",
-    )
-
     # absolutely horrible engineering here. i'm so sorry.
     native.genrule(
         name = name + "_sed_command",
         outs = ["buildid.sed"],
-        srcs = [name + "_latest_commit"],
+        srcs = ["//VERSION"],
         cmd_bash = """
-            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location """ +
-                   name +
-                   """_latest_commit))\\"|g" >$@
+            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location //VERSION))\\"|g" >$@
         """,
     )
 
