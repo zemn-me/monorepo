@@ -1,5 +1,5 @@
 {
-  "checksum": "f24cbc0ec10c67ae98117b220f3df3877591440978b51d9127404b73e636357e",
+  "checksum": "ef06e4cc339cbac773dc6c593c7e2e608fabea185299b56e63a5a99b78214c0c",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -425,13 +425,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "ast_node 0.8.6": {
+    "ast_node 0.9.4": {
       "name": "ast_node",
-      "version": "0.8.6",
+      "version": "0.9.4",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/ast_node/0.8.6/download",
-          "sha256": "cf94863c5fdfee166d0907c44e5fee970123b2b7307046d35d1e671aa93afbba"
+          "url": "https://crates.io/api/v1/crates/ast_node/0.9.4/download",
+          "sha256": "c704e2f6ee1a98223f5a7629a6ef0f3decb3b552ed282889dc957edff98ce1e6"
         }
       },
       "targets": [
@@ -453,10 +453,6 @@
         "deps": {
           "common": [
             {
-              "id": "darling 0.13.4",
-              "target": "darling"
-            },
-            {
               "id": "pmutil 0.5.3",
               "target": "pmutil"
             },
@@ -469,7 +465,7 @@
               "target": "quote"
             },
             {
-              "id": "swc_macros_common 0.3.6",
+              "id": "swc_macros_common 0.3.7",
               "target": "swc_macros_common"
             },
             {
@@ -480,60 +476,9 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.8.6"
+        "version": "0.9.4"
       },
       "license": "Apache-2.0"
-    },
-    "auto_impl 0.5.0": {
-      "name": "auto_impl",
-      "version": "0.5.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/auto_impl/0.5.0/download",
-          "sha256": "7862e21c893d65a1650125d157eaeec691439379a1cee17ee49031b79236ada4"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "auto_impl",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "auto_impl",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "proc-macro-error 1.0.4",
-              "target": "proc_macro_error"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.5.0"
-      },
-      "license": "MIT/Apache-2.0"
     },
     "autocfg 1.1.0": {
       "name": "autocfg",
@@ -1089,174 +1034,6 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "darling 0.13.4": {
-      "name": "darling",
-      "version": "0.13.4",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/darling/0.13.4/download",
-          "sha256": "a01d95850c592940db9b8194bc39f4bc0e89dee5c4265e4b1807c34a9aba453c"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "darling",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "darling",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "suggestions"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "darling_core 0.13.4",
-              "target": "darling_core"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "proc_macro_deps": {
-          "common": [
-            {
-              "id": "darling_macro 0.13.4",
-              "target": "darling_macro"
-            }
-          ],
-          "selects": {}
-        },
-        "version": "0.13.4"
-      },
-      "license": "MIT"
-    },
-    "darling_core 0.13.4": {
-      "name": "darling_core",
-      "version": "0.13.4",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/darling_core/0.13.4/download",
-          "sha256": "859d65a907b6852c9361e3185c862aae7fafd2887876799fa55f5f99dc40d610"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "darling_core",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "darling_core",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "strsim",
-            "suggestions"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "fnv 1.0.7",
-              "target": "fnv"
-            },
-            {
-              "id": "ident_case 1.0.1",
-              "target": "ident_case"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "strsim 0.10.0",
-              "target": "strsim"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.13.4"
-      },
-      "license": "MIT"
-    },
-    "darling_macro 0.13.4": {
-      "name": "darling_macro",
-      "version": "0.13.4",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/darling_macro/0.13.4/download",
-          "sha256": "9c972679f83bdf9c42bd905396b6c3588a843a17f0f16dfcfa3e2c5d57441835"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "darling_macro",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "darling_macro",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "darling_core 0.13.4",
-              "target": "darling_core"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.13.4"
-      },
-      "license": "MIT"
-    },
     "digest 0.10.6": {
       "name": "digest",
       "version": "0.10.6",
@@ -1478,43 +1255,6 @@
       },
       "license": "MIT"
     },
-    "fnv 1.0.7": {
-      "name": "fnv",
-      "version": "1.0.7",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/fnv/1.0.7/download",
-          "sha256": "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "fnv",
-            "crate_root": "lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "fnv",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
-          "selects": {}
-        },
-        "edition": "2015",
-        "version": "1.0.7"
-      },
-      "license": "Apache-2.0 / MIT"
-    },
     "form_urlencoded 1.1.0": {
       "name": "form_urlencoded",
       "version": "1.1.0",
@@ -1554,13 +1294,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "from_variant 0.1.4": {
+    "from_variant 0.1.5": {
       "name": "from_variant",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/from_variant/0.1.4/download",
-          "sha256": "f0981e470d2ab9f643df3921d54f1952ea100c39fdb6a3fdc820e20d2291df6c"
+          "url": "https://crates.io/api/v1/crates/from_variant/0.1.5/download",
+          "sha256": "1d449976075322384507443937df2f1d5577afbf4282f12a5a66ef29fa3e6307"
         }
       },
       "targets": [
@@ -1590,7 +1330,7 @@
               "target": "proc_macro2"
             },
             {
-              "id": "swc_macros_common 0.3.6",
+              "id": "swc_macros_common 0.3.7",
               "target": "swc_macros_common"
             },
             {
@@ -1601,7 +1341,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.1.4"
+        "version": "0.1.5"
       },
       "license": "Apache-2.0"
     },
@@ -1839,36 +1579,6 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "ident_case 1.0.1": {
-      "name": "ident_case",
-      "version": "1.0.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/ident_case/1.0.1/download",
-          "sha256": "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "ident_case",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "ident_case",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "edition": "2015",
-        "version": "1.0.1"
-      },
-      "license": "MIT/Apache-2.0"
-    },
     "idna 0.3.0": {
       "name": "idna",
       "version": "0.3.0",
@@ -1987,61 +1697,6 @@
       },
       "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT"
     },
-    "is-macro 0.2.1": {
-      "name": "is-macro",
-      "version": "0.2.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/is-macro/0.2.1/download",
-          "sha256": "1c068d4c6b922cd6284c609cfa6dec0e41615c9c5a1a4ba729a970d8daba05fb"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "is_macro",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "is_macro",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "Inflector 0.11.4",
-              "target": "inflector"
-            },
-            {
-              "id": "pmutil 0.5.3",
-              "target": "pmutil"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.2.1"
-      },
-      "license": "MIT"
-    },
     "is-terminal 0.4.7": {
       "name": "is-terminal",
       "version": "0.4.7",
@@ -2157,390 +1812,6 @@
         ],
         "edition": "2015",
         "version": "1.4.0"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical 6.1.1": {
-      "name": "lexical",
-      "version": "6.1.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical/6.1.1/download",
-          "sha256": "c7aefb36fd43fef7003334742cbf77b243fcd36418a1d1bdd480d613a67968f6"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "floats",
-            "integers",
-            "parse",
-            "parse-floats",
-            "parse-integers",
-            "std",
-            "write",
-            "write-floats",
-            "write-integers"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-core 0.8.5",
-              "target": "lexical_core"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "6.1.1"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-core 0.8.5": {
-      "name": "lexical-core",
-      "version": "0.8.5",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-core/0.8.5/download",
-          "sha256": "2cde5de06e8d4c2faabc400238f9ae1c74d5412d03a7bd067645ccbc47070e46"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_core",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_core",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "floats",
-            "integers",
-            "lexical-parse-float",
-            "lexical-parse-integer",
-            "lexical-write-float",
-            "lexical-write-integer",
-            "parse",
-            "parse-floats",
-            "parse-integers",
-            "std",
-            "write",
-            "write-floats",
-            "write-integers"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-parse-float 0.8.5",
-              "target": "lexical_parse_float"
-            },
-            {
-              "id": "lexical-parse-integer 0.8.6",
-              "target": "lexical_parse_integer"
-            },
-            {
-              "id": "lexical-util 0.8.5",
-              "target": "lexical_util"
-            },
-            {
-              "id": "lexical-write-float 0.8.5",
-              "target": "lexical_write_float"
-            },
-            {
-              "id": "lexical-write-integer 0.8.5",
-              "target": "lexical_write_integer"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.5"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-parse-float 0.8.5": {
-      "name": "lexical-parse-float",
-      "version": "0.8.5",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-parse-float/0.8.5/download",
-          "sha256": "683b3a5ebd0130b8fb52ba0bdc718cc56815b6a097e28ae5a6997d0ad17dc05f"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_parse_float",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_parse_float",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-parse-integer 0.8.6",
-              "target": "lexical_parse_integer"
-            },
-            {
-              "id": "lexical-util 0.8.5",
-              "target": "lexical_util"
-            },
-            {
-              "id": "static_assertions 1.1.0",
-              "target": "static_assertions"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.5"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-parse-integer 0.8.6": {
-      "name": "lexical-parse-integer",
-      "version": "0.8.6",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-parse-integer/0.8.6/download",
-          "sha256": "6d0994485ed0c312f6d965766754ea177d07f9c00c9b82a5ee62ed5b47945ee9"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_parse_integer",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_parse_integer",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-util 0.8.5",
-              "target": "lexical_util"
-            },
-            {
-              "id": "static_assertions 1.1.0",
-              "target": "static_assertions"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.6"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-util 0.8.5": {
-      "name": "lexical-util",
-      "version": "0.8.5",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-util/0.8.5/download",
-          "sha256": "5255b9ff16ff898710eb9eb63cb39248ea8a5bb036bea8085b1a767ff6c4e3fc"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_util",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_util",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "floats",
-            "integers",
-            "parse",
-            "parse-floats",
-            "parse-integers",
-            "std",
-            "write",
-            "write-floats",
-            "write-integers"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "static_assertions 1.1.0",
-              "target": "static_assertions"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.5"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-write-float 0.8.5": {
-      "name": "lexical-write-float",
-      "version": "0.8.5",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-write-float/0.8.5/download",
-          "sha256": "accabaa1c4581f05a3923d1b4cfd124c329352288b7b9da09e766b0668116862"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_write_float",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_write_float",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-util 0.8.5",
-              "target": "lexical_util"
-            },
-            {
-              "id": "lexical-write-integer 0.8.5",
-              "target": "lexical_write_integer"
-            },
-            {
-              "id": "static_assertions 1.1.0",
-              "target": "static_assertions"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.5"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "lexical-write-integer 0.8.5": {
-      "name": "lexical-write-integer",
-      "version": "0.8.5",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lexical-write-integer/0.8.5/download",
-          "sha256": "e1b6f3d1f4422866b68192d62f77bc5c700bee84f3069f2469d7bc8c77852446"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lexical_write_integer",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lexical_write_integer",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "lexical-util 0.8.5",
-              "target": "lexical_util"
-            },
-            {
-              "id": "static_assertions 1.1.0",
-              "target": "static_assertions"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.8.5"
       },
       "license": "MIT/Apache-2.0"
     },
@@ -2799,24 +2070,12 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.4.33",
+              "id": "swc_atoms 0.5.6",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.29.27",
+              "id": "swc_common 0.31.12",
               "target": "swc_common"
-            },
-            {
-              "id": "swc_css_codegen 0.137.6",
-              "target": "swc_css_codegen"
-            },
-            {
-              "id": "swc_css_modules 0.13.6",
-              "target": "swc_css_modules"
-            },
-            {
-              "id": "swc_css_parser 0.136.6",
-              "target": "swc_css_parser"
             }
           ],
           "selects": {}
@@ -3512,167 +2771,6 @@
         "version": "0.1.1"
       },
       "license": "MIT"
-    },
-    "proc-macro-error 1.0.4": {
-      "name": "proc-macro-error",
-      "version": "1.0.4",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/proc-macro-error/1.0.4/download",
-          "sha256": "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "proc_macro_error",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        },
-        {
-          "BuildScript": {
-            "crate_name": "build_script_build",
-            "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "proc_macro_error",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "syn",
-            "syn-error"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "proc-macro-error 1.0.4",
-              "target": "build_script_build"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "proc_macro_deps": {
-          "common": [
-            {
-              "id": "proc-macro-error-attr 1.0.4",
-              "target": "proc_macro_error_attr"
-            }
-          ],
-          "selects": {}
-        },
-        "version": "1.0.4"
-      },
-      "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "version_check 0.9.4",
-              "target": "version_check"
-            }
-          ],
-          "selects": {}
-        }
-      },
-      "license": "MIT OR Apache-2.0"
-    },
-    "proc-macro-error-attr 1.0.4": {
-      "name": "proc-macro-error-attr",
-      "version": "1.0.4",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/proc-macro-error-attr/1.0.4/download",
-          "sha256": "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "proc_macro_error_attr",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        },
-        {
-          "BuildScript": {
-            "crate_name": "build_script_build",
-            "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "proc_macro_error_attr",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "proc-macro-error-attr 1.0.4",
-              "target": "build_script_build"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "1.0.4"
-      },
-      "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "version_check 0.9.4",
-              "target": "version_check"
-            }
-          ],
-          "selects": {}
-        }
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "proc-macro2 1.0.57": {
       "name": "proc-macro2",
@@ -4714,43 +3812,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "static_assertions 1.1.0": {
-      "name": "static_assertions",
-      "version": "1.1.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/static_assertions/1.1.0/download",
-          "sha256": "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "static_assertions",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "static_assertions",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "edition": "2015",
-        "version": "1.1.0"
-      },
-      "license": "MIT OR Apache-2.0"
-    },
-    "string_cache 0.8.4": {
+    "string_cache 0.8.7": {
       "name": "string_cache",
-      "version": "0.8.4",
+      "version": "0.8.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/string_cache/0.8.4/download",
-          "sha256": "213494b7a2b503146286049378ce02b482200519accc31872ee8be91fa820a08"
+          "url": "https://crates.io/api/v1/crates/string_cache/0.8.7/download",
+          "sha256": "f91138e76242f575eb1d3b38b4f1362f10d3a43f47d182a5b359af488a02293b"
         }
       },
       "targets": [
@@ -4807,9 +3875,9 @@
           "selects": {}
         },
         "edition": "2018",
-        "version": "0.8.4"
+        "version": "0.8.7"
       },
-      "license": "MIT / Apache-2.0"
+      "license": "MIT OR Apache-2.0"
     },
     "string_cache_codegen 0.5.2": {
       "name": "string_cache_codegen",
@@ -4862,61 +3930,6 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "string_enum 0.3.2": {
-      "name": "string_enum",
-      "version": "0.3.2",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/string_enum/0.3.2/download",
-          "sha256": "994453cd270ad0265796eb24abf5540091ed03e681c5f3c12bc33e4db33253e1"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "string_enum",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "string_enum",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "pmutil 0.5.3",
-              "target": "pmutil"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "swc_macros_common 0.3.6",
-              "target": "swc_macros_common"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.3.2"
-      },
-      "license": "Apache-2.0"
-    },
     "strsim 0.10.0": {
       "name": "strsim",
       "version": "0.10.0",
@@ -4947,13 +3960,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.4.33": {
+    "swc_atoms 0.5.6": {
       "name": "swc_atoms",
-      "version": "0.4.33",
+      "version": "0.5.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.4.33/download",
-          "sha256": "93a49e93996e1c1cfdb641cd94888da545d440ff6cada04155ef118adee620c1"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.5.6/download",
+          "sha256": "93d0307dc4bfd107d49c7528350c372758cfca94fb503629b9a056e6a1572860"
         }
       },
       "targets": [
@@ -4996,11 +4009,11 @@
               "target": "serde"
             },
             {
-              "id": "string_cache 0.8.4",
+              "id": "string_cache 0.8.7",
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.33",
+              "id": "swc_atoms 0.5.6",
               "target": "build_script_build"
             },
             {
@@ -5011,7 +4024,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.4.33"
+        "version": "0.5.6"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -5029,13 +4042,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.29.27": {
+    "swc_common 0.31.12": {
       "name": "swc_common",
-      "version": "0.29.27",
+      "version": "0.31.12",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.29.27/download",
-          "sha256": "90a2c285d33b47a5e532a662c178dc91956534ff52207892918d3034a534ae12"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.31.12/download",
+          "sha256": "19c774005489d2907fb67909cf42af926e72edee1366512777c605ba2ef19c94"
         }
       },
       "targets": [
@@ -5103,15 +4116,15 @@
               "target": "siphasher"
             },
             {
-              "id": "string_cache 0.8.4",
+              "id": "string_cache 0.8.7",
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.4.33",
+              "id": "swc_atoms 0.5.6",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_visit 0.5.3",
+              "id": "swc_visit 0.5.6",
               "target": "swc_visit"
             },
             {
@@ -5133,11 +4146,11 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "ast_node 0.8.6",
+              "id": "ast_node 0.9.4",
               "target": "ast_node"
             },
             {
-              "id": "from_variant 0.1.4",
+              "id": "from_variant 0.1.5",
               "target": "from_variant"
             },
             {
@@ -5147,455 +4160,7 @@
           ],
           "selects": {}
         },
-        "version": "0.29.27"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_ast 0.127.3": {
-      "name": "swc_css_ast",
-      "version": "0.127.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_ast/0.127.3/download",
-          "sha256": "d20ed33612bb2db15428244f9bb984234fb0b414e23a215f40194e5b190fb54f"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_ast",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_ast",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "proc_macro_deps": {
-          "common": [
-            {
-              "id": "is-macro 0.2.1",
-              "target": "is_macro"
-            },
-            {
-              "id": "string_enum 0.3.2",
-              "target": "string_enum"
-            }
-          ],
-          "selects": {}
-        },
-        "version": "0.127.3"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_codegen 0.137.6": {
-      "name": "swc_css_codegen",
-      "version": "0.137.6",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_codegen/0.137.6/download",
-          "sha256": "d02b5c91f8778f7bb8797bc241675a492e5f95c47908c02ef0bb23494238aa96"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_codegen",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_codegen",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "bitflags 1.3.2",
-              "target": "bitflags"
-            },
-            {
-              "id": "rustc-hash 1.1.0",
-              "target": "rustc_hash"
-            },
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            },
-            {
-              "id": "swc_css_ast 0.127.3",
-              "target": "swc_css_ast"
-            },
-            {
-              "id": "swc_css_utils 0.124.3",
-              "target": "swc_css_utils"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "proc_macro_deps": {
-          "common": [
-            {
-              "id": "auto_impl 0.5.0",
-              "target": "auto_impl"
-            },
-            {
-              "id": "swc_css_codegen_macros 0.2.0",
-              "target": "swc_css_codegen_macros"
-            }
-          ],
-          "selects": {}
-        },
-        "version": "0.137.6"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_codegen_macros 0.2.0": {
-      "name": "swc_css_codegen_macros",
-      "version": "0.2.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_codegen_macros/0.2.0/download",
-          "sha256": "fe27425548d11afee43ddbe1d0cd882cb5e042f61b1503651dae2219c92333f5"
-        }
-      },
-      "targets": [
-        {
-          "ProcMacro": {
-            "crate_name": "swc_css_codegen_macros",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_codegen_macros",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "pmutil 0.5.3",
-              "target": "pmutil"
-            },
-            {
-              "id": "proc-macro2 1.0.57",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.27",
-              "target": "quote"
-            },
-            {
-              "id": "swc_macros_common 0.3.6",
-              "target": "swc_macros_common"
-            },
-            {
-              "id": "syn 1.0.107",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.2.0"
-      },
-      "license": "Apache-2.0/MIT"
-    },
-    "swc_css_modules 0.13.6": {
-      "name": "swc_css_modules",
-      "version": "0.13.6",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_modules/0.13.6/download",
-          "sha256": "e037b7223cfa59efd434e3a13919f27a9f45b7ae200bb47be4743d6f9b7b6f2f"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_modules",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_modules",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "rustc-hash 1.1.0",
-              "target": "rustc_hash"
-            },
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            },
-            {
-              "id": "swc_css_ast 0.127.3",
-              "target": "swc_css_ast"
-            },
-            {
-              "id": "swc_css_codegen 0.137.6",
-              "target": "swc_css_codegen"
-            },
-            {
-              "id": "swc_css_parser 0.136.6",
-              "target": "swc_css_parser"
-            },
-            {
-              "id": "swc_css_visit 0.126.3",
-              "target": "swc_css_visit"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.13.6"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_parser 0.136.6": {
-      "name": "swc_css_parser",
-      "version": "0.136.6",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_parser/0.136.6/download",
-          "sha256": "d1a3c8775ffd5db347f4edbcfd23fada847d9259a1557177c85314fe0f9750bd"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_parser",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_parser",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "bitflags 1.3.2",
-              "target": "bitflags"
-            },
-            {
-              "id": "lexical 6.1.1",
-              "target": "lexical"
-            },
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            },
-            {
-              "id": "swc_css_ast 0.127.3",
-              "target": "swc_css_ast"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.136.6"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_utils 0.124.3": {
-      "name": "swc_css_utils",
-      "version": "0.124.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_utils/0.124.3/download",
-          "sha256": "780ed8c6e5a3cf9085c4f969284299564cdd07ac7b881d3588bf4c8409611e73"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_utils",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_utils",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "once_cell 1.17.0",
-              "target": "once_cell"
-            },
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "serde_json 1.0.96",
-              "target": "serde_json"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            },
-            {
-              "id": "swc_css_ast 0.127.3",
-              "target": "swc_css_ast"
-            },
-            {
-              "id": "swc_css_visit 0.126.3",
-              "target": "swc_css_visit"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.124.3"
-      },
-      "license": "Apache-2.0"
-    },
-    "swc_css_visit 0.126.3": {
-      "name": "swc_css_visit",
-      "version": "0.126.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_css_visit/0.126.3/download",
-          "sha256": "3e98ed4e2539d9cd22239110a9834062183d7b0d7a56ff39d28db9b35d0327f9"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "swc_css_visit",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "swc_css_visit",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "serde"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "serde 1.0.152",
-              "target": "serde"
-            },
-            {
-              "id": "swc_atoms 0.4.33",
-              "target": "swc_atoms"
-            },
-            {
-              "id": "swc_common 0.29.27",
-              "target": "swc_common"
-            },
-            {
-              "id": "swc_css_ast 0.127.3",
-              "target": "swc_css_ast"
-            },
-            {
-              "id": "swc_visit 0.5.3",
-              "target": "swc_visit"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2021",
-        "version": "0.126.3"
+        "version": "0.31.12"
       },
       "license": "Apache-2.0"
     },
@@ -5650,13 +4215,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_macros_common 0.3.6": {
+    "swc_macros_common 0.3.7": {
       "name": "swc_macros_common",
-      "version": "0.3.6",
+      "version": "0.3.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_macros_common/0.3.6/download",
-          "sha256": "a4be988307882648d9bc7c71a6a73322b7520ef0211e920489a98f8391d8caa2"
+          "url": "https://crates.io/api/v1/crates/swc_macros_common/0.3.7/download",
+          "sha256": "3e582c3e3c2269238524923781df5be49e011dbe29cf7683a2215d600a562ea6"
         }
       },
       "targets": [
@@ -5697,17 +4262,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.3.6"
+        "version": "0.3.7"
       },
       "license": "Apache-2.0"
     },
-    "swc_visit 0.5.3": {
+    "swc_visit 0.5.6": {
       "name": "swc_visit",
-      "version": "0.5.3",
+      "version": "0.5.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.3/download",
-          "sha256": "82f2bcb7223e185c4c7cbf5e0c1207dec6d2bfd5e72e3fb7b3e8d179747e9130"
+          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.6/download",
+          "sha256": "5f412dd4fbc58f509a04e64f5c8038333142fc139e8232f01b883db0094b3b51"
         }
       },
       "targets": [
@@ -5739,23 +4304,23 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "swc_visit_macros 0.5.4",
+              "id": "swc_visit_macros 0.5.7",
               "target": "swc_visit_macros"
             }
           ],
           "selects": {}
         },
-        "version": "0.5.3"
+        "version": "0.5.6"
       },
       "license": "Apache-2.0"
     },
-    "swc_visit_macros 0.5.4": {
+    "swc_visit_macros 0.5.7": {
       "name": "swc_visit_macros",
-      "version": "0.5.4",
+      "version": "0.5.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.4/download",
-          "sha256": "8fb1f3561674d84947694d41fb6d5737d19539222779baeac1b3a071a2b29428"
+          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.7/download",
+          "sha256": "4cfc226380ba54a5feed2c12f3ccd33f1ae8e959160290e5d2d9b4e918b6472a"
         }
       },
       "targets": [
@@ -5793,7 +4358,7 @@
               "target": "quote"
             },
             {
-              "id": "swc_macros_common 0.3.6",
+              "id": "swc_macros_common 0.3.7",
               "target": "swc_macros_common"
             },
             {
@@ -5804,7 +4369,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.4"
+        "version": "0.5.7"
       },
       "license": "Apache-2.0"
     },
