@@ -10,9 +10,15 @@ export function isNotNull<T>(i: T | null): i is T {
 	return i !== null;
 }
 
-export function must<I, O extends I>(f: (v: I) => v is O, message?: () => string): (v: I) => O {
+export function must<I, O extends I>(
+	f: (v: I) => v is O,
+	message?: () => string
+): (v: I) => O {
 	return v => {
-		if (!f(v)) throw new Error(`${v} not ${f.name} ${message?`(${message()})`: ''}`);
+		if (!f(v))
+			throw new Error(
+				`${v} not ${f.name} ${message ? `(${message()})` : ''}`
+			);
 		return v;
 	};
 }
