@@ -3,10 +3,5 @@
     "regex": "potentially fixable with the `--fix` option",
     "command": "npm",
     "args": [ "run", "fix" ]
-  },
-  {
-	"regex": "(//[^ ]+): no such attribute 'project_deps'",
-	"command": "npm",
-	"args": [ "run", "buildozer", "move project_deps deps *", "$1" ]
   }
 ]
