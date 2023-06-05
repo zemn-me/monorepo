@@ -8,6 +8,5 @@ ts_project(
     deps = [
         "//ts/pulumi/lib",
         "//:node_modules/@pulumi/pulumi",
-        "//ts/pulumi/dog/pleaseintroducemetoyour:cert",
     ],
 )
