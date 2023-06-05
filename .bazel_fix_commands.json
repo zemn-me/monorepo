@@ -1,12 +1,12 @@
 [
   {
     "regex": "potentially fixable with the `--fix` option",
-    "command": "yarn",
+    "command": "npm",
     "args": [ "run", "fix" ]
   },
   {
 	"regex": "(//[^ ]+): no such attribute 'project_deps'",
-	"command": "yarn",
-	"args": [ "buildozer", "move project_deps deps *", "$1" ]
+	"command": "npm",
+	"args": [ "run", "buildozer", "move project_deps deps *", "$1" ]
   }
 ]
