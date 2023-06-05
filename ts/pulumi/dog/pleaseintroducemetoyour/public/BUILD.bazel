@@ -6,7 +6,7 @@ ts_project(
     name = "public",
     data = ["//ts/pulumi/dog/pleaseintroducemetoyour/public/static"],
     deps = [
-        "//:node_modules/@pulumi/aws-static-website",
+        "//ts/pulumi/lib",
         "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/dog/pleaseintroducemetoyour:cert",
     ],

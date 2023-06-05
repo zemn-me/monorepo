@@ -8,7 +8,6 @@ ts_project(
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/aws-static-website",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/mime",
         "//:node_modules/mime",
