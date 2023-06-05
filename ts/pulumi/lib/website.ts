@@ -26,7 +26,7 @@ function relative(from: string, to: string): string {
 		throw new Error(errorMessage);
 	}
 
-	return t.slice(f.length);
+	return path.relative(f, t);
 }
 
 export interface Args {
@@ -76,8 +76,16 @@ export class Website extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
 
+		/**
+		 * The final subdomain that the website can be loaded from on the target domain.
+		 */
+		const targetDomain = args.zone.name.apply(zoneName =>
+			[args.subDomain, zoneName].filter(guard.isDefined).join('.')
+		);
+
+
 		const cert = new aws.acm.Certificate(`${name}_cert`, {
-			domainName: args.subDomain,
+			domainName: targetDomain,
 			validationMethod: 'DNS',
 		});
 
@@ -105,13 +113,14 @@ export class Website extends pulumi.ComponentResource {
 			? relative(args.directory, args.notFound)
 			: undefined;
 
-		const bucket = new aws.s3.Bucket(`${name}_bucket`, {
-			acl: 'public-read',
+
+		const bucket = new aws.s3.Bucket(`${name.replace(/[^a-z0-9\.]/g, "-")}-bucket`, {
 			website: {
 				indexDocument,
 				errorDocument,
-			},
+			}
 		});
+
 
 		// upload files
 
@@ -133,6 +142,7 @@ export class Website extends pulumi.ComponentResource {
 				out.set(
 					fPath,
 					new aws.s3.BucketObject(`${name}_bucket_file_${fPath}`, {
+						acl: "public-read",
 						key: relative(args.directory, fPath),
 						bucket: bucket.id,
 						contentType: guard.must(
@@ -140,7 +150,10 @@ export class Website extends pulumi.ComponentResource {
 							() => `couldn't get contentType of ${fPath}`
 						)(mime.getType(fPath)),
 						source: fPath,
-						acl: 'public-read',
+						// wait to be allowed to add stuff to this bucket with public
+						// access.
+						//
+						// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
 					})
 				);
 			}
@@ -167,20 +180,38 @@ export class Website extends pulumi.ComponentResource {
 				)}]`
 		)(objects.get(args.index));
 
-		// create the cloudfront
+		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(`${name}_origin_access_identity`, {
+            comment: "this is needed to setup s3 polices and make s3 not public.",
+        });
 
-		/**
-		 * The final subdomain that the website can be loaded from on the target domain.
-		 */
-		const targetDomain = args.zone.name.apply(zoneName =>
-			[args.subDomain, zoneName].filter(guard.isDefined).join('.')
-		);
+        // Only allow cloudfront to access content bucket.
+        const bucketPolicy = new aws.s3.BucketPolicy(`${name}_bucket_policy`, {
+            bucket: bucket.id, // refer to the bucket created earlier
+            policy: pulumi.all([originAccessIdentity.iamArn, bucket.arn]).apply(([oaiArn, bucketArn]) => JSON.stringify({
+                Version: "2012-10-17",
+                Statement: [
+                    {
+                        Effect: "Allow",
+                        Principal: {
+                            AWS: oaiArn,
+                        }, // Only allow Cloudfront read access.
+                        Action: ["s3:GetObject"],
+                        Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
+                    }
+                ],
+            })),
+        });
+
+		// create the cloudfront
 
 		const distribution = new aws.cloudfront.Distribution(
 			`${name}_cloudfront_distribution`,
 			{
 				origins: [
 					{
+						s3OriginConfig: {
+							originAccessIdentity: originAccessIdentity.cloudfrontAccessIdentityPath
+						},
 						domainName: bucket.bucketRegionalDomainName,
 						originId: `${name}_cloudfront_distribution`,
 					},
@@ -200,7 +231,7 @@ export class Website extends pulumi.ComponentResource {
 								{
 									errorCode: 404,
 									responseCode: 404,
-									responsePagePath: errorDocumentObject.key,
+									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
 								},
 							],
 					  }
@@ -221,7 +252,7 @@ export class Website extends pulumi.ComponentResource {
 					// i'm fairly sure this is correct, but the docs kinda suck
 					// on which of AWS's many IDs this might be and sapling histgrep
 					// is broken.
-					targetOriginId: bucket.id,
+					targetOriginId: `${name}_cloudfront_distribution`,
 					forwardedValues: {
 						queryString: false,
 						// I'm not using cookies for anything yet.
@@ -259,7 +290,6 @@ export class Website extends pulumi.ComponentResource {
 			zoneId: args.zone.id,
 			name: targetDomain,
 			type: 'A',
-			ttl: 300,
 			aliases: [
 				{
 					name: distribution.domainName,
@@ -272,6 +302,7 @@ export class Website extends pulumi.ComponentResource {
 		this.registerOutputs({
 			distribution,
 			record,
+			bucketPolicy
 		});
 	}
 }
