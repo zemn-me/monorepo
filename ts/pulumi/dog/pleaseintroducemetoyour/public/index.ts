@@ -1,16 +1,11 @@
-import * as staticwebsite from '@pulumi/aws-static-website';
-import * as asset from '@pulumi/pulumi/asset';
-import * as cert from 'ts/pulumi/dog/pleaseintroducemetoyour/cert';
+import * as zone from 'ts/pulumi/dog/pleaseintroducemetoyour/zone';
+import Website from 'ts/pulumi/lib/website';
 
-export const site = new staticwebsite.Website('pleaseintroducemetoyour.dog', {
-	withCDN: true,
-	indexHTML: new asset.FileAsset(
-		'ts/pulumi/dog/pleaseintroducmetoyour/public/static/out/index.html'
-	).path,
-	error404: new asset.FileAsset(
-		'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out/404.html'
-	).path,
-	sitePath: 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out',
-	targetDomain: 'pleaseintroducemetoyour.dog',
-	certificateARN: cert.arn,
+export const site = new Website('pleaseintroducemetoyour.dog', {
+	index: 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out/index.html',
+	notFound:
+		'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out/404.html',
+	directory: 'ts/pulumi/dog/pleaseintroducemetoyour/public/static/out',
+	zone: zone.zone,
+	subDomain: undefined,
 });

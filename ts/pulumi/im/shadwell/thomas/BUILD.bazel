@@ -6,5 +6,6 @@ ts_project(
     name = "thomas",
     deps = [
         "//ts/pulumi/im/shadwell/thomas/public",
+        "//ts/pulumi/im/shadwell/zone",
     ],
 )
