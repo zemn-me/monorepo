@@ -1,5 +1,5 @@
 {
-  "checksum": "ef06e4cc339cbac773dc6c593c7e2e608fabea185299b56e63a5a99b78214c0c",
+  "checksum": "9b3338485c15385f25c10c61a7b30a82b7e4d1be7d94671180ec7bb8b525ef89",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -684,13 +684,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.3.0": {
+    "clap 4.3.1": {
       "name": "clap",
-      "version": "4.3.0",
+      "version": "4.3.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.3.0/download",
-          "sha256": "93aae7a4192245f70fe75dd9157fc7b4a5bf53e88d30bd4396f7d8f9284d5acc"
+          "url": "https://crates.io/api/v1/crates/clap/4.3.1/download",
+          "sha256": "b4ed2379f8603fa2b7509891660e802b88c70a79a6427a70abb5968054de2c28"
         }
       },
       "targets": [
@@ -725,7 +725,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.3.0",
+              "id": "clap_builder 4.3.1",
               "target": "clap_builder"
             },
             {
@@ -739,23 +739,23 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "clap_derive 4.3.0",
+              "id": "clap_derive 4.3.1",
               "target": "clap_derive"
             }
           ],
           "selects": {}
         },
-        "version": "4.3.0"
+        "version": "4.3.1"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.3.0": {
+    "clap_builder 4.3.1": {
       "name": "clap_builder",
-      "version": "4.3.0",
+      "version": "4.3.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.0/download",
-          "sha256": "4f423e341edefb78c9caba2d9c7f7687d0e72e89df3ce3394554754393ac3990"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.1/download",
+          "sha256": "72394f3339a76daf211e57d4bcb374410f3965dcc606dd0e03738c7888766980"
         }
       },
       "targets": [
@@ -811,17 +811,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.3.0"
+        "version": "4.3.1"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_derive 4.3.0": {
+    "clap_derive 4.3.1": {
       "name": "clap_derive",
-      "version": "4.3.0",
+      "version": "4.3.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_derive/4.3.0/download",
-          "sha256": "191d9573962933b4027f932c600cd252ce27a8ad5979418fe78e43c07996f27b"
+          "url": "https://crates.io/api/v1/crates/clap_derive/4.3.1/download",
+          "sha256": "59e9ef9a08ee1c0e1f2e162121665ac45ac3783b0f897db7244ae75ad9a8f65b"
         }
       },
       "targets": [
@@ -868,7 +868,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.3.0"
+        "version": "4.3.1"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2054,7 +2054,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.3.0",
+              "id": "clap 4.3.1",
               "target": "clap"
             },
             {
