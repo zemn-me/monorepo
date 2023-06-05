@@ -9,7 +9,6 @@ ts_project(
     data = ["//project/zemn.me/next"],
     deps = [
         "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/aws-static-website",
         "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/me/zemn/zone",
     ],

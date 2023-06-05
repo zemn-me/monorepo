@@ -1,10 +1,11 @@
-import * as staticwebsite from '@pulumi/aws-static-website';
 import * as cert from 'ts/pulumi/im/shadwell/cert';
+import * as zone from 'ts/pulumi/im/shadwell/zone';
+import Website from 'ts/pulumi/lib/website';
 
-export const site = new staticwebsite.Website('thomas.shadwell.im', {
-	withCDN: true,
-	indexHTML: 'index.html',
-	sitePath: 'ts/pulumi/im/shadwell/thomas/public',
-	targetDomain: 'thomas.shadwell.im',
-	certificateARN: cert.arn,
+export const site = new Website('thomas.shadwell.im', {
+	index: 'ts/pulumi/im/shadwell/thomas/public/index.html',
+	directory: 'ts/pulumi/im/shadwell/thomas/public',
+	notFound: 'ts/pulumi/im/shadwell/thomas/public/404.html',
+	zone: zone.zone,
+	subDomain: 'thomas',
 });
