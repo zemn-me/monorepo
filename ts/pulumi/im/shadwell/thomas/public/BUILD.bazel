@@ -11,7 +11,7 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/mime",
         "//:node_modules/mime",
+        "//ts/pulumi/im/shadwell/zone",
         "//ts/pulumi/lib",
-        "//ts/pulumi/im/shadwell/zone"
     ],
 )
