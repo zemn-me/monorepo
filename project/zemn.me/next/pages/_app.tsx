@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { HeaderTags } from 'ts/next.js';
 
 export function App({ Component, pageProps }: AppProps) {
@@ -6,9 +7,11 @@ export function App({ Component, pageProps }: AppProps) {
 		<>
 			<HeaderTags />
 			<Component {...pageProps} />
-			<meta content="@zemnmez" name="twitter:site" />
-			<meta content="@zemnnmez" name="twitter:creator" />
-			<meta content="zemnmez" name="author" />
+			<Head>
+				<meta content="@zemnmez" name="twitter:site" />
+				<meta content="@zemnnmez" name="twitter:creator" />
+				<meta content="zemnmez" name="author" />
+			</Head>
 		</>
 	);
 }
