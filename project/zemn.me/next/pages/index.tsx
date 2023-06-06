@@ -2,6 +2,7 @@ import Head from 'next/head';
 import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import * as lang from 'ts/react/lang';
+import Timeline from 'project/zemn.me/next/pages/timeline';
 
 export default function Main() {
 	return (
@@ -43,7 +44,9 @@ export default function Main() {
 						</nav>
 					) : null}
 				</section>
-				<TimeEye />
+				<section>
+					<Timeline/>
+				</section>
 			</main>
 		</>
 	);
