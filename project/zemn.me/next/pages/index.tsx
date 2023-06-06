@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
+import Timeline from 'project/zemn.me/next/pages/timeline';
 import * as lang from 'ts/react/lang';
 
 export default function Main() {
@@ -34,7 +35,7 @@ export default function Main() {
 							{bio.Bio.links.map(([text, url]) => (
 								<a
 									href={url.toString()}
-									key={lang.get(text)}
+									key={url.toString()}
 									lang={lang.get(text)}
 								>
 									{lang.text(text)}
@@ -43,7 +44,9 @@ export default function Main() {
 						</nav>
 					) : null}
 				</section>
-				<TimeEye />
+				<section>
+					<Timeline />
+				</section>
 			</main>
 		</>
 	);
