@@ -8,7 +8,10 @@ ts_project(
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/mime",
         "//:node_modules/@types/node",
+        "//:node_modules/mime",
+        "//ts",
         "//ts/iter",
     ],
 )
