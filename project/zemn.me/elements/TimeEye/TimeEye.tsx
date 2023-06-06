@@ -9,7 +9,7 @@ export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
 }) => (
 	<svg
 		{...props}
-		className={classNames(className, style["time-eye"])}
+		className={classNames(className, style['time-eye'])}
 		viewBox="0 0 17.78 7.81"
 	>
 		<g transform="translate(-13.03 -62.53)">
