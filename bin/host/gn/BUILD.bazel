@@ -1,0 +1,8 @@
+load("@rules_foreign_cc//foreign_cc:ninja.bzl", "ninja")
+
+ninja(
+    name = "gn",
+    lib_source = "@google_gn//:all_files",
+    out_binaries = [ "../gn" ],
+    out_bin_dir = "."
+)

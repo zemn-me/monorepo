@@ -200,6 +200,51 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
+        name = "rules_foreign_cc",
+        sha256 = "2a4d07cd64b0719b39a7c12218a3e507672b82a97b98c6a89d38565894cf7c51",
+        strip_prefix = "rules_foreign_cc-0.9.0",
+        url = "https://github.com/bazelbuild/rules_foreign_cc/archive/refs/tags/0.9.0.tar.gz",
+    )
+
+    git_repository(
+        name = "google_gn",
+        branch = "main",
+        patch_args = ["-p1"],
+        patches = [ "//:patches/gn.patch"],
+        remote = "https://gn.googlesource.com/gn",
+        build_file_content = """
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["**/*"])
+)
+
+
+
+        """
+    )
+
+    git_repository(
+        name = "fuscia_ffmpeg",
+        branch = "main",
+        remote = "https://fuchsia.googlesource.com/third_party/ffmpeg",
+
+        build_file_content = """
+exports_files(glob(["**/*"]))
+
+
+package(default_visibility = ["//visibility:public"])
+filegroup(
+    name = "all",
+    srcs = glob(["**/*"])
+)
+        """,
+
+    )
+
+    http_archive(
         name = "rules_rust",
         sha256 = "50272c39f20a3a3507cb56dcb5c3b348bda697a7d868708449e2fa6fb893444c",
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.22.0/rules_rust-v0.22.0.tar.gz"],
