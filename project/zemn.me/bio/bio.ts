@@ -106,6 +106,13 @@ export const Bio: Bio = {
 	],
 	timeline: [
 		// BEGIN TOOL ASSISTED SORT
+		{
+			date: date(23, 'nov', 2022),
+			description: en`Google research; exploit to remotely take over VSCode and any attached cloud systems`,
+			tags: [security, disclosure],
+			title: en`Visual Studio Code: Remote Code Execution`,
+			url: url`https://github.com/google/security-research/security/advisories/GHSA-pw56-c55x-cm9m`
+		},
 
 		{
 			date: date(14, 'jan', 2019),

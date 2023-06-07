@@ -8,9 +8,9 @@ ts_project(
     assets = glob(["**/*.css"]),
     deps = [
         "//:node_modules/@types/react",
+        "//:node_modules/immutable",
         "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/immutable",
         "//project/zemn.me/bio",
         "//project/zemn.me/elements/TimeEye",
         "//ts/next.js",
