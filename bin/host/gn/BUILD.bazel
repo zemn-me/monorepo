@@ -1,0 +1,10 @@
+load("@rules_foreign_cc//foreign_cc:ninja.bzl", "ninja")
+
+ninja(
+    name = "build",
+    lib_source = "@google_gn//:all_files",
+    # postfix_script = "pwd | tee /Users/tshadwell/code/monorepo-sl/out.txt",
+    out_binaries = [ "gn" ],
+    targets = [ "gn" ],
+    directory = "bin"
+)

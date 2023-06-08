@@ -204,3 +204,10 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
+# This sets up some common toolchains for building targets. For more details, please see
+# https://bazelbuild.github.io/rules_foreign_cc/0.9.0/flatten.html#rules_foreign_cc_dependencies
+rules_foreign_cc_dependencies()
