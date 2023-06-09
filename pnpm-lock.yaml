@@ -82,8 +82,8 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.0)(react@18.2.0)
   '@microsoft/api-documenter':
-    specifier: 7.22.13
-    version: 7.22.13(@types/node@20.2.4)
+    specifier: 7.22.14
+    version: 7.22.14(@types/node@20.2.4)
   '@microsoft/api-extractor':
     specifier: 7.35.2
     version: 7.35.2(@types/node@20.2.4)
@@ -3901,8 +3901,8 @@ packages:
     resolution: {integrity: sha512-8zYzetB1zfa7WA4c0RS1EU9pNKcj1BqilU2fCsEvmKfWgEdpaphff6hk2Rcn3A0qHwynEdw9lTrlYN4sUw2FpA==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.22.13(@types/node@20.2.4):
-    resolution: {integrity: sha512-UIfXIrll75iHYJ1gLhzbZl2Z7T/JigWfvutbJY36ytnxsZg6SJPtNdG9B7ErznExK/9TQX0S6iHIUs3DLzqcAw==}
+  /@microsoft/api-documenter@7.22.14(@types/node@20.2.4):
+    resolution: {integrity: sha512-2sB0P7y0uM0PDro87FF/+S7rc6knYf94ptE9Lz+xR/+Tn8pXf2eFpK4pFYzqLW9130QiZvYpLrjAtoMqpVDLSw==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.27.2(@types/node@20.2.4)
