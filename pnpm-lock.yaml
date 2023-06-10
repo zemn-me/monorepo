@@ -26,8 +26,8 @@ dependencies:
     specifier: ^0.0.1155872
     version: 0.0.1155872
   glob-promise:
-    specifier: 6.0.2
-    version: 6.0.2(glob@8.1.0)
+    specifier: 6.0.3
+    version: 6.0.3(glob@8.1.0)
   json-schema-to-typescript:
     specifier: ^13.0.1
     version: 13.0.1
@@ -9494,8 +9494,8 @@ packages:
       glob: 7.2.3
     dev: false
 
-  /glob-promise@6.0.2(glob@8.1.0):
-    resolution: {integrity: sha512-Ni2aDyD1ekD6x8/+K4hDriRDbzzfuK4yKpqSymJ4P7IxbtARiOOuU+k40kbHM0sLIlbf1Qh0qdMkAHMZYE6XJQ==}
+  /glob-promise@6.0.3(glob@8.1.0):
+    resolution: {integrity: sha512-m+kxywR5j/2Z2V9zvHKfwwL5Gp7gIFEBX+deTB9w2lJB+wSuw9kcS43VfvTAMk8TXL5JCl/cCjsR+tgNVspGyA==}
     engines: {node: '>=16'}
     peerDependencies:
       glob: ^8.0.3
