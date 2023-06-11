@@ -59,8 +59,8 @@ alias(
         ":darwin_x64": "@pulumi_cli_darwin_x64//:pulumi/pulumi",
         ":linux_arm64": "@pulumi_cli_linux_arm64//:pulumi/pulumi",
         ":linux_x64": "@pulumi_cli_linux_x64//:pulumi/pulumi",
-        ":windows_arm64": "@pulumi_cli_windows_arm64//:pulumi/pulumi",
-        ":windows_x64": "@pulumi_cli_windows_x64//:pulumi/pulumi",
+        ":windows_arm64": "@pulumi_cli_windows_arm64//:pulumi/bin/pulumi.exe",
+        ":windows_x64": "@pulumi_cli_windows_x64//:pulumi/bin/pulumi.exe",
         "//conditions:default": "@pulumi_cli_linux_x64//:pulumi/pulumi",
     }),
 )
