@@ -1,0 +1,12 @@
+load("@rules_foreign_cc//foreign_cc:ninja.bzl", "ninja")
+
+alias(
+    name = "build",
+    actual = "@google_gn//:build"
+)
+
+genrule(
+    name = "get_gn_binary",
+    srcs = ["@google_gn//:build"],
+
+)
