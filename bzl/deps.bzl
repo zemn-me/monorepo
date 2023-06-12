@@ -214,8 +214,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # or for core module
     http_archive(
         name = "rules_nodejs",
-        sha256 = "764a3b3757bb8c3c6a02ba3344731a3d71e558220adcb0cf7e43c9bba2c37ba8",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.2/rules_nodejs-core-5.8.2.tar.gz"],
+        sha256 = "be84fb5238a2034870810b60ae66f8555db385ff931bd6f61be204732df8d4a6",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.3/rules_nodejs-core-5.8.3.tar.gz"],
     )
 
     http_archive(
