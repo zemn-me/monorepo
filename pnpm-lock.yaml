@@ -85,8 +85,8 @@ devDependencies:
     specifier: 7.22.16
     version: 7.22.16(@types/node@20.2.4)
   '@microsoft/api-extractor':
-    specifier: 7.35.2
-    version: 7.35.2(@types/node@20.2.4)
+    specifier: 7.35.3
+    version: 7.35.3(@types/node@20.2.4)
   '@pulumi/aws':
     specifier: 5.41.0
     version: 5.41.0
@@ -3926,8 +3926,8 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.35.2(@types/node@20.2.4):
-    resolution: {integrity: sha512-f3aM4hJkv5W04eLh6wdJ9fzscAmb+GgnT6j+pMlGVyz+0p2yQDndymvgUseFO6a+HqFDSH4yZXmkqT8bP7lVWQ==}
+  /@microsoft/api-extractor@7.35.3(@types/node@20.2.4):
+    resolution: {integrity: sha512-Psh6rZB7BeJznIKJd1+xPhM0AQVXLyYHxIz5ezN7Whu3DIHfx/iRJZLFvMdshpB046ir/JDYBciuYdQbArloHQ==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.27.2(@types/node@20.2.4)
@@ -3935,7 +3935,7 @@ packages:
       '@microsoft/tsdoc-config': 0.16.1
       '@rushstack/node-core-library': 3.59.3(@types/node@20.2.4)
       '@rushstack/rig-package': 0.3.20
-      '@rushstack/ts-command-line': 4.14.0
+      '@rushstack/ts-command-line': 4.15.0
       colors: 1.2.5
       lodash: 4.17.21
       resolve: 1.22.1
@@ -5281,6 +5281,15 @@ packages:
 
   /@rushstack/ts-command-line@4.14.0:
     resolution: {integrity: sha512-DWozCsKg+ALgrsul+6vJhyB7ZogqSycRlnqULjGsJ9dLRv+Pc0Wj6J7pX0xarmgX2kH3tTf0rXgBcl8QjJULIQ==}
+    dependencies:
+      '@types/argparse': 1.0.38
+      argparse: 1.0.10
+      colors: 1.2.5
+      string-argv: 0.3.1
+    dev: true
+
+  /@rushstack/ts-command-line@4.15.0:
+    resolution: {integrity: sha512-Xl1Xc8d89ioJ6AbOQsSIPyYvrQPqmGG+YrqUZKYEDenZtKq57xuFbBJya9TXgAWSB+uVRmDYYd9ogu6WTwRjCQ==}
     dependencies:
       '@types/argparse': 1.0.38
       argparse: 1.0.10
