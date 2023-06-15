@@ -3,6 +3,7 @@ import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import Timeline from 'project/zemn.me/next/pages/timeline';
 import * as lang from 'ts/react/lang';
+import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 
 export default function Main() {
 	return (
@@ -18,6 +19,9 @@ export default function Main() {
 			</Head>
 
 			<header>
+				<video muted loop playsInline autoPlay poster={kenwood.poster.src}>
+					<kenwood.VideoSources/>
+				</video>
 				<h1 lang={lang.get(bio.Bio.who.handle)}>
 					{lang.text(bio.Bio.who.handle)}
 				</h1>
