@@ -1,0 +1,50 @@
+
+VIDEO_SCALE = "1280:720"
+
+MAX_BITRATE = "4.5M"
+
+genrule(
+    name = "transcode_video_mp4",
+    srcs = [ "kenwood.mp4", "//bin/host/ffmpeg" ],
+    cmd = """
+        $(location //bin/host/ffmpeg) -i $(location kenwood.mp4) \\
+            -c:v libx264 \\
+            -an \\
+            -b:v """ + MAX_BITRATE + """ \\
+            -vf scale=""" + VIDEO_SCALE + """ \\
+            -movflags +faststart $@ \\
+            -loglevel error
+    """,
+    outs = [ "out.mp4"]
+
+)
+
+genrule(
+    name = "transcode_video_webm",
+    srcs = [ "kenwood.mp4", "//bin/host/ffmpeg" ],
+    cmd = """
+        $(location //bin/host/ffmpeg) -i $(location kenwood.mp4) \\
+            -c:v libvpx \\
+            -an \\
+            -b:v """ + MAX_BITRATE + """ \\
+            -vf scale=""" + VIDEO_SCALE + """ \\
+            -movflags +faststart $@ \\
+            -loglevel error
+    """,
+    outs = [ "out.webm"]
+)
+
+genrule(
+    name = "transcode_video_ogv",
+    srcs = [ "kenwood.mp4", "//bin/host/ffmpeg" ],
+    cmd = """
+        $(location //bin/host/ffmpeg) -i $(location kenwood.mp4) \\
+            -c:v libtheora \\
+            -an \\
+            -b:v """ + MAX_BITRATE + """ \\
+            -vf scale=""" + VIDEO_SCALE + """ \\
+            -movflags +faststart $@ \\
+            -loglevel error
+    """,
+    outs = [ "out.ogv"]
+)
