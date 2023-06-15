@@ -1,0 +1,43 @@
+/*
+    Previously when I have approached laying out this page, I have done so
+    explicitly with CSS grid.
+
+    I think this time it might be better to do so with flexbox.
+
+    We want, in essence, in landscape
+
+    BANNER CONTENT
+    BANNER CONTENT
+    BANNER CONTENT
+
+    and in portrait:
+
+    BANNER
+    BANNER
+    BANNER
+
+    CONTENT
+    CONTENT
+    CONTENT
+
+    I think 'landscape' is not a good heuristic here. Really, what we want to do is
+    place the banner to the left of the content *as long as* there is space for both
+    of them to be there.
+
+    Instead, I think good logic for this could simply be some essential *minimum* size
+    to both, and to see if flexbox can place them correctly.
+*/
+
+.main {
+    display: flex;
+}
+
+.banner {
+    min-width: 10em;
+    flex-grow: 1;
+}
+
+.content {
+    min-width: 30em;
+    flex-grow: 1;
+}
