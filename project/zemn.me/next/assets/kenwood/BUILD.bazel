@@ -1,0 +1,15 @@
+
+genrule(
+    name = "transcode_video",
+    srcs = [ "kenwood.mp4", "//bin/host/ffmpeg" ],
+    cmd = """
+        $(location //bin/host/ffmpeg) -i $(location kenwood.mp4) \\
+            -c:v libx264 \\
+            -c:a aac \\
+            -vf scale=640:480 \\
+            -movflags +faststart $@ \\
+            -loglevel error
+    """,
+    outs = [ "output.mp4"]
+
+)
