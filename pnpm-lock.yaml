@@ -238,8 +238,8 @@ devDependencies:
     specifier: 2.8.8
     version: 2.8.8
   puppeteer:
-    specifier: 20.7.1
-    version: 20.7.1(typescript@5.0.4)
+    specifier: 20.7.2
+    version: 20.7.2(typescript@5.0.4)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -7164,8 +7164,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chromium-bidi@0.4.11(devtools-protocol@0.0.1135028):
-    resolution: {integrity: sha512-p03ajLhlQ5gebw3cmbDBFmBc2wnJM5dnXS8Phu6mblGn/KQd76yOVL5VwE0VAisa7oazNfKGTaXlIZ8Q5Bb9OA==}
+  /chromium-bidi@0.4.12(devtools-protocol@0.0.1135028):
+    resolution: {integrity: sha512-yl0ngMHtYUGJa2G0lkcbPvbnUZ9WMQyMNSfYmlrGD1nHRNyI9KOGw3dOaofFugXHHToneUaSmF9iUdgCBamCjA==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
@@ -13755,8 +13755,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@20.7.1(typescript@5.0.4):
-    resolution: {integrity: sha512-f45j9JxImFaYndQYsFA39CEDKwpn1nAF/Iw7urznatjhaslSB/RfHG7sC7iPpDbmP+CLpPEkHhqNxqpaUDdTLw==}
+  /puppeteer-core@20.7.2(typescript@5.0.4):
+    resolution: {integrity: sha512-4Sd+v2YLlYMYFP/9SI/spT1joGTePwhmKP89pchUqz7VcWwv/Yh0Atmsybz+7wWT0VPDnw0UhBM6iNEfXEoUvg==}
     engines: {node: '>=16.3.0'}
     peerDependencies:
       typescript: '>= 4.7.4'
@@ -13765,7 +13765,7 @@ packages:
         optional: true
     dependencies:
       '@puppeteer/browsers': 1.4.1(typescript@5.0.4)
-      chromium-bidi: 0.4.11(devtools-protocol@0.0.1135028)
+      chromium-bidi: 0.4.12(devtools-protocol@0.0.1135028)
       cross-fetch: 3.1.6
       debug: 4.3.4
       devtools-protocol: 0.0.1135028
@@ -13778,14 +13778,14 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@20.7.1(typescript@5.0.4):
-    resolution: {integrity: sha512-yIkba2PT6rkPw85gCAmbW6KO6VVFTdONnvQp8taeMZaOTUJ193nVajykD1jT3vFbjvwKz8te9nbBVb9ITQqbPA==}
+  /puppeteer@20.7.2(typescript@5.0.4):
+    resolution: {integrity: sha512-SKg9TgUY3TJvnOy0VrkhduSvDQIjBsi+s/Ne6S+qD53MM6emau+oh+kNqySNrT7c4qkg27UrJ9aEnltKDAQTzQ==}
     engines: {node: '>=16.3.0'}
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 1.4.1(typescript@5.0.4)
       cosmiconfig: 8.2.0
-      puppeteer-core: 20.7.1(typescript@5.0.4)
+      puppeteer-core: 20.7.2(typescript@5.0.4)
     transitivePeerDependencies:
       - bufferutil
       - encoding
