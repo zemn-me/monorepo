@@ -11,8 +11,8 @@ patchedDependencies:
 
 dependencies:
   '@commander-js/extra-typings':
-    specifier: ^10.0.3
-    version: 10.0.3(commander@11.0.0)
+    specifier: ^11.0.0
+    version: 11.0.0(commander@11.0.0)
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0
@@ -3192,10 +3192,10 @@ packages:
     resolution: {integrity: sha512-llLJZ8OAlZrjGlBvamm6Zdo/HmGAcCLq5gx7cSwUX8No+n/8ip+oaC4x33IdZIif8+Rh5dQUIZXmfbSghiOmNQ==}
     dev: true
 
-  /@commander-js/extra-typings@10.0.3(commander@11.0.0):
-    resolution: {integrity: sha512-OIw28QV/GlP8k0B5CJTRsl8IyNvd0R8C8rfo54Yz9P388vCNDgdNrFlKxZTGqps+5j6lSw3Ss9JTQwcur1w1oA==}
+  /@commander-js/extra-typings@11.0.0(commander@11.0.0):
+    resolution: {integrity: sha512-06ol6Kn5gPjFY6v0vWOZ84nQwyqhZdaeZCHYH3vhwewjpOEjniF1KHZxh18887G3poWiJ8qyq5pb6ANuiddfPQ==}
     peerDependencies:
-      commander: 10.0.x
+      commander: 11.0.x
     dependencies:
       commander: 11.0.0
     dev: false
