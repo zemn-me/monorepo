@@ -94,8 +94,8 @@ devDependencies:
     specifier: 1.0.2
     version: 1.0.2
   '@pulumi/pulumi':
-    specifier: 3.72.0
-    version: 3.72.0
+    specifier: 3.72.1
+    version: 3.72.1
   '@schemastore/package':
     specifier: 0.0.8
     version: 0.0.8
@@ -4712,7 +4712,7 @@ packages:
     resolution: {integrity: sha512-3Z+biMtXenKnYCa4LIHrKNAnE9O4EEsU4cTsKnu3uUycaA4QWnmioD64oFhDKTkhCASSCQblzxSPDcaXOqxkmQ==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.72.0
+      '@pulumi/pulumi': 3.72.1
       aws-sdk: 2.1307.0
       builtin-modules: 3.0.0
       mime: 2.6.0
@@ -4728,7 +4728,7 @@ packages:
     dependencies:
       '@pulumi/aws': 5.41.0
       '@pulumi/docker': 3.6.1
-      '@pulumi/pulumi': 3.72.0
+      '@pulumi/pulumi': 3.72.1
       '@types/aws-lambda': 8.10.109
       mime: 2.6.0
     transitivePeerDependencies:
@@ -4739,7 +4739,7 @@ packages:
     resolution: {integrity: sha512-o1omwSERsuqsAt7jhokjpF/TOrtx60oimc9u9YdwMIHG+s4WIzLokSDzlgiQMVNVkWWypFOZyWp1Dhvi32NXgQ==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.72.0
+      '@pulumi/pulumi': 3.72.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4748,14 +4748,14 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.72.0
+      '@pulumi/pulumi': 3.72.1
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.72.0:
-    resolution: {integrity: sha512-8l8GoH8V2CgLfagTBEZnC74bfY4LwlIYP6xIrKNQPIibV6go6H7/7gcIv4BONwb/KKQyQhhB3zJCU+Q/htKuNA==}
+  /@pulumi/pulumi@3.72.1:
+    resolution: {integrity: sha512-pGF+rkkbi4YElwl4mnojcFa/DjQ+yucnf32BC/x4LWBnOwM89E2tlBqBqfdoUwHqNa0shGjrkJOQm4DUuPhwVA==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.3.8
