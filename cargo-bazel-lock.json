@@ -1,5 +1,5 @@
 {
-  "checksum": "e3f69bf7bbd4de0e569a1e7de57300b6ae165d4d47dd79506b05daaea20abc0b",
+  "checksum": "73c6ebd339bf161649e7f36271f9927366bf109176bd318d1780beaded7491c3",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1034,13 +1034,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "digest 0.10.6": {
+    "digest 0.10.7": {
       "name": "digest",
-      "version": "0.10.6",
+      "version": "0.10.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/digest/0.10.6/download",
-          "sha256": "8168378f4e5023e7218c89c891c0fd8ecdb5e5e4f18cb78f38cf245dd021e76f"
+          "url": "https://crates.io/api/v1/crates/digest/0.10.7/download",
+          "sha256": "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
         }
       },
       "targets": [
@@ -1083,7 +1083,7 @@
           "selects": {}
         },
         "edition": "2018",
-        "version": "0.10.6"
+        "version": "0.10.7"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2066,7 +2066,7 @@
               "target": "serde_json"
             },
             {
-              "id": "sha2 0.10.6",
+              "id": "sha2 0.10.7",
               "target": "sha2"
             },
             {
@@ -3658,13 +3658,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "sha2 0.10.6": {
+    "sha2 0.10.7": {
       "name": "sha2",
-      "version": "0.10.6",
+      "version": "0.10.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/sha2/0.10.6/download",
-          "sha256": "82e6b795fe2e3b1e845bafcb27aa35405c4d47cdfc92af5fc8d3002f76cebdc0"
+          "url": "https://crates.io/api/v1/crates/sha2/0.10.7/download",
+          "sha256": "479fb9d862239e610720565ca91403019f2f00410f1864c5aa7479b950a76ed8"
         }
       },
       "targets": [
@@ -3697,7 +3697,7 @@
               "target": "cfg_if"
             },
             {
-              "id": "digest 0.10.6",
+              "id": "digest 0.10.7",
               "target": "digest"
             }
           ],
@@ -3711,7 +3711,7 @@
           }
         },
         "edition": "2018",
-        "version": "0.10.6"
+        "version": "0.10.7"
       },
       "license": "MIT OR Apache-2.0"
     },
