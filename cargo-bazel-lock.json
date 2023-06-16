@@ -1,5 +1,5 @@
 {
-  "checksum": "73c6ebd339bf161649e7f36271f9927366bf109176bd318d1780beaded7491c3",
+  "checksum": "b81c06c31c796adc855d2583f68b445c0bcab1a5645af5417475988d55fa2798",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2062,7 +2062,7 @@
               "target": "hex"
             },
             {
-              "id": "serde_json 1.0.96",
+              "id": "serde_json 1.0.97",
               "target": "serde_json"
             },
             {
@@ -3586,13 +3586,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_json 1.0.96": {
+    "serde_json 1.0.97": {
       "name": "serde_json",
-      "version": "1.0.96",
+      "version": "1.0.97",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_json/1.0.96/download",
-          "sha256": "057d394a50403bcac12672b2b18fb387ab6d289d957dab67dd201875391e52f1"
+          "url": "https://crates.io/api/v1/crates/serde_json/1.0.97/download",
+          "sha256": "bdf3bf93142acad5821c99197022e170842cdbc1c30482b98750c688c640842a"
         }
       },
       "targets": [
@@ -3642,14 +3642,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.96",
+              "id": "serde_json 1.0.97",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2018",
-        "version": "1.0.96"
+        "version": "1.0.97"
       },
       "build_script_attrs": {
         "data_glob": [
