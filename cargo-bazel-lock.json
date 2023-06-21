@@ -1,5 +1,5 @@
 {
-  "checksum": "dbbb0a8bfaddbca456a8684cec4f51f399c185116d282f27fd45697b49e91a35",
+  "checksum": "854dd27430eb2478361dc51cc56c86359c0fe02d7c0fab18c5f0ca8ec0f7064e",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -425,13 +425,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "ast_node 0.9.4": {
+    "ast_node 0.9.5": {
       "name": "ast_node",
-      "version": "0.9.4",
+      "version": "0.9.5",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/ast_node/0.9.4/download",
-          "sha256": "c704e2f6ee1a98223f5a7629a6ef0f3decb3b552ed282889dc957edff98ce1e6"
+          "url": "https://crates.io/api/v1/crates/ast_node/0.9.5/download",
+          "sha256": "c09c69dffe06d222d072c878c3afe86eee2179806f20503faec97250268b4c24"
         }
       },
       "targets": [
@@ -453,7 +453,7 @@
         "deps": {
           "common": [
             {
-              "id": "pmutil 0.5.3",
+              "id": "pmutil 0.6.1",
               "target": "pmutil"
             },
             {
@@ -465,18 +465,18 @@
               "target": "quote"
             },
             {
-              "id": "swc_macros_common 0.3.7",
+              "id": "swc_macros_common 0.3.8",
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.9.4"
+        "version": "0.9.5"
       },
       "license": "Apache-2.0"
     },
@@ -1294,13 +1294,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "from_variant 0.1.5": {
+    "from_variant 0.1.6": {
       "name": "from_variant",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/from_variant/0.1.5/download",
-          "sha256": "1d449976075322384507443937df2f1d5577afbf4282f12a5a66ef29fa3e6307"
+          "url": "https://crates.io/api/v1/crates/from_variant/0.1.6/download",
+          "sha256": "03ec5dc38ee19078d84a692b1c41181ff9f94331c76cee66ff0208c770b5e54f"
         }
       },
       "targets": [
@@ -1322,7 +1322,7 @@
         "deps": {
           "common": [
             {
-              "id": "pmutil 0.5.3",
+              "id": "pmutil 0.6.1",
               "target": "pmutil"
             },
             {
@@ -1330,18 +1330,18 @@
               "target": "proc_macro2"
             },
             {
-              "id": "swc_macros_common 0.3.7",
+              "id": "swc_macros_common 0.3.8",
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.1.5"
+        "version": "0.1.6"
       },
       "license": "Apache-2.0"
     },
@@ -2074,7 +2074,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.31.12",
+              "id": "swc_common 0.31.13",
               "target": "swc_common"
             }
           ],
@@ -2658,13 +2658,13 @@
       },
       "license": "Apache-2.0 OR MIT"
     },
-    "pmutil 0.5.3": {
+    "pmutil 0.6.1": {
       "name": "pmutil",
-      "version": "0.5.3",
+      "version": "0.6.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/pmutil/0.5.3/download",
-          "sha256": "3894e5d549cccbe44afecf72922f277f603cd4bb0219c8342631ef18fffbe004"
+          "url": "https://crates.io/api/v1/crates/pmutil/0.6.1/download",
+          "sha256": "52a40bc70c2c58040d2d8b167ba9a5ff59fc9dab7ad44771cfde3dcfde7a09c6"
         }
       },
       "targets": [
@@ -2694,14 +2694,14 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2018",
-        "version": "0.5.3"
+        "version": "0.6.1"
       },
       "license": "Apache-2.0/MIT"
     },
@@ -4042,13 +4042,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.31.12": {
+    "swc_common 0.31.13": {
       "name": "swc_common",
-      "version": "0.31.12",
+      "version": "0.31.13",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.31.12/download",
-          "sha256": "19c774005489d2907fb67909cf42af926e72edee1366512777c605ba2ef19c94"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.31.13/download",
+          "sha256": "fe738c06147072c476d7e12ee0e99fd947549909c7c0404abd78d95433f75a67"
         }
       },
       "targets": [
@@ -4124,7 +4124,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_visit 0.5.6",
+              "id": "swc_visit 0.5.7",
               "target": "swc_visit"
             },
             {
@@ -4146,31 +4146,31 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "ast_node 0.9.4",
+              "id": "ast_node 0.9.5",
               "target": "ast_node"
             },
             {
-              "id": "from_variant 0.1.5",
+              "id": "from_variant 0.1.6",
               "target": "from_variant"
             },
             {
-              "id": "swc_eq_ignore_macros 0.1.1",
+              "id": "swc_eq_ignore_macros 0.1.2",
               "target": "swc_eq_ignore_macros"
             }
           ],
           "selects": {}
         },
-        "version": "0.31.12"
+        "version": "0.31.13"
       },
       "license": "Apache-2.0"
     },
-    "swc_eq_ignore_macros 0.1.1": {
+    "swc_eq_ignore_macros 0.1.2": {
       "name": "swc_eq_ignore_macros",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_eq_ignore_macros/0.1.1/download",
-          "sha256": "0c20468634668c2bbab581947bb8c75c97158d5a6959f4ba33df20983b20b4f6"
+          "url": "https://crates.io/api/v1/crates/swc_eq_ignore_macros/0.1.2/download",
+          "sha256": "05a95d367e228d52484c53336991fdcf47b6b553ef835d9159db4ba40efb0ee8"
         }
       },
       "targets": [
@@ -4192,7 +4192,7 @@
         "deps": {
           "common": [
             {
-              "id": "pmutil 0.5.3",
+              "id": "pmutil 0.6.1",
               "target": "pmutil"
             },
             {
@@ -4204,24 +4204,24 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.1.1"
+        "version": "0.1.2"
       },
       "license": "Apache-2.0"
     },
-    "swc_macros_common 0.3.7": {
+    "swc_macros_common 0.3.8": {
       "name": "swc_macros_common",
-      "version": "0.3.7",
+      "version": "0.3.8",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_macros_common/0.3.7/download",
-          "sha256": "3e582c3e3c2269238524923781df5be49e011dbe29cf7683a2215d600a562ea6"
+          "url": "https://crates.io/api/v1/crates/swc_macros_common/0.3.8/download",
+          "sha256": "7a273205ccb09b51fabe88c49f3b34c5a4631c4c00a16ae20e03111d6a42e832"
         }
       },
       "targets": [
@@ -4243,7 +4243,7 @@
         "deps": {
           "common": [
             {
-              "id": "pmutil 0.5.3",
+              "id": "pmutil 0.6.1",
               "target": "pmutil"
             },
             {
@@ -4255,24 +4255,24 @@
               "target": "quote"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.3.7"
+        "version": "0.3.8"
       },
       "license": "Apache-2.0"
     },
-    "swc_visit 0.5.6": {
+    "swc_visit 0.5.7": {
       "name": "swc_visit",
-      "version": "0.5.6",
+      "version": "0.5.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.6/download",
-          "sha256": "5f412dd4fbc58f509a04e64f5c8038333142fc139e8232f01b883db0094b3b51"
+          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.7/download",
+          "sha256": "e87c337fbb2d191bf371173dea6a957f01899adb8f189c6c31b122a6cfc98fc3"
         }
       },
       "targets": [
@@ -4304,23 +4304,23 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "swc_visit_macros 0.5.7",
+              "id": "swc_visit_macros 0.5.8",
               "target": "swc_visit_macros"
             }
           ],
           "selects": {}
         },
-        "version": "0.5.6"
+        "version": "0.5.7"
       },
       "license": "Apache-2.0"
     },
-    "swc_visit_macros 0.5.7": {
+    "swc_visit_macros 0.5.8": {
       "name": "swc_visit_macros",
-      "version": "0.5.7",
+      "version": "0.5.8",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.7/download",
-          "sha256": "4cfc226380ba54a5feed2c12f3ccd33f1ae8e959160290e5d2d9b4e918b6472a"
+          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.8/download",
+          "sha256": "0f322730fb82f3930a450ac24de8c98523af7d34ab8cb2f46bcb405839891a99"
         }
       },
       "targets": [
@@ -4346,7 +4346,7 @@
               "target": "inflector"
             },
             {
-              "id": "pmutil 0.5.3",
+              "id": "pmutil 0.6.1",
               "target": "pmutil"
             },
             {
@@ -4358,18 +4358,18 @@
               "target": "quote"
             },
             {
-              "id": "swc_macros_common 0.3.7",
+              "id": "swc_macros_common 0.3.8",
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 1.0.107",
+              "id": "syn 2.0.16",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.7"
+        "version": "0.5.8"
       },
       "license": "Apache-2.0"
     },
@@ -4413,7 +4413,6 @@
             "default",
             "derive",
             "extra-traits",
-            "fold",
             "full",
             "parsing",
             "printing",
@@ -4485,11 +4484,15 @@
             "clone-impls",
             "default",
             "derive",
+            "extra-traits",
+            "fold",
             "full",
             "parsing",
             "printing",
             "proc-macro",
-            "quote"
+            "quote",
+            "visit",
+            "visit-mut"
           ],
           "selects": {}
         },
