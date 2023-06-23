@@ -17,26 +17,6 @@ on:   # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 jobs:
-  automerge:
-    name: Auto-merge
-    if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Fetch Dependabot metadata
-        id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v1.5.1
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: 'Merge (if dependabot)'
-        run: gh pr merge "$PR_URL" --auto --merge
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
   Test:
     # This runs on both push and PR – for
     # PR, we need to ensure tests pass,
