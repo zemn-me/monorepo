@@ -3,7 +3,8 @@ import React from 'react';
 export type Lang = string;
 
 /**
- * TaggedText represents a Bcp47 tagged textual string.
+ * TaggedText represents a TR35 tagged textual string.
+ * @see https://unicode.org/reports/tr35/#BCP_47_Conformance
  */
 export type TaggedText = readonly [Lang, React.ReactChild];
 
