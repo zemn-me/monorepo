@@ -1,5 +1,5 @@
 {
-  "checksum": "d29f5852d19867d6e69e29b8510c3952106eaed871249f1ef05e0b03c1eb79ee",
+  "checksum": "fc301a9fe4562d86aa141d94dce5141a3209232a88f050ad3a432ecaf81454ee",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -688,13 +688,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.3.5": {
+    "clap 4.3.6": {
       "name": "clap",
-      "version": "4.3.5",
+      "version": "4.3.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.3.5/download",
-          "sha256": "2686c4115cb0810d9a984776e197823d08ec94f176549a89a9efded477c456dc"
+          "url": "https://crates.io/api/v1/crates/clap/4.3.6/download",
+          "sha256": "6320c6d1c98b6981da7bb2dcecbd0be9dc98d42165fa8326b21000f7dbfde6d0"
         }
       },
       "targets": [
@@ -749,7 +749,7 @@
           ],
           "selects": {}
         },
-        "version": "4.3.5"
+        "version": "4.3.6"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2074,7 +2074,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.3.5",
+              "id": "clap 4.3.6",
               "target": "clap"
             },
             {
