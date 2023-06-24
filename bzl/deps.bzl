@@ -29,7 +29,7 @@ def fetch_dependencies():
         sha256 = "6b65cb7917b4d1709f9410ffe00ecf3e160edf674b78c54a894471320862184f",
         urls = [
             "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.39.0/rules_go-v0.39.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.39.1/rules_go-v0.39.0.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.40.0/rules_go-v0.39.0.zip",
         ],
     )
 
@@ -114,9 +114,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "a7e6b214cdc8e864cf87ce76ea2efa23c83cb22909936d574a2236f24b03c9d6",
+        sha256 = "a66b799ddb24623397903f2272d7bfff15b9e550eea474d074c1fd50dab41544",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.72.2/pulumi-v3.72.2-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.73.0/pulumi-v3.73.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.72.2/pulumi-v3.72.2-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.73.0/pulumi-v3.73.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "d1f6fe43b2c47a333ac7c40f930c68c9dc765571ccd950f62729ddfcee9bdcb5",
+        sha256 = "07bf4c38133e702a27b0294b5cf37f59ab5a5504cb76bd748a23fdbfc5797f46",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -147,9 +147,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.72.2/pulumi-v3.72.2-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.73.0/pulumi-v3.73.0-linux-arm64.tar.gz",
         ],
-        sha256 = "d839e8169f982d526d72d0d4a57f86941c7e2f90ec82ee477c555fc78befb81b",
+        sha256 = "4fea864358028adf228846647760b128927fe3a36c84714941ca13d137b64240",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
