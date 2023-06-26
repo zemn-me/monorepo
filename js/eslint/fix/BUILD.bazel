@@ -1,0 +1,22 @@
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+load("@npm//:eslint/package_json.bzl", "bin")
+
+ts_project(
+    name = "fix",
+    data = [ ":eslint_bin" ],
+)
+
+bin.eslint_binary(
+    name = "eslint_bin",
+)
+
+js_binary(
+    name = "eslint_proxy_binary",
+    data = [ ":fix", ":eslint_bin" ],
+    entry_point = "fix.js",
+    env = {
+        "ESLINT_BINARY": "../../$(execpath :eslint_bin)"
+    }
+)
+
