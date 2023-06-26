@@ -1,0 +1,5 @@
+load("//rs:rules.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["wrapper.template.sh"])
