@@ -1,0 +1,7 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "components",
+    srcs = glob(["**/*.ts", "**/*.tsx"]),
+    assets = glob(["**/*.css"])
+)
