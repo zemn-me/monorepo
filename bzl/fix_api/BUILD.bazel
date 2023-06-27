@@ -1,0 +1,4 @@
+sh_binary(
+    name = "fix_all",
+    srcs = ["fix_all.sh"],
+)
