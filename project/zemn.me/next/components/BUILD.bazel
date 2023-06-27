@@ -1,7 +1,16 @@
 load("//ts:rules.bzl", "ts_project")
 
+package(default_visibility = ["//project/zemn.me:__subpackages__"])
+
 ts_project(
     name = "components",
     srcs = glob(["**/*.ts", "**/*.tsx"]),
-    assets = glob(["**/*.css"])
+    assets = glob(["**/*.css"]),
+    deps = [
+        "//project/zemn.me/elements/TimeEye",
+        "//project/zemn.me/bio",
+        "//ts/react/lang",
+        "//:node_modules/clsx"
+    ]
+
 )
