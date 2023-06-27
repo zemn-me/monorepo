@@ -4,7 +4,6 @@ import * as Bio from 'project/zemn.me/bio';
 import * as lang from 'ts/react/lang';
 import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
 
-
 const numerals = [
 	[3000, 'MMM'],
 	[2000, 'MM'],
@@ -38,7 +37,7 @@ const numerals = [
 	[1, 'I'],
 ] as const;
 
-const romanize = (n: number) => {
+const romanize = (n: number): lang.TaggedText => {
 	const on = n;
 	const parts: string[] = [];
 	while (n > 0) {
@@ -50,7 +49,8 @@ const romanize = (n: number) => {
 		}
 	}
 
-	return parts.join('');
+    //      ↓ unicode for 'no specified language, roman numerals used for numbering'
+	return ["zxx-u-nu-romanlow", parts.join('')];
 };
 
 
@@ -112,9 +112,10 @@ function Month({month, events}: { month: string, events: Iterable<Bio.Event>}) {
 }
 
 function Year({year, months}: {year: string, months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>> }) {
+    const romanizedAge = romanize((months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994);
     return <div className={style.year}>
         <div className={style.yearIndicator}>{year}</div>
-        <div className={style.ageIndicator}>{romanize((months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994)}</div>
+        <div className={style.ageIndicator} lang={lang.get(romanizedAge)}>{lang.text(romanizedAge)}</div>
 
         <div className={style.content}>
         {
