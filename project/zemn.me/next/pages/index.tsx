@@ -4,10 +4,11 @@ import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import Timeline from 'project/zemn.me/next/pages/timeline';
 import * as lang from 'ts/react/lang';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
+import style from 'project/zemn.me/next/pages/index.module.css';
 
 export default function Main() {
 	return (
-		<>
+		<main className={style.main}>
 			<Head>
 				<title lang={lang.get(bio.Bio.who.handle)}>
 					{lang.text(bio.Bio.who.handle)}
@@ -18,16 +19,15 @@ export default function Main() {
 				/>
 			</Head>
 
-			<header>
-				<video muted loop playsInline autoPlay poster={kenwood.poster.src}>
-					<kenwood.VideoSources/>
-				</video>
+			<video className={style.headerBgv} muted loop playsInline autoPlay poster={kenwood.poster.src}>
+				<kenwood.VideoSources/>
+			</video>
+			<header className={style.banner}>
 				<h1 lang={lang.get(bio.Bio.who.handle)}>
 					{lang.text(bio.Bio.who.handle)}
 				</h1>
 			</header>
-			<main>
-				<section>
+				<section className={style.content}>
 					<header>
 						<h2 lang={lang.get(bio.Bio.who.fullName)}>
 							{lang.text(bio.Bio.who.fullName)}
@@ -61,11 +61,10 @@ export default function Main() {
 							))}
 						</nav>
 					) : null}
-				</section>
-				<section>
-					<Timeline />
+					<section>
+						<Timeline />
+					</section>
 				</section>
 			</main>
-		</>
 	);
 }
