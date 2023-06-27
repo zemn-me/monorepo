@@ -53,19 +53,27 @@ const getLangs = () => {
 	return [];
 };
 
-export const LocaleProvider: React.FC<{
-	children?: React.ReactNode;
-}> = ({ children }) => {
+export function useLocale() {
 	const [languages, setLanguages] = React.useState<readonly string[]>([
 		'en-GB',
 	]);
+
 	React.useEffect(() => {
-		const listener = () => setLanguages(getLangs());
+		const listener = () => {
+			setLanguages(() => getLangs());
+		};
 		window.addEventListener('languagechange', listener);
 		listener();
 		return () => window.removeEventListener('languagechange', listener);
 	}, [setLanguages]);
 
+	return languages;
+}
+
+export const LocaleProvider: React.FC<{
+	children?: React.ReactNode;
+}> = ({ children }) => {
+	const languages = useLocale();
 	return <locale.Provider value={languages}>{children}</locale.Provider>;
 };
 
