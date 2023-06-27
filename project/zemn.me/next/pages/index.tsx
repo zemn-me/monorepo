@@ -1,23 +1,39 @@
 import Head from 'next/head';
-import { TimeEye } from 'project/zemn.me/elements/TimeEye';
+import Header from 'project/zemn.me/next/components/header';
+import * as bio from 'project/zemn.me/bio';
+import Timeline from 'project/zemn.me/next/components/timeline';
+import * as lang from 'ts/react/lang';
+import * as kenwood from 'project/zemn.me/next/assets/kenwood';
+import style from 'project/zemn.me/next/pages/index.module.css';
+import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 
 export default function Main() {
 	return (
-		<>
+		<main className={style.main}>
 			<Head>
-				<title>zemn.me</title>
+				<title lang={lang.get(bio.Bio.who.handle)}>
+					{lang.text(bio.Bio.who.handle)}
+				</title>
 				<meta
 					content="zemn.me git https://github.com/zemnmez/go.git"
 					name="go-import"
 				/>
 			</Head>
 
-			<header>
-				<h1>zemnmez</h1>
+			<video className={style.headerBgv} muted loop playsInline autoPlay poster={kenwood.poster.src}>
+				<kenwood.VideoSources/>
+			</video>
+			<header className={style.banner}>
 			</header>
-			<main>
-				<TimeEye />
+				<section className={style.content}>
+					<Header className={style.header}/>
+					<section className={style.timeline}>
+						<Timeline />
+					</section>
+					<footer>
+						<ZemnmezLogo/>
+					</footer>
+				</section>
 			</main>
-		</>
-	);
+	);;
 }

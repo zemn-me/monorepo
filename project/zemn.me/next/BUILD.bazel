@@ -8,14 +8,19 @@ ts_project(
     assets = glob(["**/*.css"]),
     deps = [
         "//:node_modules/@types/react",
+        "//:node_modules/immutable",
         "//:node_modules/next",
         "//:node_modules/react",
-        "//project/zemn.me/elements/TimeEye",
+        "//project/zemn.me/bio",
         "//ts/next.js",
+        "//ts/react/lang",
+        "//project/zemn.me/next/assets/kenwood",
+        "//project/zemn.me/next/components",
+        "//project/zemn.me/elements/ZemnmezLogo"
     ],
 )
 
 next_project(
     name = "next",
-    srcs = [":ts"],
+    srcs = [":ts", "//project/zemn.me/next/public:kenwood_video_sources"],
 )
