@@ -17,14 +17,14 @@ on:   # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 jobs:
-  Test:
+  Presubmit:
     # This runs on both push and PR – for
     # PR, we need to ensure tests pass,
     # but a PR cannot save a cache due to
     # security issues. Therefore, we run
     # post merge to create a cache that
     # can be picked up by future PRs.
-    name: Test
+    name: Presubmit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -49,4 +49,4 @@ jobs:
       - name: All tests
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazel test //...
+        run: ./PRESUBMIT
