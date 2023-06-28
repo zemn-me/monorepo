@@ -242,3 +242,56 @@ exports_files(glob(["**/*"]))
         """,
         sha256 = "7e8f09af32090a0c3a1b42118cef10adc542a1f00b9f8d4ee35bfe951abbe6f6",
     )
+
+    ##########
+    # FFMPEG #
+    ##########
+
+    http_archive(
+        name = "ffmpeg_linux_x64",
+        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz",
+        strip_prefix = "fuck",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "af3ca630347de28dde516f0ee70279e5fab6e35a9dc9ad889581f9bc66bcb750",
+    )
+
+    http_archive(
+        name = "ffmpeg_linux_i686",
+        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-i686-static.tar.xz",
+        strip_prefix = "fuck",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "df4ff17a39758f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
+    )
+
+    http_archive(
+        name = "ffmpeg_linux_arm64",
+        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-arm64-static.tar.xz",
+        strip_prefix = "fuck",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "df4ff17a3af58f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
+    )
+
+    http_archive(
+        name = "ffmpeg_macos_x64",
+        url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-6.0.zip",
+        strip_prefix = "fuck",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "df4ff17a3af58f9e3af2aafe337f266171f161ebade6b20516110ed207c6a94e",
+    )
+
+    http_archive(
+        name = "ffmpeg_macos_arm64",
+        url = "https://www.osxexperts.net/ffmpeg6arm.zip",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+        sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
+    )
