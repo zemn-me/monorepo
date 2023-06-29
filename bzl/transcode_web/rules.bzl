@@ -1,13 +1,11 @@
-
-
 """
 Transcode a video source for use on the web.
 """
-def transcode_web(name, src = None, out_base_name = "out", max_bitrate="4.5M", video_scale="1280:720"):
 
+def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M", video_scale = "1280:720"):
     native.genrule(
         name = name + "_mp4",
-        srcs = [ src, "//bin/host/ffmpeg" ],
+        srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libx264 \\
@@ -17,13 +15,12 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate="4.5M", v
                 -movflags +faststart $@ \\
                 -loglevel error
         """,
-        outs = [ out_base_name + ".mp4" ]
-
+        outs = [out_base_name + ".mp4"],
     )
 
     native.genrule(
         name = name + "_webm",
-        srcs = [ src, "//bin/host/ffmpeg" ],
+        srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libvpx \\
@@ -33,12 +30,12 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate="4.5M", v
                 -movflags +faststart $@ \\
                 -loglevel error
         """,
-        outs = [ out_base_nane + ".webm"]
+        outs = [out_base_name + ".webm"],
     )
 
     native.genrule(
         name = name + "_ogv",
-        srcs = [ "kenwood.mp4", "//bin/host/ffmpeg" ],
+        srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libtheora \\
@@ -48,7 +45,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate="4.5M", v
                 -movflags +faststart $@ \\
                 -loglevel error
         """,
-        outs = [ out_base_name + ".ogv" ]
+        outs = [out_base_name + ".ogv"],
     )
 
     native.filegroup(
@@ -56,6 +53,6 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate="4.5M", v
         srcs = [
             name + "_ogv",
             name + "_webm",
-            name + "_mp4"
-        ]
+            name + "_mp4",
+        ],
     )
