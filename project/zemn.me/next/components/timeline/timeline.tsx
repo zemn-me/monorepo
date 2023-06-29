@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
-import React from 'react';
 import * as Bio from 'project/zemn.me/bio';
-import * as lang from 'ts/react/lang';
 import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
+import React from 'react';
+import * as lang from 'ts/react/lang';
 
 const numerals = [
 	[3000, 'MMM'],
@@ -49,10 +49,9 @@ const romanize = (n: number): lang.TaggedText => {
 		}
 	}
 
-    //      ↓ unicode for 'no specified language, roman numerals used for numbering'
-	return ["zxx-u-nu-romanlow", parts.join('')];
+	//      ↓ unicode for 'no specified language, roman numerals used for numbering'
+	return ['zxx-u-nu-romanlow', parts.join('')];
 };
-
 
 /**
  * Given a map that contains a set, set a single item, expanding or creating
@@ -80,72 +79,100 @@ function groupBy<T, Q>(
 	return m;
 }
 
-function Event({event: e}: {event: Bio.Event}) {
-    return <div className={style.event}>
-        <a href={e.url?.toString()} lang={lang.get(e.title)}>
-            {lang.text(e.title)}
-        </a>
-
-        {" "}
-
-        {
-            e.description
-                ?  <span lang={lang.get(e.description)}>
-                    {lang.text(e.description)}
-                </span>
-                : null
-        }
-    </div>
+function Event({ event: e }: { event: Bio.Event }) {
+	return (
+		<div className={style.event}>
+			<a href={e.url?.toString()} lang={lang.get(e.title)}>
+				{lang.text(e.title)}
+			</a>{' '}
+			{e.description ? (
+				<span lang={lang.get(e.description)}>
+					{lang.text(e.description)}
+				</span>
+			) : null}
+		</div>
+	);
 }
 
-function Month({month, events}: { month: string, events: Iterable<Bio.Event>}) {
-    return <div className={style.month}> 
-        <header className={style.monthName} lang="en-GB"> { /* <- this needs to be set to the correct language */ }
-        {month}
-        </header>
-        <div className={style.content}>
-        {
-            [...events].map((e, i) => <Event event={e} key={i}/>)
-        }
-        </div>
-    </div>
+function Month({
+	month,
+	events,
+}: {
+	month: string;
+	events: Iterable<Bio.Event>;
+}) {
+	return (
+		<div className={style.month}>
+			<header className={style.monthName} lang="en-GB">
+				{' '}
+				{/* <- this needs to be set to the correct language */}
+				{month}
+			</header>
+			<div className={style.content}>
+				{[...events].map((e, i) => (
+					<Event event={e} key={i} />
+				))}
+			</div>
+		</div>
+	);
 }
 
-function Year({year, months}: {year: string, months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>> }) {
-    const romanizedAge = romanize((months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994);
-    return <div className={style.year}>
-        <div className={style.yearIndicator}>{year}</div>
-        <div className={style.ageIndicator} lang={lang.get(romanizedAge)}>{lang.text(romanizedAge)}</div>
+function Year({
+	year,
+	months,
+}: {
+	year: string;
+	months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
+}) {
+	const romanizedAge = romanize(
+		(months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994
+	);
+	return (
+		<div className={style.year}>
+			<div className={style.yearIndicator}>{year}</div>
+			<div className={style.ageIndicator} lang={lang.get(romanizedAge)}>
+				{lang.text(romanizedAge)}
+			</div>
 
-        <div className={style.content}>
-        {
-            [...months].map(([month, events], i) => <Month month={month} events={events} key={month}/>)
-        }
-        </div>
-    </div>
+			<div className={style.content}>
+				{[...months].map(([month, events], i) => (
+					<Month events={events} key={month} month={month} />
+				))}
+			</div>
+		</div>
+	);
 }
 
 export default function Timeline() {
-    // this spread is just because Intl.DateTimeFormat expects a mutable array.
-    const locale = [...lang.useLocale()];
+	// this spread is just because Intl.DateTimeFormat expects a mutable array.
+	const locale = [...lang.useLocale()];
 
-    const years = React.useMemo(() => groupBy(Immutable.List(Bio.Bio.timeline).map(
-        event => {
-            // depending on locale there may be different numbers of months etc.
-            const month = Intl.DateTimeFormat(locale, { month: 'long' }).format(event.date);
-            const year = Intl.DateTimeFormat(locale, { year: 'numeric' }).format(event.date);
+	const years = React.useMemo(
+		() =>
+			groupBy(
+				Immutable.List(Bio.Bio.timeline)
+					.map(event => {
+						// depending on locale there may be different numbers of months etc.
+						const month = Intl.DateTimeFormat(locale, {
+							month: 'long',
+						}).format(event.date);
+						const year = Intl.DateTimeFormat(locale, {
+							year: 'numeric',
+						}).format(event.date);
 
-            return {...event, month, year}
-        }
-    ).sort((a, b) => +b.date - +a.date), v => v.year).map(
-        v => groupBy(v, i => i.month)
-    ), [ locale]);
+						return { ...event, month, year };
+					})
+					.sort((a, b) => +b.date - +a.date),
+				v => v.year
+			).map(v => groupBy(v, i => i.month)),
+		[locale]
+	);
 
-    return <>
-        {
-            [...years].map(([year, months], i) => 
-                    <Year year={year} months={months} key={year}/>
-            )
-        }
-    </>
+	return (
+		<>
+			{[...years].map(([year, months], i) => (
+				<Year key={year} months={months} year={year} />
+			))}
+		</>
+	);
 }

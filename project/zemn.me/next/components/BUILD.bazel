@@ -4,13 +4,15 @@ package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
 ts_project(
     name = "components",
-    srcs = glob(["**/*.ts", "**/*.tsx"]),
+    srcs = glob([
+        "**/*.ts",
+        "**/*.tsx",
+    ]),
     assets = glob(["**/*.css"]),
     deps = [
-        "//project/zemn.me/elements/TimeEye",
+        "//:node_modules/clsx",
         "//project/zemn.me/bio",
+        "//project/zemn.me/elements/TimeEye",
         "//ts/react/lang",
-        "//:node_modules/clsx"
-    ]
-
+    ],
 )
