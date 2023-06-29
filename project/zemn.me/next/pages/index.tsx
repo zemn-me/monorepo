@@ -18,6 +18,15 @@ export default function Main() {
 			</Head>
 
 			<header>
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					poster={kenwood.poster.src}
+				>
+					<kenwood.VideoSources />
+				</video>
 				<h1 lang={lang.get(bio.Bio.who.handle)}>
 					{lang.text(bio.Bio.who.handle)}
 				</h1>
