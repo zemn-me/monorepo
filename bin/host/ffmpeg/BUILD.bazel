@@ -1,0 +1,74 @@
+package(default_visibility = ["//:__subpackages__"])
+
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+config_setting(
+    name = "darwin_arm64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "darwin_x64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "linux_arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "linux_x64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "windows_arm64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "windows_x64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+# several of these are surely wrong and will break when used
+# on an OS I have not tried yet. Should be an easy fix.
+alias(
+    name = "ffmpeg",
+    actual = select({
+        ":darwin_arm64": "@ffmpeg_macos_arm64//:ffmpeg",
+        ":darwin_x64": "@ffmpeg_macos_x64//:ffmpeg",
+        ":linux_arm64": "@ffmpeg_linux_arm64//:ffmpeg",
+        ":linux_x64": "@ffmpeg_linux_x64//:ffmpeg",
+        "//conditions:default": "@ffmpeg_linux_x64//:ffmpeg",
+    }),
+)
+
+sh_test(
+    name = "smoke",
+    srcs = [ "ffmpeg_smoke.sh" ],
+    data = [ ":ffmpeg"],
+    env = {
+        "FFMPEG_BIN": "$(location :ffmpeg)"
+    }
+)
