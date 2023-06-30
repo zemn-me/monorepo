@@ -37,7 +37,7 @@ const numerals = [
 	[1, 'I'],
 ] as const;
 
-const romanize = (n: number): lang.TaggedText => {
+const romanize = (n: number): lang.TaggedText<string> => {
 	const on = n;
 	const parts: string[] = [];
 	while (n > 0) {
@@ -94,13 +94,12 @@ function Event({ event: e }: { event: Bio.Event }) {
 	);
 }
 
-function Month({
-	month,
-	events,
-}: {
-	month: string;
+export interface MonthProps {
+	month: Immutable.FromJS<lang.Text<string>>;
 	events: Iterable<Bio.Event>;
-}) {
+}
+
+function Month({ month, events }: MonthProps) {
 	return (
 		<div className={style.month}>
 			<header className={style.monthName} lang="en-GB">
@@ -117,13 +116,15 @@ function Month({
 	);
 }
 
-function Year({
-	year,
-	months,
-}: {
-	year: string;
-	months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
-}) {
+export interface YearProps {
+	year: Immutable.FromJS<lang.Text<string>>;
+	months: Immutable.OrderedMap<
+		Immutable.FromJS<lang.Text<string>>,
+		MonthProps['events']
+	>;
+}
+
+function Year({ year, months }: YearProps) {
 	const romanizedAge = romanize(
 		(months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994
 	);
@@ -145,7 +146,9 @@ function Year({
 
 export default function Timeline() {
 	// this spread is just because Intl.DateTimeFormat expects a mutable array.
-	const locale = [...lang.useLocale()];
+	const locales = [...lang.useLocale()];
+
+	const locale = Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
 
 	const years = React.useMemo(
 		() =>
@@ -153,12 +156,20 @@ export default function Timeline() {
 				Immutable.List(Bio.Bio.timeline)
 					.map(event => {
 						// depending on locale there may be different numbers of months etc.
-						const month = Intl.DateTimeFormat(locale, {
-							month: 'long',
-						}).format(event.date);
-						const year = Intl.DateTimeFormat(locale, {
-							year: 'numeric',
-						}).format(event.date);
+						const month: Immutable.FromJS<lang.Text<string>> =
+							Immutable.fromJS<lang.Text<string>>([
+								locale,
+								Intl.DateTimeFormat(locale, {
+									month: 'long',
+								}).format(event.date),
+							]);
+						const year: Immutable.FromJS<lang.Text<string>> =
+							Immutable.fromJS<lang.Text<string>>([
+								locale,
+								Intl.DateTimeFormat(locale, {
+									year: 'numeric',
+								}).format(event.date),
+							]);
 
 						return { ...event, month, year };
 					})
@@ -171,7 +182,7 @@ export default function Timeline() {
 	return (
 		<>
 			{[...years].map(([year, months], i) => (
-				<Year key={year} months={months} year={year} />
+				<Year key={lang.text(year)} months={months} year={year} />
 			))}
 		</>
 	);
