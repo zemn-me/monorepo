@@ -12,8 +12,11 @@ ts_project(
     deps = [
         "//:base_defs",
         "//:node_modules/@types/react",
+        "//:node_modules/clsx",
         "//:node_modules/immutable",
         "//:node_modules/react",
         "//project/zemn.me/bio",
+        "//project/zemn.me/elements/TimeEye",
+        "//ts/react/lang",
     ],
 )
