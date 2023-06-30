@@ -3,6 +3,13 @@ import * as Bio from 'project/zemn.me/bio';
 import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
 import React from 'react';
 import * as lang from 'ts/react/lang';
+<<<<<<< dest:   e612ffeab227 - thomas: project zemn.me: move timeline into co...
+=======
+import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
+import React from 'react';
+import * as lang from 'ts/react/lang';
+
+>>>>>>> source: 07c14da18989 - thomas: Project zemn.me: continue work on site.
 
 const numerals = [
 	[3000, 'MMM'],
