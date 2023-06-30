@@ -1,0 +1,41 @@
+.main {
+    display: grid;
+}
+
+.banner {
+    grid-area: banner;
+}
+
+.content {
+    grid-area: content;
+}
+
+.headerBgv {
+    z-index: -1;
+    object-fit: cover;
+    grid-area: banner;
+}
+
+@media (orientation: landscape) {
+    .main {
+        grid: " banner content " 100vh 
+              " xxxxxx content " 1fr
+              / 1fr    1fr           ;
+    }
+    
+    /*
+       in this case, the banner should have a fixed
+       position, otherwise we'll scroll past it and the layout
+       will look weird.
+    */
+
+    .headerBgv, .banner { position: sticky; top: 0 }
+}
+
+@media (orientation: portrait) {
+    .main {
+        grid: "banner" 100vh
+              "content" auto 
+              /1fr ;
+    }
+}
