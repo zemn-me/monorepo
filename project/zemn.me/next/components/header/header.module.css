@@ -1,0 +1,52 @@
+.header {
+    display: grid;
+    grid:
+        " .... name ....."
+        " .... .... ....." 1em
+        " .... logo ....." 4em
+        " .... .... ....." 1em
+        " .... links ...."
+        " .... ..... ...." 1em
+        " .... text  ...."
+        / 2em  1fr   2em;
+}
+
+.header > * {
+    /* ensure the elements fill the grid we give them */
+    margin: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.name {
+    grid-area: name;
+    text-align: center;
+    /* this is because it's currently in an h1 and i dont want it to be big. */
+    font-size: initial;
+    /* this would be a subgrid one day! but alas!! the time has not yet come!!!! */
+    display: grid;
+    grid:
+        "real-name"
+        "........." 1em
+        "handle   ";
+}
+
+.realName { grid-area: real-name }
+.handle { grid-area:handle }
+
+
+.links {
+    grid-area: links;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+
+.desc {
+    grid-area: text;
+}
+
+.logo {
+    grid-area: logo;
+}
