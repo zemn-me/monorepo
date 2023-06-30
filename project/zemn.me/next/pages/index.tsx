@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
+import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import Timeline from 'project/zemn.me/next/pages/timeline';
 import * as lang from 'ts/react/lang';
 
@@ -18,6 +19,15 @@ export default function Main() {
 			</Head>
 
 			<header>
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					poster={kenwood.poster.src}
+				>
+					<kenwood.VideoSources />
+				</video>
 				<h1 lang={lang.get(bio.Bio.who.handle)}>
 					{lang.text(bio.Bio.who.handle)}
 				</h1>

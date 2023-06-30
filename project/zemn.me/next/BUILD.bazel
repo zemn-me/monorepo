@@ -13,6 +13,7 @@ ts_project(
         "//:node_modules/react",
         "//project/zemn.me/bio",
         "//project/zemn.me/elements/TimeEye",
+        "//project/zemn.me/next/assets/kenwood",
         "//ts/next.js",
         "//ts/react/lang",
     ],
@@ -20,5 +21,8 @@ ts_project(
 
 next_project(
     name = "next",
-    srcs = [":ts"],
+    srcs = [
+        ":ts",
+        "//project/zemn.me/next/public:kenwood_video_sources",
+    ],
 )
