@@ -5,8 +5,7 @@ import Timeline from 'project/zemn.me/next/components/timeline';
 import * as lang from 'ts/react/lang';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import style from 'project/zemn.me/next/pages/index.module.css';
-import Timeline from 'project/zemn.me/next/pages/timeline';
-import * as lang from 'ts/react/lang';
+import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 
 export default function Main() {
 	return (
@@ -38,6 +37,9 @@ export default function Main() {
 					<section className={style.timeline}>
 						<Timeline />
 					</section>
+					<footer>
+						<ZemnmezLogo/>
+					</footer>
 				</section>
 			</section>
 		</main>
