@@ -20,5 +20,8 @@ ts_project(
 
 next_project(
     name = "next",
-    srcs = [":ts"],
+    srcs = [
+        ":ts",
+        "//project/zemn.me/next/public:kenwood_video_sources",
+    ],
 )
