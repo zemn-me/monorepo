@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import * as Bio from 'project/zemn.me/bio';
-import style from 'project/zemn.me/next/pages/timeline.module.css';
+import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
 import React from 'react';
 import * as lang from 'ts/react/lang';
 
