@@ -17,15 +17,35 @@ on:   # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 jobs:
-  Test:
-    # This runs on both push and PR – for
-    # PR, we need to ensure tests pass,
-    # but a PR cannot save a cache due to
-    # security issues. Therefore, we run
-    # post merge to create a cache that
-    # can be picked up by future PRs.
-    name: Test
+  Presubmit:
+    # Performs all offline testing.
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: All tests
+        run: bazel test //...
+  Submit:
+    # Attempts to submit changes to production.
+    runs-on: ubuntu-latest
+    needs: [ 'Presubmit' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -49,4 +69,64 @@ jobs:
       - name: All tests
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazel test //...
+        run: |
+          bazel run //ci/submit
+  Rollback:
+    # Undo submit if a failure occurred.
+    runs-on: ubuntu-latest
+    needs: [ 'Submit' ]
+    if: ${{ failure() }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main # rollback to success
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: All tests
+        run: |
+          bazel run //ci/submit
+  Postsubmit:
+    # Undo submit if a failure occurred.
+    runs-on: ubuntu-latest
+    needs: [ 'Presubmit', 'Submit' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main # rollback to success
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: All tests
+        run: |
+          bazel run //ci/postsubmit
