@@ -66,9 +66,9 @@ alias(
 
 sh_test(
     name = "smoke",
-    srcs = [ "ffmpeg_smoke.sh" ],
-    data = [ ":ffmpeg"],
+    srcs = ["ffmpeg_smoke.sh"],
+    data = [":ffmpeg"],
     env = {
-        "FFMPEG_BIN": "$(location :ffmpeg)"
-    }
+        "FFMPEG_BIN": "$(location :ffmpeg)",
+    },
 )
