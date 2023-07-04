@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+# This script is part of the CI pipeline; it tells any CI how to automatically
+# fix any issues that might be introduced by automated changes such as version bumping
+# see: /.github/submit/README.md
+
+# a few things are needed to make this file ready for submission
+# - needs to integrate 'npm run fix functionality' -- likely by implementing the fixable protocol
+
+echo Fixing any broken tests marked as fixable...
+bazel run //bzl/fix_api:fix_all # TODO: this should be a BUILD reference
+                                # so bazel is aware of this dependency
+
+echo Repinning rust dependencies...
+# I don't think we can make this conform to the fix API, because for it to do
+# so we would have to determine if the lock file is out of date in advance ...
+CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo
