@@ -1,6 +1,6 @@
 load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 
-package(default_visibility = ["//deploy:__subpackages__"])
+package(default_visibility = ["//ci:__subpackages__"])
 
 filegroup(
     name = "pulumi_files",
