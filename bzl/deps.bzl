@@ -227,9 +227,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "5d13b0123d91d4297f60d8da0ab5771615f6ad6829bdfe69e7dcda9e5c01bc54",
-        strip_prefix = "rules_swc-1.0.0-rc0",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
+        sha256 = "c35e633c2c90a4cd6796e66d66bcf37d31a81737afc76030201a9ef8599abc58",
+        strip_prefix = "rules_swc-0.21.3",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.21.3.tar.gz",
     )
 
     # Got no idea why but MS doesn't publish versions of this...
