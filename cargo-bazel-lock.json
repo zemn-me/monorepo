@@ -1,5 +1,5 @@
 {
-  "checksum": "629d0221192aa9c0bb556cd3a2a44265e25759d32e4f40225ab433d1a4cc6b0b",
+  "checksum": "fa4d1ae93e31bf0cbcaa566c1e6628a4e3676f0993b124c26a21179be00abd0a",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -688,13 +688,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.3.10": {
+    "clap 4.3.11": {
       "name": "clap",
-      "version": "4.3.10",
+      "version": "4.3.11",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.3.10/download",
-          "sha256": "384e169cc618c613d5e3ca6404dda77a8685a63e08660dcc64abaf7da7cb0c7a"
+          "url": "https://crates.io/api/v1/crates/clap/4.3.11/download",
+          "sha256": "1640e5cc7fb47dbb8338fd471b105e7ed6c3cb2aeb00c2e067127ffd3764a05d"
         }
       },
       "targets": [
@@ -729,7 +729,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.3.10",
+              "id": "clap_builder 4.3.11",
               "target": "clap_builder"
             },
             {
@@ -749,17 +749,17 @@
           ],
           "selects": {}
         },
-        "version": "4.3.10"
+        "version": "4.3.11"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.3.10": {
+    "clap_builder 4.3.11": {
       "name": "clap_builder",
-      "version": "4.3.10",
+      "version": "4.3.11",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.10/download",
-          "sha256": "ef137bbe35aab78bdb468ccfba75a5f4d8321ae011d34063770780545176af2d"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.11/download",
+          "sha256": "98c59138d527eeaf9b53f35a77fcc1fad9d883116070c63d5de1c7dc7b00c72b"
         }
       },
       "targets": [
@@ -811,7 +811,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.3.10"
+        "version": "4.3.11"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2070,7 +2070,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.3.10",
+              "id": "clap 4.3.11",
               "target": "clap"
             },
             {
