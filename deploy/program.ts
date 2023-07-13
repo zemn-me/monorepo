@@ -118,7 +118,10 @@ type OperationData = UpResult | void;
 type Operation = ArtifactInfo | NpmPackageInfo | PulumiDeployInfo;
 
 class OperationFailure<O extends Operation = Operation> extends Error {
-	constructor(public readonly operation: O, public readonly error: Error) {
+	constructor(
+		public readonly operation: O,
+		public readonly error: Error
+	) {
 		super(
 			`${operation.kind}${
 				'buildTag' in operation ? ' ' + operation.buildTag : ''
@@ -167,7 +170,7 @@ export const releaseNotes =
 		const operationAndFailure: [
 			operation: Operation,
 			data: OperationData,
-			error: Error | undefined
+			error: Error | undefined,
 		][] = notes.map(({ info: item, data }) => {
 			let op: Operation;
 			let error: Error | undefined;

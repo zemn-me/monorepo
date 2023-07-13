@@ -12,9 +12,14 @@ export class Quaternion<
 	X extends number = number,
 	Y extends number = number,
 	Z extends number = number,
-	W extends number = number
+	W extends number = number,
 > {
-	constructor(public x: X, public y: Y, public z: Z, public w: W) {}
+	constructor(
+		public x: X,
+		public y: Y,
+		public z: Z,
+		public w: W
+	) {}
 
 	multiply(this: Quaternion, b: Quaternion): Quaternion {
 		const x = this.w * b.x + this.x * b.w + this.y * b.z - this.z * b.y;

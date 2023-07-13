@@ -201,11 +201,7 @@ export const Deck: React.FC<Readonly<DeckProps>> = ({ name, deck }) => (
 		{(deck.cards?.size ?? 0) > 0 ? (
 			<figure>
 				<figcaption>Cards</figcaption>
-				<ol>
-					{deck.cards?.map(name => (
-						<li key={name}>{name}</li>
-					))}
-				</ol>
+				<ol>{deck.cards?.map(name => <li key={name}>{name}</li>)}</ol>
 			</figure>
 		) : null}
 	</figure>

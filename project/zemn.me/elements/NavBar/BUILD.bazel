@@ -13,6 +13,7 @@ ts_project(
         "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/react",
         "//:node_modules/csstype",  # a transitive dependency? Not sure why it needs manual inclusion.
+        "//:node_modules/@react-spring/rafz", # another transitive dependency https://github.com/pmndrs/react-spring/issues/2173
         "//:node_modules/react",
         "//:node_modules/react-dom",
         "//:node_modules/react-router-dom",

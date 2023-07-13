@@ -95,8 +95,10 @@ export const zip: {
 		v1: ReadonlyArrayOfLength<T1, L>,
 		v2: ReadonlyArrayOfLength<T2, L>
 	): Iterable<[T1, T2]>;
-	<T1, T2, T3>(v1: Iterable<T1>, v2: Iterable<T2>, fb: T3): Iterable<
-		[T1 | T3, T2 | T3]
-	>;
+	<T1, T2, T3>(
+		v1: Iterable<T1>,
+		v2: Iterable<T2>,
+		fb: T3
+	): Iterable<[T1 | T3, T2 | T3]>;
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 } = _zip as any;
