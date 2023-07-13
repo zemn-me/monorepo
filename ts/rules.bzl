@@ -29,7 +29,7 @@ def jest_test(jsdom = None, deps = [], **kwargs):
 def ts_lint(name, srcs = [], data = [], **kwargs):
     eslint_test(
         name = name,
-        data = data + ["//:tsconfig"] + srcs,
+        data = data srcs,
         **kwargs
     )
 
