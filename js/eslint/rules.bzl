@@ -4,6 +4,8 @@ load("//bzl/run_in_workspace:rules.bzl", "run_in_workspace")
 def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwargs):
     args = args + ["--ignore-path", "$(location //:gitignore)"]
 
+    data = data + [ "//:tsconfig" ]
+
     args = args + ["$(rootpath " + x + ")" for x in data + srcs]
     _eslint_test(
         name = name,
