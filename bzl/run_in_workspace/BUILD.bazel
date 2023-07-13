@@ -1,5 +1,10 @@
 load("//rs:rules.bzl", "rust_binary")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["wrapper.template.sh"])
+
+md_files(
+    name = "markdown_files",
+)

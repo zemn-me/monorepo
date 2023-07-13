@@ -1,4 +1,13 @@
+load("//md:rules.bzl", "md_files")
+
+md_files(
+    name = "markdown_files",
+    srcs = glob(["**/*.md"])
+)
+
 sh_binary(
     name = "fix_all",
     srcs = ["fix_all.sh"],
 )
+
+
