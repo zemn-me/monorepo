@@ -5,7 +5,7 @@ import * as vec from './vec';
 export type Matrix<
 	I extends number = number,
 	J extends number = number,
-	T = number
+	T = number,
 > = Vector<J, Vector<I, T>>;
 
 export type Square<IJ extends number, T = number> = Matrix<IJ, IJ, T>;
@@ -13,7 +13,7 @@ export type Square<IJ extends number, T = number> = Matrix<IJ, IJ, T>;
 export const as: <
 	I extends number = number,
 	J extends number = number,
-	T = number
+	T = number,
 >(
 	v: readonly (readonly T[] & { length: I })[] & { length: J }
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -70,7 +70,7 @@ export const mul: <
 	I1 extends number,
 	J1 extends number,
 	I2 extends number,
-	J2 extends number
+	J2 extends number,
 >(
 	m1: Matrix<I1, J1>,
 	m2: Matrix<I2, J2>
@@ -78,7 +78,7 @@ export const mul: <
 	I1 extends number,
 	J1 extends number,
 	I2 extends number,
-	J2 extends number
+	J2 extends number,
 >(
 	m1: Matrix<I1, J1>,
 	m2: Matrix<I2, J2>
@@ -153,12 +153,12 @@ function mustIsSquare<T>(
 export type Multiply<
 	A extends Matrix<number, number, unknown>,
 	B extends Matrix<number, number, unknown>,
-	O = number
+	O = number,
 > = [A, B] extends [
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 	Matrix<any, infer J1, unknown>,
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-	Matrix<infer I2, any, unknown>
+	Matrix<infer I2, any, unknown>,
 ]
 	? Matrix<I2, J1, O>
 	: never;
@@ -169,12 +169,12 @@ export type Multiply<
  */
 export type TransformTo<
 	In extends Matrix<number, number, unknown>,
-	Out extends Matrix<number, number, unknown>
+	Out extends Matrix<number, number, unknown>,
 	/*O = number*/
 > = [In, Out] extends [
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 	Matrix<any, infer J1, unknown>,
-	Matrix<infer I2, infer J2, unknown>
+	Matrix<infer I2, infer J2, unknown>,
 ]
 	? J2 extends J1
 		? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -258,7 +258,7 @@ export const checkerboard: <I extends number, J extends number>(
  * Returns the inverse of a matrix of given dimensions
  */
 export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
-	IJ extends number
+	IJ extends number,
 >(
 	m: Square<IJ>
 ) => {
