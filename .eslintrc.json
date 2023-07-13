@@ -29,6 +29,7 @@
 				"@typescript-eslint"
 			],
 			"rules": {
+				"prettier/prettier": "error",
 				"@typescript-eslint/no-floating-promises": "error",
 				"@typescript-eslint/no-misused-promises": "error",
 				"@typescript-eslint/no-empty-interface": [
@@ -47,7 +48,6 @@
 		"react/self-closing-comp": [ "error" ],
 		"react/jsx-sort-props": [ "error" ],
 		"react/no-unescaped-entities": 0,
-		"prettier/prettier": "error",
 		"arrow-parens": ["error", "as-needed"],
 		"arrow-spacing": ["error", { "before": true, "after": true }],
 		"prefer-const": ["error", { "destructuring": "all" }],
