@@ -1,3 +1,4 @@
+load("//mdx:rules.bzl", "mdx_files")
 load("//md:rules.bzl", "md_files")
 
 md_files(
@@ -5,9 +6,7 @@ md_files(
     srcs = glob(["**/*.md"])
 )
 
-sh_binary(
-    name = "fix_all",
-    srcs = ["fix_all.sh"],
+mdx_files(
+    name = "mdx_files",
+    srcs = glob(["**/*.mdx"])
 )
-
-
