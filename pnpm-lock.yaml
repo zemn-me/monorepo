@@ -241,8 +241,8 @@ devDependencies:
     specifier: 13.4.9
     version: 13.4.9(@babel/core@7.22.9)(@opentelemetry/api@1.4.1)(react-dom@18.2.0)(react@18.2.0)
   patch-package:
-    specifier: 7.0.0
-    version: 7.0.0
+    specifier: 7.0.2
+    version: 7.0.2
   prettier:
     specifier: 3.0.0
     version: 3.0.0
@@ -13462,8 +13462,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /patch-package@7.0.0:
-    resolution: {integrity: sha512-eYunHbnnB2ghjTNc5iL1Uo7TsGMuXk0vibX3RFcE/CdVdXzmdbMsG/4K4IgoSuIkLTI5oHrMQk4+NkFqSed0BQ==}
+  /patch-package@7.0.2:
+    resolution: {integrity: sha512-PMYfL8LXxGIRmxXLqlEaBxzKPu7/SdP13ld6GSfAUJUZRmBDPp8chZs0dpzaAFn9TSPnFiMwkC6PJt6pBiAl8Q==}
     engines: {node: '>=14', npm: '>5'}
     hasBin: true
     dependencies:
@@ -13477,7 +13477,7 @@ packages:
       minimist: 1.2.8
       open: 7.4.2
       rimraf: 2.7.1
-      semver: 5.7.2
+      semver: 7.5.4
       slash: 2.0.0
       tmp: 0.0.33
       yaml: 2.3.1
