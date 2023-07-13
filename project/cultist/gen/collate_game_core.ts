@@ -3,7 +3,10 @@ import path from 'node:path';
 
 export class ParsingFileError extends Error {
 	override name = 'ParsingFileError';
-	constructor(public parent: Error, public file: string) {
+	constructor(
+		public parent: Error,
+		public file: string
+	) {
 		super(`parsing file: ${file}: ${parent}`);
 	}
 }

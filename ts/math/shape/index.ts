@@ -55,7 +55,10 @@ class As3D<T extends Canvas.Drawable2D> implements Canvas.Drawable3D {
 export class Translate3D<T extends Canvas.Drawable3D>
 	implements Canvas.Drawable3D
 {
-	constructor(public readonly target: T, public readonly by: Homog.Point3D) {}
+	constructor(
+		public readonly target: T,
+		public readonly by: Homog.Point3D
+	) {}
 
 	public lines3D(): Homog.Line3D[] {
 		return this.target
@@ -120,10 +123,13 @@ export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
  */
 export class QuaternionMultiply<
 	T extends Canvas.Drawable3D,
-	Q extends Quaternion.Quaternion
+	Q extends Quaternion.Quaternion,
 > implements Canvas.Drawable3D
 {
-	constructor(public readonly value: T, public readonly quaternion: Q) {}
+	constructor(
+		public readonly value: T,
+		public readonly quaternion: Q
+	) {}
 	lines3D() {
 		return this.value.lines3D().map(line =>
 			line.map(point => {
@@ -149,10 +155,13 @@ export class QuaternionMultiply<
  */
 export class QuaternionRotate<
 	T extends Canvas.Drawable3D,
-	Q extends Homog.Point3D
+	Q extends Homog.Point3D,
 > implements Canvas.LineDrawable3D
 {
-	constructor(public readonly value: T, public readonly rotation: Q) {}
+	constructor(
+		public readonly value: T,
+		public readonly rotation: Q
+	) {}
 	lines3D() {
 		const [[rx], [ry], [rz]] = this.rotation;
 		// this whole class was kind of a mistake. but i preserve this mistake

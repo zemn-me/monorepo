@@ -13,7 +13,7 @@ export type Canvas = ReadonlyArray<Node>;
 export type Scalar = number;
 export type Path<
 	L extends number = number,
-	kind extends Cartesian | Homogenous = Cartesian
+	kind extends Cartesian | Homogenous = Cartesian,
 > = vector.Vector<L, kind>;
 
 export type Cartesian = vector.Vector<2, number>;

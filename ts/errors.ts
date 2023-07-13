@@ -22,7 +22,7 @@ export class TypeOfError<T> extends Error {
 export class GuardFailedError<
 	I,
 	O extends I,
-	Etc extends unknown[]
+	Etc extends unknown[],
 > extends Error {
 	public guard: (v: I, ...a: Etc) => v is O;
 	public value: I;
