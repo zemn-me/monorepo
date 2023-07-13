@@ -1,4 +1,10 @@
 load("//mdx:rules.bzl", "mdx_files")
+load("//md:rules.bzl", "md_files")
+
+md_files(
+    name = "markdown_files",
+    srcs = glob(["**/*.md"])
+)
 
 mdx_files(
     name = "mdx_files",

@@ -11,8 +11,14 @@ load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = [":__subpackages__"])
+
+md_files(
+    name = "markdown_files",
+    srcs = glob(["**/*.md"])
+)
 
 # Useful commands to run!
 alias(
