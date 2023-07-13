@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -85,8 +85,8 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.0)(react@18.2.0)
   '@microsoft/api-documenter':
-    specifier: 7.22.24
-    version: 7.22.24(@types/node@20.4.1)
+    specifier: 7.22.27
+    version: 7.22.27(@types/node@20.4.1)
   '@microsoft/api-extractor':
     specifier: 7.36.1
     version: 7.36.1(@types/node@20.4.1)
@@ -3441,8 +3441,8 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.22.24(@types/node@20.4.1):
-    resolution: {integrity: sha512-KdO7p/weirR/po0SqwWsbqoPUTqLv0QVvxqopysxF2PVdBpeKx4eOrII1VGw0rL0QY6WVvttIOJwD/JpYv9oWw==}
+  /@microsoft/api-documenter@7.22.27(@types/node@20.4.1):
+    resolution: {integrity: sha512-q/eyxqH321kA1BjK1Pj4mcnYpbEnbXJaxIIM/OH5ceZCSLEkDnSfa2zFxAHz1wvG6thSdU8k5gThfvuJM5wMVA==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.27.4(@types/node@20.4.1)
@@ -3634,7 +3634,7 @@ packages:
     resolution: {integrity: sha512-7kZUAaLscfgbwBQRbvdMYaZOWyMEcPTH/tJjnyAWJ/dvvs9Ef+CERx/qJb9GExJpl1qipaDGn7KqHnFGGixd0w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      semver: 7.5.3
+      semver: 7.5.4
     dev: true
 
   /@octokit/auth-token@2.5.0:
@@ -3955,7 +3955,7 @@ packages:
       '@opentelemetry/core': 1.15.0(@opentelemetry/api@1.4.1)
       '@opentelemetry/instrumentation': 0.41.0(@opentelemetry/api@1.4.1)
       '@opentelemetry/semantic-conventions': 1.15.0
-      semver: 7.5.3
+      semver: 7.5.4
       tslib: 2.6.0
     transitivePeerDependencies:
       - supports-color
@@ -3985,7 +3985,7 @@ packages:
       '@types/shimmer': 1.0.2
       import-in-the-middle: 1.3.5
       require-in-the-middle: 7.2.0
-      semver: 7.5.3
+      semver: 7.5.4
       shimmer: 1.2.1
     transitivePeerDependencies:
       - supports-color
@@ -4001,7 +4001,7 @@ packages:
       '@types/shimmer': 1.0.2
       import-in-the-middle: 1.4.1
       require-in-the-middle: 7.2.0
-      semver: 7.5.3
+      semver: 7.5.4
       shimmer: 1.2.1
       tslib: 2.6.0
     transitivePeerDependencies:
@@ -6023,7 +6023,7 @@ packages:
       p-limit: 2.3.0
       pluralize: 7.0.0
       pretty-bytes: 5.6.0
-      semver: 7.5.3
+      semver: 7.5.4
       stream-to-promise: 2.2.0
       strip-ansi: 6.0.1
       tar: 6.1.15
@@ -6844,7 +6844,7 @@ packages:
   /builtins@5.0.1:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
-      semver: 7.5.3
+      semver: 7.5.4
     dev: true
 
   /bundle-name@3.0.0:
@@ -7934,7 +7934,7 @@ packages:
       '@one-ini/wasm': 0.1.1
       commander: 11.0.0
       minimatch: 9.0.2
-      semver: 7.5.3
+      semver: 7.5.4
     dev: true
 
   /ee-first@1.1.1:
@@ -9336,7 +9336,7 @@ packages:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.5.3
+      semver: 7.5.4
       serialize-error: 7.0.1
     dev: true
 
@@ -12262,7 +12262,7 @@ packages:
       nopt: 6.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.5.3
+      semver: 7.5.4
       tar: 6.1.15
       which: 2.0.2
     transitivePeerDependencies:
