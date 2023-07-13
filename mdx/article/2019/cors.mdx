@@ -2,55 +2,50 @@
 layout: article
 title: If CORS is just a header, why don't attackers just ignore it?
 language: en-GB
-subtitle:
-    Discussion on a common misconception of the
+subtitle: Discussion on a common misconception of the
     security header CORS
 tags:
- - security
- - writing
+    - security
+    - writing
 
 date: [2, aug, 2019]
-medium:
-    https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef
+medium: https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef
 ---
-
 
 # If CORS is just a header, why don’t attackers just ignore it?
 
 Here’s a question from a co-worker I get quite often:
 
 > Considering that curl requests do not have the restriction of the fetch API,
-how does this browser policy [CORS] prevent circumventing abuse or misuse of
-server endpoints if an attacker can anyways do so by default via curl?
-And since a bad actor can use curl what’s the real world effectiveness
-of the browser policy in the first place?
+> how does this browser policy [CORS] prevent circumventing abuse or misuse of
+> server endpoints if an attacker can anyways do so by default via curl?
+> And since a bad actor can use curl what’s the real world effectiveness
+> of the browser policy in the first place?
 
 While ‘Cross Origin Resource Sharing’ is a very important security tool for the
 modern web, it solves a problem that’s very specific to the security
 architecture of the web which leads to many misconceptions.
 
 This question comes down to the crux of why CORS exists. It is often
-misconstrued that CORS is a way of *preventing* different websites from
+misconstrued that CORS is a way of _preventing_ different websites from
 receiving information from each other, but it’s quite the opposite. Let’s talk
 about a world without CORS first.
 
-
 ![artist's rendition: world before CORS](https://cdn-images-1.medium.com/max/2000/0*sICI1Q5-QgnC0hSC.jpg)
-Figure: *artist’s rendition: world before CORS*
-
+Figure: _artist’s rendition: world before CORS_
 
 In the time before CORS, as some readers might remember it was not possible
-(with caveats) for *Javascript* to retrieve data such as JSON from another web
+(with caveats) for _Javascript_ to retrieve data such as JSON from another web
 origin in the browser. This restriction is called the ‘same origin policy’
 component of the ‘web origin concept’, and underpins much of the security of web
 browsing.
 
 If I create a website, mywebsite.com, it can use Javascript to request
-information from *only* mywebsite.com. If this were not the case, I’d simply ask
+information from _only_ mywebsite.com. If this were not the case, I’d simply ask
 Javascript to retrieve google.com/account, read your personal information from
-the result and send it back to me. Because Javascript makes the request *as you*
-with *your cookie*, from* your browser*, it gets access to whatever you do, but
-is in control of the website author. Note that this restriction *only* applies
+the result and send it back to me. Because Javascript makes the request _as you_
+with _your cookie_, from* your browser*, it gets access to whatever you do, but
+is in control of the website author. Note that this restriction _only_ applies
 to requests by Javascript. I can embed images and scripts from other sites all I
 want.
 
@@ -95,7 +90,7 @@ preventing old applications using legacy behavior becoming insecure.
 ## Why don’t we just let anything request anything else and block cookies?
 
 ![picture: no gods, no masters (from 'fallout: new vegas')](https://cdn-images-1.medium.com/max/2560/1*ahbo8nFu5MSqTyfQttnEug.png)
-Figure: *[source](https://fazzeai.tumblr.com/post/178416661759)*
+Figure: _[source](https://fazzeai.tumblr.com/post/178416661759)_
 
 This may sound to an extent like anarchy, but can’t we just block cookies for
 CORS requests and let anyone load anyone else? At that point, I’m not going to
