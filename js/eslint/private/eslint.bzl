@@ -15,6 +15,8 @@ BASE_DATA_DEPS = [
     "//:node_modules/eslint-config-prettier",
     "//:node_modules/eslint-plugin-react",
     "//:node_modules/eslint-plugin-simple-import-sort",
+    "//:node_modules/eslint-plugin-mdx",
+    "//:node_modules/eslint-mdx",
 ]
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
