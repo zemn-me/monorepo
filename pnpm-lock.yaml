@@ -91,11 +91,11 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.0)(react@18.2.0)
   '@microsoft/api-documenter':
-    specifier: 7.22.24
-    version: 7.22.24(@types/node@20.4.1)
+    specifier: 7.22.27
+    version: 7.22.27(@types/node@20.4.1)
   '@microsoft/api-extractor':
-    specifier: 7.36.1
-    version: 7.36.1(@types/node@20.4.1)
+    specifier: 7.36.2
+    version: 7.36.2(@types/node@20.4.1)
   '@pulumi/aws':
     specifier: 5.41.0
     version: 5.41.0
@@ -3435,8 +3435,8 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.22.24(@types/node@20.4.1):
-    resolution: {integrity: sha512-KdO7p/weirR/po0SqwWsbqoPUTqLv0QVvxqopysxF2PVdBpeKx4eOrII1VGw0rL0QY6WVvttIOJwD/JpYv9oWw==}
+  /@microsoft/api-documenter@7.22.27(@types/node@20.4.1):
+    resolution: {integrity: sha512-q/eyxqH321kA1BjK1Pj4mcnYpbEnbXJaxIIM/OH5ceZCSLEkDnSfa2zFxAHz1wvG6thSdU8k5gThfvuJM5wMVA==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.27.4(@types/node@20.4.1)
@@ -3460,8 +3460,8 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.36.1(@types/node@20.4.1):
-    resolution: {integrity: sha512-2SPp1jq6wDY5IOsRLUv/4FxngslctBZJlztAJ3uWpCAwqKQG7ESdL3DhEza+StbYLtBQmu1Pk6q1Vkhl7qD/bg==}
+  /@microsoft/api-extractor@7.36.2(@types/node@20.4.1):
+    resolution: {integrity: sha512-ONe/jOmTZtR3OjTkWKHmeSV1P5ozbHDxHr6FV3KoWyIl1AcPk2B3dmvVBM5eOlZB5bgM66nxcWQTZ6msQo2hHg==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.27.4(@types/node@20.4.1)
