@@ -1,0 +1,24 @@
+{
+    "plugins": {
+        "remark-preset-lint-consistent": [
+            "error",
+            true
+        ],
+        "remark-preset-lint-recommended": [
+            "error",
+            true
+        ],
+        "remark-lint-list-item-indent": [
+            "error",
+            "space"
+        ],
+        "remark-lint-emphasis-marker": [
+            "error",
+            "*"
+        ],
+        "remark-lint-strong-marker": [
+            "error",
+            "*"
+        ]
+    }
+}
