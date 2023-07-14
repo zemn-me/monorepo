@@ -1,15 +1,18 @@
 ---
+
 layout: article
 title: If CORS is just a header, why don't attackers just ignore it?
 language: en-GB
 subtitle: Discussion on a common misconception of the
-    security header CORS
+security header CORS
 tags:
-    - security
-    - writing
 
-date: [2, aug, 2019]
+-   security
+-   writing
+
+date: \[2, aug, 2019]
 medium: https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef
+
 ---
 
 # If CORS is just a header, why don’t attackers just ignore it?
@@ -17,7 +20,7 @@ medium: https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-
 Here’s a question from a co-worker I get quite often:
 
 > Considering that curl requests do not have the restriction of the fetch API,
-> how does this browser policy [CORS] prevent circumventing abuse or misuse of
+> how does this browser policy \[CORS] prevent circumventing abuse or misuse of
 > server endpoints if an attacker can anyways do so by default via curl?
 > And since a bad actor can use curl what’s the real world effectiveness
 > of the browser policy in the first place?
@@ -44,7 +47,7 @@ If I create a website, mywebsite.com, it can use Javascript to request
 information from _only_ mywebsite.com. If this were not the case, I’d simply ask
 Javascript to retrieve google.com/account, read your personal information from
 the result and send it back to me. Because Javascript makes the request _as you_
-with _your cookie_, from* your browser*, it gets access to whatever you do, but
+with _your cookie_, from\* your browser\*, it gets access to whatever you do, but
 is in control of the website author. Note that this restriction _only_ applies
 to requests by Javascript. I can embed images and scripts from other sites all I
 want.
