@@ -97,8 +97,8 @@ devDependencies:
     specifier: 7.36.2
     version: 7.36.2(@types/node@20.4.2)
   '@pulumi/aws':
-    specifier: 5.41.0
-    version: 5.41.0
+    specifier: 5.42.0
+    version: 5.42.0
   '@pulumi/awsx':
     specifier: 1.0.2
     version: 1.0.2
@@ -4266,8 +4266,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@5.41.0:
-    resolution: {integrity: sha512-3Z+biMtXenKnYCa4LIHrKNAnE9O4EEsU4cTsKnu3uUycaA4QWnmioD64oFhDKTkhCASSCQblzxSPDcaXOqxkmQ==}
+  /@pulumi/aws@5.42.0:
+    resolution: {integrity: sha512-1h7Q5DjwoWVGxhBMcNragx/Q1US1KT7g29Tk3RghTg/9N7rGUbzTQKEXSrGgRSjGA/aKTbU+gt5A9ZmhONLiLg==}
     requiresBuild: true
     dependencies:
       '@pulumi/pulumi': 3.74.0
@@ -4284,7 +4284,7 @@ packages:
     resolution: {integrity: sha512-gT3piAGSa0ErafYYQ3iu7W175+usJ7fWtmoTcJ+oQW2bpnS+fM6uHro/bJlsBup1Ax2A8ep5Ts9AubPGbq01vA==}
     requiresBuild: true
     dependencies:
-      '@pulumi/aws': 5.41.0
+      '@pulumi/aws': 5.42.0
       '@pulumi/docker': 3.6.1
       '@pulumi/pulumi': 3.74.0
       '@types/aws-lambda': 8.10.119
@@ -16830,7 +16830,7 @@ packages:
     resolution: {integrity: sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==}
     engines: {node: '>=4.0.0'}
     dependencies:
-      sax: 1.2.1
+      sax: 1.2.4
       xmlbuilder: 11.0.1
     dev: true
 
