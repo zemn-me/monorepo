@@ -130,14 +130,14 @@ Ok, did that just say ‘run shell command’? I can have my widget update itsel
 Wait, what does runShellCommand actually do? It turns out, not a whole lot:
 
     const post = require('superagent').post;
-    
+
     function wrapError(err, res) {
       return err
         ? new Error((res || {}).text || 'error running command')
         : null
         ;
     }
-    
+
     module.exports = function runShellCommand(command, callback) {
       const request = post('/run/').send(command);
       return callback
@@ -195,7 +195,7 @@ We only care about the bits starting with ‘>’ or ‘<’, which indicate sen
     > GET / HTTP/1.1
     > Host: oh.no.ms
     > User-Agent: curl/7.58.0
-    > Accept: */* 
+    > Accept: */*
     >
     < HTTP/1.1 200 OK
     < x-amz-id-2: [scrubbed]

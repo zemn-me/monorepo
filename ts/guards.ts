@@ -76,7 +76,7 @@ export function hasMember<
 	K extends string | number | symbol,
 	I,
 	O extends I,
-	args extends unknown[]
+	args extends unknown[],
 >(
 	k: K,
 	t: (v: I, ...args: args) => v is O

@@ -53,8 +53,8 @@ export type AsyncFn<I extends Value[], O extends Value> = (
 const gen: (input: Value[], fn: AsyncFn<any, any>) => string = (input, fn) => `
 const main = async () => {
     console.log(JSON.stringify({ type: "success", value: await (${fn})(...${JSON.stringify(
-	input
-)}) }));
+		input
+	)}) }));
 }
 
 main().catch(e => console.log(JSON.stringify({ type: "failure", value: e })));
