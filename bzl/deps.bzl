@@ -79,10 +79,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "b8b6d75de6e4bf7c41b7737b183523085f56283f6db929b86c5e7e1f09cf59c9",
+        sha256 = "29218f8e0cebe583643cbf93cae6f971be8a2484cdcfa1e45057658df8d54002",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.31.1/bazel-gazelle-v0.31.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.31.1/bazel-gazelle-v0.31.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.32.0/bazel-gazelle-v0.32.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.32.0/bazel-gazelle-v0.32.0.tar.gz",
         ],
     )
 
@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.74.0/pulumi-v3.74.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "77030e5b7636246e9292338341f6ee15f81f636e35493fc023a7d7e5f88c171c",
+        sha256 = "6d5103f31861cc614ddb3d70f6f378ab21c4b044fe56e7932f6a48d6862225a1",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
