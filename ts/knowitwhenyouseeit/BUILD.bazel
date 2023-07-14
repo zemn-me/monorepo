@@ -1,9 +1,17 @@
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = [
     "//deploy:__subpackages__",
 ])
+
+
+md_files(
+    name = "markdown_files",
+    srcs = glob(["**/*.md"])
+)
+
 
 ts_project(
     name = "project",
