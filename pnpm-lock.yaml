@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -46,6 +46,21 @@ dependencies:
   pnpm:
     specifier: ^8.0.0
     version: 8.6.7
+  remark-lint-emphasis-marker:
+    specifier: ^3.1.2
+    version: 3.1.2
+  remark-lint-list-item-indent:
+    specifier: ^3.1.2
+    version: 3.1.2
+  remark-lint-strong-marker:
+    specifier: ^3.1.2
+    version: 3.1.2
+  remark-preset-lint-consistent:
+    specifier: ^5.1.2
+    version: 5.1.2
+  remark-preset-lint-recommended:
+    specifier: ^6.1.3
+    version: 6.1.3
 
 devDependencies:
   '@actions/core':
@@ -11547,6 +11562,15 @@ packages:
     resolution: {integrity: sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==}
     dev: true
 
+  /mdast-comment-marker@2.1.2:
+    resolution: {integrity: sha512-HED3ezseRVkBzZ0uK4q6RJMdufr/2p3VfVZstE3H1N9K8bwtspztWo6Xd7rEatuGNoCXaBna8oEqMwUn0Ve1bw==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-util-mdx-expression: 1.3.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /mdast-util-find-and-replace@1.1.1:
     resolution: {integrity: sha512-9cKl33Y21lyckGzpSmEQnIDjEfeeWelN5s1kUW1LwdB0Fkuq2u+4GdqcGEygYxJE8GVqCl0741bYXHgamfWAZA==}
     dependencies:
@@ -11583,6 +11607,12 @@ packages:
       uvu: 0.5.6
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /mdast-util-heading-style@2.0.1:
+    resolution: {integrity: sha512-0L5rthU4xKDVbw+UQ7D8Y8xOEsX4JXZvemWoEAsL+WAaeSH+TvVVwFnTb3G/OrjyP4VYQULoNWU+PdZfkmNu4A==}
+    dependencies:
+      '@types/mdast': 3.0.12
     dev: false
 
   /mdast-util-mdx-expression@1.3.2:
@@ -13499,6 +13529,11 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /pluralize@8.0.0:
+    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
+    engines: {node: '>=4'}
+    dev: false
+
   /pnpm@8.6.7:
     resolution: {integrity: sha512-vRIWpD/L4phf9Bk2o/O2TDR8fFoJnpYrp2TKqTIZF/qZ2/rgL3qKXzHofHgbXsinwMoSEigz28sqk3pQ+yMEQQ==}
     engines: {node: '>=16.14'}
@@ -14372,11 +14407,305 @@ packages:
       unist-util-visit: 2.0.3
     dev: true
 
+  /remark-lint-blockquote-indentation@3.1.2:
+    resolution: {integrity: sha512-5DOrFsZd5dXqA4p/VZvWSrqIWNFbBXjX7IV/FkVkxlNhNF/0FMf/4v8x1I2W3mzaZ7yDsWS/egpZnmligq1ckQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      pluralize: 8.0.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-checkbox-character-style@4.1.2:
+    resolution: {integrity: sha512-5ITz+1cCuJ3Jv/Q7rKgDEucCOnIgjWDnSHPJA1tb4TI/D316h+ALbDhZIpP8gyfAm6sBAh3Pwz9XZJN2uJB5UQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-code-block-style@3.1.2:
+    resolution: {integrity: sha512-3wsWmzzdyEsB9sOzBOf46TSkwwVKXN2JpTEQb6feN0Tl6Vg75F7T9MHqMz7aqk/56bOXSxUzdpXDscGBhziLRA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-emphasis-marker@3.1.2:
+    resolution: {integrity: sha512-hPZ8vxZrIfxmLA5B66bA8y3PdHjcCQuaLsySIqi5PM2DkpN6a7zAP3v1znyRSaYJ1ANVWcu00/0bNzuUjflGCA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-fenced-code-marker@3.1.2:
+    resolution: {integrity: sha512-6XNqjOuhT+0c7Q/22aCsMz61ne9g8HRpYF79EXQPdbzYa+PcfPXMiQKStONY3PfC8OE2/3WXI2zcs8w9x+8+VQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-final-newline@2.1.2:
+    resolution: {integrity: sha512-K0FdPGPyEB94PwNgopwVJFE8oRWi7IhY2ycXFVAMReI51el7EHB8F1gX14tB6p6zyGy6mUh69bCVU9mMTNeOUg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+    dev: false
+
+  /remark-lint-hard-break-spaces@3.1.2:
+    resolution: {integrity: sha512-HaW0xsl3TI7VFAqGWWcZtPqyz0NWu19KKjSO7OGFTUJU4S9YiRnhIxmSFM0ZLSsVAynE+dhzVKa8U7dOpWDcOg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-heading-style@3.1.2:
+    resolution: {integrity: sha512-0RkcRPV/H2bPFgeInzBkK1cWUwtFTm83I+Db/Z5tDY02GzKOosHLvxtJyj/1391/opAH1LYbHtHWffir99IUgw==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-util-heading-style: 2.0.1
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-link-title-style@3.1.2:
+    resolution: {integrity: sha512-if4MahYJVvQUWlrXDF8GSv4b9VtLSgMSDHeikQp1/hGYlihLl9uGw3nlL5Lf9DqTN0qaT6RPbXOjuuzHlk38sg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+      vfile-location: 4.1.0
+    dev: false
+
+  /remark-lint-list-item-bullet-indent@4.1.2:
+    resolution: {integrity: sha512-WgU5nooqIEm6f35opcbHKBzWrdFJA3XcyTfB3nv/v0KX43/h6qFGmmMJ5kEiaFExuQp3dZSdatWuY0YZ9YRbUg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      pluralize: 8.0.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-list-item-content-indent@3.1.2:
+    resolution: {integrity: sha512-TB0pmrWiRaQW80Y/PILFQTnHDghRxXNzMwyawlP+DBF9gNom3pEBmb4ZlGQlN0aa3r8VWeIKdv1ylHrfXE0vqA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      pluralize: 8.0.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-list-item-indent@3.1.2:
+    resolution: {integrity: sha512-tkrra1pxZVE4OVJGfN435u/v0ljruXU+dHzWiKDYeifquD4aWhJxvSApu7+FbE098D/4usVXgMxwFkNhrpZcSQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      pluralize: 8.0.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-blockquote-without-marker@5.1.2:
+    resolution: {integrity: sha512-QPbqsrt7EfpSWqTkZJ9tepabPIhBDlNqZkuxxMQYD0OQ2N+tHDUq3zE1JxI5ts1V9o/mWApgySocqGd3jlcKmQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+      vfile-location: 4.1.0
+    dev: false
+
+  /remark-lint-no-duplicate-definitions@3.1.2:
+    resolution: {integrity: sha512-vi0nXA7p+pjQOorZOkr9E+QDhG74JAdbzqglWPrWWNI3z2rUYWYHTNSyWJbwEXaIIcev1ZAw8SCAOis5MNm+pA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-stringify-position: 3.0.3
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-heading-content-indent@4.1.2:
+    resolution: {integrity: sha512-TTxFsm1f4ZHFxZQCuz7j0QK4RvP6oArTiwazKLr16yaZe1608ypogMek4A30j2xX8WuO9+2uBzLXCY5OBo5x5Q==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-util-heading-style: 2.0.1
+      pluralize: 8.0.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-inline-padding@4.1.2:
+    resolution: {integrity: sha512-dGyhWsiqCZS3Slob0EVBUfsFBbdpMIBCvb56LlCgaHbnLsnNYx8PpF/wA5CgsN8BXIbXfRpyPB5cIJwIq5taYg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-util-to-string: 3.2.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-literal-urls@3.1.2:
+    resolution: {integrity: sha512-4tV9JGLKxAMFSuWDMOqLozkFJ3HyRvhzgrPrxASoziaml23m7UXAozk5dkIrFny1cN2oG988Z8tORxX2FL1Ilw==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-util-to-string: 3.2.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-shortcut-reference-image@3.1.2:
+    resolution: {integrity: sha512-NX4XJFPyDeJJ77pmETxRj4oM/zayf7Lmn/O87HgExBkQIPz2NYbDeKD8QEyliLaV/oKA2rQufpzuFw55xa1Tww==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-shortcut-reference-link@3.1.2:
+    resolution: {integrity: sha512-/9iPN7FLKaaIzw4tLWKu7Rx0wAP7E2EuzIeentQlkY0rO/mMHipmT3IlgiebsAInKagzTY6TNFoG1rq2VnaCcA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-no-undefined-references@4.2.1:
+    resolution: {integrity: sha512-HdNg5b2KiuNplcuVvRtsrUiROw557kAG1CiZYB7jQrrVWFgd86lKTa3bDiywe+87dGrGmHd3qQ28eZYTuHz2Nw==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      micromark-util-normalize-identifier: 1.1.0
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+      vfile-location: 4.1.0
+    dev: false
+
+  /remark-lint-no-unused-definitions@3.1.2:
+    resolution: {integrity: sha512-bOcaJAnjKxT3kASFquUA3fO9xem9wZhVqt8TbqjA84+G4n40qjaLXDs/4vq73aMsSde73K0f3j1u0pMe7et8yQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-ordered-list-marker-style@3.1.2:
+    resolution: {integrity: sha512-62iVE/YQsA0Azaqt8yAJWPplWLS47kDLjXeC2PlRIAzCqbNt9qH3HId8vZ15QTSrp8rHmJwrCMdcqV6AZUi7gQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-generated: 2.0.1
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-rule-style@3.1.2:
+    resolution: {integrity: sha512-0CsX2XcX9pIhAP5N7Y8mhYXp3/Ld+NvxXY1p0LHAq0NZu17UsZLuegvx/s25uFbQs08DcmSqyKnepU9qGGqmTQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-strong-marker@3.1.2:
+    resolution: {integrity: sha512-U/g4wngmiI0Q6WBRQG6pZxnDS33Wt/0QYA3+KNFBDykoi1vXsDEorIqy3dEag9z6XHwcMvFDsff6VRUhaOJWQg==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint-table-cell-padding@4.1.3:
+    resolution: {integrity: sha512-N9xtnS6MG/H3srAMjqqaF26A7socr87pIgt64dr5rxoSbDRWRPChGQ8y7wKyV8VeyRNF37e3E5KB3bQVqjSYaQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      '@types/unist': 2.0.7
+      unified: 10.1.2
+      unified-lint-rule: 2.1.2
+      unist-util-position: 4.0.4
+      unist-util-visit: 4.1.2
+    dev: false
+
+  /remark-lint@9.1.2:
+    resolution: {integrity: sha512-m9e/aPlh7tsvfJfj8tPxrQzD6oEdb9Foko+Ya/6OwUP9EoGMfehv1Qtv26W1DoH58Wn8rT8CD+KuprTWscMmIA==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      remark-message-control: 7.1.1
+      unified: 10.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /remark-mdx@2.3.0:
     resolution: {integrity: sha512-g53hMkpM0I98MU266IzDFMrTD980gNF3BJnkyFcmN+dD873mQeD5rdMO3Y2X+x8umQfbSE0PcoEDl7ledSA+2g==}
     dependencies:
       mdast-util-mdx: 2.0.1
       micromark-extension-mdxjs: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /remark-message-control@7.1.1:
+    resolution: {integrity: sha512-xKRWl1NTBOKed0oEtCd8BUfH5m4s8WXxFFSoo7uUwx6GW/qdCy4zov5LfPyw7emantDmhfWn5PdIZgcbVcWMDQ==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      mdast-comment-marker: 2.1.2
+      unified: 10.1.2
+      unified-message-control: 4.0.0
+      vfile: 5.3.7
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -14398,6 +14727,52 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /remark-preset-lint-consistent@5.1.2:
+    resolution: {integrity: sha512-RQrWBFmyIkKfXtp9P1Fui7UbGSfXth9nuvRJUVnO0vfevBJe02iyMZWPokXSwkDOI/cM539wj0i3vrQupz+v5A==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      remark-lint: 9.1.2
+      remark-lint-blockquote-indentation: 3.1.2
+      remark-lint-checkbox-character-style: 4.1.2
+      remark-lint-code-block-style: 3.1.2
+      remark-lint-emphasis-marker: 3.1.2
+      remark-lint-fenced-code-marker: 3.1.2
+      remark-lint-heading-style: 3.1.2
+      remark-lint-link-title-style: 3.1.2
+      remark-lint-list-item-content-indent: 3.1.2
+      remark-lint-ordered-list-marker-style: 3.1.2
+      remark-lint-rule-style: 3.1.2
+      remark-lint-strong-marker: 3.1.2
+      remark-lint-table-cell-padding: 4.1.3
+      unified: 10.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /remark-preset-lint-recommended@6.1.3:
+    resolution: {integrity: sha512-DGjbeP2TsFmQeJflUiIvJWAOs1PxJt7SG3WQyMxOppkRr/up+mxWVkuv+6AUuaR0EsuaaFGz7WmZM5TrSSFWJw==}
+    dependencies:
+      '@types/mdast': 3.0.12
+      remark-lint: 9.1.2
+      remark-lint-final-newline: 2.1.2
+      remark-lint-hard-break-spaces: 3.1.2
+      remark-lint-list-item-bullet-indent: 4.1.2
+      remark-lint-list-item-indent: 3.1.2
+      remark-lint-no-blockquote-without-marker: 5.1.2
+      remark-lint-no-duplicate-definitions: 3.1.2
+      remark-lint-no-heading-content-indent: 4.1.2
+      remark-lint-no-inline-padding: 4.1.2
+      remark-lint-no-literal-urls: 3.1.2
+      remark-lint-no-shortcut-reference-image: 3.1.2
+      remark-lint-no-shortcut-reference-link: 3.1.2
+      remark-lint-no-undefined-references: 4.2.1
+      remark-lint-no-unused-definitions: 3.1.2
+      remark-lint-ordered-list-marker-style: 3.1.2
+      unified: 10.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /remark-stringify@10.0.3:
     resolution: {integrity: sha512-koyOzCMYoUHudypbj4XpnAKFbkddRMYZHwghnxd7ue5210WzGw6kOBwauJTRUMq16jsovXx8dYNvSSWP89kZ3A==}
@@ -16223,6 +16598,26 @@ packages:
       - supports-color
     dev: false
 
+  /unified-lint-rule@2.1.2:
+    resolution: {integrity: sha512-JWudPtRN7TLFHVLEVZ+Rm8FUb6kCAtHxEXFgBGDxRSdNMnGyTU5zyYvduHSF/liExlFB3vdFvsAHnNVE/UjAwA==}
+    dependencies:
+      '@types/unist': 2.0.7
+      trough: 2.1.0
+      unified: 10.1.2
+      vfile: 5.3.7
+    dev: false
+
+  /unified-message-control@4.0.0:
+    resolution: {integrity: sha512-1b92N+VkPHftOsvXNOtkJm4wHlr+UDmTBF2dUzepn40oy9NxanJ9xS1RwUBTjXJwqr2K0kMbEyv1Krdsho7+Iw==}
+    dependencies:
+      '@types/unist': 2.0.7
+      unist-util-is: 5.2.1
+      unist-util-visit: 3.1.0
+      vfile: 5.3.7
+      vfile-location: 4.1.0
+      vfile-message: 3.1.4
+    dev: false
+
   /unified@10.1.2:
     resolution: {integrity: sha512-pUSWAi/RAnVy1Pif2kAoeWNBa3JVrx0MId2LASj8G+7AiHWoKZNTomq6LG326T68U7/e263X6fTdcXIy7XnF7Q==}
     dependencies:
@@ -16268,6 +16663,10 @@ packages:
       imurmurhash: 0.1.4
     dev: true
 
+  /unist-util-generated@2.0.1:
+    resolution: {integrity: sha512-qF72kLmPxAw0oN2fwpWIqbXAVyEqUzDHMsbtPvOudIlUzXYFIeQIuxXQCRCFh22B7cixvU0MG7m3MW8FTq/S+A==}
+    dev: false
+
   /unist-util-inspect@7.0.2:
     resolution: {integrity: sha512-Op0XnmHUl6C2zo/yJCwhXQSm/SmW22eDZdWP2qdf4WpGrgO1ZxFodq+5zFyeRGasFjJotAnLgfuD1jkcKqiH1Q==}
     dependencies:
@@ -16286,6 +16685,12 @@ packages:
 
   /unist-util-position-from-estree@1.1.2:
     resolution: {integrity: sha512-poZa0eXpS+/XpoQwGwl79UUdea4ol2ZuCYguVaJS4qzIOMDzbqz8a3erUCOmubSZkaOuGamb3tX790iwOIROww==}
+    dependencies:
+      '@types/unist': 2.0.7
+    dev: false
+
+  /unist-util-position@4.0.4:
+    resolution: {integrity: sha512-kUBE91efOWfIVBo8xzh/uZQ7p9ffYRtUbMRZBNFYwf0RK8koUMx6dGUfwylLOKmaT2cs4wSW96QoYUSXAyEtpg==}
     dependencies:
       '@types/unist': 2.0.7
     dev: false
@@ -16315,6 +16720,13 @@ packages:
       unist-util-is: 4.1.0
     dev: true
 
+  /unist-util-visit-parents@4.1.1:
+    resolution: {integrity: sha512-1xAFJXAKpnnJl8G7K5KgU7FY55y3GcLIXqkzUj5QF/QVP7biUm0K0O2oqVkYsdjzJKifYeWn9+o6piAK2hGSHw==}
+    dependencies:
+      '@types/unist': 2.0.7
+      unist-util-is: 5.2.1
+    dev: false
+
   /unist-util-visit-parents@5.1.3:
     resolution: {integrity: sha512-x6+y8g7wWMyQhL1iZfhIPhDAs7Xwbn9nRosDXl7qoPTSCy0yNxnKc+hWokFifWQIDGi154rdUqKvbCa4+1kLhg==}
     dependencies:
@@ -16329,6 +16741,14 @@ packages:
       unist-util-is: 4.1.0
       unist-util-visit-parents: 3.1.1
     dev: true
+
+  /unist-util-visit@3.1.0:
+    resolution: {integrity: sha512-Szoh+R/Ll68QWAyQyZZpQzZQm2UPbxibDvaY8Xc9SUtYgPsDzx5AWSk++UUt2hJuow8mvwR+rG+LQLw+KsuAKA==}
+    dependencies:
+      '@types/unist': 2.0.7
+      unist-util-is: 5.2.1
+      unist-util-visit-parents: 4.1.1
+    dev: false
 
   /unist-util-visit@4.1.2:
     resolution: {integrity: sha512-MSd8OUGISqHdVvfY9TPhyK2VdUrPgxkUtWSuMHF6XAAFuL4LokseigBnZtPnJMu+FbynTkFNnFlyjxpVKujMRg==}
@@ -16508,6 +16928,13 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
     dev: true
+
+  /vfile-location@4.1.0:
+    resolution: {integrity: sha512-YF23YMyASIIJXpktBa4vIGLJ5Gs88UB/XePgqPmTa7cDA+JeO3yclbpheQYCHjVHBn/yePzrXuygIL+xbvRYHw==}
+    dependencies:
+      '@types/unist': 2.0.7
+      vfile: 5.3.7
+    dev: false
 
   /vfile-message@2.0.4:
     resolution: {integrity: sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==}
