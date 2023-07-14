@@ -60,6 +60,11 @@ copy_to_bin(
 )
 
 copy_to_bin(
+    name = "remarkrc",
+    srcs = [".remarkrc.json"],
+)
+
+copy_to_bin(
     name = "prettierrc",
     srcs = [".prettierrc.json"],
 )

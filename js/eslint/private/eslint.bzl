@@ -17,6 +17,12 @@ BASE_DATA_DEPS = [
     "//:node_modules/eslint-plugin-simple-import-sort",
     "//:node_modules/eslint-plugin-mdx",
     "//:node_modules/eslint-mdx",
+    "//:node_modules/remark-preset-lint-consistent",
+    "//:node_modules/remark-preset-lint-recommended",
+    "//:node_modules/remark-lint-list-item-indent",
+    "//:node_modules/remark-lint-emphasis-marker",
+    "//:node_modules/remark-lint-strong-marker",
+    "//:remarkrc"
 ]
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
