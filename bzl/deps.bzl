@@ -215,7 +215,7 @@ exports_files(glob(["**/*"], exclude_directories=0))
     http_archive(
         name = "rules_nodejs",
         sha256 = "be84fb5238a2034870810b60ae66f8555db385ff931bd6f61be204732df8d4a6",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.3/rules_nodejs-core-5.8.3.tar.gz"],
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-core-5.8.3.tar.gz"],
     )
 
     http_archive(
