@@ -1,14 +1,12 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"module": "CommonJS",
-		"target": "es2020",
+		"module": "esnext",
+		"target": "esnext",
 		"strictFunctionTypes": true,
-		"esModuleInterop": true,
-		"moduleResolution": "node",
+		"moduleResolution": "NodeNext",
 		"strict": true,
 		"jsx": "react-jsx",
-		"resolveJsonModule": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
 		"noImplicitThis": true,

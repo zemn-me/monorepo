@@ -17,6 +17,30 @@ BASE_DATA_DEPS = [
     "//:node_modules/eslint-plugin-simple-import-sort",
     "//:node_modules/eslint-plugin-mdx",
     "//:node_modules/eslint-mdx",
+
+"//:node_modules/remark-preset-lint-recommended",
+"//:node_modules/remark-retext",
+"//:node_modules/unified",
+"//:node_modules/retext-english",
+"//:node_modules/retext-syntax-mentions",
+"//:node_modules/retext-syntax-urls",
+"//:node_modules/retext-spell",
+"//:node_modules/dictionary-en",
+"//:node_modules/retext-contractions",
+"//:node_modules/retext-diacritics",
+"//:node_modules/retext-equality",
+"//:node_modules/retext-indefinite-article",
+"//:node_modules/retext-intensify",
+"//:node_modules/retext-passive",
+"//:node_modules/retext-profanities",
+"//:node_modules/retext-readability",
+"//:node_modules/retext-redundant-acronyms",
+"//:node_modules/retext-repeated-words",
+"//:node_modules/retext-sentence-spacing",
+"//:node_modules/retext-simplify",
+"//:package_json",
+
+    "//:remarkrc"
 ]
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
