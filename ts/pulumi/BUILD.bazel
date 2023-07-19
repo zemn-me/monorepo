@@ -1,6 +1,13 @@
 load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
+load("//yml:test.bzl", "yaml_lint_test")
 
 package(default_visibility = ["//deploy:__subpackages__"])
+
+yaml_lint_test(
+    name = "validate_yml",
+    srcs = glob(["*.yml"]),
+)
+
 
 filegroup(
     name = "pulumi_files",
