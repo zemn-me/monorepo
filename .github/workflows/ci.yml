@@ -1,30 +1,77 @@
 ---
 
+# See: /ci/README.md
+#
+#
+# ```
+# +-----------------------------+
+# | 1.       PRESUBMIT          |
+# +-----------------------------+
+#   |
+#   | All offline tests succeed.
+#   |
+#   |   - bazel test //...
+#   v
+# +-----------------------------+
+# | 2.  AUTHORIZATION CHECK     |
+# +-----------------------------+
+#   | The next step will not run
+#   | until one of the repo owners
+#   | approves the commits.
+#   |
+#   v
+# +-----------------------------+
+# | 3.        SUBMIT            |
+# +-----------------------------+
+#   | Deploy actions that can
+#   | be rolled back performed.
+#   |
+#   |  - Pulumi up
+#   v
+# +-----------------------------+
+# | 3a.       ROLLBACK          |
+# +-----------------------------+
+#   | Upon failure of step 3,
+#   | checkout origin/main,
+#   | and re-perform SUBMIT.
+#   x
+# +-----------------------------+
+# | 4.      POSTSUBMIT          |
+# +-----------------------------+
+#   | When (3) succeeds,
+#   |
+#   | Deploy actions that cannot
+#   | be rolled back performed.
+#   |
+#   |  - Creating a GitHub release
+#   |  - Uploading NPM packages
+#   v
+# +-----------------------------+
+# | 5.         MERGE            |
+# +-----------------------------+
+#
+# ```
+
 name: CI
 concurrency:
   group: concurrency-ci-${{ github.head_ref }}
   cancel-in-progress: true
 
 on:   # yamllint disable-line rule:truthy
-  push:
-    branches:
-      - main
-      - versioned
   pull_request:
     branches:
-      - main
-      - versioned
-  workflow_dispatch:
+      - main           # presubmit
+  pull_request_review:
+    types: [submitted] # submit & postsubmit
+  workflow_dispatch:   # manual triggering
+
 
 jobs:
-  Test:
-    # This runs on both push and PR – for
-    # PR, we need to ensure tests pass,
-    # but a PR cannot save a cache due to
-    # security issues. Therefore, we run
-    # post merge to create a cache that
-    # can be picked up by future PRs.
-    name: Test
+  Presubmit:
+    if: >
+      github.event_name == 'pull_request'
+      || github.event_name == 'workflow_dispatch'
+    # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,7 +93,126 @@ jobs:
             'WORKSPACE.bazel', 'MODULE.bazel') }}
           restore-keys: |
             ${{ runner.os }}-bazel-
-      - name: All tests
+      - name: Presubmit
+        run: |
+         bazel run //ci:presubmit
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+  Submit:
+    # Attempts to submit changes to production.
+    runs-on: ubuntu-latest
+    needs: ['Presubmit']
+    if: >
+     (github.event_name == 'pull_request_review'
+     && github.event.review.state == 'approved')
+     || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: Submit
         # Use npx to try to generate only
         # bazel generated node_modules
-        run: bazel test //...
+        run: |
+          bazel run //ci:submit
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+  Rollback:
+    # Undo submit if a failure occurred.
+    runs-on: ubuntu-latest
+    needs: ['Submit']
+    if: ${{ failure() }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main # rollback to success
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: Rollback
+        run: |
+          bazel run //ci:submit
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+  Postsubmit:
+    runs-on: ubuntu-latest
+    needs: ['Presubmit', 'Submit']
+    if: >
+     (github.event_name == 'pull_request_review'
+     && github.event.review.state == 'approved')
+     || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main # rollback to success
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # example copied from:
+      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - name: Cache Bazel
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: >
+            ${{ runner.os }}-bazel-${{
+            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
+            'WORKSPACE.bazel', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+      - name: Postsubmit
+        run: |
+          bazel run //ci:postsubmit
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
