@@ -277,8 +277,8 @@ devDependencies:
     specifier: 15.10.1
     version: 15.10.1
   stylelint-config-css-modules:
-    specifier: 4.2.0
-    version: 4.2.0(stylelint@15.10.1)
+    specifier: 4.3.0
+    version: 4.3.0(stylelint@15.10.1)
   stylelint-config-recommended:
     specifier: 13.0.0
     version: 13.0.0(stylelint@15.10.1)
@@ -15480,14 +15480,14 @@ packages:
       react: 18.2.0
     dev: true
 
-  /stylelint-config-css-modules@4.2.0(stylelint@15.10.1):
-    resolution: {integrity: sha512-5x7lzPNCc42puQEAFdr7dSzQ00aIg1vCVyV+QPUiSp2oZILpAt8HTgveXaDttazxcwWPBNJrxrLpa556xUP7Bw==}
+  /stylelint-config-css-modules@4.3.0(stylelint@15.10.1):
+    resolution: {integrity: sha512-KvIvhzzjpcjHKkGSPkQCueoZJHrb6sZ6GCtrQb/J45HQTBVwJAeNYXaSZZK6ZQOC7NxJ4v5kLxpQLDiCK6zzgw==}
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0
     dependencies:
       stylelint: 15.10.1
     optionalDependencies:
-      stylelint-scss: 4.7.0(stylelint@15.10.1)
+      stylelint-scss: 5.0.1(stylelint@15.10.1)
     dev: true
 
   /stylelint-config-recommended@13.0.0(stylelint@15.10.1):
@@ -15509,8 +15509,8 @@ packages:
       stylelint-config-recommended: 13.0.0(stylelint@15.10.1)
     dev: true
 
-  /stylelint-scss@4.7.0(stylelint@15.10.1):
-    resolution: {integrity: sha512-TSUgIeS0H3jqDZnby1UO1Qv3poi1N8wUYIJY6D1tuUq2MN3lwp/rITVo0wD+1SWTmRm0tNmGO0b7nKInnqF6Hg==}
+  /stylelint-scss@5.0.1(stylelint@15.10.1):
+    resolution: {integrity: sha512-n87iCRZrr2J7//I/QFsDXxFLnHKw633U4qvWZ+mOW6KDAp/HLj06H+6+f9zOuTYy+MdGdTuCSDROCpQIhw5fvQ==}
     requiresBuild: true
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0
