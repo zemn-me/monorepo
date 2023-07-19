@@ -1,4 +1,6 @@
-def yaml_lint_test(name, srcs = [], **kwargs):
+def yaml_lint_test(name, srcs = None, **kwargs):
+    if srcs == None:
+        srcs = native.glob(["**/*.yml", "**/*.yaml"])
     native.sh_test(
         name = name,
         env = {
