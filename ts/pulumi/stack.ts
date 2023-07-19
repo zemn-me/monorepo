@@ -1,0 +1,51 @@
+import { LocalWorkspace, Stack } from '@pulumi/pulumi/automation';
+import path from 'node:path';
+import fs from 'node:fs';
+
+// inject the pulumi binary into process.env; it is used by the pulumi automation API
+
+const BINDIR = process.env.JS_BINARY__BINDIR!;
+const EXECROOT = process.env.JS_BINARY__EXECROOT!;
+
+const pulumi_dir = path.join(process.cwd(), "ts/pulumi");
+const pulumi_binary_path = path.join(pulumi_dir, "pulumi");
+
+process.env.PATH = [
+	process.env.PATH,
+	// the pulumi cli binary should be here
+	pulumi_dir
+].join(":");
+
+// check the binary is actually in there
+if (!fs.existsSync(pulumi_binary_path)) {
+	throw new Error("missing pulumi binary in " + pulumi_dir); 
+}
+
+
+export async function program() {
+	require('ts/pulumi/index');
+}
+
+export const projectName = 'monorepo-2';
+
+async function provisionStack(s: Promise<Stack>): Promise<Stack> {
+	await (await s).workspace.installPlugin('aws', 'v5.13.0'); // can I get rid of this? it seems stupid
+
+	return s;
+}
+
+export async function production(): Promise<Stack> {
+	return provisionStack(LocalWorkspace.createOrSelectStack({
+		stackName: 'prod',
+		projectName,
+		program
+	}));
+}
+
+export async function staging(): Promise<Stack> {
+	return provisionStack(LocalWorkspace.createOrSelectStack({
+		stackName: 'staging',
+		projectName,
+		program
+	}));
+}
