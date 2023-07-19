@@ -1,0 +1,1 @@
+This folder contains the static (next.js) content for https://pleaseintroducemetoyour.dog.
