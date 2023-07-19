@@ -4,8 +4,7 @@ load("//yml:test.bzl", "yaml_lint_test")
 package(default_visibility = ["//deploy:__subpackages__"])
 
 yaml_lint_test(
-    name = "validate_yml",
-    srcs = glob(["*.yml", "*.yaml"]),
+    name = "validate_yml"
 )
 
 
