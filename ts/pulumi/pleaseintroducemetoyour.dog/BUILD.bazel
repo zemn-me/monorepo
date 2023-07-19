@@ -1,7 +1,7 @@
 load("//ts/next.js:rules.bzl", "next_project")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//ts/pulumi/dog/pleaseintroducemetoyour/public:__pkg__"])
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 ts_project(
     name = "ts",
@@ -10,11 +10,19 @@ ts_project(
         "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/mime",
+        "//ts",
         "//ts/next.js",
+        "//ts/pulumi/lib"
     ],
+    data = [
+        ":next"
+    ]
 )
 
 next_project(
-    name = "static",
-    srcs = [":ts"]
+    name = "next",
+    srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/pages"]
 )
