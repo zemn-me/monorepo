@@ -6,6 +6,14 @@ import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import * as guard from 'ts/guard';
 
+const bucketSuffix = "-bucket";
+const pulumiRandomChars = 7;
+const bucketNameMaximumLength = 56 - pulumiRandomChars - bucketSuffix.length;
+
+// bucket has a maximum length of 63 (56 minus the 7 random chars that Pulumi adds)
+const deriveBuckeName = (base: string) => 
+	[...base.replace(/[^a-z0-9.]/g, '-')].slice(0, bucketNameMaximumLength-1).join("") + bucketSuffix;
+
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
 		t = path.normalize(to);
@@ -83,12 +91,16 @@ export class Website extends pulumi.ComponentResource {
 			[args.subDomain, zoneName].filter(guard.isDefined).join('.')
 		);
 
-		const cert = new aws.acm.Certificate(`${name}_cert`, {
-			domainName: targetDomain,
-			validationMethod: 'DNS',
-		}, {
-			parent: this
-		});
+		const cert = new aws.acm.Certificate(
+			`${name}_cert`,
+			{
+				domainName: targetDomain,
+				validationMethod: 'DNS',
+			},
+			{
+				parent: this,
+			}
+		);
 
 		const validatingRecord = new aws.route53.Record(
 			`${name}_validating_record`,
@@ -100,7 +112,7 @@ export class Website extends pulumi.ComponentResource {
 				ttl: 1 * minute, // because these really don't need to be cached
 			},
 			{
-				parent: this
+				parent: this,
 			}
 		);
 
@@ -111,7 +123,7 @@ export class Website extends pulumi.ComponentResource {
 				validationRecordFqdns: [validatingRecord.fqdn],
 			},
 			{
-				parent: this
+				parent: this,
 			}
 		);
 
@@ -121,14 +133,15 @@ export class Website extends pulumi.ComponentResource {
 			: undefined;
 
 		const bucket = new aws.s3.Bucket(
-			`${name.replace(/[^a-z0-9.]/g, '-')}-bucket`,
+			deriveBuckeName(name),
 			{
 				website: {
 					indexDocument,
 					errorDocument,
 				},
-			}, {
-				parent: this
+			},
+			{
+				parent: this,
 			}
 		);
 
@@ -151,22 +164,26 @@ export class Website extends pulumi.ComponentResource {
 
 				out.set(
 					fPath,
-					new aws.s3.BucketObject(`${name}_bucket_file_${fPath}`, {
-						acl: 'public-read',
-						key: relative(args.directory, fPath),
-						bucket: bucket.id,
-						contentType: guard.must(
-							guard.isNotNull,
-							() => `couldn't get contentType of ${fPath}`
-						)(mime.getType(fPath)),
-						source: fPath,
-						// wait to be allowed to add stuff to this bucket with public
-						// access.
-						//
-						// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
-					}, {
-						parent: this
-					})
+					new aws.s3.BucketObject(
+						`${name}_bucket_file_${fPath}`,
+						{
+							acl: 'public-read',
+							key: relative(args.directory, fPath),
+							bucket: bucket.id,
+							contentType: guard.must(
+								guard.isNotNull,
+								() => `couldn't get contentType of ${fPath}`
+							)(mime.getType(fPath)),
+							source: fPath,
+							// wait to be allowed to add stuff to this bucket with public
+							// access.
+							//
+							// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
+						},
+						{
+							parent: this,
+						}
+					)
 				);
 			}
 
@@ -197,32 +214,37 @@ export class Website extends pulumi.ComponentResource {
 			{
 				comment:
 					'this is needed to setup s3 polices and make s3 not public.',
-			}, {
-				parent: this
+			},
+			{
+				parent: this,
 			}
 		);
 
 		// Only allow cloudfront to access content bucket.
-		const bucketPolicy = new aws.s3.BucketPolicy(`${name}_bucket_policy`, {
-			bucket: bucket.id, // refer to the bucket created earlier
-			policy: pulumi
-				.all([originAccessIdentity.iamArn, bucket.arn])
-				.apply(([oaiArn, bucketArn]) =>
-					JSON.stringify({
-						Version: '2012-10-17',
-						Statement: [
-							{
-								Effect: 'Allow',
-								Principal: {
-									AWS: oaiArn,
-								}, // Only allow Cloudfront read access.
-								Action: ['s3:GetObject'],
-								Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
-							},
-						],
-					})
-				),
-		}, { parent: this });
+		const bucketPolicy = new aws.s3.BucketPolicy(
+			`${name}_bucket_policy`,
+			{
+				bucket: bucket.id, // refer to the bucket created earlier
+				policy: pulumi
+					.all([originAccessIdentity.iamArn, bucket.arn])
+					.apply(([oaiArn, bucketArn]) =>
+						JSON.stringify({
+							Version: '2012-10-17',
+							Statement: [
+								{
+									Effect: 'Allow',
+									Principal: {
+										AWS: oaiArn,
+									}, // Only allow Cloudfront read access.
+									Action: ['s3:GetObject'],
+									Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
+								},
+							],
+						})
+					),
+			},
+			{ parent: this }
+		);
 
 		// create the cloudfront
 
@@ -310,18 +332,22 @@ export class Website extends pulumi.ComponentResource {
 		// create the alias record that allows the distribution to be located
 		// from the DNS record.
 
-		const record = new aws.route53.Record(`${name}_distribution_record`, {
-			zoneId: args.zone.id,
-			name: targetDomain,
-			type: 'A',
-			aliases: [
-				{
-					name: distribution.domainName,
-					zoneId: distribution.hostedZoneId,
-					evaluateTargetHealth: true,
-				},
-			],
-		}, { parent: this });
+		const record = new aws.route53.Record(
+			`${name}_distribution_record`,
+			{
+				zoneId: args.zone.id,
+				name: targetDomain,
+				type: 'A',
+				aliases: [
+					{
+						name: distribution.domainName,
+						zoneId: distribution.hostedZoneId,
+						evaluateTargetHealth: true,
+					},
+				],
+			},
+			{ parent: this }
+		);
 
 		this.registerOutputs({
 			distribution,
