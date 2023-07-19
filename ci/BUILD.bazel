@@ -1,16 +1,8 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
-load("//js:rules.bzl", "js_binary", "js_test")
-
-package(default_visibility = ["//deploy:__subpackages__"])
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
 
 ts_project(
-    name = "release_src",
-    srcs = [
-        "deploy_test.ts",
-        "mocks.ts",
-        "program.ts",
-        "release.ts",
-    ],
+    name = "ci",
     data = [
         "//VERSION",
         "//project/ck3/recursive-vassals:mod_zip",
@@ -33,35 +25,30 @@ ts_project(
         "//:node_modules/commander",
         "//:node_modules/mime",
         "//ts",
-        "//ts/pulumi",
+        "//ts/pulumi_ts",
     ],
 )
 
 js_binary(
-    name = "release",
-    data = [
-        ":release_src",
-    ],
-    entry_point = "release.js",
+    name = "presubmit",
+    data = [":ci"],
+    entry_point = "presubmit.js",
 )
 
-js_test(
-    name = "smoke",
-    args = [
-        "--dryRun",
-        "true",
-    ],
-    data = [":release_src"],
-    entry_point = "release.js",
+js_binary(
+    name = "postsubmit",
+    data = [":ci"],
+    entry_point = "postsubmit.js",
 )
 
-alias(
-    name = "deploy",
-    actual = "release",
+js_binary(
+    name = "submit",
+    data = [":ci"],
+    entry_point = "submit.js",
 )
 
-jest_test(
-    name = "test",
-    srcs = ["deploy_test.js"],
-    deps = [":release_src"],
+js_binary(
+    name = "rollback",
+    data = [":ci"],
+    entry_point = "rollback.js",
 )
