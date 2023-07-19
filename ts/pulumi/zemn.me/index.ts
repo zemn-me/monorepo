@@ -1,28 +1,32 @@
+import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 import Website from 'ts/pulumi/lib/website';
-import * as zone from 'ts/pulumi/me/zemn/zone';
 
-
-export interface Args { }
+export interface Args {
+	zone: aws.route53.Zone;
+}
 
 export class Component extends Pulumi.ComponentResource {
-    site: Website;
-    constructor(
-        name: string,
-        args: Args,
-        opts?: Pulumi.ComponentResourceOptions
-    ) {
-        super("ts::pulumi::shadwell.im", name, args, opts);
+	site: Website;
+	constructor(
+		name: string,
+		args: Args,
+		opts?: Pulumi.ComponentResourceOptions
+	) {
+		super('ts::pulumi::shadwell.im', name, args, opts);
 
-        this.site = new Website('staging.zemn.me', {
-            index: 'project/zemn.me/next/out/index.html',
-            notFound: 'project/zemn.me/next/out/404.html',
-            directory: 'project/zemn.me/next/out',
-            zone: zone.zone,
-            subDomain: 'staging',
-        }, { parent: this });
+		this.site = new Website(
+			'staging.zemn.me',
+			{
+				index: 'project/zemn.me/next/out/index.html',
+				notFound: 'project/zemn.me/next/out/404.html',
+				directory: 'project/zemn.me/next/out',
+				zone: args.zone,
+				subDomain: 'staging',
+			},
+			{ parent: this }
+		);
 
-        super.registerOutputs({ site: this.site });
-    }
-
+		super.registerOutputs({ site: this.site });
+	}
 }
