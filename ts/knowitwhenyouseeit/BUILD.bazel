@@ -2,7 +2,7 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 
 package(default_visibility = [
-    "//deploy:__subpackages__",
+    "//ci:__subpackages__",
 ])
 
 ts_project(
@@ -48,5 +48,5 @@ npm_pkg(
     pkg_json_base = "package.template.json",
     readme = "README.md",
     version_lock = ".version.lock",
-    visibility = ["//deploy:__subpackages__"],
+    visibility = ["//ci:__subpackages__"],
 )
