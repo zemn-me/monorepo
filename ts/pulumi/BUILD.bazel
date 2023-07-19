@@ -1,7 +1,7 @@
 load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
-package(default_visibility = ["//deploy:__subpackages__"])
+package(default_visibility = ["//ci:__subpackages__"])
 
 yaml_lint_test(
     name = "validate_yml"
@@ -12,12 +12,13 @@ filegroup(
     name = "pulumi_files",
     srcs = [
         "Pulumi.prod.yaml",
+        "Pulumi.staging.yaml",
         "Pulumi.yaml",
     ],
 )
 
 ts_project(
-    name = "pulumi",
+    name = "pulumi_ts",
     deps = [
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
@@ -27,19 +28,33 @@ ts_project(
         "//ts/pulumi/im/shadwell/thomas",
         "//ts/pulumi/me",
     ],
+    data = [
+        ":pulumi_local"
+    ]
 )
 
 jest_test(
     name = "tests",
     srcs = ["pulumi_test.js"],
-    deps = [":pulumi"],
+    deps = [":pulumi_ts"],
 )
+
 
 js_binary(
     name = "preview",
     data = [
-        ":pulumi",
+        ":pulumi_ts",
         ":pulumi_files",
     ],
     entry_point = "preview.js",
+)
+
+
+genrule(
+    name = "pulumi_local",
+    cmd = """
+cp $< $@
+    """,
+    srcs = [ "//bin/linux/pulumi" ],
+    outs = [ "pulumi" ]
 )
