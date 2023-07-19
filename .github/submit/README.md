@@ -97,7 +97,7 @@ Todo list
 ---------
 
 1. [x] Introduce a PRESUBMIT
-2. [ ] and SUBMIT script in `//` that are source of truth for their relevant step
+2. [x] and SUBMIT script in `//` that are source of truth for their relevant step
 3. [ ] Introduce a FIX script in `//` that automatically performs necessary fixes including
    (1) rust deps fix (repinning); (2) version bumping; (3) automatic lint fixes.
 4. [ ] Introduce a POSTSUBMIT script in `//` that performs tasks after submission is complete.
