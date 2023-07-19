@@ -70,11 +70,8 @@ def bump_bin(name, to_bump):
         ],
     )
 
-def bump_on_change_test(name, srcs = [], version_lock = None, version = None, run_on_main = False):
+def bump_on_change_test(name, srcs = [], version_lock = None, version = None):
     tags = []
-
-    if not run_on_main:
-        tags = ["do_not_run_on_main"]
 
     hashes_name = name + "_version_lock_validator"
     hashes(
