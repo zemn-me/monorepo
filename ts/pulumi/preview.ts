@@ -3,9 +3,11 @@
  * Runs the pulumi config in preview mode.
  */
 
-import { run } from 'ts/pulumi/run';
+import * as stack from 'ts/pulumi/stack';
 
-run(true, true).catch(e => {
+(async function main() {
+	await (await stack.production()).preview();
+})().catch(e => {
 	console.error(e);
 	process.exitCode = 1;
 });
