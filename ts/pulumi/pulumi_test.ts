@@ -1,9 +1,10 @@
 import '@pulumi/pulumi';
 import 'ts/pulumi/setMocks';
+import * as project from 'ts/pulumi';
 
 describe('pulumi', () => {
 	test('smoke', async () => {
-		require('ts/pulumi');
+		new project.Component('monorepo', { staging: false });
 		// eventually I think I need to make
 		// the whole setup a custom component to make this
 		// actually work.
