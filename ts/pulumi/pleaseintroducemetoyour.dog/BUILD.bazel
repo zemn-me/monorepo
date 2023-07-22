@@ -16,5 +16,5 @@ ts_project(
 
 next_project(
     name = "static",
-    srcs = [":ts"],
+    srcs = [":ts"]
 )
