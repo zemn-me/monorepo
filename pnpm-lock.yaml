@@ -271,8 +271,8 @@ devDependencies:
     specifier: ^36.0.0
     version: 36.8.2(typanion@3.13.0)
   sharp:
-    specifier: 0.32.3
-    version: 0.32.3
+    specifier: 0.32.4
+    version: 0.32.4
   stylelint:
     specifier: 15.10.2
     version: 15.10.2
@@ -5860,7 +5860,7 @@ packages:
     resolution: {integrity: sha512-OOi3kL+FZDnPhVzsfD37J88FNeZh6gQsGcLc95NbeURRGvmSjeXiDcyWzF2o3yh/gQAUn2uhh/e+CPCa5nwAxw==}
     deprecated: This is a stub types definition. sharp provides its own type definitions, so you do not need this installed.
     dependencies:
-      sharp: 0.32.3
+      sharp: 0.32.4
     dev: true
 
   /@types/shimmer@1.0.2:
@@ -7893,8 +7893,8 @@ packages:
     hasBin: true
     dev: true
 
-  /detect-libc@2.0.1:
-    resolution: {integrity: sha512-463v3ZeIrcWtdgIg6vI6XUncguvr2TnGl4SzDXinkt9mSLpBJKXT3mW6xT3VQdDN11+WVs29pgvivTc4Lp8v+w==}
+  /detect-libc@2.0.2:
+    resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
     engines: {node: '>=8'}
     dev: true
 
@@ -13697,7 +13697,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      detect-libc: 2.0.1
+      detect-libc: 2.0.2
       expand-template: 2.0.3
       github-from-package: 0.0.0
       minimist: 1.2.8
@@ -15035,13 +15035,13 @@ packages:
       kind-of: 6.0.3
     dev: true
 
-  /sharp@0.32.3:
-    resolution: {integrity: sha512-i1gFPiNqyqxC4ouVvCKj5G8WfPIMeeSxpKcMrjic6NY4e8zktW7bIdqHPc3FCG+pNKU/XCEabKA57hhvZi8UmQ==}
+  /sharp@0.32.4:
+    resolution: {integrity: sha512-exUnZewqVZC6UXqXuQ8fyJJv0M968feBi04jb9GcUHrWtkRoAKnbJt8IfwT4NJs7FskArbJ14JAFGVuooszoGg==}
     engines: {node: '>=14.15.0'}
     requiresBuild: true
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.1
+      detect-libc: 2.0.2
       node-addon-api: 6.1.0
       prebuild-install: 7.1.1
       semver: 7.5.4
