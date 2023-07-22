@@ -210,12 +210,11 @@ exports_files(glob(["**/*"], exclude_directories=0))
         strip_prefix = "rules_ts-1.4.0",
         url = "https://github.com/aspect-build/rules_ts/releases/download/v1.4.0/rules_ts-v1.4.0.tar.gz",
     )
-
-    # or for core module
     http_archive(
         name = "rules_nodejs",
-        sha256 = "be84fb5238a2034870810b60ae66f8555db385ff931bd6f61be204732df8d4a6",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-core-5.8.3.tar.gz"],
+        sha256 = "a833b08fc846e27a73ac2b7062e4f48cace0e72a072c6c3fa756847dc44246dd",
+        strip_prefix = "rules_nodejs-6.0.0",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-v6.0.0.tar.gz",
     )
 
     http_archive(
