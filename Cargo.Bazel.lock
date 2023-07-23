@@ -139,9 +139,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "clap"
-version = "4.3.12"
+version = "4.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3eab9e8ceb9afdade1ab3f0fd8dbce5b1b2f468ad653baf10e771781b2b67b73"
+checksum = "5fd304a20bff958a57f04c4e96a2e7594cc4490a0e809cbd48bb6437edaa452d"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -150,9 +150,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.3.12"
+version = "4.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9f2763db829349bf00cfc06251268865ed4363b93a943174f638daf3ecdba2cd"
+checksum = "01c6a3f08f1fe5662a35cfe393aec09c4df95f60ee93b7556505260f75eee9e1"
 dependencies = [
  "anstream",
  "anstyle",
@@ -637,9 +637,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.102"
+version = "1.0.103"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5062a995d481b2308b6064e9af76011f2921c35f97b0468811ed9f6cd91dfed"
+checksum = "d03b412469450d4404fe8499a268edd7f8b79fecb074b0d812ad64ca21f4031b"
 dependencies = [
  "itoa",
  "ryu",
@@ -709,9 +709,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "swc_atoms"
-version = "0.5.7"
+version = "0.5.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b1370fa1d31e18a999928aaf18f166616b16c5cb7033ced7d50d06858c5fd90"
+checksum = "b8066e17abb484602da673e2d35138ab32ce53f26368d9c92113510e1659220b"
 dependencies = [
  "once_cell",
  "rustc-hash",
@@ -723,9 +723,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.31.17"
+version = "0.31.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1362dec11e2270048e686f0c7d4a9087fcf1ec9d27147c2c226929a806a86f6"
+checksum = "e30cd01afa791b15263fcfe8f77ecbbd020ddef659f0f58d3c7b794ad65c1738"
 dependencies = [
  "ahash",
  "ast_node",

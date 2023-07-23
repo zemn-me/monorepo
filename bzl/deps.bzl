@@ -114,9 +114,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "ebc7bff82602b9f75d4c524c494f1c4237e81cb461fe38936f6ff93d4012f3c9",
+        sha256 = "fc355f0d99615001e848b88070d0dcf111df31fb26ab8a9228b5f5e6ce3350c0",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.0/pulumi-v3.76.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.0/pulumi-v3.76.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "6d5103f31861cc614ddb3d70f6f378ab21c4b044fe56e7932f6a48d6862225a1",
+        sha256 = "f5a3d63166da0e4c061d001830a6cd5603b17aadebcd85e93cf2bda277ae9b2b",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -147,9 +147,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.0/pulumi-v3.76.0-linux-arm64.tar.gz",
         ],
-        sha256 = "8bee69283eff5d5bc3d5df0cb0f2bb01a7e7df449b8df19c6ca086d1ddf67291",
+        sha256 = "66112b530e5c5a2ba3f22ec5c2a8524e57884e560ff53547e00ec69fcd9bc261",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -210,12 +210,11 @@ exports_files(glob(["**/*"], exclude_directories=0))
         strip_prefix = "rules_ts-1.4.0",
         url = "https://github.com/aspect-build/rules_ts/releases/download/v1.4.0/rules_ts-v1.4.0.tar.gz",
     )
-
-    # or for core module
     http_archive(
         name = "rules_nodejs",
-        sha256 = "be84fb5238a2034870810b60ae66f8555db385ff931bd6f61be204732df8d4a6",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.3/rules_nodejs-core-5.8.3.tar.gz"],
+        sha256 = "a833b08fc846e27a73ac2b7062e4f48cace0e72a072c6c3fa756847dc44246dd",
+        strip_prefix = "rules_nodejs-6.0.0",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-v6.0.0.tar.gz",
     )
 
     http_archive(
