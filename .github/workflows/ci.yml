@@ -87,12 +87,6 @@ jobs:
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -124,12 +118,6 @@ jobs:
     needs: Presubmit
     runs-on: ubuntu-latest
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -158,12 +146,6 @@ jobs:
     # Attempts to submit changes to production.
     runs-on: ubuntu-latest
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -196,12 +178,6 @@ jobs:
     if: github.event_name == 'push'
     needs: Submit
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
