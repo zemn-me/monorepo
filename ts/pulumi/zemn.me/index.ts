@@ -28,7 +28,7 @@ export class Component extends Pulumi.ComponentResource {
 				// to staging.staging.zemn.me.
 				domain: ['staging', args.domain].join('.'),
 				// since this is itself a staging site
-				noIndex: true // args.noIndex,
+				noIndex: true, // args.noIndex,
 			},
 			{ parent: this }
 		);
