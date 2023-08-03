@@ -2,7 +2,7 @@
 
 
 name: Renovate
-on:
+on: # yamllint disable-line rule:truthy
   schedule:
     # The "*" (#42, asterisk) character has special semantics in YAML, so this
     # string has to be quoted.
