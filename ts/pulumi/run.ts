@@ -1,4 +1,5 @@
 import { LocalWorkspace, UpResult } from '@pulumi/pulumi/automation';
+import * as monorepo from 'ts/pulumi';
 
 export async function run(): Promise<UpResult>;
 
@@ -24,7 +25,7 @@ export async function run(
 			stackName: 'prod',
 			projectName: 'monorepo-2', // be very, very careful in changing this
 			async program() {
-				require('ts/pulumi/index');
+				new monorepo.Component('monorepo', { staging: false });
 			},
 		});
 
