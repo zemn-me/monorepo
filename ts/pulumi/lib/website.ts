@@ -70,11 +70,6 @@ export interface Args {
 	 * The 404 document to serve.
 	 */
 	notFound?: string;
-
-	/**
-	 * Prevent search engines from indexing.
-	 */
-	noIndex: boolean;
 }
 
 /**
@@ -220,28 +215,6 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		// response headers policy (http headers)
-
-		const responseHeadersPolicy = new aws.cloudfront.ResponseHeadersPolicy(
-			`${name}_response_headers`,
-			{
-				comment: 'used for noindex on our cloudfront distributions',
-				customHeadersConfig: {
-					items: [
-						...(args.noIndex
-							? [
-									{
-										header: 'X-Robots-Tag',
-										value: 'noindex',
-										override: false,
-									},
-							  ]
-							: []),
-					],
-				},
-			}
-		);
-
 		// create the cloudfront
 
 		const distribution = new aws.cloudfront.Distribution(
@@ -278,7 +251,6 @@ export class Website extends pulumi.ComponentResource {
 					  }
 					: {}),
 				defaultCacheBehavior: {
-					responseHeadersPolicyId: responseHeadersPolicy.id,
 					// i dont think we use most of these but it's probably not
 					// important
 					allowedMethods: [
