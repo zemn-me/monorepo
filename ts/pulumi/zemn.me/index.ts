@@ -4,6 +4,7 @@ import Website from 'ts/pulumi/lib/website';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	noIndex: boolean;
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -26,6 +27,8 @@ export class Component extends Pulumi.ComponentResource {
 				// what's already there until it's ready; so this will double stage
 				// to staging.staging.zemn.me.
 				domain: ['staging', args.domain].join('.'),
+				// since this is itself a staging site
+				noIndex: true // args.noIndex,
 			},
 			{ parent: this }
 		);
