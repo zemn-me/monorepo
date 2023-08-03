@@ -11,6 +11,11 @@ export interface Args {
 	 * The domain to deploy to.
 	 */
 	domain: string;
+
+	/**
+	 * Prevent indexing the content.
+	 */
+	noIndex: boolean;
 }
 
 /**
@@ -31,6 +36,7 @@ export class Component extends Pulumi.ComponentResource {
 				directory: 'ts/pulumi/pleaseintroducemetoyour.dog/out',
 				zoneId: args.zoneId,
 				domain: args.domain,
+				noIndex: args.noIndex,
 			},
 			{ parent: this }
 		);
