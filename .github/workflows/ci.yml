@@ -87,6 +87,15 @@ jobs:
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -118,6 +127,15 @@ jobs:
     needs: Presubmit
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -146,6 +164,15 @@ jobs:
     # Attempts to submit changes to production.
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
@@ -178,6 +205,15 @@ jobs:
     if: github.event_name == 'push'
     needs: Submit
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
