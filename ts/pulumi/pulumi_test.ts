@@ -1,5 +1,6 @@
 import '@pulumi/pulumi';
 import 'ts/pulumi/setMocks';
+
 import * as project from 'ts/pulumi';
 
 describe('pulumi', () => {

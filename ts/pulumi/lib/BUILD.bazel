@@ -1,17 +1,20 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 ts_project(
     name = "lib",
     deps = [
         "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
         "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/mime",
-        "//:node_modules/@types/node",
+        "//:node_modules/@pulumi/aws",
         "//:node_modules/mime",
+        "//:node_modules/@types/mime",
         "//ts",
         "//ts/iter",
+        "//ts/next.js",
     ],
 )
