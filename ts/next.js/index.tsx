@@ -13,7 +13,7 @@ export function HeaderTags() {
 		...BASE_CSP_RULES,
 		process?.env?.NODE_ENV === 'development'
 			? "default-src 'self' 'unsafe-inline' 'unsafe-eval'"
-			: "default-src 'self",
+			: "default-src 'self'",
 	];
 	return (
 		<Head>
