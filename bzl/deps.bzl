@@ -114,9 +114,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "ebc7bff82602b9f75d4c524c494f1c4237e81cb461fe38936f6ff93d4012f3c9",
+        sha256 = "d4b943f86bff54cbc118a8b11cc3c09efe31c3ee81260fc814289eb50d0ddc5a",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.1/pulumi-v3.76.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.1/pulumi-v3.76.1-darwin-arm64.tar.gz",
         ],
-        sha256 = "6d5103f31861cc614ddb3d70f6f378ab21c4b044fe56e7932f6a48d6862225a1",
+        sha256 = "c1fd140fe2c235525f056dbc0227927767b96a29c06f9d353bb6fc4f8bbf3180",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -147,9 +147,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.75.0/pulumi-v3.75.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.76.1/pulumi-v3.76.1-linux-arm64.tar.gz",
         ],
-        sha256 = "8bee69283eff5d5bc3d5df0cb0f2bb01a7e7df449b8df19c6ca086d1ddf67291",
+        sha256 = "5e32c7e49171dfe26ad38c5fedf66c4816e392e406c8f0045d61c1de423dd5f7",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -201,8 +201,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "4a9cb4fda6ccd5b5ec393b2e944822a62e050c7c06f1ea41607f14c4fdec57a2",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.25.1/rules_rust-v0.25.1.tar.gz"],
+        sha256 = "9d04e658878d23f4b00163a72da3db03ddb451273eb347df7d7c50838d698f49",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.26.0/rules_rust-v0.26.0.tar.gz"],
     )
 
     http_archive(
@@ -234,12 +234,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/dcfffec21b9429a0e29accd24d82165e184aa7f0.zip",
-        strip_prefix = "json-schemas-dcfffec21b9429a0e29accd24d82165e184aa7f0",
+        url = "https://github.com/microsoft/json-schemas/archive/1347e0e77dc80e59683f22055c0e8df63449502e.zip",
+        strip_prefix = "json-schemas-1347e0e77dc80e59683f22055c0e8df63449502e",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "7e8f09af32090a0c3a1b42118cef10adc542a1f00b9f8d4ee35bfe951abbe6f6",
+        sha256 = "f22297e2ae2a5d0112577763a5fe0c1879ef36662c5e6f89247dfca16ee70b62",
     )
 
     ##########

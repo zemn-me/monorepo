@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.3.17", features = ["derive"] }
-swc_common = "0.31.17"
+clap = { version = "4.3.19", features = ["derive"] }
+swc_common = "0.31.18"
 sha2 = "0.10.7"
 hex = "0.4.3"
-serde_json = "1.0.103"
-swc_atoms = "0.5.7"
+serde_json = "1.0.104"
+swc_atoms = "0.5.8"
