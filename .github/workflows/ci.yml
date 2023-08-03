@@ -87,12 +87,14 @@ jobs:
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Cache Bazel
@@ -122,12 +124,14 @@ jobs:
     needs: Presubmit
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Cache Bazel
@@ -154,12 +158,14 @@ jobs:
     # Attempts to submit changes to production.
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Cache Bazel
@@ -190,12 +196,14 @@ jobs:
     if: github.event_name == 'push'
     needs: Submit
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Cache Bazel
