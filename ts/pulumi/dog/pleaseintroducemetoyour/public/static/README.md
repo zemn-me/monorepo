@@ -1,1 +1,0 @@
-This folder contains the static content for https://pleaseintroducemetoyour.dog.
