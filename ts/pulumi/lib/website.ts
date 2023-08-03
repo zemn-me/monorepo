@@ -86,6 +86,8 @@ export class Website extends pulumi.ComponentResource {
 		const cert = new aws.acm.Certificate(`${name}_cert`, {
 			domainName: targetDomain,
 			validationMethod: 'DNS',
+		}, {
+			parent: this
 		});
 
 		const validatingRecord = new aws.route53.Record(
@@ -96,6 +98,9 @@ export class Website extends pulumi.ComponentResource {
 				type: cert.domainValidationOptions[0].resourceRecordType,
 				zoneId: args.zone.zoneId,
 				ttl: 1 * minute, // because these really don't need to be cached
+			},
+			{
+				parent: this
 			}
 		);
 
@@ -104,6 +109,9 @@ export class Website extends pulumi.ComponentResource {
 			{
 				certificateArn: cert.arn,
 				validationRecordFqdns: [validatingRecord.fqdn],
+			},
+			{
+				parent: this
 			}
 		);
 
@@ -119,6 +127,8 @@ export class Website extends pulumi.ComponentResource {
 					indexDocument,
 					errorDocument,
 				},
+			}, {
+				parent: this
 			}
 		);
 
@@ -154,6 +164,8 @@ export class Website extends pulumi.ComponentResource {
 						// access.
 						//
 						// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
+					}, {
+						parent: this
 					})
 				);
 			}
@@ -185,6 +197,8 @@ export class Website extends pulumi.ComponentResource {
 			{
 				comment:
 					'this is needed to setup s3 polices and make s3 not public.',
+			}, {
+				parent: this
 			}
 		);
 
@@ -208,7 +222,7 @@ export class Website extends pulumi.ComponentResource {
 						],
 					})
 				),
-		});
+		}, { parent: this });
 
 		// create the cloudfront
 
@@ -289,7 +303,8 @@ export class Website extends pulumi.ComponentResource {
 					acmCertificateArn: validation.certificateArn,
 					sslSupportMethod: 'sni-only', // idk really what this does
 				},
-			}
+			},
+			{ parent: this }
 		);
 
 		// create the alias record that allows the distribution to be located
@@ -306,7 +321,7 @@ export class Website extends pulumi.ComponentResource {
 					evaluateTargetHealth: true,
 				},
 			],
-		});
+		}, { parent: this });
 
 		this.registerOutputs({
 			distribution,
