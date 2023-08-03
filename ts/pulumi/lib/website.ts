@@ -5,6 +5,17 @@ import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import * as guard from 'ts/guard';
+import Certificate from 'ts/pulumi/lib/certificate';
+
+const bucketSuffix = '-bucket';
+const pulumiRandomChars = 7;
+const bucketNameMaximumLength = 56 - pulumiRandomChars - bucketSuffix.length;
+
+// bucket has a maximum length of 63 (56 minus the 7 random chars that Pulumi adds)
+const deriveBucketName = (base: string) =>
+	[...base.replace(/[^a-z0-9.]/g, '-')]
+		.slice(0, bucketNameMaximumLength - 1)
+		.join('') + bucketSuffix;
 
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
@@ -33,17 +44,17 @@ export interface Args {
 	/**
 	 * Zone to create any needed DNS records in.
 	 */
-	zone: aws.route53.Zone;
+	zoneId: pulumi.Input<string>;
 
 	/**
-	 * The domain or subdomain itself within the zone to create the website.
+	 * The domain or subdomain itself in which to create the website.
 	 *
 	 * Leave undefined to host at the root of the domain
 	 *
 	 * @example
 	 * "mywebsite.com."
 	 */
-	subDomain: string | undefined;
+	domain: string;
 
 	/**
 	 * A directory to upload to the S3 bucket.
@@ -61,9 +72,6 @@ export interface Args {
 	notFound?: string;
 }
 
-const second = 1;
-const minute = 60 * second;
-
 /**
  * Provisions an S3 Bucket, CloudFront instance and certificate
  * to serve a static website.
@@ -76,44 +84,18 @@ export class Website extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
 
+		const certificate = new Certificate(
+			`${name}_certificate`,
+			{
+				zoneId: args.zoneId,
+				domain: args.domain,
+			},
+			{ parent: this }
+		);
+
 		/**
 		 * The final subdomain that the website can be loaded from on the target domain.
 		 */
-		const targetDomain = args.zone.name.apply(zoneName =>
-			[args.subDomain, zoneName].filter(guard.isDefined).join('.')
-		);
-
-		const cert = new aws.acm.Certificate(`${name}_cert`, {
-			domainName: targetDomain,
-			validationMethod: 'DNS',
-		}, {
-			parent: this
-		});
-
-		const validatingRecord = new aws.route53.Record(
-			`${name}_validating_record`,
-			{
-				name: cert.domainValidationOptions[0].resourceRecordName,
-				records: [cert.domainValidationOptions[0].resourceRecordValue],
-				type: cert.domainValidationOptions[0].resourceRecordType,
-				zoneId: args.zone.zoneId,
-				ttl: 1 * minute, // because these really don't need to be cached
-			},
-			{
-				parent: this
-			}
-		);
-
-		const validation = new aws.acm.CertificateValidation(
-			`${name}_validation`,
-			{
-				certificateArn: cert.arn,
-				validationRecordFqdns: [validatingRecord.fqdn],
-			},
-			{
-				parent: this
-			}
-		);
 
 		const indexDocument = relative(args.directory, args.index);
 		const errorDocument = args.notFound
@@ -121,14 +103,15 @@ export class Website extends pulumi.ComponentResource {
 			: undefined;
 
 		const bucket = new aws.s3.Bucket(
-			`${name.replace(/[^a-z0-9.]/g, '-')}-bucket`,
+			deriveBucketName(name),
 			{
 				website: {
 					indexDocument,
 					errorDocument,
 				},
-			}, {
-				parent: this
+			},
+			{
+				parent: this,
 			}
 		);
 
@@ -151,22 +134,25 @@ export class Website extends pulumi.ComponentResource {
 
 				out.set(
 					fPath,
-					new aws.s3.BucketObject(`${name}_bucket_file_${fPath}`, {
-						acl: 'public-read',
-						key: relative(args.directory, fPath),
-						bucket: bucket.id,
-						contentType: guard.must(
-							guard.isNotNull,
-							() => `couldn't get contentType of ${fPath}`
-						)(mime.getType(fPath)),
-						source: fPath,
-						// wait to be allowed to add stuff to this bucket with public
-						// access.
-						//
-						// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
-					}, {
-						parent: this
-					})
+					new aws.s3.BucketObject(
+						`${name}_bucket_file_${fPath}`,
+						{
+							key: relative(args.directory, fPath),
+							bucket: bucket.id,
+							contentType: guard.must(
+								guard.isNotNull,
+								() => `couldn't get contentType of ${fPath}`
+							)(mime.getType(fPath)),
+							source: fPath,
+							// wait to be allowed to add stuff to this bucket with public
+							// access.
+							//
+							// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
+						},
+						{
+							parent: this,
+						}
+					)
 				);
 			}
 
@@ -197,32 +183,37 @@ export class Website extends pulumi.ComponentResource {
 			{
 				comment:
 					'this is needed to setup s3 polices and make s3 not public.',
-			}, {
-				parent: this
+			},
+			{
+				parent: this,
 			}
 		);
 
 		// Only allow cloudfront to access content bucket.
-		const bucketPolicy = new aws.s3.BucketPolicy(`${name}_bucket_policy`, {
-			bucket: bucket.id, // refer to the bucket created earlier
-			policy: pulumi
-				.all([originAccessIdentity.iamArn, bucket.arn])
-				.apply(([oaiArn, bucketArn]) =>
-					JSON.stringify({
-						Version: '2012-10-17',
-						Statement: [
-							{
-								Effect: 'Allow',
-								Principal: {
-									AWS: oaiArn,
-								}, // Only allow Cloudfront read access.
-								Action: ['s3:GetObject'],
-								Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
-							},
-						],
-					})
-				),
-		}, { parent: this });
+		const bucketPolicy = new aws.s3.BucketPolicy(
+			`${name}_bucket_policy`,
+			{
+				bucket: bucket.id, // refer to the bucket created earlier
+				policy: pulumi
+					.all([originAccessIdentity.iamArn, bucket.arn])
+					.apply(([oaiArn, bucketArn]) =>
+						JSON.stringify({
+							Version: '2012-10-17',
+							Statement: [
+								{
+									Effect: 'Allow',
+									Principal: {
+										AWS: oaiArn,
+									}, // Only allow Cloudfront read access.
+									Action: ['s3:GetObject'],
+									Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
+								},
+							],
+						})
+					),
+			},
+			{ parent: this }
+		);
 
 		// create the cloudfront
 
@@ -244,7 +235,7 @@ export class Website extends pulumi.ComponentResource {
 				defaultRootObject: indexDocumentObject.key,
 				// this is the host that the distribution will expect
 				// (other than the default).
-				aliases: [targetDomain],
+				aliases: [args.domain],
 				// in the future we could maybe take a bunch of these as args, but
 				// we're not overengineering today!
 				// im sorry this bit kinda sucks
@@ -300,7 +291,7 @@ export class Website extends pulumi.ComponentResource {
 				viewerCertificate: {
 					// important to use this so that it waits for the cert
 					// to come up
-					acmCertificateArn: validation.certificateArn,
+					acmCertificateArn: certificate.validation.certificateArn,
 					sslSupportMethod: 'sni-only', // idk really what this does
 				},
 			},
@@ -310,18 +301,22 @@ export class Website extends pulumi.ComponentResource {
 		// create the alias record that allows the distribution to be located
 		// from the DNS record.
 
-		const record = new aws.route53.Record(`${name}_distribution_record`, {
-			zoneId: args.zone.id,
-			name: targetDomain,
-			type: 'A',
-			aliases: [
-				{
-					name: distribution.domainName,
-					zoneId: distribution.hostedZoneId,
-					evaluateTargetHealth: true,
-				},
-			],
-		}, { parent: this });
+		const record = new aws.route53.Record(
+			`${name}_distribution_record`,
+			{
+				zoneId: args.zoneId,
+				name: args.domain,
+				type: 'A',
+				aliases: [
+					{
+						name: distribution.domainName,
+						zoneId: distribution.hostedZoneId,
+						evaluateTargetHealth: true,
+					},
+				],
+			},
+			{ parent: this }
+		);
 
 		this.registerOutputs({
 			distribution,
