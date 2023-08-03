@@ -1,12 +1,16 @@
-import Website from 'ts/pulumi/lib/website';
 import * as Pulumi from '@pulumi/pulumi';
-import * as aws from '@pulumi/aws';
+import Website from 'ts/pulumi/lib/website';
 
 export interface Args {
 	/**
 	 * The zone to deploy to
 	 */
-	zone: aws.route53.Zone
+	zoneId: Pulumi.Input<string>;
+
+	/**
+	 * The domain to deploy to.
+	 */
+	domain: string;
 }
 
 /**
@@ -18,18 +22,21 @@ export class Component extends Pulumi.ComponentResource {
 		args: Args,
 		opts?: Pulumi.ComponentResourceOptions
 	) {
-		super("ts::pulumi::pleaseintroducemetoyour.dog", name, args, opts);
-		const website = new Website(`${name}_pleaseintroducemetoyour_dog_website`, {
-			index: 'ts/pulumi/pleaseintroducmetoyour.dog/out/index.html',
-			notFound:
-				'ts/pulumi/pleaseintroducmetoyour.dog/out/404.html',
-			directory: 'ts/pulumi/pleaseintroducmetoyour.dog/out',
-			zone: args.zone,
-			subDomain: undefined,
-		}, { parent: this });
+		super('ts:pulumi:pleaseintroducemetoyour.dog', name, args, opts);
+		const website = new Website(
+			`${name}_pleaseintroducemetoyour_dog_website`,
+			{
+				index: 'ts/pulumi/pleaseintroducemetoyour.dog/out/index.html',
+				notFound: 'ts/pulumi/pleaseintroducemetoyour.dog/out/404.html',
+				directory: 'ts/pulumi/pleaseintroducemetoyour.dog/out',
+				zoneId: args.zoneId,
+				domain: args.domain,
+			},
+			{ parent: this }
+		);
 
 		this.registerOutputs({
-			website
-		})
+			website,
+		});
 	}
 }
