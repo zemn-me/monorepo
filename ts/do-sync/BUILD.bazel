@@ -4,7 +4,7 @@ load("//js:rules.bzl", "js_library", "npm_link_package")
 
 package(default_visibility = [
     ":__subpackages__",
-    "//deploy:__subpackages__",
+    "//ci:__subpackages__",
 ])
 
 DEPS = [

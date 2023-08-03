@@ -1,0 +1,55 @@
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+
+ts_project(
+    name = "ci",
+    data = [
+        "//VERSION",
+        "//project/ck3/recursive-vassals:mod_zip",
+        "//project/ck3/recursive-vassals:patch",
+        "//ts/cmd/svgshot:npm_pkg.publish",
+        "//ts/cmd/svgshot:npm_pkg.tgz",
+        "//ts/cmd/svgshot:package.json",
+        "//ts/do-sync:npm_pkg.publish",
+        "//ts/do-sync:npm_pkg.tgz",
+        "//ts/do-sync:package.json",
+        "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
+        "//ts/knowitwhenyouseeit:package.json",
+    ],
+    deps = [
+        "//:node_modules/@actions/github",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/commander",
+        "//:node_modules/mime",
+        "//ts",
+        "//ts/pulumi:pulumi_ts",
+        "//:node_modules/@commander-js/extra-typings"
+    ],
+)
+
+js_binary(
+    name = "presubmit",
+    data = [":ci"],
+    entry_point = "presubmit.js",
+)
+
+js_binary(
+    name = "postsubmit",
+    data = [":ci"],
+    entry_point = "postsubmit.js",
+)
+
+js_binary(
+    name = "submit",
+    data = [":ci"],
+    entry_point = "submit.js",
+)
+
+js_binary(
+    name = "rollback",
+    data = [":ci"],
+    entry_point = "rollback.js",
+)
