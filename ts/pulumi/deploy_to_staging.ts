@@ -29,9 +29,9 @@ async function waitForLock<T>(
 		lastResult = await attempt(f);
 		results.push(lastResult);
 	} while (
-		lastResult instanceof Error &&
-		!(lastResult instanceof pulumi.ConcurrentUpdateError) &&
-		+new Date() - startTime < timeLimit &&
+		(lastResult instanceof Error &&
+		lastResult instanceof pulumi.ConcurrentUpdateError) &&
+		((+new Date() - startTime) < timeLimit) &&
 		(await new Promise<boolean>(ok => {
 			console.log(
 				`${cause} could not acquire lock. Backing off for ${
