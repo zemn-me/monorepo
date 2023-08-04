@@ -1,7 +1,9 @@
 import * as stack from 'ts/pulumi/stack';
 
 async function main() {
-	const result = await (await stack.production()).up();
+	const result = await (
+		await stack.production()
+	).up({ logToStdErr: true, onOutput: o => console.info(o) });
 
 	// I believe that if there is an issue pulumi will throw, but
 	// I am unsure of this, so I'm also going to check for a non-blank stderr.
