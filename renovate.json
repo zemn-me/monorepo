@@ -13,17 +13,19 @@
 	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
     "autodiscoverFilter": [ "Zemnmez/monorepo" ],
 	"allowedPostUpgradeCommands": [
-		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
+		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
+		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
 	],
 	"packageRules": [
 		{
 			"matchManagers": ["cargo", "bazel"],
 			"postUpgradeTasks": {
 				"commands": [
-					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo"
+					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
+					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
 				],
 				"executionMode": "branch",
-				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json" ],
+				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json", "**/*.js", "**/*.ts", "**/*.json" ],
 				"recreateClosed": true
 			}
 		}
