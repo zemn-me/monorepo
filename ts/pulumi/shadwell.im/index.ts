@@ -4,7 +4,6 @@ import Website from 'ts/pulumi/lib/website';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
-	noIndex: boolean;
 }
 
 /**
@@ -26,7 +25,6 @@ export class Component extends Pulumi.ComponentResource {
 				directory: 'ts/pulumi/shadwell.im/thomas/',
 				zoneId: args.zoneId,
 				domain: ['thomas', args.domain].join('.'),
-				noIndex: args.noIndex,
 			},
 			{ parent: this }
 		);
