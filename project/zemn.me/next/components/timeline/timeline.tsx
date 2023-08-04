@@ -37,7 +37,7 @@ const numerals = [
 	[1, 'I'],
 ] as const;
 
-const romanize = (n: number) => {
+const romanize = (n: number): lang.TaggedText => {
 	const parts: string[] = [];
 	while (n > 0) {
 		for (const [value, sym] of numerals) {
@@ -48,7 +48,8 @@ const romanize = (n: number) => {
 		}
 	}
 
-	return parts.join('');
+	//      ↓ unicode for 'no specified language, roman numerals used for numbering'
+	return ['zxx-u-nu-romanlow', parts.join('')];
 };
 
 /**
@@ -122,14 +123,14 @@ function Year({
 	year: string;
 	months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
 }) {
+	const romanizedAge = romanize(
+		(months.first(undefined)?.first()?.date.getFullYear() ?? 0) - 1994
+	);
 	return (
 		<div className={style.year}>
 			<div className={style.yearIndicator}>{year}</div>
-			<div className={style.ageIndicator}>
-				{romanize(
-					(months.first(undefined)?.first()?.date.getFullYear() ??
-						0) - 1994
-				)}
+			<div className={style.ageIndicator} lang={lang.get(romanizedAge)}>
+				{lang.text(romanizedAge)}
 			</div>
 
 			<div className={style.content}>
