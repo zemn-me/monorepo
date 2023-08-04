@@ -4,7 +4,11 @@ import * as bio from 'project/zemn.me/bio';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
+<<<<<<< dest:   e91548790868 - thomas: Correctly specify the language of the ...
 import * as lang from 'ts/react/lang';
+=======
+import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
+>>>>>>> source: aacda32688ce - thomas: Abstract the line divider pattern to L...
 
 export default function Main() {
 	return (
@@ -36,6 +40,9 @@ export default function Main() {
 					<section className={style.timeline}>
 						<Timeline />
 					</section>
+					<footer>
+						<ZemnmezLogo/>
+					</footer>
 				</section>
 			</section>
 		</main>
