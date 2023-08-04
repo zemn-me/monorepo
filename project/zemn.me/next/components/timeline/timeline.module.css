@@ -1,6 +1,7 @@
 .year {
     display: grid;
     grid:
+        /* This needs to be pulled out and replaced by LineDivider */
         '....... ......... ........ ........... ....... .......... .....' 1em
         '....... line-left ........ year        ....... line-right .....' 
         '....... line-left ........ age         ....... line-right .....' 
