@@ -1,0 +1,19 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//project/zemn.me:__subpackages__"])
+
+ts_project(
+    name = "components",
+    srcs = glob([
+        "**/*.ts",
+        "**/*.tsx",
+    ]),
+    assets = glob(["**/*.css"]),
+    deps = [
+        "//:base_defs",
+        "//:node_modules/@types/react",
+        "//:node_modules/immutable",
+        "//:node_modules/react",
+        "//project/zemn.me/bio",
+    ],
+)
