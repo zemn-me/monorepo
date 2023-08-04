@@ -29,8 +29,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.2
   devtools-protocol:
-    specifier: ^0.0.1177611
-    version: 0.0.1177611
+    specifier: ^0.0.1179426
+    version: 0.0.1179426
   eslint-mdx:
     specifier: ^2.1.0
     version: 2.1.0(eslint@8.46.0)
@@ -103,11 +103,11 @@ devDependencies:
     specifier: 5.42.0
     version: 5.42.0
   '@pulumi/awsx':
-    specifier: 1.0.3
-    version: 1.0.3
+    specifier: 1.0.4
+    version: 1.0.4
   '@pulumi/pulumi':
-    specifier: 3.76.1
-    version: 3.76.1
+    specifier: 3.77.0
+    version: 3.77.0
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -4286,7 +4286,7 @@ packages:
     resolution: {integrity: sha512-1h7Q5DjwoWVGxhBMcNragx/Q1US1KT7g29Tk3RghTg/9N7rGUbzTQKEXSrGgRSjGA/aKTbU+gt5A9ZmhONLiLg==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.76.1
+      '@pulumi/pulumi': 3.77.0
       aws-sdk: 2.1414.0
       builtin-modules: 3.0.0
       mime: 2.6.0
@@ -4296,13 +4296,13 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@1.0.3:
-    resolution: {integrity: sha512-tk5JJE5nYXwjaIBIlkLNnm8uv1PcklgFe862Lzn7lSv4B4kC0yjaMmA1nxDQIy97Fb6tolKMQkXe0KFnW+e0pA==}
+  /@pulumi/awsx@1.0.4:
+    resolution: {integrity: sha512-CK17bk1CrEqMLY1220USZej3pmH1oxnRL+J2zvZ+rvfi1gJkNI9bx8rPKrV1bX4EFQJdKvN4bCm+Jca2E34pMw==}
     requiresBuild: true
     dependencies:
       '@pulumi/aws': 5.42.0
       '@pulumi/docker': 3.6.1
-      '@pulumi/pulumi': 3.76.1
+      '@pulumi/pulumi': 3.77.0
       '@types/aws-lambda': 8.10.119
       mime: 2.6.0
     transitivePeerDependencies:
@@ -4314,7 +4314,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.76.1
+      '@pulumi/pulumi': 3.77.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4323,14 +4323,14 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.76.1
+      '@pulumi/pulumi': 3.77.0
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.76.1:
-    resolution: {integrity: sha512-vNKWboDpUu/2rqtZwQhoG/y5aePh0FQTzDjCOuBE62jmjt24GjoBW3Lk+49iUV/GY1PxX3HTawCL71umFgiSgQ==}
+  /@pulumi/pulumi@3.77.0:
+    resolution: {integrity: sha512-exkVVNK1Aitvtgrii7FmGmZQhid4Wpdd9aWzUbkeUCSqQg56lF03+GQ+YPRJElkmAMhezCst9UJpdx8W/lHu3A==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.8.17
@@ -7937,8 +7937,8 @@ packages:
     resolution: {integrity: sha512-hyWmRrexdhbZ1tcJUGpO95ivbRhWXz++F4Ko+n21AY5PNln2ovoJw+8ZMNDTtip+CNFQfrtLVh/w4009dXO/eQ==}
     dev: true
 
-  /devtools-protocol@0.0.1177611:
-    resolution: {integrity: sha512-wivW6Jfe1Y75MY4PdZAaVsyeL37oMfmbodbuWkAQDuE1YAAJ5GnyrNpTfhXoQXFBoIWQdmBEf6t4U73OXctHrQ==}
+  /devtools-protocol@0.0.1179426:
+    resolution: {integrity: sha512-KKC7IGwdOr7u9kTGgjUvGTov/z1s2H7oHi3zKCdR9eSDyCPia5CBi4aRhtp7d8uR7l0GS5UTDw3TjKGu5CqINg==}
     dev: false
 
   /dezalgo@1.0.4:
