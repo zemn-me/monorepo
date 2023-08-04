@@ -1,0 +1,24 @@
+.lineDivider {
+    display: grid;
+    grid:
+        '....... ......... ........ ........... ....... .......... .....' 1em
+        '....... line-left ........ content        ....... line-right .....' 
+        '....... ......... ........ ........... ....... .......... .....' 1em
+        / .2em    1fr       1em     min-content 1em  1fr        .2em
+}
+
+.lineDividerContent {
+    grid-area: content;
+}
+
+.lineDivider::before, .lineDivider::after {
+    border-top: 1px solid currentColor;
+    content: "";
+    height: 0;
+    margin: auto;
+    width: 100%;
+}
+
+.lineDivider::before { grid-area: line-left }
+.lineDivider::after { grid-area: line-right }
+

@@ -169,7 +169,7 @@ export default function Timeline() {
 
 	return (
 		<>
-			{[...years].map(([year, months]) => (
+			{[...years].map(([year, months], i) => (
 				<Year key={year} months={months} year={year} />
 			))}
 		</>
