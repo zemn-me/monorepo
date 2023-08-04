@@ -30,7 +30,7 @@ async function waitForLock<T>(
 		results.push(lastResult);
 	} while (
 		lastResult instanceof Error &&
-		!(lastResult instanceof pulumi.ConcurrentUpdateError) &&
+		lastResult instanceof pulumi.ConcurrentUpdateError &&
 		+new Date() - startTime < timeLimit &&
 		(await new Promise<boolean>(ok => {
 			console.log(
