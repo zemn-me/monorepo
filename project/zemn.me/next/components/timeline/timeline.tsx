@@ -4,6 +4,7 @@ import style from 'project/zemn.me/next/components/timeline/timeline.module.css'
 import React from 'react';
 import * as lang from 'ts/react/lang';
 
+
 const numerals = [
 	[3000, 'MMM'],
 	[2000, 'MM'],
