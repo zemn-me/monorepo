@@ -1,3 +1,7 @@
+:root {
+    hyphens: auto;
+}
+
 html, body, :root {
     margin: 0;
     padding: 0;
@@ -10,4 +14,12 @@ body {
 a {
     font-style: italic;
     color: currentColor;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: normal;
+}
+
+p {
+    text-align: justify
 }
