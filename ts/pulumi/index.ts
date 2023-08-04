@@ -51,7 +51,6 @@ export class Component extends Pulumi.ComponentResource {
 						zone.dog.pleaseintroducemetoyour.then(z => z.id)
 					),
 					domain: stage('pleaseintroducemetoyour.dog'),
-					noIndex: args.staging,
 				},
 				{ parent: this }
 			);
@@ -61,7 +60,6 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				zoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				domain: stage('zemn.me'),
-				noIndex: args.staging,
 			},
 			{ parent: this }
 		);
@@ -71,7 +69,6 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				zoneId: Pulumi.output(zone.im.shadwell.then(z => z.id)),
 				domain: stage('shadwell.im'),
-				noIndex: args.staging,
 			},
 			{ parent: this }
 		);
