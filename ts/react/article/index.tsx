@@ -15,8 +15,8 @@ export interface Article {
 }
 
 export const Article: React.FC<{
-	short?: boolean;
-	children?: React.ReactNode;
+	readonly short?: boolean;
+	readonly children?: React.ReactNode;
 }> = ({ short, children }) => (
 	<RenderModeContext.Provider
 		value={short ? RenderMode.Short : RenderMode.Long}
@@ -26,7 +26,7 @@ export const Article: React.FC<{
 );
 
 export const Title: React.FC<{
-	children?: React.ReactNode;
+	readonly children?: React.ReactNode;
 }> = ({ children }) => <>{children}</>;
 
 /**

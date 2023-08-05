@@ -4,7 +4,7 @@ import * as Homog from 'ts/math/homog';
 import * as Cnv from '.';
 
 export interface CanvasProps {
-	draw: Cnv.Drawable2D;
+	readonly draw: Cnv.Drawable2D;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({ draw }) => {

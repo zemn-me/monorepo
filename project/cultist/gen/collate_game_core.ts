@@ -11,6 +11,7 @@ export class ParsingFileError extends Error {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mergeShallow(onto: any, source: any): any {
 	for (const [key, value] of Object.entries(source)) {
 		if (value instanceof Array) {
@@ -31,6 +32,7 @@ function mergeShallow(onto: any, source: any): any {
 			onto[key] = {};
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		for (const [key2, value2] of Object.entries(value as any)) {
 			if (key2 in onto) {
 				throw new Error(

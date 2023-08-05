@@ -10,8 +10,11 @@ export const RenderModeContext = React.createContext<RenderMode>(
 );
 
 export interface ArticleProps {
-	short?: boolean;
-	children?: React.ReactElement<unknown, typeof Article | typeof Blurb>[];
+	readonly short?: boolean;
+	readonly children?: React.ReactElement<
+		unknown,
+		typeof Article | typeof Blurb
+	>[];
 }
 
 export const Article: React.FC<ArticleProps> = ({ short, children }) => (
@@ -22,11 +25,11 @@ export const Article: React.FC<ArticleProps> = ({ short, children }) => (
 	</RenderModeContext.Provider>
 );
 
-export const Blurb: React.FC<{ children?: React.ReactNode }> = ({
+export const Blurb: React.FC<{ readonly children?: React.ReactNode }> = ({
 	children,
 }) => <>{children}</>;
 
-export const Main: React.FC<{ children?: React.ReactNode }> = ({
+export const Main: React.FC<{ readonly children?: React.ReactNode }> = ({
 	children,
 }) => {
 	// don't render if in short mode
