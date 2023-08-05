@@ -60,11 +60,11 @@ export const Table: React.FC<Readonly<TableProps>> = ({
 };
 
 export interface SlotProps {
-	X: number;
-	Y: number;
-	width: number;
-	height: number;
-	onDrop: (
+	readonly X: number;
+	readonly Y: number;
+	readonly width: number;
+	readonly height: number;
+	readonly onDrop: (
 		X: number,
 		Y: number,
 		event: React.DragEvent<HTMLDivElement>
@@ -101,21 +101,21 @@ export const Slot: React.FC<SlotProps> = ({
 
 export interface BoardProps {
 	state: State.State;
-	minX?: number;
-	minY?: number;
-	maxX?: number;
-	maxY?: number;
-	cardWidth?: number;
-	cardHeight?: number;
-	defaultX?: number;
-	defaultY?: number;
-	snapGridWidth?: number;
-	snapGridHeight?: number;
+	readonly minX?: number;
+	readonly minY?: number;
+	readonly maxX?: number;
+	readonly maxY?: number;
+	readonly cardWidth?: number;
+	readonly cardHeight?: number;
+	readonly defaultX?: number;
+	readonly defaultY?: number;
+	readonly snapGridWidth?: number;
+	readonly snapGridHeight?: number;
 }
 
 export interface BoardProps {
-	state: State.State;
-	onElementMove: (
+	readonly state: State.State;
+	readonly onElementMove: (
 		X: number,
 		Y: number,
 		stateKey: string,
@@ -240,6 +240,7 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 		>
 			{/* needed to inject xmlns, not in types */}
 			<div
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as any)}
 				draggable="true"
 				onDragStart={onDragStart}

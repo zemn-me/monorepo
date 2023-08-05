@@ -1,26 +1,27 @@
 import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
-import ReactDOM from 'react-dom';
+import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
 import { Article, Blurb, Main } from '.';
 
 let container: HTMLDivElement | null = null;
+let root: Root;
 
 beforeEach(() => {
 	container = document.createElement('div');
+	root = createRoot(container!);
 	document.body.appendChild(container);
 });
 
 afterEach(() => {
-	unmountComponentAtNode(container!);
+	root.unmount();
 	container?.remove();
 	container = null;
 });
 
 it('renders all content in long form', () => {
 	act(() => {
-		ReactDOM.render(
+		root.render(
 			<Article>
 				<Blurb>
 					<div className="blurb">Hello, world!</div>
@@ -28,8 +29,7 @@ it('renders all content in long form', () => {
 				<Main>
 					<div className="main">main content goes here!</div>
 				</Main>
-			</Article>,
-			container
+			</Article>
 		);
 	});
 
@@ -41,7 +41,7 @@ it('renders all content in long form', () => {
 
 it('renders blurb only in short form', () => {
 	act(() => {
-		ReactDOM.render(
+		root.render(
 			<Article short>
 				<Blurb>
 					<div className="blurb">Hello, world!</div>
@@ -49,8 +49,7 @@ it('renders blurb only in short form', () => {
 				<Main>
 					<div className="main">main content goes here!</div>
 				</Main>
-			</Article>,
-			container
+			</Article>
 		);
 	});
 

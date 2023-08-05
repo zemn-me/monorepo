@@ -50,6 +50,7 @@ export const Hamburger: React.FC<
 				className={classes(className, style.hamburger)}
 				onMouseLeave={onMouseLeave}
 				onMouseOver={onMouseOver}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				ref={menuRef as any}
 				style={springProps}
 				{...props}
