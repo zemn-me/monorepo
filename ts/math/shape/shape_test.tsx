@@ -3,21 +3,22 @@
  */
 
 import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
-import ReactDOM from 'react-dom';
+import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { Canvas } from 'ts/math/canvas/element';
 import * as Shape from 'ts/math/shape';
 
 let container: HTMLDivElement | null = null;
+let root: Root;
 
 beforeEach(() => {
 	container = document.createElement('div');
+	root = createRoot(container!);
 	document.body.appendChild(container);
 });
 
 afterEach(() => {
-	unmountComponentAtNode(container!);
+	root.unmount();
 	container?.remove();
 	container = null;
 });
@@ -25,7 +26,7 @@ afterEach(() => {
 describe('react.Canvas', () => {
 	it('should append an svg element', () => {
 		act(() => {
-			ReactDOM.render(<Canvas draw={new Shape.Square(1)} />, container);
+			root.render(<Canvas draw={new Shape.Square(1)} />);
 		});
 
 		expect(container?.querySelector('svg')).not.toBeUndefined();

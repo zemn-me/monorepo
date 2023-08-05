@@ -50,6 +50,7 @@ export type AsyncFn<I extends Value[], O extends Value> = (
 	...v: I
 ) => Promise<O>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const gen: (input: Value[], fn: AsyncFn<any, any>) => string = (input, fn) => `
 const main = async () => {
     console.log(JSON.stringify({ type: "success", value: await (${fn})(...${JSON.stringify(
@@ -98,6 +99,7 @@ export const doSync: <I extends Value[], O extends Value>(
 		const rsp: Response = JSON.parse(proc.stdout.toString('utf-8'));
 
 		if (rsp.type == 'failure') throw rsp.value;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return rsp.value as any;
 	};
 

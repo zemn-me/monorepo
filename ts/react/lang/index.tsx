@@ -71,7 +71,7 @@ export function useLocale() {
 }
 
 export const LocaleProvider: React.FC<{
-	children?: React.ReactNode;
+	readonly children?: React.ReactNode;
 }> = ({ children }) => {
 	const languages = useLocale();
 	return <locale.Provider value={languages}>{children}</locale.Provider>;
