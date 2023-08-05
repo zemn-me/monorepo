@@ -77,7 +77,7 @@ function groupBy<T, Q>(
 	return m;
 }
 
-function Event({ event: e }: { event: Bio.Event }) {
+function Event({ event: e }: { readonly event: Bio.Event }) {
 	return (
 		<div className={style.event}>
 			<a href={e.url?.toString()} lang={lang.get(e.title)}>
@@ -96,8 +96,8 @@ function Month({
 	month,
 	events,
 }: {
-	month: string;
-	events: Iterable<Bio.Event>;
+	readonly month: string;
+	readonly events: Iterable<Bio.Event>;
 }) {
 	return (
 		<div className={style.month}>
@@ -119,8 +119,8 @@ function Year({
 	year,
 	months,
 }: {
-	year: string;
-	months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
+	readonly year: string;
+	readonly months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
 }) {
 	return (
 		<div className={style.year}>

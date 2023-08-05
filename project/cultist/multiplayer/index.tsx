@@ -1,5 +1,5 @@
 import Home from 'project/cultist/multiplayer/pages';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-ReactDOM.render(<Home />, document.querySelector('main'));
+createRoot(document.querySelector('main')!).render(<Home />);
