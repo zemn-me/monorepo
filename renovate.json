@@ -25,7 +25,7 @@
 					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
 				],
 				"executionMode": "branch",
-				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json", "**/*.js", "**/*.ts", "**/*.json" ],
+				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json", "**/*.ts"],
 				"recreateClosed": true
 			}
 		}

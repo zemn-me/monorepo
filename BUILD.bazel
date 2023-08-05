@@ -90,4 +90,16 @@ bin.renovate_config_validator_test(
     data = ["renovate.json"],
 )
 
+# This test is necessitated by several times when tooling has
+# updated package.json, but not updated pnpm-lock.yaml.
+sh_test(
+    name = "pnpm_lockfile_sync",
+    data = ["pnpm-lock.yaml", "package.json", ":pnpm"] + glob(["patches/**/*"]),
+    srcs = [ "pnpm_lock_sync_test.sh" ],
+    env = {
+        "PNPM_BINARY": "$(location :pnpm)"
+    }
+)
+
+
 npm_link_all_packages(name = "node_modules")
