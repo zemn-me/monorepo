@@ -52,10 +52,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "543395bc2ae58e72f7be674221db08b8f14e3bd7e3a19158f76105b3b61570a0",
-        strip_prefix = "protobuf-3.21.8",
+        sha256 = "a700a49470d301f1190a487a923b5095bf60f08f4ae4cac9f5f7c36883d17971",
+        strip_prefix = "protobuf-23.4",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v3.21.8.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v23.4.tar.gz",
         ],
     )
 
@@ -88,10 +88,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
-        strip_prefix = "protobuf-3.13.0",
+        sha256 = "a700a49470d301f1190a487a923b5095bf60f08f4ae4cac9f5f7c36883d17971",
+        strip_prefix = "protobuf-23.4",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v23.4.tar.gz",
         ],
     )
 
