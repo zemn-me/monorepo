@@ -1,11 +1,8 @@
-# Third-party dependencies fetched by Bazel
-# Unlike WORKSPACE, the content of this file is unordered.
-# We keep them separate to make the WORKSPACE file more maintainable.
-
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 
 def fetch_dependencies():
     http_archive(
@@ -294,3 +291,4 @@ exports_files(glob(["**/*"]))
         """,
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
     )
+
