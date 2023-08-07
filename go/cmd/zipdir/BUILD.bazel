@@ -1,9 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("//go:rules.bzl", "go_binary")
 
 go_binary(
     name = "zipdir",
-    srcs = glob(["*.go"]),
+    embed = [":zipdir_lib"],
     visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "zipdir_lib",
+    srcs = ["zipdir.go"],
+    importpath = "github.com/zemnmez/monorepo/go/cmd/zipdir",
+    visibility = ["//visibility:private"],
     deps = [
         "//go/archive/zip/ziputil",
         "//go/flag/flagutil",
