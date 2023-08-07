@@ -33,17 +33,79 @@ const cmd = new Command('presubmit')
 		// version of inkscape, and I'm deferring solving that to some later day.
 		if (!o.skipBazelTests) {
 			const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
-			// perform all the normal tests
-			const p = child_process.spawn('bazel', ['test', '//...'], {
-				cwd,
-				stdio: 'inherit',
-			});
+
+			// test if Gazelle etc would update any of our files.
+			// I think (and this would be preferable) it might be possible
+			// to move this into a bazel test that depends on every single bzl file.
+			//
+			// I am not sure exactly how this would work, however, as you cannot query
+			// for all files at once in a genrule.
+			await new Promise<void>((ok, error) =>
+				child_process
+					.spawn('go', ['mod', 'tidy'], {
+						cwd,
+						stdio: 'inherit',
+					})
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+									)
+							  )
+					)
+			);
 
 			await new Promise<void>((ok, error) =>
-				p.on('close', code => {
-					if (code != 0) return error(new Error(`Exit code ${code}`));
-					return ok();
-				})
+				child_process
+					.spawn(
+						'bazel',
+						['run', '//:gazelle-update-repos', '--', '-strict'],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Gazelle update repos exited with ${code}. This likely means that it needs to be run to add / remove repos.`
+									)
+							  )
+					)
+			);
+
+			await new Promise<void>((ok, error) =>
+				child_process
+					.spawn('bazel', ['run', '//:gazelle', '--', '-strict', '-diff'], {
+						cwd,
+						stdio: 'inherit',
+					})
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+									)
+							  )
+					)
+			);
+
+			await new Promise<void>((ok, error) =>
+				child_process
+					.spawn('bazel', ['test', '//...'], {
+						cwd,
+						stdio: 'inherit',
+					})
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(new Error(`Exit code: ${code}`))
+					)
 			);
 		}
 
