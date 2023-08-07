@@ -2,5 +2,5 @@ load("//mdx:rules.bzl", "mdx_files")
 
 mdx_files(
     name = "mdx_files",
-    srcs = glob(["**/*.mdx"])
+    srcs = glob(["**/*.mdx"]),
 )
