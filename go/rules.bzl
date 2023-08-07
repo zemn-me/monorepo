@@ -12,7 +12,6 @@ def go_binary(name = None, embedsrcs = None, importpath = None, deps = [], **kwa
 
     _test_go_fmt(
         name = name + "_fmt",
-        **kwargs
     )
 
 def go_test(name = None, importpath = None, deps = [], **kwargs):
