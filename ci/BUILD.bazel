@@ -20,13 +20,13 @@ ts_project(
     deps = [
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@commander-js/extra-typings",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//:node_modules/mime",
         "//ts",
         "//ts/pulumi:pulumi_ts",
-        "//:node_modules/@commander-js/extra-typings"
     ],
 )
 
