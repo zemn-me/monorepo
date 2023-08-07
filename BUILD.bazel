@@ -109,6 +109,9 @@ sh_test(
 npm_link_all_packages(name = "node_modules")
 
 # gazelle:prefix github.com/zemnmez/monorepo
+# workaround for https://github.com/bazelbuild/rules_go/issues/606 (which honestly is an issue with
+# webtesting which is using incorrect version numbers)
+# gazelle:resolve go github.com/bazelbuild/rules_webtesting/go/webtest @io_bazel_rules_webtesting//go/webtest:go_default_library
 gazelle(
     name = "gazelle-update-repos",
     args = [
