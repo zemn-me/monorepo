@@ -26,3 +26,8 @@ jest_test(
     name = "typescript_basic_test",
     srcs = ["typescript_basic_test.js"],
 )
+
+go_test(
+    name = "testing_test",
+    srcs = ["go_basic_test.go"],
+)
