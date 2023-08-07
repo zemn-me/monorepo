@@ -7,6 +7,9 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
+# incredibly improbable hash you can use to get the dep's actual sha256:
+# ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+
 def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
@@ -293,4 +296,13 @@ exports_files(glob(["**/*"]))
 exports_files(glob(["**/*"]))
         """,
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
+    )
+
+
+    http_archive(
+        name = "io_bazel_rules_webtesting",
+        sha256 = "e9abb7658b6a129740c0b3ef6f5a2370864e102a5ba5ffca2cea565829ed825a",
+        urls = [
+            "https://github.com/bazelbuild/rules_webtesting/releases/download/0.3.5/rules_webtesting.tar.gz",
+        ],
     )

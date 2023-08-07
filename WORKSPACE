@@ -204,3 +204,12 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+load("@io_bazel_rules_webtesting//web:repositories.bzl", "web_test_repositories")
+
+web_test_repositories()
+
+# this is a strange versioning system ... not sure how best to get the version string from deps.bzl into here.
+load("@io_bazel_rules_webtesting//web/versioned:browsers-0.3.3.bzl", "browser_repositories")
+
+browser_repositories(chromium=True, firefox=True)
