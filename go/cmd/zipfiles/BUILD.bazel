@@ -1,11 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("//go:rules.bzl", "go_binary")
 
 go_binary(
     name = "zipfiles",
-    srcs = glob(["*.go"]),
+    embed = [":zipfiles_lib"],
     visibility = ["//visibility:public"],
-    deps = [
-        "//go/archive/zip/ziputil",
-        "//go/flag/flagutil",
-    ],
+)
+
+go_library(
+    name = "zipfiles_lib",
+    srcs = ["zipfiles.go"],
+    importpath = "github.com/zemnmez/monorepo/go/cmd/zipfiles",
+    visibility = ["//visibility:private"],
+    deps = ["//go/flag/flagutil"],
 )
