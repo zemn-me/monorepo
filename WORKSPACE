@@ -60,7 +60,13 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
+# below line needed because deps are defined in bzl/deps.bzl
+# gazelle:repo bazel_gazelle
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("//bzl:go_deps.bzl", "go_dependencies")
+
+# gazelle:repository_macro bzl/go_deps.bzl%go_dependencies
+go_dependencies()
 
 # If you use WORKSPACE.bazel, use the following line instead of the bare gazelle_dependencies():
 # gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")

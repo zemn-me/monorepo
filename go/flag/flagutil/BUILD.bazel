@@ -2,7 +2,10 @@ load("//go:rules.bzl", "go_library")
 
 go_library(
     name = "flagutil",
-    srcs = glob(["*.go"]),
+    srcs = [
+        "dirflag.go",
+        "fileflag.go",
+    ],
     importpath = "github.com/zemnmez/monorepo/go/flag/flagutil",
     visibility = ["//visibility:public"],
 )

@@ -11,6 +11,7 @@ load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@bazel_gazelle//:def.bzl", "gazelle")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -94,12 +95,31 @@ bin.renovate_config_validator_test(
 # updated package.json, but not updated pnpm-lock.yaml.
 sh_test(
     name = "pnpm_lockfile_sync",
-    data = ["pnpm-lock.yaml", "package.json", ":pnpm"] + glob(["patches/**/*"]),
-    srcs = [ "pnpm_lock_sync_test.sh" ],
+    srcs = ["pnpm_lock_sync_test.sh"],
+    data = [
+        "package.json",
+        "pnpm-lock.yaml",
+        ":pnpm",
+    ] + glob(["patches/**/*"]),
     env = {
-        "PNPM_BINARY": "$(location :pnpm)"
-    }
+        "PNPM_BINARY": "$(location :pnpm)",
+    },
 )
 
-
 npm_link_all_packages(name = "node_modules")
+
+# gazelle:prefix github.com/zemnmez/monorepo
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-prune",
+        "-to_macro=bzl/go_deps.bzl%go_dependencies",
+    ],
+    command = "update-repos",
+)
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+)
