@@ -1,0 +1,28 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_webtesting//web:go.bzl", "go_web_test_suite")
+
+go_web_test_suite(
+    name = "browser_test",
+    srcs = ["main.go"],
+    browsers = [
+        "@io_bazel_rules_webtesting//browsers:chromium-local",
+    ],
+    local = True,
+)
+
+go_library(
+    name = "example_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemnmez/monorepo/go/webtesting/example",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_bazelbuild_rules_webtesting//go/webtest",
+        "@com_github_tebeka_selenium//:selenium",
+    ],
+)
+
+go_binary(
+    name = "example",
+    embed = [":example_lib"],
+    visibility = ["//visibility:public"],
+)
