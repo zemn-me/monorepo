@@ -265,8 +265,8 @@ devDependencies:
     specifier: 9.7.2
     version: 9.7.2(@react-three/fiber@8.13.5)(konva@9.2.0)(react-dom@18.2.0)(react-konva@18.2.10)(react-native@0.72.3)(react-zdog@1.1.1)(react@18.2.0)(three@0.154.0)(zdog@1.1.3)
   regenerator-runtime:
-    specifier: 0.13.11
-    version: 0.13.11
+    specifier: 0.14.0
+    version: 0.14.0
   renovate:
     specifier: ^36.0.0
     version: 36.8.2(typanion@3.13.0)
@@ -14603,6 +14603,10 @@ packages:
 
   /regenerator-runtime@0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: true
+
+  /regenerator-runtime@0.14.0:
+    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
     dev: true
 
   /regenerator-transform@0.15.1:
