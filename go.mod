@@ -16,6 +16,12 @@ module github.com/zemnmez/monorepo
 
 go 1.19
 
-require github.com/golang/protobuf v1.5.3
+require (
+	github.com/bazelbuild/rules_webtesting v0.2.0
+	github.com/golang/protobuf v1.5.3
+	github.com/gorilla/mux v1.8.0
+	github.com/tebeka/selenium v0.9.9
+	google.golang.org/protobuf v1.26.0 // indirect
+)
 
-require google.golang.org/protobuf v1.26.0 // indirect
+require github.com/blang/semver v3.5.1+incompatible // indirect
