@@ -1,0 +1,15 @@
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "dummy_lib",
+    srcs = ["dummy.go"],
+    importpath = "github.com/zemnmez/monorepo/go/webtesting/dummy",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_gorilla_mux//:mux"],
+)
+
+go_binary(
+    name = "dummy",
+    embed = [":dummy_lib"],
+    visibility = ["//visibility:public"],
+)

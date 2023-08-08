@@ -1,0 +1,15 @@
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "proto_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemnmez/monorepo/go/proto",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_golang_protobuf//ptypes/struct"],
+)
+
+go_binary(
+    name = "proto",
+    embed = [":proto_lib"],
+    visibility = ["//visibility:public"],
+)

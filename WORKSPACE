@@ -60,7 +60,13 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
+# below line needed because deps are defined in bzl/deps.bzl
+# gazelle:repo bazel_gazelle
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("//bzl:go_deps.bzl", "go_dependencies")
+
+# gazelle:repository_macro bzl/go_deps.bzl%go_dependencies
+go_dependencies()
 
 # If you use WORKSPACE.bazel, use the following line instead of the bare gazelle_dependencies():
 # gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")
@@ -203,4 +209,20 @@ load("@aspect_rules_swc//swc:repositories.bzl", "LATEST_VERSION", "swc_register_
 swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
+)
+
+load("@io_bazel_rules_webtesting//web:repositories.bzl", "web_test_repositories")
+
+web_test_repositories()
+
+load("@io_bazel_rules_webtesting//web:go_repositories.bzl", "go_repositories")
+
+go_repositories()
+
+# this is a strange versioning system ... not sure how best to get the version string from deps.bzl into here.
+load("@io_bazel_rules_webtesting//web/versioned:browsers-0.3.3.bzl", "browser_repositories")
+
+browser_repositories(
+    chromium = True,
+    firefox = True,
 )

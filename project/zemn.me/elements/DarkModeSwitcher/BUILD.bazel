@@ -3,9 +3,9 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "DarkModeSwitcher",
     srcs = glob([
+        "*.css",
         "*.ts",
         "*.tsx",
-        "*.css",
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
