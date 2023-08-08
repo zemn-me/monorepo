@@ -1,5 +1,5 @@
 load("//yml:test.bzl", "yaml_lint_test")
 
 yaml_lint_test(
-    name = "validation"
+    name = "validation",
 )
