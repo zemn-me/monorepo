@@ -1,11 +1,15 @@
-# Third-party dependencies fetched by Bazel
-# Unlike WORKSPACE, the content of this file is unordered.
-# We keep them separate to make the WORKSPACE file more maintainable.
-
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# !!!!!!!            IF YOU MANUALLY UPDATE THIS FILE                     !!!!!!
+#
+# Please note that if you do not update the SHA-256, Bazel *will not* update
+# your local copy of that file, making it appear to be broken or out of date.
+#
+# Paste in the following incredibly improbable hash you can use to get the dep's actual sha256:
+# sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 
 def fetch_dependencies():
     http_archive(
@@ -293,4 +297,13 @@ exports_files(glob(["**/*"]))
 exports_files(glob(["**/*"]))
         """,
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
+    )
+
+    http_archive(
+        name = "io_bazel_rules_webtesting",
+        strip_prefix = "rules_webtesting-0.3.5",
+        sha256 = "1399c98bbf15c210eb8e97f3b375322f28b8bf754480a2d86f88799c76663358",
+        urls = [
+            "https://github.com/bazelbuild/rules_webtesting/archive/refs/tags/0.3.5.tar.gz",
+        ],
     )
