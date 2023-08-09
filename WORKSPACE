@@ -210,3 +210,80 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+load("@rules_rust//proto/prost:repositories.bzl", "rust_prost_dependencies")
+
+rust_prost_dependencies()
+
+load("@rules_rust//proto/prost:transitive_repositories.bzl", "rust_prost_transitive_repositories")
+
+rust_prost_transitive_repositories()
+
+load("@rules_rust//crate_universe:defs.bzl", "crate", "crates_repository")
+
+crates_repository(
+    name = "crates_io",
+    annotations = {
+        "protoc-gen-prost": [crate.annotation(
+            gen_binaries = ["protoc-gen-prost"],
+        )],
+        "protoc-gen-tonic": [crate.annotation(
+            gen_binaries = ["protoc-gen-tonic"],
+        )],
+    },
+    cargo_lockfile = "Cargo.Bazel.lock",
+    packages = {
+        "prost": crate.spec(
+            version = "0",
+        ),
+        "prost-types": crate.spec(
+            version = "0",
+        ),
+        "protoc-gen-prost": crate.spec(
+            version = "0",
+        ),
+        "protoc-gen-tonic": crate.spec(
+            version = "0",
+        ),
+        "tonic": crate.spec(
+            version = "0",
+        ),
+    },
+    tags = ["manual"],
+)
+
+load("@rules_rust//proto/prost:defs.bzl", "rust_prost_toolchain")
+load("@rules_rust//rust:defs.bzl", "rust_library_group")
+
+rust_library_group(
+    name = "prost_runtime",
+    deps = [
+        "@crates_io//:prost",
+    ],
+)
+
+rust_library_group(
+    name = "tonic_runtime",
+    deps = [
+        ":prost_runtime",
+        "@crates_io//:tonic",
+    ],
+)
+
+rust_prost_toolchain(
+    name = "prost_toolchain_impl",
+    prost_plugin = "@crates_io//:protoc-gen-prost__protoc-gen-prost",
+    prost_runtime = ":prost_runtime",
+    prost_types = "@crates_io//:prost-types",
+    proto_compiler = "@com_google_protobuf//:protoc",
+    tonic_plugin = "@crates_io//:protoc-gen-tonic__protoc-gen-tonic",
+    tonic_runtime = ":tonic_runtime",
+)
+
+toolchain(
+    name = "prost_toolchain",
+    toolchain = "default_prost_toolchain_impl",
+    toolchain_type = "@rules_rust//proto/prost:toolchain_type",
+)
+
+register_toolchains("//toolchains:prost_toolchain")
