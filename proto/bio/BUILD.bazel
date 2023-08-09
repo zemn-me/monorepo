@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+
+go_test(
+    name = "bio_test",
+    srcs = ["bio_validate_test.go"],
+    deps = [
+        "//proto",
+        "@org_golang_google_protobuf//encoding/prototext",
+    ],
+    data = [
+        "bio.textproto"
+    ]
+)

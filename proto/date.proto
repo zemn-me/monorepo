@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package proto;
+
+// as distinguished from a timestamp
+// since things like bdays dont move
+// with time zone.
+message Date {
+    int32 year = 1;
+    int32 month = 2;
+    int32 date = 3;
+    // an optional time zone
+    // (e.g. Europe/London)
+    string zone = 4;
+    int32 hours = 5;
+    int32 minutes = 6;
+    int32 seconds = 7;
+}
