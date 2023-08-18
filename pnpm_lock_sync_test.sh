@@ -1,6 +1,9 @@
 #! /usr/bin/env bash
-if $PNPM_BINARY i --frozen-lockfile --lockfile-only | grep -q ERR_PNPM_OUTDATED_LOCKFILE; then
-    exit 1
+
+FAIL=1
+SUCCESS=0
+if ! $PNPM_BINARY i --frozen-lockfile --lockfile-only; then
+    exit $FAIL
 fi
 
-exit 0
+exit $SUCCESS
