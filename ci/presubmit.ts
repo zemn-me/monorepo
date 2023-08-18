@@ -8,7 +8,8 @@ const cmd = new Command('presubmit')
 		'--skip-bazel-tests',
 		`${
 			'Skip doing the traditional (and very important!) bazel presubmit tests. ' +
-			'Typically this is just useful for testing pulumi deploys.'
+			'Typically this is just useful for testing pulumi deploys.' +
+			"Skips the other tests that wouldn't fit into bazel, also."
 		}`,
 		false
 	)
@@ -44,6 +45,29 @@ const cmd = new Command('presubmit')
 					if (code != 0) return error(new Error(`Exit code ${code}`));
 					return ok();
 				})
+			);
+
+			// validate the pnpm lockfile.
+			await new Promise<void>((ok, err) =>
+				child_process
+					.spawn(
+						'bazel',
+						[
+							'run',
+							'//:pnpm',
+							'--',
+							'i',
+							'--frozen-lockfile',
+							'--lockfile-only',
+						],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code != 0 ? err(`exit ${code}`) : ok()
+					)
 			);
 		}
 
