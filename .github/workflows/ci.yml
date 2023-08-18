@@ -94,7 +94,6 @@ jobs:
           dotnet: true
           haskell: true
           docker-images: true
-          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
       # example copied from:
