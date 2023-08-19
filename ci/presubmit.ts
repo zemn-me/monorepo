@@ -59,9 +59,14 @@ const cmd = new Command('presubmit')
 							'i',
 							'--frozen-lockfile',
 							'--lockfile-only',
+							'--dir',
+							// aspect_rules_js uses this as their example;
+							// I think the script might pull in some patches etc
+							// so we have to be a bit smarter than just setting
+							// cwd when we launch the binary.
+							cwd
 						],
 						{
-							cwd,
 							stdio: 'inherit',
 						}
 					)
