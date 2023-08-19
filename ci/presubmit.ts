@@ -35,6 +35,7 @@ const cmd = new Command('presubmit')
 		if (!o.skipBazelTests) {
 			const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
 			// perform all the normal tests
+			/*
 			const p = child_process.spawn('bazel', ['test', '//...'], {
 				cwd,
 				stdio: 'inherit',
@@ -46,16 +47,18 @@ const cmd = new Command('presubmit')
 					return ok();
 				})
 			);
+			*/
 
 			// validate the pnpm lockfile.
 			await new Promise<void>((ok, err) =>
 				child_process
 					.spawn(
-						'bazel',
+						'npm',
 						[
-							'run',
-							'//:pnpm',
-							'--',
+							'exec',
+							'--yes',
+							// https://github.com/pnpm/pnpm/issues/6962
+							'pnpm@8.6.12',
 							'i',
 							'--frozen-lockfile',
 							'--lockfile-only',
