@@ -51,11 +51,9 @@ const cmd = new Command('presubmit')
 			await new Promise<void>((ok, err) =>
 				child_process
 					.spawn(
-						'bazel',
+						'npx',
 						[
-							'run',
-							'//:pnpm',
-							'--',
+							'pnpm',
 							'i',
 							'--frozen-lockfile',
 							'--lockfile-only',
