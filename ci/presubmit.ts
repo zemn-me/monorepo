@@ -51,9 +51,12 @@ const cmd = new Command('presubmit')
 			await new Promise<void>((ok, err) =>
 				child_process
 					.spawn(
-						'npx',
+						'npm',
 						[
-							'pnpm',
+							'exec',
+							'--yes',
+							// https://github.com/pnpm/pnpm/issues/6962
+							'pnpm@8.6.12',
 							'i',
 							'--frozen-lockfile',
 							'--lockfile-only',
