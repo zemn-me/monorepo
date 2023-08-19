@@ -1,5 +1,5 @@
 {
-  "checksum": "9e4ea78c274e54f0c6e6895ec887de0c42e777cf8b7e9802e3c173ed848fc3c1",
+  "checksum": "09525189bc030245b55ecaefb5a67fc71df0c680f7d98d09d0253b6338d7486c",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -688,13 +688,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.3.21": {
+    "clap 4.3.22": {
       "name": "clap",
-      "version": "4.3.21",
+      "version": "4.3.22",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.3.21/download",
-          "sha256": "c27cdf28c0f604ba3f512b0c9a409f8de8513e4816705deb0498b627e7c3a3fd"
+          "url": "https://crates.io/api/v1/crates/clap/4.3.22/download",
+          "sha256": "b417ae4361bca3f5de378294fc7472d3c4ed86a5ef9f49e93ae722f432aae8d2"
         }
       },
       "targets": [
@@ -729,7 +729,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.3.21",
+              "id": "clap_builder 4.3.22",
               "target": "clap_builder"
             },
             {
@@ -749,17 +749,17 @@
           ],
           "selects": {}
         },
-        "version": "4.3.21"
+        "version": "4.3.22"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.3.21": {
+    "clap_builder 4.3.22": {
       "name": "clap_builder",
-      "version": "4.3.21",
+      "version": "4.3.22",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.21/download",
-          "sha256": "08a9f1ab5e9f01a9b81f202e8562eb9a10de70abf9eaeac1be465c28b75aa4aa"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.3.22/download",
+          "sha256": "9c90dc0f0e42c64bff177ca9d7be6fcc9ddb0f26a6e062174a61c84dd6c644d4"
         }
       },
       "targets": [
@@ -811,7 +811,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.3.21"
+        "version": "4.3.22"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2070,7 +2070,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.3.21",
+              "id": "clap 4.3.22",
               "target": "clap"
             },
             {
@@ -2078,7 +2078,7 @@
               "target": "hex"
             },
             {
-              "id": "serde_json 1.0.104",
+              "id": "serde_json 1.0.105",
               "target": "serde_json"
             },
             {
@@ -3586,13 +3586,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_json 1.0.104": {
+    "serde_json 1.0.105": {
       "name": "serde_json",
-      "version": "1.0.104",
+      "version": "1.0.105",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_json/1.0.104/download",
-          "sha256": "076066c5f1078eac5b722a31827a8832fe108bed65dfa75e233c89f8206e976c"
+          "url": "https://crates.io/api/v1/crates/serde_json/1.0.105/download",
+          "sha256": "693151e1ac27563d6dbcec9dee9fbd5da8539b20fa14ad3752b2e6d363ace360"
         }
       },
       "targets": [
@@ -3642,14 +3642,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.104",
+              "id": "serde_json 1.0.105",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.104"
+        "version": "1.0.105"
       },
       "build_script_attrs": {
         "data_glob": [
