@@ -507,6 +507,12 @@ export const Bio: Bio = {
 			tags: [writing, security, disclosure],
 			description: en`Bypassing cutting-edge web security techniques to hack Apple ID`,
 		},
+		{
+			date: date(13, 'aug', 2023),
+			title: en`Def Con Black Badge`,
+			tags: [accolade, security],
+			description: en`The highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
