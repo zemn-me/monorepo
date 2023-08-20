@@ -212,9 +212,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
     http_archive(
         name = "rules_nodejs",
-        sha256 = "a833b08fc846e27a73ac2b7062e4f48cace0e72a072c6c3fa756847dc44246dd",
-        strip_prefix = "rules_nodejs-6.0.0",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-v6.0.0.tar.gz",
+        sha256 = "5ad078287b5f3069735652e1fc933cb2e2189b15d2c9fc826c889dc466c32a07",
+        strip_prefix = "rules_nodejs-6.0.1",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.1/rules_nodejs-v6.0.1.tar.gz",
     )
 
     http_archive(
