@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project", "jest_test")
 load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -17,7 +17,20 @@ ts_project(
         "//project/zemn.me/next/components",
         "//ts/next.js",
         "//ts/react/lang",
+        "//:node_modules/@types/node",
+        "//:node_modules/mime",
+        "//:node_modules/@types/mime",
+        "//:node_modules/puppeteer",
+        "//:node_modules/devtools-protocol",
+        "//ts"
     ],
+)
+
+jest_test(
+    name = "http_smoke",
+    deps = [":ts"],
+    srcs = ["http_smoke_test.js"],
+    data = [ ":next" ]
 )
 
 next_project(
