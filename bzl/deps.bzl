@@ -84,6 +84,23 @@ def fetch_dependencies():
     )
 
     http_archive(
+        name = "gazelle_rust",
+        sha256 = "ffffe2dc10c1ae514eef99a8b42ed99fa262b757058f65ad3c384289ff70c4b8",
+        urls = [
+            "https://github.com/github/codeql/archive/aef66c462abe817e33aad91d97aa782a1e2ad2c7.zip"
+        ],
+    )
+
+    http_archive(
+        name = "rules_rust",
+        # NOTE: This patch is currently necessary for gazelle_rust to parse crate_universe lockfiles.
+        # https://github.com/Calsign/gazelle_rust/blob/main/example/WORKSPACE#L13C1-L14C59
+        patches = ["@gazelle_rust//patches:rules_rust.patch"],
+        sha256 = "9d04e658878d23f4b00163a72da3db03ddb451273eb347df7d7c50838d698f49",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.26.0/rules_rust-v0.26.0.tar.gz"],
+    )
+
+    http_archive(
         name = "com_google_protobuf",
         sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
         strip_prefix = "protobuf-3.13.0",
@@ -196,11 +213,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         remote = "git@github.com:attilaolah/bazel-tools.git",
     )
 
-    http_archive(
-        name = "rules_rust",
-        sha256 = "9d04e658878d23f4b00163a72da3db03ddb451273eb347df7d7c50838d698f49",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.26.0/rules_rust-v0.26.0.tar.gz"],
-    )
 
     http_archive(
         name = "aspect_rules_ts",
