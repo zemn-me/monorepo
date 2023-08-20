@@ -29,31 +29,30 @@ const cmd = new Command('presubmit')
 		}`,
 		false
 	)
+	.option(
+		'--dangerously-skip-pnpm-lockfile-validation',
+		`${
+			'Skip presubmit package.json:pnpm-lock.yaml validation. ' +
+			'This is a really dangerous thing to do because it can create a desynchronization ' +
+			'that only manifests in some revision down the line.'
+		}`
+	)
 	.action(async o => {
 		// this is unfortunately necessary because my arm mac chokes on getting a running
 		// version of inkscape, and I'm deferring solving that to some later day.
-		if (!o.skipBazelTests) {
-			const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
-			// perform all the normal tests
-			const p = child_process.spawn('bazel', ['test', '//...'], {
-				cwd,
-				stdio: 'inherit',
-			});
+		const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
 
-			await new Promise<void>((ok, error) =>
-				p.on('close', code => {
-					if (code != 0) return error(new Error(`Exit code ${code}`));
-					return ok();
-				})
-			);
-
-			// validate the pnpm lockfile.
+		// validate the pnpm lockfile.
+		if (!o.dangerouslySkipPnpmLockfileValidation) {
 			await new Promise<void>((ok, err) =>
 				child_process
 					.spawn(
-						'npx',
+						'npm',
 						[
-							'pnpm',
+							'exec',
+							'--yes',
+							// https://github.com/pnpm/pnpm/issues/6962
+							'pnpm@8.6.12',
 							'i',
 							'--frozen-lockfile',
 							'--lockfile-only',
@@ -72,6 +71,21 @@ const cmd = new Command('presubmit')
 					.on('close', code =>
 						code != 0 ? err(`exit ${code}`) : ok()
 					)
+			);
+		}
+
+		if (!o.skipBazelTests) {
+			// perform all the normal tests
+			const p = child_process.spawn('bazel', ['test', '//...'], {
+				cwd,
+				stdio: 'inherit',
+			});
+
+			await new Promise<void>((ok, error) =>
+				p.on('close', code => {
+					if (code != 0) return error(new Error(`Exit code ${code}`));
+					return ok();
+				})
 			);
 		}
 
