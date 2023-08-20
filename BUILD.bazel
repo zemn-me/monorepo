@@ -113,6 +113,9 @@ npm_link_all_packages(name = "node_modules")
 # gazelle:map_kind go_library go_library //go:rules.bzl
 # gazelle:map_kind ts_project ts_project //ts:rules.bzl
 # gazelle:resolve proto go google/protobuf/struct.proto @com_github_golang_protobuf//ptypes/struct:struct
+# Tell gazelle_rust where crate_universe dependencies come from:
+# gazelle:rust_lockfile cargo.bazel.lock
+# gazelle:rust_crates_prefix @cargo//:
 gazelle(
     name = "gazelle-update-repos",
     args = [
