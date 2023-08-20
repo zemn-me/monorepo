@@ -1,5 +1,5 @@
 {
-  "checksum": "4520d17fd922ff89731b05824171dd00d41615cadc9294557f7a0f4353240f5b",
+  "checksum": "8577bfe1cdaf5ce370cf6aef7ee13e9f3d8a7313c4842e01726c60ef7090e2bc",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -52,92 +52,6 @@
         "version": "0.11.4"
       },
       "license": "BSD-2-Clause"
-    },
-    "ahash 0.8.3": {
-      "name": "ahash",
-      "version": "0.8.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/ahash/0.8.3/download",
-          "sha256": "2c99f64d1e06488f620f932677e24bc6e2897582980441ae90a671415bd7ec2f"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "ahash",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        },
-        {
-          "BuildScript": {
-            "crate_name": "build_script_build",
-            "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "ahash",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "getrandom",
-            "runtime-rng",
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "ahash 0.8.3",
-              "target": "build_script_build"
-            },
-            {
-              "id": "cfg-if 1.0.0",
-              "target": "cfg_if"
-            },
-            {
-              "id": "getrandom 0.2.8",
-              "target": "getrandom"
-            }
-          ],
-          "selects": {
-            "cfg(not(all(target_arch = \"arm\", target_os = \"none\")))": [
-              {
-                "id": "once_cell 1.18.0",
-                "target": "once_cell"
-              }
-            ]
-          }
-        },
-        "edition": "2018",
-        "version": "0.8.3"
-      },
-      "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "version_check 0.9.4",
-              "target": "version_check"
-            }
-          ],
-          "selects": {}
-        }
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "aho-corasick 0.7.20": {
       "name": "aho-corasick",
@@ -2090,7 +2004,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.31.18",
+              "id": "swc_common 0.31.21",
               "target": "swc_common"
             }
           ],
@@ -2380,8 +2294,7 @@
             "alloc",
             "default",
             "race",
-            "std",
-            "unstable"
+            "std"
           ],
           "selects": {}
         },
@@ -4042,13 +3955,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.31.18": {
+    "swc_common 0.31.21": {
       "name": "swc_common",
-      "version": "0.31.18",
+      "version": "0.31.21",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.31.18/download",
-          "sha256": "e30cd01afa791b15263fcfe8f77ecbbd020ddef659f0f58d3c7b794ad65c1738"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.31.21/download",
+          "sha256": "de5823ef063f116ad281cde9700f5be6dfb182e543ce3f62c42cee1c03ffbc6b"
         }
       },
       "targets": [
@@ -4075,10 +3988,6 @@
         },
         "deps": {
           "common": [
-            {
-              "id": "ahash 0.8.3",
-              "target": "ahash"
-            },
             {
               "id": "better_scoped_tls 0.1.1",
               "target": "better_scoped_tls"
@@ -4160,7 +4069,7 @@
           ],
           "selects": {}
         },
-        "version": "0.31.18"
+        "version": "0.31.21"
       },
       "license": "Apache-2.0"
     },
@@ -5148,13 +5057,6 @@
         "compile_data_glob": [
           "**"
         ],
-        "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
-          "selects": {}
-        },
         "edition": "2018",
         "version": "0.11.0+wasi-snapshot-preview1"
       },
@@ -6399,37 +6301,6 @@
       "i686-pc-windows-msvc",
       "i686-unknown-freebsd",
       "i686-unknown-linux-gnu",
-      "x86_64-apple-darwin",
-      "x86_64-apple-ios",
-      "x86_64-fuchsia",
-      "x86_64-linux-android",
-      "x86_64-pc-windows-msvc",
-      "x86_64-unknown-freebsd",
-      "x86_64-unknown-linux-gnu",
-      "x86_64-unknown-none"
-    ],
-    "cfg(not(all(target_arch = \"arm\", target_os = \"none\")))": [
-      "aarch64-apple-darwin",
-      "aarch64-apple-ios",
-      "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
-      "aarch64-linux-android",
-      "aarch64-pc-windows-msvc",
-      "aarch64-unknown-linux-gnu",
-      "arm-unknown-linux-gnueabi",
-      "armv7-linux-androideabi",
-      "armv7-unknown-linux-gnueabi",
-      "i686-apple-darwin",
-      "i686-linux-android",
-      "i686-pc-windows-msvc",
-      "i686-unknown-freebsd",
-      "i686-unknown-linux-gnu",
-      "powerpc-unknown-linux-gnu",
-      "riscv32imc-unknown-none-elf",
-      "riscv64gc-unknown-none-elf",
-      "s390x-unknown-linux-gnu",
-      "wasm32-unknown-unknown",
-      "wasm32-wasi",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
       "x86_64-fuchsia",
