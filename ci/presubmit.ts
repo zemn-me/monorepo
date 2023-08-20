@@ -29,11 +29,54 @@ const cmd = new Command('presubmit')
 		}`,
 		false
 	)
+	.option(
+		'--dangerously-skip-pnpm-lockfile-validation',
+		`${
+			'Skip presubmit package.json:pnpm-lock.yaml validation. ' +
+			'This is a really dangerous thing to do because it can create a desynchronization ' +
+			'that only manifests in some revision down the line.'
+		}`
+	)
 	.action(async o => {
 		// this is unfortunately necessary because my arm mac chokes on getting a running
 		// version of inkscape, and I'm deferring solving that to some later day.
+		const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
+		console.log('Executing in detected directory', cwd);
+
+		// validate the pnpm lockfile.
+		if (!o.dangerouslySkipPnpmLockfileValidation) {
+			await new Promise<void>((ok, err) =>
+				child_process
+					.spawn(
+						'npm',
+						[
+							'exec',
+							'--yes',
+							'pnpm',
+							'i',
+							'--frozen-lockfile',
+							'--lockfile-only',
+							// Due to this issue:
+							// https://github.com/pnpm/pnpm/issues/6962
+							// specifying --dir causes --frozen-lockfile to be ignored.
+							/*							'--dir',
+							// aspect_rules_js uses this as their example;
+							// I think the script might pull in some patches etc
+							// so we have to be a bit smarter than just setting
+							// cwd when we launch the binary.
+							cwd, */
+						],
+						{
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code != 0 ? err(`exit ${code}`) : ok()
+					)
+			);
+		}
+
 		if (!o.skipBazelTests) {
-			const cwd = process.env['BUILD_WORKING_DIRECTORY'] ?? process.cwd();
 			// perform all the normal tests
 			const p = child_process.spawn('bazel', ['test', '//...'], {
 				cwd,
@@ -45,33 +88,6 @@ const cmd = new Command('presubmit')
 					if (code != 0) return error(new Error(`Exit code ${code}`));
 					return ok();
 				})
-			);
-
-			// validate the pnpm lockfile.
-			await new Promise<void>((ok, err) =>
-				child_process
-					.spawn(
-						'npx',
-						[
-							'pnpm',
-							'i',
-							'--frozen-lockfile',
-							'--lockfile-only',
-							'--dir',
-							// aspect_rules_js uses this as their example;
-							// I think the script might pull in some patches etc
-							// so we have to be a bit smarter than just setting
-							// cwd when we launch the binary.
-							cwd,
-						],
-						{
-							cwd,
-							stdio: 'inherit',
-						}
-					)
-					.on('close', code =>
-						code != 0 ? err(`exit ${code}`) : ok()
-					)
 			);
 		}
 
