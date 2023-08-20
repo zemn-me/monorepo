@@ -124,9 +124,15 @@ gazelle(
         "-to_macro=bzl/go_deps.bzl%go_dependencies",
     ],
     command = "update-repos",
+    # just using the pre-prepared gazelle_rust bin here -- but we'd need
+    # a custom compilation path if we ever had more than one plugin.
+    gazelle = "@gazelle_rust//:gazelle_bin"
 )
 
 gazelle(
     name = "gazelle",
     command = "fix",
+    # just using the pre-prepared gazelle_rust bin here -- but we'd need
+    # a custom compilation path if we ever had more than one plugin.
+    gazelle = "@gazelle_rust//:gazelle_bin"
 )
