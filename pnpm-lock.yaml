@@ -58,8 +58,8 @@ devDependencies:
     specifier: 7.22.5
     version: 7.22.5(@babel/core@7.22.9)
   '@bazel/bazelisk':
-    specifier: 1.12.1
-    version: 1.12.1
+    specifier: 1.18.0
+    version: 1.18.0
   '@bazel/buildifier':
     specifier: 6.3.2
     version: 6.3.2
@@ -2635,8 +2635,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@bazel/bazelisk@1.12.1:
-    resolution: {integrity: sha512-TGCwVeIiVeQUP6yLpxAg8yluFOC+tBQnWw5l8lqwMxKhRtOA+WaH1CJKAXeCBAaS2MxohhkXq44zj/7AM+t2jg==}
+  /@bazel/bazelisk@1.18.0:
+    resolution: {integrity: sha512-WqlTatsGKypeHYidqe3/6W8dkqkgJ13sMCEers/vH7dNwxojHrMQcuaH26sOnQG1eVn8UfHo78fy34yGAF3zsw==}
     hasBin: true
     dev: true
 
