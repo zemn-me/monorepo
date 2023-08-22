@@ -1,5 +1,6 @@
 import * as Pulumi from '@pulumi/pulumi';
 import Website from 'ts/pulumi/lib/website';
+import Redirect from 'ts/pulumi/lib/redirect';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -33,6 +34,17 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		super.registerOutputs({ site: this.site });
+		const r = new Redirect(
+			`${name}_availability.zemn.me`,
+			{
+				to: 'https://calendar.google.com/calendar/u/0/embed?src=thomas@shadwell.im&src=thomas@metatheory.gg',
+				zoneId: args.zoneId,
+				domain: ['availability', args.domain].join('.'),
+				noIndex: args.noIndex
+			},
+			{ parent: this }
+		)
+
+		super.registerOutputs({ site: this.site, r });
 	}
 }
