@@ -97,10 +97,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "977a0bd4593c8d4c8f45e056d181c35e48aa01ad4f8090bdb84f78dca42f47dc",
-        strip_prefix = "buildtools-6.1.2",
+        sha256 = "b7187e0856280feb0658ab9d629c244e638022819ded8243fb02e0c1d4db8f1c",
+        strip_prefix = "buildtools-6.3.2",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.1.2.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.3.2.tar.gz",
         ],
     )
 
@@ -212,16 +212,16 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
     http_archive(
         name = "rules_nodejs",
-        sha256 = "a833b08fc846e27a73ac2b7062e4f48cace0e72a072c6c3fa756847dc44246dd",
-        strip_prefix = "rules_nodejs-6.0.0",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.0/rules_nodejs-v6.0.0.tar.gz",
+        sha256 = "5ad078287b5f3069735652e1fc933cb2e2189b15d2c9fc826c889dc466c32a07",
+        strip_prefix = "rules_nodejs-6.0.1",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.1/rules_nodejs-v6.0.1.tar.gz",
     )
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "7b2a4d1d264e105eae49a27e2e78065b23e2e45724df2251eacdd317e95bfdfd",
-        strip_prefix = "rules_js-1.31.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.31.0/rules_js-v1.31.0.tar.gz",
+        sha256 = "bdbd6df52fc7963f55281fe0a140e21de8ec587ab711a8a2fff0715b6710a4f8",
+        strip_prefix = "rules_js-1.32.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.32.0/rules_js-v1.32.0.tar.gz",
     )
 
     http_archive(
