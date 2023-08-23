@@ -1,0 +1,7 @@
+load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+ts_project(
+    name = "aliases",
+)
