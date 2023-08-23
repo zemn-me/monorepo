@@ -52,7 +52,8 @@ export class Certificate extends pulumi.ComponentResource {
 				ttl: 1 * minute, // because these really don't need to be cached
 			},
 			{
-				parent: this,
+				// records must be unique
+				parent: this, deleteBeforeReplace: true
 			}
 		);
 
