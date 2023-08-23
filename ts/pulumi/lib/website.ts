@@ -254,7 +254,8 @@ export class Website extends pulumi.ComponentResource {
 						: {}),
 				},
 			},
-			{ parent: this }
+			// records must be unique
+			{ parent: this, deleteBeforeReplace: true }
 		);
 
 		this.registerOutputs({
