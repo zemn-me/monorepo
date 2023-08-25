@@ -12,6 +12,7 @@ export default function HomePage() {
 					content="object-src https://calendar.google.com"
 					httpEquiv="Content-Security-Policy"
 				/>
+				<title>Thomas’ Availability</title>
 			</Head>
 			<main>
 				<iframe src="https://calendar.google.com/calendar/u/0/embed?src=thomas@shadwell.im&src=thomas@metatheory.gg&src=thomas.shadwell@gmail.com" />
