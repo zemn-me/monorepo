@@ -333,7 +333,8 @@ export class Website extends pulumi.ComponentResource {
 					sslSupportMethod: 'sni-only', // idk really what this does
 				},
 			},
-			{ parent: this }
+			// creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
+			{ parent: this, deleteBeforeReplace: true }
 		);
 
 		// create the alias record that allows the distribution to be located
