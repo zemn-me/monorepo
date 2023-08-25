@@ -22,6 +22,11 @@ const cmd = new Command('presubmit')
 		false
 	)
 	.option(
+		'--overwrite',
+		`${'Tear down the existing Pulumi state before performing Pulumi up.'}`,
+		false
+	)
+	.option(
 		'--skip-pulumi-deploy',
 		`${
 			'Skip doing the pulumi deploy once bazel testing is completed. ' +
@@ -105,7 +110,10 @@ const cmd = new Command('presubmit')
 
 		// attempt a deploy of pulumi to staging, and tear it down.
 		if (!o.skipPulumiDeploy) {
-			await deploy_to_staging({ doNotTearDown: o.dirty });
+			await deploy_to_staging({
+				overwrite: o.overwrite,
+				doNotTearDown: o.dirty,
+			});
 		}
 	});
 
