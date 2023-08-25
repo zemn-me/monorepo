@@ -1,4 +1,5 @@
 import * as Pulumi from '@pulumi/pulumi';
+import Redirect from 'ts/pulumi/lib/redirect';
 import Website from 'ts/pulumi/lib/website';
 
 export interface Args {

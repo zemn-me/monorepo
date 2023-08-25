@@ -5,7 +5,7 @@ import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 import * as guard from 'ts/guard';
-import Certificate from 'ts/pulumi/lib/certificate';
+import CloudFront from 'ts/pulumi/lib/cloudfront';
 
 const bucketSuffix = '-bucket';
 const pulumiRandomChars = 7;
@@ -88,15 +88,6 @@ export class Website extends pulumi.ComponentResource {
 		opts?: pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
-
-		const certificate = new Certificate(
-			`${name}_certificate`,
-			{
-				zoneId: args.zoneId,
-				domain: args.domain,
-			},
-			{ parent: this }
-		);
 
 		/**
 		 * The final subdomain that the website can be loaded from on the target domain.
@@ -220,150 +211,54 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		// response headers policy (http headers)
-
-		const responseHeadersPolicy = new aws.cloudfront.ResponseHeadersPolicy(
-			`${name}_response_headers`.replaceAll('.', '-'),
-			{
-				securityHeadersConfig: {
-					contentTypeOptions: {
-						override: false,
-					},
-					frameOptions: {
-						frameOption: 'DENY',
-						override: false,
-					},
-					strictTransportSecurity: {
-						accessControlMaxAgeSec: 31536000,
-						override: false,
-						includeSubdomains: true,
-						preload: true,
-					},
-				},
-				customHeadersConfig: {
-					items: [
-						...(args.noIndex
-							? [
-									{
-										header: 'x-robots-tag',
-										value: 'noindex',
-										override: false,
-									},
-							  ]
-							: []),
-					],
-				},
-			}
-		);
-
 		// create the cloudfront
 
-		const distribution = new aws.cloudfront.Distribution(
-			`${name}_cloudfront_distribution`,
+		// create the cloudfront distribution and cert
+		const cloudFront = new CloudFront(
+			`${name}_cloudfront`,
 			{
-				origins: [
-					{
-						s3OriginConfig: {
-							originAccessIdentity:
-								originAccessIdentity.cloudfrontAccessIdentityPath,
+				zoneId: args.zoneId,
+				domain: args.domain,
+				noIndex: args.noIndex,
+				distributionArgs: {
+					origins: [
+						{
+							s3OriginConfig: {
+								originAccessIdentity:
+									originAccessIdentity.cloudfrontAccessIdentityPath,
+							},
+							domainName: bucket.bucketRegionalDomainName,
+							originId: `${name}_cloudfront_distribution`,
 						},
-						domainName: bucket.bucketRegionalDomainName,
-						originId: `${name}_cloudfront_distribution`,
-					},
-				],
-				enabled: true,
-				isIpv6Enabled: true,
-				defaultRootObject: indexDocumentObject.key,
-				// this is the host that the distribution will expect
-				// (other than the default).
-				aliases: [args.domain],
-				// in the future we could maybe take a bunch of these as args, but
-				// we're not overengineering today!
-				// im sorry this bit kinda sucks
-				...(errorDocumentObject !== undefined
-					? {
-							customErrorResponses: [
-								{
-									errorCode: 404,
-									responseCode: 404,
-									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
-								},
-							],
-					  }
-					: {}),
-				defaultCacheBehavior: {
-					responseHeadersPolicyId: responseHeadersPolicy.id,
-					// i dont think we use most of these but it's probably not
-					// important
-					allowedMethods: [
-						'DELETE',
-						'GET',
-						'HEAD',
-						'OPTIONS',
-						'PATCH',
-						'POST',
-						'PUT',
 					],
-					cachedMethods: ['GET', 'HEAD'],
-					// i'm fairly sure this is correct, but the docs kinda suck
-					// on which of AWS's many IDs this might be and sapling histgrep
-					// is broken.
-					targetOriginId: `${name}_cloudfront_distribution`,
-					forwardedValues: {
-						queryString: false,
-						// I'm not using cookies for anything yet.
-						// and to be honest, i prefer localStorage.
-						cookies: {
-							forward: 'none',
-						},
+
+					defaultCacheBehavior: {
+						targetOriginId: `${name}_cloudfront_distribution`,
 					},
-					viewerProtocolPolicy: 'redirect-to-https',
-					minTtl: 0,
-					defaultTtl: 3600,
-					maxTtl: 86400,
-				},
-				restrictions: {
-					geoRestriction: {
-						restrictionType: 'none',
-					},
-				},
-				tags: {
-					Environment: 'production',
-				},
-				viewerCertificate: {
-					// important to use this so that it waits for the cert
-					// to come up
-					acmCertificateArn: certificate.validation.certificateArn,
-					sslSupportMethod: 'sni-only', // idk really what this does
+
+					defaultRootObject: indexDocumentObject.key,
+
+					// in the future we could maybe take a bunch of these as args, but
+					// we're not overengineering today!
+					// im sorry this bit kinda sucks
+					...(errorDocumentObject !== undefined
+						? {
+								customErrorResponses: [
+									{
+										errorCode: 404,
+										responseCode: 404,
+										responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
+									},
+								],
+						  }
+						: {}),
 				},
 			},
 			{ parent: this }
 		);
 
-		// create the alias record that allows the distribution to be located
-		// from the DNS record.
-
-		const record = new aws.route53.Record(
-			`${name}_distribution_record`,
-			{
-				zoneId: args.zoneId,
-				name: args.domain,
-				type: 'A',
-				aliases: [
-					{
-						name: distribution.domainName,
-						zoneId: distribution.hostedZoneId,
-						evaluateTargetHealth: true,
-					},
-				],
-			},
-			// records must be unique
-			{ parent: this, deleteBeforeReplace: true }
-		);
-
 		this.registerOutputs({
-			distribution,
-			record,
+			cloudFront,
 			bucketPolicy,
 		});
 	}

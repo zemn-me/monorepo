@@ -1,5 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
+import { aliases } from 'ts/pulumi/aliases';
 
 const second = 1;
 const minute = 60 * second;
@@ -42,8 +43,10 @@ export class Certificate extends pulumi.ComponentResource {
 			}
 		);
 
+		const validatingRecordName = `${name}_validating_record`;
+
 		const validatingRecord = new aws.route53.Record(
-			`${name}_validating_record`,
+			validatingRecordName,
 			{
 				name: cert.domainValidationOptions[0].resourceRecordName,
 				records: [cert.domainValidationOptions[0].resourceRecordValue],
@@ -55,6 +58,7 @@ export class Certificate extends pulumi.ComponentResource {
 				// records must be unique
 				parent: this,
 				deleteBeforeReplace: true,
+				aliases: aliases[validatingRecordName],
 			}
 		);
 
