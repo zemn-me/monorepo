@@ -33,6 +33,19 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		super.registerOutputs({ site: this.site });
+		const availability = new Website(
+			`${name}_availability_zemn_me_website`,
+			{
+				index: 'ts/pulumi/zemn.me/availability/out/index.html',
+				notFound: 'ts/pulumi/zemn.me/availability/out/404.html',
+				directory: 'ts/pulumi/zemn.me/availability/out',
+				zoneId: args.zoneId,
+				domain: ['availability', args.domain].join('.'),
+				noIndex: true, // args.noIndex,
+			},
+			{ parent: this }
+		);
+
+		super.registerOutputs({ site: this.site, availability });
 	}
 }
