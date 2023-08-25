@@ -254,7 +254,8 @@ export class Website extends pulumi.ComponentResource {
 						: {}),
 				},
 			},
-			{ parent: this }
+			// creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
+			{ parent: this, deleteBeforeReplace: true }
 		);
 
 		this.registerOutputs({
