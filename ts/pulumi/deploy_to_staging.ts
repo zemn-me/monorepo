@@ -94,6 +94,10 @@ interface Args {
 	 * Don't destroy the infra once it's turned up.
 	 */
 	doNotTearDown: boolean;
+	/**
+	 * Destroy existing state before doing Pulumi up.
+	 */
+	overwrite: boolean;
 }
 
 export async function main(args: Args) {
@@ -111,12 +115,13 @@ export async function main(args: Args) {
 		'refreshing state'
 	);
 
-	const e2 = !args.doNotTearDown
+	const e2 = args.overwrite
 		? await waitForLock(
 				async () => s.then(v => v.destroy(baseConfig)),
-				'destroying old state'
+				'destroy initial state'
 		  )
 		: undefined;
+
 	const e3 = await waitForLock(
 		async () => s.then(v => v.up(baseConfig)),
 		'deploying'
