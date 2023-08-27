@@ -11,3 +11,9 @@ a {
     font-style: italic;
     color: currentColor;
 }
+
+a:link, a:visited {
+	text-decoration-color: #98cb0c;
+}
+
+h1, h2, h3, h4, h5 { font-weight: normal }
