@@ -6,6 +6,17 @@ import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
 
+/**
+ * LetterHead is the inner part of the heading with the name and logo.
+ */
+function LetterHead() {
+	return <div className={style.letterHead}>
+		<div className={style.handle}>{lang.text(bio.Bio.who.handle)}</div>
+		<TimeEye className={style.logo}/>
+		<div className={style.fullName}>Thomas NJ Shadwell</div>
+	</div>
+}
+
 export default function Main() {
 	return (
 		<main className={style.main}>
@@ -30,16 +41,13 @@ export default function Main() {
 				<kenwood.VideoSources />
 			</video>
 			<header className={style.banner}>
-				<h1 lang={lang.get(bio.Bio.who.handle)}>
-					{lang.text(bio.Bio.who.handle)}
-				</h1>
+				<LetterHead/>
 			</header>
 			<section className={style.content}>
 				<header>
 					<h2 lang={lang.get(bio.Bio.who.fullName)}>
 						{lang.text(bio.Bio.who.fullName)}
 					</h2>
-					<TimeEye />
 					<p>
 						I am an internationally recognised international expert
 						on computer security, with specialisms in web security,
