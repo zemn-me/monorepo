@@ -148,7 +148,7 @@ export class Website extends pulumi.ComponentResource {
 								guard.isNotNull,
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
-							source: fPath,
+							source: new pulumi.asset.FileAsset(fPath),
 							// wait to be allowed to add stuff to this bucket with public
 							// access.
 							//
