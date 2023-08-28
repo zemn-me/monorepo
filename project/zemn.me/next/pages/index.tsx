@@ -61,8 +61,8 @@ export default function Main() {
 					<Prose>
 						<p>
 							I am an internationally recognised expert on
-							computersecurity, with specialisms in web security,
-							security program construction, and automated
+							computer security, with specialisms in web security,
+							security program (SSDLC) construction, and automated
 							security analysis.
 						</p>
 						<p>
