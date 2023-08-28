@@ -5,6 +5,7 @@ type Text = lang.Text;
 
 const en = lang.tag('en-GB');
 const nl = lang.tag('nl');
+const austrian = lang.tag('de-AT');
 
 const date = (...params: time.date.Date) => time.date.parse(params);
 
@@ -45,6 +46,12 @@ export interface Employment {
 	where: Text;
 }
 
+export interface Location {
+	latitude: number
+	longitude: number
+	address: Corpus
+}
+
 export interface Event {
 	date: Date;
 	description?: Text;
@@ -53,6 +60,7 @@ export interface Event {
 	url?: URL;
 	priority?: number;
 	until?: Endpoint;
+	location?: Location
 }
 
 // tags
@@ -384,6 +392,11 @@ export const Bio: Bio = {
 			tags: [talk, gaming, security],
 			description: en`talk at game dev days 2018 in Graz, Austria summarising some security concepts for game developers`,
 			url: url`https://www.youtube.com/watch?v=NjMMK-FkTW4&list=PLFqM5L7fs0mO3O3-BBZfA-sHeT86Gesd8&index=15&`,
+			location: {
+				latitude: 47.069408049449336,
+				longitude: 15.450398172503867,
+				address: austrian`Technische Universität Graz, Graz, Österreich`
+			}
 		},
 		{
 			date: date(5, 'sep', 2018),
@@ -512,6 +525,11 @@ export const Bio: Bio = {
 			title: en`Def Con Black Badge`,
 			tags: [accolade, security],
 			description: en`The highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
+			location: {
+				latitude: 36.118708482032716,
+				longitude: -115.16636901690526,
+				address: en`DEF CON 31, Caesar's Palace, Paradise, Nevada, USA`
+			}
 		},
 		// END TOOL ASSISTED SORT
 	],
