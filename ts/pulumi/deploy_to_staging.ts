@@ -115,17 +115,33 @@ export async function main(args: Args) {
 		'refreshing state'
 	);
 
-	const e2 = args.overwrite
-		? await waitForLock(
-				async () => s.then(v => v.destroy(baseConfig)),
-				'destroy initial state'
-		  )
-		: undefined;
-
+	let e2: pulumi.DestroyResult | pulumi.UpResult | Error | undefined =
+		undefined;
+	// overwrite logic is a little more complex for optimization.
+	// first, we attempt to just do a regular up(). if that fails,
+	// then we destroy the infrastructure and retry.
+	//
+	// this ensures that the infrastructure gets to the desired state
+	// even if there are conflicts, but without necessarily waiting for
+	// a full destroy.
 	const e3 = await waitForLock(
 		async () => s.then(v => v.up(baseConfig)),
 		'deploying'
 	);
+
+	if (args.overwrite && e3 instanceof Error) {
+		e2 = await waitForLock(
+			async () => s.then(v => v.destroy(baseConfig)),
+			'destroy initial state'
+		);
+
+		if (!(e2 instanceof Error)) {
+			e2 = await waitForLock(
+				async () => s.then(v => v.up(baseConfig)),
+				'redeploying after destroy (due to --overwrite)'
+			);
+		}
+	}
 	const e4 = await waitForLock(
 		async () => s.then(v => console.log(v.outputs())),
 		'outputs testing'
