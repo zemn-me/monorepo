@@ -2,11 +2,11 @@
     display: grid;
     grid:
         '....... ......... ........ ........... ....... .......... .....' 1em
-        '....... line-left ........ year        ....... line-right .....' 
-        '....... line-left ........ age         ....... line-right .....' 
+        '....... line-left ........ year        ....... line-right .....'
+        '....... line-left ........ age         ....... line-right .....'
         '....... ......... ........ ........... ....... .......... .....' 1em
         '....... content   content  content     content content    .....'
-        / .2em    1fr       1em     min-content 1em  1fr        .2em
+        / .2em    1fr       1em     auto        1em     1fr        .2em
 }
 
 .year::before, .year::after {
@@ -36,7 +36,7 @@
         '........ ....... ....... ....... ......' .2em
         '........ content content content ......'
         '........ ....... ....... ....... ......' .2em
-        /.5em     1fr min-content 1fr  .5em;
+        /.5em     1fr      auto   1fr     .5em;
     width: 30em;
 }
 
