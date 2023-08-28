@@ -14,7 +14,7 @@ export function App({ Component, pageProps }: AppProps) {
 				<meta content="@zemnnmez" name="twitter:creator" />
 				<meta content="zemnmez" name="author" />
 				<meta
-					content="width=device-width,initial-scale=1,shrink-to-fit=no"
+					content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
 					name="viewport"
 				/>
 			</Head>

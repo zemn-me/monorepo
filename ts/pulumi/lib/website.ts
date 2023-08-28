@@ -148,11 +148,7 @@ export class Website extends pulumi.ComponentResource {
 								guard.isNotNull,
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
-							source: fPath,
-							// wait to be allowed to add stuff to this bucket with public
-							// access.
-							//
-							// see: https://github.com/pulumi/pulumi-aws-static-website/blob/main/provider/cmd/pulumi-resource-aws-static-website/website.ts#L278
+							source: new pulumi.asset.FileAsset(fPath),
 						},
 						{
 							parent: this,
