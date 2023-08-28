@@ -4,6 +4,28 @@ import style from 'project/zemn.me/next/components/timeline/timeline.module.css'
 import React from 'react';
 import * as lang from 'ts/react/lang';
 
+interface MutableText {
+	corpus: string;
+	language: string;
+}
+
+type ImmutableText = Immutable.Record<MutableText>;
+
+/**
+ * Needed so that lang.TaggedText can be used as a key in a map.
+ */
+const Text = Immutable.Record<MutableText>(
+	{
+		corpus: '',
+		language: 'Zzzz', // TR35 for unknown script https://unicode.org/reports/tr35/
+	},
+	'text'
+);
+
+function textToStringKey(t: ImmutableText): string {
+	return [t.get('language'), t.get('corpus')].join('-');
+}
+
 const numerals = [
 	[3000, 'MMM'],
 	[2000, 'MM'],
@@ -96,15 +118,14 @@ function Month({
 	month,
 	events,
 }: {
-	readonly month: string;
+	readonly month: ImmutableText;
 	readonly events: Iterable<Bio.Event>;
 }) {
 	return (
 		<div className={style.month}>
-			<header className={style.monthName} lang="en-GB">
+			<header className={style.monthName} lang={month.get('language')}>
 				{' '}
-				{/* <- this needs to be set to the correct language */}
-				{month}
+				{month.get('corpus')}
 			</header>
 			<div className={style.content}>
 				{[...events].map((e, i) => (
@@ -119,13 +140,19 @@ function Year({
 	year,
 	months,
 }: {
-	readonly year: string;
-	readonly months: Immutable.OrderedMap<string, Immutable.List<Bio.Event>>;
+	readonly year: ImmutableText;
+	readonly months: Immutable.OrderedMap<
+		ImmutableText,
+		Immutable.List<Bio.Event>
+	>;
 }) {
 	return (
 		<div className={style.year}>
-			<div className={style.yearIndicator}>{year}</div>
-			<div className={style.ageIndicator}>
+			<div className={style.yearIndicator} lang={year.get('language')}>
+				{year.get('corpus')}
+			</div>
+			{/*↓ unicode for 'no specified language, roman numerals used for numbering'*/}
+			<div className={style.ageIndicator} lang="zxx-u-nu-romanlow">
 				{romanize(
 					(months.first(undefined)?.first()?.date.getFullYear() ??
 						0) - 1994
@@ -134,7 +161,11 @@ function Year({
 
 			<div className={style.content}>
 				{[...months].map(([month, events]) => (
-					<Month events={events} key={month} month={month} />
+					<Month
+						events={events}
+						key={textToStringKey(month)}
+						month={month}
+					/>
 				))}
 			</div>
 		</div>
@@ -143,7 +174,10 @@ function Year({
 
 export default function Timeline() {
 	// this spread is just because Intl.DateTimeFormat expects a mutable array.
-	const locale = [...lang.useLocale()];
+
+	const locales = [...lang.useLocale()];
+
+	const locale = Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
 
 	const years = React.useMemo(
 		() =>
@@ -151,12 +185,18 @@ export default function Timeline() {
 				Immutable.List(Bio.Bio.timeline)
 					.map(event => {
 						// depending on locale there may be different numbers of months etc.
-						const month = Intl.DateTimeFormat(locale, {
-							month: 'long',
-						}).format(event.date);
-						const year = Intl.DateTimeFormat(locale, {
-							year: 'numeric',
-						}).format(event.date);
+						const month: ImmutableText = Text({
+							corpus: Intl.DateTimeFormat(locale, {
+								month: 'long',
+							}).format(event.date),
+							language: locale,
+						});
+						const year: ImmutableText = Text({
+							corpus: Intl.DateTimeFormat(locale, {
+								year: 'numeric',
+							}).format(event.date),
+							language: locale,
+						});
 
 						return { ...event, month, year };
 					})
@@ -169,7 +209,7 @@ export default function Timeline() {
 	return (
 		<>
 			{[...years].map(([year, months]) => (
-				<Year key={year} months={months} year={year} />
+				<Year key={textToStringKey(year)} months={months} year={year} />
 			))}
 		</>
 	);
