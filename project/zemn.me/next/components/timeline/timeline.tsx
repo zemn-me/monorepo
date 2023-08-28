@@ -110,6 +110,14 @@ function Event({ event: e }: { readonly event: Bio.Event }) {
 					{lang.text(e.description)}
 				</span>
 			) : null}
+
+			{e.location? (
+				<address lang={lang.get(e.location.address)}>
+					<a href={`https://maps.google.com?${new URLSearchParams({q: [e.location.latitude, e.location.longitude].join(", ")})}`}>
+						{lang.text(e.location.address)}
+					</a>
+				</address>
+			): null}
 		</div>
 	);
 }
