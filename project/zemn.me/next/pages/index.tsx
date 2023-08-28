@@ -60,10 +60,10 @@ export default function Main() {
 				<header>
 					<Prose>
 						<p>
-							I am an internationally recognised international
-							expert on computer security, with specialisms in web
-							security, security program construction, and
-							automated security analysis.
+							I am an internationally recognised expert on
+							computersecurity, with specialisms in web security,
+							security program construction, and automated
+							security analysis.
 						</p>
 						<p>
 							I am interested in consulting on legal cases. For
