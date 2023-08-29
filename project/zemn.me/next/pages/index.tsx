@@ -5,6 +5,7 @@ import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
+import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 
 interface ProseProps {
 	readonly children?: React.ReactElement[];
@@ -97,6 +98,9 @@ export default function Main() {
 				</header>
 				<section>
 					<Timeline />
+				</section>
+				<section>
+					<ZemnmezLogo/>
 				</section>
 			</section>
 		</main>
