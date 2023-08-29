@@ -464,8 +464,9 @@ export const Bio: Bio = {
 		{
 			date: date(23, 'jul', 2020),
 			title: en`Senior Information Security Engineer, Google ISE hardening`,
-			description: en`Develop high level security analysis systems and primitives that protect Google`,
+			description: en`Automated security mitigation, detection and refactoring using compiler technology ("langsec"), SDKs and DSLs ("hardening") on TypeScript and Java. Google-wide mitigatins for Log4Shell, XSS, deserialization attacks etc. Product security review and design, Google Ads ("FLOC", "FLEDGE"), Google Cloud, Google's IDE ("Cider"), amongst others. Research including critical disclosures such as CVE-2022-41034.`,
 			tags: [work, security],
+			until: date(17, 'mar', 2023), // i dont remember the exact date
 		},
 		{
 			date: date(22, 'jan', 2018),
