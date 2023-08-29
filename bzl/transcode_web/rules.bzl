@@ -10,7 +10,10 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libx264 \\
                 -an \\
+                -bufsize 2M \\
+                -maxrate """ + max_bitrate + """ \\
                 -b:v """ + max_bitrate + """ \\
+                -crf 30 \\
                 -vf scale=""" + video_scale + """ \\
                 -movflags +faststart $@ \\
                 -loglevel error
@@ -24,8 +27,11 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libvpx \\
+                -crf 30 \\
+                -bufsize 2M \\
                 -an \\
                 -b:v """ + max_bitrate + """ \\
+                -maxrate """ + max_bitrate + """ \\
                 -vf scale=""" + video_scale + """ \\
                 -movflags +faststart $@ \\
                 -loglevel error
@@ -40,7 +46,10 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -c:v libtheora \\
                 -an \\
+                -bufsize 2M \\
+                -crf 30 \\
                 -b:v """ + max_bitrate + """ \\
+                -maxrate """ + max_bitrate + """ \\
                 -vf scale=""" + video_scale + """ \\
                 -movflags +faststart $@ \\
                 -loglevel error
