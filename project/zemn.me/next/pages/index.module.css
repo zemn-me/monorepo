@@ -82,3 +82,46 @@
 .prose {
 	margin: 0 2em 0 2em;
 }
+
+.footer {
+    display: grid;
+    grid:
+        " ...... left-dash ... logo ... right-dash ..... " 3em
+        " ...... ......... ... .... ... .......... ..... " 1em
+        " cap    cap       cap cap  cap cap        cap " 
+        " ...    ...       ... ...  ... ...        ...." 1em
+        " ...    copy      copy copy copy copy        ...."
+        / 1fr    1em       1em 3em  1em 1em        1fr    ;
+    font-size: small;
+}
+
+.copyNotice {
+    grid-area: copy
+}
+
+.footer::before, .footer::after {
+    content: '';
+    margin: auto;
+    content: "\2013";
+}
+
+.footer::before {
+    grid-area: left-dash;
+}
+
+.footer::after {
+    grid-area:right-dash;
+}
+
+.footer>.caption {
+    grid-area: cap;
+    font-style: italic;
+    margin: auto;
+    max-width: 15em;
+    text-align: center;
+}
+.footer>.logo {
+    grid-area: logo;
+    width:100%;
+    height: 100%;
+}
