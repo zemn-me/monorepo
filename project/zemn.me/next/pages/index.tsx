@@ -7,6 +7,14 @@ import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
 import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 
+function Footer() {
+	return <div className={style.footer}>
+		<ZemnmezLogo className={style.logo}/>
+		<div className={style.caption}>This is what we become, when our eyes are open.</div>
+		<div className={style.copyNotice}>© Thomas Shadwell, 2020-2023</div>
+	</div>
+}
+
 interface ProseProps {
 	readonly children?: React.ReactElement[];
 }
@@ -100,7 +108,8 @@ export default function Main() {
 					<Timeline />
 				</section>
 				<section>
-					<ZemnmezLogo/>
+					<p>[the asterism guy needs to go here]</p>
+					<Footer/>
 				</section>
 			</section>
 		</main>
