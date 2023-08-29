@@ -1,5 +1,5 @@
-import * as fs from 'ts/fs';
-import * as iter from 'ts/iter';
+import * as fs from 'monorepo/ts/fs/index.js';
+import * as iter from 'monorepo/ts/iter/index.js';
 
 describe('fs', () => {
 	describe('walk', () => {

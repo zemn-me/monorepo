@@ -1,4 +1,4 @@
-import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo';
+import ZemnmezLogo from 'monorepo/project/zemn.me/elements/ZemnmezLogo/index.js';
 import React from 'react';
 
 const rect = (

@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import tmp from 'tmp';
-import main from 'ts/cmd/svgshot/lib';
+import main from 'monorepo/ts/cmd/svgshot/lib.js';
 
 jest.setTimeout(30000);
 

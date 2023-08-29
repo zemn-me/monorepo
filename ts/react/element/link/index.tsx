@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Url from 'ts/url';
+import * as Url from 'monorepo/ts/url/index.js';
 
 type AElement = React.ReactElement<
 	React.DetailedHTMLProps<

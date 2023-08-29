@@ -1,9 +1,9 @@
 import * as cultist from 'cultist';
 import * as fs from 'fs';
 import * as dot from 'solve/dot';
-import { map } from 'ts/iter';
-import { walk } from 'ts/tree';
-import { must, perhaps, select } from 'ts/util';
+import { map } from 'monorepo/ts/iter/index.js';
+import { walk } from 'monorepo/ts/tree.js';
+import { must, perhaps, select } from 'monorepo/ts/util.js';
 
 import { quoteIfNotIdentifier } from './util';
 

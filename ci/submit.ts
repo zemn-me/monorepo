@@ -1,4 +1,4 @@
-import * as stack from 'ts/pulumi/stack';
+import * as stack from 'monorepo/ts/pulumi/stack.js';
 
 async function main() {
 	const result = await (

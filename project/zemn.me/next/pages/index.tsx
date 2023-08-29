@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import * as bio from 'project/zemn.me/bio';
-import { TimeEye } from 'project/zemn.me/elements/TimeEye';
-import * as kenwood from 'project/zemn.me/next/assets/kenwood';
-import Timeline from 'project/zemn.me/next/components/timeline';
+import * as bio from 'monorepo/project/zemn.me/bio/index.js';
+import { TimeEye } from 'monorepo/project/zemn.me/elements/TimeEye/index.js';
+import * as kenwood from 'monorepo/project/zemn.me/next/assets/kenwood/index.js';
+import Timeline from 'monorepo/project/zemn.me/next/components/timeline/index.js';
 import style from 'project/zemn.me/next/pages/index.module.css';
-import * as lang from 'ts/react/lang';
+import * as lang from 'monorepo/ts/react/lang/index.js';
 
 interface ProseProps {
 	readonly children?: React.ReactElement[];

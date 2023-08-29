@@ -1,7 +1,7 @@
-export * as deserialize from 'project/cultist/state/deserialize';
-export * from 'project/cultist/state/op';
-export * as serialize from 'project/cultist/state/serialize';
-export * from 'project/cultist/state/state';
+export * as deserialize from 'monorepo/project/cultist/state/deserialize.js';
+export * from 'monorepo/project/cultist/state/op.js';
+export * as serialize from 'monorepo/project/cultist/state/serialize.js';
+export * from 'monorepo/project/cultist/state/state.js';
 
 // taken from a save from the game.
 

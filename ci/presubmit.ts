@@ -1,7 +1,7 @@
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
-import deploy_to_staging from 'ts/pulumi/deploy_to_staging';
+import deploy_to_staging from 'monorepo/ts/pulumi/deploy_to_staging.js';
 
 const cmd = new Command('presubmit')
 	.option(

@@ -1,5 +1,5 @@
-import * as Aspects from 'project/cultist/aspects';
-import * as cultist from 'project/cultist/types';
+import * as Aspects from 'monorepo/project/cultist/aspects.js';
+import * as cultist from 'monorepo/project/cultist/types.js';
 
 export function* of(
 	i: Iterable<{ slot?: cultist.Slot } | { slots?: cultist.Slot[] }>

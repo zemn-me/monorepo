@@ -91,3 +91,13 @@ bin.renovate_config_validator_test(
 )
 
 npm_link_all_packages(name = "node_modules")
+
+# amazingly, the canonical replacement for NODE_PATH
+genrule(
+	name = "gen_absolute_import_shim",
+	outs = [ "node_modules/monorepo" ],
+	cmd = """
+		mkdir -p node_modules
+		ln -s .. $@
+	"""
+)

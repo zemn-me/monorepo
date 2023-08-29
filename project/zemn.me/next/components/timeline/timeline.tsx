@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
-import * as Bio from 'project/zemn.me/bio';
+import * as Bio from 'monorepo/project/zemn.me/bio/index.js';
 import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
 import React from 'react';
-import * as lang from 'ts/react/lang';
+import * as lang from 'monorepo/ts/react/lang/index.js';
 
 interface MutableText {
 	corpus: string;

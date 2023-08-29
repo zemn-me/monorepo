@@ -1,6 +1,6 @@
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
