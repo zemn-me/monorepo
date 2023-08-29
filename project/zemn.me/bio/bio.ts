@@ -108,7 +108,7 @@ export const Bio: Bio = {
 		// BEGIN TOOL ASSISTED SORT
 		{
 			date: date(23, 'nov', 2022),
-			description: en`Google research; exploit to remotely take over VSCode and any attached cloud systems`,
+			description: en`Google research; exploit to remotely take over VSCode and any attached cloud systems. CVE-2022-41034, GHSA-pw56-c55x-cm9m`,
 			tags: [security, disclosure],
 			title: en`Visual Studio Code: Remote Code Execution`,
 			url: url`https://github.com/google/security-research/security/advisories/GHSA-pw56-c55x-cm9m`,
