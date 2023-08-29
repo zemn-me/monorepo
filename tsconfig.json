@@ -19,7 +19,7 @@
 		"lib": ["DOM", "ESNext"],
 		"baseUrl": ".",
 		"paths": {
-			"*": [ "*", "dist/bin/*" ],
+			"*": [ "monorepo/*", "dist/bin/*" ],
 		}
 	},
 	"exclude": ["node_modules", "dist", "external"]
