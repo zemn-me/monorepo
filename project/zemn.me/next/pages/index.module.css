@@ -126,3 +126,11 @@
 	width: auto;
 	vertical-align: middle;
 }
+
+.links {
+	display: flex;
+}
+
+.links > * {
+	margin: auto;
+}
