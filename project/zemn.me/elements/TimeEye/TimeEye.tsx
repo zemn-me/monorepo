@@ -8,10 +8,16 @@ export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
 	...props
 }) => (
 	<svg
+		role="img"
 		{...props}
 		className={classNames(className, style['time-eye'])}
 		viewBox="0 0 17.78 7.81"
 	>
+		<title lang="en-GB">Thomas Shadwell Logo</title>
+		<desc lang="en-GB">
+			A 2D pyramidal frustum (triangle with the top missing). In the
+			center is an open eye, below the eye, a single tear.
+		</desc>
 		<g transform="translate(-13.03 -62.53)">
 			<path
 				d="M16.73 62.66l-3.47 6.02h17.32l-3.47-6.02z"
