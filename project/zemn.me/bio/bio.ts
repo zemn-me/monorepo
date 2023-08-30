@@ -80,7 +80,8 @@ export const Bio: Bio = {
 	links: [
 		[en`linkedin`, url`//www.linkedin.com/in/thomas-shadwell-4b333b50`],
 		[en`github`, url`//github.com/zemnmez`],
-		[en`twitch`, url`//twitch.tv/zemnmez`],
+		// probably should have an enable/ disable here at some point
+		// [en`twitch`, url`//twitch.tv/zemnmez`],
 		[en`twitter`, url`//twitter.com/zemnmez`],
 	],
 	skills: [

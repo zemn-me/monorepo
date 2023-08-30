@@ -94,7 +94,7 @@ export default function Main() {
 
 						<>
 							{bio.Bio.links !== undefined ? (
-								<nav>
+								<nav className={style.links}>
 									{bio.Bio.links.map(([text, url]) => (
 										<a
 											href={url.toString()}
