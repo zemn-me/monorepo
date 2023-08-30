@@ -1,50 +1,50 @@
 import React from 'react';
 
-export type Lang = string;
+type Language = string;
 
-/**
- * TaggedText represents a Bcp47 tagged textual string.
- */
-export type TaggedText = readonly [Lang, React.ReactChild];
+export class TextType<L extends Language = Language, Text = string> {
+	constructor(
+		public readonly language: L,
+		public readonly text: Text
+	) {}
+}
 
-/**
- * Segment represents a selection of multiple TaggedText pieces,
- * each of which describes a possible choice of language string.
- */
-export type Text = TaggedText;
+export type Text<L extends Language = Language, Text = string> = TextType<
+	L,
+	Text
+>;
+
+export function Text<L extends Language = Language, Text = string>(
+	language: L,
+	text: Text
+): TextType<L, Text> {
+	return new TextType(language, text);
+}
 
 /**
  * assign a language tag to a given text
  */
 export const tag: (
-	lang: Lang
-) => (
-	text: TemplateStringsArray,
-	...text2: { toString(): string }[]
-) => TaggedText =
+	lang: Language
+) => (text: TemplateStringsArray, ...text2: { toString(): string }[]) => Text =
 	lang =>
 	(text, ...text2) => {
 		const o: string[] = [];
 		for (let i = 0; i < Math.max(text.length, text2.length); i++)
 			o.push(text[i] ?? '', (text2[i] ?? '').toString());
-		return [lang, o.join('')] as const;
+		return Text(lang, o.join(''));
 	};
 
-/**
- * check if a Text is a TaggedText
- */
-export const textIsTaggedText = (text: Text): text is TaggedText =>
-	typeof text[0] == 'string';
+export const get = <L extends Language>(v: Text<L>): L => v.language;
 
-export const get: (t: Text) => Lang = ([lang]) => lang;
-
-export const text: (t: Text) => React.ReactChild = ([, /* lang */ text]) =>
-	text;
+// https://github.com/typescript-eslint/typescript-eslint/issues/4062
+// eslint-disable @typescript-eslint/no-unnecessary-type-constraint, @typescript-eslint/no-explicit-any
+export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
 
 /**
  * The user's set locale (the user's language preference)
  */
-export const locale = React.createContext<readonly Lang[]>(['en-GB']);
+export const locale = React.createContext<readonly Language[]>(['en-GB']);
 
 const getLangs = () => {
 	if (typeof navigator !== 'undefined')
@@ -80,4 +80,4 @@ export const LocaleProvider: React.FC<{
 /**
  * The contextual lang (the content's language)
  */
-export const lang = React.createContext<Lang>('en-GB');
+export const lang = React.createContext<Language>('en-GB');
