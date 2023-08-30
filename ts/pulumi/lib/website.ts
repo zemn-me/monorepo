@@ -203,6 +203,14 @@ export class Website extends pulumi.ComponentResource {
 							Statement: [
 								{
 									Effect: 'Allow',
+									Action: ['s3:ListBucket'],
+									Principal: {
+										AWS: oaiArn,
+									},
+									Resource: [bucketArn],
+								},
+								{
+									Effect: 'Allow',
 									Principal: {
 										AWS: oaiArn,
 									}, // Only allow Cloudfront read access.
