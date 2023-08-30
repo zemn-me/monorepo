@@ -73,7 +73,9 @@ export const gaming = en`gaming`,
 	code = en`code`,
 	typescript = en`typescript`,
 	nodejs = en`nodejs`,
-	golang = en`golang`;
+	golang = en`golang`,
+	rust = en`rust`,
+	go = en`go`;
 
 export const Bio: Bio = {
 	birthdate: date(17, 'may', 1994),
@@ -515,6 +517,27 @@ export const Bio: Bio = {
 			tags: [accolade, security],
 			description: en`The highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
 		},
+		{
+			date: date(24, 'jul', 2021),
+			title: en`Monorepo`,
+			tags: [typescript, rust, react, software, code],
+			description: en`A polyglot, fully tested, automatically upgraded, automatically versioned, continuously integrated monorepo ecosystem reflecting ideas I hard working on hardening at scale at Google. This website is deployed from it!`,
+			url: url`https://github.com/zemnmez/monorepo`,
+		},
+		{
+			date: date(6, 'mar', 2023),
+			title: en`Login CSRF, VTubeStudio`,
+			tags: [security, disclosure],
+			description: en`Fun little bug to hijack popular streaming application VTubeStudio`,
+			url: url`https://twitter.com/VTubeStudio/status/1632733713891983360`
+		},
+		{
+			date: date(11, 'aug', 2023),
+			title: en`Visual Studio Code is why I have (Workspace) Trust issues`,
+			tags: [security],
+			description: en`Talk at Def Con by Sonar R&D including original research into VSCode security, reflecting on my own prior art CVE-2022-41034.`,
+			url: url`https://media.defcon.org/DEF%20CON%2031/DEF%20CON%2031%20presentations/Thomas%20Chauchefoin%20Paul%20Gerste%20-%20Visual%20Studio%20Code%20is%20why%20I%20have%20%28Workspace%29%20Trust%20issues.pdf`
+		}
 		// END TOOL ASSISTED SORT
 	],
 	who: {
