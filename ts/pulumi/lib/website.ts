@@ -206,7 +206,7 @@ export class Website extends pulumi.ComponentResource {
 									Principal: {
 										AWS: oaiArn,
 									}, // Only allow Cloudfront read access.
-									Action: ['s3:GetObject'],
+									Action: ['s3:GetObject', 's3:ListBucket'],
 									Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
 								},
 							],
