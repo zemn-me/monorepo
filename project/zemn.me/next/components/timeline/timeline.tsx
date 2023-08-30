@@ -89,6 +89,11 @@ function setManyMap<K, V>(
 	return v.set(key, v.get(key, Immutable.List<V>()).concat(value));
 }
 
+function addFullStopIfMissing(s: string) {
+	if (/[!?.]$/.test(s)) return s;
+	return s + '.';
+}
+
 function groupBy<T, Q>(
 	i: Iterable<T>,
 	select: (v: T) => Q
@@ -107,7 +112,7 @@ function Event({ event: e }: { readonly event: Bio.Event }) {
 			</a>{' '}
 			{e.description ? (
 				<span lang={lang.get(e.description)}>
-					{lang.text(e.description)}
+					{addFullStopIfMissing(lang.text(e.description))}
 				</span>
 			) : null}
 		</div>
@@ -121,11 +126,18 @@ function Month({
 	readonly month: ImmutableText;
 	readonly events: Iterable<Bio.Event>;
 }) {
+	const locales = [...lang.useLocale()];
+	const locale = new Intl.Locale(
+		Intl.DateTimeFormat.supportedLocalesOf(locales)[0]
+	);
 	return (
 		<div className={style.month}>
 			<header className={style.monthName} lang={month.get('language')}>
 				{' '}
 				{month.get('corpus')}
+				{/* if we're typesetting in an english lanugage, do the victorian title-dot */}
+				{/* https://www.reddit.com/r/AskLiteraryStudies/comments/n8mmno/why_do_we_no_longer_use_periodsfull_stops_in/gxtfw1y */}
+				{locale.language === 'en' ? '.' : null}
 			</header>
 			<div className={style.content}>
 				{[...events].map((e, i) => (
