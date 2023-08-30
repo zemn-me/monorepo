@@ -82,3 +82,37 @@
 .prose {
 	margin: 0 2em 0 2em;
 }
+
+
+.footer {
+	display: grid;
+	grid:
+		"....... left-spacer future  right-spacer ......." 6rem
+		"tagline tagline     tagline tagline      tagline"
+		"....... .......     ....... .......       ......." 4rem/1fr 2rem 3rem 2rem 1fr
+}
+
+.future {
+	grid-area: future;
+	width: 100%;
+	height: 100%
+}
+
+.footer:before {
+    content: "\2013";
+    grid-area: left-spacer;
+    margin: auto;
+}
+
+.tagline {
+	grid-area: tagline;
+	max-width: 15em;
+	margin: auto;
+	text-align: center;
+}
+
+.footer:after {
+    content: "\2013";
+    grid-area: right-spacer;
+    margin: auto;
+}

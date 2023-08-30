@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
+import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
@@ -97,6 +98,12 @@ export default function Main() {
 				</header>
 				<section>
 					<Timeline />
+				</section>
+				<section className={style.footer}>
+					<ZemnmezLogo className={style.future} />
+					<i className={style.tagline}>
+						This is what we become, when our eyes are open.
+					</i>
 				</section>
 			</section>
 		</main>
