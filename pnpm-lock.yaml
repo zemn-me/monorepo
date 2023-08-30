@@ -22,6 +22,9 @@ dependencies:
   '@types/bcryptjs':
     specifier: 2.4.2
     version: 2.4.2
+  '@types/google-libphonenumber':
+    specifier: ^7.4.26
+    version: 7.4.26
   csstype:
     specifier: ^3.1.1
     version: 3.1.2
@@ -37,6 +40,9 @@ dependencies:
   glob-promise:
     specifier: 6.0.3
     version: 6.0.3(glob@8.1.0)
+  google-libphonenumber:
+    specifier: ^3.2.33
+    version: 3.2.33
   json-schema-to-typescript:
     specifier: ^13.0.1
     version: 13.0.2
@@ -5695,6 +5701,10 @@ packages:
       '@types/minimatch': 5.1.2
       '@types/node': 20.5.3
 
+  /@types/google-libphonenumber@7.4.26:
+    resolution: {integrity: sha512-VkVHbNOMW3TFmXNvdShXjp6LBxaU5N88KotDb6ypkiSuwUyxNK4SM78EBNBh/0RjV0fiIbPcDzEVhDGSemHExw==}
+    dev: false
+
   /@types/graceful-fs@4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
     dependencies:
@@ -9682,6 +9692,11 @@ packages:
       klona: 2.0.6
       moo: 0.5.2
     dev: true
+
+  /google-libphonenumber@3.2.33:
+    resolution: {integrity: sha512-1QKCvAlfq8zY1mviORI9lDzM3I/hwm9+h0CwYBTLq59DBbSHMd5zBOLqHZFiBLicRpwIz46Nynvbywj1XApKvA==}
+    engines: {node: '>=0.10'}
+    dev: false
 
   /google-protobuf@3.21.2:
     resolution: {integrity: sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==}
