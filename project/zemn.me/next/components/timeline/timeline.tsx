@@ -211,6 +211,10 @@ export default function Timeline() {
 			{[...years].map(([year, months]) => (
 				<Year key={textToStringKey(year)} months={months} year={year} />
 			))}
+
+			<div className={style.divider}>
+				<span>⁂</span>
+			</div>
 		</>
 	);
 }
