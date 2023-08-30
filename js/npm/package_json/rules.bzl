@@ -16,7 +16,6 @@ def package_json(name, targets, template, version, depSpec):
         name = name,
         tool = "//js/npm/package_json:gen_pkgjson_bin",
         srcs = [
-            "//:package_json",
             genquery_name,
             "//js/npm/package_json:gen_pkgjson",
             template,

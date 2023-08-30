@@ -9,7 +9,7 @@
  * to work, this is not exposed as a normal jest test.
  */
 import * as pulumi from '@pulumi/pulumi/automation';
-import { staging } from 'ts/pulumi/stack';
+import { staging } from 'monorepo/ts/pulumi/stack.js';
 
 const millisecond = 1;
 const second = 1000 * millisecond;

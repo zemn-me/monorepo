@@ -1,5 +1,5 @@
 import immutable from 'immutable';
-import * as cultist from 'project/cultist';
+import * as cultist from 'monorepo/project/cultist/index.js';
 
 describe('count', () => {
 	test('stacks', () => {

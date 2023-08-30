@@ -1,3 +1,3 @@
-import Link from 'ts/react/element/link';
+import Link from 'monorepo/ts/react/element/link/index.js';
 
 export { Link };

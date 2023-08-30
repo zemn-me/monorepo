@@ -1,7 +1,7 @@
-import exampleSave from 'project/cultist/example/savestate';
-import * as Board from 'project/cultist/react/table';
-import * as Save from 'project/cultist/save';
-import * as State from 'project/cultist/state';
+import exampleSave from 'monorepo/project/cultist/example/savestate.js';
+import * as Board from 'monorepo/project/cultist/react/table.js';
+import * as Save from 'monorepo/project/cultist/save.js';
+import * as State from 'monorepo/project/cultist/state/index.js';
 import React from 'react';
 
 const Home = (): React.ReactElement => {

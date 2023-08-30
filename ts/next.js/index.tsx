@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export * as config from 'ts/next.js/next.config';
+export * as config from 'monorepo/ts/next.js/next.config.js';
 
 const BASE_CSP_RULES = [
 	"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",

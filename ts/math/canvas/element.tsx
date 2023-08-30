@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Homog from 'ts/math/homog';
+import * as Homog from 'monorepo/ts/math/homog.js';
 
 import * as Cnv from '.';
 

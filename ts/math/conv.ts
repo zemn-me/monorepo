@@ -1,6 +1,6 @@
-import * as cartesian from 'ts/math/cartesian';
-import * as euler_angle from 'ts/math/euler_angle';
-import * as quaternion from 'ts/math/quaternion';
+import * as cartesian from 'monorepo/ts/math/cartesian.js';
+import * as euler_angle from 'monorepo/ts/math/euler_angle.js';
+import * as quaternion from 'monorepo/ts/math/quaternion.js';
 
 export const Quaternion = {
 	fromEulerAngles(e: euler_angle.EulerAngle): quaternion.Quaternion {

@@ -1,7 +1,7 @@
 import immutable from 'immutable';
-import * as state from 'project/cultist/state';
-import * as cultist from 'project/cultist/types';
-import * as iter from 'ts/iter';
+import * as state from 'monorepo/project/cultist/state/index.js';
+import * as cultist from 'monorepo/project/cultist/types.js';
+import * as iter from 'monorepo/ts/iter/index.js';
 
 export enum Kind {
 	PassTime = 0,

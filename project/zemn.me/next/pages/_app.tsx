@@ -2,7 +2,7 @@ import 'project/zemn.me/next/pages/base.css';
 
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { HeaderTags } from 'ts/next.js';
+import { HeaderTags } from 'monorepo/ts/next.js/index.js';
 
 export function App({ Component, pageProps }: AppProps) {
 	return (

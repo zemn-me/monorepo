@@ -1,4 +1,4 @@
-import allowlist from 'ts/knowitwhenyouseeit';
+import allowlist from 'monorepo/ts/knowitwhenyouseeit/index.js';
 
 describe('Alg', () => {
 	const getMessage = allowlist(

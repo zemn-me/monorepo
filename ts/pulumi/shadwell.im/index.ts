@@ -1,5 +1,5 @@
 import * as Pulumi from '@pulumi/pulumi';
-import Website from 'ts/pulumi/lib/website';
+import Website from 'monorepo/ts/pulumi/lib/website.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;

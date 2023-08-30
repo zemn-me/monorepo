@@ -1,5 +1,5 @@
-import useClickedOff from 'project/zemn.me/hooks/useClickedOff';
-import useMouseInside from 'project/zemn.me/hooks/useMouseInside';
+import useClickedOff from 'monorepo/project/zemn.me/hooks/useClickedOff.js';
+import useMouseInside from 'monorepo/project/zemn.me/hooks/useMouseInside.js';
 import React from 'react';
 
 /**

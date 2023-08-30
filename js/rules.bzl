@@ -3,16 +3,17 @@ load("@aspect_rules_js//npm:defs.bzl", _npm_link_package = "npm_link_package", _
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", _copy_to_bin = "copy_to_bin")
 load("//js/copy_to_local:copy_to_local.bzl", _copy_to_local = "copy_to_local")
 
-def _apply_env_defaults(d):
-    return d | {"NODE_PATH": "."}
+# our runtimes need to know that we're running in ESM mode
+# via our package.json -- especially since .mtsx doesn't exist.
+def _inject_esm_shims(data):
+    return data + [ "//:package_json", "//:node_modules/monorepo"]
 
-def js_binary(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
-    _js_binary(name = name, env = env, **kwargs)
+def js_binary(name, data = [], env = {}, **kwargs):
+    _js_binary(name = name, data = _inject_esm_shims(data), env = env, **kwargs)
 
-def js_test(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
-    _js_test(name = name, env = env, **kwargs)
+def js_test(name, env = {}, data = [], **kwargs):
+    env = env
+    _js_test(name = name, data = _inject_esm_shims(data), env = env, **kwargs)
 
 def js_library(name, **kwargs):
     _js_library(name = name, **kwargs)
@@ -23,10 +24,8 @@ def copy_to_bin(name, **kwargs):
 def pkg_npm(name, **kwargs):
     _pkg_npm(name = name, **kwargs)
 
-def js_run_binary(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
-
-    _js_run_binary(name = name, env = env, **kwargs)
+def js_run_binary(name, srcs = [], env = {}, **kwargs):
+    _js_run_binary(name = name, srcs = _inject_esm_shims(srcs), env = env, **kwargs)
 
 def npm_link_package(name, **kwargs):
     _npm_link_package(name = name, **kwargs)

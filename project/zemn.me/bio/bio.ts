@@ -1,5 +1,5 @@
-import * as lang from 'ts/react/lang';
-import * as time from 'ts/time';
+import * as lang from 'monorepo/ts/react/lang/index.js';
+import * as time from 'monorepo/ts/time/index.js';
 
 type Text = lang.Text;
 

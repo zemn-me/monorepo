@@ -1,12 +1,12 @@
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classes from 'classnames';
-import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo';
-import useHoverMenu from 'project/zemn.me/hooks/useHoverMenu';
+import ZemnmezLogo from 'monorepo/project/zemn.me/elements/ZemnmezLogo/index.js';
+import useHoverMenu from 'monorepo/project/zemn.me/hooks/useHoverMenu.js';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { animated, useSpring } from 'react-spring';
-import { isNotNull } from 'ts/guard';
+import { isNotNull } from 'monorepo/ts/guard.js';
 
 import style from './NavBar.module.css';
 

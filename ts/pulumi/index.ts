@@ -1,8 +1,8 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
-import * as PleaseIntroduceMeToYourDog from 'ts/pulumi/pleaseintroducemetoyour.dog';
-import * as ShadwellIm from 'ts/pulumi/shadwell.im';
-import * as ZemnMe from 'ts/pulumi/zemn.me';
+import * as PleaseIntroduceMeToYourDog from 'monorepo/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
+import * as ShadwellIm from 'monorepo/ts/pulumi/shadwell.im/index.js';
+import * as ZemnMe from 'monorepo/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	staging: boolean;
