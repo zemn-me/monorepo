@@ -10,6 +10,12 @@ export function App({ Component, pageProps }: AppProps) {
 			<HeaderTags />
 			<Component {...pageProps} />
 			<Head>
+				<link href="icon.svg" rel="icon" type="image/svg+xml" />
+				<link
+					href="icon.svg"
+					rel="apple-touch-icon"
+					type="image/svg+xml"
+				/>
 				<meta content="@zemnmez" name="twitter:site" />
 				<meta content="@zemnnmez" name="twitter:creator" />
 				<meta content="zemnmez" name="author" />

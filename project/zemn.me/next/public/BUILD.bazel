@@ -1,3 +1,4 @@
+load("//js:rules.bzl", "js_library")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
@@ -6,4 +7,10 @@ transcode_web(
     name = "kenwood_video_sources",
     src = "//project/zemn.me/next/assets/kenwood:kenwood.mp4",
     out_base_name = "kenwood",
+)
+
+js_library(
+    name = "icon_svg",
+    srcs = ["icon.svg"],
+    visibility = ["//project/zemn.me/next:__pkg__"],
 )
