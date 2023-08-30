@@ -80,7 +80,9 @@
 
 
 .prose {
-	margin: 0 2em 0 2em;
+	margin: 0 auto;
+	padding: 0 2em;
+	max-width:40em;
 }
 
 
@@ -115,4 +117,12 @@
     content: "\2013";
     grid-area: right-spacer;
     margin: auto;
+}
+
+
+.logoInline {
+	display: inline-block;
+	height: 1em;
+	width: auto;
+	vertical-align: middle;
 }
