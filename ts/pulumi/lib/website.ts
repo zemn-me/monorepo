@@ -282,7 +282,7 @@ export class Website extends pulumi.ComponentResource {
 								{
 									errorCode: 404,
 									responseCode: 404,
-									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
+									responsePagePath: errorDocumentObject.key,
 								},
 							],
 					  }
