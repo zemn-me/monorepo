@@ -1,0 +1,33 @@
+
+.dividerHeading {
+	display: grid;
+	grid:
+        '....... ......... ........ ........... ....... .......... .....' 1em
+        '....... line-left ........ text        ....... line-right .....'
+        '....... ......... ........ ........... ....... .......... .....' 1em
+        / .2em    1fr       1em     auto        1em     1fr        .2em
+		;
+	font-size: 1.17em;
+}
+
+.dividerHeading > * {
+	grid-area: text;
+}
+
+.dividerHeading::before, .dividerHeading::after {
+    border-top: 1px solid currentColor;
+    content: "";
+    height: 0;
+    margin: auto;
+    width: 100%;
+}
+
+.dividerHeading::before {
+    grid-area: line-left;
+}
+
+.dividerHeading::after {
+    grid-area: line-right;
+}
+
+

@@ -3,6 +3,7 @@ import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
+import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
@@ -112,11 +113,14 @@ export default function Main() {
 				<section>
 					<Timeline />
 				</section>
-				<section>
+				<section className={style.about}>
+					<h2 className={dividerHeadingClass}>
+						<span lang="en-GB">About.</span>
+					</h2>
 					<Prose lang="en-GB">
 						<h3 id="website_design">The design of this website.</h3>
 						<p>
-							This website is a direct descendent of one I made in
+							This website is a direct descendant of one I made in
 							2019. The core ideas come from very early on when I
 							was using the internet, and I didn't want to tell
 							people with my chosen username what kind of person I
@@ -125,12 +129,12 @@ export default function Main() {
 							ideas of who I was.
 						</p>
 						<p>
-							When I made the website, I didn't want to tell
-							people directly about myself, so instead I made this
-							timeline to keep track of what I had done every
+							Similarly, when I made the website, I didn't want to
+							tell people directly about myself, so instead I made
+							this timeline to keep track of what I had done every
 							year. The number in roman numerals is my age that
-							year. It fulfilled two roles as I was collecting my
-							work to apply for my US O1 visa, which requires
+							year. It fulfilled anoter role as I was collecting
+							my work to apply for my US O1 visa, which requires
 							proving that you've done a lot of interesting
 							things!
 						</p>
@@ -167,59 +171,49 @@ export default function Main() {
 								Lloyd's Act 1871
 							</a>
 							. Particular effort was put into trying to have
-							content fill horizontal space automatically, as is
-							seen in older documents that try to make the most of
-							the paper they're printed on.
+							content fill horizontal space automatically, as seen
+							in older documents that try to make the most of the
+							paper they're printed on.
 						</p>
 						<h3 id="logo_disambiguation">
 							What's the difference between <ZemnmezLogoInline />{' '}
 							and <TimeEyeInline />?
 						</h3>
 						<p>
-							When I was first starting to use the internet,
-							people were told very sternly to maintain different
-							identities so that someone online wouldn't find you
-							in real life.
-						</p>
-						<p>
 							The diamond logo (<ZemnmezLogoInline />) came out of
 							several years of wanting a way to express myself in
-							art. For a few years following, I changed logo every
-							year based on feelings I'd felt the year prior,
-							making logos with geometry and construction lines.
+							art. For a few years following, I changed logo
+							annualy based how I'd felt the year prior, making
+							logos with geometry and construction lines.
 						</p>
 						<p>
 							When I eventually made the diamond logo, it ended up
 							looking a like an eye logo I'd made very early on in
-							2012. I liked it so much, it stuck, and came to
-							represent ‘zemnmez’, the online persona I had since
-							2009. The logo itself is from much later, probably
-							around 2015.
+							2012. I liked it so much it came to represent the
+							persona I had since 2009. The logo itself is from
+							much later, probably around 2015.
 						</p>
 						<p>
 							The time eye logo (<TimeEyeInline />) was the later
 							(2019) creation, coming out of a specific need to
 							disambiguate between the published work I had as
 							‘Thomas Shadwell’, my real name, versus ‘zemnmez’,
-							the persona / name I had used since 2009.
+							the persona I had used since 2009. It became
+							necessary after I made the Forbes Under 30 list for
+							my tax system hack in 2018. Before this point I'd
+							worked hard to try to keep the two identities
+							separate, but Forbes lists aren't really for online
+							personas.
 						</p>
 						<p>
-							The time eye logo became necessary after I made the
-							Forbes Under 30 list for my tax system hack in 2018.
-							Before this point I'd worked hard to try to keep the
-							two identities separate, but Forbes lists aren't
-							really for online personas.
-						</p>
-						<p>
-							The eye logo was specifically made as a reflection
-							on the well-known{' '}
+							The eye logo is a reference to the well-known{' '}
 							<a href="https://en.wikipedia.org/wiki/Eye_of_Providence">
 								‘eye of providence’
 							</a>
 							, a symbol that represents human achievement as
 							being incomplete without God. I wanted it to reflect
 							the idea that, in a universe that might not have a
-							God, we as people had a responsibility to care for
+							God, we as people have a responsibility to care for
 							each other.
 						</p>
 						<p>
@@ -235,6 +229,9 @@ export default function Main() {
 					</Prose>
 				</section>
 				<section className={style.footer}>
+					<h2 className={dividerHeadingClass}>
+						<span>⁂</span>
+					</h2>
 					<ZemnmezLogo className={style.future} />
 					<i className={style.tagline}>
 						This is what we become, when our eyes are open.
