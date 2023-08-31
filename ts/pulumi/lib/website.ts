@@ -296,6 +296,7 @@ export class Website extends pulumi.ComponentResource {
 					  }
 					: {}),
 				defaultCacheBehavior: {
+					compress: true,
 					responseHeadersPolicyId: responseHeadersPolicy.id,
 					// i dont think we use most of these but it's probably not
 					// important
