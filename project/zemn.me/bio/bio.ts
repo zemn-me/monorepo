@@ -542,6 +542,12 @@ export const Bio: Bio = {
 			date: date(1, 'nov', 2021),
 			title: en`Relocated to San Francisco from London.`,
 		},
+		{
+			date: date(12, 'aug', 2023),
+			title: en`Def Con 31 Hack Fortress Champions`,
+			description: en`hybrid ctf / esports competition winners.`,
+			url: url`https://twitter.com/tf2shmoo/status/1690538453669429248`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
