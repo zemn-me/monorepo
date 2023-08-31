@@ -9,22 +9,7 @@
         / .2em    1fr       1em     auto        1em     1fr        .2em
 }
 
-/* this should probably be one day its own component one day */
-.divider {
-	display: grid;
-	grid:
-        '....... ......... ........ ........... ....... .......... .....' 1em
-        '....... line-left ........ text        ....... line-right .....'
-        '....... ......... ........ ........... ....... .......... .....' 1em
-        / .2em    1fr       1em     auto        1em     1fr        .2em
-		;
-}
-
-.divider > * {
-	grid-area: text;
-}
-
-.year::before, .year::after, .divider::before, .divider::after {
+.year::before, .year::after {
     border-top: 1px solid currentColor;
     content: "";
     height: 0;
@@ -32,11 +17,11 @@
     width: 100%;
 }
 
-.year::before, .divider::before {
+.year::before {
     grid-area: line-left;
 }
 
-.year::after, .divider::after {
+.year::after {
     grid-area: line-right;
 }
 
