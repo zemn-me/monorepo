@@ -23,12 +23,8 @@ export class Component extends Pulumi.ComponentResource {
 				notFound: 'project/zemn.me/next/out/404.html',
 				directory: 'project/zemn.me/next/out',
 				zoneId: args.zoneId,
-				// this may look weird, but I don't want to replace
-				// what's already there until it's ready; so this will double stage
-				// to staging.staging.zemn.me.
-				domain: ['staging', args.domain].join('.'),
-				// since this is itself a staging site
-				noIndex: true, // args.noIndex,
+				domain: args.domain,
+				noIndex: args.noIndex,
 			},
 			{ parent: this }
 		);
