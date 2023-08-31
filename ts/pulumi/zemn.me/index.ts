@@ -17,7 +17,7 @@ export class Component extends Pulumi.ComponentResource {
 		super('ts:pulumi:shadwell.im', name, args, opts);
 
 		this.site = new Website(
-			'staging.zemn.me',
+			`${name}_zemn_me`,
 			{
 				index: 'project/zemn.me/next/out/index.html',
 				notFound: 'project/zemn.me/next/out/404.html',
