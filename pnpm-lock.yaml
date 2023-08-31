@@ -100,8 +100,8 @@ devDependencies:
     specifier: 5.42.0
     version: 5.42.0
   '@pulumi/awsx':
-    specifier: 1.0.4
-    version: 1.0.4
+    specifier: 1.0.5
+    version: 1.0.5
   '@pulumi/pulumi':
     specifier: 3.78.1
     version: 3.78.1
@@ -4281,8 +4281,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@1.0.4:
-    resolution: {integrity: sha512-CK17bk1CrEqMLY1220USZej3pmH1oxnRL+J2zvZ+rvfi1gJkNI9bx8rPKrV1bX4EFQJdKvN4bCm+Jca2E34pMw==}
+  /@pulumi/awsx@1.0.5:
+    resolution: {integrity: sha512-iGkDzPalPhzRlfqCaWgwJkaA8EfgPwzWkcqdg0TgcnUefNwKGEXfEelORxMXKxZe5M0VV3U3ljrEq6P0SLCtWg==}
     requiresBuild: true
     dependencies:
       '@pulumi/aws': 5.42.0
