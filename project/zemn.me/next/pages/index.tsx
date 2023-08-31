@@ -133,7 +133,7 @@ export default function Main() {
 							tell people directly about myself, so instead I made
 							this timeline to keep track of what I had done every
 							year. The number in roman numerals is my age that
-							year. It fulfilled anoter role as I was collecting
+							year. It fulfilled another role as I was collecting
 							my work to apply for my US O1 visa, which requires
 							proving that you've done a lot of interesting
 							things!
@@ -183,7 +183,7 @@ export default function Main() {
 							The diamond logo (<ZemnmezLogoInline />) came out of
 							several years of wanting a way to express myself in
 							art. For a few years following, I changed logo
-							annualy based how I'd felt the year prior, making
+							annually based how I'd felt the year prior, making
 							logos with geometry and construction lines.
 						</p>
 						<p>
