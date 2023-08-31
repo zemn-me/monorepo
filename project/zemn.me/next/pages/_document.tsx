@@ -4,6 +4,10 @@ export default function Document() {
 	return (
 		<Html>
 			<Head>
+				<meta
+					content="Personal website and profile of Thomas Neil James Shadwell, also known as Zemnmez."
+					name="description"
+				/>
 				<link href="https://fonts.googleapis.com" rel="preconnect" />
 				<link
 					crossOrigin="anonymous"
