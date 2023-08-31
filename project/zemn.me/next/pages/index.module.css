@@ -89,9 +89,14 @@
 .footer {
 	display: grid;
 	grid:
+	    "title   title       title   title        title"
 		"....... left-spacer future  right-spacer ......." 6rem
 		"tagline tagline     tagline tagline      tagline"
 		"....... .......     ....... .......       ......." 4rem/1fr 2rem 3rem 2rem 1fr
+}
+
+.footer > h2 {
+	grid-area: title;
 }
 
 .future {
