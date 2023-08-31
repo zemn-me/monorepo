@@ -507,7 +507,7 @@ export const Bio: Bio = {
 		{
 			date: date(26, 'dec', 2020),
 			title: en`How to Hack Apple ID`,
-			url: url`//article/2020/icloud`,
+			url: url`https://zemnmez.medium.com/how-to-hack-apple-id-f3cc9b483a41`,
 			tags: [writing, security, disclosure],
 			description: en`Bypassing cutting-edge web security techniques to hack Apple ID`,
 		},
