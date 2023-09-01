@@ -521,7 +521,7 @@ export const Bio: Bio = {
 			date: date(24, 'jul', 2021),
 			title: en`Monorepo`,
 			tags: [typescript, rust, react, software, code],
-			description: en`A polyglot, fully tested, automatically upgraded, automatically versioned, continuously integrated monorepo ecosystem reflecting ideas I hard working on hardening at scale at Google.`,
+			description: en`A polyglot, fully tested, automatically upgraded, automatically versioned, continuously integrated monorepo ecosystem reflecting ideas I had working on hardening at scale at Google.`,
 			url: url`https://github.com/zemnmez/monorepo`,
 		},
 		{
