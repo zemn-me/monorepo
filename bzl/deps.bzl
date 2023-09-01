@@ -52,10 +52,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "543395bc2ae58e72f7be674221db08b8f14e3bd7e3a19158f76105b3b61570a0",
-        strip_prefix = "protobuf-3.21.8",
+        sha256 = "39b52572da90ad54c883a828cb2ca68e5ac918aa75d36c3e55c9c76b94f0a4f7",
+        strip_prefix = "protobuf-24.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v3.21.8.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v24.2.tar.gz",
         ],
     )
 
@@ -88,19 +88,19 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
-        strip_prefix = "protobuf-3.13.0",
+        sha256 = "39b52572da90ad54c883a828cb2ca68e5ac918aa75d36c3e55c9c76b94f0a4f7",
+        strip_prefix = "protobuf-24.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v24.2.tar.gz",
         ],
     )
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "b7187e0856280feb0658ab9d629c244e638022819ded8243fb02e0c1d4db8f1c",
-        strip_prefix = "buildtools-6.3.2",
+        sha256 = "42968f9134ba2c75c03bb271bd7bb062afb7da449f9b913c96e5be4ce890030a",
+        strip_prefix = "buildtools-6.3.3",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.3.2.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.3.3.tar.gz",
         ],
     )
 
@@ -219,9 +219,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "bdbd6df52fc7963f55281fe0a140e21de8ec587ab711a8a2fff0715b6710a4f8",
-        strip_prefix = "rules_js-1.32.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.32.0/rules_js-v1.32.0.tar.gz",
+        sha256 = "7ab2fbe6d79fb3909ad2bf6dcacfae39adcb31c514efa239dd730b4f147c8097",
+        strip_prefix = "rules_js-1.32.1",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.32.1/rules_js-v1.32.1.tar.gz",
     )
 
     http_archive(

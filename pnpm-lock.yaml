@@ -20,8 +20,8 @@ dependencies:
     specifier: ^9.7.3
     version: 9.7.3
   '@types/bcryptjs':
-    specifier: 2.4.2
-    version: 2.4.2
+    specifier: 2.4.3
+    version: 2.4.3
   csstype:
     specifier: ^3.1.1
     version: 3.1.2
@@ -100,8 +100,8 @@ devDependencies:
     specifier: 5.42.0
     version: 5.42.0
   '@pulumi/awsx':
-    specifier: 1.0.4
-    version: 1.0.4
+    specifier: 1.0.5
+    version: 1.0.5
   '@pulumi/pulumi':
     specifier: 3.78.1
     version: 3.78.1
@@ -151,8 +151,8 @@ devDependencies:
     specifier: 0.2.3
     version: 0.2.3
   '@types/uuid':
-    specifier: 9.0.2
-    version: 9.0.2
+    specifier: 9.0.3
+    version: 9.0.3
   '@typescript-eslint/eslint-plugin':
     specifier: 6.4.1
     version: 6.4.1(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.0.4)
@@ -4281,8 +4281,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@1.0.4:
-    resolution: {integrity: sha512-CK17bk1CrEqMLY1220USZej3pmH1oxnRL+J2zvZ+rvfi1gJkNI9bx8rPKrV1bX4EFQJdKvN4bCm+Jca2E34pMw==}
+  /@pulumi/awsx@1.0.5:
+    resolution: {integrity: sha512-iGkDzPalPhzRlfqCaWgwJkaA8EfgPwzWkcqdg0TgcnUefNwKGEXfEelORxMXKxZe5M0VV3U3ljrEq6P0SLCtWg==}
     requiresBuild: true
     dependencies:
       '@pulumi/aws': 5.42.0
@@ -5611,8 +5611,8 @@ packages:
       '@babel/types': 7.22.5
     dev: true
 
-  /@types/bcryptjs@2.4.2:
-    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
+  /@types/bcryptjs@2.4.3:
+    resolution: {integrity: sha512-XTnH9E/rp51aKGsiMtQCHV/owDLW2E9QAxI7ItpWWm6Gi6XO1e4o3VuEYDma0lbitj1vNOBj05Qk8l2BYoiN4A==}
     dev: false
 
   /@types/bunyan@1.8.7:
@@ -5893,8 +5893,8 @@ packages:
   /@types/unist@2.0.7:
     resolution: {integrity: sha512-cputDpIbFgLUaGQn6Vqg3/YsJwxUwHLO13v3i5ouxT4lat0khip9AEWxtERujXV9wxIB1EyF97BSJFt6vpdI8g==}
 
-  /@types/uuid@9.0.2:
-    resolution: {integrity: sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==}
+  /@types/uuid@9.0.3:
+    resolution: {integrity: sha512-taHQQH/3ZyI3zP8M/puluDEIEvtQHVYcC6y3N8ijFtAd28+Ey/G4sg1u2gB01S8MwybLOKAp9/yCMu/uR5l3Ug==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
