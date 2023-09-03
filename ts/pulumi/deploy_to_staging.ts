@@ -9,11 +9,24 @@
  * to work, this is not exposed as a normal jest test.
  */
 import * as pulumi from '@pulumi/pulumi/automation';
+import { Command, Summarize } from 'ts/github/actions';
 import { staging } from 'ts/pulumi/stack';
+
+const Task =
+	(name: string) =>
+	<T>(p: Promise<T>): Promise<T> => {
+		console.log(Command('group')({})(name));
+		return p.finally(() => console.log(Command('endgroup')({})()));
+	};
 
 const millisecond = 1;
 const second = 1000 * millisecond;
 const minute = 60 * second;
+
+const waitForLockTask =
+	<T>(f: () => Promise<T>) =>
+	(cause: string) =>
+		Task(cause)(waitForLock(f, cause));
 
 async function waitForLock<T>(
 	f: () => Promise<T>,
@@ -110,10 +123,9 @@ export async function main(args: Args) {
 
 	const s = staging();
 
-	const e1 = await waitForLock(
-		async () => s.then(v => v.refresh(baseConfig)),
-		'refreshing state'
-	);
+	const e1 = await waitForLockTask(async () =>
+		s.then(v => v.refresh(baseConfig))
+	)('refreshing state');
 
 	let e2: pulumi.DestroyResult | pulumi.UpResult | Error | undefined =
 		undefined;
@@ -124,16 +136,14 @@ export async function main(args: Args) {
 	// this ensures that the infrastructure gets to the desired state
 	// even if there are conflicts, but without necessarily waiting for
 	// a full destroy.
-	const e3 = await waitForLock(
-		async () => s.then(v => v.up(baseConfig)),
+	const e3 = await waitForLockTask(async () => s.then(v => v.up(baseConfig)))(
 		'deploying'
 	);
 
 	if (args.overwrite && e3 instanceof Error) {
-		e2 = await waitForLock(
-			async () => s.then(v => v.destroy(baseConfig)),
-			'destroy initial state'
-		);
+		e2 = await waitForLockTask(async () =>
+			s.then(v => v.destroy(baseConfig))
+		)('destroy initial state');
 
 		if (!(e2 instanceof Error)) {
 			e2 = await waitForLock(
@@ -142,13 +152,11 @@ export async function main(args: Args) {
 			);
 		}
 	}
-	const e4 = await waitForLock(
-		async () => s.then(v => console.log(v.outputs())),
-		'outputs testing'
-	);
+	const e4 = await waitForLockTask(async () =>
+		s.then(v => console.log(v.outputs()))
+	)('outputs testing');
 	const e5 = !args.doNotTearDown
-		? await waitForLock(
-				async () => s.then(v => v.destroy(baseConfig)),
+		? await waitForLockTask(async () => s.then(v => v.destroy(baseConfig)))(
 				'destroy new state'
 		  )
 		: undefined;
@@ -158,6 +166,13 @@ export async function main(args: Args) {
 	);
 
 	if (errors.length > 0) throw new MultiError(errors);
+
+	await Summarize(
+		[e1, e2, e3, e4, e5]
+			.filter(<T>(v: T | Error): v is T => !(v instanceof Error))
+			.map(v => v?.summary)
+			.join(' ')
+	);
 }
 
 export default main;
