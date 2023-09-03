@@ -122,8 +122,8 @@ export class Website extends pulumi.ComponentResource {
 
 		// upload files
 
-		const uploadDir = (dir: string): Map<string, aws.s3.BucketObject> => {
-			let out: Map<string, aws.s3.BucketObject> = new Map();
+		const uploadDir = (dir: string): Map<string, aws.s3.BucketObjectv2> => {
+			let out: Map<string, aws.s3.BucketObjectv2> = new Map();
 			for (const item of fs.readdirSync(dir)) {
 				/**
 				 * The absolute path on disk.
@@ -139,7 +139,7 @@ export class Website extends pulumi.ComponentResource {
 
 				out.set(
 					fPath,
-					new aws.s3.BucketObject(
+					new aws.s3.BucketObjectv2(
 						`${name}_bucket_file_${fPath}`,
 						{
 							key: relative(args.directory, fPath),
