@@ -1,5 +1,5 @@
 {
-  "checksum": "9d24e1bc2295b1fe534b39d995a209c87b0e5a24208ab5d879d3fe5fc7920f84",
+  "checksum": "46657f8d29c1665184fb2d47d7e12c3e8cba40d6dd434896a9cbea6dcac639a7",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2000,11 +2000,11 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.5.8",
+              "id": "swc_atoms 0.5.9",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.31.21",
+              "id": "swc_common 0.32.1",
               "target": "swc_common"
             }
           ],
@@ -3873,13 +3873,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.5.8": {
+    "swc_atoms 0.5.9": {
       "name": "swc_atoms",
-      "version": "0.5.8",
+      "version": "0.5.9",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.5.8/download",
-          "sha256": "b8066e17abb484602da673e2d35138ab32ce53f26368d9c92113510e1659220b"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.5.9/download",
+          "sha256": "9f54563d7dcba626d4acfe14ed12def7ecc28e004debe3ecd2c3ee07cc47e449"
         }
       },
       "targets": [
@@ -3926,7 +3926,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.5.8",
+              "id": "swc_atoms 0.5.9",
               "target": "build_script_build"
             },
             {
@@ -3937,7 +3937,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.8"
+        "version": "0.5.9"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -3955,13 +3955,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.31.21": {
+    "swc_common 0.32.1": {
       "name": "swc_common",
-      "version": "0.31.21",
+      "version": "0.32.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.31.21/download",
-          "sha256": "de5823ef063f116ad281cde9700f5be6dfb182e543ce3f62c42cee1c03ffbc6b"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.32.1/download",
+          "sha256": "9c84742fc22df1c293da5354c1cc8a5b45a045e9dc941005c1fd9cb4e9bdabc1"
         }
       },
       "targets": [
@@ -4029,7 +4029,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.5.8",
+              "id": "swc_atoms 0.5.9",
               "target": "swc_atoms"
             },
             {
@@ -4069,7 +4069,7 @@
           ],
           "selects": {}
         },
-        "version": "0.31.21"
+        "version": "0.32.1"
       },
       "license": "Apache-2.0"
     },
