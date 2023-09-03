@@ -548,6 +548,18 @@ export const Bio: Bio = {
 			description: en`hybrid ctf / esports competition winners.`,
 			url: url`https://twitter.com/tf2shmoo/status/1690538453669429248`,
 		},
+		{
+			date: date(9, 'apr', 2019),
+			title: en`IE 11 command switch injection`,
+			description: en`In IE11, programs on the user's computer could be launched with arbitrary arguments by running executing the scheme in an iframe. CVE-2019-0764`,
+			url: url`https://msrc.microsoft.com/update-guide/en-US/vulnerability/CVE-2019-0764`,
+		},
+		{
+			date: date(25, 'nov', 2019),
+			description: en`In Google Chrome, Blink, or Chromium, it was possible to bypass cross-origin  restrictions by causing a refresh of a failed cross-origin request. CVE-2019-13664`,
+			title: en`Chromium cross-origin bypass`,
+			url: url`https://nvd.nist.gov/vuln/detail/CVE-2019-13664`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
