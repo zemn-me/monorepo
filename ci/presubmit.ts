@@ -1,7 +1,15 @@
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
+import { Command as WorkflowCommand } from 'ts/github/actions';
 import deploy_to_staging from 'ts/pulumi/deploy_to_staging';
+
+const Task =
+	(name: string) =>
+	<T>(p: Promise<T>): Promise<T> => {
+		console.log(WorkflowCommand('group')({})(name));
+		return p.finally(() => console.log(WorkflowCommand('endgroup')({})()));
+	};
 
 const cmd = new Command('presubmit')
 	.option(
@@ -55,65 +63,72 @@ const cmd = new Command('presubmit')
 
 		// validate the pnpm lockfile.
 		if (!o.dangerouslySkipPnpmLockfileValidation) {
-			await new Promise<void>((ok, err) =>
-				child_process
-					.spawn(
-						// TODO(zemnmez): this should be changed to be the local bazel
-						// version once this issue is fixed:
-						// https://github.com/pnpm/pnpm/issues/6962
-						'npm',
-						[
-							'exec',
-							'--yes',
-							'--package',
-							'pnpm@8.6.12',
-							'--',
-							'pnpm',
-							'i',
-							'--frozen-lockfile',
-							'--lockfile-only',
-							// Due to this issue:
+			await Task('Validate the PNPM lockfile.')(
+				new Promise<void>((ok, err) =>
+					child_process
+						.spawn(
+							// TODO(zemnmez): this should be changed to be the local bazel
+							// version once this issue is fixed:
 							// https://github.com/pnpm/pnpm/issues/6962
-							// specifying --dir causes --frozen-lockfile to be ignored.
-							/*							'--dir',
+							'npm',
+							[
+								'exec',
+								'--yes',
+								'--package',
+								'pnpm@8.6.12',
+								'--',
+								'pnpm',
+								'i',
+								'--frozen-lockfile',
+								'--lockfile-only',
+								// Due to this issue:
+								// https://github.com/pnpm/pnpm/issues/6962
+								// specifying --dir causes --frozen-lockfile to be ignored.
+								/*							'--dir',
 							// aspect_rules_js uses this as their example;
 							// I think the script might pull in some patches etc
 							// so we have to be a bit smarter than just setting
 							// cwd when we launch the binary.
 							cwd, */
-						],
-						{
-							cwd,
-							stdio: 'inherit',
-						}
-					)
-					.on('close', code =>
-						code != 0 ? err(`exit ${code}`) : ok()
-					)
+							],
+							{
+								cwd,
+								stdio: 'inherit',
+							}
+						)
+						.on('close', code =>
+							code != 0 ? err(`exit ${code}`) : ok()
+						)
+				)
 			);
 		}
 
 		if (!o.skipBazelTests) {
-			// perform all the normal tests
-			const p = child_process.spawn('bazel', ['test', '//...'], {
-				cwd,
-				stdio: 'inherit',
-			});
-
-			await new Promise<void>((ok, error) =>
-				p.on('close', code => {
-					if (code != 0) return error(new Error(`Exit code ${code}`));
-					return ok();
-				})
+			await Task('Run all bazel tests.')(
+				new Promise<void>((ok, error) =>
+					child_process
+						.spawn('bazel', ['test', '//...'], {
+							cwd,
+							stdio: 'inherit',
+						})
+						.on('close', code =>
+							code !== 0
+								? error(new Error(`Exit code ${code}`))
+								: ok()
+						)
+				)
 			);
+			// perform all the normal tests
 		}
 
 		// attempt a deploy of pulumi to staging, and tear it down.
 		if (!o.skipPulumiDeploy) {
-			await deploy_to_staging({
-				overwrite: o.overwrite,
-				doNotTearDown: o.dirty,
-			});
+			await Task('Deploy pulumi to the staging environment.')(
+				deploy_to_staging({
+					overwrite: o.overwrite,
+					doNotTearDown: o.dirty,
+				})
+			);
 		}
 	});
 

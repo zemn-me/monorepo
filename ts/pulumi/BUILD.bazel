@@ -17,7 +17,8 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/aws",
         "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
-        "//ts/pulumi/lib"
+        "//ts/pulumi/lib",
+		"//ts/github/actions"
     ],
     data = [
         ":pulumi_local",

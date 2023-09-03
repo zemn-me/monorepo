@@ -26,7 +26,8 @@ ts_project(
         "//:node_modules/mime",
         "//ts",
         "//ts/pulumi:pulumi_ts",
-        "//:node_modules/@commander-js/extra-typings"
+        "//:node_modules/@commander-js/extra-typings",
+		"//ts/github/actions"
     ],
 )
 
