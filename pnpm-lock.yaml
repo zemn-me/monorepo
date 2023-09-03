@@ -35,8 +35,8 @@ dependencies:
     specifier: ^2.1.0
     version: 2.1.0(eslint@8.47.0)
   glob-promise:
-    specifier: 6.0.3
-    version: 6.0.3(glob@8.1.0)
+    specifier: 6.0.5
+    version: 6.0.5(glob@8.1.0)
   json-schema-to-typescript:
     specifier: ^13.0.1
     version: 13.0.2
@@ -9551,8 +9551,8 @@ packages:
       glob: 7.2.3
     dev: false
 
-  /glob-promise@6.0.3(glob@8.1.0):
-    resolution: {integrity: sha512-m+kxywR5j/2Z2V9zvHKfwwL5Gp7gIFEBX+deTB9w2lJB+wSuw9kcS43VfvTAMk8TXL5JCl/cCjsR+tgNVspGyA==}
+  /glob-promise@6.0.5(glob@8.1.0):
+    resolution: {integrity: sha512-uUzvxo60yo/vMLXZHCNAlfdM5U5A07jCnUO8xTK44Z0Vc58poGDXhDx8ju1DmPdprOORh+4Lpog64hl+AJ5piA==}
     engines: {node: '>=16'}
     peerDependencies:
       glob: ^8.0.3
