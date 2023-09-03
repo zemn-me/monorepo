@@ -7,17 +7,16 @@ async function main() {
 		onOutput: o => console.info(o),
 	});
 
-	// I believe that if there is an issue pulumi will throw, but
-	// I am unsure of this, so I'm also going to check for a non-blank stderr.
-
-	if (result1.stderr !== '') throw new Error(result1.stderr);
+	if (result1.stderr !== '') console.error(result1.stderr)
 
 	const result2 = await stack.up({
 		logToStdErr: true,
 		onOutput: o => console.info(o),
 	});
 
-	if (result2.stderr !== '') throw new Error(result2.stderr);
+	// I believe that if there is an issue pulumi will throw, but
+	// I am unsure of this, so I'm also going to check for a non-blank stderr.
+	if (result2.stderr !== '') console.error(result2.stderr);
 }
 
 main().catch(e => {
