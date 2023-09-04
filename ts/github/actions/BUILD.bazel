@@ -1,0 +1,9 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "actions",
+	deps = [
+		"//:node_modules/@types/node"
+	],
+	visibility = [ "//:__subpackages__" ]
+)
