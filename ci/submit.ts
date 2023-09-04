@@ -24,7 +24,9 @@ async function main() {
 	if (result2.stderr !== '')
 		console.log(Command('warning')({})(result2.stderr));
 
-	await Summarize([result1.summary, result2.summary].join('\n'));
+	await Summarize(
+		[result1.summary.message, result2.summary.message].join('\n')
+	);
 }
 
 main().catch(e => {
