@@ -170,7 +170,7 @@ export async function main(args: Args) {
 	await Summarize(
 		[e1, e2, e3, e4, e5]
 			.filter(<T>(v: T | Error): v is T => !(v instanceof Error))
-			.map(v => v?.summary)
+			.map(v => v?.summary.message)
 			.join(' ')
 	);
 }
