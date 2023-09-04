@@ -107,13 +107,15 @@ export class Website extends pulumi.ComponentResource {
 			? relative(args.directory, args.notFound)
 			: undefined;
 
-		const bucket = new aws.s3.Bucket(
+		const bucket = new aws.s3.BucketV2(
 			deriveBucketName(name),
 			{
-				website: {
-					indexDocument,
-					errorDocument,
-				},
+				websites: [
+					{
+						indexDocument,
+						errorDocument,
+					},
+				],
 			},
 			{
 				parent: this,
