@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises';
+import { appendFile } from 'node:fs/promises';
 
 interface FilePositionParams {
 	file?: string;
@@ -47,7 +47,18 @@ export const Command =
 
 export const Summarize = async (summary: string) => {
 	const step_summary_file_path = process.env['GITHUB_STEP_SUMMARY'];
-	if (step_summary_file_path === undefined) return undefined;
+	const is_github_action = !!process.env['GITHUB_ACTION'];
 
-	return writeFile(step_summary_file_path, summary);
+	if (is_github_action && !step_summary_file_path)
+		throw new Error(
+			'Detected github action runtime, but missing GITHUB_STEP_SUMMARY, weirdly.'
+		);
+
+	if (step_summary_file_path === undefined) {
+		console.info('Could not detect GITHUB_STEP_SUMMARY.');
+		console.log(summary);
+		return undefined;
+	}
+
+	return appendFile(step_summary_file_path, summary);
 };
