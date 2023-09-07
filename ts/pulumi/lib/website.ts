@@ -102,19 +102,9 @@ export class Website extends pulumi.ComponentResource {
 		 * The final subdomain that the website can be loaded from on the target domain.
 		 */
 
-		const indexDocument = relative(args.directory, args.index);
-		const errorDocument = args.notFound
-			? relative(args.directory, args.notFound)
-			: undefined;
-
-		const bucket = new aws.s3.Bucket(
+		const bucket = new aws.s3.BucketV2(
 			deriveBucketName(name),
-			{
-				website: {
-					indexDocument,
-					errorDocument,
-				},
-			},
+			{},
 			{
 				parent: this,
 			}
