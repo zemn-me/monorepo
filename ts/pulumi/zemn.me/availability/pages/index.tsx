@@ -23,6 +23,11 @@ export default function HomePage() {
 					to Google security checks. If that happens, please{' '}
 					<a href={URL}>view on Google calendar</a> directly instead.
 				</p>
+				<p>
+					"All day" events are usually reminders, not times I am busy.
+					Google Calendar does not let you filter for busy / free
+					time.
+				</p>
 				<iframe src={URL} />
 			</main>
 		</>
