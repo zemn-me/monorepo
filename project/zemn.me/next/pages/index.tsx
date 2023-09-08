@@ -92,23 +92,22 @@ export default function Main() {
 							A selection of my work over the years can be found
 							below.
 						</p>
-
-						<>
-							{bio.Bio.links !== undefined ? (
-								<nav className={style.links}>
-									{bio.Bio.links.map(([text, url]) => (
-										<a
-											href={url.toString()}
-											key={url.toString()}
-											lang={lang.get(text)}
-										>
-											{lang.text(text)}
-										</a>
-									))}
-								</nav>
-							) : null}
-						</>
 					</Prose>
+					<>
+						{bio.Bio.links !== undefined ? (
+							<nav className={style.links}>
+								{bio.Bio.links.map(([text, url]) => (
+									<a
+										href={url.toString()}
+										key={url.toString()}
+										lang={lang.get(text)}
+									>
+										{lang.text(text)}
+									</a>
+								))}
+							</nav>
+						) : null}
+					</>
 				</header>
 				<section>
 					<Timeline />

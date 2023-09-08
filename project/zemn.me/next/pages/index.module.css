@@ -47,6 +47,7 @@
 
 .content {
     grid-area: content;
+	padding-top: 4em;
 }
 
 .headerBgv {
@@ -82,7 +83,8 @@
 .prose {
 	margin: 0 auto;
 	padding: 0 2em;
-	max-width:40em;
+	column-width: 20em;
+	column-gap: 2em;
 }
 
 
