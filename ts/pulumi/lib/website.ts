@@ -357,10 +357,22 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
+		const healthCheck = pulumi
+			.all([record.name, distribution.enabled])
+			.apply(async ([siteName, distributionEnabled]) => {
+				if (!distributionEnabled)
+					throw new Error('Distribution was not enabled');
+				await fetch(siteName).then(r => {
+					if (!r.ok) throw new Error(`Request to ${siteName} failed`);
+				});
+				return true;
+			});
+
 		this.registerOutputs({
 			distribution,
 			record,
 			bucketPolicy,
+			healthCheck,
 		});
 	}
 }
