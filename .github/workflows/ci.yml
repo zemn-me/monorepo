@@ -111,6 +111,7 @@ jobs:
             ${{ runner.os }}-bazel-
       - name: Presubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- --skip-pulumi-deploy
         env:
           BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}
@@ -171,6 +172,7 @@ jobs:
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
@@ -213,6 +215,7 @@ jobs:
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -253,6 +256,7 @@ jobs:
             ${{ runner.os }}-bazel-
       - name: Postsubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:postsubmit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
