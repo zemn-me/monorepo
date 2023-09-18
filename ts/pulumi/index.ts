@@ -1,5 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
+import * as BazelCache from 'ts/pulumi/bazel_rce';
 import * as PleaseIntroduceMeToYourDog from 'ts/pulumi/pleaseintroducemetoyour.dog';
 import * as ShadwellIm from 'ts/pulumi/shadwell.im';
 import * as ZemnMe from 'ts/pulumi/zemn.me';
