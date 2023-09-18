@@ -15,7 +15,11 @@ ts_project(
         "//:node_modules/@types/jest",
         "//:node_modules/cross-spawn",
         "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/awsx",
+        "//:node_modules/@pulumi/github",
+        "//:node_modules/@pulumi/random",
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/aws-sdk",
         "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
         "//ts/pulumi/lib",
 		"//ts/github/actions"
