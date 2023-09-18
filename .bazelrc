@@ -87,8 +87,6 @@ coverage --instrument_test_targets
 try-import %workspace%/.bazelrc.user
 
 
-build --action_env=AWS_ACCESS_KEY_ID --action_env=AWS_SECRET_ACCESS_KEY --action_env=PULUMI_ACCESS_TOKEN
-test --action_env=PULUMI_ACCESS_TOKEN
 
 # be careful with this!
 test --test_tag_filters=-do_not_run_on_main
