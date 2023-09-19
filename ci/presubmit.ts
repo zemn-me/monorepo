@@ -1,6 +1,7 @@
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
+import { Bazel } from 'ci/presubmit.ts';
 import { Command as WorkflowCommand } from 'ts/github/actions';
 import deploy_to_staging from 'ts/pulumi/deploy_to_staging';
 
