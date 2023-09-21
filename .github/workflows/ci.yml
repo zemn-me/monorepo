@@ -96,22 +96,12 @@ jobs:
           large-packages: false
       - name: Checkout code
         uses: actions/checkout@v3
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Presubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- --skip-pulumi-deploy
+        env:
+          BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}
   Staging:
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
@@ -134,19 +124,6 @@ jobs:
           docker-images: true
           large-packages: false
           swap-storage: true
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
         # in order to determine if applying this patch would succeed
         # *on the mainline branch*
         # we have to set the Pulumi state to be the same.
@@ -163,11 +140,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}
       - name: Switch back to candidate branch
         uses: actions/checkout@v3
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
@@ -175,6 +154,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}
   Submit:
     concurrency: pulumi_production
     if: github.event_name == 'push'
@@ -192,23 +172,11 @@ jobs:
           large-packages: false
       - name: Checkout code
         uses: actions/checkout@v3
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Submit
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -217,6 +185,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}
   Postsubmit:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -233,21 +202,9 @@ jobs:
           swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v3
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Postsubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:postsubmit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -256,3 +213,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BAZEL_REMOTE_CACHE_URL: ${{ secrets.BAZEL_REMOTE_CACHE_URL }}

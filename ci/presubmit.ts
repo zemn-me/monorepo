@@ -132,7 +132,39 @@ const cmd = new Command('presubmit')
 		}
 	});
 
+function logError(e: unknown) {
+	if (!(e instanceof Error)) return console.log(e);
+
+	const stack = e.stack ?? Error.prototype.stack;
+
+	if (!stack) return console.log(e);
+
+	const runfilesRoot = process.env['TEST_SRCDIR'];
+
+	if (!runfilesRoot) return console.log(e);
+
+	const runfilesRootIndex = stack.indexOf(runfilesRoot);
+
+	if (runfilesRootIndex == -1) return console.log(e);
+
+	const suffix = stack.slice(runfilesRootIndex + runfilesRoot.length);
+
+	const res = /^([A-Za-z0-9/._]+)\.(?:ts|js):(\d+):(\d+)/.exec(suffix);
+
+	if (res === null) return console.log(e);
+
+	const [, filePrefix, line, offset] = res;
+
+	console.error(
+		WorkflowCommand('error')({
+			file: filePrefix,
+			line: line,
+			col: offset,
+		})('' + e)
+	);
+}
+
 cmd.parseAsync(process.argv).catch(e => {
 	process.exitCode = 2;
-	console.error(e);
+	logError(e);
 });
