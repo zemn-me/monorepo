@@ -28,6 +28,7 @@ export const projectName = 'monorepo-2';
 
 async function provisionStack(s: Promise<Stack>): Promise<Stack> {
 	await (await s).workspace.installPlugin('aws', 'v5.13.0'); // can I get rid of this? it seems stupid
+	await (await s).workspace.installPlugin('github', 'v5.17.0'); // can I get rid of this? it seems stupid
 	await (await s).setConfig('aws:region', { value: 'us-east-1' });
 
 	return s;
