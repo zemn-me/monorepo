@@ -18,5 +18,10 @@
 		"main"
 	],
 	"task.allowAutomaticTasks": "on",
-	"rust-analyzer.procMacro.enable": true
+	"rust-analyzer.procMacro.enable": true,
+	"eslint.format.enable": true,
+	"eslint.onIgnoredFiles": "warn",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	}
 }
