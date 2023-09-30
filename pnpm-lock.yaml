@@ -271,8 +271,8 @@ devDependencies:
     specifier: ^36.0.0
     version: 36.8.2(typanion@3.13.0)
   sharp:
-    specifier: 0.32.5
-    version: 0.32.5
+    specifier: 0.32.6
+    version: 0.32.6
   stylelint:
     specifier: 15.10.3
     version: 15.10.3
@@ -5924,7 +5924,7 @@ packages:
     resolution: {integrity: sha512-OOi3kL+FZDnPhVzsfD37J88FNeZh6gQsGcLc95NbeURRGvmSjeXiDcyWzF2o3yh/gQAUn2uhh/e+CPCa5nwAxw==}
     deprecated: This is a stub types definition. sharp provides its own type definitions, so you do not need this installed.
     dependencies:
-      sharp: 0.32.5
+      sharp: 0.32.6
     dev: true
 
   /@types/shimmer@1.0.2:
@@ -15353,8 +15353,8 @@ packages:
       kind-of: 6.0.3
     dev: true
 
-  /sharp@0.32.5:
-    resolution: {integrity: sha512-0dap3iysgDkNaPOaOL4X/0akdu0ma62GcdC2NBQ+93eqpePdDdr2/LM0sFdDSMmN7yS+odyZtPsb7tx/cYBKnQ==}
+  /sharp@0.32.6:
+    resolution: {integrity: sha512-KyLTWwgcR9Oe4d9HwCwNM2l7+J0dUQwn/yf7S0EnTtb0eVS4RxO0eUSvxPtzT4F3SY+C4K6fqdv/DO27sJ/v/w==}
     engines: {node: '>=14.15.0'}
     requiresBuild: true
     dependencies:
