@@ -1,6 +1,7 @@
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
+import * as Bazel from 'ci/bazel';
 import { Command as WorkflowCommand } from 'ts/github/actions';
 import deploy_to_staging from 'ts/pulumi/deploy_to_staging';
 
@@ -105,18 +106,7 @@ const cmd = new Command('presubmit')
 
 		if (!o.skipBazelTests) {
 			await Task('Run all bazel tests.')(
-				new Promise<void>((ok, error) =>
-					child_process
-						.spawn('bazel', ['test', '//...'], {
-							cwd,
-							stdio: 'inherit',
-						})
-						.on('close', code =>
-							code !== 0
-								? error(new Error(`Exit code ${code}`))
-								: ok()
-						)
-				)
+				Bazel.Bazel(cwd, 'test', '//...')
 			);
 			// perform all the normal tests
 		}
