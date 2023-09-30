@@ -3,20 +3,6 @@ load("//js:rules.bzl", "js_binary")
 
 ts_project(
     name = "ci",
-    data = [
-        "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
-        "//ts/cmd/svgshot:npm_pkg.publish",
-        "//ts/cmd/svgshot:npm_pkg.tgz",
-        "//ts/cmd/svgshot:package.json",
-        "//ts/do-sync:npm_pkg.publish",
-        "//ts/do-sync:npm_pkg.tgz",
-        "//ts/do-sync:package.json",
-        "//ts/knowitwhenyouseeit:npm_pkg.publish",
-        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
-        "//ts/knowitwhenyouseeit:package.json",
-    ],
     deps = [
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
@@ -45,13 +31,42 @@ js_binary(
 
 js_binary(
     name = "postsubmit",
-    data = [":ci"],
+    data = [
+		":ci",
+        "//VERSION",
+        "//project/ck3/recursive-vassals:mod_zip",
+        "//project/ck3/recursive-vassals:patch",
+        "//ts/cmd/svgshot:npm_pkg.publish",
+        "//ts/cmd/svgshot:npm_pkg.tgz",
+        "//ts/cmd/svgshot:package.json",
+        "//ts/do-sync:npm_pkg.publish",
+        "//ts/do-sync:npm_pkg.tgz",
+        "//ts/do-sync:package.json",
+        "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
+        "//ts/knowitwhenyouseeit:package.json",
+    ],
+
     entry_point = "postsubmit.js",
 )
 
 js_binary(
     name = "submit",
-    data = [":ci"],
+    data = [
+		":ci",
+        "//VERSION",
+        "//project/ck3/recursive-vassals:mod_zip",
+        "//project/ck3/recursive-vassals:patch",
+        "//ts/cmd/svgshot:npm_pkg.publish",
+        "//ts/cmd/svgshot:npm_pkg.tgz",
+        "//ts/cmd/svgshot:package.json",
+        "//ts/do-sync:npm_pkg.publish",
+        "//ts/do-sync:npm_pkg.tgz",
+        "//ts/do-sync:package.json",
+        "//ts/knowitwhenyouseeit:npm_pkg.publish",
+        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
+        "//ts/knowitwhenyouseeit:package.json",
+    ],
     entry_point = "submit.js",
 )
 
