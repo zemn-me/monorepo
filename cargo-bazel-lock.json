@@ -1,5 +1,5 @@
 {
-  "checksum": "902b8a1d4dc690ff3689a7e70424f7515ecb94310addcfaafc96cd411249b1a0",
+  "checksum": "98b27c8362fbc50584b392471a9a1327d535e3ef72de4ca7b98e2e47a89fd4c2",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1618,7 +1618,7 @@
               "target": "serde_json"
             },
             {
-              "id": "sha2 0.10.7",
+              "id": "sha2 0.10.8",
               "target": "sha2"
             },
             {
@@ -3087,13 +3087,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "sha2 0.10.7": {
+    "sha2 0.10.8": {
       "name": "sha2",
-      "version": "0.10.7",
+      "version": "0.10.8",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/sha2/0.10.7/download",
-          "sha256": "479fb9d862239e610720565ca91403019f2f00410f1864c5aa7479b950a76ed8"
+          "url": "https://crates.io/api/v1/crates/sha2/0.10.8/download",
+          "sha256": "793db75ad2bcafc3ffa7c68b215fee268f537982cd901d132f89c6343f3a3dc8"
         }
       },
       "targets": [
@@ -3140,7 +3140,7 @@
           }
         },
         "edition": "2018",
-        "version": "0.10.7"
+        "version": "0.10.8"
       },
       "license": "MIT OR Apache-2.0"
     },
