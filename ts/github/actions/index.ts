@@ -1,19 +1,47 @@
 import { writeFile } from 'node:fs/promises';
 
-interface FilePositionParams {
+export interface FilePositionParams {
 	file?: string;
 	line?: string;
 	endLine?: string;
 	title?: string;
+	col?: string;
+	endColumn?: string;
 }
 
 interface CommandValidation {
-	debug: Record<string, never>;
+	debug: FilePositionParams;
 	notice: FilePositionParams;
 	warning: FilePositionParams;
 	error: FilePositionParams;
 	group: Record<string, never>;
 	endgroup: Record<string, never>;
+}
+
+export function toCommandValue(input: unknown): string {
+	if (input === null || input === undefined) {
+		return '';
+	}
+	if (typeof input === 'string' || input instanceof String) {
+		return input as string;
+	}
+	return JSON.stringify(input);
+}
+
+function escapeData(s: unknown): string {
+	return toCommandValue(s)
+		.replace(/%/g, '%25')
+		.replace(/\r/g, '%0D')
+		.replace(/\n/g, '%0A');
+}
+
+function escapeProperty(s: unknown): string {
+	return toCommandValue(s)
+		.replace(/%/g, '%25')
+		.replace(/\r/g, '%0D')
+		.replace(/\n/g, '%0A')
+		.replace(/:/g, '%3A')
+		.replace(/,/g, '%2C');
 }
 
 const isDefinedString = (v: string | undefined): v is string => v !== undefined;
@@ -27,13 +55,8 @@ const commandIdent =
 		`::${[
 			command,
 			Object.entries(parameters)
-				.map(
-					([k, v]) =>
-						`${k.replaceAll(/[,=]/g, '')}=${v.replaceAll(
-							/[=,]/g,
-							''
-						)}`
-				)
+				.filter(([, v]) => v !== undefined)
+				.map(([k, v]) => `${escapeProperty(k)}=${escapeProperty(v)}`)
 				.join(','),
 		]
 			.filter(isDefinedString)
@@ -43,7 +66,7 @@ export const Command =
 	<T extends keyof CommandValidation>(command: T) =>
 	(parameters: CommandValidation[T]) =>
 	(line?: string) =>
-		(line ?? '').replaceAll(/^/g, commandIdent(command)(parameters));
+		commandIdent(command)(parameters) + escapeData(line);
 
 export const Summarize = async (summary: string) => {
 	const step_summary_file_path = process.env['GITHUB_STEP_SUMMARY'];
