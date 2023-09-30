@@ -1,5 +1,5 @@
 {
-  "checksum": "a4ef6ea3fb96149aa17ed83f1c3fe23e65a4a64a38dc22b646616ffdaac0460c",
+  "checksum": "ed81ed3d3918d0e47e53fea69095990f0e2ea2ead8bce186b6a0a33ed5e047f5",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -99,13 +99,13 @@
       },
       "license": "Unlicense OR MIT"
     },
-    "anstream 0.5.0": {
+    "anstream 0.6.4": {
       "name": "anstream",
-      "version": "0.5.0",
+      "version": "0.6.4",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/anstream/0.5.0/download",
-          "sha256": "b1f58811cfac344940f1a400b6e6231ce35171f614f26439e80f8c1465c5cc0c"
+          "url": "https://crates.io/api/v1/crates/anstream/0.6.4/download",
+          "sha256": "2ab91ebe16eb252986481c5b62f6098f3b698a45e34b5b98200cf20dd2484a44"
         }
       },
       "targets": [
@@ -158,14 +158,14 @@
           "selects": {
             "cfg(windows)": [
               {
-                "id": "anstyle-wincon 2.1.0",
+                "id": "anstyle-wincon 3.0.1",
                 "target": "anstyle_wincon"
               }
             ]
           }
         },
         "edition": "2021",
-        "version": "0.5.0"
+        "version": "0.6.4"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -293,13 +293,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "anstyle-wincon 2.1.0": {
+    "anstyle-wincon 3.0.1": {
       "name": "anstyle-wincon",
-      "version": "2.1.0",
+      "version": "3.0.1",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/anstyle-wincon/2.1.0/download",
-          "sha256": "58f54d10c6dfa51283a066ceab3ec1ab78d13fae00aa49243a45e4571fb79dfd"
+          "url": "https://crates.io/api/v1/crates/anstyle-wincon/3.0.1/download",
+          "sha256": "f0699d10d2f4d628a98ee7b57b289abbc98ff3bad977cb3152709d4bf2330628"
         }
       },
       "targets": [
@@ -335,7 +335,7 @@
           }
         },
         "edition": "2021",
-        "version": "2.1.0"
+        "version": "3.0.1"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -562,13 +562,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.4.2": {
+    "clap 4.4.6": {
       "name": "clap",
-      "version": "4.4.2",
+      "version": "4.4.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.4.2/download",
-          "sha256": "6a13b88d2c62ff462f88e4a121f17a82c1af05693a2f192b5c38d14de73c19f6"
+          "url": "https://crates.io/api/v1/crates/clap/4.4.6/download",
+          "sha256": "d04704f56c2cde07f43e8e2c154b43f216dc5c92fc98ada720177362f953b956"
         }
       },
       "targets": [
@@ -603,7 +603,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.4.2",
+              "id": "clap_builder 4.4.6",
               "target": "clap_builder"
             }
           ],
@@ -619,17 +619,17 @@
           ],
           "selects": {}
         },
-        "version": "4.4.2"
+        "version": "4.4.6"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.4.2": {
+    "clap_builder 4.4.6": {
       "name": "clap_builder",
-      "version": "4.4.2",
+      "version": "4.4.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.2/download",
-          "sha256": "2bb9faaa7c2ef94b2743a21f5a29e6f0010dff4caa69ac8e9d6cf8b6fa74da08"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.6/download",
+          "sha256": "0e231faeaca65ebd1ea3c737966bf858971cd38c3849107aa3ea7de90a804e45"
         }
       },
       "targets": [
@@ -662,7 +662,7 @@
         "deps": {
           "common": [
             {
-              "id": "anstream 0.5.0",
+              "id": "anstream 0.6.4",
               "target": "anstream"
             },
             {
@@ -681,7 +681,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.4.2"
+        "version": "4.4.6"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1606,7 +1606,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.4.2",
+              "id": "clap 4.4.6",
               "target": "clap"
             },
             {
