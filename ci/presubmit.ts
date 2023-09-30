@@ -52,6 +52,7 @@ const cmd = new Command('presubmit')
 		}`
 	)
 	.action(async o => {
+		console.log('::endgroup::');
 		// this is unfortunately necessary because my arm mac chokes on getting a running
 		// version of inkscape, and I'm deferring solving that to some later day.
 		const cwd = process.env['BUILD_WORKING_DIRECTORY'];

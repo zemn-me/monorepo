@@ -132,6 +132,7 @@ jobs:
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
         run: |
+            echo "::group::Presubmit prep"
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite
         env:
