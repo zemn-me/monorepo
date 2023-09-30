@@ -125,8 +125,6 @@ npm_translate_lock(
     lifecycle_hooks_execution_requirements = {
         "puppeteer": [
             "no-sandbox",
-            # Workaround Engflow not honoring requires-network on build actions
-            "no-remote-exec",
             "requires-network",
         ],
     },
