@@ -1,4 +1,4 @@
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "ts_project", "jest_test")
 load("//js:rules.bzl", "js_binary")
 
 ts_project(
@@ -29,6 +29,12 @@ ts_project(
         "//:node_modules/@commander-js/extra-typings",
 		"//ts/github/actions"
     ],
+)
+
+jest_test(
+	name = "tests",
+	deps = [ ":ci" ],
+	srcs = [ "bazel_test.js" ]
 )
 
 js_binary(
