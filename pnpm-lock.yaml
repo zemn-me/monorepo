@@ -97,8 +97,8 @@ devDependencies:
     specifier: 7.37.3
     version: 7.37.3(@types/node@20.5.9)
   '@pulumi/aws':
-    specifier: 6.0.4
-    version: 6.0.4
+    specifier: 6.3.0
+    version: 6.3.0
   '@pulumi/awsx':
     specifier: 1.0.5
     version: 1.0.5
@@ -4320,9 +4320,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/aws@6.0.4:
-    resolution: {integrity: sha512-g8t+LuKwEEGX7bKUcYpB8gr1xtrJm3PAt26Js5QztSWDiujy9ehmk4CeEgKLfMR9EGmav6jFSSvwX5IQXSPgog==}
-    requiresBuild: true
+  /@pulumi/aws@6.3.0:
+    resolution: {integrity: sha512-BOuIMoPg2bD4AIxU6PZq6k/lIzZnR5JQpozEtlFEpSGj81ECALn17pPqnqlYTGCCevWySK/L+kLCj3rKVzn+7A==}
     dependencies:
       '@pulumi/pulumi': 3.81.0
       builtin-modules: 3.0.0
