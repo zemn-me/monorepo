@@ -17,3 +17,13 @@ a:link, a:visited {
 }
 
 h1, h2, h3, h4, h5 { font-weight: normal }
+
+input[type="text"] {
+	display: inline;
+	padding: 0;
+	margin: 0;
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	border-bottom: 1px dotted black;
+}
