@@ -112,6 +112,16 @@ export class Website extends pulumi.ComponentResource {
 
 		// upload files
 
+		const getS3Key = (dest: string) => {
+			// x.html files should be served without the .html extension.
+			const htmlExt = '.html';
+
+			if (dest.endsWith(htmlExt)) {
+				dest.slice(0, -htmlExt.length);
+			}
+			return dest;
+		};
+
 		const uploadDir = (dir: string): Map<string, aws.s3.BucketObjectv2> => {
 			let out: Map<string, aws.s3.BucketObjectv2> = new Map();
 			for (const item of fs.readdirSync(dir)) {
@@ -127,18 +137,20 @@ export class Website extends pulumi.ComponentResource {
 					continue;
 				}
 
+				const source = new pulumi.asset.FileAsset(fPath);
+
 				out.set(
 					fPath,
 					new aws.s3.BucketObjectv2(
 						`${name}_bucket_file_${fPath}`,
 						{
-							key: relative(args.directory, fPath),
+							key: getS3Key(relative(args.directory, fPath)),
 							bucket: bucket.id,
 							contentType: guard.must(
 								guard.isNotNull,
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
-							source: new pulumi.asset.FileAsset(fPath),
+							source,
 						},
 						{
 							parent: this,
@@ -156,18 +168,18 @@ export class Website extends pulumi.ComponentResource {
 			? guard.must(
 					guard.isDefined,
 					() =>
-						`Cannot find ${args.notFound} in [${[
+						`Cannot find ${getS3Key(args.notFound!)} in [${[
 							...objects.keys(),
 						].join(', ')}]`
-			  )(objects.get(args.notFound))
+			  )(objects.get(getS3Key(args.notFound)))
 			: undefined;
 		const indexDocumentObject = guard.must(
 			guard.isDefined,
 			() =>
-				`Cannot find ${args.index} in [${[...objects.keys()].join(
-					', '
-				)}]`
-		)(objects.get(args.index));
+				`Cannot find ${getS3Key(args.index)} in [${[
+					...objects.keys(),
+				].join(', ')}]`
+		)(objects.get(getS3Key(args.index)));
 
 		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
 			`${name}_origin_access_identity`,
