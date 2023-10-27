@@ -14,6 +14,14 @@ npx @bazel/bazelisk test //...
 
 This will recursively run all tests in parallel.
 
+### BuildBuddy
+
+The project is configured to use a BuildBuddy cache for faster build times. If you have an account, you can run `BUILDBUDDY_API_KEY=EDIT_AND_REPLACE ./.github/workflows/bootstrap_remote_cache.sh` from
+the project root, and it will drop an .auth.bazelrc in there.
+
+Once that's done, edit the file and replace EDIT_AND_REPLACE with your BuildBuddy API key. I **do not** recommend changing "EDIT_AND_REPLACE" on the bash commandline, or you'll end up
+having your secret API key stored in your shell history.
+
 ## Neat features
 
 1. **Continuous patching**. Because Bazel allows this repo to be fully tested, Mend is able to automatically integrate patches for any and all dependencies of any project in this repo automatically.
