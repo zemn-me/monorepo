@@ -92,3 +92,4 @@ test --action_env=PULUMI_ACCESS_TOKEN
 
 # be careful with this!
 test --test_tag_filters=-do_not_run_on_main
+try-import .auth.bazelrc
