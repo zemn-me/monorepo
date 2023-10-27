@@ -61,3 +61,5 @@ rust-project.json
 
 # ignore yarn since we use pnpm now
 yarn.lock
+# buildbuddy API key
+.auth.bazelrc
