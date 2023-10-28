@@ -1,19 +1,17 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		"config:base"
-	],
-    "automerge": true,
-    "autodiscover": true,
+	"extends": ["config:recommended"],
+	"automerge": true,
+	"autodiscover": true,
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": true,
 	"allowScripts": true,
 	"rollbackPrs": true,
-	"recreateClosed": true,
-	"ignorePaths": ["dist/**"],
-	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
-    "autodiscoverFilter": [ "zemn-me/monorepo" ],
+	"recreateWhen": "always",
+	"ignorePaths": ["**/monorepo/dist/**"],
+	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
+	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
@@ -27,8 +25,13 @@
 					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
 				],
 				"executionMode": "branch",
-				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json", "**/*.ts"],
-				"recreateClosed": true
+				"fileFilters": [
+					"Cargo.Bazel.lock",
+					"Cargo.toml",
+					"cargo-bazel-lock.json",
+					"**/*.ts"
+				],
+				"recreateWhen": "always"
 			}
 		}
 	]
