@@ -121,7 +121,6 @@ jobs:
       || github.event_name == 'workflow_dispatch'
 
     # Performs all offline testing.
-    needs: Presubmit
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
