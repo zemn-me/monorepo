@@ -55,6 +55,11 @@
 name: CI
 
 on:   # yamllint disable-line rule:truthy
+  merge_group:
+    branches:
+
+      # presubmit
+      - main
   pull_request:
     branches:
 
@@ -82,6 +87,7 @@ jobs:
     # PRs can be sped up by loading their cached results.
     if: >
       github.event_name == 'pull_request'
+      || github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
       || github.event_name == 'push'
     # Performs all offline testing.
@@ -95,30 +101,23 @@ jobs:
           haskell: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Presubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- --skip-pulumi-deploy
+        env:
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
     concurrency: pulumi_staging
+    # only bother with this when we reach the merge queue
     if: >
-      github.event_name == 'pull_request'
+      github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
 
     # Performs all offline testing.
@@ -136,38 +135,30 @@ jobs:
           swap-storage: true
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
-        # in order to determine if applying this patch would succeed
-        # *on the mainline branch*
-        # we have to set the Pulumi state to be the same.
       - name: Checkout main branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: main
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
+        # we test if the script exists so we don't fail as a result of it
+        # not yet existing on main.
         run: |
+            test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+            ./.github/workflows/bootstrap_bazel_remote_cache.sh
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
       - name: Switch back to candidate branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
@@ -175,6 +166,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Submit:
     concurrency: pulumi_production
     if: github.event_name == 'push'
@@ -191,30 +183,21 @@ jobs:
           swap-storage: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Submit
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
+          ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
   Postsubmit:
@@ -232,27 +215,18 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-      - name: Cache Bazel
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-          key: >
-            ${{ runner.os }}-bazel-${{
-            hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE',
-            'WORKSPACE.bazel', 'MODULE.bazel') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-
       - name: Postsubmit
         run: |
+          ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:postsubmit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
