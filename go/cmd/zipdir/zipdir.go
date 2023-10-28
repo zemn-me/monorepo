@@ -5,8 +5,8 @@ import (
 
 	"os"
 
-	"github.com/zemnmez/monorepo/go/archive/zip/ziputil"
-	"github.com/zemnmez/monorepo/go/flag/flagutil"
+	"github.com/zemn-me/monorepo/go/archive/zip/ziputil"
+	"github.com/zemn-me/monorepo/go/flag/flagutil"
 )
 
 var output = flagutil.FileFlag{

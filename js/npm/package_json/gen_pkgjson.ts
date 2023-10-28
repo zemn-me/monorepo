@@ -56,7 +56,7 @@ const githubIssueUrl = (props: GithubIssueUrlProps) => {
 		if (value) params.set(key, value);
 	}
 
-	const url = new URL('https://github.com/zemnmez/monorepo/issues/new');
+	const url = new URL('https://github.com/zemn-me/monorepo/issues/new');
 	url.search = params.toString();
 	return url.toString();
 };
@@ -148,7 +148,7 @@ const main = async () => {
 		...depData,
 		repository: {
 			type: 'git',
-			url: 'https://github.com/Zemnmez/monorepo.git',
+			url: 'https://github.com/zemn-me/monorepo.git',
 			directory: opts.package_name,
 		},
 		bugs: {

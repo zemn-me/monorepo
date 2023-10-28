@@ -12,7 +12,7 @@
 	"recreateClosed": true,
 	"ignorePaths": ["dist/**"],
 	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
-    "autodiscoverFilter": [ "Zemnmez/monorepo" ],
+    "autodiscoverFilter": [ "zemn-me/monorepo" ],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
