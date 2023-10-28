@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 patchedDependencies:
   svgo@3.0.2:
     hash: eczlissk6k5s35siwvhunsnlym
@@ -147,8 +151,8 @@ devDependencies:
     specifier: 0.2.4
     version: 0.2.4
   '@types/uuid':
-    specifier: 9.0.4
-    version: 9.0.4
+    specifier: 9.0.6
+    version: 9.0.6
   '@typescript-eslint/eslint-plugin':
     specifier: 6.6.0
     version: 6.6.0(@typescript-eslint/parser@6.6.0)(eslint@8.47.0)(typescript@5.0.4)
@@ -6240,8 +6244,8 @@ packages:
   /@types/unist@2.0.7:
     resolution: {integrity: sha512-cputDpIbFgLUaGQn6Vqg3/YsJwxUwHLO13v3i5ouxT4lat0khip9AEWxtERujXV9wxIB1EyF97BSJFt6vpdI8g==}
 
-  /@types/uuid@9.0.4:
-    resolution: {integrity: sha512-zAuJWQflfx6dYJM62vna+Sn5aeSWhh3OB+wfUEACNcqUSc0AGc5JKl+ycL1vrH7frGTXhJchYjE1Hak8L819dA==}
+  /@types/uuid@9.0.6:
+    resolution: {integrity: sha512-BT2Krtx4xaO6iwzwMFUYvWBWkV2pr37zD68Vmp1CDV196MzczBRxuEpD6Pr395HAgebC/co7hOphs53r8V7jew==}
     dev: true
 
   /@types/webxr@0.5.7:
@@ -17825,7 +17829,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
