@@ -126,9 +126,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.86.0/pulumi-v3.86.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.91.1/pulumi-v3.91.1-darwin-arm64.tar.gz",
         ],
-        sha256 = "5514673cfbead3ac0726ca8c5469ae2bc13f849ac1bd375b00742df9d78e1443",
+        sha256 = "8ff103c8b00b8de69cfb68aedc5e77987c9973013a3e1c12656c2e0b4de27dee",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -147,9 +147,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.86.0/pulumi-v3.86.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.91.1/pulumi-v3.91.1-linux-arm64.tar.gz",
         ],
-        sha256 = "a33d0b61a1308f9d8c746afb4d7a3ccba55db98208c16fbb7d6640de99c0f725",
+        sha256 = "08312bd1a42ac4186684bb399c594ac2268fe8b7cfa5f7c09247290bc810f402",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -201,8 +201,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "c46bdafc582d9bd48a6f97000d05af4829f62d5fee10a2a3edddf2f3d9a232c1",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.28.0/rules_rust-v0.28.0.tar.gz"],
+        sha256 = "6357de5982dd32526e02278221bb8d6aa45717ba9bbacf43686b130aa2c72e1e",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.30.0/rules_rust-v0.30.0.tar.gz"],
     )
 
     http_archive(
@@ -212,16 +212,16 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
     http_archive(
         name = "rules_nodejs",
-        sha256 = "5ad078287b5f3069735652e1fc933cb2e2189b15d2c9fc826c889dc466c32a07",
-        strip_prefix = "rules_nodejs-6.0.1",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.1/rules_nodejs-v6.0.1.tar.gz",
+        sha256 = "162f4adfd719ba42b8a6f16030a20f434dc110c65dc608660ef7b3411c9873f9",
+        strip_prefix = "rules_nodejs-6.0.2",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.2/rules_nodejs-v6.0.2.tar.gz",
     )
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "8563dd34e75ce989fd2e45ad6dd527c6e6fafacb2dcf6f7dd36ca6e7fb0ca670",
-        strip_prefix = "rules_js-1.32.5",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.32.5/rules_js-v1.32.5.tar.gz",
+        sha256 = "a949d56fed8fa0a8dd82a0a660acc949253a05b2b0c52a07e4034e27f11218f6",
+        strip_prefix = "rules_js-1.33.1",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.33.1/rules_js-v1.33.1.tar.gz",
     )
 
     http_archive(
@@ -234,12 +234,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/cc26e9c614cf9bf3455a3bf9409c9516e9803653.zip",
-        strip_prefix = "json-schemas-cc26e9c614cf9bf3455a3bf9409c9516e9803653",
+        url = "https://github.com/microsoft/json-schemas/archive/45948c115bdf6fa70e59c166578246760cc5dd5e.zip",
+        strip_prefix = "json-schemas-45948c115bdf6fa70e59c166578246760cc5dd5e",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "7d7842c27def0b076b4b7f90406f8ca0e86ece9a9fa631e9e90d283c5545372c",
+        sha256 = "a280978a692aee785dbf0af7e25c2b28e5af95db8804c68392eab9329ac55896",
     )
 
     ##########

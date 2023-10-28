@@ -1,5 +1,5 @@
 {
-  "checksum": "98b27c8362fbc50584b392471a9a1327d535e3ef72de4ca7b98e2e47a89fd4c2",
+  "checksum": "b62342a61818782119c24f747c7e200235c37d0d85ff63ee954698544ad217ea",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -562,13 +562,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.4.6": {
+    "clap 4.4.7": {
       "name": "clap",
-      "version": "4.4.6",
+      "version": "4.4.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.4.6/download",
-          "sha256": "d04704f56c2cde07f43e8e2c154b43f216dc5c92fc98ada720177362f953b956"
+          "url": "https://crates.io/api/v1/crates/clap/4.4.7/download",
+          "sha256": "ac495e00dcec98c83465d5ad66c5c4fabd652fd6686e7c6269b117e729a6f17b"
         }
       },
       "targets": [
@@ -603,7 +603,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.4.6",
+              "id": "clap_builder 4.4.7",
               "target": "clap_builder"
             }
           ],
@@ -613,23 +613,23 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "clap_derive 4.4.2",
+              "id": "clap_derive 4.4.7",
               "target": "clap_derive"
             }
           ],
           "selects": {}
         },
-        "version": "4.4.6"
+        "version": "4.4.7"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.4.6": {
+    "clap_builder 4.4.7": {
       "name": "clap_builder",
-      "version": "4.4.6",
+      "version": "4.4.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.6/download",
-          "sha256": "0e231faeaca65ebd1ea3c737966bf858971cd38c3849107aa3ea7de90a804e45"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.7/download",
+          "sha256": "c77ed9a32a62e6ca27175d00d29d05ca32e396ea1eb5fb01d8256b669cec7663"
         }
       },
       "targets": [
@@ -670,7 +670,7 @@
               "target": "anstyle"
             },
             {
-              "id": "clap_lex 0.5.0",
+              "id": "clap_lex 0.6.0",
               "target": "clap_lex"
             },
             {
@@ -681,17 +681,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.4.6"
+        "version": "4.4.7"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_derive 4.4.2": {
+    "clap_derive 4.4.7": {
       "name": "clap_derive",
-      "version": "4.4.2",
+      "version": "4.4.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_derive/4.4.2/download",
-          "sha256": "0862016ff20d69b84ef8247369fabf5c008a7417002411897d40ee1f4532b873"
+          "url": "https://crates.io/api/v1/crates/clap_derive/4.4.7/download",
+          "sha256": "cf9804afaaf59a91e75b022a30fb7229a7901f60c755489cc61c9b423b836442"
         }
       },
       "targets": [
@@ -738,17 +738,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.4.2"
+        "version": "4.4.7"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_lex 0.5.0": {
+    "clap_lex 0.6.0": {
       "name": "clap_lex",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_lex/0.5.0/download",
-          "sha256": "2da6da31387c7e4ef160ffab6d5e7f00c42626fe39aea70a7b0f1773f7dd6c1b"
+          "url": "https://crates.io/api/v1/crates/clap_lex/0.6.0/download",
+          "sha256": "702fc72eb24e5a1e48ce58027a675bc24edd52096d5397d4aea7c6dd9eca0bd1"
         }
       },
       "targets": [
@@ -768,7 +768,7 @@
           "**"
         ],
         "edition": "2021",
-        "version": "0.5.0"
+        "version": "0.6.0"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1606,7 +1606,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.4.6",
+              "id": "clap 4.4.7",
               "target": "clap"
             },
             {
