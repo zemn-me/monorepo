@@ -11,7 +11,7 @@
 	"allowScripts": true,
 	"rollbackPrs": true,
 	"recreateClosed": true,
-	"ignorePaths": ["dist/**"],
+	"ignorePaths": ["**/monorepo/dist/**"],
 	"gitIgnoredAuthors": [ "zemnmez+renovate@gmail.com" ],
     "autodiscoverFilter": [ "zemn-me/monorepo" ],
 	"allowedPostUpgradeCommands": [
