@@ -2,6 +2,10 @@
 
 
 name: Renovate
+concurrency:
+  # if another instance of renovate is running,
+  # do not attempt to run overlapping instances.
+  group: renovate
 on: # yamllint disable-line rule:truthy
   schedule:
     # The "*" (#42, asterisk) character has special semantics in YAML, so this
