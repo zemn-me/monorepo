@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 patchedDependencies:
   svgo@3.0.2:
     hash: eczlissk6k5s35siwvhunsnlym
@@ -114,8 +118,8 @@ devDependencies:
     specifier: 6.0.3
     version: 6.0.3
   '@types/d3-axis':
-    specifier: 3.0.4
-    version: 3.0.4
+    specifier: 3.0.5
+    version: 3.0.5
   '@types/d3-scale':
     specifier: 4.0.5
     version: 4.0.5
@@ -5969,8 +5973,8 @@ packages:
       '@types/node': 20.8.0
     dev: true
 
-  /@types/d3-axis@3.0.4:
-    resolution: {integrity: sha512-ySnjI/7qm+J602VjcejXcqs1hEuu5UBbGaJGp+Cn/yKVc1iS3JueLVpToGdQsS2sqta7tqA/kG4ore/+LH90UA==}
+  /@types/d3-axis@3.0.5:
+    resolution: {integrity: sha512-ufDAV3SQzju+uB3Jlty7SUb/jMigjpIlvDDcSGvGmmO6OT/sNO93UE0dRzwWOZeBLzrLSA0CQM4bf3iq1std3A==}
     dependencies:
       '@types/d3-selection': 3.0.5
     dev: true
@@ -17825,7 +17829,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
