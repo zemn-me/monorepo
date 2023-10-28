@@ -100,7 +100,10 @@ jobs:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- --skip-pulumi-deploy
+        env:
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
@@ -131,18 +134,24 @@ jobs:
           ref: main
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
+        # we test if the script exists so we don't fail as a result of it
+        # not yet existing on main.
         run: |
+            test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+            ./.github/workflows/bootstrap_bazel_remote_cache.sh
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
       - name: Switch back to candidate branch
         uses: actions/checkout@v4
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh
          bazel run //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
@@ -150,6 +159,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Submit:
     concurrency: pulumi_production
     if: github.event_name == 'push'
@@ -173,12 +183,14 @@ jobs:
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
+          ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
   Postsubmit:
@@ -201,11 +213,13 @@ jobs:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Postsubmit
         run: |
+          ./.github/workflows/bootstrap_bazel_remote_cache.sh
           bazel run //ci:postsubmit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
