@@ -8,6 +8,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
+                -bitexact \\
                 -c:v libx264 \\
                 -an \\
                 -bufsize 2M \\
@@ -26,6 +27,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
+                -bitexact \\
                 -c:v libvpx \\
                 -crf 30 \\
                 -bufsize 2M \\
@@ -44,6 +46,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
+                -bitexact \\
                 -c:v libtheora \\
                 -an \\
                 -bufsize 2M \\
