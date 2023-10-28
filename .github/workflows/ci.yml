@@ -55,6 +55,11 @@
 name: CI
 
 on:   # yamllint disable-line rule:truthy
+  merge_group:
+    branches:
+
+      # presubmit
+      - main
   pull_request:
     branches:
 
@@ -82,6 +87,7 @@ jobs:
     # PRs can be sped up by loading their cached results.
     if: >
       github.event_name == 'pull_request'
+      || github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
       || github.event_name == 'push'
     # Performs all offline testing.
@@ -109,8 +115,9 @@ jobs:
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
     concurrency: pulumi_staging
+    # only bother with this when we reach the merge queue
     if: >
-      github.event_name == 'pull_request'
+      github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
 
     # Performs all offline testing.
