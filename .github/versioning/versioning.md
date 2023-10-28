@@ -53,4 +53,4 @@ sequenceDiagram
 
 
 
-[svgshot publish pr]: https://github.com/Zemnmez/monorepo/pull/274
+[svgshot publish pr]: https://github.com/zemn-me/monorepo/pull/274
