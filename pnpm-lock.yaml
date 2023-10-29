@@ -44,8 +44,8 @@ dependencies:
     specifier: ^13.0.1
     version: 13.0.2
   npm:
-    specifier: ^9.5.1
-    version: 9.8.0
+    specifier: ^10.0.0
+    version: 10.2.1
   pnpm:
     specifier: ^8.0.0
     version: 8.6.7
@@ -13694,18 +13694,6 @@ packages:
       minimatch: 3.1.2
     dev: true
 
-  /node-fetch@2.6.12:
-    resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
-    dev: true
-
   /node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -13848,18 +13836,21 @@ packages:
     dependencies:
       path-key: 4.0.0
 
-  /npm@9.8.0:
-    resolution: {integrity: sha512-AXeiBAdfM5K2jvBwA7EGLKeYyt0VnhmJRnlq4k2+M0Ao9v7yKJBqF8xFPzQL8kAybzwlfpTPCZwM4uTIszb3xA==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+  /npm@10.2.1:
+    resolution: {integrity: sha512-YVh8UDw5lR2bPS6rrS0aPG9ZXKDWeaeO/zMoZMp7g3Thrho9cqEnSrcvg4Pic2QhDAQptAynx5KgrPgCSRscqg==}
+    engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     dev: false
     bundledDependencies:
       - '@isaacs/string-locale-compare'
       - '@npmcli/arborist'
       - '@npmcli/config'
+      - '@npmcli/fs'
       - '@npmcli/map-workspaces'
       - '@npmcli/package-json'
+      - '@npmcli/promise-spawn'
       - '@npmcli/run-script'
+      - '@sigstore/tuf'
       - abbrev
       - archy
       - cacache
@@ -13895,6 +13886,7 @@ packages:
       - ms
       - node-gyp
       - nopt
+      - normalize-package-data
       - npm-audit-report
       - npm-install-checks
       - npm-package-arg
@@ -13910,8 +13902,9 @@ packages:
       - qrcode-terminal
       - read
       - semver
-      - sigstore
+      - spdx-expression-parse
       - ssri
+      - strip-ansi
       - supports-color
       - tar
       - text-table
