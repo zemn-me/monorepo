@@ -564,13 +564,13 @@ export const Bio: Bio = {
 			date: date(23, 'oct', 2023),
 			title: en`crypto-js PBKDF2 1,000 times weaker than specified in 1993 and 1.3M times weaker than current standard`,
 			description: en`Vulnerability in second most popular Javascript cryptography library allowing forgery of digital signatures. CVE-2023-46133`,
-			url: url`https://github.com/brix/crypto-js/security/advisories/GHSA-xwcq-pm8m-c4vf`,
+			url: url`https://github.com/advisories/GHSA-xwcq-pm8m-c4vf`,
 		},
 		{
 			date: date(23, 'oct', 2023),
 			title: en`crypto-es PBKDF2 1,000 times weaker than specified in 1993 and 1.3M times weaker than current standard`,
 			description: en`Vulnerability in maintained fork of most popular Javascript cryptography library allowing forgery of digital signatures. CVE-2023-46233`,
-			url: url`https://github.com/entronad/crypto-es/security/advisories/GHSA-mpj8-q39x-wq5h`,
+			url: url`https://github.com/advisories/GHSA-mpj8-q39x-wq5h`,
 		},
 		// END TOOL ASSISTED SORT
 	],
