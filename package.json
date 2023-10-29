@@ -119,6 +119,9 @@
 	"pnpm": {
 		"patchedDependencies": {
 			"svgo@3.0.2": "patches/svgo@3.0.2.patch"
+		},
+		"overrides": {
+			"resolve": "^2.0.0-next.5"
 		}
 	}
 }
