@@ -15,7 +15,7 @@ patchedDependencies:
 dependencies:
   '@commander-js/extra-typings':
     specifier: ^11.0.0
-    version: 11.0.0(commander@11.0.0)
+    version: 11.0.0(commander@11.1.0)
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0
@@ -172,8 +172,8 @@ devDependencies:
     specifier: 2.3.2
     version: 2.3.2
   commander:
-    specifier: 11.0.0
-    version: 11.0.0
+    specifier: 11.1.0
+    version: 11.1.0
   concurrently:
     specifier: 8.2.2
     version: 8.2.2
@@ -3048,12 +3048,12 @@ packages:
     resolution: {integrity: sha512-llLJZ8OAlZrjGlBvamm6Zdo/HmGAcCLq5gx7cSwUX8No+n/8ip+oaC4x33IdZIif8+Rh5dQUIZXmfbSghiOmNQ==}
     dev: true
 
-  /@commander-js/extra-typings@11.0.0(commander@11.0.0):
+  /@commander-js/extra-typings@11.0.0(commander@11.1.0):
     resolution: {integrity: sha512-06ol6Kn5gPjFY6v0vWOZ84nQwyqhZdaeZCHYH3vhwewjpOEjniF1KHZxh18887G3poWiJ8qyq5pb6ANuiddfPQ==}
     peerDependencies:
       commander: 11.0.x
     dependencies:
-      commander: 11.0.0
+      commander: 11.1.0
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -7894,14 +7894,9 @@ packages:
     resolution: {integrity: sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==}
     dev: true
 
-  /commander@11.0.0:
-    resolution: {integrity: sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==}
-    engines: {node: '>=16'}
-
   /commander@11.1.0:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
-    dev: true
 
   /commander@2.13.0:
     resolution: {integrity: sha512-MVuS359B+YzaWqjCL/c+22gfryv+mCBPHAv3zyVI2GN8EY6IRP8VwtasXn8jyyhvvq84R4ImN1OKRtcbIasjYA==}
@@ -8654,7 +8649,7 @@ packages:
     hasBin: true
     dependencies:
       '@one-ini/wasm': 0.1.1
-      commander: 11.0.0
+      commander: 11.1.0
       minimatch: 9.0.2
       semver: 7.5.4
     dev: true
