@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   resolve: ^2.0.0-next.5
 
@@ -96,8 +100,8 @@ devDependencies:
     specifier: 7.38.0
     version: 7.38.0(@types/node@20.8.9)
   '@pulumi/aws':
-    specifier: 6.3.0
-    version: 6.3.0
+    specifier: 6.6.1
+    version: 6.6.1
   '@pulumi/awsx':
     specifier: 1.0.5
     version: 1.0.5
@@ -4527,8 +4531,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/aws@6.3.0:
-    resolution: {integrity: sha512-BOuIMoPg2bD4AIxU6PZq6k/lIzZnR5JQpozEtlFEpSGj81ECALn17pPqnqlYTGCCevWySK/L+kLCj3rKVzn+7A==}
+  /@pulumi/aws@6.6.1:
+    resolution: {integrity: sha512-fpjiZ1BwTBbGdI+FiNlSN6//nXBDgLSUhl2+QMMYbB68reJUaVIRe/h73F1SxCwRm12fL9rFrsG2qEf5HYk6wA==}
     dependencies:
       '@pulumi/pulumi': 3.86.0
       builtin-modules: 3.0.0
@@ -17775,7 +17779,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
