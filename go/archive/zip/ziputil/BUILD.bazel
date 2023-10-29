@@ -3,6 +3,6 @@ load("//go:rules.bzl", "go_library")
 go_library(
     name = "ziputil",
     srcs = glob(["*.go"]),
-    importpath = "github.com/zemnmez/monorepo/go/archive/zip/ziputil",
+    importpath = "github.com/zemn-me/monorepo/go/archive/zip/ziputil",
     visibility = ["//visibility:public"],
 )
