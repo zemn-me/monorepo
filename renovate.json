@@ -16,7 +16,8 @@
     "autodiscoverFilter": [ "zemn-me/monorepo" ],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
-		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
+		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
+		"rm -rf dist"
 	],
 	"packageRules": [
 		{
@@ -24,7 +25,8 @@
 			"postUpgradeTasks": {
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
-					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //..."
+					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
+					"rm -rf dist"
 				],
 				"executionMode": "branch",
 				"fileFilters": [ "Cargo.Bazel.lock", "Cargo.toml", "cargo-bazel-lock.json", "**/*.ts"],
