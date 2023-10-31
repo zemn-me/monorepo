@@ -516,6 +516,7 @@ export const Bio: Bio = {
 			title: en`Def Con Black Badge`,
 			tags: [accolade, security],
 			description: en`the highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
+			url: url`https://defcon.org/html/links/dc-black-badge.html#tab-31`,
 		},
 		{
 			date: date(24, 'jul', 2021),
