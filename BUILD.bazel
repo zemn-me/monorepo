@@ -11,6 +11,7 @@ load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("//ts:rules.bzl", "ts_config")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@bazel_gazelle//:def.bzl", "gazelle")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -91,3 +92,23 @@ bin.renovate_config_validator_test(
 )
 
 npm_link_all_packages(name = "node_modules")
+
+# gazelle:prefix github.com/zemnmez/monorepo
+# gazelle:map_kind go_binary go_binary //go:rules.bzl
+# gazelle:map_kind go_library go_library //go:rules.bzl
+# gazelle:map_kind ts_project ts_project //ts:rules.bzl
+# gazelle:resolve proto go google/protobuf/struct.proto @com_github_golang_protobuf//ptypes/struct:struct
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-prune",
+        "-to_macro=bzl/go_deps.bzl%go_dependencies",
+    ],
+    command = "update-repos",
+)
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+)
