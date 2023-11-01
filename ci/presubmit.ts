@@ -102,6 +102,66 @@ const cmd = new Command('presubmit')
 				)
 			);
 		}
+		// test if Gazelle etc would update any of our files.
+		// I think (and this would be preferable) it might be possible
+		// to move this into a bazel test that depends on every single bzl file.
+		//
+		// I am not sure exactly how this would work, however, as you cannot query
+		// for all files at once in a genrule.
+		await new Promise<void>((ok, error) =>
+			child_process
+				.spawn('go', ['mod', 'tidy'], {
+					cwd,
+					stdio: 'inherit',
+				})
+				.on('close', code =>
+					code == 0
+						? ok()
+						: error(
+								new Error(
+									`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+								)
+						  )
+				)
+		);
+
+		await new Promise<void>((ok, error) =>
+			child_process
+				.spawn(
+					'bazel',
+					['run', '//:gazelle-update-repos', '--', '-strict'],
+					{
+						cwd,
+						stdio: 'inherit',
+					}
+				)
+				.on('close', code =>
+					code == 0
+						? ok()
+						: error(
+								new Error(
+									`Gazelle update repos exited with ${code}. This likely means that it needs to be run to add / remove repos.`
+								)
+						  )
+				)
+		);
+
+		await new Promise<void>((ok, error) =>
+			child_process
+				.spawn('bazel', ['run', '//:gazelle', '--', '-strict'], {
+					cwd,
+					stdio: 'inherit',
+				})
+				.on('close', code =>
+					code == 0
+						? ok()
+						: error(
+								new Error(
+									`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+								)
+						  )
+				)
+		);
 
 		if (!o.skipBazelTests) {
 			await Task('Run all bazel tests.')(
