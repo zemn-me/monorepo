@@ -1,0 +1,50 @@
+
+syntax = "proto3";
+
+package proto;
+
+import "proto/vcard.proto";
+import "proto/text.proto";
+import "proto/date.proto";
+
+message Bio {
+    proto.VCard concerning = 1;
+    repeated proto.Text skill = 3;
+    repeated Event event = 2;
+}
+
+message Event {
+    proto.Date date = 1;
+    proto.Text description = 2;
+    repeated Tag tag = 3;
+    proto.Text title = 4;
+    string url = 5;
+    // how relatively important this occurrence is
+    // (for pruning)
+    int32 priority = 6;
+    oneof until {
+        proto.Date finishDate = 7;
+        bool ongoing = 8;
+    }
+}
+
+enum Tag {
+    GAMING = 0;
+    ACCOLADE = 1;
+    TALK = 2;
+    SOFTWARE = 3;
+    REACT = 4;
+    SECURITY = 5;
+    D3 = 6;
+    LIBRARY = 7;
+    DISCLOSURE = 8;
+    COMMENT = 9;
+    WORK = 10;
+    WRITING = 11;
+    SCIENCE = 12;
+    DESIGN = 13;
+    CODE = 14;
+    TYPESCRIPT = 15;
+    NODEJS = 16;
+    GOLANG = 17;
+}
