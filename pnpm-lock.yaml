@@ -103,8 +103,8 @@ devDependencies:
     specifier: 6.7.0
     version: 6.7.0
   '@pulumi/awsx':
-    specifier: 2.1.0
-    version: 2.1.0
+    specifier: 2.1.1
+    version: 2.1.1
   '@pulumi/pulumi':
     specifier: 3.91.1
     version: 3.91.1
@@ -5059,8 +5059,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@2.1.0:
-    resolution: {integrity: sha512-YjdgEOTWPqn/VzToq1mA5iVF3vEsI6tNbqYeiE597szqrANpL+xsMaPgX1jdCz/uHJsKdTzoP0PIRci/PsZQKw==}
+  /@pulumi/awsx@2.1.1:
+    resolution: {integrity: sha512-cYRLKiFdFobWDEKT9Qe4oy4G+c4lO6STFgncZDP9LBGq4LJgxmOyn9ZEipccTAdqrSkojS+3UNh8XFwGRBx0bA==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.438.0
