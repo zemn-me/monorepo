@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+import "proto/text.proto";
+import "proto/date.proto";
+
+package proto;
+
+// vcard compatible person representation
+
+message VCard {
+  // structured name data
+  repeated Name name = 2;
+  // a list of display names in various languages
+  repeated proto.Text formatted_name = 3;
+  repeated proto.Text nickname = 4;
+  repeated Photo photo = 5;
+  repeated Address address = 6;
+  repeated proto.Date birthdate = 7;
+  repeated string note = 8;
+  repeated Email email = 9;
+  repeated Phone phone = 10;
+  repeated URL url = 11;
+}
+
+message Address {
+    // should be empty
+    string post_office_box = 1;
+    // should be empty
+    string extended_address = 2;
+    string street_address = 3;
+    string locality = 4;
+    string region = 5;
+    string postal_code = 6;
+    string country = 7;
+    string label = 8;
+    string language = 9;
+}
+
+message URL {
+    // label for the URL, e.g. "twitter"
+    string type = 1;
+    string value = 2;
+}
+
+message Name {
+  string language = 1;
+  string family_name = 2;
+  string given_name = 3;
+  string middle_name = 4;
+  string prefix = 5;
+  string suffix = 6;
+}
+
+message Photo {
+  bytes photo_data = 1;
+  string type = 2;
+}
+
+message Email {
+  string email = 1;
+  string type = 2;
+}
+
+message Phone {
+  string number = 1;
+  string phoneType = 2;
+}

@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+
+go_test(
+    name = "testing_test",
+    srcs = ["vcard_example_test.go"],
+    data = [
+        "vcard_example.textproto",
+    ],
+    deps = [
+        "//proto",
+        "@org_golang_google_protobuf//encoding/prototext",
+    ],
+)
