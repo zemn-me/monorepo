@@ -3,7 +3,6 @@ syntax = "proto3";
 package gen;
 
 import "project/cultist/proto/cultist.proto";
-import "google/protobuf/struct.proto";
 
 message Core {
     repeated cultist.Culture cultures = 1;
@@ -16,5 +15,5 @@ message Core {
     repeated cultist.Setting settings = 8;
     repeated cultist.Recipe recipes = 9;
 
-    repeated google.protobuf.Struct endings = 10;
+    repeated string endings = 10;
 }
