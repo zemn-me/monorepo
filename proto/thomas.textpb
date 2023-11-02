@@ -1,0 +1,42 @@
+# proto-file: third_party/ecclesia/lib/redfish/topology_config.proto
+# proto-message: TopologyConfig
+
+name: {
+    language: "en_GB"
+    family_name: "Shadwell"
+    given_name: "Thomas"
+    middle_name: "Neil James"
+}
+
+formatted_name: {
+    language: "en_GB"
+    text: "Thomas Neil James Shadwell"
+}
+
+nickname: "zemnmez"
+
+birthdate: {
+    year: 1994
+    month: 5
+    day: 17
+}
+
+email: {
+    email: "thomas@shadwell.im"
+}
+
+
+url: {
+    type: "Twitter"
+    value: "https://twitter.com/zemnmez"
+}
+
+url: {
+    type: "GitHub"
+    value: "https://github.com/zemnmez"
+}
+
+url: {
+    type: "LinkedIn"
+    value: "https://www.linkedin.com/in/thomas-shadwell"
+}
