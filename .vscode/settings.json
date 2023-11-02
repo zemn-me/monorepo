@@ -38,8 +38,6 @@
 			"-bazel-testlogs",
 			"-bazel-mypkg",
 		],
-		"formatting.gofumpt": true,
-		"formatting.local": "github.com/my/mypkg",
 		"ui.completion.usePlaceholders": true,
 		"ui.semanticTokens": true,
 		"ui.codelenses": {
