@@ -1,0 +1,591 @@
+<!DOCTYPE HTML>
+<head>
+<title>Resistor Colour Identifier / Calculator</title>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="Description" content="A resistor colour calculator that works in reverse, is free, works on mobile, is easy to use and doesn't look like crap.">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link rel="icon" type="image/png" href="i.png" />
+<link rel="apple-touch-icon" href="i-lrg.png" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+<style type="text/css">
+body { font-family: 'Open Sans', sans-serif; }
+body, html, #resistor { width: 100%; height: 100%; dislay: block; margin:0 }
+* { transition: all 1s ease-in-out }
+#resistor .label, #input > * { background-color: black; color: #AA967B ; display:inline-block; font-size: x-large; padding: 2rem 0 2rem 0; width: 100% }
+
+input,textarea, [contenteditable] { -webkit-user-select: text; user-select: text }
+#resistor { display: flex; text-align: center }
+#resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0 }
+#resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 ; overflow: hidden; white-space: nowrap ; color: transparent }
+#resistance:after { content: "Ω" }
+#tolerance:before { content: "(±" }
+#tolerance:after { content: "%)" }
+a:link, a:visited { color: inherit; text-decoration: none; border-bottom: 1px solid #AA967B }
+a:visited { border-bottom-style: dotted }
+a.img { border: none }
+
+#input { position:fixed; text-align:center; top:0; left:0; width:100%; height:100%; display:flex; pointer-events: none }
+
+#input #inputdata { border: 1px solid black ; border-width: 1px 0 1px 0; transition: 0.2s ease-in-out; }
+#input.invalid #inputdata{ border-color: #AA967B }
+
+#input > * { margin: auto; pointer-events: all }
+#inputdata > * { font-size: 4rem }
+#tolerance { font-size: 100%; vertical-align: super }
+#qmark { display: none; line-height: 4rem; flex-grow: 0; flex-basis: 0; font-size: 3rem; float: right; position: absolute; right: 0;
+  font-size: 3rem; width: 4rem; height: 4rem ; display: inline-block ; background-color: white ; color:black; margin: 3rem ; bottom: 0;
+  text-align: center }
+label[for] { cursor: pointer }
+
+footer { width: 100%;  color: #AA967B; background-color:black; position: fixed; bottom: 0; right: 0; height:100%; overflow: auto }
+footer > div { max-width: 30rem ; margin: 0 auto; margin-top: 3rem }
+footer .logo { width: auto; height: 1.5em ; vertical-align: middle ; margin: 0 1rem 0 1rem }
+footer .head { width: 100%; text-align: center ; margin-bottom: 2rem }
+#showfooter:not(:checked) ~ label > footer { overflow: hidden; height: 0; padding:0 }
+#footericon { font-size: 4rem; bottom: 0; right: 0; position: fixed; z-index: 10; background-color: black; padding: 1rem; color: #AA967B; box-sizing: border-box;
+  width: 10rem; height: 10rem; text-align: center }
+
+#colourValues, #toleranceValues { display: flex; width: 100% ; flex-wrap: wrap; }
+.swatch { padding: 0 0.2rem; display:inline-block; color:black; flex-grow: 1; text-align: center; text-shadow: 0.05em 0.05em white }
+.swatch .label { background-color: black; color: white }
+
+#diagram { width: 100%; text-align: center; font-size: 150%; margin-top: 1.5em }
+#diagram .swatch { padding:0 0.2rem; }
+
+
+#diagram .unit:nth-last-child(3):before { content: " x 10" }
+#diagram .unit:nth-last-child(3) .swatch { font-size: 50% ; vertical-align: super }
+
+
+
+#diagram .unit:nth-last-child(2):before { content: " = " }
+#diagram .unit:nth-last-child(2) .swatch { width: auto; color:inherit; text-shadow: none }
+
+#diagram .unit:last-child:before { content: " @ (±";}
+#diagram .unit:last-child:after { content: "%)";}
+
+#colourdrawer { position: fixed; width: 100%; height: 100%; bottom:0; right:0; overflow: auto; display: flex;
+  transition: all 0.4s ease-in-out }
+
+#showcolourdrawer:not(:checked) ~ * #colourdrawer { overflow: hidden; height: 0; padding: 0 }
+
+#colourselector { width: 100%; height: 100%; background-color:black; max-width: 20rem; max-height: 20rem ; display: flex; ; margin: auto; min-width: 90%;
+  flex-wrap: wrap }
+#colourselector .swatch { flex-grow: 1; flex-basis: 0; cursor: pointer; min-width: 20% }
+</style>
+</head>
+<body>
+<!-- google tracking shit -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71865388-1', 'auto');
+  ga('send', 'pageview');
+</script>
+	<div id="resistor">
+
+	</div>
+
+	<div id="input">
+		<div id="inputdata">
+		<span id="resistance" contentEditable="true">Please enable javascript</span> <span id="tolerance" contentEditable="true">thanks :^)</span>
+		</div>
+	</div>
+
+	<label id="qmark" for="showfooter">?</label>
+	<input id="showfooter" type="checkbox" style="display:none">
+	<label for="showfooter">
+	<footer>
+	  <div>
+	  <div class="head">&mdash; <a href="//ve.no.ms" class="img"><svg class="logo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 446.31 347.69"><g transform="translate(-148.28 -442.12)"><path fill="#AA967B" vector-effect="non-scaling-stroke" d="m322.12 442.12-119.56 119.57 32.85 32.84 119.56-119.53-32.85-32.88zm98.625 0l-32.83 32.88 119.56 119.53 32.84-32.84-119.56-119.57zm-49.3 59.26-114.6 114.59 114.6 114.59 114.59-114.59-114.59-114.59zm-190.32 81.74-32.84 32.85 32.84 32.84 32.85-32.84-32.85-32.85zm380.62 0-32.844 32.844l32.85 32.85 32.84-32.84-32.84-32.85zm-326.33 54.29-32.85 32.84 119.56 119.56 32.85-32.87-119.56-119.53zm272.06 0l-119.56 119.53 32.84 32.87 119.56-119.56-32.84-32.84z"/></g></svg></a> &mdash;</div>
+		<ul>
+			<li>Click on a field such as resistance, tolerance or a colour to edit it, the band colours will be updated corresponding
+			to the colour on a resistor in real time.</li>
+			<li>Press this dialog to close it.</li>
+			<li>Tolerance band 20% is called "transparent" because it was easier to code. "absent", "none" and "empty" also work.</li>
+			<li>Both "10GΩ" and "10 gigaΩ" notations are supported. This is case-sensitive so "10mΩ" will not work.</li>
+			<li>Precision is guessed; 1k and 11k are four band resistors, 111k is five band (usually blue cased in real life).
+			  For extra bands, just type a number of non-zero numbers into the resistance input, eg "111" will give you 5 bands.</li>
+			<li>If an invalid resistor is entered based on colour, the center bar will have an outline.</li>
+			<li>The mobile version now has a different colour selector where you don&rsquo;t need to type. It&rsquo;s possible (and quite easy)
+			  to select colours for invalid resistors with this feature, however. Gold and silver are only viable choices for the last band.</li>
+			<li>You can see all the colours by typing 1023456789. Tolerance comes in gold, silver and transparent for 5% 10% 20% respectively.</li>
+			<li>Has an icon assigned for adding to your iOS homepage. Press the up arrow in a box icon in Safari.</li>
+			<li>Some older versions of iOS do not support contentEditable, an HTML5 technology which is used for input here,
+			check <a href="http://caniuse.com/#feat=contenteditable">here</a> for a list of supported / unsupported browsers</li>
+			<li>There's a fairly useful Javascript API for dealing with resistors. Type "resistor" in your Javascript console to get the current
+			resistor, or use new Resistor(resistance, tolerance) to make a new Resistor object. You can use Resistor.bands() to get
+			the coloured bands.</li>
+			<li>The full code is on github <a href="//github.com/venoms/resistor-colours">here</a>, I&rsquo;m
+			happy to take issues and pull requests there.</li>
+		</ul>
+		<div id="diagram"></div>
+		</div>
+	</footer>
+	</label>
+
+	<input id="showcolourdrawer" type="checkbox" style="display:none">
+	<label for="showcolourdrawer">
+	<div id="colourdrawer">
+	  <div id="colourselector">
+	  </div>
+	</div>
+	</label>
+
+<!--VE.NO.MS-->
+	<script>
+
+function noop(){};
+
+function invertMap(m) {
+	var o = {};
+
+	var set = function(k, v) {
+		if (k in o) {
+			if (o[k] instanceof Array) {
+				o[k].push(v)
+			} else o[k] = [o[k], v];
+		} else o[k] = v;
+	}
+	for (var k in m)
+		if (m[k] instanceof Array) {
+			for (var i in m[k])
+				set(m[k][i], k)
+		} else set(m[k], k);
+
+	return o;
+}
+
+var siMultipliers = {
+	24: ["Y", "yotta"],
+	21: ["Z", "zetta"],
+	18: ["E", "exa"],
+	15: ["P", "peta"],
+	12: ["T", "tera"],
+	9: ["G", "giga"],
+	6: ["M", "mega"],
+	3: ["k", "kilo"],
+	2: ["h", "hecto"],
+	1: ["da", "deca"],
+	0: [""],
+
+	"-1": ["d", "deci"],
+	"-2": ["c", "centi"],
+	"-3": ["m", "mili"],
+	"-6": ["μ", "u", "micro"],
+	"-9": ["n", "nano"],
+	"-12": ["p", "pico"],
+	"-15": ["f", "femto"],
+	"-18": ["a", "atto"],
+	"-21": ["z", "zepto"],
+	"-24": ["y", "yocto"]
+};
+
+//since nobody calls 10ohm 1da ohm??
+var realisticSiMultipliers =
+	[0, 34, 21, 18, 15, 12, 9, 6, 3, -3, -6, -9, -12, -15, -18, -21, -24];
+
+function subset(ks, o) {
+	var o2 = {};
+	for (var i in ks) o2[ks[i]] = o[ks[i]];
+
+	return o2;
+};
+
+realisticSiMultipliers = subset(realisticSiMultipliers,
+	siMultipliers);
+
+
+
+var reverseSiMultipliers = invertMap(siMultipliers);
+
+function scientificNotation(n) {
+	var e = 0;
+	var k = 0;
+	while( (k = n / Math.pow(10, e)) > 1 )
+		e+=1
+	e-=1
+	k *= 10
+
+
+	return [k, e];
+}
+
+function renderScientificSi(n) {
+	return renderSi.apply(0, scientificNotation(n));
+}
+
+function parseSi(s) {
+	var g = /([\d\.]+) ?(.*)/.exec(s);
+	if (g == null) return undefined;
+
+	var n = g[1], unit = g[2];
+
+	var unit = reverseSiMultipliers[unit];
+	if (unit == undefined) return undefined;
+
+	return n * Math.pow(10, unit);
+}
+
+function renderSi(n, mul) {
+	// find the _closest_ unit
+	var closest = Object.keys(realisticSiMultipliers)
+		.map(function(v){
+			return -(v - mul)
+		}).filter (function(v){
+			return !(v < 0)
+		});
+
+	var closest = Math.min.apply(0, closest);
+
+	if (closest == undefined)
+		throw "this probably shouldn't happen";
+
+	if (closest < 0)
+		throw "this should never happen " + closest;
+
+	// we recover the actual index from
+	// the difference by adding mul back again
+	var i = (-closest) + mul;
+
+	var unit = siMultipliers[i];
+
+
+	if (unit == undefined || unit[0] == undefined)
+		throw "this should never happen (" + (i) + ")";
+
+	// if we didn't manage to find a power that
+	// worked exactly, we need to add the difference to
+	// the significant figures
+	n *= Math.pow(10, closest);
+
+
+	var unit = unit[0];
+
+	return unit.length > 2 ?
+		Math.round(n) + " " + unit:
+		Math.round(n) + "" + unit;
+}
+
+function Resistor(resistance, tolerance) {
+	this.resistance = resistance;
+	this.tolerance = tolerance;
+	this.multiplier = 0;
+
+	if (resistance == 0) return;
+	switch(this.resistance < 1){
+	case true:
+		while((this.resistance % (Math.pow(10, this.multiplier -= 1))) != 0 );
+		break;
+	case false:
+		while((this.resistance % (Math.pow(10, this.multiplier += 1))) == 0 );
+		this.multiplier -= 1;
+		break;
+	default:
+		throw "this should not happen";
+	}
+
+}
+
+Resistor.resistanceFromBands = function(vbands) {
+	var bands = Array.prototype.slice.apply(arguments);
+	var multiplier = Resistor.prototype.reverseNumericColorMap[bands.pop()];
+	var fail = false;
+
+	if (multiplier == undefined) return undefined;
+
+	for (var i in bands) 
+		if ((bands[i] = Resistor.prototype.reverseNumericColorMap[bands[i]]) == undefined)
+			return undefined;
+
+	return Math.pow(10,multiplier) *  bands.join("");
+}
+
+Resistor.fromBands = function(vbands) {
+	var bands = Array.prototype.slice.apply(arguments);
+	var tolerance = Resistor.prototype.reverseToleranceMap[bands.pop()];
+
+	var resistance = Resistor.resistanceFromBands.apply(0,bands);
+
+	return new Resistor(resistance, tolerance);
+}
+
+Resistor.prototype.toleranceMap = {
+	1: "brown",
+	2: "red",
+	"0.5": "green",
+	"0.25": "blue",
+	"0.1": "violet",
+	"0.05": "gray",
+	5: "gold",
+	10: "silver",
+	20 : "transparent"
+}
+
+Resistor.prototype.reverseToleranceMap =
+	invertMap(Resistor.prototype.toleranceMap);
+
+Resistor.prototype.numericColorMap = {
+	0: "black",
+	1: "brown",
+	2: "red",
+	3: "orange",
+	4: "yellow",
+	5: "green",
+	6: "blue",
+	7: "violet",
+	8: "gray",
+	9: "white",	
+
+	"-1": "gold",
+	"-2": "silver"
+};
+
+var niceColours = {
+	"brown": "#583A31",
+	"navy": "#001F3F",
+	"blue": "#0074D9",
+	"aqua": "#7FDBFF",
+	"teal": "#39CCCC",
+	"olive": "#3D9970",
+	"green": "#2ECC40",
+	"lime": "#01FF70",
+	"yellow": "#FFDC00",
+	"orange": "#FF851B",
+	"red": "#FF4136",
+	"fuchsia": "#F012BE",
+	"purple": "#B10DC9",
+	"maroon": "#85144B",
+	"white": "#FFFFFF",
+	"gray": "#AAAAAA",
+	"silver": "#DDDDDD",
+	"black": "#111111"
+};
+
+Resistor.prototype.niceBands = function() {
+	var bands = this.bands();
+	return bands.map(function(v){ return v in niceColours? niceColours[v]: v });
+}
+
+
+Resistor.prototype.reverseNumericColorMap =
+	invertMap(Resistor.prototype.numericColorMap);
+
+Resistor.prototype.toleranceBand = function() {
+	return this.toleranceMap[this.tolerance];
+}
+
+Resistor.prototype.invalid = function() {
+	return this.bands().some(function(v){ return v == undefined })
+}
+
+Resistor.prototype.resistanceBands = function() {
+	var mul = this.multiplier;
+	var self = this;
+	var sfString = (this.resistance / Math.pow(10,this.multiplier)).toString();
+
+	var mul = this.multiplier;
+
+	// if we don't have enough significant
+	// figures, (resistors don't generally go below 2)
+	// consume a multiplier of 10 and add a zero.
+	if (this.resistance != 0 && sfString.length < 2) {
+		sfString += "0";
+		mul -= 1
+	}
+
+	var s = sfString
+		.split("")
+		.map(function(v){ return self.numericColorMap[v] });
+
+	if (this.resistance != 0)
+		s.push(self.numericColorMap[mul]);
+
+	return s;
+}
+
+Resistor.prototype.bands = function() {
+	return this.resistanceBands().concat(this.toleranceBand());
+};
+
+function selectAllFocus() {
+	var self = this;
+	window.setTimeout(function() {
+		var sel, range;
+		if (window.getSelection && document.createRange) {
+			range = document.createRange();
+			range.selectNodeContents(self);
+			sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+		} else if (document.body.createTextRange) {
+			range = document.body.createTextRange();
+			range.moveToElementText(div);
+			range.select();
+		}
+	}, 1);
+};
+
+var resistance = document.getElementById("resistance");
+var tolerance = document.getElementById("tolerance");
+var input = document.getElementById("input");
+var colourClick = noop;
+
+var mobile = false;
+
+if (mobile = false && /mobile/g.test(navigator.userAgent.toLowerCase())) {
+
+  var labels = d3.set(Object.keys(Resistor.prototype.reverseNumericColorMap)
+	  .concat(Object.keys(Resistor.prototype.reverseToleranceMap)));
+
+  labels = labels.values();
+    // mobile colour picker
+    d3.select("#colourselector").selectAll(".swatch")
+      .data(labels).enter()
+      .append("div")
+	.classed("swatch", true)
+	.attr("data-colour", function(v) { return v })
+	.style("background-color", function(v) {
+	  return v in niceColours? niceColours[v]: v })
+	.on("click", function() {
+	  window.selectedColourElement.innerText = this.getAttribute("data-colour");
+
+	  window.selectedColourElement = null;
+
+
+	  // close drawer
+
+	  updateResistorFromColours();
+
+	});
+
+    selectAllFocus = noop;
+
+    colourClick = function() {
+      window.selectedColourElement = this;
+      document.querySelector("#showcolourdrawer").checked = true;
+    }
+}
+
+
+
+function updateResistor(r, keepText, keepColours) {
+	window.resistor = r;
+	if (!keepText) {
+		resistance.textContent = renderScientificSi(r.resistance);
+		tolerance.textContent = r.tolerance;
+		console.log("hi");
+	}
+
+	var bands = d3.select("#resistor").selectAll(".stripe")
+		.data(r.bands());
+
+	// update existing
+
+	var backgroundColorSetter = function(d) { return d in niceColours? niceColours[d]: d };
+
+
+
+	bands.enter()
+		.append("div")
+			.classed("stripe", true)
+
+			.append("div")
+				.classed("label", true)
+				.attr("contentEditable", !mobile)
+				.on("keydown", function() { if (d3.event.keyCode == 13) this.blur(), d3.event.preventDefault() })
+				.on("focus", selectAllFocus)
+				.on("click", colourClick)
+				.on("keyup", updateResistorFromColours.bind(0, false, false));
+	if (keepColours) {
+		bands
+			.style("background-color", backgroundColorSetter )
+			.classed("removed", false);
+	} else bands
+			.style("background-color", backgroundColorSetter )
+			.classed("removed", false)
+
+			.select(".label")
+				.text( function(d) { return d } );
+
+	bands.exit()
+		.classed("removed", true);
+
+	/*
+	helper code, it looks kinda dumb at the moment so I'm leaving it out. Displays a nice
+	little diagram showing how the value is calculated
+
+	var toleranceBand = r.toleranceBand(); 
+	var numberedBands = r.resistanceBands().map(function(v){ return [v, Resistor.prototype.reverseNumericColorMap[v]] });
+
+	numberedBands.push(["transparent", r.resistance]);
+	numberedBands.push([toleranceBand, Resistor.prototype.reverseToleranceMap[toleranceBand]]);
+
+	var diagramBands = d3.select("#diagram").selectAll(".unit")
+		.data(numberedBands);
+
+	console.log(numberedBands);
+
+
+	diagramBands.enter()
+		.append("span")
+			.classed("unit", true)
+
+			.append("div")
+				.classed("swatch", true)
+
+
+
+	diagramBands
+		.select(".swatch")
+			.text(function(d){  console.log(d); return d[1] })
+			.style("background-color", function(d){ return d[0] in niceColours?niceColours[d[0]]: d[0] });
+
+	diagramBands.exit().remove();
+
+	*/
+
+
+}
+
+
+function updateResistorFromColours(keepText, keepColours) {
+  var nR = Resistor.fromBands.apply(Resistor,d3.selectAll("#resistor .stripe:not(.removed) .label")[0].map(function(v) {
+    return v.textContent.trim().toLowerCase()
+	  .replace(/none|empty|absent/, "transparent")
+	  .replace(/grey/, "gray")
+  }));
+  if (nR.invalid()) {
+	  input.className = "invalid";
+  } else {
+	  input.className = "";
+	  updateResistor(nR, keepText, keepColours);
+  }
+}
+
+
+d3.selectAll("#input [contentEditable=true]")
+	.on("keydown", function() { if (d3.event.keyCode == 13) this.blur(), d3.event.preventDefault() })
+	.on("focus", selectAllFocus)
+	.on("keyup", function() {
+		var nR = new Resistor(parseSi(resistance.textContent), tolerance.textContent);
+
+		if (nR.invalid()) {
+			input.className = "invalid";
+		} else {
+			input.className = "";
+			updateResistor(nR, true);
+		}
+	})
+
+// initialize with a 100K 4 band 5% tolerance Resistor
+updateResistor(new Resistor(123456789E3, 5));
+updateResistor(new Resistor(100E3, 5));
+
+	</script>
+
+
+</body>
