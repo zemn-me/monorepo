@@ -573,6 +573,12 @@ export const Bio: Bio = {
 			description: en`Vulnerability in maintained fork of most popular Javascript cryptography library allowing forgery of digital signatures. CVE-2023-46233`,
 			url: url`https://github.com/advisories/GHSA-mpj8-q39x-wq5h`,
 		},
+		{
+			date: date(1, 'jul', 2021),
+			title: en`Apple Hall of Fame`,
+			description: en`For major security issue covered in 'How to Hack Apple ID'.`,
+			url: url`https://support.apple.com/en-gb/HT213636#:~:text=Thomas%20Shadwell%20(%40zemnmez)%20of%20Google`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
