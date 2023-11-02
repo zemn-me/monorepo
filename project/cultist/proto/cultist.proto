@@ -3,8 +3,6 @@ syntax = "proto3";
 
 package cultist;
 
-import "google/protobuf/struct.proto";
-
 message Culture {
     // unique id for this culture
     // @example "german"
@@ -13,7 +11,7 @@ message Culture {
     bool released = 3;
     string endonym = 4;
     string exonym = 5;
-    google.protobuf.Struct uilabels = 6;
+    string uilabels = 6;
     bool boldallowed = 7;
 }
 
@@ -38,7 +36,7 @@ message Element {
     string icon = 5;
     bool unique = 6;
     // map<string, string> or map<string, []{ id: xxx } etc...
-    google.protobuf.Struct xtriggers = 7;
+    string xtriggers = 7;
     string description = 8;
     map<string, uint64> aspects = 9;
     uint64 lifetime = 10;
@@ -64,7 +62,7 @@ message Recipe {
     string actionid_incorrect = 19 [ json_name = "actionId" ];
     map<string, int64> aspects = 3;
     // map<string, int64 | string>
-    google.protobuf.Struct requirements = 8;
+    string requirements = 8;
     string description = 4;
     string label = 5;
     uint64 warmup = 6;
@@ -85,7 +83,7 @@ message Recipe {
     repeated Recipe linked = 15;
     map<string, int64> tablereqs = 16;
     // map<string, int64 | string>
-    google.protobuf.Struct effects = 17;
+    string effects = 17;
     Deck internaldeck = 20;
     map<string, int64> deckeffects = 21;
     string burnimage = 22;
