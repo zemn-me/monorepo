@@ -29,8 +29,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.2
   devtools-protocol:
-    specifier: ^0.0.1213968
-    version: 0.0.1213968
+    specifier: ^0.0.1218079
+    version: 0.0.1218079
   eslint-mdx:
     specifier: ^2.1.0
     version: 2.1.0(eslint@8.52.0)
@@ -94,8 +94,8 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.2)(react@18.2.0)
   '@microsoft/api-documenter':
-    specifier: 7.23.10
-    version: 7.23.10(@types/node@20.8.10)
+    specifier: 7.23.11
+    version: 7.23.11(@types/node@20.8.10)
   '@microsoft/api-extractor':
     specifier: 7.38.1
     version: 7.38.1(@types/node@20.8.10)
@@ -103,8 +103,8 @@ devDependencies:
     specifier: 6.7.0
     version: 6.7.0
   '@pulumi/awsx':
-    specifier: 2.0.3
-    version: 2.0.3
+    specifier: 2.1.0
+    version: 2.1.0
   '@pulumi/pulumi':
     specifier: 3.91.1
     version: 3.91.1
@@ -139,8 +139,8 @@ devDependencies:
     specifier: 20.8.10
     version: 20.8.10
   '@types/react':
-    specifier: 18.2.33
-    version: 18.2.33
+    specifier: 18.2.34
+    version: 18.2.34
   '@types/react-dom':
     specifier: 18.2.14
     version: 18.2.14
@@ -371,7 +371,7 @@ packages:
     resolution: {integrity: sha512-ENNPPManmnVJ4BTXlOjAgD7URidbAznURqD0KvfREyc4o20DPYdEldU1f5cQ7Jbj0CJJSPaMIk/9ZshdB3210w==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.357.0
+      '@aws-sdk/types': 3.433.0
       tslib: 1.14.1
     dev: true
 
@@ -387,7 +387,7 @@ packages:
       '@aws-crypto/ie11-detection': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.357.0
+      '@aws-sdk/types': 3.433.0
       '@aws-sdk/util-locate-window': 3.310.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -4160,14 +4160,14 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.23.10(@types/node@20.8.10):
-    resolution: {integrity: sha512-9jPlK5EeScxmkhaAyhQI+C84zJ34sjD/k/dEEsJGOrgrLfS8G/wlkVEJZdTz3oBxtWd9SqsxopvcQECUlnoicQ==}
+  /@microsoft/api-documenter@7.23.11(@types/node@20.8.10):
+    resolution: {integrity: sha512-lrtB1DDN3xlvadGPKtR+Rdo3Dn6039D7URrHtINCG8o4bUdrRrMidU3WNWjAXktM94XLa58nxeoKCscOmEqVtQ==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.28.2(@types/node@20.8.10)
       '@microsoft/tsdoc': 0.14.2
       '@rushstack/node-core-library': 3.61.0(@types/node@20.8.10)
-      '@rushstack/ts-command-line': 4.17.0
+      '@rushstack/ts-command-line': 4.17.1
       colors: 1.2.5
       js-yaml: 3.13.1
       resolve: 2.0.0-next.5
@@ -5059,8 +5059,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@2.0.3:
-    resolution: {integrity: sha512-VK0GzfhjI3PZum5n6VjFNWdJqj/FgqunMEQs94szRtHDqBb1p7OLe51MNOA/DT8lEaKSKyYcJ7qzuB52V2XJvw==}
+  /@pulumi/awsx@2.1.0:
+    resolution: {integrity: sha512-YjdgEOTWPqn/VzToq1mA5iVF3vEsI6tNbqYeiE597szqrANpL+xsMaPgX1jdCz/uHJsKdTzoP0PIRci/PsZQKw==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.438.0
@@ -5662,6 +5662,15 @@ packages:
 
   /@rushstack/ts-command-line@4.17.0:
     resolution: {integrity: sha512-1S0sXuEpZlzKTfvUqNs7Rg4leVkeLJc4Dn9cm+pSIn35a0Ztp5GxPN2gabD2G4RrQoQcJLLyVu+twzrJl1C0eA==}
+    dependencies:
+      '@types/argparse': 1.0.38
+      argparse: 1.0.10
+      colors: 1.2.5
+      string-argv: 0.3.2
+    dev: true
+
+  /@rushstack/ts-command-line@4.17.1:
+    resolution: {integrity: sha512-2jweO1O57BYP5qdBGl6apJLB+aRIn5ccIRTPDyULh0KMwVzFqWtw6IZWt1qtUoZD/pD2RNkIOosH6Cq45rIYeg==}
     dependencies:
       '@types/argparse': 1.0.38
       argparse: 1.0.10
@@ -7010,23 +7019,23 @@ packages:
   /@types/react-dom@18.2.14:
     resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
     dependencies:
-      '@types/react': 18.2.33
+      '@types/react': 18.2.34
     dev: true
 
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
-      '@types/react': 18.2.33
+      '@types/react': 18.2.34
     dev: true
 
   /@types/react-reconciler@0.28.6:
     resolution: {integrity: sha512-NlilRDg7yjtFX568NA046OiHWbz5EKM1q5FSXi2GP7WKyU+Vem4NJQcG+ZaMiWotyPiYqkIb6NKJkFuplbchAA==}
     dependencies:
-      '@types/react': 18.2.33
+      '@types/react': 18.2.34
     dev: true
 
-  /@types/react@18.2.33:
-    resolution: {integrity: sha512-v+I7S+hu3PIBoVkKGpSYYpiBT1ijqEzWpzQD62/jm4K74hPpSP7FF9BnKG6+fg2+62weJYkkBWDJlZt5JO/9hg==}
+  /@types/react@18.2.34:
+    resolution: {integrity: sha512-U6eW/alrRk37FU/MS2RYMjx0Va2JGIVXELTODaTIYgvWGCV4Y4TfTUzG8DdmpDNIT0Xpj/R7GfyHOJJrDttcvg==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -9273,8 +9282,8 @@ packages:
     resolution: {integrity: sha512-2cZlHxC5IlgkIWe2pSDmCrDiTzbSJWywjbDDnupOImEBcG31CQgBLV8wWE+5t+C4rimcjHsbzy7CBzf9oFjboA==}
     dev: true
 
-  /devtools-protocol@0.0.1213968:
-    resolution: {integrity: sha512-o4n/beY+3CcZwFctYapjGelKptR4AuQT5gXS1Kvgbig+ArwkxK7f8wDVuD1wsoswiJWCwV6OK+Qb7vhNzNmABQ==}
+  /devtools-protocol@0.0.1218079:
+    resolution: {integrity: sha512-TnZBPyK+guVpHi5WH6s4aeMUpuhsCpjKfoKaE9ckFNlu8p01zvJl/iDi6x7eQ6j7lZ/1Y2eCX43tT0U5tVL6dg==}
     dev: false
 
   /dezalgo@1.0.4:

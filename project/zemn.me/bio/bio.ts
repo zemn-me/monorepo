@@ -516,6 +516,7 @@ export const Bio: Bio = {
 			title: en`Def Con Black Badge`,
 			tags: [accolade, security],
 			description: en`the highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
+			url: url`https://defcon.org/html/links/dc-black-badge.html#tab-31`,
 		},
 		{
 			date: date(24, 'jul', 2021),
@@ -571,6 +572,12 @@ export const Bio: Bio = {
 			title: en`crypto-es PBKDF2 1,000 times weaker than specified in 1993 and 1.3M times weaker than current standard`,
 			description: en`Vulnerability in maintained fork of most popular Javascript cryptography library allowing forgery of digital signatures. CVE-2023-46233`,
 			url: url`https://github.com/advisories/GHSA-mpj8-q39x-wq5h`,
+		},
+		{
+			date: date(1, 'jul', 2021),
+			title: en`Apple Hall of Fame`,
+			description: en`For major security issue covered in 'How to Hack Apple ID'.`,
+			url: url`https://support.apple.com/en-gb/HT213636#:~:text=Thomas%20Shadwell%20(%40zemnmez)%20of%20Google`,
 		},
 		// END TOOL ASSISTED SORT
 	],
