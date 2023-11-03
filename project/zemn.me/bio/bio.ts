@@ -357,7 +357,7 @@ export const Bio: Bio = {
 			priority: 6,
 			tags: [security, writing, disclosure],
 			title: en`CVE-2016-2049`,
-			url: url`https://cve.mitre.org/cgi-bin/cvetitle.cgi?title:CVE-2016-2049`,
+			url: url`https://nvd.nist.gov/vuln/detail/CVE-2016-2049`,
 		},
 		{
 			date: date(16, 'may', 2016),
