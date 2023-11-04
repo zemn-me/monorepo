@@ -150,3 +150,22 @@
 .links > * {
 	margin: auto;
 }
+
+
+/*
+	some scroll snap logic here
+*/
+.nav {
+	height: 100vh;
+	width: 100vw;
+}
+
+.nav > *, .navAccordionBody > * {
+	display: block
+}
+
+.navAccordionBody {
+	margin-left: 2em;
+}
+
+
