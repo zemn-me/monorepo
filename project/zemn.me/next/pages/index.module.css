@@ -150,3 +150,14 @@
 .links > * {
 	margin: auto;
 }
+
+
+.nav > *, .navAccordionBody > * {
+	display: block
+}
+
+.navAccordionBody {
+	margin-left: 2em;
+}
+
+
