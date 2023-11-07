@@ -4,6 +4,7 @@ import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
+import Link from 'project/zemn.me/next/components/Link';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
@@ -83,9 +84,9 @@ export default function Main() {
 						<p>
 							I am interested in consulting on legal cases. For
 							business, email me at{' '}
-							<a href="mailto:thomas@shadwell.im">
+							<Link href="mailto:thomas@shadwell.im">
 								thomas@shadwell.im
-							</a>
+							</Link>
 							.
 						</p>
 						<p>
@@ -97,13 +98,13 @@ export default function Main() {
 						{bio.Bio.links !== undefined ? (
 							<nav className={style.links}>
 								{bio.Bio.links.map(([text, url]) => (
-									<a
+									<Link
 										href={url.toString()}
 										key={url.toString()}
 										lang={lang.get(text)}
 									>
 										{lang.text(text)}
-									</a>
+									</Link>
 								))}
 							</nav>
 						) : null}
