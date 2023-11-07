@@ -1,5 +1,5 @@
 {
-  "checksum": "4cea3bcde6ec6d74a0ba5695420b070c2704c576134c89d56927a7d7464624d7",
+  "checksum": "2f4be0046f3da85c63efccc51a039cedf0b103c0d6e13d7cb2c76dd762add689",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -904,61 +904,6 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "dashmap 5.5.3": {
-      "name": "dashmap",
-      "version": "5.5.3",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/dashmap/5.5.3/download",
-          "sha256": "978747c1d849a7d2ee5e8adc0159961c48fb7e5db2f06af6723b80123bb53856"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "dashmap",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "dashmap",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "cfg-if 1.0.0",
-              "target": "cfg_if"
-            },
-            {
-              "id": "hashbrown 0.14.2",
-              "target": "hashbrown"
-            },
-            {
-              "id": "lock_api 0.4.11",
-              "target": "lock_api"
-            },
-            {
-              "id": "once_cell 1.18.0",
-              "target": "once_cell"
-            },
-            {
-              "id": "parking_lot_core 0.9.9",
-              "target": "parking_lot_core"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "5.5.3"
-      },
-      "license": "MIT"
-    },
     "digest 0.10.7": {
       "name": "digest",
       "version": "0.10.7",
@@ -1219,36 +1164,6 @@
       },
       "license": "MIT"
     },
-    "hashbrown 0.14.2": {
-      "name": "hashbrown",
-      "version": "0.14.2",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/hashbrown/0.14.2/download",
-          "sha256": "f93e7192158dbcda357bdec5fb5788eebf8bbac027f3f33e719d29135ae84156"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "hashbrown",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "hashbrown",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "edition": "2021",
-        "version": "0.14.2"
-      },
-      "license": "MIT OR Apache-2.0"
-    },
     "heck 0.4.0": {
       "name": "heck",
       "version": "0.4.0",
@@ -1323,13 +1238,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "hstr 0.2.3": {
+    "hstr 0.2.4": {
       "name": "hstr",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/hstr/0.2.3/download",
-          "sha256": "d5700a2810cdc52f9a306f40c88031fac8d480f3d51ef38b9ca9ff5b8d4f3814"
+          "url": "https://crates.io/api/v1/crates/hstr/0.2.4/download",
+          "sha256": "94f8eaaa1bccc114f3ed94b7b66f0195cbf48151402d3efc27f7f6e362042416"
         }
       },
       "targets": [
@@ -1350,10 +1265,6 @@
         ],
         "deps": {
           "common": [
-            {
-              "id": "dashmap 5.5.3",
-              "target": "dashmap"
-            },
             {
               "id": "new_debug_unreachable 1.0.4",
               "target": "debug_unreachable"
@@ -1378,7 +1289,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.2.3"
+        "version": "0.2.4"
       },
       "license": "Apache-2.0"
     },
@@ -1715,11 +1626,11 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.6.1",
+              "id": "swc_atoms 0.6.2",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.5",
+              "id": "swc_common 0.33.6",
               "target": "swc_common"
             }
           ],
@@ -3253,13 +3164,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.6.1": {
+    "swc_atoms 0.6.2": {
       "name": "swc_atoms",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.1/download",
-          "sha256": "3e9ad769aeefe4cf20c3ec29e714c91870fa89307faa4280a644c4c65b5cc692"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.2/download",
+          "sha256": "213e6d4233aed147b56006ed70b6369fa055be3308d22ae9ac8e691677525eb5"
         }
       },
       "targets": [
@@ -3281,7 +3192,7 @@
         "deps": {
           "common": [
             {
-              "id": "hstr 0.2.3",
+              "id": "hstr 0.2.4",
               "target": "hstr"
             },
             {
@@ -3300,17 +3211,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.6.1"
+        "version": "0.6.2"
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.33.5": {
+    "swc_common 0.33.6": {
       "name": "swc_common",
-      "version": "0.33.5",
+      "version": "0.33.6",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.33.5/download",
-          "sha256": "4b33eb74d42276b5f37ac78ed470dd206ece8a2687cfe3a681444f66c29a061f"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.33.6/download",
+          "sha256": "fe655d590dff8f37599d3f31e14ca6ec331cd6b7898252c4cba177a85f98c761"
         }
       },
       "targets": [
@@ -3378,7 +3289,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.6.1",
+              "id": "swc_atoms 0.6.2",
               "target": "swc_atoms"
             },
             {
@@ -3418,7 +3329,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.5"
+        "version": "0.33.6"
       },
       "license": "Apache-2.0"
     },
