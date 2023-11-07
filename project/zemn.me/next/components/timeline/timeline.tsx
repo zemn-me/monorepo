@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import Link from 'project/zemn.me/next/components/Link';
 import * as Bio from 'project/zemn.me/bio';
 import style from 'project/zemn.me/next/components/timeline/timeline.module.css';
 import React from 'react';
@@ -107,9 +108,9 @@ function groupBy<T, Q>(
 function Event({ event: e }: { readonly event: Bio.Event }) {
 	return (
 		<div className={style.event}>
-			<a href={e.url?.toString()} lang={lang.get(e.title)}>
+			<Link href={e.url?.toString()} lang={lang.get(e.title)}>
 				{lang.text(e.title)}
-			</a>{' '}
+			</Link>{' '}
 			{e.description ? (
 				<span lang={lang.get(e.description)}>
 					{addFullStopIfMissing(lang.text(e.description))}
