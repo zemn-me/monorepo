@@ -146,7 +146,7 @@ export const Bio: Bio = {
 			priority: 5,
 			tags: [software, accolade],
 			title: en`Geckoboard Prize`,
-			url: url`https://web.archive.org/web/20121113024249/http://Londonrealtime.co.uk/`,
+			url: url`https://web.archive.org/web/20121113024249/http:%2F%2Flondonrealtime.co.uk/`,
 		},
 		{
 			date: date(25, 'feb', 2020),
@@ -169,7 +169,7 @@ export const Bio: Bio = {
 			priority: 5,
 			tags: [software, accolade],
 			title: en`Better understanding of the work of Parliament Prize`,
-			url: url`https://web.archive.org/web/20121105174535/http://rewiredstate.org:80/blog/2011/11/press-release-for-rewired-state-parliament`,
+			url: url`https://web.archive.org/web/20121105174535/http:%2F%2Frewiredstate.org:80/blog/2011/11/press-release-for-rewired-state-parliament`,
 		},
 		{
 			date: date(1, 'feb', 2011),
@@ -177,7 +177,7 @@ export const Bio: Bio = {
 			priority: 5,
 			tags: [software, accolade],
 			title: en`Best example of Coding`,
-			url: url`https://web.archive.org/web/20120306190316/http://youngrewiredstate.org/2011-08/cant-vote-but-can-put-a-wind-in-governments-sails/`,
+			url: url`https://web.archive.org/web/20120306190316/http:%2F%2Fyoungrewiredstate.org/2011-08/cant-vote-but-can-put-a-wind-in-governments-sails/`,
 		},
 		{
 			date: date(1, 'feb', 2020),
