@@ -151,8 +151,8 @@ devDependencies:
     specifier: 3.0.0
     version: 3.0.0
   '@types/tmp':
-    specifier: 0.2.5
-    version: 0.2.5
+    specifier: 0.2.6
+    version: 0.2.6
   '@types/uuid':
     specifier: 9.0.6
     version: 9.0.6
@@ -7018,6 +7018,10 @@ packages:
 
   /@types/tmp@0.2.5:
     resolution: {integrity: sha512-KodRrjqWrk/3VyzfR4aeXkf2n5Ssg+bvVUhXlvHVffLiIHriLlrO3vYobB+Kvnr9DkNzMiyWHT3G6hT/xX0ryQ==}
+    dev: true
+
+  /@types/tmp@0.2.6:
+    resolution: {integrity: sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==}
     dev: true
 
   /@types/tough-cookie@4.0.2:
