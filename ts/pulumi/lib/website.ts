@@ -117,7 +117,7 @@ export class Website extends pulumi.ComponentResource {
 			const htmlExt = '.html';
 
 			if (dest.endsWith(htmlExt)) {
-				dest.slice(0, -htmlExt.length);
+				dest = dest.slice(0, -htmlExt.length);
 			}
 			return dest;
 		};
