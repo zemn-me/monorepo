@@ -76,10 +76,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "d3fa66a39028e97d76f9e2db8f1b0c11c099e8e01bf363a923074784e451f809",
+        sha256 = "b7387f72efb59f876e4daae42f1d3912d0d45563eac7cb23d1de0b094ab588cf",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.33.0/bazel-gazelle-v0.33.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.33.0/bazel-gazelle-v0.33.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.34.0/bazel-gazelle-v0.34.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.34.0/bazel-gazelle-v0.34.0.tar.gz",
         ],
     )
 
@@ -216,9 +216,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "a949d56fed8fa0a8dd82a0a660acc949253a05b2b0c52a07e4034e27f11218f6",
-        strip_prefix = "rules_js-1.33.1",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.33.1/rules_js-v1.33.1.tar.gz",
+        sha256 = "5af82fe13fecb467e9c2c19765a593de2e1976afd0a1e18a80d930a2465508fc",
+        strip_prefix = "rules_js-1.33.2",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.33.2/rules_js-v1.33.2.tar.gz",
     )
 
     http_archive(
@@ -231,12 +231,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/45948c115bdf6fa70e59c166578246760cc5dd5e.zip",
-        strip_prefix = "json-schemas-45948c115bdf6fa70e59c166578246760cc5dd5e",
+        url = "https://github.com/microsoft/json-schemas/archive/e5930570e5ab6114f6fc869911ea4985d028797c.zip",
+        strip_prefix = "json-schemas-e5930570e5ab6114f6fc869911ea4985d028797c",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "a280978a692aee785dbf0af7e25c2b28e5af95db8804c68392eab9329ac55896",
+        sha256 = "4f45f813856f5c55f2e411e3c5014bd496c9c2307d5e71dfb4a4a1c54eae4d36",
     )
 
     ##########

@@ -121,8 +121,8 @@ devDependencies:
     specifier: 6.0.5
     version: 6.0.5
   '@types/d3-axis':
-    specifier: 3.0.5
-    version: 3.0.5
+    specifier: 3.0.6
+    version: 3.0.6
   '@types/d3-scale':
     specifier: 4.0.8
     version: 4.0.8
@@ -133,8 +133,8 @@ devDependencies:
     specifier: 29.5.8
     version: 29.5.8
   '@types/mime':
-    specifier: 3.0.3
-    version: 3.0.3
+    specifier: 3.0.4
+    version: 3.0.4
   '@types/node':
     specifier: 20.9.0
     version: 20.9.0
@@ -6743,8 +6743,8 @@ packages:
       '@types/node': 20.9.0
     dev: true
 
-  /@types/d3-axis@3.0.5:
-    resolution: {integrity: sha512-ufDAV3SQzju+uB3Jlty7SUb/jMigjpIlvDDcSGvGmmO6OT/sNO93UE0dRzwWOZeBLzrLSA0CQM4bf3iq1std3A==}
+  /@types/d3-axis@3.0.6:
+    resolution: {integrity: sha512-pYeijfZuBd87T0hGn0FO1vQ/cgLk6E1ALJjfkC0oJ8cbwkZl3TpgS8bVBLZN+2jjGgg38epgxb2zmoGtSfvgMw==}
     dependencies:
       '@types/d3-selection': 3.0.5
     dev: true
@@ -6888,8 +6888,8 @@ packages:
     dependencies:
       '@types/unist': 2.0.7
 
-  /@types/mime@3.0.3:
-    resolution: {integrity: sha512-i8MBln35l856k5iOhKk2XJ4SeAWg75mLIpZB4v6imOagKL6twsukBZGDMNhdOVk7yRFTMPpfILocMos59Q1otQ==}
+  /@types/mime@3.0.4:
+    resolution: {integrity: sha512-iJt33IQnVRkqeqC7PzBHPTC6fDlRNRW8vjrgqtScAhrmMwe8c4Eo7+fUGTa+XdWrpEgpyKWMYmi2dIwMAYRzPw==}
     dev: true
 
   /@types/minimatch@5.1.2:
