@@ -5,7 +5,7 @@
 import Head from 'next/head';
 
 const URL =
-	'https://calendar.google.com/calendar/u/0/embed?src=thomas@shadwell.im&src=thomas@metatheory.gg&src=thomas.shadwell@gmail.com';
+	'https://calendar.google.com/calendar/u/0/embed?src=thomas@shadwell.im&src=thomas@metatheory.gg&src=thomas.shadwell@gmail.com&mode=week';
 
 export default function HomePage() {
 	return (
