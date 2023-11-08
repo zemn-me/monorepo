@@ -176,9 +176,9 @@ export class Website extends pulumi.ComponentResource {
 		const indexDocumentObject = guard.must(
 			guard.isDefined,
 			() =>
-				`Cannot find ${getS3Key(args.index)} in [${[
-					...objects.keys(),
-				].join(', ')}]`
+				`Cannot find ${args.index} in [${[...objects.keys()].join(
+					', '
+				)}]`
 		)(objects.get(getS3Key(args.index)));
 
 		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
