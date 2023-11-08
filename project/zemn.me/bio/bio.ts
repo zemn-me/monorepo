@@ -536,7 +536,7 @@ export const Bio: Bio = {
 			date: date(11, 'aug', 2023),
 			title: en`Visual Studio Code is why I have (Workspace) Trust issues`,
 			tags: [security],
-			description: en`talk at Def Con by Sonar R&D including original research into VSCode security, reflecting on my own prior art CVE-2022-41034.`,
+			description: en`talk at Def Con by Sonar R&D including original research into VSCode security, reflecting on my own prior art CVE-2022-41034 (not my talk).`,
 			url: url`https://media.defcon.org/DEF%20CON%2031/DEF%20CON%2031%20presentations/Thomas%20Chauchefoin%20Paul%20Gerste%20-%20Visual%20Studio%20Code%20is%20why%20I%20have%20%28Workspace%29%20Trust%20issues.pdf`,
 		},
 		{
