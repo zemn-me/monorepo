@@ -23,11 +23,6 @@ on:   # yamllint disable-line rule:truthy
 
 jobs:
   Presubmit:
-    # this should stop presubmits being run even when there
-    # is a successor commit in pull request.
-    concurrency:
-      group: concurrency-ci-${{ github.head_ref }}
-      cancel-in-progress: true
     # github's security settings mean that pull requests
     # can only pull from the upstream 'main' cache.
     #
