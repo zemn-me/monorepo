@@ -117,7 +117,7 @@ export class Website extends pulumi.ComponentResource {
 			const htmlExt = '.html';
 
 			if (dest.endsWith(htmlExt)) {
-				dest.slice(0, -htmlExt.length);
+				dest = dest.slice(0, -htmlExt.length);
 			}
 			return dest;
 		};
@@ -164,6 +164,8 @@ export class Website extends pulumi.ComponentResource {
 
 		const objects = uploadDir(args.directory);
 
+		// note that below we don't use the getS3Key version,
+		// as they are indexed by their on-disk paths.
 		const errorDocumentObject = args.notFound
 			? guard.must(
 					guard.isDefined,
@@ -171,15 +173,15 @@ export class Website extends pulumi.ComponentResource {
 						`Cannot find ${getS3Key(args.notFound!)} in [${[
 							...objects.keys(),
 						].join(', ')}]`
-			  )(objects.get(getS3Key(args.notFound)))
+			  )(objects.get(args.notFound))
 			: undefined;
 		const indexDocumentObject = guard.must(
 			guard.isDefined,
 			() =>
-				`Cannot find ${getS3Key(args.index)} in [${[
-					...objects.keys(),
-				].join(', ')}]`
-		)(objects.get(getS3Key(args.index)));
+				`Cannot find ${args.index} in [${[...objects.keys()].join(
+					', '
+				)}]`
+		)(objects.get(args.index));
 
 		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
 			`${name}_origin_access_identity`,
