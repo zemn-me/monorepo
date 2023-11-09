@@ -1,0 +1,23 @@
+/*
+
+The concept here is to make two boxes
+
+Menu
+--
+Content
+
+
+scroll snapping will mean that overscroll on either element
+slides you neatly over to the other.
+
+*/
+
+.container {
+	scroll-snap-type: block mandatory;
+	overflow: auto;
+	max-height: 100vh;
+}
+
+.container > * {
+	scroll-snap-align: start;
+}
