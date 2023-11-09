@@ -576,9 +576,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "swc_atoms"
-version = "0.6.2"
+version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "213e6d4233aed147b56006ed70b6369fa055be3308d22ae9ac8e691677525eb5"
+checksum = "f0bcc61377f281861a306fb33459dc7b8077d634a2f737b66beb18bd538eb6b7"
 dependencies = [
  "hstr",
  "once_cell",
@@ -588,9 +588,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.33.6"
+version = "0.33.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe655d590dff8f37599d3f31e14ca6ec331cd6b7898252c4cba177a85f98c761"
+checksum = "625e042223ae0b2a77789756eecf7b8d1a0b21655f709fe6b69b35b69fcbab7e"
 dependencies = [
  "ast_node",
  "better_scoped_tls",

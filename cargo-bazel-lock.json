@@ -1,5 +1,5 @@
 {
-  "checksum": "2f4be0046f3da85c63efccc51a039cedf0b103c0d6e13d7cb2c76dd762add689",
+  "checksum": "f8123c65d80d3c16564da5612b6b0ed9553136a2fdf9669d757e081f6fbaec0a",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1626,11 +1626,11 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.6.2",
+              "id": "swc_atoms 0.6.3",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.6",
+              "id": "swc_common 0.33.7",
               "target": "swc_common"
             }
           ],
@@ -3164,13 +3164,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.6.2": {
+    "swc_atoms 0.6.3": {
       "name": "swc_atoms",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.2/download",
-          "sha256": "213e6d4233aed147b56006ed70b6369fa055be3308d22ae9ac8e691677525eb5"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.3/download",
+          "sha256": "f0bcc61377f281861a306fb33459dc7b8077d634a2f737b66beb18bd538eb6b7"
         }
       },
       "targets": [
@@ -3211,17 +3211,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.6.2"
+        "version": "0.6.3"
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.33.6": {
+    "swc_common 0.33.7": {
       "name": "swc_common",
-      "version": "0.33.6",
+      "version": "0.33.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.33.6/download",
-          "sha256": "fe655d590dff8f37599d3f31e14ca6ec331cd6b7898252c4cba177a85f98c761"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.33.7/download",
+          "sha256": "625e042223ae0b2a77789756eecf7b8d1a0b21655f709fe6b69b35b69fcbab7e"
         }
       },
       "targets": [
@@ -3289,7 +3289,7 @@
               "target": "string_cache"
             },
             {
-              "id": "swc_atoms 0.6.2",
+              "id": "swc_atoms 0.6.3",
               "target": "swc_atoms"
             },
             {
@@ -3329,7 +3329,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.6"
+        "version": "0.33.7"
       },
       "license": "Apache-2.0"
     },
