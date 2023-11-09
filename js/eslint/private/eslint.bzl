@@ -5,18 +5,8 @@ Injects a bunch of basic dependencies to make eslint work.
 """
 
 BASE_DATA_DEPS = [
-    "//:prettierrc",
+    "//js/eslint/private:data_deps",
     "//:gitignore",
-    "//:editorconfig",
-    "//:eslintrc",
-    "//:node_modules/eslint-plugin-prettier",
-    "//:node_modules/@typescript-eslint/parser",
-    "//:node_modules/@typescript-eslint/eslint-plugin",
-    "//:node_modules/eslint-config-prettier",
-    "//:node_modules/eslint-plugin-react",
-    "//:node_modules/eslint-plugin-simple-import-sort",
-    "//:node_modules/eslint-plugin-mdx",
-    "//:node_modules/eslint-mdx",
 ]
 
 def eslint_test(name = None, data = [], args = [], **kwargs):
