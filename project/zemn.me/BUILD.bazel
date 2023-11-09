@@ -1,1 +1,7 @@
 # Nothing here!
+
+# Run zemn.me in dev mode
+alias(
+	name = "zemn.me",
+	actual = "//project/zemn.me/next:dev"
+)
