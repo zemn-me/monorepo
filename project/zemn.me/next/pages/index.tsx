@@ -83,7 +83,11 @@ export default function Main() {
 						<p>
 							I am interested in consulting on legal cases. For
 							business, email me at{' '}
-							<Link href="mailto:thomas@shadwell.im">
+							<Link
+								href={`mailto:?to=thomas@shadwell.im(${encodeURIComponent(
+									bio.Bio.who.fullName.text
+								)})`}
+							>
 								thomas@shadwell.im
 							</Link>
 							.
