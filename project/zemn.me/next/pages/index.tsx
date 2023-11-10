@@ -85,7 +85,7 @@ export default function Main() {
 							I am interested in consulting on legal cases. For
 							business, email me at{' '}
 							<Link
-								href={`mailto:?to=thomas@shadwell.im(${encodeURIComponent(
+								href={`mailto:?to=thomas@shadwell.im (${encodeURIComponent(
 									bio.Bio.who.fullName.text
 								)})`}
 							>
