@@ -387,6 +387,14 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
+		// set SPF record indicating we'll only use this with Google Workspaces.
+		new aws.route53.Record(`${name}_spf`, {
+			zoneId: args.zoneId,
+			name: args.domain,
+			type: 'TXT',
+			records: ['v=spf1 include:_spf.google.com ~all'],
+		});
+
 		this.registerOutputs({
 			distribution,
 			record,
