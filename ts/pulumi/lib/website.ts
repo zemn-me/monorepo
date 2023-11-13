@@ -164,6 +164,22 @@ export class Website extends pulumi.ComponentResource {
 
 		const objects = uploadDir(args.directory);
 
+		objects.set(
+			'security.txt',
+			new aws.s3.BucketObjectv2(
+				`${name}_security_txt`,
+				{
+					key: getS3Key('.well_known/security.txt'),
+					bucket: bucket.id,
+					contentType: 'text/plain',
+					source: new pulumi.asset.FileAsset(
+						'ts/pulumi/lib/security.txt'
+					),
+				},
+				{ parent: this }
+			)
+		);
+
 		// note that below we don't use the getS3Key version,
 		// as they are indexed by their on-disk paths.
 		const errorDocumentObject = args.notFound

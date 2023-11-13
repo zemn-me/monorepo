@@ -17,4 +17,5 @@ ts_project(
         "//ts/iter",
         "//ts/next.js",
     ],
+	data = [ "security.txt" ]
 )
