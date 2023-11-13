@@ -245,12 +245,14 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "ffmpeg_linux_x64",
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz",
-        strip_prefix = "ffmpeg-6.0-amd64-static",
+        # since this URL serves a different asset when ffmpeg's version is bumped, I'm using
+        # this query component to cache bust when that does occur.
+        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz?ver=v6.0.1",
+        strip_prefix = "ffmpeg-6.0.1-amd64-static",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "af3ca630347de28dde516f0ee70279e5fab6e35a9dc9ad889581f9bc66bcb750",
+        sha256 = "28268bf402f1083833ea269331587f60a242848880073be8016501d864bd07a5",
     )
 
     http_archive(
