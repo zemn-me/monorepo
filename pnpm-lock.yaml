@@ -106,8 +106,8 @@ devDependencies:
     specifier: 2.1.1
     version: 2.1.1
   '@pulumi/pulumi':
-    specifier: 3.93.0
-    version: 3.93.0
+    specifier: 3.94.0
+    version: 3.94.0
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -4962,7 +4962,7 @@ packages:
   /@pulumi/aws@6.8.0:
     resolution: {integrity: sha512-V9Z755RrAFDaAfnEf545EXd3ejqBafURKvUY5IeTbPkJhA48yZIjCNW5qA7hMFurGGiFl0c/Bx2iNfR9D6EW6g==}
     dependencies:
-      '@pulumi/pulumi': 3.93.0
+      '@pulumi/pulumi': 3.94.0
       builtin-modules: 3.0.0
       mime: 2.6.0
       read-package-tree: 5.3.1
@@ -4978,7 +4978,7 @@ packages:
       '@aws-sdk/client-ecs': 3.438.0
       '@pulumi/aws': 6.8.0
       '@pulumi/docker': 4.4.4
-      '@pulumi/pulumi': 3.93.0
+      '@pulumi/pulumi': 3.94.0
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1483.0
       docker-classic: /@pulumi/docker@3.6.1
@@ -4993,7 +4993,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.93.0
+      '@pulumi/pulumi': 3.94.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -5002,7 +5002,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.93.0
+      '@pulumi/pulumi': 3.94.0
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -5011,14 +5011,14 @@ packages:
   /@pulumi/docker@4.4.4:
     resolution: {integrity: sha512-CuW5UAI+mZWJqD3ZKEv74ReWu/jCpoJKyXpjtp3m4I+bWoOoOfg7jUGoJnwLODQPnrmlawOviNa0TzMR5WdXaQ==}
     dependencies:
-      '@pulumi/pulumi': 3.93.0
+      '@pulumi/pulumi': 3.94.0
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.93.0:
-    resolution: {integrity: sha512-3Hg9lTIu1EmD288NdSkBKog/x6A6YdYmk/xP48JJ3IpksquiLANvkEgjx10v6tgt9xWVZ8h4oeKuFZVZ9jxZvw==}
+  /@pulumi/pulumi@3.94.0:
+    resolution: {integrity: sha512-+CGFuAmFI5Z4bL42I2qBH9kG2Y92aNLH6Vw2n7bYZ6uGYOiI5NUOpDBDcwilexZyPOpEACmeF6m+3vRMDAxLog==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.9.6
