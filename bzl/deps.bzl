@@ -94,10 +94,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "42968f9134ba2c75c03bb271bd7bb062afb7da449f9b913c96e5be4ce890030a",
-        strip_prefix = "buildtools-6.3.3",
+        sha256 = "05c3c3602d25aeda1e9dbc91d3b66e624c1f9fdadf273e5480b489e744ca7269",
+        strip_prefix = "buildtools-6.4.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.3.3.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.4.0.tar.gz",
         ],
     )
 
@@ -111,9 +111,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "52377ecbcc6c4250dc5e0e3fccbd4ea7d3aa5148d2b29cdf64b2941aa60a08e8",
+        sha256 = "db04e796c9ecb9d161b02f237cc1a449a3821936b3411cdc85ab3808d0f02f24",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.93.0/pulumi-v3.93.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.94.1/pulumi-v3.94.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -123,9 +123,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.93.0/pulumi-v3.93.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.94.1/pulumi-v3.94.1-darwin-arm64.tar.gz",
         ],
-        sha256 = "a64d3b7d2dba9e45c7d40904b15d9b4fbfb381ac36a01bfe6c607efa1e9ca960",
+        sha256 = "a202cade90cc6549b7d3ae2589f11f5f47bde187635e74df8e39a28624f7ed59",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -144,9 +144,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.93.0/pulumi-v3.93.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.94.1/pulumi-v3.94.1-linux-arm64.tar.gz",
         ],
-        sha256 = "caeca655c6bf4b11f6d60f92cd2852cc007ea7072c64e7eebb38d6ecb1b1ba76",
+        sha256 = "5df165ab096ec58aab31fba8a4304a4e0fe790d2ef81796aed07b484dd9bc56c",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,

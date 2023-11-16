@@ -24,3 +24,18 @@ declare module '*.jpg' {
 	export const blurWidth: number;
 	export const blurHeight: number;
 }
+
+// Step 1: Define a Brand Type
+type LinkBrand = 'hey. please use project/zemn.me/next/components/Link instead';
+
+// Step 2 & 4: Extend JSX Intrinsic Elements
+declare module 'global' {
+	global {
+		namespace JSX {
+			interface IntrinsicElements {
+				// Override the `<a>` element
+				a: { 'data-brand': LinkBrand };
+			}
+		}
+	}
+}
