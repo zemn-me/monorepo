@@ -54,6 +54,8 @@ function isFirstPartyURL(u: string | UrlObject | URL): boolean {
 	);
 }
 
+type Exempt<T> = T & { 'data-brand': LinkBrand };
+
 export function Link({ href, rel, target, ...props }: LinkProps) {
 	if (href !== undefined && !isFirstPartyURL(href)) {
 		rel = `${rel ?? ''} external`.trim();
@@ -62,7 +64,15 @@ export function Link({ href, rel, target, ...props }: LinkProps) {
 	// next Link has a strangely strident stance on providing the href parameter
 	// which we do not. if there is no href we just fall back to using an <a> tag.
 	// https://github.com/i18next/next-i18next/issues/599
-	if (href === undefined) return <a {...{ href, rel, target, ...props }} />;
+	if (href === undefined) {
+		const p = {
+			href,
+			rel,
+			target,
+			...props,
+		};
+		return <a {...(props as Exempt<typeof p>)} />;
+	}
 	return <NextLink {...{ href, rel, target, ...props }} />;
 }
 
