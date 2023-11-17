@@ -252,7 +252,7 @@ exports_files(glob(["**/*"]))
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "28268bf402f1083833ea269331587f60a242848880073be8016501d864bd07a5",
+        sha256 = "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
     )
 
     http_archive(
