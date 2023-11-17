@@ -3,9 +3,58 @@
  */
 
 import Head from 'next/head';
+import { filter, flatten, map } from 'ts/iter';
 
-const URL =
-	'https://calendar.google.com/calendar/u/0/embed?src=thomas@shadwell.im&src=thomas@metatheory.gg&src=thomas.shadwell@gmail.com&mode=week&showCalendars=0';
+interface QueryParamsObject {
+	[key: string]: string[] | undefined;
+}
+
+type GCalQueryBoolean = '0' | '1';
+
+type GCalTab = 'week' | 'month' | 'agenda';
+
+interface CalendarConfigProps extends QueryParamsObject {
+	/**
+	 * A set of calendar sources to put on the calendar.
+	 */
+	src?: string[];
+
+	mode?: [GCalTab];
+
+	showCalendars?: [GCalQueryBoolean] | undefined;
+
+	title?: [string];
+
+	showTabs?: [GCalQueryBoolean];
+}
+
+const hasDefinedKey = (
+	kv: [string, string[] | undefined]
+): kv is [string, string[]] => typeof kv[1] !== 'undefined';
+
+// For ?src=1&src=1, URLSearchParams expects
+// [ [ "src", "1" ], [ "src", "1" ] ]
+// rather than
+// [ [ "src", "1" "1" ] ]
+const unrollKeys = (
+	v: Iterable<[string, string[]]>
+): Iterable<[string, string]> =>
+	flatten(map(v, ([k, v]) => map(v, v => [k, v])));
+
+const gCalEmbedURL = (props: CalendarConfigProps) =>
+	`https://calendar.google.com/calendar/u/0/embed?${new URLSearchParams([
+		...unrollKeys(filter(Object.entries(props), hasDefinedKey)),
+	]).toString()}`;
+
+const URL = gCalEmbedURL({
+	src: [
+		'thomas@shadwell.im',
+		'thomas@metatheory.gg',
+		'thomas.shadwell@gmail.com',
+	],
+	mode: ['week'],
+	showCalendars: ['0'],
+});
 
 export default function HomePage() {
 	return (

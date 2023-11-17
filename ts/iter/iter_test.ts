@@ -1,5 +1,13 @@
 import * as iter from 'ts/iter';
 
+describe('flatten', () => {
+	test('simple', () => {
+		expect([...iter.flatten([[1], [2, 2], [3, 3, 3]])]).toEqual([
+			1, 2, 2, 3, 3, 3,
+		]);
+	});
+});
+
 describe('reduce', () => {
 	test('sum', () => {
 		expect(iter.reduce([1, 2, 3], (p, c) => p + c, 0)).toEqual(6);
