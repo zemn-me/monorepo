@@ -24,3 +24,16 @@ declare module '*.jpg' {
 	export const blurWidth: number;
 	export const blurHeight: number;
 }
+
+type LinkBrand = 'hey. please use project/zemn.me/next/components/Link instead';
+
+declare module 'global' {
+	global {
+		namespace JSX {
+			interface IntrinsicElements {
+				// Override the `<a>` element
+				a: { 'data-brand': LinkBrand };
+			}
+		}
+	}
+}
