@@ -247,7 +247,7 @@ exports_files(glob(["**/*"]))
         name = "ffmpeg_linux_x64",
         # since this URL serves a different asset when ffmpeg's version is bumped, I'm using
         # this query component to cache bust when that does occur.
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz?ver=v6.0.1",
+        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
         strip_prefix = "ffmpeg-6.0.1-amd64-static",
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -257,7 +257,7 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "ffmpeg_linux_i686",
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-i686-static.tar.xz",
+        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-i686-static.tar.xz",
         strip_prefix = "ffmpeg-6.0-i686-static",
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -267,7 +267,7 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "ffmpeg_linux_arm64",
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-arm64-static.tar.xz",
+        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-arm64-static.tar.xz",
         strip_prefix = "ffmpeg-6.0-arm64-static",
         build_file_content = """
 exports_files(glob(["**/*"]))
