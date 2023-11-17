@@ -1,6 +1,15 @@
 export * as dict from './dict';
 
 /**
+ * Flatten nested iterables into a single iterable.
+ */
+export function* flatten<T>(it: Iterable<Iterable<T>>): Iterable<T> {
+	for (const v of it) {
+		for (const v2 of v) yield v2;
+	}
+}
+
+/**
  * For an iterable set of tuples of something, number
  * returns an iterable over something repeated by number
  * @example
