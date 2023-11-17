@@ -145,19 +145,19 @@ export default function Main() {
 						<p>
 							The background video (“hero video”) is of a hidden
 							area in the gardens of{' '}
-							<a href="https://en.wikipedia.org/wiki/Kenwood_House">
+							<Link href="https://en.wikipedia.org/wiki/Kenwood_House">
 								Kenwood House
-							</a>
+							</Link>
 							, a beautiful stately home sandwiched between
 							Highgate and Hampstead in London where I grew up.
 							It's located at about{' '}
-							<a
+							<Link
 								href="https://goo.gl/maps/JEAzn2kZgu6pyaNA6"
 								rel="nofollow"
 								title="Location of the Kenwood video"
 							>
 								51.57139601074658°N, -0.16924392259112794°E
-							</a>
+							</Link>
 							.
 						</p>
 						<p>
@@ -171,9 +171,9 @@ export default function Main() {
 						<p>
 							The type and style itself was inspired by older,
 							pre-computer era typsetting such as the{' '}
-							<a href="https://assets.lloyds.com/assets/pdf-lloyds-acts-mar07lloydsact1871/1/pdf-lloyds-acts-Mar07LloydsAct1871.pdf">
+							<Link href="https://assets.lloyds.com/assets/pdf-lloyds-acts-mar07lloydsact1871/1/pdf-lloyds-acts-Mar07LloydsAct1871.pdf">
 								Lloyd's Act 1871
-							</a>
+							</Link>
 							. Particular effort was put into trying to have
 							content fill horizontal space automatically, as seen
 							in older documents that try to make the most of the
@@ -211,9 +211,9 @@ export default function Main() {
 						</p>
 						<p>
 							The eye logo is a reference to the well-known{' '}
-							<a href="https://en.wikipedia.org/wiki/Eye_of_Providence">
+							<Link href="https://en.wikipedia.org/wiki/Eye_of_Providence">
 								‘eye of providence’
-							</a>
+							</Link>
 							, a symbol that represents human achievement as
 							being incomplete without God. I wanted it to reflect
 							the idea that, in a universe that might not have a
