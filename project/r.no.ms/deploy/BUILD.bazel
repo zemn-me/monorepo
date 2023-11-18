@@ -1,0 +1,10 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = [ "//:__subpackages__" ])
+
+ts_project(
+    name = "deploy",
+    data = [ "//project/r.no.ms" ],
+    deps = [ "//:node_modules/@pulumi/aws", "//:node_modules/@pulumi/pulumi",
+        "//ts/pulumi/lib" ],
+)

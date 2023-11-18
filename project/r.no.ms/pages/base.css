@@ -1,0 +1,64 @@
+body { font-family: 'Open Sans', sans-serif; }
+body, html, #resistor { width: 100%; height: 100%; display: block; margin:0 }
+* { transition: all 1s ease-in-out }
+#resistor .label, #input > * { background-color: black; color: #AA967B ; display:inline-block; font-size: x-large; padding: 2rem 0 2rem 0; width: 100% }
+
+input,textarea, [contenteditable] { -webkit-user-select: text; user-select: text }
+#resistor { display: flex; text-align: center }
+#resistor > .stripe { flex-grow: 1; height: 100% ; flex-basis: 0 }
+#resistor > .stripe.removed { width: 0; border :0 ; flex-grow: 0 ; overflow: hidden; white-space: nowrap ; color: transparent }
+#resistance:after { content: "Ω" }
+#tolerance:before { content: "(±" }
+#tolerance:after { content: "%)" }
+a:link, a:visited { color: inherit; text-decoration: none; border-bottom: 1px solid #AA967B }
+a:visited { border-bottom-style: dotted }
+a.img { border: none }
+
+#input { position:fixed; text-align:center; top:0; left:0; width:100%; height:100%; display:flex; pointer-events: none }
+
+#input #inputdata { border: 1px solid black ; border-width: 1px 0 1px 0; transition: 0.2s ease-in-out; }
+#input.invalid #inputdata{ border-color: #AA967B }
+
+#input > * { margin: auto; pointer-events: all }
+#inputdata > * { font-size: 4rem }
+#tolerance { font-size: 100%; vertical-align: super }
+#qmark { display: none; line-height: 4rem; flex-grow: 0; flex-basis: 0; font-size: 3rem; float: right; position: absolute; right: 0;
+  font-size: 3rem; width: 4rem; height: 4rem ; display: inline-block ; background-color: white ; color:black; margin: 3rem ; bottom: 0;
+  text-align: center }
+label[for] { cursor: pointer }
+
+footer { width: 100%;  color: #AA967B; background-color:black; position: fixed; bottom: 0; right: 0; height:100%; overflow: auto }
+footer > div { max-width: 30rem ; margin: 0 auto; margin-top: 3rem }
+footer .logo { width: auto; height: 1.5em ; vertical-align: middle ; margin: 0 1rem 0 1rem }
+footer .head { width: 100%; text-align: center ; margin-bottom: 2rem }
+#showfooter:not(:checked) ~ label > footer { overflow: hidden; height: 0; padding:0 }
+#footericon { font-size: 4rem; bottom: 0; right: 0; position: fixed; z-index: 10; background-color: black; padding: 1rem; color: #AA967B; box-sizing: border-box;
+  width: 10rem; height: 10rem; text-align: center }
+
+#colourValues, #toleranceValues { display: flex; width: 100% ; flex-wrap: wrap; }
+.swatch { padding: 0 0.2rem; display:inline-block; color:black; flex-grow: 1; text-align: center; text-shadow: 0.05em 0.05em white }
+.swatch .label { background-color: black; color: white }
+
+#diagram { width: 100%; text-align: center; font-size: 150%; margin-top: 1.5em }
+#diagram .swatch { padding:0 0.2rem; }
+
+
+#diagram .unit:nth-last-child(3):before { content: " x 10" }
+#diagram .unit:nth-last-child(3) .swatch { font-size: 50% ; vertical-align: super }
+
+
+
+#diagram .unit:nth-last-child(2):before { content: " = " }
+#diagram .unit:nth-last-child(2) .swatch { width: auto; color:inherit; text-shadow: none }
+
+#diagram .unit:last-child:before { content: " @ (±";}
+#diagram .unit:last-child:after { content: "%)";}
+
+#colourdrawer { position: fixed; width: 100%; height: 100%; bottom:0; right:0; overflow: auto; display: flex;
+  transition: all 0.4s ease-in-out }
+
+#showcolourdrawer:not(:checked) ~ * #colourdrawer { overflow: hidden; height: 0; padding: 0 }
+
+#colourselector { width: 100%; height: 100%; background-color:black; max-width: 20rem; max-height: 20rem ; display: flex; ; margin: auto; min-width: 90%;
+  flex-wrap: wrap }
+#colourselector .swatch { flex-grow: 1; flex-basis: 0; cursor: pointer; min-width: 20% }
