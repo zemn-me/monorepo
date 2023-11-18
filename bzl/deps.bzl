@@ -231,12 +231,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/e5930570e5ab6114f6fc869911ea4985d028797c.zip",
-        strip_prefix = "json-schemas-e5930570e5ab6114f6fc869911ea4985d028797c",
+        url = "https://github.com/microsoft/json-schemas/archive/457d95d260d7f78de92f53af5862e034d4a40d2a.zip",
+        strip_prefix = "json-schemas-457d95d260d7f78de92f53af5862e034d4a40d2a",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "4f45f813856f5c55f2e411e3c5014bd496c9c2307d5e71dfb4a4a1c54eae4d36",
+        sha256 = "1f5c0edd218d04a180a705a6d0ad779b8388759f72b36b4fc063d8ce5e6b7494",
     )
 
     ##########
@@ -268,21 +268,20 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "ffmpeg_linux_arm64",
         url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-arm64-static.tar.xz",
-        strip_prefix = "ffmpeg-6.0-arm64-static",
+        strip_prefix = "ffmpeg-5.1.1-arm64-static",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "df4ff17a3af58f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
+        sha256 = "49f9beb7690afcbd4832d3577d9f0c87374d63c39cde5097dfd52d61b24b4855",
     )
 
     http_archive(
         name = "ffmpeg_macos_x64",
         url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-6.0.zip",
-        strip_prefix = "[ fix this when i use this on macos... ]",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "df4ff17a3af58f9e3af2aafe337f266171f161ebade6b20516110ed207c6a94e",
+        sha256 = "9a810d222862a7230fd7035c91e32beb605af7501c3517580f2bc1eb8faddacc",
     )
 
     http_archive(
