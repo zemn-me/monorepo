@@ -1,0 +1,23 @@
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "ts",
+    assets = glob(["**/*.css"]),
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/immutable",
+        "//ts/next.js",
+    ],
+)
+
+next_project(
+    name = "next",
+    srcs = [
+        ":ts",
+        "//project/zemn.me/next/public:kenwood_video_sources",
+		"//project/zemn.me/next/public:icon_svg"
+    ],
+)
