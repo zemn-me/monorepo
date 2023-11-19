@@ -12,10 +12,10 @@ export function isString(v: unknown): v is string {
 	return typeof v === 'string';
 }
 
-export function isOneOf<T>(v: unknown, a: readonly T[]): v is T {
-	if (a.some(val => v === val)) return false;
-	return true;
-}
+export const isOneOf =
+	<S>(a: Set<S>) =>
+	(v: unknown): v is S =>
+		(a as Set<unknown>).has(v);
 
 export function any<T, O extends T, O2 extends T, arg extends unknown[]>(
 	a: (v: T, ...arg: arg) => v is O,
