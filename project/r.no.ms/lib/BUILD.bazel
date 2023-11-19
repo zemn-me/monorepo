@@ -1,0 +1,13 @@
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+	name="lib",
+	deps = [ "//ts/iter", "//:node_modules/@types/jest" ]
+)
+
+jest_test(
+    name = "test",
+    srcs = ["exponent_test.js"],
+    deps = [":lib"],
+)
+
