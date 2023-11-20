@@ -5,6 +5,7 @@ import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
 import Link from 'project/zemn.me/next/components/Link';
+import { Q } from 'project/zemn.me/next/components/Q';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
@@ -128,9 +129,9 @@ export default function Main() {
 							2019. The core ideas come from very early on when I
 							was using the internet, and I didn't want to tell
 							people with my chosen username what kind of person I
-							was. I picked the username ‘zemnmez’ to be something
-							meaningless that people could fill with their own
-							ideas of who I was.
+							was. I picked the username <Q single>zemnmez</Q> to
+							be something meaningless that people could fill with
+							their own ideas of who I was.
 						</p>
 						<p>
 							Similarly, when I made the website, I didn't want to
@@ -143,8 +144,8 @@ export default function Main() {
 							things!
 						</p>
 						<p>
-							The background video (“hero video”) is of a hidden
-							area in the gardens of{' '}
+							The background video (<Q single>hero video</Q>) is
+							of a hidden area in the gardens of{' '}
 							<Link href="https://en.wikipedia.org/wiki/Kenwood_House">
 								Kenwood House
 							</Link>
@@ -200,19 +201,19 @@ export default function Main() {
 						<p>
 							The time eye logo (<TimeEyeInline />) was the later
 							(2019) creation, coming out of a specific need to
-							disambiguate between the published work I had as
-							‘Thomas Shadwell’, my real name, versus ‘zemnmez’,
-							the persona I had used since 2009. It became
-							necessary after I made the Forbes Under 30 list for
-							my tax system hack in 2018. Before this point I'd
-							worked hard to try to keep the two identities
-							separate, but Forbes lists aren't really for online
-							personas.
+							disambiguate between the published work I had as{' '}
+							<Q single>Thomas Shadwell</Q>, my real name, versus{' '}
+							<Q single>zemnmez</Q>, the persona I had used since
+							2009. It became necessary after I made the Forbes
+							Under 30 list for my tax system hack in 2018. Before
+							this point I'd worked hard to try to keep the two
+							identities separate, but Forbes lists aren't really
+							for online personas.
 						</p>
 						<p>
 							The eye logo is a reference to the well-known{' '}
 							<Link href="https://en.wikipedia.org/wiki/Eye_of_Providence">
-								‘eye of providence’
+								<Q single>eye of providence</Q>
 							</Link>
 							, a symbol that represents human achievement as
 							being incomplete without God. I wanted it to reflect
@@ -222,12 +223,13 @@ export default function Main() {
 						</p>
 						<p>
 							In having to make this distinction, for a short time
-							the work published as ‘zemnmez’ continued to
-							represent the things I was most proud of – an
-							idealised kind of self. But at Google, I started to
-							publish security research I was really proud of as
-							both ‘zemnmez’ and ‘Thomas Shadwell’. The abstract
-							ideas are still there, but now I'm more ‘Thomas’
+							the work published as <Q single>zemnmez</Q>{' '}
+							continued to represent the things I was most proud
+							of – an idealised kind of self. But at Google, I
+							started to publish security research I was really
+							proud of as both <Q single>zemnmez</Q> and{' '}
+							<Q single>Thomas Shadwell</Q> The abstract ideas are
+							still there, but now I'm more <Q single>Thomas</Q>{' '}
 							than I ever was. ☺
 						</p>
 					</Prose>
