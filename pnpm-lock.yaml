@@ -103,8 +103,8 @@ devDependencies:
     specifier: 6.10.0
     version: 6.10.0
   '@pulumi/awsx':
-    specifier: 2.2.0
-    version: 2.2.0
+    specifier: 2.3.0
+    version: 2.3.0
   '@pulumi/pulumi':
     specifier: 3.94.2
     version: 3.94.2
@@ -4971,13 +4971,13 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/awsx@2.2.0:
-    resolution: {integrity: sha512-0tvgj1hOS9cw/0qKZA54gIAK4P+JhSAb/ycJ4BP0dynEXFAMXMnIozbEBLszpICwUe+OvYriG2lAK42yd7GU/Q==}
+  /@pulumi/awsx@2.3.0:
+    resolution: {integrity: sha512-847EX4r6Ulh883skMDkQxtg7aJds6ysZncRewMVWPrq4Epz33/XXAmWfopZqld9muGza4rLR8/5oTggytQFAuw==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.438.0
       '@pulumi/aws': 6.10.0
-      '@pulumi/docker': 4.4.4
+      '@pulumi/docker': 4.5.0
       '@pulumi/pulumi': 3.94.2
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1483.0
@@ -5008,8 +5008,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pulumi/docker@4.4.4:
-    resolution: {integrity: sha512-CuW5UAI+mZWJqD3ZKEv74ReWu/jCpoJKyXpjtp3m4I+bWoOoOfg7jUGoJnwLODQPnrmlawOviNa0TzMR5WdXaQ==}
+  /@pulumi/docker@4.5.0:
+    resolution: {integrity: sha512-DOiczZK1cF4NGlEWzacPLjGcoPKXHXISoqq4KqCO97YW28rZSu6LOdveQ8tLaUHGeyWQ+CS3PT45caSxHAbzbw==}
     dependencies:
       '@pulumi/pulumi': 3.94.2
       semver: 5.7.2
