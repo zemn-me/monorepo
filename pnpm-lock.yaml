@@ -35,8 +35,8 @@ dependencies:
     specifier: 2.2.0
     version: 2.2.0(eslint@8.54.0)
   eslint-plugin-mdx:
-    specifier: 2.1.0
-    version: 2.1.0(eslint@8.54.0)
+    specifier: 2.2.0
+    version: 2.2.0(eslint@8.54.0)
   glob-promise:
     specifier: 6.0.5
     version: 6.0.5(glob@8.1.0)
@@ -9565,8 +9565,8 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /eslint-plugin-markdown@3.0.0(eslint@8.54.0):
-    resolution: {integrity: sha512-hRs5RUJGbeHDLfS7ELanT0e29Ocyssf/7kBM+p7KluY5AwngGkDf8Oyu4658/NZSGTTq05FZeWbkxXtbVyHPwg==}
+  /eslint-plugin-markdown@3.0.1(eslint@8.54.0):
+    resolution: {integrity: sha512-8rqoc148DWdGdmYF6WSQFT3uQ6PO7zXYgeBpHAOAakX/zpq+NvFYbDA/H7PYzHajwtmaOzAwfxyl++x0g1/N9A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -9577,15 +9577,15 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-plugin-mdx@2.1.0(eslint@8.54.0):
-    resolution: {integrity: sha512-Q8P1JXv+OrD+xhWT95ZyV30MMdnqJ1voKtXfxWrJJ2XihJRI15gPmXbIWY9t8CjA8C//isfzNOmnVY9e3GTL0g==}
+  /eslint-plugin-mdx@2.2.0(eslint@8.54.0):
+    resolution: {integrity: sha512-OseoMXUIr8iy3E0me+wJLVAxuB0kxHP1plxuYAJDynzorzOj2OKv8Fhr+rIOJ32zfl3bnEWsqFnUiCnyznr1JQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=8.0.0'
     dependencies:
       eslint: 8.54.0
       eslint-mdx: 2.2.0(eslint@8.54.0)
-      eslint-plugin-markdown: 3.0.0(eslint@8.54.0)
+      eslint-plugin-markdown: 3.0.1(eslint@8.54.0)
       remark-mdx: 2.3.0
       remark-parse: 10.0.2
       remark-stringify: 10.0.3
