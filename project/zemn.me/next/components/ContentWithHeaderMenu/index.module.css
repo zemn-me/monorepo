@@ -1,0 +1,24 @@
+
+/*
+	logoBar
+*/
+
+.logoBar {
+	display: grid;
+	grid: ".... ........ .... ......... ..." 1rem
+		  ".... time-eye .... hamburger ..." 3rem
+		  ".... ........ .... ......... ..." 1rem
+		/  1rem auto     1fr  3rem      1rem
+}
+
+.logoBar .timeEye{
+	grid-area: time-eye;
+}
+
+.logoBar .hamburger {
+	grid-area: hamburger;
+}
+
+.logoBar .hamburger, .logoBar .timeEye {
+	width: 100%; height: 100%;
+}

@@ -1,0 +1,27 @@
+
+.bar {
+	display: grid;
+	grid: ".... ........ .... . ......... ..." 1rem
+		  ".... time-eye .... . links     ..." 3rem
+		  ".... ........ .... . ......... ..." 1rem
+		/  1rem auto     1fr 1fr 1fr      1rem
+}
+
+.bar .timeEye{
+	grid-area: time-eye;
+}
+
+.bar .links {
+	grid-area: links;
+}
+
+.bar .hamburger, .bar .timeEye {
+	width: 100%; height: 100%;
+}
+
+.links {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+}
