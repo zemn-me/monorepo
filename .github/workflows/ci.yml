@@ -80,6 +80,7 @@ jobs:
         # we test if the script exists so we don't fail as a result of it
         # not yet existing on main.
         run: |
+            echo "::group::Presubmit prep"
             test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
             ./.github/workflows/bootstrap_bazel_remote_cache.sh
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
