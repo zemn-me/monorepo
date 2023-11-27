@@ -8,6 +8,7 @@
 	"platformCommit": true,
 	"allowScripts": true,
 	"rollbackPrs": true,
+	"rangeStrategy": "pin",
 	"recreateWhen": "always",
 	"ignorePaths": ["**/monorepo/dist/**"],
 	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
