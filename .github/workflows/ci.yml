@@ -48,10 +48,6 @@ jobs:
           large-packages: false
       - name: Checkout code
         uses: actions/checkout@v4
-      # attempt at addressing
-      # https://github.com/puppeteer/puppeteer/issues/11001
-      # //ts/cmd/svgshot (puppeteer) uses this.
-      - uses: browser-actions/setup-chrome@v1
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
