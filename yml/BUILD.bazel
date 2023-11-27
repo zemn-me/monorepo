@@ -1,7 +1,20 @@
+load("//yml:test.bzl", "yaml_lint_test")
 exports_files(
     [
         "test.bzl",
         "test_runner.sh",
     ],
     visibility = ["//visibility:public"],
+)
+
+filegroup(
+	name = "yamllint_data_deps",
+	srcs = [
+		"//yml:yamllint-config.yml"
+	],
+	visibility = ["//visibility:public"]
+)
+
+yaml_lint_test(
+	name = "yaml_lint"
 )
