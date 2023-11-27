@@ -103,17 +103,17 @@
 		"pnpm": "npm run -- bazel run -- @pnpm//:pnpm --dir $PWD"
 	},
 	"dependencies": {
-		"@commander-js/extra-typings": "^11.0.0",
+		"@commander-js/extra-typings": "11.0.0",
 		"@pulumi/command": "4.5.0",
-		"@react-spring/rafz": "^9.7.3",
+		"@react-spring/rafz": "9.7.3",
 		"@types/bcryptjs": "2.4.6",
-		"csstype": "^3.1.1",
-		"devtools-protocol": "^0.0.1227788",
-		"eslint-mdx": "^2.1.0",
-		"eslint-plugin-mdx": "^2.1.0",
+		"csstype": "3.1.2",
+		"devtools-protocol": "0.0.1227788",
+		"eslint-mdx": "2.1.0",
+		"eslint-plugin-mdx": "2.1.0",
 		"glob-promise": "6.0.5",
-		"json-schema-to-typescript": "^13.0.1",
-		"npm": "^10.0.0",
+		"json-schema-to-typescript": "13.0.2",
+		"npm": "10.2.4",
 		"pnpm": "^8.0.0"
 	},
 	"pnpm": {
