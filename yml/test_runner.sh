@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-$YAMLLINT $@
+$YAMLLINT -c yml/yamllint-config.yml $@

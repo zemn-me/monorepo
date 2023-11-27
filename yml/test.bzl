@@ -7,7 +7,7 @@ def yaml_lint_test(name, srcs = None, **kwargs):
             "YAMLLINT": "$(rootpath //py/yamllint)",
         },
         srcs = ["//yml:test_runner.sh"],
-        data = ["//py/yamllint"] + srcs,
+        data = ["//py/yamllint", "//yml:yamllint_data_deps"] + srcs,
         args = ["$(rootpath %s)" % x for x in srcs],
         **kwargs
     )
