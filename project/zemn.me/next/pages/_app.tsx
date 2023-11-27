@@ -1,11 +1,24 @@
 import 'project/zemn.me/next/pages/base.css';
 
+import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { ReactElement, ReactNode } from 'react';
 import { HeaderTags } from 'ts/next.js';
 
-export function App({ Component, pageProps }: AppProps) {
-	return (
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+	getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+	readonly Component: NextPageWithLayout;
+};
+
+export function App({ Component, pageProps }: AppPropsWithLayout) {
+	// Use the layout defined at the page level, if available
+	const getLayout = Component.getLayout ?? (page => page);
+
+	return getLayout(
 		<>
 			<HeaderTags />
 			<Component {...pageProps} />
