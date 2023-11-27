@@ -1,4 +1,6 @@
-import React from 'react';
+import { ExperimentsLayout } from 'project/zemn.me/next/layouts/root/experiments/experiments';
+import { NextPageWithLayout } from 'project/zemn.me/next/pages/_app';
+import React, { ReactElement } from 'react';
 
 interface RayProps {
 	readonly x1: number;
@@ -114,7 +116,7 @@ function nVar(initialState: number): [nVarState, (s: string) => void] {
 	];
 }
 
-export default function RaysEditor() {
+const Page: NextPageWithLayout = function RaysEditor() {
 	const width = 100;
 	const height = width;
 	const [nRays, setNRays] = nVar(100);
@@ -247,7 +249,7 @@ export default function RaysEditor() {
 			</form>
 		</div>
 	);
-}
+};
 
 function TimeEye() {
 	return (
@@ -294,3 +296,9 @@ function TimeEye() {
 		</g>
 	);
 }
+
+Page.getLayout = function getLayout(element: ReactElement) {
+	return <ExperimentsLayout>{element}</ExperimentsLayout>;
+};
+
+export default Page;

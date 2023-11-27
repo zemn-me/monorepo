@@ -1,0 +1,26 @@
+
+.prose section {
+	margin: 0 0 2em auto;
+	padding: 0 2em;
+	column-width: 20em;
+	column-gap: 2em;
+}
+
+
+.prose section>*:first-child {
+	/*
+		Otherwise column layout looks weird
+		as one column will have a gap, but
+		the other won't
+	*/
+	margin-top: 0;
+}
+
+.prose p {
+	margin: 0 0 2em 0;
+}
+
+.prose h1, .prose h2 {
+	column-span: all
+}
+
