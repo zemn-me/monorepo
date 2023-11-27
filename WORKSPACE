@@ -25,21 +25,14 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+load("@rules_python//python:repositories.bzl", "py_repositories")
 
-python_register_toolchains(
-    name = "python3_9",
-    # Available versions are listed in @rules_python//python:versions.bzl.
-    # We recommend using the same version your team is already standardized on.
-    python_version = "3.9",
-)
+py_repositories()
 
-load("@python3_9//:defs.bzl", "interpreter")
 load("@rules_python//python:pip.bzl", "pip_parse")
 
 pip_parse(
     name = "pip",
-    python_interpreter_target = interpreter,
     # pip-compile
     requirements_lock = "//:requirements.txt",
 )
