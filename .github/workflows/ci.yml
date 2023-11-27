@@ -23,16 +23,10 @@ on:   # yamllint disable-line rule:truthy
 
 jobs:
   Presubmit:
-    # github's security settings mean that pull requests
-    # can only pull from the upstream 'main' cache.
-    #
-    # This means we need to run these tests so that
-    # PRs can be sped up by loading their cached results.
     if: >
       github.event_name == 'pull_request'
       || github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
-      || github.event_name == 'push'
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
