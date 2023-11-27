@@ -11,3 +11,8 @@ export type Drawable3D = LineDrawable3D;
 export interface LineDrawable3D {
 	lines3D(): Homog.Line3D[];
 }
+
+// Comment due to https://github.com/swc-project/swc/issues/7822#issuecomment-1827113023
+// if this comment is deleted, SWC will crash.
+//
+// Alternatively, if SWC doesn't crash with this comment deleted, hooray!
