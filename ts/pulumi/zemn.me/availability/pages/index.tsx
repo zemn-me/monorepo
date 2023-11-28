@@ -51,6 +51,7 @@ const URL = gCalEmbedURL({
 		'thomas@shadwell.im',
 		'thomas@metatheory.gg',
 		'thomas.shadwell@gmail.com',
+		'thomas@openai.com',
 	],
 	mode: ['week'],
 	showCalendars: ['0'],
