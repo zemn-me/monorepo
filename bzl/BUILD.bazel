@@ -5,7 +5,7 @@ bin.eslint_binary(
 )
 
 sh_binary(
-    name = "affected_files",
+    name = "run_all_affected_tests",
     srcs = ["run_affected_tests.sh"],
 )
 
