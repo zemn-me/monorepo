@@ -579,6 +579,11 @@ export const Bio: Bio = {
 			description: en`For major security issue covered in 'How to Hack Apple ID'.`,
 			url: url`https://support.apple.com/en-gb/HT213636#:~:text=Thomas%20Shadwell%20(%40zemnmez)%20of%20Google`,
 		},
+		{
+			date: date(28, 'nov', 2023),
+			title: en`Senior Member of Technical Staff, Security Partnerships, OpenAI`,
+			tags: [software, security, work],
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {

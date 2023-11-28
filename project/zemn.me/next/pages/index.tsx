@@ -83,6 +83,11 @@ export default function Main() {
 							security analysis.
 						</p>
 						<p>
+							I am a Senior Member of Technical Staff at{' '}
+							<Link href="https://openai.com">OpenAI</Link>, where
+							I work on computer security.
+						</p>
+						<p>
 							I am interested in consulting on legal cases. For
 							business, email me at{' '}
 							<Link
