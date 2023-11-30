@@ -3,6 +3,8 @@ load("//bzl/transcode_web:rules.bzl", "transcode_web")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
+# This ends up in the bundle via //project/zemn.me/next/assets/kenwood:kenwood
+# which is a ts_project that zemn.me depends on to render the video.
 transcode_web(
     name = "kenwood_video_sources",
     src = "//project/zemn.me/next/assets/kenwood:kenwood.mp4",
@@ -10,7 +12,7 @@ transcode_web(
 )
 
 js_library(
-    name = "icon_svg",
-    srcs = ["icon.svg"],
+    name = "files",
+    srcs = ["icon.svg", "wallpaper.jpg"],
     visibility = ["//project/zemn.me/next:__pkg__"],
 )
