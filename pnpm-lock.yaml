@@ -7,11 +7,6 @@ settings:
 overrides:
   resolve: ^2.0.0-next.5
 
-patchedDependencies:
-  svgo@3.0.2:
-    hash: eczlissk6k5s35siwvhunsnlym
-    path: patches/svgo@3.0.2.patch
-
 dependencies:
   '@commander-js/extra-typings':
     specifier: 11.1.0
@@ -16963,7 +16958,6 @@ packages:
       csso: 5.0.5
       picocolors: 1.0.0
     dev: true
-    patched: true
 
   /symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
