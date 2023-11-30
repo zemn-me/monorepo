@@ -3,6 +3,7 @@ load("//bzl/transcode_web:rules.bzl", "transcode_web")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
+# I think this is depended on directly by some javascript file, so it doesn't need to be put in "files".
 transcode_web(
     name = "kenwood_video_sources",
     src = "//project/zemn.me/next/assets/kenwood:kenwood.mp4",
@@ -10,7 +11,7 @@ transcode_web(
 )
 
 js_library(
-    name = "icon_svg",
-    srcs = ["icon.svg"],
+    name = "files",
+    srcs = ["icon.svg", "wallpaper.jpg"],
     visibility = ["//project/zemn.me/next:__pkg__"],
 )
