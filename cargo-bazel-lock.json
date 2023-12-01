@@ -1,5 +1,5 @@
 {
-  "checksum": "ee5e97fed61bb481569ec9149fdf64c678faaad71dcaace76acec67d047e4a28",
+  "checksum": "5090857b8d5b4a7bc84db83e82597560556235318a2a37188188c7debbf712c5",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1523,11 +1523,11 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.6.4",
+              "id": "swc_atoms 0.6.5",
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.9",
+              "id": "swc_common 0.33.10",
               "target": "swc_common"
             }
           ],
@@ -2720,13 +2720,13 @@
       },
       "license": "MIT"
     },
-    "swc_atoms 0.6.4": {
+    "swc_atoms 0.6.5": {
       "name": "swc_atoms",
-      "version": "0.6.4",
+      "version": "0.6.5",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.4/download",
-          "sha256": "b8a9e1b6d97f27b6abe5571f8fe3bdbd2fa987299fc2126450c7cde6214896ef"
+          "url": "https://crates.io/api/v1/crates/swc_atoms/0.6.5/download",
+          "sha256": "7d538eaaa6f085161d088a04cf0a3a5a52c5a7f2b3bd9b83f73f058b0ed357c0"
         }
       },
       "targets": [
@@ -2767,17 +2767,17 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.6.4"
+        "version": "0.6.5"
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.33.9": {
+    "swc_common 0.33.10": {
       "name": "swc_common",
-      "version": "0.33.9",
+      "version": "0.33.10",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.33.9/download",
-          "sha256": "5ccb656cd57c93614e4e8b33a60e75ca095383565c1a8d2bbe6a1103942831e0"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.33.10/download",
+          "sha256": "6e9319d6d5df09497d920dbc51c937032ac6909a0df617998fe840c7bb8e74e0"
         }
       },
       "targets": [
@@ -2841,7 +2841,7 @@
               "target": "siphasher"
             },
             {
-              "id": "swc_atoms 0.6.4",
+              "id": "swc_atoms 0.6.5",
               "target": "swc_atoms"
             },
             {
@@ -2881,7 +2881,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.9"
+        "version": "0.33.10"
       },
       "license": "Apache-2.0"
     },
