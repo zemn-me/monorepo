@@ -3,15 +3,10 @@ load("@aspect_rules_js//npm:defs.bzl", _npm_link_package = "npm_link_package", _
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", _copy_to_bin = "copy_to_bin")
 load("//js/copy_to_local:copy_to_local.bzl", _copy_to_local = "copy_to_local")
 
-def _apply_env_defaults(d):
-    return d | {"NODE_PATH": "."}
-
 def js_binary(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
     _js_binary(name = name, env = env, **kwargs)
 
 def js_test(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
     _js_test(name = name, env = env, **kwargs)
 
 def js_library(name, **kwargs):
@@ -24,8 +19,6 @@ def pkg_npm(name, **kwargs):
     _pkg_npm(name = name, **kwargs)
 
 def js_run_binary(name, env = {}, **kwargs):
-    env = _apply_env_defaults(env)
-
     _js_run_binary(name = name, env = env, **kwargs)
 
 def npm_link_package(name, **kwargs):
