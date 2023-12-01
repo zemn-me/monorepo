@@ -17,12 +17,13 @@ def jest_test(name, srcs = [], data = [], deps = [], jest_config = "//:jest.ts.c
     for src in srcs:
         args.extend(["--runTestsByPath", "$(rootpath %s)" % src])
 
-    data = [jest_config] + data + srcs + deps + ["//js/jest:jest_reporter"]
+    data = [jest_config, "//js:js_binary_deps"] + data + srcs + deps + ["//js/jest:jest_reporter"]
 
     jest.jest_test(
         name = name,
         data = data,
         args = args,
+        node_options = [ "--experimental-vm-modules" ],
         **kwargs
     )
 

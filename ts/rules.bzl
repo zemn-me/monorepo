@@ -14,11 +14,11 @@ def ts_config(**kwargs):
 def jest_test(jsdom = None, deps = [], **kwargs):
     jest_config = None
     if jsdom:
-        jest_config = "//ts/jest:jest.browser.config.js"
+        jest_config = "//ts/jest:jest.browser.config.mjs"
         deps = deps + ["//ts/jest:config_browser"]
     else:
-        jest_config = "//ts/jest:jest.node.config.js"
-        deps = deps + ["//ts/jest:config_node"]
+        jest_config = "//ts/jest:jest.node.config.mjs"
+        deps = deps + ["//ts/jest:config_node_mjs_lib"]
 
     _jest_test(
         deps = deps,
