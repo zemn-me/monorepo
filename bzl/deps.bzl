@@ -293,3 +293,9 @@ exports_files(glob(["**/*"]))
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
     )
 
+    http_archive(
+        name = "aspect_bazel_lib",
+        sha256 = "4d6010ca5e3bb4d7045b071205afa8db06ec11eb24de3f023d74d77cca765f66",
+        strip_prefix = "bazel-lib-1.39.0",
+        url = "https://github.com/aspect-build/bazel-lib/releases/download/v1.39.0/bazel-lib-v1.39.0.tar.gz",
+    )

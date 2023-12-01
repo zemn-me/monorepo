@@ -1,5 +1,6 @@
-import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo';
 import React from 'react';
+
+import ZemnmezLogo from '#monorepo/project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo.js';
 
 const rect = (
 	[x, y]: [number, number],

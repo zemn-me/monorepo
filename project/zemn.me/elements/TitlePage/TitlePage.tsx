@@ -1,5 +1,5 @@
 import classes from 'classnames';
-import TimeEye from 'project/zemn.me/elements/TimeEye';
+import TimeEye from '#monorepo/project/zemn.me/elements/TimeEye/index.js';
 import React from 'react';
 
 import style from './TitlePage.module.css';

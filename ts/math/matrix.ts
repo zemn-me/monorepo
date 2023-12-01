@@ -1,5 +1,5 @@
-import { Vector } from './vec';
-import * as vec from './vec';
+import { Vector } from '#monorepo/ts/math/vec.js';
+import * as vec from '#monorepo/ts/math/vec.js';
 
 // J is effectively the number of ROWS and I is the number of COLUMNS
 export type Matrix<

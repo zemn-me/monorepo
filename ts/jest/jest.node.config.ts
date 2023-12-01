@@ -12,4 +12,5 @@ export default {
 	// https://github.com/facebook/jest/issues/12889#issuecomment-1193908448
 	moduleDirectories: ['node_modules', '<rootDir>'],
 	rootDir: '../..',
+	transform: {},
 };

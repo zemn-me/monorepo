@@ -1,4 +1,4 @@
-import * as Homog from 'ts/math/homog';
+import * as Homog from '#monorepo/ts/math/homog.js';
 
 export type Drawable2D = LineDrawable2D;
 
