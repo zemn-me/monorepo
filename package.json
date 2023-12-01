@@ -14,8 +14,8 @@
 		"@bazel/labs": "4.6.1",
 		"@bazel/runfiles": "5.8.1",
 		"@bazel/typescript": "5.8.1",
-		"@fortawesome/fontawesome-svg-core": "6.5.0",
-		"@fortawesome/free-solid-svg-icons": "6.5.0",
+		"@fortawesome/fontawesome-svg-core": "6.5.1",
+		"@fortawesome/free-solid-svg-icons": "6.5.1",
 		"@fortawesome/react-fontawesome": "0.2.0",
 		"@microsoft/api-documenter": "7.23.12",
 		"@microsoft/api-extractor": "7.38.3",
@@ -108,7 +108,7 @@
 		"@react-spring/rafz": "9.7.3",
 		"@types/bcryptjs": "2.4.6",
 		"csstype": "3.1.2",
-		"devtools-protocol": "0.0.1231134",
+		"devtools-protocol": "0.0.1231733",
 		"eslint-mdx": "2.2.0",
 		"eslint-plugin-mdx": "2.2.0",
 		"glob-promise": "6.0.5",
@@ -120,5 +120,9 @@
 		"overrides": {
 			"resolve": "^2.0.0-next.5"
 		}
-	}
+	},
+	"imports": {
+		"#monorepo/*.js": "./*.js"
+	},
+	"type": "module"
 }

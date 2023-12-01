@@ -1,4 +1,4 @@
-import * as b from 'ts/testing/import_test/b';
+import * as b from '#monorepo/ts/testing/import_test/b.js';
 
 const copy: string = b.MyString;
 

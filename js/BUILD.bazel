@@ -1,1 +1,5 @@
-# Nothing in here yet!
+filegroup(
+	name = "js_binary_deps",
+	srcs = [ "//:package_json" ],
+	visibility = [ "//:__subpackages__" ]
+)
