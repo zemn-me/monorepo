@@ -16,8 +16,9 @@
 
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Link from 'project/zemn.me/next/components/Link';
 import { useEffect } from 'react';
+
+import Link from '#monorepo/project/zemn.me/next/components/Link/index.js';
 
 const targetRoute = '/experiments/rays';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Logo from './logo';
+import Logo from '#monorepo/project/zemn.me/pages/art/logo.js';
 
 export default (
 	<>

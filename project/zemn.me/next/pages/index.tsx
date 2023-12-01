@@ -1,14 +1,15 @@
 import Head from 'next/head';
-import * as bio from 'project/zemn.me/bio';
-import { TimeEye } from 'project/zemn.me/elements/TimeEye';
-import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
-import * as kenwood from 'project/zemn.me/next/assets/kenwood';
-import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
-import Link from 'project/zemn.me/next/components/Link';
-import { Q } from 'project/zemn.me/next/components/Q';
-import Timeline from 'project/zemn.me/next/components/timeline';
-import style from 'project/zemn.me/next/pages/index.module.css';
-import * as lang from 'ts/react/lang';
+
+import * as bio from '#monorepo/project/zemn.me/bio/index.js';
+import { TimeEye } from '#monorepo/project/zemn.me/elements/TimeEye/index.js';
+import ZemnmezLogo from '#monorepo/project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo.js';
+import * as kenwood from '#monorepo/project/zemn.me/next/assets/kenwood/index.js';
+import { dividerHeadingClass } from '#monorepo/project/zemn.me/next/components/DividerHeading/index.js';
+import Link from '#monorepo/project/zemn.me/next/components/Link/index.js';
+import { Q } from '#monorepo/project/zemn.me/next/components/Q/index.js';
+import Timeline from '#monorepo/project/zemn.me/next/components/timeline/index.js';
+import style from '#monorepo/project/zemn.me/next/pages/index.module.css';
+import * as lang from '#monorepo/ts/react/lang/index.js';
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;

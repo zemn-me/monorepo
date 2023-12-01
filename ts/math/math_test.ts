@@ -1,5 +1,5 @@
-import * as matrix from './matrix';
-import * as vec from './vec';
+import * as matrix from '#monorepo/ts/math/matrix.js';
+import * as vec from '#monorepo/ts/math/vec.js';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
 	expect(actual.length).toBe(expected.length);

@@ -1,8 +1,11 @@
-import * as cartesian from 'ts/math/cartesian';
-import * as euler_angle from 'ts/math/euler_angle';
-import * as quaternion from 'ts/math/quaternion';
-
-import { Cartestian as C, Euler as E, Quaternion as Q } from './conv';
+import * as cartesian from '#monorepo/ts/math/cartesian.js';
+import {
+	Cartestian as C,
+	Euler as E,
+	Quaternion as Q,
+} from '#monorepo/ts/math/conv.js';
+import * as euler_angle from '#monorepo/ts/math/euler_angle.js';
+import * as quaternion from '#monorepo/ts/math/quaternion.js';
 
 describe('Conversions', () => {
 	test('Quaternion from EulerAngles', () => {

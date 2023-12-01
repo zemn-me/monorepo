@@ -3,5 +3,10 @@
     "regex": "potentially fixable with the `--fix` option",
     "command": "npm",
     "args": [ "run", "fix" ]
+  },
+  {
+	"regex": "(.*)\\(\\d+,\\d+\\): error TS2307: Cannot find module '([^']+)' or its corresponding type declarations.",
+	"command": "./fix_import.sh",
+	"args": [ "$1", "$2" ]
   }
 ]
