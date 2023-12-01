@@ -2,7 +2,8 @@ import * as path from 'node:path';
 
 import * as fs from 'fs';
 import { readdir } from 'fs/promises';
-import * as iter from 'ts/iter';
+
+import * as iter from '#monorepo/ts/iter/index.js';
 
 type Dirent = fs.Dirent;
 

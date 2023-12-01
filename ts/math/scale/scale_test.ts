@@ -1,4 +1,4 @@
-import { Scalable, Scale } from '.';
+import { Scalable, Scale } from '#monorepo/ts/math/scale/index.js';
 
 interface SquareProps {
 	h: number;

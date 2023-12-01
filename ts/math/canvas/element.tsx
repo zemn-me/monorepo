@@ -1,7 +1,7 @@
 import React from 'react';
-import * as Homog from 'ts/math/homog';
 
-import * as Cnv from '.';
+import * as Cnv from '#monorepo/ts/math/canvas/index.js';
+import * as Homog from '#monorepo/ts/math/homog.js';
 
 export interface CanvasProps {
 	readonly draw: Cnv.Drawable2D;
