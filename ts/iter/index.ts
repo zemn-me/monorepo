@@ -1,4 +1,4 @@
-export * as dict from './dict';
+export * as dict from '#monorepo/ts/iter/dict.js';
 
 /**
  * Flatten nested iterables into a single iterable.

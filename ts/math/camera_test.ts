@@ -1,4 +1,4 @@
-import * as Camera from './camera';
+import * as Camera from '#monorepo/ts/math/camera.js';
 
 describe('Camera', () => {
 	describe('.matrix', () => {

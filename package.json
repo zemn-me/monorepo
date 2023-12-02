@@ -120,5 +120,9 @@
 		"overrides": {
 			"resolve": "^2.0.0-next.5"
 		}
-	}
+	},
+	"imports": {
+		"#monorepo/*.js": "./*.js"
+	},
+	"type": "module"
 }

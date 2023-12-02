@@ -1,4 +1,6 @@
 load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "copy_to_bin")
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -15,3 +17,26 @@ ts_project(
         "//:node_modules/jest-environment-jsdom",
     ],
 )
+
+copy_file(
+	name = "config_node_mjs",
+	src = "jest.node.config.js",
+	out = "jest.node.config.mjs"
+)
+
+copy_to_bin(
+	name = "config_node_mjs_lib",
+	srcs = [ "jest.node.config.mjs" ]
+)
+
+copy_file(
+	name = "config_browser_mjs",
+	src = "jest.browser.config.js",
+	out = "jest.browser.config.mjs"
+)
+
+copy_to_bin(
+	name = "config_browser_mjs_lib",
+	srcs = [ "jest.browser.config.mjs" ]
+)
+
