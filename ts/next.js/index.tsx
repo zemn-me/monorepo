@@ -3,75 +3,61 @@ import Script from 'next/script';
 
 export * as config from 'ts/next.js/next.config';
 
+type scheme = 'https:' | 'data:';
+type schemeSource = scheme;
+type hostSource = `${schemeSource}//${string}`;
+type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval';
+type keywordSource = `'${keyword}'`;
+type sourceExpression = schemeSource | hostSource | keywordSource;
+type sourceList = Set<sourceExpression>;
+type directives =
+	| 'style-src'
+	| 'img-src'
+	| 'script-src'
+	| 'connect-src'
+	| 'default-src'
+	| 'font-src';
+
+type cspPolicy = Partial<Record<directives, sourceList>>;
+
 const isDevMode = process?.env?.NODE_ENV === 'development';
 
-class CSPDirectiveList extends Set {
-	toString(): string {
-		return [...super.values()].join(' ');
-	}
-}
-
-class CSPDirective {
-	constructor(
-		private readonly directive: string,
-		private readonly directiveList: CSPDirectiveList
-	) {}
-	toString(): string {
-		return [this.directive, this.directiveList].join(' ');
-	}
-}
-
-const script_src_directives = new CSPDirectiveList([
-	"'self'",
-	'https://*.google-analytics.com',
-]);
-
-const csp_rules: CSPDirective[] = [
-	new CSPDirective(
-		'style-src',
-		new CSPDirectiveList([
-			"'self'",
-			"'unsafe-inline'",
-			'https://fonts.googleapis.com',
-		])
-	),
-	new CSPDirective(
-		'img-src',
-		new CSPDirectiveList([
-			"'self'",
-			"'unsafe-inline'",
-			'data:',
-			'https://*.google-analytics.com',
-			'https://*.g.doubleclick.net',
-		])
-	),
-	new CSPDirective(
-		'font-src',
-		new CSPDirectiveList([
-			"'self'",
-			'https://fonts.gstatic.com',
-			'https://fonts.googleapis.com',
-		])
-	),
-	new CSPDirective(
-		'connect-src',
-		new CSPDirectiveList(["'self'", 'https://*.google-analytics.com'])
-	),
-	new CSPDirective('script-src', script_src_directives),
-];
-
-if (isDevMode) {
-	["'unsafe-inline'", "'unsafe-eval'"].forEach(v =>
-		script_src_directives.add(v)
-	);
-
-	csp_rules.push(
-		new CSPDirective(
-			'default-src',
-			new CSPDirectiveList(["'self'", "'unsafe-eval'"])
-		)
-	);
-}
+const csp_rules: cspPolicy = {
+	'style-src': new Set([
+		"'self'",
+		"'unsafe-inline'",
+		'https://fonts.googleapis.com',
+	]),
+	'img-src': new Set([
+		"'self'",
+		"'unsafe-inline'",
+		'data:',
+		'https://*.google-analytics.com',
+		'https://*.g.doubleclick.net',
+	]),
+	'font-src': new Set([
+		"'self'",
+		'https://fonts.gstatic.com',
+		'https://fonts.googleapis.com',
+	]),
+	'connect-src': new Set([
+		"'self'",
+		'https://*.google-analytics.com',
+		'https://*.doubleclick.net',
+	]),
+	'script-src': new Set([
+		"'self'",
+		'https://*.google-analytics.com',
+		...(isDevMode
+			? (["'unsafe-inline'", "'unsafe-eval'"] as const)
+			: ([] as const)),
+	]),
+	...(isDevMode
+		? {
+				'default-src': new Set(["'self'", "'unsafe-eval'"]),
+		  }
+		: {}),
+};
 
 declare const ga: (...params: unknown[]) => void;
 export function HeaderTags() {
@@ -92,7 +78,9 @@ export function HeaderTags() {
 			/>
 			<Head>
 				<meta
-					content={csp_rules.join('; ')}
+					content={Object.entries(csp_rules)
+						.map(([k, v]) => [k, ...v].join(' '))
+						.join('; ')}
 					httpEquiv="Content-Security-Policy"
 				/>
 
