@@ -70,7 +70,7 @@ export function HeaderTags() {
 					console.error('unable to load google analytics :(')
 				}
 				onLoad={() => {
-					ga('create', 'UA-134479219-1', 'auto');
+					ga('create', 'G-BBMLN07SPK', 'auto');
 					ga('send', 'pageview');
 				}}
 				src="https://ssl.google-analytics.com/analytics.js"
