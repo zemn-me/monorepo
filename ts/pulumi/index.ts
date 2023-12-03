@@ -81,3 +81,19 @@ export class Component extends Pulumi.ComponentResource {
 		});
 	}
 }
+
+new aws.route53.Record(
+	'myrecord',
+	{
+		name: 'zemn.me',
+		records: [
+			'google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY',
+		],
+		ttl: 300,
+		type: 'TXT',
+		zoneId: 'ZG99IJ8QHXTSI',
+	},
+	{
+		protect: false,
+	}
+);
