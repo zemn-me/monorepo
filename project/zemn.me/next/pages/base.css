@@ -12,7 +12,19 @@ a {
     color: currentColor;
 }
 
-a:link, a:visited {
+a:visited {
+	/*
+	a pretty kind of vermillion-pink, sampled from the
+	hero video
+	*/
+	text-decoration-color: #ff9389;
+}
+
+a:link {
+	/*
+	a pretty kind of light green, also sampled from the
+	hero video
+	*/
 	text-decoration-color: #98cb0c;
 }
 
