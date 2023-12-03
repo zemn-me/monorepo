@@ -399,7 +399,7 @@ export class Website extends pulumi.ComponentResource {
 				],
 				ttl: 1800,
 			},
-			{ protect: true }
+			{ protect: false }
 		);
 
 		this.registerOutputs({
