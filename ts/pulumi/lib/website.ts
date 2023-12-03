@@ -387,26 +387,10 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
-		const txt_record = new aws.route53.Record(
-			`${name}_txt_record`,
-			{
-				zoneId: args.zoneId,
-				name: args.domain,
-				type: 'TXT',
-				records: [
-					'google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY',
-					'v=spf1 include:_spf.google.com ~all',
-				],
-				ttl: 1800,
-			},
-			{ protect: true }
-		);
-
 		this.registerOutputs({
 			distribution,
 			record,
 			bucketPolicy,
-			txt_record,
 		});
 	}
 }
