@@ -1,4 +1,21 @@
 import React from 'react';
+import seedrandom from 'seedrandom';
+
+function memoize<T>(fn: (arg: string) => T): (arg: string) => T {
+    const cache = new Map<string, T>();
+
+    return function(arg: string): T {
+        if (cache.has(arg)) {
+            return cache.get(arg)!;
+        } else {
+            const result = fn(arg);
+            cache.set(arg, result);
+            return result;
+        }
+    };
+}
+
+const random = memoize((seed: string) => seedrandom(seed)());
 
 interface RayProps {
 	readonly x1: number;
@@ -10,12 +27,14 @@ interface RayProps {
 	readonly minSegments: number;
 	readonly strokeWidth: number;
 	readonly stroke: string;
+	readonly seed?: string;
 }
 
 function Ray(props: RayProps) {
+	const { seed = "" } = props;
 	const { maxSegments, minSegments, ...lineProps } = props;
 	const nSegments = Math.floor(
-		(maxSegments - minSegments) * Math.random() + props.minSegments
+		(maxSegments - minSegments) * random('number of segments' + seed) + props.minSegments
 	);
 
 	const { sqrt, pow, abs } = Math;
@@ -23,7 +42,7 @@ function Ray(props: RayProps) {
 	// thanks pythagoras
 	const length = sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2));
 
-	const segmentLengths = [...Array(nSegments)].map(() => Math.random());
+	const segmentLengths = [...Array(nSegments)].map((_,n) => random(`segment length ${n}` + seed));
 
 	const totalSegmentLengths = segmentLengths.reduce((p, c) => p + c, 0);
 
@@ -58,7 +77,7 @@ function Rays(props: RaysProps) {
 				const waveringLength =
 					baseRayLength *
 					(props.randomAmountPerc / 100) *
-					Math.random();
+					random(`wavering length ${t}`);
 				const rayLength = unwaveringLength + waveringLength;
 
 				return (
@@ -73,6 +92,7 @@ function Rays(props: RaysProps) {
 						x2={rayLength}
 						y1={0}
 						y2={0}
+						seed={t.toString()}
 					/>
 				);
 			})}
