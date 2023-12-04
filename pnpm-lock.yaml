@@ -272,8 +272,8 @@ devDependencies:
     specifier: 0.14.0
     version: 0.14.0
   renovate:
-    specifier: 37.81.4
-    version: 37.81.4(typanion@3.13.0)
+    specifier: 37.82.0
+    version: 37.82.0(typanion@3.13.0)
   sharp:
     specifier: 0.33.0
     version: 0.33.0
@@ -15714,8 +15714,8 @@ packages:
       - supports-color
     dev: true
 
-  /renovate@37.81.4(typanion@3.13.0):
-    resolution: {integrity: sha512-LfP1mumYferEf6B6qtKbA6ManW6fqWF8JSWGZrImPmgYeqp+VHlFauFZvzHHFqshdDIosoClHaLbvA99VMO2VQ==}
+  /renovate@37.82.0(typanion@3.13.0):
+    resolution: {integrity: sha512-b+J8tsEPoOD4wHDi9wDZezjPhwurtgkVHn29KDbuztOfVMTNpX2IgJjhH2QpJ1znJNBloWqsk1pPk8MJLlCvNQ==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -16015,7 +16015,7 @@ packages:
   /rxjs@7.8.1:
     resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.2
     dev: true
 
   /sade@1.8.1:
@@ -17243,10 +17243,6 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
-
-  /tslib@2.6.0:
-    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
     dev: true
 
   /tslib@2.6.2:
