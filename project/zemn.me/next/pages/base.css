@@ -3,8 +3,44 @@ html, body, :root {
     padding: 0;
 }
 
-body {
+
+:root {
+	--background-color: white;
+	--foreground-color: black;
+	/*
+	a pretty kind of vermillion-pink, sampled from the
+	hero video
+	*/
+	--visited-link-color: #ff9389;
+	/*
+	a pretty kind of light green, also sampled from the
+	hero video
+	*/
+	--link-color: #98cb0c;
+}
+
+
+/*
+	Dark mode colours have been generated
+	by sampling light mode colours and
+	adjusting their lightness in the CIELAB
+	colour space.
+
+	See: https://colorizer.org/
+*/
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background-color: #010;
+		--foreground-color: #96a497;
+		--visited-link-color: #ad554b;
+		--link-color: #5b880a;
+	}
+}
+
+:root {
     font-family: 'Lora', serif;
+	color: var(--foreground-color);
+	background: var(--background-color);
 }
 
 a {
@@ -13,19 +49,11 @@ a {
 }
 
 a:visited {
-	/*
-	a pretty kind of vermillion-pink, sampled from the
-	hero video
-	*/
-	text-decoration-color: #ff9389;
+	text-decoration-color: var(--visited-link-color);
 }
 
 a:link {
-	/*
-	a pretty kind of light green, also sampled from the
-	hero video
-	*/
-	text-decoration-color: #98cb0c;
+	text-decoration-color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5 { font-weight: normal }
@@ -37,5 +65,7 @@ input[type="text"] {
 	font-family: inherit;
 	font-size: inherit;
 	border: none;
-	border-bottom: 1px dotted black;
+	border-bottom: 1px dotted var(--foreground-color);
 }
+
+

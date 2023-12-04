@@ -12,7 +12,7 @@ interface RayProps {
 	readonly stroke: string;
 }
 
-function Ray(props: RayProps) {
+function Ray({stroke, ...props}: RayProps) {
 	const { maxSegments, minSegments, ...lineProps } = props;
 	const nSegments = Math.floor(
 		(maxSegments - minSegments) * Math.random() + props.minSegments
@@ -31,6 +31,7 @@ function Ray(props: RayProps) {
 
 	return (
 		<line
+			style={{stroke}}
 			{...lineProps}
 			strokeDasharray={segmentLengths.map(v => v * scaleFactor).join(' ')}
 		/>
@@ -66,7 +67,7 @@ function Rays(props: RaysProps) {
 						key={`${t}`}
 						maxSegments={props.maxSegments}
 						minSegments={props.minSegements}
-						stroke={`black`}
+						stroke={`var(--foreground-color)`}
 						strokeWidth={props.strokeWidth}
 						transform={`rotate(${(360 / props.nRays) * t} 0 0)`}
 						x1={innerSpaceAmount}
@@ -256,7 +257,7 @@ function TimeEye() {
 				d="M16.73 62.66l-3.47 6.02h17.32l-3.47-6.02z"
 				data-part="frustum"
 				strokeWidth=".26"
-				style={{ stroke: 'black', fill: 'white' }}
+				style={{ stroke: 'var(--foreground-color)', fill: '--background-color' }}
 			/>
 			<circle
 				cx="21.92"
@@ -265,7 +266,7 @@ function TimeEye() {
 				fill="none"
 				r="1.61"
 				strokeWidth=".16"
-				style={{ stroke: 'black' }}
+				style={{ stroke: 'var(--foreground-color)' }}
 			/>
 			<ellipse
 				cx="21.92"
@@ -275,13 +276,13 @@ function TimeEye() {
 				rx="3.23"
 				ry="1.58"
 				strokeWidth=".23"
-				style={{ stroke: 'black' }}
+				style={{ stroke: 'var(--foreground-color)' }}
 			/>
 			<path
 				d="M23.53 68.65a1.61 1.61 0 0 1-3.22 0c0-.9.72-1.2 1.61-1.62.9.42 1.61.73 1.61 1.62z"
 				data-part="tear"
 				strokeWidth=".16"
-				style={{ stroke: 'black', fill: 'white' }}
+				style={{ stroke: 'var(--foreground-color)', fill: '--background-color' }}
 			/>
 			<circle
 				cx="21.92"
@@ -289,7 +290,7 @@ function TimeEye() {
 				data-part="pupil"
 				r=".54"
 				strokeWidth=".08"
-				style={{ stroke: 'black' }}
+				style={{ stroke: 'var(--foreground-color)' }}
 			/>
 		</g>
 	);
