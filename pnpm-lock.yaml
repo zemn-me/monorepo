@@ -98,8 +98,8 @@ devDependencies:
     specifier: 7.23.12
     version: 7.23.12(@types/node@20.10.3)
   '@microsoft/api-extractor':
-    specifier: 7.38.3
-    version: 7.38.3(@types/node@20.10.3)
+    specifier: 7.38.4
+    version: 7.38.4(@types/node@20.10.3)
   '@pulumi/aws':
     specifier: 6.13.0
     version: 6.13.0
@@ -4181,8 +4181,8 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.38.3(@types/node@20.10.3):
-    resolution: {integrity: sha512-xt9iYyC5f39281j77JTA9C3ISJpW1XWkCcnw+2vM78CPnro6KhPfwQdPDfwS5JCPNuq0grm8cMdPUOPvrchDWw==}
+  /@microsoft/api-extractor@7.38.4(@types/node@20.10.3):
+    resolution: {integrity: sha512-0SW3Of6os4bAYlHdiD1hJx/ygXr7vRZi92E1pREufNERH87aZ0B9Vhku/4Mj2Oxp58gyV5d18t7uZold6HCSEw==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.28.2(@types/node@20.10.3)
