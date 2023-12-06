@@ -5,6 +5,7 @@ import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
 import Link from 'project/zemn.me/next/components/Link';
+import { Prose } from 'project/zemn.me/next/components/Prose/prose';
 import { Q } from 'project/zemn.me/next/components/Q';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
@@ -16,22 +17,6 @@ function ZemnmezLogoInline() {
 
 function TimeEyeInline() {
 	return <TimeEye className={style.logoInline} />;
-}
-
-type DivAttributes = JSX.IntrinsicElements['div'];
-interface ProseProps extends DivAttributes {
-	readonly children?: React.ReactElement[];
-}
-
-/**
- * Sets up appropriate padding for showing a bunch of paragraphs.
- */
-function Prose({ children, ...props }: ProseProps) {
-	return (
-		<div {...props} className={style.prose}>
-			{children}
-		</div>
-	);
 }
 
 /**
