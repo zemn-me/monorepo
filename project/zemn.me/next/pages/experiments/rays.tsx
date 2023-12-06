@@ -2,17 +2,16 @@ import React from 'react';
 import seedrandom from 'seedrandom';
 
 function memoize<T>(fn: (arg: string) => T): (arg: string) => T {
-    const cache = new Map<string, T>();
+	const cache = new Map<string, T>();
 
-    return function(arg: string): T {
-        if (cache.has(arg)) {
-            return cache.get(arg)!;
-        } else {
-            const result = fn(arg);
-            cache.set(arg, result);
-            return result;
-        }
-    };
+	return function (arg: string): T {
+		if (cache.has(arg)) {
+			return cache.get(arg)!;
+		}
+		const result = fn(arg);
+		cache.set(arg, result);
+		return result;
+	};
 }
 
 const random = memoize((seed: string) => seedrandom(seed)());
@@ -30,10 +29,11 @@ interface RayProps {
 	readonly seed?: string;
 }
 
-function Ray({stroke, seed = "", ...props}: RayProps) {
+function Ray({ stroke, seed = '', ...props }: RayProps) {
 	const { maxSegments, minSegments, ...lineProps } = props;
 	const nSegments = Math.floor(
-		(maxSegments - minSegments) * random('number of segments' + seed) + props.minSegments
+		(maxSegments - minSegments) * random('number of segments' + seed) +
+			props.minSegments
 	);
 
 	const { sqrt, pow, abs } = Math;
@@ -41,7 +41,9 @@ function Ray({stroke, seed = "", ...props}: RayProps) {
 	// thanks pythagoras
 	const length = sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2));
 
-	const segmentLengths = [...Array(nSegments)].map((_,n) => random(`segment length ${n}` + seed));
+	const segmentLengths = [...Array(nSegments)].map((_, n) =>
+		random(`segment length ${n}` + seed)
+	);
 
 	const totalSegmentLengths = segmentLengths.reduce((p, c) => p + c, 0);
 
@@ -49,7 +51,7 @@ function Ray({stroke, seed = "", ...props}: RayProps) {
 
 	return (
 		<line
-			style={{stroke}}
+			style={{ stroke }}
 			{...lineProps}
 			strokeDasharray={segmentLengths.map(v => v * scaleFactor).join(' ')}
 		/>
@@ -85,6 +87,7 @@ function Rays(props: RaysProps) {
 						key={`${t}`}
 						maxSegments={props.maxSegments}
 						minSegments={props.minSegements}
+						seed={t.toString()}
 						stroke={`var(--foreground-color)`}
 						strokeWidth={props.strokeWidth}
 						transform={`rotate(${(360 / props.nRays) * t} 0 0)`}
@@ -92,7 +95,6 @@ function Rays(props: RaysProps) {
 						x2={rayLength}
 						y1={0}
 						y2={0}
-						seed={t.toString()}
 					/>
 				);
 			})}
@@ -276,7 +278,10 @@ function TimeEye() {
 				d="M16.73 62.66l-3.47 6.02h17.32l-3.47-6.02z"
 				data-part="frustum"
 				strokeWidth=".26"
-				style={{ stroke: 'var(--foreground-color)', fill: '--background-color' }}
+				style={{
+					stroke: 'var(--foreground-color)',
+					fill: '--background-color',
+				}}
 			/>
 			<circle
 				cx="21.92"
@@ -301,7 +306,10 @@ function TimeEye() {
 				d="M23.53 68.65a1.61 1.61 0 0 1-3.22 0c0-.9.72-1.2 1.61-1.62.9.42 1.61.73 1.61 1.62z"
 				data-part="tear"
 				strokeWidth=".16"
-				style={{ stroke: 'var(--foreground-color)', fill: '--background-color' }}
+				style={{
+					stroke: 'var(--foreground-color)',
+					fill: '--background-color',
+				}}
 			/>
 			<circle
 				cx="21.92"
