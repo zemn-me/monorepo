@@ -581,7 +581,7 @@ export const Bio: Bio = {
 		},
 		{
 			date: date(28, 'nov', 2023),
-			title: en`Senior Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
+			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
 			tags: [software, security, work],
 		},
 		// END TOOL ASSISTED SORT
