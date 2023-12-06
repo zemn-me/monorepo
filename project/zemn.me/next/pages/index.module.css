@@ -80,23 +80,6 @@
 }
 
 
-.prose {
-	margin: 0 auto;
-	padding: 0 2em;
-	column-width: 20em;
-	column-gap: 2em;
-}
-
-.prose>*:first-child {
-	/*
-		Otherwise column layout looks weird
-		as one column will have a gap, but
-		the other won't
-	*/
-	margin-top: 0;
-}
-
-
 .footer {
 	display: grid;
 	grid:
