@@ -1,0 +1,22 @@
+.prose {
+	margin: 0 auto;
+	padding: 0 2em;
+}
+
+.prose address {
+	font-variant: small-caps;
+}
+
+.prose address a:link {
+	text-decoration-thickness: 0.05em;
+}
+
+.prose address::before {
+	content: "— "
+}
+
+.prose pre {
+	font-family: inherit;
+}
+
+
