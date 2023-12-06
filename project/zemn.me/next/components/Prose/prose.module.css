@@ -1,17 +1,22 @@
 .prose {
 	margin: 0 auto;
 	padding: 0 2em;
-	column-width: 20em;
-	column-gap: 2em;
 }
 
-.prose>*:first-child {
-	/*
-		Otherwise column layout looks weird
-		as one column will have a gap, but
-		the other won't
-	*/
-	margin-top: 0;
+.prose address {
+	font-variant: small-caps;
+}
+
+.prose address a:link {
+	text-decoration-thickness: 0.05em;
+}
+
+.prose address::before {
+	content: "— "
+}
+
+.prose pre {
+	font-family: inherit;
 }
 
 
