@@ -49,6 +49,18 @@ it('should be able to annotate a successful build', async () => {
 ::error title=//bin/host/ffmpeg%3Asmoke failed in 0.1s,file=bin/host/ffmpeg/BUILD.bazel::  //bin/host/ffmpeg:smoke                                                  FAILED in 0.1s`);
 });
 
+it('should be able to annotate bazel errors', async () => {
+	await expect(
+		annotate(
+			`
+ERROR: /home/runner/work/monorepo/monorepo/ts/pulumi/BUILD.bazel:10:11: Label '//ts/pulumi:shadwell.im/thomas/index.html' is invalid because 'ts/pulumi/shadwell.im' is a subpackage; perhaps you meant to put the colon here: '//ts/pulumi/shadwell.im:thomas/index.html'?
+		`.trim()
+		)
+	).resolves.toEqual(
+		`::error file=monorepo/monorepo/ts/pulumi/BUILD.bazel,line=10,col=11::ERROR: /home/runner/work/monorepo/monorepo/ts/pulumi/BUILD.bazel:10:11: Label '//ts/pulumi:shadwell.im/thomas/index.html' is invalid because 'ts/pulumi/shadwell.im' is a subpackage; perhaps you meant to put the colon here: '//ts/pulumi/shadwell.im:thomas/index.html'?`
+	);
+});
+
 const later = <T>(): [(value: T | PromiseLike<T>) => void, Promise<T>] => {
 	let okay: (value: T | PromiseLike<T>) => void;
 	const p = new Promise<T>(ok => (okay = ok));
