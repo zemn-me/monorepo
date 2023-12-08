@@ -1,0 +1,16 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+ts_project(
+	name = "shadwell.im",
+	deps = [
+		"//:node_modules/@pulumi/pulumi",
+		"//ts/pulumi/lib",
+	],
+	data = [
+		"//ts/pulumi/shadwell.im/luke:next"
+	]
+)
+
+
