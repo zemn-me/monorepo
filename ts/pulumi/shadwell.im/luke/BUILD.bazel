@@ -1,0 +1,18 @@
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
+
+next_project(
+    name = "next",
+    srcs = ["//ts/pulumi/shadwell.im/luke/pages"],
+)
+
+
+# bazel run //ts/pulumi/shadwell.im/luke
+# to test the website.
+alias(
+	name = "luke",
+	actual = ":dev"
+)
+
