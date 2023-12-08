@@ -1,5 +1,5 @@
 {
-  "checksum": "d98508c426ceba4c909f8f37d628beaf3483c5572975e62a63671b67a9bd5f0b",
+  "checksum": "53022b67838986f974a87af20f8d8f70dc02b10eff58142c5de8498599650e38",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1527,7 +1527,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.10",
+              "id": "swc_common 0.33.11",
               "target": "swc_common"
             }
           ],
@@ -2771,13 +2771,13 @@
       },
       "license": "Apache-2.0"
     },
-    "swc_common 0.33.10": {
+    "swc_common 0.33.11": {
       "name": "swc_common",
-      "version": "0.33.10",
+      "version": "0.33.11",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.33.10/download",
-          "sha256": "6e9319d6d5df09497d920dbc51c937032ac6909a0df617998fe840c7bb8e74e0"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.33.11/download",
+          "sha256": "e4874cb70fc4d77cf9069b00a3167b32a8394916371ed053297fcfa0b0ddbf13"
         }
       },
       "targets": [
@@ -2881,7 +2881,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.10"
+        "version": "0.33.11"
       },
       "license": "Apache-2.0"
     },
