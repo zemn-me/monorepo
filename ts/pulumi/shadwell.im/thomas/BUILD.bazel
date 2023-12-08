@@ -1,0 +1,16 @@
+load("//js:rules.bzl", "js_library")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+js_library(
+	name = "thomas",
+	srcs = [ "index.html" ],
+)
+
+exports_files(
+    [
+		"index.html"
+    ],
+)
+
+
