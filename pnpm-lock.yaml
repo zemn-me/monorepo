@@ -107,8 +107,8 @@ devDependencies:
     specifier: 2.3.0
     version: 2.3.0
   '@pulumi/pulumi':
-    specifier: 3.95.0
-    version: 3.95.0
+    specifier: 3.96.1
+    version: 3.96.1
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -4905,7 +4905,7 @@ packages:
   /@pulumi/aws@6.13.1:
     resolution: {integrity: sha512-/yrcZVaYx45gaaQe8X4iPA368ZNk8WbETJ4BwUzcDK9Om36o4Meqfh7JTGpruAgu4LmQLwiMYj8Bznk7lbtbmA==}
     dependencies:
-      '@pulumi/pulumi': 3.95.0
+      '@pulumi/pulumi': 3.96.1
       builtin-modules: 3.0.0
       mime: 2.6.0
       read-package-tree: 5.3.1
@@ -4921,7 +4921,7 @@ packages:
       '@aws-sdk/client-ecs': 3.458.0
       '@pulumi/aws': 6.13.1
       '@pulumi/docker': 4.5.0
-      '@pulumi/pulumi': 3.95.0
+      '@pulumi/pulumi': 3.96.1
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1503.0
       docker-classic: /@pulumi/docker@3.6.1
@@ -4936,7 +4936,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.95.0
+      '@pulumi/pulumi': 3.96.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4945,7 +4945,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.95.0
+      '@pulumi/pulumi': 3.96.1
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -4954,14 +4954,14 @@ packages:
   /@pulumi/docker@4.5.0:
     resolution: {integrity: sha512-DOiczZK1cF4NGlEWzacPLjGcoPKXHXISoqq4KqCO97YW28rZSu6LOdveQ8tLaUHGeyWQ+CS3PT45caSxHAbzbw==}
     dependencies:
-      '@pulumi/pulumi': 3.95.0
+      '@pulumi/pulumi': 3.96.1
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.95.0:
-    resolution: {integrity: sha512-6yRqzYl+jxFeC0nuRNNDzWGsSdJF+VgZfAcmoXPGYLS5XGsXQDPitH0WmgA0sfAVfXyx1dImleQCiCY7LUV15A==}
+  /@pulumi/pulumi@3.96.1:
+    resolution: {integrity: sha512-/aHAYT1jWzJA6DNVsFuinSJ+b1w1jLpFBq1KlNKz1rszeSqreP6w4dylXKCZSTdtX1JM/1iEghFGo/rB5ygI6w==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.9.6
@@ -4975,6 +4975,7 @@ packages:
       '@opentelemetry/sdk-trace-node': 1.18.1(@opentelemetry/api@1.7.0)
       '@opentelemetry/semantic-conventions': 1.18.1
       '@pulumi/query': 0.3.0
+      '@types/google-protobuf': 3.15.12
       execa: 5.1.1
       google-protobuf: 3.21.2
       ini: 2.0.0
@@ -6722,6 +6723,9 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 20.10.4
+
+  /@types/google-protobuf@3.15.12:
+    resolution: {integrity: sha512-40um9QqwHjRS92qnOaDpL7RmDK15NuZYo9HihiJRbYkMQZlWnuH8AdvbMy8/o6lgLmKbDUKa+OALCltHdbOTpQ==}
 
   /@types/graceful-fs@4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
