@@ -1,0 +1,13 @@
+load("//ts:rules.bzl", "ts_project")
+package(default_visibility = ["//ts/pulumi/shadwell.im/luke:__subpackages__"])
+
+ts_project(
+    name = "pages",
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//ts/next.js",
+    ],
+)
+

@@ -13,7 +13,7 @@ ts_project(
         ":pulumi_local",
         "//project/zemn.me/next",
         "//ts/pulumi/zemn.me/availability:next",
-        "//ts/pulumi:shadwell.im/thomas/index.html"
+        "//ts/pulumi/shadwell.im/thomas"
     ],
     deps = [
         "//:node_modules/@pulumi/aws",
