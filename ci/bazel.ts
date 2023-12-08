@@ -43,7 +43,9 @@ function getWorkspaceRelativePath(path: string): FilePositionParams {
 
 	let [, filePath, line, column] = m;
 
-	const m2 = /.*bazel\/_bazel_runner\/[^/]+\/(.*)/.exec(filePath);
+	const m2 = /(?:.*bazel\/_bazel_runner\/[^/]+\/|.*runner\/work\/)(.*)/.exec(
+		filePath
+	);
 
 	if (m2 !== null) {
 		[, filePath] = m2;
@@ -168,8 +170,27 @@ bazel test ${failures.join(' ')}
 `);
 }
 
+async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
+	for await (const line of lines) {
+		const m = /ERROR:(\s+[^:]+.bazel:\d+:\d+):\s+.*/.exec(line);
+
+		if (m === null) {
+			yield line;
+			continue;
+		}
+
+		const [, filepath] = m;
+
+		yield Command('error')({
+			...getWorkspaceRelativePath(filepath),
+		})(line);
+	}
+}
+
 export function AnnotateBazelLines(lines: AsyncGenerator<string>) {
-	return AnnotateBuildCompletion(AnnotateDebugStatements(lines));
+	return AnnotateBuildCompletion(
+		AnnotateBazelFailures(AnnotateDebugStatements(lines))
+	);
 }
 
 /**
