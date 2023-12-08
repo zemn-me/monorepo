@@ -107,8 +107,8 @@ devDependencies:
     specifier: 2.3.0
     version: 2.3.0
   '@pulumi/pulumi':
-    specifier: 3.96.1
-    version: 3.96.1
+    specifier: 3.96.2
+    version: 3.96.2
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -4919,7 +4919,7 @@ packages:
   /@pulumi/aws@6.13.2:
     resolution: {integrity: sha512-NO5+nTQTJKeSeqZdZsc8h/ObhnAypjvDcVFatdtoMuE/mpv3Lb/8q81dXAlTU16Eo5jU8aBrGN7yZ9X6ehf8UQ==}
     dependencies:
-      '@pulumi/pulumi': 3.96.1
+      '@pulumi/pulumi': 3.96.2
       builtin-modules: 3.0.0
       mime: 2.6.0
       read-package-tree: 5.3.1
@@ -4935,7 +4935,7 @@ packages:
       '@aws-sdk/client-ecs': 3.458.0
       '@pulumi/aws': 6.13.2
       '@pulumi/docker': 4.5.0
-      '@pulumi/pulumi': 3.96.1
+      '@pulumi/pulumi': 3.96.2
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1503.0
       docker-classic: /@pulumi/docker@3.6.1
@@ -4950,7 +4950,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.96.1
+      '@pulumi/pulumi': 3.96.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4959,7 +4959,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.96.1
+      '@pulumi/pulumi': 3.96.2
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -4968,14 +4968,14 @@ packages:
   /@pulumi/docker@4.5.0:
     resolution: {integrity: sha512-DOiczZK1cF4NGlEWzacPLjGcoPKXHXISoqq4KqCO97YW28rZSu6LOdveQ8tLaUHGeyWQ+CS3PT45caSxHAbzbw==}
     dependencies:
-      '@pulumi/pulumi': 3.96.1
+      '@pulumi/pulumi': 3.96.2
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.96.1:
-    resolution: {integrity: sha512-/aHAYT1jWzJA6DNVsFuinSJ+b1w1jLpFBq1KlNKz1rszeSqreP6w4dylXKCZSTdtX1JM/1iEghFGo/rB5ygI6w==}
+  /@pulumi/pulumi@3.96.2:
+    resolution: {integrity: sha512-zYKCArkjF8YbdrJd4Ka6uCiHq+m3uDp2whA0jIQs/SgTT6m37z1v9sM7sOsdw8qK9N9hayqbLsrtqGdTYP65eg==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.9.6
@@ -7278,7 +7278,6 @@ packages:
     resolution: {integrity: sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-    dev: false
 
   /adm-zip@0.5.10:
     resolution: {integrity: sha512-x0HvcHqVJNTPk/Bw8JbLWlWoo6Wwnsug0fnYYro1HBrjxZ3G7/AZk7Ahv8JwDe1uIcz8eBqvu86FuF1POiG7vQ==}
@@ -17325,7 +17324,7 @@ packages:
     hasBin: true
     dependencies:
       '@jridgewell/source-map': 0.3.5
-      acorn: 8.10.0
+      acorn: 8.11.2
       commander: 2.20.3
       source-map-support: 0.5.21
     dev: true
