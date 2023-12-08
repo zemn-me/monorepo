@@ -1,0 +1,9 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "shadwell.im",
+	deps = [
+		"//:node_modules/@pulumi/pulumi",
+		"//ts/pulumi/lib/website",
+	]
+)
