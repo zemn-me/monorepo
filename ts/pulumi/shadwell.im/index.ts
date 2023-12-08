@@ -31,6 +31,14 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		super.registerOutputs({ site: this.site });
+		const luke = new Website(`${name}_luke_shadwell_im_website`, {
+			index: 'ts/pulumi/shadwell.im/luke/index.html',
+			directory: 'ts/pulumi/shadwell.im/luke/',
+			zoneId: args.zoneId,
+			domain: ['luke', args.domain].join('.'),
+			noIndex: args.noIndex,
+		});
+
+		super.registerOutputs({ site: this.site, luke });
 	}
 }
