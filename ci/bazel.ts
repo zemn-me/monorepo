@@ -136,14 +136,14 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 				break;
 			case 'FAILED': {
 				failures.push(tag);
-				const nextLine = await take();
+				const nextLine = (await take())?.trim();
 				yield Command('error')({
 					title: `${tag} failed in ${time}`,
 					file: buildFile,
 				})(
 					line +
-						(nextLine !== undefined
-							? `\n${await fs.readFile(nextLine.trim())}`
+						(nextLine !== undefined && nextLine
+							? `\n${await fs.readFile(nextLine)}`
 							: '')
 				);
 				break;
