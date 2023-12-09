@@ -81,6 +81,7 @@ export default function Main() {
 				<Post key={i} {...post.data} />
 			)) ?? 'we had an issue loading them ... 🐕😭'}
 			<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>
+			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>
 	);
 }
