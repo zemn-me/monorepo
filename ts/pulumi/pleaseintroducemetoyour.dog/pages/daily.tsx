@@ -60,14 +60,21 @@ function Post(post: Post) {
 
 export default function Main() {
 	const [searchResponse, setSearchResponse] = useState<SearchResponse>();
+	const [error, setError] = useState<undefined | [unknown]>(undefined);
 
 	useEffect(() => {
 		void fetch(
 			`https://www.reddit.com/r/aww/search.json?raw_json=1&q=dog&sort=top&t=day&restrict_sr=1`
 		)
 			.then(r => r.json())
-			.then(j => setSearchResponse(() => j));
+			.then(j => setSearchResponse(() => j))
+			.catch(e => {
+				console.error(e);
+				setError(() => [e]);
+			});
 	}, []);
+
+	if (error !== undefined) return 'error ... 😭😭😭😭😿😿😿';
 
 	if (!searchResponse) return 'loading doggs ... 🤔🤔';
 
