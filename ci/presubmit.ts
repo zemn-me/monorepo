@@ -185,5 +185,5 @@ const cmd = new Command('presubmit')
 
 cmd.parseAsync(process.argv).catch(e => {
 	process.exitCode = 2;
-	console.error(e);
+	console.error('Terminal error:', e);
 });
