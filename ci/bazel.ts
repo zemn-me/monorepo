@@ -136,14 +136,14 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 				break;
 			case 'FAILED': {
 				failures.push(tag);
-				const nextLine = await take();
+				const nextLine = (await take())?.trim();
 				yield Command('error')({
 					title: `${tag} failed in ${time}`,
 					file: buildFile,
 				})(
 					line +
-						(nextLine !== undefined
-							? `\n${await fs.readFile(nextLine.trim())}`
+						(nextLine !== undefined && nextLine
+							? `\n${await fs.readFile(nextLine)}`
 							: '')
 				);
 				break;
@@ -222,8 +222,13 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	args.push('--noshow_progress');
 	const process = child_process.spawn('bazel', args, { cwd });
 
+	const errors: Error[] = [];
+
+	process.addListener('error', e => errors.push(e));
+
 	const finish = new Promise<void>(ok => process.on('close', () => ok()));
 
+	console.log('Beginning tests.');
 	for await (const line of interleave(
 		AnnotateBazelLines(byLine(process.stdout)),
 		AnnotateBazelLines(byLine(process.stderr))
@@ -231,10 +236,27 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		console.log(line);
 	}
 
-	await new Promise(ok => process.addListener('exit', ok));
+	console.log('tests likely concluded. awaiting process exit');
 
-	if (process.exitCode !== 0)
+	try {
+		await Promise.all([
+			finish,
+			//new Promise(ok => process.addListener('exit', ok)),
+		]);
+	} catch (e) {
+		console.error('Mysterious error', e);
+	}
+
+	console.log('subprocess exited');
+
+	if (errors.length > 0) {
+		console.info('Failure.');
+		throw errors[0];
+	}
+
+	if (process.exitCode !== 0) {
+		console.info('Failure.');
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
-
-	await finish;
+	}
+	console.info('Success.');
 }
