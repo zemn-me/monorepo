@@ -16,13 +16,14 @@ type directives =
 	| 'script-src'
 	| 'connect-src'
 	| 'default-src'
+	| 'media-src'
 	| 'font-src';
 
-type cspPolicy = Partial<Record<directives, sourceList>>;
+export type CspPolicy = Partial<Record<directives, sourceList>>;
 
 const isDevMode = process?.env?.NODE_ENV === 'development';
 
-const csp_rules: cspPolicy = {
+export const DefaultContentSecurityPolicy: CspPolicy = {
 	'style-src': new Set([
 		"'self'",
 		"'unsafe-inline'",
@@ -60,7 +61,14 @@ const csp_rules: cspPolicy = {
 };
 
 declare const ga: (...params: unknown[]) => void;
-export function HeaderTags() {
+
+interface HeaderTagsProps {
+	readonly cspPolicy?: CspPolicy;
+}
+
+export function HeaderTags({
+	cspPolicy = DefaultContentSecurityPolicy,
+}: HeaderTagsProps) {
 	return (
 		<>
 			<Script
@@ -78,7 +86,7 @@ export function HeaderTags() {
 			/>
 			<Head>
 				<meta
-					content={Object.entries(csp_rules)
+					content={Object.entries(cspPolicy)
 						.map(([k, v]) => [k, ...v].join(' '))
 						.join('; ')}
 					httpEquiv="Content-Security-Policy"

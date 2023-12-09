@@ -12,7 +12,12 @@ ts_project(
         "//:node_modules/mime",
         "//:node_modules/next",
         "//:node_modules/react",
+		"//:node_modules/classnames",
         "//ts",
         "//ts/next.js",
+		"//project/zemn.me/next/components"
     ],
+	assets = [
+		":base.css"
+	]
 )
