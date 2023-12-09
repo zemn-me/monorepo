@@ -39,6 +39,14 @@ export class Component extends Pulumi.ComponentResource {
 			noIndex: args.noIndex,
 		});
 
-		super.registerOutputs({ site: this.site, luke });
+		const kate = new Website(`${name}_kate_shadwell_im_website`, {
+			index: 'ts/pulumi/shadwell.im/kate/out/index.html',
+			directory: 'ts/pulumi/shadwell.im/kate/out',
+			zoneId: args.zoneId,
+			domain: ['kate', args.domain].join('.'),
+			noIndex: args.noIndex,
+		});
+
+		super.registerOutputs({ site: this.site, luke, kate });
 	}
 }
