@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Head from 'next/head';
 import Link from 'project/zemn.me/next/components/Link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -72,6 +73,9 @@ export default function Main() {
 
 	return (
 		<>
+			<Head>
+				<title>Top doggoes of the day!!</title>
+			</Head>
 			<h1>Top doggoes of the day!!</h1>
 			{searchResponse?.data?.children?.map((post, i) => (
 				<Post key={i} {...post.data} />
