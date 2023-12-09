@@ -44,7 +44,12 @@ jobs:
       - name: Presubmit
         run: |
          ./.github/workflows/bootstrap_bazel_remote_cache.sh
+         echo "::group::Presubmit prep"
+         bazel build //ci:presubmit
+         echo "::endgroup::"
+         echo "::group::Presubmit"
          bazel run //ci:presubmit -- --skip-pulumi-deploy
+         echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
@@ -83,8 +88,12 @@ jobs:
             echo "::group::Presubmit prep"
             test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
             ./.github/workflows/bootstrap_bazel_remote_cache.sh
+            bazel build //ci:presubmit
+            echo "::endgroup::"
+            echo "::group::Presubmit"
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite
+            echo "::endgroup::"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
