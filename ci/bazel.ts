@@ -231,8 +231,6 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		console.log(line);
 	}
 
-	await new Promise(ok => process.addListener('exit', ok));
-
 	if (process.exitCode !== 0)
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
 
