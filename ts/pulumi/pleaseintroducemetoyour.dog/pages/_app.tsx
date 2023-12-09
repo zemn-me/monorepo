@@ -1,10 +1,35 @@
+import 'ts/pulumi/pleaseintroducemetoyour.dog/pages/base.css';
+
 import type { AppProps } from 'next/app';
-import { HeaderTags } from 'ts/next.js';
+import {
+	CspPolicy,
+	DefaultContentSecurityPolicy,
+	HeaderTags,
+} from 'ts/next.js';
+
+const csp_policy: CspPolicy = {
+	...DefaultContentSecurityPolicy,
+	'connect-src': new Set([
+		'https://*.reddit.com',
+		'https://*.redd.it',
+		...(DefaultContentSecurityPolicy['connect-src'] ?? []),
+	]),
+	'img-src': new Set([
+		'https://*.redd.it',
+		'https://*.reddit.com',
+		...(DefaultContentSecurityPolicy['img-src'] ?? []),
+	]),
+	'media-src': new Set([
+		'https://*.redd.it',
+		'https://*.reddit.com',
+		...(DefaultContentSecurityPolicy['media-src'] ?? []),
+	]),
+};
 
 export function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<HeaderTags />
+			<HeaderTags cspPolicy={csp_policy} />
 			<Component {...pageProps} />
 		</>
 	);

@@ -14,5 +14,9 @@ ts_project(
         "//:node_modules/react",
         "//ts",
         "//ts/next.js",
+		"//project/zemn.me/next/components"
     ],
+	data = [
+		":base.css"
+	]
 )
