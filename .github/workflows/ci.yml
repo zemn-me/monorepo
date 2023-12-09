@@ -44,7 +44,12 @@ jobs:
       - name: Presubmit
         run: |
          ./.github/workflows/bootstrap_bazel_remote_cache.sh
+         echo "::group::Presubmit prep"
+         bazel build //ci:presubmit
+         echo "::endgroup::"
+         echo "::group::Presubmit"
          bazel run //ci:presubmit -- --skip-pulumi-deploy
+         echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
