@@ -43,8 +43,13 @@ jobs:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
         run: |
-         ./.github/workflows/bootstrap_bazel_remote_cache.sh
-         bazel run //ci:presubmit -- --skip-pulumi-deploy
+         ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+         echo "::group::Presubmit prep" && \
+         bazel build //ci:presubmit && \
+         echo "::endgroup::" && \
+         echo "::group::Presubmit" && \
+         bazel run //ci:presubmit -- --skip-pulumi-deploy && \
+         echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
@@ -80,11 +85,15 @@ jobs:
         # we test if the script exists so we don't fail as a result of it
         # not yet existing on main.
         run: |
-            echo "::group::Presubmit prep"
+            echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
-            ./.github/workflows/bootstrap_bazel_remote_cache.sh
+            ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+            bazel build //ci:presubmit && \
+            echo "::endgroup::" && \
+            echo "::group::Presubmit" && \
             bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
-            --dangerously-skip-pnpm-lockfile-validation --overwrite
+            --dangerously-skip-pnpm-lockfile-validation --overwrite && \
+            echo "::endgroup::"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
