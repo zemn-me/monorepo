@@ -136,14 +136,14 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 				break;
 			case 'FAILED': {
 				failures.push(tag);
-				const nextLine = await take();
+				const nextLine = (await take())?.trim();
 				yield Command('error')({
 					title: `${tag} failed in ${time}`,
 					file: buildFile,
 				})(
 					line +
-						(nextLine !== undefined
-							? `\n${await fs.readFile(nextLine.trim())}`
+						(nextLine !== undefined && nextLine
+							? `\n${await fs.readFile(nextLine)}`
 							: '')
 				);
 				break;
@@ -225,6 +225,8 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	const exitCode = new Promise<number | null>(ok =>
 		process.on('close', e => ok(e))
 	);
+	const errors: Error[] = [];
+	process.addListener('error', e => errors.push(e));
 
 	for await (const line of interleave(
 		AnnotateBazelLines(byLine(process.stdout)),
@@ -235,4 +237,13 @@ export async function Bazel(cwd: string, ...args: string[]) {
 
 	if ((await exitCode) !== 0)
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
+
+	if (errors.length > 0) {
+		console.info('Failure.');
+		throw errors[0];
+	}
+
+	if (process.exitCode !== 0) {
+		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
+	}
 }

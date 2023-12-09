@@ -9,7 +9,8 @@ ts_project(
 		"//ts/pulumi/lib",
 	],
 	data = [
-		"//ts/pulumi/shadwell.im/luke:next"
+		"//ts/pulumi/shadwell.im/luke:next",
+		"//ts/pulumi/shadwell.im/kate:next"
 	]
 )
 
