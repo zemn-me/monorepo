@@ -1,20 +1,22 @@
 *	@zemnmez
 
+# personal pages
 /ts/pulumi/shadwell.im/luke/* @steadyon @zemnmez
 /ts/pulumi/shadwell.im/kate/pages/* @quailemu @zemnmez
 /ts/pulumi/shadwell/im/kate/pages/_app.tsx @zemnmez
 /ts/pulumi/shadwell/im/kate/pages/_document.tsx @zemnmez
 
 # list of files that dependabot might change
-/cargo-bazel-lock.json @zemnmez-renovate-bot @zemnmez
-/go.mod @zemnmez-renovate-bot @zemnmez
-/go.sum @zemnmez-renovate-bot @zemnmez
-/pnpm-lock.yaml @zemnmez-renovate-bot @zemnmez
-/package.json @zemnmez-renovate-bot @zemnmez
-/Cargo.Bazel.lock @zemnmez-renovate-bot @zemnmez
-/Cargo.toml @zemnmez-renovate-bot @zemnmez
-/renovate.json @zemnmez-renovate-bot @zemnmez
-/requirements.in @zemnmez-renovate-bot @zemnmez
-/requirements.txt @zemnmez-renovate-bot @zemnmez
-/bzl/deps.bzl @zemnmez-renovate-bot @zemnmez
+/cargo-bazel-lock.json @renovate_approvers
+/go.mod @renovate_approvers
+/go.sum @renovate_approvers
+/pnpm-lock.yaml @renovate_approvers
+/package.json @@renovate_approvers
+/Cargo.Bazel.lock @renovate_approvers
+/Cargo.toml @renovate_approvers
+/renovate.json @renovate_approvers
+/requirements.in @renovate_approvers
+/requirements.txt @renovate_approvers
+/bzl/deps.bzl @renovate_approvers
+
 
