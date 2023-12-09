@@ -222,7 +222,9 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	args.push('--noshow_progress');
 	const process = child_process.spawn('bazel', args, { cwd });
 
-	const finish = new Promise<void>(ok => process.on('close', () => ok()));
+	const exitCode = new Promise<number | null>(ok =>
+		process.on('close', e => ok(e))
+	);
 
 	for await (const line of interleave(
 		AnnotateBazelLines(byLine(process.stdout)),
@@ -231,10 +233,6 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		console.log(line);
 	}
 
-	await new Promise(ok => process.addListener('exit', ok));
-
-	if (process.exitCode !== 0)
-		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
-
-	await finish;
+	if ((await exitCode) !== 0)
+				throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
 }
