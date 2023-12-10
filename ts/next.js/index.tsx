@@ -56,7 +56,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	...(isDevMode
 		? {
 				'default-src': new Set(["'self'", "'unsafe-eval'"]),
-		  }
+			}
 		: {}),
 };
 
