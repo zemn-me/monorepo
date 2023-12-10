@@ -54,7 +54,7 @@ async function* _walk(
 			v.isDirectory()
 				? readdir(getPath(v, ...parents), {
 						withFileTypes: true,
-				  })
+					})
 				: []
 	);
 }

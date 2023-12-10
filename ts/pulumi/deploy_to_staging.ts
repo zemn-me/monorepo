@@ -158,7 +158,7 @@ export async function main(args: Args) {
 	const e5 = !args.doNotTearDown
 		? await waitForLockTask(async () => s.then(v => v.destroy(baseConfig)))(
 				'destroy new state'
-		  )
+			)
 		: undefined;
 
 	const errors = [e1, e2, e3, e4, e5].filter(
