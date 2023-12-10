@@ -10,9 +10,9 @@ export function App({ Component, pageProps }: AppProps) {
 			<HeaderTags />
 			<Component {...pageProps} />
 			<Head>
-				<link href="icon.svg" rel="icon" type="image/svg+xml" />
+				<link href="/icon.svg" rel="icon" type="image/svg+xml" />
 				<link
-					href="icon.svg"
+					href="/icon.svg"
 					rel="apple-touch-icon"
 					type="image/svg+xml"
 				/>
