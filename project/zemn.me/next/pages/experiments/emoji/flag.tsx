@@ -184,7 +184,7 @@ export default function Main() {
 				</p>
 				<p>
 					A big part of this is that not all countries recognise the
-					soverignty or existence of all other countries. If Unicode
+					sovereignty or existence of all other countries. If Unicode
 					had to assign codepoints to every country in the world there
 					would be a lot of arguing, and Unicode would need to be put
 					in charge of who gets to be a country.
