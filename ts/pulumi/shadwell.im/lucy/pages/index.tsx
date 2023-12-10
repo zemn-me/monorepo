@@ -4,9 +4,9 @@ export default function Main() {
 	return (
 		<>
 			<Head>
-				<title>Kate's art</title>
+				<title>Lucy</title>
 			</Head>
-			<p>Hi this is Kate's art!</p>
+			<p>Hi this is Lucy!</p>
 		</>
 	);
 }
