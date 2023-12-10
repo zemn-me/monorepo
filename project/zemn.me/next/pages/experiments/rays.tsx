@@ -280,7 +280,7 @@ function TimeEye() {
 				strokeWidth=".26"
 				style={{
 					stroke: 'var(--foreground-color)',
-					fill: '--background-color',
+					fill: 'var(--background-color)',
 				}}
 			/>
 			<circle
@@ -308,7 +308,7 @@ function TimeEye() {
 				strokeWidth=".16"
 				style={{
 					stroke: 'var(--foreground-color)',
-					fill: '--background-color',
+					fill: 'var(--background-color)',
 				}}
 			/>
 			<circle
