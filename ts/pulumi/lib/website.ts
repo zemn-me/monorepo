@@ -189,7 +189,7 @@ export class Website extends pulumi.ComponentResource {
 						`Cannot find ${getS3Key(args.notFound!)} in [${[
 							...objects.keys(),
 						].join(', ')}]`
-			  )(objects.get(args.notFound))
+				)(objects.get(args.notFound))
 			: undefined;
 		const indexDocumentObject = guard.must(
 			guard.isDefined,
@@ -273,7 +273,7 @@ export class Website extends pulumi.ComponentResource {
 										value: 'noindex',
 										override: false,
 									},
-							  ]
+								]
 							: []),
 					],
 				},
@@ -313,7 +313,7 @@ export class Website extends pulumi.ComponentResource {
 									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
 								},
 							],
-					  }
+						}
 					: {}),
 				defaultCacheBehavior: {
 					compress: true,

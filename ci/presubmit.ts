@@ -122,7 +122,7 @@ const cmd = new Command('presubmit')
 								new Error(
 									`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
 								)
-						  )
+							)
 				)
 		);
 
@@ -143,7 +143,7 @@ const cmd = new Command('presubmit')
 								new Error(
 									`Gazelle update repos exited with ${code}. This likely means that it needs to be run to add / remove repos.`
 								)
-						  )
+							)
 				)
 		);
 
@@ -160,7 +160,7 @@ const cmd = new Command('presubmit')
 								new Error(
 									`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
 								)
-						  )
+							)
 				)
 		);
 
