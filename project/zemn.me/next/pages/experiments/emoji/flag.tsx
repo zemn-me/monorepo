@@ -73,7 +73,7 @@ class ErrNoCodePoint extends Error {
 }
 
 function latinLetterToRegionalIndicatorSymbol(latinLetter: string) {
-	const codePoint = latinLetter.codePointAt(0);
+	const codePoint = latinLetter.toLowerCase().codePointAt(0);
 	if (codePoint === undefined) return new ErrNoCodePoint(latinLetter);
 	console.log(codePoint, LATIN_LETTER_A_CODEPOINT, LATIN_LETTER_Z_CODEPOINT);
 	if (
