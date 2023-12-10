@@ -272,8 +272,8 @@ devDependencies:
     specifier: 0.14.0
     version: 0.14.0
   renovate:
-    specifier: 37.89.6
-    version: 37.89.6(typanion@3.13.0)
+    specifier: 37.89.7
+    version: 37.89.7(typanion@3.13.0)
   sharp:
     specifier: 0.33.0
     version: 0.33.0
@@ -9122,12 +9122,12 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  /emojibase-regex@15.2.0:
-    resolution: {integrity: sha512-65H5YepRW3gdrghV/Ed9kW3Qry8/qeKJmMlm31nTsOrEZfuAgyr28FmloXpyak86+chR8cukZA7dlafZzrJXbw==}
+  /emojibase-regex@15.3.0:
+    resolution: {integrity: sha512-EBz/292VBF9naBPBsGzkZUccgIv1xJibTXIINl8SezgVRnTCpKJx7MgZcR+UAd2RwjGkRJJZ/lhP7riOFZLicA==}
     dev: true
 
-  /emojibase@15.2.0:
-    resolution: {integrity: sha512-gB6rIVtyJPersQvAo4nOGYPeILMhlcfZdiwCWVeRAtkJ7sm0tExZETGyLhrTQcHvZQhDEYI1vlCeqUhn5gZkQA==}
+  /emojibase@15.3.0:
+    resolution: {integrity: sha512-lFdQb14hoznwDh1xDoOFzkPdeeexmbuJdhUUjDaJZf/+jK+6Z3HkI5hWOemWfEdaMxtTujc1vNRx9DKtdtiOXA==}
     dev: true
 
   /encodeurl@1.0.2:
@@ -14770,12 +14770,6 @@ packages:
     hasBin: true
     dev: false
 
-  /prettier@3.1.0:
-    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: true
-
   /prettier@3.1.1:
     resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
     engines: {node: '>=14'}
@@ -15500,8 +15494,8 @@ packages:
       - supports-color
     dev: true
 
-  /renovate@37.89.6(typanion@3.13.0):
-    resolution: {integrity: sha512-2H4WzHFWUTkttpE5f+l/RXZzlTquJUlBT/65QwqtFN45dD1t4pDeAnz14sv09gmdPGiIFv+LoL4aIQfIRk+QrQ==}
+  /renovate@37.89.7(typanion@3.13.0):
+    resolution: {integrity: sha512-3x9ELfms39Ps/95We9etkhGcIeMlP510kEFc/JiBD+JBg7FGk3M7tvUqOstjI/jvuqtnM6t3QplOM87cHYLQeA==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -15552,8 +15546,8 @@ packages:
       editorconfig: 2.0.0
       email-addresses: 5.0.0
       emoji-regex: 10.3.0
-      emojibase: 15.2.0
-      emojibase-regex: 15.2.0
+      emojibase: 15.3.0
+      emojibase-regex: 15.3.0
       extract-zip: 2.0.1
       find-packages: 10.0.4
       find-up: 5.0.0
