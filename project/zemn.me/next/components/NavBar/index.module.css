@@ -1,0 +1,22 @@
+.NavBar {
+	display: grid;
+
+	grid: "... logo ... menu ..." auto
+		/  1em auto 1fr auto 1em;
+
+	grid-area: nav-bar;
+}
+
+.logo {
+	grid-area: logo
+}
+
+.DefaultLayout {
+	display: grid;
+	grid: "nav-bar" 2em
+		  "content" 1fr / 1fr;
+}
+
+.DefaultLayout>.content {
+	grid-area: content;
+}
