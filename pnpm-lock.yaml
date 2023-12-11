@@ -290,8 +290,8 @@ devDependencies:
     specifier: 35.0.0
     version: 35.0.0(stylelint@16.0.1)
   svgo:
-    specifier: 3.0.5
-    version: 3.0.5
+    specifier: 3.1.0
+    version: 3.1.0
   tmp:
     specifier: 0.2.1
     version: 0.2.1
@@ -6883,7 +6883,7 @@ packages:
     resolution: {integrity: sha512-G5qLWNq/rMvSM1EyY4E2iEd+s9km/PxLkzPkA2lghrgWJ2jrVMuB1ZsGOzL4YAWCy5sAoUw7SEQseHE2qypF2w==}
     deprecated: This is a stub types definition. svgo provides its own type definitions, so you do not need this installed.
     dependencies:
-      svgo: 3.0.5
+      svgo: 3.1.0
     dev: true
 
   /@types/tmp@0.2.6:
@@ -16659,8 +16659,8 @@ packages:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
 
-  /svgo@3.0.5:
-    resolution: {integrity: sha512-HQKHEo73pMNOlDlBcLgZRcHW2+1wo7bFYayAXkGN0l/2+h68KjlfZyMRhdhaGvoHV2eApOovl12zoFz42sT6rQ==}
+  /svgo@3.1.0:
+    resolution: {integrity: sha512-R5SnNA89w1dYgNv570591F66v34b3eQShpIBcQtZtM5trJwm1VvxbIoMpRYY3ybTAutcKTLEmTsdnaknOHbiQA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
