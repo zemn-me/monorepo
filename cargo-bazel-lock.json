@@ -1,5 +1,5 @@
 {
-  "checksum": "d248a63296e86ed4a67d03e8160d5ff2852f5c17e053bcb19776eafd757f3fea",
+  "checksum": "ff8dd03e6f5421d0acaf5d86f6dbcc693f81ffdfd77c2d655ef377f00b45eee8",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -4301,6 +4301,9 @@
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu"
     ],
+    "aarch64-unknown-nto-qnx710": [
+      "aarch64-unknown-nto-qnx710"
+    ],
     "arm-unknown-linux-gnueabi": [
       "arm-unknown-linux-gnueabi"
     ],
@@ -4341,6 +4344,7 @@
       "aarch64-pc-windows-msvc",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
+      "aarch64-unknown-nto-qnx710",
       "i686-apple-darwin",
       "i686-linux-android",
       "i686-pc-windows-msvc",
