@@ -14,28 +14,8 @@
  * @see https://github.com/zemn-me/monorepo/commit/56e8bcfa298e2f205a96e89d55cb9b0b47b1a0f6
  */
 
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import Link from 'project/zemn.me/next/components/Link';
-import { useEffect } from 'react';
-
-const targetRoute = '/experiments/rays';
+import Redirect from 'ts/next.js/component/Redirect';
 
 export default function Redirector() {
-	const router = useRouter();
-	useEffect(() => {
-		void router.replace(targetRoute);
-	}, []);
-
-	return (
-		<>
-			<Head>
-				<meta content={`0;URL='${targetRoute}'`} httpEquiv="refresh" />
-			</Head>
-			<p>
-				I moved this to a new address{' '}
-				<Link href={targetRoute}>here</Link>.
-			</p>
-		</>
-	);
+	return <Redirect to="/experiments/rays" />;
 }
