@@ -178,7 +178,7 @@ export type TransformTo<
 ]
 	? J2 extends J1
 		? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-		  Matrix<I2, any>
+			Matrix<I2, any>
 		: never // it isn't possible for these to be different
 	: never;
 

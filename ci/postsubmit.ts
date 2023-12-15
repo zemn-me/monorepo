@@ -106,7 +106,7 @@ async function main() {
 						pkg =>
 							`[${pkg.name}](https://npmjs.com/package/${pkg.name})`
 					)
-			  )}.`
+				)}.`
 			: ''
 	}.
 
@@ -114,7 +114,7 @@ ${
 	unsuccessful_npm_packages.length
 		? `The following NPM packages attempted an upload but failed: ${listify(
 				...unsuccessful_npm_packages.map(v => v.name)
-		  )}. This does not usually indicate an issue, I haven't programmed in recognition of rejection due to no update.`
+			)}. This does not usually indicate an issue, I haven't programmed in recognition of rejection due to no update.`
 		: ''
 }`;
 

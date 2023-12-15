@@ -208,7 +208,7 @@ export const main = async (argv: string[] = process.argv) => {
 						// are dangerous.
 						/\P{L}/gu,
 						'_'
-				  ) + '.svg'
+					) + '.svg'
 				: out;
 
 		const svgContents = (await readFile(svgFile, 'utf8')).toString();
