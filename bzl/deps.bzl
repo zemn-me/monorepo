@@ -198,8 +198,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "049fe1866e36f7c46cd266b66bad160a9a792e90e5ddd2baeae48fadeea94832",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.34.0/rules_rust-v0.34.0.tar.gz"],
+        sha256 = "75177226380b771be36d7efc538da842c433f14cd6c36d7660976efb53defe86",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.34.1/rules_rust-v0.34.1.tar.gz"],
     )
 
     http_archive(
