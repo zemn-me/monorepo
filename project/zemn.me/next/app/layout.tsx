@@ -1,3 +1,4 @@
+import ClientLayout from 'project/zemn.me/next/app/ClientLayout';
 import { ReactNode } from 'react';
 
 export interface Props {
@@ -23,7 +24,9 @@ export function RootLayout({ children }: Props) {
 					rel="stylesheet"
 				/>
 			</head>
-			<body>{children}</body>
+			<body>
+				<ClientLayout>{children}</ClientLayout>
+			</body>
 		</html>
 	);
 }
