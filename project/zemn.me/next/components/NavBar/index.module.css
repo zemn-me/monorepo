@@ -1,0 +1,40 @@
+.NavBar {
+	display: grid;
+
+	grid:
+		"... .... ... .... ..." 5%
+		"... logo ... menu ..." 90%
+		"... .... ... .... ..." 5%
+		/  1em auto 1em 1fr 1em;
+
+	grid-area: nav-bar;
+	height: 100%;
+	width: 100%;
+	position: sticky;
+	top: 0;
+}
+
+.NavBar > * {
+	margin: auto
+}
+
+.logo {
+	grid-area: logo;
+	height: 100%;
+	width: 100%;
+}
+
+.DefaultLayout {
+	display: grid;
+	grid: "nav-bar" 3rem
+		  "content" 1fr / 1fr;
+}
+
+.DefaultLayout>.content {
+	grid-area: content;
+}
+
+.menu {
+	grid-area: menu;
+}
+
