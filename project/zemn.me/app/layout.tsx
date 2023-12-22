@@ -1,3 +1,4 @@
+import { Metadata } from 'next/types';
 import ClientLayout from 'project/zemn.me/app/ClientLayout';
 import { ReactNode } from 'react';
 
@@ -32,3 +33,10 @@ export function RootLayout({ children }: Props) {
 }
 
 export default RootLayout;
+
+export const metadata: Metadata = {
+	title: {
+		template: '%s – zemn.me',
+		default: 'zemn.me',
+	},
+};

@@ -326,5 +326,6 @@ function TimeEye() {
 }
 
 export const metadata: Metadata = {
+	title: 'Rays',
 	description: 'Mess around with engraving style rays.',
 };
