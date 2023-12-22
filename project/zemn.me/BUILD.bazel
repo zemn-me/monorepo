@@ -1,7 +1,40 @@
-# Nothing here!
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
 
-# Run zemn.me in dev mode
-alias(
-	name = "zemn.me",
-	actual = "//project/zemn.me/next:dev"
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "ts",
+    assets = glob(["**/*.css"]),
+    deps = [
+        "//:node_modules/@types/react",
+		"//:node_modules/@types/seedrandom",
+        "//:node_modules/immutable",
+        "//:node_modules/next",
+        "//:node_modules/react",
+		"//:node_modules/seedrandom",
+        "//project/zemn.me/bio",
+        "//project/zemn.me/assets/kenwood",
+        "//project/zemn.me/components",
+        "//project/zemn.me/components/TimeEye",
+        "//project/zemn.me/components/ZemnmezLogo",
+        "//ts/next.js",
+        "//ts/react/lang",
+        "//ts/iter",
+		"//ts/next.js/component/Redirect"
+    ],
 )
+
+next_project(
+    name = "next",
+    srcs = [
+        ":ts",
+        "//project/zemn.me/public:files",
+    ],
+)
+
+alias(
+    name = "zemn.me",
+    actual = ":dev"
+)
+
