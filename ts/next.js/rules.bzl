@@ -69,7 +69,7 @@ def next_project(name, srcs, **kwargs):
     bin.next(
         name = "out",
         srcs = [":build"] + srcs,
-        args = ["export", native.package_name()],
+        args = ["build", native.package_name()],
         output_dir = True,
         silent_on_success = True,
     )
