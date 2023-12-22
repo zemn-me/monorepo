@@ -5,10 +5,12 @@ import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
 import Link from 'project/zemn.me/next/components/Link';
+import { DefaultLayout } from 'project/zemn.me/next/components/NavBar/NavBar';
 import { Prose } from 'project/zemn.me/next/components/Prose/prose';
 import { Q } from 'project/zemn.me/next/components/Q';
 import Timeline from 'project/zemn.me/next/components/timeline';
 import style from 'project/zemn.me/next/pages/index.module.css';
+import { ReactElement } from 'react';
 import * as lang from 'ts/react/lang';
 
 function ZemnmezLogoInline() {
@@ -32,7 +34,7 @@ function LetterHead() {
 	);
 }
 
-export default function Main() {
+const Page = function Main() {
 	return (
 		<main className={style.main}>
 			<Head>
@@ -236,4 +238,10 @@ export default function Main() {
 			</section>
 		</main>
 	);
-}
+};
+
+Page.getLayout = function (page: ReactElement) {
+	return <DefaultLayout>{page}</DefaultLayout>;
+};
+
+export default Page;

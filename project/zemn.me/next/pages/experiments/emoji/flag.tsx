@@ -1,9 +1,10 @@
 import Link from 'project/zemn.me/next/components/Link';
+import { DefaultLayout } from 'project/zemn.me/next/components/NavBar/NavBar';
 import { Prose } from 'project/zemn.me/next/components/Prose/prose';
 import { Q } from 'project/zemn.me/next/components/Q';
 import { Title } from 'project/zemn.me/next/components/Title/title';
 import style from 'project/zemn.me/next/pages/experiments/emoji/flag.module.css';
-import { Fragment, useState } from 'react';
+import { Fragment, ReactElement, useState } from 'react';
 
 interface CodePointReferenceProps {
 	readonly children: string;
@@ -149,7 +150,7 @@ function FlagGenerator() {
 	);
 }
 
-export default function Main() {
+const Page = function Page() {
 	return (
 		<>
 			<Prose>
@@ -197,4 +198,10 @@ export default function Main() {
 			<FlagGenerator />
 		</>
 	);
-}
+};
+
+Page.getLayout = function (page: ReactElement) {
+	return <DefaultLayout>{page}</DefaultLayout>;
+};
+
+export default Page;

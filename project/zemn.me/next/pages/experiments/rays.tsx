@@ -1,4 +1,5 @@
-import React from 'react';
+import { DefaultLayout } from 'project/zemn.me/next/components/NavBar/NavBar';
+import React, { ReactElement } from 'react';
 import seedrandom from 'seedrandom';
 
 function memoize<T>(fn: (arg: string) => T): (arg: string) => T {
@@ -136,7 +137,7 @@ function nVar(initialState: number): [nVarState, (s: string) => void] {
 	];
 }
 
-export default function RaysEditor() {
+const Page = function RaysEditor() {
 	const width = 100;
 	const height = width;
 	const [nRays, setNRays] = nVar(100);
@@ -269,7 +270,7 @@ export default function RaysEditor() {
 			</form>
 		</div>
 	);
-}
+};
 
 function TimeEye() {
 	return (
@@ -322,3 +323,9 @@ function TimeEye() {
 		</g>
 	);
 }
+
+Page.getLayout = function (page: ReactElement) {
+	return <DefaultLayout>{page}</DefaultLayout>;
+};
+
+export default Page;
