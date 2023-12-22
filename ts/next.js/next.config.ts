@@ -13,7 +13,7 @@ export const eslint = {
 	ignoreDuringBuilds: true,
 };
 
-export const distDir = 'build';
+export const output = 'export';
 
 // eslint-disable-next-line
 export const generateBuildId = async () => { /*REPLACE*/ throw new Error() /*REPLACE*/ };
