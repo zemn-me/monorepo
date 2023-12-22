@@ -1,4 +1,4 @@
-import style from 'project/zemn.me/next/pages/404.module.css';
+import style from 'project/zemn.me/next/app/not-found.module.css';
 
 export default function NotFound() {
 	return (
