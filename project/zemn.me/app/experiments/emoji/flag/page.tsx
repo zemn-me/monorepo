@@ -202,5 +202,6 @@ export default function Main() {
 }
 
 export const metadata: Metadata = {
+	title: 'Emoji Flags',
 	description: 'Mess around with emoji flags.',
 };

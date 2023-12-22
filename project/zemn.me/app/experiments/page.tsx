@@ -31,5 +31,6 @@ export default function Main() {
 }
 
 export const metadata: Metadata = {
+	title: 'Experiments',
 	description: 'List of experiments.',
 };
