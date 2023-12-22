@@ -51,6 +51,7 @@ def next_project(name, srcs, **kwargs):
         "//:node_modules/@types/node",
         "//:node_modules/typescript",
         "//:node_modules/next",
+        "//:node_modules/sharp",
     ]
 
     bin.next(
