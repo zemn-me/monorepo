@@ -15,7 +15,7 @@ ts_project(
 		"//:node_modules/classnames",
         "//ts",
         "//ts/next.js",
-		"//project/zemn.me/next/components"
+		"//project/zemn.me/components"
     ],
 	assets = [
 		":base.css"

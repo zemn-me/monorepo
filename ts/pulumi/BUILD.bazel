@@ -11,7 +11,7 @@ ts_project(
     name = "pulumi_ts",
     data = [
         ":pulumi_local",
-        "//project/zemn.me/next",
+        "//project/zemn.me",
         "//ts/pulumi/zemn.me/availability:next",
         "//ts/pulumi/shadwell.im/thomas"
     ],
