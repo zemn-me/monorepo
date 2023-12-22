@@ -1,14 +1,15 @@
+'use client';
 import Head from 'next/head';
 import * as bio from 'project/zemn.me/bio';
 import { TimeEye } from 'project/zemn.me/elements/TimeEye';
 import ZemnmezLogo from 'project/zemn.me/elements/ZemnmezLogo/ZemnmezLogo';
+import style from 'project/zemn.me/next/app/style.module.css';
 import * as kenwood from 'project/zemn.me/next/assets/kenwood';
 import { dividerHeadingClass } from 'project/zemn.me/next/components/DividerHeading';
 import Link from 'project/zemn.me/next/components/Link';
 import { Prose } from 'project/zemn.me/next/components/Prose/prose';
 import { Q } from 'project/zemn.me/next/components/Q';
 import Timeline from 'project/zemn.me/next/components/timeline';
-import style from 'project/zemn.me/next/pages/index.module.css';
 import * as lang from 'ts/react/lang';
 
 function ZemnmezLogoInline() {
