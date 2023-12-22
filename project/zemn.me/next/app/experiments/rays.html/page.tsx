@@ -1,3 +1,4 @@
+'use client';
 /**
  * @fileoverview In commit 56e8bcfa298e2f205a96e89d55cb9b0b47b1a0f6,
  * I made all page_name.html that next.js generates get renamed to just
