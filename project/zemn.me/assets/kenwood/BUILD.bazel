@@ -1,0 +1,26 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//project/zemn.me:__subpackages__"])
+
+exports_files([
+    "kenwood.mp4",
+    "kenwood.jpg",
+])
+
+ts_project(
+    name = "kenwood",
+    srcs = [
+        "index.ts",
+        "kenwood.tsx",
+    ],
+    assets = [
+        "//project/zemn.me/public:kenwood_video_sources",
+        ":kenwood.jpg",
+    ],
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:base_defs",  # one day this should probably be separate for next.js
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
