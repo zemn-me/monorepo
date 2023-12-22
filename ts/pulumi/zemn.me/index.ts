@@ -21,9 +21,9 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_zemn_me`,
 			{
-				index: 'project/zemn.me/next/out/index.html',
-				notFound: 'project/zemn.me/next/out/404.html',
-				directory: 'project/zemn.me/next/out',
+				index: 'project/zemn.me/out/index.html',
+				notFound: 'project/zemn.me/out/404.html',
+				directory: 'project/zemn.me/out',
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
