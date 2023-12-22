@@ -1,0 +1,25 @@
+'use client';
+/**
+ * @fileoverview Redirect but compatible with
+ * app router.
+ */
+
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+export interface Props {
+	readonly to: string;
+}
+
+export default function Redirect({ to }: Props) {
+	const router = useRouter();
+	useEffect(() => void router.replace(to), []);
+	return (
+		<Head>
+			<title>{`Redirect to ${to}`}</title>
+			<meta content={`1; ${to}`} httpEquiv="refresh" />
+			<link href={to} rel="canonical" />
+		</Head>
+	);
+}
