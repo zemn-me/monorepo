@@ -13,7 +13,7 @@ export const eslint = {
 	ignoreDuringBuilds: true,
 };
 
-export const distDir = 'build';
+export const output = 'export';
 
 export const output = 'export';
 
