@@ -1,8 +1,9 @@
+'use client';
+import style from 'project/zemn.me/next/app/experiments/emoji/flag/style.module.css';
 import Link from 'project/zemn.me/next/components/Link';
 import { Prose } from 'project/zemn.me/next/components/Prose/prose';
 import { Q } from 'project/zemn.me/next/components/Q';
 import { Title } from 'project/zemn.me/next/components/Title/title';
-import style from 'project/zemn.me/next/pages/experiments/emoji/flag.module.css';
 import { Fragment, useState } from 'react';
 
 interface CodePointReferenceProps {
