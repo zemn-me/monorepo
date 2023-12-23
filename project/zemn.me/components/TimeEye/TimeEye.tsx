@@ -1,16 +1,28 @@
 import classNames from 'classnames';
+import { inlineSVGClass } from 'project/zemn.me/css/svg/inline';
 import React from 'react';
 
 import style from './TimeEye.module.css';
 
-export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
+type svgProps = JSX.IntrinsicElements['svg'];
+
+export interface Props extends svgProps {
+	readonly inline?: boolean;
+}
+
+export const TimeEye: React.FC<Props> = ({
+	inline = false,
 	className,
 	...props
 }) => (
 	<svg
 		role="img"
 		{...props}
-		className={classNames(className, style['time-eye'])}
+		className={classNames(
+			className,
+			style['time-eye'],
+			inline ? inlineSVGClass : undefined
+		)}
 		viewBox="0 0 17.78 7.81"
 	>
 		<title lang="en-GB">Thomas Shadwell Logo</title>

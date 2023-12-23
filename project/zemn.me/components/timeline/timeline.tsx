@@ -4,6 +4,7 @@ import Link from 'project/zemn.me/components/Link';
 import style from 'project/zemn.me/components/timeline/timeline.module.css';
 import React from 'react';
 import * as lang from 'ts/react/lang';
+import { useLocale } from 'ts/react/lang/locale';
 
 interface MutableText {
 	corpus: string;
@@ -127,7 +128,7 @@ function Month({
 	readonly month: ImmutableText;
 	readonly events: Iterable<Bio.Event>;
 }) {
-	const locales = [...lang.useLocale()];
+	const locales = [...useLocale()];
 	const locale = new Intl.Locale(
 		Intl.DateTimeFormat.supportedLocalesOf(locales)[0]
 	);
@@ -188,7 +189,7 @@ function Year({
 export default function Timeline() {
 	// this spread is just because Intl.DateTimeFormat expects a mutable array.
 
-	const locales = [...lang.useLocale()];
+	const locales = [...useLocale()];
 
 	const locale = Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
 
