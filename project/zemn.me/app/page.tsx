@@ -225,15 +225,6 @@ export default function Main() {
 						</p>
 					</Prose>
 				</section>
-				<section className={style.footer}>
-					<h2 className={dividerHeadingClass}>
-						<span>⁂</span>
-					</h2>
-					<ZemnmezLogo className={style.future} />
-					<i className={style.tagline}>
-						This is what we become, when our eyes are open.
-					</i>
-				</section>
 			</section>
 		</main>
 	);
