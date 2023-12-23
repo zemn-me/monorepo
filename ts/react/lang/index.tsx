@@ -1,6 +1,4 @@
-import React from 'react';
-
-type Language = string;
+export type Language = string;
 
 export class TextType<L extends Language = Language, Text = string> {
 	constructor(
@@ -40,44 +38,3 @@ export const get = <L extends Language>(v: Text<L>): L => v.language;
 // https://github.com/typescript-eslint/typescript-eslint/issues/4062
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint, @typescript-eslint/no-explicit-any
 export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
-
-/**
- * The user's set locale (the user's language preference)
- */
-export const locale = React.createContext<readonly Language[]>(['en-GB']);
-
-const getLangs = () => {
-	if (typeof navigator !== 'undefined')
-		return navigator?.languages ?? [navigator?.language];
-
-	return [];
-};
-
-export function useLocale() {
-	const [languages, setLanguages] = React.useState<readonly string[]>([
-		'en-GB',
-	]);
-
-	React.useEffect(() => {
-		const listener = () => {
-			setLanguages(() => getLangs());
-		};
-		window.addEventListener('languagechange', listener);
-		listener();
-		return () => window.removeEventListener('languagechange', listener);
-	}, [setLanguages]);
-
-	return languages;
-}
-
-export const LocaleProvider: React.FC<{
-	readonly children?: React.ReactNode;
-}> = ({ children }) => {
-	const languages = useLocale();
-	return <locale.Provider value={languages}>{children}</locale.Provider>;
-};
-
-/**
- * The contextual lang (the content's language)
- */
-export const lang = React.createContext<Language>('en-GB');

@@ -1,0 +1,17 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "HeroLayout",
+	assets = glob([ "**/*.css" ]),
+    visibility = ["//project/zemn.me:__subpackages__"],
+	deps = [
+		"//project/zemn.me/components",
+		"//:node_modules/@types/react",
+		"//:node_modules/react",
+		"//project/zemn.me/components/TimeEye",
+		"//project/zemn.me/components/ZemnmezLogo",
+		"//ts/react/lang",
+		"//project/zemn.me/bio",
+        "//project/zemn.me/assets/kenwood"
+	]
+)

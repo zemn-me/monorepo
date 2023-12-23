@@ -1,4 +1,6 @@
-import ClientLayout from 'project/zemn.me/app/ClientLayout';
+import 'project/zemn.me/app/base.css';
+
+import { HeroLayout } from 'project/zemn.me/components/HeroLayout/HeroLayout';
 import { ReactNode } from 'react';
 
 export interface Props {
@@ -9,6 +11,10 @@ export function RootLayout({ children }: Props) {
 	return (
 		<html>
 			<head>
+				<meta
+					content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
+					name="viewport"
+				/>
 				<meta
 					content="Personal website and profile of Thomas Neil James Shadwell, also known as Zemnmez."
 					name="description"
@@ -25,7 +31,7 @@ export function RootLayout({ children }: Props) {
 				/>
 			</head>
 			<body>
-				<ClientLayout>{children}</ClientLayout>
+				<HeroLayout>{children}</HeroLayout>
 			</body>
 		</html>
 	);
