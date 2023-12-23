@@ -1,0 +1,129 @@
+
+.main {
+    display: grid;
+}
+
+.banner, .headerBgv {
+    grid-area: banner;
+	width: 100%;
+	height: 100%;
+}
+
+.banner { display: grid }
+
+.letterHead {
+	padding: 2em;
+	text-align: center;
+	background-color: var(--background-color);
+	margin: auto;
+	display: grid;
+	grid:
+	    "    logo      " 2em
+		"    handle    " auto
+		"    fullName  " auto / auto;
+}
+
+.letterHead {
+	font-size: large;
+}
+
+.letterHead > .handle {
+	grid-area: handle;
+}
+
+.letterHead > .fullName {
+	grid-area: fullName;
+}
+
+.letterHead > .logo {
+	width: 100%;
+	height: 100%;
+	grid-area: logo;
+}
+
+.banner h1 {
+	background-color: white;
+	margin: auto;
+}
+
+.content {
+    grid-area: content;
+	padding-top: 4em;
+}
+
+.headerBgv {
+    z-index: -1;
+    object-fit: cover;
+}
+
+@media (orientation: landscape) {
+    .main {
+        grid: " banner content " 100vh
+              " xxxxxx content " 1fr
+              / 1fr    1fr           ;
+    }
+
+    /*
+       in this case, the banner should have a fixed
+       position, otherwise we'll scroll past it and the layout
+       will look weird.
+    */
+
+    .headerBgv, .banner { position: sticky; top: 0 }
+}
+
+@media (orientation: portrait) {
+    .main {
+        grid: "banner" 100vh
+              "content" auto
+              /1fr ;
+    }
+}
+
+.future {
+	grid-area: future;
+	width: 100%;
+	height: 100%
+}
+
+
+.tagline {
+	grid-area: tagline;
+	max-width: 15em;
+	margin: auto;
+	text-align: center;
+}
+
+.links {
+	display: flex;
+}
+
+.links > * {
+	margin: auto;
+}
+
+.footer {
+	display: grid;
+	grid:
+	    "title   title       title   title        title"
+		"....... left-spacer future  right-spacer ......." 6rem
+		"tagline tagline     tagline tagline      tagline"
+		"....... .......     ....... .......       ......." 4rem/1fr 2rem 3rem 2rem 1fr
+}
+
+
+.footer > h2 {
+	grid-area: title;
+}
+
+.footer:after {
+    content: "\2013";
+    grid-area: right-spacer;
+    margin: auto;
+}
+
+.footer:before {
+    content: "\2013";
+    grid-area: left-spacer;
+    margin: auto;
+}
