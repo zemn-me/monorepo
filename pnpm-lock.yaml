@@ -30,8 +30,8 @@ dependencies:
     specifier: 0.0.1239539
     version: 0.0.1239539
   eslint-mdx:
-    specifier: 3.0.0
-    version: 3.0.0(eslint@8.56.0)
+    specifier: 3.0.1
+    version: 3.0.1(eslint@8.56.0)
   eslint-plugin-mdx:
     specifier: 3.0.0
     version: 3.0.0(eslint@8.56.0)
@@ -101,8 +101,8 @@ devDependencies:
     specifier: 7.39.0
     version: 7.39.0(@types/node@20.10.5)
   '@pulumi/aws':
-    specifier: 6.15.0
-    version: 6.15.0
+    specifier: 6.17.0
+    version: 6.17.0
   '@pulumi/awsx':
     specifier: 2.4.0
     version: 2.4.0
@@ -4925,8 +4925,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.15.0:
-    resolution: {integrity: sha512-ZAk1VJDM1Hn5Kr+8elPvH4yuRP0Gmpv9YUdqoYHcEIsjg4BtUXaS0Db7KmSKoUf1SmQRkBCdOqRBcit7RorpUA==}
+  /@pulumi/aws@6.17.0:
+    resolution: {integrity: sha512-mouN/IufNJQd2O0dNBscWWGkOv4iY7eS4A2b7wh1e3GQqU5Vl8PeLJBS2s29ElGaFfNiLwSjG16U88iemrp0RQ==}
     dependencies:
       '@pulumi/pulumi': 3.99.0
       builtin-modules: 3.0.0
@@ -4942,7 +4942,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
-      '@pulumi/aws': 6.15.0
+      '@pulumi/aws': 6.17.0
       '@pulumi/docker': 4.5.0
       '@pulumi/pulumi': 3.99.0
       '@types/aws-lambda': 8.10.119
@@ -9525,8 +9525,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-mdx@3.0.0(eslint@8.56.0):
-    resolution: {integrity: sha512-vhRMspKg40avafPts17WXocCXnFCXERkOmEPi1P8XL2Iq3jjpLQoO/CXeYXdt04TNlGOyYkHdJ7F0M4Bjb+/Lg==}
+  /eslint-mdx@3.0.1(eslint@8.56.0):
+    resolution: {integrity: sha512-e5oyy4LvGNmJKqXkpUwhfjx1EgOGI02sjbAspWsjCMUinlr//2q7JZnlmr0+uDmf4Hv7Sh2bbRtPzBpTH+NvGA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -9659,7 +9659,7 @@ packages:
       eslint: '>=8.0.0'
     dependencies:
       eslint: 8.56.0
-      eslint-mdx: 3.0.0(eslint@8.56.0)
+      eslint-mdx: 3.0.1(eslint@8.56.0)
       eslint-plugin-markdown: 3.0.1(eslint@8.56.0)
       remark-mdx: 3.0.0
       remark-parse: 11.0.0

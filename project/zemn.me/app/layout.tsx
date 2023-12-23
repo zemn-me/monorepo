@@ -1,5 +1,6 @@
 import { Metadata } from 'next/types';
 import ClientLayout from 'project/zemn.me/app/ClientLayout';
+import { Footer } from 'project/zemn.me/components/Footer/Footer';
 import { ReactNode } from 'react';
 
 export interface Props {
@@ -27,6 +28,7 @@ export function RootLayout({ children }: Props) {
 			</head>
 			<body>
 				<ClientLayout>{children}</ClientLayout>
+				<Footer />
 			</body>
 		</html>
 	);
