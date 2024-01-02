@@ -1,0 +1,8 @@
+load("//go:rules.bzl", "go_binary", "go_library")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+package(default_visibility = ["//go/measurement:__subpackages__"])
+
+go_binary(
+    name = "gen",
+	srcs = [ "gen.go" ]
+)
