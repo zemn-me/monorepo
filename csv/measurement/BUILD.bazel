@@ -1,0 +1,9 @@
+load("//csv/lint:rules.bzl", "csv_lint_test")
+
+package(default_visibility = ["//:__subpackages__"])
+
+csv_lint_test(
+	name = "csv_lint",
+	srcs = glob(["**/*.csv"])
+)
+
