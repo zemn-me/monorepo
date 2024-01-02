@@ -2,7 +2,7 @@
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"html.autoClosingTags": false,
 	"editor.wordWrapColumn": 80,
-	"editor.wordBasedSuggestions": false,
+	"editor.wordBasedSuggestions": "off",
 	"[mdx]": {
 		"editor.wordWrap": "bounded",
 		"editor.wordWrapColumn": 80
@@ -22,7 +22,7 @@
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {
