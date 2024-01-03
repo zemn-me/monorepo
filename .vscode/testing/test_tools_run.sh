@@ -17,3 +17,4 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # https://github.com/bazelbuild/rules_go/blob/0a6311cdc4a643f9f99b8109c44773f4a295c60e/go/tools/go_bin_runner/main.go#L34
 BUILD_WORKING_DIRECTORY="." $(rlocation $GO_BINARY) version
 
+echo {} | $(rlocation $GOPACKAGESDRIVER_BINARY) builtin

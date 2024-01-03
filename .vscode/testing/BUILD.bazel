@@ -6,8 +6,10 @@ sh_test(
 	],
 	data = [
 		"@io_bazel_rules_go//go",
+		"@io_bazel_rules_go//go/tools/gopackagesdriver",
 	],
 	env = {
-		"GO_BINARY": "$(rlocationpath @io_bazel_rules_go//go)"
+		"GO_BINARY": "$(rlocationpath @io_bazel_rules_go//go)",
+		"GOPACKAGESDRIVER_BINARY": "$(rlocationpath @io_bazel_rules_go//go/tools/gopackagesdriver)",
 	}
 )
