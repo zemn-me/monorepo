@@ -58,6 +58,6 @@
 	"go.vetOnSave": "off",
 	"typescript.preferences.importModuleSpecifier": "non-relative",
 	"go.alternateTools": {
-		"go": "${workspaceFolder}/.vscode/go.sh"
+		"go": "${workspaceFolder}/.vscode/go.sh ${workspaceFolder}"
 	}
 }
