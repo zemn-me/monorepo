@@ -56,8 +56,5 @@
 	"go.buildOnSave": "off",
 	"go.lintOnSave": "off",
 	"go.vetOnSave": "off",
-	"typescript.preferences.importModuleSpecifier": "non-relative",
-	"go.alternateTools": {
-		"go": "${workspaceFolder}/.vscode/go.sh"
-	}
+	"typescript.preferences.importModuleSpecifier": "non-relative"
 }
