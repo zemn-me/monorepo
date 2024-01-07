@@ -30,6 +30,7 @@ func main() {
 
 type lineWhitespaceTrimmer struct {
 	out         io.Writer
+	co
 	currentLine []byte
 }
 
