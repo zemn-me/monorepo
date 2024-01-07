@@ -31,7 +31,7 @@ export class Component extends Pulumi.ComponentResource {
 				nameServers: zone.then(
 					zone => zone.nameServers?.map(name => ({ name }))
 				),
-			}
+			}, { parent: this }
 		);
 
 		this.site = new Website(
