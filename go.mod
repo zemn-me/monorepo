@@ -16,6 +16,12 @@ module github.com/zemn-me/monorepo
 
 go 1.19
 
-require github.com/golang/protobuf v1.5.3
+require (
+	github.com/golang/protobuf v1.5.3
+	golang.org/x/tools v0.16.1
+)
 
-require google.golang.org/protobuf v1.26.0 // indirect
+require (
+	golang.org/x/mod v0.14.0 // indirect
+	google.golang.org/protobuf v1.26.0 // indirect
+)
