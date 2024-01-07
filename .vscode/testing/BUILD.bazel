@@ -7,6 +7,7 @@ sh_test(
 	data = [
 		"@io_bazel_rules_go//go",
 		"@io_bazel_rules_go//go/tools/gopackagesdriver",
+		"@org_golang_x_tools//cmd/goimports"
 	],
 	env = {
 		"GO_BINARY": "$(rlocationpath @io_bazel_rules_go//go)",
