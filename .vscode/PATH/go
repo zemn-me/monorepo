@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec bazel run --ui_event_filters=-info,-debug,-warning,-stderr,-stdout --tool_tag=go -- @io_bazel_rules_go//go "${@}"
