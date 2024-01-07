@@ -1,0 +1,30 @@
+load("//go:rules.bzl", "go_binary", "go_library")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+
+package(default_visibility = ["//:__subpackages__"])
+
+run_binary(
+	name = "si_data_gen",
+	tool = "//go/measures/si/gen",
+	srcs = [ "//csv/measures:si/multipliers.csv", "//csv/measures:si/units.csv" ],
+	args = [ "-out", "$(location data.go)", "-multipliers", "$(location //csv/measures:si/multipliers.csv)",
+		"-units", "$(location //csv/measures:si/units.csv)" ],
+	outs = [ "data.go" ]
+)
+
+run_binary(
+	name = "si_data_gen_stringer",
+	tool = "@org_golang_x_tools//cmd/stringer",
+	srcs = [ "data.go", "si.go" ],
+	args = [ "-output", "$(location data_stringer.go)", "-type", "BaseUnit,Multiplier", "$(location data.go)"],
+	outs = [ "data_stringer.go" ],
+	env = { "GOCACHE": "/tmp" }
+)
+
+go_library(
+	name = "si",
+	srcs = [ "data.go", "si.go", "data_stringer.go" ],
+    importpath = "github.com/zemnmez/monorepo/" + package_name(),
+)
+
+
