@@ -54,7 +54,7 @@ export interface Args {
 	 * @example
 	 * "mywebsite.com."
 	 */
-	domain: string;
+	domain: pulumi.Input<string>;
 
 	/**
 	 * A directory to upload to the S3 bucket.

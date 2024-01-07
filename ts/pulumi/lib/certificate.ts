@@ -16,7 +16,7 @@ export interface Args {
 	 * @example
 	 * "mywebsite.com."
 	 */
-	domain: string | undefined;
+	domain: pulumi.Input<string> | undefined;
 }
 
 /**
