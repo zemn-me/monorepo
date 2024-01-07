@@ -1,0 +1,40 @@
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+next_project(
+    name = "next",
+    srcs = [":next_ts"],
+)
+
+
+# bazel run //ts/pulumi/lulu.computer
+# to test the website.
+alias(
+	name = "lulu.computer",
+	actual = ":dev"
+)
+
+ts_project(
+    name = "next_ts",
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//ts/next.js",
+    ],
+	srcs = glob(["app/*.tsx", "app/*.ts"]),
+	assets = glob(["app/*.css"])
+)
+
+ts_project(
+	name = "pulumi_ts",
+	deps = [
+		"//:node_modules/@pulumi/aws",
+		"//:node_modules/@pulumi/pulumi",
+		"//ts/pulumi/lib"
+	],
+	srcs = [ "index.ts" ],
+	data = [ ":next" ]
+)
