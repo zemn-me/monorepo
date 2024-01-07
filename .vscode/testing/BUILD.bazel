@@ -11,5 +11,6 @@ sh_test(
 	env = {
 		"GO_BINARY": "$(rlocationpath @io_bazel_rules_go//go)",
 		"GOPACKAGESDRIVER_BINARY": "$(rlocationpath @io_bazel_rules_go//go/tools/gopackagesdriver)",
+		"GOIMPORTS_BINARY": "$(rlocationpath @org_golang_x_tools//cmd/goimports)"
 	}
 )
