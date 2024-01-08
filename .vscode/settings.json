@@ -60,6 +60,7 @@
 	"go.alternateTools": {
 		"go": "${workspaceFolder}/sh/bin/go",
 		"goimports": "${workspaceFolder}/sh/bin/goimports",
-		"staticcheck": "${workspaceFolder}/sh/bin/staticcheck"
+		"staticcheck": "${workspaceFolder}/sh/bin/staticcheck",
+		"dlv": "${workspaceFolder}/sh/bin/dlv"
 	}
 }
