@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+"$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" @co_honnef_go_tools//cmd/staticcheck "${@}"
