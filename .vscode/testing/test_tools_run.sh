@@ -24,3 +24,5 @@ $(rlocation $GOIMPORTS_BINARY)
 $(rlocation $STATICCHECK_BINARY) -version
 
 $(rlocation $DLV_BINARY) version
+
+$(rlocation $GOPLS_BINARY) version
