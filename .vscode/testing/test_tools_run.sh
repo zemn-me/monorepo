@@ -20,3 +20,5 @@ BUILD_WORKING_DIRECTORY="." $(rlocation $GO_BINARY) version
 echo {} | $(rlocation $GOPACKAGESDRIVER_BINARY) builtin
 
 $(rlocation $GOIMPORTS_BINARY)
+
+$(rlocation $STATICCHECK_BINARY) -version
