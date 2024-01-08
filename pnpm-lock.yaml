@@ -272,8 +272,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.126.2
-    version: 37.126.2(typanion@3.13.0)
+    specifier: 37.127.0
+    version: 37.127.0(typanion@3.13.0)
   sharp:
     specifier: 0.33.1
     version: 0.33.1
@@ -7233,7 +7233,7 @@ packages:
   /acorn-globals@7.0.1:
     resolution: {integrity: sha512-umOSDSDrfHbTNPuNpC2NSnnA3LUrqpevPb4T9jRx4MagXNS0rs+gwiTcAvqCRmsD6utzsrzNt+ebm00SNWiC3Q==}
     dependencies:
-      acorn: 8.11.2
+      acorn: 8.11.3
       acorn-walk: 8.2.0
     dev: true
 
@@ -7259,12 +7259,6 @@ packages:
 
   /acorn@8.10.0:
     resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: true
-
-  /acorn@8.11.2:
-    resolution: {integrity: sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -12147,7 +12141,7 @@ packages:
         optional: true
     dependencies:
       abab: 2.0.6
-      acorn: 8.11.2
+      acorn: 8.11.3
       acorn-globals: 7.0.1
       cssom: 0.5.0
       cssstyle: 2.3.0
@@ -15591,8 +15585,8 @@ packages:
       - supports-color
     dev: true
 
-  /renovate@37.126.2(typanion@3.13.0):
-    resolution: {integrity: sha512-9juRpB2H9ofA13hJ4HiNyKW5LR26NYZyWYACfyUhzYEf1/1Ui9Gk88CZBpbYPAdtbxNM4pvLzNrRcuOXhvuiig==}
+  /renovate@37.127.0(typanion@3.13.0):
+    resolution: {integrity: sha512-Wy+IwaJXacWEv5cTQBmRFR/hrXuEnCNzDnGpdqjFkGH84N6jCwKcrtYqhWBfymmsINZpO32tLyji5x8MqnDINw==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
