@@ -23,11 +23,8 @@ def fetch_dependencies():
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "6b65cb7917b4d1709f9410ffe00ecf3e160edf674b78c54a894471320862184f",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.39.0/rules_go-v0.39.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.44.2/rules_go-v0.39.0.zip",
-        ],
+        sha256 = "7c76d6236b28ff695aa28cf35f95de317a9472fd1fb14ac797c9bf684f09b37c",
+        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.44.2/rules_go-v0.44.2.zip"
     )
 
     http_archive(
@@ -291,5 +288,12 @@ exports_files(glob(["**/*"]))
 exports_files(glob(["**/*"]))
         """,
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
+    )
+
+    http_archive(
+        name = "bazel_features",
+        sha256 = "b8789c83c893d7ef3041d3f2795774936b27ff61701a705df52fd41d6ddbf692",
+        strip_prefix = "bazel_features-1.2.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.2.0/bazel_features-v1.2.0.tar.gz",
     )
 
