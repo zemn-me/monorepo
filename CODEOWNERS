@@ -7,16 +7,17 @@
 /ts/pulumi/shadwell/im/kate/pages/_document.tsx @zemnmez
 
 # list of files that dependabot might change
-/cargo-bazel-lock.json @zemn-me/renovate_approvers
-/go.mod @zemn-me/renovate_approvers
-/go.sum @zemn-me/renovate_approvers
-/pnpm-lock.yaml @zemn-me/renovate_approvers
-/package.json @zemn-me/renovate_approvers
-/Cargo.Bazel.lock @zemn-me/renovate_approvers
-/Cargo.toml @zemn-me/renovate_approvers
-/renovate.json @zemn-me/renovate_approvers
-/requirements.in @zemn-me/renovate_approvers
-/requirements.txt @zemn-me/renovate_approvers
-/bzl/deps.bzl @zemn-me/renovate_approvers
+# gotta all be owned by me until https://github.com/orgs/community/discussions/9636
+/cargo-bazel-lock.json @zemnmez
+/go.mod @zemnmez
+/go.sum @zemnmez
+/pnpm-lock.yaml @zemnmez
+/package.json @zemnmez
+/Cargo.Bazel.lock @zemnmez
+/Cargo.toml @zemnmez
+/renovate.json @zemnmez
+/requirements.in @zemnmez
+/requirements.txt @zemnmez
+/bzl/deps.bzl @zemnmez
 
 
