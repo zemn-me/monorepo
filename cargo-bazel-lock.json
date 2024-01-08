@@ -1,5 +1,5 @@
 {
-  "checksum": "a45cd55c7303010b134f01d410673cad5cbf17e035f4145c476930b67b7428bc",
+  "checksum": "6c3e28949a8d4e385a4e694dd12eb3018de1ef82196a13a8c7fa81db95199682",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -367,11 +367,11 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
@@ -379,7 +379,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -689,15 +689,15 @@
               "target": "heck"
             },
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -1035,7 +1035,7 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
@@ -1043,7 +1043,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -1507,7 +1507,7 @@
               "target": "hex"
             },
             {
-              "id": "serde_json 1.0.108",
+              "id": "serde_json 1.0.111",
               "target": "serde_json"
             },
             {
@@ -2005,15 +2005,15 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -2024,13 +2024,13 @@
       },
       "license": "Apache-2.0/MIT"
     },
-    "proc-macro2 1.0.63": {
+    "proc-macro2 1.0.76": {
       "name": "proc-macro2",
-      "version": "1.0.63",
+      "version": "1.0.76",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/proc-macro2/1.0.63/download",
-          "sha256": "7b368fba921b0dce7e60f5e04ec15e565b3303972b42bcfde1d0713b881959eb"
+          "url": "https://crates.io/api/v1/crates/proc-macro2/1.0.76/download",
+          "sha256": "95fc56cda0b5c3325f5fbbd7ff9fda9e02bb00bb3dac51252d2f1bfa1cb8cc8c"
         }
       },
       "targets": [
@@ -2068,7 +2068,7 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "build_script_build"
             },
             {
@@ -2078,8 +2078,8 @@
           ],
           "selects": {}
         },
-        "edition": "2018",
-        "version": "1.0.63"
+        "edition": "2021",
+        "version": "1.0.76"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -2088,13 +2088,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "quote 1.0.29": {
+    "quote 1.0.35": {
       "name": "quote",
-      "version": "1.0.29",
+      "version": "1.0.35",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/quote/1.0.29/download",
-          "sha256": "573015e8ab27661678357f27dc26460738fd2b6c86e46f386fde94cb5d913105"
+          "url": "https://crates.io/api/v1/crates/quote/1.0.35/download",
+          "sha256": "291ec9ab5efd934aaf503a6466c5d5251535d108ee747472c3977cc5acc868ef"
         }
       },
       "targets": [
@@ -2102,15 +2102,6 @@
           "Library": {
             "crate_name": "quote",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        },
-        {
-          "BuildScript": {
-            "crate_name": "build_script_build",
-            "crate_root": "build.rs",
             "srcs": [
               "**/*.rs"
             ]
@@ -2132,23 +2123,14 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.29",
-              "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2018",
-        "version": "1.0.29"
-      },
-      "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "version": "1.0.35"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2362,13 +2344,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "serde 1.0.166": {
+    "serde 1.0.195": {
       "name": "serde",
-      "version": "1.0.166",
+      "version": "1.0.195",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde/1.0.166/download",
-          "sha256": "d01b7404f9d441d3ad40e6a636a7782c377d2abdbe4fa2440e2edcc2f4f10db8"
+          "url": "https://crates.io/api/v1/crates/serde/1.0.195/download",
+          "sha256": "63261df402c67811e9ac6def069e4786148c4563f4b50fd4bf30aa370d626b02"
         }
       },
       "targets": [
@@ -2408,23 +2390,23 @@
         "deps": {
           "common": [
             {
-              "id": "serde 1.0.166",
+              "id": "serde 1.0.195",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
-        "edition": "2015",
+        "edition": "2018",
         "proc_macro_deps": {
           "common": [
             {
-              "id": "serde_derive 1.0.166",
+              "id": "serde_derive 1.0.195",
               "target": "serde_derive"
             }
           ],
           "selects": {}
         },
-        "version": "1.0.166"
+        "version": "1.0.195"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -2433,13 +2415,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_derive 1.0.166": {
+    "serde_derive 1.0.195": {
       "name": "serde_derive",
-      "version": "1.0.166",
+      "version": "1.0.195",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_derive/1.0.166/download",
-          "sha256": "5dd83d6dde2b6b2d466e14d9d1acce8816dedee94f735eac6395808b3483c6d6"
+          "url": "https://crates.io/api/v1/crates/serde_derive/1.0.195/download",
+          "sha256": "46fe8f8603d81ba86327b23a2e9cdf49e1255fb94a4c5f297f6ee0547178ea2c"
         }
       },
       "targets": [
@@ -2467,32 +2449,32 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
           "selects": {}
         },
         "edition": "2015",
-        "version": "1.0.166"
+        "version": "1.0.195"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "serde_json 1.0.108": {
+    "serde_json 1.0.111": {
       "name": "serde_json",
-      "version": "1.0.108",
+      "version": "1.0.111",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_json/1.0.108/download",
-          "sha256": "3d1c7e3eac408d115102c4c24ad393e0821bb3a5df4d506a80f85f7a742a526b"
+          "url": "https://crates.io/api/v1/crates/serde_json/1.0.111/download",
+          "sha256": "176e46fa42316f18edd598015a5166857fc835ec732f5215eac6b7bdbf0a84f4"
         }
       },
       "targets": [
@@ -2538,18 +2520,18 @@
               "target": "ryu"
             },
             {
-              "id": "serde 1.0.166",
+              "id": "serde 1.0.195",
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.108",
+              "id": "serde_json 1.0.111",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.108"
+        "version": "1.0.111"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -2752,7 +2734,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.166",
+              "id": "serde 1.0.195",
               "target": "serde"
             }
           ],
@@ -2825,7 +2807,7 @@
               "target": "rustc_hash"
             },
             {
-              "id": "serde 1.0.166",
+              "id": "serde 1.0.195",
               "target": "serde"
             },
             {
@@ -2905,15 +2887,15 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -2952,15 +2934,15 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -3055,11 +3037,11 @@
               "target": "pmutil"
             },
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
@@ -3067,7 +3049,7 @@
               "target": "swc_macros_common"
             },
             {
-              "id": "syn 2.0.23",
+              "id": "syn 2.0.48",
               "target": "syn"
             }
           ],
@@ -3129,11 +3111,11 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
@@ -3157,13 +3139,13 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "syn 2.0.23": {
+    "syn 2.0.48": {
       "name": "syn",
-      "version": "2.0.23",
+      "version": "2.0.48",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/syn/2.0.23/download",
-          "sha256": "59fb7d6d8281a51045d62b8eb3a7d1ce347b76f312af50cd3dc0af39c87c1737"
+          "url": "https://crates.io/api/v1/crates/syn/2.0.48/download",
+          "sha256": "0f3531638e407dfc0814761abb7c00a5b54992b849452a0646b7f65c9f770f3f"
         }
       },
       "targets": [
@@ -3202,11 +3184,11 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
@@ -3217,7 +3199,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "2.0.23"
+        "version": "2.0.48"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -3391,11 +3373,11 @@
         "deps": {
           "common": [
             {
-              "id": "proc-macro2 1.0.63",
+              "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
             {
-              "id": "quote 1.0.29",
+              "id": "quote 1.0.35",
               "target": "quote"
             },
             {
@@ -4433,7 +4415,7 @@
   "direct_deps": [
     "clap 4.4.13",
     "hex 0.4.3",
-    "serde_json 1.0.108",
+    "serde_json 1.0.111",
     "sha2 0.10.8",
     "swc_atoms 0.6.5",
     "swc_common 0.33.12"
