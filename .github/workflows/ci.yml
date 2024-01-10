@@ -48,7 +48,7 @@ jobs:
          bazel build //ci:presubmit && \
          echo "::endgroup::" && \
          echo "::group::Presubmit" && \
-         bazel run //ci:presubmit -- --skip-pulumi-deploy && \
+         bazel run --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
          echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
@@ -91,7 +91,7 @@ jobs:
             bazel build //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            bazel run //ci:presubmit -- --skip-bazel-tests --dirty \
+            bazel run --tool_tag=presbmit //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite && \
             echo "::endgroup::"
         env:
@@ -105,7 +105,7 @@ jobs:
         # we can run this dirty since the next run will --overwrite anyway
         run: |
          ./.github/workflows/bootstrap_bazel_remote_cache.sh
-         bazel run //ci:presubmit -- \
+         bazel run --tool_tag=presubmit //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
         env:
