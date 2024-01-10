@@ -22,37 +22,37 @@ const url = (s: TemplateStringsArray, ...f: { toString(): string }[]): URL => {
 export type Endpoint = Date | 'ongoing';
 
 export interface Bio {
-	birthdate: Date;
-	skills: Text[];
-	links: [Text, URL][];
-	timeline: Event[];
-	who: Who;
+	readonly birthdate: Date;
+	readonly skills: readonly Text[];
+	readonly links: readonly (readonly [Text, URL])[];
+	readonly timeline: readonly Event[];
+	readonly who: Who;
 }
 
-export type Timeline = Event[];
+export type Timeline = readonly Event[];
 
 export interface Who {
-	handle: Text;
-	fullName: Text;
-	name: Text;
+	readonly handle: Text;
+	readonly fullName: Text;
+	readonly name: Text;
 }
 
 export type Tag = Text;
 
 export interface Employment {
-	since: Date;
-	title: Text;
-	where: Text;
+	readonly since: Date;
+	readonly title: Text;
+	readonly where: Text;
 }
 
 export interface Event {
-	date: Date;
-	description?: Text;
-	tags?: Tag[];
-	title: Text;
-	url?: URL;
-	priority?: number;
-	until?: Endpoint;
+	readonly date: Date;
+	readonly description?: Text;
+	readonly tags?: readonly Tag[];
+	readonly title: Text;
+	readonly url?: URL;
+	readonly priority?: number;
+	readonly until?: Endpoint;
 }
 
 // tags
