@@ -46,10 +46,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "9bd87b8280ef720d3240514f884e56a712f2218f0d693b48050c836028940a42",
-        strip_prefix = "protobuf-25.1",
+        sha256 = "8ff511a64fc46ee792d3fe49a5a1bcad6f7dc50dfbba5a28b0e5b979c17f9871",
+        strip_prefix = "protobuf-25.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v25.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v25.2.tar.gz",
         ],
     )
 
@@ -82,10 +82,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "9bd87b8280ef720d3240514f884e56a712f2218f0d693b48050c836028940a42",
-        strip_prefix = "protobuf-25.1",
+        sha256 = "8ff511a64fc46ee792d3fe49a5a1bcad6f7dc50dfbba5a28b0e5b979c17f9871",
+        strip_prefix = "protobuf-25.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v25.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v25.2.tar.gz",
         ],
     )
 
@@ -108,9 +108,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "ab14c33aa7ffe4a176f7b42dd885eea5aa235cd536249fef98de2a09b2e0d553",
+        sha256 = "82304d92cf77c49c301233d8d5e96c506cab114266714f97f38a1cc46e2463c3",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.100.0/pulumi-v3.100.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.101.0/pulumi-v3.101.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -120,9 +120,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.100.0/pulumi-v3.100.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.101.0/pulumi-v3.101.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "227fa193f59e09b02ab9aa29b93e720cdd9ec5b09a779fe1665e93e2aa9a7cfa",
+        sha256 = "d0655fdae0c3780243f57bcf57db6bd4b2a3bad734846bd26c58087b3a2a7708",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -141,9 +141,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.100.0/pulumi-v3.100.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.101.0/pulumi-v3.101.0-linux-arm64.tar.gz",
         ],
-        sha256 = "c8f94b4e250118fe181ade872ae8c13a8911649b519a3da9def26b2fd8fe4c94",
+        sha256 = "7da9b176825fc91d843900046fa6d5981504e19b5dc5e91519be3adde2690f97",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,

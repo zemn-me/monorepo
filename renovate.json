@@ -36,6 +36,10 @@
 				],
 				"recreateWhen": "always"
 			}
+		},
+		{
+			"matchPackagePatterns": [ "pulumi_cli_.*" ],
+			"groupName": "pulumi_cli"
 		}
 	]
 }
