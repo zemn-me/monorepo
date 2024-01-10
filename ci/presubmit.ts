@@ -130,7 +130,13 @@ const cmd = new Command('presubmit')
 			child_process
 				.spawn(
 					'bazel',
-					['run', '//:gazelle-update-repos', '--', '-strict'],
+					[
+						'run',
+						'--tool_tag=presubmit',
+						'//:gazelle-update-repos',
+						'--',
+						'-strict',
+					],
 					{
 						cwd,
 						stdio: 'inherit',
@@ -149,10 +155,20 @@ const cmd = new Command('presubmit')
 
 		await new Promise<void>((ok, error) =>
 			child_process
-				.spawn('bazel', ['run', '//:gazelle', '--', '--strict'], {
-					cwd,
-					stdio: 'inherit',
-				})
+				.spawn(
+					'bazel',
+					[
+						'run',
+						'//:gazelle',
+						'--tool_tag=presubmit',
+						'--',
+						'--strict',
+					],
+					{
+						cwd,
+						stdio: 'inherit',
+					}
+				)
 				.on('close', code =>
 					code == 0
 						? ok()
