@@ -77,14 +77,17 @@ export const gaming = en`gaming`,
 	rust = en`rust`,
 	go = en`go`;
 
-export const Bio: Bio = {
+export const Bio = {
 	birthdate: date(17, 'may', 1994),
 	links: [
-		[en`linkedin`, url`//www.linkedin.com/in/thomas-shadwell-4b333b50`],
-		[en`github`, url`//github.com/zemnmez`],
+		[
+			lang.Text('en-GB', 'linkedin' as const),
+			url`//www.linkedin.com/in/thomas-shadwell-4b333b50`,
+		],
+		[lang.Text('en-GB', 'github' as const), url`//github.com/zemnmez`],
 		// probably should have an enable/ disable here at some point
 		// [en`twitch`, url`//twitch.tv/zemnmez`],
-		[en`twitter`, url`//twitter.com/zemnmez`],
+		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 	],
 	skills: [
 		en`Go`,
@@ -591,4 +594,17 @@ export const Bio: Bio = {
 		fullName: en`Thomas Neil James Shadwell`,
 		name: en`Thomas NJ Shadwell`,
 	},
-};
+} as const satisfies Bio;
+
+export const links = new Map(
+	Bio.links.map(
+		([name, href]) =>
+			[
+				lang.text(name),
+				{
+					name: name,
+					href,
+				},
+			] as const
+	)
+);
