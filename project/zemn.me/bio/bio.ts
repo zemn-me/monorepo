@@ -22,37 +22,37 @@ const url = (s: TemplateStringsArray, ...f: { toString(): string }[]): URL => {
 export type Endpoint = Date | 'ongoing';
 
 export interface Bio {
-	birthdate: Date;
-	skills: Text[];
-	links: [Text, URL][];
-	timeline: Event[];
-	who: Who;
+	readonly birthdate: Date;
+	readonly skills: readonly Text[];
+	readonly links: readonly (readonly [Text, URL])[];
+	readonly timeline: readonly Event[];
+	readonly who: Who;
 }
 
-export type Timeline = Event[];
+export type Timeline = readonly Event[];
 
 export interface Who {
-	handle: Text;
-	fullName: Text;
-	name: Text;
+	readonly handle: Text;
+	readonly fullName: Text;
+	readonly name: Text;
 }
 
 export type Tag = Text;
 
 export interface Employment {
-	since: Date;
-	title: Text;
-	where: Text;
+	readonly since: Date;
+	readonly title: Text;
+	readonly where: Text;
 }
 
 export interface Event {
-	date: Date;
-	description?: Text;
-	tags?: Tag[];
-	title: Text;
-	url?: URL;
-	priority?: number;
-	until?: Endpoint;
+	readonly date: Date;
+	readonly description?: Text;
+	readonly tags?: readonly Tag[];
+	readonly title: Text;
+	readonly url?: URL;
+	readonly priority?: number;
+	readonly until?: Endpoint;
 }
 
 // tags
@@ -77,14 +77,17 @@ export const gaming = en`gaming`,
 	rust = en`rust`,
 	go = en`go`;
 
-export const Bio: Bio = {
+export const Bio = {
 	birthdate: date(17, 'may', 1994),
 	links: [
-		[en`linkedin`, url`//www.linkedin.com/in/thomas-shadwell-4b333b50`],
-		[en`github`, url`//github.com/zemnmez`],
+		[
+			lang.Text('en-GB', 'linkedin' as const),
+			url`//www.linkedin.com/in/thomas-shadwell-4b333b50`,
+		],
+		[lang.Text('en-GB', 'github' as const), url`//github.com/zemnmez`],
 		// probably should have an enable/ disable here at some point
 		// [en`twitch`, url`//twitch.tv/zemnmez`],
-		[en`twitter`, url`//twitter.com/zemnmez`],
+		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 	],
 	skills: [
 		en`Go`,
@@ -591,4 +594,17 @@ export const Bio: Bio = {
 		fullName: en`Thomas Neil James Shadwell`,
 		name: en`Thomas NJ Shadwell`,
 	},
-};
+} as const satisfies Bio;
+
+export const links = new Map(
+	Bio.links.map(
+		([name, href]) =>
+			[
+				lang.text(name),
+				{
+					name: name,
+					href,
+				},
+			] as const
+	)
+);
