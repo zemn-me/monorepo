@@ -16,9 +16,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "e85ae30de33625a63eca7fc40a94fea845e641888e52f32b6beea91e8b1b2793",
-        strip_prefix = "rules_python-0.27.1",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.27.1.tar.gz",
+        sha256 = "d70cd72a7a4880f0000a6346253414825c19cdd40a28289bdf67b8e6480edff8",
+        strip_prefix = "rules_python-0.28.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.28.0.tar.gz",
     )
 
     http_archive(
@@ -195,8 +195,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "75177226380b771be36d7efc538da842c433f14cd6c36d7660976efb53defe86",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.34.1/rules_rust-v0.34.1.tar.gz"],
+        sha256 = "a761d54e49db06f863468e6bba4a13252b1bd499e8f706da65e279b3bcbc5c52",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.36.2/rules_rust-v0.36.2.tar.gz"],
     )
 
     http_archive(
