@@ -1,5 +1,5 @@
 {
-  "checksum": "f725454f3a283d403396072aa82dad1feae491f6ee5d0371dba244f6e3cb407e",
+  "checksum": "ba0cff9d023a4cbf744e79acdc8f960518f707e8416efbb3f1cd4a2c08a6f096",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -99,13 +99,13 @@
       },
       "license": "Unlicense OR MIT"
     },
-    "anstream 0.6.4": {
+    "anstream 0.6.7": {
       "name": "anstream",
-      "version": "0.6.4",
+      "version": "0.6.7",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/anstream/0.6.4/download",
-          "sha256": "2ab91ebe16eb252986481c5b62f6098f3b698a45e34b5b98200cf20dd2484a44"
+          "url": "https://crates.io/api/v1/crates/anstream/0.6.7/download",
+          "sha256": "4cd2405b3ac1faab2990b74d728624cd9fd115651fcecc7c2d8daf01376275ba"
         }
       },
       "targets": [
@@ -165,7 +165,7 @@
           }
         },
         "edition": "2021",
-        "version": "0.6.4"
+        "version": "0.6.7"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -528,13 +528,13 @@
       },
       "license": "MIT/Apache-2.0"
     },
-    "clap 4.4.15": {
+    "clap 4.4.16": {
       "name": "clap",
-      "version": "4.4.15",
+      "version": "4.4.16",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.4.15/download",
-          "sha256": "c12ed66a79a555082f595f7eb980d08669de95009dd4b3d61168c573ebe38fc9"
+          "url": "https://crates.io/api/v1/crates/clap/4.4.16/download",
+          "sha256": "58e54881c004cec7895b0068a0a954cd5d62da01aef83fa35b1e594497bf5445"
         }
       },
       "targets": [
@@ -569,7 +569,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.4.15",
+              "id": "clap_builder 4.4.16",
               "target": "clap_builder"
             }
           ],
@@ -585,17 +585,17 @@
           ],
           "selects": {}
         },
-        "version": "4.4.15"
+        "version": "4.4.16"
       },
       "license": "MIT OR Apache-2.0"
     },
-    "clap_builder 4.4.15": {
+    "clap_builder 4.4.16": {
       "name": "clap_builder",
-      "version": "4.4.15",
+      "version": "4.4.16",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.15/download",
-          "sha256": "0f4645eab3431e5a8403a96bea02506a8b35d28cd0f0330977dd5d22f9c84f43"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.4.16/download",
+          "sha256": "59cb82d7f531603d2fd1f507441cdd35184fa81beff7bd489570de7f773460bb"
         }
       },
       "targets": [
@@ -628,7 +628,7 @@
         "deps": {
           "common": [
             {
-              "id": "anstream 0.6.4",
+              "id": "anstream 0.6.7",
               "target": "anstream"
             },
             {
@@ -647,7 +647,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.4.15"
+        "version": "4.4.16"
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1499,7 +1499,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.4.15",
+              "id": "clap 4.4.16",
               "target": "clap"
             },
             {
@@ -4417,7 +4417,7 @@
     ]
   },
   "direct_deps": [
-    "clap 4.4.15",
+    "clap 4.4.16",
     "hex 0.4.3",
     "serde_json 1.0.111",
     "sha2 0.10.8",
