@@ -39,8 +39,8 @@ dependencies:
     specifier: 6.0.5
     version: 6.0.5(glob@8.1.0)
   json-schema-to-typescript:
-    specifier: 13.1.1
-    version: 13.1.1
+    specifier: 13.1.2
+    version: 13.1.2
   npm:
     specifier: 10.3.0
     version: 10.3.0
@@ -12246,8 +12246,8 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: false
 
-  /json-schema-to-typescript@13.1.1:
-    resolution: {integrity: sha512-F3CYhtA7F3yPbb8vF7sFchk/2dnr1/yTKf8RcvoNpjnh67ZS/ZMH1ElLt5KHAtf2/bymiejLQQszszPWEeTdSw==}
+  /json-schema-to-typescript@13.1.2:
+    resolution: {integrity: sha512-17G+mjx4nunvOpkPvcz7fdwUwYCEwyH8vR3Ym3rFiQ8uzAL3go+c1306Kk7iGRk8HuXBXqy+JJJmpYl0cvOllw==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
