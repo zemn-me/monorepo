@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-"$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" @com_github_go_delve_delve//cmd/dlv "${@}"
+"$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" //sh/bin:dlv "${@}"
