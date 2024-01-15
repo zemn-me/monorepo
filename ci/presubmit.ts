@@ -111,7 +111,7 @@ const cmd = new Command('presubmit')
 		// for all files at once in a genrule.
 		await new Promise<void>((ok, error) =>
 			child_process
-				.spawn('go', ['mod', 'tidy'], {
+				.spawn(process.env['GO_BINARY_LOCATION']!, ['mod', 'tidy'], {
 					cwd,
 					stdio: 'inherit',
 				})
