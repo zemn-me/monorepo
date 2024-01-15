@@ -1,5 +1,6 @@
 import child_process from 'node:child_process';
 
+import { runfiles } from '@bazel/runfiles';
 import { Command } from '@commander-js/extra-typings';
 import * as Bazel from 'ci/bazel';
 import { Command as WorkflowCommand } from 'ts/github/actions';
@@ -111,10 +112,16 @@ const cmd = new Command('presubmit')
 		// for all files at once in a genrule.
 		await new Promise<void>((ok, error) =>
 			child_process
-				.spawn('go', ['mod', 'tidy'], {
-					cwd,
-					stdio: 'inherit',
-				})
+				.spawn(
+					runfiles.resolveWorkspaceRelative(
+						process.env['GO_BINARY_LOCATION']!
+					),
+					['mod', 'tidy'],
+					{
+						cwd,
+						stdio: 'inherit',
+					}
+				)
 				.on('close', code =>
 					code == 0
 						? ok()
