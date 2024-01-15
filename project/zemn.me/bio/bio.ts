@@ -587,6 +587,13 @@ export const Bio = {
 			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
 			tags: [software, security, work],
 		},
+		{
+			date: date(13, 'jan', 2024),
+			title: en`HackFortress Shmoocon 2024 Champions`,
+			description: en`Won my favorite CTF at the penultimate Shmoocon.`,
+			url: url`https://twitter.com/tf2shmoo/status/1746340146612519239`,
+			tags: [accolade, security],
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
