@@ -25,11 +25,8 @@ jest_test(
 
 js_binary(
     name = "presubmit",
-    data = [":ci", "//sh/bin:go"],
+    data = [":ci"],
     entry_point = "presubmit.js",
-	env = {
-		"GO_BINARY_LOCATION": "$(rlocationpath //sh/bin:go)"
-	}
 )
 
 js_binary(
