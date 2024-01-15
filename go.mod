@@ -14,12 +14,14 @@
 // as I don't think you can implicitly just depend on every bazel file
 module github.com/zemn-me/monorepo
 
-go 1.19
+go 1.21
+
+toolchain go1.21.6
 
 require (
 	github.com/go-delve/delve v1.22.0
 	github.com/golang/protobuf v1.5.3
-	golang.org/x/tools v0.16.1
+	golang.org/x/tools v0.17.0
 	honnef.co/go/tools v0.4.6
 )
 
