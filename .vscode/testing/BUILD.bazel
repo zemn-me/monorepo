@@ -9,13 +9,13 @@ sh_test(
 		"@io_bazel_rules_go//go/tools/gopackagesdriver",
 		"@org_golang_x_tools//cmd/goimports",
 		"@co_honnef_go_tools//cmd/staticcheck",
-		"@com_github_go_delve_delve//cmd/dlv"
+		"//sh/bin:dlv"
 	],
 	env = {
 		"GO_BINARY": "$(rlocationpath @io_bazel_rules_go//go)",
 		"GOPACKAGESDRIVER_BINARY": "$(rlocationpath @io_bazel_rules_go//go/tools/gopackagesdriver)",
 		"GOIMPORTS_BINARY": "$(rlocationpath @org_golang_x_tools//cmd/goimports)",
 		"STATICCHECK_BINARY": "$(rlocationpath @co_honnef_go_tools//cmd/staticcheck)",
-		"DLV_BINARY": "$(rlocationpath @com_github_go_delve_delve//cmd/dlv)"
+		"DLV_BINARY": "$(rlocationpath //sh/bin:dlv)"
 	}
 )
