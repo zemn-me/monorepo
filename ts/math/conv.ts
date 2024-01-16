@@ -19,8 +19,9 @@ export const Quaternion = {
 		return new quaternion.Quaternion(x, y, z, w);
 	},
 
-	fromPoint3D([[x], [y], [z]]: cartesian.Point3D): quaternion.Quaternion {
-		return new quaternion.Quaternion(x, y, z, 0);
+	fromPoint3D([pts]: cartesian.Point3D): quaternion.Quaternion {
+		const [x, y, z] = pts!;
+		return new quaternion.Quaternion(x!, y!, z!, 0);
 	},
 };
 

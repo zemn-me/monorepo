@@ -33,7 +33,7 @@ export class GuardFailedError<
 	}
 
 	override get message(): string {
-		return `must(${this.guard.name ?? this.guard}, ${this.value})`;
+		return `must(${this.guard.name}, ${this.value})`;
 	}
 
 	override get name(): string {

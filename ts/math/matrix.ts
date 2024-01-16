@@ -38,7 +38,7 @@ export const add: <I extends number, J extends number>(
 ) => Matrix<I, J> = <I extends number, J extends number>(
 	m1: Matrix<I, J>,
 	m2: Matrix<I, J>
-) => vec.map(m1, (row, i) => vec.add(row, m2[i]));
+) => vec.map(m1, (row, i) => vec.add(row, m2[i]!));
 
 /**
  * Returns a row of a given matrix as an Iterable.
@@ -50,7 +50,7 @@ export const row: <I extends number, J extends number, T>(
 ) => Iterable<T> = function* (v, i) {
 	const a = v[i];
 	if (!a) return;
-	for (let i = 0; i < a.length; i++) yield a[i];
+	for (let i = 0; i < a.length; i++) yield a[i]!;
 };
 
 export const rows: <I extends number, J extends number, T>(
@@ -63,7 +63,7 @@ export const col: <I extends number, J extends number, T>(
 	i: number
 ) => Iterable<T> = function* (v, i) {
 	const [, jsize] = size(v);
-	for (let j = 0; j < jsize; j++) yield v[j][i];
+	for (let j = 0; j < jsize; j++) yield v[j]![i]!;
 };
 
 export const mul: <
@@ -125,7 +125,7 @@ export function is<T>(
 ): v is Matrix<number, number, T> {
 	// each row must be of the same size
 
-	return v.every((row, _, a) => row.length == a[0].length);
+	return v.every((row, _, a) => row.length == a[0]!.length);
 }
 
 export function must<T>(
@@ -196,7 +196,7 @@ export const transpose: <I extends number, J extends number>(
 	const rows = vec.New<I>(i);
 
 	return vec.map(rows, (_, rj) =>
-		vec.map(vec.New<J>(j), (__, vi) => m[vi][rj])
+		vec.map(vec.New<J>(j), (__, vi) => m[vi]![rj]!)
 	);
 };
 
@@ -213,21 +213,23 @@ export const identity: <I extends number, J extends number>(
 export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 	const [ij] = size(m);
 
-	if ((ij ?? 0) == 0) return 0;
-	if (ij == 1) return m[0][0];
+	if (ij == 0) return 0;
+	if (ij == 1) return m[0]![0]!;
 
 	if (ij == 2) {
-		const [[a, b], [c, d]] = m;
+		// actually not sure what the issue is here...
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const [[a, b], [c, d]] = m as any;
 		return a * d - b * c;
 	}
 
 	const top = m[0];
 	const rest = m.slice(1); // of length J - 1;
-	return top.reduce((acc, cur, ind) => {
+	return top!.reduce((acc, cur, ind) => {
 		const mul = ind % 2 == 0 ? 1 : -1;
 		// remove every value in the same row
 		const nm = rest.map(row => row.filter((_, ri) => ri !== ind));
-		console.assert(nm[0].length == ij - 1);
+		console.assert(nm[0]!.length == ij - 1);
 		// this should give us a new matrix we can get the determinant for
 		return acc + cur * determinant(nm) * mul;
 	}, 0);
@@ -247,7 +249,7 @@ export const minors: <IJ extends number>(s: Square<IJ>) => Square<IJ> = s =>
 		return determinant(smaller);
 	});
 
-export const width: (m: Matrix) => number = m => m?.[0]?.length ?? 0;
+export const width: (m: Matrix) => number = m => m[0]?.length ?? 0;
 
 export const checkerboard: <I extends number, J extends number>(
 	m: Matrix<I, J>
