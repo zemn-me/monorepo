@@ -17,11 +17,11 @@ const sort = async <T>(
 	];
 
 	for (const itm of [...before, ...after]) {
-		((await test(itm, pivot)) === -1 ? smaller : bigger).push(itm);
+		((await test(itm, pivot!)) === -1 ? smaller : bigger).push(itm);
 	}
 
 	return (await sort(smaller, test))
-		.concat([pivot])
+		.concat([pivot!])
 		.concat(await sort(bigger, test));
 };
 
@@ -67,7 +67,7 @@ async function main() {
 			async ([, before, mid, after]: RegExpExecArray): Promise<string> =>
 				before +
 				(
-					await sort<string>(mid.split(endRecord), async (a, b) => {
+					await sort<string>(mid!.split(endRecord), async (a, b) => {
 						let out: -1 | 1 | 0 | undefined;
 						while (out === undefined) {
 							const choice = await new Promise<string>(ok =>
