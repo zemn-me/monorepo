@@ -5,7 +5,7 @@ function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
 	expect(actual.length).toBe(expected.length);
 	actual.forEach((row, i) => {
 		row.forEach((v, k) => {
-			expect(v).toBeCloseTo(expected[i][k]);
+			expect(v).toBeCloseTo(expected[i]![k]!);
 		});
 	});
 }
