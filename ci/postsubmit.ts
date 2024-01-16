@@ -17,7 +17,7 @@ export class SafeForPublicReleaseError extends Error {
 export class NpmPackageUploadFailureError extends SafeForPublicReleaseError {
 	constructor(
 		public readonly npmPackage: npmPackage,
-		public readonly error?: Error
+		public override readonly error?: Error
 	) {
 		super(`Failed to upload npm package: ${npmPackage.name}`);
 	}
