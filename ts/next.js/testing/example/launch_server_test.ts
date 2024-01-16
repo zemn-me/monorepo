@@ -6,7 +6,7 @@ import { isDefined, isNotNull, must } from 'ts/guard';
 
 test('next.js dev server launch!', async () => {
 	const next_server_binary = 'ts/next.js/testing/example/dev.sh';
-	const BAZEL_BINDIR = must(isDefined)(process?.env?.BAZEL_BINDIR);
+	const BAZEL_BINDIR = must(isDefined)(process.env.BAZEL_BINDIR);
 
 	const proc = child_process.execFile(next_server_binary, {
 		env: { BAZEL_BINDIR },
@@ -31,7 +31,7 @@ test('next.js dev server launch!', async () => {
 		if (m?.[0]) {
 			// attempt to connect to the port
 			const resp: http.IncomingMessage = await new Promise(ok =>
-				http.get(m?.[0], resp => ok(resp))
+				http.get(m[0], resp => ok(resp))
 			);
 			expect(resp.statusCode).toBe(200);
 
