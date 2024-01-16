@@ -20,6 +20,8 @@ ts_project(
         "//project/zemn.me/bio",
 		"//:node_modules/next",
 		"//ts/iter",
-		"//:node_modules/@types/node"
+		"//:node_modules/@types/node",
+		"//:node_modules/memoizee",
+		"//:node_modules/@types/memoizee"
     ],
 )
