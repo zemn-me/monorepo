@@ -36,12 +36,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_proto",
-        sha256 = "66bfdf8782796239d3875d37e7de19b1d94301e8972b3cbd2446b332429b4df1",
-        strip_prefix = "rules_proto-4.0.0",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/refs/tags/4.0.0.tar.gz",
-            "https://github.com/bazelbuild/rules_proto/archive/refs/tags/4.0.0.tar.gz",
-        ],
+        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
+        strip_prefix = "rules_proto-5.3.0-21.7",
+        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
     )
 
     http_archive(
@@ -295,5 +292,12 @@ exports_files(glob(["**/*"]))
         sha256 = "b8789c83c893d7ef3041d3f2795774936b27ff61701a705df52fd41d6ddbf692",
         strip_prefix = "bazel_features-1.2.0",
         url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.2.0/bazel_features-v1.2.0.tar.gz",
+    )
+
+    http_archive(
+        name = "com_github_bazelbuild_bazel",
+        strip_prefix="bazel-7.0.0",
+        sha256 = "a7b95e7f6800f5878fd8d599c9096bc84d4362c13efe5c4b4f12624f4fad7db3",
+        url = "https://github.com/bazelbuild/bazel/archive/refs/tags/7.0.0.tar.gz"
     )
 
