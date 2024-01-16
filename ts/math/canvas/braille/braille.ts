@@ -63,7 +63,7 @@ function* subdivideG<T, F>(
 				}
 
 				newCell[nc] =
-					chunk[ic * wc + (nc % wc) + w * ((nc - (nc % wc)) / wc)];
+					chunk[ic * wc + (nc % wc) + w * ((nc - (nc % wc)) / wc)]!;
 			}
 
 			yield newCell;

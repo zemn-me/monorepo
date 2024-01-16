@@ -94,7 +94,7 @@ export function isArrayOf<I, O extends I, A extends unknown[]>(
 	return Object.defineProperty(
 		(v: I[]): v is O[] => v.every(val => t(val, ...a)),
 		'name',
-		{ get: () => `isArrayof(${t.name ?? t})` }
+		{ get: () => `isArrayof(${t.name})` }
 	);
 }
 
