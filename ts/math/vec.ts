@@ -1,11 +1,15 @@
-interface ReadonlyArrayOfLength<T, I extends number> extends ReadonlyArray<T> {
-	length: I;
-}
+type Tuple<T, N extends number> = N extends N
+	? number extends N
+		? T[]
+		: _TupleOf<T, N, readonly []>
+	: never;
+type _TupleOf<
+	T,
+	N extends number,
+	R extends readonly unknown[],
+> = R['length'] extends N ? R : _TupleOf<T, N, readonly [T, ...R]>;
 
-export interface Vector<I extends number = number, T = number>
-	extends ReadonlyArrayOfLength<T, I> {
-	length: I;
-}
+export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 
 /**
  * Map a Vector, returning a new Vector.
@@ -48,7 +52,7 @@ export const as: <T, L extends number>(
 
 export const New: <N extends number>(n: number) => Vector<N, undefined> = n =>
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-	[...Array(n)] as any as Vector<any, undefined>;
+	[...Array(n)] as any;
 
 export const add: <I extends number>(
 	v1: Vector<I>,
@@ -92,8 +96,8 @@ const _zip: <T1, T2, T3>(
 };
 export const zip: {
 	<T1, T2, L extends number>(
-		v1: ReadonlyArrayOfLength<T1, L>,
-		v2: ReadonlyArrayOfLength<T2, L>
+		v1: Tuple<T1, L>,
+		v2: Tuple<T2, L>
 	): Iterable<[T1, T2]>;
 	<T1, T2, T3>(
 		v1: Iterable<T1>,

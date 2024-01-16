@@ -38,7 +38,7 @@ export const add: <I extends number, J extends number>(
 ) => Matrix<I, J> = <I extends number, J extends number>(
 	m1: Matrix<I, J>,
 	m2: Matrix<I, J>
-) => vec.map(m1, (row, i) => vec.add(row, m2[i]!));
+) => vec.map(m1, (row, i) => vec.add(row, m2[i]));
 
 /**
  * Returns a row of a given matrix as an Iterable.
@@ -196,7 +196,7 @@ export const transpose: <I extends number, J extends number>(
 	const rows = vec.New<I>(i);
 
 	return vec.map(rows, (_, rj) =>
-		vec.map(vec.New<J>(j), (__, vi) => m[vi]![rj]!)
+		vec.map(vec.New<J>(j), (__, vi) => m[vi][rj])
 	);
 };
 
@@ -214,7 +214,7 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 	const [ij] = size(m);
 
 	if (ij == 0) return 0;
-	if (ij == 1) return m[0]![0]!;
+	if (ij == 1) return m[0][0];
 
 	if (ij == 2) {
 		// actually not sure what the issue is here...
@@ -225,7 +225,7 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 
 	const top = m[0];
 	const rest = m.slice(1); // of length J - 1;
-	return top!.reduce((acc, cur, ind) => {
+	return top.reduce((acc, cur, ind) => {
 		const mul = ind % 2 == 0 ? 1 : -1;
 		// remove every value in the same row
 		const nm = rest.map(row => row.filter((_, ri) => ri !== ind));
