@@ -5,7 +5,8 @@
 	"extends": [
 		"eslint:recommended",
 		"plugin:prettier/recommended",
-		"plugin:react/recommended"
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/strict"
 	],
 	"overrides": [
 		{
@@ -67,7 +68,9 @@
 		"simple-import-sort/exports": [ "error" ],
 		"keyword-spacing": "error",
 		"object-curly-newline": ["error"],
-		"arrow-body-style": ["error", "as-needed"]
+		"arrow-body-style": ["error", "as-needed"],
+		"@typescript-eslint/no-non-null-assertion": 0,
+		"@typescript-eslint/no-unnecessary-condition": "error"
 	},
 	"parserOptions": {
 		"sourceType": "module",

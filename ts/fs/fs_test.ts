@@ -10,10 +10,10 @@ describe('fs', () => {
 
 			const [a, b, c] = e;
 
-			expect(a.endsWith('ts/fs/testfiles/walk_base')).toBe(true);
+			expect(a!.endsWith('ts/fs/testfiles/walk_base')).toBe(true);
 
-			expect(b.endsWith('ts/fs/testfiles/walk_base/a.txt')).toBe(true);
-			expect(c.endsWith('ts/fs/testfiles/walk_base/b.txt')).toBe(true);
+			expect(b!.endsWith('ts/fs/testfiles/walk_base/a.txt')).toBe(true);
+			expect(c!.endsWith('ts/fs/testfiles/walk_base/b.txt')).toBe(true);
 		});
 	});
 });

@@ -45,7 +45,7 @@ function getWorkspaceRelativePath(path: string): FilePositionParams {
 
 	const m2 =
 		/(?:.*bazel\/_bazel_runner\/[^/]+\/|.*runner\/work\/)(?:monorepo\/)*(.*)/.exec(
-			filePath
+			filePath!
 		);
 
 	if (m2 !== null) {
@@ -80,13 +80,13 @@ async function* AnnotateDebugStatements(lines: AsyncGenerator<string>) {
 
 		if (warningMessage) {
 			yield Command('warning')({
-				...getWorkspaceRelativePath(filepath),
+				...getWorkspaceRelativePath(filepath!),
 				title: warningMessage,
 			})(line);
 			continue;
 		}
 
-		yield Command('debug')(getWorkspaceRelativePath(filepath))(line);
+		yield Command('debug')(getWorkspaceRelativePath(filepath!))(line);
 	}
 }
 
@@ -106,6 +106,7 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 		return resp.value;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	while (!done) {
 		const line = await take();
 		if (line === undefined) continue;
@@ -135,7 +136,7 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 				*/
 				break;
 			case 'FAILED': {
-				failures.push(tag);
+				failures.push(tag!);
 				const nextLine = (await take())?.trim();
 				yield Command('error')({
 					title: `${tag} failed in ${time}`,
@@ -183,7 +184,7 @@ async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
 		const [, filepath] = m;
 
 		yield Command('error')({
-			...getWorkspaceRelativePath(filepath),
+			...getWorkspaceRelativePath(filepath!),
 		})(line);
 	}
 }
@@ -210,7 +211,7 @@ export async function* interleave<A, B>(
 		const res = await Promise.race(nexts.filter((_, i) => !dones[i]));
 
 		// whoever wins the race needs its next promise updated
-		nexts[res.i] = its[res.i].next().then(v => ({ ...v, i: res.i }));
+		nexts[res.i] = its[res.i]!.next().then(v => ({ ...v, i: res.i }));
 
 		yield res.value;
 
