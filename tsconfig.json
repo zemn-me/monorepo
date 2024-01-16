@@ -16,6 +16,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
 		"declarationMap": true,
+		"strictNullChecks": true,
 		"lib": ["DOM", "ESNext"],
 		"baseUrl": ".",
 		"paths": {
