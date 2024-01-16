@@ -1,3 +1,4 @@
+import memoizee from 'memoizee';
 import React from 'react';
 
 type Language = string;
@@ -7,6 +8,10 @@ export class TextType<L extends Language = Language, Text = string> {
 		public readonly language: L,
 		public readonly text: Text
 	) {}
+	private localeGetter = memoizee(() => new Intl.Locale(this.language));
+	get locale(): Intl.Locale {
+		return this.localeGetter();
+	}
 }
 
 export type Text<L extends Language = Language, Text = string> = TextType<
