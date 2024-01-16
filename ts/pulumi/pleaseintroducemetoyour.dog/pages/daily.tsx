@@ -11,7 +11,7 @@ interface Post {
 			fallback_url?: string;
 			scrubber_media_url?: string;
 		};
-	} | void;
+	};
 	preview: {
 		images?: {
 			source?: {
@@ -35,7 +35,7 @@ interface SearchResponse {
 function Post(post: Post) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const onClick = useCallback(() => void videoRef.current?.play(), []);
-	const video = post?.media?.reddit_video;
+	const video = post.media?.reddit_video;
 	return (
 		<article
 			className={classNames('post', post.media ? 'media' : undefined)}
@@ -84,7 +84,7 @@ export default function Main() {
 				<title>Top doggoes of the day!!</title>
 			</Head>
 			<h1>Top doggoes of the day!!</h1>
-			{searchResponse?.data?.children?.map((post, i) => (
+			{searchResponse.data?.children?.map((post, i) => (
 				<Post key={i} {...post.data} />
 			)) ?? 'we had an issue loading them ... 🐕😭'}
 			<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>
