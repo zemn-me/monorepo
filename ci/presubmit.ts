@@ -111,10 +111,23 @@ const cmd = new Command('presubmit')
 		// for all files at once in a genrule.
 		await new Promise<void>((ok, error) =>
 			child_process
-				.spawn('go', ['mod', 'tidy'], {
-					cwd,
-					stdio: 'inherit',
-				})
+				.spawn(
+					'bazel',
+					[
+						'run',
+						'--tool_tag=presubmit',
+						// it would be better to use the binary directly in our
+						// runfiles, but then the go binary itself has runfiles issues
+						// for some reason...
+						'//sh/bin:go',
+						'mod',
+						'tidy',
+					],
+					{
+						cwd,
+						stdio: 'inherit',
+					}
+				)
 				.on('close', code =>
 					code == 0
 						? ok()
