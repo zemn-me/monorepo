@@ -36,7 +36,7 @@ const labelToNpmPackage = (label: string): string => {
 	if (match === null)
 		throw new Error(`${label} does not appear to be an NPM package.`);
 
-	return match[1];
+	return match[1]!;
 };
 
 interface GithubIssueUrlProps {
@@ -49,7 +49,7 @@ const githubIssueUrl = (props: GithubIssueUrlProps) => {
 	const params = new URLSearchParams();
 	const modifiedProps = {
 		...props,
-		labels: props.labels?.map(s => s.replace(',', ''))?.join(','),
+		labels: props.labels?.map(s => s.replace(',', '')).join(','),
 	};
 
 	for (const [key, value] of Object.entries(modifiedProps)) {
@@ -129,7 +129,7 @@ const main = async () => {
 		devDeps = new Map<string, string>();
 
 	for (const [pkgName, pkgVersion] of our_deps) {
-		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(
+		[runDeps, devDeps]![+depTypes.isDev(pkgName)]!.set(
 			pkgName,
 			mustDefined(pkgVersion)
 		);

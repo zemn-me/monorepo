@@ -133,7 +133,7 @@ ${
 		target_commitish: context.ref,
 	});
 
-	if (errors) {
+	if (errors.length) {
 		console.error('Some errors occurred, they are as follows:');
 		for (const error of errors) console.error(error);
 	}

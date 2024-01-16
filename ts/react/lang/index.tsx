@@ -47,8 +47,7 @@ export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
 export const locale = React.createContext<readonly Language[]>(['en-GB']);
 
 const getLangs = () => {
-	if (typeof navigator !== 'undefined')
-		return navigator?.languages ?? [navigator?.language];
+	if (typeof navigator !== 'undefined') return navigator.languages; // ?? [navigator.language]?;
 
 	return [];
 };
