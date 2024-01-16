@@ -20,6 +20,9 @@ dependencies:
   '@types/bcryptjs':
     specifier: 2.4.6
     version: 2.4.6
+  '@types/memoizee':
+    specifier: ^0.4.11
+    version: 0.4.11
   '@types/seedrandom':
     specifier: 3.0.8
     version: 3.0.8
@@ -41,6 +44,9 @@ dependencies:
   json-schema-to-typescript:
     specifier: 13.1.2
     version: 13.1.2
+  memoizee:
+    specifier: ^0.4.15
+    version: 0.4.15
   npm:
     specifier: 10.3.0
     version: 10.3.0
@@ -6803,6 +6809,10 @@ packages:
     resolution: {integrity: sha512-LsjtqsyF+d2/yFOYaN22dHZI1Cpwkrj+g06G8+qtUKlhovPW89YhqSnfKtMbkgmEtYpH2gydRNULd6y8mciAFg==}
     dependencies:
       '@types/unist': 3.0.2
+    dev: false
+
+  /@types/memoizee@0.4.11:
+    resolution: {integrity: sha512-2gyorIBZu8GoDr9pYjROkxWWcFtHCquF7TVbN2I+/OvgZhnIGQS0vX5KJz4lXNKb8XOSfxFOSG5OLru1ESqLUg==}
     dev: false
 
   /@types/mime@3.0.4:
