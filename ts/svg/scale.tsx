@@ -108,8 +108,8 @@ export const Ticks: <N extends Num>(
 					// gets the largest y
 					const offset: number = Math.max(
 						...tickPath
-							.map(([, /*x*/ y]) => y)
-							.concat(textMiddlePos.map(([, /*x*/ y]) => y))
+							.map(([, /*x*/ y]) => y!)
+							.concat(textMiddlePos.map(([, /*x*/ y]) => y!))
 					);
 
 					// this transform sets all y values to -y, flipping
