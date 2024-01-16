@@ -16,7 +16,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'https://something.com';
 				expect(() => new Url.Local('/something')).not.toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 
@@ -25,7 +25,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.Local('/something')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 	});
@@ -40,7 +40,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.URL('javascript://alert(1)')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it('should not allow random protocol URIs', () => {
@@ -48,7 +48,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.URL('skype://alert(1)')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it.each([
@@ -61,7 +61,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = url;
 				expect(() => new Url.URL(url)).not.toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it.each([
@@ -73,7 +73,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = url;
 				expect(() => new Url.URL(url)).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 	});
