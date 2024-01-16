@@ -18,6 +18,7 @@ load("//bzl:deps.bzl", "fetch_dependencies")
 fetch_dependencies()
 
 load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
 bazel_features_deps()
 
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
@@ -200,3 +201,17 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+register_toolchains("@build_stack_rules_proto//toolchain:standard")
+
+load("@build_stack_rules_proto//deps:core_deps.bzl", "core_deps")
+
+core_deps()
+
+load("@build_stack_rules_proto//:go_deps.bzl", "gazelle_protobuf_extension_go_deps")
+
+gazelle_protobuf_extension_go_deps()
+
+load("@build_stack_rules_proto//deps:protobuf_core_deps.bzl", "protobuf_core_deps")
+
+protobuf_core_deps()

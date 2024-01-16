@@ -1,0 +1,48 @@
+# proto-file: proto/vcard.proto
+# proto-message: VCard
+# the directives above are checked within Google by a fancy thing that
+# doesn't exist externally I will bodge at some point.
+# format via go run github.com/protocolbuffers/txtpbfmt/cmd/txtpbfmt@latest
+
+name: {
+    language: "en_GB"
+    family_name: "Shadwell"
+    given_name: "Thomas"
+    middle_name: "Neil James"
+}
+
+formatted_name: {
+    language: "en_GB"
+    text: "Thomas Neil James Shadwell"
+}
+
+nickname: {
+    language: "en_GB"
+    text: "zemnmez"
+}
+
+birthdate: {
+    year: 1994
+    month: 5
+    date: 17
+}
+
+email: {
+    email: "thomas@shadwell.im"
+}
+
+
+url: {
+    type: "Twitter"
+    value: "https://twitter.com/zemnmez"
+}
+
+url: {
+    type: "GitHub"
+    value: "https://github.com/zemnmez"
+}
+
+url: {
+    type: "LinkedIn"
+    value: "https://www.linkedin.com/in/thomas-shadwell"
+}
