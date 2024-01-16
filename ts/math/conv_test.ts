@@ -41,9 +41,9 @@ describe('Conversions', () => {
 		const point3D = C.fromQuaternion(q);
 
 		const expectedPoint3D: cartesian.Point3D = [[1], [2], [3]] as const;
-		expect(point3D[0][0]).toBeCloseTo(expectedPoint3D[0][0]);
-		expect(point3D[1][0]).toBeCloseTo(expectedPoint3D[1][0]);
-		expect(point3D[2][0]).toBeCloseTo(expectedPoint3D[2][0]);
+		expect(point3D[0]![0]).toBeCloseTo(expectedPoint3D[0]![0]!);
+		expect(point3D[1]![0]).toBeCloseTo(expectedPoint3D[1]![0]!);
+		expect(point3D[2]![0]).toBeCloseTo(expectedPoint3D[2]![0]!);
 	});
 
 	test('EulerAngle from Quaternion', () => {

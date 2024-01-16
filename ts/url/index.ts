@@ -17,7 +17,7 @@ abstract class Safe extends globalThis.URL implements URL {
 		if (err) throw err;
 	}
 
-	private isSafe(): Error | void {
+	private isSafe(): Error | undefined {
 		if (!this.allowedProtocols.includes(this.protocol))
 			return new Error(errInvalidProtocol.toString());
 	}
@@ -26,7 +26,7 @@ abstract class Safe extends globalThis.URL implements URL {
 export class Local extends Safe implements URL {
 	static New(params: TemplateStringsArray) {
 		const [url] = params;
-		return new this(url);
+		return new this(url!);
 	}
 	override [isSafeUrl] = true as const;
 	constructor(url: string) {
@@ -38,6 +38,6 @@ export class Local extends Safe implements URL {
 export class URL extends Safe implements URL {
 	static New(params: TemplateStringsArray) {
 		const [url] = params;
-		return new this(url);
+		return new this(url!);
 	}
 }

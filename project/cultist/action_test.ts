@@ -17,11 +17,9 @@ describe('decreaseQuantity', () => {
 			}),
 		});
 
-		const [[, el]] = cultist.action.decreaseQuantityBy(
-			'money',
-			elements,
-			5
-		);
+		const [a] = cultist.action.decreaseQuantityBy('money', elements, 5);
+
+		const [, el] = a!;
 
 		expect(el.quantity).toEqual(5);
 		expect(el.elementId).toEqual('money');
