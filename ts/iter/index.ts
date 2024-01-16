@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
 export * as dict from './dict';
 
 /**
