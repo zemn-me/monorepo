@@ -293,3 +293,10 @@ exports_files(glob(["**/*"]))
         strip_prefix = "bazel_features-1.2.0",
         url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.2.0/bazel_features-v1.2.0.tar.gz",
     )
+
+    http_archive(
+        name = "build_stack_rules_proto",
+        sha256 = "ac7e2966a78660e83e1ba84a06db6eda9a7659a841b6a7fd93028cd8757afbfb",
+        strip_prefix = "rules_proto-2.0.1",
+        urls = ["https://github.com/stackb/rules_proto/archive/v2.0.1.tar.gz"],
+    )
