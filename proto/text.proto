@@ -1,0 +1,11 @@
+
+syntax = "proto3";
+
+package proto;
+
+message Text {
+    // The UTF-8 text.
+    string text = 1;
+    // The BCP47 language string.
+    string language = 2;
+}
