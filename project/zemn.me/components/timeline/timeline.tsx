@@ -1,9 +1,11 @@
 import Immutable from 'immutable';
 import * as Bio from 'project/zemn.me/bio';
 import Link from 'project/zemn.me/components/Link';
+import { SectionLink } from 'project/zemn.me/components/SectionLink/SectionLink';
 import style from 'project/zemn.me/components/timeline/timeline.module.css';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import * as lang from 'ts/react/lang';
+import memoizee from 'memoizee'
 
 interface MutableText {
 	corpus: string;
@@ -25,6 +27,63 @@ const Text = Immutable.Record<MutableText>(
 
 function textToStringKey(t: ImmutableText): string {
 	return [t.get('language'), t.get('corpus')].join('-');
+}
+
+/**
+ * for a given set of strings, return the minimum number of
+ * characters we can choose from the list to ensure that
+ * each truncated string is unique.
+ */
+function shortestUniqueSample(strings: string[]): number {
+	const maxLength = strings.reduce(
+		(prev, current) => (current.length > prev ? current.length : prev),
+		-Infinity
+	);
+	for (let i = 1; i < maxLength; i++) {
+		const truncs = strings.map(v => v.slice(0, i));
+		if (truncs.length === [...new Set(truncs)].length) return i;
+	}
+
+	throw new Error('oops');
+}
+
+const eventIdPrefixCount = memoizee(() =>
+	shortestUniqueSample(Bio.Bio.timeline.map(v => v.id)));
+
+function shortIdForEvent(e: Bio.Event): string {
+	return e.id.slice(0, eventIdPrefixCount());
+}
+
+interface CorpusProps {
+	children: lang.Text
+}
+
+const sentanceTerminators = [
+	"!", ".", '?', '…'
+]
+
+
+function needsFullStop(text: lang.Text): boolean {
+	if (text.locale.language !== "en") return false;
+
+	if (sentanceTerminators.some(v => text.text.endsWith(v))) return false;
+
+	return true;
+}
+
+function fullStopIfNeeded(text: lang.Text): ReactElement | null {
+	if (needsFullStop(text)) return <>.</>;
+
+	return null;
+}
+
+/**
+ * Injects the victorian title-dot if needed.
+ * (it's a house-style thing I picked ages ago)
+ * @see https://www.reddit.com/r/AskLiteraryStudies/comments/n8mmno/why_do_we_no_longer_use_periodsfull_stops_in/gxtfw1y
+ */
+function Corpus({ children: text }: CorpusProps) {
+	return <>{text.text}{fullStopIfNeeded(text)}</>
 }
 
 const numerals = [
@@ -90,11 +149,6 @@ function setManyMap<K, V>(
 	return v.set(key, v.get(key, Immutable.List<V>()).concat(value));
 }
 
-function addFullStopIfMissing(s: string) {
-	if (/[!?.]$/.test(s)) return s;
-	return s + '.';
-}
-
 function groupBy<T, Q>(
 	i: Iterable<T>,
 	select: (v: T) => Q
@@ -107,16 +161,18 @@ function groupBy<T, Q>(
 
 function Event({ event: e }: { readonly event: Bio.Event }) {
 	return (
-		<div className={style.event}>
-			<Link href={e.url?.toString()} lang={lang.get(e.title)}>
-				{lang.text(e.title)}
-			</Link>{' '}
+		<article className={style.event}>
+			<Link href={e.url?.toString()} id={e.id} lang={lang.get(e.title)}>
+				{e.title.text}
+				{/* this would be a <Corpus> but it looks ugly with the full stop inside the link. */}
+			</Link>{fullStopIfNeeded(e.title)}{' '}
 			{e.description ? (
 				<span lang={lang.get(e.description)}>
-					{addFullStopIfMissing(lang.text(e.description))}
+					<Corpus>{e.description}</Corpus>
 				</span>
 			) : null}
-		</div>
+			{' '}<SectionLink href={`#${e.id}`}>§{shortIdForEvent(e)}.</SectionLink>
+		</article>
 	);
 }
 
@@ -134,11 +190,7 @@ function Month({
 	return (
 		<div className={style.month}>
 			<header className={style.monthName} lang={month.get('language')}>
-				{' '}
-				{month.get('corpus')}
-				{/* if we're typesetting in an english lanugage, do the victorian title-dot */}
-				{/* https://www.reddit.com/r/AskLiteraryStudies/comments/n8mmno/why_do_we_no_longer_use_periodsfull_stops_in/gxtfw1y */}
-				{locale.language === 'en' ? '.' : null}
+				<Corpus>{lang.Text(month.get("language"), month.get("corpus"))}</Corpus>
 			</header>
 			<div className={style.content}>
 				{[...events].map((e, i) => (
