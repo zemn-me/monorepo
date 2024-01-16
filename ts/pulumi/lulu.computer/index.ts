@@ -28,8 +28,8 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_domain`,
 			{
 				domainName,
-				nameServers: zone.then(
-					zone => zone.nameServers?.map(name => ({ name }))
+				nameServers: zone.then(zone =>
+					zone.nameServers?.map(name => ({ name }))
 				),
 			},
 			{ parent: this }
