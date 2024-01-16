@@ -129,7 +129,7 @@ const cmd = new Command('presubmit')
 		await new Promise<void>((ok, error) =>
 			child_process
 				.spawn(
-					'bazel',
+					'bazelisk',
 					[
 						'run',
 						'--tool_tag=presubmit',
@@ -156,7 +156,7 @@ const cmd = new Command('presubmit')
 		await new Promise<void>((ok, error) =>
 			child_process
 				.spawn(
-					'bazel',
+					'bazelisk',
 					[
 						'run',
 						'//:gazelle',
