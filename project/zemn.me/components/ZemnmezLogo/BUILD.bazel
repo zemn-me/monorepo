@@ -7,7 +7,7 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-	assets = glob(["**/*.css"]),
+    assets = glob(["**/*.css"]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//:base_defs",

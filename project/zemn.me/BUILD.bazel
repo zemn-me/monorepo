@@ -5,23 +5,26 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "ts",
-    assets = glob(["**/*.css", "**/*.svg"]),
+    assets = glob([
+        "**/*.css",
+        "**/*.svg",
+    ]),
     deps = [
         "//:node_modules/@types/react",
-		"//:node_modules/@types/seedrandom",
+        "//:node_modules/@types/seedrandom",
         "//:node_modules/immutable",
         "//:node_modules/next",
         "//:node_modules/react",
-		"//:node_modules/seedrandom",
-        "//project/zemn.me/bio",
+        "//:node_modules/seedrandom",
         "//project/zemn.me/assets/kenwood",
+        "//project/zemn.me/bio",
         "//project/zemn.me/components",
         "//project/zemn.me/components/TimeEye",
         "//project/zemn.me/components/ZemnmezLogo",
-        "//ts/next.js",
-        "//ts/react/lang",
         "//ts/iter",
-		"//ts/next.js/component/Redirect"
+        "//ts/next.js",
+        "//ts/next.js/component/Redirect",
+        "//ts/react/lang",
     ],
 )
 
@@ -35,6 +38,5 @@ next_project(
 
 alias(
     name = "zemn.me",
-    actual = ":dev"
+    actual = ":dev",
 )
-

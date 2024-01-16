@@ -4,6 +4,7 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 ts_project(
     name = "lib",
+    data = ["security.txt"],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
@@ -17,5 +18,4 @@ ts_project(
         "//ts/iter",
         "//ts/next.js",
     ],
-	data = [ "security.txt" ]
 )

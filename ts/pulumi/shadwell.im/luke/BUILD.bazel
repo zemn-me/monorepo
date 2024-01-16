@@ -8,11 +8,9 @@ next_project(
     srcs = ["//ts/pulumi/shadwell.im/luke/pages"],
 )
 
-
 # bazel run //ts/pulumi/shadwell.im/luke
 # to test the website.
 alias(
-	name = "luke",
-	actual = ":dev"
+    name = "luke",
+    actual = ":dev",
 )
-

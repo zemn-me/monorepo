@@ -1,38 +1,43 @@
-load("//ts:rules.bzl", "ts_project", "jest_test")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//js:rules.bzl", "js_binary")
 
 ts_project(
     name = "ci",
     deps = [
         "//:node_modules/@actions/github",
-        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@commander-js/extra-typings",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//:node_modules/mime",
         "//ts",
+        "//ts/github/actions",
         "//ts/pulumi:pulumi_ts",
-        "//:node_modules/@commander-js/extra-typings",
-		"//ts/github/actions"
     ],
 )
 
 jest_test(
-	name = "tests",
-	deps = [ ":ci" ],
-	srcs = [ "bazel_test.js" ]
+    name = "tests",
+    srcs = ["bazel_test.js"],
+    deps = [":ci"],
 )
 
 js_binary(
     name = "presubmit",
-    data = [":ci"],
+    data = [
+        ":ci",
+        "//sh/bin:go",
+    ],
     entry_point = "presubmit.js",
+    env = {
+        "GO_BINARY_LOCATION": "$(rlocationpath //sh/bin:go)",
+    },
 )
 
 js_binary(
     name = "postsubmit",
     data = [
-		":ci",
+        ":ci",
         "//VERSION",
         "//project/ck3/recursive-vassals:mod_zip",
         "//project/ck3/recursive-vassals:patch",
@@ -46,14 +51,13 @@ js_binary(
         "//ts/knowitwhenyouseeit:npm_pkg.tgz",
         "//ts/knowitwhenyouseeit:package.json",
     ],
-
     entry_point = "postsubmit.js",
 )
 
 js_binary(
     name = "submit",
     data = [
-		":ci",
+        ":ci",
         "//VERSION",
         "//project/ck3/recursive-vassals:mod_zip",
         "//project/ck3/recursive-vassals:patch",

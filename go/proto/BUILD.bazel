@@ -3,7 +3,7 @@ load("//go:rules.bzl", "go_binary", "go_library")
 go_library(
     name = "proto_lib",
     srcs = ["main.go"],
-    importpath = "github.com/zemnmez/monorepo/go/proto",
+    importpath = "github.com/zemn-me/monorepo/go/proto",
     visibility = ["//visibility:private"],
     deps = ["@com_github_golang_protobuf//ptypes/struct"],
 )

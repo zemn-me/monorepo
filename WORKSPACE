@@ -18,6 +18,7 @@ load("//bzl:deps.bzl", "fetch_dependencies")
 fetch_dependencies()
 
 load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
 bazel_features_deps()
 
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")

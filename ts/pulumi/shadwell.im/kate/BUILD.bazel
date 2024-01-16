@@ -8,25 +8,25 @@ next_project(
     srcs = [":pages"],
 )
 
-
 # bazel run //ts/pulumi/shadwell.im/kate
 # to test the website.
 alias(
-	name = "kate",
-	actual = ":dev"
+    name = "kate",
+    actual = ":dev",
 )
 
 # moved here so kate can automerge without modifying any important bazel stuff
 ts_project(
     name = "pages",
+    srcs = glob([
+        "pages/*.ts",
+        "pages/*.tsx",
+    ]),
+    assets = glob(["pages/*.css"]),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
         "//ts/next.js",
     ],
-	srcs = glob(["pages/*.tsx", "pages/*.ts"]),
-	assets = glob(["pages/*.css"])
 )
-
-

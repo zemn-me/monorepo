@@ -32,6 +32,5 @@ func ZipFs(w io.Writer, f fs.FS) (err error) {
 		}
 
 		return nil
-
 	})
 }

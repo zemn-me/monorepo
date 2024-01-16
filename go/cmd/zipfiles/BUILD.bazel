@@ -9,7 +9,7 @@ go_binary(
 go_library(
     name = "zipfiles_lib",
     srcs = ["zipfiles.go"],
-    importpath = "github.com/zemnmez/monorepo/go/cmd/zipfiles",
+    importpath = "github.com/zemn-me/monorepo/go/cmd/zipfiles",
     visibility = ["//visibility:private"],
     deps = ["//go/flag/flagutil"],
 )

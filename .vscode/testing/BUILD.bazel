@@ -1,21 +1,21 @@
 sh_test(
-	name = "test_tools_run",
-	srcs = [ "test_tools_run.sh" ],
-	deps = [
-		"@bazel_tools//tools/bash/runfiles",
-	],
-	data = [
-		"//sh/bin:go",
-		"//sh/bin:gopackagesdriver",
-		"//sh/bin:goimports",
-		"//sh/bin:staticcheck",
-		"//sh/bin:dlv"
-	],
-	env = {
-		"GO_BINARY": "$(rlocationpath //sh/bin:go)",
-		"GOPACKAGESDRIVER_BINARY": "$(rlocationpath //sh/bin:gopackagesdriver)",
-		"GOIMPORTS_BINARY": "$(rlocationpath //sh/bin:goimports)",
-		"STATICCHECK_BINARY": "$(rlocationpath //sh/bin:staticcheck)",
-		"DLV_BINARY": "$(rlocationpath //sh/bin:dlv)"
-	}
+    name = "test_tools_run",
+    srcs = ["test_tools_run.sh"],
+    data = [
+        "//sh/bin:dlv",
+        "//sh/bin:go",
+        "//sh/bin:goimports",
+        "//sh/bin:gopackagesdriver",
+        "//sh/bin:staticcheck",
+    ],
+    env = {
+        "GO_BINARY": "$(rlocationpath //sh/bin:go)",
+        "GOPACKAGESDRIVER_BINARY": "$(rlocationpath //sh/bin:gopackagesdriver)",
+        "GOIMPORTS_BINARY": "$(rlocationpath //sh/bin:goimports)",
+        "STATICCHECK_BINARY": "$(rlocationpath //sh/bin:staticcheck)",
+        "DLV_BINARY": "$(rlocationpath //sh/bin:dlv)",
+    },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
 )

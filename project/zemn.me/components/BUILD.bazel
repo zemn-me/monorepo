@@ -1,8 +1,8 @@
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
-	"//project/zemn.me:__subpackages__",
-	"//ts/pulumi/pleaseintroducemetoyour.dog:__subpackages__"
+    "//project/zemn.me:__subpackages__",
+    "//ts/pulumi/pleaseintroducemetoyour.dog:__subpackages__",
 ])
 
 ts_project(
@@ -14,12 +14,12 @@ ts_project(
     assets = glob(["**/*.css"]),
     deps = [
         "//:base_defs",
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/immutable",
+        "//:node_modules/next",
         "//:node_modules/react",
         "//project/zemn.me/bio",
-		"//:node_modules/next",
-		"//ts/iter",
-		"//:node_modules/@types/node"
+        "//ts/iter",
     ],
 )
