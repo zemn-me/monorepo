@@ -15,7 +15,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//ts",
-		"//ts/constants"
     ],
 )
 
