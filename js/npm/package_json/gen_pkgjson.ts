@@ -1,6 +1,7 @@
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';
+import { githubIssuesPage } from 'ts/constants/constants';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
@@ -56,7 +57,7 @@ const githubIssueUrl = (props: GithubIssueUrlProps) => {
 		if (value) params.set(key, value);
 	}
 
-	const url = new URL('https://github.com/zemn-me/monorepo/issues/new');
+	const url = new URL(githubIssuesPage);
 	url.search = params.toString();
 	return url.toString();
 };
