@@ -182,7 +182,7 @@ const cmd = new Command('presubmit')
 
 		if (!o.skipBazelTests) {
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...')
+				Bazel.Bazel(cwd, 'test', '//...', '--keep_going')
 			);
 			// perform all the normal tests
 		}
