@@ -221,7 +221,7 @@ export async function* interleave<A, B>(
 
 export async function Bazel(cwd: string, ...args: string[]) {
 	args.push('--noshow_progress');
-	const process = child_process.spawn('bazel', args, { cwd });
+	const process = child_process.spawn('bazelisk', args, { cwd });
 
 	const exitCode = new Promise<number | null>(ok =>
 		process.on('close', e => ok(e))
