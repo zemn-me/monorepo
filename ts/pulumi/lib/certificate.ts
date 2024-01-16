@@ -45,9 +45,9 @@ export class Certificate extends pulumi.ComponentResource {
 		const validatingRecord = new aws.route53.Record(
 			`${name}_validating_record`,
 			{
-				name: cert.domainValidationOptions[0].resourceRecordName,
-				records: [cert.domainValidationOptions[0].resourceRecordValue],
-				type: cert.domainValidationOptions[0].resourceRecordType,
+				name: cert.domainValidationOptions[0]!.resourceRecordName,
+				records: [cert.domainValidationOptions[0]!.resourceRecordValue],
+				type: cert.domainValidationOptions[0]!.resourceRecordType,
 				zoneId: args.zoneId,
 				ttl: 1 * minute, // because these really don't need to be cached
 			},
