@@ -661,6 +661,13 @@ export const Bio = {
 			url: url`https://twitter.com/tf2shmoo/status/1746340146612519239`,
 			tags: [accolade, security],
 		},
+		{
+			id: '48ad5d73-e29c-4242-b58b-4e0a29cd1448',
+			date: date(13, 'jan', 2024),
+			title: en`Hack Fortress @ Shmoocon - SF - RH Duke Shad Hound vs. CluckForce5`,
+			url: url`https://www.twitch.tv/videos/2031742297`,
+			description: en`Video of the finals of HackFortress @ Shmoocon 2023`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
