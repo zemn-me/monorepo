@@ -14,6 +14,7 @@ filegroup(
 		"//:node_modules/eslint-plugin-simple-import-sort",
 		"//:node_modules/eslint-plugin-mdx",
 		"//:node_modules/eslint-mdx",
+		"//:node_modules/eslint-plugin-prefer-smart-quotes",
 	],
 	visibility = [ "//visibility:public" ]
 )
