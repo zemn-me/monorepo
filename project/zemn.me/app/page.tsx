@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import style from 'project/zemn.me/app/style.module.css';
 import * as kenwood from 'project/zemn.me/assets/kenwood';
+import * as kenwood_snow from 'project/zemn.me/assets/kenwood_snow/kenwood_snow';
 import * as bio from 'project/zemn.me/bio';
 import { dividerHeadingClass } from 'project/zemn.me/components/DividerHeading';
 import Link from 'project/zemn.me/components/Link';
@@ -33,6 +34,17 @@ function LetterHead() {
 	);
 }
 
+/**
+ * In the Northern Hemisphere it is commonly regarded as extending from the winter
+ * solstice (year's shortest day), December 21 or 22, to the vernal equinox (day and
+ * night equal in length), March 20 or 21, and in the Southern Hemisphere from June
+ * 21 or 22 to September 22 or 23.
+ */
+function isWinter(v: Date): boolean {
+	const month = v.getMonth();
+	return month >= 11 || month <= 1;
+}
+
 export default function Main() {
 	return (
 		<main className={style.main}>
@@ -54,7 +66,11 @@ export default function Main() {
 				playsInline
 				poster={kenwood.poster.src}
 			>
-				<kenwood.VideoSources />
+				{isWinter(new Date()) ? (
+					<kenwood_snow.VideoSources />
+				) : (
+					<kenwood.VideoSources />
+				)}
 			</video>
 			<header className={style.banner}>
 				<LetterHead />
