@@ -1,5 +1,6 @@
 'use client';
 import Head from 'next/head';
+import { Metadata } from 'next/types';
 import style from 'project/zemn.me/app/style.module.css';
 import * as kenwood from 'project/zemn.me/assets/kenwood';
 import * as bio from 'project/zemn.me/bio';
@@ -90,21 +91,17 @@ export default function Main() {
 							below.
 						</p>
 					</Prose>
-					<>
-						{bio.Bio.links !== undefined ? (
-							<nav className={style.links}>
-								{bio.Bio.links.map(([text, url]) => (
-									<Link
-										href={url.toString()}
-										key={url.toString()}
-										lang={lang.get(text)}
-									>
-										{lang.text(text)}
-									</Link>
-								))}
-							</nav>
-						) : null}
-					</>
+					<nav className={style.links}>
+						{bio.Bio.links.map(([text, url]) => (
+							<Link
+								href={url.toString()}
+								key={url.toString()}
+								lang={lang.get(text)}
+							>
+								{lang.text(text)}
+							</Link>
+						))}
+					</nav>
 				</header>
 				<section>
 					<Timeline />
@@ -238,3 +235,14 @@ export default function Main() {
 		</main>
 	);
 }
+
+export const metadata: Metadata = {
+	title: 'Thomas Shadwell | Zemnmez',
+	openGraph: {
+		type: 'profile',
+		emails: 'thomas@shadwell.im',
+	},
+	twitter: {
+		creator: '@zemnmez',
+	},
+};
