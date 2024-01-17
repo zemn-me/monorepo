@@ -21,7 +21,7 @@ export default ({
 			that resembles a stylised, angular eye. A square, rotated 45° so
 			that its corners point up, down, left and right. The square has on
 			either side of it two similar smaller squares, separated by a small
-			gap. Each of the four square's sides have a rectangle following
+			gap. Each of the four square’s sides have a rectangle following
 			their edges with the same small gap.
 		</desc>
 		{children}
