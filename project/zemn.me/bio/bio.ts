@@ -35,6 +35,8 @@ export interface Who {
 	readonly handle: Text;
 	readonly fullName: Text;
 	readonly name: Text;
+	readonly firstName: Text;
+	readonly lastName: Text;
 }
 
 export type Tag = Text;
@@ -674,6 +676,8 @@ export const Bio = {
 		handle: en`zemnmez`,
 		fullName: en`Thomas Neil James Shadwell`,
 		name: en`Thomas NJ Shadwell`,
+		firstName: en`Thomas`,
+		lastName: en`Shadwell`,
 	},
 } as const satisfies Bio;
 
