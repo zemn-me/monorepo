@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app';
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
-	HeaderTags,
+	HeaderTagsPagesRouter,
 } from 'ts/next.js';
 
 const csp_policy: CspPolicy = {
@@ -29,7 +29,7 @@ const csp_policy: CspPolicy = {
 export function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<HeaderTags cspPolicy={csp_policy} />
+			<HeaderTagsPagesRouter cspPolicy={csp_policy} />
 			<Component {...pageProps} />
 		</>
 	);
