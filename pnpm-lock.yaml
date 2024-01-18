@@ -278,8 +278,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.134.0
-    version: 37.134.0(typanion@3.13.0)
+    specifier: 37.140.4
+    version: 37.140.4(typanion@3.13.0)
   sharp:
     specifier: 0.33.2
     version: 0.33.2
@@ -3250,8 +3250,8 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /@cdktf/hcl2json@0.19.2:
-    resolution: {integrity: sha512-gFj36AshWSyPKq/eNjQtMnWj0QM0tPtMulFpQ0FrB+eWj0GvxgWg9d65gGCZ8Y/o33VV/2Kv5l8VlDEYDW2S7Q==}
+  /@cdktf/hcl2json@0.20.1:
+    resolution: {integrity: sha512-pFSs2QfCS0I5qRhO9SI0VK87Zz8ZJK4MO8GlYprEO2s1aXo1VH6WWJw5tFFqMgntbzeci+Xj0kx7VaLgr21cTQ==}
     dependencies:
       fs-extra: 11.2.0
     dev: true
@@ -5477,8 +5477,8 @@ packages:
       '@seald-io/nedb': 4.0.3
     dev: true
 
-  /@renovatebot/osv-offline@1.3.12:
-    resolution: {integrity: sha512-vjPmc6s5MpVrod05jSozzh713476ErUhebj99/qP+lUPK1SrGe2iKVXH0PZmyULJFAVTRRwvqIlggkLfZ4mLXg==}
+  /@renovatebot/osv-offline@1.4.0:
+    resolution: {integrity: sha512-63/TZ+WXfPi5E3quLFsbAo5WDh7kqWTcGtR2nEt65MSTxmKVNx96HY8yGBfdfMTXQMw/D3FstBNcfVUi97bMPQ==}
     dependencies:
       '@octokit/rest': 20.0.2
       '@renovatebot/osv-offline-db': 1.5.0
@@ -7635,8 +7635,8 @@ packages:
       dequal: 2.0.3
     dev: true
 
-  /azure-devops-node-api@12.1.0:
-    resolution: {integrity: sha512-VY+G45eNKVJfMIO0uyZfbi4PzUR8JHEfsHQjEUAXUGRkYhhBbhGHjy8cpiyYFxLXc3a4PL5cqgqqV/YD1SaCXg==}
+  /azure-devops-node-api@12.3.0:
+    resolution: {integrity: sha512-5HDhBFIXJxiFhcJ+A3hN87gwo92PrDNLJvcvRHjr+p7AsuUSF64yQU+M6wcBDczkIDVV7m+MrraKQ2tqUxSbCA==}
     dependencies:
       tunnel: 0.0.6
       typed-rest-client: 1.8.11
@@ -10671,8 +10671,8 @@ packages:
       moo: 0.5.2
     dev: true
 
-  /google-auth-library@9.4.1:
-    resolution: {integrity: sha512-Chs7cuzDuav8W/BXOoRgSXw4u0zxYtuqAHETDR5Q6dG1RwNwz7NUKjsDDHAsBV3KkiiJBtJqjbzy1XU1L41w1g==}
+  /google-auth-library@9.4.2:
+    resolution: {integrity: sha512-rTLO4gjhqqo3WvYKL5IdtlCvRqeQ4hxUx/p4lObobY2xotFW3bCQC+Qf1N51CYOfiqfMecdMwW9RIo7dFWYjqw==}
     engines: {node: '>=14'}
     dependencies:
       base64-js: 1.5.1
@@ -15569,8 +15569,8 @@ packages:
       - supports-color
     dev: true
 
-  /renovate@37.134.0(typanion@3.13.0):
-    resolution: {integrity: sha512-nIg55jK2AH8GOW2kjvfVCDATXhNJGhUnOk0hfVH2L1eDdLMQGj8KpDbGhDez5AbTVLy9civWL3oMLxJiawMzQg==}
+  /renovate@37.140.4(typanion@3.13.0):
+    resolution: {integrity: sha512-RdrQLoqkrW+skv2cMV7rZfmCq+74TYpG7y35s2rl694JlVC5X0VfuHA35ttElE2YAHgXKhg4ef3+0ndE9TrClQ==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -15581,7 +15581,7 @@ packages:
       '@aws-sdk/client-s3': 3.363.0
       '@aws-sdk/credential-providers': 3.363.0
       '@breejs/later': 4.2.0
-      '@cdktf/hcl2json': 0.19.2
+      '@cdktf/hcl2json': 0.20.1
       '@opentelemetry/api': 1.7.0
       '@opentelemetry/context-async-hooks': 1.19.0(@opentelemetry/api@1.7.0)
       '@opentelemetry/exporter-trace-otlp-http': 0.46.0(@opentelemetry/api@1.7.0)
@@ -15593,7 +15593,7 @@ packages:
       '@opentelemetry/sdk-trace-node': 1.19.0(@opentelemetry/api@1.7.0)
       '@opentelemetry/semantic-conventions': 1.19.0
       '@qnighy/marshal': 0.1.3
-      '@renovatebot/osv-offline': 1.3.12
+      '@renovatebot/osv-offline': 1.4.0
       '@renovatebot/pep440': 3.0.17
       '@renovatebot/ruby-semver': 3.0.22
       '@sindresorhus/is': 4.6.0
@@ -15605,7 +15605,7 @@ packages:
       aggregate-error: 3.1.0
       auth-header: 1.0.0
       aws4: 1.12.0
-      azure-devops-node-api: 12.1.0
+      azure-devops-node-api: 12.3.0
       bunyan: 1.8.15
       cacache: 18.0.2
       cacheable-lookup: 5.0.4
@@ -15632,7 +15632,7 @@ packages:
       glob: 10.3.10
       global-agent: 3.0.0
       good-enough-parser: 1.1.23
-      google-auth-library: 9.4.1
+      google-auth-library: 9.4.2
       got: 11.8.6
       graph-data-structure: 3.5.0
       handlebars: 4.7.8
