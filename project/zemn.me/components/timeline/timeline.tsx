@@ -1,3 +1,4 @@
+'use client';
 import Immutable from 'immutable';
 import memoizee from 'memoizee';
 import * as Bio from 'project/zemn.me/bio';
@@ -221,8 +222,8 @@ function Year({
 			{/*↓ unicode for 'no specified language, roman numerals used for numbering'*/}
 			<div className={style.ageIndicator} lang="zxx-u-nu-romanlow">
 				{romanize(
-					(months.first(undefined)?.first()?.date.getFullYear() ??
-						0) - 1994
+					(months.first(undefined)?.first().date.getFullYear() ?? 0) -
+						1994
 				)}
 			</div>
 
