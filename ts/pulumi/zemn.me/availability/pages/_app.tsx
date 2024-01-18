@@ -2,12 +2,12 @@ import 'ts/pulumi/zemn.me/availability/pages/base.css';
 
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { HeaderTags } from 'ts/next.js';
+import { HeaderTagsPagesRouter } from 'ts/next.js';
 
 export function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<HeaderTags />
+			<HeaderTagsPagesRouter />
 			<Component {...pageProps} />
 			<Head>
 				<meta content="@zemnmez" name="twitter:site" />
