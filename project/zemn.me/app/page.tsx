@@ -1,5 +1,3 @@
-'use client';
-import Head from 'next/head';
 import { Metadata } from 'next/types';
 import style from 'project/zemn.me/app/style.module.css';
 import * as kenwood from 'project/zemn.me/assets/kenwood';
@@ -34,19 +32,23 @@ function LetterHead() {
 	);
 }
 
+export const metadata: Metadata = {
+	title: 'Thomas Shadwell | Zemnmez',
+	openGraph: {
+		type: 'profile',
+		emails: 'thomas@shadwell.im',
+		firstName: lang.text(bio.Bio.who.firstName),
+		lastName: lang.text(bio.Bio.who.lastName),
+		username: lang.text(bio.Bio.who.handle),
+	},
+	twitter: {
+		creator: '@zemnmez',
+	},
+};
+
 export default function Main() {
 	return (
 		<main className={style.main}>
-			<Head>
-				<title lang={lang.get(bio.Bio.who.handle)}>
-					{lang.text(bio.Bio.who.handle)}
-				</title>
-				<meta
-					content="zemn.me git https://github.com/zemnmez/go.git"
-					name="go-import"
-				/>
-			</Head>
-
 			<video
 				autoPlay
 				className={style.headerBgv}
@@ -235,17 +237,3 @@ export default function Main() {
 		</main>
 	);
 }
-
-export const metadata: Metadata = {
-	title: 'Thomas Shadwell | Zemnmez',
-	openGraph: {
-		type: 'profile',
-		emails: 'thomas@shadwell.im',
-		firstName: lang.text(bio.Bio.who.firstName),
-		lastName: lang.text(bio.Bio.who.lastName),
-		username: lang.text(bio.Bio.who.handle),
-	},
-	twitter: {
-		creator: '@zemnmez',
-	},
-};
