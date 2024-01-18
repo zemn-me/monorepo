@@ -1,5 +1,4 @@
 import memoizee from 'memoizee';
-import React from 'react';
 
 type Language = string;
 
