@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Script from 'next/script';
 
 export * as config from 'ts/next.js/next.config';
 
@@ -21,7 +20,7 @@ type directives =
 
 export type CspPolicy = Partial<Record<directives, sourceList>>;
 
-const isDevMode = process?.env?.NODE_ENV === 'development';
+const isDevMode = process.env.NODE_ENV === 'development';
 
 export const DefaultContentSecurityPolicy: CspPolicy = {
 	'style-src': new Set([
@@ -60,30 +59,15 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		: {}),
 };
 
-declare const ga: (...params: unknown[]) => void;
-
 interface HeaderTagsProps {
 	readonly cspPolicy?: CspPolicy;
 }
 
-export function HeaderTags({
+export function HeaderTagsPagesRouter({
 	cspPolicy = DefaultContentSecurityPolicy,
 }: HeaderTagsProps) {
 	return (
 		<>
-			<Script
-				async
-				id="ga"
-				onError={() =>
-					console.error('unable to load google analytics :(')
-				}
-				onLoad={() => {
-					ga('create', 'G-BBMLN07SPK', 'auto');
-					ga('send', 'pageview');
-				}}
-				src="https://ssl.google-analytics.com/analytics.js"
-				strategy="lazyOnload"
-			/>
 			<Head>
 				<meta
 					content={Object.entries(cspPolicy)
@@ -105,6 +89,34 @@ export function HeaderTags({
 
 				<meta content="no-referrer" name="referrer" />
 			</Head>
+		</>
+	);
+}
+
+export function HeaderTagsAppRouter({
+	cspPolicy = DefaultContentSecurityPolicy,
+}: HeaderTagsProps) {
+	return (
+		<>
+			<meta
+				content={Object.entries(cspPolicy)
+					.map(([k, v]) => [k, ...v].join(' '))
+					.join(';')}
+				httpEquiv="Content-Security-Policy"
+			/>
+
+			<meta
+				content="same-origin"
+				httpEquiv="Cross-Origin-Resource-Policy"
+			/>
+
+			<meta
+				content="same-origin"
+				httpEquiv="Cross-Origin-Opener-Policy"
+			/>
+			<meta content="nosniff" httpEquiv="X-Content-Type-Options" />
+
+			<meta content="no-referrer" name="referrer" />
 		</>
 	);
 }
