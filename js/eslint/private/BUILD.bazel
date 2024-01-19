@@ -15,6 +15,7 @@ filegroup(
 		"//:node_modules/eslint-mdx",
 		"//:node_modules/eslint-plugin-react-hooks",
 		"//:node_modules/eslint-plugin-react",
+		"//:node_modules/@next/eslint-plugin-next"
 	],
 	visibility = [ "//visibility:public" ]
 )

@@ -1,13 +1,14 @@
 {
 	"$schema": "https://json.schemastore.org/eslintrc",
 	"root": true,
-	"plugins": ["prettier", "simple-import-sort", "react", "react-hooks"],
+	"plugins": ["prettier", "simple-import-sort", "react", "react-hooks", "@next/next"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
 		"plugin:@typescript-eslint/strict",
-		"plugin:react-hooks/recommended"
+		"plugin:react-hooks/recommended",
+		"plugin:@next/next/recommended"
 	],
 	"overrides": [
 		{
@@ -83,6 +84,11 @@
 	"settings": {
 		"react": {
 			"version": "detect"
+		},
+		"next": {
+			"rootDir": [
+				"project/zemn.me/"
+			]
 		}
 	}
 }
