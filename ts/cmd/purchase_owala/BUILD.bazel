@@ -1,0 +1,17 @@
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+
+ts_project(
+	name = "ts",
+	deps = [
+		"//:node_modules/selenium-webdriver",
+		"//ts/selenium"
+	]
+)
+
+js_binary(
+	name = "purchase_owala",
+	entry_point = "main.js",
+	data = [ ":ts" ]
+)
+
