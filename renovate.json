@@ -40,6 +40,10 @@
 		{
 			"matchPackagePatterns": [ "pulumi_cli_.*" ],
 			"groupName": "pulumi_cli"
+		},
+		{
+			"matchPackagePatterns": [ "com_googleapis_storage_chromedriver.*" ],
+			"groupName": "chromedriver"
 		}
 	]
 }
