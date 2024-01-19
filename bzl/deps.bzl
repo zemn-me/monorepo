@@ -293,3 +293,40 @@ exports_files(glob(["**/*"]))
         strip_prefix = "bazel_features-1.2.0",
         url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.2.0/bazel_features-v1.2.0.tar.gz",
     )
+
+    http_archive(
+        name = "com_googleapis_storage_chromedriver_linux64",
+        sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
+        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+    )
+
+    http_archive(
+        name = "com_googleapis_storage_chromedriver_mac64",
+        sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
+        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+    )
+
+    http_archive(
+        name = "com_googleapis_storage_chromedriver_mac_arm64",
+        sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
+        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+    )
+
+    http_archive(
+        name = "com_googleapis_storage_chromedriver_win32",
+        sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
+        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+        build_file_content = """
+exports_files(glob(["**/*"]))
+        """,
+    )
+

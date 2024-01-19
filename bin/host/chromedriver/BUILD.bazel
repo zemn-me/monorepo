@@ -1,0 +1,75 @@
+package(default_visibility = ["//:__subpackages__"])
+
+config_setting(
+    name = "darwin_arm64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "darwin_x64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "linux_arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+config_setting(
+    name = "linux_x64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "windows_arm64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+
+
+config_setting(
+    name = "windows_x32",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_32",
+    ],
+)
+
+alias(
+    name = "chromedriver",
+    actual = select({
+        ":darwin_arm64": "@com_googleapis_storage_chromedriver_mac_arm64//:chromedriver",
+        ":darwin_x64": "@com_googleapis_storage_chromedriver_mac64//:chromedriver",
+        ":linux_arm64": "@com_googleapis_storage_chromedriver_linux_arm64//:chromedriver",
+        ":linux_x64": "@com_googleapis_storage_chromedriver_linux64//:chromedriver",
+		":windows_x32": "@com_googleapis_storage_chromedriver_win32//:chromedriver",
+        "//conditions:default": "@com_googleapis_storage_chromedriver_linux_x64//:chromedriver",
+    }),
+)
+
+sh_test(
+    name = "smoke",
+    srcs = ["chromedriver_smoke.sh"],
+    data = [":chromedriver"],
+	deps = [
+		"@bazel_tools//tools/bash/runfiles",
+	],
+    env = {
+        "CHROMEDRIVER_BINARY": "$(rlocationpath :chromedriver)",
+    },
+)
