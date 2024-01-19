@@ -119,7 +119,7 @@ interface nVarState {
 	value: number;
 }
 
-function nVar(initialState: number): [nVarState, (s: string) => void] {
+function useNVar(initialState: number): [nVarState, (s: string) => void] {
 	const [state, setState] = useState<nVarState>({
 		input: '' + initialState,
 		value: initialState,
@@ -141,13 +141,13 @@ function nVar(initialState: number): [nVarState, (s: string) => void] {
 export default function RaysEditor() {
 	const width = 100;
 	const height = width;
-	const [nRays, setNRays] = nVar(100);
-	const [rayLengthPerc, setRayLengthPerc] = nVar(30);
-	const [strokeWidth, setStrokeWidth] = nVar(100);
-	const [innerSpacePerc, setInnerSpacePerc] = nVar(10);
-	const [randomAmountPerc, setRandomAmountPerc] = nVar(0);
-	const [maxSegments, setMaxSegments] = nVar(8);
-	const [minSegments, setMinSegments] = nVar(2);
+	const [nRays, setNRays] = useNVar(100);
+	const [rayLengthPerc, setRayLengthPerc] = useNVar(30);
+	const [strokeWidth, setStrokeWidth] = useNVar(100);
+	const [innerSpacePerc, setInnerSpacePerc] = useNVar(10);
+	const [randomAmountPerc, setRandomAmountPerc] = useNVar(0);
+	const [maxSegments, setMaxSegments] = useNVar(8);
+	const [minSegments, setMinSegments] = useNVar(2);
 
 	const labelStyle = { display: 'inline-block' };
 	return (

@@ -1,12 +1,13 @@
 {
 	"$schema": "https://json.schemastore.org/eslintrc",
 	"root": true,
-	"plugins": ["prettier", "simple-import-sort"],
+	"plugins": ["prettier", "simple-import-sort", "react", "react-hooks"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
-		"plugin:@typescript-eslint/strict"
+		"plugin:@typescript-eslint/strict",
+		"plugin:react-hooks/recommended"
 	],
 	"overrides": [
 		{
