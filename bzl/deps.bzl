@@ -184,12 +184,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
 
-    git_repository(
-        name = "bazel_tools",
-        branch = "master",
-        remote = "git@github.com:attilaolah/bazel-tools.git",
-    )
-
     http_archive(
         name = "rules_rust",
         sha256 = "a761d54e49db06f863468e6bba4a13252b1bd499e8f706da65e279b3bcbc5c52",
