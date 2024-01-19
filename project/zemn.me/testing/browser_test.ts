@@ -12,7 +12,7 @@ describe('zemn.me website', () => {
 		expect.assertions(2);
 		const server = http
 			.createServer((rq, rw) => {
-				handler(rq, rw, { public: base });
+				void handler(rq, rw, { public: base });
 			})
 			.listen();
 		const addressInfo = server.address();
@@ -26,11 +26,15 @@ describe('zemn.me website', () => {
 
 			await chrome.get(`http://localhost:${addressInfo.port}`);
 
-			await expect(chrome.getTitle()).resolves.toContain('Zemnmez');
+			await Promise.all([
+				expect(
+					chrome.getTitle().then(t => t.toLowerCase())
+				).resolves.toContain('zemnmez'),
 
-			await expect(
-				chrome.manage().logs().get('browser')
-			).resolves.toHaveLength(0);
+				expect(
+					chrome.manage().logs().get('browser')
+				).resolves.toHaveLength(0),
+			]);
 		} finally {
 			console.info('finishing up...');
 			server.closeAllConnections();

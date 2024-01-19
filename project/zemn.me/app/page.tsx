@@ -224,13 +224,22 @@ export default function Main() {
 	);
 }
 
+const title = `${lang.text(bio.Bio.who.firstName)} ${lang.text(bio.Bio.who.lastName)} | ${lang.text(bio.Bio.who.handle)}`;
+const description = `Personal website and profile of ${lang.text(bio.Bio.who.fullName)}, also known as ${lang.text(bio.Bio.who.handle)}.`;
 export const metadata: Metadata = {
-	title: 'Thomas Shadwell | Zemnmez',
+	title,
+	description,
 	openGraph: {
+		title,
+		description,
 		type: 'profile',
 		emails: 'thomas@shadwell.im',
 		firstName: lang.text(bio.Bio.who.firstName),
 		lastName: lang.text(bio.Bio.who.lastName),
 		username: lang.text(bio.Bio.who.handle),
+	},
+	twitter: {
+		title,
+		description,
 	},
 };
