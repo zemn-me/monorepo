@@ -184,12 +184,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
 
-    git_repository(
-        name = "bazel_tools",
-        branch = "master",
-        remote = "git@github.com:attilaolah/bazel-tools.git",
-    )
-
     http_archive(
         name = "rules_rust",
         sha256 = "a761d54e49db06f863468e6bba4a13252b1bd499e8f706da65e279b3bcbc5c52",
@@ -241,8 +235,6 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "ffmpeg_linux_x64",
-        # since this URL serves a different asset when ffmpeg's version is bumped, I'm using
-        # this query component to cache bust when that does occur.
         url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
         strip_prefix = "ffmpeg-5.1.1-amd64-static",
         build_file_content = """
