@@ -99,3 +99,15 @@ test --experimental_profile_include_primary_output
 build --noslim_profile
 build --experimental_profile_include_target_label
 build --experimental_profile_include_primary_output
+
+#  Using this flag saves substantial time during type-checking.
+#  Rather than doing a full check of all d.ts files, TypeScript will only type-check the code you
+#  specifically refer to in your app's source code.
+#  We recommend this for most rules_ts users.
+#
+#  HOWEVER this performance improvement comes at the expense of type-system accuracy.
+#  For example, two packages could define two copies of the same type in an inconsistent way.
+#  If you publish a library from your repository, your incorrect types may result in errors for your users.
+build --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
+fetch --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
+query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
