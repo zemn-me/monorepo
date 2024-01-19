@@ -105,9 +105,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "26ab560550d28a8467148578f753b1d3232ccd90c3c15085335f9a11973699c9",
+        sha256 = "b19b562b1d6ca2688bb1f83a037dc62d5283acd1ab1690878fd4d55a34beedb0",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.101.1/pulumi-v3.101.1-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.102.0/pulumi-v3.102.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -117,9 +117,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.101.1/pulumi-v3.101.1-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.102.0/pulumi-v3.102.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "11b04d0bcb9ae6a4624b6b2098d7b579a2c8c7e43b3f18e27ee0b524740e23a1",
+        sha256 = "988e45d1f48ce521cbb8134583bc5d0c3b9bab7aa9a6b99c60316293fbce18de",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -138,9 +138,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.101.1/pulumi-v3.101.1-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.102.0/pulumi-v3.102.0-linux-arm64.tar.gz",
         ],
-        sha256 = "5a57b5b5511949dc3d0acb36b6a50467b0738c47e01294f9421c496299ceaffa",
+        sha256 = "59743eb222d13741f43c774fc1b089416f7457265e05416038e663225e0cb7c9",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
