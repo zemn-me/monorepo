@@ -184,12 +184,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
 
-    git_repository(
-        name = "bazel_tools",
-        branch = "master",
-        remote = "git@github.com:attilaolah/bazel-tools.git",
-    )
-
     http_archive(
         name = "rules_rust",
         sha256 = "a761d54e49db06f863468e6bba4a13252b1bd499e8f706da65e279b3bcbc5c52",
@@ -199,6 +193,7 @@ exports_files(glob(["**/*"], exclude_directories=0))
     http_archive(
         name = "aspect_rules_ts",
         strip_prefix = "rules_ts-1.4.0",
+        sha256 = "ace5b609603d9b5b875d56c9c07182357c4ee495030f40dcefb10d443ba8c208",
         url = "https://github.com/aspect-build/rules_ts/releases/download/v1.4.0/rules_ts-v1.4.0.tar.gz",
     )
     http_archive(
