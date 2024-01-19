@@ -290,8 +290,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.140.4
-    version: 37.140.4(typanion@3.13.0)
+    specifier: 37.140.9
+    version: 37.140.9(typanion@3.13.0)
   sharp:
     specifier: 0.33.2
     version: 0.33.2
@@ -13820,12 +13820,6 @@ packages:
     dev: true
     optional: true
 
-  /nanoid@3.3.6:
-    resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
-    dev: true
-
   /nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -14805,7 +14799,7 @@ packages:
     resolution: {integrity: sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
-      nanoid: 3.3.6
+      nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
@@ -15568,8 +15562,8 @@ packages:
       - supports-color
     dev: true
 
-  /renovate@37.140.4(typanion@3.13.0):
-    resolution: {integrity: sha512-RdrQLoqkrW+skv2cMV7rZfmCq+74TYpG7y35s2rl694JlVC5X0VfuHA35ttElE2YAHgXKhg4ef3+0ndE9TrClQ==}
+  /renovate@37.140.9(typanion@3.13.0):
+    resolution: {integrity: sha512-xKjjPnTUAGqmKL1PuTch26O4b3nDAWjBYWIErtXhum8TqpyMQgIbp5hmAbSzikwPyBvlo2yGIsAWUPikaWCLKw==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
