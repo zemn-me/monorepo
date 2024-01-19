@@ -5,7 +5,7 @@ export * as config from 'ts/next.js/next.config';
 type scheme = 'https:' | 'data:';
 type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
-type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval';
+type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
 type keywordSource = `'${keyword}'`;
 type sourceExpression = schemeSource | hostSource | keywordSource;
 type sourceList = Set<sourceExpression>;
@@ -16,7 +16,8 @@ type directives =
 	| 'connect-src'
 	| 'default-src'
 	| 'media-src'
-	| 'font-src';
+	| 'font-src'
+	| 'require-trusted-types-for';
 
 export type CspPolicy = Partial<Record<directives, sourceList>>;
 
@@ -45,8 +46,10 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		'https://*.google-analytics.com',
 		'https://*.doubleclick.net',
 	]),
+	'require-trusted-types-for': new Set(["'script'"]),
 	'script-src': new Set([
 		"'self'",
+		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
 		'https://*.google-analytics.com',
 		...(isDevMode
 			? (["'unsafe-inline'", "'unsafe-eval'"] as const)
