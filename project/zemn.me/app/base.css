@@ -5,6 +5,11 @@ html, body, :root {
 
 
 :root {
+	/*
+	Notify the browser that the default colour scheme is light.
+	https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme
+	*/
+	color-scheme: light;
 	--background-color: white;
 	--foreground-color: black;
 	/*
@@ -30,6 +35,11 @@ html, body, :root {
 */
 @media (prefers-color-scheme: dark) {
 	:root {
+		/*
+		Notify the browser that the default colour scheme is now dark.
+		https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme
+		*/
+		color-scheme: dark;
 		--background-color: #010;
 		--foreground-color: #96a497;
 		--visited-link-color: #ad554b;
