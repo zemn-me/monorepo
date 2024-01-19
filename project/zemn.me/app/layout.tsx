@@ -1,8 +1,10 @@
 import 'project/zemn.me/app/base.css';
 
 import { Metadata } from 'next/types';
+import { Bio } from 'project/zemn.me/bio';
 import { ReactNode } from 'react';
 import { HeaderTagsAppRouter } from 'ts/next.js';
+import { text } from 'ts/react/lang';
 
 export interface Props {
 	readonly children?: ReactNode;
@@ -38,8 +40,21 @@ export function RootLayout({ children }: Props) {
 export default RootLayout;
 
 export const metadata: Metadata = {
+	themeColor: [
+		{ media: '(prefers-color-scheme: dark)', color: '#010' },
+		{ media: '(prefers-color-scheme: light)', color: '#fff' },
+	],
+	authors: [{ name: text(Bio.who.fullName), url: 'https://zemn.me' }],
 	metadataBase: new URL('https://zemn.me'),
 	twitter: {
 		creator: '@zemnmez',
+	},
+	// fairly sure I do these manually.
+	// not sure about date and address -- are these
+	// the <datetime> and <addr> tags?
+	formatDetection: {
+		telephone: false,
+		email: false,
+		url: false,
 	},
 };
