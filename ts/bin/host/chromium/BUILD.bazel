@@ -1,0 +1,25 @@
+"""
+Provides the rlocationpath of chromium to TypeScript
+"""
+load("//ts:rules.bzl", "ts_project")
+
+
+genrule(
+	name = "module_gen",
+	srcs = [
+		"//bin/host/chromium"
+	 ],
+	cmd_bash = """
+		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" > $@
+		echo 'export const chromiumPath = Runfiles.resolve("$(rlocationpath //bin/host/chromium)")' >> $@
+	""",
+	outs = [ "path.ts" ]
+)
+
+ts_project(
+	name = "chromium",
+	srcs = [ "path.ts" ],
+	data = [ "//bin/host/chromium" ],
+	deps = [ "//:node_modules/@bazel/runfiles", "//:node_modules/@types/node" ],
+	visibility = [ "//:__subpackages__" ]
+)
