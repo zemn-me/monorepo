@@ -10,10 +10,11 @@ filegroup(
 		"//:node_modules/@typescript-eslint/parser",
 		"//:node_modules/@typescript-eslint/eslint-plugin",
 		"//:node_modules/eslint-config-prettier",
-		"//:node_modules/eslint-plugin-react",
 		"//:node_modules/eslint-plugin-simple-import-sort",
 		"//:node_modules/eslint-plugin-mdx",
 		"//:node_modules/eslint-mdx",
+		"//:node_modules/eslint-plugin-react-hooks",
+		"//:node_modules/eslint-plugin-react",
 	],
 	visibility = [ "//visibility:public" ]
 )
