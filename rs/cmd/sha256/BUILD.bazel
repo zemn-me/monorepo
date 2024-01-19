@@ -20,7 +20,7 @@ genrule(
     ],
     cmd_bash = "$(location //rs/cmd/sha256) " +
                "$< > $@",
-    exec_tools = ["//rs/cmd/sha256"],
+    tools = ["//rs/cmd/sha256"],
 )
 
 diff_test(
