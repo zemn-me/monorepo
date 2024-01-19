@@ -31,5 +31,4 @@ def jest_test(name, srcs = [], data = [], deps = [], jest_config = "//:jest.ts.c
         name = "%s.update" % name,
         data = data,
         args = args + ["-u"],
-        **kwargs
     )

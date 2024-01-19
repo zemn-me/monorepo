@@ -1,0 +1,26 @@
+load("//ts:rules.bzl", "ts_project", "jest_test")
+
+ts_project(
+	name = "ts",
+	srcs = [ "browser_test.ts" ],
+	deps = [
+		"//:node_modules/@types/node",
+		"//ts/selenium",
+		"//:node_modules/@bazel/runfiles",
+		"//:node_modules/selenium-webdriver",
+		"//:node_modules/@types/selenium-webdriver",
+		"//:node_modules/@types/jest",
+		"//:node_modules/@types/serve-handler",
+		"//:node_modules/serve-handler",
+	],
+	data = [
+		"//project/zemn.me:out"
+	]
+)
+
+jest_test(
+	name = "testing",
+	data = [ ":ts" ],
+	srcs = [ "browser_test.js" ],
+	size = "small"
+)
