@@ -225,12 +225,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/f1fa52520bcd96f0076f30694739fb443e20e943.zip",
-        strip_prefix = "json-schemas-f1fa52520bcd96f0076f30694739fb443e20e943",
+        url = "https://github.com/microsoft/json-schemas/archive/1451a8e79f0e481e20a56e195c461cdfe5e2aee8.zip",
+        strip_prefix = "json-schemas-1451a8e79f0e481e20a56e195c461cdfe5e2aee8",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "9857fc7d21a509200ff04832790450ebdff227cba2fdbf419b95d7509fd68758",
+        sha256 = "1989f602926aa06d552e9aa8bd5866e9f452130bfb16fe0842bf35ad7aaddb2c",
     )
 
     ##########
