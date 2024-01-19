@@ -1,0 +1,12 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "selenium",
+	deps = [
+		"//ts/bin/host/chromedriver",
+		"//ts/bin/host/chromium",
+		"//:node_modules/selenium-webdriver",
+		"//:node_modules/@types/selenium-webdriver"
+	],
+	visibility = [ "//:__subpackages__" ]
+)
