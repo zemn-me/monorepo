@@ -47,6 +47,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	]),
 	'script-src': new Set([
 		"'self'",
+		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
 		'https://*.google-analytics.com',
 		...(isDevMode
 			? (["'unsafe-inline'", "'unsafe-eval'"] as const)
