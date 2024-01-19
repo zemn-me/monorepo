@@ -1,0 +1,18 @@
+load("//ts:rules.bzl", "ts_project", "jest_test")
+
+ts_project(
+	name = "tests",
+	deps = [
+		"//:node_modules/@types/jest",
+		"//:node_modules/selenium-webdriver",
+		"//:node_modules/@types/selenium-webdriver",
+		"//ts/selenium",
+	]
+)
+
+
+jest_test(
+	name = "_tests",
+	srcs = [ "webdriver_test.js" ],
+	deps = [ ":tests" ]
+)
