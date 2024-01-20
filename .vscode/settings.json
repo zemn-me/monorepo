@@ -63,5 +63,11 @@
 		"staticcheck": "${workspaceFolder}/sh/bin/staticcheck",
 		"dlv": "${workspaceFolder}/sh/bin/dlv"
 	},
-	"terminal.integrated.enableImages": true
+	"terminal.integrated.enableImages": true,
+	"terminal.integrated.env.linux": {
+		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
+	},
+	"terminal.integrated.env.osx": {
+		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
+	},
 }
