@@ -1,0 +1,20 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//project/zemn.me:__subpackages__"])
+
+ts_project(
+    name = "kenwood_snow",
+    srcs = [
+        "kenwood_snow.tsx",
+    ],
+    assets = [
+        "//project/zemn.me/public:kenwood_snow_video_sources",
+		"poster.jpg"
+    ],
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:base_defs",  # one day this should probably be separate for next.js
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
