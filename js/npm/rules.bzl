@@ -117,9 +117,15 @@ def npm_pkg(
     pkg_npm(
         name = name,
         srcs = [name + "_dir"],
-        tgz = tgz,
         visibility = visibility,
     )
+
+    # vestigial functionality from rules_js
+    if tgz != None:
+        native.alias(
+            name = tgz,
+            actual = name + ".pack"
+        )
 
     exclude_all_external_rule(
         name = "version_lock_files",
