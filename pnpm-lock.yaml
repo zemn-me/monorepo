@@ -12,8 +12,8 @@ dependencies:
     specifier: 11.1.0
     version: 11.1.0(commander@11.1.0)
   '@next/eslint-plugin-next':
-    specifier: ^14.0.4
-    version: 14.0.4
+    specifier: 14.1.0
+    version: 14.1.0
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0
@@ -39,14 +39,14 @@ dependencies:
     specifier: 3.1.3
     version: 3.1.3
   devtools-protocol:
-    specifier: 0.0.1247362
-    version: 0.0.1247362
+    specifier: 0.0.1248698
+    version: 0.0.1248698
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@8.56.0)
   eslint-plugin-mdx:
-    specifier: 3.0.0
-    version: 3.0.0(eslint@8.56.0)
+    specifier: 3.1.5
+    version: 3.1.5(eslint@8.56.0)
   eslint-plugin-react-hooks:
     specifier: 4.6.0
     version: 4.6.0(eslint@8.56.0)
@@ -125,14 +125,14 @@ devDependencies:
     specifier: 7.39.1
     version: 7.39.1(@types/node@20.11.5)
   '@pulumi/aws':
-    specifier: 6.18.0
-    version: 6.18.0
+    specifier: 6.18.1
+    version: 6.18.1
   '@pulumi/awsx':
     specifier: 2.4.0
     version: 2.4.0
   '@pulumi/pulumi':
-    specifier: 3.101.1
-    version: 3.101.1
+    specifier: 3.102.0
+    version: 3.102.0
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -224,8 +224,8 @@ devDependencies:
     specifier: 8.56.0
     version: 8.56.0
   eslint-config-next:
-    specifier: 14.0.4
-    version: 14.0.4(eslint@8.56.0)(typescript@5.0.4)
+    specifier: 14.1.0
+    version: 14.1.0(eslint@8.56.0)(typescript@5.0.4)
   eslint-config-prettier:
     specifier: 9.1.0
     version: 9.1.0(eslint@8.56.0)
@@ -4263,10 +4263,10 @@ packages:
     resolution: {integrity: sha512-3G1yD/XKTSLdihyDSa8JEsaWOELY+OWe08o0LUYzfuHp1zHDA8SObQlzKt+v+wrkkPcnPweoLH1ImZeUa0A1NQ==}
     dev: true
 
-  /@next/eslint-plugin-next@14.0.4:
-    resolution: {integrity: sha512-U3qMNHmEZoVmHA0j/57nRfi3AscXNvkOnxDmle/69Jz/G0o/gWjXTDdlgILZdrxQ0Lw/jv2mPW8PGy0EGIHXhQ==}
+  /@next/eslint-plugin-next@14.1.0:
+    resolution: {integrity: sha512-x4FavbNEeXx/baD/zC/SdrvkjSby8nBn8KcCREqk6UuwvwoAPZmaV8TFCAuo/cpovBRTIY67mHhe86MQQm/68Q==}
     dependencies:
-      glob: 7.1.7
+      glob: 10.3.10
 
   /@next/swc-darwin-arm64@13.4.10:
     resolution: {integrity: sha512-4bsdfKmmg7mgFGph0UorD1xWfZ5jZEw4kKRHYEeTK9bT1QnMbPVPlVXQRIiFPrhoDQnZUoa6duuPUJIEGLV1Jg==}
@@ -4936,13 +4936,12 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.18.0:
-    resolution: {integrity: sha512-DFAZ0GIo/b0AXUdGoEbVV7BJQzQdPhdfOcvoM0O0pRewQb14GrblM5XNQ5jwG50r24n+bC4Pcf3hYujRLIzWgA==}
+  /@pulumi/aws@6.18.1:
+    resolution: {integrity: sha512-72/j9kAFXetO7BaL8XAI0FF2R9OleAJp/X/FcKAcpDMbgB4eSu3wy7/DdJ/PXhIhyIkMgYkYyy4yu/OvXYaHKw==}
     dependencies:
-      '@pulumi/pulumi': 3.101.1
+      '@pulumi/pulumi': 3.102.0
       builtin-modules: 3.0.0
       mime: 2.6.0
-      read-package-tree: 5.3.1
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
       - supports-color
@@ -4953,9 +4952,9 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
-      '@pulumi/aws': 6.18.0
+      '@pulumi/aws': 6.18.1
       '@pulumi/docker': 4.5.0
-      '@pulumi/pulumi': 3.101.1
+      '@pulumi/pulumi': 3.102.0
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1503.0
       docker-classic: /@pulumi/docker@3.6.1
@@ -4970,7 +4969,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.101.1
+      '@pulumi/pulumi': 3.102.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4979,7 +4978,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.101.1
+      '@pulumi/pulumi': 3.102.0
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -4988,14 +4987,14 @@ packages:
   /@pulumi/docker@4.5.0:
     resolution: {integrity: sha512-DOiczZK1cF4NGlEWzacPLjGcoPKXHXISoqq4KqCO97YW28rZSu6LOdveQ8tLaUHGeyWQ+CS3PT45caSxHAbzbw==}
     dependencies:
-      '@pulumi/pulumi': 3.101.1
+      '@pulumi/pulumi': 3.102.0
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.101.1:
-    resolution: {integrity: sha512-Jfes7XCjFjB0kqetqP1nYEMog9ghtilPKiyl6KyS+hvSZ55X9Sffa3St545ZDC5GpHrevCT7KgHuScS40q3nKQ==}
+  /@pulumi/pulumi@3.102.0:
+    resolution: {integrity: sha512-BWrIOqS9Vg4pYY6/pDzDwYM0o9cu1EY7ajcrjKWbPn/EcO0DIQKvItcNLl7QUprfHjpepsfLdyXKi0KlH0jj1g==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.9.6
@@ -9040,8 +9039,8 @@ packages:
     resolution: {integrity: sha512-nEzHZteIUZfGCZtTiS1fRpC8UZmsfD1SiyPvaUNvS13dvKf666OAm8YTi0+Ca3n1nLEyu49Cy4+dPWpaHFJk9g==}
     dev: true
 
-  /devtools-protocol@0.0.1247362:
-    resolution: {integrity: sha512-ejUGmC3N9+3kSF57h8/zSXjKpmTPcdU8hosyAGKC/AGr+MTJYhCRvaz3w6sMHwsbIeQ8KfNHsFC8txCCWk0zjA==}
+  /devtools-protocol@0.0.1248698:
+    resolution: {integrity: sha512-LVAG3E45fCTmO7PNjTmfB7dpQP/i8XeUTsxBXOjI6a//0HGyBxDmhj3XtnqhifJjeR8h13RlfqgWS5fuXj2AQQ==}
     dev: false
 
   /dezalgo@1.0.4:
@@ -9489,8 +9488,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-next@14.0.4(eslint@8.56.0)(typescript@5.0.4):
-    resolution: {integrity: sha512-9/xbOHEQOmQtqvQ1UsTQZpnA7SlDMBtuKJ//S4JnoyK3oGLhILKXdBgu/UO7lQo/2xOykQULS1qQ6p2+EpHgAQ==}
+  /eslint-config-next@14.1.0(eslint@8.56.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-SBX2ed7DoRFXC6CQSLc/SbLY9Ut6HxNB2wPTcoIWjUMd7aF7O/SIE7111L8FdZ9TXsNV4pulUDnfthpyPtbFUg==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -9498,7 +9497,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 14.0.4
+      '@next/eslint-plugin-next': 14.1.0
       '@rushstack/eslint-patch': 1.6.0
       '@typescript-eslint/parser': 6.19.0(eslint@8.56.0)(typescript@5.0.4)
       eslint: 8.56.0
@@ -9684,8 +9683,8 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-plugin-mdx@3.0.0(eslint@8.56.0):
-    resolution: {integrity: sha512-vLSFgcD1UtCCciGiUhaIpUhHlWuYJyjUHdUiV+C1lDFbvuWbZhVr9ZhTbOhPGRUljfDeiCz3pyturTIlpH/fEA==}
+  /eslint-plugin-mdx@3.1.5(eslint@8.56.0):
+    resolution: {integrity: sha512-lUE7tP7IrIRHU3gTtASDe5u4YM2SvQveYVJfuo82yn3MLh/B/v05FNySURCK4aIxIYF1QYo3IRemQG/lyQzpAg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -10557,16 +10556,6 @@ packages:
       path-is-absolute: 1.0.1
     dev: true
     optional: true
-
-  /glob@7.1.7:
-    resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 3.1.2
-      once: 1.4.0
-      path-is-absolute: 1.0.1
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}

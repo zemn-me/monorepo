@@ -14,8 +14,7 @@ ts_project(
         "kenwood.tsx",
     ],
     assets = [
-        "//project/zemn.me/public:kenwood_video_sources",
-        ":kenwood.jpg",
+        "//project/zemn.me/public:kenwood_media_sources",
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
