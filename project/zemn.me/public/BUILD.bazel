@@ -11,6 +11,12 @@ transcode_web(
     out_base_name = "kenwood",
 )
 
+transcode_web(
+    name = "kenwood_snow_video_sources",
+    src = "//video/2018/03/01:kenwood_snow.mp4",
+    out_base_name = "kenwood_snow",
+)
+
 js_library(
     name = "files",
     srcs = ["wallpaper.jpg"]
