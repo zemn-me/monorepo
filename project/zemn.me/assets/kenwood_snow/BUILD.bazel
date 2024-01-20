@@ -2,19 +2,14 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
-exports_files([
-    "kenwood.mp4",
-    "kenwood.jpg",
-])
-
 ts_project(
-    name = "kenwood",
+    name = "kenwood_snow",
     srcs = [
-        "index.ts",
-        "kenwood.tsx",
+        "kenwood_snow.tsx",
     ],
     assets = [
-        "//project/zemn.me/public:kenwood_media_sources",
+        "//project/zemn.me/public:kenwood_snow_video_sources",
+		"poster.jpg"
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [

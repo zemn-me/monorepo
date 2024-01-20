@@ -24,3 +24,15 @@ declare module '*.jpg' {
 	export const blurWidth: number;
 	export const blurHeight: number;
 }
+
+/**
+ * Next.js only!
+ */
+declare module '*.png' {
+	export const src: string;
+	export const height: number;
+	export const width: number;
+	export const constblurDataURL: string;
+	export const blurWidth: number;
+	export const blurHeight: number;
+}
