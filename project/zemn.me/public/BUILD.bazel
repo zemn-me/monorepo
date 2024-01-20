@@ -6,7 +6,7 @@ package(default_visibility = ["//project/zemn.me:__subpackages__"])
 # This ends up in the bundle via //project/zemn.me/assets/kenwood:kenwood
 # which is a ts_project that zemn.me depends on to render the video.
 transcode_web(
-    name = "kenwood_video_sources",
+    name = "kenwood_media_sources",
     src = "//project/zemn.me/assets/kenwood:kenwood.mp4",
     out_base_name = "kenwood",
 )
