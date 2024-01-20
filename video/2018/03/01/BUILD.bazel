@@ -1,0 +1,5 @@
+package(default_visibility = ["//:__subpackages__"])
+
+exports_files([
+    "kenwood_snow.mp4",
+])
