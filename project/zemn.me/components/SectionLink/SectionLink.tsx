@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import Link, { LinkProps } from 'project/zemn.me/components/Link';
-import style from 'project/zemn.me/components/SectionLink/SectionLink.module.css';
+
+import Link, { LinkProps } from '#root/project/zemn.me/components/Link.js';
+import style from '#root/project/zemn.me/components/SectionLink/SectionLink.module.css.js';
 
 export const SectionLink: React.FC<LinkProps> = ({
 	className,

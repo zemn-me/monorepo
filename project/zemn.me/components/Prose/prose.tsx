@@ -1,4 +1,4 @@
-import style from 'project/zemn.me/components/Prose/prose.module.css';
+import style from '#root/project/zemn.me/components/Prose/prose.module.css.js';
 
 type DivAttributes = JSX.IntrinsicElements['div'];
 
