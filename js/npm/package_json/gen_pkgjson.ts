@@ -1,7 +1,8 @@
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';
-import { githubIssuesPage } from 'ts/constants/constants';
+
+import { githubIssuesPage } from '#root/ts/constants/constants.js';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',

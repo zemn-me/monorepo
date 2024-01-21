@@ -1,4 +1,4 @@
-import * as iter from 'ts/iter';
+import * as iter from '#/ts/iter';
 
 describe('flatten', () => {
 	test('simple', () => {

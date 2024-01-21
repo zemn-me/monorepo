@@ -1,4 +1,4 @@
-import * as bazel from 'ci/bazel';
+import * as bazel from '#root/ci/bazel.js';
 
 async function* text(s: string) {
 	for (const line of s.split('\n')) {
