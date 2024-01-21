@@ -1,9 +1,10 @@
 'use client';
-import style from 'project/zemn.me/app/experiments/emoji/flag/style.module.css';
-import Link from 'project/zemn.me/components/Link';
-import { Prose } from 'project/zemn.me/components/Prose/prose';
-import { Q } from 'project/zemn.me/components/Q';
 import { Fragment, useState } from 'react';
+
+import style from '#root/project/zemn.me/app/experiments/emoji/flag/style.module.css.js';
+import Link from '#root/project/zemn.me/components/Link.js';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
+import { Q } from '#root/project/zemn.me/components/Q.js';
 
 interface CodePointReferenceProps {
 	readonly children: string;

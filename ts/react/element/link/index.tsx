@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Url from 'ts/url';
+import * as Url from '#root/ts/url.js';
 
 type AElement = React.ReactElement<
 	React.DetailedHTMLProps<

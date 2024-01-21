@@ -1,5 +1,5 @@
-import * as lang from 'ts/react/lang';
-import * as time from 'ts/time';
+import * as lang from '#root/ts/react/lang.js';
+import * as time from '#root/ts/time.js';
 
 type Text = lang.Text;
 

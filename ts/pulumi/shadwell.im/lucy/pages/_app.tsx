@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import { HeaderTagsPagesRouter } from 'ts/next.js';
+import { HeaderTagsPagesRouter } from '#root/ts/next.js.js';
 
 export function App({ Component, pageProps }: AppProps) {
 	return (

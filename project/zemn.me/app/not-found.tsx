@@ -1,4 +1,4 @@
-import style from 'project/zemn.me/app/not-found.module.css';
+import style from '#root/project/zemn.me/app/not-found.module.css.js';
 
 export default function NotFound() {
 	return (
