@@ -4,8 +4,9 @@ import path from 'node:path';
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
-import * as guard from 'ts/guard';
-import Certificate from 'ts/pulumi/lib/certificate';
+
+import * as guard from '#root/ts/guard.js';
+import Certificate from '#root/ts/pulumi/lib/certificate.js';
 
 const bucketSuffix = '-bucket';
 const pulumiRandomChars = 7;
