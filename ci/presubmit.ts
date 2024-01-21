@@ -1,9 +1,10 @@
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
-import * as Bazel from 'ci/bazel';
-import { Command as WorkflowCommand } from 'ts/github/actions';
-import deploy_to_staging from 'ts/pulumi/deploy_to_staging';
+
+import * as Bazel from '#root/ci/bazel.js';
+import { Command as WorkflowCommand } from '#root/ts/github/actions/index.js';
+import deploy_to_staging from '#root/ts/pulumi/deploy_to_staging.js';
 
 const Task =
 	(name: string) =>

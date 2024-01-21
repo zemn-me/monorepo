@@ -1,6 +1,7 @@
 import classes from 'classnames';
-import style from 'project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.module.css';
 import React from 'react';
+
+import style from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.module.css';
 
 export default ({
 	className,
