@@ -1,7 +1,7 @@
-'use client';
 import { Metadata } from 'next/types';
-import { links } from 'project/zemn.me/bio';
-import Redirect from 'ts/next.js/component/Redirect/app';
+
+import { links } from '#root/project/zemn.me/bio/index.js';
+import Redirect from '#root/ts/next.js/component/Redirect/app.js';
 
 export default function Page() {
 	return <Redirect to={links.get('twitter')!.href} />;
