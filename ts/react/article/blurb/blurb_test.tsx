@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
-import { Article, Blurb, Main } from '.';
+import { Article, Blurb, Main } from '#root/ts/react/article/blurb/index.js';
 
 let container: HTMLDivElement | null = null;
 let root: Root;

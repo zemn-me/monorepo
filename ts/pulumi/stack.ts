@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { LocalWorkspace, Stack } from '@pulumi/pulumi/automation';
-import * as monorepo from 'ts/pulumi';
+import { LocalWorkspace, Stack } from '@pulumi/pulumi/automation.js';
+
+import * as monorepo from '#root/ts/pulumi/index.js';
 
 // inject the pulumi binary into process.env; it is used by the pulumi automation API
 
