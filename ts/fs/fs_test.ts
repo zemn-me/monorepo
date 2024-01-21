@@ -1,5 +1,5 @@
-import * as fs from 'ts/fs';
-import * as iter from 'ts/iter';
+import * as fs from '#//ts/fs';
+import * as iter from '#//ts/iter';
 
 describe('fs', () => {
 	describe('walk', () => {

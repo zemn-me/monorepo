@@ -1,6 +1,6 @@
-import * as cartesian from 'ts/math/cartesian';
-import * as euler_angle from 'ts/math/euler_angle';
-import * as quaternion from 'ts/math/quaternion';
+import * as cartesian from '#//ts/math/cartesian';
+import * as euler_angle from '#//ts/math/euler_angle';
+import * as quaternion from '#//ts/math/quaternion';
 
 import { Cartestian as C, Euler as E, Quaternion as Q } from './conv';
 

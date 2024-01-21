@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
-import Website from 'ts/pulumi/lib/website';
+
+import Website from '#//ts/pulumi/lib/website';
 
 export interface Args {
 	staging: boolean;
@@ -29,7 +30,7 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				domainName,
 				nameServers: zone.then(zone =>
-					zone.nameServers?.map(name => ({ name }))
+					zone.nameServers.map(name => ({ name }))
 				),
 			},
 			{ parent: this }

@@ -1,4 +1,4 @@
-import * as Homog from 'ts/math/homog';
+import * as Homog from '#//ts/math/homog';
 
 export type Drawable2D = LineDrawable2D;
 

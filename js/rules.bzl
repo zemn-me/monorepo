@@ -8,7 +8,7 @@ def _apply_env_defaults(d):
 
 def js_binary(name, env = {}, **kwargs):
     env = _apply_env_defaults(env)
-    _js_binary(name = name, env = env, **kwargs)
+    _js_binary(name = name, data = [ "//:package_json" ], env = env, **kwargs)
 
 def js_test(name, env = {}, **kwargs):
     env = _apply_env_defaults(env)

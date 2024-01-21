@@ -7,7 +7,7 @@ import {
 	ElementInstance,
 	MutableElementInstance,
 	NewElementInstance,
-} from 'project/cultist/state/state';
+} from '#//project/cultist/state/state';
 import { v4 as v4uuid } from 'uuid';
 
 const uuid = { v4: v4uuid };

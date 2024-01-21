@@ -1,4 +1,4 @@
-import Redirect from 'ts/next.js/component/Redirect';
+import Redirect from '#//ts/next.js/component/Redirect';
 
 export default function Main() {
 	return (
