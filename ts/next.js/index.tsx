@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export * as config from 'ts/next.js/next.config';
+export * as config from '#root/ts/next.js/next.config.js';
 
 type scheme = 'https:' | 'data:';
 type schemeSource = scheme;

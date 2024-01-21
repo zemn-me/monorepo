@@ -1,4 +1,4 @@
-import { plot, subdivide } from 'ts/math/canvas/braille/braille';
+import { plot, subdivide } from '#root/ts/math/canvas/braille/braille.js';
 
 // this rule seems to be sus in this context
 /* eslint array-element-newline: "off" */
