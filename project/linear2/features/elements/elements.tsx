@@ -31,17 +31,15 @@ type ClassableElements = Filter<JSX.IntrinsicElements, { className?: string }>;
 
 const e: <
 	E extends keyof ClassableElements,
-	K extends keyof ClassableElements[E]
+	K extends keyof ClassableElements[E],
 >(
 	name: E,
 	...propNames: K[]
 ) => React.FC<ClassableElements[E]> =
 	(e, ...k) =>
-	props =>
-		<Style>{React.createElement(e, pick(props, ...k))}</Style>;
-type PropsOf<T extends React.FC<unknown>> = T extends React.FC<infer Q>
-	? Q
-	: never;
+	props => <Style>{React.createElement(e, pick(props, ...k))}</Style>;
+type PropsOf<T extends React.FC<unknown>> =
+	T extends React.FC<infer Q> ? Q : never;
 
 function s<T, P = {}>(I: React.ForwardRefExoticComponent<P>) {
 	return React.forwardRef<T, P>((props, ref) => (
@@ -91,7 +89,7 @@ function* matchAll(s: string, re: RegExp) {
 	}
 }
 
-const ChemStr: React.FC<{ children: string }> = ({ children }) => (
+const ChemStr: React.FC<{ readonly children: string }> = ({ children }) => (
 	<>
 		{[
 			...matchAll(
