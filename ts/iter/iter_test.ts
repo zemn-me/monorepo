@@ -1,4 +1,4 @@
-import * as iter from 'ts/iter';
+import * as iter from '#root/ts/iter/index.js';
 
 describe('flatten', () => {
 	test('simple', () => {
