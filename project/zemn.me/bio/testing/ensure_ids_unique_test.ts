@@ -1,4 +1,4 @@
-import { Bio } from 'project/zemn.me/bio/bio';
+import { Bio } from '#root/project/zemn.me/bio/bio.js';
 
 test('ids must be unique', () => {
 	const ordered_ids = Bio.timeline.map(v => v.id);

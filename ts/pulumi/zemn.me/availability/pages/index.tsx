@@ -3,7 +3,8 @@
  */
 
 import Head from 'next/head';
-import { filter, flatten, map } from 'ts/iter';
+
+import { filter, flatten, map } from '#root/ts/iter/index.js';
 
 interface QueryParamsObject {
 	[key: string]: string[] | undefined;

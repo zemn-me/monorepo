@@ -2,7 +2,7 @@ import child_process from 'node:child_process';
 import http from 'node:http';
 import * as readline from 'node:readline/promises';
 
-import { isDefined, isNotNull, must } from 'ts/guard';
+import { isDefined, isNotNull, must } from '#root/ts/guard.js';
 
 test('next.js dev server launch!', async () => {
 	const next_server_binary = 'ts/next.js/testing/example/dev.sh';

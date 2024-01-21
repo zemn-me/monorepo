@@ -1,5 +1,6 @@
 import { Metadata } from 'next/types';
-import RaysEditor from 'project/zemn.me/app/experiments/rays/component';
+
+import RaysEditor from '#root/project/zemn.me/app/experiments/rays/component.js';
 
 export default function Page() {
 	return <RaysEditor />;
