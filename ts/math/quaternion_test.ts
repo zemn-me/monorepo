@@ -1,4 +1,4 @@
-import { Quaternion } from './quaternion'; // Adjust the import path accordingly
+import { Quaternion } from '#root/ts/math/quaternion.js'; // Adjust the import path accordingly
 
 describe('Quaternion arithmetic', () => {
 	test('addition', () => {

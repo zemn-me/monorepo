@@ -1,5 +1,6 @@
 import React from 'react';
-import * as vector from 'ts/math/vec';
+
+import * as vector from '#root/ts/math/vec.js';
 
 type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
 
