@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import style from '#root/project/zemn.me/components/TimeEye/TimeEye.module.css';
+import style from './TimeEye.module.css';
 
 export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
 	className,

@@ -1,1 +1,1 @@
-export * from '#root/ts/log/log.js';
+export * from './log';

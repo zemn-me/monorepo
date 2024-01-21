@@ -1,5 +1,5 @@
-import * as Cart from '#root/ts/math/cartesian.js';
-import * as Matrix from '#root/ts/math/matrix.js';
+import * as Cart from './cartesian';
+import * as Matrix from './matrix';
 
 export type Point2D = Matrix.Matrix<1, 3>;
 export type Point3D = Matrix.Matrix<1, 4>;

@@ -3,8 +3,7 @@ import http from 'node:http';
 import { runfiles } from '@bazel/runfiles';
 import { Browser } from 'selenium-webdriver';
 import handler from 'serve-handler';
-
-import { Driver } from '#root/ts/selenium/webdriver.js';
+import { Driver } from 'ts/selenium/webdriver';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 

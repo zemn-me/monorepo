@@ -3,8 +3,7 @@ import type { UrlObject } from 'node:url';
 import NextLink from 'next/link';
 import { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
-
-import { map, some } from '#root/ts/iter/index.js';
+import { map, some } from 'ts/iter';
 
 interface SpecialProps {
 	readonly href?: NextLinkProps['href'];

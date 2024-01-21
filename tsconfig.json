@@ -1,11 +1,11 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"module": "node16",
+		"module": "CommonJS",
 		"target": "es2020",
 		"strictFunctionTypes": true,
 		"esModuleInterop": true,
-		"moduleResolution": "node16",
+		"moduleResolution": "node",
 		"strict": true,
 		"jsx": "react-jsx",
 		"resolveJsonModule": true,
@@ -21,7 +21,7 @@
 		"lib": ["DOM", "ESNext"],
 		"baseUrl": ".",
 		"paths": {
-			"#root/*": [ "*", "dist/bin/*" ],
+			"*": [ "*", "dist/bin/*" ],
 		}
 	},
 	"exclude": ["node_modules", "dist", "external"]

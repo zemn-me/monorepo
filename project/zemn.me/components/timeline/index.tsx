@@ -1,2 +1,2 @@
-export { default } from '#root/project/zemn.me/components/timeline/timeline.js';
-export * from '#root/project/zemn.me/components/timeline/timeline.js';
+export { default } from 'project/zemn.me/components/timeline/timeline';
+export * from 'project/zemn.me/components/timeline/timeline';

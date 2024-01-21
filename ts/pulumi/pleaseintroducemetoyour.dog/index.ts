@@ -1,6 +1,5 @@
 import * as Pulumi from '@pulumi/pulumi';
-
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from 'ts/pulumi/lib/website';
 
 export interface Args {
 	/**

@@ -37,15 +37,14 @@ ts_project(
     ],
 )
 
-# needs reworking
-# jest_test(
-#    name = "tests",
-#    srcs = ["svgshot_test.js"],
-#    data = [
-#        "//cc/inkscape",
-#    ],
-#    deps = [":tests_js"],
-# )
+jest_test(
+    name = "tests",
+    srcs = ["svgshot_test.js"],
+    data = [
+        "//cc/inkscape",
+    ],
+    deps = [":tests_js"],
+)
 
 filegroup(
     name = "docs",

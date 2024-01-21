@@ -52,7 +52,6 @@ def next_project(name, srcs, **kwargs):
         "//:node_modules/typescript",
         "//:node_modules/next",
         "//:node_modules/sharp",
-        "//:package_json"
     ]
 
     bin.next(

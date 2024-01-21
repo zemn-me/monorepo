@@ -1,6 +1,6 @@
-import * as cartesian from '#root/ts/math/cartesian.js';
-import * as euler_angle from '#root/ts/math/euler_angle.js';
-import * as quaternion from '#root/ts/math/quaternion.js';
+import * as cartesian from 'ts/math/cartesian';
+import * as euler_angle from 'ts/math/euler_angle';
+import * as quaternion from 'ts/math/quaternion';
 
 export const Quaternion = {
 	fromEulerAngles(e: euler_angle.EulerAngle): quaternion.Quaternion {

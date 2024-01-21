@@ -1,4 +1,4 @@
-import * as Camera from '#root/ts/math/camera.js';
+import * as Camera from './camera';
 
 describe('Camera', () => {
 	describe('.matrix', () => {

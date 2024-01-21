@@ -1,6 +1,5 @@
 import { Metadata } from 'next/types';
-
-import Main from '#root/project/zemn.me/app/experiments/emoji/flag/component.js';
+import Main from 'project/zemn.me/app/experiments/emoji/flag/component';
 
 export default function Page() {
 	return <Main />;

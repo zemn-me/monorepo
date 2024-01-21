@@ -1,4 +1,4 @@
-import * as Url from '#root/ts/url/index.js';
+import * as Url from '.';
 
 describe('url', () => {
 	describe('LocalURL', () => {

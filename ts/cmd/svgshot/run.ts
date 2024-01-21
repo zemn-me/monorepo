@@ -8,7 +8,7 @@
  * I wouldn't worry about it too much.
  */
 
-import main from '#root/ts/cmd/svgshot/lib.js';
+import main from './lib';
 
 main()
 	.then(() => process.exit(0))

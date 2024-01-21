@@ -1,4 +1,4 @@
-import { GuardFailedError } from '#root/ts/errors.js';
+import { GuardFailedError } from './errors';
 
 export function must<T, O extends T, A extends unknown[]>(
 	t: (v: T, ...a: A) => v is O,

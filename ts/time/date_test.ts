@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { SimpleDate as Date } from '#root/ts/time/date.js';
+import { SimpleDate as Date } from './date';
 
 test('date', () => {
 	// @ts-expect-error a generic invalid date

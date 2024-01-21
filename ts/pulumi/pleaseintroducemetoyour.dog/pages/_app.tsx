@@ -1,12 +1,11 @@
 import 'ts/pulumi/pleaseintroducemetoyour.dog/pages/base.css';
 
 import type { AppProps } from 'next/app';
-
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsPagesRouter,
-} from '#root/ts/next.js/index.js';
+} from 'ts/next.js';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,

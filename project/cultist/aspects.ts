@@ -1,4 +1,4 @@
-import * as Aspects from '#root/project/cultist/types.js';
+import * as Aspects from 'project/cultist/types';
 
 function aspectsOf(item: Pick<Aspects.Element, 'id' | 'aspects'>) {
 	return Object.entries({ ...item.aspects, [item.id]: 1 });

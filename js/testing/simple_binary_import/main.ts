@@ -1,3 +1,3 @@
-import { myString } from '#root/js/testing/simple_binary_import/lib.js';
+import { myString } from 'js/testing/simple_binary_import/lib';
 
 console.log(myString);

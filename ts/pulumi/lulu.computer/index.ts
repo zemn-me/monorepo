@@ -1,7 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
-
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from 'ts/pulumi/lib/website';
 
 export interface Args {
 	staging: boolean;
@@ -30,15 +29,7 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				domainName,
 				nameServers: zone.then(zone =>
-					// this is a bit of a hack.
-					// in testing, getZone is going to return undefined, because
-					// obviously, it doesn't know what zones exist.
-					//
-					// So here we fudge it with an empty set of name servers.
-					(
-						(zone as aws.route53.GetZoneResult | undefined)
-							?.nameServers ?? []
-					).map(name => ({ name }))
+					zone.nameServers?.map(name => ({ name }))
 				),
 			},
 			{ parent: this }

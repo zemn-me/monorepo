@@ -3,13 +3,12 @@
  */
 
 import Immutable from 'immutable';
-import { v4 as v4uuid } from 'uuid';
-
 import {
 	ElementInstance,
 	MutableElementInstance,
 	NewElementInstance,
-} from '#root/project/cultist/state/state.js';
+} from 'project/cultist/state/state';
+import { v4 as v4uuid } from 'uuid';
 
 const uuid = { v4: v4uuid };
 

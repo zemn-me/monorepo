@@ -2,8 +2,7 @@
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-
-import * as Url from '#root/ts/url/index.js';
+import * as Url from 'ts/url';
 
 import { Link } from '.';
 

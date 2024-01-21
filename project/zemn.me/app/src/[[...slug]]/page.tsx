@@ -1,8 +1,7 @@
 import { Metadata } from 'next/types';
-
-import { githubRepoUrl } from '#root/ts/constants/constants.js';
-import { isDefined } from '#root/ts/guard.js';
-import Redirect from '#root/ts/next.js/component/Redirect/app.js';
+import { githubRepoUrl } from 'ts/constants/constants';
+import { isDefined } from 'ts/guard';
+import Redirect from 'ts/next.js/component/Redirect/app';
 
 interface PageProps {
 	readonly params: { slug?: string[] };

@@ -1,9 +1,1 @@
-filegroup (
-	name = "mandatory_data",
-	data = [
-		# needed so that the ESM runtime can locate
-		# absolute imports.
-		"//:package_json"
-	],
-	visibility = [ "//:__subpackages__" ]
-)
+# Nothing in here yet!

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/unified-signatures */
-export * as dict from '#root/ts/iter/dict.js';
+export * as dict from './dict';
 
 /**
  * Flatten nested iterables into a single iterable.

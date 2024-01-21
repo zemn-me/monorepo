@@ -1,8 +1,7 @@
 import classNames from 'classnames';
 import Head from 'next/head';
+import Link from 'project/zemn.me/components/Link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-import Link from '#root/project/zemn.me/components/Link/index.js';
 
 interface Post {
 	media?: {

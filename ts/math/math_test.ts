@@ -1,5 +1,5 @@
-import * as matrix from '#root/ts/math/matrix.js';
-import * as vec from '#root/ts/math/vec.js';
+import * as matrix from './matrix';
+import * as vec from './vec';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
 	expect(actual.length).toBe(expected.length);

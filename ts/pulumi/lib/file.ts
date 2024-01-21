@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises';
 
 import * as pulumi from '@pulumi/pulumi';
-
-import * as path from '#root/ts/pulumi/lib/path.js';
+import * as path from 'ts/pulumi/lib/path';
 
 /**
  * Creates a pulumi FileAsset. Also checks the file actually exists,

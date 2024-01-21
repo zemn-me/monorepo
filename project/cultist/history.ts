@@ -1,4 +1,4 @@
-import * as cultist from '#root/project/cultist/types.js';
+import * as cultist from 'project/cultist/types';
 
 export enum Kind {
 	PassTime,

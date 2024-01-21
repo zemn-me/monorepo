@@ -1,4 +1,4 @@
-import { Scalable, Scale } from '#root/ts/math/scale/index.js';
+import { Scalable, Scale } from '.';
 
 interface SquareProps {
 	h: number;
