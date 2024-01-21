@@ -1,12 +1,13 @@
 'use client';
 import Immutable from 'immutable';
 import memoizee from 'memoizee';
-import * as Bio from 'project/zemn.me/bio';
-import Link from 'project/zemn.me/components/Link';
-import { SectionLink } from 'project/zemn.me/components/SectionLink/SectionLink';
-import style from 'project/zemn.me/components/timeline/timeline.module.css';
 import React, { ReactElement } from 'react';
-import * as lang from 'ts/react/lang';
+
+import * as Bio from '#root/project/zemn.me/bio/index.js';
+import Link from '#root/project/zemn.me/components/Link.js';
+import { SectionLink } from '#root/project/zemn.me/components/SectionLink/SectionLink.js';
+import style from '#root/project/zemn.me/components/timeline/timeline.module.css';
+import * as lang from '#root/ts/react/lang/index.js';
 
 interface MutableText {
 	corpus: string;

@@ -1,7 +1,7 @@
 import '@pulumi/pulumi';
 import 'ts/pulumi/setMocks';
 
-import * as project from 'ts/pulumi';
+import * as project from '#root/ts/pulumi.js';
 
 describe('pulumi', () => {
 	test('smoke', async () => {

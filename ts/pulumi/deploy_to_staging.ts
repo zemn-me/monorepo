@@ -9,8 +9,9 @@
  * to work, this is not exposed as a normal jest test.
  */
 import * as pulumi from '@pulumi/pulumi/automation';
-import { Command, Summarize } from 'ts/github/actions';
-import { staging } from 'ts/pulumi/stack';
+
+import { Command, Summarize } from '#root/ts/github/actions/index.js';
+import { staging } from '#root/ts/pulumi/stack.js';
 
 const Task =
 	(name: string) =>
