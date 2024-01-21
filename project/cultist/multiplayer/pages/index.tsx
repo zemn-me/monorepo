@@ -1,7 +1,7 @@
-import exampleSave from 'project/cultist/example/savestate';
-import * as Board from 'project/cultist/react/table';
-import * as Save from 'project/cultist/save';
-import * as State from 'project/cultist/state';
+import exampleSave from '#//project/cultist/example/savestate';
+import * as Board from '#//project/cultist/react/table';
+import * as Save from '#//project/cultist/save';
+import * as State from '#//project/cultist/state';
 import React from 'react';
 
 const Home = (): React.ReactElement => {

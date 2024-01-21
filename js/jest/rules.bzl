@@ -21,8 +21,11 @@ def jest_test(name, srcs = [], data = [], deps = [], jest_config = "//:jest.ts.c
 
     jest.jest_test(
         name = name,
-        data = data,
+        data = data + [ "//js:mandatory_data" ],
         args = args,
+        env = {
+            "NODE_OPTIONS": "--experimental-vm-modules"
+        },
         **kwargs
     )
 

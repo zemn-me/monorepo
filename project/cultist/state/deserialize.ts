@@ -3,10 +3,10 @@
  */
 
 import Immutable from 'immutable';
-import * as Save from 'project/cultist/save';
-import * as State from 'project/cultist/state/state';
-import * as Iter from 'ts/iter';
-import { maybe } from 'ts/util';
+import * as Save from '#//project/cultist/save';
+import * as State from '#//project/cultist/state/state';
+import * as Iter from '#//ts/iter';
+import { maybe } from '#//ts/util';
 
 function intoMap<I, O>(
 	v: { [key: string]: I },

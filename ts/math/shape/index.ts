@@ -1,10 +1,10 @@
-import * as Camera from 'ts/math/camera';
-import * as Canvas from 'ts/math/canvas';
-import * as conv from 'ts/math/conv';
-import { EulerAngle } from 'ts/math/euler_angle';
-import * as Homog from 'ts/math/homog';
-import * as Matrix from 'ts/math/matrix';
-import * as Quaternion from 'ts/math/quaternion';
+import * as Camera from '#//ts/math/camera';
+import * as Canvas from '#//ts/math/canvas';
+import * as conv from '#//ts/math/conv';
+import { EulerAngle } from '#//ts/math/euler_angle';
+import * as Homog from '#//ts/math/homog';
+import * as Matrix from '#//ts/math/matrix';
+import * as Quaternion from '#//ts/math/quaternion';
 
 export class Square implements Canvas.Drawable2D {
 	public readonly r: number;

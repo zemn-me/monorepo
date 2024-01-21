@@ -1,10 +1,11 @@
 import 'project/zemn.me/app/base.css';
 
 import { Metadata } from 'next/types';
-import { Bio } from 'project/zemn.me/bio';
 import { ReactNode } from 'react';
-import { HeaderTagsAppRouter } from 'ts/next.js';
-import { text } from 'ts/react/lang';
+import { HeaderTagsAppRouter } from '#//ts/next.js';
+import { text } from '#//ts/react/lang';
+
+import { Bio } from '#//project/zemn.me/bio';
 
 export interface Props {
 	readonly children?: ReactNode;

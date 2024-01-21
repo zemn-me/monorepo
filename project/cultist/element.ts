@@ -1,5 +1,5 @@
-import * as state from 'project/cultist/state';
-import * as Iter from 'ts/iter';
+import * as state from '#//project/cultist/state';
+import * as Iter from '#//ts/iter';
 
 export function count(id: string, elements: state.State['elementStacks']) {
 	return Iter.reduce(

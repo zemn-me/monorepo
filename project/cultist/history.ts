@@ -1,4 +1,4 @@
-import * as cultist from 'project/cultist/types';
+import * as cultist from '#//project/cultist/types';
 
 export enum Kind {
 	PassTime,

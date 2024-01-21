@@ -1,8 +1,9 @@
 import * as d3Scale from 'd3-scale';
 import React from 'react';
-import { isDefined as defined, must } from 'ts/guard';
-import * as matrix from 'ts/math/matrix';
-import * as vec from 'ts/math/vec';
+
+import { isDefined as defined, must } from '#//ts/guard';
+import * as matrix from '#//ts/math/matrix';
+import * as vec from '#//ts/math/vec';
 
 import * as svg from './index';
 
