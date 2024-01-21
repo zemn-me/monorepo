@@ -1,7 +1,7 @@
-import * as Save from 'project/cultist/save';
-import * as deserialize from 'project/cultist/state/deserialize';
-import * as serialize from 'project/cultist/state/serialize';
-import { maybe } from 'ts/util';
+import * as Save from '#//project/cultist/save';
+import * as deserialize from '#//project/cultist/state/deserialize';
+import * as serialize from '#//project/cultist/state/serialize';
+import { maybe } from '#//ts/util';
 
 test('maybe', () => {
 	expect(maybe(serialize.number)(10)).toEqual('10');

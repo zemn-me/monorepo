@@ -9,9 +9,10 @@
 import { Command } from '@commander-js/extra-typings';
 import fs from 'fs/promises';
 import paths from 'path';
-import * as guard from 'ts/guard';
+
+import * as guard from '#//ts/guard';
 // you may need to bazel build //ts/schemas/... to get type completion here... sorry!
-import { APIExtractorConfiguration } from 'ts/schemas/microsoft/api-extractor/api-extractor';
+import { APIExtractorConfiguration } from '#//ts/schemas/microsoft/api-extractor/api-extractor';
 
 new Command()
 	.name('gen_config')

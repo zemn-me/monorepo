@@ -129,5 +129,9 @@
 		"overrides": {
 			"resolve": "^2.0.0-next.5"
 		}
+	},
+	"type": "module",
+	"imports": {
+		"#//*": "./*"
 	}
 }
