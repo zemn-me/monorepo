@@ -1,4 +1,4 @@
-import allowlist from 'ts/knowitwhenyouseeit';
+import allowlist from '#root/ts/knowitwhenyouseeit.js';
 
 describe('Alg', () => {
 	const getMessage = allowlist(

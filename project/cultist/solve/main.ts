@@ -1,9 +1,9 @@
 import * as cultist from 'cultist';
 import * as fs from 'fs';
 import * as dot from 'solve/dot';
-import { map } from 'ts/iter';
-import { walk } from 'ts/tree';
-import { must, perhaps, select } from 'ts/util';
+import { map } from '#root/ts/iter/index.js';
+import { walk } from '#root/ts/tree.js';
+import { must, perhaps, select } from '#root/ts/util.js';
 
 import { quoteIfNotIdentifier } from './util';
 
