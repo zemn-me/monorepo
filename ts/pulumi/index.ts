@@ -1,9 +1,10 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
-import * as Lulu from 'ts/pulumi/lulu.computer';
-import * as PleaseIntroduceMeToYourDog from 'ts/pulumi/pleaseintroducemetoyour.dog';
-import * as ShadwellIm from 'ts/pulumi/shadwell.im';
-import * as ZemnMe from 'ts/pulumi/zemn.me';
+
+import * as Lulu from '#//ts/pulumi/lulu.computer';
+import * as PleaseIntroduceMeToYourDog from '#//ts/pulumi/pleaseintroducemetoyour.dog';
+import * as ShadwellIm from '#//ts/pulumi/shadwell.im';
+import * as ZemnMe from '#//ts/pulumi/zemn.me';
 
 export interface Args {
 	staging: boolean;

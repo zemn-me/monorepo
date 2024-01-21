@@ -1,1 +1,1 @@
-export * from 'project/zemn.me/assets/kenwood/kenwood';
+export * from '#//project/zemn.me/assets/kenwood/kenwood';

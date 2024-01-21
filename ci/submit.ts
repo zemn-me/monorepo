@@ -1,5 +1,5 @@
-import { Command, Summarize } from 'ts/github/actions';
-import * as Stack from 'ts/pulumi/stack';
+import { Command, Summarize } from '#//ts/github/actions';
+import * as Stack from '#//ts/pulumi/stack';
 
 async function main() {
 	const stack = await Stack.production();

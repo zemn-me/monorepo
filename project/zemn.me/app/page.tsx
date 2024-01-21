@@ -1,15 +1,16 @@
 import { Metadata } from 'next/types';
-import style from 'project/zemn.me/app/style.module.css';
-import * as kenwood from 'project/zemn.me/assets/kenwood';
-import * as bio from 'project/zemn.me/bio';
-import { dividerHeadingClass } from 'project/zemn.me/components/DividerHeading';
-import Link from 'project/zemn.me/components/Link';
-import { Prose } from 'project/zemn.me/components/Prose/prose';
-import { Q } from 'project/zemn.me/components/Q';
-import { TimeEye } from 'project/zemn.me/components/TimeEye';
-import Timeline from 'project/zemn.me/components/timeline';
-import ZemnmezLogo from 'project/zemn.me/components/ZemnmezLogo/ZemnmezLogo';
-import * as lang from 'ts/react/lang';
+import * as lang from '#//ts/react/lang';
+
+import style from '#//project/zemn.me/app/style.module.css';
+import * as kenwood from '#//project/zemn.me/assets/kenwood';
+import * as bio from '#//project/zemn.me/bio';
+import { dividerHeadingClass } from '#//project/zemn.me/components/DividerHeading';
+import Link from '#//project/zemn.me/components/Link';
+import { Prose } from '#//project/zemn.me/components/Prose/prose';
+import { Q } from '#//project/zemn.me/components/Q';
+import { TimeEye } from '#//project/zemn.me/components/TimeEye';
+import Timeline from '#//project/zemn.me/components/timeline';
+import ZemnmezLogo from '#//project/zemn.me/components/ZemnmezLogo/ZemnmezLogo';
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;

@@ -1,7 +1,7 @@
 import immutable from 'immutable';
-import * as state from 'project/cultist/state';
-import * as cultist from 'project/cultist/types';
-import * as iter from 'ts/iter';
+import * as state from '#//project/cultist/state';
+import * as cultist from '#//project/cultist/types';
+import * as iter from '#//ts/iter';
 
 export enum Kind {
 	PassTime = 0,

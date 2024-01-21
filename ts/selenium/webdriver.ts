@@ -3,8 +3,9 @@
  */
 import * as Selenium from 'selenium-webdriver';
 import Chrome from 'selenium-webdriver/chrome';
-import { chromeDriverPath } from 'ts/bin/host/chromedriver/path';
-import { chromiumPath } from 'ts/bin/host/chromium/path';
+
+import { chromeDriverPath } from '#//ts/bin/host/chromedriver/path';
+import { chromiumPath } from '#//ts/bin/host/chromium/path';
 
 /**
  * @returns a Chrome ServiceBuilder injected with defaults.
