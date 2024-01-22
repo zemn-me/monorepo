@@ -2,10 +2,10 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"module": "node16",
+		"moduleResolution": "Bundler",
 		"target": "es2020",
 		"strictFunctionTypes": true,
 		"esModuleInterop": true,
-		"moduleResolution": "node16",
 		"strict": true,
 		"jsx": "react-jsx",
 		"resolveJsonModule": true,
