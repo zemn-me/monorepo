@@ -68,10 +68,12 @@ def npm_pkg(
         depSpec = dep_spec_name,
     )
 
-    copy_to_bin(
-        name = pkg_json_name,
-        srcs = [pkg_json_name + "_gen"],
-    )
+    # stubbed out due to conflict; this entire package
+    # needs reworking.
+    #copy_to_bin(
+    #    name = pkg_json_name,
+    #    srcs = [pkg_json_name + "_gen"],
+    #)
 
     api_extractor(
         name = name + "_extracted_api",
