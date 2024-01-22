@@ -65,6 +65,12 @@ dependencies:
   pnpm:
     specifier: ^8.0.0
     version: 8.6.7
+  remark:
+    specifier: ^15.0.1
+    version: 15.0.1
+  remark-mdx:
+    specifier: ^3.0.0
+    version: 3.0.0
   seedrandom:
     specifier: 3.0.5
     version: 3.0.5
@@ -74,6 +80,15 @@ dependencies:
   serve-handler:
     specifier: 6.1.5
     version: 6.1.5
+  to-vfile:
+    specifier: ^8.0.0
+    version: 8.0.0
+  unified:
+    specifier: ^11.0.4
+    version: 11.0.4
+  vfile:
+    specifier: ^6.0.1
+    version: 6.0.1
 
 devDependencies:
   '@actions/core':
@@ -99,7 +114,7 @@ devDependencies:
     version: 5.8.1
   '@bazel/ibazel':
     specifier: latest
-    version: 0.23.7
+    version: 0.24.0
   '@bazel/labs':
     specifier: 4.6.1
     version: 4.6.1
@@ -3212,8 +3227,8 @@ packages:
     requiresBuild: true
     dev: true
 
-  /@bazel/ibazel@0.23.7:
-    resolution: {integrity: sha512-yXoEXfRXrrnr+3xz0nrL9N90A+SVInZzvReQqCwWxbFhRuEWawf1Nm5NCpOw+STwzH/N1Rbc+7McXIGaAVRi8g==}
+  /@bazel/ibazel@0.24.0:
+    resolution: {integrity: sha512-lA0Ey6iorssDTJDwBQW0bCmzQyBTAtOj7L4mqmmlFT6LhIzTc3r0iFOuzxFBsDq8NbxVs/W9PRNIsC/LfpI1nA==}
     hasBin: true
     dev: true
 
@@ -15571,6 +15586,17 @@ packages:
       - supports-color
     dev: true
 
+  /remark@15.0.1:
+    resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
+    dependencies:
+      '@types/mdast': 4.0.3
+      remark-parse: 11.0.0
+      remark-stringify: 11.0.0
+      unified: 11.0.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /renovate@37.140.10(typanion@3.13.0):
     resolution: {integrity: sha512-jmcCD88yUibrlABQqP819qJY8ViaxzR/EVuZz/c1ItDL2DASbA7LMJlpoz9r3p6SEXLpmrHssxvFtmMUYoxdnQ==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
@@ -16967,6 +16993,12 @@ packages:
     dependencies:
       is-number: 7.0.0
     dev: true
+
+  /to-vfile@8.0.0:
+    resolution: {integrity: sha512-IcmH1xB5576MJc9qcfEC/m/nQCFt3fzMHz45sSlgJyTWjRbKW1HAkJpuf3DgE57YzIlZcwcBZA5ENQbBo4aLkg==}
+    dependencies:
+      vfile: 6.0.1
+    dev: false
 
   /toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
