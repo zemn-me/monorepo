@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
@@ -8,6 +9,7 @@ import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	staging: boolean;
+	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
 /**
@@ -23,6 +25,9 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:Component', name, args, opts);
+
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		// i think pulumi kinda fucks up a little here, because you can totally
 		// register hosted zones with duplicate names (and I have committed this crime)
@@ -54,6 +59,7 @@ export class Component extends Pulumi.ComponentResource {
 					),
 					domain: stage('pleaseintroducemetoyour.dog'),
 					noIndex: args.staging,
+					tags,
 				},
 				{ parent: this }
 			);
@@ -64,6 +70,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
+				tags,
 			},
 			{ parent: this }
 		);
@@ -74,13 +81,14 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: Pulumi.output(zone.im.shadwell.then(z => z.id)),
 				domain: stage('shadwell.im'),
 				noIndex: args.staging,
+				tags,
 			},
 			{ parent: this }
 		);
 
 		new Lulu.Component(
 			`${name}_lulu`,
-			{ staging: args.staging },
+			{ staging: args.staging, tags },
 			{ parent: this }
 		);
 
