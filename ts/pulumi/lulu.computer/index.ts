@@ -18,17 +18,8 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:lulu.computer', name, args, opts);
-
-		const costAllocation = new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: name,
-			},
-			{ parent: this }
-		);
-
-		const tags = mergeTags(args.tags, tagTrue(costAllocation.tagKey));
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		const domainName = 'lulu.computer';
 
@@ -57,6 +48,16 @@ export class Component extends Pulumi.ComponentResource {
 				),
 			},
 			{ parent: this }
+		);
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			// needs at least one tag user before it goes up
+			{ parent: this, dependsOn: domain }
 		);
 
 		this.site = new Website(

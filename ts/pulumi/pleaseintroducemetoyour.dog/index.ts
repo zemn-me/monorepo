@@ -33,16 +33,8 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:pleaseintroducemetoyour.dog', name, args, opts);
-		const costTag = new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: name,
-			},
-			{ parent: this }
-		);
-
-		const tags = mergeTags(args.tags, tagTrue(costTag.tagKey));
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		const website = new Website(
 			`${name}_pleaseintroducemetoyour_dog_website`,
@@ -56,6 +48,16 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 			},
 			{ parent: this }
+		);
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			// cannot define CostAllocationTag with zero users.
+			{ parent: this, dependsOn: website }
 		);
 
 		this.registerOutputs({
