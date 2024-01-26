@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 
@@ -92,9 +93,17 @@ export class Website extends pulumi.ComponentResource {
 		opts?: pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
-
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			{ parent: this }
+		);
 
 		const certificate = new Certificate(
 			`${name}_certificate`,
