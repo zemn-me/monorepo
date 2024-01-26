@@ -1,4 +1,5 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -26,8 +27,16 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:Component', name, args, opts);
 
-		const tag = name;
-		const tags = mergeTags(args.tags, tagTrue(tag));
+		const costTag = new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			{ parent: this }
+		);
+
+		const tags = mergeTags(args.tags, tagTrue(costTag.tagKey));
 
 		// i think pulumi kinda fucks up a little here, because you can totally
 		// register hosted zones with duplicate names (and I have committed this crime)
