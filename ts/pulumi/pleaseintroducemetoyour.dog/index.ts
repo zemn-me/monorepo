@@ -1,5 +1,6 @@
 import * as Pulumi from '@pulumi/pulumi';
 
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website.js';
 
 export interface Args {
@@ -17,6 +18,8 @@ export interface Args {
 	 * Prevent indexing the content.
 	 */
 	noIndex: boolean;
+
+	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
 /**
@@ -29,6 +32,9 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:pleaseintroducemetoyour.dog', name, args, opts);
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
+
 		const website = new Website(
 			`${name}_pleaseintroducemetoyour_dog_website`,
 			{
@@ -38,6 +44,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
+				tags,
 			},
 			{ parent: this }
 		);
