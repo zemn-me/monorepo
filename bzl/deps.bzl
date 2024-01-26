@@ -16,9 +16,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "d70cd72a7a4880f0000a6346253414825c19cdd40a28289bdf67b8e6480edff8",
-        strip_prefix = "rules_python-0.28.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.28.0.tar.gz",
+        sha256 = "d71d2c67e0bce986e1c5a7731b4693226867c45bfe0b7c5e0067228a536fc580",
+        strip_prefix = "rules_python-0.29.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.29.0.tar.gz",
     )
 
     http_archive(
@@ -206,9 +206,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "0fd06280b6b4982e2fd94be383ac35533ac756ddf34271e1344af0a7ebaafa89",
-        strip_prefix = "rules_js-1.36.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.36.0/rules_js-v1.36.0.tar.gz",
+        sha256 = "0988cc4baa95254d5c96c2db54019df566f78f357a98272f0ee3a4a5fc9e46f1",
+        strip_prefix = "rules_js-1.36.1",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.36.1/rules_js-v1.36.1.tar.gz",
     )
 
     http_archive(
