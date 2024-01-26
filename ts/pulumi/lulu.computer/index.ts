@@ -1,10 +1,13 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website.js';
 
 export interface Args {
 	staging: boolean;
+	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -15,6 +18,17 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:lulu.computer', name, args, opts);
+
+		const costAllocation = new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			{ parent: this }
+		);
+
+		const tags = mergeTags(args.tags, tagTrue(costAllocation.tagKey));
 
 		const domainName = 'lulu.computer';
 
@@ -29,6 +43,7 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_domain`,
 			{
 				domainName,
+				tags,
 				nameServers: zone.then(zone =>
 					// this is a bit of a hack.
 					// in testing, getZone is going to return undefined, because
@@ -49,6 +64,7 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				index: 'ts/pulumi/lulu.computer/out/index.html',
 				notFound: 'ts/pulumi/lulu.computer/out/index.html',
+				tags,
 				directory: 'ts/pulumi/lulu.computer/out',
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: domain.domainName.apply(domainName =>
