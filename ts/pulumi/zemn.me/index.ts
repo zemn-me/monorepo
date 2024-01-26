@@ -1,3 +1,4 @@
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -20,9 +21,17 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:shadwell.im', name, args, opts);
-
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			{ parent: this }
+		);
 
 		this.site = new Website(
 			`${name}_zemn_me`,

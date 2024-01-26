@@ -1,4 +1,5 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -37,6 +38,15 @@ export class Certificate extends pulumi.ComponentResource {
 
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
+
+		new CostAllocationTag(
+			name,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			{ parent: this }
+		);
 
 		const cert = new aws.acm.Certificate(
 			`${name}_cert`,
