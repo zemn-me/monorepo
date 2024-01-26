@@ -22,16 +22,8 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:shadwell.im', name, args, opts);
 
-		const allocationTag = new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: name,
-			},
-			{ parent: this }
-		);
-
-		const tags = mergeTags(args.tags, tagTrue(allocationTag.tagKey));
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		this.site = new Website(
 			`${name}_zemn_me`,
@@ -45,6 +37,16 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 			},
 			{ parent: this }
+		);
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			// need one user of tag before creation
+			{ parent: this, dependsOn: this.site }
 		);
 
 		const availability = new Website(

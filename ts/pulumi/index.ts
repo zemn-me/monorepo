@@ -27,16 +27,8 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:Component', name, args, opts);
 
-		const costTag = new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: name,
-			},
-			{ parent: this }
-		);
-
-		const tags = mergeTags(args.tags, tagTrue(costTag.tagKey));
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		// i think pulumi kinda fucks up a little here, because you can totally
 		// register hosted zones with duplicate names (and I have committed this crime)
@@ -72,6 +64,16 @@ export class Component extends Pulumi.ComponentResource {
 				},
 				{ parent: this }
 			);
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			// cannot make CostAllocationTag with zero tag users.
+			{ parent: this, dependsOn: this.pleaseIntroduceMeToYourDog }
+		);
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,

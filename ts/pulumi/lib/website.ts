@@ -94,16 +94,8 @@ export class Website extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
 
-		const costAllocationTag = new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: name,
-			},
-			{ parent: this }
-		);
-
-		const tags = mergeTags(args.tags, tagTrue(costAllocationTag.tagKey));
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
 
 		const certificate = new Certificate(
 			`${name}_certificate`,
@@ -113,6 +105,17 @@ export class Website extends pulumi.ComponentResource {
 				tags: tags,
 			},
 			{ parent: this }
+		);
+
+		new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			// looks like we're not allowed to create the CostAllocationTag
+			// before anything is tagged with it.
+			{ parent: this, dependsOn: certificate }
 		);
 
 		/**
