@@ -55,11 +55,11 @@ export class Certificate extends pulumi.ComponentResource {
 			name,
 			{
 				status: 'Active',
-				tagKey: tag,
+				tagKey: cert.tags.apply(() => tag),
 			},
 			// aws doesn't appear to allow a CostAllocationTag
 			// to be created before anything is tagged with it.
-			{ parent: this, dependsOn: cert }
+			{ parent: this }
 		);
 
 		const validatingRecord = new aws.route53.Record(
