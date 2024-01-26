@@ -1,3 +1,4 @@
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -32,8 +33,16 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:pleaseintroducemetoyour.dog', name, args, opts);
-		const tag = name;
-		const tags = mergeTags(args.tags, tagTrue(tag));
+		const costTag = new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			{ parent: this }
+		);
+
+		const tags = mergeTags(args.tags, tagTrue(costTag.tagKey));
 
 		const website = new Website(
 			`${name}_pleaseintroducemetoyour_dog_website`,

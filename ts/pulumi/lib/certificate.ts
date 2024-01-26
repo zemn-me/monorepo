@@ -1,4 +1,5 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -48,6 +49,17 @@ export class Certificate extends pulumi.ComponentResource {
 			{
 				parent: this,
 			}
+		);
+
+		new CostAllocationTag(
+			name,
+			{
+				status: 'Active',
+				tagKey: tag,
+			},
+			// aws doesn't appear to allow a CostAllocationTag
+			// to be created before anything is tagged with it.
+			{ parent: this, dependsOn: cert }
 		);
 
 		const validatingRecord = new aws.route53.Record(
