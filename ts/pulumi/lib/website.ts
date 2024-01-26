@@ -2,11 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 
 import * as guard from '#root/ts/guard.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 const bucketSuffix = '-bucket';
 const pulumiRandomChars = 7;
@@ -76,6 +78,8 @@ export interface Args {
 	 * Prevent search engines from indexing.
 	 */
 	noIndex: boolean;
+
+	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
 }
 
 /**
@@ -90,11 +94,23 @@ export class Website extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Website', name, args, opts);
 
+		const costAllocationTag = new CostAllocationTag(
+			`${name}_cost_tag`,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			{ parent: this }
+		);
+
+		const tags = mergeTags(args.tags, tagTrue(costAllocationTag.tagKey));
+
 		const certificate = new Certificate(
 			`${name}_certificate`,
 			{
 				zoneId: args.zoneId,
 				domain: args.domain,
+				tags: tags,
 			},
 			{ parent: this }
 		);
@@ -102,10 +118,11 @@ export class Website extends pulumi.ComponentResource {
 		/**
 		 * The final subdomain that the website can be loaded from on the target domain.
 		 */
-
 		const bucket = new aws.s3.BucketV2(
 			deriveBucketName(name),
-			{},
+			{
+				tags,
+			},
 			{
 				parent: this,
 			}
@@ -152,6 +169,7 @@ export class Website extends pulumi.ComponentResource {
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
 							source,
+							tags,
 						},
 						{
 							parent: this,
@@ -176,6 +194,7 @@ export class Website extends pulumi.ComponentResource {
 					source: new pulumi.asset.FileAsset(
 						'ts/pulumi/lib/security.txt'
 					),
+					tags,
 				},
 				{ parent: this }
 			)
@@ -353,9 +372,9 @@ export class Website extends pulumi.ComponentResource {
 						restrictionType: 'none',
 					},
 				},
-				tags: {
+				tags: mergeTags(tags, {
 					Environment: 'production',
-				},
+				}),
 				viewerCertificate: {
 					// important to use this so that it waits for the cert
 					// to come up

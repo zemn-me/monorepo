@@ -1,5 +1,8 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
+
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 const second = 1;
 const minute = 60 * second;
@@ -17,6 +20,8 @@ export interface Args {
 	 * "mywebsite.com."
 	 */
 	domain: pulumi.Input<string> | undefined;
+
+	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
 }
 
 /**
@@ -31,11 +36,23 @@ export class Certificate extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Certificate', name, args, opts);
 
+		const costAllocationTag = new CostAllocationTag(
+			name,
+			{
+				status: 'Active',
+				tagKey: name,
+			},
+			{ parent: this }
+		);
+
+		const tags = mergeTags(args.tags, tagTrue(costAllocationTag.tagKey));
+
 		const cert = new aws.acm.Certificate(
 			`${name}_cert`,
 			{
 				domainName: args.domain,
 				validationMethod: 'DNS',
+				tags,
 			},
 			{
 				parent: this,
