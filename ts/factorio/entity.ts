@@ -14,8 +14,9 @@ import { SpeakerAlertParameter } from '#root/ts/factorio/speaker_alert_parameter
 import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
 import { Tags } from '#root/ts/factorio/tags.js';
 import { Uint8 } from '#root/ts/factorio/uint8.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface Entity {
+export interface Entity extends JSONObject {
 	entity_number: EntityNumber;
 	/**
 	 * Prototype name of the entity (e.g. "offshore-pump").

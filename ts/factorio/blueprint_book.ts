@@ -1,8 +1,9 @@
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { Color } from '#root/ts/factorio/color.js';
 import { Int } from '#root/ts/factorio/int.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface BlueprintBook {
+export interface BlueprintBook extends JSONObject {
 	/**
 	 * String, the name of the item that was saved ("blueprint-book" in vanilla).
 	 */
