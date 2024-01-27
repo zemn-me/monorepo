@@ -1,6 +1,7 @@
 import { Float } from '#root/ts/factorio/float.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface Color {
+export interface Color extends JSONObject {
 	/**
 	 * Red, 0 to 1.
 	 */
