@@ -154,16 +154,6 @@ function setManyMap<K, V>(
 	return v.set(key, v.get(key, Immutable.List<V>()).concat(value));
 }
 
-function groupBy<T, Q>(
-	i: Iterable<T>,
-	select: (v: T) => Q
-): Immutable.Map<Q, Immutable.List<T>> {
-	let m = Immutable.OrderedMap<Q, Immutable.List<T>>();
-	for (const v of i) m = setManyMap(m, select(v), v);
-
-	return m;
-}
-
 function Event({ event: e }: { readonly event: Bio.Event }) {
 	return (
 		<article className={style.event}>
