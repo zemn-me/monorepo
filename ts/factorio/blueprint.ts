@@ -5,8 +5,9 @@ import { Int } from '#root/ts/factorio/int.js';
 import { Position } from '#root/ts/factorio/position.js';
 import { Schedule } from '#root/ts/factorio/schedule.js';
 import { Tile } from '#root/ts/factorio/tile.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface Blueprint {
+export interface Blueprint extends JSONObject {
 	/**
 	 * String, the name of the item that was saved ("blueprint" in vanilla).
 	 */
@@ -18,7 +19,7 @@ export interface Blueprint {
 	/**
 	 * The color of the label of this blueprint. Optional. #Color object.
 	 */
-	label_color: Color;
+	label_color?: Color;
 	/**
 	 * The actual content of the blueprint, array of #Entity objects.
 	 */
