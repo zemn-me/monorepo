@@ -1,8 +1,9 @@
 import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 import { Uint } from '#root/ts/factorio/uint.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface DeciderCombinatorParameters {
+export interface DeciderCombinatorParameters extends JSONObject {
 	/**
 	 * Defaults to blank.
 	 */

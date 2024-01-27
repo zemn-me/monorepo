@@ -1,8 +1,9 @@
 import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface CircuitCondition {
+export interface CircuitCondition extends JSONObject {
 	/**
 	 * Specifies how inputs should be compared. If not specified, defaults to "<".
 	 */
