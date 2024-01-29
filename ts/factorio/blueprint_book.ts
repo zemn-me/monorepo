@@ -15,7 +15,7 @@ export interface BlueprintBook extends JSONObject {
 	/**
 	 * The color of the label of this blueprint. Optional. #Color object.
 	 */
-	label_color: Color;
+	label_color?: Color;
 	/**
 	 * The actual content of the blueprint book, array of objects containing an "index" key and 0-based value and a "blueprint" key with a #Blueprint object as the value.
 	 */
@@ -24,7 +24,8 @@ export interface BlueprintBook extends JSONObject {
 		 * Index, 0 based value
 		 */
 		index: Int;
-		blueprint: Blueprint;
+		blueprint?: Blueprint;
+		blueprint_book?: BlueprintBook;
 	}[];
 	/**
 	 * Index of the currently selected blueprint, 0-based.

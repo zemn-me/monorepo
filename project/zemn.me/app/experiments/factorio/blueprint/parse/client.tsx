@@ -1,9 +1,11 @@
 'use client';
 import { useId, useState } from 'react';
 
-import { JSONObject } from '#root/ts/do-sync/doSync.js';
+import { DisplayBlueprintWrapper } from '#root/project/zemn.me/app/experiments/factorio/blueprint/blueprint.js';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { ParseBlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { Option } from '#root/ts/option.js';
+import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
 import { Err, Ok, ResultSequence } from '#root/ts/result.js';
@@ -18,38 +20,64 @@ export function Client() {
 	const errorsLabel = useId();
 	const inputsString = [b64InputLabel].join(' ');
 
-	const stringifiedBlueprint = new ResultSequence(input).then(v =>
+	const bw = ResultSequence(input).then(v =>
 		safelyParseBlueprintString(v)
 	).result;
 
 	return (
-		<form>
-			<label htmlFor={b64InputLabel}>
-				Factorio blueprint (base64):{' '}
-				<textarea
-					id={b64InputLabel}
-					onChange={e => setInput({ [Ok]: e.target.value })}
-				/>
-			</label>
+		<Prose>
+			<form>
+				<ul>
+					<li>
+						<label htmlFor={b64InputLabel}>
+							Factorio blueprint (base64):{' '}
+							<textarea
+								id={b64InputLabel}
+								onChange={e =>
+									setInput({ [Ok]: e.target.value })
+								}
+								style={{ display: 'block' }}
+							/>
+						</label>
+					</li>
 
-			{Err in stringifiedBlueprint &&
-			stringifiedBlueprint[Err] !== undefined ? (
-				<label htmlFor={errorsLabel}>
-					Errors occurred:{' '}
-					<output htmlFor={inputsString} id={errorsLabel}>
-						<ErrorDisplay error={stringifiedBlueprint[Err]} />
-					</output>
-				</label>
-			) : null}
+					{Err in bw && bw[Err] !== undefined ? (
+						<li>
+							<label htmlFor={errorsLabel}>
+								Errors occurred:{' '}
+								<output htmlFor={inputsString} id={errorsLabel}>
+									<ErrorDisplay error={bw[Err]} />
+								</output>
+							</label>
+						</li>
+					) : null}
 
-			{Ok in stringifiedBlueprint ? (
-				<label htmlFor={outputLabel}>
-					Parsed JSON:
-					<output htmlFor={inputsString} id={outputLabel}>
-						<PrettyJSON value={stringifiedBlueprint[Ok]} />
-					</output>
-				</label>
-			) : null}
-		</form>
+					{Ok in bw ? (
+						<>
+							<li>
+								<label htmlFor={outputLabel}>
+									Blueprint:
+									<output
+										htmlFor={inputsString}
+										id={outputLabel}
+									>
+										<DisplayBlueprintWrapper
+											wrapper={bw[Ok]}
+										/>
+									</output>
+								</label>
+							</li>
+							<li>
+								JSON{' '}
+								<CopyToClipboard
+									text={JSON.stringify(bw[Ok])}
+								/>
+								<PrettyJSON value={bw[Ok]} />
+							</li>
+						</>
+					) : null}
+				</ul>
+			</form>
+		</Prose>
 	);
 }

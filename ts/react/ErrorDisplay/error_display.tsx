@@ -12,7 +12,9 @@ export function ErrorDisplay({ error }: Props) {
 
 	return (
 		<figure>
-			<figcaption>{error.message}</figcaption>
+			<figcaption>
+				{error.name}: {error.message}
+			</figcaption>
 			{error.cause ? (
 				<ol>
 					<li>

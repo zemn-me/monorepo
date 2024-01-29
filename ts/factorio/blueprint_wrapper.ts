@@ -6,7 +6,7 @@ interface BlueprintKey extends JSONObject {
 	blueprint: Blueprint;
 }
 interface BlueprintBookKey extends JSONObject {
-	'blueprint-book': BlueprintBook;
+	blueprint_book: BlueprintBook;
 }
 
 export type BlueprintWrapper = BlueprintKey | BlueprintBookKey;
