@@ -60,8 +60,8 @@ dependencies:
     specifier: 0.4.15
     version: 0.4.15
   npm:
-    specifier: 10.3.0
-    version: 10.3.0
+    specifier: 10.4.0
+    version: 10.4.0
   pnpm:
     specifier: ^8.0.0
     version: 8.6.7
@@ -14054,8 +14054,8 @@ packages:
       path-key: 4.0.0
     dev: true
 
-  /npm@10.3.0:
-    resolution: {integrity: sha512-9u5GFc1UqI2DLlGI7QdjkpIaBs3UhTtY8KoCqYJK24gV/j/tByaI4BA4R7RkOc+ASqZMzFPKt4Pj2Z8JcGo//A==}
+  /npm@10.4.0:
+    resolution: {integrity: sha512-RS7Mx0OVfXlOcQLRePuDIYdFCVBPCNapWHplDK+mh7GDdP/Tvor4ocuybRRPSvfcRb2vjRJt1fHCqw3cr8qACQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     dev: false
@@ -14122,7 +14122,6 @@ packages:
       - semver
       - spdx-expression-parse
       - ssri
-      - strip-ansi
       - supports-color
       - tar
       - text-table
