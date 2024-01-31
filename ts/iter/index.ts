@@ -322,3 +322,11 @@ export async function unroll<T>(v: AsyncIterable<T>): Promise<T[]> {
 
 	return arr;
 }
+
+export function* concat<T1, T2>(
+	i: Iterable<T1>,
+	i2: Iterable<T2>
+): Iterable<T1 | T2> {
+	yield* i;
+	yield* i2;
+}
