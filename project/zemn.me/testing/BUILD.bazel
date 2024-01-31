@@ -12,6 +12,7 @@ ts_project(
 		"//:node_modules/@types/jest",
 		"//:node_modules/@types/serve-handler",
 		"//:node_modules/serve-handler",
+		"//:node_modules/fast-glob"
 	],
 	data = [
 		"//project/zemn.me:out"
