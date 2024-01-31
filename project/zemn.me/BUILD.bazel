@@ -22,7 +22,11 @@ ts_project(
         "//ts/react/lang",
         "//ts/iter",
 		"//ts/next.js/component/Redirect",
-		"//ts/constants"
+		"//ts/constants",
+		"//ts/factorio",
+		"//ts/react/ErrorDisplay",
+		"//ts/react/PrettyJSON",
+		"//ts/react/CopyToClipboard"
     ],
 )
 

@@ -1,6 +1,7 @@
 import { Int } from '#root/ts/factorio/int.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface ItemFilterObject {
+export interface ItemFilterObject extends JSONObject {
 	/**
 	 * Name of the item prototype this filter is based on.
 	 */
