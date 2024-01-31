@@ -3,7 +3,7 @@ import style from '#root/project/zemn.me/components/Prose/prose.module.css';
 type DivAttributes = JSX.IntrinsicElements['div'];
 
 export interface Props extends DivAttributes {
-	readonly children?: React.ReactElement[];
+	readonly children?: React.ReactElement[] | React.ReactElement;
 }
 
 /**

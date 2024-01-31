@@ -1,7 +1,8 @@
 import { CircuitCondition } from '#root/ts/factorio/circuit_condition.js';
 import { Uint } from '#root/ts/factorio/uint.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface WaitCondition {
+export interface WaitCondition extends JSONObject {
 	/**
 	 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
 	 */

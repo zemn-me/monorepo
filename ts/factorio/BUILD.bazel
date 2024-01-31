@@ -1,5 +1,14 @@
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-	name = "factorio"
+	name = "factorio",
+	deps = [
+		"//:node_modules/base64-js",
+		"//:node_modules/@types/pako",
+		"//:node_modules/pako",
+		"//ts"
+	],
+	visibility = [
+		"//:__subpackages__"
+	]
 )

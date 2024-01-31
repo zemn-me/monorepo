@@ -1,8 +1,9 @@
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { Color } from '#root/ts/factorio/color.js';
 import { Int } from '#root/ts/factorio/int.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface BlueprintBook {
+export interface BlueprintBook extends JSONObject {
 	/**
 	 * String, the name of the item that was saved ("blueprint-book" in vanilla).
 	 */
@@ -14,7 +15,7 @@ export interface BlueprintBook {
 	/**
 	 * The color of the label of this blueprint. Optional. #Color object.
 	 */
-	label_color: Color;
+	label_color?: Color;
 	/**
 	 * The actual content of the blueprint book, array of objects containing an "index" key and 0-based value and a "blueprint" key with a #Blueprint object as the value.
 	 */
@@ -23,7 +24,8 @@ export interface BlueprintBook {
 		 * Index, 0 based value
 		 */
 		index: Int;
-		blueprint: Blueprint;
+		blueprint?: Blueprint;
+		blueprint_book?: BlueprintBook;
 	}[];
 	/**
 	 * Index of the currently selected blueprint, 0-based.
