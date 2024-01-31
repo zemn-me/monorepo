@@ -1,7 +1,8 @@
 import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface ArithmeticCombinatorParameters {
+export interface ArithmeticCombinatorParameters extends JSONObject {
 	/**
 	 * First signal to use in an operation. If not specified, the second argument will be the value of first_constant.
 	 */

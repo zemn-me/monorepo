@@ -1,11 +1,12 @@
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
+import { JSONObject } from '#root/ts/json.js';
 
-interface BlueprintKey {
+interface BlueprintKey extends JSONObject {
 	blueprint: Blueprint;
 }
-interface BlueprintBookKey {
-	'blueprint-book': BlueprintBook;
+interface BlueprintBookKey extends JSONObject {
+	blueprint_book: BlueprintBook;
 }
 
 export type BlueprintWrapper = BlueprintKey | BlueprintBookKey;

@@ -1,0 +1,33 @@
+import { useCallback } from 'react';
+import { useMutation } from 'react-query';
+
+export interface CopyToClipboardProps {
+	readonly text: string;
+}
+
+export function CopyToClipboard(props: CopyToClipboardProps) {
+	const mutation = useMutation({
+		mutationFn: () => navigator.clipboard.writeText(props.text),
+	});
+
+	console.log(mutation.isLoading, mutation.status);
+
+	const onClick = useCallback(() => {
+		if (mutation.isLoading) return;
+		mutation.mutate();
+	}, [mutation]);
+	return (
+		<button
+			{...(mutation.isLoading ? { disabled: true } : {})}
+			onClick={onClick}
+		>
+			{'Copy to clipboard' +
+				{
+					idle: '.',
+					loading: '...',
+					error: '..❌',
+					success: '..✅',
+				}[mutation.status]}
+		</button>
+	);
+}

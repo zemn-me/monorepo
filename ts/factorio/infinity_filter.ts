@@ -1,7 +1,8 @@
 import { Int } from '#root/ts/factorio/int.js';
 import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
+import { JSONObject } from '#root/ts/json.js';
 
-export interface InfinityFilter {
+export interface InfinityFilter extends JSONObject {
 	/**
 	 * Name of the item prototype the filter is set to, string.
 	 */
