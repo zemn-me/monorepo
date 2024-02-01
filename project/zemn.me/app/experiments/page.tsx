@@ -16,7 +16,7 @@ export function ExperimentsNav() {
 				</li>
 				<li>
 					<Link href="experiments/factorio">
-						Little experimental factorio blueprint parser.
+						Some Factorio experiments.
 					</Link>
 				</li>
 			</ul>

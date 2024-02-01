@@ -10,6 +10,13 @@ import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 
+const skipEndpoints = [
+	// loads an external site via redirect
+	'github',
+	// loads an external site via redirect
+	'linkedin',
+];
+
 describe('zemn.me website', () => {
 	it('should load the main page without errors', async () => {
 		expect.assertions(2);
@@ -29,17 +36,14 @@ describe('zemn.me website', () => {
 
 			await chrome.get(`http://localhost:${addressInfo.port}`);
 
-			await Promise.all([
-				expect(
-					chrome.getTitle().then(t => t.toLowerCase())
-				).resolves.toContain('zemnmez'),
+			await expect(
+				chrome.getTitle().then(t => t.toLowerCase())
+			).resolves.toContain('zemnmez');
 
-				expect(
-					chrome.manage().logs().get('browser')
-				).resolves.toHaveLength(0),
-			]);
+			await expect(
+				chrome.manage().logs().get('browser')
+			).resolves.toHaveLength(0);
 		} finally {
-			console.info('finishing up...');
 			server.closeAllConnections();
 			await Promise.all([
 				chrome.close(),
@@ -47,7 +51,6 @@ describe('zemn.me website', () => {
 					server.close(err => (err === undefined ? ok : fail)(err))
 				),
 			]);
-			console.info('all done!');
 		}
 	});
 
@@ -66,13 +69,14 @@ describe('zemn.me website', () => {
 				throw new Error('Not AddressInfo');
 			await expect(
 				Promise.all(
-					(await glob('base/**/*.html', {}))
+					(await glob(Path.join(base, '/**/*.html')))
 						.map(path => Path.relative(base, path))
 						.map(relPath =>
 							// get endpoints from html files
 							relPath.replace(/index.html|.html$/g, '')
 						)
 						.map(async endpoint => {
+							if (skipEndpoints.includes(endpoint)) return [];
 							const driver = Driver()
 								.forBrowser(Browser.CHROME)
 								.build();
@@ -83,7 +87,18 @@ describe('zemn.me website', () => {
 								await driver.get(
 									`http://localhost:${addressInfo.port}/${endpoint}`
 								);
-								return driver.manage().logs().get('browser');
+								const logs = await driver
+									.manage()
+									.logs()
+									.get('browser');
+								const url = await driver.getCurrentUrl();
+								return logs.length
+									? logs.map(log => ({
+											url,
+											endpoint,
+											log,
+										}))
+									: logs;
 							} finally {
 								await driver.close();
 							}
