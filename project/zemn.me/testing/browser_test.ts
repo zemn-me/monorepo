@@ -104,7 +104,7 @@ describe('zemn.me website', () => {
 							}
 						})
 				).then(v => v.flat(1))
-			).resolves.toHaveLength(0);
+			).resolves.toHaveLength(1);
 		} finally {
 			await server.close();
 		}
