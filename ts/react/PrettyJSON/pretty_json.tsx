@@ -14,15 +14,15 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 	path = [],
 }: Props) {
 	if (typeof value == 'string') {
-		return <>value</>;
+		return <>{value}</>;
 	}
 
 	if (typeof value == 'number') {
-		return <>value.toString()</>;
+		return <>{value.toString()}</>;
 	}
 
 	if (typeof value == 'boolean') {
-		return <>value ? 'true' : 'false'</>;
+		return <>{value ? 'true' : 'false'}</>;
 	}
 
 	if (typeof value == 'undefined') {
@@ -30,7 +30,7 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 	}
 
 	if (value == null) {
-		return <>'null'</>;
+		return <>null</>;
 	}
 
 	if (value instanceof Array) {
