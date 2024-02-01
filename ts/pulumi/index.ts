@@ -1,8 +1,9 @@
 import * as aws from '@pulumi/aws';
+import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
-import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
+import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
@@ -72,6 +73,23 @@ export class Component extends Pulumi.ComponentResource {
 				},
 				{ parent: this }
 			);
+
+		new Budget(
+			`${name}_budget`,
+			{
+				budgetType: 'COST',
+				timeUnit: 'MONTHLY',
+				limitUnit: 'USD',
+				limitAmount: '100',
+				costFilters: [
+					{
+						name: 'TagKeyValue',
+						values: tagsToFilter(tagTrue(tag)),
+					},
+				],
+			},
+			{ parent: this }
+		);
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
