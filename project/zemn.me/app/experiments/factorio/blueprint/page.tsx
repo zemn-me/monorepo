@@ -8,10 +8,10 @@ export default function Page() {
 			<h1>Factorio Blueprint Experiments</h1>
 			<ul>
 				<li>
-					<Link href="factorio/parse">Blueprint parser</Link>
+					<Link href="blueprint/parse">Blueprint parser</Link>
 				</li>
 				<li>
-					<Link href="factorio/request">
+					<Link href="blueprint/request">
 						Blueprint requester chest generator
 					</Link>
 				</li>
