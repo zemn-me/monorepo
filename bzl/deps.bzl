@@ -351,3 +351,36 @@ native_binary(
         build_file_content = chromium_buildfile
     )
 
+    http_archive(
+        name = "com_github_factoriolab",
+        integrity = "sha256-sr46XROs38AGASqEkUIKODVoLpDciRBRlJeNe+NvN2Q=",
+        strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
+        url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
+        patches = [
+            "//:patch/com/github/factoriolab.patch"
+        ],
+        build_file_content = """
+exports_files(glob(["**/*"]))
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//lib:partial.bzl", "partial")
+ts_project(
+    name = "src/apps/models/dataset",
+    srcs = [
+        "src/app/models/dataset.ts",
+        "src/app/models/entities.ts",
+    ] + glob(["src/apps/models/data/**/*.ts"]),
+    tsconfig = "tsconfig.json",
+    declaration = True,
+    source_map = True,
+    resolve_json_module = True,
+        transpiler = partial.make(
+            swc,
+            swcrc = "@monorepo//:swcrc",
+            source_maps = "true",
+        ),
+    )
+            """
+
+    )
+
