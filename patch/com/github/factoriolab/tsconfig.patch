@@ -1,0 +1,8 @@
+--- tsconfig.json
++++ tsconfig.json
+@@ -13 +13 @@
+-    "declaration": false,
++    "declaration": true,
+@@ -5 +5 @@
+-    "outDir": "./dist/out-tsc",
++

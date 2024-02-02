@@ -58,6 +58,7 @@ exports_files(
 copy_to_bin(
     name = "swcrc",
     srcs = [".swcrc.json"],
+	visibility = [ "//visibility:public" ],
 )
 
 copy_to_bin(
