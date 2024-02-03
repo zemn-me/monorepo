@@ -1,0 +1,19 @@
+load("//ts:rules.bzl", "ts_project")
+
+genrule(
+	name = "gen_data_ts",
+	srcs = [ "@com_github_factoriolab//:src/data/1.1/data.json" ],
+	cmd_bash = """
+
+		echo "import { FactorioVersionData } from '#root/ts/factorio/data/1.1/types.js'" >> $@
+		echo 'export const data: FactorioVersionData =' >> $@
+		cat $< >> $@
+	""",
+	outs = [ "data.ts" ]
+)
+
+ts_project(
+	name = "1.1",
+	srcs = [ "data.ts", "types.ts" ],
+	ignores_lint = [ "data.ts" ],
+)
