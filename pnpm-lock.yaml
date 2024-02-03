@@ -48,8 +48,8 @@ dependencies:
     specifier: 3.1.3
     version: 3.1.3
   devtools-protocol:
-    specifier: 0.0.1253724
-    version: 0.0.1253724
+    specifier: 0.0.1255431
+    version: 0.0.1255431
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@8.56.0)
@@ -3048,7 +3048,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
-    dev: false
 
   /@babel/template@7.22.5:
     resolution: {integrity: sha512-X7yV7eiwAxdj9k94NEylvbVHLiVG1nvzCV2EAowhxLTwODV1jl9UzZ48leOC0sH7OnuHrIkllaBgneUykIcZaw==}
@@ -5354,7 +5353,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.23.9
       '@types/react-reconciler': 0.26.7
       its-fine: 1.1.1(react@18.2.0)
       react: 18.2.0
@@ -9009,8 +9008,8 @@ packages:
     resolution: {integrity: sha512-pM27vqEfxSxRkTMnF+XCmxSEb6duO5R+t8A9DEEJgy4Wz2RVanje2mmj99B6A3zv2r/qGfYlOvYznUhuokizmg==}
     dev: true
 
-  /devtools-protocol@0.0.1253724:
-    resolution: {integrity: sha512-wT0BrZOzJnP59nUhki3y4ZdXoFjGfoHSRvfdixTRgnMhHfy+0NvoFA7c7VJW+roeXQ4Qoz5yLzmCq7pDIUMtKA==}
+  /devtools-protocol@0.0.1255431:
+    resolution: {integrity: sha512-VuKgO1U4Ew4meKKoXCEBMUNkzyQqci5F8HIuoELPJkr5yvk9kR9p07gaZfzG9QIIrcIfpJVgf6Ms8OqEMxEYgA==}
     dev: false
 
   /dezalgo@1.0.4:
@@ -13118,7 +13117,7 @@ packages:
     resolution: {integrity: sha512-MuWHubQHymUWBpZLwuKZQgA/qbb35WnDAKPo83rk7JRLIFPvzXSvFaC18voPuzJBt1V98lKQIonh6MiC9gd8Ug==}
     engines: {node: '>=16'}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.23.9
       react-refresh: 0.4.3
 
   /metro-source-map@0.76.7:
@@ -15373,7 +15372,7 @@ packages:
       react-dom: '>=16.8'
       zdog: '>=1.1'
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.23.9
       lodash-es: 4.17.21
       pointer-events-polyfill: 0.4.4-pre
       react: 18.2.0
@@ -15544,7 +15543,7 @@ packages:
   /regenerator-transform@0.15.1:
     resolution: {integrity: sha512-knzmNAcuyxV+gQCufkYcvOqX/qIIfHLv0u5x79kRxuGojfYVky1f15TzZEu2Avte8QGepvUNTnLskf8E6X6Vyg==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.23.9
 
   /regexp.prototype.flags@1.5.1:
     resolution: {integrity: sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg==}
