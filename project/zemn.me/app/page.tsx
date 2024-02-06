@@ -1,5 +1,6 @@
 import { Metadata } from 'next/types';
 
+import { Eeg } from '#root/project/zemn.me/app/eeg.js';
 import style from '#root/project/zemn.me/app/style.module.css';
 import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
 import * as bio from '#root/project/zemn.me/bio/index.js';
@@ -36,6 +37,7 @@ function LetterHead() {
 export default function Main() {
 	return (
 		<main className={style.main}>
+			<Eeg />
 			<video
 				autoPlay
 				className={style.headerBgv}
