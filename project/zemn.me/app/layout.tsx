@@ -64,4 +64,8 @@ export const metadata: Metadata = {
 		email: false,
 		url: false,
 	},
+	title: {
+		default: 'zemn.me',
+		template: '%s ← zemn.me',
+	},
 };
