@@ -1,5 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { useMutation } from 'react-query';
 
 export interface CopyToClipboardProps {
 	readonly text: string;
