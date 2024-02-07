@@ -5,7 +5,14 @@ import { Int } from '#root/ts/factorio/int.js';
 import { Position } from '#root/ts/factorio/position.js';
 import { Schedule } from '#root/ts/factorio/schedule.js';
 import { Tile } from '#root/ts/factorio/tile.js';
+import { concat, map } from '#root/ts/iter/index.js';
 import { JSONObject } from '#root/ts/json.js';
+import {
+	cartesianCanonicalise,
+	Point2D,
+	rectContaninsPoint,
+} from '#root/ts/math/cartesian.js';
+import { add } from '#root/ts/math/matrix.js';
 
 export interface Blueprint extends JSONObject {
 	/**
@@ -56,4 +63,104 @@ export interface Blueprint extends JSONObject {
 	 * The map version of the map the blueprint was created in.
 	 */
 	version: Int;
+}
+
+/**
+ * Returns the minimum and maximum x and y points of a Factorio Blueprint.
+ */
+export function blueprintExtent(
+	b: Blueprint
+): [[minX: number, maxX: number], [minY: number, maxY: number]] {
+	const positions = [
+		...map(concat(b.entities ?? [], b.tiles ?? []), v => v.position),
+	];
+
+	const xValues = [...map(positions, p => p.x)];
+	const yValues = [...map(positions, p => p.y)];
+
+	return [
+		[Math.min(...xValues), Math.max(...xValues)],
+		[Math.min(...yValues), Math.max(...yValues)],
+	];
+}
+
+/**
+ * Returns two points that together represent the top left
+ * and bottom right corners of a bounding box covering an
+ * entire blueprint.
+ */
+export function blueprintBoundingBox(
+	b: Blueprint
+): [tl: [x: number, y: number], br: [x: number, y: number]] {
+	const [[minX, maxX], [minY, maxY]] = blueprintExtent(b);
+
+	return [
+		[minX, minY],
+		[maxX, maxY],
+	];
+}
+
+/**
+ * Returns a new Blueprint, surrounded by a wall of specified
+ * depth.
+ */
+export function blueprintSurroundedByWall(
+	b: Blueprint,
+	depth: number
+): Blueprint {
+	const [min, max] = blueprintBoundingBox(b).map(v =>
+		cartesianCanonicalise(v)
+	) as [Point2D, Point2D];
+
+	console.info('lower bound:');
+	console.table(min);
+	console.info('upper bound:');
+	console.table(max);
+
+	// calculate the new size of the blueprint, including the wall
+	const [newMin, newMax] = [
+		add(min, [[-depth], [-depth]]),
+		add(max, [[depth], [depth]]),
+	];
+
+	const isInsideOriginalBoundingBox = rectContaninsPoint(min!)(max!);
+
+	const newBlueprint = structuredClone(b);
+
+	// iterate over the points of the new bounding box.
+	// where the point would NOT be inside the old bounding box,
+	// we place a wall.
+
+	const newMinX = newMin[0]![0]!;
+	const newMinY = newMin[1]![0]!;
+	const newMaxX = newMax[0]![0]!;
+	const newMaxY = newMax[1]![0]!;
+
+	/**
+	 * Entity number for any entites we're adding to the blueprint
+	 */
+	let entityNumber = (b.entities?.slice(-1)[0]?.entity_number ?? 1) + 1;
+
+	for (let x = newMinX; x < newMaxX; x++) {
+		for (let y = newMinY; y < newMaxY; y++) {
+			if (!isInsideOriginalBoundingBox([[x], [y]]))
+				newBlueprint.entities = [
+					...(newBlueprint.entities ?? []),
+					{
+						position: { x, y },
+						entity_number: entityNumber++,
+						name: 'stone-wall',
+					},
+				];
+		}
+	}
+
+	newBlueprint.label = ['Walled', b.label ?? 'something or other'].join(' ');
+
+	newBlueprint.description = [
+		`Wrapped with walls of depth ${depth}.`,
+		...(b.description ? [b.description] : []),
+	].join('\n\n');
+
+	return newBlueprint;
 }
