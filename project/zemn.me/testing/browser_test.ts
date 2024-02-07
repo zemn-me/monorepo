@@ -10,13 +10,6 @@ import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 
-const skipEndpoints = [
-	// loads an external site via redirect
-	'github',
-	// loads an external site via redirect
-	'linkedin',
-];
-
 describe('zemn.me website', () => {
 	it('should load the main page without errors', async () => {
 		expect.assertions(2);
@@ -67,6 +60,8 @@ describe('zemn.me website', () => {
 
 			if (addressInfo == null || typeof addressInfo == 'string')
 				throw new Error('Not AddressInfo');
+
+			const origin = `http://localhost:${addressInfo.port}`;
 			await expect(
 				Promise.all(
 					(await glob(Path.join(base, '/**/*.html')))
@@ -76,7 +71,6 @@ describe('zemn.me website', () => {
 							relPath.replace(/index.html|.html$/g, '')
 						)
 						.map(async endpoint => {
-							if (skipEndpoints.includes(endpoint)) return [];
 							const driver = Driver()
 								.forBrowser(Browser.CHROME)
 								.build();
@@ -84,14 +78,16 @@ describe('zemn.me website', () => {
 								await driver
 									.manage()
 									.setTimeouts({ implicit: 5000 });
-								await driver.get(
-									`http://localhost:${addressInfo.port}/${endpoint}`
-								);
+								await driver.get(`${origin}/${endpoint}`);
 								const logs = await driver
 									.manage()
 									.logs()
 									.get('browser');
 								const url = await driver.getCurrentUrl();
+								// we probably redirected away by accident,
+								// and we don't want to inherit their logs.
+								if (new URL(url).origin !== origin) return [];
+
 								return logs.length
 									? logs.map(log => ({
 											url,
