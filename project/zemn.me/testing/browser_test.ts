@@ -79,6 +79,11 @@ describe('zemn.me website', () => {
 									.manage()
 									.setTimeouts({ implicit: 5000 });
 								await driver.get(`${origin}/${endpoint}`);
+								// try to make the test less flakey by waiting for
+								// one second.
+								await new Promise<void>(ok =>
+									setTimeout(() => ok(), 1000)
+								);
 								const logs = await driver
 									.manage()
 									.logs()
