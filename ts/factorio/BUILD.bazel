@@ -6,7 +6,9 @@ ts_project(
 		"//:node_modules/base64-js",
 		"//:node_modules/@types/pako",
 		"//:node_modules/pako",
-		"//ts"
+		"//ts",
+		"//ts/math",
+		"//ts/iter"
 	],
 	visibility = [
 		"//:__subpackages__"
