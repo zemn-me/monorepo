@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 export function BadClient() {
