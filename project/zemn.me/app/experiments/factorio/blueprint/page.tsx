@@ -15,6 +15,12 @@ export default function Page() {
 						Blueprint requester chest generator
 					</Link>
 				</li>
+				<li>
+					<Link href="blueprint/wall">
+						Adds a wall around the entities and tiles of a
+						blueprint.
+					</Link>
+				</li>
 			</ul>
 		</Prose>
 	);
