@@ -10,13 +10,6 @@ import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 
-const skipEndpoints = [
-	// loads an external site via redirect
-	'github',
-	// loads an external site via redirect
-	'linkedin',
-];
-
 describe('zemn.me website', () => {
 	it('should load the main page without errors', async () => {
 		expect.assertions(2);
@@ -76,7 +69,6 @@ describe('zemn.me website', () => {
 							relPath.replace(/index.html|.html$/g, '')
 						)
 						.map(async endpoint => {
-							if (skipEndpoints.includes(endpoint)) return [];
 							const driver = Driver()
 								.forBrowser(Browser.CHROME)
 								.build();
@@ -92,6 +84,10 @@ describe('zemn.me website', () => {
 									.logs()
 									.get('browser');
 								const url = await driver.getCurrentUrl();
+								// we probably redirected away by accident,
+								// and we don't want to inherit their logs.
+								if (new URL(url).host !== 'localhost')
+									return [];
 								return logs.length
 									? logs.map(log => ({
 											url,
