@@ -19,3 +19,27 @@ export default function Page({ params }: PageProps) {
 export const metadata: Metadata = {
 	description: 'Redirect to the source code.',
 };
+
+/**
+ * Because I'm using static export, if I don't have exact route
+ * names a 404 happens.
+ *
+ * `undefined` doesn't seem to generate an index.html?
+ * ah well, good enough.
+ */
+export async function generateStaticParams(): Promise<PageProps['params'][]> {
+	const githubSubpaths = [
+		undefined,
+		['issues'],
+		['pulls'],
+		['discussions'],
+		['actions'],
+		['projects'],
+		['wiki'],
+		['security'],
+		['insights'],
+		['commits'],
+	];
+
+	return githubSubpaths.map(v => (v ? { slug: v } : {}));
+}
