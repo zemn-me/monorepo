@@ -126,22 +126,11 @@ export const Ticks: <N extends Num>(
 						[0, -offset + 180, 1],
 					] as const;
 
-					console.log(
-						'paths before transform...',
-						tickPath,
-						textMiddlePos
-					);
-
 					tickPath = svg.homog2Cart(
 						matrix.mul(svg.cart2Homog(tickPath), transform)
 					);
 					textMiddlePos = svg.homog2Cart(
 						matrix.mul(svg.cart2Homog(textMiddlePos), transform)
-					);
-					console.log(
-						'paths after transform...',
-						tickPath,
-						textMiddlePos
 					);
 				}
 
