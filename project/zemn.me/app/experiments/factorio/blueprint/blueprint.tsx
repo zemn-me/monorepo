@@ -66,6 +66,7 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 					? `, containing ${book.blueprints.length} blueprints:`
 					: '.'}
 			</i>
+			<CopyToClipboard text={MarshalBlueprintBookString(book)} />
 			{book.blueprints.length > 0 ? (
 				<ol>
 					{book.blueprints.map((blueprint, i) => (
@@ -84,7 +85,6 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 					))}
 				</ol>
 			) : null}
-			<CopyToClipboard text={MarshalBlueprintBookString(book)} />
 		</article>
 	);
 }
@@ -105,12 +105,12 @@ export function DisplayBlueprint({ blueprint }: DisplayBlueprintProps) {
 				</header>
 			) : null}
 			{blueprint.description ? <p>{blueprint.description}</p> : null}
+			<CopyToClipboard text={MarshalBlueprintString(blueprint)} />
 			<DisplayGamespace
 				objects={[
 					...concat(blueprint.tiles ?? [], blueprint.entities ?? []),
 				]}
 			/>
-			<CopyToClipboard text={MarshalBlueprintString(blueprint)} />
 		</article>
 	);
 }
