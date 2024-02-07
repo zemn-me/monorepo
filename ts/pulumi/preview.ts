@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview
  * Runs the pulumi config in preview mode.

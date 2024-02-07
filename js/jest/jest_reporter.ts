@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 class BazelReporter {
 	onRunComplete(
 		_: unknown,
