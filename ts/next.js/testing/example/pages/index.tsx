@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as vec from '#root/ts/math/vec.js';
 
 export default function Home() {

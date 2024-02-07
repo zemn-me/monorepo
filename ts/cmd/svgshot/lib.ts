@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { exec } from 'child_process';
 import { Command } from 'commander';
 import { readFile, writeFile } from 'fs/promises';

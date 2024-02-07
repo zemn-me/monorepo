@@ -10,8 +10,6 @@ export function CopyToClipboard(props: CopyToClipboardProps) {
 		mutationFn: () => navigator.clipboard.writeText(props.text),
 	});
 
-	console.log(mutation.isLoading, mutation.status);
-
 	const onClick = useCallback(() => {
 		if (mutation.isLoading) return;
 		mutation.mutate();

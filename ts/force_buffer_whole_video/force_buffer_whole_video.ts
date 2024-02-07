@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview The content of this file is a script which can be used to
  * fully buffer an HTML <video> element in an automatic manner which appears

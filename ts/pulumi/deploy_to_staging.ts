@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview a test binary which deploys the Pulumi configuration
  * to staging and then destroys it.
