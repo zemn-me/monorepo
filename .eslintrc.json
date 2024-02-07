@@ -72,7 +72,8 @@
 		"object-curly-newline": ["error"],
 		"arrow-body-style": ["error", "as-needed"],
 		"@typescript-eslint/no-non-null-assertion": 0,
-		"@typescript-eslint/no-unnecessary-condition": "error"
+		"@typescript-eslint/no-unnecessary-condition": "error",
+		"no-console": "error"
 	},
 	"parserOptions": {
 		"sourceType": "module",

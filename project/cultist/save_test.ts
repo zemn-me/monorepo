@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import SaveStateExample from '#root/project/cultist/example/savestate.js';
 import * as save from '#root/project/cultist/save.js';
 

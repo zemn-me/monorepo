@@ -237,6 +237,7 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		AnnotateBazelLines(byLine(process.stdout)),
 		AnnotateBazelLines(byLine(process.stderr))
 	)) {
+		// eslint-disable-next-line no-console
 		console.log(line);
 	}
 
@@ -244,6 +245,7 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
 
 	if (errors.length > 0) {
+		// eslint-disable-next-line no-console
 		console.info('Failure.');
 		throw errors[0];
 	}

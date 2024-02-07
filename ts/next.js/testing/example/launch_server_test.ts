@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import child_process from 'node:child_process';
 import http from 'node:http';
 import * as readline from 'node:readline/promises';

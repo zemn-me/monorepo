@@ -70,7 +70,6 @@ export default function Main() {
 			.then(r => r.json())
 			.then(j => setSearchResponse(() => j))
 			.catch(e => {
-				console.error(e);
 				setError(() => [e]);
 			});
 	}, []);

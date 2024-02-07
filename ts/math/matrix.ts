@@ -229,7 +229,6 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 		const mul = ind % 2 == 0 ? 1 : -1;
 		// remove every value in the same row
 		const nm = rest.map(row => row.filter((_, ri) => ri !== ind));
-		console.assert(nm[0]!.length == ij - 1);
 		// this should give us a new matrix we can get the determinant for
 		return acc + cur * determinant(nm) * mul;
 	}, 0);
