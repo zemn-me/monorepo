@@ -12,5 +12,5 @@ export interface Connection extends JSONObject {
 	/**
 	 * Second connection point. For example, the "output" part of an arithmetic combinator.#Connection point object
 	 */
-	2: ConnectionPoint;
+	2?: ConnectionPoint;
 }
