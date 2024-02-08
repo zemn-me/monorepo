@@ -5,3 +5,10 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "ts",
 )
+
+filegroup(
+	name = "swc_deps",
+	srcs = [
+		"//:node_modules/regenerator-runtime"
+	]
+)
