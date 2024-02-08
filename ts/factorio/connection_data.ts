@@ -12,5 +12,5 @@ export interface ConnectionData extends JSONObject {
 	/**
 	 * The circuit connector id of the entity this connection is connected to, see defines.circuit_connector_id.
 	 */
-	circuit_id: number;
+	circuit_id?: number;
 }

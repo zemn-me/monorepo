@@ -160,7 +160,7 @@ export interface ControlBehavior extends JSONObject {
 	/**
 	 * Array of ConstantCombinatorParameters.
 	 */
-	filters?: ConstantCombinatorParameters;
+	filters?: ConstantCombinatorParameters[];
 	/**
 	 * ArithmeticCombinatorParameters
 	 */
