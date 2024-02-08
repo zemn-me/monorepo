@@ -118,14 +118,7 @@ export interface DisplayGamespaceProps {
 	readonly objects: (Entity | Tile)[];
 }
 
-function DisplayGamespace({ objects }: DisplayGamespaceProps) {
-	return (
-		<ul>
-			{objects.map((o, i) => (
-				<li key={i}>
-					{o.name} at {o.position.x}, {o.position.y}.
-				</li>
-			))}
-		</ul>
-	);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function DisplayGamespace(props: DisplayGamespaceProps) {
+	return null;
 }
