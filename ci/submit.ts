@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
 import * as Stack from '#root/ts/pulumi/stack.js';
 

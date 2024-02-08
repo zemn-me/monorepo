@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';

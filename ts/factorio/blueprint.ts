@@ -115,11 +115,6 @@ export function blueprintSurroundedByWall(
 		cartesianCanonicalise(v)
 	) as [Point2D, Point2D];
 
-	console.info('lower bound:');
-	console.table(min);
-	console.info('upper bound:');
-	console.table(max);
-
 	// calculate the new size of the blueprint, including the wall
 	const [newMin, newMax] = [
 		add(min, [[-depth], [-depth]]),

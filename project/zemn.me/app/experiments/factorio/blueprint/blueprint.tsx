@@ -49,7 +49,6 @@ export interface DisplayBlueprintBookProps {
 }
 
 export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
-	console.log(book);
 	return (
 		<article>
 			<header>
