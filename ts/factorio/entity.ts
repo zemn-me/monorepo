@@ -85,7 +85,7 @@ export interface Entity extends JSONObject {
 	/**
 	 * Filters of the filter inserter or loader, optional. Array of #Item filter objects.
 	 */
-	filters?: ItemFilterObject;
+	filters?: ItemFilterObject[];
 	/**
 	 * Filter mode of the filter inserter, optional. Either "whitelist" or "blacklist".
 	 */

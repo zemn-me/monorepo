@@ -8,9 +8,9 @@ export interface ConnectionPoint extends JSONObject {
 	/**
 	 * An array of #Connection data object containing all the connections from this point created by red wire.
 	 */
-	red: ConnectionData[];
+	red?: ConnectionData[];
 	/**
 	 * An array of #Connection data object containing all the connections from this point created by green wire.
 	 */
-	green: ConnectionData[];
+	green?: ConnectionData[];
 }

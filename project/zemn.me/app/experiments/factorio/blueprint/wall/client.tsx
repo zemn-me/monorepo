@@ -1,7 +1,6 @@
 'use client';
 import { useId, useState } from 'react';
 
-import { DisplayBlueprint } from '#root/project/zemn.me/app/experiments/factorio/blueprint/blueprint.js';
 import Link from '#root/project/zemn.me/components/Link/Link.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { githubRepoUrl } from '#root/ts/constants/constants.js';
@@ -10,6 +9,7 @@ import {
 	blueprintSurroundedByWall,
 } from '#root/ts/factorio/blueprint.js';
 import { ParseBlueprintString } from '#root/ts/factorio/blueprint_string.js';
+import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
 import { None, Option, OptionSequence, Some } from '#root/ts/option.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { Err, Ok, Result, ResultSequence } from '#root/ts/result.js';

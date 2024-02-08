@@ -1,0 +1,12 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "react",
+	deps = [
+        "//:node_modules/@types/react",
+		"//ts/factorio",
+		"//ts/iter",
+		"//ts/react/CopyToClipboard"
+	],
+	visibility = [ "//:__subpackages__" ]
+)

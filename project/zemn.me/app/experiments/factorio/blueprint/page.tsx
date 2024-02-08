@@ -21,6 +21,11 @@ export default function Page() {
 						blueprint.
 					</Link>
 				</li>
+				<li>
+					<Link href="blueprint/book">
+						Some blueprints I like (and/or made).
+					</Link>
+				</li>
 			</ul>
 		</Prose>
 	);
