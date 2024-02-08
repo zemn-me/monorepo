@@ -1,5 +1,6 @@
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { Color } from '#root/ts/factorio/color.js';
+import { DeconstructionPlanner } from '#root/ts/factorio/deconstruction_planner.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { JSONObject } from '#root/ts/json.js';
 
@@ -26,6 +27,7 @@ export interface BlueprintBook extends JSONObject {
 		index: Int;
 		blueprint?: Blueprint;
 		blueprint_book?: BlueprintBook;
+		deconstruction_planner?: DeconstructionPlanner;
 	}[];
 	/**
 	 * Index of the currently selected blueprint, 0-based.

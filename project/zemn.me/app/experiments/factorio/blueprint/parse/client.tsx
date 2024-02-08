@@ -1,9 +1,9 @@
 'use client';
 import { useId, useState } from 'react';
 
-import { DisplayBlueprintWrapper } from '#root/project/zemn.me/app/experiments/factorio/blueprint/blueprint.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { ParseBlueprintString } from '#root/ts/factorio/blueprint_string.js';
+import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint.js';
 import { Option } from '#root/ts/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
