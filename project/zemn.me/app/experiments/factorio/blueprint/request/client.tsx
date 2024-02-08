@@ -1,10 +1,10 @@
 'use client';
 import { useId, useState } from 'react';
 
-import { DisplayBlueprint } from '#root/project/zemn.me/app/experiments/factorio/blueprint/blueprint.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { ParseBlueprintString } from '#root/ts/factorio/blueprint_string.js';
+import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
 import { concat, map } from '#root/ts/iter/index.js';
 import { None, Option, OptionSequence, Some } from '#root/ts/option.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';

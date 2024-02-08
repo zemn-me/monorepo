@@ -10,5 +10,5 @@ export interface Schedule extends JSONObject {
 	/**
 	 * Array of entity numbers of locomotives using this schedule.
 	 */
-	locomotives: EntityNumber;
+	locomotives: EntityNumber[];
 }

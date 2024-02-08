@@ -1,0 +1,18 @@
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "book",
+    assets = glob(["**/*.css", "**/*.svg"]),
+    deps = [
+        "//:node_modules/@types/react",
+        "//project/zemn.me/components",
+		"//ts/factorio",
+		"//ts/factorio/react"
+    ],
+	ignores_lint = [
+		"bigEntitiesListThatMakesTypescriptSad.ts",
+		"myBlueprints.ts"
+	]
+)
