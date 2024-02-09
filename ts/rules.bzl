@@ -42,7 +42,7 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         srcs = srcs,
         tsconfig = tsconfig,
         # swc injects this
-        deps = deps + ["//:node_modules/regenerator-runtime"],
+        deps = deps + ["//ts:swc_deps"],
         transpiler = partial.make(
             swc,
             swcrc = "//:swcrc",
