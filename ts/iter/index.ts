@@ -330,3 +330,17 @@ export function* concat<T1, T2>(
 	yield* i;
 	yield* i2;
 }
+
+export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<A | B> {
+	const iterators = [a, b].map(v => v[Symbol.iterator]());
+	const dones = iterators.map(() => false);
+
+	while (dones.some(v => v === false)) {
+		for (let i = 0; i < iterators.length; i++) {
+			if (dones[i]) continue;
+			const next = iterators[i]!.next();
+			dones[i] = !!next.done;
+			yield next.value;
+		}
+	}
+}
