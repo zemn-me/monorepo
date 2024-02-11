@@ -111,3 +111,7 @@ build --experimental_profile_include_primary_output
 build --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 fetch --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
+
+build --java_runtime_version=remotejdk_11
+fetch --java_runtime_version=remotejdk_11
+query --java_runtime_version=remotejdk_11

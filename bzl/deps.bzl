@@ -359,6 +359,12 @@ native_binary(
 exports_files(glob(["**/*"]))
 
             """
-
     )
+    http_archive(
+        name = "com_github_google_copybara",
+        integrity = "sha256-GBRuLkH7/pClobt5NFAsa0UG2/S74gJKcESr1/zRuns=",
+        strip_prefix = "copybara-c4cf60695a656d16c1e70e79eea0654e05e5a945",
+        url = "https://github.com/google/copybara/archive/c4cf60695a656d16c1e70e79eea0654e05e5a945.zip",
+    )
+
 
