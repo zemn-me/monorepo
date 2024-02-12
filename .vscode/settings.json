@@ -8,10 +8,17 @@
 		"*.bazel": "starlark",
 		"WORKSPACE": "starlark"
 	},
+	"json.validate.enable": true,
+	"editor.formatOnType": true,
+	"[jsonc]": {
+		"editor.formatOnSave": true,
+	},
+	"[json]": {
+		"editor.formatOnSave": true,
+	},
 	"[starlark]": {
 		"editor.defaultFormatter": "BazelBuild.vscode-bazel",
 		"editor.formatOnSave": true,
-		"editor.formatOnSaveMode": "file"
 	},
 	"[mdx]": {
 		"editor.wordWrap": "bounded",
