@@ -3,7 +3,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-
 def fetch_dependencies():
     http_archive(
         name = "bazel_skylib",
@@ -24,7 +23,7 @@ def fetch_dependencies():
     http_archive(
         name = "io_bazel_rules_go",
         sha256 = "6734a719993b1ba4ebe9806e853864395a8d3968ad27f9dd759c196b3eb3abe8",
-        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.45.1/rules_go-v0.45.1.zip"
+        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.45.1/rules_go-v0.45.1.zip",
     )
 
     http_archive(
@@ -348,7 +347,7 @@ native_binary(
         name = "com_googleapis_storage_chromium_linux_x64",
         sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
         url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
-        build_file_content = chromium_buildfile
+        build_file_content = chromium_buildfile,
     )
 
     http_archive(
@@ -358,7 +357,5 @@ native_binary(
         build_file_content = """
 exports_files(glob(["**/*"]))
 
-            """
-
+            """,
     )
-

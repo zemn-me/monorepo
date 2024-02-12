@@ -3,6 +3,16 @@
 	"html.autoClosingTags": false,
 	"editor.wordWrapColumn": 80,
 	"editor.wordBasedSuggestions": "off",
+	"files.associations": {
+		"*.bzl": "starlark",
+		"*.bazel": "starlark",
+		"WORKSPACE": "starlark"
+	},
+	"[starlark]": {
+		"editor.defaultFormatter": "BazelBuild.vscode-bazel",
+		"editor.formatOnSave": true,
+		"editor.formatOnSaveMode": "file"
+	},
 	"[mdx]": {
 		"editor.wordWrap": "bounded",
 		"editor.wordWrapColumn": 80
