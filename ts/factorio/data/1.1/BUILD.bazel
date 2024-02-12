@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 genrule(
@@ -17,3 +18,4 @@ ts_project(
 	srcs = [ "data.ts", "types.ts" ],
 	ignores_lint = [ "data.ts" ],
 )
+bazel_lint( name = "bazel_lint" )

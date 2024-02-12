@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "copy_to_bin", "js_binary", "js_run_binary")
@@ -75,3 +76,4 @@ go_proto_library(
     proto = ":core_proto",
     deps = ["//project/cultist/proto"],
 )
+bazel_lint( name = "bazel_lint" )

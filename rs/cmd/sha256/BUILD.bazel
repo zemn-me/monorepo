@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
@@ -28,3 +29,4 @@ diff_test(
     file1 = ":digest.golden.txt",
     file2 = ":digest.txt",
 )
+bazel_lint( name = "bazel_lint" )

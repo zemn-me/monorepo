@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
 
@@ -21,3 +22,4 @@ js_binary(
     data = [":config_gen_ts"],
     entry_point = "main.js",
 )
+bazel_lint( name = "bazel_lint" )

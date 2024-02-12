@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -14,3 +15,4 @@ ts_project(
 		"//:__subpackages__"
 	]
 )
+bazel_lint( name = "bazel_lint" )

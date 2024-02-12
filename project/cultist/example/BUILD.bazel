@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 tstests = glob(["*_test.ts"])
@@ -14,3 +15,4 @@ exports_files(
     ["savestate.ts"],
     ["//project/cultist:__subpackages__"],
 )
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
@@ -16,3 +17,4 @@ alias(
 	actual = ":dev"
 )
 
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("@npm//:stylelint/package_json.bzl", stylelint = "bin")
 load("//js:rules.bzl", "js_library")
 
@@ -31,3 +32,4 @@ js_library(
         "//:node_modules/stylelint-config-standard",
     ],
 )
+bazel_lint( name = "bazel_lint" )

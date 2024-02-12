@@ -1,6 +1,8 @@
+load("//bzl:rules.bzl", "bazel_lint")
 package(default_visibility = ["//:__subpackages__"])
 
 alias(
     name = "rustfmt",
     actual = "@rules_rust//:rustfmt",
 )
+bazel_lint( name = "bazel_lint" )

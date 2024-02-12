@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//yml:test.bzl", "yaml_lint_test")
 exports_files(
     [
@@ -18,3 +19,4 @@ filegroup(
 yaml_lint_test(
 	name = "yaml_lint"
 )
+bazel_lint( name = "bazel_lint" )

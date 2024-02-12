@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 alias(
     name = "buildozer",
     actual = "@com_github_bazelbuild_buildtools//buildozer",
@@ -15,3 +16,4 @@ sh_test(
         "@bazel_tools//tools/bash/runfiles",
     ],
 )
+bazel_lint( name = "bazel_lint" )

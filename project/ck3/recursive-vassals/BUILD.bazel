@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
@@ -35,3 +36,4 @@ pkg_zip(
     name = "mod_zip",
     srcs = [":mod_files"],
 )
+bazel_lint( name = "bazel_lint" )

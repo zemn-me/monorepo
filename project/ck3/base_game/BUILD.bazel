@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 package(default_visibility = ["//project/ck3:__subpackages__"])
 
 filegroup(
@@ -9,3 +10,4 @@ filegroup(
 )
 
 exports_files(glob(["**/*"]))
+bazel_lint( name = "bazel_lint" )

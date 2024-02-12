@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/versioning:rules.bzl", "semver_version")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
@@ -13,3 +14,4 @@ diff_test(
     file1 = "expected.txt",
     file2 = ":version",
 )
+bazel_lint( name = "bazel_lint" )

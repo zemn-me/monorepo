@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_binary")
 load("//ts:rules.bzl", "ts_project")
 
@@ -23,3 +24,4 @@ ts_project(
     srcs = ["output.ts"],
     ignores_lint = ["output.ts"],
 )
+bazel_lint( name = "bazel_lint" )

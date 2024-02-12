@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project", "jest_test")
 
 ts_project(
@@ -13,3 +14,4 @@ jest_test(
 	srcs = [ "ensure_ids_unique_test.js" ],
 	deps = [ ":ts" ]
 )
+bazel_lint( name = "bazel_lint" )

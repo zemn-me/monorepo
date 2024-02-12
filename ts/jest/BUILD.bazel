@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -15,3 +16,4 @@ ts_project(
         "//:node_modules/jest-environment-jsdom",
     ],
 )
+bazel_lint( name = "bazel_lint" )

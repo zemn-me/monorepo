@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 
@@ -20,3 +21,4 @@ ts_project(
         "//:node_modules/next",
     ],
 )
+bazel_lint( name = "bazel_lint" )

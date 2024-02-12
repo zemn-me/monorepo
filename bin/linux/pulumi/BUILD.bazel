@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 package(default_visibility = ["//:__subpackages__"])
 
 # the pulumi cli tool
@@ -73,3 +74,4 @@ native_test(
     # output; an output name for the copy of the binary
     out = "pulumi.local",
 )
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 """
 Provides the rlocationpath of chromium to TypeScript
 """
@@ -24,3 +25,4 @@ ts_project(
 	visibility = [ "//:__subpackages__" ],
 	ignores_lint = [ "path.ts" ]
 )
+bazel_lint( name = "bazel_lint" )

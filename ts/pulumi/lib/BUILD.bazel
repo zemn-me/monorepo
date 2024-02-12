@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
@@ -19,3 +20,4 @@ ts_project(
     ],
 	data = [ "security.txt" ]
 )
+bazel_lint( name = "bazel_lint" )

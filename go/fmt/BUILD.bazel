@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 exports_files(
     [
         "go.bzl",
@@ -5,3 +6,4 @@ exports_files(
     ],
     visibility = ["//visibility:public"],
 )
+bazel_lint( name = "bazel_lint" )

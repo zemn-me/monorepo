@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 
@@ -15,3 +16,4 @@ js_library(
     name = "files",
     srcs = ["wallpaper.jpg"]
 )
+bazel_lint( name = "bazel_lint" )

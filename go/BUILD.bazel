@@ -1,2 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 # no rules in this file, but it's required for
 # bazel to consider this folder a package.
+bazel_lint( name = "bazel_lint" )

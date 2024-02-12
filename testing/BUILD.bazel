@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@rules_python//python:defs.bzl", "py_test")
 load("//go:rules.bzl", "go_test")
@@ -31,3 +32,4 @@ go_test(
     name = "testing_test",
     srcs = ["go_basic_test.go"],
 )
+bazel_lint( name = "bazel_lint" )

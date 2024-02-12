@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("@npm//:eslint/package_json.bzl", "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 
@@ -35,3 +36,4 @@ sh_binary(
 bazel_lint(
     name = "blint",
 )
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/hash:rules.bzl", "hashes")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
@@ -14,3 +15,4 @@ diff_test(
     file1 = "expected.txt",
     file2 = ":hashes",
 )
+bazel_lint( name = "bazel_lint" )

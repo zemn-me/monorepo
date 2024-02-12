@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 load("@npm//:next/package_json.bzl", next = "bin")
@@ -32,3 +33,4 @@ jest_test(
         "BAZEL_BINDIR": "$(BINDIR)",
     },
 )
+bazel_lint( name = "bazel_lint" )

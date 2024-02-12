@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//js/npm:rules.bzl", "npm_pkg")
 load("//js:rules.bzl", "js_library", "npm_link_package")
@@ -38,3 +39,4 @@ js_library(
     visibility = ["//:__subpackages__"],
     deps = DEPS,
 )
+bazel_lint( name = "bazel_lint" )

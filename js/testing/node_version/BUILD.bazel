@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
@@ -14,3 +15,4 @@ jest_test(
     srcs = ["node_version_test.js"],
     data = [":node_version"],
 )
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 package(default_visibility = ["//:__subpackages__"])
 
 config_setting(
@@ -73,3 +74,4 @@ sh_test(
         "CHROMEDRIVER_BINARY": "$(rlocationpath :chromedriver)",
     },
 )
+bazel_lint( name = "bazel_lint" )

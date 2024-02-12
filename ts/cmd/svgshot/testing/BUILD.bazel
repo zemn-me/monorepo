@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 
@@ -26,3 +27,4 @@ copy_file(
 	src = "//ts/cmd/svgshot:package.json",
 	out = "package_inert.json"
 )
+bazel_lint( name = "bazel_lint" )

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 #
 # Regression test for 'can I run a JS binary' and 'do JS binary imports
 # work at runtime.
@@ -32,3 +33,4 @@ diff_test(
     file1 = "golden.txt",
     file2 = "hello_gen_out.txt",
 )
+bazel_lint( name = "bazel_lint" )

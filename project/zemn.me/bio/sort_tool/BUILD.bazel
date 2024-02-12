@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
 
@@ -16,3 +17,4 @@ js_binary(
     name = "exec",
     entry_point = "sort_tool.js",
 )
+bazel_lint( name = "bazel_lint" )

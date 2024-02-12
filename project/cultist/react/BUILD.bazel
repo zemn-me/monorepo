@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -18,3 +19,4 @@ ts_project(
         "//project/cultist/state",
     ],
 )
+bazel_lint( name = "bazel_lint" )

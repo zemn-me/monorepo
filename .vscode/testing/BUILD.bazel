@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 sh_test(
 	name = "test_tools_run",
 	srcs = [ "test_tools_run.sh" ],
@@ -19,3 +20,4 @@ sh_test(
 		"DLV_BINARY": "$(rlocationpath //sh/bin:dlv)"
 	}
 )
+bazel_lint( name = "bazel_lint" )

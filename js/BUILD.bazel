@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 filegroup (
 	name = "mandatory_data",
 	data = [
@@ -7,3 +8,4 @@ filegroup (
 	],
 	visibility = [ "//:__subpackages__" ]
 )
+bazel_lint( name = "bazel_lint" )
