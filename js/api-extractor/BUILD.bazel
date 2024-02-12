@@ -1,7 +1,10 @@
 load("@npm//:@microsoft/api-extractor/package_json.bzl", "bin")
+load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
 bin.api_extractor_binary(
     name = "api_extractor",
 )
+
+bazel_lint(name = "bazel_lint")

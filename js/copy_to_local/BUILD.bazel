@@ -1,1 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 # this just defines this file as a package!
+bazel_lint(name = "bazel_lint")

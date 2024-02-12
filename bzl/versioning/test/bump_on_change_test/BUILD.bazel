@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/versioning:rules.bzl", "bump_on_change_test")
 
 bump_on_change_test(
@@ -7,3 +8,5 @@ bump_on_change_test(
     version = "MAJOR",
     version_lock = "version.lock",
 )
+
+bazel_lint(name = "bazel_lint")

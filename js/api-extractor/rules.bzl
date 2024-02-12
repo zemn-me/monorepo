@@ -1,6 +1,6 @@
 load("@npm//:@microsoft/api-extractor/package_json.bzl", "bin")
-load("//js/api-extractor/config_gen:rules.bzl", "api_extractor_config")
 load("//js:rules.bzl", "copy_to_bin")
+load("//js/api-extractor/config_gen:rules.bzl", "api_extractor_config")
 
 def api_extractor(name, package_json = "//:package_json", tsdoc_metadata = "tsdoc-metadata.json", doc_model = None, report = None, srcs = None, public_trimmed_rollup = None, entry_point = None, config = "api-extractor.json", **kwargs):
     copy_to_bin(

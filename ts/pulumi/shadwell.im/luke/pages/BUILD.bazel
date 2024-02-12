@@ -1,4 +1,6 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
+
 package(default_visibility = ["//ts/pulumi/shadwell.im/luke:__subpackages__"])
 
 ts_project(
@@ -8,7 +10,8 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//ts/next.js",
-        "//ts/next.js/component/Redirect"
+        "//ts/next.js/component/Redirect",
     ],
 )
 
+bazel_lint(name = "bazel_lint")

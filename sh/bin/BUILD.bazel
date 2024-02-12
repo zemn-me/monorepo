@@ -1,3 +1,5 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 package(default_visibility = ["//:__subpackages__"])
 
 alias(
@@ -34,3 +36,5 @@ alias(
     name = "buildozer",
     actual = "//bin/host/buildozer",
 )
+
+bazel_lint(name = "bazel_lint")

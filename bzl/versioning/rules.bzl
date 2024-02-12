@@ -1,6 +1,6 @@
-load("//bzl/hash:rules.bzl", "hashes")
-load("@rules_python//python:defs.bzl", "py_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("//bzl/hash:rules.bzl", "hashes")
 
 def semver_version(name, major = None, minor = None, patch = None, **kwargs):
     _semver_version(

@@ -1,5 +1,6 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = [
     "//ci:__subpackages__",
@@ -50,3 +51,5 @@ npm_pkg(
     version_lock = ".version.lock",
     visibility = ["//ci:__subpackages__"],
 )
+
+bazel_lint(name = "bazel_lint")
