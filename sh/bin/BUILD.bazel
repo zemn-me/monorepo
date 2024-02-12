@@ -1,31 +1,36 @@
 package(default_visibility = ["//:__subpackages__"])
 
 alias(
-	name = "dlv",
-	actual = "@com_github_go_delve_delve//cmd/dlv",
+    name = "dlv",
+    actual = "@com_github_go_delve_delve//cmd/dlv",
 )
 
 alias(
-	name = "go",
-	actual = "@io_bazel_rules_go//go"
+    name = "go",
+    actual = "@io_bazel_rules_go//go",
 )
 
 alias(
-	name = "goimports",
-	actual = "@org_golang_x_tools//cmd/goimports"
+    name = "goimports",
+    actual = "@org_golang_x_tools//cmd/goimports",
 )
 
 alias(
-	name = "gopackagesdriver",
-	actual = "@io_bazel_rules_go//go/tools/gopackagesdriver"
+    name = "gopackagesdriver",
+    actual = "@io_bazel_rules_go//go/tools/gopackagesdriver",
 )
 
 alias(
-	name = "staticcheck",
-	actual = "@co_honnef_go_tools//cmd/staticcheck"
+    name = "staticcheck",
+    actual = "@co_honnef_go_tools//cmd/staticcheck",
 )
 
 alias(
-	name = "pnpm",
-	actual = "//:pnpm"
+    name = "pnpm",
+    actual = "//:pnpm",
+)
+
+alias(
+    name = "buildozer",
+    actual = "//bin/host/buildozer",
 )
