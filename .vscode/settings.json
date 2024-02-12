@@ -22,7 +22,8 @@
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll": "always"
 	},
 	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {
