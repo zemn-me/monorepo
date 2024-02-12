@@ -1,7 +1,10 @@
 load("@rules_python//python:defs.bzl", "py_test")
+load("//bzl:rules.bzl", "bazel_lint")
 
 py_test(
     name = "test_parse_core",
     srcs = ["test_parse_core.py"],
     deps = ["//project/cultist/gen:core_py"],
 )
+
+bazel_lint(name = "bazel_lint")

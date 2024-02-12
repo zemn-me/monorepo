@@ -1,5 +1,8 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "force_buffer_whole_video",
 )
+
+bazel_lint(name = "bazel_lint")

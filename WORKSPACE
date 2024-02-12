@@ -18,6 +18,7 @@ load("//bzl:deps.bzl", "fetch_dependencies")
 fetch_dependencies()
 
 load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
 bazel_features_deps()
 
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
@@ -79,7 +80,7 @@ rules_rust_dependencies()
 rust_register_toolchains(edition = "2021")
 
 # this rule is really weird. see docs https://github.com/bazelbuild/rules_rust/blob/main/crate_universe/private/crates_repository.bzl#L137
-load("@rules_rust//crate_universe:defs.bzl", "crate", "crates_repository")
+load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 
 crates_repository(
     name = "cargo",
@@ -112,7 +113,7 @@ nodejs_register_toolchains(
     node_version = DEFAULT_NODE_VERSION if int(DEFAULT_NODE_VERSION.split(".")[0]) > 18 else "18.13.0",
 )
 
-load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
+load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock", "pnpm_repository")
 
 npm_translate_lock(
     name = "npm",
@@ -133,12 +134,9 @@ load("@npm//:repositories.bzl", "npm_repositories")
 
 npm_repositories()
 
-load("@aspect_bazel_lib//lib:repositories.bzl", "register_coreutils_toolchains")
+load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolchains", "register_copy_to_directory_toolchains", "register_coreutils_toolchains")
 
 register_coreutils_toolchains()
-
-# https://github.com/Zemnmez/rules_js/blob/bdf3d5a61c6af9e5d7d584cfe5f78f42d1e3f227/docs/faq.md#can-i-use-bazel-managed-pnpm
-load("@aspect_rules_js//npm:repositories.bzl", "pnpm_repository")
 
 pnpm_repository(name = "pnpm")
 
@@ -168,10 +166,6 @@ rules_ts_dependencies(
     # This keeps the TypeScript version in-sync with the editor, which is typically best.
     ts_version_from = "//:package.json",
 )
-
-# Register aspect_bazel_lib toolchains;
-# If you use npm_translate_lock or npm_import from aspect_rules_js you can omit this block.
-load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolchains", "register_copy_to_directory_toolchains")
 
 register_copy_directory_toolchains()
 

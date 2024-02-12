@@ -1,9 +1,13 @@
-filegroup (
-	name = "mandatory_data",
-	data = [
-		# needed so that the ESM runtime can locate
-		# absolute imports.
-		"//:package_json"
-	],
-	visibility = [ "//:__subpackages__" ]
+load("//bzl:rules.bzl", "bazel_lint")
+
+filegroup(
+    name = "mandatory_data",
+    data = [
+        # needed so that the ESM runtime can locate
+        # absolute imports.
+        "//:package_json",
+    ],
+    visibility = ["//:__subpackages__"],
 )
+
+bazel_lint(name = "bazel_lint")

@@ -1,5 +1,6 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 package(default_visibility = ["//:__subpackages__"])
-load("//js:rules.bzl", "js_binary")
 
 config_setting(
     name = "darwin_arm64",
@@ -41,8 +42,6 @@ config_setting(
     ],
 )
 
-
-
 config_setting(
     name = "windows_x32",
     constraint_values = [
@@ -63,11 +62,12 @@ sh_test(
     name = "smoke",
     srcs = ["smoke.sh"],
     data = [":chromium"],
-	deps = [
-		"@bazel_tools//tools/bash/runfiles",
-	],
     env = {
         "CHROMIUM_BINARY": "$(rlocationpath :chromium)",
     },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
 )
 
+bazel_lint(name = "bazel_lint")

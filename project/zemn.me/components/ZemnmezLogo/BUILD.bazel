@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -7,7 +8,7 @@ ts_project(
         "*.ts",
         "*.tsx",
     ]),
-	assets = glob(["**/*.css"]),
+    assets = glob(["**/*.css"]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//:base_defs",
@@ -18,3 +19,5 @@ ts_project(
         "//:node_modules/react-router-dom",
     ],
 )
+
+bazel_lint(name = "bazel_lint")

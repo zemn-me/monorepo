@@ -1,4 +1,5 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
     ":__subpackages__",
@@ -23,3 +24,4 @@ ts_project(
 #     srcs = ["doSync_test.js"],
 #     deps = [":project"],
 # )
+bazel_lint(name = "bazel_lint")

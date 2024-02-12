@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -18,3 +19,5 @@ jest_test(
     ],
     deps = [":math"],
 )
+
+bazel_lint(name = "bazel_lint")

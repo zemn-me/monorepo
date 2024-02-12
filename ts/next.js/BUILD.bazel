@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -18,3 +19,5 @@ exports_files(
     ["next.config.ts"],
     visibility = ["//visibility:public"],
 )
+
+bazel_lint(name = "bazel_lint")

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_library")
 
 package(default_visibility = ["//visibility:public"])
@@ -6,3 +7,5 @@ rust_library(
     name = "ts",
     srcs = glob(["*.rs"]),
 )
+
+bazel_lint(name = "bazel_lint")

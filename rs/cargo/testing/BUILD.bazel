@@ -1,5 +1,6 @@
-load("//rs:rules.bzl", "rust_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//rs:rules.bzl", "rust_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -25,3 +26,5 @@ diff_test(
     file1 = "hello_world_expected.txt",
     file2 = ":hello_world_output",
 )
+
+bazel_lint(name = "bazel_lint")
