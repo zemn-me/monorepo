@@ -1,0 +1,17 @@
+alias(
+    name = "buildozer",
+    actual = "@com_github_bazelbuild_buildtools//buildozer",
+    visibility = ["//:__subpackages__"],
+)
+
+sh_test(
+    name = "smoke",
+    srcs = ["smoke.sh"],
+    data = [":buildozer"],
+    env = {
+        "BUILDOZER_BINARY": "$(rlocationpath :buildozer)",
+    },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
+)
