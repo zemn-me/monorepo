@@ -1,8 +1,7 @@
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
-	"//project/zemn.me:__subpackages__",
-	"//ts/pulumi/pleaseintroducemetoyour.dog:__subpackages__"
+	"//:__subpackages__"
 ])
 
 ts_project(
