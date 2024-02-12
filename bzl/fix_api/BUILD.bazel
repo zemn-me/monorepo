@@ -1,4 +1,8 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 sh_binary(
     name = "fix_all",
     srcs = ["fix_all.sh"],
 )
+
+bazel_lint(name = "bazel_lint")

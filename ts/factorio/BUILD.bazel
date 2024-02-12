@@ -1,16 +1,19 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-	name = "factorio",
-	deps = [
-		"//:node_modules/base64-js",
-		"//:node_modules/@types/pako",
-		"//:node_modules/pako",
-		"//ts",
-		"//ts/math",
-		"//ts/iter"
-	],
-	visibility = [
-		"//:__subpackages__"
-	]
+    name = "factorio",
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/pako",
+        "//:node_modules/base64-js",
+        "//:node_modules/pako",
+        "//ts",
+        "//ts/iter",
+        "//ts/math",
+    ],
 )
+
+bazel_lint(name = "bazel_lint")

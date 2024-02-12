@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -123,3 +124,5 @@ ts_project(
     name = "save",
     srcs = ["save.ts"],
 )
+
+bazel_lint(name = "bazel_lint")

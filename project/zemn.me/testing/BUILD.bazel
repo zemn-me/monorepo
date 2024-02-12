@@ -1,27 +1,30 @@
-load("//ts:rules.bzl", "ts_project", "jest_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
-	name = "ts",
-	srcs = [ "browser_test.ts" ],
-	deps = [
-		"//:node_modules/@types/node",
-		"//ts/selenium",
-		"//:node_modules/@bazel/runfiles",
-		"//:node_modules/selenium-webdriver",
-		"//:node_modules/@types/selenium-webdriver",
-		"//:node_modules/@types/jest",
-		"//:node_modules/@types/serve-handler",
-		"//:node_modules/serve-handler",
-		"//:node_modules/fast-glob"
-	],
-	data = [
-		"//project/zemn.me:out"
-	]
+    name = "ts",
+    srcs = ["browser_test.ts"],
+    data = [
+        "//project/zemn.me:out",
+    ],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/@types/serve-handler",
+        "//:node_modules/fast-glob",
+        "//:node_modules/selenium-webdriver",
+        "//:node_modules/serve-handler",
+        "//ts/selenium",
+    ],
 )
 
 jest_test(
-	name = "testing",
-	data = [ ":ts" ],
-	srcs = [ "browser_test.js" ],
-	size = "small"
+    name = "testing",
+    size = "small",
+    srcs = ["browser_test.js"],
+    data = [":ts"],
 )
+
+bazel_lint(name = "bazel_lint")

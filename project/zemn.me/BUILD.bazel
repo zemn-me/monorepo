@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
@@ -5,31 +6,34 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "ts",
-    assets = glob(["**/*.css", "**/*.svg"]),
+    assets = glob([
+        "**/*.css",
+        "**/*.svg",
+    ]),
     deps = [
         "//:node_modules/@types/react",
-		"//:node_modules/@types/seedrandom",
+        "//:node_modules/@types/seedrandom",
         "//:node_modules/immutable",
         "//:node_modules/next",
         "//:node_modules/react",
-		"//:node_modules/seedrandom",
-        "//project/zemn.me/bio",
+        "//:node_modules/seedrandom",
+        "//project/zemn.me/app/experiments/factorio/blueprint/book",
         "//project/zemn.me/assets/kenwood",
+        "//project/zemn.me/bio",
         "//project/zemn.me/components",
         "//project/zemn.me/components/TimeEye",
         "//project/zemn.me/components/ZemnmezLogo",
-        "//ts/next.js",
-        "//ts/react/lang",
+        "//ts/constants",
+        "//ts/factorio",
+        "//ts/factorio/react",
         "//ts/iter",
-		"//ts/next.js/component/Redirect",
-		"//ts/constants",
-		"//ts/factorio",
-		"//ts/factorio/react",
-		"//ts/react/ErrorDisplay",
-		"//ts/react/PrettyJSON",
-		"//ts/react/CopyToClipboard",
-		"//project/zemn.me/app/experiments/factorio/blueprint/book"
-    ]
+        "//ts/next.js",
+        "//ts/next.js/component/Redirect",
+        "//ts/react/CopyToClipboard",
+        "//ts/react/ErrorDisplay",
+        "//ts/react/PrettyJSON",
+        "//ts/react/lang",
+    ],
 )
 
 next_project(
@@ -42,6 +46,7 @@ next_project(
 
 alias(
     name = "zemn.me",
-    actual = ":dev"
+    actual = ":dev",
 )
 
+bazel_lint(name = "bazel_lint")

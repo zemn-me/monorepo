@@ -1,9 +1,9 @@
-load("//js/jest:rules.bzl", _jest_test = "jest_test")
-load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
-load("//js:rules.bzl", _js_binary = "js_binary")
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
+load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/eslint:rules.bzl", "eslint_test")
+load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
 def js_binary(name, **kwargs):
     _js_binary(name = name, **kwargs)

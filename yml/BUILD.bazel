@@ -1,4 +1,6 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//yml:test.bzl", "yaml_lint_test")
+
 exports_files(
     [
         "test.bzl",
@@ -8,13 +10,15 @@ exports_files(
 )
 
 filegroup(
-	name = "yamllint_data_deps",
-	srcs = [
-		"//yml:yamllint-config.yml"
-	],
-	visibility = ["//visibility:public"]
+    name = "yamllint_data_deps",
+    srcs = [
+        "//yml:yamllint-config.yml",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 yaml_lint_test(
-	name = "yaml_lint"
+    name = "yaml_lint",
 )
+
+bazel_lint(name = "bazel_lint")
