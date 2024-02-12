@@ -1,6 +1,5 @@
 load("@npm//:next/package_json.bzl", "bin")
 load("//ts:rules.bzl", "ts_project")
-load("//js:rules.bzl", "copy_to_bin")
 
 def next_project(name, srcs, **kwargs):
     target = "node_modules/monorepo/" + native.package_name()
@@ -52,7 +51,7 @@ def next_project(name, srcs, **kwargs):
         "//:node_modules/typescript",
         "//:node_modules/next",
         "//:node_modules/sharp",
-        "//:package_json"
+        "//:package_json",
     ]
 
     bin.next(

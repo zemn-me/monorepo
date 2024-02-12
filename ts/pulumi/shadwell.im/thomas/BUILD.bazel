@@ -1,16 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 js_library(
-	name = "thomas",
-	srcs = [ "index.html" ],
+    name = "thomas",
+    srcs = ["index.html"],
 )
 
 exports_files(
     [
-		"index.html"
+        "index.html",
     ],
 )
 
-
+bazel_lint(name = "bazel_lint")

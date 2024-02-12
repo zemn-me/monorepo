@@ -1,5 +1,3 @@
-load("//js/eslint:rules.bzl", "eslint_test")
-
 def mdx_lint(name, srcs = None):
     pass
     #eslint_test(
@@ -15,5 +13,5 @@ def mdx_files(name, srcs = None):
 
     native.filegroup(
         name = name,
-        srcs = srcs
+        srcs = srcs,
     )

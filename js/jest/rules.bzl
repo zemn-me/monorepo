@@ -21,10 +21,10 @@ def jest_test(name, srcs = [], env = {}, data = [], deps = [], jest_config = "//
 
     jest.jest_test(
         name = name,
-        data = data + [ "//js:mandatory_data" ],
+        data = data + ["//js:mandatory_data"],
         args = args,
         env = dict({
-            "NODE_OPTIONS": "--experimental-vm-modules"
+            "NODE_OPTIONS": "--experimental-vm-modules",
         }, **env),
         **kwargs
     )

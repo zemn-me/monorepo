@@ -1,7 +1,10 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
-	"//:__subpackages__"
+    "//:__subpackages__",
+    "//project/zemn.me:__subpackages__",
+    "//ts/pulumi/pleaseintroducemetoyour.dog:__subpackages__",
 ])
 
 ts_project(
@@ -13,15 +16,17 @@ ts_project(
     assets = glob(["**/*.css"]),
     deps = [
         "//:base_defs",
+        "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
+        "//:node_modules/classnames",
         "//:node_modules/immutable",
+        "//:node_modules/memoizee",
+        "//:node_modules/next",
         "//:node_modules/react",
         "//project/zemn.me/bio",
-		"//:node_modules/next",
-		"//ts/iter",
-		"//:node_modules/@types/node",
-		"//:node_modules/memoizee",
-		"//:node_modules/@types/memoizee",
-		"//:node_modules/classnames"
+        "//ts/iter",
     ],
 )
+
+bazel_lint(name = "bazel_lint")

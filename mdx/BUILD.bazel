@@ -1,6 +1,9 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//mdx:rules.bzl", "mdx_files")
 
 mdx_files(
     name = "mdx_files",
     srcs = glob(["**/*.mdx"]),
 )
+
+bazel_lint(name = "bazel_lint")

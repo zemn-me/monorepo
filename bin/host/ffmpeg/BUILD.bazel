@@ -1,7 +1,6 @@
-package(default_visibility = ["//:__subpackages__"])
+load("//bzl:rules.bzl", "bazel_lint")
 
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
-load("@bazel_skylib//lib:selects.bzl", "selects")
+package(default_visibility = ["//:__subpackages__"])
 
 config_setting(
     name = "darwin_arm64",
@@ -72,3 +71,5 @@ sh_test(
         "FFMPEG_BIN": "$(location :ffmpeg)",
     },
 )
+
+bazel_lint(name = "bazel_lint")

@@ -1,4 +1,5 @@
 load("@npm//:json-schema-to-typescript/package_json.bzl", "bin")
+load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -23,3 +24,5 @@ alias(
     name = "api-extractor",
     actual = "gen_ts",
 )
+
+bazel_lint(name = "bazel_lint")

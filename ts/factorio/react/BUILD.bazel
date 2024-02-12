@@ -1,12 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-	name = "react",
-	deps = [
+    name = "react",
+    visibility = ["//:__subpackages__"],
+    deps = [
         "//:node_modules/@types/react",
-		"//ts/factorio",
-		"//ts/iter",
-		"//ts/react/CopyToClipboard"
-	],
-	visibility = [ "//:__subpackages__" ]
+        "//ts/factorio",
+        "//ts/iter",
+        "//ts/react/CopyToClipboard",
+    ],
 )
+
+bazel_lint(name = "bazel_lint")

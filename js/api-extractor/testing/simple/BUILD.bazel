@@ -1,5 +1,6 @@
-load("//ts:rules.bzl", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js/api-extractor:rules.bzl", "api_extractor")
+load("//ts:rules.bzl", "ts_project")
 
 api_extractor(
     name = "collate",
@@ -21,3 +22,5 @@ ts_project(
         "//:node_modules/next",
     ],
 )
+
+bazel_lint(name = "bazel_lint")

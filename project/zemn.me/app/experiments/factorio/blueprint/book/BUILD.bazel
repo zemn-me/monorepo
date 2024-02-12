@@ -1,18 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "book",
-    assets = glob(["**/*.css", "**/*.svg"]),
+    assets = glob([
+        "**/*.css",
+        "**/*.svg",
+    ]),
+    ignores_lint = [
+        "bigEntitiesListThatMakesTypescriptSad.ts",
+        "myBlueprints.ts",
+    ],
     deps = [
         "//:node_modules/@types/react",
         "//project/zemn.me/components",
-		"//ts/factorio",
-		"//ts/factorio/react"
+        "//ts/factorio",
+        "//ts/factorio/react",
     ],
-	ignores_lint = [
-		"bigEntitiesListThatMakesTypescriptSad.ts",
-		"myBlueprints.ts"
-	]
 )
+
+bazel_lint(name = "bazel_lint")

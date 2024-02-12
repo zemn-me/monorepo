@@ -13,7 +13,7 @@ def go_binary(name = None, srcs = [], embedsrcs = None, importpath = None, deps 
 
     _test_go_fmt(
         name = name + "_fmt",
-        srcs = srcs
+        srcs = srcs,
     )
 
 def go_test(name = None, importpath = None, deps = [], **kwargs):

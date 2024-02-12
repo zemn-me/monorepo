@@ -60,7 +60,6 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         outs = [out_base_name + ".ogv"],
     )
 
-
     native.genrule(
         name = name + "_jpg",
         srcs = [src, "//bin/host/ffmpeg"],
@@ -75,13 +74,12 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         outs = [out_base_name + ".png"],
     )
 
-
     native.filegroup(
         name = name,
         srcs = [
             name + "_ogv",
             name + "_webm",
             name + "_mp4",
-            name + "_jpg"
+            name + "_jpg",
         ],
     )
