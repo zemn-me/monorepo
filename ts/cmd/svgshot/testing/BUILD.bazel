@@ -1,5 +1,6 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "project",
@@ -22,7 +23,9 @@ jest_test(
 # it doesn't get interpreted. In future, this should
 # probably extend the root package.json?
 copy_file(
-	name = "inert_package_json",
-	src = "//ts/cmd/svgshot:package.json",
-	out = "package_inert.json"
+    name = "inert_package_json",
+    src = "//ts/cmd/svgshot:package.json",
+    out = "package_inert.json",
 )
+
+bazel_lint(name = "bazel_lint")

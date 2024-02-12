@@ -1,6 +1,10 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 exports_files(
     [
         "bump.py",
     ],
     visibility = ["//visibility:public"],
 )
+
+bazel_lint(name = "bazel_lint")

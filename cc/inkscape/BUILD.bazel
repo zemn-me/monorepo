@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_local", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
@@ -31,3 +32,5 @@ js_binary(
     entry_point = "run.js",
     visibility = ["//:__subpackages__"],
 )
+
+bazel_lint(name = "bazel_lint")

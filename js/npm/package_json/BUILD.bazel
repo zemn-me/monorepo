@@ -1,5 +1,6 @@
-load("//ts:rules.bzl", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -15,7 +16,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//ts",
-		"//ts/constants"
+        "//ts/constants",
     ],
 )
 
@@ -26,3 +27,5 @@ js_binary(
     ],
     entry_point = "//js/npm/package_json:gen_pkgjson.js",
 )
+
+bazel_lint(name = "bazel_lint")

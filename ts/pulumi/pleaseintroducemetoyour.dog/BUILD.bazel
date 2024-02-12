@@ -1,5 +1,6 @@
-load("//ts/next.js:rules.bzl", "next_project")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
@@ -26,3 +27,5 @@ next_project(
     name = "next",
     srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/pages"],
 )
+
+bazel_lint(name = "bazel_lint")

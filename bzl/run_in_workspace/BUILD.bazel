@@ -1,5 +1,7 @@
-load("//rs:rules.bzl", "rust_binary")
+load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["wrapper.template.sh"])
+
+bazel_lint(name = "bazel_lint")

@@ -1,7 +1,10 @@
 load("@pip//:requirements.bzl", "entry_point")
+load("//bzl:rules.bzl", "bazel_lint")
 
 alias(
     name = "yamllint",
     actual = entry_point("yamllint"),
     visibility = ["//visibility:public"],
 )
+
+bazel_lint(name = "bazel_lint")
