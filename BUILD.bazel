@@ -6,12 +6,13 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("//js:rules.bzl", "copy_to_bin", "js_library")
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("//ts:rules.bzl", "ts_config")
-load("@npm//:renovate/package_json.bzl", "bin")
-load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("//bzl:rules.bzl", "bazel_lint")
+load("@npm//:renovate/package_json.bzl", "bin")
+load("//js:rules.bzl", "copy_to_bin", "js_library")
+load("//ts:rules.bzl", "ts_config")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -58,7 +59,7 @@ exports_files(
 copy_to_bin(
     name = "swcrc",
     srcs = [".swcrc.json"],
-	visibility = [ "//visibility:public" ],
+    visibility = ["//visibility:public"],
 )
 
 copy_to_bin(
@@ -112,4 +113,8 @@ gazelle(
 gazelle(
     name = "gazelle",
     command = "fix",
+)
+
+bazel_lint(
+    name = "blint",
 )
