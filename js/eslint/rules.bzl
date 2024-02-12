@@ -1,10 +1,10 @@
-load("//js/eslint/private:eslint.bzl", "BASE_DATA_DEPS", _eslint_binary = "eslint_binary", _eslint_test = "eslint_test")
 load("//bzl/run_in_workspace:rules.bzl", "run_in_workspace")
+load("//js/eslint/private:eslint.bzl", "BASE_DATA_DEPS", _eslint_binary = "eslint_binary", _eslint_test = "eslint_test")
 
 def eslint_test(name = None, data = [], srcs = [], args = [], tags = [], **kwargs):
     args = args + ["--ignore-path", "$(location //:gitignore)"]
 
-    data = data + [ "//:tsconfig" ]
+    data = data + ["//:tsconfig"]
 
     args = args + ["$(rootpath " + x + ")" for x in data + srcs]
     _eslint_test(
