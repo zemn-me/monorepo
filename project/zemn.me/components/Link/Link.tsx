@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-imports */
+/* eslint-disable react/forbid-elements */
 import type { UrlObject } from 'node:url';
 
 import NextLink from 'next/link';
