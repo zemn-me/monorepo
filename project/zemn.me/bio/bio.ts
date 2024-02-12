@@ -667,7 +667,7 @@ export const Bio = {
 			id: '48ad5d73-e29c-4242-b58b-4e0a29cd1448',
 			date: date(13, 'jan', 2024),
 			title: en`Hack Fortress @ Shmoocon - SF - RH Duke Shad Hound vs. CluckForce5`,
-			url: url`https://www.twitch.tv/videos/2031742297`,
+			url: url`https://youtu.be/z-XiVKuQOtc`,
 			description: en`Video of the finals of HackFortress @ Shmoocon 2023`,
 		},
 		// END TOOL ASSISTED SORT
