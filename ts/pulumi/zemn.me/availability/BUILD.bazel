@@ -14,7 +14,8 @@ ts_project(
         "//:node_modules/react",
         "//ts/next.js",
         "//ts/react/lang",
-		"//ts/iter"
+		"//ts/iter",
+		"//project/zemn.me/components"
     ],
 )
 
