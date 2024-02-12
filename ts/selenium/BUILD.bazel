@@ -1,12 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-	name = "selenium",
-	deps = [
-		"//ts/bin/host/chromedriver",
-		"//ts/bin/host/chromium",
-		"//:node_modules/selenium-webdriver",
-		"//:node_modules/@types/selenium-webdriver"
-	],
-	visibility = [ "//:__subpackages__" ]
+    name = "selenium",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/selenium-webdriver",
+        "//ts/bin/host/chromedriver",
+        "//ts/bin/host/chromium",
+    ],
 )
+
+bazel_lint(name = "bazel_lint")

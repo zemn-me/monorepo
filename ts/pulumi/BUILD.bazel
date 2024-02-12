@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
@@ -12,8 +13,8 @@ ts_project(
     data = [
         ":pulumi_local",
         "//project/zemn.me:next",
+        "//ts/pulumi/shadwell.im/thomas",
         "//ts/pulumi/zemn.me/availability:next",
-        "//ts/pulumi/shadwell.im/thomas"
     ],
     deps = [
         "//:node_modules/@pulumi/aws",
@@ -21,11 +22,11 @@ ts_project(
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
         "//:node_modules/cross-spawn",
-        "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
+        "//ts/github/actions",
         "//ts/pulumi/lib",
-		"//ts/github/actions",
-		"//ts/pulumi/shadwell.im",
-		"//ts/pulumi/lulu.computer:pulumi_ts"
+        "//ts/pulumi/lulu.computer:pulumi_ts",
+        "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
+        "//ts/pulumi/shadwell.im",
     ],
 )
 
@@ -45,9 +46,11 @@ js_binary(
 
 genrule(
     name = "pulumi_local",
+    srcs = ["//bin/linux/pulumi"],
     outs = ["pulumi"],
     cmd = """
 cp $< $@
     """,
-    srcs = [ "//bin/linux/pulumi" ],
 )
+
+bazel_lint(name = "bazel_lint")

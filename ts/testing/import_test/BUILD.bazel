@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -25,3 +26,5 @@ jest_test(
     srcs = ["import_test.js"],
     deps = [":a"],
 )
+
+bazel_lint(name = "bazel_lint")

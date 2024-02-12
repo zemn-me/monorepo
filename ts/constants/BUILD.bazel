@@ -1,6 +1,9 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-	name = "constants",
-	visibility = [ "//:__subpackages__" ]
+    name = "constants",
+    visibility = ["//:__subpackages__"],
 )
+
+bazel_lint(name = "bazel_lint")

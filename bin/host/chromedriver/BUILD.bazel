@@ -1,3 +1,5 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 package(default_visibility = ["//:__subpackages__"])
 
 config_setting(
@@ -40,8 +42,6 @@ config_setting(
     ],
 )
 
-
-
 config_setting(
     name = "windows_x32",
     constraint_values = [
@@ -57,7 +57,7 @@ alias(
         ":darwin_x64": "@com_googleapis_storage_chromedriver_mac64//:in_bin",
         ":linux_arm64": "@com_googleapis_storage_chromedriver_linux_arm64//:in_bin",
         ":linux_x64": "@com_googleapis_storage_chromedriver_linux64//:in_bin",
-		":windows_x32": "@com_googleapis_storage_chromedriver_win32//:in_bin",
+        ":windows_x32": "@com_googleapis_storage_chromedriver_win32//:in_bin",
         "//conditions:default": "@com_googleapis_storage_chromedriver_linux_x64//:in_bin",
     }),
 )
@@ -66,10 +66,12 @@ sh_test(
     name = "smoke",
     srcs = ["smoke.sh"],
     data = [":chromedriver"],
-	deps = [
-		"@bazel_tools//tools/bash/runfiles",
-	],
     env = {
         "CHROMEDRIVER_BINARY": "$(rlocationpath :chromedriver)",
     },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
 )
+
+bazel_lint(name = "bazel_lint")

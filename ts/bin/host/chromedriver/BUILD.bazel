@@ -1,26 +1,33 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 """
 Provides the rlocationpath of chromewebdriver to TypeScript
 """
+
 load("//ts:rules.bzl", "ts_project")
 
-
 genrule(
-	name = "module_gen",
-	srcs = [
-		"//bin/host/chromedriver"
-	 ],
-	cmd_bash = """
+    name = "module_gen",
+    srcs = [
+        "//bin/host/chromedriver",
+    ],
+    outs = ["path.ts"],
+    cmd_bash = """
 		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" > $@
 		echo "export const chromeDriverPath = Runfiles.resolve('$(rlocationpath //bin/host/chromedriver)')" >> $@
 	""",
-	outs = [ "path.ts" ]
 )
 
 ts_project(
-	name = "chromedriver",
-	srcs = [ "path.ts" ],
-	data = [ "//bin/host/chromedriver" ],
-	deps = [ "//:node_modules/@bazel/runfiles", "//:node_modules/@types/node" ],
-	visibility = [ "//:__subpackages__" ],
-	ignores_lint = [ "path.ts" ]
+    name = "chromedriver",
+    srcs = ["path.ts"],
+    data = ["//bin/host/chromedriver"],
+    ignores_lint = ["path.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
+    ],
 )
+
+bazel_lint(name = "bazel_lint")

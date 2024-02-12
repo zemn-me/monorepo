@@ -1,11 +1,12 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//bzl:rules.bzl", "bazel_lint")
 #
 # Regression test for 'can I run a JS binary' and 'do JS binary imports
 # work at runtime.
 #
 
-load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_binary")
-load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "simple_binary_import",
@@ -32,3 +33,5 @@ diff_test(
     file1 = "golden.txt",
     file2 = "hello_gen_out.txt",
 )
+
+bazel_lint(name = "bazel_lint")
