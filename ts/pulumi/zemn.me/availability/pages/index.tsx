@@ -4,6 +4,7 @@
 
 import Head from 'next/head';
 
+import Link from '#root/project/zemn.me/components/Link/Link.js';
 import { filter, flatten, map } from '#root/ts/iter/index.js';
 
 interface QueryParamsObject {
@@ -72,7 +73,8 @@ export default function HomePage() {
 				<p>
 					Occasionally, the below frame can have trouble loading due
 					to Google security checks. If that happens, please{' '}
-					<a href={URL}>view on Google calendar</a> directly instead.
+					<Link href={URL}>view on Google calendar</Link> directly
+					instead.
 				</p>
 				<p>
 					"All day" events are usually reminders, not times I am busy.

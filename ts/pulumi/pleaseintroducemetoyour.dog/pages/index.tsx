@@ -1,5 +1,7 @@
 import Head from 'next/head';
 
+import Link from '#root/project/zemn.me/components/Link/Link.js';
+
 export default function Main() {
 	return (
 		<>
@@ -11,7 +13,10 @@ export default function Main() {
 			<p>One day something will go here!</p>
 			<p>
 				Until then,{' '}
-				<a href="https://twitter.com/zemnmez">follow me on Twitter</a>?
+				<Link href="https://twitter.com/zemnmez">
+					follow me on Twitter
+				</Link>
+				?
 			</p>
 		</>
 	);
