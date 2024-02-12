@@ -1,9 +1,11 @@
-load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 ts_project(
     name = "lib",
+    data = ["security.txt"],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
@@ -17,5 +19,6 @@ ts_project(
         "//ts/iter",
         "//ts/next.js",
     ],
-	data = [ "security.txt" ]
 )
+
+bazel_lint(name = "bazel_lint")

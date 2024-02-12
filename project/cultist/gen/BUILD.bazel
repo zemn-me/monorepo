@@ -1,10 +1,10 @@
-load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
-load("//ts:rules.bzl", "ts_project")
-load("//js:rules.bzl", "copy_to_bin", "js_binary", "js_run_binary")
-load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
-load("//js:rules.bzl", "js_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_library", "js_run_binary")
 load("//project/cultist/gen:copy_to_local.bzl", "copy_to_local")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
     "//project/cultist:__subpackages__",
@@ -75,3 +75,5 @@ go_proto_library(
     proto = ":core_proto",
     deps = ["//project/cultist/proto"],
 )
+
+bazel_lint(name = "bazel_lint")

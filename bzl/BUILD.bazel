@@ -35,3 +35,5 @@ sh_binary(
 bazel_lint(
     name = "blint",
 )
+
+bazel_lint(name = "bazel_lint")

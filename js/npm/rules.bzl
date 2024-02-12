@@ -1,10 +1,9 @@
-load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
-load("//js/api-documenter:rules.bzl", "api_documenter")
 load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
+load("//js/api-documenter:rules.bzl", "api_documenter")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
-load("@npm//:npm/package_json.bzl", npm = "bin")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 
 def _exclude_all_external_rule(ctx):
@@ -124,7 +123,7 @@ def npm_pkg(
     if tgz != None:
         native.alias(
             name = tgz,
-            actual = name + ".pack"
+            actual = name + ".pack",
         )
 
     exclude_all_external_rule(

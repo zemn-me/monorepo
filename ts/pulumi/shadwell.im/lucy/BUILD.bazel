@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
@@ -8,25 +9,27 @@ next_project(
     srcs = [":pages"],
 )
 
-
 # bazel run //ts/pulumi/shadwell.im/lucy
 # to test the website.
 alias(
-	name = "lucy",
-	actual = ":dev"
+    name = "lucy",
+    actual = ":dev",
 )
 
 # moved here so kate can automerge without modifying any important bazel stuff
 ts_project(
     name = "pages",
+    srcs = glob([
+        "pages/*.tsx",
+        "pages/*.ts",
+    ]),
+    assets = glob(["pages/*.css"]),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
         "//ts/next.js",
     ],
-	srcs = glob(["pages/*.tsx", "pages/*.ts"]),
-	assets = glob(["pages/*.css"])
 )
 
-
+bazel_lint(name = "bazel_lint")

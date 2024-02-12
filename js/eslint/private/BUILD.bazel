@@ -1,21 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
 #
 
 filegroup(
-	name = "data_deps",
-	srcs = [
-		"//:prettierrc",
-		"//:editorconfig",
-		"//:eslintrc",
-		"//:node_modules/eslint-plugin-prettier",
-		"//:node_modules/@typescript-eslint/parser",
-		"//:node_modules/@typescript-eslint/eslint-plugin",
-		"//:node_modules/eslint-config-prettier",
-		"//:node_modules/eslint-plugin-simple-import-sort",
-		"//:node_modules/eslint-plugin-mdx",
-		"//:node_modules/eslint-mdx",
-		"//:node_modules/eslint-plugin-react-hooks",
-		"//:node_modules/eslint-plugin-react",
-		"//:node_modules/@next/eslint-plugin-next"
-	],
-	visibility = [ "//visibility:public" ]
+    name = "data_deps",
+    srcs = [
+        "//:editorconfig",
+        "//:eslintrc",
+        "//:node_modules/@next/eslint-plugin-next",
+        "//:node_modules/@typescript-eslint/eslint-plugin",
+        "//:node_modules/@typescript-eslint/parser",
+        "//:node_modules/eslint-config-prettier",
+        "//:node_modules/eslint-mdx",
+        "//:node_modules/eslint-plugin-mdx",
+        "//:node_modules/eslint-plugin-prettier",
+        "//:node_modules/eslint-plugin-react",
+        "//:node_modules/eslint-plugin-react-hooks",
+        "//:node_modules/eslint-plugin-simple-import-sort",
+        "//:prettierrc",
+    ],
+    visibility = ["//visibility:public"],
 )
+
+bazel_lint(name = "bazel_lint")

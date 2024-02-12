@@ -1,5 +1,6 @@
-load("//js:rules.bzl", "js_library")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
+load("//js:rules.bzl", "js_library")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
@@ -13,5 +14,7 @@ transcode_web(
 
 js_library(
     name = "files",
-    srcs = ["wallpaper.jpg"]
+    srcs = ["wallpaper.jpg"],
 )
+
+bazel_lint(name = "bazel_lint")
