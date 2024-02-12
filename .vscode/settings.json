@@ -88,4 +88,5 @@
 	"terminal.integrated.env.osx": {
 		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
 	},
+	"bazel.buildifierFixOnFormat": true,
 }
