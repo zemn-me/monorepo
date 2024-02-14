@@ -66,12 +66,12 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         cmd = """
             $(location //bin/host/ffmpeg) -ss 00:00:00 \\
                 -i $(location """ + src + """) \\
-                -c:v png \\
+                -c:v jpg \\
                 -frames:v 1 \\
                 -loglevel error \\
                 $@
         """,
-        outs = [out_base_name + ".png"],
+        outs = [out_base_name + ".jpg"],
     )
 
     native.filegroup(
