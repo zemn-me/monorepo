@@ -14,15 +14,15 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "d71d2c67e0bce986e1c5a7731b4693226867c45bfe0b7c5e0067228a536fc580",
-        strip_prefix = "rules_python-0.29.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.29.0.tar.gz",
+        sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
+        strip_prefix = "rules_python-0.31.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.31.0.tar.gz",
     )
 
     http_archive(
         name = "io_bazel_rules_go",
-        sha256 = "6734a719993b1ba4ebe9806e853864395a8d3968ad27f9dd759c196b3eb3abe8",
-        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.45.1/rules_go-v0.45.1.zip",
+        sha256 = "80a98277ad1311dacd837f9b16db62887702e9f1d1c4c9f796d0121a46c8e184",
+        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.46.0/rules_go-v0.46.0.zip",
     )
 
     http_archive(
