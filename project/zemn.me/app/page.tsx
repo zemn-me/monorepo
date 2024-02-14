@@ -3,6 +3,7 @@ import { Metadata } from 'next/types';
 import { Eeg } from '#root/project/zemn.me/app/eeg.js';
 import style from '#root/project/zemn.me/app/style.module.css';
 import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
+import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
 import * as bio from '#root/project/zemn.me/bio/index.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
@@ -34,7 +35,19 @@ function LetterHead() {
 	);
 }
 
+/**
+ * In the Northern Hemisphere it is commonly regarded as extending from the winter
+ * solstice (year's shortest day), December 21 or 22, to the vernal equinox (day and
+ * night equal in length), March 20 or 21, and in the Southern Hemisphere from June
+ * 21 or 22 to September 22 or 23.
+ */
+function isWinter(v: Date): boolean {
+	const month = v.getMonth();
+	return month >= 11 || month <= 1;
+}
+
 export default function Main() {
+	const currentlyWinter = isWinter(new Date());
 	return (
 		<main className={style.main}>
 			<Eeg />
@@ -44,9 +57,15 @@ export default function Main() {
 				loop
 				muted
 				playsInline
-				poster={kenwood.poster.src}
+				poster={
+					(currentlyWinter ? kenwood_snow.poster : kenwood.poster).src
+				}
 			>
-				<kenwood.VideoSources />
+				{currentlyWinter ? (
+					<kenwood_snow.VideoSources />
+				) : (
+					<kenwood.VideoSources />
+				)}
 			</video>
 			<header className={style.banner}>
 				<LetterHead />
@@ -123,8 +142,8 @@ export default function Main() {
 							things!
 						</p>
 						<p>
-							The background video (<Q single>hero video</Q>) is
-							of a hidden area in the gardens of{' '}
+							The background video (<Q single>hero video</Q>) in
+							summer is of a hidden area in the gardens of{' '}
 							<Link href="https://en.wikipedia.org/wiki/Kenwood_House">
 								Kenwood House
 							</Link>
@@ -147,6 +166,10 @@ export default function Main() {
 							I was collecting photos and videos to remind me of
 							home because I knew I'd leave it behind someday to
 							move to the US.
+						</p>
+						<p>
+							In winter, a close-by location of Kenwood House in
+							the snow is shown.
 						</p>
 						<p>
 							The type and style itself was inspired by older,

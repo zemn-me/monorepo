@@ -1,0 +1,8 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+exports_files(
+    ["Clip109.mp4"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(name = "bazel_lint")
