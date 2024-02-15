@@ -146,8 +146,8 @@ devDependencies:
     specifier: 7.40.1
     version: 7.40.1(@types/node@20.11.17)
   '@pulumi/aws':
-    specifier: 6.22.0
-    version: 6.22.0
+    specifier: 6.22.1
+    version: 6.22.1
   '@pulumi/awsx':
     specifier: 2.5.0
     version: 2.5.0
@@ -4937,8 +4937,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.22.0:
-    resolution: {integrity: sha512-SLSKJvGr91fqB8xLVb+dKPtMlkrVUBXj5+yeHnHBl2ICTgb/gmfpk4gx/PCJYE+sY1ffEeR9tzvU0QTD0+7kEg==}
+  /@pulumi/aws@6.22.1:
+    resolution: {integrity: sha512-/hQCTXLICjZOUVrOw5p8GThU/jbIb2TdgAZ+Z2P5Opd4t56jvbqUaU15jOKk6MWwogHM1yjxS5FMp4OFMxvppQ==}
     dependencies:
       '@pulumi/pulumi': 3.105.0
       builtin-modules: 3.0.0
@@ -4953,7 +4953,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
-      '@pulumi/aws': 6.22.0
+      '@pulumi/aws': 6.22.1
       '@pulumi/docker': 4.5.0
       '@pulumi/pulumi': 3.105.0
       '@types/aws-lambda': 8.10.119
