@@ -41,10 +41,11 @@ export class Voice extends Pulumi.ComponentResource {
 				inboundCallsEnabled: true,
 				outboundCallsEnabled: true,
 				identityManagementType: 'CONNECT_MANAGED',
-				instanceAlias: `${name}_connect_instance`.replaceAll(
-					/[^a-z]/g,
-					''
-				),
+				instanceAlias: new RandomPet(
+					`${name}_connect_instance_alias_name`,
+					{},
+					{ parent: this }
+				).id,
 			},
 			{ parent: this }
 		);
