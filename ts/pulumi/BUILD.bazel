@@ -19,6 +19,7 @@ ts_project(
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/random",
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
         "//:node_modules/cross-spawn",
