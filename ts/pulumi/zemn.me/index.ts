@@ -3,6 +3,7 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website.js';
+import { Voice } from '#root/ts/pulumi/zemn.me/voice/voice.js';
 
 //
 
@@ -32,6 +33,8 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+		new Voice(`${name}_voice`, { tags }, { parent: this });
 
 		this.site = new Website(
 			`${name}_zemn_me`,
