@@ -14,9 +14,15 @@ dependencies:
   '@next/eslint-plugin-next':
     specifier: 14.1.0
     version: 14.1.0
+  '@pulumi/aws-native':
+    specifier: ^0.96.0
+    version: 0.96.0
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0
+  '@pulumi/random':
+    specifier: ^4.15.1
+    version: 4.15.1
   '@react-spring/rafz':
     specifier: 9.7.3
     version: 9.7.3
@@ -51,8 +57,8 @@ dependencies:
     specifier: 3.1.3
     version: 3.1.3
   devtools-protocol:
-    specifier: 0.0.1259648
-    version: 0.0.1259648
+    specifier: 0.0.1260888
+    version: 0.0.1260888
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@8.56.0)
@@ -146,8 +152,8 @@ devDependencies:
     specifier: 7.40.1
     version: 7.40.1(@types/node@20.11.17)
   '@pulumi/aws':
-    specifier: 6.22.0
-    version: 6.22.0
+    specifier: 6.22.1
+    version: 6.22.1
   '@pulumi/awsx':
     specifier: 2.5.0
     version: 2.5.0
@@ -4937,8 +4943,25 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.22.0:
-    resolution: {integrity: sha512-SLSKJvGr91fqB8xLVb+dKPtMlkrVUBXj5+yeHnHBl2ICTgb/gmfpk4gx/PCJYE+sY1ffEeR9tzvU0QTD0+7kEg==}
+  /@pulumi/aws-native@0.96.0:
+    resolution: {integrity: sha512-FdaGTBTwzSRG4C6JmHZbIaiMJ1QkcEh4rF8ujfnTg4Emc1gt4VReEbyJKKCQvUbWEN1Z041neDrbvUQs0Ftk4A==}
+    requiresBuild: true
+    dependencies:
+      '@pulumi/pulumi': 3.105.0
+      '@types/glob': 5.0.38
+      '@types/node-fetch': 2.6.11
+      '@types/tmp': 0.0.33
+      glob: 7.2.3
+      node-fetch: 2.7.0
+      shell-quote: 1.8.1
+      tmp: 0.0.33
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
+  /@pulumi/aws@6.22.1:
+    resolution: {integrity: sha512-/hQCTXLICjZOUVrOw5p8GThU/jbIb2TdgAZ+Z2P5Opd4t56jvbqUaU15jOKk6MWwogHM1yjxS5FMp4OFMxvppQ==}
     dependencies:
       '@pulumi/pulumi': 3.105.0
       builtin-modules: 3.0.0
@@ -4953,7 +4976,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
-      '@pulumi/aws': 6.22.0
+      '@pulumi/aws': 6.22.1
       '@pulumi/docker': 4.5.0
       '@pulumi/pulumi': 3.105.0
       '@types/aws-lambda': 8.10.119
@@ -5033,6 +5056,14 @@ packages:
 
   /@pulumi/query@0.3.0:
     resolution: {integrity: sha512-xfo+yLRM2zVjVEA4p23IjQWzyWl1ZhWOGobsBqRpIarzLvwNH/RAGaoehdxlhx4X92302DrpdIFgTICMN4P38w==}
+
+  /@pulumi/random@4.15.1:
+    resolution: {integrity: sha512-qonG+7iE9haQ045hrHQEpF7SsAJLrlkyhhPs/UUOcdjcgoRh68suWxBNvTdtDZXY5Nfhwhh7mszaRbHscSbixg==}
+    dependencies:
+      '@pulumi/pulumi': 3.105.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@puppeteer/browsers@2.0.0:
     resolution: {integrity: sha512-3PS82/5+tnpEaUWonjAFFvlf35QHF15xqyGd34GBa5oP5EPVfFXRsbSxIGYf1M+vZlqBZ3oxT1kRg9OYhtt8ng==}
@@ -6740,6 +6771,13 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: false
 
+  /@types/glob@5.0.38:
+    resolution: {integrity: sha512-rTtf75rwyP9G2qO5yRpYtdJ6aU1QqEhWbtW55qEgquEDa6bXW0s2TWZfDm02GuppjEozOWG/F2UnPq5hAQb+gw==}
+    dependencies:
+      '@types/minimatch': 5.1.2
+      '@types/node': 20.11.17
+    dev: false
+
   /@types/glob@7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
@@ -6855,6 +6893,13 @@ packages:
   /@types/ms@0.7.34:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
+  /@types/node-fetch@2.6.11:
+    resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
+    dependencies:
+      '@types/node': 20.11.17
+      form-data: 4.0.0
+    dev: false
+
   /@types/node@20.11.17:
     resolution: {integrity: sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==}
     dependencies:
@@ -6965,6 +7010,10 @@ packages:
     dependencies:
       svgo: 3.2.0
     dev: true
+
+  /@types/tmp@0.0.33:
+    resolution: {integrity: sha512-gVC1InwyVrO326wbBZw+AO3u2vRXz/iRWq9jYhpG4W8LXyIgDv3ZmcLQ5Q4Gs+gFMyqx+viFoFT+l3p61QFCmQ==}
+    dev: false
 
   /@types/tmp@0.2.6:
     resolution: {integrity: sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==}
@@ -7692,7 +7741,6 @@ packages:
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-    dev: true
 
   /at-least-node@1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
@@ -8494,7 +8542,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
 
   /command-exists@1.2.9:
     resolution: {integrity: sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==}
@@ -9068,7 +9115,6 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-    dev: true
 
   /denodeify@1.2.1:
     resolution: {integrity: sha512-KNTihKNmQENUZeKu5fzfpzRqR5S2VMp4gl9RFHiWzj9DfvYQPMJ6XHKNaQxaGCXwPk6y9yme3aUoaiAe+KX+vg==}
@@ -9135,8 +9181,8 @@ packages:
     resolution: {integrity: sha512-pM27vqEfxSxRkTMnF+XCmxSEb6duO5R+t8A9DEEJgy4Wz2RVanje2mmj99B6A3zv2r/qGfYlOvYznUhuokizmg==}
     dev: true
 
-  /devtools-protocol@0.0.1259648:
-    resolution: {integrity: sha512-1JbIS/6OOXPfOZLneuAQEeTmCKxFPToMGoyjfhVHLzmnmVhfGGJwuYg03lQuV6uDHnta/2hC8mxI73BRUorGgw==}
+  /devtools-protocol@0.0.1260888:
+    resolution: {integrity: sha512-9rTIZ4ZjWwalCPiaY+kPiALLfOKgAz5CTi/Zb1L+qSZ8PH3zVo1T8JcgXIIqg1iM3pZ6hF+n9xO5r2jZ/SF+jg==}
     dev: false
 
   /dezalgo@1.0.4:
@@ -10407,7 +10453,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: true
 
   /fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -14490,7 +14535,6 @@ packages:
   /os-tmpdir@1.0.2:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /osenv@0.1.5:
     resolution: {integrity: sha512-0CWcCECdMVc2Rw3U5w9ZjqX6ga6ubk1xDVKxtBQPK7wis/0F2r9T6k4ydGYhecl7YUBxBVxhL5oisPsNxAPe2g==}
@@ -17193,7 +17237,6 @@ packages:
     engines: {node: '>=0.6.0'}
     dependencies:
       os-tmpdir: 1.0.2
-    dev: true
 
   /tmp@0.2.1:
     resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
