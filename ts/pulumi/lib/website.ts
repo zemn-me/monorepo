@@ -7,18 +7,9 @@ import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 
 import * as guard from '#root/ts/guard.js';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-
-const bucketSuffix = '-bucket';
-const pulumiRandomChars = 7;
-const bucketNameMaximumLength = 56 - pulumiRandomChars - bucketSuffix.length;
-
-// bucket has a maximum length of 63 (56 minus the 7 random chars that Pulumi adds)
-const deriveBucketName = (base: string) =>
-	[...base.replace(/[^a-z0-9.]/g, '-')]
-		.slice(0, bucketNameMaximumLength - 1)
-		.join('') + bucketSuffix;
 
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
