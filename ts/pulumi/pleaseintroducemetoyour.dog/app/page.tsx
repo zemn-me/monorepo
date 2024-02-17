@@ -1,14 +1,10 @@
-import Head from 'next/head';
+import { Metadata } from 'next/types/index.js';
 
 import Link from '#root/project/zemn.me/components/Link/Link.js';
 
 export default function Main() {
 	return (
 		<>
-			<Head>
-				<title>pleaseintroducemetoyour.dog</title>
-			</Head>
-
 			<h1>Pleaseintroducemetoyour.dog</h1>
 			<p>One day something will go here!</p>
 			<p>
@@ -21,3 +17,7 @@ export default function Main() {
 		</>
 	);
 }
+
+export const metadata: Metadata = {
+	title: 'Home',
+};

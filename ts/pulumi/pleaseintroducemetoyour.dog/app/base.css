@@ -10,12 +10,14 @@ h1 { text-align: center; font-weight: 400 }
 article { position: relative }
 article.media img { display: none }
 article video, article img { width: 100vw }
+article a:link {
+	text-decoration: none;
+}
 article header {
-  overflow:hidden;
+	position: sticky;
   box-sizing: border-box;
   font-family: "Playfair Display", serif;
   padding: 3rem;
-  position: absolute;
   width: 100%;
   top:0px;
   left: 0px;
