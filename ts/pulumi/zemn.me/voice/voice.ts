@@ -2,6 +2,7 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 import { RandomPet } from '@pulumi/random';
 
+import { PhoneNumberContactFlowAssociation } from '#root/ts/pulumi/lib/associate_phone_number_contact_flow.js';
 import {
 	ContactFlow,
 	ContactFlowAction,
@@ -72,7 +73,7 @@ export class Voice extends Pulumi.ComponentResource {
 					Identifier,
 					Type: 'MessageParticipant',
 					Parameters: {
-						Text: 'Hello, world!',
+						Text: 'Greetings, world!',
 					},
 					Transitions: {
 						NextAction: disconnectAction.Identifier,
@@ -92,7 +93,7 @@ export class Voice extends Pulumi.ComponentResource {
 				}) satisfies ContactFlowLanguage
 		);
 
-		new ContactFlow(
+		const contactFlow = new ContactFlow(
 			`${name}_contact_flow`,
 			{
 				instanceId: connectInstance.id,
@@ -110,6 +111,16 @@ export class Voice extends Pulumi.ComponentResource {
 				type: 'DID',
 				targetArn: connectInstance.arn,
 				tags,
+			},
+			{ parent: this }
+		);
+
+		new PhoneNumberContactFlowAssociation(
+			`${name}_contact_flow_association`,
+			{
+				PhoneNumberId: phone.id,
+				ContactFlowId: contactFlow.value.id,
+				InstanceId: connectInstance.id,
 			},
 			{ parent: this }
 		);
