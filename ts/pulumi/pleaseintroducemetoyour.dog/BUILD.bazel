@@ -25,7 +25,7 @@ ts_project(
 
 next_project(
     name = "next",
-    srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/pages"],
+    srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/app"],
 )
 
 bazel_lint(name = "bazel_lint")
