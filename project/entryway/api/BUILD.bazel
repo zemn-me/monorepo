@@ -1,0 +1,6 @@
+load("@npm//:prisma/package_json.bzl", "bin")
+
+bin(
+    name = "generateClient",
+    srcs = ["schema.prisma"],
+)
