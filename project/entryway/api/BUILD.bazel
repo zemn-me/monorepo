@@ -1,0 +1,26 @@
+load("@npm//:prisma/package_json.bzl", "bin")
+
+bin.prisma_binary(
+    name = "prisma",
+)
+
+# maybe look at https://github.com/davidmcnamee/rules_prisma/tree/main/prisma
+
+bin.prisma(
+    name = "generateClient",
+    srcs = [
+        "schema.prisma",
+        "//:package_json",
+        "//:pnpm_lock_yaml",
+    ],
+    outs = ["prisma_cache_dir"],
+    args = [
+        "generate",
+        "--schema",
+        "$(rootpath schema.prisma)",
+    ],
+    env = {
+        "CACHE_DIR": "$(rootpath prisma_cache_dir)",
+        "HOME": "$(rootpath prisma_cache_dir)",
+    },
+)

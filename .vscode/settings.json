@@ -10,6 +10,9 @@
 	},
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
+	"[prisma]": {
+		"editor.formatOnSave": true
+	},
 	"[jsonc]": {
 		"editor.formatOnSave": true,
 	},
