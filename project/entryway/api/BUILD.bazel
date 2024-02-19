@@ -1,0 +1,8 @@
+load("@rules_prisma//prisma:js.bzl", "prisma_generate_js")
+
+prisma_generate_js(
+    name = "prisma_client",
+    generator_name = "client",  # should match schema.prisma
+    generator_output = "gen/client",  # should match schema.prisma
+    schema = "schema.prisma",
+)
