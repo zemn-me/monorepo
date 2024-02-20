@@ -1,0 +1,172 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "db_client"
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    role      Role     @default(NOBODY)
+
+    /// every time our email changed
+    emailSetting                  emailSetting[]                  @relation("settee")
+    /// every time we changed an account's email
+    emailSetter                   emailSetting[]                  @relation("setter")
+    displayNameSetting            displayNameSetting[]            @relation("settee")
+    displaynameSetter             displayNameSetting[]            @relation("setter")
+    // more like this
+    phoneNumbersSetting           phoneNumbersSetting[]
+    phoneNumbersSetting           phoneNumbersSetting[]
+    entryCodesSetting             entryCodesSetting[]
+    entryCodesSetting             entryCodesSetting[]
+    entryCodeAuthorizationSetting entryCodeAuthorizationSetting[]
+    entryCodeAuthorizationSetting entryCodeAuthorizationSetting[]
+    phoneAuthorizationGrantGrant  phoneAuthorizationGrantGrant[]
+    phoneAuthorizationGrantGrant  phoneAuthorizationGrantGrant[]
+    entryCode                     entryCode[]
+    codeBasedEntryGrant           codeBasedEntryGrant[]
+    phoneBasedEntryGrant          phoneBasedEntryGrant[]
+    AuthenticationLink            AuthenticationLink[]
+}
+
+/// Record that a user had their email set or unset
+model emailSetting {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    value     String?
+    /// setting applies to this user
+    settee    User     @relation("settee", fields: [setteeId], references: [id])
+    /// setting was applied by this user
+    setter    User     @relation("setter", fields: [setterId], references: [id])
+}
+
+/// Record that a user had their display name set or unset
+model displayNameSetting {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    value     String?
+    /// setting applies to this user
+    settee    User     @relation(fields: [userId], references: [id])
+    /// setting was applied by this user
+    setter    User     @relation(fields: [userId], references: [id])
+    userId    Int
+    userId    Int
+}
+
+/// Record that a user had their phone numbers set or unset
+model phoneNumbersSetting {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    value     String[]
+    /// setting applies to this user
+    settee    User     @relation(fields: [userId], references: [id])
+    /// setting was applied by this user
+    setter    User     @relation(fields: [userId], references: [id])
+    userId    Int
+    userId    Int
+}
+
+/// Record that a user had their entry codes set or unset
+model entryCodesSetting {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    /// the set of entry codes
+    value     String[]
+    /// setting applies to this user
+    settee    User     @relation(fields: [userId], references: [id])
+    /// setting was applied by this user
+    setter    User     @relation(fields: [userId], references: [id])
+    userId    Int
+    userId    Int
+}
+
+/// Record that a user had their entry code authorization set or unset
+model entryCodeAuthorizationSetting {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    /// the set of entry codes
+    value     Boolean
+    /// setting applies to this user
+    settee    User     @relation(fields: [userId], references: [id])
+    /// setting was applied by this user
+    setter    User     @relation(fields: [userId], references: [id])
+    userId    Int
+    userId    Int
+}
+
+// A user has allowed
+model phoneAuthorizationGrantGrant {
+    id               Int      @id @default(autoincrement())
+    createdAt        DateTime @default(now())
+    authorizee       User     @relation("Authorizee", fields: [authorizeeUserId], references: [id])
+    authorizeeUserId Int
+    authorized       Boolean
+    // the user who authorized this user to open the door via phone
+    authorizer       User     @relation("Authorizer", fields: [authorizerUserId], references: [id])
+    authorizerUserId Int
+
+    userId Int
+}
+
+// a code that a user may use to enter the building
+model entryCode {
+    id                  Int                   @id @default(autoincrement())
+    createdAt           DateTime              @default(now())
+    // whether this code may still be used
+    enabled             Boolean
+    // only one user may have a single code
+    code                Int                   @unique
+    codeBasedEntryGrant codeBasedEntryGrant[]
+    user                User                  @relation(fields: [userId], references: [id])
+    userId              Int
+}
+
+// a record that someone was granted entry via a specific entryCode
+model codeBasedEntryGrant {
+    id          Int       @id @default(autoincrement())
+    createdAt   DateTime  @default(now())
+    // which code was used to allow the user in
+    entryCode   entryCode @relation(fields: [entryCodeId], references: [id])
+    entryCodeId Int
+    // what user was allowed in
+    user        User      @relation(fields: [userId], references: [id])
+    userId      Int
+}
+
+// someone has been allowed entry via phoning a user with
+// the right to grant entry
+model phoneBasedEntryGrant {
+    if          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    // the phone number which approved the entry
+    phoneNumber String
+    // the user the number was associated with at time of entry
+    user        User     @relation(fields: [userId], references: [id])
+    userId      Int
+}
+
+// Represents a potentially enabled OIDC credential selector
+model AuthenticationLink {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    // issuer of the authentication credential as in OIDC
+    iss       String
+    // subject of the authentication credential as in OIDC
+    sub       String
+    // false default just because I'd fuck this up otherwise
+    enabled   Boolean  @default(false)
+    // the first-party user we're linked to
+    User      User     @relation(fields: [userId], references: [id])
+    userId    Int
+}
+
+enum Role {
+    NOBODY
+    USER
+    ADMIN
+}
