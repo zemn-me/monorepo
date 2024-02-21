@@ -358,3 +358,10 @@ exports_files(glob(["**/*"]))
 
             """,
     )
+
+    http_archive(
+        name = "rules_prisma",
+        sha256 = "34f61a641ba35446e395505c2d4c3909ff95da13d49ce8c666efe6c3b2ab1f00",
+        strip_prefix = "rules_prisma-0.1.1",
+        url = "https://github.com/CooperBills/rules_prisma/archive/refs/tags/v0.1.1.tar.gz",
+    )
