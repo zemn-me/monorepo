@@ -1,0 +1,59 @@
+load("@npm//:prisma/package_json.bzl", "bin")
+load("@npm//:zod-prisma/package_json.bzl", zod_prisma_bin = "bin")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts:rules.bzl", "ts_project")
+
+zod_prisma_bin.zod_prisma_binary(
+    name = "zod_prisma_binary",
+    data = [
+        "//:node_modules/typescript",
+    ],
+)
+
+# maybe look at https://github.com/davidmcnamee/rules_prisma/tree/main/prisma
+
+bin.prisma(
+    name = "db_client",
+    srcs = [
+        "schema.prisma",
+        ":zod_prisma_binary",
+        "//:node_modules/@prisma/client",
+        "//:node_modules/typescript",
+        "//:node_modules/zod-prisma",
+        "//:package_json",
+        "//:pnpm_lock_yaml",
+    ],
+    args = [
+        "generate",
+        "--schema",
+        "$(rootpath schema.prisma)",
+    ],
+    env = {
+        "CACHE_DIR": "@D/.cache",
+        "HOME": "@D/.cache",
+        "PRISMA_GENERATE_SKIP_AUTOINSTALL": "true",
+        "PRISMA_SKIP_POSTINSTALL_GENERATE": "true",
+    },
+    out_dirs = [
+        "db",
+        "zod",
+    ],
+)
+
+js_library(
+    name = "db_client_lib",
+    deps = [":db_client"],
+)
+
+ts_project(
+    name = "api",
+    deps = [
+        ":db_client_library",
+        "//:node_modules/@trpc/server",
+        "//:node_modules/@types/aws-lambda",
+        "//:node_modules/zod",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
