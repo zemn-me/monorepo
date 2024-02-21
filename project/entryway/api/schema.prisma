@@ -1,0 +1,76 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "db"
+}
+
+generator zod {
+    // bazel generated, see https://github.com/prisma/prisma/issues/23234
+    provider = "project/entryway/api/zod_prisma_binary.sh"
+    output   = "zod"
+}
+
+model User {
+    id                      Int                    @id @default(autoincrement())
+    createdAt               DateTime               @default(now())
+    role                    Role                   @default(NOBODY)
+    email                   String?
+    displayName             String?
+    phoneNumber             String
+    entryCode               Int?
+    authorizesEntryViaPhone Boolean                @default(false)
+    codeBasedEntryGrant     codeBasedEntryGrant[]
+    phoneBasedEntryGrant    phoneBasedEntryGrant[]
+    /// all authentication links ever made to this user (may not be in force, see authenticationLinkSetting)
+    authenticationLinks     AuthenticationLink[]
+    entryCodeId             Int
+}
+
+// a record that someone was granted entry via a specific entryCode
+model codeBasedEntryGrant {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    // which code was used to allow the user in
+    entryCode   Int
+    entryCodeId Int
+    // what user was allowed in
+    user        User     @relation(fields: [userId], references: [id])
+    userId      Int
+}
+
+// someone has been allowed entry via phoning a user with
+// the right to grant entry
+model phoneBasedEntryGrant {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    // the phone number which approved the entry
+    phoneNumber String
+    // the user the number was associated with at time of entry
+    user        User     @relation(fields: [userId], references: [id])
+    userId      Int
+}
+
+// Represents a potentially enabled OIDC credential selector
+model AuthenticationLink {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    // issuer of the authentication credential as in OIDC
+    iss       String
+    // subject of the authentication credential as in OIDC
+    sub       String
+    // false default just because I'd fuck this up otherwise
+    enabled   Boolean  @default(false)
+    // the first-party user we're linked to
+    User      User     @relation(fields: [userId], references: [id])
+    userId    Int
+}
+
+enum Role {
+    NOBODY
+    USER
+    ADMIN
+}
