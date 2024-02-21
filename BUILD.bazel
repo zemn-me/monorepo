@@ -87,6 +87,11 @@ copy_to_bin(
     srcs = ["package.json"],
 )
 
+copy_to_bin(
+    name = "pnpm_lock_yaml",
+    srcs = ["pnpm-lock.yaml"],
+)
+
 bin.renovate_config_validator_test(
     name = "validate_renovate_config_test",
     args = ["$(location renovate.json)"],

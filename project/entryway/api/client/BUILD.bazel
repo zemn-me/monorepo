@@ -1,0 +1,12 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client",
+    deps = [
+        "//:node_modules/@trpc/client",
+        "//project/entryway/api",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
