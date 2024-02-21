@@ -1,7 +1,15 @@
 load("@npm//:prisma/package_json.bzl", "bin")
+load("@npm//:zod-prisma/package_json.bzl", zod_prisma_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
 load("//ts:rules.bzl", "ts_project")
+
+zod_prisma_bin.zod_prisma_binary(
+    name = "zod_prisma_binary",
+    data = [
+        "//:node_modules/typescript",
+    ],
+)
 
 # maybe look at https://github.com/davidmcnamee/rules_prisma/tree/main/prisma
 
@@ -11,6 +19,8 @@ bin.prisma(
         "schema.prisma",
         ":zod_prisma_binary",
         "//:node_modules/@prisma/client",
+        "//:node_modules/typescript",
+        "//:node_modules/zod-prisma",
         "//:package_json",
         "//:pnpm_lock_yaml",
     ],
@@ -27,6 +37,7 @@ bin.prisma(
     },
     out_dirs = [
         "db",
+        "zod",
     ],
 )
 

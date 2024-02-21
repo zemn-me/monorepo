@@ -8,6 +8,12 @@ generator client {
     output   = "db"
 }
 
+generator zod {
+    // bazel generated, see https://github.com/prisma/prisma/issues/23234
+    provider = "project/entryway/api/zod_prisma_binary.sh"
+    output   = "zod"
+}
+
 model User {
     id                      Int                    @id @default(autoincrement())
     createdAt               DateTime               @default(now())
