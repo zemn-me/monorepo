@@ -1,0 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "web",
+    visibility = [
+        "//project/entryway:__subpackages__",
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@tanstack/react-form",
+        "//:node_modules/zod",
+        "//project/entryway/api/client",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
