@@ -1,5 +1,5 @@
 {
-  "checksum": "32b3d4c7c4c0ee2ba867cc310aff2d0da1f499eb9e71629e133f11591a66b908",
+  "checksum": "eab5aa96debe8b7c4e1dbb7a2f40864b35fbe6b2da7b411c0a961697d160a3ac",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1694,7 +1694,7 @@
               "target": "hex"
             },
             {
-              "id": "serde_json 1.0.113",
+              "id": "serde_json 1.0.114",
               "target": "serde_json"
             },
             {
@@ -2768,14 +2768,14 @@
       ],
       "license_file": null
     },
-    "serde_json 1.0.113": {
+    "serde_json 1.0.114": {
       "name": "serde_json",
-      "version": "1.0.113",
+      "version": "1.0.114",
       "package_url": "https://github.com/serde-rs/json",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/serde_json/1.0.113/download",
-          "sha256": "69801b70b1c3dac963ecb03a364ba0ceda9cf60c71cfe475e99864759c8b8a79"
+          "url": "https://crates.io/api/v1/crates/serde_json/1.0.114/download",
+          "sha256": "c5f09b1bd632ef549eaa9f60a1f8de742bdbc698e6cee2095fc84dde5f549ae0"
         }
       },
       "targets": [
@@ -2825,14 +2825,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.113",
+              "id": "serde_json 1.0.114",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.113"
+        "version": "1.0.114"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -4922,7 +4922,7 @@
   "direct_deps": [
     "clap 4.5.1",
     "hex 0.4.3",
-    "serde_json 1.0.113",
+    "serde_json 1.0.114",
     "sha2 0.10.8",
     "swc_atoms 0.6.5",
     "swc_common 0.33.17"
