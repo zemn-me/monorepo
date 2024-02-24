@@ -618,7 +618,7 @@ export const Bio = {
 			id: '41b9fa28-bffa-4506-8e86-1bc3b2880c2f',
 			date: date(9, 'apr', 2019),
 			title: en`IE 11 command switch injection`,
-			description: en`in IE11, programs on the user's computer could be launched with arbitrary arguments by running executing the scheme in an iframe. CVE-2019-0764`,
+			description: en`in IE11, programs on the user's computer could be launched with arbitrary arguments by executing the scheme in an iframe. CVE-2019-0764`,
 			url: url`https://msrc.microsoft.com/update-guide/en-US/vulnerability/CVE-2019-0764`,
 		},
 		{
