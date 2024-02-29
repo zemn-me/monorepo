@@ -5,7 +5,7 @@ import { Int } from '#root/ts/factorio/int.js';
 import { Position } from '#root/ts/factorio/position.js';
 import { Schedule } from '#root/ts/factorio/schedule.js';
 import { Tile } from '#root/ts/factorio/tile.js';
-import { concat, map } from '#root/ts/iter/index.js';
+import { concat } from '#root/ts/iter/index.js';
 import { JSONObject } from '#root/ts/json.js';
 import {
 	cartesianCanonicalise,
