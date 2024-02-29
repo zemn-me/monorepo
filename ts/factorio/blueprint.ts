@@ -13,6 +13,7 @@ import {
 	rectContaninsPoint,
 } from '#root/ts/math/cartesian.js';
 import { add } from '#root/ts/math/matrix.js';
+import { extent } from '#root/ts/math/tuple.js';
 
 export interface Blueprint extends JSONObject {
 	/**
@@ -71,19 +72,11 @@ export interface Blueprint extends JSONObject {
 export function blueprintExtent(
 	b: Blueprint
 ): [[minX: number, maxX: number], [minY: number, maxY: number]] {
-	const positions = [
-		...map(
-			concat(b.entities ?? [], b.tiles ?? []),
-			(v: Entity | Tile) => v.position
-		),
-	];
-
-	const xValues = [...map(positions, (p: Position) => p.x)];
-	const yValues = [...map(positions, (p: Position) => p.y)];
+	const positionable = concat(b.entities ?? [], b.tiles ?? []);
 
 	return [
-		[Math.min(...xValues), Math.max(...xValues)],
-		[Math.min(...yValues), Math.max(...yValues)],
+		extent(positionable, v => v.position.x),
+		extent(positionable, v => v.position.y),
 	];
 }
 
