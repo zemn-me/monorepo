@@ -341,8 +341,8 @@ devDependencies:
     specifier: 3.2.0
     version: 3.2.0
   tmp:
-    specifier: 0.2.1
-    version: 0.2.1
+    specifier: 0.2.3
+    version: 0.2.3
   ts-node:
     specifier: 10.9.2
     version: 10.9.2(@swc/core@1.4.2)(@types/node@20.11.19)(typescript@5.3.3)
@@ -5255,7 +5255,7 @@ packages:
       require-from-string: 2.0.2
       semver: 7.5.4
       source-map-support: 0.5.21
-      tmp: 0.2.1
+      tmp: 0.2.3
       ts-node: 7.0.1
       typescript: 3.8.3
       upath: 1.2.0
@@ -16569,7 +16569,7 @@ packages:
     engines: {node: '>= 14.20.0'}
     dependencies:
       jszip: 3.10.1
-      tmp: 0.2.1
+      tmp: 0.2.3
       ws: 8.16.0
     transitivePeerDependencies:
       - bufferutil
@@ -17559,11 +17559,9 @@ packages:
       os-tmpdir: 1.0.2
     dev: true
 
-  /tmp@0.2.1:
-    resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
-    engines: {node: '>=8.17.0'}
-    dependencies:
-      rimraf: 3.0.2
+  /tmp@0.2.3:
+    resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
+    engines: {node: '>=14.14'}
 
   /tmpl@1.0.5:
     resolution: {integrity: sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==}
