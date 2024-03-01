@@ -1,5 +1,4 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js/npm:rules.bzl", "npm_pkg")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -51,20 +50,6 @@ ts_project(
 filegroup(
     name = "docs",
     srcs = glob(["examples/**/*"]) + ["README.md"],
-)
-
-npm_pkg(
-    name = "npm_pkg",
-    srcs = [":project"],
-    api_lock = ".api.lock",
-    entry_point = "index.ts",
-    major_version = "version/MAJOR",
-    minor_version = "version/MINOR",
-    patch_version = "version/PATCH",
-    pkg_json_base = "package.template.json",
-    readme = "README.md",
-    version_lock = ".version.lock",
-    visibility = ["//ci:__subpackages__"],
 )
 
 bazel_lint(name = "bazel_lint")
