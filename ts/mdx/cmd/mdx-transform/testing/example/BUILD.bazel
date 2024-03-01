@@ -1,0 +1,6 @@
+load("//ts/mdx/cmd/mdx-transform:rules.bzl", "mdx_to_ts")
+
+mdx_to_ts(
+	name = "example",
+	srcs = [ "page.mdx" ]
+)

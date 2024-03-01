@@ -103,6 +103,7 @@
 	},
 	"dependencies": {
 		"@commander-js/extra-typings": "12.0.0",
+		"@mdx-js/mdx": "^3.0.0",
 		"@next/eslint-plugin-next": "14.1.0",
 		"@pulumi/command": "4.5.0",
 		"@pulumi/random": "4.15.1",
@@ -129,10 +130,15 @@
 		"npm": "10.4.0",
 		"pako": "2.1.0",
 		"pnpm": "^8.0.0",
+		"remark": "^15.0.1",
 		"seedrandom": "3.0.5",
 		"selenium-webdriver": "4.18.1",
 		"serve-handler": "6.1.5",
-		"zod": "3.22.4"
+		"zod": "3.22.4",
+		"source-map": "^0.7.4",
+		"to-vfile": "^8.0.0",
+		"unified": "^11.0.4",
+		"vfile": "^6.0.1"
 	},
 	"pnpm": {
 		"overrides": {
