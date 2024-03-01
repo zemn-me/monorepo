@@ -164,8 +164,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@swc/cli':
-    specifier: 0.3.9
-    version: 0.3.9(@swc/core@1.4.2)
+    specifier: 0.3.10
+    version: 0.3.10(@swc/core@1.4.2)
   '@testing-library/react':
     specifier: 14.2.1
     version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
@@ -6723,8 +6723,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@swc/cli@0.3.9(@swc/core@1.4.2):
-    resolution: {integrity: sha512-e5grxGEyNT0fYZEFmhSrRYL1kFAZAXlv+WjfQ35J6J9Hl0EtrMVymAEbGabetg2Q/2FX6HiRcjgc9LrdUCBk4A==}
+  /@swc/cli@0.3.10(@swc/core@1.4.2):
+    resolution: {integrity: sha512-YWfYo9kXdbmIuGwIPth9geKgb0KssCMTdZa44zAN5KoqcuCP2rTW9s60heQDSRNpbtCmUr7BKF1VivsoHXrvrQ==}
     engines: {node: '>= 16.14.0'}
     hasBin: true
     peerDependencies:
@@ -6737,11 +6737,11 @@ packages:
       '@mole-inc/bin-wrapper': 8.0.1
       '@swc/core': 1.4.2
       '@swc/counter': 0.1.3
-      commander: 7.2.0
+      commander: 8.3.0
       fast-glob: 3.3.2
       minimatch: 9.0.3
       piscina: 4.3.1
-      semver: 7.5.4
+      semver: 7.6.0
       slash: 3.0.0
       source-map: 0.7.4
     dev: true
@@ -7593,7 +7593,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
-      semver: 7.5.4
+      semver: 7.6.0
       ts-api-utils: 1.0.1(typescript@5.3.3)
       typescript: 5.3.3
     transitivePeerDependencies:
@@ -7613,7 +7613,7 @@ packages:
       '@typescript-eslint/types': 7.0.2
       '@typescript-eslint/typescript-estree': 7.0.2(typescript@5.3.3)
       eslint: 8.56.0
-      semver: 7.5.4
+      semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -8975,6 +8975,11 @@ packages:
   /commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
     engines: {node: '>= 10'}
+    dev: true
+
+  /commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
     dev: true
 
   /commander@9.5.0:
