@@ -1,9 +1,6 @@
 import sharpT from 'sharp';
 
-import {
-	doSync,
-	JSONObject,
-} from '#root/ts/do-sync/npm_pkg/npm_pkg_dir/index.js';
+import { doSync, JSONObject } from '#root/ts/do-sync/index.js';
 
 const pixel =
 	'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';

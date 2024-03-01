@@ -36,3 +36,12 @@ declare module '*.png' {
 	export const blurWidth: number;
 	export const blurHeight: number;
 }
+
+/**
+ * honestly no idea what causes this issue, but
+ * im not fucking around w it
+ */
+declare module 'react/jsx-runtime' {
+	const content: string;
+	export default content;
+}

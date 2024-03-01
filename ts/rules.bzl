@@ -39,7 +39,7 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
 
     _ts_project(
         name = name,
-        srcs = srcs,
+        srcs = srcs + [ "//:package_json" ],
         tsconfig = tsconfig,
         # swc injects this
         deps = deps + ["//:node_modules/regenerator-runtime"],

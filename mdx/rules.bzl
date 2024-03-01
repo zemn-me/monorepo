@@ -1,3 +1,5 @@
+load("//ts/mdx/cmd/mdx-transform:rules.bzl", "mdx_to_ts")
+
 def mdx_lint(name, srcs = None):
     pass
     #eslint_test(
@@ -13,5 +15,10 @@ def mdx_files(name, srcs = None):
 
     native.filegroup(
         name = name,
+        srcs = srcs,
+    )
+
+    mdx_to_ts(
+        name = name + "_ts",
         srcs = srcs,
     )

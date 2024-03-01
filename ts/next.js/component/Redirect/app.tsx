@@ -4,7 +4,7 @@
  * app router.
  */
 
-import Head from 'next/head';
+import Head from 'next/head.js';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 

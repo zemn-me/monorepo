@@ -1,0 +1,28 @@
+"""
+Transform MDX files to .ts files.
+"""
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+
+ts_project(
+	name = "transform_ts",
+	deps = [
+		"//:node_modules/@commander-js/extra-typings",
+		"//:node_modules/remark",
+		"//:node_modules/to-vfile",
+		"//ts/iter",
+		"//ts/math",
+		"//:node_modules/@types/node",
+		"//:node_modules/vfile",
+		"//:node_modules/unified",
+		"//:node_modules/@mdx-js/mdx",
+		"//:node_modules/source-map"
+	]
+)
+
+js_binary(
+	name = "mdx-transform",
+	data = [ ":transform_ts" ],
+	entry_point = "main.js",
+	visibility = [ "//visibility:public" ]
+)

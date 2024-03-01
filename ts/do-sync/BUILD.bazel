@@ -1,6 +1,4 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
-load("//js/npm:rules.bzl", "npm_pkg")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -17,26 +15,6 @@ DEPS = [
 ts_project(
     name = "do-sync",
     srcs = glob(["**/*.ts"]),
-    deps = DEPS,
-)
-
-npm_pkg(
-    name = "npm_pkg",
-    srcs = [":do-sync"],
-    api_lock = ".api.lock",
-    entry_point = "index.d.ts",
-    major_version = "version/MAJOR",
-    minor_version = "version/MINOR",
-    patch_version = "version/PATCH",
-    pkg_json_base = "package.template.json",
-    readme = "README.md",
-    version_lock = ".version.lock",
-)
-
-js_library(
-    name = "lib",
-    srcs = ["//ts/do-sync:npm_pkg"],
-    visibility = ["//:__subpackages__"],
     deps = DEPS,
 )
 
