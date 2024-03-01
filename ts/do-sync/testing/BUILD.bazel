@@ -14,7 +14,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/sharp",
         "//:node_modules/sharp",
-        "//ts/do-sync:lib",
+        "//ts/do-sync",
     ],
 )
 
