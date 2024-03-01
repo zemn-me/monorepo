@@ -1,4 +1,3 @@
-load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
@@ -16,16 +15,6 @@ jest_test(
     srcs = ["do_not_depend_on_typescript_test.js"],
     data = ["//ts/cmd/svgshot/testing:package_inert.json"],
     deps = [":project"],
-)
-
-# since package.json is now used for module resolution
-# (by esm), we have to copy the package.json so that
-# it doesn't get interpreted. In future, this should
-# probably extend the root package.json?
-copy_file(
-    name = "inert_package_json",
-    src = "//ts/cmd/svgshot:package.json",
-    out = "package_inert.json",
 )
 
 bazel_lint(name = "bazel_lint")
