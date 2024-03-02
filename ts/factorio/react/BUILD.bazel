@@ -5,7 +5,12 @@ ts_project(
     name = "react",
     visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
+        "//:node_modules/zod",
         "//ts/factorio",
         "//ts/iter",
         "//ts/react/CopyToClipboard",
