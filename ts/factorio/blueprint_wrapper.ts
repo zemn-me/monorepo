@@ -1,12 +1,15 @@
+import { z } from 'zod';
+
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
-import { JSONObject } from '#root/ts/json.js';
 
-interface BlueprintKey extends JSONObject {
-	blueprint: Blueprint;
-}
-interface BlueprintBookKey extends JSONObject {
-	blueprint_book: BlueprintBook;
-}
+const BlueprintKey = z.object({
+	blueprint: Blueprint,
+});
 
-export type BlueprintWrapper = BlueprintKey | BlueprintBookKey;
+const BlueprintBookKey = z.object({
+	blueprint_book: BlueprintBook,
+});
+
+export const BlueprintWrapper = z.union([BlueprintKey, BlueprintBookKey]);
+export type BlueprintWrapper = z.TypeOf<typeof BlueprintWrapper>;

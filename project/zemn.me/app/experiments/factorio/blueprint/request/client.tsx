@@ -3,7 +3,7 @@ import { useId, useState } from 'react';
 
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
-import { ParseBlueprintString } from '#root/ts/factorio/blueprint_string.js';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
 import { concat, map } from '#root/ts/iter/index.js';
 import { None, Option, OptionSequence, Some } from '#root/ts/option.js';
@@ -11,7 +11,9 @@ import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { Err, Ok, Result, ResultSequence } from '#root/ts/result.js';
 import { safely } from '#root/ts/safely.js';
 
-const safelyParseBlueprintString = safely(ParseBlueprintString);
+const safelyParseBlueprintString = safely((s: string) =>
+	BlueprintString.parse(s)
+);
 
 function countSame<V>(it: Iterable<V>): Map<V, number> {
 	const m = new Map<V, number>();
@@ -104,12 +106,7 @@ export function Client() {
 			return { [Ok]: { blueprintWrapper, nChestsInt: nChestsInt[Ok] } };
 		})
 		.then(({ blueprintWrapper, nChestsInt }) => {
-			if (
-				!(
-					'blueprint' in blueprintWrapper &&
-					blueprintWrapper.blueprint !== undefined
-				)
-			)
+			if (!('blueprint' in blueprintWrapper))
 				return { [Err]: new ErrBlueprintBook() };
 			return {
 				[Ok]: blueprintToRequesterChest(

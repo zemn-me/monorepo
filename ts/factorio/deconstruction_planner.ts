@@ -1,13 +1,16 @@
-import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface DeconstructionPlanner extends JSONObject {
-	settings: {
-		entity_filter_mode?: number;
-		entity_filters: ItemFilterObject[];
-		tile_selection_mode?: number;
-	};
-	item: string;
-	label: string;
-	version: number;
-}
+import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
+
+export const DeconstructionPlanner = z.object({
+	settings: z.object({
+		entity_filter_mode: z.number().optional(),
+		entity_filters: z.array(ItemFilterObject),
+		tile_selection_mode: z.number().optional(),
+	}),
+	item: z.string(),
+	label: z.string(),
+	version: z.number(),
+});
+
+export type DeconstructionPlanner = z.TypeOf<typeof DeconstructionPlanner>;
