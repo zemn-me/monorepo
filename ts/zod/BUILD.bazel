@@ -1,0 +1,8 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "zod",
+    deps = [
+        "//:node_modules/zod",
+    ],
+)

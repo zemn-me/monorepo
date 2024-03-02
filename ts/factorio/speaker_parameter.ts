@@ -1,8 +1,11 @@
-import { Float } from '#root/ts/factorio/float.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface SpeakerParameter extends JSONObject {
-	playback_volume: Float;
-	playback_globally: boolean;
-	allow_polyphony: boolean;
-}
+import { Float } from '#root/ts/factorio/float.js';
+
+export const SpeakerParameter = z.object({
+	playback_volume: Float,
+	playback_globally: z.boolean(),
+	allow_polyphony: z.boolean(),
+});
+
+export type SpeakerParameter = z.TypeOf<typeof SpeakerParameter>;
