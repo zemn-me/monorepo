@@ -197,9 +197,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_nodejs",
-        sha256 = "f36e4a4747210331767033dc30728ae3df0856e88ecfdc48a0077ba874db16c3",
-        strip_prefix = "rules_nodejs-6.0.3",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.3/rules_nodejs-v6.0.3.tar.gz",
+        sha256 = "a50986c7d2f2dc43a5b9b81a6245fd89bdc4866f1d5e316d9cef2782dd859292",
+        strip_prefix = "rules_nodejs-6.0.5",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.5/rules_nodejs-v6.0.5.tar.gz",
     )
 
     http_archive(
@@ -211,20 +211,20 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_swc",
-        sha256 = "d811d99ec637bcdda63dd037f02785f4dc6917b523968bea554d406b1ca71aa5",
-        strip_prefix = "rules_swc-1.2.0",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.2.0.tar.gz",
+        sha256 = "cde09df7dea773adaed896612434559f8955d2dfb2cfd6429ee333f30299ed34",
+        strip_prefix = "rules_swc-1.2.2",
+        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.2.2.tar.gz",
     )
 
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/68ffa93cad4c9f715a99e8247783bea01e301392.zip",
-        strip_prefix = "json-schemas-68ffa93cad4c9f715a99e8247783bea01e301392",
+        url = "https://github.com/microsoft/json-schemas/archive/31887768ae575a31f589b0d0092774ad6607c7a9.zip",
+        strip_prefix = "json-schemas-31887768ae575a31f589b0d0092774ad6607c7a9",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "b4b431d47331e864b796679a2b13dc6e1e37c8a53864587d37c63551c68fe115",
+        sha256 = "0cd13a1b1d306cfedfc9d28d64a43834bbfc66d775dff41a09495e68ebd8e820",
     )
 
     ##########
