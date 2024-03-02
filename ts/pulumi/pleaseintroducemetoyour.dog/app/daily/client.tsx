@@ -176,18 +176,16 @@ const placeHolderData: z.TypeOf<typeof SearchResponseProps> = {
 };
 
 export function DogsOfTheDay() {
-	const doggs = useQuery(
-		['doggs!'],
-		(): Promise<z.TypeOf<typeof SearchResponseProps>> =>
+	const doggs = useQuery({
+		queryKey: ['doggs!'],
+		queryFn: (): Promise<z.TypeOf<typeof SearchResponseProps>> =>
 			fetch(
 				`https://www.reddit.com/r/aww/search.json?raw_json=1&q=dog&sort=top&t=day&restrict_sr=1`
 			)
 				.then(r => r.json())
 				.then(j => SearchResponseProps.parseAsync(j)),
-		{
-			placeholderData: placeHolderData,
-		}
-	);
+		placeholderData: placeHolderData,
+	});
 
 	return (
 		<>
