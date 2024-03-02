@@ -1,3 +1,7 @@
+import { extent } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
+import { z } from 'zod';
+
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
 import {
@@ -8,8 +12,46 @@ import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper.js';
 import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
 import { Tile } from '#root/ts/factorio/tile.js';
-import { concat } from '#root/ts/iter/index.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
+
+export interface RenderBlueprintProps {
+	readonly blueprint: Blueprint;
+	readonly width?: number;
+	readonly height?: number;
+}
+
+export function RenderBlueprint({
+	blueprint,
+	width = 100,
+	height = 100,
+}: RenderBlueprintProps) {
+	const renderables = blueprint.entities ?? [];
+	const scaleX = scaleLinear(
+		z
+			.tuple([z.number(), z.number()])
+			.parse(extent(renderables, v => v.position.x)),
+		[0, width]
+	);
+	const scaleY = scaleLinear(
+		z
+			.tuple([z.number(), z.number()])
+			.parse(extent(renderables, v => v.position.y)),
+		[0, height]
+	);
+
+	return (
+		<svg viewBox={`0 0 ${width} ${height}`} {...{ width, height }}>
+			{renderables.map(r => (
+				<circle
+					cx={scaleX(r.position.x)}
+					cy={scaleY(r.position.y)}
+					key={r.entity_number}
+					r="1"
+				/>
+			))}
+		</svg>
+	);
+}
 
 function colorToString(color: Color | undefined): string | undefined {
 	if (color === undefined) return undefined;
@@ -65,7 +107,6 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 					? `, containing ${book.blueprints.length} blueprints:`
 					: '.'}
 			</i>
-			<CopyToClipboard text={MarshalBlueprintBookString(book)} />
 			{book.blueprints.length > 0 ? (
 				<ol>
 					{book.blueprints.map((blueprint, i) => (
@@ -84,6 +125,8 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 					))}
 				</ol>
 			) : null}
+
+			<CopyToClipboard text={MarshalBlueprintBookString(book)} />
 		</article>
 	);
 }
@@ -105,20 +148,11 @@ export function DisplayBlueprint({ blueprint }: DisplayBlueprintProps) {
 			) : null}
 			{blueprint.description ? <p>{blueprint.description}</p> : null}
 			<CopyToClipboard text={MarshalBlueprintString(blueprint)} />
-			<DisplayGamespace
-				objects={[
-					...concat(blueprint.tiles ?? [], blueprint.entities ?? []),
-				]}
-			/>
+			<RenderBlueprint blueprint={blueprint} />
 		</article>
 	);
 }
 
 export interface DisplayGamespaceProps {
 	readonly objects: (Entity | Tile)[];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function DisplayGamespace(props: DisplayGamespaceProps) {
-	return null;
 }

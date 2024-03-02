@@ -78,4 +78,7 @@ input[type="text"] {
 	border-bottom: 1px dotted var(--foreground-color);
 }
 
+svg circle {
+	stroke: var(--foreground-color)
+}
 
