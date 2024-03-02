@@ -1,10 +1,13 @@
-import { Position } from '#root/ts/factorio/position.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface Tile extends JSONObject {
+import { Position } from '#root/ts/factorio/position.js';
+
+export const Tile = z.object({
 	/**
 	 * Prototype name of the tile (e.g. "concrete")
 	 */
-	name: string;
-	position: Position;
-}
+	name: z.string(),
+	position: Position,
+});
+
+export type Tile = z.TypeOf<typeof Tile>;

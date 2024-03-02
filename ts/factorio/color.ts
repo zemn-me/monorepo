@@ -1,21 +1,16 @@
-import { Float } from '#root/ts/factorio/float.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface Color extends JSONObject {
-	/**
-	 * Red, 0 to 1.
-	 */
-	r: Float;
-	/**
-	 * Green, 0 to 1.
-	 */
-	g: Float;
-	/**
-	 * Blue, 0 to 1.
-	 */
-	b: Float;
-	/**
-	 * Transparency, 0 to 1.
-	 */
-	a: Float;
-}
+import { Float } from '#root/ts/factorio/float.js';
+
+const colour = Float.refine(n => n >= 0 && n <= 1, {
+	message: 'colour must be between 0 and 1',
+});
+
+export const Color = z.object({
+	r: colour,
+	g: colour,
+	b: colour,
+	a: colour,
+});
+
+export type Color = z.TypeOf<typeof Color>;
