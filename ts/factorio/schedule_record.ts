@@ -1,13 +1,16 @@
-import { WaitCondition } from '#root/ts/factorio/wait_condition.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface ScheduleRecord extends JSONObject {
+import { WaitCondition } from '#root/ts/factorio/wait_condition.js';
+
+export const ScheduleRecord = z.object({
 	/**
 	 * The name of the stop for this schedule record.
 	 */
-	station: string;
+	station: z.string(),
 	/**
 	 * Array of #Wait Condition objects.
 	 */
-	wait_conditions: WaitCondition[];
-}
+	wait_conditions: z.array(WaitCondition),
+});
+
+export type ScheduleRecord = z.TypeOf<typeof ScheduleRecord>;

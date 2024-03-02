@@ -10,6 +10,7 @@ ts_project(
         "//:node_modules/@types/pako",
         "//:node_modules/base64-js",
         "//:node_modules/pako",
+        "//:node_modules/zod",
         "//ts",
         "//ts/iter",
         "//ts/math",

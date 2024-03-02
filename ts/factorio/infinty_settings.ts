@@ -1,7 +1,10 @@
-import { InfinityFilter } from '#root/ts/factorio/infinity_filter.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface InfinitySettings extends JSONObject {
-	remove_unfiltered_items: boolean;
-	filters: InfinityFilter[];
-}
+import { InfinityFilter } from '#root/ts/factorio/infinity_filter.js';
+
+export const InfinitySettings = z.object({
+	remove_unfiltered_items: z.boolean().optional(),
+	filters: z.array(InfinityFilter),
+});
+
+export type InfinitySettings = z.TypeOf<typeof InfinitySettings>;

@@ -1,9 +1,12 @@
-import { SignalID } from '#root/ts/factorio/signal_id.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface SpeakerAlertParameter extends JSONObject {
-	show_alert: boolean;
-	show_on_map: boolean;
-	icon_signal_id: SignalID;
-	alert_message: string;
-}
+import { SignalID } from '#root/ts/factorio/signal_id.js';
+
+export const SpeakerAlertParameter = z.object({
+	show_alert: z.boolean(),
+	show_on_map: z.boolean(),
+	icon_signal_id: SignalID,
+	alert_message: z.string(),
+});
+
+export type SpeakerAlertParameter = z.TypeOf<typeof SpeakerAlertParameter>;

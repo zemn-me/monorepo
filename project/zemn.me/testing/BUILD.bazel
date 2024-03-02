@@ -22,7 +22,7 @@ ts_project(
 
 jest_test(
     name = "testing",
-    size = "small",
+    size = "medium",
     srcs = ["browser_test.js"],
     data = [":ts"],
 )
