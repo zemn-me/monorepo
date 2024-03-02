@@ -1,12 +1,14 @@
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface Position extends JSONObject {
+export const Position = z.object({
 	/**
 	 * X position within the blueprint, 0 is the center.
 	 */
-	x: number;
+	x: z.number(),
 	/**
 	 * Y position within the blueprint, 0 is the center.
 	 */
-	y: number;
-}
+	y: z.number(),
+});
+
+export type Position = z.TypeOf<typeof Position>;

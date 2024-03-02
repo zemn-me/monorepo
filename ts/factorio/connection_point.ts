@@ -1,16 +1,13 @@
+import { z } from 'zod';
+
 import { ConnectionData } from '#root/ts/factorio/connection_data.js';
-import { JSONObject } from '#root/ts/json.js';
+
+export const ConnectionPoint = z.object({
+	red: ConnectionData.array().optional(),
+	green: ConnectionData.array().optional(),
+});
 
 /**
  * Information about a single connection between two connection points.
  */
-export interface ConnectionPoint extends JSONObject {
-	/**
-	 * An array of #Connection data object containing all the connections from this point created by red wire.
-	 */
-	red?: ConnectionData[];
-	/**
-	 * An array of #Connection data object containing all the connections from this point created by green wire.
-	 */
-	green?: ConnectionData[];
-}
+export type ConnectionPoint = z.TypeOf<typeof ConnectionPoint>;
