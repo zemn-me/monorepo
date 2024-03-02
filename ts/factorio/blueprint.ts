@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
 import { Icon } from '#root/ts/factorio/icon.js';
@@ -6,7 +8,6 @@ import { Position } from '#root/ts/factorio/position.js';
 import { Schedule } from '#root/ts/factorio/schedule.js';
 import { Tile } from '#root/ts/factorio/tile.js';
 import { concat } from '#root/ts/iter/index.js';
-import { JSONObject } from '#root/ts/json.js';
 import {
 	cartesianCanonicalise,
 	Point2D,
@@ -15,56 +16,56 @@ import {
 import { add } from '#root/ts/math/matrix.js';
 import { extent } from '#root/ts/math/tuple.js';
 
-export interface Blueprint extends JSONObject {
+export const Blueprint = z.object({
 	/**
 	 * String, the name of the item that was saved ("blueprint" in vanilla).
 	 */
-	item: string;
+	item: z.string(),
 	/**
 	 * String, the name of the blueprint set by the user.
 	 */
-	label?: string;
+	label: z.string().optional(),
 	/**
 	 * The color of the label of this blueprint. Optional. #Color object.
 	 */
-	label_color?: Color;
+	label_color: Color.optional(),
 	/**
 	 * The actual content of the blueprint, array of #Entity objects.
 	 */
-	entities?: Entity[];
+	entities: z.array(Entity).optional(),
 	/**
 	 * The tiles included in the blueprint, array of #Tile objects.
 	 */
-	tiles?: Tile[];
+	tiles: z.array(Tile).optional(),
 	/**
 	 * The icons of the blueprint set by the user, array of #Icon objects.
 	 */
-	icons: Icon[];
+	icons: z.array(Icon).optional(),
 	/**
 	 * The schedules for trains in this blueprint, array of #Schedule objects.
 	 */
-	schedules?: Schedule[];
+	schedules: z.array(Schedule).optional(),
 	/**
 	 * The description of the blueprint. Optional.
 	 */
-	description?: string;
+	description: z.string().optional(),
 	/**
 	 * The dimensions of the grid to use for snapping. Optional. #Position object.
 	 */
-	'snap-to-grid'?: Position;
+	'snap-to-grid': Position.optional(),
 	/**
 	 * Whether the blueprint uses absolute or relative snapping. Optional.
 	 */
-	'absolute-snapping'?: boolean;
+	'absolute-snapping': z.boolean().optional(),
 	/**
 	 * Offset relative to the global absolute snapping grid. Optional. #Position object.
 	 */
-	'position-relative-to-grid'?: Position;
+	'position-relative-to-grid': Position.optional(),
 	/**
 	 * The map version of the map the blueprint was created in.
 	 */
-	version: Int;
-}
+	version: Int,
+});
 
 /**
  * Returns the minimum and maximum x and y points of a Factorio Blueprint.
@@ -155,3 +156,5 @@ export function blueprintSurroundedByWall(
 
 	return newBlueprint;
 }
+
+export type Blueprint = z.TypeOf<typeof Blueprint>;

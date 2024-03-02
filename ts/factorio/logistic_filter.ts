@@ -1,18 +1,21 @@
-import { Int } from '#root/ts/factorio/int.js';
-import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
-import { JSONObject } from '#root/ts/json.js';
+import { z } from 'zod';
 
-export interface LogisticFilter extends JSONObject {
+import { OneBasedIndex } from '#root/ts/factorio/base';
+import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
+
+export const LogisticFilter = z.object({
 	/**
 	 * Name of the item prototype this filter is set to.
 	 */
-	name: string;
+	name: z.string(),
 	/**
 	 * Index of the filter, 1-based.
 	 */
-	index: Int;
+	index: OneBasedIndex,
 	/**
 	 * Number the filter is set to. Is 0 for storage chests.
 	 */
-	count: ItemCountType;
-}
+	count: ItemCountType,
+});
+
+export type LogisticFilter = z.TypeOf<typeof LogisticFilter>;
