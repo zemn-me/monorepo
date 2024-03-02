@@ -146,8 +146,8 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.5.1)(react@18.2.0)
   '@microsoft/api-documenter':
-    specifier: 7.23.34
-    version: 7.23.34(@types/node@20.11.24)
+    specifier: 7.23.35
+    version: 7.23.35(@types/node@20.11.24)
   '@microsoft/api-extractor':
     specifier: 7.42.2
     version: 7.42.2(@types/node@20.11.24)
@@ -4414,15 +4414,15 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.23.34(@types/node@20.11.24):
-    resolution: {integrity: sha512-HysN+5iIZvJgQs+LqygGhYO0Fz7uEN4pZhuKf2nqVCbnpIrl9yb09Zgkan/n4CJU0Yxt/AhENYIhXVHXFnFM7Q==}
+  /@microsoft/api-documenter@7.23.35(@types/node@20.11.24):
+    resolution: {integrity: sha512-zSHTX0abumOsfA3GsWJADFtiqxgwcoSCGSO+84e4s/SWotAqlUwXMYVJk6/huJFKSL+LG46gvcn7r8bsOd3K2Q==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.28.13(@types/node@20.11.24)
       '@microsoft/tsdoc': 0.14.2
       '@rushstack/node-core-library': 4.0.2(@types/node@20.11.24)
       '@rushstack/terminal': 0.10.0(@types/node@20.11.24)
-      '@rushstack/ts-command-line': 4.18.1(@types/node@20.11.24)
+      '@rushstack/ts-command-line': 4.19.0(@types/node@20.11.24)
       js-yaml: 3.13.1
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
@@ -5887,17 +5887,6 @@ packages:
       '@rushstack/node-core-library': 4.0.2(@types/node@20.11.24)
       '@types/node': 20.11.24
       supports-color: 8.1.1
-    dev: true
-
-  /@rushstack/ts-command-line@4.18.1(@types/node@20.11.24):
-    resolution: {integrity: sha512-A3x3ARWzoW4ARU1XS87wFVJvdywzo2j27aRm5SIFY3Nwl5vQqo0hvzaQDYCq/hEGBxAdBGW8q6N5clNk36H34A==}
-    dependencies:
-      '@rushstack/terminal': 0.10.0(@types/node@20.11.24)
-      '@types/argparse': 1.0.38
-      argparse: 1.0.10
-      string-argv: 0.3.2
-    transitivePeerDependencies:
-      - '@types/node'
     dev: true
 
   /@rushstack/ts-command-line@4.19.0(@types/node@20.11.24):
