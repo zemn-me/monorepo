@@ -11,8 +11,11 @@ ts_project(
         "**/*.svg",
     ]),
     deps = [
+        "//:node_modules/@types/d3-array",
         "//:node_modules/@types/react",
         "//:node_modules/@types/seedrandom",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
         "//:node_modules/immutable",
         "//:node_modules/next",
         "//:node_modules/react",
