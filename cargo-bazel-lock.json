@@ -1,5 +1,5 @@
 {
-  "checksum": "4e41bfc84407714a139f5f62200e561968bdd3bea49e008d96ff18c9b077cdf7",
+  "checksum": "4b89e4760a892bdbd7121c22e2f2c279b5f1b3e524f324b85fcacac05c09ed63",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -16,9 +16,12 @@
           "Library": {
             "crate_name": "inflector",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -73,9 +76,12 @@
           "Library": {
             "crate_name": "aho_corasick",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -108,7 +114,7 @@
         "MIT",
         "Unlicense"
       ],
-      "license_file": null
+      "license_file": "LICENSE-MIT"
     },
     "anstream 0.6.7": {
       "name": "anstream",
@@ -125,9 +131,12 @@
           "Library": {
             "crate_name": "anstream",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -184,7 +193,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "anstyle 1.0.0": {
       "name": "anstyle",
@@ -201,9 +210,12 @@
           "Library": {
             "crate_name": "anstyle",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -227,7 +239,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "anstyle-parse 0.2.0": {
       "name": "anstyle-parse",
@@ -244,9 +256,12 @@
           "Library": {
             "crate_name": "anstyle_parse",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -279,7 +294,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "anstyle-query 1.0.0": {
       "name": "anstyle-query",
@@ -296,9 +311,12 @@
           "Library": {
             "crate_name": "anstyle_query",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -326,7 +344,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "anstyle-wincon 3.0.1": {
       "name": "anstyle-wincon",
@@ -343,9 +361,12 @@
           "Library": {
             "crate_name": "anstyle_wincon",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -378,7 +399,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "ast_node 0.9.6": {
       "name": "ast_node",
@@ -395,9 +416,12 @@
           "ProcMacro": {
             "crate_name": "ast_node",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -451,9 +475,12 @@
           "Library": {
             "crate_name": "autocfg",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -470,7 +497,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "better_scoped_tls 0.1.1": {
       "name": "better_scoped_tls",
@@ -487,9 +514,12 @@
           "Library": {
             "crate_name": "better_scoped_tls",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -531,9 +561,12 @@
           "Library": {
             "crate_name": "block_buffer",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -559,7 +592,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "cfg-if 1.0.0": {
       "name": "cfg-if",
@@ -576,9 +609,12 @@
           "Library": {
             "crate_name": "cfg_if",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -595,7 +631,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "clap 4.5.1": {
       "name": "clap",
@@ -612,9 +648,12 @@
           "Library": {
             "crate_name": "clap",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -662,7 +701,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "clap_builder 4.5.1": {
       "name": "clap_builder",
@@ -679,9 +718,12 @@
           "Library": {
             "crate_name": "clap_builder",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -730,7 +772,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "clap_derive 4.5.0": {
       "name": "clap_derive",
@@ -747,9 +789,12 @@
           "ProcMacro": {
             "crate_name": "clap_derive",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -793,7 +838,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "clap_lex 0.7.0": {
       "name": "clap_lex",
@@ -810,9 +855,12 @@
           "Library": {
             "crate_name": "clap_lex",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -829,7 +877,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "colorchoice 1.0.0": {
       "name": "colorchoice",
@@ -846,9 +894,12 @@
           "Library": {
             "crate_name": "colorchoice",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -865,7 +916,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "cpufeatures 0.2.5": {
       "name": "cpufeatures",
@@ -882,9 +933,12 @@
           "Library": {
             "crate_name": "cpufeatures",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -924,7 +978,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "crypto-common 0.1.6": {
       "name": "crypto-common",
@@ -941,9 +995,12 @@
           "Library": {
             "crate_name": "crypto_common",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -979,7 +1036,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "digest 0.10.7": {
       "name": "digest",
@@ -996,9 +1053,12 @@
           "Library": {
             "crate_name": "digest",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1038,7 +1098,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "either 1.8.0": {
       "name": "either",
@@ -1055,9 +1115,12 @@
           "Library": {
             "crate_name": "either",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1081,7 +1144,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "form_urlencoded 1.2.0": {
       "name": "form_urlencoded",
@@ -1098,9 +1161,12 @@
           "Library": {
             "crate_name": "form_urlencoded",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1134,7 +1200,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "from_variant 0.1.7": {
       "name": "from_variant",
@@ -1151,9 +1217,12 @@
           "ProcMacro": {
             "crate_name": "from_variant",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1203,18 +1272,24 @@
           "Library": {
             "crate_name": "generic_array",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1263,7 +1338,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "heck 0.4.0": {
       "name": "heck",
@@ -1280,9 +1355,12 @@
           "Library": {
             "crate_name": "heck",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1305,7 +1383,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "hex 0.4.3": {
       "name": "hex",
@@ -1322,9 +1400,12 @@
           "Library": {
             "crate_name": "hex",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1349,7 +1430,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "hstr 0.2.5": {
       "name": "hstr",
@@ -1366,9 +1447,12 @@
           "Library": {
             "crate_name": "hstr",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1426,9 +1510,12 @@
           "Library": {
             "crate_name": "idna",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1466,7 +1553,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "itoa 1.0.5": {
       "name": "itoa",
@@ -1483,9 +1570,12 @@
           "Library": {
             "crate_name": "itoa",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1502,7 +1592,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "lazy_static 1.4.0": {
       "name": "lazy_static",
@@ -1519,9 +1609,12 @@
           "Library": {
             "crate_name": "lazy_static",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1538,7 +1631,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "libc 0.2.144": {
       "name": "libc",
@@ -1555,18 +1648,24 @@
           "Library": {
             "crate_name": "libc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1604,7 +1703,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "memchr 2.5.0": {
       "name": "memchr",
@@ -1621,18 +1720,24 @@
           "Library": {
             "crate_name": "memchr",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1670,7 +1775,7 @@
         "MIT",
         "Unlicense"
       ],
-      "license_file": null
+      "license_file": "LICENSE-MIT"
     },
     "monorepo 0.1.0": {
       "name": "monorepo",
@@ -1734,9 +1839,12 @@
           "Library": {
             "crate_name": "debug_unreachable",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1752,7 +1860,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-MIT"
     },
     "num-bigint 0.4.3": {
       "name": "num-bigint",
@@ -1769,18 +1877,24 @@
           "Library": {
             "crate_name": "num_bigint",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1835,7 +1949,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "num-integer 0.1.45": {
       "name": "num-integer",
@@ -1852,18 +1966,24 @@
           "Library": {
             "crate_name": "num_integer",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1914,7 +2034,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "num-traits 0.2.15": {
       "name": "num-traits",
@@ -1931,18 +2051,24 @@
           "Library": {
             "crate_name": "num_traits",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -1989,7 +2115,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "once_cell 1.18.0": {
       "name": "once_cell",
@@ -2006,9 +2132,12 @@
           "Library": {
             "crate_name": "once_cell",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2034,7 +2163,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "percent-encoding 2.3.0": {
       "name": "percent-encoding",
@@ -2051,9 +2180,12 @@
           "Library": {
             "crate_name": "percent_encoding",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2078,7 +2210,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "phf 0.11.2": {
       "name": "phf",
@@ -2095,9 +2227,12 @@
           "Library": {
             "crate_name": "phf",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2129,7 +2264,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "phf_shared 0.11.2": {
       "name": "phf_shared",
@@ -2146,9 +2281,12 @@
           "Library": {
             "crate_name": "phf_shared",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2179,7 +2317,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "pin-project-lite 0.2.9": {
       "name": "pin-project-lite",
@@ -2196,9 +2334,12 @@
           "Library": {
             "crate_name": "pin_project_lite",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2215,7 +2356,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "pmutil 0.6.1": {
       "name": "pmutil",
@@ -2232,9 +2373,12 @@
           "Library": {
             "crate_name": "pmutil",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2268,7 +2412,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "proc-macro2 1.0.76": {
       "name": "proc-macro2",
@@ -2285,18 +2429,24 @@
           "Library": {
             "crate_name": "proc_macro2",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2338,7 +2488,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "quote 1.0.35": {
       "name": "quote",
@@ -2355,9 +2505,12 @@
           "Library": {
             "crate_name": "quote",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2390,7 +2543,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "regex 1.7.0": {
       "name": "regex",
@@ -2407,9 +2560,12 @@
           "Library": {
             "crate_name": "regex",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2465,7 +2621,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "regex-syntax 0.6.28": {
       "name": "regex-syntax",
@@ -2482,9 +2638,12 @@
           "Library": {
             "crate_name": "regex_syntax",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2515,7 +2674,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "rustc-hash 1.1.0": {
       "name": "rustc-hash",
@@ -2532,9 +2691,12 @@
           "Library": {
             "crate_name": "rustc_hash",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2558,7 +2720,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "ryu 1.0.12": {
       "name": "ryu",
@@ -2575,9 +2737,12 @@
           "Library": {
             "crate_name": "ryu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2594,7 +2759,7 @@
         "Apache-2.0",
         "BSL-1.0"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "scoped-tls 1.0.1": {
       "name": "scoped-tls",
@@ -2611,9 +2776,12 @@
           "Library": {
             "crate_name": "scoped_tls",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2630,7 +2798,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "serde 1.0.195": {
       "name": "serde",
@@ -2647,18 +2815,24 @@
           "Library": {
             "crate_name": "serde",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2707,7 +2881,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "serde_derive 1.0.195": {
       "name": "serde_derive",
@@ -2724,9 +2898,12 @@
           "ProcMacro": {
             "crate_name": "serde_derive",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2766,7 +2943,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "serde_json 1.0.114": {
       "name": "serde_json",
@@ -2783,18 +2960,24 @@
           "Library": {
             "crate_name": "serde_json",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2844,7 +3027,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "sha2 0.10.8": {
       "name": "sha2",
@@ -2861,9 +3044,12 @@
           "Library": {
             "crate_name": "sha2",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2907,7 +3093,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "siphasher 0.3.10": {
       "name": "siphasher",
@@ -2924,9 +3110,12 @@
           "Library": {
             "crate_name": "siphasher",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2967,9 +3156,12 @@
           "Library": {
             "crate_name": "smallvec",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -2986,7 +3178,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "strsim 0.11.0": {
       "name": "strsim",
@@ -3003,9 +3195,12 @@
           "Library": {
             "crate_name": "strsim",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3021,7 +3216,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "swc_atoms 0.6.5": {
       "name": "swc_atoms",
@@ -3038,9 +3233,12 @@
           "Library": {
             "crate_name": "swc_atoms",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3094,9 +3292,12 @@
           "Library": {
             "crate_name": "swc_common",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3213,9 +3414,12 @@
           "ProcMacro": {
             "crate_name": "swc_eq_ignore_macros",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3265,9 +3469,12 @@
           "Library": {
             "crate_name": "swc_macros_common",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3317,9 +3524,12 @@
           "Library": {
             "crate_name": "swc_visit",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3370,9 +3580,12 @@
           "ProcMacro": {
             "crate_name": "swc_visit_macros",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3434,18 +3647,24 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3502,7 +3721,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "syn 2.0.48": {
       "name": "syn",
@@ -3519,9 +3738,12 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3572,7 +3794,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "tinyvec 1.6.0": {
       "name": "tinyvec",
@@ -3589,9 +3811,12 @@
           "Library": {
             "crate_name": "tinyvec",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3626,7 +3851,7 @@
         "MIT",
         "Zlib"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE.md"
     },
     "tinyvec_macros 0.1.0": {
       "name": "tinyvec_macros",
@@ -3643,9 +3868,12 @@
           "Library": {
             "crate_name": "tinyvec_macros",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3663,7 +3891,7 @@
         "MIT",
         "Zlib"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "tracing 0.1.37": {
       "name": "tracing",
@@ -3680,9 +3908,12 @@
           "Library": {
             "crate_name": "tracing",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3733,7 +3964,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "tracing-attributes 0.1.23": {
       "name": "tracing-attributes",
@@ -3750,9 +3981,12 @@
           "ProcMacro": {
             "crate_name": "tracing_attributes",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3785,7 +4019,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "tracing-core 0.1.30": {
       "name": "tracing-core",
@@ -3802,9 +4036,12 @@
           "Library": {
             "crate_name": "tracing_core",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3836,7 +4073,7 @@
       "license_ids": [
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "typenum 1.16.0": {
       "name": "typenum",
@@ -3853,18 +4090,24 @@
           "Library": {
             "crate_name": "typenum",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_main",
             "crate_root": "build/main.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3895,7 +4138,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE"
     },
     "unicode-bidi 0.3.13": {
       "name": "unicode-bidi",
@@ -3912,9 +4155,12 @@
           "Library": {
             "crate_name": "unicode_bidi",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3938,7 +4184,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "unicode-ident 1.0.6": {
       "name": "unicode-ident",
@@ -3955,9 +4201,12 @@
           "Library": {
             "crate_name": "unicode_ident",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -3975,7 +4224,7 @@
         "MIT",
         "Unicode-DFS-2016"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "unicode-normalization 0.1.22": {
       "name": "unicode-normalization",
@@ -3992,9 +4241,12 @@
           "Library": {
             "crate_name": "unicode_normalization",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4026,7 +4278,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "unicode-width 0.1.10": {
       "name": "unicode-width",
@@ -4043,9 +4295,12 @@
           "Library": {
             "crate_name": "unicode_width",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4068,7 +4323,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "url 2.4.0": {
       "name": "url",
@@ -4085,9 +4340,12 @@
           "Library": {
             "crate_name": "url",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4127,7 +4385,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "utf8parse 0.2.1": {
       "name": "utf8parse",
@@ -4144,9 +4402,12 @@
           "Library": {
             "crate_name": "utf8parse",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4169,7 +4430,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "version_check 0.9.4": {
       "name": "version_check",
@@ -4186,9 +4447,12 @@
           "Library": {
             "crate_name": "version_check",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4205,7 +4469,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "LICENSE-APACHE"
     },
     "windows-sys 0.48.0": {
       "name": "windows-sys",
@@ -4222,9 +4486,12 @@
           "Library": {
             "crate_name": "windows_sys",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4260,7 +4527,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows-targets 0.48.0": {
       "name": "windows-targets",
@@ -4277,9 +4544,12 @@
           "Library": {
             "crate_name": "windows_targets",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4343,7 +4613,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_aarch64_gnullvm 0.48.0": {
       "name": "windows_aarch64_gnullvm",
@@ -4360,18 +4630,24 @@
           "Library": {
             "crate_name": "windows_aarch64_gnullvm",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4402,7 +4678,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_aarch64_msvc 0.48.0": {
       "name": "windows_aarch64_msvc",
@@ -4419,18 +4695,24 @@
           "Library": {
             "crate_name": "windows_aarch64_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4461,7 +4743,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_i686_gnu 0.48.0": {
       "name": "windows_i686_gnu",
@@ -4478,18 +4760,24 @@
           "Library": {
             "crate_name": "windows_i686_gnu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4520,7 +4808,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_i686_msvc 0.48.0": {
       "name": "windows_i686_msvc",
@@ -4537,18 +4825,24 @@
           "Library": {
             "crate_name": "windows_i686_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4579,7 +4873,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_x86_64_gnu 0.48.0": {
       "name": "windows_x86_64_gnu",
@@ -4596,18 +4890,24 @@
           "Library": {
             "crate_name": "windows_x86_64_gnu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4638,7 +4938,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_x86_64_gnullvm 0.48.0": {
       "name": "windows_x86_64_gnullvm",
@@ -4655,18 +4955,24 @@
           "Library": {
             "crate_name": "windows_x86_64_gnullvm",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4697,7 +5003,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     },
     "windows_x86_64_msvc 0.48.0": {
       "name": "windows_x86_64_msvc",
@@ -4714,18 +5020,24 @@
           "Library": {
             "crate_name": "windows_x86_64_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
           }
         }
       ],
@@ -4756,7 +5068,7 @@
         "Apache-2.0",
         "MIT"
       ],
-      "license_file": null
+      "license_file": "license-apache-2.0"
     }
   },
   "binary_crates": [],
