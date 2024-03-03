@@ -194,3 +194,17 @@ swc_register_toolchains(
     name = "swc",
     swc_version = LATEST_VERSION,
 )
+
+
+load("@com_github_google_copybara//:repositories.bzl", "copybara_repositories")
+
+copybara_repositories()
+
+load("@com_github_google_copybara//:repositories.maven.bzl", "copybara_maven_repositories")
+
+copybara_maven_repositories()
+
+# seems like uncommenting these out raises issues because I already have Go.
+# load("@com_github_google_copybara//:repositories.go.bzl", "copybara_go_repositories")
+#
+# copybara_go_repositories()

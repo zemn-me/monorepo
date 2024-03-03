@@ -355,6 +355,12 @@ native_binary(
         url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
         build_file_content = """
 exports_files(glob(["**/*"]))
-
             """,
+    )
+
+    http_archive(
+        name = "com_github_google_copybara",
+        integrity = "sha256-GBRuLkH7/pClobt5NFAsa0UG2/S74gJKcESr1/zRuns=",
+        strip_prefix = "copybara-c4cf60695a656d16c1e70e79eea0654e05e5a945",
+        url = "https://github.com/google/copybara/archive/c4cf60695a656d16c1e70e79eea0654e05e5a945.zip",
     )
