@@ -1,0 +1,21 @@
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "testing",
+    deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/jest",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
+        "//:node_modules/zod",
+        "//ts/factorio",
+        "//ts/math/canvas/braille",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["blueprint_test.js"],
+    deps = [":testing"],
+)
