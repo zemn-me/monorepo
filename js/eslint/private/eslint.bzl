@@ -14,8 +14,8 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
         name = name,
         data = data + BASE_DATA_DEPS,
         args = args,
-        # eslint is getting pretty slow.
-        size = "medium",
+        # if you exceed this, break up your code!!
+        size = "small",
         **kwargs
     )
 
