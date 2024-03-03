@@ -1,0 +1,18 @@
+@startuml
+Participant ECandidate
+ECandidate -> callbox : call apartment
+callbox -> amz_connect : connect call
+amz_connect -> callbox : press 1 to enter pin, or hold
+callbox -> ECandidate
+opt 1 pressed
+ECandidate -> callbox : pin
+callbox -> amz_connect : pin
+
+amz_connect -> tRPC_lambda : pin + service key
+opt pin correct
+tRPC_lambda -> amz_connect: true
+amz_connect -> callbox: press 9
+callbox -> callbox : [opens door]
+end
+end
+@enduml
