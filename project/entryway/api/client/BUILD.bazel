@@ -1,0 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client",
+    visibility = ["//project/entryway:__subpackages__"],
+    deps = [
+        "//:node_modules/@trpc/client",
+        "//:node_modules/@trpc/react-query",
+        "//:node_modules/@types/react",
+        "//project/entryway/api",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
