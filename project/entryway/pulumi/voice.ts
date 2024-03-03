@@ -4,8 +4,8 @@ import { RandomPet } from '@pulumi/random';
 
 import {
 	ContactFlow,
-	ContactFlowAction,
-	ContactFlowLanguage,
+	contactFlowBuilder,
+	UniqueContactFlowAction,
 } from '#root/ts/pulumi/lib/contact_flow.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
@@ -50,46 +50,32 @@ export class Voice extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		const disconnectAction = new RandomPet(
+		const action = contactFlowBuilder();
+
+		// i think I'll just have to use twilio.
+		// I say this because this DX sucks & they dont
+		// have the thing where you can call a bunch of numbers
+		// at once and have the first one available pick up.
+
+		const forwardToUsers =
+
+		const getCode = action({
+			Type: 'GetParticipantInput',
+			Parameters: {
+				Text: 'Enter code now, followed by the pound or hash key; or hold to talk to a human. You have 10 seconds.',
+				InputTimeoutSeconds: 10,
+				StoreInput: false,
+			},
+		});
+
+
+		const helloWorld = new UniqueContactFlowAction(
 			`${name}_disconnect_flow_id`,
-			{},
+			{
+				Type: 'DisconnectParticipant',
+				Parameters: {},
+			},
 			{ parent: this }
-		).id.apply(
-			id =>
-				({
-					Identifier: id,
-					Type: 'DisconnectParticipant',
-					Parameters: {},
-				}) satisfies ContactFlowAction
-		);
-
-		const action = Pulumi.all([
-			new RandomPet(`${name}_flow_id`, {}, { parent: this }).id,
-			disconnectAction,
-		]).apply(
-			([Identifier, disconnectAction]) =>
-				({
-					Identifier,
-					Type: 'MessageParticipant',
-					Parameters: {
-						Text: 'Hello, world!',
-					},
-					Transitions: {
-						NextAction: disconnectAction.Identifier,
-					},
-				}) satisfies ContactFlowAction
-		);
-
-		const flow: Pulumi.Input<ContactFlowLanguage> = Pulumi.all([
-			action,
-			disconnectAction,
-		]).apply(
-			([action, disconnectAction]) =>
-				({
-					Version: '2019-10-30',
-					StartAction: action!.Identifier,
-					Actions: [action!, disconnectAction],
-				}) satisfies ContactFlowLanguage
 		);
 
 		new ContactFlow(
@@ -98,7 +84,11 @@ export class Voice extends Pulumi.ComponentResource {
 				instanceId: connectInstance.id,
 				name: 'Hello world flow',
 				type: 'CONTACT_FLOW',
-				content: flow,
+				content: {
+					Version: '2019-10-30',
+					StartAction: helloWorld.get.Identifier,
+					Actions: [helloWorld.get],
+				},
 			},
 			{ parent: this }
 		);
