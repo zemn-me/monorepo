@@ -1,5 +1,5 @@
 {
-  "checksum": "4b89e4760a892bdbd7121c22e2f2c279b5f1b3e524f324b85fcacac05c09ed63",
+  "checksum": "eac2abba896aab7e6cfec3bfc7cf5c048172d506d4e7632571815c602fbba4f7",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1811,7 +1811,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.18",
+              "id": "swc_common 0.33.19",
               "target": "swc_common"
             }
           ],
@@ -2352,62 +2352,6 @@
         "version": "0.2.9"
       },
       "license": "Apache-2.0 OR MIT",
-      "license_ids": [
-        "Apache-2.0",
-        "MIT"
-      ],
-      "license_file": "LICENSE-APACHE"
-    },
-    "pmutil 0.6.1": {
-      "name": "pmutil",
-      "version": "0.6.1",
-      "package_url": "https://github.com/kdy1/rust-pmutil",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/pmutil/0.6.1/download",
-          "sha256": "52a40bc70c2c58040d2d8b167ba9a5ff59fc9dab7ad44771cfde3dcfde7a09c6"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "pmutil",
-            "crate_root": "src/lib.rs",
-            "srcs": {
-              "allow_empty": false,
-              "include": [
-                "**/*.rs"
-              ]
-            }
-          }
-        }
-      ],
-      "library_target_name": "pmutil",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "deps": {
-          "common": [
-            {
-              "id": "proc-macro2 1.0.76",
-              "target": "proc_macro2"
-            },
-            {
-              "id": "quote 1.0.35",
-              "target": "quote"
-            },
-            {
-              "id": "syn 2.0.48",
-              "target": "syn"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.6.1"
-      },
-      "license": "Apache-2.0/MIT",
       "license_ids": [
         "Apache-2.0",
         "MIT"
@@ -3277,14 +3221,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.33.18": {
+    "swc_common 0.33.19": {
       "name": "swc_common",
-      "version": "0.33.18",
+      "version": "0.33.19",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_common/0.33.18/download",
-          "sha256": "c85e8b15d0fb87691e27c8f3cf953748db3ccd2a39e165d6d5275a48fb0d29e3"
+          "url": "https://crates.io/api/v1/crates/swc_common/0.33.19/download",
+          "sha256": "cc30ce6695b841f0a9ae01a9ca10ac3922cff559a6253c756a203c4332c62945"
         }
       },
       "targets": [
@@ -3355,7 +3299,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_visit 0.5.9",
+              "id": "swc_visit 0.5.10",
               "target": "swc_visit"
             },
             {
@@ -3391,7 +3335,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.18"
+        "version": "0.33.19"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -3509,14 +3453,14 @@
       ],
       "license_file": null
     },
-    "swc_visit 0.5.9": {
+    "swc_visit 0.5.10": {
       "name": "swc_visit",
-      "version": "0.5.9",
+      "version": "0.5.10",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.9/download",
-          "sha256": "358e246dedeb4ae8efacebcce1360dc2f9b6c0b4c1ad8b737cc60f5b6633691a"
+          "url": "https://crates.io/api/v1/crates/swc_visit/0.5.10/download",
+          "sha256": "3f5b3e8d1269a7cb95358fed3412645d9c15aa0eb1f4ca003a25a38ef2f30f1b"
         }
       },
       "targets": [
@@ -3551,13 +3495,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "swc_visit_macros 0.5.10",
+              "id": "swc_visit_macros 0.5.11",
               "target": "swc_visit_macros"
             }
           ],
           "selects": {}
         },
-        "version": "0.5.9"
+        "version": "0.5.10"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -3565,14 +3509,14 @@
       ],
       "license_file": null
     },
-    "swc_visit_macros 0.5.10": {
+    "swc_visit_macros 0.5.11": {
       "name": "swc_visit_macros",
-      "version": "0.5.10",
+      "version": "0.5.11",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.10/download",
-          "sha256": "fbbbb9d77d5112f90ed7ea00477135b16c4370c872b93a0b63b766e8710650ad"
+          "url": "https://crates.io/api/v1/crates/swc_visit_macros/0.5.11/download",
+          "sha256": "33fc817055fe127b4285dc85058596768bfde7537ae37da82c67815557f03e33"
         }
       },
       "targets": [
@@ -3601,10 +3545,6 @@
               "target": "inflector"
             },
             {
-              "id": "pmutil 0.6.1",
-              "target": "pmutil"
-            },
-            {
               "id": "proc-macro2 1.0.76",
               "target": "proc_macro2"
             },
@@ -3624,7 +3564,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.10"
+        "version": "0.5.11"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -5237,7 +5177,7 @@
     "serde_json 1.0.114",
     "sha2 0.10.8",
     "swc_atoms 0.6.5",
-    "swc_common 0.33.18"
+    "swc_common 0.33.19"
   ],
   "direct_dev_deps": []
 }
