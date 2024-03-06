@@ -1,0 +1,58 @@
+@startuml Entryway Project Usage Flow
+Participant "Entry Candidate" as ECandidate
+Participant "Callbox" as Callbox
+Participant "tRPC Lambda" as tRPC_lambda
+Participant "Amazon Connect" as amz_connect
+Participant "Approver" as approver
+Participant "PostgreSQL" as postgresql
+autonumber
+
+ECandidate -> callbox : [PSTN] call apartment
+callbox -> amz_connect : [PSTN] connect call
+amz_connect -> callbox : [PSTN] press 1 to enter pin, or hold
+callbox -> ECandidate: [sound] press 1 to enter pin or hold
+opt 1 pressed
+	loop 3
+		amz_connect -> callbox: [PSTN] enter pin?
+		callbox -> ECandidate: [sound] enter pin?
+		ECandidate -> callbox : [physical entry] pin
+		callbox -> amz_connect : [DTMF/PSTN] pin
+
+		amz_connect -> tRPC_lambda : [HTTP] pin + service key
+		alt pin correct
+			tRPC_lambda -> amz_connect: [JSON/HTTP] true
+			tRPC_lambda -> postgresql: [prisma/sql]: record entry
+			amz_connect -> amz_connect: [break loop]
+		else
+			tRPC_lambda -> amz_connect: [JSON/HTTP] false
+			alt loop < 3
+				amz_connect-> amz_connect: [continue loop]
+			else
+				amz_connect -> amz_connect: [break loop]
+			end
+		end
+	end
+end
+
+alt success = true
+	amz_connect -> callbox: press 9
+	callbox -> callbox : [break loop]
+else
+	amz_connect -> approver: [PSTN] attempt connect call
+	alt connected to approver
+		amz_connect -> approver: [sound/PSTN] candidate wants entry. connecting now
+		amz_connect -> approver: [sound/PSTN] press 9 to open door
+		ECandidate <-> approver: [sound/PSTN] negotiate entry
+		alt approver presses 9
+			tRPC_lambda -> postgresql: [prisma/sql]: record entry (?)
+			amz_connect -> callbox: [sound/DTMF/PSTN] 9
+			callbox -> callbox: [opens door]
+		else
+			amz_connect -> amz_connnect: [hang up / PSTN]
+		end
+	else
+		amz_connect -> ECandidate: [sound/PSTN] sorry...
+	end
+end
+
+@enduml
