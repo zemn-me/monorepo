@@ -1,5 +1,5 @@
 {
-  "checksum": "eac2abba896aab7e6cfec3bfc7cf5c048172d506d4e7632571815c602fbba4f7",
+  "checksum": "579481ba4a103de2e0e69ec80ca051872730564b070514322204bf714480fde9",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -633,14 +633,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap 4.5.1": {
+    "clap 4.5.2": {
       "name": "clap",
-      "version": "4.5.1",
+      "version": "4.5.2",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap/4.5.1/download",
-          "sha256": "c918d541ef2913577a0f9566e9ce27cb35b6df072075769e0b26cb5a554520da"
+          "url": "https://crates.io/api/v1/crates/clap/4.5.2/download",
+          "sha256": "b230ab84b0ffdf890d5a10abdbc8b83ae1c4918275daea1ab8801f71536b2651"
         }
       },
       "targets": [
@@ -678,7 +678,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.5.1",
+              "id": "clap_builder 4.5.2",
               "target": "clap_builder"
             }
           ],
@@ -694,7 +694,7 @@
           ],
           "selects": {}
         },
-        "version": "4.5.1"
+        "version": "4.5.2"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -703,14 +703,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_builder 4.5.1": {
+    "clap_builder 4.5.2": {
       "name": "clap_builder",
-      "version": "4.5.1",
+      "version": "4.5.2",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://crates.io/api/v1/crates/clap_builder/4.5.1/download",
-          "sha256": "9f3e7391dad68afb0c2ede1bf619f579a3dc9c2ec67f089baa397123a2f3d1eb"
+          "url": "https://crates.io/api/v1/crates/clap_builder/4.5.2/download",
+          "sha256": "ae129e2e766ae0ec03484e609954119f123cc1fe650337e155d03b022f24f7b4"
         }
       },
       "targets": [
@@ -765,7 +765,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.1"
+        "version": "4.5.2"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -1791,7 +1791,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.5.1",
+              "id": "clap 4.5.2",
               "target": "clap"
             },
             {
@@ -5172,7 +5172,7 @@
     ]
   },
   "direct_deps": [
-    "clap 4.5.1",
+    "clap 4.5.2",
     "hex 0.4.3",
     "serde_json 1.0.114",
     "sha2 0.10.8",
