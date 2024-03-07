@@ -281,9 +281,9 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "bazel_features",
-        sha256 = "70d355d5e34c3fe453f5556d6c0f02ffed0eb2c7ce4c8ee016d94d654bc6a014",
-        strip_prefix = "bazel_features-1.8.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.8.0/bazel_features-v1.8.0.tar.gz",
+        sha256 = "06f02b97b6badb3227df2141a4b4622272cdcd2951526f40a888ab5f43897f14",
+        strip_prefix = "bazel_features-1.9.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.9.0/bazel_features-v1.9.0.tar.gz",
     )
 
     chromedriver_buildfile = """
