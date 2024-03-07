@@ -164,8 +164,8 @@ devDependencies:
     specifier: 2.5.0
     version: 2.5.0
   '@pulumi/pulumi':
-    specifier: 3.108.1
-    version: 3.108.1
+    specifier: 3.109.0
+    version: 3.109.0
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -5279,7 +5279,7 @@ packages:
   /@pulumi/aws@6.25.0:
     resolution: {integrity: sha512-p3xwEbOjw9Hcb1f4VUwxsIL+xoJHsu8u0ECpY2slaWGSE4fveP62DC8jrw972SFiVYRZ2r0EdsIeftvFrd1xqg==}
     dependencies:
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
       builtin-modules: 3.0.0
       mime: 2.6.0
       resolve: 2.0.0-next.5
@@ -5295,7 +5295,7 @@ packages:
       '@aws-sdk/client-ecs': 3.458.0
       '@pulumi/aws': 6.25.0
       '@pulumi/docker': 4.5.0
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
       '@types/aws-lambda': 8.10.119
       aws-sdk: 2.1503.0
       docker-classic: /@pulumi/docker@3.6.1
@@ -5311,7 +5311,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5321,7 +5321,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
       semver: 5.7.2
     transitivePeerDependencies:
       - bluebird
@@ -5331,15 +5331,15 @@ packages:
   /@pulumi/docker@4.5.0:
     resolution: {integrity: sha512-DOiczZK1cF4NGlEWzacPLjGcoPKXHXISoqq4KqCO97YW28rZSu6LOdveQ8tLaUHGeyWQ+CS3PT45caSxHAbzbw==}
     dependencies:
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
       semver: 5.7.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
     dev: true
 
-  /@pulumi/pulumi@3.108.1:
-    resolution: {integrity: sha512-CJeYoleoRZ+uDN38xJ9GaRSzU3BIpgJrRdBRBXUEjKF3OYJedfFEp8PvmPvbFc7/IYo91Gc2P5wcDWRvRSdZJw==}
+  /@pulumi/pulumi@3.109.0:
+    resolution: {integrity: sha512-occSKeffShJJXO0dNwwGRf3MAX9pFhBIK/2vmsOLgQr/12lG9y2d8hyW8FZ3i4mhOSKiyamDnH+1+vPJ2Hk+yQ==}
     engines: {node: '>=8.13.0 || >=10.10.0'}
     dependencies:
       '@grpc/grpc-js': 1.10.1
@@ -5383,7 +5383,7 @@ packages:
   /@pulumi/random@4.16.0:
     resolution: {integrity: sha512-cHwlhy/+xTWCt7gwlJoG0q1l234YLxWtSWI61MzekWSsthbtcYruXo2bUlgcXWX5V4/lHjvQG84l5n1aTNZJoA==}
     dependencies:
-      '@pulumi/pulumi': 3.108.1
+      '@pulumi/pulumi': 3.109.0
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -10190,10 +10190,6 @@ packages:
       '@esbuild/win32-ia32': 0.20.1
       '@esbuild/win32-x64': 0.20.1
     dev: true
-
-  /escalade@3.1.1:
-    resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
-    engines: {node: '>=6'}
 
   /escalade@3.1.2:
     resolution: {integrity: sha512-ErCHMCae19vR8vQGe50xIsVomy19rg6gFu3+r3jkEO46suLMWBksvVyoGgQV+jOfl84ZSOSlmv6Gxa89PmTGmA==}
@@ -18545,7 +18541,7 @@ packages:
       browserslist: '>= 4.21.0'
     dependencies:
       browserslist: 4.21.9
-      escalade: 3.1.1
+      escalade: 3.1.2
       picocolors: 1.0.0
     dev: true
 
@@ -19146,7 +19142,7 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       cliui: 8.0.1
-      escalade: 3.1.1
+      escalade: 3.1.2
       get-caller-file: 2.0.5
       require-directory: 2.1.1
       string-width: 4.2.3
