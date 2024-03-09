@@ -14,7 +14,7 @@
 // as I don't think you can implicitly just depend on every bazel file
 module github.com/zemn-me/monorepo
 
-go 1.19
+go 1.22.1
 
 require (
 	github.com/go-delve/delve v1.22.0
