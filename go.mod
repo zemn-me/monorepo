@@ -17,7 +17,7 @@ module github.com/zemn-me/monorepo
 go 1.22.1
 
 require (
-	github.com/go-delve/delve v1.22.0
+	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.3
 	golang.org/x/tools v0.16.1
 	honnef.co/go/tools v0.4.6
@@ -30,7 +30,7 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/derekparker/trie v0.0.0-20230829180723-39f4de51ef7d // indirect
 	github.com/go-delve/gore v0.11.6 // indirect
-	github.com/go-delve/liner v1.2.3-0.20220127212407-d32d89dd2a5d // indirect
+	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/google/go-dap v0.11.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
