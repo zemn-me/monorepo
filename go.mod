@@ -20,7 +20,7 @@ require (
 	github.com/go-delve/delve v1.22.0
 	github.com/golang/protobuf v1.5.3
 	golang.org/x/tools v0.16.1
-	honnef.co/go/tools v0.4.6
+	honnef.co/go/tools v0.4.7
 )
 
 require (
