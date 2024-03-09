@@ -1,0 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "version_sync",
+    embed = [":version_sync_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "version_sync_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/cmd/version_sync",
+    visibility = ["//visibility:private"],
+)
+
+bazel_lint(name = "bazel_lint")
