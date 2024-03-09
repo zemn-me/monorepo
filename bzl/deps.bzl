@@ -103,9 +103,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "8093da0d5be55de0dcfd63ccd29ff7311abf8b532920946360d79c18b173309d",
+        sha256 = "88c972f1c03016586c213929f78c6dc4b951f4345a1787a8b2474fde5dcc9b1f",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.108.1/pulumi-v3.108.1-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -115,9 +115,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.108.1/pulumi-v3.108.1-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "d59bba6b65caeda311b8dc07a2129a3fe57254b0ff96ae42a74ecff118711e8f",
+        sha256 = "f5c2e1a4725c2313cb72980af677be84e929c7a8eb3a25542c6fa13f1cadd95a",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -136,9 +136,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.108.1/pulumi-v3.108.1-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-linux-arm64.tar.gz",
         ],
-        sha256 = "3f4c37f6e4b59c49ef77e4b0d491d28e072da2b1cd1135429704b0d9e8a2c461",
+        sha256 = "fb2a1a7c6ce0c1105bd574dae6658f15261f9437c62a70ce68f38c295574cd8e",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -281,9 +281,9 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "bazel_features",
-        sha256 = "22056b03b3f64491244882453022b801438c01d672829d1ac6338876b0fa206a",
-        strip_prefix = "bazel_features-1.7.1",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.7.1/bazel_features-v1.7.1.tar.gz",
+        sha256 = "06f02b97b6badb3227df2141a4b4622272cdcd2951526f40a888ab5f43897f14",
+        strip_prefix = "bazel_features-1.9.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.9.0/bazel_features-v1.9.0.tar.gz",
     )
 
     chromedriver_buildfile = """
