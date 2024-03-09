@@ -44,7 +44,9 @@
 					"Cargo.Bazel.lock",
 					"Cargo.toml",
 					"cargo-bazel-lock.json",
-					"**/*.ts"
+					"**/*.ts",
+					"go.mod",
+					"go_version.bzl"
 				],
 				"recreateWhen": "always"
 			}
