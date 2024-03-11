@@ -1,3 +1,8 @@
+import { extent, range } from 'd3-array';
+import { scaleLinear, scaleQuantize } from 'd3-scale';
+
+import { domainScaleFitContain, unrolledSpace2D } from '#root/ts/math/space';
+
 function head<T, F>(
 	t: Iterator<T>,
 	n: number,
@@ -192,4 +197,49 @@ export function plot(v: Iterable<1 | 0>, width: number): string {
 	const charCodes = join(blocks, nl);
 
 	return String.fromCharCode(...charCodes);
+}
+
+/**
+ * Plot a 2D space as braille characters.
+ *
+ * If height is not specified, it will be scaled the same way as width.
+ */
+export function plot2D<T>(
+	v: Iterable<T>,
+	x: (v: T) => number,
+	y: (v: T) => number,
+	width: number
+): string {
+	const all = [...v];
+
+	const xExtent = extent(all, x);
+	const yExtent = extent(all, y);
+	const [, yMax] = yExtent;
+
+	const unifiedDomain = domainScaleFitContain(
+		[xExtent, yExtent],
+		([min]) => min!,
+		([, max]) => max!
+	);
+
+	// here we get the y range by seeing what it would be on a linear
+	// scale and rounding up.
+	const height = Math.ceil(scaleLinear(unifiedDomain, [0, width])(yMax!));
+
+	const scale = scaleQuantize(
+		unifiedDomain,
+		range(0, Math.max(width, height))
+	);
+
+	// unroll into an array of 1s and 0s
+
+	const [index, length] = unrolledSpace2D(width);
+
+	const unrolledSpace: Array<1 | 0> = Array(length(height)).fill(0);
+
+	for (const item of all) {
+		unrolledSpace[index(scale(x(item)), scale(y(item)))] = 1;
+	}
+
+	return plot(unrolledSpace, width);
 }
