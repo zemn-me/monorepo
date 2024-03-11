@@ -10,9 +10,14 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/react",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
         "//:node_modules/react",
+        "//ts/math",
     ],
 )
 
