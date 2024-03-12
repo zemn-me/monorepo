@@ -37,4 +37,9 @@ alias(
     actual = "//bin/host/buildozer",
 )
 
+alias(
+    name = "buildifier",
+    actual = "//:buildifier",
+)
+
 bazel_lint(name = "bazel_lint")
