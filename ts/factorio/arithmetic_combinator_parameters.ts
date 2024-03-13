@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 
-export const ArithmeticCombinatorParameters = z.object({
+export const ArithmeticCombinatorParameters = z.strictObject({
 	/**
 	 * First signal to use in an operation. If not specified, the second argument will be the value of first_constant.
 	 */

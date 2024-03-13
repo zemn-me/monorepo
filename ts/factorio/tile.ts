@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { Position } from '#root/ts/factorio/position.js';
 
-export const Tile = z.object({
+export const Tile = z.strictObject({
 	/**
 	 * Prototype name of the tile (e.g. "concrete")
 	 */

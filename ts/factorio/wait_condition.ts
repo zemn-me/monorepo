@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { CircuitCondition } from '#root/ts/factorio/circuit_condition.js';
 import { Uint } from '#root/ts/factorio/uint.js';
 
-const WaitConditionBase = z.object({
+const WaitConditionBase = z.strictObject({
 	/**
 	 * Either "and", or "or". Tells how this condition is to be compared with the preceding conditions in the corresponding wait_conditions array.
 	 */
@@ -11,7 +11,7 @@ const WaitConditionBase = z.object({
 });
 
 export const WaitConditionWithCondition = WaitConditionBase.merge(
-	z.object({
+	z.strictObject({
 		type: z.enum(['circuit', 'fluid_count']),
 		/**
 		 * CircuitCondition object, only present when type is "item_count", "circuit" or "fluid_count".
@@ -25,7 +25,7 @@ export type WaitConditionWithCondition = z.TypeOf<
 >;
 
 export const WaitConditionWithTicks = WaitConditionBase.merge(
-	z.object({
+	z.strictObject({
 		/**
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
 		 */
@@ -41,7 +41,7 @@ export const WaitConditionWithTicks = WaitConditionBase.merge(
 export type WaitConditionWithTicks = z.TypeOf<typeof WaitConditionWithTicks>;
 
 export const WaitConditionEtc = WaitConditionBase.merge(
-	z.object({
+	z.strictObject({
 		/**
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
 		 */
