@@ -8,7 +8,7 @@ import { Int } from '#root/ts/factorio/int';
 import { SignalID } from '#root/ts/factorio/signal_id';
 import { Uint } from '#root/ts/factorio/uint';
 
-export const BlueprintBookBase = z.object({
+export const BlueprintBookBase = z.strictObject({
 	/**
 	 * String, the name of the item that was saved ("blueprint-book" in vanilla).
 	 */
@@ -35,7 +35,7 @@ export const BlueprintBookBase = z.object({
 
 	icons: z
 		.array(
-			z.object({
+			z.strictObject({
 				signal: SignalID,
 				index: OneBasedIndex,
 			})
@@ -61,7 +61,7 @@ export type BlueprintBook = z.infer<typeof BlueprintBookBase> & {
 export const BlueprintBook: z.ZodType<BlueprintBook> = BlueprintBookBase.extend(
 	{
 		blueprints: z.array(
-			z.object({
+			z.strictObject({
 				/**
 				 * Index, 0 based value
 				 */

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { WaitCondition } from '#root/ts/factorio/wait_condition.js';
 
-export const ScheduleRecord = z.object({
+export const ScheduleRecord = z.strictObject({
 	/**
 	 * The name of the stop for this schedule record.
 	 */

@@ -17,7 +17,7 @@ import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
 import { Tags } from '#root/ts/factorio/tags.js';
 import { Uint8 } from '#root/ts/factorio/uint8.js';
 
-export const Entity = z.object({
+export const Entity = z.strictObject({
 	entity_number: EntityNumber,
 	/**
 	 * Prototype name of the entity (e.g. "offshore-pump").

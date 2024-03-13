@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { Uint } from '#root/ts/factorio/uint.js';
 
-export const ProgrammableSpeakerCircuitParameters = z.object({
+export const ProgrammableSpeakerCircuitParameters = z.strictObject({
 	signal_value_is_pitch: z.boolean(),
 	instrument_id: Uint,
 	note_id: Uint,

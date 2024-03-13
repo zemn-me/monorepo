@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const Position = z.object({
+export const Position = z.strictObject({
 	/**
 	 * X position within the blueprint, 0 is the center.
 	 */

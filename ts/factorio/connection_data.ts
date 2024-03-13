@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { EntityNumber } from '#root/ts/factorio/entity_number.js';
 
-export const ConnectionData = z.object({
+export const ConnectionData = z.strictObject({
 	entity_id: EntityNumber,
 	circuit_id: z.number().optional(),
 });

@@ -16,7 +16,7 @@ import {
 import { add } from '#root/ts/math/matrix.js';
 import { extent } from '#root/ts/math/tuple.js';
 
-export const Blueprint = z.object({
+export const Blueprint = z.strictObject({
 	/**
 	 * String, the name of the item that was saved ("blueprint" in vanilla).
 	 */

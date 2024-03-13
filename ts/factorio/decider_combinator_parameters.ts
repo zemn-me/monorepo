@@ -4,7 +4,7 @@ import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 import { Uint } from '#root/ts/factorio/uint.js';
 
-export const DeciderCombinatorParameters = z.object({
+export const DeciderCombinatorParameters = z.strictObject({
 	/**
 	 * Defaults to blank.
 	 */
