@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { EntityNumber } from '#root/ts/factorio/entity_number.js';
 import { ScheduleRecord } from '#root/ts/factorio/schedule_record.js';
 
-export const Schedule = z.object({
+export const Schedule = z.strictObject({
 	/**
 	 * Array of #Schedule Record objects.
 	 */

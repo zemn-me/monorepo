@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Int } from '#root/ts/factorio/int.js';
 import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
 
-export const InfinityFilter = z.object({
+export const InfinityFilter = z.strictObject({
 	/**
 	 * Name of the item prototype the filter is set to, string.
 	 */

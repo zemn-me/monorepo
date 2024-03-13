@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { ConnectionData } from '#root/ts/factorio/connection_data.js';
 
-export const ConnectionPoint = z.object({
+export const ConnectionPoint = z.strictObject({
 	red: ConnectionData.array().optional(),
 	green: ConnectionData.array().optional(),
 });

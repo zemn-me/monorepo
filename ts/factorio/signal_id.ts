@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const SignalID = z.object({
+export const SignalID = z.strictObject({
 	type: z.union([
 		z.literal('item'),
 		z.literal('fluid'),

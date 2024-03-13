@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { Int } from '#root/ts/factorio/int.js';
 
-export const ItemFilterObject = z.object({
+export const ItemFilterObject = z.strictObject({
 	/**
 	 * Name of the item prototype this filter is based on.
 	 */

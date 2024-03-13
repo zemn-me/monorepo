@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { InfinityFilter } from '#root/ts/factorio/infinity_filter.js';
 
-export const InfinitySettings = z.object({
+export const InfinitySettings = z.strictObject({
 	remove_unfiltered_items: z.boolean().optional(),
 	filters: z.array(InfinityFilter),
 });

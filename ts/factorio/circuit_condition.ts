@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
-export const CircuitCondition = z.object({
+export const CircuitCondition = z.strictObject({
 	/**
 	 * Specifies how inputs should be compared. If not specified, defaults to "<".
 	 */

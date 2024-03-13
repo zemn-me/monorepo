@@ -13,7 +13,7 @@ import { Int } from '#root/ts/factorio/int.js';
 import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 
-export const ControlBehavior = z.object({
+export const ControlBehavior = z.strictObject({
 	/**
 	 * CircuitCondition
 	 */
