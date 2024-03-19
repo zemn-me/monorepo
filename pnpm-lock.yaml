@@ -326,8 +326,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.257.0
-    version: 37.257.0(typanion@3.14.0)
+    specifier: 37.258.0
+    version: 37.258.0(typanion@3.14.0)
   sharp:
     specifier: 0.33.2
     version: 0.33.2
@@ -4812,7 +4812,7 @@ packages:
     engines: {node: '>=14'}
     deprecated: Please use @opentelemetry/api >= 1.3.0
     dependencies:
-      '@opentelemetry/api': 1.7.0
+      '@opentelemetry/api': 1.8.0
 
   /@opentelemetry/api@1.7.0:
     resolution: {integrity: sha512-AdY5wvN0P2vXBi3b29hxZgSFvdhdxPB9+f0B6s//P9Q8nibRWeA3cHm8UmLpio9ABigkVHJ5NMPk+Mz8VCCyrw==}
@@ -4821,7 +4821,6 @@ packages:
   /@opentelemetry/api@1.8.0:
     resolution: {integrity: sha512-I/s6F7yKUDdtMsoBWXJe8Qz40Tui5vsuKCWJEWVL+5q9sSWRzzx6v2KeNsOBEwd94j0eWkpWCH4yB6rZg9Mf0w==}
     engines: {node: '>=8.0.0'}
-    dev: true
 
   /@opentelemetry/context-async-hooks@1.21.0(@opentelemetry/api@1.7.0):
     resolution: {integrity: sha512-t0iulGPiMjG/NrSjinPQoIf8ST/o9V0dGOJthfrFporJlNdlKIQPfC7lkrV+5s2dyBThfmSbJlp/4hO1eOcDXA==}
@@ -16524,8 +16523,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.257.0(typanion@3.14.0):
-    resolution: {integrity: sha512-q8r+QdKPHFzQ8PTlG9vf14SHGKja7KEpX1uKqErl+syNwZx1RMXFepe7WwyI15YsJSQ+HUoiDE8pE6w5WeSBtg==}
+  /renovate@37.258.0(typanion@3.14.0):
+    resolution: {integrity: sha512-Ep1/1KwoGDs9RZYP83CPiAe9HD5aHFbSrxuDvSozc+gi58+miySo660Q1darnjJ5Sa8RAyKmzwpowmJ2V/wCVA==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
