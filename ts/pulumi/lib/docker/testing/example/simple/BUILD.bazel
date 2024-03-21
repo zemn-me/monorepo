@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/pulumi/lib/docker:rules.bzl", "ecr_image")
+
+ts_project(
+    name = "ts_main",
+    srcs = ["main.ts"],
+)
+
+js_binary(
+    name = "main_bin",
+    data = [":ts_main"],
+    entry_point = "main.js",
+)
+
+ecr_image(
+    name = "simple",
+    srcs = ["main_bin"],
+    out = "hello_world.ts",
+    component_name = "HelloWorldImage",
+    entry_point = ":main_bin",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+)
