@@ -103,9 +103,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "88c972f1c03016586c213929f78c6dc4b951f4345a1787a8b2474fde5dcc9b1f",
+        sha256 = "5ff249a9414dafbe479373430657f007fb3005997bc01ede8b55dc7e671372c2",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.111.1/pulumi-v3.111.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -115,9 +115,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.111.1/pulumi-v3.111.1-darwin-arm64.tar.gz",
         ],
-        sha256 = "f5c2e1a4725c2313cb72980af677be84e929c7a8eb3a25542c6fa13f1cadd95a",
+        sha256 = "00da4dcd0a02ac0dfbe86f367db184835ca92db12b8a4d8efc892d13aead476f",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -136,9 +136,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.109.0/pulumi-v3.109.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.111.1/pulumi-v3.111.1-linux-arm64.tar.gz",
         ],
-        sha256 = "fb2a1a7c6ce0c1105bd574dae6658f15261f9437c62a70ce68f38c295574cd8e",
+        sha256 = "3810f72295df3e7da5c1f39032f7978374544c4b3b6dd6be7ef325be13fa5059",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -204,9 +204,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "edc7b0255114fafdbbd593ea5d5fdfd54b2a603f33b3a49518910ac618e1bf2b",
-        strip_prefix = "rules_js-1.38.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.38.0/rules_js-v1.38.0.tar.gz",
+        sha256 = "6148188cfa5cb76397b8745b71d57c47a7c1a8e00ff2f1e2e7955206846197f1",
+        strip_prefix = "rules_js-1.39.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.39.0/rules_js-v1.39.0.tar.gz",
     )
 
     http_archive(
@@ -219,12 +219,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/31887768ae575a31f589b0d0092774ad6607c7a9.zip",
-        strip_prefix = "json-schemas-31887768ae575a31f589b0d0092774ad6607c7a9",
+        url = "https://github.com/microsoft/json-schemas/archive/9d1db5538b89a2971416a27b4f9a5ef6ebfb018b.zip",
+        strip_prefix = "json-schemas-9d1db5538b89a2971416a27b4f9a5ef6ebfb018b",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "0cd13a1b1d306cfedfc9d28d64a43834bbfc66d775dff41a09495e68ebd8e820",
+        sha256 = "89205d0725007a226bd5b43f4887c87f0e81801e88b61f1f774f793733dea080",
     )
 
     ##########
