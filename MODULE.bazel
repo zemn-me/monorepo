@@ -4,3 +4,22 @@
 #
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
+
+bazel_dep(name = "rules_oci", version = "1.7.4")
+# For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+
+# Declare external images you need to pull, for example:
+oci.pull(
+    name = "distroless_base",
+    # 'latest' is not reproducible, but it's convenient.
+    # During the build we print a WARNING message that includes recommended 'digest' and 'platforms'
+    # values which you can use here in place of 'tag' to pin for reproducibility.
+    tag = "latest",
+    image = "gcr.io/distroless/base",
+    platforms = ["linux/amd64"],
+)
+
+# For each oci.pull call, repeat the "name" here to expose them as dependencies.
+use_repo(oci, "distroless_base")
