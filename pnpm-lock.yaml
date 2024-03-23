@@ -326,8 +326,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.267.0
-    version: 37.267.0(typanion@3.14.0)
+    specifier: 37.267.1
+    version: 37.267.1(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -9723,11 +9723,6 @@ packages:
     hasBin: true
     dev: true
 
-  /detect-libc@2.0.2:
-    resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
-    engines: {node: '>=8'}
-    dev: true
-
   /detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
@@ -15637,7 +15632,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      detect-libc: 2.0.2
+      detect-libc: 2.0.3
       expand-template: 2.0.3
       github-from-package: 0.0.0
       minimist: 1.2.8
@@ -16478,8 +16473,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.267.0(typanion@3.14.0):
-    resolution: {integrity: sha512-XgPdEeo3wyU+1Mh3avuEiMi0Jf4eSVwGwh3uz94u7YRBQHPdlO4GfdrUUGN8Pvg5QlHMWCBusLPfH9ztNYv4vQ==}
+  /renovate@37.267.1(typanion@3.14.0):
+    resolution: {integrity: sha512-ico/rdXyC9rb/LNLX6qbYNciCfNtVj+kgSPK1tnYwoy4aojWczBdH6woBk96DE1snmZMcR+mtxj7SHIeuhVf1g==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
