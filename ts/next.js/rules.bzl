@@ -58,7 +58,7 @@ def next_project(name, srcs, **kwargs):
         name = "build",
         srcs = srcs,
         args = ["build", native.package_name(), "--no-lint"],
-        output_dir = True,
+        out_dirs = ["build"],
     )
 
     bin.next_binary(
@@ -68,10 +68,10 @@ def next_project(name, srcs, **kwargs):
     )
 
     bin.next(
+        out_dirs = ["out"],
         name = "out",
         srcs = [":build"] + srcs,
         args = ["build", native.package_name()],
-        output_dir = True,
         silent_on_success = True,
     )
 
