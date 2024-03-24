@@ -23,6 +23,15 @@ on:   # yamllint disable-line rule:truthy
 
 jobs:
   Presubmit:
+    # Not running presubmit on merge_group is tempting, especially
+    # since presubmit is long running and already succeded on pull_request.
+    #
+    # However, the commit that a merge_group runs on is different to
+    # the pull_request commit because it may have an arbitrary number
+    # of commits merged in automatically before it.
+    #
+    # If I didn't run on merge_queue, commit A might queue before
+    # my commit B, and A+B is broken even if B is not broken.
     if: >
       github.event_name == 'pull_request'
       || github.event_name == 'merge_group'
