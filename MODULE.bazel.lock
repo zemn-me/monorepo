@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "1920ac1813f2c3a4997a6cab4bb30317344a40c81548eda4577d2dd5e1b8de37",
+  "moduleFileHash": "14da642f78de095765b8751c5410f31298db2e73d898cc54802bf7a86d8b9088",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -42,12 +42,12 @@
               "tagName": "pull",
               "attributeValues": {
                 "name": "distroless_base",
-                "tag": "latest",
                 "image": "gcr.io/distroless/base",
                 "platforms": [
                   "linux/amd64",
                   "linux/arm64/v8"
-                ]
+                ],
+                "tag": "latest"
               },
               "devDependency": false,
               "location": {
