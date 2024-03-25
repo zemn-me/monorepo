@@ -1,4 +1,4 @@
-load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template_rule")
+load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
 load("@aspect_bazel_lib//lib:tar.bzl", "tar")
 load("@rules_oci//oci:defs.bzl", "oci_image")
 load("//ts:rules.bzl", "ts_project")
@@ -43,7 +43,7 @@ def ecr_image(
     )
 
     # workaround for Pulumi's lack of 'just use this docker image.'
-    expand_template_rule(
+    expand_template(
         name = name + "_dockerfile",
         template = "//ts/pulumi/lib/docker:Dockerfile.tmpl",
         out = "Dockerfile",
@@ -53,7 +53,7 @@ def ecr_image(
         },
     )
 
-    expand_template_rule(
+    expand_template(
         name = name + "_tsfiles",
         template = "//ts/pulumi/lib/docker:oci_image.tmpl.ts",
         out = out,
