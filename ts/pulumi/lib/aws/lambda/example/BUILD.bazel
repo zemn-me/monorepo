@@ -1,0 +1,9 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+"""
+Package up a js target for Lambda
+"""
+
+bazel_lint(
+    name = "bazel_lint",
+)
