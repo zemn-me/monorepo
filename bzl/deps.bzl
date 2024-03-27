@@ -86,10 +86,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_github_bazelbuild_buildtools",
-        sha256 = "05c3c3602d25aeda1e9dbc91d3b66e624c1f9fdadf273e5480b489e744ca7269",
-        strip_prefix = "buildtools-6.4.0",
+        sha256 = "061472b3e8b589fb42233f0b48798d00cf9dee203bd39502bd294e6b050bc6c2",
+        strip_prefix = "buildtools-7.1.0",
         urls = [
-            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v6.4.0.tar.gz",
+            "https://github.com/bazelbuild/buildtools/archive/refs/tags/v7.1.0.tar.gz",
         ],
     )
 
@@ -204,9 +204,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "aspect_rules_js",
-        sha256 = "63cf42b07aae34904447c74f5b41652c4933984cc325726673a5e4561d9789e7",
-        strip_prefix = "rules_js-1.39.1",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.39.1/rules_js-v1.39.1.tar.gz",
+        sha256 = "41129b17c0951b663a30c55710a0842767cd162137b7cd3a200f43e32161ce7a",
+        strip_prefix = "rules_js-1.40.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v1.40.0/rules_js-v1.40.0.tar.gz",
     )
 
     http_archive(
@@ -219,12 +219,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/9d1db5538b89a2971416a27b4f9a5ef6ebfb018b.zip",
-        strip_prefix = "json-schemas-9d1db5538b89a2971416a27b4f9a5ef6ebfb018b",
+        url = "https://github.com/microsoft/json-schemas/archive/00a02e4c5df4838d5f1039229e304564106ca186.zip",
+        strip_prefix = "json-schemas-00a02e4c5df4838d5f1039229e304564106ca186",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "89205d0725007a226bd5b43f4887c87f0e81801e88b61f1f774f793733dea080",
+        sha256 = "a0622810ed502e04b0614e2f21f071c1cfdb557a3cd7f4501a506fe8ca1251f6",
     )
 
     ##########
@@ -281,9 +281,9 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "bazel_features",
-        sha256 = "06f02b97b6badb3227df2141a4b4622272cdcd2951526f40a888ab5f43897f14",
-        strip_prefix = "bazel_features-1.9.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.9.0/bazel_features-v1.9.0.tar.gz",
+        sha256 = "d7787da289a7fb497352211ad200ec9f698822a9e0757a4976fd9f713ff372b3",
+        strip_prefix = "bazel_features-1.9.1",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.9.1/bazel_features-v1.9.1.tar.gz",
     )
 
     chromedriver_buildfile = """
