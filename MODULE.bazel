@@ -27,4 +27,4 @@ oci.pull(
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
 use_repo(oci, "distroless_base")
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.6.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
