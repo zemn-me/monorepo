@@ -22,13 +22,12 @@ export type Homogenous = vector.Vector<3, number>;
 
 export const cart2Homog: <L extends number>(
 	path: Path<L, Cartesian>
-) => Path<L, Homogenous> = path =>
-	vector.map(path, ([x, y]) => [x!, y!, 1] as const);
+) => Path<L, Homogenous> = path => vector.map(path, ([x, y]) => [x!, y!, 1]);
 
 export const homog2Cart: <L extends number>(
 	path: Path<L, Homogenous>
 ) => Path<L, Cartesian> = path =>
-	vector.map(path, ([x, y, w]) => [x! / w!, y! / w!] as const);
+	vector.map(path, ([x, y, w]) => [x! / w!, y! / w!]);
 
 export interface LineProps
 	extends Omit<PropsOf<'line'>, 'x1' | 'y1' | 'x2' | 'y2' | 'path'> {
