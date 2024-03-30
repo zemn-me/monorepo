@@ -1,11 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "next.js",
     deps = [
+        "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
@@ -13,6 +14,12 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/react-dom",
     ],
+)
+
+jest_test(
+    name = "test",
+    srcs = ["config_validate_test.js"],
+    deps = [":next.js"],
 )
 
 exports_files(
