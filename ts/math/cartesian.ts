@@ -6,6 +6,24 @@ export type Point3D = Point<3>;
 export type Line2D = Point2D[];
 export type Line3D = Point3D[];
 
+export function point<T extends number>(...p: Point<T>): Point<T> {
+	return p;
+}
+
+export function x(p: Point<1>): number {
+	return p[0]![0]!;
+}
+
+export function y(p: Point<2>): number {
+	return p[1]![0]!;
+}
+
+export function z(p: Point<3>): number {
+	return p[2]![0]!;
+}
+
+export { add, mul, sub } from '#root/ts/math/matrix.js';
+
 /**
  * For a hyperrectangle of N dimensions defined by a minimum
  * and maximum point, returns if a point would exist inside that
