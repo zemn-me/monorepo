@@ -37,6 +37,7 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
     _jest_test(
         deps = deps,
         jest_config = jest_config,
+        srcs = srcs,
         **kwargs
     )
 
