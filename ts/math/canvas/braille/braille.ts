@@ -1,7 +1,10 @@
 import { extent, range } from 'd3-array';
 import { scaleLinear, scaleQuantize } from 'd3-scale';
 
-import { domainScaleFitContain, unrolledSpace2D } from '#root/ts/math/space';
+import {
+	domainScaleFitContain,
+	unrolledSpace2D,
+} from '#root/ts/math/space/space';
 
 function head<T, F>(
 	t: Iterator<T>,

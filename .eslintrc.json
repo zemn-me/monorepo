@@ -50,7 +50,18 @@
 						"allowSingleExtends": true
 					}
 				],
-				"@typescript-eslint/no-unused-vars": "error"
+				"@typescript-eslint/no-unused-vars": [
+					"error",
+					{
+						"args": "all",
+						"argsIgnorePattern": "^_",
+						"caughtErrors": "all",
+						"caughtErrorsIgnorePattern": "^_",
+						"destructuredArrayIgnorePattern": "^_",
+						"varsIgnorePattern": "^_",
+						"ignoreRestSiblings": true
+					}
+				]
 			}
 		}
 	],
@@ -67,7 +78,8 @@
 			}
 		],
 		"no-restricted-imports": [
-			"error", {
+			"error",
+			{
 				"name": "next/link",
 				"message": "<NextLink> is dangerous. Please use the <Link> component instead."
 			}
