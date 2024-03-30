@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
@@ -7,80 +8,9 @@ import { z } from 'zod';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
+import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 
-export const PostProps = z.object({
-	media: z
-		.object({
-			reddit_video: z
-				.object({
-					dash_url: z.string().optional().nullable(),
-					hls_url: z.string().optional().nullable(),
-					fallback_url: z.string().optional().nullable(),
-					scrubber_media_url: z.string().optional().nullable(),
-				})
-				.optional()
-				.nullable(),
-		})
-		.optional()
-		.nullable(),
-	isGallery: z.boolean().optional().nullable(),
-	url: z.string().optional().nullable(),
-	permalink: z.string().optional().nullable(),
-	title: z.string(),
-	media_metadata: z
-		.record(
-			z.string(),
-			z.object({
-				e: z.literal('Image'),
-				s: z.object({
-					u: z.string().url(),
-					x: z.number(),
-					y: z.number(),
-				}),
-			})
-		)
-		.optional()
-		.nullable(),
-
-	preview: z
-		.object({
-			images: z
-				.array(
-					z.object({
-						source: z
-							.object({
-								height: z.number(),
-								width: z.number(),
-								url: z.string().url(),
-							})
-							.optional()
-							.nullable(),
-					})
-				)
-				.optional()
-				.nullable(),
-		})
-		.optional()
-		.nullable(),
-});
-
-const SearchResponseProps = z.object({
-	data: z
-		.object({
-			children: z
-				.array(
-					z.object({
-						data: PostProps,
-					})
-				)
-				.optional()
-				.nullable(),
-		})
-		.optional()
-		.nullable(),
-});
-
-function Post(post: z.TypeOf<typeof PostProps>) {
+function Post(post: z.TypeOf<typeof RedditPost>) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const onClick = useCallback(() => void videoRef.current?.play(), []);
 	const video = post.media?.reddit_video;
@@ -90,7 +20,9 @@ function Post(post: z.TypeOf<typeof PostProps>) {
 		video?.fallback_url,
 	].filter(isString);
 
-	const metadataMedia = [...Object.values(post.media_metadata ?? {})];
+	const metadataMedia = [...Object.values(post.media_metadata ?? {})]
+		.map(v => (v.status == 'failed' ? undefined : v))
+		.filter(isDefined);
 	return (
 		<article
 			className={classNames('post', post.media ? 'media' : undefined)}
@@ -151,7 +83,7 @@ function Post(post: z.TypeOf<typeof PostProps>) {
 	);
 }
 
-const placeHolderData: z.TypeOf<typeof SearchResponseProps> = {
+const placeHolderData: z.TypeOf<typeof RedditSearchResponse> = {
 	data: {
 		children: [
 			{
@@ -178,12 +110,12 @@ const placeHolderData: z.TypeOf<typeof SearchResponseProps> = {
 export function DogsOfTheDay() {
 	const doggs = useQuery(
 		['doggs!'],
-		(): Promise<z.TypeOf<typeof SearchResponseProps>> =>
+		(): Promise<z.TypeOf<typeof RedditSearchResponse>> =>
 			fetch(
 				`https://www.reddit.com/r/aww/search.json?raw_json=1&q=dog&sort=top&t=day&restrict_sr=1`
 			)
 				.then(r => r.json())
-				.then(j => SearchResponseProps.parseAsync(j)),
+				.then(j => RedditSearchResponse.parseAsync(j)),
 		{
 			placeholderData: placeHolderData,
 		}
