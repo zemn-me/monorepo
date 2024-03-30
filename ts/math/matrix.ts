@@ -90,6 +90,16 @@ export const map: <I extends number, J extends number, T, O>(
 ) => Matrix<I, J, O> = (m, f) =>
 	vec.map(m, (row, j) => vec.map(row, (v, i) => f(v, [i, j], m)));
 
+export function sub<I extends number, J extends number>(
+	m1: Matrix<I, J, number>,
+	m2: Matrix<I, J, number>
+): Matrix<I, J, number> {
+	return add(
+		m1,
+		map(m2, v => -v)
+	);
+}
+
 /**
  * Unsafely drops values in the matrix that do not make f return true.
  *
@@ -225,7 +235,7 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 
 //https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
 export const minors: <IJ extends number>(s: Square<IJ>) => Square<IJ> = s =>
-	map(s, (v, [column, row], m) => {
+	map(s, (_, [column, row], m) => {
 		// form a new matrix omitting the row and column of the selected value
 		const smaller = filter(
 			m,
@@ -256,3 +266,12 @@ export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
 
 	return map(transpose(checkerboard(minors(m))), n => d * n);
 };
+
+/**
+ * Convert a vector into matrix form.
+ *
+ * I'm sure there must be a name for this convention but I don't know it.
+ */
+export function fromVec<L extends number, T>(v: Vector<L, T>): Matrix<1, L, T> {
+	return vec.map(v, v => [v]);
+}

@@ -142,7 +142,7 @@ export const main = async (argv: string[] = process.argv) => {
 				waitUntil: 'networkidle2',
 				timeout,
 			});
-		} catch (e) {
+		} catch (_) {
 			// if the network doesn't go idle, we still take the screenshot
 		}
 

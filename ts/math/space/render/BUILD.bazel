@@ -1,0 +1,19 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "render",
+    srcs = [
+        "braille.ts",
+        "project.ts",
+    ],
+    deps = [
+        "//ts/iter",
+        "//ts/math",
+        "//ts/math/canvas/braille",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
