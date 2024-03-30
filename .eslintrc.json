@@ -12,7 +12,6 @@
 		"eslint:recommended",
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
-		"plugin:@typescript-eslint/strict",
 		"plugin:react-hooks/recommended",
 		"plugin:@next/next/recommended"
 	],
@@ -36,6 +35,7 @@
 			"parser": "@typescript-eslint/parser",
 			"extends": [
 				"plugin:@typescript-eslint/eslint-recommended",
+				"plugin:@typescript-eslint/strict-type-checked",
 				"plugin:@typescript-eslint/recommended"
 			],
 			"plugins": [
@@ -50,11 +50,20 @@
 						"allowSingleExtends": true
 					}
 				],
-				"@typescript-eslint/no-unused-vars": "error"
+				"@typescript-eslint/no-unused-vars": "error",
+				"@typescript-eslint/no-non-null-assertion": 0
+			},
+			"parserOptions": {
+				"sourceType": "module",
+				"ecmaVersion": 2020,
+				"project": [
+					"tsconfig.json"
+				]
 			}
 		}
 	],
 	"rules": {
+		"@typescript-eslint/no-non-null-assertion": 0,
 		"react/forbid-elements": [
 			"error",
 			{
@@ -67,7 +76,8 @@
 			}
 		],
 		"no-restricted-imports": [
-			"error", {
+			"error",
+			{
 				"name": "next/link",
 				"message": "<NextLink> is dangerous. Please use the <Link> component instead."
 			}
@@ -157,7 +167,6 @@
 			"error",
 			"as-needed"
 		],
-		"@typescript-eslint/no-non-null-assertion": 0,
 		"@typescript-eslint/no-unnecessary-condition": "error",
 		"no-console": "error"
 	},

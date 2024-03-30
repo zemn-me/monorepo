@@ -9,7 +9,7 @@ export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
 ) => Vector<I, U> = (vec, c) =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
 	vec.map(c as any) as any;
 
 /**
@@ -38,10 +38,11 @@ export const reverse: <I extends number, T>(v: Vector<I, T>) => Iterable<T> =
 
 export const as: <T, L extends number>(
 	v: readonly T[] & { length: L }
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
 ) => Vector<L, T> = v => v as any;
 
 export function New<N extends number>(n: number): Vector<N, unknown> {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	return [...Array(n)] as Vector<N, unknown>;
 }
 
@@ -85,6 +86,8 @@ const _zip: <T1, T2, T3>(
 		yield [left, right];
 	}
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const zip: {
 	<T1, T2, L extends number>(
 		v1: Vector<L, T1>,

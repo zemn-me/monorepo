@@ -18,7 +18,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 		...(function* () {
 			for (const line of lines) {
 				for (const point of line) {
-					yield point[0]![0]!;
+					yield point[0][0];
 				}
 			}
 		})(),
@@ -28,7 +28,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 		...(function* () {
 			for (const line of lines) {
 				for (const point of line) {
-					yield point[1]![0]!;
+					yield point[1][0];
 				}
 			}
 		})(),
@@ -48,7 +48,7 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 			{[...lines].map(line => {
 				const d = line
 					.map((pts, i) => {
-						const [[x], [y]] = pts!;
+						const [[x], [y]] = pts;
 						const cmd = i > 0 ? 'L' : 'M';
 						return `${cmd}${x},${y}`;
 					})
