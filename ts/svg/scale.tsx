@@ -84,13 +84,15 @@ export const Ticks: <N extends Num>(
 				const text = formatter(tick);
 				const pos = percScale(tick.valueOf())!;
 				const tickLength = 40;
-				const tickBottomPos = [pos, tickLength] as const;
+				const tickBottomPos: [number, number] = [pos, tickLength];
 
-				let tickPath: svg.Path<2> = [[pos, 0], tickBottomPos] as const;
+				let tickPath: svg.Path<2> = [[pos, 0], tickBottomPos];
 
 				let textMiddlePos: svg.Path<1> = [
-					vec.add(
-						vec.map(tickBottomPos, v => v.valueOf()),
+					vec.add<2>(
+						vec.map<2, number, number>(tickBottomPos, v =>
+							v.valueOf()
+						),
 						[
 							0,
 							direction == DIRECTION.Down
@@ -126,11 +128,17 @@ export const Ticks: <N extends Num>(
 						[0, -offset + 180, 1],
 					] as const;
 
-					tickPath = svg.homog2Cart(
-						matrix.mul(svg.cart2Homog(tickPath), transform)
+					tickPath = svg.homog2Cart<2>(
+						matrix.mul<3, 2, 3, 3>(
+							svg.cart2Homog<2>(tickPath),
+							transform
+						)
 					);
-					textMiddlePos = svg.homog2Cart(
-						matrix.mul(svg.cart2Homog(textMiddlePos), transform)
+					textMiddlePos = svg.homog2Cart<1>(
+						matrix.mul<3, 1, 3, 3>(
+							svg.cart2Homog<1>(textMiddlePos),
+							transform
+						)
 					);
 				}
 
