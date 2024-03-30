@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//ts:__subpackages__"])
+
+ts_project(
+    name = "reddit",
+    deps = [
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/zod",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = ["reddit_test.js"],
+    deps = [":reddit"],
+)
+
+bazel_lint(name = "bazel_lint")
