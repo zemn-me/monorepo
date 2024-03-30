@@ -5,18 +5,27 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "braille",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = [
+        "braille.ts",
+    ],
     deps = [
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/react",
         "//:node_modules/d3-array",
         "//:node_modules/d3-scale",
         "//:node_modules/react",
+        "//ts/math/space",
+    ],
+)
+
+ts_project(
+    name = "braille_test_ts",
+    srcs = [
+        "braille_test.ts",
+    ],
+    deps = [
+        ":braille",
+        "//:node_modules/@types/jest",
         "//ts/math",
     ],
 )
