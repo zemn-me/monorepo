@@ -90,6 +90,16 @@ export const map: <I extends number, J extends number, T, O>(
 ) => Matrix<I, J, O> = (m, f) =>
 	vec.map(m, (row, j) => vec.map(row, (v, i) => f(v, [i, j], m)));
 
+export function sub<I extends number, J extends number>(
+	m1: Matrix<I, J, number>,
+	m2: Matrix<I, J, number>
+): Matrix<I, J, number> {
+	return add(
+		m1,
+		map(m2, v => -v)
+	);
+}
+
 /**
  * Unsafely drops values in the matrix that do not make f return true.
  *

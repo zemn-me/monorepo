@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "space",
+    srcs = glob(["*.ts"]),
+    deps = [
+        "//ts/iter",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
