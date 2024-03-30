@@ -1,4 +1,4 @@
-import { rectContaninsPoint } from '#root/ts/math/cartesian.js';
+import { Point, rectContaninsPoint } from '#root/ts/math/cartesian.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
@@ -388,11 +388,12 @@ describe('cartesian', () => {
 		const testCases = [
 			[[[0], [0]], [[10], [10]], [[5], [5]], true],
 			[[[0], [0]], [[10], [10]], [[-1], [-1]], false],
-		] as const;
+		] as [min: Point<2>, max: Point<2>, point: Point<2>, result: boolean][];
+
 		test.each(testCases)(
 			'rectContainsPoint(%p)(%p)(%p) → %p',
 			(min, max, point, result) =>
-				expect(rectContaninsPoint(min)(max)(point)).toEqual(result)
+				expect(rectContaninsPoint<2>(min)(max)(point)).toEqual(result)
 		);
 	});
 });

@@ -28,11 +28,11 @@ export const zero = as<0, 0>([] as any);
 export function New<I extends number, J extends number>(
 	i: I,
 	j: J
-): Matrix<I, J, undefined> {
+): Matrix<I, J, unknown> {
 	return vec.map(vec.New(j), () => vec.New(i));
 }
 
-export const add: <I extends number, J extends number>(
+export const add: <const I extends number, const J extends number>(
 	m1: Matrix<I, J>,
 	m2: Matrix<I, J>
 ) => Matrix<I, J> = <I extends number, J extends number>(
@@ -66,30 +66,19 @@ export const col: <I extends number, J extends number, T>(
 	for (let j = 0; j < jsize; j++) yield v[j]![i]!;
 };
 
-export const mul: <
-	I1 extends number,
-	J1 extends number,
-	I2 extends number,
-	J2 extends number,
->(
-	m1: Matrix<I1, J1>,
-	m2: Matrix<I2, J2>
-) => Multiply<Matrix<I1, J1>, Matrix<I2, J2>> = <
-	I1 extends number,
-	J1 extends number,
-	I2 extends number,
-	J2 extends number,
->(
-	m1: Matrix<I1, J1>,
-	m2: Matrix<I2, J2>
-) => {
+export function mul<
+	const I1 extends number,
+	const J1 extends number,
+	const I2 extends number,
+	const J2 extends number,
+>(m1: Matrix<I1, J1>, m2: Matrix<I2, J2>): Matrix<I2, J1> {
 	const [, /*i1*/ j1] = size(m1);
 	const [i2 /*, j2*/] = size(m2);
 
 	return vec.map(vec.New<J1>(j1), (_, i) =>
 		vec.map(vec.New<I2>(i2), (_, j) => vec.dot(row(m1, i), col(m2, j)))
 	);
-};
+}
 
 export const map: <I extends number, J extends number, T, O>(
 	m: Matrix<I, J, T>,
