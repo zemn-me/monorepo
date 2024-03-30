@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
