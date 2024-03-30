@@ -1,6 +1,7 @@
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/eslint:rules.bzl", "eslint_test")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
@@ -11,8 +12,21 @@ def js_binary(name, **kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(jsdom = None, deps = [], **kwargs):
+def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
+    """
+    Run jest on a set of files.
+
+    Args:
+        jsdom: include a fake browser DOM
+        srcs: set of test files to run on (if unspecified, will be the .js versions of all .ts files)
+        deps: set of dep files needed when we run the tests
+        **kwargs: passed to __jest_test (an aspect_rules_js js_binary macro)
+    """
     jest_config = None
+
+    if srcs == None:
+        srcs = [paths.replace_extension(p, ".js") for p in native.glob(["*_test.ts"])]
+
     if jsdom:
         jest_config = "//ts/jest:jest.browser.config.js"
         deps = deps + ["//ts/jest:config_browser"]
