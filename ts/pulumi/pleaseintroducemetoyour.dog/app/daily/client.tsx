@@ -131,10 +131,16 @@ export function DogsOfTheDay() {
 					<pre>{`${doggs.error}`}</pre> ...
 				</p>
 			) : null}
-			{doggs.data?.data?.children?.map((post, i) => (
-				<Post key={i} {...post.data} />
-			)) ?? null}
-			<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>
+			{doggs.data?.data?.children ? (
+				<>
+					{' '}
+					{doggs.data.data.children.map((post, i) => (
+						<Post key={i} {...post.data} />
+					))}{' '}
+					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
+				</>
+			) : null}
+
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>
 	);
