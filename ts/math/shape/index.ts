@@ -5,6 +5,7 @@ import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import { map } from '#root/ts/math/vec';
 
 export class Square implements Canvas.Drawable2D {
 	public readonly r: number;
@@ -62,9 +63,9 @@ export class Translate3D<T extends Canvas.Drawable3D>
 	) {}
 
 	public lines3D(): Homog.Line3D[] {
-		return this.target
-			.lines3D()
-			.map(line => line.map(point => Matrix.add(point, this.by)));
+		return map(this.target.lines3D(), line =>
+			map(line, point => Matrix.add<1, 4>(point, this.by))
+		);
 	}
 }
 
@@ -135,7 +136,7 @@ export class QuaternionMultiply<
 	) {}
 	lines3D() {
 		return this.value.lines3D().map(line =>
-			line.map(point => {
+			line.map((point): Homog.Point3D => {
 				const [xi, yi, zi] = Homog.pointToCart(point);
 				const [[x], [y], [z]] = [xi!, yi!, zi!];
 				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
@@ -148,7 +149,7 @@ export class QuaternionMultiply<
 				const n = q1.multiply(q2);
 
 				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
-				return [[nx], [ny], [nz], [1]] as const;
+				return [[nx], [ny], [nz], [1]];
 			})
 		);
 	}
@@ -175,7 +176,7 @@ export class QuaternionRotate<
 			new EulerAngle(rx!, ry!, rz!)
 		);
 		return this.value.lines3D().map(line =>
-			line.map(point => {
+			line.map((point): Homog.Point3D => {
 				const [xi, yi, zi] = Homog.pointToCart(point);
 				const [[x], [y], [z]] = [xi!, yi!, zi!];
 				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(

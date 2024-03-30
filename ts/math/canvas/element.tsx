@@ -47,8 +47,8 @@ export const Canvas: React.FC<CanvasProps> = ({ draw }) => {
 		>
 			{[...lines].map(line => {
 				const d = line
-					.map(([pts], i) => {
-						const [x, y] = pts!;
+					.map((pts, i) => {
+						const [[x], [y]] = pts!;
 						const cmd = i > 0 ? 'L' : 'M';
 						return `${cmd}${x},${y}`;
 					})
