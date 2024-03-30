@@ -17,3 +17,5 @@ export const output = 'export';
 
 // eslint-disable-next-line
 export const generateBuildId = async () => { /*REPLACE*/ throw new Error() /*REPLACE*/ };
+
+export const productionBrowserSourceMaps = true;
