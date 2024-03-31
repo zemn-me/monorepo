@@ -101,10 +101,6 @@ load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
 
 rust_analyzer_dependencies()
 
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
-
-rules_js_dependencies()
-
 load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
 
 # force node version to be above 18
@@ -113,23 +109,6 @@ load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_r
 nodejs_register_toolchains(
     name = "nodejs",
     node_version = DEFAULT_NODE_VERSION if int(DEFAULT_NODE_VERSION.split(".")[0]) > 18 else "18.13.0",
-)
-
-load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock", "pnpm_repository")
-
-npm_translate_lock(
-    name = "npm",
-    # https://github.com/aspect-build/rules_js/blob/11d3c4655b07d3094e0682a75402e972e8dae361/WORKSPACE#L139
-    lifecycle_hooks_execution_requirements = {
-        "puppeteer": [
-            "no-sandbox",
-            "requires-network",
-        ],
-    },
-    npmrc = "//:.npmrc",
-    patch_args = {"*": ["-p1"]},
-    pnpm_lock = "//:pnpm-lock.yaml",
-    verify_node_modules_ignored = "//:.bazelignore",
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
