@@ -168,13 +168,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.5/rules_nodejs-v6.0.5.tar.gz",
     )
 
-    http_archive(
-        name = "aspect_rules_js",
-        sha256 = "41129b17c0951b663a30c55710a0842767cd162137b7cd3a200f43e32161ce7a",
-        strip_prefix = "rules_js-1.40.0",
-        url = "https://github.com/aspect-build/rules_js/releases/download/v1.40.0/rules_js-v1.40.0.tar.gz",
-    )
-
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
