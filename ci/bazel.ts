@@ -94,6 +94,24 @@ async function* AnnotateDebugStatements(lines: AsyncGenerator<string>) {
 	}
 }
 
+async function* AnnotateNonCacheWarnings(lines: AsyncGenerator<string>) {
+	for await (const line of lines) {
+		const m =
+			/\s+WARNING: Fetching from [^\s]+ without an integrity hash. The result will not be cached/g.exec(
+				line
+			);
+
+		if (m === null) {
+			yield line;
+			continue;
+		}
+
+		yield Command('error')({
+			file: 'MODULE.bazel',
+		})(line);
+	}
+}
+
 async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 	const failures: string[] = [];
 
@@ -195,7 +213,9 @@ async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
 
 export function AnnotateBazelLines(lines: AsyncGenerator<string>) {
 	return AnnotateBuildCompletion(
-		AnnotateBazelFailures(AnnotateDebugStatements(lines))
+		AnnotateBazelFailures(
+			AnnotateNonCacheWarnings(AnnotateDebugStatements(lines))
+		)
 	);
 }
 
@@ -232,11 +252,16 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	);
 	const errors: Error[] = [];
 	process.addListener('error', e => errors.push(e));
+	/**
+	 * If a github actions error is observed in any line.
+	 */
+	let errorObserved = false;
 
 	for await (const line of interleave(
 		AnnotateBazelLines(byLine(process.stdout)),
 		AnnotateBazelLines(byLine(process.stderr))
 	)) {
+		if (!errorObserved && /^::error/.test(line)) errorObserved = true;
 		// eslint-disable-next-line no-console
 		console.log(line);
 	}
@@ -252,5 +277,11 @@ export async function Bazel(cwd: string, ...args: string[]) {
 
 	if (process.exitCode !== 0) {
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
+	}
+
+	if (errorObserved) {
+		throw new Error(
+			`Bazel exited successfully, but at least one error was observed.`
+		);
 	}
 }
