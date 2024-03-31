@@ -25,10 +25,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e",
-        strip_prefix = "protobuf-25.3",
+        sha256 = "4fc5ff1b2c339fb86cd3a25f0b5311478ab081e65ad258c6789359cd84d421f8",
+        strip_prefix = "protobuf-26.1",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v25.3.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v26.1.tar.gz",
         ],
     )
 
@@ -43,10 +43,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e",
-        strip_prefix = "protobuf-25.3",
+        sha256 = "4fc5ff1b2c339fb86cd3a25f0b5311478ab081e65ad258c6789359cd84d421f8",
+        strip_prefix = "protobuf-26.1",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v25.3.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v26.1.tar.gz",
         ],
     )
 
@@ -173,13 +173,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         sha256 = "41129b17c0951b663a30c55710a0842767cd162137b7cd3a200f43e32161ce7a",
         strip_prefix = "rules_js-1.40.0",
         url = "https://github.com/aspect-build/rules_js/releases/download/v1.40.0/rules_js-v1.40.0.tar.gz",
-    )
-
-    http_archive(
-        name = "aspect_rules_swc",
-        sha256 = "cde09df7dea773adaed896612434559f8955d2dfb2cfd6429ee333f30299ed34",
-        strip_prefix = "rules_swc-1.2.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.2.2.tar.gz",
     )
 
     # Got no idea why but MS doesn't publish versions of this...
