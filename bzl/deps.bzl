@@ -42,7 +42,6 @@ def fetch_dependencies():
     http_archive(
         name = "rules_pkg",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.10.1/rules_pkg-0.10.1.tar.gz",
             "https://github.com/bazelbuild/rules_pkg/releases/download/0.10.1/rules_pkg-0.10.1.tar.gz",
         ],
         sha256 = "d250924a2ecc5176808fc4c25d5cf5e9e79e6346d79d5ab1c493e289e722d1d0",
@@ -162,12 +161,6 @@ filegroup(
 exports_files(glob(["**/*"], exclude_directories=0))
         """,
         # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
-    )
-
-    http_archive(
-        name = "rules_rust",
-        sha256 = "c30dfdf1e86fd50650a76ea645b3a45f2f00667b06187a685e9554e167ca97ee",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.40.0/rules_rust-v0.40.0.tar.gz"],
     )
 
     http_archive(
