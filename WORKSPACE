@@ -87,33 +87,6 @@ load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolcha
 
 register_coreutils_toolchains()
 
-##################
-# rules_ts setup #
-##################
-# Fetches the rules_ts dependencies.
-# If you want to have a different version of some dependency,
-# you should fetch it *before* calling this.
-# Alternatively, you can skip calling this function, so long as you've
-# already fetched all the dependencies.
-load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
-
-rules_ts_dependencies(
-
-    # Alternatively, you could pick a specific version, or use
-    # load("@aspect_rules_ts//ts:repositories.bzl", "LATEST_VERSION")
-    # ts_version = LATEST_VERSION
-
-    # HEAD is currently further along than rules_ts has patches for.
-    # this will break updates to typescript, so should probably be removed when
-    # rules_ts is updated.
-    # As per https://docs-legacy.aspect.build/aspect-build/rules_ts/v0.10.0/docs/repositories-docgen.html
-    # Generate via
-    # curl --silent https://registry.npmjs.org/typescript/5.0.3 | jq -r '.dist.integrity'
-    #ts_integrity = "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
-    # This keeps the TypeScript version in-sync with the editor, which is typically best.
-    ts_version_from = "//:package.json",
-)
-
 register_copy_directory_toolchains()
 
 register_copy_to_directory_toolchains()
