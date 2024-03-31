@@ -40,15 +40,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "rules_pkg",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.10.1/rules_pkg-0.10.1.tar.gz",
-            "https://github.com/bazelbuild/rules_pkg/releases/download/0.10.1/rules_pkg-0.10.1.tar.gz",
-        ],
-        sha256 = "d250924a2ecc5176808fc4c25d5cf5e9e79e6346d79d5ab1c493e289e722d1d0",
-    )
-
-    http_archive(
         name = "bazel_gazelle",
         sha256 = "32938bda16e6700063035479063d9d24c60eda8d79fd4739563f50d331cb3209",
         urls = [
