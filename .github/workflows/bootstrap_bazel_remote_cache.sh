@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "::group::Configure Bazel Remote Cache"
 
 if [[ -z "${BUILDBUDDY_API_KEY}" ]]; then
@@ -24,5 +26,7 @@ else
 fi
 
 echo "::endgroup::"
+
+set +e
 
 exit 0
