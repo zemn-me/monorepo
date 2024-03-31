@@ -209,13 +209,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         url = "https://github.com/aspect-build/rules_js/releases/download/v1.40.0/rules_js-v1.40.0.tar.gz",
     )
 
-    http_archive(
-        name = "aspect_rules_swc",
-        sha256 = "cde09df7dea773adaed896612434559f8955d2dfb2cfd6429ee333f30299ed34",
-        strip_prefix = "rules_swc-1.2.2",
-        url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.2.2.tar.gz",
-    )
-
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
