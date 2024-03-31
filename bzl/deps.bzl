@@ -4,13 +4,6 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file"
 
 def fetch_dependencies():
     http_archive(
-        name = "rules_python",
-        sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
-        strip_prefix = "rules_python-0.31.0",
-        url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.31.0.tar.gz",
-    )
-
-    http_archive(
         name = "io_bazel_rules_go",
         sha256 = "80a98277ad1311dacd837f9b16db62887702e9f1d1c4c9f796d0121a46c8e184",
         url = "https://github.com/bazelbuild/rules_go/releases/download/v0.46.0/rules_go-v0.46.0.zip",
