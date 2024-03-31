@@ -90,27 +90,3 @@ register_coreutils_toolchains()
 register_copy_directory_toolchains()
 
 register_copy_to_directory_toolchains()
-
-###################
-# rules_swc setup #
-###################
-
-# Fetches the rules_swc dependencies.
-# If you want to have a different version of some dependency,
-# you should fetch it *before* calling this.
-# Alternatively, you can skip calling this function, so long as you've
-# already fetched all the dependencies.
-load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
-
-rules_swc_dependencies()
-
-# Fetches a SWC cli from
-# https://github.com/swc-project/swc/releases
-# If you'd rather compile it from source, you can use rules_rust, fetch the project,
-# then register the toolchain yourself. (Note, this is not yet documented)
-load("@aspect_rules_swc//swc:repositories.bzl", "LATEST_VERSION", "swc_register_toolchains")
-
-swc_register_toolchains(
-    name = "swc",
-    swc_version = LATEST_VERSION,
-)
