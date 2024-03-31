@@ -156,12 +156,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
-        name = "rules_rust",
-        sha256 = "c30dfdf1e86fd50650a76ea645b3a45f2f00667b06187a685e9554e167ca97ee",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.40.0/rules_rust-v0.40.0.tar.gz"],
-    )
-
-    http_archive(
         name = "aspect_rules_ts",
         strip_prefix = "rules_ts-2.2.0",
         sha256 = "c77f0dfa78c407893806491223c1264c289074feefbf706721743a3556fa7cea",
