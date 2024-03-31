@@ -112,5 +112,6 @@ build --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 fetch --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 
-common:ci --lockfile_mode=error
+# need to update renovate to generate these
+#common:ci --lockfile_mode=error
 common:ci --build_metadata=ROLE=CI
