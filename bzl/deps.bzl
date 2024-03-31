@@ -33,27 +33,11 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "rules_proto",
-        sha256 = "66bfdf8782796239d3875d37e7de19b1d94301e8972b3cbd2446b332429b4df1",
-        strip_prefix = "rules_proto-4.0.0",
-        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/4.0.0.tar.gz",
-    )
-
-    http_archive(
         name = "com_google_protobuf",
         sha256 = "d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e",
         strip_prefix = "protobuf-25.3",
         urls = [
             "https://github.com/protocolbuffers/protobuf/archive/v25.3.tar.gz",
-        ],
-    )
-
-    http_archive(
-        name = "rules_typescript_proto",
-        sha256 = "aac6dec2c8d55da2b2c2689b7a2afe44b691555cab32e2eaa2bdd29627d950e9",
-        strip_prefix = "rules_typescript_proto-1.0.1",
-        urls = [
-            "https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
         ],
     )
 
