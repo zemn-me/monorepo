@@ -28,3 +28,5 @@ oci.pull(
 use_repo(oci, "distroless_base")
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
+
+bazel_dep(name = "aspect_rules_js", version = "1.40.0")
