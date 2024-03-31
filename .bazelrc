@@ -111,3 +111,6 @@ build --experimental_profile_include_primary_output
 build --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 fetch --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
+
+common:ci --lockfile_mode=error
+common:ci --build_metadata=ROLE=CI

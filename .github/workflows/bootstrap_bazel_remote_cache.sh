@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "::group::Configure Bazel Remote Cache"
 
 if [[ -z "${BUILDBUDDY_API_KEY}" ]]; then
@@ -19,10 +21,11 @@ else
 		echo "Running locally."
 	else
 		echo "Running on CI."
-		echo "build --build_metadata=ROLE=CI" >> .auth.bazelrc
 	fi
 fi
 
 echo "::endgroup::"
+
+set +e
 
 exit 0
