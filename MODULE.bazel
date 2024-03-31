@@ -28,3 +28,6 @@ oci.pull(
 use_repo(oci, "distroless_base")
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
+
+bazel_dep(name = "bazel_skylib", version = "1.5.0")
+bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.5.0", dev_dependency = True)
