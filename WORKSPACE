@@ -29,22 +29,6 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-load("@rules_python//python:repositories.bzl", "py_repositories")
-
-py_repositories()
-
-load("@rules_python//python:pip.bzl", "pip_parse")
-
-pip_parse(
-    name = "pip",
-    # pip-compile
-    requirements_lock = "//:requirements.txt",
-)
-
-load("@pip//:requirements.bzl", "install_deps")
-
-install_deps()
-
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
@@ -52,12 +36,6 @@ go_rules_dependencies()
 load("//:go_version.bzl", "go_version")
 
 go_register_toolchains(version = go_version)
-
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
 
 # below line needed because deps are defined in bzl/deps.bzl
 # gazelle:repo bazel_gazelle
