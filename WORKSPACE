@@ -53,12 +53,6 @@ load("//:go_version.bzl", "go_version")
 
 go_register_toolchains(version = go_version)
 
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
-
 # below line needed because deps are defined in bzl/deps.bzl
 # gazelle:repo bazel_gazelle
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
