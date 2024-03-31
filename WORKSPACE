@@ -79,16 +79,6 @@ load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
 
 rust_analyzer_dependencies()
 
-load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
-
-# force node version to be above 18
-# this should eventually be loaded from package.json engines.
-
-nodejs_register_toolchains(
-    name = "nodejs",
-    node_version = DEFAULT_NODE_VERSION if int(DEFAULT_NODE_VERSION.split(".")[0]) > 18 else "18.13.0",
-)
-
 load("@npm//:repositories.bzl", "npm_repositories")
 
 npm_repositories()
