@@ -43,7 +43,7 @@ jobs:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
         run: |
-         ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+         ./.github/workflows/prepare_ci.sh && \
          echo "::group::Presubmit prep" && \
          bazel build //ci:presubmit && \
          echo "::endgroup::" && \
@@ -86,8 +86,8 @@ jobs:
         # not yet existing on main.
         run: |
             echo "::group::Presubmit prep" && \
-            test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
-            ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+            test -f ./.github/workflows/prepare_ci.sh && \
+            ./.github/workflows/prepare_ci.sh && \
             bazel build //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
@@ -104,7 +104,7 @@ jobs:
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
-         ./.github/workflows/bootstrap_bazel_remote_cache.sh
+         ./.github/workflows/prepare_ci.sh
          bazel run --tool_tag=presubmit //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
@@ -136,7 +136,7 @@ jobs:
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
-          ./.github/workflows/bootstrap_bazel_remote_cache.sh
+          ./.github/workflows/prepare_ci.sh
           bazel run //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -166,7 +166,7 @@ jobs:
   #     # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
   #     - name: Postsubmit
   #       run: |
-  #         ./.github/workflows/bootstrap_bazel_remote_cache.sh
+  #         ./.github/workflows/prepare_ci.sh
   #         bazel run //ci:postsubmit
   #       env:
   #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
