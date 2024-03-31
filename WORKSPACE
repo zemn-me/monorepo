@@ -53,32 +53,6 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
-load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
-
-rules_rust_dependencies()
-
-rust_register_toolchains(edition = "2021")
-
-# this rule is really weird. see docs https://github.com/bazelbuild/rules_rust/blob/main/crate_universe/private/crates_repository.bzl#L137
-load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
-
-crates_repository(
-    name = "cargo",
-    cargo_lockfile = "//:Cargo.Bazel.lock",
-    lockfile = "//:cargo-bazel-lock.json",
-    manifests = ["//:Cargo.toml"],
-    # Should match the version represented by the currently registered `rust_toolchain`.
-    rust_version = "1.60.0",
-)
-
-load("@cargo//:defs.bzl", "crate_repositories")
-
-crate_repositories()
-
-load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
-
-rust_analyzer_dependencies()
-
 load("@npm//:repositories.bzl", "npm_repositories")
 
 npm_repositories()
