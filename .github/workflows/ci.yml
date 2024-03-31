@@ -43,12 +43,12 @@ jobs:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
         run: |
-         ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
+         ./.github/workflows/prepare_ci.sh && \
          echo "::group::Presubmit prep" && \
-         bazel build //ci:presubmit && \
+         bazel build --config=ci --tool_tag=presubmit //ci:presubmit && \
          echo "::endgroup::" && \
          echo "::group::Presubmit" && \
-         bazel run --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
+         bazel run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
          echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
@@ -86,12 +86,12 @@ jobs:
         # not yet existing on main.
         run: |
             echo "::group::Presubmit prep" && \
-            test -f ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
-            ./.github/workflows/bootstrap_bazel_remote_cache.sh && \
-            bazel build //ci:presubmit && \
+            test -f ./.github/workflows/prepare_ci.sh && \
+            ./.github/workflows/prepare_ci.sh && \
+            bazel build --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            bazel run --tool_tag=presbmit //ci:presubmit -- --skip-bazel-tests --dirty \
+            bazel run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
             --dangerously-skip-pnpm-lockfile-validation --overwrite && \
             echo "::endgroup::"
         env:
@@ -104,8 +104,8 @@ jobs:
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
-         ./.github/workflows/bootstrap_bazel_remote_cache.sh
-         bazel run --tool_tag=presubmit //ci:presubmit -- \
+         ./.github/workflows/prepare_ci.sh
+         bazel run --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
          --dangerously-skip-pnpm-lockfile-validation --dirty
         env:
@@ -136,8 +136,8 @@ jobs:
         # Use npx to try to generate only
         # bazel generated node_modules
         run: |
-          ./.github/workflows/bootstrap_bazel_remote_cache.sh
-          bazel run //ci:submit
+          ./.github/workflows/prepare_ci.sh
+          bazel run --config=ci --tool_tag=submit //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -166,7 +166,7 @@ jobs:
   #     # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
   #     - name: Postsubmit
   #       run: |
-  #         ./.github/workflows/bootstrap_bazel_remote_cache.sh
+  #         ./.github/workflows/prepare_ci.sh
   #         bazel run //ci:postsubmit
   #       env:
   #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
