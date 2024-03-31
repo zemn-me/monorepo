@@ -13,19 +13,22 @@ oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 # Declare external images you need to pull, for example:
 oci.pull(
     name = "distroless_base",
+    digest = "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
     image = "gcr.io/distroless/base",
     platforms = [
         "linux/amd64",
         "linux/arm64/v8",
+        "linux/arm/v7",
+        "linux/s390x",
+        "linux/ppc64le",
     ],
-    # 'latest' is not reproducible, but it's convenient.
-    # During the build we print a WARNING message that includes recommended 'digest' and 'platforms'
-    # values which you can use here in place of 'tag' to pin for reproducibility.
-    tag = "latest",
 )
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
-use_repo(oci, "distroless_base")
+use_repo(
+    oci,
+    "distroless_base",
+)
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
 bazel_dep(name = "bazel_skylib", version = "1.5.0")
