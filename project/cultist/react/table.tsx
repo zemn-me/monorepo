@@ -222,16 +222,19 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 	element: e,
 }) => {
 	const onDragStart: React.DragEventHandler<HTMLDivElement> =
-		React.useCallback(ev => {
-			if (!('datatransfer' in ev)) return;
-			ev.dataTransfer.effectAllowed = 'move';
-			ev.dataTransfer.setData(
-				'application/json+elementKey',
-				JSON.stringify({
-					elementKey,
-				})
-			);
-		}, []);
+		React.useCallback(
+			ev => {
+				if (!('datatransfer' in ev)) return;
+				ev.dataTransfer.effectAllowed = 'move';
+				ev.dataTransfer.setData(
+					'application/json+elementKey',
+					JSON.stringify({
+						elementKey,
+					})
+				);
+			},
+			[elementKey]
+		);
 	return (
 		<foreignObject
 			height={h}

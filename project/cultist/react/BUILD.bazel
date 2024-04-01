@@ -7,8 +7,10 @@ ts_project(
     name = "react",
     srcs = [
         "index.tsx",
-        "table.module.css",
         "table.tsx",
+    ],
+    assets = [
+        "table.module.css",
     ],
     resolve_json_module = True,
     deps = [
