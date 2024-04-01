@@ -2,6 +2,7 @@ use sha2::{Digest, Sha256};
 use std::{convert, env::args, fs::File, io};
 
 #[derive(Debug)]
+#[allow(dead_code)] // not sure why I have to do this
 enum RunError {
     Io(io::Error),
 }

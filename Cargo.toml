@@ -1,3 +1,5 @@
+# to resync with lockfile:
+# CARGO_BAZEL_REPIN=1 bazel sync --only=cargo
 [package]
 name = "monorepo"
 version = "0.1.0"
@@ -7,6 +9,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "=4.5.4", features = ["derive"] }
+clap_derive = "=4.5.4"
 swc_common = "=0.33.21"
 sha2 = "=0.10.8"
 hex = "=0.4.3"
