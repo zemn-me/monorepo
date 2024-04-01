@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import 'project/zemn.me/app/base.css';
 
 import { Metadata } from 'next/types';

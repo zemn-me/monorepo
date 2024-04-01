@@ -8,7 +8,7 @@ export interface Props {
 
 export default function Redirect({ to }: Props) {
 	const router = useRouter();
-	useEffect(() => void router.replace(to), []);
+	useEffect(() => void router.replace(to), [router, to]);
 	return (
 		<Head>
 			<title>{`Redirect to ${to}`}</title>

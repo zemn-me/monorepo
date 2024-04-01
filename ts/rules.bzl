@@ -2,8 +2,8 @@ load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//bzl/lint:linters.bzl", "eslint_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
-load("//js/eslint:rules.bzl", "eslint_test")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
 def js_binary(name, **kwargs):
@@ -41,23 +41,52 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, srcs = [], data = [], **kwargs):
+def ts_lint(name, **kwargs):
     eslint_test(
         name = name,
-        data = data + srcs,
         **kwargs
     )
 
-def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
+    """
+    Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
+
+    Also generates an _typings tag (typescript types) and an _lint tag
+    (lint tests).
+
+    Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
+    so deps which are invalid eslint files should instead use an /* eslint-disable */ comment.
+
+    Args:
+        name: build tag name
+        visibility: bazel visibility
+        deps: ts source file deps
+        data: runtime deps
+        resolve_json_module: passed to the underlying ts_project
+        srcs: typescript source files
+        tsconfig: the tsconfig file to use (defaults to //:tsconfig)
+        preserve_jsx: passed to the aspect_rules_js ts_project rule
+        tags: test tags
+        lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
+        **kwargs: passed to the ts_project rule
+    """
     if srcs == None:
         srcs = native.glob(["**/*.ts", "**/*.tsx"])
 
+    # needed because package.json tells node it can use ESM resolution at runtime
+    # and all code is now esm.
+    data = data + ["//:package_json"]
+    srcs = srcs + ["//:package_json"]
+
+    # swc injects this
+    deps = deps + ["//:node_modules/regenerator-runtime"]
+
     _ts_project(
         name = name,
-        srcs = srcs + ["//:package_json"],
+        srcs = srcs,
+        data = data,
         tsconfig = tsconfig,
-        # swc injects this
-        deps = deps + ["//:node_modules/regenerator-runtime"],
+        deps = deps,
         transpiler = partial.make(
             swc,
             swcrc = "//:swcrc",
@@ -71,9 +100,5 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         **kwargs
     )
 
-    ts_lint(name = name + "_lint", data = [
-        x
-        for x in srcs
-        if x not in ignores_lint and
-           (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
-    ], tags = tags)
+    if lint:
+        ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)

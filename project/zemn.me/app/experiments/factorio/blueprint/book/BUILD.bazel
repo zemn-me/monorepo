@@ -4,16 +4,25 @@ load("//ts:rules.bzl", "ts_project")
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
+    name = "bad_files",
+    srcs = [
+        "bigEntitiesListThatMakesTypescriptSad.ts",
+        "myBlueprints.ts",
+    ],
+    lint = False,
+)
+
+ts_project(
     name = "book",
+    srcs = [
+        "page.tsx",
+    ],
     assets = glob([
         "**/*.css",
         "**/*.svg",
     ]),
-    ignores_lint = [
-        "bigEntitiesListThatMakesTypescriptSad.ts",
-        "myBlueprints.ts",
-    ],
     deps = [
+        ":bad_files",
         "//:node_modules/@types/react",
         "//project/zemn.me/components",
         "//ts/factorio",
