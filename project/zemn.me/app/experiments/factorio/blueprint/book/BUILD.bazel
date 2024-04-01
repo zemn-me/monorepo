@@ -9,10 +9,6 @@ ts_project(
         "**/*.css",
         "**/*.svg",
     ]),
-    ignores_lint = [
-        "bigEntitiesListThatMakesTypescriptSad.ts",
-        "myBlueprints.ts",
-    ],
     deps = [
         "//:node_modules/@types/react",
         "//project/zemn.me/components",
