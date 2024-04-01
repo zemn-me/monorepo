@@ -1,0 +1,9 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
+
+eslint_bin.eslint_binary(name = "eslint")
+
+format_multirun(
+    name = "format",
+    javascript = "//:eslint",
+)
