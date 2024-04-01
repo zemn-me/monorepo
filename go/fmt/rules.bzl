@@ -1,11 +1,10 @@
-def test_go_fmt(srcs = [], deps = [], **kwargs):
-    native.sh_test(
-        env = {
-            "GOFMT": "$(rootpath @go_sdk//:bin/gofmt)",
-        },
-        deps = deps,
-        srcs = ["//go/fmt:test_fmt.sh"],
-        data = ["@go_sdk//:bin/gofmt"] + srcs,
-        args = ["$(rootpath %s)" % x for x in srcs],
+"Test formatting of Go code."
+
+load("@aspect_rules_lint//format:defs.bzl", "format_test")
+
+def test_go_fmt(srcs = [], **kwargs):
+    format_test(
+        srcs = srcs,
+        go = "@go_sdk//:bin/gofmt",
         **kwargs
     )
