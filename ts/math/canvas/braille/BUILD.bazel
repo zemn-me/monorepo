@@ -9,6 +9,7 @@ ts_project(
         "braille.ts",
     ],
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/d3-array",

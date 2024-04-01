@@ -36,7 +36,8 @@ module.exports = {
 			"parser": "@typescript-eslint/parser",
 			"extends": [
 				"plugin:@typescript-eslint/eslint-recommended",
-				"plugin:@typescript-eslint/recommended"
+				"plugin:@typescript-eslint/recommended",
+				"plugin:@typescript-eslint/strict-type-checked"
 			],
 			"plugins": [
 				"@typescript-eslint"
@@ -179,8 +180,8 @@ module.exports = {
 			"tsconfig.json"
 		],
 		"extraFileExtensions": [
-			"md",
-			"mdx"
+			".md",
+			".mdx"
 		]
 	},
 	"ignorePatterns": [

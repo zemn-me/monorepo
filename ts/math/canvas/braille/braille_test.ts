@@ -1,4 +1,5 @@
 import { range } from 'd3-array';
+import { expect, it } from '@jest/globals';
 
 import {
 	plot,

@@ -1,0 +1,197 @@
+{
+	"$schema": "https://json.schemastore.org/eslintrc",
+	"root": true,
+	"plugins": [
+		"prettier",
+		"simple-import-sort",
+		"react",
+		"react-hooks",
+		"@next/next"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:prettier/recommended",
+		"plugin:react/recommended",
+		"plugin:react-hooks/recommended",
+		"plugin:@next/next/recommended"
+	],
+	"overrides": [
+		{
+			"files": [
+				"**/*.md?(x)"
+			],
+			"extends": [
+				"plugin:mdx/recommended"
+			],
+			"settings": {
+				"mdx/code-blocks": true,
+				"mdx/language-mapper": {}
+			}
+		},
+		{
+			"files": [
+				"**/*.{ts,js}?(x)"
+			],
+			"parser": "@typescript-eslint/parser",
+			"extends": [
+				"plugin:@typescript-eslint/eslint-recommended",
+				"plugin:@typescript-eslint/strict-type-checked",
+				"plugin:@typescript-eslint/recommended"
+			],
+			"plugins": [
+				"@typescript-eslint"
+			],
+			"rules": {
+				"@typescript-eslint/no-floating-promises": "error",
+				"@typescript-eslint/no-misused-promises": "error",
+				"@typescript-eslint/no-empty-interface": [
+					"error",
+					{
+						"allowSingleExtends": true
+					}
+				],
+				"@typescript-eslint/no-unused-vars": "error",
+				"@typescript-eslint/no-non-null-assertion": 0
+			},
+			"parserOptions": {
+				"sourceType": "module",
+				"ecmaVersion": 2020,
+				"project": [
+					"tsconfig.json"
+				]
+			}
+		}
+	],
+	"rules": {
+		"@typescript-eslint/no-non-null-assertion": 0,
+		"react/forbid-elements": [
+			"error",
+			{
+				"forbid": [
+					{
+						"element": "a",
+						"message": "<a> is dangerous. Please use the Link component instead."
+					}
+				]
+			}
+		],
+		"no-restricted-imports": [
+			"error",
+			{
+				"name": "next/link",
+				"message": "<NextLink> is dangerous. Please use the <Link> component instead."
+			}
+		],
+		"react/prop-types": 0,
+		"react/display-name": 0,
+		"react/prefer-read-only-props": [
+			"error"
+		],
+		"react/react-in-jsx-scope": 0,
+		"react/self-closing-comp": [
+			"error"
+		],
+		"react/jsx-sort-props": [
+			"error"
+		],
+		"react/no-unescaped-entities": 0,
+		"prettier/prettier": "error",
+		"arrow-parens": [
+			"error",
+			"as-needed"
+		],
+		"arrow-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": true
+			}
+		],
+		"prefer-const": [
+			"error",
+			{
+				"destructuring": "all"
+			}
+		],
+		"no-else-return": [
+			"error",
+			{
+				"allowElseIf": false
+			}
+		],
+		"no-extra-bind": "error",
+		"no-multi-spaces": [
+			"error"
+		],
+		"array-bracket-newline": [
+			"error",
+			"consistent"
+		],
+		"no-unused-expressions": [
+			"error"
+		],
+		"no-constant-binary-expression": [
+			"error"
+		],
+		"no-sequences": [
+			"error"
+		],
+		"array-element-newline": [
+			"error",
+			"consistent"
+		],
+		"block-spacing": [
+			"error",
+			"always"
+		],
+		"comma-spacing": [
+			"error"
+		],
+		"computed-property-spacing": [
+			"error"
+		],
+		"key-spacing": [
+			"error"
+		],
+		"simple-import-sort/imports": [
+			"error"
+		],
+		"simple-import-sort/exports": [
+			"error"
+		],
+		"keyword-spacing": "error",
+		"object-curly-newline": [
+			"error"
+		],
+		"arrow-body-style": [
+			"error",
+			"as-needed"
+		],
+		"@typescript-eslint/no-unnecessary-condition": "error",
+		"no-console": "error"
+	},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2020,
+		"project": [
+			"tsconfig.json"
+		],
+		"extraFileExtensions": [
+			"md",
+			"mdx"
+		]
+	},
+	"ignorePatterns": [
+		"tsconfig.json"
+	],
+	"settings": {
+		"react": {
+			"version": "detect"
+		},
+		"next": {
+			"rootDir": [
+				"project/zemn.me/"
+			]
+		}
+	}
+}
