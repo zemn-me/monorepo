@@ -15,7 +15,7 @@ export interface Props {
 export default function Redirect({ to }: Props) {
 	const href = typeof to === 'string' ? to : to.toString();
 	const router = useRouter();
-	useEffect(() => void router.replace(href), []);
+	useEffect(() => void router.replace(href), [href, router]);
 	return (
 		<Head>
 			<title>{`Redirect to ${to}`}</title>

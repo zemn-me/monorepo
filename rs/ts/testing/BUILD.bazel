@@ -14,7 +14,8 @@ genrule(
     name = "output",
     outs = ["output.ts"],
     cmd = """
-    $(location :testing) > $@
+	echo '/* eslint-disable */' > $@
+    $(location :testing) >> $@
     """,
     tools = [":testing"],
 )
@@ -22,7 +23,6 @@ genrule(
 ts_project(
     name = "output_ts",
     srcs = ["output.ts"],
-    ignores_lint = ["output.ts"],
 )
 
 bazel_lint(name = "bazel_lint")

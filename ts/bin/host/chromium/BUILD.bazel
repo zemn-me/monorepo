@@ -1,9 +1,6 @@
+"Provides the rlocationpath of chromium to TypeScript"
+
 load("//bzl:rules.bzl", "bazel_lint")
-
-"""
-Provides the rlocationpath of chromium to TypeScript
-"""
-
 load("//ts:rules.bzl", "ts_project")
 
 genrule(
@@ -13,7 +10,8 @@ genrule(
     ],
     outs = ["path.ts"],
     cmd_bash = """
-		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" > $@
+		echo '/* eslint-disable */' > $@
+		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" >> $@
 		echo "export const chromiumPath = Runfiles.resolve('$(rlocationpath //bin/host/chromium)')" >> $@
 	""",
 )
@@ -22,7 +20,6 @@ ts_project(
     name = "chromium",
     srcs = ["path.ts"],
     data = ["//bin/host/chromium"],
-    ignores_lint = ["path.ts"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@bazel/runfiles",
