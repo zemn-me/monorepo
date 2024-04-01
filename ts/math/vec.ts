@@ -18,7 +18,7 @@ export const map: <I extends number, T, U>(
 export const imap: <T, U>(
 	v: Iterable<T>,
 	f: (v: T, i: number) => U
-) => Iterable<U> = function* (v, f) {
+			) => Iterable<U> = function* (v, f) {
 	let i = 0;
 	for (const l of v) {
 		yield f(l, i);
