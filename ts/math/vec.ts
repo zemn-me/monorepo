@@ -8,7 +8,7 @@ export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
-) => Vector<I, U> = (vec, c) =>
+	) => Vector<I, U> = (vec, c) =>
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 	vec.map(c as any) as any;
 
@@ -18,7 +18,7 @@ export const map: <I extends number, T, U>(
 export const imap: <T, U>(
 	v: Iterable<T>,
 	f: (v: T, i: number) => U
-) => Iterable<U> = function* (v, f) {
+			) => Iterable<U> = function* (v, f) {
 	let i = 0;
 	for (const l of v) {
 		yield f(l, i);
