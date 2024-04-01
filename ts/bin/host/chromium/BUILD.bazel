@@ -1,9 +1,6 @@
+"Provides the rlocationpath of chromium to TypeScript"
+
 load("//bzl:rules.bzl", "bazel_lint")
-
-"""
-Provides the rlocationpath of chromium to TypeScript
-"""
-
 load("//ts:rules.bzl", "ts_project")
 
 genrule(
