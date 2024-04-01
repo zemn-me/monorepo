@@ -2,8 +2,8 @@ load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//bzl/lint:linters.bzl", "eslint_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
-load("//js/eslint:rules.bzl", "eslint_test")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
 def js_binary(name, **kwargs):
@@ -41,10 +41,9 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, srcs = [], data = [], **kwargs):
+def ts_lint(name, **kwargs):
     eslint_test(
         name = name,
-        data = data + srcs,
         **kwargs
     )
 
@@ -71,9 +70,4 @@ def ts_project(name, visibility = None, deps = [], ignores_lint = [], resolve_js
         **kwargs
     )
 
-    ts_lint(name = name + "_lint", data = [
-        x
-        for x in srcs
-        if x not in ignores_lint and
-           (x[-len(".ts"):] == ".ts" or x[-len(".tsx"):] == ".tsx")
-    ], tags = tags)
+    ts_lint(name = name + "_lint", srcs = [name], tags = tags)
