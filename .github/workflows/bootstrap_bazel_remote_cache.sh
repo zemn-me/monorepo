@@ -15,7 +15,7 @@ else
 	echo "build --remote_timeout=3600" >> .auth.bazelrc
 	echo "build --experimental_remote_cache_compression" >> .auth.bazelrc
 	echo "build --nolegacy_important_outputs" >> .auth.bazelrc
-	echo "build --experimental_remote_build_event_upload=minimal" >> .auth.bazelrc
+	echo "build --remote_build_event_upload=minimal" >> .auth.bazelrc
 	echo "build --remote_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}" >> .auth.bazelrc
 	if [[ "${CI}" -ne "true" ]]; then
 		echo "Running locally."
