@@ -87,8 +87,8 @@ dependencies:
     specifier: 0.4.15
     version: 0.4.15
   npm:
-    specifier: 10.5.0
-    version: 10.5.0
+    specifier: 10.5.1
+    version: 10.5.1
   pako:
     specifier: 2.1.0
     version: 2.1.0
@@ -14754,8 +14754,8 @@ packages:
       path-key: 4.0.0
     dev: true
 
-  /npm@10.5.0:
-    resolution: {integrity: sha512-Ejxwvfh9YnWVU2yA5FzoYLTW52vxHCz+MHrOFg9Cc8IFgF/6f5AGPAvb5WTay5DIUP1NIfN3VBZ0cLlGO0Ys+A==}
+  /npm@10.5.1:
+    resolution: {integrity: sha512-RozZuGuWbbhDM2sRhOSLIRb3DLyof6TREi0TW5b3xUEBropDhDqEHv0iAjA1zsIwXKgfIkR8GvQMd4oeKKg9eQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     dev: false
@@ -14767,6 +14767,7 @@ packages:
       - '@npmcli/map-workspaces'
       - '@npmcli/package-json'
       - '@npmcli/promise-spawn'
+      - '@npmcli/redact'
       - '@npmcli/run-script'
       - '@sigstore/tuf'
       - abbrev
