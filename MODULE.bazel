@@ -30,6 +30,22 @@ use_repo(
     "distroless_base",
 )
 
+oci.pull(
+    name = "ecr_lambda_base",
+    image = "public.ecr.aws/lambda/provided:al2023.2024.03.28.15",
+    tag = "public.ecr.aws/lambda/provided:al2023.2024.03.28.15",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+    ],
+)
+
+# For each oci.pull call, repeat the "name" here to expose them as dependencies.
+use_repo(
+    oci,
+    "ecr_lambda_base",
+)
+
 bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
 bazel_dep(name = "bazel_skylib", version = "1.5.0")
 
@@ -68,6 +84,9 @@ npm.npm_translate_lock(
     npmrc = "@@//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
+    lifecycle_hooks_execution_requirements = {
+        "aws-lambda-ric": ["no-sandbox"],
+    },
 )
 use_repo(npm, "npm")
 
@@ -82,3 +101,5 @@ rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "0.15.0")
+
+bazel_dep(name = "container_structure_test", version = "1.16.0")
