@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+exports_files(
+    [
+        "interface_test.tmpl.ts",
+        "lambda.tmpl.ts",
+        "fileExistenceTest.yml",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+)
