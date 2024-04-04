@@ -1,0 +1,7 @@
+schemaVersion: "2.0.0"
+
+commandTests:
+  - name: "try running aws-lambda-ric"
+    command: "npx"
+    args:
+      - aws-lambda-ric

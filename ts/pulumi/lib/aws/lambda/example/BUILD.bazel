@@ -1,0 +1,30 @@
+load("@container_structure_test//:defs.bzl", "container_structure_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/pulumi/lib/aws/lambda:rules.bzl", "js_lambda_func")
+
+ts_project(
+    name = "example_ts",
+    srcs = ["main.ts"],
+    deps = [
+        "//:node_modules/@types/aws-lambda",
+    ],
+)
+
+js_lambda_func(
+    name = "example_lambda_func",
+    out = "module.ts",
+    component_name = "ExampleLambdaFunc",
+    entry_point = "main.js",
+    deps = [":example_ts"],
+)
+
+container_structure_test(
+    name = "structure_test",
+    configs = ["testRit.yml"],
+    image = "example_lambda_func_image_image",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+)
