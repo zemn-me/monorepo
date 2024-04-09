@@ -326,8 +326,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.280.0
-    version: 37.280.0(typanion@3.14.0)
+    specifier: 37.280.1
+    version: 37.280.1(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -7719,7 +7719,7 @@ packages:
     engines: {node: '>=18.12.0'}
     dependencies:
       '@arcanis/slice-ansi': 1.1.1
-      '@types/semver': 7.5.6
+      '@types/semver': 7.5.8
       '@types/treeify': 1.0.0
       '@yarnpkg/fslib': 3.0.2
       '@yarnpkg/libzip': 3.0.1(@yarnpkg/fslib@3.0.2)
@@ -16425,8 +16425,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.280.0(typanion@3.14.0):
-    resolution: {integrity: sha512-i/giIG+EyOJBhj7SpImjKAuutu72OVhY1MRgjPD5O72qEk/NHARZlkctuFBHC/Xy0HxApA64TzPDqI2u0U+uag==}
+  /renovate@37.280.1(typanion@3.14.0):
+    resolution: {integrity: sha512-Wloc4l0IkmTPM0Jz8AQxpo102AoY7rCErWr/EnDF0hPIjwRaK03bdo751FQFTpwPtV5Kn6JFVc7iS2HiGGg7Lw==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
