@@ -34,10 +34,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "bazel_gazelle",
-        sha256 = "32938bda16e6700063035479063d9d24c60eda8d79fd4739563f50d331cb3209",
+        sha256 = "75df288c4b31c81eb50f51e2e14f4763cb7548daae126817247064637fd9ea62",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.35.0/bazel-gazelle-v0.35.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.35.0/bazel-gazelle-v0.35.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.36.0/bazel-gazelle-v0.36.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.36.0/bazel-gazelle-v0.36.0.tar.gz",
         ],
     )
 
@@ -163,20 +163,20 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_nodejs",
-        sha256 = "a50986c7d2f2dc43a5b9b81a6245fd89bdc4866f1d5e316d9cef2782dd859292",
-        strip_prefix = "rules_nodejs-6.0.5",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.0.5/rules_nodejs-v6.0.5.tar.gz",
+        sha256 = "dddd60acc3f2f30359bef502c9d788f67e33814b0ddd99aa27c5a15eb7a41b8c",
+        strip_prefix = "rules_nodejs-6.1.0",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.0/rules_nodejs-v6.1.0.tar.gz",
     )
 
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/00a02e4c5df4838d5f1039229e304564106ca186.zip",
-        strip_prefix = "json-schemas-00a02e4c5df4838d5f1039229e304564106ca186",
+        url = "https://github.com/microsoft/json-schemas/archive/a4e04a31f1af63d1782b5316431011c70d7f1c74.zip",
+        strip_prefix = "json-schemas-a4e04a31f1af63d1782b5316431011c70d7f1c74",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "a0622810ed502e04b0614e2f21f071c1cfdb557a3cd7f4501a506fe8ca1251f6",
+        sha256 = "fbf48aed992b4fa2e9480519ac2e450a2e5e6eb84e4aedd618dbdf33dc9d3afe",
     )
 
     ##########

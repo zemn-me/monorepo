@@ -30,7 +30,7 @@ use_repo(
     "distroless_base",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.6.1")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.0")
 bazel_dep(name = "bazel_skylib", version = "1.5.0")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.5.0", dev_dependency = True)
@@ -48,12 +48,12 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "1.2.2")
 bazel_dep(name = "rules_proto", version = "6.0.0-rc2")
-bazel_dep(name = "aspect_rules_js", version = "1.40.0")
+bazel_dep(name = "aspect_rules_js", version = "1.40.1")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
 # Optionally you can pin a different node version:
-bazel_dep(name = "rules_nodejs", version = "6.0.5")
+bazel_dep(name = "rules_nodejs", version = "6.1.0")
 #node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 
 #node.toolchain(node_version = "18.13.0")
@@ -81,4 +81,4 @@ rules_ts_ext = use_extension(
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 
-bazel_dep(name = "aspect_rules_lint", version = "0.15.0")
+bazel_dep(name = "aspect_rules_lint", version = "0.18.0")
