@@ -41,6 +41,9 @@ def next_project(name, srcs, **kwargs):
     ts_project(
         name = name + "_next_config",
         srcs = ["next.config.ts"],
+        deps = [
+            "//:node_modules/source-map-loader",
+        ],
     )
 
     srcs = srcs + [
