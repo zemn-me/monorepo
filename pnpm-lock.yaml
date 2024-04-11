@@ -326,8 +326,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.284.0
-    version: 37.284.0(typanion@3.14.0)
+    specifier: 37.284.1
+    version: 37.284.1(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -4704,7 +4704,7 @@ packages:
     resolution: {integrity: sha512-TXVX57fJV7SA6LvRkeXPIOBr8AKvKDlhwNVBP/26O9DjIFi+CkYZGFLP9WtPdVOicRIhqGHxBCC6Fdj5AWWGgQ==}
     engines: {node: '>= 18'}
     dependencies:
-      '@octokit/types': 12.3.0
+      '@octokit/types': 12.6.0
       universal-user-agent: 6.0.0
     dev: true
 
@@ -4713,7 +4713,7 @@ packages:
     engines: {node: '>= 18'}
     dependencies:
       '@octokit/request': 8.1.6
-      '@octokit/types': 12.3.0
+      '@octokit/types': 12.6.0
       universal-user-agent: 6.0.0
     dev: true
 
@@ -4778,7 +4778,7 @@ packages:
     resolution: {integrity: sha512-X7pnyTMV7MgtGmiXBwmO6M5kIPrntOXdyKZLigNfQWSEQzVxR4a4vo49vJjTWX70mPndj8KhfT4Dx+2Ng3vnBQ==}
     engines: {node: '>= 18'}
     dependencies:
-      '@octokit/types': 12.3.0
+      '@octokit/types': 12.6.0
       deprecation: 2.3.1
       once: 1.4.0
     dev: true
@@ -4789,7 +4789,7 @@ packages:
     dependencies:
       '@octokit/endpoint': 9.0.3
       '@octokit/request-error': 5.0.1
-      '@octokit/types': 12.3.0
+      '@octokit/types': 12.6.0
       universal-user-agent: 6.0.0
     dev: true
 
@@ -8539,8 +8539,8 @@ packages:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
     dev: true
 
-  /better-sqlite3@9.4.3:
-    resolution: {integrity: sha512-ud0bTmD9O3uWJGuXDltyj3R47Nz0OHX8iqPOT5PMspGqlu/qQFn+5S2eFBUCrySpavTjFXbi4EgrfVvPAHlImw==}
+  /better-sqlite3@9.4.5:
+    resolution: {integrity: sha512-uFVyoyZR9BNcjSca+cp3MWCv6upAv+tbMC4SWM51NIMhoQOm4tjIkyxFO/ZsYdGAF61WJBgdzyJcz4OokJi0gQ==}
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -16487,8 +16487,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.284.0(typanion@3.14.0):
-    resolution: {integrity: sha512-MRQAoKHf5Hpac2bnZ7yllsnuufFBzzD+Oe1XLcf+YuRchWwPZO4uVlF1COe0qhiJweJdW+tbCtDumEBsyi3huw==}
+  /renovate@37.284.1(typanion@3.14.0):
+    resolution: {integrity: sha512-8BCOHUxsgqMRkzRqq3nCya+qlnDaRdTn0M5gS9IWC9Gdhz4RX4VqRBAt9XLtIDUQ8/2edWE8CwzJ86ntAyjp7w==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -16525,7 +16525,7 @@ packages:
       auth-header: 1.0.0
       aws4: 1.12.0
       azure-devops-node-api: 12.5.0
-      better-sqlite3: 9.4.3
+      better-sqlite3: 9.4.5
       bunyan: 1.8.15
       cacache: 18.0.2
       cacheable-lookup: 5.0.4
