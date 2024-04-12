@@ -12,8 +12,8 @@ dependencies:
     specifier: 12.0.1
     version: 12.0.1(commander@12.0.0)
   '@next/eslint-plugin-next':
-    specifier: 14.2.0
-    version: 14.2.0
+    specifier: 14.2.1
+    version: 14.2.1
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0
@@ -260,8 +260,8 @@ devDependencies:
     specifier: 9.0.0
     version: 9.0.0
   eslint-config-next:
-    specifier: 14.2.0
-    version: 14.2.0(eslint@9.0.0)(typescript@5.4.5)
+    specifier: 14.2.1
+    version: 14.2.1(eslint@9.0.0)(typescript@5.4.5)
   eslint-config-prettier:
     specifier: 9.1.0
     version: 9.1.0(eslint@9.0.0)
@@ -4392,8 +4392,8 @@ packages:
     resolution: {integrity: sha512-3G1yD/XKTSLdihyDSa8JEsaWOELY+OWe08o0LUYzfuHp1zHDA8SObQlzKt+v+wrkkPcnPweoLH1ImZeUa0A1NQ==}
     dev: true
 
-  /@next/eslint-plugin-next@14.2.0:
-    resolution: {integrity: sha512-QkM01VPhwcupezVevy9Uyl1rmpg2PimhMjkb+ySmnPgSKUUM/PGGRQxdFgMpHv/JzQoC8kRySgKeM441GiizcA==}
+  /@next/eslint-plugin-next@14.2.1:
+    resolution: {integrity: sha512-Fp+mthEBjkn8r9qd6o4JgxKp0IDEzW0VYHD8ZC05xS5/lFNwHKuOdr2kVhWG7BQCO9L6eeepshM1Wbs2T+LgSg==}
     dependencies:
       glob: 10.3.10
 
@@ -10304,8 +10304,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-next@14.2.0(eslint@9.0.0)(typescript@5.4.5):
-    resolution: {integrity: sha512-N0eQkn/wz557mIpW4JQWGEv4wGU8zvJ7emLHMS15uC18jjaU4kx6leR4U9QYT/eNghUZT7N9lBlfd8E4N0cp1w==}
+  /eslint-config-next@14.2.1(eslint@9.0.0)(typescript@5.4.5):
+    resolution: {integrity: sha512-BgD0kPCWMlqoItRf3xe9fG0MqwObKfVch+f2ccwDpZiCJA8ghkz2wrASH+bI6nLZzGcOJOpMm1v1Q1euhfpt4Q==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -10313,7 +10313,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 14.2.0
+      '@next/eslint-plugin-next': 14.2.1
       '@rushstack/eslint-patch': 1.6.0
       '@typescript-eslint/parser': 6.21.0(eslint@9.0.0)(typescript@5.4.5)
       eslint: 9.0.0
