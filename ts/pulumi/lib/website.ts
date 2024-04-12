@@ -179,7 +179,7 @@ export class Website extends pulumi.ComponentResource {
 			new aws.s3.BucketObjectv2(
 				`${name}_security_txt`,
 				{
-					key: getS3Key('.well_known/security.txt'),
+					key: getS3Key('.well-known/security.txt'),
 					bucket: bucket.id,
 					contentType: 'text/plain',
 					source: new pulumi.asset.FileAsset(
