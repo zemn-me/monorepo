@@ -1,5 +1,5 @@
 {
-  "checksum": "527f0d40e4e03a4e62297ab3fc9462d7867e084fc33f006c460eab1838bdf1d9",
+  "checksum": "e3040cd00033830629f3e69d359d415bf645bc374c4a2e0133a98b8ad9b671cf",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1844,7 +1844,7 @@
               "target": "sha2"
             },
             {
-              "id": "swc_atoms 0.6.6",
+              "id": "swc_atoms 0.6.7",
               "target": "swc_atoms"
             },
             {
@@ -3199,14 +3199,14 @@
       ],
       "license_file": "LICENSE"
     },
-    "swc_atoms 0.6.6": {
+    "swc_atoms 0.6.7": {
       "name": "swc_atoms",
-      "version": "0.6.6",
+      "version": "0.6.7",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_atoms/0.6.6/download",
-          "sha256": "04d9d1941a7d24fc503efa29c53f88dd61e6a15cc371947a75cca3b48d564b5b"
+          "url": "https://static.crates.io/crates/swc_atoms/0.6.7/download",
+          "sha256": "bb6567e4e67485b3e7662b486f1565bdae54bd5b9d6b16b2ba1a9babb1e42125"
         }
       },
       "targets": [
@@ -3250,7 +3250,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.6.6"
+        "version": "0.6.7"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -3332,7 +3332,7 @@
               "target": "siphasher"
             },
             {
-              "id": "swc_atoms 0.6.6",
+              "id": "swc_atoms 0.6.7",
               "target": "swc_atoms"
             },
             {
@@ -5179,7 +5179,7 @@
     "hex 0.4.3",
     "serde_json 1.0.116",
     "sha2 0.10.8",
-    "swc_atoms 0.6.6",
+    "swc_atoms 0.6.7",
     "swc_common 0.33.24"
   ],
   "direct_dev_deps": []
