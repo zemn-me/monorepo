@@ -329,8 +329,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.301.0
-    version: 37.301.0(typanion@3.14.0)
+    specifier: 37.301.1
+    version: 37.301.1(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -16647,8 +16647,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.301.0(typanion@3.14.0):
-    resolution: {integrity: sha512-na5pytggetktanqbzUrI5TB0Edn7Z1YUAEhBFafEPil2y9A+U2ng3cGohVHH+pzDcBrGZfiDOfACnbHc0Tle8A==}
+  /renovate@37.301.1(typanion@3.14.0):
+    resolution: {integrity: sha512-WUo7OmTKJN+WHIrD9WruUGAiKWQm1NO8x675jniglrXLNTLrHSK2APTsK+83wBuK+HHntlz9TZwaZfD05SZCMg==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -18745,7 +18745,7 @@ packages:
       is-arguments: 1.1.1
       is-generator-function: 1.0.10
       is-typed-array: 1.1.13
-      which-typed-array: 1.1.14
+      which-typed-array: 1.1.15
     dev: true
 
   /utils-merge@1.0.1:
@@ -19072,17 +19072,6 @@ packages:
 
   /which-module@2.0.1:
     resolution: {integrity: sha512-iBdZ57RDvnOR9AGBhML2vFZf7h8vmBjhoaZqODJBFWHVtKkDmKuHai3cx5PgVMrX5YDNp27AofYbAwctSS+vhQ==}
-
-  /which-typed-array@1.1.14:
-    resolution: {integrity: sha512-VnXFiIW8yNn9kIHN88xvZ4yOWchftKDsRJ8fEPacX/wl1lOvBrhsJ/OeJCXq7B0AaijRuqgzSKalJoPk+D8MPg==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      available-typed-arrays: 1.0.7
-      call-bind: 1.0.7
-      for-each: 0.3.3
-      gopd: 1.0.1
-      has-tostringtag: 1.0.2
-    dev: true
 
   /which-typed-array@1.1.15:
     resolution: {integrity: sha512-oV0jmFtUky6CXfkqehVvBP/LSWJ2sy4vWMioiENyJLePrBO/yKyV9OyJySfAKosh+RYkIl5zJCNZ8/4JncrpdA==}
