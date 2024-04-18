@@ -12,8 +12,8 @@ dependencies:
     specifier: 12.0.1
     version: 12.0.1(commander@12.0.0)
   '@next/eslint-plugin-next':
-    specifier: 14.2.1
-    version: 14.2.1
+    specifier: 14.2.2
+    version: 14.2.2
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.4.5)
@@ -260,8 +260,8 @@ devDependencies:
     specifier: 9.0.0
     version: 9.0.0
   eslint-config-next:
-    specifier: 14.2.1
-    version: 14.2.1(eslint@9.0.0)(typescript@5.4.5)
+    specifier: 14.2.2
+    version: 14.2.2(eslint@9.0.0)(typescript@5.4.5)
   eslint-config-prettier:
     specifier: 9.1.0
     version: 9.1.0(eslint@9.0.0)
@@ -4389,8 +4389,8 @@ packages:
     resolution: {integrity: sha512-3G1yD/XKTSLdihyDSa8JEsaWOELY+OWe08o0LUYzfuHp1zHDA8SObQlzKt+v+wrkkPcnPweoLH1ImZeUa0A1NQ==}
     dev: true
 
-  /@next/eslint-plugin-next@14.2.1:
-    resolution: {integrity: sha512-Fp+mthEBjkn8r9qd6o4JgxKp0IDEzW0VYHD8ZC05xS5/lFNwHKuOdr2kVhWG7BQCO9L6eeepshM1Wbs2T+LgSg==}
+  /@next/eslint-plugin-next@14.2.2:
+    resolution: {integrity: sha512-q+Ec2648JtBpKiu/FSJm8HAsFXlNvioHeBCbTP12T1SGcHYwhqHULSfQgFkPgHDu3kzNp2Kem4J54bK4rPQ5SQ==}
     dependencies:
       glob: 10.3.10
 
@@ -10262,8 +10262,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-next@14.2.1(eslint@9.0.0)(typescript@5.4.5):
-    resolution: {integrity: sha512-BgD0kPCWMlqoItRf3xe9fG0MqwObKfVch+f2ccwDpZiCJA8ghkz2wrASH+bI6nLZzGcOJOpMm1v1Q1euhfpt4Q==}
+  /eslint-config-next@14.2.2(eslint@9.0.0)(typescript@5.4.5):
+    resolution: {integrity: sha512-12/uFc0KX+wUs7EDpOUGKMXBXZJiBVGdK5/m/QgXOCg2mQ0bQWoKSWNrCeOg7Vum6Kw1d1TW453W6xh+GbHquw==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -10271,7 +10271,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 14.2.1
+      '@next/eslint-plugin-next': 14.2.2
       '@rushstack/eslint-patch': 1.6.0
       '@typescript-eslint/parser': 6.21.0(eslint@9.0.0)(typescript@5.4.5)
       eslint: 9.0.0
@@ -10434,7 +10434,7 @@ packages:
       eslint: 9.0.0
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@7.7.0)(eslint-import-resolver-node@0.3.9)(eslint@9.0.0)
-      hasown: 2.0.1
+      hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
       minimatch: 3.1.2
@@ -11679,13 +11679,6 @@ packages:
   /has@1.0.3:
     resolution: {integrity: sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==}
     engines: {node: '>= 0.4.0'}
-    dependencies:
-      function-bind: 1.1.2
-    dev: true
-
-  /hasown@2.0.1:
-    resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
-    engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
     dev: true
