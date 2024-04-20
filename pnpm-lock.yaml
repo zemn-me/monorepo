@@ -161,8 +161,8 @@ devDependencies:
     specifier: 7.43.1
     version: 7.43.1(@types/node@20.12.7)
   '@pulumi/aws':
-    specifier: 6.31.1
-    version: 6.31.1(ts-node@10.9.2)(typescript@5.4.5)
+    specifier: 6.32.0
+    version: 6.32.0(ts-node@10.9.2)(typescript@5.4.5)
   '@pulumi/awsx':
     specifier: 2.8.0
     version: 2.8.0(ts-node@10.9.2)(typescript@5.4.5)
@@ -5201,8 +5201,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.31.1(ts-node@10.9.2)(typescript@5.4.5):
-    resolution: {integrity: sha512-rko69kM0vd68otg1atK9tWg58jc5cI50V12xBXywxacRHswbfUGG17whF9eINb4NZiNPBlX7HrYwAxxAO66jtw==}
+  /@pulumi/aws@6.32.0(ts-node@10.9.2)(typescript@5.4.5):
+    resolution: {integrity: sha512-kXoRn427RjSALvyEwMI5wZibNf8lRlp16vgPfI2n2OT7CLvtmqnI16IRPJ01gVf8I95sku1meKqXwXAQ+2O1Zw==}
     dependencies:
       '@pulumi/pulumi': 3.113.3(ts-node@10.9.2)(typescript@5.4.5)
       builtin-modules: 3.0.0
@@ -5220,7 +5220,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
-      '@pulumi/aws': 6.31.1(ts-node@10.9.2)(typescript@5.4.5)
+      '@pulumi/aws': 6.32.0(ts-node@10.9.2)(typescript@5.4.5)
       '@pulumi/docker': 4.5.1(ts-node@10.9.2)(typescript@5.4.5)
       '@pulumi/pulumi': 3.113.3(ts-node@10.9.2)(typescript@5.4.5)
       '@types/aws-lambda': 8.10.119
