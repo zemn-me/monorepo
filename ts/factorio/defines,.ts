@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export enum _DefinesControlBehaviorTransportBeltContentReadMode {
-	pulse = 1,
-	hold = 2,
+	pulse = 0,
+	hold = 1,
 }
 
 export const DefinesControlBehaviorTransportBeltContentReadMode = z.nativeEnum(
@@ -13,8 +13,8 @@ export type DefinesControlBehaviorTransportBeltContentReadMode = z.TypeOf<
 >;
 
 export enum _DefinesControlBehaviorInserterHandReadMode {
-	hold = 1,
-	pulse = 2,
+	hold = 0,
+	pulse = 1,
 }
 
 export const DefinesControlBehaviorInserterHandReadMode = z.nativeEnum(
