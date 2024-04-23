@@ -2,8 +2,10 @@ import {
 	Blueprint,
 	blueprintSurroundedByWall,
 } from '#root/ts/factorio/blueprint';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
+import { powerBook } from '#root/ts/factorio/testing/testdata';
 
 const exampleBlueprint: BlueprintWrapper = {
 	blueprint: {
@@ -160,5 +162,11 @@ describe('blueprintSurroundedByWall', () => {
 				true
 			)
 		).toEqual('-');
+	});
+});
+
+describe('some problematic blueprints', () => {
+	it('should parse without failure', () => {
+		expect(() => BlueprintString.parse(powerBook)).not.toThrow();
 	});
 });

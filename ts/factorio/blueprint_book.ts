@@ -60,6 +60,7 @@ export type BlueprintBook = z.infer<typeof BlueprintBookBase> & {
 
 export const BlueprintBook: z.ZodType<BlueprintBook> = BlueprintBookBase.extend(
 	{
+		blueprint_book: z.lazy(() => BlueprintBook).optional(),
 		blueprints: z.array(
 			z.strictObject({
 				/**
