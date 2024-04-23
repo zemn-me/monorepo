@@ -39,7 +39,8 @@ def go_library(name = None, srcs = [], importpath = None, deps = [], **kwargs):
         **kwargs
     )
 
-    _test_go_fmt(
-        name = name + "_fmt",
-        srcs = srcs,
-    )
+    if len(srcs) > 0:
+        _test_go_fmt(
+            name = name + "_fmt",
+            srcs = srcs,
+        )
