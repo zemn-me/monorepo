@@ -4,8 +4,9 @@ import {
 } from '#root/ts/factorio/blueprint';
 import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
+import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
+import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
-import { powerBook } from '#root/ts/factorio/testing/testdata';
 
 const exampleBlueprint: BlueprintWrapper = {
 	blueprint: {
@@ -166,7 +167,11 @@ describe('blueprintSurroundedByWall', () => {
 });
 
 describe('some problematic blueprints', () => {
-	it('should parse without failure', () => {
+	test('power book', () => {
 		expect(() => BlueprintString.parse(powerBook)).not.toThrow();
+	});
+
+	test('big ass mall', () => {
+		expect(() => BlueprintString.parse(bigAssMall)).not.toThrow();
 	});
 });
