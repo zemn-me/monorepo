@@ -12,7 +12,7 @@ export const ArithmeticCombinatorParameters = z.strictObject({
 	/**
 	 * Second signal to use in an operation. If not specified, the second argument will be the value of second_constant.
 	 */
-	second_signl: SignalID.optional(),
+	second_signal: SignalID.optional(),
 	/**
 	 * Constant to use as the first argument of the operation. Has no effect when first_signal is set. Defaults to 0.
 	 */
