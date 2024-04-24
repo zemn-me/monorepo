@@ -62,7 +62,7 @@ export const Entity = z.strictObject({
 	/**
 	 * Cargo wagon inventory configuration, optional. #Inventory object
 	 */
-	inventory: Inventory.optional(),
+	inventory: Inventory.optional().nullable(),
 	/**
 	 * Used by Prototype/InfinityContainer, optional. #Infinity settings object
 	 */
