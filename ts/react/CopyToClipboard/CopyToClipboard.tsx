@@ -14,20 +14,20 @@ export function CopyToClipboard(props: CopyToClipboardProps) {
 	const onClick = useCallback(
 		(e: MouseEvent<HTMLButtonElement>) => {
 			e.preventDefault();
-			if (mutation.isLoading) return;
+			if (!mutation.isIdle) return;
 			mutation.mutate();
 		},
 		[mutation]
 	);
 	return (
 		<button
-			{...(mutation.isLoading ? { disabled: true } : {})}
+			{...(!mutation.isIdle ? { disabled: true } : {})}
 			onClick={onClick}
 		>
 			{'Copy to clipboard' +
 				{
 					idle: '.',
-					loading: '...',
+					pending: '...',
 					error: '..❌',
 					success: '..✅',
 				}[mutation.status]}
