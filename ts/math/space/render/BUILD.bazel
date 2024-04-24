@@ -10,6 +10,7 @@ ts_project(
         "project.ts",
     ],
     deps = [
+        "//:node_modules/d3-scale",
         "//ts/iter",
         "//ts/math",
         "//ts/math/canvas/braille",

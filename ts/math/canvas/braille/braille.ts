@@ -1,8 +1,11 @@
 import { extent, range } from 'd3-array';
 import { scaleLinear, scaleQuantize } from 'd3-scale';
 
+import { zip } from '#root/ts/iter';
 import {
 	domainScaleFitContain,
+	quantizedMerge,
+	quantizeLine,
 	unrolledSpace2D,
 } from '#root/ts/math/space/space';
 
@@ -242,6 +245,85 @@ export function plot2D<T>(
 
 	for (const item of all) {
 		unrolledSpace[index(scale(x(item)), scale(y(item)))] = 1;
+	}
+
+	return plot(unrolledSpace, width);
+}
+
+/**
+ * Plot a 2D space as braille characters.
+ *
+ * If height is not specified, it will be scaled the same way as width.
+ */
+export function plotLines2D<T>(
+	v: Iterable<T>,
+	line: (v: T) => [[x: number, y: number], [x: number, y: number]],
+	width: number
+): string {
+	const all = [...v];
+	const x = (v: T) => line(v).map(v => v[0]);
+	const y = (v: T) => line(v).map(v => v[1]);
+	const xValues = all.map(v => x(v)).flat(1);
+	const yValues = all.map(v => y(v)).flat(1);
+
+	const xExtent = extent(xValues, x => x);
+	const yExtent = extent(yValues, y => y);
+	console.log('xExtent', xExtent, 'yExtent', yExtent);
+	let [, yMax] = yExtent;
+	if (yMax == 0) yMax = 1;
+
+	const unifiedDomain = domainScaleFitContain(
+		[xExtent, yExtent],
+		([min]) => min!,
+		([, max]) => max!
+	);
+
+	// here we get the y range by seeing what it would be on a linear
+	// scale and rounding up.
+	const height = Math.ceil(scaleLinear(unifiedDomain, [0, width])(yMax!));
+
+	const scale = scaleQuantize(
+		unifiedDomain,
+		range(0, Math.max(width, height))
+	);
+
+	// i fucked this up but im not sure how yet
+	// oh. i need to do some kind of ordered permute over this list
+	// so i visit every [x,y] combination
+	//
+	// this didnt work and im kind of bewildered how i thought it would
+	const [xMaskIter, yMaskIter ] =
+			all.reduce<
+				[Iterable<1 | 0> | undefined, Iterable<1 | 0> | undefined]
+			>(
+				([xlq, ylq], c) => {
+					const [[x1, y1], [x2, y2]] = line(c);
+					const xQuantize = quantizeLine(x1, x2, scale);
+					const yQuantize = quantizeLine(y1, y2, scale);
+
+					return [
+						xlq === undefined
+							? xQuantize
+							: quantizedMerge(xlq, xQuantize),
+						ylq === undefined
+							? yQuantize
+							: quantizedMerge(ylq, yQuantize),
+					];
+				},
+				[undefined, undefined]
+			) as [Iterable<1 | 0>, Iterable<1 | 0>]
+
+	const [xMask, yMask] = [[...xMaskIter], [...yMaskIter]];
+
+
+	const [index, length] = unrolledSpace2D(width);
+
+	const unrolledSpace: Array<1 | 0> = Array(length(height)).fill(0);
+
+	for (let i = 0; i < unrolledSpace.length; i++) {
+		const x = i % width;
+		const y = Math.floor(i/  width);
+		unrolledSpace[i] = (xMask[x]! & yMask[y]!) as 0|1
 	}
 
 	return plot(unrolledSpace, width);
