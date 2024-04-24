@@ -1,4 +1,7 @@
-import { map } from '#root/ts/iter';
+import { ScaleQuantize } from 'd3-scale';
+
+import { map, zip, zip2 } from '#root/ts/iter';
+import { Line2D, Point } from '#root/ts/math/cartesian';
 
 /**
  * For an N-length array of 2-tuples representing the domain of data in axis N,
@@ -45,6 +48,48 @@ export function domainScaleFitContain<T>(
 	const maxV = Math.max(...all);
 
 	return [minV, maxV];
+}
+
+/**
+ * Returns a generator which is always zero unless
+ * the index of the generator in the scale range
+ * maps to the point in the scale domain.
+ */
+function* quantize(point: number, scale: ScaleQuantize<number>) {
+	const out = scale(point);
+
+	const [rangeMin, rangeMax] = scale.range();
+
+	for (let i = rangeMin!; i < rangeMax!; i++) {
+		if (i === out) yield 1;
+		yield 0;
+	}
+}
+
+export function quantizedMerge(
+	a: Iterable<1 | 0>,
+	b: Iterable<1 | 0>
+): Iterable<1 | 0> {
+	return map(zip(a, b), ([a, b]) => (a | b) as 0 | 1);
+}
+
+/**
+ * Returns a generator which is always zero unless the index of the
+ * generator in the scale range maps between the points in the scale domain.
+ */
+export function* quantizeLine(
+	start: number,
+	end: number,
+	scale: ScaleQuantize<number>
+) {
+	let linePos = 0;
+	for (const val of quantizedMerge(
+		quantize(start, scale),
+		quantize(end, scale)
+	)) {
+		linePos += val;
+		yield +(linePos == 1) as 0 | 1;
+	}
 }
 
 /**
