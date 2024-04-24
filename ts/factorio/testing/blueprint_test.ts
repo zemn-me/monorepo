@@ -6,6 +6,7 @@ import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
 import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery';
 import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
+import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
 
@@ -176,6 +177,11 @@ describe('some problematic blueprints', () => {
 		expect(() => BlueprintString.parse(bigAssMall)).not.toThrow();
 	});
 
+	test('train stations book', () => {
+		expect(() =>
+			BlueprintString.parse(neoVortexTrainStations)
+		).not.toThrow();
+	});
 	test('all oils refinery', () => {
 		expect(() => BlueprintString.parse(allOilsRefinery)).not.toThrow();
 	});

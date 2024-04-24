@@ -12,7 +12,7 @@ const WaitConditionBase = z.strictObject({
 
 export const WaitConditionWithCondition = WaitConditionBase.merge(
 	z.strictObject({
-		type: z.enum(['circuit', 'fluid_count']),
+		type: z.enum(['circuit', 'fluid_count', 'item_count']),
 		/**
 		 * CircuitCondition object, only present when type is "item_count", "circuit" or "fluid_count".
 		 */
@@ -29,7 +29,18 @@ export const WaitConditionWithTicks = WaitConditionBase.merge(
 		/**
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
 		 */
-		type: z.enum(['time', 'inactivity']),
+		type: z.enum([
+			'time',
+			'inactivity',
+			'full',
+			'empty',
+			'item_count',
+			'circuit',
+			'robots_inactive',
+			'fluid_count',
+			'passenger_present',
+			'passenger_not_present',
+		]),
 
 		/**
 		 * Number of ticks to wait or of inactivity. Only present when type is "time" or "inactivity". Optional.
@@ -46,9 +57,14 @@ export const WaitConditionEtc = WaitConditionBase.merge(
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
 		 */
 		type: z.enum([
+			'time',
+			'inactivity',
 			'full',
 			'empty',
+			'item_count',
+			'circuit',
 			'robots_inactive',
+			'fluid_count',
 			'passenger_present',
 			'passenger_not_present',
 		]),
