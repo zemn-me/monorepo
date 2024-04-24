@@ -21,10 +21,15 @@ export function plot3D(
 	focalLength: number,
 	width: number
 ): string {
-	return plot2D(
+	return Braille.plotLines2D(
 		lines.map(line =>
 			line.map(pt => homog2cart2(project(focalLength, [...pt, [1]])))
 		),
+		(v) => {
+			const [v0, v1] = v;
+			const [[[x0], [y0]], [[x1], [y1]]] = [v0!, v1!]
+			return [[x0, y0], [x1, y1]]
+		},
 		width
 	);
 }
