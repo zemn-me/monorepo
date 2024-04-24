@@ -5,6 +5,7 @@ import { EntityNumber } from '#root/ts/factorio/entity_number.js';
 export const ConnectionData = z.strictObject({
 	entity_id: EntityNumber,
 	circuit_id: z.number().optional(),
+	wire_id: z.number().optional(),
 });
 
 /**
