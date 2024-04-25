@@ -1,3 +1,4 @@
+'use client';
 import { extent } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { z } from 'zod';
