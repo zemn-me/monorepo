@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  resolve: ^2.0.0-next.5
+  resolve: 2.0.0-next.5
 
 dependencies:
   '@commander-js/extra-typings':
@@ -105,7 +105,7 @@ dependencies:
     specifier: 6.1.5
     version: 6.1.5
   source-map-loader:
-    specifier: ^5.0.0
+    specifier: 5.0.0
     version: 5.0.0(webpack@5.91.0)
   zod:
     specifier: 3.23.4
