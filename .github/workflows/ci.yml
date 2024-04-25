@@ -5,17 +5,17 @@ name: CI
 on:   # yamllint disable-line rule:truthy
   merge_group:
     branches:
-
       # presubmit
       - main
+      - renovate/**
   pull_request:
     branches:
-
       # presubmit
       - main
   push:
     branches:
       - main
+      - renovate/**
 
   # manual triggering
   workflow_dispatch:
