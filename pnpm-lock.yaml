@@ -99,8 +99,8 @@ dependencies:
     specifier: 3.0.5
     version: 3.0.5
   selenium-webdriver:
-    specifier: 4.19.0
-    version: 4.19.0
+    specifier: 4.20.0
+    version: 4.20.0
   serve-handler:
     specifier: 6.1.5
     version: 6.1.5
@@ -16443,7 +16443,7 @@ packages:
       react: 18.3.0
       react-dom: 18.3.0(react@18.3.0)
       react-reconciler: 0.29.0(react@18.3.0)
-      scheduler: 0.23.0
+      scheduler: 0.23.1
     dev: true
 
   /react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.3.0):
@@ -16539,7 +16539,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.0
-      scheduler: 0.23.0
+      scheduler: 0.23.1
     dev: true
 
   /react-refresh@0.14.0:
@@ -17238,12 +17238,6 @@ packages:
       loose-envify: 1.4.0
     dev: true
 
-  /scheduler@0.23.0:
-    resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
-    dependencies:
-      loose-envify: 1.4.0
-    dev: true
-
   /scheduler@0.23.1:
     resolution: {integrity: sha512-5GKS5JGfiah1O38Vfa9srZE4s3wdHbwjlCrvIookrg2FO9aIwKLOJXuJQFlEfNcVSOXuaL2hzDeY20uVXcUtrw==}
     dependencies:
@@ -17267,8 +17261,8 @@ packages:
     resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
-  /selenium-webdriver@4.19.0:
-    resolution: {integrity: sha512-8XHW8m9V2XN2/SC1kr4bWzMtGvjmKUEZ6S0UBoDBqonhmwEIzKOLbzhanBd08HCOg1s1O0XrDWCD71NnA8Zt0g==}
+  /selenium-webdriver@4.20.0:
+    resolution: {integrity: sha512-s/G44lGQ1xB3tmtX6NNPomlkpL6CxLdmAvp/AGWWwi4qv5Te1+qji7tPSyr6gyuoPpdYiof1rKnWe3luy0MrYA==}
     engines: {node: '>= 14.20.0'}
     dependencies:
       jszip: 3.10.1
