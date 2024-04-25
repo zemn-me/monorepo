@@ -20,7 +20,7 @@
 		"@microsoft/api-documenter": "7.24.2",
 		"@microsoft/api-extractor": "7.43.1",
 		"@pulumi/aws": "6.32.0",
-		"@pulumi/awsx": "2.8.0",
+		"@pulumi/awsx": "2.9.0",
 		"@pulumi/pulumi": "3.113.3",
 		"@schemastore/package": "0.0.10",
 		"@swc/cli": "0.3.12",
@@ -52,7 +52,7 @@
 		"esbuild": "0.20.2",
 		"esbuild-css-modules-plugin": "3.1.1",
 		"eslint": "9.1.1",
-		"eslint-config-next": "14.2.2",
+		"eslint-config-next": "14.2.3",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-prettier": "5.1.3",
 		"eslint-plugin-react": "7.34.1",
@@ -62,7 +62,7 @@
 		"jest-cli": "29.7.0",
 		"jest-environment-jsdom": "29.7.0",
 		"jsdom": "24.0.0",
-		"mime": "4.0.1",
+		"mime": "4.0.3",
 		"minimist": "1.2.8",
 		"module-alias": "2.2.3",
 		"next": "13.4.10",
@@ -75,7 +75,7 @@
 		"react-router-dom": "6.23.0",
 		"react-spring": "9.7.3",
 		"regenerator-runtime": "0.14.1",
-		"renovate": "37.319.1",
+		"renovate": "37.323.1",
 		"sharp": "0.33.3",
 		"stylelint": "16.4.0",
 		"stylelint-config-css-modules": "4.4.0",
@@ -103,7 +103,7 @@
 	},
 	"dependencies": {
 		"@commander-js/extra-typings": "12.0.1",
-		"@next/eslint-plugin-next": "14.2.2",
+		"@next/eslint-plugin-next": "14.2.3",
 		"@pulumi/command": "4.5.0",
 		"@pulumi/random": "4.16.1",
 		"@react-spring/rafz": "9.7.3",
@@ -119,7 +119,7 @@
 		"base64-js": "1.5.1",
 		"csstype": "3.1.3",
 		"d3-array": "3.2.4",
-		"devtools-protocol": "0.0.1289136",
+		"devtools-protocol": "0.0.1292262",
 		"eslint-mdx": "3.1.5",
 		"eslint-plugin-mdx": "3.1.5",
 		"eslint-plugin-react-hooks": "4.6.0",
@@ -134,12 +134,12 @@
 		"seedrandom": "3.0.5",
 		"selenium-webdriver": "4.19.0",
 		"serve-handler": "6.1.5",
-		"source-map-loader": "^5.0.0",
+		"source-map-loader": "5.0.0",
 		"zod": "3.23.4"
 	},
 	"pnpm": {
 		"overrides": {
-			"resolve": "^2.0.0-next.5"
+			"resolve": "2.0.0-next.5"
 		}
 	},
 	"type": "module",
