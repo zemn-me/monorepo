@@ -77,7 +77,7 @@ export function Client() {
 							<li>
 								JSON{' '}
 								<CopyToClipboard
-									text={JSON.stringify(bw[Ok])}
+									text={() => JSON.stringify(bw[Ok])}
 								/>
 								<PrettyJSON value={bw[Ok]} />
 							</li>
