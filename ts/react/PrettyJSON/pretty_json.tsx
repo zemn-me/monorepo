@@ -5,6 +5,7 @@ export interface Props {
 	readonly depth?: number;
 	readonly expandToDepth?: number;
 	readonly path?: string[];
+	readonly visited?: Set<unknown>;
 }
 
 export const PrettyJSON: React.FC<Props> = function PrettyJSON({
@@ -12,7 +13,15 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 	depth = 0,
 	expandToDepth = 0,
 	path = [],
+	visited = new Set(),
 }: Props) {
+	if (visited.has(value)) {
+		return <>↩ cycle</>;
+	}
+
+	if (depth > 5) return null;
+
+	visited = new Set([...visited, value]);
 	if (typeof value == 'string') {
 		return <>{value}</>;
 	}
@@ -45,6 +54,7 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 							depth={depth + 1}
 							path={[i.toString(), ...path]}
 							value={v}
+							visited={visited}
 						/>
 					</li>
 				))}
@@ -60,12 +70,13 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 				<dl key={k} title={[k, ...path].reverse().join('.')}>
 					<details>
 						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-						<summary {...({ open: depth < expandToDepth } as any)}>
+						<summary>
 							<dt>
 								<PrettyJSON
 									depth={depth + 1}
 									path={path}
 									value={k}
+									visited={visited}
 								/>
 							</dt>
 						</summary>
@@ -74,6 +85,7 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 								depth={depth + 1}
 								path={[k, ...path]}
 								value={v}
+								visited={visited}
 							/>
 						</dd>
 					</details>
