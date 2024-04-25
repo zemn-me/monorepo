@@ -3,7 +3,6 @@ import { JSONObject, JSONValue } from '#root/ts/json.js';
 export interface Props {
 	readonly value: JSONValue;
 	readonly depth?: number;
-	readonly expandToDepth?: number;
 	readonly path?: string[];
 	readonly visited?: Set<unknown>;
 }
@@ -11,7 +10,6 @@ export interface Props {
 export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 	value,
 	depth = 0,
-	expandToDepth = 0,
 	path = [],
 	visited = new Set(),
 }: Props) {
