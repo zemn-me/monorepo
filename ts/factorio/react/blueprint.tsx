@@ -126,7 +126,7 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 				</ol>
 			) : null}
 
-			<CopyToClipboard text={MarshalBlueprintBookString(book)} />
+			<CopyToClipboard text={() => MarshalBlueprintBookString(book)} />
 		</article>
 	);
 }
@@ -147,7 +147,7 @@ export function DisplayBlueprint({ blueprint }: DisplayBlueprintProps) {
 				</header>
 			) : null}
 			{blueprint.description ? <p>{blueprint.description}</p> : null}
-			<CopyToClipboard text={MarshalBlueprintString(blueprint)} />
+			<CopyToClipboard text={() => MarshalBlueprintString(blueprint)} />
 			<RenderBlueprint blueprint={blueprint} />
 		</article>
 	);
