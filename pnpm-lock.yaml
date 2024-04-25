@@ -87,8 +87,8 @@ dependencies:
     specifier: 0.4.15
     version: 0.4.15
   npm:
-    specifier: 10.5.2
-    version: 10.5.2
+    specifier: 10.6.0
+    version: 10.6.0
   pako:
     specifier: 2.1.0
     version: 2.1.0
@@ -15197,8 +15197,8 @@ packages:
       path-key: 4.0.0
     dev: true
 
-  /npm@10.5.2:
-    resolution: {integrity: sha512-cHVG7QEJwJdZyOrK0dKX5uf3R5Fd0E8AcmSES1jLtO52UT1enUKZ96Onw/xwq4CbrTZEnDuu2Vf9kCQh/Sd12w==}
+  /npm@10.6.0:
+    resolution: {integrity: sha512-KC70Su2ZnO9v4i2t+M0sQcsRERk++XcYbK9fy4bLWzUCV2nELhSN7UAkoe42P4HQTg2LyQxcfntgYS89OEaOsA==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     dev: false
@@ -15219,8 +15219,6 @@ packages:
       - chalk
       - ci-info
       - cli-columns
-      - cli-table3
-      - columnify
       - fastest-levenshtein
       - fs-minipass
       - glob
@@ -15256,11 +15254,11 @@ packages:
       - npm-profile
       - npm-registry-fetch
       - npm-user-validate
-      - npmlog
       - p-map
       - pacote
       - parse-conflict-json
       - proc-log
+      - proggy
       - qrcode-terminal
       - read
       - semver
@@ -16443,7 +16441,7 @@ packages:
       react: 18.3.0
       react-dom: 18.3.0(react@18.3.0)
       react-reconciler: 0.29.0(react@18.3.0)
-      scheduler: 0.23.0
+      scheduler: 0.23.1
     dev: true
 
   /react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.3.0):
@@ -16539,7 +16537,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.0
-      scheduler: 0.23.0
+      scheduler: 0.23.1
     dev: true
 
   /react-refresh@0.14.0:
@@ -17234,12 +17232,6 @@ packages:
 
   /scheduler@0.21.0:
     resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}
-    dependencies:
-      loose-envify: 1.4.0
-    dev: true
-
-  /scheduler@0.23.0:
-    resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
     dev: true
