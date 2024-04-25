@@ -46,7 +46,10 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		'https://*.google-analytics.com',
 		'https://*.doubleclick.net',
 	]),
-	'require-trusted-types-for': new Set(["'script'"]),
+	'require-trusted-types-for':
+		process.env.NODE_ENV == 'development'
+			? new Set([])
+			: new Set(["'script'"]),
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
