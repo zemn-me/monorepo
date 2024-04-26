@@ -8,6 +8,7 @@ import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery'
 import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
 import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
+import { starterBase } from '#root/ts/factorio/testing/data/starterBase.js';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
 
 const exampleBlueprint: BlueprintWrapper = {
@@ -184,5 +185,9 @@ describe('some problematic blueprints', () => {
 	});
 	test('all oils refinery', () => {
 		expect(() => BlueprintString.parse(allOilsRefinery)).not.toThrow();
+	});
+
+	test('starter base', () => {
+		expect(() => BlueprintString.parse(starterBase)).not.toThrow();
 	});
 });
