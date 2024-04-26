@@ -200,8 +200,8 @@ devDependencies:
     specifier: 20.12.7
     version: 20.12.7
   '@types/react':
-    specifier: 18.3.0
-    version: 18.3.0
+    specifier: 18.3.1
+    version: 18.3.1
   '@types/react-dom':
     specifier: 18.3.0
     version: 18.3.0
@@ -7363,7 +7363,7 @@ packages:
   /@types/react-dom@18.3.0:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
-      '@types/react': 18.3.0
+      '@types/react': 18.3.1
     dev: true
 
   /@types/react-query@1.2.9(react-dom@18.3.1)(react-native@0.73.5)(react@18.3.1):
@@ -7380,17 +7380,17 @@ packages:
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
-      '@types/react': 18.3.0
+      '@types/react': 18.3.1
     dev: true
 
   /@types/react-reconciler@0.28.8:
     resolution: {integrity: sha512-SN9c4kxXZonFhbX4hJrZy37yw9e7EIxcpHCxQv5JUS18wDE5ovkQKlqQEkufdJCCMfuI9BnjUJvhYeJ9x5Ra7g==}
     dependencies:
-      '@types/react': 18.3.0
+      '@types/react': 18.3.1
     dev: true
 
-  /@types/react@18.3.0:
-    resolution: {integrity: sha512-DiUcKjzE6soLyln8NNZmyhcQjVv+WsUIFSqetMN0p8927OztKT4VTfFTqsbAi5oAGIcgOmOajlfBqyptDDjZRw==}
+  /@types/react@18.3.1:
+    resolution: {integrity: sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==}
     dependencies:
       '@types/prop-types': 15.7.5
       csstype: 3.1.3
