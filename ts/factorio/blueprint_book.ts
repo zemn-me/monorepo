@@ -7,6 +7,7 @@ import { DeconstructionPlanner } from '#root/ts/factorio/deconstruction_planner.
 import { Int } from '#root/ts/factorio/int';
 import { SignalID } from '#root/ts/factorio/signal_id';
 import { Uint } from '#root/ts/factorio/uint';
+import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner.js';
 
 export const BlueprintBookBase = z.strictObject({
 	/**
@@ -69,6 +70,7 @@ export const BlueprintBook: z.ZodType<BlueprintBook> = BlueprintBookBase.extend(
 				blueprint: optionalBlueprint,
 				blueprint_book: z.lazy(() => BlueprintBook).optional(),
 				deconstruction_planner: DeconstructionPlanner.optional(),
+				upgrade_planner: UpgradePlanner.optional(),
 			})
 		),
 	}

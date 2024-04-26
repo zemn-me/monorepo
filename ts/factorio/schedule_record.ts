@@ -10,7 +10,7 @@ export const ScheduleRecord = z.strictObject({
 	/**
 	 * Array of #Wait Condition objects.
 	 */
-	wait_conditions: z.array(WaitCondition),
+	wait_conditions: z.array(WaitCondition).optional(),
 });
 
 export type ScheduleRecord = z.TypeOf<typeof ScheduleRecord>;
