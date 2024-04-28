@@ -329,8 +329,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.326.2
-    version: 37.326.2(typanion@3.14.0)
+    specifier: 37.326.3
+    version: 37.326.3(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -7118,8 +7118,8 @@ packages:
     resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
     dev: false
 
-  /@types/better-sqlite3@7.6.9:
-    resolution: {integrity: sha512-FvktcujPDj9XKMJQWFcl2vVl7OdRIqsSRX9b0acWwTmwLK9CF2eqo/FRcmMLNpugKoX/avA6pb7TorDLmpgTnQ==}
+  /@types/better-sqlite3@7.6.10:
+    resolution: {integrity: sha512-TZBjD+yOsyrUJGmcUj6OS3JADk3+UZcNv3NOBqGkM09bZdi28fNZw8ODqbMOLfKCu7RYCO62/ldq1iHbzxqoPw==}
     dependencies:
       '@types/node': 20.12.7
     dev: true
@@ -16714,8 +16714,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.326.2(typanion@3.14.0):
-    resolution: {integrity: sha512-h4aOrvl4zYpI7hosFyrHKUQcUcOnxLG0bXu8snklYnbbC5yNkQFJ5gi7hkFEJfCgOf54m5myZ49IoWfu1GyXXg==}
+  /renovate@37.326.3(typanion@3.14.0):
+    resolution: {integrity: sha512-MoYg380Y2HtkRLhBrTX8nqPiEV0LSk1GjeErDlvOeYrkP46Z25VzBjAeVrIzJcvsCB96PMl7Sv64bnt/GpN+Hw==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^8.0.0}
     hasBin: true
     dependencies:
@@ -16743,7 +16743,7 @@ packages:
       '@renovatebot/pep440': 3.0.20
       '@renovatebot/ruby-semver': 3.0.23
       '@sindresorhus/is': 4.6.0
-      '@types/better-sqlite3': 7.6.9
+      '@types/better-sqlite3': 7.6.10
       '@types/ms': 0.7.34
       '@types/tmp': 0.2.6
       '@yarnpkg/core': 4.0.3(typanion@3.14.0)
