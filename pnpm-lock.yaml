@@ -108,8 +108,8 @@ dependencies:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.91.0)
   zod:
-    specifier: 3.23.4
-    version: 3.23.4
+    specifier: 3.23.5
+    version: 3.23.5
 
 devDependencies:
   '@actions/core':
@@ -19480,6 +19480,11 @@ packages:
 
   /zod@3.23.4:
     resolution: {integrity: sha512-/AtWOKbBgjzEYYQRNfoGKHObgfAZag6qUJX1VbHo2PRBgS+wfWagEY2mizjfyAPcGesrJOcx/wcl0L9WnVrHFw==}
+    dev: true
+
+  /zod@3.23.5:
+    resolution: {integrity: sha512-fkwiq0VIQTksNNA131rDOsVJcns0pfVUjHzLrNBiF/O/Xxb5lQyEXkhZWcJ7npWsYlvs+h0jFWXXy4X46Em1JA==}
+    dev: false
 
   /zustand@3.7.2(react@18.3.1):
     resolution: {integrity: sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==}
