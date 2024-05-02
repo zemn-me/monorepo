@@ -21,6 +21,8 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/seedrandom",
+        # if I add another one here I should consolidate the projects into /app/experiments.
+        "//project/zemn.me/app/experiments/cultist",
         "//project/zemn.me/app/experiments/factorio/blueprint/book",
         "//project/zemn.me/assets/kenwood",
         "//project/zemn.me/assets/kenwood_snow",
