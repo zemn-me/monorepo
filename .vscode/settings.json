@@ -10,6 +10,12 @@
 	},
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
+	"[typescript]": {
+		"source.fixAll.eslint": "explicit",
+	},
+	"[javascript]": {
+		"source.fixAll.eslint": "explicit",
+	},
 	"[jsonc]": {
 		"editor.formatOnSave": true,
 	},
@@ -39,7 +45,6 @@
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit",
 		"source.fixAll": "always"
 	},
 	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
