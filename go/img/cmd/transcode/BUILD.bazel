@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "transcode",
+    embed = [":transcode_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "transcode_lib",
+    srcs = [
+        "image_types.go",
+        "transcode.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/img/cmd/transcode",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//go/flag/flagutil",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
