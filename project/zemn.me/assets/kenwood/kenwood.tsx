@@ -1,4 +1,4 @@
-export { default as poster } from '#root/project/zemn.me/public/kenwood.png';
+export { default as poster } from '#root/project/zemn.me/public/kenwood.jpg';
 
 /**
  * @returns A React element representing the Kenwood video asset
