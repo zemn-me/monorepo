@@ -8,7 +8,10 @@ tsfiles = [f for f in glob(["*.ts"]) if f not in tstests]
 ts_project(
     name = "example",
     srcs = tsfiles,
-    visibility = ["//project/cultist:__subpackages__"],
+    visibility = [
+        "//project/cultist:__subpackages__",
+        "//project/zemn.me:__subpackages__",
+    ],
 )
 
 exports_files(
