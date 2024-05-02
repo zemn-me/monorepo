@@ -8,7 +8,10 @@ ts_project(
         "kenwood_snow.tsx",
     ],
     assets = [
-        "//project/zemn.me/public:kenwood_snow_video_sources",
+        "//project/zemn.me/public:kenwood_snow.mp4",
+        "//project/zemn.me/public:kenwood_snow.webm",
+        "//project/zemn.me/public:kenwood_snow.ogv",
+        "//project/zemn.me/public:kenwood_snow.jpg",
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
