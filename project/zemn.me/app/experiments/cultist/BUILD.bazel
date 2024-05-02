@@ -1,0 +1,19 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "cultist",
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//project/cultist:save",
+        "//project/cultist/example",
+        "//project/cultist/react",
+        "//project/cultist/state",
+    ],
+)
