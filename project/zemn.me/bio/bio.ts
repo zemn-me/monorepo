@@ -670,6 +670,31 @@ export const Bio = {
 			url: url`https://youtu.be/z-XiVKuQOtc`,
 			description: en`Video of the finals of HackFortress @ Shmoocon 2023`,
 		},
+		{
+			id: 'c90df85a-3896-47a3-8b0c-d1fed081e0c5',
+			date: date(8, 'dec', 2010),
+			title: en`Assistant Obstetrician (shadow)`,
+			description: en`Work experience at the Royal Free Hospital NHS Trust. Spent time in world-leading virology department.`
+		},
+		{
+			id: '0ce91f95-6bbf-4c9b-8142-9835c3c7cf4f',
+			date: date(1, 'jan', 2013),
+			title: en`Parmiter’s School Sixth Form, Garston`,
+			description: en`Graduated Sixth Form with A levels in Biology, Chemistry, Physics and Mathematics with Mechanics.`,
+		},
+		{
+			id: 'eb759cc9-2831-4b88-85d6-a194de1d0141',
+			date: date(7, 'jul', 2009),
+			title: en`ICT Support Technician, The Grove Hotel, Watford, UK`,
+			description: en`Year 12 work experience program at luxury hotel. Networking & technical support. Decompiled and reverse-engineered .net app for ease of provisioning corporate machines via batch scripts.`
+
+		},
+		{
+			id: 'fd4eccdd-b761-43b3-ad6e-a4b6b68db37c',
+			date: date(1, 'jan', 2010),
+			title: en`Parmiter’s Secondary School, Garston`,
+			description: en`Graduated Secondary School with GCSES in Biology, Chemistry, English, Geography, Electronics, Mathematics, ICT, BCS, Physics, German and English Literature.`
+		}
 		// END TOOL ASSISTED SORT
 	],
 	who: {
