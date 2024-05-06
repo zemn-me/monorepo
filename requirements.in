@@ -1,1 +1,4 @@
+# to update requirements.txt, run
+# bazel run //sh/bin:pip-compile -- "$(realpath requirements.in)"
 yamllint
+pip-tools
