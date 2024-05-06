@@ -1,1 +1,5 @@
+# to update requirements.txt, run
+# bazel run //sh/bin:pip-compile -- --allow-unsafe "$(realpath requirements.in)"
+# this should probably be a diff test at some point...
 yamllint
+pip-tools
