@@ -42,4 +42,9 @@ alias(
     actual = "//py/pip-compile",
 )
 
+alias(
+    name = "buildifier",
+    actual = "//:buildifier",
+)
+
 bazel_lint(name = "bazel_lint")
