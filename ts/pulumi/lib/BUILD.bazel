@@ -1,7 +1,13 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py/sectxt:rules.bzl", "test_sectxt")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+test_sectxt(
+    name = "validate_sectxt",
+    srcs = ["security.txt"],
+)
 
 ts_project(
     name = "lib",
