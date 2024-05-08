@@ -60,8 +60,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1297280
-    version: 0.0.1297280
+    specifier: 0.0.1297943
+    version: 0.0.1297943
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.2.0)
@@ -108,8 +108,8 @@ dependencies:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.91.0)
   zod:
-    specifier: 3.23.6
-    version: 3.23.6
+    specifier: 3.23.8
+    version: 3.23.8
 
 devDependencies:
   '@actions/core':
@@ -329,8 +329,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.349.2
-    version: 37.349.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
+    specifier: 37.351.2
+    version: 37.351.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -9606,8 +9606,8 @@ packages:
     resolution: {integrity: sha512-QDbb27xcTVReQQW/GHJsdQqGKwYBE7re7gxehj467kKP2DKuYBUj6i2k5LRiAC66J1yZG/9gsxooz/s9pcm0Og==}
     dev: true
 
-  /devtools-protocol@0.0.1297280:
-    resolution: {integrity: sha512-AHOopnHxyQV+Tw2vrvvkhVOl/KP55GDC7WJPIRC5+gNSmv+oOdhYkifVd9MY2kJ9/Dg8r7Ji5PQO1vnqtW2Jvw==}
+  /devtools-protocol@0.0.1297943:
+    resolution: {integrity: sha512-JTeSEPkAinm48uVw6wVarbANEPOs9KYeUEQEI9tckPnyRRaqK+sXfo9TB4ZOkEKIqR+8ri8FS899ib8zXHD1ZA==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -13011,6 +13011,10 @@ packages:
   /jsonata@2.0.4:
     resolution: {integrity: sha512-vfavX4/G/yrYxE+UrmT/oUJ3ph7KqUrb0R7b0LVRcntQwxw+Z5kA1pNUIQzX5hF04Oe1eKxyoIPsmXtc2LgJTQ==}
     engines: {node: '>= 8'}
+    dev: true
+
+  /jsonc-parser@3.2.1:
+    resolution: {integrity: sha512-AilxAyFOAcK5wA1+LeaySVBrHsGQvUFCDWXKpZjzaL0PqW+xfBOttn8GNtWKFWqneyMZj41MWF9Kl6iPWLwgOA==}
     dev: true
 
   /jsonfile@4.0.0:
@@ -16517,8 +16521,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.349.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-kgv0BucRKkbo5zzccs5ZZWi9RVP8+i3iunejZb6pagyLpbNibeaijCBPuT3XxENfMZvlwIjp1u8aFr/1+G7ZUA==}
+  /renovate@37.351.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-wKpceMBp/gS3xTEMQeF2z3wReQSVbuo7PDQKX8wRIGAj+3UmViQEHkhc68V/qfOox1b1M7JxzLRPWqOwohFm6w==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16590,6 +16594,7 @@ packages:
       json-stringify-pretty-compact: 3.0.0
       json5: 2.2.3
       jsonata: 2.0.4
+      jsonc-parser: 3.2.1
       klona: 2.0.6
       lru-cache: 10.2.2
       luxon: 3.4.4
@@ -19309,6 +19314,11 @@ packages:
 
   /zod@3.23.6:
     resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+    dev: true
+
+  /zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+    dev: false
 
   /zustand@3.7.2(react@18.3.1):
     resolution: {integrity: sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==}
