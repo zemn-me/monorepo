@@ -164,8 +164,8 @@ devDependencies:
     specifier: 6.35.0
     version: 6.35.0(ts-node@10.9.2)(typescript@5.4.5)
   '@pulumi/awsx':
-    specifier: 2.9.0
-    version: 2.9.0(ts-node@10.9.2)(typescript@5.4.5)
+    specifier: 2.10.0
+    version: 2.10.0(ts-node@10.9.2)(typescript@5.4.5)
   '@pulumi/pulumi':
     specifier: 3.116.0
     version: 3.116.0(ts-node@10.9.2)(typescript@5.4.5)
@@ -5262,8 +5262,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@2.9.0(ts-node@10.9.2)(typescript@5.4.5):
-    resolution: {integrity: sha512-HGEVkZ6cL1qBmUCJ7o95C1bsfqW0eXT0lKIVIhlWmKxichBn7MOkzHvIx/s+hgwFNQr7HJsTzH4SmjxdQlQAFA==}
+  /@pulumi/awsx@2.10.0(ts-node@10.9.2)(typescript@5.4.5):
+    resolution: {integrity: sha512-ozGMwmZbLI1+CGW2o7l10/qdncrR9ve0aN9BW2w4Td7dywSgbP5JhwfjCQTyVp60zLB/kjNRpTC+Ed6c6Cq4TQ==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.458.0
