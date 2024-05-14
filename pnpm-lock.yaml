@@ -329,8 +329,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.358.2
-    version: 37.358.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
+    specifier: 37.359.0
+    version: 37.359.0(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.3
     version: 0.33.3
@@ -8515,11 +8515,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /builtins@5.0.1:
-    resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
-    dependencies:
-      semver: 7.6.0
-
   /bundle-name@3.0.0:
     resolution: {integrity: sha512-PKA4BeSvBpQKQ8iPOGCSiell+N8P+Tf1DlwqmYhpe2gAhKPHn8EYOxVT+ShuGmhg8lN8XiSlS80yiExKXrURlw==}
     engines: {node: '>=12'}
@@ -9696,7 +9691,7 @@ packages:
     engines: {node: '>=0.10'}
     requiresBuild: true
     dependencies:
-      nan: 2.18.0
+      nan: 2.19.0
     dev: true
     optional: true
 
@@ -14527,12 +14522,6 @@ packages:
       thenify-all: 1.6.0
     dev: false
 
-  /nan@2.18.0:
-    resolution: {integrity: sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w==}
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /nan@2.19.0:
     resolution: {integrity: sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==}
     requiresBuild: true
@@ -14811,7 +14800,7 @@ packages:
       hosted-git-info: 7.0.1
       proc-log: 3.0.0
       semver: 7.6.0
-      validate-npm-package-name: 5.0.0
+      validate-npm-package-name: 5.0.1
 
   /npm-packlist@8.0.2:
     resolution: {integrity: sha512-shYrPFIS/JLP4oQmAwDyk5HcyysKW8/JLTEA32S0Z5TzvpaeeX2yMFfoK1fjEBnCBvVyIB/Jj/GBFdm0wsgzbA==}
@@ -16533,8 +16522,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.358.2(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-dvthKuUduPL5hzDSJnR8ePvtRU63sLlKOfYRV+SMGPuvlfH/hYufvFVdL88plw+swMPIwkythDZ1vVHGIRV2Uw==}
+  /renovate@37.359.0(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-xJUtOJsF0qwG3iN0MhjE4YqaRvq5gwIAv5kHbYey+MHipP7avzPauGIOHKydwtlRemSySASjpIzb0QX6+STG2g==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -18723,16 +18712,9 @@ packages:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  /validate-npm-package-name@5.0.0:
-    resolution: {integrity: sha512-YuKoXDAhBYxY7SfOKxHBDoSyENFeW5VvIIQp2TGQuit8gpK6MnWaQelBKxso72DoxTZfZdcP3W90LqpSkgPzLQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      builtins: 5.0.1
-
   /validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dev: true
 
   /validator@13.9.0:
     resolution: {integrity: sha512-B+dGG8U3fdtM0/aNK4/X8CXq/EcxU2WPrPEkJGslb47qyHsxmbggTWK0yEA4qnYVNF+nxNlN88o14hIcPmSIEA==}
