@@ -138,22 +138,20 @@ sh_binary(
 js_library(
     name = "eslintrc",
     srcs = [
-        ":.eslintrc.cjs",
+        ":eslint.config.js",
         "//:editorconfig",
         "//:prettierrc",
         "//:tsconfig",
     ],
     deps = [
+        "//:node_modules/@eslint/js",
         "//:node_modules/@next/eslint-plugin-next",
-        "//:node_modules/@typescript-eslint/eslint-plugin",
-        "//:node_modules/@typescript-eslint/parser",
-        "//:node_modules/eslint-config-prettier",
         "//:node_modules/eslint-mdx",
         "//:node_modules/eslint-plugin-mdx",
-        "//:node_modules/eslint-plugin-prettier",
         "//:node_modules/eslint-plugin-react",
         "//:node_modules/eslint-plugin-react-hooks",
         "//:node_modules/eslint-plugin-simple-import-sort",
+        "//:node_modules/typescript-eslint",
     ],
 )
 
