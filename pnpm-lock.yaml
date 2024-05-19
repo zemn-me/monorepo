@@ -9,13 +9,13 @@ overrides:
 
 dependencies:
   '@commander-js/extra-typings':
-    specifier: 12.0.1
-    version: 12.0.1(commander@12.1.0)
+    specifier: 12.1.0
+    version: 12.1.0(commander@12.1.0)
   '@eslint/compat':
-    specifier: ^1.0.1
+    specifier: 1.0.1
     version: 1.0.1
   '@eslint/js':
-    specifier: ^9.2.0
+    specifier: 9.3.0
     version: 9.3.0
   '@next/eslint-plugin-next':
     specifier: 14.2.3
@@ -114,7 +114,7 @@ dependencies:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.91.0)
   typescript-eslint:
-    specifier: ^7.9.0
+    specifier: 7.9.0
     version: 7.9.0(eslint@9.3.0)(typescript@5.4.5)
   zod:
     specifier: 3.23.8
@@ -3408,10 +3408,10 @@ packages:
     dev: false
     optional: true
 
-  /@commander-js/extra-typings@12.0.1(commander@12.1.0):
-    resolution: {integrity: sha512-OvkMobb1eMqOCuJdbuSin/KJkkZr7n24/UNV+Lcz/0Dhepf3r2p9PaGwpRpAWej7A+gQnny4h8mGhpFl4giKkg==}
+  /@commander-js/extra-typings@12.1.0(commander@12.1.0):
+    resolution: {integrity: sha512-wf/lwQvWAA0goIghcb91dQYpkLBcyhOhQNqG/VgWhnKzgt+UOMvra7EX/2fv70arm5RW+PUHoQHHDa6/p77Eqg==}
     peerDependencies:
-      commander: ~12.0.0
+      commander: ~12.1.0
     dependencies:
       commander: 12.1.0
     dev: false
