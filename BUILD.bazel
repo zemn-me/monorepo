@@ -140,6 +140,7 @@ js_library(
     srcs = [
         ":eslint.config.js",
         "//:editorconfig",
+        "//:package_json",
         "//:prettierrc",
         "//:tsconfig",
     ],
