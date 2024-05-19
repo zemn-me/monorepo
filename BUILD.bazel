@@ -145,6 +145,7 @@ js_library(
         "//:tsconfig",
     ],
     deps = [
+        "//:node_modules/@eslint/compat",
         "//:node_modules/@eslint/js",
         "//:node_modules/@next/eslint-plugin-next",
         "//:node_modules/eslint-mdx",

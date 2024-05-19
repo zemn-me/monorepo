@@ -23,7 +23,7 @@ export const state = atom<Root>({
 
 const parentCtx = React.createContext<Root | Node | undefined>(undefined);
 
-export const Provide: React.FC<{ element: HeadingElement }> = ({
+export const Provide: React.FC<{ readonly element: HeadingElement }> = ({
 	element,
 	children,
 }) => {

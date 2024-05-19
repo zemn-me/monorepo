@@ -177,7 +177,7 @@ const romanize = (n: number) => {
 	return parts.join('');
 };
 
-const YearDisplay: React.FC<{ year: Date; n: number }> = ({
+const YearDisplay: React.FC<{ readonly year: Date; readonly n: number }> = ({
 	year: date,
 	n,
 }) => {
@@ -233,8 +233,8 @@ export const Month: (props: MonthProps) => React.ReactElement = ({
 );
 
 export const MonthIndicator: React.FC<{
-	year: number;
-	month: model.time.date.Month;
+	readonly year: number;
+	readonly month: model.time.date.Month;
 }> = ({ month, year }) => {
 	const d = new Date(0);
 	d.setFullYear(year);
@@ -275,7 +275,7 @@ export const Event: (props: EventProps) => React.ReactElement = ({
 		React.useLayoutEffect(() => {
 			if (!concernsCurrent) return;
 
-			ref?.current?.scrollIntoView({
+			ref.current?.scrollIntoView({
 				behavior: 'smooth',
 				block: 'center',
 				inline: 'center',
