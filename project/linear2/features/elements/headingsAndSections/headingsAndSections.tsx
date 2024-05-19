@@ -32,7 +32,7 @@ export type HeaderDepth = 0 | 1 | 2 | 3 | 4 | 5;
 export const SectionDepthContext = React.createContext<HeaderDepth>(0);
 
 export interface HeadingProps extends Omit<PropsOf<'h1'>, 'ref'> {
-	depth: HeaderDepth;
+	readonly depth: HeaderDepth;
 }
 
 export type HeaderComponent =
@@ -135,9 +135,9 @@ export function isDefined<T>(v: T | undefined): v is T {
 }
 
 export interface SectionProps extends Omit<PropsOf<'section'>, 'ref'> {
-	children: [HeadingElement, ...React.ReactElement[]];
-	withSectionMarkers?: boolean;
-	sectionChildWrapperClass?: string;
+	readonly children: [HeadingElement, ...React.ReactElement[]];
+	readonly withSectionMarkers?: boolean;
+	readonly sectionChildWrapperClass?: string;
 }
 
 export const Section = React.forwardRef<HTMLSectionElement, SectionProps>(

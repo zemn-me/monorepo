@@ -1,4 +1,5 @@
 import immutable from 'immutable';
+
 import * as cultist from '#root/project/cultist.js';
 
 describe('count', () => {

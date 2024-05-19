@@ -15,8 +15,8 @@ export interface HeadingProps<
 type _X<T> = [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T];
 
 export interface FancyHeaderProps {
-	headings: _X<HeadingProps>;
-	className?: string;
+	readonly headings: _X<HeadingProps>;
+	readonly className?: string;
 }
 
 export const Header = React.forwardRef<HTMLElement, FancyHeaderProps>(
