@@ -2,6 +2,7 @@ load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//bzl/format:formatters.bzl", "format_test")
 load("//bzl/lint:linters.bzl", "eslint_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
@@ -41,10 +42,16 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, **kwargs):
+def ts_lint(name, srcs = None, **kwargs):
     eslint_test(
         name = name,
+        srcs = srcs,
         **kwargs
+    )
+
+    format_test(
+        name = name + "_formatting",
+        srcs = srcs,
     )
 
 def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
