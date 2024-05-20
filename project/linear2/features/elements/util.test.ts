@@ -52,7 +52,7 @@ describe('iter', () => {
 		});
 
 		it('should ignore undefined classes', () => {
-			expect(iter.classes(undefined, 'a')?.className).toEqual('a');
+			expect(iter.classes(undefined, 'a').className).toEqual('a');
 		});
 	});
 });

@@ -55,10 +55,10 @@ declare module 'react-syntax-highlighter' {
 }
 
 export interface CodeProps {
-	children: string;
-	language?: string;
-	lineNumbers?: boolean;
-	name?: string;
+	readonly children: string;
+	readonly language?: string;
+	readonly lineNumbers?: boolean;
+	readonly name?: string;
 }
 
 const Span: (props: highlight.Element<'span'>) => React.ReactElement | null = ({

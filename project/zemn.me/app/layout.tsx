@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-page-custom-font */
+ 
 import 'project/zemn.me/app/base.css';
 
-import { Metadata } from 'next/types';
 import { Lora } from 'next/font/google';
+import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
 import { Providers } from '#root/project/zemn.me/app/providers.js';

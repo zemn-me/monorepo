@@ -87,6 +87,7 @@
 		"yarn": "1.22.22"
 	},
 	"scripts": {
+		"lint": "eslint --fix",
 		"bazel": "npm run -- bazelisk",
 		"bazelisk": "npx --yes @bazel/bazelisk",
 		"ibazel": "npx --yes @bazel/ibazel",
