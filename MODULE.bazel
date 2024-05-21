@@ -48,7 +48,7 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "1.2.2")
 bazel_dep(name = "rules_proto", version = "6.0.0")
-bazel_dep(name = "aspect_rules_js", version = "1.42.1")
+bazel_dep(name = "aspect_rules_js", version = "1.42.3")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
@@ -81,4 +81,4 @@ rules_ts_ext = use_extension(
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 
-bazel_dep(name = "aspect_rules_lint", version = "0.19.0")
+bazel_dep(name = "aspect_rules_lint", version = "0.21.0")

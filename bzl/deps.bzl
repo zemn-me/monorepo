@@ -155,13 +155,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
     )
 
     http_archive(
-        name = "aspect_rules_ts",
-        strip_prefix = "rules_ts-2.2.0",
-        sha256 = "c77f0dfa78c407893806491223c1264c289074feefbf706721743a3556fa7cea",
-        url = "https://github.com/aspect-build/rules_ts/releases/download/v2.2.0/rules_ts-v2.2.0.tar.gz",
-    )
-
-    http_archive(
         name = "rules_nodejs",
         sha256 = "dddd60acc3f2f30359bef502c9d788f67e33814b0ddd99aa27c5a15eb7a41b8c",
         strip_prefix = "rules_nodejs-6.1.0",
