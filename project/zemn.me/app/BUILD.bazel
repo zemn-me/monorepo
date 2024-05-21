@@ -1,0 +1,34 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "app",
+    assets = glob([
+        "**/*.css",
+        "**/*.svg",
+    ]),
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/react",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
+        "//:node_modules/immutable",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//project/zemn.me/app/experiments",
+        "//project/zemn.me/assets/kenwood",
+        "//project/zemn.me/assets/kenwood_snow",
+        "//project/zemn.me/bio",
+        "//project/zemn.me/components",
+        "//project/zemn.me/components/TimeEye",
+        "//project/zemn.me/components/ZemnmezLogo",
+        "//ts/iter",
+        "//ts/next.js",
+        "//ts/next.js/component/Redirect",
+        "//ts/react/CopyToClipboard",
+        "//ts/react/ErrorDisplay",
+        "//ts/react/PrettyJSON",
+        "//ts/react/lang",
+    ],
+)
