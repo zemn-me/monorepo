@@ -329,8 +329,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.369.0
-    version: 37.369.0(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
+    specifier: 37.369.1
+    version: 37.369.1(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -11366,8 +11366,8 @@ packages:
       moo: 0.5.2
     dev: true
 
-  /google-auth-library@9.9.0:
-    resolution: {integrity: sha512-9l+zO07h1tDJdIHN74SpnWIlNR+OuOemXlWJlLP9pXy6vFtizgpEzMuwJa4lqY9UAdiAv5DVd5ql0Am916I+aA==}
+  /google-auth-library@9.10.0:
+    resolution: {integrity: sha512-ol+oSa5NbcGdDqA+gZ3G3mev59OHBZksBTxY/tYwjtcp1H/scAFwJfSQU9/1RALoyZ7FslNbke8j4i3ipwlyuQ==}
     engines: {node: '>=14'}
     dependencies:
       base64-js: 1.5.1
@@ -16520,8 +16520,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.369.0(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-ELCr/t882+N8Tc0eZkvHwRpdzLR5NyrnuDIhPI9IsMGwnq7S4qBJ1RugQ+akulWCfoVKOyx8gta8nQS4gdG9pg==}
+  /renovate@37.369.1(@aws-sdk/client-sso-oidc@3.565.0)(@aws-sdk/client-sts@3.565.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-wbSLdyAK+P3ZiBUuTIUzBhgSV3kSpvxizSyFwgZQ6S5c0kESW7lUWH7IJXVt+WxBVccV3HIkgQCybrLWkE/vNw==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16582,7 +16582,7 @@ packages:
       glob: 10.3.15
       global-agent: 3.0.0
       good-enough-parser: 1.1.23
-      google-auth-library: 9.9.0
+      google-auth-library: 9.10.0
       got: 11.8.6
       graph-data-structure: 3.5.0
       handlebars: 4.7.8
