@@ -156,9 +156,9 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_nodejs",
-        sha256 = "dddd60acc3f2f30359bef502c9d788f67e33814b0ddd99aa27c5a15eb7a41b8c",
-        strip_prefix = "rules_nodejs-6.1.0",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.0/rules_nodejs-v6.1.0.tar.gz",
+        sha256 = "3e8369256ad63197959d2253c473a9dcc57c2841d176190e59b91d25d4fe9e67",
+        strip_prefix = "rules_nodejs-6.1.1",
+        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.1/rules_nodejs-v6.1.1.tar.gz",
     )
 
     # Got no idea why but MS doesn't publish versions of this...
