@@ -46,7 +46,7 @@ pip.parse(
 )
 use_repo(pip, "pip")
 
-bazel_dep(name = "aspect_rules_swc", version = "1.2.2")
+bazel_dep(name = "aspect_rules_swc", version = "1.2.3")
 bazel_dep(name = "rules_proto", version = "6.0.0")
 bazel_dep(name = "aspect_rules_js", version = "1.42.3")
 
