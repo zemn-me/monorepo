@@ -90,8 +90,8 @@ dependencies:
     specifier: 14.0.4
     version: 14.0.4
   memoizee:
-    specifier: 0.4.15
-    version: 0.4.15
+    specifier: 0.4.16
+    version: 0.4.16
   npm:
     specifier: 10.8.0
     version: 10.8.0
@@ -8838,7 +8838,7 @@ packages:
       d: 1.0.1
       es5-ext: 0.10.64
       es6-iterator: 2.0.3
-      memoizee: 0.4.15
+      memoizee: 0.4.16
       timers-ext: 0.1.7
     dev: false
 
@@ -9336,8 +9336,16 @@ packages:
   /d@1.0.1:
     resolution: {integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==}
     dependencies:
-      es5-ext: 0.10.62
+      es5-ext: 0.10.64
       type: 1.2.0
+    dev: false
+
+  /d@1.0.2:
+    resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
+    engines: {node: '>=0.12'}
+    dependencies:
+      es5-ext: 0.10.64
+      type: 2.7.2
     dev: false
 
   /damerau-levenshtein@1.0.8:
@@ -9988,16 +9996,6 @@ packages:
       is-symbol: 1.0.4
     dev: true
 
-  /es5-ext@0.10.62:
-    resolution: {integrity: sha512-BHLqn0klhEpnOKSrzn/Xsz2UIW8j+cGmo9JLzr8BiUapV8hPL9+FliFqjwr9ngW7jWdnxv6eO+/LqyhJVqgrjA==}
-    engines: {node: '>=0.10'}
-    requiresBuild: true
-    dependencies:
-      es6-iterator: 2.0.3
-      es6-symbol: 3.1.3
-      next-tick: 1.1.0
-    dev: false
-
   /es5-ext@0.10.64:
     resolution: {integrity: sha512-p2snDhiLaXe6dahss1LddxqEm+SkuDvV8dnIQG0MWjyHpcMNfXKPE+/Cc0y+PhxJX3A4xGNeFCj5oc0BUh6deg==}
     engines: {node: '>=0.10'}
@@ -10016,23 +10014,23 @@ packages:
   /es6-iterator@2.0.3:
     resolution: {integrity: sha512-zw4SRzoUkd+cl+ZoE15A9o1oQd920Bb0iOJMQkQhl3jNc03YqVjAhG7scf9C5KWRU/R13Orf588uCC6525o02g==}
     dependencies:
-      d: 1.0.1
-      es5-ext: 0.10.62
+      d: 1.0.2
+      es5-ext: 0.10.64
       es6-symbol: 3.1.3
     dev: false
 
   /es6-symbol@3.1.3:
     resolution: {integrity: sha512-NJ6Yn3FuDinBaBRWl/q5X/s4koRHBrgKAu+yGI6JCBeiu3qrcbJhwT2GeR/EXVfylRk8dpQVJoLEFhK+Mu31NA==}
     dependencies:
-      d: 1.0.1
+      d: 1.0.2
       ext: 1.7.0
     dev: false
 
   /es6-weak-map@2.0.3:
     resolution: {integrity: sha512-p5um32HOTO1kP+w7PRnB+5lQ43Z6muuMuIMffvDN8ZB4GcnjLBV6zGStpbASIMk4DCAvEaamhe2zhyCb/QXXsA==}
     dependencies:
-      d: 1.0.1
-      es5-ext: 0.10.62
+      d: 1.0.2
+      es5-ext: 0.10.64
       es6-iterator: 2.0.3
       es6-symbol: 3.1.3
     dev: false
@@ -10469,7 +10467,7 @@ packages:
     resolution: {integrity: sha512-kTUIGKQ/mDPFoJ0oVfcmyJn4iBDRptjNVIzwIFR7tqWXdVI9xfA2RMwY/gbSpJG3lkdWNEjLap/NqVHZiJsdfg==}
     engines: {node: '>=0.10'}
     dependencies:
-      d: 1.0.1
+      d: 1.0.2
       es5-ext: 0.10.64
       event-emitter: 0.3.5
       type: 2.7.2
@@ -10540,8 +10538,8 @@ packages:
   /event-emitter@0.3.5:
     resolution: {integrity: sha512-D9rRn9y7kLPnJ+hMq7S/nhvoKwwvVJahBi2BPmx3bvbsEdK3W9ii8cBSGjP+72/LnM4n6fo3+dkCX5FeTQruXA==}
     dependencies:
-      d: 1.0.1
-      es5-ext: 0.10.62
+      d: 1.0.2
+      es5-ext: 0.10.64
     dev: false
 
   /event-target-shim@5.0.1:
@@ -13478,7 +13476,7 @@ packages:
   /lru-queue@0.1.0:
     resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
     dependencies:
-      es5-ext: 0.10.62
+      es5-ext: 0.10.64
     dev: false
 
   /luxon@3.4.4:
@@ -13747,11 +13745,12 @@ packages:
   /memoize-one@5.2.1:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
 
-  /memoizee@0.4.15:
-    resolution: {integrity: sha512-UBWmJpLZd5STPm7PMUlOw/TSy972M+z8gcyQ5veOnSDRREz/0bmpyTfKt3/51DhEBqCZQn1udM/5flcSPYhkdQ==}
+  /memoizee@0.4.16:
+    resolution: {integrity: sha512-eOxQqGfogqdcQ2jeyLgsTp91bFOdbjaiJ1P0ZeDt1HHT1+ektm2u+raWDytppt8SMZ1fP2sIWlTbZukHhMKhiQ==}
+    engines: {node: '>=.0.12'}
     dependencies:
-      d: 1.0.1
-      es5-ext: 0.10.62
+      d: 1.0.2
+      es5-ext: 0.10.64
       es6-weak-map: 2.0.3
       event-emitter: 0.3.5
       is-promise: 2.2.2
@@ -17998,7 +17997,7 @@ packages:
   /timers-ext@0.1.7:
     resolution: {integrity: sha512-b85NUNzTSdodShTIbky6ZF02e8STtVVfD+fu4aXXShEELpozH+bCpJLYMPZbsABN2wDH7fJpqIoXxJpzbf0NqQ==}
     dependencies:
-      es5-ext: 0.10.62
+      es5-ext: 0.10.64
       next-tick: 1.1.0
     dev: false
 
