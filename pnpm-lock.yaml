@@ -90,8 +90,8 @@ dependencies:
     specifier: 14.0.4
     version: 14.0.4
   memoizee:
-    specifier: 0.4.16
-    version: 0.4.16
+    specifier: 0.4.17
+    version: 0.4.17
   npm:
     specifier: 10.8.0
     version: 10.8.0
@@ -8835,10 +8835,10 @@ packages:
     resolution: {integrity: sha512-zlnpg0jNcibNrO7GG9IeHH7maWFeCz+Ja1wx/7tZNU5ASSSSZ+/qZciM0/LHCYxSdqv5h2sdbQ/PXYdOuetXvA==}
     engines: {node: '>=0.10'}
     dependencies:
-      d: 1.0.1
+      d: 1.0.2
       es5-ext: 0.10.64
       es6-iterator: 2.0.3
-      memoizee: 0.4.16
+      memoizee: 0.4.17
       timers-ext: 0.1.7
     dev: false
 
@@ -9332,13 +9332,6 @@ packages:
     dependencies:
       d3-array: 3.2.4
     dev: true
-
-  /d@1.0.1:
-    resolution: {integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==}
-    dependencies:
-      es5-ext: 0.10.64
-      type: 1.2.0
-    dev: false
 
   /d@1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
@@ -13745,9 +13738,9 @@ packages:
   /memoize-one@5.2.1:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
 
-  /memoizee@0.4.16:
-    resolution: {integrity: sha512-eOxQqGfogqdcQ2jeyLgsTp91bFOdbjaiJ1P0ZeDt1HHT1+ektm2u+raWDytppt8SMZ1fP2sIWlTbZukHhMKhiQ==}
-    engines: {node: '>=.0.12'}
+  /memoizee@0.4.17:
+    resolution: {integrity: sha512-DGqD7Hjpi/1or4F/aYAspXKNm5Yili0QDAFAY4QYvpqpgiY6+1jOfqpmByzjxbWd/T9mChbCArXAbDAsTm5oXA==}
+    engines: {node: '>=0.12'}
     dependencies:
       d: 1.0.2
       es5-ext: 0.10.64
@@ -18284,10 +18277,6 @@ packages:
   /type-fest@3.13.1:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
-    dev: false
-
-  /type@1.2.0:
-    resolution: {integrity: sha512-+5nt5AAniqsCnu2cEQQdpzCAh33kVx8n0VoFidKpB1dVVLAN/F+bgVOqOJqOnEnrhp222clB5p3vUlD+1QAnfg==}
     dev: false
 
   /type@2.7.2:
