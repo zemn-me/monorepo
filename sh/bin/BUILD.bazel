@@ -47,4 +47,9 @@ alias(
     actual = "//:buildifier",
 )
 
+alias(
+    name = "rxp",
+    actual = "@cargo//:rxp__rxp",
+)
+
 bazel_lint(name = "bazel_lint")
