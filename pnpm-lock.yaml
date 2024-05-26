@@ -66,8 +66,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1305504
-    version: 0.0.1305504
+    specifier: 0.0.1306150
+    version: 0.0.1306150
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.3.0)
@@ -9786,8 +9786,8 @@ packages:
     resolution: {integrity: sha512-wu58HMQll9voDjR4NlPyoDEw1syfzaBNHymMMZ/QOXiHRNluOnDgu9hp1yHOKYoMlxCh4lSSiugLITe6Fvu1eA==}
     dev: true
 
-  /devtools-protocol@0.0.1305504:
-    resolution: {integrity: sha512-2HgdbnBgYOhJv0ksV3HkbrlGBaUsHUy5+z/XlqbFyP1ArGDHQ8HA6OQ6U8RJg9dUMItqoQwnNH85+WSahlR5ew==}
+  /devtools-protocol@0.0.1306150:
+    resolution: {integrity: sha512-ldV6MeOcYtDDLjP4SJHgs2Jlh4iUsdEtyPR6zHTEfPy/BGnhIcjgcZDBh+u/BRgtWB09kpmTe/Tz00Fqf5OVqw==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -11416,6 +11416,7 @@ packages:
   /glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -16928,6 +16929,7 @@ packages:
 
   /rimraf@2.6.3:
     resolution: {integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
