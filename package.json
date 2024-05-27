@@ -104,6 +104,7 @@
 		"@eslint/compat": "1.0.1",
 		"@eslint/js": "9.3.0",
 		"@next/eslint-plugin-next": "14.2.3",
+		"@mdx-js/mdx": "^3.0.0",
 		"@pulumi/command": "4.5.0",
 		"@pulumi/random": "4.16.2",
 		"@react-spring/rafz": "9.7.3",
@@ -131,12 +132,17 @@
 		"npm": "10.8.0",
 		"pako": "2.1.0",
 		"pnpm": "8.15.8",
+		"remark": "^15.0.1",
 		"seedrandom": "3.0.5",
 		"selenium-webdriver": "4.21.0",
 		"serve-handler": "6.1.5",
 		"source-map-loader": "5.0.0",
 		"typescript-eslint": "7.11.0",
-		"zod": "3.23.8"
+		"zod": "3.23.8",
+		"source-map": "^0.7.4",
+		"to-vfile": "^8.0.0",
+		"unified": "^11.0.4",
+		"vfile": "^6.0.1"
 	},
 	"pnpm": {
 		"overrides": {
