@@ -12,14 +12,12 @@ const versionByte = '0';
 export const BlueprintString = z
 	.string()
 	.transform(z =>
-		BlueprintWrapper.parse(
 			JSON.parse(
 				new TextDecoder().decode(
 					pako.inflate(b64.toByteArray(z.slice(1)))
 				)
 			)
-		)
-	);
+	).pipe(BlueprintWrapper);
 
 export type BlueprintString = z.TypeOf<typeof BlueprintString>;
 
