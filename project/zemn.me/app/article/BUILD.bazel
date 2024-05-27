@@ -1,0 +1,8 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+	name = "article",
+	deps = [
+		"//project/zemn.me/app/article/2014/csp"
+	]
+)
