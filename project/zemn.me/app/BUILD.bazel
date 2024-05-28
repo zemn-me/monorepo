@@ -1,4 +1,5 @@
 load("//ts:rules.bzl", "ts_project")
+load("//mdx:rules.bzl", "mdx_files")
 
 ts_project(
     name = "app",
@@ -8,6 +9,7 @@ ts_project(
     ]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+		"//project/zemn.me/app/article",
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
@@ -30,5 +32,18 @@ ts_project(
         "//ts/react/ErrorDisplay",
         "//ts/react/PrettyJSON",
         "//ts/react/lang",
+		":mdx_js"
     ],
+)
+
+mdx_files(
+	name = "mdx",
+	srcs = [ "about.mdx" ],
+	assets = [
+		"style.module.css",
+	],
+	deps = [
+		"//project/zemn.me/components/TimeEye",
+		"//project/zemn.me/components/ZemnmezLogo",
+	]
 )
