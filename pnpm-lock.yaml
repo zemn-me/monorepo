@@ -84,8 +84,8 @@ dependencies:
     specifier: 6.0.5
     version: 6.0.5(glob@8.1.0)
   jscpd:
-    specifier: 4.0.1
-    version: 4.0.1
+    specifier: 4.0.4
+    version: 4.0.4
   json-schema-to-typescript:
     specifier: 14.0.4
     version: 14.0.4
@@ -7294,6 +7294,10 @@ packages:
     dependencies:
       '@types/node': 20.12.10
 
+  /@types/sarif@2.1.7:
+    resolution: {integrity: sha512-kRz0VEkJqWLf1LLVN4pT1cg1Z9wAuvI6L97V3m2f5B76Tg8d413ddvLBPTEHAZJlnn4XSvu0FkZtViCQGVyrXQ==}
+    dev: false
+
   /@types/seedrandom@3.0.8:
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
     dev: false
@@ -11106,6 +11110,15 @@ packages:
     dev: true
     optional: true
 
+  /fs-extra@10.1.0:
+    resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: false
+
   /fs-extra@11.2.0:
     resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
     engines: {node: '>=14.14'}
@@ -12959,8 +12972,16 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /jscpd@4.0.1:
-    resolution: {integrity: sha512-zmbe4TazCwn2JGFvAgeSQrJMS8kmGrSZ9Fo5WMsGbCMgUl/BgY8a0e7IyajHK3WPRl0dPWWVPSJBXbS5CNGSfw==}
+  /jscpd-sarif-reporter@4.0.3:
+    resolution: {integrity: sha512-0T7KiWiDIVArvlBkvCorn2NFwQe7p7DJ37o4YFRuPLDpcr1jNHQlEfbFPw8hDdgJ4hpfby6A5YwyHqASKJ7drA==}
+    dependencies:
+      colors: 1.4.0
+      fs-extra: 11.2.0
+      node-sarif-builder: 2.0.3
+    dev: false
+
+  /jscpd@4.0.4:
+    resolution: {integrity: sha512-tmcB7uQPYzdIwc03Z7ngWCD3vrJ96B88kaAh86f9dQ7dz1Cikj29t9Lu8kzFf1NIyhdm1MMP8HHIAXUx0L9EhQ==}
     hasBin: true
     dependencies:
       '@jscpd/core': 4.0.1
@@ -12971,6 +12992,7 @@ packages:
       commander: 5.1.0
       fs-extra: 11.2.0
       gitignore-to-glob: 0.3.0
+      jscpd-sarif-reporter: 4.0.3
     dev: false
 
   /jsdom@20.0.3:
@@ -14857,6 +14879,14 @@ packages:
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
 
+  /node-sarif-builder@2.0.3:
+    resolution: {integrity: sha512-Pzr3rol8fvhG/oJjIq2NTVB0vmdNNlz22FENhhPojYRZ4/ee08CfK4YuKmuL54V9MLhI1kpzxfOJ/63LzmZzDg==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@types/sarif': 2.1.7
+      fs-extra: 10.1.0
+    dev: false
+
   /node-stream-zip@1.15.0:
     resolution: {integrity: sha512-LN4fydt9TqhZhThkZIVQnF9cwjU3qmUH9h78Mx/K7d3VvfRqqwthLwJEUOEL0QPZ0XQmNN7be5Ggit5+4dq3Bw==}
     engines: {node: '>=0.12.0'}
@@ -16012,10 +16042,6 @@ packages:
       with: 7.0.2
     dev: false
 
-  /pug-error@2.0.0:
-    resolution: {integrity: sha512-sjiUsi9M4RAGHktC1drQfCr5C5eriu24Lfbt4s+7SykztEOwVZtbFk1RRq0tzLxcMxMYTBR+zMQaG07J/btayQ==}
-    dev: false
-
   /pug-error@2.1.0:
     resolution: {integrity: sha512-lv7sU9e5Jk8IeUheHata6/UThZ7RK2jnaaNztxfPYUY+VxZyk/ePVaNZ/vwmH8WqGvDz3LrNYt/+gA55NDg6Pg==}
     dev: false
@@ -16025,7 +16051,7 @@ packages:
     dependencies:
       constantinople: 4.0.1
       jstransformer: 1.0.0
-      pug-error: 2.0.0
+      pug-error: 2.1.0
       pug-walk: 2.0.0
       resolve: 2.0.0-next.5
     dev: false
@@ -16035,13 +16061,13 @@ packages:
     dependencies:
       character-parser: 2.2.0
       is-expression: 4.0.0
-      pug-error: 2.0.0
+      pug-error: 2.1.0
     dev: false
 
   /pug-linker@4.0.0:
     resolution: {integrity: sha512-gjD1yzp0yxbQqnzBAdlhbgoJL5qIFJw78juN1NpTLt/mfPJ5VgC4BvkoD3G23qKzJtIIXBbcCt6FioLSFLOHdw==}
     dependencies:
-      pug-error: 2.0.0
+      pug-error: 2.1.0
       pug-walk: 2.0.0
     dev: false
 
@@ -16055,7 +16081,7 @@ packages:
   /pug-parser@6.0.0:
     resolution: {integrity: sha512-ukiYM/9cH6Cml+AOl5kETtM9NR3WulyVP2y4HOU45DyMim1IeP/OOiyEWRr6qk5I5klpsBnbuHpwKmTx6WURnw==}
     dependencies:
-      pug-error: 2.0.0
+      pug-error: 2.1.0
       token-stream: 1.0.0
     dev: false
 
@@ -16066,7 +16092,7 @@ packages:
   /pug-strip-comments@2.0.0:
     resolution: {integrity: sha512-zo8DsDpH7eTkPHCXFeAk1xZXJbyoTfdPlNR0bK7rpOMuhBYb0f5qUVCO1xlsitYd3w5FQTK7zpNVKb3rZoUrrQ==}
     dependencies:
-      pug-error: 2.0.0
+      pug-error: 2.1.0
     dev: false
 
   /pug-walk@2.0.0:
