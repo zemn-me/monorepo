@@ -3,7 +3,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//ts:rules.bzl", "ts_project")
 load("//js:rules.bzl", "js_library")
 
-def mdx_to_js(name = None, srcs = [], outs = None, **kwargs):
+def mdx_to_js(name = None, srcs = [], assets = None, deps = [], outs = None, **kwargs):
     if outs == None:
         outs = [paths.replace_extension(src, ".js") for src in srcs]
     jsfiles = outs
@@ -20,7 +20,6 @@ def mdx_to_js(name = None, srcs = [], outs = None, **kwargs):
         tool = "//ts/mdx/cmd/mdx-transform",
         outs = outs,
         args = args,
-        **kwargs
     )
 
     native.filegroup(
@@ -28,11 +27,14 @@ def mdx_to_js(name = None, srcs = [], outs = None, **kwargs):
         srcs = outs,
     )
 
+    if assets != None:
+        outs += assets
+
     js_library(
         name = name,
         srcs = outs,
         deps = [
             "//:node_modules/react",
-        ],
+        ] + deps,
         **kwargs
     )
