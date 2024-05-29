@@ -164,8 +164,8 @@ devDependencies:
     specifier: 0.2.2
     version: 0.2.2(@fortawesome/fontawesome-svg-core@6.5.2)(react@18.3.1)
   '@microsoft/api-documenter':
-    specifier: 7.24.13
-    version: 7.24.13(@types/node@20.12.10)
+    specifier: 7.25.0
+    version: 7.25.0(@types/node@20.12.10)
   '@microsoft/api-extractor':
     specifier: 7.43.8
     version: 7.43.8(@types/node@20.12.10)
@@ -4397,12 +4397,12 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  /@microsoft/api-documenter@7.24.13(@types/node@20.12.10):
-    resolution: {integrity: sha512-QsNfkvT5njk2BynKxYOqhDd/gWZCxGA3uKuPCZikuEF8UNW18EMP7lI0gkCKoeohB7K0TRhL6zIdIoVhyTcHnQ==}
+  /@microsoft/api-documenter@7.25.0(@types/node@20.12.10):
+    resolution: {integrity: sha512-l1M1kv93wxQL5/OHn5pMq9Ukd/phhY/hpxeh+p6fI+Tyw+U9Mk6C5tezv+f6rfQjkD/mdwzZU68fE2RioerDwg==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.28.21(@types/node@20.12.10)
-      '@microsoft/tsdoc': 0.14.2
+      '@microsoft/api-extractor-model': 7.29.0(@types/node@20.12.10)
+      '@microsoft/tsdoc': 0.15.0
       '@rushstack/node-core-library': 5.3.0(@types/node@20.12.10)
       '@rushstack/terminal': 0.12.2(@types/node@20.12.10)
       '@rushstack/ts-command-line': 4.21.4(@types/node@20.12.10)
@@ -4422,11 +4422,11 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor-model@7.28.21(@types/node@20.12.10):
-    resolution: {integrity: sha512-AZSdhK/vO4ddukfheXZmrkI5180XLeAqwzu/5pTsJHsXYSyNt3H3VJyynUYKMeNcveG9QLgljH3XRr/LqEfC0Q==}
+  /@microsoft/api-extractor-model@7.29.0(@types/node@20.12.10):
+    resolution: {integrity: sha512-uh3tuQ01cnjncpE28+ifL1LFg0wnC2pkTXTDrOPpc6Y8V8Pxd53UOA2B+12iFB8pLnry/2MGVu5OLPGGrGja4Q==}
     dependencies:
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
+      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.3.0(@types/node@20.12.10)
     transitivePeerDependencies:
       - '@types/node'
@@ -4462,8 +4462,21 @@ packages:
       resolve: 2.0.0-next.5
     dev: true
 
+  /@microsoft/tsdoc-config@0.17.0:
+    resolution: {integrity: sha512-v/EYRXnCAIHxOHW+Plb6OWuUoMotxTN0GLatnpOb1xq0KuTNw/WI3pamJx/UbsoJP5k9MCw1QxvvhPcF9pH3Zg==}
+    dependencies:
+      '@microsoft/tsdoc': 0.15.0
+      ajv: 8.12.0
+      jju: 1.4.0
+      resolve: 2.0.0-next.5
+    dev: true
+
   /@microsoft/tsdoc@0.14.2:
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
+    dev: true
+
+  /@microsoft/tsdoc@0.15.0:
+    resolution: {integrity: sha512-HZpPoABogPvjeJOdzCOSJsXeL/SMCBgBZMVC3X3d7YYp2gf31MfxhUoYUNwf1ERPJOnQc0wkFn9trqI6ZEdZuA==}
     dev: true
 
   /@mole-inc/bin-wrapper@8.0.1:
@@ -7932,6 +7945,15 @@ packages:
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
+
+  /ajv@8.12.0:
+    resolution: {integrity: sha512-sRu1kpcO9yLtYxBKvqfTeh9KzZEwO3STyX1HT+4CaDzC6HpTGYhIhPIzj9XuKU7KYDwnaeh5hcOwjy1QuJzBPA==}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      json-schema-traverse: 1.0.0
+      require-from-string: 2.0.2
+      uri-js: 4.4.1
+    dev: true
 
   /ajv@8.13.0:
     resolution: {integrity: sha512-PRA911Blj99jR5RMeTunVbNXMF6Lp4vZXnk5GQjcnUWUTsrXtekg/pnmFFI2u/I36Y/2bITGS30GZCXei6uNkA==}
