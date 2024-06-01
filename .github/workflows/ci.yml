@@ -28,6 +28,16 @@ jobs:
       || github.event_name == 'workflow_dispatch'
       || (github.event_name == 'push'
       && startsWith(github.ref, 'refs/heads/renovate'))
+    concurrency:
+      # > The ref given is fully-formed, meaning that for branches the format
+      # > is refs/heads/<branch_name>,
+      # > for pull requests it is refs/pull/<pr_number>/merge,
+      # > and for tags it is refs/tags/<tag_name>. For example,
+      # > refs/heads/feature-branch-1.
+      #
+      # This should cancel a prior presubmit when a new change comes in.
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
