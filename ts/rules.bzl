@@ -95,6 +95,7 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         preserve_jsx = preserve_jsx,
         resolve_json_module = resolve_json_module,
         declaration = True,
+        allow_js = True,
         declaration_map = True,
         visibility = visibility,
         **kwargs
