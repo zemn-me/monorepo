@@ -17,12 +17,23 @@
 		"noImplicitOverride": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
+		"allowJs": true,
 		"declarationMap": true,
-		"lib": ["DOM", "ESNext"],
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
 		"baseUrl": ".",
 		"paths": {
-			"#root/*": [ "*", "dist/bin/*" ],
+			"#root/*": [
+				"*",
+				"dist/bin/*"
+			],
 		}
 	},
-	"exclude": ["node_modules", "dist", "external"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"external"
+	]
 }
