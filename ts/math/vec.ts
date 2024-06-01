@@ -90,6 +90,10 @@ export const zip: {
 		v1: Vector<L, T1>,
 		v2: Vector<L, T2>
 	): Iterable<[T1, T2]>;
+	<T1, T2>(
+		v1: Iterable<T1>,
+		v2: Iterable<T2>,
+	): Iterable<[T1 | undefined, T2  | undefined]>;
 	<T1, T2, T3>(
 		v1: Iterable<T1>,
 		v2: Iterable<T2>,

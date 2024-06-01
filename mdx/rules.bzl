@@ -1,17 +1,14 @@
-def mdx_lint(name, srcs = None):
-    pass
-    #eslint_test(
-    #    name = name,
-    #    srcs = srcs
-    #)
+load("//ts/mdx/cmd/mdx-transform:rules.bzl", "mdx_to_js")
 
-def mdx_files(name, srcs = None):
-    #mdx_lint(
-    #    name = name + "_lint",
-    #    srcs = srcs
-    #)
-
+def mdx_files(name, srcs = None, **kwargs):
     native.filegroup(
         name = name,
         srcs = srcs,
+        **kwargs
+    )
+
+    mdx_to_js(
+        name = name + "_js",
+        srcs = srcs,
+        **kwargs
     )
