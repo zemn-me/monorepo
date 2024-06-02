@@ -12,9 +12,9 @@ export function VideoSources() {
 			{/* These assets only work because they're in the public directory */}
 			{/* in the root of this next.js project via a copy_to_bin rule. */}
 			{/* no other magic is happening here! */}
-			<source src="kenwood.mp4" type="video/mp4" />
-			<source src="kenwood.webm" type="video/webm" />
-			<source src="kenwood.ogv" type="video/ogv" />
+			<source src="/kenwood.mp4" type="video/mp4" />
+			<source src="/kenwood.webm" type="video/webm" />
+			<source src="/kenwood.ogv" type="video/ogv" />
 		</>
 	);
 }
