@@ -11,6 +11,8 @@ import { readFile } from 'fs/promises';
 import { SourceMapGenerator } from 'source-map';
 import { read, write } from 'to-vfile';
 import { VFile } from 'vfile';
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
 import { map } from '#root/ts/iter/index.js';
 import { zip } from '#root/ts/math/vec.js';
@@ -45,6 +47,7 @@ void new Command('mdx-transform')
 
 				const js = await mdx.compile(await read(input), {
 					SourceMapGenerator: SourceMapGenerator,
+					remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
 				});
 
 				js.path = jsFile;
