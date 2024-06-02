@@ -43,6 +43,7 @@
 	"task.allowAutomaticTasks": "on",
 	"rust-analyzer.procMacro.enable": true,
 	"eslint.format.enable": true,
+	"eslint.experimental.useFlatConfig": true,
 	"eslint.onIgnoredFiles": "warn",
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
