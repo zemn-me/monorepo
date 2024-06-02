@@ -47,67 +47,60 @@ describe('zemn.me website', () => {
 		}
 	});
 
-	it('should load all endpoints without errors', async () => {
-		expect.assertions(1);
-		const server = http
-			.createServer((rq, rw) => {
-				void handler(rq, rw, { public: base });
-			})
-			.listen();
 
-		try {
+
+	describe('Endpoint Tests', () => {
+		let server: http.Server;
+		let origin: string;
+		let endpoints: string[] = [];
+
+		beforeAll(async () => {
+			// we are making a lot of servers
+			process.setMaxListeners(100);
+			server = http.createServer((rq, rw) => {
+				void handler(rq, rw, { public: base });
+			}).listen();
+
 			const addressInfo = server.address();
 
-			if (addressInfo == null || typeof addressInfo == 'string')
+			if (addressInfo == null || typeof addressInfo === 'string') {
 				throw new Error('Not AddressInfo');
+			}
 
-			const origin = `http://localhost:${addressInfo.port}`;
-			await expect(
-				Promise.all(
-					(await glob(Path.join(base, '/**/*.html')))
-						.map(path => Path.relative(base, path))
-						.map(relPath =>
-							// get endpoints from html files
-							relPath.replace(/index.html|.html$/g, '')
-						)
-						.map(async endpoint => {
-							const driver = Driver()
-								.forBrowser(Browser.CHROME)
-								.build();
-							try {
-								await driver
-									.manage()
-									.setTimeouts({ implicit: 5000 });
-								await driver.get(`${origin}/${endpoint}`);
-								// try to make the test less flakey by waiting for
-								// one second.
-								await new Promise<void>(ok =>
-									setTimeout(() => ok(), 1000)
-								);
-								const logs = await driver
-									.manage()
-									.logs()
-									.get('browser');
-								const url = await driver.getCurrentUrl();
-								// we probably redirected away by accident,
-								// and we don't want to inherit their logs.
-								if (new URL(url).origin !== origin) return [];
+			origin = `http://localhost:${addressInfo.port}`;
 
-								return logs.length
-									? logs.map(log => ({
-											url,
-											endpoint,
-											log,
-										}))
-									: logs;
-							} finally {
-								await driver.close();
-							}
-						})
-				).then(v => v.flat(1))
-			).resolves.toHaveLength(1);
-		} finally {
-			await server.close();
-		}
+			const htmlFiles = await glob(Path.join(base, '/**/*.html'));
+			endpoints = htmlFiles.map(path =>
+				Path.relative(base, path).replace(/index.html|.html$/g, '')
+			);
+		});
+
+		afterAll(async () => {
+			await new Promise<void>((resolve, reject) => {
+				server.close(err => (err ? reject(err) : resolve()));
+			});
+		});
+
+		const testEndpoint = async (endpoint: string) => {
+			const driver = Driver().forBrowser(Browser.CHROME).build();
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/${endpoint}`);
+				await new Promise<void>(ok => setTimeout(ok, 1000));
+				const logs = await driver.manage().logs().get('browser');
+				const url: string = await driver.getCurrentUrl();
+				if (new URL(url).origin !== origin) return [];
+
+				return logs.length ? logs.map(log => ({ url, endpoint, log })) : logs;
+			} finally {
+				await driver.quit();
+			}
+		};
+
+		it.each(endpoints)('should load %s without errors', async endpoint => {
+			const logs = await testEndpoint(endpoint);
+			expect(logs).toHaveLength(1);
+		});
 	});
+
 });
