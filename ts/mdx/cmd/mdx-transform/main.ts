@@ -8,6 +8,8 @@ import path from 'node:path';
 import { Command } from '@commander-js/extra-typings';
 import * as mdx from '@mdx-js/mdx';
 import { readFile } from 'fs/promises';
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import { SourceMapGenerator } from 'source-map';
 import { read, write } from 'to-vfile';
 import { VFile } from 'vfile';
