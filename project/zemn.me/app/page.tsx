@@ -2,8 +2,6 @@ import { Metadata } from 'next/types';
 
 import { Eeg } from '#root/project/zemn.me/app/eeg.js';
 import style from '#root/project/zemn.me/app/style.module.css';
-import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
-import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
 import * as bio from '#root/project/zemn.me/bio/index.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
@@ -13,6 +11,7 @@ import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
 import Timeline from '#root/project/zemn.me/components/timeline/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video.js';
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;
@@ -35,38 +34,13 @@ function LetterHead() {
 	);
 }
 
-/**
- * In the Northern Hemisphere it is commonly regarded as extending from the winter
- * solstice (year's shortest day), December 21 or 22, to the vernal equinox (day and
- * night equal in length), March 20 or 21, and in the Southern Hemisphere from June
- * 21 or 22 to September 22 or 23.
- */
-function isWinter(v: Date): boolean {
-	const month = v.getMonth();
-	return month >= 11 || month <= 1;
-}
+
 
 export default function Main() {
-	const currentlyWinter = isWinter(new Date());
 	return (
 		<main className={style.main}>
 			<Eeg />
-			<video
-				autoPlay
-				className={style.headerBgv}
-				loop
-				muted
-				playsInline
-				poster={
-					(currentlyWinter ? kenwood_snow.poster : kenwood.poster).src
-				}
-			>
-				{currentlyWinter ? (
-					<kenwood_snow.VideoSources />
-				) : (
-					<kenwood.VideoSources />
-				)}
-			</video>
+			<HeroVideo className={style.headerBgv}/>
 			<header className={style.banner}>
 				<LetterHead />
 			</header>
