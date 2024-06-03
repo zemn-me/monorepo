@@ -356,8 +356,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.385.0
-    version: 37.385.0(@aws-sdk/client-sso-oidc@3.588.0)(typanion@3.14.0)
+    specifier: 37.386.0
+    version: 37.386.0(@aws-sdk/client-sso-oidc@3.588.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -9189,7 +9189,7 @@ packages:
       fs-minipass: 3.0.2
       glob: 10.4.1
       lru-cache: 10.2.2
-      minipass: 7.0.4
+      minipass: 7.1.2
       minipass-collect: 2.0.1
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
@@ -15175,7 +15175,7 @@ packages:
     resolution: {integrity: sha512-D7V8PO9oaz7PWGLbCACuI1qEOsq7UKfLotx/C0Aet43fCUB/wfQ7DYeq2oR/svFJGYDHPr38SHATeaj/ZoKHKw==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
-      minipass: 7.0.4
+      minipass: 7.1.2
 
   /minipass-fetch@3.0.3:
     resolution: {integrity: sha512-n5ITsTkDqYkYJZjcRWzZt9qnZKCT7nKCosJhHoj7S7zD+BP4jVbWs+odsniw5TA3E0sLomhTKOKjF86wf11PuQ==}
@@ -17419,8 +17419,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.385.0(@aws-sdk/client-sso-oidc@3.588.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-ubfI9wsAE97GySfmdDp0yNX3w0YtbbIybElBeh8hxiAbYU/yeQM5yljCWPKz0ObSb7rJX0bVY3c8m3u4O+RELg==}
+  /renovate@37.386.0(@aws-sdk/client-sso-oidc@3.588.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-RyDSOi/5HDjMAllNTAgnyUoZ9qisI/iE3X0Vo2IvcqZLyFTPBBaufmnwitSeByONexH24BTLzQix6F2YYvTtcA==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
