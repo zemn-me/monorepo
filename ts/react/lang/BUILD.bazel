@@ -18,6 +18,7 @@ ts_project(
         "//:node_modules/memoizee",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//ts",
     ],
 )
 

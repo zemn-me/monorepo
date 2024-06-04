@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-elements */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';

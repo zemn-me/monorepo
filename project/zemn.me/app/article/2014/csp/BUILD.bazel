@@ -1,0 +1,13 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "csp",
+    assets = glob(["**/*.css"]),
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//mdx:mdx_js",
+        "//project/zemn.me/components/HeroVideo",
+        "//ts/react/lang",
+        "//ts/time",
+    ],
+)

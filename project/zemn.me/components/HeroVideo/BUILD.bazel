@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "HeroVideo",
+    assets = glob([
+        "**/*.css",
+    ]),
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:base_defs",
+		"//:node_modules/classnames",
+        "//project/zemn.me/assets/kenwood",
+        "//project/zemn.me/assets/kenwood_snow",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")

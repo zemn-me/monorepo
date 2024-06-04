@@ -1,6 +1,7 @@
-/* eslint-disable @next/next/no-page-custom-font */
+ 
 import 'project/zemn.me/app/base.css';
 
+import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
@@ -13,24 +14,18 @@ export interface Props {
 	readonly children?: ReactNode;
 }
 
+const lora = Lora({
+	weight: ['400', '700'],
+	style: ['italic', 'normal'],
+	subsets: ['latin', 'latin-ext'],
+	display: 'swap'
+});
+
 export function RootLayout({ children }: Props) {
 	return (
 		<Providers>
 			<html>
 				<head>
-					<link
-						href="https://fonts.googleapis.com"
-						rel="preconnect"
-					/>
-					<link
-						crossOrigin="anonymous"
-						href="https://fonts.gstatic.com"
-						rel="preconnect"
-					/>
-					<link
-						href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-						rel="stylesheet"
-					/>
 					<link href="/icon.svg" rel="icon" type="image/svg+xml" />
 					<link
 						href="/icon.svg"
@@ -39,7 +34,7 @@ export function RootLayout({ children }: Props) {
 					/>
 					<HeaderTagsAppRouter />
 				</head>
-				<body>{children}</body>
+				<body className={lora.className}>{children}</body>
 			</html>
 		</Providers>
 	);

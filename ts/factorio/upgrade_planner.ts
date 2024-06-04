@@ -1,5 +1,6 @@
-import { ItemFilterObject } from "#root/ts/factorio/item_filter_object.js";
 import { z } from "zod";
+
+import { ItemFilterObject } from "#root/ts/factorio/item_filter_object.js";
 
 export const UpgradePlanner = z.strictObject({
 	settings: z.strictObject({

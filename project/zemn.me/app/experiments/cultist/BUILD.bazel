@@ -1,16 +1,15 @@
-load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//project/cultist/multiplayer:__subpackages__"])
-
 ts_project(
-    name = "pages",
-    srcs = [
-        "index.tsx",
+    name = "cultist",
+    visibility = [
+        "//project/zemn.me:__subpackages__",
     ],
-    resolve_json_module = True,
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
         "//:node_modules/react",
         "//project/cultist:save",
         "//project/cultist/example",
@@ -18,5 +17,3 @@ ts_project(
         "//project/cultist/state",
     ],
 )
-
-bazel_lint(name = "bazel_lint")

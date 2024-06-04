@@ -6,7 +6,7 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 ts_project(
     name = "app",
     assets = [
-        ":base.css",
+        "base.css",
     ],
     deps = [
         "//:node_modules/@bazel/runfiles",

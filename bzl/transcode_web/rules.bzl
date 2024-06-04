@@ -1,6 +1,6 @@
-"""
-Transcode a video source for use on the web.
-"""
+"Transcode a video source for use on the web."
+
+load("//image:transcode.bzl", "transcode_img")
 
 def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M", video_scale = "1280:720"):
     native.genrule(
@@ -61,7 +61,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
     )
 
     native.genrule(
-        name = name + "_jpg",
+        name = name + "_png",
         srcs = [src, "//bin/host/ffmpeg"],
         cmd = """
             $(location //bin/host/ffmpeg) -ss 00:00:00 \\
@@ -74,12 +74,19 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         outs = [out_base_name + ".png"],
     )
 
+    transcode_img(
+        name = name + "_jpg",
+        src = name + "_png",
+        output_file_name = out_base_name + ".jpg",
+    )
+
     native.filegroup(
         name = name,
         srcs = [
             name + "_ogv",
             name + "_webm",
             name + "_mp4",
+            name + "_png",
             name + "_jpg",
         ],
     )

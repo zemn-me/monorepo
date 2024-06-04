@@ -15,7 +15,6 @@ on:   # yamllint disable-line rule:truthy
   push:
     branches:
       - main
-      - renovate/**
 
   # manual triggering
   workflow_dispatch:
@@ -29,6 +28,16 @@ jobs:
       || github.event_name == 'workflow_dispatch'
       || (github.event_name == 'push'
       && startsWith(github.ref, 'refs/heads/renovate'))
+    concurrency:
+      # > The ref given is fully-formed, meaning that for branches the format
+      # > is refs/heads/<branch_name>,
+      # > for pull requests it is refs/pull/<pr_number>/merge,
+      # > and for tags it is refs/tags/<tag_name>. For example,
+      # > refs/heads/feature-branch-1.
+      #
+      # This should cancel a prior presubmit when a new change comes in.
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +49,7 @@ jobs:
           haskell: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Presubmit
@@ -79,7 +88,7 @@ jobs:
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Checkout main branch
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
         with:
           ref: main
       - name: Pulumi up from origin/main to staging
@@ -102,7 +111,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
       - name: Switch back to candidate branch
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
@@ -131,7 +140,7 @@ jobs:
           swap-storage: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       # example copied from:
       # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Submit

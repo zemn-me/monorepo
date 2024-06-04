@@ -69,6 +69,7 @@ crates_repository(
     manifests = ["//:Cargo.toml"],
     # Should match the version represented by the currently registered `rust_toolchain`.
     rust_version = "1.60.0",
+	generate_binaries = True,
 )
 
 load("@cargo//:defs.bzl", "crate_repositories")

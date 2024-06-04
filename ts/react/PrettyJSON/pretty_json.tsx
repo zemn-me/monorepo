@@ -67,7 +67,7 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 			{Object.entries(v).map(([k, v]) => (
 				<dl key={k} title={[k, ...path].reverse().join('.')}>
 					<details>
-						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+						{ }
 						<summary>
 							<dt>
 								<PrettyJSON

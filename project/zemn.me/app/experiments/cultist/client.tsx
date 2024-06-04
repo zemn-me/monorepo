@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 
 import exampleSave from '#root/project/cultist/example/savestate.js';
@@ -23,6 +24,8 @@ const Home = (): React.ReactElement => {
 
 	return (
 		<React.StrictMode>
+			<h1>Cultist</h1>
+			<p>This is a very old project from the pandemic to simulate the game Cultist Simulator in React.</p>
 			<Board.Table onElementChange={onElementChange} state={state} />
 
 			<textarea
