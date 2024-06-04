@@ -14,17 +14,12 @@ ts_project(
         "index.ts",
         "kenwood.tsx",
     ],
-    assets = [
-        "//project/zemn.me/public:kenwood.mp4",
-        "//project/zemn.me/public:kenwood.webm",
-        "//project/zemn.me/public:kenwood.ogv",
-        "//project/zemn.me/public:kenwood.jpg",
-    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//:base_defs",  # one day this should probably be separate for next.js
         "//:node_modules/@types/react",
         "//:node_modules/react",
+        "//project/zemn.me/public:kenwood",
     ],
 )
 
