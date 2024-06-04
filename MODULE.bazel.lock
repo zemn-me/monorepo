@@ -3200,6 +3200,41 @@
         ]
       }
     },
+    "@@aspect_rules_ts~//ts:extensions.bzl%ext": {
+      "general": {
+        "bzlTransitiveDigest": "U/Aib81QWwRkpsGKPEIWwmixeSo98n4M5aSbY05Bwx4=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "npm_typescript": {
+            "bzlFile": "@@aspect_rules_ts~//ts/private:npm_repositories.bzl",
+            "ruleClassName": "http_archive_version",
+            "attributes": {
+              "bzlmod": true,
+              "version": "",
+              "version_from": "@@//:package.json",
+              "integrity": "",
+              "build_file": "@@aspect_rules_ts~//ts:BUILD.typescript",
+              "build_file_substitutions": {
+                "bazel_worker_version": "5.4.2",
+                "google_protobuf_version": "3.20.1"
+              },
+              "urls": [
+                "https://registry.npmjs.org/typescript/-/typescript-{}.tgz"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "aspect_rules_ts~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@bazel_features~//private:extensions.bzl%version_extension": {
       "general": {
         "bzlTransitiveDigest": "UwYHXjy4P9iCTMR9n5kWsy4RwLoowjUrfDFTkBo5RG8=",
