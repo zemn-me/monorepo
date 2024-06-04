@@ -71,7 +71,7 @@ npm.npm_translate_lock(
 )
 use_repo(npm, "npm")
 
-bazel_dep(name = "aspect_rules_ts", version = "2.2.0")
+bazel_dep(name = "aspect_rules_ts", version = "2.4.2")
 
 rules_ts_ext = use_extension(
     "@aspect_rules_ts//ts:extensions.bzl",
