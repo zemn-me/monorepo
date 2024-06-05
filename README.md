@@ -27,4 +27,4 @@ having your secret API key stored in your shell history.
 1. **Continuous patching**. Because Bazel allows this repo to be fully tested, Mend is able to automatically integrate patches for any and all dependencies of any project in this repo automatically.
 2. **Linting**. There are central rules that enforce basic linting standards.
 3. **Continuous deployment**. Every day, this repo runs a deploy script which detects any changes in any files and re-deploys or publishes any changed packages or services.
-4. **Automatic versioning**. The packages published on NPM use the venerable api-extractor to detect major or minor version changes to the API, and automatically increment version numbers as relevant.
+<!--4. **Automatic versioning**. The packages published on NPM use the venerable api-extractor to detect major or minor version changes to the API, and automatically increment version numbers as relevant.-->
