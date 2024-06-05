@@ -76,7 +76,7 @@ export function mul<
 	const [i2 /*, j2*/] = size(m2);
 
 	return vec.map(vec.New<J1>(j1), (_, i) =>
-		vec.map(vec.New<I2>(i2), (_, j) => vec.dot(row(m1, i), col(m2, j)))
+		vec.map(vec.New<I2>(i2!), (_, j) => vec.dot(row(m1, i), col(m2, j)))
 	);
 }
 
@@ -192,7 +192,7 @@ export const transpose: <I extends number, J extends number>(
 	m: Matrix<I, J>
 ) => Matrix<J, I> = <I extends number, J extends number>(m: Matrix<I, J>) => {
 	const [i, j] = size(m);
-	const rows = vec.New<I>(i);
+	const rows = vec.New<I>(i!);
 
 	return vec.map(rows, (_, rj) =>
 		vec.map(vec.New<J>(j), (__, vi) => m[vi]![rj]!)
