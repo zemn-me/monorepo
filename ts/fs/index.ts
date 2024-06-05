@@ -45,6 +45,7 @@ async function* _walk(
 		isSocket() {
 			return false;
 		},
+		parentPath: ".",
 		path: await path,
 	};
 	yield* iter.asyncWalkPath<Dirent>(
