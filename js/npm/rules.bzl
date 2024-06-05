@@ -2,8 +2,6 @@ load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 load("//bzl/versioning:rules.bzl", "bump_on_change_test", "semver_version")
 load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
-load("//js/api-documenter:rules.bzl", "api_documenter")
-load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
 
 def _exclude_all_external_rule(ctx):
@@ -70,21 +68,6 @@ def npm_pkg(
     copy_to_bin(
         name = pkg_json_name,
         srcs = [pkg_json_name + "_gen"],
-    )
-
-    api_extractor(
-        name = name + "_extracted_api",
-        entry_point = external_api_dts_root,
-        srcs = srcs + deps,
-        report = "api_gen.md",
-        public_trimmed_rollup = "public.d.ts",
-        doc_model = ".api.json",
-    )
-
-    api_documenter(
-        name = name + "_docs",
-        output_directory = "docs",
-        doc_model = ".api.json",
     )
 
     copy_to_directory(
