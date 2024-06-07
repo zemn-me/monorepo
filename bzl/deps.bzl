@@ -154,13 +154,6 @@ exports_files(glob(["**/*"], exclude_directories=0))
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.40.0/rules_rust-v0.40.0.tar.gz"],
     )
 
-    http_archive(
-        name = "rules_nodejs",
-        sha256 = "dd04117521ba593f9c4fa45af782e18c85411ff4516bc561497682cd735b819d",
-        strip_prefix = "rules_nodejs-6.1.3",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.3/rules_nodejs-v6.1.3.tar.gz",
-    )
-
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
