@@ -41,8 +41,8 @@ export const as: <T, L extends number>(
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 ) => Vector<L, T> = v => v as any;
 
-export function New<N extends number>(n: number): Vector<N, unknown> {
-	return [...Array(n)] as Vector<N, unknown>;
+export function New<N extends number>(length: number): Vector<N, unknown> {
+	return [...Array(length)] as Vector<N, unknown>;
 }
 
 export const add: <I extends number>(
