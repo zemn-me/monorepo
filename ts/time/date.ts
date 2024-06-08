@@ -148,7 +148,7 @@ export type Date = z.TypeOf<typeof Date>;
 export type date = Date;
 export type SimpleDate = Date;
 
-export function parse([y, m, d]: Date): globalThis.Date {
+export function parse([d, m, y]: Date): globalThis.Date {
 	return new globalThis.Date(y, numericMonthAssociations[m], d);
 }
 

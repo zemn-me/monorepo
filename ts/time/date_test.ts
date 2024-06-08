@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { SimpleDate as Date } from '#root/ts/time/date.js';
+import { parse, SimpleDate as Date } from '#root/ts/time/date.js';
 
 test('date', () => {
 	// @ts-expect-error a generic invalid date
@@ -28,4 +28,13 @@ test('date', () => {
 	const b: Date = [30, 'sep', 2020] as const;
 
 	expect(1).toEqual(1);
+});
+
+describe('parse', () => {
+	it('should parse a simple date correctly', () => {
+		const date = parse([10, 'jan', 2024]);
+		expect(date.getFullYear()).toEqual(2024);
+		expect(date.getMonth()).toEqual(0);
+		expect(date.getDate()).toEqual(10);
+	});
 });
