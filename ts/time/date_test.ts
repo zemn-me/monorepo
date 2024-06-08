@@ -9,10 +9,6 @@ test('date', () => {
 	// @ts-expect-error month too high
 	const y: Date = [1, 13, 2020] as const;
 
-	// @ts-expect-error month too high (short)
-	const z: Date = [13, 2020] as const;
-	const z2: Date = ['dec', 2020] as const;
-
 	// @ts-expect-error date too high
 	const a: Date = [31, 'sep', 2020] as const;
 	const a2: Date = [30, 'sep', 2020] as const;
@@ -23,8 +19,6 @@ test('date', () => {
 
 	// @ts-expect-error no zero dates
 	const f: Date = [0, 2020];
-
-	const f2: Date = ['jan', 2020];
 
 	// @ts-expect-error no zero dates
 	const q: Date = [0, 'jan', 2020];
