@@ -25,10 +25,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "da288bf1daa6c04d03a9051781caa52aceb9163586bff9aa6cfb12f69b9395aa",
-        strip_prefix = "protobuf-27.0",
+        sha256 = "6fbe2e6f703bcd3a246529c2cab586ca12a98c4e641f5f71d51fde09eb48e9e7",
+        strip_prefix = "protobuf-27.1",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v27.0.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v27.1.tar.gz",
         ],
     )
 
@@ -43,10 +43,10 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "da288bf1daa6c04d03a9051781caa52aceb9163586bff9aa6cfb12f69b9395aa",
-        strip_prefix = "protobuf-27.0",
+        sha256 = "6fbe2e6f703bcd3a246529c2cab586ca12a98c4e641f5f71d51fde09eb48e9e7",
+        strip_prefix = "protobuf-27.1",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v27.0.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v27.1.tar.gz",
         ],
     )
 
@@ -69,9 +69,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "5bd70e4a61ef7d8ce7b1d3c922b3b97ad8c168defae03305c91a4b68864caa97",
+        sha256 = "78d3f3df10da77569942944c622eddf5fa34e12eba6791025eb83753d108630f",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.118.0/pulumi-v3.118.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -81,9 +81,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.118.0/pulumi-v3.118.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "ac071b433326b08862d6876ad7ef5a0199d24f9d67c597bc75e08a6cc882b80b",
+        sha256 = "456068b245b4677cce6c80965577d5fb9cdfdcb9eff5e39cb6e2dd45c313618d",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -102,9 +102,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.118.0/pulumi-v3.118.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-linux-arm64.tar.gz",
         ],
-        sha256 = "81bc11ed6f274a657293f468b1e8ab58dcbbd95356cd7b502e283d635ae2976f",
+        sha256 = "85a9ba0dae67f4b68c52308a5e4673661ef1f1ce32573086752760a42e8e1f54",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -154,22 +154,15 @@ exports_files(glob(["**/*"], exclude_directories=0))
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.40.0/rules_rust-v0.40.0.tar.gz"],
     )
 
-    http_archive(
-        name = "rules_nodejs",
-        sha256 = "3e8369256ad63197959d2253c473a9dcc57c2841d176190e59b91d25d4fe9e67",
-        strip_prefix = "rules_nodejs-6.1.1",
-        url = "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.1/rules_nodejs-v6.1.1.tar.gz",
-    )
-
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/4b705fd3a95591e75c8acde57641420776c27c58.zip",
-        strip_prefix = "json-schemas-4b705fd3a95591e75c8acde57641420776c27c58",
+        url = "https://github.com/microsoft/json-schemas/archive/86dec4c116377a0c34bd9513c54ba54397dd282d.zip",
+        strip_prefix = "json-schemas-86dec4c116377a0c34bd9513c54ba54397dd282d",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "f6bd48bf52ef54bfc99d449957e6195e6c13719c4cc2a42dd902abbfa063dcaf",
+        sha256 = "f259d289b01bf789e6fcdac1f3286b618c0d8f4370beb8333e3f7ad857b1a395",
     )
 
     ##########
@@ -226,9 +219,9 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "bazel_features",
-        sha256 = "2cd9e57d4c38675d321731d65c15258f3a66438ad531ae09cb8bb14217dc8572",
-        strip_prefix = "bazel_features-1.11.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.11.0/bazel_features-v1.11.0.tar.gz",
+        sha256 = "cec7fbc7bce6597cf2e83e01ddd9328a1bb057dc1a3092745238f49d3301ab5a",
+        strip_prefix = "bazel_features-1.12.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.12.0/bazel_features-v1.12.0.tar.gz",
     )
 
     chromedriver_buildfile = """
