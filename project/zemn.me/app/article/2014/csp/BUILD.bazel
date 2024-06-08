@@ -5,7 +5,9 @@ ts_project(
     assets = glob(["**/*.css"]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/next",
         "//mdx:mdx_js",
+        "//project/zemn.me/components/Article",
         "//project/zemn.me/components/HeroVideo",
         "//ts/react/lang",
         "//ts/time",
