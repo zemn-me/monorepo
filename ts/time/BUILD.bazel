@@ -12,6 +12,7 @@ ts_project(
     deps = [
         "//:node_modules/@types/jest",
         "//:node_modules/ts-toolbelt",
+        "//:node_modules/zod",
         "//ts",
     ],
 )
