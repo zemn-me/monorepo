@@ -3,96 +3,157 @@
  *  type checked date syntax for typescript.
  */
 
-import { L, N, O } from 'ts-toolbelt';
+import { z } from 'zod';
 
-export enum Month {
-	jan,
-	feb,
-	mar,
-	apr,
-	may,
-	jun,
-	jul,
-	aug,
-	sep,
-	oct,
-	nov,
-	dec,
+export const Month = z.enum([
+	"jan",
+	"feb",
+	"mar",
+	"apr",
+	"may",
+	"jun",
+	"jul",
+	"aug",
+	"sep",
+	"oct",
+	"nov",
+	"dec",
+]).describe("Month name (short).");
+
+export const Year = z.number().describe("Numeric year.");
+
+export const OneTo29 = z.union([
+	z.literal(1),
+z.literal(2),
+z.literal(3),
+z.literal(4),
+z.literal(5),
+z.literal(6),
+z.literal(7),
+z.literal(8),
+z.literal(9),
+z.literal(10),
+z.literal(11),
+z.literal(12),
+z.literal(13),
+z.literal(14),
+	z.literal(15),
+z.literal(16),
+z.literal(17),
+z.literal(18),
+z.literal(19),
+z.literal(20),
+z.literal(21),
+z.literal(22),
+z.literal(23),
+z.literal(24),
+	z.literal(25),
+z.literal(26),
+z.literal(27),
+z.literal(28),
+z.literal(29),
+]);
+
+const OneTo30 = z.union([
+	OneTo29,
+	z.literal(30)
+])
+
+const OneTo31 = z.union([
+	OneTo30,
+	z.literal(31)
+]);
+
+export const Date = z.union([
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.jan),
+		Year,
+	]),
+	z.tuple([
+		OneTo29,
+		z.literal(Month.enum.feb),
+		Year,
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.mar),
+		Year
+	]),
+	z.tuple([
+		OneTo30,
+		z.literal(Month.enum.apr),
+		Year
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.may),
+		Year
+	]),
+	z.tuple([
+		OneTo30,
+		z.literal(Month.enum.jun),
+		Year,
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.jul),
+		Year
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.aug),
+		Year,
+	]),
+	z.tuple([
+		OneTo30,
+		z.literal(Month.enum.sep),
+		Year,
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.oct),
+		Year
+	]),
+	z.tuple([
+		OneTo30,
+		z.literal(Month.enum.nov),
+		Year
+	]),
+	z.tuple([
+		OneTo31,
+		z.literal(Month.enum.dec),
+		Year
+	])
+]);
+
+export const date = Date;
+
+const numericMonthAssociations = {
+		[Month.enum.jan]: 0,
+		[Month.enum.feb]: 1,
+		[Month.enum.mar]: 2,
+		[Month.enum.apr]: 3,
+		[Month.enum.may]: 4,
+		[Month.enum.jun]: 5,
+		[Month.enum.jul]: 6,
+		[Month.enum.aug]: 7,
+		[Month.enum.sep]: 8,
+		[Month.enum.oct]: 9,
+		[Month.enum.nov]: 10,
+		[Month.enum.dec]: 11,
 }
 
-export const fullMonth = {
-	[Month.jan]: 'january',
-	[Month.feb]: 'february',
-	[Month.mar]: 'march',
-	[Month.apr]: 'april',
-	[Month.may]: 'may',
-	[Month.jun]: 'june',
-	[Month.jul]: 'jul',
-	[Month.aug]: 'august',
-	[Month.sep]: 'september',
-	[Month.oct]: 'october',
-	[Month.nov]: 'november',
-	[Month.dec]: 'december',
-} as const;
+export type Date = z.TypeOf<typeof Date>;
+export type date = Date;
+export type SimpleDate = Date;
 
-type MonthNames = O.Invert<typeof Month>;
+export function parse([y, m, d]: Date): globalThis.Date {
+	return new globalThis.Date(y, numericMonthAssociations[m], d);
+}
 
-type MonthName<m extends number> = MonthNames[m];
+export const nativeDateFromUnknownSimpleDate = Date.transform(parse);
 
-type range<A extends number, B extends number> = L.UnionOf<N.Range<A, B>>;
 
-type MonthDates = {
-	[Month.jan]: range<1, 31>;
-	[Month.feb]: range<1, 29>;
-	[Month.mar]: range<1, 31>;
-	[Month.apr]: range<1, 30>;
-	[Month.may]: range<1, 31>;
-	[Month.jun]: range<1, 30>;
-	[Month.jul]: range<1, 31>;
-	[Month.aug]: range<1, 21>;
-	[Month.sep]: range<1, 30>;
-	[Month.oct]: range<1, 31>;
-	[Month.nov]: range<1, 30>;
-	[Month.dec]: range<1, 31>;
-};
 
-type Dates = MonthDates;
 
-type ValueOf<T> = T[keyof T];
-
-export type SimpleDate = Full | Year | DateMonth;
-export type { SimpleDate as Date };
-
-export type Year = [number];
-export type DateMonth = ValueOf<{
-	[month in Month]: readonly [MonthName<month>, number];
-}>;
-
-export type Full = ValueOf<{
-	[month in Month]: readonly [Dates[month], MonthName<month>, number];
-}>;
-
-export const parse: (s: SimpleDate) => Date = date => {
-	let dateOf: Dates[Month] = 1,
-		monthName: ValueOf<MonthNames> | undefined,
-		year = 0;
-
-	switch (date.length) {
-		case 1:
-			[year] = date;
-			break;
-		case 2:
-			[monthName, year] = date;
-			break;
-		case 3:
-			[dateOf, monthName, year] = date;
-			break;
-
-		default:
-			throw new Error(`cannot parse date ${date}`);
-	}
-
-	const month = monthName ? Month[monthName] : 0;
-
-	return new Date(year, month, dateOf);
-};
