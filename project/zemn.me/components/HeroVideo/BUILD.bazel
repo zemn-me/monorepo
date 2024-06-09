@@ -9,7 +9,7 @@ ts_project(
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//:base_defs",
-		"//:node_modules/classnames",
+        "//:node_modules/classnames",
         "//project/zemn.me/assets/kenwood",
         "//project/zemn.me/assets/kenwood_snow",
     ],
