@@ -1,0 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//mdx:rules.bzl", "mdx_files")
+
+mdx_files(
+    name = "cors",
+    srcs = glob(["**/*.mdx"]),
+    assets = glob([
+        "**/*.jpg",
+        "**/*.png",
+    ]),
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/next",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")

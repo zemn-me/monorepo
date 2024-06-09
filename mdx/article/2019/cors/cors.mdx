@@ -12,6 +12,15 @@ date: [2, aug, 2019]
 medium: https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef
 ---
 
+{/* should probably just get the SVGs of the below ... */}
+
+import Image from 'next/image';
+import world_before_cors from '#root/mdx/article/2019/cors/world_before_cors.jpg';
+import web_origin_concept from '#root/mdx/article/2019/cors/web_origin_concept.png';
+import non_cors_request_flow from '#root/mdx/article/2019/cors/non_cors_request_flow.png';
+import cors_request_flow_on_the_web from '#root/mdx/article/2019/cors/cors_request_flow_on_the_web.png';
+import no_gods_no_masters from '#root/mdx/article/2019/cors/no_gods_no_masters.png';
+
 # If CORS is just a header, why don’t attackers just ignore it?
 
 Here’s a question from a co-worker I get quite often:
@@ -31,7 +40,10 @@ misconstrued that CORS is a way of _preventing_ different websites from
 receiving information from each other, but it’s quite the opposite. Let’s talk
 about a world without CORS first.
 
-![artist's rendition: world before CORS](https://cdn-images-1.medium.com/max/2000/0*sICI1Q5-QgnC0hSC.jpg)
+{/* my brain is not big enough to understand why i need to use Image.default */}
+
+<Image.default src={world_before_cors} alt="some cavemen attempt to make fire"/>
+
 Figure: _artist’s rendition: world before CORS_
 
 In the time before CORS, as some readers might remember it was not possible
@@ -44,19 +56,21 @@ If I create a website, mywebsite.com, it can use Javascript to request
 information from _only_ mywebsite.com. If this were not the case, I’d simply ask
 Javascript to retrieve google.com/account, read your personal information from
 the result and send it back to me. Because Javascript makes the request _as you_
-with _your cookie_, from* your browser*, it gets access to whatever you do, but
+with _your cookie_, from *your browser*, it gets access to whatever you do, but
 is in control of the website author. Note that this restriction _only_ applies
 to requests by Javascript. I can embed images and scripts from other sites all I
 want.
 
-![diagram: the web origin concept](https://cdn-images-1.medium.com/max/2000/1*4YL3OngigwS20qlsnUheCA.png)
+<Image.default src={web_origin_concept} alt="the web origin concept"/>
+
 Figure: the web origin concept ([live](https://sequencediagram.org/index.html#initialdata=c4s2bsfmaibuasyhvicnohkboidmia7aayqhscbjsab2acg6bbatwhc0bnmsaogtmbqatad5oqlkvydiwafzqw7vf2c9+japseajpaaepemebggusqfdqitp258b2gnspht0afybdag7eochxabgkpgsxhagilsegcmsv7nudgbqbxaffyw2vvdsdgxk8ocgadagakvjb4w1zkgsf+ugbreegasiy7fqcnanj4stdpwquabwgdb2bvahj67wp+swjgaf1qytgsiseoregdfwhculjckfsm7lolq6bnzdx1iura+vplqghws8i3w+j1s+0ox1oowik2ms3mixy0hsd1+l1ia02daipduc18sneo2hhpcbkonkgfgahggwhgia4fsoaedljaombxjtvjyzbukn0uhp+d5mnbszz-t4dbvgdcnax4joga))
 
 As a result, before CORS, if I wanted to write a website that retrieved data
 from another, such as a Google API I had to do it via my own backend server.
 Take a look at this flow:
 
-![diagram: how a non-CORS request works](https://cdn-images-1.medium.com/max/2000/1*_eowCLoom-kYx7WUPhGrpw.png)
+<Image.default src={non_cors_request_flow} alt="diagram: how a non-CORS request works"/>
+
 Figure: how a non-CORS request works ([live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAICFIGYHsBOMDCB5ASgZQFD4C2AngO6QBGAzmJAHQDGSR0AtAHzSUpJnWQUALmikKNOkxYB6EADsAJpAAe9ABbAi4QgHNeAVwAOo8lVrAGzIrMUr1m8NABWAQwBuL6oxQhDwQjx8AijsXGJmklYiAOIAogAqJuLmljJEDE7USHIAOnIAFGRgaiZJERZSrMxIANYgkACUxKYSFVah3Lz8giIA2tAKLsAu0NmlLozM+nLAALoBXcEd4a2pRDEJZauV0jpISDpQ0uD7NUYA-CeMQyDZALwAMtkK2fhySBajboKdQT3QuBc6WgmB8Onk0AACkhwCBGCRoIY0N8ZtQ8vpqNAELxWGgAI76SDUUByHQDIYjBQgNCMCAkPLYljQaL7Q4wCHANQwDGCADkaLkgW6KAANNAstAKNAeaN9Cg8pQJjVIIpxYJviFgEhoPjCcToGBmslIkzONA9gcoJUNokXIYQPQLWydidahcrjd7k9FK8nVb2maVilrdAAN7AEiGSBCABEHtA2RjIrkQOjMe9LzkSfAN2A+iUQgAjAAGEUnUlgfPRksAXyN5TWHSFwT65OG0BclCQ+mA0E5MHjtzkowQ0AzY3mKoUQA))
 
 Here, my webpage
@@ -71,7 +85,8 @@ server to state that it’s safe to allow Javascript to retrieve information. Fo
 example, Access-Control-Allow-Origin: mywebsite.com allows Javascript on
 mywebsite.com to access the response of this request.
 
-![diagram: a CORS request flow on the web](https://cdn-images-1.medium.com/max/2000/1*wZX1WLy8YgU20O3xrtTP4g.png)
+<Image.default alt="diagram: a CORS request flow on the web" src={cors_request_flow_on_the_web}/>
+
 Figure: a CORS request flow on the web ([live](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIHUwBbQMIHkBKBlAUNgtgJ4DukARgM5iQB0AxgPZ7QC0AfNKQE71HmScAuaIRIUqdRgHoQAOwAmkAB7UEwPOFwBzbgFcADsOJlKwGgzzT5SlWvDQAVgEMAbo-K1OIPcFxcefThZ2Rz0Qak16ek0oCTwhAAkAUQBBABFoELCIqJjzSXBIgGt9AH4C2kdQehkAXgAZarlqgB0ZVE9NWSERY3FzbBl6U2h6Z34Obl5+IWAEGD8pwLdC8laiBEroWZgAsc5yaD16cBBaEEhVmUdOGGqM0PDI6LMpAvpivWpWpLToWTlTpULn9gNAmhcZAByYBrRwyUHbDK0YA6Rx2G7kI4yPhgyqObCZR45F5MNgTfzTaDJWi0C7kZjIarAbjgZjJcAFIjMdogToybpGMSmWIDIa3Pb3LJPXKMISE7LPWJbSAcg7bVoLAJbDagnpCkmtCoyJG08hqhAgA6QeRHWQwq7yaA3RxyEEHOR47Ca8Zk+XSklCADiiQAKpKiYq8m8PmV6BUqrUGvIWm0Ol1DKITCTRcNRuNvYJoIMiBkiNcYGBoBsDnp+HhLZQU4iC8JHIVgYibgBHHQXHx+4lKskFoTQADauOAjgypHoOgRc2g5UqIDu9AAZtAk01jQBdbDWuRAA))
 
 So why don’t attackers ignore the Access-Control-Allow-Origin header? Because it
@@ -89,7 +104,8 @@ preventing old applications using legacy behavior becoming insecure.
 
 ## Why don’t we just let anything request anything else and block cookies?
 
-![picture: no gods, no masters (from 'fallout: new vegas')](https://cdn-images-1.medium.com/max/2560/1*ahbo8nFu5MSqTyfQttnEug.png)
+<Image.default alt="picture: no gods, no masters (from 'fallout: new vegas')" src={no_gods_no_masters} />
+
 Figure: _[source](https://fazzeai.tumblr.com/post/178416661759)_
 
 This may sound to an extent like anarchy, but can’t we just block cookies for
