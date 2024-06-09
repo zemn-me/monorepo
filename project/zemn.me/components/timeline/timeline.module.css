@@ -6,7 +6,7 @@
         '....... line-left line-left ........ age         ....... line-right line-right .....'
         '....... ......... ......... ........ ........... ....... .......... .......... .....' 1em
         '....... ......... content   content  content     content content    .......... .....'
-        / .2em   1em       1fr       1em     auto        1em     1fr         1em        .2em
+        / .625em   0       1fr       1em     auto        1em     1fr         0        .625em
 }
 
 .year::before, .year::after {
@@ -36,7 +36,7 @@
         '........ ....... ....... ....... ......' .2em
         '........ content content content ......'
         '........ ....... ....... ....... ......' .2em
-        /.5em     1fr      auto   1fr     .5em;
+        /1.25em     1fr      auto   1fr     1.25em;
     width: 30em;
 }
 
