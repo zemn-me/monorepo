@@ -1,0 +1,15 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "cors",
+    assets = glob(["**/*.css"]),
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:node_modules/next",
+        "//mdx/article/2019/cors:cors_js",
+        "//project/zemn.me/components/Article",
+        "//project/zemn.me/components/HeroVideo",
+        "//ts/react/lang",
+        "//ts/time",
+    ],
+)
