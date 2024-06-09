@@ -4,11 +4,10 @@ import { Eeg } from '#root/project/zemn.me/app/eeg.js';
 import style from '#root/project/zemn.me/app/style.module.css';
 import * as bio from '#root/project/zemn.me/bio/index.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
-import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { Q } from '#root/project/zemn.me/components/Q/index.js';
-import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
+import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import Timeline from '#root/project/zemn.me/components/timeline/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
 import * as lang from '#root/ts/react/lang/index.js';
@@ -21,30 +20,10 @@ function TimeEyeInline() {
 	return <TimeEye className={style.logoInline} />;
 }
 
-/**
- * LetterHead is the inner part of the heading with the name and logo.
- */
-function LetterHead() {
-	return (
-		<div className={style.letterHead}>
-			<div className={style.handle}>{lang.text(bio.Bio.who.handle)}</div>
-			<TimeEye className={style.logo} />
-			<div className={style.fullName}>Thomas NJ Shadwell</div>
-		</div>
-	);
-}
-
-
-
 export default function Main() {
 	return (
-		<main className={style.main}>
-			<Eeg />
-			<HeroVideo className={style.headerBgv}/>
-			<header className={style.banner}>
-				<LetterHead />
-			</header>
-			<section className={style.content}>
+<>
+<Eeg/>
 				<header>
 					<Prose>
 						<p>
@@ -219,8 +198,8 @@ export default function Main() {
 						This is what we become, when our eyes are open.
 					</i>
 				</section>
-			</section>
-		</main>
+
+</>
 	);
 }
 
