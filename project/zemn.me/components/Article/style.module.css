@@ -22,9 +22,3 @@
 .container :is(p, h1, h2, h3, h4, h5, h6, time) {
 	grid-column: 2 / span 12;
 }
-
-.heroVideo {
-	grid-column: 1 / -1;
-	width: 100%;
-	max-height: 50vh;
-}
