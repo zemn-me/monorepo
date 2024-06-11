@@ -353,8 +353,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.401.2
-    version: 37.401.2(@aws-sdk/client-sso-oidc@3.592.0)(typanion@3.14.0)
+    specifier: 37.401.3
+    version: 37.401.3(@aws-sdk/client-sso-oidc@3.592.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -9599,12 +9599,12 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  /emojibase-regex@15.3.0:
-    resolution: {integrity: sha512-EBz/292VBF9naBPBsGzkZUccgIv1xJibTXIINl8SezgVRnTCpKJx7MgZcR+UAd2RwjGkRJJZ/lhP7riOFZLicA==}
+  /emojibase-regex@15.3.1:
+    resolution: {integrity: sha512-r+uRiuWvLdo2C8RAID7zhzNpwh3DjxM4hDP7pI096X/gjBCtBu0nH1iLXdLq4D5KWA5ZT/dJmexmUlovTef7wQ==}
     dev: true
 
-  /emojibase@15.3.0:
-    resolution: {integrity: sha512-lFdQb14hoznwDh1xDoOFzkPdeeexmbuJdhUUjDaJZf/+jK+6Z3HkI5hWOemWfEdaMxtTujc1vNRx9DKtdtiOXA==}
+  /emojibase@15.3.1:
+    resolution: {integrity: sha512-GNsjHnG2J3Ktg684Fs/vZR/6XpOSkZPMAv85EHrr6br2RN2cJNwdS4am/3YSK3y+/gOv2kmoK3GGdahXdMxg2g==}
     dev: true
 
   /encodeurl@1.0.2:
@@ -16459,8 +16459,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.401.2(@aws-sdk/client-sso-oidc@3.592.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-WlxvC7PT9/2FfmDTjzbvpv87hB96JUuvimJAQ4yHa6bvze4gMXLmR6o2AGW/dq2UI174fWEGC3GQPwJfILbJvA==}
+  /renovate@37.401.3(@aws-sdk/client-sso-oidc@3.592.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-F64MUk6nOsF+sgjWAR89AToWN9oR1nQ3qxssv0uileUwUafI/KG2/UvVKuPeGG5uloZsYTId+U8PjqHN24KnZQ==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16511,8 +16511,8 @@ packages:
       editorconfig: 2.0.0
       email-addresses: 5.0.0
       emoji-regex: 10.3.0
-      emojibase: 15.3.0
-      emojibase-regex: 15.3.0
+      emojibase: 15.3.1
+      emojibase-regex: 15.3.1
       extract-zip: 2.0.1
       find-packages: 10.0.4
       find-up: 5.0.0
