@@ -1,9 +1,12 @@
+import { plot, plotLines2D } from '#root/ts/math/canvas/braille/braille.js';
 import { point } from '#root/ts/math/cartesian';
 import { Cartestian, Quaternion } from '#root/ts/math/conv';
 import { degree } from '#root/ts/math/degree';
 import { EulerAngle } from '#root/ts/math/euler_angle';
 import { plot2D, plot3D } from '#root/ts/math/space/render/braille';
 import { cube, square } from '#root/ts/math/space/shape';
+import { quantize, quantizeLine, quantizedMerge } from '#root/ts/math/space/space.js';
+import { scaleQuantize } from 'd3-scale';
 
 it('should render a square properly', () => {
 	expect(plot2D([square(point<2>(0, 0), 1)], 10)).toEqual(
@@ -88,4 +91,70 @@ it('should render a rotated 3d cube properly', () => {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀
 	`.trim()
 	);
+});
+
+
+describe('quantize operations', () => {
+	describe('quantize', () => {
+		it('should make a single 1', () => {
+			expect(
+				[...quantize(2, scaleQuantize([0,5], [0,1,2,3,4]))].join("")
+			).toEqual('00100')
+		})
+		it('should make a single dot', () => {
+			expect(plot(
+				quantize(2, scaleQuantize([0,5], [0,1,2,3,4])), 5
+			)).toEqual('⠀⠁⠀')
+		})
+	})
+
+	describe('quantizeLine', () => {
+		it('should make a line of width 3', () => {
+			expect(
+				[...quantizeLine(1,5, scaleQuantize([0,5], [0,1,2,3,4]))].join("")
+			).toEqual('01111')
+		})
+	})
+
+	describe('quantizedMerge', () => {
+		it('should be 1 between 3 and 5 and 8 and 10', () => {
+			const scale = scaleQuantize([1, 11], [1,2,3,4,5,6,7,8,9,10])
+			expect(
+				[...quantizedMerge(
+					quantizeLine(3,5, scale),
+					quantizeLine(8,10, scale)
+				)].join("")
+			).toEqual('0011100111')
+		})
+	})
+})
+
+describe('plotLines2D', () => {
+	describe('1d tests', () => {
+		it('should make a line', () => {
+			expect(plotLines2D(
+				[[0, 0, 10, 0]] as const,
+				([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]],
+				10
+			)).toEqual('⠉⠉⠉⠉⠉')
+		})
+
+		it('should make 2 lines', () => {
+			expect(plotLines2D(
+				[[0, 0, 5, 0], [7, 0, 10, 0]] as const,
+				([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]],
+				10
+			)).toEqual('⠉⠉⠉⠈⠉')
+		})
+	})
+	describe('2d shapes', () => {
+
+		it('should make a line with a kink in it', () => {
+			expect(plotLines2D(
+				[[0, 0, 5, 0], [5, 0, 5, 5]] as const,
+				([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]],
+				10
+			)).toEqual('⠉⠉⠉⠈⠉')
+		});
+	});
 });

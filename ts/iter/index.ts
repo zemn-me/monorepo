@@ -344,3 +344,20 @@ export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<A | B> {
 		}
 	}
 }
+
+/**
+ * zip 2 iterables. truncates if one is shorter than the other.
+ */
+export function* zip<A, B>(
+	a: Iterable<A>,
+	b: Iterable<B>
+): Generator<[A, B], undefined> {
+	const iterators = [a, b].map(v => v[Symbol.iterator]());
+
+	for (; ;) {
+		const vals = iterators.map(v => v.next());
+		if (vals.some(v => v.done)) return;
+
+		yield vals.map(v => v.value) as [A, B];
+	}
+}

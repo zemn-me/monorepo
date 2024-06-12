@@ -10,6 +10,8 @@ ts_project(
         "space.ts",
     ],
     deps = [
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/d3-scale",
         "//ts/iter",
         "//ts/math",
     ],
@@ -22,7 +24,9 @@ ts_project(
     ],
     deps = [
         ":space",
+        "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/jest",
+        "//:node_modules/d3-scale",
         "//ts/math/space/render",
     ],
 )
