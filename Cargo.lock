@@ -766,9 +766,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.33.26"
+version = "0.34.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2f9706038906e66f3919028f9f7a37f3ed552f1b85578e93f4468742e2da438"
+checksum = "f79aace01c21f25090c75f5f7c6e3901498c062e2c1178c46866ed4e62e80aba"
 dependencies = [
  "ast_node",
  "better_scoped_tls",
