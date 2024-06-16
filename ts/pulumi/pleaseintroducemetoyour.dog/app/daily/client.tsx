@@ -1,4 +1,4 @@
- 
+
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
@@ -8,6 +8,7 @@ import { z } from 'zod';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
+import { Video } from '#root/ts/react/Video/video.js';
 import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 
 function Post(post: z.TypeOf<typeof RedditPost>) {
@@ -52,11 +53,11 @@ function Post(post: z.TypeOf<typeof RedditPost>) {
 				</>
 			) : null}
 			{videoUrls.length !== 0 ? (
-				<video autoPlay loop muted playsInline ref={videoRef}>
+				<Video autoPlay loop muted playsInline ref={videoRef}>
 					{videoUrls.map(source =>
 						source ? <source key={source} src={source} /> : null
 					)}
-				</video>
+				</Video>
 			) : null}
 
 			{post.preview?.images
