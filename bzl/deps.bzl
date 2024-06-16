@@ -69,9 +69,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "78d3f3df10da77569942944c622eddf5fa34e12eba6791025eb83753d108630f",
+        sha256 = "42cd5c9246975e037b4058de810dd3a7408f5ee391a0bdc92154c78f218866b2",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.120.0/pulumi-v3.120.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -81,9 +81,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.120.0/pulumi-v3.120.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "456068b245b4677cce6c80965577d5fb9cdfdcb9eff5e39cb6e2dd45c313618d",
+        sha256 = "d59e6db02686fdd3f5b8226ad52ea640cf659b1de86c3d1e202b449489f6d19e",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -102,9 +102,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.119.0/pulumi-v3.119.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.120.0/pulumi-v3.120.0-linux-arm64.tar.gz",
         ],
-        sha256 = "85a9ba0dae67f4b68c52308a5e4673661ef1f1ce32573086752760a42e8e1f54",
+        sha256 = "8b01d5935885b92e50daa635fc91c7386afd22a681718d93da7fc3485348712a",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -157,12 +157,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/86dec4c116377a0c34bd9513c54ba54397dd282d.zip",
-        strip_prefix = "json-schemas-86dec4c116377a0c34bd9513c54ba54397dd282d",
+        url = "https://github.com/microsoft/json-schemas/archive/2c2f8fa3f53e25bc9aeffa9335381ceaa180850c.zip",
+        strip_prefix = "json-schemas-2c2f8fa3f53e25bc9aeffa9335381ceaa180850c",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "f259d289b01bf789e6fcdac1f3286b618c0d8f4370beb8333e3f7ad857b1a395",
+        sha256 = "a64184e8dfe9733f2c8118ff3181951dee7591acbb3a972eabde72b8fbe00f96",
     )
 
     ##########
@@ -219,9 +219,9 @@ exports_files(glob(["**/*"]))
 
     http_archive(
         name = "bazel_features",
-        sha256 = "cec7fbc7bce6597cf2e83e01ddd9328a1bb057dc1a3092745238f49d3301ab5a",
-        strip_prefix = "bazel_features-1.12.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.12.0/bazel_features-v1.12.0.tar.gz",
+        sha256 = "5d7e4eb0bb17aee392143cd667b67d9044c270a9345776a5e5a3cccbc44aa4b3",
+        strip_prefix = "bazel_features-1.13.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.13.0/bazel_features-v1.13.0.tar.gz",
     )
 
     chromedriver_buildfile = """

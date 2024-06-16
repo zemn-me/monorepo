@@ -1,5 +1,5 @@
 {
-  "checksum": "5d50785c9729de5e957d5e14ace0cb09eabe25f43c77217d31fe6786f77bebb5",
+  "checksum": "ebdebc841296cd974317c2ad6957aa22e19718378a55f4d90fc934c37c2edc07",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -1110,14 +1110,14 @@
       ],
       "license_file": "LICENSE-MIT"
     },
-    "clap 4.5.6": {
+    "clap 4.5.7": {
       "name": "clap",
-      "version": "4.5.6",
+      "version": "4.5.7",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap/4.5.6/download",
-          "sha256": "a9689a29b593160de5bc4aacab7b5d54fb52231de70122626c178e6a368994c7"
+          "url": "https://static.crates.io/crates/clap/4.5.7/download",
+          "sha256": "5db83dced34638ad474f39f250d7fea9598bdd239eaced1bdf45d597da0f433f"
         }
       },
       "targets": [
@@ -1167,7 +1167,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.5.6",
+              "id": "clap_builder 4.5.7",
               "target": "clap_builder"
             }
           ],
@@ -1183,7 +1183,7 @@
           ],
           "selects": {}
         },
-        "version": "4.5.6"
+        "version": "4.5.7"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -1192,14 +1192,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_builder 4.5.6": {
+    "clap_builder 4.5.7": {
       "name": "clap_builder",
-      "version": "4.5.6",
+      "version": "4.5.7",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_builder/4.5.6/download",
-          "sha256": "2e5387378c84f6faa26890ebf9f0a92989f8873d4d380467bcd0d8d8620424df"
+          "url": "https://static.crates.io/crates/clap_builder/4.5.7/download",
+          "sha256": "f7e204572485eb3fbf28f871612191521df159bc3e15a9f5064c66dba3a8c05f"
         }
       },
       "targets": [
@@ -1254,7 +1254,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.6"
+        "version": "4.5.7"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2803,7 +2803,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.5.6",
+              "id": "clap 4.5.7",
               "target": "clap"
             },
             {
@@ -2827,7 +2827,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.33.26",
+              "id": "swc_common 0.34.1",
               "target": "swc_common"
             }
           ],
@@ -4847,14 +4847,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.33.26": {
+    "swc_common 0.34.1": {
       "name": "swc_common",
-      "version": "0.33.26",
+      "version": "0.34.1",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_common/0.33.26/download",
-          "sha256": "a2f9706038906e66f3919028f9f7a37f3ed552f1b85578e93f4468742e2da438"
+          "url": "https://static.crates.io/crates/swc_common/0.34.1/download",
+          "sha256": "5d0a5e455ba23fcd687b05ee944ea2c4b026f7de6bb648be3061a434509963e2"
         }
       },
       "targets": [
@@ -4961,7 +4961,7 @@
           ],
           "selects": {}
         },
-        "version": "0.33.26"
+        "version": "0.34.1"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -7328,7 +7328,7 @@
     }
   },
   "binary_crates": [
-    "clap 4.5.6",
+    "clap 4.5.7",
     "rxp 0.2.0"
   ],
   "workspace_members": {
@@ -7592,13 +7592,13 @@
     ]
   },
   "direct_deps": [
-    "clap 4.5.6",
+    "clap 4.5.7",
     "hex 0.4.3",
     "rxp 0.2.0",
     "serde_json 1.0.117",
     "sha2 0.10.8",
     "swc_atoms 0.6.7",
-    "swc_common 0.33.26"
+    "swc_common 0.34.1"
   ],
   "direct_dev_deps": []
 }
