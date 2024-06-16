@@ -1,4 +1,4 @@
- 
+
 import 'project/zemn.me/app/base.css';
 
 import { Lora } from 'next/font/google';
@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 
 import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
+import Glade from '#root/project/zemn.me/components/Glade/glade.js';
 import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
 import { text } from '#root/ts/react/lang/index.js';
 
@@ -34,7 +35,11 @@ export function RootLayout({ children }: Props) {
 					/>
 					<HeaderTagsAppRouter />
 				</head>
-				<body className={lora.className}>{children}</body>
+				<body className={lora.className}>
+					<Glade>
+					{children}
+					</Glade>
+				</body>
 			</html>
 		</Providers>
 	);

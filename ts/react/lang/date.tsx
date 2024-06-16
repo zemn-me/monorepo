@@ -1,3 +1,4 @@
+"use client"; // transitive for useLocale
 import { memo, ReactElement } from "react";
 
 import { isDefined } from "#root/ts/guard.js";
@@ -6,8 +7,6 @@ import { useLocale } from "#root/ts/react/lang/useLocale.js";
 export interface DateProps {
 	readonly date: Date
 }
-
-// TODO: should be a datetime (or whatever) html element
 
 export const Date = memo(function(props: DateProps) {
 	const [ language ] = useLocale();
