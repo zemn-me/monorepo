@@ -155,15 +155,15 @@ export default function RaysEditor() {
 			style={{
 				display: 'grid',
 				grid: "'display' 1fr 'kitchen-sink' auto",
-				width: '100vw',
-				height: '100vh',
+				width: '100%',
+				height: '100%',
 			}}
 		>
 			<svg
 				style={{
 					gridArea: 'kitchen-sink',
 					width: '100%',
-					height: '100%',
+					height: '100vh',
 				}}
 				viewBox={`0 0 ${width} ${height}`}
 			>
