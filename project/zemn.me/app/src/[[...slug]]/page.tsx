@@ -29,7 +29,7 @@ export const metadata: Metadata = {
  */
 export async function generateStaticParams(): Promise<PageProps['params'][]> {
 	const githubSubpaths = [
-		undefined,
+		[],
 		['issues'],
 		['pulls'],
 		['discussions'],
@@ -41,5 +41,12 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 		['commits'],
 	];
 
-	return githubSubpaths.map(v => (v ? { slug: v } : {}));
+	// this technically seems to be wrong but i think
+	// next.js is confused
+	//
+	// docs: https://nextjs.org/docs/pages/building-your-application/routing/api-routes#optional-catch-all-api-routes
+	//
+	// next.js docs say that when accessing /, props will be {},
+	// but doing this causes a 404.
+	return githubSubpaths.map(v => ({ slug: v }))
 }
