@@ -30,7 +30,10 @@ export const reactConfig = {
       'react/forbid-elements': [
         'error',
         {
-          forbid: [{ element: 'a', message: '<a> is dangerous. Please use the Link component instead.' }],
+			forbid: [
+				{ element: 'a', message: '<a> is dangerous. Please use the Link component instead.' },
+				{ element: 'video', message: 'native <video> does not respect reduced motion. Use Video in ts/react/video instead.' }
+			],
         },
       ],
       'no-restricted-imports': [
