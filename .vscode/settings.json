@@ -96,4 +96,5 @@
 		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
 	},
 	"bazel.buildifierFixOnFormat": true,
+	"bazel.executable": "bazelisk"
 }
