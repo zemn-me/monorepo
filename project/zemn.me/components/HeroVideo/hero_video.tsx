@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
 import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
 import style from '#root/project/zemn.me/components/HeroVideo/style.module.css';
+import { Video } from '#root/ts/react/Video/video.js';
 
 
 /**
@@ -25,7 +26,7 @@ export function HeroVideo(props: HeroVideoProps) {
 
 	const currentlyWinter = isWinter(new Date());
 
-	return 			<video
+	return 			<Video
 				autoPlay
 				className={classNames(style.heroVideo, props.className)}
 				loop
@@ -40,6 +41,6 @@ export function HeroVideo(props: HeroVideoProps) {
 				) : (
 					<kenwood.VideoSources />
 				)}
-			</video>
+			</Video>
 
 }
