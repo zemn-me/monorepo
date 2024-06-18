@@ -1,5 +1,5 @@
 {
-  "checksum": "ebdebc841296cd974317c2ad6957aa22e19718378a55f4d90fc934c37c2edc07",
+  "checksum": "1280258c792be961f4278885795ac348f8c93fafe9d893e90e9990acb53659fb",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2827,7 +2827,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.34.1",
+              "id": "swc_common 0.34.2",
               "target": "swc_common"
             }
           ],
@@ -4847,14 +4847,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.34.1": {
+    "swc_common 0.34.2": {
       "name": "swc_common",
-      "version": "0.34.1",
+      "version": "0.34.2",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_common/0.34.1/download",
-          "sha256": "5d0a5e455ba23fcd687b05ee944ea2c4b026f7de6bb648be3061a434509963e2"
+          "url": "https://static.crates.io/crates/swc_common/0.34.2/download",
+          "sha256": "add6efe3f1a2fe9108b27fb6ba94998ab5bfd8696d590033003987c82452b8f9"
         }
       },
       "targets": [
@@ -4961,7 +4961,7 @@
           ],
           "selects": {}
         },
-        "version": "0.34.1"
+        "version": "0.34.2"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -7598,7 +7598,7 @@
     "serde_json 1.0.117",
     "sha2 0.10.8",
     "swc_atoms 0.6.7",
-    "swc_common 0.34.1"
+    "swc_common 0.34.2"
   ],
   "direct_dev_deps": []
 }
