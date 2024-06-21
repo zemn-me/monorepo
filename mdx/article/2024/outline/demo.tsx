@@ -1,12 +1,8 @@
 "use client";
-import { forwardRef, ReactElement, useState } from 'react';
+import { forwardRef, ReactElement } from "react";
 
-import { ArticleProps } from '#root/project/zemn.me/components/Article/article_types.js';
-import style from '#root/project/zemn.me/components/Article/style.module.css';
-import { tocSegment } from '#root/project/zemn.me/components/Article/toc_context.js'
-import { Date } from '#root/ts/react/lang/date.js';
-import { OutlineDescription, OutlineSection } from '#root/ts/react/outline/outline.js';
-import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
+import { Outline, OutlineDescription, OutlineSection } from "#root/ts/react/outline/outline.js";
+
 
 const OutlineRootElement = forwardRef<HTMLDivElement>((_, ref) =>
 	<nav ref={ref} />
@@ -50,19 +46,20 @@ export function H5(props: BaseHeadingProps) { return <Heading level={5} {...prop
 
 
 
-export function Article(props: ArticleProps) {
-	const [toc, setToc] = useState<HTMLUListElement|null>(null);
-	return <div className={style.container}>
-		<article>
-			{props.date ? <Date date={nativeDateFromUnknownSimpleDate.parse(props.date)} /> : null}
-			<nav>
-				<ul ref={setToc}/>
-			</nav>
-			<tocSegment.Provider value={toc}>
-			{props.children}
-			</tocSegment.Provider>
-		</article>
-	</div>
+export function OutlineDemo() {
+	return <Outline element={OutlineRootElement}>
+		<Section>
+			<H1>§1: Welcome to my article!</H1>
+			<p>Some content in §1.</p>
+
+			<Section>
+				<H2>§1.1: Some lesser content!</H2>
+				<p>This content is in a subsection!</p>
+			</Section>
+			<Section>
+				<H2>Inherits <i>any</i> complex HTML</H2>
+				<p>↑ yes really!</p>
+			</Section>
+		</Section>
+	</Outline>
 }
-
-

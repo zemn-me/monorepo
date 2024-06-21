@@ -1,0 +1,315 @@
+---
+title: Flexible and Powerful React Tables of Contents With Portals
+date:
+ - 17
+ - jun
+ - 2024
+---
+
+Flexible and Powerful React Tables of Contents with Portals
+-------------------------------------------------------------------------------
+
+It may be programmer logic, but I think it's self-evident that any important
+article has a table of contents. It gives you a sense of what the article is
+about, and it lets you skip around more easily.
+
+Unfortunately implementing one has been for both technological and historical
+reasons, more complicated than you would think.
+
+Perhaps most crucial to the idea of a table of contents is screen readers,
+whose users rely on the HTML structure of the document to jump around it.
+
+In the making of HTML5, there was some discussion about standardising to an
+'outline algorithm', to put to bed what exactly denoted a section of a
+document. HTML5 was an opinionated standard on 'web semantics', the idea
+that the structure of HTML documents should reflect the structure of the
+information inside it – and this was reflected in the presence of `<article>`,
+`<section>` and `<heading>` elements which were to furnish this new outline.
+
+In the final copy ([HTML5§4.3.11]), this complexity was removed to instead
+standardise what I understand screen readers were *already* doing, which was
+just looking at the `<h1>`-`<h5>` headings to determine sections in an outline.
+In previous drafts, an `<h1>` element inside a section, inside a section could actually be a level 2 heading:
+
+[HTML5§4.3.11]: https://html.spec.whatwg.org/#headings-and-outlines-2 "HTML 5 spec: 4.3.11 Headings and outlines"
+
+```html
+<!-- in earlier versions of the HTML 5 spec... -->
+<body>
+	<article>
+		<h1>My article!</h1>
+		<section>
+			<!-- ↓ this would be a level 2 heading -->
+			<h1>My section!</h1>
+		</section>
+	</article>
+</body>
+```
+
+I say this because I like to think that had there been less argument about
+what goes in the table of contents / outline, there would be more
+standard implementations of them. Today we will write our own.
+
+The Document Tree
+===============================================================================
+
+The primary difficulty of implementing a document outline in React is that
+React's data model is all about information moving downward through a tree of
+elements. Sending data up results in requiring multiple-passes to render
+the document – and a table of contents, at the very top of that tree does
+not define its own contents; the article following it does.
+
+However, we can break this relationship a bit by using *[portals]*.
+
+[portals]: https://react.dev/reference/react-dom/createPortal
+
+Portals allow child React elements to create sub-content which is actually
+added somewhere in its parent tree:
+
+```javascript
+import { createPortal } from 'react-dom';
+
+// ...
+
+<div>
+  <p>This child is placed in the parent div.</p>
+  {createPortal(
+    <p>This child is placed in the document body.</p>,
+    document.body
+  )}
+</div>
+```
+
+React portals mess with the relationship between DOM elements (the HTML in the
+document), and the react element tree – something that is usually a 1-to-1
+relationship.
+
+In the above example, the second `<p>` element will not be inside the `<div>`
+element as it appears. Instead, it will be placed directly into the page body.
+
+A Document Outline Algorithm
+===============================================================================
+
+The argument I brought up before regarding how the outline for an HTML page
+should be generated is rooted in the unequal relationship headings have with
+their content.
+
+```html
+<h1>My Section</h1>
+<p>Some content!</p>
+```
+
+Whereas typically in HTML and the DOM it generates an element is 'part of' some
+logical thing, be it an `<article>`, `<section>`, `<aside>`, `<address>` etc. –
+
+an element is 'part of' that logical thing by being '_inside_' it, in the above
+snippet, the section 'My Section' *includes* the content 'Some content'.
+
+Luckily, since we're in charge of generating this code, we can imagine a
+stricter version:
+
+```html
+<body>
+	<article>
+		<!--
+			table of contents goes somewhere here
+		-->
+		<h1>My article!</h1>
+		<section>
+			<h2>My section!</h1>
+			<p>Some content!</p>
+		</section>
+	</article>
+</body>
+```
+
+In this form, it is much easier to detect what content belongs to which
+sections.
+
+1. Any `<article>` is the root of an outline tree.
+2. Any `<section>` can expect a section name (`<h1>`-`<h5>`).
+3. Any content from that section will be included in that section.
+
+The outline / table of contents for this article would therefore be:
+
+1. My article
+	1. My section!
+		1. Some content!
+
+Using Portals
+===============================================================================
+
+We can break this up into a 3 React element system:
+
+1. `<Outline>`, which is an outline-specific `<article>`, it defines the root
+   upon which the whole index is attached. It's a nameless section
+   which includes the table of contents, and may have children.
+2. `<OutlineSection>`, which is the outline-specific `<section>`, it defines
+   a part of the table that may have descendents.
+3. `<OutlineDescription>`, corresponding to `<h1>` → `<h5>`, it defines
+   some content which should be added to the index instead of the typical
+   content.
+
+Outline needs to create a portal in which place the index, and pass it to its
+children. OutlineSection needs to create one for its children -- and all
+OutlineDescription needs to do is put elements through the portal.
+
+
+### Outline ###################################################################
+
+``` typescript outline.tsx
+import { createContext } from "react";
+
+/**
+ * A DOM `Element` in which to put table of contents /
+ * outline content, or null if none.
+ */
+
+const outlinePortalCtx = createContext<Element|null>(null);
+```
+
+The above context allows us to propagate the portal information down
+the react tree without explicitly passing it (to best reflect the structure
+of our target HTML).
+
+```typescript outline.tsx
+import { ReactNode, useState } from "react";
+
+export interface OutlineProps {
+	/**
+	 * A react component for the DOM element
+	 * the outline should be inserted into.
+	 */
+	readonly element: ForwardRefExoticComponent<
+		RefAttributes<Element>
+	>,
+	/**
+	 * Child elements which inherit this outline.
+	 */
+	readonly children?: ReactNode
+}
+
+/**
+ * Outline creates a document outline.
+ *
+ * * The children of Outline may use
+ * `<OutlineSection>` to add branch nodes
+ * to the outline tree, or –
+ * * <OutlineDescription> to add leaf nodes
+ * to the outline tree.
+ *
+ * The outline element tree is always prepended
+ * to `<Outline>`'s children.
+ */
+export function Outline(props: OutlineProps) {
+	const [tocElement, setTocElement] = useState<Element | null>(null);
+	return <>
+		<props.element ref={setTocElement}/>
+		<outlinePortalCtx.Provider value={tocElement}>
+			{props.children}
+		</outlinePortalCtx.Provider>
+	</>
+}
+```
+
+Here, we *must* (as far as I know) use `useState`, because the typical
+`useRef` will not trigger a re-render after the DOM element is known.
+
+
+### OutlineSection ############################################################
+
+For OutlineSection, we grab the section of the table of contents portal we own
+via `useContext`. We create our DOM element via `props.element`, and pass
+a reference to it down to our children for them to use.
+
+```typescript outline.tsx
+export interface OutlineSectionProps {
+	/**
+	 * Content to place in the outline for this section.
+	 */
+	readonly element: ForwardRefExoticComponent<PropsWithChildren<
+		RefAttributes<Element>
+	>>,
+	/**
+	 * Contents of this section.
+	 */
+	readonly children?: ReactNode
+}
+
+/**
+ * OutlineSection provides a section
+ * in the document outline.
+ *
+ * Any children of the OutlineSection
+ * are made children of the corresponding
+ * element in the document outline.
+ */
+export function OutlineSection(props: OutlineSectionProps) {
+	const outlinePortal = useContext(outlinePortalCtx);
+	const [newPortal, setNewPortal] = useState<Element | null>(null);
+
+	return <>
+		{outlinePortal !== null ?
+			createPortal(<props.element ref={setNewPortal} />, outlinePortal)
+			: null
+		}
+		<outlinePortalCtx.Provider value={newPortal}>
+			{props.children}
+		</outlinePortalCtx.Provider>
+	</>
+}
+```
+
+### OutlineDescription ########################################################
+
+This is the easiest one. Since this one can't have children in the index, we
+just grab the portal to put our content in, push our content through the portal
+and leave it at that.
+
+```typescript
+export interface OutlineDescriptionProps {
+	/**
+	 * Contents of this section.
+	 */
+	readonly children?: ReactNode
+}
+
+/**
+ * Appends to the document outline.
+ *
+ * To append a branch node to the document
+ * outline, use `OutlineSection`.
+ */
+export function OutlineDescription(props: OutlineDescriptionProps) {
+	const outlinePortal = useContext(outlinePortalCtx);
+
+	return outlinePortal !== null ?
+		createPortal(props.children, outlinePortal)
+		: null;
+}
+```
+
+Demo
+===============================================================================
+
+import { OutlineDemo } from '#root/mdx/article/2024/outline/demo.js';
+
+<blockquote>
+	<OutlineDemo/>
+</blockquote>
+
+Adding Section Links
+===============================================================================
+
+With a few little tweaks, it's trivially easy to add links to jump around the
+article:
+
+import { OutlineDemoWithLinks } from '#root/mdx/article/2024/outline/demo_with_links.js';
+
+<blockquote>
+	<OutlineDemoWithLinks/>
+</blockquote>
+
+
+
+
