@@ -1,5 +1,5 @@
 {
-  "checksum": "1280258c792be961f4278885795ac348f8c93fafe9d893e90e9990acb53659fb",
+  "checksum": "bf72e3898edf1d99343c2ea649602d9b94be27820980dfe8b011f49e11d535e1",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2355,7 +2355,7 @@
               "target": "hashbrown"
             },
             {
-              "id": "new_debug_unreachable 1.0.4",
+              "id": "new_debug_unreachable 1.0.6",
               "target": "debug_unreachable"
             },
             {
@@ -2827,7 +2827,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.34.2",
+              "id": "swc_common 0.34.3",
               "target": "swc_common"
             }
           ],
@@ -2840,14 +2840,14 @@
       "license_ids": [],
       "license_file": null
     },
-    "new_debug_unreachable 1.0.4": {
+    "new_debug_unreachable 1.0.6": {
       "name": "new_debug_unreachable",
-      "version": "1.0.4",
+      "version": "1.0.6",
       "package_url": "https://github.com/mbrubeck/rust-debug-unreachable",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/new_debug_unreachable/1.0.4/download",
-          "sha256": "e4a24736216ec316047a1fc4252e27dabb04218aa4a3f37c6e7ddbf1f9782b54"
+          "url": "https://static.crates.io/crates/new_debug_unreachable/1.0.6/download",
+          "sha256": "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
         }
       },
       "targets": [
@@ -2869,8 +2869,8 @@
         "compile_data_glob": [
           "**"
         ],
-        "edition": "2018",
-        "version": "1.0.4"
+        "edition": "2021",
+        "version": "1.0.6"
       },
       "license": "MIT",
       "license_ids": [
@@ -4847,14 +4847,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.34.2": {
+    "swc_common 0.34.3": {
       "name": "swc_common",
-      "version": "0.34.2",
+      "version": "0.34.3",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_common/0.34.2/download",
-          "sha256": "add6efe3f1a2fe9108b27fb6ba94998ab5bfd8696d590033003987c82452b8f9"
+          "url": "https://static.crates.io/crates/swc_common/0.34.3/download",
+          "sha256": "2b0d7bcbd9faf61cec1a552cbdaec57faefbb10be7cc5f959613c6f91b5a9254"
         }
       },
       "targets": [
@@ -4897,7 +4897,7 @@
               "target": "either"
             },
             {
-              "id": "new_debug_unreachable 1.0.4",
+              "id": "new_debug_unreachable 1.0.6",
               "target": "debug_unreachable"
             },
             {
@@ -4961,7 +4961,7 @@
           ],
           "selects": {}
         },
-        "version": "0.34.2"
+        "version": "0.34.3"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -7598,7 +7598,7 @@
     "serde_json 1.0.117",
     "sha2 0.10.8",
     "swc_atoms 0.6.7",
-    "swc_common 0.34.2"
+    "swc_common 0.34.3"
   ],
   "direct_dev_deps": []
 }
