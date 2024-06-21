@@ -24,12 +24,22 @@
 	grid-template-columns: 1.25em repeat(12, minmax(0, 4em)) 1.25em;
 }
 
+
+/*
+	elements we need to defer to the regular
+	model for
+*/
+.container > * {
+	grid-column: 2 / span 12;
+}
+
 /*
 	block level elements
 */
 .container :is(p, h1, h2, h3, h4, h5, h6, time) {
 	grid-column: 2 / span 12;
 }
+
 
 /*
 	full width elements
