@@ -1,0 +1,18 @@
+load("//mdx:rules.bzl", "mdx_files")
+load("//ts:rules.bzl", "ts_project")
+
+mdx_files(
+    name = "test",
+    srcs = glob(["**/*.mdx"]),
+)
+
+ts_project(
+    name = "article",
+    srcs = ["page.tsx"],
+    visibility = ["//project/zemn.me/app/experiments:__subpackages__"],
+    deps = [
+        ":test_js",
+        "//:node_modules/next",
+        "//project/zemn.me/components/Article",
+    ],
+)
