@@ -52,4 +52,9 @@ alias(
     actual = "@cargo//:rxp__rxp",
 )
 
+alias(
+    name = "gojq",
+    actual = "//bin/host/gojq",
+)
+
 bazel_lint(name = "bazel_lint")
