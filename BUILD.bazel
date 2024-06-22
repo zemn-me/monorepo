@@ -40,7 +40,10 @@ ts_config(
 
 js_library(
     name = "base_defs",
-    srcs = ["Global.d.ts"],
+    srcs = [
+        "Global.d.ts",
+        "next-env.d.ts",
+    ],
 )
 
 exports_files(
