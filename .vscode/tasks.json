@@ -23,5 +23,19 @@
 				"runOn": "folderOpen"
 			}
 		},
+		{
+			"label": "Check / install repo scripts to git / sapling",
+			"command": "bazelisk",
+			"args": [
+				"run",
+				"//.vscode/prep:scm_conf",
+				"--",
+				"${workspaceFolder}"
+			],
+			"group": "build",
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		}
 	]
 }
