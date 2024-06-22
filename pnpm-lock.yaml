@@ -197,8 +197,8 @@ devDependencies:
     specifier: 6.41.0
     version: 6.41.0(ts-node@10.9.2)(typescript@5.4.5)
   '@pulumi/awsx':
-    specifier: 2.12.2
-    version: 2.12.2(ts-node@10.9.2)(typescript@5.4.5)
+    specifier: 2.12.3
+    version: 2.12.3(ts-node@10.9.2)(typescript@5.4.5)
   '@pulumi/pulumi':
     specifier: 3.121.0
     version: 3.121.0(ts-node@10.9.2)(typescript@5.4.5)
@@ -759,8 +759,8 @@ packages:
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sso-oidc': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0)
       '@aws-sdk/middleware-host-header': 3.598.0
@@ -970,13 +970,13 @@ packages:
       - aws-crt
     dev: true
 
-  /@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0):
+  /@aws-sdk/client-sso-oidc@3.598.0:
     resolution: {integrity: sha512-jfdH1pAO9Tt8Nkta/JJLoUnwl7jaRdxToQTJfUtE+o3+0JP5sA4LfC2rBkJSWcU5BdAA+kyOs5Lv776DlN04Vg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0)
       '@aws-sdk/middleware-host-header': 3.598.0
@@ -1015,7 +1015,6 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
-      - '@aws-sdk/client-sts'
       - aws-crt
     dev: true
 
@@ -1159,13 +1158,13 @@ packages:
       - aws-crt
     dev: true
 
-  /@aws-sdk/client-sts@3.598.0:
+  /@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0):
     resolution: {integrity: sha512-bXhz/cHL0iB9UH9IFtMaJJf4F8mV+HzncETCRFzZ9SyUMt5rP9j8A7VZknqGYSx/6mI8SsB1XJQkWSbhn6FiSQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/client-sso-oidc': 3.598.0
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0)
       '@aws-sdk/middleware-host-header': 3.598.0
@@ -1204,6 +1203,7 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
+      - '@aws-sdk/client-sso-oidc'
       - aws-crt
     dev: true
 
@@ -1348,7 +1348,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/credential-provider-env': 3.598.0
       '@aws-sdk/credential-provider-http': 3.598.0
       '@aws-sdk/credential-provider-process': 3.598.0
@@ -1520,7 +1520,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.1
       '@smithy/types': 3.1.0
@@ -1798,7 +1798,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sso-oidc': ^3.587.0
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/client-sso-oidc': 3.598.0
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.1.1
       '@smithy/shared-ini-file-loader': 3.1.1
@@ -1812,7 +1812,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sso-oidc': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/client-sso-oidc': 3.598.0
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.1
       '@smithy/shared-ini-file-loader': 3.1.1
@@ -5218,8 +5218,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@2.12.2(ts-node@10.9.2)(typescript@5.4.5):
-    resolution: {integrity: sha512-6Ug5lbSptyCoupSaqT7x6r74JPwa5ZJviEGrWxNeB0TGQz0w7mg+TkwhLa0yBkd1Lfe3JmnvXpkK479BkMBZaA==}
+  /@pulumi/awsx@2.12.3(ts-node@10.9.2)(typescript@5.4.5):
+    resolution: {integrity: sha512-uzjTdmS9Qy6eNotpyMdhfEXZTZ+wY5hnQBilZjDr2ZrYhF6PCIKe2cg2tDLUXb3xGUtjiCiQP57HplHo70IiMQ==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.598.0
