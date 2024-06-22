@@ -2,6 +2,7 @@ import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
 import next from '@next/eslint-plugin-next';
 import * as mdx from 'eslint-plugin-mdx';
+import onlyError from 'eslint-plugin-only-error';
 import reactPlugin from 'eslint-plugin-react';
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
@@ -24,7 +25,8 @@ export const reactConfig = {
 			'react-hooks': reactHooksPlugin,
 			'@next/next': next,
 		'react': fixupPluginRules(reactPlugin),
-			'simple-import-sort': simpleImportSort
+		'simple-import-sort': simpleImportSort,
+		'only-error': onlyError
 	},
     rules: {
       'react/forbid-elements': [
