@@ -29,25 +29,10 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-
-go_rules_dependencies()
-
-load("//:go_version.bzl", "go_version")
-
-go_register_toolchains(version = go_version)
-
-# below line needed because deps are defined in bzl/deps.bzl
-# gazelle:repo bazel_gazelle
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("//bzl:go_deps.bzl", "go_dependencies")
 
 # gazelle:repository_macro bzl/go_deps.bzl%go_dependencies
 go_dependencies()
-
-# If you use WORKSPACE.bazel, use the following line instead of the bare gazelle_dependencies():
-# gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")
-gazelle_dependencies()
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
@@ -65,11 +50,11 @@ load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 crates_repository(
     name = "cargo",
     cargo_lockfile = "//:Cargo.Bazel.lock",
+    generate_binaries = True,
     lockfile = "//:cargo-bazel-lock.json",
     manifests = ["//:Cargo.toml"],
     # Should match the version represented by the currently registered `rust_toolchain`.
     rust_version = "1.60.0",
-	generate_binaries = True,
 )
 
 load("@cargo//:defs.bzl", "crate_repositories")
