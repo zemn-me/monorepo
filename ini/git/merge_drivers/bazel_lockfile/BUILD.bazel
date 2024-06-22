@@ -1,0 +1,17 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "merge_driver",
+    srcs = ["merge_driver.py"],
+    data = [
+        "bazel-lockfile-merge.jq",
+        "//bin/host/gojq",
+    ],
+    env = {
+        "JQ_BINARY": "$(execpath //bin/host/gojq)",
+        "JQ_SCRIPT": "$(execpath :bazel-lockfile-merge.jq)",
+    },
+    visibility = [
+        "//ini/sl/merge_tools/bazel_lockfile:__subpackages__",
+    ],
+)
