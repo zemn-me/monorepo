@@ -1,4 +1,12 @@
 /*
+	todo: please unwrap the elements here
+	so they're not just :is and have their
+	own classes. otherwise we're going to have
+	complex child elements which break
+*/
+
+
+/*
 	the article grid, and
 	elements which inherit
 	the article grid.
@@ -10,10 +18,19 @@
 	them state the same grid
 	as the parent.
 */
-.container, .container :is(article, blockquote) {
+.container, .container :is(article, blockquote, section, ol, ul, nav) {
 	grid-column: 1 / -1;
 	display: grid;
 	grid-template-columns: 1.25em repeat(12, minmax(0, 4em)) 1.25em;
+}
+
+
+/*
+	elements we need to defer to the regular
+	model for
+*/
+.container :is(article, blockquote) > * {
+	grid-column: 2 / span 12;
 }
 
 /*
@@ -22,6 +39,7 @@
 .container :is(p, h1, h2, h3, h4, h5, h6, time) {
 	grid-column: 2 / span 12;
 }
+
 
 /*
 	full width elements
