@@ -13,7 +13,7 @@ load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
-load("//ts:rules.bzl", "ts_config")
+load("//ts:rules.bzl", "ts_config", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -40,7 +40,27 @@ ts_config(
 
 js_library(
     name = "base_defs",
-    srcs = ["Global.d.ts"],
+    srcs = [
+        "Global.d.ts",
+    ],
+    deps = [
+        ":next-env",
+    ],
+)
+
+ts_project(
+    name = "next-env",
+    srcs = [
+        "dummy.ts",
+        "next-env.d.ts",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+    ],
 )
 
 exports_files(
