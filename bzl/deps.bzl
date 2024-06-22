@@ -4,12 +4,6 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file"
 
 def fetch_dependencies():
     http_archive(
-        name = "io_bazel_rules_go",
-        sha256 = "b2038e2de2cace18f032249cb4bb0048abf583a36369fa98f687af1b3f880b26",
-        url = "https://github.com/bazelbuild/rules_go/releases/download/v0.48.1/rules_go-v0.48.1.zip",
-    )
-
-    http_archive(
         name = "io_bazel_rules_docker",
         sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",
         strip_prefix = "rules_docker-0.25.0",
