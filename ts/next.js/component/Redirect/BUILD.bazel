@@ -6,6 +6,7 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "Redirect",
     deps = [
+        "//:base_defs",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
