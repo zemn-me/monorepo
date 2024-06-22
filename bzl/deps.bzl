@@ -217,13 +217,6 @@ exports_files(glob(["**/*"]))
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
     )
 
-    http_archive(
-        name = "bazel_features",
-        sha256 = "5d7e4eb0bb17aee392143cd667b67d9044c270a9345776a5e5a3cccbc44aa4b3",
-        strip_prefix = "bazel_features-1.13.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.13.0/bazel_features-v1.13.0.tar.gz",
-    )
-
     chromedriver_buildfile = """
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 
