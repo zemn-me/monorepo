@@ -17,8 +17,8 @@
     "https://bcr.bazel.build/modules/aspect_bazel_lib/1.42.2/MODULE.bazel": "2e0d8ab25c57a14f56ace1c8e881b69050417ff91b2fb7718dc00d201f3c3478",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/1.42.3/MODULE.bazel": "e4529e12d8cd5b828e2b5960d07d3ec032541740d419d7d5b859cabbf5b056f9",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.5.0/MODULE.bazel": "042028f08bb9529c770378ea20036489bd53bd192972abe68095fea8d0879cf6",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.7/MODULE.bazel": "491f8681205e31bb57892d67442ce448cda4f472a8e6b3dc062865e29a64f89c",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.7/source.json": "87f12b449cd1d27d3e83840a59a6966d557e7c3c5f19e7b2e0361da5edc6b397",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.8/MODULE.bazel": "1631a1bbb119fc372f9aaa55df6c7d0a59fdb1640324b3d5c0047d976eb57aae",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.8/source.json": "896a2b322e70b0d1517b8758159e71fa3c2bf7bce5ecda3eb99c9e84fdd71e5e",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.31.0/MODULE.bazel": "15de32c321263f88c9fcef21c9ad5e9474c40d5bfc1fc6a7be0dd4af42d8eac9",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.33.1/MODULE.bazel": "db3e7f16e471cf6827059d03af7c21859e7a0d2bc65429a3a11f005d46fc501b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.34.0/MODULE.bazel": "cbe059f9c11db239121a858c5586cbfbed56777eb089860553675b25085ab11a",
@@ -85,6 +85,8 @@
     "https://bcr.bazel.build/modules/rules_cc/0.0.8/MODULE.bazel": "964c85c82cfeb6f3855e6a07054fdb159aced38e99a5eecf7bce9d53990afa3e",
     "https://bcr.bazel.build/modules/rules_cc/0.0.9/MODULE.bazel": "836e76439f354b89afe6a911a7adf59a6b2518fafb174483ad78a2a2fde7b1c5",
     "https://bcr.bazel.build/modules/rules_cc/0.0.9/source.json": "1f1ba6fea244b616de4a554a0f4983c91a9301640c8fe0dd1d410254115c8430",
+    "https://bcr.bazel.build/modules/rules_foreign_cc/0.10.1/MODULE.bazel": "b9527010e5fef060af92b6724edb3691970a5b1f76f74b21d39f7d433641be60",
+    "https://bcr.bazel.build/modules/rules_foreign_cc/0.10.1/source.json": "9300e71df0cdde0952f10afff1401fa664e9fc5d9ae6204660ba1b158d90d6a6",
     "https://bcr.bazel.build/modules/rules_go/0.33.0/MODULE.bazel": "a2b11b64cd24bf94f57454f53288a5dacfe6cb86453eee7761b7637728c1910c",
     "https://bcr.bazel.build/modules/rules_go/0.37.0/MODULE.bazel": "7639dae065f071efebbe73c03dc8330c3293206cf073af7c7084add4e0120aba",
     "https://bcr.bazel.build/modules/rules_go/0.38.1/MODULE.bazel": "fb8e73dd3b6fc4ff9d260ceacd830114891d49904f5bda1c16bc147bcc254f71",
@@ -117,15 +119,16 @@
     "https://bcr.bazel.build/modules/rules_proto/5.3.0-21.7/MODULE.bazel": "e8dff86b0971688790ae75528fe1813f71809b5afd57facb44dad9e8eca631b7",
     "https://bcr.bazel.build/modules/rules_proto/6.0.0-rc1/MODULE.bazel": "1e5b502e2e1a9e825eef74476a5a1ee524a92297085015a052510b09a1a09483",
     "https://bcr.bazel.build/modules/rules_proto/6.0.0-rc2/MODULE.bazel": "e17f94f8a347e2c808517b65d74988839d2d62daceb50073e44060193b785eb1",
-    "https://bcr.bazel.build/modules/rules_proto/6.0.0.bcr.1/MODULE.bazel": "9c59abd3ea6deaa6aed6d173d6828a24ca78b9ce806e06e31fe5c2388b600566",
-    "https://bcr.bazel.build/modules/rules_proto/6.0.0.bcr.1/source.json": "08e3301161abfacedeb98ed978540b32fa93bc7d72df07e1c44fcf93d2af23d6",
     "https://bcr.bazel.build/modules/rules_proto/6.0.0/MODULE.bazel": "b531d7f09f58dce456cd61b4579ce8c86b38544da75184eadaf0a7cb7966453f",
+    "https://bcr.bazel.build/modules/rules_proto/6.0.2/MODULE.bazel": "ce916b775a62b90b61888052a416ccdda405212b6aaeb39522f7dc53431a5e73",
+    "https://bcr.bazel.build/modules/rules_proto/6.0.2/source.json": "17a2e195f56cb28d6bbf763e49973d13890487c6945311ed141e196fb660426d",
     "https://bcr.bazel.build/modules/rules_python/0.10.2/MODULE.bazel": "cc82bc96f2997baa545ab3ce73f196d040ffb8756fd2d66125a530031cd90e5f",
+    "https://bcr.bazel.build/modules/rules_python/0.20.0/MODULE.bazel": "bfe14d17f20e3fe900b9588f526f52c967a6f281e47a1d6b988679bd15082286",
     "https://bcr.bazel.build/modules/rules_python/0.22.1/MODULE.bazel": "26114f0c0b5e93018c0c066d6673f1a2c3737c7e90af95eff30cfee38d0bbac7",
     "https://bcr.bazel.build/modules/rules_python/0.24.0/MODULE.bazel": "4bff7f583653d0762cda21303da0643cc4c545ddfd9593337f18dad8d1787801",
     "https://bcr.bazel.build/modules/rules_python/0.27.1/MODULE.bazel": "65dc875cc1a06c30d5bbdba7ab021fd9e551a6579e408a3943a61303e2228a53",
-    "https://bcr.bazel.build/modules/rules_python/0.33.1/MODULE.bazel": "b6767735ae876488ca4210ae315709a10ed97a2ff791d7b185cb241fae4ba3f1",
-    "https://bcr.bazel.build/modules/rules_python/0.33.1/source.json": "b3108745305a93436ed2727af9ddfb31c8471e9bdd40017ca0b805e70cf28d27",
+    "https://bcr.bazel.build/modules/rules_python/0.33.2/MODULE.bazel": "3e036c4ad8d804a4dad897d333d8dce200d943df4827cb849840055be8d2e937",
+    "https://bcr.bazel.build/modules/rules_python/0.33.2/source.json": "e539592cd3aae4492032cecea510e46ca16eeb972271560b922cae9893944e2f",
     "https://bcr.bazel.build/modules/rules_python/0.4.0/MODULE.bazel": "9208ee05fd48bf09ac60ed269791cf17fb343db56c8226a720fbb1cdf467166c",
     "https://bcr.bazel.build/modules/stardoc/0.5.0/MODULE.bazel": "f9f1f46ba8d9c3362648eea571c6f9100680efc44913618811b58cc9c02cd678",
     "https://bcr.bazel.build/modules/stardoc/0.5.1/MODULE.bazel": "1a05d92974d0c122f5ccf09291442580317cdd859f07a8655f1db9a60374f9f8",
@@ -172,8 +175,8 @@
     },
     "@@aspect_bazel_lib~//lib:extensions.bzl%toolchains": {
       "general": {
-        "bzlTransitiveDigest": "3KydN9M+cGcn8Huu/umxX7Vk08sXz5lJeUxg/b0Gxjc=",
-        "usagesDigest": "h1PhyVwyxy6snKMwULM3kFAfr7qhlF2jObM8sLzySv8=",
+        "bzlTransitiveDigest": "SK+5VjMKVX5gfuC//JqN+b1rWW3PNLeAEsqwiD3CAOA=",
+        "usagesDigest": "lhyQVM8A1CX7NWsxOLQjr0WH1sGzS004M7l1V/cppUY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -639,7 +642,7 @@
     },
     "@@aspect_rules_js~//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "YhJgEOuNT5We6Z2eruEmPzwTF1PnjS9yJ3QernjZMr0=",
+        "bzlTransitiveDigest": "kerUpm0auLcCig6CHkiPRumLjLhr4nUZaUiCvn1VPKs=",
         "usagesDigest": "5OFcKMIxxPMsXQ6yMzkceL/nDqHYE2v5rEVPTt7n+vc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1124,6 +1127,346 @@
         ]
       }
     },
+    "@@rules_foreign_cc~//foreign_cc:extensions.bzl%tools": {
+      "general": {
+        "bzlTransitiveDigest": "Zwv7UlthPNm6M1lPfKCT9DJgx/wUQNASsWf6E5tz8EA=",
+        "usagesDigest": "LCucDH35E6MIJI1wrj1NUamhSJpsIKTBN95bsMLcGQE=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "cmake-3.23.2-linux-aarch64": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2-linux-aarch64.tar.gz"
+              ],
+              "sha256": "f2654bf780b53f170bbbec44d8ac67d401d24788e590faa53036a89476efa91e",
+              "strip_prefix": "cmake-3.23.2-linux-aarch64",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"cmake_data\",\n    srcs = glob(\n        [\n            \"**\",\n        ],\n        exclude = [\n            \"WORKSPACE\",\n            \"WORKSPACE.bazel\",\n            \"BUILD\",\n            \"BUILD.bazel\",\n        ],\n    ),\n)\n\nnative_tool_toolchain(\n    name = \"cmake_tool\",\n    path = \"bin/cmake\",\n    target = \":cmake_data\",\n)\n"
+            }
+          },
+          "rules_foreign_cc_framework_toolchain_macos": {
+            "bzlFile": "@@rules_foreign_cc~//foreign_cc/private/framework:toolchain.bzl",
+            "ruleClassName": "framework_toolchain_repository",
+            "attributes": {
+              "commands_src": "@rules_foreign_cc//foreign_cc/private/framework/toolchains:macos_commands.bzl",
+              "exec_compatible_with": [
+                "@platforms//os:macos"
+              ]
+            }
+          },
+          "gnumake_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "filegroup(\n    name = \"all_srcs\",\n    srcs = glob([\"**\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
+              "sha256": "581f4d4e872da74b3941c874215898a7d35802f03732bdccee1d4a7979105d18",
+              "strip_prefix": "make-4.4",
+              "urls": [
+                "https://mirror.bazel.build/ftpmirror.gnu.org/gnu/make/make-4.4.tar.gz",
+                "http://ftpmirror.gnu.org/gnu/make/make-4.4.tar.gz"
+              ]
+            }
+          },
+          "gettext_runtime": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "\ncc_import(\n    name = \"gettext_runtime\",\n    shared_library = \"bin/libintl-8.dll\",\n    visibility = [\"//visibility:public\"],\n)\n        ",
+              "sha256": "1f4269c0e021076d60a54e98da6f978a3195013f6de21674ba0edbc339c5b079",
+              "urls": [
+                "https://download.gnome.org/binaries/win64/dependencies/gettext-runtime_0.18.1.1-2_win64.zip"
+              ]
+            }
+          },
+          "cmake_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "filegroup(\n    name = \"all_srcs\",\n    srcs = glob([\"**\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
+              "sha256": "f316b40053466f9a416adf981efda41b160ca859e97f6a484b447ea299ff26aa",
+              "strip_prefix": "cmake-3.23.2",
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz"
+              ]
+            }
+          },
+          "bazel_skylib": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
+                "https://github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz"
+              ],
+              "sha256": "f7be3474d42aae265405a592bb7da8e171919d74c16f082a5457840f06054728"
+            }
+          },
+          "cmake-3.23.2-macos-universal": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2-macos-universal.tar.gz"
+              ],
+              "sha256": "853a0f9af148c5ef47282ffffee06c4c9f257be2635936755f39ca13c3286c88",
+              "strip_prefix": "cmake-3.23.2-macos-universal/CMake.app/Contents",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"cmake_data\",\n    srcs = glob(\n        [\n            \"**\",\n        ],\n        exclude = [\n            \"WORKSPACE\",\n            \"WORKSPACE.bazel\",\n            \"BUILD\",\n            \"BUILD.bazel\",\n        ],\n    ),\n)\n\nnative_tool_toolchain(\n    name = \"cmake_tool\",\n    path = \"bin/cmake\",\n    target = \":cmake_data\",\n)\n"
+            }
+          },
+          "meson_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "exports_files([\"meson.py\"])\n\nfilegroup(\n    name = \"runtime\",\n    srcs = glob([\"mesonbuild/**\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
+              "strip_prefix": "meson-1.1.1",
+              "url": "https://github.com/mesonbuild/meson/releases/download/1.1.1/meson-1.1.1.tar.gz"
+            }
+          },
+          "rules_foreign_cc_framework_toolchain_freebsd": {
+            "bzlFile": "@@rules_foreign_cc~//foreign_cc/private/framework:toolchain.bzl",
+            "ruleClassName": "framework_toolchain_repository",
+            "attributes": {
+              "commands_src": "@rules_foreign_cc//foreign_cc/private/framework/toolchains:freebsd_commands.bzl",
+              "exec_compatible_with": [
+                "@platforms//os:freebsd"
+              ]
+            }
+          },
+          "rules_foreign_cc_framework_toolchain_linux": {
+            "bzlFile": "@@rules_foreign_cc~//foreign_cc/private/framework:toolchain.bzl",
+            "ruleClassName": "framework_toolchain_repository",
+            "attributes": {
+              "commands_src": "@rules_foreign_cc//foreign_cc/private/framework/toolchains:linux_commands.bzl",
+              "exec_compatible_with": [
+                "@platforms//os:linux"
+              ]
+            }
+          },
+          "rules_python": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "sha256": "84aec9e21cc56fbc7f1335035a71c850d1b9b5cc6ff497306f84cced9a769841",
+              "strip_prefix": "rules_python-0.23.1",
+              "url": "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.23.1.tar.gz"
+            }
+          },
+          "pkgconfig_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "filegroup(\n    name = \"all_srcs\",\n    srcs = glob([\"**\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
+              "sha256": "6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591",
+              "strip_prefix": "pkg-config-0.29.2",
+              "patches": [
+                "@@rules_foreign_cc~//toolchains:pkgconfig-detectenv.patch",
+                "@@rules_foreign_cc~//toolchains:pkgconfig-makefile-vc.patch"
+              ],
+              "urls": [
+                "https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz"
+              ]
+            }
+          },
+          "ninja_build_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "filegroup(\n    name = \"all_srcs\",\n    srcs = glob([\"**\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
+              "sha256": "31747ae633213f1eda3842686f83c2aa1412e0f5691d1c14dbbcc67fe7400cea",
+              "strip_prefix": "ninja-1.11.1",
+              "urls": [
+                "https://github.com/ninja-build/ninja/archive/v1.11.1.tar.gz"
+              ]
+            }
+          },
+          "ninja_1.11.1_linux": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip"
+              ],
+              "sha256": "b901ba96e486dce377f9a070ed4ef3f79deb45f4ffe2938f8e7ddc69cfb3df77",
+              "strip_prefix": "",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"ninja_bin\",\n    srcs = [\"ninja\"],\n)\n\nnative_tool_toolchain(\n    name = \"ninja_tool\",\n    env = {\"NINJA\": \"$(execpath :ninja_bin)\"},\n    path = \"$(execpath :ninja_bin)\",\n    target = \":ninja_bin\",\n)\n"
+            }
+          },
+          "glib_src": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "\ncc_import(\n    name = \"msvc_hdr\",\n    hdrs = [\"msvc_recommended_pragmas.h\"],\n    visibility = [\"//visibility:public\"],\n)\n        ",
+              "sha256": "bc96f63112823b7d6c9f06572d2ad626ddac7eb452c04d762592197f6e07898e",
+              "strip_prefix": "glib-2.26.1",
+              "urls": [
+                "https://download.gnome.org/sources/glib/2.26/glib-2.26.1.tar.gz"
+              ]
+            }
+          },
+          "cmake-3.23.2-windows-x86_64": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2-windows-x86_64.zip"
+              ],
+              "sha256": "2329387f3166b84c25091c86389fb891193967740c9bcf01e7f6d3306f7ffda0",
+              "strip_prefix": "cmake-3.23.2-windows-x86_64",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"cmake_data\",\n    srcs = glob(\n        [\n            \"**\",\n        ],\n        exclude = [\n            \"WORKSPACE\",\n            \"WORKSPACE.bazel\",\n            \"BUILD\",\n            \"BUILD.bazel\",\n        ],\n    ),\n)\n\nnative_tool_toolchain(\n    name = \"cmake_tool\",\n    path = \"bin/cmake.exe\",\n    target = \":cmake_data\",\n)\n"
+            }
+          },
+          "glib_runtime": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "\nexports_files(\n    [\n        \"bin/libgio-2.0-0.dll\",\n        \"bin/libglib-2.0-0.dll\",\n        \"bin/libgmodule-2.0-0.dll\",\n        \"bin/libgobject-2.0-0.dll\",\n        \"bin/libgthread-2.0-0.dll\",\n    ],\n    visibility = [\"//visibility:public\"],\n)\n        ",
+              "sha256": "88d857087e86f16a9be651ee7021880b3f7ba050d34a1ed9f06113b8799cb973",
+              "urls": [
+                "https://download.gnome.org/binaries/win64/glib/2.26/glib_2.26.1-1_win64.zip"
+              ]
+            }
+          },
+          "rules_foreign_cc_framework_toolchains": {
+            "bzlFile": "@@rules_foreign_cc~//foreign_cc/private/framework:toolchain.bzl",
+            "ruleClassName": "framework_toolchain_repository_hub",
+            "attributes": {}
+          },
+          "glib_dev": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file_content": "\nload(\"@rules_cc//cc:defs.bzl\", \"cc_library\")\n\ncc_import(\n    name = \"glib_dev\",\n    hdrs = glob([\"include/**\"]),\n    shared_library = \"@glib_runtime//:bin/libglib-2.0-0.dll\",\n    visibility = [\"//visibility:public\"],\n)\n        ",
+              "sha256": "bdf18506df304d38be98a4b3f18055b8b8cca81beabecad0eece6ce95319c369",
+              "urls": [
+                "https://download.gnome.org/binaries/win64/glib/2.26/glib-dev_2.26.1-1_win64.zip"
+              ]
+            }
+          },
+          "ninja_1.11.1_mac": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-mac.zip"
+              ],
+              "sha256": "482ecb23c59ae3d4f158029112de172dd96bb0e97549c4b1ca32d8fad11f873e",
+              "strip_prefix": "",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"ninja_bin\",\n    srcs = [\"ninja\"],\n)\n\nnative_tool_toolchain(\n    name = \"ninja_tool\",\n    env = {\"NINJA\": \"$(execpath :ninja_bin)\"},\n    path = \"$(execpath :ninja_bin)\",\n    target = \":ninja_bin\",\n)\n"
+            }
+          },
+          "cmake_3.23.2_toolchains": {
+            "bzlFile": "@@rules_foreign_cc~//toolchains:prebuilt_toolchains_repository.bzl",
+            "ruleClassName": "prebuilt_toolchains_repository",
+            "attributes": {
+              "repos": {
+                "cmake-3.23.2-linux-aarch64": [
+                  "@platforms//cpu:aarch64",
+                  "@platforms//os:linux"
+                ],
+                "cmake-3.23.2-linux-x86_64": [
+                  "@platforms//cpu:x86_64",
+                  "@platforms//os:linux"
+                ],
+                "cmake-3.23.2-macos-universal": [
+                  "@platforms//os:macos"
+                ],
+                "cmake-3.23.2-windows-i386": [
+                  "@platforms//cpu:x86_32",
+                  "@platforms//os:windows"
+                ],
+                "cmake-3.23.2-windows-x86_64": [
+                  "@platforms//cpu:x86_64",
+                  "@platforms//os:windows"
+                ]
+              },
+              "tool": "cmake"
+            }
+          },
+          "ninja_1.11.1_toolchains": {
+            "bzlFile": "@@rules_foreign_cc~//toolchains:prebuilt_toolchains_repository.bzl",
+            "ruleClassName": "prebuilt_toolchains_repository",
+            "attributes": {
+              "repos": {
+                "ninja_1.11.1_linux": [
+                  "@platforms//cpu:x86_64",
+                  "@platforms//os:linux"
+                ],
+                "ninja_1.11.1_mac": [
+                  "@platforms//cpu:x86_64",
+                  "@platforms//os:macos"
+                ],
+                "ninja_1.11.1_win": [
+                  "@platforms//cpu:x86_64",
+                  "@platforms//os:windows"
+                ]
+              },
+              "tool": "ninja"
+            }
+          },
+          "ninja_1.11.1_win": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip"
+              ],
+              "sha256": "524b344a1a9a55005eaf868d991e090ab8ce07fa109f1820d40e74642e289abc",
+              "strip_prefix": "",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"ninja_bin\",\n    srcs = [\"ninja.exe\"],\n)\n\nnative_tool_toolchain(\n    name = \"ninja_tool\",\n    env = {\"NINJA\": \"$(execpath :ninja_bin)\"},\n    path = \"$(execpath :ninja_bin)\",\n    target = \":ninja_bin\",\n)\n"
+            }
+          },
+          "cmake-3.23.2-windows-i386": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2-windows-i386.zip"
+              ],
+              "sha256": "6a4fcd6a2315b93cb23c93507efccacc30c449c2bf98f14d6032bb226c582e07",
+              "strip_prefix": "cmake-3.23.2-windows-i386",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"cmake_data\",\n    srcs = glob(\n        [\n            \"**\",\n        ],\n        exclude = [\n            \"WORKSPACE\",\n            \"WORKSPACE.bazel\",\n            \"BUILD\",\n            \"BUILD.bazel\",\n        ],\n    ),\n)\n\nnative_tool_toolchain(\n    name = \"cmake_tool\",\n    path = \"bin/cmake.exe\",\n    target = \":cmake_data\",\n)\n"
+            }
+          },
+          "cmake-3.23.2-linux-x86_64": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "urls": [
+                "https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2-linux-x86_64.tar.gz"
+              ],
+              "sha256": "aaced6f745b86ce853661a595bdac6c5314a60f8181b6912a0a4920acfa32708",
+              "strip_prefix": "cmake-3.23.2-linux-x86_64",
+              "build_file_content": "load(\"@rules_foreign_cc//toolchains/native_tools:native_tools_toolchain.bzl\", \"native_tool_toolchain\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nfilegroup(\n    name = \"cmake_data\",\n    srcs = glob(\n        [\n            \"**\",\n        ],\n        exclude = [\n            \"WORKSPACE\",\n            \"WORKSPACE.bazel\",\n            \"BUILD\",\n            \"BUILD.bazel\",\n        ],\n    ),\n)\n\nnative_tool_toolchain(\n    name = \"cmake_tool\",\n    path = \"bin/cmake\",\n    target = \":cmake_data\",\n)\n"
+            }
+          },
+          "rules_foreign_cc_framework_toolchain_windows": {
+            "bzlFile": "@@rules_foreign_cc~//foreign_cc/private/framework:toolchain.bzl",
+            "ruleClassName": "framework_toolchain_repository",
+            "attributes": {
+              "commands_src": "@rules_foreign_cc//foreign_cc/private/framework/toolchains:windows_commands.bzl",
+              "exec_compatible_with": [
+                "@platforms//os:windows"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_foreign_cc~",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_foreign_cc~",
+            "rules_foreign_cc",
+            "rules_foreign_cc~"
+          ]
+        ]
+      }
+    },
     "@@rules_go~//go:extensions.bzl%go_sdk": {
       "general": {
         "bzlTransitiveDigest": "EJ2jI5PPSo7sHmzcmLtJ0MyhdsySDOSbGoU59oYFq6g=",
@@ -1389,7 +1732,7 @@
     },
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "sonndpk/I7Km3q/WaCiYa93OJ6ya4oSiuRL6AHkFgTY=",
+        "bzlTransitiveDigest": "xmuC/dW0Hfaftg/uPZgmEjl1txDEN4Omzu4uk5UFcxY=",
         "usagesDigest": "wqpum9A0+/nwH6wFsVYv8mVW0u0XtWqyouupHJBrANs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

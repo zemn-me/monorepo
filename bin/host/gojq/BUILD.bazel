@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "gojq",
+    actual = "@com_github_itchyny_gojq//cmd/gojq:gojq",
+    visibility = ["//:__subpackages__"],
+)
+
+sh_test(
+    name = "smoke",
+    srcs = ["smoke.sh"],
+    data = [
+        ":gojq",
+    ],
+    env = {
+        "GOJQ_BINARY": "$(rlocationpath :gojq)",
+    },
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
+)
+
+bazel_lint(name = "bazel_lint")
