@@ -25,7 +25,8 @@
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
-		"rm -rf dist"
+		"rm -rf dist",
+		"bazel mod deps --lockfile_mode=update"
 	],
 	"packageRules": [
 		{
@@ -38,7 +39,8 @@
 				"commands": [
 					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
-					"rm -rf dist"
+					"rm -rf dist",
+					"bazel mod deps --lockfile_mode=update"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
@@ -47,7 +49,8 @@
 					"cargo-bazel-lock.json",
 					"**/*.ts",
 					"go.mod",
-					"go_version.bzl"
+					"go_version.bzl",
+					"MODULE.bazel.lock"
 				],
 				"recreateWhen": "always"
 			}
