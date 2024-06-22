@@ -80,6 +80,9 @@ dependencies:
   eslint-plugin-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.5.0)
+  eslint-plugin-only-error:
+    specifier: ^1.0.2
+    version: 1.0.2
   eslint-plugin-react-hooks:
     specifier: 4.6.2
     version: 4.6.2(eslint@9.5.0)
@@ -10367,6 +10370,11 @@ packages:
       vfile: 6.0.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /eslint-plugin-only-error@1.0.2:
+    resolution: {integrity: sha512-tdz/EU/LeQLPNMBIQOSl39by+/NGKdhjfba6qDvMWjcbY0GmiMk0bXrIXRGAwW9fksH30Y+KKlK1Jc32bbql9w==}
+    engines: {node: '>=6'}
     dev: false
 
   /eslint-plugin-react-hooks@4.6.2(eslint@9.5.0):
