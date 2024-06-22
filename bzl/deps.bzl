@@ -33,15 +33,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "bazel_gazelle",
-        sha256 = "d76bf7a60fd8b050444090dfa2837a4eaf9829e1165618ee35dceca5cbdf58d5",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.37.0/bazel-gazelle-v0.37.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.37.0/bazel-gazelle-v0.37.0.tar.gz",
-        ],
-    )
-
-    http_archive(
         name = "com_google_protobuf",
         sha256 = "6fbe2e6f703bcd3a246529c2cab586ca12a98c4e641f5f71d51fde09eb48e9e7",
         strip_prefix = "protobuf-27.1",

@@ -84,3 +84,5 @@ rules_ts_ext.deps(
 use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
+
+bazel_dep(name = "gazelle", version = "0.37.0", repo_name = "bazel_gazelle")
