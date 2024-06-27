@@ -194,8 +194,8 @@ devDependencies:
     specifier: 0.2.2
     version: 0.2.2(@fortawesome/fontawesome-svg-core@6.5.2)(react@18.3.1)
   '@microsoft/api-documenter':
-    specifier: 7.25.3
-    version: 7.25.3(@types/node@20.14.9)
+    specifier: 7.25.4
+    version: 7.25.4(@types/node@20.14.9)
   '@pulumi/aws':
     specifier: 6.42.0
     version: 6.42.0(ts-node@10.9.2)(typescript@5.4.5)
@@ -4380,8 +4380,8 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-documenter@7.25.3(@types/node@20.14.9):
-    resolution: {integrity: sha512-xigAN2KPukckFhXMp+Zv8UhIh8lRpu5RXoM+Pl1HRHAVtIWN0oWMIeGU1bU79W+bCRTuo5zsQ98NvN6DHFMXaQ==}
+  /@microsoft/api-documenter@7.25.4(@types/node@20.14.9):
+    resolution: {integrity: sha512-hGERhz4L11zni1ifapBK3zhHFcX1QIGoTf0WzoCC0mI2IXfWDJ5ToYMZTPO6qPmn3ElrZtSWcoaHVkaRz16Q/Q==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.29.2(@types/node@20.14.9)
