@@ -107,6 +107,7 @@ export class Website extends pulumi.ComponentResource {
 			{
 				zoneId: args.zoneId,
 				domain: args.domain,
+				noCostAllocationTag: args.noCostAllocationTag,
 				tags: tags,
 			},
 			{ parent: this }
