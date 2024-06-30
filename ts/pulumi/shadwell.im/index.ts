@@ -65,6 +65,16 @@ export class Component extends Pulumi.ComponentResource {
 			tags,
 		});
 
+		const anna = new Website(`${name}_anna_shadwell_im_website`, {
+			index: 'ts/pulumi/shadwell.im/anna/out/index.html',
+			directory: 'ts/pulumi/shadwell.im/anna/out',
+			zoneId: args.zoneId,
+			domain: ['anna', args.domain].join('.'),
+			noIndex: args.noIndex,
+			noCostAllocationTag: true,
+			tags,
+		});
+
 		const lucy = new Website(`${name}_lucy_shadwell_im_website`, {
 			index: 'ts/pulumi/shadwell.im/lucy/out/index.html',
 			directory: 'ts/pulumi/shadwell.im/lucy/out',
@@ -74,6 +84,6 @@ export class Component extends Pulumi.ComponentResource {
 			tags,
 		});
 
-		super.registerOutputs({ site: this.site, luke, kate, lucy });
+		super.registerOutputs({ site: this.site, luke, kate, lucy, anna });
 	}
 }
