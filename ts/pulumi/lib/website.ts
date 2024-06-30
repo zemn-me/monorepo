@@ -70,6 +70,12 @@ export interface Args {
 	 */
 	noIndex: boolean;
 
+	/**
+	 * Don't deploy a cost allocation tag.
+	 * AWS doesn't let you do this in one go.
+	 */
+	noCostAllocationTag?: boolean
+
 	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
 }
 
@@ -87,7 +93,7 @@ export class Website extends pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
-		new CostAllocationTag(
+		if (!args.noCostAllocationTag) new CostAllocationTag(
 			`${name}_cost_tag`,
 			{
 				status: 'Active',
