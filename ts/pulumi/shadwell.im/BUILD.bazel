@@ -6,6 +6,7 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 ts_project(
     name = "shadwell.im",
     data = [
+        "//ts/pulumi/shadwell.im/anna:next",
         "//ts/pulumi/shadwell.im/kate:next",
         "//ts/pulumi/shadwell.im/lucy:next",
         "//ts/pulumi/shadwell.im/luke:next",
