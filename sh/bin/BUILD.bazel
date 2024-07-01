@@ -18,6 +18,11 @@ alias(
 )
 
 alias(
+    name = "ruff",
+    actual = "//bin/host/ruff",
+)
+
+alias(
     name = "goimports",
     actual = "@org_golang_x_tools//cmd/goimports",
 )

@@ -71,3 +71,10 @@ register_coreutils_toolchains()
 register_copy_directory_toolchains()
 
 register_copy_to_directory_toolchains()
+
+# ruff is a special snowflake because it's a pip package that
+# is actually a rust binary, and the rust binary is not on
+# cargo for some reason.
+load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
+
+fetch_ruff()
