@@ -9,10 +9,10 @@
  * and most importantly requires punching through the sandbox in various ways
  * to work, this is not exposed as a normal jest test.
  */
-import * as pulumi from '@pulumi/pulumi/automation/index.js';
+import * as pulumi from '@pulumi/pulumi/automation/index';
 
-import { Command, Summarize } from '#root/ts/github/actions/index.js';
-import { staging } from '#root/ts/pulumi/stack.js';
+import { Command, Summarize } from '#root/ts/github/actions/index';
+import { staging } from '#root/ts/pulumi/stack';
 
 const Task =
 	(name: string) =>

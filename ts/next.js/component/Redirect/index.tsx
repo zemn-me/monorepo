@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router.js';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb.js';
+import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb';
 
 export interface Props {
 	readonly to: string;

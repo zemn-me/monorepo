@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
+import { ItemFilterObject } from '#root/ts/factorio/item_filter_object';
 
 export const DeconstructionPlanner = z.strictObject({
 	settings: z.strictObject({

@@ -1,1 +1,1 @@
-export * from '#root/project/cultist/react/table.js';
+export * from '#root/project/cultist/react/table';

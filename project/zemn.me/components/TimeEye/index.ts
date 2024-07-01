@@ -1,2 +1,2 @@
-export * from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
-export { default } from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
+export * from '#root/project/zemn.me/components/TimeEye/TimeEye';
+export { default } from '#root/project/zemn.me/components/TimeEye/TimeEye';

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { ConnectionData } from '#root/ts/factorio/connection_data';
-import { ConnectionPoint } from '#root/ts/factorio/connection_point.js';
+import { ConnectionPoint } from '#root/ts/factorio/connection_point';
 
 /**
  * The format of this object is very strange. While the docs say it's an object with keys

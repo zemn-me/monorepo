@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ConnectionData } from '#root/ts/factorio/connection_data.js';
+import { ConnectionData } from '#root/ts/factorio/connection_data';
 
 export const ConnectionPoint = z.strictObject({
 	red: ConnectionData.array().optional(),

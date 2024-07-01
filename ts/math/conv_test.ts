@@ -1,11 +1,11 @@
-import * as cartesian from '#root/ts/math/cartesian.js';
+import * as cartesian from '#root/ts/math/cartesian';
 import {
 	Cartestian as C,
 	Euler as E,
 	Quaternion as Q,
 } from '#root/ts/math/conv.js';
-import * as euler_angle from '#root/ts/math/euler_angle.js';
-import * as quaternion from '#root/ts/math/quaternion.js';
+import * as euler_angle from '#root/ts/math/euler_angle';
+import * as quaternion from '#root/ts/math/quaternion';
 
 describe('Conversions', () => {
 	test('Quaternion from EulerAngles', () => {

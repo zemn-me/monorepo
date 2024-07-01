@@ -1,5 +1,5 @@
-import Link from "#root/project/zemn.me/components/Link/Link.js";
-import { Prose } from "#root/project/zemn.me/components/Prose/prose.js"
+import Link from "#root/project/zemn.me/components/Link/Link";
+import { Prose } from "#root/project/zemn.me/components/Prose/prose"
 
 
 interface BlurbProps {

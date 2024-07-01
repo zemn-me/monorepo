@@ -1,4 +1,4 @@
-import { Tuple } from '#root/ts/tuple.js';
+import { Tuple } from '#root/ts/tuple';
 
 export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 

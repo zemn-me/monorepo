@@ -1,6 +1,6 @@
 import { Browser, until } from 'selenium-webdriver';
 
-import { Driver } from '#root/ts/selenium/webdriver.js';
+import { Driver } from '#root/ts/selenium/webdriver';
 
 describe('selenium webdriver', () => {
 	it('should load a data: uri', async () => {

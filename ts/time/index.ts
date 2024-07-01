@@ -1,3 +1,3 @@
-import * as date from '#root/ts/time/date.js';
+import * as date from '#root/ts/time/date';
 
 export { date };

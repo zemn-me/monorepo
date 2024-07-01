@@ -3,11 +3,11 @@ import Immutable from 'immutable';
 import memoizee from 'memoizee';
 import React, { ReactElement } from 'react';
 
-import * as Bio from '#root/project/zemn.me/bio/index.js';
-import Link from '#root/project/zemn.me/components/Link/index.js';
-import { SectionLink } from '#root/project/zemn.me/components/SectionLink/SectionLink.js';
+import * as Bio from '#root/project/zemn.me/bio/index';
+import Link from '#root/project/zemn.me/components/Link/index';
+import { SectionLink } from '#root/project/zemn.me/components/SectionLink/SectionLink';
 import style from '#root/project/zemn.me/components/timeline/timeline.module.css';
-import * as lang from '#root/ts/react/lang/index.js';
+import * as lang from '#root/ts/react/lang/index';
 
 interface MutableText {
 	corpus: string;

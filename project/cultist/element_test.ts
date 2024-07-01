@@ -1,6 +1,6 @@
 import immutable from 'immutable';
 
-import * as cultist from '#root/project/cultist.js';
+import * as cultist from '#root/project/cultist';
 
 describe('count', () => {
 	test('stacks', () => {

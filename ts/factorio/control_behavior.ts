@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
-import { ArithmeticCombinatorParameters } from '#root/ts/factorio/arithmetic_combinator_parameters.js';
-import { CircuitCondition } from '#root/ts/factorio/circuit_condition.js';
-import { ConstantCombinatorParameters } from '#root/ts/factorio/constant_combinator_parameters.js';
-import { DeciderCombinatorParameters } from '#root/ts/factorio/decider_combinator_parameters.js';
+import { ArithmeticCombinatorParameters } from '#root/ts/factorio/arithmetic_combinator_parameters';
+import { CircuitCondition } from '#root/ts/factorio/circuit_condition';
+import { ConstantCombinatorParameters } from '#root/ts/factorio/constant_combinator_parameters';
+import { DeciderCombinatorParameters } from '#root/ts/factorio/decider_combinator_parameters';
 import {
 	DefinesControlBehaviorInserterHandReadMode,
 	DefinesControlBehaviorMiningDrillResourceReadMode,
 	DefinesControlBehaviorTransportBeltContentReadMode,
 } from '#root/ts/factorio/defines,.js';
-import { Int } from '#root/ts/factorio/int.js';
-import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters.js';
-import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { Int } from '#root/ts/factorio/int';
+import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters';
+import { SignalID } from '#root/ts/factorio/signal_id';
 
 export const ControlBehavior = z.strictObject({
 	/**

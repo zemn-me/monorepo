@@ -1,7 +1,7 @@
 import { Metadata } from 'next/types';
 
-import Link from '#root/project/zemn.me/components/Link/index.js';
-import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
+import Link from '#root/project/zemn.me/components/Link/index';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose';
 
 export default function Main() {
 	return (

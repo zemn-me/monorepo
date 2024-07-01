@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 
-import exampleSave from '#root/project/cultist/example/savestate.js';
-import * as Board from '#root/project/cultist/react/table.js';
-import * as Save from '#root/project/cultist/save.js';
-import * as State from '#root/project/cultist/state/index.js';
+import exampleSave from '#root/project/cultist/example/savestate';
+import * as Board from '#root/project/cultist/react/table';
+import * as Save from '#root/project/cultist/save';
+import * as State from '#root/project/cultist/state/index';
 
 const Home = (): React.ReactElement => {
 	const [state, setState] = React.useState(

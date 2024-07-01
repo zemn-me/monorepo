@@ -1,4 +1,4 @@
-import { _ResultSequence, Err, Ok as Some, Result } from '#root/ts/result.js';
+import { _ResultSequence, Err, Ok as Some, Result } from '#root/ts/result';
 
 export { Some };
 

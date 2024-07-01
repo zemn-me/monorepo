@@ -1,20 +1,20 @@
 import { z } from 'zod';
 
-import { Color } from '#root/ts/factorio/color.js';
-import { Entity } from '#root/ts/factorio/entity.js';
-import { Icon } from '#root/ts/factorio/icon.js';
-import { Int } from '#root/ts/factorio/int.js';
-import { Position } from '#root/ts/factorio/position.js';
-import { Schedule } from '#root/ts/factorio/schedule.js';
-import { Tile } from '#root/ts/factorio/tile.js';
-import { concat } from '#root/ts/iter/index.js';
+import { Color } from '#root/ts/factorio/color';
+import { Entity } from '#root/ts/factorio/entity';
+import { Icon } from '#root/ts/factorio/icon';
+import { Int } from '#root/ts/factorio/int';
+import { Position } from '#root/ts/factorio/position';
+import { Schedule } from '#root/ts/factorio/schedule';
+import { Tile } from '#root/ts/factorio/tile';
+import { concat } from '#root/ts/iter/index';
 import {
 	cartesianCanonicalise,
 	Point2D,
 	rectContaninsPoint,
 } from '#root/ts/math/cartesian.js';
-import { add } from '#root/ts/math/matrix.js';
-import { extent } from '#root/ts/math/tuple.js';
+import { add } from '#root/ts/math/matrix';
+import { extent } from '#root/ts/math/tuple';
 
 export const Blueprint = z.strictObject({
 	/**

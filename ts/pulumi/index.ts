@@ -1,13 +1,13 @@
 import * as aws from '@pulumi/aws';
-import { Budget } from '@pulumi/aws/budgets/index.js';
-import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import { Budget } from '@pulumi/aws/budgets/index';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index';
 import * as Pulumi from '@pulumi/pulumi';
 
-import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
-import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
-import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
-import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
+import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags';
+import * as Lulu from '#root/ts/pulumi/lulu.computer/index';
+import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index';
+import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index';
+import * as ZemnMe from '#root/ts/pulumi/zemn.me/index';
 
 export interface Args {
 	staging: boolean;

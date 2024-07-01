@@ -5,11 +5,11 @@ import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
-import { Providers } from '#root/project/zemn.me/app/providers.js';
-import { Bio } from '#root/project/zemn.me/bio/index.js';
-import Glade from '#root/project/zemn.me/components/Glade/glade.js';
-import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
-import { text } from '#root/ts/react/lang/index.js';
+import { Providers } from '#root/project/zemn.me/app/providers';
+import { Bio } from '#root/project/zemn.me/bio/index';
+import Glade from '#root/project/zemn.me/components/Glade/glade';
+import { HeaderTagsAppRouter } from '#root/ts/next.js/index';
+import { text } from '#root/ts/react/lang/index';
 
 export interface Props {
 	readonly children?: ReactNode;

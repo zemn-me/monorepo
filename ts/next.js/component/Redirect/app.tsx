@@ -3,11 +3,11 @@
  * @fileoverview Redirect but compatible with
  * app router.
  */
-import Head from 'next/head.js';
+import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb.js';
+import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb';
 
 export interface Props {
 	readonly to: URL | string;
