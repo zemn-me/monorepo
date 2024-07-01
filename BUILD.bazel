@@ -6,16 +6,26 @@
 #   so that ts_library rules still use it by default.
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
-load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:renovate/package_json.bzl", "bin")
+load("@pip//:requirements.bzl", "all_whl_requirements")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
+load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("//ts:rules.bzl", "ts_config")
 
 package(default_visibility = [":__subpackages__"])
+
+compile_pip_requirements(
+    name = "requirements",
+    src = "requirements.in",
+    requirements_txt = "requirements.txt",
+)
 
 # Useful commands to run!
 alias(
@@ -90,26 +100,6 @@ bin.renovate_config_validator_test(
 
 npm_link_all_packages(name = "node_modules")
 
-# gazelle:prefix github.com/zemn-me/monorepo
-# gazelle:map_kind go_binary go_binary //go:rules.bzl
-# gazelle:map_kind go_library go_library //go:rules.bzl
-# gazelle:map_kind ts_project ts_project //ts:rules.bzl
-# gazelle:resolve proto go google/protobuf/struct.proto @com_github_golang_protobuf//ptypes/struct:struct
-gazelle(
-    name = "gazelle-update-repos",
-    args = [
-        "-from_file=go.mod",
-        "-prune",
-        "-to_macro=bzl/go_deps.bzl%go_dependencies",
-    ],
-    command = "update-repos",
-)
-
-gazelle(
-    name = "gazelle",
-    command = "fix",
-)
-
 native_test(
     name = "go_versions_synced",
     size = "small",
@@ -155,6 +145,76 @@ js_library(
         "//:node_modules/eslint-plugin-simple-import-sort",
         "//:node_modules/typescript-eslint",
     ],
+)
+
+# This rule fetches the metadata for python packages we depend on. That data is
+# required for the gazelle_python_manifest rule to update our manifest file.
+modules_mapping(
+    name = "modules_map",
+    wheels = all_whl_requirements,
+)
+
+# gazelle:resolve py google.protobuf @com_google_protobuf//:protobuf_python
+# Gazelle python extension needs a manifest file mapping from
+# an import to the installed package that provides it.
+# This macro produces two targets:
+# - //:gazelle_python_manifest.update can be used with `bazel run`
+#   to recalculate the manifest
+# - //:gazelle_python_manifest.test is a test target ensuring that
+#   the manifest doesn't need to be updated
+gazelle_python_manifest(
+    name = "gazelle_python_manifest",
+    modules_mapping = ":modules_map",
+    # This is what we called our `pip_parse` rule, where third-party
+    # python libraries are loaded in BUILD files.
+    pip_repository_name = "pip",
+    # This should point to wherever we declare our python dependencies
+    # (the same as what we passed to the modules_mapping rule in WORKSPACE)
+    # This argument is optional. If provided, the `.test` target is very
+    # fast because it just has to check an integrity field. If not provided,
+    # the integrity field is not added to the manifest which can help avoid
+    # merge conflicts in large repos.
+    requirements = "//:requirements.txt",
+)
+
+# this alias allows the gazelle python manifest fixer to conform to
+# the fix api (bzl/fix_api).
+alias(
+    name = "gazelle_python_manifest.test.fix",
+    actual = "gazelle_python_manifest.update",
+)
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@rules_python_gazelle_plugin//python",
+        "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
+        "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
+        # Any languages that depend on Gazelle's proto plugin must come after it.
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# gazelle:prefix github.com/zemn-me/monorepo
+# gazelle:map_kind go_binary go_binary //go:rules.bzl
+# gazelle:map_kind go_library go_library //go:rules.bzl
+# gazelle:map_kind ts_project ts_project //ts:rules.bzl
+# gazelle:resolve proto go google/protobuf/struct.proto @com_github_golang_protobuf//ptypes/struct:struct
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-prune",
+        "-to_macro=bzl/go_deps.bzl%go_dependencies",
+    ],
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+    gazelle = ":gazelle_bin",
 )
 
 bazel_lint(name = "bazel_lint")

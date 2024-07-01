@@ -50,7 +50,8 @@
 					"**/*.ts",
 					"go.mod",
 					"MODULE.bazel",
-					"MODULE.bazel.lock"
+					"MODULE.bazel.lock",
+					"gazelle_python.yaml"
 				],
 				"recreateWhen": "always"
 			}

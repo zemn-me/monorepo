@@ -1,6 +1,12 @@
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 
 py_binary(
     name = "scm_conf",
     srcs = ["scm_conf.py"],
+)
+
+py_library(
+    name = "prep",
+    srcs = ["scm_conf.py"],
+    visibility = ["//:__subpackages__"],
 )

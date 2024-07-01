@@ -4,8 +4,7 @@ load("//mdx:rules.bzl", "mdx_files")
 mdx_files(
     name = "mdx",
     srcs = glob(["**/*.mdx"]),
-	visibility = [ "//:__subpackages__" ]
+    visibility = ["//:__subpackages__"],
 )
-
 
 bazel_lint(name = "bazel_lint")
