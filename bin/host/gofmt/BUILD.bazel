@@ -1,0 +1,7 @@
+load("//go:sdk_tool.bzl", "go_sdk_tool")
+
+go_sdk_tool(
+    name = "gofmt",
+    goroot_relative_path = "bin/gofmt",
+    visibility = ["//:__subpackages__"],
+)
