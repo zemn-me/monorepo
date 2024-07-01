@@ -1,3 +1,4 @@
+load("@rules_python//python:defs.bzl", "py_library")
 load("//bzl:rules.bzl", "bazel_lint")
 
 exports_files(
@@ -8,3 +9,9 @@ exports_files(
 )
 
 bazel_lint(name = "bazel_lint")
+
+py_library(
+    name = "versioning",
+    srcs = ["bump.py"],
+    visibility = ["//:__subpackages__"],
+)

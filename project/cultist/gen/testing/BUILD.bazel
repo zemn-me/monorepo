@@ -1,10 +1,20 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 py_test(
     name = "test_parse_core",
     srcs = ["test_parse_core.py"],
-    deps = ["//project/cultist/gen:core_py"],
+    deps = [":testing"],
 )
 
 bazel_lint(name = "bazel_lint")
+
+py_library(
+    name = "testing",
+    srcs = ["core.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//project/cultist/gen:core_py_proto",
+        "@com_google_protobuf//:protobuf_python",
+    ],
+)
