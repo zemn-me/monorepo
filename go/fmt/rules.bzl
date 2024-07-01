@@ -5,6 +5,6 @@ load("@aspect_rules_lint//format:defs.bzl", "format_test")
 def test_go_fmt(srcs = [], **kwargs):
     format_test(
         srcs = srcs,
-        go = "@go_sdk//:bin/gofmt",
+        go = "//bin/host/gofmt",
         **kwargs
     )

@@ -13,17 +13,19 @@ import (
 )
 
 var (
-	fix          bool
-	test         bool
-	version_file string
-	module_file  string
+	fix            bool
+	test           bool
+	module_bazel   string
+	go_module_file string
 )
+
+const example_line = `go_sdk.download(version = "1.22.2")`
 
 func init() {
 	flag.BoolVar(&fix, "fix", false, "Whether to fix the bazel file if it is not in sync.")
 	flag.BoolVar(&test, "test", true, "Whether to return a non-zero status if not in sync.")
-	flag.StringVar(&version_file, "versionFile", "go_version.bzl", "The go_version.bzl file to update. Must have a line with 'go_version = \"xxx\"' in it.")
-	flag.StringVar(&module_file, "moduleFile", "go.mod", "The go.mod file to read from.")
+	flag.StringVar(&module_bazel, "module_bazel", "MODULE.bazel", fmt.Sprintf("The go module file to update. Must have a line like %+q.", example_line))
+	flag.StringVar(&go_module_file, "moduleFile", "go.mod", "The go.mod file to read from.")
 }
 
 type FileLike interface {
@@ -32,6 +34,7 @@ type FileLike interface {
 	io.Writer
 	io.Closer
 	Truncate(size int64) error
+	Name() string
 }
 
 type File struct {
@@ -53,6 +56,9 @@ func (v File) GetFirstSubmatch(re *regexp.Regexp) (start int, end int, err error
 	return
 }
 
+// FileFiddler, given a File, and a SegementMatcher, provides
+// convenient tools for efficiently finding and replacing
+// part of a file matching a regex.
 type FileFiddler struct {
 	File
 	SegmentMatcher *regexp.Regexp
@@ -66,6 +72,7 @@ func (f *FileFiddler) Offsets() (start int, end int, err error) {
 		f.start, f.end = new(int), new(int)
 		if *f.start, *f.end, err = f.GetFirstSubmatch(f.SegmentMatcher); err != nil {
 			f.start, f.end = nil, nil
+			err = fmt.Errorf("find %+q in %+q: %v", f.SegmentMatcher.String(), f.File.Name(), err)
 			return
 		}
 	}
@@ -81,12 +88,14 @@ func (f *FileFiddler) ReadSegment() (segment []byte, err error) {
 	var start int
 	var end int
 	if start, end, err = f.Offsets(); err != nil {
+		err = fmt.Errorf("read matched segment: %v", err)
 		return
 	}
 
 	f.Seek(int64(start), io.SeekStart)
 	segment = make([]byte, end-start)
 	if _, err = f.Read(segment); err != nil {
+		err = fmt.Errorf("read from byte %d to %d of %+q:", start, end, f.File.Name())
 		return
 	}
 
@@ -120,7 +129,7 @@ func (f FileFiddler) OverwriteSegment(n []byte) (err error) {
 	return
 }
 
-var ReVersionFileVersion = regexp.MustCompile(`go_version\s*=\s*"([^"]+)"\n`)
+var ReVersionFileVersion = regexp.MustCompile(`go_sdk.download\s*\(\s*version\s*=\s*"([^"]*)"\s*\)\n`)
 
 type VersionFile struct {
 	FileFiddler
@@ -134,12 +143,19 @@ func (v *VersionFile) LazyInit() {
 
 func (v *VersionFile) Version() (version []byte, err error) {
 	v.LazyInit()
-	return v.ReadSegment()
+	version, err = v.ReadSegment()
+	if err != nil {
+		err = fmt.Errorf("While getting version from %+q: %v", v.File.Name(), err)
+	}
+	return
 }
 
 func (v *VersionFile) SetVersion(b []byte) (err error) {
 	v.LazyInit()
-	return v.OverwriteSegment(b)
+	if err = v.OverwriteSegment(b); err != nil {
+		err = fmt.Errorf("While setting new version (%+q) in %+q: %v", b, v.File.Name(), err)
+	}
+	return
 }
 
 var ReModuleFileVersion = regexp.MustCompile(`go ([^\s]+)\n`)
@@ -169,18 +185,18 @@ func do() (err error) {
 	if fix {
 		fileMode = os.O_RDWR
 	}
-	vff, err := os.OpenFile(version_file, fileMode, 0o777)
+	vff, err := os.OpenFile(module_bazel, fileMode, 0o777)
 	if err != nil {
-		err = fmt.Errorf("Opening version file %+q: %v", version_file, err)
+		err = fmt.Errorf("Opening version file %+q: %v", module_bazel, err)
 		return
 	}
 
 	versionFile := VersionFile{FileFiddler: FileFiddler{File: File{FileLike: vff}}}
 	defer versionFile.Close()
 
-	modf, err := os.OpenFile(module_file, fileMode, 0o777)
+	modf, err := os.OpenFile(go_module_file, fileMode, 0o777)
 	if err != nil {
-		err = fmt.Errorf("Opening module file %+q: %v", module_file, err)
+		err = fmt.Errorf("Opening go module file %+q: %v", go_module_file, err)
 		return
 	}
 
@@ -189,11 +205,13 @@ func do() (err error) {
 
 	versionFileVersion, err := versionFile.Version()
 	if err != nil {
+		err = fmt.Errorf("While getting version from bazel module: %v", err)
 		return
 	}
 
 	moduleFileVersion, err := moduleFile.Version()
 	if err != nil {
+		err = fmt.Errorf("While getting version from go module: %v", err)
 		return
 	}
 
@@ -202,12 +220,13 @@ func do() (err error) {
 	if fix && !inSync {
 		err = versionFile.OverwriteSegment(moduleFileVersion)
 		if err != nil {
+			err = fmt.Errorf("While setting bazel module version to +%q: %v", moduleFileVersion, err)
 			return
 		}
 	}
 
 	if test && !inSync {
-		return fmt.Errorf("%+q and %+q are not in sync. %+q != %+q", version_file, module_file, versionFileVersion, moduleFileVersion)
+		return fmt.Errorf("%+q and %+q are not in sync. %+q has: %+q; %+q has: %+q.", module_bazel, go_module_file, module_bazel, versionFileVersion, go_module_file, moduleFileVersion)
 	}
 
 	return

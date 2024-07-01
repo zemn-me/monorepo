@@ -116,8 +116,8 @@ native_test(
     src = "//go/cmd/version_sync",
     out = "version_sync_test.o",
     data = [
+        "MODULE.bazel",
         "go.mod",
-        "go_version.bzl",
     ],
 )
 

@@ -85,3 +85,25 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
 bazel_dep(name = "bazel_features", version = "1.13.0")
+bazel_dep(name = "rules_go", version = "0.48.1", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "gazelle", version = "0.37.0", repo_name = "bazel_gazelle")
+
+go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
+go_sdk.download(version = "1.22.2")
+use_repo(
+    go_sdk,
+    "go_toolchains",
+)
+
+go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+
+# regenerate with bazelisk mod tidy
+use_repo(
+    go_deps,
+    "co_honnef_go_tools",
+    "com_github_go_delve_delve",
+    "com_github_golang_protobuf",
+    "com_github_itchyny_gojq",
+    "org_golang_x_tools",
+)
