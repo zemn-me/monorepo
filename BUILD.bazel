@@ -188,9 +188,20 @@ alias(
     actual = "gazelle_python_manifest.update",
 )
 
+# gazelle:exclude **/node_modules
+# gazelle:exclude tsconfig.json
+
+# gazelle:js_package_file package.json :node_modules
+# gazelle:js_web_asset .json,.css,.scss
+# gazelle:js_collect_all_assets
+# gazelle:js_root
+# gazelle:map_kind js_library js_library //js:rules.bzl
+# gazelle:map_kind ts_project ts_project //ts:rules.bzl
+# gazelle:js_import_alias #root .
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
+        "@com_github_benchsci_rules_nodejs_gazelle//gazelle",
         "@rules_python_gazelle_plugin//python",
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
