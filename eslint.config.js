@@ -3,7 +3,7 @@ import js from "@eslint/js";
 import next from '@next/eslint-plugin-next';
 import * as mdx from 'eslint-plugin-mdx';
 import reactPlugin from 'eslint-plugin-react';
-import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
+import reactRecommended from 'eslint-plugin-react/configs/recommended';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from 'typescript-eslint';

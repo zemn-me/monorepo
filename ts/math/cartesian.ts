@@ -1,5 +1,5 @@
-import * as Matrix from '#root/ts/math/matrix.js';
-import { map, Vector } from '#root/ts/math/vec.js';
+import * as Matrix from '#root/ts/math/matrix';
+import { map, Vector } from '#root/ts/math/vec';
 export type Point<T extends number = number> = Matrix.Matrix<1, T>;
 export type Point2D = Point<2>;
 export type Point3D = Point<3>;
@@ -22,7 +22,7 @@ export function z(p: Point<3>): number {
 	return p[2]![0]!;
 }
 
-export { add, mul, sub } from '#root/ts/math/matrix.js';
+export { add, mul, sub } from '#root/ts/math/matrix';
 
 /**
  * For a hyperrectangle of N dimensions defined by a minimum

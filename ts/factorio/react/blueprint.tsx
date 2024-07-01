@@ -3,17 +3,17 @@ import { extent } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { z } from 'zod';
 
-import { Blueprint } from '#root/ts/factorio/blueprint.js';
-import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
+import { Blueprint } from '#root/ts/factorio/blueprint';
+import { BlueprintBook } from '#root/ts/factorio/blueprint_book';
 import {
 	MarshalBlueprintBookString,
 	MarshalBlueprintString,
 } from '#root/ts/factorio/blueprint_string.js';
-import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper.js';
-import { Color } from '#root/ts/factorio/color.js';
-import { Entity } from '#root/ts/factorio/entity.js';
-import { Tile } from '#root/ts/factorio/tile.js';
-import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
+import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
+import { Color } from '#root/ts/factorio/color';
+import { Entity } from '#root/ts/factorio/entity';
+import { Tile } from '#root/ts/factorio/tile';
+import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard';
 
 export interface RenderBlueprintProps {
 	readonly blueprint: Blueprint;

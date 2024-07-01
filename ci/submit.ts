@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { Command, Summarize } from '#root/ts/github/actions/index.js';
-import * as Stack from '#root/ts/pulumi/stack.js';
+import { Command, Summarize } from '#root/ts/github/actions/index';
+import * as Stack from '#root/ts/pulumi/stack';
 
 async function main() {
 	const stack = await Stack.production();

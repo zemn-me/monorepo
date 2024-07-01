@@ -1,7 +1,7 @@
-import * as Slots from '#root/project/cultist/slots.js';
-import * as cultist from '#root/project/cultist/types.js';
-import { isDefined } from '#root/ts/guard.js';
-import { filter, remove } from '#root/ts/iter/index.js';
+import * as Slots from '#root/project/cultist/slots';
+import * as cultist from '#root/project/cultist/types';
+import { isDefined } from '#root/ts/guard';
+import { filter, remove } from '#root/ts/iter/index';
 
 function* elementCombosForVerb(
 	verb: cultist.Verb,

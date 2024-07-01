@@ -1,15 +1,15 @@
 'use client';
 import { useId, useState } from 'react';
 
-import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
-import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
-import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint.js';
-import { Option } from '#root/ts/option.js';
-import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
-import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
-import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
-import { Err, Ok, ResultSequence } from '#root/ts/result.js';
-import { safely } from '#root/ts/safely.js';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string';
+import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint';
+import { Option } from '#root/ts/option';
+import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard';
+import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display';
+import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json';
+import { Err, Ok, ResultSequence } from '#root/ts/result';
+import { safely } from '#root/ts/safely';
 
 export function Client() {
 	const [input, setInput] = useState<Option<string>>({ [Err]: undefined });

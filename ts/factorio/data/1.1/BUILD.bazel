@@ -7,7 +7,7 @@ genrule(
     outs = ["data.ts"],
     cmd_bash = """
 		echo '/* eslint-disable */' > $@
-		echo "import { FactorioVersionData } from '#root/ts/factorio/data/1.1/types.js'" >> $@
+		echo "import { FactorioVersionData } from '#root/ts/factorio/data/1.1/types'" >> $@
 		echo 'export const data: FactorioVersionData =' >> $@
 		cat $< >> $@
 	""",

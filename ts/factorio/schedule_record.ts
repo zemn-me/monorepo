@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { WaitCondition } from '#root/ts/factorio/wait_condition.js';
+import { WaitCondition } from '#root/ts/factorio/wait_condition';
 
 export const ScheduleRecord = z.strictObject({
 	/**

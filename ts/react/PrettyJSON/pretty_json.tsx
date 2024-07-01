@@ -1,4 +1,4 @@
-import { JSONObject, JSONValue } from '#root/ts/json.js';
+import { JSONObject, JSONValue } from '#root/ts/json';
 
 export interface Props {
 	readonly value: JSONValue;

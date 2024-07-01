@@ -45,4 +45,4 @@ export const get = <L extends Language>(v: Text<L>): L => v.language;
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
 
-export { useLocale } from '#root/ts/react/lang/useLocale.js';
+export { useLocale } from '#root/ts/react/lang/useLocale';

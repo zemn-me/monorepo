@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { CircuitCondition } from '#root/ts/factorio/circuit_condition.js';
-import { Uint } from '#root/ts/factorio/uint.js';
+import { CircuitCondition } from '#root/ts/factorio/circuit_condition';
+import { Uint } from '#root/ts/factorio/uint';
 
 const WaitConditionBase = z.strictObject({
 	/**

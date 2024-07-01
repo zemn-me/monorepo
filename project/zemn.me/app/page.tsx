@@ -1,16 +1,16 @@
 import { Metadata } from 'next/types';
 
-import { Eeg } from '#root/project/zemn.me/app/eeg.js';
+import { Eeg } from '#root/project/zemn.me/app/eeg';
 import style from '#root/project/zemn.me/app/style.module.css';
-import * as bio from '#root/project/zemn.me/bio/index.js';
-import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
-import Link from '#root/project/zemn.me/components/Link/index.js';
-import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
-import { Q } from '#root/project/zemn.me/components/Q/index.js';
-import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
-import Timeline from '#root/project/zemn.me/components/timeline/index.js';
-import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
-import * as lang from '#root/ts/react/lang/index.js';
+import * as bio from '#root/project/zemn.me/bio/index';
+import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index';
+import Link from '#root/project/zemn.me/components/Link/index';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose';
+import { Q } from '#root/project/zemn.me/components/Q/index';
+import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye';
+import Timeline from '#root/project/zemn.me/components/timeline/index';
+import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo';
+import * as lang from '#root/ts/react/lang/index';
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;

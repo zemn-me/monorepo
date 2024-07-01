@@ -1,10 +1,10 @@
-import * as Camera from '#root/ts/math/camera.js';
-import * as Canvas from '#root/ts/math/canvas/index.js';
-import * as conv from '#root/ts/math/conv.js';
-import { EulerAngle } from '#root/ts/math/euler_angle.js';
-import * as Homog from '#root/ts/math/homog.js';
-import * as Matrix from '#root/ts/math/matrix.js';
-import * as Quaternion from '#root/ts/math/quaternion.js';
+import * as Camera from '#root/ts/math/camera';
+import * as Canvas from '#root/ts/math/canvas/index';
+import * as conv from '#root/ts/math/conv';
+import { EulerAngle } from '#root/ts/math/euler_angle';
+import * as Homog from '#root/ts/math/homog';
+import * as Matrix from '#root/ts/math/matrix';
+import * as Quaternion from '#root/ts/math/quaternion';
 import { map } from '#root/ts/math/vec';
 
 export class Square implements Canvas.Drawable2D {

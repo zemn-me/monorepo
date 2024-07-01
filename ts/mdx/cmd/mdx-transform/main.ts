@@ -15,8 +15,8 @@ import { SourceMapGenerator } from 'source-map';
 import { read, write } from 'to-vfile';
 import { VFile } from 'vfile';
 
-import { map } from '#root/ts/iter/index.js';
-import { zip } from '#root/ts/math/vec.js';
+import { map } from '#root/ts/iter/index';
+import { zip } from '#root/ts/math/vec';
 
 function collect(value: string, previous: string[]) {
   return previous.concat([value]);

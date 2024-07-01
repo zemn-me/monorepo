@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { Int } from '#root/ts/factorio/int.js';
-import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
+import { Int } from '#root/ts/factorio/int';
+import { ItemFilterObject } from '#root/ts/factorio/item_filter_object';
 
 export const Inventory = z.strictObject({
 	filters: z.array(ItemFilterObject),
