@@ -1,6 +1,6 @@
 load("//ts/mdx/cmd/mdx-transform:rules.bzl", "mdx_to_js")
 
 mdx_to_js(
-	name = "example",
-	srcs = [ "page.mdx" ]
+    name = "example",
+    srcs = ["page.mdx"],
 )
