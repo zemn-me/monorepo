@@ -16,13 +16,13 @@ sh_binary(
     data = [
         ":eslint",
         "//:buildifier",
+        "//bin/host/gofmt",
         "//css/lint",
-        "@go_sdk//:bin/gofmt",
     ],
     env = {
         "FIX_CSS": "$(rootpath //css/lint)",
         "FIX_BAZEL": "$(rootpath //:buildifier)",
-        "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
+        "FIX_GO": "$(rootpath //bin/host/gofmt)",
         "FIX_JS": "$(location :eslint)",
         "BAZEL_BINDIR": ".",
     },
