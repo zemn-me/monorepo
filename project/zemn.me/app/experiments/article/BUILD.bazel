@@ -7,12 +7,13 @@ mdx_files(
 )
 
 ts_project(
-    name = "article",
+    name = "page",
     srcs = ["page.tsx"],
-    visibility = ["//project/zemn.me/app/experiments:__subpackages__"],
     deps = [
-        ":test_js",
+        "//:node_modules/@types/react",
         "//:node_modules/next",
-        "//project/zemn.me/components/Article",
+        "//:node_modules/react",
+        "//project/zemn.me/components/Article:article",
+        "//project/zemn.me/components/Article:article_metadata",
     ],
 )

@@ -1,21 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "state",
-    srcs = ["index.ts"],
-    deps = [
-        ":deserialize",
-        ":op",
-        ":serialize",
-        ":state_main",
-    ],
-)
-
-ts_project(
-    name = "state_main",
     srcs = ["state.ts"],
     deps = ["//:node_modules/immutable"],
 )
@@ -24,11 +13,11 @@ ts_project(
     name = "deserialize",
     srcs = ["deserialize.ts"],
     deps = [
-        ":state_main",
+        ":state",
         "//:node_modules/immutable",
         "//project/cultist:save",
-        "//ts",
-        "//ts/iter",
+        "//ts:util",
+        "//ts/iter:index",
     ],
 )
 
@@ -36,10 +25,10 @@ ts_project(
     name = "serialize",
     srcs = ["serialize.ts"],
     deps = [
-        ":state_main",
+        ":state",
         "//project/cultist:save",
-        "//ts",
-        "//ts/iter",
+        "//ts:util",
+        "//ts/iter:index",
     ],
 )
 
@@ -47,7 +36,6 @@ ts_project(
     name = "op",
     srcs = ["op.ts"],
     deps = [
-        ":state_main",
         "//:node_modules/@types/uuid",
         "//:node_modules/immutable",
         "//:node_modules/uuid",
@@ -60,16 +48,20 @@ ts_project(
     deps = [
         ":deserialize",
         ":serialize",
-        ":state_main",
-        "//:node_modules/@types/jest",
         "//project/cultist:save",
-        "//ts",
+        "//ts:util",
     ],
 )
 
-jest_test(
-    name = "test",
-    deps = [":state_test"],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [
+        ":deserialize",
+        ":op",
+        ":serialize",
+        ":state",
+    ],
+)

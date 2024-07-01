@@ -1,42 +1,11 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
     "//ci:__subpackages__",
 ])
-
-ts_project(
-    name = "project",
-    srcs = [
-        "index.ts",
-    ],
-    deps = [
-        "//:node_modules/@types/bcryptjs",
-        "//:node_modules/@types/node",
-        "//:node_modules/bcryptjs",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
-    ],
-)
-
-ts_project(
-    name = "tests_js",
-    srcs = ["main_test.ts"],
-    deps = [
-        ":project",
-        "//:node_modules/@types/jest",
-    ],
-)
-
-jest_test(
-    name = "tests",
-    srcs = ["main_test.js"],
-    deps = [
-        ":project",
-        ":tests_js",
-    ],
-)
 
 npm_pkg(
     name = "npm_pkg",
@@ -53,3 +22,19 @@ npm_pkg(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+)
+
+ts_project(
+    name = "main_test",
+    srcs = ["main_test.ts"],
+    deps = [":index"],
+)
+
+web_assets(
+    name = "package_template_json",
+    srcs = ["package.template.json"],
+)

@@ -3,11 +3,13 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "ErrorDisplay",
+    name = "error_display",
+    srcs = ["error_display.tsx"],
     deps = [
         "//:node_modules/@types/react",
+        "//:node_modules/react",
     ],
 )
-
-bazel_lint(name = "bazel_lint")

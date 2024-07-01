@@ -1,21 +1,35 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "testing",
+    name = "blueprint_test",
+    srcs = ["blueprint_test.ts"],
     deps = [
-        "//:node_modules/@types/d3-array",
-        "//:node_modules/@types/d3-scale",
-        "//:node_modules/@types/jest",
-        "//:node_modules/d3-array",
-        "//:node_modules/d3-scale",
-        "//:node_modules/zod",
-        "//ts/factorio",
-        "//ts/math/canvas/braille",
+        ":render_to_braille",
+        "//ts/factorio:blueprint",
+        "//ts/factorio:blueprint_string",
+        "//ts/factorio:blueprint_wrapper",
+        "//ts/factorio/testing/data:allOilsRefinery",
+        "//ts/factorio/testing/data:bigAssMall",
+        "//ts/factorio/testing/data:neoVortexTrainStations",
+        "//ts/factorio/testing/data:powerBook",
+        "//ts/factorio/testing/data:starterBase",
     ],
 )
 
-jest_test(
-    name = "tests",
-    srcs = ["blueprint_test.js"],
-    deps = [":testing"],
+ts_project(
+    name = "render_to_braille",
+    srcs = ["render_to_braille.ts"],
+    data = [
+        "//:node_modules/d3-array",
+        "//:node_modules/zod",
+    ],
+    deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
+        "//:node_modules/zod",
+        "//ts/factorio:blueprint",
+        "//ts/math/canvas/braille",
+    ],
 )

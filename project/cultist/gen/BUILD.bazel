@@ -1,21 +1,12 @@
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_binary", "js_library", "js_run_binary")
+load("//js:rules.bzl", "js_binary", "js_run_binary")
 load("//project/cultist/gen:copy_to_local.bzl", "copy_to_local")
-load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
     "//project/cultist:__subpackages__",
 ])
-
-ts_project(
-    name = "gen",
-    srcs = ["collate_game_core.ts"],
-    deps = [
-        "//:node_modules/@types/node",
-    ],
-)
 
 js_binary(
     name = "collate_game_core",
@@ -23,11 +14,6 @@ js_binary(
         ":gen",
     ],
     entry_point = "collate_game_core.js",
-)
-
-js_library(
-    name = "core_en_project",
-    srcs = ["core_en.json"],
 )
 
 copy_to_local(

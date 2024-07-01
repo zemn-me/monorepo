@@ -1,28 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
-load("//ts:rules.bzl", "jest_test", "ts_project")
-
-ts_project(
-    name = "ci",
-    deps = [
-        "//:node_modules/@actions/github",
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@commander-js/extra-typings",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/commander",
-        "//:node_modules/mime",
-        "//ts",
-        "//ts/github/actions",
-        "//ts/pulumi:pulumi_ts",
-    ],
-)
-
-jest_test(
-    name = "tests",
-    srcs = ["bazel_test.js"],
-    deps = [":ci"],
-)
+load("//ts:rules.bzl", "ts_project")
 
 js_binary(
     name = "presubmit",
@@ -65,3 +43,15 @@ js_binary(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "bazel",
+    srcs = ["bazel.ts"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+ts_project(
+    name = "bazel_test",
+    srcs = ["bazel_test.ts"],
+    deps = [":bazel"],
+)

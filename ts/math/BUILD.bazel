@@ -1,25 +1,112 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "math",
-    srcs = glob(["*.ts"]),
-    deps = [
-        "//:node_modules/@types/jest",
-        "//ts",
-        "//ts/iter",
-    ],
-)
-
-jest_test(
-    name = "test",
-    srcs = [
-        "camera_test.js",
-        "math_test.js",
-    ],
-    deps = [":math"],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "camera",
+    srcs = ["camera.ts"],
+    deps = [
+        ":homog",
+        ":matrix",
+    ],
+)
+
+ts_project(
+    name = "camera_test",
+    srcs = ["camera_test.ts"],
+    deps = [":camera"],
+)
+
+ts_project(
+    name = "cartesian",
+    srcs = ["cartesian.ts"],
+    deps = [
+        ":matrix",
+        ":vec",
+    ],
+)
+
+ts_project(
+    name = "conv",
+    srcs = ["conv.ts"],
+    deps = [
+        ":cartesian",
+        ":euler_angle",
+        ":quaternion",
+    ],
+)
+
+ts_project(
+    name = "conv_test",
+    srcs = ["conv_test.ts"],
+    deps = [
+        ":cartesian",
+        ":euler_angle",
+        ":quaternion",
+    ],
+)
+
+ts_project(
+    name = "degree",
+    srcs = ["degree.ts"],
+)
+
+ts_project(
+    name = "euler_angle",
+    srcs = ["euler_angle.ts"],
+)
+
+ts_project(
+    name = "homog",
+    srcs = ["homog.ts"],
+    deps = [
+        ":cartesian",
+        ":matrix",
+    ],
+)
+
+ts_project(
+    name = "math_test",
+    srcs = ["math_test.ts"],
+    deps = [
+        ":cartesian",
+        ":matrix",
+        ":vec",
+    ],
+)
+
+ts_project(
+    name = "matrix",
+    srcs = ["matrix.ts"],
+    deps = [":vec"],
+)
+
+ts_project(
+    name = "quaternion",
+    srcs = ["quaternion.ts"],
+)
+
+ts_project(
+    name = "quaternion_test",
+    srcs = ["quaternion_test.ts"],
+    deps = [":quaternion"],
+)
+
+ts_project(
+    name = "scale",
+    srcs = ["scale.ts"],
+)
+
+ts_project(
+    name = "tuple",
+    srcs = ["tuple.ts"],
+)
+
+ts_project(
+    name = "vec",
+    srcs = ["vec.ts"],
+    deps = ["//ts:tuple"],
+)

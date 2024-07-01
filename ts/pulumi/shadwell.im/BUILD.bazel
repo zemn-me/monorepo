@@ -3,18 +3,16 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "shadwell.im",
-    data = [
-        "//ts/pulumi/shadwell.im/anna:next",
-        "//ts/pulumi/shadwell.im/kate:next",
-        "//ts/pulumi/shadwell.im/lucy:next",
-        "//ts/pulumi/shadwell.im/luke:next",
-    ],
+    name = "index",
+    srcs = ["index.ts"],
+    data = ["//:node_modules/@pulumi/aws"],
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
-        "//ts/pulumi/lib",
+        "//ts/pulumi/lib:tags",
+        "//ts/pulumi/lib:website",
     ],
 )
-
-bazel_lint(name = "bazel_lint")

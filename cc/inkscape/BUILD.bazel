@@ -14,15 +14,6 @@ copy_to_local(
     out_dir = "app_image_local",
 )
 
-ts_project(
-    name = "inkscape_wrapper",
-    srcs = ["run.ts"],
-    data = [":app_image_local"],
-    deps = [
-        "//:node_modules/@types/node",
-    ],
-)
-
 js_binary(
     name = "inkscape",
     data = [
@@ -34,3 +25,9 @@ js_binary(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "run",
+    srcs = ["run.ts"],
+    deps = ["//:node_modules/@types/node"],
+)

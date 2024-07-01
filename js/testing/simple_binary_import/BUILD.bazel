@@ -8,10 +8,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "simple_binary_import",
-)
-
 # Executing a binary in a genrule
 
 js_binary(
@@ -35,3 +31,14 @@ diff_test(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "lib",
+    srcs = ["lib.ts"],
+)
+
+ts_project(
+    name = "main",
+    srcs = ["main.ts"],
+    deps = [":lib"],
+)

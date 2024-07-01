@@ -1,6 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_binary")
-load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -18,11 +17,6 @@ genrule(
     $(location :testing) >> $@
     """,
     tools = [":testing"],
-)
-
-ts_project(
-    name = "output_ts",
-    srcs = ["output.ts"],
 )
 
 bazel_lint(name = "bazel_lint")

@@ -11,11 +11,8 @@ ts_project(
     ],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@bazel/runfiles",
         "//:node_modules/@schemastore/package",
-        "//:node_modules/@types/node",
         "//:node_modules/commander",
-        "//ts",
         "//ts/constants",
     ],
 )

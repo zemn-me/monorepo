@@ -13,12 +13,9 @@ genrule(
 	""",
 )
 
-ts_project(
-    name = "1.1",
-    srcs = [
-        "data.ts",
-        "types.ts",
-    ],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "types",
+    srcs = ["types.ts"],
+)

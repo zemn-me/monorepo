@@ -1,20 +1,481 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "factorio",
-    visibility = [
-        "//:__subpackages__",
-    ],
+    name = "arithmetic_combinator_parameters",
+    srcs = ["arithmetic_combinator_parameters.ts"],
+    data = ["//:node_modules/zod"],
     deps = [
-        "//:node_modules/@types/pako",
-        "//:node_modules/base64-js",
-        "//:node_modules/pako",
+        ":int",
+        ":signal_id",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/iter",
-        "//ts/math",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "base",
+    srcs = ["base.ts"],
+    deps = [":uint"],
+)
+
+ts_project(
+    name = "blueprint",
+    srcs = ["blueprint.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":color",
+        ":entity",
+        ":icon",
+        ":int",
+        ":position",
+        ":schedule",
+        ":tile",
+        "//:node_modules/zod",
+        "//ts/iter:index",
+        "//ts/math:matrix",
+        "//ts/math:tuple",
+    ],
+)
+
+ts_project(
+    name = "blueprint_book",
+    srcs = ["blueprint_book.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":base",
+        ":blueprint",
+        ":color",
+        ":deconstruction_planner",
+        ":int",
+        ":signal_id",
+        ":uint",
+        ":upgrade_planner",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "blueprint_string",
+    srcs = ["blueprint_string.ts"],
+    data = [
+        "//:node_modules/pako",
+        "//:node_modules/zod",
+    ],
+    deps = [
+        ":blueprint",
+        ":blueprint_book",
+        ":blueprint_wrapper",
+        "//:node_modules/@types/pako",
+        "//:node_modules/pako",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "blueprint_wrapper",
+    srcs = ["blueprint_wrapper.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":blueprint",
+        ":blueprint_book",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "circuit_condition",
+    srcs = ["circuit_condition.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":comparator_string",
+        ":int",
+        ":signal_id",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "color",
+    srcs = ["color.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":float",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "comparator_string",
+    srcs = ["comparator_string.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "connection",
+    srcs = ["connection.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":connection_data",
+        ":connection_point",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "connection_data",
+    srcs = ["connection_data.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":entity_number",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "connection_point",
+    srcs = ["connection_point.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":connection_data",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "constant_combinator_parameters",
+    srcs = ["constant_combinator_parameters.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":int",
+        ":signal_id",
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "control_behavior",
+    srcs = ["control_behavior.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":arithmetic_combinator_parameters",
+        ":circuit_condition",
+        ":constant_combinator_parameters",
+        ":decider_combinator_parameters",
+        ":int",
+        ":programmable_speaker_circuit_parameters",
+        ":signal_id",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "decider_combinator_parameters",
+    srcs = ["decider_combinator_parameters.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":comparator_string",
+        ":int",
+        ":signal_id",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "deconstruction_planner",
+    srcs = ["deconstruction_planner.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":item_filter_object",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "defines,",
+    srcs = ["defines,.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "entity",
+    srcs = ["entity.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":color",
+        ":connection",
+        ":control_behavior",
+        ":entity_number",
+        ":float",
+        ":infinty_settings",
+        ":int",
+        ":inventory",
+        ":item_filter_object",
+        ":item_request_object",
+        ":logistic_filter",
+        ":position",
+        ":speaker_alert_parameter",
+        ":speaker_parameter",
+        ":tags",
+        ":uint8",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "entity_number",
+    srcs = ["entity_number.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":base",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "float",
+    srcs = ["float.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "icon",
+    srcs = ["icon.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":int",
+        ":signal_id",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "infinity_filter",
+    srcs = ["infinity_filter.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":int",
+        ":item_count_type",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "infinty_settings",
+    srcs = ["infinty_settings.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":infinity_filter",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "int",
+    srcs = ["int.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "inventory",
+    srcs = ["inventory.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":int",
+        ":item_filter_object",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "item_count_type",
+    srcs = ["item_count_type.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":uint32",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "item_filter_object",
+    srcs = ["item_filter_object.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":int",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "item_request_object",
+    srcs = ["item_request_object.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":item_count_type",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "item_stack_index",
+    srcs = ["item_stack_index.ts"],
+    deps = [":uint16"],
+)
+
+ts_project(
+    name = "logistic_filter",
+    srcs = ["logistic_filter.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":base",
+        ":item_count_type",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "position",
+    srcs = ["position.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "programmable_speaker_circuit_parameters",
+    srcs = ["programmable_speaker_circuit_parameters.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "schedule",
+    srcs = ["schedule.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":entity_number",
+        ":schedule_record",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "schedule_record",
+    srcs = ["schedule_record.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":wait_condition",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "signal_id",
+    srcs = ["signal_id.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "speaker_alert_parameter",
+    srcs = ["speaker_alert_parameter.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":signal_id",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "speaker_parameter",
+    srcs = ["speaker_parameter.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":float",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "tags",
+    srcs = ["tags.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "tile",
+    srcs = ["tile.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":position",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "uint",
+    srcs = ["uint.ts"],
+    data = ["//:node_modules/zod"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "uint16",
+    srcs = ["uint16.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "uint32",
+    srcs = ["uint32.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "uint8",
+    srcs = ["uint8.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "upgrade_planner",
+    srcs = ["upgrade_planner.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":item_filter_object",
+        "//:node_modules/zod",
+    ],
+)
+
+ts_project(
+    name = "wait_condition",
+    srcs = ["wait_condition.ts"],
+    data = ["//:node_modules/zod"],
+    deps = [
+        ":circuit_condition",
+        ":uint",
+        "//:node_modules/zod",
+    ],
+)

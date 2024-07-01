@@ -1,28 +1,17 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "url",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
-    deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/react",
-    ],
-)
-
-jest_test(
-    name = "url_test",
-    srcs = ["url_test.js"],
-    jsdom = True,
-    deps = [":url"],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+)
+
+ts_project(
+    name = "url_test",
+    srcs = ["url_test.ts"],
+    deps = [":index"],
+)

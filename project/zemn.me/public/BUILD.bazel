@@ -1,6 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
-load("//js:rules.bzl", "js_library")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
@@ -19,11 +18,6 @@ transcode_web(
     out_base_name = "kenwood_snow",
 )
 
-js_library(
-    name = "files",
-    srcs = ["wallpaper.jpg"],
-)
-
 ts_project(
     name = "kenwood",
     srcs = ["kenwood.ts"],
@@ -32,9 +26,6 @@ ts_project(
         "kenwood.webm",
         "kenwood.ogv",
         "kenwood.jpg",
-    ],
-    deps = [
-        "//:base_defs",  # one day this should probably be separate for next.js
     ],
 )
 
@@ -46,9 +37,6 @@ ts_project(
         "kenwood_snow.webm",
         "kenwood_snow.ogv",
         "kenwood_snow.jpg",
-    ],
-    deps = [
-        "//:base_defs",  # one day this should probably be separate for next.js
     ],
 )
 

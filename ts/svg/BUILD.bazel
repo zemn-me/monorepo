@@ -3,23 +3,29 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "svg",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
+    name = "index",
+    srcs = ["index.tsx"],
     deps = [
-        "//:node_modules/@types/d3-axis",
-        "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
-        "//:node_modules/d3-axis",
-        "//:node_modules/d3-scale",
         "//:node_modules/react",
-        "//ts",
-        "//ts/math",
+        "//ts/math:vec",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "scale",
+    srcs = ["scale.tsx"],
+    deps = [
+        ":index",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/react",
+        "//:node_modules/d3-scale",
+        "//:node_modules/react",
+        "//ts:guard",
+        "//ts/math:matrix",
+        "//ts/math:vec",
+    ],
+)

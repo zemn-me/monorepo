@@ -1,18 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "space",
-    srcs = [
-        "shape.ts",
-        "space.ts",
-    ],
-    deps = [
-        "//ts/iter",
-        "//ts/math",
-    ],
+    srcs = ["space.ts"],
+    deps = ["//ts/iter:index"],
 )
 
 ts_project(
@@ -21,15 +15,22 @@ ts_project(
         "space_test.ts",
     ],
     deps = [
-        ":space",
-        "//:node_modules/@types/jest",
-        "//ts/math/space/render",
+        ":shape",
+        "//ts/math:cartesian",
+        "//ts/math:conv",
+        "//ts/math:degree",
+        "//ts/math:euler_angle",
+        "//ts/math/space/render:braille",
     ],
 )
 
-jest_test(
-    name = "test",
-    data = [":space_test"],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "shape",
+    srcs = ["shape.ts"],
+    deps = [
+        "//ts/math:cartesian",
+        "//ts/math:vec",
+    ],
+)

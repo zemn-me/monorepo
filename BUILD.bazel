@@ -1,3 +1,5 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
+
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
@@ -17,7 +19,7 @@ load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
-load("//ts:rules.bzl", "ts_config")
+load("//ts:rules.bzl", "ts_config", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -46,11 +48,6 @@ buildifier(
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-)
-
-js_library(
-    name = "base_defs",
-    srcs = ["Global.d.ts"],
 )
 
 exports_files(
@@ -123,28 +120,6 @@ sh_binary(
     },
     deps = [
         "@bazel_tools//tools/bash/runfiles",
-    ],
-)
-
-js_library(
-    name = "eslintrc",
-    srcs = [
-        ":eslint.config.js",
-        "//:editorconfig",
-        "//:package_json",
-        "//:prettierrc",
-        "//:tsconfig",
-    ],
-    deps = [
-        "//:node_modules/@eslint/compat",
-        "//:node_modules/@eslint/js",
-        "//:node_modules/@next/eslint-plugin-next",
-        "//:node_modules/eslint-mdx",
-        "//:node_modules/eslint-plugin-mdx",
-        "//:node_modules/eslint-plugin-react",
-        "//:node_modules/eslint-plugin-react-hooks",
-        "//:node_modules/eslint-plugin-simple-import-sort",
-        "//:node_modules/typescript-eslint",
     ],
 )
 
@@ -233,3 +208,129 @@ gazelle(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "Global.d",
+    srcs = ["Global.d.ts"],
+)
+
+js_library(
+    name = "babel.config",
+    srcs = ["babel.config.js"],
+)
+
+js_library(
+    name = "eslint.config",
+    srcs = ["eslint.config.js"],
+    data = [
+        "//:node_modules/@eslint/compat",
+        "//:node_modules/@eslint/js",
+        "//:node_modules/@next/eslint-plugin-next",
+        "//:node_modules/eslint-plugin-mdx",
+        "//:node_modules/eslint-plugin-react-hooks",
+        "//:node_modules/typescript-eslint",
+    ],
+    deps = [
+        "//:node_modules/@eslint/compat",
+        "//:node_modules/@eslint/js",
+        "//:node_modules/@next/eslint-plugin-next",
+        "//:node_modules/eslint-plugin-mdx",
+        "//:node_modules/eslint-plugin-react",
+        "//:node_modules/eslint-plugin-react-hooks",
+        "//:node_modules/eslint-plugin-simple-import-sort",
+        "//:node_modules/typescript-eslint",
+    ],
+)
+
+web_assets(
+    name = "_bazel_fix_commands_json",
+    srcs = [".bazel_fix_commands.json"],
+)
+
+web_assets(
+    name = "_prettierrc_json",
+    srcs = [".prettierrc.json"],
+)
+
+web_assets(
+    name = "_swcrc_json",
+    srcs = [".swcrc.json"],
+)
+
+web_assets(
+    name = "cargo-bazel-lock_json",
+    srcs = ["cargo-bazel-lock.json"],
+)
+
+web_assets(
+    name = "jsx_tsconfig_json",
+    srcs = ["jsx.tsconfig.json"],
+)
+
+web_assets(
+    name = "node_tsconfig_json",
+    srcs = ["node.tsconfig.json"],
+)
+
+web_assets(
+    name = "renovate_json",
+    srcs = ["renovate.json"],
+)
+
+web_assets(
+    name = "rust-project_json",
+    srcs = ["rust-project.json"],
+)
+
+web_assets(
+    name = "all_assets",
+    srcs = [
+        "//:_bazel_fix_commands_json",
+        "//:_prettierrc_json",
+        "//:_swcrc_json",
+        "//:cargo-bazel-lock_json",
+        "//:jsx_tsconfig_json",
+        "//:node_tsconfig_json",
+        "//:renovate_json",
+        "//:rust-project_json",
+        "//.vscode:extensions_json",
+        "//.vscode:settings_json",
+        "//.vscode:tasks_json",
+        "//css/lint:stylelint-config_json",
+        "//project/ck3/base_game:log_settings_debug_json",
+        "//project/ck3/base_game:log_settings_live_json",
+        "//project/ck3/base_game:log_settings_release_json",
+        "//project/ck3/base_game:manifest_json",
+        "//project/ck3/base_game:mask_painter_meta_json",
+        "//project/ck3/base_game/common/achievements:msgrdk_achievements_json",
+        "//project/ck3/base_game/tools:texture_converter_settings_json",
+        "//project/ck3/base_game/tools/mapeditor:auto_nudger_settings_json",
+        "//project/ck3/base_game/tools/mapeditor:nudger_settings_json",
+        "//project/ck3/base_game/tools/mapeditor/mask_painter:mask_painter_meta_json",
+        "//project/cultist/react:table_module_css",
+        "//project/linear2/features/elements/garamond:index_css",
+        "//project/linear2/features/elements/timeline:style_module_css",
+        "//project/zemn.me/app:base_css",
+        "//project/zemn.me/app:not-found_module_css",
+        "//project/zemn.me/app:style_module_css",
+        "//project/zemn.me/app/experiments/cultist:Home_module_css",
+        "//project/zemn.me/app/experiments/cultist:globals_css",
+        "//project/zemn.me/app/experiments/emoji/flag:style_module_css",
+        "//project/zemn.me/components/Article:style_module_css",
+        "//project/zemn.me/components/DividerHeading:index_module_css",
+        "//project/zemn.me/components/Glade:style_module_css",
+        "//project/zemn.me/components/HeroVideo:style_module_css",
+        "//project/zemn.me/components/Prose:prose_module_css",
+        "//project/zemn.me/components/SectionLink:SectionLink_module_css",
+        "//project/zemn.me/components/TimeEye:TimeEye_module_css",
+        "//project/zemn.me/components/ZemnmezLogo:ZemnmezLogo_module_css",
+        "//project/zemn.me/components/timeline:timeline_module_css",
+        "//ts/cmd/svgshot:package_template_json",
+        "//ts/do-sync:package_template_json",
+        "//ts/knowitwhenyouseeit:package_template_json",
+        "//ts/math/scale:tsconfig_json",
+        "//ts/pulumi/pleaseintroducemetoyour.dog/app:base_css",
+        "//ts/pulumi/zemn.me/availability/pages:base_css",
+        "//ts/react/element/loading:loading_module_css",
+    ],
+)
