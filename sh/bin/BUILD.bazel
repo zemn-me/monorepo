@@ -3,6 +3,11 @@ load("//bzl:rules.bzl", "bazel_lint")
 package(default_visibility = ["//:__subpackages__"])
 
 alias(
+    name = "gazelle",
+    actual = "//:gazelle",
+)
+
+alias(
     name = "dlv",
     actual = "@com_github_go_delve_delve//cmd/dlv",
 )
@@ -15,6 +20,11 @@ alias(
 alias(
     name = "gofmt",
     actual = "//bin/host/gofmt",
+)
+
+alias(
+    name = "ruff",
+    actual = "//bin/host/ruff",
 )
 
 alias(
