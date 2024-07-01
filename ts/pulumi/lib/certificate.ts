@@ -1,8 +1,8 @@
 import * as aws from '@pulumi/aws';
-import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index';
 import * as pulumi from '@pulumi/pulumi';
 
-import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags';
 
 const second = 1;
 const minute = 60 * second;

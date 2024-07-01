@@ -1,10 +1,10 @@
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "article",
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "page",
+    srcs = ["page.tsx"],
     deps = [
-        "//project/zemn.me/app/article/2014/csp",
-        "//project/zemn.me/app/article/2019/cors",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
     ],
 )

@@ -3,16 +3,14 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "elements",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
+    name = "index",
+    srcs = ["index.tsx"],
     deps = [
-        "//ts/react/element/link",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts/react/element/link:index",
     ],
 )
-
-bazel_lint(name = "bazel_lint")

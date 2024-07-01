@@ -3,19 +3,21 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "canvas",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
+    name = "element",
+    srcs = ["element.tsx"],
     deps = [
-        "//:node_modules/@types/jest",
+        ":index",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//ts/math",
+        "//ts/math:homog",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = ["//ts/math:homog"],
+)

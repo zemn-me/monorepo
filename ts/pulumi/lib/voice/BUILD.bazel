@@ -2,11 +2,12 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "voice",
+    srcs = ["voice.ts"],
+    data = ["//:node_modules/@pulumi/random"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/random",
-        "//:node_modules/@types/node",
-        "//ts/pulumi/lib",
+        "//ts/pulumi/lib:tags",
     ],
 )

@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//project/ck3:__subpackages__"])
@@ -13,3 +14,28 @@ filegroup(
 exports_files(glob(["**/*"]))
 
 bazel_lint(name = "bazel_lint")
+
+web_assets(
+    name = "log_settings_debug_json",
+    srcs = ["log_settings_debug.json"],
+)
+
+web_assets(
+    name = "log_settings_live_json",
+    srcs = ["log_settings_live.json"],
+)
+
+web_assets(
+    name = "log_settings_release_json",
+    srcs = ["log_settings_release.json"],
+)
+
+web_assets(
+    name = "manifest_json",
+    srcs = ["manifest.json"],
+)
+
+web_assets(
+    name = "mask_painter_meta_json",
+    srcs = ["mask_painter_meta.json"],
+)

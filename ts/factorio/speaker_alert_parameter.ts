@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { SignalID } from '#root/ts/factorio/signal_id';
 
 export const SpeakerAlertParameter = z.strictObject({
 	show_alert: z.boolean(),

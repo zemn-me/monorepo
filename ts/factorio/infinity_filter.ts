@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { Int } from '#root/ts/factorio/int.js';
-import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
+import { Int } from '#root/ts/factorio/int';
+import { ItemCountType } from '#root/ts/factorio/item_count_type';
 
 export const InfinityFilter = z.strictObject({
 	/**

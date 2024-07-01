@@ -9,7 +9,7 @@ import {
 	Input,
 } from '@pulumi/pulumi';
 
-import { Err, Ok, Result } from '#root/ts/result.js';
+import { Err, Ok, Result } from '#root/ts/result';
 
 interface ActionBase {
 	Identifier: string;

@@ -1,20 +1,13 @@
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "factorio",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "page",
+    srcs = ["page.tsx"],
     deps = [
+        "//:node_modules/@types/react",
         "//:node_modules/next",
-        "//project/zemn.me/app/experiments/factorio/blueprint/book",
-        "//project/zemn.me/components",
-        "//ts/constants",
-        "//ts/factorio",
-        "//ts/factorio/react",
-        "//ts/react/ErrorDisplay",
-        "//ts/react/PrettyJSON",
+        "//:node_modules/react",
+        "//project/zemn.me/components/Link:index",
+        "//project/zemn.me/components/Prose:prose",
     ],
 )

@@ -1,6 +1,6 @@
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types/index';
 
-import { DogsOfTheDay } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/daily/client.js';
+import { DogsOfTheDay } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/daily/client';
 
 export default function Page() {
 	return <DogsOfTheDay />;

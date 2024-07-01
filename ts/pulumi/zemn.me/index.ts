@@ -1,8 +1,8 @@
-import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index';
 import * as Pulumi from '@pulumi/pulumi';
 
-import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags';
+import Website from '#root/ts/pulumi/lib/website';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;

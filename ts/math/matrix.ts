@@ -1,5 +1,5 @@
-import { Vector } from '#root/ts/math/vec.js';
-import * as vec from '#root/ts/math/vec.js';
+import { Vector } from '#root/ts/math/vec';
+import * as vec from '#root/ts/math/vec';
 
 // J is effectively the number of ROWS and I is the number of COLUMNS
 export type Matrix<

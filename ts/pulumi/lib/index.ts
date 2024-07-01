@@ -1,8 +1,8 @@
 import * as aws from '@pulumi/aws';
 
-import * as iter from '#root/ts/iter/index.js';
-export * as file from '#root/ts/pulumi/lib/file.js';
-export * as path from '#root/ts/pulumi/lib/path.js';
+import * as iter from '#root/ts/iter/index';
+export * as file from '#root/ts/pulumi/lib/file';
+export * as path from '#root/ts/pulumi/lib/path';
 
 /**
  * Trim a prefix from some strings, potentially asynchronously.

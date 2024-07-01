@@ -1,19 +1,24 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "HeroVideo",
-    assets = glob([
-        "**/*.css",
-    ]),
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "hero_video",
+    srcs = ["hero_video.tsx"],
+    data = [":style_module_css"],
     deps = [
-        "//:base_defs",
+        "//:node_modules/@types/react",
         "//:node_modules/classnames",
-        "//project/zemn.me/assets/kenwood",
+        "//:node_modules/react",
+        "//project/zemn.me/assets/kenwood:index",
         "//project/zemn.me/assets/kenwood_snow",
-        "//ts/react/Video",
+        "//ts/react/Video:video",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+web_assets(
+    name = "style_module_css",
+    srcs = ["style.module.css"],
+)

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Float } from '#root/ts/factorio/float.js';
+import { Float } from '#root/ts/factorio/float';
 
 const colour = Float.refine(n => n >= 0 && n <= 1, {
 	message: 'colour must be between 0 and 1',

@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -10,6 +11,21 @@ ts_project(
         "*.tsx",
     ]),
     resolve_json_module = True,
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    data = ["//ts/react/element/loading:loading.tsx"],
+)
+
+web_assets(
+    name = "loading_module_css",
+    srcs = ["loading.module.css"],
+)

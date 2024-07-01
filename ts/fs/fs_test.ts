@@ -1,5 +1,5 @@
-import * as fs from '#root/ts/fs/index.js';
-import * as iter from '#root/ts/iter/index.js';
+import * as fs from '#root/ts/fs/index';
+import * as iter from '#root/ts/iter/index';
 
 describe('fs', () => {
 	describe('walk', () => {

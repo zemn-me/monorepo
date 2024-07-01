@@ -7,7 +7,7 @@ import {
 	ContactFlowAction,
 	ContactFlowLanguage,
 } from '#root/ts/pulumi/lib/contact_flow.js';
-import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags';
 
 export interface Args {
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;

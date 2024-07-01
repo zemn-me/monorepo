@@ -1,6 +1,6 @@
 import { Metadata } from 'next/types';
 
-import Link from '#root/project/zemn.me/components/Link/index.js';
+import Link from '#root/project/zemn.me/components/Link/index';
 
 export function ExperimentsNav() {
 	return (

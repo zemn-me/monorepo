@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 
-import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
-import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
+import * as kenwood from '#root/project/zemn.me/assets/kenwood/index';
+import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow';
 import style from '#root/project/zemn.me/components/HeroVideo/style.module.css';
-import { Video } from '#root/ts/react/Video/video.js';
+import { Video } from '#root/ts/react/Video/video';
 
 
 /**

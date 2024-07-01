@@ -2,9 +2,9 @@
 import { Fragment, useState } from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/emoji/flag/style.module.css';
-import Link from '#root/project/zemn.me/components/Link/index.js';
-import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
-import { Q } from '#root/project/zemn.me/components/Q/index.js';
+import Link from '#root/project/zemn.me/components/Link/index';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose';
+import { Q } from '#root/project/zemn.me/components/Q/index';
 
 interface CodePointReferenceProps {
 	readonly children: string;

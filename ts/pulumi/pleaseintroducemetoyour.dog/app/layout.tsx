@@ -1,6 +1,6 @@
 import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
 
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types/index';
 import { ReactNode } from 'react';
 
 import {
@@ -8,7 +8,7 @@ import {
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
 } from '#root/ts/next.js/index.js';
-import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
+import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,

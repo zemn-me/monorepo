@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { Int } from '#root/ts/factorio/int.js';
-import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { Int } from '#root/ts/factorio/int';
+import { SignalID } from '#root/ts/factorio/signal_id';
 
 export const ArithmeticCombinatorParameters = z.strictObject({
 	/**

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Position } from '#root/ts/factorio/position.js';
+import { Position } from '#root/ts/factorio/position';
 
 export const Tile = z.strictObject({
 	/**

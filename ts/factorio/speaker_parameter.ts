@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Float } from '#root/ts/factorio/float.js';
+import { Float } from '#root/ts/factorio/float';
 
 export const SpeakerParameter = z.strictObject({
 	playback_volume: Float,
