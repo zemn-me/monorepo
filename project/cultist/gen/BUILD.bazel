@@ -48,10 +48,7 @@ js_run_binary(
 proto_library(
     name = "core_proto",
     srcs = ["core.proto"],
-    deps = [
-        "//project/cultist/proto:cultist_proto",
-        "@com_google_protobuf//:struct_proto",
-    ],
+    deps = ["//project/cultist/proto:cultist_proto"],
 )
 
 py_proto_library(
