@@ -105,16 +105,21 @@ const cmd = new Command('presubmit')
 				)
 			);
 		}
-		// test if Gazelle etc would update any of our files.
-		// I think (and this would be preferable) it might be possible
-		// to move this into a bazel test that depends on every single bzl file.
-		//
-		// I am not sure exactly how this would work, however, as you cannot query
-		// for all files at once in a genrule.
-		await new Promise<void>((ok, error) =>
+
+		// this is placed first since it builds everything in parallel
+		// so serial operations coming after take 0 time to build.
+		if (!o.skipBazelTests) {
+			await Task('Run all bazel tests.')(
+				Bazel.Bazel(cwd, 'test', '//...', '--keep_going')
+			);
+			// perform all the normal tests
+		}
+
+
+		await Task('check if we might need to run go.mod')(new Promise<void>((ok, error) =>
 			child_process
 				.spawn(
-					'bazel',
+					'bazelisk',
 					[
 						'run',
 						'--tool_tag=presubmit',
@@ -139,9 +144,9 @@ const cmd = new Command('presubmit')
 								)
 							)
 				)
-		);
+		));
 
-		await new Promise<void>((ok, error) =>
+		await Task("Gazelle repos")(new Promise<void>((ok, error) =>
 			child_process
 				.spawn(
 					'bazelisk',
@@ -166,9 +171,9 @@ const cmd = new Command('presubmit')
 								)
 							)
 				)
-		);
+		));
 
-		await new Promise<void>((ok, error) =>
+		await Task("Gazelle")(new Promise<void>((ok, error) =>
 			child_process
 				.spawn(
 					'bazelisk',
@@ -177,6 +182,8 @@ const cmd = new Command('presubmit')
 						'//:gazelle',
 						'--tool_tag=presubmit',
 						'--',
+						'--mode',
+						'print',
 						'--strict',
 					],
 					{
@@ -193,14 +200,9 @@ const cmd = new Command('presubmit')
 								)
 							)
 				)
-		);
+		));
 
-		if (!o.skipBazelTests) {
-			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going')
-			);
-			// perform all the normal tests
-		}
+
 
 		// attempt a deploy of pulumi to staging, and tear it down.
 		if (!o.skipPulumiDeploy) {
