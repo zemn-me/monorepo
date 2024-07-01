@@ -1,6 +1,6 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//go:rules.bzl", "go_test")
+load("//py:rules.bzl", "py_test")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 go_test(
