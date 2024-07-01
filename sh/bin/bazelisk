@@ -1,2 +1,13 @@
 #!/usr/bin/env bash
-npx @bazel/bazelisk "${@}"
+
+if command -v bazelisk > /dev/null; then
+	bazelisk "${@}"
+else
+	echo "Bazelisk doesn't seem to be in your path --"
+	echo "falling back to trying npx."
+	echo ""
+	echo ""
+	echo "npx is slow, consider installing bazelisk."
+	npx @bazel/bazelisk "${@}"
+fi
+
