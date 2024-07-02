@@ -35,7 +35,10 @@
 				"bazel",
 				"gomod",
 				"pip-compile",
-				"pip_requirements"
+				"pip_requirements",
+				"bazel",
+				"bazel-module",
+				"bazelisk"
 			],
 			"postUpgradeTasks": {
 				"commands": [
