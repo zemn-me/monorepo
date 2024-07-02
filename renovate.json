@@ -26,7 +26,7 @@
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
 		"rm -rf dist",
-		"bazel mod deps --lockfile_mode=update"
+		"npx --yes @bazel/bazelisk run mod deps --lockfile_mode=update"
 	],
 	"packageRules": [
 		{
@@ -45,7 +45,7 @@
 					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
 					"rm -rf dist",
-					"bazel mod deps --lockfile_mode=update"
+					"npx --yes @bazel/bazelisk run mod deps --lockfile_mode=update"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
