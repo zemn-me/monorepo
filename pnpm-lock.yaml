@@ -57,8 +57,8 @@ dependencies:
     specifier: 3.0.8
     version: 3.0.8
   '@types/selenium-webdriver':
-    specifier: 4.1.22
-    version: 4.1.22
+    specifier: 4.1.24
+    version: 4.1.24
   '@types/serve-handler':
     specifier: 6.1.4
     version: 6.1.4
@@ -123,8 +123,8 @@ dependencies:
     specifier: 3.0.5
     version: 3.0.5
   selenium-webdriver:
-    specifier: 4.21.0
-    version: 4.21.0
+    specifier: 4.22.0
+    version: 4.22.0
   serve-handler:
     specifier: 6.1.5
     version: 6.1.5
@@ -6710,9 +6710,10 @@ packages:
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
     dev: false
 
-  /@types/selenium-webdriver@4.1.22:
-    resolution: {integrity: sha512-MCL4l7q8dwxejr2Q2NXLyNwHWMPdlWE0Kpn6fFwJtvkJF7PTkG5jkvbH/X1IAAQxgt/L1dA8u2GtDeekvSKvOA==}
+  /@types/selenium-webdriver@4.1.24:
+    resolution: {integrity: sha512-oR5MVATv+P2dmhceZJPDm99MmOC9yAK8YpIgJbHEFQ/MbSPC1lA6Ohw441WNUcQ6B1fMAOMu0u59fRKKj9AGGg==}
     dependencies:
+      '@types/node': 20.14.9
       '@types/ws': 8.5.10
     dev: false
 
@@ -16649,8 +16650,8 @@ packages:
     resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
-  /selenium-webdriver@4.21.0:
-    resolution: {integrity: sha512-WaEJHZjOWNth1QG5FEpxpREER0qptZBMonFU6GtAqdCNLJVxbtC3E7oS/I/+Q1sf1W032Wg0Ebk+m46lANOXyQ==}
+  /selenium-webdriver@4.22.0:
+    resolution: {integrity: sha512-GNbrkCHmy249ai885wgXqTfqL2lZnclUH/P8pwTDIqzyFxU3YhDiN7p/c9tMFA4NhgRdEBO2QCG+CWmG7xr/Mw==}
     engines: {node: '>= 14.21.0'}
     dependencies:
       jszip: 3.10.1
