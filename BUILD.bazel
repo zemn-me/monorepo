@@ -17,6 +17,7 @@ load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
+load("//json:rules.bzl", "json_files")
 load("//ts:rules.bzl", "ts_config")
 
 package(default_visibility = [":__subpackages__"])
@@ -219,6 +220,11 @@ gazelle(
     name = "gazelle",
     command = "fix",
     gazelle = ":gazelle_bin",
+)
+
+json_files(
+    name = "renovate_config",
+    srcs = ["renovate.json"],
 )
 
 bazel_lint(name = "bazel_lint")
