@@ -1,4 +1,4 @@
-import { Err, Ok, Result } from '#root/ts/result.js';
+import { Err, Ok, Result } from '#root/ts/result';
 
 export class SafelyError extends Error {
 	constructor(cause: unknown) {

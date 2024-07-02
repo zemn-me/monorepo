@@ -4,11 +4,6 @@ load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/pulumi/lib/docker:rules.bzl", "ecr_image")
 
-ts_project(
-    name = "ts_main",
-    srcs = ["main.ts"],
-)
-
 # make an npm_package that node can resolve (work-around for https://github.com/aspect-build/bazel-lib/issues/797)
 npm_package(
     name = "main_bin_npm",
@@ -31,4 +26,9 @@ ecr_image(
 
 bazel_lint(
     name = "bazel_lint",
+)
+
+ts_project(
+    name = "main",
+    srcs = ["main.ts"],
 )

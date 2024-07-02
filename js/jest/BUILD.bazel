@@ -10,9 +10,6 @@ ts_project(
     name = "jest_reporter",
     srcs = ["jest_reporter.ts"],
     visibility = ["//visibility:public"],
-    deps = [
-        "//:node_modules/@types/node",
-    ],
 )
 
 bazel_lint(name = "bazel_lint")

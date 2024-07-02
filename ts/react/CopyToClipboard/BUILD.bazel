@@ -5,10 +5,11 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "CopyToClipboard",
+    srcs = ["CopyToClipboard.tsx"],
+    data = ["//:node_modules/@tanstack/react-query"],
     deps = [
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-query",
         "//:node_modules/react",
     ],
 )

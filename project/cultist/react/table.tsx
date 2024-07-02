@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
-import * as State from '#root/project/cultist/state/index.js';
-import { map } from '#root/ts/iter/index.js';
+import * as State from '#root/project/cultist/state/index';
+import { map } from '#root/ts/iter/index';
 // stubbed out because IDK how to fix style issues right now.
 //import style from './table.module.css';
 

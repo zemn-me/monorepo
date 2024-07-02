@@ -3,31 +3,29 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
-ts_project(
-    name = "bad_files",
-    srcs = [
-        "bigEntitiesListThatMakesTypescriptSad.ts",
-        "myBlueprints.ts",
-    ],
-    lint = False,
-)
-
-ts_project(
-    name = "book",
-    srcs = [
-        "page.tsx",
-    ],
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    deps = [
-        ":bad_files",
-        "//:node_modules/@types/react",
-        "//project/zemn.me/components",
-        "//ts/factorio",
-        "//ts/factorio/react",
-    ],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "bigEntitiesListThatMakesTypescriptSad",
+    srcs = ["bigEntitiesListThatMakesTypescriptSad.ts"],
+)
+
+ts_project(
+    name = "myBlueprints",
+    srcs = ["myBlueprints.ts"],
+    deps = [
+        ":bigEntitiesListThatMakesTypescriptSad",
+        "//ts/factorio:blueprint_wrapper",
+    ],
+)
+
+ts_project(
+    name = "page",
+    srcs = ["page.tsx"],
+    deps = [
+        ":myBlueprints",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts/factorio/react:blueprint",
+    ],
+)

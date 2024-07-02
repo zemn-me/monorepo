@@ -1,4 +1,4 @@
-import * as log from '#root/ts/log/log.js';
+import * as log from '#root/ts/log/log';
 
 class MockConsole
 	implements Pick<typeof window.console, 'error' | 'log' | 'info'>

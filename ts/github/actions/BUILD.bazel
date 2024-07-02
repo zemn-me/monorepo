@@ -1,12 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "actions",
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "//:node_modules/@types/node",
-    ],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = ["//:node_modules/@types/node"],
+)

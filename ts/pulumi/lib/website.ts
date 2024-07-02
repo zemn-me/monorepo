@@ -2,14 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import * as aws from '@pulumi/aws';
-import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
 
-import * as guard from '#root/ts/guard.js';
-import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
-import Certificate from '#root/ts/pulumi/lib/certificate.js';
-import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
+import * as guard from '#root/ts/guard';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName';
+import Certificate from '#root/ts/pulumi/lib/certificate';
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags';
 
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),

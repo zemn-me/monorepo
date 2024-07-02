@@ -1,22 +1,24 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "fs",
+    name = "fs_test",
+    srcs = ["fs_test.ts"],
     deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//ts/iter",
+        ":index",
+        "//ts/iter:index",
     ],
 )
 
-jest_test(
-    name = "tests",
-    srcs = ["fs_test.js"],
-    data = glob(["testfiles/**/*"]),
-    deps = [":fs"],
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//ts/iter:index",
+    ],
 )
-
-bazel_lint(name = "bazel_lint")

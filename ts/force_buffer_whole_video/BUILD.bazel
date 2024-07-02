@@ -3,6 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "force_buffer_whole_video",
+    srcs = ["force_buffer_whole_video.ts"],
 )
 
 bazel_lint(name = "bazel_lint")

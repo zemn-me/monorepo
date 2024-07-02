@@ -1,30 +1,46 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "app",
-    assets = [
-        "base.css",
-    ],
+    name = "clientProviders",
+    srcs = ["clientProviders.tsx"],
+    data = ["//:node_modules/@tanstack/react-query"],
     deps = [
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/react",
-        "//:node_modules/classnames",
-        "//:node_modules/mime",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/zod",
-        "//project/zemn.me/components",
-        "//ts",
-        "//ts/next.js",
-        "//ts/react/Video",
-        "//ts/reddit",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "layout",
+    srcs = ["layout.tsx"],
+    deps = [
+        ":base_css",
+        ":clientProviders",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "page",
+    srcs = ["page.tsx"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//project/zemn.me/components/Link",
+    ],
+)
+
+web_assets(
+    name = "base_css",
+    srcs = ["base.css"],
+)

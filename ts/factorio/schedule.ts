@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { EntityNumber } from '#root/ts/factorio/entity_number.js';
-import { ScheduleRecord } from '#root/ts/factorio/schedule_record.js';
+import { EntityNumber } from '#root/ts/factorio/entity_number';
+import { ScheduleRecord } from '#root/ts/factorio/schedule_record';
 
 export const Schedule = z.strictObject({
 	/**

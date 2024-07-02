@@ -1,19 +1,43 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "Article",
-    assets = ["style.module.css"],
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "article",
+    srcs = ["article.tsx"],
+    data = [":style_module_css"],
     deps = [
-        "//:base_defs",
-        "//:node_modules/@types/node",
+        ":article_types",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
-        "//ts/react/lang",
-        "//ts/time",
+        "//:node_modules/react",
+        "//ts/react/lang:date",
+        "//ts/time:date",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "article_metadata",
+    srcs = ["article_metadata.tsx"],
+    deps = [
+        ":article_types",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "article_types",
+    srcs = ["article_types.tsx"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+web_assets(
+    name = "style_module_css",
+    srcs = ["style.module.css"],
+)

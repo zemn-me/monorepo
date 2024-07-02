@@ -1,30 +1,14 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
-
-ts_project(
-    name = "cultist",
-    srcs = ["index.ts"],
-    deps = [
-        ":action",
-        ":element",
-        ":history",
-        ":recipe",
-        ":types",
-        ":verb",
-        "//:node_modules/@types/uuid",
-        "//:node_modules/immutable",
-        "//project/cultist/state",
-    ],
-)
 
 ts_project(
     name = "element",
     srcs = ["element.ts"],
     deps = [
-        "//project/cultist/state",
-        "//ts/iter",
+        "//project/cultist/state:index",
+        "//ts/iter:index",
     ],
 )
 
@@ -41,42 +25,6 @@ ts_project(
         ":aspects",
         ":types",
         ":verb",
-    ],
-)
-
-ts_project(
-    name = "save_tests",
-    srcs = ["save_test.ts"],
-    deps = [
-        ":save",
-        "//:node_modules/@types/jest",
-        "//project/cultist/example",
-    ],
-)
-
-jest_test(
-    name = "save_test",
-    srcs = ["save_test.js"],
-    deps = [":save_tests"],
-)
-
-ts_project(
-    name = "action_tests",
-    srcs = ["action_test.ts"],
-    deps = [
-        "element",
-        ":action",
-        "//:node_modules/@types/jest",
-        "//project/cultist/state",
-    ],
-)
-
-jest_test(
-    name = "action_test",
-    srcs = ["action_test.js"],
-    deps = [
-        ":action_tests",
-        "//:node_modules/@types/jest",
     ],
 )
 
@@ -101,8 +49,8 @@ ts_project(
     deps = [
         ":slots",
         ":types",
-        "//ts",
-        "//ts/iter",
+        "//ts:guard",
+        "//ts/iter:index",
     ],
 )
 
@@ -111,7 +59,9 @@ ts_project(
     srcs = ["action.ts"],
     deps = [
         ":types",
-        "//project/cultist/state",
+        "//:node_modules/immutable",
+        "//project/cultist/state:index",
+        "//ts/iter:index",
     ],
 )
 
@@ -126,3 +76,48 @@ ts_project(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "action_test",
+    srcs = ["action_test.ts"],
+    deps = [
+        ":action",
+        ":element",
+        "//:node_modules/immutable",
+        "//project/cultist/state:index",
+    ],
+)
+
+ts_project(
+    name = "element_test",
+    srcs = ["element_test.ts"],
+    deps = [
+        ":index",
+        "//:node_modules/immutable",
+    ],
+)
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [
+        ":action",
+        ":aspects",
+        ":element",
+        ":recipe",
+        ":save",
+        ":slots",
+        ":types",
+        ":verb",
+        "//project/cultist/state:index",
+    ],
+)
+
+ts_project(
+    name = "save_test",
+    srcs = ["save_test.ts"],
+    deps = [
+        ":save",
+        "//project/cultist/example:savestate",
+    ],
+)

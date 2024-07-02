@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { Int } from '#root/ts/factorio/int.js';
-import { SignalID } from '#root/ts/factorio/signal_id.js';
-import { Uint } from '#root/ts/factorio/uint.js';
+import { Int } from '#root/ts/factorio/int';
+import { SignalID } from '#root/ts/factorio/signal_id';
+import { Uint } from '#root/ts/factorio/uint';
 
 export const ConstantCombinatorParameters = z.strictObject({
 	signal: SignalID,

@@ -3,8 +3,57 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "ts",
+    name = "errors",
+    srcs = ["errors.ts"],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "guard",
+    srcs = ["guard.ts"],
+)
+
+ts_project(
+    name = "guards",
+    srcs = ["guards.ts"],
+    deps = [":errors"],
+)
+
+ts_project(
+    name = "json",
+    srcs = ["json.ts"],
+)
+
+ts_project(
+    name = "option",
+    srcs = ["option.ts"],
+    deps = [":result"],
+)
+
+ts_project(
+    name = "result",
+    srcs = ["result.ts"],
+)
+
+ts_project(
+    name = "safely",
+    srcs = ["safely.ts"],
+    deps = [":result"],
+)
+
+ts_project(
+    name = "tree",
+    srcs = ["tree.ts"],
+)
+
+ts_project(
+    name = "tuple",
+    srcs = ["tuple.ts"],
+)
+
+ts_project(
+    name = "util",
+    srcs = ["util.ts"],
+)

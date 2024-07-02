@@ -1,6 +1,6 @@
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types/index';
 
-import { Client } from '#root/project/zemn.me/app/experiments/factorio/blueprint/request/client.js';
+import { Client } from '#root/project/zemn.me/app/experiments/factorio/blueprint/request/client';
 
 export default function () {
 	return <Client />;

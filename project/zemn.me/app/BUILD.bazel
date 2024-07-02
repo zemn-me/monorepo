@@ -1,34 +1,86 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "app",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "eeg",
+    srcs = ["eeg.tsx"],
     deps = [
-        "//:node_modules/@types/d3-array",
-        "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
-        "//:node_modules/d3-array",
-        "//:node_modules/d3-scale",
-        "//:node_modules/immutable",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "layout",
+    srcs = ["layout.tsx"],
+    deps = [
+        ":base_css",
+        ":providers",
+        "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
-        "//project/zemn.me/app/article",
-        "//project/zemn.me/app/experiments",
-        "//project/zemn.me/bio",
-        "//project/zemn.me/components",
-        "//project/zemn.me/components/Glade",
-        "//project/zemn.me/components/TimeEye",
-        "//project/zemn.me/components/ZemnmezLogo",
-        "//ts/iter",
-        "//ts/next.js",
-        "//ts/next.js/component/Redirect",
-        "//ts/react/CopyToClipboard",
-        "//ts/react/ErrorDisplay",
-        "//ts/react/PrettyJSON",
-        "//ts/react/lang",
+        "//project/zemn.me/bio:index",
+        "//project/zemn.me/components/Glade:glade",
+        "//ts/next.js:index",
+        "//ts/react/lang:index",
     ],
+)
+
+ts_project(
+    name = "not-found",
+    srcs = ["not-found.tsx"],
+    data = [":not-found_module_css"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "page",
+    srcs = ["page.tsx"],
+    data = [
+        ":style_module_css",
+        "//project/zemn.me/components/ZemnmezLogo:ZemnmezLogo.tsx",
+    ],
+    deps = [
+        ":eeg",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//project/zemn.me/bio:index",
+        "//project/zemn.me/components/DividerHeading:index",
+        "//project/zemn.me/components/Link:index",
+        "//project/zemn.me/components/Prose:prose",
+        "//project/zemn.me/components/Q:index",
+        "//project/zemn.me/components/TimeEye",
+        "//project/zemn.me/components/timeline:index",
+        "//ts/react/lang:index",
+    ],
+)
+
+ts_project(
+    name = "providers",
+    srcs = ["providers.tsx"],
+    data = ["//:node_modules/@tanstack/react-query"],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+web_assets(
+    name = "base_css",
+    srcs = ["base.css"],
+)
+
+web_assets(
+    name = "not-found_module_css",
+    srcs = ["not-found.module.css"],
+)
+
+web_assets(
+    name = "style_module_css",
+    srcs = ["style.module.css"],
 )

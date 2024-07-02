@@ -1,19 +1,36 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "cultist",
-    visibility = [
-        "//project/zemn.me:__subpackages__",
-    ],
+    name = "client",
+    srcs = ["client.tsx"],
     deps = [
-        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
         "//:node_modules/react",
         "//project/cultist:save",
-        "//project/cultist/example",
-        "//project/cultist/react",
-        "//project/cultist/state",
+        "//project/cultist/example:savestate",
+        "//project/cultist/react:table",
+        "//project/cultist/state:index",
     ],
+)
+
+ts_project(
+    name = "page",
+    srcs = ["page.tsx"],
+    deps = [
+        ":client",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+    ],
+)
+
+web_assets(
+    name = "Home_module_css",
+    srcs = ["Home.module.css"],
+)
+
+web_assets(
+    name = "globals_css",
+    srcs = ["globals.css"],
 )

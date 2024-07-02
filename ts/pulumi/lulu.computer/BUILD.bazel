@@ -16,30 +16,16 @@ alias(
     actual = ":dev",
 )
 
-ts_project(
-    name = "next_ts",
-    srcs = glob([
-        "app/*.tsx",
-        "app/*.ts",
-    ]),
-    assets = glob(["app/*.css"]),
-    deps = [
-        "//:node_modules/@types/react",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts/next.js",
-    ],
-)
+bazel_lint(name = "bazel_lint")
 
 ts_project(
-    name = "pulumi_ts",
+    name = "index",
     srcs = ["index.ts"],
-    data = [":next"],
+    data = ["//:node_modules/@pulumi/aws"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
-        "//ts/pulumi/lib",
+        "//ts/pulumi/lib:tags",
+        "//ts/pulumi/lib:website",
     ],
 )
-
-bazel_lint(name = "bazel_lint")

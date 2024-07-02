@@ -3,6 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "constants",
+    srcs = ["constants.ts"],
     visibility = ["//:__subpackages__"],
 )
 

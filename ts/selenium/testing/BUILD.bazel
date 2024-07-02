@@ -1,20 +1,15 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
-
-ts_project(
-    name = "tests",
-    deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/selenium-webdriver",
-        "//:node_modules/selenium-webdriver",
-        "//ts/selenium",
-    ],
-)
-
-jest_test(
-    name = "_tests",
-    srcs = ["webdriver_test.js"],
-    deps = [":tests"],
-)
+load("//ts:rules.bzl", "ts_project")
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "webdriver_test",
+    srcs = ["webdriver_test.ts"],
+    data = ["//:node_modules/selenium-webdriver"],
+    deps = [
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/selenium-webdriver",
+        "//ts/selenium:webdriver",
+    ],
+)

@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-elements */
 'use client';
-import { useMediaQuery } from "#root/ts/react/useMediaQuery/useMediaQuery.js"
+import { useMediaQuery } from "#root/ts/react/useMediaQuery/useMediaQuery"
 
 type BaseVideoProps = JSX.IntrinsicElements["video"]
 

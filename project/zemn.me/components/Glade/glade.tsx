@@ -2,14 +2,14 @@
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
-import * as bio from '#root/project/zemn.me/bio/index.js';
-import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
+import * as bio from '#root/project/zemn.me/bio/index';
+import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index';
 import style from '#root/project/zemn.me/components/Glade/style.module.css';
-import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video.js';
-import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
-import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
-import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
-import * as lang from '#root/ts/react/lang/index.js';
+import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video';
+import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index';
+import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo';
+import { repoFirstCommitYear } from '#root/ts/constants/constants';
+import * as lang from '#root/ts/react/lang/index';
 
 /*
 function ZemnmezLogoInline() {

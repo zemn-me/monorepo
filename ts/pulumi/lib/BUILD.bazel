@@ -9,22 +9,90 @@ test_sectxt(
     srcs = ["security.txt"],
 )
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "lib",
-    data = ["security.txt"],
+    name = "bucketName",
+    srcs = ["bucketName.ts"],
+)
+
+ts_project(
+    name = "certificate",
+    srcs = ["certificate.ts"],
+    data = ["//:node_modules/@pulumi/aws"],
     deps = [
-        "//:node_modules/@bazel/runfiles",
+        ":tags",
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/mime",
-        "//:node_modules/@types/react",
-        "//:node_modules/mime",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts",
-        "//ts/iter",
-        "//ts/next.js",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "contact_flow",
+    srcs = ["contact_flow.ts"],
+    data = ["//:node_modules/@pulumi/aws"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//ts:result",
+    ],
+)
+
+ts_project(
+    name = "file",
+    srcs = ["file.ts"],
+    deps = [
+        ":path",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [
+        ":file",
+        ":path",
+        "//:node_modules/@pulumi/aws",
+        "//ts/iter:index",
+    ],
+)
+
+ts_project(
+    name = "path",
+    srcs = ["path.ts"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "s3Uri",
+    srcs = ["s3Uri.ts"],
+    deps = ["//:node_modules/@pulumi/pulumi"],
+)
+
+ts_project(
+    name = "tags",
+    srcs = ["tags.ts"],
+    deps = ["//:node_modules/@pulumi/pulumi"],
+)
+
+ts_project(
+    name = "website",
+    srcs = ["website.ts"],
+    data = ["//:node_modules/@pulumi/aws"],
+    deps = [
+        ":bucketName",
+        ":certificate",
+        ":tags",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/mime",
+        "//:node_modules/@types/node",
+        "//:node_modules/mime",
+        "//ts:guard",
+    ],
+)

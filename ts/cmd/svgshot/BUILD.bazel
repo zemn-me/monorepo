@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -5,37 +6,6 @@ package(default_visibility = [
     "//ci:__subpackages__",
     "//ts/cmd/svgshot:__subpackages__",
 ])
-
-ts_project(
-    name = "project",
-    srcs = [
-        "index.ts",
-        "lib.ts",
-        "run.ts",
-    ],
-    deps = [
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/tmp",
-        "//:node_modules/commander",
-        "//:node_modules/devtools-protocol",  # transitive dependency that weirdly needs to be installed
-        "//:node_modules/puppeteer",
-        "//:node_modules/svgo",
-        "//:node_modules/tmp",
-    ],
-)
-
-ts_project(
-    name = "tests_js",
-    srcs = ["svgshot_test.ts"],
-    deps = [
-        ":project",
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/tmp",
-        "//:node_modules/tmp",
-    ],
-)
 
 # needs reworking
 # jest_test(
@@ -53,3 +23,44 @@ filegroup(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [":lib"],
+)
+
+ts_project(
+    name = "lib",
+    srcs = ["lib.ts"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/svgo",
+        "//:node_modules/@types/tmp",
+        "//:node_modules/commander",
+        "//:node_modules/puppeteer",
+        "//:node_modules/svgo",
+        "//:node_modules/tmp",
+    ],
+)
+
+ts_project(
+    name = "run",
+    srcs = ["run.ts"],
+    deps = [":lib"],
+)
+
+ts_project(
+    name = "svgshot_test",
+    srcs = ["svgshot_test.ts"],
+    deps = [
+        ":lib",
+        "//:node_modules/@types/tmp",
+        "//:node_modules/tmp",
+    ],
+)
+
+web_assets(
+    name = "package_template_json",
+    srcs = ["package.template.json"],
+)

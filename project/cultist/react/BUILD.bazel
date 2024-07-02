@@ -1,25 +1,33 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "react",
-    srcs = [
-        "index.tsx",
-        "table.tsx",
-    ],
-    assets = [
-        "table.module.css",
-    ],
-    resolve_json_module = True,
+    name = "index",
+    srcs = ["index.tsx"],
     deps = [
-        "//:base_defs",
-        "//:node_modules/@types/d3-scale",
+        ":table",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//project/cultist/state",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "table",
+    srcs = ["table.tsx"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/cultist/state:index",
+        "//ts/iter:index",
+    ],
+)
+
+web_assets(
+    name = "table_module_css",
+    srcs = ["table.module.css"],
+)

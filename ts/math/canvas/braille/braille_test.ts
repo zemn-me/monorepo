@@ -4,7 +4,7 @@ import {
 	plot,
 	plot2D,
 	subdivide,
-} from '#root/ts/math/canvas/braille/braille.js';
+} from '#root/ts/math/canvas/braille/braille';
 
 // this rule seems to be sus in this context
 /* eslint array-element-newline: "off" */

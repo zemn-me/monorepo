@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -12,10 +13,25 @@ DEPS = [
     "//:node_modules/@types/node",
 ]
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "do-sync",
-    srcs = glob(["**/*.ts"]),
-    deps = DEPS,
+    name = "doSync",
+    srcs = ["doSync.ts"],
+    deps = [
+        "//:node_modules/@types/cross-spawn",
+        "//:node_modules/@types/node",
+        "//:node_modules/cross-spawn",
+    ],
 )
 
-bazel_lint(name = "bazel_lint")
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [":doSync"],
+)
+
+web_assets(
+    name = "package_template_json",
+    srcs = ["package.template.json"],
+)

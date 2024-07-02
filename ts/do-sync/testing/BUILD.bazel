@@ -6,18 +6,6 @@ package(default_visibility = [
     "//ts/cmd/do-sync:__subpackages__",
 ])
 
-ts_project(
-    name = "project",
-    srcs = glob(["**/*.ts"]),
-    deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/sharp",
-        "//:node_modules/sharp",
-        "//ts/do-sync",
-    ],
-)
-
 # system needs reworking
 # jest_test(
 #     name = "tests",
@@ -25,3 +13,13 @@ ts_project(
 #     deps = [":project"],
 # )
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "doSync_test",
+    srcs = ["doSync_test.ts"],
+    deps = [
+        "//:node_modules/@types/sharp",
+        "//:node_modules/sharp",
+        "//ts/do-sync:index",
+    ],
+)

@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "a",
@@ -12,19 +12,10 @@ ts_project(
     srcs = ["b.ts"],
 )
 
-ts_project(
-    name = "import_test_js",
-    srcs = ["import_test.ts"],
-    deps = [
-        ":a",
-        "//:node_modules/@types/jest",
-    ],
-)
+bazel_lint(name = "bazel_lint")
 
-jest_test(
+ts_project(
     name = "import_test",
-    srcs = ["import_test.js"],
+    srcs = ["import_test.ts"],
     deps = [":a"],
 )
-
-bazel_lint(name = "bazel_lint")

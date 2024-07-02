@@ -1,6 +1,6 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("@npm//:stylelint/package_json.bzl", stylelint = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -22,15 +22,9 @@ exports_files([
     "stylelint-config.json",
 ])
 
-js_library(
-    name = "stylelint_config",
-    srcs = ["stylelint-config.json"],
-    data = [":stylelint_bin"],
-    deps = [
-        "//:node_modules/stylelint-config-css-modules",
-        "//:node_modules/stylelint-config-recommended",
-        "//:node_modules/stylelint-config-standard",
-    ],
-)
-
 bazel_lint(name = "bazel_lint")
+
+web_assets(
+    name = "stylelint-config_json",
+    srcs = ["stylelint-config.json"],
+)

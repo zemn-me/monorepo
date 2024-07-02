@@ -4,17 +4,6 @@ load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//visibility:public"])
 
-ts_project(
-    name = "ts",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    deps = [
-        "//project/zemn.me/app",
-    ],
-)
-
 next_project(
     name = "next",
     srcs = [
@@ -29,3 +18,8 @@ alias(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+)

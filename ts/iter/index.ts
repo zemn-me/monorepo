@@ -1,5 +1,5 @@
- 
-export * as dict from '#root/ts/iter/dict.js';
+
+export * as dict from '#root/ts/iter/dict';
 
 /**
  * Flatten nested iterables into a single iterable.

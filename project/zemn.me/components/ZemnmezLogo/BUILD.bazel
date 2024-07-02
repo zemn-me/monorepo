@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -10,15 +11,24 @@ ts_project(
     assets = glob([
         "**/*.css",
     ]),
+    data = [":ZemnmezLogo_module_css"],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//:base_defs",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
-        "//:node_modules/react-router-dom",
     ],
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    data = ["//project/zemn.me/components/ZemnmezLogo:ZemnmezLogo.tsx"],
+)
+
+web_assets(
+    name = "ZemnmezLogo_module_css",
+    srcs = ["ZemnmezLogo.module.css"],
+)

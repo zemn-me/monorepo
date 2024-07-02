@@ -1,25 +1,30 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "Glade",
-    assets = ["style.module.css"],
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "glade",
+    srcs = ["glade.tsx"],
+    data = [
+        ":style_module_css",
+        "//project/zemn.me/components/ZemnmezLogo:ZemnmezLogo.tsx",
+    ],
     deps = [
-        "//:base_defs",
-        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
         "//:node_modules/next",
-        "//project/zemn.me/bio",
-        "//project/zemn.me/components",
-        "//project/zemn.me/components/HeroVideo",
-        "//project/zemn.me/components/TimeEye",
-        "//project/zemn.me/components/ZemnmezLogo",
+        "//:node_modules/react",
+        "//project/zemn.me/bio:index",
+        "//project/zemn.me/components/DividerHeading:index",
+        "//project/zemn.me/components/HeroVideo:hero_video",
+        "//project/zemn.me/components/TimeEye:index",
         "//ts/constants",
-        "//ts/react/lang",
-        "//ts/time",
+        "//ts/react/lang:index",
     ],
 )
 
-bazel_lint(name = "bazel_lint")
+web_assets(
+    name = "style_module_css",
+    srcs = ["style.module.css"],
+)

@@ -1,28 +1,27 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
+bazel_lint(name = "bazel_lint")
+
 ts_project(
-    name = "scale",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
+    name = "index",
+    srcs = ["index.ts"],
     deps = [
-        "//:node_modules/@types/jest",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//ts",
     ],
 )
 
-jest_test(
-    name = "tests",
-    srcs = ["scale_test.js"],
-    jsdom = True,
-    deps = [":scale"],
+ts_project(
+    name = "scale_test",
+    srcs = ["scale_test.ts"],
+    deps = [":index"],
 )
 
-bazel_lint(name = "bazel_lint")
+web_assets(
+    name = "tsconfig_json",
+    srcs = ["tsconfig.json"],
+)

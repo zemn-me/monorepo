@@ -1,3 +1,4 @@
+load("@com_github_benchsci_rules_nodejs_gazelle//:defs.bzl", "web_assets")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -5,9 +6,10 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "TimeEye",
+    srcs = ["TimeEye.tsx"],
     assets = ["TimeEye.module.css"],
+    data = [":TimeEye_module_css"],
     deps = [
-        "//:base_defs",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
@@ -15,3 +17,14 @@ ts_project(
 )
 
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "index",
+    srcs = ["index.ts"],
+    deps = [":TimeEye"],
+)
+
+web_assets(
+    name = "TimeEye_module_css",
+    srcs = ["TimeEye.module.css"],
+)

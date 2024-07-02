@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -8,34 +8,24 @@ ts_project(
     srcs = [
         "braille.ts",
     ],
+    data = ["//:node_modules/d3-array"],
     deps = [
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/d3-array",
         "//:node_modules/d3-scale",
-        "//:node_modules/react",
         "//ts/math/space",
     ],
 )
 
-ts_project(
-    name = "braille_test_ts",
-    srcs = [
-        "braille_test.ts",
-    ],
-    deps = [
-        ":braille",
-        "//:node_modules/@types/jest",
-        "//ts/math",
-    ],
-)
-
-jest_test(
-    name = "test",
-    srcs = [
-        "braille_test.js",
-    ],
-    deps = [":braille"],
-)
-
 bazel_lint(name = "bazel_lint")
+
+ts_project(
+    name = "braille_test",
+    srcs = ["braille_test.ts"],
+    data = ["//:node_modules/d3-array"],
+    deps = [
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/d3-array",
+    ],
+)
