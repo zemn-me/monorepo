@@ -33,7 +33,9 @@
 			"matchManagers": [
 				"cargo",
 				"bazel",
-				"gomod"
+				"gomod",
+				"pip-compile",
+				"pip_requirements"
 			],
 			"postUpgradeTasks": {
 				"commands": [
@@ -51,7 +53,7 @@
 					"go.mod",
 					"MODULE.bazel",
 					"MODULE.bazel.lock",
-					"gazelle_python.yaml"
+					"gazelle_python.yaml",
 				],
 				"recreateWhen": "always"
 			}
