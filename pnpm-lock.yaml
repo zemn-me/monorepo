@@ -90,8 +90,8 @@ dependencies:
     specifier: 6.0.7
     version: 6.0.7(glob@8.1.0)
   jscpd:
-    specifier: 4.0.4
-    version: 4.0.4
+    specifier: 4.0.5
+    version: 4.0.5
   json-schema-to-typescript:
     specifier: 14.1.0
     version: 14.1.0
@@ -12349,8 +12349,8 @@ packages:
       node-sarif-builder: 2.0.3
     dev: false
 
-  /jscpd@4.0.4:
-    resolution: {integrity: sha512-tmcB7uQPYzdIwc03Z7ngWCD3vrJ96B88kaAh86f9dQ7dz1Cikj29t9Lu8kzFf1NIyhdm1MMP8HHIAXUx0L9EhQ==}
+  /jscpd@4.0.5:
+    resolution: {integrity: sha512-AzJlSLvKtXYkQm93DKE1cRN3rf6pkpv3fm5TVuvECwoqljQlCM/56ujHn9xPcE7wyUnH5+yHr7tcTiveIoMBoQ==}
     hasBin: true
     dependencies:
       '@jscpd/core': 4.0.1
@@ -17259,6 +17259,7 @@ packages:
 
   /string_decoder@1.3.0:
     resolution: {integrity: sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==}
+    requiresBuild: true
     dependencies:
       safe-buffer: 5.2.1
 
