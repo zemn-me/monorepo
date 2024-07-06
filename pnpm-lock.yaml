@@ -317,8 +317,8 @@ devDependencies:
     specifier: 24.1.0
     version: 24.1.0
   mime:
-    specifier: 4.0.3
-    version: 4.0.3
+    specifier: 4.0.4
+    version: 4.0.4
   minimist:
     specifier: 1.2.8
     version: 1.2.8
@@ -6617,7 +6617,7 @@ packages:
     resolution: {integrity: sha512-5eEkJZ/BLvTE3vXGKkWlyTSUVZuzj23Wj8PoyOq2lt5I3CYbiLBOPb3XmCW6QcuOibIUE6emHXHt9E/F/rCa6w==}
     deprecated: This is a stub types definition. mime provides its own type definitions, so you do not need this installed.
     dependencies:
-      mime: 4.0.3
+      mime: 4.0.4
     dev: true
 
   /@types/minimatch@5.1.2:
@@ -14012,8 +14012,8 @@ packages:
     engines: {node: '>=4.0.0'}
     hasBin: true
 
-  /mime@4.0.3:
-    resolution: {integrity: sha512-KgUb15Oorc0NEKPbvfa0wRU+PItIEZmiv+pyAO2i0oTIVTJhlzMclU7w4RXWQrSOVH5ax/p/CkIO7KI4OyFJTQ==}
+  /mime@4.0.4:
+    resolution: {integrity: sha512-v8yqInVjhXyqP6+Kw4fV3ZzeMRqEW6FotRsKXjRS5VMTNIuXsdRoAvklpoRgSqXm6o9VNH4/C0mgedko9DdLsQ==}
     engines: {node: '>=16'}
     hasBin: true
     dev: true
