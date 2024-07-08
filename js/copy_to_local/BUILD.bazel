@@ -1,4 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
 
 # this just defines this file as a package!
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "copy_to_local.bzl",
+    ],
+)

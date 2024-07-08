@@ -9,4 +9,7 @@ bump_on_change_test(
     version_lock = "version.lock",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

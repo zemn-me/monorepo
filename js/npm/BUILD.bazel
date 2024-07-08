@@ -1,4 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
 
 # Nothing exported here. Yet!
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)

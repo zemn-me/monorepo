@@ -222,4 +222,10 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "MODULE.bazel",
+    ],
+)

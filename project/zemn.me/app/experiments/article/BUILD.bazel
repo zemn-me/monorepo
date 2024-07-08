@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//mdx:rules.bzl", "mdx_files")
 load("//ts:rules.bzl", "ts_project")
 
@@ -15,4 +16,9 @@ ts_project(
         "//:node_modules/next",
         "//project/zemn.me/components/Article",
     ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

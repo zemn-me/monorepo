@@ -6,4 +6,7 @@ csv_lint_test(
     srcs = ["test_out.csv"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_library")
 
 py_library(
@@ -12,4 +13,12 @@ py_library(
 exports_files(
     glob(["**/*"]),
     visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
 )

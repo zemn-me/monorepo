@@ -15,4 +15,7 @@ alias(
     actual = ":dev",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

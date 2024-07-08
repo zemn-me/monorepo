@@ -7,4 +7,10 @@ mdx_files(
     visibility = ["//:__subpackages__"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)

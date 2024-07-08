@@ -5,4 +5,7 @@ alias(
     actual = "//ini/git/merge_drivers/bazel_lockfile:merge_driver",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

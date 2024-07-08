@@ -5,4 +5,7 @@ ts_project(
     name = "force_buffer_whole_video",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

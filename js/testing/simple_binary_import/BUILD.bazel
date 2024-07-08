@@ -34,4 +34,7 @@ diff_test(
     file2 = "hello_gen_out.txt",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
