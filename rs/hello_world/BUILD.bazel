@@ -13,4 +13,7 @@ rust_doc(
     crate = ":hello_world",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

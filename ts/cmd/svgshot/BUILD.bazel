@@ -52,4 +52,7 @@ filegroup(
     srcs = glob(["examples/**/*"]) + ["README.md"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

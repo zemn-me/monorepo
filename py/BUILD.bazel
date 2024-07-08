@@ -1,1 +1,11 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 "Root for pure python projects."
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)

@@ -52,4 +52,7 @@ npm_pkg(
     visibility = ["//ci:__subpackages__"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

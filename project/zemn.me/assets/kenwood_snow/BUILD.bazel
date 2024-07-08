@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
@@ -14,4 +15,9 @@ ts_project(
         "//:node_modules/react",
         "//project/zemn.me/public:kenwood_snow",
     ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

@@ -64,4 +64,7 @@ js_binary(
     entry_point = "rollback.js",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

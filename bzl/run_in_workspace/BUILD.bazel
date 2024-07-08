@@ -4,4 +4,10 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files(["wrapper.template.sh"])
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)

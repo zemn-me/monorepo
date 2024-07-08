@@ -28,4 +28,7 @@ next_project(
     srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/app"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -10,4 +10,7 @@ semver_version(
     patch = "patch",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
