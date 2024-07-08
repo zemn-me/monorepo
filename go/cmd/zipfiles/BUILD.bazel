@@ -15,4 +15,7 @@ go_library(
     deps = ["//go/flag/flagutil"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

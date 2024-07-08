@@ -31,4 +31,5 @@ ecr_image(
 
 bazel_lint(
     name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

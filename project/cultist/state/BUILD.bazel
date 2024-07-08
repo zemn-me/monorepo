@@ -72,4 +72,7 @@ jest_test(
     deps = [":state_test"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -12,4 +12,7 @@ filegroup(
 
 exports_files(glob(["**/*"]))
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

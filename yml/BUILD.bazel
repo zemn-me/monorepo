@@ -21,4 +21,10 @@ yaml_lint_test(
     name = "yaml_lint",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "test.bzl",
+    ],
+)

@@ -5,4 +5,7 @@ yaml_lint_test(
     name = "validation",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

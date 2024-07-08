@@ -28,4 +28,10 @@ js_binary(
     entry_point = "//js/npm/package_json:gen_pkgjson.js",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)

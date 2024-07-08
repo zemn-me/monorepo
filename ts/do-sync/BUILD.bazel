@@ -18,4 +18,7 @@ ts_project(
     deps = DEPS,
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

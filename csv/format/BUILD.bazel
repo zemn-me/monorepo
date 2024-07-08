@@ -1,4 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
 
 # empty
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
