@@ -25,4 +25,7 @@ alias(
     actual = "gen_ts",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

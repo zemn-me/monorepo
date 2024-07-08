@@ -10,4 +10,8 @@ exports_files(
 
 bazel_lint(
     name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
 )

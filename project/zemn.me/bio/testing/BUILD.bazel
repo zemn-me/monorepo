@@ -15,4 +15,7 @@ jest_test(
     deps = [":ts"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

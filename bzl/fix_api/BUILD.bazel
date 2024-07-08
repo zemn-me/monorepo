@@ -5,4 +5,7 @@ sh_binary(
     srcs = ["fix_all.sh"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -18,4 +18,7 @@ js_binary(
     entry_point = "sort_tool.js",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -12,4 +12,7 @@ ts_project(
     resolve_json_module = True,
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

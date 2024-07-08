@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_binary", "py_library")
 
 py_binary(
@@ -20,4 +21,9 @@ py_library(
     name = "bazel_lockfile",
     srcs = ["merge_driver.py"],
     visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

@@ -15,4 +15,7 @@ jest_test(
     data = [":node_version"],
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,5 +1,14 @@
 load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
+load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
 eslint_bin.eslint_binary(name = "eslint")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "linters.bzl",
+    ],
+)

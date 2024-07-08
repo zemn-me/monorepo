@@ -7,4 +7,7 @@ alias(
     actual = "@rules_rust//:rustfmt",
 )
 
-bazel_lint(name = "bazel_lint")
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
