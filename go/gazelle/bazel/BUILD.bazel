@@ -1,0 +1,16 @@
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "bazel",
+    srcs = ["bazel.go"],
+    importpath = "github.com/zemn-me/monorepo/go/gazelle/bazel",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//language:go_default_library",
+        "@bazel_gazelle//repo:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+    ],
+)
