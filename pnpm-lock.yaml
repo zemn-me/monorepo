@@ -356,8 +356,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.426.0
-    version: 37.426.0(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0)
+    specifier: 37.426.1
+    version: 37.426.1(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -13521,6 +13521,7 @@ packages:
   /lru-cache@10.3.0:
     resolution: {integrity: sha512-CQl19J/g+Hbjbv4Y3mFNNXFEL/5t/KCg8POCuUqd4rMKjGG+j1ybER83hxV58zL+dFI1PTkt3GNFSHRt+d8qEQ==}
     engines: {node: 14 || >=16.14}
+    dev: true
 
   /lru-cache@10.4.0:
     resolution: {integrity: sha512-bfJaPTuEiTYBu+ulDaeQ0F+uLmlfFkMgXj4cbwfuMSjgObGMzb55FMMbDvbRU0fAHZ4sLGkz2mKwcMg8Dvm8Ww==}
@@ -15755,7 +15756,7 @@ packages:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
     dependencies:
-      lru-cache: 10.3.0
+      lru-cache: 10.4.0
       minipass: 7.1.2
 
   /path-to-regexp@2.2.1:
@@ -16829,8 +16830,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.426.0(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-1GNk9rpHFdgTH7f2+zml3ibcHXLrmvKqCsn7B4NORogljZPE5X20e/xJ3nBoJrn6HTenhftnypPiyXOa12E0KA==}
+  /renovate@37.426.1(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-SfG18Qv3HAOiY7FhOy8eoitSPEoYsnGdhWHENmUgEoJsKz0Oyz68CbJdy5BrZ2+TTtVokPOfoFk6vYzZnzqwTg==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
