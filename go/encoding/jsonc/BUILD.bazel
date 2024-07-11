@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "jsonc",
+    srcs = ["jsonc.go"],
+    importpath = "github.com/zemn-me/monorepo/go/encoding/jsonc",
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "jsonc_test",
+    srcs = ["jsonc_test.go"],
+    embed = [":jsonc"],
+    deps = ["@com_github_sourcegraph_go_diff_patch//:go-diff-patch"],
+)
