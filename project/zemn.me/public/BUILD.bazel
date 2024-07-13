@@ -21,7 +21,10 @@ transcode_web(
 
 js_library(
     name = "files",
-    srcs = ["wallpaper.jpg"],
+    srcs = [
+        "wallpaper.jpg",
+        "//project/zemn.me/public:poc/c/index.html",
+    ],
 )
 
 ts_project(
