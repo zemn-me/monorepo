@@ -356,8 +356,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 37.431.1
-    version: 37.431.1(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0)
+    specifier: 37.431.2
+    version: 37.431.2(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -13480,9 +13480,9 @@ packages:
     resolution: {integrity: sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==}
     engines: {node: '>=8'}
 
-  /lru-cache@10.3.0:
-    resolution: {integrity: sha512-CQl19J/g+Hbjbv4Y3mFNNXFEL/5t/KCg8POCuUqd4rMKjGG+j1ybER83hxV58zL+dFI1PTkt3GNFSHRt+d8qEQ==}
-    engines: {node: 14 || >=16.14}
+  /lru-cache@10.3.1:
+    resolution: {integrity: sha512-9/8QXrtbGeMB6LxwQd4x1tIMnsmUxMvIH/qWGsccz6bt9Uln3S+sgAaqfQNhbGA8ufzs2fHuP/yqapGgP9Hh2g==}
+    engines: {node: '>=18'}
     dev: true
 
   /lru-cache@10.4.0:
@@ -16792,8 +16792,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@37.431.1(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-1F6x/q9sLPO1YtPE+suDTOD5Usbuv8yPPaV2MaRPwvpO+yM7UUwpfqU3wIjXLhY+qtqto0nNzYaQZjtRstALXQ==}
+  /renovate@37.431.2(@aws-sdk/client-sso-oidc@3.609.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-yRZ/l3vdpBtBqj+DnS/0758ByxEPcjvhhbbRfB9/qX9iH+RXP8GWVJNxmyml7pZNoS7QSs4rtU/g+OMUGWaV2Q==}
     engines: {node: ^18.12.0 || >=20.0.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16868,7 +16868,7 @@ packages:
       jsonata: 2.0.5
       jsonc-parser: 3.3.1
       klona: 2.0.6
-      lru-cache: 10.3.0
+      lru-cache: 10.3.1
       luxon: 3.4.4
       markdown-it: 14.1.0
       markdown-table: 2.0.0
