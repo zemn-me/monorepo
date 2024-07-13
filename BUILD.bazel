@@ -27,6 +27,12 @@ compile_pip_requirements(
     requirements_txt = "requirements.txt",
 )
 
+# implement fix api
+alias(
+    name = "requirements_test.fix",
+    actual = "requirements.update",
+)
+
 # Useful commands to run!
 alias(
     name = "fix",
