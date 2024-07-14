@@ -21,6 +21,7 @@ require (
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/itchyny/gojq v0.12.16
+	github.com/sergi/go-diff v1.3.1
 	golang.org/x/tools v0.23.0
 	honnef.co/go/tools v0.4.7
 )
