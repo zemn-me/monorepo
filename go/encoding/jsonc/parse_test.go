@@ -12,10 +12,10 @@ import (
 	diff "github.com/sergi/go-diff/diffmatchpatch"
 )
 
-func TestDecode(t *testing.T) {
+func testDecode(start string, end string, t *testing.T) {
 	var p interface{}
 	var err error
-	if err = jsonc.NewDecoder(strings.NewReader(testdata.Example_Jsonc_File)).Decode(&p); err != nil {
+	if err = jsonc.NewDecoder(strings.NewReader(start)).Decode(&p); err != nil {
 		t.Fatal(err)
 	}
 
@@ -32,7 +32,7 @@ func TestDecode(t *testing.T) {
 
 	// parse output to get consistent encoding
 	var expected interface{}
-	if err = json.Unmarshal([]byte(testdata.Example_Jsonc_File_Out), &expected); err != nil {
+	if err = json.Unmarshal([]byte(end), &expected); err != nil {
 		return
 	}
 
@@ -54,4 +54,16 @@ func TestDecode(t *testing.T) {
 		diff := dd.DiffMain(expectedStr, prettyBuf.String(), true)
 		t.Fatalf("\nsummary\n=======\n%s\ngot\n===\n%s\nwanted\n======\n%s\n", dd.DiffPrettyText(diff), dd.DiffText2(diff), dd.DiffText1(diff))
 	}
+}
+
+func TestDecode1(t *testing.T) {
+	testDecode(testdata.Example_Jsonc_File, testdata.Example_Jsonc_File_Out, t)
+}
+
+func TestDecode2(t *testing.T) {
+	testDecode(testdata.Example2, testdata.Example2_Out, t)
+}
+
+func TestDecode3(t *testing.T) {
+	testDecode(`{"/*ok":1}`, `{"/*ok":1}`, t)
 }
