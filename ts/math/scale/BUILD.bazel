@@ -1,3 +1,4 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
@@ -28,4 +29,9 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
 )
