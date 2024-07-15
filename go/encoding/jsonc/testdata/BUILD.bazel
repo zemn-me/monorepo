@@ -3,7 +3,10 @@ load("//go:rules.bzl", "go_library")
 
 go_library(
     name = "testdata",
-    srcs = ["example.go"],
+    srcs = [
+        "example.go",
+        "example2.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/go/encoding/jsonc/testdata",
     visibility = ["//visibility:public"],
 )
