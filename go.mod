@@ -18,6 +18,7 @@ go 1.22.2
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.37.0
+	github.com/bazelbuild/buildtools v0.0.0-20240313121412-66c605173954
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/itchyny/gojq v0.12.16
@@ -28,7 +29,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/bazelbuild/buildtools v0.0.0-20240313121412-66c605173954 // indirect
 	github.com/cilium/ebpf v0.11.0 // indirect
 	github.com/cosiner/argv v0.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
