@@ -5,6 +5,7 @@ js_library(
     name = "a_js",
     srcs = ["a.js"],
     visibility = [":__subpackages__"],
+    deps = [],
 )
 
 bazel_lint(
