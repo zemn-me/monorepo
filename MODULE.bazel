@@ -102,10 +102,12 @@ go_deps.from_file(go_mod = "//:go.mod")
 use_repo(
     go_deps,
     "co_honnef_go_tools",
+    "com_github_bazelbuild_buildtools",
     "com_github_go_delve_delve",
     "com_github_golang_protobuf",
     "com_github_itchyny_gojq",
     "com_github_sergi_go_diff",
+    "com_github_tdewolff_parse_v2",
     "org_golang_x_tools",
 )
 

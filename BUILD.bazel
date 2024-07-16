@@ -203,6 +203,7 @@ gazelle_binary(
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
         "//go/gazelle/bazel",
         "//go/gazelle/ts/config",
+        "//go/gazelle/js",
         # Any languages that depend on Gazelle's proto plugin must come after it.
     ],
     visibility = ["//visibility:public"],
