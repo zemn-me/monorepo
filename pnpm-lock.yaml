@@ -144,8 +144,8 @@ dependencies:
     specifier: 11.0.5
     version: 11.0.5
   vfile:
-    specifier: 6.0.1
-    version: 6.0.1
+    specifier: 6.0.2
+    version: 6.0.2
   zod:
     specifier: 3.23.8
     version: 3.23.8
@@ -4437,7 +4437,7 @@ packages:
       unist-util-position-from-estree: 2.0.0
       unist-util-stringify-position: 4.0.0
       unist-util-visit: 5.0.0
-      vfile: 6.0.1
+      vfile: 6.0.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -10187,7 +10187,7 @@ packages:
       unified-engine: 11.2.1
       unist-util-visit: 5.0.0
       uvu: 0.5.6
-      vfile: 6.0.1
+      vfile: 6.0.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -10338,7 +10338,7 @@ packages:
       remark-stringify: 11.0.0
       tslib: 2.6.3
       unified: 11.0.5
-      vfile: 6.0.1
+      vfile: 6.0.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -13860,7 +13860,7 @@ packages:
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
       unist-util-visit: 5.0.0
-      vfile: 6.0.1
+      vfile: 6.0.2
     dev: false
 
   /mdast-util-to-markdown@0.6.5:
@@ -16762,7 +16762,7 @@ packages:
       '@types/mdast': 4.0.4
       mdast-util-to-hast: 13.2.0
       unified: 11.0.5
-      vfile: 6.0.1
+      vfile: 6.0.2
     dev: false
 
   /remark-stringify@11.0.0:
@@ -18296,7 +18296,7 @@ packages:
   /to-vfile@8.0.0:
     resolution: {integrity: sha512-IcmH1xB5576MJc9qcfEC/m/nQCFt3fzMHz45sSlgJyTWjRbKW1HAkJpuf3DgE57YzIlZcwcBZA5ENQbBo4aLkg==}
     dependencies:
-      vfile: 6.0.1
+      vfile: 6.0.2
     dev: false
 
   /toidentifier@1.0.1:
@@ -18751,7 +18751,7 @@ packages:
       parse-json: 7.1.1
       trough: 2.2.0
       unist-util-inspect: 8.0.0
-      vfile: 6.0.1
+      vfile: 6.0.2
       vfile-message: 4.0.2
       vfile-reporter: 8.1.1
       vfile-statistics: 3.0.0
@@ -18770,7 +18770,7 @@ packages:
       extend: 3.0.2
       is-plain-obj: 4.1.0
       trough: 2.2.0
-      vfile: 6.0.1
+      vfile: 6.0.2
     dev: false
 
   /unified@9.2.2:
@@ -19049,7 +19049,7 @@ packages:
       string-width: 6.1.0
       supports-color: 9.4.0
       unist-util-stringify-position: 4.0.0
-      vfile: 6.0.1
+      vfile: 6.0.2
       vfile-message: 4.0.2
       vfile-sort: 4.0.0
       vfile-statistics: 3.0.0
@@ -19058,14 +19058,14 @@ packages:
   /vfile-sort@4.0.0:
     resolution: {integrity: sha512-lffPI1JrbHDTToJwcq0rl6rBmkjQmMuXkAxsZPRS9DXbaJQvc642eCg6EGxcX2i1L+esbuhq+2l9tBll5v8AeQ==}
     dependencies:
-      vfile: 6.0.1
+      vfile: 6.0.2
       vfile-message: 4.0.2
     dev: false
 
   /vfile-statistics@3.0.0:
     resolution: {integrity: sha512-/qlwqwWBWFOmpXujL/20P+Iuydil0rZZNglR+VNm6J0gpLHwuVM5s7g2TfVoswbXjZ4HuIhLMySEyIw5i7/D8w==}
     dependencies:
-      vfile: 6.0.1
+      vfile: 6.0.2
       vfile-message: 4.0.2
     dev: false
 
@@ -19078,8 +19078,8 @@ packages:
       vfile-message: 2.0.4
     dev: true
 
-  /vfile@6.0.1:
-    resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
+  /vfile@6.0.2:
+    resolution: {integrity: sha512-zND7NlS8rJYb/sPqkb13ZvbbUoExdbi4w3SfRrMq6R3FvnLQmmfpajJNITuuYm6AZ5uao9vy4BAos3EXBPf2rg==}
     dependencies:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
