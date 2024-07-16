@@ -1,6 +1,7 @@
-const glob = require('glob');
-const fs = require('fs').promises;
-const path = require('path');
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+import glob from 'glob-promise';
 
 const fontName = 'EB Garamond';
 
@@ -28,11 +29,10 @@ const formatName = n =>
 
 (async function main() {
 	process.chdir(__dirname);
-	const files = await new Promise((ok, fail) =>
+	const files = await
 		glob(`./EBGaramond12/fonts/*/*`, {}, (err, files) =>
 			err ? fail(err) : ok(files)
-		)
-	);
+		);
 
 	// collate different font formats
 	const m = new Map();
@@ -65,4 +65,5 @@ const formatName = n =>
 		.join('\n');
 
 	await fs.writeFile('index.css', defs);
+// eslint-disable-next-line no-console
 })().catch(e => console.error(e));

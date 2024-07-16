@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+
+js_library(
+    name = "b_js",
+    srcs = ["b.js"],
+    deps = ["@monorepo//go/gazelle/js/example/node:a_js"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

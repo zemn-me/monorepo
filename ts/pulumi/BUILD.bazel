@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "js_binary", "ts_project")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
 package(default_visibility = ["//ci:__subpackages__"])
