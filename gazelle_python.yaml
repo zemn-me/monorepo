@@ -204,7 +204,6 @@ manifest:
     piptools.utils: pip_tools
     piptools.writer: pip_tools
     pkg_resources: setuptools
-    pkg_resources.extern: setuptools
     pyasn1: pyasn1
     pyasn1.codec: pyasn1
     pyasn1.codec.ber: pyasn1
@@ -314,7 +313,6 @@ manifest:
     setuptools.dist: setuptools
     setuptools.errors: setuptools
     setuptools.extension: setuptools
-    setuptools.extern: setuptools
     setuptools.glob: setuptools
     setuptools.installer: setuptools
     setuptools.launch: setuptools
@@ -429,4 +427,4 @@ manifest:
     yamllint.rules.truthy: yamllint
   pip_repository:
     name: pip
-integrity: 3a7042a7874fc827657e6ce7c3be2c05331a435cd911df32ca9360772e478656
+integrity: 8235d8b59720cf1d70e786ad25364eea9daa4ed97b4cf30df1a2dbb3f68ad8e2
