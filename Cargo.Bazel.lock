@@ -764,9 +764,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.35.1"
+version = "0.36.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35fc82e807a50f9964f69b2f76500d340a3784b4e695bc755dad00566bad5111"
+checksum = "df5ed098e191c0cb289aa89eeae8a5312993cf0997e7c83e011e0a7dd1f6ce7b"
 dependencies = [
  "ast_node",
  "better_scoped_tls",
@@ -812,9 +812,9 @@ dependencies = [
 
 [[package]]
 name = "swc_visit"
-version = "0.5.14"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "043d11fe683dcb934583ead49405c0896a5af5face522e4682c16971ef7871b9"
+checksum = "52e2acde04c355dc8ffd62c56f263ba61a94b5c6d21ce2cdeaf857b5d74451a6"
 dependencies = [
  "either",
  "swc_visit_macros",
