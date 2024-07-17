@@ -2459,8 +2459,8 @@
     },
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "i4dSrvj1eBpPYJ3FNlAndMOeDAjQ4fPIwkJajJfx83I=",
-        "usagesDigest": "ZOWyUJUl2jrhByry8l3Ior9GmSiEf+ug+piddyj102k=",
+        "bzlTransitiveDigest": "xmuC/dW0Hfaftg/uPZgmEjl1txDEN4Omzu4uk5UFcxY=",
+        "usagesDigest": "wqpum9A0+/nwH6wFsVYv8mVW0u0XtWqyouupHJBrANs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -2537,8 +2537,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/arm64/v8",
-              "target_name": "distroless_base_linux_arm64_v8",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_arm64_v8"
             }
           },
           "copy_to_directory_linux_amd64": {
@@ -2619,8 +2618,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/arm/v7",
-              "target_name": "distroless_base_linux_arm_v7",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_arm_v7"
             }
           },
           "distroless_base_linux_s390x": {
@@ -2632,8 +2630,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/s390x",
-              "target_name": "distroless_base_linux_s390x",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_s390x"
             }
           },
           "oci_crane_linux_amd64": {
@@ -2697,8 +2694,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/amd64",
-              "target_name": "distroless_base_linux_amd64",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_amd64"
             }
           },
           "jq_darwin_arm64": {
@@ -2766,8 +2762,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/ppc64le",
-              "target_name": "distroless_base_linux_ppc64le",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_ppc64le"
             }
           },
           "jq_windows_amd64": {
