@@ -124,8 +124,8 @@
     "https://bcr.bazel.build/modules/rules_nodejs/5.8.2/MODULE.bazel": "6bc03c8f37f69401b888023bf511cb6ee4781433b0cb56236b2e55a21e3a026a",
     "https://bcr.bazel.build/modules/rules_nodejs/6.2.0/MODULE.bazel": "ec27907f55eb34705adb4e8257952162a2d4c3ed0f0b3b4c3c1aad1fac7be35e",
     "https://bcr.bazel.build/modules/rules_nodejs/6.2.0/source.json": "a77c307175a82982f0847fd6a8660db5b21440d8a9d073642cb4afa7a18612ff",
-    "https://bcr.bazel.build/modules/rules_oci/1.8.0/MODULE.bazel": "a4d656f6a0e7c7c1a73b9e394e37c8f9bbc237143ce9e19deba7a532fe189552",
-    "https://bcr.bazel.build/modules/rules_oci/1.8.0/source.json": "c14770a5dfba2980d8f1ebeaac0bfa4848ffb7febfca84ac2a7fd7e8f4d9e1e3",
+    "https://bcr.bazel.build/modules/rules_oci/1.7.6/MODULE.bazel": "cf097afc862b7995314708f8026409ec8a91d440e94ee996b92b09518da564f2",
+    "https://bcr.bazel.build/modules/rules_oci/1.7.6/source.json": "d560c3e3ce9b4dc27755a13a8c274c83003d155041a98d21f1bc06ae4d8809c2",
     "https://bcr.bazel.build/modules/rules_pkg/0.7.0/MODULE.bazel": "df99f03fc7934a4737122518bb87e667e62d780b610910f0447665a7e2be62dc",
     "https://bcr.bazel.build/modules/rules_pkg/1.0.1/MODULE.bazel": "5b1df97dbc29623bccdf2b0dcd0f5cb08e2f2c9050aab1092fd39a41e82686ff",
     "https://bcr.bazel.build/modules/rules_pkg/1.0.1/source.json": "bd82e5d7b9ce2d31e380dd9f50c111d678c3bdaca190cb76b0e1c71b05e1ba8a",
@@ -194,7 +194,7 @@
     "@@aspect_bazel_lib~//lib:extensions.bzl%toolchains": {
       "general": {
         "bzlTransitiveDigest": "SK+5VjMKVX5gfuC//JqN+b1rWW3PNLeAEsqwiD3CAOA=",
-        "usagesDigest": "YTF3w8PrVW5mAoV7JuGoAw5ETCS5yTHOTUMJYSTc9VE=",
+        "usagesDigest": "lhyQVM8A1CX7NWsxOLQjr0WH1sGzS004M7l1V/cppUY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -2459,8 +2459,8 @@
     },
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "i4dSrvj1eBpPYJ3FNlAndMOeDAjQ4fPIwkJajJfx83I=",
-        "usagesDigest": "ZOWyUJUl2jrhByry8l3Ior9GmSiEf+ug+piddyj102k=",
+        "bzlTransitiveDigest": "xmuC/dW0Hfaftg/uPZgmEjl1txDEN4Omzu4uk5UFcxY=",
+        "usagesDigest": "wqpum9A0+/nwH6wFsVYv8mVW0u0XtWqyouupHJBrANs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -2537,8 +2537,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/arm64/v8",
-              "target_name": "distroless_base_linux_arm64_v8",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_arm64_v8"
             }
           },
           "copy_to_directory_linux_amd64": {
@@ -2619,8 +2618,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/arm/v7",
-              "target_name": "distroless_base_linux_arm_v7",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_arm_v7"
             }
           },
           "distroless_base_linux_s390x": {
@@ -2632,8 +2630,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/s390x",
-              "target_name": "distroless_base_linux_s390x",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_s390x"
             }
           },
           "oci_crane_linux_amd64": {
@@ -2697,8 +2694,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/amd64",
-              "target_name": "distroless_base_linux_amd64",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_amd64"
             }
           },
           "jq_darwin_arm64": {
@@ -2766,8 +2762,7 @@
               "repository": "distroless/base",
               "identifier": "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
               "platform": "linux/ppc64le",
-              "target_name": "distroless_base_linux_ppc64le",
-              "bazel_tags": []
+              "target_name": "distroless_base_linux_ppc64le"
             }
           },
           "jq_windows_amd64": {

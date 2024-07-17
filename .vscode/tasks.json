@@ -3,10 +3,8 @@
 	"tasks": [
 		{
 			"label": "Generate rust-project.json",
-			"command": "npm",
+			"command": "bazelisk",
 			"args": [
-				"run",
-				"bazel",
 				"run",
 				"//rs:gen_rust_project"
 			],
