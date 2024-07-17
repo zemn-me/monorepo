@@ -1,5 +1,5 @@
 {
-  "checksum": "83c0436d6ebb738de74e62cc6fd02ba9fa324ee0f7438ece99e16089b9c083c6",
+  "checksum": "20d432fb61bb7b3b939cf33b838cc2a2b25671500be3fc4fc5937aa9589942b8",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -938,6 +938,53 @@
         },
         "edition": "2018",
         "version": "0.10.3"
+      },
+      "license": "MIT OR Apache-2.0",
+      "license_ids": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "license_file": "LICENSE-APACHE"
+    },
+    "bumpalo 3.16.0": {
+      "name": "bumpalo",
+      "version": "3.16.0",
+      "package_url": "https://github.com/fitzgen/bumpalo",
+      "repository": {
+        "Http": {
+          "url": "https://static.crates.io/crates/bumpalo/3.16.0/download",
+          "sha256": "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "bumpalo",
+            "crate_root": "src/lib.rs",
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
+          }
+        }
+      ],
+      "library_target_name": "bumpalo",
+      "common_attrs": {
+        "compile_data_glob": [
+          "**"
+        ],
+        "crate_features": {
+          "common": [
+            "boxed",
+            "collections",
+            "default"
+          ],
+          "selects": {}
+        },
+        "edition": "2021",
+        "version": "3.16.0"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2827,7 +2874,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.35.0",
+              "id": "swc_common 0.35.1",
               "target": "swc_common"
             }
           ],
@@ -4788,6 +4835,53 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
+    "swc_allocator 0.1.1": {
+      "name": "swc_allocator",
+      "version": "0.1.1",
+      "package_url": "https://github.com/swc-project/swc.git",
+      "repository": {
+        "Http": {
+          "url": "https://static.crates.io/crates/swc_allocator/0.1.1/download",
+          "sha256": "2b7a01632ed24a6a00032edff18b8a797b3717adb768b54f78c454577cedfef1"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "swc_allocator",
+            "crate_root": "src/lib.rs",
+            "srcs": {
+              "allow_empty": false,
+              "include": [
+                "**/*.rs"
+              ]
+            }
+          }
+        }
+      ],
+      "library_target_name": "swc_allocator",
+      "common_attrs": {
+        "compile_data_glob": [
+          "**"
+        ],
+        "deps": {
+          "common": [
+            {
+              "id": "bumpalo 3.16.0",
+              "target": "bumpalo"
+            }
+          ],
+          "selects": {}
+        },
+        "edition": "2021",
+        "version": "0.1.1"
+      },
+      "license": "Apache-2.0",
+      "license_ids": [
+        "Apache-2.0"
+      ],
+      "license_file": null
+    },
     "swc_atoms 0.6.7": {
       "name": "swc_atoms",
       "version": "0.6.7",
@@ -4847,14 +4941,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.35.0": {
+    "swc_common 0.35.1": {
       "name": "swc_common",
-      "version": "0.35.0",
+      "version": "0.35.1",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_common/0.35.0/download",
-          "sha256": "dcad76737c09d8cafdd6cc0bcb5d57a49340fde34cf9357b9bd30e3e25976fbb"
+          "url": "https://static.crates.io/crates/swc_common/0.35.1/download",
+          "sha256": "35fc82e807a50f9964f69b2f76500d340a3784b4e695bc755dad00566bad5111"
         }
       },
       "targets": [
@@ -4921,6 +5015,10 @@
               "target": "siphasher"
             },
             {
+              "id": "swc_allocator 0.1.1",
+              "target": "swc_allocator"
+            },
+            {
               "id": "swc_atoms 0.6.7",
               "target": "swc_atoms"
             },
@@ -4961,7 +5059,7 @@
           ],
           "selects": {}
         },
-        "version": "0.35.0"
+        "version": "0.35.1"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -7598,7 +7696,7 @@
     "serde_json 1.0.120",
     "sha2 0.10.8",
     "swc_atoms 0.6.7",
-    "swc_common 0.35.0"
+    "swc_common 0.35.1"
   ],
   "direct_dev_deps": []
 }
