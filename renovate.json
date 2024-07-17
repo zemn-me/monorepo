@@ -31,6 +31,15 @@
 	"packageRules": [
 		{
 			"matchManagers": [
+				"bazel-module"
+			],
+			"matchPackageNames": [
+				"rules_oci"
+			],
+			"allowedVersions": "!/1.8.0$/"
+		},
+		{
+			"matchManagers": [
 				"cargo",
 				"bazel",
 				"gomod",
