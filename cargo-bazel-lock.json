@@ -1,5 +1,5 @@
 {
-  "checksum": "600386298d9232af48f2bdfa99e6e3e84d615af4aab779b35404f6cbc47536f5",
+  "checksum": "9197b8b12c4ea0c9cda8f486026867e143eccf16e41b727f9115ff8e0306c27d",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -3164,15 +3164,15 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.35.1",
+              "id": "swc_common 0.36.0",
               "target": "swc_common"
             },
             {
-              "id": "swc_ecma_ast 0.116.0",
+              "id": "swc_ecma_ast 0.117.0",
               "target": "swc_ecma_ast"
             },
             {
-              "id": "swc_ecma_parser 0.147.0",
+              "id": "swc_ecma_parser 0.148.0",
               "target": "swc_ecma_parser"
             }
           ],
@@ -6023,14 +6023,14 @@
       ],
       "license_file": null
     },
-    "swc_common 0.35.1": {
+    "swc_common 0.36.0": {
       "name": "swc_common",
-      "version": "0.35.1",
+      "version": "0.36.0",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_common/0.35.1/download",
-          "sha256": "35fc82e807a50f9964f69b2f76500d340a3784b4e695bc755dad00566bad5111"
+          "url": "https://static.crates.io/crates/swc_common/0.36.0/download",
+          "sha256": "df5ed098e191c0cb289aa89eeae8a5312993cf0997e7c83e011e0a7dd1f6ce7b"
         }
       },
       "targets": [
@@ -6105,7 +6105,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_visit 0.5.14",
+              "id": "swc_visit 0.6.0",
               "target": "swc_visit"
             },
             {
@@ -6141,7 +6141,7 @@
           ],
           "selects": {}
         },
-        "version": "0.35.1"
+        "version": "0.36.0"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -6149,14 +6149,14 @@
       ],
       "license_file": null
     },
-    "swc_ecma_ast 0.116.0": {
+    "swc_ecma_ast 0.117.0": {
       "name": "swc_ecma_ast",
-      "version": "0.116.0",
+      "version": "0.117.0",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_ecma_ast/0.116.0/download",
-          "sha256": "55ea1ec136cc269287c32be8edc06080e8e6cca86f0592a23ba99eed0ecf3ffd"
+          "url": "https://static.crates.io/crates/swc_ecma_ast/0.117.0/download",
+          "sha256": "536e973cd624cada731c22ad9ba3aa7a6432a5c1b6e002ec4f12809a8718da5d"
         }
       },
       "targets": [
@@ -6207,7 +6207,7 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.35.1",
+              "id": "swc_common 0.36.0",
               "target": "swc_common"
             },
             {
@@ -6231,7 +6231,7 @@
           ],
           "selects": {}
         },
-        "version": "0.116.0"
+        "version": "0.117.0"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -6239,14 +6239,14 @@
       ],
       "license_file": null
     },
-    "swc_ecma_parser 0.147.0": {
+    "swc_ecma_parser 0.148.0": {
       "name": "swc_ecma_parser",
-      "version": "0.147.0",
+      "version": "0.148.0",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_ecma_parser/0.147.0/download",
-          "sha256": "3f85ae931e009c314f88212bd53d84ee9244902e84afa5ede497cb8a763192de"
+          "url": "https://static.crates.io/crates/swc_ecma_parser/0.148.0/download",
+          "sha256": "59627c3704453c1bcb283c51ee161a5acf9988c80f80ef0250743fede0406602"
         }
       },
       "targets": [
@@ -6315,11 +6315,11 @@
               "target": "swc_atoms"
             },
             {
-              "id": "swc_common 0.35.1",
+              "id": "swc_common 0.36.0",
               "target": "swc_common"
             },
             {
-              "id": "swc_ecma_ast 0.116.0",
+              "id": "swc_ecma_ast 0.117.0",
               "target": "swc_ecma_ast"
             },
             {
@@ -6341,7 +6341,7 @@
           }
         },
         "edition": "2021",
-        "version": "0.147.0"
+        "version": "0.148.0"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -6459,14 +6459,14 @@
       ],
       "license_file": null
     },
-    "swc_visit 0.5.14": {
+    "swc_visit 0.6.0": {
       "name": "swc_visit",
-      "version": "0.5.14",
+      "version": "0.6.0",
       "package_url": "https://github.com/swc-project/swc.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/swc_visit/0.5.14/download",
-          "sha256": "043d11fe683dcb934583ead49405c0896a5af5face522e4682c16971ef7871b9"
+          "url": "https://static.crates.io/crates/swc_visit/0.6.0/download",
+          "sha256": "52e2acde04c355dc8ffd62c56f263ba61a94b5c6d21ce2cdeaf857b5d74451a6"
         }
       },
       "targets": [
@@ -6507,7 +6507,7 @@
           ],
           "selects": {}
         },
-        "version": "0.5.14"
+        "version": "0.6.0"
       },
       "license": "Apache-2.0",
       "license_ids": [
@@ -9129,9 +9129,9 @@
     "sha2 0.10.8",
     "swc_allocator 0.1.6",
     "swc_atoms 0.6.7",
-    "swc_common 0.35.1",
-    "swc_ecma_ast 0.116.0",
-    "swc_ecma_parser 0.147.0"
+    "swc_common 0.36.0",
+    "swc_ecma_ast 0.117.0",
+    "swc_ecma_parser 0.148.0"
   ],
   "direct_dev_deps": []
 }
