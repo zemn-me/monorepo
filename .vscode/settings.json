@@ -38,6 +38,9 @@
 		"**/.hg/store/**": true,
 		"**/bazel-out": true
 	},
+	"[rust]": {
+		"editor.formatOnSave": true
+	},
 	"githubPullRequests.ignoredPullRequestBranches": [
 		"main"
 	],
