@@ -204,6 +204,14 @@ manifest:
     piptools.utils: pip_tools
     piptools.writer: pip_tools
     pkg_resources: setuptools
+    pkg_resources.tests: setuptools
+    pkg_resources.tests.data.my-test-package-source.setup: setuptools
+    pkg_resources.tests.test_find_distributions: setuptools
+    pkg_resources.tests.test_integration_zope_interface: setuptools
+    pkg_resources.tests.test_markers: setuptools
+    pkg_resources.tests.test_pkg_resources: setuptools
+    pkg_resources.tests.test_resources: setuptools
+    pkg_resources.tests.test_working_set: setuptools
     pyasn1: pyasn1
     pyasn1.codec: pyasn1
     pyasn1.codec.ber: pyasn1
@@ -323,6 +331,71 @@ manifest:
     setuptools.namespaces: setuptools
     setuptools.package_index: setuptools
     setuptools.sandbox: setuptools
+    setuptools.tests: setuptools
+    setuptools.tests.compat: setuptools
+    setuptools.tests.compat.py39: setuptools
+    setuptools.tests.config: setuptools
+    setuptools.tests.config.downloads: setuptools
+    setuptools.tests.config.downloads.preload: setuptools
+    setuptools.tests.config.test_apply_pyprojecttoml: setuptools
+    setuptools.tests.config.test_expand: setuptools
+    setuptools.tests.config.test_pyprojecttoml: setuptools
+    setuptools.tests.config.test_pyprojecttoml_dynamic_deps: setuptools
+    setuptools.tests.config.test_setupcfg: setuptools
+    setuptools.tests.contexts: setuptools
+    setuptools.tests.environment: setuptools
+    setuptools.tests.fixtures: setuptools
+    setuptools.tests.integration: setuptools
+    setuptools.tests.integration.helpers: setuptools
+    setuptools.tests.integration.test_pip_install_sdist: setuptools
+    setuptools.tests.mod_with_constant: setuptools
+    setuptools.tests.namespaces: setuptools
+    setuptools.tests.script-with-bom: setuptools
+    setuptools.tests.server: setuptools
+    setuptools.tests.test_archive_util: setuptools
+    setuptools.tests.test_bdist_deprecations: setuptools
+    setuptools.tests.test_bdist_egg: setuptools
+    setuptools.tests.test_bdist_wheel: setuptools
+    setuptools.tests.test_build: setuptools
+    setuptools.tests.test_build_clib: setuptools
+    setuptools.tests.test_build_ext: setuptools
+    setuptools.tests.test_build_meta: setuptools
+    setuptools.tests.test_build_py: setuptools
+    setuptools.tests.test_config_discovery: setuptools
+    setuptools.tests.test_core_metadata: setuptools
+    setuptools.tests.test_depends: setuptools
+    setuptools.tests.test_develop: setuptools
+    setuptools.tests.test_dist: setuptools
+    setuptools.tests.test_dist_info: setuptools
+    setuptools.tests.test_distutils_adoption: setuptools
+    setuptools.tests.test_easy_install: setuptools
+    setuptools.tests.test_editable_install: setuptools
+    setuptools.tests.test_egg_info: setuptools
+    setuptools.tests.test_extern: setuptools
+    setuptools.tests.test_find_packages: setuptools
+    setuptools.tests.test_find_py_modules: setuptools
+    setuptools.tests.test_glob: setuptools
+    setuptools.tests.test_install_scripts: setuptools
+    setuptools.tests.test_integration: setuptools
+    setuptools.tests.test_logging: setuptools
+    setuptools.tests.test_manifest: setuptools
+    setuptools.tests.test_msvc14: setuptools
+    setuptools.tests.test_namespaces: setuptools
+    setuptools.tests.test_packageindex: setuptools
+    setuptools.tests.test_register: setuptools
+    setuptools.tests.test_sandbox: setuptools
+    setuptools.tests.test_sdist: setuptools
+    setuptools.tests.test_setopt: setuptools
+    setuptools.tests.test_setuptools: setuptools
+    setuptools.tests.test_test: setuptools
+    setuptools.tests.test_unicode_utils: setuptools
+    setuptools.tests.test_upload: setuptools
+    setuptools.tests.test_virtualenv: setuptools
+    setuptools.tests.test_warnings: setuptools
+    setuptools.tests.test_wheel: setuptools
+    setuptools.tests.test_windows_wrappers: setuptools
+    setuptools.tests.text: setuptools
+    setuptools.tests.textwrap: setuptools
     setuptools.unicode_utils: setuptools
     setuptools.version: setuptools
     setuptools.warnings: setuptools
@@ -427,4 +500,4 @@ manifest:
     yamllint.rules.truthy: yamllint
   pip_repository:
     name: pip
-integrity: 8235d8b59720cf1d70e786ad25364eea9daa4ed97b4cf30df1a2dbb3f68ad8e2
+integrity: a5e024a7904078de479f916e8f8ab24091ac2a70f9e23fe50258bd671617e4a4
