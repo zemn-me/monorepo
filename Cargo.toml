@@ -1,3 +1,7 @@
+# after updating this file, please run the following command
+# so that deps are updated correctly:
+#
+# CARGO_BAZEL_REPIN=1 bazelisk sync --only=cargo
 [package]
 name = "monorepo"
 version = "0.1.0"
