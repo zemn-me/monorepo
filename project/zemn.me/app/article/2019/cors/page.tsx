@@ -1,3 +1,4 @@
+"use client";
 import { Metadata } from 'next/types';
 
 import { default as Content, frontmatter } from '#root/mdx/article/2019/cors/cors';
