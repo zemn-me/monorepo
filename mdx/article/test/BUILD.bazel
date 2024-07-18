@@ -4,7 +4,6 @@ load("//js:rules.bzl", "js_library")
 js_library(
     name = "abc_js",
     srcs = ["abc.js"],
-    deps = [],
 )
 
 bazel_lint(
