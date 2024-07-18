@@ -19,6 +19,7 @@ go 1.22.2
 require (
 	github.com/bazelbuild/bazel-gazelle v0.37.0
 	github.com/bazelbuild/buildtools v0.0.0-20240313121412-66c605173954
+	github.com/bazelbuild/rules_go v0.46.0
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/itchyny/gojq v0.12.16
