@@ -1,7 +1,7 @@
 use std::{convert, io, path::Path};
 use swc_common::sync::Lrc;
 use swc_ecma_ast::ModuleDecl;
-use swc_ecma_parser::{lexer::Lexer, Parser, StringInput, Syntax};
+use swc_ecma_parser::{lexer::Lexer, Parser, Syntax};
 
 #[derive(Debug)]
 pub enum ExtractImportsError {
@@ -30,7 +30,7 @@ pub fn extract_imports(filename: String) -> Result<Vec<String>, ExtractImportsEr
     let mut parser = Parser::new_from(Lexer::new(
         Syntax::Typescript(Default::default()),
         Default::default(),
-        StringInput::from(&*file),
+        swc_ecma_parser::StringInput::from(&*file),
         None,
     ));
 
