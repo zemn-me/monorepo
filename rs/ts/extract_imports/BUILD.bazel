@@ -1,0 +1,20 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//rs:rules.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "extract_imports",
+    srcs = ["lib.rs"],
+    deps = [
+        "@cargo//:swc_allocator",
+        "@cargo//:swc_common",
+        "@cargo//:swc_ecma_ast",
+        "@cargo//:swc_ecma_parser",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
