@@ -495,7 +495,7 @@ dependencies = [
  "sha2",
  "swc_allocator",
  "swc_atoms",
- "swc_common 0.36.0",
+ "swc_common",
  "swc_ecma_ast",
  "swc_ecma_parser",
 ]
@@ -952,33 +952,7 @@ dependencies = [
  "swc_allocator",
  "swc_atoms",
  "swc_eq_ignore_macros",
- "swc_visit 0.5.14",
- "tracing",
- "unicode-width",
- "url",
-]
-
-[[package]]
-name = "swc_common"
-version = "0.36.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df5ed098e191c0cb289aa89eeae8a5312993cf0997e7c83e011e0a7dd1f6ce7b"
-dependencies = [
- "ast_node",
- "better_scoped_tls",
- "cfg-if",
- "either",
- "from_variant",
- "new_debug_unreachable",
- "num-bigint",
- "once_cell",
- "rustc-hash",
- "serde",
- "siphasher",
- "swc_allocator",
- "swc_atoms",
- "swc_eq_ignore_macros",
- "swc_visit 0.6.0",
+ "swc_visit",
  "tracing",
  "unicode-width",
  "url",
@@ -997,7 +971,7 @@ dependencies = [
  "scoped-tls",
  "string_enum",
  "swc_atoms",
- "swc_common 0.35.1",
+ "swc_common",
  "unicode-id-start",
 ]
 
@@ -1017,7 +991,7 @@ dependencies = [
  "smartstring",
  "stacker",
  "swc_atoms",
- "swc_common 0.35.1",
+ "swc_common",
  "swc_ecma_ast",
  "tracing",
  "typed-arena",
@@ -1050,16 +1024,6 @@ name = "swc_visit"
 version = "0.5.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "043d11fe683dcb934583ead49405c0896a5af5face522e4682c16971ef7871b9"
-dependencies = [
- "either",
- "swc_visit_macros",
-]
-
-[[package]]
-name = "swc_visit"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52e2acde04c355dc8ffd62c56f263ba61a94b5c6d21ce2cdeaf857b5d74451a6"
 dependencies = [
  "either",
  "swc_visit_macros",
