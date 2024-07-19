@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-"$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" //sh/bin:gojq "${@}"
+"$(dirname ${BASH_SOURCE[0]})/run_lazily.sh" //sh/bin:gojq "${@}"
