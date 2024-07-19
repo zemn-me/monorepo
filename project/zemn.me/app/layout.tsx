@@ -1,6 +1,7 @@
 
 import 'project/zemn.me/app/base.css';
 
+import type { Viewport } from 'next';
 import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
@@ -47,11 +48,16 @@ export function RootLayout({ children }: Props) {
 
 export default RootLayout;
 
-export const metadata: Metadata = {
+
+export const viewport: Viewport = {
 	themeColor: [
 		{ media: '(prefers-color-scheme: dark)', color: '#010' },
 		{ media: '(prefers-color-scheme: light)', color: '#fff' },
 	],
+}
+
+export const metadata: Metadata = {
+
 	authors: [{ name: text(Bio.who.fullName), url: 'https://zemn.me' }],
 	metadataBase: new URL('https://zemn.me'),
 	twitter: {
