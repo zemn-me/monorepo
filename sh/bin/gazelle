@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-"$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" //sh/bin:gazelle "${@}"
+BAZEL="$(realpath $(dirname ${BASH_SOURCE[0]})/bazel)"
+
+$BAZEL run --ui_event_filters=-info,-stdout,-stderr -- //sh/bin:gazelle
