@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
 import { OneBasedIndex } from '#root/ts/factorio/base';
-import { Blueprint } from '#root/ts/factorio/blueprint.js';
-import { Color } from '#root/ts/factorio/color.js';
-import { DeconstructionPlanner } from '#root/ts/factorio/deconstruction_planner.js';
+import { Blueprint } from '#root/ts/factorio/blueprint';
+import { Color } from '#root/ts/factorio/color';
+import { DeconstructionPlanner } from '#root/ts/factorio/deconstruction_planner';
 import { Int } from '#root/ts/factorio/int';
 import { SignalID } from '#root/ts/factorio/signal_id';
 import { Uint } from '#root/ts/factorio/uint';
-import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner.js';
+import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner';
 
 export const BlueprintBookBase = z.strictObject({
 	/**

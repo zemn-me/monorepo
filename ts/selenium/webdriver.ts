@@ -5,8 +5,8 @@ import { statSync } from 'fs';
 import * as Selenium from 'selenium-webdriver';
 import Chrome from 'selenium-webdriver/chrome';
 
-import { chromeDriverPath } from '#root/ts/bin/host/chromedriver/path.js';
-import { chromiumPath } from '#root/ts/bin/host/chromium/path.js';
+import { chromeDriverPath } from '#root/ts/bin/host/chromedriver/path';
+import { chromiumPath } from '#root/ts/bin/host/chromium/path';
 
 // ensure our deps actually exist
 

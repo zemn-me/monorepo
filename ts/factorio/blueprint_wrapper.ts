@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { Blueprint } from '#root/ts/factorio/blueprint.js';
-import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
+import { Blueprint } from '#root/ts/factorio/blueprint';
+import { BlueprintBook } from '#root/ts/factorio/blueprint_book';
 
 const BlueprintKey = z.strictObject({
 	blueprint: Blueprint,

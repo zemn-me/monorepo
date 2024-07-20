@@ -1,6 +1,6 @@
-import { Point, rectContaninsPoint } from '#root/ts/math/cartesian.js';
-import * as matrix from '#root/ts/math/matrix.js';
-import * as vec from '#root/ts/math/vec.js';
+import { Point, rectContaninsPoint } from '#root/ts/math/cartesian';
+import * as matrix from '#root/ts/math/matrix';
+import * as vec from '#root/ts/math/vec';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
 	expect(actual.length).toBe(expected.length);

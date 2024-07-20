@@ -6,8 +6,8 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
-import { Canvas } from '#root/ts/math/canvas/element.js';
-import * as Shape from '#root/ts/math/shape/index.js';
+import { Canvas } from '#root/ts/math/canvas/element';
+import * as Shape from '#root/ts/math/shape/index';
 
 let container: HTMLDivElement | null = null;
 let root: Root;

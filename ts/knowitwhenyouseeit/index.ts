@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryp';
 
 /**
  * Allowlist takes a set of bcrypt digests, and returns a function which, when passed an input returns that

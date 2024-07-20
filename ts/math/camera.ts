@@ -1,5 +1,5 @@
-import * as Homog from '#root/ts/math/homog.js';
-import * as Matrix from '#root/ts/math/matrix.js';
+import * as Homog from '#root/ts/math/homog';
+import * as Matrix from '#root/ts/math/matrix';
 
 export type FocalLength = number;
 

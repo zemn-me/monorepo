@@ -1,21 +1,21 @@
 import { z } from 'zod';
 
-import { Color } from '#root/ts/factorio/color.js';
-import { Connection } from '#root/ts/factorio/connection.js';
-import { ControlBehavior } from '#root/ts/factorio/control_behavior.js';
-import { EntityNumber } from '#root/ts/factorio/entity_number.js';
-import { Float } from '#root/ts/factorio/float.js';
-import { InfinitySettings } from '#root/ts/factorio/infinty_settings.js';
-import { Int } from '#root/ts/factorio/int.js';
-import { Inventory } from '#root/ts/factorio/inventory.js';
-import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
-import { ItemRequestObject } from '#root/ts/factorio/item_request_object.js';
-import { LogisticFilter } from '#root/ts/factorio/logistic_filter.js';
-import { Position } from '#root/ts/factorio/position.js';
-import { SpeakerAlertParameter } from '#root/ts/factorio/speaker_alert_parameter.js';
-import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
-import { Tags } from '#root/ts/factorio/tags.js';
-import { Uint8 } from '#root/ts/factorio/uint8.js';
+import { Color } from '#root/ts/factorio/color';
+import { Connection } from '#root/ts/factorio/connection';
+import { ControlBehavior } from '#root/ts/factorio/control_behavior';
+import { EntityNumber } from '#root/ts/factorio/entity_number';
+import { Float } from '#root/ts/factorio/float';
+import { InfinitySettings } from '#root/ts/factorio/infinty_settings';
+import { Int } from '#root/ts/factorio/int';
+import { Inventory } from '#root/ts/factorio/inventory';
+import { ItemFilterObject } from '#root/ts/factorio/item_filter_object';
+import { ItemRequestObject } from '#root/ts/factorio/item_request_object';
+import { LogisticFilter } from '#root/ts/factorio/logistic_filter';
+import { Position } from '#root/ts/factorio/position';
+import { SpeakerAlertParameter } from '#root/ts/factorio/speaker_alert_parameter';
+import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter';
+import { Tags } from '#root/ts/factorio/tags';
+import { Uint8 } from '#root/ts/factorio/uint8';
 
 export const Entity = z.strictObject({
 	entity_number: EntityNumber,

@@ -1,10 +1,10 @@
 import * as cultist from 'cultist';
 import * as fs from 'fs';
 
-import * as dot from '#root/project/cultist/solve/dot.js';
-import { map } from '#root/ts/iter/index.js';
-import { walk } from '#root/ts/tree.js';
-import { must, perhaps, select } from '#root/ts/util.js';
+import * as dot from '#root/project/cultist/solve/dot';
+import { map } from '#root/ts/iter/index';
+import { walk } from '#root/ts/tree';
+import { must, perhaps, select } from '#root/ts/util';
 
 import { quoteIfNotIdentifier } from './util';
 

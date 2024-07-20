@@ -4,8 +4,8 @@
 
 import Head from 'next/head';
 
-import Link from '#root/project/zemn.me/components/Link/Link.js';
-import { filter, flatten, map } from '#root/ts/iter/index.js';
+import Link from '#root/project/zemn.me/components/Link/Link';
+import { filter, flatten, map } from '#root/ts/iter/index';
 
 interface QueryParamsObject {
 	[key: string]: string[] | undefined;

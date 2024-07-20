@@ -6,7 +6,7 @@ import glob from 'fast-glob';
 import { Browser, ThenableWebDriver } from 'selenium-webdriver';
 import handler from 'serve-handler';
 
-import { Driver } from '#root/ts/selenium/webdriver.js';
+import { Driver } from '#root/ts/selenium/webdriver';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
+import { ComparatorString } from '#root/ts/factorio/comparator_string';
 import { Int } from '#root/ts/factorio/int';
-import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { SignalID } from '#root/ts/factorio/signal_id';
 
 export const DeciderCombinatorParameters = z.strictObject({
 	/**

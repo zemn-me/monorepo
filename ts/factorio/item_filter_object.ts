@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Int } from '#root/ts/factorio/int.js';
+import { Int } from '#root/ts/factorio/int';
 
 export const ItemFilterObject = z.strictObject({
 	/**
