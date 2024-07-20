@@ -16,12 +16,12 @@ TARGET_SCRIPT_LOCATION="$LAZY_CACHE_DIR/$TARGET"
 
 shift
 
-if find $TARGET_SCRIPT_LOCATION -mmin +120; then
+if find $TARGET_SCRIPT_LOCATION -mmin +120 >> /dev/null; then
     $TARGET_SCRIPT_LOCATION $@
     exit
 fi
 
 mkdir -p "$(dirname $TARGET_SCRIPT_LOCATION)"
-$BAZEL run --script_path="$TARGET_SCRIPT_LOCATION" $TARGET
+$BAZEL run --ui_event_filters=-info,-stdout,-stderr --script_path="$TARGET_SCRIPT_LOCATION" $TARGET
 $TARGET_SCRIPT_LOCATION $@
 
