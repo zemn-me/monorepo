@@ -231,7 +231,7 @@ func (l Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remo
 	var im []string
 
 	for dep := range imports.(DepSet) {
-		builtin := resolveNonLocalImportTags(c.Exts["javascript"].(PackageJsonPartial), dep)
+		builtin := ResolveNonLocalImportTags(c.Exts["javascript"].(PackageJsonPartial), dep)
 		if builtin != nil {
 			for _, tag := range *builtin {
 				im = append(im, tag)
