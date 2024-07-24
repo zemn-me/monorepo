@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
+
 import readline from 'readline';
 
 const sort = async <T>(
