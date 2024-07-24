@@ -38,3 +38,11 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+css_module(
+    name = "css_module",
+    srcs = [
+        "not-found.module.css",
+        "style.module.css",
+    ],
+)
