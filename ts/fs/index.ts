@@ -1,7 +1,7 @@
+import { readdir } from 'node:fs/promises';
 import * as path from 'node:path';
 
 import * as fs from 'fs';
-import { readdir } from 'fs/promises';
 
 import * as iter from '#root/ts/iter/index.js';
 

@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
+import { readFile, writeFile } from 'node:fs/promises';
+
 import { exec } from 'child_process';
 import { Command } from 'commander';
-import { readFile, writeFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
 import * as svgo from 'svgo';
 import * as tmp from 'tmp';
