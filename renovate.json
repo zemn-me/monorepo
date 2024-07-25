@@ -1,27 +1,18 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		"config:best-practices",
-		":maintainLockFilesWeekly"
-	],
+	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
 	"automerge": true,
 	"autodiscover": true,
 	"configMigration": true,
 	"platformAutomerge": true,
-	"platformCommit": true,
+	"platformCommit": "enabled",
 	"allowScripts": true,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
 	"recreateWhen": "always",
-	"ignorePaths": [
-		"**/monorepo/dist/**"
-	],
-	"gitIgnoredAuthors": [
-		"zemnmez+renovate@gmail.com"
-	],
-	"autodiscoverFilter": [
-		"zemn-me/monorepo"
-	],
+	"ignorePaths": ["**/monorepo/dist/**"],
+	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
+	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
@@ -30,12 +21,8 @@
 	],
 	"packageRules": [
 		{
-			"matchManagers": [
-				"bazel-module"
-			],
-			"matchPackageNames": [
-				"rules_oci"
-			],
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
 			"allowedVersions": "!/1.8.0$/"
 		},
 		{
@@ -72,16 +59,12 @@
 			}
 		},
 		{
-			"matchPackagePatterns": [
-				"pulumi_cli_.*"
-			],
-			"groupName": "pulumi_cli"
+			"groupName": "pulumi_cli",
+			"matchPackageNames": ["/pulumi_cli_.*/"]
 		},
 		{
-			"matchPackagePatterns": [
-				"com_googleapis_storage_chromedriver.*"
-			],
-			"groupName": "chromedriver"
+			"groupName": "chromedriver",
+			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
 		}
 	]
 }
