@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+css_module(
+    name = "css_module",
+    srcs = ["SectionLink.module.css"],
+)
+
+ts_project(
+    name = "SectionLink",
+    deps = [":css_module"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
