@@ -1,5 +1,6 @@
-import { Quaternion } from '#root/ts/math/quaternion.js'; // Adjust the import path accordingly
+import { describe, expect, test } from '@jest/globals';
 
+import { Quaternion } from '#root/ts/math/quaternion.js'; // Adjust the import path accordingly
 describe('Quaternion arithmetic', () => {
 	test('addition', () => {
 		const q1 = new Quaternion(1, 2, 3, 4);
