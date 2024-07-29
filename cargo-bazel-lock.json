@@ -1,5 +1,5 @@
 {
-  "checksum": "e5a399982b753dc74d564dc2ab3ace530d3cd4e6209c8b59e4cf3c775267a90a",
+  "checksum": "42a5c6cec46c0ad9b9bc49aae22546544d8735b687c7772428e79055d26272e2",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -3148,7 +3148,7 @@
               "target": "rxp"
             },
             {
-              "id": "serde_json 1.0.120",
+              "id": "serde_json 1.0.121",
               "target": "serde_json"
             },
             {
@@ -5091,14 +5091,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "serde_json 1.0.120": {
+    "serde_json 1.0.121": {
       "name": "serde_json",
-      "version": "1.0.120",
+      "version": "1.0.121",
       "package_url": "https://github.com/serde-rs/json",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/serde_json/1.0.120/download",
-          "sha256": "4e0d21c9a8cae1235ad58a00c11cb40d4b1e5c784f1ef2c537876ed6ffd8b7c5"
+          "url": "https://static.crates.io/crates/serde_json/1.0.121/download",
+          "sha256": "4ab380d7d9f22ef3f21ad3e6c1ebe8e4fc7a2000ccba2e4d71fc96f15b2cb609"
         }
       },
       "targets": [
@@ -5146,6 +5146,10 @@
               "target": "itoa"
             },
             {
+              "id": "memchr 2.7.4",
+              "target": "memchr"
+            },
+            {
               "id": "ryu 1.0.18",
               "target": "ryu"
             },
@@ -5154,14 +5158,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.120",
+              "id": "serde_json 1.0.121",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.120"
+        "version": "1.0.121"
       },
       "build_script_attrs": {
         "data_glob": [
@@ -9125,7 +9129,7 @@
     "clap 4.5.11",
     "hex 0.4.3",
     "rxp 0.2.0",
-    "serde_json 1.0.120",
+    "serde_json 1.0.121",
     "sha2 0.10.8",
     "swc_allocator 0.1.6",
     "swc_atoms 0.6.7",
