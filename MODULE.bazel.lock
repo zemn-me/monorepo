@@ -19,8 +19,8 @@
     "https://bcr.bazel.build/modules/aspect_bazel_lib/1.42.2/MODULE.bazel": "2e0d8ab25c57a14f56ace1c8e881b69050417ff91b2fb7718dc00d201f3c3478",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/1.42.3/MODULE.bazel": "e4529e12d8cd5b828e2b5960d07d3ec032541740d419d7d5b859cabbf5b056f9",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.5.0/MODULE.bazel": "042028f08bb9529c770378ea20036489bd53bd192972abe68095fea8d0879cf6",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.8/MODULE.bazel": "1631a1bbb119fc372f9aaa55df6c7d0a59fdb1640324b3d5c0047d976eb57aae",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.8/source.json": "896a2b322e70b0d1517b8758159e71fa3c2bf7bce5ecda3eb99c9e84fdd71e5e",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.9/MODULE.bazel": "06e54f2b345b8eb7adceed2329b273da00d0368e28a9ebd9dfc75b4a052dac85",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.9/source.json": "72c2d5294e6ac7d05c72d46fbf439171291a8db4912312c95e146e11828dc84b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.31.0/MODULE.bazel": "15de32c321263f88c9fcef21c9ad5e9474c40d5bfc1fc6a7be0dd4af42d8eac9",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.33.1/MODULE.bazel": "db3e7f16e471cf6827059d03af7c21859e7a0d2bc65429a3a11f005d46fc501b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.34.0/MODULE.bazel": "cbe059f9c11db239121a858c5586cbfbed56777eb089860553675b25085ab11a",
@@ -193,8 +193,8 @@
     },
     "@@aspect_bazel_lib~//lib:extensions.bzl%toolchains": {
       "general": {
-        "bzlTransitiveDigest": "SK+5VjMKVX5gfuC//JqN+b1rWW3PNLeAEsqwiD3CAOA=",
-        "usagesDigest": "lhyQVM8A1CX7NWsxOLQjr0WH1sGzS004M7l1V/cppUY=",
+        "bzlTransitiveDigest": "jl6upvbQ+op05W1a3gE6bja6dc7fvsNfslO0m46Ma3s=",
+        "usagesDigest": "9flKgQRP2H1Bqrtg5VDRaHKdnZ2mkIcajKupW73czLY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -660,7 +660,7 @@
     },
     "@@aspect_rules_js~//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "lf8T4CF5bxzumfi+iRKV7tP1IpaJbtENusUAYtv03OE=",
+        "bzlTransitiveDigest": "r9kwFGhny4maSDoANKH89PJzL0ZdF0FnsNq6F+xRUq8=",
         "usagesDigest": "5OFcKMIxxPMsXQ6yMzkceL/nDqHYE2v5rEVPTt7n+vc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -2459,7 +2459,7 @@
     },
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "xmuC/dW0Hfaftg/uPZgmEjl1txDEN4Omzu4uk5UFcxY=",
+        "bzlTransitiveDigest": "zr4BAPWpKAtWkS88g0QZaEE2LAWNmMs48Kv7ynSTdqA=",
         "usagesDigest": "wqpum9A0+/nwH6wFsVYv8mVW0u0XtWqyouupHJBrANs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
