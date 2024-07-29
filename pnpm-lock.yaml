@@ -30,8 +30,8 @@ dependencies:
     specifier: 4.16.3
     version: 4.16.3(ts-node@10.9.2)(typescript@5.4.5)
   '@react-spring/rafz':
-    specifier: 9.7.3
-    version: 9.7.3
+    specifier: 9.7.4
+    version: 9.7.4
   '@tanstack/react-query':
     specifier: 5.51.15
     version: 5.51.15(react@18.3.1)
@@ -5786,13 +5786,8 @@ packages:
       react-native: 0.74.3(@babel/core@7.24.8)(@babel/preset-env@7.24.8)(@types/react@18.3.3)(react@18.3.1)
     dev: true
 
-  /@react-spring/rafz@9.7.3:
-    resolution: {integrity: sha512-9vzW1zJPcC4nS3aCV+GgcsK/WLaB520Iyvm55ARHfM5AuyBqycjvh1wbmWmgCyJuX4VPoWigzemq1CaaeRSHhQ==}
-    dev: false
-
   /@react-spring/rafz@9.7.4:
     resolution: {integrity: sha512-mqDI6rW0Ca8IdryOMiXRhMtVGiEGLIO89vIOyFQXRIwwIMX30HLya24g9z4olDvFyeDW3+kibiKwtZnA4xhldA==}
-    dev: true
 
   /@react-spring/shared@9.7.4(react@18.3.1):
     resolution: {integrity: sha512-bEPI7cQp94dOtCFSEYpxvLxj0+xQfB5r9Ru1h8OMycsIq7zFZon1G0sHrBLaLQIWeMCllc4tVDYRTLIRv70C8w==}
