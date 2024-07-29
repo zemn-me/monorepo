@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { OneBasedIndex } from '#root/ts/factorio/base';
+import { OneBasedIndex } from '#root/ts/factorio/base.js';
 import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
 
 export const LogisticFilter = z.strictObject({
