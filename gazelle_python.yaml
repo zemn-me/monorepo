@@ -55,13 +55,13 @@ manifest:
     cryptography.hazmat: cryptography
     cryptography.hazmat.backends: cryptography
     cryptography.hazmat.backends.openssl: cryptography
-    cryptography.hazmat.backends.openssl.aead: cryptography
     cryptography.hazmat.backends.openssl.backend: cryptography
-    cryptography.hazmat.backends.openssl.ciphers: cryptography
-    cryptography.hazmat.backends.openssl.decode_asn1: cryptography
     cryptography.hazmat.bindings: cryptography
     cryptography.hazmat.bindings.openssl: cryptography
     cryptography.hazmat.bindings.openssl.binding: cryptography
+    cryptography.hazmat.decrepit: cryptography
+    cryptography.hazmat.decrepit.ciphers: cryptography
+    cryptography.hazmat.decrepit.ciphers.algorithms: cryptography
     cryptography.hazmat.primitives: cryptography
     cryptography.hazmat.primitives.asymmetric: cryptography
     cryptography.hazmat.primitives.asymmetric.dh: cryptography
@@ -500,4 +500,4 @@ manifest:
     yamllint.rules.truthy: yamllint
   pip_repository:
     name: pip
-integrity: 9eddd5a557e08d23b74369e7be400a6cb0f02f0e4b422851229e44d6b8fdb14b
+integrity: 3fe269e602f5692fc3ecfa877238796afedb187d582696925d47ccb82d6b4195
