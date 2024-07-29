@@ -1,12 +1,11 @@
 /* eslint-disable react/forbid-elements */
- 
+
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
+import { Link } from '#root/ts/react/element/link/index.js';
 import * as Url from '#root/ts/url/index.js';
-
-import { Link } from '.';
 
 let container: HTMLDivElement | null = null;
 let root: Root;

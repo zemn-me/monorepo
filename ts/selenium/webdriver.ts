@@ -1,7 +1,8 @@
 /**
  * @fileoverview wires up selenium webdriver
  */
-import { statSync } from 'fs';
+import { statSync } from 'node:fs';
+
 import * as Selenium from 'selenium-webdriver';
 import Chrome from 'selenium-webdriver/chrome';
 

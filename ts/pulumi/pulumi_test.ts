@@ -1,5 +1,5 @@
 import '@pulumi/pulumi';
-import 'ts/pulumi/setMocks';
+import '#root/ts/pulumi/setMocks.js';
 
 import * as project from '#root/ts/pulumi/index.js';
 
