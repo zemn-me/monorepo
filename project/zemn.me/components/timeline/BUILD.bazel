@@ -1,0 +1,12 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+
+css_module(
+    name = "css_module",
+    srcs = ["timeline.module.css"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
