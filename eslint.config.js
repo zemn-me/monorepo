@@ -7,6 +7,7 @@ import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from 'typescript-eslint';
+import jestLint from 'eslint-plugin-jest';
 
 /** @type {import('eslint').Linter.FlatConfig} */
 export const reactConfig = {
@@ -23,10 +24,12 @@ export const reactConfig = {
 	plugins: {
 			'react-hooks': reactHooksPlugin,
 			'@next/next': next,
-		'react': fixupPluginRules(reactPlugin),
-			'simple-import-sort': simpleImportSort
+			'react': fixupPluginRules(reactPlugin),
+			'simple-import-sort': simpleImportSort,
+			'jest': jestLint,
 	},
     rules: {
+		'jest/prefer-importing-jest-globals': "error",
       'react/forbid-elements': [
         'error',
         {
