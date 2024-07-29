@@ -1,4 +1,7 @@
- 
+import { NewType } from '#root/ts/NewType.js';
+import type { Option } from '#root/ts/option2/option2.js';
+
+
 export * as dict from '#root/ts/iter/dict.js';
 
 /**
@@ -344,3 +347,30 @@ export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<A | B> {
 		}
 	}
 }
+
+type _Iterable<T> = impl<Iterable<T>>
+
+class impl<T> extends NewType<T> {
+	map<I, O>(this: _Iterable<I>, f: (i: I) => O): _Iterable<O> {
+		return new impl(map(this.value, f))
+	}
+	filter<T>(this: _Iterable<Option<T>>): _Iterable<T> {
+		const { value } = this;
+		return new impl( function* () {
+			for (const v of value) {
+				if (v.is_some()) yield v.unwrap();
+			}
+		}())
+	}
+	sort<T>(this: _Iterable<T>, compareFn?: (a: T, b: T) => number): impl<T[]> {
+		return new impl([...this.value].toSorted(compareFn))
+	}
+
+}
+
+function _Iterable<T>(v: Iterable<T>): _Iterable<T> {
+	return new impl(v)
+}
+
+
+export { _Iterable as Iterable }
