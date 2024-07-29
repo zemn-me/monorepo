@@ -205,6 +205,9 @@ gazelle_binary(
         "//go/gazelle/ts/config",
         "//go/gazelle/js",
         "//go/gazelle/css/module",
+        "//go/gazelle/ts",
+        "//go/gazelle/mdx",
+        "//go/gazelle/css",
         # Any languages that depend on Gazelle's proto plugin must come after it.
     ],
     visibility = ["//visibility:public"],

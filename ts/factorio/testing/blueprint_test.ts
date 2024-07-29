@@ -1,15 +1,15 @@
 import {
 	Blueprint,
 	blueprintSurroundedByWall,
-} from '#root/ts/factorio/blueprint';
-import { BlueprintString } from '#root/ts/factorio/blueprint_string';
-import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
-import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery';
-import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
-import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
-import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
+} from '#root/ts/factorio/blueprint.js';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
+import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper.js';
+import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery.js';
+import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall.js';
+import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations.js';
+import { powerBook } from '#root/ts/factorio/testing/data/powerBook.js';
 import { starterBase } from '#root/ts/factorio/testing/data/starterBase.js';
-import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
+import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille.js';
 
 const exampleBlueprint: BlueprintWrapper = {
 	blueprint: {
