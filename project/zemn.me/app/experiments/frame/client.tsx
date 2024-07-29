@@ -1,38 +1,147 @@
 'use client';
-import React, { ChangeEvent, useCallback, useId, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useId, useMemo, useState } from "react";
+
+import { frameSizes } from "#root/project/zemn.me/app/experiments/frame/frame_sizes.js";
+import { Iterable } from "#root/ts/iter/index.js";
+import { NewType } from "#root/ts/NewType.js";
+import { None, Some } from "#root/ts/option2/option2.js";
+import { Err, Ok, Result } from "#root/ts/result2/result2.js";
+
+const measurementConversions = {
+	"in": 0.0254,
+	"m": 1,
+	"mm": 1 / 1_000,
+	"cm": 1 / 100,
+};
+
+type Unit = keyof typeof measurementConversions;
 
 
-const parseMeasurement = /(\d+(?:\.\d+)?)(in|cm|mm)/
+type Measurement<S extends number = number, U extends Unit = Unit> = measurement<[ scalar: S, unit: U ]>
+
+function mustUnit(unit: string): Result<Unit, Error> {
+	if (!Object.keys(measurementConversions).some(v => v == unit))
+		return Err(new Error(`Unknown unit: ${unit}`));
+
+	return Ok(unit as Unit);
+}
+
+class measurement<T> extends NewType<T> {
+	scalar(this: Measurement) {
+		return this.value[0]
+	}
+	unit(this: Measurement) {
+		return this.value[1]
+	}
+	as_m(this: Measurement): measurement<[number, "m"]> {
+		return new measurement([ this.scalar() * measurementConversions[this.unit()], "m" ])
+	}
+
+	as(this: Measurement, target: Unit): Measurement {
+		return new measurement([
+			this.as_m().scalar() / measurementConversions[target], target
+])
+	}
+
+	plus(this: Measurement, other: Measurement): Measurement<number, "m"> {
+		return new measurement([this.as_m().scalar() + other.as_m().scalar(), "m"]);
+	}
+
+	multiply(this: Measurement, other: Measurement): Measurement<number, "m"> {
+		return new measurement([this.as_m().scalar() * other.as_m().scalar(), "m"]);
+	}
+
+	multiply_unitless(this: Measurement<number, "in">, other: number): Measurement<number, "in">
+	multiply_unitless(this: Measurement<number, "cm">, other: number): Measurement<number, "cm">
+	multiply_unitless(this: Measurement<number, "mm">, other: number): Measurement<number, "mm">
+	multiply_unitless(this: Measurement<number, "m">, other: number): Measurement<number, "m">
+
+	multiply_unitless(this: Measurement, other: number): Measurement {
+		return new measurement([this.scalar() * other, this.unit()]);
+	}
+
+	minus(this: Measurement, other: Measurement) {
+		return this.plus(other.multiply(new measurement([ -1, "m" ])))
+	}
+
+	divide(this: Measurement, other: Measurement): Measurement<number, "m"> {
+		return this.multiply(new measurement([ 1 / other.as_m().scalar(), "m"]))
+	}
+
+	divide_unitless(this: Measurement, other: number): Measurement {
+		return new measurement([this.scalar() / other, this.unit()]);
+	}
+
+	to_string_no_adjustments(this: Measurement): string {
+		return `${this.scalar().toFixed(2)}${this.unit()}`
+	}
+
+	to_string(this: Measurement): string {
+		let v: Measurement = this.as_m();
+		if (v.scalar() < 1) v = v.as("cm");
+		return `${v.scalar().toFixed(2)}${v.unit()}`
+	}
+
+}
+
+function Measurement<T>(v: T): measurement<T> {
+	return new measurement(v)
+}
+
+
+const reParseMeasurement = /(\d+(?:\.\d+)?)\s*(in|cm|mm?)/
+
+class ParseMeasurementError extends Error {
+	constructor(cause: Error, input: string) {
+		super(`parsing ${input}: ${cause}`)
+		super.cause = cause;
+	}
+}
 
 /**
  * Parse a measurement and return it in m.
  */
-function parseAndNormaliseMeasurement(measurement: string) {
-	const parsed = new RegExp(parseMeasurement).exec(measurement);
+function parseMeasurement(measurement: string): Result<Measurement, ParseMeasurementError | Error> {
+	const parsed = new RegExp(reParseMeasurement).exec(measurement);
 
-	if (parsed == null) return undefined;
+	if (parsed == null) return Err(new ParseMeasurementError(new Error("invalid format"), measurement));
 
 	const [, decimal, unit] = parsed;
 
-	if (decimal == undefined || unit == undefined) return undefined;
+	if (decimal == undefined) return Err(
+		new ParseMeasurementError(
+			new Error("missing decimal part"),
+			measurement
+		));
 
-	const multiplier = ({
-		"in": 0.0254,
-		"m": 1,
-		"mm": 1/1_000,
-		"cm": 1/100,
-	}[unit]);
+	if (unit == undefined) return Err(
+		new ParseMeasurementError(new Error("missing unit"), measurement));
 
-	if (multiplier == undefined) return undefined;
+	const scalar = +decimal;
+	if (isNaN(scalar)) return Err(new ParseMeasurementError(new Error("invalid decimal part"), measurement));
 
-	return parseInt(decimal, 10) * multiplier;
+	return mustUnit(unit).and_then(
+		unit => Measurement([ scalar, unit ])
+	)
 }
 
-function displayCanonicalUnit(measurement: number | undefined) {
-	if (measurement == undefined) return "unknown";
-
-	return `${measurement * 1_000}mm`;
+function displayCanonicalUnit(measurement: Result<Measurement, unknown>):string {
+	return measurement.and_then(m => m.to_string()).unwrap_or("unknown");
 }
+
+const normalisedFrameSizes = frameSizes.map(v => ({
+	...v,
+	width: parseMeasurement(v.width).unwrap(),
+	height: parseMeasurement(v.height).unwrap()
+})).map(v => [
+	v,
+	{
+		...v,
+		width: v.height,
+		height: v.width,
+		name: `${v.name} (rotated)`
+	}
+]).flat(1);
 
 
 export function FrameClient() {
@@ -41,28 +150,28 @@ export function FrameClient() {
 	const frameWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) =>
 		setFrameWidthInput(e.target.value)
 		, [setFrameWidthInput]);
-	const frameWidth = useMemo(() => parseAndNormaliseMeasurement(frameWidthInput), [frameWidthInput]);
+	const frameWidth = useMemo(() => parseMeasurement(frameWidthInput), [frameWidthInput]);
 
 	const [frameHeightInput, setFrameHeightInput] = useState<string>("7in");
 	const frameHeightInputId = useId();
 	const frameHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setFrameHeightInput(e.target.value), [setFrameHeightInput]);
-	const frameHeight = useMemo(() => parseAndNormaliseMeasurement(frameHeightInput), [ frameHeightInput ]);
+	const frameHeight = useMemo(() => parseMeasurement(frameHeightInput), [frameHeightInput]);
 
 
 	const [artWidthInput, setArtWidthInput] = useState<string>("3mm");
 	const artWidthInputId = useId();
 	const artWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setArtWidthInput(e.target.value), [setArtWidthInput]);
-	const artWidth = useMemo(() => parseAndNormaliseMeasurement(artWidthInput), [artWidthInput]);
+	const artWidth = useMemo(() => parseMeasurement(artWidthInput), [artWidthInput]);
 
 	const [artHeightInput, setArtHeightInput] = useState<string>("3mm");
 	const artHeightInputId = useId();
 	const artHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setArtHeightInput(e.target.value), [setArtHeightInput]);
-	const artHeight = useMemo(() => parseAndNormaliseMeasurement(artHeightInput), [artHeightInput]);
+	const artHeight = useMemo(() => parseMeasurement(artHeightInput), [artHeightInput]);
 
 	const [overlapAmountInput, setOverlapAmountInput] = useState<string>(".1mm");
 	const overlapAmountInputId = useId();
 	const overlapAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setOverlapAmountInput(e.target.value), [setOverlapAmountInput]);
-	const overlapAmount = useMemo(() => parseAndNormaliseMeasurement(overlapAmountInput), [overlapAmountInput]);
+	const overlapAmount = useMemo(() => parseMeasurement(overlapAmountInput), [overlapAmountInput]);
 
 
 	const frameSwapClickButtonId = useId();
@@ -79,18 +188,46 @@ export function FrameClient() {
 		setArtWidthInput(artHeightInput);
 	}, [setArtHeightInput, setArtWidthInput, artHeightInput, artWidthInput]);
 
-	const inH = frameHeight != undefined && artHeight != undefined ?
-		(frameHeight - artHeight)/2 : undefined;
+	const inH = frameHeight.zip(artHeight).and_then(([
+		frameHeight, artHeight
+	]) => frameHeight.minus(artHeight).divide_unitless(2));
 
-	const inW = frameWidth != undefined && artWidth != undefined ?
-		(frameWidth - artWidth) / 2 : undefined;
+	const inW = frameWidth.zip(artWidth).and_then(([frameWidth, artWidth]) =>
+		frameWidth.minus(artWidth).divide_unitless(2));
 
-	const insH = inH != undefined && overlapAmount != undefined ?
-		inH + overlapAmount: undefined;
+	const insH = inH.zip(overlapAmount).and_then(([inH, overlapAmount]) => inH.plus(overlapAmount));
 
-	const insW = inW != undefined && overlapAmount != undefined ?
-		inW + overlapAmount: undefined;
+	const insW = inW.zip(overlapAmount).and_then(([inW, overlapAmount]) => inW.plus(overlapAmount));
 
+
+	const frameOptions = Iterable(normalisedFrameSizes)
+		.map(f => ({
+			...f,
+			δwidth: artWidth.and_then(artWidth => f.width.minus(artWidth)),
+			δheight: artHeight.and_then(artHeight => f.height.minus(artHeight)),
+		})).map(v =>
+			Some(v.δheight.zip(v.δwidth).and_then(([δheight, δwidth]) => {
+				if (δheight.scalar() < 0 || δwidth.scalar() < 0) return None;
+				const mattedHeight = δheight.multiply_unitless(2);
+				const mattedWidth = δwidth.multiply_unitless(2);
+				return Some({
+					...v,
+					δheight, δwidth,
+					mattedHeight, mattedWidth,
+					totalMattedArea: mattedWidth.plus(
+						mattedHeight
+					)
+				})
+			})).absorb_result().flatten()
+		).filter()
+		.sort((a, b) => a.totalMattedArea.minus(b.totalMattedArea).scalar())
+		.map(v => <tr key={v.name}>
+			<td>{v.name}</td>
+			<td>{v.width.to_string_no_adjustments()}</td>
+			<td>{v.height.to_string_no_adjustments()}</td>
+			<td>{v.mattedWidth.as(v.width.unit()).to_string_no_adjustments()}</td>
+			<td>{v.mattedHeight.as(v.height.unit()).to_string_no_adjustments()}</td>
+		</tr>);
 
 	return <form>
 		<h1>Framing Calculator.</h1>
@@ -98,12 +235,12 @@ export function FrameClient() {
 			<legend>Frame</legend>
 			<label htmlFor={frameWidthInputId}>
 				Width:
-				<input id={frameWidthInputId} onChange={frameWidthChange} pattern={parseMeasurement.toString()} value={frameWidthInput} />
+				<input id={frameWidthInputId} onChange={frameWidthChange} pattern={reParseMeasurement.toString()} value={frameWidthInput} />
 			</label>
 
 			<label htmlFor={frameHeightInputId}>
 				Height:
-				<input id={frameHeightInputId} onChange={frameHeightChange} pattern={parseMeasurement.toString()} value={frameHeightInput}/>
+				<input id={frameHeightInputId} onChange={frameHeightChange} pattern={reParseMeasurement.toString()} value={frameHeightInput}/>
 			</label>
 			<button id={frameSwapClickButtonId} onClick={onFrameSwapClick} title="swap width and height">⇄</button>
 		</fieldset>
@@ -112,11 +249,11 @@ export function FrameClient() {
 			<legend>Art</legend>
 			<label htmlFor={artWidthInputId}>
 				Width:
-				<input id={artWidthInputId} onChange={artWidthChange} pattern={parseMeasurement.toString()} value={artWidthInput}/>
+				<input id={artWidthInputId} onChange={artWidthChange} pattern={reParseMeasurement.toString()} value={artWidthInput}/>
 			</label>
 			<label htmlFor={artHeightInputId}>
 				Height:
-				<input id={artHeightInputId} onChange={artHeightChange} pattern={parseMeasurement.toString()} value={artHeightInput}/>
+				<input id={artHeightInputId} onChange={artHeightChange} pattern={reParseMeasurement.toString()} value={artHeightInput}/>
 			</label>
 			<button id={artSwapClickButtonId} onClick={onArtSwapClick} title="swap width and height">⇄</button>
 		</fieldset>
@@ -125,9 +262,24 @@ export function FrameClient() {
 			<legend>Overlap</legend>
 			<label htmlFor={overlapAmountInputId}>
 				<i>Amount of art to cover with matteboard.</i>
-				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={parseMeasurement.toString()} value={overlapAmountInput}/>
+				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={reParseMeasurement.toString()} value={overlapAmountInput}/>
 			</label>
 		</fieldset>
+
+		<details>
+			<summary>Frame Options</summary>
+			<p>
+				To help you pick what sized frame to put the art in, this
+				is a list of different standard & off the shelf frame sizes
+				sorted by least space around the art to most.
+			</p>
+			<table>
+				<thead><tr><td>Name</td><td>Width</td><td>Height</td><td>Matted Width</td><td>Matted Height</td></tr></thead>
+				<tbody>
+				{[...frameOptions.value]}
+				</tbody>
+			</table>
+		</details>
 
 		<output htmlFor={[frameWidthInputId, frameHeightInputId, artWidthInputId, artHeightInputId, overlapAmountInputId, artSwapClickButtonId, frameSwapClickButtonId].join(" ")} name="result" >
 			<dl>
