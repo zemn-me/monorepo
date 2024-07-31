@@ -61,6 +61,7 @@ ts_project(
         ":deserialize",
         ":serialize",
         ":state_main",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//project/cultist:save",
         "//ts",

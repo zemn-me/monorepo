@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import * as log from '#root/ts/log/log.js';
 
 class MockConsole

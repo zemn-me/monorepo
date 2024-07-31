@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import * as Url from '#root/ts/url/index.js';
 
 describe('url', () => {

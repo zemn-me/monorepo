@@ -18,6 +18,7 @@ ts_project(
     srcs = ["typescript_basic_test.ts"],
     preserve_jsx = False,
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
     ],

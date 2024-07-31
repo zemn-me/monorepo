@@ -6,6 +6,7 @@ ts_project(
     name = "ts_sources",
     deps = [
         "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",

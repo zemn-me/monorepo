@@ -14,7 +14,10 @@ ts_project(
 jest_test(
     name = "_tests",
     srcs = ["webdriver_test.js"],
-    deps = [":tests"],
+    deps = [
+        ":tests",
+        "//:node_modules/@jest/globals",
+    ],
 )
 
 bazel_lint(
