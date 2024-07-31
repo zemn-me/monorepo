@@ -1,3 +1,5 @@
+import { expect, it } from '@jest/globals';
+
 import { RedditSearchResponse } from '#root/ts/reddit/reddit';
 import { response_example } from '#root/ts/reddit/response_example';
 

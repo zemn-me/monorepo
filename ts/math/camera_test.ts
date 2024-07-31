@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import * as Camera from '#root/ts/math/camera.js';
 
 describe('Camera', () => {
