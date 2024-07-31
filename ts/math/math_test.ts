@@ -1,9 +1,11 @@
+import { describe, expect, test } from '@jest/globals';
+
 import { Point, rectContaninsPoint } from '#root/ts/math/cartesian.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
-	expect(actual.length).toBe(expected.length);
+expect(actual.length).toBe(expected.length);
 	actual.forEach((row, i) => {
 		row.forEach((v, k) => {
 			expect(v).toBeCloseTo(expected[i]![k]!);
