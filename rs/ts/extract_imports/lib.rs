@@ -44,7 +44,7 @@ pub fn extract_imports(filename: String) -> Result<Vec<String>, ExtractImportsEr
             swc_ecma_ast::ModuleItem::ModuleDecl(m) => match m {
                 ModuleDecl::Import(import) => Some(import.src.value.clone().to_string()),
                 ModuleDecl::ExportDecl(_) => None,
-                ModuleDecl::ExportNamed(_) => None,
+                ModuleDecl::ExportNamed(export) => export.src.map | value | value.value.to_string(),
                 ModuleDecl::ExportDefaultDecl(_) => None,
                 ModuleDecl::ExportDefaultExpr(_) => None,
                 ModuleDecl::ExportAll(export) => Some(export.src.value.to_string()),
