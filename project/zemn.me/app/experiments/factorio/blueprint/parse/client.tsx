@@ -4,23 +4,17 @@ import { useId, useState } from 'react';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint.js';
-import { Option } from '#root/ts/option.js';
+import { None, Option, Some } from '#root/ts/option2/option2.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
-import { Err, Ok, ResultSequence } from '#root/ts/result.js';
 import { safely } from '#root/ts/safely.js';
 
 export function Client() {
-	const [input, setInput] = useState<Option<string>>({ [Err]: undefined });
+	const [input, setInput] = useState<Option<string>>(None);
 	const b64InputLabel = useId();
 	const outputLabel = useId();
-	const errorsLabel = useId();
 	const inputsString = [b64InputLabel].join(' ');
-
-	const bw = ResultSequence(input).then(v =>
-		safely(() => BlueprintString.parse(v))()
-	).result;
 
 	return (
 		<Prose>
@@ -41,48 +35,43 @@ export function Client() {
 							<textarea
 								id={b64InputLabel}
 								onChange={e =>
-									setInput({ [Ok]: e.target.value })
+									setInput(Some(e.target.value))
 								}
 								style={{ display: 'block' }}
 							/>
 						</label>
 					</li>
 
-					{Err in bw && bw[Err] !== undefined ? (
-						<li>
-							<label htmlFor={errorsLabel}>
-								Errors occurred:{' '}
-								<output htmlFor={inputsString} id={errorsLabel}>
-									<ErrorDisplay error={bw[Err]} />
-								</output>
-							</label>
-						</li>
-					) : null}
 
-					{Ok in bw ? (
-						<>
-							<li>
-								<label htmlFor={outputLabel}>
-									Blueprint:
-									<output
-										htmlFor={inputsString}
-										id={outputLabel}
-									>
-										<DisplayBlueprintWrapper
-											wrapper={bw[Ok]}
+					<output htmlFor={inputsString}>
+						{input.and_then(input =>
+							safely(() => BlueprintString.parse(input))()
+								.and_then(output =>
+
+								<>
+									<li>
+										<label htmlFor={outputLabel}>
+											Blueprint:
+											<output
+												htmlFor={inputsString}
+												id={outputLabel}
+											>
+												<DisplayBlueprintWrapper
+													wrapper={output}
+												/>
+											</output>
+										</label>
+									</li>
+									<li>
+										JSON{' '}
+										<CopyToClipboard
+											text={() => JSON.stringify(output)}
 										/>
-									</output>
-								</label>
-							</li>
-							<li>
-								JSON{' '}
-								<CopyToClipboard
-									text={() => JSON.stringify(bw[Ok])}
-								/>
-								<PrettyJSON value={bw[Ok]} />
-							</li>
-						</>
-					) : null}
+										<PrettyJSON value={output} />
+									</li>
+								</>
+							).unwrap_or_else(e => <ErrorDisplay error={e} />)).unwrap_or(<>Please input a blueprint. </>)}
+					</output>
 				</ul>
 			</form>
 		</Prose>
