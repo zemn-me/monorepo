@@ -11,6 +11,10 @@ ts_project(
         include = ["*.ts"],
         exclude = ["*_test.ts"],
     ),
+    deps = [
+        "//ts",
+        "//ts/option2",
+    ],
 )
 
 ts_project(
