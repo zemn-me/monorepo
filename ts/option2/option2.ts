@@ -7,8 +7,8 @@ class impl<T> extends NewType<T> {
 	is_none<T>(this: Option<T>): this is None { return types.is_none(this.value) }
 	is_some<T>(this: Option<T>): this is Some<T> { return types.is_some(this.value) }
 	unwrap<T>(this: Option<T>): T { return types.unwrap(this.value) }
-	unwrap_or<T>(this: Option<T>, fallback: T): T { return types.unwrap_or(this.value, fallback) }
-	unwrap_or_else<T>(this: Option<T>, fallback: () => T): T {
+	unwrap_or<T1, T2>(this: Option<T1>, fallback: T2): T1 | T2 { return types.unwrap_or(this.value, fallback) }
+	unwrap_or_else<T1, T2>(this: Option<T1>, fallback: () => T2): T1 | T2 {
 		return types.unwrap_or_else(this.value, fallback)
 	}
 	and_then<T, O>(this: Option<T>, f: (v: T) => O): Option<O> {

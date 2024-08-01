@@ -12,7 +12,8 @@ export class impl<T> extends NewType<T> {
 
 		return this.value[types._err];
 	}
-	unwrap_or_else<T, E>(this: Result<T, E>, fallback: () => T): T {
+
+	unwrap_or_else<T, E>(this: Result<T, E>, fallback: (e: E) => T): T {
 		return types.unwrap_or_else(this.value, fallback)
 	}
 	and_then<T, E, O>(this: Result<T, E>, f: (v: T) => O): Result<O, E> {
@@ -29,6 +30,11 @@ export class impl<T> extends NewType<T> {
 		if (this.is_err()) return this;
 
 		return Ok(v);
+	}
+
+	as_union<T, E>(this: Result<T, E>): T | E {
+		if (this.is_err()) return this.unwrap_err();
+		return this.unwrap();
 	}
 }
 
