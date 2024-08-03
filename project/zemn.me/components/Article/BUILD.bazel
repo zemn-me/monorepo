@@ -2,21 +2,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "Article",
-    assets = ["style.module.css"],
-    visibility = ["//project/zemn.me:__subpackages__"],
-    deps = [
-        "//:base_defs",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
-        "//ts/react/lang",
-        "//ts/time",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -25,4 +10,40 @@ bazel_lint(
 css_module(
     name = "css_module",
     srcs = ["style.module.css"],
+)
+
+ts_project(
+    name = "article_tsx",
+    srcs = ["article.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/Article:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Article:article_types_tsx",
+        "@monorepo//ts/react/lang:date_tsx",
+        "@monorepo//ts/time:date_ts",
+    ],
+)
+
+ts_project(
+    name = "article_metadata_tsx",
+    srcs = ["article_metadata.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Article:article_types_tsx",
+    ],
+)
+
+ts_project(
+    name = "article_types_tsx",
+    srcs = ["article_types.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
 )

@@ -23,3 +23,31 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "reddit_ts",
+    srcs = ["reddit.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "reddit_test_ts",
+    srcs = ["reddit_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/reddit:reddit_ts",
+        "@monorepo//ts/reddit:response_example_ts",
+    ],
+)
+
+ts_project(
+    name = "response_example_ts",
+    srcs = ["response_example.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+jest_test(
+    name = "reddit_test_ts_test",
+    srcs = ["reddit_test.js"],
+)

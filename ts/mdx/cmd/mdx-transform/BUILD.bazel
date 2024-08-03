@@ -7,27 +7,6 @@ Transform MDX files to .ts files.
 load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "transform_ts",
-    deps = [
-        "//:node_modules/@commander-js/extra-typings",
-        "//:node_modules/@mdx-js/mdx",
-        "//:node_modules/@types/mdast",  # transient dep of @mdx-js/mdx
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/remark",
-        "//:node_modules/remark-frontmatter",
-        "//:node_modules/remark-gfm",
-        "//:node_modules/remark-mdx-frontmatter",
-        "//:node_modules/source-map",
-        "//:node_modules/to-vfile",
-        "//:node_modules/unified",
-        "//:node_modules/vfile",
-        "//ts/iter",
-        "//ts/math",
-    ],
-)
-
 js_binary(
     name = "mdx-transform",
     data = [":transform_ts"],
@@ -40,5 +19,24 @@ bazel_lint(
     srcs = [
         "BUILD.bazel",
         "rules.bzl",
+    ],
+)
+
+ts_project(
+    name = "main_ts",
+    srcs = ["main.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@mdx-js/mdx",
+        "//:node_modules/@types/node",
+        "//:node_modules/remark-frontmatter",
+        "//:node_modules/remark-gfm",
+        "//:node_modules/remark-mdx-frontmatter",
+        "//:node_modules/source-map",
+        "//:node_modules/to-vfile",
+        "//:node_modules/vfile",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/math:vec_ts",
     ],
 )

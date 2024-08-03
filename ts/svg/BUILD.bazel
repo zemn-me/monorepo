@@ -26,3 +26,30 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//ts/math:vec_ts",
+    ],
+)
+
+ts_project(
+    name = "scale_tsx",
+    srcs = ["scale.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/react",
+        "//:node_modules/d3-scale",
+        "//:node_modules/react",
+        "@monorepo//ts:guard_ts",
+        "@monorepo//ts/math:matrix_ts",
+        "@monorepo//ts/math:vec_ts",
+        "@monorepo//ts/svg:index_tsx",
+    ],
+)

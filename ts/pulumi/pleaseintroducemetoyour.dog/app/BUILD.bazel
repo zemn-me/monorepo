@@ -1,34 +1,52 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css:rules.bzl", "css_files")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
-ts_project(
-    name = "app",
-    assets = [
-        "base.css",
-    ],
-    deps = [
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@tanstack/react-query",
-        "//:node_modules/@types/react",
-        "//:node_modules/classnames",
-        "//:node_modules/mime",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//:node_modules/zod",
-        "//project/zemn.me/components",
-        "//project/zemn.me/components/Link",
-        "//ts",
-        "//ts/next.js",
-        "//ts/react/Video",
-        "//ts/reddit",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "clientProviders_tsx",
+    srcs = ["clientProviders.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "layout_tsx",
+    srcs = ["layout.tsx"],
+    assets = ["@monorepo//ts/pulumi/pleaseintroducemetoyour.dog/app:css_files"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//ts/next.js:index_tsx",
+        "@monorepo//ts/pulumi/pleaseintroducemetoyour.dog/app:clientProviders_tsx",
+    ],
+)
+
+ts_project(
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Link:Link_tsx",
+    ],
+)
+
+css_files(
+    name = "css_files",
+    srcs = ["base.css"],
 )
