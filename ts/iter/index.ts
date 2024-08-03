@@ -1,5 +1,5 @@
 import { NewType } from '#root/ts/NewType.js';
-import type { Option } from '#root/ts/option2/option2.js';
+import type { Option } from '#root/ts/option/option.js';
 
 
 export * as dict from '#root/ts/iter/dict.js';
