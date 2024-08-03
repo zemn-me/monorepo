@@ -3,7 +3,7 @@ import { useId, useState } from 'react';
 
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
-import { BlueprintString } from '#root/ts/factorio/blueprint_string';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
 import { concat, map } from '#root/ts/iter/index.js';
 import { None, Option, OptionSequence, Some } from '#root/ts/option.js';
