@@ -49,7 +49,9 @@ ts_project(
     srcs = ["save_test.ts"],
     deps = [
         ":save",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//project/cultist/example",
     ],
 )
@@ -66,7 +68,9 @@ ts_project(
     deps = [
         "element",
         ":action",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//project/cultist/state",
     ],
 )

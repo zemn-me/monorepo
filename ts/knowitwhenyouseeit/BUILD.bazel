@@ -25,6 +25,7 @@ ts_project(
     srcs = ["main_test.ts"],
     deps = [
         ":project",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
     ],
 )

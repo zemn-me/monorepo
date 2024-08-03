@@ -4,6 +4,7 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 ts_project(
     name = "testing",
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/jest",

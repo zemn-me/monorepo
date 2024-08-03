@@ -10,6 +10,8 @@ const cultist = {
 	element,
 } as const;
 
+import { describe, expect, test } from '@jest/globals';
+
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
 		const elements = Object.entries({
