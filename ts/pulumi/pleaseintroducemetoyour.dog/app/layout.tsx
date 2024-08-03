@@ -1,4 +1,4 @@
-import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
+import '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
 
 import { Metadata } from 'next/types/index.js';
 import { ReactNode } from 'react';

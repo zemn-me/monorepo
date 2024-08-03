@@ -4,7 +4,7 @@ import { scaleLinear, scaleQuantize } from 'd3-scale';
 import {
 	domainScaleFitContain,
 	unrolledSpace2D,
-} from '#root/ts/math/space/space';
+} from '#root/ts/math/space/space.js';
 
 function head<T, F>(
 	t: Iterator<T>,
