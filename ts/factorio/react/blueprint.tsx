@@ -14,6 +14,8 @@ import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
 import { Tile } from '#root/ts/factorio/tile.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
+import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
+import { resultFromZod } from '#root/ts/zod/util.js';
 
 export interface RenderBlueprintProps {
 	readonly blueprint: Blueprint;
@@ -27,22 +29,22 @@ export function RenderBlueprint({
 	height = 100,
 }: RenderBlueprintProps) {
 	const renderables = blueprint.entities ?? [];
-	const scaleX = scaleLinear(
+	const scaleX = resultFromZod(z
+		.tuple([z.number(), z.number()])
+		.safeParse(extent(renderables, v => v.position.x))).and_then(v => scaleLinear(v, [0, width]));
+
+	const scaleY = resultFromZod(
 		z
 			.tuple([z.number(), z.number()])
-			.parse(extent(renderables, v => v.position.x)),
-		[0, width]
-	);
-	const scaleY = scaleLinear(
-		z
-			.tuple([z.number(), z.number()])
-			.parse(extent(renderables, v => v.position.y)),
-		[0, height]
-	);
+			.safeParse(extent(renderables, v => v.position.y)))
+		.and_then(v => scaleLinear(v, [0, height]));
 
 	return (
 		<svg viewBox={`0 0 ${width} ${height}`} {...{ width, height }}>
-			{renderables.map(r => (
+			{
+				scaleX.zip(scaleY).and_then(
+					([scaleX, scaleY]) => <>
+{renderables.map(r => (
 				<circle
 					cx={scaleX(r.position.x)}
 					cy={scaleY(r.position.y)}
@@ -50,6 +52,10 @@ export function RenderBlueprint({
 					r="1"
 				/>
 			))}
+					</>
+				).unwrap_or_else(e => <ErrorDisplay error={e}/>)
+			}
+
 		</svg>
 	);
 }
