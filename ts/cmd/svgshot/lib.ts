@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-import { exec } from 'child_process';
+import { exec } from 'node:child_process';
+import { readFile, writeFile } from 'node:fs/promises';
+import { promisify } from 'node:util';
+
 import { Command } from 'commander';
-import { readFile, writeFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
 import * as svgo from 'svgo';
 import * as tmp from 'tmp';
-import { promisify } from 'util';
 
 const program = new Command()
 	.name('svgshot')
