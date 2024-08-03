@@ -1,6 +1,8 @@
 import '@pulumi/pulumi';
 import 'ts/pulumi/setMocks';
 
+import { describe, test } from '@jest/globals';
+
 import * as project from '#root/ts/pulumi/index.js';
 
 describe('pulumi', () => {

@@ -18,6 +18,7 @@ ts_project(
         "//ts/pulumi/zemn.me/availability:next",
     ],
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/cross-spawn",

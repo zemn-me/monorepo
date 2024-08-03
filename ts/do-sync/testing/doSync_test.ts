@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@jest/globals';
 import sharpT from 'sharp';
 
 import { doSync, JSONObject } from '#root/ts/do-sync/index.js';

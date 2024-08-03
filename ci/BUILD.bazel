@@ -8,6 +8,7 @@ ts_project(
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
