@@ -21,6 +21,7 @@ ts_project(
         ":a",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
     ],
 )
 
