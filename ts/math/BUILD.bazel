@@ -3,17 +3,6 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "math",
-    srcs = glob(["*.ts"]),
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//ts",
-        "//ts/iter",
-    ],
-)
-
 jest_test(
     name = "test",
     srcs = [
@@ -26,4 +15,146 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "camera_ts",
+    srcs = ["camera.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:homog_ts",
+        "@monorepo//ts/math:matrix_ts",
+    ],
+)
+
+ts_project(
+    name = "camera_test_ts",
+    srcs = ["camera_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/math:camera_ts"],
+)
+
+ts_project(
+    name = "cartesian_ts",
+    srcs = ["cartesian.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:matrix_ts",
+        "@monorepo//ts/math:vec_ts",
+    ],
+)
+
+ts_project(
+    name = "conv_ts",
+    srcs = ["conv.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:euler_angle_ts",
+        "@monorepo//ts/math:quaternion_ts",
+    ],
+)
+
+ts_project(
+    name = "conv_test_ts",
+    srcs = ["conv_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:conv_ts",
+        "@monorepo//ts/math:euler_angle_ts",
+        "@monorepo//ts/math:quaternion_ts",
+    ],
+)
+
+ts_project(
+    name = "degree_ts",
+    srcs = ["degree.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "euler_angle_ts",
+    srcs = ["euler_angle.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "homog_ts",
+    srcs = ["homog.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:matrix_ts",
+    ],
+)
+
+ts_project(
+    name = "math_test_ts",
+    srcs = ["math_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:matrix_ts",
+        "@monorepo//ts/math:vec_ts",
+    ],
+)
+
+ts_project(
+    name = "matrix_ts",
+    srcs = ["matrix.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/math:vec_ts"],
+)
+
+ts_project(
+    name = "quaternion_ts",
+    srcs = ["quaternion.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "quaternion_test_ts",
+    srcs = ["quaternion_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/math:quaternion_ts"],
+)
+
+ts_project(
+    name = "scale_ts",
+    srcs = ["scale.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "tuple_ts",
+    srcs = ["tuple.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "vec_ts",
+    srcs = ["vec.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts:tuple_ts"],
+)
+
+jest_test(
+    name = "camera_test_ts_test",
+    srcs = ["camera_test.js"],
+)
+
+jest_test(
+    name = "conv_test_ts_test",
+    srcs = ["conv_test.js"],
+)
+
+jest_test(
+    name = "math_test_ts_test",
+    srcs = ["math_test.js"],
+)
+
+jest_test(
+    name = "quaternion_test_ts_test",
+    srcs = ["quaternion_test.js"],
 )

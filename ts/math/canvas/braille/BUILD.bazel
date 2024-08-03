@@ -8,13 +8,13 @@ ts_project(
     srcs = [
         "braille.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/d3-array",
         "//:node_modules/d3-scale",
-        "//:node_modules/react",
-        "//ts/math/space",
+        "@monorepo//ts/math/space:space_ts",
     ],
 )
 
@@ -23,10 +23,11 @@ ts_project(
     srcs = [
         "braille_test.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":braille",
-        "//:node_modules/@types/jest",
-        "//ts/math",
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/d3-array",
+        "@monorepo//ts/math/canvas/braille",
     ],
 )
 
@@ -44,4 +45,9 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "braille_test_ts_test",
+    srcs = ["braille_test.js"],
 )

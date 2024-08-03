@@ -1,21 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-ts_project(
-    name = "testing",
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/d3-array",
-        "//:node_modules/@types/d3-scale",
-        "//:node_modules/@types/jest",
-        "//:node_modules/d3-array",
-        "//:node_modules/d3-scale",
-        "//:node_modules/zod",
-        "//ts/factorio",
-        "//ts/math/canvas/braille",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["blueprint_test.js"],
@@ -25,4 +10,42 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "blueprint_test_ts",
+    srcs = ["blueprint_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/factorio:blueprint_string_ts",
+        "@monorepo//ts/factorio:blueprint_ts",
+        "@monorepo//ts/factorio:blueprint_wrapper_ts",
+        "@monorepo//ts/factorio/testing:render_to_braille_ts",
+        "@monorepo//ts/factorio/testing/data:allOilsRefinery_ts",
+        "@monorepo//ts/factorio/testing/data:bigAssMall_ts",
+        "@monorepo//ts/factorio/testing/data:neoVortexTrainStations_ts",
+        "@monorepo//ts/factorio/testing/data:powerBook_ts",
+        "@monorepo//ts/factorio/testing/data:starterBase_ts",
+    ],
+)
+
+ts_project(
+    name = "render_to_braille_ts",
+    srcs = ["render_to_braille.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/d3-scale",
+        "//:node_modules/d3-array",
+        "//:node_modules/d3-scale",
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:blueprint_ts",
+        "@monorepo//ts/math/canvas/braille",
+    ],
+)
+
+jest_test(
+    name = "blueprint_test_ts_test",
+    srcs = ["blueprint_test.js"],
 )

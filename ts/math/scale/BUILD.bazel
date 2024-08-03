@@ -3,22 +3,6 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "scale",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/react",
-        "//:node_modules/react",
-        "//ts",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["scale_test.js"],
@@ -29,4 +13,26 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "scale_test_ts",
+    srcs = ["scale_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/math/scale:index_ts"],
+)
+
+jest_test(
+    name = "scale_test_ts_test",
+    srcs = ["scale_test.js"],
 )
