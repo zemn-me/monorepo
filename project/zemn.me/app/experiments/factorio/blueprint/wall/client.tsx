@@ -8,7 +8,7 @@ import {
 	Blueprint,
 	blueprintSurroundedByWall,
 } from '#root/ts/factorio/blueprint.js';
-import { BlueprintString } from '#root/ts/factorio/blueprint_string';
+import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
 import { None, Option, Some } from '#root/ts/option/option.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ConnectionData } from '#root/ts/factorio/connection_data';
+import { ConnectionData } from '#root/ts/factorio/connection_data.js';
 import { ConnectionPoint } from '#root/ts/factorio/connection_point.js';
 
 /**

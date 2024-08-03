@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
+import fs from 'node:fs/promises';
+
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
-import fs from 'fs/promises';
 
 import { githubIssuesPage } from '#root/ts/constants/constants.js';
 

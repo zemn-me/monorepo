@@ -9,7 +9,7 @@ import Link from '#root/project/zemn.me/components/Link/index.js';
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
 import { Video } from '#root/ts/react/Video/video.js';
-import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
+import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit.js';
 
 function Post(post: z.TypeOf<typeof RedditPost>) {
 	const videoRef = useRef<HTMLVideoElement>(null);

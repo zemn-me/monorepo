@@ -1,0 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "util",
+    srcs = ["util.go"],
+    importpath = "github.com/zemn-me/monorepo/go/gazelle/util",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_bazelbuild_buildtools//build"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

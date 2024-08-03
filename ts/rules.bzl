@@ -70,8 +70,6 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
         **kwargs: passed to the ts_project rule
     """
-    if srcs == None:
-        srcs = native.glob(["**/*.ts", "**/*.tsx"])
 
     # needed because package.json tells node it can use ESM resolution at runtime
     # and all code is now esm.

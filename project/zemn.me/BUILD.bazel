@@ -32,3 +32,6 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+# gazelle:resolve javascript javascript #root/project/zemn.me/public/kenwood.jpg //project/zemn.me/public:kenwood.jpg
+# gazelle:resolve javascript javascript #root/project/zemn.me/public/kenwood_snow.jpg //project/zemn.me/public:kenwood_snow.jpg

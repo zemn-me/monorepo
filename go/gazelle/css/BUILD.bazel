@@ -1,14 +1,12 @@
-load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_library")
 
 go_library(
-    name = "js",
+    name = "css",
     srcs = ["package.go"],
-    importpath = "github.com/zemn-me/monorepo/go/gazelle/js",
+    importpath = "github.com/zemn-me/monorepo/go/gazelle/css",
     visibility = ["//visibility:public"],
     deps = [
-        "//go/encoding/jsonc",
-        "//go/ts",
+        "//go/gazelle/js",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
@@ -17,9 +15,4 @@ go_library(
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_bazelbuild_buildtools//build",
     ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
 )

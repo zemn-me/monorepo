@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { OneBasedIndex } from '#root/ts/factorio/base';
+import { OneBasedIndex } from '#root/ts/factorio/base.js';
 
 export const EntityNumber = OneBasedIndex;
 

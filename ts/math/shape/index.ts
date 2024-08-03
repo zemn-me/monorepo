@@ -5,7 +5,7 @@ import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { map } from '#root/ts/math/vec';
+import { map } from '#root/ts/math/vec.js';
 
 export class Square implements Canvas.Drawable2D {
 	public readonly r: number;

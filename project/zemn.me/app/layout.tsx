@@ -1,5 +1,5 @@
 
-import 'project/zemn.me/app/base.css';
+import '#root/project/zemn.me/app/base.css';
 
 import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';

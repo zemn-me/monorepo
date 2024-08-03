@@ -1,11 +1,11 @@
 import { expect, it } from '@jest/globals';
 
-import { point } from '#root/ts/math/cartesian';
-import { Cartestian, Quaternion } from '#root/ts/math/conv';
-import { degree } from '#root/ts/math/degree';
-import { EulerAngle } from '#root/ts/math/euler_angle';
-import { plot2D, plot3D } from '#root/ts/math/space/render/braille';
-import { cube, square } from '#root/ts/math/space/shape';
+import { point } from '#root/ts/math/cartesian.js';
+import { Cartestian, Quaternion } from '#root/ts/math/conv.js';
+import { degree } from '#root/ts/math/degree.js';
+import { EulerAngle } from '#root/ts/math/euler_angle.js';
+import { plot2D, plot3D } from '#root/ts/math/space/render/braille.js';
+import { cube, square } from '#root/ts/math/space/shape.js';
 
 it('should render a square properly', () => {
 	expect(plot2D([square(point<2>(0, 0), 1)], 10)).toEqual(

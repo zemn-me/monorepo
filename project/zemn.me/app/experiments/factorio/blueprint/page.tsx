@@ -1,5 +1,5 @@
 import Link from '#root/project/zemn.me/components/Link/Link.js';
-import { Prose } from '#root/project/zemn.me/components/Prose/prose';
+import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 
 export default function Page() {
 	return (

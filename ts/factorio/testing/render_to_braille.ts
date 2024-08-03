@@ -2,8 +2,8 @@ import { extent, range } from 'd3-array';
 import { scaleQuantize } from 'd3-scale';
 import { z } from 'zod';
 
-import { Blueprint } from '#root/ts/factorio/blueprint';
-import { plot } from '#root/ts/math/canvas/braille/braille';
+import { Blueprint } from '#root/ts/factorio/blueprint.js';
+import { plot } from '#root/ts/math/canvas/braille/braille.js';
 
 const T2 = z.tuple([z.number(), z.number()]);
 
