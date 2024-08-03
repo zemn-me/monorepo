@@ -16,7 +16,10 @@ jest_test(
     name = "tests",
     srcs = ["fs_test.js"],
     data = glob(["testfiles/**/*"]),
-    deps = [":fs"],
+    deps = [
+        ":fs",
+        "//:node_modules/@jest/globals",
+    ],
 )
 
 bazel_lint(

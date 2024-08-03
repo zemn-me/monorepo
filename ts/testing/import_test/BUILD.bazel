@@ -17,6 +17,7 @@ ts_project(
     srcs = ["import_test.ts"],
     deps = [
         ":a",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
     ],
 )

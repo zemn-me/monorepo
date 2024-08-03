@@ -1,3 +1,5 @@
+import { describe, expect, test } from '@jest/globals';
+
 import { Scalable, Scale } from '#root/ts/math/scale/index.js';
 
 interface SquareProps {
