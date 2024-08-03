@@ -8,7 +8,7 @@ import { None, Option, Some } from '#root/ts/option/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
-import { safely } from '#root/ts/safely.js';
+import { resultFromZod } from '#root/ts/zod/util.js';
 
 export function Client() {
 	const [input, setInput] = useState<Option<string>>(None);
@@ -45,7 +45,7 @@ export function Client() {
 
 					<output htmlFor={inputsString}>
 						{input.and_then(input =>
-							safely(() => BlueprintString.parse(input))()
+							resultFromZod(BlueprintString.safeParse(input))
 								.and_then(output =>
 
 								<>
