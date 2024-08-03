@@ -1,14 +1,14 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "zod",
-    deps = [
-        "//:node_modules/zod",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "util_ts",
+    srcs = ["util.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
 )

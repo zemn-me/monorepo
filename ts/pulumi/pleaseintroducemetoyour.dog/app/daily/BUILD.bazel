@@ -1,0 +1,37 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client_tsx",
+    srcs = ["client.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+        "//:node_modules/zod",
+        "@monorepo//project/zemn.me/components/Link:index_tsx",
+        "@monorepo//ts:guard_ts",
+        "@monorepo//ts:guards_ts",
+        "@monorepo//ts/react/Video:video_tsx",
+        "@monorepo//ts/reddit:reddit_ts",
+    ],
+)
+
+ts_project(
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//ts/pulumi/pleaseintroducemetoyour.dog/app/daily:client_tsx",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

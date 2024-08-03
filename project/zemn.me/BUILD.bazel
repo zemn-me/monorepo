@@ -4,17 +4,6 @@ load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//visibility:public"])
 
-ts_project(
-    name = "ts",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    deps = [
-        "//project/zemn.me/app",
-    ],
-)
-
 next_project(
     name = "next",
     srcs = [
@@ -35,3 +24,8 @@ bazel_lint(
 
 # gazelle:resolve javascript javascript #root/project/zemn.me/public/kenwood.jpg //project/zemn.me/public:kenwood.jpg
 # gazelle:resolve javascript javascript #root/project/zemn.me/public/kenwood_snow.jpg //project/zemn.me/public:kenwood_snow.jpg
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)

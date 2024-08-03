@@ -3,14 +3,79 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "ts",
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+ts_project(
+    name = "errors_ts",
+    srcs = ["errors.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "guard_ts",
+    srcs = ["guard.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "guards_ts",
+    srcs = ["guards.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts:errors_ts"],
+)
+
+ts_project(
+    name = "json_ts",
+    srcs = ["json.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "option_ts",
+    srcs = ["option.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts:result_ts"],
+)
+
+ts_project(
+    name = "result_ts",
+    srcs = ["result.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "safely_ts",
+    srcs = ["safely.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts:result_ts"],
+)
+
+ts_project(
+    name = "tree_ts",
+    srcs = ["tree.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "tuple_ts",
+    srcs = ["tuple.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "util_ts",
+    srcs = ["util.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "NewType_ts",
+    srcs = ["NewType.ts"],
+    visibility = ["//:__subpackages__"],
 )
