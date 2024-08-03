@@ -18,3 +18,8 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+mdx_files(
+    name = "mdx_files",
+    srcs = ["cors.mdx"],
+)
