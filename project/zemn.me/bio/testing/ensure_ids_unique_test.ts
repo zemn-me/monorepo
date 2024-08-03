@@ -1,3 +1,5 @@
+import { expect, test } from '@jest/globals';
+
 import { Bio } from '#root/project/zemn.me/bio/bio.js';
 
 test('ids must be unique', () => {

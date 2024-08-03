@@ -1,3 +1,5 @@
+import { expect, test } from '@jest/globals';
+
 import * as a from '#root/ts/testing/import_test/a.js';
 
 test('import', () => {

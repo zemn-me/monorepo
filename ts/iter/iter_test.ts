@@ -1,3 +1,5 @@
+import { describe, expect, it, test } from '@jest/globals';
+
 import * as iter from '#root/ts/iter/index.js';
 
 describe('flatten', () => {

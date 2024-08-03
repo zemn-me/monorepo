@@ -1,9 +1,11 @@
+import { describe, expect, test } from '@jest/globals';
+
 import { Point, rectContaninsPoint } from '#root/ts/math/cartesian.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
-	expect(actual.length).toBe(expected.length);
+expect(actual.length).toBe(expected.length);
 	actual.forEach((row, i) => {
 		row.forEach((v, k) => {
 			expect(v).toBeCloseTo(expected[i]![k]!);
@@ -63,7 +65,7 @@ describe('matrix', () => {
 					[0, 1],
 					[0, 0],
 				] as const),
-			],
+			], //@ts-expect-error not sure how to fix rn
 		] as const)('%#: (%p) => %p', ([i, j], b) => {
 			expect(matrix.identity(i, j)).toEqual(b);
 		});
@@ -88,7 +90,7 @@ describe('matrix', () => {
 				matrix.as<3, 1>([[1, 2, 3]] as const),
 
 				matrix.as<1, 3>([[1], [2], [3]] as const),
-			],
+			], // @ts-expect-error not sure how to fix rn
 		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.transpose(a)).toEqual(b);
 		});
@@ -131,7 +133,7 @@ describe('matrix', () => {
 					[-2, 4],
 				] as const),
 				10,
-			],
+			], // @ts-expect-error not sure how to fix rn
 		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.determinant(a)).toEqual(b);
 		});
@@ -191,7 +193,7 @@ describe('matrix', () => {
 					[0.6, -0.7],
 					[-0.2, 0.4],
 				] as const),
-			],
+			], // @ts-expect-error not sure how to fix rn
 		] as const)('%#: (%p) => %p', (a, b) => {
 			expectMatrixSimilar(matrix.inverse(a), b);
 		});
@@ -224,7 +226,7 @@ describe('matrix', () => {
 					[0.2, -10, 1],
 					[4, 3, 1],
 				] as const),
-			],
+			], // @ts-expect-error not sure how to fix rn
 		] as const)('%#: %p * a => identity', a => {
 			const [ij = 0] = matrix.size(a);
 			expectMatrixSimilar(
@@ -240,20 +242,20 @@ describe('matrix', () => {
 				matrix.as<3, 2>([
 					[1, 2, 3],
 					[4, 5, 6],
-				] as const),
+				]),
 
 				matrix.as<2, 3>([
 					[1, 4],
 					[2, 5],
 					[3, 6],
-				] as const),
+				]),
 			],
 
 			[
 				matrix.as<3, 1>([[1, 2, 3]] as const),
 
 				matrix.as<1, 3>([[1], [2], [3]] as const),
-			],
+			], // @ts-expect-error not sure how to fix rn
 		] as const)('%#: (%p) => %p', (a, b) => {
 			expect(matrix.transpose(a)).toEqual(b);
 		});

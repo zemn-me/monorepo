@@ -1,3 +1,5 @@
+import { expect, it } from '@jest/globals';
+
 import { point } from '#root/ts/math/cartesian';
 import { Cartestian, Quaternion } from '#root/ts/math/conv';
 import { degree } from '#root/ts/math/degree';
