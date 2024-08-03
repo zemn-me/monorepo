@@ -1,4 +1,4 @@
-import { Err, Ok, Result } from '#root/ts/result.js';
+import { Err, Ok, Result } from "#root/ts/result2/result2.js";
 
 export class SafelyError extends Error {
 	constructor(cause: unknown) {
@@ -15,8 +15,8 @@ export const safely =
 	<I extends unknown[], O>(f: (...args: I) => O) =>
 	(...args: I): Result<O, SafelyError> => {
 		try {
-			return { [Ok]: f(...args) };
+			return Ok(f(...args));
 		} catch (e) {
-			return { [Err]: new SafelyError(e) };
+			return Err( new SafelyError(e))
 		}
 	};
