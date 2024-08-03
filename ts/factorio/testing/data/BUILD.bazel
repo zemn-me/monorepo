@@ -1,0 +1,37 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "allOilsRefinery_ts",
+    srcs = ["allOilsRefinery.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "bigAssMall_ts",
+    srcs = ["bigAssMall.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "neoVortexTrainStations_ts",
+    srcs = ["neoVortexTrainStations.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "powerBook_ts",
+    srcs = ["powerBook.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "starterBase_ts",
+    srcs = ["starterBase.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

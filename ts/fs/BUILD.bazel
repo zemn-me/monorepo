@@ -3,15 +3,6 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "fs",
-    deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//ts/iter",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["fs_test.js"],
@@ -26,4 +17,29 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "fs_test_ts",
+    srcs = ["fs_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/fs:index_ts",
+        "@monorepo//ts/iter:index_ts",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "@monorepo//ts/iter:index_ts",
+    ],
+)
+
+jest_test(
+    name = "fs_test_ts_test",
+    srcs = ["fs_test.js"],
 )
