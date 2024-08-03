@@ -2,25 +2,23 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
+css_module(
+    name = "css_module",
+    srcs = ["prose.module.css"],
+)
 
 ts_project(
-    name = "TimeEye",
-    assets = ["TimeEye.module.css"],
+    name = "Prose",
+    visibility = ["//:__subpackages__"],
     deps = [
+        ":css_module",
         "//:base_defs",
         "//:node_modules/@types/react",
-        "//:node_modules/classnames",
-        "//:node_modules/react",
+        "//project/zemn.me/components/Link",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-)
-
-css_module(
-    name = "css_module",
-    srcs = ["TimeEye.module.css"],
 )
