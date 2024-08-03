@@ -1,0 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//mdx:rules.bzl", "mdx_files")
+
+mdx_files(
+    name = "mdx_files",
+    srcs = [
+        "pizza.mdx",
+        "trad.mdx",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

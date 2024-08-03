@@ -30,3 +30,24 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "url_test_ts",
+    srcs = ["url_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "@monorepo//ts/url:index_ts",
+    ],
+)
+
+jest_test(
+    name = "url_test_ts_test",
+    srcs = ["url_test.js"],
+)

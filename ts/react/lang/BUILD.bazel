@@ -26,3 +26,38 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "date_tsx",
+    srcs = ["date.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//ts:guard_ts",
+        "@monorepo//ts/react/lang:useLocale_tsx",
+    ],
+)
+
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/react",
+        "//:node_modules/memoizee",
+        "//:node_modules/react",
+        "@monorepo//ts/react/lang:useLocale_tsx",
+    ],
+)
+
+ts_project(
+    name = "useLocale_tsx",
+    srcs = ["useLocale.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)

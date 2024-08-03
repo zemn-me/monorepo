@@ -1,3 +1,5 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
@@ -17,7 +19,7 @@ load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
-load("//ts:rules.bzl", "ts_config")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -242,4 +244,10 @@ bazel_lint(
         "BUILD.bazel",
         "MODULE.bazel",
     ],
+)
+
+ts_project(
+    name = "Global_d_ts",
+    srcs = ["Global.d.ts"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
 
 exports_files(
     [
@@ -13,5 +14,15 @@ bazel_lint(
     srcs = [
         "BUILD.bazel",
         "rules.bzl",
+    ],
+)
+
+ts_project(
+    name = "oci_image_tmpl_ts",
+    srcs = ["oci_image.tmpl.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/awsx",
+        "//:node_modules/@pulumi/pulumi",
     ],
 )

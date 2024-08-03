@@ -7,17 +7,17 @@ ts_project(
     data = [
         "//project/zemn.me:out",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/selenium-webdriver",
         "//:node_modules/@types/serve-handler",
         "//:node_modules/fast-glob",
         "//:node_modules/selenium-webdriver",
         "//:node_modules/serve-handler",
-        "//ts/selenium",
+        "@monorepo//ts/selenium:webdriver_ts",
     ],
 )
 
@@ -31,4 +31,9 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "browser_test_ts_test",
+    srcs = ["browser_test.js"],
 )

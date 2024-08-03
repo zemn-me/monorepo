@@ -4,7 +4,7 @@ load("//js:rules.bzl", "js_library")
 js_library(
     name = "b_js",
     srcs = ["b.js"],
-    deps = ["@monorepo//go/gazelle/js/example/node:a_js"],
+    deps = [],
 )
 
 bazel_lint(

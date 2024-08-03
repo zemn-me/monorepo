@@ -1,5 +1,6 @@
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
 
 genrule(
     name = "gen_test_results",
@@ -22,4 +23,15 @@ diff_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "a_ts",
+    srcs = ["a.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "@monorepo//ts/iter:dict_ts",
+        "@monorepo//ts/math:camera_ts",
+    ],
 )

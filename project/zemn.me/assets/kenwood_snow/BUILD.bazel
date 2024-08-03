@@ -10,10 +10,9 @@ ts_project(
     ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//:base_defs",  # one day this should probably be separate for next.js
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//project/zemn.me/public:kenwood_snow",
+        "@monorepo//project/zemn.me/public:kenwood_snow",
     ],
 )
 

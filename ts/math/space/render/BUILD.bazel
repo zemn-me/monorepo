@@ -3,20 +3,30 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "render",
-    srcs = [
-        "braille.ts",
-        "project.ts",
-    ],
-    deps = [
-        "//ts/iter",
-        "//ts/math",
-        "//ts/math/canvas/braille",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "braille_ts",
+    srcs = ["braille.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:homog_ts",
+        "@monorepo//ts/math/canvas/braille",
+        "@monorepo//ts/math/space/render:project_ts",
+    ],
+)
+
+ts_project(
+    name = "project_ts",
+    srcs = ["project.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:camera_ts",
+        "@monorepo//ts/math:homog_ts",
+    ],
 )

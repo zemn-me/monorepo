@@ -8,10 +8,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "simple_binary_import",
-)
-
 # Executing a binary in a genrule
 
 js_binary(
@@ -37,4 +33,17 @@ diff_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "lib_ts",
+    srcs = ["lib.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "main_ts",
+    srcs = ["main.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//js/testing/simple_binary_import:lib_ts"],
 )

@@ -2,23 +2,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-ts_project(
-    name = "ci",
-    deps = [
-        "//:node_modules/@actions/github",
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@commander-js/extra-typings",
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/commander",
-        "//:node_modules/mime",
-        "//ts",
-        "//ts/github/actions",
-        "//ts/pulumi:pulumi_ts",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["bazel_test.js"],
@@ -68,4 +51,69 @@ js_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "bazel_ts",
+    srcs = ["bazel.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "@monorepo//ts/github/actions:index_ts",
+    ],
+)
+
+ts_project(
+    name = "bazel_test_ts",
+    srcs = ["bazel_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "@monorepo//ci:bazel_ts",
+    ],
+)
+
+ts_project(
+    name = "postsubmit_ts",
+    srcs = ["postsubmit.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@actions/github",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "presubmit_ts",
+    srcs = ["presubmit.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@types/node",
+        "@monorepo//ci:bazel_ts",
+        "@monorepo//ts/github/actions:index_ts",
+        "@monorepo//ts/pulumi:deploy_to_staging_ts",
+    ],
+)
+
+ts_project(
+    name = "rollback_ts",
+    srcs = ["rollback.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ci:submit_ts"],
+)
+
+ts_project(
+    name = "submit_ts",
+    srcs = ["submit.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/github/actions:index_ts",
+        "@monorepo//ts/pulumi:stack_ts",
+    ],
+)
+
+jest_test(
+    name = "bazel_test_ts_test",
+    srcs = ["bazel_test.js"],
 )

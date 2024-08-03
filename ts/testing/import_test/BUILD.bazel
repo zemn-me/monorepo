@@ -4,22 +4,23 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 ts_project(
     name = "a",
     srcs = ["a.ts"],
-    deps = [":b"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/testing/import_test:b"],
 )
 
 ts_project(
     name = "b",
     srcs = ["b.ts"],
+    visibility = ["//:__subpackages__"],
 )
 
 ts_project(
     name = "import_test_js",
     srcs = ["import_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":a",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
+        "@monorepo//ts/testing/import_test:a",
     ],
 )
 
@@ -32,4 +33,9 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "import_test_ts_test",
+    srcs = ["import_test.js"],
 )

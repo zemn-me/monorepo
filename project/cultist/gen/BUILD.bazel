@@ -12,6 +12,7 @@ package(default_visibility = [
 ts_project(
     name = "gen",
     srcs = ["collate_game_core.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
     ],

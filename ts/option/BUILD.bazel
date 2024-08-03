@@ -1,17 +1,24 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "option",
-    visibility = [
-        "//:__subpackages__",
-    ],
-    deps = [
-        "//ts",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "option_ts",
+    srcs = ["option.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts:NewType_ts",
+        "@monorepo//ts:result_ts",
+        "@monorepo//ts/option:types_ts",
+    ],
+)
+
+ts_project(
+    name = "types_ts",
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
 )

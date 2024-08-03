@@ -4,25 +4,6 @@ load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
-ts_project(
-    name = "ts",
-    data = [
-        ":next",
-    ],
-    deps = [
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/react",
-        "//:node_modules/mime",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts",
-        "//ts/next.js",
-        "//ts/pulumi/lib",
-    ],
-)
-
 next_project(
     name = "next",
     srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/app"],
@@ -31,4 +12,16 @@ next_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts/pulumi/lib:tags_ts",
+        "@monorepo//ts/pulumi/lib:website_ts",
+    ],
 )

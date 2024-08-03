@@ -9,25 +9,102 @@ test_sectxt(
     srcs = ["security.txt"],
 )
 
-ts_project(
-    name = "lib",
-    data = ["security.txt"],
-    deps = [
-        "//:node_modules/@bazel/runfiles",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/mime",
-        "//:node_modules/@types/react",
-        "//:node_modules/mime",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts",
-        "//ts/iter",
-        "//ts/next.js",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "bucketName_ts",
+    srcs = ["bucketName.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "certificate_ts",
+    srcs = ["certificate.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts/pulumi/lib:tags_ts",
+    ],
+)
+
+ts_project(
+    name = "contact_flow_ts",
+    srcs = ["contact_flow.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts:result_ts",
+    ],
+)
+
+ts_project(
+    name = "file_ts",
+    srcs = ["file.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "@monorepo//ts/pulumi/lib:path_ts",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/pulumi/lib:file_ts",
+        "@monorepo//ts/pulumi/lib:path_ts",
+    ],
+)
+
+ts_project(
+    name = "path_ts",
+    srcs = ["path.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "s3Uri_ts",
+    srcs = ["s3Uri.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "tags_ts",
+    srcs = ["tags.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@pulumi/pulumi"],
+)
+
+ts_project(
+    name = "website_ts",
+    srcs = ["website.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/mime",
+        "//:node_modules/@types/node",
+        "//:node_modules/mime",
+        "@monorepo//ts:guard_ts",
+        "@monorepo//ts/pulumi/lib:bucketName_ts",
+        "@monorepo//ts/pulumi/lib:certificate_ts",
+        "@monorepo//ts/pulumi/lib:tags_ts",
+    ],
 )

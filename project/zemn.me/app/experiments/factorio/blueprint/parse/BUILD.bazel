@@ -1,0 +1,37 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client_tsx",
+    srcs = ["client.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Prose:prose_tsx",
+        "@monorepo//ts/factorio:blueprint_string_ts",
+        "@monorepo//ts/factorio/react:blueprint_tsx",
+        "@monorepo//ts/option:option_ts",
+        "@monorepo//ts/react/CopyToClipboard:CopyToClipboard_tsx",
+        "@monorepo//ts/react/ErrorDisplay:error_display_tsx",
+        "@monorepo//ts/react/PrettyJSON:pretty_json_tsx",
+        "@monorepo//ts/zod:util_ts",
+    ],
+)
+
+ts_project(
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/factorio/blueprint/parse:client_tsx",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

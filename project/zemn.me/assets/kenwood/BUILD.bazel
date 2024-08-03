@@ -27,3 +27,21 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/zemn.me/assets/kenwood"],
+)
+
+ts_project(
+    name = "kenwood_tsx",
+    srcs = ["kenwood.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/public:kenwood",
+    ],
+)

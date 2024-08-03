@@ -6,15 +6,13 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "config_node",
     srcs = ["jest.node.config.ts"],
+    visibility = ["//:__subpackages__"],
 )
 
 ts_project(
     name = "config_browser",
     srcs = ["jest.browser.config.ts"],
-    deps = [
-        # needed for the jsdom plugin
-        "//:node_modules/jest-environment-jsdom",
-    ],
+    visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(

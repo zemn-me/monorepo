@@ -25,3 +25,9 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "types_ts",
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
+)

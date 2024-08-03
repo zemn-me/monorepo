@@ -18,6 +18,7 @@ ts_project(
     name = "inkscape_wrapper",
     srcs = ["run.ts"],
     data = [":app_image_local"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
     ],

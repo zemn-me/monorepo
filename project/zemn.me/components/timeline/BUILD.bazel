@@ -2,26 +2,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
-ts_project(
-    name = "timeline",
-    visibility = ["//:__subpackages__"],
-    deps = [
-        ":css_module",
-        "//:node_modules/@types/memoizee",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/classnames",
-        "//:node_modules/immutable",
-        "//:node_modules/memoizee",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//project/zemn.me/bio",
-        "//project/zemn.me/components/Link",
-        "//project/zemn.me/components/SectionLink",
-        "//ts/iter",
-    ],
-)
-
 css_module(
     name = "css_module",
     srcs = ["timeline.module.css"],
@@ -30,4 +10,33 @@ css_module(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/timeline:timeline_tsx",
+    ],
+)
+
+ts_project(
+    name = "timeline_tsx",
+    srcs = ["timeline.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/timeline:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/react",
+        "//:node_modules/immutable",
+        "//:node_modules/memoizee",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/bio:index_ts",
+        "@monorepo//project/zemn.me/components/Link:index_tsx",
+        "@monorepo//project/zemn.me/components/SectionLink:SectionLink_tsx",
+        "@monorepo//ts/react/lang:index_tsx",
+    ],
 )

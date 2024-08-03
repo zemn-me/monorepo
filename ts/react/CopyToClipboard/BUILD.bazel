@@ -3,17 +3,18 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "CopyToClipboard",
-    deps = [
-        "//:node_modules/@tanstack/react-query",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-query",
-        "//:node_modules/react",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "CopyToClipboard_tsx",
+    srcs = ["CopyToClipboard.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
 )

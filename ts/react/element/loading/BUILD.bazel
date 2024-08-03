@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
+load("//mdx:rules.bzl", "mdx_files")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -21,4 +22,26 @@ bazel_lint(
 css_module(
     name = "css_module",
     srcs = ["loading.module.css"],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/react/element/loading:loading_tsx"],
+)
+
+ts_project(
+    name = "loading_tsx",
+    srcs = ["loading.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+mdx_files(
+    name = "mdx_files",
+    srcs = ["loading.stories.mdx"],
 )

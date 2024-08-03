@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//mdx:rules.bzl", "mdx_files")
 load("//ts/mdx/cmd/mdx-transform:rules.bzl", "mdx_to_js")
 
 mdx_to_js(
@@ -9,4 +10,9 @@ mdx_to_js(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+mdx_files(
+    name = "mdx_files",
+    srcs = ["page.mdx"],
 )

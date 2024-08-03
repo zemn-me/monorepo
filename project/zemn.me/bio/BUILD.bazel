@@ -25,3 +25,20 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "bio_ts",
+    srcs = ["bio.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/react/lang:index_tsx",
+        "@monorepo//ts/time:index_ts",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/zemn.me/bio:bio_ts"],
+)

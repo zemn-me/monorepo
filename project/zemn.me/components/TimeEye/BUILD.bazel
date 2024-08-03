@@ -4,17 +4,6 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "TimeEye",
-    assets = ["TimeEye.module.css"],
-    deps = [
-        "//:base_defs",
-        "//:node_modules/@types/react",
-        "//:node_modules/classnames",
-        "//:node_modules/react",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -23,4 +12,23 @@ bazel_lint(
 css_module(
     name = "css_module",
     srcs = ["TimeEye.module.css"],
+)
+
+ts_project(
+    name = "TimeEye_tsx",
+    srcs = ["TimeEye.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/TimeEye:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/zemn.me/components/TimeEye:TimeEye_tsx"],
 )
