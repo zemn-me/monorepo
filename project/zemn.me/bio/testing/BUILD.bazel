@@ -20,3 +20,15 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "ensure_ids_unique_test_ts",
+    srcs = ["ensure_ids_unique_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/zemn.me/bio:bio_ts"],
+)
+
+jest_test(
+    name = "ensure_ids_unique_test_ts_test",
+    srcs = ["ensure_ids_unique_test.js"],
+)

@@ -1,0 +1,40 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client_tsx",
+    srcs = ["client.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/frame:frame_sizes_ts",
+        "@monorepo//ts:NewType_ts",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/option2:option2_ts",
+        "@monorepo//ts/result2:result2_ts",
+    ],
+)
+
+ts_project(
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/frame:client_tsx",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "frame_sizes_ts",
+    srcs = ["frame_sizes.ts"],
+    visibility = ["//:__subpackages__"],
+)

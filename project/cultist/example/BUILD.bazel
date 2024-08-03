@@ -23,3 +23,9 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "savestate_ts",
+    srcs = ["savestate.ts"],
+    visibility = ["//:__subpackages__"],
+)
