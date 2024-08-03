@@ -9,6 +9,7 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/selenium-webdriver",

@@ -7,7 +7,9 @@ ts_project(
     name = "math",
     srcs = glob(["*.ts"]),
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//ts",
         "//ts/iter",
     ],

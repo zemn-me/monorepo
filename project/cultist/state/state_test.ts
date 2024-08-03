@@ -1,3 +1,5 @@
+import { expect, test } from '@jest/globals';
+
 import * as Save from '#root/project/cultist/save.js';
 import * as deserialize from '#root/project/cultist/state/deserialize.js';
 import * as serialize from '#root/project/cultist/state/serialize.js';

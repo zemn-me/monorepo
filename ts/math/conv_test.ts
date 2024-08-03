@@ -1,3 +1,5 @@
+import { describe, expect, test } from '@jest/globals';
+
 import * as cartesian from '#root/ts/math/cartesian.js';
 import {
 	Cartestian as C,

@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import * as fs from '#root/ts/fs/index.js';
 import * as iter from '#root/ts/iter/index.js';
 

@@ -4,6 +4,7 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 ts_project(
     name = "tests",
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/selenium-webdriver",
         "//:node_modules/selenium-webdriver",
@@ -14,7 +15,10 @@ ts_project(
 jest_test(
     name = "_tests",
     srcs = ["webdriver_test.js"],
-    deps = [":tests"],
+    deps = [
+        ":tests",
+        "//:node_modules/@jest/globals",
+    ],
 )
 
 bazel_lint(
