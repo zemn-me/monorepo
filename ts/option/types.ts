@@ -24,13 +24,13 @@ export function unwrap<T>(v: Option<T>): T {
 	throw new Error("Cannot unwrap Option; has no value.");
 }
 
-export function unwrap_or<T>(v: Option<T>, fallback: T): T {
+export function unwrap_or<T, T2>(v: Option<T>, fallback: T2): T | T2 {
 	if (is_none(v)) return fallback;
 
 	return v[_some]
 }
 
-export function unwrap_or_else<T>(v: Option<T>, fallback: () => T): T {
+export function unwrap_or_else<T, T2>(v: Option<T>, fallback: () => T2): T | T2 {
 	if (is_none(v)) return fallback();
 
 	return v[_some]

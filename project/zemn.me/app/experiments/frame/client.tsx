@@ -4,8 +4,8 @@ import { ChangeEvent, useCallback, useId, useMemo, useState } from "react";
 import { frameSizes } from "#root/project/zemn.me/app/experiments/frame/frame_sizes.js";
 import { Iterable } from "#root/ts/iter/index.js";
 import { NewType } from "#root/ts/NewType.js";
-import { None, Some } from "#root/ts/option2/option2.js";
-import { Err, Ok, Result } from "#root/ts/result2/result2.js";
+import { None, Some } from "#root/ts/option/option.js";
+import { Err, Ok, Result } from "#root/ts/result.js";
 
 const measurementConversions = {
 	"in": 0.0254,

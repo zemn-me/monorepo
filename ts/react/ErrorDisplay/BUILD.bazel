@@ -7,6 +7,7 @@ ts_project(
     name = "ErrorDisplay",
     deps = [
         "//:node_modules/@types/react",
+        "//ts",
     ],
 )
 
