@@ -4,22 +4,11 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
-    name = "space",
-    srcs = [
-        "shape.ts",
-        "space.ts",
-    ],
-    deps = [
-        "//ts/iter",
-        "//ts/math",
-    ],
-)
-
-ts_project(
     name = "space_test",
     srcs = [
         "space_test.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
         ":space",
         "//:node_modules/@jest/globals",
@@ -36,4 +25,26 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "shape_ts",
+    srcs = ["shape.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:vec_ts",
+    ],
+)
+
+ts_project(
+    name = "space_ts",
+    srcs = ["space.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/iter:index_ts"],
+)
+
+jest_test(
+    name = "space_test_ts_test",
+    srcs = ["space_test.js"],
 )

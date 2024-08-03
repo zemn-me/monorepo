@@ -38,3 +38,18 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "launch_server_test_ts",
+    srcs = ["launch_server_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "@monorepo//ts:guard_ts",
+    ],
+)
+
+jest_test(
+    name = "launch_server_test_ts_test",
+    srcs = ["launch_server_test.js"],
+)

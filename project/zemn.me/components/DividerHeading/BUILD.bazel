@@ -7,17 +7,18 @@ css_module(
     srcs = ["index.module.css"],
 )
 
-ts_project(
-    name = "DividerHeading",
-    visibility = [
-        "//:__subpackages__",
-    ],
-    deps = [
-        ":css_module",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/DividerHeading:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
 )
