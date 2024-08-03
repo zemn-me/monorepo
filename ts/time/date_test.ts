@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { describe, expect, it, test } from '@jest/globals';
+
 import { parse, SimpleDate as Date } from '#root/ts/time/date.js';
 
 test('date', () => {

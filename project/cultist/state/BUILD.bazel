@@ -62,6 +62,7 @@ ts_project(
         ":serialize",
         ":state_main",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//project/cultist:save",
         "//ts",
     ],

@@ -35,7 +35,10 @@ jest_test(
     srcs = [
         "braille_test.js",
     ],
-    deps = [":braille"],
+    deps = [
+        ":braille",
+        "//:node_modules/@jest/globals",
+    ],
 )
 
 bazel_lint(

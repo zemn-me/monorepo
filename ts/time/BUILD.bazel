@@ -10,7 +10,9 @@ ts_project(
         "*.tsx",
     ]),
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//:node_modules/ts-toolbelt",
         "//:node_modules/zod",
         "//ts",

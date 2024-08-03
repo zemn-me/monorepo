@@ -1,6 +1,7 @@
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
 import next from '@next/eslint-plugin-next';
+import jestLint from 'eslint-plugin-jest';
 import * as mdx from 'eslint-plugin-mdx';
 import reactPlugin from 'eslint-plugin-react';
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
@@ -23,10 +24,12 @@ export const reactConfig = {
 	plugins: {
 			'react-hooks': reactHooksPlugin,
 			'@next/next': next,
-		'react': fixupPluginRules(reactPlugin),
-			'simple-import-sort': simpleImportSort
+			'react': fixupPluginRules(reactPlugin),
+			'simple-import-sort': simpleImportSort,
+			'jest': jestLint,
 	},
     rules: {
+		'jest/prefer-importing-jest-globals': "error",
       'react/forbid-elements': [
         'error',
         {

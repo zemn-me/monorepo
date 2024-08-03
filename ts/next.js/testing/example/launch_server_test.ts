@@ -3,6 +3,8 @@ import child_process from 'node:child_process';
 import http from 'node:http';
 import * as readline from 'node:readline/promises';
 
+import { expect, test } from '@jest/globals';
+
 import { isDefined, isNotNull, must } from '#root/ts/guard.js';
 
 test('next.js dev server launch!', async () => {
