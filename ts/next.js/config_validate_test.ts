@@ -1,3 +1,4 @@
+import { expect, it } from '@jest/globals';
 import { NextConfig } from 'next/types';
 
 import * as mod from '#root/ts/next.js/next.config.js';

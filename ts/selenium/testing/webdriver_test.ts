@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { Browser, until } from 'selenium-webdriver';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';

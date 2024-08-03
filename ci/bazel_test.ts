@@ -1,3 +1,5 @@
+import { expect, it, test } from '@jest/globals';
+
 import * as bazel from '#root/ci/bazel.js';
 
 async function* text(s: string) {

@@ -4,6 +4,7 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 ts_project(
     name = "node_version",
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
     ],
