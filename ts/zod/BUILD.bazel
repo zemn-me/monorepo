@@ -3,8 +3,12 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "zod",
+    visibility = [
+        "//:__subpackages__",
+    ],
     deps = [
         "//:node_modules/zod",
+        "//ts",
     ],
 )
 
