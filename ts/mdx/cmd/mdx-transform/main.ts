@@ -3,11 +3,11 @@
  * @fileoverview turn MDX files into tsx files.
  * @see https://v0.mdxjs.com/advanced/transform-content
  */
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { Command } from '@commander-js/extra-typings';
 import * as mdx from '@mdx-js/mdx';
-import { readFile } from 'fs/promises';
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'

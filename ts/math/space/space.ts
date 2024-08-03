@@ -1,4 +1,4 @@
-import { map } from '#root/ts/iter';
+import { map } from '#root/ts/iter/index.js';
 
 /**
  * For an N-length array of 2-tuples representing the domain of data in axis N,
