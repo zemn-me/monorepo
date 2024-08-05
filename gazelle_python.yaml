@@ -144,15 +144,6 @@ manifest:
     langcodes.tests.test_language_data: langcodes
     langcodes.tests.test_wikt_languages: langcodes
     langcodes.util: langcodes
-    language_data: language_data
-    language_data.build_data: language_data
-    language_data.language_lists: language_data
-    language_data.name_data: language_data
-    language_data.names: language_data
-    language_data.population_data: language_data
-    language_data.registry_parser: language_data
-    language_data.util: language_data
-    marisa_trie: marisa_trie
     packaging: packaging
     packaging.markers: packaging
     packaging.metadata: packaging
@@ -431,6 +422,35 @@ manifest:
     urllib3.util.url: urllib3
     urllib3.util.util: urllib3
     urllib3.util.wait: urllib3
+    validators: validators
+    validators.between: validators
+    validators.card: validators
+    validators.country: validators
+    validators.cron: validators
+    validators.crypto_addresses: validators
+    validators.crypto_addresses.btc_address: validators
+    validators.crypto_addresses.eth_address: validators
+    validators.crypto_addresses.trx_address: validators
+    validators.domain: validators
+    validators.email: validators
+    validators.encoding: validators
+    validators.finance: validators
+    validators.hashes: validators
+    validators.hostname: validators
+    validators.i18n: validators
+    validators.i18n.es: validators
+    validators.i18n.fi: validators
+    validators.i18n.fr: validators
+    validators.i18n.ind: validators
+    validators.iban: validators
+    validators.ip_address: validators
+    validators.length: validators
+    validators.mac_address: validators
+    validators.slug: validators
+    validators.uri: validators
+    validators.url: validators
+    validators.utils: validators
+    validators.uuid: validators
     wheel: wheel
     wheel.bdist_wheel: wheel
     wheel.cli: wheel
@@ -499,4 +519,4 @@ manifest:
     yamllint.rules.truthy: yamllint
   pip_repository:
     name: pip
-integrity: 2896748491cb4fe6ddda3280577a8389665ef3820e10a6bcc756e7003b3b7286
+integrity: 65f1b93b01bf9984c1e3503cb876549dffc765c9ec68fa50b81ec7ab1445de39
