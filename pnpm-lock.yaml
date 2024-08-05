@@ -60,8 +60,8 @@ dependencies:
     specifier: 3.0.8
     version: 3.0.8
   '@types/selenium-webdriver':
-    specifier: 4.1.22
-    version: 4.1.22
+    specifier: 4.1.24
+    version: 4.1.24
   '@types/serve-handler':
     specifier: 6.1.4
     version: 6.1.4
@@ -132,8 +132,8 @@ dependencies:
     specifier: 3.0.5
     version: 3.0.5
   selenium-webdriver:
-    specifier: 4.21.0
-    version: 4.21.0
+    specifier: 4.23.0
+    version: 4.23.0
   serve-handler:
     specifier: 6.1.5
     version: 6.1.5
@@ -3208,7 +3208,6 @@ packages:
 
   /@bazel/runfiles@5.8.1:
     resolution: {integrity: sha512-NDdfpdQ6rZlylgv++iMn5FkObC/QlBQvipinGLSOguTYpRywmieOyJ29XHvUilspwTFSILWpoE9CqMGkHXug1g==}
-    dev: true
 
   /@bazel/typescript@5.8.1(typescript@5.4.5):
     resolution: {integrity: sha512-NAJ8WQHZL1WE1YmRoCrq/1hhG15Mvy/viWh6TkvFnBeEhNUiQUsA5GYyhU1ztnBIYW03nATO3vwhAEfO7Q0U5g==}
@@ -7143,9 +7142,10 @@ packages:
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
     dev: false
 
-  /@types/selenium-webdriver@4.1.22:
-    resolution: {integrity: sha512-MCL4l7q8dwxejr2Q2NXLyNwHWMPdlWE0Kpn6fFwJtvkJF7PTkG5jkvbH/X1IAAQxgt/L1dA8u2GtDeekvSKvOA==}
+  /@types/selenium-webdriver@4.1.24:
+    resolution: {integrity: sha512-oR5MVATv+P2dmhceZJPDm99MmOC9yAK8YpIgJbHEFQ/MbSPC1lA6Ohw441WNUcQ6B1fMAOMu0u59fRKKj9AGGg==}
     dependencies:
+      '@types/node': 20.14.13
       '@types/ws': 8.5.11
     dev: false
 
@@ -17142,10 +17142,11 @@ packages:
     resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
-  /selenium-webdriver@4.21.0:
-    resolution: {integrity: sha512-WaEJHZjOWNth1QG5FEpxpREER0qptZBMonFU6GtAqdCNLJVxbtC3E7oS/I/+Q1sf1W032Wg0Ebk+m46lANOXyQ==}
+  /selenium-webdriver@4.23.0:
+    resolution: {integrity: sha512-DdvtInpnMt95Td8VApvmAw7oSydBD9twIRXqoMyRoGMvL1dAnMFxdrwnW6L0d/pF/uoNTjbVUarwGZ9wIGNStA==}
     engines: {node: '>= 14.21.0'}
     dependencies:
+      '@bazel/runfiles': 5.8.1
       jszip: 3.10.1
       tmp: 0.2.3
       ws: 8.18.0
