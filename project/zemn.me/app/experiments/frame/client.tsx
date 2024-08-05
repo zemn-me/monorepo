@@ -1,10 +1,12 @@
 'use client';
-import { ChangeEvent, useCallback, useId, useMemo, useState } from "react";
+import { parseAsString, useQueryState } from 'nuqs';
+import { ChangeEvent, useCallback, useId, useMemo } from "react";
 
 import { frameSizes } from "#root/project/zemn.me/app/experiments/frame/frame_sizes.js";
 import { Iterable } from "#root/ts/iter/index.js";
 import { NewType } from "#root/ts/NewType.js";
 import { None, Some } from "#root/ts/option/option.js";
+import { ErrorDisplay } from "#root/ts/react/ErrorDisplay/error_display.js";
 import { Err, Ok, Result } from "#root/ts/result.js";
 
 const measurementConversions = {
@@ -143,49 +145,71 @@ const normalisedFrameSizes = frameSizes.map(v => ({
 	}
 ]).flat(1);
 
+interface VisualiseFramedArtProps {
+	readonly frame: [number, number],
+	readonly art: [ number, number]
+}
+
+function VisualiseFramedArt({
+	frame: [framew, frameh],
+	art: [artw, arth ],
+}: VisualiseFramedArtProps) {
+
+	const cx = framew / 2;
+	const cy = frameh / 2;
+	const rx = cx - (artw / 2);
+	const ry = cy - (arth / 2);
+
+	return <svg style={{ border: "1px solid currentColor"}} viewBox={[0, 0, framew, frameh].join(" ")}>
+		<rect height={arth} style={{ fill: "currentColor"}} width={artw} x={rx} y={ry}/>
+	</svg>
+}
+
+
+
 
 export function FrameClient() {
-	const [frameWidthInput, setFrameWidthInput] = useState<string>("5in");
+	const [frameWidthInput, setFrameWidthInput] = useQueryState<string>('frame_width', parseAsString.withDefault('17in'));
 	const frameWidthInputId = useId();
 	const frameWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) =>
-		setFrameWidthInput(e.target.value)
+		void setFrameWidthInput(e.target.value)
 		, [setFrameWidthInput]);
 	const frameWidth = useMemo(() => parseMeasurement(frameWidthInput), [frameWidthInput]);
 
-	const [frameHeightInput, setFrameHeightInput] = useState<string>("7in");
+	const [frameHeightInput, setFrameHeightInput] = useQueryState<string>('frame_height', parseAsString.withDefault("24in"));
 	const frameHeightInputId = useId();
-	const frameHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setFrameHeightInput(e.target.value), [setFrameHeightInput]);
+	const frameHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setFrameHeightInput(e.target.value), [setFrameHeightInput]);
 	const frameHeight = useMemo(() => parseMeasurement(frameHeightInput), [frameHeightInput]);
 
 
-	const [artWidthInput, setArtWidthInput] = useState<string>("3mm");
+	const [artWidthInput, setArtWidthInput] = useQueryState<string>('art_width', parseAsString.withDefault("12in"));
 	const artWidthInputId = useId();
-	const artWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setArtWidthInput(e.target.value), [setArtWidthInput]);
+	const artWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setArtWidthInput(e.target.value), [setArtWidthInput]);
 	const artWidth = useMemo(() => parseMeasurement(artWidthInput), [artWidthInput]);
 
-	const [artHeightInput, setArtHeightInput] = useState<string>("3mm");
+	const [artHeightInput, setArtHeightInput] = useQueryState<string>('art_height', parseAsString.withDefault("23.75in"));
 	const artHeightInputId = useId();
-	const artHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setArtHeightInput(e.target.value), [setArtHeightInput]);
+	const artHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setArtHeightInput(e.target.value), [setArtHeightInput]);
 	const artHeight = useMemo(() => parseMeasurement(artHeightInput), [artHeightInput]);
 
-	const [overlapAmountInput, setOverlapAmountInput] = useState<string>(".1mm");
+	const [overlapAmountInput, setOverlapAmountInput] = useQueryState<string>("overlap_amount", parseAsString.withDefault("2cm"));
 	const overlapAmountInputId = useId();
-	const overlapAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setOverlapAmountInput(e.target.value), [setOverlapAmountInput]);
+	const overlapAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setOverlapAmountInput(e.target.value), [setOverlapAmountInput]);
 	const overlapAmount = useMemo(() => parseMeasurement(overlapAmountInput), [overlapAmountInput]);
 
 
 	const frameSwapClickButtonId = useId();
 	const onFrameSwapClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		setFrameHeightInput(frameWidthInput);
-		setFrameWidthInput(frameHeightInput);
+		void setFrameHeightInput(frameWidthInput);
+		void setFrameWidthInput(frameHeightInput);
 	}, [setFrameHeightInput, setFrameWidthInput, frameHeightInput, frameWidthInput]);
 
 	const artSwapClickButtonId = useId();
 	const onArtSwapClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		setArtHeightInput(artWidthInput);
-		setArtWidthInput(artHeightInput);
+		void setArtHeightInput(artWidthInput);
+		void setArtWidthInput(artHeightInput);
 	}, [setArtHeightInput, setArtWidthInput, artHeightInput, artWidthInput]);
 
 	const inH = frameHeight.zip(artHeight).and_then(([
@@ -199,6 +223,11 @@ export function FrameClient() {
 
 	const insW = inW.zip(overlapAmount).and_then(([inW, overlapAmount]) => inW.plus(overlapAmount));
 
+	const windowH = insH.zip(frameHeight).and_then(([insH, frameHeight]) =>
+		frameHeight.minus(insH.multiply_unitless(2)));
+
+	const windowW = insW.zip(frameWidth).and_then(([insW, frameWidth]) =>
+		frameWidth.minus(insW.multiply_unitless(2)));
 
 	const frameOptions = Iterable(normalisedFrameSizes)
 		.map(f => ({
@@ -227,20 +256,26 @@ export function FrameClient() {
 			<td>{v.height.to_string_no_adjustments()}</td>
 			<td>{v.mattedWidth.as(v.width.unit()).to_string_no_adjustments()}</td>
 			<td>{v.mattedHeight.as(v.height.unit()).to_string_no_adjustments()}</td>
+			<td><button aria-label="pick this frame" onClick={e => {
+				void setFrameWidthInput(v.width.to_string_no_adjustments());
+				void setFrameHeightInput(v.height.to_string_no_adjustments());
+				e.preventDefault();
+			}}>↑</button></td>
 		</tr>);
 
 	return <form>
 		<h1>Framing Calculator.</h1>
+		<section style={{ position: "sticky", top: "0", backgroundColor: "var(--background-color)"}}>
 		<fieldset>
 			<legend>Frame</legend>
 			<label htmlFor={frameWidthInputId}>
 				Width:
-				<input id={frameWidthInputId} onChange={frameWidthChange} pattern={reParseMeasurement.toString()} value={frameWidthInput} />
+				<input id={frameWidthInputId} onChange={frameWidthChange} pattern={reParseMeasurement.source} value={frameWidthInput} />
 			</label>
 
 			<label htmlFor={frameHeightInputId}>
 				Height:
-				<input id={frameHeightInputId} onChange={frameHeightChange} pattern={reParseMeasurement.toString()} value={frameHeightInput}/>
+				<input id={frameHeightInputId} onChange={frameHeightChange} pattern={reParseMeasurement.source} value={frameHeightInput}/>
 			</label>
 			<button id={frameSwapClickButtonId} onClick={onFrameSwapClick} title="swap width and height">⇄</button>
 		</fieldset>
@@ -249,11 +284,11 @@ export function FrameClient() {
 			<legend>Art</legend>
 			<label htmlFor={artWidthInputId}>
 				Width:
-				<input id={artWidthInputId} onChange={artWidthChange} pattern={reParseMeasurement.toString()} value={artWidthInput}/>
+				<input id={artWidthInputId} onChange={artWidthChange} pattern={reParseMeasurement.source} value={artWidthInput}/>
 			</label>
 			<label htmlFor={artHeightInputId}>
 				Height:
-				<input id={artHeightInputId} onChange={artHeightChange} pattern={reParseMeasurement.toString()} value={artHeightInput}/>
+				<input id={artHeightInputId} onChange={artHeightChange} pattern={reParseMeasurement.source} value={artHeightInput}/>
 			</label>
 			<button id={artSwapClickButtonId} onClick={onArtSwapClick} title="swap width and height">⇄</button>
 		</fieldset>
@@ -262,26 +297,39 @@ export function FrameClient() {
 			<legend>Overlap</legend>
 			<label htmlFor={overlapAmountInputId}>
 				<i>Amount of art to cover with matteboard.</i>
-				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={reParseMeasurement.toString()} value={overlapAmountInput}/>
+				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={reParseMeasurement.source} value={overlapAmountInput}/>
 			</label>
 		</fieldset>
+		</section>
 
+
+
+		<output htmlFor={[frameWidthInputId, frameHeightInputId, artWidthInputId, artHeightInputId, overlapAmountInputId, artSwapClickButtonId, frameSwapClickButtonId].join(" ")} name="result" >
+		<h2>Visualisation.</h2>
+			{
+				windowW.zip(windowH).zip(
+					frameWidth.zip(frameHeight)
+				).and_then(([[artW, artH], [frameW, frameH]]) => <VisualiseFramedArt
+					art={[artW.as_m().scalar(), artH.as_m().scalar()]}
+					frame={[frameW.as_m().scalar(), frameH.as_m().scalar()]}
+				/>
+				).unwrap_or_else(e => <ErrorDisplay error={e}/>)
+			}
 		<details>
-			<summary>Frame Options</summary>
+			<summary><h2>Frame Options.</h2></summary>
 			<p>
 				To help you pick what sized frame to put the art in, this
 				is a list of different standard & off the shelf frame sizes
 				sorted by least space around the art to most.
 			</p>
 			<table>
-				<thead><tr><td>Name</td><td>Width</td><td>Height</td><td>Matted Width</td><td>Matted Height</td></tr></thead>
+				<thead><tr><td>Name</td><td>Width</td><td>Height</td><td>Matted Width</td><td>Matted Height</td><td>Pick</td></tr></thead>
 				<tbody>
 				{[...frameOptions.value]}
 				</tbody>
 			</table>
 		</details>
-
-		<output htmlFor={[frameWidthInputId, frameHeightInputId, artWidthInputId, artHeightInputId, overlapAmountInputId, artSwapClickButtonId, frameSwapClickButtonId].join(" ")} name="result" >
+		<h2>Score lengths.</h2>
 			<dl>
 				<dt>inset height: {displayCanonicalUnit(inH)}</dt>
 				<dd>This is the depth of the line to draw on the foam core from the bottom and top when it is in portrait to accurately place the art in the centre.</dd>
