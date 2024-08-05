@@ -265,6 +265,7 @@ export function FrameClient() {
 
 	return <form>
 		<h1>Framing Calculator.</h1>
+		<section style={{ position: "sticky", top: "0", backgroundColor: "var(--background-color)"}}>
 		<fieldset>
 			<legend>Frame</legend>
 			<label htmlFor={frameWidthInputId}>
@@ -299,6 +300,7 @@ export function FrameClient() {
 				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={reParseMeasurement.source} value={overlapAmountInput}/>
 			</label>
 		</fieldset>
+		</section>
 
 
 
