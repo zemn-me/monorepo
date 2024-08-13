@@ -87,9 +87,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.127.0/pulumi-v3.127.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.129.0/pulumi-v3.129.0-linux-arm64.tar.gz",
         ],
-        sha256 = "f5239a3165a3392704a14c03fad82d32cd19e9aa1e07f82a1c864096d133f3f0",
+        sha256 = "801d6c814b76cd536d267dba9258c44b9b0a1c30a90ba2c420283bc372c5d5ca",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
