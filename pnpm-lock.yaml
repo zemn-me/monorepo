@@ -81,8 +81,8 @@ dependencies:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.0)
   eslint-plugin-jest:
-    specifier: 28.6.0
-    version: 28.6.0(eslint@9.9.0)(typescript@5.4.5)
+    specifier: 28.8.0
+    version: 28.8.0(eslint@9.9.0)(typescript@5.4.5)
   eslint-plugin-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.0)
@@ -1871,7 +1871,7 @@ packages:
       '@babel/core': 7.24.8
       '@babel/helper-compilation-targets': 7.24.8
       '@babel/helper-plugin-utils': 7.24.8
-      debug: 4.3.5
+      debug: 4.3.6
       lodash.debounce: 4.0.8
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
@@ -9204,7 +9204,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
@@ -10018,11 +10017,11 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jest@28.6.0(eslint@9.9.0)(typescript@5.4.5):
-    resolution: {integrity: sha512-YG28E1/MIKwnz+e2H7VwYPzHUYU4aMa19w0yGcwXnnmJH6EfgHahTJ2un3IyraUxNfnz/KUhJAFXNNwWPo12tg==}
+  /eslint-plugin-jest@28.8.0(eslint@9.9.0)(typescript@5.4.5):
+    resolution: {integrity: sha512-Tubj1hooFxCl52G4qQu0edzV/+EZzPUeN8p2NnW5uu4fbDs+Yo7+qDVDc4/oG3FbCqEBmu/OC3LSsyiU22oghw==}
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^6.0.0 || ^7.0.0
+      '@typescript-eslint/eslint-plugin': ^6.0.0 || ^7.0.0 || ^8.0.0
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
       jest: '*'
     peerDependenciesMeta:
