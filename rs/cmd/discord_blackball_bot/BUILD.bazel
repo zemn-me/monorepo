@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//rs:rules.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "discord_blackball_bot",
+    srcs = glob(["*.rs"]),
+    deps = [
+        "@cargo//:serenity",
+        "@cargo//:tokio",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
