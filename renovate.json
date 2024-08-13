@@ -9,6 +9,7 @@
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": true,
+	"prConcurrentLimit": 0,
 	"allowScripts": true,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
