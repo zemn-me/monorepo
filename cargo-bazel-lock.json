@@ -1,5 +1,5 @@
 {
-  "checksum": "6a71445f053a1b4244d56d0ac218e0dff9ae483118b0bbe9d2d09c9cd365a961",
+  "checksum": "d8401a59ba8e777f16ebe2143bc77ddf98616bdddea8db5150e9ca333066d634",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -350,7 +350,7 @@
         "deps": {
           "common": [
             {
-              "id": "anstyle 1.0.7",
+              "id": "anstyle 1.0.8",
               "target": "anstyle"
             },
             {
@@ -393,14 +393,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "anstyle 1.0.7": {
+    "anstyle 1.0.8": {
       "name": "anstyle",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "package_url": "https://github.com/rust-cli/anstyle.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/anstyle/1.0.7/download",
-          "sha256": "038dfcf04a5feb68e9c60b21c9625a54c2c0616e79b72b0fd87075a056ae1d1b"
+          "url": "https://static.crates.io/crates/anstyle/1.0.8/download",
+          "sha256": "1bec1de6f59aedf83baf9ff929c98f2ad654b97c9510f4e70cf6f661d49fd5b1"
         }
       },
       "targets": [
@@ -430,7 +430,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.7"
+        "version": "1.0.8"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -576,7 +576,7 @@
         "deps": {
           "common": [
             {
-              "id": "anstyle 1.0.7",
+              "id": "anstyle 1.0.8",
               "target": "anstyle"
             }
           ],
@@ -1267,14 +1267,14 @@
       ],
       "license_file": "LICENSE-MIT"
     },
-    "clap 4.5.13": {
+    "clap 4.5.15": {
       "name": "clap",
-      "version": "4.5.13",
+      "version": "4.5.15",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap/4.5.13/download",
-          "sha256": "0fbb260a053428790f3de475e304ff84cdbc4face759ea7a3e64c1edd938a7fc"
+          "url": "https://static.crates.io/crates/clap/4.5.15/download",
+          "sha256": "11d8838454fda655dafd3accb2b6e2bea645b9e4078abe84a22ceb947235c5cc"
         }
       },
       "targets": [
@@ -1324,7 +1324,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.5.13",
+              "id": "clap_builder 4.5.15",
               "target": "clap_builder"
             }
           ],
@@ -1340,7 +1340,7 @@
           ],
           "selects": {}
         },
-        "version": "4.5.13"
+        "version": "4.5.15"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -1349,14 +1349,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_builder 4.5.13": {
+    "clap_builder 4.5.15": {
       "name": "clap_builder",
-      "version": "4.5.13",
+      "version": "4.5.15",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_builder/4.5.13/download",
-          "sha256": "64b17d7ea74e9f833c7dbf2cbe4fb12ff26783eda4782a8975b72f895c9b4d99"
+          "url": "https://static.crates.io/crates/clap_builder/4.5.15/download",
+          "sha256": "216aec2b177652e3846684cbfe25c9964d18ec45234f0f5da5157b207ed1aab6"
         }
       },
       "targets": [
@@ -1396,7 +1396,7 @@
               "target": "anstream"
             },
             {
-              "id": "anstyle 1.0.7",
+              "id": "anstyle 1.0.8",
               "target": "anstyle"
             },
             {
@@ -1411,7 +1411,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.13"
+        "version": "4.5.15"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -3136,7 +3136,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.5.13",
+              "id": "clap 4.5.15",
               "target": "clap"
             },
             {
@@ -8825,7 +8825,7 @@
     }
   },
   "binary_crates": [
-    "clap 4.5.13",
+    "clap 4.5.15",
     "phf_generator 0.11.2",
     "rxp 0.2.0"
   ],
@@ -9126,7 +9126,7 @@
     ]
   },
   "direct_deps": [
-    "clap 4.5.13",
+    "clap 4.5.15",
     "hex 0.4.3",
     "rxp 0.2.0",
     "serde_json 1.0.121",
