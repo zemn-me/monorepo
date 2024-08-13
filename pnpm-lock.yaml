@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.25.3
-    version: 38.25.3(@aws-sdk/client-sso-oidc@3.621.0)(typanion@3.14.0)
+    specifier: 38.26.0
+    version: 38.26.0(@aws-sdk/client-sso-oidc@3.621.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.4
     version: 0.33.4
@@ -1871,7 +1871,7 @@ packages:
       '@babel/core': 7.24.8
       '@babel/helper-compilation-targets': 7.24.8
       '@babel/helper-plugin-utils': 7.24.8
-      debug: 4.3.5
+      debug: 4.3.6
       lodash.debounce: 4.0.8
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
@@ -4156,7 +4156,7 @@ packages:
   /@kwsites/file-exists@1.1.1:
     resolution: {integrity: sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==}
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7928,8 +7928,8 @@ packages:
       xml2js: 0.6.2
     dev: true
 
-  /aws4@1.13.0:
-    resolution: {integrity: sha512-3AungXC4I8kKsS9PuS4JH2nc+0bVY/mjgrephHTIi8fpEeGsTHBUJeosp0Wc1myYMElmD0B3Oc4XL/HVJ4PV2g==}
+  /aws4@1.13.1:
+    resolution: {integrity: sha512-u5w79Rd7SU4JaIlA/zFqG+gOiuq25q5VLyZ8E+ijJeILuTxVzZgp2CaGw/UTw6pXYN9XMO9yiqj/nEHmhTG5CA==}
     dev: true
 
   /axe-core@4.9.1:
@@ -9204,7 +9204,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
@@ -10455,7 +10454,7 @@ packages:
     engines: {node: '>= 10.17.0'}
     hasBin: true
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.6
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -16589,8 +16588,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.25.3(@aws-sdk/client-sso-oidc@3.621.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-yfIoCxFyqQn15uabicllf6HlyhM8KRXkbFF+LmH/j37nOxBgWSPah371w6DSUOVlwB3W5RtHQYc3sm7/1Opqtw==}
+  /renovate@38.26.0(@aws-sdk/client-sso-oidc@3.621.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-Fv+I1aJGSKJRDptNhCYEgClI1mBibTE6KRMyIpQp9qXXL32JNs4I4HKZQa/oFyrSP62rcgITlHbJQRetWzpmvA==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16623,7 +16622,7 @@ packages:
       agentkeepalive: 4.5.0
       aggregate-error: 3.1.0
       auth-header: 1.0.0
-      aws4: 1.13.0
+      aws4: 1.13.1
       azure-devops-node-api: 14.0.1
       bunyan: 1.8.15
       cacache: 18.0.4
@@ -17257,7 +17256,7 @@ packages:
     dependencies:
       '@kwsites/file-exists': 1.1.1
       '@kwsites/promise-deferred': 1.1.1
-      debug: 4.3.5
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
     dev: true
