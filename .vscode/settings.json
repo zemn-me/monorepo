@@ -39,6 +39,8 @@
 		"**/bazel-out": true
 	},
 	"[rust]": {
+		"editor.formatOnSaveMode": "file",
+		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.formatOnSave": true
 	},
 	"githubPullRequests.ignoredPullRequestBranches": [
