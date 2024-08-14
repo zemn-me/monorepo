@@ -14,6 +14,8 @@
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
 	"recreateWhen": "always",
+	"commitBodyTable": true,
+	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### [`v{{{release.version}}}]({{{release.releaseNotes.url}}})\n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
 	"ignorePaths": [
 		"**/monorepo/dist/**"
 	],
