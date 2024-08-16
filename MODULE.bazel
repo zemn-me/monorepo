@@ -111,4 +111,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "0.33.2")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "0.35.0")
