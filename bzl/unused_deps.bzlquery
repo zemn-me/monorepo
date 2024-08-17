@@ -1,0 +1,9 @@
+# this doesnt actually work, but its the furthest I've got
+let npm_deps_all = filter("^//:node_modules/", //:*) in
+let npm_deps_dirs = filter("dir$", $npm_deps_all) in
+let npm_deps = $npm_deps_all except $npm_deps_dirs in
+let npm_dependers = rdeps(//..., $npm_deps) except $npm_deps except //:node_modules in
+let npm_deps_depended_on = deps($npm_dependers) intersect $npm_deps in
+let unused_npm_deps = $npm_deps except $npm_deps_depended_on in
+
+$unused_npm_deps
