@@ -5,7 +5,6 @@ load("//ts/next.js:rules.bzl", "next_project")
 ts_project(
     name = "ts_sources",
     deps = [
-        "//:node_modules/@bazel/runfiles",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
@@ -29,7 +28,7 @@ jest_test(
         ":ts_sources",
     ],
     env = {
-        "NEXT_SERVER_BINARY": "../../../$(location :dev)",
+        "NEXT_SERVER_BINARY": "$(location :dev)",
         "BAZEL_BINDIR": "$(BINDIR)",
     },
 )
