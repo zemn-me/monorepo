@@ -1,0 +1,17 @@
+"Audio based diary."
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "audio_diary_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@pip//openai"],
+)

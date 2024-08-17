@@ -6,6 +6,8 @@
 manifest:
   modules_mapping:
     3204bda914b7f2c6f497__mypyc: mypy
+    annotated_types: annotated_types
+    anyio: anyio
     build: build
     certifi: certifi
     cffi: cffi
@@ -13,13 +15,19 @@ manifest:
     click: click
     cryptography: cryptography
     dateutil: python_dateutil
+    distro: distro
+    h11: h11
+    httpcore: httpcore
+    httpx: httpx
     idna: idna
+    jiter: jiter
     langcodes: langcodes
     language_data: language_data
     marisa_trie: marisa_trie
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
+    openai: openai
     packaging: packaging
     pathspec: pathspec
     pgpy: PGPy
@@ -28,12 +36,16 @@ manifest:
     pkg_resources: setuptools
     pyasn1: pyasn1
     pycparser: pycparser
+    pydantic: pydantic
+    pydantic_core: pydantic_core
     pyproject_hooks: pyproject_hooks
     requests: requests
     ruff: ruff
     sectxt: sectxt
     setuptools: setuptools
     six: six
+    sniffio: sniffio
+    tqdm: tqdm
     typing_extensions: typing_extensions
     urllib3: urllib3
     wheel: wheel
@@ -41,4 +53,4 @@ manifest:
     yamllint: yamllint
   pip_repository:
     name: pip
-integrity: 256fdf8d7b9326e7b3c26721d23b947ab38c8165b281aad2124feba511f40d82
+integrity: b52068209cfc302fee37fe4a1cb1a7352ced57b947edb1df9600359bbad5b85e
