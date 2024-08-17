@@ -213,7 +213,7 @@ copy_to_bin(
     """
 
     http_archive(
-        name = "com_googleapis_storage_chromedriver_linux64",
+        name = "com_googleapis_storage_chromedriver_linux_x64",
         sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
         url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
         build_file_content = chromedriver_buildfile,
