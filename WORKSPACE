@@ -60,10 +60,6 @@ load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
 
 rust_analyzer_dependencies()
 
-load("@npm//:repositories.bzl", "npm_repositories")
-
-npm_repositories()
-
 load("@aspect_bazel_lib//lib:repositories.bzl", "register_copy_directory_toolchains", "register_copy_to_directory_toolchains", "register_coreutils_toolchains")
 
 register_coreutils_toolchains()
