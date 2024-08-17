@@ -30,13 +30,13 @@ use_repo(
     "distroless_base",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.9")
+bazel_dep(name = "aspect_bazel_lib", version = "2.8.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.0.1")
-bazel_dep(name = "rules_python", version = "0.34.0")
+bazel_dep(name = "rules_python", version = "0.35.0")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
@@ -48,7 +48,7 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "1.2.3")
 bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "aspect_rules_js", version = "1.42.3")
+bazel_dep(name = "aspect_rules_js", version = "2.0.0")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
@@ -111,4 +111,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "0.33.2")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "0.35.0")
