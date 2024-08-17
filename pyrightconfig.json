@@ -1,0 +1,10 @@
+{
+	"$schema": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+	"exclude": [
+		"**/node_modules",
+		"**/__pycache__",
+		"**/.*",
+		"project/ck3/**",
+		"dist",
+	]
+}
