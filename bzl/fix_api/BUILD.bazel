@@ -3,6 +3,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 sh_binary(
     name = "fix_all",
     srcs = ["fix_all.sh"],
+    visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(
