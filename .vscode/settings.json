@@ -101,5 +101,9 @@
 		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
 	},
 	"bazel.buildifierFixOnFormat": true,
-	"bazel.executable": "bazelisk"
+	"bazel.executable": "bazelisk",
+	"mypy-type-checker.importStrategy": "fromEnvironment",
+	"mypy-type-checker.args": [
+		"--python-executable=.venv/bin/python3"
+	]
 }
