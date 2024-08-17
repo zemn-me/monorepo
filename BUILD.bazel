@@ -36,7 +36,7 @@ alias(
 # Useful commands to run!
 alias(
     name = "fix",
-    actual = "//bzl:fix",
+    actual = "//bzl/fix_api:fix_all",
 )
 
 alias(
