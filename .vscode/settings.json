@@ -102,8 +102,10 @@
 	},
 	"bazel.buildifierFixOnFormat": true,
 	"bazel.executable": "bazelisk",
-	"mypy-type-checker.importStrategy": "fromEnvironment",
+	"mypy-type-checker.importStrategy": "useBundled",
 	"mypy-type-checker.args": [
 		"--python-executable=.venv/bin/python3"
-	]
+	],
+	"python.analysis.autoImportCompletions": true,
+	"python.analysis.typeCheckingMode": "basic"
 }
