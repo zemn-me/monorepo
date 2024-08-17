@@ -8,7 +8,8 @@ import { expect, test } from '@jest/globals';
 import { isDefined, isNotNull, must } from '#root/ts/guard.js';
 
 test('next.js dev server launch!', async () => {
-	const next_server_binary = 'ts/next.js/testing/example/dev.sh';
+	console.log(process.cwd());
+	const next_server_binary = 'ts/next.js/testing/example/dev_/dev';
 	const BAZEL_BINDIR = must(isDefined)(process.env.BAZEL_BINDIR);
 
 	const proc = child_process.execFile(next_server_binary, {
