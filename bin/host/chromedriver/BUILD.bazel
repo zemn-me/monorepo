@@ -55,8 +55,7 @@ alias(
     actual = select({
         ":darwin_arm64": "@com_googleapis_storage_chromedriver_mac_arm64//:in_bin",
         ":darwin_x64": "@com_googleapis_storage_chromedriver_mac64//:in_bin",
-        ":linux_arm64": "@com_googleapis_storage_chromedriver_linux_arm64//:in_bin",
-        ":linux_x64": "@com_googleapis_storage_chromedriver_linux64//:in_bin",
+        ":linux_x64": "@com_googleapis_storage_chromedriver_linux_x64//:in_bin",
         ":windows_x32": "@com_googleapis_storage_chromedriver_win32//:in_bin",
         "//conditions:default": "@com_googleapis_storage_chromedriver_linux_x64//:in_bin",
     }),
