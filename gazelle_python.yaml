@@ -5,6 +5,7 @@
 
 manifest:
   modules_mapping:
+    3204bda914b7f2c6f497__mypyc: mypy
     build: build
     certifi: certifi
     cffi: cffi
@@ -16,6 +17,9 @@ manifest:
     langcodes: langcodes
     language_data: language_data
     marisa_trie: marisa_trie
+    mypy: mypy
+    mypy_extensions: mypy_extensions
+    mypyc: mypy
     packaging: packaging
     pathspec: pathspec
     pgpy: PGPy
@@ -30,10 +34,11 @@ manifest:
     sectxt: sectxt
     setuptools: setuptools
     six: six
+    typing_extensions: typing_extensions
     urllib3: urllib3
     wheel: wheel
     yaml: PyYAML
     yamllint: yamllint
   pip_repository:
     name: pip
-integrity: e9ae573bb6049ad0e107af5c3e0df03b2ab9f4da88c03a698705ba69cd43eefe
+integrity: 256fdf8d7b9326e7b3c26721d23b947ab38c8165b281aad2124feba511f40d82
