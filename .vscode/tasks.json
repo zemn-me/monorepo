@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Generate rust-project.json",
+			"label": "Rust: rust-project.json",
 			"command": "bazelisk",
 			"args": [
 				"run",
@@ -22,7 +22,25 @@
 			}
 		},
 		{
-			"label": "Check / install repo scripts to git / sapling",
+			"label": "Python: Activate Venv",
+			"command": "bazelisk",
+			"args": [
+				"run",
+				"venv"
+			],
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"reveal": "never",
+				"panel": "dedicated",
+			},
+		},
+		{
+			"label": "Sapling: install hooks",
 			"command": "bazelisk",
 			"args": [
 				"run",
