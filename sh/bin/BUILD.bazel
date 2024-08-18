@@ -8,6 +8,11 @@ alias(
 )
 
 alias(
+    name = "mypy",
+    actual = "//py/mypy",
+)
+
+alias(
     name = "dlv",
     actual = "@com_github_go_delve_delve//cmd/dlv",
 )
