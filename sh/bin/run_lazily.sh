@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # runs a bazel binary, but invokes bazel only when not cached.
 
+set -x
+
 SH_BINDIR="$(dirname ${BASH_SOURCE[0]})"
 
 BAZEL="$SH_BINDIR/bazel"
 
-WORKSPACE_ROOT="$($BAZEL info workspace)"
+WORKSPACE_ROOT="$($BAZEL info workspace 2> /dev/null)"
 BAZEL_OUT="$WORKSPACE_ROOT/dist"
 LAZY_CACHE_DIR="$WORKSPACE_ROOT/.script_cache"
 
@@ -17,7 +19,7 @@ TARGET_SCRIPT_LOCATION="$LAZY_CACHE_DIR/$TARGET"
 shift
 
 
-if find "$TARGET_SCRIPT_LOCATION" -mmin -120 | read; then
+if find "$TARGET_SCRIPT_LOCATION" -mmin -120 2> /dev/null | read ; then
     $TARGET_SCRIPT_LOCATION $@
     exit
 fi
@@ -25,5 +27,5 @@ fi
 
 mkdir -p "$(dirname $TARGET_SCRIPT_LOCATION)"
 
-$BAZEL run --ui_event_filters=-info,-stdout,-stderr --script_path="$TARGET_SCRIPT_LOCATION" $TARGET
+$BAZEL run --ui_event_filters='-info,-stdout,-stderr' --script_path="$TARGET_SCRIPT_LOCATION" -- $TARGET > /dev/null 2>&1
 $TARGET_SCRIPT_LOCATION $@
