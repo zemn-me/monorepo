@@ -2,9 +2,13 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Rust: rust-project.json",
+			"label": "Rust: update rust-project.json when it changes.",
 			"command": "bazelisk",
 			"args": [
+				"run",
+				"--run_under",
+				"cd ${workspaceFolder} &&",
+				"//.vscode:ibazel",
 				"run",
 				"//.vscode:gen_rust_project"
 			],
@@ -15,33 +19,13 @@
 			"problemMatcher": [],
 			"presentation": {
 				"reveal": "never",
-				"group": "preprep",
-				"close": true,
+				"group": "editor",
+				"close": false,
 				"panel": "dedicated",
 			},
 			"runOptions": {
 				"runOn": "folderOpen"
 			}
-		},
-		{
-			"label": "Python: Activate Venv",
-			"command": "bazelisk",
-			"args": [
-				"run",
-				"//.vscode:activate_venv"
-			],
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"presentation": {
-				"close": true,
-				"reveal": "never",
-				"group": "preprep",
-				"panel": "dedicated",
-			},
 		},
 		{
 			"label": "Sapling: install hooks",
@@ -55,6 +39,29 @@
 			"presentation": {
 				"close": true,
 				"group": "preprep",
+				"reveal": "never",
+				"panel": "dedicated",
+			},
+			"group": "build",
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		},
+		{
+			"label": "Python: rebuild venv when it changes",
+			"command": "bazelisk",
+			"args": [
+				"run",
+				"--run_under",
+				// this needs to be fixed. use a script.
+				"cd ${workspaceFolder} &&",
+				"//.vscode:ibazel",
+				"run",
+				"//.vscode:activate_venv"
+			],
+			"presentation": {
+				"close": false,
+				"group": "editor",
 				"reveal": "never",
 				"panel": "dedicated",
 			},
