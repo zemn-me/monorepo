@@ -17,7 +17,7 @@ TARGET_SCRIPT_LOCATION="$LAZY_CACHE_DIR/$TARGET"
 shift
 
 
-if find "$TARGET_SCRIPT_LOCATION" -mmin -120 | read; then
+if find "$TARGET_SCRIPT_LOCATION" -mmin -120 | read > /dev/null; then
     $TARGET_SCRIPT_LOCATION $@
     exit
 fi
