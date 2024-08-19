@@ -21,6 +21,7 @@ py_library(
     name = "bazel_lockfile",
     srcs = ["merge_driver.py"],
     visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
 )
 
 bazel_lint(

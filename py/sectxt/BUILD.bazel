@@ -1,14 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_library")
-
-py_library(
-    name = "main",
-    srcs = ["main.py"],
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "@pip//sectxt",
-    ],
-)
+load("//py:rules.bzl", "py_binary")
 
 exports_files(
     glob(["**/*"]),
@@ -21,4 +12,12 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+py_binary(
+    name = "sectxt_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@pip//sectxt"],
 )

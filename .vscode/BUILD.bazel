@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+"aliases for tasks so they dont get broken"
+
+alias(
+    name = "gen_rust_project",
+    actual = "//rs:gen_rust_project",
+)
+
+alias(
+    name = "activate_venv",
+    actual = "//:venv",
+)
+
+alias(
+    name = "install_sapling_hooks",
+    actual = "//.vscode/prep:prep_bin",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

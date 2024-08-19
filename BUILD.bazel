@@ -206,6 +206,7 @@ gazelle_binary(
         "//go/gazelle/bazel",
         "//go/gazelle/ts/config",
         "//go/gazelle/js",
+        "//go/gazelle/venv",
         # Any languages that depend on Gazelle's proto plugin must come after it.
     ],
     visibility = ["//visibility:public"],
@@ -241,6 +242,16 @@ bazel_lint(
     ],
 )
 
+# gazelle:resolve py rules_python.python.runfiles.runfiles @rules_python//python/runfiles
+# gazelle:python_default_visibility //:__subpackages__
+# gazelle:exclude .venv
 py_venv(
     name = "venv",
+    deps = [
+        "//.vscode/prep:prep_bin",
+        "//bzl/versioning",
+        "//ini/git/merge_drivers/bazel_lockfile",
+        "//project/cultist/gen/testing",
+        "//py/sectxt:sectxt_bin",
+    ],
 )
