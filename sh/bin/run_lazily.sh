@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # runs a bazel binary, but invokes bazel only when not cached.
 
-set -x
-
 SH_BINDIR="$(dirname ${BASH_SOURCE[0]})"
 
 BAZEL="$SH_BINDIR/bazel"
