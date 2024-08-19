@@ -1,18 +1,14 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary", "py_library")
-
-py_binary(
-    name = "scm_conf",
-    srcs = ["scm_conf.py"],
-)
-
-py_library(
-    name = "prep",
-    srcs = ["scm_conf.py"],
-    visibility = ["//:__subpackages__"],
-)
+load("//py:rules.bzl", "py_binary")
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "prep_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
 )
