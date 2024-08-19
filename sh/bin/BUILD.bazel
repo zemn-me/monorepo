@@ -13,6 +13,11 @@ alias(
 )
 
 alias(
+    name = "ibazel",
+    actual = "@com_github_bazelbuild_bazel_watcher//cmd/ibazel",
+)
+
+alias(
     name = "dlv",
     actual = "@com_github_go_delve_delve//cmd/dlv",
 )
