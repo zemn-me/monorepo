@@ -8,6 +8,11 @@ alias(
 )
 
 alias(
+    name = "ibazel",
+    actual = "//sh/bin:ibazel",
+)
+
+alias(
     name = "activate_venv",
     actual = "//:venv",
 )
