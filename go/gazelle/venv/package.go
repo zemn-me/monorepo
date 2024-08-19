@@ -47,9 +47,20 @@ func (Language) Configure(c *config.Config, rel string, f *rule.File) {
 // since it generates "go_library" rules.
 func (Language) Name() string { return "venv" }
 
-const (
-	collate_kind_target = "py_library"
-)
+var collate_kind_targets = []string{
+	"py_library",
+	"py_binary",
+}
+
+func isTargetKind(kind string) (ok bool) {
+	for _, v := range collate_kind_targets {
+		if ok = kind == v; ok {
+			return
+		}
+	}
+
+	return
+}
 
 // this is only called for the one root venv rule and it can't be imported.
 func (this Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) (specs []resolve.ImportSpec) {
@@ -107,7 +118,7 @@ func (this Language) GenerateRules(args language.GenerateArgs) (result language.
 	}
 
 	for _, r := range args.OtherGen {
-		if r.Kind() != collate_kind_target {
+		if !isTargetKind(r.Kind()) {
 			continue
 		}
 

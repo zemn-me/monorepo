@@ -1,3 +1,5 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
 "aliases for tasks so they dont get broken"
 
 alias(
@@ -13,4 +15,9 @@ alias(
 alias(
     name = "install_sapling_hooks",
     actual = "//.vscode/prep:prep_bin",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

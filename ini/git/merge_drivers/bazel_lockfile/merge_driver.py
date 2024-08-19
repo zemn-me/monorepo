@@ -14,6 +14,8 @@ from subprocess import run
 from argparse import ArgumentParser
 from tempfile import TemporaryFile
 from shutil import copyfileobj
+from rules_python.python.runfiles import runfiles
+
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
@@ -39,13 +41,14 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+r = runfiles.Create()
 
-jq_bin = env["JQ_BINARY"]
-jq_script = env["JQ_SCRIPT"]
+jq_bin = r.Rlocation(env["JQ_BINARY"])
+jq_script = r.Rlocation(env["JQ_SCRIPT"])
 
-O = args.original_commit
-A = args.our_commit
-B = args.other_commit
+O: str = args.original_commit
+A: str = args.our_commit
+B: str = args.other_commit
 
 target_temp_file = "{}.jq"
 
