@@ -6,8 +6,8 @@ def test_sectxt(name, srcs = []):
     for src in srcs:
         py_test(
             name = name + "_" + src,
-            srcs = ["//py/sectxt:main.py"],
-            main = "//py/sectxt:main.py",
+            srcs = ["//py/sectxt:__main__.py"],
+            main = "//py/sectxt:__main__.py",
             data = [src],
             args = ["$(location " + src + ")"],
             deps = [

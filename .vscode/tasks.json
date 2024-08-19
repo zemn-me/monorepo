@@ -6,7 +6,7 @@
 			"command": "bazelisk",
 			"args": [
 				"run",
-				"//rs:gen_rust_project"
+				"//.vscode:gen_rust_project"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -26,7 +26,7 @@
 			"command": "bazelisk",
 			"args": [
 				"run",
-				"venv"
+				"//.vscode:activate_venv"
 			],
 			"runOptions": {
 				"runOn": "folderOpen"
@@ -44,7 +44,7 @@
 			"command": "bazelisk",
 			"args": [
 				"run",
-				"//.vscode/prep:scm_conf",
+				"//.vscode:install_sapling_hooks",
 				"--",
 				"${workspaceFolder}"
 			],
