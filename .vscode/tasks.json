@@ -48,6 +48,10 @@
 				"--",
 				"${workspaceFolder}"
 			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "dedicated",
+			},
 			"group": "build",
 			"runOptions": {
 				"runOn": "folderOpen"
