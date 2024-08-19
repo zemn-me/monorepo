@@ -242,12 +242,16 @@ bazel_lint(
     ],
 )
 
+# gazelle:resolve py rules_python.python.runfiles.runfiles @rules_python//python/runfiles
 # gazelle:python_default_visibility //:__subpackages__
+# gazelle:exclude .venv
 py_venv(
     name = "venv",
     deps = [
+        "//.vscode/prep:prep_bin",
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py/sectxt:sectxt_bin",
     ],
 )
