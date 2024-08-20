@@ -247,8 +247,10 @@ bazel_lint(
 py_venv(
     name = "venv",
     deps = [
+        "//.vscode/prep:prep_bin",
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py/sectxt:sectxt_bin",
     ],
 )
