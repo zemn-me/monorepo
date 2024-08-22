@@ -78,10 +78,26 @@ class measurement<T> extends NewType<T> {
 		return `${this.scalar().toFixed(2)}${this.unit()}`
 	}
 
+	greater_than(this: Measurement, other: Measurement): boolean {
+		return this.as_m().scalar() > other.as_m().scalar()
+	}
+
+	less_than(this: Measurement, other: Measurement): boolean {
+		return this.as_m().scalar() > other.as_m().scalar()
+	}
+
+	equal(this: Measurement, other: Measurement): boolean {
+		return this.as_m().scalar() == other.as_m().scalar()
+	}
+
 	to_string(this: Measurement): string {
 		let v: Measurement = this.as_m();
 		if (v.scalar() < 1) v = v.as("cm");
 		return `${v.scalar().toFixed(2)}${v.unit()}`
+	}
+
+	override toString(this: Measurement): string {
+		return this.to_string();
 	}
 
 }
@@ -165,6 +181,48 @@ function VisualiseFramedArt({
 	</svg>
 }
 
+interface MatteboardCutsProps {
+	frameHeight: Measurement
+	artHeight: Measurement
+	frameWidth: Measurement
+	artWidth: Measurement
+	overlapAmount: Measurement
+
+}
+
+interface MatteBoardCutsOutputs {
+	backingInsetHeight: Measurement
+	backingInsetWidth: Measurement
+
+	matteboardInsetHeight: Measurement
+	matteboardInsetWidth: Measurement
+
+	windowWidth: Measurement
+	windowHeight: Measurement
+
+}
+
+
+function matteboardCuts({ frameHeight, overlapAmount, artHeight, frameWidth, artWidth } : MatteboardCutsProps): MatteBoardCutsOutputs {
+	const backingInsetHeight = frameHeight.minus(artHeight).divide_unitless(2);
+
+	const backingInsetWidth = frameWidth.minus(artWidth).divide_unitless(2);
+
+	const matteboardInsetHeight = backingInsetHeight.plus(overlapAmount);
+
+	const matteboardInsetWidth = backingInsetWidth.plus(overlapAmount);
+
+	const windowHeight = frameHeight.minus(matteboardInsetHeight.multiply_unitless(2));
+
+	const windowWidth = frameWidth.minus(matteboardInsetWidth.multiply_unitless(2));
+
+	return {
+		backingInsetHeight, backingInsetWidth, matteboardInsetHeight, matteboardInsetWidth, windowHeight, windowWidth
+	}
+
+
+}
+
 
 
 
@@ -192,10 +250,17 @@ export function FrameClient() {
 	const artHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setArtHeightInput(e.target.value), [setArtHeightInput]);
 	const artHeight = useMemo(() => parseMeasurement(artHeightInput), [artHeightInput]);
 
-	const [overlapAmountInput, setOverlapAmountInput] = useQueryState<string>("overlap_amount", parseAsString.withDefault("2cm"));
+	const [overlapAmountInput, setOverlapAmountInput] = useQueryState<string>("overlap_amount", parseAsString.withDefault("1cm"));
 	const overlapAmountInputId = useId();
 	const overlapAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setOverlapAmountInput(e.target.value), [setOverlapAmountInput]);
 	const overlapAmount = useMemo(() => parseMeasurement(overlapAmountInput), [overlapAmountInput]);
+
+	const [minimumCutDepthInput, setMinimumCutDepthInput] = useQueryState<string>("minimum_cut_depth", parseAsString.withDefault(""));
+	const minimumCutDepthInputId = useId();
+	const minimumCutDepthInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setMinimumCutDepthInput(e.target.value), [setMinimumCutDepthInput]);
+	const minimumCutDepth = useMemo(() => parseMeasurement(minimumCutDepthInput).unwrap_or(
+		Measurement<[number, "cm"]>([Infinity, "cm"])
+	), [minimumCutDepthInput]);
 
 
 	const frameSwapClickButtonId = useId();
@@ -212,56 +277,79 @@ export function FrameClient() {
 		void setArtWidthInput(artHeightInput);
 	}, [setArtHeightInput, setArtWidthInput, artHeightInput, artWidthInput]);
 
-	const inH = frameHeight.zip(artHeight).and_then(([
-		frameHeight, artHeight
-	]) => frameHeight.minus(artHeight).divide_unitless(2));
+	const artInfo = artHeight.zip(artWidth);
+	const frameInfo = frameHeight.zip(frameWidth);
+	const errataInfo = overlapAmount.zip(Ok(minimumCutDepth));
+	const frameOptionsInfo = artInfo.zip(errataInfo);
 
-	const inW = frameWidth.zip(artWidth).and_then(([frameWidth, artWidth]) =>
-		frameWidth.minus(artWidth).divide_unitless(2));
+	const frameOptions: JSX.Element =
+		frameOptionsInfo.and_then(
+			([[artHeight, artWidth], [overlapAmount, minCutDepth]]) =>
+				Iterable(normalisedFrameSizes)
+					.map(f => ({
+						...f,
+						δwidth: f.width.minus(artWidth),
+						δheight: f.height.minus(artHeight),
+					})).map(v => {
+						if (v.δheight.scalar() < 0 || v.δwidth.scalar() < 0) return None;
+						const mattedHeight = v.δheight.multiply_unitless(2);
+						const mattedWidth = v.δwidth.multiply_unitless(2);
+						const vn = {
+							...v,
+							mattedHeight, mattedWidth,
+							totalMattedArea: mattedWidth.plus(
+								mattedHeight
+							),
+							...matteboardCuts({
+								frameHeight: v.height,
+								frameWidth: v.width,
+								artHeight: artHeight,
+								artWidth: artWidth,
+								overlapAmount: overlapAmount
+							})
+						};
 
-	const insH = inH.zip(overlapAmount).and_then(([inH, overlapAmount]) => inH.plus(overlapAmount));
+						// can't make cut smaller than minimum
+						if (vn.matteboardInsetHeight.less_than(minCutDepth) ||
+							vn.matteboardInsetWidth.less_than(minCutDepth)) return None;
 
-	const insW = inW.zip(overlapAmount).and_then(([inW, overlapAmount]) => inW.plus(overlapAmount));
+						return Some(vn)
 
-	const windowH = insH.zip(frameHeight).and_then(([insH, frameHeight]) =>
-		frameHeight.minus(insH.multiply_unitless(2)));
+					}).filter()
+					.sort((a, b) => a.totalMattedArea.minus(b.totalMattedArea).scalar())
+					.map(v => <tr key={v.name}>
+						<td>{v.name}</td>
+						<td>{v.width.to_string_no_adjustments()}</td>
+						<td>{v.height.to_string_no_adjustments()}</td>
+						<td>{v.mattedWidth.as(v.width.unit()).to_string_no_adjustments()}</td>
+						<td>{v.mattedHeight.as(v.height.unit()).to_string_no_adjustments()}</td>
+						<td><button aria-label="pick this frame" onClick={e => {
+							void setFrameWidthInput(v.width.to_string_no_adjustments());
+							void setFrameHeightInput(v.height.to_string_no_adjustments());
+							e.preventDefault();
+						}}>↑</button></td>
+					</tr>)).and_then(v => {
 
-	const windowW = insW.zip(frameWidth).and_then(([insW, frameWidth]) =>
-		frameWidth.minus(insW.multiply_unitless(2)));
+						const arr = [...v.value];
+						if (arr.length < 1) return <>No results.</>;
 
-	const frameOptions = Iterable(normalisedFrameSizes)
-		.map(f => ({
-			...f,
-			δwidth: artWidth.and_then(artWidth => f.width.minus(artWidth)),
-			δheight: artHeight.and_then(artHeight => f.height.minus(artHeight)),
-		})).map(v =>
-			Some(v.δheight.zip(v.δwidth).and_then(([δheight, δwidth]) => {
-				if (δheight.scalar() < 0 || δwidth.scalar() < 0) return None;
-				const mattedHeight = δheight.multiply_unitless(2);
-				const mattedWidth = δwidth.multiply_unitless(2);
-				return Some({
-					...v,
-					δheight, δwidth,
-					mattedHeight, mattedWidth,
-					totalMattedArea: mattedWidth.plus(
-						mattedHeight
+						return <table>
+							<thead><tr><td>Name</td><td>Width</td><td>Height</td><td>Matted Width</td><td>Matted Height</td><td>Pick</td></tr></thead>
+							<tbody>
+								{arr}
+							</tbody>
+						</table>;
+
+					}
 					)
-				})
-			})).absorb_result().flatten()
-		).filter()
-		.sort((a, b) => a.totalMattedArea.minus(b.totalMattedArea).scalar())
-		.map(v => <tr key={v.name}>
-			<td>{v.name}</td>
-			<td>{v.width.to_string_no_adjustments()}</td>
-			<td>{v.height.to_string_no_adjustments()}</td>
-			<td>{v.mattedWidth.as(v.width.unit()).to_string_no_adjustments()}</td>
-			<td>{v.mattedHeight.as(v.height.unit()).to_string_no_adjustments()}</td>
-			<td><button aria-label="pick this frame" onClick={e => {
-				void setFrameWidthInput(v.width.to_string_no_adjustments());
-				void setFrameHeightInput(v.height.to_string_no_adjustments());
-				e.preventDefault();
-			}}>↑</button></td>
-		</tr>);
+			.unwrap_or_else(e => <ErrorDisplay error={e}/>);
+
+	const cuts = artInfo.zip(frameInfo).and_then(
+		([[artHeight, artWidth], [frameHeight, frameWidth]]) =>
+			overlapAmount.and_then(overlapAmount =>
+				matteboardCuts({ frameHeight, frameWidth, artHeight, artWidth, overlapAmount })
+			)
+	).flatten();
 
 	return <form>
 		<h1>Framing Calculator.</h1>
@@ -272,7 +360,7 @@ export function FrameClient() {
 				Width:
 				<input id={frameWidthInputId} onChange={frameWidthChange} pattern={reParseMeasurement.source} value={frameWidthInput} />
 			</label>
-
+			{" "}
 			<label htmlFor={frameHeightInputId}>
 				Height:
 				<input id={frameHeightInputId} onChange={frameHeightChange} pattern={reParseMeasurement.source} value={frameHeightInput}/>
@@ -286,6 +374,7 @@ export function FrameClient() {
 				Width:
 				<input id={artWidthInputId} onChange={artWidthChange} pattern={reParseMeasurement.source} value={artWidthInput}/>
 			</label>
+			{" "}
 			<label htmlFor={artHeightInputId}>
 				Height:
 				<input id={artHeightInputId} onChange={artHeightChange} pattern={reParseMeasurement.source} value={artHeightInput}/>
@@ -294,10 +383,14 @@ export function FrameClient() {
 		</fieldset>
 
 		<fieldset>
-			<legend>Overlap</legend>
+			<legend>Matteboard</legend>
 			<label htmlFor={overlapAmountInputId}>
-				<i>Amount of art to cover with matteboard.</i>
+				<i>Amount of art to cover with matteboard. </i>
 				<input id={overlapAmountInputId} onChange={overlapAmountChange} pattern={reParseMeasurement.source} value={overlapAmountInput}/>
+			</label>{" "}
+			<label htmlFor={minimumCutDepthInputId}>
+				<i>Minimum Cut Depth. </i>
+				<input id={minimumCutDepthInputId} onChange={minimumCutDepthInputChange} pattern={reParseMeasurement.source} placeholder="∞" value={minimumCutDepthInput}/>
 			</label>
 		</fieldset>
 		</section>
@@ -307,9 +400,7 @@ export function FrameClient() {
 		<output htmlFor={[frameWidthInputId, frameHeightInputId, artWidthInputId, artHeightInputId, overlapAmountInputId, artSwapClickButtonId, frameSwapClickButtonId].join(" ")} name="result" >
 		<h2>Visualisation.</h2>
 			{
-				windowW.zip(windowH).zip(
-					frameWidth.zip(frameHeight)
-				).and_then(([[artW, artH], [frameW, frameH]]) => <VisualiseFramedArt
+				artInfo.zip(frameInfo).and_then(([[artW, artH], [frameW, frameH]]) => <VisualiseFramedArt
 					art={[artW.as_m().scalar(), artH.as_m().scalar()]}
 					frame={[frameW.as_m().scalar(), frameH.as_m().scalar()]}
 				/>
@@ -322,22 +413,17 @@ export function FrameClient() {
 				is a list of different standard & off the shelf frame sizes
 				sorted by least space around the art to most.
 			</p>
-			<table>
-				<thead><tr><td>Name</td><td>Width</td><td>Height</td><td>Matted Width</td><td>Matted Height</td><td>Pick</td></tr></thead>
-				<tbody>
-				{[...frameOptions.value]}
-				</tbody>
-			</table>
+				{frameOptions}
 		</details>
 		<h2>Score lengths.</h2>
 			<dl>
-				<dt>inset height: {displayCanonicalUnit(inH)}</dt>
+				<dt>inset height: {displayCanonicalUnit(cuts.and_then(v => v.backingInsetHeight))}</dt>
 				<dd>This is the depth of the line to draw on the foam core from the bottom and top when it is in portrait to accurately place the art in the centre.</dd>
-				<dt>inset width: {displayCanonicalUnit(inW)}</dt>
+				<dt>inset width: {displayCanonicalUnit(cuts.and_then(v => v.backingInsetWidth))}</dt>
 				<dd>This is the depth of the line to draw on the foam core from the bottom and top when it is in <i>landscape</i> to accurately place the art in the centre.</dd>
-				<dt>matte inset height: {displayCanonicalUnit(insH)}</dt>
+				<dt>matte inset height: {displayCanonicalUnit(cuts.and_then(v => v.matteboardInsetHeight))}</dt>
 				<dd>This is the depth of the line to draw on the back of the matteboard from the bottom and top when it is in portrait.</dd>
-				<dt>matte inset width: {displayCanonicalUnit(insW)}</dt>
+				<dt>matte inset width: {displayCanonicalUnit(cuts.and_then(v => v.matteboardInsetWidth))}</dt>
 				<dd>This is the depth of the line to draw on the back of the matteboard from the bottom and top when it is in <i>landscape</i>.</dd>
 			</dl>
 
