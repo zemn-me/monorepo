@@ -36,8 +36,8 @@ dependencies:
     specifier: 9.7.4
     version: 9.7.4
   '@tanstack/react-query':
-    specifier: 5.52.0
-    version: 5.52.0(react@18.3.1)
+    specifier: 5.52.1
+    version: 5.52.1(react@18.3.1)
   '@types/bcryptjs':
     specifier: 2.4.6
     version: 2.4.6
@@ -75,8 +75,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1344581
-    version: 0.0.1344581
+    specifier: 0.0.1345247
+    version: 0.0.1345247
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.0)
@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.47.0
-    version: 38.47.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0)
+    specifier: 38.51.0
+    version: 38.51.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -6589,10 +6589,10 @@ packages:
     resolution: {integrity: sha512-U1DOEgltjUwalN6uWYTewSnA14b+tE7lSylOiASKCAO61ENJeCq9VVD/TXHA6O5u9+6v5+UgGYBSccTKDoyMqw==}
     dev: false
 
-  /@tanstack/react-query@5.52.0(react@18.3.1):
-    resolution: {integrity: sha512-T8tLZdPEopSD3A1EBZ/sq7WkI76pKLKKiT82F486K8wf26EPgYCdeiSnJfuayssdQjWwLQMQVl/ROUBNmlWgCQ==}
+  /@tanstack/react-query@5.52.1(react@18.3.1):
+    resolution: {integrity: sha512-soyn4dNIUZ8US8NaPVXv06gkZFHaZnPfKWPDjRJjFRW3Y7WZ0jx72eT6zhw3VQlkMPysmXye8l35ewPHspKgbQ==}
     peerDependencies:
-      react: ^18.0.0
+      react: ^18 || ^19
     dependencies:
       '@tanstack/query-core': 5.52.0
       react: 18.3.1
@@ -9485,8 +9485,8 @@ packages:
     resolution: {integrity: sha512-DPnhUXvmvKT2dFA/j7B+riVLUt9Q6RKJlcppojL5CoRywJJKLDYnRlw0gTFKfgDPHP5E04UoB71SxoJlVZy8FA==}
     dev: true
 
-  /devtools-protocol@0.0.1344581:
-    resolution: {integrity: sha512-1RMqB+WUBwMh0UicWiAMvJPVy54AcWkpjDPww5vcFCl1/wI8jB9hHtwl23dootYWywjo0prpde4VTsmUhKao8g==}
+  /devtools-protocol@0.0.1345247:
+    resolution: {integrity: sha512-U6SOWj83Eznob0zaelx2CzURpexV5JwZ3Qsl2Q7cYsToMT3gDBVM2mbDgr0LNxhp9y2RG+7KZHHRRNrSnYozog==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -16639,8 +16639,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.47.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-Az4vD75vNnSYf44vKTVrb6AQAQ8sgGnAPQnuBgnucbQHGqj7lxfS3YdLyWl/dHZolrAdQTkS64RyDr22TFZObA==}
+  /renovate@38.51.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-quHia7f34a/eaPpFLrlk0TOh2ITgkeSixXfo2pY7/LxQPqVRW43KkqCCLfVvq2x9/ejS2ZqcZdg+8XpcOSQKiQ==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
