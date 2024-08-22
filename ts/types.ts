@@ -32,7 +32,7 @@ export function unwrap_or<T>(v: Result<T, unknown>, fallback: T): T {
 	return v[_ok]
 }
 
-export function unwrap_or_else<T, E>(v: Result<T, unknown>, fallback: (e: E) => T): T {
+export function unwrap_or_else<T1, T2, E>(v: Result<T1, unknown>, fallback: (e: E) => T2): T1 | T2 {
 	if (is_err(v)) return fallback(v[_err] as E);
 
 	return v[_ok]

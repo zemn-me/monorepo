@@ -37,7 +37,7 @@ export class impl<T> extends NewType<T> {
 		return this.value[types._ok]
 	}
 
-	unwrap_or_else<T, E>(this: Result<T, E>, fallback: (e: E) => T): T {
+	unwrap_or_else<T1, T2, E>(this: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
 		return types.unwrap_or_else(this.value, fallback)
 	}
 	and_then<T, E, O>(this: Result<T, E>, f: (v: T) => O): Result<O, E> {
