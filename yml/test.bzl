@@ -9,5 +9,6 @@ def yaml_lint_test(name, srcs = None, **kwargs):
         srcs = ["//yml:test_runner.sh"],
         data = ["//py/yamllint", "//yml:yamllint_data_deps"] + srcs,
         args = ["$(rootpath %s)" % x for x in srcs],
+        size = "small",
         **kwargs
     )
