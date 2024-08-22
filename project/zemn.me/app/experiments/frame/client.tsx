@@ -265,7 +265,7 @@ export function FrameClient() {
 
 	return <form>
 		<h1>Framing Calculator.</h1>
-		<section style={{ position: "sticky", top: "0", backgroundColor: "var(--background-color)"}}>
+		<section style={{ top: "0", backgroundColor: "var(--background-color)"}}>
 		<fieldset>
 			<legend>Frame</legend>
 			<label htmlFor={frameWidthInputId}>
