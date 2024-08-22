@@ -4,5 +4,6 @@ def bazel_lint(name = None, srcs = None, **kwargs):
     buildifier_test(
         name = name,
         srcs = srcs,
+        size = "small",
         **kwargs
     )
