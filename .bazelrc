@@ -114,6 +114,8 @@ query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 
 common --lockfile_mode=refresh
 
-# need to update renovate to generate these
 common:ci --lockfile_mode=error
 common:ci --build_metadata=ROLE=CI
+common:ci --keep_going
+common:ci --noshow_progress
+common --test_verbose_timeout_warnings
