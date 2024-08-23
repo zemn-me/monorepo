@@ -110,8 +110,12 @@ function Measurement<T>(v: T): measurement<T> {
 const reParseMeasurement = /(\d+(?:\.\d+)?)\s*(in|cm|mm?)/
 
 class ParseMeasurementError extends Error {
-	constructor(cause: Error, input: string) {
-		super(`parsing ${input}: ${cause}`)
+	constructor(cause: Error, input: string, meaning: string) {
+		const inputRepresentation =
+			input == ""
+				? `an empty ${meaning}`
+				: `${meaning} "${input}"`;
+		super(`trying to interpret ${inputRepresentation}: ${cause}`)
 		super.cause = cause;
 	}
 }
@@ -119,24 +123,24 @@ class ParseMeasurementError extends Error {
 /**
  * Parse a measurement and return it in m.
  */
-function parseMeasurement(measurement: string): Result<Measurement, ParseMeasurementError | Error> {
+function parseMeasurement(measurement: string, meaning: string): Result<Measurement, ParseMeasurementError | Error> {
 	const parsed = new RegExp(reParseMeasurement).exec(measurement);
 
-	if (parsed == null) return Err(new ParseMeasurementError(new Error("invalid format"), measurement));
+	if (parsed == null) return Err(new ParseMeasurementError(new Error("format is incorrect"), measurement, meaning));
 
 	const [, decimal, unit] = parsed;
 
 	if (decimal == undefined) return Err(
 		new ParseMeasurementError(
 			new Error("missing decimal part"),
-			measurement
+			measurement, meaning,
 		));
 
 	if (unit == undefined) return Err(
-		new ParseMeasurementError(new Error("missing unit"), measurement));
+		new ParseMeasurementError(new Error("please specify a unit"), measurement, meaning));
 
 	const scalar = +decimal;
-	if (isNaN(scalar)) return Err(new ParseMeasurementError(new Error("invalid decimal part"), measurement));
+	if (isNaN(scalar)) return Err(new ParseMeasurementError(new Error("please specify a valid number"), measurement, meaning));
 
 	return mustUnit(unit).and_then(
 		unit => Measurement([ scalar, unit ])
@@ -149,8 +153,8 @@ function displayCanonicalUnit(measurement: Result<Measurement, unknown>):string 
 
 const normalisedFrameSizes = frameSizes.map(v => ({
 	...v,
-	width: parseMeasurement(v.width).unwrap(),
-	height: parseMeasurement(v.height).unwrap()
+	width: parseMeasurement(v.width, `${v.name} width`).unwrap(),
+	height: parseMeasurement(v.height, `${v.name} height`).unwrap()
 })).map(v => [
 	v,
 	{
@@ -232,33 +236,33 @@ export function FrameClient() {
 	const frameWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) =>
 		void setFrameWidthInput(e.target.value)
 		, [setFrameWidthInput]);
-	const frameWidth = useMemo(() => parseMeasurement(frameWidthInput), [frameWidthInput]);
+	const frameWidth = useMemo(() => parseMeasurement(frameWidthInput, "frame width"), [frameWidthInput]);
 
 	const [frameHeightInput, setFrameHeightInput] = useQueryState<string>('frame_height', parseAsString.withDefault("24in"));
 	const frameHeightInputId = useId();
 	const frameHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setFrameHeightInput(e.target.value), [setFrameHeightInput]);
-	const frameHeight = useMemo(() => parseMeasurement(frameHeightInput), [frameHeightInput]);
+	const frameHeight = useMemo(() => parseMeasurement(frameHeightInput, "frame height"), [frameHeightInput]);
 
 
 	const [artWidthInput, setArtWidthInput] = useQueryState<string>('art_width', parseAsString.withDefault("12in"));
 	const artWidthInputId = useId();
 	const artWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setArtWidthInput(e.target.value), [setArtWidthInput]);
-	const artWidth = useMemo(() => parseMeasurement(artWidthInput), [artWidthInput]);
+	const artWidth = useMemo(() => parseMeasurement(artWidthInput, "art width"), [artWidthInput]);
 
 	const [artHeightInput, setArtHeightInput] = useQueryState<string>('art_height', parseAsString.withDefault("23.75in"));
 	const artHeightInputId = useId();
 	const artHeightChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setArtHeightInput(e.target.value), [setArtHeightInput]);
-	const artHeight = useMemo(() => parseMeasurement(artHeightInput), [artHeightInput]);
+	const artHeight = useMemo(() => parseMeasurement(artHeightInput, "art height"), [artHeightInput]);
 
 	const [overlapAmountInput, setOverlapAmountInput] = useQueryState<string>("overlap_amount", parseAsString.withDefault("1cm"));
 	const overlapAmountInputId = useId();
 	const overlapAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setOverlapAmountInput(e.target.value), [setOverlapAmountInput]);
-	const overlapAmount = useMemo(() => parseMeasurement(overlapAmountInput), [overlapAmountInput]);
+	const overlapAmount = useMemo(() => parseMeasurement(overlapAmountInput, "overlap amount"), [overlapAmountInput]);
 
 	const [minimumCutDepthInput, setMinimumCutDepthInput] = useQueryState<string>("minimum_cut_depth", parseAsString.withDefault(""));
 	const minimumCutDepthInputId = useId();
 	const minimumCutDepthInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setMinimumCutDepthInput(e.target.value), [setMinimumCutDepthInput]);
-	const minimumCutDepth = useMemo(() => parseMeasurement(minimumCutDepthInput).unwrap_or(
+	const minimumCutDepth = useMemo(() => parseMeasurement(minimumCutDepthInput, "minimum cut depth").unwrap_or(
 		Measurement<[number, "cm"]>([Infinity, "cm"])
 	), [minimumCutDepthInput]);
 
