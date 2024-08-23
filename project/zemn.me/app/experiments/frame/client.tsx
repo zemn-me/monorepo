@@ -83,7 +83,7 @@ class measurement<T> extends NewType<T> {
 	}
 
 	less_than(this: Measurement, other: Measurement): boolean {
-		return this.as_m().scalar() > other.as_m().scalar()
+		return this.as_m().scalar() < other.as_m().scalar()
 	}
 
 	equal(this: Measurement, other: Measurement): boolean {
