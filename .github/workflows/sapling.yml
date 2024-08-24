@@ -1,7 +1,11 @@
 name: Sapling
 on:
   pull_request:
-    types: [edited, opened]
+    types:
+      - edited
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   merge_in_order:
