@@ -108,5 +108,11 @@
 	],
 	"python.analysis.autoImportCompletions": true,
 	"python.analysis.typeCheckingMode": "basic",
-	"python.terminal.activateEnvInCurrentTerminal": true
+	"python.terminal.activateEnvInCurrentTerminal": true,
+	"javascript.preferences.autoImportFileExcludePatterns": [
+		"**/_*"
+	],
+	"typescript.preferences.autoImportFileExcludePatterns": [
+		"**/_*"
+	]
 }
