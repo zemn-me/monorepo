@@ -8,7 +8,7 @@
 	"autodiscover": true,
 	"configMigration": true,
 	"platformAutomerge": true,
-	"platformCommit": true,
+	"platformCommit": "enabled",
 	"prConcurrentLimit": 0,
 	"allowScripts": true,
 	"rollbackPrs": true,
@@ -77,16 +77,16 @@
 			}
 		},
 		{
-			"matchPackagePatterns": [
-				"pulumi_cli_.*"
-			],
-			"groupName": "pulumi_cli"
+			"groupName": "pulumi_cli",
+			"matchPackageNames": [
+				"/pulumi_cli_.*/"
+			]
 		},
 		{
-			"matchPackagePatterns": [
-				"com_googleapis_storage_chromedriver.*"
-			],
-			"groupName": "chromedriver"
+			"groupName": "chromedriver",
+			"matchPackageNames": [
+				"/com_googleapis_storage_chromedriver.*/"
+			]
 		}
 	]
 }
