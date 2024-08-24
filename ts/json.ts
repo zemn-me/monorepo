@@ -1,3 +1,5 @@
+import { Err, Ok, Result } from "#root/ts/result.js";
+
 /**
  * JSONPrimitive represents a primitive which can be safely transmitted over JSON.
  * @see {@link JSONObject}
@@ -24,3 +26,14 @@ export type JSONArray = JSONValue[];
  * @public
  */
 export interface JSONObject extends Record<string, JSONValue> {}
+
+
+export function safeParseJSON(json: string): Result<unknown, SyntaxError> {
+	return Ok(() => JSON.parse(json) as unknown).safely().and_then<unknown, unknown, Ok<unknown>>(v => Ok(v)).unwrap_or_else(
+		e => {
+			if (e instanceof SyntaxError) return Err(e);
+
+			throw new Error('JSON.parse() threw an error that was not SyntaxError!?');
+		}
+	)
+}
