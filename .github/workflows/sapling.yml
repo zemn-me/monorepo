@@ -1,0 +1,33 @@
+name: Sapling
+on:
+  pull_request:
+    types: [edited]
+
+jobs:
+  merge_in_order:
+    name: Merge Sapling Stacked Commits In Order
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if this is a Sapling PR
+        id: check_sapling_pr
+        run: |
+          if echo "${{ github.event.pull_request.body }}" | grep -q "[//]: # (BEGIN SAPLING FOOTER)"; then
+            echo "is_sapling=true" >> $GITHUB_ENV
+          else
+            echo "is_sapling=false" >> $GITHUB_ENV
+          fi
+
+      - name: Check base branch
+        if: env.is_sapling == 'true'
+        run: |
+          if [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
+            echo "Base branch is main. Proceeding..."
+          else
+            echo "Base branch is not main. Please wait for parent PRs to merge."
+            exit 1
+          fi
+
+      - name: Success for non-Sapling PRs or valid Sapling PRs
+        if: env.is_sapling == 'false' || github.event.pull_request.base.ref == 'main'
+        run: echo "Go for it!"
