@@ -36,7 +36,7 @@ jobs:
       # > refs/heads/feature-branch-1.
       #
       # This should cancel a prior presubmit when a new change comes in.
-      group: ${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
     # Performs all offline testing.
     runs-on: ubuntu-latest
