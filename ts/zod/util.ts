@@ -1,3 +1,4 @@
+import b64 from 'base64-js';
 import { SafeParseReturnType, z, ZodError } from 'zod';
 
 import { Err, Ok, Result } from '#root/ts/result.js';
@@ -12,3 +13,7 @@ export function resultFromZod<I, O>(
 	if (t.success) return Ok(t.data);
 	return Err(t.error);
 }
+
+export const Base64 = z.string()
+	.base64()
+	.transform(v => b64.toByteArray(v));

@@ -75,7 +75,16 @@ export class impl<T> extends NewType<T> {
 			(this as Ok<T>).unwrap_unchecked()
 		)
 	}
+
+	safely<T>(this: Ok<() => T>): Result<T, unknown> {
+		try {
+			return Ok(this.unwrap()())
+		} catch (e) {
+			return Err(e)
+		}
+	}
 }
+
 
 export function Ok<T>(v: T): Ok<T> {
 	return new impl(types.Ok(v))
