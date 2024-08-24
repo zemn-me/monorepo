@@ -75,8 +75,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1345247
-    version: 0.0.1345247
+    specifier: 0.0.1346313
+    version: 0.0.1346313
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.1)
@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.52.0
-    version: 38.52.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0)
+    specifier: 38.52.1
+    version: 38.52.1(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -9485,8 +9485,8 @@ packages:
     resolution: {integrity: sha512-DPnhUXvmvKT2dFA/j7B+riVLUt9Q6RKJlcppojL5CoRywJJKLDYnRlw0gTFKfgDPHP5E04UoB71SxoJlVZy8FA==}
     dev: true
 
-  /devtools-protocol@0.0.1345247:
-    resolution: {integrity: sha512-U6SOWj83Eznob0zaelx2CzURpexV5JwZ3Qsl2Q7cYsToMT3gDBVM2mbDgr0LNxhp9y2RG+7KZHHRRNrSnYozog==}
+  /devtools-protocol@0.0.1346313:
+    resolution: {integrity: sha512-HKuV7Vzhyyi8xj23Lcyacuk3CTo/NGrYBOrshND4/q38NyJzG7EziEWps8mtFv8txTnSw5/e2htLUi8vioPNpQ==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -16639,8 +16639,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.52.0(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-icbciTemIGmpOCDO5xXiThcWCr38Jh8W9WUA15BEGcEy1ZPapjOsaJxgnNppgeN/zz8Li0JbYcvLQjfFQdiRyQ==}
+  /renovate@38.52.1(@aws-sdk/client-sso-oidc@3.632.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-/zyUInKsBPeGm6yHeMdeRMi9fC5Rfrwd09INCkXmnHo46ccyn/G7VctjVb/h5SyCWS8SZ72lCjBfI3oLfbdgbg==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
