@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check object
+        run: |
+          cat << OBJECT
+          ${{ toJson(github) }}
+          OBJECT
       - name: Check if this is a Sapling PR
         id: check_sapling_pr
         run: |
