@@ -72,6 +72,9 @@ build --nolegacy_external_runfiles
 # See https://github.com/angular/angular/issues/27514.
 build --incompatible_strict_action_env
 run --incompatible_strict_action_env
+build --action_env=LD_LIBRARY_PATH
+test --action_env=LD_LIBRARY_PATH
+run --action_env=LD_LIBRARY_PATH
 
 # When running `bazel coverage` --instrument_test_targets needs to be set in order to
 # collect coverage information from test targets
