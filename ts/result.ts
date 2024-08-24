@@ -1,5 +1,5 @@
+import * as types from '#root/ts/_types.js';
 import { NewType } from "#root/ts/NewType.js";
-import * as types from '#root/ts/types.js';
 
 
 export class impl<T> extends NewType<T> {
