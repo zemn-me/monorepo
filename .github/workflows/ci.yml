@@ -12,6 +12,11 @@ on:   # yamllint disable-line rule:truthy
     branches:
       # presubmit
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited # not in the default set, will run on rebase.
   push:
     branches:
       - main
