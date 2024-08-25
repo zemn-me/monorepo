@@ -29,7 +29,7 @@ const resizeAsync = doSync(
 		// this is needed because the function is removed from its context.
 		// in the future, I might change the API to work based on whole files instead,
 		// which would avoid this issue.
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const sharp = require('sharp') as typeof sharpT;
 		const blob = (
 			await sharp(Buffer.from(target, 'base64'))

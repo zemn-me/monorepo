@@ -9,8 +9,7 @@ describe('url', () => {
 		});
 
 		it('should work with template syntax', () => {
-			// eslint-disable-next-line no-unused-expressions
-			Url.Local.New`https://google.com`;
+			expect(() => Url.Local.New`https://google.com`).not.toThrow();
 		});
 
 		it('should not throw when DEPLOY_DOMAIN is set', () => {
@@ -34,8 +33,8 @@ describe('url', () => {
 
 	describe('URL', () => {
 		it('should work with template syntax', () => {
-			// eslint-disable-next-line no-unused-expressions
-			Url.URL.New`https://google.com`;
+			 
+			expect(() => Url.URL.New`https://google.com`).not.toThrow();
 		});
 		it('should not allow javascript URIs', () => {
 			try {
