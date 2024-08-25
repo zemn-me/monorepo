@@ -32,6 +32,11 @@ class impl<T> extends NewType<T> {
 		return Ok(this.unwrap());
 	}
 
+	from<T>(this: Some<T | undefined>): Option<T> {
+		const val = this.unwrap();
+		return val === undefined? None: Some(val)
+	}
+
 	ok_or_else<T, E>(this: Option<T>, err: () => E): Result<T, E> {
 		if (this.is_none()) return Err( err() );
 		return Ok(this.unwrap());
