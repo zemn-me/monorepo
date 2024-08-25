@@ -1,20 +1,24 @@
 'use client';
-import { useId, useState } from 'react';
+import { parseAsString, useQueryState } from 'nuqs';
+import { ChangeEvent, useCallback, useId } from 'react';
 
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint.js';
-import { None, Option, Some } from '#root/ts/option/option.js';
+import { Some } from '#root/ts/option/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
 
 export function Client() {
-	const [input, setInput] = useState<Option<string>>(None);
+	const [input, setInput] = useQueryState<string>("blueprint", parseAsString.withDefault(''));
 	const b64InputLabel = useId();
 	const outputLabel = useId();
 	const inputsString = [b64InputLabel].join(' ');
+
+	const onBlueprintChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) =>
+		void setInput(e.target.value), [setInput]);
 
 	return (
 		<Prose>
@@ -34,9 +38,7 @@ export function Client() {
 							Factorio blueprint (base64):{' '}
 							<textarea
 								id={b64InputLabel}
-								onChange={e =>
-									setInput(Some(e.target.value))
-								}
+								onChange={onBlueprintChange}
 								style={{ display: 'block' }}
 							/>
 						</label>
@@ -44,7 +46,7 @@ export function Client() {
 
 
 					<output htmlFor={inputsString}>
-						{input.and_then(input =>
+						{Some(input).and_then(input =>
 							resultFromZod(BlueprintString.safeParse(input))
 								.and_then(output =>
 
