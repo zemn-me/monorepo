@@ -1,5 +1,5 @@
 import { NewType } from "#root/ts/NewType.js";
-import * as types from '#root/ts/option/types.js';
+import * as types from '#root/ts/option/_types.js';
 import { Err, Ok, Result } from "#root/ts/result.js";
 
 
