@@ -7,6 +7,7 @@ import {
 import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
 import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery';
+import { balancers } from '#root/ts/factorio/testing/data/balancers.js';
 import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
 import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
@@ -172,6 +173,11 @@ describe('blueprintSurroundedByWall', () => {
 });
 
 describe('some problematic blueprints', () => {
+	test('balancers', () => {
+		expect(() => BlueprintString.parse(balancers)).not.toThrow();
+	});
+
+
 	test('power book', () => {
 		expect(() => BlueprintString.parse(powerBook)).not.toThrow();
 	});
