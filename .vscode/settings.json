@@ -11,7 +11,8 @@
 	"files.associations": {
 		"*.bzl": "starlark",
 		"*.bazel": "starlark",
-		"WORKSPACE": "starlark"
+		"WORKSPACE": "starlark",
+		"*.log": "ansi"
 	},
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
