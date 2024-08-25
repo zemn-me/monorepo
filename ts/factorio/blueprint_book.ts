@@ -71,8 +71,8 @@ export const BlueprintBook: z.ZodType<BlueprintBook> = BlueprintBookBase.extend(
 				index: Uint,
 				blueprint: optionalBlueprint,
 				blueprint_book: z.lazy(() => BlueprintBook).optional(),
-				deconstruction_planner: DeconstructionPlanner.optional(),
-				upgrade_planner: UpgradePlanner.optional(),
+				deconstruction_planner: optionalDeconstructionPlanner,
+				upgrade_planner: optionalUpgradePlanner,
 			})
 		),
 	}
