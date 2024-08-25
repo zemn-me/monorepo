@@ -41,6 +41,3 @@ Once that's done, edit the file and replace EDIT_AND_REPLACE with your
 BuildBuddy API key. I **do not** recommend changing "EDIT_AND_REPLACE" on the
 bash commandline, or you'll end up having your secret API key stored in your
 shell history.
-
-
-test change 1..
