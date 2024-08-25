@@ -142,14 +142,32 @@ export class impl<T> extends NewType<T> {
 }
 
 
+/**
+ * Returns a {@link Result} that represents a success.
+ */
 export function Ok<T>(v: T): Ok<T> {
 	return new impl(types.Ok(v))
 }
 
+/**
+ * A value which represents a successful operation.
+ */
 export type Ok<T> = impl<types.Ok<T>>
+
+/**
+ * A value which represents a failed operation.
+ */
 export type Err<E> = impl<types.Err<E>>;
+
+/**
+ * A value which can be either a success or an error.
+ */
 export type Result<T, E = Error> = impl<types.Result<T, E>>
 
+/**
+ * Returns a {@link Result} that is in error
+ * with the given error.
+ */
 export function Err<T>(v: T): Err<T> {
 	return new impl(types.Err(v))
 }
