@@ -22,7 +22,7 @@ jobs:
         id: check_sapling_pr
         run: |
           if echo "${{ github.event.pull_request.body }}" |\
-          grep -q "[//]: # (BEGIN SAPLING FOOTER)"; then
+          grep -qF "[//]: # (BEGIN SAPLING FOOTER)"; then
             echo "is_sapling=true" >> $GITHUB_ENV
           else
             echo "is_sapling=false" >> $GITHUB_ENV
