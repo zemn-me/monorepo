@@ -4,9 +4,7 @@ import { useMediaQuery } from "#root/ts/react/useMediaQuery/useMediaQuery.js"
 
 type BaseVideoProps = JSX.IntrinsicElements["video"]
 
-export interface VideoProps extends BaseVideoProps {
-
-}
+export type VideoProps = BaseVideoProps
 
 export function Video(props: VideoProps) {
 	const prefersReducedMotion = useMediaQuery(
