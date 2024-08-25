@@ -46,6 +46,7 @@ export const BlueprintBookBase = z.strictObject({
 
 const optionalDeconstructionPlanner = DeconstructionPlanner.optional();
 const optionalBlueprint = Blueprint.optional();
+const optionalUpgradePlanner = UpgradePlanner.optional();
 
 export type BlueprintBook = z.infer<typeof BlueprintBookBase> & {
 	/**
@@ -56,6 +57,7 @@ export type BlueprintBook = z.infer<typeof BlueprintBookBase> & {
 		blueprint?: z.infer<typeof optionalBlueprint>;
 		blueprint_book?: BlueprintBook;
 		deconstruction_planner?: z.infer<typeof optionalDeconstructionPlanner>;
+		upgrade_planner?: z.infer<typeof optionalUpgradePlanner>
 	}[];
 };
 

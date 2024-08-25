@@ -13,6 +13,8 @@ import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper.js';
 import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
 import { Tile } from '#root/ts/factorio/tile.js';
+import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner.js';
+import { Some } from '#root/ts/option/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
@@ -93,6 +95,22 @@ export function DisplayBlueprintWrapper({
 	return <>Invalid blueprint :(</>;
 }
 
+export interface DisplayUpgradePlannerProps {
+	readonly planner: UpgradePlanner
+}
+
+export function DisplayUpgradePlanner({ planner }: DisplayUpgradePlannerProps) {
+	return <figure>
+		{Some(planner.label).from().and_then(l => <figcaption>{l}</figcaption>).unwrap_or(null)}
+		<ul>
+			{planner.settings.mappers.map(v => <li key={v.index}>
+				{v.from.name} → {v.to.name}
+			</li>)}
+		</ul>
+
+	</figure>
+}
+
 export interface DisplayBlueprintBookProps {
 	readonly book: BlueprintBook;
 }
@@ -128,6 +146,11 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 									book={blueprint.blueprint_book}
 								/>
 							) : null}
+							{
+								Some(blueprint.upgrade_planner).from()
+									.and_then(planner => <DisplayUpgradePlanner planner={planner} />)
+								.unwrap_or(null)
+							}
 						</li>
 					))}
 				</ol>

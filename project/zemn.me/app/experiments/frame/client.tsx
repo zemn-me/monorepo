@@ -227,9 +227,6 @@ function matteboardCuts({ frameHeight, overlapAmount, artHeight, frameWidth, art
 
 }
 
-
-
-
 export function FrameClient() {
 	const [frameWidthInput, setFrameWidthInput] = useQueryState<string>('frame_width', parseAsString.withDefault('17in'));
 	const frameWidthInputId = useId();
