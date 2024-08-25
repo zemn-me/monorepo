@@ -3,9 +3,7 @@ on:
   pull_request:
     types:
       - edited
-      - opened
       - synchronize
-      - reopened
 
 jobs:
   merge_in_order:
