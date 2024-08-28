@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.56.0
-    version: 38.56.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
+    specifier: 38.56.1
+    version: 38.56.1(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -16629,8 +16629,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.56.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-nGuznrSkgxmx1uypKi/XIA3zFVqIOok9oWmqT1xbZ5oRI54P5hg3DTUxD9JYPM1Lyyv6lO3NvxfB56gTEhrd4Q==}
+  /renovate@38.56.1(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-kWLEe2Pfzu2RW5friFghdpxgtuAhJkzlLmgLtHed0iL6zpVlixR0O35CWunOzW64or5K49kRVQGEmHAPDiqm0w==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
