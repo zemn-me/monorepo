@@ -4,6 +4,9 @@
 #
 #    bazel run //:requirements.update
 #
+bazel-runfiles==0.35.0 \
+    --hash=sha256:6d55da5b87d7fb0ea88b6d1e7442b5c4c6b53e556bbd157756e0c5b401e80384
+    # via -r requirements.in
 build==1.2.1 \
     --hash=sha256:526263f4870c26f26c433545579475377b2b7588b6f1eac76a001e873ae3e19d \
     --hash=sha256:75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4

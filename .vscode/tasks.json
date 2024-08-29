@@ -24,9 +24,11 @@
 			}
 		},
 		{
-			"label": "Python: Activate Venv",
+			"label": "Python: Venv",
 			"command": "bazelisk",
 			"args": [
+				"run",
+				"//.vscode:ibazel",
 				"run",
 				"//.vscode:activate_venv"
 			],

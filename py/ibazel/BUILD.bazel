@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
+
+py_binary(
+    name = "ibazel_bin",
+    srcs = ["__main__.py"],
+    data = [
+        "//sh/bin:ibazel",
+    ],
+    env = {
+        "IBAZEL_BINARY": "$(rlocationpath //sh/bin:ibazel)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

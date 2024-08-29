@@ -165,6 +165,7 @@ modules_mapping(
 )
 
 # gazelle:resolve py google.protobuf @com_google_protobuf//:protobuf_python
+# gazelle:resolve py python.runfiles @rules_python//python/runfiles
 # gazelle:map_kind py_binary py_binary //py:rules.bzl
 # gazelle:map_kind py_library py_library //py:rules.bzl
 # gazelle:map_kind py_test py_test //py:rules.bzl
@@ -251,6 +252,7 @@ py_venv(
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py/ibazel:ibazel_bin",
         "//py/sectxt:sectxt_bin",
     ],
 )
