@@ -13,6 +13,11 @@ alias(
 )
 
 alias(
+    name = "ibazel",
+    actual = "//py/ibazel:ibazel_bin",
+)
+
+alias(
     name = "install_sapling_hooks",
     actual = "//.vscode/prep:prep_bin",
 )
