@@ -31,6 +31,7 @@ manifest:
     pyproject_hooks: pyproject_hooks
     requests: requests
     ruff: ruff
+    runfiles: bazel_runfiles
     sectxt: sectxt
     setuptools: setuptools
     six: six
@@ -41,4 +42,4 @@ manifest:
     yamllint: yamllint
   pip_repository:
     name: pip
-integrity: 95f1b660249844513883c6657bb20ba6eb2443645471ebf40016064c7ff271de
+integrity: 586814f3614356161c1ae88561c4ea8c80af060123fa3e9617843cd877dd989c
