@@ -222,7 +222,7 @@ devDependencies:
     version: 0.4.0(@swc/core@1.7.18)
   '@testing-library/react':
     specifier: 16.0.1
-    version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.4)(react-dom@18.3.1)(react@18.3.1)
+    version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
   '@types/cross-spawn':
     specifier: 6.0.6
     version: 6.0.6
@@ -245,8 +245,8 @@ devDependencies:
     specifier: 20.16.2
     version: 20.16.2
   '@types/react':
-    specifier: 18.3.4
-    version: 18.3.4
+    specifier: 18.3.5
+    version: 18.3.5
   '@types/react-dom':
     specifier: 18.3.0
     version: 18.3.0
@@ -5645,7 +5645,7 @@ packages:
   /@react-native/normalize-colors@0.75.2:
     resolution: {integrity: sha512-nPwWJFtsqNFS/qSG9yDOiSJ64mjG7RCP4X/HXFfyWzCM1jq49h/DYBdr+c3e7AvTKGIdy0gGT3vgaRUHZFVdUQ==}
 
-  /@react-native/virtualized-lists@0.75.2(@types/react@18.3.4)(react-native@0.75.2)(react@18.3.1):
+  /@react-native/virtualized-lists@0.75.2(@types/react@18.3.5)(react-native@0.75.2)(react@18.3.1):
     resolution: {integrity: sha512-pD5SVCjxc8k+JdoyQ+IlulBTEqJc3S4KUKsmv5zqbNCyETB0ZUvd4Su7bp+lLF6ALxx6KKmbGk8E3LaWEjUFFQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -5656,11 +5656,11 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.3.4
+      '@types/react': 18.3.5
       invariant: 2.2.4
       nullthrows: 1.1.1
       react: 18.3.1
-      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.4)(react@18.3.1)(typescript@5.5.4)
+      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.5)(react@18.3.1)(typescript@5.5.4)
 
   /@react-spring/animated@9.7.4(react@18.3.1):
     resolution: {integrity: sha512-7As+8Pty2QlemJ9O5ecsuPKjmO0NKvmVkRR1n6mEotFgWar8FKuQt2xgxz3RTgxcccghpx1YdS1FCdElQNexmQ==}
@@ -5710,7 +5710,7 @@ packages:
       '@react-spring/shared': 9.7.4(react@18.3.1)
       '@react-spring/types': 9.7.4
       react: 18.3.1
-      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.4)(react@18.3.1)(typescript@5.5.4)
+      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.5)(react@18.3.1)(typescript@5.5.4)
     dev: true
 
   /@react-spring/rafz@9.7.4:
@@ -5813,7 +5813,7 @@ packages:
       its-fine: 1.2.5(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.4)(react@18.3.1)(typescript@5.5.4)
+      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.5)(react@18.3.1)(typescript@5.5.4)
       react-reconciler: 0.27.0(react@18.3.1)
       scheduler: 0.21.0
       suspend-react: 0.1.3(react@18.3.1)
@@ -6722,7 +6722,7 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.4)(react-dom@18.3.1)(react@18.3.1):
+  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-dSmwJVtJXmku+iocRhWOUFbrERC76TX2Mnf0ATODz8brzAZrMBbzLwQixlBSanZxR6LddK3eiwpSFZgDET1URg==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -6739,7 +6739,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.25.4
       '@testing-library/dom': 10.4.0
-      '@types/react': 18.3.4
+      '@types/react': 18.3.5
       '@types/react-dom': 18.3.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -7101,7 +7101,7 @@ packages:
   /@types/react-dom@18.3.0:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
-      '@types/react': 18.3.4
+      '@types/react': 18.3.5
     dev: true
 
   /@types/react-query@1.2.9(react-dom@18.3.1)(react-native@0.75.2)(react@18.3.1):
@@ -7118,17 +7118,17 @@ packages:
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
-      '@types/react': 18.3.4
+      '@types/react': 18.3.5
     dev: true
 
   /@types/react-reconciler@0.28.8:
     resolution: {integrity: sha512-SN9c4kxXZonFhbX4hJrZy37yw9e7EIxcpHCxQv5JUS18wDE5ovkQKlqQEkufdJCCMfuI9BnjUJvhYeJ9x5Ra7g==}
     dependencies:
-      '@types/react': 18.3.4
+      '@types/react': 18.3.5
     dev: true
 
-  /@types/react@18.3.4:
-    resolution: {integrity: sha512-J7W30FTdfCxDDjmfRM+/JqLHBIyl7xUIp9kwK637FGmY7+mkSFSe6L4jpZzhj5QMfLssSDP4/i75AKkrdC7/Jw==}
+  /@types/react@18.3.5:
+    resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4Vo5GZjCi0A3Or2lnxA==}
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
@@ -16230,7 +16230,7 @@ packages:
       scheduler: 0.23.2
     dev: true
 
-  /react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.4)(react@18.3.1)(typescript@5.5.4):
+  /react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.5)(react@18.3.1)(typescript@5.5.4):
     resolution: {integrity: sha512-pP+Yswd/EurzAlKizytRrid9LJaPJzuNldc+o5t01md2VLHym8V7FWH2z9omFKtFTer8ERg0fAhG1fpd0Qq6bQ==}
     engines: {node: '>=18'}
     hasBin: true
@@ -16251,8 +16251,8 @@ packages:
       '@react-native/gradle-plugin': 0.75.2
       '@react-native/js-polyfills': 0.75.2
       '@react-native/normalize-colors': 0.75.2
-      '@react-native/virtualized-lists': 0.75.2(@types/react@18.3.4)(react-native@0.75.2)(react@18.3.1)
-      '@types/react': 18.3.4
+      '@react-native/virtualized-lists': 0.75.2(@types/react@18.3.5)(react-native@0.75.2)(react@18.3.1)
+      '@types/react': 18.3.5
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
@@ -16307,7 +16307,7 @@ packages:
       match-sorter: 6.3.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.4)(react@18.3.1)(typescript@5.5.4)
+      react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.3.5)(react@18.3.1)(typescript@5.5.4)
     dev: false
 
   /react-reconciler@0.27.0(react@18.3.1):
