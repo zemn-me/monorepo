@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.58.1
-    version: 38.58.1(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
+    specifier: 38.58.2
+    version: 38.58.2(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -16179,8 +16179,8 @@ packages:
     dev: true
     optional: true
 
-  /re2@1.21.3:
-    resolution: {integrity: sha512-GI+KoGkHT4kxTaX+9p0FgNB1XUnCndO9slG5qqeEoZ7kbf6Dk6ohQVpmwKVeSp7LPLn+g6Q3BaCopz4oHuBDuQ==}
+  /re2@1.21.4:
+    resolution: {integrity: sha512-MVIfXWJmsP28mRsSt8HeL750ifb8H5+oF2UDIxGaiJCr8fkMqhLZ7kcX9ADRk2dC8qeGKedB7UVYRfBVpEiLfA==}
     requiresBuild: true
     dependencies:
       install-artifact-from-github: 1.3.5
@@ -16684,8 +16684,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.58.1(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-UJ31Ogi3jLZc3biyXatNbGeIe58rgfATo+n3mCJ2f6ki0ittxX3pxx4HuLykCY/Yw4WDyN7N+xRUzWdI8kLDJQ==}
+  /renovate@38.58.2(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-ISgQMv0i2Vt9rQPZYo2PAXoRyH1XxZo74IhxMENTXPyLiU7eGyATWJ5KTyPkHXGYpj28e1c1L7XRQwuuG6yf8A==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16799,7 +16799,7 @@ packages:
     optionalDependencies:
       better-sqlite3: 11.2.1
       openpgp: 5.11.2
-      re2: 1.21.3
+      re2: 1.21.4
     transitivePeerDependencies:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
