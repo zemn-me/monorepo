@@ -5,10 +5,10 @@ py_binary(
     name = "ibazel_bin",
     srcs = ["__main__.py"],
     data = [
-        "//sh/bin:ibazel",
+        "@com_github_bazelbuild_bazel_watcher//cmd/ibazel",
     ],
     env = {
-        "IBAZEL_BINARY": "$(rlocationpath //sh/bin:ibazel)",
+        "IBAZEL_BINARY": "$(rlocationpath @com_github_bazelbuild_bazel_watcher//cmd/ibazel)",
     },
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
