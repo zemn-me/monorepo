@@ -44,6 +44,24 @@
 				"group": "preprep",
 				"panel": "dedicated",
 			},
+			"isBackground": true,
+			"problemMatcher": {
+				"source": "venv",
+				"severity": "info",
+				"pattern": [
+					{
+						"regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+						"file": 1,
+						"location": 2,
+						"message": 3
+					}
+				],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+				}
+			}
 		},
 		{
 			"label": "Sapling: install hooks",
