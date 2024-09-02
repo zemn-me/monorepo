@@ -9,3 +9,4 @@ if len(s.errors):
 		"{}:{} [{}]: {}".format(argv[1], error['line'], error['code'], error['message'])
 		for error in s.errors)))
 
+
