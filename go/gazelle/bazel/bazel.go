@@ -124,6 +124,10 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		files = append(files, v)
 	}
 
+	if args.File == nil {
+		files = append(files, "BUILD.bazel") // new file being generated!
+	}
+
 	if len(files) < 1 {
 		return language.GenerateResult{}
 	}
