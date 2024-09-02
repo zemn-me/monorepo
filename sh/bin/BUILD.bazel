@@ -14,7 +14,7 @@ alias(
 
 alias(
     name = "ibazel",
-    actual = "@com_github_bazelbuild_bazel_watcher//cmd/ibazel",
+    actual = "//py/ibazel:ibazel_bin",
 )
 
 alias(
