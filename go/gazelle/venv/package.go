@@ -120,8 +120,18 @@ func (this Language) GenerateRules(args language.GenerateArgs) (result language.
 			continue
 		}
 
+		var base *string
+
+		if args.File != nil {
+			base = &args.File.Pkg
+		}
+
+		if base == nil {
+			base = &args.Rel
+		}
+
 		args.Config.Exts[this.Name()].(*Context).VenvDeps = append(args.Config.Exts[this.Name()].(*Context).VenvDeps,
-			"//"+args.File.Pkg+":"+r.Name())
+			"//"+*base+":"+r.Name())
 	}
 	return
 }
