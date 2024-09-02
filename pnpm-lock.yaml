@@ -81,8 +81,8 @@ dependencies:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.1)
   eslint-plugin-jest:
-    specifier: 28.8.1
-    version: 28.8.1(eslint@9.9.1)(typescript@5.5.4)
+    specifier: 28.8.2
+    version: 28.8.2(eslint@9.9.1)(typescript@5.5.4)
   eslint-plugin-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.9.1)
@@ -9609,6 +9609,7 @@ packages:
 
   /end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
+    requiresBuild: true
     dependencies:
       once: 1.4.0
 
@@ -10067,8 +10068,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jest@28.8.1(eslint@9.9.1)(typescript@5.5.4):
-    resolution: {integrity: sha512-G46XMyYu6PtSNJUkQ0hsPjzXYpzq/O4vpCciMizTKRJG8kNsRreGoMRDG6H9FIB/xVgfFuclVnuX4XRvFUzrZQ==}
+  /eslint-plugin-jest@28.8.2(eslint@9.9.1)(typescript@5.5.4):
+    resolution: {integrity: sha512-mC3OyklHmS5i7wYU1rGId9EnxRI8TVlnFG56AE+8U9iRy6zwaNygZR+DsdZuCL0gRG0wVeyzq+uWcPt6yJrrMA==}
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0 || ^7.0.0 || ^8.0.0
