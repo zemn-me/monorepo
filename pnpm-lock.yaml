@@ -365,8 +365,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.60.0
-    version: 38.60.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
+    specifier: 38.61.0
+    version: 38.61.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -16152,8 +16152,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.60.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-04aHNtD/NKYOBLn4zAe9POK/KpvfFeOr+rTn43Ojp9VT5w4WmmC/hTlZqaieyHbjM0KNQG8/uqteX44tWRCKog==}
+  /renovate@38.61.0(@aws-sdk/client-sso-oidc@3.637.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-196MGlRpgeW1nQ/AeADudYDQqk8pjqA2ZoLo2ltBv4cN3lXqCgy6jOxFWcWDnkO/W3FFA6beLqSd+pJuBMi00w==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -18664,6 +18664,7 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+    requiresBuild: true
 
   /write-file-atomic@2.4.3:
     resolution: {integrity: sha512-GaETH5wwsX+GcnzhPgKcKjJ6M2Cq3/iZp1WyY/X1CSqrW+jVNM9Y7D8EC2sM4ZG/V8wZlSniJnCKWPmBYAucRQ==}
