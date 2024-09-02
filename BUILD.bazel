@@ -252,6 +252,7 @@ py_venv(
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/sectxt:sectxt_bin",
     ],
