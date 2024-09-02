@@ -5,7 +5,9 @@
 from os import environ
 import subprocess
 from sys import argv
-from python import runfiles
+# bazel magic happening here. not sure how
+# to make MyPy aware.
+from python import runfiles # type: ignore
 
 r = runfiles.Runfiles.Create()
 
