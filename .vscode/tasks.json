@@ -44,6 +44,17 @@
 				"group": "preprep",
 				"panel": "dedicated",
 			},
+			"isBackground": true,
+			"problemMatcher": {
+				"source": "venv",
+				"severity": "info",
+				"pattern": [],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+				}
+			}
 		},
 		{
 			"label": "Sapling: install hooks",
