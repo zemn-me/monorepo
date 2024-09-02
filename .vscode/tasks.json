@@ -6,25 +6,43 @@
 			"command": "bazelisk",
 			"args": [
 				"run",
+				"//.vscode:ibazel",
+				"run",
 				"//.vscode:gen_rust_project"
 			],
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
-			"group": "build",
-			"problemMatcher": [],
 			"presentation": {
+				"close": true,
 				"reveal": "never",
 				"group": "preprep",
-				"close": true,
 				"panel": "dedicated",
 			},
-			"runOptions": {
-				"runOn": "folderOpen"
+			"isBackground": true,
+			"problemMatcher": {
+				"source": "rust",
+				"severity": "info",
+				"pattern": [
+					{
+						"regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+						"file": 1,
+						"location": 2,
+						"message": 3
+					}
+				],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+				}
 			}
 		},
 		{
-			"label": "Python: Venv",
+			"label": "ython: Venv",
 			"command": "bazelisk",
 			"args": [
 				"run",
