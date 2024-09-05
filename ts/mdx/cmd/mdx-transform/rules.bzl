@@ -1,6 +1,4 @@
 load("@aspect_rules_js//js:defs.bzl", "js_run_binary")
-load("@bazel_skylib//lib:paths.bzl", "paths")
-load("//ts:rules.bzl", "ts_project")
 
 aspect_js_normalization_path = "../../../"
 
@@ -8,9 +6,9 @@ def mdx_to_js(name = None, deps = [], srcs = [], **kwargs):
     input_files = srcs
     input_file_args = [["--input", aspect_js_normalization_path + "$(location " + s + ")"] for s in input_files]
 
-    # use of '.jsx' here is a HACK to allow ts_project to generate .js sources
-    # see https://github.com/aspect-build/rules_ts/issues/73#issuecomment-1184544319
-    js_files = [paths.replace_extension(src, ".jsx") for src in srcs]
+    js_files = srcs
+
+    d_ts_files = [paths.replace_extension(src, ".d.ts") for src in js_files]
     js_file_args = [["--output-js", aspect_js_normalization_path + "$(location " + s + ")"] for s in js_files]
 
     sourcemap_files = [fn + ".mdx.map" for fn in js_files]
@@ -33,6 +31,7 @@ def mdx_to_js(name = None, deps = [], srcs = [], **kwargs):
         srcs = outs,
     )
 
+    """
     ts_project(
         name = name,
         srcs = outs,
@@ -42,3 +41,4 @@ def mdx_to_js(name = None, deps = [], srcs = [], **kwargs):
         ] + deps,
         **kwargs
     )
+    """
