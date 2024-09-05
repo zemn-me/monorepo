@@ -3,19 +3,20 @@
  * @fileoverview turn MDX files into tsx files.
  * @see https://v0.mdxjs.com/advanced/transform-content
  */
+import { copyFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { Command } from '@commander-js/extra-typings';
 import * as mdx from '@mdx-js/mdx';
-import { readFile } from 'fs/promises';
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+import sectionize from 'remark-sectionize';
 import { SourceMapGenerator } from 'source-map';
 import { read, write } from 'to-vfile';
 import { VFile } from 'vfile';
 
-import { map } from '#root/ts/iter/index.js';
+import { Iterable, map, range } from '#root/ts/iter/index.js';
 import { zip } from '#root/ts/math/vec.js';
 
 function collect(value: string, previous: string[]) {
@@ -35,39 +36,48 @@ void new Command('mdx-transform')
 	.requiredOption('--input <file>', `${'Input file(s).'}`, collect, [])
 	.requiredOption('--output-js <file>', `${'Output javascript file(s).'}`, collect, [])
 	.requiredOption('--output-map <file>', `${'Output source map file(s).'}`, collect, [])
+	.requiredOption('--output-d-ts <file>', `${'Output typescript declaration files.'}`, collect, [])
+	.requiredOption('--base-d-ts <file>', 'base .d.ts to copy.')
 	.action(async o => {
-		const { input, outputJs, outputMap } = o;
+		const { input, outputJs, outputMap, outputDTs } = o;
 
-		if (![input, outputJs, outputMap].every(v => v.length == input.length))
+		if (![input, outputJs, outputMap, outputDTs].every(v => v.length == input.length))
 			throw new Error("there must be the same number of output JS and map files as input JS files.");
 
-		await Promise.all([
-			...map(map(zip(zip(input, outputJs), outputMap), ([[i, j] = [], m]) =>
-				// each of these must be defined since all 3 arraysmust be same length.
-				[i!, j!, m!] as [string, string, string]), async ([input, jsFile, mapFile]) => {
+		const n = input.length;
 
-				const js = await mdx.compile(await read(input), {
+		return Promise.all(Iterable(range(0, input.length)).map(
+			async i => {
+				const [inFile, outJs, outMap, outDts] = [
+					input[i]!, outputJs[i]!, outputMap[i]!, outputDTs[i]!
+				];
+
+
+				const js = await mdx.compile(await read(inFile), {
 					SourceMapGenerator: SourceMapGenerator,
-					remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter],
+					remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter, sectionize],
 				});
 
-				js.path = jsFile;
+				js.path = outJs;
 
-				js.map!.sourcesContent = [(await readFile(input)).toString()];
+				js.map!.sourcesContent = [(await readFile(inFile)).toString()];
 				// the source map uses relative paths to the js file
 				// but is being generated relative to cwd.
 				js.map!.sources = js.map!.sources.map(v => `/${v}`);
 				const sourceMap: VFile = new VFile({
-					path: mapFile,
+					path: outMap,
 					value: JSON.stringify(js.map)
 				});
 				js.value += `//# sourceMappingURL=${path.relative(path.dirname(js.path), sourceMap.path)}`
-				await Promise.all([
+
+
+				return Promise.all([
 					write(js),
-					write(sourceMap)
+					write(sourceMap),
+					copyFile(o.baseDTs, outDts)
 				]);
-			}),
-		]);
+			}
+		).value).then(v => undefined);
 	})
 	.parseAsync(process.argv)
 	.catch(e => {

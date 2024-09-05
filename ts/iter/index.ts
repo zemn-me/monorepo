@@ -1,5 +1,5 @@
 import { NewType } from '#root/ts/NewType.js';
-import type { Option } from '#root/ts/option/option.js';
+import { None, Some, type Option } from '#root/ts/option/option.js';
 
 
 export * as dict from '#root/ts/iter/dict.js';
@@ -334,17 +334,18 @@ export function* concat<T1, T2>(
 	yield* i2;
 }
 
-export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<A | B> {
-	const iterators = [a, b].map(v => v[Symbol.iterator]());
-	const dones = iterators.map(() => false);
+export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<readonly [Option<A>, Option<B>]> {
+	const [ai, bi] = [a, b].map(v => v[Symbol.iterator]()) as [Iterator<A>, Iterator<B>];
+	for (; ;) {
+		const [av, bv] = [ai.next(), bi.next()];
+		const ret = [
+			av.done ? Some(av.value) : None,
+			bv.done ? Some(bv.value) : None
+		] as const;
 
-	while (dones.some(v => v === false)) {
-		for (let i = 0; i < iterators.length; i++) {
-			if (dones[i]) continue;
-			const next = iterators[i]!.next();
-			dones[i] = !!next.done;
-			yield next.value;
-		}
+		yield ret;
+
+		if (ret.every(v => v.is_none())) break
 	}
 }
 
@@ -366,6 +367,13 @@ class impl<T> extends NewType<T> {
 		return new impl([...this.value].sort(compareFn))
 	}
 
+	zip<T, T2>(this: _Iterable<T>, other: Iterable<T2>): impl<Iterable<readonly [Option<T>, Option<T2>]>> {
+		return new impl(zip2(this.value, other));
+	}
+
+	flatten<T>(this: _Iterable<Iterable<T>>): _Iterable<T> {
+		return new impl(flatten(this.value))
+	}
 }
 
 function _Iterable<T>(v: Iterable<T>): _Iterable<T> {
