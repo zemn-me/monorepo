@@ -23,7 +23,7 @@ js_library(
     name = "files",
     srcs = [
         "wallpaper.jpg",
-        "//project/zemn.me/public:poc/c/index.html",
+        "//project/zemn.me/public/poc",
     ],
 )
 
