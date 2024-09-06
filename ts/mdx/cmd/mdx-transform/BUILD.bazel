@@ -11,6 +11,7 @@ ts_project(
     name = "transform_ts",
     srcs = ["main.ts"],
     deps = [
+        "//:base_defs",
         "//:node_modules/@commander-js/extra-typings",
         "//:node_modules/@mdx-js/mdx",
         "//:node_modules/@types/mdast",  # transient dep of @mdx-js/mdx
