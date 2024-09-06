@@ -3,6 +3,7 @@ use std::{convert, env::args, io};
 
 use extract_imports::{extract_imports, ExtractImportsError};
 
+#[allow(dead_code)]
 #[derive(Debug)]
 enum ExtractImportsCmdError {
     ExtractImportsLibError(ExtractImportsError),
