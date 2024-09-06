@@ -2,19 +2,16 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "cors",
-    assets = glob(["**/*.css"]),
+    name = "Heading",
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:base_defs",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
         "//:node_modules/next",
-        "//mdx/article/2019/cors:cors_js",
         "//project/zemn.me/components/Article",
-        "//ts/react/lang",
-        "//ts/time",
     ],
 )
 
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
-)
+bazel_lint(name = "bazel_lint")
