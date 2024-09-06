@@ -153,7 +153,13 @@ func JsImportsForFileModule(c *config.Config, filePath string) (symbols []string
 // If nil is returned, the rule will not be indexed. If any non-nil slice is
 // returned, including an empty slice, the rule will be indexed.
 func (this Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) (specs []resolve.ImportSpec) {
-	for _, src := range r.Attr("srcs").(*build.ListExpr).List {
+	var srcs (*build.ListExpr)
+	var ok bool
+	if srcs, ok = r.Attr("srcs").(*build.ListExpr); !ok {
+		return
+	}
+
+	for _, src := range srcs.List {
 		for _, importSymbol := range JsImportsForFileModule(c, path.Join(f.Pkg, src.(*build.StringExpr).Value)) {
 			specs = append(specs, resolve.ImportSpec{
 				Lang: this.Name(),
