@@ -9,6 +9,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "transform_ts",
+    srcs = ["main.ts"],
     deps = [
         "//:node_modules/@commander-js/extra-typings",
         "//:node_modules/@mdx-js/mdx",
@@ -19,6 +20,7 @@ ts_project(
         "//:node_modules/remark-frontmatter",
         "//:node_modules/remark-gfm",
         "//:node_modules/remark-mdx-frontmatter",
+        "//:node_modules/remark-sectionize",
         "//:node_modules/source-map",
         "//:node_modules/to-vfile",
         "//:node_modules/unified",
@@ -41,4 +43,9 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+exports_files(
+    ["mdx_file.d.ts"],
+    visibility = ["//:__subpackages__"],
 )
