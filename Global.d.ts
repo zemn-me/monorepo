@@ -36,3 +36,9 @@ declare module '*.png' {
 	export const blurWidth: number;
 	export const blurHeight: number;
 }
+
+declare module 'remark-sectionize' {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const x: any
+	export default x
+}
