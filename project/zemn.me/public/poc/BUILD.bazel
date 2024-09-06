@@ -1,0 +1,15 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "poc",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//project/zemn.me/public/poc/c",
+    ],
+)
