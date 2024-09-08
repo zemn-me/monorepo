@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -24,4 +25,28 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "css_module",
+    srcs = ["ZemnmezLogo.module.css"],
+)
+
+ts_project(
+    name = "ZemnmezLogo_tsx",
+    srcs = ["ZemnmezLogo.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/ZemnmezLogo:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/zemn.me/components/ZemnmezLogo:ZemnmezLogo_tsx"],
 )

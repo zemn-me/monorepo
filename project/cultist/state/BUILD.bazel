@@ -6,66 +6,69 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "state",
     srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":deserialize",
-        ":op",
-        ":serialize",
-        ":state_main",
+        "@monorepo//project/cultist/state:deserialize",
+        "@monorepo//project/cultist/state:op",
+        "@monorepo//project/cultist/state:serialize",
+        "@monorepo//project/cultist/state:state_main",
     ],
 )
 
 ts_project(
     name = "state_main",
     srcs = ["state.ts"],
+    visibility = ["//:__subpackages__"],
     deps = ["//:node_modules/immutable"],
 )
 
 ts_project(
     name = "deserialize",
     srcs = ["deserialize.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":state_main",
         "//:node_modules/immutable",
-        "//project/cultist:save",
-        "//ts",
-        "//ts/iter",
+        "@monorepo//project/cultist:save",
+        "@monorepo//project/cultist/state:state_main",
+        "@monorepo//ts:util_ts",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 ts_project(
     name = "serialize",
     srcs = ["serialize.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":state_main",
-        "//project/cultist:save",
-        "//ts",
-        "//ts/iter",
+        "@monorepo//project/cultist:save",
+        "@monorepo//project/cultist/state:state_main",
+        "@monorepo//ts:util_ts",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 ts_project(
     name = "op",
     srcs = ["op.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":state_main",
         "//:node_modules/@types/uuid",
         "//:node_modules/immutable",
         "//:node_modules/uuid",
+        "@monorepo//project/cultist/state:state_main",
     ],
 )
 
 ts_project(
     name = "state_test",
     srcs = ["state_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":deserialize",
-        ":serialize",
-        ":state_main",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//project/cultist:save",
-        "//ts",
+        "@monorepo//project/cultist:save",
+        "@monorepo//project/cultist/state:deserialize",
+        "@monorepo//project/cultist/state:serialize",
+        "@monorepo//ts:util_ts",
     ],
 )
 
@@ -77,4 +80,9 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "state_test_ts_test",
+    srcs = ["state_test.js"],
 )
