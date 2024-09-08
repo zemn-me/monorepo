@@ -1,8 +1,8 @@
-import { flatten } from '#root/ts/iter';
+import { flatten } from '#root/ts/iter/index.js';
 import * as Braille from '#root/ts/math/canvas/braille/braille.js';
-import { Line2D, Line3D, point, Point2D } from '#root/ts/math/cartesian';
-import * as Homog from '#root/ts/math/homog';
-import { project } from '#root/ts/math/space/render/project';
+import { Line2D, Line3D, point, Point2D } from '#root/ts/math/cartesian.js';
+import * as Homog from '#root/ts/math/homog.js';
+import { project } from '#root/ts/math/space/render/project.js';
 
 export function plot2D(lines: Line2D[], width: number): string {
 	return Braille.plot2D(
