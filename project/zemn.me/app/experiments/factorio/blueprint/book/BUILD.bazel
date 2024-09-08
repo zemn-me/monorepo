@@ -21,16 +21,32 @@ ts_project(
         "**/*.css",
         "**/*.svg",
     ]),
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":bad_files",
         "//:node_modules/@types/react",
-        "//project/zemn.me/components",
-        "//ts/factorio",
-        "//ts/factorio/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/factorio/blueprint/book:bad_files",
+        "@monorepo//ts/factorio/react:blueprint_tsx",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "bigEntitiesListThatMakesTypescriptSad_ts",
+    srcs = ["bigEntitiesListThatMakesTypescriptSad.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "myBlueprints_ts",
+    srcs = ["myBlueprints.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//project/zemn.me/app/experiments/factorio/blueprint/book:bad_files",
+        "@monorepo//ts/factorio:blueprint_wrapper_ts",
+    ],
 )
