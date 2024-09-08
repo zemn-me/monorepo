@@ -1,16 +1,17 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
-    name = "experiments",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
-    visibility = ["//project/zemn.me:__subpackages__"],
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/react",
-        "//:node_modules/@types/seedrandom",
         "//:node_modules/next",
         "//:node_modules/nuqs",
         "//:node_modules/react",
@@ -19,10 +20,6 @@ ts_project(
         "//project/zemn.me/app/experiments/cultist",
         "//project/zemn.me/app/experiments/factorio",
         "//project/zemn.me/app/experiments/toc",
+        "@monorepo//project/zemn.me/components/Link:index_tsx",
     ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
 )

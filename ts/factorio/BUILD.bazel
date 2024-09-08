@@ -1,11 +1,70 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
-    name = "factorio",
-    visibility = [
-        "//:__subpackages__",
+    name = "arithmetic_combinator_parameters_ts",
+    srcs = ["arithmetic_combinator_parameters.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
     ],
+)
+
+ts_project(
+    name = "base_ts",
+    srcs = ["base.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/factorio:uint_ts"],
+)
+
+ts_project(
+    name = "blueprint_ts",
+    srcs = ["blueprint.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:color_ts",
+        "@monorepo//ts/factorio:entity_ts",
+        "@monorepo//ts/factorio:icon_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:position_ts",
+        "@monorepo//ts/factorio:schedule_ts",
+        "@monorepo//ts/factorio:tile_ts",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/math:cartesian_ts",
+        "@monorepo//ts/math:matrix_ts",
+        "@monorepo//ts/math:tuple_ts",
+    ],
+)
+
+ts_project(
+    name = "blueprint_book_ts",
+    srcs = ["blueprint_book.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:base_ts",
+        "@monorepo//ts/factorio:blueprint_ts",
+        "@monorepo//ts/factorio:color_ts",
+        "@monorepo//ts/factorio:deconstruction_planner_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+        "@monorepo//ts/factorio:uint_ts",
+        "@monorepo//ts/factorio:upgrade_planner_ts",
+    ],
+)
+
+ts_project(
+    name = "blueprint_string_ts",
+    srcs = ["blueprint_string.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/pako",
         "//:node_modules/base64-js",
@@ -15,10 +74,417 @@ ts_project(
         "//ts/iter",
         "//ts/math",
         "//ts/zod",
+        "@monorepo//ts/factorio:blueprint_book_ts",
+        "@monorepo//ts/factorio:blueprint_ts",
+        "@monorepo//ts/factorio:blueprint_wrapper_ts",
     ],
 )
 
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+ts_project(
+    name = "blueprint_wrapper_ts",
+    srcs = ["blueprint_wrapper.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:blueprint_book_ts",
+        "@monorepo//ts/factorio:blueprint_ts",
+    ],
+)
+
+ts_project(
+    name = "circuit_condition_ts",
+    srcs = ["circuit_condition.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:comparator_string_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+    ],
+)
+
+ts_project(
+    name = "color_ts",
+    srcs = ["color.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:float_ts",
+    ],
+)
+
+ts_project(
+    name = "comparator_string_ts",
+    srcs = ["comparator_string.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "connection_ts",
+    srcs = ["connection.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:connection_data_ts",
+        "@monorepo//ts/factorio:connection_point_ts",
+    ],
+)
+
+ts_project(
+    name = "connection_data_ts",
+    srcs = ["connection_data.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:entity_number_ts",
+    ],
+)
+
+ts_project(
+    name = "connection_point_ts",
+    srcs = ["connection_point.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:connection_data_ts",
+    ],
+)
+
+ts_project(
+    name = "constant_combinator_parameters_ts",
+    srcs = ["constant_combinator_parameters.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
+)
+
+ts_project(
+    name = "control_behavior_ts",
+    srcs = ["control_behavior.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:arithmetic_combinator_parameters_ts",
+        "@monorepo//ts/factorio:circuit_condition_ts",
+        "@monorepo//ts/factorio:constant_combinator_parameters_ts",
+        "@monorepo//ts/factorio:decider_combinator_parameters_ts",
+        "@monorepo//ts/factorio:defines,_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:programmable_speaker_circuit_parameters_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+    ],
+)
+
+ts_project(
+    name = "decider_combinator_parameters_ts",
+    srcs = ["decider_combinator_parameters.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:comparator_string_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+    ],
+)
+
+ts_project(
+    name = "deconstruction_planner_ts",
+    srcs = ["deconstruction_planner.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:item_filter_object_ts",
+    ],
+)
+
+ts_project(
+    name = "defines,_ts",
+    srcs = ["defines,.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "entity_ts",
+    srcs = ["entity.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:color_ts",
+        "@monorepo//ts/factorio:connection_ts",
+        "@monorepo//ts/factorio:control_behavior_ts",
+        "@monorepo//ts/factorio:entity_number_ts",
+        "@monorepo//ts/factorio:float_ts",
+        "@monorepo//ts/factorio:infinty_settings_ts",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:inventory_ts",
+        "@monorepo//ts/factorio:item_filter_object_ts",
+        "@monorepo//ts/factorio:item_request_object_ts",
+        "@monorepo//ts/factorio:logistic_filter_ts",
+        "@monorepo//ts/factorio:position_ts",
+        "@monorepo//ts/factorio:speaker_alert_parameter_ts",
+        "@monorepo//ts/factorio:speaker_parameter_ts",
+        "@monorepo//ts/factorio:tags_ts",
+        "@monorepo//ts/factorio:uint8_ts",
+    ],
+)
+
+ts_project(
+    name = "entity_number_ts",
+    srcs = ["entity_number.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:base_ts",
+    ],
+)
+
+ts_project(
+    name = "float_ts",
+    srcs = ["float.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "icon_ts",
+    srcs = ["icon.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:signal_id_ts",
+    ],
+)
+
+ts_project(
+    name = "infinity_filter_ts",
+    srcs = ["infinity_filter.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:item_count_type_ts",
+    ],
+)
+
+ts_project(
+    name = "infinty_settings_ts",
+    srcs = ["infinty_settings.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:infinity_filter_ts",
+    ],
+)
+
+ts_project(
+    name = "int_ts",
+    srcs = ["int.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "inventory_ts",
+    srcs = ["inventory.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+        "@monorepo//ts/factorio:item_filter_object_ts",
+    ],
+)
+
+ts_project(
+    name = "item_count_type_ts",
+    srcs = ["item_count_type.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:uint32_ts",
+    ],
+)
+
+ts_project(
+    name = "item_filter_object_ts",
+    srcs = ["item_filter_object.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:int_ts",
+    ],
+)
+
+ts_project(
+    name = "item_request_object_ts",
+    srcs = ["item_request_object.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:item_count_type_ts",
+    ],
+)
+
+ts_project(
+    name = "item_stack_index_ts",
+    srcs = ["item_stack_index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/factorio:uint16_ts"],
+)
+
+ts_project(
+    name = "logistic_filter_ts",
+    srcs = ["logistic_filter.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:base_ts",
+        "@monorepo//ts/factorio:item_count_type_ts",
+    ],
+)
+
+ts_project(
+    name = "position_ts",
+    srcs = ["position.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "programmable_speaker_circuit_parameters_ts",
+    srcs = ["programmable_speaker_circuit_parameters.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
+)
+
+ts_project(
+    name = "schedule_ts",
+    srcs = ["schedule.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:entity_number_ts",
+        "@monorepo//ts/factorio:schedule_record_ts",
+    ],
+)
+
+ts_project(
+    name = "schedule_record_ts",
+    srcs = ["schedule_record.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:wait_condition_ts",
+    ],
+)
+
+ts_project(
+    name = "signal_id_ts",
+    srcs = ["signal_id.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "speaker_alert_parameter_ts",
+    srcs = ["speaker_alert_parameter.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:signal_id_ts",
+    ],
+)
+
+ts_project(
+    name = "speaker_parameter_ts",
+    srcs = ["speaker_parameter.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:float_ts",
+    ],
+)
+
+ts_project(
+    name = "tags_ts",
+    srcs = ["tags.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "tile_ts",
+    srcs = ["tile.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:position_ts",
+    ],
+)
+
+ts_project(
+    name = "uint_ts",
+    srcs = ["uint.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "uint16_ts",
+    srcs = ["uint16.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
+)
+
+ts_project(
+    name = "uint32_ts",
+    srcs = ["uint32.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
+)
+
+ts_project(
+    name = "uint8_ts",
+    srcs = ["uint8.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
+)
+
+ts_project(
+    name = "upgrade_planner_ts",
+    srcs = ["upgrade_planner.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:item_filter_object_ts",
+    ],
+)
+
+ts_project(
+    name = "wait_condition_ts",
+    srcs = ["wait_condition.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "@monorepo//ts/factorio:circuit_condition_ts",
+        "@monorepo//ts/factorio:uint_ts",
+    ],
 )

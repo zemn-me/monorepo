@@ -27,3 +27,39 @@ css_module(
     name = "css_module",
     srcs = ["style.module.css"],
 )
+
+ts_project(
+    name = "article_tsx",
+    srcs = ["article.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/Article:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Article:article_types_tsx",
+        "@monorepo//ts/react/lang:date_tsx",
+        "@monorepo//ts/time:date_ts",
+    ],
+)
+
+ts_project(
+    name = "article_metadata_tsx",
+    srcs = ["article_metadata.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Article:article_types_tsx",
+    ],
+)
+
+ts_project(
+    name = "article_types_tsx",
+    srcs = ["article_types.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
