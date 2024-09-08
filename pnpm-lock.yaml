@@ -368,8 +368,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.72.0
-    version: 38.72.0(@aws-sdk/client-sso-oidc@3.645.0)(typanion@3.14.0)
+    specifier: 38.72.1
+    version: 38.72.1(@aws-sdk/client-sso-oidc@3.645.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -17130,8 +17130,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.72.0(@aws-sdk/client-sso-oidc@3.645.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-nITkJnUNPZys7M9R8ROX5i4BBb7YYB1/7bYgSQZ09M2EybGPY2LYXrq6OFBaItrJVtlyTYqYQgvX7w+ZWtofBg==}
+  /renovate@38.72.1(@aws-sdk/client-sso-oidc@3.645.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-39Y+9/6nn5oNoMT+5y1fWZfsttxc9/HkvkBA/to0m8FRx7qIHne2zeyX98e6g4E5B/U4uMJLSGtOxFwh1UvJfw==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -17231,7 +17231,7 @@ packages:
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 2.1.2
-      simple-git: 3.25.0
+      simple-git: 3.26.0
       slugify: 1.6.6
       source-map-support: 0.5.21
       toml-eslint-parser: 0.10.0
@@ -17795,8 +17795,8 @@ packages:
     dev: true
     optional: true
 
-  /simple-git@3.25.0:
-    resolution: {integrity: sha512-KIY5sBnzc4yEcJXW7Tdv4viEz8KyG+nU0hay+DWZasvdFOYKeUZ6Xc25LUHHjw0tinPT7O1eY6pzX7pRT1K8rw==}
+  /simple-git@3.26.0:
+    resolution: {integrity: sha512-5tbkCSzuskR6uA7uA23yjasmA0RzugVo8QM2bpsnxkrgP13eisFT7TMS4a+xKEJvbmr4qf+l0WT3eKa9IxxUyw==}
     dependencies:
       '@kwsites/file-exists': 1.1.1
       '@kwsites/promise-deferred': 1.1.1
