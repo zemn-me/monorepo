@@ -13,7 +13,7 @@ export const frontmatter: {
 
 type MDXComponentTypes =
 	"a" | "blockquote" | "code" | "em" |
-	`h${1|2|3|4|5}` | "p" | "section";
+	`h${1|2|3|4|5}` | "p" | "section" | "code" | "pre";
 
 interface MDXContentProps {
 	components?: {
