@@ -2,12 +2,15 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "article",
+    name = "spotify",
+    assets = glob(["**/*.css"]),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        "//project/zemn.me/app/article/2014/csp",
-        "//project/zemn.me/app/article/2018/spotify",
-        "//project/zemn.me/app/article/2019/cors",
+        "//:node_modules/next",
+        "//mdx/article/2018/spotify:spotify_js",
+        "//project/zemn.me/components/Article",
+        "//ts/react/lang",
+        "//ts/time",
     ],
 )
 
