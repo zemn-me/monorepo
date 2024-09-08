@@ -6,8 +6,8 @@ import {
 	Point2D,
 	Point3D,
 	sub,
-} from '#root/ts/math/cartesian';
-import { map, Vector } from '#root/ts/math/vec';
+} from '#root/ts/math/cartesian.js';
+import { map, Vector } from '#root/ts/math/vec.js';
 
 /**
  * Generates a square as a set of lines
