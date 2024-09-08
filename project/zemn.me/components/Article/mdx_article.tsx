@@ -1,3 +1,4 @@
+import { Editor } from '@monaco-editor/react';
 import { cloneElement, ReactElement } from "react";
 
 import { Article } from '#root/project/zemn.me/components/Article/article.js';
@@ -18,7 +19,7 @@ interface Frontmatter {
 
 type MDXComponentTypes =
 	"a" | "blockquote" | "code" | "em" |
-	`h${1|2|3|4|5}` | "p" | "section";
+	`h${1|2|3|4|5}` | "p" | "section" | "code" | "pre";
 
 interface MDXContentProps {
 	components?: {
@@ -37,6 +38,29 @@ export interface MDXArticleProps {
 	>
 }
 
+interface CodeProps {
+	readonly children?: string
+	readonly className?: string
+}
+
+function Code(props: CodeProps) {
+	const classes =
+		new Set(props.className?.split(" ") ?? []);
+
+	return <Editor
+		defaultLanguage={[...classes].filter(
+			v => v.startsWith('language-')
+		)[0]}
+		defaultValue={"ok"}
+		height="90vh"
+		options={{
+			readOnly: true
+		}}
+
+	/>
+
+}
+
 export function MDXArticle(props: MDXArticleProps) {
 	return <Article {...props.frontmatter}>
 		{cloneElement(
@@ -50,6 +74,7 @@ export function MDXArticle(props: MDXArticleProps) {
 					h5: H5,
 					a: Link,
 					section: Section,
+					code: Code,
 				}
 			}
 		)}
