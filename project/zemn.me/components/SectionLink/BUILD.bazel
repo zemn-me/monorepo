@@ -7,19 +7,20 @@ css_module(
     srcs = ["SectionLink.module.css"],
 )
 
-ts_project(
-    name = "SectionLink",
-    visibility = [
-        "//:__subpackages__",
-    ],
-    deps = [
-        ":css_module",
-        "//:node_modules/classnames",
-        "//project/zemn.me/components/Link",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "SectionLink_tsx",
+    srcs = ["SectionLink.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/SectionLink:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Link:index_tsx",
+    ],
 )

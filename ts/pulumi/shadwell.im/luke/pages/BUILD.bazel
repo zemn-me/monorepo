@@ -3,18 +3,30 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//ts/pulumi/shadwell.im/luke:__subpackages__"])
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
-    name = "pages",
+    name = "_app_tsx",
+    srcs = ["_app.tsx"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
         "//:node_modules/react",
-        "//ts/next.js",
-        "//ts/next.js/component/Redirect",
+        "@monorepo//ts/next.js:index_tsx",
     ],
 )
 
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//ts/next.js/component/Redirect:index_tsx",
+    ],
 )

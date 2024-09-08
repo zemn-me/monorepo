@@ -7,6 +7,7 @@ load("//ts/pulumi/lib/docker:rules.bzl", "ecr_image")
 ts_project(
     name = "ts_main",
     srcs = ["main.ts"],
+    visibility = ["//:__subpackages__"],
 )
 
 # make an npm_package that node can resolve (work-around for https://github.com/aspect-build/bazel-lib/issues/797)

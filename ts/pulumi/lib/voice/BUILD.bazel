@@ -1,18 +1,20 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
-    name = "voice",
+    name = "voice_ts",
+    srcs = ["voice.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/random",
-        "//:node_modules/@types/node",
-        "//ts/pulumi/lib",
+        "@monorepo//ts/pulumi/lib:contact_flow_ts",
+        "@monorepo//ts/pulumi/lib:tags_ts",
     ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
 )

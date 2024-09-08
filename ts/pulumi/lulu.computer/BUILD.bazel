@@ -35,10 +35,12 @@ ts_project(
     name = "pulumi_ts",
     srcs = ["index.ts"],
     data = [":next"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
-        "//ts/pulumi/lib",
+        "@monorepo//ts/pulumi/lib:tags_ts",
+        "@monorepo//ts/pulumi/lib:website_ts",
     ],
 )
 

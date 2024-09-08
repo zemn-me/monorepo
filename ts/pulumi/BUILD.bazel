@@ -9,29 +9,6 @@ yaml_lint_test(
     name = "validate_yml",
 )
 
-ts_project(
-    name = "pulumi_ts",
-    data = [
-        ":pulumi_local",
-        "//project/zemn.me:next",
-        "//ts/pulumi/shadwell.im/thomas",
-        "//ts/pulumi/zemn.me/availability:next",
-    ],
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/cross-spawn",
-        "//:node_modules/@types/jest",
-        "//:node_modules/cross-spawn",
-        "//ts/github/actions",
-        "//ts/pulumi/lib",
-        "//ts/pulumi/lulu.computer:pulumi_ts",
-        "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
-        "//ts/pulumi/shadwell.im",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["pulumi_test.js"],
@@ -58,4 +35,72 @@ cp $< $@
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "deploy_to_staging_ts",
+    srcs = ["deploy_to_staging.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts/github/actions:index_ts",
+        "@monorepo//ts/pulumi:stack_ts",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts/pulumi/lib:tags_ts",
+        "@monorepo//ts/pulumi/lulu.computer:pulumi_ts",
+        "@monorepo//ts/pulumi/pleaseintroducemetoyour.dog:index_ts",
+        "@monorepo//ts/pulumi/shadwell.im:index_ts",
+        "@monorepo//ts/pulumi/zemn.me:index_ts",
+    ],
+)
+
+ts_project(
+    name = "preview_ts",
+    srcs = ["preview.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/pulumi:stack_ts"],
+)
+
+ts_project(
+    name = "pulumi_test_ts",
+    srcs = ["pulumi_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "@monorepo//ts/pulumi:index_ts",
+        "@monorepo//ts/pulumi:setMocks_ts",
+    ],
+)
+
+ts_project(
+    name = "setMocks_ts",
+    srcs = ["setMocks.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@pulumi/pulumi"],
+)
+
+ts_project(
+    name = "stack_ts",
+    srcs = ["stack.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "@monorepo//ts/pulumi:index_ts",
+    ],
+)
+
+jest_test(
+    name = "pulumi_test_ts_test",
+    srcs = ["pulumi_test.js"],
 )
