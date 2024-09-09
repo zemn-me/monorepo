@@ -5,18 +5,18 @@ import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import next from '@next/eslint-plugin-next';
+import importPlugin from 'eslint-plugin-import';
 import jestLint from 'eslint-plugin-jest';
 import * as mdx from 'eslint-plugin-mdx';
 import reactPlugin from 'eslint-plugin-react';
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import simpleImportSort from "eslint-plugin-simple-import-sort";
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, ".gitignore");
-
 
 /** @type {import('eslint').Linter.FlatConfig} */
 export const reactConfig = {
@@ -36,6 +36,7 @@ export const reactConfig = {
 		'react': fixupPluginRules(reactPlugin),
 		'simple-import-sort': simpleImportSort,
 		'jest': jestLint,
+		'import': importPlugin, // Add eslint-plugin-import here
 	},
 	rules: {
 		'jest/prefer-importing-jest-globals': "error",
@@ -80,6 +81,19 @@ export const reactConfig = {
 		'object-curly-newline': 'error',
 		'arrow-body-style': ['error', 'as-needed'],
 		'no-console': 'error',
+		'import/no-unresolved': 'error', // Add import rules here
+		'import/named': 'error',
+		'import/namespace': 'error',
+		'import/default': 'error',
+		'import/export': 'error',
+		'import/order': [
+			'error',
+			{
+				alphabetize: {
+					order: 'asc',
+				}
+			}
+		]
 	},
 	settings: {
 		react: {
@@ -88,9 +102,14 @@ export const reactConfig = {
 		next: {
 			rootDir: ['project/zemn.me/'],
 		},
+		'import/resolver': { // Add import resolver settings here
+			typescript: {},
+			node: {
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
+			},
+		},
 	},
-
-}
+};
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default tseslint.config(
@@ -107,10 +126,11 @@ export default tseslint.config(
 		extends: [
 			js.configs.recommended,
 			...tseslint.configs.recommended,
-			reactConfig
+			reactConfig,
 		],
 		plugins: {
 			'@next/next': next,
+			'import': importPlugin, // Add eslint-plugin-import here as well
 		},
 		rules: {
 			'@typescript-eslint/no-floating-promises': 'error',
@@ -133,6 +153,12 @@ export default tseslint.config(
 		},
 	},
 	{
+		name: 'gitignore',
+		extends: [
+			includeIgnoreFile(gitignorePath)
+		]
+	},
+	{
 		name: 'markdown',
 		files: ['**/*.md?(x)'],
 		plugins: {
@@ -146,11 +172,5 @@ export default tseslint.config(
 			'mdx/language-mapper': {},
 		},
 		...mdx.flat,
-	},
-	{
-		name: 'gitignore',
-		extends: [
-			includeIgnoreFile(gitignorePath)
-		]
 	}
-)
+);
