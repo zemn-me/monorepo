@@ -138,6 +138,7 @@ js_library(
     name = "eslintrc",
     srcs = [
         ":eslint.config.js",
+        "//:.gitignore",
         "//:editorconfig",
         "//:package_json",
         "//:prettierrc",
