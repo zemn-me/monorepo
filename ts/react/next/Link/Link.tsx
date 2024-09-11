@@ -2,14 +2,17 @@
 /* eslint-disable react/forbid-elements */
 import type { UrlObject } from 'node:url';
 
+import classNames from 'classnames';
 import NextLink from 'next/link';
 import { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
+import style from 'ts/react/next/Link/Link.module.css';
 
 import { map, some } from '#root/ts/iter/index.js';
 
 interface SpecialProps {
 	readonly href?: NextLinkProps['href'];
+	readonly styleless?: boolean
 }
 
 export type LinkProps = Omit<
@@ -57,16 +60,19 @@ function isFirstPartyURL(u: string | UrlObject | URL): boolean {
 	);
 }
 
-export function Link({ href, rel, target, ...props }: LinkProps) {
+export function Link({ href, className, rel, target, ...props }: LinkProps) {
 	if (href !== undefined && !isFirstPartyURL(href)) {
 		rel = `${rel ?? ''} external`.trim();
 		target = '_blank';
 	}
+
+	className = classNames(className, style.styleless)
+
 	// next Link has a strangely strident stance on providing the href parameter
 	// which we do not. if there is no href we just fall back to using an <a> tag.
 	// https://github.com/i18next/next-i18next/issues/599
-	if (href === undefined) return <a {...{ href, rel, target, ...props }} />;
-	return <NextLink {...{ href, rel, target, ...props }} />;
+	if (href === undefined) return <a {...{ className, href, rel, target, ...props }} />;
+	return <NextLink {...{ className, href, rel, target, ...props }} />;
 }
 
 export default Link;
