@@ -1,12 +1,15 @@
-import Link from "#root/project/zemn.me/components/Link/Link.js";
+import React, { ReactNode } from "react";
+
 import { Prose } from "#root/project/zemn.me/components/Prose/prose.js"
+import BaseLink from "#root/ts/react/next/Link/Link.js";
 
 
 interface BlurbProps {
 	readonly to: URL | string
+	readonly Link?: (v: { href: URL | string, children?: ReactNode }) => ReactNode
 }
 
-export function RedirectBlurb(props: BlurbProps) {
+export function RedirectBlurb({ Link = BaseLink, ...props }: BlurbProps) {
 	const target = new URL(props.to);
 	const text = target.protocol === "https:" ?
 		target.host

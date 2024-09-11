@@ -1,0 +1,12 @@
+.link {
+    font-style: italic;
+    color: currentColor;
+}
+
+.link:visited {
+	text-decoration-color: var(--visited-link-color);
+}
+
+.link:link {
+	text-decoration-color: var(--link-color);
+}
