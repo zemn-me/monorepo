@@ -52,19 +52,6 @@ html, body, :root {
 	background: var(--background-color);
 }
 
-a {
-    font-style: italic;
-    color: currentColor;
-}
-
-a:visited {
-	text-decoration-color: var(--visited-link-color);
-}
-
-a:link {
-	text-decoration-color: var(--link-color);
-}
-
 h1, h2, h3, h4, h5 { font-weight: normal }
 
 input, button {

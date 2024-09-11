@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import { useCallback, useRef } from 'react';
 import { z } from 'zod';
 
-import Link from '#root/project/zemn.me/components/Link/index.js';
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
+import { Link } from '#root/ts/react/next/Link/index.js';
 import { Video } from '#root/ts/react/Video/video.js';
 import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 

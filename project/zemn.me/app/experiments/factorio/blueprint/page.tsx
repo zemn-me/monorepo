@@ -1,4 +1,4 @@
-import Link from '#root/project/zemn.me/components/Link/Link.js';
+import Link from '#root/project/zemn.me/components/Link/index.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose';
 
 export default function Page() {

@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "Link",
+    assets = [
+        "link.module.css",
+    ],
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//:base_defs",
+        "//ts/react/next/Link",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
