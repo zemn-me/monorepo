@@ -6,6 +6,7 @@ import * as bio from '#root/project/zemn.me/bio/index.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
 import style from '#root/project/zemn.me/components/Glade/style.module.css';
 import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video.js';
+import Link from '#root/project/zemn.me/components/Link/index.js';
 import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
 import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
@@ -21,16 +22,17 @@ function TimeEyeInline() {
 }
 */
 
+
 /**
  * LetterHead is the inner part of the heading with the name and logo.
  */
 function LetterHead() {
 	return (
-		<div className={style.letterHead}>
+		<Link aria-label="Go to homepage" className={style.letterHead} href="/" styleless>
 			<div className={style.handle}>{lang.text(bio.Bio.who.handle)}</div>
 			<TimeEye className={style.logo} />
 			<div className={style.fullName}>Thomas NJ Shadwell</div>
-		</div>
+		</Link>
 	);
 }
 
