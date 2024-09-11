@@ -3,13 +3,15 @@ import classNames from 'classnames';
 import style from '#root/project/zemn.me/components/Link/link.module.css';
 import * as base from '#root/ts/react/next/Link/Link.js';
 
-export type LinkProps = base.LinkProps
+export interface LinkProps extends base.LinkProps {
+	readonly styleless?: boolean
+}
 
-export function Link({className, ...props}: LinkProps) {
+export function Link({className, styleless, ...props}: LinkProps) {
 
 	return <base.Link className={
-		classNames(className, style.link)
-	} { ...props } />
+		classNames(className, styleless? undefined: style.link)
+	} {...{ styleless, ...props } } />
 
 }
 
