@@ -1,7 +1,7 @@
 'use client';
 import { useId, useState } from 'react';
 
-import Link from '#root/project/zemn.me/components/Link/Link.js';
+import Link from '#root/project/zemn.me/components/Link/index.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
 import { githubRepoUrl } from '#root/ts/constants/constants.js';
 import {
