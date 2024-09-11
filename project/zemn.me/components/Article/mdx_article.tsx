@@ -3,7 +3,7 @@ import { cloneElement, ReactElement } from "react";
 import { Article } from '#root/project/zemn.me/components/Article/article.js';
 import { H1, H2, H3, H4, H5 } from '#root/project/zemn.me/components/Article/heading.js';
 import { Section } from '#root/project/zemn.me/components/Article/section.js';
-import Link from "#root/project/zemn.me/components/Link/Link.js";
+import Link from "#root/project/zemn.me/components/Link/index.js";
 
 
 interface Frontmatter {
