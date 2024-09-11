@@ -11,9 +11,10 @@ import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb.js';
 
 export interface Props {
 	readonly to: URL | string;
+	readonly linkClassName?: string
 }
 
-export default function Redirect({ to }: Props) {
+export default function Redirect({ to, ...props }: Props) {
 	const href = typeof to === 'string' ? to : to.toString();
 	const router = useRouter();
 	useEffect(() => void router.replace(href), [href, router]);
@@ -24,7 +25,7 @@ export default function Redirect({ to }: Props) {
 				<meta content={`1; ${to}`} httpEquiv="refresh" />
 				<link href={href} rel="canonical" />
 			</Head>
-			<RedirectBlurb {...{ to }} />
+			<RedirectBlurb {...{ to, ...props }} />
 		</>
 	);
 }
