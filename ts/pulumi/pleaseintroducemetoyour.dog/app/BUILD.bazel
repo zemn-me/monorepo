@@ -19,10 +19,10 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/zod",
-        "//project/zemn.me/components",
         "//ts",
         "//ts/next.js",
         "//ts/react/Video",
+        "//ts/react/next/Link",
         "//ts/reddit",
     ],
 )

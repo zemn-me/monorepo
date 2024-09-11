@@ -1,0 +1,11 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "Redirect",
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//project/zemn.me/components/Link",
+    ],
+)
