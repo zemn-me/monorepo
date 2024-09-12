@@ -10,6 +10,7 @@ ts_project(
         "//:__subpackages__",
     ],
     deps = [
+        "//:base_defs",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
