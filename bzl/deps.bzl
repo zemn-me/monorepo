@@ -66,9 +66,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.131.0/pulumi-v3.131.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.132.0/pulumi-v3.132.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "0a67694bdac06e55e412d960bee6543c119b14a8ea28b5536c8f3c6bce61da07",
+        sha256 = "85adc24e4da345df0ed9a4848f543e180e78ac2a8ee568b42ca331a9a6607572",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
