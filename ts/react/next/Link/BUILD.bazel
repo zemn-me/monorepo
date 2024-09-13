@@ -3,10 +3,14 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "Link",
+    assets = [
+        ":link.module.css",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
+        "//:base_defs",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",

@@ -1,8 +1,8 @@
 import { Metadata } from 'next/types';
 
+import { Redirect } from '#root/project/zemn.me/components/Redirect/Redirect.js';
 import { githubRepoUrl } from '#root/ts/constants/constants.js';
 import { isDefined } from '#root/ts/guard.js';
-import Redirect from '#root/ts/next.js/component/Redirect/app.js';
 
 interface PageProps {
 	readonly params: { slug?: string[] };
