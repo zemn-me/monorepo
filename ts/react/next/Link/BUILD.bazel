@@ -4,7 +4,7 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "Link",
     assets = [
-        "link.module.css",
+        "Link.module.css",
     ],
     visibility = [
         "//:__subpackages__",

@@ -8,7 +8,7 @@ import { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
 
 import { map, some } from '#root/ts/iter/index.js';
-import style from '#root/ts/react/next/Link/link.module.css';
+import style from '#root/ts/react/next/Link/Link.module.css';
 
 interface SpecialProps {
 	readonly href?: NextLinkProps['href'];
