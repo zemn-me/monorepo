@@ -119,3 +119,15 @@ use_repo(
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "0.35.0")
 bazel_dep(name = "aspect_rules_py", version = "0.8.0")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "com_github_factoriolab",
+    strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
+    url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
+    build_file_content = """
+exports_files(glob(["**/*"]))
+
+		""",
+)

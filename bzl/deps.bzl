@@ -264,13 +264,3 @@ native_binary(
         url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
         build_file_content = chromium_buildfile,
     )
-
-    http_archive(
-        name = "com_github_factoriolab",
-        strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
-        url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-
-            """,
-    )
