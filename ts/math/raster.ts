@@ -62,7 +62,7 @@ const EPSILON = Number.EPSILON;
  * @returns An iterable of points along all the lines.
  */
 export function* linesToPoints(
-  lines: Array<[[number, number], [number, number]]>
+  lines: Iterable<[[number, number], [number, number]]>
 ): Iterable<Point> {
   for (const [[x0, y0], [x1, y1]] of lines) {
     yield* bresenhamLine(x0, y0, x1, y1);

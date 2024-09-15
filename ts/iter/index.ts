@@ -211,6 +211,8 @@ export function reduce<I, R>(
 	return previousValue;
 }
 
+export const fold = reduce;
+
 /**
  * Walks a chain of values using a selector.
  */
@@ -349,6 +351,13 @@ export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<readonly [
 	}
 }
 
+export function* enumerate<T>(v: Iterable<T>): Iterable<[T, number]> {
+	let i = 0;
+	for (const vv of v) {
+		yield [vv, i++]
+	}
+}
+
 type _Iterable<T> = impl<Iterable<T>>
 
 class impl<T> extends NewType<T> {
@@ -373,6 +382,46 @@ class impl<T> extends NewType<T> {
 
 	flatten<T>(this: _Iterable<Iterable<T>>): _Iterable<T> {
 		return new impl(flatten(this.value))
+	}
+
+	enumerate<T>(this: _Iterable<T>): _Iterable<
+		[T, number]> {
+
+		return new impl(enumerate(this.value))
+		}
+
+	nth<T>(this: _Iterable<T>, n: number): Option<T> {
+		for (const [v, i] of this.enumerate().value) {
+			if (i == n) {
+				return Some(v);
+			}
+		}
+
+		return None;
+	}
+
+	fold<I, R>(
+		this: _Iterable<I>,
+		f: (previousValue: R, currentValue: I, currentIndex: number) => R,
+		initialValue: R
+	): R {
+		return reduce(this.value, f, initialValue)
+	}
+
+	last<T>(this: _Iterable<T>): Option<T> {
+		return this.fold(
+			(_, c) => Some(c), None as Option<T>
+		)
+	}
+
+	first<T>(this: _Iterable<T>): Option<T> {
+		return this.nth(0)
+	}
+
+	concat<T1, T2>(this: _Iterable<T1>, v: Iterable<T2>): _Iterable<T1 | T2> {
+		return new impl(
+			concat(this.value, v)
+		)
 	}
 }
 
