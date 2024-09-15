@@ -20,4 +20,18 @@ describe('raster', () => {
 ⠀⠀⠑\
 `)
 		});
+
+		it('should make a straight line (-ve)', () => {
+			expect(
+				plot2D(
+					linesToPoints( [ [ [-10, -10], [10, 10], ] ]),
+					pt => pt.x,
+					pt => pt.y,
+					6
+				)
+			).toEqual(`\
+⠑⢄⠀
+⠀⠀⠑\
+`)
+		});
 });
