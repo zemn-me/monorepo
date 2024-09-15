@@ -12,6 +12,10 @@ interface Point {
   y: number;
 }
 
+function floatEq(a: number, b: number) {
+	return Math.abs(a-b) >= Number.EPSILON
+}
+
 /**
  * Generates points along a line from (x0, y0) to (x1, y1) using Bresenham's algorithm.
  * @param x0 - The x-coordinate of the start point.
@@ -26,28 +30,34 @@ function* bresenhamLine(
   x1: number,
   y1: number
 ): Iterable<Point> {
-  const dx = Math.abs(x1 - x0);
-  const dy = -Math.abs(y1 - y0);
-  const sx = x0 < x1 ? 1 : -1;
-  const sy = y0 < y1 ? 1 : -1;
-  let err = dx + dy;
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  const steps = Math.max(absDx, absDy);
+
+  const xIncrement = dx / steps;
+  const yIncrement = dy / steps;
+
   let x = x0;
   let y = y0;
 
-	for (; ;) {
+const EPSILON = Number.EPSILON;
+
+  for (let i = 0; i <= steps; i++) {
     yield { x, y };
-    if (x === x1 && y === y1) break;
-    const e2 = 2 * err;
-    if (e2 >= dy) {
-      err += dy;
-      x += sx;
-    }
-    if (e2 <= dx) {
-      err += dx;
-      y += sy;
-    }
+    x += xIncrement;
+    y += yIncrement;
+  }
+
+  // Ensure the last point is included
+  if (Math.abs(x - x1) >= EPSILON || Math.abs(y - y1) >= EPSILON) {
+    yield { x: x1, y: y1 };
   }
 }
+
 
 /**
  * Converts a list of lines into an iterable of points using Bresenham's algorithm.
