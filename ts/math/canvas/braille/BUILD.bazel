@@ -22,6 +22,7 @@ ts_project(
     name = "braille_test_ts",
     srcs = [
         "braille_test.ts",
+        "raster_test.ts",
     ],
     deps = [
         ":braille",
@@ -34,6 +35,7 @@ jest_test(
     name = "test",
     srcs = [
         "braille_test.js",
+        "raster_test.js",
     ],
     deps = [
         ":braille",
