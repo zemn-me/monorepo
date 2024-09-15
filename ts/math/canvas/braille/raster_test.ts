@@ -34,4 +34,20 @@ describe('raster', () => {
 ⠀⠀⠑\
 `)
 		});
+
+		it('should not crash', () => {
+			expect(
+				plot2D(
+					linesToPoints( [ [ [0, 0], [-1.5, 0], ] ]),
+					pt => pt.x,
+					pt => pt.y,
+					6
+				)
+			).toEqual(`\
+⠀⠀⠀
+⠂⠂⠐\
+`)
+		});
+
+
 });
