@@ -22,7 +22,7 @@ args = parser.parse_args()
 wd = args.working_directory
 
 def try_edit_sapling_config():
-	with open(path.join(wd, ".sl/config")) as file:
+	with open(path.join(wd, ".sl/config"), "r+") as file:
 		sapling_import_pattern = re.compile("%%include\s+../ini/sl/config.ini")
 		if any(
 			(
@@ -36,9 +36,14 @@ def try_edit_sapling_config():
 
 		file.seek(0)
 
-		with TemporaryFile() as temp:
-			temp.write("%%include ../ini/sl/config.ini" + linesep)
+		with TemporaryFile(mode="w+") as temp:
+			temp.write("%include ../ini/sl/config.ini" + linesep)
 			copyfileobj(file, temp)
+
+			temp.seek(0)
+			file.seek(0)
 
 			file.truncate()
 			copyfileobj(temp, file)
+
+try_edit_sapling_config()
