@@ -2,6 +2,17 @@ import { Tuple } from '#root/ts/tuple.js';
 
 export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 
+export function magnitude(v: Vector): number {
+	return Math.sqrt(
+		sum(
+		v.map(v => v ** 2)))
+}
+
+export function unit<N extends number>(v: Vector<N>): Vector<N> {
+	const mag = magnitude(v);
+	return map(v, x => x / mag);
+}
+
 /**
  * Map a Vector, returning a new Vector.
  */
