@@ -260,7 +260,7 @@ export function FrameClient() {
 	const minimumCutDepthInputId = useId();
 	const minimumCutDepthInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => void setMinimumCutDepthInput(e.target.value), [setMinimumCutDepthInput]);
 	const minimumCutDepth = useMemo(() => parseMeasurement(minimumCutDepthInput, "minimum cut depth").unwrap_or(
-		Measurement<[number, "cm"]>([Infinity, "cm"])
+		Measurement<[number, "cm"]>([0, "cm"])
 	), [minimumCutDepthInput]);
 
 
@@ -391,7 +391,7 @@ export function FrameClient() {
 			</label>{" "}
 			<label htmlFor={minimumCutDepthInputId}>
 				<i>Minimum Cut Depth. </i>
-				<input id={minimumCutDepthInputId} onChange={minimumCutDepthInputChange} pattern={reParseMeasurement.source} placeholder="∞" value={minimumCutDepthInput}/>
+				<input id={minimumCutDepthInputId} onChange={minimumCutDepthInputChange} pattern={reParseMeasurement.source} placeholder="0" value={minimumCutDepthInput}/>
 			</label>
 		</fieldset>
 		</section>
