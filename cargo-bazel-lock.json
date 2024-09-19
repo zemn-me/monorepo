@@ -1,5 +1,5 @@
 {
-  "checksum": "7f5424e9429135e64a18b07f319ea22cb399a4fee4f321f70d8b2cd4e0606aac",
+  "checksum": "76c8cbaabe1c4319be471af1e3878196c370070f3950d6cc8f59fd2259224e68",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -9321,11 +9321,53 @@
             "getrandom",
             "libc",
             "rand_chacha",
-            "small_rng",
             "std",
             "std_rng"
           ],
-          "selects": {}
+          "selects": {
+            "aarch64-apple-darwin": [
+              "small_rng"
+            ],
+            "aarch64-pc-windows-msvc": [
+              "small_rng"
+            ],
+            "aarch64-unknown-linux-gnu": [
+              "small_rng"
+            ],
+            "aarch64-unknown-nixos-gnu": [
+              "small_rng"
+            ],
+            "arm-unknown-linux-gnueabi": [
+              "small_rng"
+            ],
+            "i686-pc-windows-msvc": [
+              "small_rng"
+            ],
+            "i686-unknown-linux-gnu": [
+              "small_rng"
+            ],
+            "powerpc-unknown-linux-gnu": [
+              "small_rng"
+            ],
+            "s390x-unknown-linux-gnu": [
+              "small_rng"
+            ],
+            "x86_64-apple-darwin": [
+              "small_rng"
+            ],
+            "x86_64-pc-windows-msvc": [
+              "small_rng"
+            ],
+            "x86_64-unknown-freebsd": [
+              "small_rng"
+            ],
+            "x86_64-unknown-linux-gnu": [
+              "small_rng"
+            ],
+            "x86_64-unknown-nixos-gnu": [
+              "small_rng"
+            ]
+          }
         },
         "deps": {
           "common": [
@@ -18038,15 +18080,10 @@
           "**"
         ],
         "crate_features": {
-          "common": [],
-          "selects": {
-            "wasm32-unknown-unknown": [
-              "spans"
-            ],
-            "wasm32-wasi": [
-              "spans"
-            ]
-          }
+          "common": [
+            "spans"
+          ],
+          "selects": {}
         },
         "deps": {
           "common": [
@@ -18184,15 +18221,10 @@
           "**"
         ],
         "crate_features": {
-          "common": [],
-          "selects": {
-            "wasm32-unknown-unknown": [
-              "spans"
-            ],
-            "wasm32-wasi": [
-              "spans"
-            ]
-          }
+          "common": [
+            "spans"
+          ],
+          "selects": {}
         },
         "deps": {
           "common": [
@@ -18247,15 +18279,10 @@
           "**"
         ],
         "crate_features": {
-          "common": [],
-          "selects": {
-            "wasm32-unknown-unknown": [
-              "spans"
-            ],
-            "wasm32-wasi": [
-              "spans"
-            ]
-          }
+          "common": [
+            "spans"
+          ],
+          "selects": {}
         },
         "deps": {
           "common": [
