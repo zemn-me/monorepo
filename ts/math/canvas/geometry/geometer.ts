@@ -15,6 +15,66 @@ import * as cartesian from "#root/ts/math/cartesian.js";
 import * as matrix from "#root/ts/math/matrix.js";
 
 /**
+ * Generates the vertices of a cube centered at (cx, cy, cz) with size s.
+ */
+export function cube(
+  cx: number,
+  cy: number,
+  cz: number,
+  s: number
+): cartesian.Line3D {
+  const points: cartesian.Line3D = [];
+  const half = s / 2;
+
+  const coords = [-half, half];
+
+  for (let dx of coords) {
+    for (let dy of coords) {
+      for (let dz of coords) {
+        const x = cx + dx;
+        const y = cy + dy;
+        const z = cz + dz;
+        const point: cartesian.Point3D = [[x], [y], [z]];
+        points.push(point);
+      }
+    }
+  }
+
+  return points;
+}
+
+/**
+ * Generates the vertices of a square pyramid with base centered at (cx, cy, cz), base size s, and height h.
+ */
+export function pyramid(
+  cx: number,
+  cy: number,
+  cz: number,
+  s: number,
+  h: number
+): cartesian.Line3D {
+  const points: cartesian.Line3D = [];
+  const half = s / 2;
+
+  // Base vertices
+  const basePoints: cartesian.Point3D[] = [
+    [[cx - half], [cy - half], [cz]],
+    [[cx + half], [cy - half], [cz]],
+    [[cx + half], [cy + half], [cz]],
+    [[cx - half], [cy + half], [cz]],
+  ];
+
+  // Apex vertex
+  const apex: cartesian.Point3D = [[cx], [cy], [cz + h]];
+
+  // Collect all points
+  points.push(...basePoints, apex);
+
+  return points;
+}
+
+
+/**
  * Generates a polyline for an n-gon.
  */
 export function ngon(
