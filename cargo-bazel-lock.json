@@ -1,5 +1,5 @@
 {
-  "checksum": "76c8cbaabe1c4319be471af1e3878196c370070f3950d6cc8f59fd2259224e68",
+  "checksum": "a36f853b59831060abe9fecc2899a021f2e32c0b602570719539345198e8430b",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2309,14 +2309,14 @@
       ],
       "license_file": "LICENSE-MIT"
     },
-    "clap 4.5.17": {
+    "clap 4.5.18": {
       "name": "clap",
-      "version": "4.5.17",
+      "version": "4.5.18",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap/4.5.17/download",
-          "sha256": "3e5a21b8495e732f1b3c364c9949b201ca7bae518c502c80256c96ad79eaf6ac"
+          "url": "https://static.crates.io/crates/clap/4.5.18/download",
+          "sha256": "b0956a43b323ac1afaffc053ed5c4b7c1f1800bacd1683c353aabbb752515dd3"
         }
       },
       "targets": [
@@ -2366,7 +2366,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.5.17",
+              "id": "clap_builder 4.5.18",
               "target": "clap_builder"
             }
           ],
@@ -2376,13 +2376,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "clap_derive 4.5.13",
+              "id": "clap_derive 4.5.18",
               "target": "clap_derive"
             }
           ],
           "selects": {}
         },
-        "version": "4.5.17"
+        "version": "4.5.18"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2391,14 +2391,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_builder 4.5.17": {
+    "clap_builder 4.5.18": {
       "name": "clap_builder",
-      "version": "4.5.17",
+      "version": "4.5.18",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_builder/4.5.17/download",
-          "sha256": "8cf2dd12af7a047ad9d6da2b6b249759a22a7abc0f474c1dae1777afa4b21a73"
+          "url": "https://static.crates.io/crates/clap_builder/4.5.18/download",
+          "sha256": "4d72166dd41634086d5803a47eb71ae740e61d84709c36f3c34110173db3961b"
         }
       },
       "targets": [
@@ -2453,7 +2453,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.17"
+        "version": "4.5.18"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2462,14 +2462,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_derive 4.5.13": {
+    "clap_derive 4.5.18": {
       "name": "clap_derive",
-      "version": "4.5.13",
+      "version": "4.5.18",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_derive/4.5.13/download",
-          "sha256": "501d359d5f3dcaf6ecdeee48833ae73ec6e42723a1e52419c79abf9507eec0a0"
+          "url": "https://static.crates.io/crates/clap_derive/4.5.18/download",
+          "sha256": "4ac6a0c7b1a9e9a5186361f67dfa1b88213572f427fb9ab038efb2bd8c582dab"
         }
       },
       "targets": [
@@ -2519,7 +2519,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.13"
+        "version": "4.5.18"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -7582,7 +7582,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.5.17",
+              "id": "clap 4.5.18",
               "target": "clap"
             },
             {
@@ -20568,7 +20568,7 @@
     }
   },
   "binary_crates": [
-    "clap 4.5.17",
+    "clap 4.5.18",
     "phf_generator 0.11.2",
     "pulldown-cmark 0.9.6",
     "rxp 0.2.0"
@@ -21016,7 +21016,7 @@
     ]
   },
   "direct_deps": [
-    "clap 4.5.17",
+    "clap 4.5.18",
     "hex 0.4.3",
     "rxp 0.2.0",
     "serde_json 1.0.128",
