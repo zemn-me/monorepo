@@ -7,18 +7,18 @@ css_module(
     srcs = ["prose.module.css"],
 )
 
-ts_project(
-    name = "Prose",
-    visibility = ["//:__subpackages__"],
-    deps = [
-        ":css_module",
-        "//:base_defs",
-        "//:node_modules/@types/react",
-        "//project/zemn.me/components/Link",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "prose_tsx",
+    srcs = ["prose.tsx"],
+    assets = ["@monorepo//project/zemn.me/components/Prose:css_module"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
 )

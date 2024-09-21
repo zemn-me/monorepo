@@ -1,35 +1,25 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
-
-ts_project(
-    name = "shape",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
-        "//ts/math",
-        "//ts/math/canvas",
-    ],
-)
-
-jest_test(
-    name = "shape_test",
-    srcs = ["shape_test.js"],
-    jsdom = True,
-    deps = [":shape"],
-)
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@monorepo//ts/math:camera_ts",
+        "@monorepo//ts/math:conv_ts",
+        "@monorepo//ts/math:euler_angle_ts",
+        "@monorepo//ts/math:homog_ts",
+        "@monorepo//ts/math:matrix_ts",
+        "@monorepo//ts/math:quaternion_ts",
+        "@monorepo//ts/math:vec_ts",
+        "@monorepo//ts/math/canvas:index_ts",
+    ],
 )

@@ -12,13 +12,21 @@ ts_project(
     srcs = ["page.tsx"],
     visibility = ["//project/zemn.me/app/experiments:__subpackages__"],
     deps = [
-        ":test_js",
+        "//:node_modules/@types/react",
         "//:node_modules/next",
-        "//project/zemn.me/components/Article",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/article:mdx_files_js",
+        "@monorepo//project/zemn.me/components/Article:article_metadata_tsx",
+        "@monorepo//project/zemn.me/components/Article:article_tsx",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+mdx_files(
+    name = "mdx_files",
+    srcs = ["test.mdx"],
 )
