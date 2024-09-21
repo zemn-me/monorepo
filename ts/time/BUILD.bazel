@@ -3,22 +3,6 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-ts_project(
-    name = "time",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/ts-toolbelt",
-        "//:node_modules/zod",
-        "//ts",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["date_test.js"],
