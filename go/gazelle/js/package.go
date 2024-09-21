@@ -1,7 +1,6 @@
 package js
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -10,6 +9,7 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -21,10 +21,8 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/bazelbuild/buildtools/build"
 
-	parse "github.com/tdewolff/parse/v2"
-	js "github.com/tdewolff/parse/v2/js"
-
 	"github.com/zemn-me/monorepo/go/encoding/jsonc"
+	"github.com/zemn-me/monorepo/go/ts"
 )
 
 func demystifyJsonParseError(f *os.File, err error) error {
@@ -68,6 +66,31 @@ func (p PackageJsonPartial) HasDep(packageName string) bool {
 	_, b := p.DevDependencies[packageName]
 
 	return a || b
+}
+
+var importFromPatReplacer = regexp.MustCompile("(.*)/\\*")
+
+// For a given module path, resolve a set of symbols
+// that it can be imported as.
+func (p PackageJsonPartial) ResolveJSModule(modulePath string) (symbols []string) {
+	modulePaths := []string{
+		modulePath,
+		strings.TrimSuffix(modulePath, filepath.Ext(modulePath)),
+	}
+
+	for _, modulePath := range modulePaths {
+		for importFromPat, importToPat := range p.Imports {
+			if importToPat != "./*" || !strings.HasSuffix(importFromPat, "*") {
+				panic(
+					fmt.Sprintf("subpath imports should be based at root (%+q), instead %+q; or rewrite pattern %+q did not end in *", "./*", importToPat, importFromPat),
+				)
+			}
+
+			symbols = append(symbols, path.Join(importFromPat, "..", modulePath))
+		}
+	}
+
+	return
 }
 
 type Language struct{}
@@ -127,24 +150,12 @@ func (Language) Configure(c *config.Config, rel string, f *rule.File) {
 // since it generates "go_library" rules.
 func (Language) Name() string { return "javascript" }
 
-var importFromPatReplacer = regexp.MustCompile("(.*)/\\*")
-
 // gives a list of possible import symbols for a given file module
 // we only support esm, so this is pretty simple.
 //
 // filePath must be relative to the repo root.
 func JsImportsForFileModule(c *config.Config, filePath string) (symbols []string) {
-	for importFromPat, importToPat := range c.Exts["javascript"].(PackageJsonPartial).Imports {
-		if importToPat != "./*" || !strings.HasSuffix(importFromPat, "*") {
-			panic(
-				fmt.Sprintf("subpath imports should be based at root (%+q), instead %+q; or rewrite pattern %+q did not end in *", "./*", importToPat, importFromPat),
-			)
-		}
-
-		symbols = append(symbols, path.Join(importFromPat, "..", filePath))
-	}
-
-	return
+	return c.Exts["javascript"].(PackageJsonPartial).ResolveJSModule(filePath)
 }
 
 // Imports returns a list of ImportSpecs that can be used to import the rule
@@ -177,13 +188,16 @@ func (this Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) (spec
 // the imports of the embedded rule.
 func (Language) Embeds(r *rule.Rule, from label.Label) []label.Label { return nil }
 
-func resolveBuiltinImportTags(pkg string) (imports *[]string) {
-	switch {
-	case strings.HasPrefix(pkg, "node:"):
-		return &[]string{}
+func resolveBuiltinImportTags(pkg string, types bool) (imports []string) {
+	if !strings.HasPrefix(pkg, "node:") {
+		return
 	}
 
-	return nil
+	if types {
+		imports = append(imports, fmt.Sprintf("//:node_modules/@types/node"))
+	}
+
+	return
 }
 
 var reExtractModule = regexp.MustCompile("@[^/]+/[^/]+|[^/]+")
@@ -197,23 +211,34 @@ func nodeModulesModuleFromImportString(importString string) (moduleName string) 
 	return reExtractModule.FindString(importString)
 }
 
-func resolveNodeModulesImportTags(pkgjson PackageJsonPartial, pkg string) (imports *[]string) {
+func resolveNodeModulesImportTags(pkgjson PackageJsonPartial, pkg string, types bool) (imports []string) {
 	moduleName := nodeModulesModuleFromImportString(pkg)
-	if !pkgjson.HasDep(moduleName) {
-		return nil
+
+	if pkgjson.HasDep(moduleName) {
+		imports = append(imports, fmt.Sprintf("//:node_modules/%s", moduleName))
 	}
 
-	return &[]string{
-		fmt.Sprintf("//:node_modules/%s", moduleName),
+	if types && !strings.HasPrefix(pkg, "@types/") {
+		imports = append(imports, resolveNodeModulesImportTags(pkgjson, fmt.Sprintf("@types/%s", pkg), true)...)
 	}
+
+	return
 }
 
-func resolveNonLocalImportTags(pkgjson PackageJsonPartial, pkg string) (imports *[]string) {
-	if imports = resolveBuiltinImportTags(pkg); imports != nil {
-		return
+func ResolveNonLocalImportTags(pkgjson PackageJsonPartial, pkg string, types bool) (imports []string) {
+	imports = append(imports, resolveBuiltinImportTags(pkg, types)...)
+	imports = append(imports, resolveNodeModulesImportTags(pkgjson, pkg, types)...)
+
+	set := make(map[string]bool)
+
+	for _, i := range imports {
+		set[i] = true
 	}
-	if imports = resolveNodeModulesImportTags(pkgjson, pkg); imports != nil {
-		return
+
+	imports = make([]string, 0, len(set))
+
+	for k := range set {
+		imports = append(imports, k)
 	}
 
 	return
@@ -230,10 +255,14 @@ type DepSet map[string]bool
 func (l Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
 	var im []string
 
+	if r.Kind() != "js_library" {
+		return
+	}
+
 	for dep := range imports.(DepSet) {
-		builtin := resolveNonLocalImportTags(c.Exts["javascript"].(PackageJsonPartial), dep)
+		builtin := ResolveNonLocalImportTags(c.Exts["javascript"].(PackageJsonPartial), dep, false)
 		if builtin != nil {
-			for _, tag := range *builtin {
+			for _, tag := range builtin {
 				im = append(im, tag)
 			}
 			continue
@@ -291,32 +320,6 @@ type GenerateRuleResult struct {
 	imports DepSet
 }
 
-type jsImportLister struct {
-	importList [][]byte
-}
-
-var _ js.IVisitor = &jsImportLister{}
-
-func (l *jsImportLister) Enter(n js.INode) js.IVisitor {
-	switch v := n.(type) {
-	case *js.ImportStmt:
-		l.importList = append(l.importList, bytes.Trim(v.Module, "\"'"))
-	default:
-	}
-
-	return l
-}
-
-func (l *jsImportLister) Exit(n js.INode) {
-}
-
-func listImports(mod *js.AST) [][]byte {
-	var j jsImportLister
-	js.Walk(&j, &mod.BlockStmt)
-
-	return j.importList
-}
-
 // attempt to generate a rule for a single TSConfig file.
 //
 // a nil GenerateRuleResult will be returned if this
@@ -328,19 +331,10 @@ func generateRule(fileName string, args language.GenerateArgs) (res *GenerateRul
 	if !isJsFilebyName(fileName) {
 		return
 	}
+
 	filePath := path.Join(args.Dir, fileName)
 
-	var f *os.File
-	if f, err = os.Open(filePath); err != nil {
-		return
-	}
-
-	module, err := js.Parse(parse.NewInput(f), js.Options{})
-	if err != nil {
-		return
-	}
-
-	imports := listImports(module)
+	imports, err := ts.ExtractImports(filePath)
 
 	var deps DepSet = make(DepSet)
 
