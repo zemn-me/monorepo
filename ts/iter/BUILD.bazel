@@ -3,40 +3,46 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
-tstestfiles = glob(["*_test.ts"])
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
 
 ts_project(
-    name = "iter",
-    srcs = glob(
-        include = ["*.ts"],
-        exclude = ["*_test.ts"],
-    ),
+    name = "async_ts",
+    srcs = ["async.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "dict_ts",
+    srcs = ["dict.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//ts",
-        "//ts/option",
+        "@monorepo//ts:NewType_ts",
+        "@monorepo//ts/iter:dict_ts",
+        "@monorepo//ts/option:option_ts",
     ],
 )
 
 ts_project(
-    name = "tests_lib",
-    srcs = tstestfiles,
+    name = "iter_test_ts",
+    srcs = ["iter_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":iter",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 jest_test(
-    name = "test",
-    srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
-    deps = [
-        ":iter",
-    ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    name = "iter_test_ts_test",
+    srcs = ["iter_test.js"],
+    deps = ["@monorepo//ts/iter:iter_test_ts"],
 )

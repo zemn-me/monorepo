@@ -50,3 +50,33 @@ exports_files(
     ["mdx_file.d.ts"],
     visibility = ["//:__subpackages__"],
 )
+
+ts_project(
+    name = "main_ts",
+    srcs = ["main.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@mdx-js/mdx",
+        "//:node_modules/@types/node",
+        "//:node_modules/remark-frontmatter",
+        "//:node_modules/remark-gfm",
+        "//:node_modules/remark-mdx-frontmatter",
+        "//:node_modules/remark-sectionize",
+        "//:node_modules/source-map",
+        "//:node_modules/to-vfile",
+        "//:node_modules/vfile",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/math:vec_ts",
+    ],
+)
+
+ts_project(
+    name = "mdx_file_d_ts",
+    srcs = ["mdx_file.d.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)

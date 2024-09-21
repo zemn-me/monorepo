@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
+load("//mdx:rules.bzl", "mdx_files")
 
 js_library(
     name = "abc_js",
@@ -10,4 +11,13 @@ js_library(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+mdx_files(
+    name = "mdx_files",
+    srcs = [
+        "basic.mdx",
+        "index.mdx",
+        "transition.mdx",
+    ],
 )

@@ -29,3 +29,33 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "date_ts",
+    srcs = ["date.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/zod"],
+)
+
+ts_project(
+    name = "date_test_ts",
+    srcs = ["date_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "@monorepo//ts/time:date_ts",
+    ],
+)
+
+ts_project(
+    name = "index_ts",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//ts/time:date_ts"],
+)
+
+jest_test(
+    name = "date_test_ts_test",
+    srcs = ["date_test.js"],
+    deps = ["@monorepo//ts/time:tests"],
+)

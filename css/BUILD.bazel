@@ -1,0 +1,6 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["rules.bzl"],
+)

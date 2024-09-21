@@ -17,11 +17,8 @@ ts_project(
     name = "typescript_basic_test_js",
     srcs = ["typescript_basic_test.ts"],
     preserve_jsx = False,
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@jest/globals"],
 )
 
 jest_test(
@@ -37,4 +34,10 @@ go_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "typescript_basic_test_ts_test",
+    srcs = ["typescript_basic_test.js"],
+    deps = ["@monorepo//testing:typescript_basic_test_js"],
 )

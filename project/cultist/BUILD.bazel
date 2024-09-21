@@ -6,53 +6,56 @@ package(default_visibility = ["//visibility:public"])
 ts_project(
     name = "cultist",
     srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":action",
-        ":element",
-        ":history",
-        ":recipe",
-        ":types",
-        ":verb",
-        "//:node_modules/@types/uuid",
-        "//:node_modules/immutable",
-        "//project/cultist/state",
+        "@monorepo//project/cultist:action",
+        "@monorepo//project/cultist:aspects",
+        "@monorepo//project/cultist:element",
+        "@monorepo//project/cultist:recipe",
+        "@monorepo//project/cultist:save",
+        "@monorepo//project/cultist:slots",
+        "@monorepo//project/cultist:types",
+        "@monorepo//project/cultist:verb",
+        "@monorepo//project/cultist/state",
     ],
 )
 
 ts_project(
     name = "element",
     srcs = ["element.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//project/cultist/state",
-        "//ts/iter",
+        "@monorepo//project/cultist/state",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 ts_project(
     name = "history",
     srcs = ["history.ts"],
-    deps = [":types"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/cultist:types"],
 )
 
 ts_project(
     name = "recipe",
     srcs = ["recipe.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":aspects",
-        ":types",
-        ":verb",
+        "@monorepo//project/cultist:aspects",
+        "@monorepo//project/cultist:types",
+        "@monorepo//project/cultist:verb",
     ],
 )
 
 ts_project(
     name = "save_tests",
     srcs = ["save_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":save",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//project/cultist/example",
+        "@monorepo//project/cultist:save",
+        "@monorepo//project/cultist/example:savestate_ts",
     ],
 )
 
@@ -65,13 +68,13 @@ jest_test(
 ts_project(
     name = "action_tests",
     srcs = ["action_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "element",
-        ":action",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//project/cultist/state",
+        "//:node_modules/immutable",
+        "@monorepo//project/cultist:action",
+        "@monorepo//project/cultist:element",
+        "@monorepo//project/cultist/state",
     ],
 )
 
@@ -87,49 +90,69 @@ jest_test(
 ts_project(
     name = "slots",
     srcs = ["slots.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":aspects",
-        ":types",
+        "@monorepo//project/cultist:aspects",
+        "@monorepo//project/cultist:types",
     ],
 )
 
 ts_project(
     name = "aspects",
     srcs = ["aspects.ts"],
-    deps = [":types"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@monorepo//project/cultist:types"],
 )
 
 ts_project(
     name = "verb",
     srcs = ["verb.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":slots",
-        ":types",
-        "//ts",
-        "//ts/iter",
+        "@monorepo//project/cultist:slots",
+        "@monorepo//project/cultist:types",
+        "@monorepo//ts:guard_ts",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 ts_project(
     name = "action",
     srcs = ["action.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":types",
-        "//project/cultist/state",
+        "//:node_modules/immutable",
+        "@monorepo//project/cultist:types",
+        "@monorepo//project/cultist/state",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
 ts_project(
     name = "types",
     srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
 )
 
 ts_project(
     name = "save",
     srcs = ["save.ts"],
+    visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "action_test_ts_test",
+    srcs = ["action_test.js"],
+    deps = ["@monorepo//project/cultist:action_tests"],
+)
+
+jest_test(
+    name = "save_test_ts_test",
+    srcs = ["save_test.js"],
+    deps = ["@monorepo//project/cultist:save_tests"],
 )

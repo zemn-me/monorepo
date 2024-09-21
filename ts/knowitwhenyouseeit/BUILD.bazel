@@ -11,22 +11,20 @@ ts_project(
     srcs = [
         "index.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/bcryptjs",
-        "//:node_modules/@types/node",
         "//:node_modules/bcryptjs",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
     ],
 )
 
 ts_project(
     name = "tests_js",
     srcs = ["main_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":project",
         "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
+        "@monorepo//ts/knowitwhenyouseeit:project",
     ],
 )
 
@@ -56,4 +54,10 @@ npm_pkg(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+jest_test(
+    name = "main_test_ts_test",
+    srcs = ["main_test.js"],
+    deps = ["@monorepo//ts/knowitwhenyouseeit:tests_js"],
 )

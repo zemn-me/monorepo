@@ -1,15 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-ts_project(
-    name = "ts",
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//project/zemn.me/bio",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["ensure_ids_unique_test.js"],
@@ -19,4 +10,20 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "ensure_ids_unique_test_ts",
+    srcs = ["ensure_ids_unique_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "@monorepo//project/zemn.me/bio:bio_ts",
+    ],
+)
+
+jest_test(
+    name = "ensure_ids_unique_test_ts_test",
+    srcs = ["ensure_ids_unique_test.js"],
+    deps = ["@monorepo//project/zemn.me/bio/testing:tests"],
 )

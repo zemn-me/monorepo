@@ -23,3 +23,14 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "video_tsx",
+    srcs = ["video.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//ts/react/useMediaQuery:useMediaQuery_ts",
+    ],
+)

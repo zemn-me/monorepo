@@ -1,0 +1,39 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css:rules.bzl", "css_files")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "_app_tsx",
+    srcs = ["_app.tsx"],
+    assets = ["@monorepo//ts/pulumi/zemn.me/availability/pages:css_files"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//ts/next.js:index_tsx",
+    ],
+)
+
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Link:Link_tsx",
+        "@monorepo//ts/iter:index_ts",
+    ],
+)
+
+css_files(
+    name = "css_files",
+    srcs = ["base.css"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
