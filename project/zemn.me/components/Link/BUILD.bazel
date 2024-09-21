@@ -1,18 +1,31 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
-    name = "Link",
+    name = "Link_tsx",
+    srcs = ["Link.tsx"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/next",
-        "//ts/iter",
+        "//:node_modules/react",
+        "@monorepo//ts/iter:index_ts",
     ],
 )
 
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+ts_project(
+    name = "index_tsx",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Link:Link_tsx",
+    ],
 )

@@ -1,0 +1,38 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "client_tsx",
+    srcs = ["client.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/components/Prose:prose_tsx",
+        "@monorepo//ts:result_ts",
+        "@monorepo//ts:safely_ts",
+        "@monorepo//ts/factorio:blueprint_string_ts",
+        "@monorepo//ts/factorio:blueprint_ts",
+        "@monorepo//ts/factorio/react:blueprint_tsx",
+        "@monorepo//ts/iter:index_ts",
+        "@monorepo//ts/option:option_ts",
+        "@monorepo//ts/react/ErrorDisplay:error_display_tsx",
+    ],
+)
+
+ts_project(
+    name = "page_tsx",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "@monorepo//project/zemn.me/app/experiments/factorio/blueprint/request:client_tsx",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
