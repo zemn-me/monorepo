@@ -1,5 +1,6 @@
+import { join } from 'node:path/posix';
+
 import { all, Input } from '@pulumi/pulumi';
-import { join } from 'path/posix';
 
 export const s3Uri =
 	(bucketName: Input<string>) =>
