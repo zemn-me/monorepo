@@ -35,7 +35,7 @@ use_repo(
     "distroless_base_linux_s390x",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.9.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.9.1")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependency = True)
