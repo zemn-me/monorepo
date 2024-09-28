@@ -119,3 +119,16 @@ use_repo(
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "0.36.0")
 bazel_dep(name = "aspect_rules_py", version = "0.8.0")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "com_github_nvkelso_natural_earth_vector",
+    urls = [
+        "https://github.com/nvkelso/natural-earth-vector/archive/refs/tags/v5.1.2.zip",
+    ],
+    integrity = "sha256-+PnHiL0/xcmcW8bbsl+eFU/IhhPqPGmcmsq12c88PCs=",
+    build_file_content = [
+        "exports_files(glob([\"**/*\"]))",
+    ],
+)
