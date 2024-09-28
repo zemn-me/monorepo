@@ -14,8 +14,8 @@
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
 	"recreateWhen": "always",
-	"commitBodyTable": true,
-	"commitBody": "Notes:\n{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### [`v{{{release.version}}}]({{{release.releaseNotes.url}}})\n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
+	"fetchChangeLogs": "branch",
+	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### [`v{{{release.version}}}]({{{release.releaseNotes.url}}})\n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
 	"ignorePaths": [
 		"**/monorepo/dist/**"
 	],
@@ -27,7 +27,7 @@
 	],
 	"allowedPostUpgradeCommands": [
 		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
-		"npx --yes @bazel/bazelisk run @rules_go//go -- mod tidy",
+		"npx --yes @bazel/bazelisk run @@//sh/bin:go -- mod tidy",
 		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
 		"rm -rf dist",
 		"npx --yes @bazel/bazelisk mod deps --lockfile_mode=update"
