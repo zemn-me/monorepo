@@ -9,7 +9,6 @@
 load("@aspect_rules_py//py:defs.bzl", "py_venv")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@pip//:requirements.bzl", "all_whl_requirements")
@@ -46,8 +45,9 @@ alias(
     actual = "@pnpm//:pnpm",
 )
 
-buildifier(
+alias(
     name = "buildifier",
+    actual = "@com_github_bazelbuild_buildtools//buildifier:buildifier",
 )
 
 ts_config(
