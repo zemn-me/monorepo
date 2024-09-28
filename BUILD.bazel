@@ -255,6 +255,7 @@ py_venv(
         "//project/cultist/gen/testing",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
+        "//py/ipynb:ipynb_bin",
         "//py/sectxt:sectxt_bin",
     ],
 )
