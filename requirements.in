@@ -1,6 +1,15 @@
 # to update this file, run
 # bazel run fix //:\*
-# this should probably be a diff test at some point...
+# NB: MacOS
+# if you run the above ↑ on MacOS
+# it will almost certainly break in CI
+# due to the conditional package 'appnope'
+# that is not needed on Linux, but IS needed
+# on MacOS.
+#
+# I don't have a good solution to this yet,
+# but I've wasted enough time trying to diagnose the issue
+# that this note has become justified!
 yamllint
 pip-tools
 sectxt
