@@ -6,39 +6,126 @@
 manifest:
   modules_mapping:
     3204bda914b7f2c6f497__mypyc: mypy
+    IPython: ipython
+    anyio: anyio
+    appnope: appnope
+    argon2: argon2_cffi
+    arrow: arrow
+    asttokens: asttokens
+    async_lru: async_lru
+    attr: attrs
+    attrs: attrs
+    babel: babel
+    bleach: bleach
+    bs4: beautifulsoup4
     build: build
     certifi: certifi
     cffi: cffi
     charset_normalizer: charset_normalizer
     click: click
+    comm: comm
     cryptography: cryptography
     dateutil: python_dateutil
+    debugpy: debugpy
+    decorator: decorator
+    defusedxml: defusedxml
+    executing: executing
+    fastjsonschema: fastjsonschema
+    fqdn: fqdn
+    h11: h11
+    httpcore: httpcore
+    httpx: httpx
     idna: idna
+    ipykernel: ipykernel
+    ipykernel_launcher: ipykernel
+    ipywidgets: ipywidgets
+    isoduration: isoduration
+    isympy: sympy
+    jedi: jedi
+    jinja2: jinja2
+    json5: json5
+    jsonpointer: jsonpointer
+    jsonschema: jsonschema
+    jsonschema_specifications: jsonschema_specifications
+    jupyter: jupyter_core
+    jupyter_client: jupyter_client
+    jupyter_console: jupyter_console
+    jupyter_core: jupyter_core
+    jupyter_events: jupyter_events
+    jupyter_lsp: jupyter_lsp
+    jupyter_server: jupyter_server
+    jupyter_server_terminals: jupyter_server_terminals
+    jupyterlab: jupyterlab
+    jupyterlab_pygments: jupyterlab_pygments
+    jupyterlab_server: jupyterlab_server
+    jupyterlab_widgets: jupyterlab_widgets
     langcodes: langcodes
     language_data: language_data
     marisa_trie: marisa_trie
+    markupsafe: MarkupSafe
+    matplotlib_inline: matplotlib_inline
+    mistune: mistune
+    mpmath: mpmath
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
+    nbclient: nbclient
+    nbconvert: nbconvert
+    nbformat: nbformat
+    nest_asyncio: nest_asyncio
+    notebook: notebook
+    notebook_shim: notebook_shim
+    overrides: overrides
     packaging: packaging
+    pandocfilters: pandocfilters
+    parso: parso
     pathspec: pathspec
+    pexpect: pexpect
     pgpy: PGPy
     pip: pip
     piptools: pip_tools
     pkg_resources: setuptools
+    platformdirs: platformdirs
+    prometheus_client: prometheus_client
+    prompt_toolkit: prompt_toolkit
+    psutil: psutil
+    ptyprocess: ptyprocess
+    pure_eval: pure_eval
     pyasn1: pyasn1
     pycparser: pycparser
+    pygments: pygments
     pyproject_hooks: pyproject_hooks
+    pythonjsonlogger: python_json_logger
+    referencing: referencing
     requests: requests
+    rfc3339_validator: rfc3339_validator
+    rfc3986_validator: rfc3986_validator
+    rpds: rpds_py
     ruff: ruff
     sectxt: sectxt
+    send2trash: Send2Trash
     setuptools: setuptools
     six: six
+    sniffio: sniffio
+    soupsieve: soupsieve
+    stack_data: stack_data
+    sympy: sympy
+    terminado: terminado
+    tinycss2: tinycss2
+    tornado: tornado
+    traitlets: traitlets
     typing_extensions: typing_extensions
+    uri_template: uri_template
     urllib3: urllib3
+    wcwidth: wcwidth
+    webcolors: webcolors
+    webencodings: webencodings
+    websocket: websocket_client
     wheel: wheel
+    widgetsnbextension: widgetsnbextension
     yaml: PyYAML
     yamllint: yamllint
+    zmq: pyzmq
   pip_repository:
     name: pip
-integrity: e78105f6356387c06a19b935ffeaad8c1d1b1ab2900702c3336c4d9afe3f8831
+integrity: 68b2f86d0e66f74d377e375f83d7c6efd483c120c69c592819d76390bc4ea3b9
