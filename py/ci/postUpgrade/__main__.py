@@ -30,7 +30,7 @@ def cargo_repin():
 	return bazel(["sync", "--only=cargo"])
 
 def go_mod_tidy():
-	return bazel_run(["@@/sh/bin:go", "--", "mod", "tidy"])
+	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
 
 def bazel_update_lockfile():
 	return bazel(["mod", "deps", "--lockfile_mode=update"])
