@@ -17,9 +17,9 @@ module github.com/zemn-me/monorepo
 go 1.22.2
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.38.0
+	github.com/bazelbuild/bazel-gazelle v0.39.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
-	github.com/bazelbuild/buildtools v0.0.0-20240313121412-66c605173954
+	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/itchyny/gojq v0.12.16
