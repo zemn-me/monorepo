@@ -19,6 +19,11 @@ ts_project(
     ],
 )
 
+alias(
+    name = "postupgrade",
+    actual = "@@//py/ci/postUpgrade:postUpgrade_bin",
+)
+
 jest_test(
     name = "tests",
     srcs = ["bazel_test.js"],
