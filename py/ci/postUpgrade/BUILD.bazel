@@ -1,0 +1,8 @@
+load("//py:rules.bzl", "py_binary")
+
+py_binary(
+    name = "postUpgrade_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+)

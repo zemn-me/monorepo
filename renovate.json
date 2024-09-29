@@ -26,11 +26,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
-		"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
-		"npx --yes @bazel/bazelisk run @@//sh/bin:go -- mod tidy",
-		"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
-		"rm -rf dist",
-		"npx --yes @bazel/bazelisk mod deps --lockfile_mode=update"
+		"npx --yes @bazel/bazelisk run //ci:postupgrade"
 	],
 	"packageRules": [
 		{
@@ -55,12 +51,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"CARGO_BAZEL_REPIN=1 npx --yes @bazel/bazelisk sync --only=cargo",
-					"npx --yes @bazel/bazelisk run @@//sh/bin:go -- mod tidy",
-					"npx --yes @bazel/bazelisk mod deps --lockfile_mode=update",
-					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
-					"npx --yes @bazel/bazelisk run //bzl/fix_api:fix_all //...",
-					"rm -rf dist"
+					"npx --yes @bazel/bazelisk run //ci:postupgrade"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
