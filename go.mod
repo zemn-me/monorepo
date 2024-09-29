@@ -25,7 +25,7 @@ require (
 	github.com/itchyny/gojq v0.12.16
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.15
-	golang.org/x/tools v0.23.0
+	golang.org/x/tools v0.25.0
 	honnef.co/go/tools v0.4.7
 )
 
@@ -58,9 +58,9 @@ require (
 	golang.org/x/arch v0.6.0 // indirect
 	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20221208152030-732eee02a75a // indirect
-	golang.org/x/mod v0.19.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/mod v0.21.0 // indirect
+	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
