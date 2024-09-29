@@ -4,6 +4,7 @@ sh_test(
     name = "test_tools_run",
     srcs = ["test_tools_run.sh"],
     data = [
+        "//:go.mod",
         "//sh/bin:dlv",
         "//sh/bin:go",
         "//sh/bin:goimports",
