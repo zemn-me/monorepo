@@ -253,6 +253,7 @@ py_venv(
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py/ci/postUpgrade:postUpgrade_bin",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/ipynb:ipynb_bin",
