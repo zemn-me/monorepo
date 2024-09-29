@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary")
+load("//py:rules.bzl", "py_binary", "py_library")
 
 py_binary(
     name = "ipynb_bin",
@@ -12,4 +12,14 @@ py_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+py_library(
+    name = "ipynb",
+    srcs = ["lib.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//ipykernel",
+        "@pip//pip",
+    ],
 )
