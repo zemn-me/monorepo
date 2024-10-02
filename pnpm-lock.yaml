@@ -212,8 +212,8 @@ devDependencies:
     specifier: 6.54.2
     version: 6.54.2(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
-    specifier: 2.16.0
-    version: 2.16.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 2.16.1
+    version: 2.16.1(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/pulumi':
     specifier: 3.135.0
     version: 3.135.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4960,8 +4960,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@2.16.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-mXSsddx1Jo8g2y3aClvELWnef/Kg4GLStSPaAaiuoG0JHozkMEDTngMYEkXPMy6LntNPbP9ba4p+A9+UYm53qg==}
+  /@pulumi/awsx@2.16.1(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-mQEz+2XdaqkXxDNmkfkqdiU7DAUkD3uNkBFN15q2vsnvZQCjUxZ8WxAJQmLabj/zYV1zl/X4ckf3lMy8Z3Dbcg==}
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.658.1
@@ -8214,7 +8214,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
     dev: true
 
@@ -19022,7 +19022,7 @@ packages:
     resolution: {integrity: sha512-T4rieHaC1EXcES0Kxxj4JWgaUQHDk+qwHcYOCFHfiwKz7tOVPLq7Hjq9dM1WCMhylqMEfP7hMcOIChvotiZegA==}
     engines: {node: '>=4.0.0'}
     dependencies:
-      sax: 1.2.1
+      sax: 1.4.1
       xmlbuilder: 11.0.1
     dev: true
 
