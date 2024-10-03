@@ -694,6 +694,18 @@ export const Bio = {
 			date: date(1, 'jan', 2010),
 			title: en`Parmiter’s Secondary School, Garston`,
 			description: en`Graduated Secondary School with GCSES in Biology, Chemistry, English, Geography, Electronics, Mathematics, ICT, BCS, Physics, German and English Literature.`
+		},
+		{
+			date: date(13, 'may', 2024),
+			title: en`GPT4o`,
+			url: url`https://openai.com/gpt-4o-contributions/`,
+			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
+		},
+		{
+			date: date(3, 'oct', 2024),
+			title: en`ChatGPT Canvas`,
+			url: url`https://openai.com/index/introducing-canvas/`,
+			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1'
 		}
 		// END TOOL ASSISTED SORT
 	],
