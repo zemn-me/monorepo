@@ -1,18 +1,26 @@
 "Runs after Renovate updates some dep"
 from subprocess import run as _run
-from os import getenv
+from os import environ, getenv
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
 
 wd = getenv("BUILD_WORKSPACE_DIRECTORY")
 
+
 if wd is None:
 	raise Exception("Please run from bazel.")
 
 
-def run(*args, **kwargs):
-	return _run(*args, cwd=wd, **kwargs)
+base_env = environ.copy()
+
+# drop implicit CARGO_BAZEL_REPIN -- we don't want
+# it running on every bazel coommand.
+base_env.pop("CARGO_BAZEL_REPIN", None)
+
+
+def run(env = {}, *args, **kwargs):
+	return _run(*args, env = env | base_env, cwd=wd, **kwargs)
 
 def bazel(args: list[str] = [],  **kwargs):
 	return run(
@@ -27,7 +35,9 @@ def bazel_run(args: list[str] = [], env: dict[str, str] = {}, **kwargs):
 	)
 
 def cargo_repin():
-	return bazel(["sync", "--only=cargo"])
+	return bazel(["sync", "--only=cargo"], env={
+		"CARGO_BAZEL_REPIN": "true"
+	})
 
 def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
