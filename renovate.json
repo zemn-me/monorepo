@@ -26,7 +26,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
-		"npx --yes @bazel/bazelisk run //ci:postupgrade"
+		"CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 	],
 	"packageRules": [
 		{
@@ -51,7 +51,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"npx --yes @bazel/bazelisk run //ci:postupgrade"
+					"CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
