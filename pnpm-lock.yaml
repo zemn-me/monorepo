@@ -164,8 +164,8 @@ dependencies:
 
 devDependencies:
   '@actions/core':
-    specifier: 1.11.0
-    version: 1.11.0
+    specifier: 1.11.1
+    version: 1.11.1
   '@actions/github':
     specifier: 6.0.0
     version: 6.0.0
@@ -409,8 +409,8 @@ devDependencies:
 
 packages:
 
-  /@actions/core@1.11.0:
-    resolution: {integrity: sha512-I21jQUzEjbZolw3jFZ/0iHGCb+rePCww9MaA0SbVFae4FpBTQWP1GIvr/m5Y6GVaxrDz7p3RhBtpBzwkA3rPSA==}
+  /@actions/core@1.11.1:
+    resolution: {integrity: sha512-hXJCSrkwfA46Vd9Z3q4cpEpHB1rL5NG04+/rbqW9d3+CSvtB1tYe8UTpAlixa1vj0m/ULglfEK2UKxMGxCxv5A==}
     dependencies:
       '@actions/exec': 1.1.1
       '@actions/http-client': 2.2.3
