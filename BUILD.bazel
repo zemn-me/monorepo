@@ -261,3 +261,5 @@ py_venv(
         "//py/sectxt:sectxt_bin",
     ],
 )
+
+# gazelle:exclude third_party
