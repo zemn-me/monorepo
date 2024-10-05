@@ -14,6 +14,57 @@
 import * as cartesian from "#root/ts/math/cartesian.js";
 import * as matrix from "#root/ts/math/matrix.js";
 
+
+
+/**
+ * Generates the vertices and edges of a cube for wireframe rendering.
+ */
+export function cube(
+  cx: number,
+  cy: number,
+  cz: number,
+  s: number
+): {
+  vertices: cartesian.Point3D[];
+  edges: [number, number][];
+} {
+  const half = s / 2;
+
+  // Define the 8 unique corner points of the cube
+  const vertices: cartesian.Point3D[] = [
+    [[cx - half], [cy - half], [cz - half]], // 0
+    [[cx + half], [cy - half], [cz - half]], // 1
+    [[cx + half], [cy + half], [cz - half]], // 2
+    [[cx - half], [cy + half], [cz - half]], // 3
+    [[cx - half], [cy - half], [cz + half]], // 4
+    [[cx + half], [cy - half], [cz + half]], // 5
+    [[cx + half], [cy + half], [cz + half]], // 6
+    [[cx - half], [cy + half], [cz + half]], // 7
+  ];
+
+  // Define the 12 edges of the cube
+  const edges: [number, number][] = [
+    // Bottom face edges
+    [0, 1],
+[1, 2],
+[2, 3],
+[3, 0],
+    // Top face edges
+    [4, 5],
+[5, 6],
+[6, 7],
+[7, 4],
+    // Side edges
+    [0, 4],
+[1, 5],
+[2, 6],
+[3, 7],
+  ];
+
+  return { vertices, edges };
+}
+
+
 /**
  * Generates a polyline for an n-gon.
  */

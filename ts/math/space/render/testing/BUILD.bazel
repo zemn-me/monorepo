@@ -1,0 +1,32 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "testing",
+    srcs = [
+        "render_test.ts",
+    ],
+    deps = [
+        "//:node_modules/@types/jest",
+        "//ts/math/canvas/braille",
+        "//ts/math/canvas/geometry",
+        "//ts/math/space/render",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = [
+        "render_test.js",
+    ],
+    deps = [
+        ":testing",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
