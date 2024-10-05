@@ -47,7 +47,7 @@ def mdx_to_js(name = None, deps = [], assets = [], srcs = [], **kwargs):
         deps = [
             "//:node_modules/react",
             "//:node_modules/@types/react",
-        ],
+        ] + deps,
         srcs = [name + "_sources"] + assets,
         **kwargs
     )

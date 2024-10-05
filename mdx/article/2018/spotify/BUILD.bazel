@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//mdx:rules.bzl", "mdx_files")
+
+mdx_files(
+    name = "spotify",
+    srcs = glob(["**/*.mdx"]),
+    assets = glob([
+        "**/*.jpg",
+        "**/*.png",
+    ]),
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/next",
+        "//ts/react/Tweet",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
