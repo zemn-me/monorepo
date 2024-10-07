@@ -22,7 +22,9 @@ require (
 	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
+	github.com/gorilla/websocket v1.5.0
 	github.com/itchyny/gojq v0.12.16
+	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.16
 	golang.org/x/tools v0.26.0
@@ -39,7 +41,6 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/google/go-dap v0.11.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/itchyny/timefmt-go v0.1.6 // indirect
