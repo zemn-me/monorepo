@@ -1,0 +1,19 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "realtime",
+    srcs = ["realtime.go"],
+    importpath = "github.com/zemn-me/monorepo/go/openai/realtime",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//go/openai",
+        "@com_github_gorilla_websocket//:websocket",
+        "@com_github_santhosh_tekuri_jsonschema_v5//:jsonschema",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
