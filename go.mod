@@ -24,6 +24,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/websocket v1.5.0
 	github.com/itchyny/gojq v0.12.16
+	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.16
 	golang.org/x/tools v0.26.0
