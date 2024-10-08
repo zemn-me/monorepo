@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "openai",
+    srcs = ["auth.go"],
+    importpath = "github.com/zemn-me/monorepo/go/openai",
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

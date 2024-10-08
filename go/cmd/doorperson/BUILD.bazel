@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "doorperson_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/cmd/doorperson",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_gorilla_websocket//:websocket"],
+)
+
+go_binary(
+    name = "doorperson",
+    embed = [":doorperson_lib"],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

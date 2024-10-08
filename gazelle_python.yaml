@@ -7,6 +7,7 @@ manifest:
   modules_mapping:
     3204bda914b7f2c6f497__mypyc: mypy
     IPython: ipython
+    annotated_types: annotated_types
     anyio: anyio
     argon2: argon2_cffi
     arrow: arrow
@@ -28,6 +29,7 @@ manifest:
     debugpy: debugpy
     decorator: decorator
     defusedxml: defusedxml
+    distro: distro
     executing: executing
     fastjsonschema: fastjsonschema
     fqdn: fqdn
@@ -42,6 +44,7 @@ manifest:
     isympy: sympy
     jedi: jedi
     jinja2: jinja2
+    jiter: jiter
     json5: json5
     jsonpointer: jsonpointer
     jsonschema: jsonschema
@@ -74,6 +77,7 @@ manifest:
     nest_asyncio: nest_asyncio
     notebook: notebook
     notebook_shim: notebook_shim
+    openai: openai
     overrides: overrides
     packaging: packaging
     pandocfilters: pandocfilters
@@ -92,6 +96,9 @@ manifest:
     pure_eval: pure_eval
     pyasn1: pyasn1
     pycparser: pycparser
+    pydantic: pydantic
+    pydantic_core: pydantic_core
+    pydub: pydub
     pygments: pygments
     pyproject_hooks: pyproject_hooks
     pythonjsonlogger: python_json_logger
@@ -112,6 +119,7 @@ manifest:
     terminado: terminado
     tinycss2: tinycss2
     tornado: tornado
+    tqdm: tqdm
     traitlets: traitlets
     typing_extensions: typing_extensions
     uri_template: uri_template
@@ -127,4 +135,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: de74cb8d88e7a1426926ab078f9c4470c1aba063a4007a6d16b85da7b452a5f8
+integrity: c0536c961f858295f5ef0694be1d9c90041cdfa1bb2e84ee6162c8f08830d657
