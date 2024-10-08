@@ -45,9 +45,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "0594b163cf7816c52a47a68bed731566eb898d3e45678edb1ef6b13b348e0d81",
+        sha256 = "d7dd188189c416d1a5c7c560eb5b1c927165d1fa092c1abc22a88e35dfedfe7e",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.135.1/pulumi-v3.135.1-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.136.0/pulumi-v3.136.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -57,9 +57,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.135.1/pulumi-v3.135.1-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.136.0/pulumi-v3.136.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "5baf926b61fcffabe6d10aa9b7b3f1e4d16bc6ff0e407002247c94ef35733d2f",
+        sha256 = "7c1f757635d99233c9c11362119b909896661a7b077db5da8081f61777e49308",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -78,9 +78,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.135.1/pulumi-v3.135.1-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.136.0/pulumi-v3.136.0-linux-arm64.tar.gz",
         ],
-        sha256 = "5bb7e67bc6103fee2279bb29b7a091fa32011109f9e726d34e9812810cd3d2fe",
+        sha256 = "424ba5736028d6b4eb4dc1ed72d0ffac164f5d876dbd25206cf286eac62c5f24",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -126,8 +126,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "7931e7b544107b62029bf2fc72e79f9d77523ad650d442d93c3fcce9ad5ec1eb",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.52.0/rules_rust-v0.52.0.tar.gz"],
+        sha256 = "671ddb3fe5ebcf9dd34d051eca7352fbaf33fa53bf61eed0b75a4c34829e5480",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.52.2/rules_rust-v0.52.2.tar.gz"],
     )
 
     # Got no idea why but MS doesn't publish versions of this...
