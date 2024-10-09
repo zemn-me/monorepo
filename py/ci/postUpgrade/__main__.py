@@ -24,14 +24,13 @@ def run(*args, env = {}, **kwargs):
 
 def bazel(args: list[str] = [],  **kwargs):
 	return run(
-		["npx", "--yes", "@bazel/bazelisk",
-   		"--tool_tag=postupgrade"] + args,
+		["npx", "--yes", "@bazel/bazelisk"] + args,
 		check=True, **kwargs,
 	)
 
 def bazel_run(args: list[str] = [], env: dict[str, str] = {}, **kwargs):
 	return bazel(
-		["run"] + args,
+		["run", "--tool_tag=postupgrade"] + args,
 		**kwargs,
 	)
 
