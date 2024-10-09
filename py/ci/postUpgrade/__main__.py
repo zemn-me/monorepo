@@ -19,7 +19,7 @@ base_env = environ.copy()
 base_env.pop("CARGO_BAZEL_REPIN", None)
 
 
-def run(env = {}, *args, **kwargs):
+def run(*args, env = {}, **kwargs):
 	return _run(*args, env = env | base_env, cwd=wd, **kwargs)
 
 def bazel(args: list[str] = [],  **kwargs):
