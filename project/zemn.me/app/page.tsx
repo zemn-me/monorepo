@@ -213,4 +213,13 @@ export const metadata: Metadata = {
 		title,
 		description,
 	},
+
+	alternates: {
+		canonical: "https://zemn.me",
+		types: {
+			'application/rss+xml': [
+				{ url: 'bio.rss', title: 'Bio Timeline'}
+			 ]
+		}
+	}
 };
