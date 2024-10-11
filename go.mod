@@ -24,7 +24,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/itchyny/gojq v0.12.16
 	github.com/sergi/go-diff v1.3.1
-	github.com/tdewolff/parse/v2 v2.7.16
+	github.com/tdewolff/parse/v2 v2.7.18
 	golang.org/x/tools v0.26.0
 	honnef.co/go/tools v0.5.1
 )
