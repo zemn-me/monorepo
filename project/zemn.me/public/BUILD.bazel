@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//js:rules.bzl", "js_library")
@@ -22,6 +23,7 @@ transcode_web(
 js_library(
     name = "files",
     srcs = [
+        "bio.rss",
         "wallpaper.jpg",
         "//project/zemn.me/public/poc",
     ],
@@ -58,4 +60,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+copy_file(
+    name = "copy_over_rss_feed",
+    src = "//project/zemn.me/bio:bio.rss",
+    out = "bio.rss",
 )
