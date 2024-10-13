@@ -13,8 +13,9 @@
 	"allowScripts": true,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
-	"recreateWhen": "always",
-	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} (`{{{release.releaseNotes.url}}}`)\n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
+	"recreateWhen": "always".
+	"fetchChangeNotes": "branch",
+	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} \n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
 	"ignorePaths": [
 		"**/monorepo/dist/**"
 	],
