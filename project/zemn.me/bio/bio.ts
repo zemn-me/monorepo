@@ -700,12 +700,14 @@ export const Bio = {
 			title: en`GPT4o`,
 			url: url`https://openai.com/gpt-4o-contributions/`,
 			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
+   description: en`Product security for OpenAI‘s first multimodal model.`
 		},
 		{
 			date: date(3, 'oct', 2024),
 			title: en`ChatGPT Canvas`,
 			url: url`https://openai.com/index/introducing-canvas/`,
-			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1'
+			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
+   description: en`Security for AI pairing system for text.`
 		}
 		// END TOOL ASSISTED SORT
 	],
