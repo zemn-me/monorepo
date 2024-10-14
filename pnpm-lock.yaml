@@ -368,8 +368,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.120.1
-    version: 38.120.1(@aws-sdk/client-sso-oidc@3.670.0)(typanion@3.14.0)
+    specifier: 38.121.0
+    version: 38.121.0(@aws-sdk/client-sso-oidc@3.670.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -469,7 +469,7 @@ packages:
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.654.0
+      '@aws-sdk/types': 3.667.0
       tslib: 2.7.0
     dev: true
 
@@ -477,7 +477,7 @@ packages:
     resolution: {integrity: sha512-+iWb8qaHLYKrNvGRbiYRHSdKRWhto5XlZUEBwDjYNf+ly5SVYG6zEoYIdxvf5R3zyeP16w4PLBn3rH1xc74Rag==}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.654.0
+      '@aws-sdk/types': 3.667.0
       tslib: 2.7.0
     dev: true
 
@@ -486,7 +486,7 @@ packages:
     dependencies:
       '@aws-crypto/supports-web-crypto': 5.2.0
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.654.0
+      '@aws-sdk/types': 3.667.0
       '@aws-sdk/util-locate-window': 3.568.0
       '@smithy/util-utf8': 2.3.0
       tslib: 2.7.0
@@ -16772,8 +16772,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.120.1(@aws-sdk/client-sso-oidc@3.670.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-0uslx8f56GK/DQN7Cwl0PkAGpoavNGNfg85vkJeAx+uS2QsYn4/sx4SZJYyUny3bcwCKGDtdu57j9gSziB/YAQ==}
+  /renovate@38.121.0(@aws-sdk/client-sso-oidc@3.670.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-o9pSutJuB3bN0i4P0tJvQEU42QSD34Q4ZB9u+h1NEjBDjpWE6UZY16FLcaGJfL8ou+GmA3BXk5uiTcWnyFxVrw==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
