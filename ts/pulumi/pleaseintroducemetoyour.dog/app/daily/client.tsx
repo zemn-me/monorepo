@@ -136,9 +136,12 @@ export function DogsOfTheDay() {
 					{doggs.data.data.children.map((post, i) => (
 						<Post key={i} {...post.data} />
 					))}{' '}
-					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
 				</>
 			) : null}
+
+   {!doggs.isLoading ? null:
+					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
+   }
 
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>
