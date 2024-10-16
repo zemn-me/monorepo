@@ -139,7 +139,7 @@ export function DogsOfTheDay() {
 				</>
 			) : null}
 
-   {!doggs.isLoading ? null:
+   {doggs.isLoading ? null:
 					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
    }
 
