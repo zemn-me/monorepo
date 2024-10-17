@@ -206,8 +206,8 @@ devDependencies:
     specifier: 0.2.2
     version: 0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@18.3.1)
   '@microsoft/api-documenter':
-    specifier: 7.25.18
-    version: 7.25.18(@types/node@20.16.12)
+    specifier: 7.25.19
+    version: 7.25.19(@types/node@20.16.12)
   '@pulumi/aws':
     specifier: 6.56.0
     version: 6.56.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4379,15 +4379,15 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-documenter@7.25.18(@types/node@20.16.12):
-    resolution: {integrity: sha512-6/e5SIEr3nBvLojnq1PSjyVaEXMT4J9kPoY+4LTQRcYVkXVawjck+cHQ1iaokGVAKjt4LkmMmJD4m9rBydQuQA==}
+  /@microsoft/api-documenter@7.25.19(@types/node@20.16.12):
+    resolution: {integrity: sha512-2JTqn0Gowjy3l5pO8spSq/dj4D2Aq0ZnfZSM+zYIpT0Kd1LNpS08Q9jCEC+E+/TLkFminsNuwaz7Qq16LLf/1Q==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.29.8(@types/node@20.16.12)
       '@microsoft/tsdoc': 0.15.0
       '@rushstack/node-core-library': 5.9.0(@types/node@20.16.12)
       '@rushstack/terminal': 0.14.2(@types/node@20.16.12)
-      '@rushstack/ts-command-line': 4.22.8(@types/node@20.16.12)
+      '@rushstack/ts-command-line': 4.23.0(@types/node@20.16.12)
       js-yaml: 3.13.1
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
@@ -6153,8 +6153,8 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@4.22.8(@types/node@20.16.12):
-    resolution: {integrity: sha512-XbFjOoV7qZHJnSuFUHv0pKaFA4ixyCuki+xMjsMfDwfvQjs5MYG0IK5COal3tRnG7KCDe2l/G+9LrzYE/RJhgg==}
+  /@rushstack/ts-command-line@4.23.0(@types/node@20.16.12):
+    resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
     dependencies:
       '@rushstack/terminal': 0.14.2(@types/node@20.16.12)
       '@types/argparse': 1.0.38
