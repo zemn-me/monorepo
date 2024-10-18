@@ -9,7 +9,7 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.39.1
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
-	github.com/go-delve/delve v1.22.1
+	github.com/go-delve/delve v1.23.1
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/websocket v1.5.3
 	github.com/itchyny/gojq v0.12.16
@@ -37,7 +37,7 @@ require (
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
-	github.com/google/go-dap v0.11.0 // indirect
+	github.com/google/go-dap v0.12.0 // indirect
 	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
