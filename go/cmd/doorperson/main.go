@@ -280,6 +280,36 @@ func receiveFromTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *
 	}
 }
 
+type RealtimeUnknownServerEventResponse struct {
+	Type string
+}
+
+type RealtimeServerEventResponse struct {
+	value any
+}
+
+func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
+	var unknown RealtimeUnknownServerEventResponse
+	if err = json.Unmarshal(b, &unknown); err != nil {
+		return
+	}
+
+	switch unknown.Type {
+	case "session.updated":
+		var v *openai.RealtimeServerEventSessionUpdated
+		err = json.Unmarshal(b, &v)
+		r.value = v
+	case "response.audio.delta":
+		var v *openai.RealtimeServerEventResponseAudioDelta
+		err = json.Unmarshal(b, &v)
+		r.value = v
+	default:
+		r.value = &unknown
+	}
+
+	return
+}
+
 // sendToTwilio receives events from the OpenAI Realtime API and sends audio back to Twilio.
 func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
 	for {
@@ -293,27 +323,27 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				log.Println("Error reading from OpenAI WebSocket:", err)
 				return
 			}
-			var response map[string]interface{}
+			var response RealtimeServerEventResponse
 			err = json.Unmarshal(messageBytes, &response)
 			if err != nil {
 				log.Println("Error unmarshaling message from OpenAI:", err)
 				continue
 			}
-			responseType, _ := response["type"].(string)
-			switch responseType {
-			case "session.updated":
+			switch v := response.value.(type) {
+			case *openai.RealtimeServerEventSessionUpdated:
 				log.Println("Session updated successfully:", response)
-			case "response.audio.delta":
-				delta, ok := response["delta"].(string)
-				if !ok || delta == "" {
+			case *openai.RealtimeServerEventResponseAudioDelta:
+				if v.Delta == "" {
 					continue
 				}
+
 				// Process audio data
-				decodedData, err := base64.StdEncoding.DecodeString(delta)
+				decodedData, err := base64.StdEncoding.DecodeString(v.Delta)
 				if err != nil {
 					log.Println("Error decoding delta audio data:", err)
 					continue
 				}
+
 				encodedData := base64.StdEncoding.EncodeToString(decodedData)
 				audioDelta := map[string]interface{}{
 					"event":     "media",
@@ -328,8 +358,10 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 					log.Println("Error sending to Twilio WebSocket:", err)
 					return
 				}
+			case *RealtimeUnknownServerEventResponse:
+				log.Println("Unhandled event", v.Type)
 			default:
-				log.Printf("Received event: %s %v", responseType, response)
+				panic(fmt.Sprintf("Unhandled type: %+T", v))
 			}
 		}
 	}
