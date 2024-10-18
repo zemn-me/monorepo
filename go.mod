@@ -11,7 +11,7 @@ require (
 	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
-	github.com/gorilla/websocket v1.5.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/itchyny/gojq v0.12.16
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
