@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/refs/heads/main/configuration-schema.json
+package: openai
+generate:
+  models: true
+output-options:
+  skip-prune: true

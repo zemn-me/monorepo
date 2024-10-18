@@ -5,12 +5,15 @@ load("//go:rules.bzl", "go_library")
 
 genrule(
     name = "gen_api",
-    srcs = ["@com_github_openai_openai_openapi//:openapi.yaml"],
-    outs = ["openai_api.go"],
+    srcs = [
+        "@com_github_openai_openai_openapi//:openapi.yaml",
+        "codegen.yaml",
+    ],
+    outs = ["api.go"],
     cmd = """
-$(execpath //bin/host/oapi-codegen) -generate types \\
-	-o $(location openai_api.go) \\
-	-package openai \\
+$(execpath //bin/host/oapi-codegen) \\
+	-config $(location codegen.yaml) \\
+	-o $(location api.go) \\
 	 $(location @com_github_openai_openai_openapi//:openapi.yaml)
 	""",
     tools = ["//bin/host/oapi-codegen"],
@@ -19,8 +22,8 @@ $(execpath //bin/host/oapi-codegen) -generate types \\
 go_library(
     name = "openai",
     srcs = [
+        "api.go",
         "imports.go",
-        "openai_api.go",
     ],
     importpath = "github.com/zemn-me/monorepo/go/openai",
     visibility = ["//visibility:public"],
