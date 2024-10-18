@@ -303,6 +303,27 @@ func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
 		var v *openai.RealtimeServerEventResponseAudioDelta
 		err = json.Unmarshal(b, &v)
 		r.value = v
+	case "response.done":
+		var v *openai.RealtimeServerEventResponseDone
+		err = json.Unmarshal(b, &v)
+		r.value = v
+	case "response.output_item.done":
+		var v *openai.RealtimeServerEventResponseOutputItemDone
+		err = json.Unmarshal(b, &v)
+		r.value = v
+		if err != nil {
+			return
+		}
+
+		if v.Item.Type != nil && *v.Item.Type == "function_call" {
+			var v2 ToolCall
+			err = json.Unmarshal(b, &v2)
+			r.value = v2
+		}
+	case "response.function_call_arguments.done":
+		var v *openai.RealtimeServerEventResponseFunctionCallArgumentsDone
+		err = json.Unmarshal(b, &v)
+		r.value = v
 	default:
 		r.value = &unknown
 	}
@@ -310,13 +331,27 @@ func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
+// pretend response type because FunctionCallArgumentsDone doesn't
+// have a correct schema type yet.
+type ToolCall struct {
+	Item struct {
+		Name      string
+		Arguments string
+	}
+}
+
 // sendToTwilio receives events from the OpenAI Realtime API and sends audio back to Twilio.
 func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
+	ctx, cancel := context.WithCancelCause(ctx)
 	for {
+		// cancellation for this call.
 		select {
 		case <-ctx.Done():
-			log.Println("sendToTwilio context canceled")
-			return
+			err := context.Cause(ctx)
+			if errors.Is(err, io.EOF) {
+				return
+			}
+			panic(err)
 		default:
 			_, messageBytes, err := openaiConn.ReadMessage()
 			if err != nil {
@@ -358,10 +393,19 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 					log.Println("Error sending to Twilio WebSocket:", err)
 					return
 				}
+			case ToolCall:
+				// model called a function
+				fmt.Printf("%+v", v)
+				if v.Item.Name == "HangUp" {
+					cancel(fmt.Errorf("Model hung up the call: %v", io.EOF))
+				}
+			case *openai.RealtimeServerEventResponseFunctionCallArgumentsDone:
+			case *openai.RealtimeServerEventResponseDone:
+				// cancel(fmt.Errorf("User hung up: %v", io.EOF))
 			case *RealtimeUnknownServerEventResponse:
 				log.Println("Unhandled event", v.Type)
 			default:
-				panic(fmt.Sprintf("Unhandled type: %+T", v))
+				fmt.Printf("Unhandled type: %+T\n", v)
 			}
 		}
 	}
@@ -422,6 +466,18 @@ func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
 			Instructions:      strPtr("Hi"),
 			Modalities:        &[]string{"text", "audio"},
 			Temperature:       &temperature,
+			Tools: &[]struct {
+				Description *string                 "json:\"description,omitempty\""
+				Name        *string                 "json:\"name,omitempty\""
+				Parameters  *map[string]interface{} "json:\"parameters,omitempty\""
+				Type        *string                 "json:\"type,omitempty\""
+			}{
+				{
+					Description: strPtr("Used to hang up the call."),
+					Name:        strPtr("HangUp"),
+					Type:        strPtr("function"),
+				},
+			},
 		},
 	}
 
