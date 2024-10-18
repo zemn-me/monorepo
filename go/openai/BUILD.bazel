@@ -1,0 +1,36 @@
+"Generated defs for the openai apis."
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+genrule(
+    name = "gen_api",
+    srcs = ["@com_github_openai_openai_openapi//:openapi.yaml"],
+    outs = ["openai_api.go"],
+    cmd = """
+$(execpath //bin/host/oapi-codegen) -generate types \\
+	-o $(location openai_api.go) \\
+	-package openai \\
+	 $(location @com_github_openai_openai_openapi//:openapi.yaml)
+	""",
+    tools = ["//bin/host/oapi-codegen"],
+)
+
+go_library(
+    name = "openai",
+    srcs = [
+        "imports.go",
+        "openai_api.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/openai",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//types",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
