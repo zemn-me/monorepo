@@ -18,13 +18,13 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/twilio/twilio-go/twiml"
+
+	"github.com/zemn-me/monorepo/go/openai"
 )
 
 var (
-	openaiAPIKey  string
-	systemMessage = `Hi`
-	voice         = "alloy"
-	upgrader      = websocket.Upgrader{
+	openaiAPIKey string
+	upgrader     = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin:     func(r *http.Request) bool { return true },
@@ -280,6 +280,36 @@ func receiveFromTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *
 	}
 }
 
+type RealtimeUnknownServerEventResponse struct {
+	Type string
+}
+
+type RealtimeServerEventResponse struct {
+	value any
+}
+
+func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
+	var unknown RealtimeUnknownServerEventResponse
+	if err = json.Unmarshal(b, &unknown); err != nil {
+		return
+	}
+
+	switch unknown.Type {
+	case "session.updated":
+		var v *openai.RealtimeServerEventSessionUpdated
+		err = json.Unmarshal(b, &v)
+		r.value = v
+	case "response.audio.delta":
+		var v *openai.RealtimeServerEventResponseAudioDelta
+		err = json.Unmarshal(b, &v)
+		r.value = v
+	default:
+		r.value = &unknown
+	}
+
+	return
+}
+
 // sendToTwilio receives events from the OpenAI Realtime API and sends audio back to Twilio.
 func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
 	for {
@@ -293,27 +323,27 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				log.Println("Error reading from OpenAI WebSocket:", err)
 				return
 			}
-			var response map[string]interface{}
+			var response RealtimeServerEventResponse
 			err = json.Unmarshal(messageBytes, &response)
 			if err != nil {
 				log.Println("Error unmarshaling message from OpenAI:", err)
 				continue
 			}
-			responseType, _ := response["type"].(string)
-			switch responseType {
-			case "session.updated":
+			switch v := response.value.(type) {
+			case *openai.RealtimeServerEventSessionUpdated:
 				log.Println("Session updated successfully:", response)
-			case "response.audio.delta":
-				delta, ok := response["delta"].(string)
-				if !ok || delta == "" {
+			case *openai.RealtimeServerEventResponseAudioDelta:
+				if v.Delta == "" {
 					continue
 				}
+
 				// Process audio data
-				decodedData, err := base64.StdEncoding.DecodeString(delta)
+				decodedData, err := base64.StdEncoding.DecodeString(v.Delta)
 				if err != nil {
 					log.Println("Error decoding delta audio data:", err)
 					continue
 				}
+
 				encodedData := base64.StdEncoding.EncodeToString(decodedData)
 				audioDelta := map[string]interface{}{
 					"event":     "media",
@@ -328,33 +358,78 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 					log.Println("Error sending to Twilio WebSocket:", err)
 					return
 				}
+			case *RealtimeUnknownServerEventResponse:
+				log.Println("Unhandled event", v.Type)
 			default:
-				log.Printf("Received event: %s %v", responseType, response)
+				panic(fmt.Sprintf("Unhandled type: %+T", v))
 			}
 		}
 	}
 }
 
+type Session struct{}
+
+type SessionUpdate struct {
+	// must be session.update
+	Type string
+}
+
+func strPtr(s string) *string {
+	return &s
+}
+
 // sendSessionUpdate sends a session update to the OpenAI WebSocket.
 func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
-	sessionUpdate := map[string]interface{}{
-		"type": "session.update",
-		"session": map[string]interface{}{
-			"turn_detection": map[string]interface{}{
-				"type": "server_vad",
+	var temperature float32 = 0.8
+	s := openai.RealtimeClientEventSessionUpdate{
+		Type: "session.update",
+		Session: struct {
+			InputAudioFormat        *string "json:\"input_audio_format,omitempty\""
+			InputAudioTranscription *struct {
+				Model *string "json:\"model,omitempty\""
+			} "json:\"input_audio_transcription,omitempty\""
+			Instructions      *string                                                          "json:\"instructions,omitempty\""
+			MaxOutputTokens   *openai.RealtimeClientEventSessionUpdate_Session_MaxOutputTokens "json:\"max_output_tokens,omitempty\""
+			Modalities        *[]string                                                        "json:\"modalities,omitempty\""
+			OutputAudioFormat *string                                                          "json:\"output_audio_format,omitempty\""
+			Temperature       *float32                                                         "json:\"temperature,omitempty\""
+			ToolChoice        *string                                                          "json:\"tool_choice,omitempty\""
+			Tools             *[]struct {
+				Description *string                 "json:\"description,omitempty\""
+				Name        *string                 "json:\"name,omitempty\""
+				Parameters  *map[string]interface{} "json:\"parameters,omitempty\""
+				Type        *string                 "json:\"type,omitempty\""
+			} "json:\"tools,omitempty\""
+			TurnDetection *struct {
+				PrefixPaddingMs   *int     "json:\"prefix_padding_ms,omitempty\""
+				SilenceDurationMs *int     "json:\"silence_duration_ms,omitempty\""
+				Threshold         *float32 "json:\"threshold,omitempty\""
+				Type              *string  "json:\"type,omitempty\""
+			} "json:\"turn_detection,omitempty\""
+			Voice *string "json:\"voice,omitempty\""
+		}{
+			TurnDetection: &struct {
+				PrefixPaddingMs   *int     "json:\"prefix_padding_ms,omitempty\""
+				SilenceDurationMs *int     "json:\"silence_duration_ms,omitempty\""
+				Threshold         *float32 "json:\"threshold,omitempty\""
+				Type              *string  "json:\"type,omitempty\""
+			}{
+				Type: strPtr("server_vad"),
 			},
-			"input_audio_format":  "g711_ulaw",
-			"output_audio_format": "g711_ulaw",
-			"voice":               voice,
-			"instructions":        systemMessage,
-			"modalities":          []string{"text", "audio"},
-			"temperature":         0.8,
+			InputAudioFormat:  strPtr("g711_ulaw"),
+			OutputAudioFormat: strPtr("g711_ulaw"),
+			Voice:             strPtr(string(openai.CreateSpeechRequestVoiceAlloy)),
+			Instructions:      strPtr("Hi"),
+			Modalities:        &[]string{"text", "audio"},
+			Temperature:       &temperature,
 		},
 	}
-	sessionUpdateBytes, err := json.Marshal(sessionUpdate)
+
+	sessionUpdateBytes, err := json.Marshal(s)
 	if err != nil {
 		return err
 	}
+	fmt.Println(string(sessionUpdateBytes))
 	log.Println("Sending session update:", string(sessionUpdateBytes))
 	err = openaiConn.WriteMessage(websocket.TextMessage, sessionUpdateBytes)
 	if err != nil {
