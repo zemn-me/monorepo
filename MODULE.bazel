@@ -113,6 +113,8 @@ use_repo(
     "com_github_golang_protobuf",
     "com_github_gorilla_websocket",
     "com_github_itchyny_gojq",
+    "com_github_oapi_codegen_oapi_codegen_v2",
+    "com_github_oapi_codegen_runtime",
     "com_github_sergi_go_diff",
     "com_github_tdewolff_parse_v2",
     "com_github_twilio_twilio_go",
@@ -121,3 +123,13 @@ use_repo(
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "0.36.0")
 bazel_dep(name = "aspect_rules_py", version = "0.9.1")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "com_github_openai_openai_openapi",
+    build_file_content = """exports_files(glob(["**/*"]))""",
+    integrity = "sha256-P0PkXK8DEh56Z+S7dWMwxIpVxqmuDJTBuni5ZN/cSok=",
+    strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
+    url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
+)
