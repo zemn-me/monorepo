@@ -7,6 +7,7 @@ go_library(
     importpath = "github.com/zemn-me/monorepo/go/cmd/doorperson",
     visibility = ["//visibility:private"],
     deps = [
+        "//go/openai",
         "@com_github_gorilla_websocket//:websocket",
         "@com_github_twilio_twilio_go//twiml",
     ],
