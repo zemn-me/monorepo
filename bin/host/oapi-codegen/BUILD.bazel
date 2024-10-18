@@ -1,0 +1,12 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "oapi-codegen",
+    actual = "@com_github_oapi_codegen_oapi_codegen_v2//cmd/oapi-codegen:oapi-codegen",
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
