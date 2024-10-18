@@ -24,12 +24,7 @@ var (
 	openaiAPIKey  string
 	systemMessage = `Hi`
 	voice         = "alloy"
-	logEventTypes = []string{
-		"response.content.done", "rate_limits.updated", "response.done",
-		"input_audio_buffer.committed", "input_audio_buffer.speech_stopped",
-		"input_audio_buffer.speech_started", "session.created",
-	}
-	upgrader = websocket.Upgrader{
+	upgrader      = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin:     func(r *http.Request) bool { return true },
@@ -182,17 +177,14 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 	defer wsConn.Close()
 	log.Println("Client connected")
 
-	// Connect to OpenAI's WebSocket API
-	openaiWsURL := "wss://api.openai.com/v1/realtime"
-	u, err := url.Parse(openaiWsURL)
-	if err != nil {
-		err = fmt.Errorf("Error parsing OpenAI WebSocket URL: %v", err)
-		return
+	url := &url.URL{
+		Scheme: "wss",
+		Host:   "api.openai.com",
+		Path:   "v1/realtime",
+		RawQuery: url.Values{
+			"model": []string{"gpt-4o-realtime-preview-2024-10-01"},
+		}.Encode(),
 	}
-
-	params := url.Values{}
-	params.Add("model", "gpt-4o-realtime-preview-2024-10-01")
-	u.RawQuery = params.Encode()
 
 	headers := http.Header{
 		"Authorization": []string{fmt.Sprintf("Bearer %s", openaiAPIKey)},
@@ -200,7 +192,7 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	dialer := websocket.Dialer{}
-	openaiConn, _, err := dialer.DialContext(ctx, u.String(), headers)
+	openaiConn, _, err := dialer.DialContext(ctx, url.String(), headers)
 	if err != nil {
 		err = fmt.Errorf("Error connecting to OpenAI WebSocket: %v", err)
 		return
@@ -308,9 +300,10 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				continue
 			}
 			responseType, _ := response["type"].(string)
-			if responseType == "session.updated" {
+			switch responseType {
+			case "session.updated":
 				log.Println("Session updated successfully:", response)
-			} else if responseType == "response.audio.delta" {
+			case "response.audio.delta":
 				delta, ok := response["delta"].(string)
 				if !ok || delta == "" {
 					continue
@@ -335,11 +328,8 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 					log.Println("Error sending to Twilio WebSocket:", err)
 					return
 				}
-			} else {
-				// Log other event types
-				if contains(logEventTypes, responseType) {
-					log.Printf("Received event: %s %v", responseType, response)
-				}
+			default:
+				log.Printf("Received event: %s %v", responseType, response)
 			}
 		}
 	}
@@ -371,14 +361,4 @@ func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
 		return err
 	}
 	return nil
-}
-
-// contains checks if a slice contains a specific string.
-func contains(slice []string, item string) bool {
-	for _, s := range slice {
-		if s == item {
-			return true
-		}
-	}
-	return false
 }
