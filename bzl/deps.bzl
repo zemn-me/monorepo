@@ -126,8 +126,8 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "671ddb3fe5ebcf9dd34d051eca7352fbaf33fa53bf61eed0b75a4c34829e5480",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.52.2/rules_rust-v0.52.2.tar.gz"],
+        sha256 = "85e2013727ab26fb22abdffe4b2ac0c27a2d5b6296167ba63d8f6e13140f51f9",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.53.0/rules_rust-v0.53.0.tar.gz"],
     )
 
     # Got no idea why but MS doesn't publish versions of this...
