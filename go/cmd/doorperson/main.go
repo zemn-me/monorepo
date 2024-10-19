@@ -139,10 +139,6 @@ func indexPage(w http.ResponseWriter, r *http.Request) {
 // handleIncomingCall handles incoming calls and returns a TwiML response to connect to the media stream.
 func handleIncomingCall(w http.ResponseWriter, r *http.Request) (err error) {
 	ml, err := twiml.Voice([]twiml.Element{
-		twiml.VoiceSay{
-			Message: "hi",
-		},
-
 		twiml.VoiceConnect{
 			InnerElements: []twiml.Element{
 				twiml.VoiceStream{
@@ -223,7 +219,7 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 // receiveFromTwilio receives audio data from Twilio and sends it to the OpenAI Realtime API.
-func receiveFromTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
+func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
 	defer func() {
 		if openaiConn != nil {
 			openaiConn.Close()
@@ -236,7 +232,7 @@ func receiveFromTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *
 			log.Println("receiveFromTwilio context canceled")
 			return
 		default:
-			_, messageBytes, err := wsConn.ReadMessage()
+			_, messageBytes, err := twilioConn.ReadMessage()
 			if err != nil {
 				if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
 					log.Println("Client disconnected")
@@ -257,12 +253,10 @@ func receiveFromTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *
 				if !ok {
 					continue
 				}
-				payload, _ := media["payload"].(string)
-				audioAppend := map[string]interface{}{
-					"type":  "input_audio_buffer.append",
-					"audio": payload,
-				}
-				audioAppendBytes, _ := json.Marshal(audioAppend)
+				audioAppendBytes, _ := json.Marshal(openai.RealtimeClientEventInputAudioBufferAppend{
+					Audio: media["payload"].(string),
+					Type:  "input_audio_buffer.append",
+				})
 				err = openaiConn.WriteMessage(websocket.TextMessage, audioAppendBytes)
 				if err != nil {
 					log.Println("Error sending to OpenAI WebSocket:", err)
