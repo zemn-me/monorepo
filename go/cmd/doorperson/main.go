@@ -14,10 +14,10 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/gorilla/websocket"
 	"github.com/twilio/twilio-go/twiml"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zemn-me/monorepo/go/openai"
 )
@@ -203,23 +203,18 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	var streamSid string
-	var wg sync.WaitGroup
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		receiveFromTwilio(ctx, wsConn, openaiConn, &streamSid)
-	}()
-	go func() {
-		defer wg.Done()
-		sendToTwilio(ctx, wsConn, openaiConn, &streamSid)
-	}()
-	wg.Wait()
-
-	return
+	group, groupCtx := errgroup.WithContext(ctx)
+	group.Go(func() (err error) {
+		return receiveFromTwilio(groupCtx, wsConn, openaiConn, &streamSid)
+	})
+	group.Go(func() (err error) {
+		return sendToTwilio(groupCtx, wsConn, openaiConn, &streamSid)
+	})
+	return group.Wait()
 }
 
 // receiveFromTwilio receives audio data from Twilio and sends it to the OpenAI Realtime API.
-func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
+func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) (err error) {
 	defer func() {
 		if openaiConn != nil {
 			openaiConn.Close()
@@ -229,17 +224,13 @@ func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiCo
 	for {
 		select {
 		case <-ctx.Done():
-			log.Println("receiveFromTwilio context canceled")
+			err = fmt.Errorf("receiveFromTwilio context canceled")
 			return
 		default:
-			_, messageBytes, err := twilioConn.ReadMessage()
+			var messageBytes []byte
+			_, messageBytes, err = twilioConn.ReadMessage()
 			if err != nil {
-				if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-					log.Println("Client disconnected")
-				} else {
-					log.Println("Error reading from Twilio WebSocket:", err)
-				}
-				return
+				return fmt.Errorf("Reading message: %v", err)
 			}
 			var data map[string]interface{}
 			err = json.Unmarshal(messageBytes, &data)
@@ -259,7 +250,7 @@ func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiCo
 				})
 				err = openaiConn.WriteMessage(websocket.TextMessage, audioAppendBytes)
 				if err != nil {
-					log.Println("Error sending to OpenAI WebSocket:", err)
+					err = fmt.Errorf("Error sending to OpenAI WebSocket: %v", err)
 					return
 				}
 			} else if eventType == "start" {
@@ -335,21 +326,19 @@ type ToolCall struct {
 }
 
 // sendToTwilio receives events from the OpenAI Realtime API and sends audio back to Twilio.
-func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) {
+func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) (err error) {
 	ctx, cancel := context.WithCancelCause(ctx)
 	for {
 		// cancellation for this call.
 		select {
 		case <-ctx.Done():
-			err := context.Cause(ctx)
-			if errors.Is(err, io.EOF) {
-				return
-			}
-			panic(err)
+			err = context.Cause(ctx)
+			return
 		default:
-			_, messageBytes, err := openaiConn.ReadMessage()
+			var messageBytes []byte
+			_, messageBytes, err = openaiConn.ReadMessage()
 			if err != nil {
-				log.Println("Error reading from OpenAI WebSocket:", err)
+				err = fmt.Errorf("Error reading from OpenAI WebSocket: %v", err)
 				return
 			}
 			var response RealtimeServerEventResponse
@@ -359,15 +348,13 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				continue
 			}
 			switch v := response.value.(type) {
-			case *openai.RealtimeServerEventSessionUpdated:
-				log.Println("Session updated successfully:", response)
 			case *openai.RealtimeServerEventResponseAudioDelta:
 				if v.Delta == "" {
 					continue
 				}
 
-				// Process audio data
-				decodedData, err := base64.StdEncoding.DecodeString(v.Delta)
+				var decodedData []byte
+				decodedData, err = base64.StdEncoding.DecodeString(v.Delta)
 				if err != nil {
 					log.Println("Error decoding delta audio data:", err)
 					continue
@@ -384,7 +371,7 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				audioDeltaBytes, _ := json.Marshal(audioDelta)
 				err = wsConn.WriteMessage(websocket.TextMessage, audioDeltaBytes)
 				if err != nil {
-					log.Println("Error sending to Twilio WebSocket:", err)
+					err = fmt.Errorf("Error sending to Twilio WebSocket: %v", err)
 					return
 				}
 			case ToolCall:
@@ -393,9 +380,9 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				if v.Item.Name == "HangUp" {
 					cancel(fmt.Errorf("Model hung up the call: %v", io.EOF))
 				}
+			case *openai.RealtimeServerEventSessionUpdated:
 			case *openai.RealtimeServerEventResponseFunctionCallArgumentsDone:
 			case *openai.RealtimeServerEventResponseDone:
-				// cancel(fmt.Errorf("User hung up: %v", io.EOF))
 			case *RealtimeUnknownServerEventResponse:
 				log.Println("Unhandled event", v.Type)
 			default:
