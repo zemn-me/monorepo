@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -19,6 +20,7 @@ import (
 	"github.com/twilio/twilio-go/twiml"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/zemn-me/monorepo/go/ioutil"
 	"github.com/zemn-me/monorepo/go/openai"
 )
 
@@ -202,6 +204,12 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 		return
 	}
 
+	err = initializeRealtimeSession(ctx, openaiConn)
+	if err != nil {
+		err = fmt.Errorf("Initializing session: %v", err)
+		return
+	}
+
 	var streamSid string
 	group, groupCtx := errgroup.WithContext(ctx)
 	group.Go(func() (err error) {
@@ -211,6 +219,157 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 		return sendToTwilio(groupCtx, wsConn, openaiConn, &streamSid)
 	})
 	return group.Wait()
+}
+
+const chunkSize = 0x8000
+
+func PCMByteStreamToAudioChunks(r io.Reader) (appendCalls []openai.RealtimeClientEventInputAudioBufferAppend, err error) {
+	var buf [chunkSize]byte
+
+	for err != io.EOF {
+		var n int
+		n, err = r.Read(buf[:])
+		if err != nil {
+			if err != io.EOF {
+				return
+			}
+		}
+
+		appendCalls = append(appendCalls, openai.RealtimeClientEventInputAudioBufferAppend{
+			Audio: base64.RawStdEncoding.EncodeToString(buf[:n]),
+			Type:  "input_audio_buffer.append",
+		})
+
+	}
+
+	err = nil
+	return
+}
+
+func writeTextMessage(conn *websocket.Conn, write io.Reader) (err error) {
+	wt, err := conn.NextWriter(websocket.TextMessage)
+	if err != nil {
+		return errors.Join(wt.Close(), err)
+	}
+
+	_, err = io.Copy(wt, write)
+	if err != nil {
+		return errors.Join(wt.Close(), err)
+	}
+
+	return
+}
+
+func initializeRealtimeSession(ctx context.Context, oaiConn *websocket.Conn) (err error) {
+	if err = writeTextMessage(
+		oaiConn,
+		&ioutil.JSONReader{
+			V: openai.RealtimeClientEventConversationItemCreate{
+				Type: "conversation.item.create",
+				Item: struct {
+					Arguments *string "json:\"arguments,omitempty\""
+					CallId    *string "json:\"call_id,omitempty\""
+					Content   *[]struct {
+						Audio      *string "json:\"audio,omitempty\""
+						Text       *string "json:\"text,omitempty\""
+						Transcript *string "json:\"transcript,omitempty\""
+						Type       *string "json:\"type,omitempty\""
+					} "json:\"content,omitempty\""
+					Id     *string "json:\"id,omitempty\""
+					Name   *string "json:\"name,omitempty\""
+					Output *string "json:\"output,omitempty\""
+					Role   *string "json:\"role,omitempty\""
+					Status *string "json:\"status,omitempty\""
+					Type   *string "json:\"type,omitempty\""
+				}{
+					Type: strPtr("message"),
+					Role: strPtr(string(openai.ChatCompletionRequestSystemMessageRoleSystem)),
+					Content: &[]struct {
+						Audio      *string "json:\"audio,omitempty\""
+						Text       *string "json:\"text,omitempty\""
+						Transcript *string "json:\"transcript,omitempty\""
+						Type       *string "json:\"type,omitempty\""
+					}{
+						{
+							Type: strPtr("text"),
+							Text: strPtr("Next: an audio sample to imitate on the call."),
+						},
+					},
+				},
+			},
+		},
+	); err != nil {
+		return
+	}
+
+	pcmBytes, err := pcmBytesFromFLACFile("go/cmd/doorperson/alice.flac")
+	if err != nil {
+		return err
+	}
+
+	var buf bytes.Buffer
+	if _, err = io.Copy(
+		&buf,
+		pcmBytes,
+	); err != nil {
+		return
+	}
+
+	appendCalls, err := PCMByteStreamToAudioChunks(&buf)
+	if err != nil {
+		return err
+	}
+
+	for _, call := range appendCalls {
+		writeTextMessage(oaiConn, &ioutil.JSONReader{V: call})
+	}
+
+	if err != nil {
+		return
+	}
+
+	if writeTextMessage(
+		oaiConn,
+		&ioutil.JSONReader{
+			V: openai.RealtimeClientEventConversationItemCreate{
+				Type: "conversation.item.create",
+				Item: struct {
+					Arguments *string "json:\"arguments,omitempty\""
+					CallId    *string "json:\"call_id,omitempty\""
+					Content   *[]struct {
+						Audio      *string "json:\"audio,omitempty\""
+						Text       *string "json:\"text,omitempty\""
+						Transcript *string "json:\"transcript,omitempty\""
+						Type       *string "json:\"type,omitempty\""
+					} "json:\"content,omitempty\""
+					Id     *string "json:\"id,omitempty\""
+					Name   *string "json:\"name,omitempty\""
+					Output *string "json:\"output,omitempty\""
+					Role   *string "json:\"role,omitempty\""
+					Status *string "json:\"status,omitempty\""
+					Type   *string "json:\"type,omitempty\""
+				}{
+					Type: strPtr("message"),
+					Role: strPtr(string(openai.ChatCompletionRequestSystemMessageRoleSystem)),
+					Content: &[]struct {
+						Audio      *string "json:\"audio,omitempty\""
+						Text       *string "json:\"text,omitempty\""
+						Transcript *string "json:\"transcript,omitempty\""
+						Type       *string "json:\"type,omitempty\""
+					}{
+						{
+							Type: strPtr("text"),
+							Text: strPtr("What follows is the conversation with the USER."),
+						},
+					},
+				},
+			},
+		},
+	); err != nil {
+		return
+	}
+
+	return
 }
 
 // receiveFromTwilio receives audio data from Twilio and sends it to the OpenAI Realtime API.
@@ -380,7 +539,6 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				}
 			case ToolCall:
 				// model called a function
-				fmt.Printf("%+v", v)
 				if v.Item.Name == "HangUp" {
 					cancel(fmt.Errorf("Model hung up the call: %v", io.EOF))
 				}
@@ -450,9 +608,19 @@ func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
 			InputAudioFormat:  strPtr("g711_ulaw"),
 			OutputAudioFormat: strPtr("g711_ulaw"),
 			Voice:             strPtr(string(openai.CreateSpeechRequestVoiceAlloy)),
-			Instructions:      strPtr("Hi"),
-			Modalities:        &[]string{"text", "audio"},
-			Temperature:       &temperature,
+			Instructions: strPtr(`
+You are a helpful doorperson. You will shortly recieve an audio sample of
+the owner of the apartment's voice. You should imitate something like this
+voice for the conversation you are connected to, which will be someone
+who has dialed the call box you are speaking through that grants entry
+to the apartment.
+
+The owner of the apartment's name is Thomas.
+
+Opening the door has not yet been implemented.
+			`),
+			Modalities:  &[]string{"text", "audio"},
+			Temperature: &temperature,
 			Tools: &[]struct {
 				Description *string                 "json:\"description,omitempty\""
 				Name        *string                 "json:\"name,omitempty\""
