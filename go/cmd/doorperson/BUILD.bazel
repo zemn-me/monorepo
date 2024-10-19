@@ -3,12 +3,21 @@ load("//go:rules.bzl", "go_binary", "go_library")
 
 go_library(
     name = "doorperson_lib",
-    srcs = ["main.go"],
+    srcs = [
+        "main.go",
+        "seed.go",
+    ],
+    data = [
+        "alice.flac",
+    ],
     importpath = "github.com/zemn-me/monorepo/go/cmd/doorperson",
     visibility = ["//visibility:private"],
     deps = [
+        "//go/ioutil",
         "//go/openai",
         "@com_github_gorilla_websocket//:websocket",
+        "@com_github_mewkiz_flac//:flac",
+        "@com_github_mewkiz_flac//frame",
         "@com_github_twilio_twilio_go//twiml",
         "@org_golang_x_sync//errgroup",
     ],
