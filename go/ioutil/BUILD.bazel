@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "ioutil",
+    srcs = [
+        "chunked_writer_to.go",
+        "count_writer.go",
+        "json_writer_to.go",
+        "reader_from_writer_to.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/ioutil",
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "ioutil_test",
+    srcs = ["reader_from_writer_test.go"],
+    embed = [":ioutil"],
+)
