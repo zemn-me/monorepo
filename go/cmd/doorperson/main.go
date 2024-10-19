@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -19,6 +20,7 @@ import (
 	"github.com/twilio/twilio-go/twiml"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/zemn-me/monorepo/go/ioutil"
 	"github.com/zemn-me/monorepo/go/openai"
 )
 
@@ -213,6 +215,52 @@ func handleMediaStream(w http.ResponseWriter, r *http.Request) (err error) {
 	return group.Wait()
 }
 
+func initializeRealtimeSession(oaiConn *websocket.Conn) (err error) {
+	connWt, err := oaiConn.NextWriter(websocket.TextMessage)
+	defer connWt.Close()
+	if err != nil {
+		return
+	}
+
+	/*
+		if _, err = io.Copy(
+			connWt,
+			&ioutil.JSONReader{
+
+			}
+		)			*/
+
+	pcmBytes, err := pcmBytesFromFLACFile("go/cmd/doorperson/alice.flac")
+	if err != nil {
+		return err
+	}
+
+	var buf bytes.Buffer
+	if _, err = io.Copy(
+		&buf,
+		pcmBytes,
+	); err != nil {
+		return
+	}
+
+	pcmBytesB64 := base64.StdEncoding.EncodeToString(
+		buf.Bytes(),
+	)
+
+	_, err = io.Copy(
+		connWt,
+		&ioutil.JSONReader{
+			V: openai.RealtimeClientEventInputAudioBufferAppend{
+				Audio: pcmBytesB64,
+				Type:  "input_audio_buffer.append",
+			},
+		},
+	)
+	if err != nil {
+		return
+	}
+}
+
 // receiveFromTwilio receives audio data from Twilio and sends it to the OpenAI Realtime API.
 func receiveFromTwilio(ctx context.Context, twilioConn *websocket.Conn, openaiConn *websocket.Conn, streamSid *string) (err error) {
 	defer func() {
@@ -380,7 +428,6 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				}
 			case ToolCall:
 				// model called a function
-				fmt.Printf("%+v", v)
 				if v.Item.Name == "HangUp" {
 					cancel(fmt.Errorf("Model hung up the call: %v", io.EOF))
 				}
@@ -450,9 +497,19 @@ func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
 			InputAudioFormat:  strPtr("g711_ulaw"),
 			OutputAudioFormat: strPtr("g711_ulaw"),
 			Voice:             strPtr(string(openai.CreateSpeechRequestVoiceAlloy)),
-			Instructions:      strPtr("Hi"),
-			Modalities:        &[]string{"text", "audio"},
-			Temperature:       &temperature,
+			Instructions: strPtr(`
+You are a helpful doorperson. You will shortly recieve an audio sample of
+the owner of the apartment's voice. You should imitate something like this
+voice for the conversation you are connected to, which will be someone
+who has dialed the call box you are speaking through that grants entry
+to the apartment.
+
+The owner of the apartment's name is Thomas.
+
+Opening the door has not yet been implemented.
+			`),
+			Modalities:  &[]string{"text", "audio"},
+			Temperature: &temperature,
 			Tools: &[]struct {
 				Description *string                 "json:\"description,omitempty\""
 				Name        *string                 "json:\"name,omitempty\""
