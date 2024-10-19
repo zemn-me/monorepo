@@ -292,6 +292,10 @@ func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
 		var v *openai.RealtimeServerEventResponseDone
 		err = json.Unmarshal(b, &v)
 		r.value = v
+	case "response.audio_transcript.done":
+		var v *openai.RealtimeServerEventResponseAudioTranscriptDone
+		err = json.Unmarshal(b, &v)
+		r.value = v
 	case "response.output_item.done":
 		var v *openai.RealtimeServerEventResponseOutputItemDone
 		err = json.Unmarshal(b, &v)
@@ -380,6 +384,8 @@ func sendToTwilio(ctx context.Context, wsConn *websocket.Conn, openaiConn *webso
 				if v.Item.Name == "HangUp" {
 					cancel(fmt.Errorf("Model hung up the call: %v", io.EOF))
 				}
+			case *openai.RealtimeServerEventResponseAudioTranscriptDone:
+				log.Println(v.Transcript)
 			case *openai.RealtimeServerEventSessionUpdated:
 			case *openai.RealtimeServerEventResponseFunctionCallArgumentsDone:
 			case *openai.RealtimeServerEventResponseDone:
