@@ -13,6 +13,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/websocket v1.5.3
 	github.com/itchyny/gojq v0.12.16
+	github.com/mewkiz/flac v1.0.12
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
@@ -41,6 +42,7 @@ require (
 	github.com/google/go-dap v0.11.0 // indirect
 	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
+	github.com/icza/bitio v1.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/invopop/yaml v0.3.1 // indirect
 	github.com/itchyny/timefmt-go v0.1.6 // indirect
@@ -51,6 +53,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
+	github.com/mewkiz/pkg v0.0.0-20230226050401-4010bf0fec14 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
