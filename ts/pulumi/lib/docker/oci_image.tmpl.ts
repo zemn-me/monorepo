@@ -1,4 +1,4 @@
-import { Image, ImageArgs } from "@pulumi/awsx/ecr";
+import { Image, ImageArgs } from "@pulumi/awsx/ecr/index.js";
 import { ComponentResource, ComponentResourceOptions } from "@pulumi/pulumi";
 
 
