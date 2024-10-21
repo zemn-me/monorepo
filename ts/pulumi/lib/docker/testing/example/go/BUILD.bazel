@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts/pulumi/lib/docker:rules.bzl", "ecr_image")
+
+ecr_image(
+    name = "simple",
+    srcs = ["//ts/pulumi/lib/docker/testing/example/go/cmd/simple"],
+    out = "simple_go_example.ts",
+    component_name = "SimpleGoEcrExample",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
