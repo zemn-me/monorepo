@@ -1,4 +1,7 @@
-import { Image, ImageArgs } from "@pulumi/awsx/ecr";
+import fs from 'node:fs';
+
+import { runfiles } from '@bazel/runfiles';
+import { Image, ImageArgs } from "@pulumi/awsx/ecr/index.js";
 import { ComponentResource, ComponentResourceOptions } from "@pulumi/pulumi";
 
 
@@ -15,8 +18,14 @@ export class __ClassName extends ComponentResource {
 	) {
 		super('__TYPE', name, args, opts);
 
+		const dockerfile = runfiles.resolveWorkspaceRelative('__DOCKERFILE_PATH');
+
+		fs.accessSync(dockerfile)
+
+
 		this.image = new Image(`${name}_image`, {
-			dockerfile: '__DOCKERFILE_PATH',
+			platform: "linux/amd64",
+			dockerfile,
 			...args.image
 		}, { parent: this })
 
