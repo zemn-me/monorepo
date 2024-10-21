@@ -99,6 +99,7 @@ def ecr_image(
             "//:node_modules/@pulumi/aws",
             "//:node_modules/@pulumi/pulumi",
             "//:node_modules/@types/node",
+            "//:node_modules/@bazel/runfiles",
             "//:node_modules/@pulumi/awsx",
         ],
         visibility = visibility,
