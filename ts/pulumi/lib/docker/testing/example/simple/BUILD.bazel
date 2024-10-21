@@ -24,7 +24,7 @@ js_binary(
 
 ecr_image(
     name = "simple",
-    src = "main_bin",
+    srcs = ["main_bin"],
     out = "hello_world.ts",
     component_name = "HelloWorldImage",
 )
