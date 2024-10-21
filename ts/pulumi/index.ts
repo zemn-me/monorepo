@@ -1,8 +1,10 @@
 import * as aws from '@pulumi/aws';
 import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import * as awsx from '@pulumi/awsx';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { ExampleFargateService } from '#root/ts/pulumi/example/fargate_service.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
@@ -119,8 +121,14 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		// test deploying the Go example to a fargate container.
+
+		const exampleFargateService = new ExampleFargateService(`${name}_example_fargate_service`, {});
+
+
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
+			exampleFargateService
 		});
 	}
 }

@@ -1,0 +1,15 @@
+load("//ts:rules.bzl", "ts_project")
+load("//yml:test.bzl", "yaml_lint_test")
+
+package(default_visibility = ["//ci:__subpackages__"])
+
+yaml_lint_test(
+    name = "validate_yml",
+)
+
+ts_project(
+    name = "example",
+    srcs = ["fargate_service.ts"],
+    deps = [
+    ],
+)
