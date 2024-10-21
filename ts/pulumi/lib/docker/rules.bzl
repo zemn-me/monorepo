@@ -1,11 +1,12 @@
-load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template_rule")
-load("@aspect_bazel_lib//lib:tar.bzl", "tar")
+load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
+load("@aspect_bazel_lib//lib:tar.bzl", "mtree_mutate", "mtree_spec", "tar")
 load("@rules_oci//oci:defs.bzl", "oci_image")
 load("//ts:rules.bzl", "ts_project")
+load("//ts/pulumi/lib/docker:mtree.bzl", "mtree_content_paths")
 
 def ecr_image(
         name,
-        src,
+        srcs,
         component_name,
         out,
         base = "@distroless_base",
@@ -16,7 +17,7 @@ def ecr_image(
 
     Args:
         name: name of the ts_project rule
-        src: content of the docker image. Must be a bazel-style binary.
+        srcs: List of bazel binary entrypoints.
         component_name: name of the exported pulumi class
         component_pulumi_name: used to construct the unique resource IDs for Pulumi
         out: ts filename
@@ -24,26 +25,48 @@ def ecr_image(
         visibility: bazel visibility
     """
 
+    package_dir = "monorepo"
+
     if component_pulumi_name == None:
         component_pulumi_name = native.package_name().replace("/", ":") + ":" + component_name
 
+    mtree_files_spec_out = name + "_container_tar_files_spec.mtree"
+    mtree_spec(
+        name = name + "_container_tar_files_spec",
+        srcs = srcs,
+        out = mtree_files_spec_out,
+    )
+
+    mtree_mutate(
+        name = name + "_container_tar_spec",
+        mtree = mtree_files_spec_out,
+        package_dir = "monorepo",
+    )
+
+    mtree_content_paths(
+        name = name + "_entrypoints",
+        mtree_file = name + "_container_tar_spec",
+        content_paths = srcs,
+        out = name + "_entrypoints.txt",
+    )
+
     tar(
         name = name + "_tar",
-        srcs = [src],
+        srcs = srcs,
+        mtree = name + "_container_tar_spec",
     )
 
     oci_image(
         name = name + "_image",
         base = base,
         tars = [name + "_tar"],
-        # below eventually needs to be a dynamically calculated file.
-        # https://docs.aspect.build/rulesets/rules_oci/docs/image/#entrypoint
-        # entrypoint = "ts/pulumi/lib/docker/testing/example/simple/main_bin.sh",
+        workdir = package_dir,
+        entrypoint = name + "_entrypoints",
         visibility = visibility,
     )
 
     # workaround for Pulumi's lack of 'just use this docker image.'
-    expand_template_rule(
+    expand_template(
         name = name + "_dockerfile",
         template = "//ts/pulumi/lib/docker:Dockerfile.tmpl",
         out = "Dockerfile",
@@ -53,7 +76,7 @@ def ecr_image(
         },
     )
 
-    expand_template_rule(
+    expand_template(
         name = name + "_tsfiles",
         template = "//ts/pulumi/lib/docker:oci_image.tmpl.ts",
         out = out,
@@ -78,4 +101,5 @@ def ecr_image(
             "//:node_modules/@types/node",
             "//:node_modules/@pulumi/awsx",
         ],
+        visibility = visibility,
     )
