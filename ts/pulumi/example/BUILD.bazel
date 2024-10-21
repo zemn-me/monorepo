@@ -1,0 +1,29 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//yml:test.bzl", "yaml_lint_test")
+
+package(default_visibility = ["//ci:__subpackages__"])
+
+yaml_lint_test(
+    name = "validate_yml",
+)
+
+ts_project(
+    name = "example",
+    srcs = ["fargate_service.ts"],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/awsx",
+        "//:node_modules/@pulumi/pulumi",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/docker/testing/example/go:simple",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
