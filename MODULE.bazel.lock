@@ -145,8 +145,8 @@
     "https://bcr.bazel.build/modules/rules_python/0.27.1/MODULE.bazel": "65dc875cc1a06c30d5bbdba7ab021fd9e551a6579e408a3943a61303e2228a53",
     "https://bcr.bazel.build/modules/rules_python/0.29.0/MODULE.bazel": "2ac8cd70524b4b9ec49a0b8284c79e4cd86199296f82f6e0d5da3f783d660c82",
     "https://bcr.bazel.build/modules/rules_python/0.31.0/MODULE.bazel": "93a43dc47ee570e6ec9f5779b2e64c1476a6ce921c48cc9a1678a91dd5f8fd58",
-    "https://bcr.bazel.build/modules/rules_python/0.37.0/MODULE.bazel": "bd90c62e4c789ea94ed61ab21a5a538dd4145548d1de994192049652d433816e",
-    "https://bcr.bazel.build/modules/rules_python/0.37.0/source.json": "c17b8ca7a2348fd8fa96ad5b414223dd1ce5d6e8265c3134a88d337b0554d53c",
+    "https://bcr.bazel.build/modules/rules_python/0.37.1/MODULE.bazel": "3faeb2d9fa0a81f8980643ee33f212308f4d93eea4b9ce6f36d0b742e71e9500",
+    "https://bcr.bazel.build/modules/rules_python/0.37.1/source.json": "c0f22f8b8558cac8c854d82419caeb37fbc239b4e94b70c22112a0d60ba7f415",
     "https://bcr.bazel.build/modules/rules_python/0.4.0/MODULE.bazel": "9208ee05fd48bf09ac60ed269791cf17fb343db56c8226a720fbb1cdf467166c",
     "https://bcr.bazel.build/modules/rules_python_gazelle_plugin/0.37.0/MODULE.bazel": "1db297fbb50ba86b08a4626d4fa5f399c67791d2f792e1bbf4f326333c96ca1d",
     "https://bcr.bazel.build/modules/rules_python_gazelle_plugin/0.37.0/source.json": "cf2ac340ec5b77acf04588c6c039249d7e91fc2e5c2b1498839b9441e1a7a9c7",
@@ -3190,7 +3190,7 @@
     "@@rules_python~//python/private/pypi:pip.bzl%pip_internal": {
       "general": {
         "bzlTransitiveDigest": "tIbSc6sHILncdBUHGnlHc1FtsvC/OlsLfDR+9f1q7L8=",
-        "usagesDigest": "6aWn2ksPPX2aQupUm1XC31uuo/EZomMWelG48CsA6Wc=",
+        "usagesDigest": "S4eiAUtZXBBK/BrxeoSGkP8I3FuLOMrp/CKt3FE4kWw=",
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements.txt": "031e35d03dde03ae6305fe4b3d1f58ad7bdad857379752deede0f93649991b8a",
           "@@rules_python~//tools/publish/requirements_windows.txt": "27831a1477549ad865043f17a9c1dd9a19566d460ba1f68cd8dfded642accbca",
