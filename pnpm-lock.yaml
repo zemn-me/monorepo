@@ -24,8 +24,8 @@ dependencies:
     specifier: 3.1.0
     version: 3.1.0(acorn@8.13.0)
   '@next/eslint-plugin-next':
-    specifier: 15.0.0
-    version: 15.0.0
+    specifier: 15.0.1
+    version: 15.0.1
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -302,8 +302,8 @@ devDependencies:
     specifier: 9.13.0
     version: 9.13.0
   eslint-config-next:
-    specifier: 15.0.0
-    version: 15.0.0(eslint@9.13.0)(typescript@5.5.4)
+    specifier: 15.0.1
+    version: 15.0.1(eslint@9.13.0)(typescript@5.5.4)
   eslint-config-prettier:
     specifier: 9.1.0
     version: 9.1.0(eslint@9.13.0)
@@ -4719,8 +4719,8 @@ packages:
   /@next/env@13.4.10:
     resolution: {integrity: sha512-3G1yD/XKTSLdihyDSa8JEsaWOELY+OWe08o0LUYzfuHp1zHDA8SObQlzKt+v+wrkkPcnPweoLH1ImZeUa0A1NQ==}
 
-  /@next/eslint-plugin-next@15.0.0:
-    resolution: {integrity: sha512-UG/Gnsq6Sc4wRhO9qk+vc/2v4OfRXH7GEH6/TGlNF5eU/vI9PIO7q+kgd65X2DxJ+qIpHWpzWwlPLmqMi1FE9A==}
+  /@next/eslint-plugin-next@15.0.1:
+    resolution: {integrity: sha512-bKWsMaGPbiFAaGqrDJvbE8b4Z0uKicGVcgOI77YM2ui3UfjHMr4emFPrZTLeZVchi7fT1mooG2LxREfUUClIKw==}
     dependencies:
       fast-glob: 3.3.1
 
@@ -10293,8 +10293,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-next@15.0.0(eslint@9.13.0)(typescript@5.5.4):
-    resolution: {integrity: sha512-HFeTwCR2lFEUWmdB00WZrzaak2CvMvxici38gQknA6Bu2HPizSE4PNFGaFzr5GupjBt+SBJ/E0GIP57ZptOD3g==}
+  /eslint-config-next@15.0.1(eslint@9.13.0)(typescript@5.5.4):
+    resolution: {integrity: sha512-3cYCrgbH6GS/ufApza7XCKz92vtq4dAdYhx++rMFNlH2cAV+/GsAKkrr4+bohYOACmzG2nAOR+uWprKC1Uld6A==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0 || ^9.0.0
       typescript: '>=3.3.1'
@@ -10302,7 +10302,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 15.0.0
+      '@next/eslint-plugin-next': 15.0.1
       '@rushstack/eslint-patch': 1.10.4
       '@typescript-eslint/eslint-plugin': 8.11.0(@typescript-eslint/parser@8.11.0)(eslint@9.13.0)(typescript@5.5.4)
       '@typescript-eslint/parser': 8.11.0(eslint@9.13.0)(typescript@5.5.4)
