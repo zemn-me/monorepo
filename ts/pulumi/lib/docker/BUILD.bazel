@@ -4,6 +4,7 @@ exports_files(
     [
         "Dockerfile.tmpl",
         "oci_image.tmpl.ts",
+        "link_template.mtree",
     ],
     visibility = ["//visibility:public"],
 )
