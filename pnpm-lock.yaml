@@ -60,8 +60,8 @@ dependencies:
     specifier: 3.0.8
     version: 3.0.8
   '@types/selenium-webdriver':
-    specifier: 4.1.22
-    version: 4.1.22
+    specifier: 4.1.26
+    version: 4.1.26
   '@types/serve-handler':
     specifier: 6.1.4
     version: 6.1.4
@@ -135,8 +135,8 @@ dependencies:
     specifier: 3.0.5
     version: 3.0.5
   selenium-webdriver:
-    specifier: 4.21.0
-    version: 4.21.0
+    specifier: 4.25.0
+    version: 4.25.0
   serve-handler:
     specifier: 6.1.6
     version: 6.1.6
@@ -3480,6 +3480,10 @@ packages:
   /@bazel/labs@4.6.1:
     resolution: {integrity: sha512-7CRtjP9W3ywX6AvTAzV5is0LrXt3zxUSW5SzUGa+LhdsrDc3+VDyW7MOJlwMai2xmBb4J1tqaZKo8KSlr2H2tg==}
     dev: true
+
+  /@bazel/runfiles@5.8.1:
+    resolution: {integrity: sha512-NDdfpdQ6rZlylgv++iMn5FkObC/QlBQvipinGLSOguTYpRywmieOyJ29XHvUilspwTFSILWpoE9CqMGkHXug1g==}
+    dev: false
 
   /@bazel/runfiles@6.3.1:
     resolution: {integrity: sha512-1uLNT5NZsUVIGS4syuHwTzZ8HycMPyr6POA3FCE4GbMtc4rhoJk8aZKtNIRthJYfL+iioppi+rTfH3olMPr9nA==}
@@ -7449,9 +7453,10 @@ packages:
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
     dev: false
 
-  /@types/selenium-webdriver@4.1.22:
-    resolution: {integrity: sha512-MCL4l7q8dwxejr2Q2NXLyNwHWMPdlWE0Kpn6fFwJtvkJF7PTkG5jkvbH/X1IAAQxgt/L1dA8u2GtDeekvSKvOA==}
+  /@types/selenium-webdriver@4.1.26:
+    resolution: {integrity: sha512-PUgqsyNffal0eAU0bzGlh37MJo558aporAPZoKqBeB/pF7zhKl1S3zqza0GpwFqgoigNxWhEIJzru75eeYco/w==}
     dependencies:
+      '@types/node': 20.17.0
       '@types/ws': 8.5.12
     dev: false
 
@@ -17383,10 +17388,11 @@ packages:
     resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
-  /selenium-webdriver@4.21.0:
-    resolution: {integrity: sha512-WaEJHZjOWNth1QG5FEpxpREER0qptZBMonFU6GtAqdCNLJVxbtC3E7oS/I/+Q1sf1W032Wg0Ebk+m46lANOXyQ==}
+  /selenium-webdriver@4.25.0:
+    resolution: {integrity: sha512-zl9IX93caOT8wbcCpZzAkEtYa+hNgJ4C5GUN8uhpzggqRLvsg1asfKi0p1uNZC8buYVvsBZbx8S+9MjVAjs4oA==}
     engines: {node: '>= 14.21.0'}
     dependencies:
+      '@bazel/runfiles': 5.8.1
       jszip: 3.10.1
       tmp: 0.2.3
       ws: 8.18.0
