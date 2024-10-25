@@ -37,9 +37,9 @@
     "https://bcr.bazel.build/modules/bazel_features/1.1.1/MODULE.bazel": "27b8c79ef57efe08efccbd9dd6ef70d61b4798320b8d3c134fd571f78963dbcd",
     "https://bcr.bazel.build/modules/bazel_features/1.10.0/MODULE.bazel": "f75e8807570484a99be90abcd52b5e1f390362c258bcb73106f4544957a48101",
     "https://bcr.bazel.build/modules/bazel_features/1.11.0/MODULE.bazel": "f9382337dd5a474c3b7d334c2f83e50b6eaedc284253334cf823044a26de03e8",
-    "https://bcr.bazel.build/modules/bazel_features/1.19.0/MODULE.bazel": "59adcdf28230d220f0067b1f435b8537dd033bfff8db21335ef9217919c7fb58",
-    "https://bcr.bazel.build/modules/bazel_features/1.19.0/source.json": "d7bf14517c1b25b9d9c580b0f8795fceeae08a7590f507b76aace528e941375d",
     "https://bcr.bazel.build/modules/bazel_features/1.2.0/MODULE.bazel": "122b2b606622afbaa498913d54f52d9bcd2d19a5edd1bd6d6c5aa17441c4d5f9",
+    "https://bcr.bazel.build/modules/bazel_features/1.20.0/MODULE.bazel": "8b85300b9c8594752e0721a37210e34879d23adc219ed9dc8f4104a4a1750920",
+    "https://bcr.bazel.build/modules/bazel_features/1.20.0/source.json": "ec676339c530e7e3db8dd8ae99cc827b679fc0f3acda4fef9fc9e3d6a2c505dd",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
     "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
@@ -665,7 +665,7 @@
     },
     "@@aspect_rules_js~//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "T5G6mPV3lphFxQUsDCYzl6V47B5Iyzut5vlVecpwTnk=",
+        "bzlTransitiveDigest": "TDj8q/EZQFsq9EVTq4OydotQcRyat8YwmPZMHhY/C0A=",
         "usagesDigest": "8RuvKNH1Sq54X1N0lrv6KByZBjwnt8MVN0hh9qKx8FY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -3189,7 +3189,7 @@
     },
     "@@rules_python~//python/private/pypi:pip.bzl%pip_internal": {
       "general": {
-        "bzlTransitiveDigest": "tIbSc6sHILncdBUHGnlHc1FtsvC/OlsLfDR+9f1q7L8=",
+        "bzlTransitiveDigest": "Rc8R1TWBg3CUvX9LL/OuuNmGLSOmljw/1hbwy2OWYpQ=",
         "usagesDigest": "S4eiAUtZXBBK/BrxeoSGkP8I3FuLOMrp/CKt3FE4kWw=",
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements.txt": "031e35d03dde03ae6305fe4b3d1f58ad7bdad857379752deede0f93649991b8a",
