@@ -368,8 +368,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 38.131.1
-    version: 38.131.1(@aws-sdk/client-sso-oidc@3.675.0)(typanion@3.14.0)
+    specifier: 38.131.2
+    version: 38.131.2(@aws-sdk/client-sso-oidc@3.675.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -2033,13 +2033,6 @@ packages:
       '@smithy/types': 3.5.0
       tslib: 2.8.0
     dev: true
-
-  /@babel/code-frame@7.25.7:
-    resolution: {integrity: sha512-0xZJFNE5XMpENsgfHYTw8FbX4kv53mFLn2i3XPoq69LyhYSCBJtitaHx9QnsVTrsogI4Z3+HtEfZ2/GFPOtf5g==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/highlight': 7.25.9
-      picocolors: 1.1.1
 
   /@babel/code-frame@7.25.9:
     resolution: {integrity: sha512-z88xeGxnzehn2sqZ8UdGQEvYErF1odv2CftxInpSYJt6uHuPe9YjahKZITGs3l5LeI9d2ROG+obuDAoSlqbNfQ==}
@@ -12773,7 +12766,7 @@ packages:
     resolution: {integrity: sha512-GBEV4GRADeP+qtB2+6u61stea8mGcOT4mCtrYISZwfu9/ISHFJ/5zOMXYbpBE9RsS5+Gb63DW4FgmnKJ79Kf6w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@babel/code-frame': 7.25.7
+      '@babel/code-frame': 7.25.9
       '@jest/types': 29.6.3
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -16979,8 +16972,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@38.131.1(@aws-sdk/client-sso-oidc@3.675.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-IZK9wNOIqaGze3lW04BktsVLYG8GEFCyPnEchk8hOP++Gb4gJVBt2Hp23IdVvoUoGUY451jeADiDzz4AuuBrCg==}
+  /renovate@38.131.2(@aws-sdk/client-sso-oidc@3.675.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-SCF3wqeKjamHD90FxWSYoDfCEsjUE7kZ20pln7VACB1LSj/N9LFqGEvScg2UExZJ40ayG56ZkRySP4gbCmtYHQ==}
     engines: {node: ^20.15.1, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
