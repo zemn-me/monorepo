@@ -2,7 +2,7 @@ module github.com/pulumi/pulumi-xyz/provider
 
 go 1.22
 
-toolchain go1.23.0
+toolchain go1.23.2
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
