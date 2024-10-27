@@ -16,8 +16,8 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
-	github.com/tdewolff/parse/v2 v2.7.18
-	github.com/twilio/twilio-go v1.23.4
+	github.com/tdewolff/parse/v2 v2.7.19
+	github.com/twilio/twilio-go v1.23.5
 	golang.org/x/sync v0.8.0
 	golang.org/x/tools v0.26.0
 	honnef.co/go/tools v0.5.1

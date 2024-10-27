@@ -19,19 +19,19 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "b2340aa47faf7ef10a0328190319d3f3bee1b24f426d4ce8f4253b6f27ce16db",
-        strip_prefix = "protobuf-28.2",
+        sha256 = "7c3ebd7aaedd86fa5dc479a0fda803f602caaf78d8aff7ce83b89e1b8ae7442a",
+        strip_prefix = "protobuf-28.3",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v28.2.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v28.3.tar.gz",
         ],
     )
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "b2340aa47faf7ef10a0328190319d3f3bee1b24f426d4ce8f4253b6f27ce16db",
-        strip_prefix = "protobuf-28.2",
+        sha256 = "7c3ebd7aaedd86fa5dc479a0fda803f602caaf78d8aff7ce83b89e1b8ae7442a",
+        strip_prefix = "protobuf-28.3",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v28.2.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v28.3.tar.gz",
         ],
     )
 
@@ -133,12 +133,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/5f3be8d670167f55249e1dfa09cbc5daa345e8ce.zip",
-        strip_prefix = "json-schemas-5f3be8d670167f55249e1dfa09cbc5daa345e8ce",
+        url = "https://github.com/microsoft/json-schemas/archive/9c3263a8fafa0d0b937176370617e3525662669b.zip",
+        strip_prefix = "json-schemas-9c3263a8fafa0d0b937176370617e3525662669b",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "8c52e41abb94c0232c31f01f7095a19872e6fe93d61eaa6c814db5dbce305206",
+        sha256 = "f8b5cc70930e769ea75f8fa55b203c20abfd7184ae2efe9ca1853048bfb15478",
     )
 
     ##########
