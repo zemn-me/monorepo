@@ -1,0 +1,6 @@
+name: provider-crane-native
+runtime: nodejs
+plugins:
+  providers:
+    - name: crane
+      path: ../../bin

@@ -1,0 +1,20 @@
+name: provider-crane-native
+runtime: yaml
+plugins:
+  providers:
+    - name: crane
+      path: ../../bin
+
+resources:
+  myRandomResource:
+    type: crane:Random
+    properties:
+      length: 24
+  myRandomComponent:
+    type: crane:RandomComponent
+    properties:
+      length: 24
+
+outputs:
+  output:
+    value: ${myRandomResource.result}
