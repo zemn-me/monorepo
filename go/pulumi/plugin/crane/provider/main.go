@@ -1,12 +1,10 @@
 package main
 
 import (
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	p "github.com/pulumi/pulumi-go-provider"
+	"github.com/pulumi/pulumi-xyz/provider"
 )
 
 func main() {
-	pulumi.Run(func(ctx *pulumi.Context) error {
-		// Implement the provider logic here
-		return nil
-	})
+	p.RunProvider(provider.Name, provider.Version, provider.Provider())
 }
