@@ -103,3 +103,10 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/frand v1.4.2 // indirect
 )
+module github.com/yourorg/crane-provider
+
+go 1.21
+
+require (
+	github.com/pulumi/pulumi/sdk/v3 v3.0.0
+)
