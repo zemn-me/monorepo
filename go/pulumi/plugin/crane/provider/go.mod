@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-xyz/provider
+module github.com/zemn-me/monorepo/go/pulumi/plugin/crane/provider
 
 go 1.22
 
