@@ -309,6 +309,10 @@ func generateRule(fileName string, args language.GenerateArgs) (res *GenerateRul
 
 	r.SetAttr("src", fileName)
 
+	if args.File == nil {
+		return nil, nil
+	}
+
 	res = &GenerateRuleResult{
 		rule:    r,
 		imports: NewDepSet(args.File.Pkg, conf.Extends.Strings()...),
