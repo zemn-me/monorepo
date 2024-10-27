@@ -28,9 +28,12 @@ manifest:
     debugpy: debugpy
     decorator: decorator
     defusedxml: defusedxml
+    dill: dill
     executing: executing
     fastjsonschema: fastjsonschema
     fqdn: fqdn
+    google.protobuf: protobuf
+    grpc: grpcio
     h11: h11
     httpcore: httpcore
     httpx: httpx
@@ -89,6 +92,7 @@ manifest:
     prompt_toolkit: prompt_toolkit
     psutil: psutil
     ptyprocess: ptyprocess
+    pulumi: pulumi
     pure_eval: pure_eval
     pyasn1: pyasn1
     pycparser: pycparser
@@ -102,6 +106,7 @@ manifest:
     rpds: rpds_py
     ruff: ruff
     sectxt: sectxt
+    semver: semver
     send2trash: Send2Trash
     setuptools: setuptools
     six: six
@@ -127,4 +132,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: de74cb8d88e7a1426926ab078f9c4470c1aba063a4007a6d16b85da7b452a5f8
+integrity: 9d5434ffde76a680356d7c89f0ba9e39e6ebd45383cb7720751945b4c8dead86
