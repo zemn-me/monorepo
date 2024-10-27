@@ -1,0 +1,6 @@
+name: provider-crane-native
+runtime: python
+plugins:
+  providers:
+    - name: crane
+      path: ../../bin
