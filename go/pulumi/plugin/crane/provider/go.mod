@@ -110,3 +110,10 @@ go 1.21
 require (
 	github.com/pulumi/pulumi/sdk/v3 v3.0.0
 )
+module github.com/yourorg/crane-provider
+
+go 1.21
+
+require (
+	github.com/pulumi/pulumi/sdk/v3 v3.0.0
+)
