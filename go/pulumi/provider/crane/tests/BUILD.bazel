@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+go_test(
+    name = "tests_test",
+    srcs = ["provider_test.go"],
+    deps = [
+        "//go/pulumi/provider/crane/provider",
+        "@com_github_blang_semver//:go_default_library",
+        "@com_github_pulumi_pulumi_go_provider//:go_default_library",
+        "@com_github_pulumi_pulumi_go_provider//integration:go_default_library",
+        "@com_github_pulumi_pulumi_sdk_v3//go/common/resource:go_default_library",
+        "@com_github_pulumi_pulumi_sdk_v3//go/common/tokens:go_default_library",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
