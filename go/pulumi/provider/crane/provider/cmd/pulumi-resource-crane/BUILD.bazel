@@ -1,0 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "pulumi-resource-crane_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/pulumi/provider/crane/provider/cmd/pulumi-resource-crane",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//go/pulumi/provider/crane/provider",
+        "@com_github_pulumi_pulumi_go_provider//:pulumi-go-provider",
+    ],
+)
+
+go_binary(
+    name = "pulumi-resource-crane",
+    embed = [":pulumi-resource-crane_lib"],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
