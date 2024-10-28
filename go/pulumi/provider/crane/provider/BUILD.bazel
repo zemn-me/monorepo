@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "provider",
+    srcs = [
+        "provider.go",
+        "randomComponent.go",
+        "randomResource.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/pulumi/provider/crane/provider",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_pulumi_pulumi_go_provider//:pulumi-go-provider",
+        "@com_github_pulumi_pulumi_go_provider//infer",
+        "@com_github_pulumi_pulumi_random_sdk_v4//go/random",
+        "@com_github_pulumi_pulumi_sdk_v3//go/common/tokens",
+        "@com_github_pulumi_pulumi_sdk_v3//go/pulumi",
+    ],
+)
+
+go_test(
+    name = "provider_test",
+    srcs = ["randomResource_test.go"],
+    embed = [":provider"],
+    deps = [
+        "@com_github_blang_semver//:semver",
+        "@com_github_pulumi_pulumi_go_provider//integration",
+        "@com_github_pulumi_pulumi_sdk_v3//go/common/resource",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
