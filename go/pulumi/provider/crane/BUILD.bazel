@@ -1,0 +1,4 @@
+alias(
+    name = "provider",
+    actual = "//go/pulumi/provider/crane/provider/cmd/pulumi-resource-crane",
+)
