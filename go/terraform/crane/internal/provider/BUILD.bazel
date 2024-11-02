@@ -1,0 +1,32 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "provider",
+    srcs = [
+        "provider.go",
+        "resource.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/terraform/crane/internal/provider",
+    visibility = ["//go/terraform/crane:__subpackages__"],
+    deps = [
+        "@com_github_google_go_containerregistry//pkg/authn",
+        "@com_github_google_go_containerregistry//pkg/crane",
+        "@com_github_google_go_containerregistry//pkg/name",
+        "@com_github_google_go_containerregistry//pkg/v1/remote",
+        "@com_github_hashicorp_terraform_plugin_framework//datasource",
+        "@com_github_hashicorp_terraform_plugin_framework//diag",
+        "@com_github_hashicorp_terraform_plugin_framework//function",
+        "@com_github_hashicorp_terraform_plugin_framework//path",
+        "@com_github_hashicorp_terraform_plugin_framework//provider",
+        "@com_github_hashicorp_terraform_plugin_framework//provider/schema",
+        "@com_github_hashicorp_terraform_plugin_framework//resource",
+        "@com_github_hashicorp_terraform_plugin_framework//resource/schema",
+        "@com_github_hashicorp_terraform_plugin_framework//types",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
