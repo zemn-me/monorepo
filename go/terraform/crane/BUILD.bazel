@@ -1,0 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "crane_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/terraform/crane",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//go/terraform/crane/internal/provider",
+        "@com_github_hashicorp_terraform_plugin_framework//providerserver",
+    ],
+)
+
+go_binary(
+    name = "crane",
+    embed = [":crane_lib"],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
