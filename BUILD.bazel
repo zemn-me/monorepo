@@ -263,3 +263,8 @@ py_venv(
 )
 
 # gazelle:exclude third_party
+
+alias(
+    name = "go",
+    actual = "//sh/bin:go",
+)
