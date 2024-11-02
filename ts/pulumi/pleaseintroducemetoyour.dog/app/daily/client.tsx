@@ -123,7 +123,7 @@ export function DogsOfTheDay() {
 	return (
 		<>
 			<h1>Top doggoes of the day!!</h1>
-			{doggs.isLoading ? `we are loading the dogs!! 🐕 🐶` : null}
+			{doggs.isFetching ? `we are loading the dogs!! 🐕 🐶` : null}
 			{doggs.isError ? (
 				<p>
 					we had an issue loading the doggs... 🐕😭 ...{' '}
@@ -139,7 +139,7 @@ export function DogsOfTheDay() {
 				</>
 			) : null}
 
-			{doggs.isLoading ?
+			{doggs.isSuccess ?
 				null : <h1>That’s all for today ‼️ Check back tomorrow 🐕</h1> }
 
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
