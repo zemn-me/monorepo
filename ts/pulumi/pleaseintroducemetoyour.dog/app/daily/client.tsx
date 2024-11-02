@@ -139,9 +139,8 @@ export function DogsOfTheDay() {
 				</>
 			) : null}
 
-   {!doggs.isLoading ? null:
-					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
-   }
+			{doggs.isLoading ?
+				null : <h1>That’s all for today ‼️ Check back tomorrow 🐕</h1> }
 
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>
