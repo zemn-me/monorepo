@@ -1,5 +1,6 @@
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { ReactNode } from 'react';
 
 export interface ProviderProps {
@@ -10,8 +11,10 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }: ProviderProps) {
 	return (
-		<QueryClientProvider client={queryClient}>
-			{children}
-		</QueryClientProvider>
+		<NuqsAdapter>
+			<QueryClientProvider client={queryClient}>
+				{children}
+			</QueryClientProvider>
+		</NuqsAdapter>
 	);
 }
