@@ -23,6 +23,10 @@ export function must<I, O extends I>(
 	};
 }
 
+export function impossible(v: never, then: (v: never) => Error): asserts v is never {
+	throw then(v);
+}
+
 export function assert<I, O extends I>(f: (i: I) => asserts i is O) {
 	return (v: I): v is O => {
 		f(v);
