@@ -414,6 +414,10 @@ class impl<T> extends NewType<T> {
 		)
 	}
 
+	to_array<T>(this: _Iterable<T>): T[] {
+		return Array.from(this.value)
+	}
+
 	first<T>(this: _Iterable<T>): Option<T> {
 		return this.nth(0)
 	}
@@ -423,6 +427,8 @@ class impl<T> extends NewType<T> {
 			concat(this.value, v)
 		)
 	}
+
+
 }
 
 function _Iterable<T>(v: Iterable<T>): _Iterable<T> {
