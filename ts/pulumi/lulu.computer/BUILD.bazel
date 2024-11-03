@@ -25,8 +25,11 @@ ts_project(
     assets = glob(["app/*.css"]),
     deps = [
         "//:node_modules/@types/react",
+        "//:node_modules/@types/seedrandom",
         "//:node_modules/next",
         "//:node_modules/react",
+        "//:node_modules/seedrandom",
+        "//ts/iter",
         "//ts/next.js",
     ],
 )
