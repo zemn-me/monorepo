@@ -60,7 +60,7 @@ function buoyancy(self: Particle, _: Set<Particle>, __: number): Vector {
 	return vector(0, self.mass)
 }
 
-function fishFear(self: Particle, all: Set<Particle>, dt: number) {
+function fishFear(self: Particle, all: Set<Particle>, _: number) {
 	if (self.type != ParticleType.Fish) return vector(0, 0);
 
 	const sharks = Iterable(all)
@@ -97,14 +97,14 @@ function fishFear(self: Particle, all: Set<Particle>, dt: number) {
 	);
 
 	return vector(
-		awayUnit.x * 50 * dt,
-		awayUnit.y * 50 * dt
+		awayUnit.x * 50,
+		awayUnit.y * 50
 	)
 
 
 }
 
-function sharkHunger(self: Particle, other: Set<Particle>, dt: number) {
+function sharkHunger(self: Particle, other: Set<Particle>, _: number) {
 	if (self.type != ParticleType.Shark) return vector(0, 0);
 
 	// find the nearest fish
@@ -140,12 +140,12 @@ function sharkHunger(self: Particle, other: Set<Particle>, dt: number) {
 
 
 	return fishDir.and_then(dir => vector(
-		dir.x * dt * 1000,
-		dir.y * dt * 100
+		dir.x * 20,
+		dir.y * 20
 	)).unwrap_or(vector(0, 0))
 }
 
-const friction = (coefficient: number) => (self: Particle, _: Set<Particle>, __: number): Vector => vector(-self.velocity.x * coefficient, -self.velocity.y * coefficient);
+const friction = (coefficient: number) => (self: Particle, _: Set<Particle>, __: number): Vector => vector(-self.velocity.x * coefficient * self.radius, -self.velocity.y * coefficient * self.radius);
 
 
 function Fishbowl(props: FishbowlProps) {
@@ -160,10 +160,11 @@ function Fishbowl(props: FishbowlProps) {
 			Iterable(props.particles).map(p => <text
 				key={p.id}
 				style={{
-					fontSize: `${p.radius}`
+					textAnchor: "middle",
+					fontSize: `${p.radius}`,
 				}}
-				x={p.position.x}
-				y={props.size.y-p.position.y}
+	x={p.position.x}
+	y={props.size.y - p.position.y}
 			>{
 					icon(p)
 				}</text>).to_array()
@@ -268,7 +269,7 @@ function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 
 const fields: FieldEffect[] = [
 	buoyancy,
-	friction(0.4),
+	friction(0.01),
 	sharkHunger,
 	fishFear
 ];
@@ -331,28 +332,24 @@ export function FishbowlClient() {
 	const lastFrameTime = useRef<Option<number>>(None);
 	const animationframeRequestHnd = useRef<Option<number>>(None);
 
-	const onAnimationFrame = useCallback<FrameRequestCallback>(() =>
-		setParticles(particles => {
+	const onAnimationFrame = useCallback<FrameRequestCallback>(() => {
 			const now = performance.now();
-			const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
+		const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
 
-			lastFrameTime.current = Some(now);
+		lastFrameTime.current = Some(now);
 
-			/*
-			animationframeRequestHnd.current = Some(
-				requestAnimationFrame(onAnimationFrame)
-			)
-				*/
+		animationframeRequestHnd.current = Some(
+			requestAnimationFrame(onAnimationFrame)
+		)
 
-			return tick(dt / 1000, particles, {
-				min: vector(0, 0),
-				max: size,
-			})
-		}), [ setParticles ]);
+		return setParticles(tick(dt / 1000, particles, {
+			min: vector(0, 0),
+			max: size,
+		}));
+		}, [ particles, setParticles]);
 
 
 	useEffect(() => {
-		setInterval(onAnimationFrame, 100);
 		animationframeRequestHnd.current = Some(requestAnimationFrame(
 			onAnimationFrame
 		));
