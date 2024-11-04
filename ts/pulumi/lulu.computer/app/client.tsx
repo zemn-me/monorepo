@@ -60,6 +60,91 @@ function buoyancy(self: Particle, _: Set<Particle>, __: number): Vector {
 	return vector(0, self.mass)
 }
 
+function fishFear(self: Particle, all: Set<Particle>, dt: number) {
+	if (self.type != ParticleType.Fish) return vector(0, 0);
+
+	const sharks = Iterable(all)
+		.map(v => v.type == ParticleType.Shark ? Some(v) : None)
+		.filter()
+		.to_array();
+
+	const sharkSum = Iterable(sharks)
+		.fold((p, c) => vector(
+			p.x + c.position.x,
+			p.y + c.position.y
+		), vector(0, 0));
+
+	const sharkCentre = vector(
+		sharkSum.x / sharks.length,
+		sharkSum.y / sharks.length
+	)
+
+	const toward = vector(
+		self.position.x - sharkCentre.x,
+		self.position.y - sharkCentre.y
+	);
+
+	const towardMag = Math.hypot(toward.x, toward.y);
+
+	const towardUnit = vector(
+		toward.x / towardMag,
+		toward.y / towardMag
+	);
+
+	const awayUnit = vector(
+		-towardUnit.x,
+		-towardUnit.y
+	);
+
+	return vector(
+		awayUnit.x * 50 * dt,
+		awayUnit.y * 50 * dt
+	)
+
+
+}
+
+function sharkHunger(self: Particle, other: Set<Particle>, dt: number) {
+	if (self.type != ParticleType.Shark) return vector(0, 0);
+
+	// find the nearest fish
+
+	const distance = (other: Vector) =>
+		Math.hypot(self.position.x - other.x, self.position.y, other.y);
+
+
+	const closestFish = Iterable(other.difference(new Set([self])))
+		.map(v => v.type == ParticleType.Fish ? Some(v) : None)
+		.filter()
+		.sort(
+			(a, b) => distance(b.position) - distance(a.position),
+		).first();
+
+	const fishDist = closestFish.and_then(
+		closest => vector(
+			self.position.x - closest.position.x,
+			self.position.y - closest.position.y
+		)
+	)
+
+	const fishDir = fishDist.and_then(
+		dist => {
+			const mag = Math.hypot(dist.x, dist.y);
+
+			return vector(
+				dist.x / mag,
+				dist.y / mag
+			)
+		}
+	)
+
+
+	return fishDir.and_then(dir => vector(
+		dir.x * dt * 1000,
+		dir.y * dt * 100
+	)).unwrap_or(vector(0, 0))
+}
+
 const friction = (coefficient: number) => (self: Particle, _: Set<Particle>, __: number): Vector => vector(-self.velocity.x * coefficient, -self.velocity.y * coefficient);
 
 
@@ -183,7 +268,9 @@ function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 
 const fields: FieldEffect[] = [
 	buoyancy,
-	friction(0.4)
+	friction(0.4),
+	sharkHunger,
+	fishFear
 ];
 
 interface Range {
@@ -216,6 +303,14 @@ function tick(dt: number, p: Set<Particle>, bounds: Range) {
 			(self.position.x + self.velocity.x * dt) % bounds.max.x,
 			(self.position.y + self.velocity.y * dt) % bounds.max.y
 		)
+
+		if (self.position.x < 0) {
+			self.position.x += bounds.max.x
+		}
+
+		if (self.position.y < 0) {
+			self.position.y += bounds.max.y
+		}
 
 		return self;
 	}).to_array())
@@ -257,7 +352,7 @@ export function FishbowlClient() {
 
 
 	useEffect(() => {
-		setInterval(onAnimationFrame, 10);
+		setInterval(onAnimationFrame, 100);
 		animationframeRequestHnd.current = Some(requestAnimationFrame(
 			onAnimationFrame
 		));
