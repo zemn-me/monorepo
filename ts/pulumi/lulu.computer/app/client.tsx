@@ -30,8 +30,6 @@ type Particle = {
 	mass: number;
 	radius: number;
 	type: ParticleType;
-	// Optional properties for behavior
-	acceleration?: Vector;
 };
 
 
@@ -52,6 +50,19 @@ function icon(p: Particle): string {
 	}
 }
 
+interface FieldEffect {
+	(self: Particle, all: Set<Particle>, δt: number): Vector
+}
+
+function buoyancy(self: Particle, _: Set<Particle>, __: number): Vector {
+	if (self.type != ParticleType.Bubble) return vector(0, 0);
+
+	return vector(0, self.mass)
+}
+
+const friction = (coefficient: number) => (self: Particle, _: Set<Particle>, __: number): Vector => vector(-self.velocity.x * coefficient, -self.velocity.y * coefficient);
+
+
 function Fishbowl(props: FishbowlProps) {
 	return <svg style={{
 		width: "100vw",
@@ -67,7 +78,7 @@ function Fishbowl(props: FishbowlProps) {
 					fontSize: `${p.radius}`
 				}}
 				x={p.position.x}
-				y={p.position.y}
+				y={props.size.y-p.position.y}
 			>{
 					icon(p)
 				}</text>).to_array()
@@ -91,12 +102,14 @@ function Fishbowl(props: FishbowlProps) {
 
 function uuid(rng: () => number) {
 	return Iterable(range(0, 10)).map(
-		() => ramp[Math.round(rng() * ramp.length)]
+		() => ramp[Math.floor(rng() * ramp.length)]
 	).fold((a, c) => a + "" + c, "")
 }
 
 
 function spawnBubble(rng: () => number, max: Vector): Particle {
+
+	const radius = 5 + 10 * rng();
 	return {
 		id: uuid(rng),
 		position: vector(
@@ -104,18 +117,19 @@ function spawnBubble(rng: () => number, max: Vector): Particle {
 			rng() * max.y
 		),
 
-		mass: 0,
+		mass: 0.1 + radius * .5,
 
-		radius: 5 + 10 * rng(),
+		radius,
+
 
 		type: ParticleType.Bubble,
 
-		acceleration: vector(0, 0),
-		velocity: vector(0, 0)
+		velocity: vector(rng() * 3, rng() * 3)
 	}
 }
 
 function spawnFish(rng: () => number, max: Vector): Particle {
+	const radius = 10 + 10 * rng();
 	return {
 		id: uuid(rng),
 		position: vector(
@@ -123,18 +137,19 @@ function spawnFish(rng: () => number, max: Vector): Particle {
 			rng() * max.y
 		),
 
-		mass: 0,
+		radius,
+		mass: 0.1 + radius * 2,
 
-		radius: 5 + 10 * rng(),
 
 		type: ParticleType.Fish,
 
-		acceleration: vector(0, 0),
 		velocity: vector(0, 0)
 	}
 }
 
 function spawnShark(rng: () => number, max: Vector): Particle {
+
+	const radius= 15 + 15 * rng();
 	return {
 		id: uuid(rng),
 		position: vector(
@@ -142,13 +157,13 @@ function spawnShark(rng: () => number, max: Vector): Particle {
 			rng() * max.y
 		),
 
-		mass: 0,
+		mass: 1 + radius * 4,
 
-		radius: 10 + 15 * rng(),
+		radius,
+
 
 		type: ParticleType.Shark,
 
-		acceleration: vector(0, 0),
 		velocity: vector(0, 0)
 	}
 }
@@ -166,8 +181,44 @@ function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 
 }
 
-function tick(_: number, p: Set<Particle>) {
-	return p
+const fields: FieldEffect[] = [
+	buoyancy,
+	friction(0.4)
+];
+
+interface Range {
+	min: Vector,
+	max: Vector
+}
+
+function tick(dt: number, p: Set<Particle>, bounds: Range) {
+	return new Set(Iterable(p).map(self => {
+		const force = Iterable(fields).map(field =>
+			field(self, p, dt)
+		).fold((a, b) => vector(a.x + b.x, a.y + b.y), vector(0, 0));
+
+		const acceleration = vector(
+			force.x / self.mass,
+			force.y / self.mass
+		);
+
+		const dv = vector(
+			acceleration.x * dt,
+			acceleration.y * dt
+		);
+
+		self.velocity = vector(
+			self.velocity.x + dv.x,
+			self.velocity.y + dv.y
+		);
+
+		self.position = vector(
+			(self.position.x + self.velocity.x * dt) % bounds.max.x,
+			(self.position.y + self.velocity.y * dt) % bounds.max.y
+		)
+
+		return self;
+	}).to_array())
 }
 
 export function FishbowlClient() {
@@ -188,15 +239,25 @@ export function FishbowlClient() {
 	const onAnimationFrame = useCallback<FrameRequestCallback>(() =>
 		setParticles(particles => {
 			const now = performance.now();
-			const dt = lastFrameTime.current.and_then(last => last - now).unwrap_or(0);
+			const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
 
 			lastFrameTime.current = Some(now);
 
-			return tick(dt, particles)
+			/*
+			animationframeRequestHnd.current = Some(
+				requestAnimationFrame(onAnimationFrame)
+			)
+				*/
+
+			return tick(dt / 1000, particles, {
+				min: vector(0, 0),
+				max: size,
+			})
 		}), [ setParticles ]);
 
 
 	useEffect(() => {
+		setInterval(onAnimationFrame, 10);
 		animationframeRequestHnd.current = Some(requestAnimationFrame(
 			onAnimationFrame
 		));
