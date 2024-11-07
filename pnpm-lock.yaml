@@ -215,8 +215,8 @@ devDependencies:
     specifier: 2.17.0
     version: 2.17.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/pulumi':
-    specifier: 3.137.0
-    version: 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 3.138.0
+    version: 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -5366,7 +5366,7 @@ packages:
   /@pulumi/aws@6.57.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-cFwb7EbbfWntByGuyNmQAZaTXyJu1Wxcuw8aWsBS5xF/C/28iYUooRFXWT37sjYbFtYqTDYGG+LSsg+WKl1yHw==}
     dependencies:
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
       builtin-modules: 3.0.0
       mime: 2.6.0
       resolve: 2.0.0-next.5
@@ -5384,7 +5384,7 @@ packages:
       '@aws-sdk/client-ecs': 3.683.0
       '@pulumi/aws': 6.57.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.5.7(ts-node@10.9.2)(typescript@5.5.4)
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.145
       docker-classic: /@pulumi/docker@3.6.1(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
@@ -5401,7 +5401,7 @@ packages:
     deprecated: Inadvertently published.
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5413,7 +5413,7 @@ packages:
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
     dependencies:
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
       semver: 5.7.2
     transitivePeerDependencies:
       - bluebird
@@ -5425,7 +5425,7 @@ packages:
   /@pulumi/docker@4.5.7(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-z0rr1PoJXemafrNl0oPjQJlGRNbMKN0z50cKhmcuMVsiNTt36cDLXw7kpclgddgdwkM6ZU5zMRyaA1rcNuXTlg==}
     dependencies:
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
       semver: 5.7.2
     transitivePeerDependencies:
       - bluebird
@@ -5434,8 +5434,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/pulumi@3.137.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-YgvcPKxuE3X1Yi93W2qZuM43nELT1FEvz7J5IK1hAJPo+v9m2oAh5Vag1lNDPjM0+y7WDfFe0ODI+2way3quRw==}
+  /@pulumi/pulumi@3.138.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-LcQTYwVecIpoA9Dnbq31+3IuOT4QYsGmCbXO0+wJLFlXBxBEoeq4Rft16shxM01n3EXJnTo4w5/pLetoAz0pYg==}
     engines: {node: '>=18'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -5488,7 +5488,7 @@ packages:
   /@pulumi/random@4.16.7(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-lY51FGL6dbD2o37HKqisrlHQH+q2yd+dInEcZR0H78fT33vTjzNHo2rUf89eK0Gb9JjFTCTw/CHC2qtT02MALA==}
     dependencies:
-      '@pulumi/pulumi': 3.137.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.138.0(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
       - bluebird
       - supports-color
