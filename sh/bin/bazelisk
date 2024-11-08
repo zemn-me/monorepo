@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Wrapper for Bazelisk
+
+# Step 1: Check if `bazelisk` exists in PATH
+if command -v bazelisk &> /dev/null; then
+  exec bazelisk "$@"
+
+# Step 2: Check if `go` is available in PATH
+elif command -v go &> /dev/null; then
+  exec go run github.com/bazelbuild/bazelisk@latest "$@"
+
+# Step 3: Check if `npx` is available in PATH
+elif command -v npx &> /dev/null; then
+  exec npx --yes @bazel/bazelisk "$@"
+
+# Step 4: Error out if none of the above are available
+else
+  echo "Error: Bazelisk, Go, and NPX are not available. Please install one of them to use this script."
+  exit 1
+fi
