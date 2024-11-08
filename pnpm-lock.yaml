@@ -368,8 +368,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.7.4
-    version: 39.7.4(@aws-sdk/client-sso-oidc@3.682.0)(typanion@3.14.0)
+    specifier: 39.7.5
+    version: 39.7.5(@aws-sdk/client-sso-oidc@3.682.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -16469,8 +16469,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.7.4(@aws-sdk/client-sso-oidc@3.682.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-l66G9agOxSLkjASgxsgLvsnoxHoei4DzNtY7LrimwxHA8i1yWB3GGxuy8wqLj5waHgBTdZ9/fc06YLx+Tslm+w==}
+  /renovate@39.7.5(@aws-sdk/client-sso-oidc@3.682.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-IMXE+OCRuEUVOJy2cla1gnGj79BH9PHdXX1IyzNwRcSZcCTdyaHic4WclbZTMflVh8QxzpLA13QJzlRBVuJyOg==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16574,7 +16574,7 @@ packages:
       slugify: 1.6.6
       source-map-support: 0.5.21
       toml-eslint-parser: 0.10.0
-      tslib: 2.8.0
+      tslib: 2.8.1
       upath: 2.0.1
       url-join: 4.0.1
       validate-npm-package-name: 6.0.0
@@ -18084,10 +18084,6 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
-
-  /tslib@2.8.0:
-    resolution: {integrity: sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==}
     dev: true
 
   /tslib@2.8.1:
