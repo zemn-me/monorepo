@@ -25,7 +25,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
-		"CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+		"CARGO_BAZEL_REPIN=true npx bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 	],
 	"packageRules": [
 		{
