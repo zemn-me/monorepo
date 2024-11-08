@@ -50,7 +50,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+					"CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
