@@ -24,7 +24,7 @@ def run(*args, env = {}, **kwargs):
 
 def bazel(args: list[str] = [],  **kwargs):
 	return run(
-		["bazelisk"] + args,
+		["./sh/bin/bazel"] + args,
 		check=True, **kwargs,
 	)
 
