@@ -18,8 +18,8 @@ require (
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.19
 	github.com/twilio/twilio-go v1.23.5
-	golang.org/x/sync v0.8.0
-	golang.org/x/tools v0.26.0
+	golang.org/x/sync v0.9.0
+	golang.org/x/tools v0.27.0
 	honnef.co/go/tools v0.5.1
 )
 
@@ -65,8 +65,8 @@ require (
 	golang.org/x/arch v0.6.0 // indirect
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
-	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/mod v0.22.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
