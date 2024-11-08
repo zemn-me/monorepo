@@ -24,7 +24,7 @@ def run(*args, env = {}, **kwargs):
 
 def bazel(args: list[str] = [],  **kwargs):
 	return run(
-		["npx", "--yes", "@bazel/bazelisk"] + args,
+		["bazelisk"] + args,
 		check=True, **kwargs,
 	)
 
