@@ -25,6 +25,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
+		"mkdir -p $HOME/.cache/bazelisk",
 		"CARGO_BAZEL_REPIN=true ./sh/bin/bazel run --tool_tag=postupgrade //ci:postupgrade"
 	],
 	"packageRules": [
@@ -50,6 +51,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
+					"mkdir -p $HOME/.cache/bazelisk",
 					"CARGO_BAZEL_REPIN=true ./sh/bin/bazel run --tool_tag=postupgrade //ci:postupgrade"
 				],
 				"executionMode": "branch",
