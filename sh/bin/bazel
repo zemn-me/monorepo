@@ -8,7 +8,7 @@ if command -v bazelisk &> /dev/null; then
 
 # Step 2: Check if `go` is available in PATH
 elif command -v go &> /dev/null; then
-  strace go run github.com/bazelbuild/bazelisk@latest -- "$@"
+  strace go run github.com/bazelbuild/bazelisk@latest "$@"
 
 # Step 3: Check if `npx` is available in PATH
 elif command -v npx &> /dev/null; then
