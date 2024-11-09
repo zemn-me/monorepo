@@ -2,6 +2,8 @@
 
 # Wrapper for Bazelisk
 
+set -x
+
 # Step 1: Check if `bazelisk` exists in PATH
 if command -v bazelisk &> /dev/null; then
   bazelisk "$@"
@@ -12,10 +14,13 @@ elif command -v go &> /dev/null; then
 
 # Step 3: Check if `npx` is available in PATH
 elif command -v npx &> /dev/null; then
-  npx --yes @bazel/bazelisk -- "$@"
+  npx --yes @bazel/bazelisk "$@"
 
 # Step 4: Error out if none of the above are available
 else
   echo "Error: Bazelisk, Go, and NPX are not available. Please install one of them to use this script."
   exit 1
 fi
+
+
+set +x
