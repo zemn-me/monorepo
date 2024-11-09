@@ -27,6 +27,20 @@
 	"allowedPostUpgradeCommands": [
 		"XDG_CACHE_HOME=/home/ubuntu CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 	],
+	"customManagers": [
+		{
+			"customType": "regex",
+			"fileMatch": "^MODULE.bazel$",
+			"matchStrings": [
+				"PYTHON_VERSION\\s*=\\s*\"(?<currentVersion>\\d+(?:\\.(?<minor>\\d+)?))\"\\s*"
+			],
+			"autoReplaceStringTemplate": "PYTHON_VERSION = \"{{{newValue}}}\"",
+			"currentValueTemplate": "3.{{{minor}}}",
+			"datasourceTemplate": "python-version",
+			"versioningTemplate": "python",
+			"depNameTemplate": "python"
+		}
+	],
 	"packageRules": [
 		{
 			"matchManagers": [
