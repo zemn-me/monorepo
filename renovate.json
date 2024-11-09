@@ -25,7 +25,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
-		"XDG_CACHE_HOME=/home/ubuntu CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk -- run --tool_tag=postupgrade //ci:postupgrade"
+		"XDG_CACHE_HOME=/home/ubuntu CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 	],
 	"packageRules": [
 		{
@@ -50,7 +50,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"XDG_CACHE_HOME=/home/ubuntu CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk -- run --tool_tag=postupgrade //ci:postupgrade"
+					"XDG_CACHE_HOME=/home/ubuntu CARGO_BAZEL_REPIN=true npx --yes @bazel/bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
