@@ -39,6 +39,17 @@
 			"datasourceTemplate": "python-version",
 			"versioningTemplate": "python",
 			"depNameTemplate": "python"
+		},
+		{
+			"customType": "regex",
+			"fileMatch": "^MODULE.bazel$",
+			"matchStrings": [
+				"RUST_VERSION\\s*=\\s*\"(?<currentVersion>\\d+(?:\\.(?<minor>\\d+)?))\"\\s*"
+			],
+			"autoReplaceStringTemplate": "RUST_VERSION = \"{{{newValue}}}\"",
+			"datasourceTemplate": "github-releases",
+			"versioningTemplate": "rust",
+			"depNameTemplate": "rust-lang/rust"
 		}
 	],
 	"packageRules": [

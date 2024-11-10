@@ -42,6 +42,8 @@ rust_register_toolchains(edition = "2021")
 # this rule is really weird. see docs https://github.com/bazelbuild/rules_rust/blob/main/crate_universe/private/crates_repository.bzl#L137
 load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 
+RUST_VERSION = "1.60.0"  # renovate managed
+
 crates_repository(
     name = "cargo",
     cargo_lockfile = "//:Cargo.Bazel.lock",
@@ -49,7 +51,7 @@ crates_repository(
     lockfile = "//:cargo-bazel-lock.json",
     manifests = ["//:Cargo.toml"],
     # Should match the version represented by the currently registered `rust_toolchain`.
-    rust_version = "1.60.0",
+    rust_version = RUST_VERSION,
 )
 
 load("@cargo//:defs.bzl", "crate_repositories")
