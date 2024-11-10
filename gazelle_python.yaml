@@ -23,7 +23,6 @@ manifest:
     charset_normalizer: charset_normalizer
     click: click
     comm: comm
-    cryptography: cryptography
     dateutil: python_dateutil
     debugpy: debugpy
     decorator: decorator
@@ -58,9 +57,6 @@ manifest:
     jupyterlab_pygments: jupyterlab_pygments
     jupyterlab_server: jupyterlab_server
     jupyterlab_widgets: jupyterlab_widgets
-    langcodes: langcodes
-    language_data: language_data
-    marisa_trie: marisa_trie
     markupsafe: MarkupSafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
@@ -80,7 +76,6 @@ manifest:
     parso: parso
     pathspec: pathspec
     pexpect: pexpect
-    pgpy: PGPy
     pip: pip
     piptools: pip_tools
     pkg_resources: setuptools
@@ -90,7 +85,6 @@ manifest:
     psutil: psutil
     ptyprocess: ptyprocess
     pure_eval: pure_eval
-    pyasn1: pyasn1
     pycparser: pycparser
     pygments: pygments
     pyproject_hooks: pyproject_hooks
@@ -101,7 +95,6 @@ manifest:
     rfc3986_validator: rfc3986_validator
     rpds: rpds_py
     ruff: ruff
-    sectxt: sectxt
     send2trash: Send2Trash
     setuptools: setuptools
     six: six
@@ -127,4 +120,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: 2f3f3745a959c286ec6b3c5288306ac9606124eb4e195b8ca30803442d9a4652
+integrity: 75eefe1131c4bbc493521c8c399030466f64a14995fb30d44a1e6d7657f2ae80
