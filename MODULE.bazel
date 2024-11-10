@@ -43,7 +43,7 @@ bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependenc
 bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "rules_python", version = "0.37.2")
 
-PYTHON_VERSION = "3.11"  # renovate managed
+PYTHON_VERSION = "3.13"# renovate managed
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
