@@ -1,6 +1,9 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
+	"extends": [
+		"config:best-practices",
+		":maintainLockFilesWeekly"
+	],
 	"automerge": true,
 	"autodiscover": true,
 	"configMigration": true,
@@ -12,11 +15,18 @@
 	"rangeStrategy": "pin",
 	"recreateWhen": "always",
 	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} \n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
-	"ignorePaths": ["**/monorepo/dist/**"],
-	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
-	"autodiscoverFilter": ["zemn-me/monorepo"],
+	"ignorePaths": [
+		"**/monorepo/dist/**"
+	],
+	"gitIgnoredAuthors": [
+		"zemnmez+renovate@gmail.com"
+	],
+	"autodiscoverFilter": [
+		"zemn-me/monorepo"
+	],
 	"allowedPostUpgradeCommands": [
-		"CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+		"mkdir -p $HOME/.bazelisk",
+		"BAZELISK_HOME=$HOME/.bazelisk CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 	],
 	"customManagers": [
 		{
@@ -34,8 +44,12 @@
 	],
 	"packageRules": [
 		{
-			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["rules_oci"],
+			"matchManagers": [
+				"bazel-module"
+			],
+			"matchPackageNames": [
+				"rules_oci"
+			],
 			"allowedVersions": "!/1.8.0$/"
 		},
 		{
@@ -52,7 +66,8 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+					"mkdir -p $HOME/.bazelisk",
+					"BAZELISK_HOME=$HOME/.bazelisk CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
@@ -70,11 +85,15 @@
 		},
 		{
 			"groupName": "pulumi_cli",
-			"matchPackageNames": ["/pulumi_cli_.*/"]
+			"matchPackageNames": [
+				"/pulumi_cli_.*/"
+			]
 		},
 		{
 			"groupName": "chromedriver",
-			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
+			"matchPackageNames": [
+				"/com_googleapis_storage_chromedriver.*/"
+			]
 		}
 	]
 }
