@@ -21,6 +21,7 @@ jobs:
         uses: renovatebot/github-action@67a664fc9b4481b33a3eff6ee9edfb7a7b9dfa1e # v41.0.2
         with:
           configurationFile: renovate.json
+          renovate-version: full
           token: ${{ secrets.GH_PAT }}
     env:
       LOG_LEVEL: 'debug'
