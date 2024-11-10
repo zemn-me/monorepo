@@ -61,10 +61,18 @@ export const add: <I extends number>(
 	v2: Vector<I>
 ) => Vector<I> = (v1, v2) => map(v1, (v, i) => v + v2[i]!);
 
+export const sub = <I extends number>(
+	v1: Vector<I>,
+	v2: Vector<I>
+) => add(v1, map(v2, x => -x));
+
 export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v1,
 	v2
 ) => map(v2, (v /*i*/) => v * v1);
+
+export const div = <I extends number>(v1: number, v2: Vector<I>) =>
+	mul(1 / v1, v2);
 
 export const dot: (v1: Iterable<number>, v2: Iterable<number>) => number = (
 	v1,
