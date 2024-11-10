@@ -15,6 +15,9 @@ bazel_lint(
 py_library(
     name = "testing",
     srcs = ["core.py"],
+    data = [
+        "//project/cultist/gen:core_en.json",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//project/cultist/gen:core_py_proto",
