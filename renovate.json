@@ -25,8 +25,7 @@
 		"zemn-me/monorepo"
 	],
 	"allowedPostUpgradeCommands": [
-		"mkdir -p $HOME/.bazelisk",
-		"BAZELISK_HOME=$HOME/.bazelisk CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+		"./sh/postUpgrade.sh"
 	],
 	"customManagers": [
 		{
@@ -66,8 +65,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
-					"mkdir -p $HOME/.bazelisk",
-					"BAZELISK_HOME=$HOME/.bazelisk CARGO_BAZEL_REPIN=true bazelisk run --tool_tag=postupgrade //ci:postupgrade"
+					"./sh/postUpgrade.sh"
 				],
 				"executionMode": "branch",
 				"fileFilters": [
