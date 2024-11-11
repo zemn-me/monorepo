@@ -405,6 +405,20 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
+		new aws.route53.Record(
+			`${name}_dmarc_record`,
+			{
+				zoneId: args.zoneId,
+				name: pulumi.interpolate`_dmarc.${args.domain}`,
+				type: 'TXT',
+				records: pulumi.output(args.domain).apply(name => [
+					`"v=DMARC1; p=none; rua=mailto:dmarc-reports@${name}; ruf=mailto:dmarc-failures@${name}; sp=none; adkim=s; aspf=s"`,
+				]),
+				ttl: 300,
+			},
+			{ parent: this }
+		);
+
 		const txt_record = new aws.route53.Record(
 			`${name}_txt_record`,
 			{
@@ -412,12 +426,31 @@ export class Website extends pulumi.ComponentResource {
 				name: args.domain,
 				type: 'TXT',
 				records: [
+					`google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM`,
 					'google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY',
 					'v=spf1 include:_spf.google.com ~all',
 				],
 				ttl: 1800,
 			},
 			{ protect: false }
+		);
+
+		new aws.route53.Record(
+			`${name}_mx`,
+			{
+				zoneId: args.zoneId,
+				name: args.domain,
+				type: 'MX',
+				records: [
+					"1 ASPMX.L.GOOGLE.COM",
+					"5 ALT1.ASPMX.L.GOOGLE.COM",
+					"5 ALT2.ASPMX.L.GOOGLE.COM",
+					"10 ALT3.ASPMX.L.GOOGLE.COM",
+					"10 ALT4.ASPMX.L.GOOGLE.COM",
+				],
+				ttl: 300,
+			},
+			{ parent: this }
 		);
 
 		this.registerOutputs({
