@@ -126,19 +126,19 @@ exports_files(glob(["**/*"], exclude_directories=0))
 
     http_archive(
         name = "rules_rust",
-        sha256 = "85e2013727ab26fb22abdffe4b2ac0c27a2d5b6296167ba63d8f6e13140f51f9",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.53.0/rules_rust-v0.53.0.tar.gz"],
+        sha256 = "af4f56caae50a99a68bfce39b141b509dd68548c8204b98ab7a1cafc94d5bb02",
+        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.54.1/rules_rust-v0.54.1.tar.gz"],
     )
 
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/7e51a763e73c7657f11c9b707fd25d6c800ea106.zip",
-        strip_prefix = "json-schemas-7e51a763e73c7657f11c9b707fd25d6c800ea106",
+        url = "https://github.com/microsoft/json-schemas/archive/f7629762adf8092fb825d30e0ffabdcb8346fc26.zip",
+        strip_prefix = "json-schemas-f7629762adf8092fb825d30e0ffabdcb8346fc26",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "f20baac009828a9141dca271b044c7226431c0f30a946200c1efb92b24d13049",
+        sha256 = "ab2683db030ad4a4eaa4100e8e73275bbd19c3dbc95f2cc0d9b5dcfa083be74c",
     )
 
     ##########
