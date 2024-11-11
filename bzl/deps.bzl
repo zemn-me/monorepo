@@ -264,4 +264,5 @@ native_binary(
 exports_files(glob(["**/*"]))
 
             """,
+        integrity = "sha256-sr46XROs38AGASqEkUIKODVoLpDciRBRlJeNe+NvN2Q=",
     )
