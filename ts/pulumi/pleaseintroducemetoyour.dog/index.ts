@@ -54,6 +54,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
+				email: true,
 				tags,
 			},
 			{ parent: this }
