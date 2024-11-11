@@ -30,19 +30,21 @@ export class Component extends Pulumi.ComponentResource {
 
 		const tags = mergeTags(args.tags, tagTrue(costAllocation.tagKey));
 
-		const domainName = 'lulu.computer';
+		const baseDomainName = 'lulu.computer';
 
 		const zone = aws.route53.getZone(
 			{
-				name: `${domainName}.`,
+				name: `${baseDomainName}.`,
 			},
 			{ parent: this }
 		);
 
-		const domain = new aws.route53domains.RegisteredDomain(
+
+
+		const baseDomain = new aws.route53domains.RegisteredDomain(
 			`${name}_domain`,
 			{
-				domainName,
+				domainName: baseDomainName,
 				tags,
 				nameServers: zone.then(zone =>
 					// this is a bit of a hack.
@@ -59,6 +61,59 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+
+		const usedDomainname = baseDomain.domainName.apply(name => [...(args.staging ? ['staging'] : []), name].join('.'));
+
+		// workspacesDomainClaimRecord
+		new aws.route53.Record(
+			`${name}_domain_claim_record`,
+			{
+				zoneId: zone.then(z => z.id),
+				name: usedDomainname,
+				type: 'TXT',
+				records: [
+					`"google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM"`,
+					`"v=spf1 include:_spf.google.com ~all"`
+				],
+				ttl: 300,
+			},
+			{ parent: this }
+		)
+
+		new aws.route53.Record(
+			`${name}_dmarc_record`,
+			{
+				zoneId: zone.then(z => z.id),
+				name: usedDomainname.apply(name => `_dmarc.${name}`),
+				type: 'TXT',
+				records: usedDomainname.apply(name => [
+					`"v=DMARC1; p=none; rua=mailto:dmarc-reports@${name}; ruf=mailto:dmarc-failures@${name}; sp=none; adkim=s; aspf=s"`,
+				]),
+				ttl: 300,
+			},
+			{ parent: this }
+		);
+
+		// Combined MX records for Google Workspace
+		new aws.route53.Record(
+			`${name}_mx`,
+			{
+				zoneId: zone.then(z => z.id),
+				name: usedDomainname,
+				type: 'MX',
+				records: [
+					"1 ASPMX.L.GOOGLE.COM",
+					"5 ALT1.ASPMX.L.GOOGLE.COM",
+					"5 ALT2.ASPMX.L.GOOGLE.COM",
+					"10 ALT3.ASPMX.L.GOOGLE.COM",
+					"10 ALT4.ASPMX.L.GOOGLE.COM",
+				],
+				ttl: 300,
+			},
+			{ parent: this }
+		);
+
+
 		this.site = new Website(
 			`${name}_lulu.computer`,
 			{
@@ -67,12 +122,12 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 				directory: 'ts/pulumi/lulu.computer/out',
 				zoneId: zone.then(zone => zone.zoneId),
-				domain: domain.domainName.apply(domainName =>
-					[...(args.staging ? ['staging'] : []), domainName].join('.')
-				),
+				domain: usedDomainname,
 				noIndex: args.staging,
 			},
 			{ parent: this }
 		);
+
+
 	}
 }
