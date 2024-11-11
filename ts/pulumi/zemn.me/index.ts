@@ -40,6 +40,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
+				email: false,
 				tags,
 			},
 			{ parent: this }
@@ -54,6 +55,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: args.zoneId,
 				domain: ['availability', args.domain].join('.'),
 				noIndex: true, // args.noIndex,
+				email: false,
 				tags,
 			},
 			{ parent: this }

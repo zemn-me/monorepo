@@ -71,6 +71,7 @@ export class Component extends Pulumi.ComponentResource {
 					[...(args.staging ? ['staging'] : []), domainName].join('.')
 				),
 				noIndex: args.staging,
+				email: true,
 			},
 			{ parent: this }
 		);
