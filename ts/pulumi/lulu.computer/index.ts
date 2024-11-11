@@ -39,6 +39,20 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		// workspacesDomainClaimRecord
+		new aws.route53.Record(
+			`${name}_domain_claim_record`,
+			{
+				zoneId: zone.then(z => z.id),
+				name: zone.then(z => z.name),
+				type: 'TXT',
+				records: [
+					'google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM'
+				]
+			},
+			{ parent: this}
+		)
+
 		const domain = new aws.route53domains.RegisteredDomain(
 			`${name}_domain`,
 			{
@@ -74,5 +88,7 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+
 	}
 }
