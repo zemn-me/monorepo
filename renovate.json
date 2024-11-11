@@ -39,6 +39,20 @@
 			"datasourceTemplate": "python-version",
 			"versioningTemplate": "python",
 			"depNameTemplate": "python"
+		},
+		{
+			"customType": "regex",
+			"description": "Renovate directives",
+			"fileMatch": [
+				"^MODULE.bazel$"
+			],
+			"matchStrings": [
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>.*)\n#\\s*versioning\\s*=\\s*(?<versioning>python)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+			],
+			"datasourceTemplate": "{{{datasource}}}",
+			"currentValueTemplate": "{{{currentValue}}}",
+			"versioningTemplate": "{{{versioning}}}",
+			"depNameTemplate": "{{{depName}}",
 		}
 	],
 	"packageRules": [
