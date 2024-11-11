@@ -3,7 +3,9 @@ import path from 'node:path';
 
 import * as aws from '@pulumi/aws';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import * as gcp from '@pulumi/gcp';
 import * as pulumi from '@pulumi/pulumi';
+import { PulumiCommand } from '@pulumi/pulumi/automation';
 import mime from 'mime';
 
 import * as guard from '#root/ts/guard.js';
@@ -410,6 +412,9 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
+		const txt_records: (pulumi.Input<string>)[] = [];
+
+
 		if (args.email) {
 			new aws.route53.Record(
 				`${name}_dmarc_record`,
@@ -425,21 +430,9 @@ export class Website extends pulumi.ComponentResource {
 				{ parent: this }
 			);
 
-			new aws.route53.Record(
-				`${name}_txt_record`,
-				{
-					zoneId: args.zoneId,
-					name: args.domain,
-					type: 'TXT',
-					records: [
-						`"google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM"`,
-						`"google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY"`,
-						`"v=spf1 include:_spf.google.com ~all"`,
-					],
-					ttl: 1800,
-				},
-				{ protect: false }
-			);
+			txt_records.push(
+				`"v=spf1 include:_spf.google.com ~all"`,
+			)
 
 			new aws.route53.Record(
 				`${name}_mx`,
@@ -459,6 +452,46 @@ export class Website extends pulumi.ComponentResource {
 				{ parent: this }
 			);
 		}
+
+
+
+		const token = pulumi.output(args.domain).apply(name => gcp.siteverification.getToken({
+			type: "INET_DOMAIN",
+			identifier: name,
+			verificationMethod: "DNS_TXT"
+		}));
+
+		txt_records.push(
+			token.apply(v => v.token)
+		);
+
+
+		const txtRecords = new aws.route53.Record(
+			`${name}_txt_record`,
+			{
+				zoneId: args.zoneId,
+				name: args.domain,
+				type: 'TXT',
+				records: pulumi.all(txt_records),
+				ttl: 1800,
+			},
+			{ protect: false }
+		);
+
+		const resource = new gcp.siteverification.WebResource("example", {
+			site: {
+				type: token.apply(token => token.type),
+				identifier: token.apply(token => token.identifier),
+			},
+			verificationMethod: token.apply(token => token.verificationMethod),
+		}, {
+			dependsOn: [txtRecords],
+		});
+
+		new gcp.siteverification.Owner("example", {
+			webResourceId: resource.id,
+			email: "thomas@shadwell.im",
+		});
 
 		this.registerOutputs({
 			distribution,
