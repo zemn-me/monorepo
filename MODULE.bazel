@@ -45,7 +45,11 @@ bazel_dep(name = "rules_python", version = "0.38.0")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
-PYTHON_VERSION = "3.13"  # renovate managed
+# renovate:
+# 	datasource=python-version
+# 	versioning=python
+# 	depName=python
+PYTHON_VERSION = "3.13"
 
 python.toolchain(
     is_default = True,
