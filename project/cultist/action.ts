@@ -1,4 +1,4 @@
-import immutable from 'immutable';
+import * as immutable from 'immutable';
 
 import * as state from '#root/project/cultist/state/index.js';
 import * as cultist from '#root/project/cultist/types.js';

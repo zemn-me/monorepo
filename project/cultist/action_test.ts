@@ -1,4 +1,4 @@
-import immutable from 'immutable';
+import * as immutable from 'immutable';
 
 import * as action from '#root/project/cultist/action.js';
 import * as element from '#root/project/cultist/element.js';
