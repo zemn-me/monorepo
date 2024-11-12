@@ -1,5 +1,5 @@
 'use client';
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 import memoizee from 'memoizee';
 import React, { ReactElement } from 'react';
 
