@@ -2,7 +2,7 @@
  * @fileoverview like save state, but more sane.
  */
 
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 interface MutableState {
 	elementStacks?: Immutable.Map<string, ElementInstance>;
