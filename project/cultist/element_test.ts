@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 import * as cultist from '#root/project/cultist.js';
 

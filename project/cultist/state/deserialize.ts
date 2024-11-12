@@ -2,7 +2,7 @@
  * @fileoverview like save state, but more sane.
  */
 
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 import * as Save from '#root/project/cultist/save.js';
 import * as State from '#root/project/cultist/state/state.js';
