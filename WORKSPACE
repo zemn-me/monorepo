@@ -46,7 +46,7 @@ load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.60.0"
+RUST_VERSION = "1.82.0"
 
 crates_repository(
     name = "cargo",
