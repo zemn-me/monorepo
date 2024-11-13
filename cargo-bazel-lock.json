@@ -1,5 +1,5 @@
 {
-  "checksum": "4bf92380171952bae407198c19287ae083530acf9c59131712797abf4982cb59",
+  "checksum": "f0b00705d421c66b38f5a36c1ed1bc243b53c42394eaaa5ab9a8a6cb20e59b65",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2754,14 +2754,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "command_attr 0.5.2": {
+    "command_attr 0.5.3": {
       "name": "command_attr",
-      "version": "0.5.2",
+      "version": "0.5.3",
       "package_url": null,
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/command_attr/0.5.2/download",
-          "sha256": "88da8d7e9fe6f30d8e3fcf72d0f84102b49de70fece952633e8439e89bdc7631"
+          "url": "https://static.crates.io/crates/command_attr/0.5.3/download",
+          "sha256": "6fcc89439e1bb4e19050a9586a767781a3060000d2f3296fd2a40597ad9421c5"
         }
       },
       "targets": [
@@ -2801,7 +2801,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.2"
+        "version": "0.5.3"
       },
       "license": "ISC",
       "license_ids": [
@@ -7620,7 +7620,7 @@
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.2",
+              "id": "serenity 0.12.3",
               "target": "serenity"
             },
             {
@@ -12484,14 +12484,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "serenity 0.12.2": {
+    "serenity 0.12.3": {
       "name": "serenity",
-      "version": "0.12.2",
+      "version": "0.12.3",
       "package_url": "https://github.com/serenity-rs/serenity.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/serenity/0.12.2/download",
-          "sha256": "880a04106592d0a8f5bdacb1d935889bfbccb4a14f7074984d9cd857235d34ac"
+          "url": "https://static.crates.io/crates/serenity/0.12.3/download",
+          "sha256": "e8f0088eeaf12d92d0a7b6cbbde5c14a2ca9016f51f71c4b54ebcf66c69dc472"
         }
       },
       "targets": [
@@ -12632,7 +12632,7 @@
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.2",
+              "id": "serenity 0.12.3",
               "target": "build_script_build"
             },
             {
@@ -12679,13 +12679,13 @@
               "target": "async_trait"
             },
             {
-              "id": "command_attr 0.5.2",
+              "id": "command_attr 0.5.3",
               "target": "command_attr"
             }
           ],
           "selects": {}
         },
-        "version": "0.12.2"
+        "version": "0.12.3"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -21115,7 +21115,7 @@
     "hex 0.4.3",
     "rxp 0.2.0",
     "serde_json 1.0.132",
-    "serenity 0.12.2",
+    "serenity 0.12.3",
     "sha2 0.10.8",
     "swc_allocator 0.1.6",
     "swc_atoms 1.0.0",
