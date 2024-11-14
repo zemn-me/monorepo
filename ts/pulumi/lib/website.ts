@@ -11,6 +11,15 @@ import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
+const millisecond = 1
+const second = millisecond * 1000
+const minute = 60 * second
+const hour = 60 * minute
+const day = hour * 24
+
+const maxCloudFrontPropagationTimeSeconds =
+	1 * day;
+
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
 		t = path.normalize(to);
@@ -125,6 +134,9 @@ export class Website extends pulumi.ComponentResource {
 			deriveBucketName(name),
 			{
 				tags,
+				// put versioning config!
+				// we also need to make sure the latest
+				// veresion is always used
 			},
 			{
 				parent: this,
@@ -172,6 +184,12 @@ export class Website extends pulumi.ComponentResource {
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
 							source,
+							// try to make objects get retained until
+							// CF can propagate new versions of things.
+							objectLockRetainUntilDate:
+								new Date((+new Date()) + maxCloudFrontPropagationTimeSeconds)
+									.toISOString(),
+							objectLockMode: 'GOVERNANCE',
 							tags,
 						},
 						{
