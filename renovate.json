@@ -36,7 +36,7 @@
 				"^WORKSPACE$"
 			],
 			"matchStrings": [
-				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>.*)\n#\\s*versioning\\s*=\\s*(?<versioning>python)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>.*)\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
 			],
 			"datasourceTemplate": "{{{datasource}}}",
 			"currentValueTemplate": "{{{currentValue}}}",

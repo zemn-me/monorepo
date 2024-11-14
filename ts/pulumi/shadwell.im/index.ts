@@ -43,6 +43,7 @@ export class Component extends Pulumi.ComponentResource {
 				domain: ['thomas', args.domain].join('.'),
 				noIndex: args.noIndex,
 				tags,
+				email: false,
 			},
 			{ parent: this }
 		);
@@ -53,6 +54,7 @@ export class Component extends Pulumi.ComponentResource {
 			zoneId: args.zoneId,
 			domain: ['luke', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 
@@ -62,6 +64,7 @@ export class Component extends Pulumi.ComponentResource {
 			zoneId: args.zoneId,
 			domain: ['kate', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 
@@ -72,6 +75,7 @@ export class Component extends Pulumi.ComponentResource {
 			domain: ['anna', args.domain].join('.'),
 			noIndex: args.noIndex,
 			noCostAllocationTag: true,
+			email: false,
 			tags,
 		});
 
@@ -81,6 +85,7 @@ export class Component extends Pulumi.ComponentResource {
 			zoneId: args.zoneId,
 			domain: ['lucy', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 

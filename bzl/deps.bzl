@@ -12,9 +12,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_proto",
-        sha256 = "6fb6767d1bef535310547e03247f7518b03487740c11b6c6adb7952033fe1295",
-        strip_prefix = "rules_proto-6.0.2",
-        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/6.0.2.tar.gz",
+        sha256 = "0e5c64a2599a6e26c6a03d6162242d231ecc0de219534c38cb4402171def21e8",
+        strip_prefix = "rules_proto-7.0.2",
+        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/7.0.2.tar.gz",
     )
 
     http_archive(
@@ -133,12 +133,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/f7629762adf8092fb825d30e0ffabdcb8346fc26.zip",
-        strip_prefix = "json-schemas-f7629762adf8092fb825d30e0ffabdcb8346fc26",
+        url = "https://github.com/microsoft/json-schemas/archive/2fa3cf87bde32b5b6df8eb208d09731aa74f9795.zip",
+        strip_prefix = "json-schemas-2fa3cf87bde32b5b6df8eb208d09731aa74f9795",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "ab2683db030ad4a4eaa4100e8e73275bbd19c3dbc95f2cc0d9b5dcfa083be74c",
+        sha256 = "fba80b17eece982e3ddb4fe78a27cf1504a0a3311938b25f51d1479ddb6267de",
     )
 
     ##########

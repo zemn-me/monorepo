@@ -11,6 +11,15 @@ import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
+const millisecond = 1
+const second = millisecond * 1000
+const minute = 60 * second
+const hour = 60 * minute
+const day = hour * 24
+
+const maxCloudFrontPropagationTimeSeconds =
+	1 * day;
+
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
 		t = path.normalize(to);
@@ -77,6 +86,11 @@ export interface Args {
 	noCostAllocationTag?: boolean
 
 	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
+
+	/**
+	 * Whether to set up email for this website.
+	 */
+	email: boolean
 }
 
 /**
@@ -120,6 +134,9 @@ export class Website extends pulumi.ComponentResource {
 			deriveBucketName(name),
 			{
 				tags,
+				// put versioning config!
+				// we also need to make sure the latest
+				// veresion is always used
 			},
 			{
 				parent: this,
@@ -167,6 +184,12 @@ export class Website extends pulumi.ComponentResource {
 								() => `couldn't get contentType of ${fPath}`
 							)(mime.getType(fPath)),
 							source,
+							// try to make objects get retained until
+							// CF can propagate new versions of things.
+							objectLockRetainUntilDate:
+								new Date((+new Date()) + maxCloudFrontPropagationTimeSeconds)
+									.toISOString(),
+							objectLockMode: 'GOVERNANCE',
 							tags,
 						},
 						{
@@ -405,26 +428,60 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this, deleteBeforeReplace: true }
 		);
 
-		const txt_record = new aws.route53.Record(
-			`${name}_txt_record`,
-			{
-				zoneId: args.zoneId,
-				name: args.domain,
-				type: 'TXT',
-				records: [
-					'google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY',
-					'v=spf1 include:_spf.google.com ~all',
-				],
-				ttl: 1800,
-			},
-			{ protect: false }
-		);
+		if (args.email) {
+			new aws.route53.Record(
+				`${name}_dmarc_record`,
+				{
+					zoneId: args.zoneId,
+					name: pulumi.interpolate`_dmarc.${args.domain}`,
+					type: 'TXT',
+					records: pulumi.output(args.domain).apply(name => [
+						`v=DMARC1; p=none; rua=mailto:dmarc-reports@${name}; ruf=mailto:dmarc-failures@${name}; sp=none; adkim=s; aspf=s`,
+					]),
+					ttl: 300,
+				},
+				{ parent: this }
+			);
+
+			new aws.route53.Record(
+				`${name}_txt_record`,
+				{
+					zoneId: args.zoneId,
+					name: args.domain,
+					type: 'TXT',
+					records: [
+						`google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM`,
+						`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
+						`v=spf1 include:_spf.google.com ~all`,
+					],
+					ttl: 1800,
+				},
+				{ protect: false }
+			);
+
+			new aws.route53.Record(
+				`${name}_mx`,
+				{
+					zoneId: args.zoneId,
+					name: args.domain,
+					type: 'MX',
+					records: [
+						"1 ASPMX.L.GOOGLE.COM",
+						"5 ALT1.ASPMX.L.GOOGLE.COM",
+						"5 ALT2.ASPMX.L.GOOGLE.COM",
+						"10 ALT3.ASPMX.L.GOOGLE.COM",
+						"10 ALT4.ASPMX.L.GOOGLE.COM",
+					],
+					ttl: 300,
+				},
+				{ parent: this }
+			);
+		}
 
 		this.registerOutputs({
 			distribution,
 			record,
 			bucketPolicy,
-			txt_record,
 		});
 	}
 }
