@@ -1,5 +1,5 @@
 {
-  "checksum": "5c649ca797843a4ecd5271110f50fecfbf385b083466aa51e9295fe63aa06b35",
+  "checksum": "24af5516a738b41d23b80678e8b5d228252a3023d0510bee3449bc9419e9543e",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -7620,7 +7620,7 @@
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.3",
+              "id": "serenity 0.12.4",
               "target": "serenity"
             },
             {
@@ -12484,14 +12484,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "serenity 0.12.3": {
+    "serenity 0.12.4": {
       "name": "serenity",
-      "version": "0.12.3",
+      "version": "0.12.4",
       "package_url": "https://github.com/serenity-rs/serenity.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/serenity/0.12.3/download",
-          "sha256": "e8f0088eeaf12d92d0a7b6cbbde5c14a2ca9016f51f71c4b54ebcf66c69dc472"
+          "url": "https://static.crates.io/crates/serenity/0.12.4/download",
+          "sha256": "3d72ec4323681bf9a3cabe40fd080abc2435859b502a1b5aa9bf693f125bfa76"
         }
       },
       "targets": [
@@ -12632,7 +12632,7 @@
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.3",
+              "id": "serenity 0.12.4",
               "target": "build_script_build"
             },
             {
@@ -12685,7 +12685,7 @@
           ],
           "selects": {}
         },
-        "version": "0.12.3"
+        "version": "0.12.4"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -21115,7 +21115,7 @@
     "hex 0.4.3",
     "rxp 0.2.0",
     "serde_json 1.0.132",
-    "serenity 0.12.3",
+    "serenity 0.12.4",
     "sha2 0.10.8",
     "swc_allocator 0.1.6",
     "swc_atoms 1.0.0",
