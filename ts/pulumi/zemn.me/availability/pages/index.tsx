@@ -4,6 +4,7 @@
 
 import Head from 'next/head';
 
+import { Bio } from '#root/project/zemn.me/bio/bio.js';
 import { filter, flatten, map } from '#root/ts/iter/index.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
 
@@ -49,12 +50,7 @@ const gCalEmbedURL = (props: CalendarConfigProps) =>
 	]).toString()}`;
 
 const URL = gCalEmbedURL({
-	src: [
-		'thomas@shadwell.im',
-		'thomas@metatheory.gg',
-		'thomas.shadwell@gmail.com',
-		'thomas@openai.com',
-	],
+	src: [...Bio.email],
 	mode: ['week'],
 	showCalendars: ['0'],
 });

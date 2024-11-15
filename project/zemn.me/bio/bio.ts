@@ -27,6 +27,7 @@ export interface Bio {
 	readonly links: readonly (readonly [Text, URL])[];
 	readonly timeline: readonly Event[];
 	readonly who: Who;
+	readonly email?: readonly string[];
 }
 
 export type Timeline = readonly Event[];
@@ -82,6 +83,12 @@ export const gaming = en`gaming`,
 
 export const Bio = {
 	birthdate: date(17, 'may', 1994),
+	email: [
+		'thomas@shadwell.im',
+		'thomas@metatheory.gg',
+		'thomas.shadwell@gmail.com',
+		'thomas@openai.com',
+	],
 	links: [
 		[
 			lang.Text('en-GB', 'linkedin' as const),
