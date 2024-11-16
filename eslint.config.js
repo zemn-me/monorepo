@@ -133,19 +133,25 @@ export default tseslint.config(
 		},
 	},
 	{
-		name: 'markdown',
-		files: ['**/*.md?(x)'],
-		plugins: {
-			mdx: 'eslint-plugin-mdx',
-		},
-		languageOptions: {
-			extraFileExtensions: ['.md', '.mdx'],
-		},
-		settings: {
-			'mdx/code-blocks': true,
-			'mdx/language-mapper': {},
-		},
+		files: ["**/*.md", "**/*.mdx"],
 		...mdx.flat,
+		// optional, if you want to lint code blocks at the same
+		processor: mdx.createRemarkProcessor({
+			lintCodeBlocks: true,
+			// optional, if you want to disable language mapper, set it to `false`
+			// if you want to override the default language mapper inside, you can provide your own
+			languageMapper: {},
+		}),
+	},
+	{
+		files: ["**/*.md", "**/*.mdx"],
+		...mdx.flatCodeBlocks,
+		rules: {
+			...mdx.flatCodeBlocks.rules,
+			// if you want to override some rules for code blocks
+			//'no-var': 'error',
+			//'prefer-const': 'error',
+		},
 	},
 	{
 		name: 'gitignore',
