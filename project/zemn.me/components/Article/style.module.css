@@ -40,7 +40,7 @@
 /*
 	block level elements
 */
-.container :is(p, h1, h2, h3, h4, h5, h6, time) {
+.container :is(p, h1, h2, h3, h4, h5, h6, time, hr) {
 	grid-column: 2 / span 12;
 }
 
