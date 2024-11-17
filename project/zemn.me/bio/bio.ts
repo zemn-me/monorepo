@@ -1,4 +1,9 @@
+import { z } from 'zod';
+
+import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
+import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
 import * as time from '#root/ts/time/index.js';
 
 type Text = lang.Text;
@@ -54,7 +59,7 @@ export interface Event {
 	readonly description?: Text;
 	readonly tags?: readonly Tag[];
 	readonly title: Text;
-	readonly url?: URL;
+	readonly url?: URL | RelativeURL;
 	readonly priority?: number;
 	readonly until?: Endpoint;
 }
@@ -80,6 +85,22 @@ export const gaming = en`gaming`,
 	golang = en`golang`,
 	rust = en`rust`,
 	go = en`go`;
+
+const zodCanonicaliseArticleMetadata = z.object({
+	title: z.string(),
+	language: z.string(),
+	description: z.string().optional(),
+	date: time.date.Date,
+}).transform(m => ({
+	...m,
+	date: time.date.parse(m.date),
+	title: lang.Text(m.language, m.title),
+	description: m.description?
+		lang.Text(m.language, m.description): undefined,
+}))
+
+const canonicaliseArticleMetadata = (p: ArticleProps): Pick<Event, 'date' | 'description' | 'title'> =>
+	zodCanonicaliseArticleMetadata.parse(p);
 
 export const Bio = {
 	birthdate: date(17, 'may', 1994),
@@ -122,6 +143,14 @@ export const Bio = {
 	],
 	timeline: [
 		// BEGIN TOOL ASSISTED SORT
+		{
+			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',
+			...canonicaliseArticleMetadata(articleMissing),
+			tags: [ writing ],
+			url: new RelativeURL(
+				"/article/2024/missing"
+			)
+		},
 		{
 			id: 'bda2ee54-67ba-4650-887c-78240143a825',
 			date: date(23, 'nov', 2022),

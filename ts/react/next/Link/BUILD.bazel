@@ -3,6 +3,10 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "Link",
+    srcs = [
+        "Link.tsx",
+        "index.tsx",
+    ],
     assets = [
         "Link.module.css",
     ],
@@ -10,12 +14,27 @@ ts_project(
         "//:__subpackages__",
     ],
     deps = [
+        ":relative_url",
         "//:base_defs",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/next",
         "//ts/iter",
+    ],
+)
+
+ts_project(
+    name = "relative_url",
+    srcs = [
+        "relative_url.ts",
+    ],
+    assets = [],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//ts",
     ],
 )
 

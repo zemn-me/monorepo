@@ -8,6 +8,7 @@ export const frontmatter: {
     tags?: string[];
     date?: [number, string, number];
     medium?: string;
+	description?: string;
 }
 
 
