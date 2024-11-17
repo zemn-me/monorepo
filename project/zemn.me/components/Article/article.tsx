@@ -1,9 +1,9 @@
 "use client";
 import { useState } from 'react';
 
-import { ArticleProps } from '#root/project/zemn.me/components/Article/article_types.js';
 import style from '#root/project/zemn.me/components/Article/style.module.css';
 import { tocSegment } from '#root/project/zemn.me/components/Article/toc_context.js'
+import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
 import { Date } from '#root/ts/react/lang/date.js';
 import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 

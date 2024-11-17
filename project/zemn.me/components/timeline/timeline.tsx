@@ -167,7 +167,7 @@ function groupBy<T, Q>(
 function Event({ event: e }: { readonly event: Bio.Event }) {
 	return (
 		<article className={style.event}>
-			<Link href={e.url?.toString()} id={e.id} lang={lang.get(e.title)}>
+			<Link href={e.url} id={e.id} lang={lang.get(e.title)}>
 				{e.title.text}
 				{/* this would be a <Corpus> but it looks ugly with the full stop inside the link. */}
 			</Link>
