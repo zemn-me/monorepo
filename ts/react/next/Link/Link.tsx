@@ -8,10 +8,20 @@ import { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
 
 import { map, some } from '#root/ts/iter/index.js';
+import { NewType } from '#root/ts/NewType.js';
 import style from '#root/ts/react/next/Link/Link.module.css';
 
+/**
+ * A pathname that we pinky promise is relative
+ * to the current app.
+ */
+export class RelativeURL extends NewType<string> {
+
+}
+
 interface SpecialProps {
-	readonly href?: NextLinkProps['href'];
+	readonly href?: NextLinkProps['href']
+		| RelativeURL;
 	readonly styleless?: boolean
 }
 
@@ -49,7 +59,9 @@ export const firstPartyOrigins = new Set([
  * @example
  * isFirstPartyURL("https://zemn.me/ok") // true
  */
-function isFirstPartyURL(u: string | UrlObject | URL): boolean {
+function isFirstPartyURL(u: RelativeURL | string | UrlObject | URL): boolean {
+
+	if (u instanceof RelativeURL) return true;
 	// necessary because UrlObject is not compatible with browser's
 	// new URL().
 	const nu = u instanceof URL ? u : typeof u === 'string' ? u : u.toString();
@@ -67,6 +79,8 @@ export function Link({ href, className, styleless, rel, target, ...props }: Link
 	}
 
 	className = classNames(className, styleless? style.styleless : undefined)
+
+	if (href instanceof RelativeURL) href = href.value;
 
 	// next Link has a strangely strident stance on providing the href parameter
 	// which we do not. if there is no href we just fall back to using an <a> tag.
