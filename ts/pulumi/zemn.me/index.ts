@@ -1,6 +1,8 @@
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
+import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website.js';
 
@@ -60,6 +62,18 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+		new BlueskyDisplayNameClaim(
+			`${name}_bluesky_claim`,
+			{
+				zoneId: args.zoneId,
+				displayname: args.domain,
+				did: bskyDid
+			},
+			{ parent: this}
+		)
+
+
 
 		super.registerOutputs({ site: this.site, availability });
 	}
