@@ -18,7 +18,7 @@ export class Component extends Pulumi.ComponentResource {
 		args: Args,
 		opts?: Pulumi.ComponentResourceOptions
 	) {
-		super('ts:pulumi:shadwell.im', name, args, opts);
+		super('ts:pulumi:zemn.me', name, args, opts);
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
