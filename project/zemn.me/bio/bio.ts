@@ -99,6 +99,8 @@ const zodCanonicaliseArticleMetadata = z.object({
 		lang.Text(m.language, m.description): undefined,
 }))
 
+export const bskyDid = `did:plc:gs4i6qqpygcstwez77xsrbbq`;
+
 const canonicaliseArticleMetadata = (p: ArticleProps): Pick<Event, 'date' | 'description' | 'title'> =>
 	zodCanonicaliseArticleMetadata.parse(p);
 
@@ -118,6 +120,7 @@ export const Bio = {
 		[lang.Text('en-GB', 'github' as const), url`//github.com/zemnmez`],
 		// probably should have an enable/ disable here at some point
 		// [en`twitch`, url`//twitch.tv/zemnmez`],
+		[lang.Text('en-GB', 'bluesky' as const), url`//bsky.app/profile/${bskyDid}`],
 		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 	],
 	skills: [
