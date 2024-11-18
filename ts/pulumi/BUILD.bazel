@@ -24,6 +24,7 @@ ts_project(
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
         "//:node_modules/cross-spawn",
+        "//project/zemn.me/bio",
         "//ts/github/actions",
         "//ts/pulumi/lib",
         "//ts/pulumi/lulu.computer:pulumi_ts",
