@@ -4,7 +4,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website, { BucketWebsiteConfigurationV2RoutingRuleRedirect } from '#root/ts/pulumi/lib/website.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -59,6 +59,14 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: true, // args.noIndex,
 				email: false,
 				tags,
+				redirect: new Map<string, BucketWebsiteConfigurationV2RoutingRuleRedirect>([
+					["/.well-known/host-meta", {
+						hostName: "fed.brid.gy",
+					}],
+					["/.well-known/webfinger", {
+						hostName: "fed.brid.gy",
+					}]
+				])
 			},
 			{ parent: this }
 		);

@@ -34,6 +34,30 @@ function relative(from: string, to: string): string {
 	return path.relative(f, t);
 }
 
+// had to copy since not exported 😠
+export interface BucketWebsiteConfigurationV2RoutingRuleRedirect {
+	/**
+	 * Host name to use in the redirect request.
+	 */
+	hostName?: pulumi.Input<string>;
+	/**
+	 * HTTP redirect code to use on the response.
+	 */
+	httpRedirectCode?: pulumi.Input<string>;
+	/**
+	 * Protocol to use when redirecting requests. The default is the protocol that is used in the original request. Valid values: `http`, `https`.
+	 */
+	protocol?: pulumi.Input<string>;
+	/**
+	 * Object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix `docs/` (objects in the `docs/` folder) to `documents/`, you can set a `condition` block with `keyPrefixEquals` set to `docs/` and in the `redirect` set `replaceKeyPrefixWith` to `/documents`.
+	 */
+	replaceKeyPrefixWith?: pulumi.Input<string>;
+	/**
+	 * Specific object key to use in the redirect request. For example, redirect request to `error.html`.
+	 */
+	replaceKeyWith?: pulumi.Input<string>;
+}
+
 export interface Args {
 	/**
 	 * Zone to create any needed DNS records in.
@@ -82,6 +106,8 @@ export interface Args {
 	 * Whether to set up email for this website.
 	 */
 	email: boolean
+
+	redirect?: pulumi.Input<Map<string, BucketWebsiteConfigurationV2RoutingRuleRedirect>>
 }
 
 /**
@@ -225,6 +251,15 @@ export class Website extends pulumi.ComponentResource {
 		const s3Site = new aws.s3.BucketWebsiteConfigurationV2(
 			`${name}_bucket_website`,
 			{
+				routingRules:
+					pulumi.output(args.redirect).apply(
+						m => m == undefined ? [] : [...m].map(([from, to]) => ({
+							condition: {
+								keyPrefixEquals: from
+							},
+							redirect: to
+						}))
+					),
 				bucket: bucket.bucket,
 				indexDocument: {
 					suffix: "index.html"
