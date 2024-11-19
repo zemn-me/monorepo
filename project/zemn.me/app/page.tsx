@@ -44,6 +44,7 @@ export default function Main() {
 								href={`mailto:?to=thomas@shadwell.im (${encodeURIComponent(
 									bio.Bio.who.fullName.text
 								)})`}
+								rel="me"
 							>
 								thomas@shadwell.im
 							</Link>
@@ -60,6 +61,7 @@ export default function Main() {
 								href={url.toString()}
 								key={url.toString()}
 								lang={lang.get(text)}
+								rel="me"
 							>
 								{lang.text(text)}
 							</Link>
