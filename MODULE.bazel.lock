@@ -711,12 +711,36 @@
     },
     "@@aspect_rules_js~//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "KavQsrFKaU2RHvh+iaN3ySRPwJZEsMTWvrulYKxZ5Qk=",
-        "usagesDigest": "8RuvKNH1Sq54X1N0lrv6KByZBjwnt8MVN0hh9qKx8FY=",
+        "bzlTransitiveDigest": "MSXcp24gUkZVftu47Y46LeCc+k1H0CdVP2SgQOANwBY=",
+        "usagesDigest": "Q4/pB1GY3fTCrR4t6+vYezCUNSTQlCg9iyGgKXuarVU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
+          "pnpm__links": {
+            "bzlFile": "@@aspect_rules_js~//npm/private:npm_import.bzl",
+            "ruleClassName": "npm_import_links",
+            "attributes": {
+              "package": "pnpm",
+              "version": "8.6.7",
+              "dev": false,
+              "root_package": "",
+              "link_packages": {},
+              "deps": {},
+              "transitive_closure": {},
+              "lifecycle_build_target": false,
+              "lifecycle_hooks_env": [],
+              "lifecycle_hooks_execution_requirements": [
+                "no-sandbox"
+              ],
+              "lifecycle_hooks_use_default_shell_env": false,
+              "bins": {},
+              "package_visibility": [
+                "//visibility:public"
+              ],
+              "replace_package": ""
+            }
+          },
           "pnpm": {
             "bzlFile": "@@aspect_rules_js~//npm/private:npm_import.bzl",
             "ruleClassName": "npm_import_rule",
@@ -743,30 +767,6 @@
               "generate_bzl_library_targets": false,
               "extract_full_archive": true,
               "system_tar": "auto"
-            }
-          },
-          "pnpm__links": {
-            "bzlFile": "@@aspect_rules_js~//npm/private:npm_import.bzl",
-            "ruleClassName": "npm_import_links",
-            "attributes": {
-              "package": "pnpm",
-              "version": "8.6.7",
-              "dev": false,
-              "root_package": "",
-              "link_packages": {},
-              "deps": {},
-              "transitive_closure": {},
-              "lifecycle_build_target": false,
-              "lifecycle_hooks_env": [],
-              "lifecycle_hooks_execution_requirements": [
-                "no-sandbox"
-              ],
-              "lifecycle_hooks_use_default_shell_env": false,
-              "bins": {},
-              "package_visibility": [
-                "//visibility:public"
-              ],
-              "replace_package": ""
             }
           }
         },
@@ -1013,8 +1013,8 @@
     },
     "@@aspect_rules_ts~//ts:extensions.bzl%ext": {
       "general": {
-        "bzlTransitiveDigest": "nHINgcihDnQeI8Ls1EXcikQMq7o7NK2Ek4s+UFzogUY=",
-        "usagesDigest": "/z4ca+1z/VCydEk0MwLyKPL107p9F5XvIgbvZZhwt3Y=",
+        "bzlTransitiveDigest": "ih8NNHbL9x82jWgxv2H9LOcvfWQ4Mi/2ekPCsez/lNc=",
+        "usagesDigest": "I6za/4zuMBo2QeWIbbBMNJEQLC9o4zdAdtdW1qGN8A8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
