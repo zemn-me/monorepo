@@ -368,8 +368,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.21.0
-    version: 39.21.0(@aws-sdk/client-sso-oidc@3.693.0)(typanion@3.14.0)
+    specifier: 39.21.1
+    version: 39.21.1(@aws-sdk/client-sso-oidc@3.693.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -11305,8 +11305,8 @@ packages:
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  /graph-data-structure@3.5.0:
-    resolution: {integrity: sha512-AAgjRtBZC1acIExgK2otv2LDdcYeZdQFKiEStXRDTyaVs6sUUaGUif05pCczTqAU4ny82NQtM1p5PK7AQEYgRA==}
+  /graph-data-structure@4.2.0:
+    resolution: {integrity: sha512-DFGyFROTYJAXwLjBPvj6LYihF2zIUDKt6Rzgo18E+FFKtHm7dJnE/bMHVp6fji5IchykUg3ctS9gwS0L5azwDw==}
     dev: true
 
   /grapheme-splitter@1.0.4:
@@ -16573,8 +16573,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.21.0(@aws-sdk/client-sso-oidc@3.693.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-2wNdlQ3R4bg6rjGh5nsx+YZJiwqx9sMbvWM9XMRRX9LLrTOgTdTG7/zMg/VpeeuXVwU8qJxnCpzIC4MvwuMjRg==}
+  /renovate@39.21.1(@aws-sdk/client-sso-oidc@3.693.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-9/Vn6bJQAURz2Se5unLinH1O81s3mzJMJ5y9myfn0D5pMz5ZbmWSeRx012kFe/YaHYluRFKVHVU3SQSSmvLhUQ==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16640,7 +16640,7 @@ packages:
       good-enough-parser: 1.1.23
       google-auth-library: 9.14.2
       got: 11.8.6
-      graph-data-structure: 3.5.0
+      graph-data-structure: 4.2.0
       handlebars: 4.7.8
       ignore: 6.0.2
       ini: 5.0.0
