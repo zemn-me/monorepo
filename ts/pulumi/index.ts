@@ -3,6 +3,7 @@ import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
+import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
@@ -118,6 +119,12 @@ export class Component extends Pulumi.ComponentResource {
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);
+
+		new Baby.Component(
+			`${name}_baby`,
+			{ staging: args.staging, tags },
+			{parent: this },
+		)
 
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,

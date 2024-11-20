@@ -438,6 +438,7 @@ export class Website extends pulumi.ComponentResource {
 					records: [
 						`google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM`,
 						`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
+						`google-site-verification=byw27UvCg87CmNCBN_1gweAhrlxa_5TW-GDD_ht1lug`,
 						`v=spf1 include:_spf.google.com ~all`,
 					],
 					ttl: 1800,
