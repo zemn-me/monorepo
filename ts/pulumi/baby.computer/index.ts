@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import Website from '#root/ts/pulumi/lib/website.js';
 
 export interface Args {
@@ -58,6 +59,16 @@ export class Component extends Pulumi.ComponentResource {
 				),
 				noIndex: args.staging,
 				email: true,
+			},
+			{ parent: this }
+		);
+
+		new BlueskyDisplayNameClaim(
+			`${name}_display_name_claim`,
+			{
+				zoneId: zone.then(zone => zone.zoneId),
+				displayname: domain.domainName,
+				did: 'did:plc:koeqb5womf3kw5jwnyyb3anr',
 			},
 			{ parent: this }
 		);
