@@ -73,92 +73,69 @@ const cmd = new Command('presubmit')
 			// perform all the normal tests
 		}
 
-		await Task('check if we might need to run go.mod')(new Promise<void>((ok, error) =>
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'--tool_tag=presubmit',
-						// it would be better to use the binary directly in our
-						// runfiles, but then the go binary itself has runfiles issues
-						// for some reason...
+		await Task('check if we might need to run go.mod')(
+			new Promise<void>((ok, error) =>
+				child_process
+					.spawn(
+						'bazelisk',
+						[
+							'run',
+							'--tool_tag=presubmit',
+							// it would be better to use the binary directly in our
+							// runfiles, but then the go binary itself has runfiles issues
+							// for some reason...
 
-						'//sh/bin:go',
-						'mod',
-						'tidy',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
-								new Error(
-									`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+							'//sh/bin:go',
+							'mod',
+							'tidy',
+						],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+									)
 								)
-							)
-				)
-		));
+					)
+			)
+		);
 
-		await Task("Gazelle repos")(new Promise<void>((ok, error) => {
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'--tool_tag=presubmit',
-						'//:gazelle-update-repos',
-						'--',
-						'-strict',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
-							new Error(
-								`Gazelle update repos exited with ${code}. This likely means that it needs to be run to add / remove repos.`
-							)
-						)
-				)
-		}));
-
-		await Task("Gazelle")(new Promise<void>((ok, error) =>
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'//:gazelle',
-						'--tool_tag=presubmit',
-						'--',
-						'--mode',
-						'diff',
-						'--strict',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
-								new Error(
-									`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+		await Task('Gazelle')(
+			new Promise<void>((ok, error) =>
+				child_process
+					.spawn(
+						'bazelisk',
+						[
+							'run',
+							'//:gazelle',
+							'--tool_tag=presubmit',
+							'--',
+							'--mode',
+							'diff',
+							'--strict',
+						],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+									)
 								)
-							)
-				)
-		));
+					)
+			)
+		);
 
 		// validate the pnpm lockfile.
 		if (!o.dangerouslySkipPnpmLockfileValidation) {
