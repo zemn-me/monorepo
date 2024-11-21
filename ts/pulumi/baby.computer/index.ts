@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import Website from '#root/ts/pulumi/lib/website.js';
 
 export interface Args {
@@ -45,6 +46,10 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const targetDomain = domain.domainName.apply(domainName =>
+			[...(args.staging ? ['staging'] : []), domainName].join('.')
+		);
+
 		this.site = new Website(
 			`${name}_baby.computer`,
 			{
@@ -53,11 +58,19 @@ export class Component extends Pulumi.ComponentResource {
 				notFound: 'ts/pulumi/baby.computer/out/index.html',
 				directory: 'ts/pulumi/baby.computer/out',
 				zoneId: zone.then(zone => zone.zoneId),
-				domain: domain.domainName.apply(domainName =>
-					[...(args.staging ? ['staging'] : []), domainName].join('.')
-				),
+				domain: targetDomain,
 				noIndex: args.staging,
 				email: true,
+			},
+			{ parent: this }
+		);
+
+		new BlueskyDisplayNameClaim(
+			`${name}_display_name_claim`,
+			{
+				zoneId: zone.then(zone => zone.zoneId),
+				displayname: targetDomain,
+				did: 'did:plc:koeqb5womf3kw5jwnyyb3anr',
 			},
 			{ parent: this }
 		);
