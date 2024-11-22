@@ -206,8 +206,8 @@ devDependencies:
     specifier: 0.2.2
     version: 0.2.2(@fortawesome/fontawesome-svg-core@6.7.1)(react@18.3.1)
   '@microsoft/api-documenter':
-    specifier: 7.25.21
-    version: 7.25.21(@types/node@22.9.1)
+    specifier: 7.25.22
+    version: 7.25.22(@types/node@22.9.1)
   '@pulumi/aws':
     specifier: 6.60.0
     version: 6.60.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4388,27 +4388,27 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-documenter@7.25.21(@types/node@22.9.1):
-    resolution: {integrity: sha512-Nyfidxbi9wIZ1H7VjVqw3nUhRM1fUJuGqvt2iDEI91Z4k8X+BqxSaLOsnn8n65YaAZhUJRkh1Ouxt90r7cnmjA==}
+  /@microsoft/api-documenter@7.25.22(@types/node@22.9.1):
+    resolution: {integrity: sha512-eTfxI6/5mpJmXfwwADtj8D9zgR1lrHx7On9HlDvwkBhATRwVc6OOmWgzPNbVpPiDjywZy+V4gmgrlsnipY6Meg==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.29.8(@types/node@22.9.1)
+      '@microsoft/api-extractor-model': 7.29.9(@types/node@22.9.1)
       '@microsoft/tsdoc': 0.15.0
-      '@rushstack/node-core-library': 5.9.0(@types/node@22.9.1)
-      '@rushstack/terminal': 0.14.2(@types/node@22.9.1)
-      '@rushstack/ts-command-line': 4.23.0(@types/node@22.9.1)
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.9.1)
+      '@rushstack/terminal': 0.14.3(@types/node@22.9.1)
+      '@rushstack/ts-command-line': 4.23.1(@types/node@22.9.1)
       js-yaml: 3.13.1
       resolve: 2.0.0-next.5
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor-model@7.29.8(@types/node@22.9.1):
-    resolution: {integrity: sha512-t3Z/xcO6TRbMcnKGVMs4uMzv/gd5j0NhMiJIGjD4cJMeFJ1Hf8wnLSx37vxlRlL0GWlGJhnFgxvnaL6JlS+73g==}
+  /@microsoft/api-extractor-model@7.29.9(@types/node@22.9.1):
+    resolution: {integrity: sha512-/DaMfUjiswmrnLjHCorVzWGbW5rmeTGDo+H0QcvcarJ14SjNVmFWiRKzscN4B2y9AyllqeXMPgwbtSFAdAkpMQ==}
     dependencies:
       '@microsoft/tsdoc': 0.15.0
       '@microsoft/tsdoc-config': 0.17.0
-      '@rushstack/node-core-library': 5.9.0(@types/node@22.9.1)
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.9.1)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
@@ -5995,8 +5995,8 @@ packages:
     resolution: {integrity: sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==}
     dev: true
 
-  /@rushstack/node-core-library@5.9.0(@types/node@22.9.1):
-    resolution: {integrity: sha512-MMsshEWkTbXqxqFxD4gcIUWQOCeBChlGczdZbHfqmNZQFLHB3yWxDFSMHFUdu2/OB9NUk7Awn5qRL+rws4HQNg==}
+  /@rushstack/node-core-library@5.10.0(@types/node@22.9.1):
+    resolution: {integrity: sha512-2pPLCuS/3x7DCd7liZkqOewGM0OzLyCacdvOe8j6Yrx9LkETGnxul1t7603bIaB8nUAooORcct9fFDOQMbWAgw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -6014,23 +6014,23 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@rushstack/terminal@0.14.2(@types/node@22.9.1):
-    resolution: {integrity: sha512-2fC1wqu1VCExKC0/L+0noVcFQEXEnoBOtCIex1TOjBzEDWcw8KzJjjj7aTP6mLxepG0XIyn9OufeFb6SFsa+sg==}
+  /@rushstack/terminal@0.14.3(@types/node@22.9.1):
+    resolution: {integrity: sha512-csXbZsAdab/v8DbU1sz7WC2aNaKArcdS/FPmXMOXEj/JBBZMvDK0+1b4Qao0kkG0ciB1Qe86/Mb68GjH6/TnMw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
       '@types/node':
         optional: true
     dependencies:
-      '@rushstack/node-core-library': 5.9.0(@types/node@22.9.1)
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.9.1)
       '@types/node': 22.9.1
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@4.23.0(@types/node@22.9.1):
-    resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
+  /@rushstack/ts-command-line@4.23.1(@types/node@22.9.1):
+    resolution: {integrity: sha512-40jTmYoiu/xlIpkkRsVfENtBq4CW3R4azbL0Vmda+fMwHWqss6wwf/Cy/UJmMqIzpfYc2OTnjYP1ZLD3CmyeCA==}
     dependencies:
-      '@rushstack/terminal': 0.14.2(@types/node@22.9.1)
+      '@rushstack/terminal': 0.14.3(@types/node@22.9.1)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
