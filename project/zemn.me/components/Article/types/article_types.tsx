@@ -8,5 +8,6 @@ export interface ArticleProps {
 	readonly children?: ReactElement
 	readonly description?: string
 	readonly language?: string
+	readonly className?: string
 }
 
