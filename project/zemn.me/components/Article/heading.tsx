@@ -9,6 +9,7 @@ type BaseHeadingProps = JSX.IntrinsicElements["h1"]
 
 export interface HeadingProps extends BaseHeadingProps {
 	readonly level: 1 | 2 | 3 | 4 | 5
+	readonly className?: string
 }
 
 export function Heading({ level, children, ...props }: HeadingProps) {
