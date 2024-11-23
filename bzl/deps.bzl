@@ -45,9 +45,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "f06ae324d31d2df58d152f7e2debb3cef0c78187b8f84217a530d8606992f019",
+        sha256 = "81b51e4aec70e7c8f2287a2ed88b7801f4cade074cacc9f3cc3ca852cae47700",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.140.0/pulumi-v3.140.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.141.0/pulumi-v3.141.0-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -57,9 +57,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.140.0/pulumi-v3.140.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.141.0/pulumi-v3.141.0-darwin-arm64.tar.gz",
         ],
-        sha256 = "3e4e89136a879534fad6ac6da5caef62488ea19c4a297e726e6b92a10503b369",
+        sha256 = "30315f929566535629f948e3fcd96259e3671e2432851808454c9e6415036f3e",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -78,9 +78,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.140.0/pulumi-v3.140.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.141.0/pulumi-v3.141.0-linux-arm64.tar.gz",
         ],
-        sha256 = "f9a7165dd5c3d8fc929ac14c1c715e584a40fd7edebf66072bfc9e6dd3794378",
+        sha256 = "39928166bea79efe2baed8b662563a7fd5d032dc7f07e9e8aca550adfbb87ca0",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -133,12 +133,12 @@ exports_files(glob(["**/*"], exclude_directories=0))
     # Got no idea why but MS doesn't publish versions of this...
     http_archive(
         name = "microsoft_json_schemas",
-        url = "https://github.com/microsoft/json-schemas/archive/cc369f7513b9f0774735c703cf837ceb906f4d3a.zip",
-        strip_prefix = "json-schemas-cc369f7513b9f0774735c703cf837ceb906f4d3a",
+        url = "https://github.com/microsoft/json-schemas/archive/c67903ee05292c805aa843d451c6640c9fa10a9d.zip",
+        strip_prefix = "json-schemas-c67903ee05292c805aa843d451c6640c9fa10a9d",
         build_file_content = """
 exports_files(glob(["**/*"]))
         """,
-        sha256 = "bf83430f8db76b968fbb75d10aff845dcc9799842863f60704923cc470fc6c7d",
+        sha256 = "63968c02b48659441675dca0ef11472ec7414b3c6460646c1e3d93570b2c004d",
     )
 
     ##########
