@@ -15,12 +15,14 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # this is a hack because the go_bin_runner chdirs into BUILD_WORKING_DIRECTORY
 # which may make sense in some contexts but does not make sense in a smoke test.
 # https://github.com/bazelbuild/rules_go/blob/0a6311cdc4a643f9f99b8109c44773f4a295c60e/go/tools/go_bin_runner/main.go#L34
+echo testing go...
 BUILD_WORKING_DIRECTORY="." $(rlocation $GO_BINARY) version
 
-echo {} | $(rlocation $GOPACKAGESDRIVER_BINARY) builtin
 
-$(rlocation $GOIMPORTS_BINARY)
 
+echo testing staticcheck...
 $(rlocation $STATICCHECK_BINARY) -version
 
+
+echo testing dlv...
 $(rlocation $DLV_BINARY) version
