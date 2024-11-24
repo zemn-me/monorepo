@@ -107,7 +107,7 @@ bazel_dep(name = "rules_go", version = "0.50.1", repo_name = "io_bazel_rules_go"
 bazel_dep(name = "gazelle", version = "0.39.1", repo_name = "bazel_gazelle")
 
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
-go_sdk.download(version = "1.22.2")
+go_sdk.download(version = "1.22.7")
 use_repo(
     go_sdk,
     "go_toolchains",
@@ -124,7 +124,9 @@ use_repo(
     "com_github_bazelbuild_buildtools",
     "com_github_go_delve_delve",
     "com_github_golang_protobuf",
+    "com_github_google_go_containerregistry",
     "com_github_gorilla_websocket",
+    "com_github_hashicorp_terraform_plugin_framework",
     "com_github_itchyny_gojq",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",
@@ -137,6 +139,20 @@ use_repo(
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "0.40.0")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
+
+go_deps_with_disabled_proto_generation = [
+    "github.com/hashicorp/go-plugin",
+]
+
+[
+    go_deps.gazelle_override(
+        directives = [
+            "gazelle:go_generate_proto false",
+        ],
+        path = path,
+    )
+    for path in go_deps_with_disabled_proto_generation
+]
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 

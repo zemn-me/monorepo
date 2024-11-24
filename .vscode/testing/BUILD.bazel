@@ -13,8 +13,6 @@ sh_test(
     ],
     env = {
         "GO_BINARY": "$(rlocationpath //sh/bin:go)",
-        "GOPACKAGESDRIVER_BINARY": "$(rlocationpath //sh/bin:gopackagesdriver)",
-        "GOIMPORTS_BINARY": "$(rlocationpath //sh/bin:goimports)",
         "STATICCHECK_BINARY": "$(rlocationpath //sh/bin:staticcheck)",
         "DLV_BINARY": "$(rlocationpath //sh/bin:dlv)",
     },
