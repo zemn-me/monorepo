@@ -2,6 +2,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 
 sh_test(
     name = "test_tools_run",
+    size = "small",
     srcs = ["test_tools_run.sh"],
     data = [
         "//:go.mod",
@@ -13,8 +14,6 @@ sh_test(
     ],
     env = {
         "GO_BINARY": "$(rlocationpath //sh/bin:go)",
-        "GOPACKAGESDRIVER_BINARY": "$(rlocationpath //sh/bin:gopackagesdriver)",
-        "GOIMPORTS_BINARY": "$(rlocationpath //sh/bin:goimports)",
         "STATICCHECK_BINARY": "$(rlocationpath //sh/bin:staticcheck)",
         "DLV_BINARY": "$(rlocationpath //sh/bin:dlv)",
     },
