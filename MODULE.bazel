@@ -130,6 +130,8 @@ use_repo(
     "com_github_itchyny_gojq",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",
+    "com_github_pulumi_pulumi_pkg_v3",
+    "com_github_pulumi_pulumi_terraform_bridge_v3",
     "com_github_sergi_go_diff",
     "com_github_tdewolff_parse_v2",
     "com_github_twilio_twilio_go",
@@ -163,3 +165,5 @@ http_archive(
     strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
+
+bazel_dep(name = "circl", version = "1.3.8")

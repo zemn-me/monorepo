@@ -2,20 +2,20 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "crane_lib",
+    name = "pulumi-tfgen-crane_lib",
     srcs = ["main.go"],
-    importpath = "github.com/zemn-me/monorepo/go/terraform/crane",
+    importpath = "github.com/zemn-me/monorepo/go/pulumi/crane/provider/cmd/pulumi-tfgen-crane",
     visibility = ["//visibility:private"],
     deps = [
-        "//go/terraform/crane/provider",
+        "//go/pulumi/crane/provider",
         "//go/terraform/crane/version",
-        "@com_github_hashicorp_terraform_plugin_framework//providerserver",
+        "@com_github_pulumi_pulumi_terraform_bridge_v3//pkg/tfgen",
     ],
 )
 
 go_binary(
-    name = "crane",
-    embed = [":crane_lib"],
+    name = "pulumi-tfgen-crane",
+    embed = [":pulumi-tfgen-crane_lib"],
     visibility = ["//visibility:public"],
 )
 
@@ -23,5 +23,3 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
-
-# gazelle:go_visibility //go/terraform/crane //go/pulumi/crane

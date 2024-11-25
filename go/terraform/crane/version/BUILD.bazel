@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "version",
+    srcs = ["version.go"],
+    importpath = "github.com/zemn-me/monorepo/go/terraform/crane/version",
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
