@@ -8,6 +8,8 @@ go 1.22.7
 toolchain go1.23.3
 
 require (
+	github.com/aws/aws-lambda-go v1.47.0
+	github.com/aws/aws-sdk-go v1.55.5
 	github.com/bazelbuild/bazel-gazelle v0.39.1
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
@@ -20,6 +22,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
+	github.com/stretchr/testify v1.9.0
 	github.com/tdewolff/parse/v2 v2.7.19
 	github.com/twilio/twilio-go v1.23.6
 	golang.org/x/sync v0.9.0
@@ -35,6 +38,7 @@ require (
 	github.com/containerd/stargz-snapshotter/estargz v0.14.3 // indirect
 	github.com/cosiner/argv v0.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/derekparker/trie v0.0.0-20230829180723-39f4de51ef7d // indirect
 	github.com/docker/cli v27.1.1+incompatible // indirect
 	github.com/docker/distribution v2.8.2+incompatible // indirect
@@ -62,6 +66,7 @@ require (
 	github.com/invopop/yaml v0.3.1 // indirect
 	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/jaschaephraim/lrserver v0.0.0-20171129202958-50d19f603f71 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
@@ -77,6 +82,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.0-rc3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
