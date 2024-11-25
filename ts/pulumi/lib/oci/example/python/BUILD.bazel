@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//oci:py_layer.bzl", "py_oci_image")
+load("//py:rules.bzl", "py_binary")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+py_binary(
+    name = "python_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+)
+
+py_oci_image(
+    name = "oci_image",
+    base = "@distroless_base",
+    binary = "python_bin",
+)
+
+pulumi_image(
+    name = "example_python_image",
+    src = ":oci_image",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
