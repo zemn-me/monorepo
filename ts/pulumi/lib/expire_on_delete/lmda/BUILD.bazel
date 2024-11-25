@@ -1,0 +1,41 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_library", "py_test")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_library(
+    name = "lmda",
+    srcs = ["lib.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//aws_lambda_typing",
+        "@pip//boto3",
+        "@pip//boto3_stubs",
+        "@pip//botocore",
+        "@pip//botocore_stubs",
+    ],
+)
+
+py_oci_image(
+    name = "oci_image",
+    base = "@distroless_base",
+    binary = "python_bin",
+)
+
+pulumi_image(
+    name = "example_python_image",
+    src = ":oci_image",
+)
+
+py_test(
+    name = "lmda_test",
+    srcs = ["lmda_test.py"],
+    deps = [
+        ":lmda",
+        "@pip//boto3",
+        "@pip//boto3_stubs",
+    ],
+)
