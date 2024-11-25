@@ -163,3 +163,20 @@ http_archive(
     strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
+
+# Pulumi plugin binaries...
+# you can get this URL by doing, e.g.:
+# 	pulumi plugin install converter terraform --server http://example.com
+#
+# This will fail and give you the plugin URL:
+# (.venv.venv) thomas@DESKTOP-B82ERE8:~/code/monorepo/ts/pulumi/gen$ pulumi plugin -v 5 install converter terraform 1.0.16 --server https://example.com
+# [converter plugin terraform-1.0.16] installing
+# error: [converter plugin terraform-1.0.16] downloading from https://example.com: failed to download plugin: terraform-1.0.16: 404 HTTP error fetching plugin from https://example.com/pulumi-converter-terraform-v1.0.16-linux-amd64.tar.gz
+# (the real server is get.pulumi.com/releases)
+# below i had to use github though because pulumi sucks
+
+http_archive(
+    name = "com_pulumi_get_pulumi_converter_terraform_linux_amd64",
+    build_file_content = """exports_files(glob(["**/*"]))""",
+    url = "https://github.com/pulumi/pulumi-converter-terraform/releases/download/v1.0.19/pulumi-converter-terraform-v1.0.19-linux-amd64.tar.gz",
+)
