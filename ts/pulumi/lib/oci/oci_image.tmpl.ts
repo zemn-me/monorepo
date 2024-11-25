@@ -1,13 +1,12 @@
-import { Image, ImageArgs } from "@pulumi/awsx/ecr";
+import { local } from '@pulumi/command';
 import { ComponentResource, ComponentResourceOptions } from "@pulumi/pulumi";
 
 
 export interface Args {
-	image: Omit<ImageArgs, 'dockerfile'>
+	repository: string
 }
 
 export class __ClassName extends ComponentResource {
-	image: Image
 	constructor(
 		name: string,
 		args: Args,
@@ -15,13 +14,16 @@ export class __ClassName extends ComponentResource {
 	) {
 		super('__TYPE', name, args, opts);
 
-		this.image = new Image(`${name}_image`, {
-			dockerfile: '__DOCKERFILE_PATH',
-			...args.image
+		const upload = new local.Command(`${name}_push`, {
+			create: [
+				"__PUSH_BIN",
+				"--repository",
+				args.repository,
+			].join(" ")
 		}, { parent: this })
 
 
-		super.registerOutputs({ image: this.image })
+		super.registerOutputs({ upload })
 	}
 
 
