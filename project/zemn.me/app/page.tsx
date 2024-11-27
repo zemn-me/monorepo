@@ -1,9 +1,9 @@
 import { Metadata } from 'next/types';
 
 import { Eeg } from '#root/project/zemn.me/app/eeg.js';
+import { ProfilePageSchema } from '#root/project/zemn.me/app/schema.js';
 import style from '#root/project/zemn.me/app/style.module.css';
 import * as bio from '#root/project/zemn.me/bio/index.js';
-import { schema } from '#root/project/zemn.me/bio/schema.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { Prose } from '#root/project/zemn.me/components/Prose/prose.js';
@@ -191,7 +191,7 @@ export default function Main() {
 			</section>
 
 			<script
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(ProfilePageSchema) }}
 				type="application/ld+json"
 			/>
 		</>
