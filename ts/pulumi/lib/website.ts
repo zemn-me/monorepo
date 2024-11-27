@@ -82,6 +82,11 @@ export interface Args {
 	 * Whether to set up email for this website.
 	 */
 	email: boolean
+
+	/**
+	 * Other TXT records to attach to the domain.
+	 */
+	otherTXTRecords?: string[]
 }
 
 /**
@@ -436,6 +441,7 @@ export class Website extends pulumi.ComponentResource {
 						`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
 						`google-site-verification=byw27UvCg87CmNCBN_1gweAhrlxa_5TW-GDD_ht1lug`,
 						`v=spf1 include:_spf.google.com ~all`,
+						...args.otherTXTRecords ?? []
 					],
 					ttl: 1800,
 				},
