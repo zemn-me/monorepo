@@ -6,6 +6,7 @@ import { Metadata } from 'next/types';
 import { ReactNode, useEffect } from 'react';
 
 import { Providers } from '#root/project/zemn.me/app/providers.js';
+import { TrustedTypesPolicy } from '#root/project/zemn.me/app/useTrustedTypesPolicy.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
 import Glade from '#root/project/zemn.me/components/Glade/glade.js';
 import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
@@ -33,6 +34,8 @@ export function RootLayout({ children }: Props) {
 		return;
 	})
 	return (
+		<>
+		<TrustedTypesPolicy/>
 		<Providers>
 			<html>
 				<head>
@@ -51,6 +54,7 @@ export function RootLayout({ children }: Props) {
 				</body>
 			</html>
 		</Providers>
+		</>
 	);
 }
 
