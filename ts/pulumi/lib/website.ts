@@ -431,24 +431,6 @@ export class Website extends pulumi.ComponentResource {
 			);
 
 			new aws.route53.Record(
-				`${name}_txt_record`,
-				{
-					zoneId: args.zoneId,
-					name: args.domain,
-					type: 'TXT',
-					records: [
-						`google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM`,
-						`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
-						`google-site-verification=byw27UvCg87CmNCBN_1gweAhrlxa_5TW-GDD_ht1lug`,
-						`v=spf1 include:_spf.google.com ~all`,
-						...args.otherTXTRecords ?? []
-					],
-					ttl: 1800,
-				},
-				{ protect: false }
-			);
-
-			new aws.route53.Record(
 				`${name}_mx`,
 				{
 					zoneId: args.zoneId,
@@ -466,6 +448,24 @@ export class Website extends pulumi.ComponentResource {
 				{ parent: this }
 			);
 		}
+
+		new aws.route53.Record(
+			`${name}_txt_record`,
+			{
+				zoneId: args.zoneId,
+				name: args.domain,
+				type: 'TXT',
+				records: [
+					`google-site-verification=I7-1voPtMM91njshXSCMfLFPTPgY_lFFeScPYIgklRM`,
+					`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
+					`google-site-verification=byw27UvCg87CmNCBN_1gweAhrlxa_5TW-GDD_ht1lug`,
+					`v=spf1 include:_spf.google.com ~all`,
+					...args.otherTXTRecords ?? []
+				],
+				ttl: 1800,
+			},
+			{ protect: false }
+		);
 
 		this.registerOutputs({
 			distribution,
