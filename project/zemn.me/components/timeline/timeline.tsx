@@ -224,7 +224,7 @@ function Year({
 			</div>
 			{/*↓ unicode for 'no specified language, roman numerals used for numbering'*/}
 			<div className={style.ageIndicator} lang="zxx-u-nu-romanlow">
-				{romanize(fullYear - 1994)}
+				{romanize(fullYear - Bio.Bio.birthdate.getFullYear())}
 			</div>
 
 			<div className={style.content}>
