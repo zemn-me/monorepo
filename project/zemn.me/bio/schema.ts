@@ -1,12 +1,12 @@
-import type { Organization, Person, WithContext } from 'schema-dts';
+import type { Organization, Person } from 'schema-dts';
 
 import { Bio, employment } from '#root/project/zemn.me/bio/bio.js';
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 
-export const schema: WithContext<Person> = {
-	'@context': 'https://schema.org',
+export const schema: Person = {
 	'@type': 'Person',
+	alternateName: Bio.who.handle.text,
 	name: Bio.who.fullName.text,
 	birthDate: Bio.birthdate.toISOString(),
 	jobTitle: Iterable(Bio.timeline)
