@@ -27,7 +27,6 @@ export const schema: WithContext<Person> = {
 		.map(
 			(v): Organization => ({
 				'@type': 'Organization',
-				// why does this need to happen??
 				name: v.employer.text,
 				url: 'url' in v ? v.url.toString() : undefined,
 			})
