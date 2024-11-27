@@ -22,10 +22,13 @@ export const schema: WithContext<Person> = {
 		.filter()
 		.map(v => ('until' in v ? None : Some(v)))
 		.filter()
+		.map(v => ('employer' in v ? Some(v) : None))
+		.filter()
 		.map(
 			(v): Organization => ({
 				'@type': 'Organization',
-				name: v.title.text,
+				// why does this need to happen??
+				name: v.employer.text,
 				url: 'url' in v ? v.url.toString() : undefined,
 			})
 		)
