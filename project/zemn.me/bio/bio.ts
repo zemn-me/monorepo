@@ -57,12 +57,14 @@ export interface Employment {
 export interface Event {
 	id: string;
 	readonly date: Date;
+	readonly since?: Date;
 	readonly description?: Text;
 	readonly tags?: readonly Tag[];
 	readonly title: Text;
 	readonly url?: URL | RelativeURL;
 	readonly priority?: number;
 	readonly until?: Endpoint;
+	readonly employer?: Text;
 }
 
 // tags
@@ -571,6 +573,8 @@ export const Bio = {
 			title: en`Senior Information Security Engineer, Google ISE hardening`,
 			description: en`Automated security mitigation, detection and refactoring using compiler technology (“langsec”), SDKs and DSLs (“hardening”) on TypeScript and Java. Google-wide mitigations for Log4Shell, XSS, deserialization attacks. Product security review and design, Google Ads (“FLOC”, “FLEDGE”), Google Cloud, Google's IDE (“Cider”). Research including critical disclosures such as CVE-2022-41034.`,
 			tags: [work, security, employment],
+			employer: en`Google`,
+			url: url`https://google.com`,
 			until: date(17, 'mar', 2023), // i dont remember the exact date
 		},
 		{
@@ -607,6 +611,7 @@ export const Bio = {
 			until: date(11, 'jul', 2020),
 			priority: 9,
 			tags: [software, security, work, employment],
+			employer: en`Twitch`,
 			title: en`Senior Application Security Engineer, Twitch`,
 			url: url`https://twitch.tv`,
 		},
@@ -701,7 +706,9 @@ export const Bio = {
 			id: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 			date: date(28, 'nov', 2023),
 			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
+			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
+			employer: en`OpenAI`
 		},
 		{
 			id: '741b6fc1-5c5b-4319-aa9b-36f4b88d7f9a',
@@ -737,6 +744,7 @@ export const Bio = {
 			description: en`Year 12 work experience program at luxury hotel. Networking & technical support. Decompiled and reverse-engineered .net app for ease of provisioning corporate machines via batch scripts.`,
 			until: date(7, 'sep', 2009),
 			tags: [work, employment],
+			employer: en`The Grove Hotel`
 		},
 		{
 			id: 'fd4eccdd-b761-43b3-ad6e-a4b6b68db37c',
