@@ -69,4 +69,7 @@ export const metadata: Metadata = {
 		default: 'zemn.me',
 		template: '%s ← zemn.me',
 	},
+    alternates: {
+        canonical: './',
+    }
 };
