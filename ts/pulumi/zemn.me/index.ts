@@ -44,7 +44,7 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: args.noIndex,
 				email: false,
 				otherTXTRecords: [
-					"google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY"
+					"google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag"
 				],
 				tags,
 			},
