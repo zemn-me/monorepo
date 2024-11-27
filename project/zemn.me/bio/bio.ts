@@ -33,6 +33,7 @@ export interface Bio {
 	readonly timeline: readonly Event[];
 	readonly who: Who;
 	readonly email?: readonly string[];
+	readonly officialWebsite?: URL;
 }
 
 export type Timeline = readonly Event[];
@@ -84,27 +85,34 @@ export const gaming = en`gaming`,
 	nodejs = en`nodejs`,
 	golang = en`golang`,
 	rust = en`rust`,
-	go = en`go`;
+	go = en`go`,
+	employment = en`employment`;
 
-const zodCanonicaliseArticleMetadata = z.object({
-	title: z.string(),
-	language: z.string(),
-	description: z.string().optional(),
-	date: time.date.Date,
-}).transform(m => ({
-	...m,
-	date: time.date.parse(m.date),
-	title: lang.Text(m.language, m.title),
-	description: m.description?
-		lang.Text(m.language, m.description): undefined,
-}))
+const zodCanonicaliseArticleMetadata = z
+	.object({
+		title: z.string(),
+		language: z.string(),
+		description: z.string().optional(),
+		date: time.date.Date,
+	})
+	.transform(m => ({
+		...m,
+		date: time.date.parse(m.date),
+		title: lang.Text(m.language, m.title),
+		description: m.description
+			? lang.Text(m.language, m.description)
+			: undefined,
+	}));
 
 export const bskyDid = `did:plc:gs4i6qqpygcstwez77xsrbbq`;
 
-const canonicaliseArticleMetadata = (p: ArticleProps): Pick<Event, 'date' | 'description' | 'title'> =>
+const canonicaliseArticleMetadata = (
+	p: ArticleProps
+): Pick<Event, 'date' | 'description' | 'title'> =>
 	zodCanonicaliseArticleMetadata.parse(p);
 
 export const Bio = {
+	officialWebsite: url`https://zemn.me`,
 	birthdate: date(17, 'may', 1994),
 	email: [
 		'thomas@shadwell.im',
@@ -120,7 +128,10 @@ export const Bio = {
 		[lang.Text('en-GB', 'github' as const), url`//github.com/zemnmez`],
 		// probably should have an enable/ disable here at some point
 		// [en`twitch`, url`//twitch.tv/zemnmez`],
-		[lang.Text('en-GB', 'bluesky' as const), url`//bsky.app/profile/${bskyDid}`],
+		[
+			lang.Text('en-GB', 'bluesky' as const),
+			url`//bsky.app/profile/${bskyDid}`,
+		],
 		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 	],
 	skills: [
@@ -149,10 +160,8 @@ export const Bio = {
 		{
 			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',
 			...canonicaliseArticleMetadata(articleMissing),
-			tags: [ writing ],
-			url: new RelativeURL(
-				"/article/2024/missing"
-			)
+			tags: [writing],
+			url: new RelativeURL('/article/2024/missing'),
 		},
 		{
 			id: 'bda2ee54-67ba-4650-887c-78240143a825',
@@ -260,7 +269,7 @@ export const Bio = {
 			description: en`full stack freelance work building MVPs for London startups and wrangling data for hackathons`,
 			until: date(1, 'may', 2014),
 			priority: 7,
-			tags: [work],
+			tags: [work, employment],
 			title: en`Software Engineer, Consultant`,
 		},
 		{
@@ -561,7 +570,7 @@ export const Bio = {
 			date: date(23, 'jul', 2020),
 			title: en`Senior Information Security Engineer, Google ISE hardening`,
 			description: en`Automated security mitigation, detection and refactoring using compiler technology (“langsec”), SDKs and DSLs (“hardening”) on TypeScript and Java. Google-wide mitigations for Log4Shell, XSS, deserialization attacks. Product security review and design, Google Ads (“FLOC”, “FLEDGE”), Google Cloud, Google's IDE (“Cider”). Research including critical disclosures such as CVE-2022-41034.`,
-			tags: [work, security],
+			tags: [work, security, employment],
 			until: date(17, 'mar', 2023), // i dont remember the exact date
 		},
 		{
@@ -597,7 +606,7 @@ export const Bio = {
 			description: en`first security engineer at the video game streaming website. Designed security architecture for flagship projects including bits, the Twitch API, extensions and Twitch's OIDC / OAuth AuthN/Z systems. Created and defined security relationships and processes. Built Go security static analysis system, security frameworks and libraries`,
 			until: date(11, 'jul', 2020),
 			priority: 9,
-			tags: [software, security, work],
+			tags: [software, security, work, employment],
 			title: en`Senior Application Security Engineer, Twitch`,
 			url: url`https://twitch.tv`,
 		},
@@ -692,7 +701,7 @@ export const Bio = {
 			id: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 			date: date(28, 'nov', 2023),
 			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
-			tags: [software, security, work],
+			tags: [software, security, work, employment],
 		},
 		{
 			id: '741b6fc1-5c5b-4319-aa9b-36f4b88d7f9a',
@@ -713,7 +722,7 @@ export const Bio = {
 			id: 'c90df85a-3896-47a3-8b0c-d1fed081e0c5',
 			date: date(8, 'dec', 2010),
 			title: en`Assistant Obstetrician (shadow)`,
-			description: en`Work experience at the Royal Free Hospital NHS Trust. Spent time in world-leading virology department.`
+			description: en`Work experience at the Royal Free Hospital NHS Trust. Spent time in world-leading virology department.`,
 		},
 		{
 			id: '0ce91f95-6bbf-4c9b-8142-9835c3c7cf4f',
@@ -725,29 +734,30 @@ export const Bio = {
 			id: 'eb759cc9-2831-4b88-85d6-a194de1d0141',
 			date: date(7, 'jul', 2009),
 			title: en`ICT Support Technician, The Grove Hotel, Watford, UK`,
-			description: en`Year 12 work experience program at luxury hotel. Networking & technical support. Decompiled and reverse-engineered .net app for ease of provisioning corporate machines via batch scripts.`
-
+			description: en`Year 12 work experience program at luxury hotel. Networking & technical support. Decompiled and reverse-engineered .net app for ease of provisioning corporate machines via batch scripts.`,
+			until: date(7, 'sep', 2009),
+			tags: [work, employment],
 		},
 		{
 			id: 'fd4eccdd-b761-43b3-ad6e-a4b6b68db37c',
 			date: date(1, 'jan', 2010),
 			title: en`Parmiter’s Secondary School, Garston`,
-			description: en`Graduated Secondary School with GCSES in Biology, Chemistry, English, Geography, Electronics, Mathematics, ICT, BCS, Physics, German and English Literature.`
+			description: en`Graduated Secondary School with GCSES in Biology, Chemistry, English, Geography, Electronics, Mathematics, ICT, BCS, Physics, German and English Literature.`,
 		},
 		{
 			date: date(13, 'may', 2024),
 			title: en`GPT4o`,
 			url: url`https://openai.com/gpt-4o-contributions/`,
 			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
-   description: en`Product security for OpenAI‘s first multimodal model.`
+			description: en`Product security for OpenAI‘s first multimodal model.`,
 		},
 		{
 			date: date(3, 'oct', 2024),
 			title: en`ChatGPT Canvas`,
 			url: url`https://openai.com/index/introducing-canvas/`,
 			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
-   description: en`Security for AI pairing system for text.`
-		}
+			description: en`Security for AI pairing system for text.`,
+		},
 		// END TOOL ASSISTED SORT
 	],
 	who: {
