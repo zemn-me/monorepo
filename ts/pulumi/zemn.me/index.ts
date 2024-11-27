@@ -43,6 +43,9 @@ export class Component extends Pulumi.ComponentResource {
 				domain: args.domain,
 				noIndex: args.noIndex,
 				email: false,
+				otherTXTRecords: [
+					"google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY"
+				],
 				tags,
 			},
 			{ parent: this }
