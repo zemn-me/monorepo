@@ -1,12 +1,14 @@
 import { local } from '@pulumi/command';
-import { ComponentResource, ComponentResourceOptions } from "@pulumi/pulumi";
+import { ComponentResource, ComponentResourceOptions, Input, output } from "@pulumi/pulumi";
+import { FileAsset } from '@pulumi/pulumi/asset';
 
 
 export interface Args {
-	repository: string
+	repository: Input<string>
 }
 
 export class __ClassName extends ComponentResource {
+	digest: FileAsset
 	constructor(
 		name: string,
 		args: Args,
@@ -14,16 +16,18 @@ export class __ClassName extends ComponentResource {
 	) {
 		super('__TYPE', name, args, opts);
 
+		this.digest = new FileAsset("_DIGEST_PATH");
+
 		const upload = new local.Command(`${name}_push`, {
-			create: [
+			create: output(args.repository).apply(repo => [
 				"__PUSH_BIN",
 				"--repository",
-				args.repository,
-			].join(" ")
+				repo,
+			].join(" "))
 		}, { parent: this })
 
 
-		super.registerOutputs({ upload })
+		super.registerOutputs({ upload, digest: this.digest })
 	}
 
 

@@ -36,26 +36,28 @@ def pulumi_image(
         repository = "why is this mandatory",
     )
 
+    tsprojdeps = [
+        ":" + name + "_push_bin",
+        src + ".digest",
+    ]
+
     expand_template_rule(
         name = name + "_tsfiles",
         template = "//ts/pulumi/lib/oci:oci_image.tmpl.ts",
         out = out,
-        data = [
-            ":" + name + "_push_bin",
-        ],
+        data = tsprojdeps,
         substitutions = {
             "__ClassName": component_name,
             "__TYPE": native.package_name().replace("/", ":"),
             "__PUSH_BIN": "$(rootpath :" + name + "_push_bin" + ")",
+            "_DIGEST_PATH": "$(rootpath " + src + ".digest)",
         },
     )
 
     ts_project(
         name = name,
         srcs = [name + "_tsfiles"],
-        data = [
-            ":" + name + "_push_bin",
-        ],
+        data = tsprojdeps,
         deps = [
             "//:node_modules/@pulumi/pulumi",
             "//:node_modules/@pulumi/command",

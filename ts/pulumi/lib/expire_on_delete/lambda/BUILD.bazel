@@ -1,0 +1,58 @@
+load("@aspect_bazel_lib//lib:testing.bzl", "assert_archive_contains")
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+pulumi_image(
+    name = "expire_on_delete_image",
+    src = ":oci_image",
+)
+
+go_library(
+    name = "lambda_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/lib/expire_on_delete/lambda",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_aws_aws_sdk_go//aws",
+        "@com_github_aws_aws_sdk_go//aws/session",
+        "@com_github_aws_aws_sdk_go//service/s3",
+    ],
+)
+
+go_binary(
+    name = "app",
+    embed = [":lambda_lib"],
+    visibility = ["//visibility:public"],
+)
+
+# Put app go_binary into a tar layer.
+pkg_tar(
+    name = "app_layer",
+    srcs = [":app"],
+    # If the binary depends on RUNFILES, uncomment the attribute below.
+    # include_runfiles = True
+)
+
+# Prove that the application is at the path we expect in that tar.
+assert_archive_contains(
+    name = "test_app_layer",
+    archive = "app_layer.tar",
+    expected = ["app"],
+)
+
+oci_image(
+    name = "oci_image",
+    base = "@distroless_base",
+    entrypoint = ["/app"],
+    tars = [":app_layer"],
+)
