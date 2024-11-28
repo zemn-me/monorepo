@@ -24,6 +24,7 @@ const lora = Lora({
 
 export function RootLayout({ children }: Props) {
 	return (
+		<>
 		<Providers>
 			<html>
 				<head>
@@ -42,6 +43,7 @@ export function RootLayout({ children }: Props) {
 				</body>
 			</html>
 		</Providers>
+		</>
 	);
 }
 
