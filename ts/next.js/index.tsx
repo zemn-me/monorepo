@@ -17,7 +17,8 @@ type directives =
 	| 'default-src'
 	| 'media-src'
 	| 'font-src'
-	| 'require-trusted-types-for';
+	| 'require-trusted-types-for'
+	| 'trusted-types';
 
 export type CspPolicy = Partial<Record<directives, sourceList>>;
 
@@ -48,7 +49,11 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	]),
 	...(process.env.NODE_ENV == 'development'
 		? {}
-		: { 'require-trusted-types-for': new Set(["'script'"]) }),
+		: {
+			'require-trusted-types-for': new Set(["'script'"]),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			'trusted-types': new Set(['default', 'nextjs#bundler']) as any, // 🤷
+		}),
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
