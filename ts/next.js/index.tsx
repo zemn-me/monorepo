@@ -1,5 +1,7 @@
 import Head from 'next/head';
 
+import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
+
 export * as config from '#root/ts/next.js/next.config.js';
 
 type scheme = 'https:' | 'data:';
@@ -17,7 +19,8 @@ type directives =
 	| 'default-src'
 	| 'media-src'
 	| 'font-src'
-	| 'require-trusted-types-for';
+	| 'require-trusted-types-for'
+	| 'trusted-types';
 
 export type CspPolicy = Partial<Record<directives, sourceList>>;
 
@@ -48,7 +51,11 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	]),
 	...(process.env.NODE_ENV == 'development'
 		? {}
-		: { 'require-trusted-types-for': new Set(["'script'"]) }),
+		: {
+			'require-trusted-types-for': new Set(["'script'"]),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			'trusted-types': new Set(['default', 'nextjs#bundler']) as any, // 🤷
+		}),
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
@@ -73,6 +80,7 @@ export function HeaderTagsPagesRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
+			<DeclareTrustedTypesPolicy/>
 			<Head>
 				<meta
 					content={Object.entries(cspPolicy)
@@ -103,6 +111,7 @@ export function HeaderTagsAppRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
+			<DeclareTrustedTypesPolicy/>
 			<meta
 				content={Object.entries(cspPolicy)
 					.map(([k, v]) => [k, ...v].join(' '))
