@@ -136,6 +136,7 @@ export const Bio = {
 		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 		[lang.Text('en-GB', 'youtube' as const), url`//youtube.com/zemnmez`],
 		[en`twitch`, url`//twitch.tv/zemnmez`],
+		[en`forbes`, url`//www.forbes.com/profile/thomas-shadwell/`]
 	],
 	skills: [
 		en`Go`,
