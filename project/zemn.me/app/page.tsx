@@ -11,6 +11,8 @@ import { Q } from '#root/project/zemn.me/components/Q/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import Timeline from '#root/project/zemn.me/components/timeline/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
+import { Iterable } from '#root/ts/iter/index.js';
+import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
 
 function ZemnmezLogoInline() {
@@ -57,7 +59,15 @@ export default function Main() {
 					</p>
 				</Prose>
 				<nav className={style.links}>
-					{bio.Bio.links.map(([text, url]) => (
+					{Iterable(bio.Bio.links)
+						.map(v => [
+							"linkedin",
+							"github",
+							"bluesky",
+							"twitter"
+						].some(n => v[0].text == n)? Some(v): None)
+						.filter()
+						.map(([text, url]) => (
 						<Link
 							href={url.toString()}
 							key={url.toString()}
@@ -66,7 +76,7 @@ export default function Main() {
 						>
 							{lang.text(text)}
 						</Link>
-					))}
+					)).to_array()}
 				</nav>
 			</header>
 			<section>
