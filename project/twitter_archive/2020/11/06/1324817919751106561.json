@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1324817919751106561"
+        ],
+        "editableUntil": "2020-11-06T21:56:20.652Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "convexity",
+          "screen_name": "convexitymusic",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "523706002",
+          "id": "523706002"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/convexitymusic/status/1322594168028495874/video/1",
+          "source_status_id": "1322594168028495874",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/JyfRbyz4xw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1322594051397472256/pu/img/tfudLIdBin436zyq.jpg",
+          "id_str": "1322594051397472256",
+          "source_user_id": "523706002",
+          "id": "1322594051397472256",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1322594051397472256/pu/img/tfudLIdBin436zyq.jpg",
+          "source_user_id_str": "523706002",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1322594168028495874",
+          "display_url": "pic.twitter.com/JyfRbyz4xw"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "60"
+    ],
+    "favorite_count": "0",
+    "id_str": "1324817919751106561",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1324817919751106561",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 06 20:56:20 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @convexitymusic: original content https://t.co/JyfRbyz4xw",
+    "lang": "ca",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/convexitymusic/status/1322594168028495874/video/1",
+          "source_status_id": "1322594168028495874",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/JyfRbyz4xw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1322594051397472256/pu/img/tfudLIdBin436zyq.jpg",
+          "id_str": "1322594051397472256",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "9510",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1322594051397472256/pu/vid/320x320/1c6gSknbtwRkeRZI.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1322594051397472256/pu/pl/qtPty1tG0Oo3_to4.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1322594051397472256/pu/vid/500x500/HLwmiEcD1de5qhmC.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "523706002",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1322594051397472256",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1322594051397472256/pu/img/tfudLIdBin436zyq.jpg",
+          "source_user_id_str": "523706002",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1322594168028495874",
+          "display_url": "pic.twitter.com/JyfRbyz4xw"
+        }
+      ]
+    }
+  }
+}

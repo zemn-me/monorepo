@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1347838532187025409"
+        ],
+        "editableUntil": "2021-01-09T10:32:02.359Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "barroo",
+          "screen_name": "averycutedog",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1590210720",
+          "id": "1590210720"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/averycutedog/status/1347639707576881152/video/1",
+          "source_status_id": "1347639707576881152",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/Gu5quHNecI",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1347639662379106304/pu/img/WgiM_JvTq1VwfBx3.jpg",
+          "id_str": "1347639662379106304",
+          "source_user_id": "1590210720",
+          "id": "1347639662379106304",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1347639662379106304/pu/img/WgiM_JvTq1VwfBx3.jpg",
+          "source_user_id_str": "1590210720",
+          "sizes": {
+            "small": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1347639707576881152",
+          "display_url": "pic.twitter.com/Gu5quHNecI"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "1347838532187025409",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1347838532187025409",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 09 09:32:02 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @averycutedog: https://t.co/Gu5quHNecI",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/averycutedog/status/1347639707576881152/video/1",
+          "source_status_id": "1347639707576881152",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/Gu5quHNecI",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1347639662379106304/pu/img/WgiM_JvTq1VwfBx3.jpg",
+          "id_str": "1347639662379106304",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "18318",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1347639662379106304/pu/pl/o7BSAA0e7S4GY7nD.m3u8?tag=10&v=46f"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1347639662379106304/pu/vid/320x400/PBBUJ97MvHJErRLn.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1590210720",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1347639662379106304",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1347639662379106304/pu/img/WgiM_JvTq1VwfBx3.jpg",
+          "source_user_id_str": "1590210720",
+          "sizes": {
+            "small": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1347639707576881152",
+          "display_url": "pic.twitter.com/Gu5quHNecI"
+        }
+      ]
+    }
+  }
+}

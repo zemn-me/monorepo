@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1240463193828360192"
+        ],
+        "editableUntil": "2020-03-19T03:20:46.757Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Animated Antic",
+          "screen_name": "Animated_Antic",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "901950437124825088",
+          "id": "901950437124825088"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Animated_Antic/status/1240310954492973058/video/1",
+          "source_status_id": "1240310954492973058",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/4gbjtr9plE",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1240310905495113729/pu/img/0OaFeZs3qTMHEKUR.jpg",
+          "id_str": "1240310905495113729",
+          "source_user_id": "901950437124825088",
+          "id": "1240310905495113729",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1240310905495113729/pu/img/0OaFeZs3qTMHEKUR.jpg",
+          "source_user_id_str": "901950437124825088",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1240310954492973058",
+          "display_url": "pic.twitter.com/4gbjtr9plE"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "106"
+    ],
+    "favorite_count": "0",
+    "id_str": "1240463193828360192",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1240463193828360192",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 19 02:20:46 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Animated_Antic: This joke from The Princess and the Frog still makes me laugh. https://t.co/4gbjtr9plE",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Animated_Antic/status/1240310954492973058/video/1",
+          "source_status_id": "1240310954492973058",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/4gbjtr9plE",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1240310905495113729/pu/img/0OaFeZs3qTMHEKUR.jpg",
+          "id_str": "1240310905495113729",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "19457",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1240310905495113729/pu/pl/R5dj14WdShrRJ_Ro.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1240310905495113729/pu/vid/480x270/XUiHAx0pENyolPKR.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1240310905495113729/pu/vid/640x360/dnSncL6xfU5ydxeE.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "901950437124825088",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1240310905495113729",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1240310905495113729/pu/img/0OaFeZs3qTMHEKUR.jpg",
+          "source_user_id_str": "901950437124825088",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1240310954492973058",
+          "display_url": "pic.twitter.com/4gbjtr9plE"
+        }
+      ]
+    }
+  }
+}

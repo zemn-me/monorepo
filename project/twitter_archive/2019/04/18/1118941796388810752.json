@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1118941796388810752"
+        ],
+        "editableUntil": "2019-04-18T19:18:07.849Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Roushan",
+          "screen_name": "doingjobs",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1485146977671294976",
+          "id": "1485146977671294976"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DoingJobs/status/1118347246347739136/video/1",
+          "source_status_id": "1118347246347739136",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/Vms8DS05Gb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1118347203934871554/pu/img/FRTuPzVlVAgT_fnf.jpg",
+          "id_str": "1118347203934871554",
+          "source_user_id": "1108957040557252608",
+          "id": "1118347203934871554",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1118347203934871554/pu/img/FRTuPzVlVAgT_fnf.jpg",
+          "source_user_id_str": "1108957040557252608",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1118347246347739136",
+          "display_url": "pic.twitter.com/Vms8DS05Gb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "38"
+    ],
+    "favorite_count": "0",
+    "id_str": "1118941796388810752",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1118941796388810752",
+    "possibly_sensitive": false,
+    "created_at": "Thu Apr 18 18:18:07 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @DoingJobs: https://t.co/Vms8DS05Gb",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DoingJobs/status/1118347246347739136/video/1",
+          "source_status_id": "1118347246347739136",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/Vms8DS05Gb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1118347203934871554/pu/img/FRTuPzVlVAgT_fnf.jpg",
+          "id_str": "1118347203934871554",
+          "video_info": {
+            "aspect_ratio": [
+              "30",
+              "37"
+            ],
+            "duration_millis": "14034",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1118347203934871554/pu/vid/320x394/yGuMqICQsI4ERHFd.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1118347203934871554/pu/vid/360x444/nxEDNfj58Cly2Nf1.mp4?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1118347203934871554/pu/vid/480x592/buapB5-AojAgGZFa.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1118347203934871554/pu/pl/nOBilu4q-gh0EEK9.m3u8?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "1108957040557252608",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1118347203934871554",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1118347203934871554/pu/img/FRTuPzVlVAgT_fnf.jpg",
+          "source_user_id_str": "1108957040557252608",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "592",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1118347246347739136",
+          "display_url": "pic.twitter.com/Vms8DS05Gb"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1093558347222081536"
+        ],
+        "editableUntil": "2019-02-07T18:13:21.966Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dave",
+          "screen_name": "sheepfilms",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "17991085",
+          "id": "17991085"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sheepfilms/status/1093487138832900098/video/1",
+          "source_status_id": "1093487138832900098",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/dZ3Oq7E9Ph",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1093487058725883905/pu/img/xsERwkzSEdNE_yQB.jpg",
+          "id_str": "1093487058725883905",
+          "source_user_id": "17991085",
+          "id": "1093487058725883905",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1093487058725883905/pu/img/xsERwkzSEdNE_yQB.jpg",
+          "source_user_id_str": "17991085",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1093487138832900098",
+          "display_url": "pic.twitter.com/dZ3Oq7E9Ph"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1093558347222081536",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1093558347222081536",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 07 17:13:21 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @sheepfilms: If baguettes could move, how would they move? Give your reasoning pls https://t.co/dZ3Oq7E9Ph",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sheepfilms/status/1093487138832900098/video/1",
+          "source_status_id": "1093487138832900098",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/dZ3Oq7E9Ph",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1093487058725883905/pu/img/xsERwkzSEdNE_yQB.jpg",
+          "id_str": "1093487058725883905",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "1560",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1093487058725883905/pu/vid/480x360/VIHG4nQk2VzN_7CK.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1093487058725883905/pu/vid/960x720/Flbyc8flV7EQQQ5R.mp4?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1093487058725883905/pu/vid/240x180/ISoY8Fb5ugXk4g8F.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1093487058725883905/pu/pl/oELHcuSQUKxN-yIx.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "17991085",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1093487058725883905",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1093487058725883905/pu/img/xsERwkzSEdNE_yQB.jpg",
+          "source_user_id_str": "17991085",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1093487138832900098",
+          "display_url": "pic.twitter.com/dZ3Oq7E9Ph"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1544803936846024704"
+        ],
+        "editableUntil": "2022-07-06T22:32:14.270Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ceph0",
+          "screen_name": "ceph0rend",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3411962404",
+          "id": "3411962404"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ceph0rend/status/1544722306265624577/video/1",
+          "source_status_id": "1544722306265624577",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/L5LJMI9sCG",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1544722264158941184/pu/img/690MGTlA9CerxCBT.jpg",
+          "id_str": "1544722264158941184",
+          "source_user_id": "3411962404",
+          "id": "1544722264158941184",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1544722264158941184/pu/img/690MGTlA9CerxCBT.jpg",
+          "source_user_id_str": "3411962404",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "458",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1068",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1068",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1544722306265624577",
+          "display_url": "pic.twitter.com/L5LJMI9sCG"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "112"
+    ],
+    "favorite_count": "0",
+    "id_str": "1544803936846024704",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1544803936846024704",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 06 22:02:14 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @ceph0rend: Monster Hunter Players when a fan favorite gets announced in the new game https://t.co/L5LJMI9sCG",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ceph0rend/status/1544722306265624577/video/1",
+          "source_status_id": "1544722306265624577",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/L5LJMI9sCG",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1544722264158941184/pu/img/690MGTlA9CerxCBT.jpg",
+          "id_str": "1544722264158941184",
+          "video_info": {
+            "aspect_ratio": [
+              "89",
+              "60"
+            ],
+            "duration_millis": "9133",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1544722264158941184/pu/pl/ZxS2oxeGI0UoA2yq.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1544722264158941184/pu/vid/1068x720/9oSUNU-RFnIWwIjK.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1544722264158941184/pu/vid/534x360/Qz-gfnNBNZu9IO58.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1544722264158941184/pu/vid/400x270/ekDzFYGzapDp3EGn.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "3411962404",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1544722264158941184",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1544722264158941184/pu/img/690MGTlA9CerxCBT.jpg",
+          "source_user_id_str": "3411962404",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "458",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1068",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1068",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1544722306265624577",
+          "display_url": "pic.twitter.com/L5LJMI9sCG"
+        }
+      ]
+    }
+  }
+}

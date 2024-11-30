@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1760070282491105680"
+        ],
+        "editableUntil": "2024-02-20T23:33:50.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "WebDevCody",
+          "screen_name": "webdevcody",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "1616631881834848256",
+          "id": "1616631881834848256"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "259"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1759961711598072205",
+    "id_str": "1760070282491105680",
+    "in_reply_to_user_id": "1616631881834848256",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1760070282491105680",
+    "in_reply_to_status_id": "1759961711598072205",
+    "created_at": "Tue Feb 20 22:33:50 +0000 2024",
+    "favorited": false,
+    "full_text": "@webdevcody the principled answer is that ideologically, Go is trying to make a language with a small number of concepts needed to understand it, like C.\n\nHence, stdlib libraries like net/http tend to have Request and Response objects they pass around instead",
+    "lang": "en",
+    "in_reply_to_screen_name": "webdevcody",
+    "in_reply_to_user_id_str": "1616631881834848256"
+  }
+}

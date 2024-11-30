@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "978353750522978304"
+        ],
+        "editableUntil": "2018-03-26T20:31:25.715Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "demarcus",
+          "screen_name": "spookyboosky",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "361098566",
+          "id": "361098566"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spookyboosky/status/977721205854752768/video/1",
+          "source_status_id": "977721205854752768",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/Q5CYfKUGa6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/977720558778449920/pu/img/LZfUhu63_YVNg9EA.jpg",
+          "id_str": "977720558778449920",
+          "source_user_id": "361098566",
+          "id": "977720558778449920",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/977720558778449920/pu/img/LZfUhu63_YVNg9EA.jpg",
+          "source_user_id_str": "361098566",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "977721205854752768",
+          "display_url": "pic.twitter.com/Q5CYfKUGa6"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "978353750522978304",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "978353750522978304",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 26 19:31:25 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @spookyboosky: https://t.co/Q5CYfKUGa6",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spookyboosky/status/977721205854752768/video/1",
+          "source_status_id": "977721205854752768",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/Q5CYfKUGa6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/977720558778449920/pu/img/LZfUhu63_YVNg9EA.jpg",
+          "id_str": "977720558778449920",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "29500",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/977720558778449920/pu/vid/720x1280/wKmo5oMsC9TBLggy.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/977720558778449920/pu/vid/180x320/uSPKTl9-6Vwbz7B0.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/977720558778449920/pu/vid/360x640/USoqH5Qq8GkxfHgZ.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/977720558778449920/pu/pl/zfelCBs6XnKGmWms.m3u8?v=045"
+              }
+            ]
+          },
+          "source_user_id": "361098566",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "977720558778449920",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/977720558778449920/pu/img/LZfUhu63_YVNg9EA.jpg",
+          "source_user_id_str": "361098566",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "977721205854752768",
+          "display_url": "pic.twitter.com/Q5CYfKUGa6"
+        }
+      ]
+    }
+  }
+}

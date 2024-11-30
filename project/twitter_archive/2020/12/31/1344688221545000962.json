@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1344688221545000962"
+        ],
+        "editableUntil": "2020-12-31T17:53:49.772Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Gene Park",
+          "screen_name": "GenePark",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "15100219",
+          "id": "15100219"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GenePark/status/1344451460352905217/video/1",
+          "source_status_id": "1344451460352905217",
+          "indices": [
+            "64",
+            "87"
+          ],
+          "url": "https://t.co/WjIwXin78w",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1344451402203090948/pu/img/F-f4i-hKAY_TCJNo.jpg",
+          "id_str": "1344451402203090948",
+          "source_user_id": "15100219",
+          "id": "1344451402203090948",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1344451402203090948/pu/img/F-f4i-hKAY_TCJNo.jpg",
+          "source_user_id_str": "15100219",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1344451460352905217",
+          "display_url": "pic.twitter.com/WjIwXin78w"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "87"
+    ],
+    "favorite_count": "0",
+    "id_str": "1344688221545000962",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1344688221545000962",
+    "possibly_sensitive": false,
+    "created_at": "Thu Dec 31 16:53:49 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @GenePark: you might need this: goofy shouting “YAMEROOOOOO” https://t.co/WjIwXin78w",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GenePark/status/1344451460352905217/video/1",
+          "source_status_id": "1344451460352905217",
+          "indices": [
+            "64",
+            "87"
+          ],
+          "url": "https://t.co/WjIwXin78w",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1344451402203090948/pu/img/F-f4i-hKAY_TCJNo.jpg",
+          "id_str": "1344451402203090948",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "54648",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1344451402203090948/pu/vid/640x360/c8aYSsNZ1KmK3suV.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1344451402203090948/pu/pl/ZzUTVaaRCUYfKOTI.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1344451402203090948/pu/vid/480x270/eYOzFI8f2_P2XRwo.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "15100219",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1344451402203090948",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1344451402203090948/pu/img/F-f4i-hKAY_TCJNo.jpg",
+          "source_user_id_str": "15100219",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1344451460352905217",
+          "display_url": "pic.twitter.com/WjIwXin78w"
+        }
+      ]
+    }
+  }
+}

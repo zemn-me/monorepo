@@ -1,0 +1,66 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1732841982475837567"
+        ],
+        "editableUntil": "2023-12-07T20:18:17.926Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/TWwAhm9byn",
+          "expanded_url": "https://vulnerabledoma.in/tinymce/CVE-2023-45818.html",
+          "display_url": "vulnerabledoma.in/tinymce/CVE-20…",
+          "indices": [
+            "74",
+            "97"
+          ]
+        },
+        {
+          "url": "https://t.co/X2A4dnZtGy",
+          "expanded_url": "https://vulnerabledoma.in/tinymce/CVE-2023-48219.html",
+          "display_url": "vulnerabledoma.in/tinymce/CVE-20…",
+          "indices": [
+            "98",
+            "121"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "121"
+    ],
+    "favorite_count": "0",
+    "id_str": "1732841982475837567",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1732841982475837567",
+    "possibly_sensitive": false,
+    "created_at": "Thu Dec 07 19:18:17 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: I put here PoC for TinyMCE XSS that I recently found:\nhttps://t.co/TWwAhm9byn\nhttps://t.co/X2A4dnZtGy",
+    "lang": "en"
+  }
+}

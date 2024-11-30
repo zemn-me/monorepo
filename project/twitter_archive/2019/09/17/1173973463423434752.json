@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1173973463423434752"
+        ],
+        "editableUntil": "2019-09-17T15:54:19.709Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "272"
+    ],
+    "favorite_count": "1",
+    "id_str": "1173973463423434752",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1173973463423434752",
+    "created_at": "Tue Sep 17 14:54:19 +0000 2019",
+    "favorited": false,
+    "full_text": "even though it breaks with the protobuf spec, generated go protobuf code doesn't allow json of raw enums. why?\n\nrather than have the code generator annotate the generated enum *type* with enum, every single *usage*, everywhere is annotated, thousands of times per file ...",
+    "lang": "en"
+  }
+}

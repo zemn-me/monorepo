@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "984286622840643584"
+        ],
+        "editableUntil": "2018-04-12T05:26:32.703Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "282"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "984275650721693696",
+    "id_str": "984286622840643584",
+    "in_reply_to_user_id": "267035710",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "984286622840643584",
+    "in_reply_to_status_id": "984275650721693696",
+    "created_at": "Thu Apr 12 04:26:32 +0000 2018",
+    "favorited": false,
+    "full_text": "@dRastic1337 you probably don't need mongodb. you probably want a SQL database with something like Redis, or LevelDB or its successors IF AND WHEN you reach the scale where you need them. mongodb won by appealing to the natural tendency of engineers to pre-optimise against unknowns",
+    "lang": "en",
+    "in_reply_to_screen_name": "frrrnnarraa",
+    "in_reply_to_user_id_str": "267035710"
+  }
+}

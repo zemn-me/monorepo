@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1045437965198118914"
+        ],
+        "editableUntil": "2018-09-27T23:20:08.858Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Matthew Rorie",
+          "screen_name": "frailgesture",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "453963",
+          "id": "453963"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/frailgesture/status/1045135723093876737/video/1",
+          "source_status_id": "1045135723093876737",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/ZCZj1OCi9t",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1045135449625227264/pu/img/yJShPQCGsUJiAveu.jpg",
+          "id_str": "1045135449625227264",
+          "source_user_id": "453963",
+          "id": "1045135449625227264",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1045135449625227264/pu/img/yJShPQCGsUJiAveu.jpg",
+          "source_user_id_str": "453963",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1045135723093876737",
+          "display_url": "pic.twitter.com/ZCZj1OCi9t"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "100"
+    ],
+    "favorite_count": "0",
+    "id_str": "1045437965198118914",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1045437965198118914",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 27 22:20:08 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @frailgesture: they avoided the video game category as long as they could https://t.co/ZCZj1OCi9t",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/frailgesture/status/1045135723093876737/video/1",
+          "source_status_id": "1045135723093876737",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/ZCZj1OCi9t",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1045135449625227264/pu/img/yJShPQCGsUJiAveu.jpg",
+          "id_str": "1045135449625227264",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "77306",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1045135449625227264/pu/vid/1280x720/98TF0ptU76c6bise.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1045135449625227264/pu/pl/JMUMpgwY_YMULOWX.m3u8?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1045135449625227264/pu/vid/640x360/UyxUW4z_b9CQHKRI.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1045135449625227264/pu/vid/320x180/n-qshGtlUIrIMhJt.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "453963",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1045135449625227264",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1045135449625227264/pu/img/yJShPQCGsUJiAveu.jpg",
+          "source_user_id_str": "453963",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1045135723093876737",
+          "display_url": "pic.twitter.com/ZCZj1OCi9t"
+        }
+      ]
+    }
+  }
+}

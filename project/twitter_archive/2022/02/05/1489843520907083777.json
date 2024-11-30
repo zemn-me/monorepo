@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1489843520907083777"
+        ],
+        "editableUntil": "2022-02-05T07:09:09.995Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/72iLk9gyqo",
+          "expanded_url": "https://github.com/ChainSafe/web3.js/pull/4729",
+          "display_url": "github.com/ChainSafe/web3…",
+          "indices": [
+            "108",
+            "131"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "131"
+    ],
+    "favorite_count": "9",
+    "id_str": "1489843520907083777",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1489843520907083777",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 05 06:09:09 +0000 2022",
+    "favorited": false,
+    "full_text": "another reminder that web3 continues to be incompatible with content security policy due to its use of eval https://t.co/72iLk9gyqo",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1095742959272816641"
+        ],
+        "editableUntil": "2019-02-13T18:54:14.067Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Justin Whang 🐙",
+          "screen_name": "JustinWhang",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "51359739",
+          "id": "51359739"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/blogTO/status/1095074058629275648/video/1",
+          "source_status_id": "1095074058629275648",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/emaqm1Idso",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1095073754680446976/pu/img/4Gn0XgTXUIS5R0Lw.jpg",
+          "id_str": "1095073754680446976",
+          "source_user_id": "1223101",
+          "id": "1095073754680446976",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1095073754680446976/pu/img/4Gn0XgTXUIS5R0Lw.jpg",
+          "source_user_id_str": "1223101",
+          "sizes": {
+            "small": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1095074058629275648",
+          "display_url": "pic.twitter.com/emaqm1Idso"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "74"
+    ],
+    "favorite_count": "0",
+    "id_str": "1095742959272816641",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1095742959272816641",
+    "possibly_sensitive": false,
+    "created_at": "Wed Feb 13 17:54:14 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @JustinWhang: Where is your boy tonight I hope\n\nhttps://t.co/emaqm1Idso",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/blogTO/status/1095074058629275648/video/1",
+          "source_status_id": "1095074058629275648",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/emaqm1Idso",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1095073754680446976/pu/img/4Gn0XgTXUIS5R0Lw.jpg",
+          "id_str": "1095073754680446976",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "60034",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1095073754680446976/pu/vid/360x450/sO7rMNYIfv6nWrYO.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1095073754680446976/pu/vid/480x600/j9VcMimE1NVnCyqz.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1095073754680446976/pu/pl/kD589CySn8OGNUST.m3u8?tag=6&v=15b"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1095073754680446976/pu/vid/320x400/z8jvFDT-q2KIgm8_.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "1223101",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1095073754680446976",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1095073754680446976/pu/img/4Gn0XgTXUIS5R0Lw.jpg",
+          "source_user_id_str": "1223101",
+          "sizes": {
+            "small": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1095074058629275648",
+          "display_url": "pic.twitter.com/emaqm1Idso"
+        }
+      ]
+    }
+  }
+}

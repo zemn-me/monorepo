@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1242618598578884618"
+        ],
+        "editableUntil": "2020-03-25T02:05:35.295Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "SteeScribbles",
+          "screen_name": "SteeScribbles",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "43229236",
+          "id": "43229236"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SteeScribbles/status/1242505426228449280/video/1",
+          "source_status_id": "1242505426228449280",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/HTSJJXwM48",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242505354900049923/pu/img/GYilMcP7OD4bgspN.jpg",
+          "id_str": "1242505354900049923",
+          "source_user_id": "43229236",
+          "id": "1242505354900049923",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242505354900049923/pu/img/GYilMcP7OD4bgspN.jpg",
+          "source_user_id_str": "43229236",
+          "sizes": {
+            "large": {
+              "w": "714",
+              "h": "402",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "714",
+              "h": "402",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1242505426228449280",
+          "display_url": "pic.twitter.com/HTSJJXwM48"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "rtenews",
+          "indices": [
+            "82",
+            "90"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "1242618598578884618",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1242618598578884618",
+    "possibly_sensitive": false,
+    "created_at": "Wed Mar 25 01:05:35 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @SteeScribbles: There's a glitch in the simulation and I just spilled my drink #rtenews https://t.co/HTSJJXwM48",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SteeScribbles/status/1242505426228449280/video/1",
+          "source_status_id": "1242505426228449280",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/HTSJJXwM48",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242505354900049923/pu/img/GYilMcP7OD4bgspN.jpg",
+          "id_str": "1242505354900049923",
+          "video_info": {
+            "aspect_ratio": [
+              "119",
+              "67"
+            ],
+            "duration_millis": "17520",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1242505354900049923/pu/pl/UqPyZBm6vDRMCGv4.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242505354900049923/pu/vid/478x270/FPZi-fRwuJ9XfzZR.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242505354900049923/pu/vid/714x402/HJy13vzz0ksg1-BM.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "43229236",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1242505354900049923",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242505354900049923/pu/img/GYilMcP7OD4bgspN.jpg",
+          "source_user_id_str": "43229236",
+          "sizes": {
+            "large": {
+              "w": "714",
+              "h": "402",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "714",
+              "h": "402",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1242505426228449280",
+          "display_url": "pic.twitter.com/HTSJJXwM48"
+        }
+      ]
+    }
+  }
+}

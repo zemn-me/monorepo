@@ -1,0 +1,71 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1103750434437693440"
+        ],
+        "editableUntil": "2019-03-07T21:13:04.918Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Turner",
+          "screen_name": "ItsTurnerr",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "1486389593633017856",
+          "id": "1486389593633017856"
+        },
+        {
+          "name": "Cristuna Amaya",
+          "screen_name": "Silcris88",
+          "indices": [
+            "12",
+            "22"
+          ],
+          "id_str": "987467778",
+          "id": "987467778"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/uJoc0Eju5z",
+          "expanded_url": "https://developer.twitter.com/en/docs/tutorials/using-twurl.html",
+          "display_url": "developer.twitter.com/en/docs/tutori…",
+          "indices": [
+            "251",
+            "274"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "274"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1103748613321109504",
+    "id_str": "1103750434437693440",
+    "in_reply_to_user_id": "1639655281",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1103750434437693440",
+    "in_reply_to_status_id": "1103748613321109504",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 07 20:13:04 +0000 2019",
+    "favorited": false,
+    "full_text": "@ItsTurnerr @Silcris88 should be\n twurl -X GET \"/1.1/direct_messages/welcome_messages/list.json\"\nthen you should get a number, and then you do this\ntwurl -X DELETE /1.1/direct_messages/welcome_messages/destroy.json?id=[number]\n\nif you dont have twurl\nhttps://t.co/uJoc0Eju5z",
+    "lang": "en",
+    "in_reply_to_user_id_str": "1639655281"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1120659410928451585"
+        ],
+        "editableUntil": "2019-04-23T13:03:19.067Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "sak’s rkive 📂",
+          "screen_name": "glosstradamus",
+          "indices": [
+            "0",
+            "14"
+          ],
+          "id_str": "1393406249748688897",
+          "id": "1393406249748688897"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "293"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1120448421813456902",
+    "id_str": "1120659410928451585",
+    "in_reply_to_user_id": "750162369444057088",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1120659410928451585",
+    "in_reply_to_status_id": "1120448421813456902",
+    "created_at": "Tue Apr 23 12:03:19 +0000 2019",
+    "favorited": false,
+    "full_text": "@glosstradamus typically, when a DOM system tries to render a link, i recommend it use HTMLAnchor​Element or URL for whitelisting, for example blocking `javascript` and `skype` uris by only allowing ^https?$. the benefit is these is that they return the browser's own interpretation of the URL",
+    "lang": "en",
+    "in_reply_to_user_id_str": "750162369444057088"
+  }
+}

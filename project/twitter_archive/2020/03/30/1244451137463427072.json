@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1244451137463427072"
+        ],
+        "editableUntil": "2020-03-30T03:27:26.612Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Capybaras",
+          "screen_name": "CapybaraCountry",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1053676262739238912",
+          "id": "1053676262739238912"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CapybaraCountry/status/1242201108082122752/video/1",
+          "source_status_id": "1242201108082122752",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/Y0N5hPv7sw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242201042399285248/pu/img/WMc48Mywe54GPhNi.jpg",
+          "id_str": "1242201042399285248",
+          "source_user_id": "1053676262739238912",
+          "id": "1242201042399285248",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242201042399285248/pu/img/WMc48Mywe54GPhNi.jpg",
+          "source_user_id_str": "1053676262739238912",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1242201108082122752",
+          "display_url": "pic.twitter.com/Y0N5hPv7sw"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1244451137463427072",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1244451137463427072",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 30 02:27:26 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @CapybaraCountry: relaxin’ in the bath https://t.co/Y0N5hPv7sw",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CapybaraCountry/status/1242201108082122752/video/1",
+          "source_status_id": "1242201108082122752",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/Y0N5hPv7sw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242201042399285248/pu/img/WMc48Mywe54GPhNi.jpg",
+          "id_str": "1242201042399285248",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "59700",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242201042399285248/pu/vid/480x270/9kke7sCZpY-3A6r8.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1242201042399285248/pu/pl/nIsHHHBudd6bEHnb.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242201042399285248/pu/vid/640x360/skH4NvjhbTCHxpJJ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1053676262739238912",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1242201042399285248",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242201042399285248/pu/img/WMc48Mywe54GPhNi.jpg",
+          "source_user_id_str": "1053676262739238912",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1242201108082122752",
+          "display_url": "pic.twitter.com/Y0N5hPv7sw"
+        }
+      ]
+    }
+  }
+}

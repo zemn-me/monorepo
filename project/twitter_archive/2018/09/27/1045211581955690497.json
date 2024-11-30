@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1045211581955690497"
+        ],
+        "editableUntil": "2018-09-27T08:20:34.887Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "DitzyFlama",
+          "screen_name": "DitzyFlama",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "851844984",
+          "id": "851844984"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DitzyFlama/status/1044913886732800000/video/1",
+          "source_status_id": "1044913886732800000",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/WeHW8sQriM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1044913786799308801/pu/img/PI5yehcjCj7uHahe.jpg",
+          "id_str": "1044913786799308801",
+          "source_user_id": "851844984",
+          "id": "1044913786799308801",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1044913786799308801/pu/img/PI5yehcjCj7uHahe.jpg",
+          "source_user_id_str": "851844984",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1044913886732800000",
+          "display_url": "pic.twitter.com/WeHW8sQriM"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "72"
+    ],
+    "favorite_count": "0",
+    "id_str": "1045211581955690497",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1045211581955690497",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 27 07:20:34 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @DitzyFlama: we're almost in the spooky month https://t.co/WeHW8sQriM",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DitzyFlama/status/1044913886732800000/video/1",
+          "source_status_id": "1044913886732800000",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/WeHW8sQriM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1044913786799308801/pu/img/PI5yehcjCj7uHahe.jpg",
+          "id_str": "1044913786799308801",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "14433",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1044913786799308801/pu/pl/zhDbMlZYbqcA9zp2.m3u8?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1044913786799308801/pu/vid/320x180/DFlUFJbsLghbi7uA.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1044913786799308801/pu/vid/640x360/UJ3vscPxoPLMeAgH.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1044913786799308801/pu/vid/1280x720/ZEGhlGHOG9Rw-aUT.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "851844984",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1044913786799308801",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1044913786799308801/pu/img/PI5yehcjCj7uHahe.jpg",
+          "source_user_id_str": "851844984",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1044913886732800000",
+          "display_url": "pic.twitter.com/WeHW8sQriM"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215167070196944896"
+        ],
+        "editableUntil": "2020-01-09T08:03:00.904Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dad×2_jack",
+          "screen_name": "Iceland_jack",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "2832623057",
+          "id": "2832623057"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/CxgyCqWPxu",
+          "expanded_url": "https://twitter.com/zemnmez/status/1200238859243667458",
+          "display_url": "twitter.com/zemnmez/status…",
+          "indices": [
+            "17",
+            "40"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "299"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1215166161970716672",
+    "id_str": "1215167070196944896",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215167070196944896",
+    "in_reply_to_status_id": "1215166161970716672",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 07:03:00 +0000 2020",
+    "favorited": false,
+    "full_text": "@Iceland_jack 4) https://t.co/CxgyCqWPxu here I write strMul :: String -&gt; Integer -&gt; String; strMul repeatUnit count [...]. I found the invocation (`strMul space nSpace`) hard to read because I couldn't intuit what the params were w/o reading the defn.. is there a way to make it more obvious?",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

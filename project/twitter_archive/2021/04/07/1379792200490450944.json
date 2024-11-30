@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1379792200490450944"
+        ],
+        "editableUntil": "2021-04-07T14:44:30.553Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Daniel Benneworth-Gray",
+          "screen_name": "gray",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "17782234",
+          "id": "17782234"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/gray/status/1379416366575456261/video/1",
+          "source_status_id": "1379416366575456261",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/WasjBrpKEl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1379416215567933440/pr/img/oz3XDmv0nmKaD6-u.jpg",
+          "id_str": "1379416215567933440",
+          "source_user_id": "17782234",
+          "id": "1379416215567933440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1379416215567933440/pr/img/oz3XDmv0nmKaD6-u.jpg",
+          "source_user_id_str": "17782234",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "486",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1110",
+              "h": "794",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1110",
+              "h": "794",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1379416366575456261",
+          "display_url": "pic.twitter.com/WasjBrpKEl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "103"
+    ],
+    "favorite_count": "0",
+    "id_str": "1379792200490450944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1379792200490450944",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 07 13:44:30 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @gray: You’re not at all ready for this Barbican promotional film from 1969. https://t.co/WasjBrpKEl",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/gray/status/1379416366575456261/video/1",
+          "source_status_id": "1379416366575456261",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/WasjBrpKEl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1379416215567933440/pr/img/oz3XDmv0nmKaD6-u.jpg",
+          "id_str": "1379416215567933440",
+          "video_info": {
+            "aspect_ratio": [
+              "555",
+              "397"
+            ],
+            "duration_millis": "123453",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1379416215567933440/pr/pl/_3QAdoFeDy3AmvWV.m3u8?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1379416215567933440/pr/vid/502x360/9e2FtuqRlX-2e2_y.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1379416215567933440/pr/vid/376x270/MfTRiDFRk6CDk4Ah.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1379416215567933440/pr/vid/1006x720/kJFd9SiCFNNnSQOf.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "17782234",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1379416215567933440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1379416215567933440/pr/img/oz3XDmv0nmKaD6-u.jpg",
+          "source_user_id_str": "17782234",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "486",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1110",
+              "h": "794",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1110",
+              "h": "794",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1379416366575456261",
+          "display_url": "pic.twitter.com/WasjBrpKEl"
+        }
+      ]
+    }
+  }
+}

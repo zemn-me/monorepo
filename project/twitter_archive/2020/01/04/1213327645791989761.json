@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1213327645791989761"
+        ],
+        "editableUntil": "2020-01-04T06:13:47.951Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "AK moved to @_akhaliq",
+          "screen_name": "ak92501",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "1543267077414211584",
+          "id": "1543267077414211584"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ak92501/status/1211707573986050048/video/1",
+          "source_status_id": "1211707573986050048",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/nxPTKyge69",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1211707339654475778/pu/img/qCoCpD7FzniZSR6W.jpg",
+          "id_str": "1211707339654475778",
+          "source_user_id": "2465283662",
+          "id": "1211707339654475778",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1211707339654475778/pu/img/qCoCpD7FzniZSR6W.jpg",
+          "source_user_id_str": "2465283662",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "340",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1440",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "600",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1211707573986050048",
+          "display_url": "pic.twitter.com/nxPTKyge69"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1213327645791989761",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1213327645791989761",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 04 05:13:47 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @ak92501: Do you want to build a snowgan https://t.co/nxPTKyge69",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ak92501/status/1211707573986050048/video/1",
+          "source_status_id": "1211707573986050048",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/nxPTKyge69",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1211707339654475778/pu/img/qCoCpD7FzniZSR6W.jpg",
+          "id_str": "1211707339654475778",
+          "video_info": {
+            "aspect_ratio": [
+              "2",
+              "1"
+            ],
+            "duration_millis": "80000",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1211707339654475778/pu/vid/720x360/uZ1CkjtCpoYJ0EFR.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1211707339654475778/pu/vid/1440x720/kFYfuHuVyaH9qXXA.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1211707339654475778/pu/pl/JVQQRf9u1UA0DqMh.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1211707339654475778/pu/vid/540x270/1rG3r6rWC6aMX2B6.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2465283662",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1211707339654475778",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1211707339654475778/pu/img/qCoCpD7FzniZSR6W.jpg",
+          "source_user_id_str": "2465283662",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "340",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1440",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "600",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1211707573986050048",
+          "display_url": "pic.twitter.com/nxPTKyge69"
+        }
+      ]
+    }
+  }
+}

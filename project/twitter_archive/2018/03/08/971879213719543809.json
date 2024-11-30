@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "971879213719543809"
+        ],
+        "editableUntil": "2018-03-08T23:43:55.850Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "David Mack",
+          "screen_name": "davidmackau",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "304932002",
+          "id": "304932002"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/davidmackau/status/971852828418428928/video/1",
+          "source_status_id": "971852828418428928",
+          "indices": [
+            "27",
+            "50"
+          ],
+          "url": "https://t.co/iu888ZKEdU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/971852710340329473/pu/img/tSenubh3wREhSAnc.jpg",
+          "id_str": "971852710340329473",
+          "source_user_id": "304932002",
+          "id": "971852710340329473",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/971852710340329473/pu/img/tSenubh3wREhSAnc.jpg",
+          "source_user_id_str": "304932002",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "971852828418428928",
+          "display_url": "pic.twitter.com/iu888ZKEdU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "50"
+    ],
+    "favorite_count": "0",
+    "id_str": "971879213719543809",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "971879213719543809",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 08 22:43:55 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @davidmackau: OH MY GOD https://t.co/iu888ZKEdU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/davidmackau/status/971852828418428928/video/1",
+          "source_status_id": "971852828418428928",
+          "indices": [
+            "27",
+            "50"
+          ],
+          "url": "https://t.co/iu888ZKEdU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/971852710340329473/pu/img/tSenubh3wREhSAnc.jpg",
+          "id_str": "971852710340329473",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "10377",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/971852710340329473/pu/vid/320x180/JnHY32ZXDYJUusR_.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/971852710340329473/pu/pl/YtLsuJQRGLm7ra-o.m3u8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/971852710340329473/pu/vid/640x360/Mbagh6fDmlO1N2bn.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/971852710340329473/pu/vid/1280x720/q2E9zngI4t9LrFIB.mp4"
+              }
+            ]
+          },
+          "source_user_id": "304932002",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "971852710340329473",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/971852710340329473/pu/img/tSenubh3wREhSAnc.jpg",
+          "source_user_id_str": "304932002",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "971852828418428928",
+          "display_url": "pic.twitter.com/iu888ZKEdU"
+        }
+      ]
+    }
+  }
+}

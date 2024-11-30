@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1584476090017280000"
+        ],
+        "editableUntil": "2022-10-24T09:55:12.659Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "BRT",
+          "screen_name": "BeratStuff",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1387719861380554752",
+          "id": "1387719861380554752"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BeratStuff/status/1583079936146886657/video/1",
+          "source_status_id": "1583079936146886657",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/6emSRzOV2W",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1583079894765936641/pu/img/zQivTVmpNAPtLaG7.jpg",
+          "id_str": "1583079894765936641",
+          "source_user_id": "1387719861380554752",
+          "id": "1583079894765936641",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1583079894765936641/pu/img/zQivTVmpNAPtLaG7.jpg",
+          "source_user_id_str": "1387719861380554752",
+          "sizes": {
+            "medium": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1583079936146886657",
+          "display_url": "pic.twitter.com/6emSRzOV2W"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "39"
+    ],
+    "favorite_count": "0",
+    "id_str": "1584476090017280000",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1584476090017280000",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 24 09:25:12 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @BeratStuff: https://t.co/6emSRzOV2W",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BeratStuff/status/1583079936146886657/video/1",
+          "source_status_id": "1583079936146886657",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/6emSRzOV2W",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1583079894765936641/pu/img/zQivTVmpNAPtLaG7.jpg",
+          "id_str": "1583079894765936641",
+          "video_info": {
+            "aspect_ratio": [
+              "19",
+              "30"
+            ],
+            "duration_millis": "58836",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1583079894765936641/pu/pl/tiRDV4tNbur_fIDs.m3u8?tag=12&v=30b"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1583079894765936641/pu/vid/304x480/a-K78uJRzAtkBcVF.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1387719861380554752",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1583079894765936641",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1583079894765936641/pu/img/zQivTVmpNAPtLaG7.jpg",
+          "source_user_id_str": "1387719861380554752",
+          "sizes": {
+            "medium": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "304",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1583079936146886657",
+          "display_url": "pic.twitter.com/6emSRzOV2W"
+        }
+      ]
+    }
+  }
+}

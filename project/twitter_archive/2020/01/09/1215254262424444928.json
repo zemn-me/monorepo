@@ -1,0 +1,48 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215254262424444928"
+        ],
+        "editableUntil": "2020-01-09T13:49:29.151Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [
+        {
+          "text": "var",
+          "indices": [
+            "141",
+            "145"
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "247"
+    ],
+    "favorite_count": "23",
+    "in_reply_to_status_id_str": "1215254260851658752",
+    "id_str": "1215254262424444928",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215254262424444928",
+    "in_reply_to_status_id": "1215254260851658752",
+    "created_at": "Thu Jan 09 12:49:29 +0000 2020",
+    "favorited": false,
+    "full_text": "- [ ] and if [[ ]] fully removed; now only if [[[ ]]] is allowed\n- lines not present in both .bashrc AND .bash_profile are ignored\n- ${} and $var replaced with £{} and £var depending on locale\n- some commands need double sudo (‘sudo sudo’) to work",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

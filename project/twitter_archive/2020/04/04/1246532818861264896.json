@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1246532818861264896"
+        ],
+        "editableUntil": "2020-04-04T21:19:18.133Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "g__ferris",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/g__ferris/status/1246475565072371712/video/1",
+          "source_status_id": "1246475565072371712",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/cQw92CtNxv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1246475507245486081/pu/img/t0ldBGuNipRO4Ev2.jpg",
+          "id_str": "1246475507245486081",
+          "source_user_id": "545060251",
+          "id": "1246475507245486081",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1246475507245486081/pu/img/t0ldBGuNipRO4Ev2.jpg",
+          "source_user_id_str": "545060251",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1246475565072371712",
+          "display_url": "pic.twitter.com/cQw92CtNxv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "120"
+    ],
+    "favorite_count": "0",
+    "id_str": "1246532818861264896",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1246532818861264896",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 04 20:19:18 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @g__ferris: A police van is going around peckham rye blaring “no sunbathing... exercise only” https://t.co/cQw92CtNxv",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/g__ferris/status/1246475565072371712/video/1",
+          "source_status_id": "1246475565072371712",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/cQw92CtNxv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1246475507245486081/pu/img/t0ldBGuNipRO4Ev2.jpg",
+          "id_str": "1246475507245486081",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "27992",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1246475507245486081/pu/pl/5rB0SoC16r9CseG_.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1246475507245486081/pu/vid/320x568/CIxS8ObKE2Fx8K_z.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1246475507245486081/pu/vid/720x1280/DtZseB161KE_QETX.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1246475507245486081/pu/vid/360x640/PAXq0aOVOutb44Xh.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "545060251",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1246475507245486081",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1246475507245486081/pu/img/t0ldBGuNipRO4Ev2.jpg",
+          "source_user_id_str": "545060251",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1246475565072371712",
+          "display_url": "pic.twitter.com/cQw92CtNxv"
+        }
+      ]
+    }
+  }
+}

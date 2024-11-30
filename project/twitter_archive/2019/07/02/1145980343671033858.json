@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1145980343671033858"
+        ],
+        "editableUntil": "2019-07-02T09:59:39.873Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Cool 3D World",
+          "screen_name": "Cool3DWorld",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "3571233797",
+          "id": "3571233797"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Cool3DWorld/status/1145724469358530560/video/1",
+          "source_status_id": "1145724469358530560",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/LR9dgKUklm",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1145723085791932420/pu/img/7BmKArp_Z2nus4kD.jpg",
+          "id_str": "1145723085791932420",
+          "source_user_id": "3571233797",
+          "id": "1145723085791932420",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1145723085791932420/pu/img/7BmKArp_Z2nus4kD.jpg",
+          "source_user_id_str": "3571233797",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1145724469358530560",
+          "display_url": "pic.twitter.com/LR9dgKUklm"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "62"
+    ],
+    "favorite_count": "0",
+    "id_str": "1145980343671033858",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1145980343671033858",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 02 08:59:39 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Cool3DWorld: Jacob and the Giraffe https://t.co/LR9dgKUklm",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Cool3DWorld/status/1145724469358530560/video/1",
+          "source_status_id": "1145724469358530560",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/LR9dgKUklm",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1145723085791932420/pu/img/7BmKArp_Z2nus4kD.jpg",
+          "id_str": "1145723085791932420",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "117646",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1145723085791932420/pu/pl/006melISPMKujnOG.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1145723085791932420/pu/vid/480x270/7KxeKhP-z-1XNogW.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1145723085791932420/pu/vid/1280x720/8rlcYYIv62Ts-VNB.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1145723085791932420/pu/vid/640x360/QWr-hXDlB9XD64-L.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3571233797",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1145723085791932420",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1145723085791932420/pu/img/7BmKArp_Z2nus4kD.jpg",
+          "source_user_id_str": "3571233797",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1145724469358530560",
+          "display_url": "pic.twitter.com/LR9dgKUklm"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1228167209039478785"
+        ],
+        "editableUntil": "2020-02-14T05:00:55.535Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "hamster",
+          "screen_name": "hamsterie",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1132541109547278336",
+          "id": "1132541109547278336"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamsterie/status/1228004861456896001/video/1",
+          "source_status_id": "1228004861456896001",
+          "indices": [
+            "38",
+            "61"
+          ],
+          "url": "https://t.co/KARkNwSkwa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1228004835057897472/pu/img/exA3zkMpBwTSMG4B.jpg",
+          "id_str": "1228004835057897472",
+          "source_user_id": "1132541109547278336",
+          "id": "1228004835057897472",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1228004835057897472/pu/img/exA3zkMpBwTSMG4B.jpg",
+          "source_user_id_str": "1132541109547278336",
+          "sizes": {
+            "small": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1228004861456896001",
+          "display_url": "pic.twitter.com/KARkNwSkwa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "61"
+    ],
+    "favorite_count": "0",
+    "id_str": "1228167209039478785",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1228167209039478785",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 14 04:00:55 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @hamsterie: room for one more plz! https://t.co/KARkNwSkwa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamsterie/status/1228004861456896001/video/1",
+          "source_status_id": "1228004861456896001",
+          "indices": [
+            "38",
+            "61"
+          ],
+          "url": "https://t.co/KARkNwSkwa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1228004835057897472/pu/img/exA3zkMpBwTSMG4B.jpg",
+          "id_str": "1228004835057897472",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "7867",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1228004835057897472/pu/vid/480x600/-u7Z71NtIJxzGbXD.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1228004835057897472/pu/vid/360x450/ceS5g5Hk4Gy3sBA6.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1228004835057897472/pu/vid/320x400/xkuJt1oAqb-85mlU.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1228004835057897472/pu/pl/zs5GNMMTud8z9T_u.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1132541109547278336",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1228004835057897472",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1228004835057897472/pu/img/exA3zkMpBwTSMG4B.jpg",
+          "source_user_id_str": "1132541109547278336",
+          "sizes": {
+            "small": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "600",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1228004861456896001",
+          "display_url": "pic.twitter.com/KARkNwSkwa"
+        }
+      ]
+    }
+  }
+}

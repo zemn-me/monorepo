@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1773164176682176928"
+        ],
+        "editableUntil": "2024-03-28T02:44:18.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Ld. Vincent Hanquez 牛角包",
+          "screen_name": "vincenthz",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "35186808",
+          "id": "35186808"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1773142431204093996",
+    "id_str": "1773164176682176928",
+    "in_reply_to_user_id": "35186808",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1773164176682176928",
+    "in_reply_to_status_id": "1773142431204093996",
+    "created_at": "Thu Mar 28 01:44:18 +0000 2024",
+    "favorited": false,
+    "full_text": "@vincenthz why is your definition more complex than 'n=0 number of days since a patch is available for the issue'?\n\nto be clear here, we're talking about an implementation that picks a rounds count (=1) which was incorrect *against the specification* at the turn of the millennium",
+    "lang": "en",
+    "in_reply_to_screen_name": "vincenthz",
+    "in_reply_to_user_id_str": "35186808"
+  }
+}

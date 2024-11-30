@@ -1,0 +1,71 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1847352559817937037"
+        ],
+        "editableUntil": "2024-10-18T20:02:27.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "hatcrabzombie",
+          "screen_name": "Hatcrab",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "808907167",
+          "id": "808907167"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/i9viKV4lFr",
+          "expanded_url": "http://github.com/oapi-codegen/oapi-codegen/v2",
+          "display_url": "github.com/oapi-codegen/o…",
+          "indices": [
+            "34",
+            "57"
+          ]
+        },
+        {
+          "url": "https://t.co/UWHa9pztRL",
+          "expanded_url": "https://github.com/zemn-me/monorepo/blob/0541ef58710480ce0dbe0bb94f827276856e915d/go.mod#L16",
+          "display_url": "github.com/zemn-me/monore…",
+          "indices": [
+            "58",
+            "81"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "81"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1847241598830027094",
+    "id_str": "1847352559817937037",
+    "in_reply_to_user_id": "808907167",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1847352559817937037",
+    "in_reply_to_status_id": "1847241598830027094",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 18 19:02:27 +0000 2024",
+    "favorited": false,
+    "full_text": "@Hatcrab looks like oapi-codegen: https://t.co/i9viKV4lFr https://t.co/UWHa9pztRL",
+    "lang": "en",
+    "in_reply_to_screen_name": "Hatcrab",
+    "in_reply_to_user_id_str": "808907167"
+  }
+}

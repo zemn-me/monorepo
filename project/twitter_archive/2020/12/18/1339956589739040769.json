@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1339956589739040769"
+        ],
+        "editableUntil": "2020-12-18T16:32:00.840Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Primates",
+          "screen_name": "PrimatesDaily",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "1327406109825540096",
+          "id": "1327406109825540096"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PrimatesDaily/status/1339729591582126080/video/1",
+          "source_status_id": "1339729591582126080",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/pt4e404knx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1339727308157038593/pu/img/lNxWtcwxdFofDc2u.jpg",
+          "id_str": "1339727308157038593",
+          "source_user_id": "1327406109825540096",
+          "id": "1339727308157038593",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1339727308157038593/pu/img/lNxWtcwxdFofDc2u.jpg",
+          "source_user_id_str": "1327406109825540096",
+          "sizes": {
+            "small": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1339729591582126080",
+          "display_url": "pic.twitter.com/pt4e404knx"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "0",
+    "id_str": "1339956589739040769",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1339956589739040769",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 18 15:32:00 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @PrimatesDaily: Marmoset fascinated by bug https://t.co/pt4e404knx",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PrimatesDaily/status/1339729591582126080/video/1",
+          "source_status_id": "1339729591582126080",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/pt4e404knx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1339727308157038593/pu/img/lNxWtcwxdFofDc2u.jpg",
+          "id_str": "1339727308157038593",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "18900",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1339727308157038593/pu/vid/360x270/-sdJToTOpfX53oVJ.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1339727308157038593/pu/pl/qZHdIfynvKcuSiSR.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1339727308157038593/pu/vid/576x432/XrAZDvxpkiqMnVqw.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1327406109825540096",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1339727308157038593",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1339727308157038593/pu/img/lNxWtcwxdFofDc2u.jpg",
+          "source_user_id_str": "1327406109825540096",
+          "sizes": {
+            "small": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "432",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1339729591582126080",
+          "display_url": "pic.twitter.com/pt4e404knx"
+        }
+      ]
+    }
+  }
+}

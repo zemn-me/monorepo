@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1553474490088161286"
+        ],
+        "editableUntil": "2022-07-30T20:45:55.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dominik 🔮",
+          "screen_name": "TkDodo",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "44217212",
+          "id": "44217212"
+        },
+        {
+          "name": "Jin",
+          "screen_name": "_jin_nin_",
+          "indices": [
+            "8",
+            "18"
+          ],
+          "id_str": "1084497636491751424",
+          "id": "1084497636491751424"
+        },
+        {
+          "name": "Thorsten 👨‍💻🖋👨‍🏫🕹🇩🇪",
+          "screen_name": "schleinzer_dev",
+          "indices": [
+            "19",
+            "34"
+          ],
+          "id_str": "1171844858794979328",
+          "id": "1171844858794979328"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1553474490088161286/photo/1",
+          "indices": [
+            "115",
+            "138"
+          ],
+          "url": "https://t.co/TwtVPN5IzY",
+          "media_url": "http://pbs.twimg.com/media/FY8Mz_bXkAY3AMP.jpg",
+          "id_str": "1553474483805196294",
+          "id": "1553474483805196294",
+          "media_url_https": "https://pbs.twimg.com/media/FY8Mz_bXkAY3AMP.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "385",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1170",
+              "h": "662",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1170",
+              "h": "662",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/TwtVPN5IzY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "138"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1553454193905737729",
+    "id_str": "1553474490088161286",
+    "in_reply_to_user_id": "44217212",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1553474490088161286",
+    "in_reply_to_status_id": "1553454193905737729",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jul 30 20:15:55 +0000 2022",
+    "favorited": false,
+    "full_text": "@TkDodo @_jin_nin_ @schleinzer_dev this doesn’t protect against csrf, it just means i need to send the user a link https://t.co/TwtVPN5IzY",
+    "lang": "en",
+    "in_reply_to_screen_name": "TkDodo",
+    "in_reply_to_user_id_str": "44217212",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1553474490088161286/photo/1",
+          "indices": [
+            "115",
+            "138"
+          ],
+          "url": "https://t.co/TwtVPN5IzY",
+          "media_url": "http://pbs.twimg.com/media/FY8Mz_bXkAY3AMP.jpg",
+          "id_str": "1553474483805196294",
+          "id": "1553474483805196294",
+          "media_url_https": "https://pbs.twimg.com/media/FY8Mz_bXkAY3AMP.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "385",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1170",
+              "h": "662",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1170",
+              "h": "662",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/TwtVPN5IzY"
+        }
+      ]
+    }
+  }
+}

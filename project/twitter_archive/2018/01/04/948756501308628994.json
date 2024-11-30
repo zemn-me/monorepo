@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "948756501308628994"
+        ],
+        "editableUntil": "2018-01-04T04:22:31.612Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jackson Palmer",
+          "screen_name": "ummjackson",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "702764958",
+          "id": "702764958"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "177"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "948754779018182656",
+    "id_str": "948756501308628994",
+    "in_reply_to_user_id": "25456180",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "948756501308628994",
+    "in_reply_to_status_id": "948754779018182656",
+    "created_at": "Thu Jan 04 03:22:31 +0000 2018",
+    "favorited": false,
+    "full_text": "@ummjackson xorg doesn't provide any memory protection between the contents of windows anyway, so this has been possible since forever unless you're running a flavour of SELinux",
+    "lang": "en",
+    "in_reply_to_user_id_str": "25456180"
+  }
+}

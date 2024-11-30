@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1202757730840272899"
+        ],
+        "editableUntil": "2019-12-06T02:12:43.847Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1202520965823029248/video/1",
+          "source_status_id": "1202520965823029248",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/gOIlPzaXCY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1202520954674565120/pu/img/PlHOhh3FIi5aKqrT.jpg",
+          "id_str": "1202520954674565120",
+          "source_user_id": "2275883743",
+          "id": "1202520954674565120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1202520954674565120/pu/img/PlHOhh3FIi5aKqrT.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1202520965823029248",
+          "display_url": "pic.twitter.com/gOIlPzaXCY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "96"
+    ],
+    "favorite_count": "0",
+    "id_str": "1202757730840272899",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1202757730840272899",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 06 01:12:43 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Sometimes, being a cat must be absolutely exhausting. https://t.co/gOIlPzaXCY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1202520965823029248/video/1",
+          "source_status_id": "1202520965823029248",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/gOIlPzaXCY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1202520954674565120/pu/img/PlHOhh3FIi5aKqrT.jpg",
+          "id_str": "1202520954674565120",
+          "video_info": {
+            "aspect_ratio": [
+              "213",
+              "119"
+            ],
+            "duration_millis": "15015",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1202520954674565120/pu/pl/jyZVl3HtIXUwGj4j.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1202520954674565120/pu/vid/426x238/LMnlCMKB_qtN8ZPu.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1202520954674565120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1202520954674565120/pu/img/PlHOhh3FIi5aKqrT.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1202520965823029248",
+          "display_url": "pic.twitter.com/gOIlPzaXCY"
+        }
+      ]
+    }
+  }
+}

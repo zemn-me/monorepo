@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1076924641564913672"
+        ],
+        "editableUntil": "2018-12-23T20:36:57.498Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "André Baptista",
+          "screen_name": "0xacb",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "1320338581",
+          "id": "1320338581"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/XD16EJbFvQ",
+          "expanded_url": "https://twitter.com/kernelpaniek/status/1069203671001587712",
+          "display_url": "twitter.com/kernelpaniek/s…",
+          "indices": [
+            "90",
+            "113"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "113"
+    ],
+    "favorite_count": "0",
+    "id_str": "1076924641564913672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1076924641564913672",
+    "possibly_sensitive": false,
+    "created_at": "Sun Dec 23 19:36:57 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @0xACB: We did it 🔥 RCE on Steam Client! We’ll publish a writeup if we have permission https://t.co/XD16EJbFvQ",
+    "lang": "en"
+  }
+}

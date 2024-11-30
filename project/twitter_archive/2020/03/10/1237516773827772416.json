@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1237516773827772416"
+        ],
+        "editableUntil": "2020-03-11T00:12:45.487Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/Y6yjJmCNMm",
+          "expanded_url": "https://github.com/golang/go/issues/24031#issuecomment-597263309",
+          "display_url": "github.com/golang/go/issu…",
+          "indices": [
+            "141",
+            "164"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "164"
+    ],
+    "favorite_count": "1",
+    "id_str": "1237516773827772416",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1237516773827772416",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 10 23:12:45 +0000 2020",
+    "favorited": false,
+    "full_text": "looks like a semi-concrete proposal for how security vulnerabilities and critical issues in Go software versions will be handled exists now: https://t.co/Y6yjJmCNMm",
+    "lang": "en"
+  }
+}

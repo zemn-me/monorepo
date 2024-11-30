@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "364381280101601280"
+        ],
+        "editableUntil": "2013-08-05T14:44:01.710Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "http://t.co/DQiNff35dM",
+          "expanded_url": "http://steam.zemn.me/",
+          "display_url": "steam.zemn.me",
+          "indices": [
+            "9",
+            "31"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "134"
+    ],
+    "favorite_count": "0",
+    "id_str": "364381280101601280",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "364381280101601280",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 05 13:44:01 +0000 2013",
+    "favorited": false,
+    "full_text": "I pushed http://t.co/DQiNff35dM to Heroku yesterday, it maps steam:// urls to http:// urls; twitch.tv doesn't parse the steam:// ones.",
+    "lang": "en"
+  }
+}

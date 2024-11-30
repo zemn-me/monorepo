@@ -1,0 +1,139 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1102554288453230594"
+        ],
+        "editableUntil": "2019-03-04T14:00:01.492Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "notch",
+          "screen_name": "notch",
+          "indices": [
+            "10",
+            "16"
+          ],
+          "id_str": "63485337",
+          "id": "63485337"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/QIDiU88aB3",
+          "expanded_url": "https://t.co",
+          "display_url": "t.co",
+          "indices": [
+            "41",
+            "64"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1102554288453230594/photo/1",
+          "indices": [
+            "140",
+            "163"
+          ],
+          "url": "https://t.co/jdG47qF7F9",
+          "media_url": "http://pbs.twimg.com/media/D00PLuDXgAEaCwG.png",
+          "id_str": "1102554177790771201",
+          "id": "1102554177790771201",
+          "media_url_https": "https://pbs.twimg.com/media/D00PLuDXgAEaCwG.png",
+          "sizes": {
+            "large": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/jdG47qF7F9"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "163"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1102552210058240001",
+    "id_str": "1102554288453230594",
+    "in_reply_to_user_id": "2790053829",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1102554288453230594",
+    "in_reply_to_status_id": "1102552210058240001",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 04 13:00:01 +0000 2019",
+    "favorited": false,
+    "full_text": "@temtunes @notch looks like its actually https://t.co/QIDiU88aB3 that does this, if anything (might theorise twitter simply strips the www) https://t.co/jdG47qF7F9",
+    "lang": "en",
+    "in_reply_to_user_id_str": "2790053829",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1102554288453230594/photo/1",
+          "indices": [
+            "140",
+            "163"
+          ],
+          "url": "https://t.co/jdG47qF7F9",
+          "media_url": "http://pbs.twimg.com/media/D00PLuDXgAEaCwG.png",
+          "id_str": "1102554177790771201",
+          "id": "1102554177790771201",
+          "media_url_https": "https://pbs.twimg.com/media/D00PLuDXgAEaCwG.png",
+          "sizes": {
+            "large": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "551",
+              "h": "246",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/jdG47qF7F9"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1122940117050691587"
+        ],
+        "editableUntil": "2019-04-29T20:06:01.780Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1122940117050691587/photo/1",
+          "indices": [
+            "231",
+            "254"
+          ],
+          "url": "https://t.co/BFP6fVcZ8q",
+          "media_url": "http://pbs.twimg.com/media/D5V6ASzXkAAGQTY.png",
+          "id_str": "1122937827564687360",
+          "id": "1122937827564687360",
+          "media_url_https": "https://pbs.twimg.com/media/D5V6ASzXkAAGQTY.png",
+          "sizes": {
+            "medium": {
+              "w": "832",
+              "h": "679",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "555",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "832",
+              "h": "679",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/BFP6fVcZ8q"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "254"
+    ],
+    "favorite_count": "0",
+    "id_str": "1122940117050691587",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1122940117050691587",
+    "possibly_sensitive": false,
+    "created_at": "Mon Apr 29 19:06:01 +0000 2019",
+    "favorited": false,
+    "full_text": "i was trying to google the mathematical definition of SHA256 and this is the top result for \"sha256 definition\"\n\nreminder that the computation time for a single SHA256 hash, no ASIC, no parallelism is one 300 millionth of a second https://t.co/BFP6fVcZ8q",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1122940117050691587/photo/1",
+          "indices": [
+            "231",
+            "254"
+          ],
+          "url": "https://t.co/BFP6fVcZ8q",
+          "media_url": "http://pbs.twimg.com/media/D5V6ASzXkAAGQTY.png",
+          "id_str": "1122937827564687360",
+          "id": "1122937827564687360",
+          "media_url_https": "https://pbs.twimg.com/media/D5V6ASzXkAAGQTY.png",
+          "sizes": {
+            "medium": {
+              "w": "832",
+              "h": "679",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "555",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "832",
+              "h": "679",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/BFP6fVcZ8q"
+        }
+      ]
+    }
+  }
+}

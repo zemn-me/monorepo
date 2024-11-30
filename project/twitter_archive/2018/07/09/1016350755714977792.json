@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1016350755714977792"
+        ],
+        "editableUntil": "2018-07-09T16:57:57.703Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mike Taddeo",
+          "screen_name": "mike_taddeo",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1568035205448966146",
+          "id": "1568035205448966146"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mike_taddeo/status/1015090745974448128/video/1",
+          "source_status_id": "1015090745974448128",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/6LeVm5RSNN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1015090608237678592/pu/img/HabmR4Lc2D13A507.jpg",
+          "id_str": "1015090608237678592",
+          "source_user_id": "805701001",
+          "id": "1015090608237678592",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1015090608237678592/pu/img/HabmR4Lc2D13A507.jpg",
+          "source_user_id_str": "805701001",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1015090745974448128",
+          "display_url": "pic.twitter.com/6LeVm5RSNN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "112"
+    ],
+    "favorite_count": "0",
+    "id_str": "1016350755714977792",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1016350755714977792",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jul 09 15:57:57 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @mike_taddeo: Whenever I’m outside Maddie never lets me go unsupervised. Here’s proof https://t.co/6LeVm5RSNN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mike_taddeo/status/1015090745974448128/video/1",
+          "source_status_id": "1015090745974448128",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/6LeVm5RSNN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1015090608237678592/pu/img/HabmR4Lc2D13A507.jpg",
+          "id_str": "1015090608237678592",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "22717",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1015090608237678592/pu/vid/180x320/GXD_YCYT9-g5XZOO.mp4?tag=3"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1015090608237678592/pu/vid/720x1280/tsWei-PZTfB5SlXO.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1015090608237678592/pu/pl/LxPaOpkGjbfdBDnN.m3u8?tag=3&v=f99"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1015090608237678592/pu/vid/360x640/72tPy7LbB0lKFUtB.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "805701001",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1015090608237678592",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1015090608237678592/pu/img/HabmR4Lc2D13A507.jpg",
+          "source_user_id_str": "805701001",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1015090745974448128",
+          "display_url": "pic.twitter.com/6LeVm5RSNN"
+        }
+      ]
+    }
+  }
+}

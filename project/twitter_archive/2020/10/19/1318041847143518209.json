@@ -1,0 +1,39 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1318041847143518209"
+        ],
+        "editableUntil": "2020-10-19T05:10:39.049Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "256"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1318024066763313152",
+    "id_str": "1318041847143518209",
+    "in_reply_to_user_id": "312426579",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1318041847143518209",
+    "in_reply_to_status_id": "1318024066763313152",
+    "created_at": "Mon Oct 19 04:10:39 +0000 2020",
+    "favorited": false,
+    "full_text": "@mcclure111 The most hilarious thing about javascript in a way is how strongly it avoids pointers only to have them re-invented like this. React.useRef seems magical under the hood until you find out it’s just a { current: T } where T is any arbitrary type",
+    "lang": "en",
+    "in_reply_to_user_id_str": "312426579"
+  }
+}

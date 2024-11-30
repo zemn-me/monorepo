@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1445598635173969935"
+        ],
+        "editableUntil": "2021-10-06T04:55:47.206Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "RubberRoss",
+          "screen_name": "RubberNinja",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "21076522",
+          "id": "21076522"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RubberNinja/status/1445421348847685632/video/1",
+          "source_status_id": "1445421348847685632",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/96UPSlezPb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1445420994315751424/pu/img/hYoG4ILp1T2Gj_JA.jpg",
+          "id_str": "1445420994315751424",
+          "source_user_id": "21076522",
+          "id": "1445420994315751424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1445420994315751424/pu/img/hYoG4ILp1T2Gj_JA.jpg",
+          "source_user_id_str": "21076522",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1445421348847685632",
+          "display_url": "pic.twitter.com/96UPSlezPb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1445598635173969935",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1445598635173969935",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 06 03:55:47 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @RubberNinja: that realization when.. https://t.co/96UPSlezPb",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RubberNinja/status/1445421348847685632/video/1",
+          "source_status_id": "1445421348847685632",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/96UPSlezPb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1445420994315751424/pu/img/hYoG4ILp1T2Gj_JA.jpg",
+          "id_str": "1445420994315751424",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "23516",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1445420994315751424/pu/pl/EDgHfHJ_BCLRg0nF.m3u8?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1445420994315751424/pu/vid/640x360/klfHb32hH7A20F2h.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1445420994315751424/pu/vid/1280x720/wauZBqFLy1LiuoKQ.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1445420994315751424/pu/vid/480x270/ykDJ6Ya0wOf1QsWR.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "21076522",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1445420994315751424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1445420994315751424/pu/img/hYoG4ILp1T2Gj_JA.jpg",
+          "source_user_id_str": "21076522",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1445421348847685632",
+          "display_url": "pic.twitter.com/96UPSlezPb"
+        }
+      ]
+    }
+  }
+}

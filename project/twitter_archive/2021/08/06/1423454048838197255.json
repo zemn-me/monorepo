@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1423454048838197255"
+        ],
+        "editableUntil": "2021-08-06T02:21:06.397Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Ryan Sleevi",
+          "screen_name": "sleevi_",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "1064741256",
+          "id": "1064741256"
+        },
+        {
+          "name": "Thomas H. Ptacek",
+          "screen_name": "tqbf",
+          "indices": [
+            "9",
+            "14"
+          ],
+          "id_str": "9395312",
+          "id": "9395312"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "169"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1423453583681466368",
+    "id_str": "1423454048838197255",
+    "in_reply_to_user_id": "1064741256",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1423454048838197255",
+    "in_reply_to_status_id": "1423453583681466368",
+    "created_at": "Fri Aug 06 01:21:06 +0000 2021",
+    "favorited": false,
+    "full_text": "@sleevi_ @tqbf when you load the keys from the server you don't persist keys that are no longer there, or am I misunderstanding. is 'they' the server or the client here?",
+    "lang": "en",
+    "in_reply_to_screen_name": "sleevi_",
+    "in_reply_to_user_id_str": "1064741256"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1764887490341847244"
+        ],
+        "editableUntil": "2024-03-05T06:35:42.378Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pablo Rochat",
+          "screen_name": "PabloRochat",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1483209162",
+          "id": "1483209162"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PabloRochat/status/1764695850876301375/video/1",
+          "source_status_id": "1764695850876301375",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/UxjtTVB2AN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1764694913189294080/pu/img/qZJ_WjQjxXEq2QVt.jpg",
+          "id_str": "1764694913189294080",
+          "source_user_id": "1483209162",
+          "id": "1764694913189294080",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1764694913189294080/pu/img/qZJ_WjQjxXEq2QVt.jpg",
+          "source_user_id_str": "1483209162",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1920",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1764695850876301375",
+          "display_url": "pic.twitter.com/UxjtTVB2AN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "60"
+    ],
+    "favorite_count": "0",
+    "id_str": "1764887490341847244",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1764887490341847244",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 05 05:35:42 +0000 2024",
+    "favorited": false,
+    "full_text": "RT @PabloRochat: drip drop beep boop https://t.co/UxjtTVB2AN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PabloRochat/status/1764695850876301375/video/1",
+          "source_status_id": "1764695850876301375",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/UxjtTVB2AN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1764694913189294080/pu/img/qZJ_WjQjxXEq2QVt.jpg",
+          "id_str": "1764694913189294080",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "12879",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1764694913189294080/pu/vid/avc1/480x852/1Sd_qFUUdUbISOxf.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1764694913189294080/pu/pl/66LTmxagP44KiSa8.m3u8?tag=12&v=cfc"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1764694913189294080/pu/vid/avc1/720x1280/SrME9mupQcMvPmqF.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1764694913189294080/pu/vid/avc1/320x568/fEIAmobFACLFJzIG.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1483209162",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1764694913189294080",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1764694913189294080/pu/img/qZJ_WjQjxXEq2QVt.jpg",
+          "source_user_id_str": "1483209162",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1920",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1764695850876301375",
+          "display_url": "pic.twitter.com/UxjtTVB2AN"
+        }
+      ]
+    }
+  }
+}

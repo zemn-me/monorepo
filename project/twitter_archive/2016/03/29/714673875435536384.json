@@ -1,0 +1,49 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "714673875435536384"
+        ],
+        "editableUntil": "2016-03-29T05:41:44.559Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Harry",
+          "screen_name": "fiskie",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "19646624",
+          "id": "19646624"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "92"
+    ],
+    "favorite_count": "0",
+    "id_str": "714673875435536384",
+    "in_reply_to_user_id": "19646624",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "714673875435536384",
+    "created_at": "Tue Mar 29 04:41:44 +0000 2016",
+    "favorited": false,
+    "full_text": "@fiskie console.log [c,m=\"fizz\",m+=\"buzz\",m][!(c%5)*2+!(c%3)]for c in[1..100] (coffeescript)",
+    "lang": "en",
+    "in_reply_to_screen_name": "fiskie",
+    "in_reply_to_user_id_str": "19646624"
+  }
+}

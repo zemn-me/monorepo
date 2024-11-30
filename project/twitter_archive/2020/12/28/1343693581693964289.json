@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1343693581693964289"
+        ],
+        "editableUntil": "2020-12-29T00:01:29.152Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Oregon Zoo",
+          "screen_name": "OregonZoo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "14336662",
+          "id": "14336662"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OregonZoo/status/1343605128276787200/video/1",
+          "source_status_id": "1343605128276787200",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/E4zJ32Pp8I",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1342956304378200064/img/2ijPSHA-7erBA-My.jpg",
+          "id_str": "1342956304378200064",
+          "source_user_id": "14336662",
+          "id": "1342956304378200064",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1342956304378200064/img/2ijPSHA-7erBA-My.jpg",
+          "source_user_id_str": "14336662",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1343605128276787200",
+          "display_url": "pic.twitter.com/E4zJ32Pp8I"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1343693581693964289",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1343693581693964289",
+    "possibly_sensitive": false,
+    "created_at": "Mon Dec 28 23:01:29 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @OregonZoo: 2020: the year in rascality https://t.co/E4zJ32Pp8I",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OregonZoo/status/1343605128276787200/video/1",
+          "source_status_id": "1343605128276787200",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/E4zJ32Pp8I",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1342956304378200064/img/2ijPSHA-7erBA-My.jpg",
+          "id_str": "1342956304378200064",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "137567",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1342956304378200064/pl/4ziNIXkPMD1dShNZ.m3u8?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1342956304378200064/vid/480x480/Pb1cWVWou_eTGqrJ.mp4?tag=13"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1342956304378200064/vid/320x320/jRF0-_ziy1OQKIA_.mp4?tag=13"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1342956304378200064/vid/720x720/LLc3HGD5cMVS4z_G.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "14336662",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1342956304378200064",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1342956304378200064/img/2ijPSHA-7erBA-My.jpg",
+          "source_user_id_str": "14336662",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1343605128276787200",
+          "display_url": "pic.twitter.com/E4zJ32Pp8I"
+        }
+      ]
+    }
+  }
+}

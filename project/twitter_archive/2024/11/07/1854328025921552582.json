@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1854328025921552582"
+        ],
+        "editableUntil": "2024-11-07T02:00:27.785Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Kévin GERVOT (Mizu)",
+          "screen_name": "kevin_mizu",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "866258514196484096",
+          "id": "866258514196484096"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1854328025921552582",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1854328025921552582",
+    "created_at": "Thu Nov 07 01:00:27 +0000 2024",
+    "favorited": false,
+    "full_text": "RT @kevin_mizu: I recently reported an RCE to Happy-DOM (a Node.js HTML parser), and it’s now fixed!\n\nThe bug itself wasn't complex, but si…",
+    "lang": "en"
+  }
+}

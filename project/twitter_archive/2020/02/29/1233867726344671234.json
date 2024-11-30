@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1233867726344671234"
+        ],
+        "editableUntil": "2020-02-29T22:32:44.771Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jimmy D.",
+          "screen_name": "JimmyDPooper",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "3411980472",
+          "id": "3411980472"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JimmyDPooper/status/1233728627046408193/video/1",
+          "source_status_id": "1233728627046408193",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/gXsB90TWzQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1233728459286827008/pu/img/7mAKivq62Uq6aU7K.jpg",
+          "id_str": "1233728459286827008",
+          "source_user_id": "3411980472",
+          "id": "1233728459286827008",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1233728459286827008/pu/img/7mAKivq62Uq6aU7K.jpg",
+          "source_user_id_str": "3411980472",
+          "sizes": {
+            "large": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1233728627046408193",
+          "display_url": "pic.twitter.com/gXsB90TWzQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "104"
+    ],
+    "favorite_count": "0",
+    "id_str": "1233867726344671234",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1233867726344671234",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 29 21:32:44 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @JimmyDPooper: I think this might actually be my best sentence-mixing to date https://t.co/gXsB90TWzQ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JimmyDPooper/status/1233728627046408193/video/1",
+          "source_status_id": "1233728627046408193",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/gXsB90TWzQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1233728459286827008/pu/img/7mAKivq62Uq6aU7K.jpg",
+          "id_str": "1233728459286827008",
+          "video_info": {
+            "aspect_ratio": [
+              "71",
+              "40"
+            ],
+            "duration_millis": "5372",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1233728459286827008/pu/pl/_UKV4KLwDIHW_sOz.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233728459286827008/pu/vid/852x480/GDbBd33LUyOx-IW9.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233728459286827008/pu/vid/638x360/7Y4c27y8-yrHSyVQ.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233728459286827008/pu/vid/478x270/xrvFxnXghfUek6sy.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3411980472",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1233728459286827008",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1233728459286827008/pu/img/7mAKivq62Uq6aU7K.jpg",
+          "source_user_id_str": "3411980472",
+          "sizes": {
+            "large": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1233728627046408193",
+          "display_url": "pic.twitter.com/gXsB90TWzQ"
+        }
+      ]
+    }
+  }
+}

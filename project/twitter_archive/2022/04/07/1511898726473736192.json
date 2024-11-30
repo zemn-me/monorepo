@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1511898726473736192"
+        ],
+        "editableUntil": "2022-04-07T03:48:40.768Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alec Stapp",
+          "screen_name": "AlecStapp",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "48111864",
+          "id": "48111864"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OpenAI/status/1511707245536428034/video/1",
+          "source_status_id": "1511707245536428034",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/yg4qGBFebl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1511706649064468488/pu/img/bst5PRmkNKbkXIvy.jpg",
+          "id_str": "1511706649064468488",
+          "source_user_id": "4398626122",
+          "id": "1511706649064468488",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1511706649064468488/pu/img/bst5PRmkNKbkXIvy.jpg",
+          "source_user_id_str": "4398626122",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1511707245536428034",
+          "display_url": "pic.twitter.com/yg4qGBFebl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "79"
+    ],
+    "favorite_count": "0",
+    "id_str": "1511898726473736192",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1511898726473736192",
+    "possibly_sensitive": false,
+    "created_at": "Thu Apr 07 02:48:40 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @AlecStapp: Mind-blowing stuff from the OpenAI team  https://t.co/yg4qGBFebl",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OpenAI/status/1511707245536428034/video/1",
+          "source_status_id": "1511707245536428034",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/yg4qGBFebl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1511706649064468488/pu/img/bst5PRmkNKbkXIvy.jpg",
+          "id_str": "1511706649064468488",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30030",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1511706649064468488/pu/pl/z-MSI36jyLUq-sKi.m3u8?tag=12&v=1ee"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1511706649064468488/pu/vid/480x270/_glJaeaOdMjXCCB2.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1511706649064468488/pu/vid/640x360/DgktRYNhwuAFEEe4.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1511706649064468488/pu/vid/1280x720/8A0nJ8YWhWY2AhRM.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "4398626122",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1511706649064468488",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1511706649064468488/pu/img/bst5PRmkNKbkXIvy.jpg",
+          "source_user_id_str": "4398626122",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1511707245536428034",
+          "display_url": "pic.twitter.com/yg4qGBFebl"
+        }
+      ]
+    }
+  }
+}

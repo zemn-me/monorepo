@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "960283226391629824"
+        ],
+        "editableUntil": "2018-02-04T23:45:37.028Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Tim Garbos",
+          "screen_name": "timgarbos",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "356227929",
+          "id": "356227929"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/timgarbos/status/960103701594636289/photo/1",
+          "source_status_id": "960103701594636289",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/JM1OMrngha",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DVL5FVaXUAAgEBJ.jpg",
+          "id_str": "960103540625723392",
+          "source_user_id": "356227929",
+          "id": "960103540625723392",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DVL5FVaXUAAgEBJ.jpg",
+          "source_user_id_str": "356227929",
+          "sizes": {
+            "medium": {
+              "w": "800",
+              "h": "578",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "800",
+              "h": "578",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "491",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "960103701594636289",
+          "display_url": "pic.twitter.com/JM1OMrngha"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "gamedev",
+          "indices": [
+            "33",
+            "41"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "960283226391629824",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "960283226391629824",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 04 22:45:37 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @timgarbos: Minor physics bug #gamedev https://t.co/JM1OMrngha",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/timgarbos/status/960103701594636289/photo/1",
+          "source_status_id": "960103701594636289",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/JM1OMrngha",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DVL5FVaXUAAgEBJ.jpg",
+          "id_str": "960103540625723392",
+          "video_info": {
+            "aspect_ratio": [
+              "400",
+              "289"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/DVL5FVaXUAAgEBJ.mp4"
+              }
+            ]
+          },
+          "source_user_id": "356227929",
+          "id": "960103540625723392",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DVL5FVaXUAAgEBJ.jpg",
+          "source_user_id_str": "356227929",
+          "sizes": {
+            "medium": {
+              "w": "800",
+              "h": "578",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "800",
+              "h": "578",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "491",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "960103701594636289",
+          "display_url": "pic.twitter.com/JM1OMrngha"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1120776366356606976"
+        ],
+        "editableUntil": "2019-04-23T20:48:03.414Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pokémon",
+          "screen_name": "Pokemon",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "96879107",
+          "id": "96879107"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Pokemon/status/1117517883062439937/video/1",
+          "source_status_id": "1117517883062439937",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/vlIc8xko28",
+          "media_url": "http://pbs.twimg.com/media/D4Ir1MrU8AAY9y5.jpg",
+          "id_str": "1117503423291617280",
+          "source_user_id": "96879107",
+          "id": "1117503423291617280",
+          "media_url_https": "https://pbs.twimg.com/media/D4Ir1MrU8AAY9y5.jpg",
+          "source_user_id_str": "96879107",
+          "sizes": {
+            "large": {
+              "w": "840",
+              "h": "472",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "840",
+              "h": "472",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "382",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1117517883062439937",
+          "display_url": "pic.twitter.com/vlIc8xko28"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "110"
+    ],
+    "favorite_count": "0",
+    "id_str": "1120776366356606976",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1120776366356606976",
+    "possibly_sensitive": false,
+    "created_at": "Tue Apr 23 19:48:03 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Pokemon: Feeling cute, might evolve into one of eight different Pokémon later, idk https://t.co/vlIc8xko28",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Pokemon/status/1117517883062439937/video/1",
+          "source_status_id": "1117517883062439937",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/vlIc8xko28",
+          "media_url": "http://pbs.twimg.com/media/D4Ir1MrU8AAY9y5.jpg",
+          "id_str": "1117503423291617280",
+          "video_info": {
+            "aspect_ratio": [
+              "105",
+              "59"
+            ],
+            "duration_millis": "8800",
+            "variants": [
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1117503423291617280/vid/320x180/Fg3Ro_UaPZ3MhNgB.mp4?tag=11"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1117503423291617280/pl/Su7oH1NSszrT2rb7.m3u8?tag=11"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1117503423291617280/vid/840x472/4gp3Zcn-KHDbnx1a.mp4?tag=11"
+              }
+            ]
+          },
+          "source_user_id": "96879107",
+          "additional_media_info": {
+            "title": "Just Eevee things!",
+            "description": "Which one of Eevee's evolutions is your favorite?",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1117503423291617280",
+          "media_url_https": "https://pbs.twimg.com/media/D4Ir1MrU8AAY9y5.jpg",
+          "source_user_id_str": "96879107",
+          "sizes": {
+            "large": {
+              "w": "840",
+              "h": "472",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "840",
+              "h": "472",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "382",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1117517883062439937",
+          "display_url": "pic.twitter.com/vlIc8xko28"
+        }
+      ]
+    }
+  }
+}

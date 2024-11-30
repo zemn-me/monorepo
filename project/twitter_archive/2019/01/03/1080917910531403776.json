@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1080917910531403776"
+        ],
+        "editableUntil": "2019-01-03T21:04:47.011Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Go",
+          "screen_name": "golang",
+          "indices": [
+            "53",
+            "60"
+          ],
+          "id_str": "113419064",
+          "id": "113419064"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/faoeTpldoc",
+          "expanded_url": "https://github.com/golang/go/issues/29537",
+          "display_url": "github.com/golang/go/issu…",
+          "indices": [
+            "104",
+            "127"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "165"
+    ],
+    "favorite_count": "3",
+    "id_str": "1080917910531403776",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1080917910531403776",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 03 20:04:47 +0000 2019",
+    "favorited": false,
+    "full_text": "I'm proposing a standard way of marking revisions of @golang packages as vulnerable to security issues: https://t.co/faoeTpldoc\n\nPlease let me know what you think :)",
+    "lang": "en"
+  }
+}

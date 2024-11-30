@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1391855860150947840"
+        ],
+        "editableUntil": "2021-05-10T21:41:11.148Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "189"
+    ],
+    "favorite_count": "3",
+    "id_str": "1391855860150947840",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1391855860150947840",
+    "created_at": "Mon May 10 20:41:11 +0000 2021",
+    "favorited": false,
+    "full_text": "the world really needs a github action that:\n - checks for dependabot security patch PRs\n - runs tests\n - merges in the change\n - publishes a minor patch to the package on NPM automatically",
+    "lang": "en"
+  }
+}

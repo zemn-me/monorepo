@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1554338553307361281"
+        ],
+        "editableUntil": "2022-08-02T05:59:23.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1554338553307361281/photo/1",
+          "indices": [
+            "156",
+            "179"
+          ],
+          "url": "https://t.co/jVKyA1Z7gz",
+          "media_url": "http://pbs.twimg.com/media/FZIebugVQAAGEaU.png",
+          "id_str": "1554338283085185024",
+          "id": "1554338283085185024",
+          "media_url_https": "https://pbs.twimg.com/media/FZIebugVQAAGEaU.png",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "363",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "206",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1244",
+              "h": "376",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/jVKyA1Z7gz"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "179"
+    ],
+    "favorite_count": "10",
+    "id_str": "1554338553307361281",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1554338553307361281",
+    "possibly_sensitive": false,
+    "created_at": "Tue Aug 02 05:29:23 +0000 2022",
+    "favorited": false,
+    "full_text": "discord's regex for dev links has a mistaken unescaped question mark, so you can use lind, ling etc. regex is bad in general but this is particularly funny https://t.co/jVKyA1Z7gz",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1554338553307361281/photo/1",
+          "indices": [
+            "156",
+            "179"
+          ],
+          "url": "https://t.co/jVKyA1Z7gz",
+          "media_url": "http://pbs.twimg.com/media/FZIebugVQAAGEaU.png",
+          "id_str": "1554338283085185024",
+          "id": "1554338283085185024",
+          "media_url_https": "https://pbs.twimg.com/media/FZIebugVQAAGEaU.png",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "363",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "206",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1244",
+              "h": "376",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/jVKyA1Z7gz"
+        }
+      ]
+    }
+  }
+}

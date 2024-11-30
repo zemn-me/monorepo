@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1676606473156149248"
+        ],
+        "editableUntil": "2023-07-05T15:58:27.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/hU47xDxs3s",
+          "expanded_url": "https://github.com/Zemnmez/monorepo/pull/3376",
+          "display_url": "github.com/Zemnmez/monore…",
+          "indices": [
+            "206",
+            "229"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "229"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1676606467585998850",
+    "id_str": "1676606473156149248",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1676606473156149248",
+    "in_reply_to_status_id": "1676606467585998850",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 05 14:58:27 +0000 2023",
+    "favorited": false,
+    "full_text": "i’m dealing with some manual state in my AWS account that wont be reflected in staging, and building a whole staging infra just to tear it down again immediately sounds expensive… i’m not the expert though https://t.co/hU47xDxs3s",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

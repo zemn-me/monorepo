@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1291422901464371200"
+        ],
+        "editableUntil": "2020-08-06T18:16:27.843Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pablo Rochat",
+          "screen_name": "PabloRochat",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1483209162",
+          "id": "1483209162"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PabloRochat/status/1291034989866315776/video/1",
+          "source_status_id": "1291034989866315776",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/KHhWLi2iGl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1291034776145498112/pu/img/IilRnSLYnb27EvBz.jpg",
+          "id_str": "1291034776145498112",
+          "source_user_id": "1483209162",
+          "id": "1291034776145498112",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1291034776145498112/pu/img/IilRnSLYnb27EvBz.jpg",
+          "source_user_id_str": "1483209162",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1291034989866315776",
+          "display_url": "pic.twitter.com/KHhWLi2iGl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "0",
+    "id_str": "1291422901464371200",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1291422901464371200",
+    "possibly_sensitive": false,
+    "created_at": "Thu Aug 06 17:16:27 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @PabloRochat: italian pigeons are the best https://t.co/KHhWLi2iGl",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PabloRochat/status/1291034989866315776/video/1",
+          "source_status_id": "1291034989866315776",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/KHhWLi2iGl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1291034776145498112/pu/img/IilRnSLYnb27EvBz.jpg",
+          "id_str": "1291034776145498112",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "13514",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1291034776145498112/pu/vid/720x720/TXl6Dm7LcXbnDFUN.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1291034776145498112/pu/vid/320x320/j7WwCc-CP2RFB4R-.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1291034776145498112/pu/pl/He4KhtRveATTfrHw.m3u8?tag=10&v=8f2"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1291034776145498112/pu/vid/480x480/m5Zb7HRZQCsSfzQM.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1483209162",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1291034776145498112",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1291034776145498112/pu/img/IilRnSLYnb27EvBz.jpg",
+          "source_user_id_str": "1483209162",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1291034989866315776",
+          "display_url": "pic.twitter.com/KHhWLi2iGl"
+        }
+      ]
+    }
+  }
+}

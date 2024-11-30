@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1107277442169884672"
+        ],
+        "editableUntil": "2019-03-17T14:48:09.090Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "yan",
+          "screen_name": "bcrypt",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "968881477",
+          "id": "968881477"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bcrypt/status/1107018023716573185/video/1",
+          "source_status_id": "1107018023716573185",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/6lPuBDejeP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1107017959002660864/pu/img/C3Tll7ALilsUJaYv.jpg",
+          "id_str": "1107017959002660864",
+          "source_user_id": "968881477",
+          "id": "1107017959002660864",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1107017959002660864/pu/img/C3Tll7ALilsUJaYv.jpg",
+          "source_user_id_str": "968881477",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "900",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "720",
+              "h": "900",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1107018023716573185",
+          "display_url": "pic.twitter.com/6lPuBDejeP"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1107277442169884672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1107277442169884672",
+    "possibly_sensitive": false,
+    "created_at": "Sun Mar 17 13:48:09 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @bcrypt: we’ve been eating lettuce wrong this whole time https://t.co/6lPuBDejeP",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bcrypt/status/1107018023716573185/video/1",
+          "source_status_id": "1107018023716573185",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/6lPuBDejeP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1107017959002660864/pu/img/C3Tll7ALilsUJaYv.jpg",
+          "id_str": "1107017959002660864",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "26400",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1107017959002660864/pu/vid/320x400/OlZrcv4up4cld3Ti.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1107017959002660864/pu/vid/360x450/iL8ip4RLp1n4Sfg0.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1107017959002660864/pu/pl/MzwE9dC0byZS71WP.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1107017959002660864/pu/vid/720x900/y9pJ5NjlUHWF3Usf.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "968881477",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1107017959002660864",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1107017959002660864/pu/img/C3Tll7ALilsUJaYv.jpg",
+          "source_user_id_str": "968881477",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "900",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "720",
+              "h": "900",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1107018023716573185",
+          "display_url": "pic.twitter.com/6lPuBDejeP"
+        }
+      ]
+    }
+  }
+}

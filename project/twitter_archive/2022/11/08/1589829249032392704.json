@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1589829249032392704"
+        ],
+        "editableUntil": "2022-11-08T04:26:45.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/UTo0H8Q47i",
+          "expanded_url": "http://document.body.style",
+          "display_url": "document.body.style",
+          "indices": [
+            "66",
+            "89"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "198"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1589827712235233280",
+    "id_str": "1589829249032392704",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1589829249032392704",
+    "in_reply_to_status_id": "1589827712235233280",
+    "possibly_sensitive": false,
+    "created_at": "Tue Nov 08 03:56:45 +0000 2022",
+    "favorited": false,
+    "full_text": "navigator?.getBattery().then(battery =&gt; {\n setLevel = () =&gt; https://t.co/UTo0H8Q47i.filter = `brightness(${battery.level})`;\n    setLevel();battery.addEventListener(\"levelchange\", setLevel)\n})",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

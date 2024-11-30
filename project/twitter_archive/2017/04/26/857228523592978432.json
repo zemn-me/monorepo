@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "857228523592978432"
+        ],
+        "editableUntil": "2017-04-26T14:43:01.217Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Harry Partridge",
+          "screen_name": "HappyHarryToons",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "95097958",
+          "id": "95097958"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/HappyHarryToons/status/857199277470359554/video/1",
+          "source_status_id": "857199277470359554",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/P2AlIA1uRy",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/857199036448866306/pu/img/yq_QhaLL-pmjoHCe.jpg",
+          "id_str": "857199036448866306",
+          "source_user_id": "95097958",
+          "id": "857199036448866306",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/857199036448866306/pu/img/yq_QhaLL-pmjoHCe.jpg",
+          "source_user_id_str": "95097958",
+          "sizes": {
+            "medium": {
+              "w": "720",
+              "h": "480",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "453",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "857199277470359554",
+          "display_url": "pic.twitter.com/P2AlIA1uRy"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "0",
+    "id_str": "857228523592978432",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "857228523592978432",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 26 13:43:01 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @HappyHarryToons: Scrapped 2009 cartoon about the transformers writing themselves a new theme tune. https://t.co/P2AlIA1uRy",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/HappyHarryToons/status/857199277470359554/video/1",
+          "source_status_id": "857199277470359554",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/P2AlIA1uRy",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/857199036448866306/pu/img/yq_QhaLL-pmjoHCe.jpg",
+          "id_str": "857199036448866306",
+          "video_info": {
+            "aspect_ratio": [
+              "3",
+              "2"
+            ],
+            "duration_millis": "25400",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/857199036448866306/pu/vid/270x180/ElsNoBN7SJXlAqEd.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/857199036448866306/pu/pl/a15gZ59Inktk5OGS.m3u8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/857199036448866306/pu/vid/540x360/IBUSOvswT7XsSbg9.mp4"
+              }
+            ]
+          },
+          "source_user_id": "95097958",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "857199036448866306",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/857199036448866306/pu/img/yq_QhaLL-pmjoHCe.jpg",
+          "source_user_id_str": "95097958",
+          "sizes": {
+            "medium": {
+              "w": "720",
+              "h": "480",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "453",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "857199277470359554",
+          "display_url": "pic.twitter.com/P2AlIA1uRy"
+        }
+      ]
+    }
+  }
+}

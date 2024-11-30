@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1595463791307001856"
+        ],
+        "editableUntil": "2022-11-23T17:36:24.788Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mazie",
+          "screen_name": "catfunked",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1401636539457839108",
+          "id": "1401636539457839108"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/catfunked/status/1595072410138689536/video/1",
+          "source_status_id": "1595072410138689536",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/Gr4bUmJ2zB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1595072384385564676/pu/img/hz958qf4RmfG0dwP.jpg",
+          "id_str": "1595072384385564676",
+          "source_user_id": "1401636539457839108",
+          "id": "1595072384385564676",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1595072384385564676/pu/img/hz958qf4RmfG0dwP.jpg",
+          "source_user_id_str": "1401636539457839108",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1595072410138689536",
+          "display_url": "pic.twitter.com/Gr4bUmJ2zB"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "94"
+    ],
+    "favorite_count": "0",
+    "id_str": "1595463791307001856",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1595463791307001856",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 23 17:06:24 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @catfunked: me at my post (my job is to oversee the thingamajigger) https://t.co/Gr4bUmJ2zB",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/catfunked/status/1595072410138689536/video/1",
+          "source_status_id": "1595072410138689536",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/Gr4bUmJ2zB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1595072384385564676/pu/img/hz958qf4RmfG0dwP.jpg",
+          "id_str": "1595072384385564676",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "6221",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1595072384385564676/pu/vid/480x600/2XfyRZHo_0AMCU5h.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1595072384385564676/pu/pl/BFxyQz0GzbbO-jFS.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1595072384385564676/pu/vid/640x800/FbYX0NLCpBNqVqHt.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1595072384385564676/pu/vid/320x400/m277gA6TRZ1TBoJa.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1401636539457839108",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1595072384385564676",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1595072384385564676/pu/img/hz958qf4RmfG0dwP.jpg",
+          "source_user_id_str": "1401636539457839108",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1595072410138689536",
+          "display_url": "pic.twitter.com/Gr4bUmJ2zB"
+        }
+      ]
+    }
+  }
+}

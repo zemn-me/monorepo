@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1072807241055641601"
+        ],
+        "editableUntil": "2018-12-12T11:55:52.719Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ian Laking",
+          "screen_name": "IHLaking",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "2662861692",
+          "id": "2662861692"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IHLaking/status/1072526899098910720/video/1",
+          "source_status_id": "1072526899098910720",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/RhGN7acHHq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1072526858456059907/pu/img/UDSY11cZULyc6xT5.jpg",
+          "id_str": "1072526858456059907",
+          "source_user_id": "2662861692",
+          "id": "1072526858456059907",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1072526858456059907/pu/img/UDSY11cZULyc6xT5.jpg",
+          "source_user_id_str": "2662861692",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1072526899098910720",
+          "display_url": "pic.twitter.com/RhGN7acHHq"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "78"
+    ],
+    "favorite_count": "0",
+    "id_str": "1072807241055641601",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1072807241055641601",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 12 10:55:52 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @IHLaking: i can honestly say i did not expect that https://t.co/RhGN7acHHq",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IHLaking/status/1072526899098910720/video/1",
+          "source_status_id": "1072526899098910720",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/RhGN7acHHq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1072526858456059907/pu/img/UDSY11cZULyc6xT5.jpg",
+          "id_str": "1072526858456059907",
+          "video_info": {
+            "aspect_ratio": [
+              "320",
+              "179"
+            ],
+            "duration_millis": "10030",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1072526858456059907/pu/vid/320x180/Mqv74Uz74FeCefTv.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1072526858456059907/pu/vid/640x358/G9nViCky27dviywV.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1072526858456059907/pu/pl/2zoZXFWfaGcEwRUA.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "2662861692",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1072526858456059907",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1072526858456059907/pu/img/UDSY11cZULyc6xT5.jpg",
+          "source_user_id_str": "2662861692",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "358",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1072526899098910720",
+          "display_url": "pic.twitter.com/RhGN7acHHq"
+        }
+      ]
+    }
+  }
+}

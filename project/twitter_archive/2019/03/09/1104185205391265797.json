@@ -1,0 +1,162 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1104185205391265797"
+        ],
+        "editableUntil": "2019-03-09T02:00:42.391Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Adam Parkhomenko",
+          "screen_name": "AdamParkhomenko",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "18382184",
+          "id": "18382184"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kharyp/status/1103899287149142019/video/1",
+          "source_status_id": "1103899287149142019",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/PHmEuf2lMJ",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1103898241660149762/img/DyY9DQzrQzVS4hCr.jpg",
+          "id_str": "1103898241660149762",
+          "source_user_id": "53503202",
+          "id": "1103898241660149762",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1103898241660149762/img/DyY9DQzrQzVS4hCr.jpg",
+          "source_user_id_str": "53503202",
+          "sizes": {
+            "small": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1103899287149142019",
+          "display_url": "pic.twitter.com/PHmEuf2lMJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1104185205391265797",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1104185205391265797",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 09 01:00:42 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @AdamParkhomenko: I’ve watched this thirty times and I’m still not done. https://t.co/PHmEuf2lMJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kharyp/status/1103899287149142019/video/1",
+          "source_status_id": "1103899287149142019",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/PHmEuf2lMJ",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1103898241660149762/img/DyY9DQzrQzVS4hCr.jpg",
+          "id_str": "1103898241660149762",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "225359",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1103898241660149762/vid/320x320/nh2Ea0Jy_V6LTobD.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1103898241660149762/pl/lC5NYjFN_FWG6AaX.m3u8?tag=9&v=80e"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1103898241660149762/vid/400x400/f5U-vqvOjgdqkbmi.mp4?tag=9"
+              }
+            ]
+          },
+          "source_user_id": "53503202",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1103898241660149762",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1103898241660149762/img/DyY9DQzrQzVS4hCr.jpg",
+          "source_user_id_str": "53503202",
+          "sizes": {
+            "small": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "400",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1103899287149142019",
+          "display_url": "pic.twitter.com/PHmEuf2lMJ"
+        }
+      ]
+    }
+  }
+}

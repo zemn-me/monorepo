@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1299451815734530050"
+        ],
+        "editableUntil": "2020-08-28T22:00:30.175Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "kona",
+          "screen_name": "spideywoo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "851020602223841282",
+          "id": "851020602223841282"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spideywoo/status/1299068391689510913/video/1",
+          "source_status_id": "1299068391689510913",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/fd359rB9hR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1299067986687520771/pu/img/RcXJYpFvke43xDr1.jpg",
+          "id_str": "1299067986687520771",
+          "source_user_id": "851020602223841282",
+          "id": "1299067986687520771",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1299067986687520771/pu/img/RcXJYpFvke43xDr1.jpg",
+          "source_user_id_str": "851020602223841282",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1299068391689510913",
+          "display_url": "pic.twitter.com/fd359rB9hR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1299451815734530050",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1299451815734530050",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 28 21:00:30 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @spideywoo: IDEK WHAT THIS IS IM SORRY https://t.co/fd359rB9hR",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spideywoo/status/1299068391689510913/video/1",
+          "source_status_id": "1299068391689510913",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/fd359rB9hR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1299067986687520771/pu/img/RcXJYpFvke43xDr1.jpg",
+          "id_str": "1299067986687520771",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "22000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1299067986687520771/pu/pl/ZwQ148CoLSkQTjnr.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1299067986687520771/pu/vid/480x270/m0fLmU4JlgzyQnkL.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1299067986687520771/pu/vid/640x360/U-5r_P_psGzVARqz.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1299067986687520771/pu/vid/1280x720/LHnCIIq1q8cyYDDR.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "851020602223841282",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1299067986687520771",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1299067986687520771/pu/img/RcXJYpFvke43xDr1.jpg",
+          "source_user_id_str": "851020602223841282",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1299068391689510913",
+          "display_url": "pic.twitter.com/fd359rB9hR"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1516151139926147073"
+        ],
+        "editableUntil": "2022-04-18T20:56:15.141Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "jonodrew@mastodon.social",
+          "screen_name": "jonodrew",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "17314212",
+          "id": "17314212"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1516151139926147073/photo/1",
+          "indices": [
+            "10",
+            "33"
+          ],
+          "url": "https://t.co/nLeEUQcMte",
+          "media_url": "http://pbs.twimg.com/media/FQpzYpsVcAAfeLk.jpg",
+          "id_str": "1516151091909455872",
+          "id": "1516151091909455872",
+          "media_url_https": "https://pbs.twimg.com/media/FQpzYpsVcAAfeLk.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "106",
+              "h": "106",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1009",
+              "h": "106",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "71",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1009",
+              "h": "106",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/nLeEUQcMte"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "33"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1516150823570526214",
+    "id_str": "1516151139926147073",
+    "in_reply_to_user_id": "17314212",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1516151139926147073",
+    "in_reply_to_status_id": "1516150823570526214",
+    "possibly_sensitive": false,
+    "created_at": "Mon Apr 18 20:26:15 +0000 2022",
+    "favorited": false,
+    "full_text": "@jonodrew https://t.co/nLeEUQcMte",
+    "lang": "qme",
+    "in_reply_to_screen_name": "jonodrew",
+    "in_reply_to_user_id_str": "17314212",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1516151139926147073/photo/1",
+          "indices": [
+            "10",
+            "33"
+          ],
+          "url": "https://t.co/nLeEUQcMte",
+          "media_url": "http://pbs.twimg.com/media/FQpzYpsVcAAfeLk.jpg",
+          "id_str": "1516151091909455872",
+          "id": "1516151091909455872",
+          "media_url_https": "https://pbs.twimg.com/media/FQpzYpsVcAAfeLk.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "106",
+              "h": "106",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1009",
+              "h": "106",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "71",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1009",
+              "h": "106",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/nLeEUQcMte"
+        }
+      ]
+    }
+  }
+}

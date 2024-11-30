@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1237010358331674625"
+        ],
+        "editableUntil": "2020-03-09T14:40:26.624Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "shindigs",
+          "screen_name": "shindags",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "67275584",
+          "id": "67275584"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "271"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1236872230094569472",
+    "id_str": "1237010358331674625",
+    "in_reply_to_user_id": "67275584",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1237010358331674625",
+    "in_reply_to_status_id": "1236872230094569472",
+    "created_at": "Mon Mar 09 13:40:26 +0000 2020",
+    "favorited": false,
+    "full_text": "@shindags it looks like they implemented the loader by deleting a certain amount of characters to clear the space and some error (probably a floating point error) caused it to overflow that amount of characters. this meant that every update increases the text in the area",
+    "lang": "en",
+    "in_reply_to_screen_name": "shindags",
+    "in_reply_to_user_id_str": "67275584"
+  }
+}

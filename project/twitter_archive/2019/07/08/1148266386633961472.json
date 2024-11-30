@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1148266386633961472"
+        ],
+        "editableUntil": "2019-07-08T17:23:34.988Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "0",
+    "id_str": "1148266386633961472",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1148266386633961472",
+    "created_at": "Mon Jul 08 16:23:34 +0000 2019",
+    "favorited": false,
+    "full_text": "interestingly, it seems that MSEdge doesn't confirm custom protocol uris if it thinks they dont exist on the computer, instead immediately launching the \"you need a program to open this blah\". there must be a time to check race condition there but i have no idea how you'd use it",
+    "lang": "en"
+  }
+}

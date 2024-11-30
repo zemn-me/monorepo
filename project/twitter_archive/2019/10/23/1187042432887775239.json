@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1187042432887775239"
+        ],
+        "editableUntil": "2019-10-23T17:25:44.839Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "162"
+    ],
+    "favorite_count": "1",
+    "id_str": "1187042432887775239",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1187042432887775239",
+    "created_at": "Wed Oct 23 16:25:44 +0000 2019",
+    "favorited": false,
+    "full_text": "i think a loading spinner on any cli tool should just spin as lines from stderr pass thru a pipe, and if the program crashes it spits out everything in the buffer",
+    "lang": "en"
+  }
+}

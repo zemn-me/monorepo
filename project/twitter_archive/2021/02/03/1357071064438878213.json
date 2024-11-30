@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1357071064438878213"
+        ],
+        "editableUntil": "2021-02-03T21:58:49.580Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Danil Krivoruchko",
+          "screen_name": "microdanilka",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1378021595080486917",
+          "id": "1378021595080486917"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/microdanilka/status/1356697036146569216/video/1",
+          "source_status_id": "1356697036146569216",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/9YO05ModV8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1356696870916149255/pu/img/7ckt-nS7JWNvZdZM.jpg",
+          "id_str": "1356696870916149255",
+          "source_user_id": "13157822",
+          "id": "1356696870916149255",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1356696870916149255/pu/img/7ckt-nS7JWNvZdZM.jpg",
+          "source_user_id_str": "13157822",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1356697036146569216",
+          "display_url": "pic.twitter.com/9YO05ModV8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "100"
+    ],
+    "favorite_count": "0",
+    "id_str": "1357071064438878213",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1357071064438878213",
+    "possibly_sensitive": false,
+    "created_at": "Wed Feb 03 20:58:49 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @microdanilka: One more test of marker-less tracking used for clothes sim https://t.co/9YO05ModV8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/microdanilka/status/1356697036146569216/video/1",
+          "source_status_id": "1356697036146569216",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/9YO05ModV8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1356696870916149255/pu/img/7ckt-nS7JWNvZdZM.jpg",
+          "id_str": "1356696870916149255",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "22250",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1356696870916149255/pu/vid/720x720/_E1WPaF4uGkymKbZ.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1356696870916149255/pu/vid/320x320/TZpvbeLY7Z6q6pMS.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1356696870916149255/pu/pl/X12-VghiXa7T8f3l.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1356696870916149255/pu/vid/480x480/fLtvhZt7xojD-_EW.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "13157822",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1356696870916149255",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1356696870916149255/pu/img/7ckt-nS7JWNvZdZM.jpg",
+          "source_user_id_str": "13157822",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1356697036146569216",
+          "display_url": "pic.twitter.com/9YO05ModV8"
+        }
+      ]
+    }
+  }
+}

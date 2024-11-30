@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1400955531280461824"
+        ],
+        "editableUntil": "2021-06-05T00:20:01.809Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "the Cagle Cats",
+          "screen_name": "CagleCats",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "900851740840534016",
+          "id": "900851740840534016"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CagleCats/status/1400626226457350147/video/1",
+          "source_status_id": "1400626226457350147",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/JoGH0ZRrFa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1400626191099469828/pu/img/XsnxhhLSpfubtKWu.jpg",
+          "id_str": "1400626191099469828",
+          "source_user_id": "900851740840534016",
+          "id": "1400626191099469828",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1400626191099469828/pu/img/XsnxhhLSpfubtKWu.jpg",
+          "source_user_id_str": "900851740840534016",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1400626226457350147",
+          "display_url": "pic.twitter.com/JoGH0ZRrFa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "1400955531280461824",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1400955531280461824",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 04 23:20:01 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @CagleCats: It's raining https://t.co/JoGH0ZRrFa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CagleCats/status/1400626226457350147/video/1",
+          "source_status_id": "1400626226457350147",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/JoGH0ZRrFa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1400626191099469828/pu/img/XsnxhhLSpfubtKWu.jpg",
+          "id_str": "1400626191099469828",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "14793",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400626191099469828/pu/vid/1280x720/NwlGvSsQC_mS07Vf.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1400626191099469828/pu/pl/HblKVzJ-4dNA-HdS.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400626191099469828/pu/vid/480x270/l3A65-DovE-RLYeJ.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400626191099469828/pu/vid/640x360/N0WWx3496Vb2d2zi.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "900851740840534016",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1400626191099469828",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1400626191099469828/pu/img/XsnxhhLSpfubtKWu.jpg",
+          "source_user_id_str": "900851740840534016",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1400626226457350147",
+          "display_url": "pic.twitter.com/JoGH0ZRrFa"
+        }
+      ]
+    }
+  }
+}

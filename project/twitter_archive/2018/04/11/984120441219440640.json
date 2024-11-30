@@ -1,0 +1,143 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "984120441219440640"
+        ],
+        "editableUntil": "2018-04-11T18:26:11.917Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Gene Park",
+          "screen_name": "GenePark",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "15100219",
+          "id": "15100219"
+        },
+        {
+          "name": "Twitch",
+          "screen_name": "Twitch",
+          "indices": [
+            "18",
+            "25"
+          ],
+          "id_str": "309366491",
+          "id": "309366491"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GenePark/status/984117573800333313/photo/1",
+          "source_status_id": "984117573800333313",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/XFXeiPXas5",
+          "media_url": "http://pbs.twimg.com/media/DahJttUXUAAdFqc.jpg",
+          "id_str": "984117568188403712",
+          "source_user_id": "15100219",
+          "id": "984117568188403712",
+          "media_url_https": "https://pbs.twimg.com/media/DahJttUXUAAdFqc.jpg",
+          "source_user_id_str": "15100219",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "2048",
+              "h": "1536",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "900",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "984117573800333313",
+          "display_url": "pic.twitter.com/XFXeiPXas5"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "73"
+    ],
+    "favorite_count": "0",
+    "id_str": "984120441219440640",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "984120441219440640",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 11 17:26:11 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @GenePark: Our @twitch setup is a bit much lol https://t.co/XFXeiPXas5",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GenePark/status/984117573800333313/photo/1",
+          "source_status_id": "984117573800333313",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/XFXeiPXas5",
+          "media_url": "http://pbs.twimg.com/media/DahJttUXUAAdFqc.jpg",
+          "id_str": "984117568188403712",
+          "source_user_id": "15100219",
+          "id": "984117568188403712",
+          "media_url_https": "https://pbs.twimg.com/media/DahJttUXUAAdFqc.jpg",
+          "source_user_id_str": "15100219",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "2048",
+              "h": "1536",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "900",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "984117573800333313",
+          "display_url": "pic.twitter.com/XFXeiPXas5"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1346171671925952512"
+        ],
+        "editableUntil": "2021-01-04T20:08:31.904Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kyle Tobener",
+          "screen_name": "kylekyle",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "18255542",
+          "id": "18255542"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kylekyle/status/1345941999833108484/video/1",
+          "source_status_id": "1345941999833108484",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/XzFk1QwJ3U",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1345941896602947586/pu/img/DxWXVpreAWezgCXY.jpg",
+          "id_str": "1345941896602947586",
+          "source_user_id": "18255542",
+          "id": "1345941896602947586",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1345941896602947586/pu/img/DxWXVpreAWezgCXY.jpg",
+          "source_user_id_str": "18255542",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1345941999833108484",
+          "display_url": "pic.twitter.com/XzFk1QwJ3U"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1346171671925952512",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1346171671925952512",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 04 19:08:31 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @kylekyle: I tried to be a bean dad and I got destroyed. I’m very proud. https://t.co/XzFk1QwJ3U",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kylekyle/status/1345941999833108484/video/1",
+          "source_status_id": "1345941999833108484",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/XzFk1QwJ3U",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1345941896602947586/pu/img/DxWXVpreAWezgCXY.jpg",
+          "id_str": "1345941896602947586",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "30477",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345941896602947586/pu/vid/720x1280/9Wwf5ia68qrYwDgI.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1345941896602947586/pu/pl/oAur-nAJsU0PHb8y.m3u8?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345941896602947586/pu/vid/320x568/sLf9rQBw3Cd_GgtO.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345941896602947586/pu/vid/360x640/pfTy8yAkCffguUW6.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "18255542",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1345941896602947586",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1345941896602947586/pu/img/DxWXVpreAWezgCXY.jpg",
+          "source_user_id_str": "18255542",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1345941999833108484",
+          "display_url": "pic.twitter.com/XzFk1QwJ3U"
+        }
+      ]
+    }
+  }
+}

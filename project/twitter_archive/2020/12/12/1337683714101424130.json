@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337683714101424130"
+        ],
+        "editableUntil": "2020-12-12T10:00:25.060Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The DesertPogona.",
+          "screen_name": "DesertPogona",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "3501101714",
+          "id": "3501101714"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DesertPogona/status/1337439597870145540/video/1",
+          "source_status_id": "1337439597870145540",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/5biDXHh5Co",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337439351375093763/pu/img/_EBn7vhEJN6ON-nX.jpg",
+          "id_str": "1337439351375093763",
+          "source_user_id": "3501101714",
+          "id": "1337439351375093763",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337439351375093763/pu/img/_EBn7vhEJN6ON-nX.jpg",
+          "source_user_id_str": "3501101714",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337439597870145540",
+          "display_url": "pic.twitter.com/5biDXHh5Co"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "76"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337683714101424130",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337683714101424130",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 12 09:00:25 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DesertPogona: how i handle potential DMCA music: https://t.co/5biDXHh5Co",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DesertPogona/status/1337439597870145540/video/1",
+          "source_status_id": "1337439597870145540",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/5biDXHh5Co",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337439351375093763/pu/img/_EBn7vhEJN6ON-nX.jpg",
+          "id_str": "1337439351375093763",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "62283",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1337439351375093763/pu/pl/cGrDzkoUqXY8bd5c.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337439351375093763/pu/vid/640x360/VY_EEj-5lhgfB8nn.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337439351375093763/pu/vid/1280x720/0fnnmO7KGRcOZoeo.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337439351375093763/pu/vid/480x270/xQSlL44lffUnC0eb.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3501101714",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1337439351375093763",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337439351375093763/pu/img/_EBn7vhEJN6ON-nX.jpg",
+          "source_user_id_str": "3501101714",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1337439597870145540",
+          "display_url": "pic.twitter.com/5biDXHh5Co"
+        }
+      ]
+    }
+  }
+}

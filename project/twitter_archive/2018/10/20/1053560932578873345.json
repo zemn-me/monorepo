@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1053560932578873345"
+        ],
+        "editableUntil": "2018-10-20T09:17:55.199Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Luke (SteadyOn)",
+          "screen_name": "2Steady4U",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3045657838",
+          "id": "3045657838"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/2Steady4U/status/1053302838355521536/video/1",
+          "source_status_id": "1053302838355521536",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/H4PffLFi0o",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1053302755731869697/pu/img/zfW87LsycPUqQNIM.jpg",
+          "id_str": "1053302755731869697",
+          "source_user_id": "3045657838",
+          "id": "1053302755731869697",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1053302755731869697/pu/img/zfW87LsycPUqQNIM.jpg",
+          "source_user_id_str": "3045657838",
+          "sizes": {
+            "small": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1053302838355521536",
+          "display_url": "pic.twitter.com/H4PffLFi0o"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "1053560932578873345",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1053560932578873345",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 20 08:17:55 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @2Steady4U: Some guy's been using a leafblower all morning for hours... https://t.co/H4PffLFi0o",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/2Steady4U/status/1053302838355521536/video/1",
+          "source_status_id": "1053302838355521536",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/H4PffLFi0o",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1053302755731869697/pu/img/zfW87LsycPUqQNIM.jpg",
+          "id_str": "1053302755731869697",
+          "video_info": {
+            "aspect_ratio": [
+              "11",
+              "20"
+            ],
+            "duration_millis": "26893",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1053302755731869697/pu/vid/180x326/UGpMK_YLg48u9pTE.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1053302755731869697/pu/vid/352x640/OOllDqJzFkQ5PJc-.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1053302755731869697/pu/pl/0to8PvAr1j3ELQl0.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "3045657838",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1053302755731869697",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1053302755731869697/pu/img/zfW87LsycPUqQNIM.jpg",
+          "source_user_id_str": "3045657838",
+          "sizes": {
+            "small": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1053302838355521536",
+          "display_url": "pic.twitter.com/H4PffLFi0o"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1091379679963959296"
+        ],
+        "editableUntil": "2019-02-01T17:56:07.214Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "pokimane",
+          "screen_name": "pokimanelol",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "2244953047",
+          "id": "2244953047"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "288"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1091124164742676482",
+    "id_str": "1091379679963959296",
+    "in_reply_to_user_id": "2244953047",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1091379679963959296",
+    "in_reply_to_status_id": "1091124164742676482",
+    "created_at": "Fri Feb 01 16:56:07 +0000 2019",
+    "favorited": false,
+    "full_text": "@pokimanelol php originally used a custom hash table implementation based, bizarrely on strlen(). this meant that the language’s speed was highly contingent on the distribution of the lengths of function names, which is why even modern php has such bizarre names for its builtin functions",
+    "lang": "en",
+    "in_reply_to_screen_name": "pokimanelol",
+    "in_reply_to_user_id_str": "2244953047"
+  }
+}

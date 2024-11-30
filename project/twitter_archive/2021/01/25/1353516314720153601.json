@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1353516314720153601"
+        ],
+        "editableUntil": "2021-01-25T02:33:31.203Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "theGunrun",
+          "screen_name": "theGunrun",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "17346342",
+          "id": "17346342"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theGunrun/status/1353506305151881216/video/1",
+          "source_status_id": "1353506305151881216",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/eHIOJIfEq7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1353505885222440962/pu/img/296Yx6iCo-APDyD2.jpg",
+          "id_str": "1353505885222440962",
+          "source_user_id": "17346342",
+          "id": "1353505885222440962",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1353505885222440962/pu/img/296Yx6iCo-APDyD2.jpg",
+          "source_user_id_str": "17346342",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1353506305151881216",
+          "display_url": "pic.twitter.com/eHIOJIfEq7"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "119"
+    ],
+    "favorite_count": "0",
+    "id_str": "1353516314720153601",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1353516314720153601",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 25 01:33:31 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @theGunrun: What timeline is this?? Terry Crews &amp; his son nerding out to Zentreya's raid https://t.co/eHIOJIfEq7",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theGunrun/status/1353506305151881216/video/1",
+          "source_status_id": "1353506305151881216",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/eHIOJIfEq7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1353505885222440962/pu/img/296Yx6iCo-APDyD2.jpg",
+          "id_str": "1353505885222440962",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "51467",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1353505885222440962/pu/vid/480x270/msd2ppyQ3M5HoZuj.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1353505885222440962/pu/vid/640x360/D7z_seD2vgDyiRzs.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1353505885222440962/pu/pl/D5zvdrEtnKNcrhnT.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1353505885222440962/pu/vid/1280x720/hyJhVXwsNEaOzn7r.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "17346342",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1353505885222440962",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1353505885222440962/pu/img/296Yx6iCo-APDyD2.jpg",
+          "source_user_id_str": "17346342",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1353506305151881216",
+          "display_url": "pic.twitter.com/eHIOJIfEq7"
+        }
+      ]
+    }
+  }
+}

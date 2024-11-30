@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1541865165469392896"
+        ],
+        "editableUntil": "2022-06-28T19:54:36.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jonathan Howard",
+          "screen_name": "Hovverd",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "1275758743",
+          "id": "1275758743"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "208"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1541862396871839745",
+    "id_str": "1541865165469392896",
+    "in_reply_to_user_id": "1275758743",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1541865165469392896",
+    "in_reply_to_status_id": "1541862396871839745",
+    "created_at": "Tue Jun 28 19:24:36 +0000 2022",
+    "favorited": false,
+    "full_text": "@Hovverd i’ll have to come back to this when my brain works, but I can’t really see how you can prevent a malicious webview when the client secret is public. why wouldnt it be able to replicate the same state",
+    "lang": "en",
+    "in_reply_to_screen_name": "Hovverd",
+    "in_reply_to_user_id_str": "1275758743"
+  }
+}

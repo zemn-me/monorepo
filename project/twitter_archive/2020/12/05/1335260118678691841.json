@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1335260118678691841"
+        ],
+        "editableUntil": "2020-12-05T17:29:54.883Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1335237496981041153/video/1",
+          "source_status_id": "1335237496981041153",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/v1jvCTNMmK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1335237453435850754/pu/img/UyoQ_Nt7YsMiwJk0.jpg",
+          "id_str": "1335237453435850754",
+          "source_user_id": "2275883743",
+          "id": "1335237453435850754",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1335237453435850754/pu/img/UyoQ_Nt7YsMiwJk0.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1335237496981041153",
+          "display_url": "pic.twitter.com/v1jvCTNMmK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "89"
+    ],
+    "favorite_count": "0",
+    "id_str": "1335260118678691841",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1335260118678691841",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 05 16:29:54 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Please enjoy these ducks changing their minds. https://t.co/v1jvCTNMmK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1335237496981041153/video/1",
+          "source_status_id": "1335237496981041153",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/v1jvCTNMmK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1335237453435850754/pu/img/UyoQ_Nt7YsMiwJk0.jpg",
+          "id_str": "1335237453435850754",
+          "video_info": {
+            "aspect_ratio": [
+              "71",
+              "40"
+            ],
+            "duration_millis": "29367",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335237453435850754/pu/vid/478x270/FgIHw8s3hVY7iym1.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1335237453435850754/pu/pl/x8VrhIHlm7hAtAtC.m3u8?tag=10&v=93d"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335237453435850754/pu/vid/638x360/2ptJTM9EfBxoToZk.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335237453435850754/pu/vid/852x480/6pDOUjGL_C0nJsgd.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1335237453435850754",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1335237453435850754/pu/img/UyoQ_Nt7YsMiwJk0.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "852",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1335237496981041153",
+          "display_url": "pic.twitter.com/v1jvCTNMmK"
+        }
+      ]
+    }
+  }
+}

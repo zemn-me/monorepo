@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1355135729182121985"
+        ],
+        "editableUntil": "2021-01-29T13:48:29.698Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Andrew Fallows",
+          "screen_name": "kaldrenon",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "631663116",
+          "id": "631663116"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kaldrenon/status/1354841504641126404/video/1",
+          "source_status_id": "1354841504641126404",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/jqWOUgdPfp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1354841440279474176/pu/img/RaaGWg4CjNA1xycg.jpg",
+          "id_str": "1354841440279474176",
+          "source_user_id": "631663116",
+          "id": "1354841440279474176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1354841440279474176/pu/img/RaaGWg4CjNA1xycg.jpg",
+          "source_user_id_str": "631663116",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1354841504641126404",
+          "display_url": "pic.twitter.com/jqWOUgdPfp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "60"
+    ],
+    "favorite_count": "0",
+    "id_str": "1355135729182121985",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1355135729182121985",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jan 29 12:48:29 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @kaldrenon: This is a work of art https://t.co/jqWOUgdPfp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kaldrenon/status/1354841504641126404/video/1",
+          "source_status_id": "1354841504641126404",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/jqWOUgdPfp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1354841440279474176/pu/img/RaaGWg4CjNA1xycg.jpg",
+          "id_str": "1354841440279474176",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "50617",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354841440279474176/pu/vid/640x360/xj-pMhXIB6C7mYHp.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1354841440279474176/pu/pl/ugKBbQO3jHpvLi9Y.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354841440279474176/pu/vid/480x270/zSwZEeLE8bQWyCVx.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354841440279474176/pu/vid/1024x576/RRYFl_g77N_omVpO.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "631663116",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1354841440279474176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1354841440279474176/pu/img/RaaGWg4CjNA1xycg.jpg",
+          "source_user_id_str": "631663116",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1354841504641126404",
+          "display_url": "pic.twitter.com/jqWOUgdPfp"
+        }
+      ]
+    }
+  }
+}

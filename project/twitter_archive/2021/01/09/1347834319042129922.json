@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1347834319042129922"
+        ],
+        "editableUntil": "2021-01-09T10:15:17.867Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Matt Buechele",
+          "screen_name": "mattbooshell",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "16993839",
+          "id": "16993839"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mattbooshell/status/1347595193806188554/video/1",
+          "source_status_id": "1347595193806188554",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/WK8l1crHXZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1347595108745666566/pu/img/eCCRH_Y3G4P6FIcJ.jpg",
+          "id_str": "1347595108745666566",
+          "source_user_id": "16993839",
+          "id": "1347595108745666566",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1347595108745666566/pu/img/eCCRH_Y3G4P6FIcJ.jpg",
+          "source_user_id_str": "16993839",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1347595193806188554",
+          "display_url": "pic.twitter.com/WK8l1crHXZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1347834319042129922",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1347834319042129922",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 09 09:15:17 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @mattbooshell: people who say things like “orwellian” https://t.co/WK8l1crHXZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mattbooshell/status/1347595193806188554/video/1",
+          "source_status_id": "1347595193806188554",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/WK8l1crHXZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1347595108745666566/pu/img/eCCRH_Y3G4P6FIcJ.jpg",
+          "id_str": "1347595108745666566",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "42580",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1347595108745666566/pu/vid/720x1280/eyXNMbkJLkycK__q.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1347595108745666566/pu/vid/320x568/NKOmjnnYqXRtUYvj.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1347595108745666566/pu/vid/360x640/O-Zo_13eGnqdifeM.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1347595108745666566/pu/pl/wIKOAUzw2LkFWQhz.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "16993839",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1347595108745666566",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1347595108745666566/pu/img/eCCRH_Y3G4P6FIcJ.jpg",
+          "source_user_id_str": "16993839",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1347595193806188554",
+          "display_url": "pic.twitter.com/WK8l1crHXZ"
+        }
+      ]
+    }
+  }
+}

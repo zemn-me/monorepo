@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1576199823245443072"
+        ],
+        "editableUntil": "2022-10-01T13:48:16.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/GaVA6Me4zl",
+          "expanded_url": "https://twitter.com/arstechnica/status/1576190838929080326",
+          "display_url": "twitter.com/arstechnica/st…",
+          "indices": [
+            "267",
+            "290"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1576199823245443072/photo/1",
+          "indices": [
+            "291",
+            "314"
+          ],
+          "url": "https://t.co/tHnIFr8WGl",
+          "media_url": "http://pbs.twimg.com/media/Fd_JTjQUYAAiXYZ.jpg",
+          "id_str": "1576199732321345536",
+          "id": "1576199732321345536",
+          "media_url_https": "https://pbs.twimg.com/media/Fd_JTjQUYAAiXYZ.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1100",
+              "h": "275",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "170",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1100",
+              "h": "275",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/tHnIFr8WGl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "314"
+    ],
+    "favorite_count": "14",
+    "id_str": "1576199823245443072",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1576199823245443072",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 01 13:18:16 +0000 2022",
+    "favorited": false,
+    "full_text": "The funny thing about using AI models to compress stuff is that the underlying representation is not pixels, but, essentially, concept vectors. which means it can just make up stuff that it thinks are the same thing. like the shine it adds to the heart in this image https://t.co/GaVA6Me4zl https://t.co/tHnIFr8WGl",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1576199823245443072/photo/1",
+          "indices": [
+            "291",
+            "314"
+          ],
+          "url": "https://t.co/tHnIFr8WGl",
+          "media_url": "http://pbs.twimg.com/media/Fd_JTjQUYAAiXYZ.jpg",
+          "id_str": "1576199732321345536",
+          "id": "1576199732321345536",
+          "media_url_https": "https://pbs.twimg.com/media/Fd_JTjQUYAAiXYZ.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1100",
+              "h": "275",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "170",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1100",
+              "h": "275",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/tHnIFr8WGl"
+        }
+      ]
+    }
+  }
+}

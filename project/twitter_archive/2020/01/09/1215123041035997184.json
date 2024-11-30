@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215123041035997184"
+        ],
+        "editableUntil": "2020-01-09T05:08:03.534Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "critical_kitcat",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/critical_kitcat/status/1214766608930856960/video/1",
+          "source_status_id": "1214766608930856960",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/fILUXQxfMX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214766571437973504/pu/img/885MqvxIF8VE8Mj3.jpg",
+          "id_str": "1214766571437973504",
+          "source_user_id": "998587389990789120",
+          "id": "1214766571437973504",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214766571437973504/pu/img/885MqvxIF8VE8Mj3.jpg",
+          "source_user_id_str": "998587389990789120",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1214766608930856960",
+          "display_url": "pic.twitter.com/fILUXQxfMX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "77"
+    ],
+    "favorite_count": "0",
+    "id_str": "1215123041035997184",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215123041035997184",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 04:08:03 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @critical_kitcat: The best joke in the whole movie https://t.co/fILUXQxfMX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/critical_kitcat/status/1214766608930856960/video/1",
+          "source_status_id": "1214766608930856960",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/fILUXQxfMX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214766571437973504/pu/img/885MqvxIF8VE8Mj3.jpg",
+          "id_str": "1214766571437973504",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "11867",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214766571437973504/pu/vid/640x360/NLueeJqivKGQtcwO.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214766571437973504/pu/vid/1280x720/mqkzLHcV-DPgvhLc.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1214766571437973504/pu/pl/uPTnu9o_P1W9PlJq.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214766571437973504/pu/vid/480x270/YttPyqXgqMX6v0wt.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "998587389990789120",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1214766571437973504",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214766571437973504/pu/img/885MqvxIF8VE8Mj3.jpg",
+          "source_user_id_str": "998587389990789120",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1214766608930856960",
+          "display_url": "pic.twitter.com/fILUXQxfMX"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1006010772881887232"
+        ],
+        "editableUntil": "2018-06-11T04:10:33.688Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Bethesda Game Studios",
+          "screen_name": "BethesdaStudios",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "469689725",
+          "id": "469689725"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BethesdaStudios/status/1006006777626877952/video/1",
+          "source_status_id": "1006006777626877952",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/3aF5evUsnY",
+          "media_url": "http://pbs.twimg.com/media/DfYNw3RVMAAYuMF.jpg",
+          "id_str": "1006005764383637504",
+          "source_user_id": "469689725",
+          "id": "1006005764383637504",
+          "media_url_https": "https://pbs.twimg.com/media/DfYNw3RVMAAYuMF.jpg",
+          "source_user_id_str": "469689725",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1006006777626877952",
+          "display_url": "pic.twitter.com/3aF5evUsnY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "110"
+    ],
+    "favorite_count": "0",
+    "id_str": "1006010772881887232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1006010772881887232",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 11 03:10:33 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @BethesdaStudios: We're excited to announce our next chapter, The Elder Scrolls VI. https://t.co/3aF5evUsnY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BethesdaStudios/status/1006006777626877952/video/1",
+          "source_status_id": "1006006777626877952",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/3aF5evUsnY",
+          "media_url": "http://pbs.twimg.com/media/DfYNw3RVMAAYuMF.jpg",
+          "id_str": "1006005764383637504",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "36103",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1006005764383637504/vid/1280x720/eZce6b6T_QP_hNFf.mp4?tag=2"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1006005764383637504/vid/640x360/XyHLx6CqVEQa2Q9w.mp4?tag=2"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1006005764383637504/vid/320x180/nNKcENtDtU7OqO6K.mp4?tag=2"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1006005764383637504/pl/6s8NAYjP3p_1JB_j.m3u8?tag=2&v=727"
+              }
+            ]
+          },
+          "source_user_id": "469689725",
+          "additional_media_info": {
+            "title": "The Elder Scrolls VI – Official Announcement Teaser ",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1006005764383637504",
+          "media_url_https": "https://pbs.twimg.com/media/DfYNw3RVMAAYuMF.jpg",
+          "source_user_id_str": "469689725",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1006006777626877952",
+          "display_url": "pic.twitter.com/3aF5evUsnY"
+        }
+      ]
+    }
+  }
+}

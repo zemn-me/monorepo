@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1233400310669901824"
+        ],
+        "editableUntil": "2020-02-28T15:35:24.190Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "JF",
+          "screen_name": "JtingF",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "1113487444509220864",
+          "id": "1113487444509220864"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JtingF/status/1233400062618636289/video/1",
+          "source_status_id": "1233400062618636289",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/NCFedel0iT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1233399526620200965/pu/img/azhmDXk_2gGT0Otm.jpg",
+          "id_str": "1233399526620200965",
+          "source_user_id": "1113487444509220864",
+          "id": "1233399526620200965",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1233399526620200965/pu/img/azhmDXk_2gGT0Otm.jpg",
+          "source_user_id_str": "1113487444509220864",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1233400062618636289",
+          "display_url": "pic.twitter.com/NCFedel0iT"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "FursuitFriday",
+          "indices": [
+            "32",
+            "46"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1233400310669901824",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1233400310669901824",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 28 14:35:24 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @JtingF: I am now prepared \n\n#FursuitFriday https://t.co/NCFedel0iT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JtingF/status/1233400062618636289/video/1",
+          "source_status_id": "1233400062618636289",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/NCFedel0iT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1233399526620200965/pu/img/azhmDXk_2gGT0Otm.jpg",
+          "id_str": "1233399526620200965",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "16933",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233399526620200965/pu/vid/640x360/waTZTkszcef5hMzC.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233399526620200965/pu/vid/480x270/0BM8i6BFTGnVYpL4.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1233399526620200965/pu/pl/eCzHEZgPvcTNcxP1.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1233399526620200965/pu/vid/1280x720/rcsTkbd9j8vFsrLr.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1113487444509220864",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1233399526620200965",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1233399526620200965/pu/img/azhmDXk_2gGT0Otm.jpg",
+          "source_user_id_str": "1113487444509220864",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1233400062618636289",
+          "display_url": "pic.twitter.com/NCFedel0iT"
+        }
+      ]
+    }
+  }
+}

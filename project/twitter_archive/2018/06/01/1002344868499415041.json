@@ -1,0 +1,173 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1002344868499415041"
+        ],
+        "editableUntil": "2018-06-01T01:23:33.974Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Brian",
+          "screen_name": "Protodude",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "30694969",
+          "id": "30694969"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Protodude/status/1002284423742664704/photo/1",
+          "source_status_id": "1002284423742664704",
+          "indices": [
+            "106",
+            "129"
+          ],
+          "url": "https://t.co/klTJgSPrgv",
+          "media_url": "http://pbs.twimg.com/media/DejUTRRV4AA7PIH.jpg",
+          "id_str": "1002284344608677888",
+          "source_user_id": "30694969",
+          "id": "1002284344608677888",
+          "media_url_https": "https://pbs.twimg.com/media/DejUTRRV4AA7PIH.jpg",
+          "source_user_id_str": "30694969",
+          "sizes": {
+            "small": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1002284423742664704",
+          "display_url": "pic.twitter.com/klTJgSPrgv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "129"
+    ],
+    "favorite_count": "0",
+    "id_str": "1002344868499415041",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1002344868499415041",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 01 00:23:33 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Protodude: Someone just dumped a Pokemon SILVER beta. Different border than the '97 Gold version too. https://t.co/klTJgSPrgv",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Protodude/status/1002284423742664704/photo/1",
+          "source_status_id": "1002284423742664704",
+          "indices": [
+            "106",
+            "129"
+          ],
+          "url": "https://t.co/klTJgSPrgv",
+          "media_url": "http://pbs.twimg.com/media/DejUTRRV4AA7PIH.jpg",
+          "id_str": "1002284344608677888",
+          "source_user_id": "30694969",
+          "id": "1002284344608677888",
+          "media_url_https": "https://pbs.twimg.com/media/DejUTRRV4AA7PIH.jpg",
+          "source_user_id_str": "30694969",
+          "sizes": {
+            "small": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "514",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1002284423742664704",
+          "display_url": "pic.twitter.com/klTJgSPrgv"
+        },
+        {
+          "expanded_url": "https://twitter.com/Protodude/status/1002284423742664704/photo/1",
+          "source_status_id": "1002284423742664704",
+          "indices": [
+            "106",
+            "129"
+          ],
+          "url": "https://t.co/klTJgSPrgv",
+          "media_url": "http://pbs.twimg.com/media/DejUXEiVwAUiJ9_.jpg",
+          "id_str": "1002284409909788677",
+          "source_user_id": "30694969",
+          "id": "1002284409909788677",
+          "media_url_https": "https://pbs.twimg.com/media/DejUXEiVwAUiJ9_.jpg",
+          "source_user_id_str": "30694969",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "149",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1197",
+              "h": "263",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1197",
+              "h": "263",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1002284423742664704",
+          "display_url": "pic.twitter.com/klTJgSPrgv"
+        }
+      ]
+    }
+  }
+}

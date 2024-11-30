@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1050111136325128199"
+        ],
+        "editableUntil": "2018-10-10T20:49:39.678Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "かおるこ",
+          "screen_name": "tojimarumini",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "2923496268",
+          "id": "2923496268"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tojimarumini/status/1049520758966214656/video/1",
+          "source_status_id": "1049520758966214656",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/Y5ocScY8zW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1049520734886719489/pu/img/CRpr6guhEWZmOFPb.jpg",
+          "id_str": "1049520734886719489",
+          "source_user_id": "2923496268",
+          "id": "1049520734886719489",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1049520734886719489/pu/img/CRpr6guhEWZmOFPb.jpg",
+          "source_user_id_str": "2923496268",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1049520758966214656",
+          "display_url": "pic.twitter.com/Y5ocScY8zW"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "とまみ",
+          "indices": [
+            "31",
+            "35"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "59"
+    ],
+    "favorite_count": "0",
+    "id_str": "1050111136325128199",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1050111136325128199",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 10 19:49:39 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @tojimarumini: トマチャンキターーーーー\n#とまみ https://t.co/Y5ocScY8zW",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tojimarumini/status/1049520758966214656/video/1",
+          "source_status_id": "1049520758966214656",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/Y5ocScY8zW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1049520734886719489/pu/img/CRpr6guhEWZmOFPb.jpg",
+          "id_str": "1049520734886719489",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "4803",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1049520734886719489/pu/pl/33jyPop6H4ylL4U_.m3u8?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049520734886719489/pu/vid/240x240/eyAeSyFck40k3MuH.mp4?tag=5"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049520734886719489/pu/vid/640x640/hxGwTUYVo7CH3-mA.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049520734886719489/pu/vid/480x480/ekVkMrfVVgVPDhL5.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "2923496268",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1049520734886719489",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1049520734886719489/pu/img/CRpr6guhEWZmOFPb.jpg",
+          "source_user_id_str": "2923496268",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1049520758966214656",
+          "display_url": "pic.twitter.com/Y5ocScY8zW"
+        }
+      ]
+    }
+  }
+}

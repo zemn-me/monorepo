@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1274620443996061696"
+        ],
+        "editableUntil": "2020-06-21T09:29:29.808Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "berserksouls",
+          "screen_name": "berserksouls",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1161840058820939777",
+          "id": "1161840058820939777"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/berserksouls/status/1274456337737494538/video/1",
+          "source_status_id": "1274456337737494538",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/LGNQIpSMYU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1274456311762206720/pu/img/5quMiuwJ5DebUYEP.jpg",
+          "id_str": "1274456311762206720",
+          "source_user_id": "1161840058820939777",
+          "id": "1274456311762206720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1274456311762206720/pu/img/5quMiuwJ5DebUYEP.jpg",
+          "source_user_id_str": "1161840058820939777",
+          "sizes": {
+            "small": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1274456337737494538",
+          "display_url": "pic.twitter.com/LGNQIpSMYU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "1274620443996061696",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1274620443996061696",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jun 21 08:29:29 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @berserksouls: https://t.co/LGNQIpSMYU",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/berserksouls/status/1274456337737494538/video/1",
+          "source_status_id": "1274456337737494538",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/LGNQIpSMYU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1274456311762206720/pu/img/5quMiuwJ5DebUYEP.jpg",
+          "id_str": "1274456311762206720",
+          "video_info": {
+            "aspect_ratio": [
+              "200",
+              "183"
+            ],
+            "duration_millis": "7000",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1274456311762206720/pu/vid/400x366/NR8Cv8OAt9ZK0L1F.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1274456311762206720/pu/pl/NQOL5Xx9-ie1jH7G.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1274456311762206720/pu/vid/294x270/8lUSbWBKxVldtLZc.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1161840058820939777",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1274456311762206720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1274456311762206720/pu/img/5quMiuwJ5DebUYEP.jpg",
+          "source_user_id_str": "1161840058820939777",
+          "sizes": {
+            "small": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "400",
+              "h": "366",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1274456337737494538",
+          "display_url": "pic.twitter.com/LGNQIpSMYU"
+        }
+      ]
+    }
+  }
+}

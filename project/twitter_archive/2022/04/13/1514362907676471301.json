@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1514362907676471301"
+        ],
+        "editableUntil": "2022-04-13T23:00:27.349Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "keith kurson is not here",
+          "screen_name": "keithkurson",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "3285511",
+          "id": "3285511"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "291"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1514362582890475525",
+    "id_str": "1514362907676471301",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1514362907676471301",
+    "in_reply_to_status_id": "1514362582890475525",
+    "created_at": "Wed Apr 13 22:00:27 +0000 2022",
+    "favorited": false,
+    "full_text": "@keithkurson I instrumented a docker thing for a project that generated some files by running steam, and it was a pain in the ass because all the files would be not deletable because docker would write all the files with  owner as the docker container user... which didnt exist on the parent",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

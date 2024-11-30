@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1609588908677033987"
+        ],
+        "editableUntil": "2023-01-01T17:04:35.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "264"
+    ],
+    "favorite_count": "1",
+    "id_str": "1609588908677033987",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1609588908677033987",
+    "created_at": "Sun Jan 01 16:34:35 +0000 2023",
+    "favorited": false,
+    "full_text": "i think its uber weird how in javascript Array is iterable any number of times with the same result, but generators based on the same are arbitrarily not. it would make sense if Generator was an Iterator, but its madness to me that Iterables should be one time use",
+    "lang": "en"
+  }
+}

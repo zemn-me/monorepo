@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1633596059854475266"
+        ],
+        "editableUntil": "2023-03-08T23:00:26.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Damian Strobel",
+          "screen_name": "damian_89_",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "130916279",
+          "id": "130916279"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "157"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1633438831390146562",
+    "id_str": "1633596059854475266",
+    "in_reply_to_user_id": "130916279",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1633596059854475266",
+    "in_reply_to_status_id": "1633438831390146562",
+    "created_at": "Wed Mar 08 22:30:26 +0000 2023",
+    "favorited": false,
+    "full_text": "@damian_89_ i am fairly sure this is an off-by-n error related to not escaping ‘.’ in a regex. assumedly they had this issue before and messed up patching it",
+    "lang": "en",
+    "in_reply_to_screen_name": "damian_89_",
+    "in_reply_to_user_id_str": "130916279"
+  }
+}

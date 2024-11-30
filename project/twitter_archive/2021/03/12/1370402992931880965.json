@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1370402992931880965"
+        ],
+        "editableUntil": "2021-03-12T16:55:09.028Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1370402992931880965/photo/1",
+          "indices": [
+            "209",
+            "232"
+          ],
+          "url": "https://t.co/zKyLId668G",
+          "media_url": "http://pbs.twimg.com/media/EwSl79LWgAIpZ1E.png",
+          "id_str": "1370402636080513026",
+          "id": "1370402636080513026",
+          "media_url_https": "https://pbs.twimg.com/media/EwSl79LWgAIpZ1E.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "342",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "787",
+              "h": "396",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "787",
+              "h": "396",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zKyLId668G"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "232"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1370401151909302284",
+    "id_str": "1370402992931880965",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1370402992931880965",
+    "in_reply_to_status_id": "1370401151909302284",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 12 15:55:09 +0000 2021",
+    "favorited": false,
+    "full_text": "Okay, it seems like maybe in some cases you are allowed to say &amp;'a mut T (\"a T that is mutable and lives as long as 'a\") without explicitly making it a dynamic reference? I am not sure at all why, though. https://t.co/zKyLId668G",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1370402992931880965/photo/1",
+          "indices": [
+            "209",
+            "232"
+          ],
+          "url": "https://t.co/zKyLId668G",
+          "media_url": "http://pbs.twimg.com/media/EwSl79LWgAIpZ1E.png",
+          "id_str": "1370402636080513026",
+          "id": "1370402636080513026",
+          "media_url_https": "https://pbs.twimg.com/media/EwSl79LWgAIpZ1E.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "342",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "787",
+              "h": "396",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "787",
+              "h": "396",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zKyLId668G"
+        }
+      ]
+    }
+  }
+}

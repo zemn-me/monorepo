@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1105526342018392065"
+        ],
+        "editableUntil": "2019-03-12T18:49:54.280Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "PTSDGuts",
+          "screen_name": "PTSDGuts",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "4800070219",
+          "id": "4800070219"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PTSDGuts/status/1105521199163924480/video/1",
+          "source_status_id": "1105521199163924480",
+          "indices": [
+            "14",
+            "37"
+          ],
+          "url": "https://t.co/hXIyIUXu0Q",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1105520505879113728/pu/img/DGz-bBqc-OtYNUgh.jpg",
+          "id_str": "1105520505879113728",
+          "source_user_id": "4800070219",
+          "id": "1105520505879113728",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1105520505879113728/pu/img/DGz-bBqc-OtYNUgh.jpg",
+          "source_user_id_str": "4800070219",
+          "sizes": {
+            "small": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1105521199163924480",
+          "display_url": "pic.twitter.com/hXIyIUXu0Q"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "37"
+    ],
+    "favorite_count": "0",
+    "id_str": "1105526342018392065",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1105526342018392065",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 12 17:49:54 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @PTSDGuts: https://t.co/hXIyIUXu0Q",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PTSDGuts/status/1105521199163924480/video/1",
+          "source_status_id": "1105521199163924480",
+          "indices": [
+            "14",
+            "37"
+          ],
+          "url": "https://t.co/hXIyIUXu0Q",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1105520505879113728/pu/img/DGz-bBqc-OtYNUgh.jpg",
+          "id_str": "1105520505879113728",
+          "video_info": {
+            "aspect_ratio": [
+              "13",
+              "10"
+            ],
+            "duration_millis": "12200",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1105520505879113728/pu/pl/nv-LjCRVG6CFP4fF.m3u8?tag=8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1105520505879113728/pu/vid/234x180/uCkmeJjYvlFhsawG.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1105520505879113728/pu/vid/468x360/jB5B-FEZHe3i9G6h.mp4?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1105520505879113728/pu/vid/624x480/R2umnsLg7jkAyvnG.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "4800070219",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1105520505879113728",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1105520505879113728/pu/img/DGz-bBqc-OtYNUgh.jpg",
+          "source_user_id_str": "4800070219",
+          "sizes": {
+            "small": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "624",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1105521199163924480",
+          "display_url": "pic.twitter.com/hXIyIUXu0Q"
+        }
+      ]
+    }
+  }
+}

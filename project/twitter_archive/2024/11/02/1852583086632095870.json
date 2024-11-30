@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1852583086632095870"
+        ],
+        "editableUntil": "2024-11-02T06:26:41.839Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "yan",
+          "screen_name": "bcrypt",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "968881477",
+          "id": "968881477"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1852583086632095870",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1852583086632095870",
+    "created_at": "Sat Nov 02 05:26:41 +0000 2024",
+    "favorited": false,
+    "full_text": "RT @bcrypt: reminder that the bcrypt hash function ignores input above a certain length! so if you do bcrypt(username || password) for some…",
+    "lang": "en"
+  }
+}

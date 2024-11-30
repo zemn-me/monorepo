@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "595477719661596672"
+        ],
+        "editableUntil": "2015-05-05T07:38:46.465Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Sergey Bobrov",
+          "screen_name": "Black2Fan",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "178619771",
+          "id": "178619771"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/gYzkJQrCE8",
+          "expanded_url": "https://hackerone.com/reports/14883",
+          "display_url": "hackerone.com/reports/14883",
+          "indices": [
+            "68",
+            "91"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "91"
+    ],
+    "favorite_count": "0",
+    "id_str": "595477719661596672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "595477719661596672",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 05 06:38:46 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @Black2Fan: Twitter CSRF Protection Bypass via Google Analytics \nhttps://t.co/gYzkJQrCE8",
+    "lang": "en"
+  }
+}

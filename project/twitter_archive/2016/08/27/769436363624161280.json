@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "769436363624161280"
+        ],
+        "editableUntil": "2016-08-27T08:28:19.181Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "rachel",
+          "screen_name": "ohhoe",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "2141321",
+          "id": "2141321"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ohhoe/status/749684688772599809/video/1",
+          "source_status_id": "749684688772599809",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/zR9N9ziNpX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/749684628512989188/pu/img/0vjYkvn858S2vtUm.jpg",
+          "id_str": "749684628512989188",
+          "source_user_id": "2141321",
+          "id": "749684628512989188",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/749684628512989188/pu/img/0vjYkvn858S2vtUm.jpg",
+          "source_user_id_str": "2141321",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "749684688772599809",
+          "display_url": "pic.twitter.com/zR9N9ziNpX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "89"
+    ],
+    "favorite_count": "0",
+    "id_str": "769436363624161280",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "769436363624161280",
+    "possibly_sensitive": false,
+    "created_at": "Sat Aug 27 07:28:19 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @ohhoe: The machine revolution has begun and it loves pop punk https://t.co/zR9N9ziNpX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ohhoe/status/749684688772599809/video/1",
+          "source_status_id": "749684688772599809",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/zR9N9ziNpX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/749684628512989188/pu/img/0vjYkvn858S2vtUm.jpg",
+          "id_str": "749684628512989188",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "22815",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/749684628512989188/pu/vid/640x360/_l-ICID4d-4CWzIR.mp4"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/749684628512989188/pu/vid/320x180/GR4BdPSZ0zzGdlLe.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/749684628512989188/pu/pl/INQ496mf8wjeJvoE.m3u8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/749684628512989188/pu/vid/1280x720/JbqSYydQTbwn49sd.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2141321",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "749684628512989188",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/749684628512989188/pu/img/0vjYkvn858S2vtUm.jpg",
+          "source_user_id_str": "2141321",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "749684688772599809",
+          "display_url": "pic.twitter.com/zR9N9ziNpX"
+        }
+      ]
+    }
+  }
+}

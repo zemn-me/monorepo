@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1516202959649996801"
+        ],
+        "editableUntil": "2022-04-19T00:22:09.926Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jueg01",
+          "screen_name": "Jueg01",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "865219980",
+          "id": "865219980"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "288"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1516202259104899075",
+    "id_str": "1516202959649996801",
+    "in_reply_to_user_id": "865219980",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1516202959649996801",
+    "in_reply_to_status_id": "1516202259104899075",
+    "created_at": "Mon Apr 18 23:52:09 +0000 2022",
+    "favorited": false,
+    "full_text": "@Jueg01 it's almost certainly to do with the service architecture of the game. separation of components into services is generally (with google / apple being possible exceptions due to their unique tech stacks) is a common way to manage scaling, throughput and uptime along org boundaries",
+    "lang": "en",
+    "in_reply_to_screen_name": "Jueg01",
+    "in_reply_to_user_id_str": "865219980"
+  }
+}

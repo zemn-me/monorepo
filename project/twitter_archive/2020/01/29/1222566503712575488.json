@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1222566503712575488"
+        ],
+        "editableUntil": "2020-01-29T18:05:43.329Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Can You Pet the Dog?",
+          "screen_name": "CanYouPetTheDog",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1102974090581864448",
+          "id": "1102974090581864448"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CanYouPetTheDog/status/1222525097057161216/video/1",
+          "source_status_id": "1222525097057161216",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/q8cMeE6CX7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222524973924876288/pu/img/fNKXWWjDaAynWIff.jpg",
+          "id_str": "1222524973924876288",
+          "source_user_id": "1102974090581864448",
+          "id": "1222524973924876288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222524973924876288/pu/img/fNKXWWjDaAynWIff.jpg",
+          "source_user_id_str": "1102974090581864448",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1222525097057161216",
+          "display_url": "pic.twitter.com/q8cMeE6CX7"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "107"
+    ],
+    "favorite_count": "0",
+    "id_str": "1222566503712575488",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1222566503712575488",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 29 17:05:43 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @CanYouPetTheDog: Following an update, you can now pet the dog in Dwarf Fortress https://t.co/q8cMeE6CX7",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CanYouPetTheDog/status/1222525097057161216/video/1",
+          "source_status_id": "1222525097057161216",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/q8cMeE6CX7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222524973924876288/pu/img/fNKXWWjDaAynWIff.jpg",
+          "id_str": "1222524973924876288",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "8486",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1222524973924876288/pu/pl/C1jHyedrzJWnw1FW.m3u8?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222524973924876288/pu/vid/320x320/791ZzqQ1G_FzCso1.mp4?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222524973924876288/pu/vid/640x640/UdCO5wBCdPeHQOmO.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222524973924876288/pu/vid/480x480/cDP0UCP0w5CTiWcB.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1102974090581864448",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1222524973924876288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222524973924876288/pu/img/fNKXWWjDaAynWIff.jpg",
+          "source_user_id_str": "1102974090581864448",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1222525097057161216",
+          "display_url": "pic.twitter.com/q8cMeE6CX7"
+        }
+      ]
+    }
+  }
+}

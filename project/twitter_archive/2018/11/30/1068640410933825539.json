@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1068640410933825539"
+        ],
+        "editableUntil": "2018-11-30T23:58:23.002Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Reuters",
+          "screen_name": "Reuters",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "1652541",
+          "id": "1652541"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reuters/status/1068639309144580096/video/1",
+          "source_status_id": "1068639309144580096",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/13WNUgVNWY",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1067760374060015616/img/bGnP2r3PwH7qk55w.jpg",
+          "id_str": "1067760374060015616",
+          "source_user_id": "1652541",
+          "id": "1067760374060015616",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1067760374060015616/img/bGnP2r3PwH7qk55w.jpg",
+          "source_user_id_str": "1652541",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1068639309144580096",
+          "display_url": "pic.twitter.com/13WNUgVNWY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "0",
+    "id_str": "1068640410933825539",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1068640410933825539",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 30 22:58:23 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Reuters: Standing at over six feet tall, ‘Knickers’ is thought to be the biggest cow in Australia. https://t.co/13WNUgVNWY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reuters/status/1068639309144580096/video/1",
+          "source_status_id": "1068639309144580096",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/13WNUgVNWY",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1067760374060015616/img/bGnP2r3PwH7qk55w.jpg",
+          "id_str": "1067760374060015616",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "43300",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067760374060015616/vid/640x360/HnnphFi7-J3VFo_o.mp4?tag=8"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067760374060015616/vid/320x180/c7f19ANBRpQ4f5ao.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1067760374060015616/pl/AoCYzEeEMIPORCEk.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067760374060015616/vid/1280x720/kOkMxroVBVsd0lrA.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "1652541",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": true
+          },
+          "id": "1067760374060015616",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1067760374060015616/img/bGnP2r3PwH7qk55w.jpg",
+          "source_user_id_str": "1652541",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1068639309144580096",
+          "display_url": "pic.twitter.com/13WNUgVNWY"
+        }
+      ]
+    }
+  }
+}

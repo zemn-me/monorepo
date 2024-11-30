@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "499403121836429312"
+        ],
+        "editableUntil": "2014-08-13T04:52:37.364Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "1",
+    "id_str": "499403121836429312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "499403121836429312",
+    "created_at": "Wed Aug 13 03:52:37 +0000 2014",
+    "favorited": false,
+    "full_text": "So the azure marketplace API for some reason finds the need to quote URL params. {k:\"1\"} → k=%271%27. {k:\"'1'\"}? k=%27''1''%27. Serious.",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "963933790333820929"
+        ],
+        "editableUntil": "2018-02-15T01:31:39.296Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Bodega Cats",
+          "screen_name": "Bodegacats_",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2783025822",
+          "id": "2783025822"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Bodegacats_/status/963933683630727169/video/1",
+          "source_status_id": "963933683630727169",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/vngdjupc0s",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/963933641880453120/pu/img/pHwwZ9pnGOf45yTH.jpg",
+          "id_str": "963933641880453120",
+          "source_user_id": "2783025822",
+          "id": "963933641880453120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/963933641880453120/pu/img/pHwwZ9pnGOf45yTH.jpg",
+          "source_user_id_str": "2783025822",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "963933683630727169",
+          "display_url": "pic.twitter.com/vngdjupc0s"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "60"
+    ],
+    "favorite_count": "0",
+    "id_str": "963933790333820929",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "963933790333820929",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 15 00:31:39 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Bodegacats_: 📷: Brandon Thompson https://t.co/vngdjupc0s",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Bodegacats_/status/963933683630727169/video/1",
+          "source_status_id": "963933683630727169",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/vngdjupc0s",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/963933641880453120/pu/img/pHwwZ9pnGOf45yTH.jpg",
+          "id_str": "963933641880453120",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "7967",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/963933641880453120/pu/vid/480x480/RL7tdVzLymg6VfCs.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/963933641880453120/pu/vid/240x240/tAdf1PdNgDz-MOeg.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/963933641880453120/pu/pl/UNyzeheXkpl2Rbk5.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "2783025822",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "963933641880453120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/963933641880453120/pu/img/pHwwZ9pnGOf45yTH.jpg",
+          "source_user_id_str": "2783025822",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "963933683630727169",
+          "display_url": "pic.twitter.com/vngdjupc0s"
+        }
+      ]
+    }
+  }
+}
