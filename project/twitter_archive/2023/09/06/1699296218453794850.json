@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1699296218453794850"
+        ],
+        "editableUntil": "2023-09-06T06:39:24.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "pspaul",
+          "screen_name": "pspaul95",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "842481287780884482",
+          "id": "842481287780884482"
+        },
+        {
+          "name": "Ashley Shen",
+          "screen_name": "ashl3y_shen",
+          "indices": [
+            "10",
+            "22"
+          ],
+          "id_str": "517687298",
+          "id": "517687298"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "146"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1699134847413842429",
+    "id_str": "1699296218453794850",
+    "in_reply_to_user_id": "842481287780884482",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1699296218453794850",
+    "in_reply_to_status_id": "1699134847413842429",
+    "created_at": "Wed Sep 06 05:39:24 +0000 2023",
+    "favorited": false,
+    "full_text": "@pspaul95 @ashl3y_shen this is a really nice vuln! am I right in understanding that Proton Mail uses allow-same-origin with a blob: or data: url??",
+    "lang": "en",
+    "in_reply_to_screen_name": "pspaul95",
+    "in_reply_to_user_id_str": "842481287780884482"
+  }
+}

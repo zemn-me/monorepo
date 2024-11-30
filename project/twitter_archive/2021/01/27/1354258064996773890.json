@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1354258064996773890"
+        ],
+        "editableUntil": "2021-01-27T03:40:58.250Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "shindigs",
+          "screen_name": "shindags",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "67275584",
+          "id": "67275584"
+        }
+      ],
+      "urls": [],
+      "symbols": [
+        {
+          "text": "GME",
+          "indices": [
+            "14",
+            "18"
+          ]
+        }
+      ],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/shindags/status/1354237961454317568/video/1",
+          "source_status_id": "1354237961454317568",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/ZYkitmnHdB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1354237380706717699/pu/img/RakE7Jl-0lRa63qj.jpg",
+          "id_str": "1354237380706717699",
+          "source_user_id": "67275584",
+          "id": "1354237380706717699",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1354237380706717699/pu/img/RakE7Jl-0lRa63qj.jpg",
+          "source_user_id_str": "67275584",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1354237961454317568",
+          "display_url": "pic.twitter.com/ZYkitmnHdB"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1354258064996773890",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1354258064996773890",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 27 02:40:58 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @shindags: $GME vtuber with an important message https://t.co/ZYkitmnHdB",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/shindags/status/1354237961454317568/video/1",
+          "source_status_id": "1354237961454317568",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/ZYkitmnHdB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1354237380706717699/pu/img/RakE7Jl-0lRa63qj.jpg",
+          "id_str": "1354237380706717699",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "46400",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354237380706717699/pu/vid/480x270/jeS_T4MPM7ssIHDc.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1354237380706717699/pu/pl/SAzRLF_dL2oxarci.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354237380706717699/pu/vid/1280x720/jKIFhxEGUNhQtwoe.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1354237380706717699/pu/vid/640x360/MTyjAHNNR5cFoKkO.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "67275584",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1354237380706717699",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1354237380706717699/pu/img/RakE7Jl-0lRa63qj.jpg",
+          "source_user_id_str": "67275584",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1354237961454317568",
+          "display_url": "pic.twitter.com/ZYkitmnHdB"
+        }
+      ]
+    }
+  }
+}

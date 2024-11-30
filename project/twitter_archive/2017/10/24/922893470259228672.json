@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "922893470259228672"
+        ],
+        "editableUntil": "2017-10-24T19:32:04.498Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Louis Dion-Marcil",
+          "screen_name": "ldionmarcil",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "322291637",
+          "id": "322291637"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "922893470259228672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "922893470259228672",
+    "created_at": "Tue Oct 24 18:32:04 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @ldionmarcil: Stored XSS quick-win: IIS serves .stm files as text/html. Most file uploads features will blacklist asp(x), s/htm(l), etc.…",
+    "lang": "en"
+  }
+}

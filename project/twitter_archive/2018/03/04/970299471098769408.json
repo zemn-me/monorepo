@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "970299471098769408"
+        ],
+        "editableUntil": "2018-03-04T15:06:35.859Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ヤマアラシ",
+          "screen_name": "sinicca343",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "2161443504",
+          "id": "2161443504"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sinicca343/status/969869169599512581/video/1",
+          "source_status_id": "969869169599512581",
+          "indices": [
+            "38",
+            "61"
+          ],
+          "url": "https://t.co/GHwQUNtRYf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/969868823284166656/pu/img/3he8DXwUoTbf8ELf.jpg",
+          "id_str": "969868823284166656",
+          "source_user_id": "2161443504",
+          "id": "969868823284166656",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/969868823284166656/pu/img/3he8DXwUoTbf8ELf.jpg",
+          "source_user_id_str": "2161443504",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "969869169599512581",
+          "display_url": "pic.twitter.com/GHwQUNtRYf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "61"
+    ],
+    "favorite_count": "0",
+    "id_str": "970299471098769408",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "970299471098769408",
+    "possibly_sensitive": false,
+    "created_at": "Sun Mar 04 14:06:35 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @sinicca343: ゴマちゃん、\nそれどういう感情なの？(笑) https://t.co/GHwQUNtRYf",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sinicca343/status/969869169599512581/video/1",
+          "source_status_id": "969869169599512581",
+          "indices": [
+            "38",
+            "61"
+          ],
+          "url": "https://t.co/GHwQUNtRYf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/969868823284166656/pu/img/3he8DXwUoTbf8ELf.jpg",
+          "id_str": "969868823284166656",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "44987",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/969868823284166656/pu/vid/640x360/rigb0vtoTVZQw0BY.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/969868823284166656/pu/vid/1280x720/uxYNMeBwsYZvT1CI.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/969868823284166656/pu/pl/6EBua1_amKSBCcmO.m3u8?v=8ab"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/969868823284166656/pu/vid/320x180/Dfzy7WFSdDT53QX_.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2161443504",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "969868823284166656",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/969868823284166656/pu/img/3he8DXwUoTbf8ELf.jpg",
+          "source_user_id_str": "2161443504",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "969869169599512581",
+          "display_url": "pic.twitter.com/GHwQUNtRYf"
+        }
+      ]
+    }
+  }
+}

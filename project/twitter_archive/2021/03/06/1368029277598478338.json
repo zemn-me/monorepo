@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1368029277598478338"
+        ],
+        "editableUntil": "2021-03-06T03:42:51.191Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "232"
+    ],
+    "favorite_count": "1",
+    "id_str": "1368029277598478338",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1368029277598478338",
+    "created_at": "Sat Mar 06 02:42:51 +0000 2021",
+    "favorited": false,
+    "full_text": "alright rust, so:\n\ntrait WriterTo { fn write_to(&amp;self, w: &amp;mut dyn io::Write) -&gt; Result&lt;u64, Box&lt;dyn Error&gt;&gt; }\n\nthen how\n\ntrait&lt;T&gt; TryFrom&lt;T&gt; for Vec&lt;u8&gt; where T: WriterTo { ... }\n\nnot work??",
+    "lang": "en"
+  }
+}

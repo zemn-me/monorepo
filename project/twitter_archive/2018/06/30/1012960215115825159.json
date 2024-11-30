@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1012960215115825159"
+        ],
+        "editableUntil": "2018-06-30T08:25:09.831Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "toasty",
+          "screen_name": "suckmytoast",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2408861442",
+          "id": "2408861442"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/suckmytoast/status/1012355384449921024/video/1",
+          "source_status_id": "1012355384449921024",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/NbEShy8gW2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1012355235962970113/pu/img/v2yVysF4mkkYmC4H.jpg",
+          "id_str": "1012355235962970113",
+          "source_user_id": "2408861442",
+          "id": "1012355235962970113",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1012355235962970113/pu/img/v2yVysF4mkkYmC4H.jpg",
+          "source_user_id_str": "2408861442",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1012355384449921024",
+          "display_url": "pic.twitter.com/NbEShy8gW2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1012960215115825159",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1012960215115825159",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 30 07:25:09 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @suckmytoast: overwatch players when hammond hits the ptr https://t.co/NbEShy8gW2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/suckmytoast/status/1012355384449921024/video/1",
+          "source_status_id": "1012355384449921024",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/NbEShy8gW2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1012355235962970113/pu/img/v2yVysF4mkkYmC4H.jpg",
+          "id_str": "1012355235962970113",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "37437",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1012355235962970113/pu/vid/320x180/t_LzrejHiHRS4Q_n.mp4?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1012355235962970113/pu/vid/640x360/BSxQ_V2sp1ku1Cvx.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1012355235962970113/pu/pl/AjUu6FKqCC3yOc7B.m3u8?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "2408861442",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1012355235962970113",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1012355235962970113/pu/img/v2yVysF4mkkYmC4H.jpg",
+          "source_user_id_str": "2408861442",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1012355384449921024",
+          "display_url": "pic.twitter.com/NbEShy8gW2"
+        }
+      ]
+    }
+  }
+}

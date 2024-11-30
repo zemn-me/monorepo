@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1271838492662861831"
+        ],
+        "editableUntil": "2020-06-13T17:15:00.924Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/nPKXkpVaDu",
+          "expanded_url": "https://www.staging-typescript.org/docs/handbook/mixins.html",
+          "display_url": "staging-typescript.org/docs/handbook/…",
+          "indices": [
+            "74",
+            "97"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1271838492662861831/photo/1",
+          "indices": [
+            "98",
+            "121"
+          ],
+          "url": "https://t.co/iQ4aF5zelk",
+          "media_url": "http://pbs.twimg.com/media/EaZ6WgaWAAITHnS.png",
+          "id_str": "1271838471854882818",
+          "id": "1271838471854882818",
+          "media_url_https": "https://pbs.twimg.com/media/EaZ6WgaWAAITHnS.png",
+          "sizes": {
+            "medium": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/iQ4aF5zelk"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "121"
+    ],
+    "favorite_count": "1",
+    "id_str": "1271838492662861831",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1271838492662861831",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 13 16:15:00 +0000 2020",
+    "favorited": false,
+    "full_text": "kind of taken aback by the canonical way to do class mixins in typescript https://t.co/nPKXkpVaDu https://t.co/iQ4aF5zelk",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1271838492662861831/photo/1",
+          "indices": [
+            "98",
+            "121"
+          ],
+          "url": "https://t.co/iQ4aF5zelk",
+          "media_url": "http://pbs.twimg.com/media/EaZ6WgaWAAITHnS.png",
+          "id_str": "1271838471854882818",
+          "id": "1271838471854882818",
+          "media_url_https": "https://pbs.twimg.com/media/EaZ6WgaWAAITHnS.png",
+          "sizes": {
+            "medium": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "670",
+              "h": "265",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/iQ4aF5zelk"
+        }
+      ]
+    }
+  }
+}

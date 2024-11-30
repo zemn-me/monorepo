@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1195510052934889473"
+        ],
+        "editableUntil": "2019-11-16T02:13:02.779Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "めーちっさい",
+          "screen_name": "meetissai",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3224103708",
+          "id": "3224103708"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/meetissai/status/1195507753751478273/video/1",
+          "source_status_id": "1195507753751478273",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/zSxszk5qt1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1195507659010498560/pu/img/PfQ-N194pQ3fp0Jv.jpg",
+          "id_str": "1195507659010498560",
+          "source_user_id": "3224103708",
+          "id": "1195507659010498560",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1195507659010498560/pu/img/PfQ-N194pQ3fp0Jv.jpg",
+          "source_user_id_str": "3224103708",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1195507753751478273",
+          "display_url": "pic.twitter.com/zSxszk5qt1"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "1195510052934889473",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1195510052934889473",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 16 01:13:02 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @meetissai: 頂いた画像を参考に触って楽しめるペーパーウェイトを作ってみました。\nおしりの方に錘が入っています。\n\n※動画は無音です https://t.co/zSxszk5qt1",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/meetissai/status/1195507753751478273/video/1",
+          "source_status_id": "1195507753751478273",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/zSxszk5qt1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1195507659010498560/pu/img/PfQ-N194pQ3fp0Jv.jpg",
+          "id_str": "1195507659010498560",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "19787",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1195507659010498560/pu/vid/480x270/SYN-8-W3iTEboVv3.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1195507659010498560/pu/vid/1280x720/L3p4WqW45Jb6AjjZ.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1195507659010498560/pu/vid/640x360/0yI7pEBBsA1NS653.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1195507659010498560/pu/pl/V2F0_Qi_ewfLGoKE.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3224103708",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1195507659010498560",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1195507659010498560/pu/img/PfQ-N194pQ3fp0Jv.jpg",
+          "source_user_id_str": "3224103708",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1195507753751478273",
+          "display_url": "pic.twitter.com/zSxszk5qt1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1003659481253924865"
+        ],
+        "editableUntil": "2018-06-04T16:27:22.079Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "🦈",
+          "screen_name": "Zyboarg",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "4735751483",
+          "id": "4735751483"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "285"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1003658721988358144",
+    "id_str": "1003659481253924865",
+    "in_reply_to_user_id": "4735751483",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1003659481253924865",
+    "in_reply_to_status_id": "1003658721988358144",
+    "created_at": "Mon Jun 04 15:27:22 +0000 2018",
+    "favorited": false,
+    "full_text": "@Zyboarg i'm finding it difficult to imagine a common situation involving operator precedence and multithread synchronisation. if you're calling a function that performs multithread synchronisation as part of its action, there should be no onus on the caller to know of, or maintain it",
+    "lang": "en",
+    "in_reply_to_screen_name": "Zyboarg",
+    "in_reply_to_user_id_str": "4735751483"
+  }
+}

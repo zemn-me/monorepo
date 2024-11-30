@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1080457342167252992"
+        ],
+        "editableUntil": "2019-01-02T14:34:38.956Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Russ Cox",
+          "screen_name": "_rsc",
+          "indices": [
+            "0",
+            "5"
+          ],
+          "id_str": "22455722",
+          "id": "22455722"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/WaJtrD5NTB",
+          "expanded_url": "https://gist.github.com/Zemnmez/414911c7f0d26e3ca0620a8516f0fd22",
+          "display_url": "gist.github.com/Zemnmez/414911…",
+          "indices": [
+            "257",
+            "280"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "0",
+    "id_str": "1080457342167252992",
+    "in_reply_to_user_id": "22455722",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1080457342167252992",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 02 13:34:38 +0000 2019",
+    "favorited": false,
+    "full_text": "@_rsc hi, there's a bug in your QArt Coder javascript where URLs are improperly encoded (encodeURL vs encodeURLComponent) causing characters, including ';' to break the encoding. I'd make a PR but there doesn't seem to be a repo for the static assets. fix: https://t.co/WaJtrD5NTB",
+    "lang": "en",
+    "in_reply_to_screen_name": "_rsc",
+    "in_reply_to_user_id_str": "22455722"
+  }
+}

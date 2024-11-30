@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1463418247932379144"
+        ],
+        "editableUntil": "2021-11-24T09:04:33.960Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "meggy",
+          "screen_name": "dogmatic_shorty",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "433037952",
+          "id": "433037952"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ccccaa13/status/1461253465229991945/video/1",
+          "source_status_id": "1461253465229991945",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/J1muMppW9Z",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1461253413015105539/pu/img/hGuEjK0f3tsY4iNx.jpg",
+          "id_str": "1461253413015105539",
+          "source_user_id": "1238585569103446016",
+          "id": "1461253413015105539",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1461253413015105539/pu/img/hGuEjK0f3tsY4iNx.jpg",
+          "source_user_id_str": "1238585569103446016",
+          "sizes": {
+            "large": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1461253465229991945",
+          "display_url": "pic.twitter.com/J1muMppW9Z"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1463418247932379144",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1463418247932379144",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 24 08:04:33 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @dogmatic_shorty: my cat at 3am in our 400 sqft apartment https://t.co/J1muMppW9Z",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ccccaa13/status/1461253465229991945/video/1",
+          "source_status_id": "1461253465229991945",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/J1muMppW9Z",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1461253413015105539/pu/img/hGuEjK0f3tsY4iNx.jpg",
+          "id_str": "1461253413015105539",
+          "video_info": {
+            "aspect_ratio": [
+              "50",
+              "37"
+            ],
+            "duration_millis": "43700",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1461253413015105539/pu/vid/364x270/PEHbhsdr-BeD2VFb.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1461253413015105539/pu/vid/400x296/omQmxYorIq-acWFl.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1461253413015105539/pu/pl/Zj00ZuRyRVx_M155.m3u8?tag=12&v=d4e"
+              }
+            ]
+          },
+          "source_user_id": "1238585569103446016",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1461253413015105539",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1461253413015105539/pu/img/hGuEjK0f3tsY4iNx.jpg",
+          "source_user_id_str": "1238585569103446016",
+          "sizes": {
+            "large": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "400",
+              "h": "296",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1461253465229991945",
+          "display_url": "pic.twitter.com/J1muMppW9Z"
+        }
+      ]
+    }
+  }
+}

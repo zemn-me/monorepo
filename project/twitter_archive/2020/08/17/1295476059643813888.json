@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1295476059643813888"
+        ],
+        "editableUntil": "2020-08-17T22:42:16.057Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/gkTQel0Hc4",
+          "expanded_url": "https://www.typescriptlang.org/play?#code/C4TwDgpgBAqgdgSwPZwCpIJJ2BATgZwgGNhk4AeGAPigF4oAoKKAChiggA8c4ATfKAEM4IKAH5WAawBcsAJS0qANyQJeUWXAhK8cjtwh8BLFjKgI4AMzxQMC5at56JGDVC07cDb6EhQAyhDAGJYAIhCWFhC85Kg09PBk6Fg4BMSkKOQA3kzMUADaANLmcFCSECBIllCoALqy+QAKCESSsQA0UIU0AD5QWQC+tQwD+eWV1XU0XDz8-VAADLIW1rhQAIpQAxLrmtp43gy8xAA2grjQRCj4wFBgsoHBYRFRMTl5UEhmN7gWAOa5ZhwJCaACuAFsAEYHAZUbwAenhHFwuCQa3wFiI0AA7pdhLc-qDzviIBAGGAAHRfOj0UF8F5aXjkqmSbwIaosABEX05JTueneeSucBuUE4sh+-zodxZAG4oIj3Ps1nTjpFGQBCQFQYX4JAnCAUk5IP4sThyWUjNkc7mSXkWfnmG3A+2lMB6XX6w3G02Ur6dSnAi1AA",
+          "display_url": "typescriptlang.org/play?#code/C4T…",
+          "indices": [
+            "231",
+            "254"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1295476059643813888/photo/1",
+          "indices": [
+            "280",
+            "303"
+          ],
+          "url": "https://t.co/kwIM9uqLOY",
+          "media_url": "http://pbs.twimg.com/media/Efp0Q3tWkAEdoWX.png",
+          "id_str": "1295475676003340289",
+          "id": "1295475676003340289",
+          "media_url_https": "https://pbs.twimg.com/media/Efp0Q3tWkAEdoWX.png",
+          "sizes": {
+            "medium": {
+              "w": "718",
+              "h": "533",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "505",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "718",
+              "h": "533",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kwIM9uqLOY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "303"
+    ],
+    "favorite_count": "9",
+    "id_str": "1295476059643813888",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1295476059643813888",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 17 21:42:16 +0000 2020",
+    "favorited": false,
+    "full_text": "there was a discussion at Google on if it was possible in typescript to make a `declare const k: { v?: string }` where if `\"v\" in k`, always `k.v == undefined` i.e. 'present values are never undefined'. I have managed to do this.\n\nhttps://t.co/gkTQel0Hc4\n\nI apologize to everyone https://t.co/kwIM9uqLOY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1295476059643813888/photo/1",
+          "indices": [
+            "280",
+            "303"
+          ],
+          "url": "https://t.co/kwIM9uqLOY",
+          "media_url": "http://pbs.twimg.com/media/Efp0Q3tWkAEdoWX.png",
+          "id_str": "1295475676003340289",
+          "id": "1295475676003340289",
+          "media_url_https": "https://pbs.twimg.com/media/Efp0Q3tWkAEdoWX.png",
+          "sizes": {
+            "medium": {
+              "w": "718",
+              "h": "533",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "505",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "718",
+              "h": "533",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kwIM9uqLOY"
+        }
+      ]
+    }
+  }
+}

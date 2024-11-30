@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1230843331619545089"
+        ],
+        "editableUntil": "2020-02-21T14:14:52.878Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Everyday.penguin",
+          "screen_name": "jinwoojung81",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1040953537054666753",
+          "id": "1040953537054666753"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jinwoojung81/status/1230842287782916096/video/1",
+          "source_status_id": "1230842287782916096",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/SLwDwIIZCl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1230842144211890176/pu/img/tzHSHBM1nAGy6S69.jpg",
+          "id_str": "1230842144211890176",
+          "source_user_id": "1040953537054666753",
+          "id": "1230842144211890176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1230842144211890176/pu/img/tzHSHBM1nAGy6S69.jpg",
+          "source_user_id_str": "1040953537054666753",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "565",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "720",
+              "h": "598",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "598",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1230842287782916096",
+          "display_url": "pic.twitter.com/SLwDwIIZCl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1230843331619545089",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1230843331619545089",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 21 13:14:52 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @jinwoojung81: 눈오는 날 누워 쉬는 아델리펭귄.\n깃털에 떨어지는 눈송이들. https://t.co/SLwDwIIZCl",
+    "lang": "ko",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jinwoojung81/status/1230842287782916096/video/1",
+          "source_status_id": "1230842287782916096",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/SLwDwIIZCl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1230842144211890176/pu/img/tzHSHBM1nAGy6S69.jpg",
+          "id_str": "1230842144211890176",
+          "video_info": {
+            "aspect_ratio": [
+              "360",
+              "299"
+            ],
+            "duration_millis": "54200",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1230842144211890176/pu/pl/wNcB_r8WPQ6htzbG.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230842144211890176/pu/vid/432x360/vbVs90ARtq4Z1II2.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230842144211890176/pu/vid/720x598/VuBOkJHTjNFaMiP1.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230842144211890176/pu/vid/324x270/WRG7IeRk4wpi5Rol.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1040953537054666753",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1230842144211890176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1230842144211890176/pu/img/tzHSHBM1nAGy6S69.jpg",
+          "source_user_id_str": "1040953537054666753",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "565",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "720",
+              "h": "598",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "598",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1230842287782916096",
+          "display_url": "pic.twitter.com/SLwDwIIZCl"
+        }
+      ]
+    }
+  }
+}

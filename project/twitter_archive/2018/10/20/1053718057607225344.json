@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1053718057607225344"
+        ],
+        "editableUntil": "2018-10-20T19:42:16.725Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "@Nick_Craver@infosec.exchange",
+          "screen_name": "Nick_Craver",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "95030839",
+          "id": "95030839"
+        },
+        {
+          "name": "Joshua Leo Leo",
+          "screen_name": "JoshuaL",
+          "indices": [
+            "13",
+            "21"
+          ],
+          "id_str": "1824937405138264064",
+          "id": "1824937405138264064"
+        },
+        {
+          "name": "Joshua Leo Leo",
+          "screen_name": "JoshuaL",
+          "indices": [
+            "142",
+            "150"
+          ],
+          "id_str": "1824937405138264064",
+          "id": "1824937405138264064"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1053718057607225344/photo/1",
+          "indices": [
+            "302",
+            "325"
+          ],
+          "url": "https://t.co/VTsaq5K6l2",
+          "media_url": "http://pbs.twimg.com/media/Dp-OoVQXgAAjQZ-.jpg",
+          "id_str": "1053717661379690496",
+          "id": "1053717661379690496",
+          "media_url_https": "https://pbs.twimg.com/media/Dp-OoVQXgAAjQZ-.jpg",
+          "sizes": {
+            "large": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/VTsaq5K6l2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "325"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1053345936905252865",
+    "id_str": "1053718057607225344",
+    "in_reply_to_user_id": "95030839",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1053718057607225344",
+    "in_reply_to_status_id": "1053345936905252865",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 20 18:42:16 +0000 2018",
+    "favorited": false,
+    "full_text": "@Nick_Craver @JoshuaL your tweets give the false impression that 'keeping users personal deleted data deleted in backups' is somehow trivial. @joshual and the asker's point are important in the context of EU law, and judging by the UK data commissioner 'dissociated and unidentifiable' doesn't cut it. https://t.co/VTsaq5K6l2",
+    "lang": "en",
+    "in_reply_to_screen_name": "Nick_Craver",
+    "in_reply_to_user_id_str": "95030839",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1053718057607225344/photo/1",
+          "indices": [
+            "302",
+            "325"
+          ],
+          "url": "https://t.co/VTsaq5K6l2",
+          "media_url": "http://pbs.twimg.com/media/Dp-OoVQXgAAjQZ-.jpg",
+          "id_str": "1053717661379690496",
+          "id": "1053717661379690496",
+          "media_url_https": "https://pbs.twimg.com/media/Dp-OoVQXgAAjQZ-.jpg",
+          "sizes": {
+            "large": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "565",
+              "h": "324",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/VTsaq5K6l2"
+        }
+      ]
+    }
+  }
+}

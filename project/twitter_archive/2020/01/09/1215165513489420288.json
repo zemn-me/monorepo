@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215165513489420288"
+        ],
+        "editableUntil": "2020-01-09T07:56:49.756Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dad×2_jack",
+          "screen_name": "Iceland_jack",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "2832623057",
+          "id": "2832623057"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/ZZjgeryMIS",
+          "expanded_url": "https://github.com/Gabriel439/simple-twitter/blob/master/Main.hs",
+          "display_url": "github.com/Gabriel439/sim…",
+          "indices": [
+            "75",
+            "98"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "294"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1215163891325554688",
+    "id_str": "1215165513489420288",
+    "in_reply_to_user_id": "2832623057",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215165513489420288",
+    "in_reply_to_status_id": "1215163891325554688",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 06:56:49 +0000 2020",
+    "favorited": false,
+    "full_text": "@Iceland_jack I got motivated to write my first haskell reading this code: https://t.co/ZZjgeryMIS and that experience gave me a few questions:\n\n1) it looks like there are a lot of optional language features? I am not sure where to begin on thinking about that. Are there features everyone uses",
+    "lang": "en",
+    "in_reply_to_screen_name": "Iceland_jack",
+    "in_reply_to_user_id_str": "2832623057"
+  }
+}

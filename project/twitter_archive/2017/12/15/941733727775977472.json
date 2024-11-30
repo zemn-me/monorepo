@@ -1,0 +1,49 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "941733727775977472"
+        ],
+        "editableUntil": "2017-12-15T19:16:31.925Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mike West",
+          "screen_name": "mikewest",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "63163",
+          "id": "63163"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "157"
+    ],
+    "favorite_count": "0",
+    "id_str": "941733727775977472",
+    "in_reply_to_user_id": "63163",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "941733727775977472",
+    "created_at": "Fri Dec 15 18:16:31 +0000 2017",
+    "favorited": false,
+    "full_text": "@mikewest hey man, does CSP still apply to iframe sandboxes? want to implement CSP but there's issues with ads so we only have child contexts implementing it",
+    "lang": "en",
+    "in_reply_to_screen_name": "mikewest",
+    "in_reply_to_user_id_str": "63163"
+  }
+}

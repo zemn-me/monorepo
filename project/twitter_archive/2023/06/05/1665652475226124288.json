@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1665652475226124288"
+        ],
+        "editableUntil": "2023-06-05T10:01:11.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "258"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1665652473846173696",
+    "id_str": "1665652475226124288",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1665652475226124288",
+    "in_reply_to_status_id": "1665652473846173696",
+    "created_at": "Mon Jun 05 09:31:11 +0000 2023",
+    "favorited": false,
+    "full_text": "if you want to fix this issue, you have to stash, commit or save all your changes, then somehow locate the last working revision in your git tree (since there is no dry run you can't bisect this) and then run this kind of 'clean' deployment before continuing",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

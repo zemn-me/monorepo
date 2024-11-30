@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1371922965474983936"
+        ],
+        "editableUntil": "2021-03-16T21:34:58.722Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/Upo5QsUDT5",
+          "expanded_url": "https://github.com/Agoric/realms-shim/issues/74",
+          "display_url": "github.com/Agoric/realms-…",
+          "indices": [
+            "143",
+            "166"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "210"
+    ],
+    "favorite_count": "1",
+    "id_str": "1371922965474983936",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1371922965474983936",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 16 20:34:58 +0000 2021",
+    "favorited": false,
+    "full_text": "i need to make this into an actual blog post / talk but please dont use code rewriting or Proxies in an attempt to sandbox Javascript. please. https://t.co/Upo5QsUDT5 use &lt;iframe sandbox/&gt; and postMessage",
+    "lang": "en"
+  }
+}

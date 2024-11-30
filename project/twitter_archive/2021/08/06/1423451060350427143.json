@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1423451060350427143"
+        ],
+        "editableUntil": "2021-08-06T02:09:13.886Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Ryan Sleevi",
+          "screen_name": "sleevi_",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "1064741256",
+          "id": "1064741256"
+        },
+        {
+          "name": "Thomas H. Ptacek",
+          "screen_name": "tqbf",
+          "indices": [
+            "9",
+            "14"
+          ],
+          "id_str": "9395312",
+          "id": "9395312"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "260"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1423448332228235264",
+    "id_str": "1423451060350427143",
+    "in_reply_to_user_id": "1064741256",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1423451060350427143",
+    "in_reply_to_status_id": "1423448332228235264",
+    "created_at": "Fri Aug 06 01:09:13 +0000 2021",
+    "favorited": false,
+    "full_text": "@sleevi_ @tqbf so the way I see it is that if you can impersonate the OIDC server and mess with the given keys it doesn't give you much more than only impersonating the OIDC server because the tokens are very short lived and the keys are fairly short lived too",
+    "lang": "en",
+    "in_reply_to_screen_name": "sleevi_",
+    "in_reply_to_user_id_str": "1064741256"
+  }
+}

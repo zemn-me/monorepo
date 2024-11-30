@@ -1,0 +1,141 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1334057393844523009"
+        ],
+        "editableUntil": "2020-12-02T09:50:42.937Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pierre Mortel",
+          "screen_name": "PierreMortel",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "707026298158325760",
+          "id": "707026298158325760"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PierreMortel/status/1333802174812307457/photo/1",
+          "source_status_id": "1333802174812307457",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/q0olRZMlBe",
+          "media_url": "http://pbs.twimg.com/media/EoKd_8TUcAEUrdq.jpg",
+          "id_str": "1333802161499566081",
+          "source_user_id": "707026298158325760",
+          "id": "1333802161499566081",
+          "media_url_https": "https://pbs.twimg.com/media/EoKd_8TUcAEUrdq.jpg",
+          "source_user_id_str": "707026298158325760",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "566",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1000",
+              "h": "833",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1000",
+              "h": "833",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1333802174812307457",
+          "display_url": "pic.twitter.com/q0olRZMlBe"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "quackquack",
+          "indices": [
+            "18",
+            "29"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "53"
+    ],
+    "favorite_count": "0",
+    "id_str": "1334057393844523009",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1334057393844523009",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 02 08:50:42 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @PierreMortel: #quackquack https://t.co/q0olRZMlBe",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PierreMortel/status/1333802174812307457/photo/1",
+          "source_status_id": "1333802174812307457",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/q0olRZMlBe",
+          "media_url": "http://pbs.twimg.com/media/EoKd_8TUcAEUrdq.jpg",
+          "id_str": "1333802161499566081",
+          "source_user_id": "707026298158325760",
+          "id": "1333802161499566081",
+          "media_url_https": "https://pbs.twimg.com/media/EoKd_8TUcAEUrdq.jpg",
+          "source_user_id_str": "707026298158325760",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "566",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1000",
+              "h": "833",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1000",
+              "h": "833",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1333802174812307457",
+          "display_url": "pic.twitter.com/q0olRZMlBe"
+        }
+      ]
+    }
+  }
+}

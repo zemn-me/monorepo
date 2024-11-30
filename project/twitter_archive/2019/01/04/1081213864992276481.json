@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1081213864992276481"
+        ],
+        "editableUntil": "2019-01-04T16:40:48.053Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "1",
+    "id_str": "1081213864992276481",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1081213864992276481",
+    "created_at": "Fri Jan 04 15:40:48 +0000 2019",
+    "favorited": false,
+    "full_text": "what do you guys think of my javascript parametric array equal\narray_eq = (...arrays) =&gt;\n    ([longest, arrays]) =&gt;\n        longest.every((item, index) =&gt; arrays.every(a =&gt; a[index] === item))\n        ([longest, ...arrays] = arrays.sort((a,b)=&gt;b.length-a.length));",
+    "lang": "en"
+  }
+}

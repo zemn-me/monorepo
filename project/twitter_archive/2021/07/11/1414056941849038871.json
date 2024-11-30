@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1414056941849038871"
+        ],
+        "editableUntil": "2021-07-11T04:00:21.501Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "thecodemiko",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thecodemiko/status/1413971287563767810/video/1",
+          "source_status_id": "1413971287563767810",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/QLlpgnvtd1",
+          "media_url": "http://pbs.twimg.com/media/E59u_zUXMAMIPxx.jpg",
+          "id_str": "1413970502301978629",
+          "source_user_id": "1239724701062254592",
+          "id": "1413970502301978629",
+          "media_url_https": "https://pbs.twimg.com/media/E59u_zUXMAMIPxx.jpg",
+          "source_user_id_str": "1239724701062254592",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1413971287563767810",
+          "display_url": "pic.twitter.com/QLlpgnvtd1"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1414056941849038871",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1414056941849038871",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jul 11 03:00:21 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @thecodemiko: from Tech: Demonstrating high fidelity mocap with CodeMiko https://t.co/QLlpgnvtd1",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thecodemiko/status/1413971287563767810/video/1",
+          "source_status_id": "1413971287563767810",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/QLlpgnvtd1",
+          "media_url": "http://pbs.twimg.com/media/E59u_zUXMAMIPxx.jpg",
+          "id_str": "1413970502301978629",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "15800",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1413970502301978629/vid/1280x720/4jftzSRzCDX4Atxj.mp4?tag=14"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1413970502301978629/pl/ib73FU6AOC3pDp2o.m3u8?tag=14&v=7bd"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1413970502301978629/vid/480x270/ZlC6u3MTV_s36lg7.mp4?tag=14"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1413970502301978629/vid/640x360/hVBtAP2wRxBfwPN-.mp4?tag=14"
+              }
+            ]
+          },
+          "source_user_id": "1239724701062254592",
+          "additional_media_info": {
+            "embeddable": true,
+            "monetizable": false,
+            "description": "Demonstrating the capabilities of CodeMiko with Technician. CodeMiko is an advanced Vtuber with full facial capture and body motion capture. ",
+            "call_to_actions": {
+              "visit_site": {
+                "url": "https://www.twitch.tv/codemiko"
+              }
+            },
+            "title": "CodeMiko Technician Demo"
+          },
+          "id": "1413970502301978629",
+          "media_url_https": "https://pbs.twimg.com/media/E59u_zUXMAMIPxx.jpg",
+          "source_user_id_str": "1239724701062254592",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1413971287563767810",
+          "display_url": "pic.twitter.com/QLlpgnvtd1"
+        }
+      ]
+    }
+  }
+}

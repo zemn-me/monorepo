@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1199029985845108736"
+        ],
+        "editableUntil": "2019-11-25T19:20:00.182Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "277"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1199029954412986368",
+    "id_str": "1199029985845108736",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1199029985845108736",
+    "in_reply_to_status_id": "1199029954412986368",
+    "created_at": "Mon Nov 25 18:20:00 +0000 2019",
+    "favorited": false,
+    "full_text": "my understanding of the intent of wasm is that its good for compute heavy tasks -- tasks which can be heavily sandboxed. I think this is a great idea. Having the majority of your client-side app being compiled to wasm is ... I don't want to be paged for a use after free to XSS",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337851624304357378"
+        ],
+        "editableUntil": "2020-12-12T21:07:37.972Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "みー",
+          "screen_name": "LittleMy918",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2395967838",
+          "id": "2395967838"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LittleMy918/status/1337223368756482048/video/1",
+          "source_status_id": "1337223368756482048",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/qpRvL7hFnG",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337223337257304066/pu/img/GUozaSSSwHBXTCeJ.jpg",
+          "id_str": "1337223337257304066",
+          "source_user_id": "2395967838",
+          "id": "1337223337257304066",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337223337257304066/pu/img/GUozaSSSwHBXTCeJ.jpg",
+          "source_user_id_str": "2395967838",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337223368756482048",
+          "display_url": "pic.twitter.com/qpRvL7hFnG"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "56"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337851624304357378",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337851624304357378",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 12 20:07:37 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @LittleMy918: スプーン握ってお昼寝です☺️🔆 https://t.co/qpRvL7hFnG",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LittleMy918/status/1337223368756482048/video/1",
+          "source_status_id": "1337223368756482048",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/qpRvL7hFnG",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337223337257304066/pu/img/GUozaSSSwHBXTCeJ.jpg",
+          "id_str": "1337223337257304066",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "20245",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1337223337257304066/pu/pl/S0UK9keXDogBjTUA.m3u8?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337223337257304066/pu/vid/320x320/7E4OYMGDPHfNXGwh.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337223337257304066/pu/vid/480x480/fYG6YwcGNqMHm-rG.mp4?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337223337257304066/pu/vid/720x720/GDUU9SrbZo7sFPzJ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2395967838",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1337223337257304066",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337223337257304066/pu/img/GUozaSSSwHBXTCeJ.jpg",
+          "source_user_id_str": "2395967838",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1337223368756482048",
+          "display_url": "pic.twitter.com/qpRvL7hFnG"
+        }
+      ]
+    }
+  }
+}

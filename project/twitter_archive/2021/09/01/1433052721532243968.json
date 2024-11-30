@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1433052721532243968"
+        ],
+        "editableUntil": "2021-09-01T14:02:48.302Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "joe",
+          "screen_name": "PyroJoe",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "3347934922",
+          "id": "3347934922"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FurryWith2Sides/status/1432730490092630021/video/1",
+          "source_status_id": "1432730490092630021",
+          "indices": [
+            "23",
+            "46"
+          ],
+          "url": "https://t.co/0tsjE1JVbP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1432730387239907328/pu/img/xuTOzram9FXeiLkV.jpg",
+          "id_str": "1432730387239907328",
+          "source_user_id": "783705239811661824",
+          "id": "1432730387239907328",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1432730387239907328/pu/img/xuTOzram9FXeiLkV.jpg",
+          "source_user_id_str": "783705239811661824",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1432730490092630021",
+          "display_url": "pic.twitter.com/0tsjE1JVbP"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "46"
+    ],
+    "favorite_count": "0",
+    "id_str": "1433052721532243968",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1433052721532243968",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 01 13:02:48 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @PyroJoe: OH MY GOD https://t.co/0tsjE1JVbP",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FurryWith2Sides/status/1432730490092630021/video/1",
+          "source_status_id": "1432730490092630021",
+          "indices": [
+            "23",
+            "46"
+          ],
+          "url": "https://t.co/0tsjE1JVbP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1432730387239907328/pu/img/xuTOzram9FXeiLkV.jpg",
+          "id_str": "1432730387239907328",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "19029",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1432730387239907328/pu/pl/DU4mven_jma7Nrl_.m3u8?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1432730387239907328/pu/vid/480x480/qS3e-I0UY3vsRzf5.mp4?tag=12"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1432730387239907328/pu/vid/320x320/Naef1i5NM4IxG49T.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "783705239811661824",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1432730387239907328",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1432730387239907328/pu/img/xuTOzram9FXeiLkV.jpg",
+          "source_user_id_str": "783705239811661824",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1432730490092630021",
+          "display_url": "pic.twitter.com/0tsjE1JVbP"
+        }
+      ]
+    }
+  }
+}

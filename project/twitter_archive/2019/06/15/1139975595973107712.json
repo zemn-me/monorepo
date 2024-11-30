@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1139975595973107712"
+        ],
+        "editableUntil": "2019-06-15T20:18:56.459Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Seth Everman",
+          "screen_name": "SethEverman",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1447245938",
+          "id": "1447245938"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SethEverman/status/1139973578789662720/video/1",
+          "source_status_id": "1139973578789662720",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/4dizz3arXW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1139973330486870023/pu/img/uvdpEyYsXrVEoiyq.jpg",
+          "id_str": "1139973330486870023",
+          "source_user_id": "1447245938",
+          "id": "1139973330486870023",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1139973330486870023/pu/img/uvdpEyYsXrVEoiyq.jpg",
+          "source_user_id_str": "1447245938",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1139973578789662720",
+          "display_url": "pic.twitter.com/4dizz3arXW"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "0",
+    "id_str": "1139975595973107712",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1139975595973107712",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 15 19:18:56 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @SethEverman: i made a very important song https://t.co/4dizz3arXW",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SethEverman/status/1139973578789662720/video/1",
+          "source_status_id": "1139973578789662720",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/4dizz3arXW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1139973330486870023/pu/img/uvdpEyYsXrVEoiyq.jpg",
+          "id_str": "1139973330486870023",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "24233",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139973330486870023/pu/vid/360x640/WTu3YDKR6iGEd-ul.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139973330486870023/pu/vid/320x568/3jVK5kkPMKq78nkW.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139973330486870023/pu/vid/540x960/mbYC3E8SAmXhWc9o.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1139973330486870023/pu/pl/dlr14982AqQfjvOs.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1447245938",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1139973330486870023",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1139973330486870023/pu/img/uvdpEyYsXrVEoiyq.jpg",
+          "source_user_id_str": "1447245938",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1139973578789662720",
+          "display_url": "pic.twitter.com/4dizz3arXW"
+        }
+      ]
+    }
+  }
+}

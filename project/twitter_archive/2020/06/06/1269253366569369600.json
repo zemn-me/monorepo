@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1269253366569369600"
+        ],
+        "editableUntil": "2020-06-06T14:02:38.834Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/xvuZjTfVrt",
+          "expanded_url": "https://github.com/zemnmez/react-storage-hook",
+          "display_url": "github.com/zemnmez/react-…",
+          "indices": [
+            "143",
+            "166"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1269253366569369600/video/1",
+          "indices": [
+            "167",
+            "190"
+          ],
+          "url": "https://t.co/NEJSEYNPMU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1269253346436755457/pu/img/yrtn9S5lmqzH1wv5.jpg",
+          "id_str": "1269253346436755457",
+          "id": "1269253346436755457",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1269253346436755457/pu/img/yrtn9S5lmqzH1wv5.jpg",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/NEJSEYNPMU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "190"
+    ],
+    "favorite_count": "13",
+    "id_str": "1269253366569369600",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1269253366569369600",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 06 13:02:38 +0000 2020",
+    "favorited": false,
+    "full_text": "check out my react-storage-hook library. it synchronizes data between sessions and tabs in real time with virtually no config. check it out!!\n\nhttps://t.co/xvuZjTfVrt https://t.co/NEJSEYNPMU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1269253366569369600/video/1",
+          "indices": [
+            "167",
+            "190"
+          ],
+          "url": "https://t.co/NEJSEYNPMU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1269253346436755457/pu/img/yrtn9S5lmqzH1wv5.jpg",
+          "id_str": "1269253346436755457",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "18100",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1269253346436755457/pu/pl/K7EeTzuea0RhaOrR.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1269253346436755457/pu/vid/640x360/Ut5wCpRKPs7tlRqv.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1269253346436755457/pu/vid/480x270/sFh9oUlw1945HNqO.mp4?tag=10"
+              }
+            ]
+          },
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1269253346436755457",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1269253346436755457/pu/img/yrtn9S5lmqzH1wv5.jpg",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "display_url": "pic.twitter.com/NEJSEYNPMU"
+        }
+      ]
+    }
+  }
+}

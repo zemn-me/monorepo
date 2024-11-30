@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1227249742436085761"
+        ],
+        "editableUntil": "2020-02-11T16:15:14.451Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "ア",
+          "screen_name": "yuruyurau",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "534780961",
+          "id": "534780961"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1227249742436085761",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1227249742436085761",
+    "created_at": "Tue Feb 11 15:15:14 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @yuruyurau: W=540;N=200;x,y,t=0,0,0\ndef setup():size(W,W);noStroke()\ndef draw():global t;clear();[F(i,j)for i in range(N)for j in range(…",
+    "lang": "cy"
+  }
+}

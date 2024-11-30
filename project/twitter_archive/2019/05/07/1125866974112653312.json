@@ -1,0 +1,39 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1125866974112653312"
+        ],
+        "editableUntil": "2019-05-07T21:56:18.882Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "216"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1125863766233636864",
+    "id_str": "1125866974112653312",
+    "in_reply_to_user_id": "1108733869820399617",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1125866974112653312",
+    "in_reply_to_status_id": "1125863766233636864",
+    "created_at": "Tue May 07 20:56:18 +0000 2019",
+    "favorited": false,
+    "full_text": "@overfl0wd so what you're seeing is not it being rendered in plain, but with html entities -- the system is decoding and then re-encoding any html entities you send it apparently. this doesn't really win you anything",
+    "lang": "en",
+    "in_reply_to_user_id_str": "1108733869820399617"
+  }
+}

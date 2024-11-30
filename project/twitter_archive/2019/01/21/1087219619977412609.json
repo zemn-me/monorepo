@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1087219619977412609"
+        ],
+        "editableUntil": "2019-01-21T06:25:31.623Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alicia",
+          "screen_name": "aliciakarcher",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "1069656371107368961",
+          "id": "1069656371107368961"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/aliciakarcher/status/1086617735046537219/video/1",
+          "source_status_id": "1086617735046537219",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/kUXZGrrjBN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1086617692558290945/pu/img/SSuKLGSBJOu7-2qV.jpg",
+          "id_str": "1086617692558290945",
+          "source_user_id": "1069656371107368961",
+          "id": "1086617692558290945",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1086617692558290945/pu/img/SSuKLGSBJOu7-2qV.jpg",
+          "source_user_id_str": "1069656371107368961",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "608",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "624",
+              "h": "1232",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1086617735046537219",
+          "display_url": "pic.twitter.com/kUXZGrrjBN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "76"
+    ],
+    "favorite_count": "0",
+    "id_str": "1087219619977412609",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1087219619977412609",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 21 05:25:31 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @aliciakarcher: 100% recommend my mums plumber 😩😂 https://t.co/kUXZGrrjBN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/aliciakarcher/status/1086617735046537219/video/1",
+          "source_status_id": "1086617735046537219",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/kUXZGrrjBN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1086617692558290945/pu/img/SSuKLGSBJOu7-2qV.jpg",
+          "id_str": "1086617692558290945",
+          "video_info": {
+            "aspect_ratio": [
+              "39",
+              "77"
+            ],
+            "duration_millis": "5100",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1086617692558290945/pu/pl/5kLwjR5QjCTsIRtN.m3u8?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1086617692558290945/pu/vid/360x710/oCcTde7DV1ACd1W2.mp4?tag=6"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1086617692558290945/pu/vid/320x630/lsYeR97Yot6wl8zP.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1086617692558290945/pu/vid/624x1232/jTSlP7dMJJFS9AO5.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "1069656371107368961",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1086617692558290945",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1086617692558290945/pu/img/SSuKLGSBJOu7-2qV.jpg",
+          "source_user_id_str": "1069656371107368961",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "608",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "624",
+              "h": "1232",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1086617735046537219",
+          "display_url": "pic.twitter.com/kUXZGrrjBN"
+        }
+      ]
+    }
+  }
+}

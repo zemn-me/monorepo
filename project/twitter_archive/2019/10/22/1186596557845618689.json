@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1186596557845618689"
+        ],
+        "editableUntil": "2019-10-22T11:53:59.945Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "rob delaney",
+          "screen_name": "robdelaney",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "22084427",
+          "id": "22084427"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RobDunsmore/status/1186331068892405761/video/1",
+          "source_status_id": "1186331068892405761",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ahEWFtDYg1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1186330822980395011/pu/img/5mQAt-lbMkO1XExN.jpg",
+          "id_str": "1186330822980395011",
+          "source_user_id": "2523826300",
+          "id": "1186330822980395011",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1186330822980395011/pu/img/5mQAt-lbMkO1XExN.jpg",
+          "source_user_id_str": "2523826300",
+          "sizes": {
+            "medium": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1186331068892405761",
+          "display_url": "pic.twitter.com/ahEWFtDYg1"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1186596557845618689",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1186596557845618689",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 22 10:53:59 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @robdelaney: Rees-Mogg perfectly exhibits the ruling class’s disdain for commoners https://t.co/ahEWFtDYg1",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RobDunsmore/status/1186331068892405761/video/1",
+          "source_status_id": "1186331068892405761",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ahEWFtDYg1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1186330822980395011/pu/img/5mQAt-lbMkO1XExN.jpg",
+          "id_str": "1186330822980395011",
+          "video_info": {
+            "aspect_ratio": [
+              "326",
+              "183"
+            ],
+            "duration_millis": "19062",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1186330822980395011/pu/pl/eogpC1vMLMNALfWq.m3u8?tag=10&v=d25"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1186330822980395011/pu/vid/480x270/sy50swqxV-Nil-CV.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1186330822980395011/pu/vid/652x366/s34PsxnB_zjXHn5N.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2523826300",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1186330822980395011",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1186330822980395011/pu/img/5mQAt-lbMkO1XExN.jpg",
+          "source_user_id_str": "2523826300",
+          "sizes": {
+            "medium": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "652",
+              "h": "366",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1186331068892405761",
+          "display_url": "pic.twitter.com/ahEWFtDYg1"
+        }
+      ]
+    }
+  }
+}

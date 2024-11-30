@@ -1,0 +1,63 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1028061476869701632"
+        ],
+        "editableUntil": "2018-08-11T00:32:11.201Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "12",
+            "19"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/TwKRiWrjHO",
+          "expanded_url": "http://os.Open",
+          "display_url": "os.Open",
+          "indices": [
+            "37",
+            "60"
+          ]
+        },
+        {
+          "url": "https://t.co/TwKRiWrjHO",
+          "expanded_url": "http://os.Open",
+          "display_url": "os.Open",
+          "indices": [
+            "97",
+            "120"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "141"
+    ],
+    "favorite_count": "1",
+    "id_str": "1028061476869701632",
+    "truncated": false,
+    "retweet_count": "2",
+    "id": "1028061476869701632",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 10 23:32:11 +0000 2018",
+    "favorited": false,
+    "full_text": "anyone with #golang on windows: does https://t.co/TwKRiWrjHO (\"folder/filename \") do the same as https://t.co/TwKRiWrjHO (\"folder/filename\")?",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1222562057448345606"
+        ],
+        "editableUntil": "2020-01-29T17:48:03.257Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "seanatar",
+          "screen_name": "Seanatar",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "710997730496110592",
+          "id": "710997730496110592"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Seanatar/status/1222254710696169475/video/1",
+          "source_status_id": "1222254710696169475",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/GPMTNcIo42",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222254540206092288/pu/img/wecE09L3taWK9rA0.jpg",
+          "id_str": "1222254540206092288",
+          "source_user_id": "710997730496110592",
+          "id": "1222254540206092288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222254540206092288/pu/img/wecE09L3taWK9rA0.jpg",
+          "source_user_id_str": "710997730496110592",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1222254710696169475",
+          "display_url": "pic.twitter.com/GPMTNcIo42"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "85"
+    ],
+    "favorite_count": "0",
+    "id_str": "1222562057448345606",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1222562057448345606",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 29 16:48:03 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Seanatar: Thief and the Cobbler in 60fps is really trippy https://t.co/GPMTNcIo42",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Seanatar/status/1222254710696169475/video/1",
+          "source_status_id": "1222254710696169475",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/GPMTNcIo42",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222254540206092288/pu/img/wecE09L3taWK9rA0.jpg",
+          "id_str": "1222254540206092288",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "18450",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222254540206092288/pu/vid/1280x720/wzZU5r-YI9ORfuTE.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222254540206092288/pu/vid/640x360/SQfYHqBM9OCbWMBN.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222254540206092288/pu/vid/480x270/yVBCdkeaaqsaXn-q.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1222254540206092288/pu/pl/qYVl023Sg-uEPjaa.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "710997730496110592",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1222254540206092288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222254540206092288/pu/img/wecE09L3taWK9rA0.jpg",
+          "source_user_id_str": "710997730496110592",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1222254710696169475",
+          "display_url": "pic.twitter.com/GPMTNcIo42"
+        }
+      ]
+    }
+  }
+}

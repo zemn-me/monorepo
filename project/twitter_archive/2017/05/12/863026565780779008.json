@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "863026565780779008"
+        ],
+        "editableUntil": "2017-05-12T14:42:22.197Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "1",
+    "id_str": "863026565780779008",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "863026565780779008",
+    "created_at": "Fri May 12 13:42:22 +0000 2017",
+    "favorited": false,
+    "full_text": "[...\"string\"].map((c)=&gt;\"%\"+c.charCodeAt(0).toString(16)).join(\"\")",
+    "lang": "en"
+  }
+}

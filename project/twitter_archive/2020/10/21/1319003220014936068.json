@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1319003220014936068"
+        ],
+        "editableUntil": "2020-10-21T20:50:48.203Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1319003220014936068/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/kP5y4ZlalK",
+          "media_url": "http://pbs.twimg.com/media/Ek4JqrAWkAIuCqS.png",
+          "id_str": "1319002369569492994",
+          "id": "1319002369569492994",
+          "media_url_https": "https://pbs.twimg.com/media/Ek4JqrAWkAIuCqS.png",
+          "sizes": {
+            "small": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kP5y4ZlalK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "304"
+    ],
+    "favorite_count": "6",
+    "id_str": "1319003220014936068",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1319003220014936068",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 21 19:50:48 +0000 2020",
+    "favorited": false,
+    "full_text": "kinda fucked up that a byte is 0-255 for the almost totally arbitrary reason that you can fit every english letter and a few more in there and we just got stuck with it. now all the processors expect 8 bit bytes and we can't go back, like what if we just did everything in decimal https://t.co/kP5y4ZlalK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1319003220014936068/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/kP5y4ZlalK",
+          "media_url": "http://pbs.twimg.com/media/Ek4JqrAWkAIuCqS.png",
+          "id_str": "1319002369569492994",
+          "id": "1319002369569492994",
+          "media_url_https": "https://pbs.twimg.com/media/Ek4JqrAWkAIuCqS.png",
+          "sizes": {
+            "small": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "457",
+              "h": "203",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kP5y4ZlalK"
+        }
+      ]
+    }
+  }
+}

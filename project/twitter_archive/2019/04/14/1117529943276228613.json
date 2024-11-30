@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1117529943276228613"
+        ],
+        "editableUntil": "2019-04-14T21:47:55.836Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "SungWon Cho",
+          "screen_name": "ProZD",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "182236262",
+          "id": "182236262"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ProZD/status/1117528340653494272/video/1",
+          "source_status_id": "1117528340653494272",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/NTgkkt4PwA",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1117528303126974464/pu/img/nyUax11u2XfHixwr.jpg",
+          "id_str": "1117528303126974464",
+          "source_user_id": "182236262",
+          "id": "1117528303126974464",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1117528303126974464/pu/img/nyUax11u2XfHixwr.jpg",
+          "source_user_id_str": "182236262",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1117528340653494272",
+          "display_url": "pic.twitter.com/NTgkkt4PwA"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1117529943276228613",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1117529943276228613",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 14 20:47:55 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @ProZD: send this to the special someone in your life https://t.co/NTgkkt4PwA",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ProZD/status/1117528340653494272/video/1",
+          "source_status_id": "1117528340653494272",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/NTgkkt4PwA",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1117528303126974464/pu/img/nyUax11u2XfHixwr.jpg",
+          "id_str": "1117528303126974464",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "5205",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1117528303126974464/pu/vid/640x360/1MGex5r6MgBqAAiz.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1117528303126974464/pu/pl/EZKLCcRnLrdmBcJh.m3u8?tag=8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1117528303126974464/pu/vid/320x180/AV5-6GS8vHhIFTnt.mp4?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1117528303126974464/pu/vid/1280x720/SUwcc4rU96mpb4yZ.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "182236262",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1117528303126974464",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1117528303126974464/pu/img/nyUax11u2XfHixwr.jpg",
+          "source_user_id_str": "182236262",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1117528340653494272",
+          "display_url": "pic.twitter.com/NTgkkt4PwA"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1287214092055392257"
+        ],
+        "editableUntil": "2020-07-26T03:32:09.484Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1286567934823936001/video/1",
+          "source_status_id": "1286567934823936001",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/1w5JyGHiLn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1286567865668251649/pu/img/FhRBLXFphUyGaE0m.jpg",
+          "id_str": "1286567865668251649",
+          "source_user_id": "2275883743",
+          "id": "1286567865668251649",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1286567865668251649/pu/img/FhRBLXFphUyGaE0m.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "854",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "854",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1286567934823936001",
+          "display_url": "pic.twitter.com/1w5JyGHiLn"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "112"
+    ],
+    "favorite_count": "0",
+    "id_str": "1287214092055392257",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1287214092055392257",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jul 26 02:32:09 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Inquisitive deer hears something strange and wondrous in the woods... https://t.co/1w5JyGHiLn",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1286567934823936001/video/1",
+          "source_status_id": "1286567934823936001",
+          "indices": [
+            "89",
+            "112"
+          ],
+          "url": "https://t.co/1w5JyGHiLn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1286567865668251649/pu/img/FhRBLXFphUyGaE0m.jpg",
+          "id_str": "1286567865668251649",
+          "video_info": {
+            "aspect_ratio": [
+              "427",
+              "320"
+            ],
+            "duration_millis": "57500",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1286567865668251649/pu/vid/360x270/GZMKpKd_xpANgZ5r.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1286567865668251649/pu/vid/854x640/FXqum7-cl6d05lx2.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1286567865668251649/pu/vid/480x360/c0Gc6EHfRIPSv0Df.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1286567865668251649/pu/pl/nIEbP8K0RGcG6drj.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1286567865668251649",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1286567865668251649/pu/img/FhRBLXFphUyGaE0m.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "854",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "854",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1286567934823936001",
+          "display_url": "pic.twitter.com/1w5JyGHiLn"
+        }
+      ]
+    }
+  }
+}

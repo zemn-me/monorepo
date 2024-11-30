@@ -1,0 +1,129 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1153585900082868224"
+        ],
+        "editableUntil": "2019-07-23T09:41:25.826Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/p4QzlQMVcM",
+          "expanded_url": "http://openscdp.org",
+          "display_url": "openscdp.org",
+          "indices": [
+            "48",
+            "71"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1153585900082868224/photo/1",
+          "indices": [
+            "250",
+            "273"
+          ],
+          "url": "https://t.co/yZyoOTYx4S",
+          "media_url": "http://pbs.twimg.com/media/EAJcQtvXoAAPAvn.png",
+          "id_str": "1153585896786206720",
+          "id": "1153585896786206720",
+          "media_url_https": "https://pbs.twimg.com/media/EAJcQtvXoAAPAvn.png",
+          "sizes": {
+            "large": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "142",
+              "h": "142",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/yZyoOTYx4S"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "273"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1153584224445894656",
+    "id_str": "1153585900082868224",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1153585900082868224",
+    "in_reply_to_status_id": "1153584224445894656",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 23 08:41:25 +0000 2019",
+    "favorited": false,
+    "full_text": "the best reference I can find for the protocol, https://t.co/p4QzlQMVcM, has itself some excellent code of perhaps dark and arcane origin, written inexplicably in Javascript. every implementation i have seen online is based on the code snippets here https://t.co/yZyoOTYx4S",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1153585900082868224/photo/1",
+          "indices": [
+            "250",
+            "273"
+          ],
+          "url": "https://t.co/yZyoOTYx4S",
+          "media_url": "http://pbs.twimg.com/media/EAJcQtvXoAAPAvn.png",
+          "id_str": "1153585896786206720",
+          "id": "1153585896786206720",
+          "media_url_https": "https://pbs.twimg.com/media/EAJcQtvXoAAPAvn.png",
+          "sizes": {
+            "large": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "142",
+              "h": "142",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "622",
+              "h": "142",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/yZyoOTYx4S"
+        }
+      ]
+    }
+  }
+}

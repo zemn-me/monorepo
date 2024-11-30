@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1210570457893744640"
+        ],
+        "editableUntil": "2019-12-27T15:37:43.130Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "grouch",
+          "screen_name": "rodakscreens",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "2320026164",
+          "id": "2320026164"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rodakscreens/status/1210294629121310725/video/1",
+          "source_status_id": "1210294629121310725",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/xzsJ3T7Wpx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1210294429094948866/pu/img/Ed-01uXRn078uz6q.jpg",
+          "id_str": "1210294429094948866",
+          "source_user_id": "2320026164",
+          "id": "1210294429094948866",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1210294429094948866/pu/img/Ed-01uXRn078uz6q.jpg",
+          "source_user_id_str": "2320026164",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1210294629121310725",
+          "display_url": "pic.twitter.com/xzsJ3T7Wpx"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "1210570457893744640",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1210570457893744640",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 27 14:37:43 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @rodakscreens: https://t.co/xzsJ3T7Wpx",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rodakscreens/status/1210294629121310725/video/1",
+          "source_status_id": "1210294629121310725",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/xzsJ3T7Wpx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1210294429094948866/pu/img/Ed-01uXRn078uz6q.jpg",
+          "id_str": "1210294429094948866",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "11645",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1210294429094948866/pu/pl/Ot8ESq_4e7v9WWsp.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1210294429094948866/pu/vid/360x270/TWyYDwXsYIbw00x0.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1210294429094948866/pu/vid/480x360/NjD1Sp4HkhlDtfC9.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2320026164",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1210294429094948866",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1210294429094948866/pu/img/Ed-01uXRn078uz6q.jpg",
+          "source_user_id_str": "2320026164",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1210294629121310725",
+          "display_url": "pic.twitter.com/xzsJ3T7Wpx"
+        }
+      ]
+    }
+  }
+}

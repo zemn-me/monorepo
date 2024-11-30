@@ -1,0 +1,8 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+"archive of all my old tweets."
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

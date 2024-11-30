@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1075821942710697984"
+        ],
+        "editableUntil": "2018-12-20T19:35:13.604Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "yan",
+          "screen_name": "bcrypt",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "968881477",
+          "id": "968881477"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bcrypt/status/1075820294999285760/video/1",
+          "source_status_id": "1075820294999285760",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/IVxr739169",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1075820237633871872/pu/img/Cx48MJiDu5GG3dPN.jpg",
+          "id_str": "1075820237633871872",
+          "source_user_id": "968881477",
+          "id": "1075820237633871872",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1075820237633871872/pu/img/Cx48MJiDu5GG3dPN.jpg",
+          "source_user_id_str": "968881477",
+          "sizes": {
+            "medium": {
+              "w": "720",
+              "h": "406",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "406",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1075820294999285760",
+          "display_url": "pic.twitter.com/IVxr739169"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1075821942710697984",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1075821942710697984",
+    "possibly_sensitive": false,
+    "created_at": "Thu Dec 20 18:35:13 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @bcrypt: hippos do this when they want u to feed them https://t.co/IVxr739169",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bcrypt/status/1075820294999285760/video/1",
+          "source_status_id": "1075820294999285760",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/IVxr739169",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1075820237633871872/pu/img/Cx48MJiDu5GG3dPN.jpg",
+          "id_str": "1075820237633871872",
+          "video_info": {
+            "aspect_ratio": [
+              "360",
+              "203"
+            ],
+            "duration_millis": "15015",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1075820237633871872/pu/vid/318x180/3MGAk2ubvW0Xt7hq.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1075820237633871872/pu/vid/720x406/3rSFmwvNpiyddL3b.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1075820237633871872/pu/pl/-h8Gje8H4IVGbBdl.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "968881477",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1075820237633871872",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1075820237633871872/pu/img/Cx48MJiDu5GG3dPN.jpg",
+          "source_user_id_str": "968881477",
+          "sizes": {
+            "medium": {
+              "w": "720",
+              "h": "406",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "406",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1075820294999285760",
+          "display_url": "pic.twitter.com/IVxr739169"
+        }
+      ]
+    }
+  }
+}

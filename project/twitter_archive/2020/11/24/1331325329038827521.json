@@ -1,0 +1,138 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1331325329038827521"
+        ],
+        "editableUntil": "2020-11-24T20:54:27.928Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/BbGmIMWTwM",
+          "expanded_url": "http://Function.prototype.call",
+          "display_url": "Function.prototype.call",
+          "indices": [
+            "38",
+            "61"
+          ]
+        },
+        {
+          "url": "https://t.co/BTuFGNDl5K",
+          "expanded_url": "http://this.name",
+          "display_url": "this.name",
+          "indices": [
+            "125",
+            "148"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1331325329038827521/photo/1",
+          "indices": [
+            "280",
+            "303"
+          ],
+          "url": "https://t.co/J3HlGxZUOz",
+          "media_url": "http://pbs.twimg.com/media/EnnRENRW4AAr2aI.png",
+          "id_str": "1331325035076837376",
+          "id": "1331325035076837376",
+          "media_url_https": "https://pbs.twimg.com/media/EnnRENRW4AAr2aI.png",
+          "sizes": {
+            "small": {
+              "w": "614",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1138",
+              "h": "1260",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1084",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/J3HlGxZUOz"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "303"
+    ],
+    "favorite_count": "4",
+    "in_reply_to_status_id_str": "1331322253426954241",
+    "id_str": "1331325329038827521",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1331325329038827521",
+    "in_reply_to_status_id": "1331322253426954241",
+    "possibly_sensitive": false,
+    "created_at": "Tue Nov 24 19:54:27 +0000 2020",
+    "favorited": false,
+    "full_text": "quick impl of 'pain' for Javascript:\n\nhttps://t.co/BbGmIMWTwM = function(...a) { try { this(...a) } catch{\n  console.log(`[${https://t.co/BTuFGNDl5K}] pain:`, this.pain = (this.pain === undefined || this.pain === NaN? 0: this.pain)+1)\n} }\n\ntwitter experiences much pain then dies https://t.co/J3HlGxZUOz",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1331325329038827521/photo/1",
+          "indices": [
+            "280",
+            "303"
+          ],
+          "url": "https://t.co/J3HlGxZUOz",
+          "media_url": "http://pbs.twimg.com/media/EnnRENRW4AAr2aI.png",
+          "id_str": "1331325035076837376",
+          "id": "1331325035076837376",
+          "media_url_https": "https://pbs.twimg.com/media/EnnRENRW4AAr2aI.png",
+          "sizes": {
+            "small": {
+              "w": "614",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1138",
+              "h": "1260",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1084",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/J3HlGxZUOz"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1133382032841748480"
+        ],
+        "editableUntil": "2019-05-28T15:38:28.506Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Neru",
+          "screen_name": "NeruNox",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "363824987",
+          "id": "363824987"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NeruNox/status/1133349085870731264/video/1",
+          "source_status_id": "1133349085870731264",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/fe4t5HigJJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1133348647998054400/pu/img/a06SZ_ar0HIc-BPW.jpg",
+          "id_str": "1133348647998054400",
+          "source_user_id": "363824987",
+          "id": "1133348647998054400",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1133348647998054400/pu/img/a06SZ_ar0HIc-BPW.jpg",
+          "source_user_id_str": "363824987",
+          "sizes": {
+            "small": {
+              "w": "382",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "460",
+              "h": "818",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "460",
+              "h": "818",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1133349085870731264",
+          "display_url": "pic.twitter.com/fe4t5HigJJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "1133382032841748480",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1133382032841748480",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 28 14:38:28 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @NeruNox: instant regret https://t.co/fe4t5HigJJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NeruNox/status/1133349085870731264/video/1",
+          "source_status_id": "1133349085870731264",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/fe4t5HigJJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1133348647998054400/pu/img/a06SZ_ar0HIc-BPW.jpg",
+          "id_str": "1133348647998054400",
+          "video_info": {
+            "aspect_ratio": [
+              "230",
+              "409"
+            ],
+            "duration_millis": "19650",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1133348647998054400/pu/vid/320x568/dlPx95Z6Q3dlv0PP.mp4?tag=9"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1133348647998054400/pu/vid/460x818/gV_N9INC4nRfx8iu.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1133348647998054400/pu/pl/bi39hsgiDXPKzqHs.m3u8?tag=9"
+              }
+            ]
+          },
+          "source_user_id": "363824987",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1133348647998054400",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1133348647998054400/pu/img/a06SZ_ar0HIc-BPW.jpg",
+          "source_user_id_str": "363824987",
+          "sizes": {
+            "small": {
+              "w": "382",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "460",
+              "h": "818",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "460",
+              "h": "818",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1133349085870731264",
+          "display_url": "pic.twitter.com/fe4t5HigJJ"
+        }
+      ]
+    }
+  }
+}

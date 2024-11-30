@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1331604086651760641"
+        ],
+        "editableUntil": "2020-11-25T15:22:08.922Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sam Helle 🐾🐅",
+          "screen_name": "samanthaiam",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "32440573",
+          "id": "32440573"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/samanthaiam/status/1331424073595965442/video/1",
+          "source_status_id": "1331424073595965442",
+          "indices": [
+            "88",
+            "111"
+          ],
+          "url": "https://t.co/16ODmqxDUN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1331424021326553089/pu/img/G57BScYT51ei4_hZ.jpg",
+          "id_str": "1331424021326553089",
+          "source_user_id": "32440573",
+          "id": "1331424021326553089",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1331424021326553089/pu/img/G57BScYT51ei4_hZ.jpg",
+          "source_user_id_str": "32440573",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1331424073595965442",
+          "display_url": "pic.twitter.com/16ODmqxDUN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "111"
+    ],
+    "favorite_count": "0",
+    "id_str": "1331604086651760641",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1331604086651760641",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 25 14:22:08 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @samanthaiam: I’m not crying. You’re crying. Dammit paleotwitter this is too much. 😭 https://t.co/16ODmqxDUN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/samanthaiam/status/1331424073595965442/video/1",
+          "source_status_id": "1331424073595965442",
+          "indices": [
+            "88",
+            "111"
+          ],
+          "url": "https://t.co/16ODmqxDUN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1331424021326553089/pu/img/G57BScYT51ei4_hZ.jpg",
+          "id_str": "1331424021326553089",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "44956",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1331424021326553089/pu/pl/FVYiv-eSsXUPMLe0.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1331424021326553089/pu/vid/576x1024/YoHFOOKIyXAm2IcK.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1331424021326553089/pu/vid/320x568/sApBCW0c288Do56u.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1331424021326553089/pu/vid/360x640/EQClO2xyY5iDIDyt.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "32440573",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1331424021326553089",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1331424021326553089/pu/img/G57BScYT51ei4_hZ.jpg",
+          "source_user_id_str": "32440573",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1331424073595965442",
+          "display_url": "pic.twitter.com/16ODmqxDUN"
+        }
+      ]
+    }
+  }
+}

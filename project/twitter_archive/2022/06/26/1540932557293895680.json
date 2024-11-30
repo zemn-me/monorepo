@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1540932557293895680"
+        ],
+        "editableUntil": "2022-06-26T06:08:45.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "mandatory.bsky.social",
+          "screen_name": "IAmMandatory",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "785694042",
+          "id": "785694042"
+        },
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "14",
+            "23"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "303"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1540931591341350912",
+    "id_str": "1540932557293895680",
+    "in_reply_to_user_id": "785694042",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1540932557293895680",
+    "in_reply_to_status_id": "1540931591341350912",
+    "created_at": "Sun Jun 26 05:38:45 +0000 2022",
+    "favorited": false,
+    "full_text": "@IAmMandatory @d0nutptr i think the ways the API is usually used feed into that – like, from the spec I get the impression it’s meant to be a set of cached, time-expired headers and yet most APIs use it like a negotiated protocol with the server reflecting back the request Origin by matching on a regex",
+    "lang": "en",
+    "in_reply_to_screen_name": "IAmMandatory",
+    "in_reply_to_user_id_str": "785694042"
+  }
+}

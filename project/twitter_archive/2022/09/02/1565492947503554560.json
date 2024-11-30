@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1565492947503554560"
+        ],
+        "editableUntil": "2022-09-02T00:42:58.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Theo",
+          "screen_name": "t3dotgg",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "58855664",
+          "id": "58855664"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/glN26itunI",
+          "expanded_url": "https://github.com/zemnmez/monorepo",
+          "display_url": "github.com/zemnmez/monore…",
+          "indices": [
+            "62",
+            "85"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "255"
+    ],
+    "favorite_count": "0",
+    "id_str": "1565492947503554560",
+    "in_reply_to_user_id": "786375418685165568",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1565492947503554560",
+    "possibly_sensitive": false,
+    "created_at": "Fri Sep 02 00:12:58 +0000 2022",
+    "favorited": false,
+    "full_text": "@t3dotgg maybe you know something about this. I have a setup (https://t.co/glN26itunI) where I have pulumi in a CI. When I do a test run before a merge I want to test (1) if the pulumi run is possible given current config and (2) what changes will be made",
+    "lang": "en",
+    "in_reply_to_screen_name": "theo",
+    "in_reply_to_user_id_str": "786375418685165568"
+  }
+}

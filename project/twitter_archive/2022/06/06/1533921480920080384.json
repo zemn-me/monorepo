@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1533921480920080384"
+        ],
+        "editableUntil": "2022-06-06T21:49:14.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/WlyGsVqATi",
+          "expanded_url": "https://github.com/Zemnmez/monorepo/blob/main/bzl/hash/rules.bzl",
+          "display_url": "github.com/Zemnmez/monore…",
+          "indices": [
+            "175",
+            "198"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "198"
+    ],
+    "favorite_count": "4",
+    "in_reply_to_status_id_str": "1533921479900794881",
+    "id_str": "1533921480920080384",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1533921480920080384",
+    "in_reply_to_status_id": "1533921479900794881",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 06 21:19:14 +0000 2022",
+    "favorited": false,
+    "full_text": "the eye opening one was reading this rule, which describes how to create any kind of hash for a given file, but the hashes that aren't needed by other build steps are a no-op https://t.co/WlyGsVqATi",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

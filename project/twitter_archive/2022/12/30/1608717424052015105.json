@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1608717424052015105"
+        ],
+        "editableUntil": "2022-12-30T07:21:37.075Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "wcrichton",
+          "screen_name": "wcrichton",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1651688286371586049",
+          "id": "1651688286371586049"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wcrichton/status/1608632382256746498/photo/1",
+          "source_status_id": "1608632382256746498",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/BcfYtAYD5U",
+          "media_url": "http://pbs.twimg.com/media/FlMCSGeXgAE4fsZ.jpg",
+          "id_str": "1608632001900281857",
+          "source_user_id": "374264753",
+          "id": "1608632001900281857",
+          "media_url_https": "https://pbs.twimg.com/media/FlMCSGeXgAE4fsZ.jpg",
+          "source_user_id_str": "374264753",
+          "sizes": {
+            "small": {
+              "w": "638",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1125",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1176",
+              "h": "1254",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1608632382256746498",
+          "display_url": "pic.twitter.com/BcfYtAYD5U"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "0",
+    "id_str": "1608717424052015105",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1608717424052015105",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 30 06:51:37 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @wcrichton: This is a REAL string in Rust. This is what they don't want you to see with their \"abstractions.\" https://t.co/BcfYtAYD5U",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wcrichton/status/1608632382256746498/photo/1",
+          "source_status_id": "1608632382256746498",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/BcfYtAYD5U",
+          "media_url": "http://pbs.twimg.com/media/FlMCSGeXgAE4fsZ.jpg",
+          "id_str": "1608632001900281857",
+          "source_user_id": "374264753",
+          "id": "1608632001900281857",
+          "media_url_https": "https://pbs.twimg.com/media/FlMCSGeXgAE4fsZ.jpg",
+          "source_user_id_str": "374264753",
+          "sizes": {
+            "small": {
+              "w": "638",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1125",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1176",
+              "h": "1254",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1608632382256746498",
+          "display_url": "pic.twitter.com/BcfYtAYD5U"
+        }
+      ]
+    }
+  }
+}

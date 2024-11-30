@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1219717913684463616"
+        ],
+        "editableUntil": "2020-01-21T21:26:26.542Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1219528156798955522/video/1",
+          "source_status_id": "1219528156798955522",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/eXWFoCoGNp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219528112800698368/pu/img/If1__5DUHJbN0jh9.jpg",
+          "id_str": "1219528112800698368",
+          "source_user_id": "2275883743",
+          "id": "1219528112800698368",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219528112800698368/pu/img/If1__5DUHJbN0jh9.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "medium": {
+              "w": "960",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1219528156798955522",
+          "display_url": "pic.twitter.com/eXWFoCoGNp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "95"
+    ],
+    "favorite_count": "0",
+    "id_str": "1219717913684463616",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1219717913684463616",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 21 20:26:26 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Penguin couple enjoy a romantic stroll on the beach. https://t.co/eXWFoCoGNp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1219528156798955522/video/1",
+          "source_status_id": "1219528156798955522",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/eXWFoCoGNp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219528112800698368/pu/img/If1__5DUHJbN0jh9.jpg",
+          "id_str": "1219528112800698368",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "16400",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1219528112800698368/pu/pl/o8xM9DPOCynSINmN.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219528112800698368/pu/vid/480x480/GrXt3UTkoTf3tieC.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219528112800698368/pu/vid/320x320/uk624ZdSPdhQLyNV.mp4?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219528112800698368/pu/vid/720x720/3lsOPJWwhaPW5f8_.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1219528112800698368",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219528112800698368/pu/img/If1__5DUHJbN0jh9.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "medium": {
+              "w": "960",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1219528156798955522",
+          "display_url": "pic.twitter.com/eXWFoCoGNp"
+        }
+      ]
+    }
+  }
+}

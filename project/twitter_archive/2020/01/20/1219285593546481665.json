@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1219285593546481665"
+        ],
+        "editableUntil": "2020-01-20T16:48:33.389Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Netflix UK & Ireland",
+          "screen_name": "NetflixUK",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "231183280",
+          "id": "231183280"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NetflixUK/status/1219194812290732034/video/1",
+          "source_status_id": "1219194812290732034",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/hnyhujRAnM",
+          "media_url": "http://pbs.twimg.com/media/EOty754X4AEj4J4.jpg",
+          "id_str": "1219194276392898560",
+          "source_user_id": "231183280",
+          "id": "1219194276392898560",
+          "media_url_https": "https://pbs.twimg.com/media/EOty754X4AEj4J4.jpg",
+          "source_user_id_str": "231183280",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1219194812290732034",
+          "display_url": "pic.twitter.com/hnyhujRAnM"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "62"
+    ],
+    "favorite_count": "0",
+    "id_str": "1219285593546481665",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1219285593546481665",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 20 15:48:33 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @NetflixUK: 21 films. February 1st. https://t.co/hnyhujRAnM",
+    "lang": "et",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NetflixUK/status/1219194812290732034/video/1",
+          "source_status_id": "1219194812290732034",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/hnyhujRAnM",
+          "media_url": "http://pbs.twimg.com/media/EOty754X4AEj4J4.jpg",
+          "id_str": "1219194276392898560",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "59851",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1219194276392898560/vid/320x320/WRc2JhiDByvq7lQi.mp4?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1219194276392898560/vid/480x480/P-nuwi0NVJ_u-s1l.mp4?tag=13"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1219194276392898560/vid/720x720/a9T2WSIg2cXEOF7M.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1219194276392898560/pl/vI4vVF2yX75lVQfK.m3u8?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "231183280",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1219194276392898560",
+          "media_url_https": "https://pbs.twimg.com/media/EOty754X4AEj4J4.jpg",
+          "source_user_id_str": "231183280",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1219194812290732034",
+          "display_url": "pic.twitter.com/hnyhujRAnM"
+        }
+      ]
+    }
+  }
+}

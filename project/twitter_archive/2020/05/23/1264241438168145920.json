@@ -1,0 +1,145 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1264241438168145920"
+        ],
+        "editableUntil": "2020-05-23T18:07:01.986Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1264241438168145920/video/1",
+          "indices": [
+            "259",
+            "282"
+          ],
+          "url": "https://t.co/sH0FV0JCJ8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1264241046864760839/pu/img/K4mqKmwK8eFg08jo.jpg",
+          "id_str": "1264241046864760839",
+          "id": "1264241046864760839",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1264241046864760839/pu/img/K4mqKmwK8eFg08jo.jpg",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/sH0FV0JCJ8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "282"
+    ],
+    "favorite_count": "4",
+    "id_str": "1264241438168145920",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1264241438168145920",
+    "possibly_sensitive": false,
+    "created_at": "Sat May 23 17:07:01 +0000 2020",
+    "favorited": false,
+    "full_text": "I made this terrible version of a little tool i've been meaning to make for ages, it:\n- takes a number of commands on the command line\n- runs them in parallel &amp; while running displays only their last line of output\n- then dumps stdout / stderr to console https://t.co/sH0FV0JCJ8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1264241438168145920/video/1",
+          "indices": [
+            "259",
+            "282"
+          ],
+          "url": "https://t.co/sH0FV0JCJ8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1264241046864760839/pu/img/K4mqKmwK8eFg08jo.jpg",
+          "id_str": "1264241046864760839",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "7934",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1264241046864760839/pu/vid/1280x720/i-S5xww4e4zmiKI9.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1264241046864760839/pu/vid/640x360/DncskhOWSdcTPrIV.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1264241046864760839/pu/pl/hMn6AQbDInjsbCOy.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1264241046864760839/pu/vid/480x270/HCb3M5klMBTA3eyG.mp4?tag=10"
+              }
+            ]
+          },
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1264241046864760839",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1264241046864760839/pu/img/K4mqKmwK8eFg08jo.jpg",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "display_url": "pic.twitter.com/sH0FV0JCJ8"
+        }
+      ]
+    }
+  }
+}

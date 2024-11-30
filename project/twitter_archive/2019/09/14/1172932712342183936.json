@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1172932712342183936"
+        ],
+        "editableUntil": "2019-09-14T18:58:45.315Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kyle Hill",
+          "screen_name": "Sci_Phile",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "60709500",
+          "id": "60709500"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Sci_Phile/status/1172619137916362752/video/1",
+          "source_status_id": "1172619137916362752",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/LEbqf4TG3N",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1172619122536079360/pu/img/oQ6h62pDjMx0JF7a.jpg",
+          "id_str": "1172619122536079360",
+          "source_user_id": "60709500",
+          "id": "1172619122536079360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1172619122536079360/pu/img/oQ6h62pDjMx0JF7a.jpg",
+          "source_user_id_str": "60709500",
+          "sizes": {
+            "large": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1172619137916362752",
+          "display_url": "pic.twitter.com/LEbqf4TG3N"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "1172932712342183936",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1172932712342183936",
+    "possibly_sensitive": false,
+    "created_at": "Sat Sep 14 17:58:45 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Sci_Phile: scientists still don’t understand the physics behind perpetual parrot power https://t.co/LEbqf4TG3N",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Sci_Phile/status/1172619137916362752/video/1",
+          "source_status_id": "1172619137916362752",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/LEbqf4TG3N",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1172619122536079360/pu/img/oQ6h62pDjMx0JF7a.jpg",
+          "id_str": "1172619122536079360",
+          "video_info": {
+            "aspect_ratio": [
+              "101",
+              "180"
+            ],
+            "duration_millis": "21944",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1172619122536079360/pu/vid/202x360/cby2bSv-VFsGuu7Y.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1172619122536079360/pu/pl/_2hDeY_zBduATC6m.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "60709500",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1172619122536079360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1172619122536079360/pu/img/oQ6h62pDjMx0JF7a.jpg",
+          "source_user_id_str": "60709500",
+          "sizes": {
+            "large": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "202",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1172619137916362752",
+          "display_url": "pic.twitter.com/LEbqf4TG3N"
+        }
+      ]
+    }
+  }
+}

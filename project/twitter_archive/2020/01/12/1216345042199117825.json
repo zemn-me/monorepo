@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1216345042199117825"
+        ],
+        "editableUntil": "2020-01-12T14:03:51.315Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Murugo",
+          "screen_name": "MurugalStudio",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "279388756",
+          "id": "279388756"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MurugalStudio/status/1216133917624791040/video/1",
+          "source_status_id": "1216133917624791040",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/PCVdjIveya",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216133895256559617/pu/img/HZPdsSx0bWzkrhbL.jpg",
+          "id_str": "1216133895256559617",
+          "source_user_id": "279388756",
+          "id": "1216133895256559617",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216133895256559617/pu/img/HZPdsSx0bWzkrhbL.jpg",
+          "source_user_id_str": "279388756",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1216133917624791040",
+          "display_url": "pic.twitter.com/PCVdjIveya"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "id_str": "1216345042199117825",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1216345042199117825",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 12 13:03:51 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @MurugalStudio: Now that the source code for VVVVVV is released, I have improved Veni Vidi Vici https://t.co/PCVdjIveya",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MurugalStudio/status/1216133917624791040/video/1",
+          "source_status_id": "1216133917624791040",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/PCVdjIveya",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216133895256559617/pu/img/HZPdsSx0bWzkrhbL.jpg",
+          "id_str": "1216133895256559617",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "13684",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1216133895256559617/pu/pl/fxYyMXN01T7hLr-a.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216133895256559617/pu/vid/960x720/0kjTgoSt0TuUmZDg.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216133895256559617/pu/vid/360x270/C3eka44J9m9ASiXk.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216133895256559617/pu/vid/480x360/gpxUoxDEAHSrDQVU.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "279388756",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1216133895256559617",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216133895256559617/pu/img/HZPdsSx0bWzkrhbL.jpg",
+          "source_user_id_str": "279388756",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1216133917624791040",
+          "display_url": "pic.twitter.com/PCVdjIveya"
+        }
+      ]
+    }
+  }
+}

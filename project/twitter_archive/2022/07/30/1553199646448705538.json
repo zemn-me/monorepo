@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1553199646448705538"
+        ],
+        "editableUntil": "2022-07-30T02:33:47.424Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pokémon Brainrot",
+          "screen_name": "PkmnBrainrot",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1121063650062733312",
+          "id": "1121063650062733312"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PkmnBrainrot/status/1553060405253111808/video/1",
+          "source_status_id": "1553060405253111808",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/CUUpIz8f4V",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1553060305546235904/pu/img/lz9GLUMhLXtXBaxh.jpg",
+          "id_str": "1553060305546235904",
+          "source_user_id": "1121063650062733312",
+          "id": "1553060305546235904",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1553060305546235904/pu/img/lz9GLUMhLXtXBaxh.jpg",
+          "source_user_id_str": "1121063650062733312",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1553060405253111808",
+          "display_url": "pic.twitter.com/CUUpIz8f4V"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1553199646448705538",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1553199646448705538",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jul 30 02:03:47 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @PkmnBrainrot: no thoughts, head empty https://t.co/CUUpIz8f4V",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PkmnBrainrot/status/1553060405253111808/video/1",
+          "source_status_id": "1553060405253111808",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/CUUpIz8f4V",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1553060305546235904/pu/img/lz9GLUMhLXtXBaxh.jpg",
+          "id_str": "1553060305546235904",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "20603",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1553060305546235904/pu/pl/YQvhstLayufxisTy.m3u8?tag=12&v=cfc"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1553060305546235904/pu/vid/480x852/I69sa-7dSkuM79KG.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1553060305546235904/pu/vid/576x1024/x8nd9Y1qbYeKkX-7.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1553060305546235904/pu/vid/320x568/58A9Ix-wDYIovN--.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1121063650062733312",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1553060305546235904",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1553060305546235904/pu/img/lz9GLUMhLXtXBaxh.jpg",
+          "source_user_id_str": "1121063650062733312",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1553060405253111808",
+          "display_url": "pic.twitter.com/CUUpIz8f4V"
+        }
+      ]
+    }
+  }
+}

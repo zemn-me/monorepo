@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1412371751951081472"
+        ],
+        "editableUntil": "2021-07-06T12:24:00.920Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1412345290712100867/video/1",
+          "source_status_id": "1412345290712100867",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/UTfwhtGSbr",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1412345001854521349/pu/img/1BkRUa57tBhFMBZy.jpg",
+          "id_str": "1412345001854521349",
+          "source_user_id": "2275883743",
+          "id": "1412345001854521349",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1412345001854521349/pu/img/1BkRUa57tBhFMBZy.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "480",
+              "h": "852",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "852",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1412345290712100867",
+          "display_url": "pic.twitter.com/UTfwhtGSbr"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "113"
+    ],
+    "favorite_count": "0",
+    "id_str": "1412371751951081472",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1412371751951081472",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 06 11:24:00 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: The abomination known as 'running water' must be stopped at all costs. https://t.co/UTfwhtGSbr",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1412345290712100867/video/1",
+          "source_status_id": "1412345290712100867",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/UTfwhtGSbr",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1412345001854521349/pu/img/1BkRUa57tBhFMBZy.jpg",
+          "id_str": "1412345001854521349",
+          "video_info": {
+            "aspect_ratio": [
+              "40",
+              "71"
+            ],
+            "duration_millis": "30000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1412345001854521349/pu/pl/Iw4_cHXkejMnlGf2.m3u8?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1412345001854521349/pu/vid/480x852/S7Z42aQ4ZHP00BYp.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1412345001854521349/pu/vid/320x568/mEnEjTOIBnAMr7Sd.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1412345001854521349",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1412345001854521349/pu/img/1BkRUa57tBhFMBZy.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "480",
+              "h": "852",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "852",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1412345290712100867",
+          "display_url": "pic.twitter.com/UTfwhtGSbr"
+        }
+      ]
+    }
+  }
+}

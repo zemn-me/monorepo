@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1444409434718052358"
+        ],
+        "editableUntil": "2021-10-02T22:10:19.723Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "102"
+    ],
+    "favorite_count": "4",
+    "id_str": "1444409434718052358",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1444409434718052358",
+    "created_at": "Sat Oct 02 21:10:19 +0000 2021",
+    "favorited": false,
+    "full_text": "\"cool\" in Object.assign(\"ok\", { cool: 1}) // returns true\n\"cool\" in \"ok\" // throws an error\n\nvery good",
+    "lang": "en"
+  }
+}

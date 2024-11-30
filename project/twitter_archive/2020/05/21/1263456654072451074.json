@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1263456654072451074"
+        ],
+        "editableUntil": "2020-05-21T14:08:34.877Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jordy",
+          "screen_name": "inurend0",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "798363642492174336",
+          "id": "798363642492174336"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/inurend0/status/1262890026532126720/video/1",
+          "source_status_id": "1262890026532126720",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/sRPMzkbupE",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1262889984002084864/pu/img/B8gaIpBvYDLOegBa.jpg",
+          "id_str": "1262889984002084864",
+          "source_user_id": "798363642492174336",
+          "id": "1262889984002084864",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1262889984002084864/pu/img/B8gaIpBvYDLOegBa.jpg",
+          "source_user_id_str": "798363642492174336",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "912",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "537",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "912",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1262890026532126720",
+          "display_url": "pic.twitter.com/sRPMzkbupE"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "90"
+    ],
+    "favorite_count": "0",
+    "id_str": "1263456654072451074",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1263456654072451074",
+    "possibly_sensitive": false,
+    "created_at": "Thu May 21 13:08:34 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @inurend0: Me taking my dog to the vet because he’s fuckin sicc https://t.co/sRPMzkbupE",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/inurend0/status/1262890026532126720/video/1",
+          "source_status_id": "1262890026532126720",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/sRPMzkbupE",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1262889984002084864/pu/img/B8gaIpBvYDLOegBa.jpg",
+          "id_str": "1262889984002084864",
+          "video_info": {
+            "aspect_ratio": [
+              "15",
+              "19"
+            ],
+            "duration_millis": "13134",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262889984002084864/pu/vid/360x456/CT0JdKfRsfUDtZdm.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1262889984002084864/pu/pl/fGqF3fhtY6XrTke6.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262889984002084864/pu/vid/720x912/U4BXw4GXSPYJXn9Q.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262889984002084864/pu/vid/320x404/9ZugvoFzSmrCKn8A.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "798363642492174336",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1262889984002084864",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1262889984002084864/pu/img/B8gaIpBvYDLOegBa.jpg",
+          "source_user_id_str": "798363642492174336",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "912",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "537",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "912",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1262890026532126720",
+          "display_url": "pic.twitter.com/sRPMzkbupE"
+        }
+      ]
+    }
+  }
+}

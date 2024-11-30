@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1288558848849186817"
+        ],
+        "editableUntil": "2020-07-29T20:35:44.488Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Joseph Bialek @josephbialek@infosec.exchange",
+          "screen_name": "JosephBialek",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "462595092",
+          "id": "462595092"
+        },
+        {
+          "name": "Tavis Ormandy",
+          "screen_name": "taviso",
+          "indices": [
+            "14",
+            "21"
+          ],
+          "id_str": "14453232",
+          "id": "14453232"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "299"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1288557999431114752",
+    "id_str": "1288558848849186817",
+    "in_reply_to_user_id": "462595092",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1288558848849186817",
+    "in_reply_to_status_id": "1288557999431114752",
+    "created_at": "Wed Jul 29 19:35:44 +0000 2020",
+    "favorited": false,
+    "full_text": "@JosephBialek @taviso &gt; I don't buy your argument of \"they'll just use those credentials on non-2FA sites\", that's the other sites issue.\nthen you're arguing cross-purposes on different goals systems that band-aid auth to allow users to re-use the same password *do* perpetuate the stuffing issue",
+    "lang": "en",
+    "in_reply_to_screen_name": "JosephBialek",
+    "in_reply_to_user_id_str": "462595092"
+  }
+}

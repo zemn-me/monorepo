@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1717043837686980759"
+        ],
+        "editableUntil": "2023-10-25T06:02:06.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/7IhxXlm1UJ",
+          "expanded_url": "https://github.com/entronad/crypto-es/security/advisories/GHSA-mpj8-q39x-wq5h",
+          "display_url": "github.com/entronad/crypt…",
+          "indices": [
+            "57",
+            "80"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "276"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1716905058397454747",
+    "id_str": "1717043837686980759",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1717043837686980759",
+    "in_reply_to_status_id": "1716905058397454747",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 25 05:02:06 +0000 2023",
+    "favorited": false,
+    "full_text": "you can now read the details of this vulnerability here: https://t.co/7IhxXlm1UJ\n\nIn short, crypto-js's PBKDF2 is 1,300,000 times weaker than standard because it defaults to *one single round* of SHA1. This was considered insecure in 1993 in the original PBKDF2 specification.",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1165194840373649408"
+        ],
+        "editableUntil": "2019-08-24T10:31:12.875Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Oskar Stålberg",
+          "screen_name": "OskSta",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "767755917890842624",
+          "id": "767755917890842624"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OskSta/status/1164926304640229376/photo/1",
+          "source_status_id": "1164926304640229376",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/OyXLflGet0",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/ECqmSP5XoAEM7_X.jpg",
+          "id_str": "1164926286063706113",
+          "source_user_id": "767755917890842624",
+          "id": "1164926286063706113",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/ECqmSP5XoAEM7_X.jpg",
+          "source_user_id_str": "767755917890842624",
+          "sizes": {
+            "small": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1164926304640229376",
+          "display_url": "pic.twitter.com/OyXLflGet0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "124"
+    ],
+    "favorite_count": "0",
+    "id_str": "1165194840373649408",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1165194840373649408",
+    "possibly_sensitive": false,
+    "created_at": "Sat Aug 24 09:31:12 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @OskSta: WFC running at interactive speed on that funky grid. Next up is to make it deterministic https://t.co/OyXLflGet0",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OskSta/status/1164926304640229376/photo/1",
+          "source_status_id": "1164926304640229376",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/OyXLflGet0",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/ECqmSP5XoAEM7_X.jpg",
+          "id_str": "1164926286063706113",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/ECqmSP5XoAEM7_X.mp4"
+              }
+            ]
+          },
+          "source_user_id": "767755917890842624",
+          "id": "1164926286063706113",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/ECqmSP5XoAEM7_X.jpg",
+          "source_user_id_str": "767755917890842624",
+          "sizes": {
+            "small": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1164926304640229376",
+          "display_url": "pic.twitter.com/OyXLflGet0"
+        }
+      ]
+    }
+  }
+}

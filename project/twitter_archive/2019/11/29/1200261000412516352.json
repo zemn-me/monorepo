@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1200261000412516352"
+        ],
+        "editableUntil": "2019-11-29T04:51:36.926Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Twitch",
+          "screen_name": "Twitch",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "309366491",
+          "id": "309366491"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/1200117026917888006/video/1",
+          "source_status_id": "1200117026917888006",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/I0uc9FM7oY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1200116955891617793/pu/img/pLT8bQ1yVlpRavy4.jpg",
+          "id_str": "1200116955891617793",
+          "source_user_id": "309366491",
+          "id": "1200116955891617793",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1200116955891617793/pu/img/pLT8bQ1yVlpRavy4.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1200117026917888006",
+          "display_url": "pic.twitter.com/I0uc9FM7oY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "73"
+    ],
+    "favorite_count": "0",
+    "id_str": "1200261000412516352",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1200261000412516352",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 29 03:51:36 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Twitch: On second thought, let's get takeout. https://t.co/I0uc9FM7oY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/1200117026917888006/video/1",
+          "source_status_id": "1200117026917888006",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/I0uc9FM7oY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1200116955891617793/pu/img/pLT8bQ1yVlpRavy4.jpg",
+          "id_str": "1200116955891617793",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "48148",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200116955891617793/pu/vid/720x720/tiACp__fQcX31nCf.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200116955891617793/pu/vid/480x480/5xcQ0lLmHri__VHN.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1200116955891617793/pu/pl/eGypQIKNmLTWBwpt.m3u8?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200116955891617793/pu/vid/320x320/C2UhSDSuZCURf2bg.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "309366491",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1200116955891617793",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1200116955891617793/pu/img/pLT8bQ1yVlpRavy4.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1200117026917888006",
+          "display_url": "pic.twitter.com/I0uc9FM7oY"
+        }
+      ]
+    }
+  }
+}

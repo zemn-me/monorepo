@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1335251933200855042"
+        ],
+        "editableUntil": "2020-12-05T16:57:23.313Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pesto",
+          "screen_name": "Derek_n_Shoes",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "788747095477977088",
+          "id": "788747095477977088"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Derek_n_Shoes/status/1335024785495973888/video/1",
+          "source_status_id": "1335024785495973888",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/xIzK7Gzq9n",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1335024739685781504/pu/img/xgCxFG321WgzZCl6.jpg",
+          "id_str": "1335024739685781504",
+          "source_user_id": "788747095477977088",
+          "id": "1335024739685781504",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1335024739685781504/pu/img/xgCxFG321WgzZCl6.jpg",
+          "source_user_id_str": "788747095477977088",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "587",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "834",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "834",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1335024785495973888",
+          "display_url": "pic.twitter.com/xIzK7Gzq9n"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "101"
+    ],
+    "favorite_count": "0",
+    "id_str": "1335251933200855042",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1335251933200855042",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 05 15:57:23 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Derek_n_Shoes: I hope animators can appreciate this bug as much as I have https://t.co/xIzK7Gzq9n",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Derek_n_Shoes/status/1335024785495973888/video/1",
+          "source_status_id": "1335024785495973888",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/xIzK7Gzq9n",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1335024739685781504/pu/img/xgCxFG321WgzZCl6.jpg",
+          "id_str": "1335024739685781504",
+          "video_info": {
+            "aspect_ratio": [
+              "139",
+              "120"
+            ],
+            "duration_millis": "11767",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1335024739685781504/pu/pl/WshWIG9VrXbBpjig.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335024739685781504/pu/vid/416x360/gJgzaFuKMHtv9MdC.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335024739685781504/pu/vid/312x270/kKwDphr9b0A-ZRw-.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1335024739685781504/pu/vid/834x720/wOQxDQCkFaBa9bUQ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "788747095477977088",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1335024739685781504",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1335024739685781504/pu/img/xgCxFG321WgzZCl6.jpg",
+          "source_user_id_str": "788747095477977088",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "587",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "834",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "834",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1335024785495973888",
+          "display_url": "pic.twitter.com/xIzK7Gzq9n"
+        }
+      ]
+    }
+  }
+}

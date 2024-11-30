@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1444419060658278408"
+        ],
+        "editableUntil": "2021-10-02T22:48:34.726Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "268"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1444418206496591875",
+    "id_str": "1444419060658278408",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1444419060658278408",
+    "in_reply_to_status_id": "1444418206496591875",
+    "created_at": "Sat Oct 02 21:48:34 +0000 2021",
+    "favorited": false,
+    "full_text": "the thing i do really like about this approach is that you can think of both the lex and parse step as being two sub-categories of token transforms, where the lex step takes a bunch of runes and produces tokens and the parse step takes those tokens and produces an AST",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

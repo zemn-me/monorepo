@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1111587516250030080"
+        ],
+        "editableUntil": "2019-03-29T12:14:50.828Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "dan_abramov",
+          "screen_name": "dan_abramov",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "1823396792068648967",
+          "id": "1823396792068648967"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/cod5tlDAab",
+          "expanded_url": "http://time.now.date",
+          "display_url": "time.now.date",
+          "indices": [
+            "29",
+            "52"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1111529586750156800",
+    "id_str": "1111587516250030080",
+    "in_reply_to_user_id": "70345946",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1111587516250030080",
+    "in_reply_to_status_id": "1111529586750156800",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 29 11:14:50 +0000 2019",
+    "favorited": false,
+    "full_text": "@dan_abramov sleep(rand.seed(https://t.co/cod5tlDAab()).number())",
+    "lang": "en",
+    "in_reply_to_user_id_str": "70345946"
+  }
+}

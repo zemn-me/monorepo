@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1495192681747660803"
+        ],
+        "editableUntil": "2022-02-20T01:24:49.322Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "JavaScriptErika",
+          "screen_name": "JavaScriptErika",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "3026125809",
+          "id": "3026125809"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "182"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1495192161125470209",
+    "id_str": "1495192681747660803",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1495192681747660803",
+    "in_reply_to_status_id": "1495192161125470209",
+    "created_at": "Sun Feb 20 00:24:49 +0000 2022",
+    "favorited": false,
+    "full_text": "@JavaScriptErika I think a concrete answer to your ‘why’ would be that react might mount and unmount an element with the same ID – and then your previous reference would be undefined",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

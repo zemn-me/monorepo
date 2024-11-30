@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1627979846570868736"
+        ],
+        "editableUntil": "2023-02-21T11:03:36.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "259"
+    ],
+    "favorite_count": "2",
+    "id_str": "1627979846570868736",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1627979846570868736",
+    "created_at": "Tue Feb 21 10:33:36 +0000 2023",
+    "favorited": false,
+    "full_text": "anyone know a way to trick a node.js program running on linux into not opening a file RW but just RO or at least crashing when a write is attempted? next.js is failing under bazel because tsconfig.json is read only (and there is no reason to modify it anyway)",
+    "lang": "en"
+  }
+}

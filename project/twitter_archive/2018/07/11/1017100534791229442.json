@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1017100534791229442"
+        ],
+        "editableUntil": "2018-07-11T18:37:18.965Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "なな丸 クリ丸 いね丸 ぶち丸 はな丸 おしゃ丸",
+          "screen_name": "nanakuriinemaru",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "961537802977492994",
+          "id": "961537802977492994"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nanakuriinemaru/status/1016619599071072256/video/1",
+          "source_status_id": "1016619599071072256",
+          "indices": [
+            "31",
+            "54"
+          ],
+          "url": "https://t.co/bkkqtO480c",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016619497111687168/pu/img/76uGDXo5FZeQS1iG.jpg",
+          "id_str": "1016619497111687168",
+          "source_user_id": "961537802977492994",
+          "id": "1016619497111687168",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016619497111687168/pu/img/76uGDXo5FZeQS1iG.jpg",
+          "source_user_id_str": "961537802977492994",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1016619599071072256",
+          "display_url": "pic.twitter.com/bkkqtO480c"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "54"
+    ],
+    "favorite_count": "0",
+    "id_str": "1017100534791229442",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1017100534791229442",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 11 17:37:18 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @nanakuriinemaru: 帰ったら毎日これ😌 https://t.co/bkkqtO480c",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nanakuriinemaru/status/1016619599071072256/video/1",
+          "source_status_id": "1016619599071072256",
+          "indices": [
+            "31",
+            "54"
+          ],
+          "url": "https://t.co/bkkqtO480c",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016619497111687168/pu/img/76uGDXo5FZeQS1iG.jpg",
+          "id_str": "1016619497111687168",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "35625",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016619497111687168/pu/vid/720x1280/lhKLaLGbdqElY73r.mp4?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016619497111687168/pu/vid/360x640/j5QdEh7xhmKYdu_p.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016619497111687168/pu/vid/180x320/4IkbYG819El64ucq.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1016619497111687168/pu/pl/6LfY_OOtrD7CovXE.m3u8?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "961537802977492994",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1016619497111687168",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016619497111687168/pu/img/76uGDXo5FZeQS1iG.jpg",
+          "source_user_id_str": "961537802977492994",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1016619599071072256",
+          "display_url": "pic.twitter.com/bkkqtO480c"
+        }
+      ]
+    }
+  }
+}

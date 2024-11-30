@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "970794218552811521"
+        ],
+        "editableUntil": "2018-03-05T23:52:32.844Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/sGjBjHlPnF",
+          "expanded_url": "http://x.map",
+          "display_url": "x.map",
+          "indices": [
+            "102",
+            "125"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "139"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "970789946977062912",
+    "id_str": "970794218552811521",
+    "in_reply_to_user_id": "312426579",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "970794218552811521",
+    "in_reply_to_status_id": "970789946977062912",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 05 22:52:32 +0000 2018",
+    "favorited": false,
+    "full_text": "@mcclure111 javascript\nvar x = [1,2,3];\nfor(let i = 0; i &lt; x.length; i++) {\nx[i] = x[i] + 1;\n}\nx = https://t.co/sGjBjHlPnF(x =&gt; x+1);",
+    "lang": "da",
+    "in_reply_to_user_id_str": "312426579"
+  }
+}

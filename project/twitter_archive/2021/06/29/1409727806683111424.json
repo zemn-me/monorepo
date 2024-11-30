@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1409727806683111424"
+        ],
+        "editableUntil": "2021-06-29T05:17:55.246Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Eri/Wolf",
+          "screen_name": "WuffFluff",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3977115374",
+          "id": "3977115374"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/WuffFluff/status/1409248647041011714/video/1",
+          "source_status_id": "1409248647041011714",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/SEWwX0vn7l",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1409248570130141184/pu/img/wIeQf_OhKcYS65aF.jpg",
+          "id_str": "1409248570130141184",
+          "source_user_id": "3977115374",
+          "id": "1409248570130141184",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1409248570130141184/pu/img/wIeQf_OhKcYS65aF.jpg",
+          "source_user_id_str": "3977115374",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1409248647041011714",
+          "display_url": "pic.twitter.com/SEWwX0vn7l"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "124"
+    ],
+    "favorite_count": "0",
+    "id_str": "1409727806683111424",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1409727806683111424",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 29 04:17:55 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @WuffFluff: I literally have not been able to stop thinking about this video since I first saw it https://t.co/SEWwX0vn7l",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/WuffFluff/status/1409248647041011714/video/1",
+          "source_status_id": "1409248647041011714",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/SEWwX0vn7l",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1409248570130141184/pu/img/wIeQf_OhKcYS65aF.jpg",
+          "id_str": "1409248570130141184",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "51018",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1409248570130141184/pu/pl/JPNB7WTzSxvmpENl.m3u8?tag=12&v=62a"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1409248570130141184/pu/vid/480x360/F29duqWD2Dstia_R.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1409248570130141184/pu/vid/360x270/28a9H_rdCWCf8IX7.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "3977115374",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1409248570130141184",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1409248570130141184/pu/img/wIeQf_OhKcYS65aF.jpg",
+          "source_user_id_str": "3977115374",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1409248647041011714",
+          "display_url": "pic.twitter.com/SEWwX0vn7l"
+        }
+      ]
+    }
+  }
+}

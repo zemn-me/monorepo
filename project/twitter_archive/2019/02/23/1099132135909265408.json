@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1099132135909265408"
+        ],
+        "editableUntil": "2019-02-23T03:21:36.745Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "@codaanim.bsky.social",
+          "screen_name": "codaanim",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "846435361974898688",
+          "id": "846435361974898688"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/codaanim/status/1098470550786191362/video/1",
+          "source_status_id": "1098470550786191362",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/SxplO5mQZ7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1098470418942443520/pu/img/Rr0vOcOXLeSCeezK.jpg",
+          "id_str": "1098470418942443520",
+          "source_user_id": "846435361974898688",
+          "id": "1098470418942443520",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1098470418942443520/pu/img/Rr0vOcOXLeSCeezK.jpg",
+          "source_user_id_str": "846435361974898688",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "282",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1736",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "498",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1098470550786191362",
+          "display_url": "pic.twitter.com/SxplO5mQZ7"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "92"
+    ],
+    "favorite_count": "0",
+    "id_str": "1099132135909265408",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1099132135909265408",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 23 02:21:36 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @codaanim: some of these Spiderverse deleted scenes are crazy bro https://t.co/SxplO5mQZ7",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/codaanim/status/1098470550786191362/video/1",
+          "source_status_id": "1098470550786191362",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/SxplO5mQZ7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1098470418942443520/pu/img/Rr0vOcOXLeSCeezK.jpg",
+          "id_str": "1098470418942443520",
+          "video_info": {
+            "aspect_ratio": [
+              "217",
+              "90"
+            ],
+            "duration_millis": "3792",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1098470418942443520/pu/vid/868x360/tTx2lX0uddiZpJCa.mp4?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1098470418942443520/pu/vid/434x180/tybJ4r5iCc60Fdzw.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1098470418942443520/pu/vid/1736x720/-NZKrdjtxDO1lv-w.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1098470418942443520/pu/pl/htzRu3ijLPOLl3D7.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "846435361974898688",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1098470418942443520",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1098470418942443520/pu/img/Rr0vOcOXLeSCeezK.jpg",
+          "source_user_id_str": "846435361974898688",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "282",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1736",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "498",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1098470550786191362",
+          "display_url": "pic.twitter.com/SxplO5mQZ7"
+        }
+      ]
+    }
+  }
+}

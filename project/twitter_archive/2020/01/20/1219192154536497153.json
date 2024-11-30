@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1219192154536497153"
+        ],
+        "editableUntil": "2020-01-20T10:37:15.793Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "dag",
+          "screen_name": "brother_dag",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "97009441",
+          "id": "97009441"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/brother_dag/status/1219020371430531072/video/1",
+          "source_status_id": "1219020371430531072",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/zngzH9wlRA",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219020256653369344/pu/img/SXYZKDmfh1aiBuAn.jpg",
+          "id_str": "1219020256653369344",
+          "source_user_id": "97009441",
+          "id": "1219020256653369344",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219020256653369344/pu/img/SXYZKDmfh1aiBuAn.jpg",
+          "source_user_id_str": "97009441",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1219020371430531072",
+          "display_url": "pic.twitter.com/zngzH9wlRA"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "106"
+    ],
+    "favorite_count": "0",
+    "id_str": "1219192154536497153",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1219192154536497153",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 20 09:37:15 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @brother_dag: What’s up YouTube? Doing a review of my hotel bathtub in Seattle. https://t.co/zngzH9wlRA",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/brother_dag/status/1219020371430531072/video/1",
+          "source_status_id": "1219020371430531072",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/zngzH9wlRA",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219020256653369344/pu/img/SXYZKDmfh1aiBuAn.jpg",
+          "id_str": "1219020256653369344",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "39872",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219020256653369344/pu/vid/320x568/mS8Qpe1_Hg5-HKGb.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1219020256653369344/pu/pl/Yw8vzVsBEcxc2aC6.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219020256653369344/pu/vid/360x640/Tl-4w1XY29q0JQ9c.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219020256653369344/pu/vid/720x1280/CEIk4lYDNu5CpUpr.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "97009441",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1219020256653369344",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219020256653369344/pu/img/SXYZKDmfh1aiBuAn.jpg",
+          "source_user_id_str": "97009441",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1219020371430531072",
+          "display_url": "pic.twitter.com/zngzH9wlRA"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1083571161760440326"
+        ],
+        "editableUntil": "2019-01-11T04:47:51.399Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Brad Fitzpatrick 🌻",
+          "screen_name": "bradfitz",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "650013",
+          "id": "650013"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "108"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1083558450129395712",
+    "id_str": "1083571161760440326",
+    "in_reply_to_user_id": "650013",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1083571161760440326",
+    "in_reply_to_status_id": "1083558450129395712",
+    "created_at": "Fri Jan 11 03:47:51 +0000 2019",
+    "favorited": false,
+    "full_text": "@bradfitz oh my god the analysis package. we've been running a homerolled similar thing based on x/go/loader",
+    "lang": "en",
+    "in_reply_to_screen_name": "bradfitz",
+    "in_reply_to_user_id_str": "650013"
+  }
+}

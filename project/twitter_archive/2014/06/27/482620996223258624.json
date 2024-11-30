@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "482620996223258624"
+        ],
+        "editableUntil": "2014-06-27T21:26:26.821Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "0",
+    "id_str": "482620996223258624",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "482620996223258624",
+    "created_at": "Fri Jun 27 20:26:26 +0000 2014",
+    "favorited": false,
+    "full_text": "And yes, I know [][2][]byte is a really ugly way to store kv, but the alternative is [][2]string, which is less expressive and idomatic.",
+    "lang": "en"
+  }
+}

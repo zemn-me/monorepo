@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1559818309356228608"
+        ],
+        "editableUntil": "2022-08-17T08:53:59.630Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "IGN",
+          "screen_name": "IGN",
+          "indices": [
+            "3",
+            "7"
+          ],
+          "id_str": "18927441",
+          "id": "18927441"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IGN/status/1559655126943420416/video/1",
+          "source_status_id": "1559655126943420416",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/Ta7odb8f1f",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1559654583139389440/pu/img/UeUVHQa6IXKMxPhE.jpg",
+          "id_str": "1559654583139389440",
+          "source_user_id": "18927441",
+          "id": "1559654583139389440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1559654583139389440/pu/img/UeUVHQa6IXKMxPhE.jpg",
+          "source_user_id_str": "18927441",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1559655126943420416",
+          "display_url": "pic.twitter.com/Ta7odb8f1f"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "gaming",
+          "indices": [
+            "63",
+            "70"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "94"
+    ],
+    "favorite_count": "0",
+    "id_str": "1559818309356228608",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1559818309356228608",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 17 08:23:59 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @IGN: For those who want a sim game with some more... bite. #gaming https://t.co/Ta7odb8f1f",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IGN/status/1559655126943420416/video/1",
+          "source_status_id": "1559655126943420416",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/Ta7odb8f1f",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1559654583139389440/pu/img/UeUVHQa6IXKMxPhE.jpg",
+          "id_str": "1559654583139389440",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "59659",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1559654583139389440/pu/pl/ealmSRj81w22lhNA.m3u8?tag=12&v=25c"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1559654583139389440/pu/vid/320x320/SSpjGSzpjK1EfdFo.mp4?tag=12"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1559654583139389440/pu/vid/720x720/tghAA-g283vNAvFH.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1559654583139389440/pu/vid/540x540/NOlRLM5blPuDUESr.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "18927441",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1559654583139389440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1559654583139389440/pu/img/UeUVHQa6IXKMxPhE.jpg",
+          "source_user_id_str": "18927441",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1559655126943420416",
+          "display_url": "pic.twitter.com/Ta7odb8f1f"
+        }
+      ]
+    }
+  }
+}

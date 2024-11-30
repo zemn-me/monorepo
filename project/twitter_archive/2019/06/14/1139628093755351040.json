@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1139628093755351040"
+        ],
+        "editableUntil": "2019-06-14T21:18:05.474Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/CkOV5nkO1A",
+          "expanded_url": "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0764",
+          "display_url": "portal.msrc.microsoft.com/en-US/security…",
+          "indices": [
+            "76",
+            "99"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "273"
+    ],
+    "favorite_count": "26",
+    "id_str": "1139628093755351040",
+    "truncated": false,
+    "retweet_count": "4",
+    "id": "1139628093755351040",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 14 20:18:05 +0000 2019",
+    "favorited": false,
+    "full_text": "my command switch injection vuln CVE-2019-0764  in IE and Edge got fixed :D https://t.co/CkOV5nkO1A\n\nit could bypass sanitization used by IE and Edge on custom protocol invocations, allowing injection of arbitrary parameters to invocations of programs on the users conputer",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1222205603193311232"
+        ],
+        "editableUntil": "2020-01-28T18:11:37.940Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kimerson",
+          "screen_name": "TheKimersonShow",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "2768868228",
+          "id": "2768868228"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TheKimersonShow/status/1221992602049884160/video/1",
+          "source_status_id": "1221992602049884160",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/YKcD63eIoh",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1221990525873553408/pu/img/I5xuJfSvk0zzrh9L.jpg",
+          "id_str": "1221990525873553408",
+          "source_user_id": "2768868228",
+          "id": "1221990525873553408",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1221990525873553408/pu/img/I5xuJfSvk0zzrh9L.jpg",
+          "source_user_id_str": "2768868228",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1221992602049884160",
+          "display_url": "pic.twitter.com/YKcD63eIoh"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "1222205603193311232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1222205603193311232",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 28 17:11:37 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @TheKimersonShow: Pardon https://t.co/YKcD63eIoh",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TheKimersonShow/status/1221992602049884160/video/1",
+          "source_status_id": "1221992602049884160",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/YKcD63eIoh",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1221990525873553408/pu/img/I5xuJfSvk0zzrh9L.jpg",
+          "id_str": "1221990525873553408",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "32399",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1221990525873553408/pu/pl/Qfq2fxwibZ3uT-28.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1221990525873553408/pu/vid/480x270/F4ctitTKqN_EoOHQ.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1221990525873553408/pu/vid/1280x720/__W5V9PCPChcWToz.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1221990525873553408/pu/vid/640x360/J9eFgfK1NHImqzlx.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2768868228",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1221990525873553408",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1221990525873553408/pu/img/I5xuJfSvk0zzrh9L.jpg",
+          "source_user_id_str": "2768868228",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1221992602049884160",
+          "display_url": "pic.twitter.com/YKcD63eIoh"
+        }
+      ]
+    }
+  }
+}

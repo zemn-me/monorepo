@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "913194753298071552"
+        ],
+        "editableUntil": "2017-09-28T01:12:50.181Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://about.twitter.com/products/tweetdeck\" rel=\"nofollow\">TweetDeck</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "大神 @ VRChat臨場感3200%",
+          "screen_name": "KeroWolf",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "51394028",
+          "id": "51394028"
+        },
+        {
+          "name": "Tweeten",
+          "screen_name": "TweetenApp",
+          "indices": [
+            "10",
+            "21"
+          ],
+          "id_str": "4624428743",
+          "id": "4624428743"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/FbxbmAI0jc",
+          "expanded_url": "https://gist.githubusercontent.com/Zemnmez/ffb5449d873d5407c7172534b762ae46/raw/f0acfc5c2ea927561493278f0aaac6ec50a21cd9/tweetdeck-limit-override-dm-rt-fix.js",
+          "display_url": "gist.githubusercontent.com/Zemnmez/ffb544…",
+          "indices": [
+            "34",
+            "57"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "180"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "913180503695437824",
+    "id_str": "913194753298071552",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "913194753298071552",
+    "in_reply_to_status_id": "913180503695437824",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 28 00:12:50 +0000 2017",
+    "favorited": false,
+    "full_text": "@KeroWolf @TweetenApp here ya go! https://t.co/FbxbmAI0jc\n\nrt-fix now counts up to 140 twice, which confuses the twitter UI a whole lot less, at the expense of being kind of weird.",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

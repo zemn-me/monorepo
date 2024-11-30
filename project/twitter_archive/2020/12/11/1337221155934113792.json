@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337221155934113792"
+        ],
+        "editableUntil": "2020-12-11T03:22:22.599Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Eupholie",
+          "screen_name": "Eupholie_",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "983392829518090241",
+          "id": "983392829518090241"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Eupholie_/status/1336702684045438978/video/1",
+          "source_status_id": "1336702684045438978",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/45gpHmFjFs",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1336702570681786369/pu/img/ltrjYudl29asC6ls.jpg",
+          "id_str": "1336702570681786369",
+          "source_user_id": "983392829518090241",
+          "id": "1336702570681786369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1336702570681786369/pu/img/ltrjYudl29asC6ls.jpg",
+          "source_user_id_str": "983392829518090241",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1336702684045438978",
+          "display_url": "pic.twitter.com/45gpHmFjFs"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "38"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337221155934113792",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337221155934113792",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 11 02:22:22 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Eupholie_: https://t.co/45gpHmFjFs",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Eupholie_/status/1336702684045438978/video/1",
+          "source_status_id": "1336702684045438978",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/45gpHmFjFs",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1336702570681786369/pu/img/ltrjYudl29asC6ls.jpg",
+          "id_str": "1336702570681786369",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "2267",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1336702570681786369/pu/vid/480x270/ALne6KNIoWPZ44Q_.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1336702570681786369/pu/vid/640x360/XwFMaERop7VrWS17.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1336702570681786369/pu/pl/xM_nKLeopUfgPPad.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1336702570681786369/pu/vid/1280x720/Kz97tkAE7-VGD2UA.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "983392829518090241",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1336702570681786369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1336702570681786369/pu/img/ltrjYudl29asC6ls.jpg",
+          "source_user_id_str": "983392829518090241",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1336702684045438978",
+          "display_url": "pic.twitter.com/45gpHmFjFs"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1206406661830828037"
+        ],
+        "editableUntil": "2019-12-16T03:52:16.789Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1206406661830828037/photo/1",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/bdGYMCs6kU",
+          "media_url": "http://pbs.twimg.com/media/EL4Edu9W4AAO_F4.png",
+          "id_str": "1206406659049971712",
+          "id": "1206406659049971712",
+          "media_url_https": "https://pbs.twimg.com/media/EL4Edu9W4AAO_F4.png",
+          "sizes": {
+            "small": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/bdGYMCs6kU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1206403036903608322",
+    "id_str": "1206406661830828037",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1206406661830828037",
+    "in_reply_to_status_id": "1206403036903608322",
+    "possibly_sensitive": false,
+    "created_at": "Mon Dec 16 02:52:16 +0000 2019",
+    "favorited": false,
+    "full_text": "huh i guess typescript's discriminated unions are better than i thought... https://t.co/bdGYMCs6kU",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1206406661830828037/photo/1",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/bdGYMCs6kU",
+          "media_url": "http://pbs.twimg.com/media/EL4Edu9W4AAO_F4.png",
+          "id_str": "1206406659049971712",
+          "id": "1206406659049971712",
+          "media_url_https": "https://pbs.twimg.com/media/EL4Edu9W4AAO_F4.png",
+          "sizes": {
+            "small": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "573",
+              "h": "196",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/bdGYMCs6kU"
+        }
+      ]
+    }
+  }
+}

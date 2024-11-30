@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1204889789213921281"
+        ],
+        "editableUntil": "2019-12-11T23:24:46.175Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Can You Pet the Dog?",
+          "screen_name": "CanYouPetTheDog",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1102974090581864448",
+          "id": "1102974090581864448"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CanYouPetTheDog/status/1204794696851218432/video/1",
+          "source_status_id": "1204794696851218432",
+          "indices": [
+            "95",
+            "118"
+          ],
+          "url": "https://t.co/KwGwv1LlzN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1204794485554778113/pu/img/NO_AvEMvptFObecx.jpg",
+          "id_str": "1204794485554778113",
+          "source_user_id": "1102974090581864448",
+          "id": "1204794485554778113",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1204794485554778113/pu/img/NO_AvEMvptFObecx.jpg",
+          "source_user_id_str": "1102974090581864448",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1204794696851218432",
+          "display_url": "pic.twitter.com/KwGwv1LlzN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "118"
+    ],
+    "favorite_count": "0",
+    "id_str": "1204889789213921281",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1204889789213921281",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 11 22:24:46 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @CanYouPetTheDog: New: Following an update, you can now pet the dog in Old School RuneScape https://t.co/KwGwv1LlzN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CanYouPetTheDog/status/1204794696851218432/video/1",
+          "source_status_id": "1204794696851218432",
+          "indices": [
+            "95",
+            "118"
+          ],
+          "url": "https://t.co/KwGwv1LlzN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1204794485554778113/pu/img/NO_AvEMvptFObecx.jpg",
+          "id_str": "1204794485554778113",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "5902",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1204794485554778113/pu/vid/320x320/XZJRZgC1pyHkUmJb.mp4?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1204794485554778113/pu/vid/640x640/kMgwdH2M1MpHlc7p.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1204794485554778113/pu/vid/480x480/jy9xlqwrHuG6O7xZ.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1204794485554778113/pu/pl/8Uxq06CkYlvcQ8xY.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1102974090581864448",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1204794485554778113",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1204794485554778113/pu/img/NO_AvEMvptFObecx.jpg",
+          "source_user_id_str": "1102974090581864448",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1204794696851218432",
+          "display_url": "pic.twitter.com/KwGwv1LlzN"
+        }
+      ]
+    }
+  }
+}

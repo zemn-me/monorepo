@@ -1,0 +1,155 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "714697210542366720"
+        ],
+        "editableUntil": "2016-03-29T07:14:28.082Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/BbJQeuHa6i",
+          "expanded_url": "http://fuck.website",
+          "display_url": "fuck.website",
+          "indices": [
+            "48",
+            "71"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zemnmez/status/714697210542366720/video/1",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/lC68qFu9Sw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/714696819729637376/pu/img/CTvAIAnD8fDdaWRa.jpg",
+          "id_str": "714696819729637376",
+          "id": "714696819729637376",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/714696819729637376/pu/img/CTvAIAnD8fDdaWRa.jpg",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/lC68qFu9Sw"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "95"
+    ],
+    "favorite_count": "0",
+    "id_str": "714697210542366720",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "714697210542366720",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 29 06:14:28 +0000 2016",
+    "favorited": false,
+    "full_text": "I found this while trying to find out who owned https://t.co/BbJQeuHa6i https://t.co/lC68qFu9Sw",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zemnmez/status/714697210542366720/video/1",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/lC68qFu9Sw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/714696819729637376/pu/img/CTvAIAnD8fDdaWRa.jpg",
+          "id_str": "714696819729637376",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "20000",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/714696819729637376/pu/vid/640x360/cV16ORcbBvfmqTrX.mp4"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/714696819729637376/pu/vid/320x180/PDU9oobfMz3i1zog.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/714696819729637376/pu/vid/1280x720/1NY_zPdLyWINktEz.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/714696819729637376/pu/pl/7mnKferNdZDAOmlE.m3u8"
+              }
+            ]
+          },
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "714696819729637376",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/714696819729637376/pu/img/CTvAIAnD8fDdaWRa.jpg",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "display_url": "pic.twitter.com/lC68qFu9Sw"
+        }
+      ]
+    }
+  }
+}

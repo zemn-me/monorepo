@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1242174368672874505"
+        ],
+        "editableUntil": "2020-03-23T20:40:22.632Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sive",
+          "screen_name": "sivemorten",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "4844061977",
+          "id": "4844061977"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sivemorten/status/1242069645626150912/video/1",
+          "source_status_id": "1242069645626150912",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/ibOWo8dhXH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242069599543320579/pu/img/xrbZaJnonz6dTnUP.jpg",
+          "id_str": "1242069599543320579",
+          "source_user_id": "4844061977",
+          "id": "1242069599543320579",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242069599543320579/pu/img/xrbZaJnonz6dTnUP.jpg",
+          "source_user_id_str": "4844061977",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1242069645626150912",
+          "display_url": "pic.twitter.com/ibOWo8dhXH"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "110"
+    ],
+    "favorite_count": "0",
+    "id_str": "1242174368672874505",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1242174368672874505",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 23 19:40:22 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @sivemorten: Ok, send me the best memes you've seen this week, Most liked wins $50. https://t.co/ibOWo8dhXH",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sivemorten/status/1242069645626150912/video/1",
+          "source_status_id": "1242069645626150912",
+          "indices": [
+            "87",
+            "110"
+          ],
+          "url": "https://t.co/ibOWo8dhXH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242069599543320579/pu/img/xrbZaJnonz6dTnUP.jpg",
+          "id_str": "1242069599543320579",
+          "video_info": {
+            "aspect_ratio": [
+              "5",
+              "3"
+            ],
+            "duration_millis": "17067",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242069599543320579/pu/vid/480x288/m5k4-_xpvJTvlppB.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1242069599543320579/pu/pl/jQDzlJJ7vim78b3H.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242069599543320579/pu/vid/450x270/aoJ93iptXp_P6A4h.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "4844061977",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1242069599543320579",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242069599543320579/pu/img/xrbZaJnonz6dTnUP.jpg",
+          "source_user_id_str": "4844061977",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "480",
+              "h": "288",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1242069645626150912",
+          "display_url": "pic.twitter.com/ibOWo8dhXH"
+        }
+      ]
+    }
+  }
+}

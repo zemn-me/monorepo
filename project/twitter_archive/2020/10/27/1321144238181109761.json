@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1321144238181109761"
+        ],
+        "editableUntil": "2020-10-27T18:38:26.712Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "chris person",
+          "screen_name": "Papapishu",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "7961342",
+          "id": "7961342"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Papapishu/status/1321143721610649603/video/1",
+          "source_status_id": "1321143721610649603",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/OY4nBZY8oi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1321143533579997185/pu/img/spwFdZey0-eZOoii.jpg",
+          "id_str": "1321143533579997185",
+          "source_user_id": "7961342",
+          "id": "1321143533579997185",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1321143533579997185/pu/img/spwFdZey0-eZOoii.jpg",
+          "source_user_id_str": "7961342",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1321143721610649603",
+          "display_url": "pic.twitter.com/OY4nBZY8oi"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "113"
+    ],
+    "favorite_count": "0",
+    "id_str": "1321144238181109761",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1321144238181109761",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 27 17:38:26 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Papapishu: i've played ghostrunner for like 10 minutes and I feel physically high now https://t.co/OY4nBZY8oi",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Papapishu/status/1321143721610649603/video/1",
+          "source_status_id": "1321143721610649603",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/OY4nBZY8oi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1321143533579997185/pu/img/spwFdZey0-eZOoii.jpg",
+          "id_str": "1321143533579997185",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "24150",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1321143533579997185/pu/vid/480x270/cdzvLdz9x9rvGt-F.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1321143533579997185/pu/vid/640x360/7-1qZ4zOLag9ZW3T.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1321143533579997185/pu/vid/1280x720/ATBTVmWuNUZjoQK_.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1321143533579997185/pu/pl/-PEjWeN6wooO45Dy.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "7961342",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1321143533579997185",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1321143533579997185/pu/img/spwFdZey0-eZOoii.jpg",
+          "source_user_id_str": "7961342",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1321143721610649603",
+          "display_url": "pic.twitter.com/OY4nBZY8oi"
+        }
+      ]
+    }
+  }
+}

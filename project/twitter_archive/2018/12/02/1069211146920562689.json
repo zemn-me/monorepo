@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1069211146920562689"
+        ],
+        "editableUntil": "2018-12-02T13:46:17.065Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Daniel Rourke 🙃",
+          "screen_name": "therourke",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "31485284",
+          "id": "31485284"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/therourke/status/1068875942473404422/video/1",
+          "source_status_id": "1068875942473404422",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/p5Cw17czDr",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1068875731487375360/pu/img/4aN--YOkkRIWkBvn.jpg",
+          "id_str": "1068875731487375360",
+          "source_user_id": "31485284",
+          "id": "1068875731487375360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1068875731487375360/pu/img/4aN--YOkkRIWkBvn.jpg",
+          "source_user_id_str": "31485284",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1068875942473404422",
+          "display_url": "pic.twitter.com/p5Cw17czDr"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "76"
+    ],
+    "favorite_count": "0",
+    "id_str": "1069211146920562689",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1069211146920562689",
+    "possibly_sensitive": false,
+    "created_at": "Sun Dec 02 12:46:17 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @therourke: I, for one, welcome our owl overlords https://t.co/p5Cw17czDr",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/therourke/status/1068875942473404422/video/1",
+          "source_status_id": "1068875942473404422",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/p5Cw17czDr",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1068875731487375360/pu/img/4aN--YOkkRIWkBvn.jpg",
+          "id_str": "1068875731487375360",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "30334",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1068875731487375360/pu/pl/MabSTrVMgU11Zk8W.m3u8?tag=5&v=6ca"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1068875731487375360/pu/vid/180x320/sUt9uSmAxUy-kFcL.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1068875731487375360/pu/vid/720x1280/QwzLZ9Oa1AMbvsDM.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1068875731487375360/pu/vid/360x640/nskns-DLq9sTbqB_.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "31485284",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1068875731487375360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1068875731487375360/pu/img/4aN--YOkkRIWkBvn.jpg",
+          "source_user_id_str": "31485284",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1068875942473404422",
+          "display_url": "pic.twitter.com/p5Cw17czDr"
+        }
+      ]
+    }
+  }
+}

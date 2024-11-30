@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1320453945563766790"
+        ],
+        "editableUntil": "2020-10-25T20:55:28.127Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Crunchyroll",
+          "screen_name": "Crunchyroll",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "28023330",
+          "id": "28023330"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Crunchyroll/status/1320452600387362816/video/1",
+          "source_status_id": "1320452600387362816",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/QEi0jie9CQ",
+          "media_url": "http://pbs.twimg.com/media/EhgIQydWsAE5TLn.jpg",
+          "id_str": "1303797773339447297",
+          "source_user_id": "28023330",
+          "id": "1303797773339447297",
+          "media_url_https": "https://pbs.twimg.com/media/EhgIQydWsAE5TLn.jpg",
+          "source_user_id_str": "28023330",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1320452600387362816",
+          "display_url": "pic.twitter.com/QEi0jie9CQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "90"
+    ],
+    "favorite_count": "0",
+    "id_str": "1320453945563766790",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1320453945563766790",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 25 19:55:28 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Crunchyroll: How to (Accidentally) Start Your Own Anime Studio https://t.co/QEi0jie9CQ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Crunchyroll/status/1320452600387362816/video/1",
+          "source_status_id": "1320452600387362816",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/QEi0jie9CQ",
+          "media_url": "http://pbs.twimg.com/media/EhgIQydWsAE5TLn.jpg",
+          "id_str": "1303797773339447297",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "316316",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1303797773339447297/vid/480x480/OHi1svWwIX57GiZf.mp4?tag=13"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1303797773339447297/vid/720x720/lx2Y7RHY2jzVDYxX.mp4?tag=13"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1303797773339447297/vid/320x320/nYyhYMyc8Lk1JqMK.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1303797773339447297/pl/2kdiI2eq3BbzzD-r.m3u8?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "28023330",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1303797773339447297",
+          "media_url_https": "https://pbs.twimg.com/media/EhgIQydWsAE5TLn.jpg",
+          "source_user_id_str": "28023330",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1320452600387362816",
+          "display_url": "pic.twitter.com/QEi0jie9CQ"
+        }
+      ]
+    }
+  }
+}

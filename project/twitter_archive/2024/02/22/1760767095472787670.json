@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1760767095472787670"
+        ],
+        "editableUntil": "2024-02-22T21:42:43.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Emmett Shear",
+          "screen_name": "eshear",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "905201",
+          "id": "905201"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "288"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1760765310779675012",
+    "id_str": "1760767095472787670",
+    "in_reply_to_user_id": "905201",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1760767095472787670",
+    "in_reply_to_status_id": "1760765310779675012",
+    "created_at": "Thu Feb 22 20:42:43 +0000 2024",
+    "favorited": false,
+    "full_text": "@eshear i didn’t mean to imply that /dev/urandom is some kind of perfect randomness source, only that it defining property as a CSPRNG is randomess *and* non-predictability. I think it’s a up in the air at which point a CSPRNG is no longer abstractly a viable source of randomness, though",
+    "lang": "en",
+    "in_reply_to_screen_name": "eshear",
+    "in_reply_to_user_id_str": "905201"
+  }
+}

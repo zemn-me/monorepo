@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1232253593950003200"
+        ],
+        "editableUntil": "2020-02-25T11:38:45.619Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "虎之介",
+          "screen_name": "tora_hamham",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1178478323782995968",
+          "id": "1178478323782995968"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tora_hamham/status/1232061696853692418/video/1",
+          "source_status_id": "1232061696853692418",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/jBVSzsZeA8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1232061608433602561/pu/img/Xt94Wv0TVJyxOcd1.jpg",
+          "id_str": "1232061608433602561",
+          "source_user_id": "1178478323782995968",
+          "id": "1232061608433602561",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1232061608433602561/pu/img/Xt94Wv0TVJyxOcd1.jpg",
+          "source_user_id_str": "1178478323782995968",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1232061696853692418",
+          "display_url": "pic.twitter.com/jBVSzsZeA8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1232253593950003200",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1232253593950003200",
+    "possibly_sensitive": false,
+    "created_at": "Tue Feb 25 10:38:45 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @tora_hamham: どうしてもミニコーンを持って帰りたいとらちゃん🐹✨\n決定的瞬間は次のお写真で… https://t.co/jBVSzsZeA8",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tora_hamham/status/1232061696853692418/video/1",
+          "source_status_id": "1232061696853692418",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/jBVSzsZeA8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1232061608433602561/pu/img/Xt94Wv0TVJyxOcd1.jpg",
+          "id_str": "1232061608433602561",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "16482",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1232061608433602561/pu/vid/720x1280/tJqemKyAbcVKGCRw.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1232061608433602561/pu/vid/320x568/0PiHfQuKzqQUycL-.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1232061608433602561/pu/vid/360x640/KPjcqdDQHKT2AlfY.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1232061608433602561/pu/pl/_ZsjmAOjbOaqFEUN.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1178478323782995968",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1232061608433602561",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1232061608433602561/pu/img/Xt94Wv0TVJyxOcd1.jpg",
+          "source_user_id_str": "1178478323782995968",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1232061696853692418",
+          "display_url": "pic.twitter.com/jBVSzsZeA8"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1140208586854977538"
+        ],
+        "editableUntil": "2019-06-16T11:44:45.814Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1140208586854977538/photo/1",
+          "indices": [
+            "160",
+            "183"
+          ],
+          "url": "https://t.co/FM0EPraErS",
+          "media_url": "http://pbs.twimg.com/media/D9LVae5W4AARpFZ.jpg",
+          "id_str": "1140208306625110016",
+          "id": "1140208306625110016",
+          "media_url_https": "https://pbs.twimg.com/media/D9LVae5W4AARpFZ.jpg",
+          "sizes": {
+            "large": {
+              "w": "1788",
+              "h": "1140",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "765",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "434",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/FM0EPraErS"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "183"
+    ],
+    "favorite_count": "3",
+    "id_str": "1140208586854977538",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1140208586854977538",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jun 16 10:44:45 +0000 2019",
+    "favorited": false,
+    "full_text": "Spotify's OAuth2 system doesn't require a client secret to exchange an OAuth2 code for a refresh token... so what's the point in having short expiry tokens ?😂? https://t.co/FM0EPraErS",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1140208586854977538/photo/1",
+          "indices": [
+            "160",
+            "183"
+          ],
+          "url": "https://t.co/FM0EPraErS",
+          "media_url": "http://pbs.twimg.com/media/D9LVae5W4AARpFZ.jpg",
+          "id_str": "1140208306625110016",
+          "id": "1140208306625110016",
+          "media_url_https": "https://pbs.twimg.com/media/D9LVae5W4AARpFZ.jpg",
+          "sizes": {
+            "large": {
+              "w": "1788",
+              "h": "1140",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "765",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "434",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/FM0EPraErS"
+        }
+      ]
+    }
+  }
+}

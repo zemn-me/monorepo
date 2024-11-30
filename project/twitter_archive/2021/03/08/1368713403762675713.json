@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1368713403762675713"
+        ],
+        "editableUntil": "2021-03-08T01:01:19.579Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1368713403762675713/photo/1",
+          "indices": [
+            "161",
+            "184"
+          ],
+          "url": "https://t.co/PdGUPdkKKc",
+          "media_url": "http://pbs.twimg.com/media/Ev6llchXIAYvHHJ.png",
+          "id_str": "1368713399497072646",
+          "id": "1368713399497072646",
+          "media_url_https": "https://pbs.twimg.com/media/Ev6llchXIAYvHHJ.png",
+          "sizes": {
+            "small": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "83",
+              "h": "83",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/PdGUPdkKKc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "184"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1368710643633827841",
+    "id_str": "1368713403762675713",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1368713403762675713",
+    "in_reply_to_status_id": "1368710643633827841",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 08 00:01:19 +0000 2021",
+    "favorited": false,
+    "full_text": "I try to break out the arbitrary Iterator type into a type member of my trait, but now I need a lifetime, and I have no clue where that lifetime would come from https://t.co/PdGUPdkKKc",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1368713403762675713/photo/1",
+          "indices": [
+            "161",
+            "184"
+          ],
+          "url": "https://t.co/PdGUPdkKKc",
+          "media_url": "http://pbs.twimg.com/media/Ev6llchXIAYvHHJ.png",
+          "id_str": "1368713399497072646",
+          "id": "1368713399497072646",
+          "media_url_https": "https://pbs.twimg.com/media/Ev6llchXIAYvHHJ.png",
+          "sizes": {
+            "small": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "83",
+              "h": "83",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "456",
+              "h": "83",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/PdGUPdkKKc"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1748244216277618806"
+        ],
+        "editableUntil": "2024-01-19T08:21:16.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Next.js",
+          "screen_name": "nextjs",
+          "indices": [
+            "29",
+            "36"
+          ],
+          "id_str": "1467726470533754880",
+          "id": "1467726470533754880"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "204"
+    ],
+    "favorite_count": "2",
+    "id_str": "1748244216277618806",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1748244216277618806",
+    "created_at": "Fri Jan 19 07:21:16 +0000 2024",
+    "favorited": false,
+    "full_text": "i do not really like how the @nextjs app router only supports nonce CSP. it means you can't have a static next.js site with Content security Policy enabled because nonces are, by definition, never static.",
+    "lang": "en"
+  }
+}

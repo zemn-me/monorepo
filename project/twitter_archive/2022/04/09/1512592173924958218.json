@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1512592173924958218"
+        ],
+        "editableUntil": "2022-04-09T01:44:11.524Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "よる",
+          "screen_name": "sgsy_1005",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1816334180",
+          "id": "1816334180"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sgsy_1005/status/1512383970511835145/video/1",
+          "source_status_id": "1512383970511835145",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/Og1q2IWpdV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1512383642768928768/pu/img/maiNBgr_yp6Z9BwV.jpg",
+          "id_str": "1512383642768928768",
+          "source_user_id": "1816334180",
+          "id": "1512383642768928768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1512383642768928768/pu/img/maiNBgr_yp6Z9BwV.jpg",
+          "source_user_id_str": "1816334180",
+          "sizes": {
+            "large": {
+              "w": "1376",
+              "h": "776",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "677",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1512383970511835145",
+          "display_url": "pic.twitter.com/Og1q2IWpdV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "97"
+    ],
+    "favorite_count": "0",
+    "id_str": "1512592173924958218",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1512592173924958218",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 09 00:44:11 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @sgsy_1005: ダチョウが来ているとのRTを見かけて動画ちょっとシークで戻したら、あかちゃんダチョウがいっぱい出てきて萌え死にました https://t.co/Og1q2IWpdV",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sgsy_1005/status/1512383970511835145/video/1",
+          "source_status_id": "1512383970511835145",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/Og1q2IWpdV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1512383642768928768/pu/img/maiNBgr_yp6Z9BwV.jpg",
+          "id_str": "1512383642768928768",
+          "video_info": {
+            "aspect_ratio": [
+              "172",
+              "97"
+            ],
+            "duration_millis": "105525",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1512383642768928768/pu/vid/638x360/XxwsFH7FWjkzeqKu.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1512383642768928768/pu/vid/1276x720/GNvZ2DNpPALClLZn.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1512383642768928768/pu/pl/_3dTN8Z-zK03DN9g.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1512383642768928768/pu/vid/478x270/A8GJz0NYIp-X8YBN.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1816334180",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1512383642768928768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1512383642768928768/pu/img/maiNBgr_yp6Z9BwV.jpg",
+          "source_user_id_str": "1816334180",
+          "sizes": {
+            "large": {
+              "w": "1376",
+              "h": "776",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "677",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1512383970511835145",
+          "display_url": "pic.twitter.com/Og1q2IWpdV"
+        }
+      ]
+    }
+  }
+}

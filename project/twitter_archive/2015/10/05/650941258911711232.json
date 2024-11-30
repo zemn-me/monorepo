@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "650941258911711232"
+        ],
+        "editableUntil": "2015-10-05T08:51:04.685Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alexander Bruce",
+          "screen_name": "Demruth",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "191790175",
+          "id": "191790175"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Demruth/status/650895583700480000/video/1",
+          "source_status_id": "650895583700480000",
+          "indices": [
+            "19",
+            "41"
+          ],
+          "url": "http://t.co/MWTI2Kjv2e",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/650895522048315392/pu/img/Dg5ACebTBYAEgs_U.jpg",
+          "id_str": "650895522048315392",
+          "source_user_id": "191790175",
+          "id": "650895522048315392",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/650895522048315392/pu/img/Dg5ACebTBYAEgs_U.jpg",
+          "source_user_id_str": "191790175",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "650895583700480000",
+          "display_url": "pic.twitter.com/MWTI2Kjv2e"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "650941258911711232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "650941258911711232",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 05 07:51:04 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @Demruth: Haha. http://t.co/MWTI2Kjv2e",
+    "lang": "tl",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Demruth/status/650895583700480000/video/1",
+          "source_status_id": "650895583700480000",
+          "indices": [
+            "19",
+            "41"
+          ],
+          "url": "http://t.co/MWTI2Kjv2e",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/650895522048315392/pu/img/Dg5ACebTBYAEgs_U.jpg",
+          "id_str": "650895522048315392",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "6566",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/650895522048315392/pu/pl/ywei8qWBJauKEgA0.m3u8"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/650895522048315392/pu/vid/240x240/yJOiu_xKYXatn-pD.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/650895522048315392/pu/vid/480x480/D7JY5zLhy8XOrBJt.mp4"
+              }
+            ]
+          },
+          "source_user_id": "191790175",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "650895522048315392",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/650895522048315392/pu/img/Dg5ACebTBYAEgs_U.jpg",
+          "source_user_id_str": "191790175",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "650895583700480000",
+          "display_url": "pic.twitter.com/MWTI2Kjv2e"
+        }
+      ]
+    }
+  }
+}

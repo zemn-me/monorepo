@@ -1,0 +1,67 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1381790772396183555"
+        ],
+        "editableUntil": "2021-04-13T03:06:07.227Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Zhuowei Zhang",
+          "screen_name": "zhuowei",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "383083538",
+          "id": "383083538"
+        },
+        {
+          "name": "the vessel of morganna",
+          "screen_name": "astraleureka",
+          "indices": [
+            "13",
+            "26"
+          ],
+          "id_str": "860374931191644160",
+          "id": "860374931191644160"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/iM5X7iSkV3",
+          "expanded_url": "https://goerli.etherscan.io/tx/0xcbe06fdd54bd9d221993c875022fe2960128874811a25075d692cc638a28f290",
+          "display_url": "goerli.etherscan.io/tx/0xcbe06fdd5…",
+          "indices": [
+            "94",
+            "117"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1381790772396183555",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1381790772396183555",
+    "possibly_sensitive": false,
+    "created_at": "Tue Apr 13 02:06:07 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @zhuowei: @astraleureka Copying an nft_ptr is illegal.\nMoving an nft_ptr takes 87,169 gas:\nhttps://t.co/iM5X7iSkV3\nat mainnet gas prices…",
+    "lang": "en"
+  }
+}

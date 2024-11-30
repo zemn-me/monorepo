@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1130391565422096384"
+        ],
+        "editableUntil": "2019-05-20T09:35:25.513Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Dodo",
+          "screen_name": "dodo",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "1604444052",
+          "id": "1604444052"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/1130141064969560066/video/1",
+          "source_status_id": "1130141064969560066",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/d11UFgnQ2o",
+          "media_url": "http://pbs.twimg.com/media/D6xj3Y0XsAAjTSc.jpg",
+          "id_str": "1129386868666261505",
+          "source_user_id": "1604444052",
+          "id": "1129386868666261505",
+          "media_url_https": "https://pbs.twimg.com/media/D6xj3Y0XsAAjTSc.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1130141064969560066",
+          "display_url": "pic.twitter.com/d11UFgnQ2o"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1130391565422096384",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1130391565422096384",
+    "possibly_sensitive": false,
+    "created_at": "Mon May 20 08:35:25 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @dodo: This dolphin swam up to divers to ask for help ❤️ https://t.co/d11UFgnQ2o",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/1130141064969560066/video/1",
+          "source_status_id": "1130141064969560066",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/d11UFgnQ2o",
+          "media_url": "http://pbs.twimg.com/media/D6xj3Y0XsAAjTSc.jpg",
+          "id_str": "1129386868666261505",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "182749",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1129386868666261505/vid/320x320/kHbB2Zjly-c2qkLF.mp4?tag=12"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1129386868666261505/vid/720x720/p5qQlaz1-vQUHfBv.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1129386868666261505/vid/480x480/3PsOxkSXdKuxInKh.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1129386868666261505/pl/H4gum07EmXIOv2hM.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1604444052",
+          "additional_media_info": {
+            "title": "Wild Dolphin Knew Exactly How To Ask People For Help",
+            "description": "",
+            "embeddable": true,
+            "monetizable": true
+          },
+          "id": "1129386868666261505",
+          "media_url_https": "https://pbs.twimg.com/media/D6xj3Y0XsAAjTSc.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1130141064969560066",
+          "display_url": "pic.twitter.com/d11UFgnQ2o"
+        }
+      ]
+    }
+  }
+}

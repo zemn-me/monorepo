@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1171173656355119110"
+        ],
+        "editableUntil": "2019-09-09T22:28:53.686Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Go",
+          "screen_name": "golang",
+          "indices": [
+            "127",
+            "134"
+          ],
+          "id_str": "113419064",
+          "id": "113419064"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "142"
+    ],
+    "favorite_count": "2",
+    "id_str": "1171173656355119110",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1171173656355119110",
+    "created_at": "Mon Sep 09 21:28:53 +0000 2019",
+    "favorited": false,
+    "full_text": "what the heck why is io.Write `Write(p []byte) (n int, err error)` but io.WriterTo is `WriteTo(w Writer) (n int64, err error)` @golang hewwo??",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "863870579937599490"
+        ],
+        "editableUntil": "2017-05-14T22:36:10.853Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "vulnerability",
+          "indices": [
+            "41",
+            "55"
+          ]
+        },
+        {
+          "text": "ETERNALBLUE",
+          "indices": [
+            "59",
+            "71"
+          ]
+        },
+        {
+          "text": "MS17010",
+          "indices": [
+            "74",
+            "82"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Tal Be'ery",
+          "screen_name": "TalBeerySec",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2470499646",
+          "id": "2470499646"
+        },
+        {
+          "name": "zerosum0x0",
+          "screen_name": "zerosum0x0",
+          "indices": [
+            "128",
+            "139"
+          ],
+          "id_str": "1472994971800117248",
+          "id": "1472994971800117248"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/FIj9Vp5Ns2",
+          "expanded_url": "https://github.com/RiskSense-Ops/MS17-010/blob/master/exploits/eternalblue/ms17_010_eternalblue.rb",
+          "display_url": "github.com/RiskSense-Ops/…",
+          "indices": [
+            "95",
+            "118"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "863870579937599490",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "863870579937599490",
+    "possibly_sensitive": false,
+    "created_at": "Sun May 14 21:36:10 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @TalBeerySec: Finally, the root-cause #vulnerability of #ETERNALBLUE / #MS17010 is exposed.\nhttps://t.co/FIj9Vp5Ns2\nKudos to @zerosum0x0…",
+    "lang": "en"
+  }
+}

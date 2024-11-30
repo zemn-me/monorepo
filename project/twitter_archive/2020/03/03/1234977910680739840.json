@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1234977910680739840"
+        ],
+        "editableUntil": "2020-03-04T00:04:13.343Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "milk",
+          "screen_name": "milkinhisbag",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "805701001",
+          "id": "805701001"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/milkinhisbag/status/1234549739460317185/photo/1",
+          "source_status_id": "1234549739460317185",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/zXJpBIcM1d",
+          "media_url": "http://pbs.twimg.com/media/ESIAcZmUYAAE7vg.jpg",
+          "id_str": "1234549735760879616",
+          "source_user_id": "805701001",
+          "id": "1234549735760879616",
+          "media_url_https": "https://pbs.twimg.com/media/ESIAcZmUYAAE7vg.jpg",
+          "source_user_id_str": "805701001",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "509",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "756",
+              "h": "566",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "756",
+              "h": "566",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1234549739460317185",
+          "display_url": "pic.twitter.com/zXJpBIcM1d"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1234977910680739840",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1234977910680739840",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 03 23:04:13 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @milkinhisbag: is this all i am to you https://t.co/zXJpBIcM1d",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/milkinhisbag/status/1234549739460317185/photo/1",
+          "source_status_id": "1234549739460317185",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/zXJpBIcM1d",
+          "media_url": "http://pbs.twimg.com/media/ESIAcZmUYAAE7vg.jpg",
+          "id_str": "1234549735760879616",
+          "source_user_id": "805701001",
+          "id": "1234549735760879616",
+          "media_url_https": "https://pbs.twimg.com/media/ESIAcZmUYAAE7vg.jpg",
+          "source_user_id_str": "805701001",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "509",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "756",
+              "h": "566",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "756",
+              "h": "566",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1234549739460317185",
+          "display_url": "pic.twitter.com/zXJpBIcM1d"
+        }
+      ]
+    }
+  }
+}

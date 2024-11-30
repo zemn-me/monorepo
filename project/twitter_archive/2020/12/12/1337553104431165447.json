@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337553104431165447"
+        ],
+        "editableUntil": "2020-12-12T01:21:25.288Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "🍔burger king piccolo🍔",
+          "screen_name": "BKPiccolo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1250303966316867585",
+          "id": "1250303966316867585"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BKPiccolo/status/1337552695364702208/video/1",
+          "source_status_id": "1337552695364702208",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/wSwstAPGj3",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337552687802376195/pu/img/yaq47Sbu8KP6u22c.jpg",
+          "id_str": "1337552687802376195",
+          "source_user_id": "1250303966316867585",
+          "id": "1337552687802376195",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337552687802376195/pu/img/yaq47Sbu8KP6u22c.jpg",
+          "source_user_id_str": "1250303966316867585",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337552695364702208",
+          "display_url": "pic.twitter.com/wSwstAPGj3"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "40"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337553104431165447",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337553104431165447",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 12 00:21:25 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @BKPiccolo: 😷 https://t.co/wSwstAPGj3",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BKPiccolo/status/1337552695364702208/video/1",
+          "source_status_id": "1337552695364702208",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/wSwstAPGj3",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337552687802376195/pu/img/yaq47Sbu8KP6u22c.jpg",
+          "id_str": "1337552687802376195",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "6167",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337552687802376195/pu/vid/360x360/JsLxj77v_o4KZboa.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1337552687802376195/pu/pl/BVvRjQirWAy7LOx6.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1250303966316867585",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1337552687802376195",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337552687802376195/pu/img/yaq47Sbu8KP6u22c.jpg",
+          "source_user_id_str": "1250303966316867585",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1337552695364702208",
+          "display_url": "pic.twitter.com/wSwstAPGj3"
+        }
+      ]
+    }
+  }
+}

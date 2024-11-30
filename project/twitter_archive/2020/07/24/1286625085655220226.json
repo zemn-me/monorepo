@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1286625085655220226"
+        ],
+        "editableUntil": "2020-07-24T12:31:39.415Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "purribell.bsky.social",
+          "screen_name": "PurriBell",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "749862124244131840",
+          "id": "749862124244131840"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PurriBell/status/1286548481528799233/video/1",
+          "source_status_id": "1286548481528799233",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/Nklnbk0VUb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1286548410229821440/pu/img/OyAtjP0NWn2h7sMY.jpg",
+          "id_str": "1286548410229821440",
+          "source_user_id": "749862124244131840",
+          "id": "1286548410229821440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1286548410229821440/pu/img/OyAtjP0NWn2h7sMY.jpg",
+          "source_user_id_str": "749862124244131840",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1286548481528799233",
+          "display_url": "pic.twitter.com/Nklnbk0VUb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "113"
+    ],
+    "favorite_count": "0",
+    "id_str": "1286625085655220226",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1286625085655220226",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jul 24 11:31:39 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @PurriBell: I HAVE LITERAL TEARS ROLLING DOWN MY FACE WHY IS THIS VIDEO SO FUNNY TO ME https://t.co/Nklnbk0VUb",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PurriBell/status/1286548481528799233/video/1",
+          "source_status_id": "1286548481528799233",
+          "indices": [
+            "90",
+            "113"
+          ],
+          "url": "https://t.co/Nklnbk0VUb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1286548410229821440/pu/img/OyAtjP0NWn2h7sMY.jpg",
+          "id_str": "1286548410229821440",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "4400",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1286548410229821440/pu/pl/HJ0BqdrDRWW7LAyz.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1286548410229821440/pu/vid/480x270/GU5XgdJVbso8UUwF.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1286548410229821440/pu/vid/640x360/4TG57iH9O3QYCB06.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "749862124244131840",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1286548410229821440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1286548410229821440/pu/img/OyAtjP0NWn2h7sMY.jpg",
+          "source_user_id_str": "749862124244131840",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1286548481528799233",
+          "display_url": "pic.twitter.com/Nklnbk0VUb"
+        }
+      ]
+    }
+  }
+}

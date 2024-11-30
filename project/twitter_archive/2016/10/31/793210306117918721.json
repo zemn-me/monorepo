@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "793210306117918721"
+        ],
+        "editableUntil": "2016-10-31T22:57:28.770Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Kamil Kisiel (кисель) 🇵🇱🇺🇦",
+          "screen_name": "kisielk",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "16489597",
+          "id": "16489597"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "793210306117918721",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "793210306117918721",
+    "created_at": "Mon Oct 31 21:57:28 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @kisielk: Today's git tip\n\nIn .gitconfig:\n\n[url \"git@github.com:\"]\n    insteadOf = gh:\n\nNow you can do, eg:\n\n$ git clone gh:kisielk/errc…",
+    "lang": "en"
+  }
+}

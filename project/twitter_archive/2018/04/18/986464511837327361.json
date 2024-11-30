@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "986464511837327361"
+        ],
+        "editableUntil": "2018-04-18T05:40:41.903Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "matty monroe🥤",
+          "screen_name": "MonrovianPrince",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "228557170",
+          "id": "228557170"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MonrovianPrince/status/985777832994529280/video/1",
+          "source_status_id": "985777832994529280",
+          "indices": [
+            "100",
+            "123"
+          ],
+          "url": "https://t.co/uePRZ9qLSS",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/985777728254132224/pu/img/wQPeyQVcqboJ1LJ_.jpg",
+          "id_str": "985777728254132224",
+          "source_user_id": "228557170",
+          "id": "985777728254132224",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/985777728254132224/pu/img/wQPeyQVcqboJ1LJ_.jpg",
+          "source_user_id_str": "228557170",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "985777832994529280",
+          "display_url": "pic.twitter.com/uePRZ9qLSS"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "123"
+    ],
+    "favorite_count": "0",
+    "id_str": "986464511837327361",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "986464511837327361",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 18 04:40:41 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @MonrovianPrince: just need to have this video of John Cena posted so I can re-watch it whenever https://t.co/uePRZ9qLSS",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MonrovianPrince/status/985777832994529280/video/1",
+          "source_status_id": "985777832994529280",
+          "indices": [
+            "100",
+            "123"
+          ],
+          "url": "https://t.co/uePRZ9qLSS",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/985777728254132224/pu/img/wQPeyQVcqboJ1LJ_.jpg",
+          "id_str": "985777728254132224",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "21165",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985777728254132224/pu/vid/640x360/-2i1_PDUfi2wHrYx.mp4?tag=2"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985777728254132224/pu/vid/320x180/PNhxqxboTosgKdIx.mp4?tag=2"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/985777728254132224/pu/pl/Yd_NjBdlfqmUXwdM.m3u8?tag=2&v=b33"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/985777728254132224/pu/vid/1280x720/6A5I_b_vTRQomLVr.mp4?tag=2"
+              }
+            ]
+          },
+          "source_user_id": "228557170",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "985777728254132224",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/985777728254132224/pu/img/wQPeyQVcqboJ1LJ_.jpg",
+          "source_user_id_str": "228557170",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "985777832994529280",
+          "display_url": "pic.twitter.com/uePRZ9qLSS"
+        }
+      ]
+    }
+  }
+}

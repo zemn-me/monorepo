@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1687196067757240320"
+        ],
+        "editableUntil": "2023-08-03T21:17:43.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/6lyUHwGq6W",
+          "expanded_url": "https://github.com/orgs/community/discussions/45229",
+          "display_url": "github.com/orgs/community…",
+          "indices": [
+            "235",
+            "258"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "258"
+    ],
+    "favorite_count": "2",
+    "id_str": "1687196067757240320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1687196067757240320",
+    "possibly_sensitive": false,
+    "created_at": "Thu Aug 03 20:17:43 +0000 2023",
+    "favorited": false,
+    "full_text": "niche github trivia I just discovered: branch protection rules only apply to *failed* tests. If you make a PR that breaks the GitHub test runner so it returns a neutral status the branch protection is bypassed without tests succeeding https://t.co/6lyUHwGq6W",
+    "lang": "en"
+  }
+}
