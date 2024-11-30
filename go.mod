@@ -8,9 +8,9 @@ go 1.22.7
 toolchain go1.23.3
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.39.1
+	github.com/bazelbuild/bazel-gazelle v0.40.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
-	github.com/bazelbuild/buildtools v0.0.0-20240827154017-dd10159baa91
+	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/go-delve/delve v1.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.2
@@ -42,7 +42,7 @@ require (
 	github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsevents v0.1.1 // indirect
-	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/getkin/kin-openapi v0.127.0 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
