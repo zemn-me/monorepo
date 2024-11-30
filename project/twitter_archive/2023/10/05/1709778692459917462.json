@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1709778692459917462"
+        ],
+        "editableUntil": "2023-10-05T04:53:01.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "dade",
+          "screen_name": "0xdade",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "3089780477",
+          "id": "3089780477"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "286"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1709776565532492233",
+    "id_str": "1709778692459917462",
+    "in_reply_to_user_id": "3089780477",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1709778692459917462",
+    "in_reply_to_status_id": "1709776565532492233",
+    "created_at": "Thu Oct 05 03:53:01 +0000 2023",
+    "favorited": false,
+    "full_text": "@0xdade yeah, I noticed COPY --chown -- but I wasn't uploading any files at all. the software I'm running just needed a data directory and the example mounted a volume. I've realised that since I'm on Fargate and pushing most data to S3, it's probably not a big deal to not have VOLUMEs",
+    "lang": "en",
+    "in_reply_to_screen_name": "0xdade",
+    "in_reply_to_user_id_str": "3089780477"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1067556187170922498"
+        ],
+        "editableUntil": "2018-11-28T00:10:03.913Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dallas Tester",
+          "screen_name": "DallasNChains",
+          "indices": [
+            "0",
+            "14"
+          ],
+          "id_str": "185825173",
+          "id": "185825173"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "248"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1067542983464017920",
+    "id_str": "1067556187170922498",
+    "in_reply_to_user_id": "185825173",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1067556187170922498",
+    "in_reply_to_status_id": "1067542983464017920",
+    "created_at": "Tue Nov 27 23:10:03 +0000 2018",
+    "favorited": false,
+    "full_text": "@DallasNChains yeah, I understand that it's reference documentation. it's just that associativity goes left to right for everything but godoc i.e. the build is passing, the chat is telegram, but for godoc you can't really say the godoc is reference",
+    "lang": "en",
+    "in_reply_to_screen_name": "DallasNChains",
+    "in_reply_to_user_id_str": "185825173"
+  }
+}

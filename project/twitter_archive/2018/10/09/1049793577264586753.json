@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1049793577264586753"
+        ],
+        "editableUntil": "2018-10-09T23:47:47.698Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "Coralie_Orgs",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Coralie_Orgs/status/1049379415224934400/video/1",
+          "source_status_id": "1049379415224934400",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/41tEENGmh0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1049379173901508609/pu/img/oJvWMQqQladDRzN2.jpg",
+          "id_str": "1049379173901508609",
+          "source_user_id": "3288648987",
+          "id": "1049379173901508609",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1049379173901508609/pu/img/oJvWMQqQladDRzN2.jpg",
+          "source_user_id_str": "3288648987",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1049379415224934400",
+          "display_url": "pic.twitter.com/41tEENGmh0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1049793577264586753",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1049793577264586753",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 09 22:47:47 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Coralie_Orgs: Bonsoir je vous présente mon chat https://t.co/41tEENGmh0",
+    "lang": "fr",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Coralie_Orgs/status/1049379415224934400/video/1",
+          "source_status_id": "1049379415224934400",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/41tEENGmh0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1049379173901508609/pu/img/oJvWMQqQladDRzN2.jpg",
+          "id_str": "1049379173901508609",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "5593",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049379173901508609/pu/vid/720x1280/elx_IVvk3etQdAyy.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049379173901508609/pu/vid/360x640/7XqYSvb9ocgn9zti.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1049379173901508609/pu/vid/180x320/vpSvaECDQ86IVxJe.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1049379173901508609/pu/pl/ecJDKv2XQJUVY2cE.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "3288648987",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1049379173901508609",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1049379173901508609/pu/img/oJvWMQqQladDRzN2.jpg",
+          "source_user_id_str": "3288648987",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1049379415224934400",
+          "display_url": "pic.twitter.com/41tEENGmh0"
+        }
+      ]
+    }
+  }
+}

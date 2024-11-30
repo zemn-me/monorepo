@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1067789287083700224"
+        ],
+        "editableUntil": "2018-11-28T15:36:19.263Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "hello",
+          "screen_name": "KardOnIce",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "4838839944",
+          "id": "4838839944"
+        },
+        {
+          "name": "Fake “Unicode.” 🩵🆓",
+          "screen_name": "FakeUnicode",
+          "indices": [
+            "11",
+            "23"
+          ],
+          "id_str": "2183231114",
+          "id": "2183231114"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "270"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1067788748413390853",
+    "id_str": "1067789287083700224",
+    "in_reply_to_user_id": "4838839944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1067789287083700224",
+    "in_reply_to_status_id": "1067788748413390853",
+    "created_at": "Wed Nov 28 14:36:19 +0000 2018",
+    "favorited": false,
+    "full_text": "@KardOnIce @FakeUnicode i still don't really get the feeling this is anything more than a nice-to-have based on your example. if you are still interested, it'd be great to see how you would do your digit parsing example in a language that handles this 'better' vs in Go.",
+    "lang": "en",
+    "in_reply_to_screen_name": "KardOnIce",
+    "in_reply_to_user_id_str": "4838839944"
+  }
+}

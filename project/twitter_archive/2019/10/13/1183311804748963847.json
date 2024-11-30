@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1183311804748963847"
+        ],
+        "editableUntil": "2019-10-13T10:21:33.779Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Christin",
+          "screen_name": "hexprax",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "249866299",
+          "id": "249866299"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/grizedinmypants/status/1183179010399973376/video/1",
+          "source_status_id": "1183179010399973376",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/BLt3fhBQWm",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1183178582199357440/pu/img/-sOfmldq7c_RKaC2.jpg",
+          "id_str": "1183178582199357440",
+          "source_user_id": "502130439",
+          "id": "1183178582199357440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1183178582199357440/pu/img/-sOfmldq7c_RKaC2.jpg",
+          "source_user_id_str": "502130439",
+          "sizes": {
+            "medium": {
+              "w": "555",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "592",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "315",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1183179010399973376",
+          "display_url": "pic.twitter.com/BLt3fhBQWm"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "85"
+    ],
+    "favorite_count": "0",
+    "id_str": "1183311804748963847",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1183311804748963847",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 13 09:21:33 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @hexprax: This is how I feel whenever I’m awake after 9 pm https://t.co/BLt3fhBQWm",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/grizedinmypants/status/1183179010399973376/video/1",
+          "source_status_id": "1183179010399973376",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/BLt3fhBQWm",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1183178582199357440/pu/img/-sOfmldq7c_RKaC2.jpg",
+          "id_str": "1183178582199357440",
+          "video_info": {
+            "aspect_ratio": [
+              "37",
+              "80"
+            ],
+            "duration_millis": "9537",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1183178582199357440/pu/vid/360x778/-E0NjlFQDM6HxGa6.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1183178582199357440/pu/vid/592x1280/OqPychNAO7ojFbx9.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1183178582199357440/pu/pl/vZ61atCMGwHJnpVP.m3u8?tag=10&v=dd3"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1183178582199357440/pu/vid/320x690/Fqd4bwiWayi5NRS6.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "502130439",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1183178582199357440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1183178582199357440/pu/img/-sOfmldq7c_RKaC2.jpg",
+          "source_user_id_str": "502130439",
+          "sizes": {
+            "medium": {
+              "w": "555",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "592",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "315",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1183179010399973376",
+          "display_url": "pic.twitter.com/BLt3fhBQWm"
+        }
+      ]
+    }
+  }
+}

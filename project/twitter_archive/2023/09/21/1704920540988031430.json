@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1704920540988031430"
+        ],
+        "editableUntil": "2023-09-21T19:08:27.520Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "PortSwigger Research",
+          "screen_name": "PortSwiggerRes",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1177545689460592640",
+          "id": "1177545689460592640"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1704920540988031430",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1704920540988031430",
+    "created_at": "Thu Sep 21 18:08:27 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @PortSwiggerRes: Have you found XSS inside a function call but severely restricted and can't use the characters  `, (), ?, [], or ,? Aft…",
+    "lang": "en"
+  }
+}

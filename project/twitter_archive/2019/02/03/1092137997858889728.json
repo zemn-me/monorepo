@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1092137997858889728"
+        ],
+        "editableUntil": "2019-02-03T20:09:24.289Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "connor",
+          "screen_name": "ConnorEatsPants",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1049716874",
+          "id": "1049716874"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ConnorEatsPants/status/1091794316736057344/video/1",
+          "source_status_id": "1091794316736057344",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/rYrSkZL7fD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1091794232983994368/pu/img/bBdIu5_wGRaE3M7n.jpg",
+          "id_str": "1091794232983994368",
+          "source_user_id": "1049716874",
+          "id": "1091794232983994368",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1091794232983994368/pu/img/bBdIu5_wGRaE3M7n.jpg",
+          "source_user_id_str": "1049716874",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1091794316736057344",
+          "display_url": "pic.twitter.com/rYrSkZL7fD"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1092137997858889728",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1092137997858889728",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 03 19:09:24 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @ConnorEatsPants: https://t.co/rYrSkZL7fD",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ConnorEatsPants/status/1091794316736057344/video/1",
+          "source_status_id": "1091794316736057344",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/rYrSkZL7fD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1091794232983994368/pu/img/bBdIu5_wGRaE3M7n.jpg",
+          "id_str": "1091794232983994368",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "8542",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1091794232983994368/pu/vid/1280x720/-iB3_c06t8QGrbyA.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1091794232983994368/pu/vid/640x360/DEXbsq1IEU7RadsR.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1091794232983994368/pu/pl/lDjLOcLKq0rXX6q0.m3u8?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1091794232983994368/pu/vid/320x180/L437FyPjT6YK2n5d.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "1049716874",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1091794232983994368",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1091794232983994368/pu/img/bBdIu5_wGRaE3M7n.jpg",
+          "source_user_id_str": "1049716874",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1091794316736057344",
+          "display_url": "pic.twitter.com/rYrSkZL7fD"
+        }
+      ]
+    }
+  }
+}

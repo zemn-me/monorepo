@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1122249848932196352"
+        ],
+        "editableUntil": "2019-04-27T22:23:09.036Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "the Cagle Cats",
+          "screen_name": "CagleCats",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "900851740840534016",
+          "id": "900851740840534016"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CagleCats/status/1122010227078049792/video/1",
+          "source_status_id": "1122010227078049792",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/Fw1pNCk2rh",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1122010161885921280/pu/img/d88mZ5lSbZnCzl2A.jpg",
+          "id_str": "1122010161885921280",
+          "source_user_id": "900851740840534016",
+          "id": "1122010161885921280",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1122010161885921280/pu/img/d88mZ5lSbZnCzl2A.jpg",
+          "source_user_id_str": "900851740840534016",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1122010227078049792",
+          "display_url": "pic.twitter.com/Fw1pNCk2rh"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "0",
+    "id_str": "1122249848932196352",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1122249848932196352",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 27 21:23:09 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @CagleCats: Teaching baby how to playfight https://t.co/Fw1pNCk2rh",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CagleCats/status/1122010227078049792/video/1",
+          "source_status_id": "1122010227078049792",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/Fw1pNCk2rh",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1122010161885921280/pu/img/d88mZ5lSbZnCzl2A.jpg",
+          "id_str": "1122010161885921280",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "33362",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1122010161885921280/pu/pl/ATSDT0h5PsdzZXpZ.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1122010161885921280/pu/vid/640x360/wIXetcxz_Rfm0p3R.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1122010161885921280/pu/vid/480x270/spjcw74abr2slB3s.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1122010161885921280/pu/vid/1280x720/-2bXpo5yf9DFqORb.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "900851740840534016",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1122010161885921280",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1122010161885921280/pu/img/d88mZ5lSbZnCzl2A.jpg",
+          "source_user_id_str": "900851740840534016",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1122010227078049792",
+          "display_url": "pic.twitter.com/Fw1pNCk2rh"
+        }
+      ]
+    }
+  }
+}

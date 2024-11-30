@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1245172576147685381"
+        ],
+        "editableUntil": "2020-04-01T03:14:10.998Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "World birds",
+          "screen_name": "worldbirds32",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "875791392659963905",
+          "id": "875791392659963905"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/worldbirds32/status/1245074079763312642/video/1",
+          "source_status_id": "1245074079763312642",
+          "indices": [
+            "104",
+            "127"
+          ],
+          "url": "https://t.co/WqBUInFHx1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1245073743107559424/pu/img/FlyjiH_S6PeulWRR.jpg",
+          "id_str": "1245073743107559424",
+          "source_user_id": "875791392659963905",
+          "id": "1245073743107559424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1245073743107559424/pu/img/FlyjiH_S6PeulWRR.jpg",
+          "source_user_id_str": "875791392659963905",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1245074079763312642",
+          "display_url": "pic.twitter.com/WqBUInFHx1"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "127"
+    ],
+    "favorite_count": "0",
+    "id_str": "1245172576147685381",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1245172576147685381",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 01 02:14:10 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @worldbirds32: Fischer's Turaco (Tauraco fischeri)🐦🦜🕊️🎵Common Nightingale (Luscinia megarhynchos)🎵❤️ https://t.co/WqBUInFHx1",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/worldbirds32/status/1245074079763312642/video/1",
+          "source_status_id": "1245074079763312642",
+          "indices": [
+            "104",
+            "127"
+          ],
+          "url": "https://t.co/WqBUInFHx1",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1245073743107559424/pu/img/FlyjiH_S6PeulWRR.jpg",
+          "id_str": "1245073743107559424",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "38000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1245073743107559424/pu/vid/480x270/htHpzzzDI8RPCAZL.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1245073743107559424/pu/vid/1280x720/ZnKHpPCgdRZDJ5Ly.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1245073743107559424/pu/pl/XHuMgMyoxN3BnA17.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1245073743107559424/pu/vid/640x360/eZ_H5bCL61riCw0s.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "875791392659963905",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1245073743107559424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1245073743107559424/pu/img/FlyjiH_S6PeulWRR.jpg",
+          "source_user_id_str": "875791392659963905",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1245074079763312642",
+          "display_url": "pic.twitter.com/WqBUInFHx1"
+        }
+      ]
+    }
+  }
+}

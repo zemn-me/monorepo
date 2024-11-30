@@ -1,0 +1,141 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "654366129801007104"
+        ],
+        "editableUntil": "2015-10-14T19:40:17.536Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Tavis Ormandy",
+          "screen_name": "taviso",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "14453232",
+          "id": "14453232"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/taviso/status/654321182338977792/photo/1",
+          "source_status_id": "654321182338977792",
+          "indices": [
+            "117",
+            "139"
+          ],
+          "url": "http://t.co/mVVKVw7ZUd",
+          "media_url": "http://pbs.twimg.com/media/CRSdpfHUAAEKtvV.jpg",
+          "id_str": "654321181927931905",
+          "source_user_id": "14453232",
+          "id": "654321181927931905",
+          "media_url_https": "https://pbs.twimg.com/media/CRSdpfHUAAEKtvV.jpg",
+          "source_user_id_str": "14453232",
+          "sizes": {
+            "medium": {
+              "w": "1025",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1025",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "239",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "654321182338977792",
+          "display_url": "pic.twitter.com/mVVKVw7ZUd"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "notjoking",
+          "indices": [
+            "106",
+            "116"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "139"
+    ],
+    "favorite_count": "0",
+    "id_str": "654366129801007104",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "654366129801007104",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 14 18:40:17 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @taviso: I found a major antivirus vendor doing s/strncpy/strcpy/g on what *was* safe opensource code. #notjoking http://t.co/mVVKVw7ZUd",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/taviso/status/654321182338977792/photo/1",
+          "source_status_id": "654321182338977792",
+          "indices": [
+            "117",
+            "139"
+          ],
+          "url": "http://t.co/mVVKVw7ZUd",
+          "media_url": "http://pbs.twimg.com/media/CRSdpfHUAAEKtvV.jpg",
+          "id_str": "654321181927931905",
+          "source_user_id": "14453232",
+          "id": "654321181927931905",
+          "media_url_https": "https://pbs.twimg.com/media/CRSdpfHUAAEKtvV.jpg",
+          "source_user_id_str": "14453232",
+          "sizes": {
+            "medium": {
+              "w": "1025",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1025",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "239",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "654321182338977792",
+          "display_url": "pic.twitter.com/mVVKVw7ZUd"
+        }
+      ]
+    }
+  }
+}

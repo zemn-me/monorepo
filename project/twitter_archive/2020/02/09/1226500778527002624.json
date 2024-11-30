@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1226500778527002624"
+        ],
+        "editableUntil": "2020-02-09T14:39:07.540Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Anthony Hopkins",
+          "screen_name": "AnthonyHopkins",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "782973815496192000",
+          "id": "782973815496192000"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AnthonyHopkins/status/1226189933703921666/video/1",
+          "source_status_id": "1226189933703921666",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/soxeN1oCUo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1226189908290592768/pu/img/OXoaUlVoZAI_MrI_.jpg",
+          "id_str": "1226189908290592768",
+          "source_user_id": "782973815496192000",
+          "id": "1226189908290592768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1226189908290592768/pu/img/OXoaUlVoZAI_MrI_.jpg",
+          "source_user_id_str": "782973815496192000",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1226189933703921666",
+          "display_url": "pic.twitter.com/soxeN1oCUo"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "81"
+    ],
+    "favorite_count": "0",
+    "id_str": "1226500778527002624",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1226500778527002624",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 09 13:39:07 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @AnthonyHopkins: Niblo wishes everyone a lovely day... https://t.co/soxeN1oCUo",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AnthonyHopkins/status/1226189933703921666/video/1",
+          "source_status_id": "1226189933703921666",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/soxeN1oCUo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1226189908290592768/pu/img/OXoaUlVoZAI_MrI_.jpg",
+          "id_str": "1226189908290592768",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "17183",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1226189908290592768/pu/vid/720x1280/tgZ-WiLuPoMWBmcP.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1226189908290592768/pu/vid/320x568/a3_IungSmRk6nzGt.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1226189908290592768/pu/vid/360x640/Y-b6jaEU10l5r65Z.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1226189908290592768/pu/pl/cIiJlxbocg72H71P.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "782973815496192000",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1226189908290592768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1226189908290592768/pu/img/OXoaUlVoZAI_MrI_.jpg",
+          "source_user_id_str": "782973815496192000",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1226189933703921666",
+          "display_url": "pic.twitter.com/soxeN1oCUo"
+        }
+      ]
+    }
+  }
+}

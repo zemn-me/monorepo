@@ -1,0 +1,80 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1565525685950500865"
+        ],
+        "editableUntil": "2022-09-02T02:53:04.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Briggs Clœlia",
+          "screen_name": "BriggsL",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "1830030075963588610",
+          "id": "1830030075963588610"
+        },
+        {
+          "name": "Gareth Lewin",
+          "screen_name": "garethlewin",
+          "indices": [
+            "9",
+            "21"
+          ],
+          "id_str": "14195214",
+          "id": "14195214"
+        },
+        {
+          "name": "Theo",
+          "screen_name": "t3dotgg",
+          "indices": [
+            "22",
+            "30"
+          ],
+          "id_str": "58855664",
+          "id": "58855664"
+        },
+        {
+          "name": "lil bro",
+          "screen_name": "thdxr",
+          "indices": [
+            "31",
+            "37"
+          ],
+          "id_str": "2870102861",
+          "id": "2870102861"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "303"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1565525375408435200",
+    "id_str": "1565525685950500865",
+    "in_reply_to_user_id": "17814727",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1565525685950500865",
+    "in_reply_to_status_id": "1565525375408435200",
+    "created_at": "Fri Sep 02 02:23:04 +0000 2022",
+    "favorited": false,
+    "full_text": "@briggsl @garethlewin @t3dotgg @thdxr No, that's not what I mean. What I mean is that the CI run has access to the pulumi token, which means the attacker can do anything with it (or even steal it!). They can then run `pulumi state unprotect --all` with that token and the protection is now doing nothing",
+    "lang": "en",
+    "in_reply_to_user_id_str": "17814727"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1612249100841541632"
+        ],
+        "editableUntil": "2023-01-09T01:15:14.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "273"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1612249098857635840",
+    "id_str": "1612249100841541632",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1612249100841541632",
+    "in_reply_to_status_id": "1612249098857635840",
+    "created_at": "Mon Jan 09 00:45:14 +0000 2023",
+    "favorited": false,
+    "full_text": "What about different coordinate spaces / geometries?\n\nif\n\ntype Point3D = [x: number, y: number, z: number]\n\nis for your cartesian geometry library, then Point2D in homogenous coordinates = [ x: number, y: number, k: number ] is considered the same by the type system! (3/4)",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

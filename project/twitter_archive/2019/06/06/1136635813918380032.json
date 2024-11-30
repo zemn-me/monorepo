@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1136635813918380032"
+        ],
+        "editableUntil": "2019-06-06T15:07:50.367Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "austin 🇵🇸",
+          "screen_name": "stdlib",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "23419587",
+          "id": "23419587"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "26",
+    "in_reply_to_status_id_str": "1136629930060636162",
+    "id_str": "1136635813918380032",
+    "in_reply_to_user_id": "23419587",
+    "truncated": false,
+    "retweet_count": "2",
+    "id": "1136635813918380032",
+    "in_reply_to_status_id": "1136629930060636162",
+    "created_at": "Thu Jun 06 14:07:50 +0000 2019",
+    "favorited": false,
+    "full_text": "@stdlib okay so if I'm getting this right:\n1) nix OS uses 'derivations' as a system of package management. these use a SHA-1 hash of the request URL for security\n2) chrome has non-deterministic request URLs\n3) therefore, nix OS exploits a collision in its OWN hashing to bypass it",
+    "lang": "en",
+    "in_reply_to_screen_name": "stdlib",
+    "in_reply_to_user_id_str": "23419587"
+  }
+}

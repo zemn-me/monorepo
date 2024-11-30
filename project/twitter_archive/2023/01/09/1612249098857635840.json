@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1612249098857635840"
+        ],
+        "editableUntil": "2023-01-09T01:15:13.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "274"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1612249096533991424",
+    "id_str": "1612249098857635840",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1612249098857635840",
+    "in_reply_to_status_id": "1612249096533991424",
+    "created_at": "Mon Jan 09 00:45:13 +0000 2023",
+    "favorited": false,
+    "full_text": "so structurally,\ntype Point2D = [x: number, y: number];\ntype Polyline = Point2D[];\n\nBut then what's a polygon? Is it any polyline that ends with the same point as it started?\n\ntype Polygon&lt;StartX, StartY&gt; = [ [ StartX, StartY], ...Point2D[], [StartX, StartY ] ]? (2/4)",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

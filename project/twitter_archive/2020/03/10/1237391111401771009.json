@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1237391111401771009"
+        ],
+        "editableUntil": "2020-03-10T15:53:25.230Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Daniel Beauchamp",
+          "screen_name": "pushmatrix",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "91908253",
+          "id": "91908253"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pushmatrix/status/1237373570277191687/video/1",
+          "source_status_id": "1237373570277191687",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/hM9mnfNPJx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1237372555352141825/pu/img/5i9sHX6vvlczUCMK.jpg",
+          "id_str": "1237372555352141825",
+          "source_user_id": "91908253",
+          "id": "1237372555352141825",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1237372555352141825/pu/img/5i9sHX6vvlczUCMK.jpg",
+          "source_user_id_str": "91908253",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1237373570277191687",
+          "display_url": "pic.twitter.com/hM9mnfNPJx"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "107"
+    ],
+    "favorite_count": "0",
+    "id_str": "1237391111401771009",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1237391111401771009",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 10 14:53:25 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @pushmatrix: It's VR Jenga but your fingers get longer after every move.\nYou in? https://t.co/hM9mnfNPJx",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pushmatrix/status/1237373570277191687/video/1",
+          "source_status_id": "1237373570277191687",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/hM9mnfNPJx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1237372555352141825/pu/img/5i9sHX6vvlczUCMK.jpg",
+          "id_str": "1237372555352141825",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "14367",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1237372555352141825/pu/vid/720x720/-7HZ9O0vMlUFkZiA.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1237372555352141825/pu/pl/R8rKa-ngioW6eWaL.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1237372555352141825/pu/vid/480x480/CIoH2SYHFhhhyiRK.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1237372555352141825/pu/vid/320x320/kptA-fErs8Fi35dd.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "91908253",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1237372555352141825",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1237372555352141825/pu/img/5i9sHX6vvlczUCMK.jpg",
+          "source_user_id_str": "91908253",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1237373570277191687",
+          "display_url": "pic.twitter.com/hM9mnfNPJx"
+        }
+      ]
+    }
+  }
+}

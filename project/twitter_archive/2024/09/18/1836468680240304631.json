@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1836468680240304631"
+        ],
+        "editableUntil": "2024-09-18T19:13:47.964Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Linus Tech Tips",
+          "screen_name": "LinusTech",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "403614288",
+          "id": "403614288"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LinusTech/status/1836134860391616762/video/1",
+          "source_status_id": "1836134860391616762",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/jaqSUwvypd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1836134742997241861/pu/img/Ys-jFoODnI2dSomK.jpg",
+          "id_str": "1836134742997241861",
+          "source_user_id": "403614288",
+          "id": "1836134742997241861",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1836134742997241861/pu/img/Ys-jFoODnI2dSomK.jpg",
+          "source_user_id_str": "403614288",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1836134860391616762",
+          "display_url": "pic.twitter.com/jaqSUwvypd"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "86"
+    ],
+    "favorite_count": "0",
+    "id_str": "1836468680240304631",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1836468680240304631",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 18 18:13:47 +0000 2024",
+    "favorited": false,
+    "full_text": "RT @LinusTech: People always ask how we get hacked so often... https://t.co/jaqSUwvypd",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LinusTech/status/1836134860391616762/video/1",
+          "source_status_id": "1836134860391616762",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/jaqSUwvypd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1836134742997241861/pu/img/Ys-jFoODnI2dSomK.jpg",
+          "id_str": "1836134742997241861",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "12400",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1836134742997241861/pu/vid/avc1/320x568/PMSlp43H105Txhsr.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1836134742997241861/pu/vid/avc1/576x1024/OKw85yWmjU_bLpmb.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1836134742997241861/pu/pl/wOvyvQiPq8QBA-VV.m3u8?tag=12&v=fbc"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1836134742997241861/pu/vid/avc1/480x852/hVrq-EjNVEIgU3X_.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "403614288",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1836134742997241861",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1836134742997241861/pu/img/Ys-jFoODnI2dSomK.jpg",
+          "source_user_id_str": "403614288",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1836134860391616762",
+          "display_url": "pic.twitter.com/jaqSUwvypd"
+        }
+      ]
+    }
+  }
+}

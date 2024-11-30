@@ -1,0 +1,139 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1042715684248186880"
+        ],
+        "editableUntil": "2018-09-20T11:02:46.502Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/Cjhztnfeiu",
+          "expanded_url": "https://play.golang.org/p/bCPgh5VN7Fp",
+          "display_url": "play.golang.org/p/bCPgh5VN7Fp",
+          "indices": [
+            "64",
+            "87"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1042715684248186880/photo/1",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/xEPukvN2Px",
+          "media_url": "http://pbs.twimg.com/media/Dnh4RKeXoAMkJAq.jpg",
+          "id_str": "1042715550001111043",
+          "id": "1042715550001111043",
+          "media_url_https": "https://pbs.twimg.com/media/Dnh4RKeXoAMkJAq.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "62",
+              "h": "62",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "2048",
+              "h": "61",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "36",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "20",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/xEPukvN2Px"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "88",
+            "95"
+          ]
+        },
+        {
+          "text": "bug",
+          "indices": [
+            "96",
+            "100"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "124"
+    ],
+    "favorite_count": "0",
+    "id_str": "1042715684248186880",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1042715684248186880",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 20 10:02:46 +0000 2018",
+    "favorited": false,
+    "full_text": "go dislikes being asked to parse a time in the year 200 billion https://t.co/Cjhztnfeiu #golang #bug https://t.co/xEPukvN2Px",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1042715684248186880/photo/1",
+          "indices": [
+            "101",
+            "124"
+          ],
+          "url": "https://t.co/xEPukvN2Px",
+          "media_url": "http://pbs.twimg.com/media/Dnh4RKeXoAMkJAq.jpg",
+          "id_str": "1042715550001111043",
+          "id": "1042715550001111043",
+          "media_url_https": "https://pbs.twimg.com/media/Dnh4RKeXoAMkJAq.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "62",
+              "h": "62",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "2048",
+              "h": "61",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "36",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "20",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/xEPukvN2Px"
+        }
+      ]
+    }
+  }
+}

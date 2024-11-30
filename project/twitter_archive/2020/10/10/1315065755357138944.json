@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1315065755357138944"
+        ],
+        "editableUntil": "2020-10-11T00:04:43.474Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Matt Post",
+          "screen_name": "MattPostSaysHi",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "2871453981",
+          "id": "2871453981"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MattPostSaysHi/status/1314754879265660928/video/1",
+          "source_status_id": "1314754879265660928",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/xAIqKeTZ6D",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1314754835741315074/pu/img/GQ398TtdDjl_DKK_.jpg",
+          "id_str": "1314754835741315074",
+          "source_user_id": "2871453981",
+          "id": "1314754835741315074",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1314754835741315074/pu/img/GQ398TtdDjl_DKK_.jpg",
+          "source_user_id_str": "2871453981",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1314754879265660928",
+          "display_url": "pic.twitter.com/xAIqKeTZ6D"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "125"
+    ],
+    "favorite_count": "0",
+    "id_str": "1315065755357138944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1315065755357138944",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 10 23:04:43 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @MattPostSaysHi: It’s not up for debate. Animals have the best comedic timing. It’s not even fair. https://t.co/xAIqKeTZ6D",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MattPostSaysHi/status/1314754879265660928/video/1",
+          "source_status_id": "1314754879265660928",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/xAIqKeTZ6D",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1314754835741315074/pu/img/GQ398TtdDjl_DKK_.jpg",
+          "id_str": "1314754835741315074",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "24500",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1314754835741315074/pu/pl/rOyfih1EjNRQ1MOI.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1314754835741315074/pu/vid/576x1024/uhROix0YsYqnOY_s.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1314754835741315074/pu/vid/360x640/Gm7ulU7A8laWn7E3.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1314754835741315074/pu/vid/320x568/kR8duuog5r1oo616.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2871453981",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1314754835741315074",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1314754835741315074/pu/img/GQ398TtdDjl_DKK_.jpg",
+          "source_user_id_str": "2871453981",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1314754879265660928",
+          "display_url": "pic.twitter.com/xAIqKeTZ6D"
+        }
+      ]
+    }
+  }
+}

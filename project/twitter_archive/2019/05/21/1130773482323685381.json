@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1130773482323685381"
+        ],
+        "editableUntil": "2019-05-21T10:53:01.598Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lux Manning",
+          "screen_name": "AConnorManning",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1370244269718433797",
+          "id": "1370244269718433797"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AConnorManning/status/1130347349434195969/video/1",
+          "source_status_id": "1130347349434195969",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ipmsBaU4tq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1130347256714940416/pu/img/BQzsQ-VX51cPFc-J.jpg",
+          "id_str": "1130347256714940416",
+          "source_user_id": "119263820",
+          "id": "1130347256714940416",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1130347256714940416/pu/img/BQzsQ-VX51cPFc-J.jpg",
+          "source_user_id_str": "119263820",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1130347349434195969",
+          "display_url": "pic.twitter.com/ipmsBaU4tq"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1130773482323685381",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1130773482323685381",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 21 09:53:01 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @AConnorManning: I almost forgot to show you this video of my neighbor's dog Rocky https://t.co/ipmsBaU4tq",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AConnorManning/status/1130347349434195969/video/1",
+          "source_status_id": "1130347349434195969",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ipmsBaU4tq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1130347256714940416/pu/img/BQzsQ-VX51cPFc-J.jpg",
+          "id_str": "1130347256714940416",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "26995",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1130347256714940416/pu/vid/720x1280/7uN0NGzIe0gr8_dD.mp4?tag=9"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1130347256714940416/pu/vid/320x568/tF7V9jw91mQZ475F.mp4?tag=9"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1130347256714940416/pu/vid/360x640/KG3YVIT1PBPGDnjB.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1130347256714940416/pu/pl/H6OJjv9tf6sKpl9N.m3u8?tag=9&v=8e3"
+              }
+            ]
+          },
+          "source_user_id": "119263820",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1130347256714940416",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1130347256714940416/pu/img/BQzsQ-VX51cPFc-J.jpg",
+          "source_user_id_str": "119263820",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1130347349434195969",
+          "display_url": "pic.twitter.com/ipmsBaU4tq"
+        }
+      ]
+    }
+  }
+}

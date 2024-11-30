@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "979555780453191680"
+        ],
+        "editableUntil": "2018-03-30T04:07:51.983Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "nevona",
+          "screen_name": "nevona",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "15191548",
+          "id": "15191548"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nevona/status/979551362798309376/video/1",
+          "source_status_id": "979551362798309376",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/e86XmgRc0b",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/979551259521896448/pu/img/Ob395KZy9vkHfpml.jpg",
+          "id_str": "979551259521896448",
+          "source_user_id": "15191548",
+          "id": "979551259521896448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/979551259521896448/pu/img/Ob395KZy9vkHfpml.jpg",
+          "source_user_id_str": "15191548",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "979551362798309376",
+          "display_url": "pic.twitter.com/e86XmgRc0b"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "96"
+    ],
+    "favorite_count": "0",
+    "id_str": "979555780453191680",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "979555780453191680",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 30 03:07:51 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @nevona: i've had these harmonizing samoyeds stuck in my head all day https://t.co/e86XmgRc0b",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nevona/status/979551362798309376/video/1",
+          "source_status_id": "979551362798309376",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/e86XmgRc0b",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/979551259521896448/pu/img/Ob395KZy9vkHfpml.jpg",
+          "id_str": "979551259521896448",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "44733",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/979551259521896448/pu/pl/6LOJ9mcHQQEu1ZK5.m3u8?v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/979551259521896448/pu/vid/640x360/e8bZ6jewZsvZjtxB.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/979551259521896448/pu/vid/1280x720/1oqtv4Lx_46NUG3L.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/979551259521896448/pu/vid/320x180/Xgd5yGhAbCY8zrs7.mp4"
+              }
+            ]
+          },
+          "source_user_id": "15191548",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "979551259521896448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/979551259521896448/pu/img/Ob395KZy9vkHfpml.jpg",
+          "source_user_id_str": "15191548",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "979551362798309376",
+          "display_url": "pic.twitter.com/e86XmgRc0b"
+        }
+      ]
+    }
+  }
+}

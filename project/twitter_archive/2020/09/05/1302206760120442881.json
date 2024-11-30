@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1302206760120442881"
+        ],
+        "editableUntil": "2020-09-05T12:27:40.101Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1302155633660108800/video/1",
+          "source_status_id": "1302155633660108800",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/qelSho4VoZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1302155592379715585/pu/img/cxWjxoVj2ZSwRkXV.jpg",
+          "id_str": "1302155592379715585",
+          "source_user_id": "2275883743",
+          "id": "1302155592379715585",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1302155592379715585/pu/img/cxWjxoVj2ZSwRkXV.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1302155633660108800",
+          "display_url": "pic.twitter.com/qelSho4VoZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "89"
+    ],
+    "favorite_count": "0",
+    "id_str": "1302206760120442881",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1302206760120442881",
+    "possibly_sensitive": false,
+    "created_at": "Sat Sep 05 11:27:40 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: The Killer Rabbit of Caerbannog; training day. https://t.co/qelSho4VoZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1302155633660108800/video/1",
+          "source_status_id": "1302155633660108800",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/qelSho4VoZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1302155592379715585/pu/img/cxWjxoVj2ZSwRkXV.jpg",
+          "id_str": "1302155592379715585",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "11300",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1302155592379715585/pu/pl/NDfySUjITj4X54zx.m3u8?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1302155592379715585/pu/vid/320x400/BRhVd_x2HGO8Y-A5.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1302155592379715585/pu/vid/360x450/rGpOZ2yPGgOntz0R.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1302155592379715585/pu/vid/640x800/hqZ9-aNoNMA-PgeK.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1302155592379715585",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1302155592379715585/pu/img/cxWjxoVj2ZSwRkXV.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1302155633660108800",
+          "display_url": "pic.twitter.com/qelSho4VoZ"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1267066655504568320"
+        ],
+        "editableUntil": "2020-05-31T13:13:26.289Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Cabel Sasser",
+          "screen_name": "cabel",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "1919231",
+          "id": "1919231"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/cabel/status/1266428485804847104/video/1",
+          "source_status_id": "1266428485804847104",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/awPQn8Jjou",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1266428438178443264/pu/img/a21rfrRbZqooQD7O.jpg",
+          "id_str": "1266428438178443264",
+          "source_user_id": "1919231",
+          "id": "1266428438178443264",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1266428438178443264/pu/img/a21rfrRbZqooQD7O.jpg",
+          "source_user_id_str": "1919231",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "315",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "555",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1280",
+              "h": "592",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1266428485804847104",
+          "display_url": "pic.twitter.com/awPQn8Jjou"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "1267066655504568320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1267066655504568320",
+    "possibly_sensitive": false,
+    "created_at": "Sun May 31 12:13:26 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @cabel: Hmm, what port did I plug AP-6 into again? 🤯 Extremely awesome. https://t.co/awPQn8Jjou",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/cabel/status/1266428485804847104/video/1",
+          "source_status_id": "1266428485804847104",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/awPQn8Jjou",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1266428438178443264/pu/img/a21rfrRbZqooQD7O.jpg",
+          "id_str": "1266428438178443264",
+          "video_info": {
+            "aspect_ratio": [
+              "80",
+              "37"
+            ],
+            "duration_millis": "34748",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266428438178443264/pu/vid/582x270/VKYxTxky6ujPL-cC.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266428438178443264/pu/vid/1280x592/zbvRNjkrmMdgXbW7.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1266428438178443264/pu/pl/ZTH7g7MSwmZFeNZA.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266428438178443264/pu/vid/778x360/As3ItQMJx6-3VDKy.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1919231",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1266428438178443264",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1266428438178443264/pu/img/a21rfrRbZqooQD7O.jpg",
+          "source_user_id_str": "1919231",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "315",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "555",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1280",
+              "h": "592",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1266428485804847104",
+          "display_url": "pic.twitter.com/awPQn8Jjou"
+        }
+      ]
+    }
+  }
+}

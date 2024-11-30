@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1323584775077191688"
+        ],
+        "editableUntil": "2020-11-03T12:16:16.051Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Nintendo UK",
+          "screen_name": "NintendoUK",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "493974431",
+          "id": "493974431"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NintendoUK/status/1323233394541682690/video/1",
+          "source_status_id": "1323233394541682690",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/RLGNUMIhQL",
+          "media_url": "http://pbs.twimg.com/media/Elz9AI7X0AA89Ho.jpg",
+          "id_str": "1323210318538002433",
+          "source_user_id": "493974431",
+          "id": "1323210318538002433",
+          "media_url_https": "https://pbs.twimg.com/media/Elz9AI7X0AA89Ho.jpg",
+          "source_user_id_str": "493974431",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1323233394541682690",
+          "display_url": "pic.twitter.com/RLGNUMIhQL"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1323584775077191688",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1323584775077191688",
+    "possibly_sensitive": false,
+    "created_at": "Tue Nov 03 11:16:16 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @NintendoUK: Autumn is in full swing on your Animal Crossing: New Horizons island! https://t.co/RLGNUMIhQL",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NintendoUK/status/1323233394541682690/video/1",
+          "source_status_id": "1323233394541682690",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/RLGNUMIhQL",
+          "media_url": "http://pbs.twimg.com/media/Elz9AI7X0AA89Ho.jpg",
+          "id_str": "1323210318538002433",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30000",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1323210318538002433/vid/1280x720/Sb0Luvn_6UO6MhKN.mp4?tag=13"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1323210318538002433/vid/480x270/l3GmGXmPs_gGaDce.mp4?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1323210318538002433/vid/640x360/1QFJh6luqjEaEfjk.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1323210318538002433/pl/-jhiM6ks5bsUicvG.m3u8?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "493974431",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1323210318538002433",
+          "media_url_https": "https://pbs.twimg.com/media/Elz9AI7X0AA89Ho.jpg",
+          "source_user_id_str": "493974431",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1323233394541682690",
+          "display_url": "pic.twitter.com/RLGNUMIhQL"
+        }
+      ]
+    }
+  }
+}

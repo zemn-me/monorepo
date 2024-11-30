@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "759584199271735297"
+        ],
+        "editableUntil": "2016-07-31T03:59:20.155Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben Pitt",
+          "screen_name": "robotduck",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "26046925",
+          "id": "26046925"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/robotduck/status/759529875992698880/video/1",
+          "source_status_id": "759529875992698880",
+          "indices": [
+            "114",
+            "137"
+          ],
+          "url": "https://t.co/9k8IDl0DjD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/759529266845519873/pu/img/3VTx7O4_tC_gnjuG.jpg",
+          "id_str": "759529266845519873",
+          "source_user_id": "26046925",
+          "id": "759529266845519873",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/759529266845519873/pu/img/3VTx7O4_tC_gnjuG.jpg",
+          "source_user_id_str": "26046925",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "759529875992698880",
+          "display_url": "pic.twitter.com/9k8IDl0DjD"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "137"
+    ],
+    "favorite_count": "0",
+    "id_str": "759584199271735297",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "759584199271735297",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jul 31 02:59:20 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @robotduck: When non-threatening \"decorative\" peril masks simplistic gameplay, it often feels like this to me. https://t.co/9k8IDl0DjD",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/robotduck/status/759529875992698880/video/1",
+          "source_status_id": "759529875992698880",
+          "indices": [
+            "114",
+            "137"
+          ],
+          "url": "https://t.co/9k8IDl0DjD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/759529266845519873/pu/img/3VTx7O4_tC_gnjuG.jpg",
+          "id_str": "759529266845519873",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "29933",
+            "variants": [
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/759529266845519873/pu/vid/320x180/rTot0KYk65Zw88L_.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/759529266845519873/pu/vid/1280x720/vdt2p-kwHqH-6pTW.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/759529266845519873/pu/vid/640x360/cm01nb2jPYSkEMLZ.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/759529266845519873/pu/pl/nbXQGKOHCqVeuo2a.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "26046925",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "759529266845519873",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/759529266845519873/pu/img/3VTx7O4_tC_gnjuG.jpg",
+          "source_user_id_str": "26046925",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "759529875992698880",
+          "display_url": "pic.twitter.com/9k8IDl0DjD"
+        }
+      ]
+    }
+  }
+}

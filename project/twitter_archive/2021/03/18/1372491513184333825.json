@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1372491513184333825"
+        ],
+        "editableUntil": "2021-03-18T11:14:11.059Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lara",
+          "screen_name": "garbagebby",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "24662384",
+          "id": "24662384"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/garbagebby/status/1372230706479263744/video/1",
+          "source_status_id": "1372230706479263744",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/f1i4PKce1u",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1372230651517181957/pu/img/mYfA8U34BullW5vt.jpg",
+          "id_str": "1372230651517181957",
+          "source_user_id": "24662384",
+          "id": "1372230651517181957",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1372230651517181957/pu/img/mYfA8U34BullW5vt.jpg",
+          "source_user_id_str": "24662384",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1372230706479263744",
+          "display_url": "pic.twitter.com/f1i4PKce1u"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1372491513184333825",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1372491513184333825",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 18 10:14:11 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @garbagebby: Living rent-free in my head forever https://t.co/f1i4PKce1u",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/garbagebby/status/1372230706479263744/video/1",
+          "source_status_id": "1372230706479263744",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/f1i4PKce1u",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1372230651517181957/pu/img/mYfA8U34BullW5vt.jpg",
+          "id_str": "1372230651517181957",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "44933",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1372230651517181957/pu/pl/JE7EOxtZNyWUWkLB.m3u8?tag=12&v=00d"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1372230651517181957/pu/vid/320x568/O9BJxRUkkDbC4_Z7.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1372230651517181957/pu/vid/576x1024/nLZ6zeXXb_hfnhSJ.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1372230651517181957/pu/vid/480x852/X2acxKcWokXDfm0A.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "24662384",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1372230651517181957",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1372230651517181957/pu/img/mYfA8U34BullW5vt.jpg",
+          "source_user_id_str": "24662384",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1372230706479263744",
+          "display_url": "pic.twitter.com/f1i4PKce1u"
+        }
+      ]
+    }
+  }
+}

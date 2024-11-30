@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337860946325331968"
+        ],
+        "editableUntil": "2020-12-12T21:44:40.515Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "iPaulie",
+          "screen_name": "iPaulie",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "17211859",
+          "id": "17211859"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/WylieCable/status/1236719875776581633/video/1",
+          "source_status_id": "1236719875776581633",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/GiDqP7TkPa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1236719796953071616/pu/img/31Wolm8S8aWxl9mV.jpg",
+          "id_str": "1236719796953071616",
+          "source_user_id": "3864940592",
+          "id": "1236719796953071616",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1236719796953071616/pu/img/31Wolm8S8aWxl9mV.jpg",
+          "source_user_id_str": "3864940592",
+          "sizes": {
+            "small": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1236719875776581633",
+          "display_url": "pic.twitter.com/GiDqP7TkPa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "78"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337860946325331968",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337860946325331968",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 12 20:44:40 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @iPaulie: Always here for a cat playing a theremin. https://t.co/GiDqP7TkPa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/WylieCable/status/1236719875776581633/video/1",
+          "source_status_id": "1236719875776581633",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/GiDqP7TkPa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1236719796953071616/pu/img/31Wolm8S8aWxl9mV.jpg",
+          "id_str": "1236719796953071616",
+          "video_info": {
+            "aspect_ratio": [
+              "163",
+              "122"
+            ],
+            "duration_millis": "35282",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1236719796953071616/pu/vid/360x270/77PS5tH9xLMtrld8.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1236719796953071616/pu/vid/480x360/-wlrv52Ptem8GeGZ.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1236719796953071616/pu/vid/652x488/ohHq9ZQdWRIEQThb.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1236719796953071616/pu/pl/Xx_u1bG7ZZxswAyi.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3864940592",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1236719796953071616",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1236719796953071616/pu/img/31Wolm8S8aWxl9mV.jpg",
+          "source_user_id_str": "3864940592",
+          "sizes": {
+            "small": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "652",
+              "h": "488",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1236719875776581633",
+          "display_url": "pic.twitter.com/GiDqP7TkPa"
+        }
+      ]
+    }
+  }
+}

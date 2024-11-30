@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1011113119815331840"
+        ],
+        "editableUntil": "2018-06-25T06:05:27.994Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jonathan Sandman",
+          "screen_name": "jonsandmanTV",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "844518824024035329",
+          "id": "844518824024035329"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JonsandmanTv/status/1011078351891542016/video/1",
+          "source_status_id": "1011078351891542016",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/o8IfUWaO5t",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1011078303967350784/pu/img/eMF3SPD4rMwOTmbK.jpg",
+          "id_str": "1011078303967350784",
+          "source_user_id": "2617169929",
+          "id": "1011078303967350784",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1011078303967350784/pu/img/eMF3SPD4rMwOTmbK.jpg",
+          "source_user_id_str": "2617169929",
+          "sizes": {
+            "small": {
+              "w": "384",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "677",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1276",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1011078351891542016",
+          "display_url": "pic.twitter.com/o8IfUWaO5t"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "95"
+    ],
+    "favorite_count": "0",
+    "id_str": "1011113119815331840",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1011113119815331840",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 25 05:05:27 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @JonsandmanTv: This is me playing any single player game. Seriously. https://t.co/o8IfUWaO5t",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JonsandmanTv/status/1011078351891542016/video/1",
+          "source_status_id": "1011078351891542016",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/o8IfUWaO5t",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1011078303967350784/pu/img/eMF3SPD4rMwOTmbK.jpg",
+          "id_str": "1011078303967350784",
+          "video_info": {
+            "aspect_ratio": [
+              "180",
+              "319"
+            ],
+            "duration_millis": "15000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1011078303967350784/pu/vid/180x320/kLg55VOeytYfNboA.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1011078303967350784/pu/pl/2iPqsB_HqtSDivY_.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1011078303967350784/pu/vid/360x640/zZ6QdN1Hca-Wci8j.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "2617169929",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1011078303967350784",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1011078303967350784/pu/img/eMF3SPD4rMwOTmbK.jpg",
+          "source_user_id_str": "2617169929",
+          "sizes": {
+            "small": {
+              "w": "384",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "677",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1276",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1011078351891542016",
+          "display_url": "pic.twitter.com/o8IfUWaO5t"
+        }
+      ]
+    }
+  }
+}

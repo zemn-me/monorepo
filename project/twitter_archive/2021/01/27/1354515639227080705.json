@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1354515639227080705"
+        ],
+        "editableUntil": "2021-01-27T20:44:28.732Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/71INAYY2sQ",
+          "expanded_url": "https://www.typescriptlang.org/play?ssl=9&ssc=1&pln=1&pc=1#code/KYDwDg9gTgLgBAbwL4CgAmwDGAbAhlYOAc2wgCNdtEU5a4BLAOxmCgDNdNCAJAFQFkAMgEFGmABbQAotmABbYM2p0VccQTYAuOAAMAJAgBE4mDDCGAPnGOmwAZ0NJNAemcHcjAJ5IdNOqlR0CEwAVwVmADpMAlwWGXlFGAAKQ1xDAEoI9WA2AF5DACtcADdcO2j6MBhNSlZkgEZ0wwBuFCA",
+          "display_url": "typescriptlang.org/play?ssl=9&ssc…",
+          "indices": [
+            "234",
+            "257"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "257"
+    ],
+    "favorite_count": "8",
+    "id_str": "1354515639227080705",
+    "truncated": false,
+    "retweet_count": "3",
+    "id": "1354515639227080705",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 27 19:44:28 +0000 2021",
+    "favorited": false,
+    "full_text": "typescript templates let you make XSS sinks explicitly errors:\n\nexport {}\ndeclare global {\n    interface HTMLAnchorElement {\n        href: `${\"http\"| \"https\"}://${any}`\n    }\n}\n\ndocument.createElement(\"a\").href=\"javascript:alert(1)\";\nhttps://t.co/71INAYY2sQ",
+    "lang": "en"
+  }
+}

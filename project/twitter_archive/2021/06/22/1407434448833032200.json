@@ -1,0 +1,67 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1407434448833032200"
+        ],
+        "editableUntil": "2021-06-22T21:24:56.126Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Andrea Chiarelli",
+          "screen_name": "andychiare",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "824509617355059200",
+          "id": "824509617355059200"
+        },
+        {
+          "name": "Philippe De Ryck",
+          "screen_name": "PhilippeDeRyck",
+          "indices": [
+            "83",
+            "98"
+          ],
+          "id_str": "3417260589",
+          "id": "3417260589"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/YxrRBI4KW8",
+          "expanded_url": "https://auth0.com/blog/securing-spa-with-trusted-types/",
+          "display_url": "auth0.com/blog/securing-…",
+          "indices": [
+            "100",
+            "123"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "123"
+    ],
+    "favorite_count": "0",
+    "id_str": "1407434448833032200",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1407434448833032200",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 22 20:24:56 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @andychiare: An introduction to Trusted Types to prevent XSS attacks in SPAs by @PhilippeDeRyck \nhttps://t.co/YxrRBI4KW8",
+    "lang": "en"
+  }
+}

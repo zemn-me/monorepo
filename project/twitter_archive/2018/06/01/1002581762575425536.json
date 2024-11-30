@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1002581762575425536"
+        ],
+        "editableUntil": "2018-06-01T17:04:53.923Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kent Sheely",
+          "screen_name": "ksheely",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "17528017",
+          "id": "17528017"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ksheely/status/1002422523156258817/video/1",
+          "source_status_id": "1002422523156258817",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/Dfx8jeFlCp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1002421573385576448/pu/img/vti36WpMyuFx71Df.jpg",
+          "id_str": "1002421573385576448",
+          "source_user_id": "17528017",
+          "id": "1002421573385576448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1002421573385576448/pu/img/vti36WpMyuFx71Df.jpg",
+          "source_user_id_str": "17528017",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1002422523156258817",
+          "display_url": "pic.twitter.com/Dfx8jeFlCp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "82"
+    ],
+    "favorite_count": "0",
+    "id_str": "1002581762575425536",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1002581762575425536",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 01 16:04:53 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @ksheely: this is why i'm not allowed in church anymore https://t.co/Dfx8jeFlCp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ksheely/status/1002422523156258817/video/1",
+          "source_status_id": "1002422523156258817",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/Dfx8jeFlCp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1002421573385576448/pu/img/vti36WpMyuFx71Df.jpg",
+          "id_str": "1002421573385576448",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "59128",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1002421573385576448/pu/vid/1280x720/BJ1DsY8gHA-4V9L9.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1002421573385576448/pu/vid/320x180/dbt7-Qv-20ANjbkJ.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1002421573385576448/pu/pl/B47JgUBSu8L6wVZC.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1002421573385576448/pu/vid/640x360/pU9zDfsKmUXuhAQS.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "17528017",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1002421573385576448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1002421573385576448/pu/img/vti36WpMyuFx71Df.jpg",
+          "source_user_id_str": "17528017",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1002422523156258817",
+          "display_url": "pic.twitter.com/Dfx8jeFlCp"
+        }
+      ]
+    }
+  }
+}

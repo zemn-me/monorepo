@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1381404382508486658"
+        ],
+        "editableUntil": "2021-04-12T01:30:44.699Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Oscaron",
+          "screen_name": "oscaron",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "16156052",
+          "id": "16156052"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oscaron/status/1381279074333626368/video/1",
+          "source_status_id": "1381279074333626368",
+          "indices": [
+            "48",
+            "71"
+          ],
+          "url": "https://t.co/MFS9wewiHC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1381279021598703617/pu/img/PJLxohzBThbPXxhC.jpg",
+          "id_str": "1381279021598703617",
+          "source_user_id": "16156052",
+          "id": "1381279021598703617",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1381279021598703617/pu/img/PJLxohzBThbPXxhC.jpg",
+          "source_user_id_str": "16156052",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1381279074333626368",
+          "display_url": "pic.twitter.com/MFS9wewiHC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "71"
+    ],
+    "favorite_count": "0",
+    "id_str": "1381404382508486658",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1381404382508486658",
+    "possibly_sensitive": false,
+    "created_at": "Mon Apr 12 00:30:44 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @oscaron: Every vendor I've ever worked with https://t.co/MFS9wewiHC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oscaron/status/1381279074333626368/video/1",
+          "source_status_id": "1381279074333626368",
+          "indices": [
+            "48",
+            "71"
+          ],
+          "url": "https://t.co/MFS9wewiHC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1381279021598703617/pu/img/PJLxohzBThbPXxhC.jpg",
+          "id_str": "1381279021598703617",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "55034",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1381279021598703617/pu/pl/sj5187zBCFyiHVeM.m3u8?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1381279021598703617/pu/vid/480x600/xEcGWpf9O3r0uwBq.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1381279021598703617/pu/vid/320x400/sfl8SvUiCdjrO-ee.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1381279021598703617/pu/vid/640x800/9irh9unxz7M7Hrvp.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "16156052",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1381279021598703617",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1381279021598703617/pu/img/PJLxohzBThbPXxhC.jpg",
+          "source_user_id_str": "16156052",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "640",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1381279074333626368",
+          "display_url": "pic.twitter.com/MFS9wewiHC"
+        }
+      ]
+    }
+  }
+}

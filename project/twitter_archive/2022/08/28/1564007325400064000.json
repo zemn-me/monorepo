@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1564007325400064000"
+        ],
+        "editableUntil": "2022-08-28T22:19:38.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/CUCPhZNPn1",
+          "expanded_url": "https://query.wikidata.org/#SELECT%20distinct%20%3Fsuccessor_state%20%3Fsuccessor_stateLabel%20WHERE%20%7B%0A%20%20%0A%20%20wd%3AQ8680%20%28%5Ewdt%3AP361%7Cwdt%3AP1366%7Cwd%3AP156%29%2B%20%3Fsuccessor_state.%20%23%20replaced%20or%20followed%20by%0A%20%20%0A%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%7D%20ORDER%20BY%20%3Fitem",
+          "display_url": "query.wikidata.org/#SELECT%20dist…",
+          "indices": [
+            "16",
+            "39"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "39"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1564006022947020800",
+    "id_str": "1564007325400064000",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1564007325400064000",
+    "in_reply_to_status_id": "1564006022947020800",
+    "possibly_sensitive": false,
+    "created_at": "Sun Aug 28 21:49:38 +0000 2022",
+    "favorited": false,
+    "full_text": "getting closer! https://t.co/CUCPhZNPn1",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

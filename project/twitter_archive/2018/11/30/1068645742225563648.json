@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1068645742225563648"
+        ],
+        "editableUntil": "2018-12-01T00:19:34.081Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben Carlsson",
+          "screen_name": "glcls",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "3428251",
+          "id": "3428251"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/glcls/status/763648525171236864/video/1",
+          "source_status_id": "763648525171236864",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/KN6WC0e9nR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/763648273772982272/pu/img/qEoRyqHv6syYwVyg.jpg",
+          "id_str": "763648273772982272",
+          "source_user_id": "3428251",
+          "id": "763648273772982272",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/763648273772982272/pu/img/qEoRyqHv6syYwVyg.jpg",
+          "source_user_id_str": "3428251",
+          "sizes": {
+            "medium": {
+              "w": "854",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "854",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "382",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "763648525171236864",
+          "display_url": "pic.twitter.com/KN6WC0e9nR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1068645742225563648",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1068645742225563648",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 30 23:19:34 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @glcls: she's been like this for 20 minutes https://t.co/KN6WC0e9nR",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/glcls/status/763648525171236864/video/1",
+          "source_status_id": "763648525171236864",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/KN6WC0e9nR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/763648273772982272/pu/img/qEoRyqHv6syYwVyg.jpg",
+          "id_str": "763648273772982272",
+          "video_info": {
+            "aspect_ratio": [
+              "427",
+              "240"
+            ],
+            "duration_millis": "19753",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/763648273772982272/pu/vid/640x360/jRujyNCOvpIsDrMK.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/763648273772982272/pu/pl/gf09QYOoGHIGasjA.m3u8"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/763648273772982272/pu/vid/320x180/E70g-ZD10gPBdcAj.mp4"
+              }
+            ]
+          },
+          "source_user_id": "3428251",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "763648273772982272",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/763648273772982272/pu/img/qEoRyqHv6syYwVyg.jpg",
+          "source_user_id_str": "3428251",
+          "sizes": {
+            "medium": {
+              "w": "854",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "854",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "382",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "763648525171236864",
+          "display_url": "pic.twitter.com/KN6WC0e9nR"
+        }
+      ]
+    }
+  }
+}

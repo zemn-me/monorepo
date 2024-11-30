@@ -1,0 +1,55 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1748804296106262807"
+        ],
+        "editableUntil": "2024-01-20T21:26:50.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/Qt4T11ekHX",
+          "expanded_url": "http://example.com/article/10",
+          "display_url": "example.com/article/10",
+          "indices": [
+            "37",
+            "60"
+          ]
+        },
+        {
+          "url": "https://t.co/iIz4iLcPSp",
+          "expanded_url": "http://example.com/articles/10",
+          "display_url": "example.com/articles/10",
+          "indices": [
+            "64",
+            "87"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "87"
+    ],
+    "favorite_count": "1",
+    "id_str": "1748804296106262807",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1748804296106262807",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 20 20:26:50 +0000 2024",
+    "favorited": false,
+    "full_text": "alright, bikeshed time. should it be https://t.co/Qt4T11ekHX or https://t.co/iIz4iLcPSp",
+    "lang": "en"
+  }
+}

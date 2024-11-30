@@ -1,0 +1,160 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1107686200444444674"
+        ],
+        "editableUntil": "2019-03-18T17:52:24.657Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/4qRzq2mV3w",
+          "expanded_url": "https://www.npmjs.com/package/@zemnmez/macros",
+          "display_url": "npmjs.com/package/@zemnm…",
+          "indices": [
+            "151",
+            "174"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1107686200444444674/photo/1",
+          "indices": [
+            "175",
+            "198"
+          ],
+          "url": "https://t.co/uVESGMzsiy",
+          "media_url": "http://pbs.twimg.com/media/D19KjxBWoAAbflB.png",
+          "id_str": "1107686011671322624",
+          "id": "1107686011671322624",
+          "media_url_https": "https://pbs.twimg.com/media/D19KjxBWoAAbflB.png",
+          "sizes": {
+            "thumb": {
+              "w": "126",
+              "h": "126",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "96",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "888",
+              "h": "126",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "888",
+              "h": "126",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/uVESGMzsiy"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "198"
+    ],
+    "favorite_count": "0",
+    "id_str": "1107686200444444674",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1107686200444444674",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 18 16:52:24 +0000 2019",
+    "favorited": false,
+    "full_text": "i published some useful babel macros for debugging that: (1) add file and class context to assertions and logs and (2) delete themselves in production https://t.co/4qRzq2mV3w https://t.co/uVESGMzsiy",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1107686200444444674/photo/1",
+          "indices": [
+            "175",
+            "198"
+          ],
+          "url": "https://t.co/uVESGMzsiy",
+          "media_url": "http://pbs.twimg.com/media/D19KjxBWoAAbflB.png",
+          "id_str": "1107686011671322624",
+          "id": "1107686011671322624",
+          "media_url_https": "https://pbs.twimg.com/media/D19KjxBWoAAbflB.png",
+          "sizes": {
+            "thumb": {
+              "w": "126",
+              "h": "126",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "96",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "888",
+              "h": "126",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "888",
+              "h": "126",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/uVESGMzsiy"
+        },
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1107686200444444674/photo/1",
+          "indices": [
+            "175",
+            "198"
+          ],
+          "url": "https://t.co/uVESGMzsiy",
+          "media_url": "http://pbs.twimg.com/media/D19Kt4TXcAc7MPd.jpg",
+          "id_str": "1107686185424613383",
+          "id": "1107686185424613383",
+          "media_url_https": "https://pbs.twimg.com/media/D19Kt4TXcAc7MPd.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "66",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "88",
+              "h": "88",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "908",
+              "h": "88",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "908",
+              "h": "88",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/uVESGMzsiy"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1070761928824406018"
+        ],
+        "editableUntil": "2018-12-06T20:28:32.283Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Ryan North 🦖 🪄 🐶 💪 4️⃣",
+          "screen_name": "ryanqnorth",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "14162415",
+          "id": "14162415"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "235"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1070753539864051712",
+    "id_str": "1070761928824406018",
+    "in_reply_to_user_id": "14162415",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1070761928824406018",
+    "in_reply_to_status_id": "1070753539864051712",
+    "created_at": "Thu Dec 06 19:28:32 +0000 2018",
+    "favorited": false,
+    "full_text": "@ryanqnorth stripping all protocols except http (including mailto:) is a common fix to javascript: uri xss issues stemming from allowing that protocol in links (javascript: links can include code which has full control over the reader)",
+    "lang": "en",
+    "in_reply_to_screen_name": "ryanqnorth",
+    "in_reply_to_user_id_str": "14162415"
+  }
+}

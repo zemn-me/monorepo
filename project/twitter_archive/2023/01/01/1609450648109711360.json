@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1609450648109711360"
+        ],
+        "editableUntil": "2023-01-01T07:55:11.313Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Torfi",
+          "screen_name": "torfias",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "42004634",
+          "id": "42004634"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/torfias/status/1609246746420338688/video/1",
+          "source_status_id": "1609246746420338688",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/cIz2whK4DU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1609242917830287360/pu/img/vIGMTG38s04rVV26.jpg",
+          "id_str": "1609242917830287360",
+          "source_user_id": "42004634",
+          "id": "1609242917830287360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1609242917830287360/pu/img/vIGMTG38s04rVV26.jpg",
+          "source_user_id_str": "42004634",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1609246746420338688",
+          "display_url": "pic.twitter.com/cIz2whK4DU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1609450648109711360",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1609450648109711360",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 01 07:25:11 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @torfias: I released a game yesterday! Here is a little thread about it. https://t.co/cIz2whK4DU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/torfias/status/1609246746420338688/video/1",
+          "source_status_id": "1609246746420338688",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/cIz2whK4DU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1609242917830287360/pu/img/vIGMTG38s04rVV26.jpg",
+          "id_str": "1609242917830287360",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "69952",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1609242917830287360/pu/vid/320x320/tWkSDFNOjSv6ZVNS.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1609242917830287360/pu/pl/0_ettsMXiZluGx8v.m3u8?tag=12&v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1609242917830287360/pu/vid/540x540/9ABp7or8WvZoiiko.mp4?tag=12"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1609242917830287360/pu/vid/720x720/veuWCEq1JSRZoIEp.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "42004634",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1609242917830287360",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1609242917830287360/pu/img/vIGMTG38s04rVV26.jpg",
+          "source_user_id_str": "42004634",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1609246746420338688",
+          "display_url": "pic.twitter.com/cIz2whK4DU"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1680865806790569984"
+        ],
+        "editableUntil": "2023-07-17T10:03:31.972Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Johann",
+          "screen_name": "LookAtMyMeat1",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "1155840474588037121",
+          "id": "1155840474588037121"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LookAtMyMeat1/status/1680320650009882630/video/1",
+          "source_status_id": "1680320650009882630",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/UYjn7K4ZrH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1680320623157846017/pu/img/wwoi4_tV31rAV139.jpg",
+          "id_str": "1680320623157846017",
+          "source_user_id": "1155840474588037121",
+          "id": "1680320623157846017",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1680320623157846017/pu/img/wwoi4_tV31rAV139.jpg",
+          "source_user_id_str": "1155840474588037121",
+          "sizes": {
+            "small": {
+              "w": "629",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "778",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "778",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1680320650009882630",
+          "display_url": "pic.twitter.com/UYjn7K4ZrH"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "42"
+    ],
+    "favorite_count": "0",
+    "id_str": "1680865806790569984",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1680865806790569984",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jul 17 09:03:31 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @LookAtMyMeat1: https://t.co/UYjn7K4ZrH",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LookAtMyMeat1/status/1680320650009882630/video/1",
+          "source_status_id": "1680320650009882630",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/UYjn7K4ZrH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1680320623157846017/pu/img/wwoi4_tV31rAV139.jpg",
+          "id_str": "1680320623157846017",
+          "video_info": {
+            "aspect_ratio": [
+              "360",
+              "389"
+            ],
+            "duration_millis": "5233",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1680320623157846017/pu/vid/480x518/FT93ERm7bUcL3zhW.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1680320623157846017/pu/vid/720x778/O-wX9OTFNb--DVVN.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1680320623157846017/pu/pl/5KmbqNYRXyosAEKn.m3u8?tag=12&v=a6f"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1680320623157846017/pu/vid/320x344/tAVxzHKcIkFur2Jf.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1155840474588037121",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1680320623157846017",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1680320623157846017/pu/img/wwoi4_tV31rAV139.jpg",
+          "source_user_id_str": "1155840474588037121",
+          "sizes": {
+            "small": {
+              "w": "629",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "778",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "778",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1680320650009882630",
+          "display_url": "pic.twitter.com/UYjn7K4ZrH"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1104829267123277824"
+        ],
+        "editableUntil": "2019-03-10T20:39:58.674Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/GbcuIx4kFJ",
+          "expanded_url": "https://github.com/codemix/babel-plugin-trace/blob/master/src/index.js#L197",
+          "display_url": "github.com/codemix/babel-…",
+          "indices": [
+            "76",
+            "99"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "212"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1104827587778543623",
+    "id_str": "1104829267123277824",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1104829267123277824",
+    "in_reply_to_status_id": "1104827587778543623",
+    "possibly_sensitive": false,
+    "created_at": "Sun Mar 10 19:39:58 +0000 2019",
+    "favorited": false,
+    "full_text": "had a ton of trouble traversing backward in the AST until I found this code https://t.co/GbcuIx4kFJ, which uses a function getAncestry() for which the only hits on Google are github issues from compiler devlopers",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

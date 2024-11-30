@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1520511317399855104"
+        ],
+        "editableUntil": "2022-04-30T21:42:02.459Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Briggs Clœlia",
+          "screen_name": "BriggsL",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "1830030075963588610",
+          "id": "1830030075963588610"
+        },
+        {
+          "name": "zoro respecter",
+          "screen_name": "myspace4dogs",
+          "indices": [
+            "9",
+            "22"
+          ],
+          "id_str": "1302414259251482626",
+          "id": "1302414259251482626"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "259"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1520508287820517376",
+    "id_str": "1520511317399855104",
+    "in_reply_to_user_id": "17814727",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1520511317399855104",
+    "in_reply_to_status_id": "1520508287820517376",
+    "created_at": "Sat Apr 30 21:12:02 +0000 2022",
+    "favorited": false,
+    "full_text": "@briggsl @myspace4dogs yeah I'm aware they don't interact directly with a cloud provider. I'm saying how do I get pulumi to verify the changes in a foreign PR will actually work in a test without giving that foreign PR the ability to actually modify my stack!",
+    "lang": "en",
+    "in_reply_to_user_id_str": "17814727"
+  }
+}

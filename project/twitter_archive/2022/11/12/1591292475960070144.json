@@ -1,0 +1,118 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1591292475960070144"
+        ],
+        "editableUntil": "2022-11-12T05:21:05.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1591292475960070144/photo/1",
+          "indices": [
+            "244",
+            "267"
+          ],
+          "url": "https://t.co/caFB1DNR2z",
+          "media_url": "http://pbs.twimg.com/media/FhVn-MRUcAA3Czu.jpg",
+          "id_str": "1591292361488756736",
+          "id": "1591292361488756736",
+          "media_url_https": "https://pbs.twimg.com/media/FhVn-MRUcAA3Czu.jpg",
+          "sizes": {
+            "large": {
+              "w": "708",
+              "h": "1124",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "708",
+              "h": "1124",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "428",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/caFB1DNR2z"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "267"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1591292023654731776",
+    "id_str": "1591292475960070144",
+    "in_reply_to_user_id": "451735131",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1591292475960070144",
+    "in_reply_to_status_id": "1591292023654731776",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 12 04:51:05 +0000 2022",
+    "favorited": false,
+    "full_text": "@XMPPwocky I'm trying to implement a css modules -&gt; icss -&gt; typescript transpiler toolchain. I'm trying to write the deserialization half of turning a set of basic typescript primitives i've defined as structs and enums into output bytes https://t.co/caFB1DNR2z",
+    "lang": "en",
+    "in_reply_to_user_id_str": "451735131",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1591292475960070144/photo/1",
+          "indices": [
+            "244",
+            "267"
+          ],
+          "url": "https://t.co/caFB1DNR2z",
+          "media_url": "http://pbs.twimg.com/media/FhVn-MRUcAA3Czu.jpg",
+          "id_str": "1591292361488756736",
+          "id": "1591292361488756736",
+          "media_url_https": "https://pbs.twimg.com/media/FhVn-MRUcAA3Czu.jpg",
+          "sizes": {
+            "large": {
+              "w": "708",
+              "h": "1124",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "708",
+              "h": "1124",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "428",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/caFB1DNR2z"
+        }
+      ]
+    }
+  }
+}

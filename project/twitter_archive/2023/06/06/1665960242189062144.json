@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1665960242189062144"
+        ],
+        "editableUntil": "2023-06-06T06:54:08.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/ZbEzPUnBK4",
+          "expanded_url": "https://github.com/ewebkit/webkit/blob/d63fe49559882ea45a45ece23ef22018a0be850c/LayoutTests/js/intl-datetimeformat-expected.txt#LL296C6-L296C122",
+          "display_url": "github.com/ewebkit/webkit…",
+          "indices": [
+            "106",
+            "129"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "252"
+    ],
+    "favorite_count": "2",
+    "id_str": "1665960242189062144",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1665960242189062144",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 06 05:54:08 +0000 2023",
+    "favorited": false,
+    "full_text": "doesnt seem to work in my version of chrome, but upstream webkit has tests for some crazy date specifiers https://t.co/ZbEzPUnBK4\n\nPASS Intl.DateTimeFormat('en-u-nu-romanlow', { timeZone: 'America/Los_Angeles' }).format(1451099872641) is 'xii/xxv/mmxv'",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "697341242057822208"
+        ],
+        "editableUntil": "2016-02-10T09:48:02.737Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "697341242057822208",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "697341242057822208",
+    "created_at": "Wed Feb 10 08:48:02 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: text/cssでないリソースをCSSとしてロードする時はパースが厳格になるが、それでも [UTF-16で潰れた文字],*{font-family:[UTF-16で潰れた文字] でvalidなCSSにできてたと。昔、CSSXSSなどと呼ば…",
+    "lang": "ja"
+  }
+}

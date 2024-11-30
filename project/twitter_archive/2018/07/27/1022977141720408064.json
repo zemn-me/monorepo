@@ -1,0 +1,65 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1022977141720408064"
+        ],
+        "editableUntil": "2018-07-27T23:48:51.239Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "homelab",
+          "indices": [
+            "81",
+            "89"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Brad Fitzpatrick 🌻",
+          "screen_name": "bradfitz",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "650013",
+          "id": "650013"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/zhh1vHWlgX",
+          "expanded_url": "https://github.com/google/embiggen-disk",
+          "display_url": "github.com/google/embigge…",
+          "indices": [
+            "42",
+            "65"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1022977141720408064",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1022977141720408064",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jul 27 22:48:51 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @bradfitz: Announcing \"embiggen-disk\": https://t.co/zhh1vHWlgX\n\nAs part of my #homelab work, I just released embiggen-disk to live-resiz…",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1051834228265107462"
+        ],
+        "editableUntil": "2018-10-15T14:56:36.810Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ninja",
+          "screen_name": "Ninja",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "214201922",
+          "id": "214201922"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ninja/status/1051294547546923008/video/1",
+          "source_status_id": "1051294547546923008",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/vtn43aPWWK",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1051294360468381698/img/IzGcvWTbUAmxGzcI.jpg",
+          "id_str": "1051294360468381698",
+          "source_user_id": "214201922",
+          "id": "1051294360468381698",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1051294360468381698/img/IzGcvWTbUAmxGzcI.jpg",
+          "source_user_id_str": "214201922",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1051294547546923008",
+          "display_url": "pic.twitter.com/vtn43aPWWK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "101"
+    ],
+    "favorite_count": "0",
+    "id_str": "1051834228265107462",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1051834228265107462",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 15 13:56:36 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Ninja: BEHOLD! Baiting the last player with the new emote and an airdrop! https://t.co/vtn43aPWWK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ninja/status/1051294547546923008/video/1",
+          "source_status_id": "1051294547546923008",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/vtn43aPWWK",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1051294360468381698/img/IzGcvWTbUAmxGzcI.jpg",
+          "id_str": "1051294360468381698",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "10984",
+            "variants": [
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1051294360468381698/vid/320x180/0XnpS7Ua2v9LgzmS.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1051294360468381698/vid/640x360/H2jPNUmhzgOoy5LY.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1051294360468381698/pl/H9l8nGzSZ3WRCl3E.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1051294360468381698/vid/1280x720/TcFTOzrWsS41t7I6.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "214201922",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": true
+          },
+          "id": "1051294360468381698",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1051294360468381698/img/IzGcvWTbUAmxGzcI.jpg",
+          "source_user_id_str": "214201922",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1051294547546923008",
+          "display_url": "pic.twitter.com/vtn43aPWWK"
+        }
+      ]
+    }
+  }
+}

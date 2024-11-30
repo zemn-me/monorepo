@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1171984794844110848"
+        ],
+        "editableUntil": "2019-09-12T04:12:04.172Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "a guy",
+          "screen_name": "apiecebyguy",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "129725446",
+          "id": "129725446"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/apiecebyguy/status/1171981998770053120/video/1",
+          "source_status_id": "1171981998770053120",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/A1VOP6d3EI",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1171981946433523717/pu/img/iazQmjCZS70Gz6JS.jpg",
+          "id_str": "1171981946433523717",
+          "source_user_id": "129725446",
+          "id": "1171981946433523717",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1171981946433523717/pu/img/iazQmjCZS70Gz6JS.jpg",
+          "source_user_id_str": "129725446",
+          "sizes": {
+            "small": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1171981998770053120",
+          "display_url": "pic.twitter.com/A1VOP6d3EI"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "72"
+    ],
+    "favorite_count": "0",
+    "id_str": "1171984794844110848",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1171984794844110848",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 12 03:12:04 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @apiecebyguy: Who the hell is he fighting...? https://t.co/A1VOP6d3EI",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/apiecebyguy/status/1171981998770053120/video/1",
+          "source_status_id": "1171981998770053120",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/A1VOP6d3EI",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1171981946433523717/pu/img/iazQmjCZS70Gz6JS.jpg",
+          "id_str": "1171981946433523717",
+          "video_info": {
+            "aspect_ratio": [
+              "89",
+              "81"
+            ],
+            "duration_millis": "27133",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1171981946433523717/pu/vid/296x270/7-0xwWxAa0dX3zSW.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1171981946433523717/pu/vid/394x360/9JBVRBq2n5P0JbTr.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1171981946433523717/pu/pl/2cbi9i_BT-lNidzY.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1171981946433523717/pu/vid/534x486/snnrFB6bBBolwO9o.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "129725446",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1171981946433523717",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1171981946433523717/pu/img/iazQmjCZS70Gz6JS.jpg",
+          "source_user_id_str": "129725446",
+          "sizes": {
+            "small": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "534",
+              "h": "486",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1171981998770053120",
+          "display_url": "pic.twitter.com/A1VOP6d3EI"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1193337481237798914"
+        ],
+        "editableUntil": "2019-11-10T02:20:01.322Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1193337481237798914/photo/1",
+          "indices": [
+            "127",
+            "150"
+          ],
+          "url": "https://t.co/kQudrzXbuC",
+          "media_url": "http://pbs.twimg.com/media/EI-WHQuXUAE4SQL.png",
+          "id_str": "1193337477769154561",
+          "id": "1193337477769154561",
+          "media_url_https": "https://pbs.twimg.com/media/EI-WHQuXUAE4SQL.png",
+          "sizes": {
+            "small": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kQudrzXbuC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "150"
+    ],
+    "favorite_count": "2",
+    "id_str": "1193337481237798914",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1193337481237798914",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 10 01:20:01 +0000 2019",
+    "favorited": false,
+    "full_text": "neat typescript trick: you can extract just the ordered values of a tuple by getting Omit&lt;Tuple, keyof Array&lt;any&gt;&gt; https://t.co/kQudrzXbuC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1193337481237798914/photo/1",
+          "indices": [
+            "127",
+            "150"
+          ],
+          "url": "https://t.co/kQudrzXbuC",
+          "media_url": "http://pbs.twimg.com/media/EI-WHQuXUAE4SQL.png",
+          "id_str": "1193337477769154561",
+          "id": "1193337477769154561",
+          "media_url_https": "https://pbs.twimg.com/media/EI-WHQuXUAE4SQL.png",
+          "sizes": {
+            "small": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "499",
+              "h": "204",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/kQudrzXbuC"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1485338112049827840"
+        ],
+        "editableUntil": "2022-01-23T20:46:16.817Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jake 🎉",
+          "screen_name": "jitl",
+          "indices": [
+            "0",
+            "5"
+          ],
+          "id_str": "218424553",
+          "id": "218424553"
+        },
+        {
+          "name": "thatjdanisso.cool on bsky",
+          "screen_name": "jdan",
+          "indices": [
+            "6",
+            "11"
+          ],
+          "id_str": "23481558",
+          "id": "23481558"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/IU05zBi6qb",
+          "expanded_url": "http://matrix.as",
+          "display_url": "matrix.as",
+          "indices": [
+            "200",
+            "223"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "267"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1485337045195051012",
+    "id_str": "1485338112049827840",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1485338112049827840",
+    "in_reply_to_status_id": "1485337045195051012",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 23 19:46:16 +0000 2022",
+    "favorited": false,
+    "full_text": "@jitl @jdan I gotta say, working with more functional stuff over time, I've come to realise that syntax like:\n\nvec(\n   vec(1,2,3), vec(1,2,3), vec(1,2,3)\n)\n\nactually reads and plays a lot nicer than\n\nhttps://t.co/IU05zBi6qb&lt;3,3&gt;([\n   [1,2,3], [1,2,3],[1,2,3]]);",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

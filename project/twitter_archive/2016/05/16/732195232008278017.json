@@ -1,0 +1,65 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "732195232008278017"
+        ],
+        "editableUntil": "2016-05-16T14:05:21.497Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "exploit",
+          "indices": [
+            "70",
+            "78"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "packet storm",
+          "screen_name": "packet_storm",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "17381850",
+          "id": "17381850"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/BF1KNMrW6Y",
+          "expanded_url": "http://packetstormsecurity.com/files/135368",
+          "display_url": "packetstormsecurity.com/files/135368",
+          "indices": [
+            "46",
+            "69"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "78"
+    ],
+    "favorite_count": "0",
+    "id_str": "732195232008278017",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "732195232008278017",
+    "possibly_sensitive": false,
+    "created_at": "Mon May 16 13:05:21 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @packet_storm: Buffalo NAS Remote Shutdown https://t.co/BF1KNMrW6Y #exploit",
+    "lang": "en"
+  }
+}

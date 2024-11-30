@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1319010500110372864"
+        ],
+        "editableUntil": "2020-10-21T21:19:43.913Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Kayohtic",
+          "screen_name": "aroflcopterr",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "427687843",
+          "id": "427687843"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/2LrawlCjNY",
+          "expanded_url": "https://tools.ietf.org/html/rfc1918",
+          "display_url": "tools.ietf.org/html/rfc1918",
+          "indices": [
+            "195",
+            "218"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "218"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1319009372211654656",
+    "id_str": "1319010500110372864",
+    "in_reply_to_user_id": "427687843",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1319010500110372864",
+    "in_reply_to_status_id": "1319009372211654656",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 21 20:19:43 +0000 2020",
+    "favorited": false,
+    "full_text": "@aroflcopterr I think that's cause of block allocation in RFC1918, though i dont have the brain energy to read it thoroughly enough to work out the constraints they chose those block sizes under https://t.co/2LrawlCjNY",
+    "lang": "en",
+    "in_reply_to_screen_name": "aroflcopterr",
+    "in_reply_to_user_id_str": "427687843"
+  }
+}

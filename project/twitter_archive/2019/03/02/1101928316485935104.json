@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1101928316485935104"
+        ],
+        "editableUntil": "2019-03-02T20:32:38.145Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lynn (finally free)",
+          "screen_name": "chordbug",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "807585861965664257",
+          "id": "807585861965664257"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chordbug/status/1101645780962734081/video/1",
+          "source_status_id": "1101645780962734081",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/3Z1bUbMs3G",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1101645355010195456/pu/img/_COTQJUxMIHpNrk8.jpg",
+          "id_str": "1101645355010195456",
+          "source_user_id": "807585861965664257",
+          "id": "1101645355010195456",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1101645355010195456/pu/img/_COTQJUxMIHpNrk8.jpg",
+          "source_user_id_str": "807585861965664257",
+          "sizes": {
+            "small": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1101645780962734081",
+          "display_url": "pic.twitter.com/3Z1bUbMs3G"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "86"
+    ],
+    "favorite_count": "0",
+    "id_str": "1101928316485935104",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1101928316485935104",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 02 19:32:38 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @chordbug: ☠️ CURSED CSS TIP: ☠️\n\nwhatever this bullshit is https://t.co/3Z1bUbMs3G",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chordbug/status/1101645780962734081/video/1",
+          "source_status_id": "1101645780962734081",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/3Z1bUbMs3G",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1101645355010195456/pu/img/_COTQJUxMIHpNrk8.jpg",
+          "id_str": "1101645355010195456",
+          "video_info": {
+            "aspect_ratio": [
+              "70",
+              "47"
+            ],
+            "duration_millis": "13634",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1101645355010195456/pu/vid/560x376/YJpkUtlYuozh_csH.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1101645355010195456/pu/pl/CbipuZPzAhWFC2Ub.m3u8?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1101645355010195456/pu/vid/268x180/MoST47QoPwkRGRow.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "807585861965664257",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1101645355010195456",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1101645355010195456/pu/img/_COTQJUxMIHpNrk8.jpg",
+          "source_user_id_str": "807585861965664257",
+          "sizes": {
+            "small": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "560",
+              "h": "376",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1101645780962734081",
+          "display_url": "pic.twitter.com/3Z1bUbMs3G"
+        }
+      ]
+    }
+  }
+}

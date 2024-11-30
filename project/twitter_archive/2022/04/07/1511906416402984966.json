@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1511906416402984966"
+        ],
+        "editableUntil": "2022-04-07T04:19:14.190Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "simple complex Lie algebra",
+          "screen_name": "sl2c",
+          "indices": [
+            "0",
+            "5"
+          ],
+          "id_str": "913863469",
+          "id": "913863469"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1511906416402984966/photo/1",
+          "indices": [
+            "257",
+            "280"
+          ],
+          "url": "https://t.co/tbJXQr1W8s",
+          "media_url": "http://pbs.twimg.com/media/FPtewuVVUAIH-f7.png",
+          "id_str": "1511906291077173250",
+          "id": "1511906291077173250",
+          "media_url_https": "https://pbs.twimg.com/media/FPtewuVVUAIH-f7.png",
+          "sizes": {
+            "large": {
+              "w": "805",
+              "h": "669",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "805",
+              "h": "669",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "565",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/tbJXQr1W8s"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1511905016809881600",
+    "id_str": "1511906416402984966",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1511906416402984966",
+    "in_reply_to_status_id": "1511905016809881600",
+    "possibly_sensitive": false,
+    "created_at": "Thu Apr 07 03:19:14 +0000 2022",
+    "favorited": false,
+    "full_text": "@sl2c I don't think I've 100% understood it because e.g. 10.255.0.10/24 still somehow gives us 256 addresses. but I think this might also be something to do with CIDR blocks having to be contiguous, and thus it's just ignoring the latter part of my address https://t.co/tbJXQr1W8s",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1511906416402984966/photo/1",
+          "indices": [
+            "257",
+            "280"
+          ],
+          "url": "https://t.co/tbJXQr1W8s",
+          "media_url": "http://pbs.twimg.com/media/FPtewuVVUAIH-f7.png",
+          "id_str": "1511906291077173250",
+          "id": "1511906291077173250",
+          "media_url_https": "https://pbs.twimg.com/media/FPtewuVVUAIH-f7.png",
+          "sizes": {
+            "large": {
+              "w": "805",
+              "h": "669",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "805",
+              "h": "669",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "565",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/tbJXQr1W8s"
+        }
+      ]
+    }
+  }
+}

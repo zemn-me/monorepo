@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1227339175067897857"
+        ],
+        "editableUntil": "2020-02-11T22:10:36.852Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "1",
+    "id_str": "1227339175067897857",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1227339175067897857",
+    "created_at": "Tue Feb 11 21:10:36 +0000 2020",
+    "favorited": false,
+    "full_text": "been writing a little c# -- can someone speak to why the caller distinction between getters and functions with no arguments when getters are so ubiquitous? i.e:\n\nint MyThing {\n   get { return 1 }\n}\n\nMyClass.MyThing // OK\n\nvs\n\nint MyThing() { return 1 }\n\nMyClass.MyThing // Not OK",
+    "lang": "en"
+  }
+}

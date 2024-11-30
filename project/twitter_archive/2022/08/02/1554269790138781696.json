@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1554269790138781696"
+        ],
+        "editableUntil": "2022-08-02T01:26:09.562Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "RyanMarino.bsky.social",
+          "screen_name": "RyanMarino",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "24252027",
+          "id": "24252027"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RyanMarino/status/1554222939670827008/video/1",
+          "source_status_id": "1554222939670827008",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/70OQjF3Lxp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1554222902857400320/pu/img/WEiKCi5XPVRGme0S.jpg",
+          "id_str": "1554222902857400320",
+          "source_user_id": "24252027",
+          "id": "1554222902857400320",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1554222902857400320/pu/img/WEiKCi5XPVRGme0S.jpg",
+          "source_user_id_str": "24252027",
+          "sizes": {
+            "large": {
+              "w": "576",
+              "h": "1022",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1022",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1554222939670827008",
+          "display_url": "pic.twitter.com/70OQjF3Lxp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "77"
+    ],
+    "favorite_count": "0",
+    "id_str": "1554269790138781696",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1554269790138781696",
+    "possibly_sensitive": false,
+    "created_at": "Tue Aug 02 00:56:09 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @RyanMarino: I had to hear this so now you do, too https://t.co/70OQjF3Lxp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/RyanMarino/status/1554222939670827008/video/1",
+          "source_status_id": "1554222939670827008",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/70OQjF3Lxp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1554222902857400320/pu/img/WEiKCi5XPVRGme0S.jpg",
+          "id_str": "1554222902857400320",
+          "video_info": {
+            "aspect_ratio": [
+              "288",
+              "511"
+            ],
+            "duration_millis": "32813",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1554222902857400320/pu/pl/7EL3ydj_a763D_Xm.m3u8?tag=12&v=a3c"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1554222902857400320/pu/vid/576x1022/60Xj59OVjwfxhwtS.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1554222902857400320/pu/vid/480x850/Wtq_5-yL3Q1Yy-Wl.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1554222902857400320/pu/vid/320x566/diVjNwcXrjY-31xB.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "24252027",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1554222902857400320",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1554222902857400320/pu/img/WEiKCi5XPVRGme0S.jpg",
+          "source_user_id_str": "24252027",
+          "sizes": {
+            "large": {
+              "w": "576",
+              "h": "1022",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1022",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1554222939670827008",
+          "display_url": "pic.twitter.com/70OQjF3Lxp"
+        }
+      ]
+    }
+  }
+}

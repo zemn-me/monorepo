@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1050762552391688192"
+        ],
+        "editableUntil": "2018-10-12T15:58:09.371Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ian Laking",
+          "screen_name": "IHLaking",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "2662861692",
+          "id": "2662861692"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IHLaking/status/1048988378862051328/video/1",
+          "source_status_id": "1048988378862051328",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/ThcWgFZIic",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1048988264059699200/pu/img/jCDATdrc4S9soZ7s.jpg",
+          "id_str": "1048988264059699200",
+          "source_user_id": "2662861692",
+          "id": "1048988264059699200",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1048988264059699200/pu/img/jCDATdrc4S9soZ7s.jpg",
+          "source_user_id_str": "2662861692",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1048988378862051328",
+          "display_url": "pic.twitter.com/ThcWgFZIic"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1050762552391688192",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1050762552391688192",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 12 14:58:09 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @IHLaking: Saddest short film of 2018 right here https://t.co/ThcWgFZIic",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IHLaking/status/1048988378862051328/video/1",
+          "source_status_id": "1048988378862051328",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/ThcWgFZIic",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1048988264059699200/pu/img/jCDATdrc4S9soZ7s.jpg",
+          "id_str": "1048988264059699200",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "12000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1048988264059699200/pu/pl/uoiIZqAxYtO33W4u.m3u8?tag=5"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1048988264059699200/pu/vid/720x720/Iq-dhZMsGYn46f7t.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1048988264059699200/pu/vid/480x480/9LKhDagDvddig5tE.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1048988264059699200/pu/vid/240x240/21azsO5K_R-fLXyV.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "2662861692",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1048988264059699200",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1048988264059699200/pu/img/jCDATdrc4S9soZ7s.jpg",
+          "source_user_id_str": "2662861692",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1048988378862051328",
+          "display_url": "pic.twitter.com/ThcWgFZIic"
+        }
+      ]
+    }
+  }
+}

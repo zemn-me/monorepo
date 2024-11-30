@@ -1,0 +1,67 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1014074978503921666"
+        ],
+        "editableUntil": "2018-07-03T10:14:50.134Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "codeshtool",
+          "screen_name": "codeshtool",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1013896860640034816",
+          "id": "1013896860640034816"
+        },
+        {
+          "name": "Trend Micro",
+          "screen_name": "TrendMicro",
+          "indices": [
+            "112",
+            "123"
+          ],
+          "id_str": "8112142",
+          "id": "8112142"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/655mfCT0vS",
+          "expanded_url": "http://seclists.org/fulldisclosure/2018/Jul/3",
+          "display_url": "seclists.org/fulldisclosure…",
+          "indices": [
+            "16",
+            "39"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "123"
+    ],
+    "favorite_count": "0",
+    "id_str": "1014074978503921666",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1014074978503921666",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 03 09:14:50 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @codeshtool: https://t.co/655mfCT0vS   XXE in WeChat Pay Sdk ( WeChat leave a backdoor on merchantwebsites)  @TrendMicro",
+    "lang": "en"
+  }
+}

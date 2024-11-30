@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1031277630652182528"
+        ],
+        "editableUntil": "2018-08-19T21:32:02.016Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "rusty shackleford",
+          "screen_name": "yunggarlicknot",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "400404421",
+          "id": "400404421"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Emily_Morton_/status/976301344087719937/video/1",
+          "source_status_id": "976301344087719937",
+          "indices": [
+            "48",
+            "71"
+          ],
+          "url": "https://t.co/uOP6dJ8EU0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/976301298734727168/pu/img/vvgCo1HbGZusTolt.jpg",
+          "id_str": "976301298734727168",
+          "source_user_id": "400404421",
+          "id": "976301298734727168",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/976301298734727168/pu/img/vvgCo1HbGZusTolt.jpg",
+          "source_user_id_str": "400404421",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "976301344087719937",
+          "display_url": "pic.twitter.com/uOP6dJ8EU0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "71"
+    ],
+    "favorite_count": "0",
+    "id_str": "1031277630652182528",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1031277630652182528",
+    "possibly_sensitive": false,
+    "created_at": "Sun Aug 19 20:32:02 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @yunggarlicknot: Oh my GOD please watch this https://t.co/uOP6dJ8EU0",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Emily_Morton_/status/976301344087719937/video/1",
+          "source_status_id": "976301344087719937",
+          "indices": [
+            "48",
+            "71"
+          ],
+          "url": "https://t.co/uOP6dJ8EU0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/976301298734727168/pu/img/vvgCo1HbGZusTolt.jpg",
+          "id_str": "976301298734727168",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "10900",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/976301298734727168/pu/vid/480x480/NgiaVcU39Wk_g0BL.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/976301298734727168/pu/pl/PZuhKVnSXrqfzLHg.m3u8?v=100"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/976301298734727168/pu/vid/240x240/l14ZNmf1JqLTcVKq.mp4"
+              }
+            ]
+          },
+          "source_user_id": "400404421",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "976301298734727168",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/976301298734727168/pu/img/vvgCo1HbGZusTolt.jpg",
+          "source_user_id_str": "400404421",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "976301344087719937",
+          "display_url": "pic.twitter.com/uOP6dJ8EU0"
+        }
+      ]
+    }
+  }
+}

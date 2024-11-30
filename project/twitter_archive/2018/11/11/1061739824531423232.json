@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1061739824531423232"
+        ],
+        "editableUntil": "2018-11-11T22:57:54.997Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "cami",
+          "screen_name": "garciathecami",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "469027249",
+          "id": "469027249"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/garciathecami/status/1061021985432657921/video/1",
+          "source_status_id": "1061021985432657921",
+          "indices": [
+            "114",
+            "137"
+          ],
+          "url": "https://t.co/8Yg486GrZ2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1061021921028919296/pu/img/CKGZKycpjKTt5sGX.jpg",
+          "id_str": "1061021921028919296",
+          "source_user_id": "469027249",
+          "id": "1061021921028919296",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1061021921028919296/pu/img/CKGZKycpjKTt5sGX.jpg",
+          "source_user_id_str": "469027249",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1061021985432657921",
+          "display_url": "pic.twitter.com/8Yg486GrZ2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "137"
+    ],
+    "favorite_count": "0",
+    "id_str": "1061739824531423232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1061739824531423232",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 11 21:57:54 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @garciathecami: daylight savings messed up my dog’s dinner schedule... she’s been sitting there for 20 minutes https://t.co/8Yg486GrZ2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/garciathecami/status/1061021985432657921/video/1",
+          "source_status_id": "1061021985432657921",
+          "indices": [
+            "114",
+            "137"
+          ],
+          "url": "https://t.co/8Yg486GrZ2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1061021921028919296/pu/img/CKGZKycpjKTt5sGX.jpg",
+          "id_str": "1061021921028919296",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "2900",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1061021921028919296/pu/vid/180x320/bidg-Ammsxp4nqNi.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1061021921028919296/pu/pl/hiBScwg6a19AxGTA.m3u8?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1061021921028919296/pu/vid/720x1280/C6_qJEIH-kxwTqgO.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1061021921028919296/pu/vid/360x640/6cCWHu-85DTHFD0M.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "469027249",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1061021921028919296",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1061021921028919296/pu/img/CKGZKycpjKTt5sGX.jpg",
+          "source_user_id_str": "469027249",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1061021985432657921",
+          "display_url": "pic.twitter.com/8Yg486GrZ2"
+        }
+      ]
+    }
+  }
+}

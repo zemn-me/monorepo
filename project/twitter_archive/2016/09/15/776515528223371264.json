@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "776515528223371264"
+        ],
+        "editableUntil": "2016-09-15T21:18:23.546Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alice",
+          "screen_name": "maliceyang",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "21015627",
+          "id": "21015627"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/maliceyang/status/756633492579028992/video/1",
+          "source_status_id": "756633492579028992",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/lTDbp9PQHf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/756633441769254916/pu/img/eVeZ5U1SxBxhZKKj.jpg",
+          "id_str": "756633441769254916",
+          "source_user_id": "21015627",
+          "id": "756633441769254916",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/756633441769254916/pu/img/eVeZ5U1SxBxhZKKj.jpg",
+          "source_user_id_str": "21015627",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "756633492579028992",
+          "display_url": "pic.twitter.com/lTDbp9PQHf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "0",
+    "id_str": "776515528223371264",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "776515528223371264",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 15 20:18:23 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @maliceyang: Ladies and gentlemen, my cat https://t.co/lTDbp9PQHf",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/maliceyang/status/756633492579028992/video/1",
+          "source_status_id": "756633492579028992",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/lTDbp9PQHf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/756633441769254916/pu/img/eVeZ5U1SxBxhZKKj.jpg",
+          "id_str": "756633441769254916",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "6471",
+            "variants": [
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/756633441769254916/pu/vid/320x180/pI30L-1fXwqvqCsp.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/756633441769254916/pu/vid/640x360/y_W9BupRBRk7mUGL.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/756633441769254916/pu/vid/1280x720/8bgDLwYMOcEfqnxZ.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/756633441769254916/pu/pl/Cn9V1U4pn4CQz0a9.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "21015627",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "756633441769254916",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/756633441769254916/pu/img/eVeZ5U1SxBxhZKKj.jpg",
+          "source_user_id_str": "21015627",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "756633492579028992",
+          "display_url": "pic.twitter.com/lTDbp9PQHf"
+        }
+      ]
+    }
+  }
+}

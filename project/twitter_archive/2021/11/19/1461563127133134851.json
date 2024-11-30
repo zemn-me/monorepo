@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1461563127133134851"
+        ],
+        "editableUntil": "2021-11-19T06:12:58.695Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "289"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1461562626186485767",
+    "id_str": "1461563127133134851",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1461563127133134851",
+    "in_reply_to_status_id": "1461562626186485767",
+    "created_at": "Fri Nov 19 05:12:58 +0000 2021",
+    "favorited": false,
+    "full_text": "@d0nutptr a good example of how to use this is to do a large refactoring of API x.A to x.B. There, I’d create 3 commits; one that introduces x.B – one that changes all existing usages of x.A to x.B and one that deletes x.A. This means that you never break tests, and dont need depreciation",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

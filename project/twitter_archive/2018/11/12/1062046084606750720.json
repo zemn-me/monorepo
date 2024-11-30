@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1062046084606750720"
+        ],
+        "editableUntil": "2018-11-12T19:14:53.089Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Hollywood Reporter",
+          "screen_name": "THR",
+          "indices": [
+            "3",
+            "7"
+          ],
+          "id_str": "17446621",
+          "id": "17446621"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/THR/status/1062034496025845762/video/1",
+          "source_status_id": "1062034496025845762",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/ai2q0mCXvy",
+          "media_url": "http://pbs.twimg.com/media/Dr0acPQU8AAVeHl.jpg",
+          "id_str": "1062033788853608450",
+          "source_user_id": "17446621",
+          "id": "1062033788853608450",
+          "media_url_https": "https://pbs.twimg.com/media/Dr0acPQU8AAVeHl.jpg",
+          "source_user_id_str": "17446621",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1062034496025845762",
+          "display_url": "pic.twitter.com/ai2q0mCXvy"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "104"
+    ],
+    "favorite_count": "0",
+    "id_str": "1062046084606750720",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1062046084606750720",
+    "possibly_sensitive": false,
+    "created_at": "Mon Nov 12 18:14:53 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @THR: First 'Detective Pikachu' trailer makes Ryan Reynolds a Pokemon. Watch: https://t.co/ai2q0mCXvy",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/THR/status/1062034496025845762/video/1",
+          "source_status_id": "1062034496025845762",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/ai2q0mCXvy",
+          "media_url": "http://pbs.twimg.com/media/Dr0acPQU8AAVeHl.jpg",
+          "id_str": "1062033788853608450",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "141892",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1062033788853608450/pl/2J4NwrSYRdxh48cO.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1062033788853608450/vid/1280x720/vOzechAzDuxRtii_.mp4?tag=8"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1062033788853608450/vid/320x180/3J2rgBVIVTIHMOKJ.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1062033788853608450/vid/640x360/uHbt4pf9RoakH3UC.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "17446621",
+          "additional_media_info": {
+            "embeddable": true,
+            "monetizable": false,
+            "description": "",
+            "call_to_actions": {
+              "visit_site": {
+                "url": "https://www.hollywoodreporter.com/heat-vision/detective-pikachu-trailer-watch-ryan-reynolds-become-a-pokemon-1160378"
+              }
+            },
+            "title": "Trailer: 'Detective Pikachu'"
+          },
+          "id": "1062033788853608450",
+          "media_url_https": "https://pbs.twimg.com/media/Dr0acPQU8AAVeHl.jpg",
+          "source_user_id_str": "17446621",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1062034496025845762",
+          "display_url": "pic.twitter.com/ai2q0mCXvy"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1083568530182860800"
+        ],
+        "editableUntil": "2019-01-11T04:37:23.982Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Twitch",
+          "screen_name": "Twitch",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "309366491",
+          "id": "309366491"
+        },
+        {
+          "name": "chocoTaco",
+          "screen_name": "chocoTaco",
+          "indices": [
+            "15",
+            "25"
+          ],
+          "id_str": "891787061199613952",
+          "id": "891787061199613952"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/1083559258476765184/video/1",
+          "source_status_id": "1083559258476765184",
+          "indices": [
+            "27",
+            "50"
+          ],
+          "url": "https://t.co/PcUzunhNSZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1083559203329978371/pu/img/W54VfcNMwsFXNbHm.jpg",
+          "id_str": "1083559203329978371",
+          "source_user_id": "309366491",
+          "id": "1083559203329978371",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1083559203329978371/pu/img/W54VfcNMwsFXNbHm.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1083559258476765184",
+          "display_url": "pic.twitter.com/PcUzunhNSZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "50"
+    ],
+    "favorite_count": "0",
+    "id_str": "1083568530182860800",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1083568530182860800",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jan 11 03:37:23 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Twitch: GG @chocoTaco. https://t.co/PcUzunhNSZ",
+    "lang": "und",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/1083559258476765184/video/1",
+          "source_status_id": "1083559258476765184",
+          "indices": [
+            "27",
+            "50"
+          ],
+          "url": "https://t.co/PcUzunhNSZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1083559203329978371/pu/img/W54VfcNMwsFXNbHm.jpg",
+          "id_str": "1083559203329978371",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "36100",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1083559203329978371/pu/vid/320x320/2PWgcmERg0iipMhO.mp4?tag=6"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1083559203329978371/pu/vid/720x720/CH8PR2dvIJzflEr5.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1083559203329978371/pu/pl/7t5wtrLLwJHKVRce.m3u8?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1083559203329978371/pu/vid/480x480/wS3Ps9EJLX8EQlze.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "309366491",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1083559203329978371",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1083559203329978371/pu/img/W54VfcNMwsFXNbHm.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1083559258476765184",
+          "display_url": "pic.twitter.com/PcUzunhNSZ"
+        }
+      ]
+    }
+  }
+}

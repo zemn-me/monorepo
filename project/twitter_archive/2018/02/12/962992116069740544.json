@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "962992116069740544"
+        ],
+        "editableUntil": "2018-02-12T11:09:46.656Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ibcf",
+          "screen_name": "_ibcf_",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "3745339814",
+          "id": "3745339814"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/_ibcf_/status/962609576263626753/video/1",
+          "source_status_id": "962609576263626753",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/cBjoPEMKZK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/962609173664972800/pu/img/DppZY-DaaDfpQECl.jpg",
+          "id_str": "962609173664972800",
+          "source_user_id": "3745339814",
+          "id": "962609173664972800",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/962609173664972800/pu/img/DppZY-DaaDfpQECl.jpg",
+          "source_user_id_str": "3745339814",
+          "sizes": {
+            "large": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "962609576263626753",
+          "display_url": "pic.twitter.com/cBjoPEMKZK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "962992116069740544",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "962992116069740544",
+    "possibly_sensitive": false,
+    "created_at": "Mon Feb 12 10:09:46 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @_ibcf_: kids these days, don't even know how to tie down their pumpkins https://t.co/cBjoPEMKZK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/_ibcf_/status/962609576263626753/video/1",
+          "source_status_id": "962609576263626753",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/cBjoPEMKZK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/962609173664972800/pu/img/DppZY-DaaDfpQECl.jpg",
+          "id_str": "962609173664972800",
+          "video_info": {
+            "aspect_ratio": [
+              "155",
+              "119"
+            ],
+            "duration_millis": "40958",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/962609173664972800/pu/pl/00KXVEGV1O2hjtVD.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/962609173664972800/pu/vid/234x180/4cvmTki20WrjexPQ.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/962609173664972800/pu/vid/468x360/6nGCSnjewWY0_lMp.mp4"
+              }
+            ]
+          },
+          "source_user_id": "3745339814",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "962609173664972800",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/962609173664972800/pu/img/DppZY-DaaDfpQECl.jpg",
+          "source_user_id_str": "3745339814",
+          "sizes": {
+            "large": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "620",
+              "h": "476",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "962609576263626753",
+          "display_url": "pic.twitter.com/cBjoPEMKZK"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1490813361872785411"
+        ],
+        "editableUntil": "2022-02-07T23:22:58.100Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "AVC",
+          "screen_name": "annevclark",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "14519841",
+          "id": "14519841"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/annevclark/status/1490428376510828556/video/1",
+          "source_status_id": "1490428376510828556",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/LldsxIz3Xi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1490428230087716865/pu/img/f-UTjVQzwDCOkh-0.jpg",
+          "id_str": "1490428230087716865",
+          "source_user_id": "14519841",
+          "id": "1490428230087716865",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1490428230087716865/pu/img/f-UTjVQzwDCOkh-0.jpg",
+          "source_user_id_str": "14519841",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1490428376510828556",
+          "display_url": "pic.twitter.com/LldsxIz3Xi"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "1490813361872785411",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1490813361872785411",
+    "possibly_sensitive": false,
+    "created_at": "Mon Feb 07 22:22:58 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @annevclark: A comedian's job is to be more entertaining than this and good fuckin luck https://t.co/LldsxIz3Xi",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/annevclark/status/1490428376510828556/video/1",
+          "source_status_id": "1490428376510828556",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/LldsxIz3Xi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1490428230087716865/pu/img/f-UTjVQzwDCOkh-0.jpg",
+          "id_str": "1490428230087716865",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "65178",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1490428230087716865/pu/vid/480x852/Ak0MxCY3UeWYxy-t.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1490428230087716865/pu/vid/576x1024/r_XKJNM2ILzJpehL.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1490428230087716865/pu/vid/320x568/EccGU-bi_xXHZE_y.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1490428230087716865/pu/pl/1ZAyFsHHXNQ3SDbD.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "14519841",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1490428230087716865",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1490428230087716865/pu/img/f-UTjVQzwDCOkh-0.jpg",
+          "source_user_id_str": "14519841",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1490428376510828556",
+          "display_url": "pic.twitter.com/LldsxIz3Xi"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1271605107768078339"
+        ],
+        "editableUntil": "2020-06-13T01:47:37.629Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pluto",
+          "screen_name": "TwitchPluto",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "598642412",
+          "id": "598642412"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TwitchPluto/status/1271592616233033728/video/1",
+          "source_status_id": "1271592616233033728",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/PinbaPZtjV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1271592359516463104/pu/img/JFtAvlD3SlQA_68s.jpg",
+          "id_str": "1271592359516463104",
+          "source_user_id": "598642412",
+          "id": "1271592359516463104",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1271592359516463104/pu/img/JFtAvlD3SlQA_68s.jpg",
+          "source_user_id_str": "598642412",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1271592616233033728",
+          "display_url": "pic.twitter.com/PinbaPZtjV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1271605107768078339",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1271605107768078339",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 13 00:47:37 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @TwitchPluto: In memoriam of the juice. https://t.co/PinbaPZtjV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TwitchPluto/status/1271592616233033728/video/1",
+          "source_status_id": "1271592616233033728",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/PinbaPZtjV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1271592359516463104/pu/img/JFtAvlD3SlQA_68s.jpg",
+          "id_str": "1271592359516463104",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "60104",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1271592359516463104/pu/vid/360x360/Vj4B3UUwzW8QgBpz.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1271592359516463104/pu/pl/_YWBKzIF8Lm8ASb_.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "598642412",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1271592359516463104",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1271592359516463104/pu/img/JFtAvlD3SlQA_68s.jpg",
+          "source_user_id_str": "598642412",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1271592616233033728",
+          "display_url": "pic.twitter.com/PinbaPZtjV"
+        }
+      ]
+    }
+  }
+}

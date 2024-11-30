@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1038941692823564288"
+        ],
+        "editableUntil": "2018-09-10T01:06:16.829Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mustafa Al-Bassam",
+          "screen_name": "musalbas",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "1436258888",
+          "id": "1436258888"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/musalbas/status/1038919152826757122/video/1",
+          "source_status_id": "1038919152826757122",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/phONMKHBle",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1038918965265936385/img/HwBaGNosIyjPcqoK.jpg",
+          "id_str": "1038918965265936385",
+          "source_user_id": "1436258888",
+          "id": "1038918965265936385",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1038918965265936385/img/HwBaGNosIyjPcqoK.jpg",
+          "source_user_id_str": "1436258888",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1038919152826757122",
+          "display_url": "pic.twitter.com/phONMKHBle"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "1038941692823564288",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1038941692823564288",
+    "possibly_sensitive": false,
+    "created_at": "Mon Sep 10 00:06:16 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @musalbas: Quick phishing demo. Would you fall for something like this? https://t.co/phONMKHBle",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/musalbas/status/1038919152826757122/video/1",
+          "source_status_id": "1038919152826757122",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/phONMKHBle",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1038918965265936385/img/HwBaGNosIyjPcqoK.jpg",
+          "id_str": "1038918965265936385",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "9700",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1038918965265936385/pl/6vr8gmGlMSraKCoB.m3u8?tag=8"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1038918965265936385/vid/240x240/WHVTS5t1pAV6YOeq.mp4?tag=8"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1038918965265936385/vid/640x640/sPSJmkF_cx3D8O1L.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1038918965265936385/vid/480x480/HX3-ylVPG_Ub8Iak.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "1436258888",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1038918965265936385",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1038918965265936385/img/HwBaGNosIyjPcqoK.jpg",
+          "source_user_id_str": "1436258888",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1038919152826757122",
+          "display_url": "pic.twitter.com/phONMKHBle"
+        }
+      ]
+    }
+  }
+}

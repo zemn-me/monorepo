@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1345637846523256832"
+        ],
+        "editableUntil": "2021-01-03T08:47:18.010Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jeff Ball",
+          "screen_name": "jeffthatnoise",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "42184697",
+          "id": "42184697"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jeffthatnoise/status/1345111450080034816/video/1",
+          "source_status_id": "1345111450080034816",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/4a4k2wthSJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1345110489794109440/pu/img/D-1tcXYfGIWmO-Jh.jpg",
+          "id_str": "1345110489794109440",
+          "source_user_id": "42184697",
+          "id": "1345110489794109440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1345110489794109440/pu/img/D-1tcXYfGIWmO-Jh.jpg",
+          "source_user_id_str": "42184697",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1345111450080034816",
+          "display_url": "pic.twitter.com/4a4k2wthSJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "97"
+    ],
+    "favorite_count": "0",
+    "id_str": "1345637846523256832",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1345637846523256832",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 03 07:47:18 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @jeffthatnoise: I put Evangeleon music over the Space Needle NYE show😆 https://t.co/4a4k2wthSJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jeffthatnoise/status/1345111450080034816/video/1",
+          "source_status_id": "1345111450080034816",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/4a4k2wthSJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1345110489794109440/pu/img/D-1tcXYfGIWmO-Jh.jpg",
+          "id_str": "1345110489794109440",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "60333",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345110489794109440/pu/vid/640x360/Rodq4N0RvhvBKS1U.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345110489794109440/pu/vid/480x270/8RBcYnws3HsuonYQ.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1345110489794109440/pu/pl/VE99MlzSD9brPQP7.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1345110489794109440/pu/vid/1280x720/lEEuEuEmqQ1XtMHm.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "42184697",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1345110489794109440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1345110489794109440/pu/img/D-1tcXYfGIWmO-Jh.jpg",
+          "source_user_id_str": "42184697",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1345111450080034816",
+          "display_url": "pic.twitter.com/4a4k2wthSJ"
+        }
+      ]
+    }
+  }
+}

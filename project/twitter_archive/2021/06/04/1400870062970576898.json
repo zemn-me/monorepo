@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1400870062970576898"
+        ],
+        "editableUntil": "2021-06-04T18:40:24.576Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "X (bsky.app/profile/xkeeper.net)",
+          "screen_name": "xkeepah",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "61653331",
+          "id": "61653331"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/xkeepah/status/1400869518872698882/video/1",
+          "source_status_id": "1400869518872698882",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/nSJqShVnSZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1400869471099658240/pu/img/QAxfwTlysLUB9Nmr.jpg",
+          "id_str": "1400869471099658240",
+          "source_user_id": "61653331",
+          "id": "1400869471099658240",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1400869471099658240/pu/img/QAxfwTlysLUB9Nmr.jpg",
+          "source_user_id_str": "61653331",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "426",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "818",
+              "h": "512",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "818",
+              "h": "512",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1400869518872698882",
+          "display_url": "pic.twitter.com/nSJqShVnSZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1400870062970576898",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1400870062970576898",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 04 17:40:24 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @xkeepah: i fucking hate web browsers https://t.co/nSJqShVnSZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/xkeepah/status/1400869518872698882/video/1",
+          "source_status_id": "1400869518872698882",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/nSJqShVnSZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1400869471099658240/pu/img/QAxfwTlysLUB9Nmr.jpg",
+          "id_str": "1400869471099658240",
+          "video_info": {
+            "aspect_ratio": [
+              "409",
+              "256"
+            ],
+            "duration_millis": "32150",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400869471099658240/pu/vid/818x512/P3qjRpFmlV1GQqI7.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400869471099658240/pu/vid/574x360/VQj4S7M5LwcUZwU8.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1400869471099658240/pu/vid/430x270/5fggBRNDDhXce_63.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1400869471099658240/pu/pl/iRdgsdJa-SvGazKy.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "61653331",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1400869471099658240",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1400869471099658240/pu/img/QAxfwTlysLUB9Nmr.jpg",
+          "source_user_id_str": "61653331",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "426",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "818",
+              "h": "512",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "818",
+              "h": "512",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1400869518872698882",
+          "display_url": "pic.twitter.com/nSJqShVnSZ"
+        }
+      ]
+    }
+  }
+}

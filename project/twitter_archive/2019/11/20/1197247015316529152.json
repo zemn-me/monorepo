@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1197247015316529152"
+        ],
+        "editableUntil": "2019-11-20T21:15:06.882Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "262"
+    ],
+    "favorite_count": "0",
+    "id_str": "1197247015316529152",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1197247015316529152",
+    "created_at": "Wed Nov 20 20:15:06 +0000 2019",
+    "favorited": false,
+    "full_text": "after much trial and tribulation i can tell you the very best way to observe postMessage conversations is to add a 'custom break point' to the first line of the js of each page you want to view that does `window.addEventListener('message', c=&gt;console.log(c))`",
+    "lang": "en"
+  }
+}

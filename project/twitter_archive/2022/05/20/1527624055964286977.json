@@ -1,0 +1,169 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1527624055964286977"
+        ],
+        "editableUntil": "2022-05-20T12:45:31.481Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "a y e x",
+          "screen_name": "Alkupra",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "34545814",
+          "id": "34545814"
+        },
+        {
+          "name": "Joe Merrick",
+          "screen_name": "JoeMerrick",
+          "indices": [
+            "13",
+            "24"
+          ],
+          "id_str": "25344376",
+          "id": "25344376"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Alkupra/status/1527600228375089152/video/1",
+          "source_status_id": "1527600228375089152",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/7EN561v76p",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1527600195948941312/pu/img/YeoviO5eaUeV8xl0.jpg",
+          "id_str": "1527600195948941312",
+          "source_user_id": "34545814",
+          "id": "1527600195948941312",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1527600195948941312/pu/img/YeoviO5eaUeV8xl0.jpg",
+          "source_user_id_str": "34545814",
+          "sizes": {
+            "small": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1527600228375089152",
+          "display_url": "pic.twitter.com/7EN561v76p"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "48"
+    ],
+    "favorite_count": "0",
+    "id_str": "1527624055964286977",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1527624055964286977",
+    "possibly_sensitive": false,
+    "created_at": "Fri May 20 12:15:31 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @Alkupra: @JoeMerrick https://t.co/7EN561v76p",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Alkupra/status/1527600228375089152/video/1",
+          "source_status_id": "1527600228375089152",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/7EN561v76p",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1527600195948941312/pu/img/YeoviO5eaUeV8xl0.jpg",
+          "id_str": "1527600195948941312",
+          "video_info": {
+            "aspect_ratio": [
+              "11",
+              "20"
+            ],
+            "duration_millis": "21666",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1527600195948941312/pu/vid/352x640/SbdBkMMBFXF6FwBu.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1527600195948941312/pu/pl/Tlm-L7QMNoS1j97q.m3u8?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1527600195948941312/pu/vid/320x580/tPt2d_R5JHW37ZTt.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "34545814",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1527600195948941312",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1527600195948941312/pu/img/YeoviO5eaUeV8xl0.jpg",
+          "source_user_id_str": "34545814",
+          "sizes": {
+            "small": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "352",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1527600228375089152",
+          "display_url": "pic.twitter.com/7EN561v76p"
+        }
+      ]
+    }
+  }
+}

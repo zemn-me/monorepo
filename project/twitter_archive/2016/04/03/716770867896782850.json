@@ -1,0 +1,161 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "716770867896782850"
+        ],
+        "editableUntil": "2016-04-04T00:34:26.522Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Fatih Arslan",
+          "screen_name": "fatih",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "23119057",
+          "id": "23119057"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/fatih/status/716722650383564800/photo/1",
+          "source_status_id": "716722650383564800",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/3QH37aiEcy",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CfJPWSLUMAAlIB2.jpg",
+          "id_str": "716722534960345088",
+          "source_user_id": "23119057",
+          "id": "716722534960345088",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CfJPWSLUMAAlIB2.jpg",
+          "source_user_id_str": "23119057",
+          "sizes": {
+            "medium": {
+              "w": "1088",
+              "h": "728",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1088",
+              "h": "728",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "455",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "716722650383564800",
+          "display_url": "pic.twitter.com/3QH37aiEcy"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "78",
+            "85"
+          ]
+        },
+        {
+          "text": "vim",
+          "indices": [
+            "86",
+            "90"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "716770867896782850",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "716770867896782850",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 03 23:34:26 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @fatih: Coming soon to vim-go. Enhanced and builtin test coverage support! #golang #vim https://t.co/3QH37aiEcy",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/fatih/status/716722650383564800/photo/1",
+          "source_status_id": "716722650383564800",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/3QH37aiEcy",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CfJPWSLUMAAlIB2.jpg",
+          "id_str": "716722534960345088",
+          "video_info": {
+            "aspect_ratio": [
+              "136",
+              "91"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/CfJPWSLUMAAlIB2.mp4"
+              }
+            ]
+          },
+          "source_user_id": "23119057",
+          "id": "716722534960345088",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CfJPWSLUMAAlIB2.jpg",
+          "source_user_id_str": "23119057",
+          "sizes": {
+            "medium": {
+              "w": "1088",
+              "h": "728",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1088",
+              "h": "728",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "455",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "716722650383564800",
+          "display_url": "pic.twitter.com/3QH37aiEcy"
+        }
+      ]
+    }
+  }
+}

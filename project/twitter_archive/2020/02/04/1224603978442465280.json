@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1224603978442465280"
+        ],
+        "editableUntil": "2020-02-04T09:01:55.159Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "nematode",
+          "screen_name": "nematodeneedles",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "717835224906903553",
+          "id": "717835224906903553"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nematodeneedles/status/1224445636252065793/video/1",
+          "source_status_id": "1224445636252065793",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/GqCoosa5II",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1224445444861784067/pu/img/BZBtZPII39_eQwRO.jpg",
+          "id_str": "1224445444861784067",
+          "source_user_id": "717835224906903553",
+          "id": "1224445444861784067",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1224445444861784067/pu/img/BZBtZPII39_eQwRO.jpg",
+          "source_user_id_str": "717835224906903553",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "372",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1520",
+              "h": "832",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "657",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1224445636252065793",
+          "display_url": "pic.twitter.com/GqCoosa5II"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "82"
+    ],
+    "favorite_count": "0",
+    "id_str": "1224603978442465280",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1224603978442465280",
+    "possibly_sensitive": false,
+    "created_at": "Tue Feb 04 08:01:55 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @nematodeneedles: i'm learning how to use after effects https://t.co/GqCoosa5II",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nematodeneedles/status/1224445636252065793/video/1",
+          "source_status_id": "1224445636252065793",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/GqCoosa5II",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1224445444861784067/pu/img/BZBtZPII39_eQwRO.jpg",
+          "id_str": "1224445444861784067",
+          "video_info": {
+            "aspect_ratio": [
+              "95",
+              "52"
+            ],
+            "duration_millis": "32000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1224445444861784067/pu/vid/492x270/vhB1vJsnQ2yE6YyL.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1224445444861784067/pu/pl/BsQJ-xLMkSAzSl8z.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1224445444861784067/pu/vid/1314x720/kiBpOw6HnsBru6Qn.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1224445444861784067/pu/vid/656x360/DBPtoNlptNuxrKzI.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "717835224906903553",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1224445444861784067",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1224445444861784067/pu/img/BZBtZPII39_eQwRO.jpg",
+          "source_user_id_str": "717835224906903553",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "372",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1520",
+              "h": "832",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "657",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1224445636252065793",
+          "display_url": "pic.twitter.com/GqCoosa5II"
+        }
+      ]
+    }
+  }
+}

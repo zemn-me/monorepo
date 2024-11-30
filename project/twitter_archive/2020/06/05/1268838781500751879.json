@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1268838781500751879"
+        ],
+        "editableUntil": "2020-06-05T10:35:14.051Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "おがくず",
+          "screen_name": "oga_kuz",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "185942278",
+          "id": "185942278"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oga_kuz/status/1268438501583806466/video/1",
+          "source_status_id": "1268438501583806466",
+          "indices": [
+            "23",
+            "46"
+          ],
+          "url": "https://t.co/yN5ZC0aYhC",
+          "media_url": "http://pbs.twimg.com/media/FerBF3OaUAACe6e.jpg",
+          "id_str": "1268438455983288320",
+          "source_user_id": "185942278",
+          "id": "1268438455983288320",
+          "media_url_https": "https://pbs.twimg.com/media/FerBF3OaUAACe6e.jpg",
+          "source_user_id_str": "185942278",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1268438501583806466",
+          "display_url": "pic.twitter.com/yN5ZC0aYhC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "46"
+    ],
+    "favorite_count": "0",
+    "id_str": "1268838781500751879",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1268838781500751879",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 05 09:35:14 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @oga_kuz: バーチャル背景風呂 https://t.co/yN5ZC0aYhC",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oga_kuz/status/1268438501583806466/video/1",
+          "source_status_id": "1268438501583806466",
+          "indices": [
+            "23",
+            "46"
+          ],
+          "url": "https://t.co/yN5ZC0aYhC",
+          "media_url": "http://pbs.twimg.com/media/FerBF3OaUAACe6e.jpg",
+          "id_str": "1268438455983288320",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "19920",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1268438455983288320/pu/pl/xsj6mlRn3Zwlxc5n.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1268438455983288320/pu/vid/1280x720/InTJYBllfIhLxbnz.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1268438455983288320/pu/vid/480x270/UN9nXNQoVkmZZTP2.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1268438455983288320/pu/vid/640x360/SUrKJO1tZ_oomoGi.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "185942278",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1268438455983288320",
+          "media_url_https": "https://pbs.twimg.com/media/FerBF3OaUAACe6e.jpg",
+          "source_user_id_str": "185942278",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1268438501583806466",
+          "display_url": "pic.twitter.com/yN5ZC0aYhC"
+        }
+      ]
+    }
+  }
+}

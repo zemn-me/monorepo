@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1080427043236524033"
+        ],
+        "editableUntil": "2019-01-02T12:34:15.128Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ma-ko",
+          "screen_name": "blurring_my_day",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1036987486294093826",
+          "id": "1036987486294093826"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/blurring_my_day/status/1080086898343735297/photo/1",
+          "source_status_id": "1080086898343735297",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/HGclGGY8SU",
+          "media_url": "http://pbs.twimg.com/media/Dv09KkKUcAA30DM.jpg",
+          "id_str": "1080086737353732096",
+          "source_user_id": "1036987486294093826",
+          "id": "1080086737353732096",
+          "media_url_https": "https://pbs.twimg.com/media/Dv09KkKUcAA30DM.jpg",
+          "source_user_id_str": "1036987486294093826",
+          "sizes": {
+            "large": {
+              "w": "1100",
+              "h": "1100",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1100",
+              "h": "1100",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1080086898343735297",
+          "display_url": "pic.twitter.com/HGclGGY8SU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1080427043236524033",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1080427043236524033",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 02 11:34:15 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @blurring_my_day: https://t.co/HGclGGY8SU",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/blurring_my_day/status/1080086898343735297/photo/1",
+          "source_status_id": "1080086898343735297",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/HGclGGY8SU",
+          "media_url": "http://pbs.twimg.com/media/Dv09KkKUcAA30DM.jpg",
+          "id_str": "1080086737353732096",
+          "source_user_id": "1036987486294093826",
+          "id": "1080086737353732096",
+          "media_url_https": "https://pbs.twimg.com/media/Dv09KkKUcAA30DM.jpg",
+          "source_user_id_str": "1036987486294093826",
+          "sizes": {
+            "large": {
+              "w": "1100",
+              "h": "1100",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1100",
+              "h": "1100",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1080086898343735297",
+          "display_url": "pic.twitter.com/HGclGGY8SU"
+        }
+      ]
+    }
+  }
+}

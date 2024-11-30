@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "967879224924221441"
+        ],
+        "editableUntil": "2018-02-25T22:49:24.205Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "racoconn",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/racoconn/status/967388102191755264/video/1",
+          "source_status_id": "967388102191755264",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/fa1tJegZW8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/967387731931230208/pu/img/1oZuRutpI2yghjnA.jpg",
+          "id_str": "967387731931230208",
+          "source_user_id": "833118038",
+          "id": "967387731931230208",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/967387731931230208/pu/img/1oZuRutpI2yghjnA.jpg",
+          "source_user_id_str": "833118038",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "967388102191755264",
+          "display_url": "pic.twitter.com/fa1tJegZW8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "93"
+    ],
+    "favorite_count": "0",
+    "id_str": "967879224924221441",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "967879224924221441",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 25 21:49:24 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @racoconn: what people think programming is vs. how it actually is https://t.co/fa1tJegZW8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/racoconn/status/967388102191755264/video/1",
+          "source_status_id": "967388102191755264",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/fa1tJegZW8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/967387731931230208/pu/img/1oZuRutpI2yghjnA.jpg",
+          "id_str": "967387731931230208",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "29496",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/967387731931230208/pu/pl/2RvU6lAX1Hw4qdHL.m3u8?v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/967387731931230208/pu/vid/640x360/ELDKBDZWNXm8J7Am.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/967387731931230208/pu/vid/1280x720/jkUhhOJT5dwieQzh.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/967387731931230208/pu/vid/320x180/l3o_JfH37fEoy4zV.mp4"
+              }
+            ]
+          },
+          "source_user_id": "833118038",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "967387731931230208",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/967387731931230208/pu/img/1oZuRutpI2yghjnA.jpg",
+          "source_user_id_str": "833118038",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "967388102191755264",
+          "display_url": "pic.twitter.com/fa1tJegZW8"
+        }
+      ]
+    }
+  }
+}

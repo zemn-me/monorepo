@@ -1,0 +1,140 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1165999209969016832"
+        ],
+        "editableUntil": "2019-08-26T15:47:29.531Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Michée Lengronne",
+          "screen_name": "MicheeLengronne",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "137964274",
+          "id": "137964274"
+        },
+        {
+          "name": "Frederic Jacobs",
+          "screen_name": "FredericJacobs",
+          "indices": [
+            "17",
+            "32"
+          ],
+          "id_str": "18018877",
+          "id": "18018877"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1165999209969016832/photo/1",
+          "indices": [
+            "286",
+            "309"
+          ],
+          "url": "https://t.co/sh0RFbbY9o",
+          "media_url": "http://pbs.twimg.com/media/EC52Gb6WsAAsiqO.png",
+          "id_str": "1165999206479343616",
+          "id": "1165999206479343616",
+          "media_url_https": "https://pbs.twimg.com/media/EC52Gb6WsAAsiqO.png",
+          "sizes": {
+            "large": {
+              "w": "797",
+              "h": "296",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "253",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "797",
+              "h": "296",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/sh0RFbbY9o"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "309"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1165998234088747011",
+    "id_str": "1165999209969016832",
+    "in_reply_to_user_id": "137964274",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1165999209969016832",
+    "in_reply_to_status_id": "1165998234088747011",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 26 14:47:29 +0000 2019",
+    "favorited": false,
+    "full_text": "@MicheeLengronne @FredericJacobs the only thing that could be even vaguely considered PII is 'capturing the user's browser window, pixel-by-pixel'. this is utterly untrue and I can't imagine where it came from. There is no browser API for capturing the current window 'pixel-by-pixel'. https://t.co/sh0RFbbY9o",
+    "lang": "en",
+    "in_reply_to_screen_name": "MicheeLengronne",
+    "in_reply_to_user_id_str": "137964274",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1165999209969016832/photo/1",
+          "indices": [
+            "286",
+            "309"
+          ],
+          "url": "https://t.co/sh0RFbbY9o",
+          "media_url": "http://pbs.twimg.com/media/EC52Gb6WsAAsiqO.png",
+          "id_str": "1165999206479343616",
+          "id": "1165999206479343616",
+          "media_url_https": "https://pbs.twimg.com/media/EC52Gb6WsAAsiqO.png",
+          "sizes": {
+            "large": {
+              "w": "797",
+              "h": "296",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "253",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "797",
+              "h": "296",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/sh0RFbbY9o"
+        }
+      ]
+    }
+  }
+}

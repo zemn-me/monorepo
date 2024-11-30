@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1453473932825276426"
+        ],
+        "editableUntil": "2021-10-27T22:29:24.482Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "149"
+    ],
+    "favorite_count": "1",
+    "id_str": "1453473932825276426",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1453473932825276426",
+    "created_at": "Wed Oct 27 21:29:24 +0000 2021",
+    "favorited": false,
+    "full_text": "whats the operation f2 called:\n\nwhere f = (a, b) =&gt; c:\n\nf2(f)(a, b) = f(a,b)\nf2(f)(a, b, c) = f(a, f(b, c))\nf2(f)(a, b, c, d) = f(a, f(b, f(c, d))",
+    "lang": "en"
+  }
+}

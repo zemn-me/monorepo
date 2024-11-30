@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1262516094553767943"
+        ],
+        "editableUntil": "2020-05-18T23:51:08.013Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "dan_abramov",
+          "screen_name": "dan_abramov",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "1823396792068648967",
+          "id": "1823396792068648967"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "273"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1262515531015426052",
+    "id_str": "1262516094553767943",
+    "in_reply_to_user_id": "70345946",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1262516094553767943",
+    "in_reply_to_status_id": "1262515531015426052",
+    "created_at": "Mon May 18 22:51:08 +0000 2020",
+    "favorited": false,
+    "full_text": "@dan_abramov personally i’ve has this bug but it depends on the size of the code. i think its some kinda race cause i perfed devtools when it happened and the lexer kinda whizzes into infinity. it seems to me to happen when a lot of loads during a breakpoint and navigation",
+    "lang": "en",
+    "in_reply_to_user_id_str": "70345946"
+  }
+}

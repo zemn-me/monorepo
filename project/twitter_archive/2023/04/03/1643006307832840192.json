@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1643006307832840192"
+        ],
+        "editableUntil": "2023-04-03T22:13:24.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "mark",
+          "screen_name": "r_marked",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "374316641",
+          "id": "374316641"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "87"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1643004084021243905",
+    "id_str": "1643006307832840192",
+    "in_reply_to_user_id": "374316641",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1643006307832840192",
+    "in_reply_to_status_id": "1643004084021243905",
+    "created_at": "Mon Apr 03 21:43:24 +0000 2023",
+    "favorited": false,
+    "full_text": "@r_marked go doesn't support negative lookahead / lookbehind and I needed a quick regex",
+    "lang": "en",
+    "in_reply_to_screen_name": "r_marked",
+    "in_reply_to_user_id_str": "374316641"
+  }
+}

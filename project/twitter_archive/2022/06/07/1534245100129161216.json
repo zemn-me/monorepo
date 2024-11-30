@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1534245100129161216"
+        ],
+        "editableUntil": "2022-06-07T19:15:11.423Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Brent (King of Skill)",
+          "screen_name": "TrueKingOfSkill",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1099182778774474753",
+          "id": "1099182778774474753"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TrueKingOfSkill/status/1533961738617593856/video/1",
+          "source_status_id": "1533961738617593856",
+          "indices": [
+            "82",
+            "105"
+          ],
+          "url": "https://t.co/i7ot4NB4hP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1533961557364850688/pu/img/pg2G-ofDq813ZOUo.jpg",
+          "id_str": "1533961557364850688",
+          "source_user_id": "1099182778774474753",
+          "id": "1533961557364850688",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1533961557364850688/pu/img/pg2G-ofDq813ZOUo.jpg",
+          "source_user_id_str": "1099182778774474753",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1533961738617593856",
+          "display_url": "pic.twitter.com/i7ot4NB4hP"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "105"
+    ],
+    "favorite_count": "0",
+    "id_str": "1534245100129161216",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1534245100129161216",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 07 18:45:11 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @TrueKingOfSkill: This is one of the dumbest openings to a game I've ever had. https://t.co/i7ot4NB4hP",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TrueKingOfSkill/status/1533961738617593856/video/1",
+          "source_status_id": "1533961738617593856",
+          "indices": [
+            "82",
+            "105"
+          ],
+          "url": "https://t.co/i7ot4NB4hP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1533961557364850688/pu/img/pg2G-ofDq813ZOUo.jpg",
+          "id_str": "1533961557364850688",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "12352",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1533961557364850688/pu/vid/640x360/L4M6xnkQslrVRRTO.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1533961557364850688/pu/vid/1280x720/lm2780zsjiKNT_Fa.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1533961557364850688/pu/vid/480x270/-fzBgOYq0l2DKYh_.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1533961557364850688/pu/pl/cpC8sCBs6EOaDejz.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1099182778774474753",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1533961557364850688",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1533961557364850688/pu/img/pg2G-ofDq813ZOUo.jpg",
+          "source_user_id_str": "1099182778774474753",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1533961738617593856",
+          "display_url": "pic.twitter.com/i7ot4NB4hP"
+        }
+      ]
+    }
+  }
+}

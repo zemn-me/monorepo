@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "822753189300670464"
+        ],
+        "editableUntil": "2017-01-21T11:30:21.001Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alex Ernst",
+          "screen_name": "AlexErnst",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "125103240",
+          "id": "125103240"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AlexErnst/status/822533986408923137/video/1",
+          "source_status_id": "822533986408923137",
+          "indices": [
+            "22",
+            "45"
+          ],
+          "url": "https://t.co/9jMxQkx3af",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/822531061125091329/pu/img/ykFZMwgZAQ1DrvOH.jpg",
+          "id_str": "822531061125091329",
+          "source_user_id": "125103240",
+          "id": "822531061125091329",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/822531061125091329/pu/img/ykFZMwgZAQ1DrvOH.jpg",
+          "source_user_id_str": "125103240",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "822533986408923137",
+          "display_url": "pic.twitter.com/9jMxQkx3af"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "45"
+    ],
+    "favorite_count": "0",
+    "id_str": "822753189300670464",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "822753189300670464",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 21 10:30:21 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @AlexErnst: oh boy https://t.co/9jMxQkx3af",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/AlexErnst/status/822533986408923137/video/1",
+          "source_status_id": "822533986408923137",
+          "indices": [
+            "22",
+            "45"
+          ],
+          "url": "https://t.co/9jMxQkx3af",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/822531061125091329/pu/img/ykFZMwgZAQ1DrvOH.jpg",
+          "id_str": "822531061125091329",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "25280",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/822531061125091329/pu/vid/640x360/0RL7mafAGixNRVc4.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/822531061125091329/pu/vid/320x180/RTvDck5cCXefIovj.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/822531061125091329/pu/pl/l9Fa5zWl3wPnNqSp.m3u8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/822531061125091329/pu/vid/1280x720/l1_ieEN9AwdkgMOX.mp4"
+              }
+            ]
+          },
+          "source_user_id": "125103240",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "822531061125091329",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/822531061125091329/pu/img/ykFZMwgZAQ1DrvOH.jpg",
+          "source_user_id_str": "125103240",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "822533986408923137",
+          "display_url": "pic.twitter.com/9jMxQkx3af"
+        }
+      ]
+    }
+  }
+}

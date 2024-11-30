@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1254783930344984576"
+        ],
+        "editableUntil": "2020-04-27T15:46:16.409Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mathias Bynens",
+          "screen_name": "mathias",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "532923",
+          "id": "532923"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/53wliQd7pf",
+          "expanded_url": "https://github.com/mozilla-spidermonkey/jsparagus/blob/master/js-quirks.md#readme",
+          "display_url": "github.com/mozilla-spider…",
+          "indices": [
+            "53",
+            "76"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1254783930344984576",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1254783930344984576",
+    "possibly_sensitive": false,
+    "created_at": "Mon Apr 27 14:46:16 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @mathias: Why JavaScript syntax is hard to parse: https://t.co/53wliQd7pf\n\nExcellent overview of tricky gotchas in the JavaScript gramma…",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1332639949968044035"
+        ],
+        "editableUntil": "2020-11-28T11:58:17.982Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Zach Whalen: @zachwhalen@assemblag.es",
+          "screen_name": "zachwhalen",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "14298626",
+          "id": "14298626"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zachwhalen/status/1332406938307600385/video/1",
+          "source_status_id": "1332406938307600385",
+          "indices": [
+            "85",
+            "108"
+          ],
+          "url": "https://t.co/vuVIjimutV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1332406741150134272/pu/img/lX-mNoOL63NGouZT.jpg",
+          "id_str": "1332406741150134272",
+          "source_user_id": "14298626",
+          "id": "1332406741150134272",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1332406741150134272/pu/img/lX-mNoOL63NGouZT.jpg",
+          "source_user_id_str": "14298626",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1332406938307600385",
+          "display_url": "pic.twitter.com/vuVIjimutV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "108"
+    ],
+    "favorite_count": "0",
+    "id_str": "1332639949968044035",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1332639949968044035",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 28 10:58:17 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @zachwhalen: Here's the current state of the panel generator doing a latent walk. https://t.co/vuVIjimutV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zachwhalen/status/1332406938307600385/video/1",
+          "source_status_id": "1332406938307600385",
+          "indices": [
+            "85",
+            "108"
+          ],
+          "url": "https://t.co/vuVIjimutV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1332406741150134272/pu/img/lX-mNoOL63NGouZT.jpg",
+          "id_str": "1332406741150134272",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "25500",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1332406741150134272/pu/vid/720x720/pxdUQCccQIU783iP.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1332406741150134272/pu/vid/320x320/RXWLvIzEM9Wp3GX3.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1332406741150134272/pu/pl/jDhxE4dczB-Nnlr9.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1332406741150134272/pu/vid/480x480/G4xy1IF7i62AF56z.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "14298626",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1332406741150134272",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1332406741150134272/pu/img/lX-mNoOL63NGouZT.jpg",
+          "source_user_id_str": "14298626",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1332406938307600385",
+          "display_url": "pic.twitter.com/vuVIjimutV"
+        }
+      ]
+    }
+  }
+}

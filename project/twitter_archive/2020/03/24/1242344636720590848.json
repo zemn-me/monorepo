@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1242344636720590848"
+        ],
+        "editableUntil": "2020-03-24T07:56:57.698Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dan Ryckert",
+          "screen_name": "DanRyckert",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "36311369",
+          "id": "36311369"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DanRyckert/status/1242250480358535169/video/1",
+          "source_status_id": "1242250480358535169",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/nljn3eDVUe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242250430861565952/pu/img/z026cbV3T7814nRG.jpg",
+          "id_str": "1242250430861565952",
+          "source_user_id": "36311369",
+          "id": "1242250430861565952",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242250430861565952/pu/img/z026cbV3T7814nRG.jpg",
+          "source_user_id_str": "36311369",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1242250480358535169",
+          "display_url": "pic.twitter.com/nljn3eDVUe"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "97"
+    ],
+    "favorite_count": "0",
+    "id_str": "1242344636720590848",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1242344636720590848",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 24 06:56:57 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DanRyckert: Update: I no longer have room for a bed but this is fine. https://t.co/nljn3eDVUe",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DanRyckert/status/1242250480358535169/video/1",
+          "source_status_id": "1242250480358535169",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/nljn3eDVUe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242250430861565952/pu/img/z026cbV3T7814nRG.jpg",
+          "id_str": "1242250430861565952",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "29967",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242250430861565952/pu/vid/1280x720/U0VH1U55sDPxBFSo.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242250430861565952/pu/vid/480x270/gCypq7YdrC1D6uqB.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1242250430861565952/pu/pl/cwQfk-o00TLGbdeV.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242250430861565952/pu/vid/640x360/NglzqsLSCMLQIJDT.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "36311369",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1242250430861565952",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242250430861565952/pu/img/z026cbV3T7814nRG.jpg",
+          "source_user_id_str": "36311369",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1242250480358535169",
+          "display_url": "pic.twitter.com/nljn3eDVUe"
+        }
+      ]
+    }
+  }
+}

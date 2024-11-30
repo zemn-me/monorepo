@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1026581334968258565"
+        ],
+        "editableUntil": "2018-08-06T22:30:37.872Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "x0rz",
+          "screen_name": "x0rz",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "71522953",
+          "id": "71522953"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/urRGCzpx3r",
+          "expanded_url": "https://blog.perfect.blue/P90_Rush_B",
+          "display_url": "blog.perfect.blue/P90_Rush_B",
+          "indices": [
+            "26",
+            "49"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/x0rz/status/1026364817433612288/photo/1",
+          "source_status_id": "1026364817433612288",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/mQJ3wzQxjt",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Dj5gXIxX0AAChSg.jpg",
+          "id_str": "1026363715694874624",
+          "source_user_id": "71522953",
+          "id": "1026363715694874624",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Dj5gXIxX0AAChSg.jpg",
+          "source_user_id_str": "71522953",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "580",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "329",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1208",
+              "h": "584",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1026364817433612288",
+          "display_url": "pic.twitter.com/mQJ3wzQxjt"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "vulnerability",
+          "indices": [
+            "50",
+            "64"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "88"
+    ],
+    "favorite_count": "0",
+    "id_str": "1026581334968258565",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1026581334968258565",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 06 21:30:37 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @x0rz: CS:GO RCE 0-day https://t.co/urRGCzpx3r #vulnerability https://t.co/mQJ3wzQxjt",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/x0rz/status/1026364817433612288/photo/1",
+          "source_status_id": "1026364817433612288",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/mQJ3wzQxjt",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Dj5gXIxX0AAChSg.jpg",
+          "id_str": "1026363715694874624",
+          "video_info": {
+            "aspect_ratio": [
+              "151",
+              "73"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/Dj5gXIxX0AAChSg.mp4"
+              }
+            ]
+          },
+          "source_user_id": "71522953",
+          "id": "1026363715694874624",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Dj5gXIxX0AAChSg.jpg",
+          "source_user_id_str": "71522953",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "580",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "329",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1208",
+              "h": "584",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1026364817433612288",
+          "display_url": "pic.twitter.com/mQJ3wzQxjt"
+        }
+      ]
+    }
+  }
+}

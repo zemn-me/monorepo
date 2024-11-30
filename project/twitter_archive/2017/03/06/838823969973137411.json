@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "838823969973137411"
+        ],
+        "editableUntil": "2017-03-06T19:49:53.694Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Susie Lu",
+          "screen_name": "DataToViz",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "252761153",
+          "id": "252761153"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/YYDp6L4LF2",
+          "expanded_url": "http://d3-annotation.susielu.com/",
+          "display_url": "d3-annotation.susielu.com",
+          "indices": [
+            "41",
+            "64"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DataToViz/status/837775037377597440/photo/1",
+          "source_status_id": "837775037377597440",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/MrZy4gMekn",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C6BeiPrUoAALRal.jpg",
+          "id_str": "837773473107714048",
+          "source_user_id": "252761153",
+          "id": "837773473107714048",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C6BeiPrUoAALRal.jpg",
+          "source_user_id_str": "252761153",
+          "sizes": {
+            "large": {
+              "w": "850",
+              "h": "450",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "850",
+              "h": "450",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "837775037377597440",
+          "display_url": "pic.twitter.com/MrZy4gMekn"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "d3js",
+          "indices": [
+            "99",
+            "104"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "132"
+    ],
+    "favorite_count": "0",
+    "id_str": "838823969973137411",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "838823969973137411",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 06 18:49:53 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @DataToViz: Introducing d3-annotation https://t.co/YYDp6L4LF2 \nA library for annotating the web #d3js 💕🌟🤖 https://t.co/MrZy4gMekn",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DataToViz/status/837775037377597440/photo/1",
+          "source_status_id": "837775037377597440",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/MrZy4gMekn",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C6BeiPrUoAALRal.jpg",
+          "id_str": "837773473107714048",
+          "video_info": {
+            "aspect_ratio": [
+              "17",
+              "9"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/C6BeiPrUoAALRal.mp4"
+              }
+            ]
+          },
+          "source_user_id": "252761153",
+          "id": "837773473107714048",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C6BeiPrUoAALRal.jpg",
+          "source_user_id_str": "252761153",
+          "sizes": {
+            "large": {
+              "w": "850",
+              "h": "450",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "850",
+              "h": "450",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "837775037377597440",
+          "display_url": "pic.twitter.com/MrZy4gMekn"
+        }
+      ]
+    }
+  }
+}

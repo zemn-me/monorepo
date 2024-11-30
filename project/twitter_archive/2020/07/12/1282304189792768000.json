@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1282304189792768000"
+        ],
+        "editableUntil": "2020-07-12T14:21:57.563Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "my book is better than my tweets",
+          "screen_name": "MichellCClark",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "72118738",
+          "id": "72118738"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MichellCClark/status/1281952518747107328/video/1",
+          "source_status_id": "1281952518747107328",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/KEG2P2Qbz2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1281952481220722688/pu/img/nnM4p48mt82hd7N3.jpg",
+          "id_str": "1281952481220722688",
+          "source_user_id": "72118738",
+          "id": "1281952481220722688",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1281952481220722688/pu/img/nnM4p48mt82hd7N3.jpg",
+          "source_user_id_str": "72118738",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1281952518747107328",
+          "display_url": "pic.twitter.com/KEG2P2Qbz2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "0",
+    "id_str": "1282304189792768000",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1282304189792768000",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jul 12 13:21:57 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @MichellCClark: not all heroes wear capes. https://t.co/KEG2P2Qbz2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MichellCClark/status/1281952518747107328/video/1",
+          "source_status_id": "1281952518747107328",
+          "indices": [
+            "46",
+            "69"
+          ],
+          "url": "https://t.co/KEG2P2Qbz2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1281952481220722688/pu/img/nnM4p48mt82hd7N3.jpg",
+          "id_str": "1281952481220722688",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "24467",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1281952481220722688/pu/vid/576x1024/xI3NcwHaeT5udlkO.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1281952481220722688/pu/vid/320x568/nGLICj8yakJ89bV5.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1281952481220722688/pu/pl/0BqMVfOuG-0Hw1-3.m3u8?tag=10&v=b5f"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1281952481220722688/pu/vid/360x640/wxN6WfANVqOpZqNN.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "72118738",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1281952481220722688",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1281952481220722688/pu/img/nnM4p48mt82hd7N3.jpg",
+          "source_user_id_str": "72118738",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1281952518747107328",
+          "display_url": "pic.twitter.com/KEG2P2Qbz2"
+        }
+      ]
+    }
+  }
+}

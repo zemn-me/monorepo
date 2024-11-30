@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1121142457440325638"
+        ],
+        "editableUntil": "2019-04-24T21:02:46.330Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lance",
+          "screen_name": "theLLance",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "725857376",
+          "id": "725857376"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theLLance/status/1121116006070595585/video/1",
+          "source_status_id": "1121116006070595585",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/Z8Zbkemrq0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1121109538000732161/pu/img/YoJoyTwPPiXNH4fp.jpg",
+          "id_str": "1121109538000732161",
+          "source_user_id": "725857376",
+          "id": "1121109538000732161",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1121109538000732161/pu/img/YoJoyTwPPiXNH4fp.jpg",
+          "source_user_id_str": "725857376",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1121116006070595585",
+          "display_url": "pic.twitter.com/Z8Zbkemrq0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "107"
+    ],
+    "favorite_count": "0",
+    "id_str": "1121142457440325638",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1121142457440325638",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 24 20:02:46 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @theLLance: When Twitch chat doesn't pay attention to anything the streamer says https://t.co/Z8Zbkemrq0",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theLLance/status/1121116006070595585/video/1",
+          "source_status_id": "1121116006070595585",
+          "indices": [
+            "84",
+            "107"
+          ],
+          "url": "https://t.co/Z8Zbkemrq0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1121109538000732161/pu/img/YoJoyTwPPiXNH4fp.jpg",
+          "id_str": "1121109538000732161",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "139272",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1121109538000732161/pu/vid/320x180/RfVyrmj-kLcV068W.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1121109538000732161/pu/pl/y_Wth13UWam2K2Pa.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1121109538000732161/pu/vid/1280x720/Tfzp5J53VtVix1SL.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1121109538000732161/pu/vid/640x360/fYrii35yBG9DvU8d.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "725857376",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1121109538000732161",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1121109538000732161/pu/img/YoJoyTwPPiXNH4fp.jpg",
+          "source_user_id_str": "725857376",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1121116006070595585",
+          "display_url": "pic.twitter.com/Z8Zbkemrq0"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1146715564016115712"
+        ],
+        "editableUntil": "2019-07-04T10:41:10.063Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "danee 🦖",
+          "screen_name": "itsdaneesaur",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1477039015",
+          "id": "1477039015"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/itsdaneesaur/status/1146564064610529280/video/1",
+          "source_status_id": "1146564064610529280",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/GEPe1XzurJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1146564053780901891/pu/img/FkOwRJgST3O7fYIZ.jpg",
+          "id_str": "1146564053780901891",
+          "source_user_id": "1477039015",
+          "id": "1146564053780901891",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1146564053780901891/pu/img/FkOwRJgST3O7fYIZ.jpg",
+          "source_user_id_str": "1477039015",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1146564064610529280",
+          "display_url": "pic.twitter.com/GEPe1XzurJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1146715564016115712",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1146715564016115712",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jul 04 09:41:10 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @itsdaneesaur: Can everybody just Please look at this cat https://t.co/GEPe1XzurJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/itsdaneesaur/status/1146564064610529280/video/1",
+          "source_status_id": "1146564064610529280",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/GEPe1XzurJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1146564053780901891/pu/img/FkOwRJgST3O7fYIZ.jpg",
+          "id_str": "1146564053780901891",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "4433",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1146564053780901891/pu/vid/320x320/7HmGLTJlkbEvnCcI.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1146564053780901891/pu/pl/Cq1ktZ4eCqKILdC-.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1146564053780901891/pu/vid/480x480/ajCqRk0WVMKJG-Bu.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1477039015",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1146564053780901891",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1146564053780901891/pu/img/FkOwRJgST3O7fYIZ.jpg",
+          "source_user_id_str": "1477039015",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1146564064610529280",
+          "display_url": "pic.twitter.com/GEPe1XzurJ"
+        }
+      ]
+    }
+  }
+}

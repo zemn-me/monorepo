@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1482497602528571393"
+        ],
+        "editableUntil": "2022-01-16T00:39:06.573Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/k58NcZnd4z",
+          "expanded_url": "https://github.com/bazelbuild/rules_nodejs/blob/3.x/third_party/github.com/bazelbuild/rules_typescript/internal/common/compilation.bzl",
+          "display_url": "github.com/bazelbuild/rul…",
+          "indices": [
+            "251",
+            "274"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "274"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1482497601412866048",
+    "id_str": "1482497602528571393",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1482497602528571393",
+    "in_reply_to_status_id": "1482497601412866048",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 15 23:39:06 +0000 2022",
+    "favorited": false,
+    "full_text": "however, bazel's internals and configurations are an actual Python subset cutely called 'Starlark' and while it looks like it, that shit is nowhere near as elegant as Make. if there aren't rules out there to do what you want, you're basically fucked: https://t.co/k58NcZnd4z",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

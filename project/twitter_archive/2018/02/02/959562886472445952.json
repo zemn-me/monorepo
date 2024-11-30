@@ -1,0 +1,64 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "959562886472445952"
+        ],
+        "editableUntil": "2018-02-03T00:03:14.608Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "TIL",
+          "indices": [
+            "19",
+            "23"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "John Lindquist",
+          "screen_name": "johnlindquist",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "15430177",
+          "id": "15430177"
+        },
+        {
+          "name": "Chrome DevTools",
+          "screen_name": "ChromeDevTools",
+          "indices": [
+            "25",
+            "40"
+          ],
+          "id_str": "2862241270",
+          "id": "2862241270"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "959562886472445952",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "959562886472445952",
+    "created_at": "Fri Feb 02 23:03:14 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @johnlindquist: #TIL\n\n@ChromeDevTools has a `copy` method in the console. `copy(myObj)` will copy the entire myObj as json to the clipbo…",
+    "lang": "en"
+  }
+}

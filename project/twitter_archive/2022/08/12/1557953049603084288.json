@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1557953049603084288"
+        ],
+        "editableUntil": "2022-08-12T05:22:07.050Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Cheston",
+          "screen_name": "Cheston",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "1527091",
+          "id": "1527091"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Cheston/status/1557951623619457025/video/1",
+          "source_status_id": "1557951623619457025",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/zMcMSUAAOW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1557951580644577280/pr/img/FN83_SZnTzH1b-ud.jpg",
+          "id_str": "1557951580644577280",
+          "source_user_id": "1527091",
+          "id": "1557951580644577280",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1557951580644577280/pr/img/FN83_SZnTzH1b-ud.jpg",
+          "source_user_id_str": "1527091",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1557951623619457025",
+          "display_url": "pic.twitter.com/zMcMSUAAOW"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "DEFCON",
+          "indices": [
+            "52",
+            "59"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1557953049603084288",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1557953049603084288",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 12 04:52:07 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @Cheston: Wow! Serious storm in Vegas right now! #DEFCON https://t.co/zMcMSUAAOW",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Cheston/status/1557951623619457025/video/1",
+          "source_status_id": "1557951623619457025",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/zMcMSUAAOW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1557951580644577280/pr/img/FN83_SZnTzH1b-ud.jpg",
+          "id_str": "1557951580644577280",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "13501",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1557951580644577280/pr/vid/320x568/VQucLKFbHR_h7E3e.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1557951580644577280/pr/vid/720x1280/mdBWMDEkz7KUbKYg.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1557951580644577280/pr/pl/8XYHfU6sAPjxPq5H.m3u8?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1557951580644577280/pr/vid/480x852/EmK5F-WmYGct663e.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1527091",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1557951580644577280",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1557951580644577280/pr/img/FN83_SZnTzH1b-ud.jpg",
+          "source_user_id_str": "1527091",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1557951623619457025",
+          "display_url": "pic.twitter.com/zMcMSUAAOW"
+        }
+      ]
+    }
+  }
+}

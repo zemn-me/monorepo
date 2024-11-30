@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1454431380771852295"
+        ],
+        "editableUntil": "2021-10-30T13:53:57.861Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "chloe_somethin",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chloe_somethin/status/1453805285601067018/video/1",
+          "source_status_id": "1453805285601067018",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/nKMnCadtEW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1453805253548290054/pu/img/gLMmVla_wz0hFqxI.jpg",
+          "id_str": "1453805253548290054",
+          "source_user_id": "415146484",
+          "id": "1453805253548290054",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1453805253548290054/pu/img/gLMmVla_wz0hFqxI.jpg",
+          "source_user_id_str": "415146484",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1453805285601067018",
+          "display_url": "pic.twitter.com/nKMnCadtEW"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "106"
+    ],
+    "favorite_count": "0",
+    "id_str": "1454431380771852295",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1454431380771852295",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 30 12:53:57 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @chloe_somethin: his face after he says “connecting with people” made me scream https://t.co/nKMnCadtEW",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chloe_somethin/status/1453805285601067018/video/1",
+          "source_status_id": "1453805285601067018",
+          "indices": [
+            "83",
+            "106"
+          ],
+          "url": "https://t.co/nKMnCadtEW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1453805253548290054/pu/img/gLMmVla_wz0hFqxI.jpg",
+          "id_str": "1453805253548290054",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "21700",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1453805253548290054/pu/vid/640x360/xFpMVq6VhBfNXHjy.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1453805253548290054/pu/pl/k9Yi_KAC0poj18gZ.m3u8?tag=12&v=043"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1453805253548290054/pu/vid/480x270/tPXkfWQ_fzmBEl8r.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "415146484",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1453805253548290054",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1453805253548290054/pu/img/gLMmVla_wz0hFqxI.jpg",
+          "source_user_id_str": "415146484",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1453805285601067018",
+          "display_url": "pic.twitter.com/nKMnCadtEW"
+        }
+      ]
+    }
+  }
+}

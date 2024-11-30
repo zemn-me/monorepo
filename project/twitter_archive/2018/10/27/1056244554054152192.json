@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1056244554054152192"
+        ],
+        "editableUntil": "2018-10-27T19:01:40.418Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "おおかみ",
+          "screen_name": "wolf64m",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "36102280",
+          "id": "36102280"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wolf64m/status/1056080327179829248/video/1",
+          "source_status_id": "1056080327179829248",
+          "indices": [
+            "31",
+            "54"
+          ],
+          "url": "https://t.co/ijezJx7B98",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1056080242517991424/pu/img/nBZsrk9t8mbdbR0T.jpg",
+          "id_str": "1056080242517991424",
+          "source_user_id": "36102280",
+          "id": "1056080242517991424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1056080242517991424/pu/img/nBZsrk9t8mbdbR0T.jpg",
+          "source_user_id_str": "36102280",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1056080327179829248",
+          "display_url": "pic.twitter.com/ijezJx7B98"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "54"
+    ],
+    "favorite_count": "0",
+    "id_str": "1056244554054152192",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1056244554054152192",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 27 18:01:40 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @wolf64m: このレンズがどーなってるのか判らん https://t.co/ijezJx7B98",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wolf64m/status/1056080327179829248/video/1",
+          "source_status_id": "1056080327179829248",
+          "indices": [
+            "31",
+            "54"
+          ],
+          "url": "https://t.co/ijezJx7B98",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1056080242517991424/pu/img/nBZsrk9t8mbdbR0T.jpg",
+          "id_str": "1056080242517991424",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "10727",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1056080242517991424/pu/vid/320x180/GiT3GeIaEsOAKB4h.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1056080242517991424/pu/pl/YNH5ELZ2Lm5eZT6I.m3u8?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1056080242517991424/pu/vid/640x360/ZP7Xj6hezYYrkYKE.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1056080242517991424/pu/vid/1280x720/zCbrTvd7KfOx95Qq.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "36102280",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1056080242517991424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1056080242517991424/pu/img/nBZsrk9t8mbdbR0T.jpg",
+          "source_user_id_str": "36102280",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1056080327179829248",
+          "display_url": "pic.twitter.com/ijezJx7B98"
+        }
+      ]
+    }
+  }
+}

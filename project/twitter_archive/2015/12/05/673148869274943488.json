@@ -1,0 +1,79 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "673148869274943488"
+        ],
+        "editableUntil": "2015-12-05T15:36:11.593Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "Chrome",
+          "indices": [
+            "20",
+            "27"
+          ]
+        },
+        {
+          "text": "vulnerability",
+          "indices": [
+            "28",
+            "42"
+          ]
+        },
+        {
+          "text": "InfoSec",
+          "indices": [
+            "128",
+            "136"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Vaibhav Gupta",
+          "screen_name": "VaibhavGupta_1",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "978370261",
+          "id": "978370261"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/OulJjsm7Cm",
+          "expanded_url": "https://code.google.com/p/chromium/issues/detail?id=514076",
+          "display_url": "code.google.com/p/chromium/iss…",
+          "indices": [
+            "104",
+            "127"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "673148869274943488",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "673148869274943488",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 05 14:36:11 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @VaibhavGupta_1: #Chrome #vulnerability: localStorage of file:// can be read from any remote origin \nhttps://t.co/OulJjsm7Cm\n#InfoSec #B…",
+    "lang": "en"
+  }
+}

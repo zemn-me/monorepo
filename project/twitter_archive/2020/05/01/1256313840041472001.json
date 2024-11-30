@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1256313840041472001"
+        ],
+        "editableUntil": "2020-05-01T21:05:35.305Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "とーる",
+          "screen_name": "mayokan13",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3101411264",
+          "id": "3101411264"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mayokan13/status/1255739058182975490/video/1",
+          "source_status_id": "1255739058182975490",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/oz9qYIUoMy",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1255738815047557120/pu/img/HIxsgvISTHHvts_2.jpg",
+          "id_str": "1255738815047557120",
+          "source_user_id": "3101411264",
+          "id": "1255738815047557120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1255738815047557120/pu/img/HIxsgvISTHHvts_2.jpg",
+          "source_user_id_str": "3101411264",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1255739058182975490",
+          "display_url": "pic.twitter.com/oz9qYIUoMy"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1256313840041472001",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1256313840041472001",
+    "possibly_sensitive": false,
+    "created_at": "Fri May 01 20:05:35 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @mayokan13: マカダミアナッツが予想以上に丸すぎて噛みにくくて困ってる https://t.co/oz9qYIUoMy",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mayokan13/status/1255739058182975490/video/1",
+          "source_status_id": "1255739058182975490",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/oz9qYIUoMy",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1255738815047557120/pu/img/HIxsgvISTHHvts_2.jpg",
+          "id_str": "1255738815047557120",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "28093",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1255738815047557120/pu/vid/320x568/j_dcSxH_CnPIXpR-.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1255738815047557120/pu/vid/720x1280/WIB6MsEZKaW3Wd4G.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1255738815047557120/pu/pl/tRxnar1h6MdjZ06H.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1255738815047557120/pu/vid/360x640/5HXT0gN3gn-VSD8Y.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3101411264",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1255738815047557120",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1255738815047557120/pu/img/HIxsgvISTHHvts_2.jpg",
+          "source_user_id_str": "3101411264",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1255739058182975490",
+          "display_url": "pic.twitter.com/oz9qYIUoMy"
+        }
+      ]
+    }
+  }
+}

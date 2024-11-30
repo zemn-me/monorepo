@@ -1,0 +1,54 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1229103862809874432"
+        ],
+        "editableUntil": "2020-02-16T19:02:51.196Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "Signal",
+          "indices": [
+            "39",
+            "46"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "mandatory.bsky.social",
+          "screen_name": "IAmMandatory",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "785694042",
+          "id": "785694042"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "144"
+    ],
+    "favorite_count": "0",
+    "id_str": "1229103862809874432",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1229103862809874432",
+    "created_at": "Sun Feb 16 18:02:51 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @IAmMandatory: Ever want to write a #Signal Messenger Bot 🤖💬? Wrote a library to make it easy to automate sending &amp; receiving messages v…",
+    "lang": "en"
+  }
+}

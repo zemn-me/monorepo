@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1147271142178283522"
+        ],
+        "editableUntil": "2019-07-05T23:28:50.219Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben Yahr",
+          "screen_name": "benyahr",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "24996233",
+          "id": "24996233"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/benyahr/status/1147270657123770373/video/1",
+          "source_status_id": "1147270657123770373",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/Se4U2XVDzT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1147270385534218242/pu/img/WZMcU6bRUUOga6C2.jpg",
+          "id_str": "1147270385534218242",
+          "source_user_id": "24996233",
+          "id": "1147270385534218242",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1147270385534218242/pu/img/WZMcU6bRUUOga6C2.jpg",
+          "source_user_id_str": "24996233",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "434",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1128",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1128",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1147270657123770373",
+          "display_url": "pic.twitter.com/Se4U2XVDzT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "72"
+    ],
+    "favorite_count": "0",
+    "id_str": "1147271142178283522",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1147271142178283522",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jul 05 22:28:50 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @benyahr: Do you want the fuckin’ cheesecake? https://t.co/Se4U2XVDzT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/benyahr/status/1147270657123770373/video/1",
+          "source_status_id": "1147270657123770373",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/Se4U2XVDzT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1147270385534218242/pu/img/WZMcU6bRUUOga6C2.jpg",
+          "id_str": "1147270385534218242",
+          "video_info": {
+            "aspect_ratio": [
+              "47",
+              "30"
+            ],
+            "duration_millis": "140000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1147270385534218242/pu/vid/422x270/J4zNd9L9nBfsYFAq.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1147270385534218242/pu/vid/564x360/Pgr_KboSvRgq72FI.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1147270385534218242/pu/vid/1128x720/YipBk_yzFZ5z9j88.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1147270385534218242/pu/pl/DNh8ljpQum2FeFyj.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "24996233",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1147270385534218242",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1147270385534218242/pu/img/WZMcU6bRUUOga6C2.jpg",
+          "source_user_id_str": "24996233",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "434",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1128",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1128",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1147270657123770373",
+          "display_url": "pic.twitter.com/Se4U2XVDzT"
+        }
+      ]
+    }
+  }
+}

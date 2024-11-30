@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1016983583523852288"
+        ],
+        "editableUntil": "2018-07-11T10:52:35.610Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jon Bois",
+          "screen_name": "jon_bois",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "70739029",
+          "id": "70739029"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jon_bois/status/1016828989510504453/video/1",
+          "source_status_id": "1016828989510504453",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/h81vfa8JAN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016828376500224001/pu/img/8gMXW7fI07pWAbg0.jpg",
+          "id_str": "1016828376500224001",
+          "source_user_id": "70739029",
+          "id": "1016828376500224001",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016828376500224001/pu/img/8gMXW7fI07pWAbg0.jpg",
+          "source_user_id_str": "70739029",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1016828989510504453",
+          "display_url": "pic.twitter.com/h81vfa8JAN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "48"
+    ],
+    "favorite_count": "0",
+    "id_str": "1016983583523852288",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1016983583523852288",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 11 09:52:35 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @jon_bois: ah damn it https://t.co/h81vfa8JAN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jon_bois/status/1016828989510504453/video/1",
+          "source_status_id": "1016828989510504453",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/h81vfa8JAN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016828376500224001/pu/img/8gMXW7fI07pWAbg0.jpg",
+          "id_str": "1016828376500224001",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "6306",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016828376500224001/pu/vid/640x360/wy-wRa9IFh97PW8V.mp4?tag=3"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016828376500224001/pu/vid/1280x720/rTbVJggGJXgIL93I.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1016828376500224001/pu/pl/4nNjWEtBKvE1KYCL.m3u8?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016828376500224001/pu/vid/320x180/gFsqeWIgfPjDhbQX.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "70739029",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1016828376500224001",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016828376500224001/pu/img/8gMXW7fI07pWAbg0.jpg",
+          "source_user_id_str": "70739029",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1016828989510504453",
+          "display_url": "pic.twitter.com/h81vfa8JAN"
+        }
+      ]
+    }
+  }
+}

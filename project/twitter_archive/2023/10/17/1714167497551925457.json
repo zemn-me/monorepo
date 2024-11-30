@@ -1,0 +1,59 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1714167497551925457"
+        ],
+        "editableUntil": "2023-10-17T07:32:33.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "evanvosberg",
+          "screen_name": "evanvosberg",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "1832357781581524992",
+          "id": "1832357781581524992"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/TKfsl5ajPy",
+          "expanded_url": "https://github.com/Zemnmez/monorepo/security/advisories/GHSA-wfv4-vj52-rg8m",
+          "display_url": "github.com/Zemnmez/monore…",
+          "indices": [
+            "175",
+            "198"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "198"
+    ],
+    "favorite_count": "1",
+    "id_str": "1714167497551925457",
+    "in_reply_to_user_id": "2676462514",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1714167497551925457",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 17 06:32:33 +0000 2023",
+    "favorited": false,
+    "full_text": "@evanvosberg hey there, I have a vulnerability in crypto-js and I noticed you are a contributor. Will you work with me on getting it disclosed please 🥺 I added you to a draft https://t.co/TKfsl5ajPy",
+    "lang": "en",
+    "in_reply_to_user_id_str": "2676462514"
+  }
+}

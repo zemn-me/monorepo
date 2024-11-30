@@ -1,0 +1,70 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1345459468277047297"
+        ],
+        "editableUntil": "2021-01-02T20:58:29.322Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jason Scott",
+          "screen_name": "textfiles",
+          "indices": [
+            "21",
+            "31"
+          ],
+          "id_str": "1465481",
+          "id": "1465481"
+        },
+        {
+          "name": "Jake Nelson",
+          "screen_name": "JakeNelsonMN",
+          "indices": [
+            "32",
+            "45"
+          ],
+          "id_str": "137492822",
+          "id": "137492822"
+        },
+        {
+          "name": "Discord",
+          "screen_name": "discord",
+          "indices": [
+            "46",
+            "54"
+          ],
+          "id_str": "3065618342",
+          "id": "3065618342"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "292"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1345459135291256833",
+    "id_str": "1345459468277047297",
+    "in_reply_to_user_id": "2749291534",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1345459468277047297",
+    "in_reply_to_status_id": "1345459135291256833",
+    "created_at": "Sat Jan 02 19:58:29 +0000 2021",
+    "favorited": false,
+    "full_text": "@LNplum @MrAureliusR @textfiles @JakeNelsonMN @discord they just have to provide the data in a format similar to how they store it afaik. it's not obfuscated, it's just that the data is like most gdpr dumps, basically a sql database dump and not in a form someone would typically use directly",
+    "lang": "en",
+    "in_reply_to_user_id_str": "2749291534"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1116112309594808320"
+        ],
+        "editableUntil": "2019-04-10T23:54:45.628Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Twitch",
+          "screen_name": "Twitch",
+          "indices": [
+            "52",
+            "59"
+          ],
+          "id_str": "309366491",
+          "id": "309366491"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/mLxL0rfZlM",
+          "expanded_url": "https://blog.twitch.tv/go-memory-ballast-how-i-learnt-to-stop-worrying-and-love-the-heap-26c2462549a2?gi=a1ce73c24c01",
+          "display_url": "blog.twitch.tv/go-memory-ball…",
+          "indices": [
+            "60",
+            "83"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1116112309594808320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1116112309594808320",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 10 22:54:45 +0000 2019",
+    "favorited": false,
+    "full_text": "beating refresh storms with a 'memory ballast' (go) @twitch https://t.co/mLxL0rfZlM",
+    "lang": "en"
+  }
+}

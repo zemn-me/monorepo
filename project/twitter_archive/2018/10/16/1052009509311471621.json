@@ -1,0 +1,59 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1052009509311471621"
+        ],
+        "editableUntil": "2018-10-16T02:33:07.068Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [
+        {
+          "text": "var",
+          "indices": [
+            "163",
+            "167"
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "name": "Rick",
+          "screen_name": "gibbed",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "17745675",
+          "id": "17745675"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "174"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1052008398630338560",
+    "id_str": "1052009509311471621",
+    "in_reply_to_user_id": "17745675",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1052009509311471621",
+    "in_reply_to_status_id": "1052008398630338560",
+    "created_at": "Tue Oct 16 01:33:07 +0000 2018",
+    "favorited": false,
+    "full_text": "@gibbed i dont really know what you’re saying but they’re just using regular php prepared statement syntax which expects ‘?’ where variables should be,  but using $var syntax",
+    "lang": "en",
+    "in_reply_to_screen_name": "gibbed",
+    "in_reply_to_user_id_str": "17745675"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1281559428098142213"
+        ],
+        "editableUntil": "2020-07-10T13:02:32.538Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Klara",
+          "screen_name": "klara_sjo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "742371799116222464",
+          "id": "742371799116222464"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/klara_sjo/status/1280231379222106113/video/1",
+          "source_status_id": "1280231379222106113",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/yBakvrrWIN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1280231327422431233/pu/img/g-ENCtaFmV9Nr2Su.jpg",
+          "id_str": "1280231327422431233",
+          "source_user_id": "742371799116222464",
+          "id": "1280231327422431233",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1280231327422431233/pu/img/g-ENCtaFmV9Nr2Su.jpg",
+          "source_user_id_str": "742371799116222464",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1280231379222106113",
+          "display_url": "pic.twitter.com/yBakvrrWIN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1281559428098142213",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1281559428098142213",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jul 10 12:02:32 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @klara_sjo: Cat:  I'll never hiss again. https://t.co/yBakvrrWIN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/klara_sjo/status/1280231379222106113/video/1",
+          "source_status_id": "1280231379222106113",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/yBakvrrWIN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1280231327422431233/pu/img/g-ENCtaFmV9Nr2Su.jpg",
+          "id_str": "1280231327422431233",
+          "video_info": {
+            "aspect_ratio": [
+              "203",
+              "360"
+            ],
+            "duration_millis": "11633",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1280231327422431233/pu/vid/320x566/DTjzK7TwWvPwGhno.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1280231327422431233/pu/pl/wca_u3Tw3fHhEidy.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1280231327422431233/pu/vid/406x720/Oo2YRiM_rIfcdNfr.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "742371799116222464",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1280231327422431233",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1280231327422431233/pu/img/g-ENCtaFmV9Nr2Su.jpg",
+          "source_user_id_str": "742371799116222464",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1280231379222106113",
+          "display_url": "pic.twitter.com/yBakvrrWIN"
+        }
+      ]
+    }
+  }
+}

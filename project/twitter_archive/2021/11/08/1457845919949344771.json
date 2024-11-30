@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1457845919949344771"
+        ],
+        "editableUntil": "2021-11-09T00:02:07.440Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "dmnk.bsky.social",
+          "screen_name": "domenuk",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "29731897",
+          "id": "29731897"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/domenuk/status/1457041322817245188/photo/1",
+          "source_status_id": "1457041322817245188",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/McYOG83vqj",
+          "media_url": "http://pbs.twimg.com/media/FDhzJYbWQAM7TML.png",
+          "id_str": "1457041084467527683",
+          "source_user_id": "29731897",
+          "id": "1457041084467527683",
+          "media_url_https": "https://pbs.twimg.com/media/FDhzJYbWQAM7TML.png",
+          "source_user_id_str": "29731897",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "856",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "485",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1942",
+              "h": "1386",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1457041322817245188",
+          "display_url": "pic.twitter.com/McYOG83vqj"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "100"
+    ],
+    "favorite_count": "0",
+    "id_str": "1457845919949344771",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1457845919949344771",
+    "possibly_sensitive": false,
+    "created_at": "Mon Nov 08 23:02:07 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @domenuk: Rust suggests to add this tiny type annotation to my variable.. https://t.co/McYOG83vqj",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/domenuk/status/1457041322817245188/photo/1",
+          "source_status_id": "1457041322817245188",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/McYOG83vqj",
+          "media_url": "http://pbs.twimg.com/media/FDhzJYbWQAM7TML.png",
+          "id_str": "1457041084467527683",
+          "source_user_id": "29731897",
+          "id": "1457041084467527683",
+          "media_url_https": "https://pbs.twimg.com/media/FDhzJYbWQAM7TML.png",
+          "source_user_id_str": "29731897",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "856",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "485",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1942",
+              "h": "1386",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1457041322817245188",
+          "display_url": "pic.twitter.com/McYOG83vqj"
+        }
+      ]
+    }
+  }
+}

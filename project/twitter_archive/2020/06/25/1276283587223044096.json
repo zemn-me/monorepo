@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1276283587223044096"
+        ],
+        "editableUntil": "2020-06-25T23:38:14.053Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Seth Everman",
+          "screen_name": "SethEverman",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1447245938",
+          "id": "1447245938"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SethEverman/status/1276260277626044416/video/1",
+          "source_status_id": "1276260277626044416",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/co3m39AWeV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1276259710698741770/pu/img/4zYY34sOlxK_nJwq.jpg",
+          "id_str": "1276259710698741770",
+          "source_user_id": "1447245938",
+          "id": "1276259710698741770",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1276259710698741770/pu/img/4zYY34sOlxK_nJwq.jpg",
+          "source_user_id_str": "1447245938",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1276260277626044416",
+          "display_url": "pic.twitter.com/co3m39AWeV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "85"
+    ],
+    "favorite_count": "0",
+    "id_str": "1276283587223044096",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1276283587223044096",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jun 25 22:38:14 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @SethEverman: how to create the weeknd's \"blinding lights\" https://t.co/co3m39AWeV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SethEverman/status/1276260277626044416/video/1",
+          "source_status_id": "1276260277626044416",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/co3m39AWeV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1276259710698741770/pu/img/4zYY34sOlxK_nJwq.jpg",
+          "id_str": "1276259710698741770",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "39700",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1276259710698741770/pu/vid/1280x720/Ifu1CyrpQrd2QV39.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1276259710698741770/pu/vid/480x270/ww0nSZU9GomZb_sB.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1276259710698741770/pu/pl/46dZ5F7jIEgHPPD4.m3u8?tag=10&v=5f5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1276259710698741770/pu/vid/640x360/4sAudlddkChhvbEU.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1447245938",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1276259710698741770",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1276259710698741770/pu/img/4zYY34sOlxK_nJwq.jpg",
+          "source_user_id_str": "1447245938",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1276260277626044416",
+          "display_url": "pic.twitter.com/co3m39AWeV"
+        }
+      ]
+    }
+  }
+}

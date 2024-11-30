@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1213282676653862917"
+        ],
+        "editableUntil": "2020-01-04T03:15:06.473Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Rafael Sommerhalder",
+          "screen_name": "Serendippo",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "26201018",
+          "id": "26201018"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Serendippo/status/1212707341357010945/video/1",
+          "source_status_id": "1212707341357010945",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/1c8u9yAvyN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1212705179344220162/pu/img/pUyOgOldunwo7jZI.jpg",
+          "id_str": "1212705179344220162",
+          "source_user_id": "26201018",
+          "id": "1212705179344220162",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1212705179344220162/pu/img/pUyOgOldunwo7jZI.jpg",
+          "source_user_id_str": "26201018",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1212707341357010945",
+          "display_url": "pic.twitter.com/1c8u9yAvyN"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "popcorn",
+          "indices": [
+            "16",
+            "24"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "48"
+    ],
+    "favorite_count": "0",
+    "id_str": "1213282676653862917",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1213282676653862917",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 04 02:15:06 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Serendippo: #popcorn https://t.co/1c8u9yAvyN",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Serendippo/status/1212707341357010945/video/1",
+          "source_status_id": "1212707341357010945",
+          "indices": [
+            "25",
+            "48"
+          ],
+          "url": "https://t.co/1c8u9yAvyN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1212705179344220162/pu/img/pUyOgOldunwo7jZI.jpg",
+          "id_str": "1212705179344220162",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "11584",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212705179344220162/pu/vid/320x320/Lwn83t05tFeAsQ1g.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1212705179344220162/pu/pl/6FcfvRN9K6niV2Ry.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212705179344220162/pu/vid/720x720/XUmk6X5QbAAIAgGo.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212705179344220162/pu/vid/480x480/y44wgUkTpPypCeGE.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "26201018",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1212705179344220162",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1212705179344220162/pu/img/pUyOgOldunwo7jZI.jpg",
+          "source_user_id_str": "26201018",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1212707341357010945",
+          "display_url": "pic.twitter.com/1c8u9yAvyN"
+        }
+      ]
+    }
+  }
+}
