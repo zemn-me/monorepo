@@ -123,6 +123,7 @@ export const Bio = {
 		'thomas@openai.com',
 	],
 	links: [
+		[en`Google Knowledge Graph`, url`//www.google.com/search?kgmid=/g/11lw7w6zt8`],
 		[
 			lang.Text('en-GB', 'linkedin' as const),
 			url`//www.linkedin.com/in/thomas-shadwell-4b333b50`,
