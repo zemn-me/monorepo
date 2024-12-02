@@ -10,15 +10,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-	"github.com/zemn-me/monorepo/go/terraform/crane/internal/provider"
+	"github.com/zemn-me/monorepo/go/terraform/crane/provider"
+	version "github.com/zemn-me/monorepo/go/terraform/crane/version"
 )
-
-// these will be set by the goreleaser configuration
-// to appropriate values for the compiled binary.
-var version string = "dev"
-
-// goreleaser can pass other information to the main package, such as the specific commit
-// https://goreleaser.com/cookbooks/using-main.version/
 
 func main() {
 	var debug bool
@@ -34,7 +28,7 @@ func main() {
 		Debug:   debug,
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version), opts)
+	err := providerserver.Serve(context.Background(), provider.New(version.Version), opts)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

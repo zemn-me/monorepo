@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "provider",
+    srcs = ["resources.go"],
+    embedsrcs = ["cmd/pulumi-resource-crane/bridge-metadata.json"],
+    importpath = "github.com/zemn-me/monorepo/go/pulumi/crane/provider",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//go/terraform/crane/provider",
+        "//go/terraform/crane/version",
+        "@com_github_pulumi_pulumi_pkg_v3//codegen/schema",
+        "@com_github_pulumi_pulumi_terraform_bridge_v3//pkg/tfbridge",
+        "@com_github_pulumi_pulumi_terraform_bridge_v3//pkg/tfbridge/tokens",
+        "@com_github_pulumi_pulumi_terraform_bridge_v3//pkg/tfshim/sdk-v2",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
