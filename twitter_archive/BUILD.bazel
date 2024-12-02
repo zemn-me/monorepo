@@ -1,0 +1,6 @@
+"Archive of my old tweets."
+
+filegroup(
+    name = "tweets",
+    srcs = glob(["**/*.json"]),
+)

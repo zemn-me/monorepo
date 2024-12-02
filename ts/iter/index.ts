@@ -372,6 +372,15 @@ class impl<T> extends NewType<T> {
 			}
 		}())
 	}
+	filter_async<T>(this: _Iterable<Promise<Option<T>>>): _Iterable<Promise<T>> {
+		const { value } = this;
+		return new impl(async function* () {
+			for await (const v of value) {
+				if (v.is_some()) yield v.unwrap();
+			}
+		}())
+	}
+
 	sort<T>(this: _Iterable<T>, compareFn?: (a: T, b: T) => number): impl<T[]> {
 		return new impl([...this.value].sort(compareFn))
 	}
