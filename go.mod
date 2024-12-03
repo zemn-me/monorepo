@@ -5,7 +5,7 @@ module github.com/zemn-me/monorepo
 
 go 1.22.7
 
-toolchain go1.23.3
+toolchain go1.23.4
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.40.0
