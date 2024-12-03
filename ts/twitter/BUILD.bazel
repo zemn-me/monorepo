@@ -1,0 +1,36 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_run_binary")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "twitter",
+    srcs = [
+        "archive.ts",
+        "json_schema.ts",
+    ],
+    deps = [
+        "//:node_modules/zod",
+        "//:node_modules/zod-to-json-schema",
+    ],
+)
+
+js_binary(
+    name = "json_schema_bin",
+    data = [
+        ":twitter",
+    ],
+    entry_point = "json_schema.js",
+)
+
+js_run_binary(
+    name = "json_schema",
+    stdout = "json_schema.json",
+    tool = ":json_schema_bin",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
