@@ -1,5 +1,5 @@
 {
-  "checksum": "8ceac299c1686a9535cf19b44f4a15d54a0b56630e0617a0734ea47e06159b21",
+  "checksum": "4568d513355f2f93ff0a0585bb28dfbd4c417d92da9c2ffe63142a68f29886c8",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -5233,7 +5233,7 @@
               "target": "slab"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             },
             {
@@ -6064,7 +6064,7 @@
               "target": "socket2"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             },
             {
@@ -6139,7 +6139,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             },
             {
@@ -7648,7 +7648,7 @@
               "target": "swc_ecma_parser"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             }
           ],
@@ -10388,7 +10388,7 @@
                 "target": "pin_project_lite"
               },
               {
-                "id": "tokio 1.41.1",
+                "id": "tokio 1.42.0",
                 "target": "tokio"
               }
             ],
@@ -12645,7 +12645,7 @@
               "alias": "dep_time"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             },
             {
@@ -15634,14 +15634,14 @@
       ],
       "license_file": "LICENSE-APACHE.md"
     },
-    "tokio 1.41.1": {
+    "tokio 1.42.0": {
       "name": "tokio",
-      "version": "1.41.1",
+      "version": "1.42.0",
       "package_url": "https://github.com/tokio-rs/tokio",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/tokio/1.41.1/download",
-          "sha256": "22cfb5bee7a6a52939ca9224d6ac897bb669134078daa8735560897f69de4d33"
+          "url": "https://static.crates.io/crates/tokio/1.42.0/download",
+          "sha256": "5cec9b21b0450273377fc97bd4c33a8acffc8c996c987a7c5b319a0083707551"
         }
       },
       "targets": [
@@ -16026,7 +16026,7 @@
           ],
           "selects": {}
         },
-        "version": "1.41.1"
+        "version": "1.42.0"
       },
       "license": "MIT",
       "license_ids": [
@@ -16133,7 +16133,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             }
           ],
@@ -16199,7 +16199,7 @@
               "alias": "pki_types"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             }
           ],
@@ -16278,7 +16278,7 @@
               "target": "rustls_pki_types"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             },
             {
@@ -16361,7 +16361,7 @@
               "target": "pin_project_lite"
             },
             {
-              "id": "tokio 1.41.1",
+              "id": "tokio 1.42.0",
               "target": "tokio"
             }
           ],
@@ -21122,7 +21122,7 @@
     "swc_common 0.36.0",
     "swc_ecma_ast 0.117.0",
     "swc_ecma_parser 0.148.0",
-    "tokio 1.41.1"
+    "tokio 1.42.0"
   ],
   "direct_dev_deps": []
 }
