@@ -1,8 +1,23 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//go/cmd/jsonschemavalidator:rules.bzl", "jsonschema_test")
 
 "archive of all my old tweets."
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "twitter_archive_files",
+    srcs = glob(["**/*.json"]),
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+jsonschema_test(
+    name = "schema_valid",
+    srcs = glob(["**/*.json"]),
+    schema = "//ts/twitter:json_schema",
 )
