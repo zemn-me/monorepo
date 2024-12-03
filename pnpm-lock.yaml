@@ -374,8 +374,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.46.0
-    version: 39.46.0(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0)
+    specifier: 39.46.1
+    version: 39.46.1(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -7840,8 +7840,8 @@ packages:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
     dev: true
 
-  /better-sqlite3@11.5.0:
-    resolution: {integrity: sha512-e/6eggfOutzoK0JWiU36jsisdWoHOfN9iWiW/SieKvb7SAa6aGNmBM/UKyp+/wWSXpLlWNN8tCPwoDNPhzUvuQ==}
+  /better-sqlite3@11.6.0:
+    resolution: {integrity: sha512-2J6k/eVxcFYY2SsTxsXrj6XylzHWPxveCn4fKPKZFv/Vqn/Cd7lOuX4d7rGQXT5zL+97MkNL3nSbCrIoe3LkgA==}
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -16086,8 +16086,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.46.0(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-4FG6hbQUL/oeKqW1UnJ4h5mlyxQTJgZyGbTTylmwt0XsmCLe+CPvWV0b47sNh37jCuy+SdmX19jqRuFwWfHVMg==}
+  /renovate@39.46.1(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-hByB2KJB7Dh5OAbPDzJUibGpjV/aTIwlB4OmLN2Ad0Q+Psch/AZEIxTlBlk/WR7pWyd+3Yn2DJjnI/MXE/3fDQ==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16201,7 +16201,7 @@ packages:
       yaml: 2.6.1
       zod: 3.23.8
     optionalDependencies:
-      better-sqlite3: 11.5.0
+      better-sqlite3: 11.6.0
       openpgp: 6.0.1
       re2: 1.21.4
     transitivePeerDependencies:
