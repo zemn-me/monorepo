@@ -1,0 +1,29 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jsonschemavalidator_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/cmd/jsonschemavalidator",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_xeipuuv_gojsonschema//:gojsonschema"],
+)
+
+go_binary(
+    name = "jsonschemavalidator",
+    embed = [":jsonschemavalidator_lib"],
+    visibility = ["//visibility:public"],
+)
+
+exports_files(
+    srcs = ["jsonschema_test.sh"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
