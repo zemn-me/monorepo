@@ -1,0 +1,17 @@
+"for working with the twitter data dump"
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go/jsonschema:rules.bzl", "jsonschema_gen")
+
+# when below is uncommented, the correct go_library is generated
+# and i dont know why...
+jsonschema_gen(
+    name = "twitter",
+    src = "//ts/twitter:json_schema",
+    outs = ["gen.go"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
