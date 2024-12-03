@@ -1,0 +1,10 @@
+"JQ scripts."
+
+exports_files(
+    srcs = [
+        "upgrade_json_schema.jq",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)

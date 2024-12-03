@@ -1,0 +1,8 @@
+"for working with the twitter data dump"
+
+load("//go/jsonschema:rules.bzl", "go_jsonschema_library")
+
+go_jsonschema_library(
+    name = "twitter",
+    src = "//ts/twitter:json_schema",
+)
