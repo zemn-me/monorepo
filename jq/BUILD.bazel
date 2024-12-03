@@ -1,0 +1,20 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+"JQ scripts."
+
+exports_files(
+    srcs = [
+        "upgrade_json_schema.jq",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "upgrade_json_schema.bzl",
+    ],
+)

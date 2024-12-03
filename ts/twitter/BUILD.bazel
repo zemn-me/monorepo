@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//jq:upgrade_json_schema.bzl", "upgrade_json_schema")
 load("//js:rules.bzl", "js_binary", "js_run_binary")
 load("//ts:rules.bzl", "ts_project")
 
@@ -25,9 +26,14 @@ js_binary(
 )
 
 js_run_binary(
-    name = "json_schema",
+    name = "json_schema_old",
     stdout = "json_schema.json",
     tool = ":json_schema_bin",
+)
+
+upgrade_json_schema(
+    name = "json_schema",
+    src = ":json_schema_old",
 )
 
 bazel_lint(
