@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "best_posts_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/twitter/best_posts",
+    visibility = ["//visibility:private"],
+    deps = ["//go/twitter"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_binary(
+    name = "best_posts",
+    embed = [":best_posts_lib"],
+    visibility = ["//visibility:public"],
+)
