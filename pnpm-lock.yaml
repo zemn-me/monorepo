@@ -231,7 +231,7 @@ devDependencies:
     version: 0.4.0(@swc/core@1.9.3)
   '@testing-library/react':
     specifier: 16.0.1
-    version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
+    version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.13)(react-dom@18.3.1)(react@18.3.1)
   '@types/cross-spawn':
     specifier: 6.0.6
     version: 6.0.6
@@ -254,8 +254,8 @@ devDependencies:
     specifier: 22.10.1
     version: 22.10.1
   '@types/react':
-    specifier: 18.3.12
-    version: 18.3.12
+    specifier: 18.3.13
+    version: 18.3.13
   '@types/react-dom':
     specifier: 18.3.1
     version: 18.3.1
@@ -5149,7 +5149,7 @@ packages:
   /@react-native/normalize-colors@0.76.3:
     resolution: {integrity: sha512-Yrpmrh4IDEupUUM/dqVxhAN8QW1VEUR3Qrk2lzJC1jB2s46hDe0hrMP2vs12YJqlzshteOthjwXQlY0TgIzgbg==}
 
-  /@react-native/virtualized-lists@0.76.3(@types/react@18.3.12)(react-native@0.76.3)(react@18.3.1):
+  /@react-native/virtualized-lists@0.76.3(@types/react@18.3.13)(react-native@0.76.3)(react@18.3.1):
     resolution: {integrity: sha512-wTGv9pVh3vAOWb29xFm+J9VRe9dUcUcb9FyaMLT/Hxa88W4wqa5ZMe1V9UvrrBiA1G5DKjv8/1ZcDsJhyugVKA==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -5160,11 +5160,11 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 18.3.13
       invariant: 2.2.4
       nullthrows: 1.1.1
       react: 18.3.1
-      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.13)(react@18.3.1)
 
   /@react-spring/animated@9.7.5(react@18.3.1):
     resolution: {integrity: sha512-Tqrwz7pIlsSDITzxoLS3n/v/YCUHQdOIKtOJf4yL6kYVSDTSmVK1LI1Q3M/uu2Sx4X3pIWF3xLUhlsA6SPNTNg==}
@@ -5214,7 +5214,7 @@ packages:
       '@react-spring/shared': 9.7.5(react@18.3.1)
       '@react-spring/types': 9.7.5
       react: 18.3.1
-      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.13)(react@18.3.1)
     dev: true
 
   /@react-spring/rafz@9.7.5:
@@ -5317,7 +5317,7 @@ packages:
       its-fine: 1.2.5(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.13)(react@18.3.1)
       react-reconciler: 0.27.0(react@18.3.1)
       scheduler: 0.21.0
       suspend-react: 0.1.3(react@18.3.1)
@@ -6213,7 +6213,7 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1):
+  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.13)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-dSmwJVtJXmku+iocRhWOUFbrERC76TX2Mnf0ATODz8brzAZrMBbzLwQixlBSanZxR6LddK3eiwpSFZgDET1URg==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -6230,7 +6230,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.26.0
       '@testing-library/dom': 10.4.0
-      '@types/react': 18.3.12
+      '@types/react': 18.3.13
       '@types/react-dom': 18.3.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -6612,7 +6612,7 @@ packages:
   /@types/react-dom@18.3.1:
     resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 18.3.13
     dev: true
 
   /@types/react-query@1.2.9(react-dom@18.3.1)(react-native@0.76.3)(react@18.3.1):
@@ -6629,17 +6629,17 @@ packages:
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 18.3.13
     dev: true
 
   /@types/react-reconciler@0.28.8:
     resolution: {integrity: sha512-SN9c4kxXZonFhbX4hJrZy37yw9e7EIxcpHCxQv5JUS18wDE5ovkQKlqQEkufdJCCMfuI9BnjUJvhYeJ9x5Ra7g==}
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 18.3.13
     dev: true
 
-  /@types/react@18.3.12:
-    resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
+  /@types/react@18.3.13:
+    resolution: {integrity: sha512-ii/gswMmOievxAJed4PAHT949bpYjPKXvXo1v6cRB/kqc2ZR4n+SgyCyvyc5Fec5ez8VnUumI1Vk7j6fRyRogg==}
     dependencies:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
@@ -15572,7 +15572,7 @@ packages:
       scheduler: 0.23.2
     dev: true
 
-  /react-native@0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1):
+  /react-native@0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.13)(react@18.3.1):
     resolution: {integrity: sha512-0TUhgmlouRNf6yuDIIAdbQl0g1VsONgCMsLs7Et64hjj5VLMCA7np+4dMrZvGZ3wRNqzgeyT9oWJsUm49AcwSQ==}
     engines: {node: '>=18'}
     hasBin: true
@@ -15590,8 +15590,8 @@ packages:
       '@react-native/gradle-plugin': 0.76.3
       '@react-native/js-polyfills': 0.76.3
       '@react-native/normalize-colors': 0.76.3
-      '@react-native/virtualized-lists': 0.76.3(@types/react@18.3.12)(react-native@0.76.3)(react@18.3.1)
-      '@types/react': 18.3.12
+      '@react-native/virtualized-lists': 0.76.3(@types/react@18.3.13)(react-native@0.76.3)(react@18.3.1)
+      '@types/react': 18.3.13
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
@@ -15649,7 +15649,7 @@ packages:
       match-sorter: 6.3.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.13)(react@18.3.1)
     dev: false
 
   /react-reconciler@0.27.0(react@18.3.1):
