@@ -50,8 +50,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		'https://*.doubleclick.net',
 	]),
 
-	// temp disabled
-	//'require-trusted-types-for': new Set(["'script'"]),
+	'require-trusted-types-for': new Set(["'script'"]),
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	'trusted-types': new Set(['default', 'nextjs#bundler']) as any, // 🤷
 	'script-src': new Set([
