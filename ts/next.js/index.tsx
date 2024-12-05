@@ -47,8 +47,8 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		'https://*.doubleclick.net',
 	]),
 	...(process.env.NODE_ENV == 'development'
-		? {}
-		: { 'require-trusted-types-for': new Set(["'script'"]) }),
+		? {} // below temp disabled while i work out wtf i did wrong...
+		: {}), // { 'require-trusted-types-for': new Set(["'script'"]) }),
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
