@@ -1,0 +1,199 @@
+---
+title: Antihero Stories
+date:
+  - 22
+  - nov
+  - 2024
+tags:
+  - writing
+  - security
+language: en-GB
+description: Article where I explain why I think a user story written from the point of view of an attacker should be mandatory.
+---
+
+                                Antihero Stories.
+-------------------------------------------------------------------------------
+
+*In this article, I explain why I think it should be *mandatory* for security
+vulnerabilities to come with a form of ‘user story’ – a short, first-person
+story from the point of view of an attacker. I also complain about
+[weasel-word] usage of technical security terms to create the appearance of
+vulnerability where there is none.*
+
+[weasel-word]: https://en.wikipedia.org/wiki/Weasel_word "Weasel word
+    (Wikipedia)"
+
+In Hackers (1994) 11-year-old Dade “Zero Cool” Murphy’s family is fined $45,000
+for his crashing of 1,507 computer systems, causing a seven-point drop in the
+New York Stock Exchange. I'm certain the NYSE fixed the issue within 30
+business days.
+
+Unfortunately, real hackers in 2024 mostly get by by with whining. This is a
+standard hacker technique where you have to be annoying enough to have the
+issue fixed.
+
+ rework this -->
+
+In a twist of fate I argue is convergent evolution, the best of
+these look like [user stories][user story]:
+
+[user story]: https://en.wikipedia.org/wiki/user_story "User story (Wikipedia)"
+
+> (As an attacker,) I want to get access to a victim’s account, so I can divert
+> their payout information to my bank account. When I send the victim user my
+> special link, it causes their browser to send my server their authorization
+> token. I, (as an attacker,) use this token to change the victim's payout
+> information.
+
+I think this is the golden standard of describing a vulnerability. The intent
+is clear. The means is clear. The impact is clear. Whining is a clear and
+concise method of explanation to non-hackers born of necessity.
+
+A vulnerability is a path through a very complex system. Most of those paths go
+nowhere. Even ones that fit into vulnerability taxonomies. A hacker puts all
+these complex pieces together and – in theory – creates a path through them
+that starts at something an attacker can control, and ends in something the
+attacker wants.
+
+Thanks to the advent of Bug Bounty and Responsible Disclosure, even to the the
+outside world, sometimes all we need to say is ‘XSS’, or ‘SQLi’, ‘open
+redirect’, ‘buffer overflow’, or traversing into the barely legitimate:
+‘content injection’, ‘information leak’, ‘confused deputy’. Security vendors
+will be string these together like novel animal species or viral strains and
+season with a smattering of CVSS values based on vibes.
+
+Many of these technical terms came to exist as legitimate shorthand between
+comrades who trust each and want to short-cut the explaining. Most hackers know
+what `alert(document.origin)` means. Everyone knows what it means to pop a
+calculator. These are all shorthands. They do not demostrate the existence of
+the paths I mentioned before.
+
+I do genuinely think that our usage of this type of security terminology has,
+in the hands of some, taken on a distinctly dark and insincere bent that I
+think that user stories could dispel. I will follow this with an example I came
+across that I think illustrates this well, but before that, let’s analyse some
+terms I particularly dislike.
+
+                      “Broken”, “Missing”, and “Improper”.
+===============================================================================
+
+Vulnerability taxonomies exist to categorise vulnerabilities for tracking. But
+they are irrevocably tied to the idea that demonstrating a category of taxonomy
+inherently demonstrates vulnerability. In this sense, Everything in the
+[Bugcrowd Vulnerability Taxonomy] that includes ‘broken’ is on my shitlist.
+This includes: **Broken Authentication and Session Management**, **Broken
+Access Control (BAC)**, **Broken Access Control (BAC)**, and **Broken
+Cryptography**.
+
+[Bugcrowd Vulnerability Taxonomy]:
+    https://bugcrowd.com/vulnerability-rating-taxonomy
+
+I also include the more standard CWE terms “missing”, and “improper” when it is
+presented without reference to a specific technology: [CWE-862] “Missing
+Authorization”, [CWE-20] “Improper Input Validation”, [CWE-287] “Improper
+Authentication”, [CWE-269] “Improper Privilege Management”, and so on.
+
+[CWE-862]: https://cwe.mitre.org/data/definitions/862.html
+[CWE-20]: https://cwe.mitre.org/data/definitions/20.html
+[CWE-297]: https://cwe.mitre.org/data/definitions/287.html
+[CWE-269]: https://cwe.mitre.org/data/definitions/269.html
+
+These terms fulfil only the function of telling the reader that the reporter
+thinks the thing in question is bad, without any information at all about why
+it is bad. *Of course* the reporter thinks the thing is bad. They would not be
+reporting it otherwise.
+
+It is eminently obvious that demonstration of ‘Missing Authorization’ is not
+itself a demonstration of a security vulnerability. Nobody should be making
+arguments that being able to access ChatGPT without being logged in is a
+vulnerability. The term _begs the question_ of _why_ the reporter thinks
+missing authorization is an issue.
+
+If I asked them why it was an issue, perhaps they would say ‘unauthorized
+access to customer data’ – in which case, congratulations! We've found an
+actually good way of describing the vulnerability at hand.
+
+I think in a way, this is a reflection of the ‘[five whys]’ principle. The
+answer to ‘why did we have an incident yesterday’ should not be ‘the website
+was down’. It should be ‘we do not prevent two commits being deployed to
+production at the same time’ or some other statement reflecting a resolution
+that cuts deep enough to not have to ask ‘why?’ one more time.
+
+[five whys]: https://en.wikipedia.org/wiki/Five_whys "Wikipedia: Five whys"
+
+
+
+
+
+Thomas
+
+San Francisco, California, USA
+
+Below are segments from the old article! They should be re-incorperated where
+appropritate:
+
+Data URI Injection This was a craaazy vulnerability type between probably
+sometime in the 90s until about 2017. When you use the web, you're on 'http:'.
+That's the protocol. But there's also 'mailto:' for email, and there once was
+'ftp:' for file transfer. After Web 2.0 became a thing, data: URIs became a
+thing. Normally, if I put a picture such as below, a beautiful picture of San
+Francisco's Civic Centre plaza in 1940, it is a link (like with 'http:') loaded
+off the internet. So your browser goes to that link for you that has the
+picture, downloads it, and puts it in the page. But that means loading 2
+ things, and it's 2010 and loads are slow! Ray M. Mann, Jr. Color Slides of
+Golden Gate International Exposition, 1940. SFPL AAZ-1445So when I put this
+other picture of the same location in 2024 in my web page, I may use a data:
+URI. And this data: URI might specify the full content of the image in-line,
+without a second request being made. That way, you can see the tragic extent of
+the demolition of San Francisco's civic space much more quickly. Google
+Street ViewI can't put one here in Medium, because they're banned. Why are they
+banned? Because until 2017, a data: URI was considered a fully trusted part of
+the page it appeared in, and that meant security issues. Sure, it was most
+often used for images, like this 1907 photo of the gardens surrounding San
+Francisco's Pioneer Monument: Pioneer Monument in Civic Center, San Francisco
+Department of Public Works (San Francisco, Calif.) 1907–1920 SFPL DPW-4794But
+it could be used to also specify web pages, such as
+data:text/html,`<script>alert(document.domain)</script>` . This web page is a
+tiny little one, and it contains a single piece of code. That little piece of
+code makes a pop-up on the screen saying what the web browser thinks the
+security identity of the page is. In 2010, a link like that on Medium.com would
+cause a pop-up window saying 'medium.com'. This meant that the mere action of
+making a link resulted in an attacker being able to inject code into the page!
+In other words: As an attacker, I want to delete your Medium posts, because
+they're not good. I make my own Medium post and in the first paragraph I make a
+prominent link along the lines of: "first, please note the required watching"
+When my victim (you) clicks this link, my injected code runs. The browser
+believes that my injected code comes from Medium.com, and the code directs your
+browser to act as though you clicked 'delete' on your article. Your article is
+deleted. But by 2017, browser vendors realised data: URIs being treated like
+they were blessed by the page where the link was present was a really bad idea.
+They made it so that these links are treated by the browser as though they are
+in an opaque origin, a kind of shadow realm that unsafe code is sent to where
+it may not be blessed with the gift of knowing its own origin. In a modern
+browser, clicking a data: URI with my code results in a single word null ,
+which is the human name for the opaque origin. This hasn't stopped people
+claiming it's a security issue though! They just removed the document.domain
+proof that the origin is inherited and instead the pop-up just says "XSS!". A
+quick Google shows payouts on HackerOne for this as late as 2020 using exactly
+this sleight of hand (by 2021, it looks like people had caught on). I remember
+responding to these for years. I don't think these payouts were from
+well-informed individuals making carefully considered decisions about their
+long-tail of users who haven't upgraded their web browsers since 2017. The
+first XSS of this kind I'm sure had to justify itself; but by 2020 we were
+happy to fork over $500 at the first sign of a pop-up, having totally forgotten
+what the meaning of the action was. By the way, this is what the Pioneer
+Monument looks like today: Google MapsCall to Action I am not saying that user
+stories are bulletproof. A malicious reporter absolutely could concoct a user
+story that appears true, but is not. But the difference is the currency. The
+fact is, what the reporter demonstrated was XSS. They have presented valid
+currency in the system we have built. But the real currency is risk, and that's
+a product of probability and impact, something expressed intuitively in a user
+story. I think if we more often did, we would be much easier to understand. I
+want to live in a world where someone mostly non-technical can read a security
+vendor report and intuitively understand why 'network-local hypertext
+information leak sidechannel' was rated CVSS 3.0 4.7 (Medium)
+CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N. I don't think it's too far away.
+I promise, you can still send your reports in PDFs 0.5–1 vulnerabilities to a
+piece of paper. With cover sheets for each section, and some pages
+intentionally left blank. I'll leave a few SSL cipher suites a few years out of
+date as a treat.
