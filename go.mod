@@ -24,7 +24,7 @@ require (
 	github.com/twilio/twilio-go v1.23.6
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.10.0
-	golang.org/x/tools v0.27.0
+	golang.org/x/tools v0.28.0
 	honnef.co/go/tools v0.5.1
 )
 
@@ -96,9 +96,9 @@ require (
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
