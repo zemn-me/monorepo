@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
@@ -167,6 +168,12 @@ export const Bio = {
 			...canonicaliseArticleMetadata(articleMissing),
 			tags: [writing],
 			url: new RelativeURL('/article/2024/missing'),
+		},
+		{
+			id: 'ab290485-ae49-4455-af28-674d5fb00fa8',
+			...canonicaliseArticleMetadata(articleClean),
+			tags: [writing],
+			url: new RelativeURL('/article/2024/clean'),
 		},
 		{
 			id: 'bda2ee54-67ba-4650-887c-78240143a825',
