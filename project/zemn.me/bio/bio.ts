@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
@@ -501,12 +502,13 @@ export const Bio = {
 		},
 		{
 			id: 'f6bfd6fd-a84f-449d-90f9-218a55f22c35',
-			date: date(7, 'jul', 2014),
 			description: en`exploit using content security policy 1 to steal data on the web`,
 			priority: 9,
 			tags: [security, writing, disclosure],
-			title: en`when security creates insecurity`,
-			url: url`http://archive.is/UXD8j`,
+			...canonicaliseArticleMetadata(
+				articleCsp
+			),
+			url: new RelativeURL('/article/2014/csp')
 		},
 		{
 			id: 'd4b51ac9-107c-4e83-b07f-0cffa34255f6',
