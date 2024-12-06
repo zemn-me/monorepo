@@ -31,8 +31,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.21.0/source.json": "2d81f4b844073682b855416a119ffec9e0d54f223c46f4fdcbfad44f432e440f",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/MODULE.bazel": "8eb29876512d3242af50a424300bec5c5f8957b455963df5f618cb7fd4e8ae19",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/source.json": "f48be9ca9f58adb817450c677659ed087d540d9f355f4e39098431cecd86ebf9",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.0.1/MODULE.bazel": "35e0c95698ecb59454ea2ca0de5dd4550afe23aaa0853c313024651ce3f1464e",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.0.1/source.json": "f52f91ab97db89b1e60067585104be37f05fa6f7c999e0156a1e6151d17c49b3",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.1.0/MODULE.bazel": "ffa30faf69f264154fb5f928b4eaafc37532498571fc0caa834d6b9eab6b8a45",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.1.0/source.json": "1d30dcaf6d1f32300b3a45bc691fceb388d27a9211cc7f38e10daa52871afde4",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/MODULE.bazel": "596ccdc1e93c860ec60d0bfce361ecbfb9ea09362d01f9d1bc5666118bcb76ab",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/source.json": "71249b3b84336747ec1f6b5de30d7605194d0bb4ea5ea84015550c17b6e38879",
     "https://bcr.bazel.build/modules/bazel_features/0.1.0/MODULE.bazel": "47011d645b0f949f42ee67f2e8775188a9cf4a0a1528aa2fa4952f2fd00906fd",
@@ -930,8 +930,8 @@
     },
     "@@aspect_rules_swc~//swc:extensions.bzl%swc": {
       "general": {
-        "bzlTransitiveDigest": "3apbvYWdvAuuh7WuuMR7QSBcZYajPR7jtSA8iESt50s=",
-        "usagesDigest": "jETFA8Llg7DU5jZGWOkhBcc1eFb/vBygl6g4P6X18QM=",
+        "bzlTransitiveDigest": "1rj9VvXgoeeHULdiG3D2hqopLJ3rHtpJIeDAJ2xpjp8=",
+        "usagesDigest": "7Anoc0dHMLd9xhH742Ic8mooskXemLwfouOr720O82c=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -941,7 +941,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "darwin-arm64",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_darwin-x64": {
@@ -949,7 +949,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "darwin-x64",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_linux-arm64-gnu": {
@@ -957,7 +957,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "linux-arm64-gnu",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_linux-x64-gnu": {
@@ -965,7 +965,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "linux-x64-gnu",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_win32-arm64-msvc": {
@@ -973,7 +973,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "win32-arm64-msvc",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_win32-ia32-msvc": {
@@ -981,7 +981,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "win32-ia32-msvc",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_win32-x64-msvc": {
@@ -989,7 +989,7 @@
             "ruleClassName": "swc_repositories",
             "attributes": {
               "platform": "win32-x64-msvc",
-              "swc_version": "v1.6.6"
+              "swc_version": "v1.7.40"
             }
           },
           "swc_toolchains": {
