@@ -1,0 +1,11 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "zone1970.tab",
+    actual = "@org_iana_data_zone1970_tab//file:file",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

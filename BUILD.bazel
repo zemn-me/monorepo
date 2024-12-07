@@ -248,6 +248,7 @@ py_venv(
         "//py/ibazel:ibazel_bin",
         "//py/ipynb",
         "//py/ipynb:ipynb_bin",
+        "//py/time/hemisphere:hemisphere_bin",
         "//ts/pulumi/lib/oci/example/python:python_bin",
     ],
 )
