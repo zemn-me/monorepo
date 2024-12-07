@@ -1,0 +1,50 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+package(default_visibility = ["//:__subpackages__"])
+
+py_library(
+    name = "is_northern_hemisphere",
+    srcs = ["is_northern_hemisphere.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "hemisphere_bin",
+    srcs = ["__main__.py"],
+    data = [
+        "@org_iana_data_zone1970_tab//file",
+    ],
+    env = {
+        "ZONE_TAB": "$(rlocationpath @org_iana_data_zone1970_tab//file:file)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+genrule(
+    name = "tz_to_hemisphere",
+    outs = [
+        "tz_to_hemisphere.json",
+    ],
+    cmd = """
+		$(execpath :hemisphere_bin) > $@
+	""",
+    tools = [
+        ":hemisphere_bin",
+    ],
+)
+
+js_library(
+    name = "tz_to_hemisphere_js",
+    srcs = [
+        "tz_to_hemisphere.json",
+    ],
+)

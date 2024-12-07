@@ -1,10 +1,11 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
 import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
 import style from '#root/project/zemn.me/components/HeroVideo/style.module.css';
 import { Video } from '#root/ts/react/Video/video.js';
+import { getSeason, winter } from '#root/ts/time/season.js';
 
 
 function first(dates: Date[]): Date {
@@ -54,15 +55,27 @@ const winterEnds = 2;
  * night equal in length), March 20 or 21, and in the Southern Hemisphere from June
  * 21 or 22 to September 22 or 23.
  */
-function isWinter(v: Date): boolean {
-	const month = v.getMonth();
-	return month >= winterStarts || month < winterEnds;
+function isWinter(v: Date, isNorthernHemi?: boolean): boolean {
+	return getSeason(v, isNorthernHemi) == winter
 }
 
 function useIsWinter() {
 	const [bIsWinter, setBIsWinter] = useState<boolean>(
-		isWinter(new Date())
+		// calculate initial winter value based
+		// on assumption the user is in the northern hemi.
+		//
+		// this inevitably means the prerender will be
+		// wrong for australians.
+		isWinter(new Date(), true)
 	);
+
+	useEffect(() => {
+		// as soon as mounted in a browser, calculate
+		// if winter for the local browser.
+		setBIsWinter(
+			isWinter(new Date())
+		)
+	}, [ setBIsWinter ]);
 
 	useEffect(() => {
 		const now = new Date();
@@ -85,7 +98,6 @@ function useIsWinter() {
 
 
 	return bIsWinter;
-
 }
 
 
@@ -98,6 +110,13 @@ export interface HeroVideoProps {
 
 export function HeroVideo(props: HeroVideoProps) {
 	const currentlyWinter = useIsWinter();
+	const videoRef = useRef<HTMLVideoElement|null>(null);
+
+	// if winter status changes, reload the video!
+
+	useEffect(
+		() => videoRef.current?.load()
+	, [currentlyWinter])
 
 	return <Video
 		autoPlay
@@ -108,6 +127,7 @@ export function HeroVideo(props: HeroVideoProps) {
 		poster={
 			(currentlyWinter ? kenwood_snow.poster : kenwood.poster).src
 		}
+		ref={videoRef}
 	>
 		{currentlyWinter ? (
 			<kenwood_snow.VideoSources />
