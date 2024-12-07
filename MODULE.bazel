@@ -41,7 +41,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.0.1")
-bazel_dep(name = "rules_python", version = "0.40.0")
+bazel_dep(name = "rules_python", version = "1.0.0")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
@@ -64,7 +64,7 @@ pip.parse(
 )
 use_repo(pip, "pip")
 
-bazel_dep(name = "aspect_rules_swc", version = "2.0.1")
+bazel_dep(name = "aspect_rules_swc", version = "2.1.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
 bazel_dep(name = "aspect_rules_js", version = "2.1.2")
 
@@ -102,7 +102,7 @@ rules_ts_ext.deps(
 use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
-bazel_dep(name = "bazel_features", version = "1.21.0")
+bazel_dep(name = "bazel_features", version = "1.22.0")
 bazel_dep(name = "rules_go", version = "0.50.1", repo_name = "io_bazel_rules_go")
 bazel_dep(name = "gazelle", version = "0.40.0", repo_name = "bazel_gazelle")
 
@@ -138,7 +138,7 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "0.40.0")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "1.0.0")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
 
 go_deps_with_disabled_proto_generation = [
@@ -163,4 +163,12 @@ http_archive(
     integrity = "sha256-P0PkXK8DEh56Z+S7dWMwxIpVxqmuDJTBuni5ZN/cSok=",
     strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
+)
+
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+http_file(
+    name = "org_iana_data_zone1970_tab",
+    url = "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    integrity = "sha256-3ANHICItrC0iU1vSQAMKZXN1a68sozBiy9AHi9ZGooE=",
 )

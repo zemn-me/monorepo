@@ -36,8 +36,8 @@ dependencies:
     specifier: 9.7.5
     version: 9.7.5
   '@tanstack/react-query':
-    specifier: 5.62.2
-    version: 5.62.2(react@19.0.0)
+    specifier: 5.62.3
+    version: 5.62.3(react@19.0.0)
   '@types/bcryptjs':
     specifier: 2.4.6
     version: 2.4.6
@@ -78,8 +78,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1392070
-    version: 0.0.1392070
+    specifier: 0.0.1393284
+    version: 0.0.1393284
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.16.0)
@@ -221,8 +221,8 @@ devDependencies:
     specifier: 7.26.1
     version: 7.26.1(@types/node@22.10.1)
   '@pulumi/aws':
-    specifier: 6.63.0
-    version: 6.63.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 6.64.0
+    version: 6.64.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
     specifier: 2.19.0
     version: 2.19.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -380,8 +380,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.51.0
-    version: 39.51.0(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0)
+    specifier: 39.56.4
+    version: 39.56.4(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -4836,8 +4836,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.63.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-U12WIgc1JjpX3igDAVZODE5vy8p93iqEz7G08UHiivqELhdUShEEIKMCugX7ZucaSUbROwnmJffSV9z0lfi18w==}
+  /@pulumi/aws@6.64.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-LEJgLycefXk1Dam46dCfhc3b2GJQ08TmXr/efii5c96nmSYbFRLxYmmYHRb1qJi4Bt3wIWcZhKuCXHarNdmvLw==}
     dependencies:
       '@pulumi/pulumi': 3.142.0(ts-node@10.9.2)(typescript@5.5.4)
       builtin-modules: 3.0.0
@@ -4855,7 +4855,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.699.0
-      '@pulumi/aws': 6.63.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/aws': 6.64.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.5.7(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/pulumi': 3.142.0(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.145
@@ -6192,16 +6192,16 @@ packages:
     dependencies:
       defer-to-connect: 2.0.1
 
-  /@tanstack/query-core@5.62.2:
-    resolution: {integrity: sha512-LcwVcC5qpsDpHcqlXUUL5o9SaOBwhNkGeV+B06s0GBoyBr8FqXPuXT29XzYXR36lchhnerp6XO+CWc84/vh7Zg==}
+  /@tanstack/query-core@5.62.3:
+    resolution: {integrity: sha512-Jp/nYoz8cnO7kqhOlSv8ke/0MJRJVGuZ0P/JO9KQ+f45mpN90hrerzavyTKeSoT/pOzeoOUkv1Xd0wPsxAWXfg==}
     dev: false
 
-  /@tanstack/react-query@5.62.2(react@19.0.0):
-    resolution: {integrity: sha512-fkTpKKfwTJtVPKVR+ag7YqFgG/7TRVVPzduPAUF9zRCiiA8Wu305u+KJl8rCrh98Qce77vzIakvtUyzWLtaPGA==}
+  /@tanstack/react-query@5.62.3(react@19.0.0):
+    resolution: {integrity: sha512-y2zDNKuhgiuMgsKkqd4AcsLIBiCfEO8U11AdrtAUihmLbRNztPrlcZqx2lH1GacZsx+y1qRRbCcJLYTtF1vKsw==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
-      '@tanstack/query-core': 5.62.2
+      '@tanstack/query-core': 5.62.3
       react: 19.0.0
     dev: false
 
@@ -8917,8 +8917,8 @@ packages:
     resolution: {integrity: sha512-XxtPuC3PGakY6PD7dG66/o8KwJ/LkH2/EKe19Dcw58w53dv4/vSQEkn/SzuyhHE2q4zPgCkxQBxus3VV4ql+Pg==}
     dev: true
 
-  /devtools-protocol@0.0.1392070:
-    resolution: {integrity: sha512-yKpQcEdht7OrwdHK9GdDymphvbJkYGla3EueECQwXA+zsBnzz/ylbXfvV0pqSIjXZEqZpz/V1bjohrBFp4SKaw==}
+  /devtools-protocol@0.0.1393284:
+    resolution: {integrity: sha512-LSoYipzCbc6QYAsfmSVauUXKmeNnj3pOitEok4dvHEqD7Eob81KBI9spSId+hP6xuKT4vQmR1PlBQolOyYuOIA==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -12316,8 +12316,8 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  /jsonata@2.0.5:
-    resolution: {integrity: sha512-wEse9+QLIIU5IaCgtJCPsFi/H4F3qcikWzF4bAELZiRz08ohfx3Q6CjDRf4ZPF5P/92RI3KIHtb7u3jqPaHXdQ==}
+  /jsonata@2.0.6:
+    resolution: {integrity: sha512-WhQB5tXQ32qjkx2GYHFw2XbL90u+LLzjofAYwi+86g6SyZeXHz9F1Q0amy3dWRYczshOC3Haok9J4pOCgHtwyQ==}
     engines: {node: '>= 8'}
     dev: true
 
@@ -16039,8 +16039,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.51.0(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-4I6kCEDu8g5BOat9AuMg8Ro37DXex0p4yDU2ooK59jWoQTgnsfLc0U5MlwYmwAhcQBI2X3SCMRcVwdIaloSKew==}
+  /renovate@39.56.4(@aws-sdk/client-sso-oidc@3.699.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-b/iMWzb0c3KNDzbMUzDZHH7SmtCu416PS7neBNixXx5mWLn1L9SzDrVKRLk8LzDG6kIFMapuXj6p4mZvjk6muA==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16113,7 +16113,7 @@ packages:
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 3.0.0
       json5: 2.2.3
-      jsonata: 2.0.5
+      jsonata: 2.0.6
       jsonc-parser: 3.3.1
       klona: 2.0.6
       luxon: 3.5.0
