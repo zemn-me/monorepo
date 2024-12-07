@@ -164,3 +164,11 @@ http_archive(
     strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
+
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+http_file(
+    name = "org_iana_data_zone1970_tab",
+    url = "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    integrity = "sha256-3ANHICItrC0iU1vSQAMKZXN1a68sozBiy9AHi9ZGooE=",
+)
