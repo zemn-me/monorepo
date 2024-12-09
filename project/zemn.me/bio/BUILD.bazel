@@ -18,6 +18,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//:node_modules/schema-dts",
         "//mdx:mdx_js",
+        "//mdx/article/2019/cors:cors_js",
         "//project/zemn.me/components/Article/types",
         "//ts/iter",
         "//ts/option",
