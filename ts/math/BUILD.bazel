@@ -19,6 +19,7 @@ jest_test(
     name = "test",
     srcs = [
         "camera_test.js",
+        "lookAt_test.js",
         "math_test.js",
     ],
     deps = [":math"],

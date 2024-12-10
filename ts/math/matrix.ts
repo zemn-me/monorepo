@@ -80,8 +80,24 @@ export function mul<
 	);
 }
 
+/**
+ * Iterate over & enumerate a {@link Matrix}.
+ * @param I -- the width of the input matrix.
+ * @param J -- the height of the input matrix.
+ * @param T -- the type of each value in the matrix.
+ * @param O -- the output type of each point once mapped.
+ * @param m {@link m} -- the matrix to iterate over.
+ * @param f {@link f} -- a mapping function taking value, position and m.
+ *
+ */
 export const map: <I extends number, J extends number, T, O>(
 	m: Matrix<I, J, T>,
+	/**
+	 * A mapping function over a matrix.
+	 * @param v -- {@link v} the value at a point in the matrix.
+	 * @param pos -- {@link pos} the i, j position in the matrix.
+	 * @param matrix -- {@link matrix} the input matrix.
+	 */
 	f: (
 		v: T,
 		pos: readonly [i: number, j: number],
@@ -98,6 +114,58 @@ export function sub<I extends number, J extends number>(
 		m1,
 		map(m2, v => -v)
 	);
+}
+
+/**
+ * For vector-shaped matricies, gives the equivilent magnitude.
+ */
+export function magnitude(m: Matrix<1, number>): number {
+	return Math.sqrt(
+		vec.sum(
+			map(
+				m,
+				(v: number) => v ** 2
+			).flat()
+		)
+	);
+}
+
+export const length = magnitude;
+
+/**
+ * For vector-shaped matricies, gives the equivilent unit vector.
+ */
+export function unit<J extends number>(m: Matrix<1, J>): Matrix<1, J> {
+	const mag = magnitude(m);
+	return map<1, J, number, number>(m, (v: number) => v / mag);
+}
+
+/**
+ * For vector-shaped matricies, performs the dot operation.
+ */
+export function dot<J extends number>(
+	m1: Matrix<1, J>,
+	m2: Matrix<1, J>) {
+	return vec.dot(m1.flat(), m2.flat());
+}
+
+export const normalise = unit;
+
+/**
+ * For a vector3 analagous matrix, performs the cross operation.
+ */
+export function cross(
+	m1: Matrix<1, 3, number>,
+	m2: Matrix<1, 3, number>
+): Matrix<1, 3, number> {
+	const [[x1], [y1], [z1]] = m1;
+	const [[x2], [y2], [z2]] = m2;
+
+	const cx = y1 * z2 - z1 * y2;
+	const cy = z1 * x2 - x1 * z2;
+	const cz = x1 * y2 - y1 * x2;
+
+	return [[cx], [ cy ], [ cz ]];
 }
 
 /**
