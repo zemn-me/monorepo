@@ -4,10 +4,8 @@
  * for handling rotations in 3D space.
  */
 
-/**
- * A Quaternion is a complex number representing both the position and the
- * rotation of an object in 3D space.
- */
+import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
+
 export class Quaternion<
 	X extends number = number,
 	Y extends number = number,
@@ -20,6 +18,24 @@ export class Quaternion<
 		public z: Z,
 		public w: W
 	) {}
+
+	/**
+	 * Returns true if this Quaternion can be converted directly to a point
+	 * in cartesian 3D space (i.e. its real component is zero).
+	 */
+	is_vector<X extends number, Y extends number, Z extends number>(
+		this: Quaternion<X, Y, Z, number>
+	): this is Quaternion<X, Y, Z, 0> {
+		return this.w == 0
+	}
+
+	/**
+	 * Converts a Quaternion whose real component is zero into a point in 3D
+	 * space. ({@link is_vector} can be used to test that predicate).
+	 */
+	to_vector<X extends number, Y extends number, Z extends number>(this: Quaternion<X, Y, Z, 0>): Point3D {
+		return point<3>(this.x, this.y, this.z)
+	}
 
 	multiply(this: Quaternion, b: Quaternion): Quaternion {
 		const x = this.w * b.x + this.x * b.w + this.y * b.z - this.z * b.y;
@@ -56,10 +72,6 @@ export class Quaternion<
 		);
 	}
 
-	/**
-	 * Return a new Quaternion representing a unit quaternion (i.e. a quaternion
-	 * of length one). This preserves only its rotation in 3D space.
-	 */
 	normalize(): Quaternion {
 		const length = this.length();
 		if (length === 0) {
@@ -71,5 +83,35 @@ export class Quaternion<
 			this.z / length,
 			this.w / length
 		);
+	}
+
+	inverse(): Quaternion {
+		// Assuming normalized quaternion.
+		const lenSq = this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w;
+		if (lenSq === 0) {
+			throw new Error('Cannot invert a zero-length quaternion.');
+		}
+		return new Quaternion(-this.x/lenSq, -this.y/lenSq, -this.z/lenSq, this.w/lenSq);
+	}
+
+	/**
+	 * Rotates a vector by this quaternion.
+	 */
+	rotateVector(v: Point3D): Point3D {
+		const qv = new Quaternion(x (v), y(v), z(v), 0);
+		const inv = this.inverse();
+		const res = this.multiply(qv).multiply(inv);
+		return point<3>(res.x, res.y, res.z)
+	}
+
+	static fromAxisAngle(axis: Point3D, angle: number): Quaternion {
+		const halfAngle = angle * 0.5;
+		const s = Math.sin(halfAngle);
+		return new Quaternion(
+			x(axis)* s,
+			y(axis)* s,
+			z(axis)* s,
+			Math.cos(halfAngle)
+		).normalize();
 	}
 }

@@ -13,6 +13,8 @@ export function unit<N extends number>(v: Vector<N>): Vector<N> {
 	return map(v, x => x / mag);
 }
 
+export const normalise = unit;
+
 /**
  * Map a Vector, returning a new Vector.
  */
