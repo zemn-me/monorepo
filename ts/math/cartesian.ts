@@ -106,11 +106,11 @@ export function x(p: [...Point<1>, ...unknown[]]): number {
 	return p[0]![0]!;
 }
 
-export function y(p: Point<2>): number {
+export function y(p: [...Point<2>, ...unknown[]]): number {
 	return p[1]![0]!;
 }
 
-export function z(p: Point<3>): number {
+export function z(p: [...Point<3>, ...unknown[]]): number {
 	return p[2]![0]!;
 }
 
