@@ -49,9 +49,9 @@ async-lru==2.0.4 \
     --hash=sha256:b8a59a5df60805ff63220b2a0c5b5393da5521b113cd5465a44eb037d81a5627 \
     --hash=sha256:ff02944ce3c288c5be660c42dbcca0742b32c3b279d6dceda655190240b99224
     # via jupyterlab
-attrs==24.2.0 \
-    --hash=sha256:5cfb1b9148b5b086569baec03f20d7b6bf3bcacc9a42bebf87ffaaca362f6346 \
-    --hash=sha256:81921eb96de3191c8258c199618104dd27ac608d9366f5e35d011eae1867ede2
+attrs==24.3.0 \
+    --hash=sha256:8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff \
+    --hash=sha256:ac96cd038792094f438ad1f6ff80837353805ac950cd2aa0e0625ef19850c308
     # via
     #   jsonschema
     #   referencing
@@ -711,9 +711,9 @@ python-dateutil==2.9.0.post0 \
     # via
     #   arrow
     #   jupyter-client
-python-json-logger==3.2.0 \
-    --hash=sha256:2c11056458d3f56614480b24e9cb28f7aba69cbfbebddbb77c92f0ec0d4947ab \
-    --hash=sha256:d73522ddcfc6d0461394120feaddea9025dc64bf804d96357dd42fa878cc5fe8
+python-json-logger==3.2.1 \
+    --hash=sha256:8eb0554ea17cb75b05d2848bc14fb02fbdbd9d6972120781b974380bfa162008 \
+    --hash=sha256:cdc17047eb5374bd311e748b42f99d71223f3b0e186f4206cc5d52aefe85b090
     # via jupyter-events
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
