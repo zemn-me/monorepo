@@ -111,8 +111,8 @@ dependencies:
     specifier: 0.4.17
     version: 0.4.17
   npm:
-    specifier: 10.9.2
-    version: 10.9.2
+    specifier: 11.0.0
+    version: 11.0.0
   nuqs:
     specifier: 1.20.0
     version: 1.20.0(next@13.4.10)
@@ -15049,9 +15049,9 @@ packages:
     dependencies:
       path-key: 3.1.1
 
-  /npm@10.9.2:
-    resolution: {integrity: sha512-iriPEPIkoMYUy3F6f3wwSZAU93E0Eg6cHwIR6jzzOXWSy+SD/rOODEs74cVONHKSx2obXtuUoyidVEhISrisgQ==}
-    engines: {node: ^18.17.0 || >=20.5.0}
+  /npm@11.0.0:
+    resolution: {integrity: sha512-Ed/ylWXSKXx058WUqXYlgb3pafCqXL5vWzZEvwCKFsBl7OYQlNn/u4ESW+ON+OG6Q+uCRLPTDGHreX6aJEDj7A==}
+    engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
     dev: false
     bundledDependencies:
@@ -15084,7 +15084,6 @@ packages:
       - libnpmdiff
       - libnpmexec
       - libnpmfund
-      - libnpmhook
       - libnpmorg
       - libnpmpack
       - libnpmpublish
@@ -15122,7 +15121,6 @@ packages:
       - treeverse
       - validate-npm-package-name
       - which
-      - write-file-atomic
 
   /nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
