@@ -19,7 +19,7 @@ def _go_sdk_tool_impl(ctx):
 
     sdk_tools = []
     sdk_tools.append(go.go)  # `go` binary
-    sdk_tools.extend(go.sdk_tools)  # all other tools, e.g. `gofmt`
+    sdk_tools.extend(go.sdk_tools.to_list())  # all other tools, e.g. `gofmt`
 
     for f in sdk_tools:
         if f.path == tool_path:
