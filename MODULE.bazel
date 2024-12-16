@@ -5,7 +5,7 @@
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
 
-bazel_dep(name = "rules_oci", version = "2.0.1")
+bazel_dep(name = "rules_oci", version = "2.2.0")
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
@@ -35,7 +35,7 @@ use_repo(
     "distroless_base_linux_s390x",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.9.4")
+bazel_dep(name = "aspect_bazel_lib", version = "2.10.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependency = True)
@@ -103,7 +103,7 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
 bazel_dep(name = "bazel_features", version = "1.22.0")
-bazel_dep(name = "rules_go", version = "0.50.1", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "rules_go", version = "0.51.0", repo_name = "io_bazel_rules_go")
 bazel_dep(name = "gazelle", version = "0.40.0", repo_name = "bazel_gazelle")
 
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
