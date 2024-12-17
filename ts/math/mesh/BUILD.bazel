@@ -1,0 +1,31 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "mesh",
+    srcs = [
+        "mesh.ts",
+        "mesh_test.ts",
+    ],
+    resolve_json_module = True,
+    deps = [
+        "//ts",
+        "//ts/math",
+        "//ts/math/canvas/braille",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = [
+        "mesh_test.js",
+    ],
+    deps = [":mesh"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

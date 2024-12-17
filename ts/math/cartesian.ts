@@ -40,8 +40,6 @@ export function denormaliseLine2D(l: Line2D<2>): [
 	]
 }
 
-
-
 export function point<T extends number>(...p: Vector<T, number>): Point<T> {
 	return Matrix.fromVec(p);
 }
