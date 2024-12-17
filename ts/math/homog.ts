@@ -1,8 +1,16 @@
 import * as Cart from '#root/ts/math/cartesian.js';
 import * as Matrix from '#root/ts/math/matrix.js';
+import { Add } from '#root/ts/typeadd.js';
 
-export type Point2D = Matrix.Matrix<1, 3>;
-export type Point3D = Matrix.Matrix<1, 4>;
+/**
+ * Returns the type of an N-dimensional
+ * homogenous coordinate.
+ */
+export type Point<N extends number> =
+	Matrix.Matrix<1, Add<N, 1>>;
+
+export type Point2D = Point<2>
+export type Point3D = Point<3>;
 export type Line2D = Point2D[];
 export type Line3D = Point3D[];
 
