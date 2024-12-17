@@ -1,5 +1,7 @@
 import * as cartesian from '#root/ts/math/cartesian.js';
 import * as euler_angle from '#root/ts/math/euler_angle.js';
+import * as homogenous from '#root/ts/math/homog.js';
+import * as Matrix from '#root/ts/math/matrix.js';
 import * as quaternion from '#root/ts/math/quaternion.js';
 
 export const Quaternion = {
