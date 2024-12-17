@@ -3,6 +3,8 @@ import { cross, dot, magnitude, normalise, sub } from "#root/ts/math/matrix.js";
 import { Quaternion } from "#root/ts/math/quaternion.js";
 const EPSILON = 1e-6;
 
+export const defaultUp = point<3>(0, 1, 0);
+
 /**
  * Constructs a quaternion that rotates a default camera orientation:
  * - Default forward: (0,0,1)
@@ -10,9 +12,9 @@ const EPSILON = 1e-6;
  *
  * So that it points from 'from' towards 'to', respecting the given 'up' vector.
  */
-export function lookAt(from: Point3D, to: Point3D, up: Point3D): Quaternion {
+export function lookAt(from: Point3D, to: Point3D, up: Point3D = defaultUp): Quaternion {
 	const f0 = point<3>( 0, 0, 1 );
-	const u0 = point<3>( 0, 1, 0 ); // default up
+	const u0 = defaultUp// default up
 
 	// Desired forward direction
 	const f = normalise<3>(sub<1, 3>(to, from));
