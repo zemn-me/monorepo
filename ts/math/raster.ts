@@ -3,6 +3,8 @@
  * i dont really understand this because chatgpt generated it.
  */
 
+import { point, Point2D } from "#root/ts/math/cartesian.js";
+
 
 /**
  * Represents a point in 2D space.
@@ -68,4 +70,21 @@ export function* linesToPoints(
     yield* bresenhamLine(x0, y0, x1, y1);
   }
 }
+
+/**
+ * {@link linesToPoints} except accepting
+ * Matrix form.
+ */
+export function* matLineToPoints(
+	[[[x0], [y0]], [[x1], [y1]]]: [
+		Point2D, Point2D ]) {
+
+	for (const { x, y } of bresenhamLine(x0, y0, x1, y1)) {
+		yield point<2>(x, y)
+	}
+
+	return;
+
+}
+
 

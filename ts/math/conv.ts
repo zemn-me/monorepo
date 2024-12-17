@@ -1,5 +1,7 @@
 import * as cartesian from '#root/ts/math/cartesian.js';
 import * as euler_angle from '#root/ts/math/euler_angle.js';
+import * as homogenous from '#root/ts/math/homog.js';
+import * as Matrix from '#root/ts/math/matrix.js';
 import * as quaternion from '#root/ts/math/quaternion.js';
 
 export const Quaternion = {
@@ -52,3 +54,19 @@ export const Euler = {
 		return new euler_angle.EulerAngle(pitch, yaw, roll);
 	},
 };
+
+
+export const homogToCart =
+	<N extends number>(
+		pt: homogenous.Point<N>
+	): cartesian.Point<N> =>
+		Matrix.map<1, N, number, number>(
+			homogenous.nonw<N>(pt),
+			v => v * homogenous.w<N>(pt)
+		)
+
+export const cartToHomog =
+	<N extends number>(
+		pt: cartesian.Point<N>
+	): homogenous.Point<N> =>
+	[...pt, [1]] as homogenous.Point<N>
