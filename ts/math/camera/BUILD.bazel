@@ -1,0 +1,21 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "camera",
+    srcs = [
+        "camera.ts",
+    ],
+    resolve_json_module = True,
+    deps = [
+        "//ts",
+        "//ts/math",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
