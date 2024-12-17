@@ -10,6 +10,8 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
+        "//:node_modules/@types/ramda",
+        "//:node_modules/ramda",
         "//ts",
         "//ts/iter",
     ],
