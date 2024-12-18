@@ -19,19 +19,19 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
+        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
+        strip_prefix = "protobuf-29.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
         ],
     )
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
+        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
+        strip_prefix = "protobuf-29.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
         ],
     )
 
