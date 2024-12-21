@@ -330,34 +330,26 @@ export function FishbowlClient() {
 	);
 
 	const lastFrameTime = useRef<Option<number>>(None);
-	const animationframeRequestHnd = useRef<Option<number>>(None);
 
-	const onAnimationFrame = useCallback<FrameRequestCallback>(() => {
+	const onTick = useCallback<FrameRequestCallback>(() => {
 			const now = performance.now();
-		const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
+			const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
 
 		lastFrameTime.current = Some(now);
-
-		animationframeRequestHnd.current = Some(
-			requestAnimationFrame(onAnimationFrame)
-		)
 
 		return setParticles(tick(dt / 1000, particles, {
 			min: vector(0, 0),
 			max: size,
 		}));
-		}, [ particles, setParticles]);
+	}, [ particles, setParticles]);
+
+
 
 
 	useEffect(() => {
-		animationframeRequestHnd.current = Some(requestAnimationFrame(
-			onAnimationFrame
-		));
-
-		return () => void animationframeRequestHnd.current.and_then(hnd =>
-			cancelAnimationFrame(hnd)
-		 )
-	}, [ onAnimationFrame])
+		const hnd = setInterval(onTick, 1);
+		return () => clearInterval(hnd);
+	}, [ onTick ])
 
 
 	return <Fishbowl
