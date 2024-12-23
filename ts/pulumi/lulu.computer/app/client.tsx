@@ -5,6 +5,43 @@ import seedrandom from 'seedrandom';
 
 import { Iterable, range } from '#root/ts/iter/index.js';
 import { None, Option, Some } from '#root/ts/option/option.js';
+import * as date from '#root/ts/time/date.js';
+import { dayOfYear } from '#root/ts/time/day_of_year.js';
+import { daysInYear } from '#root/ts/time/days_in_year.js';
+
+const a = () => date.parse([9, "oct", 2022]);
+
+// Computes the day of the year for the target date (e.g., 9th October)
+const yearlyCycleHigh = (targetDate: Date): number => dayOfYear(targetDate);
+
+// Main function
+const cyclePos = (inputDate: Date, targetDate: Date = new Date(inputDate.getFullYear(), 9 - 1, 9)): number => {
+    const dayOfYearInput = dayOfYear(inputDate);
+    const daysInCurrentYear = daysInYear(inputDate);
+    const targetDayThisYear = yearlyCycleHigh(targetDate);
+
+    // Calculate surrounding years' target days
+    const targetDayNextYear = targetDayThisYear + daysInCurrentYear;
+    const targetDayLastYear = targetDayThisYear - daysInCurrentYear;
+
+    // Determine the closest target day
+    const closestTargetDay = [targetDayLastYear, targetDayThisYear, targetDayNextYear].reduce(
+        (prev, curr) => (Math.abs(curr - dayOfYearInput) < Math.abs(prev - dayOfYearInput) ? curr : prev)
+    );
+
+    // Calculate distance to the closest target date
+    const distance = Math.abs(closestTargetDay - dayOfYearInput);
+
+    // Maximum possible distance (half the year's length)
+    const maxDistance = Math.floor(daysInCurrentYear / 2);
+
+    // Normalised value
+    return 1 - distance / maxDistance;
+};
+
+
+
+
 
 
 export type Vector = { x: number; y: number };
@@ -18,6 +55,7 @@ enum ParticleType {
 	Bubble,
 	Fish,
 	Shark,
+	Heart,
 }
 
 /**
@@ -30,6 +68,7 @@ type Particle = {
 	mass: number;
 	radius: number;
 	type: ParticleType;
+	isBuoyant?: boolean
 };
 
 
@@ -43,6 +82,8 @@ function icon(p: Particle): string {
 	switch (p.type) {
 		case ParticleType.Bubble:
 			return "🫧"
+		case ParticleType.Heart:
+			return "💕"
 		case ParticleType.Fish:
 			return "🐠"
 		case ParticleType.Shark:
@@ -55,7 +96,7 @@ interface FieldEffect {
 }
 
 function buoyancy(self: Particle, _: Set<Particle>, __: number): Vector {
-	if (self.type != ParticleType.Bubble) return vector(0, 0);
+	if (!self.isBuoyant) return vector(0, 0);
 
 	return vector(0, self.mass)
 }
@@ -206,11 +247,19 @@ function spawnBubble(rng: () => number, max: Vector): Particle {
 		mass: 0.1 + radius * .5,
 
 		radius,
+		isBuoyant: true,
 
 
 		type: ParticleType.Bubble,
 
 		velocity: vector(rng() * 3, rng() * 3)
+	}
+}
+
+function spawnHeart(rng: () => number, max: Vector): Particle {
+	return {
+		...spawnBubble(rng, max),
+		type: ParticleType.Heart
 	}
 }
 
@@ -256,6 +305,14 @@ function spawnShark(rng: () => number, max: Vector): Particle {
 
 const ramp = "abcdefghijklmnopqrstuvwxyz".split("");
 
+function spawnRandomBubble(rng: () => number, max: Vector): Particle {
+	if (rng() < ((cyclePos(a())**2))*.5) {
+		return spawnHeart(rng, max)
+	}
+
+	return spawnBubble(rng, max);
+}
+
 function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 	const rnd = rng();
 
@@ -263,8 +320,7 @@ function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 
 	if (rnd < .5) return spawnFish(rng, max);
 
-	return spawnBubble(rng, max)
-
+	return spawnRandomBubble(rng, max)
 }
 
 const fields: FieldEffect[] = [
