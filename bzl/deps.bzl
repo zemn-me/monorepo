@@ -12,26 +12,26 @@ def fetch_dependencies():
 
     http_archive(
         name = "rules_proto",
-        sha256 = "798377bf1093d30cd740d347d1ec58c63701a32306daea44eb3b54459eef4494",
-        strip_prefix = "rules_proto-7.0.3",
-        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/7.0.3.tar.gz",
+        sha256 = "14a225870ab4e91869652cfd69ef2028277fc1dc4910d65d353b62d6e0ae21f4",
+        strip_prefix = "rules_proto-7.1.0",
+        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/7.1.0.tar.gz",
     )
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
+        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
+        strip_prefix = "protobuf-29.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
         ],
     )
 
     http_archive(
         name = "com_google_protobuf",
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
+        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
+        strip_prefix = "protobuf-29.2",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
         ],
     )
 
@@ -45,9 +45,9 @@ def fetch_dependencies():
 
     http_archive(
         name = "pulumi_cli_linux_x64",
-        sha256 = "e519d578bf5ddbf22d79eced3920d31ec158c8c23b8f6cf76162f9953c986810",
+        sha256 = "de608c40247d180379e532e4d38f5d2918d19b3a4fadad51f0df1f94e8e01602",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.143.0/pulumi-v3.143.0-linux-x64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-linux-x64.tar.gz",
         ],
         build_file_content = """
 exports_files(glob(["**/*"]))
@@ -57,9 +57,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_darwin_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.143.0/pulumi-v3.143.0-darwin-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-darwin-arm64.tar.gz",
         ],
-        sha256 = "36ae5065d5211fb1210be6ed0dfd7e850e7aea8c79e8a90c0cc1b3fb851b3070",
+        sha256 = "be5d10b4b5a4bb008c795e22f325509df1da7b50b3ef72de90350499b63711a9",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,
@@ -78,9 +78,9 @@ exports_files(glob(["**/*"]))
     http_archive(
         name = "pulumi_cli_linux_arm64",
         urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.143.0/pulumi-v3.143.0-linux-arm64.tar.gz",
+            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-linux-arm64.tar.gz",
         ],
-        sha256 = "fbb67a5f29e097eecc077f585fe45b0707b7c79b30401ae6110192400939d2ee",
+        sha256 = "d86a8cb329edbb5ad548559b7d4205db9c170a07f00aa183468b62253b886eba",
         build_file_content = """
 exports_files(glob(["**/*"]))
 """,

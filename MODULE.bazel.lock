@@ -32,8 +32,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.21.0/source.json": "2d81f4b844073682b855416a119ffec9e0d54f223c46f4fdcbfad44f432e440f",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/MODULE.bazel": "8eb29876512d3242af50a424300bec5c5f8957b455963df5f618cb7fd4e8ae19",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/source.json": "f48be9ca9f58adb817450c677659ed087d540d9f355f4e39098431cecd86ebf9",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.1.0/MODULE.bazel": "ffa30faf69f264154fb5f928b4eaafc37532498571fc0caa834d6b9eab6b8a45",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.1.0/source.json": "1d30dcaf6d1f32300b3a45bc691fceb388d27a9211cc7f38e10daa52871afde4",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.2.0/MODULE.bazel": "a0428ad9c50c9174af5657972332d660cd4f211fbfe24c83fb2d2487c1f5d2d1",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.2.0/source.json": "c89109a6dd96ae0f222283052c115dc1b52298d940239056bcb8ab8728a81e7a",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/MODULE.bazel": "596ccdc1e93c860ec60d0bfce361ecbfb9ea09362d01f9d1bc5666118bcb76ab",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/source.json": "71249b3b84336747ec1f6b5de30d7605194d0bb4ea5ea84015550c17b6e38879",
     "https://bcr.bazel.build/modules/bazel_features/0.1.0/MODULE.bazel": "47011d645b0f949f42ee67f2e8775188a9cf4a0a1528aa2fa4952f2fd00906fd",
@@ -47,8 +47,8 @@
     "https://bcr.bazel.build/modules/bazel_features/1.19.0/MODULE.bazel": "59adcdf28230d220f0067b1f435b8537dd033bfff8db21335ef9217919c7fb58",
     "https://bcr.bazel.build/modules/bazel_features/1.2.0/MODULE.bazel": "122b2b606622afbaa498913d54f52d9bcd2d19a5edd1bd6d6c5aa17441c4d5f9",
     "https://bcr.bazel.build/modules/bazel_features/1.21.0/MODULE.bazel": "675642261665d8eea09989aa3b8afb5c37627f1be178382c320d1b46afba5e3b",
-    "https://bcr.bazel.build/modules/bazel_features/1.22.0/MODULE.bazel": "5a5571e4155373c0463f568edfbcc1fb81dde7ec9e7d980999f1f03bff8d93cc",
-    "https://bcr.bazel.build/modules/bazel_features/1.22.0/source.json": "c5ff5b7ca29ad2838dadc497c793e327cd903c7d650afa215d0ef98169d04646",
+    "https://bcr.bazel.build/modules/bazel_features/1.23.0/MODULE.bazel": "fd1ac84bc4e97a5a0816b7fd7d4d4f6d837b0047cf4cbd81652d616af3a6591a",
+    "https://bcr.bazel.build/modules/bazel_features/1.23.0/source.json": "c72c61b722d7c3f884994fe647afeb2ed1ae66c437f8f370753551f7b4d8be7f",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
     "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
@@ -100,7 +100,8 @@
     "https://bcr.bazel.build/modules/protobuf/27.1/MODULE.bazel": "703a7b614728bb06647f965264967a8ef1c39e09e8f167b3ca0bb1fd80449c0d",
     "https://bcr.bazel.build/modules/protobuf/29.0-rc2/MODULE.bazel": "6241d35983510143049943fc0d57937937122baf1b287862f9dc8590fc4c37df",
     "https://bcr.bazel.build/modules/protobuf/29.0-rc3/MODULE.bazel": "33c2dfa286578573afc55a7acaea3cada4122b9631007c594bf0729f41c8de92",
-    "https://bcr.bazel.build/modules/protobuf/29.0-rc3/source.json": "c16a6488fb279ef578da7098e605082d72ed85fc8d843eaae81e7d27d0f4625d",
+    "https://bcr.bazel.build/modules/protobuf/29.1/MODULE.bazel": "557c3457560ff49e122ed76c0bc3397a64af9574691cb8201b4e46d4ab2ecb95",
+    "https://bcr.bazel.build/modules/protobuf/29.1/source.json": "04cca85dce26b895ed037d98336d860367fe09919208f2ad383f0df1aff63199",
     "https://bcr.bazel.build/modules/protobuf/3.19.0/MODULE.bazel": "6b5fbb433f760a99a22b18b6850ed5784ef0e9928a72668b66e4d7ccd47db9b0",
     "https://bcr.bazel.build/modules/protobuf/3.19.2/MODULE.bazel": "532ffe5f2186b69fdde039efe6df13ba726ff338c6bc82275ad433013fa10573",
     "https://bcr.bazel.build/modules/protobuf/3.19.6/MODULE.bazel": "9233edc5e1f2ee276a60de3eaa47ac4132302ef9643238f23128fea53ea12858",
@@ -178,7 +179,8 @@
     "https://bcr.bazel.build/modules/rules_proto/6.0.0/MODULE.bazel": "b531d7f09f58dce456cd61b4579ce8c86b38544da75184eadaf0a7cb7966453f",
     "https://bcr.bazel.build/modules/rules_proto/6.0.2/MODULE.bazel": "ce916b775a62b90b61888052a416ccdda405212b6aaeb39522f7dc53431a5e73",
     "https://bcr.bazel.build/modules/rules_proto/7.0.2/MODULE.bazel": "bf81793bd6d2ad89a37a40693e56c61b0ee30f7a7fdbaf3eabbf5f39de47dea2",
-    "https://bcr.bazel.build/modules/rules_proto/7.0.2/source.json": "1e5e7260ae32ef4f2b52fd1d0de8d03b606a44c91b694d2f1afb1d3b28a48ce1",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/MODULE.bazel": "002d62d9108f75bb807cd56245d45648f38275cb3a99dcd45dfb864c5d74cb96",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/source.json": "39f89066c12c24097854e8f57ab8558929f9c8d474d34b2c00ac04630ad8940e",
     "https://bcr.bazel.build/modules/rules_python/0.10.2/MODULE.bazel": "cc82bc96f2997baa545ab3ce73f196d040ffb8756fd2d66125a530031cd90e5f",
     "https://bcr.bazel.build/modules/rules_python/0.18.0/MODULE.bazel": "4927032417a3ad1ff220c3e6f940b6811387151aec9e43d3ba76fd7ac8962be8",
     "https://bcr.bazel.build/modules/rules_python/0.22.1/MODULE.bazel": "26114f0c0b5e93018c0c066d6673f1a2c3737c7e90af95eff30cfee38d0bbac7",
@@ -245,7 +247,7 @@
     },
     "@@aspect_rules_js~//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "u6BlrGHj8vG9dinB/xG1so/gKjnl4pVXEmPyqihOLVk=",
+        "bzlTransitiveDigest": "Sp9+wAl9bKuyuo65G5poQuzMva4VtPtawIsBo7Z7AGM=",
         "usagesDigest": "UhUmHE4EEvBWdWNjgY/D41+x42nDh5PI6CrKUYaf/qA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -467,7 +469,7 @@
     "@@aspect_rules_swc~//swc:extensions.bzl%swc": {
       "general": {
         "bzlTransitiveDigest": "1rj9VvXgoeeHULdiG3D2hqopLJ3rHtpJIeDAJ2xpjp8=",
-        "usagesDigest": "7Anoc0dHMLd9xhH742Ic8mooskXemLwfouOr720O82c=",
+        "usagesDigest": "9e1XK+pn61srZzBw2/vPeYgD1Pj+jahjB6+d/SMu43U=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1195,7 +1197,7 @@
     },
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "cSgpaJTlVwhIhMwBj5/uzZvy2F+hhZTMg6pFPTGEDGk=",
+        "bzlTransitiveDigest": "tSFCgHR/xGxzbUpoIM6IJBi3LkPglkNx8iXpSPFoGaM=",
         "usagesDigest": "6nBkfFa2UUUKVcg6LG4KCmdjaCDw4j5WPIVL1UXueN4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1311,7 +1313,8 @@
                 "ProtoInfo": "8.0.0",
                 "PyCcLinkParamsProvider": "8.0.0",
                 "PyInfo": "8.0.0",
-                "PyRuntimeInfo": "8.0.0"
+                "PyRuntimeInfo": "8.0.0",
+                "cc_proto_aspect": "8.0.0"
               }
             }
           },
@@ -1726,12 +1729,12 @@
     },
     "@@rules_python~//python/extensions:pip.bzl%pip": {
       "general": {
-        "bzlTransitiveDigest": "UZxRX9KhYO5E6eIKF+hm3/CTxZV9tDwH+LQ32j6M3qs=",
-        "usagesDigest": "bYvMM7Rehyzl+1UP6jmS1NMjqYq4LNrOInWPrN/tMsM=",
+        "bzlTransitiveDigest": "Yo4Ao+352NgNETChKwAu9ybL8Sqraw2BO0bpV0O68AY=",
+        "usagesDigest": "lHRGel7Fm7M2RBqhw/TXBgBuirfaOQPyIa3vgfinC3A=",
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "8175b4c8df50ae2f22d1706961884beeb54e7da27bd2447018314a175981997d",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "2d7afadd1c5a1d94182151a7ae2364f64203631107a90235a0998e9b58f94893",
+          "@@//requirements.txt": "875ba764d4909c869da767bfde0972d77fc93bd47d3a3bee040f83b47681e82c",
           "@@rules_python~//tools/publish/requirements_windows.txt": "7673adc71dc1a81d3661b90924d7a7c0fc998cd508b3cb4174337cef3f2de556",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "2994136eab7e57b083c3de76faf46f70fad130bc8e7360a7fed2b288b69e79dc"
@@ -1889,7 +1892,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "click==8.1.7     --hash=sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28     --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"
+              "requirement": "click==8.1.8     --hash=sha256:63c132bbbed01578a06712a2d1f497bb62d9c1c0d329b7903a866228027263b2     --hash=sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a"
             }
           },
           "pip_313_comm": {
@@ -2019,7 +2022,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "ipython==8.30.0     --hash=sha256:85ec56a7e20f6c38fce7727dcca699ae4ffc85985aa7b23635a8008f918ae321     --hash=sha256:cb0a405a306d2995a5cbb9901894d240784a9f341394c6ba3f4fe8c6eb89ff6e"
+              "requirement": "ipython==8.31.0     --hash=sha256:46ec58f8d3d076a61d128fe517a51eb730e3aaf0c184ea8c17d16e366660c6a6     --hash=sha256:b6a2274606bec6166405ff05e54932ed6e5cfecaca1fc05f2cacde7bb074d70b"
             }
           },
           "pip_313_ipywidgets": {
@@ -2149,7 +2152,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "jupyter-events==0.10.0     --hash=sha256:4b72130875e59d57716d327ea70d3ebc3af1944d3717e5a498b8a06c6c159960     --hash=sha256:670b8229d3cc882ec782144ed22e0d29e1c2d639263f92ca8383e66682845e22"
+              "requirement": "jupyter-events==0.11.0     --hash=sha256:36399b41ce1ca45fe8b8271067d6a140ffa54cec4028e95491c93b78a855cacf     --hash=sha256:c0bc56a37aac29c1fbc3bcfbddb8c8c49533f9cf11f1c4e6adadba936574ab90"
             }
           },
           "pip_313_jupyter_lsp": {
@@ -2169,7 +2172,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "jupyter-server==2.14.2     --hash=sha256:47ff506127c2f7851a17bf4713434208fc490955d0e8632e95014a9a9afbeefd     --hash=sha256:66095021aa9638ced276c248b1d81862e4c50f292d575920bbe960de1c56b12b"
+              "requirement": "jupyter-server==2.15.0     --hash=sha256:872d989becf83517012ee669f09604aa4a28097c0bd90b2f424310156c2cdae3     --hash=sha256:9d446b8697b4f7337a1b7cdcac40778babdd93ba614b6d68ab1c0c918f1c4084"
             }
           },
           "pip_313_jupyter_server_terminals": {
@@ -2269,7 +2272,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "mypy==1.13.0     --hash=sha256:0246bcb1b5de7f08f2826451abd947bf656945209b140d16ed317f65a17dc7dc     --hash=sha256:0291a61b6fbf3e6673e3405cfcc0e7650bebc7939659fdca2702958038bd835e     --hash=sha256:0730d1c6a2739d4511dc4253f8274cdd140c55c32dfb0a4cf8b7a43f40abfa6f     --hash=sha256:07de989f89786f62b937851295ed62e51774722e5444a27cecca993fc3f9cd74     --hash=sha256:100fac22ce82925f676a734af0db922ecfea991e1d7ec0ceb1e115ebe501301a     --hash=sha256:164f28cb9d6367439031f4c81e84d3ccaa1e19232d9d05d37cb0bd880d3f93c2     --hash=sha256:20c7ee0bc0d5a9595c46f38beb04201f2620065a93755704e141fcac9f59db2b     --hash=sha256:3790ded76f0b34bc9c8ba4def8f919dd6a46db0f5a6610fb994fe8efdd447f73     --hash=sha256:39bb21c69a5d6342f4ce526e4584bc5c197fd20a60d14a8624d8743fffb9472e     --hash=sha256:3ddb5b9bf82e05cc9a627e84707b528e5c7caaa1c55c69e175abb15a761cec2d     --hash=sha256:3e38b980e5681f28f033f3be86b099a247b13c491f14bb8b1e1e134d23bb599d     --hash=sha256:4bde84334fbe19bad704b3f5b78c4abd35ff1026f8ba72b29de70dda0916beb6     --hash=sha256:51f869f4b6b538229c1d1bcc1dd7d119817206e2bc54e8e374b3dfa202defcca     --hash=sha256:581665e6f3a8a9078f28d5502f4c334c0c8d802ef55ea0e7276a6e409bc0d82d     --hash=sha256:5c7051a3461ae84dfb5dd15eff5094640c61c5f22257c8b766794e6dd85e72d5     --hash=sha256:5d5092efb8516d08440e36626f0153b5006d4088c1d663d88bf79625af3d1d62     --hash=sha256:6607e0f1dd1fb7f0aca14d936d13fd19eba5e17e1cd2a14f808fa5f8f6d8f60a     --hash=sha256:7029881ec6ffb8bc233a4fa364736789582c738217b133f1b55967115288a2bc     --hash=sha256:7b2353a44d2179846a096e25691d54d59904559f4232519d420d64da6828a3a7     --hash=sha256:7bcb0bb7f42a978bb323a7c88f1081d1b5dee77ca86f4100735a6f541299d8fb     --hash=sha256:7bfd8836970d33c2105562650656b6846149374dc8ed77d98424b40b09340ba7     --hash=sha256:7f5b7deae912cf8b77e990b9280f170381fdfbddf61b4ef80927edd813163732     --hash=sha256:8a21be69bd26fa81b1f80a61ee7ab05b076c674d9b18fb56239d72e21d9f4c80     --hash=sha256:9c250883f9fd81d212e0952c92dbfcc96fc237f4b7c92f56ac81fd48460b3e5a     --hash=sha256:9f73dba9ec77acb86457a8fc04b5239822df0c14a082564737833d2963677dbc     --hash=sha256:a0affb3a79a256b4183ba09811e3577c5163ed06685e4d4b46429a271ba174d2     --hash=sha256:a4c1bfcdbce96ff5d96fc9b08e3831acb30dc44ab02671eca5953eadad07d6d0     --hash=sha256:a6789be98a2017c912ae6ccb77ea553bbaf13d27605d2ca20a76dfbced631b24     --hash=sha256:a7b44178c9760ce1a43f544e595d35ed61ac2c3de306599fa59b38a6048e1aa7     --hash=sha256:bde31fc887c213e223bbfc34328070996061b0833b0a4cfec53745ed61f3519b     --hash=sha256:c5fc54dbb712ff5e5a0fca797e6e0aa25726c7e72c6a5850cfd2adbc1eb0a372     --hash=sha256:de2904956dac40ced10931ac967ae63c5089bd498542194b436eb097a9f77bc8"
+              "requirement": "mypy==1.14.0     --hash=sha256:00df23b42e533e02a6f0055e54de9a6ed491cd8b7ea738647364fd3a39ea7efc     --hash=sha256:0b16738b1d80ec4334654e89e798eb705ac0c36c8a5c4798496cd3623aa02286     --hash=sha256:10065fcebb7c66df04b05fc799a854b1ae24d9963c8bb27e9064a9bdb43aa8ad     --hash=sha256:14117b9da3305b39860d0aa34b8f1ff74d209a368829a584eb77524389a9c13e     --hash=sha256:1628c5c3ce823d296e41e2984ff88c5861499041cb416a8809615d0c1f41740e     --hash=sha256:1daca283d732943731a6a9f20fdbcaa927f160bc51602b1d4ef880a6fb252015     --hash=sha256:2238d7f93fc4027ed1efc944507683df3ba406445a2b6c96e79666a045aadfab     --hash=sha256:273e70fcb2e38c5405a188425aa60b984ffdcef65d6c746ea5813024b68c73dc     --hash=sha256:342de51c48bab326bfc77ce056ba08c076d82ce4f5a86621f972ed39970f94d8     --hash=sha256:3498cb55448dc5533e438cd13d6ddd28654559c8c4d1fd4b5ca57a31b81bac01     --hash=sha256:390dfb898239c25289495500f12fa73aa7f24a4c6d90ccdc165762462b998d63     --hash=sha256:3fa76988dc760da377c1e5069200a50d9eaaccf34f4ea18428a3337034ab5a44     --hash=sha256:56b2280cedcb312c7a79f5001ae5325582d0d339bce684e4a529069d0e7ca1e7     --hash=sha256:585ed36031d0b3ee362e5107ef449a8b5dfd4e9c90ccbe36414ee405ee6b32ba     --hash=sha256:6e73c8a154eed31db3445fe28f63ad2d97b674b911c00191416cf7f6459fd49a     --hash=sha256:74e925649c1ee0a79aa7448baf2668d81cc287dc5782cff6a04ee93f40fb8d3f     --hash=sha256:7a52f26b9c9b1664a60d87675f3bae00b5c7f2806e0c2800545a32c325920bcc     --hash=sha256:7e026d55ddcd76e29e87865c08cbe2d0104e2b3153a523c529de584759379d3d     --hash=sha256:7e68047bedb04c1c25bba9901ea46ff60d5eaac2d71b1f2161f33107e2b368eb     --hash=sha256:7fadb29b77fc14a0dd81304ed73c828c3e5cde0016c7e668a86a3e0dfc9f3af3     --hash=sha256:822dbd184d4a9804df5a7d5335a68cf7662930e70b8c1bc976645d1509f9a9d6     --hash=sha256:af98c5a958f9c37404bd4eef2f920b94874507e146ed6ee559f185b8809c44cc     --hash=sha256:bf4ec4980bec1e0e24e5075f449d014011527ae0055884c7e3abc6a99cd2c7f1     --hash=sha256:c7b243408ea43755f3a21a0a08e5c5ae30eddb4c58a80f415ca6b118816e60aa     --hash=sha256:cdb5563c1726c85fb201be383168f8c866032db95e1095600806625b3a648cb7     --hash=sha256:d5326ab70a6db8e856d59ad4cb72741124950cbbf32e7b70e30166ba7bbf61dd     --hash=sha256:e86aaeaa3221a278c66d3d673b297232947d873773d61ca3ee0e28b2ff027179     --hash=sha256:e8c8387e5d9dff80e7daf961df357c80e694e942d9755f3ad77d69b0957b8e3f     --hash=sha256:e971c1c667007f9f2b397ffa80fa8e1e0adccff336e5e77e74cb5f22868bee87     --hash=sha256:e9f6f4c0b27401d14c483c622bc5105eff3911634d576bbdf6695b9a7c1ba741     --hash=sha256:f0b343a1d3989547024377c2ba0dca9c74a2428ad6ed24283c213af8dbb0710b     --hash=sha256:fbb7d683fa6bdecaa106e8368aa973ecc0ddb79a9eaeb4b821591ecd07e9e03c"
             }
           },
           "pip_313_mypy_extensions": {
@@ -2289,7 +2292,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "nbclient==0.10.1     --hash=sha256:3e93e348ab27e712acd46fccd809139e356eb9a31aab641d1a7991a6eb4e6f68     --hash=sha256:949019b9240d66897e442888cfb618f69ef23dc71c01cb5fced8499c2cfc084d"
+              "requirement": "nbclient==0.10.2     --hash=sha256:4ffee11e788b4a27fabeb7955547e4318a5298f34342a4bfd01f2e1faaeadc3d     --hash=sha256:90b7fc6b810630db87a6d0c2250b1f0ab4cf4d3c27a299b0cde78a4ed3fd9193"
             }
           },
           "pip_313_nbconvert": {
@@ -2459,7 +2462,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "psutil==6.1.0     --hash=sha256:000d1d1ebd634b4efb383f4034437384e44a6d455260aaee2eca1e9c1b55f047     --hash=sha256:045f00a43c737f960d273a83973b2511430d61f283a44c96bf13a6e829ba8fdc     --hash=sha256:0895b8414afafc526712c498bd9de2b063deaac4021a3b3c34566283464aff8e     --hash=sha256:1209036fbd0421afde505a4879dee3b2fd7b1e14fee81c0069807adcbbcca747     --hash=sha256:1ad45a1f5d0b608253b11508f80940985d1d0c8f6111b5cb637533a0e6ddc13e     --hash=sha256:353815f59a7f64cdaca1c0307ee13558a0512f6db064e92fe833784f08539c7a     --hash=sha256:498c6979f9c6637ebc3a73b3f87f9eb1ec24e1ce53a7c5173b8508981614a90b     --hash=sha256:5cd2bcdc75b452ba2e10f0e8ecc0b57b827dd5d7aaffbc6821b2a9a242823a76     --hash=sha256:6d3fbbc8d23fcdcb500d2c9f94e07b1342df8ed71b948a2649b5cb060a7c94ca     --hash=sha256:6e2dcd475ce8b80522e51d923d10c7871e45f20918e027ab682f94f1c6351688     --hash=sha256:9118f27452b70bb1d9ab3198c1f626c2499384935aaf55388211ad982611407e     --hash=sha256:9dcbfce5d89f1d1f2546a2090f4fcf87c7f669d1d90aacb7d7582addece9fb38     --hash=sha256:a8506f6119cff7015678e2bce904a4da21025cc70ad283a53b099e7620061d85     --hash=sha256:a8fb3752b491d246034fa4d279ff076501588ce8cbcdbb62c32fd7a377d996be     --hash=sha256:c0e0c00aa18ca2d3b2b991643b799a15fc8f0563d2ebb6040f64ce8dc027b942     --hash=sha256:d905186d647b16755a800e7263d43df08b790d709d575105d419f8b6ef65423a     --hash=sha256:ff34df86226c0227c52f38b919213157588a678d049688eded74c76c8ba4a5d0"
+              "requirement": "psutil==6.1.1     --hash=sha256:018aeae2af92d943fdf1da6b58665124897cfc94faa2ca92098838f83e1b1bca     --hash=sha256:0bdd4eab935276290ad3cb718e9809412895ca6b5b334f5a9111ee6d9aff9377     --hash=sha256:1924e659d6c19c647e763e78670a05dbb7feaf44a0e9c94bf9e14dfc6ba50468     --hash=sha256:33431e84fee02bc84ea36d9e2c4a6d395d479c9dd9bba2376c1f6ee8f3a4e0b3     --hash=sha256:384636b1a64b47814437d1173be1427a7c83681b17a450bfc309a1953e329603     --hash=sha256:8be07491f6ebe1a693f17d4f11e69d0dc1811fa082736500f649f79df7735303     --hash=sha256:8df0178ba8a9e5bc84fed9cfa61d54601b371fbec5c8eebad27575f1e105c0d4     --hash=sha256:97f7cb9921fbec4904f522d972f0c0e1f4fabbdd4e0287813b21215074a0f160     --hash=sha256:9ccc4316f24409159897799b83004cb1e24f9819b0dcf9c0b68bdcb6cefee6a8     --hash=sha256:b6e06c20c05fe95a3d7302d74e7097756d4ba1247975ad6905441ae1b5b66003     --hash=sha256:ca9609c77ea3b8481ab005da74ed894035936223422dc591d6772b147421f777     --hash=sha256:cf8496728c18f2d0b45198f06895be52f36611711746b7f30c464b422b50e2f5     --hash=sha256:eaa912e0b11848c4d9279a93d7e2783df352b082f40111e078388701fd479e53     --hash=sha256:f35cfccb065fff93529d2afb4a2e89e363fe63ca1e4a5da22b603a85833c2649     --hash=sha256:fc0ed7fe2231a444fc219b9c42d0376e0a9a1a72f16c5cfa0f68d19f1a0663e8"
             }
           },
           "pip_313_ptyprocess": {
@@ -2609,7 +2612,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "ruff==0.8.3     --hash=sha256:01b14b2f72a37390c1b13477c1c02d53184f728be2f3ffc3ace5b44e9e87b90d     --hash=sha256:19048f2f878f3ee4583fc6cb23fb636e48c2635e30fb2022b3a1cd293402f964     --hash=sha256:1ae441ce4cf925b7f363d33cd6570c51435972d697e3e58928973994e56e1452     --hash=sha256:53babd6e63e31f4e96ec95ea0d962298f9f0d9cc5990a1bbb023a6baf2503a82     --hash=sha256:5be450bb18f23f0edc5a4e5585c17a56ba88920d598f04a06bd9fd76d324cb20     --hash=sha256:5e7558304353b84279042fc584a4f4cb8a07ae79b2bf3da1a7551d960b5626d3     --hash=sha256:6567be9fb62fbd7a099209257fef4ad2c3153b60579818b31a23c886ed4147ea     --hash=sha256:75fb782f4db39501210ac093c79c3de581d306624575eddd7e4e13747e61ba18     --hash=sha256:7f26bc76a133ecb09a38b7868737eded6941b70a6d34ef53a4027e83913b6502     --hash=sha256:8d5d273ffffff0acd3db5bf626d4b131aa5a5ada1276126231c4174543ce20d6     --hash=sha256:8faeae3827eaa77f5721f09b9472a18c749139c891dbc17f45e72d8f2ca1f8fc     --hash=sha256:9c0a60a825e3e177116c84009d5ebaa90cf40dfab56e1358d1df4e29a9a14b13     --hash=sha256:c356e770811858bd20832af696ff6c7e884701115094f427b64b25093d6d932d     --hash=sha256:d7c65bc0cadce32255e93c57d57ecc2cca23149edd52714c0c5d6fa11ec328cd     --hash=sha256:db503486e1cf074b9808403991663e4277f5c664d3fe237ee0d994d1305bb060     --hash=sha256:e4d66a21de39f15c9757d00c50c8cdd20ac84f55684ca56def7891a025d7e939     --hash=sha256:f7df94f57d7418fa7c3ffb650757e0c2b96cf2501a0b192c18e4fb5571dfada9     --hash=sha256:fe2756edf68ea79707c8d68b78ca9a58ed9af22e430430491ee03e718b5e4936"
+              "requirement": "ruff==0.8.4     --hash=sha256:0d5f89f254836799af1615798caa5f80b7f935d7a670fad66c5007928e57ace8     --hash=sha256:13e9ec6d6b55f6da412d59953d65d66e760d583dd3c1c72bf1f26435b5bfdbae     --hash=sha256:552fb6d861320958ca5e15f28b20a3d071aa83b93caee33a87b471f99a6c0835     --hash=sha256:58072f0c06080276804c6a4e21a9045a706584a958e644353603d36ca1eb8a60     --hash=sha256:6ddf5d654ac0d44389f6bf05cee4caeefc3132a64b58ea46738111d687352296     --hash=sha256:736272574e97157f7edbbb43b1d046125fce9e7d8d583d5d65d0c9bf2c15addf     --hash=sha256:8ef06f66f4a05c3ddbc9121a8b0cecccd92c5bf3dd43b5472ffe40b8ca10f0f8     --hash=sha256:9183dd615d8df50defa8b1d9a074053891ba39025cf5ae88e8bcb52edcc4bf08     --hash=sha256:97d9aefef725348ad77d6db98b726cfdb075a40b936c7984088804dfd38268a7     --hash=sha256:9f8402b7c4f96463f135e936d9ab77b65711fcd5d72e5d67597b543bbb43cf3f     --hash=sha256:ab78e33325a6f5374e04c2ab924a3367d69a0da36f8c9cb6b894a62017506111     --hash=sha256:bf197b98ed86e417412ee3b6c893f44c8864f816451441483253d5ff22c0e81e     --hash=sha256:c41319b85faa3aadd4d30cb1cffdd9ac6b89704ff79f7664b853785b48eccdf3     --hash=sha256:e248b1f0fa2749edd3350a2a342b67b43a2627434c059a063418e3d375cfe643     --hash=sha256:e4e56b3baa9c23d324ead112a4fdf20db9a3f8f29eeabff1355114dd96014604     --hash=sha256:e5fe710ab6061592521f902fca7ebcb9fabd27bc7c57c764298b1c1f15fff720     --hash=sha256:f21a1143776f8656d7f364bd264a9d60f01b7f52243fbe90e7670c0dfe0cf65d     --hash=sha256:ffb60904651c00a1e0b8df594591770018a0f04587f7deeb3838344fe3adabac"
             }
           },
           "pip_313_send2trash": {
