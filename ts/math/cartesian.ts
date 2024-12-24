@@ -112,7 +112,14 @@ export function z(p: [...Point<3>, ...unknown[]]): number {
 	return p[2]![0]!;
 }
 
-export { add, mul, sub } from '#root/ts/math/matrix.js';
+export { mul, sub } from '#root/ts/math/matrix.js';
+
+export const add =
+	<N extends number>(
+		a: Point<N>,
+		b: Point<N>
+	): Point<N> =>
+		Matrix.add<1, N>(a, b);
 
 /**
  * For a hyperrectangle of N dimensions defined by a minimum
