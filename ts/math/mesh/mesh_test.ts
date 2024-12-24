@@ -9,7 +9,7 @@ import { matLineToPoints } from "#root/ts/math/raster.js";
 
 it('should render a cube mesh', () => {
 	const c =
-		cube(point<3>(0, 0, 0), 1);
+		cube(1);
 	const cam = (pt: Point3D) =>
 		camera(
 			point<3>(6, 2, 3),
