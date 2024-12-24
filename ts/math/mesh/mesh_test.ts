@@ -4,7 +4,7 @@ import { Iterable } from "#root/ts/iter/index.js";
 import { camera } from "#root/ts/math/camera.js"
 import { plot2D } from "#root/ts/math/canvas/braille/braille.js";
 import { point, Point2D, Point3D, x, y } from "#root/ts/math/cartesian.js"
-import { Centre, cube, mesh2Edges } from "#root/ts/math/mesh/mesh.js";
+import { Centre, cube, mesh2Edges, translateMesh } from "#root/ts/math/mesh/mesh.js";
 import { matLineToPoints } from "#root/ts/math/raster.js";
 
 it('should render a cube mesh', () => {
@@ -65,5 +65,50 @@ it('should render a cube mesh', () => {
 ⠀⠀⠐⡁⢀⠠⠀⠂⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\
 `)
+
+})
+
+
+
+it.skip.each([
+	[
+		'', point<3>(-2, 0, 0)
+	],
+	[ '', point<3>(0, -2, 0)],
+	['', point<3>(0, 0, -2) ],
+])('test lookAt', (expd, trans) => {
+	const c =
+		translateMesh(
+			trans
+		)(
+			cube(1)
+		)
+	const cam = (pt: Point3D) =>
+		camera(
+			point<3>(6, 2, 3),
+			c[Centre], pt
+		);
+
+	const l =
+		Iterable(
+			mesh2Edges(
+				c
+			)).map((
+				[start, end]
+			) => [
+				cam(start),
+				cam(end)
+				] as [
+					Point2D,
+					Point2D
+				])
+			.map(matLineToPoints)
+				.flatten()
+
+	expect(plot2D(
+		l.to_array(),
+		x,
+		y, 210/2
+	)).toEqual(expd)
 
 })
