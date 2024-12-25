@@ -1,70 +1,46 @@
-import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
-import { cross, dot, magnitude, normalise, sub } from "#root/ts/math/matrix.js";
-import { Quaternion } from "#root/ts/math/quaternion.js";
-const EPSILON = 1e-6;
+// lookAtMatrix.ts
+import type { Point3D } from "#root/ts/math/cartesian.js";
+import { point, x, y, z } from "#root/ts/math/cartesian.js";
+import type { Matrix } from "#root/ts/math/matrix.js";
+import { as, cross, dot, normalise, sub } from "#root/ts/math/matrix.js";
+import { matrixToQuaternion } from "#root/ts/math/matrix_to_quaternion.js";
 
 export const defaultUp = point<3>(0, 1, 0);
 
-/**
- * Constructs a quaternion that rotates a default camera orientation:
- * - Default forward: (0,0,1)
- * - Default up: (0,1,0)
- *
- * So that it points from 'from' towards 'to', respecting the given 'up' vector.
- */
-export function lookAt(from: Point3D, to: Point3D, up: Point3D = defaultUp): Quaternion {
-	const f0 = point<3>( 0, 0, 1 );
-	const u0 = defaultUp// default up
+export function lookAtMatrix(
+  eye: Point3D,
+  centre: Point3D,
+  up: Point3D = defaultUp,
+): Matrix<4, 4, number> {
+  // Forward vector (camera facing direction)
+  const forward = normalise<3>(sub<1, 3>(centre, eye));
 
-	// Desired forward direction
-	const f = normalise<3>(sub<1, 3>(to, from));
+  // Right vector
+  const right = normalise<3>(cross(forward, up));
 
-	// Step 1: Rotate forward
-	const dotF = dot<3>(f0, f);
-	let qF: Quaternion;
+  // True up vector
+  const newUp = cross(right, forward);
 
-	if (dotF > 1.0 - EPSILON) {
-		// f0 and f are almost the same
-		qF = new Quaternion(0, 0, 0, 1);
-	} else if (dotF < -1.0 + EPSILON) {
-		// f0 and f are opposite, rotate 180° around an axis perpendicular to f0
-		let axis = cross(u0, f0);
-		if (magnitude(axis) < EPSILON) {
-			// If u0 and f0 are also collinear, pick another axis
-			axis = point<3>(1, 0, 0);
-		} else {
-			axis = normalise<3>(axis);
-		}
-		qF = Quaternion.fromAxisAngle(axis, Math.PI);
-	} else {
-		// General case
-		let axis = cross(f0, f);
-		axis = normalise<3>(axis);
-		const angle = Math.acos(dotF);
-		qF = Quaternion.fromAxisAngle(axis, angle);
-	}
+  // Negated dot products for translation
+  const tx = -dot<3>(right, eye);
+  const ty = -dot<3>(newUp, eye);
+  const tz = -dot<3>(forward, eye);
 
-	// Step 2: After applying qF, rotate u0 -> u'
-	const uPrime = qF.rotateVector(u0);
+  return as<4, 4, number>([
+    [ x(right), x(newUp), x(forward), 0 ],
+    [ y(right), y(newUp), y(forward), 0 ],
+    [ z(right), z(newUp), z(forward), 0 ],
+    [ tx, ty, tz, 1 ],
+  ]);
+}
 
-	// Step 3: Rotate around f to align uPrime with up
-	const dotU = dot<3>(uPrime, up);
-	if (dotU > 1.0 - EPSILON) {
-		// Already aligned
-		return qF;
-	}
-	if (dotU < -1.0 + EPSILON) {
-		// Opposite direction, rotate 180° around f
-		const fLen = magnitude(f);
-		const fUnit = (fLen > EPSILON) ? point<3>(x(f)/fLen, y(f)/fLen, z(f)/fLen ) : point<3>(0, 0, 1);
-		const qRoll = Quaternion.fromAxisAngle(fUnit, Math.PI);
-		return qRoll.multiply(qF).normalize();
-	}
 
-	const angleUp = Math.acos(dotU);
-	const fLen = magnitude(f);
-	const fUnit = (fLen > EPSILON) ? point<3>(x( f )/fLen, y( f )/fLen, z(f ) /fLen ) : point<3>(0, 0, 1);
 
-	const qRoll = Quaternion.fromAxisAngle(fUnit, angleUp);
-	return qRoll.multiply(qF).normalize();
+export function lookAt(
+	eye: Point3D,
+	centre: Point3D,
+	up: Point3D = point<3>(0, 1, 0),
+) {
+	return matrixToQuaternion(
+		lookAtMatrix(eye, centre, up))
 }
