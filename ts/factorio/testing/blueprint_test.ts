@@ -11,6 +11,7 @@ import { balancers } from '#root/ts/factorio/testing/data/balancers.js';
 import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
 import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
+import { reactor } from '#root/ts/factorio/testing/data/reactor.js';
 import { starterBase } from '#root/ts/factorio/testing/data/starterBase.js';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
 
@@ -197,5 +198,9 @@ describe('some problematic blueprints', () => {
 
 	test('starter base', () => {
 		expect(() => BlueprintString.parse(starterBase)).not.toThrow();
+	});
+
+	test('reactor', () => {
+		expect(() => BlueprintString.parse(reactor)).not.toThrow();
 	});
 });
