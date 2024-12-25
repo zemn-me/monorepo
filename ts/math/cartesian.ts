@@ -64,6 +64,10 @@ export function length(l: Line2D<2>): number {
 	return magnitude(Matrix.sub<1, 2>(l[1], l[0]));
 }
 
+export function clamp3DTo2D(pt: Point<3>): Point<2> {
+	return point<2>(x(pt), y(pt))
+}
+
 export function magnitude(l: Point): number {
 	return vecMag(l.map(([v]) => v))
 }
