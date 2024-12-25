@@ -29,8 +29,8 @@ export interface Mesh<N extends number = number> {
 }
 
 export function mesh2Edges<N extends number>(m: Mesh<N>) {
-	return map(m[Edges], ([start, end]) =>
-		[m[Verticies][start], m[Verticies][end]] as const
+	return map(m[Edges], ([start, end]): Cartesian.Line3D<2> =>
+		[m[Verticies][start]!, m[Verticies][end]!]
 	)
 }
 
