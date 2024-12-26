@@ -145,54 +145,6 @@ exports_files(glob(["**/*"]))
     # FFMPEG #
     ##########
 
-    http_archive(
-        name = "ffmpeg_linux_x64",
-        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
-        strip_prefix = "ffmpeg-5.1.1-amd64-static",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-        """,
-        sha256 = "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
-    )
-
-    http_archive(
-        name = "ffmpeg_linux_i686",
-        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-i686-static.tar.xz",
-        strip_prefix = "ffmpeg-6.0-i686-static",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-        """,
-        sha256 = "df4ff17a39758f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
-    )
-
-    http_archive(
-        name = "ffmpeg_linux_arm64",
-        url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-arm64-static.tar.xz",
-        strip_prefix = "ffmpeg-5.1.1-arm64-static",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-        """,
-        sha256 = "49f9beb7690afcbd4832d3577d9f0c87374d63c39cde5097dfd52d61b24b4855",
-    )
-
-    http_archive(
-        name = "ffmpeg_macos_x64",
-        url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-6.0.zip",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-        """,
-        sha256 = "9a810d222862a7230fd7035c91e32beb605af7501c3517580f2bc1eb8faddacc",
-    )
-
-    http_archive(
-        name = "ffmpeg_macos_arm64",
-        url = "https://www.osxexperts.net/ffmpeg6arm.zip",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-        """,
-        sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
-    )
-
     chromedriver_buildfile = """
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 
