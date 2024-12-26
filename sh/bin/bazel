@@ -2,15 +2,13 @@
 
 # Wrapper for Bazelisk
 
-set -x
-
 # Step 1: Check if `bazelisk` exists in PATH
 if command -v bazelisk &> /dev/null; then
   bazelisk "$@"
 
 # Step 2: Check if `go` is available in PATH
 elif command -v go &> /dev/null; then
-  strace go run github.com/bazelbuild/bazelisk@latest "$@"
+  go run github.com/bazelbuild/bazelisk@latest "$@"
 
 # Step 3: Check if `npx` is available in PATH
 elif command -v npx &> /dev/null; then
@@ -22,5 +20,3 @@ else
   exit 1
 fi
 
-
-set +x
