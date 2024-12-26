@@ -165,6 +165,31 @@ http_archive(
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
 
+chromium_buildfile = """
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+copy_to_bin(
+name = "in_bin",
+srcs = [ ":binary" ],
+visibility = [ "//visibility:public" ]
+)
+
+native_binary(
+name = "binary",
+src = "chrome-linux64/chrome",
+data = glob(["**/*"], ["chrome-linux64/chrome"]),
+out = "chromium"
+)
+"""
+
+http_archive(
+    name = "com_googleapis_storage_chromium_linux_x64",
+    build_file_content = chromium_buildfile,
+    sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
+)
+
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(

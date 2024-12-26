@@ -231,31 +231,6 @@ copy_to_bin(
         build_file_content = chromedriver_buildfile,
     )
 
-    chromium_buildfile = """
-load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
-load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
-
-copy_to_bin(
-    name = "in_bin",
-    srcs = [ ":binary" ],
-    visibility = [ "//visibility:public" ]
-)
-
-native_binary(
-    name = "binary",
-    src = "chrome-linux64/chrome",
-    data = glob(["**/*"], ["chrome-linux64/chrome"]),
-    out = "chromium"
-)
-    """
-
-    http_archive(
-        name = "com_googleapis_storage_chromium_linux_x64",
-        sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
-        url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
-        build_file_content = chromium_buildfile,
-    )
-
     http_archive(
         name = "com_github_factoriolab",
         strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
