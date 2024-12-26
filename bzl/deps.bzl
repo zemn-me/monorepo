@@ -193,44 +193,6 @@ exports_files(glob(["**/*"]))
         sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
     )
 
-    chromedriver_buildfile = """
-load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
-
-copy_to_bin(
-    name = "in_bin",
-    srcs = [ "chromedriver" ],
-    visibility = [ "//visibility:public" ]
-)
-    """
-
-    http_archive(
-        name = "com_googleapis_storage_chromedriver_linux_x64",
-        sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
-        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
-        build_file_content = chromedriver_buildfile,
-    )
-
-    http_archive(
-        name = "com_googleapis_storage_chromedriver_mac64",
-        sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
-        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
-        build_file_content = chromedriver_buildfile,
-    )
-
-    http_archive(
-        name = "com_googleapis_storage_chromedriver_mac_arm64",
-        sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
-        build_file_content = chromedriver_buildfile,
-    )
-
-    http_archive(
-        name = "com_googleapis_storage_chromedriver_win32",
-        sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-        url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
-        build_file_content = chromedriver_buildfile,
-    )
-
     chromium_buildfile = """
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
