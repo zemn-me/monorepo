@@ -1,0 +1,13 @@
+sh_binary(
+    name = "pnpm",
+    srcs = [
+        "pnpm_bazel.sh",
+    ],
+    data = [
+        "@pnpm",
+    ],
+    env = {
+        "PNPM_BINARY": "$(rootpath @pnpm)",
+    },
+    visibility = ["//sh:__subpackages__"],
+)
