@@ -3,6 +3,7 @@
 	"name": "monorepo",
 	"postCreateCommand": "bazel run //.devcontainer:init",
 	"hostRequirements": {
-		"storage": "15gb"
+		"storage": "15gb",
+		"cpus": 8
 	}
 }
