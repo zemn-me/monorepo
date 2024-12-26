@@ -1,10 +1,9 @@
 {
 	"$schema": "https://raw.githubusercontent.com/devcontainers/spec/refs/heads/main/schemas/devContainer.schema.json",
 	"name": "monorepo",
-	"image": "ghcr.io/devcontainers/base:latest",
-	"updateContentCommand": "sl pull",
 	"postCreateCommand": "bazel run //.devcontainer:init",
 	"hostRequirements": {
-		"storage": "15gb"
+		"storage": "15gb",
+		"cpus": 8
 	}
 }
