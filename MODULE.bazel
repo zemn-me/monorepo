@@ -165,6 +165,17 @@ http_archive(
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
 
+http_archive(
+    name = "com_github_factoriolab",
+    build_file_content = """
+exports_files(glob(["**/*"]))
+
+		""",
+    integrity = "sha256-sr46XROs38AGASqEkUIKODVoLpDciRBRlJeNe+NvN2Q=",
+    strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
+    url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
+)
+
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
