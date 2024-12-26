@@ -7,6 +7,7 @@ export interface Args {
 }
 
 export class __ClassName extends ComponentResource {
+	url: string = "TODO" // will fill once i've deployed for the first time
 	constructor(
 		name: string,
 		args: Args,
