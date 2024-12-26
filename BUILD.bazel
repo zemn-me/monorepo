@@ -42,7 +42,7 @@ alias(
 alias(
     name = "pnpm",
     # bazel run -- //:pnpm --dir $PWD
-    actual = "@pnpm//:pnpm",
+    actual = "//sh/bin:pnpm",
 )
 
 alias(
