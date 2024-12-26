@@ -1,0 +1,11 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+sh_binary(
+    name = "init",
+    srcs = ["init.sh"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
