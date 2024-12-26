@@ -1,9 +1,9 @@
 import { local } from '@pulumi/command';
-import { ComponentResource, ComponentResourceOptions } from "@pulumi/pulumi";
+import { ComponentResource, ComponentResourceOptions, Input, output } from "@pulumi/pulumi";
 
 
 export interface Args {
-	repository: string
+	repository: Input<string>
 }
 
 export class __ClassName extends ComponentResource {
@@ -15,11 +15,12 @@ export class __ClassName extends ComponentResource {
 		super('__TYPE', name, args, opts);
 
 		const upload = new local.Command(`${name}_push`, {
-			create: [
+			create:
+				output(args.repository).apply(repository => [
 				"__PUSH_BIN",
 				"--repository",
-				args.repository,
-			].join(" ")
+				repository,
+			].join(" "))
 		}, { parent: this })
 
 
