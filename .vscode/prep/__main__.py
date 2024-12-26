@@ -3,7 +3,7 @@ import re
 from os import linesep
 from tempfile import TemporaryFile
 from shutil import copyfileobj
-from os import path
+from os import path, makedirs
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
@@ -22,8 +22,10 @@ args = parser.parse_args()
 wd = args.working_directory
 
 def try_edit_sapling_config():
+	makedirs(".sl")
+
 	with open(path.join(wd, ".sl/config"), "r+") as file:
-		sapling_import_pattern = re.compile("%%include\s+../ini/sl/config.ini")
+		sapling_import_pattern = re.compile("%%include\\s+../ini/sl/config.ini")
 		if any(
 			(
 				sapling_import_pattern.match(line)
