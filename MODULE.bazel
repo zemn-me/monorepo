@@ -165,6 +165,44 @@ http_archive(
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
 )
 
+chromedriver_buildfile = """
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+
+copy_to_bin(
+name = "in_bin",
+srcs = [ "chromedriver" ],
+visibility = [ "//visibility:public" ]
+)
+"""
+
+http_archive(
+    name = "com_googleapis_storage_chromedriver_linux_x64",
+    build_file_content = chromedriver_buildfile,
+    sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
+    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
+)
+
+http_archive(
+    name = "com_googleapis_storage_chromedriver_mac64",
+    build_file_content = chromedriver_buildfile,
+    sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
+    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
+)
+
+http_archive(
+    name = "com_googleapis_storage_chromedriver_mac_arm64",
+    build_file_content = chromedriver_buildfile,
+    sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
+    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+)
+
+http_archive(
+    name = "com_googleapis_storage_chromedriver_win32",
+    build_file_content = chromedriver_buildfile,
+    sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
+    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+)
+
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
