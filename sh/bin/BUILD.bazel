@@ -54,7 +54,7 @@ alias(
 
 alias(
     name = "pnpm",
-    actual = "//:pnpm",
+    actual = "//sh/pnpm",
 )
 
 alias(

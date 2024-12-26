@@ -85,19 +85,6 @@
 		"uuid": "11.0.3",
 		"yarn": "1.22.22"
 	},
-	"scripts": {
-		"lint": "eslint --fix",
-		"bazel": "npm run -- bazelisk",
-		"bazelisk": "npx --yes @bazel/bazelisk",
-		"ibazel": "npx --yes @bazel/ibazel",
-		"build": "npm run bazel build //...",
-		"test": "npm run bazel run //bzl:affected_files",
-		"fix": "npm run bazel run //:fix",
-		"dev": "npm run ibazel --run_output --run_output_interactive=false test",
-		"pr": "gh pr create -f; gh pr merge -md --auto",
-		"repin": "CARGO_BAZEL_REPIN=1 npm run -- bazel sync --only=cargo",
-		"pnpm": "npm run -- bazel run -- @pnpm//:pnpm --dir $PWD"
-	},
 	"dependencies": {
 		"@commander-js/extra-typings": "12.1.0",
 		"@eslint/compat": "1.2.4",
