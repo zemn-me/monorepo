@@ -8,6 +8,7 @@ go 1.22.7
 toolchain go1.23.4
 
 require (
+	github.com/aws/aws-lambda-go v1.47.0
 	github.com/bazelbuild/bazel-gazelle v0.40.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
