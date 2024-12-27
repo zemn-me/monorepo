@@ -29,24 +29,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "cultistsimulator",
-        strip_prefix = "cultistsimulator-visible-2022.3.n.1",
-        urls = [
-            "https://github.com/weatherfactory/cultistsimulator-visible/archive/refs/tags/v2022.3.n.1.tar.gz",
-        ],
-        sha256 = "c640c454db8bd2ef4b53cf00edffa959d6c6147718bafce9a43f48db286f2ea2",
-        build_file_content = """
-filegroup(
-    name = "core",
-    srcs = glob(["Assets/StreamingAssets/content/core/**/*.json"]),
-    visibility = [ "//visibility:public" ]
-)
-exports_files(glob(["**/*"], exclude_directories=0))
-        """,
-        # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
-    )
-
-    http_archive(
         name = "rules_rust",
         sha256 = "af4f56caae50a99a68bfce39b141b509dd68548c8204b98ab7a1cafc94d5bb02",
         urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.54.1/rules_rust-v0.54.1.tar.gz"],
