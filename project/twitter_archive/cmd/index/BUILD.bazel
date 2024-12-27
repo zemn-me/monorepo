@@ -1,0 +1,15 @@
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "index_lib",
+    srcs = ["id_mapping.go"],
+    importpath = "github.com/zemn-me/monorepo/project/twitter_archive/cmd/index",
+    visibility = ["//visibility:private"],
+    deps = ["//go/twitter"],
+)
+
+go_binary(
+    name = "index",
+    embed = [":index_lib"],
+    visibility = ["//visibility:public"],
+)
