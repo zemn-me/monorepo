@@ -44,69 +44,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "pulumi_cli_linux_x64",
-        sha256 = "de608c40247d180379e532e4d38f5d2918d19b3a4fadad51f0df1f94e8e01602",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-linux-x64.tar.gz",
-        ],
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
-        name = "pulumi_cli_darwin_arm64",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-darwin-arm64.tar.gz",
-        ],
-        sha256 = "be5d10b4b5a4bb008c795e22f325509df1da7b50b3ef72de90350499b63711a9",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
-        name = "pulumi_cli_darwin_x64",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-x64.tar.gz",
-        ],
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
-        name = "pulumi_cli_linux_arm64",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-linux-arm64.tar.gz",
-        ],
-        sha256 = "d86a8cb329edbb5ad548559b7d4205db9c170a07f00aa183468b62253b886eba",
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
-        name = "pulumi_cli_windows_arm64",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-arm64.zip",
-        ],
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
-        name = "pulumi_cli_windows_x64",
-        urls = [
-            "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-x64.zip",
-        ],
-        build_file_content = """
-exports_files(glob(["**/*"]))
-""",
-    )
-
-    http_archive(
         name = "cultistsimulator",
         strip_prefix = "cultistsimulator-visible-2022.3.n.1",
         urls = [
