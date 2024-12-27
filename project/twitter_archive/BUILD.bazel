@@ -48,4 +48,5 @@ $(execpath //project/twitter_archive/cmd/index) \\
     tools = [
         "//project/twitter_archive/cmd/index",
     ],
+    visibility = ["//:__subpackages__"],
 )
