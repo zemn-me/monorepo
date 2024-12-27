@@ -299,8 +299,8 @@ devDependencies:
     specifier: 12.1.0
     version: 12.1.0
   concurrently:
-    specifier: 9.1.0
-    version: 9.1.0
+    specifier: 9.1.1
+    version: 9.1.1
   cross-spawn:
     specifier: 7.0.6
     version: 7.0.6
@@ -8965,8 +8965,8 @@ packages:
       typedarray: 0.0.6
     dev: false
 
-  /concurrently@9.1.0:
-    resolution: {integrity: sha512-VxkzwMAn4LP7WyMnJNbHN5mKV9L2IbyDjpzemKr99sXNR3GqRNMMHdm7prV1ws9wg7ETj6WUkNOigZVsptwbgg==}
+  /concurrently@9.1.1:
+    resolution: {integrity: sha512-6VX8lrBIycgZKTwBsWS+bLrmkGRkDmvtGsYylRN9b93CygN6CbK46HmnQ3rdSOR8HRjdahDrxb5MqD9cEFOg5Q==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
