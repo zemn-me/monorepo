@@ -73,7 +73,10 @@ func CreateMapping(indexFilePath, outputFilePath string) error {
 		return fmt.Errorf("error reading index file: %w", err)
 	}
 
-	if err := json.NewEncoder(writer).Encode(m); err != nil {
+	enc := json.NewEncoder(writer)
+	enc.SetIndent("", "\t")
+
+	if err := enc.Encode(m); err != nil {
 		return err
 	}
 

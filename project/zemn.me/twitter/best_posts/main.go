@@ -1,12 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/bazelbuild/rules_go/go/runfiles"
 
 	"github.com/zemn-me/monorepo/go/twitter"
 )
@@ -17,7 +18,7 @@ type Tweet struct {
 
 type IndexFile struct {
 	filepath string
-	data     map[int64]string
+	data     map[string]string // Keys are strings (tweet IDs) and values are file paths
 }
 
 var _ flag.Value = &IndexFile{}
@@ -28,7 +29,7 @@ func (i IndexFile) String() string {
 
 func (i *IndexFile) Set(filePath string) error {
 	i.filepath = filePath
-	i.data = make(map[int64]string)
+	i.data = make(map[string]string)
 
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -98,12 +99,16 @@ func LoadTweetFilePaths(indexFilePath string) (<-chan string, error) {
 		defer file.Close()
 		defer close(paths)
 
-		scanner := bufio.NewScanner(file)
-		for scanner.Scan() {
-			paths <- scanner.Text()
+		// Decode JSON from the index file (map of tweet IDs to file paths)
+		var indexData map[string]string
+		if err := json.NewDecoder(file).Decode(&indexData); err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading index file: %v\n", err)
+			return
 		}
-		if err := scanner.Err(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+
+		// Send the file paths to the channel
+		for _, path := range indexData {
+			paths <- path
 		}
 	}()
 
@@ -118,8 +123,22 @@ func Do() error {
 		return fmt.Errorf("failed to load tweet file paths: %w", err)
 	}
 
+	type data struct {
+		Score float64
+		File  string
+		Text  string
+	}
+
+	var d []data
+
 	for path := range paths {
-		tweet, err := LoadTweetFromFile(path)
+		absPath, err := runfiles.Rlocation(
+			"_main/" + path,
+		)
+		if err != nil {
+			return err
+		}
+		tweet, err := LoadTweetFromFile(absPath)
 		if err != nil {
 			return fmt.Errorf("error loading tweet from file %s: %w", path, err)
 		}
@@ -129,7 +148,24 @@ func Do() error {
 			return fmt.Errorf("error calculating score for tweet in file %s: %w", path, err)
 		}
 
-		fmt.Printf("File: %s, Score: %.2f\n", path, score)
+		if score < 100 {
+			continue
+		}
+
+		d = append(d, data{Score: score, File: path, Text: tweet.Tweet.FullText})
+	}
+
+	f, err := os.Create(out)
+	if err != nil {
+		return err
+	}
+
+	enc := json.NewEncoder(f)
+	enc.SetIndent("", "\t")
+
+	err = enc.Encode(d)
+	if err != nil {
+		return err
 	}
 
 	return nil
