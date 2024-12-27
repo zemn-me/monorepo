@@ -1,13 +1,15 @@
 import { local } from '@pulumi/command';
-import { ComponentResource, ComponentResourceOptions, Input, output } from "@pulumi/pulumi";
+import { all, ComponentResource, ComponentResourceOptions, Input, Output, output } from "@pulumi/pulumi";
 
 
 export interface Args {
 	repository: Input<string>
+	username?: Input<string>
+	password?: Input<string>
 }
 
 export class __ClassName extends ComponentResource {
-	url: string = "TODO" // will fill once i've deployed for the first time
+	url: Output<string>
 	constructor(
 		name: string,
 		args: Args,
@@ -15,14 +17,25 @@ export class __ClassName extends ComponentResource {
 	) {
 		super('__TYPE', name, args, opts);
 
+		const auth_part = all([args.username, args.password]).apply(
+			([username, password]) => username && password
+				? `${username}:${password}@`
+				: ""
+		)
+
+		const arg = all([args.repository, auth_part]).apply(([repo, auth]) => [
+			"--repository", `${auth}${repo}`
+		])
+
 		const upload = new local.Command(`${name}_push`, {
-			create:
-				output(args.repository).apply(repository => [
+			interpreter:
+				arg.apply(arg => [
 				"__PUSH_BIN",
-				"--repository",
-				repository,
-			].join(" "))
+				...arg
+			])
 		}, { parent: this })
+
+		this.url = upload.stdout
 
 
 		super.registerOutputs({ upload })
