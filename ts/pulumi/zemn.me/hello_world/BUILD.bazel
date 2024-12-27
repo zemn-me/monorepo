@@ -1,0 +1,60 @@
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+go_library(
+    name = "hello_world_lib",
+    srcs = ["hello.go"],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/hello_world",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_aws_aws_lambda_go//lambda"],
+)
+
+go_binary(
+    name = "hello_world",
+    embed = [":hello_world_lib"],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+pkg_tar(
+    name = "tar",
+    srcs = [":hello_world"],
+)
+
+oci_image(
+    name = "image",
+    base = "@distroless_base",
+    entrypoint = ["/hello_world"],
+    tars = [":tar"],
+)
+
+pulumi_image(
+    name = "oci_image",
+    src = ":image",
+    component_name = "HelloWorldImage",
+)
+
+ts_project(
+    name = "ts",
+    srcs = [
+        "hello_world.ts",
+    ],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+    deps = [
+        ":oci_image",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/awsx",
+        "//:node_modules/@pulumi/pulumi",
+        "//ts/pulumi/lib",
+    ],
+)
