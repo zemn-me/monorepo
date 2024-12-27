@@ -274,6 +274,15 @@ http_archive(
     url = "https://www.osxexperts.net/ffmpeg6arm.zip",
 )
 
+# Got no idea why but MS doesn't publish versions of this...
+http_archive(
+    name = "microsoft_json_schemas",
+    build_file_content = """exports_files(glob(["**/*"]))""",
+    sha256 = "d6a1a41601ebb98d85742756b2847eda1781caa29c46ca66b1b0fb4c55c23072",
+    strip_prefix = "json-schemas-2b6ef3bfa6634bada05486040a36b81fccb23a24",
+    url = "https://github.com/microsoft/json-schemas/archive/2b6ef3bfa6634bada05486040a36b81fccb23a24.zip",
+)
+
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
