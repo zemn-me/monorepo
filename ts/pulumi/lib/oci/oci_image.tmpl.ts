@@ -1,5 +1,5 @@
 import { local } from '@pulumi/command';
-import { ComponentResource, ComponentResourceOptions, Input, output } from "@pulumi/pulumi";
+import { ComponentResource, ComponentResourceOptions, Input, Output, output } from "@pulumi/pulumi";
 
 
 export interface Args {
@@ -7,7 +7,7 @@ export interface Args {
 }
 
 export class __ClassName extends ComponentResource {
-	url: string = "TODO" // will fill once i've deployed for the first time
+	url: Output<string>
 	constructor(
 		name: string,
 		args: Args,
@@ -18,11 +18,14 @@ export class __ClassName extends ComponentResource {
 		const upload = new local.Command(`${name}_push`, {
 			create:
 				output(args.repository).apply(repository => [
+				"echo",
 				"__PUSH_BIN",
 				"--repository",
-				repository,
+				`${repository}`,
 			].join(" "))
 		}, { parent: this })
+
+		this.url = upload.stdout
 
 
 		super.registerOutputs({ upload })
