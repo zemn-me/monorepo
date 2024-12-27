@@ -36,7 +36,6 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
-        "deps.bzl",
         "rules.bzl",
         "show_all_outputs.bzl",
     ],
