@@ -119,3 +119,6 @@ common:ci --build_metadata=ROLE=CI
 common:ci --keep_going
 common:ci --noshow_progress
 common --test_verbose_timeout_warnings
+
+
+common --experimental_remote_cache_compression_threshold=100
