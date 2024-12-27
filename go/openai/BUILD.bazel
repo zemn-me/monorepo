@@ -1,7 +1,8 @@
+load("//go:rules.bzl", "go_library")
+
 "Generated defs for the openai apis."
 
 load("//bzl:rules.bzl", "bazel_lint")
-load("//go:rules.bzl", "go_library")
 
 genrule(
     name = "gen_api",
@@ -19,6 +20,11 @@ $(execpath //bin/host/oapi-codegen) \\
     tools = ["//bin/host/oapi-codegen"],
 )
 
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 go_library(
     name = "openai",
     srcs = [
@@ -31,9 +37,4 @@ go_library(
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//types",
     ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
 )
