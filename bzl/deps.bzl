@@ -1,6 +1,6 @@
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def fetch_dependencies():
     http_archive(
@@ -33,24 +33,6 @@ def fetch_dependencies():
         urls = [
             "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
         ],
-    )
-
-    http_archive(
-        name = "cultistsimulator",
-        strip_prefix = "cultistsimulator-visible-2022.3.n.1",
-        urls = [
-            "https://github.com/weatherfactory/cultistsimulator-visible/archive/refs/tags/v2022.3.n.1.tar.gz",
-        ],
-        sha256 = "c640c454db8bd2ef4b53cf00edffa959d6c6147718bafce9a43f48db286f2ea2",
-        build_file_content = """
-filegroup(
-    name = "core",
-    srcs = glob(["Assets/StreamingAssets/content/core/**/*.json"]),
-    visibility = [ "//visibility:public" ]
-)
-exports_files(glob(["**/*"], exclude_directories=0))
-        """,
-        # exports_files(glob(["**/*"]), visibility=["//visibility:public"])
     )
 
     http_archive(
