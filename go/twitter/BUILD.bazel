@@ -1,0 +1,30 @@
+load("//go:rules.bzl", "go_library")
+
+"for working with the twitter data dump"
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go/jsonschema:rules.bzl", "jsonschema_gen")
+
+# when below is uncommented, the correct go_library is generated
+# and i dont know why...
+jsonschema_gen(
+    name = "twitter_gen",
+    src = "//ts/twitter:json_schema",
+    outs = ["gen.go"],
+    package = "twitter",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_library(
+    name = "twitter",
+    srcs = [
+        "doc.go",
+        "gen.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/twitter",
+    visibility = ["//visibility:public"],
+)
