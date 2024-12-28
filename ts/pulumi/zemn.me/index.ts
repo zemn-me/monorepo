@@ -5,6 +5,7 @@ import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website.js';
+import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -32,6 +33,10 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+		new LambdaHelloWorld(`${name}_fargate`, {
+			tags: args.tags
+		});
 
 		this.site = new Website(
 			`${name}_zemn_me`,
