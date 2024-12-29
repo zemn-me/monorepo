@@ -33,7 +33,7 @@ def pulumi_image(
     oci_push(
         name = name + "_push_bin",
         image = src,
-        repository = "why is this mandatory",
+        repository = "None",
     )
 
     expand_template_rule(
