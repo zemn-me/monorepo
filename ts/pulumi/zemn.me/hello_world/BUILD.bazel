@@ -31,7 +31,7 @@ pkg_tar(
 
 oci_image(
     name = "image",
-    base = "@distroless_base",
+    base = "@distroless_debian12",
     entrypoint = ["/hello_world"],
     tars = [":tar"],
 )
