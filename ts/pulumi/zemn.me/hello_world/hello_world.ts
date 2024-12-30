@@ -65,7 +65,6 @@ export class LambdaHelloWorld extends ComponentResource {
 		});
         // Create the Lambda function using the container image
         const lambda = new aws.lambda.Function(clampLambdaFunctionName(`${name}_lambda`), {
-			name: clampLambdaFunctionName(`${name}_lambda`),
             packageType: "Image",
 			// e.g. --
 			// https://658613637108.dkr.ecr.us-east-1.amazonaws.com/repo-fe6824f@sha256:c61c4b619733eb59d7c68a34d7b56e562894c9d777f26e982bc453bbcf57ab5b
