@@ -23,6 +23,18 @@ oci.pull(
         "linux/ppc64le",
     ],
 )
+oci.pull(
+    name = "distroless_debian12",
+    digest = "sha256:fe3521b45c4985199f810f7db472de6cd6164799ed13605db1d699011e860c23",
+    image = "gcr.io/distroless/base-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+        "linux/arm/v7",
+        "linux/s390x",
+        "linux/ppc64le",
+    ],
+)
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
 use_repo(
@@ -33,6 +45,12 @@ use_repo(
     "distroless_base_linux_arm_v7",
     "distroless_base_linux_ppc64le",
     "distroless_base_linux_s390x",
+    "distroless_debian12",
+    "distroless_debian12_linux_amd64",
+    "distroless_debian12_linux_arm64_v8",
+    "distroless_debian12_linux_arm_v7",
+    "distroless_debian12_linux_ppc64le",
+    "distroless_debian12_linux_s390x",
 )
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.10.0")
