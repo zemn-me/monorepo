@@ -43,7 +43,7 @@ export class LambdaHelloWorld extends ComponentResource {
         const tags = mergeTags(args.tags, tagTrue(tag));
 
         // Create the ECR repository to store our container image
-        const repo = new aws.ecr.Repository("repo", {
+        const repo = new aws.ecr.Repository(`${name}_repo`, {
             forceDelete: true,
             tags: tags,
         });
