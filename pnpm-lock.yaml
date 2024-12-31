@@ -230,8 +230,8 @@ devDependencies:
     specifier: 7.26.3
     version: 7.26.3(@types/node@22.10.2)
   '@pulumi/aws':
-    specifier: 6.66.1
-    version: 6.66.1(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 6.66.2
+    version: 6.66.2(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
     specifier: 2.19.0
     version: 2.19.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -5404,13 +5404,11 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.66.1(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-/qE/cM1X4RmNn9BDhg3ypK+us4MraxXbvvwrspyqaQixJDFlbOSF2H7cprRK7HcfoCBJaNrViacfendyxQ8zBQ==}
+  /@pulumi/aws@6.66.2(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-jO5L4JcjYriqXBGYH9LVb+GjawHUJvkWvLtb5nXxIKpkykEO1LyWVZdR4ngFcT7Hlw99Tg1ms4ut7LdETPCuUw==}
     dependencies:
       '@pulumi/pulumi': 3.144.1(ts-node@10.9.2)(typescript@5.5.4)
-      builtin-modules: 3.0.0
       mime: 2.6.0
-      resolve: 2.0.0-next.5
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5423,7 +5421,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@aws-sdk/client-ecs': 3.716.0
-      '@pulumi/aws': 6.66.1(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/aws': 6.66.2(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.5.8(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/pulumi': 3.144.1(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.146
@@ -8579,11 +8577,6 @@ packages:
       ieee754: 1.2.1
     dev: true
 
-  /builtin-modules@3.0.0:
-    resolution: {integrity: sha512-hMIeU4K2ilbXV6Uv93ZZ0Avg/M91RaKXucQ+4me2Do1txxBDyDZWCBa5bJSLqoNTRpXTLwEzIk1KmloenDDjhg==}
-    engines: {node: '>=6'}
-    dev: true
-
   /bunyan@1.8.15:
     resolution: {integrity: sha512-0tECWShh6wUysgucJcBAoYegf3JJoZWibxdqhTm7OHPeT42qdjkZ29QCMcKwbgU1kiH+auSIasNRXMLWXafXig==}
     engines: {'0': node >=0.10.0}
@@ -9740,6 +9733,7 @@ packages:
 
   /end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
+    requiresBuild: true
     dependencies:
       once: 1.4.0
 
