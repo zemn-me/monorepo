@@ -9,8 +9,8 @@ overrides:
 
 dependencies:
   '@commander-js/extra-typings':
-    specifier: 12.1.0
-    version: 12.1.0(commander@13.0.0)
+    specifier: 13.0.0
+    version: 13.0.0(commander@13.0.0)
   '@eslint/compat':
     specifier: 1.2.4
     version: 1.2.4(eslint@9.17.0)
@@ -3433,10 +3433,10 @@ packages:
     dev: false
     optional: true
 
-  /@commander-js/extra-typings@12.1.0(commander@13.0.0):
-    resolution: {integrity: sha512-wf/lwQvWAA0goIghcb91dQYpkLBcyhOhQNqG/VgWhnKzgt+UOMvra7EX/2fv70arm5RW+PUHoQHHDa6/p77Eqg==}
+  /@commander-js/extra-typings@13.0.0(commander@13.0.0):
+    resolution: {integrity: sha512-4or44L3saI49QRBvdSzfCtzqONlFg0/qy0Cfl+LRynDaxlGs7r2KRTLCELaAoKh4oQguICxRwQfm77/Up+0wTw==}
     peerDependencies:
-      commander: ~12.1.0
+      commander: ~13.0.0
     dependencies:
       commander: 13.0.0
     dev: false
