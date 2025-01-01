@@ -389,8 +389,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.86.4
-    version: 39.86.4(@aws-sdk/client-sso-oidc@3.716.0)(typanion@3.14.0)
+    specifier: 39.87.0
+    version: 39.87.0(@aws-sdk/client-sso-oidc@3.716.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -5400,17 +5400,17 @@ packages:
       tweetnacl: 1.0.3
     dev: true
 
-  /@renovatebot/osv-offline-db@1.6.0:
-    resolution: {integrity: sha512-cEOCTyd3+/7gPDmBn0pyJtF01+f9e/dJ1mOoML+v5AsP8GIPAzhtQUuIB5FiCxS4IsbP0qm34anYUZHGJldNJA==}
+  /@renovatebot/osv-offline-db@1.7.0:
+    resolution: {integrity: sha512-E24t9YfqJWkR2VbkUiatTEeUdWcTgVly/9JMAEYrLEjJPNZDQQEophsH19faOwFPnIoHhIpsNeTWf2iPhn4OEg==}
     dependencies:
       '@seald-io/nedb': 4.0.4
     dev: true
 
-  /@renovatebot/osv-offline@1.5.10:
-    resolution: {integrity: sha512-3Nu7bGVQGm0rJwGoHxZjc80cERtK7r25aii8aBwK2+JLAacC7xLju2WzuELt1TWSx/yt+QjA4ouWSC5/JnlmHw==}
+  /@renovatebot/osv-offline@1.5.11:
+    resolution: {integrity: sha512-y4lTOL90P1JpsAQ+gadSCXmeRP+tvRrFPCmKtsRUwq/00vO2HoTi9GgKRTEWS6QxtDVnKlHrQS0xbBCmdXySTA==}
     dependencies:
       '@octokit/rest': 20.1.1
-      '@renovatebot/osv-offline-db': 1.6.0
+      '@renovatebot/osv-offline-db': 1.7.0
       adm-zip: 0.5.16
       fs-extra: 11.2.0
       got: 11.8.6
@@ -16154,8 +16154,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.86.4(@aws-sdk/client-sso-oidc@3.716.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-MsCn2HhScuCenYGJ9M6mqr7T35OuYCATWFoixfZk81+lD2NJy4FVpJcjoDiokCm+hpkThQxmC5IQ+sfX+oIqsA==}
+  /renovate@39.87.0(@aws-sdk/client-sso-oidc@3.716.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-ioQZU76et2Y8a4xBbu8GMZlnVjrtQ1OvxY0DSKcy6P/05rtehojPFdP5KSTaPzbBqW8k1xVuiJvNDjlFtvQlSA==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16180,7 +16180,7 @@ packages:
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.1
-      '@renovatebot/osv-offline': 1.5.10
+      '@renovatebot/osv-offline': 1.5.11
       '@renovatebot/pep440': 4.0.1
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 4.6.0
