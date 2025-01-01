@@ -9,6 +9,7 @@ import mime from 'mime';
 import * as guard from '#root/ts/guard.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
+import { S3ExpireOnDeletePolicy } from '#root/ts/pulumi/lib/expire_on_delete/expire_on_delete.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 function relative(from: string, to: string): string {
@@ -130,11 +131,17 @@ export class Website extends pulumi.ComponentResource {
 			deriveBucketName(name),
 			{
 				tags,
+
 			},
 			{
 				parent: this,
 			}
 		);
+
+		new S3ExpireOnDeletePolicy(`${name}_expire_on_delete`, {
+			bucketId: bucket.id,
+			expirationDays: 20,
+		}, { parent: this })
 
 		// upload files
 
@@ -200,7 +207,7 @@ export class Website extends pulumi.ComponentResource {
 					bucket: bucket.id,
 					contentType: 'text/plain',
 					source: new pulumi.asset.FileAsset(
-						'ts/pulumi/lib/security.txt'
+						'ts/pulumi/lib/webiste/security.txt'
 					),
 					tags,
 				},
