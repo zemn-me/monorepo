@@ -60,6 +60,7 @@ def pulumi_image(
             "//:node_modules/@pulumi/pulumi",
             "//:node_modules/@pulumi/command",
             "//:node_modules/@types/node",
+            "//ts/pulumi/lib"
         ],
         visibility = visibility,
     )
