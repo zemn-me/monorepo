@@ -130,6 +130,7 @@ export class Website extends pulumi.ComponentResource {
 			deriveBucketName(name),
 			{
 				tags,
+
 			},
 			{
 				parent: this,
@@ -200,7 +201,7 @@ export class Website extends pulumi.ComponentResource {
 					bucket: bucket.id,
 					contentType: 'text/plain',
 					source: new pulumi.asset.FileAsset(
-						'ts/pulumi/lib/security.txt'
+						'ts/pulumi/lib/webiste/security.txt'
 					),
 					tags,
 				},
