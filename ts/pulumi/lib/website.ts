@@ -227,50 +227,23 @@ export class Website extends pulumi.ComponentResource {
 				)}]`
 		)(objects.get(args.index));
 
-		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
-			`${name}_origin_access_identity`,
+		const s3Site = new aws.s3.BucketWebsiteConfigurationV2(
+			`${name}_bucket_website`,
 			{
-				comment:
-					'this is needed to setup s3 polices and make s3 not public.',
+				bucket: bucket.bucket,
+				indexDocument: {
+					suffix: "index.html"
+				},
+				...(
+					errorDocumentObject != undefined?
+						{
+							errorDocument: {
+								key: pulumi.interpolate`/${errorDocumentObject.key}`
+							}
+						} : {})
 			},
-			{
-				parent: this,
-			}
-		);
-
-		// Only allow cloudfront to access content bucket.
-		const bucketPolicy = new aws.s3.BucketPolicy(
-			`${name}_bucket_policy`,
-			{
-				bucket: bucket.id, // refer to the bucket created earlier
-				policy: pulumi
-					.all([originAccessIdentity.iamArn, bucket.arn])
-					.apply(([oaiArn, bucketArn]) =>
-						JSON.stringify({
-							Version: '2012-10-17',
-							Statement: [
-								{
-									Effect: 'Allow',
-									Action: ['s3:ListBucket'],
-									Principal: {
-										AWS: oaiArn,
-									},
-									Resource: [bucketArn],
-								},
-								{
-									Effect: 'Allow',
-									Principal: {
-										AWS: oaiArn,
-									}, // Only allow Cloudfront read access.
-									Action: ['s3:GetObject'],
-									Resource: [`${bucketArn}/*`], // Give Cloudfront access to the entire bucket.
-								},
-							],
-						})
-					),
-			},
-			{ parent: this }
-		);
+			{parent: this}
+		)
 
 		// response headers policy (http headers)
 
@@ -315,13 +288,9 @@ export class Website extends pulumi.ComponentResource {
 			{
 				origins: [
 					{
-						s3OriginConfig: {
-							originAccessIdentity:
-								originAccessIdentity.cloudfrontAccessIdentityPath,
-						},
-						domainName: bucket.bucketRegionalDomainName,
-						originId: `${name}_cloudfront_distribution`,
-					},
+						originId: bucket.arn,
+						domainName: s3Site.websiteEndpoint,
+					}
 				],
 				enabled: true,
 				isIpv6Enabled: true,
@@ -338,7 +307,7 @@ export class Website extends pulumi.ComponentResource {
 								{
 									errorCode: 404,
 									responseCode: 404,
-									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
+									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`
 								},
 							],
 						}
@@ -470,7 +439,6 @@ export class Website extends pulumi.ComponentResource {
 		this.registerOutputs({
 			distribution,
 			record,
-			bucketPolicy,
 		});
 	}
 }
