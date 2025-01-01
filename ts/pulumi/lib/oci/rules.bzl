@@ -58,8 +58,9 @@ def pulumi_image(
         ],
         deps = [
             "//:node_modules/@pulumi/pulumi",
-            "//:node_modules/@pulumi/command",
             "//:node_modules/@types/node",
+            "//ts/pulumi/lib/oci",
+            "//ts/pulumi/lib",
         ],
         visibility = visibility,
     )
