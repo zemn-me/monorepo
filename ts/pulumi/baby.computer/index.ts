@@ -2,7 +2,7 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from '#root/ts/pulumi/lib/website/website.js';
 
 export interface Args {
 	staging: boolean;
