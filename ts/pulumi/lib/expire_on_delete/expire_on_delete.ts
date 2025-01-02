@@ -113,7 +113,7 @@ export class S3ExpireOnDeletePolicy extends ComponentResource {
         }, { parent: this });
 
         // Allow S3 to invoke the Lambda
-        const allowPerm = new aws.lambda.Permission(clampString(sanitisedStatementId(`${name}-lambdaS3InvokePermission`), 100 - 7), {
+        const allowPerm = new aws.lambda.Permission(clampString(sanitisedStatementId(`${name}-lambdaS3InvokePermission`), 100 - 10), {
             action: "lambda:InvokeFunction",
             function: this.lambda.name,
             principal: "s3.amazonaws.com",
