@@ -112,7 +112,8 @@ export class OCIImage extends ComponentResource {
 				args.push,
 				"--repository",
 				args.repository
-			]
+			],
+			// todo: load the digest here
 		}, { parent: this });
 
 		this.uri = upload.stdout;
