@@ -1,0 +1,51 @@
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+package(default_visibility = ["//:__subpackages__"])
+
+pkg_tar(
+    name = "tar",
+    srcs = [":expire_on_delete"],
+)
+
+oci_image(
+    name = "image",
+    base = "@distroless_debian12",
+    entrypoint = ["/soft_delete"],
+    tars = [":tar"],
+)
+
+pulumi_image(
+    name = "oci_image",
+    src = ":image",
+    component_name = "ExpireOnDeleteLambdaImage",
+)
+
+go_library(
+    name = "expire_on_delete_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//types",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_binary(
+    name = "expire_on_delete",
+    embed = [":expire_on_delete_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -84,7 +84,6 @@ async function createImageAuthFile(
 	return path.resolve(configDir)
 }
 
-
 /**
  * Represents an OCI [Docker-like] image uploaded to an arbitrary remote OCI
  * repository such as AWS ECR.
