@@ -43,6 +43,7 @@ ts_project(
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/lib",
+        "//ts/pulumi/lib/website",
     ],
 )
 
