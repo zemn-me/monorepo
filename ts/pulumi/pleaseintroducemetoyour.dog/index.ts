@@ -2,7 +2,7 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from '#root/ts/pulumi/lib/website/website.js';
 
 export interface Args {
 	/**
