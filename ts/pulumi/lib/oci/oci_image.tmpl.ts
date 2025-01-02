@@ -10,6 +10,7 @@ export interface Args {
 
 export class __ClassName extends ComponentResource {
 	url: Output<string>
+	static digestPath: string = "__DIGEST"
 	constructor(
 		name: string,
 		args: Args,
