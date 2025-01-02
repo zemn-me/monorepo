@@ -20,6 +20,10 @@ export interface OciImageArgs {
 	 * Executable used to push the image — expected to be output of oci_push rule.
 	 */
 	push: Input<string>
+	/**
+	 * Digest uniquely identifying the image.
+	 */
+	digest: Input<string>
 }
 
 /**
@@ -112,7 +116,8 @@ export class OCIImage extends ComponentResource {
 				args.push,
 				"--repository",
 				args.repository
-			]
+			],
+			triggers: [ args.digest ]
 		}, { parent: this });
 
 		this.uri = upload.stdout;
