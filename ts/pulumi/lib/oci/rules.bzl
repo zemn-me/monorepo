@@ -57,6 +57,7 @@ def pulumi_image(
         srcs = [name + "_tsfiles"],
         data = [
             ":" + name + "_push_bin",
+            src + ".digest",
         ],
         deps = [
             "//:node_modules/@pulumi/pulumi",
