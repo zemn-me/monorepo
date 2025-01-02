@@ -42,11 +42,13 @@ def pulumi_image(
         out = out,
         data = [
             ":" + name + "_push_bin",
+            src + ".digest",
         ],
         substitutions = {
             "__ClassName": component_name,
             "__TYPE": native.package_name().replace("/", ":"),
             "__PUSH_BIN": "$(rootpath :" + name + "_push_bin" + ")",
+            "__DIGEST": "$(rootpath " + src + ".digest)",
         },
     )
 
@@ -55,6 +57,7 @@ def pulumi_image(
         srcs = [name + "_tsfiles"],
         data = [
             ":" + name + "_push_bin",
+            src + ".digest",
         ],
         deps = [
             "//:node_modules/@pulumi/pulumi",
