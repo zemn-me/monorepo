@@ -1825,7 +1825,7 @@
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "8175b4c8df50ae2f22d1706961884beeb54e7da27bd2447018314a175981997d",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "1ef7b9db35268bc276af8c05acce50ff5e66e682bf62f153ef218df3755cbd92",
+          "@@//requirements.txt": "bfcfafdb14264132dbb94b1badb25429cfb1fe959ecf5044fd625cb431fd8160",
           "@@rules_python~//tools/publish/requirements_windows.txt": "7673adc71dc1a81d3661b90924d7a7c0fc998cd508b3cb4174337cef3f2de556",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "2994136eab7e57b083c3de76faf46f70fad130bc8e7360a7fed2b288b69e79dc"
@@ -1843,7 +1843,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "anyio==4.7.0     --hash=sha256:2f834749c602966b7d456a7567cafcb309f96482b5081d14ac93ccd457f9dd48     --hash=sha256:ea60c3723ab42ba6fff7e8ccb0488c898ec538ff4df1f1d5e642c3601d07e352"
+              "requirement": "anyio==4.8.0     --hash=sha256:1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a     --hash=sha256:b5011f270ab5eb0abf13385f851315585cc37ef330dd88e27ec3d34d651fd47a"
             }
           },
           "pip_313_argon2_cffi": {
