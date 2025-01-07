@@ -317,8 +317,8 @@ devDependencies:
     specifier: 0.24.2
     version: 0.24.2
   esbuild-css-modules-plugin:
-    specifier: 3.1.2
-    version: 3.1.2(esbuild@0.24.2)
+    specifier: 3.1.4
+    version: 3.1.4(esbuild@0.24.2)
   eslint:
     specifier: 9.17.0
     version: 9.17.0
@@ -9809,9 +9809,9 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /esbuild-css-modules-plugin@3.1.2(esbuild@0.24.2):
-    resolution: {integrity: sha512-XRpRuRT3m1Pk456djTvrq1AOEj+OB8sa8PdGN/Yha6eL8Im0TIYPq0CELgQU6DDKkHlYET++3sXZVjiF/kcgQw==}
-    engines: {node: '>= 16.20.0'}
+  /esbuild-css-modules-plugin@3.1.4(esbuild@0.24.2):
+    resolution: {integrity: sha512-/WrLny7XhGQlPQt8KD4Z37p5DRAHvZr2sqoxBO2ue1jzpqsREpexkTDhlnBmOM2c590u6Mmwf9Ylkvs82FSu/A==}
+    engines: {node: '>= 20'}
     peerDependencies:
       esbuild: '*'
     dependencies:
