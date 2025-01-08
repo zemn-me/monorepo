@@ -1,5 +1,5 @@
 {
-  "checksum": "f08ed06c4a8d1109cc49815f0f726bfbd8aeb3b487748069e25365fd6c15d7e0",
+  "checksum": "dd8a110e627c171918a5ab64fc3e08ca1b1e9123bfb2efb80f8e4c53421d3e95",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -332,7 +332,7 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -909,7 +909,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -1040,7 +1040,7 @@
                 "target": "addr2line"
               },
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -2852,7 +2852,7 @@
               "target": "core_foundation_sys"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -2948,25 +2948,25 @@
           "selects": {
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"aarch64\", target_os = \"linux\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"aarch64\", target_vendor = \"apple\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"loongarch64\", target_os = \"linux\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -3628,19 +3628,19 @@
           "selects": {
             "cfg(target_os = \"hermit\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(target_os = \"wasi\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -5068,7 +5068,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -5233,7 +5233,7 @@
               "target": "slab"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -5515,7 +5515,7 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -6064,7 +6064,7 @@
               "target": "socket2"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -6139,7 +6139,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -6799,14 +6799,14 @@
       ],
       "license_file": null
     },
-    "libc 0.2.155": {
+    "libc 0.2.169": {
       "name": "libc",
-      "version": "0.2.155",
+      "version": "0.2.169",
       "package_url": "https://github.com/rust-lang/libc",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/libc/0.2.155/download",
-          "sha256": "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+          "url": "https://static.crates.io/crates/libc/0.2.169/download",
+          "sha256": "b5aba8db14291edd000dfcc4d620c7ebfb122c613afb886ca8803fa4e128a20a"
         }
       },
       "targets": [
@@ -6976,14 +6976,14 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
-        "edition": "2015",
-        "version": "0.2.155"
+        "edition": "2021",
+        "version": "0.2.169"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -7546,7 +7546,7 @@
             ],
             "cfg(target_os = \"wasi\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -7556,7 +7556,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -7648,7 +7648,7 @@
               "target": "swc_ecma_parser"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -8212,7 +8212,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -9405,145 +9405,145 @@
           "selects": {
             "aarch64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-apple-ios-sim": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-fuchsia": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-nto-qnx710": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "arm-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "armv7-linux-androideabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "armv7-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "powerpc-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "s390x-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-fuchsia": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -10388,7 +10388,7 @@
                 "target": "pin_project_lite"
               },
               {
-                "id": "tokio 1.42.0",
+                "id": "tokio 1.43.0",
                 "target": "tokio"
               }
             ],
@@ -11047,7 +11047,7 @@
           "selects": {
             "cfg(all(any(target_os = \"android\", target_os = \"linux\"), any(target_arch = \"aarch64\", target_arch = \"arm\")))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -11247,7 +11247,7 @@
                 "alias": "libc_errno"
               },
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -12645,7 +12645,7 @@
               "alias": "dep_time"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -13251,7 +13251,7 @@
           "selects": {
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -13404,7 +13404,7 @@
               "target": "cfg_if"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             },
             {
@@ -14998,7 +14998,7 @@
               "target": "core_foundation_sys"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             },
             {
@@ -15634,14 +15634,14 @@
       ],
       "license_file": "LICENSE-APACHE.md"
     },
-    "tokio 1.42.0": {
+    "tokio 1.43.0": {
       "name": "tokio",
-      "version": "1.42.0",
+      "version": "1.43.0",
       "package_url": "https://github.com/tokio-rs/tokio",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/tokio/1.42.0/download",
-          "sha256": "5cec9b21b0450273377fc97bd4c33a8acffc8c996c987a7c5b319a0083707551"
+          "url": "https://static.crates.io/crates/tokio/1.43.0/download",
+          "sha256": "3d61fa4ffa3de412bfea335c6ecff681de2b609ba3c77ef3e00e521813a9ed9e"
         }
       },
       "targets": [
@@ -15710,7 +15710,7 @@
           "selects": {
             "aarch64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15720,7 +15720,7 @@
             ],
             "aarch64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15730,7 +15730,7 @@
             ],
             "aarch64-apple-ios-sim": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15740,7 +15740,7 @@
             ],
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15760,7 +15760,7 @@
             ],
             "aarch64-unknown-fuchsia": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15770,7 +15770,7 @@
             ],
             "aarch64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15780,7 +15780,7 @@
             ],
             "aarch64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15790,7 +15790,7 @@
             ],
             "aarch64-unknown-nto-qnx710": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15800,7 +15800,7 @@
             ],
             "arm-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15810,7 +15810,7 @@
             ],
             "armv7-linux-androideabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15820,7 +15820,7 @@
             ],
             "armv7-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15836,7 +15836,7 @@
             ],
             "i686-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15846,7 +15846,7 @@
             ],
             "i686-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15866,7 +15866,7 @@
             ],
             "i686-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15876,7 +15876,7 @@
             ],
             "i686-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15886,7 +15886,7 @@
             ],
             "powerpc-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15908,7 +15908,7 @@
             ],
             "s390x-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15930,7 +15930,7 @@
             ],
             "x86_64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15940,7 +15940,7 @@
             ],
             "x86_64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15950,7 +15950,7 @@
             ],
             "x86_64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15970,7 +15970,7 @@
             ],
             "x86_64-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15980,7 +15980,7 @@
             ],
             "x86_64-unknown-fuchsia": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15990,7 +15990,7 @@
             ],
             "x86_64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -16000,7 +16000,7 @@
             ],
             "x86_64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -16020,13 +16020,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "tokio-macros 2.4.0",
+              "id": "tokio-macros 2.5.0",
               "target": "tokio_macros"
             }
           ],
           "selects": {}
         },
-        "version": "1.42.0"
+        "version": "1.43.0"
       },
       "license": "MIT",
       "license_ids": [
@@ -16034,14 +16034,14 @@
       ],
       "license_file": "LICENSE"
     },
-    "tokio-macros 2.4.0": {
+    "tokio-macros 2.5.0": {
       "name": "tokio-macros",
-      "version": "2.4.0",
+      "version": "2.5.0",
       "package_url": "https://github.com/tokio-rs/tokio",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/tokio-macros/2.4.0/download",
-          "sha256": "693d596312e88961bc67d7f1f97af8a70227d9f90c31bba5806eec004978d752"
+          "url": "https://static.crates.io/crates/tokio-macros/2.5.0/download",
+          "sha256": "6e06d43f1345a3bcd39f6a56dbb7dcab2ba47e68e8ac134855e7e2bdbaf8cab8"
         }
       },
       "targets": [
@@ -16081,7 +16081,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "2.4.0"
+        "version": "2.5.0"
       },
       "license": "MIT",
       "license_ids": [
@@ -16133,7 +16133,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -16199,7 +16199,7 @@
               "alias": "pki_types"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -16278,7 +16278,7 @@
               "target": "rustls_pki_types"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -16361,7 +16361,7 @@
               "target": "pin_project_lite"
             },
             {
-              "id": "tokio 1.42.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -21122,7 +21122,7 @@
     "swc_common 0.36.0",
     "swc_ecma_ast 0.117.0",
     "swc_ecma_parser 0.148.0",
-    "tokio 1.42.0"
+    "tokio 1.43.0"
   ],
   "direct_dev_deps": []
 }
