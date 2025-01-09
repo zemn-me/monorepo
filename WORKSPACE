@@ -57,16 +57,21 @@ load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_regi
 
 rules_rust_dependencies()
 
-rust_register_toolchains(edition = "2021")
-
-# this rule is really weird. see docs https://github.com/bazelbuild/rules_rust/blob/main/crate_universe/private/crates_repository.bzl#L137
-load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 
 # renovate:
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.84.0"
+RUST_VERSION = "1.83.0"
+
+rust_register_toolchains(
+    edition = "2021",
+    versions = [ RUST_VERSION ]
+)
+
+# this rule is really weird. see docs https://github.com/bazelbuild/rules_rust/blob/main/crate_universe/private/crates_repository.bzl#L137
+load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
+
 
 crates_repository(
     name = "cargo",
