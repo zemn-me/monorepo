@@ -4,9 +4,8 @@ import { RandomPet } from '@pulumi/random';
 
 import {
 	ContactFlow,
-	ContactFlowAction,
-	ContactFlowLanguage,
 } from '#root/ts/pulumi/lib/contact_flow.js';
+import { ContactFlowAction, ContactFlowLanguage } from '#root/ts/pulumi/lib/contact_flow_language.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 export interface Args {
