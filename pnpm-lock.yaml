@@ -12,11 +12,11 @@ dependencies:
     specifier: 13.0.0
     version: 13.0.0(commander@13.0.0)
   '@eslint/compat':
-    specifier: 1.2.4
-    version: 1.2.4(eslint@9.17.0)
+    specifier: 1.2.5
+    version: 1.2.5(eslint@9.17.0)
   '@eslint/js':
-    specifier: 9.17.0
-    version: 9.17.0
+    specifier: 9.18.0
+    version: 9.18.0
   '@jest/globals':
     specifier: 29.7.0
     version: 29.7.0
@@ -81,8 +81,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   devtools-protocol:
-    specifier: 0.0.1403989
-    version: 0.0.1403989
+    specifier: 0.0.1404580
+    version: 0.0.1404580
   eslint-mdx:
     specifier: 3.1.5
     version: 3.1.5(eslint@9.17.0)
@@ -368,8 +368,8 @@ devDependencies:
     specifier: 3.4.2
     version: 3.4.2
   puppeteer:
-    specifier: 23.11.1
-    version: 23.11.1(typescript@5.5.4)
+    specifier: 24.0.0
+    version: 24.0.0(typescript@5.5.4)
   react:
     specifier: 19.0.0
     version: 19.0.0
@@ -389,8 +389,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.99.0
-    version: 39.99.0(@aws-sdk/client-sso-oidc@3.721.0)(typanion@3.14.0)
+    specifier: 39.103.0
+    version: 39.103.0(@aws-sdk/client-sso-oidc@3.721.0)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -422,8 +422,8 @@ devDependencies:
     specifier: 5.5.4
     version: 5.5.4
   uuid:
-    specifier: 11.0.3
-    version: 11.0.3
+    specifier: 11.0.5
+    version: 11.0.5
   yarn:
     specifier: 1.22.22
     version: 1.22.22
@@ -3607,8 +3607,8 @@ packages:
     resolution: {integrity: sha512-CCZCDJuduB9OUkFkY2IgppNZMi2lBQgD2qzwXkEia16cge2pijY/aXi96CJMquDMn3nJdlPV1A5KrJEXwfLNzQ==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
-  /@eslint/compat@1.2.4(eslint@9.17.0):
-    resolution: {integrity: sha512-S8ZdQj/N69YAtuqFt7653jwcvuUj131+6qGLUyDqfDg1OIoBQ66OCuXC473YQfO2AaxITTutiRQiDwoo7ZLYyg==}
+  /@eslint/compat@1.2.5(eslint@9.17.0):
+    resolution: {integrity: sha512-5iuG/StT+7OfvhoBHPlmxkPA9om6aDUFgmD4+mWKAGsYt4vCe8rypneG03AuseyRHBmcCLXQtIH5S26tIoggLg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^9.10.0
@@ -3654,6 +3654,11 @@ packages:
   /@eslint/js@9.17.0:
     resolution: {integrity: sha512-Sxc4hqcs1kTu0iID3kcZDW3JHq2a77HO9P8CP6YEA/FpH3Ll8UXE2r/86Rz9YJLKme39S9vU5OWNjC6Xl0Cr3w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  /@eslint/js@9.18.0:
+    resolution: {integrity: sha512-fK6L7rxcq6/z+AaQMtiFTkvbHkBLNlwyRxHpKawP0x3u9+NC6MQTnFW+AdpwC6gfHTW0051cokQgtTN2FqlxQA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    dev: false
 
   /@eslint/object-schema@2.1.5:
     resolution: {integrity: sha512-o0bhxnL89h5Bae5T318nFoFzGy+YE5i/gGkoPAgkmTVdRKTiv3p8JHevPiPaMwoloKfEiiaHlawCqaZMqRm+XQ==}
@@ -5436,8 +5441,8 @@ packages:
       - typescript
     dev: false
 
-  /@puppeteer/browsers@2.6.1:
-    resolution: {integrity: sha512-aBSREisdsGH890S2rQqK82qmQYU3uFpSH8wcZWHgHzl3LfzsxAKbLNiAG9mO8v1Y0UICBeClICxPJvyr0rcuxg==}
+  /@puppeteer/browsers@2.7.0:
+    resolution: {integrity: sha512-bO61XnTuopsz9kvtfqhVbH6LTM1koxK0IlBR+yuVrM2LB7mk8+5o1w18l5zqd5cs8xlf+ntgambqRqGifMDjog==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
@@ -8668,6 +8673,16 @@ packages:
       zod: 3.23.8
     dev: true
 
+  /chromium-bidi@0.12.0(devtools-protocol@0.0.1367902):
+    resolution: {integrity: sha512-xzXveJmX826GGq1MeE5okD8XxaDT8172CXByhFJ687eY65rbjOIebdbUuQh+jXKaNyGKI14Veb3KjLLmSueaxA==}
+    peerDependencies:
+      devtools-protocol: '*'
+    dependencies:
+      devtools-protocol: 0.0.1367902
+      mitt: 3.0.1
+      zod: 3.24.1
+    dev: true
+
   /chromium-edge-launcher@0.2.0:
     resolution: {integrity: sha512-JfJjUnq25y9yg4FABRRVPmBGWPZZi+AQXT4mxupb67766/0UlhG8PAZCz6xzEMXTbW3CsSoE8PcCWA49n35mKg==}
     dependencies:
@@ -9403,8 +9418,8 @@ packages:
     resolution: {integrity: sha512-XxtPuC3PGakY6PD7dG66/o8KwJ/LkH2/EKe19Dcw58w53dv4/vSQEkn/SzuyhHE2q4zPgCkxQBxus3VV4ql+Pg==}
     dev: true
 
-  /devtools-protocol@0.0.1403989:
-    resolution: {integrity: sha512-3wXQeT6gEJwZawvs0V4D+VvsLUY1Oe/Qeqh+9S8KOZY98FJ04rc1mYnRkuV6qAZ6wxuZ24zGt25tCow7Bg9MTQ==}
+  /devtools-protocol@0.0.1404580:
+    resolution: {integrity: sha512-YZS6J8qsPYTRG74WPXuidDnpT4TVC2Dn8uRtnhrD3vFvgq1cEmIlTQpo4g/o6qphsmKKSfSMl3DE7Xh2K7rkJw==}
     dev: false
 
   /diff-sequences@29.6.3:
@@ -15886,11 +15901,11 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /puppeteer-core@23.11.1:
-    resolution: {integrity: sha512-3HZ2/7hdDKZvZQ7dhhITOUg4/wOrDRjyK2ZBllRB0ZCOi9u0cwq1ACHDjBB+nX+7+kltHjQvBRdeY7+W0T+7Gg==}
+  /puppeteer-core@24.0.0:
+    resolution: {integrity: sha512-bHVXmnkYnMVSbsD+pJGt8fmGZLaVYOAieVnJcDxtLIVTMq0s5RfYdzN4xVlFoBQ3T06/sPkXxca3VLVfaqLxzg==}
     engines: {node: '>=18'}
     dependencies:
-      '@puppeteer/browsers': 2.6.1
+      '@puppeteer/browsers': 2.7.0
       chromium-bidi: 0.11.0(devtools-protocol@0.0.1367902)
       debug: 4.4.0
       devtools-protocol: 0.0.1367902
@@ -15902,17 +15917,17 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@23.11.1(typescript@5.5.4):
-    resolution: {integrity: sha512-53uIX3KR5en8l7Vd8n5DUv90Ae9QDQsyIthaUFVzwV6yU750RjqRznEtNMBT20VthqAdemnJN+hxVdmMHKt7Zw==}
+  /puppeteer@24.0.0(typescript@5.5.4):
+    resolution: {integrity: sha512-KRF2iWdHGSZkQ8pqftR5XR1jqnTqKRVZghMGJfJ665zS8++0cErRG2tXWfp98YqvMzsVLHfzBtTQlk0MMhCxzg==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@puppeteer/browsers': 2.6.1
-      chromium-bidi: 0.11.0(devtools-protocol@0.0.1367902)
+      '@puppeteer/browsers': 2.7.0
+      chromium-bidi: 0.12.0(devtools-protocol@0.0.1367902)
       cosmiconfig: 9.0.0(typescript@5.5.4)
       devtools-protocol: 0.0.1367902
-      puppeteer-core: 23.11.1
+      puppeteer-core: 24.0.0
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bufferutil
@@ -16583,8 +16598,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.99.0(@aws-sdk/client-sso-oidc@3.721.0)(typanion@3.14.0):
-    resolution: {integrity: sha512-ZCTJU+Px9DyEi4pItKKYigHpGiKbiuUVzcI92gFYwRLaoBUYOLgR4VbcibXrwz7HTwF3K+DBe9vBwILATqx1ow==}
+  /renovate@39.103.0(@aws-sdk/client-sso-oidc@3.721.0)(typanion@3.14.0):
+    resolution: {integrity: sha512-LmqsxWrVUes8imrGkhmNwWbWxxVIx/ZVEnzggjBkE4yHrTuW/F2ZA00iLIuUglviJpnrgDwj8Z9FXGPLyPCJkQ==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -18836,8 +18851,8 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  /uuid@11.0.3:
-    resolution: {integrity: sha512-d0z310fCWv5dJwnX1Y/MncBAqGMKEzlBb1AOf7z9K8ALnd0utBX/msg/fA0+sbyN1ihbMsLhrBlnl1ak7Wa0rg==}
+  /uuid@11.0.5:
+    resolution: {integrity: sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==}
     hasBin: true
     dev: true
 
