@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.22.7
+go 1.22.9
 
 toolchain go1.23.4
 
@@ -13,7 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.32.8
 	github.com/aws/aws-sdk-go-v2/config v1.28.10
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.72.2
-	github.com/bazelbuild/bazel-gazelle v0.40.0
+	github.com/bazelbuild/bazel-gazelle v0.41.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.51.0
