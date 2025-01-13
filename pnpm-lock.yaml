@@ -395,17 +395,17 @@ devDependencies:
     specifier: 0.33.5
     version: 0.33.5
   stylelint:
-    specifier: 16.13.0
-    version: 16.13.0(typescript@5.5.4)
+    specifier: 16.13.1
+    version: 16.13.1(typescript@5.5.4)
   stylelint-config-css-modules:
     specifier: 4.4.0
-    version: 4.4.0(stylelint@16.13.0)
+    version: 4.4.0(stylelint@16.13.1)
   stylelint-config-recommended:
     specifier: 15.0.0
-    version: 15.0.0(stylelint@16.13.0)
+    version: 15.0.0(stylelint@16.13.1)
   stylelint-config-standard:
     specifier: 37.0.0
-    version: 37.0.0(stylelint@16.13.0)
+    version: 37.0.0(stylelint@16.13.1)
   svgo:
     specifier: 3.3.2
     version: 3.3.2
@@ -4201,6 +4201,7 @@ packages:
   /@npmcli/agent@2.2.2:
     resolution: {integrity: sha512-OrcNPXdpSl9UX7qPVRWbmWMCSXrcDa2M9DvrbOTj7ao1S4PlqVFYv9/yLKMkrJKZ/V5A/kDBC690or307i26Og==}
     engines: {node: ^16.14.0 || >=18.0.0}
+    requiresBuild: true
     dependencies:
       agent-base: 7.1.3
       http-proxy-agent: 7.0.2
@@ -9131,6 +9132,7 @@ packages:
 
   /err-code@2.0.3:
     resolution: {integrity: sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA==}
+    requiresBuild: true
 
   /error-ex@1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
@@ -11108,8 +11110,8 @@ packages:
     resolution: {integrity: sha512-InwqeHHN2XpumIkMvpl/DCJVrAHgCsG5+cn1XlnLWGwtZBm8QJfSusItfrwx81CTp5agNZqpKU2J/ccC5nGT4A==}
     engines: {node: '>= 4'}
 
-  /ignore@7.0.0:
-    resolution: {integrity: sha512-lcX8PNQygAa22u/0BysEY8VhaFRzlOkvdlKczDPnJvrkJD1EuqzEky5VYYKM2iySIuaVIDv9N190DfSreSLw2A==}
+  /ignore@7.0.1:
+    resolution: {integrity: sha512-D1gVletsbVOoiXF963rgZnfobGAbq7Lb+dz3fcBmlOmZg6hHkpbycLqL8PLNB8f4GVv6dOVYwhPL/r7hwiH0Fw==}
     engines: {node: '>= 4'}
     dev: true
 
@@ -11430,6 +11432,7 @@ packages:
 
   /is-lambda@1.0.1:
     resolution: {integrity: sha512-z7CMFGNrENq5iFB9Bqo64Xk6Y9sg+epq1myIcdHaGnbMTYOxvzsEtdYqQUylB7LxfkvgrrjP32T6Ywciio9UIQ==}
+    requiresBuild: true
 
   /is-map@2.0.3:
     resolution: {integrity: sha512-1Qed0/Hr2m+YqxnM09CjA2d/i6YZNfF6R2oRAOj36eUdS6qIV/huPJNSEpKbupewFs+ZsJlxsjjPbc0/afW6Lw==}
@@ -11604,6 +11607,7 @@ packages:
   /isexe@3.1.1:
     resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
     engines: {node: '>=16'}
+    requiresBuild: true
 
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
@@ -13993,6 +13997,7 @@ packages:
   /minipass-sized@1.0.3:
     resolution: {integrity: sha512-MbkQQ2CTiBMlA2Dm/5cY+9SWFEN8pzzOXi6rlM5Xxq0Yqbda5ZQy9sU75a673FE9ZK0Zsbr6Y5iP6u9nktfg2g==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dependencies:
       minipass: 3.3.6
 
@@ -14136,6 +14141,7 @@ packages:
   /negotiator@0.6.4:
     resolution: {integrity: sha512-myRT3DiWPHqho5PrJaIRyaMv2kgYf0mUVgBNOYMuCH5Ki1yEiQaf/ZJuQ62nvpc44wL5WDbTX7yGJi1Neevw8w==}
     engines: {node: '>= 0.6'}
+    requiresBuild: true
 
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
@@ -16340,6 +16346,7 @@ packages:
   /retry@0.12.0:
     resolution: {integrity: sha512-9LkiTwjUh6rT555DtE9rTX+BKByPfrMzEAtnlEtdEwr3Nkffwiihqe2bWADg+OQRjt9gl6ICdmB/ZFDCGAtSow==}
     engines: {node: '>= 4'}
+    requiresBuild: true
 
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
@@ -17286,36 +17293,36 @@ packages:
       client-only: 0.0.1
       react: 19.0.0
 
-  /stylelint-config-css-modules@4.4.0(stylelint@16.13.0):
+  /stylelint-config-css-modules@4.4.0(stylelint@16.13.1):
     resolution: {integrity: sha512-J93MtxPjRzs/TjwbJ5y9SQy4iIqULXwL1CF1yx2tQCJfS/VZUcDAmoGOwqlLbhHXSQtZO5XQiA75NVWUR3KDCQ==}
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0 || ^16.0.0
     dependencies:
-      stylelint: 16.13.0(typescript@5.5.4)
+      stylelint: 16.13.1(typescript@5.5.4)
     optionalDependencies:
-      stylelint-scss: 6.10.0(stylelint@16.13.0)
+      stylelint-scss: 6.10.0(stylelint@16.13.1)
     dev: true
 
-  /stylelint-config-recommended@15.0.0(stylelint@16.13.0):
+  /stylelint-config-recommended@15.0.0(stylelint@16.13.1):
     resolution: {integrity: sha512-9LejMFsat7L+NXttdHdTq94byn25TD+82bzGRiV1Pgasl99pWnwipXS5DguTpp3nP1XjvLXVnEJIuYBfsRjRkA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.13.0(typescript@5.5.4)
+      stylelint: 16.13.1(typescript@5.5.4)
     dev: true
 
-  /stylelint-config-standard@37.0.0(stylelint@16.13.0):
+  /stylelint-config-standard@37.0.0(stylelint@16.13.1):
     resolution: {integrity: sha512-+6eBlbSTrOn/il2RlV0zYGQwRTkr+WtzuVSs1reaWGObxnxLpbcspCUYajVQHonVfxVw2U+h42azGhrBvcg8OA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.13.0(typescript@5.5.4)
-      stylelint-config-recommended: 15.0.0(stylelint@16.13.0)
+      stylelint: 16.13.1(typescript@5.5.4)
+      stylelint-config-recommended: 15.0.0(stylelint@16.13.1)
     dev: true
 
-  /stylelint-scss@6.10.0(stylelint@16.13.0):
+  /stylelint-scss@6.10.0(stylelint@16.13.1):
     resolution: {integrity: sha512-y03if6Qw9xBMoVaf7tzp5BbnYhYvudIKzURkhSHzcHG0bW0fAYvQpTUVJOe7DyhHaxeThBil4ObEMvGbV7+M+w==}
     engines: {node: '>=18.12.0'}
     requiresBuild: true
@@ -17330,12 +17337,12 @@ packages:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.0.0
       postcss-value-parser: 4.2.0
-      stylelint: 16.13.0(typescript@5.5.4)
+      stylelint: 16.13.1(typescript@5.5.4)
     dev: true
     optional: true
 
-  /stylelint@16.13.0(typescript@5.5.4):
-    resolution: {integrity: sha512-muxVjMhZB8BrDFSKNva0dmvD2tM0o/szrvuZuXYcAnN9a8nQmbGLqNUOemSgumaCMCPQ+0USYyG3hA5vJjUC1Q==}
+  /stylelint@16.13.1(typescript@5.5.4):
+    resolution: {integrity: sha512-691JjSIIcP6f9QJFz0J0/AMG3lupE9RqYAgYCON3wiqp5nQiKqDYIsz321GeTOYNznoRPNh0Mf6VjzP1eBVz/Q==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
@@ -17357,7 +17364,7 @@ packages:
       globby: 11.1.0
       globjoin: 0.1.4
       html-tags: 3.3.1
-      ignore: 7.0.0
+      ignore: 7.0.1
       imurmurhash: 0.1.4
       is-plain-object: 5.0.0
       known-css-properties: 0.35.0
