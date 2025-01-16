@@ -8,7 +8,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]),
+    ], allow_empty = True),
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
