@@ -233,8 +233,8 @@ devDependencies:
     specifier: 6.66.3
     version: 6.66.3(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
-    specifier: 2.20.1
-    version: 2.20.1(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 2.21.0
+    version: 2.21.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/pulumi':
     specifier: 3.146.0
     version: 3.146.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4887,11 +4887,12 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@2.20.1(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-Ketxn12C3YbR54233ETJLfGM1PZHj4rDEBaJQIFonw4wYMBc3aV6C9uA0g18pePhlThE1KRIr1itnXhg6fw2eQ==}
+  /@pulumi/awsx@2.21.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-3kUE1J5r+BS25QqL2tQq7mfuCP1CAzGRHUKl+IIl4fQ1K5crI2W7r/FIHfmWResFlBWu5ekS5IfM9fvUHg5ATA==}
     dependencies:
       '@aws-sdk/client-ecs': 3.726.1
       '@pulumi/aws': 6.66.3(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/docker': 4.6.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker-build': 0.0.8(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/pulumi': 3.146.0(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.147
@@ -4933,6 +4934,18 @@ packages:
   /@pulumi/docker@3.6.1(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     requiresBuild: true
+    dependencies:
+      '@pulumi/pulumi': 3.146.0(ts-node@10.9.2)(typescript@5.5.4)
+      semver: 5.7.2
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+      - ts-node
+      - typescript
+    dev: true
+
+  /@pulumi/docker@4.6.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-9XBQtKGYQykJgXS3nWXk/mp7vSZ4kpwGJcp8yPMwvlUDiIDS4lLPp7ieOJl/qVETXkW8EtQ8qxlJ/n8kTBgiBA==}
     dependencies:
       '@pulumi/pulumi': 3.146.0(ts-node@10.9.2)(typescript@5.5.4)
       semver: 5.7.2
