@@ -6,10 +6,13 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "ts",
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         "//project/zemn.me/app",
     ],

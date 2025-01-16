@@ -182,7 +182,7 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 
 http_archive(
     name = "com_github_openai_openai_openapi",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     integrity = "sha256-P0PkXK8DEh56Z+S7dWMwxIpVxqmuDJTBuni5ZN/cSok=",
     strip_prefix = "openai-openapi-2577b8c9a889a61c1163075c2e71e3812d80aa83",
     url = "https://github.com/openai/openai-openapi/archive/2577b8c9a889a61c1163075c2e71e3812d80aa83.zip",
@@ -201,7 +201,7 @@ visibility = [ "//visibility:public" ]
 native_binary(
 name = "binary",
 src = "chrome-linux64/chrome",
-data = glob(["**/*"], ["chrome-linux64/chrome"]),
+data = glob(["**/*"], ["chrome-linux64/chrome"], allow_empty=True),
 out = "chromium"
 )
 """
@@ -215,7 +215,7 @@ http_archive(
 
 http_archive(
     name = "com_github_factoriolab",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     integrity = "sha256-sr46XROs38AGASqEkUIKODVoLpDciRBRlJeNe+NvN2Q=",
     strip_prefix = "factoriolab-4ac80cb416e779819a73b871dd3e32ab7e0cda0c",
     url = "https://github.com/factoriolab/factoriolab/archive/4ac80cb416e779819a73b871dd3e32ab7e0cda0c.zip",
@@ -261,7 +261,7 @@ http_archive(
 
 http_archive(
     name = "ffmpeg_linux_x64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
     strip_prefix = "ffmpeg-5.1.1-amd64-static",
     url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
@@ -269,7 +269,7 @@ http_archive(
 
 http_archive(
     name = "ffmpeg_linux_i686",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "df4ff17a39758f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
     strip_prefix = "ffmpeg-6.0-i686-static",
     url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-i686-static.tar.xz",
@@ -277,7 +277,7 @@ http_archive(
 
 http_archive(
     name = "ffmpeg_linux_arm64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "49f9beb7690afcbd4832d3577d9f0c87374d63c39cde5097dfd52d61b24b4855",
     strip_prefix = "ffmpeg-5.1.1-arm64-static",
     url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-arm64-static.tar.xz",
@@ -285,14 +285,14 @@ http_archive(
 
 http_archive(
     name = "ffmpeg_macos_x64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "9a810d222862a7230fd7035c91e32beb605af7501c3517580f2bc1eb8faddacc",
     url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-6.0.zip",
 )
 
 http_archive(
     name = "ffmpeg_macos_arm64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
     url = "https://www.osxexperts.net/ffmpeg6arm.zip",
 )
@@ -300,7 +300,7 @@ http_archive(
 # Got no idea why but MS doesn't publish versions of this...
 http_archive(
     name = "microsoft_json_schemas",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "d6a1a41601ebb98d85742756b2847eda1781caa29c46ca66b1b0fb4c55c23072",
     strip_prefix = "json-schemas-2b6ef3bfa6634bada05486040a36b81fccb23a24",
     url = "https://github.com/microsoft/json-schemas/archive/2b6ef3bfa6634bada05486040a36b81fccb23a24.zip",
@@ -308,7 +308,7 @@ http_archive(
 
 http_archive(
     name = "pulumi_cli_linux_x64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "de608c40247d180379e532e4d38f5d2918d19b3a4fadad51f0df1f94e8e01602",
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-linux-x64.tar.gz",
@@ -317,7 +317,7 @@ http_archive(
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "be5d10b4b5a4bb008c795e22f325509df1da7b50b3ef72de90350499b63711a9",
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v3.144.1/pulumi-v3.144.1-darwin-arm64.tar.gz",
@@ -326,7 +326,7 @@ http_archive(
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-darwin-x64.tar.gz",
     ],
@@ -335,7 +335,7 @@ http_archive(
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = """
-exports_files(glob(["**/*"]))
+exports_files(glob(["**/*"], allow_empty=True))
 """,
     sha256 = "d86a8cb329edbb5ad548559b7d4205db9c170a07f00aa183468b62253b886eba",
     urls = [
@@ -345,7 +345,7 @@ exports_files(glob(["**/*"]))
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-arm64.zip",
     ],
@@ -353,7 +353,7 @@ http_archive(
 
 http_archive(
     name = "pulumi_cli_windows_x64",
-    build_file_content = """exports_files(glob(["**/*"]))""",
+    build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v3.59.0/pulumi-v3.59.0-windows-x64.zip",
     ],
@@ -364,10 +364,10 @@ http_archive(
     build_file_content = """
 filegroup(
 name = "core",
-srcs = glob(["Assets/StreamingAssets/content/core/**/*.json"]),
+srcs = glob(["Assets/StreamingAssets/content/core/**/*.json"], allow_empty=True),
 visibility = [ "//visibility:public" ]
 )
-exports_files(glob(["**/*"], exclude_directories=0))""",
+exports_files(glob(["**/*"], exclude_directories=0, allow_empty=True))""",
     sha256 = "c640c454db8bd2ef4b53cf00edffa959d6c6147718bafce9a43f48db286f2ea2",
     strip_prefix = "cultistsimulator-visible-2022.3.n.1",
     urls = [
