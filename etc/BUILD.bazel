@@ -2,7 +2,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 
 alias(
     name = "zone1970.tab",
-    actual = "@org_iana_data_zone1970_tab//file:file",
+    actual = "@com_github_eggbert_tz//:zone1970.tab",
 )
 
 bazel_lint(
