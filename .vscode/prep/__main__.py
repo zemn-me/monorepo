@@ -22,7 +22,7 @@ args = parser.parse_args()
 wd = args.working_directory
 
 def try_edit_sapling_config():
-	makedirs(".sl")
+	makedirs(".sl", exist_ok=True)
 
 	with open(path.join(wd, ".sl/config"), "r+") as file:
 		sapling_import_pattern = re.compile("%%include\\s+../ini/sl/config.ini")
