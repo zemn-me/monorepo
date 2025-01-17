@@ -378,15 +378,20 @@ exports_files(glob(["**/*"], exclude_directories=0))""",
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
-    name = "org_iana_data_zone1970_tab",
-    integrity = "sha256-3ANHICItrC0iU1vSQAMKZXN1a68sozBiy9AHi9ZGooE=",
-    url = "https://data.iana.org/time-zones/tzdb/zone1970.tab",
-)
-
-http_file(
     name = "inkscape_linux",
     downloaded_file_path = "bin",
     executable = True,
     sha256 = "b7a99b6c0ee2817706e77803643f4a6caf9e35bdec928e963c1d2ae86e5e4beb",
     urls = ["https://inkscape.org/es/gallery/item/31669/Inkscape-0a00cf5-x86_64.AppImage"],
+)
+
+http_archive(
+    name = "com_github_eggbert_tz",
+    build_file_content = """
+exports_files(glob(["**/*"]))""",
+    integrity = "sha256-g6dD48YBkXw5CQh81ac+WxWXYOiqIHs9IO5FCooZuu0=",
+    strip_prefix = "tz-2025a",
+    urls = [
+        "https://github.com/eggert/tz/archive/refs/tags/2025a.zip",
+    ],
 )

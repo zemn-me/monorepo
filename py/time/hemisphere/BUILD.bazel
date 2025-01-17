@@ -13,10 +13,10 @@ py_binary(
     name = "hemisphere_bin",
     srcs = ["__main__.py"],
     data = [
-        "@org_iana_data_zone1970_tab//file",
+        "//etc:zone1970.tab",
     ],
     env = {
-        "ZONE_TAB": "$(rlocationpath @org_iana_data_zone1970_tab//file:file)",
+        "ZONE_TAB": "$(rlocationpath //etc:zone1970.tab)",
     },
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
