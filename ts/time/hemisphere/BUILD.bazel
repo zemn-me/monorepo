@@ -1,0 +1,40 @@
+load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary", "js_run_binary")
+
+ts_project(
+	name = "regexgen",
+	srcs = [
+		"regexgen.ts"
+	],
+	deps = [
+		"//:node_modules/regexgen",
+		"//:node_modules/@types/regexgen",
+		"//py/time/hemisphere:tz_to_hemisphere_js"
+	]
+)
+
+js_binary(
+	name = "gen_regex_bin",
+	entry_point = "regexgen.js",
+	data = [
+		":regexgen"
+	]
+)
+
+js_run_binary(
+	name = "gen_hemi_regex",
+	tool = ":gen_regex_bin",
+	stdout = "is_hemisphere.ts"
+)
+
+ts_project(
+	name = "hemisphere",
+	srcs = [ "is_hemisphere.ts"],
+	visibility = [
+		"//:__subpackages__"
+	]
+)
+
+
+
+
