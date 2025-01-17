@@ -5,7 +5,7 @@ module github.com/zemn-me/monorepo
 
 go 1.22.9
 
-toolchain go1.23.4
+toolchain go1.23.5
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
