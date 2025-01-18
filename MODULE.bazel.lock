@@ -1826,7 +1826,7 @@
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "d576e0d8542df61396a9b38deeaa183c24135ed5e8e73bb9622f298f2671811e",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "021e85eb94cef6f547a25adad39361ff0db4e20aa947852abacb7081083cbe5b",
+          "@@//requirements.txt": "e456588f66d2be0195cf3db0517efa3c4be6962fbef0d0b6996a3f6e73cb01ee",
           "@@rules_python~//tools/publish/requirements_windows.txt": "d18538a3982beab378fd5687f4db33162ee1ece69801f9a451661b1b64286b76",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8"
@@ -2284,7 +2284,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "jupyterlab==4.2.7 --hash=sha256:7353c0704aec0e1219eb1e376c2d51f855a2522605f9ecdcab4993c006991ea3 --hash=sha256:a16a10a114360a4249c855e382b95260ebf2b91341884739dde954936096684d"
+              "requirement": "jupyterlab==4.3.4 --hash=sha256:b754c2601c5be6adf87cb5a1d8495d653ffb945f021939f77776acaa94dae952 --hash=sha256:f0bb9b09a04766e3423cccc2fc23169aa2ffedcdf8713e9e0fb33cac0b6859d0"
             }
           },
           "pip_313_jupyterlab_pygments": {
@@ -2424,7 +2424,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "notebook==7.2.2 --hash=sha256:2ef07d4220421623ad3fe88118d687bc0450055570cdd160814a59cf3a1c516e --hash=sha256:c89264081f671bc02eec0ed470a627ed791b9156cad9285226b31611d3e9fe1c"
+              "requirement": "notebook==7.3.2 --hash=sha256:705e83a1785f45b383bf3ee13cb76680b92d24f56fb0c7d2136fe1d850cd3ca8 --hash=sha256:e5f85fc59b69d3618d73cf27544418193ff8e8058d5bf61d315ce4f473556288"
             }
           },
           "pip_313_notebook_shim": {
