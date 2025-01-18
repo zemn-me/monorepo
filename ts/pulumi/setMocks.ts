@@ -1,6 +1,6 @@
 import * as pulumi from '@pulumi/pulumi';
 
-pulumi.runtime.setMocks({
+void pulumi.runtime.setMocks({
 	// Mock requests to provision cloud resources and return a canned response.
 	newResource: (
 		args: pulumi.runtime.MockResourceArgs
