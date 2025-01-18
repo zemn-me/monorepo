@@ -79,7 +79,9 @@
 					"go.mod",
 					"MODULE.bazel",
 					"MODULE.bazel.lock",
-					"gazelle_python.yaml"
+					"gazelle_python.yaml",
+					"go.sum",
+					"requirements.txt"
 				],
 				"recreateWhen": "always"
 			}
