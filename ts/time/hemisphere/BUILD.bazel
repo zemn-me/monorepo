@@ -1,0 +1,43 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_run_binary")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "regexgen",
+    srcs = [
+        "regexgen.ts",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/regexgen",
+        "//:node_modules/regexgen",
+        "//py/time/hemisphere:tz_to_hemisphere_js",
+    ],
+)
+
+js_binary(
+    name = "gen_regex_bin",
+    data = [
+        ":regexgen",
+    ],
+    entry_point = "regexgen.js",
+)
+
+js_run_binary(
+    name = "gen_hemi_regex",
+    stdout = "is_hemisphere.ts",
+    tool = ":gen_regex_bin",
+)
+
+ts_project(
+    name = "hemisphere",
+    srcs = ["is_hemisphere.ts"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

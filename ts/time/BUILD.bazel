@@ -15,9 +15,9 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/ts-toolbelt",
         "//:node_modules/zod",
-        "//py/time/hemisphere:tz_to_hemisphere_js",
         "//ts",
         "//ts/option",
+        "//ts/time/hemisphere",
     ],
 )
 
