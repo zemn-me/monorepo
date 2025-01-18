@@ -1826,7 +1826,7 @@
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "d576e0d8542df61396a9b38deeaa183c24135ed5e8e73bb9622f298f2671811e",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "83fe0d65ee1ff7bd488fb665aad8da3d2f3fa45c4527a2b896130af07ae49a21",
+          "@@//requirements.txt": "021e85eb94cef6f547a25adad39361ff0db4e20aa947852abacb7081083cbe5b",
           "@@rules_python~//tools/publish/requirements_windows.txt": "d18538a3982beab378fd5687f4db33162ee1ece69801f9a451661b1b64286b76",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8"
@@ -2284,7 +2284,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "jupyterlab==4.2.5 --hash=sha256:73b6e0775d41a9fee7ee756c80f58a6bed4040869ccc21411dc559818874d321 --hash=sha256:ae7f3a1b8cb88b4f55009ce79fa7c06f99d70cd63601ee4aa91815d054f46f75"
+              "requirement": "jupyterlab==4.2.7 --hash=sha256:7353c0704aec0e1219eb1e376c2d51f855a2522605f9ecdcab4993c006991ea3 --hash=sha256:a16a10a114360a4249c855e382b95260ebf2b91341884739dde954936096684d"
             }
           },
           "pip_313_jupyterlab_pygments": {
