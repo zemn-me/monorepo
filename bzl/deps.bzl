@@ -11,31 +11,6 @@ def fetch_dependencies():
     )
 
     http_archive(
-        name = "rules_proto",
-        sha256 = "14a225870ab4e91869652cfd69ef2028277fc1dc4910d65d353b62d6e0ae21f4",
-        strip_prefix = "rules_proto-7.1.0",
-        url = "https://github.com/bazelbuild/rules_proto/archive/refs/tags/7.1.0.tar.gz",
-    )
-
-    http_archive(
-        name = "com_google_protobuf",
-        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
-        strip_prefix = "protobuf-29.2",
-        urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
-        ],
-    )
-
-    http_archive(
-        name = "com_google_protobuf",
-        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
-        strip_prefix = "protobuf-29.2",
-        urls = [
-            "https://github.com/protocolbuffers/protobuf/archive/v29.2.tar.gz",
-        ],
-    )
-
-    http_archive(
         name = "cultistsimulator",
         strip_prefix = "cultistsimulator-visible-2022.3.n.1",
         urls = [
