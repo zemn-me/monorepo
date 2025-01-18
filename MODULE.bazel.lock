@@ -1826,7 +1826,7 @@
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "d576e0d8542df61396a9b38deeaa183c24135ed5e8e73bb9622f298f2671811e",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "2c78acc7d0ed6767ad677334486ddf1c9694dcb1b2faac41cfa928f30a9105a9",
+          "@@//requirements.txt": "f512b5447c6d47ca58a1a6b899eda23f47c7317725a0fd3234cbfbd3610c5378",
           "@@rules_python~//tools/publish/requirements_windows.txt": "d18538a3982beab378fd5687f4db33162ee1ece69801f9a451661b1b64286b76",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8"
@@ -2095,6 +2095,16 @@
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
               "requirement": "idna==3.10 --hash=sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9 --hash=sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+            }
+          },
+          "pip_313_iniconfig": {
+            "bzlFile": "@@rules_python~//python/private/pypi:whl_library.bzl",
+            "ruleClassName": "whl_library",
+            "attributes": {
+              "dep_template": "@pip//{name}:{target}",
+              "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
+              "repo": "pip_313",
+              "requirement": "iniconfig==2.0.0 --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"
             }
           },
           "pip_313_ipykernel": {
@@ -2527,6 +2537,16 @@
               "requirement": "platformdirs==4.3.6 --hash=sha256:357fb2acbc885b0419afd3ce3ed34564c13c9b95c89360cd9563f73aa5e2b907 --hash=sha256:73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb"
             }
           },
+          "pip_313_pluggy": {
+            "bzlFile": "@@rules_python~//python/private/pypi:whl_library.bzl",
+            "ruleClassName": "whl_library",
+            "attributes": {
+              "dep_template": "@pip//{name}:{target}",
+              "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
+              "repo": "pip_313",
+              "requirement": "pluggy==1.5.0 --hash=sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1 --hash=sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"
+            }
+          },
           "pip_313_prometheus_client": {
             "bzlFile": "@@rules_python~//python/private/pypi:whl_library.bzl",
             "ruleClassName": "whl_library",
@@ -2605,6 +2625,16 @@
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
               "requirement": "pyproject-hooks==1.2.0 --hash=sha256:1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8 --hash=sha256:9e5c6bfa8dcc30091c74b0cf803c81fdd29d94f01992a7707bc97babb1141913"
+            }
+          },
+          "pip_313_pytest": {
+            "bzlFile": "@@rules_python~//python/private/pypi:whl_library.bzl",
+            "ruleClassName": "whl_library",
+            "attributes": {
+              "dep_template": "@pip//{name}:{target}",
+              "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
+              "repo": "pip_313",
+              "requirement": "pytest==8.3.4 --hash=sha256:50e16d954148559c9a74109af1eaf0c945ba2d8f30f0a3d3335edde19788b6f6 --hash=sha256:965370d062bce11e73868e0335abac31b4d3de0e82f4007408d242b4f8610761"
             }
           },
           "pip_313_python_dateutil": {
@@ -5561,6 +5591,7 @@
                 "httpcore": "{\"pip_313_httpcore\":[{\"version\":\"3.13\"}]}",
                 "httpx": "{\"pip_313_httpx\":[{\"version\":\"3.13\"}]}",
                 "idna": "{\"pip_313_idna\":[{\"version\":\"3.13\"}]}",
+                "iniconfig": "{\"pip_313_iniconfig\":[{\"version\":\"3.13\"}]}",
                 "ipykernel": "{\"pip_313_ipykernel\":[{\"version\":\"3.13\"}]}",
                 "ipython": "{\"pip_313_ipython\":[{\"version\":\"3.13\"}]}",
                 "ipywidgets": "{\"pip_313_ipywidgets\":[{\"version\":\"3.13\"}]}",
@@ -5604,6 +5635,7 @@
                 "pip": "{\"pip_313_pip\":[{\"version\":\"3.13\"}]}",
                 "pip_tools": "{\"pip_313_pip_tools\":[{\"version\":\"3.13\"}]}",
                 "platformdirs": "{\"pip_313_platformdirs\":[{\"version\":\"3.13\"}]}",
+                "pluggy": "{\"pip_313_pluggy\":[{\"version\":\"3.13\"}]}",
                 "prometheus_client": "{\"pip_313_prometheus_client\":[{\"version\":\"3.13\"}]}",
                 "prompt_toolkit": "{\"pip_313_prompt_toolkit\":[{\"version\":\"3.13\"}]}",
                 "psutil": "{\"pip_313_psutil\":[{\"version\":\"3.13\"}]}",
@@ -5612,6 +5644,7 @@
                 "pycparser": "{\"pip_313_pycparser\":[{\"version\":\"3.13\"}]}",
                 "pygments": "{\"pip_313_pygments\":[{\"version\":\"3.13\"}]}",
                 "pyproject_hooks": "{\"pip_313_pyproject_hooks\":[{\"version\":\"3.13\"}]}",
+                "pytest": "{\"pip_313_pytest\":[{\"version\":\"3.13\"}]}",
                 "python_dateutil": "{\"pip_313_python_dateutil\":[{\"version\":\"3.13\"}]}",
                 "python_json_logger": "{\"pip_313_python_json_logger\":[{\"version\":\"3.13\"}]}",
                 "pyyaml": "{\"pip_313_pyyaml\":[{\"version\":\"3.13\"}]}",
@@ -5672,6 +5705,7 @@
                 "httpcore",
                 "httpx",
                 "idna",
+                "iniconfig",
                 "ipykernel",
                 "ipython",
                 "ipywidgets",
@@ -5715,6 +5749,7 @@
                 "pip",
                 "pip_tools",
                 "platformdirs",
+                "pluggy",
                 "prometheus_client",
                 "prompt_toolkit",
                 "psutil",
@@ -5723,6 +5758,7 @@
                 "pycparser",
                 "pygments",
                 "pyproject_hooks",
+                "pytest",
                 "python_dateutil",
                 "python_json_logger",
                 "pyyaml",
