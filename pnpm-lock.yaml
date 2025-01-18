@@ -30,8 +30,8 @@ dependencies:
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/random':
-    specifier: 4.16.8
-    version: 4.16.8(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 4.17.0
+    version: 4.17.0(ts-node@10.9.2)(typescript@5.5.4)
   '@react-spring/rafz':
     specifier: 9.7.5
     version: 9.7.5
@@ -5007,8 +5007,8 @@ packages:
   /@pulumi/query@0.3.0:
     resolution: {integrity: sha512-xfo+yLRM2zVjVEA4p23IjQWzyWl1ZhWOGobsBqRpIarzLvwNH/RAGaoehdxlhx4X92302DrpdIFgTICMN4P38w==}
 
-  /@pulumi/random@4.16.8(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-hJtaBARb2mIllAe+8X3nWdXcEaBhAwOobv6lkkdYGw+1hQg1HuGwKQYCIVegHfmdeHH9Sr55/BFqTm8yEMT9AA==}
+  /@pulumi/random@4.17.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-zJxTp5F7fANhm6CgIpWQEhF1/G0zUj6x+Y3g1JkHmLM5tVLmW5FTzD4K+JDLL0m2iZL7iQET0hx/kO4Aj3MizQ==}
     dependencies:
       '@pulumi/pulumi': 3.146.0(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
