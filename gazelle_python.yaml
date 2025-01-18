@@ -34,6 +34,7 @@ manifest:
     httpcore: httpcore
     httpx: httpx
     idna: idna
+    iniconfig: iniconfig
     ipykernel: ipykernel
     ipykernel_launcher: ipykernel
     ipywidgets: ipywidgets
@@ -80,14 +81,17 @@ manifest:
     piptools: pip_tools
     pkg_resources: setuptools
     platformdirs: platformdirs
+    pluggy: pluggy
     prometheus_client: prometheus_client
     prompt_toolkit: prompt_toolkit
     psutil: psutil
     ptyprocess: ptyprocess
     pure_eval: pure_eval
+    py: pytest
     pycparser: pycparser
     pygments: pygments
     pyproject_hooks: pyproject_hooks
+    pytest: pytest
     pythonjsonlogger: python_json_logger
     referencing: referencing
     requests: requests
@@ -120,4 +124,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: 53eacafa1a694060ee97591ace25d329ee4332f51f7bebc332b1a5d5ef67dec8
+integrity: 13f7afbe8a9626b0f03f51b349226c15477d920c84683f875ceb8973e852ca85

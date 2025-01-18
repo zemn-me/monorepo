@@ -1,0 +1,30 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "prep_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":prep"],
+)
+
+py_test(
+    name = "prep_test",
+    srcs = ["prep_test.py"],
+    deps = [":prep"],
+)
+
+py_library(
+    name = "prep",
+    srcs = [
+        "__init__.py",
+        "lib.py",
+    ],
+    visibility = ["//:__subpackages__"],
+)

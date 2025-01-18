@@ -1,18 +1,13 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_library")
 
-"Root for pure python projects."
+py_library(
+    name = "devtools",
+    srcs = ["__init__.py"],
+    visibility = ["//:__subpackages__"],
+)
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = [
-        "BUILD.bazel",
-        "rules.bzl",
-    ],
-)
-
-py_library(
-    name = "py",
-    srcs = ["__init__.py"],
-    visibility = ["//:__subpackages__"],
+    srcs = ["BUILD.bazel"],
 )
