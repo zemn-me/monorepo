@@ -36,4 +36,5 @@ export const Driver = (): Selenium.Builder =>
 				.setChromeBinaryPath(chromiumPath)
 				.addArguments('--disable-dev-shm-usage')
 				.addArguments('--headless')
+				.addArguments('--no-sandbox')
 		);
