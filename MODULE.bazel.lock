@@ -1826,7 +1826,7 @@
         "recordedFileInputs": {
           "@@rules_python~//tools/publish/requirements_linux.txt": "d576e0d8542df61396a9b38deeaa183c24135ed5e8e73bb9622f298f2671811e",
           "@@rules_fuzzing~//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
-          "@@//requirements.txt": "0d4c84e556790180e548bd6a92deb638203e127a9464e3e979efccccc21615fa",
+          "@@//requirements.txt": "16234679725bbf3edbd9450a4980492b5820f975720c870c4f61dd319dd4c311",
           "@@rules_python~//tools/publish/requirements_windows.txt": "d18538a3982beab378fd5687f4db33162ee1ece69801f9a451661b1b64286b76",
           "@@protobuf~//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_python~//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8"
@@ -1934,7 +1934,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "bleach==6.2.0 --hash=sha256:117d9c6097a7c3d22fd578fcd8d35ff1e125df6736f554da4e432fdd63f31e5e --hash=sha256:123e894118b8a599fd80d3ec1a6d4cc7ce4e5882b1317a7e1ba69b56e95f991f"
+              "requirement": "bleach[css]==6.2.0 --hash=sha256:117d9c6097a7c3d22fd578fcd8d35ff1e125df6736f554da4e432fdd63f31e5e --hash=sha256:123e894118b8a599fd80d3ec1a6d4cc7ce4e5882b1317a7e1ba69b56e95f991f"
             }
           },
           "pip_313_build": {
@@ -2394,7 +2394,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python~~python~python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "nbconvert==7.16.4 --hash=sha256:05873c620fe520b6322bf8a5ad562692343fe3452abda5765c7a34b7d1aa3eb3 --hash=sha256:86ca91ba266b0a448dc96fa6c5b9d98affabde2867b363258703536807f9f7f4"
+              "requirement": "nbconvert==7.16.5 --hash=sha256:c83467bb5777fdfaac5ebbb8e864f300b277f68692ecc04d6dab72f2d8442344 --hash=sha256:e12eac052d6fd03040af4166c563d76e7aeead2e9aadf5356db552a1784bd547"
             }
           },
           "pip_313_nbformat": {
