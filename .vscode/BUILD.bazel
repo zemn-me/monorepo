@@ -19,7 +19,7 @@ alias(
 
 alias(
     name = "install_sapling_hooks",
-    actual = "//.vscode/prep:prep_bin",
+    actual = "//py/devtools/prep:prep_bin",
 )
 
 bazel_lint(

@@ -1,3 +1,5 @@
+load("//py:rules.bzl", "py_library")
+
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
@@ -239,11 +241,14 @@ bazel_lint(
 py_venv(
     name = "venv",
     deps = [
-        "//.vscode/prep:prep_bin",
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/cultist/gen/testing",
+        "//py",
         "//py/ci/postUpgrade:postUpgrade_bin",
+        "//py/devtools",
+        "//py/devtools/prep",
+        "//py/devtools/prep:prep_bin",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/ipynb",
@@ -258,4 +263,12 @@ py_venv(
 alias(
     name = "go",
     actual = "//sh/bin:go",
+)
+
+# gazelle:python_root
+
+py_library(
+    name = "monorepo",
+    srcs = ["__init__.py"],
+    visibility = ["//:__subpackages__"],
 )
