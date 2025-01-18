@@ -69,4 +69,6 @@ rust_analyzer_dependencies()
 # cargo for some reason.
 load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
 
-fetch_ruff()
+fetch_ruff(
+    "v0.4.10",
+)
