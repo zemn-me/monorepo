@@ -397,3 +397,30 @@ exports_files(glob(["**/*"]))""",
         "https://github.com/eggert/tz/archive/refs/tags/2025a.zip",
     ],
 )
+
+bazel_dep(name = "rules_rust", version = "0.56.0")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+
+# renovate:
+# 	datasource=github-releases
+# 	versioning=rust
+# 	depName=rust-lang/rust
+RUST_VERSION = "1.83.0"
+
+rust.toolchain(
+    edition = "2021",
+    versions = [RUST_VERSION],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+crate.from_cargo(
+    name = "cargo",
+    cargo_lockfile = "//:Cargo.lock",
+    generate_binaries = True,
+    manifests = ["//:Cargo.toml"],
+)
+use_repo(crate, "cargo")
