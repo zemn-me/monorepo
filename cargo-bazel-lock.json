@@ -1,5 +1,5 @@
 {
-  "checksum": "815f21caf37734529457c61bc197ad0a60666e83968a9ab76c5d038a389cf9b5",
+  "checksum": "3f0e56ea745f2622b40dc41f0b6b39a8c33792252c987f8b73a8a45afb6e4e18",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -2239,12 +2239,6 @@
               }
             ],
             "wasm32-unknown-unknown": [
-              {
-                "id": "ansi_term 0.12.1",
-                "target": "ansi_term"
-              }
-            ],
-            "wasm32-wasi": [
               {
                 "id": "ansi_term 0.12.1",
                 "target": "ansi_term"
@@ -4795,12 +4789,6 @@
               "default",
               "futures-macro"
             ],
-            "wasm32-wasi": [
-              "async-await",
-              "async-await-macro",
-              "default",
-              "futures-macro"
-            ],
             "wasm32-wasip1": [
               "async-await",
               "async-await-macro",
@@ -4855,12 +4843,6 @@
           "common": [],
           "selects": {
             "wasm32-unknown-unknown": [
-              {
-                "id": "futures-macro 0.3.30",
-                "target": "futures_macro"
-              }
-            ],
-            "wasm32-wasi": [
               {
                 "id": "futures-macro 0.3.30",
                 "target": "futures_macro"
@@ -6924,10 +6906,6 @@
               "std"
             ],
             "s390x-unknown-linux-gnu": [
-              "default",
-              "std"
-            ],
-            "wasm32-wasi": [
               "default",
               "std"
             ],
@@ -10713,12 +10691,6 @@
               }
             ],
             "wasm32-unknown-unknown": [
-              {
-                "id": "wasm-streams 0.4.0",
-                "target": "wasm_streams"
-              }
-            ],
-            "wasm32-wasi": [
               {
                 "id": "wasm-streams 0.4.0",
                 "target": "wasm_streams"
@@ -20748,7 +20720,6 @@
       "thumbv7em-none-eabi",
       "thumbv8m.main-none-eabi",
       "wasm32-unknown-unknown",
-      "wasm32-wasi",
       "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
@@ -20895,7 +20866,6 @@
       "i686-unknown-linux-gnu",
       "powerpc-unknown-linux-gnu",
       "s390x-unknown-linux-gnu",
-      "wasm32-wasi",
       "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
@@ -20928,7 +20898,6 @@
       "thumbv7em-none-eabi",
       "thumbv8m.main-none-eabi",
       "wasm32-unknown-unknown",
-      "wasm32-wasi",
       "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
@@ -20976,7 +20945,6 @@
     "cfg(skeptic)": [],
     "cfg(target_arch = \"wasm32\")": [
       "wasm32-unknown-unknown",
-      "wasm32-wasi",
       "wasm32-wasip1"
     ],
     "cfg(target_feature = \"atomics\")": [],
@@ -20995,7 +20963,6 @@
     ],
     "cfg(target_os = \"redox\")": [],
     "cfg(target_os = \"wasi\")": [
-      "wasm32-wasi",
       "wasm32-wasip1"
     ],
     "cfg(target_os = \"windows\")": [
@@ -21073,9 +21040,6 @@
     "wasm32-unknown-unknown": [
       "wasm32-unknown-unknown"
     ],
-    "wasm32-wasi": [
-      "wasm32-wasi"
-    ],
     "wasm32-wasip1": [
       "wasm32-wasip1"
     ],
@@ -21124,5 +21088,6 @@
     "swc_ecma_parser 0.148.0",
     "tokio 1.43.0"
   ],
-  "direct_dev_deps": []
+  "direct_dev_deps": [],
+  "unused_patches": []
 }
