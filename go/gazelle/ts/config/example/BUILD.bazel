@@ -4,7 +4,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-    deps = ["@monorepo//:tsconfig"],
+    deps = ["//:tsconfig"],
 )
 
 bazel_lint(
