@@ -3,11 +3,17 @@ load("//mdx:rules.bzl", "mdx_files")
 
 mdx_files(
     name = "cors",
-    srcs = glob(["**/*.mdx"]),
-    assets = glob([
-        "**/*.jpg",
-        "**/*.png",
-    ]),
+    srcs = glob(
+        ["**/*.mdx"],
+        allow_empty = True,
+    ),
+    assets = glob(
+        [
+            "**/*.jpg",
+            "**/*.png",
+        ],
+        allow_empty = True,
+    ),
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/next",

@@ -8,7 +8,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]),
+    ], allow_empty = True),
     resolve_json_module = True,
     deps = [
         "//:node_modules/@types/jest",

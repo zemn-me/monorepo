@@ -19,8 +19,8 @@ ts_project(
     srcs = glob([
         "app/*.tsx",
         "app/*.ts",
-    ]),
-    assets = glob(["app/*.css"]),
+    ], allow_empty = True),
+    assets = glob(["app/*.css"], allow_empty = True),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/@types/seedrandom",
