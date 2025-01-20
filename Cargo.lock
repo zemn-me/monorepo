@@ -24,13 +24,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
 
 [[package]]
+name = "ahash"
+version = "0.8.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e89da841a80418a9b391ebaea17f5c112ffaaa96f621d2c285b5174da76b9011"
+dependencies = [
+ "cfg-if",
+ "once_cell",
+ "version_check",
+ "zerocopy",
+]
+
+[[package]]
 name = "allocator-api2"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "android-tzdata"
@@ -117,9 +126,9 @@ dependencies = [
 
 [[package]]
 name = "ast_node"
-version = "0.9.9"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9184f2b369b3e8625712493c89b785881f27eedc6cde480a81883cef78868b2"
+checksum = "f4d23a6d1d5f18bdbc06d9aa908880e5f49205156ba804751af731c51f5cf81a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -590,9 +599,9 @@ dependencies = [
 
 [[package]]
 name = "from_variant"
-version = "0.1.9"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32016f1242eb82af5474752d00fd8ebcd9004bd69b462b1c91de833972d08ed4"
+checksum = "e8d8947525c49c73130b5a7187b55b027b6b78fe60268d9f4c283ed690698cb1"
 dependencies = [
  "proc-macro2",
  "swc_macros_common",
@@ -742,6 +751,10 @@ name = "hashbrown"
 version = "0.14.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5274423e17b7c9fc20b6e7e208532f9b19825d82dfd615708b70edd83df41f1"
+dependencies = [
+ "ahash",
+ "allocator-api2",
+]
 
 [[package]]
 name = "hashbrown"
@@ -1217,7 +1230,7 @@ dependencies = [
  "serenity",
  "sha2",
  "swc_allocator",
- "swc_atoms 1.0.0",
+ "swc_atoms",
  "swc_common",
  "swc_ecma_ast",
  "swc_ecma_parser",
@@ -2002,33 +2015,22 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "swc_allocator"
-version = "0.1.6"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dae2f696639ba1834a7edb1765a5ea0a7ef57de52ac1403135929bd006748731"
+checksum = "76aa0eb65c0f39f9b6d82a7e5192c30f7ac9a78f084a21f270de1d8c600ca388"
 dependencies = [
- "allocator-api2",
  "bumpalo",
+ "hashbrown 0.14.5",
  "ptr_meta",
+ "rustc-hash",
  "triomphe",
 ]
 
 [[package]]
 name = "swc_atoms"
-version = "0.6.7"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb6567e4e67485b3e7662b486f1565bdae54bd5b9d6b16b2ba1a9babb1e42125"
-dependencies = [
- "hstr",
- "once_cell",
- "rustc-hash",
- "serde",
-]
-
-[[package]]
-name = "swc_atoms"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0963b5f4cb08353dd4a386c7b5ee1c99d5a097722cdbc6a522efb2aeb91aad71"
+checksum = "b25ff0f3fd48ab1a95d86fd0505fdd1ac904f84d0350dc8222bbc824e9d4fdf6"
 dependencies = [
  "hstr",
  "once_cell",
@@ -2038,9 +2040,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.36.0"
+version = "0.40.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df5ed098e191c0cb289aa89eeae8a5312993cf0997e7c83e011e0a7dd1f6ce7b"
+checksum = "ca32839a37f3b12213b18623b1bd58d37641cab750c50c3c287876cb98b12ab4"
 dependencies = [
  "ast_node",
  "better_scoped_tls",
@@ -2054,7 +2056,7 @@ dependencies = [
  "serde",
  "siphasher 0.3.11",
  "swc_allocator",
- "swc_atoms 0.6.7",
+ "swc_atoms",
  "swc_eq_ignore_macros",
  "swc_visit",
  "tracing",
@@ -2064,9 +2066,9 @@ dependencies = [
 
 [[package]]
 name = "swc_ecma_ast"
-version = "0.117.0"
+version = "0.121.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "536e973cd624cada731c22ad9ba3aa7a6432a5c1b6e002ec4f12809a8718da5d"
+checksum = "84d568834a727fc06c608db119dcea52c2d58e9426e92e72f358e2f7dc847063"
 dependencies = [
  "bitflags 2.8.0",
  "is-macro",
@@ -2074,16 +2076,16 @@ dependencies = [
  "phf",
  "scoped-tls",
  "string_enum",
- "swc_atoms 0.6.7",
+ "swc_atoms",
  "swc_common",
  "unicode-id-start",
 ]
 
 [[package]]
 name = "swc_ecma_parser"
-version = "0.148.0"
+version = "0.152.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59627c3704453c1bcb283c51ee161a5acf9988c80f80ef0250743fede0406602"
+checksum = "b888663998ef49da15d1dd3377e6b62bab4f994588e4f405628cb058d11ce8b3"
 dependencies = [
  "either",
  "new_debug_unreachable",
@@ -2094,7 +2096,7 @@ dependencies = [
  "smallvec",
  "smartstring",
  "stacker",
- "swc_atoms 0.6.7",
+ "swc_atoms",
  "swc_common",
  "swc_ecma_ast",
  "tracing",
