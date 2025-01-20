@@ -36,7 +36,7 @@ rules_rust_dependencies()
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.83.0"
+RUST_VERSION = "1.84.0"
 
 rust_register_toolchains(
     edition = "2021",
