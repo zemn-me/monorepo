@@ -5,6 +5,10 @@
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
 
+module(
+	name = "monorepo",
+)
+
 bazel_dep(name = "rules_oci", version = "2.2.0")
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 
