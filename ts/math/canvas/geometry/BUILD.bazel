@@ -8,7 +8,7 @@ ts_project(
     srcs = glob([
         "*.ts",
         "*.tsx",
-    ]),
+    ], allow_empty = True),
     deps = [
         "//ts/math",
     ],
