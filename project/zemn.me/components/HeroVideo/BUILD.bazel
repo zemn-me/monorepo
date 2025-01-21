@@ -3,9 +3,12 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "HeroVideo",
-    assets = glob([
-        "**/*.css",
-    ]),
+    assets = glob(
+        [
+            "**/*.css",
+        ],
+        allow_empty = True,
+    ),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//:base_defs",

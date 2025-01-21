@@ -22,8 +22,8 @@ ts_project(
     srcs = glob([
         "pages/*.tsx",
         "pages/*.ts",
-    ]),
-    assets = glob(["pages/*.css"]),
+    ], allow_empty = True),
+    assets = glob(["pages/*.css"], allow_empty = True),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
