@@ -6,11 +6,15 @@ filegroup(
     name = "base_game",
     srcs = glob(
         ["**/*"],
+        allow_empty = True,
         exclude = ["**/BUILD"],
     ),
 )
 
-exports_files(glob(["**/*"]))
+exports_files(glob(
+    ["**/*"],
+    allow_empty = True,
+))
 
 bazel_lint(
     name = "bazel_lint",

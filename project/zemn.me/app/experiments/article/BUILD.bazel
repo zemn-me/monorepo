@@ -4,7 +4,10 @@ load("//ts:rules.bzl", "ts_project")
 
 mdx_files(
     name = "test",
-    srcs = glob(["**/*.mdx"]),
+    srcs = glob(
+        ["**/*.mdx"],
+        allow_empty = True,
+    ),
 )
 
 ts_project(
