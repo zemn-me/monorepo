@@ -17,10 +17,13 @@ ts_project(
     srcs = [
         "page.tsx",
     ],
-    assets = glob([
-        "**/*.css",
-        "**/*.svg",
-    ]),
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         ":bad_files",
         "//:node_modules/@types/react",
