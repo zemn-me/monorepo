@@ -19,11 +19,17 @@ alias(
 # moved here so kate can automerge without modifying any important bazel stuff
 ts_project(
     name = "pages",
-    srcs = glob([
-        "pages/*.tsx",
-        "pages/*.ts",
-    ]),
-    assets = glob(["pages/*.css"]),
+    srcs = glob(
+        [
+            "pages/*.tsx",
+            "pages/*.ts",
+        ],
+        allow_empty = True,
+    ),
+    assets = glob(
+        ["pages/*.css"],
+        allow_empty = True,
+    ),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/next",
