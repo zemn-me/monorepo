@@ -1,22 +1,90 @@
 #!/usr/bin/env bash
+#
+# A pure Bash script that downloads (if necessary) and runs Bazelisk
+# from a cache folder stored at ../../.script_cache/bazelisk relative
+# to this script's location.
+#
+set -euo pipefail
 
-# Wrapper for Bazelisk
+# 1. Determine the directory where this script resides.
+#    This allows us to place the cache in ../../.script_cache/bazelisk
+#    relative to this file.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Step 1: Check if `bazelisk` exists in PATH
-if command -v bazelisk &> /dev/null; then
-  bazelisk "$@"
+# 2. Construct the cache path.
+CACHE_DIR="${SCRIPT_DIR}/../../.script_cache/bazelisk"
+mkdir -p "${CACHE_DIR}"
 
-# Step 2: Check if `go` is available in PATH
-elif command -v go &> /dev/null; then
-  go run github.com/bazelbuild/bazelisk@latest "$@"
+# 3. Identify OS and architecture.
+OS="$(uname -s)"
+ARCH="$(uname -m)"
 
-# Step 3: Check if `npx` is available in PATH
-elif command -v npx &> /dev/null; then
-  npx --yes @bazel/bazelisk "$@"
+# Normalise a few typical architecture strings
+case "${ARCH}" in
+  x86_64|amd64)
+    ARCH="amd64"
+    ;;
+  aarch64|arm64)
+    ARCH="arm64"
+    ;;
+  # Extend as needed for other architectures
+esac
 
-# Step 4: Error out if none of the above are available
-else
-  echo "Error: Bazelisk, Go, and NPX are not available. Please install one of them to use this script."
-  exit 1
+# Map the OS/ARCH pair to the correct Bazelisk asset name
+ASSET=""
+case "${OS}" in
+  Linux)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-linux-arm64"
+    else
+      ASSET="bazelisk-linux-amd64"
+    fi
+    ;;
+  Darwin)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-darwin-arm64"
+    else
+      ASSET="bazelisk-darwin-amd64"
+    fi
+    ;;
+  Windows)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-windows-arm64.exe"
+    else
+      ASSET="bazelisk-windows-amd64.exe"
+    fi
+    ;;
+  *)
+    echo "Unsupported OS: '${OS}'. Exiting."
+    exit 1
+    ;;
+esac
+
+# 4. Construct the path to the cached Bazelisk binary
+CACHED_BAZELISK="${CACHE_DIR}/${ASSET}"
+
+# 5. If the Bazelisk binary isn't cached yet, download it from GitHub.
+if [ ! -f "${CACHED_BAZELISK}" ]; then
+  echo "Downloading Bazelisk asset '${ASSET}' to '${CACHED_BAZELISK}'..."
+  curl --fail -L \
+    "https://github.com/bazelbuild/bazelisk/releases/latest/download/${ASSET}" \
+    -o "${CACHED_BAZELISK}"
+
+  if [ ! -f "${CACHED_BAZELISK}" ]; then
+    echo "Error: Could not download Bazelisk asset '${ASSET}'."
+    exit 1
+  fi
+
+  # Make it executable if on a Unix-like OS
+  case "${OS}" in
+    Linux|Darwin)
+      chmod +x "${CACHED_BAZELISK}"
+      ;;
+    Windows)
+      # On Windows, .exe doesn't need special permissions
+      ;;
+  esac
 fi
 
+# 6. Run Bazelisk from the cache, forwarding user arguments
+exec "${CACHED_BAZELISK}" "$@"
