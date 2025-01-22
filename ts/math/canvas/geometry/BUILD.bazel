@@ -5,10 +5,13 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "geometry",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = glob(
+        [
+            "*.ts",
+            "*.tsx",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         "//ts/math",
     ],

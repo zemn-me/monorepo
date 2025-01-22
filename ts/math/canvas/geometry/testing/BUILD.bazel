@@ -5,10 +5,13 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "testing",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = glob(
+        [
+            "*.ts",
+            "*.tsx",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         "//:node_modules/@types/jest",
         "//ts/math/canvas/braille",

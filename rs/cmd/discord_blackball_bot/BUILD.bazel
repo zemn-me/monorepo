@@ -5,7 +5,10 @@ package(default_visibility = ["//visibility:public"])
 
 rust_binary(
     name = "discord_blackball_bot",
-    srcs = glob(["*.rs"]),
+    srcs = glob(
+        ["*.rs"],
+        allow_empty = True,
+    ),
     deps = [
         "@cargo//:serenity",
         "@cargo//:tokio",

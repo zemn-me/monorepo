@@ -1,7 +1,10 @@
 [
-  {
-    "regex": "potentially fixable with the `--fix` option",
-    "command": "npm",
-    "args": [ "run", "fix" ]
-  }
+	{
+		"regex": "potentially fixable with the `--fix` option",
+		"command": "npm",
+		"args": [
+			"run",
+			"fix"
+		]
+	}
 ]

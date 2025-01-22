@@ -6,7 +6,10 @@ package(default_visibility = ["//visibility:public"])
 
 rust_binary(
     name = "testing",
-    srcs = glob(["*.rs"]),
+    srcs = glob(
+        ["*.rs"],
+        allow_empty = True,
+    ),
     deps = ["//rs/ts"],
 )
 

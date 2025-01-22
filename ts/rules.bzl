@@ -25,7 +25,7 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
     jest_config = None
 
     if srcs == None:
-        srcs = [paths.replace_extension(p, ".js") for p in native.glob(["*_test.ts"])]
+        srcs = [paths.replace_extension(p, ".js") for p in native.glob(["*_test.ts"], allow_empty = True)]
 
     if jsdom:
         jest_config = "//ts/jest:jest.browser.config.js"
@@ -71,7 +71,7 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         **kwargs: passed to the ts_project rule
     """
     if srcs == None:
-        srcs = native.glob(["**/*.ts", "**/*.tsx"])
+        srcs = native.glob(["**/*.ts", "**/*.tsx"], allow_empty = True)
 
     # needed because package.json tells node it can use ESM resolution at runtime
     # and all code is now esm.
