@@ -3,7 +3,10 @@ load("//mdx:rules.bzl", "mdx_files")
 
 mdx_files(
     name = "mdx",
-    srcs = glob(["**/*.mdx"]),
+    srcs = glob(
+        ["**/*.mdx"],
+        allow_empty = True,
+    ),
     visibility = ["//:__subpackages__"],
 )
 

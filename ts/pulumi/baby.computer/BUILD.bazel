@@ -16,11 +16,17 @@ alias(
 
 ts_project(
     name = "next_ts",
-    srcs = glob([
-        "app/*.tsx",
-        "app/*.ts",
-    ]),
-    assets = glob(["app/*.css"]),
+    srcs = glob(
+        [
+            "app/*.tsx",
+            "app/*.ts",
+        ],
+        allow_empty = True,
+    ),
+    assets = glob(
+        ["app/*.css"],
+        allow_empty = True,
+    ),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/@types/seedrandom",

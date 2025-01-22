@@ -5,10 +5,13 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "url",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = glob(
+        [
+            "*.ts",
+            "*.tsx",
+        ],
+        allow_empty = True,
+    ),
     resolve_json_module = True,
     deps = [
         "//:node_modules/@jest/globals",
