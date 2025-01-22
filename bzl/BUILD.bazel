@@ -10,28 +10,6 @@ sh_binary(
     srcs = ["run_affected_tests.sh"],
 )
 
-sh_binary(
-    name = "fix",
-    srcs = ["fix.sh"],
-    data = [
-        ":eslint",
-        "//:buildifier",
-        "//bin/host/gofmt",
-        "//css/lint",
-    ],
-    env = {
-        "FIX_CSS": "$(rootpath //css/lint)",
-        "FIX_BAZEL": "$(rootpath //:buildifier)",
-        "FIX_GO": "$(rootpath //bin/host/gofmt)",
-        "FIX_JS": "$(location :eslint)",
-        "BAZEL_BINDIR": ".",
-    },
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
-    ],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = [

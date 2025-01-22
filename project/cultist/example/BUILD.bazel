@@ -1,9 +1,15 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-tstests = glob(["*_test.ts"])
+tstests = glob(
+    ["*_test.ts"],
+    allow_empty = True,
+)
 
-tsfiles = [f for f in glob(["*.ts"]) if f not in tstests]
+tsfiles = [f for f in glob(
+    ["*.ts"],
+    allow_empty = True,
+) if f not in tstests]
 
 ts_project(
     name = "example",

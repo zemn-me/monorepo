@@ -5,10 +5,13 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "time",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = glob(
+        [
+            "*.ts",
+            "*.tsx",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",

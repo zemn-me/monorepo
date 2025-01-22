@@ -10,7 +10,10 @@ bazel_lint(
 
 filegroup(
     name = "twitter_archive_files",
-    srcs = glob(["**/*.json"]),
+    srcs = glob(
+        ["**/*.json"],
+        allow_empty = True,
+    ),
     visibility = [
         "//:__subpackages__",
     ],
@@ -18,7 +21,10 @@ filegroup(
 
 jsonschema_test(
     name = "schema_valid",
-    srcs = glob(["**/*.json"]),
+    srcs = glob(
+        ["**/*.json"],
+        allow_empty = True,
+    ),
     schema = "//ts/twitter:json_schema",
 )
 

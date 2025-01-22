@@ -8,6 +8,7 @@ filegroup(
     name = "modded_game",
     srcs = glob(
         ["**/*"],
+        allow_empty = True,
         exclude = ["**/BUILD"],
     ),
 )

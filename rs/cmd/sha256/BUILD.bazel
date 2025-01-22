@@ -6,7 +6,10 @@ package(default_visibility = ["//visibility:public"])
 
 rust_binary(
     name = "sha256",
-    srcs = glob(["*.rs"]),
+    srcs = glob(
+        ["*.rs"],
+        allow_empty = True,
+    ),
     deps = [
         "@cargo//:hex",
         "@cargo//:sha2",
