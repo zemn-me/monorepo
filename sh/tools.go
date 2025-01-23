@@ -9,5 +9,6 @@ import (
 	_ "github.com/itchyny/gojq"
 	_ "github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen"
 	_ "golang.org/x/tools/cmd/goimports"
+	_ "golang.org/x/tools/gopls"
 	_ "honnef.co/go/tools/cmd/staticcheck"
 )
