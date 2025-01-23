@@ -402,7 +402,7 @@ exports_files(glob(["**/*"]))""",
     ],
 )
 
-bazel_dep(name = "rules_rust", version = "0.57.0")
+bazel_dep(name = "rules_rust", version = "0.57.1")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
