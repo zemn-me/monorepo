@@ -51,8 +51,10 @@ CACHED_BAZELISK="${CACHE_DIR}/${ASSET}"
 
 if [ ! -f "${CACHED_BAZELISK}" ]; then
   echo "Downloading Bazelisk ${BAZELISK_VERSION} (${ASSET})..."
+  DOWNLOAD_URL="https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/${ASSET}"
+  echo "Downloading bazelisk $BAZELISK_VERSION from $DOWNLOAD_URL..."
   curl --fail -L \
-    "https://github.com/bazelbuild/bazelisk/releases/${BAZELISK_VERSION}/download/${ASSET}" \
+    "$DOWNLOAD_URL" \
     -o "${CACHED_BAZELISK}"
 
   case "${OS}" in
