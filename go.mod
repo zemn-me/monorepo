@@ -5,8 +5,6 @@ module github.com/zemn-me/monorepo
 
 go 1.23.5
 
-toolchain go1.23.5
-
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
 	github.com/aws/aws-lambda-go v1.47.0
@@ -31,6 +29,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.10.0
 	golang.org/x/tools v0.29.0
+	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.5.1
 )
 
@@ -69,6 +68,7 @@ require (
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-dap v0.12.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
@@ -122,9 +122,12 @@ require (
 	golang.org/x/telemetry v0.0.0-20241106142447-58a1122356f5 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
+	golang.org/x/vuln v1.0.4 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	mvdan.cc/gofumpt v0.7.0 // indirect
+	mvdan.cc/xurls/v2 v2.5.0 // indirect
 )
