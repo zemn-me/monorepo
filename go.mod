@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.22.9
+go 1.23.5
 
 toolchain go1.23.5
 
