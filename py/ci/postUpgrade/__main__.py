@@ -1,6 +1,7 @@
 "Runs after Renovate updates some dep"
 from subprocess import run as _run
 from os import environ, getenv
+from os.path import exists
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
@@ -35,9 +36,10 @@ def bazel_run(args: list[str] = [], env: dict[str, str] = {}, **kwargs):
 	)
 
 def cargo_repin():
-	return bazel(["sync", "--only=cargo"], env={
-		"CARGO_BAZEL_REPIN": "true"
-	})
+	if exists("WORKSPACE"):
+		return bazel(["sync", "--only=cargo"], env={
+			"CARGO_BAZEL_REPIN": "true"
+		})
 
 def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
