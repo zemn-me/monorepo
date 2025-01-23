@@ -52,6 +52,13 @@ alias(
     actual = "@co_honnef_go_tools//cmd/staticcheck",
 )
 
+
+alias(
+    name = "gopls",
+    actual = "@org_golang_x_tools_gopls//:gopls",
+)
+
+
 alias(
     name = "pnpm",
     actual = "//sh/pnpm",
