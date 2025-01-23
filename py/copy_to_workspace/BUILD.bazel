@@ -1,0 +1,9 @@
+load("//py:rules.bzl", "py_binary")
+
+py_binary(
+    name = "copy_to_workspace_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
