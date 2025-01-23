@@ -12,6 +12,7 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/zemn-me/monorepo/go/cmd/version_sync",
     visibility = ["//visibility:private"],
+    deps = ["@com_github_blang_semver_v4//:semver"],
 )
 
 bazel_lint(
