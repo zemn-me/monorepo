@@ -402,7 +402,7 @@ exports_files(glob(["**/*"]))""",
     ],
 )
 
-bazel_dep(name = "rules_rust", version = "0.57.0")
+bazel_dep(name = "rules_rust", version = "0.57.1")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
@@ -474,4 +474,4 @@ http_archive(
     url = "https://github.com/astral-sh/ruff/releases/download/0.9.2/ruff-x86_64-pc-windows-msvc.zip",
 )
 
-bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "platforms", version = "0.0.11")

@@ -33,7 +33,8 @@
 			"description": "Renovate directives",
 			"fileMatch": [
 				"^MODULE.bazel$",
-				"^WORKSPACE$"
+				"^WORKSPACE$",
+				"^sh/bin/bazel$"
 			],
 			"matchStrings": [
 				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>.*)\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""

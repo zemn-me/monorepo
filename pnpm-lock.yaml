@@ -371,8 +371,8 @@ devDependencies:
     specifier: 3.4.2
     version: 3.4.2
   puppeteer:
-    specifier: 24.1.0
-    version: 24.1.0(typescript@5.5.4)
+    specifier: 24.1.1
+    version: 24.1.1(typescript@5.5.4)
   react:
     specifier: 19.0.0
     version: 19.0.0
@@ -392,8 +392,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.124.0
-    version: 39.124.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0)
+    specifier: 39.126.0
+    version: 39.126.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -8729,18 +8729,8 @@ packages:
     engines: {node: '>=6.0'}
     dev: false
 
-  /chromium-bidi@0.11.0(devtools-protocol@0.0.1380148):
-    resolution: {integrity: sha512-6CJWHkNRoyZyjV9Rwv2lYONZf1Xm0IuDyNq97nwSsxxP3wf5Bwy15K5rOvVKMtJ127jJBmxFUanSAOjgFRxgrA==}
-    peerDependencies:
-      devtools-protocol: '*'
-    dependencies:
-      devtools-protocol: 0.0.1380148
-      mitt: 3.0.1
-      zod: 3.23.8
-    dev: true
-
-  /chromium-bidi@0.12.0(devtools-protocol@0.0.1380148):
-    resolution: {integrity: sha512-xzXveJmX826GGq1MeE5okD8XxaDT8172CXByhFJ687eY65rbjOIebdbUuQh+jXKaNyGKI14Veb3KjLLmSueaxA==}
+  /chromium-bidi@1.1.0(devtools-protocol@0.0.1380148):
+    resolution: {integrity: sha512-HislCEczCuamWm3+55Lig9XKmMF13K+BGKum9rwtDAzgUAHT4h5jNwhDmD4U20VoVUG8ujnv9UZ89qiIf5uF8w==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
@@ -15993,12 +15983,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /puppeteer-core@24.1.0:
-    resolution: {integrity: sha512-ReefWoQgqdyl67uWEBy/TMZ4mAB7hP0JB5HIxSE8B1ot/4ningX1gmzHCOSNfMbTiS/VJHCvaZAe3oJTXph7yw==}
+  /puppeteer-core@24.1.1:
+    resolution: {integrity: sha512-7FF3gq6bpIsbq3I8mfbodXh3DCzXagoz3l2eGv1cXooYU4g0P4mcHQVHuBD4iSZPXNg8WjzlP5kmRwK9UvwF0A==}
     engines: {node: '>=18'}
     dependencies:
       '@puppeteer/browsers': 2.7.0
-      chromium-bidi: 0.11.0(devtools-protocol@0.0.1380148)
+      chromium-bidi: 1.1.0(devtools-protocol@0.0.1380148)
       debug: 4.4.0
       devtools-protocol: 0.0.1380148
       typed-query-selector: 2.12.0
@@ -16010,17 +16000,17 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@24.1.0(typescript@5.5.4):
-    resolution: {integrity: sha512-F+3yKILaosLToT7amR7LIkTKkKMR0EGQPjFBch+MtgS8vRPS+4cPnLJuXDVTfCj2NqfrCnShtOr7yD+9dEgHRQ==}
+  /puppeteer@24.1.1(typescript@5.5.4):
+    resolution: {integrity: sha512-fuhceZ5HZuDXVuaMIRxUuDHfCJLmK0pXh8FlzVQ0/+OApStevxZhU5kAVeYFOEqeCF5OoAyZjcWbdQK27xW/9A==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 2.7.0
-      chromium-bidi: 0.12.0(devtools-protocol@0.0.1380148)
+      chromium-bidi: 1.1.0(devtools-protocol@0.0.1380148)
       cosmiconfig: 9.0.0(typescript@5.5.4)
       devtools-protocol: 0.0.1380148
-      puppeteer-core: 24.1.0
+      puppeteer-core: 24.1.1
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-buffer
@@ -16701,8 +16691,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.124.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0):
-    resolution: {integrity: sha512-Deg/iOLW4hNDLIY/ECZFBzrrOBWzcO8ht68m5s6j7rBZrZLoXAch6D3JetA++QU/6gCcLxIYzEl/IsEExUGVfA==}
+  /renovate@39.126.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0):
+    resolution: {integrity: sha512-YmVv2QGBTTyuhnbNQ/9I9OVTFBWVE5Wa7pCHNUY22Q7BpYaOf1SJVkLGl6cvUBf/52cwPBMcmCnp/7hH17sB/w==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -19509,10 +19499,6 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-
-  /zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
-    dev: true
 
   /zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
