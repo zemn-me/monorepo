@@ -69,15 +69,18 @@ esac
 # 4. Construct the path to the cached Bazelisk binary
 CACHED_BAZELISK="${CACHE_DIR}/${ASSET}"
 
-# 5. If the Bazelisk binary isn't cached yet, download it from GitHub.
+# 5. Determine Bazelisk version to download (default: latest)
+VERSION="${BAZELISK_VERSION:-latest}"
+
+# 6. If the Bazelisk binary isn't cached yet, download it from GitHub.
 if [ ! -f "${CACHED_BAZELISK}" ]; then
-  echo "Downloading Bazelisk asset '${ASSET}' to '${CACHED_BAZELISK}'..."
+  echo "Downloading Bazelisk asset '${ASSET}' (version: '${VERSION}') to '${CACHED_BAZELISK}'..."
   curl --fail -L \
-    "https://github.com/bazelbuild/bazelisk/releases/latest/download/${ASSET}" \
+    "https://github.com/bazelbuild/bazelisk/releases/${VERSION}/download/${ASSET}" \
     -o "${CACHED_BAZELISK}"
 
   if [ ! -f "${CACHED_BAZELISK}" ]; then
-    echo "Error: Could not download Bazelisk asset '${ASSET}'."
+    echo "Error: Could not download Bazelisk asset '${ASSET}' (version: '${VERSION}')."
     exit 1
   fi
 
@@ -92,5 +95,6 @@ if [ ! -f "${CACHED_BAZELISK}" ]; then
   esac
 fi
 
-# 6. Run Bazelisk from the cache, forwarding user arguments
+# 7. Run Bazelisk from the cache, forwarding user arguments
 exec "${CACHED_BAZELISK}" "$@"
+
