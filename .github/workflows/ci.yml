@@ -1,29 +1,28 @@
 ---
-
 name: CI
 
 on:   # yamllint disable-line rule:truthy
   merge_group:
     branches:
-      # presubmit
       - main
       - renovate/**
   pull_request:
     branches:
-      # presubmit
       - main
     types:
       - opened
       - synchronize
       - reopened
-      - edited # not in the default set, will run on rebase.
+      - edited
   push:
     branches:
       - main
-
-  # manual triggering
   workflow_dispatch:
 
+env:
+  BAZEL_RUN: ./sh/bin/bazel run --config=ci
+  BAZEL_BUILD: ./sh/bin/bazel build --config=ci
+  BAZEL_TEST: ./sh/bin/bazel test --config=ci
 
 jobs:
   Presubmit:
@@ -31,22 +30,12 @@ jobs:
       github.event_name == 'pull_request'
       || github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
-      || (github.event_name == 'push'
-      && startsWith(github.ref, 'refs/heads/renovate'))
+      || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/renovate'))
     concurrency:
-      # > The ref given is fully-formed, meaning that for branches the format
-      # > is refs/heads/<branch_name>,
-      # > for pull requests it is refs/pull/<pr_number>/merge,
-      # > and for tags it is refs/tags/<tag_name>. For example,
-      # > refs/heads/feature-branch-1.
-      #
-      # This should cancel a prior presubmit when a new change comes in.
       group: >
-        ${{ github.workflow }}-
-        ${{ github.job }}-
-        ${{ github.event.pull_request.number || github.ref }}
+        ${{ github.workflow }}-${{ github.job }}-${{
+        github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
-    # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -57,31 +46,24 @@ jobs:
           haskell: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+        uses: actions/checkout@v4
       - name: Presubmit
         run: |
-         ./.github/workflows/prepare_ci.sh && \
-         echo "::group::Presubmit prep" && \
-         bazel build --config=ci --tool_tag=presubmit //ci:presubmit && \
-         echo "::endgroup::" && \
-         echo "::group::Presubmit" && \
-         bazel run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
-         echo "::endgroup::"
+          ./.github/workflows/prepare_ci.sh && \
+          echo "::group::Presubmit prep" && \
+          $BAZEL_BUILD --tool_tag=presubmit //ci:presubmit && \
+          echo "::endgroup::" && \
+          echo "::group::Presubmit" && \
+          $BAZEL_RUN --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
+          echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+
   Staging:
-    # Pulumi doesn't like it when multiple deploys are attempted at once.
-    # This is also enforced at the pulumi layer, but i'm sure github actions
-    # would make me pay while that thread waits to acquire the lock.
     concurrency: pulumi_staging
-    # only bother with this when we reach the merge queue
     if: >
       github.event_name == 'merge_group'
       || github.event_name == 'workflow_dispatch'
-
-    # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -93,49 +75,30 @@ jobs:
           docker-images: true
           large-packages: false
           swap-storage: true
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
       - name: Checkout main branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@v4
         with:
           ref: main
       - name: Pulumi up from origin/main to staging
-        # dirty used here so the state transition is main -> candidate
-        # we test if the script exists so we don't fail as a result of it
-        # not yet existing on main.
         run: |
-            echo "::group::Presubmit prep" && \
-            test -f ./.github/workflows/prepare_ci.sh && \
-            ./.github/workflows/prepare_ci.sh && \
-            bazel build --config=ci --tool_tag=staging //ci:presubmit && \
-            echo "::endgroup::" && \
-            echo "::group::Presubmit" && \
-            bazel run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
-            --dangerously-skip-pnpm-lockfile-validation --overwrite && \
-            echo "::endgroup::"
+          echo "::group::Presubmit prep" && \
+          test -f ./.github/workflows/prepare_ci.sh && \
+          ./.github/workflows/prepare_ci.sh && \
+          $BAZEL_BUILD --tool_tag=staging //ci:presubmit && \
+          echo "::endgroup::" && \
+          echo "::group::Presubmit" && \
+          $BAZEL_RUN --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+          --dangerously-skip-pnpm-lockfile-validation --overwrite && \
+          echo "::endgroup::"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-      - name: Switch back to candidate branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Deploy candidate branch to Staging
-        # we can run this dirty since the next run will --overwrite anyway
-        run: |
-         ./.github/workflows/prepare_ci.sh
-         bazel run --tool_tag=staging //ci:presubmit -- \
-         --skip-bazel-tests \
-         --dangerously-skip-pnpm-lockfile-validation --dirty
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+
   Submit:
     concurrency: pulumi_production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    # Attempts to submit changes to production.
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -148,15 +111,11 @@ jobs:
           swap-storage: true
           large-packages: false
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+        uses: actions/checkout@v4
       - name: Submit
-        # Use npx to try to generate only
-        # bazel generated node_modules
         run: |
           ./.github/workflows/prepare_ci.sh
-          bazel run --config=ci --tool_tag=submit //ci:submit
+          $BAZEL_RUN --tool_tag=submit //ci:submit
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -165,33 +124,3 @@ jobs:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-  # Postsubmit:
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push'
-  #   needs: Submit
-  #   steps:
-  #     - name: Free Disk Space (Ubuntu)
-  #       uses: jlumbroso/free-disk-space@main
-  #       with:
-  #         android: true
-  #         dotnet: true
-  #         haskell: true
-  #         docker-images: true
-  #         large-packages: false
-  #         swap-storage: true
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     # example copied from:
-  #     # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
-  #     - name: Postsubmit
-  #       run: |
-  #         ./.github/workflows/prepare_ci.sh
-  #         bazel run //ci:postsubmit
-  #       env:
-  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
