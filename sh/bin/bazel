@@ -6,6 +6,12 @@
 #
 set -euo pipefail
 
+# renovate:
+# 	datasource=github-releases
+# 	versioning=semver-coerced
+# 	depName=bazelbuild/bazelisk
+BAZELISK_VERSION="v1.25.0"
+
 # 1. Determine the directory where this script resides.
 #    This allows us to place the cache in ../../.script_cache/bazelisk
 #    relative to this file.
