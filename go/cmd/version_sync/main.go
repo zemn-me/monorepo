@@ -1,240 +1,225 @@
-// cmd version_sync keeps go.mod and go_version.bzl in sync
 package main
 
 import (
 	"bufio"
-	"bytes"
-	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"regexp"
+	"strings"
+
+	"github.com/blang/semver/v4"
 )
 
 var (
-	fix            bool
-	test           bool
-	module_bazel   string
-	go_module_file string
+	goModPath      string
+	bazelPath      string
+	fixDiscrepancy bool
+	outputGoMod    string
+	outputBazel    string
 )
 
-const example_line = `go_sdk.download(version = "1.22.2")`
-
 func init() {
-	flag.BoolVar(&fix, "fix", false, "Whether to fix the bazel file if it is not in sync.")
-	flag.BoolVar(&test, "test", true, "Whether to return a non-zero status if not in sync.")
-	flag.StringVar(&module_bazel, "module_bazel", "MODULE.bazel", fmt.Sprintf("The go module file to update. Must have a line like %+q.", example_line))
-	flag.StringVar(&go_module_file, "moduleFile", "go.mod", "The go.mod file to read from.")
-}
-
-type FileLike interface {
-	io.Reader
-	io.Seeker
-	io.Writer
-	io.Closer
-	Truncate(size int64) error
-	Name() string
-}
-
-type File struct {
-	FileLike
-}
-
-func (v File) GetFirstSubmatch(re *regexp.Regexp) (start int, end int, err error) {
-	if _, err = v.Seek(0, io.SeekStart); err != nil {
-		return
-	}
-	versionIndex := re.FindReaderSubmatchIndex(bufio.NewReader(v))
-	if len(versionIndex) < 2*1+2 {
-		err = errors.New("Could not find match")
-		return
-	}
-
-	start, end = versionIndex[2*1], versionIndex[2*1+2-1]
-
-	return
-}
-
-// FileFiddler, given a File, and a SegementMatcher, provides
-// convenient tools for efficiently finding and replacing
-// part of a file matching a regex.
-type FileFiddler struct {
-	File
-	SegmentMatcher *regexp.Regexp
-	start          *int
-	end            *int
-	segment        []byte
-}
-
-func (f *FileFiddler) Offsets() (start int, end int, err error) {
-	if f.start == nil || f.end == nil {
-		f.start, f.end = new(int), new(int)
-		if *f.start, *f.end, err = f.GetFirstSubmatch(f.SegmentMatcher); err != nil {
-			f.start, f.end = nil, nil
-			err = fmt.Errorf("find %+q in %+q: %v", f.SegmentMatcher.String(), f.File.Name(), err)
-			return
-		}
-	}
-
-	return *f.start, *f.end, nil
-}
-
-func (f *FileFiddler) ReadSegment() (segment []byte, err error) {
-	if f.segment != nil {
-		return f.segment, nil
-	}
-
-	var start int
-	var end int
-	if start, end, err = f.Offsets(); err != nil {
-		err = fmt.Errorf("read matched segment: %v", err)
-		return
-	}
-
-	f.Seek(int64(start), io.SeekStart)
-	segment = make([]byte, end-start)
-	if _, err = f.Read(segment); err != nil {
-		err = fmt.Errorf("read from byte %d to %d of %+q:", start, end, f.File.Name())
-		return
-	}
-
-	return
-}
-
-func (f FileFiddler) OverwriteSegment(n []byte) (err error) {
-	var start int
-	if start, _, err = f.Offsets(); err != nil {
-		return
-	}
-	// buffer the whole file after the end of the match
-	var b bytes.Buffer
-	if _, err = io.Copy(&b, f); err != nil {
-		return
-	}
-	// truncate the file at the beginning of the match
-	if err = f.Truncate(int64(start)); err != nil {
-		return
-	}
-
-	// append the new segment
-	if _, err = f.Seek(int64(start), io.SeekStart); err != nil {
-		return
-	}
-
-	if _, err = io.Copy(f, io.MultiReader(bytes.NewReader(n), &b)); err != nil {
-		return
-	}
-
-	return
-}
-
-var ReVersionFileVersion = regexp.MustCompile(`go_sdk.download\s*\(\s*version\s*=\s*"([^"]*)"\s*\)\n`)
-
-type VersionFile struct {
-	FileFiddler
-}
-
-func (v *VersionFile) LazyInit() {
-	if v.FileFiddler.SegmentMatcher == nil {
-		v.FileFiddler.SegmentMatcher = ReVersionFileVersion
-	}
-}
-
-func (v *VersionFile) Version() (version []byte, err error) {
-	v.LazyInit()
-	version, err = v.ReadSegment()
-	if err != nil {
-		err = fmt.Errorf("While getting version from %+q: %v", v.File.Name(), err)
-	}
-	return
-}
-
-func (v *VersionFile) SetVersion(b []byte) (err error) {
-	v.LazyInit()
-	if err = v.OverwriteSegment(b); err != nil {
-		err = fmt.Errorf("While setting new version (%+q) in %+q: %v", b, v.File.Name(), err)
-	}
-	return
-}
-
-var ReModuleFileVersion = regexp.MustCompile(`go ([^\s]+)\n`)
-
-type ModuleFile struct {
-	FileFiddler
-}
-
-func (v *ModuleFile) LazyInit() {
-	if v.FileFiddler.SegmentMatcher == nil {
-		v.FileFiddler.SegmentMatcher = ReModuleFileVersion
-	}
-}
-
-func (v *ModuleFile) Version() (version []byte, err error) {
-	v.LazyInit()
-	return v.ReadSegment()
-}
-
-func (v *ModuleFile) SetVersion(b []byte) (err error) {
-	v.LazyInit()
-	return v.OverwriteSegment(b)
-}
-
-func do() (err error) {
-	var fileMode int = os.O_RDONLY
-	if fix {
-		fileMode = os.O_RDWR
-	}
-	vff, err := os.OpenFile(module_bazel, fileMode, 0o777)
-	if err != nil {
-		err = fmt.Errorf("Opening version file %+q: %v", module_bazel, err)
-		return
-	}
-
-	versionFile := VersionFile{FileFiddler: FileFiddler{File: File{FileLike: vff}}}
-	defer versionFile.Close()
-
-	modf, err := os.OpenFile(go_module_file, fileMode, 0o777)
-	if err != nil {
-		err = fmt.Errorf("Opening go module file %+q: %v", go_module_file, err)
-		return
-	}
-
-	moduleFile := ModuleFile{FileFiddler: FileFiddler{File: File{FileLike: modf}}}
-	defer moduleFile.Close()
-
-	versionFileVersion, err := versionFile.Version()
-	if err != nil {
-		err = fmt.Errorf("While getting version from bazel module: %v", err)
-		return
-	}
-
-	moduleFileVersion, err := moduleFile.Version()
-	if err != nil {
-		err = fmt.Errorf("While getting version from go module: %v", err)
-		return
-	}
-
-	inSync := bytes.Equal(versionFileVersion, moduleFileVersion)
-
-	if fix && !inSync {
-		err = versionFile.OverwriteSegment(moduleFileVersion)
-		if err != nil {
-			err = fmt.Errorf("While setting bazel module version to +%q: %v", moduleFileVersion, err)
-			return
-		}
-	}
-
-	if test && !inSync {
-		return fmt.Errorf("%+q and %+q are not in sync. %+q has: %+q; %+q has: %+q.", module_bazel, go_module_file, module_bazel, versionFileVersion, go_module_file, moduleFileVersion)
-	}
-
-	return
+	flag.StringVar(&goModPath, "go-mod", "go.mod", "Path to the go.mod file")
+	flag.StringVar(&bazelPath, "module-bazel", "MODULE.bazel", "Path to the MODULE.bazel file")
+	flag.StringVar(&outputGoMod, "output-go-mod", "", "Path to output the updated go.mod")
+	flag.StringVar(&outputBazel, "output-module-bazel", "", "Path to output the updated MODULE.bazel")
+	flag.BoolVar(&fixDiscrepancy, "fix", false, "Fix discrepancies instead of just reporting errors")
 }
 
 func main() {
 	flag.Parse()
-	if err := do(); err != nil {
-		panic(err)
+
+	if err := Do(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
+}
+
+// Do reads versions from go.mod and MODULE.bazel, compares them, and updates
+// one or both if needed (when -fix is specified). If output paths are given,
+// writes the *complete edited file* to those paths.
+func Do() error {
+	// 1. Read the current versions
+	goModVersion, err := readGoModVersion(goModPath)
+	if err != nil {
+		return fmt.Errorf("failed to read go.mod: %w", err)
+	}
+	bazelGoVersion, err := readBazelGoVersion(bazelPath)
+	if err != nil {
+		return fmt.Errorf("failed to read MODULE.bazel: %w", err)
+	}
+
+	// 2. Determine the latest version via semver comparison
+	latest, err := getLatestVersion(goModVersion, bazelGoVersion)
+	if err != nil {
+		return fmt.Errorf("failed to determine latest version: %w", err)
+	}
+
+	// 3. If we're not fixing, just check consistency
+	if !fixDiscrepancy {
+		if goModVersion != bazelGoVersion {
+			return fmt.Errorf("versions are inconsistent; run with -fix to synchronise")
+		}
+		return nil
+	}
+
+	// 4. If we are fixing, update go.mod if needed
+	if goModVersion != latest {
+		fmt.Printf("Updating go.mod from %s to %s\n", goModVersion, latest)
+		if err := rewriteGoMod(goModPath, outputGoMod, latest); err != nil {
+			return fmt.Errorf("failed to update go.mod: %w", err)
+		}
+	} else {
+		// If it doesn't need updating but an output path is set, still copy over
+		if outputGoMod != "" {
+			if err := copyFile(goModPath, outputGoMod); err != nil {
+				return fmt.Errorf("failed to copy go.mod to output: %w", err)
+			}
+		}
+	}
+
+	// 5. Update MODULE.bazel if needed
+	if bazelGoVersion != latest {
+		fmt.Printf("Updating MODULE.bazel from %s to %s\n", bazelGoVersion, latest)
+		if err := rewriteBazelGoVersion(bazelPath, outputBazel, latest); err != nil {
+			return fmt.Errorf("failed to update MODULE.bazel: %w", err)
+		}
+	} else {
+		// If it doesn't need updating but an output path is set, still copy over
+		if outputBazel != "" {
+			if err := copyFile(bazelPath, outputBazel); err != nil {
+				return fmt.Errorf("failed to copy MODULE.bazel to output: %w", err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// getLatestVersion compares two semver strings and returns the higher version.
+func getLatestVersion(v1, v2 string) (string, error) {
+	semver1, err := semver.ParseTolerant(v1)
+	if err != nil {
+		return "", fmt.Errorf("invalid version in go.mod: %w", err)
+	}
+	semver2, err := semver.ParseTolerant(v2)
+	if err != nil {
+		return "", fmt.Errorf("invalid version in MODULE.bazel: %w", err)
+	}
+	if semver1.GT(semver2) {
+		return semver1.String(), nil
+	}
+	return semver2.String(), nil
+}
+
+// readGoModVersion scans go.mod for a line matching `go <version>`
+func readGoModVersion(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", fmt.Errorf("unable to open file %s: %w", path, err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	re := regexp.MustCompile(`^go\s+(\S+)$`)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if matches := re.FindStringSubmatch(line); len(matches) == 2 {
+			return matches[1], nil
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return "", fmt.Errorf("error reading file %s: %w", path, err)
+	}
+	return "", fmt.Errorf("no go version found in %s", path)
+}
+
+// rewriteGoMod reads go.mod, updates its `go <version>` line to newVersion (if needed),
+// and writes the full updated content either to outputPath (if not empty) or back to srcPath.
+func rewriteGoMod(srcPath, outputPath, newVersion string) error {
+	contents, err := os.ReadFile(srcPath)
+	if err != nil {
+		return fmt.Errorf("unable to read file %s: %w", srcPath, err)
+	}
+	lines := strings.Split(string(contents), "\n")
+
+	re := regexp.MustCompile(`^go\s+(\S+)$`)
+	for i, line := range lines {
+		if re.MatchString(line) {
+			lines[i] = "go " + newVersion
+			break
+		}
+	}
+
+	destPath := srcPath
+	if outputPath != "" {
+		destPath = outputPath
+	}
+	if err := os.WriteFile(destPath, []byte(strings.Join(lines, "\n")), 0644); err != nil {
+		return fmt.Errorf("unable to write updated go.mod to %s: %w", destPath, err)
+	}
+	return nil
+}
+
+// readBazelGoVersion scans MODULE.bazel for a line matching `GO_VERSION = "<version>"`
+func readBazelGoVersion(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", fmt.Errorf("unable to open file %s: %w", path, err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	re := regexp.MustCompile(`^(\s*)GO_VERSION\s*=\s*"([^"]+)"`)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if matches := re.FindStringSubmatch(line); len(matches) == 3 {
+			return matches[2], nil
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return "", fmt.Errorf("error reading file %s: %w", path, err)
+	}
+	return "", fmt.Errorf("no GO_VERSION found in %s", path)
+}
+
+// rewriteBazelGoVersion reads MODULE.bazel, updates its `GO_VERSION = "<version>"` to newVersion,
+// and writes the full updated content either to outputPath (if provided) or back to srcPath.
+func rewriteBazelGoVersion(srcPath, outputPath, newVersion string) error {
+	contents, err := os.ReadFile(srcPath)
+	if err != nil {
+		return fmt.Errorf("unable to read file %s: %w", srcPath, err)
+	}
+	lines := strings.Split(string(contents), "\n")
+
+	re := regexp.MustCompile(`^(\s*)GO_VERSION\s*=\s*"([^"]+)"`)
+	for i, line := range lines {
+		if matches := re.FindStringSubmatch(line); len(matches) == 3 {
+			prefix := matches[1]
+			lines[i] = fmt.Sprintf(`%sGO_VERSION = "%s"`, prefix, newVersion)
+			break
+		}
+	}
+
+	destPath := srcPath
+	if outputPath != "" {
+		destPath = outputPath
+	}
+	if err := os.WriteFile(destPath, []byte(strings.Join(lines, "\n")), 0644); err != nil {
+		return fmt.Errorf("unable to write updated MODULE.bazel to %s: %w", destPath, err)
+	}
+	return nil
+}
+
+// copyFile simply copies the entire content from src to dst unmodified.
+func copyFile(src, dst string) error {
+	data, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(dst, data, 0644); err != nil {
+		return err
+	}
+	return nil
 }
