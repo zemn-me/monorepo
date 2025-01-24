@@ -17,6 +17,7 @@ require (
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.52.0
+	github.com/blang/semver/v4 v4.0.0
 	github.com/go-delve/delve v1.24.0
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.2
