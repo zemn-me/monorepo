@@ -392,8 +392,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.129.0
-    version: 39.129.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0)
+    specifier: 39.131.0
+    version: 39.131.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -5231,9 +5231,39 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: false
 
+  /@pnpm/catalogs.protocol-parser@1000.0.0:
+    resolution: {integrity: sha512-8eC25RAiu8BTaEseQmbo5xemlSwl06pMsUVORiYGX7JZEDb0UQVXOnbqFFJMPe/dyO8uwGXnDb350nauMzaraA==}
+    engines: {node: '>=18.12'}
+    dev: true
+
+  /@pnpm/catalogs.resolver@1000.0.1:
+    resolution: {integrity: sha512-A6KdGQMYNiwBe7N4CuQXfxhHnHo1MBX+d+EiAm+CEXeVrKPhm2RmVHRcKkF+pBlr6vV/KHp9z5tF2B3+jFnnRw==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      '@pnpm/catalogs.protocol-parser': 1000.0.0
+      '@pnpm/error': 1000.0.1
+    dev: true
+
+  /@pnpm/catalogs.types@1000.0.0:
+    resolution: {integrity: sha512-xRf72lk7xHNvbenA4sp4Of/90QDdRW0CRYT+V+EbqpUXu1xsXtedHai34cTU6VGe7C1hUukxxE9eYTtIpYrx5g==}
+    engines: {node: '>=18.12'}
+    dev: true
+
+  /@pnpm/constants@1001.0.0:
+    resolution: {integrity: sha512-yg+S/e8goJoUC4CxyKAplT2fuI94G/nynshPCNkLsi69bUMim5iDMuiiiMo/LeMoOjuyfByealD3u1mqNXrl+A==}
+    engines: {node: '>=18.12'}
+    dev: true
+
   /@pnpm/constants@6.1.0:
     resolution: {integrity: sha512-L6AiU3OXv9kjKGTJN9j8n1TeJGDcLX9atQlZvAkthlvbXjvKc5SKNWESc/eXhr5nEfuMWhQhiKHDJCpYejmeCQ==}
     engines: {node: '>=14.19'}
+    dev: true
+
+  /@pnpm/error@1000.0.1:
+    resolution: {integrity: sha512-FdDMjp9ORXK/JlxwjlNF7mRohVKx5pvM01bxsVUSLFLZ9/oMBtDceWlntUTLhvr2MwYcr69mGilTojnXEbsjQA==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      '@pnpm/constants': 1001.0.0
     dev: true
 
   /@pnpm/error@4.0.0:
@@ -5248,6 +5278,23 @@ packages:
     engines: {node: '>=14.19'}
     dependencies:
       graceful-fs: 4.2.11
+    dev: true
+
+  /@pnpm/parse-overrides@1000.0.1:
+    resolution: {integrity: sha512-dr7dBAFYsS2XS483/Z2bwk1ng8OwK4ixK3H7/RIptG1yD1GgYf4rZR1jAvQdmyuyTttKE9jSAdJLNFPo0bTRug==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      '@pnpm/catalogs.resolver': 1000.0.1
+      '@pnpm/catalogs.types': 1000.0.0
+      '@pnpm/error': 1000.0.1
+      '@pnpm/parse-wanted-dependency': 1000.0.0
+    dev: true
+
+  /@pnpm/parse-wanted-dependency@1000.0.0:
+    resolution: {integrity: sha512-SKK9m7leIQ0u6S+/LXREF0wTrFnyKiirLza6Dt0l7CL9pZdZtuI3mMvz6gNBFnIjTKJPwacdqRywT3bfK8W+FQ==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      validate-npm-package-name: 5.0.0
     dev: true
 
   /@pnpm/read-project-manifest@4.1.1:
@@ -8480,6 +8527,12 @@ packages:
       ieee754: 1.2.1
     dev: true
 
+  /builtins@5.1.0:
+    resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
+    dependencies:
+      semver: 7.6.3
+    dev: true
+
   /bunyan@1.8.15:
     resolution: {integrity: sha512-0tECWShh6wUysgucJcBAoYegf3JJoZWibxdqhTm7OHPeT42qdjkZ29QCMcKwbgU1kiH+auSIasNRXMLWXafXig==}
     engines: {'0': node >=0.10.0}
@@ -8892,6 +8945,11 @@ packages:
   /commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
+
+  /commander@13.0.0:
+    resolution: {integrity: sha512-oPYleIY8wmTVzkvQq10AEok6YcTC4sRUBl8F9gVuwchGVUCTbl/vhLTaQqutuuySYOsu8YTgV+OxKc/8Yvx+mQ==}
+    engines: {node: '>=18'}
+    dev: true
 
   /commander@13.1.0:
     resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
@@ -16691,8 +16749,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.129.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0):
-    resolution: {integrity: sha512-HLjyR6jy7Te/yzBxuu2sfgqU/muqAZF1uRiBYAZhpOVQRwQhkB9OUo96Jg/mmZM0QXIlePZP+7RoSl+Tlhu1zg==}
+  /renovate@39.131.0(@aws-sdk/client-sso-oidc@3.731.1)(typanion@3.14.0):
+    resolution: {integrity: sha512-oSlhUo/FMPE05I4Xs8VMteP0wtLdyTp5LqVh3WtAfCZNADHx7Qu1iTsc/1AcoGLoD9wKMVEXrCWwB8ipttVoLg==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^9.0.0}
     hasBin: true
     dependencies:
@@ -16714,6 +16772,7 @@ packages:
       '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.28.0
+      '@pnpm/parse-overrides': 1000.0.1
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.1
@@ -16734,7 +16793,7 @@ packages:
       chalk: 4.1.2
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
-      commander: 12.1.0
+      commander: 13.0.0
       conventional-commits-detector: 1.0.3
       croner: 9.0.0
       cronstrue: 2.53.0
@@ -18979,6 +19038,13 @@ packages:
     dependencies:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
+
+  /validate-npm-package-name@5.0.0:
+    resolution: {integrity: sha512-YuKoXDAhBYxY7SfOKxHBDoSyENFeW5VvIIQp2TGQuit8gpK6MnWaQelBKxso72DoxTZfZdcP3W90LqpSkgPzLQ==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      builtins: 5.1.0
+    dev: true
 
   /validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
