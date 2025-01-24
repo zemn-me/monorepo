@@ -1,0 +1,43 @@
+monorepoUrl = "ssh://git@github.com/zemn-me/monorepo.git"
+
+core.workflow(
+    name = "pull",                                 # <- renamed to pull
+    origin = git.origin(
+        url = monorepoUrl,
+        ref = "master",
+    ),
+    destination = git.github_pr_destination(
+        url = destinationUrl,
+        destination_ref = "master",
+        pr_branch = "from_public_repo",
+        title = "pr from external public repo",
+        body = "this is a sample pull request",
+        integrates = [],
+    ),
+    destination_files = glob(["external/**"]),
+    authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
+    transformations = [
+        core.move("", "external"),
+    ],
+)
+
+core.workflow(
+    name = "push",                                 # <- created
+    origin = git.origin(
+        url = destinationUrl,
+        ref = "master",
+    ),
+    destination = git.github_pr_destination(
+        url = monorepoUrl,
+        destination_ref = "master",
+        pr_branch = "from_monorepo",
+        title = "pr from monorepo",
+        body = "this is a sample pull request",
+        integrates = [],
+    ),
+    origin_files = glob(["external/**"]),  # pay attention!
+    authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
+    transformations = [
+        core.move("external", ""),
+    ],
+)
