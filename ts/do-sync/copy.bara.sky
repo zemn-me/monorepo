@@ -1,0 +1,37 @@
+
+monorepoUrl = "ssh://git@github.com/zemn-me/monorepo.git"
+targetUrl = "ssh://git@github.com/zemn-me/do-sync"
+
+core.workflow(
+    name = "pull",                                 # <- renamed to pull
+    origin = git.origin(
+        url = monorepoUrl,
+        ref = "main",
+    ),
+    destination = git.github_pr_destination(
+        url = targetUrl,
+        destination_ref = "main",
+    ),
+    destination_files = glob(["**"]),
+    authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
+    transformations = [
+#        core.move("", "external"),
+    ],
+)
+
+core.workflow(
+    name = "push",                                 # <- created
+    origin = git.origin(
+        url = destinationUrl,
+        ref = "main",
+    ),
+    destination = git.github_pr_destination(
+        url = monorepoUrl,
+        destination_ref = "main",
+    ),
+    origin_files = glob(["ts/do-sync/**"]),
+    authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
+    transformations = [
+        core.move("ts/do-sync", ""),
+    ],
+)
