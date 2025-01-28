@@ -1,9 +1,12 @@
 "use client";
 
+import { reduce } from 'ramda';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import seedrandom from 'seedrandom';
 
 import { Iterable, range } from '#root/ts/iter/index.js';
+import { add, mul, Point, point, sub, x, y } from '#root/ts/math/cartesian.js';
+import { fields, SimulateField, wrap2 } from '#root/ts/math/sim/sim';
 import { None, Option, Some } from '#root/ts/option/option.js';
 import * as date from '#root/ts/time/date.js';
 import { dayOfYear } from '#root/ts/time/day_of_year.js';
@@ -41,12 +44,11 @@ const cyclePos = (inputDate: Date, targetDate: Date = new Date(inputDate.getFull
 
 
 
+type Vector<N extends number = number> = Point<N>;
+const vector = point;
+const sum = add;
+const scalar = (n: number) => vector<1>(n);
 
-
-
-export type Vector = { x: number; y: number };
-
-export const vector = (x: number, y: number): Vector => ({ x, y });
 
 /**
  * Enum for different types of particles.
@@ -63,8 +65,8 @@ enum ParticleType {
  */
 type Particle = {
 	id: string;
-	position: Vector;
-	velocity: Vector;
+	position: Vector<2>;
+	velocity: Vector<2>;
 	mass: number;
 	radius: number;
 	type: ParticleType;
@@ -75,7 +77,7 @@ type Particle = {
 
 interface FishbowlProps {
 	readonly particles: Set<Particle>
-	readonly size: Vector
+	readonly size: Vector<2>
 }
 
 function icon(p: Particle): string {
@@ -91,18 +93,15 @@ function icon(p: Particle): string {
 	}
 }
 
-interface FieldEffect {
-	(self: Particle, all: Set<Particle>, δt: number): Vector
+
+function buoyancy(__: number, self: Particle, _: Set<Particle>): Vector<2> {
+	if (!self.isBuoyant) return vector<2>(0, 0);
+
+	return vector<2>(0, self.mass)
 }
 
-function buoyancy(self: Particle, _: Set<Particle>, __: number): Vector {
-	if (!self.isBuoyant) return vector(0, 0);
-
-	return vector(0, self.mass)
-}
-
-function fishFear(self: Particle, all: Set<Particle>, _: number) {
-	if (self.type != ParticleType.Fish) return vector(0, 0);
+function fishFear(_: number, self: Particle, all: Set<Particle>) {
+	if (self.type != ParticleType.Fish) return vector<2>(0, 0);
 
 	const sharks = Iterable(all)
 		.map(v => v.type == ParticleType.Shark ? Some(v) : None)
@@ -110,48 +109,46 @@ function fishFear(self: Particle, all: Set<Particle>, _: number) {
 		.to_array();
 
 	const sharkSum = Iterable(sharks)
-		.fold((p, c) => vector(
-			p.x + c.position.x,
-			p.y + c.position.y
-		), vector(0, 0));
+		.fold((p, c) =>
+			sum<1, 2>(
+				p, c.position
+			), vector<2>(0, 0));
 
-	const sharkCentre = vector(
-		sharkSum.x / sharks.length,
-		sharkSum.y / sharks.length
+	const sharkCentre = mul<1, 2, 1, 1>(
+		sharkSum, vector<1>(1 / sharks.length)
+	);
+
+	const toward = sub<1, 2>(
+		self.position, sharkCentre
 	)
 
-	const toward = vector(
-		self.position.x - sharkCentre.x,
-		self.position.y - sharkCentre.y
-	);
-
-	const towardMag = Math.hypot(toward.x, toward.y);
-
-	const towardUnit = vector(
-		toward.x / towardMag,
-		toward.y / towardMag
-	);
-
-	const awayUnit = vector(
-		-towardUnit.x,
-		-towardUnit.y
-	);
-
-	return vector(
-		awayUnit.x * 50,
-		awayUnit.y * 50
+	const towardMag = Math.hypot(
+		x(toward), y(toward)
 	)
 
+	const towardUnit = mul<1, 2, 1, 1>(
+		toward, scalar(1/towardMag)
+	)
 
+	const awayUnit = mul<1, 2, 1, 1>(
+		towardUnit,
+		scalar(-1)
+	);
+
+
+	return mul<1, 2, 1, 1>(
+		awayUnit,
+		scalar(50)
+	)
 }
 
-function sharkHunger(self: Particle, other: Set<Particle>, _: number) {
+function sharkHunger(_: number, self: Particle, other: Set<Particle>) {
 	if (self.type != ParticleType.Shark) return vector(0, 0);
 
 	// find the nearest fish
 
-	const distance = (other: Vector) =>
-		Math.hypot(self.position.x - other.x, self.position.y, other.y);
+	const distance = (other: Vector<2>) =>
+		Math.hypot(x(self.position) - x(other), y(self.position), y(other));
 
 
 	const closestFish = Iterable(other.difference(new Set([self])))
@@ -162,31 +159,30 @@ function sharkHunger(self: Particle, other: Set<Particle>, _: number) {
 		).first();
 
 	const fishDist = closestFish.and_then(
-		closest => vector(
-			self.position.x - closest.position.x,
-			self.position.y - closest.position.y
+		closest => vector<2>(
+			x(self.position) - x(closest.position),
+			y(self.position) - y(closest.position)
 		)
-	)
+	);
 
 	const fishDir = fishDist.and_then(
 		dist => {
-			const mag = Math.hypot(dist.x, dist.y);
+			const mag = Math.hypot(x(dist), y(dist));
 
-			return vector(
-				dist.x / mag,
-				dist.y / mag
+			return vector<2>(
+				x(dist) / mag,
+				y(dist) / mag
 			)
 		}
 	)
 
-
-	return fishDir.and_then(dir => vector(
-		dir.x * 20,
-		dir.y * 20
-	)).unwrap_or(vector(0, 0))
+	return fishDir.and_then(dir => vector<2>(
+		x(dir) * 20,
+		y(dir) * 20
+	)).unwrap_or(vector<2>(0, 0))
 }
 
-const friction = (coefficient: number) => (self: Particle, _: Set<Particle>, __: number): Vector => vector(-self.velocity.x * coefficient * self.radius, -self.velocity.y * coefficient * self.radius);
+const friction = (coefficient: number) => (__: number, self: Particle, _: Set<Particle>): Vector => vector<2>(-x(self.velocity) * coefficient * self.radius, -y(self.velocity) * coefficient * self.radius);
 
 
 function Fishbowl(props: FishbowlProps) {
@@ -204,8 +200,8 @@ function Fishbowl(props: FishbowlProps) {
 					textAnchor: "middle",
 					fontSize: `${p.radius}`,
 				}}
-	x={p.position.x}
-	y={props.size.y - p.position.y}
+	x={x(p.position)}
+	y={y(props.size) - y(p.position)}
 			>{
 					icon(p)
 				}</text>).to_array()
@@ -234,14 +230,14 @@ function uuid(rng: () => number) {
 }
 
 
-function spawnBubble(rng: () => number, max: Vector): Particle {
+function spawnBubble(rng: () => number, max: Vector<2>): Particle {
 
 	const radius = 5 + 10 * rng();
 	return {
 		id: uuid(rng),
-		position: vector(
-			rng() * max.x,
-			rng() * max.y
+		position: vector<2>(
+			rng() * x(max),
+			rng() * y(max)
 		),
 
 		mass: 0.1 + radius * .5,
@@ -252,24 +248,24 @@ function spawnBubble(rng: () => number, max: Vector): Particle {
 
 		type: ParticleType.Bubble,
 
-		velocity: vector(rng() * 3, rng() * 3)
+		velocity: vector<2>(rng() * 3, rng() * 3)
 	}
 }
 
-function spawnHeart(rng: () => number, max: Vector): Particle {
+function spawnHeart(rng: () => number, max: Vector<2>): Particle {
 	return {
 		...spawnBubble(rng, max),
 		type: ParticleType.Heart
 	}
 }
 
-function spawnFish(rng: () => number, max: Vector): Particle {
+function spawnFish(rng: () => number, max: Vector<2>): Particle {
 	const radius = 10 + 10 * rng();
 	return {
 		id: uuid(rng),
-		position: vector(
-			rng() * max.x,
-			rng() * max.y
+		position: vector<2>(
+			rng() * x(max),
+			rng() * y(max)
 		),
 
 		radius,
@@ -278,18 +274,18 @@ function spawnFish(rng: () => number, max: Vector): Particle {
 
 		type: ParticleType.Fish,
 
-		velocity: vector(0, 0)
+		velocity: vector<2>(0, 0)
 	}
 }
 
-function spawnShark(rng: () => number, max: Vector): Particle {
+function spawnShark(rng: () => number, max: Vector<2>): Particle {
 
 	const radius= 15 + 15 * rng();
 	return {
 		id: uuid(rng),
-		position: vector(
-			rng() * max.x,
-			rng() * max.y
+		position: vector<2>(
+			rng() * x(max),
+			rng() * y(max)
 		),
 
 		mass: 1 + radius * 4,
@@ -299,13 +295,13 @@ function spawnShark(rng: () => number, max: Vector): Particle {
 
 		type: ParticleType.Shark,
 
-		velocity: vector(0, 0)
+		velocity: vector<2>(0, 0)
 	}
 }
 
 const ramp = "abcdefghijklmnopqrstuvwxyz".split("");
 
-function spawnRandomBubble(rng: () => number, max: Vector): Particle {
+function spawnRandomBubble(rng: () => number, max: Vector<2>): Particle {
 	if (rng() < ((cyclePos(a())**2))*.5) {
 		return spawnHeart(rng, max)
 	}
@@ -313,7 +309,7 @@ function spawnRandomBubble(rng: () => number, max: Vector): Particle {
 	return spawnBubble(rng, max);
 }
 
-function spawnRandomParticle(rng: () => number, max: Vector): Particle {
+function spawnRandomParticle(rng: () => number, max: Vector<2>): Particle {
 	const rnd = rng();
 
 	if (rnd < .1) return spawnShark(rng, max);
@@ -323,60 +319,54 @@ function spawnRandomParticle(rng: () => number, max: Vector): Particle {
 	return spawnRandomBubble(rng, max)
 }
 
-const fields: FieldEffect[] = [
-	buoyancy,
-	friction(0.01),
-	sharkHunger,
+const f1 = fields(
+	buoyancy, friction(0.01)
+)
+
+const f2 = fields(
+	f1,
+	friction(0.01)
+);
+
+const f3 = fields(
+	f2,
+	sharkHunger
+);
+
+const f4 = fields(
+	f3,
 	fishFear
-];
+)
 
-interface Range {
-	min: Vector,
-	max: Vector
-}
 
-function tick(dt: number, p: Set<Particle>, bounds: Range) {
-	return new Set(Iterable(p).map(self => {
-		const force = Iterable(fields).map(field =>
-			field(self, p, dt)
-		).fold((a, b) => vector(a.x + b.x, a.y + b.y), vector(0, 0));
+// im sure i can do better with
+// ramda but idk how.
+const field = f4;
 
-		const acceleration = vector(
-			force.x / self.mass,
-			force.y / self.mass
-		);
+function sim(
+	dt: number,
+	objects: Set<Particle>,
+): Set<Particle> {
+	const step = SimulateField(
+		dt,
+		objects,
+		field
+	);
 
-		const dv = vector(
-			acceleration.x * dt,
-			acceleration.y * dt
-		);
-
-		self.velocity = vector(
-			self.velocity.x + dv.x,
-			self.velocity.y + dv.y
-		);
-
-		self.position = vector(
-			(self.position.x + self.velocity.x * dt) % bounds.max.x,
-			(self.position.y + self.velocity.y * dt) % bounds.max.y
+	return new Set<Particle>(
+		[...step].map(
+			v => wrap2(
+				vector<2>(0, 0),
+				vector<2>(1000, 1000)
+			)(v)
 		)
-
-		if (self.position.x < 0) {
-			self.position.x += bounds.max.x
-		}
-
-		if (self.position.y < 0) {
-			self.position.y += bounds.max.y
-		}
-
-		return self;
-	}).to_array())
+	)
 }
 
 export function FishbowlClient() {
 	const rng = seedrandom('lulu.computer');
-	const size = vector(1000, 1000);
-	const maxDensity = (size.x * size.y) / 1000;
+	const size = vector<2>(1000, 1000);
+	const maxDensity = (x(size) * y(size)) / 1000;
 	const [particles, setParticles] = useState<Set<Particle>>(
 		new Set<Particle>(
 			Iterable(range(0, Math.round(rng() * maxDensity)))
@@ -393,10 +383,10 @@ export function FishbowlClient() {
 
 		lastFrameTime.current = Some(now);
 
-		return setParticles(tick(dt / 1000, particles, {
-			min: vector(0, 0),
-			max: size,
-		}));
+		return setParticles(sim(
+			dt / 1000,
+			particles
+		))
 	}, [ particles, setParticles]);
 
 
