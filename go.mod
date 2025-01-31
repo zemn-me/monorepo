@@ -10,8 +10,8 @@ require (
 	github.com/aws/aws-lambda-go v1.47.0
 	github.com/aws/aws-sdk-go-v2 v1.34.0
 	github.com/aws/aws-sdk-go-v2/config v1.29.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.74.1
-	github.com/bazelbuild/bazel-gazelle v0.41.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.75.0
+	github.com/bazelbuild/bazel-gazelle v0.42.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.52.0
@@ -25,8 +25,8 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
-	github.com/tdewolff/parse/v2 v2.7.19
-	github.com/twilio/twilio-go v1.23.10
+	github.com/tdewolff/parse/v2 v2.7.20
+	github.com/twilio/twilio-go v1.23.11
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.10.0
 	golang.org/x/tools v0.29.0
