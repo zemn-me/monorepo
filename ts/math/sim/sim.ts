@@ -1,0 +1,123 @@
+/**
+ * @fileoverview
+ * Functions for a simulation in time.
+ */
+
+import { Iterable } from "#root/ts/iter/index.js"
+import { add, mul, Point, point, x, y } from "#root/ts/math/cartesian.js"
+
+
+type Vector<N extends number = number> = Point<N>;
+const vector = point;
+const sum = add;
+const scalar = (n: number) => vector<1>(n);
+
+
+/**
+ * Performs operations on an object in the simulation
+ * on a tick-to-tick basis.
+ */
+export interface TickField<T> {
+	(dt: number, self: T, other: Set<T>): T
+}
+
+/**
+ * Resolve forces on an object in the simulation
+ */
+export interface Field<T, N extends number> {
+	(dt: number, self: T, other: Set<T>): Vector<N>
+}
+
+/**
+ * if value is -1, return max-1,
+ * if value is max+1, return 1 usw.
+ */
+function wrapToZero(value: number, modulus: number): number {
+  return ((value % modulus) + modulus) % modulus;
+}
+
+function wrapInRange(value: number, minVal: number, maxVal: number): number {
+  const span = (maxVal - minVal) + 1;
+  return wrapToZero(value - minVal, span) + minVal;
+}
+
+/**
+ * When the particle exits some bounds, wrap it
+ * around to the other side.
+ *
+ * im lazy so its only for 2d rn
+ */
+export const wrap2 = (min: Vector<2>, max: Vector<2>) => <T extends Particle<2>>(self: T): T => {
+	self.position = vector<2>(
+		wrapInRange(
+			x(self.position),
+			x(min),
+			x(max)
+		),
+		wrapInRange(
+			y(self.position),
+			y(min),
+			y(max)
+		)
+	);
+
+	return self;
+}
+
+/**
+ * Combine two fields into a single Field.
+ */
+export function fields<T1, T2, N extends number>(
+	f1: Field<T1, N>,
+	f2: Field<T2, N>
+): Field<T1 & T2, N> {
+	return (...a: Parameters<Field<T1 & T2, N>>) =>
+		sum<1, N>(f1(...a), f2(...a))
+}
+
+interface Particle<N extends number> {
+	mass: number
+	velocity: Vector<N>
+	position: Vector<N>
+}
+
+export function SimulateField<N extends number, T extends Particle<N>>(
+	dt: number,
+	objects: Set<T>,
+	field: Field<T, N>
+): Set<T> {
+	return new Set(Iterable(objects).map(self => {
+		const other = objects.difference(
+			new Set([self])
+		);
+
+		const force = field(dt, self, other);
+
+		const acc = mul<1, N, 1, 1>(
+			force,
+			scalar(1/self.mass)
+		)
+
+		const dv = mul<1, N, 1, 1>(
+			acc,
+			scalar(dt)
+		);
+
+		const dp = mul<1, N, 1, 1>(
+			self.velocity,
+			scalar(dt)
+		);
+
+		self.velocity = sum<1, N>(
+			self.velocity,
+			dv
+		);
+
+		self.position = sum<1, N>(
+			self.position,
+			dp
+		);
+
+		return self;
+	}).to_array())
+}
