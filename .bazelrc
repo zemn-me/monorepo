@@ -16,7 +16,7 @@ build --enable_platform_specific_config
 # Be aware that this will still create a bazel-out symlink in
 # your project directory, which you must exclude from version control and your
 # editor's search path.
- build --symlink_prefix=dist/
+# build --symlink_prefix=dist/
 # To disable the symlinks altogether (including bazel-out) you can use
 # build --symlink_prefix=/
 # however this makes it harder to find outputs.
@@ -89,7 +89,7 @@ try-import %workspace%/.bazelrc.user
 
 # be careful with this!
 test --test_tag_filters=-do_not_run_on_main
-try-import .auth.bazelrc
+#try-import .auth.bazelrc
 
 # BuildBuddy suggestions
 test --noslim_profile
