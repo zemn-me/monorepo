@@ -1694,7 +1694,7 @@
         "bzlTransitiveDigest": "aktGAlJU8Q8pzkqRA3mIdVvyj4JD3tjAJ/ICXVkwjkg=",
         "usagesDigest": "xHXQN0xaq8w1wbLM4gvbyUFwVyjifiz/jb8yfd8RAbM=",
         "recordedFileInputs": {
-          "@@//requirements.txt": "77e2ab500170bfefab3917cfd27d201043ee3c0c6a685f7e09500ceea1396b95",
+          "@@//requirements.txt": "585dd328dc686e7d4cac79e21b860e2e6a393fa13ff857d4ff584e195686ec54",
           "@@protobuf+//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_fuzzing+//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
           "@@rules_python+//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8",
@@ -1785,7 +1785,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python++python+python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "beautifulsoup4==4.13.0 --hash=sha256:9c4c3dfa67aba55f6cd03769c441b21e6a369797fd6766e4b4c6b3399aae2735 --hash=sha256:b6e5afb3a2b1472c8db751a92eabf7834e5c7099f990c5e4b35f1f16b60bae64"
+              "requirement": "beautifulsoup4==4.13.1 --hash=sha256:72465267014897bb10ca749bb632bde6c2d20f3254afd5458544bd74e6c2e6d8 --hash=sha256:741c8b6903a1e4ae8ba32b9c9ae7510dab7a197fdbadcf9fcdeb0891ef5ec66a"
             }
           },
           "pip_313_bleach": {
