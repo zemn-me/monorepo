@@ -12,6 +12,7 @@ const vector = point;
 const sum = add;
 const scalar = (n: number) => vector<1>(n);
 
+export const kilogram = 1;
 
 /**
  * Performs operations on an object in the simulation
@@ -27,6 +28,21 @@ export interface TickField<T> {
 export interface Field<T, N extends number> {
 	(dt: number, self: T, other: Set<T>): Vector<N>
 }
+
+
+export const forceField =
+	<N extends number>(unitVector:
+		Vector<N>
+	) =>
+		(force: number): Field<unknown, N> =>
+			() => mul<1, N, 1, 1>(unitVector,
+				scalar(force)
+			);
+
+export const earthGravity =
+	forceField(
+		vector(0, 0, -1)
+	)(10);
 
 /**
  * if value is -1, return max-1,
@@ -121,3 +137,4 @@ export function SimulateField<N extends number, T extends Particle<N>>(
 		return self;
 	}).to_array())
 }
+
