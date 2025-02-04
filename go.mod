@@ -28,7 +28,7 @@ require (
 	github.com/tdewolff/parse/v2 v2.7.20
 	github.com/twilio/twilio-go v1.23.11
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.11.0
 	golang.org/x/tools v0.29.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.5.1
