@@ -4,7 +4,7 @@
  */
 
 import { Iterable } from "#root/ts/iter/index.js"
-import { add, mul, Point, point, x, y } from "#root/ts/math/cartesian.js"
+import { add, mul, Point, point, x, y, z } from "#root/ts/math/cartesian.js"
 
 
 type Vector<N extends number = number> = Point<N>;
@@ -12,6 +12,7 @@ const vector = point;
 const sum = add;
 const scalar = (n: number) => vector<1>(n);
 
+export const kilogram = 1;
 
 /**
  * Performs operations on an object in the simulation
@@ -28,6 +29,25 @@ export interface Field<T, N extends number> {
 	(dt: number, self: T, other: Set<T>): Vector<N>
 }
 
+
+export const forceField =
+	<N extends number>(unitVector:
+		Vector<N>
+	) =>
+		(force: number): Field<unknown, N> =>
+			() => mul<1, N, 1, 1>(unitVector,
+				scalar(force)
+			);
+
+export const airFriction =
+	(coefficient: Vector<1>): Field<Particle<N>, N> =>
+	<N extends number>(_: number, self: Particle<N>, __: Set<Particle<N>>) => mul<1, N, 1, 1>(mul<1, N, 1, 1>(self.velocity, scalar(-1)), coefficient)
+
+export const earthGravity =
+	forceField(
+		vector(0, 0, -1)
+	)(10);
+
 /**
  * if value is -1, return max-1,
  * if value is max+1, return 1 usw.
@@ -40,6 +60,50 @@ function wrapInRange(value: number, minVal: number, maxVal: number): number {
   const span = (maxVal - minVal) + 1;
   return wrapToZero(value - minVal, span) + minVal;
 }
+
+/**
+ * Simulates a plane at Y=0 that objects collide with elasically.
+ */
+export const collisionPlaneZ0:
+	Field<
+		Massed &
+		Velocitied<3> &
+		Positioned<3>,
+		3
+	> =
+	(dt, self, __) => {
+		if (z(self.position) > 0) return vector<3>(0, 0, 0);
+
+		// exert a force within DT which
+		// effectively reverses the
+		// particle's velocity
+		//
+		// f = ma
+		// v = at
+		// v2 = v1 + at
+		// v2 - v1 = at
+		// (v2-v1) /t = a
+		//
+		// f = m(
+		// (v2-v1) /t
+		// )
+		//
+
+		const f = self.mass * (
+			(
+				(-z(self.velocity)) -
+				z(self.velocity)
+			) / dt
+		)
+
+
+
+		return vector<3>(
+			x(self.velocity),
+			y(self.velocity),
+			f
+		)
+	}
 
 /**
  * When the particle exits some bounds, wrap it
@@ -75,11 +139,21 @@ export function fields<T1, T2, N extends number>(
 		sum<1, N>(f1(...a), f2(...a))
 }
 
-interface Particle<N extends number> {
+export interface Massed {
 	mass: number
+}
+
+export interface Velocitied<N extends number> {
 	velocity: Vector<N>
+}
+
+export interface Positioned<N extends number> {
 	position: Vector<N>
 }
+
+type Particle<N extends number> =
+	Massed & Velocitied<N> & Positioned<N>
+
 
 export function SimulateField<N extends number, T extends Particle<N>>(
 	dt: number,
@@ -121,3 +195,4 @@ export function SimulateField<N extends number, T extends Particle<N>>(
 		return self;
 	}).to_array())
 }
+
