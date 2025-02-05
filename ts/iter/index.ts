@@ -1,3 +1,4 @@
+import * as functional from '#root/ts/iter/iterable_functional.js';
 import { NewType } from '#root/ts/NewType.js';
 import { None, type Option, Some } from '#root/ts/option/option.js';
 
@@ -195,23 +196,25 @@ export function* range(start = 0, end = Infinity, step = 1) {
 	}
 }
 
+
 export function reduce<I, R>(
 	i: Iterable<I>,
 	f: (previousValue: R, currentValue: I, currentIndex: number) => R,
 	initialValue: R
 ) {
-	let previousValue = initialValue,
-		currentIndex = 0;
-
-	for (const currentValue of i) {
-		previousValue = f(previousValue, currentValue, currentIndex);
-		currentIndex++;
-	}
-
-	return previousValue;
+	return functional.fold(
+		(
+			p: R,
+			[c, i]: [I, number],
+		) => f(p, c, i)
+	)(initialValue)(
+		enumerate(i)
+	)
 }
 
-export const fold = reduce;
+export { reduce as fold };
+
+
 
 /**
  * Walks a chain of values using a selector.
@@ -328,12 +331,11 @@ export async function unroll<T>(v: AsyncIterable<T>): Promise<T[]> {
 	return arr;
 }
 
-export function* concat<T1, T2>(
+export function concat<T1, T2>(
 	i: Iterable<T1>,
 	i2: Iterable<T2>
 ): Iterable<T1 | T2> {
-	yield* i;
-	yield* i2;
+	return functional.concat(i)(i2)
 }
 
 export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<readonly [Option<A>, Option<B>]> {
@@ -365,12 +367,13 @@ class impl<T> extends NewType<T> {
 		return new impl(map(this.value, f))
 	}
 	filter<T>(this: _Iterable<Option<T>>): _Iterable<T> {
-		const { value } = this;
-		return new impl( function* () {
-			for (const v of value) {
-				if (v.is_some()) yield v.unwrap();
-			}
-		}())
+		return new impl(
+			functional.filter<T>(
+				this.map(v =>
+					v.value
+				).value
+			)
+		)
 	}
 	sort<T>(this: _Iterable<T>, compareFn?: (a: T, b: T) => number): impl<T[]> {
 		return new impl([...this.value].sort(compareFn))
