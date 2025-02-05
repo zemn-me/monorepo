@@ -1,22 +1,22 @@
-import path from "node:path";
+
+import path from "path";
 import { fileURLToPath } from "node:url";
 
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import next from '@next/eslint-plugin-next';
+import importPlugin from "eslint-plugin-import";
 import jestLint from 'eslint-plugin-jest';
 import * as mdx from 'eslint-plugin-mdx';
 import reactPlugin from 'eslint-plugin-react';
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, ".gitignore");
-
 
 /** @type {import('eslint').Linter.FlatConfig} */
 export const reactConfig = {
@@ -34,7 +34,6 @@ export const reactConfig = {
 		'react-hooks': reactHooksPlugin,
 		'@next/next': next,
 		'react': fixupPluginRules(reactPlugin),
-		'simple-import-sort': simpleImportSort,
 		'jest': jestLint,
 	},
 	rules: {
@@ -74,12 +73,16 @@ export const reactConfig = {
 		'comma-spacing': 'error',
 		'computed-property-spacing': 'error',
 		'key-spacing': 'error',
-		'simple-import-sort/imports': 'error',
-		'simple-import-sort/exports': 'error',
 		'keyword-spacing': 'error',
 		'object-curly-newline': 'error',
 		'arrow-body-style': ['error', 'as-needed'],
 		'no-console': 'error',
+		/**
+		 * unshipped :(
+		 * 'import/enforce-node-protocol-usage': [
+			'error',
+			'always'
+		]*/
 	},
 	settings: {
 		react: {
@@ -89,8 +92,7 @@ export const reactConfig = {
 			rootDir: ['project/zemn.me/'],
 		},
 	},
-
-}
+};
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default tseslint.config(
@@ -105,6 +107,8 @@ export default tseslint.config(
 			},
 		},
 		extends: [
+			importPlugin.flatConfigs.recommended,
+			importPlugin.flatConfigs.typescript,
 			js.configs.recommended,
 			...tseslint.configs.recommended,
 			reactConfig
@@ -142,6 +146,7 @@ export default tseslint.config(
 			extraFileExtensions: ['.md', '.mdx'],
 		},
 		settings: {
+			'import/internal-regex': "^#",
 			'mdx/code-blocks': true,
 			'mdx/language-mapper': {},
 		},
@@ -153,4 +158,4 @@ export default tseslint.config(
 			includeIgnoreFile(gitignorePath)
 		]
 	}
-)
+);
