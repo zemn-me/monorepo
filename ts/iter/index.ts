@@ -116,9 +116,7 @@ export function some<T>(i: Iterable<T>, f: (i: T) => boolean) {
 	return false;
 }
 
-export function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
-	for (const it of i) yield f(it);
-}
+export const map = functional.map;
 
 /**
  * Separates an iterator into two iterators in one single loop
@@ -190,12 +188,7 @@ export function _divide<I, O extends I>(
 	];
 }
 
-export function* range(start = 0, end = Infinity, step = 1) {
-	for (let i = start; i < end; i += step) {
-		yield i;
-	}
-}
-
+export const range = functional.range;
 
 export function reduce<I, R>(
 	i: Iterable<I>,
