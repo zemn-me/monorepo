@@ -30,6 +30,7 @@ const kingPenguin =
 		mass: randomRange(rng)(
 			9
 		)(15) * kilogram,
+		species: 'King Penguin',
 		position,
 		icon: '🐧',
 		velocity: vector<3>(0, 0, 0)
@@ -42,6 +43,7 @@ const adeliePenguin =
 			5
 		)(7) * kilogram,
 		position,
+		species: 'Adelie Penguin',
 		icon: '🐧',
 		velocity: vector<3>(0, 0, 0)
 	})
@@ -135,6 +137,9 @@ export function PenguinSim() {
 					icon
 					</td>
 					<td>
+					species
+					</td>
+					<td>
 					mass (kg)
 					</td>
 
@@ -152,6 +157,7 @@ export function PenguinSim() {
 				{[...world].map(
 					(object, i) => <tr key={i}>
 						<td>{object.icon}</td>
+						<td>{object.species}</td>
 						<td>{object.mass}</td>
 						<td>{x(object.position)}</td>
 						<td>{y(object.position)}</td>
