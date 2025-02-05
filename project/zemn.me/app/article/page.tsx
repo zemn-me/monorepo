@@ -1,4 +1,7 @@
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-	return <>Nothing here yet!</>
+	const router = useRouter();
+
+	router.replace("../articles");
 }

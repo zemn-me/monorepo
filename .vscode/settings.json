@@ -37,7 +37,7 @@
 		"**/.git/subtree-cache/**": true,
 		"**/node_modules/*/**": true,
 		"**/.hg/store/**": true,
-		"**/bazel-out": true
+		"**/dist/out": true
 	},
 	"[rust]": {
 		"editor.formatOnSaveMode": "file",
@@ -55,7 +55,7 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
 	},
-	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
+	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {
 		"GOPACKAGESDRIVER": "${workspaceFolder}/sh/bin/gopackagesdriver"
 	},
@@ -64,10 +64,7 @@
 	},
 	"gopls": {
 		"build.directoryFilters": [
-			"-bazel-bin",
-			"-bazel-out",
-			"-bazel-testlogs",
-			"-bazel-mypkg",
+			"-dist",
 		],
 		"formatting.gofumpt": true,
 		"formatting.local": "github.com/zemn-me/monorepo",
