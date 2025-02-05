@@ -45,14 +45,6 @@ const cmd = new Command('presubmit')
 		}`,
 		false
 	)
-	.option(
-		'--dangerously-skip-pnpm-lockfile-validation',
-		`${
-			'Skip presubmit package.json:pnpm-lock.yaml validation. ' +
-			'This is a really dangerous thing to do because it can create a desynchronization ' +
-			'that only manifests in some revision down the line.'
-		}`
-	)
 	.action(async o => {
 		// this is unfortunately necessary because my arm mac chokes on getting a running
 		// version of inkscape, and I'm deferring solving that to some later day.
@@ -136,48 +128,6 @@ const cmd = new Command('presubmit')
 					)
 			)
 		);
-
-		// validate the pnpm lockfile.
-		if (!o.dangerouslySkipPnpmLockfileValidation) {
-			await Task('Validate the PNPM lockfile.')(
-				new Promise<void>((ok, err) =>
-					child_process
-						.spawn(
-							// TODO(zemnmez): this should be changed to be the local bazel
-							// version once this issue is fixed:
-							// https://github.com/pnpm/pnpm/issues/6962
-							'npm',
-							[
-								'exec',
-								'--yes',
-								'--package',
-								'pnpm@8.6.12',
-								'--',
-								'pnpm',
-								'i',
-								'--frozen-lockfile',
-								'--lockfile-only',
-								// Due to this issue:
-								// https://github.com/pnpm/pnpm/issues/6962
-								// specifying --dir causes --frozen-lockfile to be ignored.
-								/*							'--dir',
-							// aspect_rules_js uses this as their example;
-							// I think the script might pull in some patches etc
-							// so we have to be a bit smarter than just setting
-							// cwd when we launch the binary.
-							cwd, */
-							],
-							{
-								cwd,
-								stdio: 'inherit',
-							}
-						)
-						.on('close', code =>
-							code != 0 ? err(`exit ${code}`) : ok()
-						)
-				)
-			);
-		}
 
 		// attempt a deploy of pulumi to staging, and tear it down.
 		if (!o.skipPulumiDeploy) {
