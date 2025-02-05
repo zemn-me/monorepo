@@ -3,8 +3,7 @@
  * Functions for a simulation in time.
  */
 
-import { map } from "#root/ts/iter/index.js"
-import { to_array } from "#root/ts/iter/iterable_functional.js";
+import { map, to_array } from "#root/ts/iter/iterable_functional.js";
 import { add, mul, Point, point, x, y, z } from "#root/ts/math/cartesian.js"
 
 

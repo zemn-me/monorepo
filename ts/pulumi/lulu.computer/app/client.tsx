@@ -4,8 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import seedrandom from 'seedrandom';
 
-import { map, range } from '#root/ts/iter/index.js';
-import { filter, first, fold, iterator, to_array, to_set } from '#root/ts/iter/iterable_functional.js';
+import { filter, first, fold, iterator, map, range, to_array, to_set } from '#root/ts/iter/iterable_functional.js';
 import { add, mul, Point, point, sub, x, y } from '#root/ts/math/cartesian.js';
 import { fields, SimulateField, wrap2 } from '#root/ts/math/sim/sim.js';
 import { and_then, None, Option, Some, unwrap_or } from '#root/ts/option/types.js';
