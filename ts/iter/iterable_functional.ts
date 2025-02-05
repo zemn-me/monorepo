@@ -63,11 +63,19 @@ export const last =
 	<T>(self: Iterable<T>): Option<T> =>
 		fold<T, Option<T>>(
 			(_, c) => Some(c)
-		)(None)(self)
+		)(None)(self);
+
+export const first =
+	<T>(self: Iterator<T>): Option<T> =>
+		nth(0)(self);
 
 export const to_array =
 	<T>(self: Iterable<T>): T[] =>
 		Array.from(self);
+
+export const to_set =
+	<T>(self: Iterable<T>): Set<T> =>
+		new Set(self);
 
 export const concat =
 	<T>(i: Iterable<T>) =>
@@ -75,4 +83,3 @@ export const concat =
 			yield* i;
 			yield* ii;
 	}
-
