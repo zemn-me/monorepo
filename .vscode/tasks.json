@@ -3,10 +3,8 @@
 	"tasks": [
 		{
 			"label": "Rust: rust-project.json",
-			"command": "go",
+			"command": "${workspaceFolder}/sh/bin/bazel",
 			"args": [
-				"run",
-				"github.com/bazelbuild/bazelisk@latest",
 				"run",
 				"//.vscode:gen_rust_project"
 			],
@@ -27,10 +25,8 @@
 		},
 		{
 			"label": "Python: Venv",
-			"command": "go",
+			"command": "${workspaceFolder}/sh/bin/bazel",
 			"args": [
-				"run",
-				"github.com/bazelbuild/bazelisk@latest",
 				"run",
 				"//.vscode:ibazel",
 				"run",
@@ -69,10 +65,8 @@
 		},
 		{
 			"label": "Sapling: install hooks",
-			"command": "go",
+			"command": "${workspaceFolder}/sh/bin/bazel",
 			"args": [
-				"run",
-				"github.com/bazelbuild/bazelisk@latest",
 				"run",
 				"//.vscode:install_sapling_hooks",
 				"--",
