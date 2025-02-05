@@ -12,6 +12,10 @@
 # promises to fix issues with using it.
 # We recommend using Aspect CLI instead!
 
+echo "This script is EXPECTED to be broken!"
+echo "It uses the bazel- directories that are a pain to ignore, and"
+echo "needs to be amended to use dist-."
+
 set -x
 BAZEL="$(dirname ${BASH_SOURCE[0]})/../../sh/bin/bazel"
 
