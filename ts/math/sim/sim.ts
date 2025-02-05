@@ -3,7 +3,8 @@
  * Functions for a simulation in time.
  */
 
-import { Iterable } from "#root/ts/iter/index.js"
+import { map } from "#root/ts/iter/index.js"
+import { to_array } from "#root/ts/iter/iterable_functional.js";
 import { add, mul, Point, point, x, y, z } from "#root/ts/math/cartesian.js"
 
 
@@ -41,7 +42,7 @@ export const forceField =
 
 export const airFriction =
 	<N extends number>(coefficient: Vector<1>): Field<Particle<N>, N> =>
-	(_: number, self: Particle<N>, __: Set<Particle<N>>) => mul<1, N, 1, 1>(mul<1, N, 1, 1>(self.velocity, scalar(-1)), coefficient)
+		(_: number, self: Particle<N>, __: Set<Particle<N>>) => mul<1, N, 1, 1>(mul<1, N, 1, 1>(self.velocity, scalar(-1)), coefficient)
 
 export const earthGravity: Field<unknown, 3> =
 	forceField<3>(
@@ -53,12 +54,12 @@ export const earthGravity: Field<unknown, 3> =
  * if value is max+1, return 1 usw.
  */
 function wrapToZero(value: number, modulus: number): number {
-  return ((value % modulus) + modulus) % modulus;
+	return ((value % modulus) + modulus) % modulus;
 }
 
 function wrapInRange(value: number, minVal: number, maxVal: number): number {
-  const span = (maxVal - minVal) + 1;
-  return wrapToZero(value - minVal, span) + minVal;
+	const span = (maxVal - minVal) + 1;
+	return wrapToZero(value - minVal, span) + minVal;
 }
 
 /**
@@ -160,39 +161,41 @@ export function SimulateField<N extends number, T extends Particle<N>>(
 	objects: Set<T>,
 	field: Field<T, N>
 ): Set<T> {
-	return new Set(Iterable(objects).map(self => {
-		const other = objects.difference(
-			new Set([self])
-		);
+	return new Set(
+		to_array(
+			map(objects, self => {
+				const other = objects.difference(
+					new Set([self])
+				);
 
-		const force = field(dt, self, other);
+				const force = field(dt, self, other);
 
-		const acc = mul<1, N, 1, 1>(
-			force,
-			scalar(1/self.mass)
-		)
+				const acc = mul<1, N, 1, 1>(
+					force,
+					scalar(1 / self.mass)
+				)
 
-		const dv = mul<1, N, 1, 1>(
-			acc,
-			scalar(dt)
-		);
+				const dv = mul<1, N, 1, 1>(
+					acc,
+					scalar(dt)
+				);
 
-		const dp = mul<1, N, 1, 1>(
-			self.velocity,
-			scalar(dt)
-		);
+				const dp = mul<1, N, 1, 1>(
+					self.velocity,
+					scalar(dt)
+				);
 
-		self.velocity = sum<1, N>(
-			self.velocity,
-			dv
-		);
+				self.velocity = sum<1, N>(
+					self.velocity,
+					dv
+				);
 
-		self.position = sum<1, N>(
-			self.position,
-			dp
-		);
+				self.position = sum<1, N>(
+					self.position,
+					dp
+				);
 
-		return self;
-	}).to_array())
+				return self;
+			})))
 }
 

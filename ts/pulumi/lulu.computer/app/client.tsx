@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import seedrandom from 'seedrandom';
 
-import { Iterable, range } from '#root/ts/iter/index.js';
+import { map, range } from '#root/ts/iter/index.js';
+import { filter, first, fold, iterator, to_array, to_set } from '#root/ts/iter/iterable_functional.js';
 import { add, mul, Point, point, sub, x, y } from '#root/ts/math/cartesian.js';
-import { fields, SimulateField, wrap2 } from '#root/ts/math/sim/sim';
-import { None, Option, Some } from '#root/ts/option/option.js';
+import { fields, SimulateField, wrap2 } from '#root/ts/math/sim/sim.js';
+import { and_then, None, Option, Some, unwrap_or } from '#root/ts/option/types.js';
 import * as date from '#root/ts/time/date.js';
 import { dayOfYear } from '#root/ts/time/day_of_year.js';
 import { daysInYear } from '#root/ts/time/days_in_year.js';
@@ -18,27 +20,27 @@ const yearlyCycleHigh = (targetDate: Date): number => dayOfYear(targetDate);
 
 // Main function
 const cyclePos = (inputDate: Date, targetDate: Date = new Date(inputDate.getFullYear(), 9 - 1, 9)): number => {
-    const dayOfYearInput = dayOfYear(inputDate);
-    const daysInCurrentYear = daysInYear(inputDate);
-    const targetDayThisYear = yearlyCycleHigh(targetDate);
+	const dayOfYearInput = dayOfYear(inputDate);
+	const daysInCurrentYear = daysInYear(inputDate);
+	const targetDayThisYear = yearlyCycleHigh(targetDate);
 
-    // Calculate surrounding years' target days
-    const targetDayNextYear = targetDayThisYear + daysInCurrentYear;
-    const targetDayLastYear = targetDayThisYear - daysInCurrentYear;
+	// Calculate surrounding years' target days
+	const targetDayNextYear = targetDayThisYear + daysInCurrentYear;
+	const targetDayLastYear = targetDayThisYear - daysInCurrentYear;
 
-    // Determine the closest target day
-    const closestTargetDay = [targetDayLastYear, targetDayThisYear, targetDayNextYear].reduce(
-        (prev, curr) => (Math.abs(curr - dayOfYearInput) < Math.abs(prev - dayOfYearInput) ? curr : prev)
-    );
+	// Determine the closest target day
+	const closestTargetDay = [targetDayLastYear, targetDayThisYear, targetDayNextYear].reduce(
+		(prev, curr) => (Math.abs(curr - dayOfYearInput) < Math.abs(prev - dayOfYearInput) ? curr : prev)
+	);
 
-    // Calculate distance to the closest target date
-    const distance = Math.abs(closestTargetDay - dayOfYearInput);
+	// Calculate distance to the closest target date
+	const distance = Math.abs(closestTargetDay - dayOfYearInput);
 
-    // Maximum possible distance (half the year's length)
-    const maxDistance = Math.floor(daysInCurrentYear / 2);
+	// Maximum possible distance (half the year's length)
+	const maxDistance = Math.floor(daysInCurrentYear / 2);
 
-    // Normalised value
-    return 1 - distance / maxDistance;
+	// Normalised value
+	return 1 - distance / maxDistance;
 };
 
 
@@ -102,19 +104,30 @@ function buoyancy(__: number, self: Particle, _: Set<Particle>): Vector<2> {
 function fishFear(_: number, self: Particle, all: Set<Particle>) {
 	if (self.type != ParticleType.Fish) return vector<2>(0, 0);
 
-	const sharks = Iterable(all)
-		.map(v => v.type == ParticleType.Shark ? Some(v) : None)
-		.filter()
-		.to_array();
+	// i guess we are doing this shit until the pipeline
+	// operator exists
 
-	const sharkSum = Iterable(sharks)
-		.fold((p, c) =>
-			sum<1, 2>(
-				p, c.position
-			), vector<2>(0, 0));
+	const s1 = map(all,
+		v => v.type == ParticleType.Shark ? Some(v) : None
+	);
 
+	const s2 = filter(s1);
+
+	const sharks = to_set(s2);
+
+	/**
+	 * positions of all the sharks added together
+	 */
+	const sharkSum = fold((p: Vector<2>, c: Particle) => sum<1, 2>(p, c.position))(
+		vector<2>(0, 0)
+	)(sharks);
+
+
+	/**
+	 * average position of all the sharks
+	 */
 	const sharkCentre = mul<1, 2, 1, 1>(
-		sharkSum, vector<1>(1 / sharks.length)
+		sharkSum, vector<1>(1 / sharks.size)
 	);
 
 	const toward = sub<1, 2>(
@@ -126,7 +139,7 @@ function fishFear(_: number, self: Particle, all: Set<Particle>) {
 	)
 
 	const towardUnit = mul<1, 2, 1, 1>(
-		toward, scalar(1/towardMag)
+		toward, scalar(1 / towardMag)
 	)
 
 	const awayUnit = mul<1, 2, 1, 1>(
@@ -149,22 +162,31 @@ function sharkHunger(_: number, self: Particle, other: Set<Particle>) {
 	const distance = (other: Vector<2>) =>
 		Math.hypot(x(self.position) - x(other), y(self.position), y(other));
 
+	// closestFish
+	const maybeFish = map(
+		other.difference(new Set([self])),
+		(v: Particle) => v.type == ParticleType.Fish ? Some(v) : None
+	);
 
-	const closestFish = Iterable(other.difference(new Set([self])))
-		.map(v => v.type == ParticleType.Fish ? Some(v) : None)
-		.filter()
-		.sort(
-			(a, b) => distance(b.position) - distance(a.position),
-		).first();
+	const fishes = filter(maybeFish);
 
-	const fishDist = closestFish.and_then(
+	const fishes_by_closeness = to_array(fishes).sort(
+		(a, b) => distance(b.position) - distance(a.position),
+	);
+
+	const closestFish = first(iterator(fishes_by_closeness));
+
+	const fishDist = and_then(closestFish,
 		closest => vector<2>(
 			x(self.position) - x(closest.position),
 			y(self.position) - y(closest.position)
 		)
 	);
 
-	const fishDir = fishDist.and_then(
+	/**
+	 * Direction to nearest fish.
+	 */
+	const fishDir = and_then(fishDist,
 		dist => {
 			const mag = Math.hypot(x(dist), y(dist));
 
@@ -175,10 +197,10 @@ function sharkHunger(_: number, self: Particle, other: Set<Particle>) {
 		}
 	)
 
-	return fishDir.and_then(dir => vector<2>(
+	return unwrap_or(and_then(fishDir, dir => vector<2>(
 		x(dir) * 20,
 		y(dir) * 20
-	)).unwrap_or(vector<2>(0, 0))
+	)), vector<2>(0, 0));
 }
 
 const friction = (coefficient: number) => (__: number, self: Particle, _: Set<Particle>): Vector => vector<2>(-x(self.velocity) * coefficient * self.radius, -y(self.velocity) * coefficient * self.radius);
@@ -193,17 +215,19 @@ function Fishbowl(props: FishbowlProps) {
 		<rect fill="url(#underwaterGradient)" height="100%" width="100%" />
 
 		{
-			Iterable(props.particles).map(p => <text
-				key={p.id}
-				style={{
-					textAnchor: "middle",
-					fontSize: `${p.radius}`,
-				}}
-	x={x(p.position)}
-	y={y(props.size) - y(p.position)}
-			>{
-					icon(p)
-				}</text>).to_array()
+			to_array(
+				map(props.particles, p => <text
+					key={p.id}
+					style={{
+						textAnchor: "middle",
+						fontSize: `${p.radius}`,
+					}}
+					x={x(p.position)}
+					y={y(props.size) - y(p.position)}
+				>{
+						icon(p)
+					}</text>)
+			)
 		}
 
 
@@ -223,9 +247,10 @@ function Fishbowl(props: FishbowlProps) {
 
 
 function uuid(rng: () => number) {
-	return Iterable(range(0, 10)).map(
+	const bits= map(range(0, 10),
 		() => ramp[Math.floor(rng() * ramp.length)]
-	).fold((a, c) => a + "" + c, "")
+	)
+	return to_array(bits).join("")
 }
 
 
@@ -279,7 +304,7 @@ function spawnFish(rng: () => number, max: Vector<2>): Particle {
 
 function spawnShark(rng: () => number, max: Vector<2>): Particle {
 
-	const radius= 15 + 15 * rng();
+	const radius = 15 + 15 * rng();
 	return {
 		id: uuid(rng),
 		position: vector<2>(
@@ -301,7 +326,7 @@ function spawnShark(rng: () => number, max: Vector<2>): Particle {
 const ramp = "abcdefghijklmnopqrstuvwxyz".split("");
 
 function spawnRandomBubble(rng: () => number, max: Vector<2>): Particle {
-	if (rng() < ((cyclePos(a())**2))*.5) {
+	if (rng() < ((cyclePos(a()) ** 2)) * .5) {
 		return spawnHeart(rng, max)
 	}
 
@@ -368,17 +393,22 @@ export function FishbowlClient() {
 	const maxDensity = (x(size) * y(size)) / 1000;
 	const [particles, setParticles] = useState<Set<Particle>>(
 		new Set<Particle>(
-			Iterable(range(0, Math.round(rng() * maxDensity)))
-				.map(() => spawnRandomParticle(rng, size))
-				.value
+			map(
+				range(0, Math.round(rng() * maxDensity)),
+				() => spawnRandomParticle(rng, size)
+			)
 		)
 	);
 
 	const lastFrameTime = useRef<Option<number>>(None);
 
 	const onTick = useCallback<FrameRequestCallback>(() => {
-			const now = performance.now();
-			const dt = lastFrameTime.current.and_then(last => now - last).unwrap_or(0);
+		const now = performance.now();
+		const dt =
+			unwrap_or(
+				and_then(lastFrameTime.current, last => now - last),
+				0
+			);
 
 		lastFrameTime.current = Some(now);
 
@@ -386,7 +416,7 @@ export function FishbowlClient() {
 			dt / 1000,
 			particles
 		))
-	}, [ particles, setParticles]);
+	}, [particles, setParticles]);
 
 
 
@@ -394,7 +424,7 @@ export function FishbowlClient() {
 	useEffect(() => {
 		const hnd = setInterval(onTick, 1);
 		return () => clearInterval(hnd);
-	}, [ onTick ])
+	}, [onTick])
 
 
 	return <Fishbowl
