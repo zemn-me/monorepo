@@ -1,6 +1,6 @@
 import { NewType } from "#root/ts/NewType.js";
-import * as types from '#root/ts/option/_types.js';
-import { Err, Ok, Result } from "#root/ts/result.js";
+import * as types from '#root/ts/option/types.js';
+import { impl as resultImpl, Result } from "#root/ts/result.js";
 
 
 class impl<T> extends NewType<T> {
@@ -57,7 +57,7 @@ class impl<T> extends NewType<T> {
 	 * [{@link T}, {@link TT}], if both values are {@link Some}.
 	 */
 	zip<T, TT>(this: Option<T>, other: Option<TT>): Option<[T, TT]> {
-		return this.and_then(v => other.and_then(vv => [v, vv ] as [T, TT])).flatten()
+		return new impl(types.zip<T, TT>(this.value, other.value));
 	}
 
 	/**
@@ -76,8 +76,9 @@ class impl<T> extends NewType<T> {
 	 * the provided error value {@link err}.
 	 */
 	ok_or<T, E>(this: Option<T>, err: E): Result<T, E> {
-		if (this.is_none()) return Err( err );
-		return Ok(this.unwrap());
+		return new resultImpl(
+			types.ok_or<T, E>(this.value, err)
+		)
 	}
 
 	/**
@@ -85,8 +86,9 @@ class impl<T> extends NewType<T> {
 	 * into {@link Some}({@link T}) or {@link None}.
 	 */
 	from<T>(this: Some<T | undefined>): Option<T> {
-		const val = this.unwrap();
-		return val === undefined? None: Some(val)
+		return new impl(
+			types.from<T>(this.unwrap())
+		)
 	}
 
 	/**
@@ -95,8 +97,11 @@ class impl<T> extends NewType<T> {
 	 * the result of calling provided error function {@link err}().
 	 */
 	ok_or_else<T, E>(this: Option<T>, err: () => E): Result<T, E> {
-		if (this.is_none()) return Err( err() );
-		return Ok(this.unwrap());
+		return new resultImpl(
+			types.ok_or_else<T, E>(
+				this.value, err
+			)
+		)
 	}
 
 	/**
