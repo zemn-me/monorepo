@@ -17,10 +17,10 @@ def get_sapling_config_dir(working_directory: str) -> str:
         return os.path.join(git_dir, "sl")
     return os.path.join(working_directory, ".sl")
 
-def ensure_sapling_include(config_file_path: str) -> bool:
+def ensure_sapling_include(config_file_path: str, relative_include: str) -> bool:
     """
     Ensure the Sapling config file includes:
-        %include ../ini/sl/config.ini
+        %include <relative_include>
     If the include is missing, it is prepended, and the file is updated.
     Returns True if the file was changed; False if it was already correct.
     """
@@ -33,24 +33,21 @@ def ensure_sapling_include(config_file_path: str) -> bool:
         config_file.seek(0)
         lines = config_file.readlines()
 
-        # Regex to match line exactly: %%include ../ini/sl/config.ini
-        pattern = re.compile(r"^%include\s+\.\./ini/sl/config\.ini\s*$")
+        pattern_str = fr"^%include\s+{re.escape(relative_include)}\s*$"
+        pattern = re.compile(pattern_str)
 
         # If any line matches, there's nothing to fix
         if any(pattern.match(line.strip()) for line in lines):
             return False
 
-        print("It seems you're not importing the standard Sapling config. I'll fix this.")
+        print("It appears your Sapling config does not include the standard file. Allow me to correct that.")
 
         # We need to prepend the missing line
         config_file.seek(0)
-
-        # Clear the file using truncate, then rebuild
         config_file.truncate()
 
-        # Prepend the missing line, then original lines
         with TemporaryFile(mode="w+") as temp:
-            temp.write("%include ../ini/sl/config.ini" + os.linesep)
+            temp.write(f"%include {relative_include}{os.linesep}")
             for line in lines:
                 temp.write(line)
 
@@ -62,11 +59,18 @@ def ensure_sapling_include(config_file_path: str) -> bool:
 
 def configure_sapling(working_directory: str) -> None:
     """
-    High-level function that locates the config directory and ensures the standard Sapling include.
+    High-level function that locates the config directory,
+    calculates the relative path to ini/sl/config.ini,
+    and ensures the include is present.
     """
     config_dir = get_sapling_config_dir(working_directory)
     config_file_path = os.path.join(config_dir, "config")
-    ensure_sapling_include(config_file_path)
+
+    # Figure out the relative path from config_dir to ini/sl/config.ini
+    ini_config_path = os.path.join(working_directory, "ini", "sl", "config.ini")
+    relative_include = os.path.relpath(ini_config_path, start=config_dir)
+
+    ensure_sapling_include(config_file_path, relative_include)
 
 def main():
     parser = ArgumentParser(
@@ -79,3 +83,6 @@ def main():
     )
     args = parser.parse_args()
     configure_sapling(args.working_directory)
+
+if __name__ == "__main__":
+    main()
