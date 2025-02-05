@@ -27,7 +27,7 @@
 		"paths": {
 			"#root/*": [
 				"*",
-				"dist/bin/*"
+				"bazel-bin/*"
 			]
 		}
 	},
@@ -36,6 +36,10 @@
 		"dist",
 		"external",
 		".venv",
-		".script_cache"
+		".script_cache",
+		".sl",
+		".git",
+		"bazel-out",
+		"bazel-testlogs"
 	]
 }
