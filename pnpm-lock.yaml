@@ -117,8 +117,8 @@ dependencies:
     specifier: 11.1.0
     version: 11.1.0
   nuqs:
-    specifier: 1.20.0
-    version: 1.20.0(next@13.4.10)
+    specifier: 2.3.2
+    version: 2.3.2(next@13.4.10)(react-router-dom@7.1.5)(react-router@7.1.5)(react@19.0.0)
   pako:
     specifier: 2.1.0
     version: 2.1.0
@@ -6403,7 +6403,6 @@ packages:
 
   /@types/cookie@0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
-    dev: true
 
   /@types/cross-spawn@6.0.6:
     resolution: {integrity: sha512-fXRhhUkG4H3TQk5dBhQ7m/JDdSNHKwR2BBia62lhwEIq9xGiQKLxd6LymNhn47SjXhsUEPmxi+PKw2OkW4LLjA==}
@@ -8534,7 +8533,6 @@ packages:
   /cookie@1.0.2:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
-    dev: true
 
   /core-js-compat@3.40.0:
     resolution: {integrity: sha512-0XEDpr5y5mijvw8Lbc6E5AkjrHfp7eEoPlu36SWeAbcL8fn1G1ANe8DBlo2XoNN89oVpxWwOjYIPVzR4ZvsKCQ==}
@@ -14524,13 +14522,29 @@ packages:
   /nullthrows@1.1.1:
     resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}
 
-  /nuqs@1.20.0(next@13.4.10):
-    resolution: {integrity: sha512-nGVfv7eWMNxAzOJ9n8ARTo6ObqeEr1ETYZ+dIMCg/VfGUoZoPrqyTOndIvQIgUzK3pIC41mTXg10JJxh9ziEhw==}
+  /nuqs@2.3.2(next@13.4.10)(react-router-dom@7.1.5)(react-router@7.1.5)(react@19.0.0):
+    resolution: {integrity: sha512-WeG78r8e3a30JY3P8npldvNiAZwGIk499lnpeRs3UYA3PpSvs2/PLunKGgjuF/JMw4BOowD3K2xgGEOZ3PeODA==}
     peerDependencies:
-      next: '>=13.4 <14.0.2 || ^14.0.3'
+      '@remix-run/react': '>=2'
+      next: '>=14.2.0'
+      react: '>=18.2.0 || ^19.0.0-0'
+      react-router: ^6 || ^7
+      react-router-dom: ^6 || ^7
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      next:
+        optional: true
+      react-router:
+        optional: true
+      react-router-dom:
+        optional: true
     dependencies:
       mitt: 3.0.1
       next: 13.4.10(@babel/core@7.26.7)(@opentelemetry/api@1.9.0)(react-dom@19.0.0)(react@19.0.0)
+      react: 19.0.0
+      react-router: 7.1.5(react-dom@19.0.0)(react@19.0.0)
+      react-router-dom: 7.1.5(react-dom@19.0.0)(react@19.0.0)
     dev: false
 
   /nwsapi@2.2.16:
@@ -15770,7 +15784,6 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       react-router: 7.1.5(react-dom@19.0.0)(react@19.0.0)
-    dev: true
 
   /react-router@7.1.5(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-8BUF+hZEU4/z/JD201yK6S+UYhsf58bzYIDq2NS1iGpwxSXDu7F+DeGSkIXMFBuHZB21FSiCzEcUb18cQNdRkA==}
@@ -15788,7 +15801,6 @@ packages:
       react-dom: 19.0.0(react@19.0.0)
       set-cookie-parser: 2.7.1
       turbo-stream: 2.4.0
-    dev: true
 
   /react-spring@9.7.5(@react-three/fiber@8.17.14)(konva@9.3.18)(react-dom@19.0.0)(react-konva@18.2.10)(react-native@0.77.0)(react-zdog@1.2.2)(react@19.0.0)(three@0.173.0)(zdog@1.1.3):
     resolution: {integrity: sha512-oG6DkDZIASHzPiGYw5KwrCvoFZqsaO3t2R7KE37U6S/+8qWSph/UjRQalPpZxlbgheqV9LT62H6H9IyoopHdug==}
@@ -16730,7 +16742,6 @@ packages:
 
   /set-cookie-parser@2.7.1:
     resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
-    dev: true
 
   /set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
@@ -17944,7 +17955,6 @@ packages:
 
   /turbo-stream@2.4.0:
     resolution: {integrity: sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==}
-    dev: true
 
   /tweetnacl@0.13.3:
     resolution: {integrity: sha512-iNWodk4oBsZ03Qfw/Yvv0KB90uYrJqvL4Je7Gy4C5t/GS3sCXPRmIT1lxmId4RzvUp0XG62bcxJ2CBu/3L5DSg==}
