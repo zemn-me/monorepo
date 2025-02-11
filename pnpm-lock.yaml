@@ -180,11 +180,11 @@ dependencies:
     specifier: 6.0.3
     version: 6.0.3
   zod:
-    specifier: 3.24.1
-    version: 3.24.1
+    specifier: 3.24.2
+    version: 3.24.2
   zod-to-json-schema:
     specifier: 3.24.1
-    version: 3.24.1(zod@3.24.1)
+    version: 3.24.1(zod@3.24.2)
 
 devDependencies:
   '@actions/core':
@@ -5656,7 +5656,7 @@ packages:
       fs-extra: 11.3.0
       toml-eslint-parser: 0.10.0
       upath: 2.0.1
-      zod: 3.24.1
+      zod: 3.24.2
     dev: true
 
   /@renovatebot/kbpgp@4.0.1:
@@ -8510,7 +8510,7 @@ packages:
     dependencies:
       devtools-protocol: 0.0.1402036
       mitt: 3.0.1
-      zod: 3.24.1
+      zod: 3.24.2
     dev: true
 
   /chromium-edge-launcher@0.2.0:
@@ -19231,12 +19231,12 @@ packages:
     resolution: {integrity: sha512-raRj6r0gPzopFm5XWBJZr/NuV4EEnT4iE+U3dp5FV5pCb588Gmm3zLIp/j9yqqcMiHH8VNQlerLTgOqL7krh6w==}
     dev: true
 
-  /zod-to-json-schema@3.24.1(zod@3.24.1):
+  /zod-to-json-schema@3.24.1(zod@3.24.2):
     resolution: {integrity: sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==}
     peerDependencies:
       zod: ^3.24.1
     dependencies:
-      zod: 3.24.1
+      zod: 3.24.2
     dev: false
 
   /zod@3.21.4:
@@ -19244,6 +19244,10 @@ packages:
 
   /zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+    dev: true
+
+  /zod@3.24.2:
+    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
   /zustand@3.7.2(react@19.0.0):
     resolution: {integrity: sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==}
