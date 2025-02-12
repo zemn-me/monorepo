@@ -1,36 +1,23 @@
 #!/usr/bin/env bash
-#
-# A pure Bash script that downloads (if necessary) and runs Bazelisk
-# from a cache folder stored at ../../.script_cache/bazelisk relative
-# to this script's location.
-#
 set -euo pipefail
 
-# 1. Determine the directory where this script resides.
-#    This allows us to place the cache in ../../.script_cache/bazelisk
-#    relative to this file.
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# renovate:
+#   datasource=github-releases
+#   versioning=semver-coerced
+#   depName=bazelbuild/bazelisk
+BAZELISK_VERSION="v1.25.0"
 
-# 2. Construct the cache path.
-CACHE_DIR="${SCRIPT_DIR}/../../.script_cache/bazelisk"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CACHE_DIR="${SCRIPT_DIR}/../../.script_cache/bazelisk/${BAZELISK_VERSION}"
 mkdir -p "${CACHE_DIR}"
 
-# 3. Identify OS and architecture.
 OS="$(uname -s)"
 ARCH="$(uname -m)"
-
-# Normalise a few typical architecture strings
 case "${ARCH}" in
-  x86_64|amd64)
-    ARCH="amd64"
-    ;;
-  aarch64|arm64)
-    ARCH="arm64"
-    ;;
-  # Extend as needed for other architectures
+  x86_64|amd64) ARCH="amd64";;
+  aarch64|arm64) ARCH="arm64";;
 esac
 
-# Map the OS/ARCH pair to the correct Bazelisk asset name
 ASSET=""
 case "${OS}" in
   Linux)
@@ -60,31 +47,20 @@ case "${OS}" in
     ;;
 esac
 
-# 4. Construct the path to the cached Bazelisk binary
 CACHED_BAZELISK="${CACHE_DIR}/${ASSET}"
 
-# 5. If the Bazelisk binary isn't cached yet, download it from GitHub.
 if [ ! -f "${CACHED_BAZELISK}" ]; then
-  echo "Downloading Bazelisk asset '${ASSET}' to '${CACHED_BAZELISK}'..."
-  curl --fail -L \
-    "https://github.com/bazelbuild/bazelisk/releases/latest/download/${ASSET}" \
+  DOWNLOAD_URL="https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/${ASSET}"
+  curl -s --fail -L \
+    "$DOWNLOAD_URL" \
     -o "${CACHED_BAZELISK}"
 
-  if [ ! -f "${CACHED_BAZELISK}" ]; then
-    echo "Error: Could not download Bazelisk asset '${ASSET}'."
-    exit 1
-  fi
-
-  # Make it executable if on a Unix-like OS
   case "${OS}" in
     Linux|Darwin)
       chmod +x "${CACHED_BAZELISK}"
       ;;
-    Windows)
-      # On Windows, .exe doesn't need special permissions
-      ;;
+    # Windows requires no special execute permissions
   esac
 fi
 
-# 6. Run Bazelisk from the cache, forwarding user arguments
 exec "${CACHED_BAZELISK}" "$@"

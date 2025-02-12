@@ -37,7 +37,7 @@
 		"**/.git/subtree-cache/**": true,
 		"**/node_modules/*/**": true,
 		"**/.hg/store/**": true,
-		"**/bazel-out": true
+		"**/dist/out": true
 	},
 	"[rust]": {
 		"editor.formatOnSaveMode": "file",
@@ -55,7 +55,7 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
 	},
-	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
+	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {
 		"GOPACKAGESDRIVER": "${workspaceFolder}/sh/bin/gopackagesdriver"
 	},
@@ -64,10 +64,7 @@
 	},
 	"gopls": {
 		"build.directoryFilters": [
-			"-bazel-bin",
-			"-bazel-out",
-			"-bazel-testlogs",
-			"-bazel-mypkg",
+			"-dist",
 		],
 		"formatting.gofumpt": true,
 		"formatting.local": "github.com/zemn-me/monorepo",
@@ -92,6 +89,7 @@
 		"go": "${workspaceFolder}/sh/bin/go",
 		"goimports": "${workspaceFolder}/sh/bin/goimports",
 		"staticcheck": "${workspaceFolder}/sh/bin/staticcheck",
+		"gopls": "${workspaceFolder}/sh/bin/gopls",
 		"dlv": "${workspaceFolder}/sh/bin/dlv"
 	},
 	"terminal.integrated.enableImages": true,
@@ -102,7 +100,7 @@
 		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
 	},
 	"bazel.buildifierFixOnFormat": true,
-	"bazel.executable": "bazelisk",
+	"bazel.executable": "./sh/bin/bazel",
 	"mypy-type-checker.importStrategy": "useBundled",
 	"mypy-type-checker.args": [
 		"--python-executable=.venv/bin/python3"

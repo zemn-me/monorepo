@@ -10,7 +10,6 @@ load("//py:rules.bzl", "py_library")
 
 load("@aspect_rules_py//py:defs.bzl", "py_venv")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("@pip//:requirements.bzl", "all_whl_requirements")
@@ -18,6 +17,8 @@ load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
+load("//go/cmd/version_sync:go_version_sync.bzl", "go_version_sync")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
 load("//ts:rules.bzl", "ts_config")
 
@@ -111,29 +112,8 @@ bin.renovate_config_validator_test(
 
 npm_link_all_packages(name = "node_modules")
 
-native_test(
-    name = "go_versions_synced",
-    size = "small",
-    src = "//go/cmd/version_sync",
-    out = "version_sync_test.o",
-    data = [
-        "MODULE.bazel",
-        "go.mod",
-    ],
-)
-
-sh_binary(
-    name = "go_versions_synced.fix",
-    srcs = ["fix_go_version_sync.sh"],
-    data = [
-        "//go/cmd/version_sync",
-    ],
-    env = {
-        "VERSION_SYNC": "$(rlocationpath //go/cmd/version_sync)",
-    },
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
-    ],
+go_version_sync(
+    name = "go_version_sync",
 )
 
 js_library(
@@ -246,6 +226,7 @@ py_venv(
         "//project/cultist/gen/testing",
         "//py",
         "//py/ci/postUpgrade:postUpgrade_bin",
+        "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
         "//py/devtools/prep",
         "//py/devtools/prep:prep_bin",
@@ -271,4 +252,19 @@ py_library(
     name = "monorepo",
     srcs = ["__init__.py"],
     visibility = ["//:__subpackages__"],
+)
+
+binary_with_args(
+    name = "pnpm_lockfile_validation_bin",
+    args = [
+        "i",
+        "--lockfile-only",
+        "--frozen-lockfile",
+    ],
+    binary = "@pnpm",
+    data = [
+        "package.json",
+        "pnpm-lock.yaml",
+    ],
+    test = True,
 )

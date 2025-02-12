@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "option",
@@ -7,7 +7,21 @@ ts_project(
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/ramda",
+        "//:node_modules/ramda",
         "//ts",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "option_test.js",
+    ],
+    deps = [
+        ":option",
     ],
 )
 

@@ -32,13 +32,14 @@ class TestSaplingConfig(unittest.TestCase):
 
     def test_ensure_sapling_include(self):
         config_file = os.path.join(self.tmp_dir, "config")
+        relative_path = "../ini/sl/config.ini"
 
         # File doesn’t exist initially
-        changed = ensure_sapling_include(config_file)
+        changed = ensure_sapling_include(config_file, relative_path)
         self.assertTrue(changed, "Should create file and prepend line.")
 
         # Calling again detects it's already included
-        changed_again = ensure_sapling_include(config_file)
+        changed_again = ensure_sapling_include(config_file, relative_path)
         self.assertFalse(changed_again, "No change after second include.")
 
     def test_configure_sapling(self):
@@ -48,7 +49,6 @@ class TestSaplingConfig(unittest.TestCase):
             os.path.isfile(os.path.join(config_dir, "config")),
             "Config file should exist in .sl directory."
         )
-
 
 if __name__ == "__main__":
     unittest.main()

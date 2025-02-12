@@ -53,6 +53,11 @@ alias(
 )
 
 alias(
+    name = "gopls",
+    actual = "@org_golang_x_tools_gopls//:gopls",
+)
+
+alias(
     name = "pnpm",
     actual = "//sh/pnpm",
 )
