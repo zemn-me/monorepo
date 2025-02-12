@@ -14,7 +14,7 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.42.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
-	github.com/bazelbuild/rules_go v0.52.0
+	github.com/bazelbuild/rules_go v0.53.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/go-delve/delve v1.24.0
 	github.com/golang/protobuf v1.5.4
@@ -124,8 +124,8 @@ require (
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	golang.org/x/vuln v1.0.4 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
-	google.golang.org/grpc v1.67.1 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
+	google.golang.org/grpc v1.67.3 // indirect
 	google.golang.org/protobuf v1.36.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
