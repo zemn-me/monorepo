@@ -1694,7 +1694,7 @@
         "bzlTransitiveDigest": "aktGAlJU8Q8pzkqRA3mIdVvyj4JD3tjAJ/ICXVkwjkg=",
         "usagesDigest": "xHXQN0xaq8w1wbLM4gvbyUFwVyjifiz/jb8yfd8RAbM=",
         "recordedFileInputs": {
-          "@@//requirements.txt": "ce680759a1c179d70f70342b113790522afa7531713abe99e72a6517505a61f2",
+          "@@//requirements.txt": "188064293595d44902cfb1f31ff6a6b094103c3476e0a163dd5efcdbd546887e",
           "@@protobuf+//python/requirements.txt": "983be60d3cec4b319dcab6d48aeb3f5b2f7c3350f26b3a9e97486c37967c73c5",
           "@@rules_fuzzing+//fuzzing/requirements.txt": "ab04664be026b632a0d2a2446c4f65982b7654f5b6851d2f9d399a19b7242a5b",
           "@@rules_python+//tools/publish/requirements_darwin.txt": "095d4a4f3d639dce831cd493367631cd51b53665292ab20194bac2c0c6458fa8",
@@ -2307,7 +2307,7 @@
               "dep_template": "@pip//{name}:{target}",
               "python_interpreter_target": "@@rules_python++python+python_3_13_host//:python",
               "repo": "pip_313",
-              "requirement": "pip==25.0 --hash=sha256:8e0a97f7b4c47ae4a494560da84775e9e2f671d415d8d828e052efefb206b30b --hash=sha256:b6eb97a803356a52b2dd4bb73ba9e65b2ba16caa6bcb25a7497350a4e5859b65"
+              "requirement": "pip==25.0.1 --hash=sha256:88f96547ea48b940a3a385494e181e29fb8637898f88d88737c5049780f196ea --hash=sha256:c46efd13b6aa8279f33f2864459c8ce587ea6a1a59ee20de055868d8f7688f7f"
             }
           },
           "pip_313_pip_tools": {
