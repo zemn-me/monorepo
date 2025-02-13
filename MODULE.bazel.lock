@@ -1,5 +1,5 @@
 {
-  "lockFileVersion": 16,
+  "lockFileVersion": 18,
   "registryFileHashes": {
     "https://bcr.bazel.build/bazel_registry.json": "8a28e4aff06ee60aed2a8c281907fb8bcbf3b753c91fb5a5c57da3215d5b3497",
     "https://bcr.bazel.build/modules/abseil-cpp/20210324.2/MODULE.bazel": "7cd0312e064fde87c8d1cd79ba06c876bd23630c83466e9500321be55c96ace2",
@@ -264,7 +264,7 @@
     },
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "xSGEWX5iXJi6MW+DZwl1H5LpXb/2hKU0SEGq3gZatvY=",
+        "bzlTransitiveDigest": "Fgo5eTT3QOzXKjbO4xZHAN4VFnq0j/TEnrtjVtSYJw4=",
         "usagesDigest": "4vJqdaOC9055cQcg6hER13v1IVX6DN170ICmf0wJniw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1691,7 +1691,7 @@
     },
     "@@rules_python+//python/extensions:pip.bzl%pip": {
       "general": {
-        "bzlTransitiveDigest": "aktGAlJU8Q8pzkqRA3mIdVvyj4JD3tjAJ/ICXVkwjkg=",
+        "bzlTransitiveDigest": "JjU2SUIoekUqlurh/S2TgxxqLzgwzOzJKAZxTUzV9qE=",
         "usagesDigest": "xHXQN0xaq8w1wbLM4gvbyUFwVyjifiz/jb8yfd8RAbM=",
         "recordedFileInputs": {
           "@@//requirements.txt": "33a3c73bb6b9e6d7884d6b2b6e4fbc882e42eeac26aceaff1ab3590eaaab7910",
@@ -5891,7 +5891,7 @@
     },
     "@@rules_rust+//crate_universe:extension.bzl%crate": {
       "general": {
-        "bzlTransitiveDigest": "AnksKAAaxSnW3PqGaZObmwNjZac1JBT+jaKk1bbnY+Q=",
+        "bzlTransitiveDigest": "0ofwC8XvkgbG1HBWTLOHmqwBn5j164Hdg7Iv8diKzxw=",
         "usagesDigest": "CJgWQSwxgEje6b5PvzZUGlf66pCyQEIEAnIjOQVxaS8=",
         "recordedFileInputs": {
           "@@//Cargo.toml": "dab4f07744ac464491fad08a93b55b7f57c681729bd980632390a262edc411e1"
@@ -11109,7 +11109,7 @@
     },
     "@@rules_rust+//crate_universe/private:internal_extensions.bzl%cu_nr": {
       "general": {
-        "bzlTransitiveDigest": "30trgAacsCFER80jacKP/S4gew/mcOpMDui6AlD62kE=",
+        "bzlTransitiveDigest": "tqvfttkeq0eRDg4hm4HwAHsUyMBFOl9YzzIYN7yr558=",
         "usagesDigest": "JTRjQHmqGCK2FUQYDLQD4VejKtuKKC8LrOQhFOpHPPo=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
