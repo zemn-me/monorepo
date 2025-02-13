@@ -19,6 +19,12 @@ transcode_web(
     out_base_name = "kenwood_snow",
 )
 
+transcode_web(
+    name = "mist_on_the_hills_video_sources",
+    src = "//video/2024/12/25:mist_on_the_hills.m4v",
+    out_base_name = "mist_on_the_hills",
+)
+
 js_library(
     name = "files",
     srcs = [
@@ -52,6 +58,20 @@ ts_project(
     ],
     deps = [
         "//:base_defs",  # one day this should probably be separate for next.js
+    ],
+)
+
+ts_project(
+    name = "mist_on_the_hills",
+    srcs = ["mist_on_the_hills.ts"],
+    assets = [
+        "mist_on_the_hills.mp4",
+        "mist_on_the_hills.webm",
+        "mist_on_the_hills.ogv",
+        "mist_on_the_hills.jpg",
+    ],
+    deps = [
+        "//:base_defs",
     ],
 )
 
