@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//project/zemn.me:__subpackages__"])
+
+ts_project(
+    name = "mist_on_the_hills",
+    srcs = [
+        "mist_on_the_hills.tsx",
+    ],
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:base_defs",  # one day this should probably be separate for next.js
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/zemn.me/public:mist_on_the_hills",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
