@@ -290,8 +290,8 @@ devDependencies:
     specifier: 10.0.0
     version: 10.0.0
   bcryptjs:
-    specifier: 2.4.3
-    version: 2.4.3
+    specifier: 3.0.0
+    version: 3.0.0
   chalk:
     specifier: 5.4.1
     version: 5.4.1
@@ -8073,8 +8073,9 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
-  /bcryptjs@2.4.3:
-    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+  /bcryptjs@3.0.0:
+    resolution: {integrity: sha512-Q2vVGpGC7B7m9wggpcA5lq4OYR5OS1nrXoUpnH9MmogXU8HpxzKg63uxtCrLebY5v/y3o0r7JcGCpR/vTGGn7A==}
+    hasBin: true
     dev: true
 
   /before-after-hook@2.2.3:
