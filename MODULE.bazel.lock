@@ -726,6 +726,48 @@
         ]
       }
     },
+    "@@copybara+//:repositories.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "h2IYX1ZpjSXWr4kVuUvgkAfyDicUxygFyeln7fDYjZw=",
+        "usagesDigest": "7CE+3SREmjuGYkdaMYns5ZUNY3ai+HQr8/AuuvQsmV8=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "io_bazel": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "sha256": "8964d54a9fdba17655bf3ae64d2453e31b39706df24ede88bc241cdc9963c69e",
+              "strip_prefix": "bazel-b2cf9a59a3b0beb73e86fdd093c4c9787b1ac86c",
+              "url": "https://github.com/bazelbuild/bazel/archive/b2cf9a59a3b0beb73e86fdd093c4c9787b1ac86c.zip",
+              "patch_args": [
+                "-p1"
+              ],
+              "patches": [
+                "@@copybara+//third_party/bazel:bazel.patch"
+              ]
+            }
+          },
+          "JCommander": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "sha256": "e7ed3cf09f43d0d0a083f1b3243c6d1b45139a84a61c6356504f9b7aa14554fc",
+              "urls": [
+                "https://github.com/cbeust/jcommander/archive/05254453c0a824f719bd72dac66fa686525752a5.zip"
+              ],
+              "build_file": "@@copybara+//external/third_party:jcommander.BUILD"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "copybara+",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@pybind11_bazel+//:python_configure.bzl%extension": {
       "general": {
         "bzlTransitiveDigest": "d4N/SZrl3ONcmzE98rcV0Fsro0iUbjNQFTIiLiGuH+k=",
