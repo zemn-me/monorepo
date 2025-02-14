@@ -1,0 +1,17 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "copybara",
+    srcs = ["copybara.ts"],
+    data = [
+        "@copybara//java/com/google/copybara",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
+        "//ts",
+    ],
+)
