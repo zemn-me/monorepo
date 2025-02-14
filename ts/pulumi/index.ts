@@ -4,6 +4,7 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
+import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
@@ -124,6 +125,12 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_baby`,
 			{ staging: args.staging, tags },
 			{parent: this },
+		)
+
+		new DoSync(
+			`${name}_do_sync`,
+			{staging: args.staging, tags},
+			{ parent: this}
 		)
 
 		super.registerOutputs({

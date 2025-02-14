@@ -8,6 +8,7 @@ ts_project(
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/command",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/mime",
         "//:node_modules/@types/react",
@@ -15,6 +16,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//ts",
+        "//ts/cmd/copybara",
         "//ts/iter",
         "//ts/next.js",
     ],
