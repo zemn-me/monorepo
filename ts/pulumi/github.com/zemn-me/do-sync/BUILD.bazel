@@ -1,0 +1,20 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "do-sync",
+    srcs = [
+        "do_sync.ts",
+    ],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/pulumi",
+        "//ts/do-sync:copy_bara_sky",
+        "//ts/pulumi/lib",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
