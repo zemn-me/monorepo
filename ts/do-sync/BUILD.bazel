@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -21,4 +22,14 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+# should probably be a rule at some point
+# that makes this and exports ts
+js_library(
+    name = "copy_bara_sky",
+    srcs = ["copy.bara.sky"],
+    visibility = [
+        "//:__subpackages__",
+    ],
 )
