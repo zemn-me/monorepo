@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
+import { frontmatter as articleCors } from '#root/mdx/article/2019/cors/cors.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
@@ -264,11 +265,10 @@ export const Bio = {
 		},
 		{
 			id: 'befbb9a3-5499-4f45-b251-fa899c178b4d',
-			date: date(2, 'aug', 2019),
-			title: en`If CORS is just a header, why don’t attackers just ignore it?`,
-			url: url`https://medium.com/@Zemnmez/if-cors-is-just-a-header-why-dont-attackers-just-ignore-it-63e57c323cef?source=your_stories_page---------------------------`,
+			url: new RelativeURL(`/article/2019/cors`),
 			description: en`article on common security misconceptions around CORS`,
 			tags: [writing, security],
+			...canonicaliseArticleMetadata(articleCors),
 		},
 		{
 			id: '9195a7e3-b02f-4eb5-8b47-6ae7a9900800',
