@@ -479,3 +479,4 @@ http_archive(
 )
 
 bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
