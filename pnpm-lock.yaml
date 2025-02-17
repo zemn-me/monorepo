@@ -36,8 +36,8 @@ dependencies:
     specifier: 9.7.5
     version: 9.7.5
   '@tanstack/react-query':
-    specifier: 5.66.4
-    version: 5.66.4(react@19.0.0)
+    specifier: 5.66.5
+    version: 5.66.5(react@19.0.0)
   '@types/bcryptjs':
     specifier: 2.4.6
     version: 2.4.6
@@ -6482,8 +6482,8 @@ packages:
     resolution: {integrity: sha512-skM/gzNX4shPkqmdTCSoHtJAPMTtmIJNS0hE+xwTTUVYwezArCT34NMermABmBVUg5Ls5aiUXEDXfqwR1oVkcA==}
     dev: false
 
-  /@tanstack/react-query@5.66.4(react@19.0.0):
-    resolution: {integrity: sha512-zLlb9Ij7msRazeJP1LUu+tkrxWnUujYanUbY0c2lFoXhRwXvRt6SIwCuwCAmYgMeEuvIlv9/zIQb7bhhGR0jhw==}
+  /@tanstack/react-query@5.66.5(react@19.0.0):
+    resolution: {integrity: sha512-D9aABj3/aFeNmifsdllh5O3hPyA8gUnZ1jAV8MjODQ7blirfAyGed9NjAnm8rgEdr1wChyjTT738ij3vY0EREQ==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
