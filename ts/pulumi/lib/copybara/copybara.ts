@@ -41,7 +41,7 @@ export class Copybara extends ComponentResource {
 			]
 		)
 
-		new local.Command(`${name}_run`, {
+		const run = new local.Command(`${name}_run`, {
 			environment: output(args.githubToken).apply(
 				GITHUB_TOKEN => GITHUB_TOKEN ? { GITHUB_TOKEN } as {
 					[key: string]: Input<string>;
@@ -50,6 +50,12 @@ export class Copybara extends ComponentResource {
 			interpreter: interpreterParam,
 			triggers: [ Math.random() ]
 		}, { parent: this });
+
+
+		all([run.stdout, run.stderr]).apply(([a, b]) =>
+			// eslint-disable-next-line no-console
+			console.log(a, b));
+
 
 
 	}
