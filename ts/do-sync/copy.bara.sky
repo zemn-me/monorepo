@@ -37,6 +37,6 @@ core.workflow(
     destination_files = glob(["**"]),
     authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
     transformations = [
-        core.move("", "ts/do-sync"),
+        core.move("ts/do-sync", ""),
     ],
 )
