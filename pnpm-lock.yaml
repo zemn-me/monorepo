@@ -392,8 +392,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.174.0
-    version: 39.174.0(typanion@3.14.0)
+    specifier: 39.174.2
+    version: 39.174.2(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -4941,6 +4941,11 @@ packages:
   /@opentelemetry/semantic-conventions@1.28.0:
     resolution: {integrity: sha512-lp4qAiMTD4sNWW4DbKLBkfiMZ4jbAboJIGOQr5DvciMRI494OapieI9qiODpOt0XBr1LjIDy1xAGAnVs5supTA==}
     engines: {node: '>=14'}
+
+  /@opentelemetry/semantic-conventions@1.29.0:
+    resolution: {integrity: sha512-KZ1JsXcP2pqunfsJBNk+py6AJ5R6ZJ3yvM5Lhhf93rHPHvdDzgfMYPS4F7GNO3j/MVDCtfbttrkcpu7sl0Wu/Q==}
+    engines: {node: '>=14'}
+    dev: true
 
   /@opentelemetry/semantic-conventions@1.30.0:
     resolution: {integrity: sha512-4VlGgo32k2EQ2wcCY3vEU28A0O13aOtHz3Xt2/2U5FAh9EfhD6t6DqL5Z6yAnRCntbTFDU4YfbpyzSlHNWycPw==}
@@ -16506,8 +16511,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.174.0(typanion@3.14.0):
-    resolution: {integrity: sha512-cDZx3mdA0uqgLRXilBuNRywCUhnAHVmcIwrpiznS1I8c+jI74ceQwZFDtitxTO9gieLU2E2ilJslUGrXna2VKw==}
+  /renovate@39.174.2(typanion@3.14.0):
+    resolution: {integrity: sha512-NS5wlggh4sUDjtvibh9e24PbUqec9U7Yu8FetghXDnJWAet7UEmGotiuEOZ2GmBV7fXYkGOpC9dP5+KAiqdW3A==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16528,7 +16533,7 @@ packages:
       '@opentelemetry/resources': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 1.30.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.28.0
+      '@opentelemetry/semantic-conventions': 1.29.0
       '@pnpm/parse-overrides': 1000.0.2
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
