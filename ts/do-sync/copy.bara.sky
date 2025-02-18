@@ -1,7 +1,6 @@
 monorepoUrl = "https://github.com/zemn-me/monorepo.git"
 targetUrl = "https://github.com/zemn-me/do-sync.git"
 
-
 """
 
 core.workflow(
@@ -23,7 +22,6 @@ core.workflow(
 
 """
 
-
 core.workflow(
     name = "default",
     origin = git.origin(
@@ -34,6 +32,7 @@ core.workflow(
         url = targetUrl,
         destination_ref = "main",
     ),
+    origin_files = glob(["ts/do-sync/**"]),
     destination_files = glob(["**"]),
     authoring = authoring.pass_thru("Copybara <copybara@example.com>"),
     transformations = [
