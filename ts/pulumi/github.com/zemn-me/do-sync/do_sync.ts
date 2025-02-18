@@ -21,6 +21,7 @@ export class DoSync extends Pulumi.ComponentResource {
 			{
 				configPath: runfiles.resolve("monorepo/ts/do-sync/copy.bara.sky"),
 				staging: args.staging,
+				args: ["default"]
 			},
 			{parent: this}
 		)
