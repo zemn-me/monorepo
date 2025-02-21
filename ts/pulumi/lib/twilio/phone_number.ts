@@ -45,7 +45,7 @@ class TwilioPhoneNumberProvider implements dynamic.ResourceProvider<TwilioPhoneN
 		const num = await client.incomingPhoneNumbers(id).fetch();
 		return {
 			id: num.sid,
-			outs: num
+			outs: num.toJSON()
 		};
     }
 
