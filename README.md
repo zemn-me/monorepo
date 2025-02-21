@@ -9,13 +9,21 @@ rot.
 Prerequisites
 -------------------------------------------------------------------------------
 
-The only prerequisite is [bazelisk], which you can get on [brew]. You _can_ in
-theory run it with npx via npx run @bazel/bazelisk, but it is very slow so I
-don’t recommend it.
+The only prerequisite is [bazelisk]. On unix-like systems you can simply run
+'./[sh/bin/bazel]', which automatically downloads bazelisk and caches it. You
+_can_ in theory run it with npx via npx run @bazel/bazelisk, but it is very
+slow so I don’t recommend it.
 
 I recommend using the [VSCode] IDE. This repo is locally set up to configure it
-to conform to various linting and formatting settings.
+to conform to various linting and formatting settings. It also adds [sh/bin] to
+the PATH of your VSCode terminal emulator, which adds [pnpm], [buildifier],
+[go] and all the other tools bootstrapped and controlled by bazel.
 
+[pnpm]: /sh/bin/pnpm
+[buildifier]: /sh/bin/buildifier
+[go]: /sh/bin/go
+[sh/bin/bazel]: /sh/bin/bazel
+[sh/bin]: /sh/bin
 [bazelisk]: https://github.com/bazelbuild/bazelisk
 [brew]: https://brew.sh
 [VSCode]: https://code.visualstudio.com
