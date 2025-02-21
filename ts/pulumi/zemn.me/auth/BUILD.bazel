@@ -1,0 +1,16 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "auth",
+    srcs = [
+        "auth.ts",
+    ],
+    deps = [
+        "//:node_modules/@pulumi/gcp",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+	visibility = [
+		"//ts/pulumi:__subpackages__"
+	]
+)
