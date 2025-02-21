@@ -1,6 +1,7 @@
 ---
 
 name: CI
+# yamllint disable rule:line-length
 
 on:   # yamllint disable-line rule:truthy
   merge_group:
