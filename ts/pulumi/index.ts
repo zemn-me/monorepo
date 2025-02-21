@@ -136,7 +136,9 @@ export class Component extends Pulumi.ComponentResource {
 
 		new TwilioPhoneNumber(`${name}_twiliophone`, {
 			countryCode: 'US',
-			options: {}
+			options: {
+				voiceUrl: 'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
+			}
 		}, { parent: this });
 
 		super.registerOutputs({
