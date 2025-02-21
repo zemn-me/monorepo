@@ -12,6 +12,10 @@ import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemeto
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
+
+const personalPhoneNumber = () =>
+	process.env['PERSONAL_PHONE_NUMBER'];
+
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
@@ -134,10 +138,17 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
+
+
+		const personalPhone = personalPhoneNumber();
+
 		new TwilioPhoneNumber(`${name}_twiliophone`, {
 			countryCode: 'US',
 			options: {
-				voiceUrl: 'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
+				voiceUrl:
+					personalPhone?
+						`https://twimlets.com/forward?PhoneNumber=${encodeURIComponent(personalPhone)}`:
+						'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
 			}
 		}, { parent: this });
 

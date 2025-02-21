@@ -123,6 +123,9 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          # i guess if you exfil this secret you can also call me instead
+          # of making a security report 🤣
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
       - name: Switch back to candidate branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Deploy candidate branch to Staging
@@ -140,6 +143,7 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
   Submit:
     concurrency: pulumi_production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -176,6 +180,9 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          # i guess if you exfil this secret you can also call me instead
+          # of making a security report 🤣
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
   # Postsubmit:
   #   runs-on: ubuntu-latest
   #   if: github.event_name == 'push'
