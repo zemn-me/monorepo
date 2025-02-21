@@ -5,6 +5,7 @@ import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
+import { AuthZemnMe } from '#root/ts/pulumi/zemn.me/auth/auth.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
 
 export interface Args {
@@ -81,7 +82,10 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
-
+		new AuthZemnMe(`${name}_auth`, {
+			domain: ['auth', args.domain].join("."),
+			zoneId: args.zoneId,
+		}, { parent: this });
 
 		super.registerOutputs({ site: this.site, availability });
 	}
