@@ -6,7 +6,6 @@ import * as Pulumi from '@pulumi/pulumi';
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import { TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
@@ -133,11 +132,6 @@ export class Component extends Pulumi.ComponentResource {
 			{staging: args.staging, tags},
 			{ parent: this}
 		)
-
-		new TwilioPhoneNumber(`${name}_twiliophone`, {
-			countryCode: 'US',
-			options: {}
-		}, { parent: this });
 
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
