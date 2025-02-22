@@ -371,8 +371,8 @@ devDependencies:
     specifier: 8.0.0
     version: 8.0.0
   prettier:
-    specifier: 3.5.1
-    version: 3.5.1
+    specifier: 3.5.2
+    version: 3.5.2
   puppeteer:
     specifier: 24.2.1
     version: 24.2.1(typescript@5.5.4)
@@ -12803,7 +12803,7 @@ packages:
       js-yaml: 4.1.0
       lodash: 4.17.21
       minimist: 1.2.8
-      prettier: 3.5.1
+      prettier: 3.5.2
       tinyglobby: 0.2.10
     dev: false
 
@@ -15673,6 +15673,12 @@ packages:
 
   /prettier@3.5.1:
     resolution: {integrity: sha512-hPpFQvHwL3Qv5AdRvBFMhnKo4tYxp0ReXiPn2bxkiohEX6mBeBwEpBSQTkD458RaaDKQMYSp4hX4UtfUTA5wDw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /prettier@3.5.2:
+    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
     engines: {node: '>=14'}
     hasBin: true
 
