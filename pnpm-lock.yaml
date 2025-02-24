@@ -395,8 +395,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.178.2
-    version: 39.178.2(typanion@3.14.0)
+    specifier: 39.178.3
+    version: 39.178.3(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -14294,6 +14294,7 @@ packages:
   /mimic-response@3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
+    requiresBuild: true
 
   /mimic-response@4.0.0:
     resolution: {integrity: sha512-e5ISH9xMYU0DzrT+jl8q2ze9D6eWBto+I8CNpe+VI+K2J/F/k3PdkdTdz4wvGVH4NTpo+NRYTVIuMQEMMcsLqg==}
@@ -16507,8 +16508,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.178.2(typanion@3.14.0):
-    resolution: {integrity: sha512-RGh9/S92bsWJFg6WxnHSXFC7O/H2s61EBPOa3WkyBUOUGaZ6ro+bqe55uaB4nCo03kAFr9xrvKcLzEm/PWFFpg==}
+  /renovate@39.178.3(typanion@3.14.0):
+    resolution: {integrity: sha512-ff8no3SIZuN/D86Te2bl9zZ2YVVmDskT6r7Q+Y51Vb8kn4G91NvA1IFqB7jcnxtLYP8kJIXsF00fcv9bVBOZig==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
