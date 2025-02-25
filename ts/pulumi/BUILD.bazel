@@ -20,6 +20,7 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
