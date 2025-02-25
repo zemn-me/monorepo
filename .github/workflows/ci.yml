@@ -76,6 +76,8 @@ jobs:
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
+    permissions:
+      id-token: write
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
@@ -152,6 +154,8 @@ jobs:
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
           PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
   Submit:
+    permissions:
+      id-token: write
     concurrency: pulumi_production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # Attempts to submit changes to production.
