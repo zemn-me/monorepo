@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import { getProject } from '@pulumi/gcp/projects/getProject';
 import * as Pulumi from '@pulumi/pulumi';
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
@@ -98,6 +99,11 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const gcpProject = getProject({
+			filter: 'id: extreme-cycling-441523-a9'
+
+		}, { parent: this });
+
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
 			{
@@ -105,6 +111,8 @@ export class Component extends Pulumi.ComponentResource {
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
 				tags,
+				gcpProjectId: Pulumi.output(gcpProject)
+					.id,
 			},
 			{ parent: this }
 		);
