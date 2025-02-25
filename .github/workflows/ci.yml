@@ -147,6 +147,13 @@ jobs:
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Switch back to candidate branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: 'google-github-actions/auth@v2'
+        name: Re-acquire GCloud credentials after checkout...
+        id: auth2
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
