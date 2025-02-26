@@ -20,6 +20,7 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
@@ -34,6 +35,7 @@ ts_project(
         "//ts/pulumi/lulu.computer:pulumi_ts",
         "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
         "//ts/pulumi/shadwell.im",
+        "//ts/pulumi/zemn.me/auth",
         "//ts/pulumi/zemn.me/hello_world:ts",
     ],
 )
