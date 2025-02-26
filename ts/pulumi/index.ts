@@ -105,6 +105,7 @@ export class Component extends Pulumi.ComponentResource {
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
 				tags,
+				gcpProjectId: 'extreme-cycling-441523-a9',
 			},
 			{ parent: this }
 		);

@@ -1,6 +1,8 @@
 ---
 
 name: CI
+# yamllint disable rule:line-length
+#
 
 on:   # yamllint disable-line rule:truthy
   merge_group:
@@ -74,6 +76,8 @@ jobs:
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
   Staging:
+    permissions:
+      id-token: write
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
@@ -101,6 +105,13 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           ref: main
+      - uses: 'google-github-actions/auth@v2'
+        name: Acquire GCloud credentials for first deploy.
+        id: auth
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
         # we test if the script exists so we don't fail as a result of it
@@ -128,6 +139,13 @@ jobs:
           PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
       - name: Switch back to candidate branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: 'google-github-actions/auth@v2'
+        name: Re-acquire GCloud credentials after checkout...
+        id: auth2
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
@@ -145,6 +163,8 @@ jobs:
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
           PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
   Submit:
+    permissions:
+      id-token: write
     concurrency: pulumi_production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # Attempts to submit changes to production.
@@ -161,8 +181,13 @@ jobs:
           large-packages: false
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      # example copied from:
-      # https://github.com/actions/cache/blob/04f198bf0b2a39f7230a4304bf07747a0bddf146/examples.md
+      - uses: 'google-github-actions/auth@v2'
+        name: Acquire federated GCloud credentials...
+        id: auth
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Submit
         # Use npx to try to generate only
         # $BAZEL generated node_modules
