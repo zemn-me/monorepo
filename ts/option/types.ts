@@ -1,7 +1,7 @@
 import { always, ifElse } from 'ramda';
 
-import { Err, Ok, Result } from '#root/ts/_types.js';
 import { isDefined } from '#root/ts/guard.js';
+import { Err, Ok, Result } from '#root/ts/result_types.js';
 
 export const _some = Symbol();
 export const _none = Symbol();
