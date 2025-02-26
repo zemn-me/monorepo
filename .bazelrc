@@ -89,7 +89,7 @@ try-import %workspace%/.bazelrc.user
 
 # be careful with this!
 test --test_tag_filters=-do_not_run_on_main
-try-import .auth.bazelrc
+#try-import .auth.bazelrc
 
 # BuildBuddy suggestions
 test --noslim_profile
