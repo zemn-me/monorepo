@@ -327,14 +327,18 @@ ipykernel==6.29.5 \
     #   jupyter
     #   jupyter-console
     #   jupyterlab
-ipython==8.33.0 \
-    --hash=sha256:4c3e36a6dfa9e8e3702bd46f3df668624c975a22ff340e96ea7277afbd76217d \
-    --hash=sha256:aa5b301dfe1eaf0167ff3238a6825f810a029c9dad9d3f1597f30bd5ff65cc44
+ipython==9.0.0 \
+    --hash=sha256:2cce23069b830a54a5b9d3d66ccd6433047c1503a7b9a3b34593c0b5c2c08477 \
+    --hash=sha256:9368d65b3d4a471e9a698fed3ea486bbf6737e45111e915279c971b77f974397
     # via
     #   -r requirements.in
     #   ipykernel
     #   ipywidgets
     #   jupyter-console
+ipython-pygments-lexers==1.1.1 \
+    --hash=sha256:09c0138009e56b6854f9535736f4171d855c8c08a563a0dcd8022f78355c7e81 \
+    --hash=sha256:a9462224a505ade19a605f71f8fa63c2048833ce50abc86768a0d81d876dc81c
+    # via ipython
 ipywidgets==8.1.5 \
     --hash=sha256:3290f526f87ae6e77655555baba4f36681c555b8bdbbff430b70e52c34c86245 \
     --hash=sha256:870e43b1a35656a80c18c9503bbf2d16802db1cb487eec6fab27d683381dde17
@@ -679,6 +683,7 @@ pygments==2.19.1 \
     --hash=sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c
     # via
     #   ipython
+    #   ipython-pygments-lexers
     #   jupyter-console
     #   nbconvert
 pyproject-hooks==1.2.0 \
