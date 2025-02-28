@@ -9,8 +9,8 @@ type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
 type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
 type keywordSource = `'${keyword}'`;
-type sourceExpression = schemeSource | hostSource | keywordSource;
-type sourceList = Set<sourceExpression>;
+export type SourceExpression = schemeSource | hostSource | keywordSource;
+type sourceList = Set<SourceExpression>;
 type directives =
 	| 'style-src'
 	| 'img-src'
