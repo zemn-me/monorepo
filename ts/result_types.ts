@@ -22,8 +22,12 @@ export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
 }
 
 export function unwrap<T, E>(v: Result<T, E>): T {
-	if (is_ok(v)) return v[_ok];
+	if (is_ok(v)) return unwrap_unsafe(v);
 	throw v[_err];
+}
+
+export function unwrap_unsafe<T>(v: Ok<T>): T {
+	return v[_ok]
 }
 
 export function unwrap_or<T>(v: Result<T, unknown>, fallback: T): T {
@@ -32,7 +36,7 @@ export function unwrap_or<T>(v: Result<T, unknown>, fallback: T): T {
 	return v[_ok]
 }
 
-export function unwrap_or_else<T1, T2, E>(v: Result<T1, unknown>, fallback: (e: E) => T2): T1 | T2 {
+export function unwrap_or_else<T1, T2, E>(v: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
 	if (is_err(v)) return fallback(v[_err] as E);
 
 	return v[_ok]
