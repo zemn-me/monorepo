@@ -150,8 +150,8 @@ dependencies:
     specifier: 2.0.0
     version: 2.0.0
   schema-dts:
-    specifier: 1.1.2
-    version: 1.1.2(typescript@5.5.4)
+    specifier: 1.1.5
+    version: 1.1.5
   seedrandom:
     specifier: 3.0.5
     version: 3.0.5
@@ -17005,12 +17005,8 @@ packages:
   /scheduler@0.25.0:
     resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
 
-  /schema-dts@1.1.2(typescript@5.5.4):
-    resolution: {integrity: sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==}
-    peerDependencies:
-      typescript: '>=4.1.0'
-    dependencies:
-      typescript: 5.5.4
+  /schema-dts@1.1.5:
+    resolution: {integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==}
     dev: false
 
   /schema-utils@4.3.0:
