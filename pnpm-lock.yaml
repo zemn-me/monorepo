@@ -398,8 +398,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.185.3
-    version: 39.185.3(typanion@3.14.0)
+    specifier: 39.185.4
+    version: 39.185.4(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -11163,8 +11163,8 @@ packages:
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  /graph-data-structure@4.3.1:
-    resolution: {integrity: sha512-S+Qp6xtMb4AAWsixMHShDx/X/RYaWQMvs+IksTW6jPyamRzx7xILfOdJ+qPfcbcteZeKa7KDRqeEQv+jHlrBmw==}
+  /graph-data-structure@4.4.0:
+    resolution: {integrity: sha512-eQ/BL0WiwDQKADavJ2e72/5PFAaXoQa2nQ3YQa5v25FgwJOp13DhXoYQP0Q4QlepPEKZfJyab/xMrmJaKYdj/A==}
     dev: true
 
   /grapheme-splitter@1.0.4:
@@ -16594,8 +16594,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.185.3(typanion@3.14.0):
-    resolution: {integrity: sha512-4bx6sj8CZzW+TwjMfhkRui0MIVjnY1eHA/6ndX9vEhqys6UuxBijOmLIyOTwFbdBjJ4W43LeFSUlo8GL5pPinQ==}
+  /renovate@39.185.4(typanion@3.14.0):
+    resolution: {integrity: sha512-D90l1FPnzyN8Np95iHfX/VJrb2Ev3tGlamAE6q+epVbbrMfW0VTmcS0YMuwEt5sqRpqOyb7qPD0IfXMgvGEVhw==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16662,7 +16662,7 @@ packages:
       good-enough-parser: 1.1.23
       google-auth-library: 9.15.1
       got: 11.8.6
-      graph-data-structure: 4.3.1
+      graph-data-structure: 4.4.0
       handlebars: 4.7.8
       ignore: 7.0.3
       ini: 5.0.0
