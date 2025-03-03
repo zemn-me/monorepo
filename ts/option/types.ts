@@ -25,8 +25,13 @@ export function is_none(v: Option<unknown>): v is None {
 }
 
 export function unwrap<T>(v: Option<T>): T {
-	if (is_some(v)) return v[_some];
-	throw new Error("Cannot unwrap Option; has no value.");
+	if (!is_some(v)) throw new Error("Cannot unwrap Option; has no value.");
+
+	return unwrap_unchecked(v);
+}
+
+export function unwrap_unchecked<T>(v: Some<T>): T {
+	return v[_some]
 }
 
 export function unwrap_or<T, T2>(v: Option<T>, fallback: T2): T | T2 {
