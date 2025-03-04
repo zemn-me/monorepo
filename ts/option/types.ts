@@ -1,7 +1,7 @@
 import { always, ifElse } from 'ramda';
 
 import { isDefined } from '#root/ts/guard.js';
-import { Err, Ok, Result } from '#root/ts/result_types.js';
+import { and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
 
 export const _some = Symbol();
 export const _none = Symbol();
@@ -25,8 +25,13 @@ export function is_none(v: Option<unknown>): v is None {
 }
 
 export function unwrap<T>(v: Option<T>): T {
-	if (is_some(v)) return v[_some];
-	throw new Error("Cannot unwrap Option; has no value.");
+	if (!is_some(v)) throw new Error("Cannot unwrap Option; has no value.");
+
+	return unwrap_unchecked(v);
+}
+
+export function unwrap_unchecked<T>(v: Some<T>): T {
+	return v[_some]
 }
 
 export function unwrap_or<T, T2>(v: Option<T>, fallback: T2): T | T2 {
@@ -119,4 +124,17 @@ export function ok_or_else<T, E>(
 	), always(Err(err())))
 }
 
+
+
+export function option_result_transpose<T, E>(
+	a: Option<Result<T, E>>
+): Result<Option<T>, E> {
+	return unwrap_or(and_then(
+		a,
+		r => result_and_then(
+			r,
+			res => Some(res)
+		)
+	), Ok(None));
+}
 
