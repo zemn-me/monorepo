@@ -1,0 +1,9 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "storage",
+    deps = [
+        "//ts",
+        "//ts/option",
+    ],
+)
