@@ -1,0 +1,12 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "storage",
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//ts",
+        "//ts/option",
+    ],
+)

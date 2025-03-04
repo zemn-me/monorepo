@@ -9,7 +9,7 @@ import { Some } from '#root/ts/option/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
-import { resultFromZod } from '#root/ts/zod/util.js';
+import { resultFromZod } from '#root/ts/zod/_old_result_from_zod.js';
 
 export function Client() {
 	const [input, setInput] = useQueryState<string>("blueprint", parseAsString.withDefault(''));
