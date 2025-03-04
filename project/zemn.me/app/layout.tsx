@@ -8,7 +8,7 @@ import { ReactNode } from 'react';
 import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
 import Glade from '#root/project/zemn.me/components/Glade/glade.js';
-import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
+import { DefaultContentSecurityPolicy, HeaderTagsAppRouter, SourceExpression } from '#root/ts/next.js/index.js';
 import { text } from '#root/ts/react/lang/index.js';
 
 export interface Props {
@@ -22,6 +22,14 @@ const lora = Lora({
 	display: 'swap'
 });
 
+const csp = {
+	...DefaultContentSecurityPolicy,
+	'connect-src': new Set<SourceExpression>([
+		...DefaultContentSecurityPolicy['connect-src']!,
+		'https://accounts.google.com',
+	])
+}
+
 export function RootLayout({ children }: Props) {
 	return (
 		<>
@@ -34,7 +42,7 @@ export function RootLayout({ children }: Props) {
 						rel="apple-touch-icon"
 						type="image/svg+xml"
 					/>
-					<HeaderTagsAppRouter />
+					<HeaderTagsAppRouter cspPolicy={csp} />
 				</head>
 				<body className={lora.className}>
 					<Glade>
