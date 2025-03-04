@@ -17,6 +17,7 @@ import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner.js';
 import { Some } from '#root/ts/option/option.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
+import { and_then, unwrap_or_else, zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
 
 export interface RenderBlueprintProps {
@@ -31,20 +32,22 @@ export function RenderBlueprint({
 	height = 100,
 }: RenderBlueprintProps) {
 	const renderables = blueprint.entities ?? [];
-	const scaleX = resultFromZod(z
+	const scaleX = and_then(resultFromZod(z
 		.tuple([z.number(), z.number()])
-		.safeParse(extent(renderables, v => v.position.x))).and_then(v => scaleLinear(v, [0, width]));
+		.safeParse(extent(renderables, v => v.position.x))), v => scaleLinear(v, [0, width]));
 
-	const scaleY = resultFromZod(
+	const scaleY = and_then(resultFromZod(
 		z
 			.tuple([z.number(), z.number()])
 			.safeParse(extent(renderables, v => v.position.y)))
-		.and_then(v => scaleLinear(v, [0, height]));
+		, v => scaleLinear(v, [0, height]));
 
 	return (
 		<svg viewBox={`0 0 ${width} ${height}`} {...{ width, height }}>
 			{
-				scaleX.zip(scaleY).and_then(
+				unwrap_or_else(
+				and_then(
+					zip(scaleX, scaleY),
 					([scaleX, scaleY]) => <>
 {renderables.map(r => (
 				<circle
@@ -55,7 +58,7 @@ export function RenderBlueprint({
 				/>
 			))}
 					</>
-				).unwrap_or_else(e => <ErrorDisplay error={e}/>)
+				), e => <ErrorDisplay error={e}/>)
 			}
 
 		</svg>
