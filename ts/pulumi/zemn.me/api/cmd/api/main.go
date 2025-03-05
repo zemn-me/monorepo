@@ -9,10 +9,6 @@ import (
 )
 
 func main() {
-	if phoneNumber == "" {
-		panic("missing phone number")
-	}
-
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
