@@ -3,7 +3,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
 import { stringToJSON } from 'zod_utilz';
 
-import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
+import { and_then as result_and_then, asyncCatcher, flatten as result_flatten, map_err, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
 
 
@@ -73,7 +73,11 @@ export async function watch_out_i_am_verifying_the_id_token_with_no_specified_is
 			audience,
 			clockToleranceSeconds
 		)
-	)).then( v => result_promise_transpose( result_flatten(v) ))
+	)).then( v => result_flatten(v) )
+}
+
+export class JWTValidationError extends Error {
+	constructor(public override cause: Error) { super() }
 }
 
 /**
@@ -95,15 +99,21 @@ export async function verifyOIDCToken(
 		c => createRemoteJWKSet(new URL(c.jwks_uri))
 	);
 
-	return result_and_then(
+	const r = result_and_then(
 		jwks,
-		jwks => jwtVerify(
+		jwks => _jwtVerify(
 			token,
 			jwks,
 			{ issuer, audience, clockTolerance: clockToleranceSeconds }
 		)
 	)
 
+	return result_flatten(await result_promise_transpose(r));
+}
+
+async function _jwtVerify(...a: Parameters<typeof jwtVerify>) {
+	return map_err(await asyncCatcher(() => jwtVerify(...a)),
+		e => e instanceof Error ? new JWTValidationError(e) : new JWTValidationError(new Error(`${e}`)));
 }
 
 export async function oidcAuthorizeUri(
