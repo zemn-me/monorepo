@@ -98,12 +98,27 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+
+		const personalPhone = personalPhoneNumber();
+
+		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber`, {
+			countryCode: 'US',
+			options: {
+				voiceUrl:
+					personalPhone?
+						`https://twimlets.com/forward?PhoneNumber=${encodeURIComponent(personalPhone)}`:
+						'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
+			}
+		}, { parent: this, protect: !args.staging });
+
+
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
 			{
 				zoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
+				callboxPhoneNumber: callboxPhone.phoneNumber,
 				tags,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 			},
@@ -140,18 +155,6 @@ export class Component extends Pulumi.ComponentResource {
 		)
 
 
-
-		const personalPhone = personalPhoneNumber();
-
-		new TwilioPhoneNumber(`${name}_twiliophone`, {
-			countryCode: 'US',
-			options: {
-				voiceUrl:
-					personalPhone?
-						`https://twimlets.com/forward?PhoneNumber=${encodeURIComponent(personalPhone)}`:
-						'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
-			}
-		}, { parent: this });
 
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,

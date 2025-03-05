@@ -1,4 +1,5 @@
-import { CustomResourceOptions, dynamic } from "@pulumi/pulumi";
+import { CustomResourceOptions, dynamic, Output } from "@pulumi/pulumi";
+import { PulumiCommand } from "@pulumi/pulumi/automation";
 import twilio from "twilio";
 import { IncomingPhoneNumberInstance, IncomingPhoneNumberListInstanceCreateOptions } from "twilio/lib/rest/api/v2010/account/incomingPhoneNumber.js";
 
@@ -69,11 +70,15 @@ class TwilioPhoneNumberProvider implements dynamic.ResourceProvider<TwilioPhoneN
 }
 
 export class TwilioPhoneNumber extends dynamic.Resource {
+	public readonly phoneNumber!: Output<string>;
     constructor(
         name: string,
         args: TwilioPhoneNumberArgs,
         opts?: CustomResourceOptions
     ) {
-        super(new TwilioPhoneNumberProvider(), name, args, opts);
+		super(new TwilioPhoneNumberProvider(), name, {
+			phoneNumber: undefined,
+			...args
+		}, opts);
     }
 }
