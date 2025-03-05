@@ -1,10 +1,16 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { z } from "zod";
 
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/app/hook/useOIDC.js";
 import { and_then as option_and_then, is_none, None, Option, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else, unwrap_unchecked as option_unwrap_unchecked } from "#root/ts/option/types.js";
-import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked } from "#root/ts/result_types.js";
+import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked, unwrap_unchecked as unwrap_result_unchecked } from "#root/ts/result_types.js";
+import { resultFromZod } from "#root/ts/zod/util.js";
+
+const phoneNumberResponseSchema = z.strictObject({
+	phoneNumber: z.string()
+})
 
 export default function Admin() {
 	const googleAuth = useOIDC("https://accounts.google.com");
@@ -45,14 +51,21 @@ export default function Admin() {
 				You need to log in to see this.
 			</>;
 
+			const pnRespJson = await fetch("https://api.zemn.me/phone/number", {
+				headers: {
+					Authorization: option_unwrap_unchecked(auth).id_token,
+				}
+			}) .then(v => v.json());
+
+			const pn = resultFromZod(phoneNumberResponseSchema.safeParse(pnRespJson));
+
+			if (is_err(pn)) return <>
+					⚠ {unwrap_err_unchecked(pn).toString()}
+			</>;
+
 			return <>
 				Callbox phone number is currently:
-				{await fetch("https://api.zemn.me/phone/number", {
-					headers: {
-						Authorization: option_unwrap_unchecked(auth).id_token,
-					}
-				})
-					.then(v => v.json())}
+				{unwrap_result_unchecked(pn).phoneNumber}
 			</>
 		}
 	});
