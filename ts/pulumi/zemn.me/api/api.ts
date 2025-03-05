@@ -73,6 +73,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             integrationUri: lambdaFn.arn,
         }, { parent: this });
 
+		new aws.lambda.Permission(`${name}-lambda-permission`, {
+			action: "lambda:InvokeFunction",
+			function: lambdaFn.name,
+			principal: "apigateway.amazonaws.com",
+			sourceArn: Pulumi.interpolate`${gateway.executionArn}/*/*`,
+		}, { parent: this });
+
         new aws.apigatewayv2.Route(`${name}-proxy-route`, {
             apiId: gateway.id,
             routeKey: "$default",
