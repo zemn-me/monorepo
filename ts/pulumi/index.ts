@@ -6,7 +6,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import { TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
+import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
@@ -111,6 +111,12 @@ export class Component extends Pulumi.ComponentResource {
 			}
 		}, { parent: this, protect: !args.staging });
 
+		// because i cant work out how to make outs happen from a
+		// DynamicProvider
+		const phoneNumberInfo = callboxPhone.id.apply(
+			v => getTwilioPhoneNumber(v)
+		);
+
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
@@ -118,7 +124,7 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
-				callboxPhoneNumber: callboxPhone.phoneNumber,
+				callboxPhoneNumber: phoneNumberInfo.phoneNumber,
 				tags,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 			},
