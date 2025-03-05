@@ -10,8 +10,6 @@ import (
 	"github.com/coreos/go-oidc"
 )
 
-var phoneNumber = os.Getenv("CALLBOX_PHONE_NUMBER")
-
 // ValidateOIDCToken checks if the provided ID token is valid.
 func validateOIDCToken(ctx context.Context, idToken string) error {
 	provider, err := oidc.NewProvider(ctx, "https://accounts.google.com")
@@ -63,7 +61,7 @@ func CallboxNumberHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := CallboxNumberResponse{PhoneNumber: phoneNumber}
+	response := CallboxNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
