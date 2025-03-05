@@ -14,7 +14,7 @@ pkg_tar(
 oci_image(
     name = "image",
     base = "@distroless_debian12",
-    entrypoint = ["/soft_delete"],
+    entrypoint = ["/expire_on_delete"],
     tars = [":tar"],
 )
 
