@@ -18,17 +18,13 @@ export default function Admin() {
 
 	// when googleAuth is something, make sure to close any open window handles
 	useEffect(
-		() => void result_and_then(
-			googleAuth,
-			r => option_and_then(
-				r,
-				() => option_and_then(
-					openWindowHnd,
-					wnd => wnd.close()
-				)
-			)
+		() => void googleAuth.then(
+			a => result_and_then(a, () => option_and_then(
+				openWindowHnd, wnd => wnd.close()
+			))
 		)
-	, [googleAuth])
+		, [googleAuth]);
+
 
 	const authTokenCacheKey = result_unwrap_or(result_and_then(
 		googleAuth,
