@@ -11,11 +11,15 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.36.2
 	github.com/aws/aws-sdk-go-v2/config v1.29.7
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.77.1
+	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.42.0
 	github.com/bazelbuild/bazel-watcher v0.25.3
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.53.0
 	github.com/blang/semver/v4 v4.0.0
+	github.com/coreos/go-oidc v2.3.0+incompatible
+	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/cors v1.2.1
 	github.com/go-delve/delve v1.24.0
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.3
@@ -100,6 +104,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
@@ -115,10 +120,12 @@ require (
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	go.starlark.net v0.0.0-20231101134539-556fd59b42f6 // indirect
 	golang.org/x/arch v0.11.0 // indirect
-	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/oauth2 v0.25.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/telemetry v0.0.0-20241106142447-58a1122356f5 // indirect
 	golang.org/x/text v0.21.0 // indirect
@@ -127,6 +134,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
 	google.golang.org/grpc v1.69.4 // indirect
 	google.golang.org/protobuf v1.36.3 // indirect
+	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mvdan.cc/gofumpt v0.7.0 // indirect
