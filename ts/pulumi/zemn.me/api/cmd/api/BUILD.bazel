@@ -1,0 +1,53 @@
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+package(default_visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"])
+
+go_library(
+    name = "api_lib",
+    srcs = [
+        "callbox_number.go",
+        "main.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/cmd/api",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_awslabs_aws_lambda_go_api_proxy//httpadapter",
+        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_go_chi_chi_v5//:chi",
+    ],
+)
+
+go_binary(
+    name = "api",
+    embed = [":api_lib"],
+    visibility = ["//visibility:public"],
+)
+
+pkg_tar(
+    name = "tar",
+    srcs = [":api"],
+)
+
+oci_image(
+    name = "image",
+    base = "@distroless_debian12",
+    entrypoint = ["/api"],
+    tars = [":tar"],
+)
+
+pulumi_image(
+    name = "oci_image",
+    src = ":image",
+    component_name = "ApiZemnMeLambdaImage",
+    visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
