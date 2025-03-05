@@ -21,6 +21,15 @@ export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
 	return _err in v
 }
 
+export function unwrap_err<T, E>(v: Result<T, E>) {
+	if (!is_err(v)) throw new Error("Not in error.");
+	return unwrap_err_unchecked(v);
+}
+
+export function unwrap_err_unchecked<E>(v: Err<E>) {
+	return v[_err]
+}
+
 export function unwrap<T, E>(v: Result<T, E>): T {
 	if (is_ok(v)) return unwrap_unsafe(v);
 	throw v[_err];
@@ -29,6 +38,8 @@ export function unwrap<T, E>(v: Result<T, E>): T {
 export function unwrap_unsafe<T>(v: Ok<T>): T {
 	return v[_ok]
 }
+
+export const unwrap_unchecked = unwrap_unsafe;
 
 export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
 	if (is_err(v)) return fallback;
