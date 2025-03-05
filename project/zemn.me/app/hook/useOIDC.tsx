@@ -1,34 +1,57 @@
+import { useState } from "react";
+
 import { useLocalStorageItem } from "#root/project/zemn.me/app/hook/useLocalStorage.js";
 import { AuthorizationCache } from "#root/project/zemn.me/app/localStorage/localStorage.js";
-import { Issuer } from "#root/project/zemn.me/app/OAuth/clients.js";
+import { Issuer, OAuthClientByIssuer } from "#root/project/zemn.me/app/OAuth/clients.js";
 import { lensPromise } from "#root/ts/lens.js";
-import { and_then, flatten, None, option_result_transpose, Some } from "#root/ts/option/types.js";
-import { and_then as result_and_then } from "#root/ts/result_types.js";
+import { verifyOIDCToken } from "#root/ts/oidc/oidc.js";
+import { and_then, flatten as option_flatten, None, ok_or_else, Some } from "#root/ts/option/types.js";
+import { and_then as result_and_then, Err, flatten as result_flatten, Ok, result_promise_transpose } from "#root/ts/result_types.js";
 
-export function useOIDC(issuer: Issuer) {
+class MissingToken extends Error {
+
+}
+
+class Loading extends Error {
+
+}
+
+export function useOIDC(issuer: Issuer ) {
+	const audience = OAuthClientByIssuer(issuer).clientId;
 	const [authCache] = useLocalStorageItem(
 		lensPromise(AuthorizationCache)
 	);
+	const [result, setResult] = useState();
 
 	const aa =
-		flatten(and_then(authCache, v => v === null ? None : Some(v)));
+		option_flatten(and_then(authCache, v => v === null ? None : Some(v)));
 
-	const maybeOurToken =
-		result_and_then(
-			option_result_transpose(
-				and_then(
-					aa,
-					result => result_and_then(
-						result,
-						v => v[issuer] === undefined ? None : Some(v[issuer])
-					)
-				)),
-			r => flatten(r)
-		);
+	const bb = result_flatten(ok_or_else(
+		aa,
+		() => new Loading("loading...")
+	));
 
+	const candidate = result_flatten(result_and_then(
+		bb,
+		v => {
+			const cand = v[issuer];
+			if (cand === undefined) return Err(new MissingToken("missing token"));
 
+			return Ok(cand);
+		}
+	));
 
-	return maybeOurToken
+	const verifiedToken = result_promise_transpose(result_and_then(
+		candidate,
+		v => verifyOIDCToken(
+			v.id_token,
+			issuer,
+			audience,
+			0
+		)
+	)).then(r => result_flatten(r))
+
+	return verifiedToken
 }
 
 /**

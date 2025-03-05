@@ -79,3 +79,18 @@ export async function result_promise_transpose<T, E>(
 	if (is_err(r)) return r;
 	return Ok(await unwrap_unsafe(r))
 }
+
+export function catcher<T>(f: () => T): Result<T, unknown> {
+	try { return Ok(f()) }
+	catch (e) { return Err(e) }
+}
+
+export async function asyncCatcher<T>(f: () => Promise<T>): Promise<Result<T, unknown>> {
+	try { return Ok(await f()) }
+	catch (e) { return Err(e) }
+}
+
+export function map_err<T, E, EE>(r: Result<T, E>, f: (v: E) => EE): Result<T, EE> {
+	if (is_ok(r)) return Ok(unwrap_unchecked(r));
+	return Err(f(unwrap_err_unchecked(r)))
+}
