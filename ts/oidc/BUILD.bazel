@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "oidc",
+    srcs = ["oidc.ts"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/base64-js",
+        "//:node_modules/jose",
+        "//:node_modules/zod",
+        "//:node_modules/zod_utilz",
+        "//ts",
+        "//ts/zod",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
