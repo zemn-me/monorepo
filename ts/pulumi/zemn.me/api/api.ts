@@ -69,7 +69,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 
         const integration = new aws.apigatewayv2.Integration(`${name}-integration`, {
             apiId: gateway.id,
-            integrationType: "AWS_PROXY",
+            integrationType: "HTTP_PROXY",
             integrationUri: lambdaFn.arn,
         }, { parent: this });
 
