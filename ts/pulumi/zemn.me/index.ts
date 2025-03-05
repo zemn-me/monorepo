@@ -84,8 +84,8 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
-		new ApiZemnMe(`${name}_auth`, {
-			domain: ['auth', args.domain].join("."),
+		new ApiZemnMe(`${name}_api`, {
+			domain: ['api', args.domain].join("."),
 			zoneId: args.zoneId,
 			callboxPhoneNumber: args.callboxPhoneNumber,
 		}, { parent: this });
