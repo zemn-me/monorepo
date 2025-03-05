@@ -17,7 +17,8 @@ func validateOIDCToken(ctx context.Context, idToken string) error {
 		return fmt.Errorf("failed to create OIDC provider: %w", err)
 	}
 
-	verifier := provider.Verifier(&oidc.Config{ClientID: ""})
+	// todo: single source of truth for this.
+	verifier := provider.Verifier(&oidc.Config{ClientID: "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com"})
 
 	token, err := verifier.Verify(ctx, idToken)
 	if err != nil {
