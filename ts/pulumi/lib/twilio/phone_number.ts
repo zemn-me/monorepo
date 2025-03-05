@@ -14,7 +14,11 @@ const apiKeySid = () => process.env["TWILIO_API_KEY_SID"];
 const Client = () => twilio(apiKeySid(), authToken(), { accountSid: accountSID() });
 
 type SerializedIncomingPhoneNumberInstance =
-	ReturnType<IncomingPhoneNumberInstance["toJSON"]>
+	ReturnType<IncomingPhoneNumberInstance["toJSON"]>;
+
+export function getTwilioPhoneNumber(id: string): Promise<IncomingPhoneNumberInstance> {
+	return Client().incomingPhoneNumbers(id).fetch();
+}
 
 class TwilioPhoneNumberProvider implements dynamic.ResourceProvider<TwilioPhoneNumberArgs, SerializedIncomingPhoneNumberInstance> {
     public async create(args: TwilioPhoneNumberArgs) {
