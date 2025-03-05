@@ -5,7 +5,7 @@ import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
-import { AuthZemnMe } from '#root/ts/pulumi/zemn.me/auth/auth.js';
+import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
 
 export interface Args {
@@ -14,6 +14,7 @@ export interface Args {
 	noIndex: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	gcpProjectId: Pulumi.Input<string>
+	callboxPhoneNumber: Pulumi.Input<string>
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -83,10 +84,10 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
-		new AuthZemnMe(`${name}_auth`, {
+		new ApiZemnMe(`${name}_auth`, {
 			domain: ['auth', args.domain].join("."),
 			zoneId: args.zoneId,
-			gcpProjectId: args.gcpProjectId,
+			callboxPhoneNumber: args.callboxPhoneNumber,
 		}, { parent: this });
 
 		super.registerOutputs({ site: this.site, availability });
