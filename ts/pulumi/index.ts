@@ -109,7 +109,7 @@ export class Component extends Pulumi.ComponentResource {
 						`https://twimlets.com/forward?PhoneNumber=${encodeURIComponent(personalPhone)}`:
 						'https://twimlets.com/message?Message%5B0%5D=If+you+are+hearing+this%2C+then+it+must+be+working%21'
 			}
-		}, { parent: this, protect: !args.staging });
+		}, { parent: this });
 
 
 		this.zemnMe = new ZemnMe.Component(
