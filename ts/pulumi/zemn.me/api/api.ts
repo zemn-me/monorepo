@@ -127,5 +127,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                 evaluateTargetHealth: false,
             }],
         }, { parent: this });
+
+		super.registerOutputs({
+			lambdaEnvironment: lambdaFn.environment,
+			callboxPhoneNumber: args.callboxPhoneNumber,
+		})
     }
 }
