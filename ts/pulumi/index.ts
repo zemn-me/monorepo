@@ -101,7 +101,7 @@ export class Component extends Pulumi.ComponentResource {
 
 		const personalPhone = personalPhoneNumber();
 
-		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber`, {
+		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber2`, {
 			countryCode: 'US',
 			options: {
 				voiceUrl:
