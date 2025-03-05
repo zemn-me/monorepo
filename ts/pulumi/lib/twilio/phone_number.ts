@@ -29,37 +29,52 @@ class TwilioPhoneNumberProvider implements dynamic.ResourceProvider<TwilioPhoneN
 			v => v[0]
 		);
 
-		const newNumber = chosenNumber.then(n => client.incomingPhoneNumbers.create({
+		const n = await chosenNumber.then(n => client.incomingPhoneNumbers.create({
 			phoneNumber: n?.phoneNumber,
 			...args.options
 		}))
 
-		return newNumber.then(n => ({
+		const j = n.toJSON();
+
+		return {
 			id: n.sid,
-			outs: n.toJSON()
-		}))
+			outs: {
+				...j,
+				phoneNumber: j.phoneNumber,
+			}
+		}
     }
 
     public async read(id: string) {
 		const client = Client();
 		const num = await client.incomingPhoneNumbers(id).fetch();
+		const j = num.toJSON();
 		return {
 			id: num.sid,
-			outs: num.toJSON()
+			outs: {
+				...j,
+				phoneNumber: j.phoneNumber,
+			}
 		};
     }
 
     public async update(id: string, _: SerializedIncomingPhoneNumberInstance, news: TwilioPhoneNumberArgs) {
 		const client = Client();
 
-        const updatedNumber = client.incomingPhoneNumbers(id).update({
+        const n = await client.incomingPhoneNumbers(id).update({
 			...news.options
         });
 
-		return updatedNumber.then(n => ({
+		const j = n.toJSON();
+
+		return {
 			id: n.sid,
-			outs: n.toJSON()
-		}))
+			outs: {
+				...j,
+				phoneNumber: j.phoneNumber,
+			}
+		}
+
     }
 
     public async delete(id: string, _: SerializedIncomingPhoneNumberInstance) {
