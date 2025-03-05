@@ -61,6 +61,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             memorySize: 512,
 			environment: {
 				variables: {
+					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
 					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
 				}
 			}
