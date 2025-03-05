@@ -18,7 +18,7 @@ require (
 	github.com/bazelbuild/rules_go v0.53.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.3.0+incompatible
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/cors v1.2.1
 	github.com/go-delve/delve v1.24.0
 	github.com/golang/protobuf v1.5.4
