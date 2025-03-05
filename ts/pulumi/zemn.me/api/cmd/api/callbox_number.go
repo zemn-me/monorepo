@@ -39,7 +39,7 @@ func validateOIDCToken(ctx context.Context, idToken string) error {
 		return fmt.Errorf("invalid issuer: %s", claims.Iss)
 	}
 
-	if claims.Email != "thomas@shadwell.im" {
+	if claims.Sub != "111669004071516300752" {
 		return fmt.Errorf("unauthorized subject: %s", claims.Email)
 	}
 
