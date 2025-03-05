@@ -1,10 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+package(default_visibility = ["//:__subpackages__"])
+
 ts_project(
-    name = "auth",
+    name = "api",
     srcs = [
-        "auth.ts",
+        "api.ts",
     ],
     visibility = [
         "//ts/pulumi:__subpackages__",
@@ -13,6 +15,7 @@ ts_project(
         "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
+        "//ts/pulumi/zemn.me/api/cmd/api:oci_image",
     ],
 )
 
