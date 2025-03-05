@@ -1,7 +1,3 @@
-/**
- * @fileoverview api.zemn.me
- */
-
 import * as aws from "@pulumi/aws";
 import * as Pulumi from '@pulumi/pulumi';
 
@@ -29,6 +25,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
                 Service: "lambda.amazonaws.com",
             }),
+            managedPolicyArns: [aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole],
         }, { parent: this });
 
         const repo = new aws.ecr.Repository(`${name}_repo`, {
@@ -47,6 +44,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             }, { parent: this });
             lambdaImageCache.set(imageCacheKey, image);
         }
+
+        const logGroup = new aws.cloudwatch.LogGroup(`${name}-log-group`, {
+            retentionInDays: 14,
+        }, { parent: this });
 
         const gateway = new aws.apigatewayv2.Api(`${name}-api`, {
             protocolType: "HTTP",
@@ -73,21 +74,33 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 
         new aws.apigatewayv2.Route(`${name}-proxy-route`, {
             apiId: gateway.id,
-            routeKey: "$default", // Matches all methods and paths
+            routeKey: "$default",
             target: Pulumi.interpolate`integrations/${integration.id}`,
         }, { parent: this });
 
         new aws.apigatewayv2.Stage(`${name}-stage`, {
             apiId: gateway.id,
-            name: "$default", // Use the default stage
+            name: "$default",
             autoDeploy: true,
+            accessLogSettings: {
+                destinationArn: logGroup.arn,
+                format: JSON.stringify({
+                    requestId: "$context.requestId",
+                    sourceIp: "$context.identity.sourceIp",
+                    requestTime: "$context.requestTime",
+                    httpMethod: "$context.httpMethod",
+                    routeKey: "$context.routeKey",
+                    status: "$context.status",
+                    path: "$context.path"
+                })
+            },
         }, { parent: this });
 
 		const cert = new Certificate(`${name}_cert`, {
 			zoneId: args.zoneId,
 			domain: args.domain,
 			noCostAllocationTag: true,
-		}, { parent: this })
+		}, { parent: this });
 
         const customDomain = new aws.apigatewayv2.DomainName(`${name}-domain`, {
             domainName: args.domain,
