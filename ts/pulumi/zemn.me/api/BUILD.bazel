@@ -2,17 +2,18 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "auth",
+    name = "api",
     srcs = [
-        "auth.ts",
+        "api.ts",
     ],
     visibility = [
         "//ts/pulumi:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/zemn.me/api/cmd/api:oci_image",
     ],
 )
 
