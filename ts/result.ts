@@ -172,4 +172,3 @@ export function Err<T>(v: T): Err<T> {
 	return new impl(types.Err(v))
 }
 
-
