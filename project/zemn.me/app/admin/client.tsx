@@ -64,7 +64,7 @@ export default function Admin() {
 			</>;
 
 			return <>
-				Callbox phone number is currently:
+				Callbox phone number is currently: {" "}
 				{unwrap_result_unchecked(pn).phoneNumber}
 			</>
 		}
