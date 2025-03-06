@@ -13,6 +13,7 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
         "//:node_modules/twilio",
+        "//ts",
     ],
 )
 
