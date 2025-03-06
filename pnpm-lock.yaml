@@ -404,8 +404,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.188.1
-    version: 39.188.1(typanion@3.14.0)
+    specifier: 39.188.2
+    version: 39.188.2(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -16661,8 +16661,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.188.1(typanion@3.14.0):
-    resolution: {integrity: sha512-klo4UXlKXFb96+Cruo+LRclQIRKPZEFitn0JXnXOTZYAehGFwJvdd0FR1+4WvzUeFkpux2QaJyvbyWKmmy3nbg==}
+  /renovate@39.188.2(typanion@3.14.0):
+    resolution: {integrity: sha512-ouX80QxbEEP29Vc3+6Kn/oV70qrART4Hl5PZkgepUW0tCDaklKooIXfujEzVod5EnGILq5Z2rbBPSK4UKTh5jg==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17002,6 +17002,7 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    requiresBuild: true
 
   /sax@1.4.1:
     resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
