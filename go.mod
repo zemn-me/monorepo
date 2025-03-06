@@ -35,7 +35,7 @@ require (
 	golang.org/x/sync v0.12.0
 	golang.org/x/tools v0.31.0
 	golang.org/x/tools/gopls v0.17.1
-	honnef.co/go/tools v0.6.0
+	honnef.co/go/tools v0.6.1
 )
 
 require (
