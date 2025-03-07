@@ -341,8 +341,8 @@ devDependencies:
     specifier: 15.2.1
     version: 15.2.1(eslint@9.21.0)(typescript@5.5.4)
   eslint-config-prettier:
-    specifier: 10.0.2
-    version: 10.0.2(eslint@9.21.0)
+    specifier: 10.0.3
+    version: 10.0.3(eslint@9.21.0)
   eslint-plugin-react:
     specifier: 7.37.4
     version: 7.37.4(eslint@9.21.0)
@@ -9870,8 +9870,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-prettier@10.0.2(eslint@9.21.0):
-    resolution: {integrity: sha512-1105/17ZIMjmCOJOPNfVdbXafLCLj3hPmkmB7dLgt7XsQ/zkxSuDerE/xgO3RxoHysR1N1whmquY0lSn2O0VLg==}
+  /eslint-config-prettier@10.0.3(eslint@9.21.0):
+    resolution: {integrity: sha512-wlypkcjrA6L2fG+WTmEELzZJFmiF3ftdirkmz8te3FOVwviFvaeYxHPtBvwaIlvjUC4QjrTrPxRMddx+CU7Tlw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
