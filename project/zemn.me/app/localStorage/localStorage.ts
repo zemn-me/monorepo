@@ -56,6 +56,7 @@ export const clientSecret = async (s: Storage) => {
 };
 
 
+
 export const authCacheSchema = z.record(
 	Issuer,
 	z.strictObject({
@@ -78,7 +79,6 @@ function zod<T extends z.ZodTypeAny>(schema: T): Serde<
 		v => resultFromZod(stringToJSON().pipe(schema).safeParse(v))
 	]
 }
-
 
 export const AuthorizationCache = serdeLens(
 	StorageLens("1"),
