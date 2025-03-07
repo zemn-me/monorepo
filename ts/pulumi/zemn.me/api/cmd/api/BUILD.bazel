@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_oci//oci:defs.bzl", "oci_image")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//bzl:rules.bzl", "bazel_lint")
@@ -9,6 +10,7 @@ package(default_visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"])
 go_library(
     name = "api_lib",
     srcs = [
+        "callbox.go",
         "callbox_number.go",
         "main.go",
     ],
@@ -20,6 +22,8 @@ go_library(
         "@com_github_coreos_go_oidc//:go-oidc",
         "@com_github_go_chi_chi_v5//:chi",
         "@com_github_go_chi_cors//:cors",
+        "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_twilio_twilio_go//twiml",
     ],
 )
 
@@ -51,4 +55,11 @@ pulumi_image(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "api_test",
+    srcs = ["callbox_test.go"],
+    embed = [":api_lib"],
+    deps = ["@com_github_beevik_etree//:etree"],
 )
