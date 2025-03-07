@@ -19,6 +19,7 @@ func main() {
 	}))
 
 	r.Get("/phone/number", CallboxNumberHandler)
+	r.Get("/phone/twilio", TwilioCallboxHandler)
 
 	lambda.Start(httpadapter.New(r).ProxyWithContext)
 }
