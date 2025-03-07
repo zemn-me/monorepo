@@ -79,3 +79,21 @@ export async function result_promise_transpose<T, E>(
 	if (is_err(r)) return r;
 	return Ok(await unwrap_unsafe(r))
 }
+
+/**
+ * Aggregates a set of {@link Result}s into a single Result.
+ *
+ * If an error occurs, only the *first* error will be in the new Result.
+ */
+export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
+    const collected: T[] = [];
+
+    for (const res of arr) {
+        if (is_err(res)) {
+            return res;
+        }
+        collected.push(unwrap_unsafe(res));
+    }
+
+    return Ok(collected);
+}
