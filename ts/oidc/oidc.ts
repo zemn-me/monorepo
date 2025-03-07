@@ -2,6 +2,7 @@ import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
 import { stringToJSON } from 'zod_utilz';
+import { stringToJSON } from 'zod_utilz';
 
 import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
@@ -103,8 +104,33 @@ export async function verifyOIDCToken(
 			{ issuer, audience, clockTolerance: clockToleranceSeconds }
 		)
 	)
-
 }
+
+export const idTokenSchema = z.object({
+	iss: z.string().url().startsWith('https://'),
+	sub: z.string().max(255),
+	aud: z.union([z.string(), z.array(z.string()).nonempty()]),
+	exp: z.number().int().positive(),
+	iat: z.number().int().positive(),
+	auth_time: z.number().int().positive().optional(),
+	nonce: z.string().optional(),
+	acr: z.string().optional(),
+	amr: z.array(z.string()).optional(),
+	azp: z.string().optional(),
+});
+
+export type ID_Token = z.TypeOf<typeof idTokenSchema>;
+
+export const watchOutParseIdToken = z.string()
+	.transform(s => s.split("."))
+	.pipe(
+		z.tuple([z.string(), z.string(), z.string()])
+	).transform(
+		([, body]) => atob(body)
+	).pipe(
+		stringToJSON()
+	).pipe(idTokenSchema);
+
 
 export async function oidcAuthorizeUri(
 	nonce: string, state: string, callback: URL, clientId: string, issuer: URL) {

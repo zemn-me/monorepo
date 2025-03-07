@@ -20,7 +20,7 @@ require (
 	github.com/coreos/go-oidc v2.3.0+incompatible
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/cors v1.2.1
-	github.com/go-delve/delve v1.24.0
+	github.com/go-delve/delve v1.24.1
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.3
 	github.com/gorilla/websocket v1.5.3
@@ -35,7 +35,7 @@ require (
 	golang.org/x/sync v0.12.0
 	golang.org/x/tools v0.30.0
 	golang.org/x/tools/gopls v0.17.1
-	honnef.co/go/tools v0.6.0
+	honnef.co/go/tools v0.6.1
 )
 
 require (
@@ -110,8 +110,8 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/smartystreets/goconvey v1.8.0 // indirect
 	github.com/speakeasy-api/openapi-overlay v0.9.0 // indirect
-	github.com/spf13/cobra v1.8.1 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/cobra v1.9.1 // indirect
+	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/vbatts/tar-split v0.11.6 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
