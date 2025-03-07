@@ -23,6 +23,13 @@ export function must<I, O extends I>(
 	};
 }
 
+export function and<I, A extends I, B extends I>(
+	f1: (v: I) => v is A,
+	f2: (v: I) => v is B
+) {
+	return (v: I): v is A & B => f1(v) && f2(v)
+}
+
 export function impossible(v: never, then: (v: never) => Error): asserts v is never {
 	throw then(v);
 }

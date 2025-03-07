@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/app/hook/useOIDC.js";
+import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, is_none, None, Option, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else, unwrap_unchecked as option_unwrap_unchecked } from "#root/ts/option/types.js";
 import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked, unwrap_unchecked as unwrap_result_unchecked } from "#root/ts/result_types.js";
 import { resultFromZod } from "#root/ts/zod/util.js";
@@ -13,7 +14,7 @@ const phoneNumberResponseSchema = z.strictObject({
 })
 
 export default function Admin() {
-	const googleAuth = useOIDC("https://accounts.google.com");
+	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
 	const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(None);
 
 	// when googleAuth is something, make sure to close any open window handles
