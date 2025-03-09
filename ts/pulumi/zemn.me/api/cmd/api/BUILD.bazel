@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_oci//oci:defs.bzl", "oci_image")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//bzl:rules.bzl", "bazel_lint")
@@ -54,4 +55,10 @@ pulumi_image(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "api_test",
+    srcs = ["smoke_test.go"],
+    embed = [":api_lib"],
 )

@@ -17,6 +17,10 @@ func init() {
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
 		MaxAge:         300, // Cache preflight response for 5 minutes
 	}))
+
+	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
+	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
+	r.Get("/phone/number", CallboxNumberHandler)
 }
 
 func main() {

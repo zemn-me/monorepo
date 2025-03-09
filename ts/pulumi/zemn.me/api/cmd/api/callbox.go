@@ -70,11 +70,6 @@ func TwilioErrorHandler(f func(http.ResponseWriter, *http.Request) error) http.H
 	}
 }
 
-func init() {
-	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
-	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
-}
-
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
