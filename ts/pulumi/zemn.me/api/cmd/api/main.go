@@ -8,17 +8,17 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func main() {
-	r := chi.NewRouter()
+var r = chi.NewRouter()
 
+func init() {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
 		MaxAge:         300, // Cache preflight response for 5 minutes
 	}))
+}
 
-	r.Get("/phone/number", CallboxNumberHandler)
-
+func main() {
 	lambda.Start(httpadapter.New(r).ProxyWithContext)
 }

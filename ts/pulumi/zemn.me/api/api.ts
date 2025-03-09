@@ -53,6 +53,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             protocolType: "HTTP",
         }, { parent: this });
 
+		const PERSONAL_PHONE_NUMBER = process.env["PERSONAL_PHONE_NUMBER"];
+
         const lambdaFn = new LambdaFunction(`apizemnmelambdafunction`, {
             packageType: "Image",
             role: lambdaRole.arn,
@@ -62,6 +64,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			environment: {
 				variables: {
 					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
+					// currently a misnomer. this is a list of
+					// phone numbers allowed to authorize the callbox.
+					...(PERSONAL_PHONE_NUMBER !== undefined? {PERSONAL_PHONE_NUMBER}: {}),
 					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
 				}
 			}
