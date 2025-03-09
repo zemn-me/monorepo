@@ -50,10 +50,6 @@ type CallboxNumberResponse struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-func init() {
-	r.Get("/phone/number", CallboxNumberHandler)
-}
-
 func CallboxNumberHandler(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Authorization")
 	if auth == "" {
