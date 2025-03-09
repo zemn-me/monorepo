@@ -19,8 +19,10 @@ func init() {
 	}))
 
 	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
+ r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
 	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
 	r.Get("/phone/number", CallboxNumberHandler)
+ r.Post("/phone/number", CallboxNumberHandler)
 }
 
 func main() {
