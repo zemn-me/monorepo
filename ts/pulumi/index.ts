@@ -103,7 +103,7 @@ export class Component extends Pulumi.ComponentResource {
 				voiceUrl:
 					// i would await the service deploy
 					// but that would currently make a cycle...
-					'https://zemn.me/api/phone/init'
+					'https://api.zemn.me/phone/init'
 			}
 		}, { parent: this });
 
