@@ -26,6 +26,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/terraform-plugin-framework v1.14.1
 	github.com/itchyny/gojq v0.12.17
+	github.com/nyaruka/phonenumbers v1.5.0
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
@@ -121,7 +122,7 @@ require (
 	go.starlark.net v0.0.0-20231101134539-556fd59b42f6 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
-	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
+	golang.org/x/exp v0.0.0-20240525044651-4c93da0ed11d // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
