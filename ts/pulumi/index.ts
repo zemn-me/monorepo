@@ -105,7 +105,7 @@ export class Component extends Pulumi.ComponentResource {
 					// but that would currently make a cycle...
 					'https://api.zemn.me/phone/init'
 			}
-		}, { parent: this });
+		}, { parent: this, protect: !args.staging });
 
 		// because i cant work out how to make outs happen from a
 		// DynamicProvider
