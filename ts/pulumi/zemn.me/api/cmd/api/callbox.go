@@ -5,10 +5,32 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
 )
+
+func Salutation() (salutation string, err error) {
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		return
+	}
+
+	now := time.Now().In(loc)
+	hour := now.Hour()
+
+	switch {
+	case hour < 12:
+		salutation = "Good morning."
+	case hour < 18:
+		salutation = "Good day."
+	default:
+		salutation = "Good evening."
+	}
+
+	return
+}
 
 // normalizePhoneNumber trims the international prefix and returns the local format.
 func normalizePhoneNumber(number string) (string, string, error) {
@@ -74,13 +96,19 @@ func TwilioErrorHandler(f func(http.ResponseWriter, *http.Request) error) http.H
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
 func TwilioCallboxEntryPoint(w http.ResponseWriter, r *http.Request) (err error) {
+	salutation, err := Salutation()
+	if err != nil {
+		return
+	}
+
 	doc, response := twiml.CreateDocument()
 	gather := response.CreateElement("Gather")
 	gather.CreateAttr("action", "/phone/handleEntry")
 	gather.CreateAttr("method", "GET")
 	gather.CreateAttr("actionOnEmptyResult", "true")
 	gather.CreateElement("Say").SetText(
-		"If you have access, please enter your phone number now, " +
+		salutation +
+			"If you have access, please enter your phone number now, " +
 			"or hold to be conected to a resident.\n\n" +
 			"Press the pound or hash key when you are done.",
 	)
