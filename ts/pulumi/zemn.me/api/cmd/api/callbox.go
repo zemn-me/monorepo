@@ -37,7 +37,7 @@ func getAllowedNumbers() (numbers []AllowedNumber, err error) {
 	for _, num := range allowedWithPrefix {
 		var n AllowedNumber
 		n.Local, n.Intl, err = normalizePhoneNumber(num)
-		if err == nil {
+		if err != nil {
 			return
 		}
 		numbers = append(numbers, n)
