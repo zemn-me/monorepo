@@ -22,11 +22,11 @@ func Salutation() (salutation string, err error) {
 
 	switch {
 	case hour < 12:
-		salutation = "Good morning."
+		salutation = "Good morning. "
 	case hour < 18:
-		salutation = "Good day."
+		salutation = "Good day. "
 	default:
-		salutation = "Good evening."
+		salutation = "Good evening. "
 	}
 
 	return
