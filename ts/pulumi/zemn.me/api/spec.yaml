@@ -1,0 +1,39 @@
+openapi: 3.0.4
+info:
+  title: zemn.me API
+  version: 0.0.0
+
+servers:
+  - url: https://api.zemn.me
+    description: Production
+  - url: http://api.staging.zemn.me
+    description: Staging
+
+components:
+  securitySchemes:
+    googleOIDC:
+      type: openIdConnect
+      openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
+  schemas:
+    GetPhoneNumberResponse:
+      type: object
+      required:
+          - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+          example: "+447823434620"
+
+paths:
+  /phone/number:
+    get:
+      summary: Returns the current phone number for the callbox.
+      security:
+        - googleOIDC: []
+      responses:
+        "200":
+          description: It worked!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPhoneNumberResponse'
