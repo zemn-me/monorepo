@@ -8,9 +8,9 @@ import (
 	"github.com/go-chi/cors"
 )
 
-var r = chi.NewRouter()
+func main() {
+	r := chi.NewRouter()
 
-func init() {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -19,12 +19,10 @@ func init() {
 	}))
 
 	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
- r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
+	r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
 	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
-	r.Get("/phone/number", CallboxNumberHandler)
- r.Post("/phone/number", CallboxNumberHandler)
-}
 
-func main() {
-	lambda.Start(httpadapter.New(r).ProxyWithContext)
+	h := HandlerFromMux(Server{}, r)
+
+	lambda.Start(httpadapter.New(h).ProxyWithContext)
 }
