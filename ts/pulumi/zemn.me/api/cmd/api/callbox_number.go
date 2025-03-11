@@ -46,11 +46,7 @@ func validateOIDCToken(ctx context.Context, idToken string) error {
 	return nil
 }
 
-type CallboxNumberResponse struct {
-	PhoneNumber string `json:"phoneNumber"`
-}
-
-func CallboxNumberHandler(w http.ResponseWriter, r *http.Request) {
+func (Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Authorization")
 	if auth == "" {
 		http.Error(w, "forbidden", http.StatusForbidden)
@@ -62,7 +58,7 @@ func CallboxNumberHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := CallboxNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
+	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
