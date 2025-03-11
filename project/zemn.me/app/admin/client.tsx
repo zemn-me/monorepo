@@ -1,18 +1,19 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import createClient from "openapi-fetch";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/app/hook/useOIDC.js";
 import Link from "#root/project/zemn.me/components/Link/index.js";
 import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten, is_none, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else, unwrap_unchecked as option_unwrap_unchecked } from "#root/ts/option/types.js";
-import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked, unwrap_unchecked as unwrap_result_unchecked } from "#root/ts/result_types.js";
-import { resultFromZod } from "#root/ts/zod/util.js";
+import type { paths } from "#root/ts/pulumi/zemn.me/api/api_client.gen";
+import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked } from "#root/ts/result_types.js";
 
-const phoneNumberResponseSchema = z.strictObject({
-	phoneNumber: z.string()
+const apiClient = createClient<paths>({
+	baseUrl: "https://api.zemn.me"
 })
+
 
 export default function Admin() {
 	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
@@ -65,19 +66,13 @@ export default function Admin() {
 				You need to log in to see this.
 			</>;
 
-			const pnRespJson = await fetch("https://api.zemn.me/phone/number", {
+			const {phoneNumber} = await apiClient.GET("/phone/number", {
 				headers: {
 					Authorization: option_unwrap_unchecked(auth)
 				}
-			}) .then(v => v.json());
+			}).then(v => v.data!);
 
-			const pn = resultFromZod(phoneNumberResponseSchema.safeParse(pnRespJson));
-
-			if (is_err(pn)) return <>
-					⚠ {unwrap_err_unchecked(pn).toString()}
-			</>;
-
-			const pnn = unwrap_result_unchecked(pn).phoneNumber;
+			const pnn = phoneNumber;
 
 			return <>
 				Callbox phone number is currently: {" "}
