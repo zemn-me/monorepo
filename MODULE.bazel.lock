@@ -185,8 +185,8 @@
     "https://bcr.bazel.build/modules/rules_nodejs/5.8.2/MODULE.bazel": "6bc03c8f37f69401b888023bf511cb6ee4781433b0cb56236b2e55a21e3a026a",
     "https://bcr.bazel.build/modules/rules_nodejs/6.2.0/MODULE.bazel": "ec27907f55eb34705adb4e8257952162a2d4c3ed0f0b3b4c3c1aad1fac7be35e",
     "https://bcr.bazel.build/modules/rules_nodejs/6.3.0/MODULE.bazel": "45345e4aba35dd6e4701c1eebf5a4e67af4ed708def9ebcdc6027585b34ee52d",
-    "https://bcr.bazel.build/modules/rules_nodejs/6.3.3/MODULE.bazel": "b66eadebd10f1f1b25f52f95ab5213a57e82c37c3f656fcd9a57ad04d2264ce7",
-    "https://bcr.bazel.build/modules/rules_nodejs/6.3.3/source.json": "45bd343155bdfed2543f0e39b80ff3f6840efc31975da4b5795797f4c94147ad",
+    "https://bcr.bazel.build/modules/rules_nodejs/6.3.4/MODULE.bazel": "8a87c1d45548e7224e261f721a559a984995d3728cb95fb60cf249491ebf72a7",
+    "https://bcr.bazel.build/modules/rules_nodejs/6.3.4/source.json": "26645e2934d5783805a70d50ae0bb7d65a52e993dc1de16a70878f0a11bf9e47",
     "https://bcr.bazel.build/modules/rules_oci/2.2.2/MODULE.bazel": "f2afa49fbed0edb709b79d21d55db562f70450ca1a8527ff7b56fdf792bf26f7",
     "https://bcr.bazel.build/modules/rules_oci/2.2.2/source.json": "91e19c82d3311d7531b143e24fbaa72d8942f5f4e23c640eb834b0a1322ff136",
     "https://bcr.bazel.build/modules/rules_pkg/0.10.1/MODULE.bazel": "d6e593e048db5f1028f1f05ceb64b123aa6f1c2d43cba049c036443ab2cc2044",
@@ -1064,8 +1064,8 @@
     },
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
-        "bzlTransitiveDigest": "q44Ox2Nwogn6OsO0Xw5lhjkd/xmxkvvpwVOn5P4pmHQ=",
-        "usagesDigest": "efxfHor5gMxNfQlFC56HYkbXRtqmmS1pzpPZWtyZQSI=",
+        "bzlTransitiveDigest": "6mH+d9usKSnfYPXj6umbdS1DJq28sikqbQWLllnmceE=",
+        "usagesDigest": "7BCaB2QC9tdpeeRMkz1aK5BOh6WZdWjmzJ9SzeFDLG4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1078,7 +1078,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "linux_amd64"
             }
@@ -1091,7 +1091,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "linux_arm64"
             }
@@ -1104,7 +1104,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "linux_s390x"
             }
@@ -1117,7 +1117,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "linux_ppc64le"
             }
@@ -1130,7 +1130,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "darwin_amd64"
             }
@@ -1143,7 +1143,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "darwin_arm64"
             }
@@ -1156,7 +1156,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.5",
+              "node_version": "18.20.7",
               "include_headers": false,
               "platform": "windows_amd64"
             }
