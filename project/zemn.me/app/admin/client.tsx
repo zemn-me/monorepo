@@ -25,7 +25,9 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 	const remoteAuthorizers = useQuery({
 		queryKey: authorizersQueryKey,
 		queryFn: () => apiClient.GET('/callbox/authorizers', {
-			Authorization
+			headers: {
+				Authorization
+			}
 		})
 	});
 
@@ -43,7 +45,10 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 	const changeRemoteAuthorizers = useMutation({
 		mutationFn: (o: components["schemas"]["PhoneNumberPatchRequest"]) => apiClient.PATCH(
 			'/callbox/authorizers', {
-			body: o
+				body: o,
+				headers: {
+					Authorization,
+				}
 		}
 		),
 		onMutate: () => queryClient.invalidateQueries({
@@ -83,6 +88,13 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 			)
 		}
 	, [remoteAuthorizers.data?.data]);
+
+	const maybeError = remoteAuthorizers.error
+		? Some(remoteAuthorizers.error)
+		: remoteAuthorizers.data?.error
+			? Some(new Error(remoteAuthorizers.data.error.cause))
+			: None
+
 
 
 	const stateIcon = new Set([
@@ -141,7 +153,15 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 			}>
 				Add another authorizer
 			</button>
-
+			{
+				option_unwrap_or(option_and_then(
+					maybeError,
+					v => <details>
+						<summary>Something went wrong...</summary>
+						{v.toString()}
+					</details>
+				), null)
+			}
 			<button disabled={
 				remoteAuthorizers.isLoading || changeRemoteAuthorizers.isPending
 				} onClick={
