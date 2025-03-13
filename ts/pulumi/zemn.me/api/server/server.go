@@ -1,4 +1,4 @@
-package main
+package apiserver
 
 import (
 	"context"
@@ -49,3 +49,25 @@ func NewServer(ctx context.Context) (*Server, error) {
 		tableName: tableName,
 	}, nil
 }
+
+
+// probably need to disambiguate server now ...
+
+	r := chi.NewRouter()
+
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
+		MaxAge:         300, // Cache preflight response for 5 minutes
+	}))
+
+	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
+	r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
+	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
+
+	server := NewServer(
+		context.Background(),
+	)
+
+	h := HandlerFromMux(server, r)

@@ -1,0 +1,30 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "server",
+    srcs = [
+        "authorizers.go",
+        "callbox.go",
+        "callbox_number.go",
+        "id_token.go",
+        "server.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_twilio_twilio_go//twiml",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = ["smoke_test.go"],
+    embed = [":server"],
+)
