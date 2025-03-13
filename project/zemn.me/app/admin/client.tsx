@@ -136,7 +136,8 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 
 									return clone;
 								})
-							} type="text"
+							} placeholder="+442345234028..."
+							type="text"
 							value={a.value}
 						/>
 					</li>
