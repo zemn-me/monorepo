@@ -23,6 +23,13 @@ env:
 
 
 jobs:
+  # fake staging for merge-queue only check.
+  # https://github.com/orgs/community/discussions/103114#discussioncomment-8359045
+  Staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pass
+        run: true
   Presubmit:
     concurrency:
       # > The ref given is fully-formed, meaning that for branches the format

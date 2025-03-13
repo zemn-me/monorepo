@@ -12,6 +12,7 @@ go_library(
     name = "api_lib",
     srcs = [
         "api.gen.go",
+        "authorizers.go",
         "callbox.go",
         "callbox_number.go",
         "main.go",
