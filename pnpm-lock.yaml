@@ -183,8 +183,8 @@ dependencies:
     specifier: 2.0.0
     version: 2.0.0
   twilio:
-    specifier: 5.4.5
-    version: 5.4.5
+    specifier: 5.5.0
+    version: 5.5.0
   typescript-eslint:
     specifier: 8.26.1
     version: 8.26.1(eslint@9.22.0)(typescript@5.5.4)
@@ -18484,8 +18484,8 @@ packages:
     resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
     dev: true
 
-  /twilio@5.4.5:
-    resolution: {integrity: sha512-PIteif0CBOrA42SWZiT8IwUuqTNakAFgvXYWsrjEPGaDSczu/GvBs3vUock4S+UguXj7cV4qBswWgXs5ySjGNg==}
+  /twilio@5.5.0:
+    resolution: {integrity: sha512-iyI9kP3ZSrffUb9XApRNd35MMsV4Yp3OZM3Ewg7JNt5FvscsZZel/vCaxTlJ9D5kss0FKdeeu2c+GnaUK6Z1VA==}
     engines: {node: '>=14.0'}
     dependencies:
       axios: 1.8.2
