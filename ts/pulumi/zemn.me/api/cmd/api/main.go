@@ -2,6 +2,8 @@
 package main
 
 import (
+	"context"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/go-chi/chi/v5"
@@ -22,7 +24,11 @@ func main() {
 	r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
 	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
 
-	h := HandlerFromMux(Server{}, r)
+	server := NewServer(
+		context.Background(),
+	)
+
+	h := HandlerFromMux(server, r)
 
 	lambda.Start(httpadapter.New(h).ProxyWithContext)
 }

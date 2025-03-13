@@ -43,9 +43,6 @@ func NewServer(ctx context.Context) (*Server, error) {
 
 	// Allow the table name to be set via an environment variable.
 	tableName := os.Getenv("DYNAMODB_TABLE_NAME")
-	if tableName == "" {
-		tableName = TableName // TableName must be defined elsewhere in your code.
-	}
 
 	return &Server{
 		ddb:       dynamodb.NewFromConfig(cfg),
