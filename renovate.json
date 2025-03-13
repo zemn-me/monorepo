@@ -57,6 +57,15 @@
 		},
 		{
 			"matchManagers": [
+				"npm"
+			],
+			"matchPackageNames": [
+				"twilio"
+			],
+			"allowedVersions": "!/5.5.0/"
+		},
+		{
+			"matchManagers": [
 				"cargo",
 				"bazel",
 				"custom.regex",
