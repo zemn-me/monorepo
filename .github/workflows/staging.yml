@@ -1,0 +1,99 @@
+---
+
+name: Staging
+# yamllint disable rule:line-length
+#
+
+on:   # yamllint disable-line rule:truthy
+  merge_group:
+    branches:
+      # presubmit
+      - main
+      - renovate/**
+
+env:
+  BAZEL: ./sh/bin/bazel
+
+jobs:
+  Staging:
+    permissions:
+      id-token: write
+    # Pulumi doesn't like it when multiple deploys are attempted at once.
+    # This is also enforced at the pulumi layer, but i'm sure github actions
+    # would make me pay while that thread waits to acquire the lock.
+    concurrency: pulumi_staging
+    # only bother with this when we reach the merge queue
+
+    # Performs all offline testing.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          docker-images: true
+          large-packages: false
+          swap-storage: true
+      - name: Checkout main branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: main
+      - uses: 'google-github-actions/auth@6fc4af4b145ae7821d527454aa9bd537d1f2dc5f' # v2
+        name: Acquire GCloud credentials for first deploy.
+        id: auth
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Pulumi up from origin/main to staging
+        # dirty used here so the state transition is main -> candidate
+        # we test if the script exists so we don't fail as a result of it
+        # not yet existing on main.
+        run: |
+            echo "::group::Presubmit prep" && \
+            test -f ./.github/workflows/prepare_ci.sh && \
+            ./.github/workflows/prepare_ci.sh && \
+            $BAZEL build --config=ci --tool_tag=staging //ci:presubmit && \
+            echo "::endgroup::" && \
+            echo "::group::Presubmit" && \
+            $BAZEL run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+            --overwrite && \
+            echo "::endgroup::"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          # i guess if you exfil this secret you can also call me instead
+          # of making a security report 🤣
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
+      - name: Switch back to candidate branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: 'google-github-actions/auth@6fc4af4b145ae7821d527454aa9bd537d1f2dc5f' # v2
+        name: Re-acquire GCloud credentials after checkout...
+        id: auth2
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Deploy candidate branch to Staging
+        # we can run this dirty since the next run will --overwrite anyway
+        run: |
+         ./.github/workflows/prepare_ci.sh
+         $BAZEL run --tool_tag=staging //ci:presubmit -- \
+         --skip-bazel-tests \
+         --dirty
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
