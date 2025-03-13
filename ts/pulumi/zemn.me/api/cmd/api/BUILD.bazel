@@ -36,12 +36,6 @@ go_library(
     ],
 )
 
-go_binary(
-    name = "api",
-    embed = [":api_lib"],
-    visibility = ["//visibility:public"],
-)
-
 pkg_tar(
     name = "tar",
     srcs = [":api"],
@@ -81,4 +75,10 @@ go_oapi_codegen(
     ],
     package = "main",
     source = "//ts/pulumi/zemn.me/api:spec.yaml",
+)
+
+go_binary(
+    name = "api",
+    embed = [":api_lib"],
+    visibility = ["//visibility:public"],
 )
