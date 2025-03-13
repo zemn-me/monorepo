@@ -144,12 +144,14 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 			}
 			</ul>
 			<button onClick={
-				() => setLocalAuthorizers(
-					v => [
-						...v,
-						{value: "", keep: false}
-					]
-				)
+				e => {
+					e.preventDefault(); setLocalAuthorizers(
+						v => [
+							...v,
+							{ value: "", keep: false }
+						]
+					)
+				}
 			}>
 				Add another authorizer
 			</button>
@@ -165,7 +167,7 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 			<button disabled={
 				remoteAuthorizers.isLoading || changeRemoteAuthorizers.isPending
 				} onClick={
-					() => submitRemoteAuthorizers()
+					e => { e.preventDefault(); submitRemoteAuthorizers() }
 			}>Change authorizers {[...stateIcon].join(" ")}</button>
 		</fieldset>
 	</form>
