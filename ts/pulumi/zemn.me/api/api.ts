@@ -8,7 +8,7 @@ import { ApiZemnMeLambdaImage } from '#root/ts/pulumi/zemn.me/api/cmd/api/ApiZem
 export interface Args {
     zoneId: Pulumi.Input<string>;
     domain: string;
-    callboxPhoneNumber: Pulumi.Input<string>;
+	callboxPhoneNumber: Pulumi.Input<string>;
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -49,37 +49,27 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             retentionInDays: 14,
         }, { parent: this });
 
-        // Create a DynamoDB table and use its name as the identifier.
-        const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
-            attributes: [{
-                name: "id",
-                type: "S",
-            }],
-            billingMode: "PAY_PER_REQUEST",
-            hashKey: "id",
-        }, { parent: this });
-
         const gateway = new aws.apigatewayv2.Api(`${name}-api`, {
             protocolType: "HTTP",
         }, { parent: this });
 
-        const PERSONAL_PHONE_NUMBER = process.env["PERSONAL_PHONE_NUMBER"];
+		const PERSONAL_PHONE_NUMBER = process.env["PERSONAL_PHONE_NUMBER"];
 
-        // Pass the DynamoDB table name to your Lambda environment.
         const lambdaFn = new LambdaFunction(`apizemnmelambdafunction`, {
             packageType: "Image",
             role: lambdaRole.arn,
             imageUri: image.url,
             timeout: 30,
             memorySize: 512,
-            environment: {
-                variables: {
-                    ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
-                    ...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
-                    CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
-                    DYNAMODB_TABLE_NAME: dynamoTable.name,
-                }
-            }
+			environment: {
+				variables: {
+					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
+					// currently a misnomer. this is a list of
+					// phone numbers allowed to authorize the callbox.
+					...(PERSONAL_PHONE_NUMBER !== undefined? {PERSONAL_PHONE_NUMBER}: {}),
+					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
+				}
+			}
         }, { parent: this }).function;
 
         const integration = new aws.apigatewayv2.Integration(`${name}-integration`, {
@@ -88,12 +78,12 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             integrationUri: lambdaFn.arn,
         }, { parent: this });
 
-        new aws.lambda.Permission(`zemnmeapipermission`, {
-            action: "lambda:InvokeFunction",
-            function: lambdaFn.name,
-            principal: "apigateway.amazonaws.com",
-            sourceArn: Pulumi.interpolate`${gateway.executionArn}/*/*`,
-        }, { parent: this });
+		new aws.lambda.Permission(`zemnmeapipermission`, {
+			action: "lambda:InvokeFunction",
+			function: lambdaFn.name,
+			principal: "apigateway.amazonaws.com",
+			sourceArn: Pulumi.interpolate`${gateway.executionArn}/*/*`,
+		}, { parent: this });
 
         new aws.apigatewayv2.Route(`${name}-proxy-route`, {
             apiId: gateway.id,
@@ -119,11 +109,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             },
         }, { parent: this });
 
-        const cert = new Certificate(`${name}_cert`, {
-            zoneId: args.zoneId,
-            domain: args.domain,
-            noCostAllocationTag: true,
-        }, { parent: this });
+		const cert = new Certificate(`${name}_cert`, {
+			zoneId: args.zoneId,
+			domain: args.domain,
+			noCostAllocationTag: true,
+		}, { parent: this });
 
         const customDomain = new aws.apigatewayv2.DomainName(`${name}-domain`, {
             domainName: args.domain,
@@ -151,10 +141,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             }],
         }, { parent: this });
 
-        super.registerOutputs({
-            lambdaEnvironment: lambdaFn.environment,
-            callboxPhoneNumber: args.callboxPhoneNumber,
-            dynamoDBTableName: dynamoTable.name,
-        });
+		super.registerOutputs({
+			lambdaEnvironment: lambdaFn.environment,
+			callboxPhoneNumber: args.callboxPhoneNumber,
+		})
     }
 }

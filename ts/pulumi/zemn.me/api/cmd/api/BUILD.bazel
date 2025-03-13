@@ -22,10 +22,6 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "@com_github_aws_aws_lambda_go//lambda",
-        "@com_github_aws_aws_sdk_go_v2//aws",
-        "@com_github_aws_aws_sdk_go_v2_config//:config",
-        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
-        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
         "@com_github_awslabs_aws_lambda_go_api_proxy//httpadapter",
         "@com_github_coreos_go_oidc//:go-oidc",
         "@com_github_go_chi_chi_v5//:chi",
