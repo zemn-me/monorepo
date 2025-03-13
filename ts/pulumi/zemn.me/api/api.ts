@@ -59,6 +59,28 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             hashKey: "id",
         }, { parent: this });
 
+        // Attach IAM policy to allow dynamodb:Query on the table.
+        const dynamoPolicy = new aws.iam.Policy(`${name}-dynamo-policy`, {
+            policy: JSON.stringify({
+                Version: "2012-10-17",
+                Statement: [{
+					Action: [
+						"dynamodb:Query",
+						"dynamodb:PutItem",
+						"dynamodb:UpdateItem",
+						"dynamodb:DeleteItem"
+					],
+                    Effect: "Allow",
+                    Resource: dynamoTable.arn,
+                }],
+            }),
+        }, { parent: this });
+
+        new aws.iam.RolePolicyAttachment(`${name}-dynamo-attach`, {
+            role: lambdaRole.name,
+            policyArn: dynamoPolicy.arn,
+        }, { parent: this });
+
         const gateway = new aws.apigatewayv2.Api(`${name}-api`, {
             protocolType: "HTTP",
         }, { parent: this });
