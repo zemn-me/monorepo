@@ -60,6 +60,10 @@ func (s Server) putNewAuthorizers(ctx context.Context, list []string) error {
 
 // getCallboxAuthorizers is the unexported version of GET /callbox/authorizers.
 func (s Server) getCallboxAuthorizers(w http.ResponseWriter, r *http.Request) error {
+	err := useOIDCAuth(w, r)
+	if err != nil {
+		return err
+	}
 	ctx := r.Context()
 	list, err := s.getLatestAuthorizers(ctx)
 	if err != nil {
@@ -80,6 +84,10 @@ func (s Server) GetCallboxAuthorizers(w http.ResponseWriter, r *http.Request) {
 
 // patchCallboxAuthorizers is the unexported version of PATCH /callbox/authorizers.
 func (s Server) patchCallboxAuthorizers(w http.ResponseWriter, r *http.Request) error {
+	err := useOIDCAuth(w, r)
+	if err != nil {
+		return err
+	}
 	ctx := r.Context()
 	var req PhoneNumberPatchRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

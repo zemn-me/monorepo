@@ -15,6 +15,7 @@ go_library(
         "authorizers.go",
         "callbox.go",
         "callbox_number.go",
+        "id_token.go",
         "main.go",
         "server.go",
     ],
