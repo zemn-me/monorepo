@@ -1,0 +1,63 @@
+---
+
+name: Submit
+# yamllint disable rule:line-length
+#
+
+on:   # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+
+
+env:
+  BAZEL: ./sh/bin/bazel
+
+
+jobs:
+  Submit:
+    permissions:
+      id-token: write
+    concurrency: pulumi_production
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Attempts to submit changes to production.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          docker-images: true
+          swap-storage: true
+          large-packages: false
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: 'google-github-actions/auth@6fc4af4b145ae7821d527454aa9bd537d1f2dc5f' # v2
+        name: Acquire federated GCloud credentials...
+        id: auth
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Submit
+        # Use npx to try to generate only
+        # $BAZEL generated node_modules
+        run: |
+          ./.github/workflows/prepare_ci.sh
+          $BAZEL run --config=ci --tool_tag=submit //ci:submit
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          # i guess if you exfil this secret you can also call me instead
+          # of making a security report 🤣
+          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}

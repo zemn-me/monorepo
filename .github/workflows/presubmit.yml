@@ -1,0 +1,61 @@
+---
+
+name: Presubmit
+# yamllint disable rule:line-length
+#
+
+on:   # yamllint disable-line rule:truthy
+  merge_group:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited # not in the default set, will run on rebase.
+
+env:
+  BAZEL: ./sh/bin/bazel
+
+
+jobs:
+  Presubmit:
+    concurrency:
+      # > The ref given is fully-formed, meaning that for branches the format
+      # > is refs/heads/<branch_name>,
+      # > for pull requests it is refs/pull/<pr_number>/merge,
+      # > and for tags it is refs/tags/<tag_name>. For example,
+      # > refs/heads/feature-branch-1.
+      #
+      # This should cancel a prior presubmit when a new change comes in.
+      group: >
+        ${{ github.workflow }}-
+        ${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    # Performs all offline testing.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Presubmit
+        run: |
+         ./.github/workflows/prepare_ci.sh && \
+         echo "::group::Presubmit prep" && \
+         $BAZEL build --config=ci --tool_tag=presubmit //ci:presubmit && \
+         echo "::endgroup::" && \
+         echo "::group::Presubmit" && \
+         $BAZEL run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
+         echo "::endgroup::"
+        env:
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
