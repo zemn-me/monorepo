@@ -121,6 +121,11 @@ func (Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
+// given an entry code, returns if authorization is successful (logging
+// the authorization as having happened)
+func (s *Server) AuthorizeViaCode(code string) (authorized bool, err error) {
+}
+
 func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 	err := s.getPhoneInit(rw, rq)
 	if err != nil {
@@ -128,9 +133,37 @@ func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 	}
 }
 
+func (s *Server) sendTwilioDoorOpenDTMFResponse(w http.ResponseWriter, r *http.Request) (err error) {
+	doc, response := twiml.CreateDocument()
+	play := response.CreateElement("Play")
+	play.createAttr("digits", "9www9www9")
+	twiML, err := twiml.ToXML(doc)
+	if err != nil {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write([]byte(twiML))
+}
+
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
 func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	var digits string
+
+	if params.Digits != nil {
+		digits = *params.Digits
+	}
+
+	azd, err := s.AuthorizeViaCode(digits)
+	if err != nil {
+		return
+	}
+
+	if azd {
+		return sendTwilioDoorOpenDTMFResponse(w, r)
+	}
+
 	allowedNumbers, err := s.getAllowedNumbers(r.Context())
 	if err != nil {
 		return
@@ -138,12 +171,6 @@ func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, par
 
 	// default to the first one in the list.
 	selectedNumber := allowedNumbers[0].Intl
-
-	var digits string
-
-	if params.Digits != nil {
-		digits = *params.Digits
-	}
 
 	for _, number := range allowedNumbers {
 		if number.Local == digits {
