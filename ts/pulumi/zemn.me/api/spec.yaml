@@ -44,6 +44,35 @@ components:
           $ref: '#/components/schemas/PhoneNumberList'
 
 paths:
+  /phone/init:
+    get:
+      summary: Entry point for twilio callbox phone number.
+      responses:
+        "200":
+          description: It worked ig.
+          content:
+            application/xml:
+              schema:
+                type: string
+  /phone/handleEntry:
+    get:
+      parameters:
+        - name: Digits
+          in: query
+          description: digits entered by user.
+          required: false
+          schema:
+            type: string
+      summary: Handles entering an authorizer for the callbox phone number.
+      responses:
+        "200":
+          description: It worked ig.
+          content:
+            application/xml:
+              schema:
+                type: string
+
+
   /callbox/authorizers:
     patch:
       description: >
