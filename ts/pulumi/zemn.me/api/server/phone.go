@@ -1,6 +1,7 @@
-package main
+package apiserver
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -69,33 +70,29 @@ func getAllowedNumbers() (numbers []AllowedNumber, err error) {
 }
 
 // Handles an error gracefully with a Twilio <Say/> response.
-func TwilioErrorHandler(f func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		rsp := f(w, r)
-		if rsp == nil {
-			return
-		}
-
-		doc, response := twiml.CreateDocument()
-		response.CreateElement("Say").SetText(
-			fmt.Sprintf(
-				"Something went wrong and we are unable to fulfil your request. Apologies. The issue was as follows: %s",
-				rsp,
-			),
-		)
-
-		twiML, _ := twiml.ToXML(doc)
-		w.Header().Set("Content-Type", "application/xml")
-		w.Write([]byte(twiML))
-
-		return
+func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err error) {
+	if err == nil {
+		panic("Incorrect usage.")
 	}
+	doc, response := twiml.CreateDocument()
+	response.CreateElement("Say").SetText(
+		fmt.Sprintf(
+			"Something went wrong and we are unable to fulfil your request. Apologies. The issue was as follows: %s",
+			err,
+		),
+	)
+
+	twiML, _ := twiml.ToXML(doc)
+	rw.Header().Set("Content-Type", "application/xml")
+	rw.Write([]byte(twiML))
+
+	return
 }
 
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
-func TwilioCallboxEntryPoint(w http.ResponseWriter, r *http.Request) (err error) {
+func (Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
 	salutation, err := Salutation()
 	if err != nil {
 		return
@@ -123,9 +120,16 @@ func TwilioCallboxEntryPoint(w http.ResponseWriter, r *http.Request) (err error)
 	return
 }
 
+func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
+	err := s.getPhoneInit(rw, rq)
+	if err != nil {
+		s.HandleErrorForTwilio(rw, rq, err)
+	}
+}
+
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
-func TwilioCallboxProcessPhoneEntry(w http.ResponseWriter, r *http.Request) (err error) {
+func (Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
 	allowedNumbers, err := getAllowedNumbers()
 	if err != nil {
 		return
@@ -134,8 +138,14 @@ func TwilioCallboxProcessPhoneEntry(w http.ResponseWriter, r *http.Request) (err
 	// default to the first one in the list.
 	selectedNumber := allowedNumbers[0].Intl
 
+	var digits string
+
+	if params.Digits != nil {
+		digits = *params.Digits
+	}
+
 	for _, number := range allowedNumbers {
-		if number.Local == r.URL.Query().Get("Digits") {
+		if number.Local == digits {
 			selectedNumber = number.Intl
 			break
 		}
@@ -152,4 +162,17 @@ func TwilioCallboxProcessPhoneEntry(w http.ResponseWriter, r *http.Request) (err
 	w.Header().Set("Content-Type", "application/xml")
 	w.Write([]byte(twiML))
 	return
+}
+
+func (s Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) {
+	err := s.getPhoneHandleEntry(w, rq, params)
+	if err != nil {
+		s.HandleErrorForTwilio(w, rq, err)
+	}
+}
+
+func (Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
+	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }

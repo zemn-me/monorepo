@@ -1,0 +1,53 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
+load("//go:rules.bzl", "go_library")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_oapi_codegen(
+    name = "server_gen",
+    out = "api.gen.go",
+    generate = [
+        "chi-server",
+        "models",
+    ],
+    package = "apiserver",
+    source = "//ts/pulumi/zemn.me/api:spec.yaml",
+)
+
+go_library(
+    name = "server",
+    srcs = [
+        "api.gen.go",
+        "authorizers.go",
+        "id_token.go",
+        "imports.go",
+        "phone.go",
+        "server.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_go_chi_chi_v5//:chi",
+        "@com_github_go_chi_cors//:cors",
+        "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//types",
+        "@com_github_twilio_twilio_go//twiml",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = ["smoke_test.go"],
+    embed = [":server"],
+)
