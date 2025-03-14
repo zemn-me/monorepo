@@ -1,11 +1,11 @@
 package apiserver
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/nyaruka/phonenumbers"
@@ -51,11 +51,12 @@ type AllowedNumber struct {
 	Local string
 }
 
-// getAllowedNumbers retrieves and normalizes allowed phone numbers from the environment.
-func getAllowedNumbers() (numbers []AllowedNumber, err error) {
-	allowedUsersEnv := os.Getenv("PERSONAL_PHONE_NUMBER")
-	allowedWithPrefix := strings.Split(allowedUsersEnv, ",")
-	numbers = make([]AllowedNumber, 0, len(allowedWithPrefix))
+// getAllowedNumbers returns international format and local format numbers
+// in pairs so end-users can enter their numbers without faffing
+// with exit codes or +.
+func (s *Server) getAllowedNumbers(ctx context.Context) (numbers []AllowedNumber, err error) {
+	var allowedWithPrefix []string
+	allowedWithPrefix, err = s.getLatestAuthorizers(ctx)
 
 	for _, num := range allowedWithPrefix {
 		var n AllowedNumber
@@ -129,8 +130,8 @@ func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
-func (Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
-	allowedNumbers, err := getAllowedNumbers()
+func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	allowedNumbers, err := s.getAllowedNumbers(r.Context())
 	if err != nil {
 		return
 	}
@@ -164,7 +165,7 @@ func (Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params
 	return
 }
 
-func (s Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) {
+func (s *Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) {
 	err := s.getPhoneHandleEntry(w, rq, params)
 	if err != nil {
 		s.HandleErrorForTwilio(w, rq, err)
