@@ -149,7 +149,7 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 					e.preventDefault(); setLocalAuthorizers(
 						v => [
 							...v,
-							{ value: "", keep: false }
+							{ value: "", keep: true }
 						]
 					)
 				}
