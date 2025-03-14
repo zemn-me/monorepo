@@ -15,6 +15,47 @@ components:
       type: openIdConnect
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    PhoneNumber:
+      description: A single E.164 phone number.
+      example: "+447823423420"
+      type: string
+      pattern: ^\+[1-9]\d{1,14}$
+
+    EntryCode:
+      description: A 5 digit PIN-like entry code that may be used by a user.
+      example: "56734"
+      type: string
+      pattern: ^\d{5}$
+
+    CallboxSettings:
+      type: object
+      properties:
+        authorizers:
+          description: >
+            A list of E.164 phone numbers. Authorizers are phone numbers that
+            can be requested by the visitor — the callbox will then connect the
+            authorizer who may press 9 at any time to approve visitor entry.
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneNumber"
+
+        fallbackPhone:
+          description: >
+            This number is called when the visitor does not request anything
+            specific, or if the visitor fails to get in via some other method.
+
+            It is a single E.164 phone number.
+
+          $ref: "#/components/schemas/PhoneNumber"
+
+        entryCodes:
+          description: >
+            A set of PIN-like numbers that may be used for immediate entry.
+          type: array
+          items:
+            $ref: "#/components/schemas/EntryCode"
+
+
     Error:
       type: object
       required:
@@ -29,19 +70,7 @@ components:
         - phoneNumber
       properties:
         phoneNumber:
-          type: string
-          example: "+447823434620"
-    PhoneNumberList:
-      type: array
-      items:
-        type: string
-    PhoneNumberPatchRequest:
-      type: object
-      properties:
-        add:
-          $ref: '#/components/schemas/PhoneNumberList'
-        remove:
-          $ref: '#/components/schemas/PhoneNumberList'
+          $ref: "#/components/schemas/PhoneNumber"
 
 paths:
   /phone/init:
@@ -73,30 +102,35 @@ paths:
                 type: string
 
 
-  /callbox/authorizers:
-    patch:
+  /callbox/settings:
+    post:
       description: >
-        Add or remove people from the list of authorizers for entry,
-        by phone number.
+        Return the current callbox settings.
       security:
         - googleOIDC: []
       requestBody:
-        description: List of phone numbers to add or remove
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PhoneNumberPatchRequest'
+              $ref: "#/components/schemas/CallboxSettings"
       responses:
         "200":
           description: >
-            Returns an updated list of phone numbers constituting
-            the full list of approvers.
+            Settings as synced with the backend.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PhoneNumberList'
+                $ref: '#/components/schemas/CallboxSettings'
+        "500":
+            description: Error.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
     get:
+      description: >
+        Returns the current settings for the callbox.
       security:
         - googleOIDC: []
       responses:
@@ -114,7 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PhoneNumberList'
+                $ref: '#/components/schemas/CallboxSettings'
   /phone/number:
     get:
       summary: Returns the current phone number for the callbox.
