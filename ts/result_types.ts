@@ -97,3 +97,15 @@ export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
 
     return Ok(collected);
 }
+
+export function safely<T>(f: () => T): Result<T, Error> {
+	try {
+		return Ok(f())
+	} catch (e) {
+		return Err(
+			e instanceof Error
+				? e
+				: new Error(`${e}`)
+		)
+	}
+}
