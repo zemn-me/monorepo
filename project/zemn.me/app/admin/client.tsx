@@ -67,7 +67,7 @@ function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
 				v => v.value
 			));
 			const adds = final.difference(base);
-			const removes = base.difference(adds);
+			const removes = base.difference(final);
 
 			changeRemoteAuthorizers.mutate({
 				add: [...adds],
