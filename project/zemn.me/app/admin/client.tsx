@@ -1,7 +1,8 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import createClient from "openapi-fetch";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/app/hook/useOIDC.js";
 import Link from "#root/project/zemn.me/components/Link/index.js";
@@ -15,165 +16,138 @@ const apiClient = createClient<paths>({
 })
 
 
+
 interface AuthorizerListEditorProps {
 	readonly Authorization: string
 }
 
-function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
-	const authorizersQueryKey = ['authorizers'];
-	const queryClient = useQueryClient();
-	const remoteAuthorizers = useQuery({
-		queryKey: authorizersQueryKey,
-		queryFn: () => apiClient.GET('/callbox/authorizers', {
-			headers: {
-				Authorization
-			}
-		})
-	});
-
-	interface ItemState {
-		/**
-		 * The item's value.
-		 */
-		value: string
-		/**
-		 * Whether to delete it when submitted.
-		 */
-		keep: boolean
-	}
-
-	const changeRemoteAuthorizers = useMutation({
-		mutationFn: (o: components["schemas"]["PhoneNumberPatchRequest"]) => apiClient.PATCH(
-			'/callbox/authorizers', {
-				body: o,
-				headers: {
-					Authorization,
-				}
-		}
-		),
-		onMutate: () => queryClient.invalidateQueries({
-			queryKey: authorizersQueryKey
-		})
-	});
-
-
-
-	const [localAuthorizers, setLocalAuthorizers] = useState<ItemState[]>([]);
-
-	const submitRemoteAuthorizers = useCallback(
-		() => {
-			const base = new Set(remoteAuthorizers.data?.data ?? []);
-			const final = new Set(localAuthorizers.filter(v => v.keep).map(
-				v => v.value
-			));
-			const adds = final.difference(base);
-			const removes = base.difference(adds);
-
-			changeRemoteAuthorizers.mutate({
-				add: [...adds],
-				remove: [...removes]
-			});
-		}
-	, [remoteAuthorizers.data?.data, localAuthorizers, changeRemoteAuthorizers]);
-
-	// if we get new data from the remote, update local state.
-	useEffect(
-		() => {
-			if (remoteAuthorizers.data?.data === undefined) return;
-
-			setLocalAuthorizers(
-				remoteAuthorizers.data.data.map(
-					value => ({value, keep: true})
-				)
-			)
-		}
-	, [remoteAuthorizers.data?.data]);
-
-	const maybeError = remoteAuthorizers.error
-		? Some(remoteAuthorizers.error)
-		: remoteAuthorizers.data?.error
-			? Some(new Error(remoteAuthorizers.data.error.cause))
-			: None
-
-
-
-	const stateIcon = new Set([
-		...remoteAuthorizers.isLoading ? ['⌛'] : [],
-		...changeRemoteAuthorizers.isPending ? ['⌛'] : [],
-		...remoteAuthorizers.isError ? ['❌'] : [],
-		...changeRemoteAuthorizers.isError ? ['❌'] : [],
-	]);
-
-	return <form>
-		<fieldset>
-			<legend>Authorizers</legend>
-			<p>These people can accept calls to allow entry.</p>
-			<ul>
-			{
-				localAuthorizers.map(
-					(a, i) => <li key={i}>
-						<input checked={
-							a.keep
-						} onChange={
-							e =>
-								setLocalAuthorizers(v => {
-									const clone = [...v];
-									clone[i] = {
-										...clone[i] ?? { value: "" },
-										keep: e.target.checked
-									}
-
-									return clone;
-								})
-						} type="checkbox" />
-						<input onChange={
-								e => setLocalAuthorizers(v => {
-									const clone = [...v];
-									clone[i] = {
-										...clone[i] ?? { keep: true},
-										value: e.target.value
-									}
-
-									return clone;
-								})
-							} placeholder="+442345234028..."
-							type="text"
-							value={a.value}
-						/>
-					</li>
-				)
-			}
-			</ul>
-			<button onClick={
-				e => {
-					e.preventDefault(); setLocalAuthorizers(
-						v => [
-							...v,
-							{ value: "", keep: true }
-						]
-					)
-				}
-			}>
-				Add another authorizer
-			</button>
-			{
-				option_unwrap_or(option_and_then(
-					maybeError,
-					v => <details>
-						<summary>Something went wrong...</summary>
-						{v.toString()}
-					</details>
-				), null)
-			}
-			<button disabled={
-				remoteAuthorizers.isLoading || changeRemoteAuthorizers.isPending
-				} onClick={
-					e => { e.preventDefault(); submitRemoteAuthorizers() }
-			}>Change authorizers {[...stateIcon].join(" ")}</button>
-		</fieldset>
-	</form>
-
+interface ItemState {
+  value: string;
+  keep: boolean;
 }
+
+interface FormValues {
+  authorizers: ItemState[];
+}
+
+
+function AuthorizersForm({Authorization}: AuthorizerListEditorProps) {
+  const queryClient = useQueryClient();
+  const authorizersQueryKey = ["authorizers"];
+
+  const remoteAuthorizers = useQuery({
+    queryKey: authorizersQueryKey,
+    queryFn: () => apiClient.GET("/callbox/authorizers", { headers: { Authorization } }),
+  });
+
+  const changeRemoteAuthorizers = useMutation({
+    mutationFn: (patch: components["schemas"]["PhoneNumberPatchRequest"]) =>
+      apiClient.PATCH("/callbox/authorizers", {
+        body: patch,
+        headers: { Authorization },
+      }),
+    onMutate: () =>
+      queryClient.invalidateQueries({ queryKey: authorizersQueryKey }),
+  });
+
+  const { register, control, handleSubmit, reset } = useForm<FormValues>({
+	shouldUseNativeValidation: true,
+    defaultValues: { authorizers: [] },
+  });
+
+  const { fields, append } = useFieldArray({
+    control,
+    name: "authorizers",
+  });
+
+  // Reset form values when remote data changes
+  useEffect(() => {
+    if (remoteAuthorizers.data?.data) {
+      const defaultAuthorizers = remoteAuthorizers.data.data.map((value: string) => ({
+        value,
+        keep: true,
+      }));
+      reset({ authorizers: defaultAuthorizers });
+    }
+  }, [remoteAuthorizers.data?.data, reset]);
+
+  const onSubmit = (data: FormValues) => {
+    const remoteSet = new Set(remoteAuthorizers.data?.data ?? []);
+    const finalSet = new Set(data.authorizers.filter(item => item.keep).map(item => item.value));
+    const adds = [...finalSet].filter(x => !remoteSet.has(x));
+    const removes = [...remoteSet].filter(x => !finalSet.has(x));
+
+    changeRemoteAuthorizers.mutate({
+      add: adds,
+      remove: removes,
+    });
+  };
+
+  const maybeError = remoteAuthorizers.error
+    ? Some(remoteAuthorizers.error)
+    : remoteAuthorizers.data?.error
+      ? Some(new Error(remoteAuthorizers.data.error.cause))
+      : None;
+
+  const stateIcon = new Set([
+    ...(remoteAuthorizers.isLoading ? ["⌛"] : []),
+    ...(changeRemoteAuthorizers.isPending ? ["⌛"] : []),
+    ...(remoteAuthorizers.isError ? ["❌"] : []),
+    ...(changeRemoteAuthorizers.isError ? ["❌"] : []),
+  ]);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <fieldset>
+        <legend>Authorizers</legend>
+        <p>These people can accept calls to allow entry.</p>
+        <ul>
+          {fields.map((field, index) => (
+            <li key={field.id}>
+              <input
+                type="checkbox"
+                {...register(`authorizers.${index}.keep` as const)}
+              />
+              <input
+                placeholder="+442345234028..."
+                type="tel"
+				{...register(`authorizers.${index}.value` as const, {
+					validate: value => /^\+[1-9]\d{1,14}$/.test(
+						value
+					)? true: "Enter number in E.164 format (+XXX)"
+				})}
+              />
+            </li>
+          ))}
+        </ul>
+        <button
+          onClick={() => append({ value: "", keep: true })}
+          type="button"
+        >
+          Add another authorizer
+        </button>
+        {option_unwrap_or(
+          option_and_then(
+            maybeError,
+            v => (
+              <details>
+                <summary>Something went wrong...</summary>
+                {v.toString()}
+              </details>
+            )
+          ),
+          null
+        )}
+        <button disabled={
+				  remoteAuthorizers.isLoading || changeRemoteAuthorizers.isPending
+        } type="submit">
+          Change authorizers {[...stateIcon].join(" ")}
+        </button>
+      </fieldset>
+    </form>
+  );
+}
+
 
 
 export default function Admin() {
@@ -275,7 +249,7 @@ export default function Admin() {
 		</p> : null}
 		{option_unwrap_or(option_and_then(
 			authTokenOrNothing,
-			token => <AuthorizerListEditor Authorization={token}/>
+			token => <AuthorizersForm Authorization={token}/>
 		), null)}
 	</>
 }

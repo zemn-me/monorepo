@@ -10,12 +10,23 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/nyaruka/phonenumbers"
 )
 
 const (
 	TableName         = "CallboxAuthorizers"  // Ensure your table exists.
 	PartitionKeyValue = "CALLBOX_AUTHORIZERS" // Fixed partition key.
 )
+
+func E164(pn string) (e164 string, err error) {
+	parsed, err := phonenumbers.Parse(pn, "")
+	if err != nil {
+		return
+	}
+
+	e164 = phonenumbers.Format(parsed, phonenumbers.E164)
+	return e164, nil
+}
 
 // getLatestAuthorizers retrieves the most recent record of authorizers.
 func (s Server) getLatestAuthorizers(ctx context.Context) ([]string, error) {
@@ -44,7 +55,13 @@ func (s Server) getLatestAuthorizers(ctx context.Context) ([]string, error) {
 }
 
 // putNewAuthorizers writes a new record with the updated list and current timestamp.
-func (s Server) putNewAuthorizers(ctx context.Context, list []string) error {
+func (s Server) putNewAuthorizers(ctx context.Context, list []string) (err error) {
+	for i, v := range list {
+		list[i], err = E164(v)
+		if err != nil {
+			return
+		}
+	}
 	now := time.Now().UTC().Format(time.RFC3339)
 	input := &dynamodb.PutItemInput{
 		TableName: aws.String(s.tableName),
@@ -54,7 +71,7 @@ func (s Server) putNewAuthorizers(ctx context.Context, list []string) error {
 			"authorizers": &types.AttributeValueMemberSS{Value: list},
 		},
 	}
-	_, err := s.ddb.PutItem(ctx, input)
+	_, err = s.ddb.PutItem(ctx, input)
 	return err
 }
 
