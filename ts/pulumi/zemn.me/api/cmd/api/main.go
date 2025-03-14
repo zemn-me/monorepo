@@ -1,4 +1,4 @@
-// server for api.zemn.me
+// Lambda HTTP server for api.zemn.me.
 package main
 
 import (
@@ -6,32 +6,17 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
+
+	apiserver "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server"
 )
 
 func main() {
-	r := chi.NewRouter()
-
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
-		MaxAge:         300, // Cache preflight response for 5 minutes
-	}))
-
-	r.Get("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
-	r.Post("/phone/init", TwilioErrorHandler(TwilioCallboxEntryPoint))
-	r.Get("/phone/handleEntry", TwilioErrorHandler(TwilioCallboxProcessPhoneEntry))
-
-	server, err := NewServer(
+	server, err := apiserver.NewServer(
 		context.Background(),
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	h := HandlerFromMux(server, r)
-
-	lambda.Start(httpadapter.New(h).ProxyWithContext)
+	lambda.Start(httpadapter.New(server).ProxyWithContext)
 }
