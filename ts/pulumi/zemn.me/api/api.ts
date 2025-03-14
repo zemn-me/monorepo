@@ -50,7 +50,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
         }, { parent: this });
 
         // Create a DynamoDB table and use its name as the identifier.
-        const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
+        const authorizersTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
             attributes: [{
                 name: "id",
                 type: "S",
@@ -59,21 +59,42 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             hashKey: "id",
         }, { parent: this });
 
-        // Attach IAM policy to allow dynamodb:Query on the table.
+        const entryCodesTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
+            attributes: [{
+                name: "id",
+                type: "S",
+            }],
+            billingMode: "PAY_PER_REQUEST",
+            hashKey: "id",
+        }, { parent: this });
+
+		const statements = Pulumi.all([
+			authorizersTable.arn,
+			entryCodesTable.arn
+		]).apply(
+			tables => tables.map(t => ({
+				Action: [
+					"dynamodb:Query",
+					"dynamodb:PutItem",
+					"dynamodb:UpdateItem",
+					"dynamodb:DeleteItem"
+				],
+				Effect: "Allow",
+				Resource: t,
+			}
+			))
+		);
+
+		const policy = statements.apply(
+			Statement => JSON.stringify({
+				Version: "2012-10-17",
+				Statement
+			})
+		);
+
+        // Attach IAM policy to allow dynamodb:Query on the tables.
         const dynamoPolicy = new aws.iam.Policy(`${name}-dynamo-policy`, {
-            policy: dynamoTable.arn.apply(arn => JSON.stringify({
-                Version: "2012-10-17",
-                Statement: [{
-					Action: [
-						"dynamodb:Query",
-						"dynamodb:PutItem",
-						"dynamodb:UpdateItem",
-						"dynamodb:DeleteItem"
-					],
-                    Effect: "Allow",
-                    Resource: arn,
-                }],
-            })),
+            policy: policy,
         }, { parent: this });
 
         new aws.iam.RolePolicyAttachment(`${name}-dynamo-attach`, {
@@ -99,7 +120,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                     ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
                     ...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
                     CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
-                    DYNAMODB_TABLE_NAME: dynamoTable.name,
+                    AUTHORIZERS_TABLE_NAME: authorizersTable.name,
                 }
             }
         }, { parent: this }).function;
@@ -176,7 +197,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
         super.registerOutputs({
             lambdaEnvironment: lambdaFn.environment,
             callboxPhoneNumber: args.callboxPhoneNumber,
-            dynamoDBTableName: dynamoTable.name,
+            dynamoDBTableName: authorizersTable.name,
         });
     }
 }
