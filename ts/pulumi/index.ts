@@ -100,6 +100,7 @@ export class Component extends Pulumi.ComponentResource {
 		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber2`, {
 			countryCode: 'US',
 			options: {
+				voiceMethod: 'GET',
 				voiceUrl:
 					// i would await the service deploy
 					// but that would currently make a cycle...
