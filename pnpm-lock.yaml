@@ -198,8 +198,8 @@ dependencies:
     specifier: 3.24.2
     version: 3.24.2
   zod-to-json-schema:
-    specifier: 3.24.3
-    version: 3.24.3(zod@3.24.2)
+    specifier: 3.24.4
+    version: 3.24.4(zod@3.24.2)
   zod_utilz:
     specifier: 0.8.3
     version: 0.8.3(typescript@5.5.4)(zod@3.24.2)
@@ -19561,8 +19561,8 @@ packages:
     resolution: {integrity: sha512-raRj6r0gPzopFm5XWBJZr/NuV4EEnT4iE+U3dp5FV5pCb588Gmm3zLIp/j9yqqcMiHH8VNQlerLTgOqL7krh6w==}
     dev: true
 
-  /zod-to-json-schema@3.24.3(zod@3.24.2):
-    resolution: {integrity: sha512-HIAfWdYIt1sssHfYZFCXp4rU1w2r8hVVXYIlmoa0r0gABLs5di3RCqPU5DDROogVz1pAdYBaz7HK5n9pSUNs3A==}
+  /zod-to-json-schema@3.24.4(zod@3.24.2):
+    resolution: {integrity: sha512-0uNlcvgabyrni9Ag8Vghj21drk7+7tp7VTwwR7KxxXXc/3pbXz2PHlDgj3cICahgF1kHm4dExBFj7BXrZJXzig==}
     peerDependencies:
       zod: ^3.24.1
     dependencies:
