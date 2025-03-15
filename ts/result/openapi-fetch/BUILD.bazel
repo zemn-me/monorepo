@@ -1,0 +1,14 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "react-query",
+    srcs = ["fetchResult.ts"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/openapi-fetch",
+        "//:node_modules/openapi-typescript-helpers",
+        "//ts/result",
+    ],
+)
