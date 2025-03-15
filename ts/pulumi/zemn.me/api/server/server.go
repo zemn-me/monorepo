@@ -14,9 +14,9 @@ import (
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb       *dynamodb.Client
-	tableName string
-	rt        *chi.Mux
+	ddb               *dynamodb.Client
+	settingsTableName string
+	rt                *chi.Mux
 	http.Handler
 }
 
@@ -47,7 +47,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 	}
 
 	// Allow the table name to be set via an environment variable.
-	tableName := os.Getenv("DYNAMODB_TABLE_NAME")
+	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
 
 	r := chi.NewRouter()
 
@@ -66,8 +66,8 @@ func NewServer(ctx context.Context) (*Server, error) {
 	}))
 
 	s := &Server{
-		ddb:       dynamodb.NewFromConfig(cfg),
-		tableName: tableName,
+		ddb:               dynamodb.NewFromConfig(cfg),
+		settingsTableName: settingsTableName,
 	}
 
 	s.Handler = HandlerFromMux(s, r)
