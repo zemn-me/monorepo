@@ -2,7 +2,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 
-import { LocalStorageController } from '#root/project/zemn.me/app/hook/useLocalStorage.js';
+import { LocalStorageController } from '#root/project/zemn.me/hook/useLocalStorage.js';
 
 export interface ProviderProps {
 	readonly children?: ReactNode;

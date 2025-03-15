@@ -1,0 +1,15 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "localStorage",
+    visibility = ["//project/zemn.me:__subpackages__"],
+    deps = [
+        "//:node_modules/zod",
+        "//:node_modules/zod_utilz",
+        "//project/zemn.me/OAuth",
+        "//ts/result",
+        "//ts/serde",
+        "//ts/storage",
+        "//ts/zod",
+    ],
+)
