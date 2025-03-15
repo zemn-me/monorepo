@@ -1,0 +1,12 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "PendingPip",
+    srcs = ["PendingPip.tsx"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts",
+        "//ts/option",
+    ],
+)

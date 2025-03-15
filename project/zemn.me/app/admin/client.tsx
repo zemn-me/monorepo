@@ -10,169 +10,20 @@ import { and_then as option_and_then, flatten, is_none, None, Option, option_res
 import type { components, paths } from "#root/ts/pulumi/zemn.me/api/api_client.gen";
 import { and_then as result_and_then, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked } from "#root/ts/result_types.js";
 
-const apiClient = createClient<paths>({
-	baseUrl: "https://api.zemn.me",
-})
+const apiClient = (Authorization: string) =>
+	createClient<paths>({
+		baseUrl: "https://api.zemn.me",
+		headers: {
+			Authorization
+		}
+	})
 
 
-interface AuthorizerListEditorProps {
+interface SettingsEditorProps {
 	readonly Authorization: string
 }
 
-function AuthorizerListEditor({ Authorization }: AuthorizerListEditorProps) {
-	const authorizersQueryKey = ['authorizers'];
-	const queryClient = useQueryClient();
-	const remoteAuthorizers = useQuery({
-		queryKey: authorizersQueryKey,
-		queryFn: () => apiClient.GET('/callbox/authorizers', {
-			headers: {
-				Authorization
-			}
-		})
-	});
-
-	interface ItemState {
-		/**
-		 * The item's value.
-		 */
-		value: string
-		/**
-		 * Whether to delete it when submitted.
-		 */
-		keep: boolean
-	}
-
-	const changeRemoteAuthorizers = useMutation({
-		mutationFn: (o: components["schemas"]["PhoneNumberPatchRequest"]) => apiClient.PATCH(
-			'/callbox/authorizers', {
-				body: o,
-				headers: {
-					Authorization,
-				}
-		}
-		),
-		onMutate: () => queryClient.invalidateQueries({
-			queryKey: authorizersQueryKey
-		})
-	});
-
-
-
-	const [localAuthorizers, setLocalAuthorizers] = useState<ItemState[]>([]);
-
-	const submitRemoteAuthorizers = useCallback(
-		() => {
-			const base = new Set(remoteAuthorizers.data?.data ?? []);
-			const final = new Set(localAuthorizers.filter(v => v.keep).map(
-				v => v.value
-			));
-			const adds = final.difference(base);
-			const removes = base.difference(final);
-
-			changeRemoteAuthorizers.mutate({
-				add: [...adds],
-				remove: [...removes]
-			});
-		}
-	, [remoteAuthorizers.data?.data, localAuthorizers, changeRemoteAuthorizers]);
-
-	// if we get new data from the remote, update local state.
-	useEffect(
-		() => {
-			if (remoteAuthorizers.data?.data === undefined) return;
-
-			setLocalAuthorizers(
-				remoteAuthorizers.data.data.map(
-					value => ({value, keep: true})
-				)
-			)
-		}
-	, [remoteAuthorizers.data?.data]);
-
-	const maybeError = remoteAuthorizers.error
-		? Some(remoteAuthorizers.error)
-		: remoteAuthorizers.data?.error
-			? Some(new Error(remoteAuthorizers.data.error.cause))
-			: None
-
-
-
-	const stateIcon = new Set([
-		...remoteAuthorizers.isLoading ? ['⌛'] : [],
-		...changeRemoteAuthorizers.isPending ? ['⌛'] : [],
-		...remoteAuthorizers.isError ? ['❌'] : [],
-		...changeRemoteAuthorizers.isError ? ['❌'] : [],
-	]);
-
-	return <form>
-		<fieldset>
-			<legend>Authorizers</legend>
-			<p>These people can accept calls to allow entry.</p>
-			<ul>
-			{
-				localAuthorizers.map(
-					(a, i) => <li key={i}>
-						<input checked={
-							a.keep
-						} onChange={
-							e =>
-								setLocalAuthorizers(v => {
-									const clone = [...v];
-									clone[i] = {
-										...clone[i] ?? { value: "" },
-										keep: e.target.checked
-									}
-
-									return clone;
-								})
-						} type="checkbox" />
-						<input onChange={
-								e => setLocalAuthorizers(v => {
-									const clone = [...v];
-									clone[i] = {
-										...clone[i] ?? { keep: true},
-										value: e.target.value
-									}
-
-									return clone;
-								})
-							} placeholder="+442345234028..."
-							type="text"
-							value={a.value}
-						/>
-					</li>
-				)
-			}
-			</ul>
-			<button onClick={
-				e => {
-					e.preventDefault(); setLocalAuthorizers(
-						v => [
-							...v,
-							{ value: "", keep: true }
-						]
-					)
-				}
-			}>
-				Add another authorizer
-			</button>
-			{
-				option_unwrap_or(option_and_then(
-					maybeError,
-					v => <details>
-						<summary>Something went wrong...</summary>
-						{v.toString()}
-					</details>
-				), null)
-			}
-			<button disabled={
-				remoteAuthorizers.isLoading || changeRemoteAuthorizers.isPending
-				} onClick={
-					e => { e.preventDefault(); submitRemoteAuthorizers() }
-			}>Change authorizers {[...stateIcon].join(" ")}</button>
-		</fieldset>
-	</form>
-
+function SettingsEditor({ Authorization }: SettingsEditorProps) {
 }
 
 
@@ -227,11 +78,9 @@ export default function Admin() {
 				You need to log in to see this.
 			</>;
 
-			const { phoneNumber } = await apiClient.GET("/phone/number", {
-				headers: {
-					Authorization: option_unwrap_unchecked(auth)
-				}
-			}).then(v => v.data!);
+			const client = apiClient(option_unwrap_unchecked(auth));
+
+			const { phoneNumber } = await client.GET("/phone/number").then(v => v.data!);
 
 			const pnn = phoneNumber;
 
