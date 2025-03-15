@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { useLocalStorageController } from "#root/project/zemn.me/app/hook/useLocalStorage.js";
-import { authCacheSchema, AuthorizationCache, clientSecret } from "#root/project/zemn.me/app/localStorage/localStorage.js";
+import { authCacheSchema, AuthorizationCache, clientSecret } from "#root/project/zemn.me/localStorage.js";
 import { Client, clients, Issuer, OAuthClientByIssuer } from "#root/project/zemn.me/app/OAuth/clients.js";
 import { LensGet, LensSet } from "#root/ts/lens.js";
 import { oidcAuthorizeUri, watch_out_i_am_verifying_the_id_token_with_no_specified_issuer } from "#root/ts/oidc/oidc.js";
