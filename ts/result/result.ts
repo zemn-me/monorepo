@@ -97,3 +97,16 @@ export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
 
     return Ok(collected);
 }
+
+/**
+ * If this {@link Result} is {@link Some}thing, swap it out for input value
+ * {@link v}
+ */
+export function result_and<V, E>(
+	v: Result<unknown, E>,
+	vv: V
+): Result<V, E> {
+	return is_ok(v)
+		? Ok(vv)
+		: v
+}
