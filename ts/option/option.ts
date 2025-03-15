@@ -2,7 +2,9 @@ import { NewType } from "#root/ts/NewType.js";
 import * as types from '#root/ts/option/types.js';
 import { impl as resultImpl, Result } from "#root/ts/result.js";
 
-
+/**
+ * @deprecated please use {@link types} instead
+ */
 class impl<T> extends NewType<T> {
 	/**
 	 * True if this {@link Option} represents {@link None}.
@@ -122,6 +124,7 @@ class impl<T> extends NewType<T> {
 }
 
 /**
+ * @deprecated please use {@link types} instead
  * An {@link Option} representing a value that exists.
  */
 export function Some<T>(v: T): Some<T> {
@@ -129,21 +132,26 @@ export function Some<T>(v: T): Some<T> {
 }
 
 /**
+ * @deprecated please use {@link types} instead
  * An {@link Option} representing a value that exists.
  */
 export type Some<T> = impl<types.Some<T>>
 
 /**
+ * @deprecated please use {@link types} instead
  * An {@link Option} representing a value which does not exist.
  */
 export type None = impl<types.None>;
 
 /**
+ * @deprecated please use {@link types} instead
  * A value which can be {@link T}, or nothing.
  */
 export type Option<T> = impl<types.Option<T>>
 
+
 /**
+ * @deprecated please use {@link types} instead
  * A value representing nothing.
  */
 export const None: None = new impl(types.None);
