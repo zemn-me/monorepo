@@ -1,15 +1,15 @@
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "react-query",
-    srcs = ["queryResult.ts"],
+    name = "PendingPip",
+    srcs = ["PendingPip.tsx"],
     visibility = [
-        "//:__subpackages__",
+        "//project/zemn.me:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts",
         "//ts/option",
-        "//ts/result",
     ],
 )
