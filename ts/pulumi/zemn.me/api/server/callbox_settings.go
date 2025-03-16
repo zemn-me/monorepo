@@ -17,8 +17,8 @@ const (
 )
 
 type SettingsRecord struct {
-	Id       string `dynamodbav:"id"` // caps needed
-	When     Time `dynamodbav:"when"`
+	Id       string          `dynamodbav:"id"` // caps needed
+	When     Time            `dynamodbav:"when"`
 	Settings CallboxSettings `dynamodbav:"settings"`
 }
 
@@ -43,6 +43,8 @@ func (s Server) getLatestSettings(ctx context.Context) (set *SettingsRecord, err
 		// no result
 		return
 	}
+
+	set = new(SettingsRecord)
 
 	if err = attributevalue.UnmarshalMap(result.Items[0], set); err != nil {
 		return
