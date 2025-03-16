@@ -2,7 +2,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "react-query",
+    name = "openapi-fetch",
     srcs = ["fetchResult.ts"],
     visibility = [
         "//:__subpackages__",
