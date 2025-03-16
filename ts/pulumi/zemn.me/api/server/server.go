@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
 
@@ -70,6 +71,11 @@ func NewServer(ctx context.Context) (*Server, error) {
 	}))
 
 	s := &Server{
+		log: log.New(
+			os.Stderr,
+			"Server",
+			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
+		),
 		ddb:               dynamodb.NewFromConfig(cfg),
 		settingsTableName: settingsTableName,
 	}
