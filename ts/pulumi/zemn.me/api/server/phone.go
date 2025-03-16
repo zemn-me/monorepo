@@ -111,7 +111,7 @@ func (Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
 	gather.CreateAttr("actionOnEmptyResult", "true")
 	gather.CreateElement("Say").SetText(
 		salutation +
-			"Enter entry code followed by hash key now, or hold.",
+			"Enter entry code now, or hold.",
 	)
 
 	twiML, err := twiml.ToXML(doc)
