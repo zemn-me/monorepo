@@ -45,7 +45,10 @@ const authorizerSchema = z.object({
 });
 
 const entryCodeSchema = z.string()
-	.regex(/^\d{5}$/)
+	.regex(
+		/^\d{5}$/,
+		"Must be a 5 digit number."
+	)
 
 const entryCodeEntrySchema = z.object({
 	code: entryCodeSchema
@@ -173,6 +176,10 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					)
 				}
 
+				{maybeMessage(
+					errors.authorizers?.message
+				)}
+
 				<button onClick={
 					e => {
 						e.preventDefault();
@@ -212,6 +219,10 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 								)
 							}
 						</fieldset>
+				)}
+
+				{maybeMessage(
+					errors.entryCodes?.message
 				)}
 				<button onClick={
 					e => {

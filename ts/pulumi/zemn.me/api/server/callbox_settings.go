@@ -13,11 +13,11 @@ import (
 )
 
 const (
-	PartitionKeyValue = "CALLBOX_SETTINGS" // Fixed partition key.
+	PartitionKeyValue = "CALLBOX_SETTINGS_2" // Fixed partition key.
 )
 
 type SettingsRecord struct {
-	Id       UUID
+	Id       UUID `dynamodbav:"id"` // caps needed
 	When     Time
 	Settings CallboxSettings
 }
