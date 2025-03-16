@@ -11,6 +11,7 @@ import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_worl
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	protectDatabases: boolean;
 	noIndex: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	gcpProjectId: Pulumi.Input<string>
@@ -88,6 +89,7 @@ export class Component extends Pulumi.ComponentResource {
 			domain: ['api', args.domain].join("."),
 			zoneId: args.zoneId,
 			callboxPhoneNumber: args.callboxPhoneNumber,
+			protectDatabases: args.protectDatabases,
 		}, { parent: this });
 
 		super.registerOutputs({ site: this.site, availability });
