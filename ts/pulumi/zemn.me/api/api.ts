@@ -54,9 +54,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             attributes: [{
                 name: "id",
                 type: "S",
-            }],
+			}, {
+				name: "when",
+				type: "S"
+			}],
             billingMode: "PAY_PER_REQUEST",
             hashKey: "id",
+			rangeKey: "when",
         }, { parent: this });
 
         // Attach IAM policy to allow dynamodb:Query on the table.
