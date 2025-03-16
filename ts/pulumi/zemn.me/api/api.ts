@@ -80,7 +80,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             })),
         }, { parent: this });
 
-        new aws.iam.RolePolicyAttachment(`${name}-dynamo-attach`, {
+       const attach = new aws.iam.RolePolicyAttachment(`${name}-dynamo-attach`, {
             role: lambdaRole.name,
             policyArn: dynamoPolicy.arn,
         }, { parent: this });
@@ -106,7 +106,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                     DYNAMODB_TABLE_NAME: dynamoTable.name,
                 }
             }
-        }, { parent: this }).function;
+		}, {parent: this, dependsOn: [
+			attach
+		] }).function;
 
         const integration = new aws.apigatewayv2.Integration(`${name}-integration`, {
             apiId: gateway.id,
