@@ -9,6 +9,7 @@ export interface Args {
     zoneId: Pulumi.Input<string>;
     domain: string;
     callboxPhoneNumber: Pulumi.Input<string>;
+	protectDatabases: boolean
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -61,7 +62,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
             billingMode: "PAY_PER_REQUEST",
             hashKey: "id",
 			rangeKey: "when",
-        }, { parent: this });
+        }, { parent: this, protect: args.protectDatabases });
 
         // Attach IAM policy to allow dynamodb:Query on the table.
         const dynamoPolicy = new aws.iam.Policy(`${name}-dynamo-policy`, {
