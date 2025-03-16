@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"crypto/subtle"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -55,12 +56,12 @@ type AllowedNumber struct {
 // in pairs so end-users can enter their numbers without faffing
 // with exit codes or +.
 func (s *Server) getAllowedNumbers(ctx context.Context) (numbers []AllowedNumber, err error) {
-	var allowedWithPrefix []string
+	var allowedWithPrefix []Authorizer
 	allowedWithPrefix, err = s.getLatestAuthorizers(ctx)
 
 	for _, num := range allowedWithPrefix {
 		var n AllowedNumber
-		n.Local, n.Intl, err = normalizePhoneNumber(num)
+		n.Local, n.Intl, err = normalizePhoneNumber(num.PhoneNumber)
 		if err != nil {
 			return
 		}
@@ -68,6 +69,10 @@ func (s *Server) getAllowedNumbers(ctx context.Context) (numbers []AllowedNumber
 	}
 
 	return
+}
+
+func (s *Server) getAllowedEntryCodes(ctx context.Context) (entryCodes []EntryCodeEntry, err error) {
+	return s.getLatestEntryCodes(ctx)
 }
 
 // Handles an error gracefully with a Twilio <Say/> response.
@@ -128,10 +133,44 @@ func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 	}
 }
 
-// Takes a param of a phone number to forward the call to (the owner of that
-// phone may then press 9 to open the door).
-func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
-	allowedNumbers, err := s.getAllowedNumbers(r.Context())
+func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (success bool, err error) {
+	codes, err := s.getLatestEntryCodes(rq.Context())
+	if err != nil {
+		return
+	}
+
+	var digits string
+
+	if params.Digits != nil {
+		digits = *params.Digits
+	}
+
+	for _, code := range codes {
+		if success = subtle.ConstantTimeCompare(
+			[]byte(code.Code), []byte(digits),
+		) == 1; success {
+			break
+		}
+	}
+
+	if !success {
+		return
+	}
+
+	doc, response := twiml.CreateDocument()
+	response.CreateElement("Play").CreateAttr("digits", "9www9www9")
+	twiml, err := twiml.ToXML(doc)
+	if err != nil {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write([]byte(twiml))
+	return
+}
+
+func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	allowedNumbers, err := s.getAllowedNumbers(rq.Context())
 	if err != nil {
 		return
 	}
@@ -163,6 +202,17 @@ func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, par
 	w.Header().Set("Content-Type", "application/xml")
 	w.Write([]byte(twiML))
 	return
+}
+
+// Takes a param of a phone number to forward the call to (the owner of that
+// phone may then press 9 to open the door).
+func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	ok, err := s.handleEntryViaCode(w, r, params)
+	if ok || err != nil {
+		return
+	}
+
+	return s.handleEntryViaAuthorizer(w, r, params)
 }
 
 func (s *Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) {

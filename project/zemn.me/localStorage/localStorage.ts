@@ -5,9 +5,9 @@
 import { z } from 'zod';
 import { stringToJSON } from 'zod_utilz';
 
-import { Issuer } from '#root/project/zemn.me/app/OAuth/clients.js';
+import { Issuer } from '#root/project/zemn.me/OAuth/clients.js';
 import { LensGet, LensSet } from '#root/ts/lens.js';
-import { and_then, Result, unwrap_or_else } from '#root/ts/result_types.js';
+import { and_then, Result, unwrap_or_else } from '#root/ts/result/result.js';
 import { asyncSerdeNullable, Serde, serdeKey, serdeLens, serdeNullable } from '#root/ts/serde/serde.js';
 import { asyncStorageLens, StorageLens } from '#root/ts/storage/storage.js';
 import { resultFromZod } from '#root/ts/zod/util.js';

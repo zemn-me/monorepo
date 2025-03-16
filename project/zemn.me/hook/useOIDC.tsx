@@ -1,11 +1,11 @@
-import { useLocalStorageItem } from "#root/project/zemn.me/app/hook/useLocalStorage.js";
-import { AuthorizationCache } from "#root/project/zemn.me/app/localStorage/localStorage.js";
-import { Issuer } from "#root/project/zemn.me/app/OAuth/clients.js";
+import { useLocalStorageItem } from "#root/project/zemn.me/hook/useLocalStorage.js";
+import { AuthorizationCache } from "#root/project/zemn.me/localStorage/localStorage.js";
+import { Issuer } from "#root/project/zemn.me/OAuth/clients.js";
 import { and, firstItemIs } from "#root/ts/guard.js";
 import { lensPromise } from "#root/ts/lens.js";
 import { ID_Token, watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Some } from "#root/ts/option/types.js";
-import { and_then as result_and_then, flatten as result_flatten, result_collect } from "#root/ts/result_types.js";
+import { and_then as result_and_then, flatten as result_flatten, result_collect } from "#root/ts/result/result.js";
 import { resultFromZod } from "#root/ts/zod/util.js";
 
 function isUnexpiredIDToken(token: ID_Token): token is ID_Token {
