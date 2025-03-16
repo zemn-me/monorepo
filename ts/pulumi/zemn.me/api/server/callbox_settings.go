@@ -17,9 +17,9 @@ const (
 )
 
 type SettingsRecord struct {
-	Id       UUID `dynamodbav:"id"` // caps needed
-	When     Time
-	Settings CallboxSettings
+	Id       string `dynamodbav:"id"` // caps needed
+	When     Time `dynamodbav:"when"`
+	Settings CallboxSettings `dynamodbav:"settings"`
 }
 
 // getLatestSettings retrieves the most recent callbox settings record.
@@ -72,7 +72,7 @@ func (s *Server) getLatestAuthorizers(ctx context.Context) (authorizers []Author
 // postNewSettings writes a new callbox settings record with the current timestamp.
 func (s Server) postNewSettings(ctx context.Context, settings CallboxSettings) (err error) {
 	rec := SettingsRecord{
-		Id:       NewUUID(),
+		Id:       PartitionKeyValue,
 		When:     Now(),
 		Settings: settings,
 	}
