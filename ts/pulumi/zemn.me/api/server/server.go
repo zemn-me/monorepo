@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
 
@@ -18,6 +19,7 @@ type Server struct {
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler
+	log *log.Logger
 }
 
 // NewServer initialises the DynamoDB client.
@@ -66,6 +68,11 @@ func NewServer(ctx context.Context) (*Server, error) {
 	}))
 
 	s := &Server{
+		log: log.New(
+			os.Stderr,
+			"Server",
+			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
+		),
 		ddb:               dynamodb.NewFromConfig(cfg),
 		settingsTableName: settingsTableName,
 	}
