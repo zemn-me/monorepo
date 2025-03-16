@@ -2,16 +2,20 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "react-query",
-    srcs = ["queryResult.ts"],
+    name = "hook",
     visibility = [
-        "//:__subpackages__",
+        "//project/zemn.me:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/zemn.me/OAuth",
+        "//project/zemn.me/localStorage",
+        "//ts",
+        "//ts/oidc",
         "//ts/option",
         "//ts/result",
+        "//ts/storage",
     ],
 )
 
