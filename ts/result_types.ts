@@ -1,99 +1,106 @@
-export const _ok = Symbol();
-export const _err = Symbol();
-
-export type Ok<T> = { [_ok]: T, [_err]?: undefined }
-export type Err<T> = { [_err]: T, [_ok]?: undefined }
-export type Result<T, E> = Ok<T> | Err<E>
-
-export function Ok<T>(v: T): Ok<T> {
-	return { [_ok]: v }
-}
-
-export function Err<T>(v: T): Err<T> {
-	return { [_err]: v }
-}
-
-export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
-	return !is_err(v)
-}
-
-export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
-	return _err in v
-}
-
-export function unwrap_err<T, E>(v: Result<T, E>) {
-	if (!is_err(v)) throw new Error("Not in error.");
-	return unwrap_err_unchecked(v);
-}
-
-export function unwrap_err_unchecked<E>(v: Err<E>) {
-	return v[_err]
-}
-
-export function unwrap<T, E>(v: Result<T, E>): T {
-	if (is_ok(v)) return unwrap_unsafe(v);
-	throw v[_err];
-}
-
-export function unwrap_unsafe<T>(v: Ok<T>): T {
-	return v[_ok]
-}
-
-export const unwrap_unchecked = unwrap_unsafe;
-
-export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
-	if (is_err(v)) return fallback;
-
-	return v[_ok]
-}
-
-export function unwrap_or_else<T1, T2, E>(v: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
-	if (is_err(v)) return fallback(v[_err] as E);
-
-	return v[_ok]
-}
-
-export function and_then<T, E, O>(v: Result<T, E>, f: (v: T) => O): Result<O, E> {
-	if (is_err(v)) return v;
-
-	return Ok(f(unwrap(v)))
-}
-
-export function flatten<T, E1, E2>(v: Result<Result<T, E2>, E1>): Result<T, E1 | E2> {
-	if (is_err(v)) return v;
-	return unwrap(v);
-}
-
-
-export function zip<T, TT, E>(self: Result<T, E>, other: Result<TT, E>): Result<[T, TT], E> {
-	if (is_err(self)) return self;
-	if (is_err(other)) return other;
-
-	return Ok([unwrap_unsafe(self), unwrap_unsafe(other)]);
-}
-
-
-export async function result_promise_transpose<T, E>(
-	r: Result<Promise<T>, E>
-): Promise<Result<T, E>> {
-	if (is_err(r)) return r;
-	return Ok(await unwrap_unsafe(r))
-}
+import * as result from '#root/ts/result/result.js';
 
 /**
- * Aggregates a set of {@link Result}s into a single Result.
- *
- * If an error occurs, only the *first* error will be in the new Result.
+ * @deprecated — please use {@link result._ok} instead.
  */
-export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
-    const collected: T[] = [];
+export const _ok = result._ok;
 
-    for (const res of arr) {
-        if (is_err(res)) {
-            return res;
-        }
-        collected.push(unwrap_unsafe(res));
-    }
+/**
+ * @deprecated — please use {@link result._err} instead.
+ */
+export const _err = result._err;
 
-    return Ok(collected);
-}
+/**
+ * @deprecated — please use {@link result.Ok} instead.
+ */
+export type Ok<T> = result.Ok<T>;
+
+/**
+ * @deprecated — please use {@link result.Err} instead.
+ */
+export type Err<T> = result.Err<T>;
+
+/**
+ * @deprecated — please use {@link result.Result} instead.
+ */
+export type Result<T, E> = result.Result<T, E>;
+
+/**
+ * @deprecated — please use {@link result.Ok} instead.
+ */
+export const Ok = result.Ok;
+
+/**
+ * @deprecated — please use {@link result.Err} instead.
+ */
+export const Err = result.Err;
+
+/**
+ * @deprecated — please use {@link result.is_ok} instead.
+ */
+export const is_ok = result.is_ok;
+
+/**
+ * @deprecated — please use {@link result.is_err} instead.
+ */
+export const is_err = result.is_err;
+
+/**
+ * @deprecated — please use {@link result.unwrap_err} instead.
+ */
+export const unwrap_err = result.unwrap_err;
+
+/**
+ * @deprecated — please use {@link result.unwrap_err_unchecked} instead.
+ */
+export const unwrap_err_unchecked = result.unwrap_err_unchecked;
+
+/**
+ * @deprecated — please use {@link result.unwrap} instead.
+ */
+export const unwrap = result.unwrap;
+
+/**
+ * @deprecated — please use {@link result.unwrap_unsafe} instead.
+ */
+export const unwrap_unsafe = result.unwrap_unsafe;
+
+/**
+ * @deprecated — please use {@link result.unwrap_unchecked} instead.
+ */
+export const unwrap_unchecked = result.unwrap_unchecked;
+
+/**
+ * @deprecated — please use {@link result.unwrap_or} instead.
+ */
+export const unwrap_or = result.unwrap_or;
+
+/**
+ * @deprecated — please use {@link result.unwrap_or_else} instead.
+ */
+export const unwrap_or_else = result.unwrap_or_else;
+
+/**
+ * @deprecated — please use {@link result.and_then} instead.
+ */
+export const and_then = result.and_then;
+
+/**
+ * @deprecated — please use {@link result.flatten} instead.
+ */
+export const flatten = result.flatten;
+
+/**
+ * @deprecated — please use {@link result.zip} instead.
+ */
+export const zip = result.zip;
+
+/**
+ * @deprecated — please use {@link result.result_promise_transpose} instead.
+ */
+export const result_promise_transpose = result.result_promise_transpose;
+
+/**
+ * @deprecated — please use {@link result.result_collect} instead.
+ */
+export const result_collect = result.result_collect;

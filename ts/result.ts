@@ -1,7 +1,11 @@
 import { NewType } from "#root/ts/NewType.js";
+import * as r from "#root/ts/result/result.js";
 import * as types from '#root/ts/result_types.js';
 
 
+/**
+ * @deprecated please use {@link r}
+ */
 export class impl<T> extends NewType<T> {
 	/**
 	 * If this {@link Result} represents a failure ({@link Err}), returns
@@ -37,7 +41,7 @@ export class impl<T> extends NewType<T> {
 	unwrap_err<E>(this: Result<unknown, E>): E {
 		if (!this.is_err()) throw new Error("Cannot unwrap non error Result to error.");
 
-		return this.value[types._err];
+		return this.value[r._err];
 	}
 
 	/**
@@ -49,7 +53,7 @@ export class impl<T> extends NewType<T> {
 	 * even if not checked at runtime.
 	 */
 	unwrap_err_unchecked<E>(this: Err<E>): E {
-		return this.value[types._err]
+		return this.value[r._err]
 	}
 
 	/**
@@ -61,7 +65,7 @@ export class impl<T> extends NewType<T> {
 	 * even if not checked at runtime.
 	 */
 	unwrap_unchecked<V>(this: Ok<V>): V {
-		return this.value[types._ok]
+		return this.value[r._ok]
 	}
 
 	/**
@@ -143,6 +147,7 @@ export class impl<T> extends NewType<T> {
 
 
 /**
+ * @deprecated please use {@link r}
  * Returns a {@link Result} that represents a success.
  */
 export function Ok<T>(v: T): Ok<T> {
@@ -150,21 +155,25 @@ export function Ok<T>(v: T): Ok<T> {
 }
 
 /**
+ * @deprecated please use {@link r}
  * A value which represents a successful operation.
  */
 export type Ok<T> = impl<types.Ok<T>>
 
 /**
+ * @deprecated please use {@link r}
  * A value which represents a failed operation.
  */
 export type Err<E> = impl<types.Err<E>>;
 
 /**
+ * @deprecated please use {@link r}
  * A value which can be either a success or an error.
  */
 export type Result<T, E = Error> = impl<types.Result<T, E>>
 
 /**
+ * @deprecated please use {@link r}
  * Returns a {@link Result} that is in error
  * with the given error.
  */
