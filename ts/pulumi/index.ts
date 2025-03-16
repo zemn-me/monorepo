@@ -123,6 +123,7 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: args.staging,
 				callboxPhoneNumber: phoneNumberInfo.phoneNumber,
 				tags,
+				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 			},
 			{ parent: this }
