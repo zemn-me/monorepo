@@ -98,11 +98,16 @@ func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
-func (Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
+func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
 	salutation, err := Salutation()
 	if err != nil {
 		return
 	}
+
+	fmt.Println(
+		"Rcv call",
+		r.FormValue("From"),
+	)
 
 	doc, response := twiml.CreateDocument()
 	gather := response.CreateElement("Gather")
@@ -124,7 +129,7 @@ func (Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
-func (s Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
+func (s *Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 	err := s.getPhoneInit(rw, rq)
 	if err != nil {
 		s.HandleErrorForTwilio(rw, rq, err)
@@ -152,11 +157,14 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 	}
 
 	if !success {
+		s.log.Printf("Denied access via code entry: %+q is not a valid entry code.", digits)
 		return
 	}
 
+	s.log.Printf("Allowed access via code entry: %+q", digits)
+
 	doc, response := twiml.CreateDocument()
-	response.CreateElement("Play").CreateAttr("digits", "9www9www9")
+	response.CreateElement("Play").CreateAttr("digits", "9w9w9w9")
 	twiml, err := twiml.ToXML(doc)
 	if err != nil {
 		return

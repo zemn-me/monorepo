@@ -18,10 +18,14 @@ type Server struct {
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler
+	log *log.Logger
 }
+
 
 // NewServer initialises the DynamoDB client.
 func NewServer(ctx context.Context) (*Server, error) {
+	s.log = log.New(os.Stderr, "Server", log.Ldate | log.Ltime | log.Llongfile | log.LUTC)
+
 	// Check for an optional endpoint override.
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	var cfg aws.Config
