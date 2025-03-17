@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"unicode"
 
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
@@ -136,6 +137,26 @@ func (s *Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
 	}
 }
 
+func removeDuplicateDigits(input string) string {
+	var result []rune
+	var lastDigit rune
+	inDigitSeq := false
+
+	for _, r := range input {
+		if unicode.IsDigit(r) {
+			if !inDigitSeq || r != lastDigit {
+				result = append(result, r)
+			}
+			lastDigit = r
+			inDigitSeq = true
+		} else {
+			result = append(result, r)
+			inDigitSeq = false
+		}
+	}
+	return string(result)
+}
+
 func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (success bool, err error) {
 	codes, err := s.getLatestEntryCodes(rq.Context())
 	if err != nil {
@@ -150,7 +171,7 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 	for _, code := range codes {
 		if success = subtle.ConstantTimeCompare(
-			[]byte(code.Code), []byte(digits),
+			[]byte(removeDuplicateDigits(code.Code)), []byte(removeDuplicateDigits(digits)),
 		) == 1; success {
 			break
 		}

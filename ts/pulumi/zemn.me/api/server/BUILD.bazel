@@ -22,6 +22,7 @@ go_oapi_codegen(
 go_library(
     name = "server",
     srcs = [
+        "TestRemoveDuplicateDigits.go",
         "api.gen.go",
         "callbox_settings.go",
         "date.go",
