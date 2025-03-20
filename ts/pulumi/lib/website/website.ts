@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import * as aws from '@pulumi/aws';
+import { ResponseHeadersPolicy } from '@pulumi/aws/cloudfront';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 import mime from 'mime';
@@ -88,6 +89,68 @@ export interface Args {
 	 * Other TXT records to attach to the domain.
 	 */
 	otherTXTRecords?: string[]
+}
+
+// needed cause there's a cache policy limit of 20.
+let noRobotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
+let robotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
+
+function noRobotsResponseHeadersPolicy() {
+	if (typeof noRobotsResponseHeadersPolicyCache == "undefined") {
+		noRobotsResponseHeadersPolicyCache = responseHeadersPolicy(
+			"norobotsresponsepolicy",
+			true
+		)
+	}
+
+	return noRobotsResponseHeadersPolicyCache
+}
+
+function robotsResponseHeadersPolicy() {
+	if (typeof robotsResponseHeadersPolicyCache == "undefined") {
+		robotsResponseHeadersPolicyCache = responseHeadersPolicy(
+			"robotsresponsepolicy",
+			false
+		)
+	}
+
+	return robotsResponseHeadersPolicyCache;
+}
+
+function responseHeadersPolicy(name: string, noIndex: boolean) {
+		return new aws.cloudfront.ResponseHeadersPolicy(
+			`${name}_response_headers`.replaceAll('.', '-'),
+			{
+				securityHeadersConfig: {
+					contentTypeOptions: {
+						override: false,
+					},
+					frameOptions: {
+						frameOption: 'DENY',
+						override: false,
+					},
+					strictTransportSecurity: {
+						accessControlMaxAgeSec: 31536000,
+						override: false,
+						includeSubdomains: true,
+						preload: true,
+					},
+				},
+				customHeadersConfig: {
+					items: [
+						...(noIndex
+							? [
+									{
+										header: 'x-robots-tag',
+										value: 'noindex',
+										override: false,
+									},
+								]
+							: []),
+					],
+				},
+			}
+		);
 }
 
 /**
@@ -280,40 +343,12 @@ export class Website extends pulumi.ComponentResource {
 		);
 
 		// response headers policy (http headers)
+		const responseHeadersPolicy =
+			args.noIndex
+				? noRobotsResponseHeadersPolicy()
+				: robotsResponseHeadersPolicy();
 
-		const responseHeadersPolicy = new aws.cloudfront.ResponseHeadersPolicy(
-			`${name}_response_headers`.replaceAll('.', '-'),
-			{
-				securityHeadersConfig: {
-					contentTypeOptions: {
-						override: false,
-					},
-					frameOptions: {
-						frameOption: 'DENY',
-						override: false,
-					},
-					strictTransportSecurity: {
-						accessControlMaxAgeSec: 31536000,
-						override: false,
-						includeSubdomains: true,
-						preload: true,
-					},
-				},
-				customHeadersConfig: {
-					items: [
-						...(args.noIndex
-							? [
-									{
-										header: 'x-robots-tag',
-										value: 'noindex',
-										override: false,
-									},
-								]
-							: []),
-					],
-				},
-			}
-		);
+
 
 		// create the cloudfront
 
