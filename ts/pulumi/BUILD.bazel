@@ -16,6 +16,7 @@ ts_project(
         "//project/zemn.me:next",
         "//ts/pulumi/shadwell.im/thomas",
         "//ts/pulumi/zemn.me/availability:next",
+        "//ts/pulumi/zemn.me/static",
     ],
     deps = [
         "//:node_modules/@jest/globals",

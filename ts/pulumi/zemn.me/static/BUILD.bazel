@@ -1,0 +1,16 @@
+"""
+These files should get uploaded to static.zemn.me
+"""
+
+load("//js:rules.bzl", "js_library")
+
+js_library(
+    name = "static",
+    srcs = [
+        "index.html",
+        "nook_phone_yes.mp3",
+    ],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+)
