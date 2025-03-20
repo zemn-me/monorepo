@@ -34,7 +34,7 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.21
-	github.com/twilio/twilio-go v1.24.0
+	github.com/twilio/twilio-go v1.24.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.12.0
 	golang.org/x/tools v0.31.0
