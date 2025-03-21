@@ -75,6 +75,21 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const Static = new Website(
+			`${name}_static`,
+			{
+				index: 'ts/pulumi/zemn.me/static/index.html',
+				notFound: 'ts/pulumi/zemn.me/static/index.html',
+				directory: 'ts/pulumi/zemn.me/static',
+				zoneId: args.zoneId,
+				domain: ['static', args.domain].join('.'),
+				noIndex: true,
+				email: false,
+				noCostAllocationTag: true,
+				tags
+			},
+		{ parent: this })
+
 		new BlueskyDisplayNameClaim(
 			`${name}_bluesky_claim`,
 			{
@@ -90,8 +105,8 @@ export class Component extends Pulumi.ComponentResource {
 			zoneId: args.zoneId,
 			callboxPhoneNumber: args.callboxPhoneNumber,
 			protectDatabases: args.protectDatabases,
-		}, { parent: this });
+		}, { parent: this, dependsOn: Static });
 
-		super.registerOutputs({ site: this.site, availability });
+		super.registerOutputs({ site: this.site, availability, Static });
 	}
 }
