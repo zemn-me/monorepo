@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.210.1
-    version: 39.210.1(typanion@3.14.0)
+    specifier: 39.211.0
+    version: 39.211.0(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -3297,6 +3297,10 @@ packages:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  /@baszalmstra/rattler@0.2.0:
+    resolution: {integrity: sha512-Dkcy5TXmlNvU8LAvagfBHYOFnBHlKYeBiMljG8Iln6ZmQSkeHgO3yo69A4Rs3Lv6DSH3pSrun7LHdaxv99l4tg==}
+    dev: true
 
   /@bazel/bazelisk@1.25.0:
     resolution: {integrity: sha512-IgesSUh9EwwLI9+Vs5rb/sx7vh6cI97CRLPqw9+/egFzeZlB5S2fTsKwbdDxtTVPjQMGS3GY64tTNsgejVFeKg==}
@@ -17636,8 +17640,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.210.1(typanion@3.14.0):
-    resolution: {integrity: sha512-oUoUgLULXCRnhwAJAaeIkkpXV+GJqwpP077OPFrNK43hqaOSYtU1KYD56TuLO5ieso9d4TzUpgc+QVAA10PktQ==}
+  /renovate@39.211.0(typanion@3.14.0):
+    resolution: {integrity: sha512-/m+9+Bceth+O6q5xOJ6H1BmYtSgbc3fdD9YEFrSpleezCeHIGs6UeMY79iABAHsTmSHB73T+4KJ9e6jJTfKcNg==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17648,6 +17652,7 @@ packages:
       '@aws-sdk/client-rds': 3.740.0
       '@aws-sdk/client-s3': 3.740.0
       '@aws-sdk/credential-providers': 3.738.0
+      '@baszalmstra/rattler': 0.2.0
       '@breejs/later': 4.2.0
       '@cdktf/hcl2json': 0.20.11
       '@opentelemetry/api': 1.9.0
