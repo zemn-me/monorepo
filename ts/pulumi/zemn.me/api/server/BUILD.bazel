@@ -48,7 +48,6 @@ go_library(
         "@com_github_nyaruka_phonenumbers//:phonenumbers",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//types",
-        "@com_github_twilio_twilio_go//client",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
