@@ -59,7 +59,7 @@ func (s *Server) AssertTwilioRequest_GET(rw http.ResponseWriter, rq *http.Reques
 	}
 
 	// for some reason twilio's api doesn't take the standard format...
-	var fields map[string]string
+	fields := make(map[string]string)
 	// this will clearly break if there are dupe fields.
 	for k, v := range map[string][]string(rq.Form) {
 		fields[k] = v[0] // i think must be at least one...
