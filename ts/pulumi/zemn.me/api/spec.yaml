@@ -101,6 +101,13 @@ components:
 paths:
   /phone/init:
     get:
+      parameters:
+        - name: secret
+          in: query
+          description: Auth secret.
+          required: true
+          schema:
+            type: string
       summary: Entry point for twilio callbox phone number.
       responses:
         "200":
@@ -112,6 +119,12 @@ paths:
   /phone/handleEntry:
     get:
       parameters:
+        - name: secret
+          in: query
+          description: Auth secret.
+          required: true
+          schema:
+            type: string
         - name: Digits
           in: query
           description: digits entered by user.
