@@ -84,7 +84,6 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 		}, { parent: this });
 
 		const PERSONAL_PHONE_NUMBER = process.env["PERSONAL_PHONE_NUMBER"];
-		const TWILIO_AUTH_TOKEN = process.env["TWILIO_AUTH_TOKEN"];
 
 		// Pass the DynamoDB table name to your Lambda environment.
 		const lambdaFn = new LambdaFunction(`apizemnmelambdafunction`, {
@@ -97,9 +96,6 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				variables: {
 					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
-					...(TWILIO_AUTH_TOKEN !== undefined
-						? { TWILIO_AUTH_TOKEN }
-						: {}),
 					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
 					DYNAMODB_TABLE_NAME: dynamoTable.name,
 				}
