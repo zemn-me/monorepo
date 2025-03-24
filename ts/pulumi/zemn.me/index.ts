@@ -16,6 +16,7 @@ export interface Args {
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	gcpProjectId: Pulumi.Input<string>
 	callboxPhoneNumber: Pulumi.Input<string>
+	twilioSharedSecret: Pulumi.Input<string>
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -105,6 +106,7 @@ export class Component extends Pulumi.ComponentResource {
 			zoneId: args.zoneId,
 			callboxPhoneNumber: args.callboxPhoneNumber,
 			protectDatabases: args.protectDatabases,
+			twilioSharedSecret: args.twilioSharedSecret,
 		}, { parent: this, dependsOn: Static });
 
 		super.registerOutputs({ site: this.site, availability, Static });
