@@ -53,14 +53,6 @@ type AllowedNumber struct {
 	Local string
 }
 
-func (s *Server) AssertTwilioRequest(rw http.ResponseWriter, rq *http.Request) (err error) {
-	if !s.twilioValidator.Validate(rq) {
-		return fmt.Errorf("Invalid Twilio Signature")
-	}
-
-	return nil
-}
-
 // getAllowedNumbers returns international format and local format numbers
 // in pairs so end-users can enter their numbers without faffing
 // with exit codes or +.
@@ -108,10 +100,6 @@ func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
 func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
-	if err = s.AssertTwilioRequest(w, r); err != nil {
-		return
-	}
-
 	salutation, err := Salutation()
 	if err != nil {
 		return
@@ -247,10 +235,6 @@ func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Reques
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
 func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
-	if err = s.AssertTwilioRequest(w, r); err != nil {
-		return
-	}
-
 	ok, err := s.handleEntryViaCode(w, r, params)
 	if ok || err != nil {
 		return
