@@ -1,11 +1,11 @@
-import { CustomResourceOptions, dynamic, Output } from "@pulumi/pulumi";
+import { CustomResourceOptions, dynamic, Input, Output } from "@pulumi/pulumi";
 import twilio from "twilio";
 import { IncomingPhoneNumberInstance, IncomingPhoneNumberListInstanceCreateOptions } from "twilio/lib/rest/api/v2010/account/incomingPhoneNumber.js";
 
 
 export interface TwilioPhoneNumberArgs {
 	countryCode: string;
-	options: Omit<IncomingPhoneNumberListInstanceCreateOptions, 'phoneNumber'>
+	options: Input<Omit<IncomingPhoneNumberListInstanceCreateOptions, 'phoneNumber'>>
 }
 
 const accountSID = () => process.env["TWILIO_ACCOUNT_SID"];
