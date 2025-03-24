@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-	"github.com/twilio/twilio-go/client"
 )
 
 // Server holds the DynamoDB client and table name.
@@ -20,8 +19,8 @@ type Server struct {
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler
-	log             *log.Logger
-	twilioValidator TwilioRequestValidator
+	log                *log.Logger
+	twilioSharedSecret string
 }
 
 // NewServer initialises the DynamoDB client.
@@ -75,9 +74,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 			"Server",
 			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
 		),
-		ddb:               dynamodb.NewFromConfig(cfg),
-		settingsTableName: settingsTableName,
-		twilioValidator:   TwilioRequestValidator{client.NewRequestValidator(os.Getenv("TWILIO_AUTH_TOKEN"))},
+		ddb:                dynamodb.NewFromConfig(cfg),
+		settingsTableName:  settingsTableName,
+		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
 	}
 
 	s.Handler = HandlerFromMux(s, r)

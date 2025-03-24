@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 	"unicode"
@@ -53,14 +54,6 @@ type AllowedNumber struct {
 	Local string
 }
 
-func (s *Server) AssertTwilioRequest(rw http.ResponseWriter, rq *http.Request) (err error) {
-	if !s.twilioValidator.Validate(rq) {
-		return fmt.Errorf("Invalid Twilio Signature")
-	}
-
-	return nil
-}
-
 // getAllowedNumbers returns international format and local format numbers
 // in pairs so end-users can enter their numbers without faffing
 // with exit codes or +.
@@ -104,11 +97,19 @@ func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err
 	return
 }
 
+func (s Server) TestTwilioChallenge(challenge string) (err error) {
+	if challenge != s.twilioSharedSecret {
+		err = fmt.Errorf("Invalid Twilio challenge.")
+	}
+
+	return
+}
+
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
-func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
-	if err = s.AssertTwilioRequest(w, r); err != nil {
+func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request, params GetPhoneInitParams) (err error) {
+	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
 
@@ -124,7 +125,13 @@ func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error
 
 	doc, response := twiml.CreateDocument()
 	gather := response.CreateElement("Gather")
-	gather.CreateAttr("action", "/phone/handleEntry")
+
+	gather.CreateAttr("action", (&url.URL{
+		Path: "/phone/handleEntry",
+		RawQuery: url.Values{
+			"secret": []string{params.Secret},
+		}.Encode(),
+	}).String())
 	gather.CreateAttr("method", "GET")
 	gather.CreateAttr("actionOnEmptyResult", "true")
 	gather.CreateElement("Say").SetText(
@@ -142,8 +149,8 @@ func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error
 	return
 }
 
-func (s *Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request) {
-	err := s.getPhoneInit(rw, rq)
+func (s *Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request, params GetPhoneInitParams) {
+	err := s.getPhoneInit(rw, rq, params)
 	if err != nil {
 		s.HandleErrorForTwilio(rw, rq, err)
 	}
@@ -247,7 +254,7 @@ func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Reques
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
 func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
-	if err = s.AssertTwilioRequest(w, r); err != nil {
+	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
 
