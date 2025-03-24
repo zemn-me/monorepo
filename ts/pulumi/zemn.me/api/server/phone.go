@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 	"os"
 	"time"
 	"unicode"
@@ -54,31 +53,8 @@ type AllowedNumber struct {
 	Local string
 }
 
-func (s *Server) AssertTwilioRequest_GET(rw http.ResponseWriter, rq *http.Request) (err error) {
-	u := (&url.URL{
-		Scheme: rq.URL.Scheme,
-		Host:   rq.URL.Host,
-		Path:   rq.URL.Path,
-	}).String()
-
-	if err = rq.ParseForm(); err != nil {
-		return
-	}
-
-	// for some reason twilio's api doesn't take the standard format...
-	fields := make(map[string]string)
-	// this will clearly break if there are dupe fields.
-	for k, v := range map[string][]string(rq.Form) {
-		fields[k] = v[0] // i think must be at least one...
-	}
-
-	ok := s.twilioValidator.Validate(
-		u,
-		fields,
-		rq.Header.Get("X-Twilio-Signature"),
-	)
-
-	if !ok {
+func (s *Server) AssertTwilioRequest(rw http.ResponseWriter, rq *http.Request) (err error) {
+	if !s.twilioValidator.Validate(rq) {
 		return fmt.Errorf("Invalid Twilio Signature")
 	}
 
@@ -132,7 +108,7 @@ func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
 func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request) (err error) {
-	if err = s.AssertTwilioRequest_GET(w, r); err != nil {
+	if err = s.AssertTwilioRequest(w, r); err != nil {
 		return
 	}
 
@@ -271,7 +247,7 @@ func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Reques
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
 func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
-	if err = s.AssertTwilioRequest_GET(w, r); err != nil {
+	if err = s.AssertTwilioRequest(w, r); err != nil {
 		return
 	}
 

@@ -21,7 +21,7 @@ type Server struct {
 	rt                *chi.Mux
 	http.Handler
 	log             *log.Logger
-	twilioValidator client.RequestValidator
+	twilioValidator TwilioRequestValidator
 }
 
 // NewServer initialises the DynamoDB client.
@@ -77,7 +77,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 		),
 		ddb:               dynamodb.NewFromConfig(cfg),
 		settingsTableName: settingsTableName,
-		twilioValidator:   client.NewRequestValidator(os.Getenv("TWILIO_AUTH_TOKEN")),
+		twilioValidator:   TwilioRequestValidator{client.NewRequestValidator(os.Getenv("TWILIO_AUTH_TOKEN"))},
 	}
 
 	s.Handler = HandlerFromMux(s, r)
