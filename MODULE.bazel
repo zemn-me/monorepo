@@ -88,7 +88,7 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.3.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "aspect_rules_js", version = "2.3.2")
+bazel_dep(name = "aspect_rules_js", version = "2.3.3")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
