@@ -31,6 +31,7 @@ go_library(
         "imports.go",
         "phone.go",
         "server.go",
+        "twilio_request_validator.go",
         "uuid.go",
     ],
     importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server",
@@ -48,12 +49,17 @@ go_library(
         "@com_github_nyaruka_phonenumbers//:phonenumbers",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//types",
+        "@com_github_twilio_twilio_go//client",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
 
 go_test(
     name = "server_test",
-    srcs = ["smoke_test.go"],
+    srcs = [
+        "request_validator_test.go",
+        "smoke_test.go",
+    ],
     embed = [":server"],
+    deps = ["@com_github_stretchr_testify//assert"],
 )
