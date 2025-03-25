@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.213.4
-    version: 39.213.4(typanion@3.14.0)
+    specifier: 39.213.5
+    version: 39.213.5(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -17706,8 +17706,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.213.4(typanion@3.14.0):
-    resolution: {integrity: sha512-33HTQiUjKGJD93Lsh2rc4JoAI82++WlFiklXh6t8qUuBd9rvBW6rXbA0el9wx45uhgaqP7C43C5mXdNUH7jO3A==}
+  /renovate@39.213.5(typanion@3.14.0):
+    resolution: {integrity: sha512-Ysz2XO3Mddzd7YCVO3FBIS5vhyYFFFpJKMGoRiSg65rcczKZOa224SNaZ5xRMi2gnq/Q0WZYJy2ed6cygmwk9A==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -20359,6 +20359,7 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+    requiresBuild: true
 
   /write-file-atomic@3.0.3:
     resolution: {integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==}
