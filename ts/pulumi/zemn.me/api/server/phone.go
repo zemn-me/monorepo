@@ -11,9 +11,10 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh"
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
+
+	"github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh"
 )
 
 func Salutation() (salutation string, err error) {
@@ -204,11 +205,10 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
 
-	acTrack, err := 		acnh.Track(
-			acnh.Sunny,
-			time.Now(),
-		)
-
+	acTrack, err := acnh.Track(
+		acnh.Sunny,
+		time.Now(),
+	)
 	if err != nil {
 		return
 	}
@@ -218,7 +218,7 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 	response.CreateElement("Play").CreateAttr("digits", "9w9")
 	response.CreateElement("Play").SetText(
 		fmt.Sprintf(
-			"https://static.zemn.me/acnh_music/%s", acTrack,
+			"https://static.zemn.me/acnh_music/%s", url.PathEscape(acTrack),
 		),
 	)
 	twiml, err := twiml.ToXML(doc)
