@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "acnh",
+    srcs = ["acnh_track.go"],
+    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "acnh_test",
+    srcs = ["acnh_track_test.go"],
+    embed = [":acnh"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -11,6 +11,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh"
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
 )
@@ -203,9 +204,23 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
 
+	acTrack, err := 		acnh.Track(
+			acnh.Sunny,
+			time.Now(),
+		)
+
+	if err != nil {
+		return
+	}
+
 	doc, response := twiml.CreateDocument()
 	response.CreateElement("Play").SetText(nook_phone_yes)
-	response.CreateElement("Play").CreateAttr("digits", "9w9w9w9")
+	response.CreateElement("Play").CreateAttr("digits", "9w9")
+	response.CreateElement("Play").SetText(
+		fmt.Sprintf(
+			"https://static.zemn.me/acnh_music/%s", acTrack,
+		),
+	)
 	twiml, err := twiml.ToXML(doc)
 	if err != nil {
 		return
