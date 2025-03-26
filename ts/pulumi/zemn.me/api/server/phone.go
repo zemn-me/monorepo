@@ -223,7 +223,7 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 	response.CreateElement("Play").CreateAttr("digits", "9w9")
 	response.CreateElement("Play").SetText(
 		fmt.Sprintf(
-			"https://static.zemn.me/acnh_music/%s", acTrack,
+			"https://static.zemn.me/acnh_music/%s", url.PathEscape(acTrack),
 		),
 	)
 	twiml, err := twiml.ToXML(doc)
