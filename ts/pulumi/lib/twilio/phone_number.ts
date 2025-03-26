@@ -3,7 +3,12 @@ import twilio from "twilio";
 import { IncomingPhoneNumberInstance, IncomingPhoneNumberListInstanceCreateOptions } from "twilio/lib/rest/api/v2010/account/incomingPhoneNumber.js";
 
 
-export interface TwilioPhoneNumberArgs {
+export interface TwilioPhoneNumberInputs {
+	countryCode: Input<string>;
+	options: Input<TwilioPhoneNumberArgs["options"]>
+}
+
+interface TwilioPhoneNumberArgs {
 	countryCode: string;
 	options: Input<Omit<IncomingPhoneNumberListInstanceCreateOptions, 'phoneNumber'>>
 }
@@ -124,7 +129,7 @@ export class TwilioPhoneNumber extends dynamic.Resource {
 	public readonly phoneNumber!: Output<string>;
     constructor(
         name: string,
-        args: TwilioPhoneNumberArgs,
+        args: TwilioPhoneNumberInputs,
         opts?: CustomResourceOptions
     ) {
 		super(new TwilioPhoneNumberProvider(), name, {
