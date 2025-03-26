@@ -205,9 +205,14 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
 
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		return
+	}
+
 	acTrack, err := acnh.Track(
 		acnh.Sunny,
-		time.Now(),
+		time.Now().In(loc),
 	)
 	if err != nil {
 		return
