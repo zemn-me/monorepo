@@ -10,6 +10,10 @@ export interface Args {
     domain: string;
     callboxPhoneNumber: Pulumi.Input<string>;
 	protectDatabases: boolean
+	/**
+	 * Used to auth calls from twilio to the api server.
+	 */
+	twilioSharedSecret: Pulumi.Input<string>
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -98,6 +102,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
 					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
 					DYNAMODB_TABLE_NAME: dynamoTable.name,
+					TWILIO_SHARED_SECRET: args.twilioSharedSecret
 				}
 			}
 		}, { parent: this }).function;
