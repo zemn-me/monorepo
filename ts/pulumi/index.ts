@@ -2,6 +2,7 @@ import * as aws from '@pulumi/aws';
 import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
+import * as random from "@pulumi/random";
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
@@ -96,16 +97,29 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const twilioSharedSecret = new random.RandomPassword(
+			"callbox_twilio_shared_secret",
+			{
+				length: 16,
+			},
+			{ parent: this}
+		);
+
+		const voiceUrl = twilioSharedSecret.result.apply(
+			secret => `https://api.zemn.me/phone/init?secret=${encodeURIComponent(secret)}`
+		);
+
+		const twilioOptions = voiceUrl.apply(
+			voiceUrl => ({
+				voiceMethod: 'GET',
+				voiceUrl
+			})
+		);
+
 
 		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber2`, {
 			countryCode: 'US',
-			options: {
-				voiceMethod: 'GET',
-				voiceUrl:
-					// i would await the service deploy
-					// but that would currently make a cycle...
-					'https://api.zemn.me/phone/init'
-			}
+			options: twilioOptions,
 		}, { parent: this, protect: !args.staging });
 
 		// because i cant work out how to make outs happen from a
@@ -125,6 +139,7 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
+				twilioSharedSecret: twilioSharedSecret.result,
 			},
 			{ parent: this }
 		);
