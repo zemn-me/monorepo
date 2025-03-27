@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.219.1
-    version: 39.219.1(typanion@3.14.0)
+    specifier: 39.219.2
+    version: 39.219.2(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -3354,8 +3354,8 @@ packages:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  /@baszalmstra/rattler@0.2.0:
-    resolution: {integrity: sha512-Dkcy5TXmlNvU8LAvagfBHYOFnBHlKYeBiMljG8Iln6ZmQSkeHgO3yo69A4Rs3Lv6DSH3pSrun7LHdaxv99l4tg==}
+  /@baszalmstra/rattler@0.2.1:
+    resolution: {integrity: sha512-HZ2xu6Nk+XzAeateyzDKYM47ySkjkuKtTNpKRAy+Y+YcRH1qHM2le4iLlG32wDddaHCLUsBsyBxirClOj1TLjw==}
     dev: true
 
   /@bazel/bazelisk@1.25.0:
@@ -17676,8 +17676,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.219.1(typanion@3.14.0):
-    resolution: {integrity: sha512-XYD6k2YAmxG4iArPRn2bWC+oRFVOjkuD3Nq+IHJX/xe7Dl/x55Q1zKwobpi3kqLX7o1P7xLWYB3cv/Aw55qCFQ==}
+  /renovate@39.219.2(typanion@3.14.0):
+    resolution: {integrity: sha512-rq652g7cGfm3admuY6a+yEKcqwT4arZfMsk2E/6XNwX7+xa+xvFjCLna2sBPesi8EB1S/8XsS/bLf1M32YZ+5A==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17688,7 +17688,7 @@ packages:
       '@aws-sdk/client-rds': 3.740.0
       '@aws-sdk/client-s3': 3.740.0
       '@aws-sdk/credential-providers': 3.738.0
-      '@baszalmstra/rattler': 0.2.0
+      '@baszalmstra/rattler': 0.2.1
       '@breejs/later': 4.2.0
       '@cdktf/hcl2json': 0.20.11
       '@opentelemetry/api': 1.9.0
