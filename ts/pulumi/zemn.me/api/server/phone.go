@@ -301,6 +301,8 @@ func (s *Server) getPhoneNumber(w http.ResponseWriter, r *http.Request) (err err
 	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+
+	return
 }
 
 func (s *Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
