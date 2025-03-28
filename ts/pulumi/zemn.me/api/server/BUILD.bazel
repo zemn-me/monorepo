@@ -14,6 +14,7 @@ go_oapi_codegen(
     generate = [
         "chi-server",
         "models",
+        "strict-server",
     ],
     package = "apiserver",
     source = "//ts/pulumi/zemn.me/api:spec.yaml",
@@ -48,6 +49,7 @@ go_library(
         "@com_github_google_uuid//:uuid",
         "@com_github_nyaruka_phonenumbers//:phonenumbers",
         "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
         "@com_github_oapi_codegen_runtime//types",
         "@com_github_twilio_twilio_go//twiml",
     ],
