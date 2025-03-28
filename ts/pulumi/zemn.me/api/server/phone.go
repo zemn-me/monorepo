@@ -293,8 +293,22 @@ func (s *Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, pa
 	}
 }
 
-func (Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getPhoneNumber(w http.ResponseWriter, r *http.Request) (err error) {
+	if err := useOIDCAuth(w, r); err != nil {
+		return err
+	}
+
 	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+
+	return
+}
+
+func (s *Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
+	if err := s.postCallboxSettings(w, r); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
+	}
 }
