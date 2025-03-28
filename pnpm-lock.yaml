@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.220.1
-    version: 39.220.1(typanion@3.14.0)
+    specifier: 39.220.2
+    version: 39.220.2(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -6515,18 +6515,18 @@ packages:
       tweetnacl: 1.0.3
     dev: true
 
-  /@renovatebot/osv-offline-db@1.7.2:
-    resolution: {integrity: sha512-wYD/0K/cNX1iyYBfp4EXBA5yjMA0Bjp2Np71iIUnUZyinMTm5io57ZbCl6ZEIXOB/PYmlN7to6xGGlg3JrtrqQ==}
+  /@renovatebot/osv-offline-db@1.7.3:
+    resolution: {integrity: sha512-xhFTlmZhP60n44d3voXM0WF09cJM59Ua1WhcfSYh1AiafKbTqiXQcfbDLoneLAGjYn5ZsSaN1/uIDJbGULTDfw==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@seald-io/nedb': 4.1.1
     dev: true
 
-  /@renovatebot/osv-offline@1.6.2:
-    resolution: {integrity: sha512-N7jEqJkYTykCe6DdBLnUN/v0rR1QWHMHW2jiAgiaVV9OEVLHE1OWNIhC5habKXDJZ2DHwyl8UvBi+yj6Ki6MMg==}
+  /@renovatebot/osv-offline@1.6.3:
+    resolution: {integrity: sha512-2BlfQCmui/ptqRWKOeQsfnrp1svwu/Yu0Jvjvlof97gTY9Ooxe1JCToFn7K7z+21dUqT4aTh75nJBpxqc7TVKg==}
     engines: {node: '>=18.12.0'}
     dependencies:
-      '@renovatebot/osv-offline-db': 1.7.2
+      '@renovatebot/osv-offline-db': 1.7.3
       adm-zip: 0.5.16
       fs-extra: 11.3.0
       got: 11.8.6
@@ -17676,8 +17676,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.220.1(typanion@3.14.0):
-    resolution: {integrity: sha512-/cE9BGah+aF1Fsi0Gic6xkHPb1axFHM2v5n/oeYcFBmWmTntRXiD4oAldNxjhjwLYVu7x6U2zgjuHsScFnaF8Q==}
+  /renovate@39.220.2(typanion@3.14.0):
+    resolution: {integrity: sha512-746bEohyIz8aYfYLqCoZRDbXcCd3d6uTrt+Y0lkMybtk4AMNI/xoisjY+ttC8YAEWddpcFreBgdymoEGOXrN3w==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17705,7 +17705,7 @@ packages:
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.1
-      '@renovatebot/osv-offline': 1.6.2
+      '@renovatebot/osv-offline': 1.6.3
       '@renovatebot/pep440': 4.1.0
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 4.6.0
