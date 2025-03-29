@@ -17,7 +17,7 @@ go_oapi_codegen(
         "strict-server",
     ],
     package = "apiserver",
-    source = "//ts/pulumi/zemn.me/api:spec.yaml",
+    source = "//project/zemn.me/api:spec.yaml",
 )
 
 go_library(
@@ -34,10 +34,10 @@ go_library(
         "server.go",
         "uuid.go",
     ],
-    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server",
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server",
     visibility = ["//visibility:public"],
     deps = [
-        "//ts/pulumi/zemn.me/api/server/acnh",
+        "//project/zemn.me/api/server/acnh",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_config//:config",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",

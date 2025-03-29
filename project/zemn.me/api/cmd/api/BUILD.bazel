@@ -10,10 +10,10 @@ package(default_visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"])
 go_library(
     name = "api_lib",
     srcs = ["main.go"],
-    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/cmd/api",
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/cmd/api",
     visibility = ["//visibility:private"],
     deps = [
-        "//ts/pulumi/zemn.me/api/server",
+        "//project/zemn.me/api/server",
         "@com_github_aws_aws_lambda_go//lambda",
         "@com_github_awslabs_aws_lambda_go_api_proxy//httpadapter",
     ],
