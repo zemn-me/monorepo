@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	"github.com/twilio/twilio-go"
 )
 
 // Server holds the DynamoDB client and table name.
@@ -21,6 +22,7 @@ type Server struct {
 	http.Handler
 	log                *log.Logger
 	twilioSharedSecret string
+	twilioClient       twilio.RestClient
 }
 
 // NewServer initialises the DynamoDB client.
@@ -77,6 +79,10 @@ func NewServer(ctx context.Context) (*Server, error) {
 		ddb:                dynamodb.NewFromConfig(cfg),
 		settingsTableName:  settingsTableName,
 		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
+		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
+			Username: os.Getenv("TWILIO_ACCOUNT_SID"),
+			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
+		}),
 	}
 
 	s.Handler = HandlerFromMux(s, r)
