@@ -306,7 +306,7 @@ func (s *Server) getPhoneNumber(w http.ResponseWriter, r *http.Request) (err err
 }
 
 func (s *Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
-	if err := s.postCallboxSettings(w, r); err != nil {
+	if err := s.getPhoneNumber(w, r); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
