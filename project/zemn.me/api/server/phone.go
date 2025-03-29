@@ -14,7 +14,7 @@ import (
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
 
-	"github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
 func Salutation() (salutation string, err error) {
