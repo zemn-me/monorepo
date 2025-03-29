@@ -5,7 +5,7 @@ load("//go:rules.bzl", "go_library")
 go_library(
     name = "acnh",
     srcs = ["acnh_track.go"],
-    importpath = "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server/acnh",
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh",
     visibility = ["//visibility:public"],
 )
 

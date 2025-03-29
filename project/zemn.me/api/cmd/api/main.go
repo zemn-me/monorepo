@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 
-	apiserver "github.com/zemn-me/monorepo/ts/pulumi/zemn.me/api/server"
+	apiserver "github.com/zemn-me/monorepo/project/zemn.me/api/server"
 )
 
 func main() {
