@@ -1,9 +1,9 @@
 import * as aws from "@pulumi/aws";
 import * as Pulumi from '@pulumi/pulumi';
 
+import { ApiZemnMeLambdaImage } from '#root/project/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js';
 import Certificate from "#root/ts/pulumi/lib/certificate.js";
 import { LambdaFunction } from "#root/ts/pulumi/lib/lambda_function.js";
-import { ApiZemnMeLambdaImage } from '#root/ts/pulumi/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js';
 
 export interface Args {
     zoneId: Pulumi.Input<string>;

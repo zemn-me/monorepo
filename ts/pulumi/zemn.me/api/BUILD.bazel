@@ -1,14 +1,5 @@
-load("@npm//:openapi-typescript/package_json.bzl", oapi_ts = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
 load("//ts:rules.bzl", "ts_project")
-
-exports_files(
-    ["spec.yaml"],
-    visibility = [
-        "//:__subpackages__",
-    ],
-)
 
 ts_project(
     name = "api",
@@ -21,38 +12,12 @@ ts_project(
     deps = [
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
+        "//project/zemn.me/api/cmd/api:oci_image",
         "//ts/pulumi/lib",
-        "//ts/pulumi/zemn.me/api/cmd/api:oci_image",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-)
-
-oapi_ts.openapi_typescript(
-    name = "ts_client_gen",
-    srcs = [
-        "spec.yaml",
-    ],
-    outs = [
-        "api_client.gen.d.ts",
-    ],
-    args = [
-        "spec.yaml",
-        "-o",
-        "api_client.gen.d.ts",
-    ],
-    chdir = package_name(),
-)
-
-js_library(
-    name = "ts_client_dts",
-    srcs = [
-        "api_client.gen.d.ts",
-    ],
-    visibility = [
-        "//:__subpackages__",
-    ],
 )

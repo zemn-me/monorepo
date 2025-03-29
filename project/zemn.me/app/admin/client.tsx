@@ -6,12 +6,12 @@ import { useEffect, useId, useState } from "react";
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from "zod";
 
+import type { components, paths } from "#root/project/zemn.me/api/api_client.gen";
 import Link from "#root/project/zemn.me/components/Link/index.js";
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, is_none, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else, unwrap_unchecked as option_unwrap_unchecked } from "#root/ts/option/types.js";
-import type { components, paths } from "#root/ts/pulumi/zemn.me/api/api_client.gen";
 import { fetchResult } from "#root/ts/result/openapi-fetch/fetchResult.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 import { and_then as result_and_then, flatten, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked } from "#root/ts/result/result.js";

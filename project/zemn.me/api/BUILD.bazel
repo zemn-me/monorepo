@@ -1,0 +1,49 @@
+load("@npm//:openapi-typescript/package_json.bzl", oapi_ts = "bin")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+load("//js:rules.bzl", "js_library")
+
+exports_files(
+    ["spec.yaml"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+oapi_ts.openapi_typescript(
+    name = "ts_client_gen",
+    srcs = [
+        "spec.yaml",
+    ],
+    outs = [
+        "api_client.gen.d.ts",
+    ],
+    args = [
+        "spec.yaml",
+        "-o",
+        "api_client.gen.d.ts",
+    ],
+    chdir = package_name(),
+)
+
+js_library(
+    name = "ts_client_dts",
+    srcs = [
+        "api_client.gen.d.ts",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+go_library(
+    name = "api",
+    srcs = ["doc.go"],
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api",
+    visibility = ["//visibility:public"],
+)
