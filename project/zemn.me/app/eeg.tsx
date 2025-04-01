@@ -3,45 +3,50 @@
 
 import { useCallback, useEffect, useMemo } from 'react';
 
-/**
- * Get an item at an index in an array.
- *
- * Loops around instead of overflowing.
- */
 const indexModulo =
 	<T,>(A: T[]) =>
 	(at: number) =>
 		at % A.length;
 
-const gooseTarget =
-	'https://www.tiktok.com/@antonellamollica2.0/video/7308687953851632928?_r=1&_t=8jeNrsOARhR&social_sharing=1';
-
 export function Eeg() {
-	const toMatch = useMemo(() => [...'goose'], []);
-	const buffer: string[] = useMemo(() => Array(toMatch.length), [toMatch]);
+	// Define triggers for "goose" and "horse"
+	const triggers = useMemo(() => [
+		{
+			word: [...'goose'],
+			target: 'https://www.tiktok.com/@antonellamollica2.0/video/7308687953851632928?_r=1&_t=8jeNrsOARhR&social_sharing=1'
+		},
+		{
+			word: [...'horse'],
+			target: 'https://vm.tiktok.com/ZNd8cR2Mc'
+		}
+	], []);
+
+	// Use the maximum length of the trigger words for the circular buffer
+	const bufferLength = Math.max(...triggers.map(trigger => trigger.word.length));
+	const buffer: string[] = useMemo(() => Array(bufferLength), [bufferLength]);
 	let cursor: number = 0;
 
-	const onGoose = useCallback(
+	const onKey = useCallback(
 		(v: KeyboardEvent) => {
 			buffer[indexModulo(buffer)(cursor++)] = v.key;
 
-			if (v.key != toMatch[toMatch.length - 1]) return;
-			// walk backwards to see if we just typed 'goose'
-
-			for (let i = cursor - toMatch.length, k = 0; i < cursor; i++, k++) {
-				if (buffer[indexModulo(buffer)(i)] != toMatch[k]) return;
-			}
-
-			window.open(gooseTarget, '_blank');
+			triggers.forEach(trigger => {
+				// Only check if the key matches the last character of the trigger word
+				if (v.key !== trigger.word[trigger.word.length - 1]) return;
+				// Check if the sequence matches
+				for (let i = cursor - trigger.word.length, k = 0; i < cursor; i++, k++) {
+					if (buffer[indexModulo(buffer)(i)] !== trigger.word[k]) return;
+				}
+				window.open(trigger.target, '_blank');
+			});
 		},
-		[buffer, cursor, toMatch]
+		[buffer, triggers]
 	);
 
 	useEffect(() => {
-		window.addEventListener('keyup', onGoose);
-
-		return () => window.removeEventListener('keyup', onGoose);
-	}, [onGoose]);
+		window.addEventListener('keyup', onKey);
+		return () => window.removeEventListener('keyup', onKey);
+	}, [onKey]);
 
 	return <></>;
 }
