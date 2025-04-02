@@ -3,6 +3,7 @@
 # To update this file, run:
 #   bazel run //:gazelle_python_manifest.update
 
+---
 manifest:
   modules_mapping:
     3204bda914b7f2c6f497__mypyc: mypy
@@ -121,4 +122,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: 7ec0eaf44c4ef49f640c19e62c14b6914fc6b72bd7b0e24953b910eab369f4d5
+integrity: 14dc719a3b0094d07a0dfee7f3f878b001b95105d5fa01976312c2484c6cdd73
