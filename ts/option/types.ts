@@ -1,5 +1,3 @@
-import { always, ifElse } from 'ramda';
-
 import { isDefined } from '#root/ts/guard.js';
 import { and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
 
@@ -102,11 +100,9 @@ export function ok_or<T, E>(self: Option<T>, err: E): Result<T, E> {
  * into {@link Some}({@link T}) or {@link None}.
  */
 export function from<T>(self: T | undefined): Option<T> {
-	return ifElse(
-		isDefined,
-		v => Some(v),
-		always(None)
-	)(self)
+	if (isDefined(self)) return Some(self);
+
+	return None;
 }
 
 /**
@@ -122,7 +118,7 @@ export function ok_or_else<T, E>(
 		and_then(
 		self,
 		v => Ok(v)
-	), always(Err(err())))
+	), () => Err(err()))
 }
 
 
