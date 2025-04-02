@@ -1,16 +1,13 @@
-export const _ok = Symbol();
-export const _err = Symbol();
-
-export type Ok<T> = { [_ok]: T, [_err]?: undefined }
-export type Err<T> = { [_err]: T, [_ok]?: undefined }
+export type Ok<T> = { ok: T, err?: undefined }
+export type Err<T> = { err: T, ok?: undefined }
 export type Result<T, E> = Ok<T> | Err<E>
 
 export function Ok<T>(v: T): Ok<T> {
-	return { [_ok]: v }
+	return { ok: v }
 }
 
 export function Err<T>(v: T): Err<T> {
-	return { [_err]: v }
+	return { err: v }
 }
 
 export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
@@ -18,7 +15,7 @@ export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
 }
 
 export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
-	return _err in v
+	return v.err !== undefined
 }
 
 export function unwrap_err<T, E>(v: Result<T, E>) {
@@ -27,30 +24,33 @@ export function unwrap_err<T, E>(v: Result<T, E>) {
 }
 
 export function unwrap_err_unchecked<E>(v: Err<E>) {
-	return v[_err]
+	return v.err
 }
 
 export function unwrap<T, E>(v: Result<T, E>): T {
 	if (is_ok(v)) return unwrap_unsafe(v);
-	throw v[_err];
+	throw unwrap_err_unchecked(v)
 }
 
 export function unwrap_unsafe<T>(v: Ok<T>): T {
-	return v[_ok]
+	return v.ok;
 }
 
-export const unwrap_unchecked = unwrap_unsafe;
+
+export function unwrap_unchecked<T>(v: Ok<T>): T {
+	return unwrap_unsafe(v)
+}
 
 export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
 	if (is_err(v)) return fallback;
 
-	return v[_ok]
+	return unwrap_unchecked(v)
 }
 
 export function unwrap_or_else<T1, T2, E>(v: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
-	if (is_err(v)) return fallback(v[_err] as E);
+	if (is_err(v)) return fallback(unwrap_err_unchecked(v) as E);
 
-	return v[_ok]
+	return unwrap_unchecked(v)
 }
 
 export function and_then<T, E, O>(v: Result<T, E>, f: (v: T) => O): Result<O, E> {
