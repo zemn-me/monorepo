@@ -1,16 +1,6 @@
 import * as result from '#root/ts/result/result.js';
 
 /**
- * @deprecated — please use {@link result._ok} instead.
- */
-export const _ok = result._ok;
-
-/**
- * @deprecated — please use {@link result._err} instead.
- */
-export const _err = result._err;
-
-/**
  * @deprecated — please use {@link result.Ok} instead.
  */
 export type Ok<T> = result.Ok<T>;
