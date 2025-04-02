@@ -39,9 +39,7 @@ export class impl<T> extends NewType<T> {
 	 * *throw an error*!
 	 */
 	unwrap_err<E>(this: Result<unknown, E>): E {
-		if (!this.is_err()) throw new Error("Cannot unwrap non error Result to error.");
-
-		return this.value[r._err];
+		return r.unwrap_err(this.value)
 	}
 
 	/**
@@ -53,7 +51,7 @@ export class impl<T> extends NewType<T> {
 	 * even if not checked at runtime.
 	 */
 	unwrap_err_unchecked<E>(this: Err<E>): E {
-		return this.value[r._err]
+		return r.unwrap_err_unchecked(this.value);
 	}
 
 	/**
@@ -65,7 +63,7 @@ export class impl<T> extends NewType<T> {
 	 * even if not checked at runtime.
 	 */
 	unwrap_unchecked<V>(this: Ok<V>): V {
-		return this.value[r._ok]
+		return r.unwrap_unchecked(this.value)
 	}
 
 	/**
