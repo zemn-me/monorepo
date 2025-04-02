@@ -18,8 +18,8 @@ dependencies:
     specifier: 9.23.0
     version: 9.23.0
   '@hookform/resolvers':
-    specifier: 5.0.0
-    version: 5.0.0(react-hook-form@7.55.0)
+    specifier: 5.0.1
+    version: 5.0.1(react-hook-form@7.55.0)
   '@jest/globals':
     specifier: 29.7.0
     version: 29.7.0
@@ -3313,10 +3313,10 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.0.0(react-hook-form@7.55.0):
-    resolution: {integrity: sha512-3w/nL/GcafcBnehyvOGzrhFACAQoLAEVzJjRJrBpedEiD+dPvu/K+UL51wVOB4toZq8p6UkTfkd4aoAW+LOpRQ==}
+  /@hookform/resolvers@5.0.1(react-hook-form@7.55.0):
+    resolution: {integrity: sha512-u/+Jp83luQNx9AdyW2fIPGY6Y7NG68eN2ZW8FOJYL+M0i4s49+refdJdOp/A9n9HFQtQs3HIDHQvX3ZET2o7YA==}
     peerDependencies:
-      react-hook-form: 7.55.0
+      react-hook-form: ^7.55.0
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.55.0(react@19.1.0)
