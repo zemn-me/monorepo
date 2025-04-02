@@ -3,25 +3,26 @@ import { always, ifElse } from 'ramda';
 import { isDefined } from '#root/ts/guard.js';
 import { and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
 
-export const _some = Symbol();
-export const _none = Symbol();
-
-export type Some<T> = { [_some]: T, [_none]?: undefined }
-export type None = { [_none]: true, [_some]?: undefined }
+export type Some<T> = { some: T, none?: undefined }
+export type None = () => { none: true, some?: undefined }
 export type Option<T> = Some<T> | None
 
-export const None: None = { [_none]: true };
+
+// i dont think this actually ever gets called in this scheme...
+export function None(): { none: true, some?: undefined} {
+	return { none: true }
+}
 
 export function Some<T>(v: T): Some<T> {
-	return { [_some]: v }
+	return { some: v }
 }
 
 export function is_some<T>(v: Option<T>): v is Some<T> {
-	return !is_none(v)
+	return "some" in v
 }
 
 export function is_none(v: Option<unknown>): v is None {
-	return _none in v
+	return !is_some(v)
 }
 
 export function unwrap<T>(v: Option<T>): T {
@@ -31,19 +32,19 @@ export function unwrap<T>(v: Option<T>): T {
 }
 
 export function unwrap_unchecked<T>(v: Some<T>): T {
-	return v[_some]
+	return v.some;
 }
 
 export function unwrap_or<T, T2>(v: Option<T>, fallback: T2): T | T2 {
 	if (is_none(v)) return fallback;
 
-	return v[_some]
+	return v.some
 }
 
 export function unwrap_or_else<T, T2>(v: Option<T>, fallback: () => T2): T | T2 {
 	if (is_none(v)) return fallback();
 
-	return v[_some]
+	return unwrap_unchecked(v);
 }
 
 export function and_then<T, O>(v: Option<T>, f: (v: T) => O): Option<O> {
