@@ -2,69 +2,82 @@ export type Ok<T> = { ok: T, err?: undefined }
 export type Err<T> = { err: T, ok?: undefined }
 export type Result<T, E> = Ok<T> | Err<E>
 
+/*#__NO_SIDE_EFFECTS__*/
 export function Ok<T>(v: T): Ok<T> {
 	return { ok: v }
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function Err<T>(v: T): Err<T> {
 	return { err: v }
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
 	return !is_err(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
 	return v.err !== undefined
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_err<T, E>(v: Result<T, E>) {
 	if (!is_err(v)) throw new Error("Not in error.");
 	return unwrap_err_unchecked(v);
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_err_unchecked<E>(v: Err<E>) {
 	return v.err
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap<T, E>(v: Result<T, E>): T {
 	if (is_ok(v)) return unwrap_unsafe(v);
 	throw unwrap_err_unchecked(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_unsafe<T>(v: Ok<T>): T {
 	return v.ok;
 }
 
-
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_unchecked<T>(v: Ok<T>): T {
 	return unwrap_unsafe(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
 	if (is_err(v)) return fallback;
 
 	return unwrap_unchecked(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function unwrap_or_else<T1, T2, E>(v: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
 	if (is_err(v)) return fallback(unwrap_err_unchecked(v) as E);
 
 	return unwrap_unchecked(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function and_then<T, E, O>(v: Result<T, E>, f: (v: T) => O): Result<O, E> {
 	if (is_err(v)) return v;
 
 	return Ok(f(unwrap(v)))
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function flatten<T, E1, E2>(v: Result<Result<T, E2>, E1>): Result<T, E1 | E2> {
 	if (is_err(v)) return v;
 	return unwrap(v);
 }
 
 
+/*#__NO_SIDE_EFFECTS__*/
 export function zip<T, TT, E>(self: Result<T, E>, other: Result<TT, E>): Result<[T, TT], E> {
 	if (is_err(self)) return self;
 	if (is_err(other)) return other;
@@ -73,6 +86,7 @@ export function zip<T, TT, E>(self: Result<T, E>, other: Result<TT, E>): Result<
 }
 
 
+/*#__NO_SIDE_EFFECTS__*/
 export async function result_promise_transpose<T, E>(
 	r: Result<Promise<T>, E>
 ): Promise<Result<T, E>> {
@@ -85,6 +99,7 @@ export async function result_promise_transpose<T, E>(
  *
  * If an error occurs, only the *first* error will be in the new Result.
  */
+/*#__NO_SIDE_EFFECTS__*/
 export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
     const collected: T[] = [];
 
@@ -102,6 +117,7 @@ export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
  * If this {@link Result} is {@link Some}thing, swap it out for input value
  * {@link v}
  */
+/*#__NO_SIDE_EFFECTS__*/
 export function result_and<V, E>(
 	v: Result<unknown, E>,
 	vv: V
