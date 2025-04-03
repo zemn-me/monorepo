@@ -42,6 +42,10 @@ describe('Option Utilities', () => {
 		it('returns false for None', () => {
 			expect(is_some(None)).toBe(false);
 		});
+
+		it('does not get confused by undefined', () => {
+			expect(is_some(Some(undefined))).toBe(true)
+		})
 	});
 
 	describe('is_none', () => {
