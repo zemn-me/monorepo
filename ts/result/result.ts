@@ -1,15 +1,27 @@
-export type Ok<T> = { ok: T, err?: undefined }
-export type Err<T> = { err: T, ok?: undefined }
+export interface Ok<T> {
+	/** @deprecated use {@link unwrap_unchecked} */
+	ok: T,
+	/** @deprecated use {@link is_ok} */
+	isOk: true
+}
+
+export interface Err<T> {
+	/** @deprecated use {@link unwrap_err_unchecked} */
+	err: T,
+	/**@deprecated use {@link is_err} */
+	isOk: false,
+}
+
 export type Result<T, E> = Ok<T> | Err<E>
 
 /*#__NO_SIDE_EFFECTS__*/
 export function Ok<T>(v: T): Ok<T> {
-	return { ok: v }
+	return { ok: v, isOk: true }
 }
 
 /*#__NO_SIDE_EFFECTS__*/
 export function Err<T>(v: T): Err<T> {
-	return { err: v }
+	return { err: v, isOk: false }
 }
 
 /*#__NO_SIDE_EFFECTS__*/
@@ -19,7 +31,7 @@ export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
 
 /*#__NO_SIDE_EFFECTS__*/
 export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
-	return v.err !== undefined
+	return !v.isOk
 }
 
 /*#__NO_SIDE_EFFECTS__*/
