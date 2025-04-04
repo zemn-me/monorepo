@@ -93,8 +93,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   eslint-mdx:
-    specifier: 3.3.1
-    version: 3.3.1(eslint@9.23.0)
+    specifier: 3.3.2
+    version: 3.3.2(eslint@9.23.0)
   eslint-plugin-jest:
     specifier: 28.11.0
     version: 28.11.0(eslint@9.23.0)(typescript@5.5.4)
@@ -10386,8 +10386,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-mdx@3.3.1(eslint@9.23.0):
-    resolution: {integrity: sha512-3koPGGjGOKXxWBIY0ExcMhtEGWRpbM/xrqIp6c4XDxZOMs/nIUEZKnaKZf+sAMRtqdv5Z99Nq5izWyCLoTdcGg==}
+  /eslint-mdx@3.3.2(eslint@9.23.0):
+    resolution: {integrity: sha512-GFeLoM2S5Jx0iTXYvsp/do/UNTzV+vRNfNxRglelXb9ZNSfUFGHsq60ZcHyUvpxy2crPebCX4gzT/FRu/LJRbA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -10404,7 +10404,7 @@ packages:
       remark-mdx: 3.1.0
       remark-parse: 11.0.0
       remark-stringify: 11.0.0
-      synckit: 0.10.3
+      synckit: 0.11.2
       tslib: 2.8.1
       unified: 11.0.5
       unified-engine: 11.2.2
@@ -10534,7 +10534,7 @@ packages:
       eslint: '>=8.0.0'
     dependencies:
       eslint: 9.23.0
-      eslint-mdx: 3.3.1(eslint@9.23.0)
+      eslint-mdx: 3.3.2(eslint@9.23.0)
       mdast-util-from-markdown: 2.0.2
       remark-mdx: 3.1.0
       remark-parse: 11.0.0
@@ -18475,6 +18475,14 @@ packages:
 
   /synckit@0.10.3:
     resolution: {integrity: sha512-R1urvuyiTaWfeCggqEvpDJwAlDVdsT9NM+IP//Tk2x7qHCkSvBk/fwFgw/TLAHzZlrAnnazMcRw0ZD8HlYFTEQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    dependencies:
+      '@pkgr/core': 0.2.0
+      tslib: 2.8.1
+    dev: false
+
+  /synckit@0.11.2:
+    resolution: {integrity: sha512-1IUffI8zZ8qUMB3NUJIjk0RpLroG/8NkQDAWH1NbB2iJ0/5pn3M8rxfNzMz4GH9OnYaGYn31LEDSXJp/qIlxgA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     dependencies:
       '@pkgr/core': 0.2.0
