@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.233.2
-    version: 39.233.2(typanion@3.14.0)
+    specifier: 39.233.3
+    version: 39.233.3(typanion@3.14.0)
   sharp:
     specifier: 0.33.5
     version: 0.33.5
@@ -7941,8 +7941,8 @@ packages:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: false
 
-  /@yarnpkg/core@4.2.1(typanion@3.14.0):
-    resolution: {integrity: sha512-+nXgfe/SE1lGedYuLNvgFGT5DNTb2pc6XJQCok1zoGGxbhqdTfslcFcPQrarSOjbhYK+Vl/PfWP9o6j/YIcuDw==}
+  /@yarnpkg/core@4.3.0(typanion@3.14.0):
+    resolution: {integrity: sha512-7KdrddBCgYMT/rQePALrsWRmtKFvYH6dlEfftte0A1ItcQ6JVNsLBHIIzVlHxUQ9AyHMaVDt169zfBc7OzdMtw==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@arcanis/slice-ansi': 1.1.1
@@ -17177,8 +17177,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.233.2(typanion@3.14.0):
-    resolution: {integrity: sha512-vx87iseQJiXpsPL7zVZv8mL866BbVnjjU2H9IFzfF4co+qA9+tOLBcC59G65ynmznTCVYPtvowxMBTSV0J/B4A==}
+  /renovate@39.233.3(typanion@3.14.0):
+    resolution: {integrity: sha512-GQF3N+UzY8RiEO6B8JJzQxFOrlYsuZEC6mE3t3xciRs+JcVLdvIBPaBlXn0xtuy+24Mbj0OlrD3SoFmq1Mr4hQ==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17210,7 +17210,7 @@ packages:
       '@renovatebot/pep440': 4.1.0
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 4.6.0
-      '@yarnpkg/core': 4.2.1(typanion@3.14.0)
+      '@yarnpkg/core': 4.3.0(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       agentkeepalive: 4.6.0
       aggregate-error: 3.1.0
