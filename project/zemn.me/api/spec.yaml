@@ -166,7 +166,7 @@ paths:
                 type: string
 
   /phone/hold-music:
-    get:
+    post:
       summary: Plays ACNH music as hold music while caller waits.
       parameters:
         - name: secret

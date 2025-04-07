@@ -11,7 +11,7 @@ import (
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
-func (s *Server) getPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params GetPhoneHoldMusicParams) (err error) {
+func (s *Server) postPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params PostPhoneHoldMusicParams) (err error) {
 	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
@@ -45,8 +45,8 @@ func (s *Server) getPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, par
 
 // Returns a conference response with the correct animal crossing new horizons
 // track as backing music!
-func (s *Server) GetPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params GetPhoneHoldMusicParams) {
-	err := s.getPhoneHoldMusic(rw, rq, params)
+func (s *Server) PostPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params PostPhoneHoldMusicParams) {
+	err := s.postPhoneHoldMusic(rw, rq, params)
 	if err != nil {
 		s.HandleErrorForTwilio(rw, rq, err)
 	}
