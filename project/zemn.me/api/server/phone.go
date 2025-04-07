@@ -249,17 +249,15 @@ func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Reques
 	}
 
 	// Make the outbound call to the authoriser
-	go func() {
-		callParams := &twilioApi.CreateCallParams{}
-		callParams.SetTo(selectedNumber)
-		callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
-		callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(params.Secret)))
+	callParams := &twilioApi.CreateCallParams{}
+	callParams.SetTo(selectedNumber)
+	callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
+	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(params.Secret)))
 
-		_, callErr := s.twilioClient.Api.CreateCall(callParams)
-		if callErr != nil {
-			s.log.Printf("Failed to call authoriser %s: %v", selectedNumber, callErr)
-		}
-	}()
+	_, err = s.twilioClient.Api.CreateCall(callParams)
+	if err != nil {
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/xml")
 	_, _ = w.Write([]byte(twiML))
