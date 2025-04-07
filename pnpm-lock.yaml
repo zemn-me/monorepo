@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.235.1
-    version: 39.235.1(typanion@3.14.0)
+    specifier: 39.235.2
+    version: 39.235.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.0
     version: 0.34.0
@@ -6164,8 +6164,8 @@ packages:
       '@seald-io/nedb': 4.1.1
     dev: true
 
-  /@renovatebot/osv-offline@1.6.4:
-    resolution: {integrity: sha512-/zKTvQNX9/P3fy6/7f0TJd8W/WywD837xCLrvptbuXx0RjgOn5wOs+eFmeEOTmMyxfM5YhvTPdrLzC+jO3toJA==}
+  /@renovatebot/osv-offline@1.6.5:
+    resolution: {integrity: sha512-WtGzUvr1QgQZCxoeSqDcLI16otvaPzIUq/Mn+LkZZtX4pRxJ5SIiL0/Eiirc2ngAIWi2ihvnG9DHvRBK8trK2g==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@renovatebot/osv-offline-db': 1.7.3
@@ -17408,8 +17408,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.235.1(typanion@3.14.0):
-    resolution: {integrity: sha512-LbW9WSrGjv2fnTdShZ5oY1XlCAxNOB2w4D1vo50YhO55zVLLMNPQbz6uX2TKL40Xtt7z3M13pjfED07nERK2DQ==}
+  /renovate@39.235.2(typanion@3.14.0):
+    resolution: {integrity: sha512-ntJkwcEsVMehKGtYapVe+q0Lo22L7UJqkjIOIRsJxm+hEo5J3P3DEg9F03r51fLoY1tz4L/52qGaqTDuG/6ANw==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17437,7 +17437,7 @@ packages:
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.1
-      '@renovatebot/osv-offline': 1.6.4
+      '@renovatebot/osv-offline': 1.6.5
       '@renovatebot/pep440': 4.1.0
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 4.6.0
