@@ -12,9 +12,8 @@ import (
 	"unicode"
 
 	"github.com/nyaruka/phonenumbers"
+	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"github.com/twilio/twilio-go/twiml"
-
-	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
 func Salutation() (salutation string, err error) {
@@ -205,27 +204,10 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
 
-	loc, err := time.LoadLocation("America/Los_Angeles")
-	if err != nil {
-		return
-	}
-
-	acTrack, err := acnh.Track(
-		acnh.Sunny,
-		time.Now().In(loc),
-	)
-	if err != nil {
-		return
-	}
-
 	doc, response := twiml.CreateDocument()
 	response.CreateElement("Play").SetText(nook_phone_yes)
 	response.CreateElement("Play").CreateAttr("digits", "9w9")
-	response.CreateElement("Play").SetText(
-		fmt.Sprintf(
-			"https://static.zemn.me/acnh_music/%s", url.PathEscape(acTrack),
-		),
-	)
+
 	twiml, err := twiml.ToXML(doc)
 	if err != nil {
 		return
@@ -238,36 +220,49 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 
 func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (err error) {
 	allowedNumbers, err := s.getAllowedNumbers(rq.Context())
-	if err != nil {
-		return
+	if err != nil || len(allowedNumbers) == 0 {
+		return fmt.Errorf("no authoriser numbers available")
 	}
 
-	// default to the first one in the list.
+	// Default to the first number
 	selectedNumber := allowedNumbers[0].Intl
-
-	var digits string
-
 	if params.Digits != nil {
-		digits = *params.Digits
-	}
-
-	for _, number := range allowedNumbers {
-		if number.Local == digits {
-			selectedNumber = number.Intl
-			break
+		for _, number := range allowedNumbers {
+			if number.Local == *params.Digits {
+				selectedNumber = number.Intl
+				break
+			}
 		}
 	}
 
+	// Place the caller into the conference with hold music
 	doc, response := twiml.CreateDocument()
-	response.CreateElement("Dial").CreateElement("Number").SetText(selectedNumber)
+	dial := response.CreateElement("Dial")
+	conf := dial.CreateElement("Conference")
+	conf.CreateAttr("startConferenceOnEnter", "true")
+	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(params.Secret)))
+	conf.SetText(TWILIO_CONFERENCE_NAME)
 
 	twiML, err := twiml.ToXML(doc)
 	if err != nil {
 		return
 	}
 
+	// Make the outbound call to the authoriser
+	go func() {
+		callParams := &twilioApi.CreateCallParams{}
+		callParams.SetTo(selectedNumber)
+		callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
+		callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(params.Secret)))
+
+		_, callErr := s.twilioClient.Api.CreateCall(callParams)
+		if callErr != nil {
+			s.log.Printf("Failed to call authoriser %s: %v", selectedNumber, callErr)
+		}
+	}()
+
 	w.Header().Set("Content-Type", "application/xml")
-	w.Write([]byte(twiML))
+	_, _ = w.Write([]byte(twiML))
 	return
 }
 
