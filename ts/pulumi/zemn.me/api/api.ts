@@ -5,17 +5,6 @@ import { ApiZemnMeLambdaImage } from '#root/project/zemn.me/api/cmd/api/ApiZemnM
 import Certificate from "#root/ts/pulumi/lib/certificate.js";
 import { LambdaFunction } from "#root/ts/pulumi/lib/lambda_function.js";
 
-
-
-
-const pick_env = <T extends string>(k: T): (
-	Record<never, never> | Record < T, string>
-) =>
-	process.env[k] === undefined ? {} : {
-		[k]: process.env[k]
-	};
-
-
 export interface Args {
     zoneId: Pulumi.Input<string>;
     domain: string;
@@ -113,10 +102,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
 					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
 					DYNAMODB_TABLE_NAME: dynamoTable.name,
-					TWILIO_SHARED_SECRET: args.twilioSharedSecret,
-					...pick_env("TWILIO_ACCOUNT_SID"),
-					...pick_env("TWILIO_AUTH_TOKEN"),
-					...pick_env("TWILIO_API_KEY_SID")
+					TWILIO_SHARED_SECRET: args.twilioSharedSecret
 				}
 			}
 		}, { parent: this }).function;
