@@ -14,8 +14,6 @@ func (s *Server) postPhoneJoinConference(rw http.ResponseWriter, rq *http.Reques
 	}
 
 	doc, response := twiml.CreateDocument()
-	response.CreateElement("Say").SetText("You are being connected to a person requesting entry. Press 9 to grant entry.")
-
 	dial := response.CreateElement("Dial")
 	conf := dial.CreateElement("Conference")
 	conf.CreateAttr("startConferenceOnEnter", "true")
