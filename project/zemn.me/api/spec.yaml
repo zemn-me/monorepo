@@ -141,49 +141,6 @@ paths:
                 type: string
 
 
-  /phone/join-conference:
-    get:
-      summary: Join the Twilio conference as an authoriser.
-      parameters:
-        - name: secret
-          in: query
-          description: Auth secret.
-          required: true
-          schema:
-            type: string
-        - name: name
-          in: query
-          required: false
-          description: The name of the Twilio conference to join.
-          schema:
-            type: string
-      responses:
-        "200":
-          description: TwiML response placing the authoriser into the conference.
-          content:
-            application/xml:
-              schema:
-                type: string
-
-  /phone/hold-music:
-    get:
-      summary: Plays ACNH music as hold music while caller waits.
-      parameters:
-        - name: secret
-          in: query
-          description: Auth secret.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: TwiML response that plays a looping audio track.
-          content:
-            application/xml:
-              schema:
-                type: string
-
-
   /callbox/settings:
     post:
       description: >
