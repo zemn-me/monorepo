@@ -8,7 +8,7 @@ import (
 
 const TWILIO_CONFERENCE_NAME = "CallboxConference"
 
-func (s *Server) getPhoneJoinConference(rw http.ResponseWriter, rq *http.Request, params GetPhoneJoinConferenceParams) (err error) {
+func (s *Server) postPhoneJoinConference(rw http.ResponseWriter, rq *http.Request, params PostPhoneJoinConferenceParams) (err error) {
 	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
@@ -33,8 +33,8 @@ func (s *Server) getPhoneJoinConference(rw http.ResponseWriter, rq *http.Request
 }
 
 // dials into a given conference name (?name=xxx)
-func (s *Server) GetPhoneJoinConference(rw http.ResponseWriter, rq *http.Request, params GetPhoneJoinConferenceParams) {
-	err := s.getPhoneJoinConference(rw, rq, params)
+func (s *Server) PostPhoneJoinConference(rw http.ResponseWriter, rq *http.Request, params PostPhoneJoinConferenceParams) {
+	err := s.postPhoneJoinConference(rw, rq, params)
 	if err != nil {
 		s.HandleErrorForTwilio(rw, rq, err)
 	}

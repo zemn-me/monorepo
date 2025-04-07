@@ -142,7 +142,7 @@ paths:
 
 
   /phone/join-conference:
-    get:
+    post:
       summary: Join the Twilio conference as an authoriser.
       parameters:
         - name: secret
