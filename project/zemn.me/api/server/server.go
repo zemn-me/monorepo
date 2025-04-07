@@ -80,7 +80,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 		settingsTableName:  settingsTableName,
 		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
-			Username: os.Getenv("TWILIO_ACCOUNT_SID"),
+			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
 	}
