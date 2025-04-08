@@ -37,7 +37,7 @@ require (
 	github.com/twilio/twilio-go v1.24.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.13.0
-	golang.org/x/tools v0.31.0
+	golang.org/x/tools v0.32.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.6.1
 )
