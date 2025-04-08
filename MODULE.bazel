@@ -414,7 +414,7 @@ exports_files(glob(["**/*"]))""",
     ],
 )
 
-bazel_dep(name = "rules_rust", version = "0.59.2")
+bazel_dep(name = "rules_rust", version = "0.60.0")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
