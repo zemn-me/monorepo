@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.235.4
-    version: 39.235.4(typanion@3.14.0)
+    specifier: 39.236.0
+    version: 39.236.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -8933,6 +8933,7 @@ packages:
 
   /bignumber.js@9.2.0:
     resolution: {integrity: sha512-JocpCSOixzy5XFJi2ub6IMmV/G9i8Lrm2lZvwBv9xPdglmZM0ufDVBbjbrfU/zuLvBfD7Bv2eYxz9i+OHTgkew==}
+    deprecated: pkg version number incorrect
     dev: true
 
   /bin-links@4.0.4:
@@ -17408,8 +17409,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.235.4(typanion@3.14.0):
-    resolution: {integrity: sha512-Itzh35bs4hUWbQRo13/iopKoGHyzEAUVf4jC0cOnRBGXJ4YCk1KCUUrro7if/rqPmru6DffRnL2jdcI/xntdCA==}
+  /renovate@39.236.0(typanion@3.14.0):
+    resolution: {integrity: sha512-Z6ewSfhk2/5Xk1xAd+zGPHwRsfZ9ed5XMtXqlgVqaUuAy+JT0eRRmlTBO1Z3g8wDeYZBp8llTTFMGB3P96Cazw==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
