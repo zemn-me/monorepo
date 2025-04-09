@@ -7,7 +7,7 @@ go 1.23.5
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
-	github.com/aws/aws-lambda-go v1.47.0
+	github.com/aws/aws-lambda-go v1.48.0
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.13
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.18.9
