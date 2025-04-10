@@ -22,7 +22,7 @@ require (
 	github.com/coreos/go-oidc v2.3.0+incompatible
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/cors v1.2.1
-	github.com/go-delve/delve v1.24.1
+	github.com/go-delve/delve v1.24.2
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.3
 	github.com/google/uuid v1.6.0
