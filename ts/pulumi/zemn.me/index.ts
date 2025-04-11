@@ -7,6 +7,7 @@ import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
+import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -108,6 +109,11 @@ export class Component extends Pulumi.ComponentResource {
 			protectDatabases: args.protectDatabases,
 			twilioSharedSecret: args.twilioSharedSecret,
 		}, { parent: this, dependsOn: Static });
+
+		new GcpWorkstation(`${name}_workstation`, {
+			location: 'us-central1',
+			project: args.gcpProjectId,
+		}, { parent: this });
 
 		super.registerOutputs({ site: this.site, availability, Static });
 	}
