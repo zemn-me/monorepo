@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import * as kenwood from '#root/project/zemn.me/assets/kenwood/index.js';
 import * as kenwood_snow from '#root/project/zemn.me/assets/kenwood_snow/kenwood_snow.js';
@@ -133,26 +133,41 @@ export interface HeroVideoProps {
 	readonly className?: string;
 }
 
+type LatLng = [latitude: number, longitude: number];
+
 export function HeroVideo(props: HeroVideoProps) {
+	const [captionToggled, setCaptionToggled ] = useState(false)
 	const season = useSeason();
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 
-	const kenwoodSummerVideoSource = [
+	type VideoChoice = [
+		posterSrc: string,
+		videoSources: JSX.Element,
+		caption?: string,
+		latLng?: LatLng
+	]
+
+	const kenwoodSummerVideoSource: VideoChoice = [
 		kenwood.poster.src,
 		<kenwood.VideoSources key="summer-sources" />,
+		"Kenwood House Gardens",
+		[51.57139601074658, -0.16924392259112794]
 	] as const;
 
 	const kenwoodWinterVideoSource = [
 		kenwood_snow.poster.src,
 		<kenwood_snow.VideoSources key="winter-sources" />,
+		"Kenwood House",
+		[51.57122281677411, -0.16746393741998228]
 	] as const;
 
 	const mistOnTheHillsVideoSource = [
 		mistOnTheHillsPoster.src,
 		<MistOnTheHillsVideoSources key="mist-sources" />,
+		"East Devon AONB",
 	] as const;
 
-	const [videoPoster, videoSource] = {
+	const [videoPoster, videoSource, caption, latlng] = {
 		[winter]: kenwoodWinterVideoSource,
 		// Technically incorrect, as it was filmed in December...
 		// i actually don't like this as much as I thought in practice
@@ -163,21 +178,44 @@ export function HeroVideo(props: HeroVideoProps) {
 		[autumn]: kenwoodSummerVideoSource,
 	}[season];
 
+	const [lat, lng] = latlng ?? [];
+
 	useEffect(() => {
 		videoRef.current?.load();
 	}, [season]);
 
+	const onClick = useCallback(
+		() => setCaptionToggled(v => !v)
+	, [ setCaptionToggled ] );
+
+
 	return (
-		<Video
-			autoPlay
-			className={classNames(style.heroVideo, props.className)}
-			loop
-			muted
-			playsInline
-			poster={videoPoster}
-			ref={videoRef}
+		<figure className={classNames(
+			style.heroVideo,
+			props.className
+		)}
+			onClick={onClick}
 		>
-			{videoSource}
-		</Video>
+			<Video
+				autoPlay
+				className={classNames(style.cover)}
+				loop
+				muted
+				playsInline
+				poster={videoPoster}
+				ref={videoRef}
+			>
+				{videoSource}
+			</Video>
+
+			<figcaption className={
+				classNames(
+					captionToggled ? style.toggled : undefined,
+					style.caption
+				)
+			}>
+				{caption} {lat} {lng}
+			</figcaption>
+		</figure>
 	);
 }
