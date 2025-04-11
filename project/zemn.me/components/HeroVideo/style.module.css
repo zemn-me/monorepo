@@ -1,3 +1,30 @@
 .heroVideo {
+	display: grid;
+	grid: "top" 1fr "bottom";
+	padding: 0;
+	margin: 0;
+}
+
+.cover {
     object-fit: cover;
+	width: 100%;
+	height: 100%;
+	grid-area: 1 / 1 / -1 / -1;
+	z-index: calc(var(--z-index-base)-1);
+}
+
+.caption {
+	grid-area: bottom;
+	font-size: xx-large;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out,
+		visibility 0.3s ease-in-out;
+	visibility: hidden;
+	text-align: center;
+	z-index: var(--z-index-base);
+}
+
+.caption.toggled {
+	opacity: 1;
+	visibility: visible;
 }
