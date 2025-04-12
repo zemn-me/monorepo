@@ -6,6 +6,7 @@ import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_cl
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
+import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
 import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 
