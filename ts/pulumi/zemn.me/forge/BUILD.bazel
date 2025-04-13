@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "forge",
+    srcs = [
+        "forge.ts",
+    ],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@pulumi/gcp",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
