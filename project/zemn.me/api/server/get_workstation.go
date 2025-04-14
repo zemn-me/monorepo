@@ -7,10 +7,6 @@ import (
 )
 
 func (s *Server) getWorkstation(w http.ResponseWriter, r *http.Request) (err error) {
-	if err := useOIDCAuth(w, r); err != nil {
-		return err
-	}
-
 	w.Header().Set(
 		"Location",
 		os.Getenv("WORKSTATION_HOST"),
