@@ -18,6 +18,7 @@ export interface Args {
 	gcpProjectId: Pulumi.Input<string>
 	callboxPhoneNumber: Pulumi.Input<string>
 	twilioSharedSecret: Pulumi.Input<string>
+	cloudWorkstations?: Pulumi.Input<boolean>
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -110,7 +111,7 @@ export class Component extends Pulumi.ComponentResource {
 			twilioSharedSecret: args.twilioSharedSecret,
 		}, { parent: this, dependsOn: Static });
 
-		new GcpWorkstation(`${name}_workstation`, {
+		if (args.cloudWorkstations) new GcpWorkstation(`${name}_workstation`, {
 			location: 'us-central1',
 			project: args.gcpProjectId,
 		}, { parent: this });
