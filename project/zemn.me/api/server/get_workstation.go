@@ -16,7 +16,7 @@ func (s *Server) getWorkstation(w http.ResponseWriter, r *http.Request) (err err
 }
 
 func (s *Server) GetWorkstation(w http.ResponseWriter, r *http.Request) {
-	if err := s.getPhoneNumber(w, r); err != nil {
+	if err := s.getWorkstation(w, r); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
