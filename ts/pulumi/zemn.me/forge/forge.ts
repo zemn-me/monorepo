@@ -7,6 +7,7 @@ export interface GcpWorkstationArgs {
 }
 
 export class GcpWorkstation extends pulumi.ComponentResource {
+	workstation: gcp.workstations.Workstation;
 	constructor(
 		name: string,
 		args: GcpWorkstationArgs,
@@ -68,6 +69,7 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 			workstationClusterId: cluster.workstationClusterId,
 			workstationConfigId: config.workstationConfigId,
 		}, { parent: this, dependsOn: [apiService] });
+		this.workstation = ws;
 
 		new gcp.workstations.WorkstationIamMember("forgews-user-binding", {
 			location: args.location,
@@ -77,6 +79,8 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 			role: "roles/workstations.workstationUser",
 			member: "user:thomas@shadwell.im",
 		}, { parent: this });
+
+
 
 		this.registerOutputs({ ws });
 	}

@@ -23,6 +23,7 @@ export interface Args {
 
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
+	workstation: GcpWorkstation | undefined;
 	constructor(
 		name: string,
 		args: Args,
@@ -103,18 +104,21 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
+		if (args.cloudWorkstations) this.workstation = new GcpWorkstation(`${name}_workstation`, {
+			location: 'us-central1',
+			project: args.gcpProjectId,
+		}, { parent: this });
+
 		new ApiZemnMe(`${name}_api`, {
 			domain: ['api', args.domain].join("."),
 			zoneId: args.zoneId,
 			callboxPhoneNumber: args.callboxPhoneNumber,
 			protectDatabases: args.protectDatabases,
 			twilioSharedSecret: args.twilioSharedSecret,
+			workstationHost: this.workstation?.workstation.host,
 		}, { parent: this, dependsOn: Static });
 
-		if (args.cloudWorkstations) new GcpWorkstation(`${name}_workstation`, {
-			location: 'us-central1',
-			project: args.gcpProjectId,
-		}, { parent: this });
+
 
 		super.registerOutputs({ site: this.site, availability, Static });
 	}
