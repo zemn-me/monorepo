@@ -69,6 +69,15 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 			workstationConfigId: config.workstationConfigId,
 		}, { parent: this, dependsOn: [apiService] });
 
+		new gcp.workstations.WorkstationIamMember("forgews-user-binding", {
+			location: args.location,
+			workstationClusterId: cluster.workstationClusterId,
+			workstationConfigId: config.workstationConfigId,
+			workstationId: ws.workstationId,
+			role: "roles/workstations.workstationUser",
+			member: "user:thomas@shadwell.im",
+		}, { parent: this });
+
 		this.registerOutputs({ ws });
 	}
 }
