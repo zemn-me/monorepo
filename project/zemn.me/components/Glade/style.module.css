@@ -8,7 +8,7 @@
 	height: 100%;
 }
 
-.banner { display: grid }
+.banner { display: grid; pointer-events: none }
 
 .letterHead {
 	padding: 2em;
@@ -24,6 +24,9 @@
 
 .letterHead {
 	font-size: large;
+	z-index: 3;
+	/* 👇 because contianing element is set to none */
+	pointer-events: all;
 }
 
 .letterHead > .handle {
@@ -51,7 +54,7 @@
 }
 
 .headerBgv {
-    z-index: -1;
+	--z-index-base: 2;
 }
 
 @media (orientation: landscape) {
