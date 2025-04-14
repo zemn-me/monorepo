@@ -118,10 +118,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					...pick_env("TWILIO_ACCOUNT_SID"),
 					...pick_env("TWILIO_AUTH_TOKEN"),
 					...pick_env("TWILIO_API_KEY_SID"),
-					...(args.workstationHost
-						? { WORKSTATION_HOST: args.workstationHost }
+					...args.workstationHost.apply(h => (h
+						? { WORKSTATION_HOST: h }
 						: {}
-					)
+					))
 				}
 			}
 		}, { parent: this }).function;
