@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.243.0
-    version: 39.243.0(typanion@3.14.0)
+    specifier: 39.244.0
+    version: 39.244.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -4094,6 +4094,56 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
+
+  /@opentelemetry/resource-detector-aws@2.0.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-jvHvLAXzFPJJhj0AdbMOpup+Fchef32sHM1Suj4NgJGKxTO47T84i5OjKiG/81YEoCaKmlTefezNbuaGCrPd3w==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.0.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.30.0
+    dev: true
+
+  /@opentelemetry/resource-detector-azure@0.7.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-aR2ALsK+b/+5lLDhK9KTK8rcuKg7+sqa/Cg+QCeasqoy7qby70FRtAbQcZGljJ5BLBcVPYjl1hcTYIUyL3Laww==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.0.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.30.0
+    dev: true
+
+  /@opentelemetry/resource-detector-gcp@0.34.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-Mug9Oing1nVQE8pYT33UKuPSEa/wjQTMk3feS9F84h4U7oZIx5Mz3yddj3OHOPgrW/7d1Ve/mG7jmYqBI9tpTg==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.0.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.30.0
+      gcp-metadata: 6.1.1
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: true
+
+  /@opentelemetry/resource-detector-github@0.31.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-m4lbj4/vZ/ylBCtID0zO4bkuN1nPoaXEPCSn7DdiPmLgcS2eE0OWPx8TGO/Rw1HceXf8/qH4KQT94bsu3usVPg==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.0.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
+    dev: true
 
   /@opentelemetry/resources@1.30.1(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-5UxZqiAgLYGFjS4s9qm5mBVo433u+dSPUFWVWXmLAD4wB65oMCoXaJP1KJa9DIYYMeHu3z4BZcStG3LC593cWA==}
@@ -10644,8 +10694,8 @@ packages:
       parse-url: 9.2.0
     dev: true
 
-  /git-url-parse@16.0.1:
-    resolution: {integrity: sha512-mcD36GrhAzX5JVOsIO52qNpgRyFzYWRbU1VSRFCvJt1IJvqfvH427wWw/CFqkWvjVPtdG5VTx4MKUeC5GeFPDQ==}
+  /git-url-parse@16.1.0:
+    resolution: {integrity: sha512-cPLz4HuK86wClEW7iDdeAKcCVlWXmrLpb2L+G9goW0Z1dtpNS6BXXSOckUTlJT/LDQViE1QZKstNORzHsLnobw==}
     dependencies:
       git-up: 8.1.1
     dev: true
@@ -16275,8 +16325,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.243.0(typanion@3.14.0):
-    resolution: {integrity: sha512-mj7MY4IeXOpvKbjh7RhXoZ8fjndt+78rpRTmcAxF78mOBdJ1P9gzARZlyzdopGJ2HTedMQM/9Xgk+y3lpXBRPg==}
+  /renovate@39.244.0(typanion@3.14.0):
+    resolution: {integrity: sha512-Wwd6H05ZdpzdFhWlye32Qq3ofaJ/Lc6HEdPheyTVrVruKr8urjT/2MihWPeNwwLSvl91+CpAPPIK771PFe9GBg==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16296,6 +16346,10 @@ packages:
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-bunyan': 0.46.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-http': 0.200.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-aws': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-azure': 0.7.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-gcp': 0.34.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-github': 0.31.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 2.0.0(@opentelemetry/api@1.9.0)
@@ -16338,7 +16392,7 @@ packages:
       find-packages: 10.0.4
       find-up: 5.0.0
       fs-extra: 11.3.0
-      git-url-parse: 16.0.1
+      git-url-parse: 16.1.0
       github-url-from-git: 1.5.0
       glob: 11.0.1
       global-agent: 3.0.0
