@@ -243,16 +243,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPhoneNumberResponse'
-
-  /workstation:
-    get:
-      summary: Redirects to the GCP workstation host url
-      responses:
-        "302":
-          description: Redirects to the GCP workstation host url
-          headers:
-            Location:
-              description: Redirect to GCP workstation host url
-              schema:
-                type: string
-                format: uri

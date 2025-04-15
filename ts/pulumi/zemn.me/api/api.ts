@@ -25,7 +25,6 @@ export interface Args {
 	 * Used to auth calls from twilio to the api server.
 	 */
 	twilioSharedSecret: Pulumi.Input<string>
-	workstationHost?: Pulumi.Input<string>
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -117,11 +116,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 					...pick_env("TWILIO_ACCOUNT_SID"),
 					...pick_env("TWILIO_AUTH_TOKEN"),
-					...pick_env("TWILIO_API_KEY_SID"),
-					...args.workstationHost.apply(h => (h
-						? { WORKSTATION_HOST: h }
-						: {}
-					))
+					...pick_env("TWILIO_API_KEY_SID")
 				}
 			}
 		}, { parent: this }).function;
