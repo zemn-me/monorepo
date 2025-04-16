@@ -49,25 +49,37 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 			subnetwork: subnetwork.id,
 		}, { parent: this, dependsOn: [apiService] });
 
-		const config = new gcp.workstations.WorkstationConfig("forgeconfig", {
-			workstationConfigId: "forgeconfigid",
-			location: args.location,
-			workstationClusterId: cluster.workstationClusterId,
-			host: {
-				gceInstance: {
-					machineType: "e2-standard-4",
-					bootDiskSizeGb: 50,
-					disablePublicIpAddresses: true,
-				},
+	const config = new gcp.workstations.WorkstationConfig("forgeconfig", {
+		workstationConfigId: "forgeconfigid",
+		location: args.location,
+		workstationClusterId: cluster.workstationClusterId,
+
+		host: {
+			gceInstance: {
+				machineType: "e2-standard-4",
+				bootDiskSizeGb: 50,
+				disablePublicIpAddresses: true,
 			},
-		}, { parent: this, dependsOn: [apiService] });
+		},
+
+		// Persist /home across workstation restarts
+		persistentDirectories: [{
+			mountPath: "/home", // where to mount inside the VM
+			gcePd: {
+				sizeGb: 200, // disk capacity
+				diskType: "pd-standard", // defaults to pd‑standard
+				fsType: "ext4", // defaults to ext4
+				reclaimPolicy: "RETAIN", // keep disk when workstation is deleted
+			},
+		}],
+	}, { parent: this, dependsOn: [apiService] });
 
 		const ws = new gcp.workstations.Workstation("forgews", {
 			workstationId: "forgews",
 			location: args.location,
 			workstationClusterId: cluster.workstationClusterId,
 			workstationConfigId: config.workstationConfigId,
-		}, { parent: this, dependsOn: [apiService] });
+		}, { parent: this, dependsOn: [apiService], protect: true });
 
 		new gcp.workstations.WorkstationIamMember("forgews-user-binding", {
 			location: args.location,
