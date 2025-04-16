@@ -47,7 +47,11 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 			location: args.location,
 			network: network.id,
 			subnetwork: subnetwork.id,
-		}, { parent: this, dependsOn: [apiService] });
+		}, {
+			parent: this,
+			dependsOn: [apiService],
+			deleteBeforeReplace: true // neded bc of the id field 😢
+		});
 
 	const config = new gcp.workstations.WorkstationConfig("forgeconfig", {
 		workstationConfigId: "forgeconfigid",
@@ -72,14 +76,23 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 				reclaimPolicy: "RETAIN", // keep disk when workstation is deleted
 			},
 		}],
-	}, { parent: this, dependsOn: [apiService] });
+	}, {
+		parent: this,
+		dependsOn: [apiService],
+		deleteBeforeReplace: true, // needed bc of the id field 😭
+	});
 
 		const ws = new gcp.workstations.Workstation("forgews", {
 			workstationId: "forgews",
 			location: args.location,
 			workstationClusterId: cluster.workstationClusterId,
 			workstationConfigId: config.workstationConfigId,
-		}, { parent: this, dependsOn: [apiService], protect: true });
+		}, {
+			parent: this,
+			dependsOn: [apiService],
+			protect: true,
+			deleteBeforeReplace: true,
+		});
 
 		new gcp.workstations.WorkstationIamMember("forgews-user-binding", {
 			location: args.location,
