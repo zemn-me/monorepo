@@ -30,8 +30,8 @@ dependencies:
     specifier: 15.3.0
     version: 15.3.0
   '@openai/codex':
-    specifier: 0.1.4161352
-    version: 0.1.4161352(@types/react@18.3.20)(zod@3.24.2)
+    specifier: 0.1.2504161551
+    version: 0.1.2504161551(@types/react@18.3.20)(zod@3.24.2)
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -3922,14 +3922,15 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.1.4161352(@types/react@18.3.20)(zod@3.24.2):
-    resolution: {integrity: sha512-oTww5Ucp20npjrs5+nGwin6oieU7/9nR/ang4Hbggmv12pir0vu77/j6V9XBg8DC4KVSdUHZS2vjijOs0F9b9A==}
+  /@openai/codex@0.1.2504161551(@types/react@18.3.20)(zod@3.24.2):
+    resolution: {integrity: sha512-qOLb4V4y+avkRE4G4ToFBA57tHdUfNQ6+0KZWbQRCSSSwdfz4Q+3mLgXdZQSgbUFEyPrzs7uwjDlNS0/grjWVQ==}
     engines: {node: '>=22'}
     hasBin: true
     dependencies:
       '@inkjs/ui': 2.0.0(ink@5.2.0)
       chalk: 5.4.1
       diff: 7.0.0
+      dotenv: 16.5.0
       file-type: 20.4.1
       ink: 5.2.0(@types/react@18.3.20)(react@19.1.0)
       ink-select-input: 6.0.0(ink@5.2.0)(react@18.3.1)
@@ -9392,7 +9393,6 @@ packages:
   /dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
-    dev: true
 
   /dtrace-provider@0.8.8:
     resolution: {integrity: sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==}
