@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.246.0
-    version: 39.246.0(typanion@3.14.0)
+    specifier: 39.246.1
+    version: 39.246.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -7288,8 +7288,8 @@ packages:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: false
 
-  /@yarnpkg/core@4.3.1(typanion@3.14.0):
-    resolution: {integrity: sha512-1C/Tw1SmUbC+82gL7BvOl0mpaacfu3MEwm6KWU4BaZWVFfz2OVFcAs/eKyljrv4IxJZ/fNyEU30sBLBpgkBDGA==}
+  /@yarnpkg/core@4.4.0(typanion@3.14.0):
+    resolution: {integrity: sha512-ZT+dPniRDJEyH+z0oOXS+nNkrssJ2jsmqoKDP5y8wQpbHlG+bxqEq8Ri1uDQGLh+43LkEh1Brih9QMs9p3f5/A==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@arcanis/slice-ansi': 1.1.1
@@ -16325,8 +16325,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.246.0(typanion@3.14.0):
-    resolution: {integrity: sha512-rahUMmQ5iE9d7ggt1Y/8kDd2UWfy/AFRgXTd75Tb2hFEOORZsT3Te5P4eN9wYs6u//EGPrEXSXQsADsDzgBLUw==}
+  /renovate@39.246.1(typanion@3.14.0):
+    resolution: {integrity: sha512-FlCdpo240HCW1GveiKQTiB1Wnsm1cOwJ5Q6osBD3Tj885Wkd/vLfWfKV7n/uMJIKCyv0pqz4SJgBs5ubf9g6CQ==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16362,7 +16362,7 @@ packages:
       '@renovatebot/pep440': 4.1.0
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 4.6.0
-      '@yarnpkg/core': 4.3.1(typanion@3.14.0)
+      '@yarnpkg/core': 4.4.0(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       agentkeepalive: 4.6.0
       aggregate-error: 3.1.0
@@ -18949,6 +18949,7 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+    requiresBuild: true
 
   /write-file-atomic@3.0.3:
     resolution: {integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==}
