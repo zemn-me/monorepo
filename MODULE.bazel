@@ -9,7 +9,7 @@ module(
     name = "monorepo",
 )
 
-bazel_dep(name = "rules_oci", version = "2.2.5")
+bazel_dep(name = "rules_oci", version = "2.2.6")
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
