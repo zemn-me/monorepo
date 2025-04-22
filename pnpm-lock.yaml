@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.254.1
-    version: 39.254.1(typanion@3.14.0)
+    specifier: 39.254.2
+    version: 39.254.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -15937,25 +15937,6 @@ packages:
     resolution: {integrity: sha512-7D/qOz/+Y4X/rzSB6jKxKUsQnphO046ei8qxG59mtM3RG3DHgTK81HrxrmoDVINJb8NKT5ZsRbwHvQ6B68Iyhg==}
     dev: false
 
-  /protobufjs@7.4.0:
-    resolution: {integrity: sha512-mRUWCc3KUU4w1jU8sGxICXH/gNS94DvI1gxqDvBzhj1JpcsimQkYiOJfwsPUykUI5ZaspFbSgmBLER8IrQ3tqw==}
-    engines: {node: '>=12.0.0'}
-    requiresBuild: true
-    dependencies:
-      '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/base64': 1.1.2
-      '@protobufjs/codegen': 2.0.4
-      '@protobufjs/eventemitter': 1.1.0
-      '@protobufjs/fetch': 1.1.0
-      '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
-      '@protobufjs/path': 1.1.2
-      '@protobufjs/pool': 1.1.0
-      '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.14.1
-      long: 5.3.2
-    dev: true
-
   /protobufjs@7.5.0:
     resolution: {integrity: sha512-Z2E/kOY1QjoMlCytmexzYfDm/w5fKAiRwpSzGtdnXW1zC88Z2yXazHHrOtwCzn+7wSxyE8PYM4rvVcMphF9sOA==}
     engines: {node: '>=12.0.0'}
@@ -16787,8 +16768,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.254.1(typanion@3.14.0):
-    resolution: {integrity: sha512-2MrR0TQT6K8NmdIzv6UOvCUj0wF5cT9+WGqAw/ddA91V/t9PAhYF/7ZSy7jx7G/GVccQyWXYnCm+yw+7vGHlKA==}
+  /renovate@39.254.2(typanion@3.14.0):
+    resolution: {integrity: sha512-zXAvz9mDj1cQPHoqW9CYhHXz88f02kpzyOwT2voHEQl3hbkdCgJ9rnWs90g/ezhHgUPaKRGWCP68kd92MPU7tA==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16886,7 +16867,7 @@ packages:
       p-throttle: 4.1.1
       parse-link-header: 2.0.0
       prettier: 3.5.3
-      protobufjs: 7.4.0
+      protobufjs: 7.5.0
       punycode: 2.3.1
       redis: 4.7.0
       remark: 13.0.0
