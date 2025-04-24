@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 39.257.5
-    version: 39.257.5(typanion@3.14.0)
+    specifier: 39.257.6
+    version: 39.257.6(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -2216,10 +2216,10 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /@cdktf/hcl2json@0.20.11:
-    resolution: {integrity: sha512-k4CJkbUPyI+k9KOQjJ6qu2dIrpqSkXukt9R+kDaizWVM4yc8HDMLHnelC0X2oWsfeQNE8wSAm20SXkGlPLoFmw==}
+  /@cdktf/hcl2json@0.20.12:
+    resolution: {integrity: sha512-0kisly/cb4UK/cFhMAWMMEq+/FNFwPmDVoZ9ZphvDlXH62eytQcY5gaCxUrztKhncj2EYKovsTPbRq9C8GlRwg==}
     dependencies:
-      fs-extra: 11.2.0
+      fs-extra: 11.3.0
     dev: true
 
   /@colors/colors@1.5.0:
@@ -10732,15 +10732,6 @@ packages:
       universalify: 2.0.1
     dev: false
 
-  /fs-extra@11.2.0:
-    resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
-    engines: {node: '>=14.14'}
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 6.1.0
-      universalify: 2.0.1
-    dev: true
-
   /fs-extra@11.3.0:
     resolution: {integrity: sha512-Z4XaCL6dUDHfP/jT25jJKMmtxvuwbkrD1vNSMFlo9lNLY2c5FHYSQgHPRZUjAB26TpDEoW9HCOgplrdbaPV/ew==}
     engines: {node: '>=14.14'}
@@ -16774,8 +16765,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@39.257.5(typanion@3.14.0):
-    resolution: {integrity: sha512-M5qDi/IxYhbQFv/r1ON7ppJyq8vqJkm6OMZZlP9szq/Slhb/nBrdwbQmEfR8+hEnLTwCLFDi0+pX0Alhe2SOuA==}
+  /renovate@39.257.6(typanion@3.14.0):
+    resolution: {integrity: sha512-4iP08WlB98CRMUcAzi0qieiUGv9CjX59GcJlUBe8H17JA/ZCo+h0ccbwLItj5UUZRImdAeVCPe7hbjKIyRhOHA==}
     engines: {node: ^20.15.1 || ^22.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16788,7 +16779,7 @@ packages:
       '@aws-sdk/credential-providers': 3.778.0
       '@baszalmstra/rattler': 0.2.1
       '@breejs/later': 4.2.0
-      '@cdktf/hcl2json': 0.20.11
+      '@cdktf/hcl2json': 0.20.12
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/context-async-hooks': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-trace-otlp-http': 0.200.0(@opentelemetry/api@1.9.0)
