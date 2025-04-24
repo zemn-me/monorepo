@@ -27,8 +27,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_js/1.33.1/MODULE.bazel": "db3e7f16e471cf6827059d03af7c21859e7a0d2bc65429a3a11f005d46fc501b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.40.0/MODULE.bazel": "01a1014e95e6816b68ecee2584ae929c7d6a1b72e4333ab1ff2d2c6c30babdf1",
     "https://bcr.bazel.build/modules/aspect_rules_js/2.0.0/MODULE.bazel": "b45b507574aa60a92796e3e13c195cd5744b3b8aff516a9c0cb5ae6a048161c5",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.6/MODULE.bazel": "3e97773afe7111096176a0abbdabd3b591b404a66b48e7c92464c0d8d75b0790",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.6/source.json": "964fa42121f19253edc767cdce7eb92dad299596b208405e3a8b5664b6aa5e4c",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.7/MODULE.bazel": "21935b86f6e32f7f0a57ab1064c6c04da19eb9dd8481ca6947649ec1f34f1127",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.7/source.json": "8f35038a3e73a10f59ef7e357fcb9fc34506a85dec5687792ee9bf3023298682",
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.12.0/MODULE.bazel": "e767c5dbfeb254ec03275a7701b5cfde2c4d2873676804bc7cb27ddff3728fed",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.3.5/MODULE.bazel": "a5c7a2e1b4d02f688c9f111dda04fd88c392bdfbd842a3edf0bfadef25bad307",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.3.5/source.json": "9e73031241bfdaa7b731684179b2ca0371299e19de096619aaece2067398a431",
@@ -284,8 +284,8 @@
     },
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "lQ+CfRP9nyNF9LrpO6W/snIEZqWjSEy7XIN46VznPhw=",
-        "usagesDigest": "/iWuT+lfln0hOSNyj+zXABqghnPw5Rl3H0onf0qUgQo=",
+        "bzlTransitiveDigest": "+FzrmWqY8iCDBuK97qvINJqghLNW0sm7UYk3lIAWQHk=",
+        "usagesDigest": "DsYGwiP9vRoYpWh/bRcwizmkSFpg1vs5moru+TUGD4c=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -346,6 +346,11 @@
         "recordedRepoMappingEntries": [
           [
             "aspect_bazel_lib+",
+            "aspect_bazel_lib",
+            "aspect_bazel_lib+"
+          ],
+          [
+            "aspect_bazel_lib+",
             "bazel_skylib",
             "bazel_skylib+"
           ],
@@ -358,6 +363,11 @@
             "aspect_rules_js+",
             "aspect_bazel_lib",
             "aspect_bazel_lib+"
+          ],
+          [
+            "aspect_rules_js+",
+            "aspect_rules_js",
+            "aspect_rules_js+"
           ],
           [
             "aspect_rules_js+",
@@ -1053,7 +1063,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "ymtfFlK4flnWJF7gd5+nb2eINjrPkQgwxbS+n41aMKU=",
-        "usagesDigest": "jzIz60JkAjkwoR8w5bn9Pkorn/Plbtj4G9BkXGZDcPc=",
+        "usagesDigest": "FUoDakJzv09zLvbf6SyNwxJ6+tl1mI21+7EE+pMDn8U=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
