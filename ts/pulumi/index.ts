@@ -132,7 +132,7 @@ export class Component extends Pulumi.ComponentResource {
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
 			{
-				cloudWorkstations: false, // it was not cheaper than GitHub
+				cloudWorkstations: !args.staging,
 				zoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				domain: stage('zemn.me'),
 				noIndex: args.staging,
