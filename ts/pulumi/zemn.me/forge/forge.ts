@@ -90,7 +90,7 @@ export class GcpWorkstation extends pulumi.ComponentResource {
 		}, {
 			parent: this,
 			dependsOn: [apiService],
-			protect: true,
+			protect: false,
 			deleteBeforeReplace: true, // 😿
 		});
 
