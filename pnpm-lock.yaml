@@ -48,8 +48,8 @@ dependencies:
     specifier: 9.7.5
     version: 9.7.5
   '@tanstack/react-query':
-    specifier: 5.74.7
-    version: 5.74.7(react@19.1.0)
+    specifier: 5.74.8
+    version: 5.74.8(react@19.1.0)
   '@types/bcryptjs':
     specifier: 3.0.0
     version: 3.0.0
@@ -6162,6 +6162,7 @@ packages:
   /@swc/core@1.11.22:
     resolution: {integrity: sha512-mjPYbqq8XjwqSE0hEPT9CzaJDyxql97LgK4iyvYlwVSQhdN1uK0DBG4eP9PxYzCS2MUGAXB34WFLegdUj5HGpg==}
     engines: {node: '>=10'}
+    deprecated: It has a bug. See https://github.com/swc-project/swc/issues/10413
     requiresBuild: true
     peerDependencies:
       '@swc/helpers': '>=0.5.17'
@@ -6213,8 +6214,8 @@ packages:
     resolution: {integrity: sha512-X3StkN/Y6KGHndTjJf8H8th7AX4bKfbRpiVhVqevf0QWlxl6DhyJ0TYG3R0LARa/+xqDwzU9mA4pbJxzPCI29A==}
     dev: false
 
-  /@tanstack/react-query@5.74.7(react@19.1.0):
-    resolution: {integrity: sha512-u4o/RIWnnrq26orGZu2NDPwmVof1vtAiiV6KYUXd49GuK+8HX+gyxoAYqIaZogvCE1cqOuZAhQKcrKGYGkrLxg==}
+  /@tanstack/react-query@5.74.8(react@19.1.0):
+    resolution: {integrity: sha512-Hs3QHLYyyc/yUI8tS7CIM8vRmlm+2gPBiNsHzcDclvqZNCgTc0LdXRrZDhSxxhcnXJrIMnIcoNPwj9BshsCT+Q==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
