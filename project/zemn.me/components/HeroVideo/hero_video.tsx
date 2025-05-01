@@ -68,7 +68,7 @@ function schedule(fn: () => void, at: Date): Cancel {
 const SEASON_START_MONTHS = {
 	[winter]: 11, // December
 	[spring]: 2, // March
-	[summer]: 5, // June
+	[summer]: 4, // June
 	[autumn]: 8, // September
 };
 
