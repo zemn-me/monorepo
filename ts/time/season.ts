@@ -15,7 +15,7 @@ const northernSeasons = [
 	winter, // February
 	spring, // March
 	spring, // April
-	spring, // May
+	summer, // May
     summer, // June
 	summer, // July
 	summer, // August
