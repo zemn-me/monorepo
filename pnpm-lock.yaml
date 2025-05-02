@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.0.7
-    version: 40.0.7(typanion@3.14.0)
+    specifier: 40.0.8
+    version: 40.0.8(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -11699,11 +11699,6 @@ packages:
     engines: {node: '>= 4'}
     dev: false
 
-  /ignore@7.0.3:
-    resolution: {integrity: sha512-bAH5jbK/F3T3Jls4I0SO1hmPR0dKU0a7+SY6n1yzRtG54FLO8d6w/nxLFX2Nb7dBu6cCWXPaAME6cYqFUMmuCA==}
-    engines: {node: '>= 4'}
-    dev: true
-
   /ignore@7.0.4:
     resolution: {integrity: sha512-gJzzk+PQNznz8ysRrC0aOkBNVRBDtE1n53IqyqEf3PXrYwomFs5q4pGMizBMJF+ykh03insJ27hB8gSrD2Hn8A==}
     engines: {node: '>= 4'}
@@ -16946,8 +16941,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.0.7(typanion@3.14.0):
-    resolution: {integrity: sha512-CGCdjHOjE8Njwc9EBovy8r6qiN7oQvuHR5Yt0KIXaSD89wnUXpUTPnPQMfVY9YGH/IuhS7fA2zG8hORmxVeYlQ==}
+  /renovate@40.0.8(typanion@3.14.0):
+    resolution: {integrity: sha512-E+VzmYRnmgWhgv/xl0SFDKVJ7kSxDrykYEH4DgU2czVSGq+E1ksQQZ/IyZwFW65PA2My/SUsaK4To8cKbzHlhg==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17022,7 +17017,7 @@ packages:
       got: 11.8.6
       graph-data-structure: 4.5.0
       handlebars: 4.7.8
-      ignore: 7.0.3
+      ignore: 7.0.4
       ini: 5.0.0
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 3.0.0
