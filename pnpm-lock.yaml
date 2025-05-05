@@ -135,8 +135,8 @@ dependencies:
     specifier: 1.20.0
     version: 1.20.0(next@13.4.10)
   openapi-fetch:
-    specifier: 0.13.6
-    version: 0.13.6
+    specifier: 0.13.7
+    version: 0.13.7
   openapi-typescript:
     specifier: 7.7.0
     version: 7.7.0(typescript@5.5.4)
@@ -15079,8 +15079,8 @@ packages:
       - encoding
     dev: false
 
-  /openapi-fetch@0.13.6:
-    resolution: {integrity: sha512-B4lblfkFwaSGTSj5EuwmPLiR18Pblc7wu441CUrEVfaEuuu+bl4nYDrPawAnyN8Ka+Cvjfb4LlwqWJXpCbqgdA==}
+  /openapi-fetch@0.13.7:
+    resolution: {integrity: sha512-3QdcAgvLFZ4j9Rcja7/Tq1j0qyv/LPqnHzwtMz5gKj6iddTdP48r+FZd8rmb+6xL9CdnJ5OmgdM0CpgGBi6Fgg==}
     dependencies:
       openapi-typescript-helpers: 0.0.15
     dev: false
