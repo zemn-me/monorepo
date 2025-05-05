@@ -34,7 +34,7 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.7.23
-	github.com/twilio/twilio-go v1.25.1
+	github.com/twilio/twilio-go v1.26.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.13.0
 	golang.org/x/tools v0.32.0
@@ -79,7 +79,7 @@ require (
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
 	github.com/golang/mock v1.7.0-rc.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-dap v0.12.0 // indirect
