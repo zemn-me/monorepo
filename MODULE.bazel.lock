@@ -19,8 +19,8 @@
     "https://bcr.bazel.build/modules/aspect_bazel_lib/1.42.2/MODULE.bazel": "2e0d8ab25c57a14f56ace1c8e881b69050417ff91b2fb7718dc00d201f3c3478",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.11.0/MODULE.bazel": "cb1ba9f9999ed0bc08600c221f532c1ddd8d217686b32ba7d45b0713b5131452",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.14.0/MODULE.bazel": "2b31ffcc9bdc8295b2167e07a757dbbc9ac8906e7028e5170a3708cecaac119f",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.15.3/MODULE.bazel": "c2940c50bb0a57edcc4339fe59cf00f0dbdefe1404b40f820ce97562df8fbdde",
-    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.15.3/source.json": "4bf591ea07df41bbdfcec94e86e2a656a2c20553736dc4e9b8858b186347e2c9",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.16.0/MODULE.bazel": "852f9ebbda017572a7c113a2434592dd3b2f55cd9a0faea3d4be5a09a59e4900",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.16.0/source.json": "87ffed720a2ba7cfe209d9ccc1be59e21ec3d434124ec126ab90e5913e9cb13b",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.2/MODULE.bazel": "780d1a6522b28f5edb7ea09630748720721dfe27690d65a2d33aa7509de77e07",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.7/MODULE.bazel": "491f8681205e31bb57892d67442ce448cda4f472a8e6b3dc062865e29a64f89c",
     "https://bcr.bazel.build/modules/aspect_bazel_lib/2.9.4/MODULE.bazel": "ccc41028429f894b02fde7ef67d416cba3ba5084ed9ddb9bb6107aa82d118776",
@@ -284,7 +284,7 @@
     },
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "LqE2dqKQRjlA7mIOvpm2p5tkj/HVYcRVrs3K4dMX7R0=",
+        "bzlTransitiveDigest": "+9jsSOqvI6PKwnm6ASK8/AjQTb/xK7ULJ8QnI6+uPsw=",
         "usagesDigest": "DsYGwiP9vRoYpWh/bRcwizmkSFpg1vs5moru+TUGD4c=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -399,7 +399,7 @@
     },
     "@@aspect_rules_py+//py:extensions.bzl%py_tools": {
       "general": {
-        "bzlTransitiveDigest": "Qz5QZJ46uU9PJ49xku04sKqcBYBsY/IrGuv4Lnz3Xtk=",
+        "bzlTransitiveDigest": "CF9/ABUay+yWr3e9U506E/ygdEsbZSFdnyDAhzFfHXc=",
         "usagesDigest": "IIGZG9NCKYY6eyTXEk6vinZVRU1Dbh4tZgmwRsdeeHU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -433,6 +433,12 @@
             "repoRuleId": "@@aspect_bazel_lib+//lib/private:tar_toolchain.bzl%bsdtar_binary_repo",
             "attributes": {
               "platform": "windows_amd64"
+            }
+          },
+          "bsd_tar_windows_arm64": {
+            "repoRuleId": "@@aspect_bazel_lib+//lib/private:tar_toolchain.bzl%bsdtar_binary_repo",
+            "attributes": {
+              "platform": "windows_arm64"
             }
           },
           "bsd_tar_toolchains": {
@@ -1183,7 +1189,7 @@
     },
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "EhazFFV5egWY4qKyI3pZ7PEPw/i3na5ZR9AHVRu7hTA=",
+        "bzlTransitiveDigest": "LN8Ji3uYUdMHl7S0YCdq2AiHxQPoOX50vf4wXe+gNeo=",
         "usagesDigest": "6BFYsIMfyVQCzL7swnI4Z0lejLSWdOZHkm7/v5mGdHo=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
