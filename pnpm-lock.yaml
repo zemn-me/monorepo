@@ -404,8 +404,8 @@ devDependencies:
     specifier: 3.5.3
     version: 3.5.3
   puppeteer:
-    specifier: 24.8.0
-    version: 24.8.0(typescript@5.5.4)
+    specifier: 24.8.1
+    version: 24.8.1(typescript@5.5.4)
   react:
     specifier: 19.1.0
     version: 19.1.0
@@ -8360,8 +8360,8 @@ packages:
     engines: {node: '>=6.0'}
     dev: false
 
-  /chromium-bidi@4.1.1(devtools-protocol@0.0.1439962):
-    resolution: {integrity: sha512-biR7t4vF3YluE6RlMSk9IWk+b9U+WWyzHp+N2pL9vRTk+UXHYRTVp7jTK58ZNzMLBgoLMHY4QyJMbeuw3eKxqg==}
+  /chromium-bidi@5.1.0(devtools-protocol@0.0.1439962):
+    resolution: {integrity: sha512-9MSRhWRVoRPDG0TgzkHrshFSJJNZzfY5UFqUMuksg7zL1yoZIZ3jLB0YAgHclbiAxPI86pBnwDX1tbzoiV8aFw==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
@@ -16066,12 +16066,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /puppeteer-core@24.8.0:
-    resolution: {integrity: sha512-tDf2YKIo5kM5r0vOzT52+PTgN0bBZOA4OFgQaqYyfarrcXLLJ92wi/lSMe44hd+F+gk0gw9QsAzyRW8v6ra93w==}
+  /puppeteer-core@24.8.1:
+    resolution: {integrity: sha512-UP/VIxVk/Akrgql3a55ZAIuAIx7+yQevz6qEXFUtSTIynEcgsCJ6tlRdi7uKAAlovmNQG4iNMzq9f8WxZLnGGg==}
     engines: {node: '>=18'}
     dependencies:
       '@puppeteer/browsers': 2.10.3
-      chromium-bidi: 4.1.1(devtools-protocol@0.0.1439962)
+      chromium-bidi: 5.1.0(devtools-protocol@0.0.1439962)
       debug: 4.4.0(supports-color@9.4.0)
       devtools-protocol: 0.0.1439962
       typed-query-selector: 2.12.0
@@ -16083,17 +16083,17 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@24.8.0(typescript@5.5.4):
-    resolution: {integrity: sha512-8GPlUKXvZK8ANxab75UerMar14ZnJTJpPok3XN9Nx6f7SKyabyFK39pQruMni6zfrwVBrPXp3Mo6ztwKEmXaDQ==}
+  /puppeteer@24.8.1(typescript@5.5.4):
+    resolution: {integrity: sha512-5OvJCe6tQ09EWf35qqyoH/cr9YGMbLj0ZpoT2pEImF9Ox35JXyAn8kIqj8eBgpDfyzuEwXYIMUwIAIkdgO/gDA==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 2.10.3
-      chromium-bidi: 4.1.1(devtools-protocol@0.0.1439962)
+      chromium-bidi: 5.1.0(devtools-protocol@0.0.1439962)
       cosmiconfig: 9.0.0(typescript@5.5.4)
       devtools-protocol: 0.0.1439962
-      puppeteer-core: 24.8.0
+      puppeteer-core: 24.8.1
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-buffer
