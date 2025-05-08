@@ -9,6 +9,7 @@ manifest:
     3204bda914b7f2c6f497__mypyc: mypy
     IPython: ipython
     anyio: anyio
+    appnope: appnope
     argon2: argon2_cffi
     arrow: arrow
     asttokens: asttokens
@@ -23,6 +24,7 @@ manifest:
     cffi: cffi
     charset_normalizer: charset_normalizer
     click: click
+    colorama: colorama
     comm: comm
     dateutil: python_dateutil
     debugpy: debugpy
@@ -31,6 +33,8 @@ manifest:
     executing: executing
     fastjsonschema: fastjsonschema
     fqdn: fqdn
+    frida: frida
+    frida_tools: frida_tools
     h11: h11
     httpcore: httpcore
     httpx: httpx
@@ -115,6 +119,7 @@ manifest:
     webcolors: webcolors
     webencodings: webencodings
     websocket: websocket_client
+    websockets: websockets
     wheel: wheel
     widgetsnbextension: widgetsnbextension
     yaml: PyYAML
@@ -122,4 +127,4 @@ manifest:
     zmq: pyzmq
   pip_repository:
     name: pip
-integrity: ebb0ed29f8c0190995c4519f4b7d1ed345f1b09ce4f891fb6e3d41e0d4de9ef5
+integrity: 0a650c043d16487cd55550bf4859e146ddcc1b7eb09f5f045b610a49bea47160
