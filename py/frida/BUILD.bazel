@@ -1,0 +1,50 @@
+load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
+load("//bzl:rules.bzl", "bazel_lint")
+
+"""
+scripts = [
+	"frida",
+	"frida-apk",
+	"frida-compile",
+	"frida-create",
+	"frida-discover",
+	"frida-itrace",
+	"frida-join",
+	"frida-kill",
+	"frida-ls",
+	"frida-ls-devices",
+	"frida-ps",
+	"frida-pull",
+	"frida-push",
+	"frida-rm",
+	"frida-trace"
+]
+"""
+
+py_console_script_binary(
+    name = "frida",
+    pkg = "@pip//frida_tools",
+    script = "frida",
+    visibility = ["//visibility:public"],
+)
+
+py_console_script_binary(
+    name = "ls",
+    pkg = "@pip//frida_tools",
+    script = "frida-ls",
+    visibility = ["//visibility:public"],
+)
+
+
+py_console_script_binary(
+    name = "ps",
+    pkg = "@pip//frida_tools",
+    script = "frida-ps",
+    visibility = ["//visibility:public"],
+)
+
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
