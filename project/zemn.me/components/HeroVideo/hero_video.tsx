@@ -214,9 +214,7 @@ export function HeroVideo(props: HeroVideoProps) {
 		videoRef.current?.load();
 	}, [season]);
 
-	// use a better event that doesnt trigger when selecting
-	// text pls thomas
-	const onClick = useCallback(
+	const figureOnClick = useCallback(
 		(e: React.MouseEvent) => {
 			// prevent toggling if the user is selecting text.
 			const selection = document.getSelection();
@@ -225,13 +223,22 @@ export function HeroVideo(props: HeroVideoProps) {
 		}
 	, [ setCaptionToggled ] );
 
+	/**
+	 * Prevent clicking the caption from toggling the caption.
+	 */
+	const captionOnClick = useCallback(
+		(e: React.MouseEvent) => {
+			e.stopPropagation();
+		}
+	, []);
+
 
 	return (
 		<figure className={classNames(
 			style.heroVideo,
 			props.className
 		)}
-			onClick={onClick}
+			onClick={figureOnClick}
 		>
 			<Video
 				autoPlay
@@ -251,6 +258,8 @@ export function HeroVideo(props: HeroVideoProps) {
 					style.caption
 				)
 			}
+
+				onClick={captionOnClick}
 			>
 				<div className={style.Title}>
 					{caption}
