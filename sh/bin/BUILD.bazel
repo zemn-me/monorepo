@@ -92,6 +92,16 @@ alias(
     actual = "//bin/host/gojq",
 )
 
+alias(
+    name = "frida-ls",
+    actual = "//py/frida:ls",
+)
+
+alias(
+    name = "frida",
+    actual = "//py/frida",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
