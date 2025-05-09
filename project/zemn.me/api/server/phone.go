@@ -114,6 +114,12 @@ func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request, params Get
 		return
 	}
 
+	success, err := s.handleEntryViaPartyMode(w, r)
+
+	if err != nil || success {
+		return
+	}
+
 	salutation, err := Salutation()
 	if err != nil {
 		return

@@ -1,7 +1,9 @@
 "archive of all my old tweets."
 
+load("@aspect_bazel_lib//lib:jq.bzl", "jq")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go/cmd/jsonschemavalidator:rules.bzl", "jsonschema_test")
+load("//js:rules.bzl", "js_library")
 
 bazel_lint(
     name = "bazel_lint",
@@ -10,10 +12,41 @@ bazel_lint(
 
 filegroup(
     name = "twitter_archive_files",
-    srcs = glob(
-        ["**/*.json"],
-        allow_empty = True,
-    ),
+    srcs = [
+        "//project/twitter_archive/2013:all_tweets_files",
+        "//project/twitter_archive/2014:all_tweets_files",
+        "//project/twitter_archive/2015:all_tweets_files",
+        "//project/twitter_archive/2016:all_tweets_files",
+        "//project/twitter_archive/2017:all_tweets_files",
+        "//project/twitter_archive/2018:all_tweets_files",
+        "//project/twitter_archive/2019:all_tweets_files",
+        "//project/twitter_archive/2020:all_tweets_files",
+        "//project/twitter_archive/2021:all_tweets_files",
+        "//project/twitter_archive/2022:all_tweets_files",
+        "//project/twitter_archive/2023:all_tweets_files",
+        "//project/twitter_archive/2024:all_tweets_files",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "all_tweets_jsons",
+    srcs = [
+        "//project/twitter_archive/2013:all_tweets",
+        "//project/twitter_archive/2014:all_tweets",
+        "//project/twitter_archive/2015:all_tweets",
+        "//project/twitter_archive/2016:all_tweets",
+        "//project/twitter_archive/2017:all_tweets",
+        "//project/twitter_archive/2018:all_tweets",
+        "//project/twitter_archive/2019:all_tweets",
+        "//project/twitter_archive/2020:all_tweets",
+        "//project/twitter_archive/2021:all_tweets",
+        "//project/twitter_archive/2022:all_tweets",
+        "//project/twitter_archive/2023:all_tweets",
+        "//project/twitter_archive/2024:all_tweets",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
@@ -21,10 +54,7 @@ filegroup(
 
 jsonschema_test(
     name = "schema_valid",
-    srcs = glob(
-        ["**/*.json"],
-        allow_empty = True,
-    ),
+    srcs = [":all_tweets_files"],
     schema = "//ts/twitter:json_schema",
 )
 
@@ -54,5 +84,20 @@ $(execpath //project/twitter_archive/cmd/index) \\
     tools = [
         "//project/twitter_archive/cmd/index",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+jq(
+    name = "all_tweets",
+    srcs = [":all_tweets_jsons"],
+    out = "all_tweets.json",
+    args = ["--slurp"],
+    filter = "flatten",
+    visibility = ["//:__subpackages__"],
+)
+
+js_library(
+    name = "all_tweets_js",
+    srcs = [":all_tweets"],
     visibility = ["//:__subpackages__"],
 )
