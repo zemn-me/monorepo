@@ -177,6 +177,31 @@ func removeDuplicateDigits(input string) string {
 	return string(result)
 }
 
+func (s *Server) handleEntryViaPartyMode(w http.ResponseWriter, rq *http.Request) (success bool, err error) {
+	success, err = s.inPartyMode(rq.Context())
+	if err != nil {
+		return
+	}
+
+	if success {
+		s.log.Printf("Allowed access via party mode.")
+		doc, response := twiml.CreateDocument()
+		response.CreateElement("Play").SetText(nook_phone_yes)
+		response.CreateElement("Play").CreateAttr("digits", "9w9")
+
+		var t string
+		t, err = twiml.ToXML(doc)
+		if err != nil {
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/xml")
+		w.Write([]byte(t))
+	}
+
+	return
+}
+
 func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (success bool, err error) {
 	codes, err := s.getLatestEntryCodes(rq.Context())
 	if err != nil {

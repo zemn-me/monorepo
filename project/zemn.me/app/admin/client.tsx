@@ -35,7 +35,8 @@ type CallboxSettings = components["schemas"]["CallboxSettings"];
 const defaultValues = {
 	authorizers: [],
 	fallbackPhone: "",
-	entryCodes: []
+	entryCodes: [],
+	partyMode: false as boolean | undefined,
 }
 
 const phoneNumberSchema = e164;
@@ -58,6 +59,7 @@ const settingsSchema = z.object({
 	authorizers: authorizerSchema.array(),
 	fallbackPhone: phoneNumberSchema,
 	entryCodes: entryCodeEntrySchema.array(),
+	partyMode: z.boolean().optional(),
 })
 
 function maybeMessage(m: string | undefined) {
@@ -251,6 +253,26 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					errors.fallbackPhone ?
 						<output htmlFor={id('fallbackPhone')}>
 							{errors.fallbackPhone.message}
+						</output> : null
+				}
+			</fieldset>
+			<fieldset>
+				<legend>Party Mode</legend>
+				<label htmlFor={id('partyMode')} >
+					<p>Whether the callbox is in party mode. In party mode, the callbox will not ask for a code and will instead immediately open the door.</p>
+				</label>
+				<input
+					id={id('partyMode')}
+					type="checkbox"
+					{
+					...register("partyMode")
+					}
+				/>
+
+				{
+					errors.partyMode ?
+						<output htmlFor={id('partyMode')}>
+							{errors.partyMode.message}
 						</output> : null
 				}
 			</fieldset>
