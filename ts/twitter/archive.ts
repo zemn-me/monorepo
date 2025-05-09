@@ -344,3 +344,5 @@ export const postSchema = z.strictObject({
 export const archivedTweetSchema = z.strictObject({
 	tweet: postSchema
 })
+
+export type ArchivedTweet = z.infer<typeof archivedTweetSchema>;
