@@ -8,15 +8,21 @@ manifest:
   modules_mapping:
     3204bda914b7f2c6f497__mypyc: mypy
     IPython: ipython
+    OpenSSL: pyOpenSSL
+    aioquic: aioquic
     anyio: anyio
+    appnope: appnope
     argon2: argon2_cffi
     arrow: arrow
+    asgiref: asgiref
     asttokens: asttokens
     async_lru: async_lru
     attr: attrs
     attrs: attrs
     babel: babel
     bleach: bleach
+    blinker: blinker
+    brotli: Brotli
     bs4: beautifulsoup4
     build: build
     certifi: certifi
@@ -25,18 +31,23 @@ manifest:
     click: click
     colorama: colorama
     comm: comm
+    cryptography: cryptography
     dateutil: python_dateutil
     debugpy: debugpy
     decorator: decorator
     defusedxml: defusedxml
     executing: executing
     fastjsonschema: fastjsonschema
+    flask: flask
     fqdn: fqdn
     frida: frida
     frida_tools: frida_tools
     h11: h11
+    h2: h2
+    hpack: hpack
     httpcore: httpcore
     httpx: httpx
+    hyperframe: hyperframe
     idna: idna
     ipykernel: ipykernel
     ipykernel_launcher: ipykernel
@@ -44,6 +55,7 @@ manifest:
     ipywidgets: ipywidgets
     isoduration: isoduration
     isympy: sympy
+    itsdangerous: itsdangerous
     jedi: jedi
     jinja2: jinja2
     json5: json5
@@ -62,10 +74,16 @@ manifest:
     jupyterlab_pygments: jupyterlab_pygments
     jupyterlab_server: jupyterlab_server
     jupyterlab_widgets: jupyterlab_widgets
+    kaitaistruct: kaitaistruct
+    ldap3: ldap3
     markupsafe: MarkupSafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
+    mitmproxy: mitmproxy
+    mitmproxy_macos: mitmproxy_macos
+    mitmproxy_rs: mitmproxy_rs
     mpmath: mpmath
+    msgpack: msgpack
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
@@ -79,6 +97,7 @@ manifest:
     packaging: packaging
     pandocfilters: pandocfilters
     parso: parso
+    passlib: passlib
     pathspec: pathspec
     pexpect: pexpect
     pip: pip
@@ -89,9 +108,15 @@ manifest:
     prompt_toolkit: prompt_toolkit
     psutil: psutil
     ptyprocess: ptyprocess
+    publicsuffix2: publicsuffix2
     pure_eval: pure_eval
+    pyasn1: pyasn1
+    pyasn1_modules: pyasn1_modules
     pycparser: pycparser
     pygments: pygments
+    pylsqpack: pylsqpack
+    pyparsing: pyparsing
+    pyperclip: pyperclip
     pyproject_hooks: pyproject_hooks
     pythonjsonlogger: python_json_logger
     referencing: referencing
@@ -99,11 +124,14 @@ manifest:
     rfc3339_validator: rfc3339_validator
     rfc3986_validator: rfc3986_validator
     rpds: rpds_py
+    ruamel.yaml: ruamel.yaml
     ruff: ruff
     send2trash: Send2Trash
+    service_identity: service_identity
     setuptools: setuptools
     six: six
     sniffio: sniffio
+    sortedcontainers: sortedcontainers
     soupsieve: soupsieve
     stack_data: stack_data
     sympy: sympy
@@ -114,16 +142,20 @@ manifest:
     typing_extensions: typing_extensions
     uri_template: uri_template
     urllib3: urllib3
+    urwid: urwid
     wcwidth: wcwidth
     webcolors: webcolors
     webencodings: webencodings
     websocket: websocket_client
     websockets: websockets
+    werkzeug: werkzeug
     wheel: wheel
     widgetsnbextension: widgetsnbextension
+    wsproto: wsproto
     yaml: PyYAML
     yamllint: yamllint
     zmq: pyzmq
+    zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 9f583a6e88a8dcf4b18d5b79a188609fe37f773d40cabd50b9235f2ae6e01764
+integrity: 1488fda3acbbcb967db2aa2b3d5e4c14ae85e2fd99ace8235b6c26102b5285f0
