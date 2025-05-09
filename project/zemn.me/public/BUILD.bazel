@@ -5,6 +5,49 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/zemn.me:__subpackages__"])
 
+# in future i can generate this from some aspect asset (that's like a
+# partial of this file) I can generate from each asset.
+# then i can collate them here.
+#
+# this would allow deps to import files instead of centralising them here.
+genrule(
+    name = "content_addressible_manifest",
+    srcs = [
+        ":kenwood_media_sources",
+        ":kenwood_snow_video_sources",
+        ":mist_on_the_hills_video_sources",
+    ],
+    outs = [
+        "cas_manifest.txt",
+        "cas",
+    ],
+    cmd = """
+mkdir -p "$$(dirname $(location cas_manifest.txt))"
+mkdir -p "$(location cas)"
+$(execpath //rs/cmd/sha256) $(SRCS) > $(location cas_manifest.txt)
+
+while read -r hash path; do
+    cp "$$path" "$(location cas)/$$hash"
+done < $(location cas_manifest.txt)
+	""",
+    tools = [
+        "//rs/cmd/sha256",
+    ],
+)
+
+genrule(
+    name = "content_addressible_manifest_ts",
+    srcs = ["cas_manifest.txt"],
+    outs = ["manifest.ts"],
+    cmd = """
+    while read -r hash path; do
+        short_path="$${path#*bazel-out/*/bin/}"
+        var_name=$$(echo "$$short_path" | sed -E 's/[^a-zA-Z0-9]/_/g')
+        echo "export const $${var_name} = \\"cas/$${hash}\\""
+    done < $(location cas_manifest.txt) > $(location manifest.ts)
+    """,
+)
+
 # This ends up in the bundle via //project/zemn.me/assets/kenwood:kenwood
 # which is a ts_project that zemn.me depends on to render the video.
 transcode_web(
