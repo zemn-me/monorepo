@@ -1,5 +1,5 @@
-import { map } from "#root/ts/iter/index.js";
 import * as Cartesian from "#root/ts/math/cartesian.js";
+import { map } from "#root/ts/math/vec.js";
 import { Tuple, TupleIndex } from "#root/ts/tuple.js";
 
 export const Verticies = Symbol();
@@ -36,51 +36,57 @@ export function mesh2Edges<N extends number>(m: Mesh<N>) {
 
 export const mesh2Lines = mesh2Edges;
 
+const defaultCentre: Cartesian.Point3D =
+	Cartesian.point<3>(0, 0, 0);
+
+/**
+ * Creates a cube about 0, 0, 0 with the given
+ * radius.
+ */
 export const cube = (
-	centre: Cartesian.Point3D,
 	radius: number
 ): Mesh<8> => ({
-	[Centre]: centre,
+	[Centre]: defaultCentre,
 	[Verticies]: [
 		Cartesian.point<3>(
-			Cartesian.x(centre) - radius,
-			Cartesian.y(centre) - radius,
-			Cartesian.z(centre) - radius
+			Cartesian.x(defaultCentre) - radius,
+			Cartesian.y(defaultCentre) - radius,
+			Cartesian.z(defaultCentre) - radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) + radius,
-			Cartesian.y(centre) - radius,
-			Cartesian.z(centre) - radius
+			Cartesian.x(defaultCentre) + radius,
+			Cartesian.y(defaultCentre) - radius,
+			Cartesian.z(defaultCentre) - radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) + radius,
-			Cartesian.y(centre) + radius,
-			Cartesian.z(centre) - radius
+			Cartesian.x(defaultCentre) + radius,
+			Cartesian.y(defaultCentre) + radius,
+			Cartesian.z(defaultCentre) - radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) - radius,
-			Cartesian.y(centre) + radius,
-			Cartesian.z(centre) - radius
+			Cartesian.x(defaultCentre) - radius,
+			Cartesian.y(defaultCentre) + radius,
+			Cartesian.z(defaultCentre) - radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) - radius,
-			Cartesian.y(centre) - radius,
-			Cartesian.z(centre) + radius
+			Cartesian.x(defaultCentre) - radius,
+			Cartesian.y(defaultCentre) - radius,
+			Cartesian.z(defaultCentre) + radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) + radius,
-			Cartesian.y(centre) - radius,
-			Cartesian.z(centre) + radius
+			Cartesian.x(defaultCentre) + radius,
+			Cartesian.y(defaultCentre) - radius,
+			Cartesian.z(defaultCentre) + radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) + radius,
-			Cartesian.y(centre) + radius,
-			Cartesian.z(centre) + radius
+			Cartesian.x(defaultCentre) + radius,
+			Cartesian.y(defaultCentre) + radius,
+			Cartesian.z(defaultCentre) + radius
 		),
 		Cartesian.point<3>(
-			Cartesian.x(centre) - radius,
-			Cartesian.y(centre) + radius,
-			Cartesian.z(centre) + radius
+			Cartesian.x(defaultCentre) - radius,
+			Cartesian.y(defaultCentre) + radius,
+			Cartesian.z(defaultCentre) + radius
 		),
 	],
 	[Edges]: [
@@ -98,3 +104,26 @@ export const cube = (
 		[3, 7]
 	]
 });
+
+
+export const translateMesh =
+	(by: Cartesian.Point3D) =>
+	<N extends number>(
+		m: Mesh<N>
+	): Mesh<N> => ({
+		...m,
+		[Centre]:
+			Cartesian.add<3>(
+				by,
+				m[Centre]
+			),
+
+		[Verticies]:
+			map(
+				m[Verticies],
+				v => Cartesian.add<3>(
+					by,
+					v
+				),
+			)
+	})
