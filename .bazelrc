@@ -123,4 +123,4 @@ common:ci --flaky_test_attempts=3
 common --test_verbose_timeout_warnings
 
 
-common --experimental_remote_cache_compression_threshold=100
+common --remote_cache_compression_threshold=100
