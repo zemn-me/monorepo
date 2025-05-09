@@ -52,6 +52,12 @@ components:
         - entryCodes
       properties:
 
+        partyMode:
+          description: >
+            Whether the callbox is in party mode. In party mode, the callbox
+            will not ask for a code and will immediately open the door.
+          type: boolean
+
         authorizers:
           description: >
             A list of E.164 phone numbers. Authorizers are phone numbers that

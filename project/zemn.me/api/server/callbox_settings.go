@@ -53,6 +53,20 @@ func (s Server) getLatestSettings(ctx context.Context) (set *SettingsRecord, err
 	return
 }
 
+func (s *Server) inPartyMode(ctx context.Context) (inPartyMode bool, err error) {
+	settings, err := s.getLatestSettings(ctx)
+	if err != nil {
+		return
+	}
+
+	if settings == nil {
+		return false, nil
+	}
+
+	inPartyMode = settings.Settings.PartyMode != nil && *settings.Settings.PartyMode
+	return
+}
+
 func (s *Server) getLatestEntryCodes(ctx context.Context) (entryCodes []EntryCodeEntry, err error) {
 	settings, err := s.getLatestSettings(ctx)
 	if err != nil {
