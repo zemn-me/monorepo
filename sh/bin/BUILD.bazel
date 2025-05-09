@@ -107,6 +107,11 @@ alias(
     actual = "//py/frida",
 )
 
+alias(
+    name = "mitmproxy",
+    actual = "//py/mitmproxy",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
