@@ -138,8 +138,8 @@ dependencies:
     specifier: 0.14.0
     version: 0.14.0
   openapi-typescript:
-    specifier: 7.7.3
-    version: 7.7.3(typescript@5.5.4)
+    specifier: 7.8.0
+    version: 7.8.0(typescript@5.5.4)
   openapi-typescript-helpers:
     specifier: 0.0.15
     version: 0.0.15
@@ -5098,8 +5098,8 @@ packages:
     resolution: {integrity: sha512-roRDai8/zr2S9YfmzUfNhKjOF0NdcOIqF7bhf4MVC5UxpjIysDjyudvlAiVbpPHp3eDRWbdzUgtkK1a7YiDNyQ==}
     dev: false
 
-  /@redocly/openapi-core@1.34.2(supports-color@10.0.0):
-    resolution: {integrity: sha512-glfkQFJizLdq2fBkNvc2FJW0sxDb5exd0wIXhFk+WHaFLMREBC3CxRo2Zq7uJIdfV9U3YTceMbXJklpDfmmwFQ==}
+  /@redocly/openapi-core@1.34.3(supports-color@10.0.0):
+    resolution: {integrity: sha512-3arRdUp1fNx55itnjKiUhO6t4Mf91TsrTIYINDNLAZPS0TPd5YpiXRctwjel0qqWoOOhjA34cZ3m4dksLDFUYg==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
     dependencies:
       '@redocly/ajv': 8.11.2
@@ -15157,13 +15157,13 @@ packages:
     resolution: {integrity: sha512-opyTPaunsklCBpTK8JGef6mfPhLSnyy5a0IN9vKtx3+4aExf+KxEqYwIy3hqkedXIB97u357uLMJsOnm3GVjsw==}
     dev: false
 
-  /openapi-typescript@7.7.3(typescript@5.5.4):
-    resolution: {integrity: sha512-w8s82UbR5QSh8t56w0++pCva5rdRM3My8Jx/UM7BfDE1j2fzylJKSIe1cF+qM9cdjJc+5MVwdpJ7fqMc3mAPVg==}
+  /openapi-typescript@7.8.0(typescript@5.5.4):
+    resolution: {integrity: sha512-1EeVWmDzi16A+siQlo/SwSGIT7HwaFAVjvMA7/jG5HMLSnrUOzPL7uSTRZZa4v/LCRxHTApHKtNY6glApEoiUQ==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
     dependencies:
-      '@redocly/openapi-core': 1.34.2(supports-color@10.0.0)
+      '@redocly/openapi-core': 1.34.3(supports-color@10.0.0)
       ansi-colors: 4.1.3
       change-case: 5.4.4
       parse-json: 8.3.0
