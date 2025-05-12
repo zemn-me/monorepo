@@ -9,6 +9,7 @@ import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
+import * as EggsDogs from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
@@ -153,6 +154,12 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: args.staging,
 				tags,
 			},
+			{ parent: this }
+		);
+
+		new EggsDogs.Component(
+			`${name}_eggsdogs`,
+			{ staging: args.staging, tags },
 			{ parent: this }
 		);
 
