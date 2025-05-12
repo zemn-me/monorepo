@@ -89,6 +89,13 @@ export interface Args {
 	 * Other TXT records to attach to the domain.
 	 */
 	otherTXTRecords?: string[]
+
+	/**
+	 * Whether to issue a certificate for the website.
+	 *
+	 * @default false
+	 */
+	noAssignCertificate?: boolean;
 }
 
 // needed cause there's a cache policy limit of 20.
@@ -178,16 +185,21 @@ export class Website extends pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		const certificate = new Certificate(
-			`${name}_certificate`,
-			{
-				zoneId: args.zoneId,
-				domain: args.domain,
-				noCostAllocationTag: args.noCostAllocationTag,
-				tags: tags,
-			},
-			{ parent: this }
-		);
+		let certificate: Certificate | undefined = undefined;
+
+
+		if (!args.noAssignCertificate) {
+			certificate = new Certificate(
+				`${name}_certificate`,
+				{
+					zoneId: args.zoneId,
+					domain: args.domain,
+					noCostAllocationTag: args.noCostAllocationTag,
+					tags: tags,
+				},
+				{ parent: this }
+			);
+		}
 
 		/**
 		 * The final subdomain that the website can be loaded from on the target domain.
@@ -427,12 +439,13 @@ export class Website extends pulumi.ComponentResource {
 				tags: mergeTags(tags, {
 					Environment: 'production',
 				}),
-				viewerCertificate: {
-					// important to use this so that it waits for the cert
-					// to come up
-					acmCertificateArn: certificate.validation.certificateArn,
-					sslSupportMethod: 'sni-only', // idk really what this does
-				},
+				viewerCertificate: certificate !== undefined ?
+					{
+						// important to use this so that it waits for the cert
+						// to come up
+						acmCertificateArn: certificate.validation.certificateArn,
+						sslSupportMethod: 'sni-only', // idk really what this does
+					} : {},
 			},
 			// creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
 			{ parent: this, deleteBeforeReplace: true }
