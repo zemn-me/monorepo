@@ -112,6 +112,11 @@ alias(
     actual = "//py/mitmproxy",
 )
 
+alias(
+    name = "pulumi",
+    actual = "//bin/linux/pulumi",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
