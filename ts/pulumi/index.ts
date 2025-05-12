@@ -5,6 +5,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import * as random from "@pulumi/random";
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
+import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
@@ -153,6 +154,12 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: args.staging,
 				tags,
 			},
+			{ parent: this }
+		);
+
+		new EggsDogs.Component(
+			`${name}_eggsdogs`,
+			{ staging: args.staging, tags },
 			{ parent: this }
 		);
 
