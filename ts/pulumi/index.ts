@@ -181,10 +181,31 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this}
 		)
 
+		/**
+		 * This zone is for @eggsfordogs to point their namecheap record at;
+		 * all the other domains are registered with AWS, so the logic is a
+		 * bit different.
+		 */
+		const eggsForDogsDotComZoneId =
+			args.staging
+				// staging needs to share the same zone as prod
+				? Pulumi.output(aws.route53.getZone({ name: 'eggsfordogs.com' })
+					// prod needs to make the zone for us to have
+					// it on staging...
+					.then(v => v.zoneId)
+					.catch(() => undefined))
+				: new aws.route53.Zone(
+					`${name}_eggsfordogs.com_zone`,
+					{
+						name: 'eggsfordogs.com',
+					},
+					{ parent: this, protect: !args.staging }
+				).zoneId;
 
 
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
+			eggsForDogsDotComZoneId,
 		});
 	}
 }
