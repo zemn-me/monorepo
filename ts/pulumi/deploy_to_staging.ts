@@ -71,7 +71,7 @@ async function waitForLock<T>(
 
 	// if we failed due to timeout, wrap with a timeout error.
 
-	if (+new Date() - startTime > 10 * minute) {
+	if (+new Date() - startTime > 60 * minute * 3) {
 		const e = new Error(`${cause} timed out`);
 		e.cause = error;
 
