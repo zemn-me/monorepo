@@ -278,8 +278,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@swc/cli':
-    specifier: 0.7.5
-    version: 0.7.5(@swc/core@1.11.24)
+    specifier: 0.7.7
+    version: 0.7.7(@swc/core@1.11.24)
   '@testing-library/react':
     specifier: 16.3.0
     version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.7)(@types/react@18.3.21)(react-dom@19.1.0)(react@19.1.0)
@@ -6131,8 +6131,8 @@ packages:
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
     dev: false
 
-  /@swc/cli@0.7.5(@swc/core@1.11.24):
-    resolution: {integrity: sha512-RlUYAxOhsecBB7qFVdDXhXXW3GDVxXpJx90q8Tlj+KuJVUPXViI7tNAvu54u3hbIZAL3LtrQKZHBWF6O5cXxZQ==}
+  /@swc/cli@0.7.7(@swc/core@1.11.24):
+    resolution: {integrity: sha512-j4yYm9bx3pxWofaJKX1BFwj/3ngUDynN4UIQ2Xd2h0h/7Gt7zkReBTpDN7g5S13mgAYxacaTHTOUsz18097E8w==}
     engines: {node: '>= 16.14.0'}
     hasBin: true
     peerDependencies:
