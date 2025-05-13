@@ -5,6 +5,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import * as random from "@pulumi/random";
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
+import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
@@ -156,6 +157,7 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+
 		new Lulu.Component(
 			`${name}_lulu`,
 			{ staging: args.staging, tags },
@@ -183,10 +185,8 @@ export class Component extends Pulumi.ComponentResource {
 			args.staging
 				// staging needs to share the same zone as prod
 				? Pulumi.output(aws.route53.getZone({ name: 'eggsfordogs.com' })
-					// prod needs to make the zone for us to have
-					// it on staging...
-					.then(v => v.zoneId)
-					.catch(() => undefined))
+					// deleting this infra may crash something...
+					.then(v => v.zoneId))
 				: new aws.route53.Zone(
 					`${name}_eggsfordogs.com_zone`,
 					{
@@ -195,6 +195,11 @@ export class Component extends Pulumi.ComponentResource {
 					{ parent: this, protect: !args.staging }
 				).zoneId;
 
+		new EggsDogs.Component(
+			`${name}_eggsdogs`,
+			{ staging: args.staging, tags, zoneId: eggsForDogsDotComZoneId },
+			{ parent: this }
+		);
 
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
