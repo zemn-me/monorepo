@@ -22,13 +22,13 @@ export class Component extends Pulumi.ComponentResource {
 
 		const tags = args.tags;
 
-		const domainName = 'eggsfordogs.com';
+		const domainName = [...(args.staging ? ['staging'] : []), "eggsfordogs.com"].join('.');
 
 		new BlueskyDisplayNameClaim(
 			`${name}_bluesky_claim`,
 			{
 				zoneId: args.zoneId,
-				displayname: 'eggsfordogs.com',
+				displayname: domainName,
 				did: "did:plc:7npbillg4uotx5cdcbvnjhpn"
 			},
 			{ parent: this}
@@ -42,7 +42,7 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 				directory: 'ts/pulumi/eggsfordogs.com/out',
 				zoneId: args.zoneId,
-				domain: [...(args.staging ? ['staging'] : []), domainName].join('.'),
+				domain: domainName,
 				noIndex: args.staging,
 				email: true,
 				noCostAllocationTag: true,
