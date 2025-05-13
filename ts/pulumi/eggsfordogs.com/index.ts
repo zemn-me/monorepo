@@ -42,7 +42,7 @@ export class Component extends Pulumi.ComponentResource {
 				tags,
 				directory: 'ts/pulumi/eggsfordogs.com/out',
 				zoneId: args.zoneId,
-				domain: [(args.staging ? ['staging'] : []), domainName].join('.'),
+				domain: [...(args.staging ? ['staging'] : []), domainName].join('.'),
 				noIndex: args.staging,
 				email: true,
 				noCostAllocationTag: true,
