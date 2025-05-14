@@ -30,8 +30,8 @@ dependencies:
     specifier: 15.3.2
     version: 15.3.2
   '@openai/codex':
-    specifier: 0.1.2504301751
-    version: 0.1.2504301751(@types/react@18.3.21)
+    specifier: 0.1.2505140839
+    version: 0.1.2505140839(@types/react@18.3.21)
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4047,8 +4047,8 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.1.2504301751(@types/react@18.3.21):
-    resolution: {integrity: sha512-Hgd9jlGJrlLhvan1MeixfjFxEUv6cPgBt5ejU3riubhefGMLa0fHdo9SuWYX8BOi1uz37Jx/3EE4IQEoH3xPTw==}
+  /@openai/codex@0.1.2505140839(@types/react@18.3.21):
+    resolution: {integrity: sha512-aMBVSr+zxx9FV/S4Lg2UF4L97lYOIdNNHzkz26wLZuqCpHdfwohjFOvYCAWowOjiwBAJewPi8Zr6gg3yE+8xug==}
     engines: {node: '>=22'}
     hasBin: true
     dependencies:
@@ -4060,6 +4060,7 @@ packages:
       fast-npm-meta: 0.4.2
       figures: 6.1.0
       file-type: 20.5.0
+      https-proxy-agent: 7.0.6(supports-color@10.0.0)
       ink: 5.2.1(@types/react@18.3.21)(react@19.1.0)
       js-yaml: 4.1.0
       marked: 15.0.11
