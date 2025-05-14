@@ -36,8 +36,8 @@ dependencies:
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/gcp':
-    specifier: 8.30.0
-    version: 8.30.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 8.30.1
+    version: 8.30.1(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/random':
     specifier: 4.18.2
     version: 4.18.2(ts-node@10.9.2)(typescript@5.5.4)
@@ -48,8 +48,8 @@ dependencies:
     specifier: 9.7.5
     version: 9.7.5
   '@tanstack/react-query':
-    specifier: 5.76.0
-    version: 5.76.0(react@19.1.0)
+    specifier: 5.76.1
+    version: 5.76.1(react@19.1.0)
   '@types/bcryptjs':
     specifier: 3.0.0
     version: 3.0.0
@@ -347,8 +347,8 @@ devDependencies:
     specifier: 4.0.2
     version: 4.0.2
   diff:
-    specifier: 8.0.0
-    version: 8.0.0
+    specifier: 8.0.1
+    version: 8.0.1
   esbuild:
     specifier: 0.25.4
     version: 0.25.4
@@ -4675,8 +4675,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/gcp@8.30.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-NnqVAH18ZxbpGv5PyVJ4hsyA94pU67vE6boweUyyg6iRfTk9zT/WUKTASCL7wQXkjP74YD/EC56b/LEFGt0I7A==}
+  /@pulumi/gcp@8.30.1(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-87HwWix9l1wQwU6yIkXb2mNGhRKyt6GdewMa2+bsY7NNIBDopjWPzI30kLb7MyHu8RHOl0s0q3zMCcT5vvmBnA==}
     dependencies:
       '@pulumi/pulumi': 3.169.0(ts-node@10.9.2)(typescript@5.5.4)
       '@types/express': 4.17.21
@@ -6288,8 +6288,8 @@ packages:
     resolution: {integrity: sha512-FN375hb8ctzfNAlex5gHI6+WDXTNpe0nbxp/d2YJtnP+IBM6OUm7zcaoCW6T63BawGOYZBbKC0iPvr41TteNVg==}
     dev: false
 
-  /@tanstack/react-query@5.76.0(react@19.1.0):
-    resolution: {integrity: sha512-dZLYzVuUFZJkenxd8o01oyFimeLBmSkaUviPHuDzXe7LSLO4WTTx92jwJlNUXOOHzg6t0XknklZ15cjhYNSDjA==}
+  /@tanstack/react-query@5.76.1(react@19.1.0):
+    resolution: {integrity: sha512-YxdLZVGN4QkT5YT1HKZQWiIlcgauIXEIsMOTSjvyD5wLYK8YVvKZUPAysMqossFJJfDpJW3pFn7WNZuPOqq+fw==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
@@ -9532,8 +9532,8 @@ packages:
     resolution: {integrity: sha512-PJWHUb1RFevKCwaFA9RlG5tCd+FO5iRh9A8HEtkmBH2Li03iJriB6m6JIN4rGz3K3JLawI7/veA1xzRKP6ISBw==}
     engines: {node: '>=0.3.1'}
 
-  /diff@8.0.0:
-    resolution: {integrity: sha512-DJkPOAHudnz8swaqtm8cYmR9YfHLVDmoIH02+MqJiI/V9PxCf0WG+TBMduL7FZfnO53LhUXaPMo8Iw/uUJXLRA==}
+  /diff@8.0.1:
+    resolution: {integrity: sha512-rEaM3KmVm78zE3dFZaop3aCQa2MTm+T4kcigUFLVU/KbOYdiY6JnL2g2puOYnct3QFw9pjZadaCbCZ1O8ArMlQ==}
     engines: {node: '>=0.3.1'}
     dev: true
 

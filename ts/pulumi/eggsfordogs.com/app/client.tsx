@@ -37,6 +37,7 @@ interface YardProps {
 function icon(p: Particle): string {
 	switch (p.type) {
 		case ParticleType.Egg:
+			// 👇 an egg
 			return "🥚";
 		case ParticleType.Dog:
 			return "🐕";
