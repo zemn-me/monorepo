@@ -68,6 +68,7 @@ export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
 	return unwrap_unchecked(v)
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function or_else<Success, Fail, NewFail>(v: Result<Success, Fail>, fallback: (v: Fail) => Result<Success, NewFail>): Result<Success, NewFail> {
 	if (is_err(v)) return fallback(unwrap_err_unchecked(v));
 	return v;
