@@ -1,19 +1,29 @@
 "use client";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import createClient from "openapi-fetch";
 import { useEffect, useId, useState } from "react";
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from "zod";
 
-import type { components } from "#root/project/zemn.me/api/api_client.gen";
+import type { components, paths } from "#root/project/zemn.me/api/api_client.gen";
+import Link from "#root/project/zemn.me/components/Link/index.js";
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
-import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { ID_Token } from "#root/ts/oidc/oidc.js";
-import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
+import { and_then as option_and_then, flatten as option_flatten, is_none, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else, unwrap_unchecked as option_unwrap_unchecked } from "#root/ts/option/types.js";
+import { fetchResult } from "#root/ts/result/openapi-fetch/fetchResult.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
-import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
+import { and_then as result_and_then, flatten, is_err, unwrap_err_unchecked, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else, unwrap_unchecked as result_unwrap_unchecked } from "#root/ts/result/result.js";
 import { e164 } from "#root/ts/zod/e164.js";
+
+const apiClient = (Authorization: string) =>
+	createClient<paths>({
+		baseUrl: "https://api.zemn.me",
+		headers: {
+			Authorization
+		},
+	})
 
 
 interface SettingsEditorProps {
@@ -58,37 +68,29 @@ function maybeMessage(m: string | undefined) {
 	return m;
 }
 
-
 function SettingsEditor({ Authorization }: SettingsEditorProps) {
-	const $api = useZemnMeApi();
 	const idbase = useId();
 	const id = (...s: string[]) => [
 		idbase, ...s
 	].join("/");
-
+	const client = apiClient(Authorization);
 	const queryClient = useQueryClient();
+	const queryKey = [
+		 '/callbox/settings', Authorization
+	];
 
-	const remoteSettingsParams = [
-		"get",
-		"/callbox/settings",
-		{
-			headers: {
-				Authorization
-			}
-		},
-	] as const;
+	const remoteSettingsQuery = useQuery({
+		queryFn: async () => fetchResult(
+			await client.GET('/callbox/settings'),
+			({ cause }) => new Error(cause)
+		),
+		queryKey,
+	});
 
-	const remoteSettingsKey = remoteSettingsParams;
-
-	const remoteSettings =
-		option_and_then(
-			queryResult($api.useQuery(...remoteSettingsParams)),
-			r => result_or_else(
-				r,
-				({ cause }) => Err(new Error(cause))
-			)
-		)
-
+	const remoteSettings = option_and_then(
+		queryResult(remoteSettingsQuery),
+		r => flatten(r)
+	);
 
 	const values = option_unwrap_or(
 		option_and_then(
@@ -117,16 +119,17 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 		)
 	});
 
-	const mutateRemoteSettings = $api.useMutation("post", "/callbox/settings", {
-		onSuccess: () => {
-			void queryClient.invalidateQueries({
-				queryKey: remoteSettingsKey
-			});
-		}
-	})
-		;
-
-
+	const mutateRemoteSettings = useMutation({
+		mutationFn: (s: CallboxSettings) => client.POST(
+			'/callbox/settings',
+			{
+				body: s
+			},
+		),
+		onMutate: () => queryClient.invalidateQueries({
+			queryKey: queryKey
+		})
+	});
 
 	const authorizerFields = useFieldArray({
 		control, // control props comes from useForm (optional: if you are using FormProvider)
@@ -141,14 +144,8 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises
-	return <form onSubmit={handleSubmit(d => {
-		void mutateRemoteSettings.mutate({
-			headers: {
-				Authorization: Authorization,
-			},
-			body: d,
-		})
-	})}>
+	return <form onSubmit={handleSubmit(d => { void mutateRemoteSettings.mutate(d) })}>
+		<PendingPip value={Some(remoteSettings)} />
 		<fieldset>
 			<legend>Settings</legend>
 
@@ -159,20 +156,20 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 				{
 					authorizerFields.fields.map(
 						(f, i) => <fieldset>
-							<input
-								id={f.id}
-								key={f.id}
-								{...register(
-									`authorizers.${i}.phoneNumber`
-								)}
-							/>
+						<input
+							id={f.id}
+							key={f.id}
+							{...register(
+								`authorizers.${i}.phoneNumber`
+							)}
+						/>
 
-							<button onClick={
-								e => {
-									e.preventDefault();
-									authorizerFields.remove(i)
-								}
-							}>-</button>
+						<button onClick={
+							e => {
+								e.preventDefault();
+								authorizerFields.remove(i)
+							}
+						}>-</button>
 
 							{
 								maybeMessage(errors.authorizers?.[i]?.phoneNumber?.message)
@@ -202,21 +199,21 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 				{
 					entryCodesFields.fields.map(
-						(f, i) => <fieldset>
-							<input
-								id={f.id}
-								key={f.id}
-								{...register(
-									`entryCodes.${i}.code`
-								)}
-							/>
+					(f, i) => <fieldset>
+						<input
+							id={f.id}
+							key={f.id}
+							{...register(
+								`entryCodes.${i}.code`
+							)}
+						/>
 
-							<button onClick={
-								e => {
-									e.preventDefault();
-									entryCodesFields.remove(i)
-								}
-							}>-</button>
+						<button onClick={
+							e => {
+								e.preventDefault();
+								entryCodesFields.remove(i)
+							}
+						}>-</button>
 
 							{
 								maybeMessage(
@@ -224,7 +221,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 								)
 							}
 						</fieldset>
-					)}
+				)}
 
 				{maybeMessage(
 					errors.entryCodes?.message
@@ -280,7 +277,6 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 				}
 			</fieldset>
 			<input type="submit" />
-			<PendingPip value={Some(remoteSettings)} />
 		</fieldset>
 	</form>
 
@@ -318,6 +314,40 @@ export default function Admin() {
 		)
 		, [at])
 
+	const authTokenCacheKey = result_unwrap_or(result_and_then(
+		at,
+		o => option_unwrap_or(option_and_then(
+			o,
+			o => o
+		), undefined)
+	), undefined);
+
+	const phoneNumber = useQuery({
+		queryKey: ['callbox', 'phone number', authTokenCacheKey],
+		queryFn: async () => {
+			if (is_err(at)) return <>
+				⚠ {unwrap_err_unchecked(at)}
+			</>;
+
+			const auth = result_unwrap_unchecked(at);
+
+			if (is_none(auth)) return <>
+				You need to log in to see this.
+			</>;
+
+			const client = apiClient(option_unwrap_unchecked(auth));
+
+			const { phoneNumber } = await client.GET("/phone/number").then(v => v.data!);
+
+			const pnn = phoneNumber;
+
+			return <>
+				Callbox phone number is currently: {" "}
+				<Link href={`tel:${pnn}`}>{pnn}</Link>
+			</>
+		}
+	});
+
 	const login_button = result_unwrap_or_else(
 		result_and_then(
 			at,
@@ -343,6 +373,12 @@ export default function Admin() {
 
 	return <>
 		<p>{login_button}</p>
+		{phoneNumber.error !== null ? <p>
+			{phoneNumber.error.toString()}
+		</p> : null}
+		{phoneNumber.data !== undefined ? <p>
+			{phoneNumber.data}
+		</p> : null}
 		{option_unwrap_or(option_and_then(
 			authTokenOrNothing,
 			token => <SettingsEditor Authorization={token}/>
