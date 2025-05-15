@@ -6,6 +6,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from "zod";
 
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
+import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
@@ -287,6 +288,43 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 }
 
+function DisplayPhoneNumber({ Authorization }: { readonly Authorization: string }) {
+	const $api = useZemnMeApi();
+	const pn = queryResult($api.useQuery(
+		"get",
+		"/phone/number",
+		{
+			headers: { Authorization }
+		}
+	));
+
+	const el = option_and_then(
+		pn,
+		r => result_unwrap_or_else(
+			result_and_then(
+				r,
+				({ phoneNumber }) => <Link href={`tel:${phoneNumber}`}>{phoneNumber}</Link>
+			),
+			({ cause }) => <details>
+				<summary>❌</summary>
+				{cause}
+			</details>
+	));
+
+	return <fieldset>
+		<legend>Phone Number</legend>
+		<output>
+			{
+				option_unwrap_or(
+					el,
+					<>⏳</>
+				)
+			}
+
+		</output>
+	</fieldset>
+}
+
 
 export default function Admin() {
 	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
@@ -343,9 +381,13 @@ export default function Admin() {
 
 	return <>
 		<p>{login_button}</p>
+
 		{option_unwrap_or(option_and_then(
 			authTokenOrNothing,
-			token => <SettingsEditor Authorization={token}/>
+			token => <>
+				<DisplayPhoneNumber Authorization={token} />
+				<SettingsEditor Authorization={token} />
+			</>
 		), null)}
 	</>
 }
