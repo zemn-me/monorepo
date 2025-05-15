@@ -15,6 +15,22 @@ components:
       type: openIdConnect
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    Identity:
+      type: object
+      required:
+        - sub
+        - issuer
+      properties:
+        sub:
+          description: >
+            OIDC subject identifier for the useer.
+          type: string
+        issuer:
+          description: >
+            The issuer of the token. This is the URL of the OpenID Connect
+            provider.
+          type: string
+          example: "https://accounts.google.com"
     Authorizer:
       type: object
       required:
@@ -83,6 +99,50 @@ components:
           items:
             $ref: "#/components/schemas/EntryCodeEntry"
 
+    GrievanceResponse:
+      type: object
+      required:
+        - grievance
+        - identity
+      properties:
+        grievance:
+          $ref: "#/components/schemas/Grievance"
+        identity:
+          $ref: "#/components/schemas/Identity"
+          description: >
+            The identity of the user who submitted the grievance.
+
+    Grievance:
+      description: >
+        Complaint from my partner.
+      type: object
+      required:
+        - title
+        - description
+        - mood
+        - severity
+      properties:
+        title:
+          description: >
+            Short descrioption of the grievance.
+          type: string
+
+        description:
+          description: >
+            Detailed description of the issue.
+          type: string
+
+        mood:
+          description: >
+            General feeling associated with the grievance. Integer 1-5.
+          type: integer
+          minimum: 1
+          maximum: 5
+
+        severity:
+          description: >
+            Severity of the grievance. Integer 1-5.
+          type: integer
 
     Error:
       description: >
@@ -249,3 +309,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPhoneNumberResponse'
+
+  /greviance:
+    post:
+      summary: Add a new greviance.
+      security:
+        - googleOIDC: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Grievance"
+      responses:
+        "200":
+          description: >
+            The grievance was added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grievance'
+        "500":
+          description: >
+            Something went wrong.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get all grievances.
+      security:
+        - googleOIDC: []
+      responses:
+        "200":
+          description: >
+            A list of grievances.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GrievanceResponse'
+        "500":
+          description: >
+            Something went wrong.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

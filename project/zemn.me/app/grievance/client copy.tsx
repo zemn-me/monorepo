@@ -68,7 +68,6 @@ function maybeMessage(m: string | undefined) {
 	return m;
 }
 
-
 function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	const idbase = useId();
 	const id = (...s: string[]) => [
