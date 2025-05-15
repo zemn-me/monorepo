@@ -315,40 +315,6 @@ export default function Admin() {
 		)
 		, [at])
 
-	const authTokenCacheKey = result_unwrap_or(result_and_then(
-		at,
-		o => option_unwrap_or(option_and_then(
-			o,
-			o => o
-		), undefined)
-	), undefined);
-
-	const phoneNumber = useQuery({
-		queryKey: ['callbox', 'phone number', authTokenCacheKey],
-		queryFn: async () => {
-			if (is_err(at)) return <>
-				⚠ {unwrap_err_unchecked(at)}
-			</>;
-
-			const auth = result_unwrap_unchecked(at);
-
-			if (is_none(auth)) return <>
-				You need to log in to see this.
-			</>;
-
-			const client = apiClient(option_unwrap_unchecked(auth));
-
-			const { phoneNumber } = await client.GET("/phone/number").then(v => v.data!);
-
-			const pnn = phoneNumber;
-
-			return <>
-				Callbox phone number is currently: {" "}
-				<Link href={`tel:${pnn}`}>{pnn}</Link>
-			</>
-		}
-	});
-
 	const login_button = result_unwrap_or_else(
 		result_and_then(
 			at,
@@ -374,12 +340,6 @@ export default function Admin() {
 
 	return <>
 		<p>{login_button}</p>
-		{phoneNumber.error !== null ? <p>
-			{phoneNumber.error.toString()}
-		</p> : null}
-		{phoneNumber.data !== undefined ? <p>
-			{phoneNumber.data}
-		</p> : null}
 		{option_unwrap_or(option_and_then(
 			authTokenOrNothing,
 			token => <SettingsEditor Authorization={token}/>
