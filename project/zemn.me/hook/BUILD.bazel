@@ -8,8 +8,11 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@types/react",
+        "//:node_modules/openapi-fetch",
+        "//:node_modules/openapi-react-query",
         "//:node_modules/react",
         "//project/zemn.me/OAuth",
+        "//project/zemn.me/api:ts_client_dts",
         "//project/zemn.me/localStorage",
         "//ts",
         "//ts/oidc",
