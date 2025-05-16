@@ -102,8 +102,8 @@ dependencies:
     specifier: 28.11.0
     version: 28.11.0(eslint@9.26.0)(typescript@5.5.4)
   eslint-plugin-mdx:
-    specifier: 3.4.1
-    version: 3.4.1(eslint@9.26.0)
+    specifier: 3.4.2
+    version: 3.4.2(eslint@9.26.0)
   eslint-plugin-react-hooks:
     specifier: 5.2.0
     version: 5.2.0(eslint@9.26.0)
@@ -10215,8 +10215,8 @@ packages:
       string.prototype.includes: 2.0.1
     dev: true
 
-  /eslint-plugin-mdx@3.4.1(eslint@9.26.0):
-    resolution: {integrity: sha512-dfQ7LthK/Kmfw2d5XrR4CS1ScmFOa1S9vPjBUxtKgCEl6mNnYVfA/yg50xLyab0pI/GEfGEmvlajs2biDHJBsA==}
+  /eslint-plugin-mdx@3.4.2(eslint@9.26.0):
+    resolution: {integrity: sha512-deXcJ4hTLkQ7F2JLto74UXeDkZYXu1Xtgvy0ZHlJ4CNwCYAZier3qNvTMBwE9VEnowxN+TgB18OhMLYyaR9hXA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
