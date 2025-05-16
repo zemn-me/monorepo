@@ -5,4 +5,7 @@ package apiserver
 // pulumi by some environment variable.
 //
 // some part of me says I don't care.
-const nook_phone_yes = "https://static.zemn.me/nook_phone_yes.mp3"
+const (
+	nook_phone_yes      = "https://static.zemn.me/nook_phone_yes.mp3"
+	party_entry_message = "https://static.zemn.me/bday/31bday.mp3"
+)
