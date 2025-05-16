@@ -1,0 +1,11 @@
+load("//js:rules.bzl", "js_library")
+
+js_library(
+    name = "js",
+    srcs = [
+        "31bday.mp3",
+    ],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+)

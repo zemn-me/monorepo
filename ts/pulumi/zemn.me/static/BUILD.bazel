@@ -11,6 +11,7 @@ js_library(
         "index.html",
         "nook_phone_yes.mp3",
         "//ts/pulumi/zemn.me/static/acnh_music:acnh_music_js",
+		"//ts/pulumi/zemn.me/static/bday:js",
     ],
     visibility = [
         "//ts/pulumi:__subpackages__",

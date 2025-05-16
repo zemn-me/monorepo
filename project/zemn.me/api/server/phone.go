@@ -236,6 +236,7 @@ func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, par
 	s.log.Printf("Allowed access via code entry: %+q", digits)
 
 	doc, response := twiml.CreateDocument()
+	response.CreateElement("Play").SetText(party_entry_message)
 	response.CreateElement("Play").SetText(nook_phone_yes)
 	response.CreateElement("Play").CreateAttr("digits", "9w9")
 
