@@ -85,7 +85,10 @@ func NewServer(ctx context.Context) (*Server, error) {
 		}),
 	}
 
-	s.Handler = HandlerFromMux(s, r)
+	s.Handler = HandlerFromMux(NewStrictHandler(
+		s,
+		nil,
+	), r)
 
 	return s, nil
 }
