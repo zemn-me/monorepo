@@ -34,6 +34,7 @@ go_library(
         "phone_hold_music.go",
         "phone_join_conference.go",
         "server.go",
+        "token_exchange.go",
         "uuid.go",
     ],
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server",
