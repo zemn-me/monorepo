@@ -10,7 +10,7 @@ overrides:
 dependencies:
   '@commander-js/extra-typings':
     specifier: 13.1.0
-    version: 13.1.0(commander@13.1.0)
+    version: 13.1.0(commander@14.0.0)
   '@eslint/compat':
     specifier: 1.2.9
     version: 1.2.9(eslint@9.27.0)
@@ -335,8 +335,8 @@ devDependencies:
     specifier: 2.5.1
     version: 2.5.1
   commander:
-    specifier: 13.1.0
-    version: 13.1.0
+    specifier: 14.0.0
+    version: 14.0.0
   concurrently:
     specifier: 9.1.2
     version: 9.1.2
@@ -2346,12 +2346,12 @@ packages:
     dev: false
     optional: true
 
-  /@commander-js/extra-typings@13.1.0(commander@13.1.0):
+  /@commander-js/extra-typings@13.1.0(commander@14.0.0):
     resolution: {integrity: sha512-q5P52BYb1hwVWE6dtID7VvuJWrlfbCv4klj7BjUUOqMz4jbSZD4C9fJ9lRjL2jnBGTg+gDDlaXN51rkWcLk4fg==}
     peerDependencies:
       commander: ~13.1.0
     dependencies:
-      commander: 13.1.0
+      commander: 14.0.0
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -8903,6 +8903,11 @@ packages:
   /commander@13.1.0:
     resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
+    dev: true
+
+  /commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
 
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
