@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.17.0
-    version: 40.17.0(typanion@3.14.0)
+    specifier: 40.17.1
+    version: 40.17.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.1
     version: 0.34.1
@@ -17092,8 +17092,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.17.0(typanion@3.14.0):
-    resolution: {integrity: sha512-IGDtn6ORI7CL5x8KgmV+EcW37WuHXUo+9p6jJpR56M7VNQ303yY4Uo+aHgq3Ca5uxhtG2anUxXQqZJiyIZbzjQ==}
+  /renovate@40.17.1(typanion@3.14.0):
+    resolution: {integrity: sha512-MAB6VhPl3ME3IfbHOMzrkkVKNM9z0ccNcu0vSNEVoXPE/OI04hP5Dx9zzYy0LdNqYmfPyDgNj7r6gg9fW6b7IQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17197,7 +17197,7 @@ packages:
       remark: 13.0.0
       remark-github: 10.1.0
       safe-stable-stringify: 2.5.0
-      semver: 7.7.1
+      semver: 7.7.2
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 2.1.2
@@ -17568,12 +17568,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: true
-
-  /semver@7.7.1:
-    resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
-    engines: {node: '>=10'}
-    hasBin: true
     dev: true
 
   /semver@7.7.2:
