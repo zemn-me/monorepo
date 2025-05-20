@@ -17,7 +17,7 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.43.0
 	github.com/bazelbuild/bazel-watcher v0.26.1
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
-	github.com/bazelbuild/rules_go v0.54.0
+	github.com/bazelbuild/rules_go v0.54.1
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.3.0+incompatible
 	github.com/go-chi/chi/v5 v5.2.1
