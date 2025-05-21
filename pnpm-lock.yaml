@@ -45,8 +45,8 @@ dependencies:
     specifier: 1.2.7
     version: 1.2.7(@types/react-dom@18.3.7)(@types/react@18.3.21)(react-dom@19.1.0)(react@19.1.0)
   '@react-spring/rafz':
-    specifier: 10.0.0
-    version: 10.0.0
+    specifier: 10.0.1
+    version: 10.0.1
   '@tanstack/react-query':
     specifier: 5.76.1
     version: 5.76.1(react@19.1.0)
@@ -5276,13 +5276,8 @@ packages:
       react-native: 0.79.2(@babel/core@7.27.1)(@types/react@18.3.21)(react@19.1.0)
     dev: true
 
-  /@react-spring/rafz@10.0.0:
-    resolution: {integrity: sha512-j8cwCiJKGNDw1DQLYo/3Z+RIGC+6yZiyDqmvwv3uAJHjL0b+xnLwpKz4SW94kIJcJBNetkYDrwzTMFv4U3JVQA==}
-    dev: false
-
   /@react-spring/rafz@10.0.1:
     resolution: {integrity: sha512-UrzG/d6Is+9i0aCAjsjWRqIlFFiC4lFqFHrH63zK935z2YDU95TOFio4VKGISJ5SG0xq4ULy7c1V3KU+XvL+Yg==}
-    dev: true
 
   /@react-spring/shared@10.0.1(react@19.1.0):
     resolution: {integrity: sha512-KR2tmjDShPruI/GGPfAZOOLvDgkhFseabjvxzZFFggJMPkyICLjO0J6mCIoGtdJSuHywZyc4Mmlgi+C88lS00g==}
