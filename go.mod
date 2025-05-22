@@ -29,7 +29,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/terraform-plugin-framework v1.15.0
 	github.com/itchyny/gojq v0.12.17
-	github.com/nyaruka/phonenumbers v1.6.1
+	github.com/nyaruka/phonenumbers v1.6.3
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
