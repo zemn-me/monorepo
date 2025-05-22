@@ -26,7 +26,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["date_test.js"],
+    srcs = [
+        "date_test.js",
+        "season_test.js",
+    ],
     deps = [":time"],
 )
 
