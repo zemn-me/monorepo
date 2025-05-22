@@ -17,7 +17,7 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.43.0
 	github.com/bazelbuild/bazel-watcher v0.26.1
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
-	github.com/bazelbuild/rules_go v0.54.0
+	github.com/bazelbuild/rules_go v0.54.1
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.3.0+incompatible
 	github.com/go-chi/chi/v5 v5.2.1
@@ -33,7 +33,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
-	github.com/tdewolff/parse/v2 v2.8.0
+	github.com/tdewolff/parse/v2 v2.8.1
 	github.com/twilio/twilio-go v1.26.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.14.0
