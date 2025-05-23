@@ -47,7 +47,8 @@ const southernSeasons = [
 
 export function getSeason(
 	date: Date = new Date(),
-	isNorthernHemi: boolean = isNorthernHemisphere()): Season {
+	timeZone: string | undefined = undefined,
+	isNorthernHemi: boolean = isNorthernHemisphere(timeZone)): Season {
 
 	const seasons = ([southernSeasons, northernSeasons] as const)[(+isNorthernHemi) as 0 | 1];
 
