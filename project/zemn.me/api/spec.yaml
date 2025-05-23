@@ -15,6 +15,117 @@ components:
       type: openIdConnect
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+
+
+    OAuthTokenTypeURI:
+      type: string
+      description: >
+        A URI identifying the type of token. Standard values are defined in RFC 8693,
+        but additional URIs may be used.
+      enum:
+        - urn:ietf:params:oauth:token-type:access_token
+        - urn:ietf:params:oauth:token-type:refresh_token
+        - urn:ietf:params:oauth:token-type:id_token
+        - urn:ietf:params:oauth:token-type:saml1
+        - urn:ietf:params:oauth:token-type:saml2
+        - urn:ietf:params:oauth:token-type:jwt
+      example: urn:ietf:params:oauth:token-type:jwt
+
+
+    TokenExchangeRequest:
+      type: object
+      description: >
+        Request body schema for an OAuth 2.0 Token Exchange request as defined in RFC 8693.
+        The client submits this form-encoded payload to the token endpoint.
+      required:
+        - grant_type
+        - subject_token
+        - subject_token_type
+      properties:
+        grant_type:
+          type: string
+          enum: [urn:ietf:params:oauth:grant-type:token-exchange]
+          description: MUST be the token exchange grant type URI.
+        resource:
+          type: string
+          format: uri
+          description: >
+            A URI for the target resource where the issued token will be used.
+        audience:
+          type: string
+          description: >
+            Logical name of the target service. Interpretation depends on local agreement.
+        scope:
+          type: string
+          description: >
+            Space-delimited string of requested access scopes.
+        requested_token_type:
+          type: string
+          description: >
+            URI identifying the requested type of the issued token (e.g. access_token, jwt).
+        subject_token:
+          $ref: "#/components/schemas/OAuthTokenTypeURI"
+          description: >
+            The token representing the subject (user or entity) on whose behalf the request is made.
+        subject_token_type:
+          $ref: "#/components/schemas/OAuthTokenTypeURI"
+          description: >
+            URI indicating the type of subject_token, e.g.
+            urn:ietf:params:oauth:token-type:access_token
+        actor_token:
+          type: string
+          description: >
+            (Optional) A token representing the actor (delegating party).
+        actor_token_type:
+          type: string
+          description: >
+            The type of the actor_token. REQUIRED if actor_token is present.
+
+    TokenExchangeResponse:
+      type: object
+      description: >
+        Standard OAuth 2.0 response for a successful token exchange. This includes the new token and metadata.
+      required:
+        - access_token
+        - issued_token_type
+        - token_type
+      properties:
+        access_token:
+          type: string
+          description: The issued token itself (JWT, opaque string, etc).
+        issued_token_type:
+          type: string
+          description: >
+            The type of the issued token, e.g.
+            urn:ietf:params:oauth:token-type:access_token
+        token_type:
+          type: string
+          enum: [Bearer, N_A]
+          description: >
+            How to use the access token (usually "Bearer"). "N_A" if not applicable.
+        expires_in:
+          type: integer
+          description: Time in seconds until the token expires.
+        scope:
+          type: string
+          description: >
+            The granted scope of the issued token. REQUIRED if it differs from the requested scope.
+        refresh_token:
+          type: string
+          description: >
+            Optional refresh token, if offline access is allowed.
+
+    OAuthErrorResponse:
+      type: object
+      description: Standard OAuth 2.0 error response.
+      properties:
+        error:
+          type: string
+          description: Short error code (e.g., "invalid_request", "invalid_target").
+        error_description:
+          type: string
+          description: Human-readable explanation of the error.
+
     Authorizer:
       type: object
       required:
@@ -105,6 +216,31 @@ components:
           $ref: "#/components/schemas/PhoneNumber"
 
 paths:
+  /token:
+    post:
+      summary: Token Exchange
+      description: >
+        Exchanges a security token (subject_token) for a new token, possibly
+        with impersonation or delegation semantics. Conforms to RFC 8693.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenExchangeRequest'
+      responses:
+        '200':
+          description: A token was successfully exchanged.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenExchangeResponse'
+        '400':
+          description: Invalid or unsupported token exchange request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthErrorResponse'
   /phone/init:
     get:
       parameters:
