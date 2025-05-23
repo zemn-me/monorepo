@@ -2,6 +2,9 @@ package apiserver
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -103,13 +106,15 @@ func (s Server) postNewSettings(ctx context.Context, settings CallboxSettings) (
 	return err
 }
 
-var _ StrictServerInterface = (*Server)(nil)
-
 // getCallboxSettings handles GET /callbox/settings.
-func (s Server) GetCallboxSettings(ctx context.Context, rq GetCallboxSettingsRequestObject) (rs GetCallboxSettingsResponseObject, err error) {
+func (s Server) getCallboxSettings(w http.ResponseWriter, r *http.Request) error {
+	if err := useOIDCAuth(w, r); err != nil {
+		return err
+	}
+	ctx := r.Context()
 	rec, err := s.getLatestSettings(ctx)
 	if err != nil {
-		return
+		return err
 	}
 
 	// blank / default settings
@@ -118,17 +123,43 @@ func (s Server) GetCallboxSettings(ctx context.Context, rq GetCallboxSettingsReq
 		settings = rec.Settings
 	}
 
-	return GetCallboxSettings200JSONResponse(settings), nil
+	w.Header().Set("Content-Type", "application/json")
+	return json.NewEncoder(w).Encode(settings)
+}
+
+// GetCallboxSettings is the exported handler for GET /callbox/settings.
+func (s Server) GetCallboxSettings(w http.ResponseWriter, r *http.Request) {
+	if err := s.getCallboxSettings(w, r); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
+	}
 }
 
 // postCallboxSettings handles POST /callbox/settings.
-func (s Server) PostCallboxSettings(ctx context.Context, rq PostCallboxSettingsRequestObject) (rs PostCallboxSettingsResponseObject, err error) {
-	// Write the new settings record.
-	if err = s.postNewSettings(ctx, *rq.Body); err != nil {
-		return
+func (s Server) postCallboxSettings(w http.ResponseWriter, r *http.Request) error {
+	if err := useOIDCAuth(w, r); err != nil {
+		return err
+	}
+	ctx := r.Context()
+	var req CallboxSettings
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return fmt.Errorf("invalid request: %w", err)
 	}
 
-	return PostCallboxSettings200JSONResponse(
-		*rq.Body,
-	), nil
+	// Write the new settings record.
+	if err := s.postNewSettings(ctx, req); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	return json.NewEncoder(w).Encode(req)
+}
+
+// PostCallboxSettings is the exported handler for POST /callbox/settings.
+func (s Server) PostCallboxSettings(w http.ResponseWriter, r *http.Request) {
+	if err := s.postCallboxSettings(w, r); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
+	}
 }
