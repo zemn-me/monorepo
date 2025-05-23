@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 	"crypto/subtle"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -10,7 +11,6 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/beevik/etree"
 	"github.com/nyaruka/phonenumbers"
 	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"github.com/twilio/twilio-go/twiml"
@@ -78,60 +78,24 @@ func (s *Server) getAllowedEntryCodes(ctx context.Context) (entryCodes []EntryCo
 	return s.getLatestEntryCodes(ctx)
 }
 
-type TwimlResponse struct {
-	*etree.Document
-	Code int
-}
-
-func (t *TwimlResponse) SendHTTP(w http.ResponseWriter) (err error) {
-	twiML, err := twiml.ToXML(t.Document)
-	if err != nil {
-		return
-	}
-	w.Header().Set("Content-Type", "application/xml")
-	w.Write([]byte(twiML))
-	code := t.Code
-	if code == 0 {
-		code = http.StatusOK
-	}
-	w.WriteHeader(code)
-	return
-}
-
-func (t TwimlResponse) VisitPostPhoneJoinConferenceResponse(w http.ResponseWriter) (err error) {
-	return t.SendHTTP(w)
-}
-
-func (t TwimlResponse) VisitPostPhoneHoldMusicResponse(w http.ResponseWriter) (err error) {
-	return t.SendHTTP(w)
-}
-
-func (t TwimlResponse) VisitGetPhoneHandleEntryResponse(w http.ResponseWriter) (err error) {
-	return t.SendHTTP(w)
-}
-
-func (t TwimlResponse) VisitPostPhoneInitResponse(w http.ResponseWriter) (err error) {
-	return t.SendHTTP(w)
-}
-
-func (t TwimlResponse) VisitPostPhoneHandleEntryResponse(w http.ResponseWriter) (err error) {
-	return t.SendHTTP(w)
-}
-
 // Handles an error gracefully with a Twilio <Say/> response.
-func twilioError(i error) (tree *etree.Document, err error) {
-	if i == nil {
+func (Server) HandleErrorForTwilio(rw http.ResponseWriter, rq *http.Request, err error) {
+	if err == nil {
 		panic("Incorrect usage.")
 	}
 	doc, response := twiml.CreateDocument()
 	response.CreateElement("Say").SetText(
 		fmt.Sprintf(
 			"Something went wrong and we are unable to fulfil your request. Apologies. The issue was as follows: %s",
-			i,
+			err,
 		),
 	)
 
-	return doc, nil
+	twiML, _ := twiml.ToXML(doc)
+	rw.Header().Set("Content-Type", "application/xml")
+	rw.Write([]byte(twiML))
+
+	return
 }
 
 func (s Server) TestTwilioChallenge(challenge string) (err error) {
@@ -145,14 +109,14 @@ func (s Server) TestTwilioChallenge(challenge string) (err error) {
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
-func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
-	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
+func (s *Server) getPhoneInit(w http.ResponseWriter, r *http.Request, params GetPhoneInitParams) (err error) {
+	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
 
-	rs, err = s.handleEntryViaPartyMode(ctx, rq)
+	success, err := s.handleEntryViaPartyMode(w, r)
 
-	if err != nil || rs != nil {
+	if err != nil || success {
 		return
 	}
 
@@ -163,7 +127,7 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 
 	fmt.Println(
 		"Rcv call",
-		rq.Body.From,
+		r.FormValue("From"),
 	)
 
 	doc, response := twiml.CreateDocument()
@@ -172,10 +136,9 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 	gather.CreateAttr("action", (&url.URL{
 		Path: "/phone/handleEntry",
 		RawQuery: url.Values{
-			"secret": []string{rq.Params.Secret},
+			"secret": []string{params.Secret},
 		}.Encode(),
 	}).String())
-	// todo(@Zemnmez): change to POST.
 	gather.CreateAttr("method", "GET")
 	gather.CreateAttr("actionOnEmptyResult", "true")
 	gather.CreateElement("Say").SetText(
@@ -183,20 +146,21 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 			"Enter entry code now, or hold.",
 	)
 
-	return TwimlResponse{Document: doc}, nil
-}
-
-func (s *Server) PostPhoneInit(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
-	rs, err = s.postPhoneInit(ctx, rq)
+	twiML, err := twiml.ToXML(doc)
 	if err != nil {
-		doc, _ := twilioError(err)
-		err = nil
-		rs = TwimlResponse{
-			Document: doc,
-		}
+		return
 	}
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write([]byte(twiML))
 
 	return
+}
+
+func (s *Server) GetPhoneInit(rw http.ResponseWriter, rq *http.Request, params GetPhoneInitParams) {
+	err := s.getPhoneInit(rw, rq, params)
+	if err != nil {
+		s.HandleErrorForTwilio(rw, rq, err)
+	}
 }
 
 func removeDuplicateDigits(input string) string {
@@ -219,9 +183,8 @@ func removeDuplicateDigits(input string) string {
 	return string(result)
 }
 
-func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
-	var success bool
-	success, err = s.inPartyMode(ctx)
+func (s *Server) handleEntryViaPartyMode(w http.ResponseWriter, rq *http.Request) (success bool, err error) {
+	success, err = s.inPartyMode(rq.Context())
 	if err != nil {
 		return
 	}
@@ -233,25 +196,30 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 		response.CreateElement("Play").SetText(nook_phone_yes)
 		response.CreateElement("Play").CreateAttr("digits", "9w9")
 
-		return TwimlResponse{Document: doc}, nil
+		var t string
+		t, err = twiml.ToXML(doc)
+		if err != nil {
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/xml")
+		w.Write([]byte(t))
 	}
 
 	return
 }
 
-func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
-	codes, err := s.getLatestEntryCodes(ctx)
+func (s *Server) handleEntryViaCode(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (success bool, err error) {
+	codes, err := s.getLatestEntryCodes(rq.Context())
 	if err != nil {
 		return
 	}
 
 	var digits string
 
-	if rq.Params.Digits != nil {
-		digits = *rq.Params.Digits
+	if params.Digits != nil {
+		digits = *params.Digits
 	}
-
-	var success bool
 
 	for _, code := range codes {
 		if success = subtle.ConstantTimeCompare(
@@ -272,25 +240,27 @@ func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryR
 	response.CreateElement("Play").SetText(nook_phone_yes)
 	response.CreateElement("Play").CreateAttr("digits", "9w9")
 
-	return TwimlResponse{Document: doc}, nil
-}
-
-func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
-	allowedNumbers, err := s.getAllowedNumbers(ctx)
+	twiml, err := twiml.ToXML(doc)
 	if err != nil {
 		return
 	}
 
-	if len(allowedNumbers) == 0 {
-		err = fmt.Errorf("no authoriser numbers available")
-		return
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write([]byte(twiml))
+	return
+}
+
+func (s *Server) handleEntryViaAuthorizer(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	allowedNumbers, err := s.getAllowedNumbers(rq.Context())
+	if err != nil || len(allowedNumbers) == 0 {
+		return fmt.Errorf("no authoriser numbers available")
 	}
 
 	// Default to the first number
 	selectedNumber := allowedNumbers[0].Intl
-	if rq.Params.Digits != nil {
+	if params.Digits != nil {
 		for _, number := range allowedNumbers {
-			if number.Local == *rq.Params.Digits {
+			if number.Local == *params.Digits {
 				selectedNumber = number.Intl
 				break
 			}
@@ -302,54 +272,68 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 	dial := response.CreateElement("Dial")
 	conf := dial.CreateElement("Conference")
 	conf.CreateAttr("startConferenceOnEnter", "true")
-	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(rq.Params.Secret)))
+	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(params.Secret)))
 	conf.SetText(TWILIO_CONFERENCE_NAME)
+
+	twiML, err := twiml.ToXML(doc)
+	if err != nil {
+		return
+	}
 
 	// Make the outbound call to the authoriser
 	callParams := &twilioApi.CreateCallParams{}
 	callParams.SetTo(selectedNumber)
 	callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
-	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(rq.Params.Secret)))
+	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(params.Secret)))
 
 	_, err = s.twilioClient.Api.CreateCall(callParams)
 	if err != nil {
 		return
 	}
 
-	return TwimlResponse{Document: doc}, nil
+	w.Header().Set("Content-Type", "application/xml")
+	_, _ = w.Write([]byte(twiML))
+	return
 }
 
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
-func (s *Server) getPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
-	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
+func (s *Server) getPhoneHandleEntry(w http.ResponseWriter, r *http.Request, params GetPhoneHandleEntryParams) (err error) {
+	if err = s.TestTwilioChallenge(params.Secret); err != nil {
 		return
 	}
 
-	rs, err = s.handleEntryViaCode(ctx, rq)
-	if rs != nil || err != nil {
+	ok, err := s.handleEntryViaCode(w, r, params)
+	if ok || err != nil {
 		return
 	}
 
-	return s.handleEntryViaAuthorizer(ctx, rq)
+	return s.handleEntryViaAuthorizer(w, r, params)
 }
 
-func (s *Server) GetPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
-	rs, err = s.getPhoneHandleEntry(ctx, rq)
+func (s *Server) GetPhoneHandleEntry(w http.ResponseWriter, rq *http.Request, params GetPhoneHandleEntryParams) {
+	err := s.getPhoneHandleEntry(w, rq, params)
 	if err != nil {
-		doc, _ := twilioError(err)
-		err = nil
-		rs = TwimlResponse{
-			Document: doc,
-			// 200 bc twilio
-		}
+		s.HandleErrorForTwilio(w, rq, err)
 	}
+}
+
+func (s *Server) getPhoneNumber(w http.ResponseWriter, r *http.Request) (err error) {
+	if err := useOIDCAuth(w, r); err != nil {
+		return err
+	}
+
+	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 
 	return
 }
 
-func (s *Server) GetPhoneNumber(ctx context.Context, rq GetPhoneNumberRequestObject) (rs GetPhoneNumberResponseObject, err error) {
-	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
-
-	return GetPhoneNumber200JSONResponse(response), nil
+func (s *Server) GetPhoneNumber(w http.ResponseWriter, r *http.Request) {
+	if err := s.getPhoneNumber(w, r); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(Error{Cause: err.Error()})
+	}
 }
