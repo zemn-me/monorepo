@@ -18,8 +18,10 @@ require (
 	github.com/bazelbuild/bazel-watcher v0.26.1
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.54.1
+	github.com/beevik/etree v1.4.1
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.3.0+incompatible
+	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/cors v1.2.1
 	github.com/go-delve/delve v1.24.2
@@ -30,6 +32,7 @@ require (
 	github.com/hashicorp/terraform-plugin-framework v1.15.0
 	github.com/itchyny/gojq v0.12.17
 	github.com/nyaruka/phonenumbers v1.6.3
+	github.com/oapi-codegen/nethttp-middleware v1.1.2
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
@@ -62,7 +65,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.19 // indirect
 	github.com/aws/smithy-go v1.22.2 // indirect
-	github.com/beevik/etree v1.4.1 // indirect
 	github.com/cilium/ebpf v0.11.0 // indirect
 	github.com/containerd/stargz-snapshotter/estargz v0.16.3 // indirect
 	github.com/cosiner/argv v0.1.0 // indirect
@@ -75,7 +77,6 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsevents v0.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/getkin/kin-openapi v0.127.0 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
@@ -83,6 +84,7 @@ require (
 	github.com/golang/mock v1.7.0-rc.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-dap v0.12.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
 	github.com/hashicorp/go-plugin v1.6.3 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
@@ -93,7 +95,6 @@ require (
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/invopop/yaml v0.3.1 // indirect
 	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/jaschaephraim/lrserver v0.0.0-20171129202958-50d19f603f71 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
@@ -106,6 +107,8 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
+	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/oklog/run v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
