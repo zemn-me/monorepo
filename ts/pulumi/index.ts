@@ -112,7 +112,7 @@ export class Component extends Pulumi.ComponentResource {
 
 		const twilioOptions = voiceUrl.apply(
 			voiceUrl => ({
-				voiceMethod: 'GET',
+				voiceMethod: 'POST',
 				voiceUrl
 			})
 		);
