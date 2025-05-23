@@ -1,8 +1,8 @@
 package apiserver
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 	"net/url"
 	"time"
 
@@ -11,8 +11,8 @@ import (
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
-func (s *Server) postPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params PostPhoneHoldMusicParams) (err error) {
-	if err = s.TestTwilioChallenge(params.Secret); err != nil {
+func (s *Server) postPhoneHoldMusic(ctx context.Context, rq PostPhoneHoldMusicRequestObject) (rs PostPhoneHoldMusicResponseObject, err error) {
+	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
 		return
 	}
 
@@ -33,21 +33,24 @@ func (s *Server) postPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, pa
 	play.CreateAttr("loop", "0")
 	play.SetText(fmt.Sprintf("https://static.zemn.me/acnh_music/%s", url.PathEscape(track)))
 
-	twiML, err := twiml.ToXML(doc)
-	if err != nil {
-		return
-	}
-
-	rw.Header().Set("Content-Type", "application/xml")
-	_, _ = rw.Write([]byte(twiML))
-	return
+	return TwimlResponse{
+		Document: doc,
+	}, nil
 }
 
 // Returns a conference response with the correct animal crossing new horizons
 // track as backing music!
-func (s *Server) PostPhoneHoldMusic(rw http.ResponseWriter, rq *http.Request, params PostPhoneHoldMusicParams) {
-	err := s.postPhoneHoldMusic(rw, rq, params)
-	if err != nil {
-		s.HandleErrorForTwilio(rw, rq, err)
+func (s *Server) PostPhoneHoldMusic(ctx context.Context, rq PostPhoneHoldMusicRequestObject) (rs PostPhoneHoldMusicResponseObject, err error) {
+	rs, err = s.postPhoneHoldMusic(ctx, rq)
+	if rs != nil {
+		return
 	}
+	if err != nil {
+		tree, _ := twilioError(err)
+		rs = TwimlResponse{Document: tree}
+		err = nil
+		return
+	}
+
+	return
 }
