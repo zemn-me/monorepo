@@ -77,7 +77,7 @@ const SEASON_START_MONTHS = {
  */
 export function useSeason(): Season {
 	// Provide a fallback for SSR by guessing northern hemisphere initially:
-	const [season, setSeason] = useState<Season>(() => getSeason(new Date(), true));
+	const [season, setSeason] = useState<Season>(() => getSeason(new Date(), undefined, true));
 
 	function scheduleNextCheck() {
 		const now = new Date();
