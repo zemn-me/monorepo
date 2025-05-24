@@ -28,7 +28,7 @@ go_library(
         "callbox_settings.go",
         "constants.go",
         "date.go",
-        "id_token.go",
+        "health.go",
         "imports.go",
         "phone.go",
         "phone_hold_music.go",
@@ -39,17 +39,22 @@ go_library(
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server",
     visibility = ["//visibility:public"],
     deps = [
+        "//project/zemn.me/api",
         "//project/zemn.me/api/server/acnh",
+        "//project/zemn.me/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_config//:config",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
-        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_beevik_etree//:etree",
+        "@com_github_getkin_kin_openapi//openapi3",
+        "@com_github_getkin_kin_openapi//openapi3filter",
         "@com_github_go_chi_chi_v5//:chi",
         "@com_github_go_chi_cors//:cors",
         "@com_github_google_uuid//:uuid",
         "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
         "@com_github_oapi_codegen_runtime//types",
@@ -61,6 +66,9 @@ go_library(
 
 go_test(
     name = "server_test",
-    srcs = ["smoke_test.go"],
+    srcs = [
+        "cors_test.go",
+        "smoke_test.go",
+    ],
     embed = [":server"],
 )
