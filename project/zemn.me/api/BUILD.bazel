@@ -43,7 +43,25 @@ js_library(
 
 go_library(
     name = "api",
-    srcs = ["doc.go"],
+    srcs = [
+        "doc.go",
+        "spec.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api",
     visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "go_raw_spec",
+    srcs = ["spec.yaml"],
+    outs = ["spec.go"],
+    cmd = """
+		echo 'package api' > $@
+		echo 'const Spec = `' >> $@
+		cat $(SRCS) >> $@
+		echo '`' >> $@
+	""",
+    visibility = [
+        "//:__subpackages__",
+    ],
 )
