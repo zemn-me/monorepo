@@ -9,9 +9,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/twilio/twilio-go"
+
+	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 // Server holds the DynamoDB client and table name.
@@ -27,10 +33,22 @@ type Server struct {
 
 // NewServer initialises the DynamoDB client.
 func NewServer(ctx context.Context) (*Server, error) {
+	spec, err := openapi3.NewLoader().LoadFromData([]byte(apiSpec.Spec))
+	if err != nil {
+		return nil, err
+	}
+
+	spec.Servers = nil
+
+	mw := middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
+		Options: openapi3filter.Options{
+			AuthenticationFunc: auth.OIDC,
+		},
+	})
+
 	// Check for an optional endpoint override.
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	var cfg aws.Config
-	var err error
 	if endpoint != "" {
 		cfg, err = config.LoadDefaultConfig(ctx,
 			config.WithEndpointResolver(aws.EndpointResolverFunc(
@@ -85,7 +103,10 @@ func NewServer(ctx context.Context) (*Server, error) {
 		}),
 	}
 
-	s.Handler = HandlerFromMux(s, r)
+	s.Handler = mw(HandlerFromMux(NewStrictHandler(
+		s,
+		nil,
+	), r))
 
 	return s, nil
 }
