@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Color } from '#root/ts/factorio/color.js';
 import { Connection } from '#root/ts/factorio/connection.js';
@@ -19,146 +19,76 @@ import { Uint8 } from '#root/ts/factorio/uint8.js';
 
 export const Entity = z.strictObject({
 	entity_number: EntityNumber,
-	/**
-	 * Prototype name of the entity (e.g. "offshore-pump").
-	 */
+	/** Prototype name of the entity (e.g. "offshore-pump"). */
 	name: z.string(),
-	/**
-	 * Position object, position of the entity within the blueprint.
-	 */
+	/** Position object, position of the entity within the blueprint. */
 	position: Position,
-	/**
-	 * Direction of the entity, uint (optional).
-	 */
-	direction: z.number().optional(),
-	/**
-	 * Orientation of cargo wagon or locomotive, value 0 to 1 (optional).
-	 */
-	orientation: Float.optional(),
-	/**
-	 * Circuit connection, object with keys starting from 1, values are #Connection objects (optional).
-	 */
-	connections: Connection.optional(),
-	/**
-	 * Copper wire connections, array of entity_numbers (optional).
-	 */
-	neighbours: z.array(EntityNumber).optional(),
-	/**
-	 * #Control behavior object of this entity (optional).
-	 */
-	control_behavior: ControlBehavior.optional(),
-	/**
-	 * Item requests by this entity, this is what defines the item-request-proxy when the blueprint is placed, optional. #Item request object
-	 */
-	items: ItemRequestObject.optional(),
-	/**
-	 * Name of the recipe prototype this assembling machine is set to, optional, string.
-	 */
-	recipe: z.string().optional(),
-	/**
-	 * Used by Prototype/Container, optional. The index of the first inaccessible item slot due to limiting with the red "bar". 0-based Types/ItemStackIndex.
-	 */
-	bar: Int.optional(),
-	/**
-	 * Cargo wagon inventory configuration, optional. #Inventory object
-	 */
-	inventory: Inventory.optional().nullable(),
-	/**
-	 * Used by Prototype/InfinityContainer, optional. #Infinity settings object
-	 */
-	infinity_settings: InfinitySettings.optional(),
-	/**
-	 * Type of the underground belt or loader, optional. Either "input" or "output".
-	 */
-	type: z.enum(['input', 'output']).optional(),
-	/**
-	 * Input priority of the splitter, optional. Either "right" or "left", "none" is omitted.
-	 */
-	input_priority: z.enum(['right', 'left']).optional(),
-	/**
-	 * Output priority of the splitter, optional. Either "right" or "left", "none" is omitted.
-	 */
-	output_priority: z.enum(['right', 'left']).optional(),
-	/**
-	 * Filter of the splitter, optional. Name of the item prototype the filter is set to, string.
-	 */
-	filter: z.string().optional(),
-	/**
-	 * Filters of the filter inserter or loader, optional. Array of #Item filter objects.
-	 */
-	filters: z.array(ItemFilterObject).optional(),
-	/**
-	 * Filter mode of the filter inserter, optional. Either "whitelist" or "blacklist".
-	 */
-	filter_mode: z.enum(['whitelist', 'blacklist']).optional(),
-	/**
-	 * The stack size the inserter is set to, optional. Types/uint8.
-	 */
-	override_stack_size: Uint8.optional(),
-	/**
-	 * The drop position the inserter is set to, optional. #Position object.
-	 */
-	drop_position: Position.optional(),
-	/**
-	 * The pickup position the inserter is set to, optional. #Position object.
-	 */
-	pickup_position: Position.optional(),
-	/**
-	 * Used by Prototype/LogisticContainer, optional. #Logistic filter object.
-	 */
-	request_filters: z.array(LogisticFilter).optional(),
-	/**
-	 * Boolean. Whether this requester chest can request from buffer chests.
-	 */
-	request_from_buffers: z.boolean().optional(),
-	/**
-	 * Used by Programmable speaker, optional. #Speaker parameter object.
-	 */
-	parameters: SpeakerParameter.optional(),
-	/**
-	 * Used by Programmable speaker, optional. #Speaker alert parameter object
-	 */
-	alert_parameters: SpeakerAlertParameter.optional(),
-	/**
-	 * Used by the rocket silo, optional. Boolean, whether auto launch is enabled.
-	 */
-	auto_launch: z.boolean().optional(),
-	/**
-	 * Used by Prototype/SimpleEntityWithForce or Prototype/SimpleEntityWithOwner, optional. Types/GraphicsVariation
-	 */
-	variation: z.number().optional(),
-	/**
-	 * Color of the Prototype/SimpleEntityWithForce, Prototype/SimpleEntityWithOwner, or train station, optional. #Color object.
-	 */
-	color: Color.optional(),
-	/**
-	 * The name of the train station, optional.
-	 */
-	station: z.string().optional(),
-	/**
-	 * The manually set train limit of the train station, optional.
-	 */
-	manual_trains_limit: z.number().optional(),
-	/**
-	 * The current state of the power switch, optional.
-	 */
-	switch_state: z.boolean().optional(),
-	/**
-	 * Dictionary of arbitrary data, optional. Tags.
-	 */
-	tags: Tags.optional(),
-	/**
-	 * ?
-	 */
-	power_production: z.number().optional(),
-	/**
-	 * ?
-	 */
-	power_usage: z.number().optional(),
-	/**
-	 * ?
-	 */
-	buffer_size: z.number().optional(),
+	/** Direction of the entity, uint (optional). */
+	direction: z.optional(z.number()),
+	/** Orientation of cargo wagon or locomotive, value 0 to 1 (optional). */
+	orientation: z.optional(Float),
+	/** Circuit connection, object with keys starting from 1, values are #Connection objects (optional). */
+	connections: z.optional(Connection),
+	/** Copper wire connections, array of entity_numbers (optional). */
+	neighbours: z.optional(z.array(EntityNumber)),
+	/** #Control behavior object of this entity (optional). */
+	control_behavior: z.optional(ControlBehavior),
+	/** Item requests by this entity, optional. #Item request object */
+	items: z.optional(ItemRequestObject),
+	/** Name of the recipe prototype, optional. */
+	recipe: z.optional(z.string()),
+	/** Index of the first inaccessible item slot, optional. */
+	bar: z.optional(Int),
+	/** Cargo wagon inventory configuration, optional. #Inventory object */
+	inventory: z.nullable(z.optional(Inventory)),
+	/** Used by Prototype/InfinityContainer, optional. #Infinity settings object */
+	infinity_settings: z.optional(InfinitySettings),
+	/** Type of the underground belt or loader, optional. */
+	type: z.optional(z.enum(['input', 'output'])),
+	/** Input priority of the splitter, optional. */
+	input_priority: z.optional(z.enum(['right', 'left'])),
+	/** Output priority of the splitter, optional. */
+	output_priority: z.optional(z.enum(['right', 'left'])),
+	/** Filter of the splitter, optional. */
+	filter: z.optional(z.string()),
+	/** Filters of the filter inserter or loader, optional. */
+	filters: z.optional(z.array(ItemFilterObject)),
+	/** Filter mode of the filter inserter, optional. */
+	filter_mode: z.optional(z.enum(['whitelist', 'blacklist'])),
+	/** Stack size the inserter is set to, optional. */
+	override_stack_size: z.optional(Uint8),
+	/** Drop position of the inserter, optional. */
+	drop_position: z.optional(Position),
+	/** Pickup position of the inserter, optional. */
+	pickup_position: z.optional(Position),
+	/** Used by Prototype/LogisticContainer, optional. */
+	request_filters: z.optional(z.array(LogisticFilter)),
+	/** Whether this requester chest can request from buffer chests. */
+	request_from_buffers: z.optional(z.boolean()),
+	/** Used by Programmable speaker, optional. */
+	parameters: z.optional(SpeakerParameter),
+	/** Used by Programmable speaker, optional. */
+	alert_parameters: z.optional(SpeakerAlertParameter),
+	/** Whether auto launch is enabled. */
+	auto_launch: z.optional(z.boolean()),
+	/** Graphics variation, optional. */
+	variation: z.optional(z.number()),
+	/** Color of the entity, optional. */
+	color: z.optional(Color),
+	/** Train station name, optional. */
+	station: z.optional(z.string()),
+	/** Manually set train limit, optional. */
+	manual_trains_limit: z.optional(z.number()),
+	/** Power switch state, optional. */
+	switch_state: z.optional(z.boolean()),
+	/** Arbitrary data, optional. */
+	tags: z.optional(Tags),
+	/** Power production, optional. */
+	power_production: z.optional(z.number()),
+	/** Power usage, optional. */
+	power_usage: z.optional(z.number()),
+	/** Buffer size, optional. */
+	buffer_size: z.optional(z.number()),
 });
 
-export type Entity = z.TypeOf<typeof Entity>;
+export type Entity = z.infer<typeof Entity>;

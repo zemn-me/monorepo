@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
@@ -10,6 +10,6 @@ export const ConstantCombinatorParameters = z.strictObject({
 	index: Uint,
 });
 
-export type ConstantCombinatorParameters = z.TypeOf<
+export type ConstantCombinatorParameters = z.infer<
 	typeof ConstantCombinatorParameters
 >;

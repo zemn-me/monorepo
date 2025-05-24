@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 export const Uint = z
 	.number()
-	.refine(z => z >= 0, { message: 'uint must be >= 0' });
+	.check(z.refine(z => z >= 0, { message: 'uint must be >= 0' }));
 
-export type Uint = z.TypeOf<typeof Uint>;
+export type Uint = z.infer<typeof Uint>;
