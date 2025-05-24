@@ -16,6 +16,29 @@ components:
       # todo: own issuer!
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    OAuthClientID:
+      type: string
+      description: The OAuth client ID.
+      example: "1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com"
+    OAuthClient:
+      type: object
+      properties:
+        clientId:
+          ref: "#/components/schemas/OAuthClientID"
+        redirectUris:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: The redirect URIs allowed for this OAuth client.
+        authorizations:
+          type: array
+          items:
+            type: string
+            description: A list of authorizations (scopes) granted to the OAuth client.
+        name:
+          type: string
+          description: The name of the OAuth client.
     TwilioCallRequest:
       type: object
       description: Parameters sent by Twilio in requests to your webhook for handling a call.
@@ -350,3 +373,21 @@ paths:
               schema:
                 type: string
                 enum: [OK]
+
+  /oauth/client/authorization:
+    get:
+      summary: Returns info needed to perform the OAuth authorization step.
+      responses:
+        "200":
+          description: >
+            Returns the OAuth client ID and redirect URIs.
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OAuthClient"
