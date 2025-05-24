@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 export enum _DefinesControlBehaviorTransportBeltContentReadMode {
 	pulse = 0,
@@ -8,7 +8,7 @@ export enum _DefinesControlBehaviorTransportBeltContentReadMode {
 export const DefinesControlBehaviorTransportBeltContentReadMode = z.nativeEnum(
 	_DefinesControlBehaviorTransportBeltContentReadMode
 );
-export type DefinesControlBehaviorTransportBeltContentReadMode = z.TypeOf<
+export type DefinesControlBehaviorTransportBeltContentReadMode = z.infer<
 	typeof DefinesControlBehaviorInserterHandReadMode
 >;
 
@@ -20,7 +20,7 @@ export enum _DefinesControlBehaviorInserterHandReadMode {
 export const DefinesControlBehaviorInserterHandReadMode = z.nativeEnum(
 	_DefinesControlBehaviorInserterHandReadMode
 );
-export type DefinesControlBehaviorInserterHandReadMode = z.TypeOf<
+export type DefinesControlBehaviorInserterHandReadMode = z.infer<
 	typeof DefinesControlBehaviorInserterHandReadMode
 >;
 
@@ -32,6 +32,6 @@ export enum _DefinesControlBehaviorMiningDrillResourceReadMode {
 export const DefinesControlBehaviorMiningDrillResourceReadMode = z.nativeEnum(
 	_DefinesControlBehaviorMiningDrillResourceReadMode
 );
-export type DefinesControlBehaviorMiningDrillResourceReadMode = z.TypeOf<
+export type DefinesControlBehaviorMiningDrillResourceReadMode = z.infer<
 	typeof DefinesControlBehaviorInserterHandReadMode
 >;

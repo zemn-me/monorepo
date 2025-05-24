@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 export const SignalID = z.strictObject({
 	type: z.union([
@@ -9,7 +9,7 @@ export const SignalID = z.strictObject({
 	/**
 	 * Name of the item, fluid or virtual signal.
 	 */
-	name: z.string().optional(),
+	name: z.optional(z.string()),
 });
 
-export type SignalID = z.TypeOf<typeof SignalID>;
+export type SignalID = z.infer<typeof SignalID>;
