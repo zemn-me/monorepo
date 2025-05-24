@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
@@ -24,43 +24,43 @@ export const Blueprint = z.strictObject({
 	/**
 	 * String, the name of the blueprint set by the user.
 	 */
-	label: z.string().optional(),
+	label: z.optional(z.string()),
 	/**
 	 * The color of the label of this blueprint. Optional. #Color object.
 	 */
-	label_color: Color.optional(),
+	label_color: z.optional(Color),
 	/**
 	 * The actual content of the blueprint, array of #Entity objects.
 	 */
-	entities: z.array(Entity).optional(),
+	entities: z.optional(z.array(Entity)),
 	/**
 	 * The tiles included in the blueprint, array of #Tile objects.
 	 */
-	tiles: z.array(Tile).optional(),
+	tiles: z.optional(z.array(Tile)),
 	/**
 	 * The icons of the blueprint set by the user, array of #Icon objects.
 	 */
-	icons: z.array(Icon).optional(),
+	icons: z.optional(z.array(Icon)),
 	/**
 	 * The schedules for trains in this blueprint, array of #Schedule objects.
 	 */
-	schedules: z.array(Schedule).optional(),
+	schedules: z.optional(z.array(Schedule)),
 	/**
 	 * The description of the blueprint. Optional.
 	 */
-	description: z.string().optional(),
+	description: z.optional(z.string()),
 	/**
 	 * The dimensions of the grid to use for snapping. Optional. #Position object.
 	 */
-	'snap-to-grid': Position.optional(),
+	'snap-to-grid': z.optional(Position),
 	/**
 	 * Whether the blueprint uses absolute or relative snapping. Optional.
 	 */
-	'absolute-snapping': z.boolean().optional(),
+	'absolute-snapping': z.optional(z.boolean()),
 	/**
 	 * Offset relative to the global absolute snapping grid. Optional. #Position object.
 	 */
-	'position-relative-to-grid': Position.optional(),
+	'position-relative-to-grid': z.optional(Position),
 	/**
 	 * The map version of the map the blueprint was created in.
 	 */
@@ -157,4 +157,4 @@ export function blueprintSurroundedByWall(
 	return newBlueprint;
 }
 
-export type Blueprint = z.TypeOf<typeof Blueprint>;
+export type Blueprint = z.infer<typeof Blueprint>;

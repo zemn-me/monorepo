@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { CircuitCondition } from '#root/ts/factorio/circuit_condition.js';
 import { Uint } from '#root/ts/factorio/uint.js';
@@ -10,7 +10,7 @@ const WaitConditionBase = z.strictObject({
 	compare_type: z.enum(['and', 'or']),
 });
 
-export const WaitConditionWithCondition = WaitConditionBase.merge(
+export const WaitConditionWithCondition = z.extend(WaitConditionBase, (
 	z.strictObject({
 		type: z.enum(['circuit', 'fluid_count', 'item_count']),
 		/**
@@ -18,13 +18,13 @@ export const WaitConditionWithCondition = WaitConditionBase.merge(
 		 */
 		condition: CircuitCondition,
 	})
-);
+));
 
-export type WaitConditionWithCondition = z.TypeOf<
+export type WaitConditionWithCondition = z.infer<
 	typeof WaitConditionWithCondition
 >;
 
-export const WaitConditionWithTicks = WaitConditionBase.merge(
+export const WaitConditionWithTicks = z.extend(WaitConditionBase, (
 	z.strictObject({
 		/**
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
@@ -47,11 +47,11 @@ export const WaitConditionWithTicks = WaitConditionBase.merge(
 		 */
 		ticks: Uint,
 	})
-);
+));
 
-export type WaitConditionWithTicks = z.TypeOf<typeof WaitConditionWithTicks>;
+export type WaitConditionWithTicks = z.infer<typeof WaitConditionWithTicks>;
 
-export const WaitConditionEtc = WaitConditionBase.merge(
+export const WaitConditionEtc = z.extend( WaitConditionBase, (
 	z.strictObject({
 		/**
 		 * One of "time", "inactivity", "full", "empty", "item_count", "circuit", "robots_inactive", "fluid_count", "passenger_present", "passenger_not_present".
@@ -69,9 +69,9 @@ export const WaitConditionEtc = WaitConditionBase.merge(
 			'passenger_not_present',
 		]),
 	})
-);
+));
 
-export type WaitConditionEtc = z.TypeOf<typeof WaitConditionEtc>;
+export type WaitConditionEtc = z.infer<typeof WaitConditionEtc>;
 
 export const WaitCondition = z.union([
 	WaitConditionWithTicks,
@@ -79,4 +79,4 @@ export const WaitCondition = z.union([
 	WaitConditionEtc,
 ]);
 
-export type WaitCondition = z.TypeOf<typeof WaitCondition>;
+export type WaitCondition = z.infer<typeof WaitCondition>;

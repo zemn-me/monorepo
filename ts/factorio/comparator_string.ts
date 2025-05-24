@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 export const EqualTo = z.literal('=');
-export type EqualTo = z.TypeOf<typeof EqualTo>;
+export type EqualTo = z.infer<typeof EqualTo>;
 
 export const GreaterThan = z.literal('>');
-export type GreaterThan = z.TypeOf<typeof GreaterThan>;
+export type GreaterThan = z.infer<typeof GreaterThan>;
 
 export const LesserThan = z.literal('<');
-export type LesserThan = z.TypeOf<typeof LesserThan>;
+export type LesserThan = z.infer<typeof LesserThan>;
 
 export const GreaterThanOrEqualToUnicode = z.literal('≥');
 export const GreaterThanOrEqualToAscii = z.literal('>=');
@@ -15,7 +15,7 @@ export const GreaterThanOrEqualTo = z.union([
 	GreaterThanOrEqualToAscii,
 	GreaterThanOrEqualToUnicode,
 ]);
-export type GreaterThanOrEqualTo = z.TypeOf<typeof GreaterThanOrEqualTo>;
+export type GreaterThanOrEqualTo = z.infer<typeof GreaterThanOrEqualTo>;
 
 export const LesserThanOrEqualToUnicode = z.literal('≤');
 export const LesserThanOrEqualToAscii = z.literal('<=');
@@ -23,11 +23,11 @@ export const LesserThanOrEqualTo = z.union([
 	LesserThanOrEqualToUnicode,
 	LesserThanOrEqualToAscii,
 ]);
-export type LesserThanOrEqualTo = z.TypeOf<typeof LesserThanOrEqualTo>;
+export type LesserThanOrEqualTo = z.infer<typeof LesserThanOrEqualTo>;
 export const NotEqualToUnicode = z.literal('≠');
 export const NotEqualToAscii = z.literal('!=');
 export const NotEqualTo = z.union([NotEqualToUnicode, NotEqualToAscii]);
-export type NotEqualTo = z.TypeOf<typeof NotEqualTo>;
+export type NotEqualTo = z.infer<typeof NotEqualTo>;
 
 export const ComparatorString = z.union([
 	EqualTo,
@@ -38,4 +38,4 @@ export const ComparatorString = z.union([
 	NotEqualTo,
 ]);
 
-export type ComparatorString = z.TypeOf<typeof ComparatorString>;
+export type ComparatorString = z.infer<typeof ComparatorString>;

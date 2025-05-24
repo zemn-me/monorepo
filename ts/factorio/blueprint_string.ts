@@ -1,6 +1,6 @@
 import b64 from 'base64-js';
 import pako from 'pako';
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
@@ -14,9 +14,9 @@ const versionByte = '0';
 
 export const BlueprintString = z
 	.string()
-	.refine(v => v[0] == versionByte, {
+	.check(z.refine(v => v[0] == versionByte, {
 		message: `Factorio blueprint must start with version byte "${versionByte}".`
-	})
+	}))
 	.transform(v => v.slice(1))
 	.pipe(Base64)
 	.transform((val, ctx) =>

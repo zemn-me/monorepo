@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { EntityNumber } from '#root/ts/factorio/entity_number.js';
 import { ScheduleRecord } from '#root/ts/factorio/schedule_record.js';
