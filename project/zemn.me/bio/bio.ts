@@ -115,6 +115,8 @@ const canonicaliseArticleMetadata = (
 ): Pick<Event, 'date' | 'description' | 'title'> =>
 	zodCanonicaliseArticleMetadata.parse(p);
 
+export type BioType = typeof Bio;
+
 export const Bio = {
 	officialWebsite: url`https://zemn.me`,
 	birthdate: date(17, 'may', 1994),
@@ -163,7 +165,6 @@ export const Bio = {
 		en`bazel`,
 	],
 	timeline: [
-		// BEGIN TOOL ASSISTED SORT
 		{
 			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',
 			...canonicaliseArticleMetadata(articleMissing),
@@ -778,7 +779,6 @@ export const Bio = {
 			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
 			description: en`Security for AI pairing system for text.`,
 		},
-		// END TOOL ASSISTED SORT
 	],
 	who: {
 		handle: en`zemnmez`,
