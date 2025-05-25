@@ -115,6 +115,8 @@ const canonicaliseArticleMetadata = (
 ): Pick<Event, 'date' | 'description' | 'title'> =>
 	zodCanonicaliseArticleMetadata.parse(p);
 
+export type BioType = typeof Bio;
+
 export const Bio = {
 	officialWebsite: url`https://zemn.me`,
 	birthdate: date(17, 'may', 1994),
