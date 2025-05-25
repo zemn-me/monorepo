@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -9,6 +10,7 @@ ts_project(
         [
             "*.ts",
             "*.tsx",
+            "*.json",
         ],
         allow_empty = True,
     ),
@@ -28,6 +30,20 @@ ts_project(
         "//ts/react/next/Link:relative_url",
         "//ts/time",
     ],
+)
+
+js_binary(
+    name = "priority_sort",
+    data = [
+        ":bio",
+    ],
+    entry_point = "priority_sort.js",
+)
+
+jest_test(
+    name = "test",
+    srcs = ["priority_test.js"],
+    deps = [":bio"],
 )
 
 bazel_lint(
