@@ -378,7 +378,7 @@ http_archive(
     ],
 )
 
-bazel_dep(name = "protobuf", version = "29.4", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "29.5", repo_name = "com_google_protobuf")
 
 http_archive(
     name = "cultistsimulator",
