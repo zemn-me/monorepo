@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.19.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.43.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.4
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.80.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.43.0
 	github.com/bazelbuild/bazel-watcher v0.26.1
@@ -37,11 +37,11 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/sergi/go-diff v1.3.1
 	github.com/tdewolff/parse/v2 v2.8.1
-	github.com/twilio/twilio-go v1.26.1
+	github.com/twilio/twilio-go v1.26.2
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.14.0
 	golang.org/x/tools v0.33.0
-	golang.org/x/tools/gopls v0.17.1
+	golang.org/x/tools/gopls v0.18.1
 	honnef.co/go/tools v0.6.1
 )
 
@@ -132,15 +132,15 @@ require (
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.37.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20241210194714-1829a127f884 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/telemetry v0.0.0-20241106142447-58a1122356f5 // indirect
+	golang.org/x/telemetry v0.0.0-20241220003058-cc96b6e0d3d9 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
-	golang.org/x/vuln v1.0.4 // indirect
+	golang.org/x/vuln v1.1.3 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250218202821-56aae31c358a // indirect
 	google.golang.org/grpc v1.72.1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
@@ -152,4 +152,4 @@ require (
 )
 
 // gopls needs this very specific version of tools.
-replace golang.org/x/tools => golang.org/x/tools v0.27.1-0.20241219162658-575221bfbda3
+replace golang.org/x/tools => golang.org/x/tools v0.30.1-0.20250221230316-5055f70f240c

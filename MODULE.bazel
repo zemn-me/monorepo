@@ -57,7 +57,7 @@ use_repo(
     "distroless_debian12_linux_s390x",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.16.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.17.1")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1", dev_dependency = True)
@@ -123,9 +123,9 @@ rules_ts_ext.deps(
 )
 use_repo(rules_ts_ext, "npm_typescript")
 
-bazel_dep(name = "aspect_rules_lint", version = "1.4.2")
+bazel_dep(name = "aspect_rules_lint", version = "1.4.4")
 bazel_dep(name = "bazel_features", version = "1.30.0")
-bazel_dep(name = "rules_go", version = "0.54.1", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "rules_go", version = "0.40.0", repo_name = "io_bazel_rules_go")
 bazel_dep(name = "gazelle", version = "0.43.0", repo_name = "bazel_gazelle")
 
 GO_VERSION = "1.24.0"
@@ -378,7 +378,7 @@ http_archive(
     ],
 )
 
-bazel_dep(name = "protobuf", version = "29.4", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "29.5", repo_name = "com_google_protobuf")
 
 http_archive(
     name = "cultistsimulator",
@@ -489,5 +489,5 @@ http_archive(
     url = "https://github.com/astral-sh/ruff/releases/download/0.9.2/ruff-x86_64-pc-windows-msvc.zip",
 )
 
-bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
