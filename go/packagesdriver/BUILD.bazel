@@ -1,0 +1,33 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "packagesdriver",
+    actual = "@io_bazel_rules_go//go/tools/gopackagesdriver",
+    visibility = [
+        "//sh/bin:__subpackages__",
+    ],
+)
+
+go_test(
+    name = "packagesdriver_test",
+    srcs = ["packagesdriver_test.go"],
+    data = [
+        "//go/packagesdriver",
+    ],
+    env = {
+        "GOPACKAGESBINARY": "$(rlocationpath //go/packagesdriver)",
+    },
+    tags = [
+        "no-sandbox",
+    ],
+    deps = [
+        "@io_bazel_rules_go//go/runfiles",
+        "@org_golang_x_tools//go/packages",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -55,7 +55,7 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
 	},
-	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
+	"go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/rules_go++go_sdk+monorepo__download_0/",
 	"go.toolsEnvVars": {
 		"GOPACKAGESDRIVER": "${workspaceFolder}/sh/bin/gopackagesdriver"
 	},
