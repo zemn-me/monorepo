@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.36.8
-    version: 40.36.8(typanion@3.14.0)
+    specifier: 40.36.9
+    version: 40.36.9(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -16527,8 +16527,8 @@ packages:
     dev: true
     optional: true
 
-  /re2@1.21.5:
-    resolution: {integrity: sha512-ud7gX1bO6K4+l2YVUxZjOPCiyCBZvmi7XUnGArSk3rGIvsZW35jX3pjGs8zQiTumOpgbxHCZI1ivB1VO7i4MFw==}
+  /re2@1.22.0:
+    resolution: {integrity: sha512-tmgBh4Ttx41cpM3DQ4VrFpXF287/0ZpXUu+Zq9Q6xsJDG7XP9Xa0Wrc9pRJUzk8uLddg1J7Krlcp4WIV9Xg0Qg==}
     requiresBuild: true
     dependencies:
       install-artifact-from-github: 1.4.0
@@ -17112,8 +17112,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.36.8(typanion@3.14.0):
-    resolution: {integrity: sha512-Ka3KTd9k88HBEp4aXb0Yxi/XXtCYrIO2ifvDtgGmaCTUuN4mLdj5HcuLIAa5LHqWRsq4t9KaS1SKDx1fD6Miug==}
+  /renovate@40.36.9(typanion@3.14.0):
+    resolution: {integrity: sha512-Vm+dhz9AmafRt0bHOvz/m6y9B4aeLC1y0QxORuQYJBtXDsInLHHOBm4DVeVV9PpqdYzZuK3HK5qanSc/l/njWA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17236,7 +17236,7 @@ packages:
     optionalDependencies:
       better-sqlite3: 11.10.0
       openpgp: 6.1.1
-      re2: 1.21.5
+      re2: 1.22.0
     transitivePeerDependencies:
       - aws-crt
       - encoding
