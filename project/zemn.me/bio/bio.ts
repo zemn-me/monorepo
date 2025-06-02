@@ -54,6 +54,11 @@ export interface Employment {
 	readonly since: Date;
 	readonly title: Text;
 	readonly where: Text;
+	/**
+	 * Previous role (at the same company or elsewhere) that this new role
+	 * can be considered a continuation or replacement of.
+	 */
+	readonly supercedes?: string
 }
 
 export interface Event {
@@ -720,7 +725,8 @@ export const Bio = {
 			title: en`Member of Technical Staff, AppSec, OpenAI`,
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
-			employer: en`OpenAI`
+			employer: en`OpenAI`,
+			supercedes: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 		},
 		{
 			id: '94c6577b-372f-4842-b2c5-1438f16b2eab',
