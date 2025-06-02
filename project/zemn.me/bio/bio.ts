@@ -715,8 +715,17 @@ export const Bio = {
 			url: url`https://support.apple.com/en-gb/HT213636#:~:text=Thomas%20Shadwell%20(%40zemnmez)%20of%20Google`,
 		},
 		{
+			id: 'e5c48dff-db0d-4731-99c2-48b57a13c309',
+			date: date(1, 'sep', 2024),
+			title: en`Member of Technical Staff, AppSec, OpenAI`,
+			url: url`https://openai.com`,
+			tags: [software, security, work, employment],
+			employer: en`OpenAI`
+		},
+		{
 			id: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 			date: date(28, 'nov', 2023),
+			until: date(1, 'sep', 2024),
 			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
