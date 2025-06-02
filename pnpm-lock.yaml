@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.37.1
-    version: 40.37.1(typanion@3.14.0)
+    specifier: 40.38.0
+    version: 40.38.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -3942,7 +3942,7 @@ packages:
       '@opentelemetry/sdk-logs': 0.201.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-metrics': 2.0.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.1(@opentelemetry/api@1.9.0)
-      protobufjs: 7.5.2
+      protobufjs: 7.5.3
     dev: true
 
   /@opentelemetry/propagator-b3@1.30.1(@opentelemetry/api@1.9.0):
@@ -16812,8 +16812,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.37.1(typanion@3.14.0):
-    resolution: {integrity: sha512-eRujgsDRMmSYlHIoqmEdF/3uglDxmRwEG440fAmpLVpDD/gngbH8CmPt0jOnqFKbpMHDjW9Ny/V/DSWz2AQopg==}
+  /renovate@40.38.0(typanion@3.14.0):
+    resolution: {integrity: sha512-P9VeBQu2Fl/MBOiHWF9Cbt/z9smGgpAfxfWPRnGL0K51QIi3pA7XchSrbAT0w9Y6NL3P1ihsoVdewi7/Zc23ag==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
