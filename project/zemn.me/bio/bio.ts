@@ -569,7 +569,7 @@ export const Bio = {
 			title: en`UK Government Vulnerability Disclosure Initiative`,
 			url: url`https://www.ncsc.gov.uk/information/vulnerability-reporting`,
 			description: en`responsible disclosure program created with the UK National Cyber Security Center covering all government assets`,
-			tags: [work, security],
+			tags: [security], // maybe separate 'employment' and 'work'?
 		},
 		{
 			id: 'a3777d0d-e747-4bbd-aea5-33c06d61230e',
