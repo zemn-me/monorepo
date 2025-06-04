@@ -250,7 +250,7 @@ export const Bio = {
 		{
 			id: '963e6a0a-d279-4838-a2d6-2445a0ec97e4',
 			date: date(1, 'feb', 2011),
-			description: en`Young Rewired State 2011`,
+			description: en`Prize from national hackathon for young people.`,
 			priority: 5,
 			tags: [software, accolade],
 			title: en`Best example of Coding`,
@@ -436,7 +436,7 @@ export const Bio = {
 		{
 			id: '214fcf06-69b5-4eb2-a5d3-882e13c42071',
 			date: date(19, 'oct', 2015),
-			description: en`unique developer granted cosmetic item for the video game Team Fortress 2 granted for security issues allowing remote access to computers running the video game`,
+			description: en`unique developer granted cosmetic item for the video game Team Fortress 2 granted for security issue disclosures allowing remote access to computers running the video game`,
 			priority: 7,
 			tags: [gaming, security, accolade],
 			title: en`Nebula Finder\u2019s Fee`,
@@ -516,7 +516,7 @@ export const Bio = {
 			date: date(27, 'apr', 2016),
 			description: en`padding oracle based decryption of Steam traffic`,
 			priority: 7,
-			tags: [security, gaming, disclosure],
+			tags: [security, gaming, disclosure, comment],
 			title: en`steam patches broken crypto in wake of replay, padding oracle attacks`,
 			url: url`https://threatpost.com/steam-patches-broken-crypto-in-wake-of-replay-padding-oracle-attacks/117691/`,
 		},
@@ -551,7 +551,7 @@ export const Bio = {
 			date: date(17, 'may', 2019),
 			title: en`Full Steam Ahead: Remotely Executing Code in Modern Desktop Applications`,
 			description: en`technical talk at offensive AppSec conference Infiltrate summarising through example research into hybrid web / desktop application security`,
-			tags: [en`talk`, security, gaming],
+			tags: [talk, security, gaming],
 			url: url`https://vimeo.com/335206831`,
 		},
 		{
@@ -664,7 +664,7 @@ export const Bio = {
 			id: '9d204846-266d-4dc4-be46-e055b139fdba',
 			date: date(11, 'aug', 2023),
 			title: en`Visual Studio Code is why I have (Workspace) Trust issues`,
-			tags: [security],
+			tags: [security, comment],
 			description: en`talk at Def Con by Sonar R&D including original research into VSCode security, reflecting on my own prior art CVE-2022-41034 (not my talk).`,
 			url: url`https://media.defcon.org/DEF%20CON%2031/DEF%20CON%2031%20presentations/Thomas%20Chauchefoin%20Paul%20Gerste%20-%20Visual%20Studio%20Code%20is%20why%20I%20have%20%28Workspace%29%20Trust%20issues.pdf`,
 		},
@@ -721,6 +721,7 @@ export const Bio = {
 			title: en`Member of Technical Staff, AppSec, OpenAI`,
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
+			description: en`Built out OpenAI's first Secure Development Lifecycle (SDLC); designed security primitives for OAI products including ChatGPT Canvas and Apple Intelligence. Work on Prompt Injection, Agentic Security & AI cyber risk.`,
 			employer: en`OpenAI`
 		},
 		{
