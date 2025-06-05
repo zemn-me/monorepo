@@ -39,7 +39,7 @@ require (
 	github.com/tdewolff/parse/v2 v2.8.1
 	github.com/twilio/twilio-go v1.26.2
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/sync v0.14.0
+	golang.org/x/sync v0.15.0
 	golang.org/x/tools v0.33.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.6.1
