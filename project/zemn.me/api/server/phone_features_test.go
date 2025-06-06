@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"context"
-	"crypto/subtle"
 	"io"
 	"log"
 	"strings"
@@ -85,27 +84,30 @@ func TestTwilioError(t *testing.T) {
 }
 
 func TestHandleEntryViaCode(t *testing.T) {
+	s := newTestServer()
+	orig := entryCodeLookup
+	entryCodeLookup = func(_ *Server, _ context.Context) ([]EntryCodeEntry, error) {
+		return []EntryCodeEntry{{Code: "12345"}}, nil
+	}
+	defer func() { entryCodeLookup = orig }()
+
 	digits := "12345"
-	codes := []EntryCodeEntry{{Code: digits}}
-
-	// Inline implementation of handleEntryViaCode using preset codes
-	var success bool
-	for _, code := range codes {
-		if success = subtle.ConstantTimeCompare(
-			[]byte(removeDuplicateDigits(code.Code)), []byte(removeDuplicateDigits(digits)),
-		) == 1; success {
-			break
-		}
-	}
-	if !success {
-		t.Fatalf("expected code entry to succeed")
+	rq := GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Digits: &digits,
+		},
 	}
 
-	doc, response := twiml.CreateDocument()
-	response.CreateElement("Play").SetText(nook_phone_yes)
-	response.CreateElement("Play").CreateAttr("digits", "9w9")
+	rs, err := s.handleEntryViaCode(context.Background(), rq)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 
-	resp := TwimlResponse{Document: doc}
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
 	xmlData, err := twiml.ToXML(resp.Document)
 	if err != nil {
 		t.Fatalf("failed to encode xml: %v", err)
