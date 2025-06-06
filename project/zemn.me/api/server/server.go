@@ -22,8 +22,9 @@ import (
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb               *dynamodb.Client
-	settingsTableName string
+        ddb               *dynamodb.Client
+        settingsTableName string
+       openWindowTableName string
 	rt                *chi.Mux
 	http.Handler
 	log                *log.Logger
@@ -69,8 +70,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 		return nil, err
 	}
 
-	// Allow the table name to be set via an environment variable.
-	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+       // Allow the table name to be set via environment variables.
+       settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+       openWindowTableName := os.Getenv("OPEN_WINDOW_TABLE_NAME")
 
 	r := chi.NewRouter()
 
@@ -96,8 +98,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 			"Server",
 			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
 		),
-		ddb:                dynamodb.NewFromConfig(cfg),
-		settingsTableName:  settingsTableName,
+               ddb:                 dynamodb.NewFromConfig(cfg),
+               settingsTableName:   settingsTableName,
+               openWindowTableName: openWindowTableName,
 		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
