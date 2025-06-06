@@ -1,64 +1,60 @@
-import memoizee from 'memoizee';
-
-import { accolade, Bio, comment, disclosure, talk, work, writing } from '#root/project/zemn.me/bio/bio.js';
+import React from 'react';
+import { Bio, work } from '#root/project/zemn.me/bio/bio.js';
 import priorities from '#root/project/zemn.me/bio/priority.json';
 import { isDefined, must } from '#root/ts/guard.js';
-import React from 'react';
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
 
-
-const priorityMap = memoizee(() => new Map<string, number>(
-        priorities.map((id, index) => [id, priorities.length - index]),
-));
-
-const getPriority = (id: string): number | undefined => priorityMap().get(id);
+const priorityMap = new Map<string, number>(
+        priorities.map((id, idx) => [id, priorities.length - idx]),
+);
+const getPriority = (id: string): number | undefined => priorityMap.get(id);
 const mustPriority = (id: string): number => must(isDefined)(getPriority(id));
 
-const minPriorityRecord = "74086941-7c37-4f3e-af9b-4cc8e8bbc749";
-const minPriority = memoizee(() => mustPriority(minPriorityRecord));
+const minPriorityRecord = '74086941-7c37-4f3e-af9b-4cc8e8bbc749';
+const minPriority = mustPriority(minPriorityRecord);
 
-const entries = memoizee(() =>
-        Bio.timeline
-                .filter(e => mustPriority(e.id) >= minPriority())
-                .sort((a, b) => (+a.date) - (+b.date))
-                .toReversed()
-);
+const entries = Bio.timeline
+        .filter(e => mustPriority(e.id) >= minPriority)
+        .sort((a, b) => (+a.date) - (+b.date))
+        .toReversed();
 
 type Event = (typeof Bio.timeline)[number];
 
-function WorkItems() {
+function WorkItem({ event }: { event: Event }) {
+        const start = ('since' in event && event.since ? event.since : event.date) as Date;
+        const end = 'until' in event ? event.until : undefined;
+        const endDate = end && end !== 'ongoing' ? (end as Date) : undefined;
+        const employer = 'employer' in event ? event.employer : undefined;
         return (
-                <>
-                        {entries()
-                                .filter(e => 'tags' in e && e.tags.includes(work))
-                                .map(e => {
-                                        const start = ('since' in e && e.since ? e.since : e.date) as Date;
-                                        const end = 'until' in e ? e.until : undefined;
-                                        const endDate = end && end !== 'ongoing' ? end as Date : undefined;
-                                        const employer = 'employer' in e ? e.employer : undefined;
-                                        return (
-                                                <div className={style.work} key={e.id}>
-                                                        {employer ? <div className={style.employer}>{employer.text}</div> : null}
-                                                        <div className={style.position}>{e.title.text}</div>
-                                                        <div className={`${style.date} ${style.start}`}><time dateTime={String(+start)}>{start.getFullYear()}</time></div>
-                                                        {end ? <div className={style.end}>{end === 'ongoing' ? 'Ongoing' : endDate?.getFullYear()}</div> : null}
-                                                        {'description' in e && e.description ? <span className={`${style.timelineDescription} ${style.content}`}><p>{e.description.text}</p></span> : null}
-                                                </div>
-                                        );
-                                })}
-                </>
+                <div className={style.work} key={event.id}>
+                        {employer && <div className={style.employer}>{employer.text}</div>}
+                        <div className={style.position}>{event.title.text}</div>
+                        <div className={`${style.date} ${style.start}`}><time dateTime={String(+start)}>{start.getFullYear()}</time></div>
+                        {end && <div className={style.end}>{end === 'ongoing' ? 'Ongoing' : endDate?.getFullYear()}</div>}
+                        {'description' in event && event.description && (
+                                <span className={`${style.timelineDescription} ${style.content}`}>
+                                        <p>{event.description.text}</p>
+                                </span>
+                        )}
+                </div>
         );
+}
+
+function WorkItems() {
+        return <>{entries.filter(e => 'tags' in e && e.tags.includes(work)).map(e => <WorkItem event={e} key={e.id} />)}</>;
 }
 
 function OtherItems() {
         return (
                 <>
-                        {entries()
+                        {entries
                                 .filter(e => 'tags' in e && !e.tags.includes(work))
                                 .map(e => (
                                         <React.Fragment key={e.id}>
                                                 <div>{e.title.text}</div>
-                                                {'description' in e && e.description ? <div className={style.description}>{e.description.text}</div> : null}
+                                                {'description' in e && e.description && (
+                                                        <div className={style.description}>{e.description.text}</div>
+                                                )}
                                         </React.Fragment>
                                 ))}
                 </>
@@ -67,7 +63,7 @@ function OtherItems() {
 
 export default function CV() {
         return (
-                <div className={`${style.cv} ${style.app}`}> 
+                <div className={`${style.cv} ${style.app}`}>
                         <div className={style.header}>
                                 <a className={style.website} href={Bio.officialWebsite?.toString() ?? ''}>zemn.me</a>
                                 {Bio.email && <div className={style.email}>{Bio.email[0]}</div>}
@@ -89,7 +85,7 @@ export default function CV() {
                                 <WorkItems />
                         </div>
                         <div className={`${style.rule} ${style.worksTitle}`}><span>of note</span></div>
-                        <div className={`${style.skills} ${style.works}`}> 
+                        <div className={`${style.skills} ${style.works}`}>
                                 <OtherItems />
                         </div>
                 </div>
