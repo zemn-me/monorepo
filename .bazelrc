@@ -129,6 +129,6 @@ common --java_runtime_version=remotejdk_11
 
 # codex...
 # https://github.com/bazelbuild/bazel/issues/21334
-build:codex --no-incompatible_strict_action_env
-run:codex --no-incompatible_strict_action_env
+build:codex --noincompatible_strict_action_env
+run:codex --noincompatible_strict_action_env
 
