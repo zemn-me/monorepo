@@ -6,6 +6,8 @@ please run ./sh/bin/gazelle also! Or the presubmit will fail.
 
 Changes must THEN be tested via ./sh/bin/bazel test path/to/your/changes/...
 
+Bazel WILL take a long time! please don't interrupt the process! let it time out naturally...
+
 don't forget to write tests!
 
 toolchain
