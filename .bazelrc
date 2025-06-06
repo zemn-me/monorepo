@@ -126,9 +126,3 @@ common --test_verbose_timeout_warnings
 common --experimental_remote_cache_compression_threshold=100
 common --java_runtime_version=remotejdk_11
 
-
-# codex...
-# https://github.com/bazelbuild/bazel/issues/21334
-build:codex --noincompatible_strict_action_env
-run:codex --noincompatible_strict_action_env
-
