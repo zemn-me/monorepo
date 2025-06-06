@@ -5,10 +5,19 @@ import { useMemo } from 'react';
 import type { paths } from "#root/project/zemn.me/api/api_client.gen";
 
 export function useFetchClient() {
-	return useMemo(() => createFetchClient<paths>({
-		baseUrl: "https://api.zemn.me",
-	})
-	, []);
+        return useMemo(() => {
+                const env = process.env.NODE_ENV;
+                let baseUrl = "https://api.zemn.me";
+                if (env === "development") {
+                        baseUrl = "http://localhost:8080";
+                } else if (env === "production") {
+                        baseUrl = "https://api.zemn.me";
+                }
+                return createFetchClient<paths>({
+                        baseUrl,
+                });
+        }
+        , []);
 }
 
 export function useZemnMeApi() {
