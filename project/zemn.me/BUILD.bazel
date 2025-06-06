@@ -1,11 +1,21 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
+
+# gazelle:exclude dev.py
 
 package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "ts",
+    srcs = glob(
+        [
+            "**/*.ts",
+            "**/*.tsx",
+        ],
+        allow_empty = True,
+    ),
     assets = glob(
         [
             "**/*.css",
@@ -26,12 +36,30 @@ next_project(
     ],
 )
 
-alias(
-    name = "zemn.me",
-    actual = ":dev",
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+# dev launcher running next.js and go backend
+
+py_binary(
+    name = "dev_with_backend",
+    srcs = ["dev.py"],
+    data = [
+        ":dev",  # next dev binary
+        "//project/zemn.me/api/cmd/server",
+    ],
+    env = {
+        "NEXTSERVER": "$(rlocationpath :dev)",
+        "APIBACKEND": "$(rlocationpath //project/zemn.me/api/cmd/server)",
+        "BAZEL_BINDIR": "$(BINDIR)",
+    },
+    main = "dev.py",
+    deps = ["@rules_python//python/runfiles"],
+)
+
+alias(
+    name = "zemn.me",
+    actual = ":dev_with_backend",
 )
