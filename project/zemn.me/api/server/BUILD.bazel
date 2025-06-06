@@ -72,5 +72,8 @@ go_test(
         "smoke_test.go",
     ],
     embed = [":server"],
-    deps = ["@com_github_twilio_twilio_go//twiml"],
+    deps = [
+        "//project/zemn.me/api/server/acnh",
+        "@com_github_twilio_twilio_go//twiml",
+    ],
 )
