@@ -51,7 +51,7 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
-    Also generates an _typings tag (typescript types) and an _lint tag
+    Also generates a _types target (typescript types) and a _lint target
     (lint tests).
 
     Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
@@ -102,4 +102,4 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     )
 
     if lint:
-        ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
+        ts_lint(name = name + "_lint", srcs = [name], tags = tags)
