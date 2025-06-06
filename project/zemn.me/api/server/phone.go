@@ -239,11 +239,8 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 	return
 }
 
-// entryCodeLookup allows tests to stub the entry code retrieval.
-var entryCodeLookup = (*Server).getLatestEntryCodes
-
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
-	codes, err := entryCodeLookup(s, ctx)
+	codes, err := s.entryCodeLookup(s, ctx)
 	if err != nil {
 		return
 	}

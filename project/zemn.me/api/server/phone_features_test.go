@@ -17,6 +17,8 @@ func newTestServer() *Server {
 	return &Server{
 		log:                log.New(io.Discard, "", 0),
 		twilioSharedSecret: "secret",
+		entryCodeLookup:    (*Server).getLatestEntryCodes,
+		trackLookup:        acnh.Track,
 	}
 }
 
@@ -44,11 +46,11 @@ func TestPostPhoneJoinConference(t *testing.T) {
 
 func TestPostPhoneHoldMusic(t *testing.T) {
 	s := newTestServer()
-	orig := trackLookup
-	trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
+	orig := s.trackLookup
+	s.trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
 		return "sample.mp3", nil
 	}
-	defer func() { trackLookup = orig }()
+	defer func() { s.trackLookup = orig }()
 	rq := PostPhoneHoldMusicRequestObject{
 		Params: PostPhoneHoldMusicParams{Secret: "secret"},
 	}
@@ -85,11 +87,11 @@ func TestTwilioError(t *testing.T) {
 
 func TestHandleEntryViaCode(t *testing.T) {
 	s := newTestServer()
-	orig := entryCodeLookup
-	entryCodeLookup = func(_ *Server, _ context.Context) ([]EntryCodeEntry, error) {
+	orig := s.entryCodeLookup
+	s.entryCodeLookup = func(_ *Server, _ context.Context) ([]EntryCodeEntry, error) {
 		return []EntryCodeEntry{{Code: "12345"}}, nil
 	}
-	defer func() { entryCodeLookup = orig }()
+	defer func() { s.entryCodeLookup = orig }()
 
 	digits := "12345"
 	rq := GetPhoneHandleEntryRequestObject{
