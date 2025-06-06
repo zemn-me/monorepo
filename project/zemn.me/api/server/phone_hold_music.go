@@ -1,15 +1,18 @@
 package apiserver
 
 import (
-	"context"
-	"fmt"
-	"net/url"
-	"time"
+        "context"
+        "fmt"
+        "net/url"
+        "time"
 
-	"github.com/twilio/twilio-go/twiml"
+        "github.com/twilio/twilio-go/twiml"
 
-	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
+        "github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
+
+// trackLookup allows tests to stub the ACNH track lookup function.
+var trackLookup = acnh.Track
 
 func (s *Server) postPhoneHoldMusic(ctx context.Context, rq PostPhoneHoldMusicRequestObject) (rs PostPhoneHoldMusicResponseObject, err error) {
 	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
@@ -21,7 +24,7 @@ func (s *Server) postPhoneHoldMusic(ctx context.Context, rq PostPhoneHoldMusicRe
 		return
 	}
 
-	track, err := acnh.Track(acnh.Sunny, time.Now().In(loc))
+        track, err := trackLookup(acnh.Sunny, time.Now().In(loc))
 	if err != nil {
 		return
 	}

@@ -1,14 +1,17 @@
 package apiserver
 
 import (
-	"context"
-	"crypto/subtle"
-	"io"
-	"log"
-	"strings"
-	"testing"
+        "context"
+        "crypto/subtle"
+        "io"
+        "log"
+        "strings"
+        "testing"
+        "time"
 
-	"github.com/twilio/twilio-go/twiml"
+        "github.com/twilio/twilio-go/twiml"
+
+        "github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
 func newTestServer() *Server {
@@ -41,10 +44,15 @@ func TestPostPhoneJoinConference(t *testing.T) {
 }
 
 func TestPostPhoneHoldMusic(t *testing.T) {
-	s := newTestServer()
-	rq := PostPhoneHoldMusicRequestObject{
-		Params: PostPhoneHoldMusicParams{Secret: "secret"},
-	}
+       s := newTestServer()
+       orig := trackLookup
+       trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
+               return "sample.mp3", nil
+       }
+       defer func() { trackLookup = orig }()
+       rq := PostPhoneHoldMusicRequestObject{
+               Params: PostPhoneHoldMusicParams{Secret: "secret"},
+       }
 	rs, err := s.postPhoneHoldMusic(context.Background(), rq)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
