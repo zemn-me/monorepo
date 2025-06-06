@@ -34,6 +34,9 @@ func (s Server) createOpenWindow(ctx context.Context, rec OpenWindowRecord) erro
 }
 
 func (s Server) isDoorOpen(ctx context.Context) (bool, error) {
+	if s.ddb == nil || s.openWindowTableName == "" {
+		return false, nil
+	}
 	now := Now()
 	input := &dynamodb.QueryInput{
 		TableName:              aws.String(s.openWindowTableName),
@@ -66,5 +69,5 @@ func (s Server) PostCallboxOpen(ctx context.Context, rq PostCallboxOpenRequestOb
 	if err != nil {
 		return nil, err
 	}
-	return PostCallboxOpen200JSONResponse(OpenWindowResponse{OpenUntil: until.Time, Who: who}), nil
+	return PostCallboxOpen200JSONResponse(OpenWindowResponse{OpenUntil: until.Time, Who: &who}), nil
 }
