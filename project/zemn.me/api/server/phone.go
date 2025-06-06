@@ -240,7 +240,7 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
-	codes, err := s.entryCodeLookup(s, ctx)
+	codes, err := s.getLatestEntryCodes(ctx)
 	if err != nil {
 		return
 	}
