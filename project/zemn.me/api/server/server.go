@@ -22,10 +22,10 @@ import (
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
-        ddb               *dynamodb.Client
-        settingsTableName string
-       openWindowTableName string
-	rt                *chi.Mux
+	ddb                 *dynamodb.Client
+	settingsTableName   string
+	openWindowTableName string
+	rt                  *chi.Mux
 	http.Handler
 	log                *log.Logger
 	twilioSharedSecret string
@@ -70,9 +70,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 		return nil, err
 	}
 
-       // Allow the table name to be set via environment variables.
-       settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
-       openWindowTableName := os.Getenv("OPEN_WINDOW_TABLE_NAME")
+	// Allow the table name to be set via environment variables.
+	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+	openWindowTableName := os.Getenv("OPEN_WINDOW_TABLE_NAME")
 
 	r := chi.NewRouter()
 
@@ -92,16 +92,23 @@ func NewServer(ctx context.Context) (*Server, error) {
 
 	r.Use(mw)
 
+	authCtxMiddleware := func(next StrictHandlerFunc, _ string) StrictHandlerFunc {
+		return func(ctx context.Context, w http.ResponseWriter, r *http.Request, req interface{}) (interface{}, error) {
+			ctx = context.WithValue(ctx, authCtxKey{}, r.Header.Get("Authorization"))
+			return next(ctx, w, r, req)
+		}
+	}
+
 	s := &Server{
 		log: log.New(
 			os.Stderr,
 			"Server",
 			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
 		),
-               ddb:                 dynamodb.NewFromConfig(cfg),
-               settingsTableName:   settingsTableName,
-               openWindowTableName: openWindowTableName,
-		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
+		ddb:                 dynamodb.NewFromConfig(cfg),
+		settingsTableName:   settingsTableName,
+		openWindowTableName: openWindowTableName,
+		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
@@ -110,7 +117,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 
 	s.Handler = HandlerFromMux(NewStrictHandler(
 		s,
-		nil,
+		[]StrictMiddlewareFunc{authCtxMiddleware},
 	), r)
 
 	return s, nil
