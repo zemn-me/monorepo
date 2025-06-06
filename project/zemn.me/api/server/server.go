@@ -23,8 +23,15 @@ import (
 )
 
 // Server holds the DynamoDB client and table name.
+// DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
+type DynamoDBClient interface {
+	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
+	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+}
+
+// Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb               *dynamodb.Client
+	ddb               DynamoDBClient
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler
@@ -33,8 +40,7 @@ type Server struct {
 	twilioClient       *twilio.RestClient
 
 	// Dependency injection points for tests
-	entryCodeLookup func(*Server, context.Context) ([]EntryCodeEntry, error)
-	trackLookup     func(acnh.Weather, time.Time) (string, error)
+	trackLookup func(acnh.Weather, time.Time) (string, error)
 }
 
 // NewServer initialises the DynamoDB client.
@@ -109,8 +115,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
-		entryCodeLookup: (*Server).getLatestEntryCodes,
-		trackLookup:     acnh.Track,
+		trackLookup: acnh.Track,
 	}
 
 	s.Handler = HandlerFromMux(NewStrictHandler(
