@@ -21,7 +21,7 @@ func (s *Server) postPhoneHoldMusic(ctx context.Context, rq PostPhoneHoldMusicRe
 		return
 	}
 
-	track, err := s.trackLookup(acnh.Sunny, time.Now().In(loc))
+	track, err := acnh.Track(acnh.Sunny, time.Now().In(loc))
 	if err != nil {
 		return
 	}
