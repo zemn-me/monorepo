@@ -44,7 +44,6 @@ func newTestServer() *Server {
 		twilioSharedSecret: "secret",
 		settingsTableName:  "settings",
 		ddb:                &inMemoryDDB{},
-		trackLookup:        acnh.Track,
 	}
 }
 
@@ -72,11 +71,6 @@ func TestPostPhoneJoinConference(t *testing.T) {
 
 func TestPostPhoneHoldMusic(t *testing.T) {
 	s := newTestServer()
-	orig := s.trackLookup
-	s.trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
-		return "sample.mp3", nil
-	}
-	defer func() { s.trackLookup = orig }()
 	rq := PostPhoneHoldMusicRequestObject{
 		Params: PostPhoneHoldMusicParams{Secret: "secret"},
 	}
