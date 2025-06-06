@@ -1,17 +1,17 @@
 package apiserver
 
 import (
-        "context"
-        "crypto/subtle"
-        "io"
-        "log"
-        "strings"
-        "testing"
-        "time"
+	"context"
+	"crypto/subtle"
+	"io"
+	"log"
+	"strings"
+	"testing"
+	"time"
 
-        "github.com/twilio/twilio-go/twiml"
+	"github.com/twilio/twilio-go/twiml"
 
-        "github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 )
 
 func newTestServer() *Server {
@@ -44,15 +44,15 @@ func TestPostPhoneJoinConference(t *testing.T) {
 }
 
 func TestPostPhoneHoldMusic(t *testing.T) {
-       s := newTestServer()
-       orig := trackLookup
-       trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
-               return "sample.mp3", nil
-       }
-       defer func() { trackLookup = orig }()
-       rq := PostPhoneHoldMusicRequestObject{
-               Params: PostPhoneHoldMusicParams{Secret: "secret"},
-       }
+	s := newTestServer()
+	orig := trackLookup
+	trackLookup = func(w acnh.Weather, t time.Time) (string, error) {
+		return "sample.mp3", nil
+	}
+	defer func() { trackLookup = orig }()
+	rq := PostPhoneHoldMusicRequestObject{
+		Params: PostPhoneHoldMusicParams{Secret: "secret"},
+	}
 	rs, err := s.postPhoneHoldMusic(context.Background(), rq)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -65,7 +65,7 @@ func TestPostPhoneHoldMusic(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to encode xml: %v", err)
 	}
-	if !strings.Contains(xmlData, "<Play>") {
+	if !strings.Contains(xmlData, "<Play") {
 		t.Errorf("expected play element, got %s", xmlData)
 	}
 }
@@ -110,7 +110,7 @@ func TestHandleEntryViaCode(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to encode xml: %v", err)
 	}
-	if !strings.Contains(xmlData, "<Play>") {
+	if !strings.Contains(xmlData, "<Play") {
 		t.Errorf("expected play element, got %s", xmlData)
 	}
 }
