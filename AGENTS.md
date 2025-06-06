@@ -1,8 +1,12 @@
 # hello robot
 
+This file is for robots... if you learn anything that would be important to remember next time, please commit it to this file!
+
 # tools
 
 this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to ./sh/bin/bazel. There are many tools in ./sh/bin that can be used and they are all added to $PATH.
+
+A lot of your tools are run through bazel and therefore get confused by relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
 
 please run gazelle also! Or the presubmit will fail.
 
@@ -15,5 +19,6 @@ Changes must be tested via bazel test path/to/your/changes/...
 Bazel WILL take a long time! please don't interrupt the process! let it time out naturally...
 
 If your tests take too long, you can use `bazel query` to pick a more specific set of tests!
+
 
 
