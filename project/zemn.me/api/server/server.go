@@ -15,8 +15,10 @@ import (
 	"github.com/go-chi/cors"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/twilio/twilio-go"
+	"time"
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
@@ -29,6 +31,10 @@ type Server struct {
 	log                *log.Logger
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
+
+	// Dependency injection points for tests
+	entryCodeLookup func(*Server, context.Context) ([]EntryCodeEntry, error)
+	trackLookup     func(acnh.Weather, time.Time) (string, error)
 }
 
 // NewServer initialises the DynamoDB client.
@@ -103,6 +109,8 @@ func NewServer(ctx context.Context) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
+		entryCodeLookup: (*Server).getLatestEntryCodes,
+		trackLookup:     acnh.Track,
 	}
 
 	s.Handler = HandlerFromMux(NewStrictHandler(
