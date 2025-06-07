@@ -220,23 +220,30 @@ func removeDuplicateDigits(input string) string {
 }
 
 func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
-	var success bool
-	success, err = s.inPartyMode(ctx)
-	if err != nil {
-		return
-	}
+       var allowed bool
+       allowed, err = s.inPartyMode(ctx)
+       if err != nil {
+               return
+       }
 
-	if success {
-		s.log.Printf("Allowed access via party mode.")
-		doc, response := twiml.CreateDocument()
+       if !allowed {
+               allowed, err = s.isDoorOpen(ctx)
+               if err != nil {
+                       return
+               }
+       }
 
-		response.CreateElement("Play").SetText(nook_phone_yes)
-		response.CreateElement("Play").CreateAttr("digits", "9w9")
+       if allowed {
+               s.log.Printf("Allowed access via party mode or open window.")
+               doc, response := twiml.CreateDocument()
 
-		return TwimlResponse{Document: doc}, nil
-	}
+               response.CreateElement("Play").SetText(nook_phone_yes)
+               response.CreateElement("Play").CreateAttr("digits", "9w9")
 
-	return
+               return TwimlResponse{Document: doc}, nil
+       }
+
+       return
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {

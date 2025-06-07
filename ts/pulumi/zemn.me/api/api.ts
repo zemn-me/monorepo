@@ -37,40 +37,68 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
     ) {
 		super('ts:pulumi:zemn.me:api', name, args, opts);
 
-		const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
-			attributes: [{
-				name: "id",
-				type: "S",
-			}, {
-				name: "when",
-				type: "S"
-			}],
-			billingMode: "PAY_PER_REQUEST",
-			hashKey: "id",
-			rangeKey: "when",
-		}, { parent: this, protect: args.protectDatabases });
+                const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }, {
+                                name: "when",
+                                type: "S"
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                        rangeKey: "when",
+                }, { parent: this, protect: args.protectDatabases });
+
+                const openWindowTable = new aws.dynamodb.Table(`${name}-open-window`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }, {
+                                name: "until",
+                                type: "S",
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                        rangeKey: "until",
+                }, { parent: this, protect: args.protectDatabases });
 
 		const lambdaRole = new aws.iam.Role(`${name}-lambda-role`, {
 			assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 				Service: "lambda.amazonaws.com",
 			}),
 			managedPolicyArns: [aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole],
-			inlinePolicies: [{
-				name: `${name}-dynamodb-inline-policy`,
-				policy: dynamoTable.arn.apply(arn => JSON.stringify({
-					Version: "2012-10-17",
-					Statement: [{
-						Action: [
-							"dynamodb:Query",
-							"dynamodb:PutItem",
-							"dynamodb:UpdateItem",
-							"dynamodb:DeleteItem"
-						],
-						Effect: "Allow",
-						Resource: arn,
-					}],
-				})),
-			}]
+                        inlinePolicies: [{
+                                name: `${name}-dynamodb-inline-policy`,
+                                policy: dynamoTable.arn.apply(arn => JSON.stringify({
+                                        Version: "2012-10-17",
+                                        Statement: [{
+                                                Action: [
+                                                        "dynamodb:Query",
+                                                        "dynamodb:PutItem",
+                                                        "dynamodb:UpdateItem",
+                                                        "dynamodb:DeleteItem"
+                                                ],
+                                                Effect: "Allow",
+                                                Resource: arn,
+                                        }],
+                                })),
+                        }, {
+                                name: `${name}-openwindow-inline-policy`,
+                                policy: openWindowTable.arn.apply(arn => JSON.stringify({
+                                        Version: "2012-10-17",
+                                        Statement: [{
+                                                Action: [
+                                                        "dynamodb:Query",
+                                                        "dynamodb:PutItem",
+                                                        "dynamodb:UpdateItem",
+                                                        "dynamodb:DeleteItem"
+                                                ],
+                                                Effect: "Allow",
+                                                Resource: arn,
+                                        }],
+                                })),
+                        }]
 		}, { parent: this });
 
 		const repo = new aws.ecr.Repository(`${name}_repo`, {
@@ -111,9 +139,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				variables: {
 					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
-					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
-					DYNAMODB_TABLE_NAME: dynamoTable.name,
-					TWILIO_SHARED_SECRET: args.twilioSharedSecret,
+                                        CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
+                                        DYNAMODB_TABLE_NAME: dynamoTable.name,
+                                        OPEN_WINDOW_TABLE_NAME: openWindowTable.name,
+                                        TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 					...pick_env("TWILIO_ACCOUNT_SID"),
 					...pick_env("TWILIO_AUTH_TOKEN"),
 					...pick_env("TWILIO_API_KEY_SID")
@@ -190,10 +219,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			}],
 		}, { parent: this });
 
-		super.registerOutputs({
-			lambdaEnvironment: lambdaFn.environment,
-			callboxPhoneNumber: args.callboxPhoneNumber,
-			dynamoDBTableName: dynamoTable.name,
-		});
+                super.registerOutputs({
+                        lambdaEnvironment: lambdaFn.environment,
+                        callboxPhoneNumber: args.callboxPhoneNumber,
+                        dynamoDBTableName: dynamoTable.name,
+                        openWindowTableName: openWindowTable.name,
+                });
     }
 }
