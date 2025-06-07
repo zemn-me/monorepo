@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Position } from '#root/ts/factorio/position.js';
 
@@ -10,4 +10,4 @@ export const Tile = z.strictObject({
 	position: Position,
 });
 
-export type Tile = z.TypeOf<typeof Tile>;
+export type Tile = z.infer<typeof Tile>;
