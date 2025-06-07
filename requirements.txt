@@ -1405,7 +1405,7 @@ rpds-py==0.25.1 \
     # via
     #   jsonschema
     #   referencing
-ruamel-yaml==0.18.10 \
+ruamel-yaml==0.18.13 \
     --hash=sha256:20c86ab29ac2153f80a428e1254a8adf686d3383df04490514ca3b79a362db58 \
     --hash=sha256:30f22513ab2301b3d2b577adc121c6471f28734d3d9728581245f1e76468b4f1
     # via mitmproxy
@@ -1776,3 +1776,6 @@ setuptools==80.9.0 \
     # via
     #   jupyterlab
     #   pip-tools
+ruamel.yaml==0.18.13 \
+    --hash=sha256:b0d5ac0a2b0b4e39d87aed00ddff26e795de6750b064da364a8d009b97ce5f26 \
+    --hash=sha256:cf9628cfdfe9d88b78429cd093aa766e9a4c69242f9f3c86ac1d9e56437e5572
