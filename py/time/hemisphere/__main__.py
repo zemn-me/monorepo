@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 from os import environ
 from typing import Optional
 
@@ -36,7 +37,23 @@ def parse_tzdb_to_json(input_file):
     print(json.dumps(timezone_mapping, indent=2))
 
 # Input file name
-input_file = r.Rlocation(environ.get("ZONE_TAB"))  # Replace with your file path
+zone_tab = environ.get("ZONE_TAB")
+if zone_tab and os.path.isabs(zone_tab):
+    input_file = zone_tab
+else:
+    if not zone_tab:
+        # Default to the tzdb shipped with this repository. If the code is executed
+        # as a tool within another rule, the `ZONE_TAB` environment variable may
+        # not be set, so resolve the runfile relative to the current repository.
+        try:
+            repo = r.CurrentRepository()
+        except Exception:
+            repo = ""
+        if repo:
+            zone_tab = f"{repo}/etc/zone1970.tab"
+        else:
+            zone_tab = "etc/zone1970.tab"
+    input_file = r.Rlocation(zone_tab) if zone_tab else r.Rlocation("etc/zone1970.tab")
 
 # Run the script
 parse_tzdb_to_json(input_file)
