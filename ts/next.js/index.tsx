@@ -5,8 +5,9 @@ import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.
 export * as config from '#root/ts/next.js/next.config.js';
 
 type scheme = 'https:' | 'data:';
+type Localhost = `http://localhost:${string}`
 type schemeSource = scheme;
-type hostSource = `${schemeSource}//${string}`;
+type hostSource = `${schemeSource}//${string}` | Localhost;
 type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
 type keywordSource = `'${keyword}'`;
 export type SourceExpression = schemeSource | hostSource | keywordSource;
