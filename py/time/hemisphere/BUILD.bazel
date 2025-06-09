@@ -25,15 +25,15 @@ py_binary(
 
 genrule(
     name = "tz_to_hemisphere",
+    srcs = ["//etc:zone1970.tab"],
     outs = [
         "tz_to_hemisphere.json",
     ],
     cmd = """
-		$(execpath :hemisphere_bin) > $@
-	""",
-    tools = [
-        ":hemisphere_bin",
-    ],
+        ZONE_TAB=$(rlocationpath //etc:zone1970.tab) \
+        $(execpath :hemisphere_bin) > $@
+    """,
+    tools = [":hemisphere_bin"],
 )
 
 js_library(
