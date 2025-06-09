@@ -15,14 +15,23 @@ import (
 	"github.com/go-chi/cors"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/twilio/twilio-go"
+	"time"
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 // Server holds the DynamoDB client and table name.
+// DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
+type DynamoDBClient interface {
+	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
+	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+}
+
+// Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb               *dynamodb.Client
+	ddb               DynamoDBClient
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler
