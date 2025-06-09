@@ -43,7 +43,7 @@ const entryCodeSchema = z.string()
 	)
 
 const entryCodeEntrySchema = z.object({
-	code: entryCodeSchema
+        code: entryCodeSchema
 })
 
 const settingsSchema = z.object({
@@ -321,7 +321,15 @@ function DisplayPhoneNumber({ Authorization }: { readonly Authorization: string 
 			}
 
 		</output>
-	</fieldset>
+        </fieldset>
+}
+
+function OpenDoorButton({ Authorization }: { readonly Authorization: string }) {
+        const $api = useZemnMeApi();
+        const m = $api.useMutation("post", "/callbox/open");
+        return <button onClick={() => m.mutate({ headers: { Authorization } })} disabled={m.isPending}>
+                Open door for 5 minutes
+        </button>
 }
 
 
@@ -385,6 +393,7 @@ export default function Admin() {
 			authTokenOrNothing,
 			token => <>
 				<DisplayPhoneNumber Authorization={token} />
+				<OpenDoorButton Authorization={token} />
 				<SettingsEditor Authorization={token} />
 			</>
 		), null)}
