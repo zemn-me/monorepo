@@ -6,6 +6,9 @@ ts_project(
     srcs = [
         "page.tsx",
     ],
+    assets = [
+        "page.module.css",
+    ],
     visibility = [
         "//project/zemn.me:__subpackages__",
     ],
