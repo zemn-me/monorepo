@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.49.0
-    version: 40.49.0(typanion@3.14.0)
+    specifier: 40.49.1
+    version: 40.49.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -8077,8 +8077,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /azure-devops-node-api@14.1.0:
-    resolution: {integrity: sha512-QhpgjH1LQ+vgDJ7oBwcmsZ3+o4ZpjLVilw0D3oJQpYpRzN+L39lk5jZDLJ464hLUgsDzWn/Ksv7zLLMKLfoBzA==}
+  /azure-devops-node-api@15.1.0:
+    resolution: {integrity: sha512-zlZ387CISkSKK1vjBv53kzR5fnzA60SxYrejypZawefZWvrjC28zyM/iKSP5b+iYl+Z7OOlm+Rgl6YsMecK6fg==}
     engines: {node: '>= 16.0.0'}
     dependencies:
       tunnel: 0.0.6
@@ -9555,6 +9555,7 @@ packages:
   /diff@7.0.0:
     resolution: {integrity: sha512-PJWHUb1RFevKCwaFA9RlG5tCd+FO5iRh9A8HEtkmBH2Li03iJriB6m6JIN4rGz3K3JLawI7/veA1xzRKP6ISBw==}
     engines: {node: '>=0.3.1'}
+    dev: false
 
   /diff@8.0.2:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
@@ -17200,8 +17201,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.49.0(typanion@3.14.0):
-    resolution: {integrity: sha512-sANxpL0jL5QXHdHDPafOC+70n3upWq9JZEGGE7Teqm+aqIAOPHTmGeXYo0MlSKnjsr3sE0GHzC9i7HWHKhUf3A==}
+  /renovate@40.49.1(typanion@3.14.0):
+    resolution: {integrity: sha512-WHH7MnsbjApQEcf+6p5bXawMamIEPEuVnEAXiiNnwJsEd+op9elu7FE4wU2t66iHLNzMOBqTy0bEFJpdfXIvzA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17244,20 +17245,20 @@ packages:
       async-mutex: 0.5.0
       auth-header: 1.0.0
       aws4: 1.13.2
-      azure-devops-node-api: 14.1.0
+      azure-devops-node-api: 15.1.0
       bunyan: 1.8.15
       cacache: 19.0.1
       chalk: 4.1.2
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
-      commander: 13.1.0
+      commander: 14.0.0
       conventional-commits-detector: 1.0.3
       croner: 9.0.0
       cronstrue: 2.61.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.1
-      diff: 7.0.0
+      diff: 8.0.2
       editorconfig: 2.0.1
       email-addresses: 5.0.0
       emoji-regex: 10.4.0
