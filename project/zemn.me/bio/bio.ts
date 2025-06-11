@@ -575,7 +575,7 @@ export const Bio = {
 			id: 'a3777d0d-e747-4bbd-aea5-33c06d61230e',
 			date: date(22, 'jan', 2018),
 			description: en`advisory position. Provided expertise to UK cyber advisory / defence group on Go and building security analysis systems. Launched world's first government-wide responsible disclosure program.`,
-			until: 'ongoing',
+			until: date(23, 'nov', 2021),
 			priority: 8,
 			tags: [security, work],
 			title: en`Application Security Engineer, UK National Cyber Security Centre`,

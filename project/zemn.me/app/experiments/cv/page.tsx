@@ -26,7 +26,7 @@ type Event = (typeof Bio.timeline)[number];
 function WorkItem({ event }: { readonly event: Event }) {
         const start = ('since' in event && event.since ? event.since : event.date) as Date;
         const end = 'until' in event ? event.until : undefined;
-        const endDate = end && end !== 'ongoing' ? (end as Date) : undefined;
+        const endDate = end instanceof Date ? end : undefined;
         const employer = 'employer' in event ? event.employer : undefined;
         return (
                 <div className={style.work} key={event.id}>
