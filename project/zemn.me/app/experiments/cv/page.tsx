@@ -1,10 +1,9 @@
-/* eslint-disable react/forbid-elements */
-// remove above when im not feeling lazy
 import React from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
 import { Bio, work } from '#root/project/zemn.me/bio/bio.js';
 import priorities from '#root/project/zemn.me/bio/priority.json';
+import Link from '#root/project/zemn.me/components/Link/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import { isDefined, must } from '#root/ts/guard.js';
 
@@ -69,7 +68,7 @@ export default function CV() {
         return (
                 <div className={`${style.cv} ${style.app}`}>
                         <div className={style.header}>
-                                <a className={style.website} href={Bio.officialWebsite.toString()}>zemn.me</a>
+                                <Link className={style.website} href={Bio.officialWebsite.toString()}>zemn.me</Link>
                                 {<div className={style.email}>{Bio.email[0]}</div>}
                                 <div className={style.phone}>+1 901 910 1110</div>
 								<TimeEye className={style.headerIcon} />
