@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.49.9
-    version: 40.49.9(typanion@3.14.0)
+    specifier: 40.49.10
+    version: 40.49.10(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -17198,8 +17198,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.49.9(typanion@3.14.0):
-    resolution: {integrity: sha512-WvJ/Bm7rBGqq2zTlula3Gc38RZs4Oog8ls2sLXPgczPxKJHJQJsez+jgBLo9be55zUUl7K0gK4y0egHVgkEJDQ==}
+  /renovate@40.49.10(typanion@3.14.0):
+    resolution: {integrity: sha512-eI/gue+qk7HCobcrLKSMv1DZvQk3bpWG1pC9bCOmeUpzW6Du/vbpVK7U7z+7Ch0Xz8uJ0+p2vbzy3czcc1nIiw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17244,7 +17244,7 @@ packages:
       azure-devops-node-api: 15.1.0
       bunyan: 1.8.15
       cacache: 19.0.1
-      chalk: 4.1.2
+      chalk: 5.4.1
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
       commander: 14.0.0
