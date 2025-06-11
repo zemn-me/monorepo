@@ -47,6 +47,64 @@ function WorkItems() {
         return <>{entries.filter(e => 'tags' in e && e.tags.includes(work)).map(e => <WorkItem event={e} key={e.id} />)}</>;
 }
 
+
+/*
+
+TODO --
+
+function Talks() {Add commentMore actions
+	return <section>
+		<h2>Talks...</h2>
+		<ol>
+			{entries().filter(e => 'tags' in e && e.tags.includes(talk)).map(e => <li key={e.id}>
+				<h3 lang={e.title.language}>{e.title.text}</h3>
+				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
+			</li>)}
+		</ol>
+	</section>
+}
+
+function Accolades() {Add commentMore actions
+	return <section>
+		<h2>Accolades...</h2>
+		<ol>
+			{entries().filter(e => 'tags' in e && e.tags.includes(accolade)).map(e => <li key={e.id}>
+				<h3 lang={e.title.language}>{e.title.text}</h3>
+				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
+			</li>)}
+		</ol>
+	</section>
+
+
+	function Coverage() {Add commentMore actions
+	return <section>
+		<h2>Coverage & Citiations...</h2>
+		<ol>
+			{entries().filter(e => 'tags' in e && e.tags.includes(comment)).map(e => <li key={e.id}>
+
+				<h3 lang={e.title.language}>{e.title.text}</h3>
+				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
+			</li>)}
+		</ol>
+	</section>
+}
+
+function Disclosures() {Add commentMore actions
+	return <section>
+		<h2>Papers & Disclosures</h2>
+		<ol>
+			{entries().filter(e => 'tags' in e && [
+				writing, disclosure
+			].some(t => e.tags.includes(t))).map(e => <li key={e.id}>
+				<h3 lang={e.title.language}>{e.title.text}</h3>
+				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
+			</li>)}
+		</ol>
+	</section>
+}
+*/
+
+
 function OtherItems() {
         return (
                 <>
@@ -75,7 +133,7 @@ export default function CV() {
                                 <div className={style.date}><time dateTime={String(Date.now())}>{new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</time></div>
                                 <div className={`${style.profileName} ${style.name}`}>{Bio.who.name.text}</div>
                         </div>
-                        <div className={`${style.rule} ${style.experienceTitle}`}><span>selected experience</span></div>
+                        <div className={`${style.rule} ${style.experienceTitle}`}><span>Employment</span></div>
                         <div className={style.experience}>
                                 <WorkItems />
                         </div>
