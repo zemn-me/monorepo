@@ -66,7 +66,7 @@ describe('Option Utilities', () => {
 		});
 
 		it('throws if called on None', () => {
-			expect(() => unwrap(None)).toThrowError('Cannot unwrap Option; has no value.');
+			expect(() => unwrap(None)).toThrow('Cannot unwrap Option; has no value.');
 		});
 	});
 
