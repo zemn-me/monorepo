@@ -99,8 +99,8 @@ dependencies:
     specifier: 3.4.2
     version: 3.4.2(eslint@9.28.0)
   eslint-plugin-jest:
-    specifier: 28.13.4
-    version: 28.13.4(eslint@9.28.0)(typescript@5.5.4)
+    specifier: 28.13.5
+    version: 28.13.5(eslint@9.28.0)(typescript@5.5.4)
   eslint-plugin-mdx:
     specifier: 3.4.2
     version: 3.4.2(eslint@9.28.0)
@@ -10222,8 +10222,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jest@28.13.4(eslint@9.28.0)(typescript@5.5.4):
-    resolution: {integrity: sha512-EefLhckQh/p1m4ky9wJQ5DpxvnvpFXL9x8wc/VxWOMhkoaVGerLZWJF0UqWr1zWNKnTAGIgWg08pcFR7Xng5xg==}
+  /eslint-plugin-jest@28.13.5(eslint@9.28.0)(typescript@5.5.4):
+    resolution: {integrity: sha512-ThdhaLPqK78iVjWY1zIfe4WdcVB0NgxZzsOE38SRCc/i3lPIcdfkOuWMC6m96LAg9zAbPPY7LSTXXT0Pf8J7pQ==}
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0 || ^7.0.0 || ^8.0.0
