@@ -428,8 +428,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 40.52.0
-    version: 40.52.0(typanion@3.14.0)
+    specifier: 40.53.1
+    version: 40.53.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -17261,8 +17261,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@40.52.0(typanion@3.14.0):
-    resolution: {integrity: sha512-dtcnmgQMH7Y2j4nIRtlRJX8tm7XNlfopXYwZ7uBCdekGZ5yPT9l96FgwFZpJc2A625mGYUw1Me0N4iWpZeccfA==}
+  /renovate@40.53.1(typanion@3.14.0):
+    resolution: {integrity: sha512-SJIFH87M16MFxhO4xdE3qedjGrLckFCKyuXGJ38clhIehuAzni0+QYyW3nkCpS6eLy8B8vphjHFOnfKuib3Umw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17369,7 +17369,7 @@ packages:
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 2.1.2
-      simple-git: 3.27.0
+      simple-git: 3.28.0
       slugify: 1.6.6
       source-map-support: 0.5.21
       toml-eslint-parser: 0.10.0
@@ -17380,7 +17380,7 @@ packages:
       vuln-vects: 1.1.0
       xmldoc: 1.3.0
       yaml: 2.8.0
-      zod: 3.25.53
+      zod: 3.25.55
     optionalDependencies:
       better-sqlite3: 11.10.0
       openpgp: 6.1.1
@@ -18003,8 +18003,8 @@ packages:
     dev: true
     optional: true
 
-  /simple-git@3.27.0:
-    resolution: {integrity: sha512-ivHoFS9Yi9GY49ogc6/YAi3Fl9ROnF4VyubNylgCkA+RVqLaKWnDSzXOVzya8csELIaWaYNutsEuAhZrtOjozA==}
+  /simple-git@3.28.0:
+    resolution: {integrity: sha512-Rs/vQRwsn1ILH1oBUy8NucJlXmnnLeLCfcvbSehkPzbv3wwoFWIdtfd6Ndo6ZPhlPsCZ60CPI4rxurnwAa+a2w==}
     dependencies:
       '@kwsites/file-exists': 1.1.1
       '@kwsites/promise-deferred': 1.1.1
@@ -20293,8 +20293,8 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
 
-  /zod@3.25.53:
-    resolution: {integrity: sha512-BKOKoY3XcGUVkqaalCtFK15LhwR0G0i65AClFpWSXLN2gJNBGlTktukHgwexCTa/dAacPPp9ReryXPWyeZF4LQ==}
+  /zod@3.25.55:
+    resolution: {integrity: sha512-219huNnkSLQnLsQ3uaRjXsxMrVm5C9W3OOpEVt2k5tvMKuA8nBSu38e0B//a+he9Iq2dvmk2VyYVlHqiHa4YBA==}
     dev: true
 
   /zod@3.25.64:
