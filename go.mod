@@ -14,7 +14,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.43.3
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.80.2
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/bazelbuild/bazel-gazelle v0.43.0
+	github.com/bazelbuild/bazel-gazelle v0.44.0
 	github.com/bazelbuild/bazel-watcher v0.26.1
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.55.1
