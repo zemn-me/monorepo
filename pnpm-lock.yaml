@@ -96,8 +96,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   eslint-mdx:
-    specifier: 3.4.2
-    version: 3.4.2(eslint@9.29.0)
+    specifier: 3.5.0
+    version: 3.5.0(eslint@9.29.0)
   eslint-plugin-jest:
     specifier: 28.13.5
     version: 28.13.5(eslint@9.29.0)(typescript@5.5.4)
@@ -10125,36 +10125,6 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-mdx@3.4.2(eslint@9.29.0):
-    resolution: {integrity: sha512-NYNGuBClNzYzTJWbPzeYSh/eCl5m4BrX1MayNuGuvxn+cItTdNirE+ykos9q1CkYhHj+ZgQz6W+6EIaHMp7/jQ==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      eslint: '>=8.0.0'
-      remark-lint-file-extension: '*'
-    peerDependenciesMeta:
-      remark-lint-file-extension:
-        optional: true
-    dependencies:
-      acorn: 8.15.0
-      acorn-jsx: 5.3.2(acorn@8.15.0)
-      eslint: 9.29.0
-      espree: 10.3.0
-      estree-util-visit: 2.0.0
-      remark-mdx: 3.1.0
-      remark-parse: 11.0.0
-      remark-stringify: 11.0.0
-      synckit: 0.11.8
-      tslib: 2.8.1
-      unified: 11.0.5
-      unified-engine: 11.2.2
-      unist-util-visit: 5.0.0
-      uvu: 0.5.6
-      vfile: 6.0.3
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
-    dev: false
-
   /eslint-mdx@3.5.0(eslint@9.29.0):
     resolution: {integrity: sha512-3iFgW201z26bnFJelrrG2D8YXx1jk9JzXBp2pN32EMIpg47ZBM20mkdneLXn2CBKp27ZMHTygEA1DJNpqMu4Pg==}
     engines: {node: '>=18.0.0'}
@@ -10445,15 +10415,6 @@ packages:
       es5-ext: 0.10.64
       event-emitter: 0.3.5
       type: 2.7.3
-    dev: false
-
-  /espree@10.3.0:
-    resolution: {integrity: sha512-0QYC8b24HWY8zjRnDTL6RiHfDbAWn63qb4LMj1Z4b076A4une81+z03Kg7l7mn/48PUTqoLptSXez8oknU8Clg==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-    dependencies:
-      acorn: 8.15.0
-      acorn-jsx: 5.3.2(acorn@8.15.0)
-      eslint-visitor-keys: 4.2.0
     dev: false
 
   /espree@10.4.0:
