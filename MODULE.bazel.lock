@@ -51,8 +51,8 @@
     "https://bcr.bazel.build/modules/bazel_features/1.18.0/MODULE.bazel": "1be0ae2557ab3a72a57aeb31b29be347bcdc5d2b1eb1e70f39e3851a7e97041a",
     "https://bcr.bazel.build/modules/bazel_features/1.19.0/MODULE.bazel": "59adcdf28230d220f0067b1f435b8537dd033bfff8db21335ef9217919c7fb58",
     "https://bcr.bazel.build/modules/bazel_features/1.21.0/MODULE.bazel": "675642261665d8eea09989aa3b8afb5c37627f1be178382c320d1b46afba5e3b",
-    "https://bcr.bazel.build/modules/bazel_features/1.31.0/MODULE.bazel": "eca40770b202b2161c1e20be7f1c323c8836dc959ae48dcf02ee7a051ffe4e8e",
-    "https://bcr.bazel.build/modules/bazel_features/1.31.0/source.json": "ed96a7d1b0a388225c7c14549975e81bd35c9e8d5829d29fd39719bbf2f8c769",
+    "https://bcr.bazel.build/modules/bazel_features/1.32.0/MODULE.bazel": "095d67022a58cb20f7e20e1aefecfa65257a222c18a938e2914fd257b5f1ccdc",
+    "https://bcr.bazel.build/modules/bazel_features/1.32.0/source.json": "2546c766986a6541f0bacd3e8542a1f621e2b14a80ea9e88c6f89f7eedf64ae1",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
     "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
@@ -296,7 +296,7 @@
     },
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "lY4UzGgQHbSI9mJD4/XsDgI6yYNv5MqSZdg58EgEyzI=",
+        "bzlTransitiveDigest": "6BgUDZjZxkVzMoFbYI274bpdFVAcmLi3ylIXGrzhHP8=",
         "usagesDigest": "DsYGwiP9vRoYpWh/bRcwizmkSFpg1vs5moru+TUGD4c=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1592,7 +1592,7 @@
     },
     "@@rules_rust+//crate_universe:extension.bzl%crate": {
       "general": {
-        "bzlTransitiveDigest": "aMFS51TP+R9Ko0d4ZxMrqjbXNAaP/s28jjnG1M7Ona0=",
+        "bzlTransitiveDigest": "OImcWIXslBXTtf646c1jZsy7bt+1+qAehyECsbSs+Mo=",
         "usagesDigest": "CJgWQSwxgEje6b5PvzZUGlf66pCyQEIEAnIjOQVxaS8=",
         "recordedFileInputs": {
           "@@//Cargo.lock": "8492b7e187182ec817f8bb6cc8fba74e23b8113d3d12a0d40281051ac33d22bb",
@@ -6907,7 +6907,7 @@
     },
     "@@rules_rust+//crate_universe/private:internal_extensions.bzl%cu_nr": {
       "general": {
-        "bzlTransitiveDigest": "Xy9gCf/4lUoIzDBJm3GjH+jNNp4hABzyrVKg11ouz2E=",
+        "bzlTransitiveDigest": "5wMC2VN5TjlLsDLDBJvptnb1mmUabRZpyZdKZW3vvJ0=",
         "usagesDigest": "Pr9/2PR9/ujuo94SXikpx+fg31V4bDKobC10YJu+z5I=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
