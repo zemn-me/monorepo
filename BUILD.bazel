@@ -258,7 +258,7 @@ binary_with_args(
     name = "pnpm_lockfile_validation_bin",
     args = [
         "i",
-        "--lockfile-only",
+        #        "--lockfile-only", # https://github.com/pnpm/pnpm/issues/6962#issuecomment-2985146457
         "--frozen-lockfile",
     ],
     binary = "@pnpm",
@@ -266,5 +266,6 @@ binary_with_args(
         "package.json",
         "pnpm-lock.yaml",
     ],
+    tags = ["no-sandbox"],
     test = True,
 )
