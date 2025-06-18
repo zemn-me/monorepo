@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
@@ -12,4 +12,4 @@ const BlueprintBookKey = z.strictObject({
 });
 
 export const BlueprintWrapper = z.union([BlueprintKey, BlueprintBookKey]);
-export type BlueprintWrapper = z.TypeOf<typeof BlueprintWrapper>;
+export type BlueprintWrapper = z.infer<typeof BlueprintWrapper>;
