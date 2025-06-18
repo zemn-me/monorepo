@@ -12,4 +12,4 @@ const BlueprintBookKey = z.strictObject({
 });
 
 export const BlueprintWrapper = z.union([BlueprintKey, BlueprintBookKey]);
-export type BlueprintWrapper = z.TypeOf<typeof BlueprintWrapper>;
+export type BlueprintWrapper = z.infer<typeof BlueprintWrapper>;
