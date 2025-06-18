@@ -221,6 +221,7 @@ paths:
         - name: Digits
           in: query
           description: digits entered by user.
+          allowEmptyValue: true
           required: false
           schema:
             type: string
