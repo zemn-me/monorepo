@@ -158,11 +158,6 @@
 		"zod-to-json-schema": "3.24.5",
 		"zod_utilz": "0.8.4"
 	},
-	"pnpm": {
-		"overrides": {
-			"resolve": "2.0.0-next.5"
-		}
-	},
 	"type": "module",
 	"imports": {
 		"#root/*": "./*"
