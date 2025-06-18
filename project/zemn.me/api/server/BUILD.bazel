@@ -83,11 +83,9 @@ go_test(
     ],
     embed = [":server"],
     deps = [
-        "//project/zemn.me/api",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
-        "@com_github_getkin_kin_openapi//openapi3",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
