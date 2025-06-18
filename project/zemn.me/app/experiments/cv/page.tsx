@@ -26,14 +26,17 @@ type Event = (typeof Bio.timeline)[number];
 function WorkItem({ event }: { readonly event: Event }) {
         const start = ('since' in event && event.since ? event.since : event.date) as Date;
         const end = 'until' in event ? event.until : undefined;
-        const endDate = end instanceof Date ? end : undefined;
-        const employer = 'employer' in event ? event.employer : undefined;
-        return (
-                <div className={style.work} key={event.id}>
-                        {employer && <div className={style.employer}>{employer.text}</div>}
-                        <div className={style.position}>{event.title.text}</div>
-                        <div className={`${style.date} ${style.start}`}><time dateTime={String(+start)}>{start.getFullYear()}</time></div>
-                        {end && <div className={style.end}>{end === 'ongoing' ? 'Ongoing' : endDate?.getFullYear()}</div>}
+       const employer = 'employer' in event ? event.employer : undefined;
+       return (
+               <div className={style.work} key={event.id}>
+                       {employer && <div className={style.employer}>{employer.text}</div>}
+                       <div className={style.position}>{event.title.text}</div>
+                       <div className={`${style.date} ${style.start}`}><time dateTime={String(+start)}>{start.getFullYear()}</time></div>
+                       {end && (
+                               <div className={style.end}>
+                                       {typeof end === 'string' ? 'Ongoing' : end.getFullYear()}
+                               </div>
+                       )}
                         {'description' in event && event.description && (
                                 <span className={`${style.timelineDescription} ${style.content}`}>
                                         <p>{event.description.text}</p>
