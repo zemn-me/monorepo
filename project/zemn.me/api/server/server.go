@@ -12,14 +12,12 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
-	middleware "github.com/oapi-codegen/nethttp-middleware"
-	"github.com/twilio/twilio-go"
-	"time"
+       "github.com/go-chi/cors"
+       middleware "github.com/oapi-codegen/nethttp-middleware"
+       "github.com/twilio/twilio-go"
 
-	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
-	"github.com/zemn-me/monorepo/project/zemn.me/api/server/acnh"
-	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
+       apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
+       "github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 // Server holds the DynamoDB client and table name.
