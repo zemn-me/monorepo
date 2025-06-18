@@ -351,3 +351,28 @@ paths:
               schema:
                 type: string
                 enum: [OK]
+
+  /.well-known/security.txt:
+    get:
+      summary: security.txt
+      description: Security contact information.
+      responses:
+        "200":
+          description: security.txt contents.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /security.txt:
+    get:
+      summary: security.txt
+      description: Security contact information.
+      responses:
+        "200":
+          description: security.txt contents.
+          content:
+            text/plain:
+              schema:
+                type: string
+
