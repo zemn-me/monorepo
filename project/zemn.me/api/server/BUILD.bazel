@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
@@ -20,6 +21,12 @@ go_oapi_codegen(
     source = "//project/zemn.me/api:spec.yaml",
 )
 
+copy_file(
+    name = "security_txt",
+    src = "//ts/pulumi/lib/website:security.txt",
+    out = "security.txt",
+)
+
 go_library(
     name = "server",
     srcs = [
@@ -33,9 +40,11 @@ go_library(
         "phone.go",
         "phone_hold_music.go",
         "phone_join_conference.go",
+        "security_txt.go",
         "server.go",
         "uuid.go",
     ],
+    embedsrcs = ["security.txt"],
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server",
     visibility = ["//visibility:public"],
     deps = [
