@@ -28,8 +28,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_js/1.33.1/MODULE.bazel": "db3e7f16e471cf6827059d03af7c21859e7a0d2bc65429a3a11f005d46fc501b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.40.0/MODULE.bazel": "01a1014e95e6816b68ecee2584ae929c7d6a1b72e4333ab1ff2d2c6c30babdf1",
     "https://bcr.bazel.build/modules/aspect_rules_js/2.0.0/MODULE.bazel": "b45b507574aa60a92796e3e13c195cd5744b3b8aff516a9c0cb5ae6a048161c5",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.7/MODULE.bazel": "21935b86f6e32f7f0a57ab1064c6c04da19eb9dd8481ca6947649ec1f34f1127",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.7/source.json": "8f35038a3e73a10f59ef7e357fcb9fc34506a85dec5687792ee9bf3023298682",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.8/MODULE.bazel": "74bf20a7a6bd5f2be09607fdb4196cfd6f203422ea271752ec2b1afe95426101",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.3.8/source.json": "411ec9d79d6f5fe8a083359588c21d01a5b48d88a2cbd334a4c90365015b7836",
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.12.0/MODULE.bazel": "e767c5dbfeb254ec03275a7701b5cfde2c4d2873676804bc7cb27ddff3728fed",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.4.4/MODULE.bazel": "24459eeeeb084bc3e7628c338e494746718bc17b3a3cbd94415c8df5c7c6dc37",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.4.4/source.json": "68a98376c993a8113ac3a5e75eaab588bd61f67e5d633dee31770f9a9a6c785b",
@@ -296,8 +296,8 @@
     },
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "6BgUDZjZxkVzMoFbYI274bpdFVAcmLi3ylIXGrzhHP8=",
-        "usagesDigest": "DsYGwiP9vRoYpWh/bRcwizmkSFpg1vs5moru+TUGD4c=",
+        "bzlTransitiveDigest": "hD0y+R4FSQKY5yMD6qO9hMT0oQAphC//4pb5I61zuGQ=",
+        "usagesDigest": "tut8r3NZDAG1XWlvVJAAyLT+cxJYtvGXqkH4x2qTmHI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1096,7 +1096,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "MLpfA+65GINLc2EHubnI97nNK9NXPVkAUVpbgIrPV/M=",
-        "usagesDigest": "T2f7kU321lW96h0R0/8M8mgnteqJ5QKciyzCEY590sc=",
+        "usagesDigest": "rvZkg3wKpo2RgpXYsfSwmMNAj9xPnyyU4YAP8Y9oHiw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
