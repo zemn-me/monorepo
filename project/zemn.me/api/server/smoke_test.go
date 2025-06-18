@@ -5,5 +5,6 @@ import (
 )
 
 func TestSmoke(t *testing.T) {
-	// smoke
+       var s Server
+       _, _ = s.isDoorOpen(nil)
 }

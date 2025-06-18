@@ -191,6 +191,19 @@ components:
       properties:
         phoneNumber:
           $ref: "#/components/schemas/PhoneNumber"
+    OpenWindowResponse:
+      description: |
+        Response when the door has been opened temporarily.
+      type: object
+      required:
+        - openUntil
+      properties:
+        openUntil:
+          type: string
+          format: date-time
+        who:
+          type: string
+          description: Identifier for who opened the door.
 
 paths:
   /phone/init:
@@ -298,11 +311,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CallboxSettings'
         "500":
-            description: Error.
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
+          description: Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     get:
       description: >
         Returns the current settings for the callbox.
@@ -324,6 +337,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CallboxSettings'
+  /callbox/open:
+    post:
+      description: >
+        Opens the door for five minutes. During this period,
+        all callers will be allowed entry automatically.
+      security:
+        - googleOIDC: []
+      responses:
+        "200":
+          description: Open window created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenWindowResponse'
+        "500":
+          description: Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /phone/number:
     get:
       summary: Returns the current phone number for the callbox.
