@@ -76,15 +76,18 @@ go_library(
 go_test(
     name = "server_test",
     srcs = [
+        "allow_empty_digits_test.go",
         "cors_test.go",
         "phone_features_test.go",
         "smoke_test.go",
     ],
     embed = [":server"],
     deps = [
+        "//project/zemn.me/api",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_getkin_kin_openapi//openapi3",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
