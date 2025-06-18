@@ -12,12 +12,12 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
-       "github.com/go-chi/cors"
-       middleware "github.com/oapi-codegen/nethttp-middleware"
-       "github.com/twilio/twilio-go"
+	"github.com/go-chi/cors"
+	middleware "github.com/oapi-codegen/nethttp-middleware"
+	"github.com/twilio/twilio-go"
 
-       apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
-       "github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
+	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 // Server holds the DynamoDB client and table name.
@@ -26,6 +26,9 @@ type DynamoDBClient interface {
 	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
 	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
 }
+
+// Ensure the real DynamoDB client implements the interface.
+var _ DynamoDBClient = (*dynamodb.Client)(nil)
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
