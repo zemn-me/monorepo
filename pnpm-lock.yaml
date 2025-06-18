@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  resolve: 2.0.0-next.5
-
 dependencies:
   '@commander-js/extra-typings':
     specifier: 14.0.0
@@ -3405,7 +3402,7 @@ packages:
       '@rushstack/terminal': 0.15.3(@types/node@22.15.32)
       '@rushstack/ts-command-line': 5.0.1(@types/node@22.15.32)
       js-yaml: 3.13.1
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     transitivePeerDependencies:
       - '@types/node'
     dev: true
@@ -3426,7 +3423,7 @@ packages:
       '@microsoft/tsdoc': 0.15.1
       ajv: 8.12.0
       jju: 1.4.0
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     dev: true
 
   /@microsoft/tsdoc@0.15.1:
@@ -5520,7 +5517,7 @@ packages:
       fs-extra: 11.3.0
       import-lazy: 4.0.0
       jju: 1.4.0
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
       semver: 7.5.4
     dev: true
 
@@ -10096,7 +10093,7 @@ packages:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.16.1
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12818,7 +12815,7 @@ packages:
       jest-pnp-resolver: 1.2.3(jest-resolve@29.7.0)
       jest-util: 29.7.0
       jest-validate: 29.7.0
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
       resolve.exports: 2.0.3
       slash: 3.0.0
     dev: true
@@ -13424,7 +13421,7 @@ packages:
       is-plain-object: 2.0.4
       object.map: 1.0.1
       rechoir: 0.7.1
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     dev: true
 
   /lighthouse-logger@1.4.2:
@@ -15204,7 +15201,7 @@ packages:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
       hosted-git-info: 2.8.9
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
       semver: 5.7.2
       validate-npm-package-license: 3.0.4
     dev: true
@@ -16374,7 +16371,7 @@ packages:
       jstransformer: 1.0.0
       pug-error: 2.1.0
       pug-walk: 2.0.0
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     dev: false
 
   /pug-lexer@5.0.1:
@@ -16893,7 +16890,7 @@ packages:
     resolution: {integrity: sha512-/njmZ8s1wVeR6pjTZ+0nCnv8SpZNRMT2D1RLOJQESlYFDBvwpTA4KWJpZ+sBJ4+vhjILRcK7JIFdGCdxEAAitg==}
     engines: {node: '>= 0.10'}
     dependencies:
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     dev: true
 
   /recma-build-jsx@1.0.0:
@@ -17267,7 +17264,7 @@ packages:
     dependencies:
       debug: 4.4.1(supports-color@10.0.0)
       module-details-from-path: 1.0.4
-      resolve: 2.0.0-next.5
+      resolve: 1.22.10
     transitivePeerDependencies:
       - supports-color
 
@@ -17318,6 +17315,15 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /resolve@1.22.10:
+    resolution: {integrity: sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==}
+    engines: {node: '>= 0.4'}
+    hasBin: true
+    dependencies:
+      is-core-module: 2.16.1
+      path-parse: 1.0.7
+      supports-preserve-symlinks-flag: 1.0.0
+
   /resolve@2.0.0-next.5:
     resolution: {integrity: sha512-U7WjGVG9sH8tvjW5SmGbQuui75FiyjAX72HX15DwBBwF9dNiQZRQAg9nnPhYy+TUnE0+VcrttuvNI8oSxZcocA==}
     hasBin: true
@@ -17325,6 +17331,7 @@ packages:
       is-core-module: 2.16.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+    dev: true
 
   /responselike@2.0.1:
     resolution: {integrity: sha512-4gl03wn3hj1HP3yzgdI7d3lCkF95F21Pz4BPGvKHinyQzALR5CapwC8yIi0Rh58DEMQ/SguC03wFj2k0M/mHhw==}
