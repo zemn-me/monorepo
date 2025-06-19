@@ -28,6 +28,6 @@ if $(rlocation $VALIDATION_BIN) >out.txt 2>&1; then
   cat out.txt >&2
   exit 1
 else
-  echo "command failed as expected" >&2
+  # command failed as expected; suppress output
   exit 0
 fi
