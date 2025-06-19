@@ -76,6 +76,7 @@ go_library(
 go_test(
     name = "server_test",
     srcs = [
+        "allow_empty_digits_test.go",
         "cors_test.go",
         "phone_features_test.go",
         "smoke_test.go",

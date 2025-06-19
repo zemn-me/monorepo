@@ -67,10 +67,11 @@ func Do() error {
 		return nil
 	}
 
-	// 4. Fix go.mod lines if needed
-	if goModVersion != latest || toolchainVersion != latest {
-		fmt.Printf("Updating go.mod to use %s (was go=%s, toolchain go=%s)\n",
-			latest, safeStr(goModVersion), safeStr(toolchainVersion))
+	// 4. Fix go.mod lines if needed. We only rewrite when the existing
+	// version lines are present and differ from the desired version.
+	changeGoVersion := goModVersion != "" && goModVersion != latest
+	changeToolchain := toolchainVersion != "" && toolchainVersion != latest
+	if changeGoVersion || changeToolchain {
 		if err := rewriteGoMod(goModPath, outputGoMod, latest); err != nil {
 			return fmt.Errorf("failed to update go.mod: %w", err)
 		}
@@ -83,7 +84,6 @@ func Do() error {
 
 	// 5. Fix MODULE.bazel if needed
 	if bazelGoVersion != latest {
-		fmt.Printf("Updating MODULE.bazel from %s to %s\n", bazelGoVersion, latest)
 		if err := rewriteBazelGoVersion(bazelPath, outputBazel, latest); err != nil {
 			return fmt.Errorf("failed to update MODULE.bazel: %w", err)
 		}
