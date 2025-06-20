@@ -7,6 +7,7 @@ import { ArticleProps } from '#root/project/zemn.me/components/Article/types/art
 import * as lang from '#root/ts/react/lang/index.js';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
 import * as time from '#root/ts/time/index.js';
+import { linkToHighlight } from '#root/ts/url/selection.js';
 
 type Text = lang.Text;
 
@@ -778,14 +779,18 @@ export const Bio = {
 		{
 			date: date(13, 'may', 2024),
 			title: en`GPT4o`,
-			url: url`https://openai.com/gpt-4o-contributions/`,
+			url: linkToHighlight(url`https://openai.com/gpt-4o-contributions/`, {
+				start: "Thomas Shadwell",
+			}),
 			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
-			description: en`Product security for OpenAI‘s first multimodal model.`,
+			description: en`Product security for OpenAI’s first multimodal model.`,
 		},
 		{
 			date: date(3, 'oct', 2024),
 			title: en`ChatGPT Canvas`,
-			url: url`https://openai.com/index/introducing-canvas/`,
+			url: linkToHighlight(url`https://openai.com/index/introducing-canvas`, {
+				start: "Thomas Shadwell",
+			}),
 			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
 			description: en`Security for AI pairing system for text.`,
 		},
