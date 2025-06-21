@@ -33,7 +33,7 @@ html, body, :root {
 
 	See: https://colorizer.org/
 */
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
 	:root {
 		/*
 		Notify the browser that the default colour scheme is now dark.
