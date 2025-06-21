@@ -83,6 +83,14 @@
     }
 }
 
+.banner {
+	page-break-after: always; /* legacy WebKit/Blink */
+	break-after: page;        /* spec-compliant */
+}
+
+@page :first {
+	margin: 0;
+}
 
 .footer {
 	grid-area: footer;

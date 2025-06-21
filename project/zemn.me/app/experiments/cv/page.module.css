@@ -1,5 +1,11 @@
 
 
+.newCV {
+	display: block;
+}
+
+
+
 .cv {
   font-size: 80%;
   width: 210mm;
@@ -43,9 +49,9 @@
   align-items: center;
   grid:
     "website icon date" min-content
-    ". . ." 1em
-    "phone name email" min-content
-    ". . ." 2em / 1fr 1fr 1fr;
+    "....... .... ...." 1em
+    "phone   name email" min-content
+    ".....   .... ....." 2em / 1fr 1fr 1fr;
 }
 
 .website { grid-area: website; }
