@@ -1,0 +1,110 @@
+
+
+.cv {
+  font-size: 80%;
+  width: 210mm;
+  height: 297mm;
+  margin: auto;
+  padding: 20mm 30mm;
+  border: 1px solid #000;
+  display: grid;
+  grid:
+    "header header header header header" min-content
+    "experience-title experience-title experience-title experience-title experience-title" min-content
+    ". . . . ." .4fr
+    "experience experience experience experience experience" 7fr
+    "works-title works-title works-title works-title works-title" min-content
+    ". . . . ." .4fr
+    "works works works works works" 1fr
+    ". . . . ." .4fr
+    "works2 works2 works2 works2 works2" 1fr
+    ". . . . ." .4fr
+    "skills-title skills-title skills-title skills-title skills-title" min-content
+    ". . . . ." .4fr
+    "skills skills skills skills skills" 1fr
+    ". . . . ." 3em
+    ". dash-left future dash-right ." 2em / 1fr 2em 1fr 2em 1fr;
+}
+
+.cv::before,
+.cv::after {
+  content: '\2013';
+  margin: auto;
+  opacity: .5;
+}
+
+.cv::before { grid-area: dash-left; }
+.cv::after { grid-area: dash-right; }
+
+.header {
+  grid-area: header;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid:
+    "website icon date" min-content
+    ". . ." 1em
+    "phone name email" min-content
+    ". . ." 2em / 1fr 1fr 1fr;
+}
+
+.website { grid-area: website; }
+.headerIcon { grid-area: icon; height: 2.5em; }
+.phone { grid-area: phone; }
+.email { grid-area: email; }
+.name { grid-area: name; }
+.profileName { grid-area: name; }
+.date { grid-area: date; }
+
+.experience { grid-area: experience; display: grid; }
+
+.work {
+  display: grid;
+  grid:
+    "employer employer . start dash end" min-content
+    "position position . duration duration duration" min-content
+    ". . . . . ." .1em
+    ". content content . . ." min-content
+    ". . . . . ." 1em / 1em 1fr 1em 4.5em 2em 4em;
+}
+
+.work::before { content: ' - '; grid-area: dash; justify-self: center; }
+.employer { grid-area: employer; font-weight: 700; font-style: italic; }
+.position { grid-area: position; }
+.start { grid-area: start; justify-self: end; white-space: nowrap; opacity: .6; }
+.end { grid-area: end; justify-self: end; white-space: nowrap; opacity: .6; }
+.duration { grid-area: duration; justify-self: end; white-space: nowrap; opacity: .4; }
+.content { grid-area: content; }
+
+.work p { margin: 0; }
+.work p + p { margin-top: 1em; }
+.work ul { list-style-type: none; margin: 0; padding: 0; }
+.work li + li { margin-top: 1em; }
+
+.rule {
+  display: flex;
+  align-items: center;
+}
+
+.rule::before,
+.rule::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid;
+}
+
+.rule span { padding: 0 .5em; }
+
+.experienceTitle { grid-area: experience-title; }
+.worksTitle { grid-area: works-title; }
+.works { grid-area: works; }
+.works2 { grid-area: works2; }
+.skills { grid-area: skills; display: grid; grid-template-columns: repeat(auto-fit, minmax(7em, 1fr)); grid-auto-flow: dense; align-items: center; justify-items: stretch; text-align: center; }
+.skills.works { grid-gap: 0 1em; }
+.skillsTitle { grid-area: skills-title; }
+.description { grid-row: 2; align-self: start; opacity: .7; }
+.future { grid-area: future; stroke: none; fill: #000 !important; }
+
+
+
+@page { size: A4; margin: 0; }

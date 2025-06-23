@@ -1,6 +1,8 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+exports_files(["security.txt"])
+
 ts_project(
     name = "website",
     data = ["security.txt"],

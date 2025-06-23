@@ -34,6 +34,24 @@ go_test(
     srcs = ["go_basic_test.go"],
 )
 
+sh_test(
+    name = "pnpm_lockfile_validation_fail_test",
+    srcs = ["pnpm_lockfile_validation/test_fail.sh"],
+    data = [
+        "//:package.json",
+        "//:pnpm-lock.yaml",
+        "//:pnpm_lockfile_validation_bin",
+        "//sh/bin:gojq",
+    ],
+    env = {
+        "PACKAGE_JSON": "$(rlocationpath //:package.json)",
+        "PNPM_LOCKFILE": "$(rlocationpath //:pnpm-lock.yaml)",
+        "VALIDATION_BIN": "$(rlocationpath //:pnpm_lockfile_validation_bin)",
+        "GOJQ_BINARY": "$(rlocationpath //sh/bin:gojq)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],

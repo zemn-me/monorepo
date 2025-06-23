@@ -21,8 +21,18 @@ import (
 )
 
 // Server holds the DynamoDB client and table name.
+// DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
+type DynamoDBClient interface {
+	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
+	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+}
+
+// Ensure the real DynamoDB client implements the interface.
+var _ DynamoDBClient = (*dynamodb.Client)(nil)
+
+// Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb               *dynamodb.Client
+	ddb               DynamoDBClient
 	settingsTableName string
 	rt                *chi.Mux
 	http.Handler

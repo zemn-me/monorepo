@@ -388,7 +388,7 @@ export default function Auth() {
 	)
 
 	/**
-	 * New new auth token cache with the newly recieved OIDC id_token
+        * New new auth token cache with the newly received OIDC id_token
 	 * mixed in.
 	 */
 	const amendedAuthTokenCache = result_and_then(
