@@ -1,11 +1,14 @@
 import React from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
-import { Bio, work } from '#root/project/zemn.me/bio/bio.js';
+import { accolade, Bio, comment, talk, work } from '#root/project/zemn.me/bio/bio.js';
 import priorities from '#root/project/zemn.me/bio/priority.json';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import { isDefined, must } from '#root/ts/guard.js';
+import { filter } from '#root/ts/iter/iterable_functional.js';
+import { None, Some } from '#root/ts/option/types.js';
+import { Date as DateDisplay } from '#root/ts/react/lang/date.js';
 
 const priorityMap = new Map<string, number>(
         priorities.map((id, idx) => [id, priorities.length - idx]),
@@ -23,7 +26,7 @@ const entries = Bio.timeline
 
 type Event = (typeof Bio.timeline)[number];
 
-function WorkItem({ event }: { readonly event: Event }) {
+function Event({ event }: { readonly event: Event }) {
         const start = ('since' in event && event.since ? event.since : event.date) as Date;
         const end = 'until' in event ? event.until : undefined;
        const employer = 'employer' in event ? event.employer : undefined;
@@ -47,7 +50,7 @@ function WorkItem({ event }: { readonly event: Event }) {
 }
 
 function WorkItems() {
-        return <>{entries.filter(e => 'tags' in e && e.tags.includes(work)).map(e => <WorkItem event={e} key={e.id} />)}</>;
+        return <>{entries.filter(e => 'tags' in e && e.tags.includes(work)).map(e => <Event event={e} key={e.id} />)}</>;
 }
 
 function OtherItems() {
@@ -67,7 +70,7 @@ function OtherItems() {
         );
 }
 
-export default function CV() {
+function OldCV() {
         return (
                 <div className={`${style.cv} ${style.app}`}>
                         <div className={style.header}>
@@ -88,4 +91,124 @@ export default function CV() {
                         </div>
                 </div>
         );
+}
+
+function Header() {
+	return <div className={style.header}>
+		<Link className={style.website} href={Bio.officialWebsite.toString()}>
+			{Bio.officialWebsite.host}
+		</Link>
+		<div className={style.email}>{Bio.email[0]}</div>
+		<div className={style.phone}>+1 901 910 1110</div>
+		<TimeEye className={style.headerIcon} />
+		<div className={style.date}><time dateTime={String(Date.now())}>
+			<DateDisplay date={new Date()}/>
+		</time></div>
+		<div className={`${style.profileName} ${style.name}`} lang={Bio.who.name.language}>{Bio.who.name.text}</div>
+	</div>
+}
+
+function interestingEvents() { // memoize this
+	return Bio.timeline.filter(e => mustPriority(e.id) >= minPriority)
+}
+
+function getValidWork() {
+	const workItems = new Map(interestingEvents().filter(
+		e => 'tags' in e && e.tags.includes(work) && mustPriority(e.id) >= minPriority
+	).map(e => [e.id, e]));
+
+
+	const supercessions = filter(
+	[...workItems.values()]
+			.map(i => 'supercedes' in i ? Some([
+				i.id, i.supercedes
+			] as [
+				typeof i.id, typeof i.supercedes
+			]) : None)
+	)
+
+	for (const [replacementId, replacesId] of supercessions) {
+		const replacement = workItems.get(replacementId)!;
+		const replaces = workItems.get(replacesId)!;
+
+		workItems.set(replacesId, {
+			...replacement,
+			// then this 'super item' pretty much begins
+			// when the old item started
+			... 'since' in replaces ? {
+				since: replaces.since,
+			} : {}
+		});
+
+		workItems.delete(replacesId);
+	}
+
+	return [...workItems.values()]
+}
+
+function Work() {
+	return <div className={style.newWork}>
+		{getValidWork().map(e => <Event event={e} key={e.id}/> )}
+	</div>
+}
+
+function Talks() {
+	return <div>
+		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(talk)).map(e => <Event event={e} key={e.id} />)}
+	</div>
+}
+
+function Accolades() {
+	return <div>
+		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(accolade)).map(e => <Event event={e} key={e.id} />)}
+	</div>
+}
+
+function Coverage() {
+	return <div>
+		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(comment)).map(e => <Event event={e} key={e.id} />)}
+	</div>
+}
+
+
+/*
+function Disclosures() {Add commentMore actions
+	return <section>
+		<h2>Papers & Disclosures</h2>
+		<ol>
+			{entries().filter(e => 'tags' in e && [
+				writing, disclosure
+			].some(t => e.tags.includes(t))).map(e => <li key={e.id}>
+				<h3 lang={e.title.language}>{e.title.text}</h3>
+				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
+			</li>)}
+		</ol>
+	</section>
+}
+*/
+
+
+function NewCV() {
+	return <div className={style.newCV} >
+		<Header/>
+		<h2>Work</h2>
+		<Work/>
+		{/* todo: titles */}
+		<h2>Talks</h2>
+		<Talks/>
+		<h2>Accolades</h2>
+		<Accolades/>
+		<h2>Coverage</h2>
+		<Coverage/>
+	</div>
+}
+
+
+
+
+export default function Page() {
+	return <div>
+		<NewCV/>
+		<OldCV/>
+	</div>
 }
