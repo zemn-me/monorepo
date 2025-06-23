@@ -55,6 +55,11 @@ export interface Employment {
 	readonly since: Date;
 	readonly title: Text;
 	readonly where: Text;
+	/**
+	 * id we supercede --
+	 * Promo, re-org etc.
+	 */
+	readonly supercedes?: string;
 }
 
 export interface Event {
@@ -68,6 +73,11 @@ export interface Event {
 	readonly priority?: number;
 	readonly until?: Endpoint;
 	readonly employer?: Text;
+	/**
+	 * id we supercede --
+	 * Promo, re-org etc.
+	 */
+	readonly supercedes?: boolean;
 }
 
 // tags
@@ -720,6 +730,7 @@ export const Bio = {
 			id: 'e5c48dff-db0d-4731-99c2-48b57a13c309',
 			date: date(1, 'sep', 2024),
 			title: en`Member of Technical Staff, AppSec, OpenAI`,
+			supercedes: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
 			description: en`Built out OpenAI's first Secure Development Lifecycle (SDLC); designed security primitives for OAI products including ChatGPT Canvas and Apple Intelligence. Work on Prompt Injection, Agentic Security & AI cyber risk.`,

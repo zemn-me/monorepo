@@ -13,6 +13,12 @@
 	z-index: calc(var(--z-index-base)-1);
 }
 
+@media print {
+	.cover, .caption {
+		display: none;
+	}
+}
+
 .caption {
 	color: white;
 	text-shadow: .02em .02em black;
