@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "admin",
@@ -24,6 +24,31 @@ ts_project(
         "//ts/result",
         "//ts/result/openapi-fetch",
         "//ts/result/react-query",
+    ],
+)
+
+ts_project(
+    name = "admin_test_ts",
+    srcs = ["client_test.tsx"],
+    deps = [
+        ":admin",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@testing-library/react",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+    ],
+)
+
+jest_test(
+    name = "client_test",
+    srcs = ["client_test.js"],
+    jsdom = True,
+    deps = [
+        ":admin_test_ts",
+        "//ts/jest:cssStub_js",
+        "//ts/jest:jest_setup",
     ],
 )
 
