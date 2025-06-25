@@ -1,8 +1,8 @@
 "use client";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useId, useState } from "react";
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useEffect, useId, useState, useRef } from "react";
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from "zod";
 
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
@@ -59,7 +59,7 @@ function maybeMessage(m: string | undefined) {
 	return m;
 }
 
-function SettingsEditor({ Authorization }: SettingsEditorProps) {
+export function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	const $api = useZemnMeApi();
 	const idbase = useId();
 	const id = (...s: string[]) => [
@@ -101,30 +101,57 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 		defaultValues
 	)
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		control
-	} = useForm<
-		CallboxSettings
-	>({
-		values,
-		shouldUseNativeValidation: true,
-		shouldFocusError: true,
-		resolver: zodResolver(
-			settingsSchema
-		)
-	});
+        const {
+                register,
+                handleSubmit,
+                formState: { errors, isDirty },
+                control,
+                reset,
+       } = useForm<
+               CallboxSettings
+       >({
+                defaultValues: values,
+                shouldUseNativeValidation: true,
+                shouldFocusError: true,
+                resolver: zodResolver(
+                        settingsSchema
+                )
+        });
 
-	const mutateRemoteSettings = $api.useMutation("post", "/callbox/settings", {
-		onSuccess: () => {
-			void queryClient.invalidateQueries({
-				queryKey: remoteSettingsKey
-			});
-		}
-	})
-		;
+       const watchedValues = useWatch<CallboxSettings>({ control }) as CallboxSettings;
+       const [lastSaved, setLastSaved] = useState<CallboxSettings>(values);
+       const saveTimer = useRef<NodeJS.Timeout>();
+
+       const mutateRemoteSettings = $api.useMutation("post", "/callbox/settings", {
+               onSuccess: () => {
+                       setLastSaved(watchedValues);
+                       reset(watchedValues);
+                       void queryClient.invalidateQueries({
+                               queryKey: remoteSettingsKey
+                       });
+               }
+       })
+               ;
+
+       useEffect(() => {
+                setLastSaved(values);
+                reset(values);
+        }, [values, reset]);
+
+
+        useEffect(() => {
+                if (!isDirty) return;
+                clearTimeout(saveTimer.current);
+                saveTimer.current = setTimeout(() => {
+                        mutateRemoteSettings.mutate({
+                                headers: {
+                                        Authorization,
+                                },
+                                body: watchedValues,
+                        });
+                }, 500);
+                return () => clearTimeout(saveTimer.current);
+        }, [watchedValues, isDirty, Authorization]);
 
 
 
@@ -149,8 +176,9 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 			body: d,
 		})
 	})}>
-		<fieldset>
-			<legend>Settings</legend>
+                <fieldset>
+                        <legend>Settings</legend>
+                        <PendingPip value={Some(remoteSettings)} />
 
 			<fieldset>
 				<legend>Authorizers</legend>
@@ -244,13 +272,14 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					<p>
 						Called if no other entry option is available. As with a regular authorizer, can press 9 to let the visitor in.</p>
 				</label>
-				<input
-					id={id('fallbackPhone')}
-					type="tel"
-					{
-					...register("fallbackPhone")
-					}
-				/>
+                                <input
+                                        id={id('fallbackPhone')}
+                                        type="tel"
+                                        aria-label="Fallback phone number"
+                                        {
+                                        ...register("fallbackPhone")
+                                        }
+                                />
 
 				{
 					errors.fallbackPhone ?
@@ -279,10 +308,25 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 						</output> : null
 				}
 			</fieldset>
-			<input type="submit" />
-			<PendingPip value={Some(remoteSettings)} />
-		</fieldset>
-	</form>
+                        <input type="submit" />
+                        {isDirty && (
+                                <button
+                                        onClick={e => {
+                                                e.preventDefault();
+                                                reset(lastSaved);
+                                        }}
+                                >Undo</button>
+                        )}
+                        <span aria-live="polite" style={{marginLeft: '0.5em'}}>
+                                {{
+                                        idle: null,
+                                        pending: '⌛',
+                                        error: '❌',
+                                        success: '✓',
+                                }[mutateRemoteSettings.status]}
+                        </span>
+                </fieldset>
+        </form>
 
 
 }
