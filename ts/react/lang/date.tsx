@@ -1,79 +1,123 @@
-"use client"; // transitive for useLocale
+"use client";
+
 import { memo, ReactElement } from "react";
 
 import { isDefined } from "#root/ts/guard.js";
 import { useLocale } from "#root/ts/react/lang/useLocale.js";
 
 export interface DateProps {
-	readonly date: Date
+  readonly date: Date;
+  readonly className?: string
 }
 
-export const Date = memo(function(props: DateProps) {
-	const [ language ] = useLocale();
-	let locale = new Intl.Locale(language);
-	// if the language is english, defer to british english
-	if (locale.language == "en") locale = new Intl.Locale("en-GB");
-	// i think the types are wrong
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const dateParts = new Intl.DateTimeFormat(locale as any, {
-		dateStyle: 'full'
-	})
-		.formatToParts(props.date);
+/**
+ * Choose a concrete locale from a raw language tag. We default plain
+ * English (`en`) to British English (`en-GB`).
+ */
+function selectLocale(language: string): Intl.Locale {
+  const base = new Intl.Locale(language);
+  return base.language === "en" ? new Intl.Locale("en-GB") : base;
+}
 
+/**
+ * Return the Intl‑generated parts needed to assemble a full date.
+ */
+function getDateParts(date: Date, locale: Intl.Locale): Intl.DateTimeFormatPart[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return new Intl.DateTimeFormat(locale as any, { dateStyle: "full" }).formatToParts(date);
+}
 
-	const ordinalIndex = dateParts.findIndex(v => v.type === "day");
-	let content: ReactElement | undefined;
-	if (ordinalIndex != -1) switch (locale.language) {
-		case "en": {
-			// justification for this is that Chrome and FF differ on how they format en-GB full dates
-			// which i would argue are of the format Friday, the 3rd of January 2024, but are instead
-			// in Chrome: Friday 3 January 2024
-			// in FF: Friday, 3 January 2024
+/**
+ * Build an English date in the form:
+ *   Friday, the 3rd of January 2024
+ * (Chrome and Firefox disagree on the default en‑GB format, so we roll our own.)
+ */
+function formatEnglish(parts: Intl.DateTimeFormatPart[], language: string): ReactElement | undefined {
+  const want = ["weekday", "day", "month", "year"] as const;
+  type Part = (typeof want)[number];
+  const desired = new Set(want);
 
-			// decompose date
-			const want = ["weekday", "day", "month", "year"] as const;
-			type wantT = (typeof want)[number];
-			const pieces = new Set(want);
+  const fields = new Map(
+    parts
+      .map(p => (desired.has(p.type as Part) ? ([p.type as Part, p.value] as const) : undefined))
+      .filter(isDefined)
+  );
 
-			const fields = new Map(dateParts.map(v => pieces.has(v.type as wantT /* this is literally how sets work */) ? [v.type as wantT, v.value] as const : undefined)
-				.filter(isDefined));
+  if (fields.size !== want.length) return undefined;
 
-			if (fields.size != want.length) break;
+  const rule = new Intl.PluralRules(language, { type: "ordinal" }).select(+fields.get("day")!);
+  const suffix = { one: "st", two: "nd", few: "rd", other: "th", zero: "", many: "" }[rule];
 
-			const pluralRule = new Intl.PluralRules(language, {
-				type: 'ordinal'
-			}).select(+fields.get("day")!);
+  return (
+    <>
+      {fields.get("weekday")}, the {fields.get("day")}
+      <sup>{suffix}</sup> of {fields.get("month")} {fields.get("year")}
+    </>
+  );
+}
 
-			content = <>{fields.get("weekday")}, the {fields.get("day")}<sup>{
-				{
-					one: "st",
-					two: "nd",
-					few: "rd",
-					other: "th",
-					zero: null,
-					many: null
-				}[pluralRule]
-			}</sup> of {fields.get("month")} {fields.get("year")}</>;
-			break;
-		}
-		case "it": {
-			if (ordinalIndex == -1) break;
+/**
+ * Append the correct ordinal marker (º or ª) to the day for Italian dates.
+ */
+function appendItalianOrdinalMarker(parts: Intl.DateTimeFormatPart[]): void {
+  const dayIndex = parts.findIndex(p => p.type === "day");
+  if (dayIndex === -1) return;
 
-			// locate month name
-			const monthName = dateParts.find(v => v.type === "month");
-			if (monthName === undefined) break;
-			let suffix = "";
-			if (monthName.value.toString().endsWith("o")) suffix = "º";
-			if (monthName.value.toString().endsWith("a")) suffix = "ª";
+  const month = parts.find(p => p.type === "month");
+  if (!month) return;
 
+  const marker = month.value.endsWith("a") ? "ª" : month.value.endsWith("o") ? "º" : "";
+  if (marker) {
+    parts[dayIndex] = { ...parts[dayIndex]!, value: parts[dayIndex]!.value + marker };
+  }
+}
 
-			dateParts[ordinalIndex]!.value += suffix;
+/**
+ * Month–year formatter (e.g. «June 2011»).
+ * Uses the current locale’s long month name followed by the numeric year.
+ */
+function formatMonthYear(date: Date, locale: Intl.Locale): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return new Intl.DateTimeFormat(locale as any, { month: "long", year: "numeric" }).format(date);
+}
 
-			break;
-		}
-	}
+/**
+ * Full date component (e.g. «Friday, the 3rd of January 2024»).
+ */
+export const Date = memo(function DateComponent(props: DateProps) {
+  const [language] = useLocale();
+  const locale = selectLocale(language);
+  const parts = getDateParts(props.date, locale);
 
-	if (content === undefined) content = <>{dateParts.map(v => v.value).join("")}</>;
+  let content: ReactElement | undefined;
 
-	return <time dateTime={props.date.toString()} lang={locale.toString()}>{content}</time>
-})
+  switch (locale.language) {
+    case "en":
+      content = formatEnglish(parts, language);
+      break;
+    case "it":
+      appendItalianOrdinalMarker(parts);
+      break;
+  }
+
+  if (content === undefined) {
+    content = <>{parts.map(p => p.value).join("")}</>;
+  }
+
+  return (
+    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()}>{content}</time>
+  );
+});
+
+/**
+ * Month–Year component (e.g. «June 2011»).
+ */
+export const MonthYear = memo(function MonthYearComponent(props: DateProps) {
+  const [language] = useLocale();
+  const locale = selectLocale(language);
+  const text = formatMonthYear(props.date, locale);
+
+  return (
+    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()}>{text}</time>
+  );
+});

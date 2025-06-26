@@ -8,7 +8,7 @@ import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import { isDefined, must } from '#root/ts/guard.js';
 import { filter } from '#root/ts/iter/iterable_functional.js';
 import { None, Some } from '#root/ts/option/types.js';
-import { Date as DateDisplay } from '#root/ts/react/lang/date.js';
+import { Date as DateDisplay, MonthYear } from '#root/ts/react/lang/date.js';
 
 const priorityMap = new Map<string, number>(
         priorities.map((id, idx) => [id, priorities.length - idx]),
@@ -34,10 +34,13 @@ function Event({ event }: { readonly event: Event }) {
                <div className={style.work} key={event.id}>
                        {employer && <div className={style.employer}>{employer.text}</div>}
                        <div className={style.position}>{event.title.text}</div>
-                       <div className={`${style.date} ${style.start}`}><time dateTime={String(+start)}>{start.getFullYear()}</time></div>
+
+						<MonthYear className={style.date} date={start}/>
+
                        {end && (
                                <div className={style.end}>
-                                       {typeof end === 'string' ? 'Ongoing' : end.getFullYear()}
+					   {typeof end === 'string' ? 'Ongoing' :
+						   <MonthYear date={end}/>}
                                </div>
                        )}
                         {'description' in event && event.description && (
@@ -78,7 +81,9 @@ function OldCV() {
                                 {<div className={style.email}>{Bio.email[0]}</div>}
                                 <div className={style.phone}>+1 901 910 1110</div>
 								<TimeEye className={style.headerIcon} />
-                                <div className={style.date}><time dateTime={String(Date.now())}>{new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</time></div>
+
+								<MonthYear className={style.date} date={new Date()}/>
+
                                 <div className={`${style.profileName} ${style.name}`}>{Bio.who.name.text}</div>
                         </div>
                         <div className={`${style.rule} ${style.experienceTitle}`}><span>selected experience</span></div>
@@ -101,15 +106,14 @@ function Header() {
 		<div className={style.email}>{Bio.email[0]}</div>
 		<div className={style.phone}>+1 901 910 1110</div>
 		<TimeEye className={style.headerIcon} />
-		<div className={style.date}><time dateTime={String(Date.now())}>
-			<DateDisplay date={new Date()}/>
-		</time></div>
+		<MonthYear className={style.date} date={new Date()}/>
 		<div className={`${style.profileName} ${style.name}`} lang={Bio.who.name.language}>{Bio.who.name.text}</div>
 	</div>
 }
 
 function interestingEvents() { // memoize this
 	return Bio.timeline.filter(e => mustPriority(e.id) >= minPriority)
+		.sort((a, b) => (+a.date) - (+b.date)).toReversed()
 }
 
 function getValidWork() {
