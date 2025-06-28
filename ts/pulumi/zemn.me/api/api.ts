@@ -60,12 +60,14 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				policy: dynamoTable.arn.apply(arn => JSON.stringify({
 					Version: "2012-10-17",
 					Statement: [{
-						Action: [
-							"dynamodb:Query",
-							"dynamodb:PutItem",
-							"dynamodb:UpdateItem",
-							"dynamodb:DeleteItem"
-						],
+                                                Action: [
+                                                        "dynamodb:Query",
+                                                        "dynamodb:PutItem",
+                                                        "dynamodb:UpdateItem",
+                                                        "dynamodb:DeleteItem",
+                                                        "dynamodb:GetItem",
+                                                        "dynamodb:Scan"
+                                                ],
 						Effect: "Allow",
 						Resource: arn,
 					}],
