@@ -1,47 +1,23 @@
 package apiserver
 
 import (
-	"context"
-	"io"
-       "log"
-       "strings"
-       "testing"
+        "context"
+        "io"
+        "log"
+        "strings"
+        "testing"
 
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/twilio/twilio-go/twiml"
-
+       "github.com/twilio/twilio-go/twiml"
 )
 
-type inMemoryDDB struct{ records []SettingsRecord }
-
-func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-	if len(db.records) == 0 {
-		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
-	}
-	item, err := attributevalue.MarshalMap(db.records[len(db.records)-1])
-	if err != nil {
-		return nil, err
-	}
-	return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
-}
-
-func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
-	var rec SettingsRecord
-	if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
-		return nil, err
-	}
-	db.records = append(db.records, rec)
-	return &dynamodb.PutItemOutput{}, nil
-}
 
 func newTestServer() *Server {
 	return &Server{
-		log:                log.New(io.Discard, "", 0),
-		twilioSharedSecret: "secret",
-		settingsTableName:  "settings",
-		ddb:                &inMemoryDDB{},
+		log:                 log.New(io.Discard, "", 0),
+		twilioSharedSecret:  "secret",
+		settingsTableName:   "settings",
+		grievancesTableName: "grievances",
+		ddb:                 &inMemoryDDB{},
 	}
 }
 
