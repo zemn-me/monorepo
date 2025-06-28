@@ -40,8 +40,8 @@ async function waitForLock<T>(
 	const timeLimit = 10 * minute;
 	const step = 2 * minute;
 
-	do {
-		lastResult = await attempt(f);
+        do {
+                lastResult = await attempt(f, cause);
 		results.push(lastResult);
 	} while (
 		lastResult instanceof Error &&
@@ -85,23 +85,33 @@ async function attempt<T>(
 	f: () => Promise<T>,
 	cause?: string
 ): Promise<T | Error> {
-	let ret: T | Error;
-	try {
-		ret = await f();
-	} catch (e) {
-		const base = e instanceof Error ? e : new Error(`${e}`);
+        let ret: T | Error;
+        try {
+                ret = await f();
+        } catch (e) {
+                const base = e instanceof Error ? e : new Error(`${e}`);
 
-		ret = new Error(`${cause} failed`);
-		ret.cause = base;
-	}
+                ret = new Error(`${cause} failed: ${base.message}`);
+                ret.cause = base;
+        }
 
 	return ret;
 }
 
+function formatError(e: Error): string {
+        const messages: string[] = [];
+        let current: Error | undefined = e;
+        while (current) {
+                messages.push(current.message);
+                current = current.cause instanceof Error ? current.cause : undefined;
+        }
+        return messages.join(': ');
+}
+
 class MultiError extends Error {
-	constructor(public readonly errors: Error[]) {
-		super(errors.map(e => `${e}`).join('; '));
-	}
+        constructor(public readonly errors: Error[]) {
+                super(errors.map(formatError).join('; '));
+        }
 }
 
 interface Args {
