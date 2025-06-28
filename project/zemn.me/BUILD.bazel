@@ -33,6 +33,7 @@ sh_binary(
         ":dev",
         "//project/zemn.me/api/cmd/local",
     ],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
 alias(
