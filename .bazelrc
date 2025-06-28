@@ -125,4 +125,5 @@ common --test_verbose_timeout_warnings
 
 common --experimental_remote_cache_compression_threshold=100
 common --java_runtime_version=remotejdk_11
+build --action_env=NEXT_DISABLE_FONT_DOWNLOADS=1
 

@@ -1,7 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
-package(default_visibility = ["//project/zemn.me/testing:__pkg__"])
+package(default_visibility = [
+    "//project/zemn.me:__pkg__",
+    "//project/zemn.me/testing:__pkg__",
+])
 
 go_binary(
     name = "local",
