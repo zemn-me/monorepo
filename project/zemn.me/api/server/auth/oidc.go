@@ -1,14 +1,25 @@
 package auth
 
 import (
-	"context"
-	"errors"
-	"fmt"
+        "context"
+        "errors"
+        "fmt"
 
-	oidc "github.com/coreos/go-oidc"
+        oidc "github.com/coreos/go-oidc"
 
-	"github.com/getkin/kin-openapi/openapi3filter"
+        "github.com/getkin/kin-openapi/openapi3filter"
 )
+
+type contextKey string
+
+const SubjectKey contextKey = "oidc_subject"
+
+// SubjectFromContext retrieves the subject ID from the context if present.
+func SubjectFromContext(ctx context.Context) (string, bool) {
+        v := ctx.Value(SubjectKey)
+        s, ok := v.(string)
+        return s, ok
+}
 
 // suuper basic oidc auth that only checks if it's me via Google.
 func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err error) {
@@ -51,9 +62,13 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return fmt.Errorf("invalid issuer: %s", claims.Iss)
 	}
 
-	if claims.Sub != "111669004071516300752" {
-		fmt.Errorf("unauthorized subject: %s", claims.Email)
-	}
+        if claims.Sub != "111669004071516300752" {
+                fmt.Errorf("unauthorized subject: %s", claims.Email)
+        }
 
-	return nil
+        r := ai.RequestValidationInput.Request
+        ctx = context.WithValue(r.Context(), SubjectKey, claims.Sub)
+        *ai.RequestValidationInput.Request = *r.WithContext(ctx)
+
+        return nil
 }

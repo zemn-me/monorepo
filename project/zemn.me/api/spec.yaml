@@ -514,3 +514,16 @@ paths:
               schema:
                 type: string
 
+  /admin/uid:
+    get:
+      summary: Returns the caller's OIDC subject ID.
+      security:
+        - googleOIDC: []
+      responses:
+        "200":
+          description: The subject identifier.
+          content:
+            text/plain:
+              schema:
+                type: string
+
