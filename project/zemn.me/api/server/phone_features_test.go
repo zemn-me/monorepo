@@ -1,6 +1,7 @@
 package apiserver
 
 import (
+<<<<<<< dest:   c1cfcd813bc2 - thomas: Fix call retry without shared memory
 	"context"
 	"io"
 	"log"
@@ -11,37 +12,54 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/twilio/twilio-go/twiml"
+||||||| base:   b5e6a0ac6959 - zemnmez+renovate: fix(deps): update dependency...
+	"context"
+	"io"
+       "log"
+       "strings"
+       "testing"
+
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/twilio/twilio-go/twiml"
+
+=======
+        "context"
+        "io"
+        "log"
+        "strings"
+        "testing"
+
+       "github.com/twilio/twilio-go/twiml"
+>>>>>>> source: 967ebf2c0e9c - thomas: Grievance API
 )
 
-type inMemoryDDB struct{ records []SettingsRecord }
-
-func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-	if len(db.records) == 0 {
-		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
-	}
-	item, err := attributevalue.MarshalMap(db.records[len(db.records)-1])
-	if err != nil {
-		return nil, err
-	}
-	return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
-}
-
-func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
-	var rec SettingsRecord
-	if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
-		return nil, err
-	}
-	db.records = append(db.records, rec)
-	return &dynamodb.PutItemOutput{}, nil
-}
 
 func newTestServer() *Server {
+<<<<<<< dest:   c1cfcd813bc2 - thomas: Fix call retry without shared memory
         return &Server{
                 log:                log.New(io.Discard, "", 0),
                 twilioSharedSecret: "secret",
                 settingsTableName:  "settings",
                 ddb:                &inMemoryDDB{},
         }
+||||||| base:   b5e6a0ac6959 - zemnmez+renovate: fix(deps): update dependency...
+	return &Server{
+		log:                log.New(io.Discard, "", 0),
+		twilioSharedSecret: "secret",
+		settingsTableName:  "settings",
+		ddb:                &inMemoryDDB{},
+	}
+=======
+	return &Server{
+		log:                 log.New(io.Discard, "", 0),
+		twilioSharedSecret:  "secret",
+		settingsTableName:   "settings",
+		grievancesTableName: "grievances",
+		ddb:                 &inMemoryDDB{},
+	}
+>>>>>>> source: 967ebf2c0e9c - thomas: Grievance API
 }
 
 func TestPostPhoneJoinConference(t *testing.T) {

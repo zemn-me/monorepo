@@ -23,8 +23,11 @@ import (
 // Server holds the DynamoDB client and table name.
 // DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
 type DynamoDBClient interface {
-	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
-	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+        Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
+        PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+        GetItem(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error)
+        DeleteItem(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error)
+        Scan(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error)
 }
 
 // Ensure the real DynamoDB client implements the interface.
@@ -32,6 +35,7 @@ var _ DynamoDBClient = (*dynamodb.Client)(nil)
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
+<<<<<<< dest:   c1cfcd813bc2 - thomas: Fix call retry without shared memory
         ddb               DynamoDBClient
         settingsTableName string
         rt                *chi.Mux
@@ -39,6 +43,24 @@ type Server struct {
         log                *log.Logger
         twilioSharedSecret string
         twilioClient       *twilio.RestClient
+||||||| base:   b5e6a0ac6959 - zemnmez+renovate: fix(deps): update dependency...
+	ddb               DynamoDBClient
+	settingsTableName string
+	rt                *chi.Mux
+	http.Handler
+	log                *log.Logger
+	twilioSharedSecret string
+	twilioClient       *twilio.RestClient
+=======
+        ddb               DynamoDBClient
+        settingsTableName string
+        grievancesTableName string
+        rt                *chi.Mux
+        http.Handler
+        log                *log.Logger
+        twilioSharedSecret string
+        twilioClient       *twilio.RestClient
+>>>>>>> source: 967ebf2c0e9c - thomas: Grievance API
 }
 
 // NewServer initialises the DynamoDB client.
@@ -79,8 +101,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 		return nil, err
 	}
 
-	// Allow the table name to be set via an environment variable.
-	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+        // Allow the table names to be set via environment variables.
+        settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+        grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 
 	r := chi.NewRouter()
 
@@ -106,8 +129,9 @@ func NewServer(ctx context.Context) (*Server, error) {
 			"Server",
 			log.Ldate|log.Ltime|log.Llongfile|log.LUTC,
 		),
-		ddb:                dynamodb.NewFromConfig(cfg),
-		settingsTableName:  settingsTableName,
+                ddb:                 dynamodb.NewFromConfig(cfg),
+                settingsTableName:   settingsTableName,
+                grievancesTableName: grievancesTableName,
 		twilioSharedSecret: os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"), // idk
