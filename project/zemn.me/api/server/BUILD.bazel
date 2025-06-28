@@ -81,6 +81,7 @@ go_test(
         "cors_test.go",
         "grievances_test.go",
         "in_memory_ddb_test.go",
+        "integration_test.go",
         "phone_features_test.go",
         "smoke_test.go",
     ],
