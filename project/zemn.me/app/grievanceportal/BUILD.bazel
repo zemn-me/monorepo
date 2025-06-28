@@ -7,13 +7,13 @@ ts_project(
         "client.tsx",
         "page.tsx",
         "style.module.css",
-        "style.module.css.d.ts",
     ],
     assets = ["style.module.css"],
     visibility = [
         "//project/zemn.me:__subpackages__",
     ],
     deps = [
+        "//:base_defs",
         "//:node_modules/@hookform/resolvers",
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/react-hook-form",
