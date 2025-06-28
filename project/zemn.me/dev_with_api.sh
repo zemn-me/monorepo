@@ -10,8 +10,11 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
   { echo>&2 "ERROR: cannot find $f"; exit 1; }; f=; set -e
 # --- end runfiles.bash initialization v3 ---
 
-api_bin="$(rlocation "project/zemn.me/api/cmd/local/local")"
+api_bin="$(rlocation "project/zemn.me/api/cmd/local/local_/local")"
 next_bin="$(rlocation "project/zemn.me/dev_/dev")"
+
+# Ensure child processes can locate their runfiles
+runfiles_export_envvars
 
 ADDR="127.0.0.1:8787"
 NEXT_PUBLIC_ZEMN_ME_API="http://$ADDR" ADDR="$ADDR" "$api_bin" &

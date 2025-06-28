@@ -12,7 +12,7 @@ describe('zemn.me api', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const bin = runfiles.resolveWorkspaceRelative('project/zemn.me/api/cmd/local/local');
+    const bin = runfiles.resolveWorkspaceRelative('project/zemn.me/api/cmd/local/local_/local');
     proc = child_process.spawn(bin, { env: { ADDR: '127.0.0.1:0' } });
 
     const rl = readline.createInterface({ input: proc.stdout! });
