@@ -28,6 +28,19 @@ const defaultValues: NewGrievance = {
         priority: 1,
 }
 
+const severityMap = new Map<number, string>([
+        [1, "I'll sleep on it"],
+        [2, "A chai would fix it"],
+        [3, "Let's scribble our worries away!"],
+        [4, "Maybe a tiny dance?"],
+        [5, "Time for a silly pun!"],
+        [6, "A quick stretch break!"],
+        [7, "Let's consult a friendly teddy bear!"],
+        [8, "Sprinkle some glitter on the issue!"],
+        [9, "Cue the karaoke microphone!"],
+        [10, "Full-blown dance party time!"],
+]);
+
 const grievanceSchema = z.object({
         name: z.string(),
         description: z.string(),
@@ -57,7 +70,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                 }
         });
 
-        const { register, handleSubmit, reset, formState: { errors } } = useForm<NewGrievance>({
+        const { register, handleSubmit, reset, formState: { errors }, watch } = useForm<NewGrievance>({
                 defaultValues,
                 resolver: zodResolver(grievanceSchema)
         });
@@ -75,6 +88,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                                 <p className={style.formField}><label>Name <input {...register("name")} /></label></p>
                                 <p className={style.formField}><label>Description <textarea {...register("description")} /></label></p>
                                 <p className={style.formField}><label>Priority <input type="number" min={1} max={10} {...register("priority", { valueAsNumber: true })} /></label></p>
+                                <p className={style.formField}><small>{severityMap.get(watch("priority"))}</small></p>
                                 <input type="submit" className={style.submitButton} />
                         </fieldset>
                 </form>
@@ -84,7 +98,8 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                                 grievances,
                                 r => result_unwrap_or(r, []).map((g: Grievance) => (
                                         <li key={g.id}>
-                                                <strong>{g.name}</strong> (priority {g.priority})
+                                                <strong>{g.name}</strong>
+                                                {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
                                                 <p>{g.description}</p>
                                                <button className={style.deleteButton} onClick={() => void del.mutate({
                                                         params: { path: { id: g.id! } },
