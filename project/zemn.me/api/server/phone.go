@@ -305,16 +305,16 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(rq.Params.Secret)))
 	conf.SetText(TWILIO_CONFERENCE_NAME)
 
-	// Make the outbound call to the authoriser
-	callParams := &twilioApi.CreateCallParams{}
-	callParams.SetTo(selectedNumber)
-	callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
-	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s", url.QueryEscape(rq.Params.Secret)))
+       // Make the outbound call to the authoriser
+       callParams := &twilioApi.CreateCallParams{}
+       callParams.SetTo(selectedNumber)
+       callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
+       callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s&attempt=1", url.QueryEscape(rq.Params.Secret)))
 
-	_, err = s.twilioClient.Api.CreateCall(callParams)
-	if err != nil {
-		return
-	}
+       _, err = s.twilioClient.Api.CreateCall(callParams)
+       if err != nil {
+               return
+       }
 
 	return TwimlResponse{Document: doc}, nil
 }
