@@ -31,6 +31,7 @@ go_library(
     name = "server",
     srcs = [
         "TestRemoveDuplicateDigits.go",
+        "admin.go",
         "api.gen.go",
         "callbox_settings.go",
         "constants.go",
@@ -77,6 +78,7 @@ go_library(
 go_test(
     name = "server_test",
     srcs = [
+        "admin_test.go",
         "allow_empty_digits_test.go",
         "cors_test.go",
         "grievances_test.go",
@@ -86,6 +88,7 @@ go_test(
     ],
     embed = [":server"],
     deps = [
+        "//project/zemn.me/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
