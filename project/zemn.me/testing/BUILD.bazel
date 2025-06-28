@@ -3,9 +3,13 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "ts",
-    srcs = ["browser_test.ts"],
+    srcs = [
+        "api_integration_test.ts",
+        "browser_test.ts",
+    ],
     data = [
         "//project/zemn.me:out",
+        "//project/zemn.me/api/cmd/local",
     ],
     deps = [
         "//:node_modules/@bazel/runfiles",
@@ -15,8 +19,10 @@ ts_project(
         "//:node_modules/@types/selenium-webdriver",
         "//:node_modules/@types/serve-handler",
         "//:node_modules/fast-glob",
+        "//:node_modules/openapi-fetch",
         "//:node_modules/selenium-webdriver",
         "//:node_modules/serve-handler",
+        "//project/zemn.me/api:ts_client_dts",
         "//ts/selenium",
     ],
 )
@@ -24,7 +30,10 @@ ts_project(
 jest_test(
     name = "testing",
     size = "medium",
-    srcs = ["browser_test.js"],
+    srcs = [
+        "api_integration_test.js",
+        "browser_test.js",
+    ],
     data = [":ts"],
 )
 
