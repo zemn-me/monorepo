@@ -35,9 +35,6 @@ jest_test(
         "browser_test.js",
     ],
     data = [":ts"],
-    env = {
-        "NEXT_DISABLE_FONT_DOWNLOADS": "1",
-    },
 )
 
 bazel_lint(
