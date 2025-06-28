@@ -111,9 +111,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				variables: {
 					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
-					CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
-					DYNAMODB_TABLE_NAME: dynamoTable.name,
-					TWILIO_SHARED_SECRET: args.twilioSharedSecret,
+                                        CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
+                                        DYNAMODB_TABLE_NAME: dynamoTable.name,
+                                        GRIEVANCES_TABLE_NAME: dynamoTable.name,
+                                        TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 					...pick_env("TWILIO_ACCOUNT_SID"),
 					...pick_env("TWILIO_AUTH_TOKEN"),
 					...pick_env("TWILIO_API_KEY_SID")
