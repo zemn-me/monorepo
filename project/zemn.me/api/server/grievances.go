@@ -32,7 +32,7 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 	if err := attributevalue.UnmarshalListOfMaps(out.Items, &recs); err != nil {
 		return nil, err
 	}
-	var gs []Grievance
+	gs := make([]Grievance, 0, len(recs))
 	for _, r := range recs {
 		uid := uuid.MustParse(r.Id)
 		id := openapi_types.UUID(uid)
