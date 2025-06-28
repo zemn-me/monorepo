@@ -1,10 +1,10 @@
 package apiserver
 
 import (
-	"context"
-	"log"
-	"net/http"
-	"os"
+        "context"
+        "log"
+        "net/http"
+        "os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -32,13 +32,13 @@ var _ DynamoDBClient = (*dynamodb.Client)(nil)
 
 // Server holds the DynamoDB client and table name.
 type Server struct {
-	ddb               DynamoDBClient
-	settingsTableName string
-	rt                *chi.Mux
-	http.Handler
-	log                *log.Logger
-	twilioSharedSecret string
-	twilioClient       *twilio.RestClient
+        ddb               DynamoDBClient
+        settingsTableName string
+        rt                *chi.Mux
+        http.Handler
+        log                *log.Logger
+        twilioSharedSecret string
+        twilioClient       *twilio.RestClient
 }
 
 // NewServer initialises the DynamoDB client.

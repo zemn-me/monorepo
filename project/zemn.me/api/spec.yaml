@@ -95,6 +95,10 @@ components:
           type: string
           nullable: true
           description: The country of the called party, if available.
+        Digits:
+          type: string
+          nullable: true
+          description: digits entered by user.
       required:
         - CallSid
         - AccountSid
@@ -251,6 +255,18 @@ paths:
           description: The name of the Twilio conference to join.
           schema:
             type: string
+        - name: attempt
+          in: query
+          required: false
+          description: The call attempt number.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/TwilioCallRequest"
       responses:
         "200":
           description: TwiML response placing the authoriser into the conference.
