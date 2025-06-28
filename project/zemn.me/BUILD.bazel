@@ -26,9 +26,15 @@ next_project(
     ],
 )
 
+sh_binary(
+    name = "dev_with_api",
+    srcs = ["dev_with_api.sh"],
+    data = [":dev", "//project/zemn.me/api/cmd/local"],
+)
+
 alias(
     name = "zemn.me",
-    actual = ":dev",
+    actual = ":dev_with_api",
 )
 
 bazel_lint(
