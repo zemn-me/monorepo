@@ -37,42 +37,56 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
     ) {
 		super('ts:pulumi:zemn.me:api', name, args, opts);
 
-		const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
-			attributes: [{
-				name: "id",
-				type: "S",
-			}, {
-				name: "when",
-				type: "S"
-			}],
-			billingMode: "PAY_PER_REQUEST",
-			hashKey: "id",
-			rangeKey: "when",
-		}, { parent: this, protect: args.protectDatabases });
+                const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }, {
+                                name: "when",
+                                type: "S"
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                        rangeKey: "when",
+                }, { parent: this, protect: args.protectDatabases });
+
+                const grievancesTable = new aws.dynamodb.Table(`${name}-grievances`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                }, { parent: this, protect: args.protectDatabases });
 
 		const lambdaRole = new aws.iam.Role(`${name}-lambda-role`, {
 			assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 				Service: "lambda.amazonaws.com",
 			}),
 			managedPolicyArns: [aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole],
-			inlinePolicies: [{
-				name: `${name}-dynamodb-inline-policy`,
-				policy: dynamoTable.arn.apply(arn => JSON.stringify({
-					Version: "2012-10-17",
-					Statement: [{
-                                                Action: [
-                                                        "dynamodb:Query",
-                                                        "dynamodb:PutItem",
-                                                        "dynamodb:UpdateItem",
-                                                        "dynamodb:DeleteItem",
-                                                        "dynamodb:GetItem",
-                                                        "dynamodb:Scan"
-                                                ],
-						Effect: "Allow",
-						Resource: arn,
-					}],
-				})),
-			}]
+                        inlinePolicies: [{
+                                name: `${name}-dynamodb-inline-policy`,
+                                policy: Pulumi.all([dynamoTable.arn, grievancesTable.arn]).apply(
+                                        ([settingsArn, grievancesArn]) =>
+                                                JSON.stringify({
+                                                        Version: "2012-10-17",
+                                                        Statement: [
+                                                                {
+                                                                        Action: [
+                                                                                "dynamodb:Query",
+                                                                                "dynamodb:PutItem",
+                                                                                "dynamodb:UpdateItem",
+                                                                                "dynamodb:DeleteItem",
+                                                                                "dynamodb:GetItem",
+                                                                                "dynamodb:Scan",
+                                                                        ],
+                                                                        Effect: "Allow",
+                                                                        Resource: [settingsArn, grievancesArn],
+                                                                },
+                                                        ],
+                                                })
+                                ),
+                        }]
 		}, { parent: this });
 
 		const repo = new aws.ecr.Repository(`${name}_repo`, {
@@ -115,7 +129,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
                                         CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
                                         DYNAMODB_TABLE_NAME: dynamoTable.name,
-                                        GRIEVANCES_TABLE_NAME: dynamoTable.name,
+                                        GRIEVANCES_TABLE_NAME: grievancesTable.name,
                                         TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 					...pick_env("TWILIO_ACCOUNT_SID"),
 					...pick_env("TWILIO_AUTH_TOKEN"),
@@ -193,10 +207,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			}],
 		}, { parent: this });
 
-		super.registerOutputs({
-			lambdaEnvironment: lambdaFn.environment,
-			callboxPhoneNumber: args.callboxPhoneNumber,
-			dynamoDBTableName: dynamoTable.name,
-		});
+                super.registerOutputs({
+                        lambdaEnvironment: lambdaFn.environment,
+                        callboxPhoneNumber: args.callboxPhoneNumber,
+                        dynamoDBTableName: dynamoTable.name,
+                        grievancesTableName: grievancesTable.name,
+                });
     }
 }
