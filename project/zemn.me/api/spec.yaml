@@ -8,6 +8,8 @@ servers:
     description: Production
   - url: http://api.staging.zemn.me
     description: Staging
+  - url: http://localhost:8080
+    description: Development
 
 components:
   securitySchemes:
