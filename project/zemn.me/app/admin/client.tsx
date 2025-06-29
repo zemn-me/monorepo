@@ -324,6 +324,43 @@ function DisplayPhoneNumber({ Authorization }: { readonly Authorization: string 
 	</fieldset>
 }
 
+function DisplayAdminUid({ Authorization }: { readonly Authorization: string }) {
+        const $api = useZemnMeApi();
+        const uid = queryResult($api.useQuery(
+                "get",
+                "/admin/uid",
+                {
+                        headers: { Authorization }
+                }
+        ));
+
+        const el = option_and_then(
+                uid,
+                r => result_unwrap_or_else(
+                        result_and_then(
+                                r,
+                                u => <code>{u}</code>
+                        ),
+                        ({ cause }) => <details>
+                                <summary>❌</summary>
+                                {cause}
+                        </details>
+        ));
+
+        return <fieldset>
+                <legend>UID</legend>
+                <output>
+                        {
+                                option_unwrap_or(
+                                        el,
+                                        <>⏳</>
+                                )
+                        }
+
+                </output>
+        </fieldset>;
+}
+
 
 export default function Admin() {
 	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
@@ -383,10 +420,11 @@ export default function Admin() {
 
 		{option_unwrap_or(option_and_then(
 			authTokenOrNothing,
-			token => <>
-				<DisplayPhoneNumber Authorization={token} />
-				<SettingsEditor Authorization={token} />
-			</>
-		), null)}
-	</>
+                        token => <>
+                                <DisplayAdminUid Authorization={token} />
+                                <DisplayPhoneNumber Authorization={token} />
+                                <SettingsEditor Authorization={token} />
+                        </>
+                ), null)}
+        </>
 }
