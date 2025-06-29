@@ -64,7 +64,7 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 
         if claims.Sub != "111669004071516300752" &&
                 claims.Sub != "112149295011396650000" {
-                return fmt.Errorf("unauthorized subject: %s", claims.Email)
+                return fmt.Errorf("unauthorized subject: %s", claims.Sub)
         }
 
         r := ai.RequestValidationInput.Request
