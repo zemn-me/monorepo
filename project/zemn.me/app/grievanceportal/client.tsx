@@ -11,6 +11,7 @@ import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
+import { Date as PrettyDate } from "#root/ts/react/lang/date.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
 
@@ -111,15 +112,16 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                         {option_unwrap_or(option_and_then(
                                 grievances,
                                 r => result_unwrap_or(r, []).map((g: Grievance) => (
-                                        <li key={g.id}>
-                                                <strong>{g.name}</strong>
-                                                {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
-                                                <p>{g.description}</p>
+                                       <li key={g.id}>
+                                               <strong>{g.name}</strong>
+                                               {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
+                                               <p><PrettyDate date={new Date(g.created)} /> {new Date(g.created).toLocaleTimeString()}</p>
+                                               <p>{g.description}</p>
                                                <button className={style.deleteButton} onClick={() => void del.mutate({
                                                         params: { path: { id: g.id! } },
                                                         headers: { Authorization }
                                                })}>Delete</button>
-                                        </li>
+                                       </li>
                                 ))
                         ), null)}
                 </ul>
