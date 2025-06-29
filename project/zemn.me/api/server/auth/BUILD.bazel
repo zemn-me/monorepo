@@ -1,9 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_library")
 
 go_library(
     name = "auth",
-    srcs = ["oidc.go"],
+    srcs = [
+        "authorized_users.go",
+        "oidc.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server/auth",
     visibility = ["//visibility:public"],
     deps = [
@@ -15,4 +19,10 @@ go_library(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "auth_test",
+    srcs = ["identity_test.go"],
+    embed = [":auth"],
 )
