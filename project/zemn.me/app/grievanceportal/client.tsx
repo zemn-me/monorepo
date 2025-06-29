@@ -37,7 +37,7 @@ const severityMap = new Map<number, string>([
         [5, "Let\u2019s go for a walk by the river \uD83C\uDF05"],
         [6, "Need penguin videos & cuddles \uD83D\uDC27"],
         [7, "Bring snacks and patience \uD83C\uDF71"],
-        [8, "Sashimi dinner peace offering \uD83C\uDF63"],
+        [8, "Steak dinner peace offering \uD83E\uDD69"],
         [9, "Send me flowers! \uD83D\uDC90"],
         [10, "Flowers + apology letter! \uD83D\uDCDD\uD83D\uDC90"],
 ]);
