@@ -1,13 +1,14 @@
 package auth
 
 import (
-        "context"
-        "errors"
-        "fmt"
+	"context"
+	"errors"
+	"fmt"
+	"slices"
 
-        oidc "github.com/coreos/go-oidc"
+	oidc "github.com/coreos/go-oidc"
 
-        "github.com/getkin/kin-openapi/openapi3filter"
+	"github.com/getkin/kin-openapi/openapi3filter"
 )
 
 type contextKey string
@@ -16,9 +17,9 @@ const SubjectKey contextKey = "oidc_subject"
 
 // SubjectFromContext retrieves the subject ID from the context if present.
 func SubjectFromContext(ctx context.Context) (string, bool) {
-        v := ctx.Value(SubjectKey)
-        s, ok := v.(string)
-        return s, ok
+	v := ctx.Value(SubjectKey)
+	s, ok := v.(string)
+	return s, ok
 }
 
 // suuper basic oidc auth that only checks if it's me via Google.
@@ -48,28 +49,25 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return fmt.Errorf("token verification failed: %w", err)
 	}
 
-	var claims struct {
-		Sub   string `json:"sub"`
-		Iss   string `json:"iss"`
-		Email string `json:"email"`
-	}
+	var claim Identity
 
-	if err := token.Claims(&claims); err != nil {
+	if err := token.Claims(&claim); err != nil {
 		return fmt.Errorf("failed to parse claims: %w", err)
 	}
 
-	if claims.Iss != "https://accounts.google.com" {
-		return fmt.Errorf("invalid issuer: %s", claims.Iss)
+	idIdx := slices.IndexFunc(AuthorizedUsers, func(u Identity) bool {
+		return u.Is(claim)
+	})
+
+	if idIdx < 0 {
+		return fmt.Errorf("unauthorized user: %v", claim)
 	}
 
-        if claims.Sub != "111669004071516300752" &&
-                claims.Sub != "112149295011396650000" {
-                return fmt.Errorf("unauthorized subject: %s", claims.Sub)
-        }
+	id := AuthorizedUsers[idIdx]
 
-        r := ai.RequestValidationInput.Request
-        ctx = context.WithValue(r.Context(), SubjectKey, claims.Sub)
-        *ai.RequestValidationInput.Request = *r.WithContext(ctx)
+	r := ai.RequestValidationInput.Request
+	ctx = context.WithValue(r.Context(), SubjectKey, id.Subject)
+	*ai.RequestValidationInput.Request = *r.WithContext(ctx)
 
-        return nil
+	return nil
 }
