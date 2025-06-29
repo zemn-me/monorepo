@@ -202,6 +202,7 @@ components:
         - name
         - description
         - priority
+        - created
       properties:
         id:
           type: string
@@ -214,6 +215,9 @@ components:
           type: integer
           minimum: 1
           maximum: 10
+        created:
+          type: string
+          format: date-time
     NewGrievance:
       type: object
       required:
