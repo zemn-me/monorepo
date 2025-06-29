@@ -13,10 +13,11 @@ import (
 )
 
 type grievanceRecord struct {
-	Id          string `dynamodbav:"id"`
-	Name        string `dynamodbav:"name"`
-	Description string `dynamodbav:"description"`
-	Priority    int    `dynamodbav:"priority"`
+        Id          string `dynamodbav:"id"`
+        Name        string `dynamodbav:"name"`
+        Description string `dynamodbav:"description"`
+        Priority    int    `dynamodbav:"priority"`
+        Created     Time   `dynamodbav:"created"`
 }
 
 var errGrievanceNotFound = errors.New("grievance not found")
@@ -33,27 +34,29 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 		return nil, err
 	}
 	gs := make([]Grievance, 0, len(recs))
-	for _, r := range recs {
-		uid := uuid.MustParse(r.Id)
-		id := openapi_types.UUID(uid)
-		gs = append(gs, Grievance{
-			Id:          &id,
-			Name:        r.Name,
-			Description: r.Description,
-			Priority:    r.Priority,
-		})
-	}
-	return gs, nil
+       for _, r := range recs {
+               uid := uuid.MustParse(r.Id)
+               id := openapi_types.UUID(uid)
+               gs = append(gs, Grievance{
+                       Id:          &id,
+                       Name:        r.Name,
+                       Description: r.Description,
+                       Priority:    r.Priority,
+                       Created:     r.Created.Time,
+               })
+       }
+       return gs, nil
 }
 
 func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
 	id := uuid.New()
-	rec := grievanceRecord{
-		Id:          id.String(),
-		Name:        g.Name,
-		Description: g.Description,
-		Priority:    g.Priority,
-	}
+       rec := grievanceRecord{
+               Id:          id.String(),
+               Name:        g.Name,
+               Description: g.Description,
+               Priority:    g.Priority,
+               Created:     Now(),
+       }
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
 		return Grievance{}, err
@@ -62,13 +65,14 @@ func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance,
 		TableName: aws.String(s.grievancesTableName),
 		Item:      item,
 	})
-	oid := openapi_types.UUID(id)
-	return Grievance{
-		Id:          &oid,
-		Name:        g.Name,
-		Description: g.Description,
-		Priority:    g.Priority,
-	}, err
+       oid := openapi_types.UUID(id)
+       return Grievance{
+               Id:          &oid,
+               Name:        g.Name,
+               Description: g.Description,
+               Priority:    g.Priority,
+               Created:     rec.Created.Time,
+       }, err
 }
 
 func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) (Grievance, error) {
@@ -79,12 +83,13 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
 	if existing == nil {
 		return Grievance{}, errGrievanceNotFound
 	}
-	rec := grievanceRecord{
-		Id:          id,
-		Name:        g.Name,
-		Description: g.Description,
-		Priority:    g.Priority,
-	}
+       rec := grievanceRecord{
+               Id:          id,
+               Name:        g.Name,
+               Description: g.Description,
+               Priority:    g.Priority,
+               Created:     Time{Time: existing.Created},
+       }
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
 		return Grievance{}, err
@@ -93,14 +98,15 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
 		TableName: aws.String(s.grievancesTableName),
 		Item:      item,
 	})
-	uid := uuid.MustParse(id)
-	oid := openapi_types.UUID(uid)
-	return Grievance{
-		Id:          &oid,
-		Name:        g.Name,
-		Description: g.Description,
-		Priority:    g.Priority,
-	}, err
+       uid := uuid.MustParse(id)
+       oid := openapi_types.UUID(uid)
+       return Grievance{
+               Id:          &oid,
+               Name:        g.Name,
+               Description: g.Description,
+               Priority:    g.Priority,
+               Created:     existing.Created,
+       }, err
 }
 
 func (s Server) getGrievance(ctx context.Context, id string) (*Grievance, error) {
@@ -120,14 +126,15 @@ func (s Server) getGrievance(ctx context.Context, id string) (*Grievance, error)
 	if err := attributevalue.UnmarshalMap(out.Item, &rec); err != nil {
 		return nil, err
 	}
-	uid := uuid.MustParse(rec.Id)
-	oid := openapi_types.UUID(uid)
-	g := Grievance{
-		Id:          &oid,
-		Name:        rec.Name,
-		Description: rec.Description,
-		Priority:    rec.Priority,
-	}
+       uid := uuid.MustParse(rec.Id)
+       oid := openapi_types.UUID(uid)
+       g := Grievance{
+               Id:          &oid,
+               Name:        rec.Name,
+               Description: rec.Description,
+               Priority:    rec.Priority,
+               Created:     rec.Created.Time,
+       }
 	return &g, nil
 }
 

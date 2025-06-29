@@ -15,11 +15,14 @@ func TestGrievanceCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatalf("create grievance: %v", err)
 	}
-	created := Grievance(createResp.(PostGrievances200JSONResponse))
-	if created.Id == nil {
-		t.Fatalf("expected id assigned")
-	}
-	id := uuid.UUID(*created.Id).String()
+       created := Grievance(createResp.(PostGrievances200JSONResponse))
+       if created.Id == nil {
+               t.Fatalf("expected id assigned")
+       }
+       if created.Created.IsZero() {
+               t.Fatalf("expected created time set")
+       }
+       id := uuid.UUID(*created.Id).String()
 
 	// read
 	getResp, err := s.GetGrievanceId(context.Background(), GetGrievanceIdRequestObject{Id: id})
@@ -38,20 +41,26 @@ func TestGrievanceCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatalf("update grievance: %v", err)
 	}
-	upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
-	if upd.Name != "baz" || upd.Priority != 3 {
-		t.Fatalf("update failed: %+v", upd)
-	}
+       upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
+       if upd.Name != "baz" || upd.Priority != 3 {
+               t.Fatalf("update failed: %+v", upd)
+       }
+       if !upd.Created.Equal(created.Created) {
+               t.Fatalf("created time changed on update: %v vs %v", upd.Created, created.Created)
+       }
 
 	// list
 	listResp, err := s.GetGrievances(context.Background(), GetGrievancesRequestObject{})
 	if err != nil {
 		t.Fatalf("list grievances: %v", err)
 	}
-	list := []Grievance(listResp.(GetGrievances200JSONResponse))
-	if len(list) != 1 {
-		t.Fatalf("expected 1 grievance, got %d", len(list))
-	}
+       list := []Grievance(listResp.(GetGrievances200JSONResponse))
+       if len(list) != 1 {
+               t.Fatalf("expected 1 grievance, got %d", len(list))
+       }
+       if !list[0].Created.Equal(created.Created) {
+               t.Fatalf("list mismatch: %v vs %v", list[0].Created, created.Created)
+       }
 
 	// delete
 	_, err = s.DeleteGrievanceId(context.Background(), DeleteGrievanceIdRequestObject{Id: id})
