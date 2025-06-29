@@ -16,6 +16,7 @@ ts_project(
         "//:base_defs",
         "//:node_modules/@hookform/resolvers",
         "//:node_modules/@tanstack/react-query",
+        "//:node_modules/next",
         "//:node_modules/react-hook-form",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
