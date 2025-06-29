@@ -49,10 +49,9 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return fmt.Errorf("token verification failed: %w", err)
 	}
 
-	var claim Identity
-
-	if err := token.Claims(&claim); err != nil {
-		return fmt.Errorf("failed to parse claims: %w", err)
+	claim := Identity{
+		Issuer:  token.Issuer,
+		Subject: token.Subject,
 	}
 
 	idIdx := slices.IndexFunc(AuthorizedUsers, func(u Identity) bool {
