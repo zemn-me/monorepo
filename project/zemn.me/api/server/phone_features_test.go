@@ -37,11 +37,11 @@ func TestPostPhoneJoinConference(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to encode xml: %v", err)
 	}
-	if !strings.Contains(xmlData, "<Gather") ||
-		!strings.Contains(xmlData, "Press 1 to accept this call") ||
-		!strings.Contains(xmlData, "attempt=1") {
-		t.Errorf("unexpected xml: %s", xmlData)
-	}
+       if !strings.Contains(xmlData, "<Gather") ||
+               !strings.Contains(xmlData, "Press any number to accept this call") ||
+               !strings.Contains(xmlData, "attempt=1") {
+               t.Errorf("unexpected xml: %s", xmlData)
+       }
 }
 
 func TestPostPhoneJoinConferenceDigitsAccepted(t *testing.T) {
@@ -66,6 +66,30 @@ func TestPostPhoneJoinConferenceDigitsAccepted(t *testing.T) {
 	if !strings.Contains(xmlData, "<Conference") || !strings.Contains(xmlData, TWILIO_CONFERENCE_NAME) {
 		t.Errorf("unexpected xml: %s", xmlData)
 	}
+}
+
+func TestPostPhoneJoinConferenceOtherDigitAccepted(t *testing.T) {
+       s := newTestServer()
+       digit := "7"
+       rq := PostPhoneJoinConferenceRequestObject{
+               Params: PostPhoneJoinConferenceParams{Secret: "secret"},
+               Body:   &TwilioCallRequest{Digits: &digit},
+       }
+       rs, err := s.postPhoneJoinConference(context.Background(), rq)
+       if err != nil {
+               t.Fatalf("unexpected error: %v", err)
+       }
+       resp, ok := rs.(TwimlResponse)
+       if !ok {
+               t.Fatalf("expected TwimlResponse, got %T", rs)
+       }
+       xmlData, err := twiml.ToXML(resp.Document)
+       if err != nil {
+               t.Fatalf("failed to encode xml: %v", err)
+       }
+       if !strings.Contains(xmlData, "<Conference") || !strings.Contains(xmlData, TWILIO_CONFERENCE_NAME) {
+               t.Errorf("unexpected xml: %s", xmlData)
+       }
 }
 
 func TestPostPhoneHoldMusic(t *testing.T) {
