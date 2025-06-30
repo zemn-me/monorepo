@@ -119,7 +119,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                                                <strong>{g.name}</strong>
                                                {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
                                                <p><PrettyDate date={new Date(g.created)} /> {new Date(g.created).toLocaleTimeString()}</p>
-                                               <p>{g.description}</p>
+                                               <pre>{g.description}</pre>
                                                <button className={style.deleteButton} onClick={() => void del.mutate({
                                                         params: { path: { id: g.id! } },
                                                         headers: { Authorization }
