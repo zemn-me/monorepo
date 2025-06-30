@@ -38,6 +38,11 @@
     border-radius: 0.5em;
 }
 
+.grievanceList pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
 .deleteButton {
     margin-left: 1em;
     background: #fdd;
