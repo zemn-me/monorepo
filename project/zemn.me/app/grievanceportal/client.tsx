@@ -111,7 +111,10 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                 <ul className={style.grievanceList}>
                         {option_unwrap_or(option_and_then(
                                 grievances,
-                                r => result_unwrap_or(r, []).map((g: Grievance) => (
+                                r => result_unwrap_or(r, [])
+                                        .slice()
+                                        .sort((a, b) => new Date(b.created).valueOf() - new Date(a.created).valueOf())
+                                        .map((g: Grievance) => (
                                        <li key={g.id}>
                                                <strong>{g.name}</strong>
                                                {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
