@@ -1,0 +1,26 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "elastictabs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/nuqs",
+        "//:node_modules/react",
+        "//ts/react/next/Link",
+        "//ts/text/tabwriter",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
