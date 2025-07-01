@@ -1,0 +1,30 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "tabwriter",
+    srcs = [
+        "tabwriter.ts",
+        "tabwriter_test.ts",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "tabwriter_test.js",
+    ],
+    deps = [":tabwriter"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
