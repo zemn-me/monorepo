@@ -730,6 +730,7 @@ export const Bio = {
 			id: 'e5c48dff-db0d-4731-99c2-48b57a13c309',
 			date: date(1, 'sep', 2024),
 			title: en`Member of Technical Staff, AppSec, OpenAI`,
+			until: 'ongoing',
 			supercedes: '94c6577b-372f-4842-b2c5-1438f16b2eab',
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],

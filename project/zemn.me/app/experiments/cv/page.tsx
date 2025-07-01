@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, ReactNode } from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
 import { accolade, Bio, comment, talk, work } from '#root/project/zemn.me/bio/bio.js';
@@ -6,8 +6,8 @@ import priorities from '#root/project/zemn.me/bio/priority.json';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import { isDefined, must } from '#root/ts/guard.js';
-import { filter } from '#root/ts/iter/iterable_functional.js';
-import { None, Some } from '#root/ts/option/types.js';
+import { filter, to_array } from '#root/ts/iter/iterable_functional.js';
+import { and_then, and_then_or_else, None, Option, Some, unwrap_or } from '#root/ts/option/types.js';
 import { MonthYear } from '#root/ts/react/lang/date.js';
 
 const priorityMap = new Map<string, number>(
@@ -26,30 +26,76 @@ const entries = Bio.timeline
 
 type Event = (typeof Bio.timeline)[number];
 
+
+
+function or_null<T>(v: Option<T>): T | null {
+	return unwrap_or(v, null);
+}
+
 function Event({ event }: { readonly event: Event }) {
-        const start = ('since' in event && event.since ? event.since : event.date) as Date;
-        const end = 'until' in event ? event.until : undefined;
-       const employer = 'employer' in event ? event.employer : undefined;
-       return (
-               <div className={style.work} key={event.id}>
-                       {employer && <div className={style.employer}>{employer.text}</div>}
-                       <div className={style.position}>{event.title.text}</div>
+	const since = 'since' in event ? Some(event.since) : None;
+	const until = 'until' in event ? Some(event.until) : None;
+	const date = 'date' in event ? Some(event.date) : None;
+	const employer = 'employer' in event ? Some(event.employer) : None;
+	const description = 'description' in event && event.description != undefined? Some(event.description) : None;
 
-						<MonthYear className={style.date} date={start}/>
+	// this variable is used to make sure the elements in the right column stay
+	// in sync with the number of elemnts in right column for this given event.
+	const leftColElements: Option<ReactNode>[] = [
+		and_then(employer, employer =>
+			<div className={style.leftColumn}>{employer.text}</div>
+		),
 
-                       {end && (
-                               <div className={style.end}>
-					   {typeof end === 'string' ? 'Ongoing' :
-						   <MonthYear date={end}/>}
-                               </div>
-                       )}
-                        {'description' in event && event.description && (
-                                <span className={`${style.timelineDescription} ${style.content}`}>
-                                        <p>{event.description.text}</p>
-                                </span>
-                        )}
-                </div>
-        );
+		Some(<div className={style.leftColumn}>{event.title.text}</div>),
+		and_then(description, description => <div className={style.leftColumn} lang={description.language}>
+			{description.text}
+		</div>)
+	];
+
+
+	const leftColElementsCount = to_array(filter(leftColElements)).length;
+
+	const rightColStyle = {
+				gridRow: 'auto / span ' + leftColElementsCount,
+			}
+
+	return <div className={style.event} key={event.id}>
+
+
+		{leftColElements.map((el, idx) => and_then_or_else(
+			el,
+			el => <Fragment key={idx}>{el}</Fragment>,
+			() => null
+		))}
+
+		{and_then_or_else(
+			date,
+			date => <MonthYear className={style.date} date={date} style={rightColStyle} />,
+			// has to have a fallback, or the table will get fucked up
+			() => null // <div className={style.date}/>
+		)}
+
+		{and_then_or_else(
+			since,
+			since => <MonthYear className={style.since} date={since} style={rightColStyle} />,
+			() => null //<div className={style.since} />
+		) }
+
+		{and_then_or_else(
+			until,
+			until => {
+				if (typeof until === "string" && until == 'ongoing') {
+					return <div className={style.until} style={rightColStyle}>ongoing</div>;
+				}
+				return <MonthYear className={style.until} date={until} style={rightColStyle} />
+			},
+			() => null//<div className={style.until} style={rightColStyle} />,
+		)}
+
+
+
+			</div>
+	;
 }
 
 function WorkItems() {
@@ -150,28 +196,34 @@ function getValidWork() {
 	return [...workItems.values()]
 }
 
+function Section({ children }: { readonly children: React.ReactNode }) {
+	return <section className={style.section}>
+		{children}
+	</section>
+}
+
 function Work() {
-	return <div className={style.newWork}>
+	return <Section>
 		{getValidWork().map(e => <Event event={e} key={e.id}/> )}
-	</div>
+	</Section>
 }
 
 function Talks() {
-	return <div>
+	return <Section>
 		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(talk)).map(e => <Event event={e} key={e.id} />)}
-	</div>
+	</Section>
 }
 
 function Accolades() {
-	return <div>
+	return <Section>
 		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(accolade)).map(e => <Event event={e} key={e.id} />)}
-	</div>
+	</Section>
 }
 
 function Coverage() {
-	return <div>
+	return <Section>
 		{interestingEvents().filter(e => 'tags' in e && e.tags.includes(comment)).map(e => <Event event={e} key={e.id} />)}
-	</div>
+	</Section>
 }
 
 
@@ -191,18 +243,21 @@ function Disclosures() {Add commentMore actions
 }
 */
 
+function SectionTitle({ children }: { readonly children: React.ReactNode }) {
+	return <h2 className={style.rule}>{children}</h2>
+}
+
 
 function NewCV() {
 	return <div className={style.newCV} >
 		<Header/>
-		<h2>Work</h2>
+		<SectionTitle>Work</SectionTitle>
 		<Work/>
-		{/* todo: titles */}
-		<h2>Talks</h2>
+		<SectionTitle>Talks</SectionTitle>
 		<Talks/>
-		<h2>Accolades</h2>
+		<SectionTitle>Accolades</SectionTitle>
 		<Accolades/>
-		<h2>Coverage</h2>
+		<SectionTitle>Coverage</SectionTitle>
 		<Coverage/>
 	</div>
 }
