@@ -1,9 +1,5 @@
 
 
-.newCV {
-	display: block;
-}
-
 
 
 .cv {
@@ -48,10 +44,11 @@
   justify-items: center;
   align-items: center;
   grid:
-    "website icon date" min-content
-    "....... .... ...." 1em
-    "phone   name email" min-content
-    ".....   .... ....." 2em / 1fr 1fr 1fr;
+	" website icon date  " min-content
+	" ....... .... ..... " 1em
+	" phone   name email " min-content
+	" ....... .... ..... " 2em
+	/ 1fr     1fr  1fr   ;
 }
 
 .website { grid-area: website; }
@@ -63,16 +60,6 @@
 .date { grid-area: date; }
 
 .experience { grid-area: experience; display: grid; }
-
-.work {
-  display: grid;
-  grid:
-    "employer employer . start dash end" min-content
-    "position position . duration duration duration" min-content
-    ". . . . . ." .1em
-    ". content content . . ." min-content
-    ". . . . . ." 1em / 1em 1fr 1em 4.5em 2em 4em;
-}
 
 .work::before { content: ' - '; grid-area: dash; justify-self: center; }
 .employer { grid-area: employer; font-weight: 700; font-style: italic; }
@@ -114,3 +101,49 @@
 
 
 @page { size: A4; margin: 0; }
+
+.newCV {
+	display: grid;
+	grid-template-columns:
+		1fr min-content 1em min-content;
+}
+
+.newCV > .rule {
+	font: inherit;
+	font-weight: normal;
+	margin: 0;
+	padding: 0 .2em;
+}
+
+.newCV *:is(
+	.header, .rule, .title, .date, .since, .until, .description, .employer
+) {
+	grid-row: auto;
+}
+
+.newCV > .rule, .newCV > .header {
+	grid-column: 1 / -1;
+}
+
+.leftColumn {
+	grid-column: 1 / 1;
+}
+
+.newCV .event .date {
+	grid-column: 2 / 4;
+}
+
+.newCV .event .since {
+	grid-column: 2 / 2;
+}
+
+.newCV .event .until {
+	grid-column: 4 / 4;
+}
+
+
+.newCV .section, .newCV .event {
+	display: contents;
+}
+
+

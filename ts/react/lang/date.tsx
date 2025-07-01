@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, ReactElement } from "react";
+import { CSSProperties, memo, ReactElement } from "react";
 
 import { isDefined } from "#root/ts/guard.js";
 import { useLocale } from "#root/ts/react/lang/useLocale.js";
@@ -8,6 +8,7 @@ import { useLocale } from "#root/ts/react/lang/useLocale.js";
 export interface DateProps {
   readonly date: Date;
   readonly className?: string
+  readonly style?: CSSProperties
 }
 
 /**
@@ -105,7 +106,7 @@ export const Date = memo(function DateComponent(props: DateProps) {
   }
 
   return (
-    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()}>{content}</time>
+    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()} style={props.style}>{content}</time>
   );
 });
 
@@ -118,6 +119,6 @@ export const MonthYear = memo(function MonthYearComponent(props: DateProps) {
   const text = formatMonthYear(props.date, locale);
 
   return (
-    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()}>{text}</time>
+    <time className={props.className} dateTime={props.date.toISOString()} lang={locale.toString()} style={props.style}>{text}</time>
   );
 });
