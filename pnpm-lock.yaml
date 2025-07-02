@@ -191,6 +191,9 @@ dependencies:
   source-map-loader:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.99.9)
+  temporal-polyfill:
+    specifier: ^0.3.0
+    version: 0.3.0
   to-vfile:
     specifier: 8.0.0
     version: 8.0.0
@@ -18597,6 +18600,16 @@ packages:
       mkdirp: 3.0.1
       yallist: 5.0.0
     dev: true
+
+  /temporal-polyfill@0.3.0:
+    resolution: {integrity: sha512-qNsTkX9K8hi+FHDfHmf22e/OGuXmfBm9RqNismxBrnSmZVJKegQ+HYYXT+R7Ha8F/YSm2Y34vmzD4cxMu2u95g==}
+    dependencies:
+      temporal-spec: 0.3.0
+    dev: false
+
+  /temporal-spec@0.3.0:
+    resolution: {integrity: sha512-n+noVpIqz4hYgFSMOSiINNOUOMFtV5cZQNCmmszA6GiVFVRt3G7AqVyhXjhCSmowvQn+NsGn+jMDMKJYHd3bSQ==}
+    dev: false
 
   /terser-webpack-plugin@5.3.14(@swc/core@1.12.7)(esbuild@0.25.5)(webpack@5.99.9):
     resolution: {integrity: sha512-vkZjpUjb6OMS7dhV+tILUW6BhpDR7P2L/aQSAv+Uwk+m8KATX9EccViHTJR2qDtACKPIYndLGCyl3FMo+r2LMw==}
