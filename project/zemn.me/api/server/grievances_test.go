@@ -9,7 +9,8 @@ import (
 func TestGrievanceCRUD(t *testing.T) {
 	s := newTestServer()
 	// create
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 5}
+       tz := "America/Los_Angeles"
+       body := NewGrievance{Name: "foo", Description: "bar", Priority: 5, TimeZone: &tz}
 	createReq := PostGrievancesRequestObject{Body: &body}
 	createResp, err := s.PostGrievances(context.Background(), createReq)
 	if err != nil {
@@ -30,19 +31,20 @@ func TestGrievanceCRUD(t *testing.T) {
 		t.Fatalf("get grievance: %v", err)
 	}
 	got := Grievance(getResp.(GetGrievanceId200JSONResponse))
-	if got.Name != "foo" || got.Description != "bar" || got.Priority != 5 {
-		t.Fatalf("unexpected grievance: %+v", got)
-	}
+       if got.Name != "foo" || got.Description != "bar" || got.Priority != 5 || got.TimeZone == nil || *got.TimeZone != "America/Los_Angeles" {
+               t.Fatalf("unexpected grievance: %+v", got)
+       }
 
 	// update
-	updatedBody := NewGrievance{Name: "baz", Description: "qux", Priority: 3}
-	updReq := PutGrievanceIdRequestObject{Id: id, Body: &updatedBody}
+       newTZ := "Asia/Tokyo"
+       updatedBody := NewGrievance{Name: "baz", Description: "qux", Priority: 3, TimeZone: &newTZ}
+       updReq := PutGrievanceIdRequestObject{Id: id, Body: &updatedBody}
 	updResp, err := s.PutGrievanceId(context.Background(), updReq)
 	if err != nil {
 		t.Fatalf("update grievance: %v", err)
 	}
        upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
-       if upd.Name != "baz" || upd.Priority != 3 {
+       if upd.Name != "baz" || upd.Priority != 3 || upd.TimeZone == nil || *upd.TimeZone != "Asia/Tokyo" {
                t.Fatalf("update failed: %+v", upd)
        }
        if !upd.Created.Equal(created.Created) {
@@ -79,7 +81,8 @@ func TestGrievanceCRUD(t *testing.T) {
 
 func TestPutGrievanceNotFound(t *testing.T) {
 	s := newTestServer()
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 1}
+       tz2 := "America/Los_Angeles"
+       body := NewGrievance{Name: "foo", Description: "bar", Priority: 1, TimeZone: &tz2}
 	resp, err := s.PutGrievanceId(context.Background(), PutGrievanceIdRequestObject{Id: uuid.NewString(), Body: &body})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

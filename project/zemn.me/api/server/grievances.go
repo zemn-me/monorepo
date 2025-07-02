@@ -17,7 +17,8 @@ type grievanceRecord struct {
         Name        string `dynamodbav:"name"`
         Description string `dynamodbav:"description"`
         Priority    int    `dynamodbav:"priority"`
-        Created     Time   `dynamodbav:"created"`
+        Created     Time    `dynamodbav:"created"`
+        TimeZone    *string `dynamodbav:"timeZone,omitempty"`
 }
 
 var errGrievanceNotFound = errors.New("grievance not found")
@@ -43,19 +44,28 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
                        Description: r.Description,
                        Priority:    r.Priority,
                        Created:     r.Created.Time,
+                       TimeZone:    r.TimeZone,
                })
        }
        return gs, nil
 }
 
 func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
+	tz, err := time.LoadLocation(g.TimeZone)
+	if err != nil {
+		return Grievance{}, err
+	}
+
 	id := uuid.New()
        rec := grievanceRecord{
                Id:          id.String(),
                Name:        g.Name,
                Description: g.Description,
                Priority:    g.Priority,
-               Created:     Now(),
+               Created:     Now().In(
+				tz
+			   ),
+               TimeZone:    g.TimeZone,
        }
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
@@ -72,6 +82,7 @@ func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance,
                Description: g.Description,
                Priority:    g.Priority,
                Created:     rec.Created.Time,
+               TimeZone:    g.TimeZone,
        }, err
 }
 
@@ -89,6 +100,7 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
                Description: g.Description,
                Priority:    g.Priority,
                Created:     Time{Time: existing.Created},
+               TimeZone:    g.TimeZone,
        }
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
@@ -106,6 +118,7 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
                Description: g.Description,
                Priority:    g.Priority,
                Created:     existing.Created,
+               TimeZone:    g.TimeZone,
        }, err
 }
 
@@ -134,6 +147,7 @@ func (s Server) getGrievance(ctx context.Context, id string) (*Grievance, error)
                Description: rec.Description,
                Priority:    rec.Priority,
                Created:     rec.Created.Time,
+               TimeZone:    rec.TimeZone,
        }
 	return &g, nil
 }

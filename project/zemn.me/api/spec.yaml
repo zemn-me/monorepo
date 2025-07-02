@@ -218,6 +218,9 @@ components:
         created:
           type: string
           format: date-time
+        timeZone:
+          type: string
+          description: Client IANA time zone
     NewGrievance:
       type: object
       required:
@@ -233,6 +236,9 @@ components:
           type: integer
           minimum: 1
           maximum: 10
+        timeZone:
+          type: string
+          description: Client IANA time zone
 
 paths:
   /phone/init:
