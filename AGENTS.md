@@ -19,6 +19,7 @@ Changes must be tested via bazel test path/to/your/changes/...
 Bazel WILL take a long time! please don't interrupt the process! let it time out naturally...
 
 If your tests take too long, you can use `bazel query` to pick a more specific set of tests!
+In-browser tests depend on Node modules from npm. Without network access or pre-cached modules, `bazel test` may fail.
 
 # generated files
 
