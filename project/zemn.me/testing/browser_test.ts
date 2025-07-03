@@ -41,7 +41,7 @@ describe('zemn.me website', () => {
                         origin = `http://localhost:${addressInfo.port}`;
 
                         const apiBin = runfiles.resolveWorkspaceRelative(
-                                'project/zemn.me/api/cmd/localserver/localserver'
+                                'project/zemn.me/api/cmd/localserver/localserver_/localserver'
                         );
                         apiProc = spawn(apiBin);
                         apiOrigin = await new Promise<string>((resolve, reject) => {
@@ -61,7 +61,7 @@ describe('zemn.me website', () => {
 		});
 
                 afterAll(async () => {
-                        apiProc.kill();
+                        apiProc?.kill();
                         await new Promise<void>((resolve, reject) => {
                                 server.close(err => (err ? reject(err) : resolve()));
                         });
