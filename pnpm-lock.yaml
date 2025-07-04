@@ -210,14 +210,14 @@ dependencies:
     specifier: 6.0.3
     version: 6.0.3
   zod:
-    specifier: 3.25.71
-    version: 3.25.71
+    specifier: 3.25.72
+    version: 3.25.72
   zod-to-json-schema:
     specifier: 3.24.6
-    version: 3.24.6(zod@3.25.71)
+    version: 3.24.6(zod@3.25.72)
   zod_utilz:
     specifier: 0.8.4
-    version: 0.8.4(typescript@5.5.4)(zod@3.25.71)
+    version: 0.8.4(typescript@5.5.4)(zod@3.25.72)
 
 devDependencies:
   '@actions/core':
@@ -4132,14 +4132,14 @@ packages:
       marked-terminal: 7.3.0(marked@15.0.12)
       meow: 13.2.0
       open: 10.1.2
-      openai: 4.104.0(zod@3.25.71)
+      openai: 4.104.0(zod@3.25.72)
       package-manager-detector: 1.3.0
       react: 18.3.1
       shell-quote: 1.8.3
       strip-ansi: 7.1.0
       to-rotated: 1.0.0
       use-interval: 1.4.0(react@18.3.1)
-      zod: 3.25.71
+      zod: 3.25.72
     transitivePeerDependencies:
       - '@types/react'
       - bufferutil
@@ -5515,7 +5515,7 @@ packages:
       fs-extra: 11.3.0
       toml-eslint-parser: 0.10.0
       upath: 2.0.1
-      zod: 3.25.71
+      zod: 3.25.72
     dev: true
 
   /@renovatebot/kbpgp@4.0.1:
@@ -8753,7 +8753,7 @@ packages:
     dependencies:
       devtools-protocol: 0.0.1464554
       mitt: 3.0.1
-      zod: 3.25.71
+      zod: 3.25.72
     dev: true
 
   /chromium-edge-launcher@0.2.0:
@@ -15607,7 +15607,7 @@ packages:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  /openai@4.104.0(zod@3.25.71):
+  /openai@4.104.0(zod@3.25.72):
     resolution: {integrity: sha512-p99EFNsA/yX6UhVO93f5kJsDRLAg+CTA2RBqdHK4RtK8u5IJw32Hyb2dTGKbnnFmnuoBv5r7Z2CURI9sGZpSuA==}
     hasBin: true
     peerDependencies:
@@ -15626,7 +15626,7 @@ packages:
       form-data-encoder: 1.7.2
       formdata-node: 4.4.1
       node-fetch: 2.7.0
-      zod: 3.25.71
+      zod: 3.25.72
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -20131,12 +20131,12 @@ packages:
     resolution: {integrity: sha512-raRj6r0gPzopFm5XWBJZr/NuV4EEnT4iE+U3dp5FV5pCb588Gmm3zLIp/j9yqqcMiHH8VNQlerLTgOqL7krh6w==}
     dev: true
 
-  /zod-to-json-schema@3.24.6(zod@3.25.71):
+  /zod-to-json-schema@3.24.6(zod@3.25.72):
     resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
     peerDependencies:
       zod: ^3.24.1
     dependencies:
-      zod: 3.25.71
+      zod: 3.25.72
     dev: false
 
   /zod@3.21.4:
@@ -20146,17 +20146,17 @@ packages:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
     dev: true
 
-  /zod@3.25.71:
-    resolution: {integrity: sha512-BsBc/NPk7h8WsUWYWYL+BajcJPY8YhjelaWu2NMLuzgraKAz4Lb4/6K11g9jpuDetjMiqhZ6YaexFLOC0Ogi3Q==}
+  /zod@3.25.72:
+    resolution: {integrity: sha512-Cl+fe4dNL4XumOBNBsr0lHfA80PQiZXHI4xEMTEr8gt6aGz92t3lBA32e71j9+JeF/VAYvdfBnuwJs+BMx/BrA==}
 
-  /zod_utilz@0.8.4(typescript@5.5.4)(zod@3.25.71):
+  /zod_utilz@0.8.4(typescript@5.5.4)(zod@3.25.72):
     resolution: {integrity: sha512-roxu+9Y+rlJ7xLT/XPD9GUD3X26tgCydyz4ZOWG0WZirAYpxo6hWSOl7SsGzbs1JzAgX1yCSHf24rdweVM/xcQ==}
     peerDependencies:
       typescript: ^5.0.0
       zod: ^3.22.4
     dependencies:
       typescript: 5.5.4
-      zod: 3.25.71
+      zod: 3.25.72
     dev: false
 
   /zustand@5.0.6(@types/react@18.3.23)(react@19.1.0)(use-sync-external-store@1.5.0):
