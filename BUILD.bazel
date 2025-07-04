@@ -32,7 +32,7 @@ compile_pip_requirements(
 
 # implement fix api
 alias(
-    name = "requirements_test.fix",
+    name = "requirements.test.fix",
     actual = "requirements.update",
 )
 
