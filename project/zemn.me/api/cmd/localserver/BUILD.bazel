@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+package(default_visibility = ["//visibility:public"])
+
+go_library(
+    name = "localserver_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/cmd/localserver",
+    visibility = ["//visibility:private"],
+    deps = ["//project/zemn.me/api/server"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_binary(
+    name = "localserver",
+    embed = [":localserver_lib"],
+)
