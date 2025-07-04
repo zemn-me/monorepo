@@ -25,7 +25,10 @@ jest_test(
     name = "testing",
     size = "medium",
     srcs = ["browser_test.js"],
-    data = [":ts"],
+    data = [
+        ":ts",
+        "//project/zemn.me/api/cmd/localserver",
+    ],
 )
 
 bazel_lint(
