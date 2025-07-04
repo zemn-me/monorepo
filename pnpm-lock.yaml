@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.20.0
-    version: 41.20.0(typanion@3.14.0)
+    specifier: 41.20.1
+    version: 41.20.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -576,7 +576,7 @@ packages:
       '@aws-crypto/sha256-js': 5.2.0
       '@aws-crypto/supports-web-crypto': 5.2.0
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.821.0
+      '@aws-sdk/types': 3.840.0
       '@aws-sdk/util-locate-window': 3.804.0
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
@@ -587,7 +587,7 @@ packages:
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.821.0
+      '@aws-sdk/types': 3.840.0
       tslib: 2.8.1
     dev: true
 
@@ -17152,8 +17152,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.20.0(typanion@3.14.0):
-    resolution: {integrity: sha512-d7W+y4l9cEeKj220EVKkd4T+8HTC5UL/TGnnoqMbymuk5k7C5GHbfTO8Y5qptal8Z/JCtpli8VaWbDk+PkPkbg==}
+  /renovate@41.20.1(typanion@3.14.0):
+    resolution: {integrity: sha512-THr3YuqjTdMyqbu3sI07EyVjO17feGqRIYD8WLxfyxZlafenut8+K4lsTtS8x2gUlNFAhFtRrNEi0wfvZZBesw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
