@@ -138,9 +138,9 @@ checksum = "d92bec98840b8f03a5ff5413de5293bfcd8bf96467cf5452609f939ec6f5de16"
 
 [[package]]
 name = "ast_node"
-version = "3.0.1"
+version = "3.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6ea666cbca3830383d6ce836593e88ade6f61b12c6066c09dc1257c3079a5b6"
+checksum = "337b95505078e10730624c8d182b8564c745ba4b2ce398e626a4df3f8c9e6899"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2083,9 +2083,9 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "13.0.2"
+version = "13.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc28daa84b57762ecf28d8fdf6a3204ff04c8b8d98d35b9e8b9f56d4a7fafffa"
+checksum = "f77288e8187be57e6ef487301b08cac12351a6e479c85d1d06f77e21df496bcb"
 dependencies = [
  "anyhow",
  "ast_node",
