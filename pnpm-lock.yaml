@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.21.1
-    version: 41.21.1(typanion@3.14.0)
+    specifier: 41.21.2
+    version: 41.21.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.2
     version: 0.34.2
@@ -8308,8 +8308,8 @@ packages:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
     dev: true
 
-  /better-sqlite3@12.1.1:
-    resolution: {integrity: sha512-xjl/TjWLy/6yLa5wkbQSjTgIgSiaEJy3XzjF5TAdiWaAsu/v0OCkYOc6tos+PkM/k4qURN2pFKTsbcG3gk29Uw==}
+  /better-sqlite3@12.2.0:
+    resolution: {integrity: sha512-eGbYq2CT+tos1fBwLQ/tkBt9J5M3JEHjku4hbvQUePCckkvVf14xWj+1m7dGoK81M/fOjFT7yM9UMeKT/+vFLQ==}
     engines: {node: 20.x || 22.x || 23.x || 24.x}
     requiresBuild: true
     dependencies:
@@ -14778,6 +14778,7 @@ packages:
   /mimic-response@3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
+    requiresBuild: true
 
   /mimic-response@4.0.0:
     resolution: {integrity: sha512-e5ISH9xMYU0DzrT+jl8q2ze9D6eWBto+I8CNpe+VI+K2J/F/k3PdkdTdz4wvGVH4NTpo+NRYTVIuMQEMMcsLqg==}
@@ -17152,8 +17153,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.21.1(typanion@3.14.0):
-    resolution: {integrity: sha512-oBX76Zq3CMP66XNbi3M/3yBkUraCApRdAWKFeHMbtGeD08t34ntjRUwdN39/maHsESTUTt+pGGwOW+wJy85rcA==}
+  /renovate@41.21.2(typanion@3.14.0):
+    resolution: {integrity: sha512-43OHkjv2sAbSpxeCQEBN2txUqod/LsXAe6r9LdpjNA7j/sWwc/6q67VCs86HqRDiHPeEoFQcO9MJcmtAKfaStA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17274,7 +17275,7 @@ packages:
       yaml: 2.8.0
       zod: 3.25.67
     optionalDependencies:
-      better-sqlite3: 12.1.1
+      better-sqlite3: 12.2.0
       openpgp: 6.1.1
       re2: 1.22.1
     transitivePeerDependencies:
