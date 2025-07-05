@@ -33,9 +33,9 @@ const csp = {
 }
 
 export function RootLayout({ children }: Props) {
-	return (
-		<>
-		<Providers>
+        return (
+                <>
+                <Providers apiBaseUrl={process.env.NEXT_PUBLIC_ZEMN_ME_API_BASE}>
 			<html>
 				<head>
 					<link href="/icon.svg" rel="icon" type="image/svg+xml" />

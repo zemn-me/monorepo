@@ -21,6 +21,20 @@ ts_project(
     ],
 )
 
+ts_project(
+    name = "admin_ts",
+    srcs = ["admin_panel_test.tsx"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@testing-library/react",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//project/zemn.me/app",
+        "//project/zemn.me/app/admin",
+    ],
+)
+
 jest_test(
     name = "testing",
     size = "medium",
@@ -29,6 +43,16 @@ jest_test(
         ":ts",
         "//project/zemn.me/api/cmd/localserver",
     ],
+)
+
+jest_test(
+    name = "admin_panel_test",
+    srcs = ["admin_panel_test.js"],
+    env = {
+        "NEXT_PUBLIC_ZEMN_ME_API_BASE": "https://api.example.test",
+    },
+    jsdom = True,
+    deps = [":admin_ts"],
 )
 
 bazel_lint(
