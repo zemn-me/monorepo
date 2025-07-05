@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
+import { Temporal } from 'temporal-polyfill';
 import { z } from "zod";
 
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
@@ -28,6 +29,7 @@ const defaultValues: NewGrievance = {
         name: "",
         description: "",
         priority: 1,
+        timeZone: Temporal.Now.zonedDateTimeISO().timeZoneId,
 }
 
 const severityMap = new Map<number, string>([
@@ -89,7 +91,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                 <form className={style.formField} onSubmit={backgroundPromise(handleSubmit(d => {
                         void create.mutate({
                                 headers: { Authorization },
-                                body: d
+                                body: { ...d, timeZone: Temporal.Now.zonedDateTimeISO().timeZoneId }
                         })
                         reset();
                 }))}>
@@ -118,7 +120,9 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
                                        <li key={g.id}>
                                                <strong>{g.name}</strong>
                                                {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
-                                               <p><PrettyDate date={new Date(g.created)} /> {new Date(g.created).toLocaleTimeString()}</p>
+                                               <p>
+                                                       <PrettyDate date={Temporal.ZonedDateTime.from(g.created)} />
+                                               </p>
                                                <pre>{g.description}</pre>
                                                <button className={style.deleteButton} onClick={() => void del.mutate({
                                                         params: { path: { id: g.id! } },

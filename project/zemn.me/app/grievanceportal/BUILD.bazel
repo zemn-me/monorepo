@@ -18,6 +18,7 @@ ts_project(
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/next",
         "//:node_modules/react-hook-form",
+        "//:node_modules/temporal-polyfill",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
         "//project/zemn.me/components/PendingPip",
