@@ -17,7 +17,7 @@ type grievanceRecord struct {
         Name        string `dynamodbav:"name"`
         Description string `dynamodbav:"description"`
         Priority    int    `dynamodbav:"priority"`
-        Created     Time   `dynamodbav:"created"`
+        Created     Time    `dynamodbav:"created"`
 }
 
 var errGrievanceNotFound = errors.New("grievance not found")
@@ -49,13 +49,20 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 }
 
 func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
+	tz, err := time.LoadLocation(g.TimeZone)
+	if err != nil {
+		return Grievance{}, err
+	}
+
 	id := uuid.New()
        rec := grievanceRecord{
                Id:          id.String(),
                Name:        g.Name,
                Description: g.Description,
                Priority:    g.Priority,
-               Created:     Now(),
+               Created:     Now().In(
+				tz
+			   ),
        }
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
