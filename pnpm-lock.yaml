@@ -93,8 +93,8 @@ dependencies:
     specifier: 3.2.4
     version: 3.2.4
   eslint-mdx:
-    specifier: 3.6.0
-    version: 3.6.0(eslint@9.30.1)
+    specifier: 3.6.1
+    version: 3.6.1(eslint@9.30.1)
   eslint-plugin-jest:
     specifier: 29.0.1
     version: 29.0.1(eslint@9.30.1)(typescript@5.5.4)
@@ -9706,8 +9706,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-mdx@3.6.0(eslint@9.30.1):
-    resolution: {integrity: sha512-D1YKiLODSJmNK5+zOGqk5gU4lXEXCImUgT8uChDFgcwZYFYNUT71r+sOyLc0tYhTbuHg+tTOSkgSxJUhVon1Yg==}
+  /eslint-mdx@3.6.1(eslint@9.30.1):
+    resolution: {integrity: sha512-LK3gftslwbZspMb3tW/R3szOy88wXpMI7WLQ+Xv9t040T3qFDcflgnO9Lvz5XZO3iG8/lFJXnxeH/r3eo9Od0Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -9853,7 +9853,7 @@ packages:
       eslint: '>=8.0.0'
     dependencies:
       eslint: 9.30.1
-      eslint-mdx: 3.6.0(eslint@9.30.1)
+      eslint-mdx: 3.6.1(eslint@9.30.1)
       mdast-util-from-markdown: 2.0.2
       mdast-util-mdx: 3.0.0
       micromark-extension-mdxjs: 3.0.0
