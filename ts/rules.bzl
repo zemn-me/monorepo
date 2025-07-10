@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//bzl/lint:linters.bzl", "eslint_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
+load("//ts/fmt:rules.bzl", "test_ts_fmt")
 
 def js_binary(name, **kwargs):
     _js_binary(name = name, **kwargs)
@@ -68,6 +69,9 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         preserve_jsx: passed to the aspect_rules_js ts_project rule
         tags: test tags
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
+        # Prettier can be disabled for a specific target by either adding a
+        # tag listed in ts/fmt/rules.bzl's ``FMT_EXEMPT_TAGS`` or by adding the
+        # target label to ``ts/fmt/exempt_targets.bzl``.
         **kwargs: passed to the ts_project rule
     """
     if srcs == None:
@@ -103,3 +107,4 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
 
     if lint:
         ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
+        test_ts_fmt(name = name + "_fmt", srcs = srcs, tags = tags)
