@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.30.4
-    version: 41.30.4(typanion@3.14.0)
+    specifier: 41.30.5
+    version: 41.30.5(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -16764,8 +16764,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.30.4(typanion@3.14.0):
-    resolution: {integrity: sha512-XK+8DVM+mZxGBIV8DV07ZPYgsBycn7ZVH+vlGn5OgdKTPoYWcaVCaaaayUjShWDH02D0aMjIt6cEH6ulPfYzAQ==}
+  /renovate@41.30.5(typanion@3.14.0):
+    resolution: {integrity: sha512-zwmlQX5OMy2sX3EgD0pywlRdif/9hHwzSJCwaWBJghfbBeNN0mRbe/UvSmFE0P9IIwwhtqjK2Pg5vwD7KZS3nQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16885,7 +16885,7 @@ packages:
       vuln-vects: 1.1.0
       xmldoc: 2.0.2
       yaml: 2.8.0
-      zod: 3.25.72
+      zod: 3.25.73
     optionalDependencies:
       better-sqlite3: 12.2.0
       openpgp: 6.1.1
@@ -19757,8 +19757,8 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
 
-  /zod@3.25.72:
-    resolution: {integrity: sha512-Cl+fe4dNL4XumOBNBsr0lHfA80PQiZXHI4xEMTEr8gt6aGz92t3lBA32e71j9+JeF/VAYvdfBnuwJs+BMx/BrA==}
+  /zod@3.25.73:
+    resolution: {integrity: sha512-fuIKbQAWQl22Ba5d1quwEETQYjqnpKVyZIWAhbnnHgnDd3a+z4YgEfkI5SZ2xMELnLAXo/Flk2uXgysZNf0uaA==}
     dev: true
 
   /zod@3.25.76:
