@@ -13,10 +13,8 @@ ts_project(
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/selenium-webdriver",
-        "//:node_modules/@types/serve-handler",
         "//:node_modules/fast-glob",
         "//:node_modules/selenium-webdriver",
-        "//:node_modules/serve-handler",
         "//ts/selenium",
     ],
 )
@@ -41,6 +39,7 @@ jest_test(
     srcs = ["browser_test.js"],
     data = [
         ":ts",
+        "//project/zemn.me:start",
         "//project/zemn.me/api/cmd/localserver",
     ],
 )
