@@ -13,11 +13,37 @@ ts_project(
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/selenium-webdriver",
-        "//:node_modules/@types/serve-handler",
         "//:node_modules/fast-glob",
         "//:node_modules/selenium-webdriver",
-        "//:node_modules/serve-handler",
         "//ts/selenium",
+    ],
+)
+
+ts_project(
+    name = "admin_browser_ts",
+    srcs = ["browser_admin_test.ts"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/selenium-webdriver",
+        "//ts/selenium",
+    ],
+)
+
+ts_project(
+    name = "admin_ts",
+    srcs = ["admin_panel_test.tsx"],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@testing-library/react",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//project/zemn.me/app",
+        "//project/zemn.me/app/admin",
     ],
 )
 
@@ -27,8 +53,30 @@ jest_test(
     srcs = ["browser_test.js"],
     data = [
         ":ts",
+        "//project/zemn.me:start",
         "//project/zemn.me/api/cmd/localserver",
     ],
+)
+
+jest_test(
+    name = "admin_browser_test",
+    size = "medium",
+    srcs = ["browser_admin_test.js"],
+    data = [
+        ":admin_browser_ts",
+        "//project/zemn.me:start",
+        "//project/zemn.me/api/cmd/localserver",
+    ],
+)
+
+jest_test(
+    name = "admin_panel_test",
+    srcs = ["admin_panel_test.js"],
+    env = {
+        "NEXT_PUBLIC_ZEMN_ME_API_BASE": "https://api.example.test",
+    },
+    jsdom = True,
+    deps = [":admin_ts"],
 )
 
 bazel_lint(
