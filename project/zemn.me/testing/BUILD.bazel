@@ -20,6 +20,20 @@ ts_project(
 )
 
 ts_project(
+    name = "admin_browser_ts",
+    srcs = ["browser_admin_test.ts"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/selenium-webdriver",
+        "//ts/selenium",
+    ],
+)
+
+ts_project(
     name = "admin_ts",
     srcs = ["admin_panel_test.tsx"],
     deps = [
@@ -39,6 +53,17 @@ jest_test(
     srcs = ["browser_test.js"],
     data = [
         ":ts",
+        "//project/zemn.me:start",
+        "//project/zemn.me/api/cmd/localserver",
+    ],
+)
+
+jest_test(
+    name = "admin_browser_test",
+    size = "medium",
+    srcs = ["browser_admin_test.js"],
+    data = [
+        ":admin_browser_ts",
         "//project/zemn.me:start",
         "//project/zemn.me/api/cmd/localserver",
     ],
