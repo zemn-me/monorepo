@@ -30,7 +30,7 @@ describe('zemn.me admin panel (browser)', () => {
       setTimeout(() => reject(new Error('api server did not start')), 10000);
     });
 
-    const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start');
+    const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start_/start');
   webProc = spawn(nextBin, {
     stdio: ['ignore', 'pipe', 'inherit'],
   env: {
