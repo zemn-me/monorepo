@@ -75,8 +75,8 @@ dependencies:
     specifier: 3.0.8
     version: 3.0.8
   '@types/selenium-webdriver':
-    specifier: 4.1.22
-    version: 4.1.22
+    specifier: 4.1.28
+    version: 4.1.28
   '@types/serve-handler':
     specifier: 6.1.4
     version: 6.1.4
@@ -180,8 +180,8 @@ dependencies:
     specifier: 3.0.5
     version: 3.0.5
   selenium-webdriver:
-    specifier: 4.21.0
-    version: 4.21.0
+    specifier: 4.34.0
+    version: 4.34.0
   serve-handler:
     specifier: 6.1.6
     version: 6.1.6
@@ -1979,7 +1979,6 @@ packages:
 
   /@bazel/runfiles@6.3.1:
     resolution: {integrity: sha512-1uLNT5NZsUVIGS4syuHwTzZ8HycMPyr6POA3FCE4GbMtc4rhoJk8aZKtNIRthJYfL+iioppi+rTfH3olMPr9nA==}
-    dev: true
 
   /@bazel/typescript@5.8.1(typescript@5.5.4):
     resolution: {integrity: sha512-NAJ8WQHZL1WE1YmRoCrq/1hhG15Mvy/viWh6TkvFnBeEhNUiQUsA5GYyhU1ztnBIYW03nATO3vwhAEfO7Q0U5g==}
@@ -6571,9 +6570,10 @@ packages:
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
     dev: false
 
-  /@types/selenium-webdriver@4.1.22:
-    resolution: {integrity: sha512-MCL4l7q8dwxejr2Q2NXLyNwHWMPdlWE0Kpn6fFwJtvkJF7PTkG5jkvbH/X1IAAQxgt/L1dA8u2GtDeekvSKvOA==}
+  /@types/selenium-webdriver@4.1.28:
+    resolution: {integrity: sha512-Au7CXegiS7oapbB16zxPToY4Cjzi9UQQMf3W2ZZM8PigMLTGR3iUAHjPUTddyE5g1SBjT/qpmvlsAQLBfNAdKg==}
     dependencies:
+      '@types/node': 22.16.3
       '@types/ws': 8.18.1
     dev: false
 
@@ -17189,10 +17189,11 @@ packages:
       commander: 6.2.1
     dev: true
 
-  /selenium-webdriver@4.21.0:
-    resolution: {integrity: sha512-WaEJHZjOWNth1QG5FEpxpREER0qptZBMonFU6GtAqdCNLJVxbtC3E7oS/I/+Q1sf1W032Wg0Ebk+m46lANOXyQ==}
-    engines: {node: '>= 14.21.0'}
+  /selenium-webdriver@4.34.0:
+    resolution: {integrity: sha512-zGfQFcsASAv3KrYzYh+iw4fFqB7iZAgHW7BU6rRz7isK1i1X4x3LvjmZad4bUUgHDwTnAhlqTzDh21byB+zHMg==}
+    engines: {node: '>= 20.0.0'}
     dependencies:
+      '@bazel/runfiles': 6.3.1
       jszip: 3.10.1
       tmp: 0.2.3
       ws: 8.18.3
