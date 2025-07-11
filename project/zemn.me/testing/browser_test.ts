@@ -50,7 +50,6 @@ describe('zemn.me website', () => {
                                         ...process.env,
                                         PORT: '0',
                                         NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
-                                        NEXT_DISABLE_GOOGLE_FONTS: '1',
                                 },
                         });
                         origin = await new Promise<string>((resolve, reject) => {

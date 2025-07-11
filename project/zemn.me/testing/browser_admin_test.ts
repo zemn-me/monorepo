@@ -33,12 +33,11 @@ describe('zemn.me admin panel (browser)', () => {
     const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start');
   webProc = spawn(nextBin, {
     stdio: ['ignore', 'pipe', 'inherit'],
-    env: {
-      ...process.env,
-      PORT: '0',
-      NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
-      NEXT_DISABLE_GOOGLE_FONTS: '1',
-    },
+  env: {
+    ...process.env,
+    PORT: '0',
+    NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
+  },
   });
     origin = await new Promise<string>((resolve, reject) => {
       webProc.stdout!.on('data', chunk => {

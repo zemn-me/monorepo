@@ -1,6 +1,7 @@
 
 import 'project/zemn.me/app/base.css';
 
+import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
@@ -11,10 +12,15 @@ import { DefaultContentSecurityPolicy, HeaderTagsAppRouter, SourceExpression } f
 import { text } from '#root/ts/react/lang/index.js';
 
 export interface Props {
-	readonly children?: ReactNode;
+        readonly children?: ReactNode;
 }
 
-const lora = { className: '' };
+const lora = Lora({
+       weight: ['400', '700'],
+       style: ['italic', 'normal'],
+       subsets: ['latin', 'latin-ext'],
+       display: 'swap'
+});
 
 const csp = {
 	...DefaultContentSecurityPolicy,
