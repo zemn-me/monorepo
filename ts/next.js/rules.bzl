@@ -70,6 +70,13 @@ def next_project(name, srcs, **kwargs):
         args = ["dev", native.package_name()],
     )
 
+    bin.next_binary(
+        name = "start",
+        data = [":build"] + srcs,
+        args = ["start", native.package_name()],
+        tags = ["generated"],
+    )
+
     bin.next(
         out_dirs = ["out"],
         name = "out",

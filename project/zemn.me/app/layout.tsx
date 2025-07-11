@@ -1,7 +1,6 @@
 
 import 'project/zemn.me/app/base.css';
 
-import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
@@ -15,12 +14,7 @@ export interface Props {
 	readonly children?: ReactNode;
 }
 
-const lora = Lora({
-	weight: ['400', '700'],
-	style: ['italic', 'normal'],
-	subsets: ['latin', 'latin-ext'],
-	display: 'swap'
-});
+const lora = { className: '' };
 
 const csp = {
 	...DefaultContentSecurityPolicy,
@@ -33,9 +27,9 @@ const csp = {
 }
 
 export function RootLayout({ children }: Props) {
-	return (
-		<>
-		<Providers>
+        return (
+                <>
+                <Providers apiBaseUrl={process.env.NEXT_PUBLIC_ZEMN_ME_API_BASE}>
 			<html>
 				<head>
 					<link href="/icon.svg" rel="icon" type="image/svg+xml" />
