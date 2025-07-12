@@ -46,6 +46,7 @@ describe('zemn.me website', () => {
                         const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start_/start');
                         webProc = spawn(nextBin, {
                                 stdio: ['ignore', 'pipe', 'inherit'],
+                                cwd: runfiles.resolveWorkspaceRelative('project/zemn.me'),
                                 env: {
                                         ...process.env,
                                         PORT: '0',

@@ -1,4 +1,5 @@
 import { ChildProcess, spawn } from 'node:child_process';
+
 import { runfiles } from '@bazel/runfiles';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
@@ -33,11 +34,12 @@ describe('zemn.me admin panel (browser)', () => {
     const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start_/start');
   webProc = spawn(nextBin, {
     stdio: ['ignore', 'pipe', 'inherit'],
-  env: {
-    ...process.env,
-    PORT: '0',
-    NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
-  },
+    cwd: runfiles.resolveWorkspaceRelative('project/zemn.me'),
+    env: {
+      ...process.env,
+      PORT: '0',
+      NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
+    },
   });
     origin = await new Promise<string>((resolve, reject) => {
       webProc.stdout!.on('data', chunk => {

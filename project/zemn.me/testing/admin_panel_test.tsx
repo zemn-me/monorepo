@@ -13,9 +13,10 @@ beforeEach(() => {
     'https://accounts.google.com': { id_token: token },
   }));
 
-  global.fetch = jest.fn((input: RequestInfo | URL, init?: RequestInit) => {
-    const url = typeof input === 'string' ? input : input.url;
-    const method = init?.method ?? 'GET';
+  global.fetch = jest.fn(
+    (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+      const url = input instanceof Request ? input.url : input.toString();
+      const method = init?.method ?? 'GET';
     if (url.endsWith('/callbox/settings') && method === 'GET') {
       return Promise.resolve(new Response(JSON.stringify(defaultSettings), { status: 200 }));
     }
@@ -29,7 +30,8 @@ beforeEach(() => {
       return Promise.resolve(new Response('12345', { status: 200 }));
     }
     return Promise.reject(new Error(`Unhandled request: ${method} ${url}`));
-  }) as jest.Mock;
+    },
+  ) as jest.MockedFunction<typeof fetch>;
 });
 
 describe('zemn.me admin panel', () => {
