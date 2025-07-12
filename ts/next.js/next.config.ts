@@ -15,6 +15,10 @@ export const eslint = {
 
 export const output = 'export';
 
+export const env = {
+        NEXT_PUBLIC_ZEMN_ME_API_BASE: process.env.NEXT_PUBLIC_ZEMN_ME_API_BASE ?? "",
+};
+
 
 export const generateBuildId = async () => { /*REPLACE*/ throw new Error() /*REPLACE*/ };
 

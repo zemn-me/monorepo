@@ -43,6 +43,7 @@ def next_project(name, srcs, **kwargs):
         srcs = ["next.config.ts"],
         deps = [
             "//:node_modules/source-map-loader",
+            "//:node_modules/@types/node",
         ],
     )
 
@@ -68,6 +69,13 @@ def next_project(name, srcs, **kwargs):
         name = "dev",
         data = srcs,
         args = ["dev", native.package_name()],
+    )
+
+    bin.next_binary(
+        name = "start",
+        data = [":build"] + srcs,
+        args = ["start", native.package_name()],
+        tags = ["generated"],
     )
 
     bin.next(

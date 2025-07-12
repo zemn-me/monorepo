@@ -12,14 +12,14 @@ import { DefaultContentSecurityPolicy, HeaderTagsAppRouter, SourceExpression } f
 import { text } from '#root/ts/react/lang/index.js';
 
 export interface Props {
-	readonly children?: ReactNode;
+        readonly children?: ReactNode;
 }
 
 const lora = Lora({
-	weight: ['400', '700'],
-	style: ['italic', 'normal'],
-	subsets: ['latin', 'latin-ext'],
-	display: 'swap'
+       weight: ['400', '700'],
+       style: ['italic', 'normal'],
+       subsets: ['latin', 'latin-ext'],
+       display: 'swap'
 });
 
 const csp = {
@@ -33,9 +33,9 @@ const csp = {
 }
 
 export function RootLayout({ children }: Props) {
-	return (
-		<>
-		<Providers>
+        return (
+                <>
+                <Providers apiBaseUrl={process.env.NEXT_PUBLIC_ZEMN_ME_API_BASE}>
 			<html>
 				<head>
 					<link href="/icon.svg" rel="icon" type="image/svg+xml" />
