@@ -5,11 +5,11 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "simple",
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
+    srcs = [
+        "hello.ts",
+        "hello_test.ts",
     ],
+    deps = [],
 )
 
 jest_test(
