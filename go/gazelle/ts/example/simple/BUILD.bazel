@@ -9,7 +9,11 @@ ts_project(
         "hello.ts",
         "hello_test.ts",
     ],
-    deps = [],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+    ],
 )
 
 jest_test(

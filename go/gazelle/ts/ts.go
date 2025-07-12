@@ -29,7 +29,7 @@ func (Language) Embeds(r *rule.Rule, from label.Label) []label.Label          { 
 func (Language) Fix(c *config.Config, f *rule.File)                           {}
 
 func isAllowed(rel string) bool {
-	return strings.HasPrefix(rel, allowPath)
+        return rel == allowPath || strings.HasPrefix(rel, allowPath+"/")
 }
 
 func (Language) Kinds() map[string]rule.KindInfo {
@@ -77,9 +77,13 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	}
 
 	name := filepath.Base(args.Dir)
-	r := rule.NewRule("ts_project", name)
-	r.SetAttr("srcs", srcs)
-	r.SetAttr("deps", []string{})
+        r := rule.NewRule("ts_project", name)
+        r.SetAttr("srcs", srcs)
+        r.SetAttr("deps", []string{
+                "//:node_modules/@jest/globals",
+                "//:node_modules/@types/jest",
+                "//:node_modules/@types/node",
+        })
 
 	return language.GenerateResult{
 		Gen:     []*rule.Rule{r},
