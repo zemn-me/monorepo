@@ -803,17 +803,17 @@ mistune==3.1.3 \
 mitmproxy==12.1.1 \
     --hash=sha256:e6da78e54624a6138125ea332444fd5cd135c8a4aae529a94e7736c957a297a2
     # via -r requirements.in
-mitmproxy-linux==0.12.6 \
-    --hash=sha256:387b47864ed81cc7f91162f1cff264782ea48b9ce264111678d7de02fd29f1d9 \
-    --hash=sha256:a1bd330f09f7cfac9755576c6b4272636aba62257ff84c70a9022ef2a2785ce4 \
-    --hash=sha256:afd69e7ecb51e6099b66ba2b4c96928c7bce3165f60cb4d6abf83d97c56be292
+mitmproxy-linux==0.12.7 \
+    --hash=sha256:47ce06e6de8dfecffce3b9205cff45366921822ffdc3fbb88e80166d6c5209b1 \
+    --hash=sha256:af5287a98a055979e755c58b71b443619370af4e5897eaa2fe2c2364620e2f1f \
+    --hash=sha256:d1f708fadad84f36b6bc8d47850bb9501c63678bba092ea887c65d72fe49a2e0
     # via mitmproxy-rs
-mitmproxy-rs==0.12.6 \
-    --hash=sha256:0cfa7d81b9c1656a52feff1a95f380ec45d5a7f648431af17624b9b6afdc5150 \
-    --hash=sha256:601ef2d3d31fef1e414ccaf3ab6fbf6a05d6021c704d0ee7a37fb35f6b55ad2c \
-    --hash=sha256:757fa78f4f376140abbe5b1d8ed93adaed5c5d41956bc8600e4f9aca6072b629 \
-    --hash=sha256:baf58e9debf43f47197483376de3b32ae375235d23d253b3248e5a25839a8246 \
-    --hash=sha256:e9163bed9750c58b7ad5aa2896f0285b1dda02e2d5d0479d74be3ada2532d4aa
+mitmproxy-rs==0.12.7 \
+    --hash=sha256:287dfafc4ae78b05ac3fd434fdd7ad9ab3c1cbc9fc0a1f918a15ebe0880643da \
+    --hash=sha256:538858ecb480949eba72f43e071fb68fa4b5ec0c62b659abdc0c661ff389ed3a \
+    --hash=sha256:948c66181038e56c451ff099e9a2fc13610f55713a64188703e631dc61770663 \
+    --hash=sha256:b4d6654e58489886c16afb3dc2e587ef26d5152480d4e48d0e4425f6ff0fcdf9 \
+    --hash=sha256:ea7d8b5fbb8a6263500bc2cebcfadf06efb0778acfd2ca4238a6971ea4dc8735
     # via mitmproxy
 mpmath==1.3.0 \
     --hash=sha256:7a28eb2a9774d00c7bc92411c19a89209d5da7c4c9a9e227be8330a23a25b91f \
