@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.37.5
-    version: 41.37.5(typanion@3.14.0)
+    specifier: 41.37.7
+    version: 41.37.7(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -5503,15 +5503,15 @@ packages:
       '@seald-io/nedb': 4.1.2
     dev: true
 
-  /@renovatebot/osv-offline@1.6.6:
-    resolution: {integrity: sha512-xyhxVMGTk95b9nJte9Br1iu2mrkbPVnc7XXE1Klpnjc3hy0B7j9YXlhZzEgvWlVQ21/WmNuMft0/QCaLgFABrQ==}
+  /@renovatebot/osv-offline@1.6.7:
+    resolution: {integrity: sha512-ae/4FHq2URKcdkyCMHxSX5ayMDsC48u8Ov7ZgrigEnunUMPWChlk/N6ZjJD3nXJapjoKbfdUPx8EwYvLquY7/w==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@renovatebot/osv-offline-db': 1.7.4
       adm-zip: 0.5.16
       fs-extra: 11.3.0
       got: 11.8.6
-      luxon: 3.7.0
+      luxon: 3.7.1
     dev: true
 
   /@renovatebot/pep440@4.1.0:
@@ -13708,8 +13708,8 @@ packages:
       es5-ext: 0.10.64
     dev: false
 
-  /luxon@3.7.0:
-    resolution: {integrity: sha512-FWOR5aRqol+wq5WqqCj/zQ4sHIq48T0RdeNHH0oYRRY+Ds11SOSZQ89y11TyhiQ5BLZGJorlcxi4FxgBx0LNtw==}
+  /luxon@3.7.1:
+    resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
     engines: {node: '>=12'}
     dev: true
 
@@ -17135,8 +17135,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.37.5(typanion@3.14.0):
-    resolution: {integrity: sha512-B0m7gfSDEitUETAMdf6gp5McgMvdn5QtxrdQ5lsrk4uK5i1hgMIisviqVVqmuIzCWc0bWLT6RayobfApRmlCyQ==}
+  /renovate@41.37.7(typanion@3.14.0):
+    resolution: {integrity: sha512-P9UVDmi61ZkqrTlNNEQZmqZTBTXHNShX2yed6tJxVy7Yuxcq+CLW8ghLIgXDb+m2LysCzyVIL//uY1eUQQrNGA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17168,7 +17168,7 @@ packages:
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.1
-      '@renovatebot/osv-offline': 1.6.6
+      '@renovatebot/osv-offline': 1.6.7
       '@renovatebot/pep440': 4.1.0
       '@renovatebot/ruby-semver': 4.0.0
       '@sindresorhus/is': 7.0.2
@@ -17218,7 +17218,7 @@ packages:
       jsonata: 2.0.6
       jsonc-parser: 3.3.1
       klona: 2.0.6
-      luxon: 3.7.0
+      luxon: 3.7.1
       markdown-it: 14.1.0
       markdown-table: 3.0.4
       minimatch: 10.0.3
