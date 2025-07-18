@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Uint } from '#root/ts/factorio/uint.js';
 
@@ -8,6 +8,6 @@ export const ProgrammableSpeakerCircuitParameters = z.strictObject({
 	note_id: Uint,
 });
 
-export type ProgrammableSpeakerCircuitParameters = z.TypeOf<
+export type ProgrammableSpeakerCircuitParameters = z.infer<
 	typeof ProgrammableSpeakerCircuitParameters
 >;
