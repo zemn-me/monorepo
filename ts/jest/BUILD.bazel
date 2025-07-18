@@ -1,3 +1,4 @@
+load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -15,6 +16,25 @@ ts_project(
         # needed for the jsdom plugin
         "//:node_modules/jest-environment-jsdom",
     ],
+)
+
+filegroup(
+    name = "cssStub",
+    srcs = ["cssStub.js"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "cssStub_js",
+    srcs = ["cssStub.js"],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
+
+ts_project(
+    name = "jest_setup",
+    srcs = ["jest.setup.ts"],
+    visibility = ["//visibility:public"],
 )
 
 bazel_lint(
