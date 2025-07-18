@@ -1,12 +1,10 @@
 import { ChildProcess, spawn } from 'node:child_process';
-import http from 'node:http';
 import Path from 'node:path';
 
 import { runfiles } from '@bazel/runfiles';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
 import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
-import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
@@ -17,7 +15,7 @@ const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/']);
 
 describe('zemn.me website', () => {
 	describe('Endpoint Tests', () => {
-                let server: http.Server;
+                let webProc: ChildProcess;
                 let origin: string;
                 let apiProc: ChildProcess;
                 let apiOrigin: string;
@@ -28,18 +26,6 @@ describe('zemn.me website', () => {
 		paths.sort();
 
                 beforeAll(async () => {
-                        server = http.createServer((rq, rw) => {
-                                void handler(rq, rw, { public: base });
-                        }).listen();
-
-                        const addressInfo = server.address();
-
-                        if (addressInfo == null || typeof addressInfo === 'string') {
-                                throw new Error('Not AddressInfo');
-                        }
-
-                        origin = `http://localhost:${addressInfo.port}`;
-
                         const apiBin = runfiles.resolveWorkspaceRelative(
                                 'project/zemn.me/api/cmd/localserver/localserver_/localserver'
                         );
@@ -56,6 +42,26 @@ describe('zemn.me website', () => {
                                 apiProc.once('error', reject);
                                 setTimeout(() => reject(new Error('api server did not start')), 10000);
                         });
+
+                        const nextBin = runfiles.resolveWorkspaceRelative('project/zemn.me/start');
+                        webProc = spawn(nextBin, {
+                                stdio: ['ignore', 'pipe', 'inherit'],
+                                env: {
+                                        ...process.env,
+                                        PORT: '0',
+                                        NEXT_PUBLIC_ZEMN_ME_API_BASE: apiOrigin,
+                                },
+                        });
+                        origin = await new Promise<string>((resolve, reject) => {
+                                webProc.stdout!.on('data', chunk => {
+                                        const m = /localhost:(\d+)/.exec(chunk.toString());
+                                        if (m) {
+                                                resolve(`http://localhost:${m[1]}`);
+                                        }
+                                });
+                                webProc.once('error', reject);
+                                setTimeout(() => reject(new Error('next server did not start')), 20000);
+                        });
                 });
 
 		beforeEach(async () => {
@@ -64,9 +70,7 @@ describe('zemn.me website', () => {
 
                 afterAll(async () => {
                         apiProc.kill();
-                        await new Promise<void>((resolve, reject) => {
-                                server.close(err => (err ? reject(err) : resolve()));
-                        });
+                        webProc.kill();
                 });
 
 		const testEndpoint = async (endpoint: string) => {
