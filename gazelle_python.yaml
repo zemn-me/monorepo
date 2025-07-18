@@ -74,6 +74,7 @@ manifest:
     jupyterlab_server: jupyterlab_server
     jupyterlab_widgets: jupyterlab_widgets
     kaitaistruct: kaitaistruct
+    lark: lark
     ldap3: ldap3
     markupsafe: MarkupSafe
     matplotlib_inline: matplotlib_inline
@@ -122,6 +123,7 @@ manifest:
     requests: requests
     rfc3339_validator: rfc3339_validator
     rfc3986_validator: rfc3986_validator
+    rfc3987_syntax: rfc3987_syntax
     rpds: rpds_py
     ruamel.yaml: ruamel.yaml
     ruff: ruff
@@ -157,4 +159,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 1389cb315e60f734dc6e92ab808b1d67fee2927c9fed5f0f634394f524d1ada7
+integrity: 36b99671ed0a4d7364a6eeae057bed77e8910fde9d0da26357302ce4b86e1de1
