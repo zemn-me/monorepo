@@ -210,14 +210,14 @@ dependencies:
     specifier: 6.0.3
     version: 6.0.3
   zod:
-    specifier: 3.25.76
-    version: 3.25.76
+    specifier: 4.0.5
+    version: 4.0.5
   zod-to-json-schema:
     specifier: 3.24.6
-    version: 3.24.6(zod@3.25.76)
+    version: 3.24.6(zod@4.0.5)
   zod_utilz:
     specifier: 0.8.4
-    version: 0.8.4(typescript@5.5.4)(zod@3.25.76)
+    version: 0.8.4(typescript@5.5.4)(zod@4.0.5)
 
 devDependencies:
   '@actions/core':
@@ -20124,12 +20124,12 @@ packages:
     resolution: {integrity: sha512-raRj6r0gPzopFm5XWBJZr/NuV4EEnT4iE+U3dp5FV5pCb588Gmm3zLIp/j9yqqcMiHH8VNQlerLTgOqL7krh6w==}
     dev: true
 
-  /zod-to-json-schema@3.24.6(zod@3.25.76):
+  /zod-to-json-schema@3.24.6(zod@4.0.5):
     resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
     peerDependencies:
       zod: ^3.24.1
     dependencies:
-      zod: 3.25.76
+      zod: 4.0.5
     dev: false
 
   /zod@3.21.4:
@@ -20138,14 +20138,18 @@ packages:
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  /zod_utilz@0.8.4(typescript@5.5.4)(zod@3.25.76):
+  /zod@4.0.5:
+    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
+    dev: false
+
+  /zod_utilz@0.8.4(typescript@5.5.4)(zod@4.0.5):
     resolution: {integrity: sha512-roxu+9Y+rlJ7xLT/XPD9GUD3X26tgCydyz4ZOWG0WZirAYpxo6hWSOl7SsGzbs1JzAgX1yCSHf24rdweVM/xcQ==}
     peerDependencies:
       typescript: ^5.0.0
       zod: ^3.22.4
     dependencies:
       typescript: 5.5.4
-      zod: 3.25.76
+      zod: 4.0.5
     dev: false
 
   /zustand@5.0.6(@types/react@18.3.23)(react@19.1.0)(use-sync-external-store@1.5.0):
