@@ -30,9 +30,11 @@ go_test(
     srcs = ["launch_server_test.go"],
     data = [
         ":dev",
+        ":start",
     ],
     env = {
         "NEXT_SERVER_BINARY": "$(rlocationpath :dev)",
+        "NEXT_PROD_SERVER_BINARY": "$(rlocationpath :start)",
         "BAZEL_BINDIR": "$(BINDIR)",
     },
     deps = ["@io_bazel_rules_go//go/runfiles"],
