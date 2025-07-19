@@ -34,6 +34,19 @@ jest_test(
     },
 )
 
+jest_test(
+    name = "test_running_prod_server",
+    srcs = ["launch_server_prod_test.js"],
+    data = [
+        ":start",
+        ":ts_sources",
+    ],
+    env = {
+        "NEXT_SERVER_BINARY": "$(rlocationpath :start)",
+        "BAZEL_BINDIR": "$(BINDIR)",
+    },
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
