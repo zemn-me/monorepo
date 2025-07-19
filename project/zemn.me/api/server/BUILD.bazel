@@ -84,6 +84,7 @@ go_test(
         "grievances_test.go",
         "in_memory_ddb_test.go",
         "phone_features_test.go",
+        "salutation_test.go",
         "smoke_test.go",
     ],
     embed = [":server"],

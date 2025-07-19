@@ -34,6 +34,7 @@ manifest:
     debugpy: debugpy
     decorator: decorator
     defusedxml: defusedxml
+    edfc647aaf02b20aa651__mypyc: mypy
     executing: executing
     fastjsonschema: fastjsonschema
     flask: flask
@@ -73,6 +74,7 @@ manifest:
     jupyterlab_server: jupyterlab_server
     jupyterlab_widgets: jupyterlab_widgets
     kaitaistruct: kaitaistruct
+    lark: lark
     ldap3: ldap3
     markupsafe: MarkupSafe
     matplotlib_inline: matplotlib_inline
@@ -121,6 +123,7 @@ manifest:
     requests: requests
     rfc3339_validator: rfc3339_validator
     rfc3986_validator: rfc3986_validator
+    rfc3987_syntax: rfc3987_syntax
     rpds: rpds_py
     ruamel.yaml: ruamel.yaml
     ruff: ruff
@@ -156,4 +159,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 416bfbed640f4178101777a4abe7ee8950eed79c75397ae0360a9157d583f37e
+integrity: a71805bc7a4b30a373fc010b4dc0d3a7ff755aaea4247426b19ab4fc95020d5b
