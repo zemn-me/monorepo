@@ -266,8 +266,8 @@ devDependencies:
     specifier: 7.26.29
     version: 7.26.29(@types/node@22.16.5)
   '@pulumi/aws':
-    specifier: 6.68.0
-    version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 7.0.0
+    version: 7.0.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
     specifier: 2.22.0
     version: 2.22.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4620,6 +4620,18 @@ packages:
 
   /@pulumi/aws@6.68.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-uehJNSviSq3garkLXsy1zZzI7V6clBDQq8G83PSpNfdePdGeKtuRoxMSsuqkgpGkue+cGjoxJtC6QwdtzgaKBQ==}
+    dependencies:
+      '@pulumi/pulumi': 3.184.0(ts-node@10.9.2)(typescript@5.5.4)
+      mime: 2.6.0
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+      - ts-node
+      - typescript
+    dev: true
+
+  /@pulumi/aws@7.0.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-0SO8NvDdp4ThCoPCv3UUGSBx6y93wY2j8ujU9QTc8SpogEQpkNXEg7LEJPj2VJy8229aJefxGWKkhX36N75Ocw==}
     dependencies:
       '@pulumi/pulumi': 3.184.0(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
