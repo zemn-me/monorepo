@@ -9,23 +9,13 @@ def next_project(name, srcs, **kwargs):
         srcs = srcs,
     )
 
-    # absolutely horrible engineering here. i'm so sorry.
-    native.genrule(
-        name = name + "_sed_command",
-        outs = ["buildid.sed"],
-        srcs = ["//VERSION"],
-        cmd_bash = """
-            echo "s|/\\*REPLACE\\*/ throw new Error() /\\*REPLACE\\*/|return \\"$$(cat $(location //VERSION))\\"|g" >$@
-        """,
-    )
-
     # copy the next config over
     native.genrule(
         name = name + "_gen_next.config.ts",
-        srcs = ["//ts/next.js:next.config.ts", "buildid.sed"],
+        srcs = ["//ts/next.js:next.config.ts"],
         outs = ["next.config.ts"],
         cmd_bash = """
-            sed -f $(location buildid.sed) $(location //ts/next.js:next.config.ts) >$@
+            cp $(location //ts/next.js:next.config.ts) $@
         """,
     )
 

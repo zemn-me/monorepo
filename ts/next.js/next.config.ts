@@ -15,9 +15,6 @@ export const eslint = {
 
 export const output = 'export';
 
-
-export const generateBuildId = async () => { /*REPLACE*/ throw new Error() /*REPLACE*/ };
-
 export const productionBrowserSourceMaps = true;
 
 export const future = { webpack5: true };
