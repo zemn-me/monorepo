@@ -13,7 +13,7 @@ const next_server_binary =
 		process.env['NEXT_SERVER_BINARY']!
 	)
 
-test('next.js dev server launch!', async () => {
+test('next.js prod server launch!', async () => {
 	console.log(process.cwd());
 	expect.assertions(1);
 	const BAZEL_BINDIR = must(isDefined)(process.env.BAZEL_BINDIR);
@@ -43,8 +43,6 @@ test('next.js dev server launch!', async () => {
 			const resp: http.IncomingMessage = await new Promise(ok =>
 				http.get(m[0], resp => ok(resp))
 			);
-
-			console.info("status code", resp.statusCode)
 			expect(resp.statusCode).toBe(200);
 
 			break;
