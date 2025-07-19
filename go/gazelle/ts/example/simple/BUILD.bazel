@@ -1,0 +1,28 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "simple",
+    srcs = [
+        "hello.ts",
+        "hello_test.ts",
+    ],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = ["hello_test.js"],
+    deps = [":simple"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

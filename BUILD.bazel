@@ -1,3 +1,4 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
 load("//py:rules.bzl", "py_library")
 
 # Add rules here to build your software
@@ -20,7 +21,6 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
 load("//go/cmd/version_sync:go_version_sync.bzl", "go_version_sync")
 load("//js:rules.bzl", "copy_to_bin", "js_library")
-load("//ts:rules.bzl", "ts_config")
 
 package(default_visibility = [":__subpackages__"])
 
@@ -188,6 +188,7 @@ gazelle_binary(
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
         "//go/gazelle/bazel",
+        "//go/gazelle/ts",
         "//go/gazelle/ts/config",
         "//go/gazelle/js",
         "//go/gazelle/venv",
