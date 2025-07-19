@@ -1,15 +1,17 @@
 load("@npm//:next/package_json.bzl", "bin")
 load("//ts:rules.bzl", "ts_project")
 
-def next_project(name, srcs, **kwargs):
-    target = "node_modules/monorepo/" + native.package_name()
-
-    native.filegroup(
-        name = name + "_git_analysis_srcs",
-        srcs = srcs,
+def _next_js_project(name):
+    # create a jsconfig allowing imports from root
+    native.genrule(
+        name = name,
+        outs = ["jsconfig.json"],
+        cmd_bash = """
+            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([".." for x in native.package_name().split("/")]) + """\" }}' > $@
+        """,
     )
 
-    # copy the next config over
+def _next_next_config(name):
     native.genrule(
         name = name + "_gen_next.config.ts",
         srcs = ["//ts/next.js:next.config.ts"],
@@ -19,26 +21,24 @@ def next_project(name, srcs, **kwargs):
         """,
     )
 
-    # create a jsconfig allowing imports from root
-    native.genrule(
-        name = name + "_jsconfig",
-        outs = ["jsconfig.json"],
-        cmd_bash = """
-            echo '{ "compilerOptions": { "baseUrl": \"""" + "/".join([".." for x in native.package_name().split("/")]) + """\" }}' > $@
-        """,
-    )
-
     ts_project(
-        name = name + "_next_config",
-        srcs = ["next.config.ts"],
+        name = name,
+        srcs = [
+            "next.config.ts",
+        ],
         deps = [
             "//:node_modules/source-map-loader",
         ],
     )
 
-    srcs = srcs + [
-        ":" + name + "_next_config",
-        name + "_jsconfig",
+def _next_srcset(
+        name,
+        jsproject_json = None,
+        next_config = None,
+        srcs = []):
+    return srcs + [
+        jsproject_json,
+        next_config,
         "//:node_modules/@types/react",
         "//:node_modules/@types/node",
         "//:node_modules/typescript",
@@ -46,6 +46,27 @@ def next_project(name, srcs, **kwargs):
         "//:node_modules/sharp",
         "//:package_json",
     ]
+
+def next_project(name, srcs, **kwargs):
+    native.filegroup(
+        name = name + "_git_analysis_srcs",
+        srcs = srcs,
+    )
+
+    _next_js_project(
+        name + "_jsconfig",
+    )
+
+    _next_next_config(
+        name = name + "_next_config",
+    )
+
+    srcs = _next_srcset(
+        name,
+        jsproject_json = ":" + name + "_jsconfig",
+        next_config = ":" + name + "_next_config",
+        srcs = srcs,
+    )
 
     bin.next(
         name = "build",
