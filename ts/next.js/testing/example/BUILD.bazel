@@ -1,16 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
 ts_project(
     name = "ts_sources",
     deps = [
-        "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//ts",
         "//ts/math",
     ],
 )
@@ -20,20 +19,21 @@ next_project(
     srcs = [":ts_sources"],
 )
 
-jest_test(
-    name = "test_running_dev_server",
-    srcs = ["launch_server_test.js"],
-    data = [
-        ":dev",
-        ":ts_sources",
-    ],
-    env = {
-        "NEXT_SERVER_BINARY": "$(location :dev)",
-        "BAZEL_BINDIR": "$(BINDIR)",
-    },
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "example_test",
+    size = "small",
+    srcs = ["launch_server_test.go"],
+    data = [
+        ":dev",
+    ],
+    env = {
+        "NEXT_SERVER_BINARY": "$(rlocationpath :dev)",
+        "BAZEL_BINDIR": "$(BINDIR)",
+    },
+    deps = ["@io_bazel_rules_go//go/runfiles"],
 )
