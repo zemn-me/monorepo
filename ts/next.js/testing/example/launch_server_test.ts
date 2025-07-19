@@ -3,13 +3,18 @@ import child_process from 'node:child_process';
 import http from 'node:http';
 import * as readline from 'node:readline/promises';
 
+import { runfiles } from '@bazel/runfiles';
 import { expect, test } from '@jest/globals';
 
 import { isDefined, isNotNull, must } from '#root/ts/guard.js';
 
+const next_server_binary =
+	runfiles.resolve(
+		process.env['NEXT_SERVER_BINARY']!
+	)
+
 test('next.js dev server launch!', async () => {
 	console.log(process.cwd());
-	const next_server_binary = 'ts/next.js/testing/example/dev_/dev';
 	const BAZEL_BINDIR = must(isDefined)(process.env.BAZEL_BINDIR);
 
 	const proc = child_process.execFile(next_server_binary, {
