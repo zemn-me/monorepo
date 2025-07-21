@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -16,6 +17,8 @@ import (
 )
 
 const allowPath = "go/gazelle/ts"
+
+var reExtractModule = regexp.MustCompile("@[^/]+/[^/]+|[^/]+")
 
 // Language implements a very small Gazelle extension that
 // generates ts_project rules for TypeScript files.
@@ -98,7 +101,8 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 			if strings.HasPrefix(mod, ".") {
 				continue
 			}
-			depSet["//:node_modules/"+mod] = true
+			moduleName := reExtractModule.FindString(mod)
+			depSet["//:node_modules/"+moduleName] = true
 		}
 	}
 
@@ -106,6 +110,7 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	for d := range depSet {
 		deps = append(deps, d)
 	}
+	sort.Strings(deps)
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}
