@@ -6,7 +6,7 @@ import type { paths } from "#root/project/zemn.me/api/api_client.gen";
 
 export function useFetchClient() {
 	return useMemo(() => createFetchClient<paths>({
-		baseUrl: "https://api.zemn.me",
+		baseUrl: process.env["NEXT_PUBLIC_ZEMN_ME_API_BASE"] ?? "https://api.zemn.me",
 	})
 	, []);
 }
