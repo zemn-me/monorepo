@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
 import Glade from '#root/project/zemn.me/components/Glade/glade.js';
+import { ZEMN_ME_API_BASE } from '#root/project/zemn.me/constants/constants.js';
 import { DefaultContentSecurityPolicy, HeaderTagsAppRouter, SourceExpression } from '#root/ts/next.js/index.js';
 import { text } from '#root/ts/react/lang/index.js';
 
@@ -27,7 +28,7 @@ const csp = {
 	'connect-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
-		'https://api.zemn.me',
+		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
 	])
 }
