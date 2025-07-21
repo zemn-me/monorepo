@@ -13,6 +13,7 @@ ts_project(
         "//:node_modules/react",
         "//project/zemn.me/OAuth",
         "//project/zemn.me/api:ts_client_dts",
+        "//project/zemn.me/constants",
         "//project/zemn.me/localStorage",
         "//ts",
         "//ts/oidc",
