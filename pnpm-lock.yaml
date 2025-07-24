@@ -186,8 +186,8 @@ dependencies:
     specifier: 6.1.6
     version: 6.1.6
   source-map:
-    specifier: 0.7.4
-    version: 0.7.4
+    specifier: 0.7.6
+    version: 0.7.6
   source-map-loader:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.100.2)
@@ -3409,7 +3409,7 @@ packages:
       remark-mdx: 3.1.0
       remark-parse: 11.0.0
       remark-rehype: 11.1.2
-      source-map: 0.7.4
+      source-map: 0.7.6
       unified: 11.0.5
       unist-util-position-from-estree: 2.0.0
       unist-util-stringify-position: 4.0.0
@@ -6191,7 +6191,7 @@ packages:
       piscina: 4.9.2
       semver: 7.7.2
       slash: 3.0.0
-      source-map: 0.7.4
+      source-map: 0.7.6
       tinyglobby: 0.2.14
     dev: true
 
@@ -10450,7 +10450,7 @@ packages:
     dependencies:
       '@types/estree-jsx': 1.0.5
       astring: 1.9.0
-      source-map: 0.7.4
+      source-map: 0.7.6
     dev: false
 
   /estree-util-value-to-estree@3.4.0:
@@ -18121,9 +18121,9 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  /source-map@0.7.4:
-    resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
-    engines: {node: '>= 8'}
+  /source-map@0.7.6:
+    resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
+    engines: {node: '>= 12'}
 
   /space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
