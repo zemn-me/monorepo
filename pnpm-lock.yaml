@@ -16,7 +16,7 @@ dependencies:
     version: 9.31.0
   '@hookform/resolvers':
     specifier: 5.1.1
-    version: 5.1.1(react-hook-form@7.61.0)
+    version: 5.1.1(react-hook-form@7.61.1)
   '@jest/globals':
     specifier: 29.7.0
     version: 29.7.0
@@ -153,8 +153,8 @@ dependencies:
     specifier: 0.31.3
     version: 0.31.3
   react-hook-form:
-    specifier: 7.61.0
-    version: 7.61.0(react@19.1.0)
+    specifier: 7.61.1
+    version: 7.61.1(react@19.1.0)
   regexgen:
     specifier: 1.3.0
     version: 1.3.0
@@ -2777,13 +2777,13 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.1.1(react-hook-form@7.61.0):
+  /@hookform/resolvers@5.1.1(react-hook-form@7.61.1):
     resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
     peerDependencies:
       react-hook-form: ^7.55.0
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.61.0(react@19.1.0)
+      react-hook-form: 7.61.1(react@19.1.0)
     dev: false
 
   /@humanfs/core@0.19.1:
@@ -16701,8 +16701,8 @@ packages:
       react: 19.1.0
       scheduler: 0.26.0
 
-  /react-hook-form@7.61.0(react@19.1.0):
-    resolution: {integrity: sha512-o8S/HcCeuaAQVib36fPCgOLaaQN/v7Anj8zlYjcLMcz+4FnNfMsoDAEvVCefLb3KDnS43wq3pwcifehhkwowuQ==}
+  /react-hook-form@7.61.1(react@19.1.0):
+    resolution: {integrity: sha512-2vbXUFDYgqEgM2RcXcAT2PwDW/80QARi+PKmHy5q2KhuKvOlG8iIYgf7eIlIANR5trW9fJbP4r5aub3a4egsew==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
