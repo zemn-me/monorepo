@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.43.0
-    version: 41.43.0(typanion@3.14.0)
+    specifier: 41.43.1
+    version: 41.43.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -15722,8 +15722,8 @@ packages:
       yargs-parser: 21.1.1
     dev: false
 
-  /openpgp@6.1.1:
-    resolution: {integrity: sha512-V/DXZ5AGCz3q4X8psUSc3q4SxnH/bfICaTSpNcla7wvBFhrxa9/ajm31rtMwZ1qj7Fu2oMpfX6ZcxKmTBlb6Yg==}
+  /openpgp@6.2.0:
+    resolution: {integrity: sha512-zKbgazxMeGrTqUEWicKufbdcjv2E0om3YVxw+I3hRykp8ODp+yQOJIDqIr1UXJjP8vR2fky3bNQwYoQXyFkYMA==}
     engines: {node: '>= 18.0.0'}
     requiresBuild: true
     dev: true
@@ -17212,8 +17212,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.43.0(typanion@3.14.0):
-    resolution: {integrity: sha512-GxL5KpylI6O0mMROEJ1X1hS/ubjLlkTsCPMpwF68e4XjLjAmJUC4xiNLKzpG+wli8fg/pJx+D/nwvninbcYStg==}
+  /renovate@41.43.1(typanion@3.14.0):
+    resolution: {integrity: sha512-ZmBh6E6iNnObO9VXBp7OY2YXOB3LtjcdnQKEYJXPv3SQ1DW54O6emZ1LZGrYTCY63MLuwSjlDivbuv+Ko3l8WQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17336,7 +17336,7 @@ packages:
       zod: 3.25.76
     optionalDependencies:
       better-sqlite3: 12.2.0
-      openpgp: 6.1.1
+      openpgp: 6.2.0
       re2: 1.22.1
     transitivePeerDependencies:
       - aws-crt
