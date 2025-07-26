@@ -45,8 +45,8 @@ dependencies:
     specifier: 10.0.1
     version: 10.0.1
   '@tanstack/react-query':
-    specifier: 5.79.2
-    version: 5.79.2(react@19.1.0)
+    specifier: 5.83.0
+    version: 5.83.0(react@19.1.0)
   '@types/bcryptjs':
     specifier: 3.0.0
     version: 3.0.0
@@ -136,7 +136,7 @@ dependencies:
     version: 0.14.0
   openapi-react-query:
     specifier: 0.5.0
-    version: 0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.14.0)
+    version: 0.5.0(@tanstack/react-query@5.83.0)(openapi-fetch@0.14.0)
   openapi-typescript:
     specifier: 7.8.0
     version: 7.8.0(typescript@5.5.4)
@@ -6325,16 +6325,16 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@tanstack/query-core@5.79.2:
-    resolution: {integrity: sha512-kr+KQrBuqd6495eP9S41BoftFI1H50XA9O+6FmbnTx/Te6bjiq1mj8rt9rJjW3YZSO2aaUNUres0TWesJW1j1g==}
+  /@tanstack/query-core@5.83.0:
+    resolution: {integrity: sha512-0M8dA+amXUkyz5cVUm/B+zSk3xkQAcuXuz5/Q/LveT4ots2rBpPTZOzd7yJa2Utsf8D2Upl5KyjhHRY+9lB/XA==}
     dev: false
 
-  /@tanstack/react-query@5.79.2(react@19.1.0):
-    resolution: {integrity: sha512-kadeprsH6bWuhHCpqukXHRykJkxcLBxAaF0cQ05yawPmLZ/KiCpR1DyQenonF7A/70rnRUxhJD0RJejqk9wImQ==}
+  /@tanstack/react-query@5.83.0(react@19.1.0):
+    resolution: {integrity: sha512-/XGYhZ3foc5H0VM2jLSD/NyBRIOK4q9kfeml4+0x2DlL6xVuAcVEW+hTlTapAmejObg0i3eNqhkr2dT+eciwoQ==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
-      '@tanstack/query-core': 5.79.2
+      '@tanstack/query-core': 5.83.0
       react: 19.1.0
     dev: false
 
@@ -15692,13 +15692,13 @@ packages:
       openapi-typescript-helpers: 0.0.15
     dev: false
 
-  /openapi-react-query@0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.14.0):
+  /openapi-react-query@0.5.0(@tanstack/react-query@5.83.0)(openapi-fetch@0.14.0):
     resolution: {integrity: sha512-VtyqiamsbWsdSWtXmj/fAR+m9nNxztsof6h8ZIsjRj8c8UR/x9AIwHwd60IqwgymmFwo7qfSJQ1ZzMJrtqjQVg==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
       openapi-fetch: ^0.14.0
     dependencies:
-      '@tanstack/react-query': 5.79.2(react@19.1.0)
+      '@tanstack/react-query': 5.83.0(react@19.1.0)
       openapi-fetch: 0.14.0
       openapi-typescript-helpers: 0.0.15
     dev: false
