@@ -1,4 +1,5 @@
 load("@npm//:next/package_json.bzl", "bin")
+load("@rules_itest//private:itest.bzl", "itest_service")
 load("//ts:rules.bzl", "ts_project")
 
 def _next_js_project(name):
@@ -47,7 +48,28 @@ def _next_srcset(
         "//:package_json",
     ]
 
-def next_project(name, srcs, **kwargs):
+def next_itest_service(
+        name,
+        exe = None,
+        args = [],
+        **kwargs):
+    itest_service(
+        name = name,
+        args = args + [
+            "--port",
+            "$${PORT}",
+        ],
+        health_check_timeout = "60s",
+        autoassign_port = True,
+        exe = exe,
+        #        http_health_check_address = "http://localhost:$${PORT}/",
+        **kwargs
+    )
+
+def next_project(
+        name,
+        srcs,
+        **kwargs):
     native.filegroup(
         name = name + "_git_analysis_srcs",
         srcs = srcs,
