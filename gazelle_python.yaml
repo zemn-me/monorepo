@@ -9,6 +9,7 @@ manifest:
     IPython: ipython
     OpenSSL: pyOpenSSL
     aioquic: aioquic
+    annotated_types: annotated_types
     anyio: anyio
     argon2: argon2_cffi
     arrow: arrow
@@ -113,6 +114,8 @@ manifest:
     pyasn1: pyasn1
     pyasn1_modules: pyasn1_modules
     pycparser: pycparser
+    pydantic: pydantic
+    pydantic_core: pydantic_core
     pygments: pygments
     pylsqpack: pylsqpack
     pyparsing: pyparsing
@@ -141,6 +144,7 @@ manifest:
     tornado: tornado
     traitlets: traitlets
     typing_extensions: typing_extensions
+    typing_inspection: typing_inspection
     uri_template: uri_template
     urllib3: urllib3
     urwid: urwid
@@ -159,4 +163,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: ba4912fa76dcaa55966b1b5d4c6ae9ca23c20ee1fc73babe582f1eb86a1801ae
+integrity: 5d020f45895ac2da5082ebd90bacafc25903dce6ed1830e9b1f5df06e90dc704
