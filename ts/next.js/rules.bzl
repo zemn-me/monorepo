@@ -66,6 +66,22 @@ def next_itest_service(
         **kwargs
     )
 
+def next_itest_service_dev(
+        name,
+        exe = None,
+        args = [],
+        **kwargs):
+    itest_service(
+        name = name,
+        args = args + [
+            "--port",
+            "3000",
+        ],
+        health_check_timeout = "60s",
+        exe = exe,
+        **kwargs
+    )
+
 def next_project(
         name,
         srcs,
