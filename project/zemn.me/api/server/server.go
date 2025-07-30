@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -45,8 +46,12 @@ type Server struct {
 	twilioClient       *twilio.RestClient
 }
 
+type NewServerOptions struct {
+	LocalStack bool
+}
+
 // NewServer initialises the DynamoDB client.
-func NewServer(ctx context.Context) (*Server, error) {
+func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	spec, err := openapi3.NewLoader().LoadFromData([]byte(apiSpec.Spec))
 	if err != nil {
 		return nil, err
@@ -64,7 +69,7 @@ func NewServer(ctx context.Context) (*Server, error) {
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	var cfg aws.Config
 	if endpoint != "" {
-		cfg, err = config.LoadDefaultConfig(ctx,
+		var options []func(*config.LoadOptions) error = []func(*config.LoadOptions) error{
 			config.WithEndpointResolver(aws.EndpointResolverFunc(
 				func(service, region string) (aws.Endpoint, error) {
 					if service == dynamodb.ServiceID {
@@ -75,6 +80,19 @@ func NewServer(ctx context.Context) (*Server, error) {
 					return aws.Endpoint{}, &aws.EndpointNotFoundError{}
 				},
 			)),
+		}
+
+		if opts.LocalStack {
+			options = append(options, config.WithCredentialsProvider(credentials.StaticCredentialsProvider{
+				Value: aws.Credentials{
+					AccessKeyID:     "LOCALSTACK",
+					SecretAccessKey: "LOCALSTACK",
+				},
+			}))
+		}
+
+		cfg, err = config.LoadDefaultConfig(ctx,
+			options...,
 		)
 	} else {
 		cfg, err = config.LoadDefaultConfig(ctx)
