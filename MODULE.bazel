@@ -88,7 +88,7 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.4.3")
 bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "aspect_rules_js", version = "2.4.0")
+bazel_dep(name = "aspect_rules_js", version = "2.4.2")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
@@ -417,7 +417,7 @@ exports_files(glob(["**/*"]))""",
     ],
 )
 
-bazel_dep(name = "rules_rust", version = "0.62.0")
+bazel_dep(name = "rules_rust", version = "0.63.0")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
@@ -491,3 +491,5 @@ http_archive(
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
+
+bazel_dep(name = "rules_itest", version = "0.0.36")

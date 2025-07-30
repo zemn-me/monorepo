@@ -1,3 +1,4 @@
+load("@rules_itest//private:itest.bzl", "itest_service")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
@@ -19,4 +20,15 @@ bazel_lint(
 go_binary(
     name = "localserver",
     embed = [":localserver_lib"],
+)
+
+itest_service(
+    name = "localserver_itest_service",
+    args = [
+        "--address",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":localserver",
+    http_health_check_address = "${{@@//project/zemn.me/api/cmd/localserver:localserver_itest_service:port_name}}/healthz",
 )
