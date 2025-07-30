@@ -491,3 +491,5 @@ http_archive(
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
+
+bazel_dep(name = "rules_itest", version = "0.0.36")
