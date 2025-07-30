@@ -4,6 +4,8 @@ load("@rules_java//java:defs.bzl", "java_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
+package(default_visibility = ["//:__subpackages__"])
+
 # Because the `out` is non-configurable, we generate actions for all of these.
 # Only the right one for the target platform will get executed however.
 [

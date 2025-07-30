@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
+load("//ts/next.js:rules.bzl", "next_itest_service", "next_itest_service_dev", "next_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -27,6 +27,17 @@ next_project(
 )
 
 next_itest_service(
+    name = "itest_service",
+    args = [
+        "project/zemn.me",
+    ],
+    exe = "//project/zemn.me/inject_iservice:inject_iservice_bin",
+    deps = [
+        "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
+    ],
+)
+
+next_itest_service_dev(
     name = "itest_service_dev",
     args = [
         "project/zemn.me",
@@ -39,7 +50,7 @@ next_itest_service(
 
 alias(
     name = "zemn.me",
-    actual = ":dev",
+    actual = ":itest_service_dev",
 )
 
 bazel_lint(

@@ -9,7 +9,7 @@ import (
 func TestCORS(t *testing.T) {
 	rc := httptest.NewRecorder()
 
-	s, err := NewServer(t.Context())
+	s, err := NewServer(t.Context(), NewServerOptions{})
 	if err != nil {
 		t.Fatalf("failed to create server: %v", err)
 	}
