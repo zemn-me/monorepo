@@ -1,0 +1,73 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@rules_itest//:itest.bzl", "itest_service")
+load("@rules_java//java:defs.bzl", "java_binary")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+# Because the `out` is non-configurable, we generate actions for all of these.
+# Only the right one for the target platform will get executed however.
+[
+    copy_file(
+        name = "gen_" + out,
+        src = "@sqlite4java//:libsqlite4java.so",
+        out = out,
+        allow_symlink = True,
+    )
+    for out in [
+        "libsqlite4java-osx-aarch64.dylib",
+        "libsqlite4java-osx.dylib",
+        "libsqlite4java-linux-aarch64.so",
+        "libsqlite4java-linux-amd64.so",
+    ]
+]
+
+java_binary(
+    name = "bin",
+    data = select({
+        "@bazel_tools//src/conditions:darwin_arm64": ["libsqlite4java-osx-aarch64.dylib"],
+        "@bazel_tools//src/conditions:darwin_x86_64": ["libsqlite4java-osx.dylib"],
+        "@bazel_tools//src/conditions:linux_aarch64": ["libsqlite4java-linux-aarch64.so"],
+        "@bazel_tools//src/conditions:linux_x86_64": ["libsqlite4java-linux-amd64.so"],
+    }),
+    jvm_flags = [
+        "-Djava.library.path=$$JAVA_RUNFILES/_main/java/software/amazon/dynamodb",
+    ],
+    main_class = "com.amazonaws.services.dynamodbv2.local.main.ServerRunner",
+    runtime_deps = [
+        "@maven//:com_amazonaws_DynamoDBLocal",
+    ],
+)
+
+itest_service(
+    name = "dynamodb",
+    args = [
+        "--dbPath",
+        "$${TMPDIR}",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":bin",
+    health_check = ":health_check",
+)
+
+go_library(
+    name = "dynamodb_lib",
+    srcs = ["health_check.go"],
+    importpath = "github.com/zemn-me/monorepo/java/software/amazon/dynamodb",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+    ],
+)
+
+go_binary(
+    name = "health_check",
+    embed = [":dynamodb_lib"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

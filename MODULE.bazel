@@ -492,3 +492,33 @@ http_archive(
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
 bazel_dep(name = "rules_itest", version = "0.0.36")
+bazel_dep(name = "rules_jvm_external", version = "6.8")
+
+bazel_dep(name = "rules_java", version = "8.14.0")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = ["com.amazonaws:DynamoDBLocal:2.0.0"],
+    exclusions = [
+        # rules_jvm_external doesn't really handle these properly, and even if it did,
+        # there is no linux-arm64 variant. So we build this one from source instead.
+        "com.almworks.sqlite4java:libsqlite4java-linux-amd64",
+        "com.almworks.sqlite4java:libsqlite4java-linux-i386",
+        "io.github.ganadist.sqlite4java:libsqlite4java-osx-aarch64",
+        # TODO(zbarsky): Not sure why we still need this one on Mac...
+        #"com.almworks.sqlite4java:libsqlite4java-osx",
+        "com.almworks.sqlite4java:sqlite4java-win32-x64",
+        "com.almworks.sqlite4java:sqlite4java-win32-x86",
+    ],
+    lock_file = "//:maven_install.json",
+)
+
+use_repo(maven, "maven")
+
+http_archive(
+    name = "sqlite4java",
+    build_file = "//third_party:BUILD.sqlite4java",
+    integrity = "sha256-zsZtCvre6it1fzl30RBHO15j2a5fbIKCZSKS7YPgPnw=",
+    strip_prefix = "sqlite4java-7b55b3eab6901a0e49d6e1129431fa92c4206c0b",
+    url = "https://github.com/ganadist/sqlite4java/archive/7b55b3eab6901a0e49d6e1129431fa92c4206c0b.tar.gz",
+)
