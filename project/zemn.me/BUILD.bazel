@@ -50,7 +50,7 @@ next_itest_service_dev(
 
 alias(
     name = "zemn.me",
-    actual = ":dev",
+    actual = ":itest_service_dev",
 )
 
 bazel_lint(
