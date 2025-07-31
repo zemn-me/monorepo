@@ -1,0 +1,54 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+"""
+Provides the rlocationpath of chromewebdriver to TypeScript
+"""
+
+genrule(
+    name = "chromedriver_rlocation_gen",
+    srcs = [
+        "//bin/host/chromedriver",
+    ],
+    outs = ["chromedriver_rlocation.go"],
+    cmd_bash = """
+		echo "package selenium" >> $@
+		echo "const chromeDriverRlocationPath = \\`$(rlocationpath //bin/host/chromedriver)\\`" >> $@
+	""",
+)
+
+genrule(
+    name = "chromium_rlocation_gen",
+    srcs = [
+        "//bin/host/chromium",
+    ],
+    outs = ["chrome_rlocation.go"],
+    cmd_bash = """
+		echo "package selenium" >> $@
+		echo "const chromiumRlocationPath = \\`$(rlocationpath //bin/host/chromium)\\`" >> $@
+	""",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_library(
+    name = "seleniumutil",
+    srcs = [
+        "chrome_rlocation.go",
+        "chromedriver_rlocation.go",
+        "selenium.go",
+    ],
+    data = [
+        "//bin/host/chromedriver",
+        "//bin/host/chromium",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/seleniumutil",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_tebeka_selenium//:selenium",
+        "@io_bazel_rules_go//go/runfiles",
+    ],
+)
