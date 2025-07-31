@@ -1,3 +1,4 @@
+load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
@@ -22,13 +23,24 @@ ts_project(
 )
 
 jest_test(
-    name = "testing",
+    name = "integration_tests",
     size = "medium",
     srcs = ["browser_test.js"],
     data = [
         ":ts",
-        "//project/zemn.me/api/cmd/localserver",
     ],
+    tags = ["manual"],
+)
+
+service_test(
+    name = "integration_test",
+    data = [
+        ":ts",
+    ],
+    services = [
+        "//project/zemn.me:itest_service_dev",
+    ],
+    test = ":integration_tests",
 )
 
 bazel_lint(
