@@ -3,7 +3,7 @@ load("//mdx:rules.bzl", "mdx_files")
 load("//ts:rules.bzl", "ts_project")
 
 mdx_files(
-    name = "test",
+    name = "testarticle",
     srcs = glob(
         ["**/*.mdx"],
         allow_empty = True,
@@ -15,7 +15,7 @@ ts_project(
     srcs = ["page.tsx"],
     visibility = ["//project/zemn.me/app/experiments:__subpackages__"],
     deps = [
-        ":test_js",
+        ":testarticle_js",
         "//:node_modules/next",
         "//project/zemn.me/components/Article",
     ],
