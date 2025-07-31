@@ -32,6 +32,7 @@ next_itest_service(
         "project/zemn.me",
     ],
     exe = "//project/zemn.me/inject_iservice:inject_iservice_bin",
+    http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
     ],
