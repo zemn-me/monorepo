@@ -30,7 +30,7 @@ require (
 	github.com/google/go-containerregistry v0.20.6
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/hashicorp/terraform-plugin-framework v1.15.0
+	github.com/hashicorp/terraform-plugin-framework v1.15.1
 	github.com/itchyny/gojq v0.12.17
 	github.com/nyaruka/phonenumbers v1.6.4
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
