@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { Int } from '#root/ts/factorio/int.js';
 
@@ -13,4 +13,4 @@ export const ItemFilterObject = z.strictObject({
 	index: Int,
 });
 
-export type ItemFilterObject = z.TypeOf<typeof ItemFilterObject>;
+export type ItemFilterObject = z.infer<typeof ItemFilterObject>;

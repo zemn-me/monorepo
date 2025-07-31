@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 export const Position = z.strictObject({
 	/**
@@ -11,4 +11,4 @@ export const Position = z.strictObject({
 	y: z.number(),
 });
 
-export type Position = z.TypeOf<typeof Position>;
+export type Position = z.infer<typeof Position>;

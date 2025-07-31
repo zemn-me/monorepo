@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { WaitCondition } from '#root/ts/factorio/wait_condition.js';
 
@@ -10,7 +10,7 @@ export const ScheduleRecord = z.strictObject({
 	/**
 	 * Array of #Wait Condition objects.
 	 */
-	wait_conditions: z.array(WaitCondition).optional(),
+	wait_conditions: z.optional(z.array(WaitCondition)),
 });
 
-export type ScheduleRecord = z.TypeOf<typeof ScheduleRecord>;
+export type ScheduleRecord = z.infer<typeof ScheduleRecord>;
