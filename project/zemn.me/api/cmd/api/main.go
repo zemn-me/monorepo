@@ -13,6 +13,7 @@ import (
 func main() {
 	server, err := apiserver.NewServer(
 		context.Background(),
+		apiserver.NewServerOptions{},
 	)
 	if err != nil {
 		panic(err)
