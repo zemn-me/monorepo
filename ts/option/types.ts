@@ -61,6 +61,18 @@ export function and_then<T, O>(v: Option<T>, f: (v: T) => O): Option<O> {
 }
 
 /*#__NO_SIDE_EFFECTS__*/
+export function and_then_or_else<T, O1, O2>(
+	v: Option<T>,
+	andThen: (v: T) => O1,
+	orElse: () => O2
+): O1 | O2 {
+	return unwrap_or(
+		and_then(v, andThen),
+		orElse()
+	)
+}
+
+/*#__NO_SIDE_EFFECTS__*/
 export function flatten<T>(v: Option<Option<T>>): Option<T> {
 	if (is_none(v)) return v;
 	return unwrap(v);
