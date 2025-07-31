@@ -2,26 +2,70 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	apiserver "github.com/zemn-me/monorepo/project/zemn.me/api/server"
 )
 
-var address string
+var (
+	address    string
+	ddbAddress string
+)
 
 func init() {
 	flag.StringVar(&address, "address", ":0", "Address to listen on")
+	flag.StringVar(&ddbAddress, "ddb-address", "", "Address of the DynamoDB server.")
+}
+
+type AssignedPorts struct {
+	APIPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 }
 
 func main() {
 	flag.Parse()
-	srv, err := apiserver.NewServer(context.Background())
+
+	assignedPorts := os.Getenv("ASSIGNED_PORTS")
+	if assignedPorts != "" {
+		var ports AssignedPorts
+		if err := json.Unmarshal([]byte(assignedPorts), &ports); err != nil {
+			log.Fatalf("failed to parse ASSIGNED_PORTS: %v (%s)", err)
+		}
+
+		ddbAddress = "http://localhost:" + ports.APIPort
+	}
+
+	err := os.Setenv("DYNAMODB_ENDPOINT", ddbAddress)
+	if err != nil {
+		log.Fatalf("failed to set DYNAMODB_ENDPOINT: %v", err)
+	}
+
+	err = os.Setenv("DYNAMODB_TABLE_NAME", "table1")
+	if err != nil {
+		log.Fatalf("failed to set DYNAMODB_TABLE_NAME: %v", err)
+	}
+
+	err = os.Setenv("GRIEVANCES_TABLE_NAME", "table2")
+	if err != nil {
+		log.Fatalf("failed to set GRIEVANCES_TABLE_NAME: %v", err)
+	}
+
+	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
+		LocalStack: true,
+	})
 	if err != nil {
 		log.Fatalf("failed to create server: %v", err)
+	}
+
+	if assignedPorts != "" {
+		if err = srv.ProvisionTables(context.Background()); err != nil {
+			log.Fatalf("failed to provision tables: %v", err)
+		}
 	}
 
 	ln, err := net.Listen("tcp", address)
