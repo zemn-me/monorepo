@@ -21,4 +21,4 @@ swc_ecma_parser = "=22.0.3"
 swc_ecma_ast = "=14.0.0"
 swc_allocator = "=4.0.1"
 serenity = "=0.12.4"
-tokio = { version = "=1.47.0", features = ["rt", "rt-multi-thread", "macros"] }
+tokio = { version = "=1.47.1", features = ["rt", "rt-multi-thread", "macros"] }
