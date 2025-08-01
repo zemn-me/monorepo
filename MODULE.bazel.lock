@@ -37,8 +37,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.5.1/source.json": "d384789c62a452ae4b5b17d241f360ea7a0bedb116867cd19d5870c7b4ed115b",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/MODULE.bazel": "8eb29876512d3242af50a424300bec5c5f8957b455963df5f618cb7fd4e8ae19",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/source.json": "f48be9ca9f58adb817450c677659ed087d540d9f355f4e39098431cecd86ebf9",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.4.3/MODULE.bazel": "2477db7e0d53468c1e3df43bafc26e49a0c214e4ceda762344d560ce107ce7ce",
-    "https://bcr.bazel.build/modules/aspect_rules_swc/2.4.3/source.json": "f3cf36b85296ea687b333f5f050a6c331571713b5c7dc539e35e91f9aaf974d6",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.4.4/MODULE.bazel": "45b6e0c05b2e29e56c85634c1cd4d37446b9ad4ff93837b8d70511fe2d9bd842",
+    "https://bcr.bazel.build/modules/aspect_rules_swc/2.4.4/source.json": "c731e6007fabb56c73164ad85262214a0401fa92da98e4e01429e6a3d41c36ff",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/MODULE.bazel": "596ccdc1e93c860ec60d0bfce361ecbfb9ea09362d01f9d1bc5666118bcb76ab",
     "https://bcr.bazel.build/modules/aspect_rules_ts/3.1.0/source.json": "71249b3b84336747ec1f6b5de30d7605194d0bb4ea5ea84015550c17b6e38879",
     "https://bcr.bazel.build/modules/aspect_tools_telemetry/0.2.3/MODULE.bazel": "20f53b145f40957a51077ae90b37b7ce83582a1daf9350349f0f86179e19dd0d",
@@ -554,8 +554,8 @@
     },
     "@@aspect_rules_swc+//swc:extensions.bzl%swc": {
       "general": {
-        "bzlTransitiveDigest": "KoZhReav7DkhzbYPtYo7uh2Le1w/LPhIwNP+5r8RLX4=",
-        "usagesDigest": "eLTEr7kTTnr+XJqsn2pGshNbHD639e3IxvEBCMmRBPI=",
+        "bzlTransitiveDigest": "asq7bgZTmdVQECqNKk/Z9qpLQVho127aZYMGo0kchE8=",
+        "usagesDigest": "wW2r7stJcatcU/BVVTLprZ19Yhvw7a16Gdo/T1/XNZg=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -581,10 +581,24 @@
               "swc_version": "v1.7.40"
             }
           },
+          "swc_linux-arm64-musl": {
+            "repoRuleId": "@@aspect_rules_swc+//swc:repositories.bzl%swc_repositories",
+            "attributes": {
+              "platform": "linux-arm64-musl",
+              "swc_version": "v1.7.40"
+            }
+          },
           "swc_linux-x64-gnu": {
             "repoRuleId": "@@aspect_rules_swc+//swc:repositories.bzl%swc_repositories",
             "attributes": {
               "platform": "linux-x64-gnu",
+              "swc_version": "v1.7.40"
+            }
+          },
+          "swc_linux-x64-musl": {
+            "repoRuleId": "@@aspect_rules_swc+//swc:repositories.bzl%swc_repositories",
+            "attributes": {
+              "platform": "linux-x64-musl",
               "swc_version": "v1.7.40"
             }
           },
@@ -612,11 +626,27 @@
           "swc_toolchains": {
             "repoRuleId": "@@aspect_rules_swc+//swc/private:toolchains_repo.bzl%toolchains_repo",
             "attributes": {
-              "user_repository_name": "swc"
+              "user_repository_name": "swc",
+              "platforms": [
+                "darwin-arm64",
+                "darwin-x64",
+                "linux-arm64-gnu",
+                "linux-arm64-musl",
+                "linux-x64-gnu",
+                "linux-x64-musl",
+                "win32-arm64-msvc",
+                "win32-ia32-msvc",
+                "win32-x64-msvc"
+              ]
             }
           }
         },
         "recordedRepoMappingEntries": [
+          [
+            "aspect_rules_swc+",
+            "aspect_tools_telemetry_report",
+            "aspect_tools_telemetry++telemetry+aspect_tools_telemetry_report"
+          ],
           [
             "aspect_rules_swc+",
             "bazel_skylib",
@@ -663,7 +693,7 @@
     "@@aspect_tools_telemetry+//:extension.bzl%telemetry": {
       "general": {
         "bzlTransitiveDigest": "cLuD0cAZWm2SwvVSu2NHX+0x33L7A5+Shk+6Qcw9oik=",
-        "usagesDigest": "nWmdtfYtI/pySh2HglsevnzK2xLJ5Y+RQhXbKHWJbxU=",
+        "usagesDigest": "1Le1EPlYVi7OeuSaX99Zto0T3Q3Ka/z/04s5qvXoGsc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -672,6 +702,7 @@
             "repoRuleId": "@@aspect_tools_telemetry+//:extension.bzl%tel_repository",
             "attributes": {
               "deps": {
+                "aspect_rules_swc": "2.4.4",
                 "aspect_rules_js": "2.4.2",
                 "aspect_tools_telemetry": "0.2.3"
               }
