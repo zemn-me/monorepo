@@ -21,7 +21,7 @@ require (
 	github.com/bazelbuild/rules_go v0.56.0
 	github.com/beevik/etree v1.5.1
 	github.com/blang/semver/v4 v4.0.0
-	github.com/coreos/go-oidc v2.3.0+incompatible
+	github.com/coreos/go-oidc v2.4.0+incompatible
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-chi/chi/v5 v5.2.2
 	github.com/go-chi/cors v1.2.2
