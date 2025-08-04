@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.51.2
-    version: 41.51.2(typanion@3.14.0)
+    specifier: 41.52.0
+    version: 41.52.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -16854,8 +16854,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.51.2(typanion@3.14.0):
-    resolution: {integrity: sha512-/+8Rgacdzoj2yqQy/QJreSGtl/Xtull76PYsPzeehvZOIq2eqnVgmEBPmknBe0ao2EESLToBx6GwWpG2j3SdYQ==}
+  /renovate@41.52.0(typanion@3.14.0):
+    resolution: {integrity: sha512-6ioCswI8X+2ORcNWT+1N20UK7TzYv1lMP6RlYjqRvAwtDWX9KYMiNxE+lnbst1pDM3yF4cUTMjqGoFTwokPohg==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16962,7 +16962,7 @@ packages:
       semver: 7.7.2
       semver-stable: 3.0.0
       semver-utils: 1.1.4
-      shlex: 2.1.2
+      shlex: 3.0.0
       simple-git: 3.28.0
       slugify: 1.6.6
       source-map-support: 0.5.21
@@ -17534,8 +17534,8 @@ packages:
   /shimmer@1.2.1:
     resolution: {integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==}
 
-  /shlex@2.1.2:
-    resolution: {integrity: sha512-Nz6gtibMVgYeMEhUjp2KuwAgqaJA1K155dU/HuDaEJUGgnmYfVtVZah+uerVWdH8UGnyahhDCgABbYTbs254+w==}
+  /shlex@3.0.0:
+    resolution: {integrity: sha512-jHPXQQk9d/QXCvJuLPYMOYWez3c43sORAgcIEoV7bFv5AJSJRAOyw5lQO12PMfd385qiLRCaDt7OtEzgrIGZUA==}
     dev: true
 
   /side-channel-list@1.0.0:
