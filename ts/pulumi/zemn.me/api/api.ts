@@ -1,5 +1,6 @@
 import * as aws from "@pulumi/aws";
 import * as Pulumi from '@pulumi/pulumi';
+import { generateKeyPairSync } from "node:crypto";
 
 import { ApiZemnMeLambdaImage } from '#root/project/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js';
 import Certificate from "#root/ts/pulumi/lib/certificate.js";
@@ -35,7 +36,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
         args: Args,
         opts?: Pulumi.ComponentResourceOptions
     ) {
-		super('ts:pulumi:zemn.me:api', name, args, opts);
+                super('ts:pulumi:zemn.me:api', name, args, opts);
+
+                const { privateKey: oidcPrivateKey, publicKey: oidcPublicKey } = generateKeyPairSync("rsa", {
+                        modulusLength: 2048,
+                        publicKeyEncoding: { type: "spki", format: "pem" },
+                        privateKeyEncoding: { type: "pkcs1", format: "pem" }
+                });
 
                 const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
                         attributes: [{
@@ -131,12 +138,14 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                         DYNAMODB_TABLE_NAME: dynamoTable.name,
                                         GRIEVANCES_TABLE_NAME: grievancesTable.name,
                                         TWILIO_SHARED_SECRET: args.twilioSharedSecret,
-					...pick_env("TWILIO_ACCOUNT_SID"),
-					...pick_env("TWILIO_AUTH_TOKEN"),
-					...pick_env("TWILIO_API_KEY_SID")
-				}
-			}
-		}, { parent: this }).function;
+                                        OIDC_JWT_PRIVATE_KEY: Pulumi.secret(oidcPrivateKey),
+                                        OIDC_JWT_PUBLIC_KEY: oidcPublicKey,
+                                        ...pick_env("TWILIO_ACCOUNT_SID"),
+                                        ...pick_env("TWILIO_AUTH_TOKEN"),
+                                        ...pick_env("TWILIO_API_KEY_SID")
+                                }
+                        }
+                }, { parent: this }).function;
 
 		const integration = new aws.apigatewayv2.Integration(`${name}-integration`, {
 			apiId: gateway.id,
