@@ -16,6 +16,150 @@ components:
       # todo: own issuer!
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    Link:
+      type: object
+      required: [rel, href]
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+          format: uri
+    JRD:
+      description: |
+        JSON Resource Descriptor (JRD) as defined in [RFC 6415](https://datatracker.ietf.org/doc/html/rfc6415).
+        Used for WebFinger discovery.
+      type: object
+      required: [subject, links]
+      properties:
+        subject:
+          type: string
+        links:
+          type: array
+          items: { $ref: '#/components/schemas/Link' }
+    OIDCConfiguration:
+      type: object
+      description: |
+        Subset of fields listed in spec §3.
+        Feel free to extend locally: add extra properties without fear of
+        breaking non-OIDC consumers, provided you preserve existing names.
+      required:
+        - issuer
+        - authorization_endpoint
+        - jwks_uri
+        - response_types_supported
+        - subject_types_supported
+        - id_token_signing_alg_values_supported
+      properties:
+        issuer:
+          type: string
+          format: uri
+          description: HTTPS URL; must match both discovery URL & ID-token `iss`.
+        authorization_endpoint:
+          type: string
+          format: uri
+        token_endpoint:
+          type: string
+          format: uri
+          description: Required unless OP only supports Implicit flow.
+        userinfo_endpoint:
+          type: string
+          format: uri
+        jwks_uri:
+          type: string
+          format: uri
+        registration_endpoint:
+          type: string
+          format: uri
+        scopes_supported:
+          type: array
+          items: { type: string }
+        response_types_supported:
+          type: array
+          items: { type: string }
+        response_modes_supported:
+          type: array
+          items: { type: string }
+        grant_types_supported:
+          type: array
+          items: { type: string }
+        subject_types_supported:
+          type: array
+          items:
+            type: string
+            enum: [public, pairwise]
+        acr_values_supported:
+          type: array
+          items: { type: string }
+        id_token_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        id_token_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        id_token_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        request_object_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        request_object_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        request_object_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        token_endpoint_auth_methods_supported:
+          type: array
+          items:
+            type: string
+            enum: [client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
+        token_endpoint_auth_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        display_values_supported:
+          type: array
+          items: { type: string }
+        claim_types_supported:
+          type: array
+          items:
+            type: string
+            enum: [normal, aggregated, distributed]
+        claims_supported:
+          type: array
+          items: { type: string }
+        claims_locales_supported:
+          type: array
+          items: { type: string }
+        ui_locales_supported:
+          type: array
+          items: { type: string }
+        claims_parameter_supported:
+          type: boolean
+        request_parameter_supported:
+          type: boolean
+        request_uri_parameter_supported:
+          type: boolean
+        require_request_uri_registration:
+          type: boolean
+        service_documentation:
+          type: string
+          format: uri
+        op_policy_uri:
+          type: string
+          format: uri
+        op_tos_uri:
+          type: string
+          format: uri
     TwilioCallRequest:
       type: object
       description: Parameters sent by Twilio in requests to your webhook for handling a call.
@@ -530,4 +674,54 @@ paths:
             text/plain:
               schema:
                 type: string
+  /.well-known/webfinger:
+    get:
+      tags: [Discovery]
+      summary: WebFinger issuer discovery
+      description: |
+        Identifier-to-issuer lookup (spec §2).
+        Safe to coexist with any other `/.well-known/*` handlers because
+        the path and media-type are unique.
+      operationId: getWebFinger
+      parameters:
+        - name: resource
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Normalised End-User identifier (URI or `acct:` form).
+        - name: rel
+          in: query
+          required: false
+          schema:
+            type: string
+            default: http://openid.net/specs/connect/1.0/issuer
+          description: Relation type; leave at default for OIDC usage.
+      responses:
+        '200':
+          description: JSON Resource Descriptor with at least one issuer link.
+          content:
+            application/jrd+json:
+              schema:
+                $ref: '#/components/schemas/JRD'
+        default:
+          description: Error (400/404 etc. depending on implementation policy).
 
+  /.well-known/openid-configuration:
+    get:
+      tags: [Discovery]
+      summary: OP configuration (root issuer)
+      description: |
+        Returned when `issuer` has no path component.
+        If your main spec includes additional root-level `/.well-known`
+        handlers, ensure they use distinct filenames.
+      operationId: getOpenIDConnectRootConfiguration
+      responses:
+        '200':
+          description: OpenID Provider metadata document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OIDCConfiguration'
+        default:
+          description: Discovery failure.
