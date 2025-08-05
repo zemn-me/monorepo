@@ -48,10 +48,14 @@ type Server struct {
 	log                *log.Logger
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
+	// skips the ID token authentication (for local dev only!!!!)
+	skipIdTokenAuth bool
 }
 
 type NewServerOptions struct {
 	LocalStack bool
+	// skips the ID token authentication (for local dev only!!!!)
+	SkipIdTokenAuth bool
 }
 
 // NewServer initialises the DynamoDB client and HTTP router.
@@ -107,6 +111,13 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}))
 	r.Use(mw)
 
+	authFunc := auth.OIDC
+	if opts.SkipIdTokenAuth {
+		authFunc = func(context.Context, *openapi3filter.AuthenticationInput) error {
+			return nil
+		}
+	}
+
 	s := &Server{
 		log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                 dynamodb.NewFromConfig(cfg),
@@ -117,6 +128,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
+		skipIdTokenAuth: authFunc,
 	}
 
 	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)

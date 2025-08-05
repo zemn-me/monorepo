@@ -28,6 +28,19 @@ bazel_lint(
     srcs = ["BUILD.bazel"],
 )
 
+service_test(
+    name = "integration_test",
+    services = [
+        "//project/zemn.me:itest_service",
+    ],
+    test = ":testing_test",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
 ts_project(
     name = "ts",
     srcs = ["browser_test.ts"],
