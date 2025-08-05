@@ -10,6 +10,7 @@ ts_project(
         "//ts/pulumi:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
         "//project/zemn.me/api/cmd/api:oci_image",

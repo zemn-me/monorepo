@@ -107,20 +107,20 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}))
 	r.Use(mw)
 
-	s := &Server{
-		log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
-		ddb:                 dynamodb.NewFromConfig(cfg),
-		settingsTableName:   settingsTableName,
-		grievancesTableName: grievancesTableName,
-		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
-		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
-			Username: os.Getenv("TWILIO_API_KEY_SID"),
-			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
-		}),
-	}
+        s := &Server{
+                log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
+                ddb:                 dynamodb.NewFromConfig(cfg),
+                settingsTableName:   settingsTableName,
+                grievancesTableName: grievancesTableName,
+                twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
+                twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
+                        Username: os.Getenv("TWILIO_API_KEY_SID"),
+                        Password: os.Getenv("TWILIO_AUTH_TOKEN"),
+                }),
+        }
 
-	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
-	return s, nil
+       s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
+       return s, nil
 }
 
 // ProvisionTables creates missing tables and waits until they are ACTIVE.
