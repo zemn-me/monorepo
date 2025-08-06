@@ -35,7 +35,16 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
         args: Args,
         opts?: Pulumi.ComponentResourceOptions
     ) {
-		super('ts:pulumi:zemn.me:api', name, args, opts);
+                super('ts:pulumi:zemn.me:api', name, args, opts);
+
+                const oidcKey = new aws.kms.Key(`${name}-oidc-key`, {
+                        customerMasterKeySpec: "ECC_NIST_P256",
+                        keyUsage: "SIGN_VERIFY",
+                }, { parent: this });
+
+                const oidcPublicKey = oidcKey.keyId.apply(id =>
+                        aws.kms.getPublicKey({ keyId: id }).then(r =>
+                                `-----BEGIN PUBLIC KEY-----\n${r.publicKey}\n-----END PUBLIC KEY-----\n`));
 
                 const dynamoTable = new aws.dynamodb.Table(`${name}-dynamodb`, {
                         attributes: [{
@@ -86,8 +95,18 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                                         ],
                                                 })
                                 ),
+                        }, {
+                                name: `${name}-kms-inline-policy`,
+                                policy: oidcKey.arn.apply(arn => JSON.stringify({
+                                        Version: "2012-10-17",
+                                        Statement: [{
+                                                Action: ["kms:Sign"],
+                                                Effect: "Allow",
+                                                Resource: arn,
+                                        }],
+                                })),
                         }]
-		}, { parent: this });
+                }, { parent: this });
 
 		const repo = new aws.ecr.Repository(`${name}_repo`, {
 			forceDelete: true,
@@ -131,12 +150,14 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                         DYNAMODB_TABLE_NAME: dynamoTable.name,
                                         GRIEVANCES_TABLE_NAME: grievancesTable.name,
                                         TWILIO_SHARED_SECRET: args.twilioSharedSecret,
-					...pick_env("TWILIO_ACCOUNT_SID"),
-					...pick_env("TWILIO_AUTH_TOKEN"),
-					...pick_env("TWILIO_API_KEY_SID")
-				}
-			}
-		}, { parent: this }).function;
+                                        OIDC_JWT_KMS_KEY_ID: oidcKey.keyId,
+                                        OIDC_JWT_PUBLIC_KEY: oidcPublicKey,
+                                        ...pick_env("TWILIO_ACCOUNT_SID"),
+                                        ...pick_env("TWILIO_AUTH_TOKEN"),
+                                        ...pick_env("TWILIO_API_KEY_SID")
+                                }
+                        }
+                }, { parent: this }).function;
 
 		const integration = new aws.apigatewayv2.Integration(`${name}-integration`, {
 			apiId: gateway.id,

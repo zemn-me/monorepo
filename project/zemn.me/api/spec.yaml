@@ -37,6 +37,29 @@ components:
         links:
           type: array
           items: { $ref: '#/components/schemas/Link' }
+    JWK:
+      type: object
+      required: [kty, alg, use, crv, x, y]
+      properties:
+        kty:
+          type: string
+        alg:
+          type: string
+        use:
+          type: string
+        crv:
+          type: string
+        x:
+          type: string
+        y:
+          type: string
+    JWKS:
+      type: object
+      required: [keys]
+      properties:
+        keys:
+          type: array
+          items: { $ref: '#/components/schemas/JWK' }
     OIDCConfiguration:
       type: object
       description: |
@@ -706,6 +729,21 @@ paths:
                 $ref: '#/components/schemas/JRD'
         default:
           description: Error (400/404 etc. depending on implementation policy).
+
+  /.well-known/jwks.json:
+    get:
+      tags: [Discovery]
+      summary: JSON Web Key Set
+      operationId: getJWKS
+      responses:
+        '200':
+          description: JSON Web Key Set.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWKS'
+        default:
+          description: Error.
 
   /.well-known/openid-configuration:
     get:
