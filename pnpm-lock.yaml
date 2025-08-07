@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.56.0
-    version: 41.56.0(typanion@3.14.0)
+    specifier: 41.56.1
+    version: 41.56.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -13034,8 +13034,8 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  /jsonata@2.0.6:
-    resolution: {integrity: sha512-WhQB5tXQ32qjkx2GYHFw2XbL90u+LLzjofAYwi+86g6SyZeXHz9F1Q0amy3dWRYczshOC3Haok9J4pOCgHtwyQ==}
+  /jsonata@2.1.0:
+    resolution: {integrity: sha512-OCzaRMK8HobtX8fp37uIVmL8CY1IGc/a6gLsDqz3quExFR09/U78HUzWYr7T31UEB6+Eu0/8dkVD5fFDOl9a8w==}
     engines: {node: '>= 8'}
     dev: true
 
@@ -16942,8 +16942,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.56.0(typanion@3.14.0):
-    resolution: {integrity: sha512-zX0ZUeOMG9fBozAaELlrFUk7ka4zUAHsX+QIHi02H/n5H3Hhvhdm3hxNlqsmQ2WvyKqudJoDW66umUNlbNo02Q==}
+  /renovate@41.56.1(typanion@3.14.0):
+    resolution: {integrity: sha512-YVp/4mrRwz8CGyQio7T2hT1fZj2vcFhfGxxttLKX8ZD6pDVENcXAjY1lV3dk/y+LbxPGBNgp+MwYoj0mg/sfLQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17022,7 +17022,7 @@ packages:
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 4.0.0
       json5: 2.2.3
-      jsonata: 2.0.6
+      jsonata: 2.1.0
       jsonc-parser: 3.3.1
       klona: 2.0.6
       luxon: 3.7.1
