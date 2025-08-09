@@ -6,6 +6,7 @@ ts_project(
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
         "//project/zemn.me/app/article/2014/csp",
+        "//project/zemn.me/app/article/2018/spotify",
         "//project/zemn.me/app/article/2019/cors",
         "//project/zemn.me/app/article/2024/clean",
         "//project/zemn.me/app/article/2024/missing",
