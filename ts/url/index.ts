@@ -24,11 +24,13 @@ abstract class Safe extends globalThis.URL implements URL {
 }
 
 export class Local extends Safe implements URL {
-	static New(params: TemplateStringsArray) {
+	static New(
+		params: TemplateStringsArray) {
+
 		const [url] = params;
 		return new this(url!);
 	}
-	override [isSafeUrl] = true as const;
+	override[isSafeUrl] = true as const;
 	constructor(url: string) {
 		super(url, process.env['DEPLOY_DOMAIN']);
 	}
