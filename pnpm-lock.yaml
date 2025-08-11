@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.61.0
-    version: 41.61.0(typanion@3.14.0)
+    specifier: 41.61.1
+    version: 41.61.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -8371,11 +8371,6 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  /chalk@5.4.1:
-    resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-    dev: true
 
   /chalk@5.5.0:
     resolution: {integrity: sha512-1tm8DTaJhPBG3bIkVeZt1iZM9GfSX2lzOeDVZH9R9ffRHpmHvxZ/QhgQH/aDTkswQVt+YHdXAdS/In/30OjCbg==}
@@ -16389,8 +16384,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.61.0(typanion@3.14.0):
-    resolution: {integrity: sha512-YzdGNcgP9ZbphicgY9SV5bSui7X8PWSzYzsNAddKU/FrVzW7znxK6C002Z6v+NqOHtvwtdAlsacxqeT2IWb8eA==}
+  /renovate@41.61.1(typanion@3.14.0):
+    resolution: {integrity: sha512-o02bTmGCWC1aTqZOF1ODa80vjFiThRHLJNJO8PlVqBpanQRVUVviLcerII+wUv9KcT0tafsmNlnr7ge59a9y1A==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16435,7 +16430,7 @@ packages:
       azure-devops-node-api: 15.1.1
       bunyan: 1.8.15
       cacache: 20.0.0
-      chalk: 5.4.1
+      chalk: 5.5.0
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
       commander: 14.0.0
