@@ -182,7 +182,7 @@ use_repo(
     "org_golang_x_tools_gopls",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.5.2")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "1.5.3")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
 
 go_deps_with_disabled_proto_generation = [
