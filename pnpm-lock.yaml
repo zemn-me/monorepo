@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.70.1
-    version: 41.70.1(typanion@3.14.0)
+    specifier: 41.70.2
+    version: 41.70.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -16733,8 +16733,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.70.1(typanion@3.14.0):
-    resolution: {integrity: sha512-zpQMnCMwxfptBnP7+zFoo/H92aPsVD4NJBO0QwtZz155Gk7HB9+KDIgEYpRGtPljinJTszC9s7nu82CFBiyCoQ==}
+  /renovate@41.70.2(typanion@3.14.0):
+    resolution: {integrity: sha512-zvAdci7CS12rKcQEcuN+btXdSjCZKUc6/GU5D7EoyfuXI6EfmcAtxxVVc0x0bkFB5CthdQNHoXZPr4cC3Ho11Q==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
