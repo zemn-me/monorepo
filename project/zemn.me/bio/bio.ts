@@ -796,20 +796,27 @@ export const Bio = {
 			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
 			description: en`Product security for OpenAI’s first multimodal model.`,
 		},
-		{
-			date: date(3, 'oct', 2024),
-			title: en`ChatGPT Canvas`,
-			url: linkToHighlight(url`https://openai.com/index/introducing-canvas`, {
-				start: "Thomas Shadwell",
-			}),
-			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
-			description: en`Security for AI pairing system for text.`,
-		},
-	],
-	who: {
-		handle: en`zemnmez`,
-		fullName: en`Thomas Neil James Shadwell`,
-		name: en`Thomas NJ Shadwell`,
+                {
+                        date: date(3, 'oct', 2024),
+                        title: en`ChatGPT Canvas`,
+                        url: linkToHighlight(url`https://openai.com/index/introducing-canvas`, {
+                                start: "Thomas Shadwell",
+                        }),
+                        id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
+                        description: en`Security for AI pairing system for text.`,
+                },
+                {
+                        date: date(7, 'aug', 2025),
+                        title: en`GPT5`,
+                        url: url`https://openai.com/gpt-5`,
+                        id: 'c0c4240c-344b-44f5-9788-4ace389f81ce',
+                        description: en`Security for OpenAI's next-generation model.`,
+                },
+        ],
+        who: {
+                handle: en`zemnmez`,
+                fullName: en`Thomas Neil James Shadwell`,
+                name: en`Thomas NJ Shadwell`,
 		firstName: en`Thomas`,
 		lastName: en`Shadwell`,
 	},
