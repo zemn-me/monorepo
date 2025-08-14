@@ -53,15 +53,16 @@ export class Component extends Pulumi.ComponentResource {
 				directory: 'project/zemn.me/out',
 				zoneId: args.zoneId,
 				domain: args.domain,
-				noIndex: args.noIndex,
-				email: false,
-				otherTXTRecords: [
-					"google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag"
-				],
-				tags,
-			},
-			{ parent: this }
-		);
+                                noIndex: args.noIndex,
+                                email: false,
+                                otherTXTRecords: [
+                                        "google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag"
+                                ],
+                                tags,
+                                wellKnownOidcDomain: ['api', args.domain].join('.'),
+                        },
+                        { parent: this }
+                );
 
 		const availability = new Website(
 			`${name}_availability_zemn_me_website`,
