@@ -114,5 +114,5 @@
 	"typescript.preferences.autoImportFileExcludePatterns": [
 		"**/_*"
 	],
-	"bazel.buildifierExecutable": "@@//:buildifier"
+        "bazel.buildifierExecutable": "${workspaceFolder}/sh/bin/buildifier"
 }
