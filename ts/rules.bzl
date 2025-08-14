@@ -1,9 +1,9 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_test")
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//bzl/lint:linters.bzl", "eslint_test")
-load("@aspect_rules_lint//format:defs.bzl", "format_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
