@@ -85,10 +85,18 @@ export interface Args {
 	 */
 	email: boolean
 
-	/**
-	 * Other TXT records to attach to the domain.
-	 */
-	otherTXTRecords?: string[]
+        /**
+         * Other TXT records to attach to the domain.
+         */
+        otherTXTRecords?: string[]
+
+        /**
+         * Domain hosting OpenID Connect well-known resources.
+         * When provided, CloudFront will proxy
+         * `/.well-known/openid-configuration` and
+         * `/.well-known/jwks.json` to this origin.
+         */
+        wellKnownOidcDomain?: pulumi.Input<string>
 }
 
 // needed cause there's a cache policy limit of 20.
@@ -354,89 +362,146 @@ export class Website extends pulumi.ComponentResource {
 
 		// create the cloudfront
 
-		const distribution = new aws.cloudfront.Distribution(
-			`${name}_cloudfront_distribution`,
-			{
-				origins: [
-					{
-						s3OriginConfig: {
-							originAccessIdentity:
-								originAccessIdentity.cloudfrontAccessIdentityPath,
-						},
-						domainName: bucket.bucketRegionalDomainName,
-						originId: `${name}_cloudfront_distribution`,
-					},
-				],
-				enabled: true,
-				isIpv6Enabled: true,
-				defaultRootObject: indexDocumentObject.key,
-				// this is the host that the distribution will expect
-				// (other than the default).
-				aliases: [args.domain],
-				// in the future we could maybe take a bunch of these as args, but
-				// we're not overengineering today!
-				// im sorry this bit kinda sucks
-				...(errorDocumentObject !== undefined
-					? {
-							customErrorResponses: [
-								{
-									errorCode: 404,
-									responseCode: 404,
-									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
-								},
-							],
-						}
-					: {}),
-				defaultCacheBehavior: {
-					compress: true,
-					responseHeadersPolicyId: responseHeadersPolicy.id,
-					// i dont think we use most of these but it's probably not
-					// important
-					allowedMethods: [
-						'DELETE',
-						'GET',
-						'HEAD',
-						'OPTIONS',
-						'PATCH',
-						'POST',
-						'PUT',
-					],
-					cachedMethods: ['GET', 'HEAD'],
-					// i'm fairly sure this is correct, but the docs kinda suck
-					// on which of AWS's many IDs this might be and sapling histgrep
-					// is broken.
-					targetOriginId: `${name}_cloudfront_distribution`,
-					forwardedValues: {
-						queryString: false,
-						// I'm not using cookies for anything yet.
-						// and to be honest, i prefer localStorage.
-						cookies: {
-							forward: 'none',
-						},
-					},
-					viewerProtocolPolicy: 'redirect-to-https',
-					minTtl: 0,
-					defaultTtl: 3600,
-					maxTtl: 86400,
-				},
-				restrictions: {
-					geoRestriction: {
-						restrictionType: 'none',
-					},
-				},
-				tags: mergeTags(tags, {
-					Environment: 'production',
-				}),
-				viewerCertificate: {
-					// important to use this so that it waits for the cert
-					// to come up
-					acmCertificateArn: certificate.validation.certificateArn,
-					sslSupportMethod: 'sni-only', // idk really what this does
-				},
-			},
-			// creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
-			{ parent: this, deleteBeforeReplace: true }
-		);
+                const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
+                        {
+                                s3OriginConfig: {
+                                        originAccessIdentity:
+                                                originAccessIdentity.cloudfrontAccessIdentityPath,
+                                },
+                                domainName: bucket.bucketRegionalDomainName,
+                                originId: `${name}_cloudfront_distribution`,
+                        },
+                        ...(args.wellKnownOidcDomain
+                                ? [
+                                        {
+                                                domainName: args.wellKnownOidcDomain,
+                                                originId: `${name}_oidc_api`,
+                                                customOriginConfig: {
+                                                        originProtocolPolicy: 'https-only',
+                                                        httpPort: 80,
+                                                        httpsPort: 443,
+                                                        originSslProtocols: ['TLSv1.2'],
+                                                },
+                                        },
+                                ]
+                                : []),
+                ];
+
+                const orderedCacheBehaviors = args.wellKnownOidcDomain
+                        ? [
+                                {
+                                        pathPattern: '/.well-known/openid-configuration',
+                                        targetOriginId: `${name}_oidc_api`,
+                                        compress: true,
+                                        responseHeadersPolicyId: responseHeadersPolicy.id,
+                                        allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+                                        cachedMethods: ['GET', 'HEAD'],
+                                        forwardedValues: {
+                                                queryString: false,
+                                                cookies: { forward: 'none' },
+                                        },
+                                        viewerProtocolPolicy: 'redirect-to-https',
+                                        minTtl: 0,
+                                        defaultTtl: 0,
+                                        maxTtl: 0,
+                                },
+                                {
+                                        pathPattern: '/.well-known/jwks.json',
+                                        targetOriginId: `${name}_oidc_api`,
+                                        compress: true,
+                                        responseHeadersPolicyId: responseHeadersPolicy.id,
+                                        allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+                                        cachedMethods: ['GET', 'HEAD'],
+                                        forwardedValues: {
+                                                queryString: false,
+                                                cookies: { forward: 'none' },
+                                        },
+                                        viewerProtocolPolicy: 'redirect-to-https',
+                                        minTtl: 0,
+                                        defaultTtl: 0,
+                                        maxTtl: 0,
+                                },
+                        ]
+                        : undefined;
+
+                const distribution = new aws.cloudfront.Distribution(
+                        `${name}_cloudfront_distribution`,
+                        {
+                                origins,
+                                ...(orderedCacheBehaviors
+                                        ? { orderedCacheBehaviors }
+                                        : {}),
+                                enabled: true,
+                                isIpv6Enabled: true,
+                                defaultRootObject: indexDocumentObject.key,
+                                // this is the host that the distribution will expect
+                                // (other than the default).
+                                aliases: [args.domain],
+                                // in the future we could maybe take a bunch of these as args, but
+                                // we're not overengineering today!
+                                // im sorry this bit kinda sucks
+                                ...(errorDocumentObject !== undefined
+                                        ? {
+                                                customErrorResponses: [
+                                                        {
+                                                                errorCode: 404,
+                                                                responseCode: 404,
+                                                                responsePagePath:
+                                                                        pulumi.interpolate`/${errorDocumentObject.key}`,
+                                                        },
+                                                ],
+                                        }
+                                        : {}),
+                                defaultCacheBehavior: {
+                                        compress: true,
+                                        responseHeadersPolicyId: responseHeadersPolicy.id,
+                                        // i dont think we use most of these but it's probably not
+                                        // important
+                                        allowedMethods: [
+                                                'DELETE',
+                                                'GET',
+                                                'HEAD',
+                                                'OPTIONS',
+                                                'PATCH',
+                                                'POST',
+                                                'PUT',
+                                        ],
+                                        cachedMethods: ['GET', 'HEAD'],
+                                        // i'm fairly sure this is correct, but the docs kinda suck
+                                        // on which of AWS's many IDs this might be and sapling histgrep
+                                        // is broken.
+                                        targetOriginId: `${name}_cloudfront_distribution`,
+                                        forwardedValues: {
+                                                queryString: false,
+                                                // I'm not using cookies for anything yet.
+                                                // and to be honest, i prefer localStorage.
+                                                cookies: {
+                                                        forward: 'none',
+                                                },
+                                        },
+                                        viewerProtocolPolicy: 'redirect-to-https',
+                                        minTtl: 0,
+                                        defaultTtl: 3600,
+                                        maxTtl: 86400,
+                                },
+                                restrictions: {
+                                        geoRestriction: {
+                                                restrictionType: 'none',
+                                        },
+                                },
+                                tags: mergeTags(tags, {
+                                        Environment: 'production',
+                                }),
+                                viewerCertificate: {
+                                        // important to use this so that it waits for the cert
+                                        // to come up
+                                        acmCertificateArn: certificate.validation.certificateArn,
+                                        sslSupportMethod: 'sni-only', // idk really what this does
+                                },
+                        },
+                        // creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
+                        { parent: this, deleteBeforeReplace: true }
+                );
 
 		// create the alias record that allows the distribution to be located
 		// from the DNS record.
