@@ -60,8 +60,8 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
-    Also generates an _typings tag (typescript types) and an _lint tag
-    (lint tests).
+    Also generates _typings (TypeScript types), _lint (eslint checks), and
+    _prettier (format checks) tags.
 
     Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
     so deps which are invalid eslint files should instead use an /* eslint-disable */ comment.
