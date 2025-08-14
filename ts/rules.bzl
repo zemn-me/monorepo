@@ -3,6 +3,7 @@ load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "t
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//bzl/lint:linters.bzl", "eslint_test")
+load("@aspect_rules_lint//format:defs.bzl", "format_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
@@ -45,6 +46,14 @@ def ts_lint(name, **kwargs):
     eslint_test(
         name = name,
         **kwargs
+    )
+
+def prettier_test(name, srcs = [], tags = []):
+    format_test(
+        name = name,
+        srcs = srcs + ["//:.prettierrc.json"],
+        javascript = "//bzl/format:prettier",
+        tags = tags,
     )
 
 def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
@@ -103,3 +112,5 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
 
     if lint:
         ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
+
+    prettier_test(name = name + "_prettier", srcs = srcs, tags = tags)
