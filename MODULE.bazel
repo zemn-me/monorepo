@@ -57,7 +57,7 @@ use_repo(
     "distroless_debian12_linux_s390x",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.20.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.21.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.1")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.8.1", dev_dependency = True)
