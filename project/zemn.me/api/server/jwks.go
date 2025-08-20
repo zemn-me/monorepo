@@ -1,57 +1,42 @@
 package apiserver
 
 import (
-        "context"
-        "crypto/ecdsa"
-        "crypto/x509"
-        "encoding/base64"
-        "encoding/pem"
-        "net/http"
-        "os"
+	"context"
+	"encoding/json"
+
+	"github.com/go-jose/go-jose/v4"
 )
 
-// GetJWKS exposes the public key in JWK Set format.
-func (s *Server) GetJWKS(_ context.Context, _ GetJWKSRequestObject) (GetJWKSResponseObject, error) {
-        pubPem := os.Getenv("OIDC_JWT_PUBLIC_KEY")
-        if pubPem == "" {
-                return GetJWKSdefaultResponse{StatusCode: http.StatusInternalServerError}, nil
-        }
-
-        block, _ := pem.Decode([]byte(pubPem))
-        if block == nil {
-                return GetJWKSdefaultResponse{StatusCode: http.StatusInternalServerError}, nil
-        }
-
-        pkix, err := x509.ParsePKIXPublicKey(block.Bytes)
-        if err != nil {
-                return GetJWKSdefaultResponse{StatusCode: http.StatusInternalServerError}, nil
-        }
-
-        pub, ok := pkix.(*ecdsa.PublicKey)
-        if !ok {
-                return GetJWKSdefaultResponse{StatusCode: http.StatusInternalServerError}, nil
-        }
-
-        size := (pub.Curve.Params().BitSize + 7) / 8
-        xb := pub.X.Bytes()
-        yb := pub.Y.Bytes()
-        xbuf := make([]byte, size)
-        ybuf := make([]byte, size)
-        copy(xbuf[size-len(xb):], xb)
-        copy(ybuf[size-len(yb):], yb)
-
-        x := base64.RawURLEncoding.EncodeToString(xbuf)
-        y := base64.RawURLEncoding.EncodeToString(ybuf)
-
-        jwks := JWKS{Keys: []JWK{{
-                Kty: "EC",
-                Alg: "ES256",
-                Use: "sig",
-                Crv: "P-256",
-                X:   x,
-                Y:   y,
-        }}}
-
-        return GetJWKS200JSONResponse(jwks), nil
+type KeySet struct {
+	jose.JSONWebKeySet
 }
 
+// Returns the local JWKS type as defined in our openapi spec.
+func (k KeySet) Local() (ks JWKS, err error) {
+	// this is stupid im sorry
+	enc, err := json.Marshal(k.JSONWebKeySet)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(enc, &ks)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s *Server) keySet() (ks KeySet) {
+	return KeySet{jose.JSONWebKeySet{
+		Keys: []jose.JSONWebKey{s.signingKey},
+	}}
+}
+
+// GetJWKS exposes the public key in JWK Set format.
+func (s *Server) GetJWKS(_ context.Context, _ GetJWKSRequestObject) (r GetJWKSResponseObject, err error) {
+	ks, err := s.keySet().Local()
+	if err != nil {
+		return nil, err
+	}
+	return GetJWKS200JSONResponse(ks), nil
+}
