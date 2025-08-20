@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"errors"
 	"log"
 	"net/http"
@@ -13,12 +14,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/twilio/twilio-go"
+
+	jose "github.com/go-jose/go-jose/v4"
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
@@ -38,6 +42,11 @@ type DynamoDBClient interface {
 // Ensure the real DynamoDB client implements the interface.
 var _ DynamoDBClient = (*dynamodb.Client)(nil)
 
+type jwtSigner interface {
+	jose.SignatureAlgorithm
+	pub() *ecdsa.PublicKey
+}
+
 // Server holds the DynamoDB client and table names.
 type Server struct {
 	ddb                 DynamoDBClient
@@ -48,6 +57,8 @@ type Server struct {
 	log                *log.Logger
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
+	// kms in production, dummy in testing.
+	jwtSigner jwtSigner
 }
 
 type NewServerOptions struct {
@@ -107,20 +118,31 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}))
 	r.Use(mw)
 
-        s := &Server{
-                log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
-                ddb:                 dynamodb.NewFromConfig(cfg),
-                settingsTableName:   settingsTableName,
-                grievancesTableName: grievancesTableName,
-                twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
-                twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
-                        Username: os.Getenv("TWILIO_API_KEY_SID"),
-                        Password: os.Getenv("TWILIO_AUTH_TOKEN"),
-                }),
-        }
+	s := &Server{
+		log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
+		ddb:                 dynamodb.NewFromConfig(cfg),
+		settingsTableName:   settingsTableName,
+		grievancesTableName: grievancesTableName,
+		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
+		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
+			Username: os.Getenv("TWILIO_API_KEY_SID"),
+			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
+		}),
+	}
 
-       s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
-       return s, nil
+	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
+	jwtKmsPublicKey := os.Getenv("OIDC_JWT_PUBLIC_KEY")
+
+	if jwtKmsKeyId != "" {
+		s.jwtSigner = kmsECDSASigner{
+			kms:   kms.NewFromConfig(cfg),
+			keyID: jwtKmsKeyId,
+			pub:   jwtKmsPublicKey,
+		}
+	}
+
+	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
+	return s, nil
 }
 
 // ProvisionTables creates missing tables and waits until they are ACTIVE.

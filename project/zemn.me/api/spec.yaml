@@ -17,6 +17,242 @@ components:
       # todo: own issuer!
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    IdToken:
+      type: object
+      description: >
+        OpenID Connect **ID Token** claims set (the payload of a signed JWT).
+        Conveys who issued the token, for whom (`aud`), which subject (`sub`),
+        when it expires (`exp`) and was issued (`iat`), plus optional
+        authentication context (e.g., `auth_time`, `acr`, `amr`) and
+        flow-specific hashes (`at_hash`, `c_hash`). Must be **JWS-signed**;
+        may be JWE-encrypted (sign **then** encrypt).
+      required:
+        - iss
+        - sub
+        - aud
+        - exp
+        - iat
+      properties:
+        iss:
+          type: string
+          format: uri
+          description: >
+            **Issuer Identifier** — HTTPS URL (case-sensitive) for the OP.
+            Must exactly match the provider’s discovery `issuer`.
+            **No query or fragment** allowed.
+        sub:
+          type: string
+          maxLength: 255
+          description: >
+            **Subject Identifier** — locally unique, never reassigned.
+            Case-sensitive string (≤255 ASCII). Uniqueness is guaranteed only
+            by the pair (`iss`, `sub`).
+        aud:
+          description: >
+            **Audience** — identifies recipients the token is intended for.
+            Must include the RP’s OAuth `client_id`. Commonly a single string,
+            but may be an array when multiple audiences are present.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+              minItems: 1
+              uniqueItems: true
+        exp:
+          type: integer
+          format: int64
+          description: >
+            **Expiration time** (UTC seconds since 1970-01-01T00:00:00Z).
+            Current time **must** be before `exp`. Small clock skew allowance is acceptable.
+        iat:
+          type: integer
+          format: int64
+          description: >
+            **Issued-at time** (UTC seconds since epoch). RPs may reject tokens
+            issued too far in the past to bound nonce storage and replay windows.
+        auth_time:
+          type: integer
+          format: int64
+          description: >
+            **End-User authentication time** (UTC seconds). REQUIRED if the RP
+            sent `max_age` or requested `auth_time` as an Essential Claim; otherwise OPTIONAL.
+        nonce:
+          type: string
+          description: >
+            **Nonce** to bind client session to the ID Token and mitigate replay.
+            If the RP supplied a nonce in the auth request, this **must** be present
+            and equal. OPs should not transform it.
+        acr:
+          type: string
+          description: >
+            **Authentication Context Class Reference.** String naming the assurance
+            class satisfied (e.g., an absolute URI or a registered name).
+            Interpreted by agreement between RP and OP.
+        amr:
+          type: array
+          description: >
+            **Authentication Methods References.** Identifiers for methods used
+            (e.g., `pwd`, `otp`). Values should come from IANA AMR registry; unregistered
+            values are allowed by agreement.
+          items:
+            type: string
+        azp:
+          type: string
+          description: >
+            **Authorized party.** If present, must equal the OAuth `client_id` to which
+            this ID Token was issued. Typically occurs only with extensions.
+        # Flow-dependent hashes (JWS 'alg' defines the hash function family)
+        at_hash:
+          type: string
+          description: >
+            **Access Token hash.** Base64url(left-most half of hash(ASCII(access_token))).
+            REQUIRED when an Access Token is returned from the Authorization Endpoint
+            (`response_type` includes `token`); OPTIONAL/omitted otherwise.
+        c_hash:
+          type: string
+          description: >
+            **Authorization Code hash.** Base64url(left-most half of hash(ASCII(code))).
+            REQUIRED when an Authorization Code is returned from the Authorization Endpoint
+            alongside an ID Token (Hybrid); OPTIONAL/omitted otherwise.
+        # Common profile/user claims may appear here or be fetched from UserInfo:
+        name:
+          type: string
+          description: End-User’s full display name.
+        given_name:
+          type: string
+          description: End-User’s given/first name(s).
+        family_name:
+          type: string
+          description: End-User’s surname(s).
+        middle_name:
+          type: string
+          description: End-User’s middle name(s).
+        nickname:
+          type: string
+          description: Casual name; may differ from `given_name`.
+        preferred_username:
+          type: string
+          description: User’s preferred handle at the RP (not guaranteed unique).
+        profile:
+          type: string
+          format: uri
+          description: URL of the End-User’s profile page.
+        picture:
+          type: string
+          format: uri
+          description: URL of a profile **image** (direct image URL, not a page).
+        website:
+          type: string
+          format: uri
+          description: URL of the End-User’s website/blog.
+        email:
+          type: string
+          description: Preferred email address (RFC 5322 `addr-spec`). Not guaranteed unique.
+        email_verified:
+          type: boolean
+          description: >
+            Whether the OP verified control of `email` at verification time (true/false).
+        gender:
+          type: string
+          description: End-User’s gender (values often `female` / `male`; others allowed).
+        birthdate:
+          type: string
+          description: >
+            ISO 8601 date. Year may be `"0000"` to indicate omission; `YYYY` alone is allowed.
+        zoneinfo:
+          type: string
+          description: IANA Time Zone (e.g., `Europe/Paris`, `America/Los_Angeles`).
+        locale:
+          type: string
+          description: BCP 47 language tag (e.g., `en-GB`, `fr-CA`).
+        phone_number:
+          type: string
+          description: Preferred phone number (E.164 recommended).
+        phone_number_verified:
+          type: boolean
+          description: >
+            Whether the OP verified control of `phone_number`. If true, number should be E.164.
+        address:
+          $ref: '#/components/schemas/Address'
+        updated_at:
+          type: integer
+          format: int64
+          description: >
+            Seconds since epoch when End-User information was last updated.
+        # Aggregated/Distributed Claims support:
+        _claim_names:
+          type: object
+          additionalProperties:
+            type: string
+          description: >
+            Maps claim names to source keys found in `_claim_sources` for aggregated/distributed claims.
+        _claim_sources:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: object
+                description: Aggregated claims (embedded as a JWT).
+                properties:
+                  JWT:
+                    type: string
+                    description: JWT carrying the aggregated claims.
+                required: [JWT]
+              - type: object
+                description: Distributed claims (reference to an external endpoint).
+                properties:
+                  endpoint:
+                    type: string
+                    format: uri
+                    description: OAuth 2.0 resource endpoint returning the claim(s) as a JWT.
+                  access_token:
+                    type: string
+                    description: Bearer token to retrieve the distributed claims (optional).
+                required: [endpoint]
+      example:
+        iss: "https://server.example.com"
+        sub: "24400320"
+        aud: "s6BhdRkqt3"
+        exp: 1311281970
+        iat: 1311280970
+        nonce: "n-0S6_WzA2Mj"
+        auth_time: 1311280969
+        acr: "urn:mace:incommon:iap:silver"
+        amr: ["pwd", "otp"]
+        at_hash: "77QmUPtjPfzWtF2AnpK9RQ"
+        c_hash: "LDktKdoQak3Pk0cnXxCltA"
+
+    Address:
+      type: object
+      description: >
+        Postal address claim. Providers may return only a subset. `formatted` may
+        contain multiple lines (`\n` or `\r\n`).
+      properties:
+        formatted:
+          type: string
+          description: Full mailing address, formatted for display.
+        street_address:
+          type: string
+          description: Street address (may include house number, PO Box; multi-line allowed).
+        locality:
+          type: string
+          description: City / locality.
+        region:
+          type: string
+          description: State / province / prefecture / region.
+        postal_code:
+          type: string
+          description: ZIP / postal code.
+        country:
+          type: string
+          description: Country name.
+      example:
+        formatted: "1234 Hollywood Blvd.\nLos Angeles, CA 90210\nUnited States"
+        street_address: "1234 Hollywood Blvd."
+        locality: "Los Angeles"
+        region: "CA"
+        postal_code: "90210"
+        country: "United States"
     Link:
       type: object
       required: [rel, href]
@@ -40,7 +276,7 @@ components:
           items: { $ref: '#/components/schemas/Link' }
     JWK:
       type: object
-      required: [kty, alg, use, crv, x, y]
+      required: [kty, alg, use, crv, x, y, kid]
       properties:
         kty:
           type: string
@@ -53,6 +289,8 @@ components:
         x:
           type: string
         y:
+          type: string
+        kid:
           type: string
     JWKS:
       type: object

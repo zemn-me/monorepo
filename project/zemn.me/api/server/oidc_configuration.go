@@ -33,7 +33,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		RequestObjectEncryptionEncValuesSupported:  emptyStrings,
 		RequestObjectSigningAlgValuesSupported:     emptyStrings,
 		ResponseModesSupported:                     emptyStrings,
-		ScopesSupported:                            emptyStrings,
+		ScopesSupported:                            &[]string{"openid"},
 		TokenEndpointAuthMethodsSupported:          emptyAuth,
 		TokenEndpointAuthSigningAlgValuesSupported: emptyStrings,
 		UiLocalesSupported:                         emptyStrings,

@@ -13,6 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.4
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.3
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.47.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.44.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.45.0
@@ -26,6 +27,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.2
 	github.com/go-chi/cors v1.2.2
 	github.com/go-delve/delve v1.25.1
+	github.com/go-jose/go-jose/v4 v4.0.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.6
 	github.com/google/uuid v1.6.0
@@ -44,6 +46,7 @@ require (
 	golang.org/x/sync v0.16.0
 	golang.org/x/tools v0.36.0
 	golang.org/x/tools/gopls v0.17.1
+	gopkg.in/go-jose/go-jose.v2 v2.6.3
 	honnef.co/go/tools v0.6.1
 )
 
@@ -146,7 +149,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250218202821-56aae31c358a // indirect
 	google.golang.org/grpc v1.72.1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
-	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mvdan.cc/gofumpt v0.7.0 // indirect
