@@ -19,7 +19,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		JwksUri:                          "https://api.zemn.me/.well-known/jwks.json",
 		ResponseTypesSupported:           []string{},
 		SubjectTypesSupported:            []OIDCConfigurationSubjectTypesSupported{},
-		IdTokenSigningAlgValuesSupported: []string{},
+		IdTokenSigningAlgValuesSupported: []string{s.signingKey.Algorithm},
 
 		AcrValuesSupported:                         emptyStrings,
 		ClaimTypesSupported:                        emptyClaims,
