@@ -2,6 +2,9 @@ package apiserver
 
 import (
 	"context"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"errors"
 	"log"
 	"net/http"
@@ -19,6 +22,8 @@ import (
 	"github.com/go-chi/cors"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/twilio/twilio-go"
+
+	jose "github.com/go-jose/go-jose/v4"
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
@@ -48,6 +53,8 @@ type Server struct {
 	log                *log.Logger
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
+	// kms in production, dummy in testing.
+	signingKey jose.JSONWebKey
 }
 
 type NewServerOptions struct {
@@ -107,20 +114,76 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}))
 	r.Use(mw)
 
-        s := &Server{
-                log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
-                ddb:                 dynamodb.NewFromConfig(cfg),
-                settingsTableName:   settingsTableName,
-                grievancesTableName: grievancesTableName,
-                twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
-                twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
-                        Username: os.Getenv("TWILIO_API_KEY_SID"),
-                        Password: os.Getenv("TWILIO_AUTH_TOKEN"),
-                }),
-        }
+	s := &Server{
+		log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
+		ddb:                 dynamodb.NewFromConfig(cfg),
+		settingsTableName:   settingsTableName,
+		grievancesTableName: grievancesTableName,
+		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
+		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
+			Username: os.Getenv("TWILIO_API_KEY_SID"),
+			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
+		}),
+	}
 
-       s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
-       return s, nil
+	s.signingKey, err = provisionSigningKey()
+	if err != nil {
+		return nil, err
+	}
+
+	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
+	return s, nil
+}
+
+func provisionSigningKey() (k jose.JSONWebKey, err error) {
+	if os.Getenv("OIDC_JWT_JMS_KEY") != "" {
+		return provisionKMSSigningKey()
+	}
+
+	return provisionTestingSigningKey()
+}
+
+func provisionTestingSigningKey() (k jose.JSONWebKey, err error) {
+	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		return
+	}
+
+	k = jose.JSONWebKey{
+		Key:       priv,
+		KeyID:     "fake123",
+		Algorithm: string(jose.ES256),
+		Use:       "sig",
+	}
+	return
+}
+
+func provisionKMSSigningKey() (k jose.JSONWebKey, err error) {
+	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
+	if jwtKmsKeyId == "" {
+		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
+		return
+	}
+
+	jwtKmsPublicKey := os.Getenv("OIDC_JWT_PUBLIC_KEY")
+
+	if jwtKmsPublicKey == "" {
+		err = errors.New("OIDC_JWT_PUBLIC_KEY not set")
+		return
+	}
+
+	pk, err := parseECDSAPublicKeyFromPEM(jwtKmsPublicKey)
+	if err != nil {
+		return
+	}
+	k = jose.JSONWebKey{
+		Key:       pk,
+		KeyID:     jwtKmsKeyId,
+		Algorithm: string(jose.ES256),
+		Use:       "sig",
+	}
+
+	return
 }
 
 // ProvisionTables creates missing tables and waits until they are ACTIVE.
