@@ -1,6 +1,9 @@
 package apiserver
 
-import "context"
+import (
+	"context"
+	"net/url"
+)
 
 func strptr(s string) *string { return &s }
 func boolptr(b bool) *bool    { return &b }
@@ -8,18 +11,30 @@ func boolptr(b bool) *bool    { return &b }
 func (s *Server) getOpenIDConnectRootConfiguration(
 	ctx context.Context,
 	_ GetOpenIDConnectRootConfigurationRequestObject,
-) (OIDCConfiguration, error) {
+) (conf OIDCConfiguration, err error) {
 	emptyStrings := &[]string{}
 	emptyClaims := &[]OIDCConfigurationClaimTypesSupported{}
 	emptyAuth := &[]OIDCConfigurationTokenEndpointAuthMethodsSupported{}
 
+	apiRoot, err := ApiRoot()
+	if err != nil {
+		return
+	}
+
+	var authEndpoint url.URL = *apiRoot
+
+	authEndpoint.Path = "/oauth2/authorize"
+
+	var jwksEndpoint url.URL = *apiRoot
+	jwksEndpoint.Path = "/.well-known/jwks.json"
+
 	return OIDCConfiguration{
-		Issuer:                           "https://api.zemn.me",
-		AuthorizationEndpoint:            "https://api.zemn.me/oauth2/authorize",
-		JwksUri:                          "https://api.zemn.me/.well-known/jwks.json",
+		Issuer:                           apiRoot.String(),
+		AuthorizationEndpoint:            authEndpoint.String(),
+		JwksUri:                          jwksEndpoint.String(),
 		ResponseTypesSupported:           []string{},
 		SubjectTypesSupported:            []OIDCConfigurationSubjectTypesSupported{},
-		IdTokenSigningAlgValuesSupported: []string{},
+		IdTokenSigningAlgValuesSupported: []string{s.signingKey.Algorithm},
 
 		AcrValuesSupported:                         emptyStrings,
 		ClaimTypesSupported:                        emptyClaims,
@@ -33,7 +48,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		RequestObjectEncryptionEncValuesSupported:  emptyStrings,
 		RequestObjectSigningAlgValuesSupported:     emptyStrings,
 		ResponseModesSupported:                     emptyStrings,
-		ScopesSupported:                            emptyStrings,
+		ScopesSupported:                            &[]string{},
 		TokenEndpointAuthMethodsSupported:          emptyAuth,
 		TokenEndpointAuthSigningAlgValuesSupported: emptyStrings,
 		UiLocalesSupported:                         emptyStrings,
