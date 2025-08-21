@@ -678,9 +678,9 @@ jupyter-lsp==2.2.6 \
     --hash=sha256:0566bd9bb04fd9e6774a937ed01522b555ba78be37bebef787c8ab22de4c0361 \
     --hash=sha256:283783752bf0b459ee7fa88effa72104d87dd343b82d5c06cf113ef755b15b6d
     # via jupyterlab
-jupyter-server==2.16.0 \
-    --hash=sha256:3d8db5be3bc64403b1c65b400a1d7f4647a5ce743f3b20dbdefe8ddb7b55af9e \
-    --hash=sha256:65d4b44fdf2dcbbdfe0aa1ace4a842d4aaf746a2b7b168134d5aaed35621b7f6
+jupyter-server==2.17.0 \
+    --hash=sha256:c38ea898566964c888b4772ae1ed58eca84592e88251d2cfc4d171f81f7e99d5 \
+    --hash=sha256:e8cb9c7db4251f51ed307e329b81b72ccf2056ff82d50524debde1ee1870e13f
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -963,10 +963,6 @@ notebook-shim==0.2.4 \
     # via
     #   jupyterlab
     #   notebook
-overrides==7.7.0 \
-    --hash=sha256:55158fa3d93b98cc75299b1e67078ad9003ca27945c76162c1c0766d6f91820a \
-    --hash=sha256:c7ed9d062f78b8e4c1a7b70bd8796b35ead4d9f510227ef9c5dc7626c60d7e49
-    # via jupyter-server
 packaging==25.0 \
     --hash=sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484 \
     --hash=sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f
