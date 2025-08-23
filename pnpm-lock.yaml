@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.82.5
-    version: 41.82.5(typanion@3.14.0)
+    specifier: 41.82.6
+    version: 41.82.6(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -16444,25 +16444,6 @@ packages:
     resolution: {integrity: sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==}
     dev: false
 
-  /protobufjs@7.5.3:
-    resolution: {integrity: sha512-sildjKwVqOI2kmFDiXQ6aEB0fjYTafpEvIBs8tOR8qI4spuL9OPROLVu2qZqi/xgCfsHIwVqlaF8JBjWFHnKbw==}
-    engines: {node: '>=12.0.0'}
-    requiresBuild: true
-    dependencies:
-      '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/base64': 1.1.2
-      '@protobufjs/codegen': 2.0.4
-      '@protobufjs/eventemitter': 1.1.0
-      '@protobufjs/fetch': 1.1.0
-      '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
-      '@protobufjs/path': 1.1.2
-      '@protobufjs/pool': 1.1.0
-      '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.17.2
-      long: 5.3.2
-    dev: true
-
   /protobufjs@7.5.4:
     resolution: {integrity: sha512-CvexbZtbov6jW2eXAvLukXjXUW1TzFaivC46BpWc/3BpcCysb5Vffu+B3XHMm8lVEuy2Mm4XGex8hBSg1yapPg==}
     engines: {node: '>=12.0.0'}
@@ -17285,8 +17266,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.82.5(typanion@3.14.0):
-    resolution: {integrity: sha512-oODOvDTj7Fvs10t9GP5UexuSv+tM6KzPO0efdibUpfP7bmNqj8wzlEXGrYsuHwFr7QBa33JzU/l7pfPBIDO7jA==}
+  /renovate@41.82.6(typanion@3.14.0):
+    resolution: {integrity: sha512-s2SZTwWNFJ2MEGqWG7Lfpzl2mPQz+V2vcmm7hPKqwH0JAv4BzxALrg1EcUG1T/FBiSVz0m9kUAtDX9vP/SQCUw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17383,7 +17364,7 @@ packages:
       p-throttle: 7.0.0
       parse-link-header: 2.0.0
       prettier: 3.6.2
-      protobufjs: 7.5.3
+      protobufjs: 7.5.4
       punycode: 2.3.1
       redis: 4.7.1
       remark: 15.0.1
