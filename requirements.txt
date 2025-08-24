@@ -544,9 +544,9 @@ h11==0.16.0 \
     #   httpcore
     #   mitmproxy
     #   wsproto
-h2==4.1.0 \
-    --hash=sha256:03a46bcf682256c95b5fd9e9a99c1323584c3eec6440d379b9903d709476bc6d \
-    --hash=sha256:a83aca08fbe7aacb79fec788c9c0bac936343560ed9ec18b82a13a12c28d2abb
+h2==4.3.0 \
+    --hash=sha256:6c59efe4323fa18b47a632221a1888bd7fde6249819beda254aeca909f221bf1 \
+    --hash=sha256:c438f029a25f7945c69e0ccf0fb951dc3f73a5f6412981daee861431b70e2bdd
     # via mitmproxy
 hpack==4.1.0 \
     --hash=sha256:157ac792668d995c657d93111f46b4535ed114f0c9c8d672271bbec7eae1b496 \
@@ -800,8 +800,8 @@ mistune==3.1.3 \
     --hash=sha256:1a32314113cff28aa6432e99e522677c8587fd83e3d51c29b82a52409c842bd9 \
     --hash=sha256:a7035c21782b2becb6be62f8f25d3df81ccb4d6fa477a6525b15af06539f02a0
     # via nbconvert
-mitmproxy==12.1.1 \
-    --hash=sha256:e6da78e54624a6138125ea332444fd5cd135c8a4aae529a94e7736c957a297a2
+mitmproxy==12.1.2 \
+    --hash=sha256:fbe3cd38e3722f926a4655aeebf429fe69c47c72a852ca37d208765774ae76af
     # via -r requirements.in
 mitmproxy-linux==0.12.7 \
     --hash=sha256:47ce06e6de8dfecffce3b9205cff45366921822ffdc3fbb88e80166d6c5209b1 \
