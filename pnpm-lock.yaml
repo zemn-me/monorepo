@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.83.0
-    version: 41.83.0(typanion@3.14.0)
+    specifier: 41.83.2
+    version: 41.83.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -3533,9 +3533,11 @@ packages:
   /@isaacs/fs-minipass@4.0.1:
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
     engines: {node: '>=18.0.0'}
+    requiresBuild: true
     dependencies:
       minipass: 7.1.2
     dev: true
+    optional: true
 
   /@isaacs/string-locale-compare@1.1.0:
     resolution: {integrity: sha512-SQ7Kzhh9+D+ZW9MA0zkYv3VXhIDNx+LzM6EJ+/65I3QY+enU6Itte7E5XX7EWrqLW2FN4n06GWzBnPoC3th2aQ==}
@@ -9163,8 +9165,8 @@ packages:
     dev: true
     optional: true
 
-  /cacache@20.0.0:
-    resolution: {integrity: sha512-2Js2sNgHK36Fdu3ItpQqJjwUXAURb0uyo9i83Tr2wUQINU4tPl4AtQYh6mCqwVFV5W8+Vgcna+bSTQeyPLG/sQ==}
+  /cacache@20.0.1:
+    resolution: {integrity: sha512-+7LYcYGBYoNqTp1Rv7Ny1YjUo5E0/ftkQtraH3vkfAGgVHc+ouWdC8okAwQgQR7EVIdW6JTzTmhKFwzb+4okAQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
       '@npmcli/fs': 4.0.0
@@ -9177,7 +9179,6 @@ packages:
       minipass-pipeline: 1.2.4
       p-map: 7.0.3
       ssri: 12.0.0
-      tar: 7.4.3
       unique-filename: 4.0.0
     dev: true
 
@@ -9348,7 +9349,9 @@ packages:
   /chownr@3.0.0:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
+    requiresBuild: true
     dev: true
+    optional: true
 
   /chrome-launcher@0.15.2:
     resolution: {integrity: sha512-zdLEwNo3aUVzIhKhTtXfxhdvZhUghrnmkvcAq2NoDd+LeOHKf03H5jwZ8T/STsAlzyALkBVK552iaG1fGf1xVQ==}
@@ -15160,9 +15163,11 @@ packages:
   /minizlib@3.0.2:
     resolution: {integrity: sha512-oG62iEk+CYt5Xj2YqI5Xi9xWUeZhDI8jjQmC5oThVH5JGCTgIjr7ciJDzC7MBzYd//WvR1OTmP5Q38Q8ShQtVA==}
     engines: {node: '>= 18'}
+    requiresBuild: true
     dependencies:
       minipass: 7.1.2
     dev: true
+    optional: true
 
   /mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
@@ -15191,7 +15196,9 @@ packages:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
     hasBin: true
+    requiresBuild: true
     dev: true
+    optional: true
 
   /module-alias@2.2.3:
     resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
@@ -17320,8 +17327,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.83.0(typanion@3.14.0):
-    resolution: {integrity: sha512-Ouxcuqkz9vtNTw9shuxFI/kys1V3+4IYD3VPH71RhSgyWc8sn7OjmhyjSLDM9NZDQVWXmr82S/TkBRLJL5DoTA==}
+  /renovate@41.83.2(typanion@3.14.0):
+    resolution: {integrity: sha512-v5fzs8oc7hLOhkc+D3LSHIlFwLJcBQCa2PiB72/bfzMeva8tUjQbGfxEDXO2RLKEfLg4aZbkAYC0sO6DAAC1CA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17365,7 +17372,7 @@ packages:
       aws4: 1.13.2
       azure-devops-node-api: 15.1.1
       bunyan: 1.8.15
-      cacache: 20.0.0
+      cacache: 20.0.1
       chalk: 5.6.0
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
@@ -18716,6 +18723,7 @@ packages:
   /tar@7.4.3:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
+    requiresBuild: true
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -18724,6 +18732,7 @@ packages:
       mkdirp: 3.0.1
       yallist: 5.0.0
     dev: true
+    optional: true
 
   /terser-webpack-plugin@5.3.14(@swc/core@1.13.5)(esbuild@0.25.9)(webpack@5.101.3):
     resolution: {integrity: sha512-vkZjpUjb6OMS7dhV+tILUW6BhpDR7P2L/aQSAv+Uwk+m8KATX9EccViHTJR2qDtACKPIYndLGCyl3FMo+r2LMw==}
@@ -20063,7 +20072,9 @@ packages:
   /yallist@5.0.0:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
     engines: {node: '>=18'}
+    requiresBuild: true
     dev: true
+    optional: true
 
   /yaml-ast-parser@0.0.43:
     resolution: {integrity: sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==}
