@@ -26,7 +26,7 @@ require (
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-chi/cors v1.2.2
-	github.com/go-delve/delve v1.25.1
+	github.com/go-delve/delve v1.25.2
 	github.com/go-jose/go-jose/v4 v4.1.2
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.6
