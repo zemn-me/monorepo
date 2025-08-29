@@ -27,8 +27,8 @@ dependencies:
     specifier: 15.5.2
     version: 15.5.2
   '@openai/codex':
-    specifier: 0.25.0
-    version: 0.25.0
+    specifier: 0.27.0
+    version: 0.27.0
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4559,8 +4559,8 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.25.0:
-    resolution: {integrity: sha512-YAeKOQNdmMz/CPnj0dtbprFGlvkwGbKjd7aEMfbdhrrkwEx0qNwb5pr82ID+9Y77X19AixmZcAA3qa0vPmWaXQ==}
+  /@openai/codex@0.27.0:
+    resolution: {integrity: sha512-3uak0oAWQMn35Bmr6bLRVjsefNboi4hNcVoBmWvgbq2uUFHOXaC7Obb0OEC1YHk+ASYyweXXigJ9IA77Ibx84g==}
     engines: {node: '>=20'}
     hasBin: true
     dependencies:
