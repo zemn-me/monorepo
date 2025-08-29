@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.89.0
-    version: 41.89.0(typanion@3.14.0)
+    specifier: 41.89.2
+    version: 41.89.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -12376,6 +12376,7 @@ packages:
   /ip-address@10.0.1:
     resolution: {integrity: sha512-NWv9YLW4PoW2B7xtzaS3NCot75m6nK7Icdv0o3lfMceJVRfSoQwqD4wEH5rLwoKJwUiZ/rfpiVBhnaF0FK4HoA==}
     engines: {node: '>= 12'}
+    requiresBuild: true
 
   /is-absolute@1.0.0:
     resolution: {integrity: sha512-dOWoqflvcydARa360Gvv18DZ/gRuHKi2NU/wU5X1ZFzdYfH29nkiNZsF3mp4OJ3H4yo9Mx8A/uAGNzpzPN3yBA==}
@@ -17270,8 +17271,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.89.0(typanion@3.14.0):
-    resolution: {integrity: sha512-eRmeRY7TPreUWTj50V4LRs46xZJZFMajRaj/VgsVIhBUdycu6YSpFrWkI9s2snhHyXRYJlRr2Is9pmzi1r2hSQ==}
+  /renovate@41.89.2(typanion@3.14.0):
+    resolution: {integrity: sha512-UcAKa00jEO5izOzmuUkzDcO+eEC4vfQxvWCNI9UKJ8pkZfp9Ri+DIDfsz6WVGhFypGuQw34UM6GTX+vwKg3hkw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -18017,6 +18018,7 @@ packages:
   /smart-buffer@4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
+    requiresBuild: true
 
   /socks-proxy-agent@8.0.5:
     resolution: {integrity: sha512-HehCEsotFqbPW9sJ8WVYB6UbmIMv7kUUORIF2Nncq4VQvBfNBLibW9YZR5dlYCSUhwcD628pRllm7n+E+YTzJw==}
@@ -18031,6 +18033,7 @@ packages:
   /socks@2.8.7:
     resolution: {integrity: sha512-HLpt+uLy/pxB+bum/9DzAgiKS8CX1EvbWxI4zlmgGCExImLdiad2iCwXT5Z4c9c3Eq8rP2318mPW2c+QbtjK8A==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+    requiresBuild: true
     dependencies:
       ip-address: 10.0.1
       smart-buffer: 4.2.0
