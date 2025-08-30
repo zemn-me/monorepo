@@ -1,20 +1,18 @@
 import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
-import { z } from 'zod';
-import { stringToJSON } from 'zod_utilz';
+import { array, base64, number, object, optional, output, pipe, string, transform, tuple, union, url } from 'zod/v4-mini';
 
-import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
-import { resultFromZod } from '#root/ts/zod/util.js';
+import { and_then, Err, flatten, Ok, Result, result_promise_transpose, zip } from '#root/ts/result/result.js';
 
 
-export const openidConfiguration = z.object({
-	issuer: z.string(),
-	response_types_supported: z.string().array(),
-	subject_types_supported: z.string().array(),
-	scopes_supported: z.string().array(),
-	claims_supported: z.string().array(),
-	authorization_endpoint: z.string().url(),
-	jwks_uri: z.string().url(),
+export const openidConfiguration = object({
+	issuer: string(),
+	response_types_supported: array(string()),
+	subject_types_supported: array(string()),
+	scopes_supported: array(string()),
+	claims_supported: array(string()),
+	authorization_endpoint: url(),
+	jwks_uri: url(),
 });
 
 
@@ -26,55 +24,74 @@ export const getOpenidConfig = (issuer: URL) => {
 	clone.pathname = openidConfigPathName;
 
 	return fetch(clone).then(b => b.json())
-		.then(json => resultFromZod(openidConfiguration.safeParse(json)))
+		.then(json => openidConfiguration.safeParse(json))
+		.then(v => v.success? Ok(v.data): Err(v.error))
 }
 
-const unsafeJwtIssParser = z.string().transform(
-	s => s.split(".")
-).pipe(
-	z.tuple([z.string(), z.string(), z.string()])
-).transform(([, body]) => b64.toByteArray(body))
-.transform(b => new TextDecoder().decode(b))
-	.pipe(
-	stringToJSON()
-).pipe(
-	z.object({
-		iss: z.string()
-	})
-).transform(o => o.iss);
+const jwtb64Parts = pipe(
+	pipe(
+	string(),
+	transform(string => string.split(".")),
+	),
+	tuple([base64(), base64(), base64()])
+);
+
+const jwtUnsafeBody = pipe(
+	jwtb64Parts,
+	transform(([, body]) =>
+		JSON.parse(new TextDecoder().decode(b64.toByteArray(body)))
+))
+
+const jwtUnsafeIssuer = pipe(
+	jwtUnsafeBody,
+	object({ iss: string() })
+)
+
 
 function issuerForIdToken(
 	token: string
 ) {
-	return resultFromZod(unsafeJwtIssParser.safeParse(token));
+	const v = jwtUnsafeIssuer.safeParse(token);
+
+	return v.success ?
+		Ok(v.data) : Err(v.error);
 }
 
 /**
  * Verifies an OIDC id_token *without* specifying the issuer.
  */
-export async function watch_out_i_am_verifying_the_id_token_with_no_specified_issuer<E> (
+export async function watch_out_i_am_verifying_the_id_token_with_no_specified_issuer<E>(
 	token: string,
 	getAudience: (iss: string) => Result<string, E>,
 	clockToleranceSeconds: number
 ) {
-	const issuer =
-		issuerForIdToken(token);
+	const issuer = and_then(
+		issuerForIdToken(token),
+		v => v.iss
+	)
 
-	const audience = result_flatten(result_and_then(
+	const audience = flatten(and_then(
 		issuer,
 		issuer => getAudience(issuer)
 	));
 
-	return result_promise_transpose(result_and_then(
-		result_zip(audience, issuer),
+	const audience_issuer = zip(audience, issuer);
+
+	const verification = and_then(
+		audience_issuer,
 		([audience, issuer]) => verifyOIDCToken(
 			token,
 			issuer,
 			audience,
 			clockToleranceSeconds
 		)
-	)).then( v => result_promise_transpose( result_flatten(v) ))
+	)
+
+	const promise = result_promise_transpose(verification)
+	return promise;
+
 }
+
 
 /**
  * Verifies an OIDC token given audience, issuer etc.
@@ -90,12 +107,12 @@ export async function verifyOIDCToken(
 	clockToleranceSeconds: number
 ) {
 	const config = getOpenidConfig(new URL(issuer));
-	const jwks = result_and_then(
+	const jwks = and_then(
 		await config,
 		c => createRemoteJWKSet(new URL(c.jwks_uri))
 	);
 
-	return result_and_then(
+	const verified_jwt = and_then(
 		jwks,
 		jwks => jwtVerify(
 			token,
@@ -103,39 +120,37 @@ export async function verifyOIDCToken(
 			{ issuer, audience, clockTolerance: clockToleranceSeconds }
 		)
 	)
+
+	const promise = result_promise_transpose(verified_jwt);
+
+	return promise;
 }
 
-export const idTokenSchema = z.object({
-	iss: z.string().url().startsWith('https://'),
-	sub: z.string().max(255),
-	aud: z.union([z.string(), z.array(z.string()).nonempty()]),
-	exp: z.number().int().positive(),
-	iat: z.number().int().positive(),
-	auth_time: z.number().int().positive().optional(),
-	nonce: z.string().optional(),
-	acr: z.string().optional(),
-	amr: z.array(z.string()).optional(),
-	azp: z.string().optional(),
+export const idTokenSchema = object({
+	iss: url(),
+	sub: string,
+	aud: union([string(), array(string())]),
+	exp: number(),
+	iat: number(),
+	auth_time: optional(number()),
+	nonce: optional(string()),
+	acr: optional(string()),
+	amr: optional(array(string())),
+	azp: optional(string()),
 });
 
-export type ID_Token = z.TypeOf<typeof idTokenSchema>;
+export type ID_Token = output<typeof idTokenSchema>;
 
-export const watchOutParseIdToken = z.string()
-	.transform(s => s.split("."))
-	.pipe(
-		z.tuple([z.string(), z.string(), z.string()])
-	).transform(
-		([, body]) => atob(body)
-	).pipe(
-		stringToJSON()
-	).pipe(idTokenSchema);
-
+export const watchOutParseIdToken = pipe(
+	jwtUnsafeBody,
+	idTokenSchema
+)
 
 export async function oidcAuthorizeUri(
 	nonce: string, state: string, callback: URL, clientId: string, issuer: URL) {
 	const config = await getOpenidConfig(issuer);
 
-	return result_and_then(
+	return and_then(
 		config,
 		c => {
 			const base = new URL(c.authorization_endpoint);
