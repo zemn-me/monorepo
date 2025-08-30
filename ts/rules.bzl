@@ -1,3 +1,4 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_test")
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
@@ -47,12 +48,20 @@ def ts_lint(name, **kwargs):
         **kwargs
     )
 
+def prettier_test(name, srcs = [], tags = []):
+    format_test(
+        name = name,
+        srcs = srcs + ["//:.prettierrc.json"],
+        javascript = "//bzl/format:prettier",
+        tags = tags,
+    )
+
 def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
-    Also generates an _typings tag (typescript types) and an _lint tag
-    (lint tests).
+    Also generates _typings (TypeScript types), _lint (eslint checks), and
+    _prettier (format checks) tags.
 
     Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
     so deps which are invalid eslint files should instead use an /* eslint-disable */ comment.
@@ -103,3 +112,5 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
 
     if lint:
         ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
+
+    prettier_test(name = name + "_prettier", srcs = srcs, tags = tags)
