@@ -8,25 +8,25 @@ go 1.24.0
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
 	github.com/aws/aws-lambda-go v1.49.0
-	github.com/aws/aws-sdk-go-v2 v1.38.1
-	github.com/aws/aws-sdk-go-v2/config v1.31.2
-	github.com/aws/aws-sdk-go-v2/credentials v1.18.6
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.6
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.49.1
-	github.com/aws/aws-sdk-go-v2/service/kms v1.44.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.1
+	github.com/aws/aws-sdk-go-v2 v1.38.3
+	github.com/aws/aws-sdk-go-v2/config v1.31.6
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.10
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.9
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.1
+	github.com/aws/aws-sdk-go-v2/service/kms v1.45.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.3
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.45.0
 	github.com/bazelbuild/bazel-watcher v0.26.10
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.57.0
-	github.com/beevik/etree v1.5.1
+	github.com/beevik/etree v1.6.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.4.0+incompatible
-	github.com/getkin/kin-openapi v0.132.0
-	github.com/go-chi/chi/v5 v5.2.2
+	github.com/getkin/kin-openapi v0.133.0
+	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-chi/cors v1.2.2
-	github.com/go-delve/delve v1.25.1
+	github.com/go-delve/delve v1.25.2
 	github.com/go-jose/go-jose/v4 v4.1.2
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-containerregistry v0.20.6
@@ -41,7 +41,7 @@ require (
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.3
 	github.com/tebeka/selenium v0.9.9
-	github.com/twilio/twilio-go v1.27.1
+	github.com/twilio/twilio-go v1.27.2
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.16.0
 	golang.org/x/tools v0.36.0
@@ -52,22 +52,22 @@ require (
 require (
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.0 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.4 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.1 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.6 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.6 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.6 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.30.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.8.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.28.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.33.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.38.0 // indirect
-	github.com/aws/smithy-go v1.22.5 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.30.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.8.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.29.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.38.2 // indirect
+	github.com/aws/smithy-go v1.23.0 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/cilium/ebpf v0.11.0 // indirect
 	github.com/containerd/stargz-snapshotter/estargz v0.16.3 // indirect
@@ -130,6 +130,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
+	github.com/woodsbury/decimal128 v1.3.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	go.starlark.net v0.0.0-20231101134539-556fd59b42f6 // indirect

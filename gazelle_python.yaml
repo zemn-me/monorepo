@@ -7,7 +7,7 @@
 manifest:
   modules_mapping:
     IPython: ipython
-    OpenSSL: pyOpenSSL
+    OpenSSL: pyopenssl
     aioquic: aioquic
     annotated_types: annotated_types
     anyio: anyio
@@ -162,4 +162,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 17fa80a47ca29a42ab1418c9fbdb59ad72cbdff7fd6f424954ca8f45c4def923
+integrity: eeff76b3780c971c6cee85a1e292021fd103933425e8a8f7115cf0f449dea7f1
