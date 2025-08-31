@@ -1,5 +1,5 @@
 import b64 from 'base64-js';
-import { SafeParseReturnType, z, ZodError } from 'zod';
+import { z, ZodError, ZodSafeParseResult } from 'zod';
 
 import { Err, Ok, Result } from '#root/ts/result_types.js';
 
@@ -7,9 +7,9 @@ export function zodUnsafe<T>() {
 	return z.custom<T>(v => v);
 }
 
-export function resultFromZod<I, O>(
-	t: SafeParseReturnType<I, O>
-): Result<O, ZodError<I>> {
+export function resultFromZod<I>(
+	t: ZodSafeParseResult<I>
+): Result<I, ZodError<I>> {
 	if (t.success) return Ok(t.data);
 	return Err(t.error);
 }
