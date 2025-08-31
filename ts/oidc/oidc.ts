@@ -1,7 +1,6 @@
 import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
-import { stringToJSON } from 'zod_utilz';
 
 import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
@@ -29,6 +28,26 @@ export const getOpenidConfig = (issuer: URL) => {
 		.then(json => resultFromZod(openidConfiguration.safeParse(json)))
 }
 
+
+
+/**
+ * Parse a JSON string, then validate/shape it with `schema`.
+ * Usage: const Parsed = stringToJSON(z.object({ ... }));
+ */
+export const stringToJSON =
+  z.string().transform((s, ctx) => {
+    try {
+      return JSON.parse(s);
+    } catch {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Expected a valid JSON string.",
+      });
+      return z.NEVER;
+    }
+  })
+
+
 const unsafeJwtIssParser = z.string().transform(
 	s => s.split(".")
 ).pipe(
@@ -36,7 +55,7 @@ const unsafeJwtIssParser = z.string().transform(
 ).transform(([, body]) => b64.toByteArray(body))
 .transform(b => new TextDecoder().decode(b))
 	.pipe(
-	stringToJSON()
+	stringToJSON
 ).pipe(
 	z.object({
 		iss: z.string()
@@ -127,7 +146,7 @@ export const watchOutParseIdToken = z.string()
 	).transform(
 		([, body]) => atob(body)
 	).pipe(
-		stringToJSON()
+		stringToJSON
 	).pipe(idTokenSchema);
 
 
