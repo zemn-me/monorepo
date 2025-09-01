@@ -24,7 +24,7 @@ export const placeSchema = z.strictObject({
   /**
    * A record of additional attributes about the place.
    */
-  attributes: z.record(z.any()),
+  attributes: z.record(z.any(), z.any()),
   /**
    * The bounding box for the place, defining its coordinates.
    */
