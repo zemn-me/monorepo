@@ -1,5 +1,5 @@
 "use client";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
@@ -82,7 +82,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 
         const { register, handleSubmit, reset } = useForm<NewGrievance>({
                 defaultValues,
-                resolver: zodResolver(grievanceSchema)
+                resolver: standardSchemaResolver(grievanceSchema)
         });
 
         return <>
