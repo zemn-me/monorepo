@@ -260,8 +260,8 @@ devDependencies:
     specifier: 7.0.0
     version: 7.0.0
   '@fortawesome/react-fontawesome':
-    specifier: 3.0.1
-    version: 3.0.1(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)
+    specifier: 3.0.2
+    version: 3.0.2(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)
   '@microsoft/api-documenter':
     specifier: 7.26.32
     version: 7.26.32(@types/node@22.18.0)
@@ -2463,8 +2463,8 @@ packages:
       '@fortawesome/fontawesome-common-types': 7.0.0
     dev: true
 
-  /@fortawesome/react-fontawesome@3.0.1(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1):
-    resolution: {integrity: sha512-kpVyf85UHhQ+Y/TPyiNaUldqylhhXiVXv20z7sq+CLmhKLXWbzjIHaRPDrHIydnrL6Qq9oFwuNHq66alJdDM5Q==}
+  /@fortawesome/react-fontawesome@3.0.2(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1):
+    resolution: {integrity: sha512-cmp/nT0pPC7HUALF8uc3+D5ECwEBWxYQbOIHwtGUWEu72sWtZc26k5onr920HWOViF0nYaC+Qzz6Ln56SQcaVg==}
     engines: {node: '>=20'}
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~6 || ~7
@@ -2472,7 +2472,6 @@ packages:
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.0.0
       react: 19.1.1
-      semver: 7.7.2
     dev: true
 
   /@grpc/grpc-js@1.13.4:
