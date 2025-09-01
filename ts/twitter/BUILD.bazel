@@ -13,7 +13,6 @@ ts_project(
     ],
     deps = [
         "//:node_modules/zod",
-        "//:node_modules/zod-to-json-schema",
     ],
 )
 

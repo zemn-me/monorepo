@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { toJSONSchema } from "zod";
 
 import { archivedTweetSchema } from "#root/ts/twitter/archive.js";
 
 // Convert to JSON Schema
-const jsonSchema = zodToJsonSchema(archivedTweetSchema);
+const jsonSchema = toJSONSchema(archivedTweetSchema);
 console.log(JSON.stringify(jsonSchema, null, 2));
 
