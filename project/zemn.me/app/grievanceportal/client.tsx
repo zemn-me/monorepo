@@ -31,16 +31,16 @@ const defaultValues: NewGrievance = {
 }
 
 const severityMap = new Map<number, string>([
-        [1, "Just logging a vibe check \uD83D\uDE0C"],
-        [2, "A nice hug will sort it \uD83E\uDD17"],
-        [3, "Chai latte & a smile, please \u2615\uFE0F"],
-        [4, "Ruffles required \uD83E\uDD54"],
-        [5, "Let\u2019s go for a walk by the river \uD83C\uDF05"],
-        [6, "Need penguin videos & cuddles \uD83D\uDC27"],
-        [7, "Bring snacks and patience \uD83C\uDF71"],
-        [8, "Steak dinner peace offering \uD83E\uDD69"],
-        [9, "Send me flowers! \uD83D\uDC90"],
-        [10, "Flowers + apology letter! \uD83D\uDCDD\uD83D\uDC90"],
+	[1, "Just logging a vibe check 😌"],
+	[2, "A nice hug will sort it 🤗"],
+	[3, "Chai latte & a smile, please ☕️"],
+	[4, "Ruffles required 🥔"],
+	[5, "Let’s go for a walk by the river 🌅"],
+	[6, "Need penguin videos & cuddles 🐧"],
+	[7, "Bring snacks and patience 🍱"],
+	[8, "Steak dinner peace offering 🥩"],
+	[9, "Send me flowers! 💐"],
+	[10, "Flowers + apology letter! 📝💐"],
 ]);
 
 const grievanceSchema = z.object({
