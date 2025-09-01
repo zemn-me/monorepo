@@ -8,7 +8,7 @@ import { z } from "zod";
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
 import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
-import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import { useDeleteGrievances, useGetGrievances, usePostGrievances } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
 import { Date as PrettyDate } from "#root/ts/react/lang/date.js";
@@ -58,77 +58,65 @@ function backgroundPromise<A extends unknown[]>(f: (...a: A) => Promise<void>): 
 }
 
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
-        const $api = useZemnMeApi();
-        const queryClient = useQueryClient();
-        const grievancesKey = ["get", "/grievances", { headers: { Authorization } }] as const;
-       const grievances = option_and_then(
-               queryResult($api.useQuery(...grievancesKey)),
-               r => result_or_else(
-                       r,
-                       e => Err((e as object) instanceof Error ? e as Error : new Error(String(e)))
-               )
-       );
+	const create = usePostGrievances();
+	const del = useDeleteGrievances();
+	const grievances = option_and_then(
+		queryResult(useGetGrievances()),
+		r => result_or_else(
+			r,
+			e => Err((e as object) instanceof Error ? e as Error : new Error(String(e)))
+		)
+	);
 
-        const create = $api.useMutation("post", "/grievances", {
-                onSuccess: () => {
-                        void queryClient.invalidateQueries({ queryKey: grievancesKey });
-                }
-        });
-        const del = $api.useMutation("delete", "/grievance/{id}", {
-                onSuccess: () => {
-                        void queryClient.invalidateQueries({ queryKey: grievancesKey });
-                }
-        });
+	const { register, handleSubmit, reset } = useForm<NewGrievance>({
+		defaultValues,
+		resolver: zodResolver(grievanceSchema)
+	});
 
-        const { register, handleSubmit, reset } = useForm<NewGrievance>({
-                defaultValues,
-                resolver: zodResolver(grievanceSchema)
-        });
-
-        return <>
-                <form className={style.formField} onSubmit={backgroundPromise(handleSubmit(d => {
-                        void create.mutate({
-                                headers: { Authorization },
-                                body: d
-                        })
-                        reset();
-                }))}>
-                        <fieldset>
-                                <legend>New Grievance</legend>
-                                <p className={style.formField}><label>Name <input {...register("name")} /></label></p>
-                                <p className={style.formField}><label>Description <textarea {...register("description")} /></label></p>
-                                <p className={style.formField}><label>Priority
-                                        <select {...register("priority", { valueAsNumber: true })}>
-                                                {Array.from(severityMap.entries()).map(([level, caption]) => (
-                                                        <option key={level} value={level}>{caption}</option>
-                                                ))}
-                                        </select>
-                                </label></p>
-                                <input className={style.submitButton} type="submit" />
-                        </fieldset>
-                </form>
-                <PendingPip value={Some(grievances)} />
-                <ul className={style.grievanceList}>
-                        {option_unwrap_or(option_and_then(
-                                grievances,
-                                r => result_unwrap_or(r, [])
-                                        .slice()
-                                        .sort((a, b) => new Date(b.created).valueOf() - new Date(a.created).valueOf())
-                                        .map((g: Grievance) => (
-                                       <li key={g.id}>
-                                               <strong>{g.name}</strong>
-                                               {" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
-                                               <p><PrettyDate date={new Date(g.created)} /> {new Date(g.created).toLocaleTimeString()}</p>
-                                               <pre>{g.description}</pre>
-                                               <button className={style.deleteButton} onClick={() => void del.mutate({
-                                                        params: { path: { id: g.id! } },
-                                                        headers: { Authorization }
-                                               })}>Delete</button>
-                                       </li>
-                                ))
-                        ), null)}
-                </ul>
-        </>
+	return <>
+		<form className={style.formField} onSubmit={backgroundPromise(handleSubmit(d => {
+			void create.mutate({
+				headers: { Authorization },
+				body: d
+			})
+			reset();
+		}))}>
+			<fieldset>
+				<legend>New Grievance</legend>
+				<p className={style.formField}><label>Name <input {...register("name")} /></label></p>
+				<p className={style.formField}><label>Description <textarea {...register("description")} /></label></p>
+				<p className={style.formField}><label>Priority
+					<select {...register("priority", { valueAsNumber: true })}>
+						{Array.from(severityMap.entries()).map(([level, caption]) => (
+							<option key={level} value={level}>{caption}</option>
+						))}
+					</select>
+				</label></p>
+				<input className={style.submitButton} type="submit" />
+			</fieldset>
+		</form>
+		<PendingPip value={Some(grievances)} />
+		<ul className={style.grievanceList}>
+			{option_unwrap_or(option_and_then(
+				grievances,
+				r => result_unwrap_or(r, [])
+					.slice()
+					.sort((a, b) => new Date(b.created).valueOf() - new Date(a.created).valueOf())
+					.map((g: Grievance) => (
+						<li key={g.id}>
+							<strong>{g.name}</strong>
+							{" ("}{severityMap.get(g.priority) ?? `level ${g.priority}`}{")"}
+							<p><PrettyDate date={new Date(g.created)} /> {new Date(g.created).toLocaleTimeString()}</p>
+							<pre>{g.description}</pre>
+							<button className={style.deleteButton} onClick={() => void del.mutate({
+								params: { path: { id: g.id! } },
+								headers: { Authorization }
+							})}>Delete</button>
+						</li>
+					))
+			), null)}
+		</ul>
+	</>
 }
 
 export default function GrievancePortal() {
