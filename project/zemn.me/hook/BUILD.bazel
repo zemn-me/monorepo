@@ -8,6 +8,7 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@standard-schema/spec",
         "//:node_modules/@types/react",
         "//:node_modules/openapi-fetch",
         "//:node_modules/openapi-react-query",

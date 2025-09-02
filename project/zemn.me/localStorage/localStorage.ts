@@ -3,7 +3,6 @@
  */
 
 import { z } from 'zod';
-import { stringToJSON } from 'zod_utilz';
 
 import { Issuer } from '#root/project/zemn.me/OAuth/clients.js';
 import { LensGet, LensSet } from '#root/ts/lens.js';
@@ -65,7 +64,7 @@ export const authCacheSchema = z.record(
 )
 
 function zod<T extends z.ZodTypeAny>(schema: T): Serde<
-	Result<z.TypeOf<T>, z.ZodError<string>>,
+	Result<z.output<T>, z.ZodError<z.output<T>>>,
 	string
 > {
 	return [
@@ -76,7 +75,7 @@ function zod<T extends z.ZodTypeAny>(schema: T): Serde<
 				e => { throw e }
 			)
 		,
-		v => resultFromZod(stringToJSON().pipe(schema).safeParse(v))
+		v => resultFromZod(schema.safeParse(JSON.parse(v))) // <- this line
 	]
 }
 
