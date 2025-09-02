@@ -1,5 +1,5 @@
 "use client";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
@@ -45,7 +45,7 @@ const severityMap = new Map<number, string>([
 const grievanceSchema = z.object({
         name: z.string(),
         description: z.string(),
-        priority: z.coerce.number().min(1).max(10),
+        priority: z.coerce.number<number>().min(1).max(10),
 })
 
 
@@ -69,7 +69,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 
 	const { register, handleSubmit, reset } = useForm<NewGrievance>({
 		defaultValues,
-		resolver: zodResolver(grievanceSchema)
+		resolver: standardSchemaResolver(grievanceSchema)
 	});
 
 	return <>
