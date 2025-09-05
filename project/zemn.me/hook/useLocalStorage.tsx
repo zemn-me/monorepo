@@ -5,7 +5,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 import { Lens, LensGet, LensSet } from "#root/ts/lens.js";
-import { and_then, None, Option, Some, unwrap_or } from "#root/ts/option/types.js";
+import { and_then, None, ok_or_else, Option, Some, unwrap_or } from "#root/ts/option/types.js";
 import { asyncStorageLensKey } from "#root/ts/storage/storage.js";
 
 interface StorageEventLike {
@@ -96,7 +96,7 @@ function removeStorageKeyListener(state: StorageControllerState, key: string, ca
 }
 
 
-interface Controller extends Storage {
+export interface Controller extends Storage {
 	onChange: (key: string, cb: (v: string | null) => void) => (() => void),
 }
 
@@ -194,6 +194,12 @@ export type UseLocalStorageItemReturnType<T> = [
 
 export const useLocalStorageController =
 	() => useContext(storageControllerContext);
+
+
+export const mustUseLocalStorageController =
+	() => ok_or_else(useLocalStorageController(), () => new Error(
+		"no bound storage controller!"
+	));
 
 
 export function useLocalStorageItem<T>(lens: Lens<Promise<Storage>, Promise<T>>) {
