@@ -71,38 +71,6 @@ function SignOnSelector(props: SignOnSelectorProps) {
 	</select>
 }
 
-
-const challengeForIssuerPrefix = "0|";
-
-const challengeStringHashInputForIssuer =
-	(issuer: string) => challengeForIssuerPrefix + issuer;
-
-/**
- * Generates an entropy challenge for a given issuer.
- *
- * I dont really care too much for n-onces. These can
- * be used as state tokens without worrying too much
- * about disclosure.
- *
- * It's possible the state tokens could build up in logs
- * and stuff but overall i dont care rn.
- */
-async function challengeForIssuer(masterKey: CryptoKey, issuer: string) {
-	return crypto.subtle.sign("HMAC", masterKey, new TextEncoder().encode(challengeStringHashInputForIssuer(issuer)));
-}
-
-async function challengeStringForIssuer(masterKey: CryptoKey, issuer: string) {
-	return b64.fromByteArray(new Uint8Array(await challengeForIssuer(masterKey, issuer)))
-}
-
-async function verifyChallengeForIssuer(masterKey: CryptoKey, issuer: string, signature: ArrayBuffer) {	return crypto.subtle.verify(
-		"HMAC",
-		masterKey,
-		signature,
-		new TextEncoder().encode(challengeStringHashInputForIssuer(issuer))
-	)
-}
-
 interface AuthInitiatorProps {
 	readonly client: Client | undefined
 }

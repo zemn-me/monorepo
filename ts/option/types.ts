@@ -1,5 +1,5 @@
 import { isDefined } from '#root/ts/guard.js';
-import { and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
+import { and_then as result_and_then, and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
 
 export type Some<T> = { some: T, none?: undefined }
 export type None = () => { none: true, some?: undefined }
@@ -64,6 +64,12 @@ export function and_then<T, O>(v: Option<T>, f: (v: T) => O): Option<O> {
 export function flatten<T>(v: Option<Option<T>>): Option<T> {
 	if (is_none(v)) return v;
 	return unwrap(v);
+}
+
+
+/*#__NO_SIDE_EFFECTS__*/
+export function and_then_flatten<T, O>(v: Option<T>, f: (v: T) => Option<O>): Option<O> {
+	return flatten(and_then(v, f))
 }
 
 /**
@@ -134,6 +140,19 @@ export function ok_or_else<T, E>(
 			self,
 			v => Ok(v)
 		), () => Err(err()))
+}
+
+export function option_result_and_then<T, O, E>(
+	v: Option<Result<T, E>>,
+	f: (v: T) => O
+): Option<Result<O, E>> {
+	return and_then(
+		v,
+		r => result_and_then(
+			r,
+			v => f(v)
+		)
+	)
 }
 
 
