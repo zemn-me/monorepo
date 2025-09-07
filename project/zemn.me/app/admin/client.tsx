@@ -8,13 +8,14 @@ import { z } from "zod";
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
-import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
+import { useOIDC, useRequestOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
 import { e164 } from "#root/ts/zod/e164.js";
+import { ZEMN_ME_API_BASE } from '#root/project/zemn.me/constants/constants.js';
 
 
 interface SettingsEditorProps {
@@ -363,7 +364,7 @@ function DisplayAdminUid({ Authorization }: { readonly Authorization: string }) 
 
 
 export default function Admin() {
-	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
+	const googleAuth = useOIDC(ZEMN_ME_API_BASE);
 	const authToken = option_and_then(
 		googleAuth,
 		q => result_and_then(
@@ -371,6 +372,8 @@ export default function Admin() {
 			v => v[0] === undefined ? None : Some(v[0])
 		)
 	);
+
+	const requestOIDC = useRequestOIDC('https://accounts.google.com');
 
 	const at = result_and_then(option_result_transpose(authToken),
 		o => option_flatten(o)

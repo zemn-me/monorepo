@@ -13,6 +13,7 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/either",
     ],
 )
 
