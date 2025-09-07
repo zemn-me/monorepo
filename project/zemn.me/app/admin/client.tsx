@@ -400,7 +400,7 @@ export default function Admin() {
 					r,
 					() => <p>You are logged in.</p>
 				),
-				() => <button onClick={() => setOpenWindowHnd(Some(requestOIDC("https://accounts.google.com")!))}>
+				() => <button onClick={() => setOpenWindowHnd(() => Some(requestOIDC("https://accounts.google.com")!))}>
 					<p>
 						You are not authenticated to perform this operation.
 					</p>
