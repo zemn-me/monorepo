@@ -376,7 +376,7 @@ export default function Admin() {
 		o => option_flatten(o)
 	);
 
-	const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(None);
+	const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(() => None);
 
 	// when googleAuth is something, make sure to close any open window handles
 	useEffect(
