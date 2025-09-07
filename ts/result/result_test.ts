@@ -96,14 +96,14 @@ describe('Result Utilities', () => {
       const error = 'fail';
       const result = and_then(Err(error), (v: number) => v * 3);
       expect(is_err(result)).toBe(true);
-      expect(result).toEqual(Err(error));
+      expect(unwrap_err(result)).toEqual(error);
     });
   });
 
   describe('flatten', () => {
     it('unwraps nested Ok(Ok(value)) to Ok(value)', () => {
       const nested = Ok(Ok('Nested'));
-      expect(flatten(nested)).toEqual(Ok('Nested'));
+      expect(unwrap(flatten(nested))).toEqual('Nested');
     });
     it('throws the inner error if the nested result is Err', () => {
       const innerError = 'inner error';
@@ -118,15 +118,15 @@ describe('Result Utilities', () => {
       const b = Ok('B');
       const zipped = zip(a, b);
       expect(is_ok(zipped)).toBe(true);
-      expect(zipped).toEqual(Ok(['A', 'B']));
+      expect(unwrap(zipped)).toEqual(['A', 'B']);
     });
     it('returns the first Err if the first result is Err', () => {
       const error = 'first error';
-      expect(zip(Err(error), Ok('B'))).toEqual(Err(error));
+      expect(unwrap_err(zip(Err(error), Ok('B')))).toEqual(error);
     });
     it('returns the second Err if the first is Ok and second is Err', () => {
       const error = 'second error';
-      expect(zip(Ok('A'), Err(error))).toEqual(Err(error));
+      expect(unwrap_err(zip(Ok('A'), Err(error)))).toEqual(error);
     });
   });
 
@@ -134,34 +134,34 @@ describe('Result Utilities', () => {
     it('resolves to Ok with the promise value if input is Ok', async () => {
       const promiseResult = Ok(Promise.resolve(5));
       const result = await result_promise_transpose(promiseResult);
-      expect(result).toEqual(Ok(5));
+      expect(unwrap(result)).toEqual(5);
     });
     it('returns Err immediately if input is Err', async () => {
       const error = 'promise error';
       const result = await result_promise_transpose(Err(error));
-      expect(result).toEqual(Err(error));
+      expect(unwrap_err(result)).toEqual(error);
     });
   });
 
   describe('result_collect', () => {
     it('collects values into an Ok array when all results are Ok', () => {
       const results = [Ok(1), Ok(2), Ok(3)];
-      expect(result_collect(results)).toEqual(Ok([1, 2, 3]));
+      expect(unwrap(result_collect(results))).toEqual([1, 2, 3]);
     });
     it('returns the first Err encountered', () => {
       const error = 'collect error';
       const results = [Ok(1), Err(error), Ok(3)];
-      expect(result_collect(results)).toEqual(Err(error));
+      expect(unwrap_err(result_collect(results))).toEqual(error);
     });
   });
 
   describe('result_and', () => {
     it('swaps the inner value with the provided value when Ok', () => {
-      expect(result_and(Ok('original'), 'new')).toEqual(Ok('new'));
+      expect(unwrap(result_and(Ok('original'), 'new'))).toEqual('new');
     });
     it('returns the Err unchanged when input is Err', () => {
       const error = 'error present';
-      expect(result_and(Err(error), 'new')).toEqual(Err(error));
+      expect(unwrap_err(result_and(Err(error), 'new'))).toEqual(error);
     });
   });
 });
