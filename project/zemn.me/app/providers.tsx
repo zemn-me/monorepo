@@ -1,6 +1,7 @@
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import z from 'zod';
 
 import { LocalStorageController } from '#root/project/zemn.me/hook/useLocalStorage.js';
 
@@ -11,6 +12,7 @@ export interface ProviderProps {
 const queryClient = new QueryClient();
 
 export function Providers({ children }: ProviderProps) {
+	useEffect(() => { z.config({ jitless: true }); return undefined }, [])
 	return (
 		<LocalStorageController>
 			<QueryClientProvider client={queryClient}>
