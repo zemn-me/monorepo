@@ -60,7 +60,7 @@ const cmd = new Command('presubmit')
 		// so serial operations coming after take 0 time to build.
 		if (!o.skipBazelTests) {
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going')
+				Bazel.Bazel(cwd, 'test', '//...', '--keep_going', "--config=ci")
 			);
 			// perform all the normal tests
 		}

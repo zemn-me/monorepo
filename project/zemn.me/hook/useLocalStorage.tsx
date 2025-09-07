@@ -162,7 +162,7 @@ export interface LocalStorageControllerProps {
 }
 
 export function LocalStorageController(props: LocalStorageControllerProps) {
-	const [storage, setStorage] = useState<Option<Storage>>(None);
+	const [storage, setStorage] = useState<Option<Storage>>(() => None);
 
 	const controller = and_then(
 		storage,
@@ -172,7 +172,7 @@ export function LocalStorageController(props: LocalStorageControllerProps) {
 	// localStorage will only be available once you hit the browser
 	useEffect(
 		() => {
-			setStorage(Some(localStorage))
+			setStorage(() => Some(localStorage))
 		}
 	, [])
 
@@ -199,7 +199,7 @@ export const useLocalStorageController =
 export function useLocalStorageItem<T>(lens: Lens<Promise<Storage>, Promise<T>>) {
 	const key = asyncStorageLensKey(lens);
 	const controller = useLocalStorageController();
-	const [value, setValue] = useState<Option<T>>(None);
+	const [value, setValue] = useState<Option<T>>(() => None);
 
 	// effect: when the component is mounted, set the value
 	// to the result of the lens.
@@ -208,7 +208,7 @@ export function useLocalStorageItem<T>(lens: Lens<Promise<Storage>, Promise<T>>)
 			and_then(
 				controller,
 				c => LensGet(lens)(Promise.resolve(c))
-					.then(v => setValue(Some(v)))
+					.then(v => setValue(() => Some(v)))
 			)
 		}
 	, [controller]);

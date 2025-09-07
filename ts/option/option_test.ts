@@ -15,6 +15,10 @@ import {
 	zip
 } from '#root/ts/option/types.js';
 
+const _: None = None;
+const some1 = Some(1 as const);
+const __: Some<1> = some1;
+
 describe('Option Utilities', () => {
 	describe('None', () => {
 		it('represents None correctly', () => {
