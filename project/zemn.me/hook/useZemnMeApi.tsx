@@ -22,8 +22,8 @@ export function useZemnMeApi(Authorization?: string) {
 	return useMemo(() => createClient(fetchClient), [fetchClient]);
 }
 
-export function useGetGrievances() {
-	return useZemnMeApi().useQuery("get", "/grievances");
+export function useGetGrievances(Authorization: string) {
+	return useZemnMeApi(Authorization).useQuery("get", "/grievances");
 }
 
 function useinvalidateGrievances() {
@@ -31,16 +31,16 @@ function useinvalidateGrievances() {
 	return () => void queryClient.invalidateQueries({ queryKey: ["get", "/grievances"] });
 }
 
-export function usePostGrievances() {
+export function usePostGrievances(Authorization: string) {
 	const invalidateGrievances = useinvalidateGrievances();
-	return useZemnMeApi().useMutation("post", "/grievances", {
+	return useZemnMeApi(Authorization).useMutation("post", "/grievances", {
 		onSuccess: () => void invalidateGrievances(),
 	});
 }
 
-export function useDeleteGrievances() {
+export function useDeleteGrievances(Authorization: string) {
 	const invalidateGrievances = useinvalidateGrievances();
-	return useZemnMeApi().useMutation("delete", "/grievance/{id}", {
+	return useZemnMeApi(Authorization).useMutation("delete", "/grievance/{id}", {
 		onSuccess: () => void invalidateGrievances(),
 	});
 }
