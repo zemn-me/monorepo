@@ -1,147 +1,132 @@
-export interface Ok<T> {
-	/** @deprecated use {@link unwrap_unchecked} */
-	ok: T,
-	/** @deprecated use {@link is_ok} */
-	isOk: true
+import {
+	Either,
+	either,
+	is_left,
+	is_right,
+	Left,
+	Right,
+} from "#root/ts/either/either.js"
+
+/** Result<T, E> ≡ Either<E, T> (error first, success second) */
+export type Result<T, E> = Either<E, T>
+
+/** Constructors */
+export const Ok = <T, E = never>(v: T): Result<T, E> => Right<T, E>(v)
+export const Err = <E, T = never>(e: E): Result<T, E> => Left<E, T>(e)
+
+/** Compatibility aliases (types) — corrected */
+export type Ok<T> = Result<T, never>
+export type Err<E> = Result<never, E>
+
+/** Predicates */
+export const is_ok = <T, E>(v: Result<T, E>) => is_right(v)
+export const is_err = <T, E>(v: Result<T, E>) => is_left(v)
+
+/** Left value or throw if Ok */
+export function unwrap_err<T, E>(v: Result<T, E>): E {
+	return either<E, T, E>(v, e => e, () => { throw new Error("Not in error.") })
 }
 
-export interface Err<T> {
-	/** @deprecated use {@link unwrap_err_unchecked} */
-	err: T,
-	/**@deprecated use {@link is_err} */
-	isOk: false,
-}
-
-export type Result<T, E> = Ok<T> | Err<E>
-
-/*#__NO_SIDE_EFFECTS__*/
-export function Ok<T>(v: T): Ok<T> {
-	return { ok: v, isOk: true }
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function Err<T>(v: T): Err<T> {
-	return { err: v, isOk: false }
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function is_ok<T>(v: Result<T, unknown>): v is Ok<T> {
-	return !is_err(v)
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function is_err<E>(v: Result<unknown, E>): v is Err<E> {
-	return !v.isOk
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_err<T, E>(v: Result<T, E>) {
-	if (!is_err(v)) throw new Error("Not in error.");
-	return unwrap_err_unchecked(v);
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_err_unchecked<E>(v: Err<E>) {
-	return v.err
-}
-
-/*#__NO_SIDE_EFFECTS__*/
+/** Right value or throw the error */
 export function unwrap<T, E>(v: Result<T, E>): T {
-	if (is_ok(v)) return unwrap_unsafe(v);
-	throw unwrap_err_unchecked(v)
+	return either<E, T, T>(v, e => { throw e as unknown }, t => t)
 }
 
-/*#__NO_SIDE_EFFECTS__*/
+/** Assume Ok (will throw if actually Err) */
 export function unwrap_unsafe<T>(v: Ok<T>): T {
-	return v.ok;
+	return unwrap(v)
 }
+export const unwrap_unchecked = unwrap_unsafe
 
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_unchecked<T>(v: Ok<T>): T {
-	return unwrap_unsafe(v)
-}
+// this used to actually not check but now i am not sure that is even poss
+export const unwrap_err_unchecked = unwrap_err
 
-/*#__NO_SIDE_EFFECTS__*/
+
+/** Right value or fallback */
 export function unwrap_or<T, TT>(v: Result<T, unknown>, fallback: TT): T | TT {
-	if (is_err(v)) return fallback;
-
-	return unwrap_unchecked(v)
+	return either<unknown, T, T | TT>(v, () => fallback, t => t)
 }
 
-/*#__NO_SIDE_EFFECTS__*/
-export function or_else<Success, Fail, NewFail>(v: Result<Success, Fail>, fallback: (v: Fail) => Result<Success, NewFail>): Result<Success, NewFail> {
-	if (is_err(v)) return fallback(unwrap_err_unchecked(v));
-	return v;
+/** If Err, map error to a new Result; else pass through */
+export function or_else<S, F, NF>(
+	v: Result<S, F>,
+	fallback: (e: F) => Result<S, NF>
+): Result<S, NF> {
+	return either<F, S, Result<S, NF>>(v, fallback, s => Ok<S, NF>(s))
 }
 
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_or_else<T1, T2, E>(v: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
-	if (is_err(v)) return fallback(unwrap_err_unchecked(v) as E);
-
-	return unwrap_unchecked(v)
+/** If Err, compute default; else value */
+export function unwrap_or_else<T1, T2, E>(
+	v: Result<T1, E>,
+	fallback: (e: E) => T2
+): T1 | T2 {
+	return either<E, T1, T1 | T2>(v, fallback, t => t)
 }
 
-/*#__NO_SIDE_EFFECTS__*/
-export function and_then<T, E, O>(v: Result<T, E>, f: (v: T) => O): Result<O, E> {
-	if (is_err(v)) return v;
-
-	return Ok(f(unwrap(v)))
+/** Chain on Ok; keep Err */
+export function and_then<T, E, O>(
+	v: Result<T, E>,
+	f: (value: T) => O
+): Result<O, E> {
+	return either<E, T, Result<O, E>>(v, e => Err<E, O>(e), t => Ok<O, E>(f(t)))
 }
 
-/*#__NO_SIDE_EFFECTS__*/
-export function flatten<T, E1, E2>(v: Result<Result<T, E2>, E1>): Result<T, E1 | E2> {
-	if (is_err(v)) return v;
-	return unwrap(v);
+/** Flatten Result<Result<T,E2>,E1> → Result<T, E1|E2> */
+export function flatten<T, E1, E2>(
+	v: Result<Result<T, E2>, E1>
+): Result<T, E1 | E2> {
+	return either<E1, Result<T, E2>, Result<T, E1 | E2>>(
+		v,
+		e1 => Err<E1 | E2, T>(e1),
+		inner => inner as Result<T, E1 | E2>
+	)
 }
 
-
-/*#__NO_SIDE_EFFECTS__*/
-export function zip<T, TT, E>(self: Result<T, E>, other: Result<TT, E>): Result<[T, TT], E> {
-	if (is_err(self)) return self;
-	if (is_err(other)) return other;
-
-	return Ok([unwrap_unsafe(self), unwrap_unsafe(other)]);
+/** Zip two Results (first Err wins) */
+export function zip<T, TT, E>(
+	a: Result<T, E>,
+	b: Result<TT, E>
+): Result<[T, TT], E> {
+	return either<E, T, Result<[T, TT], E>>(
+		a,
+		e => Err<E, [T, TT]>(e),
+		ta => either<E, TT, Result<[T, TT], E>>(
+			b,
+			e => Err<E, [T, TT]>(e),
+			tb => Ok<[T, TT], E>([ta, tb])
+		)
+	)
 }
 
-
-/*#__NO_SIDE_EFFECTS__*/
+/** Result<Promise<T>,E> → Promise<Result<T,E>> */
 export async function result_promise_transpose<T, E>(
 	r: Result<Promise<T>, E>
 ): Promise<Result<T, E>> {
-	if (is_err(r)) return r;
-	return Ok(await unwrap_unsafe(r))
+	return either<E, Promise<T>, Promise<Result<T, E>>>(
+		r,
+		async e => Err<E, T>(e),
+		async p => Ok<T, E>(await p)
+	)
 }
 
-/**
- * Aggregates a set of {@link Result}s into a single Result.
- *
- * If an error occurs, only the *first* error will be in the new Result.
- */
-/*#__NO_SIDE_EFFECTS__*/
+/** Collect array of Results; stop at first Err */
 export function result_collect<T, E>(arr: Result<T, E>[]): Result<T[], E> {
-    const collected: T[] = [];
-
-    for (const res of arr) {
-        if (is_err(res)) {
-            return res;
-        }
-        collected.push(unwrap_unsafe(res));
-    }
-
-    return Ok(collected);
+	const out: T[] = []
+	for (const res of arr) {
+		const next = either<E, T, Result<null, E>>(
+			res,
+			e => Err<E, null>(e),
+			t => { out.push(t); return Ok<null, E>(null) }
+		)
+		if (is_err(next)) return Err<E, T[]>(unwrap_err(next))
+	}
+	return Ok<T[], E>(out)
 }
 
-/**
- * If this {@link Result} is {@link Some}thing, swap it out for input value
- * {@link v}
- */
-/*#__NO_SIDE_EFFECTS__*/
+/** If Ok, replace value with vv; else keep Err */
 export function result_and<V, E>(
 	v: Result<unknown, E>,
 	vv: V
 ): Result<V, E> {
-	return is_ok(v)
-		? Ok(vv)
-		: v
+	return is_ok(v) ? Ok<V, E>(vv) : (v as Result<V, E>)
 }
