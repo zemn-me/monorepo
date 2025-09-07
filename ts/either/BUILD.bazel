@@ -2,25 +2,27 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
-    name = "option",
+    name = "either",
+    srcs = [
+        "either.ts",
+        "either_test.ts",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//ts",
-        "//ts/either",
     ],
 )
 
 jest_test(
     name = "tests",
     srcs = [
-        "option_test.js",
+        "either_test.js",
     ],
     deps = [
-        ":option",
+        ":either",
     ],
 )
 
