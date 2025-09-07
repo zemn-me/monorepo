@@ -4,7 +4,6 @@ import 'project/zemn.me/app/base.css';
 import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
-import z from 'zod';
 
 import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
@@ -17,9 +16,6 @@ export interface Props {
 	readonly children?: ReactNode;
 }
 
-// prevents CSP errors. maybe i will just have to move to
-// trusted types...
-z.config({ jitless: true });
 
 const lora = Lora({
 	weight: ['400', '700'],
