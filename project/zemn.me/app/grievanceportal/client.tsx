@@ -57,10 +57,10 @@ function backgroundPromise<A extends unknown[]>(f: (...a: A) => Promise<void>): 
 }
 
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
-	const create = usePostGrievances();
-	const del = useDeleteGrievances();
+	const create = usePostGrievances(Authorization);
+	const del = useDeleteGrievances(Authorization);
 	const grievances = option_and_then(
-		queryResult(useGetGrievances()),
+		queryResult(useGetGrievances(Authorization)),
 		r => result_or_else(
 			r,
 			e => Err((e as object) instanceof Error ? e as Error : new Error(String(e)))
