@@ -26,11 +26,11 @@ import { resultFromZod } from "#root/ts/zod/util.js";
  * Allows accessing window.location, which will not be around during prerender.
  */
 function useWindowLocation() {
-	const [location, setLocation] = useState<Option<typeof window.location>>(None);
+	const [location, setLocation] = useState<Option<typeof window.location>>(() => None);
 
 	// useState only renders on the client.
 	useEffect(() => {
-		setLocation(Some(window.location));
+		setLocation(() => Some(window.location));
 	}, [setLocation])
 
 

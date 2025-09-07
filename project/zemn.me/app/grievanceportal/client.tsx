@@ -132,7 +132,7 @@ export default function GrievancePortal() {
                 o => option_flatten(o)
         );
 
-        const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(None);
+        const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(() => None);
 
         useEffect(
                 () => void result_and_then(
@@ -155,7 +155,7 @@ export default function GrievancePortal() {
                                         r,
                                         () => <p>You are logged in.</p>
                                 ),
-                                () => <button onClick={() => setOpenWindowHnd(Some(requestOIDC("https://accounts.google.com")!))}>Login with Google</button>
+                                () => <button onClick={() => setOpenWindowHnd(() => Some(requestOIDC("https://accounts.google.com")!))}>Login with Google</button>
                         )
                 ), e => <>error: {e}</>);
 
