@@ -12,6 +12,7 @@ export interface ProviderProps {
 const queryClient = new QueryClient();
 
 export function Providers({ children }: ProviderProps) {
+	z.config({ jitless: true });
 	useEffect(() => { z.config({ jitless: true }); return undefined }, [])
 	return (
 		<LocalStorageController>
