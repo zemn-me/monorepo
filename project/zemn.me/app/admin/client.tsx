@@ -60,7 +60,7 @@ function maybeMessage(m: string | undefined) {
 }
 
 function SettingsEditor({ Authorization }: SettingsEditorProps) {
-	const $api = useZemnMeApi();
+	const $api = useZemnMeApi(Authorization);
 	const idbase = useId();
 	const id = (...s: string[]) => [
 		idbase, ...s
