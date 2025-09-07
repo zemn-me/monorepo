@@ -1,163 +1,137 @@
-import { isDefined } from '#root/ts/guard.js';
-import { and_then as result_and_then, Err, Ok, Result } from '#root/ts/result_types.js';
-
-export type Some<T> = { some: T, none?: undefined }
-export type None = () => { none: true, some?: undefined }
-export type Option<T> = Some<T> | None
-
-
-// i dont think this actually ever gets called in this scheme...
-/*#__NO_SIDE_EFFECTS__*/
-export function None(): { none: true, some?: undefined } {
-	return { none: true }
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function Some<T>(v: T): Some<T> {
-	return { some: v }
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function is_some<T>(v: Option<T>): v is Some<T> {
-	return "some" in v
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function is_none(v: Option<unknown>): v is None {
-	return !is_some(v)
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap<T>(v: Option<T>): T {
-	if (!is_some(v)) throw new Error("Cannot unwrap Option; has no value.");
-
-	return unwrap_unchecked(v);
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_unchecked<T>(v: Some<T>): T {
-	return v.some;
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_or<T, T2>(v: Option<T>, fallback: T2): T | T2 {
-	if (is_none(v)) return fallback;
-
-	return unwrap_unchecked(v)
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function unwrap_or_else<T, T2>(v: Option<T>, fallback: () => T2): T | T2 {
-	if (is_none(v)) return fallback();
-
-	return unwrap_unchecked(v);
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function and_then<T, O>(v: Option<T>, f: (v: T) => O): Option<O> {
-	if (is_none(v)) return v;
-
-	return Some(f(unwrap(v)))
-}
-
-/*#__NO_SIDE_EFFECTS__*/
-export function flatten<T>(v: Option<Option<T>>): Option<T> {
-	if (is_none(v)) return v;
-	return unwrap(v);
-}
+import {
+  Either,
+  either,
+  is_left,
+  is_right,
+  Left,
+  Right,
+} from "#root/ts/either/either.js"
+import { isDefined } from "#root/ts/guard.js"
+import { and_then as result_and_then, Err, Ok, Result } from "#root/ts/result/result.js"
 
 /**
- * For two given {@link Option}s, {@link self} and {@link other},
- * return a new option that is a tuple of both values
- * [{@link T}, {@link TT}], if both values are {@link Some}.
+ * Option<T> ≔ Either<null, T>
+ * - None  → Left(null)
+ * - Some  → Right(value)
  */
-/*#__NO_SIDE_EFFECTS__*/
-export function zip<T, TT>(self: Option<T>, other: Option<TT>): Option<[T, TT]> {
-	return flatten(and_then(
-		self,
-		v => and_then(
-			other,
-			vv => [v, vv] as [T, TT]
-		)
-	))
+export type Option<T> = Either<null, T>
+
+export const _None = <T = never>(): Option<T> => Left<null, T>(null)
+/** Construct None (no value). */
+export const None = _None();
+
+export type Some<T> = Right<T, null>;
+export type None = typeof None; // Left<null>
+
+/** Construct Some(value). */
+export const Some = <T>(v: T): Option<T> => Right<T, null>(v)
+
+/** True if it’s Some. */
+export const is_some = <T>(o: Option<T>) => is_right(o)
+
+/** True if it’s None. */
+export const is_none = <T>(o: Option<T>) => is_left(o)
+
+/** Get the value or throw if None. */
+export function unwrap<T>(o: Option<T>): T {
+  return either<null, T, T>(o, () => { throw new Error("Cannot unwrap Option; has no value.") }, v => v)
 }
 
-/**
- * If this {@link Option} is {@link Some}thing, swap it out for
- * input value {@link v}.
- */
-/*#__NO_SIDE_EFFECTS__*/
+/** Get the value (assumes Some). */
+export function unwrap_unchecked<T>(o: Option<T>): T {
+  return either<null, T, T>(o, () => { throw new Error("unwrap_unchecked called on None") }, v => v)
+}
+
+/** Get the value or a fallback. */
+export function unwrap_or<T, T2>(o: Option<T>, fallback: T2): T | T2 {
+  return either<null, T, T | T2>(o, () => fallback, v => v)
+}
+
+/** Get the value or call a fallback. */
+export function unwrap_or_else<T, T2>(o: Option<T>, fallback: () => T2): T | T2 {
+  return either<null, T, T | T2>(o, () => fallback(), v => v)
+}
+
+/** If Some, apply `f` to the value; if None, keep None. */
+export function and_then<T, O>(o: Option<T>, f: (v: T) => O): Option<O> {
+  return either<null, T, Option<O>>(o, () => None, v => Some(f(v)))
+}
+
+/** Flatten Option<Option<T>> → Option<T>. */
+export function flatten<T>(o: Option<Option<T>>): Option<T> {
+  // FIXED: use eliminator so branches return Option<T>
+  return either<null, Option<T>, Option<T>>(o, () => None, x => x)
+}
+
+/** If Some, run `f` which returns an Option; otherwise None. */
+export function and_then_flatten<T, O>(o: Option<T>, f: (v: T) => Option<O>): Option<O> {
+  return either<null, T, Option<O>>(o, () => None, v => f(v))
+}
+
+/** Zip two Options. If both Some, returns Some([a,b]); otherwise None. */
+export function zip<T, TT>(a: Option<T>, b: Option<TT>): Option<[T, TT]> {
+  return either<null, T, Option<[T, TT]>>(a,
+    () => None,
+    va => either<null, TT, Option<[T, TT]>>(b,
+      () => None,
+      vb => Some<[T, TT]>([va, vb])
+    )
+  )
+}
+
+/** If this Option is Some, replace it with `v`; else keep None. */
 export function and<V>(self: Option<unknown>, v: V): Option<V> {
-	if (is_some(self)) return Some(v);
-
-	return None;
+  return is_some(self) ? Some(v) : None
 }
 
-/**
- * Converts this {@link Option} into an {@link Result} whose value
- * on success is our inner value {@link T}, or – upon failure –
- * the provided error value {@link err}.
- */
-/*#__NO_SIDE_EFFECTS__*/
+/** Convert Option<T> → Result<T, E> using a provided error for None. */
 export function ok_or<T, E>(self: Option<T>, err: E): Result<T, E> {
-	return unwrap_or_else(
-		and_then(
-			self,
-			v => Ok(v)
-		), () => Err(err))
+  return either<null, T, Result<T, E>>(self, () => Err<E, T>(err), v => Ok<T, E>(v))
 }
 
+/** Convert Option<T> → Result<T, E> using a thunk for the error. */
+export function ok_or_else<T, E>(self: Option<T>, err: () => E): Result<T, E> {
+  return either<null, T, Result<T, E>>(self, () => Err<E, T>(err()), v => Ok<T, E>(v))
+}
 
-/**
- * Convert a union of some value ({@link T}) or undefined
- * into {@link Some}({@link T}) or {@link None}.
- */
-/*#__NO_SIDE_EFFECTS__*/
-export function from<T>(self: T | undefined): Option<T> {
-	if (isDefined(self)) return Some(self);
-
-	return None;
+/** From possibly-undefined: defined → Some(x), undefined → None. */
+export function from<T>(v: T | undefined): Option<T> {
+  return isDefined(v) ? Some(v) : None
 }
 
 /**
- * Converts this {@link Option} into an {@link Result} whose value
- * on success is our inner value {@link T}, or – upon failure –
- * the result of calling provided error function {@link err}().
+ * Map Option<Result<T,E>> by applying `f` to the Ok value when present.
+ * None stays None; Err stays Err.
  */
-/*#__NO_SIDE_EFFECTS__*/
-export function ok_or_else<T, E>(
-	self: Option<T>,
-	err: () => E
-): Result<T, E> {
-	return unwrap_or_else(
-		and_then(
-			self,
-			v => Ok(v)
-		), () => Err(err()))
+export function option_result_and_then<T, O, E>(
+  o: Option<Result<T, E>>,
+  f: (v: T) => O
+): Option<Result<O, E>> {
+  return and_then(o, r => result_and_then<T, E, O>(r, x => f(x)))
 }
 
-
-
-/*#__NO_SIDE_EFFECTS__*/
+/**
+ * Transpose: Option<Result<T,E>> → Result<Option<T>, E>.
+ * - None            → Ok(None())
+ * - Some(Err(e))    → Err(e)
+ * - Some(Ok(t))     → Ok(Some(t))
+ */
 export function option_result_transpose<T, E>(
-	a: Option<Result<T, E>>
+  o: Option<Result<T, E>>
 ): Result<Option<T>, E> {
-	return unwrap_or(and_then(
-		a,
-		r => result_and_then(
-			r,
-			res => Some(res)
-		)
-	), Ok(None));
+  return either<null, Result<T, E>, Result<Option<T>, E>>(o,
+    () => Ok<Option<T>, E>(None),
+    // FIXED: callback returns Option<T>; result_and_then wraps it into Ok
+    r => result_and_then<T, E, Option<T>>(r, t => Some(t))
+  )
 }
 
-// god i miss Into() so much.
-
-/*#__NO_SIDE_EFFECTS__*/
+/** Option<Promise<T>> → Promise<Option<T>>. */
 export async function option_promise_transpose<T>(
-	o: Option<Promise<T>>
+  o: Option<Promise<T>>
 ): Promise<Option<T>> {
-	if (is_none(o)) return None;
-
-	return Some(await unwrap(o));
+  return either<null, Promise<T>, Promise<Option<T>>>(o,
+    async () => None,
+    async p => Some(await p)
+  )
 }
