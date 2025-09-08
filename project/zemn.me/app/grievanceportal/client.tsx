@@ -12,7 +12,7 @@ import { ID_Token } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
 import { Date as PrettyDate } from "#root/ts/react/lang/date.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
-import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
+import { and_then as result_and_then, Err, or_else as result_or_else, unwrap, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
 
 import style from './style.module.css';
 
@@ -145,17 +145,21 @@ export default function GrievancePortal() {
                                 )
                         )
                 )
-                , [at])
+                , [at, openWindowHnd])
 
-        const login_button = result_unwrap_or_else(
-                result_and_then(
-                        at,
-                        r => option_unwrap_or_else(
-                                option_and_then(
-                                        r,
-                                        () => <p>You are logged in.</p>
-                                ),
-                                () => <button onClick={() => setOpenWindowHnd(() => Some(requestOIDC("https://accounts.google.com")!))}>Login with Google</button>
+	const login_button = result_unwrap_or_else(
+		result_and_then(
+			at,
+			r => option_unwrap_or_else(
+				option_and_then(
+					r,
+					() => <p>You are logged in.</p>
+				),
+				() => <button onClick={() => {
+					const wnd = requestOIDC("https://accounts.google.com")
+					setOpenWindowHnd(() =>
+						Some(unwrap(wnd)))
+				} }>Login with Google</button>
                         )
                 ), e => <>error: {e}</>);
 
