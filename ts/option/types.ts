@@ -66,6 +66,12 @@ export function flatten<T>(v: Option<Option<T>>): Option<T> {
 	return unwrap(v);
 }
 
+
+/*#__NO_SIDE_EFFECTS__*/
+export function and_then_flatten<T, O>(v: Option<T>, f: (v: T) => Option<O>): Option<O> {
+	return flatten(and_then(v, f))
+}
+
 /**
  * For two given {@link Option}s, {@link self} and {@link other},
  * return a new option that is a tuple of both values

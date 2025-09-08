@@ -1,32 +1,13 @@
 import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
 
 
-export const openidConfiguration = z.object({
-	issuer: z.string(),
-	response_types_supported: z.string().array(),
-	subject_types_supported: z.string().array(),
-	scopes_supported: z.string().array(),
-	claims_supported: z.string().array(),
-	authorization_endpoint: z.string().url(),
-	jwks_uri: z.string().url(),
-});
 
 
-export const openidConfigPathName = ".well-known/openid-configuration";
-
-// should be cached in future
-export const getOpenidConfig = (issuer: URL) => {
-	const clone = new URL(issuer);
-	clone.pathname = openidConfigPathName;
-
-	return fetch(clone).then(b => b.json())
-		.then(json => resultFromZod(openidConfiguration.safeParse(json)))
-}
 
 
 
