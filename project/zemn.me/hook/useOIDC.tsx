@@ -5,7 +5,7 @@ import { and, firstItemIs } from "#root/ts/guard.js";
 import { lensPromise } from "#root/ts/lens.js";
 import { ID_Token, watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 import { and_then as option_and_then, flatten as option_flatten, None, Some } from "#root/ts/option/types.js";
-import { and_then as result_and_then, flatten as result_flatten, result_collect } from "#root/ts/result/result.js";
+import { and_then, and_then as result_and_then, Err, flatten as result_flatten, Ok, result_collect, unwrap } from "#root/ts/result/result.js";
 import { resultFromZod } from "#root/ts/zod/util.js";
 
 function isUnexpiredIDToken(token: ID_Token): token is ID_Token {
@@ -61,13 +61,18 @@ export function useOIDC<T extends ID_Token>(filter: (v: ID_Token) => v is T) {
  * @param issuer
  */
 export function requestOIDC(issuer?: Issuer) {
-	const wnd = window.open(`/auth?${new URLSearchParams([
+	const wndOrNull = window.open(`/auth?${new URLSearchParams([
 		...issuer != undefined ? [
 			["hint", issuer]
 		] : []
 	])}`, '_blank');
 
-	wnd?.focus();
+	const wnd = wndOrNull === null ?
+		Err(new Error("window open blocked")) : Ok(wndOrNull);
 
-	return wnd;
+
+
+	and_then(wnd, w => w.focus());
+
+	return unwrap(wnd);
 }
