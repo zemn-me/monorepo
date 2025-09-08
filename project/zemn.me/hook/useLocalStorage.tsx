@@ -229,7 +229,7 @@ export function useLocalStorageItem<T>(lens: Lens<Promise<Storage>, Promise<T>>)
 					k,
 					() => {
 						void LensGet(lens)(Promise.resolve(c)).then(
-							v => setValue(Some(v))
+							v => setValue(() => Some(v))
 						)
 					}
 				)

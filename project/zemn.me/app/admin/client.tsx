@@ -400,7 +400,11 @@ export default function Admin() {
 					r,
 					() => <p>You are logged in.</p>
 				),
-				() => <button onClick={() => setOpenWindowHnd(() => Some(requestOIDC("https://accounts.google.com")!))}>
+				() => <button onClick={() => {
+					const u = requestOIDC("https://accounts.google.com");
+					setOpenWindowHnd(() => Some(u))
+
+				}}>
 					<p>
 						You are not authenticated to perform this operation.
 					</p>

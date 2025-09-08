@@ -22,6 +22,10 @@
 export type Either<L, R> =
 	<T>(onLeft: (l: L) => T, onRight: (r: R) => T) => T
 
+// if you are getting 'onRight is not a function' errors around here, it's
+// likely that you are using React and an Either function is being set as
+// a useState value which React is interpreting as an initializer.
+
 /**
  * Make a Left value.
  * Use for errors or the “unhappy” path.

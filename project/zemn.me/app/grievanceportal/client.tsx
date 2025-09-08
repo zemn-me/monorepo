@@ -145,17 +145,21 @@ export default function GrievancePortal() {
                                 )
                         )
                 )
-                , [at])
+                , [at, openWindowHnd])
 
-        const login_button = result_unwrap_or_else(
-                result_and_then(
-                        at,
-                        r => option_unwrap_or_else(
-                                option_and_then(
-                                        r,
-                                        () => <p>You are logged in.</p>
-                                ),
-                                () => <button onClick={() => setOpenWindowHnd(() => Some(requestOIDC("https://accounts.google.com")!))}>Login with Google</button>
+	const login_button = result_unwrap_or_else(
+		result_and_then(
+			at,
+			r => option_unwrap_or_else(
+				option_and_then(
+					r,
+					() => <p>You are logged in.</p>
+				),
+				() => <button onClick={() => {
+					const wnd = requestOIDC("https://accounts.google.com")
+					setOpenWindowHnd(() =>
+						Some(wnd))
+				} }>Login with Google</button>
                         )
                 ), e => <>error: {e}</>);
 
