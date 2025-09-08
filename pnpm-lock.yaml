@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.97.10
-    version: 41.97.10(typanion@3.14.0)
+    specifier: 41.98.0
+    version: 41.98.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -14991,6 +14991,7 @@ packages:
   /openpgp@6.2.1:
     resolution: {integrity: sha512-5vkqxQWgyrfY0shygqJTaCoa4SbPdjrpmtfREyXBBDrXjoRT25edEMQbdKH5/WxDXlLVn9TxPsVrKP72Jjuz2A==}
     engines: {node: '>= 18.0.0'}
+    deprecated: This version has a bug affecting zlib compression if manually enabled as part of encryption or signing (see https://github.com/openpgpjs/openpgpjs/pull/1894). Please update to v6.2.2 or later.
     requiresBuild: true
     dev: true
     optional: true
@@ -16411,8 +16412,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.97.10(typanion@3.14.0):
-    resolution: {integrity: sha512-tnSQuZL87dC3TPtlrgt/wZeIt0j4l0tlKagRN+OJUw6C5YNxyGI9+38w18eL6jsohsFan71j3fBPLaQsgdHDKw==}
+  /renovate@41.98.0(typanion@3.14.0):
+    resolution: {integrity: sha512-YJJMLkK9ecSyt7rVEPoEUqWWpg0plZe8XEtqKoom9rC6EJwOk0irBxBkMZ0pwFHeGNwbiIMAVDo4HU74ajrSiQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
