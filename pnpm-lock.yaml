@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.98.4
-    version: 41.98.4(typanion@3.14.0)
+    specifier: 41.99.1
+    version: 41.99.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -14988,10 +14988,9 @@ packages:
       yargs-parser: 21.1.1
     dev: false
 
-  /openpgp@6.2.1:
-    resolution: {integrity: sha512-5vkqxQWgyrfY0shygqJTaCoa4SbPdjrpmtfREyXBBDrXjoRT25edEMQbdKH5/WxDXlLVn9TxPsVrKP72Jjuz2A==}
+  /openpgp@6.2.2:
+    resolution: {integrity: sha512-P/dyEqQ3gfwOCo+xsqffzXjmUhGn4AZTOJ1LCcN21S23vAk+EAvMJOQTsb/C8krL6GjOSBxqGYckhik7+hneNw==}
     engines: {node: '>= 18.0.0'}
-    deprecated: This version has a bug affecting zlib compression if manually enabled as part of encryption or signing (see https://github.com/openpgpjs/openpgpjs/pull/1894). Please update to v6.2.2 or later.
     requiresBuild: true
     dev: true
     optional: true
@@ -16412,8 +16411,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.98.4(typanion@3.14.0):
-    resolution: {integrity: sha512-P/DTA3YXdSUPDfPRl9NOm5v1szPKhMP+FkLh0dsYER/lzAtTMRGUZd0dhRMN3Hn7AMiCQElucBfr+xLaT1jjKg==}
+  /renovate@41.99.1(typanion@3.14.0):
+    resolution: {integrity: sha512-Ta7BnX5ajOjyamhd1Ud4+3H2ZGqQzDjp6FA6SuQv+iH3bQ1OPTIGvIBGCVXKOQ+SzTUBZLgUt2iBR5zD0eP4Xw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16537,7 +16536,7 @@ packages:
       zod: 3.25.76
     optionalDependencies:
       better-sqlite3: 12.2.0
-      openpgp: 6.2.1
+      openpgp: 6.2.2
       re2: 1.22.1
     transitivePeerDependencies:
       - aws-crt
