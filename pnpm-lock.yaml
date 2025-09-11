@@ -260,8 +260,8 @@ devDependencies:
     specifier: 3.0.2
     version: 3.0.2(@fortawesome/fontawesome-svg-core@7.0.1)(react@19.1.1)
   '@microsoft/api-documenter':
-    specifier: 7.26.32
-    version: 7.26.32(@types/node@22.18.1)
+    specifier: 7.26.33
+    version: 7.26.33(@types/node@22.18.1)
   '@pulumi/aws':
     specifier: 6.68.0
     version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -3135,15 +3135,15 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-documenter@7.26.32(@types/node@22.18.1):
-    resolution: {integrity: sha512-OnfyOuiOQMvIkzh7TK8RyPHDwtkZs7Dzu48XwzUyNHc3tyrLnlZcMNvh6XxUvPsTi/jOoe9alJezESnuGKIQYw==}
+  /@microsoft/api-documenter@7.26.33(@types/node@22.18.1):
+    resolution: {integrity: sha512-Fw6NlfC0BEn/8GeNlipcq4RgOwNdHnyAWH+aOQL1hT1/L/lNjY27KHjYST3UnOKnHBOvHX+C2I1sSOAYhGT1fA==}
     hasBin: true
     dependencies:
       '@microsoft/api-extractor-model': 7.30.7(@types/node@22.18.1)
       '@microsoft/tsdoc': 0.15.1
       '@rushstack/node-core-library': 5.14.0(@types/node@22.18.1)
-      '@rushstack/terminal': 0.15.4(@types/node@22.18.1)
-      '@rushstack/ts-command-line': 5.0.2(@types/node@22.18.1)
+      '@rushstack/terminal': 0.16.0(@types/node@22.18.1)
+      '@rushstack/ts-command-line': 5.0.3(@types/node@22.18.1)
       js-yaml: 3.13.1
       resolve: 1.22.10
     transitivePeerDependencies:
@@ -5260,8 +5260,8 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@rushstack/terminal@0.15.4(@types/node@22.18.1):
-    resolution: {integrity: sha512-OQSThV0itlwVNHV6thoXiAYZlQh4Fgvie2CzxFABsbO2MWQsI4zOh3LRNigYSTrmS+ba2j0B3EObakPzf/x6Zg==}
+  /@rushstack/terminal@0.16.0(@types/node@22.18.1):
+    resolution: {integrity: sha512-WEvNuKkoR1PXorr9SxO0dqFdSp1BA+xzDrIm/Bwlc5YHg2FFg6oS+uCTYjerOhFuqCW+A3vKBm6EmKWSHfgx/A==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -5273,10 +5273,10 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@5.0.2(@types/node@22.18.1):
-    resolution: {integrity: sha512-+AkJDbu1GFMPIU8Sb7TLVXDv/Q7Mkvx+wAjEl8XiXVVq+p1FmWW6M3LYpJMmoHNckSofeMecgWg5lfMwNAAsEQ==}
+  /@rushstack/ts-command-line@5.0.3(@types/node@22.18.1):
+    resolution: {integrity: sha512-bgPhQEqLVv/2hwKLYv/XvsTWNZ9B/+X1zJ7WgQE9rO5oiLzrOZvkIW4pk13yOQBhHyjcND5qMOa6p83t+Z66iQ==}
     dependencies:
-      '@rushstack/terminal': 0.15.4(@types/node@22.18.1)
+      '@rushstack/terminal': 0.16.0(@types/node@22.18.1)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
