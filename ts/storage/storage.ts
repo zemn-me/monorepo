@@ -2,7 +2,7 @@ import { Lens, LensGet } from "#root/ts/lens.js";
 import { None, Option, Some, unwrap } from "#root/ts/option/types.js";
 
 export function asyncStorageLens(k: string): Lens<Promise<Storage>, Promise<string | null>> {
-        return (f) => f(
+        return f => f(
                 /** get */async v => (await v).getItem(k),
                 /** set */async (pv, storage) => {
                         const v = await pv;
@@ -57,7 +57,7 @@ export async function asyncStorageLensKey<T>(l: Lens<Promise<Storage>, Promise<T
 }
 
 export function StorageLens(k: string): Lens<Storage, string | null> {
-        return (f) => f(
+        return f => f(
                 /** get */ v => v.getItem(k),
                 /** set */ (v, storage) => {
                         if (v === null) {

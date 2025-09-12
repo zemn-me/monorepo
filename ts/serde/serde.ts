@@ -128,7 +128,7 @@ export function serdeLens<Haystack, Needle, Deserialized>(
         lens: Lens<Haystack, Needle>,
         serde: Serde<Deserialized, Needle>,
 ): Lens<Haystack, Deserialized> {
-        return (f) => f(
+        return f => f(
                 v => Deserialize(serde)(LensGet(lens)(v)),
                 (needle, haystack) => LensSet(lens)(Serialize(serde)(needle), haystack),
         )
