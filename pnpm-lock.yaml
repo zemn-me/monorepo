@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.105.0
-    version: 41.105.0(typanion@3.14.0)
+    specifier: 41.107.0
+    version: 41.107.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -7456,6 +7456,10 @@ packages:
   /adm-zip@0.5.16:
     resolution: {integrity: sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ==}
     engines: {node: '>=12.0'}
+    dev: true
+
+  /ae-cvss-calculator@1.0.8:
+    resolution: {integrity: sha512-ud8g+BQTSJoeuB4nOnbhu/Fd7TnGEnnr1AYOA+uFaEDQB0IOgjxHA2ds5iOmLh5Os6ziGCJJqjEFOFeWMOVQ4Q==}
     dev: true
 
   /agent-base@6.0.2:
@@ -16371,8 +16375,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.105.0(typanion@3.14.0):
-    resolution: {integrity: sha512-tLos2MevkYXf9imyGIb6qdq86c8+ctVUCLdE5zpVkIS7xj55TAIsaaOTj/tgA+6cnxgPrQwJWPql704CyvMyuQ==}
+  /renovate@41.107.0(typanion@3.14.0):
+    resolution: {integrity: sha512-X/gfBAeGrCrJc4bWz0+lJfOzziXLEJ4E3+GdnRhSOR3bWDNxIAuBbNGvNTrJ3L+CVZKQnyVIiztMxuUc65lHig==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16410,6 +16414,7 @@ packages:
       '@sindresorhus/is': 7.0.2
       '@yarnpkg/core': 4.4.3(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
+      ae-cvss-calculator: 1.0.8
       agentkeepalive: 4.6.0
       async-mutex: 0.5.0
       auth-header: 1.0.0
@@ -16490,7 +16495,6 @@ packages:
       upath: 2.0.1
       url-join: 5.0.0
       validate-npm-package-name: 6.0.2
-      vuln-vects: 1.1.0
       xmldoc: 2.0.2
       yaml: 2.8.1
       zod: 3.25.76
@@ -18716,10 +18720,6 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
     dev: false
-
-  /vuln-vects@1.1.0:
-    resolution: {integrity: sha512-LGDwn9nRz94YoeqOn2TZqQXzyonBc5FJppSgH34S/1U+3bgPONq/vvfiCbCQ4MeBll58xx+kDmhS73ac+EHBBw==}
-    dev: true
 
   /w3c-xmlserializer@4.0.0:
     resolution: {integrity: sha512-d+BFHzbiCx6zGfz0HyQ6Rg69w9k19nviJspaj4yNscGjrHu94sVP+aRm75yEbCh+r2/yR+7q6hux9LVtbuTGBw==}
