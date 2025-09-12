@@ -6,7 +6,7 @@ export type Lens<S, A> = <R>(
 ) => R;
 
 export function LensGet<S, A>(lens: Lens<S, A>) {
-        return lens((get) => get);
+        return lens(get => get);
 }
 
 export function LensSet<S, A>(lens: Lens<S, A>) {
@@ -18,7 +18,7 @@ export function LensSet<S, A>(lens: Lens<S, A>) {
  * be used where a promise would be.
  */
 export function lensPromise<S, A>(lens: Lens<S, A>): Lens<Promise<S>, Promise<A>> {
-        return (f) =>
+        return f =>
                 lens((get, set) =>
                         f(
                                 /** get */ async s => Promise.resolve(get(await s)),
@@ -31,7 +31,7 @@ export function pipeLens<A, B, C>(
         lensAB: Lens<A, B>,
         lensBC: Lens<B, C>,
 ): Lens<A, C> {
-        return (f) =>
+        return f =>
                 lensAB((getAB, setAB) =>
                         lensBC((getBC, setBC) =>
                                 f(
