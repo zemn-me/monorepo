@@ -119,7 +119,6 @@ common:ci --lockfile_mode=error
 common:ci --build_metadata=ROLE=CI
 common:ci --keep_going
 common:ci --noshow_progress
-common:ci --flaky_test_attempts=3
 common --test_verbose_timeout_warnings
 
 
