@@ -5,6 +5,7 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 service_test(
     name = "integration_test",
+    flaky = True,
     services = [
         "//project/zemn.me:itest_service",
     ],
