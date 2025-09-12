@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.107.0
-    version: 41.107.0(typanion@3.14.0)
+    specifier: 41.109.0
+    version: 41.109.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.3
     version: 0.34.3
@@ -5241,7 +5241,7 @@ packages:
       adm-zip: 0.5.16
       fs-extra: 11.3.1
       got: 11.8.6
-      luxon: 3.7.1
+      luxon: 3.7.2
     dev: true
 
   /@renovatebot/pep440@4.2.0:
@@ -13107,8 +13107,8 @@ packages:
       es5-ext: 0.10.64
     dev: false
 
-  /luxon@3.7.1:
-    resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
+  /luxon@3.7.2:
+    resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
     engines: {node: '>=12'}
     dev: true
 
@@ -16380,8 +16380,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.107.0(typanion@3.14.0):
-    resolution: {integrity: sha512-X/gfBAeGrCrJc4bWz0+lJfOzziXLEJ4E3+GdnRhSOR3bWDNxIAuBbNGvNTrJ3L+CVZKQnyVIiztMxuUc65lHig==}
+  /renovate@41.109.0(typanion@3.14.0):
+    resolution: {integrity: sha512-GhnG8nVpYjO62lyYted2aqVmbqUnvgUsyR4EGbedCXfXDTI/Iy3JDLNecQ5UPFL+1vMsbbjdeNTE3zy4K/EyRQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16464,7 +16464,7 @@ packages:
       jsonata: 2.1.0
       jsonc-parser: 3.3.1
       klona: 2.0.6
-      luxon: 3.7.1
+      luxon: 3.7.2
       markdown-it: 14.1.0
       markdown-table: 3.0.4
       minimatch: 10.0.3
