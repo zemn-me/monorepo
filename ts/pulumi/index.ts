@@ -35,7 +35,10 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:Component', name, args, opts);
 		const tag = name;
-		const tags = mergeTags(args.tags, tagTrue(tag));
+		const tagsa = mergeTags(args.tags, tagTrue(tag));
+		const tags = mergeTags(tagsa, tagTrue(
+			args.staging? 'staging': 'production'
+		))
 
 		new CostAllocationTag(
 			`${name}_cost_tag`,
