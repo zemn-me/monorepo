@@ -7,7 +7,7 @@ import { Err, Ok, Result } from "#root/ts/result/result.js";
  * Returns {@link None} if the query is still loading. Returns
  * {@link Some}({@Link Result}) if done loading.
  */
-export function queryResult<T, E>(
+/*#__NO_SIDE_EFFECTS__*/ export function queryResult<T, E>(
 	r: UseQueryResult<T, E>
 ): Option<Result<T, E>> {
 	switch (r.status) {

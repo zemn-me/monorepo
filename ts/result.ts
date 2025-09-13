@@ -148,7 +148,7 @@ export class impl<T> extends NewType<T> {
  * @deprecated please use {@link r}
  * Returns a {@link Result} that represents a success.
  */
-export function Ok<T>(v: T): Ok<T> {
+/*#__NO_SIDE_EFFECTS__*/ export function Ok<T>(v: T): Ok<T> {
 	return new impl(types.Ok(v))
 }
 
@@ -175,7 +175,7 @@ export type Result<T, E = Error> = impl<types.Result<T, E>>
  * Returns a {@link Result} that is in error
  * with the given error.
  */
-export function Err<T>(v: T): Err<T> {
+/*#__NO_SIDE_EFFECTS__*/ export function Err<T>(v: T): Err<T> {
 	return new impl(types.Err(v))
 }
 
