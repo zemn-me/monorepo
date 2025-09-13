@@ -6,6 +6,7 @@
 ---
 manifest:
   modules_mapping:
+    7ae574991b77ef47acad__mypyc: mypy
     IPython: ipython
     OpenSSL: pyopenssl
     aioquic: aioquic
@@ -35,7 +36,6 @@ manifest:
     debugpy: debugpy
     decorator: decorator
     defusedxml: defusedxml
-    edfc647aaf02b20aa651__mypyc: mypy
     executing: executing
     fastjsonschema: fastjsonschema
     flask: flask
@@ -88,6 +88,7 @@ manifest:
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
+    native_internal: mypy
     nbclient: nbclient
     nbconvert: nbconvert
     nbformat: nbformat
@@ -162,4 +163,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: ee67473d9fe9cb8d64bf350016cf2660dc06c71a69b0bb69c8fcd18a2f39fb52
+integrity: acc120a307bf0eb4eff271f61bc2914682a491ea25a653d06c7ed21e80bf2ef9

@@ -139,7 +139,7 @@ export class S3ExpireOnDeletePolicy extends ComponentResource {
                     id: "ExpireSoftDeletedObjects",
                     filter: {
                         tag: {
-                            key: "soft_deleted",
+                            key: "expire_on_delete",
                             value: "true",
                         },
 						objectSizeGreaterThan: '0',
