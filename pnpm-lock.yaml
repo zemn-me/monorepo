@@ -27,8 +27,8 @@ dependencies:
     specifier: 15.5.3
     version: 15.5.3
   '@openai/codex':
-    specifier: 0.34.0
-    version: 0.34.0
+    specifier: 0.36.0
+    version: 0.36.0
   '@pulumi/command':
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -3816,8 +3816,8 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.34.0:
-    resolution: {integrity: sha512-lLEC2HYccGgazkd1aKcAH5FqpNvhYRV905Fke9HQdEUJrhB85a97x2zddXIYblAHK0YkL+pQsNRm95bKytu5Tg==}
+  /@openai/codex@0.36.0:
+    resolution: {integrity: sha512-IFarw0q0rrV/O88PPN3883nz3I7jYdnODNbk5YlzuJA/geGJJdqBuc4NOQtXug1Da5XJX0l/3iw4fCyWAvbfww==}
     engines: {node: '>=20'}
     hasBin: true
     dependencies:
@@ -4896,7 +4896,7 @@ packages:
         optional: true
     dependencies:
       '@react-native/dev-middleware': 0.81.1
-      debug: 4.4.1(supports-color@10.2.0)
+      debug: 4.4.3
       invariant: 2.2.4
       metro: 0.83.1
       metro-config: 0.83.1
@@ -4920,7 +4920,7 @@ packages:
       chrome-launcher: 0.15.2
       chromium-edge-launcher: 0.2.0
       connect: 3.7.0
-      debug: 4.4.1(supports-color@10.2.0)
+      debug: 4.4.3
       invariant: 2.2.4
       nullthrows: 1.1.1
       open: 7.4.2
@@ -13598,7 +13598,7 @@ packages:
     resolution: {integrity: sha512-Yu429lnexKl44PttKw3nhqgmpBR+6UQ/tRaYcxPeEShtcza9DWakCn7cjqDTQZtWR2A8xSNv139izJMyQ4CG+w==}
     engines: {node: '>=20.19.4'}
     dependencies:
-      debug: 4.4.1(supports-color@10.2.0)
+      debug: 4.4.3
       fb-watchman: 2.0.2
       flow-enums-runtime: 0.0.6
       graceful-fs: 4.2.11
@@ -13712,7 +13712,7 @@ packages:
       chalk: 4.1.2
       ci-info: 2.0.0
       connect: 3.7.0
-      debug: 4.4.1(supports-color@10.2.0)
+      debug: 4.4.3
       error-stack-parser: 2.1.4
       flow-enums-runtime: 0.0.6
       graceful-fs: 4.2.11
