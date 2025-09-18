@@ -429,7 +429,7 @@ rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.89.0"
+RUST_VERSION = "1.90.0"
 
 rust.toolchain(
     edition = "2021",
