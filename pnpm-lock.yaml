@@ -422,8 +422,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.121.0
-    version: 41.121.0(typanion@3.14.0)
+    specifier: 41.121.3
+    version: 41.121.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -4203,7 +4203,7 @@ packages:
     engines: {node: '>=18.12'}
     dependencies:
       '@pnpm/catalogs.protocol-parser': 1001.0.0
-      '@pnpm/error': 1000.0.4
+      '@pnpm/error': 1000.0.5
     dev: true
 
   /@pnpm/catalogs.types@1000.0.0:
@@ -4211,8 +4211,8 @@ packages:
     engines: {node: '>=18.12'}
     dev: true
 
-  /@pnpm/constants@1001.3.0:
-    resolution: {integrity: sha512-ZFRekNHbDlu//67Byg+mG8zmtmCsfBhNsg1wKBLRtF7VjH+Q5TDGMX0+8aJYSikQDuzM2FOhvQcDwyjILKshJQ==}
+  /@pnpm/constants@1001.3.1:
+    resolution: {integrity: sha512-2hf0s4pVrVEH8RvdJJ7YRKjQdiG8m0iAT26TTqXnCbK30kKwJW69VLmP5tED5zstmDRXcOeH5eRcrpkdwczQ9g==}
     engines: {node: '>=18.12'}
     dev: true
 
@@ -4221,11 +4221,11 @@ packages:
     engines: {node: '>=14.19'}
     dev: true
 
-  /@pnpm/error@1000.0.4:
-    resolution: {integrity: sha512-22mG/Mq4u2r7gr2+XY5j4GlN7J4Mg4WiCfT9flvsUc1uZecShocv6WkyoA20qs14M64f6I+aaWB6b6xsDiITlg==}
+  /@pnpm/error@1000.0.5:
+    resolution: {integrity: sha512-GjH0TPjbVNrPnl/BAGoFuBLJ2sFfXNKbS33lll/Ehe9yw0fyc8Kdw7kO9if37yQqn6vaa4dAHKkPllum7f/IPQ==}
     engines: {node: '>=18.12'}
     dependencies:
-      '@pnpm/constants': 1001.3.0
+      '@pnpm/constants': 1001.3.1
     dev: true
 
   /@pnpm/error@4.0.0:
@@ -4242,13 +4242,13 @@ packages:
       graceful-fs: 4.2.11
     dev: true
 
-  /@pnpm/parse-overrides@1001.0.2:
-    resolution: {integrity: sha512-1GgUm9XJpEKQvaWGd8N55c9SlGzViN16vSC/F6FU2o28SPwOgw1aOs1A8v5hcQOWL3iEk1N/s9z0Zruq+2pqzw==}
+  /@pnpm/parse-overrides@1001.0.3:
+    resolution: {integrity: sha512-Ctu3m3cnGscQM9SQjnBVzrw6C4ZI4DBkotEOYv1dyRF0xc+aktGNDnrx59O/hnWU8PbsQ9PT5LmAO/GkdlrM/Q==}
     engines: {node: '>=18.12'}
     dependencies:
       '@pnpm/catalogs.resolver': 1000.0.5
       '@pnpm/catalogs.types': 1000.0.0
-      '@pnpm/error': 1000.0.4
+      '@pnpm/error': 1000.0.5
       '@pnpm/parse-wanted-dependency': 1001.0.0
     dev: true
 
@@ -16541,8 +16541,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.121.0(typanion@3.14.0):
-    resolution: {integrity: sha512-5Bbk5uh89e5mq5PRAFsSseVlAVuR8rkwavk7aXj3nlmd/FIl/Ak4W3ozCwzzetuppbt2KEPsJz1I/VbRnn85gA==}
+  /renovate@41.121.3(typanion@3.14.0):
+    resolution: {integrity: sha512-Wqu1g9m294Ghe7bXbDI0SqgOkWow83ydZIXA5kylKBNqPF5mLpNA7omKNEyVBOQ7EclgcuCT66gZNwj/DXWeQg==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16570,7 +16570,7 @@ packages:
       '@opentelemetry/sdk-trace-base': 2.1.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 2.1.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.37.0
-      '@pnpm/parse-overrides': 1001.0.2
+      '@pnpm/parse-overrides': 1001.0.3
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.1.0
       '@renovatebot/kbpgp': 4.0.3
