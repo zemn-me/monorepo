@@ -1,0 +1,4 @@
+setcpm(30)
+
+note("c e g b, b g e [ c e ]".add("<0 0 0 -5 -5 -5>"))
+  .sound("piano")._pianoroll()
