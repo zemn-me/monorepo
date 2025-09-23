@@ -1,0 +1,10 @@
+setcpm(53)
+
+// lacklustre attempt to make the engine sound
+// at the beginning of divide and conquer
+// by what so not
+
+$: note("gb3@3 - ").pattack("12")
+  .sound("sawtooth").pcurve(0)
+  .fast(2).distort("12:.2").room(1.2)
+  ._spectrum()
