@@ -2,7 +2,10 @@ package ts
 
 import (
 	"flag"
+	"os"
 	"path/filepath"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -14,6 +17,8 @@ import (
 )
 
 const allowPath = "go/gazelle/ts"
+
+var reExtractModule = regexp.MustCompile("@[^/]+/[^/]+|[^/]+")
 
 // Language implements a very small Gazelle extension that
 // generates ts_project rules for TypeScript files.
@@ -29,7 +34,7 @@ func (Language) Embeds(r *rule.Rule, from label.Label) []label.Label          { 
 func (Language) Fix(c *config.Config, f *rule.File)                           {}
 
 func isAllowed(rel string) bool {
-        return rel == allowPath || strings.HasPrefix(rel, allowPath+"/")
+	return rel == allowPath || strings.HasPrefix(rel, allowPath+"/")
 }
 
 func (Language) Kinds() map[string]rule.KindInfo {
@@ -77,14 +82,38 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	}
 
 	name := filepath.Base(args.Dir)
-        r := rule.NewRule("ts_project", name)
-        r.SetAttr("srcs", srcs)
-		// todo(codex): get deps by parsing from ts files.
-        r.SetAttr("deps", []string{
-                "//:node_modules/@jest/globals",
-                "//:node_modules/@types/jest",
-                "//:node_modules/@types/node",
-        })
+	r := rule.NewRule("ts_project", name)
+	r.SetAttr("srcs", srcs)
+
+	depSet := make(map[string]bool)
+	re := regexp.MustCompile(`(?m)from\s+['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)`)
+	for _, src := range srcs {
+		data, err := os.ReadFile(filepath.Join(args.Dir, src))
+		if err != nil {
+			continue
+		}
+		matches := re.FindAllStringSubmatch(string(data), -1)
+		for _, m := range matches {
+			mod := m[1]
+			if mod == "" {
+				mod = m[2]
+			}
+			if strings.HasPrefix(mod, ".") {
+				continue
+			}
+			moduleName := reExtractModule.FindString(mod)
+			depSet["//:node_modules/"+moduleName] = true
+		}
+	}
+
+	var deps []string
+	for d := range depSet {
+		deps = append(deps, d)
+	}
+	sort.Strings(deps)
+	if len(deps) > 0 {
+		r.SetAttr("deps", deps)
+	}
 
 	return language.GenerateResult{
 		Gen:     []*rule.Rule{r},
