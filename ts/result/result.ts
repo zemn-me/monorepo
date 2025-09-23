@@ -71,6 +71,13 @@ export const unwrap_err_unchecked = /*#__NO_SIDE_EFFECTS__*/ unwrap_err
 	return either<E, T, Result<O, E>>(v, e => Err<E, O>(e), t => Ok<O, E>(f(t)))
 }
 
+export function and_then_flatten<T, E, O, OE>(
+	v: Result<T, E>,
+	f: (value: T) => Result<O, OE>,
+): Result<O, OE | E> {
+	return flatten(and_then(v, f))
+}
+
 /** Flatten Result<Result<T,E2>,E1> → Result<T, E1|E2> */
 /*#__NO_SIDE_EFFECTS__*/ export function flatten<T, E1, E2>(
 	v: Result<Result<T, E2>, E1>
