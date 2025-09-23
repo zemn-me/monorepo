@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.125.1
-    version: 41.125.1(typanion@3.14.0)
+    specifier: 41.125.2
+    version: 41.125.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -9624,8 +9624,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /detect-indent@7.0.1:
-    resolution: {integrity: sha512-Mc7QhQ8s+cLrnUfU/Ji94vG/r8M26m8f++vyres4ZoojaRDpZ1eSIh/EpzLNwlWuvzSZ3UbDFspjFvTDXe6e/g==}
+  /detect-indent@7.0.2:
+    resolution: {integrity: sha512-y+8xyqdGLL+6sh0tVeHcfP/QDd8gUgbasolJJpY7NgeQGSZ739bDtSiaiDgtoicy+mtYB81dKLxO9xRhCyIB3A==}
     engines: {node: '>=12.20'}
     dev: true
 
@@ -16906,8 +16906,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.125.1(typanion@3.14.0):
-    resolution: {integrity: sha512-cuuLe7ufdLChRW2/EPgONF8yUTmzEll5t133gym+/5lOcn2pkjJBZeOA5BcWckVsiRctCQMMhJJf8htGWNzqRQ==}
+  /renovate@41.125.2(typanion@3.14.0):
+    resolution: {integrity: sha512-MQjofh3LfqJLO7b6N/sqBSi2H7Am2KdITMscxCPqhyTGegpv2zkQkRn+4g8C+my/ZlXnJv2yruITsaD50yQkxA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16962,7 +16962,7 @@ packages:
       cronstrue: 3.3.0
       deepmerge: 4.3.1
       dequal: 2.0.3
-      detect-indent: 7.0.1
+      detect-indent: 7.0.2
       diff: 8.0.2
       editorconfig: 3.0.1
       email-addresses: 5.0.0
