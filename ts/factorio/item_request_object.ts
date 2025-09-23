@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
 
@@ -7,4 +7,4 @@ import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
  */
 export const ItemRequestObject = z.record(z.string(), ItemCountType);
 
-export type ItemRequestObject = z.TypeOf<typeof ItemRequestObject>;
+export type ItemRequestObject = z.infer<typeof ItemRequestObject>;

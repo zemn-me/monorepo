@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4-mini';
 
 import { ConnectionData } from '#root/ts/factorio/connection_data';
 import { ConnectionPoint } from '#root/ts/factorio/connection_point.js';
@@ -20,4 +20,4 @@ export const Connection = z.strictObject({
 /**
  * Object containing information about the connections to other entities formed by red or green wires.
  */
-export type Connection = z.TypeOf<typeof Connection>;
+export type Connection = z.infer<typeof Connection>;
