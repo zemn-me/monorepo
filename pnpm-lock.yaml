@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.125.0
-    version: 41.125.0(typanion@3.14.0)
+    specifier: 41.125.1
+    version: 41.125.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -12469,6 +12469,7 @@ packages:
   /jazz-midi@1.7.9:
     resolution: {integrity: sha512-c8c4BBgwxdsIr1iVm53nadCrtH7BUlnX3V95ciK/gbvXN/ndE5+POskBalXgqlc/r9p2XUbdLTrgrC6fou5p9w==}
     engines: {node: '>=10.0.0'}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -16905,8 +16906,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.125.0(typanion@3.14.0):
-    resolution: {integrity: sha512-Z4V1lDgFSvEnUzEXOsTFhH3SZPzWHiaHltUKOPn3V90XkrK0z738DzzktTwZKiIaQogZ2xetyzUKGNTMMRUmZQ==}
+  /renovate@41.125.1(typanion@3.14.0):
+    resolution: {integrity: sha512-cuuLe7ufdLChRW2/EPgONF8yUTmzEll5t133gym+/5lOcn2pkjJBZeOA5BcWckVsiRctCQMMhJJf8htGWNzqRQ==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
