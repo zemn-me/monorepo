@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.130.0
-    version: 41.130.0(typanion@3.14.0)
+    specifier: 41.130.1
+    version: 41.130.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -15352,8 +15352,8 @@ packages:
       safe-push-apply: 1.0.0
     dev: true
 
-  /p-all@5.0.0:
-    resolution: {integrity: sha512-pofqu/1FhCVa+78xNAptCGc9V45exFz2pvBRyIvgXkNM0Rh18Py7j8pQuSjA+zpabI46v9hRjNWmL9EAFcEbpw==}
+  /p-all@5.0.1:
+    resolution: {integrity: sha512-LMT7WX9ZSaq3J1zjloApkIVmtz0ZdMFSIqbuiEa3txGYPLjUPOvgOPOx3nFjo+f37ZYL+1aY666I2SG7GVwLOA==}
     engines: {node: '>=16'}
     dependencies:
       p-map: 6.0.0
@@ -16746,8 +16746,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.130.0(typanion@3.14.0):
-    resolution: {integrity: sha512-9Phravx8NTVTTVcrixblOWsgiDyeZMr9XGOTX3w2zkqNq/Q4lN28U4WL2dHtOZN2z9AvM7GFujVFIK/FTgc5cw==}
+  /renovate@41.130.1(typanion@3.14.0):
+    resolution: {integrity: sha512-yXsUppr5Nx4it2RoRHd1jZBs91M9qXiCfuBggqmXDSUcR6oUubqryCB3z4NvRcf5ITAZSWt2ObX+mlUSHBh4cA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16839,7 +16839,7 @@ packages:
       nanoid: 5.1.5
       neotraverse: 0.6.18
       node-html-parser: 7.0.1
-      p-all: 5.0.0
+      p-all: 5.0.1
       p-map: 7.0.3
       p-queue: 8.1.1
       p-throttle: 8.0.0
