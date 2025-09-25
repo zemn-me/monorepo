@@ -41,7 +41,7 @@ require (
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.3
 	github.com/tebeka/selenium v0.9.9
-	github.com/twilio/twilio-go v1.28.1
+	github.com/twilio/twilio-go v1.28.2
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.17.0
 	golang.org/x/tools v0.37.0
