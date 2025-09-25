@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.130.1
-    version: 41.130.1(typanion@3.14.0)
+    specifier: 41.130.2
+    version: 41.130.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -5390,8 +5390,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /@sindresorhus/is@7.0.2:
-    resolution: {integrity: sha512-d9xRovfKNz1SKieM0qJdO+PQonjnnIfSNWfHYnBSJ9hkjm0ZPw6HlxscDXYstp3z+7V2GOFHc+J0CYrYTjqCJw==}
+  /@sindresorhus/is@7.1.0:
+    resolution: {integrity: sha512-7F/yz2IphV39hiS2zB4QYVkivrptHHh0K8qJJd9HhuWSdvf8AN7NpebW3CcDZDBQsUPMoDKWsY2WWgW7bqOcfA==}
     engines: {node: '>=18'}
     dev: true
 
@@ -16746,8 +16746,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.130.1(typanion@3.14.0):
-    resolution: {integrity: sha512-yXsUppr5Nx4it2RoRHd1jZBs91M9qXiCfuBggqmXDSUcR6oUubqryCB3z4NvRcf5ITAZSWt2ObX+mlUSHBh4cA==}
+  /renovate@41.130.2(typanion@3.14.0):
+    resolution: {integrity: sha512-JAfZr6YcvQnkMRk0lNjTsZYg9RbNFkTRDbl/DmhhcldYULTGZIOl4R4bnS+PGhSWzZYSy3iSDkkNiOFBWx4mag==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16782,7 +16782,7 @@ packages:
       '@renovatebot/osv-offline': 1.6.11
       '@renovatebot/pep440': 4.2.1
       '@renovatebot/ruby-semver': 4.1.2
-      '@sindresorhus/is': 7.0.2
+      '@sindresorhus/is': 7.1.0
       '@yarnpkg/core': 4.4.3(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       ae-cvss-calculator: 1.0.8
