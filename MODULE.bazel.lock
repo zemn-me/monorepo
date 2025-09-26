@@ -34,8 +34,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_js/2.6.0/MODULE.bazel": "5a6f8dbc5b170769453f1819d469fe54b0e4b86a0e82e13fde8e5a45438a1890",
     "https://bcr.bazel.build/modules/aspect_rules_js/2.6.0/source.json": "e1e20b259d4f1b0a5d8b99d57b418c96f306e1c77f96e9ea1c9f1068a628b211",
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.12.0/MODULE.bazel": "e767c5dbfeb254ec03275a7701b5cfde2c4d2873676804bc7cb27ddff3728fed",
-    "https://bcr.bazel.build/modules/aspect_rules_lint/1.7.0/MODULE.bazel": "bcadb86f82f66fcf1295e9d856a558abbdc7b64fa5e8398eadbad1b88134fbe5",
-    "https://bcr.bazel.build/modules/aspect_rules_lint/1.7.0/source.json": "306efdeb0fb439ccfc33abd23f2d87c92a88b86536b40d077cad1b89c3607582",
+    "https://bcr.bazel.build/modules/aspect_rules_lint/1.9.0/MODULE.bazel": "7ce1b9497d6055b29ba7d562205dbdcdf12bf7992c71016258e957b7b07be5ac",
+    "https://bcr.bazel.build/modules/aspect_rules_lint/1.9.0/source.json": "b871e5ee1ae9387c8183cf39e7cedaada30ff6c8723b166f067739d97f034932",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/MODULE.bazel": "8eb29876512d3242af50a424300bec5c5f8957b455963df5f618cb7fd4e8ae19",
     "https://bcr.bazel.build/modules/aspect_rules_py/1.0.0/source.json": "f48be9ca9f58adb817450c677659ed087d540d9f355f4e39098431cecd86ebf9",
     "https://bcr.bazel.build/modules/aspect_rules_swc/2.4.4/MODULE.bazel": "45b6e0c05b2e29e56c85634c1cd4d37446b9ad4ff93837b8d70511fe2d9bd842",
@@ -673,7 +673,7 @@
     "@@aspect_tools_telemetry+//:extension.bzl%telemetry": {
       "general": {
         "bzlTransitiveDigest": "gA7tPEdJXhskzPIEUxjX9IdDrM6+WjfbgXJ8Ez47umk=",
-        "usagesDigest": "WGNau2KW5lGzQHJ76Y6Sxzw5hpU3Mw7unM3kzqM0RLw=",
+        "usagesDigest": "nOY58pfA1iHV4or1kj0XoY0lInYCCLdiGNcRY4yqerk=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -684,7 +684,7 @@
               "deps": {
                 "aspect_rules_swc": "2.4.4",
                 "aspect_rules_js": "2.6.0",
-                "aspect_rules_lint": "1.7.0",
+                "aspect_rules_lint": "1.9.0",
                 "aspect_tools_telemetry": "0.2.8"
               }
             }
@@ -1093,7 +1093,7 @@
     "@@rules_multitool+//multitool:extension.bzl%multitool": {
       "general": {
         "bzlTransitiveDigest": "X9g8ULgPVMAMnQE06PLvw44AJzT3oE4qO7EyHicjLH4=",
-        "usagesDigest": "aa+zbJ7cnTr3bBcmne3T9yaH39eqfwIRrjDu03AoL88=",
+        "usagesDigest": "4iIQQrg+LuCOYk2tUDhVo6TjD2eq1gqSRRgmVgw0Fro=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
