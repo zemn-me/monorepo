@@ -1,12 +1,40 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "ts",
+    srcs = glob(
+        [
+            "**/*.ts",
+            "**/*.tsx",
+        ],
+        allow_empty = True,
+        exclude = ["*_test.ts"],
+    ),
     deps = [
         "//ts/result",
+    ],
+)
+
+ts_project(
+    name = "lens_test",
+    srcs = ["lens_test.ts"],
+    deps = [
+        ":ts",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "lens_tests",
+    srcs = [
+        "lens_test.js",
+    ],
+    deps = [
+        ":lens_test",
     ],
 )
 
