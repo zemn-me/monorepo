@@ -78,6 +78,7 @@
 			],
 			"postUpgradeTasks": {
 				"commands": [
+					"./sh/postUpgrade.sh",
 					"./sh/postUpgrade.sh"
 				],
 				"executionMode": "branch",
