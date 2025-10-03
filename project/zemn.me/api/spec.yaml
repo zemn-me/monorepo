@@ -12,11 +12,118 @@ servers:
 
 components:
   securitySchemes:
-    googleOIDC:
+    zemnMeOIDC:
       type: openIdConnect
       # todo: own issuer!
       openIdConnectUrl: "https://accounts.google.com/.well-known/openid-configuration"
   schemas:
+    OIDCIssuer:
+      type: string
+      format: uri
+      description: >
+        The server issuing the id_token (the `iss` field of the token).
+      example:
+        https://accounts.google.com
+    OIDCSubject:
+      type: string
+      description: >
+        The unique never reused identifier for a user.
+    OAuthClientId:
+      type: string
+    TokenExchangeTokenType: # just the supported ones!
+      type: string
+      enum:
+        - urn:ietf:params:oauth:token-type:access_token
+        - urn:ietf:params:oauth:token-type:id_token
+        - urn:ietf:params:oauth:token-type:refresh_token
+    TokenExchangeRequest:
+      description: RFC8693 token exchange (form-encoded)
+      type: object
+      required: [grant_type, subject_token, subject_token_type]
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/OAuthGrantType'
+        resource:
+          description: Optional resource indicator (can repeat)
+          oneOf:
+            - type: string
+            - type: array
+              items: { type: string }
+        audience:
+          description: Optional audience (can repeat)
+          oneOf:
+            - type: string
+            - type: array
+              items: { type: string }
+        scope:
+          type: string
+          description: Space-delimited scopes to apply to the issued token.
+        requested_token_type:
+          description: >
+            Desired type of the issued token.
+            e.g., urn:ietf:params:oauth:token-type:access_token | id_token | refresh_token | jwt
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+        subject_token:
+          type: string
+          description: The token representing the subject of the request.
+        subject_token_type:
+          description: Type of subject_token (e.g., …:access_token, …:id_token, …:jwt, …:saml2)
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+#        actor_token:
+#          type: string
+#          description: Optional actor token (on-behalf-of/impersonation)
+#        actor_token_type:
+#          type: string
+#          description: Type of actor_token
+#        requested_subject:
+#          type: string
+#          description: Optional identifier for desired subject (deployment-specific)
+        # Standard OAuth client auth parameters if using client_secret_post:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+
+    TokenResponse:
+      description: OAuth 2.0 successful token response (RFC6749/RFC8693)
+      type: object
+      required: [access_token, issued_token_type, token_type, expires_in]
+      properties:
+        access_token:
+          type: string
+          description: >
+            The returned token. For legacy reasons, it
+            is always called "access_token", even if it
+            is not an access token.
+        issued_token_type:
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+          description: Echoes the actual type issued (RFC8693 §2.2)
+          example: urn:ietf:params:oauth:token-type:access_token
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+        scope:
+          type: string
+
+    OAuthError:
+      description: RFC6749 error response
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          enum: [invalid_request, invalid_client, invalid_grant, unauthorized_client, unsupported_grant_type, invalid_scope]
+        error_description:
+          type: string
+        error_uri:
+          type: string
+          format: uri
+    OAuthGrantType: # just the supported ones!
+      type: string
+      enum:
+        - urn:ietf:params:oauth:grant-type:token-exchange
     IdToken:
       type: object
       description: >
@@ -34,31 +141,23 @@ components:
         - iat
       properties:
         iss:
-          type: string
-          format: uri
+          $ref: '#/components/schemas/OIDCIssuer'
           description: >
             **Issuer Identifier** — HTTPS URL (case-sensitive) for the OP.
             Must exactly match the provider’s discovery `issuer`.
             **No query or fragment** allowed.
         sub:
-          type: string
-          maxLength: 255
+          $ref: '#/components/schemas/OIDCSubject'
           description: >
             **Subject Identifier** — locally unique, never reassigned.
             Case-sensitive string (≤255 ASCII). Uniqueness is guaranteed only
             by the pair (`iss`, `sub`).
         aud:
+          $ref: '#/components/schemas/OAuthClientId'
           description: >
             **Audience** — identifies recipients the token is intended for.
             Must include the RP’s OAuth `client_id`. Commonly a single string,
             but may be an array when multiple audiences are present.
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                type: string
-              minItems: 1
-              uniqueItems: true
         exp:
           type: integer
           format: int64
@@ -344,7 +443,8 @@ components:
           items: { type: string }
         grant_types_supported:
           type: array
-          items: { type: string }
+          items:
+              $ref: '#/components/schemas/OAuthGrantType'
         subject_types_supported:
           type: array
           items:
@@ -743,7 +843,7 @@ paths:
       description: >
         Return the current callbox settings.
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       requestBody:
         required: true
         content:
@@ -768,7 +868,7 @@ paths:
       description: >
         Returns the current settings for the callbox.
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       responses:
         "500":
           description: >
@@ -789,7 +889,7 @@ paths:
     get:
       summary: Returns the current phone number for the callbox.
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       responses:
         "200":
           description: It worked!
@@ -801,7 +901,7 @@ paths:
   /grievances:
     get:
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       responses:
         "200":
           description: List grievances
@@ -813,7 +913,7 @@ paths:
                   $ref: '#/components/schemas/Grievance'
     post:
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       requestBody:
         required: true
         content:
@@ -831,7 +931,7 @@ paths:
   /grievance/{id}:
     get:
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       parameters:
         - name: id
           in: path
@@ -847,7 +947,7 @@ paths:
                 $ref: '#/components/schemas/Grievance'
     put:
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       parameters:
         - name: id
           in: path
@@ -871,7 +971,7 @@ paths:
           description: Not found
     delete:
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       parameters:
         - name: id
           in: path
@@ -928,7 +1028,7 @@ paths:
     get:
       summary: Returns the caller's OIDC subject ID.
       security:
-        - googleOIDC: []
+        - zemnMeOIDC: []
       responses:
         "200":
           description: The subject identifier.
@@ -1002,3 +1102,35 @@ paths:
                 $ref: '#/components/schemas/OIDCConfiguration'
         default:
           description: Discovery failure.
+  /oauth2/token:
+    post:
+      summary: OAuth 2.0 Token Endpoint (incl. RFC8693 Token Exchange)
+      description: >
+        Supports standard grants and `urn:ietf:params:oauth:grant-type:token-exchange`
+        per RFC 8693. Clients authenticate with `client_secret_basic` (recommended),
+        `client_secret_post`, or `private_key_jwt`.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+                $ref: '#/components/schemas/TokenExchangeRequest'
+      responses:
+        "200":
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        "400":
+          description: OAuth error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+        "401":
+          description: Client authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
