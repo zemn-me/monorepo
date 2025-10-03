@@ -109,13 +109,14 @@ export default tseslint.config(
 			...tseslint.configs.recommended,
 			reactConfig
 		],
-		plugins: {
-			'@next/next': next,
-		},
-		rules: {
-			'@typescript-eslint/no-floating-promises': 'error',
-			'@typescript-eslint/no-misused-promises': 'error',
-			'@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
+        plugins: {
+                '@next/next': next,
+                'jest': jestLint,
+        },
+        rules: {
+                '@typescript-eslint/no-floating-promises': 'error',
+                '@typescript-eslint/no-misused-promises': 'error',
+                '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
@@ -125,12 +126,13 @@ export default tseslint.config(
 					caughtErrorsIgnorePattern: '^_',
 					destructuredArrayIgnorePattern: '^_',
 					varsIgnorePattern: '^_',
-					ignoreRestSiblings: true,
-				},
-			],
-			'@typescript-eslint/no-non-null-assertion': 'off',
-			'@typescript-eslint/no-unnecessary-condition': 'error',
-		},
+                        ignoreRestSiblings: true,
+                },
+                ],
+                '@typescript-eslint/no-non-null-assertion': 'off',
+                '@typescript-eslint/no-unnecessary-condition': 'error',
+                'jest/prefer-importing-jest-globals': 'error',
+        },
 	},
 	{
 		name: 'markdown',
