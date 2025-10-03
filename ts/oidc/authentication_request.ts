@@ -51,7 +51,7 @@ export const OIDCAuthenticationRequest = object({
   ),
 
   /** Max acceptable age (in seconds) since last active authentication. */
-  max_age: optional(number()),
+  max_age: optional(string()),
 
   /** End-User’s preferred UI languages, as space-separated BCP47 tags. */
   ui_locales: optional(string()),

@@ -1,11 +1,11 @@
-import { useLocalStorageItem } from "#root/project/zemn.me/hook/useLocalStorage.js";
-import { AuthorizationCache } from "#root/project/zemn.me/localStorage/localStorage.js";
+import { useAuthRedirect } from "#root/project/zemn.me/hook/useAuthRedirect.js";
+import { useOpenIDConfiguration } from "#root/project/zemn.me/hook/useOpenIDConfiguration.js";
 import { Issuer } from "#root/project/zemn.me/OAuth/clients.js";
-import { and, firstItemIs } from "#root/ts/guard.js";
-import { lensPromise } from "#root/ts/lens.js";
+import { OIDCAuthenticationRequest } from "#root/ts/oidc/authentication_request.js";
+import { OIDCResponse } from "#root/ts/oidc/callback_params.js";
 import { ID_Token, watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
-import { and_then as option_and_then, flatten as option_flatten, None, Some } from "#root/ts/option/types.js";
-import { and_then, and_then as result_and_then, Err, flatten as result_flatten, Ok, result_collect, unwrap } from "#root/ts/result/result.js";
+import { and_then as option_and_then, None, Some } from "#root/ts/option/types.js";
+import { and_then_flatten as result_and_then_flatten, Err, Ok } from "#root/ts/result/result.js";
 import { resultFromZod } from "#root/ts/zod/util.js";
 
 function isUnexpiredIDToken(token: ID_Token): token is ID_Token {
@@ -16,41 +16,63 @@ export function allIdTokens(token: ID_Token): token is ID_Token {
 	return true;
 }
 
-export function useOIDC<T extends ID_Token>(filter: (v: ID_Token) => v is T) {
-	const f = firstItemIs(and(isUnexpiredIDToken, filter));
-	const [authCache] = useLocalStorageItem(
-		lensPromise(AuthorizationCache)
+
+const params = union([OIDCImplicitAuthResponse, OIDCAuthErrorResponse]);
+
+export function useOIDC(issuer: URL, req: OIDCAuthenticationRequest) {
+	const config = useOpenIDConfiguration(issuer);
+
+	const authEndp = config.data?.data?.authorization_endpoint;
+	const authEndpoint = authEndp ?
+		Some(new URL(authEndp[0]!)) : None;
+
+
+	const authReq = option_and_then(
+		authEndpoint,
+		v => {
+			const u = new URL(v);
+			u.search = (new URLSearchParams(Object.entries(req))).toString();
+			return u;
+		}
+	)
+
+	// we should probably not just do this every time because it
+	// is going to open so many windows.
+	const respQuery = useAuthRedirect(
+		authReq
 	);
 
-	const aa =
-		option_flatten(option_and_then(authCache, v => v === null ? None : Some(v)));
+	const respParams =
+		respQuery.data === undefined ?
+			None : Some(respQuery.data);
 
-	const id_tokens = option_and_then(
-		aa,
-		v => result_flatten(result_and_then(
-			v,
-			q => result_collect(Object.values(q).map(
-				v => {
-					const r = resultFromZod(watchOutParseIdToken.safeParse(v.id_token));
-					return result_and_then(
-						r,
-						vv => [vv, v.id_token] as const
-					)
-				}
-			)))
-		)
-	);
-
-
-	const filtered_tokens = option_and_then(
-		id_tokens,
-		ts => result_and_then(
-			ts,
-			v => v.filter(f).map(([, v]) => v)
+	const parsedParams = option_and_then(
+		respParams,
+		result => result_and_then_flatten(
+			result,
+			v => resultFromZod(OIDCResponse.safeParse(v))
 		)
 	)
 
-	return filtered_tokens
+	// todo:(thomas) state generation / checking
+
+	// handle case where we get an error
+	const successParams = option_and_then(
+		parsedParams,
+		result => result_and_then_flatten(
+			result,
+			v => {
+				if ('error' in v) return Err(new Error('remote server error'));
+				return Ok(v)
+			}
+		)
+	)
+
+
+
+
+
+
 }
 
 /**
@@ -72,7 +94,50 @@ export function requestOIDC(issuer?: Issuer) {
 
 
 
-	and_then(wnd, w => w.focus());
+	option_and_then(wnd, w => w.focus());
 
 	return unwrap(wnd);
+}
+
+
+
+export default function Client() {
+	const zq = params.safeParse(useRouter().query);
+	const query = zq.success ? Ok(zq.data) : Err(zq.error);
+
+	const success_params = result_and_then_flatten(query,
+		params =>
+			'error' in params?
+				Err(new Error(params.error))
+				: Ok(params)
+	)
+
+	const id_token = result_and_then_flatten(success_params,
+		v => v.id_token !== undefined ? Ok(v.id_token) : Err(
+			new Error("missing id_token in response")
+		)
+	)
+
+
+	return unwrap_or_else(
+		option_and_then(id_token, tok => <TokenExchanger token={tok} />),
+		err => `${err}`
+	)
+}
+
+function TokenExchanger({ token }: { token: string }) {
+	const api = useZemnMeApi();
+
+	// exchange foreign for local id_token
+	const ownIdTokenQuery = api.useQuery('post', '/oauth2/token', {
+		body: {
+			requested_token_type: "urn:ietf:params:oauth:token-type:id_token",
+			grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
+			subject_token: token,
+			subject_token_type: "urn:ietf:params:oauth:token-type:id_token",
+		}
+	});
+
+
+
 }
