@@ -77,7 +77,7 @@ manifest:
     kaitaistruct: kaitaistruct
     lark: lark
     ldap3: ldap3
-    markupsafe: MarkupSafe
+    markupsafe: markupsafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
     mitmproxy: mitmproxy
@@ -157,10 +157,10 @@ manifest:
     wheel: wheel
     widgetsnbextension: widgetsnbextension
     wsproto: wsproto
-    yaml: PyYAML
+    yaml: pyyaml
     yamllint: yamllint
     zmq: pyzmq
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 69e20a39cefe2674f92ede3783e86bee9c9852cd42cf0cd26e98914089990fc0
+integrity: 6d85d0b159f191873cd5f95a6eeae9c441253c2cbadf9ff4551a6fd7c432662f

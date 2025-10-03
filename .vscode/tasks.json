@@ -13,15 +13,12 @@
 			},
 			"group": "build",
 			"problemMatcher": [],
-			"presentation": {
-				"reveal": "never",
-				"group": "preprep",
-				"close": true,
-				"panel": "dedicated",
-			},
-			"runOptions": {
-				"runOn": "folderOpen"
-			}
+                        "presentation": {
+                                "reveal": "never",
+                                "group": "preprep",
+                                "close": true,
+                                "panel": "dedicated",
+                        }
 		},
 		{
 			"label": "Python: Venv",
@@ -32,12 +29,9 @@
 				"run",
 				"//.vscode:activate_venv"
 			],
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
+                        "options": {
+                                "cwd": "${workspaceFolder}"
+                        },
 			"presentation": {
 				"close": true,
 				"reveal": "never",
