@@ -12,7 +12,6 @@ import (
 
 	"github.com/beevik/etree"
 	"github.com/nyaruka/phonenumbers"
-	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"github.com/twilio/twilio-go/twiml"
 )
 
@@ -302,24 +301,12 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 		}
 	}
 
-	// Place the caller into the conference with hold music
 	doc, response := twiml.CreateDocument()
 	dial := response.CreateElement("Dial")
-	conf := dial.CreateElement("Conference")
-	conf.CreateAttr("startConferenceOnEnter", "true")
-	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(rq.Params.Secret)))
-	conf.SetText(TWILIO_CONFERENCE_NAME)
-
-	// Make the outbound call to the authoriser
-	callParams := &twilioApi.CreateCallParams{}
-	callParams.SetTo(selectedNumber)
-	callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
-	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s&attempt=1", url.QueryEscape(rq.Params.Secret)))
-
-	_, err = s.twilioClient.Api.CreateCall(callParams)
-	if err != nil {
-		return
+	if callerID := os.Getenv("CALLBOX_PHONE_NUMBER"); callerID != "" {
+		dial.CreateAttr("callerId", callerID)
 	}
+	dial.CreateElement("Number").SetText(selectedNumber)
 
 	return TwimlResponse{Document: doc}, nil
 }
