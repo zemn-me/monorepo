@@ -20,100 +20,6 @@ func newTestServer() *Server {
 	}
 }
 
-func TestPostPhoneJoinConference(t *testing.T) {
-	s := newTestServer()
-	rq := PostPhoneJoinConferenceRequestObject{
-		Params: PostPhoneJoinConferenceParams{Secret: "secret"},
-	}
-	rs, err := s.postPhoneJoinConference(context.Background(), rq)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	resp, ok := rs.(TwimlResponse)
-	if !ok {
-		t.Fatalf("expected TwimlResponse, got %T", rs)
-	}
-	xmlData, err := twiml.ToXML(resp.Document)
-	if err != nil {
-		t.Fatalf("failed to encode xml: %v", err)
-	}
-       if !strings.Contains(xmlData, "<Gather") ||
-               !strings.Contains(xmlData, "Press any number to accept this call") ||
-               !strings.Contains(xmlData, "attempt=1") {
-               t.Errorf("unexpected xml: %s", xmlData)
-       }
-}
-
-func TestPostPhoneJoinConferenceDigitsAccepted(t *testing.T) {
-	s := newTestServer()
-	digit := "1"
-	rq := PostPhoneJoinConferenceRequestObject{
-		Params: PostPhoneJoinConferenceParams{Secret: "secret"},
-		Body:   &TwilioCallRequest{Digits: &digit},
-	}
-	rs, err := s.postPhoneJoinConference(context.Background(), rq)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	resp, ok := rs.(TwimlResponse)
-	if !ok {
-		t.Fatalf("expected TwimlResponse, got %T", rs)
-	}
-	xmlData, err := twiml.ToXML(resp.Document)
-	if err != nil {
-		t.Fatalf("failed to encode xml: %v", err)
-	}
-	if !strings.Contains(xmlData, "<Conference") || !strings.Contains(xmlData, TWILIO_CONFERENCE_NAME) {
-		t.Errorf("unexpected xml: %s", xmlData)
-	}
-}
-
-func TestPostPhoneJoinConferenceOtherDigitAccepted(t *testing.T) {
-       s := newTestServer()
-       digit := "7"
-       rq := PostPhoneJoinConferenceRequestObject{
-               Params: PostPhoneJoinConferenceParams{Secret: "secret"},
-               Body:   &TwilioCallRequest{Digits: &digit},
-       }
-       rs, err := s.postPhoneJoinConference(context.Background(), rq)
-       if err != nil {
-               t.Fatalf("unexpected error: %v", err)
-       }
-       resp, ok := rs.(TwimlResponse)
-       if !ok {
-               t.Fatalf("expected TwimlResponse, got %T", rs)
-       }
-       xmlData, err := twiml.ToXML(resp.Document)
-       if err != nil {
-               t.Fatalf("failed to encode xml: %v", err)
-       }
-       if !strings.Contains(xmlData, "<Conference") || !strings.Contains(xmlData, TWILIO_CONFERENCE_NAME) {
-               t.Errorf("unexpected xml: %s", xmlData)
-       }
-}
-
-func TestPostPhoneHoldMusic(t *testing.T) {
-	s := newTestServer()
-	rq := PostPhoneHoldMusicRequestObject{
-		Params: PostPhoneHoldMusicParams{Secret: "secret"},
-	}
-	rs, err := s.postPhoneHoldMusic(context.Background(), rq)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	resp, ok := rs.(TwimlResponse)
-	if !ok {
-		t.Fatalf("expected TwimlResponse, got %T", rs)
-	}
-	xmlData, err := twiml.ToXML(resp.Document)
-	if err != nil {
-		t.Fatalf("failed to encode xml: %v", err)
-	}
-	if !strings.Contains(xmlData, "<Play") {
-		t.Errorf("expected play element, got %s", xmlData)
-	}
-}
-
 func TestTwilioError(t *testing.T) {
 	doc, err := twilioError(io.EOF)
 	if err != nil {
@@ -160,5 +66,80 @@ func TestHandleEntryViaCode(t *testing.T) {
 	}
 	if !strings.Contains(xmlData, "<Play") {
 		t.Errorf("expected play element, got %s", xmlData)
+	}
+}
+
+func TestHandleEntryViaAuthorizerDefault(t *testing.T) {
+	s := newTestServer()
+	err := s.postNewSettings(context.Background(), CallboxSettings{
+		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	})
+	if err != nil {
+		t.Fatalf("failed to seed settings: %v", err)
+	}
+
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+
+	if !strings.Contains(xmlData, "<Dial") || !strings.Contains(xmlData, "+15551234567") {
+		t.Errorf("expected dial element with number, got %s", xmlData)
+	}
+	if strings.Contains(xmlData, "<Conference") {
+		t.Errorf("did not expect conference element, got %s", xmlData)
+	}
+}
+
+func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
+	s := newTestServer()
+	err := s.postNewSettings(context.Background(), CallboxSettings{
+		Authorizers: []Authorizer{{PhoneNumber: "+15557654321"}},
+	})
+	if err != nil {
+		t.Fatalf("failed to seed settings: %v", err)
+	}
+
+	local, _, err := normalizePhoneNumber("+15557654321")
+	if err != nil {
+		t.Fatalf("failed to normalize phone number: %v", err)
+	}
+
+	rq := GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Digits: &local,
+		},
+	}
+
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), rq)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+
+	if !strings.Contains(xmlData, "+15557654321") {
+		t.Errorf("expected dialed number in response, got %s", xmlData)
+	}
+	if strings.Contains(xmlData, "<Conference") {
+		t.Errorf("did not expect conference element, got %s", xmlData)
 	}
 }

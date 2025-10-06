@@ -47,8 +47,6 @@ go_library(
         "oidc.go",
         "oidc_configuration.go",
         "phone.go",
-        "phone_hold_music.go",
-        "phone_join_conference.go",
         "security_txt.go",
         "server.go",
         "uuid.go",
@@ -59,7 +57,6 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//project/zemn.me/api",
-        "//project/zemn.me/api/server/acnh",
         "//project/zemn.me/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_config//:config",
@@ -82,7 +79,6 @@ go_library(
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
         "@com_github_oapi_codegen_runtime//types",
         "@com_github_twilio_twilio_go//:twilio-go",
-        "@com_github_twilio_twilio_go//rest/api/v2010:api",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
