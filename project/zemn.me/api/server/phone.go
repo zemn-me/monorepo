@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 	"unicode"
 
@@ -301,8 +303,58 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 		}
 	}
 
+	attempt := 1
+	if rq.Params.Attempt != nil && *rq.Params.Attempt > 0 {
+		attempt = *rq.Params.Attempt
+	}
+	var dialStatus string
+	if rq.Params.DialCallStatus != nil {
+		dialStatus = *rq.Params.DialCallStatus
+	}
+
+	const maxAttempts = 2
+	retryStatuses := map[string]struct{}{
+		"busy":      {},
+		"canceled":  {},
+		"failed":    {},
+		"no-answer": {},
+	}
+
+	normalizedStatus := strings.ToLower(strings.TrimSpace(dialStatus))
+	shouldRetry := dialStatus == ""
+	if dialStatus != "" {
+		_, retryable := retryStatuses[normalizedStatus]
+		shouldRetry = retryable && attempt <= maxAttempts
+	}
+
+	if !shouldRetry {
+		doc, response := twiml.CreateDocument()
+		if normalizedStatus != "" {
+			if normalizedStatus == "completed" {
+				return TwimlResponse{Document: doc}, nil
+			}
+			if _, retryable := retryStatuses[normalizedStatus]; retryable && attempt > maxAttempts {
+				response.CreateElement("Say").SetText("No authorizer responded. Goodbye.")
+				response.CreateElement("Hangup")
+			}
+		}
+		return TwimlResponse{Document: doc}, nil
+	}
+
 	doc, response := twiml.CreateDocument()
 	dial := response.CreateElement("Dial")
+	if attempt < maxAttempts {
+		nextAttempt := attempt + 1
+		actionURL := &url.URL{
+			Path: "/phone/handleEntry",
+			RawQuery: url.Values{
+				"secret":  []string{rq.Params.Secret},
+				"attempt": []string{strconv.Itoa(nextAttempt)},
+			}.Encode(),
+		}
+		dial.CreateAttr("action", actionURL.String())
+		dial.CreateAttr("method", http.MethodGet)
+	}
 	if callerID := os.Getenv("CALLBOX_PHONE_NUMBER"); callerID != "" {
 		dial.CreateAttr("callerId", callerID)
 	}

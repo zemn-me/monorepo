@@ -673,6 +673,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: DialCallStatus
+          in: query
+          description: Final status of the previous Dial attempt when Twilio calls back.
+          required: false
+          schema:
+            type: string
+        - name: attempt
+          in: query
+          description: The next Dial attempt number when retrying authorizers.
+          required: false
+          schema:
+            type: integer
       summary: Handles entering an authorizer for the callbox phone number.
       responses:
         "200":
