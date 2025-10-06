@@ -102,6 +102,7 @@ go_test(
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_beevik_etree//:etree",
         "@com_github_google_uuid//:uuid",
         "@com_github_twilio_twilio_go//twiml",
     ],

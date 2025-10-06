@@ -4,9 +4,12 @@ import (
 	"context"
 	"io"
 	"log"
+	"net/http"
+	"net/url"
 	"strings"
 	"testing"
 
+	"github.com/beevik/etree"
 	"github.com/twilio/twilio-go/twiml"
 )
 
@@ -99,6 +102,35 @@ func TestHandleEntryViaAuthorizerDefault(t *testing.T) {
 	if strings.Contains(xmlData, "<Conference") {
 		t.Errorf("did not expect conference element, got %s", xmlData)
 	}
+
+	doc := etree.NewDocument()
+	if err := doc.ReadFromString(xmlData); err != nil {
+		t.Fatalf("failed to parse xml: %v", err)
+	}
+	dial := doc.FindElement("Response/Dial")
+	if dial == nil {
+		t.Fatalf("expected dial element in parsed xml")
+	}
+	action := dial.SelectAttrValue("action", "")
+	if action == "" {
+		t.Fatalf("expected dial action attribute to be set")
+	}
+	parsedAction, err := url.Parse(action)
+	if err != nil {
+		t.Fatalf("failed to parse dial action url: %v", err)
+	}
+	if parsedAction.Path != "/phone/handleEntry" {
+		t.Errorf("unexpected dial action path: %q", parsedAction.Path)
+	}
+	if got := parsedAction.Query().Get("attempt"); got != "2" {
+		t.Errorf("unexpected attempt query value: %q", got)
+	}
+	if got := parsedAction.Query().Get("secret"); got != "" {
+		t.Errorf("unexpected secret query value: %q", got)
+	}
+	if got := dial.SelectAttrValue("method", ""); got != http.MethodGet {
+		t.Errorf("unexpected dial method attribute: %q", got)
+	}
 }
 
 func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
@@ -141,5 +173,94 @@ func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
 	}
 	if strings.Contains(xmlData, "<Conference") {
 		t.Errorf("did not expect conference element, got %s", xmlData)
+	}
+}
+
+func TestHandleEntryViaAuthorizerRetriesOnNoAnswer(t *testing.T) {
+	s := newTestServer()
+	err := s.postNewSettings(context.Background(), CallboxSettings{
+		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	})
+	if err != nil {
+		t.Fatalf("failed to seed settings: %v", err)
+	}
+
+	attempt := 2
+	status := "no-answer"
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Secret:         "sekrit",
+			Attempt:        &attempt,
+			DialCallStatus: &status,
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+
+	doc := etree.NewDocument()
+	if err := doc.ReadFromString(xmlData); err != nil {
+		t.Fatalf("failed to parse xml: %v", err)
+	}
+	dial := doc.FindElement("Response/Dial")
+	if dial == nil {
+		t.Fatalf("expected dial element for retry attempt")
+	}
+	if got := dial.SelectAttrValue("action", ""); got != "" {
+		t.Errorf("expected no action on final attempt, got %q", got)
+	}
+	if dial.SelectAttrValue("method", "") != "" {
+		t.Errorf("expected no method attribute on final attempt")
+	}
+}
+
+func TestHandleEntryViaAuthorizerSkipsRedialOnCompletedCall(t *testing.T) {
+	s := newTestServer()
+	err := s.postNewSettings(context.Background(), CallboxSettings{
+		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	})
+	if err != nil {
+		t.Fatalf("failed to seed settings: %v", err)
+	}
+
+	attempt := 2
+	status := "completed"
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Secret:         "sekrit",
+			Attempt:        &attempt,
+			DialCallStatus: &status,
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+
+	doc := etree.NewDocument()
+	if err := doc.ReadFromString(xmlData); err != nil {
+		t.Fatalf("failed to parse xml: %v", err)
+	}
+	if dial := doc.FindElement("Response/Dial"); dial != nil {
+		t.Fatalf("did not expect retry dial when call completed")
 	}
 }
