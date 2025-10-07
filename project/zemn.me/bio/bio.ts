@@ -808,7 +808,9 @@ export const Bio = {
                 {
                         date: date(7, 'aug', 2025),
                         title: en`GPT5`,
-                        url: url`https://openai.com/gpt-5`,
+						url: linkToHighlight(url`https://openai.com/index/introducing-gpt-5`, {
+							start: "Thomas Shadwell",
+						}),
                         id: 'c0c4240c-344b-44f5-9788-4ace389f81ce',
                         description: en`Security for OpenAI's next-generation model.`,
                 },
