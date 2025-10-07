@@ -384,22 +384,6 @@ http_archive(
 
 bazel_dep(name = "protobuf", version = "29.5", repo_name = "com_google_protobuf")
 
-http_archive(
-    name = "cultistsimulator",
-    build_file_content = """
-filegroup(
-name = "core",
-srcs = glob(["Assets/StreamingAssets/content/core/**/*.json"], allow_empty=True),
-visibility = [ "//visibility:public" ]
-)
-exports_files(glob(["**/*"], exclude_directories=0, allow_empty=True))""",
-    sha256 = "c640c454db8bd2ef4b53cf00edffa959d6c6147718bafce9a43f48db286f2ea2",
-    strip_prefix = "cultistsimulator-visible-2022.3.n.1",
-    urls = [
-        "https://github.com/weatherfactory/cultistsimulator-visible/archive/refs/tags/v2022.3.n.1.tar.gz",
-    ],
-)
-
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
