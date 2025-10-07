@@ -490,7 +490,6 @@ http_archive(
 http_archive(
     name = "ruff_x86_64-pc-windows-msvc",
     build_file_content = "exports_files(['ruff.exe'])",
-    strip_prefix = "ruff-x86_64-pc-windows-msvc",
     url = "https://github.com/astral-sh/ruff/releases/download/0.9.2/ruff-x86_64-pc-windows-msvc.zip",
 )
 
