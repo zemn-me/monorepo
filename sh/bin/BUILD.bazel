@@ -1,10 +1,18 @@
 load("@npm//:@openai/codex/package_json.bzl", codex_bin = "bin")
+load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
 codex_bin.codex_binary(
     name = "codex_cli",
+)
+
+eslint_bin.eslint_binary(
+    name = "eslint",
+    data = [
+        "@@//:eslintrc",
+    ],
 )
 
 alias(
