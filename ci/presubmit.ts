@@ -56,14 +56,27 @@ const cmd = new Command('presubmit')
 			);
 		console.log('Executing in detected directory', cwd);
 
+
+
 		// this is placed first since it builds everything in parallel
 		// so serial operations coming after take 0 time to build.
 		if (!o.skipBazelTests) {
+			await Task('Test all bazel code works.')(
+				Bazel.Bazel(
+					cwd,
+					'query',
+					'//...',
+					'--noshow_progress',
+					'--ui_event_filters=-stdout',
+					'--noshow_loading_progress',
+				)
+			);
 			await Task('Run all bazel tests.')(
 				Bazel.Bazel(cwd, 'test', '//...', '--keep_going', "--config=ci")
 			);
 			// perform all the normal tests
 		}
+
 
 		await Task('check if we might need to run go.mod')(
 			new Promise<void>((ok, error) =>
