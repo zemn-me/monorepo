@@ -224,7 +224,6 @@ py_venv(
     deps = [
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
-        "//project/cultist/gen/testing",
         "//project/zemn.me/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci/postUpgrade:postUpgrade_bin",
