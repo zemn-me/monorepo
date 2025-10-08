@@ -814,6 +814,16 @@ export const Bio = {
                         id: 'c0c4240c-344b-44f5-9788-4ace389f81ce',
                         description: en`Security for OpenAI's next-generation model.`,
                 },
+                {
+                        date: date(18, 'oct', 2025),
+                        title: en`Panel Discussion: How Leading AI Platforms Approach Building Trustworthy Agents, AI Agent Security Summit SF`,
+						url: linkToHighlight(url`https://zenity.io/resources/events/ai-agent-security-summit-2025`, {
+							start: "Thomas Shadwell",
+						}),
+                        id: '11a2ca4e-d899-4a62-8e17-2d91082544ec',
+                        description: en`Panel representing OpenAI at the AI Agent Security summit at the Commonwealth Club of San Francisco.`,
+					tags: [talk, work, security],
+                },
         ],
         who: {
                 handle: en`zemnmez`,
