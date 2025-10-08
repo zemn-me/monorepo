@@ -7,12 +7,13 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 	"unicode"
 
 	"github.com/beevik/etree"
 	"github.com/nyaruka/phonenumbers"
-	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"github.com/twilio/twilio-go/twiml"
 )
 
@@ -302,24 +303,62 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 		}
 	}
 
-	// Place the caller into the conference with hold music
+	attempt := 1
+	if rq.Params.Attempt != nil && *rq.Params.Attempt > 0 {
+		attempt = *rq.Params.Attempt
+	}
+	var dialStatus string
+	if rq.Params.DialCallStatus != nil {
+		dialStatus = *rq.Params.DialCallStatus
+	}
+
+	const maxAttempts = 2
+	retryStatuses := map[string]struct{}{
+		"busy":      {},
+		"canceled":  {},
+		"failed":    {},
+		"no-answer": {},
+	}
+
+	normalizedStatus := strings.ToLower(strings.TrimSpace(dialStatus))
+	shouldRetry := dialStatus == ""
+	if dialStatus != "" {
+		_, retryable := retryStatuses[normalizedStatus]
+		shouldRetry = retryable && attempt <= maxAttempts
+	}
+
+	if !shouldRetry {
+		doc, response := twiml.CreateDocument()
+		if normalizedStatus != "" {
+			if normalizedStatus == "completed" {
+				return TwimlResponse{Document: doc}, nil
+			}
+			if _, retryable := retryStatuses[normalizedStatus]; retryable && attempt > maxAttempts {
+				response.CreateElement("Say").SetText("No authorizer responded. Goodbye.")
+				response.CreateElement("Hangup")
+			}
+		}
+		return TwimlResponse{Document: doc}, nil
+	}
+
 	doc, response := twiml.CreateDocument()
 	dial := response.CreateElement("Dial")
-	conf := dial.CreateElement("Conference")
-	conf.CreateAttr("startConferenceOnEnter", "true")
-	conf.CreateAttr("waitUrl", fmt.Sprintf("https://api.zemn.me/phone/hold-music?secret=%s", url.QueryEscape(rq.Params.Secret)))
-	conf.SetText(TWILIO_CONFERENCE_NAME)
-
-	// Make the outbound call to the authoriser
-	callParams := &twilioApi.CreateCallParams{}
-	callParams.SetTo(selectedNumber)
-	callParams.SetFrom(os.Getenv("CALLBOX_PHONE_NUMBER"))
-	callParams.SetUrl(fmt.Sprintf("https://api.zemn.me/phone/join-conference?secret=%s&attempt=1", url.QueryEscape(rq.Params.Secret)))
-
-	_, err = s.twilioClient.Api.CreateCall(callParams)
-	if err != nil {
-		return
+	if attempt < maxAttempts {
+		nextAttempt := attempt + 1
+		actionURL := &url.URL{
+			Path: "/phone/handleEntry",
+			RawQuery: url.Values{
+				"secret":  []string{rq.Params.Secret},
+				"attempt": []string{strconv.Itoa(nextAttempt)},
+			}.Encode(),
+		}
+		dial.CreateAttr("action", actionURL.String())
+		dial.CreateAttr("method", http.MethodGet)
 	}
+	if callerID := os.Getenv("CALLBOX_PHONE_NUMBER"); callerID != "" {
+		dial.CreateAttr("callerId", callerID)
+	}
+	dial.CreateElement("Number").SetText(selectedNumber)
 
 	return TwimlResponse{Document: doc}, nil
 }
