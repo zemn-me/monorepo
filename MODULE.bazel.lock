@@ -61,8 +61,8 @@
     "https://bcr.bazel.build/modules/bazel_features/1.28.0/MODULE.bazel": "4b4200e6cbf8fa335b2c3f43e1d6ef3e240319c33d43d60cc0fbd4b87ece299d",
     "https://bcr.bazel.build/modules/bazel_features/1.30.0/MODULE.bazel": "a14b62d05969a293b80257e72e597c2da7f717e1e69fa8b339703ed6731bec87",
     "https://bcr.bazel.build/modules/bazel_features/1.32.0/MODULE.bazel": "095d67022a58cb20f7e20e1aefecfa65257a222c18a938e2914fd257b5f1ccdc",
-    "https://bcr.bazel.build/modules/bazel_features/1.36.0/MODULE.bazel": "596cb62090b039caf1cad1d52a8bc35cf188ca9a4e279a828005e7ee49a1bec3",
-    "https://bcr.bazel.build/modules/bazel_features/1.36.0/source.json": "279625cafa5b63cc0a8ee8448d93bc5ac1431f6000c50414051173fd22a6df3c",
+    "https://bcr.bazel.build/modules/bazel_features/1.37.0/MODULE.bazel": "bd8f7e20ce3125d3507eb24e672f8db0b7da203572705fc8df6160a927bd8ff4",
+    "https://bcr.bazel.build/modules/bazel_features/1.37.0/source.json": "b90ae265a662942485cdc153d5adbad8696666092c31ecba3ea12923a739bceb",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
     "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
@@ -290,7 +290,7 @@
   "moduleExtensions": {
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "4gLQA1JQ+6ZbgExk06fJx+zJW6CkJPEDnBq7PaU797g=",
+        "bzlTransitiveDigest": "fljHhRMwqUqKYkCkuxxuYws6BG3QBOvse2lnES8Fm9w=",
         "usagesDigest": "J83qHSpG2NjMMUlPFKt76hw8qAUhI/I++cVH+0vW4zM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1102,7 +1102,7 @@
     },
     "@@rules_multitool+//multitool:extension.bzl%multitool": {
       "general": {
-        "bzlTransitiveDigest": "hyanVa2ZhaIX0Ukk/AXthJ7I/FcKsxU/j6C5udeyMEI=",
+        "bzlTransitiveDigest": "bOUiEA/qA5n1XGYDoI3VgJbrciyMYlrQTAv1E9orKbA=",
         "usagesDigest": "4iIQQrg+LuCOYk2tUDhVo6TjD2eq1gqSRRgmVgw0Fro=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1339,7 +1339,7 @@
     },
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
-        "bzlTransitiveDigest": "UG6/u9Dl5qNozcG8E6ehAcOG2nhh8rw191ishRnBR24=",
+        "bzlTransitiveDigest": "pJ5cWlKTkIDIyUuclTxx5XIlwybuT/LlYhkGN55cXyo=",
         "usagesDigest": "6BFYsIMfyVQCzL7swnI4Z0lejLSWdOZHkm7/v5mGdHo=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1720,7 +1720,7 @@
     },
     "@@rules_rust+//crate_universe:extension.bzl%crate": {
       "general": {
-        "bzlTransitiveDigest": "aTxYxJ93ysyL59JokKAMg2NYgIcaO8T8pzelukUuqE0=",
+        "bzlTransitiveDigest": "U++35/wnfZEZX6ZkcRrYeOMu+Nacm9BDb6fz7fBwVcM=",
         "usagesDigest": "CJgWQSwxgEje6b5PvzZUGlf66pCyQEIEAnIjOQVxaS8=",
         "recordedFileInputs": {
           "@@//Cargo.lock": "1c4eb644ed5e960f66d7f9f81a819e6dcb4ad19a5682878ba374ca3b47ae97f5",
@@ -7260,7 +7260,7 @@
     },
     "@@rules_rust+//crate_universe/private:internal_extensions.bzl%cu_nr": {
       "general": {
-        "bzlTransitiveDigest": "a6zsyWsMFczt7jvNjO3JQfUKb2d/vA4gV5/A60UamXc=",
+        "bzlTransitiveDigest": "QSROVpBCK3h1oUC2lw5HoATjbwlVHmryXaKf+97KwFo=",
         "usagesDigest": "lAGiU7JGcUJ6BL7JrXrtglO7l/4CfFuSP4+oWoVk9Js=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
