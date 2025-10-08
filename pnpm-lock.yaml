@@ -425,8 +425,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.140.1
-    version: 41.140.1(typanion@3.14.0)
+    specifier: 41.140.2
+    version: 41.140.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -11562,8 +11562,8 @@ packages:
       moo: 0.5.2
     dev: true
 
-  /google-auth-library@10.3.1:
-    resolution: {integrity: sha512-w6bmyfvB7Fezdb70admbJlDYY8MdzRZPssCYO1M/zrIx2HWNhsycIoFf/tZ8qdWSg5l4BUTAt2ax8Pv/R6NnSw==}
+  /google-auth-library@10.4.0:
+    resolution: {integrity: sha512-CmIrSy1bqMQUsPmA9+hcSbAXL80cFhu40cGMUjCaLpNKVzzvi+0uAHq8GNZxkoGYIsTX4ZQ7e4aInAqWxgn4fg==}
     engines: {node: '>=18'}
     dependencies:
       base64-js: 1.5.1
@@ -16979,8 +16979,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.140.1(typanion@3.14.0):
-    resolution: {integrity: sha512-7QKqCIIAwASsaxiGhH4bHumkNW22MK6MzjMMQoltuWWsxuq5sfXvrUJYUt48Xk8BpXINUmTHusj2/tSgxN+IsA==}
+  /renovate@41.140.2(typanion@3.14.0):
+    resolution: {integrity: sha512-kb8QOF+ISspdAEXyjVGoKffepkD1uWxqS6XnIBhrVrP4kQVYye3+engb/UqG72CQrilzgQwcmCcrwo0+P0awkw==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17051,7 +17051,7 @@ packages:
       glob: 11.0.3
       global-agent: 3.0.0
       good-enough-parser: 1.1.23
-      google-auth-library: 10.3.1
+      google-auth-library: 10.4.0
       got: 11.8.6
       graph-data-structure: 4.5.0
       handlebars: 4.7.8
