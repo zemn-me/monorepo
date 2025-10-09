@@ -31,8 +31,8 @@
     "https://bcr.bazel.build/modules/aspect_rules_js/1.33.1/MODULE.bazel": "db3e7f16e471cf6827059d03af7c21859e7a0d2bc65429a3a11f005d46fc501b",
     "https://bcr.bazel.build/modules/aspect_rules_js/1.40.0/MODULE.bazel": "01a1014e95e6816b68ecee2584ae929c7d6a1b72e4333ab1ff2d2c6c30babdf1",
     "https://bcr.bazel.build/modules/aspect_rules_js/2.0.0/MODULE.bazel": "b45b507574aa60a92796e3e13c195cd5744b3b8aff516a9c0cb5ae6a048161c5",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.6.0/MODULE.bazel": "5a6f8dbc5b170769453f1819d469fe54b0e4b86a0e82e13fde8e5a45438a1890",
-    "https://bcr.bazel.build/modules/aspect_rules_js/2.6.0/source.json": "e1e20b259d4f1b0a5d8b99d57b418c96f306e1c77f96e9ea1c9f1068a628b211",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.6.1/MODULE.bazel": "a5d1fb55da855dd4dde345c8aa23fedb84cf5daafdfd009d7c4614b81b826bd4",
+    "https://bcr.bazel.build/modules/aspect_rules_js/2.6.1/source.json": "f7b88ed5860995186426fe024b23554bad0f5239f64be508a66b7fae806f7fdc",
     "https://bcr.bazel.build/modules/aspect_rules_lint/0.12.0/MODULE.bazel": "e767c5dbfeb254ec03275a7701b5cfde2c4d2873676804bc7cb27ddff3728fed",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.9.1/MODULE.bazel": "546a6e4220e5677605ba8fc00ffd3212b2db00235fcf2e238e5bb93c3c76a4da",
     "https://bcr.bazel.build/modules/aspect_rules_lint/1.9.1/source.json": "b193f210bd72ec96f6869eea078b3f13ca353430f92de699c0c2fd57410f3e85",
@@ -291,8 +291,8 @@
   "moduleExtensions": {
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "fljHhRMwqUqKYkCkuxxuYws6BG3QBOvse2lnES8Fm9w=",
-        "usagesDigest": "J83qHSpG2NjMMUlPFKt76hw8qAUhI/I++cVH+0vW4zM=",
+        "bzlTransitiveDigest": "XOF84V8XwHHsJewYdqEKGFFgqZKmmebKgzDpt5j9r5E=",
+        "usagesDigest": "k4Os/duDU9+SCDTIOtUQQLC254PSISqTjcwFoN8Vgks=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -684,7 +684,7 @@
     "@@aspect_tools_telemetry+//:extension.bzl%telemetry": {
       "general": {
         "bzlTransitiveDigest": "gA7tPEdJXhskzPIEUxjX9IdDrM6+WjfbgXJ8Ez47umk=",
-        "usagesDigest": "rkypJmwtnLDnmd6OrDXWr9v/G5PGzxWwUJcwgD5MFtk=",
+        "usagesDigest": "wghv/3CjWLXkg6jgi3wF8M0LZahE/kZc7/3MQPmPkIM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -694,7 +694,7 @@
             "attributes": {
               "deps": {
                 "aspect_rules_swc": "2.5.0",
-                "aspect_rules_js": "2.6.0",
+                "aspect_rules_js": "2.6.1",
                 "aspect_rules_lint": "1.9.1",
                 "aspect_tools_telemetry": "0.2.8"
               }
@@ -1208,7 +1208,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "FmfMiNXAxRoLWw3NloQbssosE1egrSvzirbQnso7j7E=",
-        "usagesDigest": "JCyddY30GIxI9OLdoNg0ZEe96B364L+h6f71rQ3CJhY=",
+        "usagesDigest": "0rTaXHQZbaPCUB1DFlSngyDBawwQzGAmFYM/fdBGziw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
