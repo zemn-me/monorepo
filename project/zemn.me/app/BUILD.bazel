@@ -12,6 +12,8 @@ ts_project(
     ),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/@tanstack/query-async-storage-persister",
+        "//:node_modules/@tanstack/react-query-persist-client",
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
