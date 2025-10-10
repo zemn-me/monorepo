@@ -7,7 +7,7 @@ go 1.24.0
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
-	github.com/aws/aws-lambda-go v1.49.0
+	github.com/aws/aws-lambda-go v1.50.0
 	github.com/aws/aws-sdk-go-v2 v1.39.2
 	github.com/aws/aws-sdk-go-v2/config v1.31.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.16
@@ -17,7 +17,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.4
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.45.0
-	github.com/bazelbuild/bazel-watcher v0.26.10
+	github.com/bazelbuild/bazel-watcher v0.27.0
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/bazelbuild/rules_go v0.57.0
 	github.com/beevik/etree v1.6.0
@@ -34,7 +34,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/terraform-plugin-framework v1.15.1
 	github.com/itchyny/gojq v0.12.17
-	github.com/nyaruka/phonenumbers v1.6.5
+	github.com/nyaruka/phonenumbers v1.6.6
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
 	github.com/oapi-codegen/oapi-codegen/v2 v2.5.0
 	github.com/oapi-codegen/runtime v1.1.2
@@ -45,7 +45,7 @@ require (
 	github.com/twilio/twilio-go v1.28.3
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.17.0
-	golang.org/x/tools v0.37.0
+	golang.org/x/tools v0.38.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.6.1
 )
@@ -142,7 +142,7 @@ require (
 	golang.org/x/mod v0.25.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/telemetry v0.0.0-20241106142447-58a1122356f5 // indirect
 	golang.org/x/text v0.26.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
