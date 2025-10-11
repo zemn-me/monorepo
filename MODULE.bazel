@@ -71,7 +71,7 @@ python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 # 	datasource=python-version
 # 	versioning=python
 # 	depName=python
-PYTHON_VERSION = "3.13"
+PYTHON_VERSION = "3.14"
 
 python.toolchain(
     is_default = True,
