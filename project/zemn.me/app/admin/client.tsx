@@ -80,42 +80,49 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 	const remoteSettingsKey = remoteSettingsParams;
 
-	const remoteSettings =
-		option_and_then(
-			queryResult($api.useQuery(...remoteSettingsParams)),
-			r => result_or_else(
-				r,
-				({ cause }) => Err(new Error(cause))
-			)
-		)
+        const remoteSettingsQuery = $api.useQuery(...remoteSettingsParams);
 
+        const remoteSettings =
+                option_and_then(
+                        queryResult(remoteSettingsQuery),
+                        r => result_or_else(
+                                r,
+                                ({ cause }) => Err(new Error(cause))
+                        )
+                );
 
-	const values = option_unwrap_or(
-		option_and_then(
-			remoteSettings,
-			r => result_unwrap_or(
-				r,
-				defaultValues
-			)
-		),
-		defaultValues
-	)
+        const {
+                register,
+                handleSubmit,
+                formState: { errors },
+                control,
+                reset
+        } = useForm<
+                CallboxSettings
+        >({
+                defaultValues,
+                shouldUseNativeValidation: true,
+                shouldFocusError: true,
+                resolver: zodResolver(
+                        settingsSchema
+                )
+        });
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		control
-	} = useForm<
-		CallboxSettings
-	>({
-		values,
-		shouldUseNativeValidation: true,
-		shouldFocusError: true,
-		resolver: zodResolver(
-			settingsSchema
-		)
-	});
+        const [hasLoadedSettings, setHasLoadedSettings] = useState(false);
+
+        useEffect(() => {
+                option_and_then(
+                        remoteSettings,
+                        r => result_and_then(
+                                r,
+                                settings => {
+                                        setHasLoadedSettings(true);
+                                        reset(settings);
+                                        return settings;
+                                }
+                        )
+                );
+        }, [remoteSettings, reset]);
 
 	const mutateRemoteSettings = $api.useMutation("post", "/callbox/settings", {
 		onSuccess: () => {
@@ -134,23 +141,31 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	});
 
 
-	const entryCodesFields = useFieldArray({
-		control, // control props comes from useForm (optional: if you are using FormProvider)
-		name: "entryCodes", // unique name for your Field Array
-	});
+        const entryCodesFields = useFieldArray({
+                control, // control props comes from useForm (optional: if you are using FormProvider)
+                name: "entryCodes", // unique name for your Field Array
+        });
+
+        const disableSettingsInputs =
+                remoteSettingsQuery.fetchStatus === "fetching" || mutateRemoteSettings.isPending;
+
+        const pendingPipValue =
+                hasLoadedSettings && remoteSettingsQuery.fetchStatus === "fetching"
+                        ? None
+                        : Some(remoteSettings);
 
 
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises
-	return <form onSubmit={handleSubmit(d => {
-		void mutateRemoteSettings.mutate({
-			headers: {
-				Authorization: Authorization,
-			},
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        return <form onSubmit={handleSubmit(d => {
+                void mutateRemoteSettings.mutate({
+                        headers: {
+                                Authorization: Authorization,
+                        },
 			body: d,
 		})
-	})}>
-		<fieldset>
-			<legend>Settings</legend>
+        })}>
+                <fieldset disabled={disableSettingsInputs}>
+                        <legend>Settings</legend>
 
 			<fieldset>
 				<legend>Authorizers</legend>
@@ -279,60 +294,96 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 						</output> : null
 				}
 			</fieldset>
-			<input type="submit" />
-			<PendingPip value={Some(remoteSettings)} />
-		</fieldset>
-	</form>
+                        <input type="submit" disabled={disableSettingsInputs} />
+                        <PendingPip value={pendingPipValue} />
+                </fieldset>
+        </form>
 
 
 }
 
 function DisplayPhoneNumber({ Authorization }: { readonly Authorization: string }) {
-	const $api = useZemnMeApi();
-	const pn = queryResult($api.useQuery(
-		"get",
-		"/phone/number",
-		{
-			headers: { Authorization }
-		}
-	));
+        const $api = useZemnMeApi();
+        const pnQuery = $api.useQuery(
+                "get",
+                "/phone/number",
+                {
+                        headers: { Authorization }
+                }
+        );
 
-	const el = option_and_then(
-		pn,
-		r => result_unwrap_or_else(
-			result_and_then(
-				r,
-				({ phoneNumber }) => <Link href={`tel:${phoneNumber}`}>{phoneNumber}</Link>
-			),
-			({ cause }) => <details>
-				<summary>❌</summary>
-				{cause}
-			</details>
-	));
+        const pn = queryResult(pnQuery);
+        const [lastPhoneNumber, setLastPhoneNumber] = useState<string | null>(null);
 
-	return <fieldset>
-		<legend>Phone Number</legend>
-		<output>
-			{
-				option_unwrap_or(
-					el,
-					<>⏳</>
-				)
-			}
+        useEffect(() => {
+                option_and_then(
+                        pn,
+                        r => result_and_then(
+                                r,
+                                ({ phoneNumber }) => {
+                                        setLastPhoneNumber(phoneNumber);
+                                        return { phoneNumber };
+                                }
+                        )
+                );
+        }, [pn]);
 
-		</output>
-	</fieldset>
+        const el = option_and_then(
+                pn,
+                r => result_unwrap_or_else(
+                        result_and_then(
+                                r,
+                                ({ phoneNumber }) => <Link href={`tel:${phoneNumber}`}>{phoneNumber}</Link>
+                        ),
+                        ({ cause }) => <details>
+                                <summary>❌</summary>
+                                {cause}
+                        </details>
+        ));
+
+        const fallbackPhoneNumber = lastPhoneNumber === null
+                ? <>⏳</>
+                : <Link href={`tel:${lastPhoneNumber}`}>{lastPhoneNumber}</Link>;
+
+        return <fieldset>
+                <legend>Phone Number</legend>
+                <output>
+                        {
+                                option_unwrap_or(
+                                        el,
+                                        fallbackPhoneNumber
+                                )
+                        }
+
+                </output>
+        </fieldset>
 }
 
 function DisplayAdminUid({ Authorization }: { readonly Authorization: string }) {
         const $api = useZemnMeApi();
-        const uid = queryResult($api.useQuery(
+        const uidQuery = $api.useQuery(
                 "get",
                 "/admin/uid",
                 {
                         headers: { Authorization }
                 }
-        ));
+        );
+
+        const uid = queryResult(uidQuery);
+        const [lastUid, setLastUid] = useState<string | null>(null);
+
+        useEffect(() => {
+                option_and_then(
+                        uid,
+                        r => result_and_then(
+                                r,
+                                u => {
+                                        setLastUid(u);
+                                        return u;
+                                }
+                        )
+                );
+        }, [uid]);
 
         const el = option_and_then(
                 uid,
@@ -347,13 +398,17 @@ function DisplayAdminUid({ Authorization }: { readonly Authorization: string }) 
                         </details>
         ));
 
+        const fallbackUid = lastUid === null
+                ? <>⏳</>
+                : <code>{lastUid}</code>;
+
         return <fieldset>
                 <legend>UID</legend>
                 <output>
                         {
                                 option_unwrap_or(
                                         el,
-                                        <>⏳</>
+                                        fallbackUid
                                 )
                         }
 
