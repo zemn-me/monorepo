@@ -20,6 +20,7 @@ manifest:
     attr: attrs
     attrs: attrs
     babel: babel
+    bcrypt: bcrypt
     bleach: bleach
     blinker: blinker
     brotli: Brotli
@@ -98,7 +99,6 @@ manifest:
     packaging: packaging
     pandocfilters: pandocfilters
     parso: parso
-    passlib: passlib
     pathspec: pathspec
     pexpect: pexpect
     pip: pip
@@ -163,4 +163,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 828545ce1d649798b503364a523d0b7cadcb8d10f1e26c3128cf43e8e8336e84
+integrity: afd65812cb87a61ebda4e35976775877d787e22fbeb7c931e645fb237f7b85d5
