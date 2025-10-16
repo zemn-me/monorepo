@@ -1345,9 +1345,9 @@ pylsqpack==0.3.23 \
     --hash=sha256:db03232c85855cb03226447e41539f8631d7d4e5483d48206e30d470a9cb07a1 \
     --hash=sha256:f55b126940d8b3157331f123d4428d703a698a6db65a6a7891f7ec1b90c86c56
     # via aioquic
-pyopenssl==25.1.0 \
-    --hash=sha256:2b11f239acc47ac2e5aca04fd7fa829800aeee22a2eb30d744572a157bd8a1ab \
-    --hash=sha256:8d031884482e0c67ee92bf9a4d8cceb08d92aba7136432ffb0703c5280fc205b
+pyopenssl==25.3.0 \
+    --hash=sha256:1fda6fc034d5e3d179d39e59c1895c9faeaf40a79de5fc4cbbfbe0d36f4a77b6 \
+    --hash=sha256:c981cb0a3fd84e8602d7afc209522773b94c1c2446a3c710a75b06fe1beae329
     # via
     #   aioquic
     #   mitmproxy
