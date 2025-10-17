@@ -1,32 +1,87 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 ts_project(
     name = "math",
-    srcs = glob(["*.ts"]),
+    srcs = [
+        "camera.ts",
+        "cartesian.ts",
+        "conv.ts",
+        "degree.ts",
+        "euler_angle.ts",
+        "homog.ts",
+        "lookAt.ts",
+        "matrix.ts",
+        "quaternion.ts",
+        "raster.ts",
+        "scale.ts",
+        "tuple.ts",
+        "vec.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/ramda",
         "//:node_modules/ramda",
         "//ts",
-        "//ts/iter",
     ],
 )
 
 jest_test(
-    name = "test",
+    name = "tests",
     srcs = [
         "camera_test.js",
+        "conv_test.js",
         "math_test.js",
+        "quaternion_test.js",
     ],
-    deps = [":math"],
+    visibility = ["//:__subpackages__"],
+    deps = [":math_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "camera.ts",
+        "camera_test.ts",
+        "cartesian.ts",
+        "conv.ts",
+        "conv_test.ts",
+        "degree.ts",
+        "euler_angle.ts",
+        "homog.ts",
+        "lookAt.ts",
+        "math_test.ts",
+        "matrix.ts",
+        "quaternion.ts",
+        "quaternion_test.ts",
+        "raster.ts",
+        "scale.ts",
+        "tuple.ts",
+        "vec.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "math_tests",
+    srcs = [
+        "camera_test.ts",
+        "conv_test.ts",
+        "math_test.ts",
+        "quaternion_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":math",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/math/camera",
+    ],
 )

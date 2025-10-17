@@ -3,7 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files(["sample.ts"])
+exports_files(["consumer.ts"])
 
 bazel_lint(
     name = "bazel_lint",
@@ -11,19 +11,19 @@ bazel_lint(
     visibility = ["//:__subpackages__"],
 )
 
-ts_project(
-    name = "uses_option",
-    srcs = ["sample.ts"],
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/node",
-        "//go/gazelle/ts/testdata/dependency",
-    ],
-)
-
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["sample.ts"],
+    srcs = ["consumer.ts"],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "submodule",
+    srcs = ["consumer.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react-dom",
+    ],
 )

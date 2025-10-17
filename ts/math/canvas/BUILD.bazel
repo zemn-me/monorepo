@@ -1,17 +1,15 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 ts_project(
     name = "canvas",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
-    resolve_json_module = True,
+    srcs = [
+        "element.tsx",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//ts/math",
@@ -21,4 +19,14 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "element.tsx",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
