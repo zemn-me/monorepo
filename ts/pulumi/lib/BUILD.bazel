@@ -5,24 +5,52 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "lib",
+    srcs = [
+        "bluesky_username_claim.ts",
+        "bucketName.ts",
+        "certificate.ts",
+        "contact_flow.ts",
+        "contact_flow_composer.ts",
+        "contact_flow_language.ts",
+        "file.ts",
+        "index.ts",
+        "lambda_function.ts",
+        "path.ts",
+        "s3Uri.ts",
+        "tags.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/command",
         "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@types/mime",
-        "//:node_modules/@types/react",
-        "//:node_modules/mime",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts",
-        "//ts/cmd/copybara",
+        "//:node_modules/@types/node",
         "//ts/iter",
-        "//ts/next.js",
+        "//ts/result",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "bluesky_username_claim.ts",
+        "bucketName.ts",
+        "certificate.ts",
+        "contact_flow.ts",
+        "contact_flow_composer.ts",
+        "contact_flow_language.ts",
+        "file.ts",
+        "index.ts",
+        "lambda_function.ts",
+        "path.ts",
+        "s3Uri.ts",
+        "tags.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )

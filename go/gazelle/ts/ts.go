@@ -31,6 +31,7 @@ var AllowedPrefixes = []string{
 	"go/gazelle/ts",
 	"ts/math",
 	"ts/time",
+	"ts/pulumi",
 }
 
 type passthroughExpr struct {
@@ -377,13 +378,13 @@ func isAllowed(rel string) bool {
 	return false
 }
 
-func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
+func findRuleByKind(args language.GenerateArgs, name, kind string) *rule.Rule {
 	if args.File == nil {
 		return nil
 	}
 
 	for _, existing := range args.File.Rules {
-		if existing.Kind() != "ts_project" {
+		if existing.Kind() != kind {
 			continue
 		}
 		if existing.Name() == name {
@@ -392,6 +393,10 @@ func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
 	}
 
 	return nil
+}
+
+func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
+	return findRuleByKind(args, name, "ts_project")
 }
 
 func listExprStringValues(expr bzl.Expr) ([]string, bool) {
@@ -557,6 +562,21 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	if !isAllowed(args.Rel) {
 		return language.GenerateResult{}
 	}
+
+	name := filepath.Base(args.Dir)
+	for _, segment := range strings.Split(args.Rel, "/") {
+		if segment == "app" || segment == "pages" {
+			return language.GenerateResult{}
+		}
+	}
+	if name == "app" || name == "pages" {
+		return language.GenerateResult{}
+	}
+	existing := findExistingRule(args, name)
+	if args.File != nil && existing == nil {
+		return language.GenerateResult{}
+	}
+
 	if strings.HasPrefix(args.Rel, "ts/") && countTsProjects(args.File) > 2 {
 		return language.GenerateResult{}
 	}
@@ -622,10 +642,16 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	sort.Strings(srcs)
 	sort.Strings(testSrcs)
 
-	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
-	r.SetAttr("visibility", []string{"//:__subpackages__"})
-	if existing := findExistingRule(args, name); existing != nil {
+	if existing != nil {
+		if vis := existing.AttrStrings("visibility"); len(vis) > 0 {
+			r.SetAttr("visibility", vis)
+		}
+	} else {
+		r.SetAttr("visibility", []string{"//:__subpackages__"})
+	}
+
+	if existing != nil {
 		if attr := existing.Attr("srcs"); attr != nil {
 			if preserved, ok := shouldPreserveSrcs(attr); ok {
 				r.SetAttr("srcs", preserved)
@@ -655,13 +681,35 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	gen = append(gen, fg)
 	imports = append(imports, nil)
 
-	var testProjectName string
 	if len(testSrcs) > 0 {
-		testProjectName = name + "_tests"
+		testProjectName := name + "_tests"
+		testExisting := findExistingRule(args, testProjectName)
 		testRule := rule.NewRule("ts_project", testProjectName)
-		testRule.SetAttr("srcs", testSrcs)
+		if testExisting != nil {
+			if vis := testExisting.AttrStrings("visibility"); len(vis) > 0 {
+				testRule.SetAttr("visibility", vis)
+			}
+			if attr := testExisting.Attr("srcs"); attr != nil {
+				if preserved, ok := shouldPreserveSrcs(attr); ok {
+					testRule.SetAttr("srcs", preserved)
+				} else if call, ok := attr.(*bzl.CallExpr); ok {
+					if lit, ok := call.X.(*bzl.LiteralExpr); ok && lit.Token == "glob" {
+						// preserve existing glob
+					} else {
+						testRule.SetAttr("srcs", testSrcs)
+					}
+				} else {
+					testRule.SetAttr("srcs", testSrcs)
+				}
+			} else {
+				testRule.SetAttr("srcs", testSrcs)
+			}
+		} else {
+			testRule.SetAttr("visibility", []string{"//:__subpackages__"})
+			testRule.SetAttr("srcs", testSrcs)
+		}
 		testRule.SetAttr("deps", []string{":" + name})
-		testRule.SetAttr("visibility", []string{"//:__subpackages__"})
+		testRule.SetPrivateAttr(testMainDepKey, ":"+name)
 		gen = append(gen, testRule)
 		imports = append(imports, testDeps)
 	}
