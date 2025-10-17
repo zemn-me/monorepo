@@ -1,18 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 ts_project(
     name = "geometry",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-        ],
-        allow_empty = True,
-    ),
+    srcs = ["geometer.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@types/node",
         "//ts/math",
     ],
 )
@@ -20,4 +14,11 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["geometer.ts"],
+    visibility = ["//:__subpackages__"],
 )

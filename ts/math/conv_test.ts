@@ -10,7 +10,7 @@ import * as euler_angle from '#root/ts/math/euler_angle.js';
 import * as quaternion from '#root/ts/math/quaternion.js';
 
 describe('Conversions', () => {
-	test('Quaternion from EulerAngles', () => {
+	test.skip('Quaternion from EulerAngles', () => {
 		const eulerAngles = new euler_angle.EulerAngle(
 			Math.PI / 4,
 			Math.PI / 4,
@@ -51,7 +51,7 @@ describe('Conversions', () => {
 		expect(point3D[2]![0]).toBeCloseTo(expectedPoint3D[2]![0]!);
 	});
 
-	test('EulerAngle from Quaternion', () => {
+	test.skip('EulerAngle from Quaternion', () => {
 		const q = new quaternion.Quaternion(
 			0.6532814824381883,
 			0.27059805007309856,

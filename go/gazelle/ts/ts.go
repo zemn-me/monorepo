@@ -17,23 +17,40 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	bzl "github.com/bazelbuild/buildtools/build"
 
 	tsconfig "github.com/zemn-me/monorepo/go/gazelle/ts/config"
 )
 
 const (
-	allowPath = "go/gazelle/ts"
-
 	packageJSONExtKey  = "typescript.package_json"
 	rootTsConfigExtKey = "typescript.root_tsconfig"
 )
 
+var AllowedPrefixes = []string{
+	"go/gazelle/ts",
+	"ts/math",
+}
+
+type passthroughExpr struct {
+	expr bzl.Expr
+}
+
+func (p passthroughExpr) BzlExpr() bzl.Expr { return p.expr }
+
+func (p passthroughExpr) Merge(other bzl.Expr) bzl.Expr {
+	if other != nil {
+		return other
+	}
+	return p.expr
+}
+
 var (
-	importPattern       = regexp.MustCompile(`(?m)(?:^|\s)(?:import|export)\s+(?:[^;\n]*?\s+from\s+)?["']([^"']+)["']|require\(\s*["']([^"']+)["']\s*\)|import\(\s*["']([^"']+)["']\s*\)`)
-	nodeModulePattern   = regexp.MustCompile(`@[^/]+/[^/]+|[^/]+`)
-	knownFileExtensions = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
-	defaultDeps         = []string{"//:node_modules/@types/node"}
-	builtinModulePrefix = "node:"
+	importPattern         = regexp.MustCompile(`(?m)(?:^|\s)(?:import|export)\s+(?:[^;\n]*?\s+from\s+)?["']([^"']+)["']|require\(\s*["']([^"']+)["']\s*\)|import\(\s*["']([^"']+)["']\s*\)`)
+	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
+	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
+	defaultDeps           = []string{"//:node_modules/@types/node"}
+	builtinModulePrefix   = "node:"
 )
 
 type depSet map[string]struct{}
@@ -174,7 +191,12 @@ func resolveModuleToRepoPath(module string, conf tsconfig.TsConfigPartial) (stri
 		}
 
 		resolved = strings.TrimPrefix(resolved, "./")
-		return path.Clean(resolved), true
+		resolved = path.Clean(resolved)
+		if strings.HasPrefix(resolved, "dist/bin/") {
+			continue
+		}
+
+		return resolved, true
 	}
 
 	return "", false
@@ -225,7 +247,9 @@ func repoPathToLabel(repoRoot, repoPath string, from label.Label) (string, bool)
 
 	cleaned = trimKnownExtensions(cleaned)
 
-	if pathExistsWithExt(repoRoot, cleaned) {
+	if info, err := os.Stat(filepath.Join(repoRoot, cleaned)); err == nil && info.IsDir() {
+		// use directory as-is
+	} else if pathExistsWithExt(repoRoot, cleaned) {
 		if idx := strings.LastIndex(cleaned, "/"); idx != -1 {
 			cleaned = cleaned[:idx]
 		} else {
@@ -242,7 +266,23 @@ func repoPathToLabel(repoRoot, repoPath string, from label.Label) (string, bool)
 }
 
 func nodeModulesModuleFromImportString(importString string) string {
-	return nodeModulePattern.FindString(importString)
+	importString = strings.TrimSpace(importString)
+	if importString == "" {
+		return ""
+	}
+	if strings.HasPrefix(importString, "@") {
+		parts := strings.Split(importString, "/")
+		if len(parts) >= 2 {
+			return parts[0] + "/" + parts[1]
+		}
+		return importString
+	}
+
+	if idx := strings.Index(importString, "/"); idx != -1 {
+		return importString[:idx]
+	}
+
+	return importString
 }
 
 func extractImports(filePath string) ([]string, error) {
@@ -251,7 +291,8 @@ func extractImports(filePath string) ([]string, error) {
 		return nil, err
 	}
 
-	matches := importPattern.FindAllSubmatch(data, -1)
+	content := strings.ReplaceAll(string(data), "\n", " ")
+	matches := importPattern.FindAllStringSubmatch(content, -1)
 	imports := make([]string, 0, len(matches))
 	for _, match := range matches {
 		for i := 1; i < len(match); i++ {
@@ -264,6 +305,18 @@ func extractImports(filePath string) ([]string, error) {
 	}
 
 	return imports, nil
+}
+
+func ExtractImportsForTest(filePath string) ([]string, error) {
+	return extractImports(filePath)
+}
+
+func hasJsdomDirective(filePath string) (bool, error) {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return false, err
+	}
+	return jsdomDirectivePattern.Match(data), nil
 }
 
 func isTypeScriptFile(name string) bool {
@@ -291,13 +344,47 @@ func (Language) Embeds(r *rule.Rule, from label.Label) []label.Label { return ni
 func (Language) Fix(c *config.Config, f *rule.File)                  {}
 
 func isAllowed(rel string) bool {
-	return rel == allowPath || strings.HasPrefix(rel, allowPath+"/")
+	for _, prefix := range AllowedPrefixes {
+		if rel == prefix || strings.HasPrefix(rel, prefix+"/") {
+			return true
+		}
+	}
+	return false
+}
+
+func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
+	if args.File == nil {
+		return nil
+	}
+
+	for _, existing := range args.File.Rules {
+		if existing.Kind() != "ts_project" {
+			continue
+		}
+		if existing.Name() == name {
+			return existing
+		}
+	}
+
+	return nil
+}
+
+func countTsProjects(f *rule.File) int {
+	if f == nil {
+		return 0
+	}
+	count := 0
+	for _, r := range f.Rules {
+		if r.Kind() == "ts_project" {
+			count++
+		}
+	}
+	return count
 }
 
 func (Language) Kinds() map[string]rule.KindInfo {
 	return map[string]rule.KindInfo{
 		"ts_project": {
-			MatchAny: true,
 			MergeableAttrs: map[string]bool{
 				"srcs": true,
 				"deps": true,
@@ -309,11 +396,23 @@ func (Language) Kinds() map[string]rule.KindInfo {
 				"srcs": true,
 			},
 		},
+		"jest_test": {
+			MergeableAttrs: map[string]bool{
+				"srcs": true,
+				"deps": true,
+			},
+			NonEmptyAttrs: map[string]bool{
+				"srcs": true,
+			},
+		},
 	}
 }
 
 func (Language) Loads() []rule.LoadInfo {
-	return []rule.LoadInfo{{Name: "//ts:rules.bzl", Symbols: []string{"ts_project"}}}
+	return []rule.LoadInfo{
+		{Name: "//bzl:rules.bzl", Symbols: []string{"bazel_lint"}},
+		{Name: "//ts:rules.bzl", Symbols: []string{"jest_test", "ts_project"}},
+	}
 }
 
 func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
@@ -321,6 +420,9 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 }
 
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
+	if imports == nil {
+		return
+	}
 	modules := imports.(depSet)
 
 	if len(modules) == 0 {
@@ -369,10 +471,20 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		}
 
 		deps[fmt.Sprintf("//:node_modules/%s", moduleName)] = struct{}{}
+		if !strings.HasPrefix(moduleName, "@") {
+			typePkg := "@types/" + moduleName
+			if pkgJSON.HasDep(typePkg) {
+				deps[fmt.Sprintf("//:node_modules/%s", typePkg)] = struct{}{}
+			}
+		}
 	}
 
 	if len(deps) == 0 {
 		return
+	}
+
+	if mainDep, ok := r.PrivateAttr(testMainDepKey).(string); ok && mainDep != "" {
+		deps[mainDep] = struct{}{}
 	}
 
 	labels := make([]string, 0, len(deps))
@@ -387,42 +499,130 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	if !isAllowed(args.Rel) {
 		return language.GenerateResult{}
 	}
+	if strings.HasPrefix(args.Rel, "ts/") && countTsProjects(args.File) > 2 {
+		return language.GenerateResult{}
+	}
 
 	var (
-		srcs []string
-		deps = newDepSet()
+		srcs     []string
+		testSrcs []string
+		mainDeps = newDepSet()
+		testDeps = newDepSet()
 	)
 
+	needsJsdom := false
 	for _, f := range args.RegularFiles {
 		if !isTypeScriptFile(f) {
 			continue
 		}
 
-		srcs = append(srcs, f)
+		isTest := strings.HasSuffix(f, "_test.ts") || strings.HasSuffix(f, "_test.tsx")
+		if isTest {
+			testSrcs = append(testSrcs, f)
+		} else {
+			srcs = append(srcs, f)
+		}
 
-		imports, err := extractImports(filepath.Join(args.Dir, f))
+		absPath := filepath.Join(args.Dir, f)
+
+		if isTest {
+			jsdom, err := hasJsdomDirective(absPath)
+			if err != nil {
+				panic(fmt.Sprintf("read jsdom directive from %s: %v", absPath, err))
+			}
+			if jsdom {
+				needsJsdom = true
+			}
+		}
+
+		imports, err := extractImports(absPath)
 		if err != nil {
-			panic(fmt.Sprintf("extract imports from %s: %v", filepath.Join(args.Dir, f), err))
+			panic(fmt.Sprintf("extract imports from %s: %v", absPath, err))
+		}
+
+		target := mainDeps
+		if isTest {
+			target = testDeps
 		}
 
 		for _, imp := range imports {
-			deps.add(imp)
+			target.add(imp)
 		}
 	}
 
 	if len(srcs) == 0 {
-		return language.GenerateResult{}
+		if len(testSrcs) == 0 {
+			return language.GenerateResult{}
+		}
+
+		srcs = append(srcs, testSrcs...)
+		mainDeps = testDeps
+		testSrcs = nil
+		testDeps = newDepSet()
 	}
 
 	sort.Strings(srcs)
+	sort.Strings(testSrcs)
 
 	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
-	r.SetAttr("srcs", srcs)
+	r.SetAttr("visibility", []string{"//:__subpackages__"})
+	if existing := findExistingRule(args, name); existing != nil {
+		if attr := existing.Attr("srcs"); attr != nil {
+			if call, ok := attr.(*bzl.CallExpr); ok {
+				if lit, ok := call.X.(*bzl.LiteralExpr); ok && lit.Token == "glob" {
+					// preserve existing glob
+				} else {
+					r.SetAttr("srcs", srcs)
+				}
+			} else {
+				r.SetAttr("srcs", srcs)
+			}
+		} else {
+			r.SetAttr("srcs", srcs)
+		}
+	} else {
+		r.SetAttr("srcs", srcs)
+	}
+
+	gen := []*rule.Rule{r}
+	imports := []interface{}{mainDeps}
+
+	allSrcs := append(append([]string{}, srcs...), testSrcs...)
+	fg := rule.NewRule("filegroup", "all_ts_srcs")
+	fg.SetAttr("srcs", allSrcs)
+	fg.SetAttr("visibility", []string{"//:__subpackages__"})
+	gen = append(gen, fg)
+	imports = append(imports, nil)
+
+	var testProjectName string
+	if len(testSrcs) > 0 {
+		testProjectName = name + "_tests"
+		testRule := rule.NewRule("ts_project", testProjectName)
+		testRule.SetAttr("srcs", testSrcs)
+		testRule.SetAttr("deps", []string{":" + name})
+		testRule.SetAttr("visibility", []string{"//:__subpackages__"})
+		gen = append(gen, testRule)
+		imports = append(imports, testDeps)
+	}
+
+	testCfg := testRuleConfig{
+		mainName:   name,
+		srcs:       testSrcs,
+		deps:       testDeps,
+		needsJsdom: needsJsdom,
+	}
+	testCfg.buildRules(args, &gen, &imports)
+
+	lint := rule.NewRule("bazel_lint", "bazel_lint")
+	lint.SetAttr("srcs", []string{"BUILD.bazel"})
+	lint.SetAttr("visibility", []string{"//:__subpackages__"})
+	gen = append(gen, lint)
+	imports = append(imports, nil)
 
 	return language.GenerateResult{
-		Gen:     []*rule.Rule{r},
-		Imports: []interface{}{deps},
+		Gen:     gen,
+		Imports: imports,
 	}
 }
 

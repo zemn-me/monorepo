@@ -20,9 +20,11 @@ def go_binary(name = None, srcs = [], embedsrcs = None, importpath = None, deps 
 def go_test(name = None, importpath = None, deps = [], **kwargs):
     fmt_kwargs = dict(kwargs)
     data = fmt_kwargs.pop("data", None)
+    embed = fmt_kwargs.pop("embed", None)
 
     _go_test(
         name = name,
+        embed = embed,
         data = data,
         deps = deps,
         importpath = importpath,
