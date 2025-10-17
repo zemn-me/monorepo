@@ -1,49 +1,59 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 ts_project(
     name = "braille",
-    srcs = [
-        "braille.ts",
-    ],
+    srcs = ["braille.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
+        "//:node_modules/@types/node",
         "//:node_modules/d3-array",
         "//:node_modules/d3-scale",
-        "//:node_modules/react",
         "//ts/math/space",
     ],
 )
 
-ts_project(
-    name = "braille_test_ts",
-    srcs = [
-        "braille_test.ts",
-        "raster_test.ts",
-    ],
-    deps = [
-        ":braille",
-        "//:node_modules/@types/jest",
-        "//ts/math",
-    ],
-)
-
 jest_test(
-    name = "test",
+    name = "tests",
     srcs = [
         "braille_test.js",
         "raster_test.js",
     ],
-    deps = [
-        ":braille",
-        "//:node_modules/@jest/globals",
-    ],
+    visibility = ["//:__subpackages__"],
+    deps = [":braille_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "braille.ts",
+        "braille_test.ts",
+        "raster_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "braille_tests",
+    srcs = [
+        "braille_test.ts",
+        "raster_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":braille",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/d3-array",
+        "//:node_modules/@types/node",
+        "//:node_modules/d3-array",
+        "//ts/math",
+    ],
 )

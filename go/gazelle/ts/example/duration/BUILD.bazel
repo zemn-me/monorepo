@@ -12,12 +12,9 @@ exports_files(
 
 ts_project(
     name = "duration",
-    srcs = [
-        "duration.ts",
-        "duration_test.ts",
-    ],
+    srcs = ["duration.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts/time",
     ],
@@ -26,10 +23,32 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = ["duration_test.js"],
-    deps = [":duration"],
+    visibility = ["//:__subpackages__"],
+    deps = [":duration_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "duration.ts",
+        "duration_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "duration_tests",
+    srcs = ["duration_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":duration",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

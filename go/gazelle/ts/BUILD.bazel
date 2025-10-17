@@ -4,7 +4,10 @@ load("//go:rules.bzl", "go_library")
 
 go_library(
     name = "ts",
-    srcs = ["ts.go"],
+    srcs = [
+        "test_rules.go",
+        "ts.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/go/gazelle/ts",
     visibility = ["//visibility:public"],
     deps = [
@@ -15,6 +18,7 @@ go_library(
         "@bazel_gazelle//repo",
         "@bazel_gazelle//resolve",
         "@bazel_gazelle//rule",
+        "@com_github_bazelbuild_buildtools//build",
     ],
 )
 
@@ -24,13 +28,14 @@ go_test(
     data = [
         "//:package.json",
         "//:tsconfig.json",
-        "//go/gazelle/ts/example/duration:duration.ts",
-        "//go/gazelle/ts/example/duration:duration_test.ts",
-        "//go/gazelle/ts/example/simple:hello.ts",
-        "//go/gazelle/ts/example/simple:hello_test.ts",
-        "//go/gazelle/ts/testdata/dependency:dep.ts",
-        "//go/gazelle/ts/testdata/uses_option:sample.ts",
-        "//ts/time:duration.ts",
+        "//go/gazelle/ts/example/duration:all_ts_srcs",
+        "//go/gazelle/ts/example/simple:all_ts_srcs",
+        "//go/gazelle/ts/testdata/dependency:all_ts_srcs",
+        "//go/gazelle/ts/testdata/jsdom:all_ts_srcs",
+        "//go/gazelle/ts/testdata/submodule:all_ts_srcs",
+        "//go/gazelle/ts/testdata/uses_option:all_ts_srcs",
+        "//ts/math/mesh:all_ts_srcs",
+        "//ts/math/shape:all_ts_srcs",
     ],
     deps = [
         ":ts",
@@ -39,6 +44,7 @@ go_test(
         "@bazel_gazelle//language",
         "@bazel_gazelle//resolve",
         "@bazel_gazelle//rule",
+        "@com_github_bazelbuild_buildtools//build",
         "@io_bazel_rules_go//go/runfiles",
     ],
 )
