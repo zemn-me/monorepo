@@ -27,11 +27,29 @@ js_run_binary(
     name = "gen_hemi_regex",
     stdout = "is_hemisphere.ts",
     tool = ":gen_regex_bin",
+    visibility = [
+        "//:__subpackages__",
+    ],
 )
 
 ts_project(
     name = "hemisphere",
-    srcs = ["is_hemisphere.ts"],
+    srcs = [
+        ":gen_hemi_regex",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/regexgen",
+        "//:node_modules/regexgen",
+    ],
+)
+
+alias(
+    name = "is_hemisphere",
+    actual = ":hemisphere",
     visibility = [
         "//:__subpackages__",
     ],
@@ -40,4 +58,11 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["regexgen.ts"],
+    visibility = ["//:__subpackages__"],
 )
