@@ -5,21 +5,19 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "time",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-        ],
-        allow_empty = True,
-    ),
+    srcs = [
+        "date.ts",
+        "day_of_year.ts",
+        "days_in_year.ts",
+        "duration.ts",
+        "hemisphere.ts",
+        "index.ts",
+        "season.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
-        "//:node_modules/ts-toolbelt",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/option",
         "//ts/time/hemisphere",
     ],
 )
@@ -30,10 +28,42 @@ jest_test(
         "date_test.js",
         "season_test.js",
     ],
-    deps = [":time"],
+    visibility = ["//:__subpackages__"],
+    deps = [":time_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "date.ts",
+        "date_test.ts",
+        "day_of_year.ts",
+        "days_in_year.ts",
+        "duration.ts",
+        "hemisphere.ts",
+        "index.ts",
+        "season.ts",
+        "season_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "time_tests",
+    srcs = [
+        "date_test.ts",
+        "season_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":time",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

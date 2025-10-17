@@ -30,6 +30,7 @@ const (
 var AllowedPrefixes = []string{
 	"go/gazelle/ts",
 	"ts/math",
+	"ts/time",
 }
 
 type passthroughExpr struct {
@@ -245,15 +246,39 @@ func repoPathToLabel(repoRoot, repoPath string, from label.Label) (string, bool)
 		return "", false
 	}
 
+	preferDir := false
+	switch {
+	case strings.HasSuffix(cleaned, "/index"), strings.HasSuffix(cleaned, "/index.d.ts"):
+		preferDir = true
+	default:
+		for _, ext := range knownFileExtensions {
+			if strings.HasSuffix(cleaned, "/index"+ext) {
+				preferDir = true
+				break
+			}
+		}
+	}
+
 	cleaned = trimKnownExtensions(cleaned)
 
 	if info, err := os.Stat(filepath.Join(repoRoot, cleaned)); err == nil && info.IsDir() {
 		// use directory as-is
+	} else if preferDir {
+		// keep the directory even if it is missing from the test runfiles tree
 	} else if pathExistsWithExt(repoRoot, cleaned) {
 		if idx := strings.LastIndex(cleaned, "/"); idx != -1 {
 			cleaned = cleaned[:idx]
 		} else {
 			cleaned = ""
+		}
+	} else if idx := strings.LastIndex(cleaned, "/"); idx != -1 {
+		parent := cleaned[:idx]
+		if parent != "" {
+			if info, err := os.Stat(filepath.Join(repoRoot, parent)); err == nil && info.IsDir() {
+				cleaned = parent
+			}
+		} else {
+			cleaned = parent
 		}
 	}
 
@@ -367,6 +392,39 @@ func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
 	}
 
 	return nil
+}
+
+func listExprStringValues(expr bzl.Expr) ([]string, bool) {
+	list, ok := expr.(*bzl.ListExpr)
+	if !ok {
+		return nil, false
+	}
+
+	values := make([]string, 0, len(list.List))
+	for _, elem := range list.List {
+		str, ok := elem.(*bzl.StringExpr)
+		if !ok {
+			return nil, false
+		}
+		values = append(values, str.Value)
+	}
+
+	return values, true
+}
+
+func shouldPreserveSrcs(expr bzl.Expr) ([]string, bool) {
+	values, ok := listExprStringValues(expr)
+	if !ok {
+		return nil, false
+	}
+
+	for _, v := range values {
+		if strings.HasPrefix(v, ":") || strings.HasPrefix(v, "//") {
+			return values, true
+		}
+	}
+
+	return nil, false
 }
 
 func countTsProjects(f *rule.File) int {
@@ -569,7 +627,9 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	r.SetAttr("visibility", []string{"//:__subpackages__"})
 	if existing := findExistingRule(args, name); existing != nil {
 		if attr := existing.Attr("srcs"); attr != nil {
-			if call, ok := attr.(*bzl.CallExpr); ok {
+			if preserved, ok := shouldPreserveSrcs(attr); ok {
+				r.SetAttr("srcs", preserved)
+			} else if call, ok := attr.(*bzl.CallExpr); ok {
 				if lit, ok := call.X.(*bzl.LiteralExpr); ok && lit.Token == "glob" {
 					// preserve existing glob
 				} else {
