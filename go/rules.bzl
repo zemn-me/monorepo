@@ -18,16 +18,20 @@ def go_binary(name = None, srcs = [], embedsrcs = None, importpath = None, deps 
         )
 
 def go_test(name = None, importpath = None, deps = [], **kwargs):
+    fmt_kwargs = dict(kwargs)
+    data = fmt_kwargs.pop("data", None)
+
     _go_test(
         name = name,
+        data = data,
         deps = deps,
         importpath = importpath,
-        **kwargs
+        **fmt_kwargs
     )
 
     _test_go_fmt(
         name = name + "_fmt",
-        **kwargs
+        **fmt_kwargs
     )
 
 def go_library(name = None, srcs = [], importpath = None, deps = [], **kwargs):
