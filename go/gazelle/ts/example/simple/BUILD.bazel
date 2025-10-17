@@ -5,15 +5,15 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "simple",
-    srcs = [
-        "hello.ts",
-        "hello_test.ts",
-    ],
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/node",
-    ],
+    srcs = ["hello.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
 )
+
+exports_files([
+    "hello.ts",
+    "hello_test.ts",
+])
 
 jest_test(
     name = "test",
@@ -24,4 +24,32 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["hello_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":simple_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "hello.ts",
+        "hello_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "simple_tests",
+    srcs = ["hello_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":simple",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

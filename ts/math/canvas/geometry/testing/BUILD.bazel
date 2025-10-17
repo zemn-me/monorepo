@@ -1,35 +1,35 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-package(default_visibility = ["//:__subpackages__"])
-
 ts_project(
     name = "testing",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-        ],
-        allow_empty = True,
-    ),
+    srcs = ["geometer_test.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@types/jest",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/iter",
+        "//ts/math",
         "//ts/math/canvas/braille",
         "//ts/math/canvas/geometry",
     ],
 )
 
 jest_test(
-    name = "test",
-    srcs = [
-        "geometer_test.js",
-    ],
-    deps = [
-        ":testing",
-    ],
+    name = "tests",
+    srcs = ["geometer_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":testing"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["geometer_test.ts"],
+    visibility = ["//:__subpackages__"],
 )
