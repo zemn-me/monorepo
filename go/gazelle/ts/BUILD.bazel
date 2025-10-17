@@ -24,10 +24,13 @@ go_test(
     data = [
         "//:package.json",
         "//:tsconfig.json",
+        "//go/gazelle/ts/example/duration:duration.ts",
+        "//go/gazelle/ts/example/duration:duration_test.ts",
         "//go/gazelle/ts/example/simple:hello.ts",
         "//go/gazelle/ts/example/simple:hello_test.ts",
         "//go/gazelle/ts/testdata/dependency:dep.ts",
         "//go/gazelle/ts/testdata/uses_option:sample.ts",
+        "//ts/time:duration.ts",
     ],
     deps = [
         ":ts",
