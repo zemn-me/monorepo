@@ -1,0 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["dep.ts"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "dependency",
+    srcs = ["dep.ts"],
+    deps = ["//:node_modules/@types/node"],
+)
