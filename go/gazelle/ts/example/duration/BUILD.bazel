@@ -1,0 +1,35 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+exports_files(
+    [
+        "duration.ts",
+        "duration_test.ts",
+    ],
+)
+
+ts_project(
+    name = "duration",
+    srcs = [
+        "duration.ts",
+        "duration_test.ts",
+    ],
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/time",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["duration_test.js"],
+    deps = [":duration"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

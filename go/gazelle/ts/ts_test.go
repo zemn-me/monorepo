@@ -115,3 +115,14 @@ func TestResolveAddsRepositoryDependencyFromAlias(t *testing.T) {
 	assertContains(t, deps, "//:node_modules/@jest/globals")
 	assertContains(t, deps, "//:node_modules/@types/node")
 }
+
+func TestResolveAddsTsTimeDependency(t *testing.T) {
+	rel := "go/gazelle/ts/example/duration"
+	files := []string{"duration.ts", "duration_test.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	assertContains(t, deps, "//ts/time")
+	assertContains(t, deps, "//:node_modules/@jest/globals")
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
