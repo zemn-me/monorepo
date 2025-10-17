@@ -22,6 +22,7 @@ go_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
 )
 
 pkg_tar(
@@ -57,4 +58,10 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//ts/pulumi/lib",
     ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["hello_world.ts"],
+    visibility = ["//:__subpackages__"],
 )

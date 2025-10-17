@@ -6,6 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	bzl "github.com/bazelbuild/buildtools/build"
 )
 
 const testMainDepKey = "typescript:test_main_dep"
@@ -27,26 +28,41 @@ func (cfg testRuleConfig) buildRules(args language.GenerateArgs, gen *[]*rule.Ru
 	}
 
 	testProjectName := cfg.mainName + "_tests"
-	testRule := rule.NewRule("ts_project", testProjectName)
-	testRule.SetAttr("srcs", cfg.srcs)
-	testRule.SetAttr("deps", []string{":" + cfg.mainName})
-	testRule.SetAttr("visibility", []string{"//:__subpackages__"})
-	testRule.SetPrivateAttr(testMainDepKey, ":"+cfg.mainName)
-	*gen = append(*gen, testRule)
-	*imports = append(*imports, cfg.deps)
-
 	var testJS []string
 	for _, tf := range cfg.srcs {
 		testJS = append(testJS, strings.TrimSuffix(tf, path.Ext(tf))+".js")
 	}
 
+	existingJest := findRuleByKind(args, "tests", "jest_test")
+
 	j := rule.NewRule("jest_test", "tests")
-	j.SetAttr("srcs", testJS)
+	if existingJest != nil {
+		if vis := existingJest.AttrStrings("visibility"); len(vis) > 0 {
+			j.SetAttr("visibility", vis)
+		}
+		if attr := existingJest.Attr("srcs"); attr != nil {
+			if preserved, ok := shouldPreserveSrcs(attr); ok {
+				j.SetAttr("srcs", preserved)
+			} else if call, ok := attr.(*bzl.CallExpr); ok {
+				if lit, ok := call.X.(*bzl.LiteralExpr); ok && lit.Token == "glob" {
+					// preserve existing glob
+				} else {
+					j.SetAttr("srcs", testJS)
+				}
+			} else {
+				j.SetAttr("srcs", testJS)
+			}
+		} else {
+			j.SetAttr("srcs", testJS)
+		}
+	} else {
+		j.SetAttr("visibility", []string{"//:__subpackages__"})
+		j.SetAttr("srcs", testJS)
+	}
 	j.SetAttr("deps", []string{":" + testProjectName})
 	if cfg.needsJsdom {
 		j.SetAttr("jsdom", true)
 	}
-	j.SetAttr("visibility", []string{"//:__subpackages__"})
 	*gen = append(*gen, j)
 	*imports = append(*imports, nil)
 }

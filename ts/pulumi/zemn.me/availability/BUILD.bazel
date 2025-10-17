@@ -6,7 +6,12 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "ts",
-    assets = glob(["**/*.css"]),
+    assets = glob(
+        [
+            "**/*.css",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         "//:node_modules/@types/react",
         "//:node_modules/immutable",

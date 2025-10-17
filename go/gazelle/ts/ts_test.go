@@ -220,6 +220,20 @@ func TestAllowedPrefixesIncludesTsMath(t *testing.T) {
 	}
 }
 
+func TestAllowedPrefixesIncludesTsPulumi(t *testing.T) {
+	found := false
+	for _, prefix := range ts.AllowedPrefixes {
+		if prefix == "ts/pulumi" {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		t.Fatalf("expected AllowedPrefixes to include ts/pulumi, got %v", ts.AllowedPrefixes)
+	}
+}
+
 func TestResolveAddsMeshDependencies(t *testing.T) {
 	rel := "ts/math/mesh"
 	files := []string{"mesh.ts"}

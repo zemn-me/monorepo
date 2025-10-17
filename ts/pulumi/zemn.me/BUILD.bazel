@@ -1,17 +1,9 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
-package(default_visibility = ["//ts/pulumi:__subpackages__"])
-
 ts_project(
-    name = "shadwell.im",
+    name = "zemn.me",
     srcs = ["index.ts"],
-    data = [
-        "//ts/pulumi/shadwell.im/anna:next",
-        "//ts/pulumi/shadwell.im/kate:next",
-        "//ts/pulumi/shadwell.im/lucy:next",
-        "//ts/pulumi/shadwell.im/luke:next",
-    ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
@@ -20,17 +12,20 @@ ts_project(
         "//project/zemn.me/bio",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
+        "//ts/pulumi/zemn.me/api",
+        "//ts/pulumi/zemn.me/forge",
+        "//ts/pulumi/zemn.me/hello_world:ts",
     ],
-)
-
-bazel_lint(
-    name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
-    visibility = ["//:__subpackages__"],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
     visibility = ["//:__subpackages__"],
 )

@@ -11,6 +11,13 @@ yaml_lint_test(
 
 ts_project(
     name = "pulumi_ts",
+    srcs = [
+        "deploy_to_staging.ts",
+        "index.ts",
+        "preview.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
     data = [
         ":pulumi_local",
         "//project/zemn.me:next",
@@ -25,6 +32,7 @@ ts_project(
         "//:node_modules/@pulumi/random",
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//:node_modules/cross-spawn",
         "//project/zemn.me/bio",
         "//ts/github/actions",
@@ -46,7 +54,7 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = ["pulumi_test.js"],
-    deps = [":pulumi_ts"],
+    deps = [":pulumi_tests"],
 )
 
 js_binary(
@@ -69,4 +77,27 @@ cp $< $@
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "deploy_to_staging.ts",
+        "index.ts",
+        "preview.ts",
+        "pulumi_test.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
+)
+
+ts_project(
+    name = "pulumi_tests",
+    srcs = ["pulumi_test.ts"],
+    deps = [
+        ":pulumi_ts",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
 )

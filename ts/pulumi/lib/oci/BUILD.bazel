@@ -15,12 +15,14 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+    visibility = ["//:__subpackages__"],
 )
 
 ts_project(
     name = "oci",
     srcs = [
         "image.ts",
+        "oci_image.tmpl.ts",
     ],
     visibility = [
         "//:__subpackages__",
@@ -30,4 +32,13 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
     ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "image.ts",
+        "oci_image.tmpl.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
