@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-BAZEL_BINDIR="." "$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" //sh/bin:codex_cli "${@}"
+BAZEL_BINDIR="." "$(dirname ${BASH_SOURCE[0]})/../run_bazel.sh" //sh/bin:codex_cli "${@}" --cd "$(pwd)"
