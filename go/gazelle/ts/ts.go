@@ -27,12 +27,6 @@ const (
 	rootTsConfigExtKey = "typescript.root_tsconfig"
 )
 
-var AllowedPrefixes = []string{
-	"go/gazelle/ts",
-	"ts/math",
-	"ts/time",
-}
-
 type passthroughExpr struct {
 	expr bzl.Expr
 }
@@ -53,6 +47,24 @@ var (
 	defaultDeps           = []string{"//:node_modules/@types/node"}
 	builtinModulePrefix   = "node:"
 )
+
+var suppressedTypescriptFiles = func() map[string]struct{} {
+	suppressed := make(map[string]struct{}, len(SuppressGazelleTypescriptFor))
+	for _, f := range SuppressGazelleTypescriptFor {
+		f = strings.TrimSpace(f)
+		if f == "" {
+			continue
+		}
+		f = strings.TrimPrefix(f, "./")
+		f = strings.TrimPrefix(f, "/")
+		f = path.Clean(f)
+		if f == "" || f == "." {
+			continue
+		}
+		suppressed[f] = struct{}{}
+	}
+	return suppressed
+}()
 
 type depSet map[string]struct{}
 
@@ -368,13 +380,13 @@ func (Language) Configure(c *config.Config, rel string, f *rule.File) {
 func (Language) Embeds(r *rule.Rule, from label.Label) []label.Label { return nil }
 func (Language) Fix(c *config.Config, f *rule.File)                  {}
 
-func isAllowed(rel string) bool {
-	for _, prefix := range AllowedPrefixes {
-		if rel == prefix || strings.HasPrefix(rel, prefix+"/") {
-			return true
-		}
-	}
-	return false
+func isSuppressedFile(rel, file string) bool {
+	repoPath := path.Join(rel, file)
+	repoPath = strings.TrimPrefix(repoPath, "./")
+	repoPath = strings.TrimPrefix(repoPath, "/")
+	repoPath = path.Clean(repoPath)
+	_, ok := suppressedTypescriptFiles[repoPath]
+	return ok
 }
 
 func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
@@ -554,9 +566,6 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 }
 
 func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResult {
-	if !isAllowed(args.Rel) {
-		return language.GenerateResult{}
-	}
 	if strings.HasPrefix(args.Rel, "ts/") && countTsProjects(args.File) > 2 {
 		return language.GenerateResult{}
 	}
@@ -571,6 +580,9 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	needsJsdom := false
 	for _, f := range args.RegularFiles {
 		if !isTypeScriptFile(f) {
+			continue
+		}
+		if isSuppressedFile(args.Rel, f) {
 			continue
 		}
 
