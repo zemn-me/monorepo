@@ -206,20 +206,6 @@ func TestResolveAddsTsTimeDependency(t *testing.T) {
 	assertContains(t, deps, "//:node_modules/@types/node")
 }
 
-func TestAllowedPrefixesIncludesTsMath(t *testing.T) {
-	found := false
-	for _, prefix := range ts.AllowedPrefixes {
-		if prefix == "ts/math" {
-			found = true
-			break
-		}
-	}
-
-	if !found {
-		t.Fatalf("expected AllowedPrefixes to include ts/math, got %v", ts.AllowedPrefixes)
-	}
-}
-
 func TestResolveAddsMeshDependencies(t *testing.T) {
 	rel := "ts/math/mesh"
 	files := []string{"mesh.ts"}
@@ -238,6 +224,17 @@ func TestResolveAddsMeshDependencies(t *testing.T) {
 	}
 	assertContains(t, deps, "//ts/iter")
 	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestGenerateRulesSuppressedPackage(t *testing.T) {
+	rel := "project/cultist"
+	files := []string{"action.ts"}
+
+	result := generateRulesOnly(t, rel, files)
+
+	if len(result.Gen) != 0 {
+		t.Fatalf("expected no rules for suppressed package %q, got %d", rel, len(result.Gen))
+	}
 }
 
 func TestGenerateRulesAddsJsdomAttributeWhenDirectivePresent(t *testing.T) {
