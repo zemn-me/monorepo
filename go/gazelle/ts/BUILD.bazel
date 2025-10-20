@@ -5,6 +5,7 @@ load("//go:rules.bzl", "go_library")
 go_library(
     name = "ts",
     srcs = [
+        "suppressions.go",
         "test_rules.go",
         "ts.go",
     ],
