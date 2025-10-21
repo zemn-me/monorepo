@@ -7,10 +7,13 @@ import {
 import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper';
 import { allOilsRefinery } from '#root/ts/factorio/testing/data/allOilsRefinery';
+import { automatedAquiloRunner } from '#root/ts/factorio/testing/data/automated_aquilo_runner.js';
 import { balancers } from '#root/ts/factorio/testing/data/balancers.js';
 import { bigAssMall } from '#root/ts/factorio/testing/data/bigAssMall';
+import { cryoScience } from '#root/ts/factorio/testing/data/cryoScience.js';
 import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
+import { spaceScience } from '#root/ts/factorio/testing/data/spaceScience.js';
 import { starterBase } from '#root/ts/factorio/testing/data/starterBase.js';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
 
@@ -173,6 +176,19 @@ describe('blueprintSurroundedByWall', () => {
 });
 
 describe('some problematic blueprints', () => {
+	test('automatedAquiloRunner', () => {
+		expect(() => BlueprintString.parse(automatedAquiloRunner)).not.toThrow();
+	});
+	test('spaceScience', () => {
+		expect(() => BlueprintString.parse(spaceScience)).not.toThrow();
+	});
+
+
+	test('cryoScience', () => {
+		expect(() => BlueprintString.parse(cryoScience)).not.toThrow();
+	});
+
+
 	test('balancers', () => {
 		expect(() => BlueprintString.parse(balancers)).not.toThrow();
 	});

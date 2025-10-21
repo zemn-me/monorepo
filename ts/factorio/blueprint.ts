@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
+import { EntityNumber } from '#root/ts/factorio/entity_number.js';
 import { Icon } from '#root/ts/factorio/icon.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { Position } from '#root/ts/factorio/position.js';
@@ -15,6 +16,17 @@ import {
 } from '#root/ts/math/cartesian.js';
 import { add } from '#root/ts/math/matrix.js';
 import { extent } from '#root/ts/math/tuple.js';
+
+const BlueprintWire = z.tuple([
+	/** Source entity number. */
+	EntityNumber,
+	/** Source wire connector index. */
+	Int,
+	/** Target entity number. */
+	EntityNumber,
+	/** Target wire connector index. */
+	Int,
+]);
 
 export const Blueprint = z.strictObject({
 	/**
@@ -65,6 +77,10 @@ export const Blueprint = z.strictObject({
 	 * The map version of the map the blueprint was created in.
 	 */
 	version: Int,
+	/**
+	 * Direct wire connections between entities (Factorio 2.0).
+	 */
+	wires: z.array(BlueprintWire).optional(),
 });
 
 /**

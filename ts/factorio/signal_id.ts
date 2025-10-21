@@ -5,7 +5,9 @@ export const SignalID = z.strictObject({
 		z.literal('item'),
 		z.literal('fluid'),
 		z.literal('virtual'),
-	]),
+		z.literal('space-location'),
+		z.literal('recipe'),
+	]).optional(),
 	/**
 	 * Name of the item, fluid or virtual signal.
 	 */
