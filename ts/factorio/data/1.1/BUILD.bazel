@@ -15,13 +15,19 @@ genrule(
 
 ts_project(
     name = "1.1",
-    srcs = [
-        "data.ts",
-        "types.ts",
-    ],
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
 )

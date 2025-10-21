@@ -26,20 +26,12 @@ func (cfg testRuleConfig) buildRules(args language.GenerateArgs, gen *[]*rule.Ru
 		return
 	}
 
-	testProjectName := cfg.mainName + "_tests"
-	testRule := rule.NewRule("ts_project", testProjectName)
-	testRule.SetAttr("srcs", cfg.srcs)
-	testRule.SetAttr("deps", []string{":" + cfg.mainName})
-	testRule.SetAttr("visibility", []string{"//:__subpackages__"})
-	testRule.SetPrivateAttr(testMainDepKey, ":"+cfg.mainName)
-	*gen = append(*gen, testRule)
-	*imports = append(*imports, cfg.deps)
-
 	var testJS []string
 	for _, tf := range cfg.srcs {
 		testJS = append(testJS, strings.TrimSuffix(tf, path.Ext(tf))+".js")
 	}
 
+	testProjectName := cfg.mainName + "_tests"
 	j := rule.NewRule("jest_test", "tests")
 	j.SetAttr("srcs", testJS)
 	j.SetAttr("deps", []string{":" + testProjectName})

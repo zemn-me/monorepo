@@ -3,16 +3,18 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "react",
+    srcs = ["blueprint.tsx"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/d3-array",
         "//:node_modules/@types/d3-scale",
-        "//:node_modules/@types/react",
+        "//:node_modules/@types/node",
         "//:node_modules/d3-array",
         "//:node_modules/d3-scale",
         "//:node_modules/zod",
+        "//ts",
         "//ts/factorio",
-        "//ts/iter",
+        "//ts/option",
         "//ts/react/CopyToClipboard",
         "//ts/react/ErrorDisplay",
         "//ts/zod",
@@ -22,4 +24,11 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["blueprint.tsx"],
+    visibility = ["//:__subpackages__"],
 )
