@@ -659,6 +659,7 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		testRule.SetAttr("srcs", testSrcs)
 		testRule.SetAttr("deps", []string{":" + name})
 		testRule.SetAttr("visibility", []string{"//:__subpackages__"})
+		testRule.SetPrivateAttr(testMainDepKey, ":"+name)
 		gen = append(gen, testRule)
 		imports = append(imports, testDeps)
 	}
