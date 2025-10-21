@@ -824,6 +824,12 @@ export const Bio = {
                         description: en`Panel representing OpenAI at the AI Agent Security summit at the Commonwealth Club of San Francisco.`,
 					tags: [talk, work, security],
                 },
+				{
+					date: date(21, 'oct', 2025),
+					title: en`Atlas`,
+					description: en`AI enabled web-browser.`,
+					id: `32dda71c-fa45-4652-b09d-3635a27b8f55`,
+				}
         ],
         who: {
                 handle: en`zemnmez`,
