@@ -3,13 +3,14 @@ import { z } from 'zod';
 export enum _DefinesControlBehaviorTransportBeltContentReadMode {
 	pulse = 0,
 	hold = 1,
+	read_contents = 2,
 }
 
 export const DefinesControlBehaviorTransportBeltContentReadMode = z.nativeEnum(
 	_DefinesControlBehaviorTransportBeltContentReadMode
 );
 export type DefinesControlBehaviorTransportBeltContentReadMode = z.TypeOf<
-	typeof DefinesControlBehaviorInserterHandReadMode
+	typeof DefinesControlBehaviorTransportBeltContentReadMode
 >;
 
 export enum _DefinesControlBehaviorInserterHandReadMode {
@@ -33,5 +34,5 @@ export const DefinesControlBehaviorMiningDrillResourceReadMode = z.nativeEnum(
 	_DefinesControlBehaviorMiningDrillResourceReadMode
 );
 export type DefinesControlBehaviorMiningDrillResourceReadMode = z.TypeOf<
-	typeof DefinesControlBehaviorInserterHandReadMode
+	typeof DefinesControlBehaviorMiningDrillResourceReadMode
 >;

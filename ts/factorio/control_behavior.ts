@@ -12,6 +12,7 @@ import {
 import { Int } from '#root/ts/factorio/int.js';
 import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
+import { LogisticSection } from '#root/ts/factorio/logistic_section.js';
 
 export const ControlBehavior = z.strictObject({
 	/**
@@ -50,6 +51,18 @@ export const ControlBehavior = z.strictObject({
 	 * CircuitCondition
 	 */
 	circuit_condition: CircuitCondition.optional(),
+	/**
+	 * Whether the entity evaluates its circuit condition.
+	 */
+	circuit_condition_enabled: z.boolean().optional(),
+	/**
+	 * Whether the circuit network currently enables the entity (power-switch etc.).
+	 */
+	circuit_enabled: z.boolean().optional(),
+	/**
+	 * Sets filters via circuit network (logistic/requester chests, asteroid collectors).
+	 */
+	circuit_set_filters: z.boolean().optional(),
 	/**
 	 * Enable or disable based on circuit_condition.
 	 */
@@ -122,6 +135,32 @@ export const ControlBehavior = z.strictObject({
 	 * #SignalID to output the wall-gate sensor / accumulator charge on.
 	 */
 	output_signal: SignalID.optional(),
+	/** Whether to read the entities temperature (heating tower). */
+	read_temperature: z.boolean().optional(),
+	/** Signal to report the temperature on. */
+	temperature_signal: SignalID.optional(),
+	/** Whether to read contents (cryogenic plant). */
+	read_contents: z.boolean().optional(),
+	/** Whether to report the current speed. */
+	read_speed: z.boolean().optional(),
+	/** Signal that receives the speed. */
+	speed_signal: SignalID.optional(),
+	/** Whether to report recipe completion. */
+	read_recipe_finished: z.boolean().optional(),
+	/** Signal that receives recipe finished events. */
+	recipe_finished_signal: SignalID.optional(),
+	/** Signal representing working state. */
+	working_signal: SignalID.optional(),
+	/** Whether to read the moving-from station (for trains). */
+	read_moving_from: z.boolean().optional(),
+	/** Whether the entity should set its recipe via circuit. */
+	set_recipe: z.boolean().optional(),
+	/** Selector combinator mode. */
+	operation: z.string().optional(),
+	/** Selector combinator mode: choose max instead of min. */
+	select_max: z.boolean().optional(),
+	/** Selector combinator index offset. */
+	index_constant: Int.optional(),
 	/**
 	 * Whether to read this belts content or inserters hand.
 	 */
@@ -170,6 +209,10 @@ export const ControlBehavior = z.strictObject({
 	 * DeciderCombinatorParameters
 	 */
 	decider_conditions: DeciderCombinatorParameters.optional(),
+	/** Filter sections for combinators (Factorio 2.0). */
+	sections: z.strictObject({
+		sections: z.array(LogisticSection)
+	}).optional(),
 	/**
 	 * ProgrammableSpeakerCircuitParameters
 	 */

@@ -11,11 +11,44 @@ import { Inventory } from '#root/ts/factorio/inventory.js';
 import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
 import { ItemRequestObject } from '#root/ts/factorio/item_request_object.js';
 import { LogisticFilter } from '#root/ts/factorio/logistic_filter.js';
+import { LogisticSection } from '#root/ts/factorio/logistic_section.js';
+import { OneBasedIndex } from '#root/ts/factorio/base';
 import { Position } from '#root/ts/factorio/position.js';
+import { Quality } from '#root/ts/factorio/quality.js';
 import { SpeakerAlertParameter } from '#root/ts/factorio/speaker_alert_parameter.js';
 import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
 import { Tags } from '#root/ts/factorio/tags.js';
 import { Uint8 } from '#root/ts/factorio/uint8.js';
+
+const EntityItemInventorySlot = z.strictObject({
+	/** Index of the inventory this stack lives in (Factorio 1-based). */
+	inventory: Int,
+	/** Slot within the inventory. */
+	stack: Int,
+});
+
+const EntityItemInventoryAssignments = z.strictObject({
+	/** Slot assignments for module inventories, requester inventories, etc. */
+	in_inventory: z.array(EntityItemInventorySlot),
+});
+
+const EntityItemSlot = z.strictObject({
+	id: z.strictObject({
+		name: z.string(),
+		quality: Quality.optional(),
+	}),
+	items: EntityItemInventoryAssignments,
+});
+
+const Something = z.strictObject({
+	sections: z.array(LogisticSection),
+	request_from_buffers: z.boolean().optional(),
+});
+
+const EntityPriorityListEntry = z.strictObject({
+	index: OneBasedIndex,
+	name: z.string(),
+});
 
 export const Entity = z.strictObject({
 	entity_number: EntityNumber,
@@ -35,6 +68,8 @@ export const Entity = z.strictObject({
 	 * Orientation of cargo wagon or locomotive, value 0 to 1 (optional).
 	 */
 	orientation: Float.optional(),
+	/** Mirrors building placement (Factorio 2.0). */
+	mirror: z.boolean().optional(),
 	/**
 	 * Circuit connection, object with keys starting from 1, values are #Connection objects (optional).
 	 */
@@ -50,7 +85,13 @@ export const Entity = z.strictObject({
 	/**
 	 * Item requests by this entity, this is what defines the item-request-proxy when the blueprint is placed, optional. #Item request object
 	 */
-	items: ItemRequestObject.optional(),
+	items:
+		z.union([
+			z.array(ItemRequestObject),
+			ItemRequestObject,
+			z.array(EntityItemSlot),
+			EntityItemSlot,
+		]).optional(),
 	/**
 	 * Name of the recipe prototype this assembling machine is set to, optional, string.
 	 */
@@ -67,6 +108,10 @@ export const Entity = z.strictObject({
 	 * Used by Prototype/InfinityContainer, optional. #Infinity settings object
 	 */
 	infinity_settings: InfinitySettings.optional(),
+	/** Pump fluid filter. */
+	fluid_filter: z.string().optional(),
+	/** Result inventory index for asteroid collectors. */
+	'result-inventory': z.union([Int, z.null()]).optional(),
 	/**
 	 * Type of the underground belt or loader, optional. Either "input" or "output".
 	 */
@@ -86,7 +131,7 @@ export const Entity = z.strictObject({
 	/**
 	 * Filters of the filter inserter or loader, optional. Array of #Item filter objects.
 	 */
-	filters: z.array(ItemFilterObject).optional(),
+	filters: z.array(ItemFilterObject).optional().nullable(),
 	/**
 	 * Filter mode of the filter inserter, optional. Either "whitelist" or "blacklist".
 	 */
@@ -106,7 +151,15 @@ export const Entity = z.strictObject({
 	/**
 	 * Used by Prototype/LogisticContainer, optional. #Logistic filter object.
 	 */
-	request_filters: z.array(LogisticFilter).optional(),
+	request_filters:
+		z.union([
+			Something,
+			z.array(LogisticFilter),
+		]).optional().nullable(),
+	request_missing_construction_materials: z.boolean().optional(),
+	use_filters: z.boolean().optional(),
+	'priority-list': z.array(EntityPriorityListEntry).optional(),
+	'ignore-unprioritised': z.boolean().optional(),
 	/**
 	 * Boolean. Whether this requester chest can request from buffer chests.
 	 */
@@ -159,6 +212,9 @@ export const Entity = z.strictObject({
 	 * ?
 	 */
 	buffer_size: z.number().optional(),
+
+	recipe_quality: z.optional(Quality),
+	quality: Quality.optional()
 });
 
 export type Entity = z.TypeOf<typeof Entity>;
