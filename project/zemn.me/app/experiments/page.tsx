@@ -19,6 +19,11 @@ export function ExperimentsNav() {
 						Some Factorio experiments.
 					</Link>
 				</li>
+				<li>
+					<Link href="/experiments/ldml">
+						LDML pattern workbench.
+					</Link>
+				</li>
 			</ul>
 		</nav>
 	);
