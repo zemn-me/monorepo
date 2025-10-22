@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { OneBasedIndex } from '#root/ts/factorio/base';
 import { Color } from '#root/ts/factorio/color.js';
+import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { Connection } from '#root/ts/factorio/connection.js';
 import { ControlBehavior } from '#root/ts/factorio/control_behavior.js';
 import { EntityNumber } from '#root/ts/factorio/entity_number.js';
@@ -10,6 +11,7 @@ import { InfinitySettings } from '#root/ts/factorio/infinty_settings.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { Inventory } from '#root/ts/factorio/inventory.js';
 import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
+import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
 import { ItemRequestObject } from '#root/ts/factorio/item_request_object.js';
 import { LogisticFilter } from '#root/ts/factorio/logistic_filter.js';
 import { LogisticSection } from '#root/ts/factorio/logistic_section.js';
@@ -49,6 +51,13 @@ const Something = z.strictObject({
 const EntityPriorityListEntry = z.strictObject({
 	index: OneBasedIndex,
 	name: z.string(),
+});
+
+const EntityFilterObject = z.strictObject({
+	name: z.string(),
+	quality: Quality.optional(),
+	comparator: ComparatorString.optional(),
+	count: ItemCountType.optional(),
 });
 
 export const Entity = z.strictObject({
@@ -128,7 +137,7 @@ export const Entity = z.strictObject({
 	/**
 	 * Filter of the splitter, optional. Name of the item prototype the filter is set to, string.
 	 */
-	filter: z.string().optional(),
+	filter: z.union([z.string(), EntityFilterObject]).optional(),
 	/**
 	 * Filters of the filter inserter or loader, optional. Array of #Item filter objects.
 	 */
