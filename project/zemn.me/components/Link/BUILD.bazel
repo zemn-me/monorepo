@@ -8,6 +8,7 @@ ts_project(
     ],
     visibility = [
         "//project/zemn.me:__subpackages__",
+        "//ts/react/strudel:__subpackages__",  # whatever
     ],
     deps = [
         "//:base_defs",

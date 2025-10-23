@@ -29,6 +29,7 @@ const csp = {
 	'connect-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
+		'https://raw.githubusercontent.com', // strudel
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
 	])
