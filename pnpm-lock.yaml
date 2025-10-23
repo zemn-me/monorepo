@@ -275,8 +275,8 @@ devDependencies:
     specifier: 6.68.0
     version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
-    specifier: 3.0.0
-    version: 3.0.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 3.0.1
+    version: 3.0.1(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/pulumi':
     specifier: 3.203.0
     version: 3.203.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -431,8 +431,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.157.0
-    version: 41.157.0(typanion@3.14.0)
+    specifier: 41.157.1
+    version: 41.157.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -4729,13 +4729,13 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@3.0.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-Qce18z2zSSIpeQA+aUKNlDKAZaZIc7h5ioYgmLfmpliRFwzFGN7DbxJuZY+Ja3hbtjpe74UYBjI5VleFM+Ougw==}
+  /@pulumi/awsx@3.0.1(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-f5wXbVC6FirgfWhLJx4+ePl9pYOGdp2dx+AWVg3QHRkVLMJBkzmhdcwDybgVIpRY2kty0v3p7Xe9FomOvHRJwQ==}
     dependencies:
       '@aws-sdk/client-ecs': 3.901.0
       '@pulumi/aws': 7.7.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.9.0(ts-node@10.9.2)(typescript@5.5.4)
-      '@pulumi/docker-build': 0.0.8(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/docker-build': 0.0.14(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/pulumi': 3.203.0(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.153
       docker-classic: /@pulumi/docker@3.6.1(ts-node@10.9.2)(typescript@5.5.4)
@@ -4761,8 +4761,8 @@ packages:
       - typescript
     dev: false
 
-  /@pulumi/docker-build@0.0.8(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-tS6UUgmDjQ+LVekMXGC/6ND7riY75h3oO9fLiVOrvNafCBumxK+Cjm6ZZ9tUChLYvw6H+rZRExZEhfC8F/SQgQ==}
+  /@pulumi/docker-build@0.0.14(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-dLCta3BOrYRxHyp22QnVh06qlSiSORtmIypcQ6yb4+GZ2+ThbML06pINyERc5ClgJXGQFSVTtuWhMSiurTWU2w==}
     requiresBuild: true
     dependencies:
       '@pulumi/pulumi': 3.203.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -11399,8 +11399,8 @@ packages:
       - supports-color
     dev: true
 
-  /gcp-metadata@7.0.1:
-    resolution: {integrity: sha512-UcO3kefx6dCcZkgcTGgVOTFb7b1LlQ02hY1omMjjrrBzkajRMCFgYOjs7J71WqnuG1k2b+9ppGL7FsOfhZMQKQ==}
+  /gcp-metadata@8.1.1:
+    resolution: {integrity: sha512-dTCcAe9fRQf06ELwel6lWWFrEbstwjUBYEhr5VRGoC+iPDZQucHppCowaIp8b8v92tU1G4X4H3b/Y6zXZxkMsQ==}
     engines: {node: '>=18'}
     dependencies:
       gaxios: 7.1.2
@@ -11700,14 +11700,14 @@ packages:
       moo: 0.5.2
     dev: true
 
-  /google-auth-library@10.4.0:
-    resolution: {integrity: sha512-CmIrSy1bqMQUsPmA9+hcSbAXL80cFhu40cGMUjCaLpNKVzzvi+0uAHq8GNZxkoGYIsTX4ZQ7e4aInAqWxgn4fg==}
+  /google-auth-library@10.4.1:
+    resolution: {integrity: sha512-VlvZ+QDWng3aPh++0BSQlSJyjn4qgLLTmqylAR3as0dr6YwPkZpHcZAngAFr68TDVCUSQVRTkV73K/D3m7vEIg==}
     engines: {node: '>=18'}
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
       gaxios: 7.1.2
-      gcp-metadata: 7.0.1
+      gcp-metadata: 8.1.1
       google-logging-utils: 1.1.1
       gtoken: 8.0.0
       jws: 4.0.0
@@ -17134,8 +17134,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.157.0(typanion@3.14.0):
-    resolution: {integrity: sha512-/E9+7t3Db/0MXuOUgQ8RPY1Wcae2bOMbxH3Z4xR03eq4fnouzZdWlFpCpvoSkhJLXJJ9O7YRcZXYDqJXu9FnQg==}
+  /renovate@41.157.1(typanion@3.14.0):
+    resolution: {integrity: sha512-BABpmqLrSDT+LVwIqxU7dy8HRC/vaW0+r2aO6kVt/btmbYF/TWv0CUUCfbX33+zqr52GKuBkjXNJI8TmShKwqA==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17206,7 +17206,7 @@ packages:
       glob: 11.0.3
       global-agent: 3.0.0
       good-enough-parser: 1.1.23
-      google-auth-library: 10.4.0
+      google-auth-library: 10.4.1
       got: 11.8.6
       graph-data-structure: 4.5.0
       handlebars: 4.7.8

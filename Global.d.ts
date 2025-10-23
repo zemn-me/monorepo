@@ -42,3 +42,4 @@ declare module 'remark-sectionize' {
 	const x: any
 	export default x
 }
+
