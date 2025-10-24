@@ -431,8 +431,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 41.158.3
-    version: 41.158.3(typanion@3.14.0)
+    specifier: 41.159.0
+    version: 41.159.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.4
     version: 0.34.4
@@ -1897,7 +1897,7 @@ packages:
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-validator-identifier': 7.27.1
+      '@babel/helper-validator-identifier': 7.28.5
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
@@ -2329,7 +2329,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/helper-string-parser': 7.27.1
-      '@babel/helper-validator-identifier': 7.27.1
+      '@babel/helper-validator-identifier': 7.28.5
 
   /@babel/types@7.28.5:
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
@@ -17176,8 +17176,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@41.158.3(typanion@3.14.0):
-    resolution: {integrity: sha512-bbVl89JW0hSh9pibX9qiJG3AKn/5BqjP8Re3l5ISKkE3gsTrlIflmjg5hUJC4lx03iifs3ZESA7hlsM2Q+wRRQ==}
+  /renovate@41.159.0(typanion@3.14.0):
+    resolution: {integrity: sha512-9nK5GuN6sjhyasUeR5PIuKL1vOoPznn1Ltg5BawG6YFW8hDTBTTMihnNoeT+E0g/qzP0QXvCGnhOl+vYu/P23w==}
     engines: {node: ^22.13.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
