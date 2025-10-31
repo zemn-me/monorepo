@@ -8,10 +8,10 @@ import { z } from "zod";
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
-import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
+import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
+import { useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
-import { ID_Token } from "#root/ts/oidc/oidc.js";
-import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
+import { and_then as option_and_then, None, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
 import { e164 } from "#root/ts/zod/e164.js";
@@ -363,72 +363,43 @@ function DisplayAdminUid({ Authorization }: { readonly Authorization: string }) 
 
 
 export default function Admin() {
-	const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
-	const authToken = option_and_then(
-		googleAuth,
-		q => result_and_then(
-			q,
-			v => v[0] === undefined ? None : Some(v[0])
-		)
+	const [idToken, requestURL, beginLogin, isAuthenticating] = useOIDC("https://accounts.google.com");
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			window.__oidcRequestURL = requestURL;
+		}
+	}, [requestURL]);
+
+	const isAuthenticated = idToken !== null;
+
+	const loginButton = isAuthenticated ? (
+		<p>You are logged in.</p>
+	) : (
+	<button
+		data-request-url={requestURL}
+		data-testid="oidc-login-button"
+		disabled={!requestURL || isAuthenticating}
+		onClick={() => {
+			if (!requestURL) return;
+			void beginLogin();
+		}}
+	>
+			<p>You are not authenticated to perform this operation.</p>
+			<p>Please click here to authenticate.</p>
+		</button>
 	);
 
-	const at = result_and_then(option_result_transpose(authToken),
-		o => option_flatten(o)
+	return (
+		<>
+			<p>{loginButton}</p>
+			{isAuthenticated && idToken ? (
+				<>
+					<DisplayAdminUid Authorization={idToken} />
+					<DisplayPhoneNumber Authorization={idToken} />
+					<SettingsEditor Authorization={idToken} />
+				</>
+			) : null}
+		</>
 	);
-
-	const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(() => None);
-
-	// when googleAuth is something, make sure to close any open window handles
-	useEffect(
-		() => void result_and_then(
-			at,
-			r => option_and_then(
-				r,
-				() => option_and_then(
-					openWindowHnd,
-					wnd => wnd.close()
-				)
-			)
-		)
-		, [at])
-
-	const login_button = result_unwrap_or_else(
-		result_and_then(
-			at,
-			r => option_unwrap_or_else(
-				option_and_then(
-					r,
-					() => <p>You are logged in.</p>
-				),
-				() => <button onClick={() => {
-					const u = requestOIDC("https://accounts.google.com");
-					setOpenWindowHnd(() => Some(u))
-
-				}}>
-					<p>
-						You are not authenticated to perform this operation.
-					</p>
-					<p>
-						Please click here to authenticate.
-					</p>
-				</button>)
-		), e => <>error: {e}</>);
-
-	const authTokenOrNothing = option_flatten(result_unwrap_or(result_and_then(
-		at,
-		v => Some(v)
-	), None));
-
-	return <>
-		<p>{login_button}</p>
-
-		{option_unwrap_or(option_and_then(
-			authTokenOrNothing,
-                        token => <>
-                                <DisplayAdminUid Authorization={token} />
-                                <DisplayPhoneNumber Authorization={token} />
-                                <SettingsEditor Authorization={token} />
-                        </>
-                ), null)}
-        </>
 }

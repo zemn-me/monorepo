@@ -1,15 +1,15 @@
 "use client";
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 
 import type { components } from "#root/project/zemn.me/api/api_client.gen";
+import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { PendingPip } from "#root/project/zemn.me/components/PendingPip/PendingPip.js";
-import { requestOIDC, useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
+import { useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
 import { useDeleteGrievances, useGetGrievances, usePostGrievances } from '#root/project/zemn.me/hook/useZemnMeApi.js';
-import { ID_Token } from "#root/ts/oidc/oidc.js";
-import { and_then as option_and_then, flatten as option_flatten, None, Option, option_result_transpose, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
+import { and_then as option_and_then, None, Some, unwrap_or as option_unwrap_or, unwrap_or_else as option_unwrap_or_else } from "#root/ts/option/types.js";
 import { Date as PrettyDate } from "#root/ts/react/lang/date.js";
 import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 import { and_then as result_and_then, Err, or_else as result_or_else, unwrap_or as result_unwrap_or, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
@@ -119,62 +119,38 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-        const googleAuth = useOIDC((v): v is ID_Token => v.iss == "https://accounts.google.com");
-        const authToken = option_and_then(
-                googleAuth,
-                q => result_and_then(
-                        q,
-                        v => v[0] === undefined ? None : Some(v[0])
-                )
-        );
+	const [idToken, requestURL, beginLogin, isAuthenticating] = useOIDC("https://accounts.google.com");
 
-        const at = result_and_then(option_result_transpose(authToken),
-                o => option_flatten(o)
-        );
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			window.__oidcRequestURL = requestURL;
+		}
+	}, [requestURL]);
 
-        const [openWindowHnd, setOpenWindowHnd] = useState<Option<WindowProxy>>(() => None);
+	const isAuthenticated = idToken !== null;
 
-        useEffect(
-                () => void result_and_then(
-                        at,
-                        r => option_and_then(
-                                r,
-                                () => option_and_then(
-                                        openWindowHnd,
-                                        wnd => wnd.close()
-                                )
-                        )
-                )
-                , [at, openWindowHnd])
-
-	const login_button = result_unwrap_or_else(
-		result_and_then(
-			at,
-			r => option_unwrap_or_else(
-				option_and_then(
-					r,
-					() => <p>You are logged in.</p>
-				),
-				() => <button onClick={() => {
-					const wnd = requestOIDC("https://accounts.google.com")
-					setOpenWindowHnd(() =>
-						Some(wnd))
-				} }>Login with Google</button>
-                        )
-                ), e => <>error: {e}</>);
-
-        const authTokenOrNothing = option_flatten(result_unwrap_or(result_and_then(
-                at,
-                v => Some(v)
-        ), None));
-
-        return <div className={style.wrapper}>
-                <h1 className={style.header}>💖 Grievance Portal 💖</h1>
-                <p className={style.hearts}>we can fix it!</p>
-                <p>{login_button}</p>
-                {option_unwrap_or(option_and_then(
-                        authTokenOrNothing,
-                        token => <GrievanceEditor Authorization={token} />
-                ), null)}
-        </div>
+	return (
+		<div className={style.wrapper}>
+			<h1 className={style.header}>💖 Grievance Portal 💖</h1>
+			<p className={style.hearts}>we can fix it!</p>
+			<p>
+		{isAuthenticated ? (
+			<p>You are logged in.</p>
+		) : (
+			<button
+				data-testid="oidc-login-button"
+				data-request-url={requestURL}
+				disabled={!requestURL || isAuthenticating}
+				onClick={() => {
+					if (!requestURL) return;
+					void beginLogin();
+				}}
+					>
+						Login with Google
+					</button>
+				)}
+			</p>
+			{isAuthenticated && idToken ? <GrievanceEditor Authorization={idToken} /> : null}
+		</div>
+	);
 }
