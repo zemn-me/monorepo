@@ -2,9 +2,13 @@ package auth
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"slices"
+	"net/http"
+	"os"
+	"strings"
 
 	oidc "github.com/coreos/go-oidc"
 
@@ -25,7 +29,7 @@ func SubjectFromContext(ctx context.Context) (string, bool) {
 // suuper basic oidc auth that only checks if it's me via Google.
 func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err error) {
 	// no requirement
-	if ai.SecuritySchemeName != "googleOIDC" {
+	if ai.SecuritySchemeName != "zemnMeOIDC" {
 		return nil
 	}
 
@@ -34,39 +38,87 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return errors.New("missing authorization header")
 	}
 
-	provider, err := oidc.NewProvider(ctx, "https://accounts.google.com")
+	issuer, err := issuerFromToken(auth)
+	if err != nil {
+		return fmt.Errorf("extract issuer: %w", err)
+	}
+
+	if err := ensureAllowedIssuer(ai.RequestValidationInput.Request, issuer); err != nil {
+		return err
+	}
+
+	provider, err := oidc.NewProvider(ctx, issuer)
 	if err != nil {
 		return fmt.Errorf("failed to create OIDC provider: %w", err)
 	}
 
-	// todo: single source of truth for this.
-	verifier := provider.Verifier(&oidc.Config{ClientID: "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com"})
+	verifier := provider.Verifier(&oidc.Config{ClientID: "zemn.me"})
 
 	idToken := auth
 
-	token, err := verifier.Verify(ctx, idToken)
+	verified_token, err := verifier.Verify(ctx, idToken)
 	if err != nil {
 		return fmt.Errorf("token verification failed: %w", err)
 	}
 
-	claim := Identity{
-		Issuer:  token.Issuer,
-		Subject: token.Subject,
-	}
-
-	idIdx := slices.IndexFunc(AuthorizedUsers, func(u Identity) bool {
-		return u.Is(claim)
-	})
-
-	if idIdx < 0 {
-		return fmt.Errorf("unauthorized user: %v", claim)
-	}
-
-	id := AuthorizedUsers[idIdx]
-
 	r := ai.RequestValidationInput.Request
-	ctx = context.WithValue(r.Context(), SubjectKey, id.Subject)
+	ctx = context.WithValue(r.Context(), SubjectKey, verified_token.Subject)
 	*ai.RequestValidationInput.Request = *r.WithContext(ctx)
 
 	return nil
+}
+
+func issuerFromToken(token string) (string, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) < 2 {
+		return "", errors.New("invalid token: not enough segments")
+	}
+
+	payload, err := base64.RawStdEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", fmt.Errorf("decode token payload: %w", err)
+	}
+
+	var claims struct {
+		Iss string `json:"iss"`
+	}
+
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return "", fmt.Errorf("unmarshal token payload: %w", err)
+	}
+
+	if claims.Iss == "" {
+		return "", errors.New("token missing issuer")
+	}
+
+	return claims.Iss, nil
+}
+
+func ensureAllowedIssuer(req *http.Request, issuer string) error {
+	allowed := map[string]struct{}{
+		"https://accounts.google.com": {},
+	}
+
+	if test := os.Getenv("ZEMN_TEST_OIDC_ISSUER"); test != "" {
+		allowed[test] = struct{}{}
+	}
+
+	if req != nil {
+		scheme := "https"
+		if req.URL != nil && req.URL.Scheme != "" {
+			scheme = req.URL.Scheme
+		} else if req.TLS == nil {
+			scheme = "http"
+		}
+		host := req.Host
+		if host != "" {
+			allowed[fmt.Sprintf("%s://%s", scheme, host)] = struct{}{}
+		}
+	}
+
+	if _, ok := allowed[issuer]; ok {
+		return nil
+	}
+
+	return fmt.Errorf("issuer %q is not permitted", issuer)
 }

@@ -24,7 +24,8 @@ func init() {
 }
 
 type AssignedPorts struct {
-	APIPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	APIPort          string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	OIDCProviderPort string `json:"@@//project/zemn.me/testing:oidc_provider_itest_service"`
 }
 
 func main() {
@@ -38,22 +39,32 @@ func main() {
 		}
 
 		ddbAddress = "http://localhost:" + ports.APIPort
+		if ports.OIDCProviderPort != "" {
+			issuer := fmt.Sprintf("http://localhost:%s", ports.OIDCProviderPort)
+			mustSetEnv("ZEMN_TEST_OIDC_ISSUER", issuer)
+			mustSetEnv("ZEMN_TEST_OIDC_PROVIDER", issuer)
+		}
 	}
 
-	err := os.Setenv("DYNAMODB_ENDPOINT", ddbAddress)
-	if err != nil {
-		log.Fatalf("failed to set DYNAMODB_ENDPOINT: %v", err)
+	if os.Getenv("ZEMN_TEST_OIDC_ISSUER") == "" {
+		mustSetEnv("ZEMN_TEST_OIDC_ISSUER", "http://localhost:43111")
+	}
+	if os.Getenv("ZEMN_TEST_OIDC_PROVIDER") == "" {
+		mustSetEnv("ZEMN_TEST_OIDC_PROVIDER", "http://localhost:43111")
+	}
+	if os.Getenv("ZEMN_TEST_OIDC_CLIENT_ID") == "" {
+		mustSetEnv("ZEMN_TEST_OIDC_CLIENT_ID", "integration-test-client")
+	}
+	if os.Getenv("ZEMN_TEST_OIDC_SUBJECT") == "" {
+		mustSetEnv("ZEMN_TEST_OIDC_SUBJECT", "integration-test-remote")
+	}
+	if os.Getenv("ZEMN_TEST_OIDC_LOCAL_SUBJECT") == "" {
+		mustSetEnv("ZEMN_TEST_OIDC_LOCAL_SUBJECT", "integration-test-local")
 	}
 
-	err = os.Setenv("DYNAMODB_TABLE_NAME", "table1")
-	if err != nil {
-		log.Fatalf("failed to set DYNAMODB_TABLE_NAME: %v", err)
-	}
-
-	err = os.Setenv("GRIEVANCES_TABLE_NAME", "table2")
-	if err != nil {
-		log.Fatalf("failed to set GRIEVANCES_TABLE_NAME: %v", err)
-	}
+	mustSetEnv("DYNAMODB_ENDPOINT", ddbAddress)
+	mustSetEnv("DYNAMODB_TABLE_NAME", "table1")
+	mustSetEnv("GRIEVANCES_TABLE_NAME", "table2")
 
 	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
 		LocalStack: true,
@@ -76,5 +87,14 @@ func main() {
 	fmt.Printf("PORT=%d\n", addr.Port)
 	if err := http.Serve(ln, srv); err != nil {
 		log.Fatalf("serve: %v", err)
+	}
+}
+
+func mustSetEnv(key, value string) {
+	if value == "" {
+		return
+	}
+	if err := os.Setenv(key, value); err != nil {
+		log.Fatalf("failed to set %s: %v", key, err)
 	}
 }
