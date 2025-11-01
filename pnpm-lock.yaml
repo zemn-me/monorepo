@@ -272,8 +272,8 @@ devDependencies:
     specifier: 7.27.3
     version: 7.27.3(@types/node@24.9.2)
   '@pulumi/aws':
-    specifier: 6.68.0
-    version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 7.10.0
+    version: 7.10.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
     specifier: 3.0.1
     version: 3.0.1(ts-node@10.9.2)(typescript@5.5.4)
@@ -4755,20 +4755,8 @@ packages:
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  /@pulumi/aws@6.68.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-uehJNSviSq3garkLXsy1zZzI7V6clBDQq8G83PSpNfdePdGeKtuRoxMSsuqkgpGkue+cGjoxJtC6QwdtzgaKBQ==}
-    dependencies:
-      '@pulumi/pulumi': 3.205.0(ts-node@10.9.2)(typescript@5.5.4)
-      mime: 2.6.0
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
-      - ts-node
-      - typescript
-    dev: true
-
-  /@pulumi/aws@7.7.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-YcILX9dVHSWEReRKe9nLCKwH9QTZ2N8GgqQcFbF7aReKMa4wwWeohCkWCL9Y5hEo3ZVXLICxFS1vY8WVmdxEqQ==}
+  /@pulumi/aws@7.10.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-1ykqa7bRcXv7iAmfBdfLckVwbaORsZbOHsqyHZk8A0gcM0RVrv38u3EagQTq13yNjZCaYdfzM2zTYpim2fDUVQ==}
     dependencies:
       '@pulumi/pulumi': 3.205.0(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
@@ -4783,7 +4771,7 @@ packages:
     resolution: {integrity: sha512-f5wXbVC6FirgfWhLJx4+ePl9pYOGdp2dx+AWVg3QHRkVLMJBkzmhdcwDybgVIpRY2kty0v3p7Xe9FomOvHRJwQ==}
     dependencies:
       '@aws-sdk/client-ecs': 3.901.0
-      '@pulumi/aws': 7.7.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/aws': 7.10.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.9.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker-build': 0.0.14(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/pulumi': 3.205.0(ts-node@10.9.2)(typescript@5.5.4)
