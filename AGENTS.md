@@ -2,6 +2,8 @@
 
 This file is for robots... if you learn anything that would be important to remember next time, please commit it to this file!
 
+- Optional env vars like `NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID` / `_NAME` might be unset; add guards so TS sees guaranteed strings before wiring them into clients.
+
 # tools
 
 this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to ./sh/bin/bazel. There are many tools in ./sh/bin that can be used and they are all added to $PATH.
@@ -9,6 +11,10 @@ this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to ./sh/bin/ba
 A lot of your tools are run through bazel and therefore get confused by relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
 
 please run gazelle also! Or the presubmit will fail.
+
+# rules_itest services
+
+When adding background processes for integration tests, define them with `rules_itest` so ports are auto-assigned. Reference service ports via `ASSIGNED_PORTS` (e.g. struct fields tagged with `json:"@@//path:service"`), and avoid hard-coding addresses—`rules_itest` and `inject_iservice` handle plumbing.
 
 # tests
 
@@ -19,6 +25,8 @@ Changes must be tested via bazel test path/to/your/changes/...
 Bazel WILL take a long time! please don't interrupt the process! let it time out naturally...
 
 If your tests take too long, you can use `bazel query` to pick a more specific set of tests!
+
+- Avoid introducing or relying on custom `window.*` globals to communicate state to tests; prefer observing behaviour through the DOM, network responses, or existing APIs instead.
 
 
 # generated files
