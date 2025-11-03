@@ -3,39 +3,17 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "zod",
-    srcs = [
-        "_old_result_from_zod.ts",
-        "e164.ts",
-        "nuqs.ts",
-        "util.ts",
-    ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",  # keep
         "//:node_modules/base64-js",
-        "//:node_modules/nuqs",
         "//:node_modules/zod",
         "//ts",
-        "//ts/result",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-    visibility = ["//:__subpackages__"],
-)
-
-filegroup(
-    name = "all_ts_srcs",
-    srcs = [
-        "_old_result_from_zod.ts",
-        "e164.ts",
-        "nuqs.ts",
-        "util.ts",
-    ],
-    visibility = ["//:__subpackages__"],
 )

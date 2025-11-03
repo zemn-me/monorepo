@@ -70,8 +70,6 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	spec.Servers = nil
 
-	configureTestOIDCIssuerFromEnv()
-
 	mw := middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
 		Options: openapi3filter.Options{
 			AuthenticationFunc: auth.OIDC,
@@ -138,11 +136,11 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 }
 
 func provisionSigningKey() (k jose.JSONWebKey, err error) {
-	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
-		return provisionKMSSigningKey()
-	}
+        if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
+                return provisionKMSSigningKey()
+        }
 
-	return provisionTestingSigningKey()
+        return provisionTestingSigningKey()
 }
 
 func provisionTestingSigningKey() (k jose.JSONWebKey, err error) {

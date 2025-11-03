@@ -4,6 +4,7 @@
 
 import { z } from 'zod';
 
+import { Issuer } from '#root/project/zemn.me/OAuth/clients.js';
 import { LensGet, LensSet } from '#root/ts/lens.js';
 import { and_then, Result, unwrap_or_else } from '#root/ts/result/result.js';
 import { asyncSerdeNullable, Serde, serdeKey, serdeLens, serdeNullable } from '#root/ts/serde/serde.js';
@@ -56,7 +57,7 @@ export const clientSecret = async (s: Storage) => {
 
 
 export const authCacheSchema = z.record(
-	z.string().url(),
+	Issuer,
 	z.strictObject({
 		id_token: z.string()
 	})

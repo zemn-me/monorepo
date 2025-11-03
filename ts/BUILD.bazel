@@ -14,8 +14,6 @@ ts_project(
         exclude = ["*_test.ts"],
     ),
     deps = [
-        "//:node_modules/@types/memoizee",
-        "//:node_modules/memoizee",
         "//ts/result",
     ],
 )
