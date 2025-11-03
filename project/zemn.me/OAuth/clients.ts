@@ -1,29 +1,43 @@
-import { z } from "zod";
-
 export interface Client {
-	clientId: string
-	issuer: Issuer
-	name: string
+	readonly clientId: string
+	readonly issuer: string
+	readonly name: string
 }
 
-export const clients = new Set<Client>([
-	{
-		issuer: "https://accounts.google.com",
-		clientId: `845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com`,
-		name: "Google",
+const clientMap = new Map<string, Client>();
+
+clientMap.set("https://accounts.google.com", {
+	issuer: "https://accounts.google.com",
+	clientId: "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com",
+	name: "Google",
+});
+
+const testIssuer = process.env.NEXT_PUBLIC_ZEMN_TEST_OIDC_ISSUER;
+if (testIssuer && testIssuer.trim() !== "") {
+	const testClientId = process.env.NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID;
+	const testName = process.env.NEXT_PUBLIC_ZEMN_TEST_OIDC_NAME;
+	if (
+		testClientId &&
+		testClientId.trim() !== "" &&
+		testName &&
+		testName.trim() !== ""
+	) {
+		clientMap.set(testIssuer, {
+			issuer: testIssuer,
+			clientId: testClientId,
+			name: testName,
+		});
 	}
-]);
-
-export function OAuthClientByIssuer(i: Issuer) {
-	// below fails because we only have one issuer, requiring this
-	// exemption!
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	return [...clients].filter(v => v.issuer === i)[0]!;
 }
 
+export const clients: readonly Client[] = Array.from(clientMap.values());
 
-export const Issuer = z.enum([
-	"https://accounts.google.com"
-]);
+export function OAuthClientByIssuer(issuer: string): Client {
+	const client = clientMap.get(issuer);
+	if (!client) {
+		throw new Error(`Unknown OIDC issuer: ${issuer}`);
+	}
+	return client;
+}
 
-export type Issuer = z.TypeOf<typeof Issuer>
+export type Issuer = string;
