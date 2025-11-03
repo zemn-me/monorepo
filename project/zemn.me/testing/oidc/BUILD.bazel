@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "oidc",
+    srcs = [
+        "keys.go",
+        "token.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/testing/oidc",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_go_jose_go_jose_v4//:go-jose"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
