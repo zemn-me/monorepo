@@ -3,29 +3,41 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "hook",
+    srcs = [
+        "useAuthRedirect.ts",
+        "useLocalSecret.ts",
+        "useOpenIDConfiguration.ts",
+        "usePerDomainChallenge.ts",
+        "useWindowCallback.ts",
+    ],
     visibility = [
         "//project/zemn.me:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@standard-schema/spec",
         "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/openapi-fetch",
-        "//:node_modules/openapi-react-query",
         "//:node_modules/react",
-        "//project/zemn.me/OAuth",
-        "//project/zemn.me/api:ts_client_dts",
-        "//project/zemn.me/constants",
-        "//project/zemn.me/localStorage",
-        "//ts",
         "//ts/oidc",
-        "//ts/option",
-        "//ts/result",
-        "//ts/storage",
+        "//ts/result/react-query",
+        "//ts/time",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "useAuthRedirect.ts",
+        "useLocalSecret.ts",
+        "useOpenIDConfiguration.ts",
+        "usePerDomainChallenge.ts",
+        "useWindowCallback.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
