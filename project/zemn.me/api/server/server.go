@@ -55,6 +55,7 @@ type Server struct {
 	twilioClient       *twilio.RestClient
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
+	signer     any
 }
 
 type NewServerOptions struct {
@@ -128,7 +129,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		}),
 	}
 
-	s.signingKey, err = provisionSigningKey()
+	s.signingKey, s.signer, err = provisionSigningKey(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -137,30 +138,31 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	return s, nil
 }
 
-func provisionSigningKey() (k jose.JSONWebKey, err error) {
+func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, signer any, err error) {
 	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
-		return provisionKMSSigningKey()
+		return provisionKMSSigningKey(ctx)
 	}
 
 	return provisionTestingSigningKey()
 }
 
-func provisionTestingSigningKey() (k jose.JSONWebKey, err error) {
+func provisionTestingSigningKey() (k jose.JSONWebKey, signer any, err error) {
 	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return
 	}
 
 	k = jose.JSONWebKey{
-		Key:       priv,
+		Key:       &priv.PublicKey,
 		KeyID:     "fake123",
 		Algorithm: string(jose.ES256),
 		Use:       "sig",
 	}
+	signer = priv
 	return
 }
 
-func provisionKMSSigningKey() (k jose.JSONWebKey, err error) {
+func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, signer any, err error) {
 	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
 	if jwtKmsKeyId == "" {
 		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
@@ -174,17 +176,18 @@ func provisionKMSSigningKey() (k jose.JSONWebKey, err error) {
 		return
 	}
 
-	pk, err := parseECDSAPublicKeyFromPEM(jwtKmsPublicKey)
+	var opaque jose.OpaqueSigner
+	opaque, err = kmsOpaqueSignerFactory(ctx, jwtKmsKeyId, jwtKmsPublicKey)
 	if err != nil {
 		return
 	}
-	k = jose.JSONWebKey{
-		Key:       pk,
-		KeyID:     jwtKmsKeyId,
-		Algorithm: string(jose.ES256),
-		Use:       "sig",
+	if public := opaque.Public(); public != nil {
+		k = *public
+	} else {
+		err = errors.New("kms signer did not provide public key")
+		return
 	}
-
+	signer = opaque
 	return
 }
 
