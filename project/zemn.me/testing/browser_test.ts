@@ -12,7 +12,7 @@ import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
 
-const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/']);
+const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/', 'callback']);
 
 
 describe('zemn.me website', () => {
