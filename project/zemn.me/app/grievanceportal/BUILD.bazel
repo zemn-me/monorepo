@@ -15,6 +15,7 @@ ts_project(
     deps = [
         "//:base_defs",
         "//:node_modules/@hookform/resolvers",
+        "//:node_modules/@standard-schema/spec",  # keep
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/next",
         "//:node_modules/react-hook-form",
