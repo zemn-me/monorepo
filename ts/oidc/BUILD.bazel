@@ -3,20 +3,34 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "oidc",
-    srcs = ["oidc.ts"],
+    srcs = [
+        "callback_params.ts",
+        "configuration.ts",
+        "state.ts",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/base64-js",
-        "//:node_modules/jose",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/zod",
+        "//ts/result",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "callback_params.ts",
+        "configuration.ts",
+        "state.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
