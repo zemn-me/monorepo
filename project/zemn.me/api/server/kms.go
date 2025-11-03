@@ -17,8 +17,12 @@ import (
 	jose "github.com/go-jose/go-jose/v4"
 )
 
+type kmsSignAPI interface {
+	Sign(context.Context, *kms.SignInput, ...func(*kms.Options)) (*kms.SignOutput, error)
+}
+
 type kmsECDSASigner struct {
-	kms   *kms.Client
+	kms   kmsSignAPI
 	keyID string
 	pub   *ecdsa.PublicKey
 }
@@ -79,7 +83,7 @@ func NewKMSSigner(ctx context.Context, keyID, publicPEM string) (*kmsECDSASigner
 // ===== OpaqueSigner for go-jose v4 =====
 
 type kmsOpaqueSigner struct {
-	kms   *kms.Client
+	kms   kmsSignAPI
 	keyID string
 	pub   *ecdsa.PublicKey
 }
@@ -150,4 +154,8 @@ func derToJOSE(der []byte, size int) ([]byte, error) {
 	copy(out[size-len(r):size], r)
 	copy(out[2*size-len(s):], s)
 	return out, nil
+}
+
+var kmsOpaqueSignerFactory = func(ctx context.Context, keyID, publicPEM string) (jose.OpaqueSigner, error) {
+	return NewKMSOpaqueSigner(ctx, keyID, publicPEM)
 }
