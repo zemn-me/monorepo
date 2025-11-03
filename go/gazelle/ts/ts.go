@@ -508,6 +508,23 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 			continue
 		}
 
+		impSpec := resolve.ImportSpec{Lang: "typescript", Imp: module}
+		if override, ok := resolve.FindRuleWithOverride(c, impSpec, "typescript"); ok {
+			if !override.Equal(from) {
+				deps[override.String()] = struct{}{}
+			}
+			continue
+		}
+		if matches := ix.FindRulesByImportWithConfig(c, impSpec, "typescript"); len(matches) > 0 {
+			for _, m := range matches {
+				if m.IsSelfImport(from) {
+					continue
+				}
+				deps[m.Label.String()] = struct{}{}
+			}
+			continue
+		}
+
 		if strings.HasPrefix(module, "#") {
 			if resolved, ok := resolveModuleToRepoPath(module, rootConfig); ok {
 				if label, ok := repoPathToLabel(c.RepoRoot, resolved, from); ok {
