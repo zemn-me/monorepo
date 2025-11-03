@@ -13,21 +13,33 @@ ts_project(
     deps = [
         "//:node_modules/@hookform/resolvers",
         "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
         "//:node_modules/react-hook-form",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
         "//project/zemn.me/components/Link",
         "//project/zemn.me/components/PendingPip",
         "//project/zemn.me/hook",
-        "//ts/oidc",
         "//ts/option",
         "//ts/result",
-        "//ts/result/openapi-fetch",
         "//ts/result/react-query",
+        "//ts/zod",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
 )
