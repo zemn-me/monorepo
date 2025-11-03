@@ -3,7 +3,10 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "oidc",
-    srcs = ["oidc.ts"],
+    srcs = [
+        "oidc.ts",
+        "state.ts",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
