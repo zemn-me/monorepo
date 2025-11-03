@@ -7,7 +7,7 @@ import {
   Right,
 } from "#root/ts/either/either.js"
 import { isDefined } from "#root/ts/guard.js"
-import { and_then as result_and_then, Err, Ok, Result, unwrap_or as result_unwrap_or } from "#root/ts/result/result.js"
+import { and_then as result_and_then, Err, Ok, Result } from "#root/ts/result/result.js"
 
 /**
  * Option<T> ≔ Either<null, T>
@@ -149,13 +149,4 @@ export async function option_promise_transpose<T>(
     async () => None,
     async p => Some(await p)
   )
-}
-
-export function result_to_option<T>(
-	r: Result<T, unknown>
-): Option<T> {
-	return result_unwrap_or(
-		result_and_then(r, v => Some(v)),
-		None
-	)
 }

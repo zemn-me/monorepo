@@ -35,7 +35,6 @@ next_itest_service(
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
-        "//project/zemn.me/testing:oidc_provider_itest_service",
     ],
 )
 
@@ -47,7 +46,6 @@ next_itest_service_dev(
     exe = "//project/zemn.me/inject_iservice:inject_iservice_bin",
     deps = [
         "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
-        "//project/zemn.me/testing:oidc_provider_itest_service",
     ],
 )
 
@@ -60,5 +58,3 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
-
-# gazelle:resolve typescript typescript #root/project/zemn.me/api/api_client.gen //project/zemn.me/api:ts_client_dts

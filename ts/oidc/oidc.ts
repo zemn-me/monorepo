@@ -2,16 +2,32 @@ import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
 
-import {
-	and_then as result_and_then,
-	Err,
-	flatten as result_flatten,
-	Ok,
-	Result,
-	result_promise_transpose,
-	zip as result_zip,
-} from '#root/ts/result_types.js';
+import { and_then as result_and_then, flatten as result_flatten, Result, result_promise_transpose, zip as result_zip } from '#root/ts/result_types.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
+
+
+export const openidConfiguration = z.object({
+	issuer: z.string(),
+	response_types_supported: z.string().array(),
+	subject_types_supported: z.string().array(),
+	scopes_supported: z.string().array(),
+	claims_supported: z.string().array(),
+	authorization_endpoint: z.string().url(),
+	jwks_uri: z.string().url(),
+});
+
+
+export const openidConfigPathName = ".well-known/openid-configuration";
+
+// should be cached in future
+export const getOpenidConfig = (issuer: URL) => {
+	const clone = new URL(issuer);
+	clone.pathname = openidConfigPathName;
+
+	return fetch(clone).then(b => b.json())
+		.then(json => resultFromZod(openidConfiguration.safeParse(json)))
+}
+
 
 
 /**
@@ -31,44 +47,6 @@ export const stringToJSON =
     }
   })
 
-
-type OpenIDProviderConfiguration = {
-	authorization_endpoint: string;
-	jwks_uri: string;
-};
-
-const openidConfigCache = new Map<string, Promise<Result<OpenIDProviderConfiguration, Error>>>();
-
-async function getOpenidConfig(issuer: URL): Promise<Result<OpenIDProviderConfiguration, Error>> {
-	const key = issuer.toString();
-	const cached = openidConfigCache.get(key);
-	if (cached) {
-		return cached;
-	}
-
-	const configPromise = (async () => {
-		try {
-			const wellKnown = new URL('.well-known/openid-configuration', issuer);
-			const response = await fetch(wellKnown.toString());
-			if (!response.ok) {
-				return Err(new Error(`failed to fetch openid configuration (${response.status})`));
-			}
-			const json = await response.json();
-			if (typeof json.authorization_endpoint !== 'string' || typeof json.jwks_uri !== 'string') {
-				return Err(new Error('invalid openid configuration response'));
-			}
-			return Ok({
-				authorization_endpoint: json.authorization_endpoint,
-				jwks_uri: json.jwks_uri,
-			});
-		} catch (error) {
-			return Err(error instanceof Error ? error : new Error(String(error)));
-		}
-	})();
-
-	openidConfigCache.set(key, configPromise);
-	return configPromise;
-}
 
 const unsafeJwtIssParser = z.string().transform(
 	s => s.split(".")
@@ -146,13 +124,8 @@ export async function verifyOIDCToken(
 	)
 }
 
-const issuerSchema = z.string().url().refine(
-	s => s.startsWith('https://') || s.startsWith('http://localhost'),
-	"Issuer must be https:// or http://localhost"
-);
-
 export const idTokenSchema = z.object({
-	iss: issuerSchema,
+	iss: z.string().url().startsWith('https://'),
 	sub: z.string().max(255),
 	aud: z.union([z.string(), z.array(z.string()).nonempty()]),
 	exp: z.number().int().positive(),
@@ -166,26 +139,12 @@ export const idTokenSchema = z.object({
 
 export type ID_Token = z.TypeOf<typeof idTokenSchema>;
 
-const base64UrlBytes = z.string().transform((value, ctx) => {
-	try {
-		const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
-		const padding = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4));
-		return b64.toByteArray(normalized + padding);
-	} catch (_error) {
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: 'Expected base64url payload',
-		});
-		return z.NEVER;
-	}
-});
-
 export const watchOutParseIdToken = z.string()
 	.transform(s => s.split("."))
 	.pipe(
-		z.tuple([z.string(), base64UrlBytes, z.string()])
+		z.tuple([z.string(), z.string(), z.string()])
 	).transform(
-		([, body]) => new TextDecoder().decode(body)
+		([, body]) => atob(body)
 	).pipe(
 		stringToJSON
 	).pipe(idTokenSchema);

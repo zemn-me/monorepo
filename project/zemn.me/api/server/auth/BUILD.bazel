@@ -12,7 +12,6 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_coreos_go_oidc//:go-oidc",
-        "@com_github_getkin_kin_openapi//openapi3",
         "@com_github_getkin_kin_openapi//openapi3filter",
     ],
 )
@@ -24,10 +23,6 @@ bazel_lint(
 
 go_test(
     name = "auth_test",
-    srcs = [
-        "identity_test.go",
-        "oidc_test.go",
-    ],
+    srcs = ["identity_test.go"],
     embed = [":auth"],
-    deps = ["@com_github_getkin_kin_openapi//openapi3"],
 )

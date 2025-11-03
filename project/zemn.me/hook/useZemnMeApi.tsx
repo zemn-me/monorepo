@@ -7,16 +7,13 @@ import type { paths } from "#root/project/zemn.me/api/api_client.gen";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 
 export function useFetchClient(Authorization?: string) {
-	return useMemo(
-		() =>
-			createFetchClient<paths>({
-				baseUrl: ZEMN_ME_API_BASE,
-				headers: {
-					Authorization: Authorization ?? undefined,
-				},
-			}),
-		[Authorization],
-	);
+	return useMemo(() => createFetchClient<paths>({
+		baseUrl: ZEMN_ME_API_BASE,
+		headers: {
+			Authorization
+		}
+	})
+	, []);
 }
 
 export function useZemnMeApi(Authorization?: string) {
@@ -47,4 +44,5 @@ export function useDeleteGrievances(Authorization: string) {
 		onSuccess: () => void invalidateGrievances(),
 	});
 }
+
 

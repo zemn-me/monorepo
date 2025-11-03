@@ -1,5 +1,6 @@
 import {
   enum as zenum,
+  number,
   object,
   optional,
   output,
@@ -50,7 +51,7 @@ export const OIDCAuthenticationRequest = object({
   ),
 
   /** Max acceptable age (in seconds) since last active authentication. */
-  max_age: optional(string()),
+  max_age: optional(number()),
 
   /** End-User’s preferred UI languages, as space-separated BCP47 tags. */
   ui_locales: optional(string()),
