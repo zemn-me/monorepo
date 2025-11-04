@@ -27,8 +27,39 @@ func (k KeySet) Local() (ks JWKS, err error) {
 }
 
 func (s *Server) keySet() (ks KeySet) {
+	pub := s.signingKey.Public()
+	if signer, ok := s.signingKey.Key.(jose.OpaqueSigner); ok {
+		if public := signer.Public(); public != nil {
+			pub = *public
+		}
+	}
+	if pub.Key == nil {
+		pub = s.signingKey
+	}
+	if nested, ok := pub.Key.(*jose.JSONWebKey); ok {
+		if nested.KeyID == "" {
+			nested.KeyID = s.signingKey.KeyID
+		}
+		if nested.Algorithm == "" {
+			nested.Algorithm = s.signingKey.Algorithm
+		}
+		if nested.Use == "" {
+			nested.Use = s.signingKey.Use
+		}
+		pub = *nested
+	}
+	if pub.KeyID == "" {
+		pub.KeyID = s.signingKey.KeyID
+	}
+	if pub.Algorithm == "" {
+		pub.Algorithm = s.signingKey.Algorithm
+	}
+	if pub.Use == "" {
+		pub.Use = s.signingKey.Use
+	}
+
 	return KeySet{jose.JSONWebKeySet{
-		Keys: []jose.JSONWebKey{s.signingKey},
+		Keys: []jose.JSONWebKey{pub},
 	}}
 }
 

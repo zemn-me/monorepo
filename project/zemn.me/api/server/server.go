@@ -24,6 +24,7 @@ import (
 	"github.com/twilio/twilio-go"
 
 	jose "github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/cryptosigner"
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
@@ -128,7 +129,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		}),
 	}
 
-	s.signingKey, err = provisionSigningKey()
+	s.signingKey, err = provisionSigningKey(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -137,30 +138,40 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	return s, nil
 }
 
-func provisionSigningKey() (k jose.JSONWebKey, err error) {
+func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
 	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
-		return provisionKMSSigningKey()
+		return provisionKMSSigningKey(ctx)
 	}
 
-	return provisionTestingSigningKey()
+	return provisionTestingSigningKey(ctx)
 }
 
-func provisionTestingSigningKey() (k jose.JSONWebKey, err error) {
+func newOpaqueSignerJWK(keyID string, signer jose.OpaqueSigner) jose.JSONWebKey {
+	alg := string(jose.ES256)
+	if algs := signer.Algs(); len(algs) > 0 {
+		alg = string(algs[0])
+	}
+
+	return jose.JSONWebKey{
+		Key:       signer,
+		KeyID:     keyID,
+		Algorithm: alg,
+		Use:       "sig",
+	}
+}
+
+func provisionTestingSigningKey(_ context.Context) (k jose.JSONWebKey, err error) {
 	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return
 	}
 
-	k = jose.JSONWebKey{
-		Key:       priv,
-		KeyID:     "fake123",
-		Algorithm: string(jose.ES256),
-		Use:       "sig",
-	}
+	signer := cryptosigner.Opaque(priv)
+	k = newOpaqueSignerJWK("fake123", signer)
 	return
 }
 
-func provisionKMSSigningKey() (k jose.JSONWebKey, err error) {
+func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
 	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
 	if jwtKmsKeyId == "" {
 		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
@@ -174,16 +185,11 @@ func provisionKMSSigningKey() (k jose.JSONWebKey, err error) {
 		return
 	}
 
-	pk, err := parseECDSAPublicKeyFromPEM(jwtKmsPublicKey)
+	signer, err := NewKMSOpaqueSigner(ctx, jwtKmsKeyId, jwtKmsPublicKey)
 	if err != nil {
 		return
 	}
-	k = jose.JSONWebKey{
-		Key:       pk,
-		KeyID:     jwtKmsKeyId,
-		Algorithm: string(jose.ES256),
-		Use:       "sig",
-	}
+	k = newOpaqueSignerJWK(jwtKmsKeyId, signer)
 
 	return
 }
