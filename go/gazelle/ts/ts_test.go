@@ -1,6 +1,7 @@
 package ts_test
 
 import (
+	"flag"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -46,6 +47,15 @@ func newTestConfig(t *testing.T) *config.Config {
 	cfg := config.New()
 	cfg.RepoRoot = root
 	cfg.WorkDir = root
+
+	var rc resolve.Configurer
+	fs := flag.NewFlagSet("test", flag.ContinueOnError)
+	rc.RegisterFlags(fs, "", cfg)
+	if err := rc.CheckFlags(fs, cfg); err != nil {
+		t.Fatalf("resolve.CheckFlags: %v", err)
+	}
+	rc.Configure(cfg, "", nil)
+
 	return cfg
 }
 
@@ -163,6 +173,16 @@ func assertContains(t *testing.T, haystack []string, needle string) {
 	t.Fatalf("expected %q to be present in %v", needle, haystack)
 }
 
+func assertNotContains(t *testing.T, haystack []string, needle string) {
+	t.Helper()
+
+	for _, item := range haystack {
+		if item == needle {
+			t.Fatalf("expected %q to be absent in %v", needle, haystack)
+		}
+	}
+}
+
 func TestGenerateRulesExampleSimple(t *testing.T) {
 	rel := "go/gazelle/ts/example/simple"
 	files := []string{"hello.ts", "hello_test.ts"}
@@ -224,6 +244,66 @@ func TestResolveAddsMeshDependencies(t *testing.T) {
 	}
 	assertContains(t, deps, "//ts/iter")
 	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestResolveUsesGazelleResolveDirective(t *testing.T) {
+	cfg := newTestConfig(t)
+
+	var resolverCfg resolve.Configurer
+	rootFile := &rule.File{
+		Path: "BUILD.bazel",
+		Pkg:  "",
+		Directives: []rule.Directive{
+			{
+				Key:   "resolve",
+				Value: "typescript typescript #root/project/zemn.me/api/api_client.gen //project/zemn.me/api:ts_client_dts",
+			},
+		},
+	}
+	resolverCfg.Configure(cfg, "", rootFile)
+
+	var lang ts.Language
+	lang.Configure(cfg, "", nil)
+
+	rel := "project/zemn.me/app/admin"
+	dirCfg := cfg.Clone()
+	resolverCfg.Configure(dirCfg, rel, nil)
+	lang.Configure(dirCfg, rel, nil)
+
+	args := language.GenerateArgs{
+		Config:       dirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: []string{"client.tsx"},
+	}
+
+	result := lang.GenerateRules(args)
+
+	var (
+		projectRule    *rule.Rule
+		projectImports interface{}
+	)
+	for i, generated := range result.Gen {
+		if generated.Kind() == "ts_project" {
+			projectRule = generated
+			projectImports = result.Imports[i]
+			break
+		}
+	}
+
+	if projectRule == nil {
+		t.Fatalf("expected ts_project rule to be generated")
+	}
+
+	lbl := label.New("", rel, projectRule.Name())
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+
+	lang.Resolve(dirCfg, idx, nil, projectRule, projectImports, lbl)
+
+	deps := projectRule.AttrStrings("deps")
+
+	assertContains(t, deps, "//project/zemn.me/api:ts_client_dts")
+	assertNotContains(t, deps, "//project/zemn.me/api")
 }
 
 func TestGenerateRulesSuppressedPackage(t *testing.T) {
