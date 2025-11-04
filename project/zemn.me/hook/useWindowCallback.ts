@@ -1,6 +1,9 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+
+import { None, Option, Some } from '#root/ts/option/types.js';
+import { Err, Ok, Result } from '#root/ts/result/result.js';
 
 export class UnableToOpenWindowError extends Error {
 	constructor() {
@@ -19,7 +22,7 @@ type WindowCallbackMessage = {
 	href: string;
 };
 
-function isWindowCallbackMessage(value: unknown): value is WindowCallbackMessage {
+function isWindowCallbackMessage(value: unknown): value is WindowCallbackMessage { // codex wrote this and its bad but im not fixing rn
 	return (
 		typeof value === 'object' &&
 		value !== null &&
@@ -33,57 +36,44 @@ function isWindowCallbackMessage(value: unknown): value is WindowCallbackMessage
  * popup navigates back to our callback endpoint and posts a message.
  */
 export function useWindowCallback() {
-	return useCallback(async (target: URL): Promise<string> => {
+	const [value, setValue] = useState<Option<Result<string, Error>>>(None);
+
+	const openWindow = useCallback(async (target: URL) => {
 		const opened = window.open(target.toString(), '_blank');
 		if (!opened) {
 			throw new UnableToOpenWindowError();
 		}
 
-		return await new Promise<string>((resolve, reject) => {
-			const origin = window.location.origin;
-			let watchdog: number | undefined;
+		const origin = window.location.origin;
 
-			function cleanup() {
-				window.removeEventListener('message', handler);
-				if (watchdog !== undefined) {
-					window.clearInterval(watchdog);
-					watchdog = undefined;
-				}
+
+
+		function handler(event: MessageEvent) {
+			if (event.origin !== origin) {
+				return;
 			}
 
-			function handler(event: MessageEvent) {
-				if (event.origin !== origin) {
-					return;
-				}
-
-				if (!isWindowCallbackMessage(event.data)) {
-					return;
-				}
-
-				cleanup();
-
-					try {
-						opened?.close();
-					} catch {
-						// best effort; ignore failures closing popup
-					}
-
-				if (!event.data.href) {
-					reject(new InvalidCallbackMessageError());
-					return;
-				}
-
-				resolve(event.data.href);
+			if (!isWindowCallbackMessage(event.data)) {
+				return;
 			}
+
+			window.removeEventListener('message', handler);
+
+			opened?.close();
+
+			if (!event.data.href) {
+				return setValue(
+					Some(Err(new InvalidCallbackMessageError())));
+			}
+
+			return setValue(Some(Ok(event.data.href)));
+		}
+
+
 
 			window.addEventListener('message', handler);
 
-			watchdog = window.setInterval(() => {
-				if (opened.closed) {
-					cleanup();
-					reject(new InvalidCallbackMessageError('window closed before callback was received'));
-				}
-			}, 500);
-		});
-	}, []);
+	}, [setValue]);
+
+	return [value, openWindow] as const;
 }
