@@ -7,7 +7,7 @@ import {
   Right,
 } from "#root/ts/either/either.js"
 import { isDefined } from "#root/ts/guard.js"
-import { and_then as result_and_then, Err, Ok, Result, unwrap_or as result_unwrap_or } from "#root/ts/result/result.js"
+import { and_then as result_and_then, Err, flatten as result_flatten, Ok, Result, result_promise_transpose, unwrap_or as result_unwrap_or, zipped as result_zipped } from "#root/ts/result/result.js"
 
 /**
  * Option<T> ≔ Either<null, T>
@@ -78,13 +78,7 @@ export function and_then_flatten<T, O>(o: Option<T>, f: (v: T) => Option<O>): Op
 /** Zip two Options. If both Some, returns Some([a,b]); otherwise None. */
 /*#__NO_SIDE_EFFECTS__*/
 export function zip<T, TT>(a: Option<T>, b: Option<TT>): Option<[T, TT]> {
-  return either<null, T, Option<[T, TT]>>(a,
-    () => None,
-    va => either<null, TT, Option<[T, TT]>>(b,
-      () => None,
-      vb => Some<[T, TT]>([va, vb])
-    )
-  )
+  return option_zipped(a, b, (a, b) => [a, b])
 }
 
 /** If this Option is Some, replace it with `v`; else keep None. */
@@ -123,6 +117,30 @@ export function option_result_and_then<T, O, E>(
   return and_then(o, r => result_and_then<T, E, O>(r, x => f(x)))
 }
 
+export function option_zipped<T1, T2, T3>(
+	o1: Option<T1>,
+	o2: Option<T2>,
+	f: (a: T1, b: T2) => T3
+): Option<T3> {
+	return flatten(and_then(
+		o1,
+		v => and_then(o2, vv => f(v, vv))
+	))
+}
+
+export function option_result_zipped<T1, T2, T3, E1, E2>(
+	o1: Option<Result<T1, E1>>,
+	o2: Option<Result<T2, E2>>,
+	f: (a: T1, b: T2) => T3
+): Option<Result<T3, E1 | E2>> {
+	return option_zipped(
+		o1, o2,
+		(a, b) => result_zipped(
+			a, b, (c, d) => f(c, d)
+		)
+	)
+}
+
 /**
  * Transpose: Option<Result<T,E>> → Result<Option<T>, E>.
  * - None            → Ok(None())
@@ -151,6 +169,15 @@ export async function option_promise_transpose<T>(
   )
 }
 
+export async function option_result_promise_transpose<T, E>(
+	o: Option<Result<Promise<T>, E>>,
+): Promise<Option<Result<T, E>>> {
+	return option_promise_transpose(and_then(
+		o,
+		v => result_promise_transpose(v )
+	))
+}
+
 export function result_to_option<T>(
 	r: Result<T, unknown>
 ): Option<T> {
@@ -158,4 +185,65 @@ export function result_to_option<T>(
 		result_and_then(r, v => Some(v)),
 		None
 	)
+}
+
+
+/**
+ * idk. FP makes you do shit like this i think
+ */
+export function option_result_result_flatten<T, E1, E2>(
+	r: Option<Result<Result<T, E1>, E2>>,
+): Option<Result<T, E1 | E2>> {
+	return and_then(
+		r,
+		v => result_flatten(v)
+	)
+}
+
+export function option_result_and_then_flatten<T, T2, E, E2>(
+	r: Option<Result<T, E>>,
+	f: (v: T) => Result<T2, E2>,
+): Option<Result<T2, E | E2>> {
+	return option_result_result_flatten(option_result_and_then(
+		r,
+		f
+	))
+}
+
+
+// the model generated this and i wish I trusted it
+/**
+ * Transpose: Result<Option<T>, E> → Option<Result<T, E>>.
+ * - Err(e)        → Some(Err(e))
+ * - Ok(None)      → None
+ * - Ok(Some(t))   → Some(Ok(t))
+ */
+/*#__NO_SIDE_EFFECTS__*/
+export function result_option_transpose<T, E>(
+  r: Result<Option<T>, E>
+): Option<Result<T, E>> {
+  return either<E, Option<T>, Option<Result<T, E>>>(
+    r,
+    // r == Err(e)
+    e => Some(Err<E, T>(e)),
+    // r == Ok(opt)
+    opt =>
+      either<null, T, Option<Result<T, E>>>(
+        opt,
+        // opt == None
+        () => None,
+        // opt == Some(t)
+        t => Some(Ok<T, E>(t)),
+      ),
+  )
+}
+
+// i don't think this is efficient or good and I disavow it
+export function option_result_option_result_flatten<T, E1, E2>(
+  o: Option<Result<Option<Result<T, E1>>, E2>>,
+): Option<Result<T, E1 | E2>> {
+	return result_option_transpose(result_and_then(option_result_transpose(and_then(option_result_and_then(
+		o,
+		v => option_result_transpose(v)
+	), v => result_flatten(v))), v => flatten(v)))
 }
