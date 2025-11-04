@@ -5,7 +5,7 @@ import { useId } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { components } from '#root/project/zemn.me/api/api_client.gen';
+import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
@@ -346,46 +346,58 @@ function DisplayAdminUid({
 }
 
 export default function Admin() {
-	const [idToken, requestURL, beginLogin, isAuthenticating, authError] = useOIDC(
-		'https://accounts.google.com'
-	);
+	const [id_token, request_id_token] = useOIDC();
 
-	const isAuthenticated = idToken !== null;
 
-	const loginSection = isAuthenticated ? (
-		<p>You are logged in.</p>
-	) : (
-		<div>
+
+
+	const loginA = option_and_then(
+		request_id_token,
+		r => result_and_then(
+			r,
+			onClick => <div>
 			<button
-				data-request-url={requestURL}
 				data-testid="oidc-login-button"
-				disabled={!requestURL || isAuthenticating}
-				onClick={() => {
-					if (!requestURL) return;
-					void beginLogin();
-				}}
+				onClick={() => { void onClick() }}
 			>
 				<p>You are not authenticated to perform this operation.</p>
 				<p>Please click here to authenticate.</p>
 			</button>
-			{authError ? (
-				<p data-testid="oidc-error" role="alert">
-					{authError}
-				</p>
-			) : null}
-		</div>
+			</div>
+		)
+	)
+
+	const loginB = option_and_then(
+		loginA,
+		r => result_unwrap_or_else(
+			r,
+			err => <>Error: {err}</>
+		)
+	)
+
+	const login = option_unwrap_or(
+		loginB,
+		<>Loading!</>
+	)
+
+	const main = option_and_then(
+		id_token,
+		res => result_and_then(
+			res,
+			idToken => <>
+				<DisplayAdminUid Authorization={idToken} />
+				<DisplayPhoneNumber Authorization={idToken} />
+				<SettingsEditor Authorization={idToken} />
+			</>
+		)
 	);
 
-	return (
-		<>
-			{loginSection}
-			{isAuthenticated && idToken ? (
-				<>
-					<DisplayAdminUid Authorization={idToken} />
-					<DisplayPhoneNumber Authorization={idToken} />
-					<SettingsEditor Authorization={idToken} />
-				</>
-			) : null}
-		</>
-	);
+
+	return option_unwrap_or(option_and_then(
+		main,
+		r => result_unwrap_or(
+			r,
+			login
+		)
+	), main)
 }
