@@ -1,4 +1,4 @@
-import { array, object, string, url } from 'zod/mini';
+import { array, object, output, string, url } from 'zod/mini';
 
 export const openidConfiguration = object({
 	issuer: string(),
@@ -11,3 +11,6 @@ export const openidConfiguration = object({
 });
 
 export const openidConfigPathName = ".well-known/openid-configuration";
+
+
+export type OpenIDConfiguration = output<typeof openidConfiguration>;

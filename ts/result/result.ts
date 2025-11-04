@@ -89,20 +89,28 @@ export function and_then_flatten<T, E, O, OE>(
 	)
 }
 
+
+/** Zip two Results (first Err wins) */
+/*#__NO_SIDE_EFFECTS__*/ export function zipped<T, TT, TTT, E, E2>(
+	a: Result<T, E>,
+	b: Result<TT, E2>,
+	f: (a: T, b: TT) => TTT
+): Result<TTT, E | E2> {
+	return and_then_flatten(
+		a,
+		v => and_then(
+			b,
+			vv => f(v, vv)
+		)
+	)
+}
+
 /** Zip two Results (first Err wins) */
 /*#__NO_SIDE_EFFECTS__*/ export function zip<T, TT, E>(
 	a: Result<T, E>,
 	b: Result<TT, E>
 ): Result<[T, TT], E> {
-	return either<E, T, Result<[T, TT], E>>(
-		a,
-		e => Err<E, [T, TT]>(e),
-		ta => either<E, TT, Result<[T, TT], E>>(
-			b,
-			e => Err<E, [T, TT]>(e),
-			tb => Ok<[T, TT], E>([ta, tb])
-		)
-	)
+	return zipped(a, b, (a, b) => [a, b])
 }
 
 /** Result<Promise<T>,E> → Promise<Result<T,E>> */
