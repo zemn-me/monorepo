@@ -284,8 +284,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@swc/cli':
-    specifier: 0.7.8
-    version: 0.7.8(@swc/core@1.13.5)
+    specifier: 0.7.9
+    version: 0.7.9(@swc/core@1.13.5)
   '@testing-library/react':
     specifier: 16.3.0
     version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@18.3.7)(@types/react@18.3.26)(react-dom@19.2.0)(react@19.2.0)
@@ -6624,8 +6624,8 @@ packages:
       superdough: 1.2.5
     dev: false
 
-  /@swc/cli@0.7.8(@swc/core@1.13.5):
-    resolution: {integrity: sha512-27Ov4rm0s2C6LLX+NDXfDVB69LGs8K94sXtFhgeUyQ4DBywZuCgTBu2loCNHRr8JhT9DeQvJM5j9FAu/THbo4w==}
+  /@swc/cli@0.7.9(@swc/core@1.13.5):
+    resolution: {integrity: sha512-AFQu3ZZ9IcdClTknxbug08S9ed/q8F3aYkO5NoZ+6IjQ5UEo1s2HN1GRKNvUslYx2EoVYxd+6xGcp6C7wwtxyQ==}
     engines: {node: '>= 16.14.0'}
     hasBin: true
     peerDependencies:
@@ -6641,7 +6641,7 @@ packages:
       commander: 8.3.0
       minimatch: 9.0.5
       piscina: 4.9.2
-      semver: 7.7.2
+      semver: 7.7.3
       slash: 3.0.0
       source-map: 0.7.6
       tinyglobby: 0.2.15
