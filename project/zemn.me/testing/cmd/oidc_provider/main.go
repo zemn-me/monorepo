@@ -28,7 +28,12 @@ func main() {
 	}
 	issuer := fmt.Sprintf("http://localhost:%s", portString)
 
-	http.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, _ *http.Request) {
+	http.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		_ = json.NewEncoder(w).Encode(map[string]any{
 			"issuer":                   issuer,
 			"authorization_endpoint":   issuer + "/authorize",
@@ -40,7 +45,12 @@ func main() {
 		})
 	})
 
-	http.HandleFunc("/jwks", func(w http.ResponseWriter, _ *http.Request) {
+	http.HandleFunc("/jwks", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		_ = json.NewEncoder(w).Encode(oidc.JWKS())
 	})
 
