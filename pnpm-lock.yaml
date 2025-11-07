@@ -431,8 +431,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.0.3
-    version: 42.0.3(typanion@3.14.0)
+    specifier: 42.1.1
+    version: 42.1.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5808,8 +5808,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /@sindresorhus/is@7.1.0:
-    resolution: {integrity: sha512-7F/yz2IphV39hiS2zB4QYVkivrptHHh0K8qJJd9HhuWSdvf8AN7NpebW3CcDZDBQsUPMoDKWsY2WWgW7bqOcfA==}
+  /@sindresorhus/is@7.1.1:
+    resolution: {integrity: sha512-rO92VvpgMc3kfiTjGT52LEtJ8Yc5kCWhZjLQ3LwlA4pSgPpQO7bVpYXParOD8Jwf+cVQECJo3yP/4I8aZtUQTQ==}
     engines: {node: '>=18'}
     dev: true
 
@@ -10158,11 +10158,6 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /detect-libc@2.1.1:
-    resolution: {integrity: sha512-ecqj/sy1jcK1uWrwpR67UhYrIFQ+5WlGxth34WquCbamhFA6hkkwiu37o6J5xCHdo1oixJRfVRw+ywV+Hq/0Aw==}
-    engines: {node: '>=8'}
-    dev: true
-
   /detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
@@ -13980,7 +13975,7 @@ packages:
     resolution: {integrity: sha512-utfs7Pr5uJyyvDETitgsaqSyjCb2qNRAtuqUeWIAKztsOYdcACf2KtARYXg2pSvhkt+9NfoaNY7fxjl6nuMjIQ==}
     engines: {node: '>= 12.0.0'}
     dependencies:
-      detect-libc: 2.1.1
+      detect-libc: 2.1.2
     optionalDependencies:
       lightningcss-android-arm64: 1.30.2
       lightningcss-darwin-arm64: 1.30.2
@@ -17398,8 +17393,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.0.3(typanion@3.14.0):
-    resolution: {integrity: sha512-/DVoQjRMmYwr1C61hmJt5X1EwKkUMow9u6/zaKTSxAMhJkMzwr304jK+JlhJFiJwiX16UkchzXWM+KcmdsSrjg==}
+  /renovate@42.1.1(typanion@3.14.0):
+    resolution: {integrity: sha512-+Q+D/PcWPg3Qi6K0/bUGAlDDbosjjGeYlFuOrqmNUFXOOxR0vQeO4KgHclMMz+HQ0RRCQKYtvq2xqD7G5zdy6Q==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17434,7 +17429,7 @@ packages:
       '@renovatebot/pep440': 4.2.1
       '@renovatebot/pgp': 1.1.0
       '@renovatebot/ruby-semver': 4.1.2
-      '@sindresorhus/is': 7.1.0
+      '@sindresorhus/is': 7.1.1
       '@yarnpkg/core': 4.4.4(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       ae-cvss-calculator: 1.0.9
