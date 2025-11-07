@@ -431,8 +431,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.0.2
-    version: 42.0.2(typanion@3.14.0)
+    specifier: 42.0.3
+    version: 42.0.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -2549,14 +2549,6 @@ packages:
     dev: true
     optional: true
 
-  /@emnapi/runtime@1.5.0:
-    resolution: {integrity: sha512-97/BJ3iXHww3djw6hYIfErCZFee7qCtrneuLa20UXFCOTCfBM2cvQHjWJ2EG0s0MtdNwInarqCTz35i4wWXHsQ==}
-    requiresBuild: true
-    dependencies:
-      tslib: 2.8.1
-    dev: true
-    optional: true
-
   /@emnapi/runtime@1.7.0:
     resolution: {integrity: sha512-oAYoQnCYaQZKVS53Fq23ceWMRxq5EhQsE0x0RdQ55jT7wagMu5k+fS39v1fiSLrtrLQlXwVINenqhLMtTrV/1Q==}
     requiresBuild: true
@@ -3831,7 +3823,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@emnapi/core': 1.5.0
-      '@emnapi/runtime': 1.5.0
+      '@emnapi/runtime': 1.7.0
       '@tybys/wasm-util': 0.10.1
     dev: true
     optional: true
@@ -16498,7 +16490,7 @@ packages:
     hasBin: true
     requiresBuild: true
     dependencies:
-      detect-libc: 2.1.1
+      detect-libc: 2.1.2
       expand-template: 2.0.3
       github-from-package: 0.0.0
       minimist: 1.2.8
@@ -17406,8 +17398,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.0.2(typanion@3.14.0):
-    resolution: {integrity: sha512-9pZjMXDKYwDi/0W/UaYL7AnC4H+PdLhbuWbFbn9xZpsHJA7XAIsEX1I+4n3oAlOxqgq3V7wkMhyyeLVS25V+eA==}
+  /renovate@42.0.3(typanion@3.14.0):
+    resolution: {integrity: sha512-/DVoQjRMmYwr1C61hmJt5X1EwKkUMow9u6/zaKTSxAMhJkMzwr304jK+JlhJFiJwiX16UkchzXWM+KcmdsSrjg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
