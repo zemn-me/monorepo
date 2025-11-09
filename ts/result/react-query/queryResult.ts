@@ -14,6 +14,9 @@ import { Err, Ok, Result } from "#root/ts/result/result.js";
 	case "error":
 		return Some(Err(r.error))
 	case "pending":
+		if (r.data !== undefined) {
+			return Some(Ok(r.data))
+		}
 		return None
 	case "success":
 		return Some(Ok(r.data))
