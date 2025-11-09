@@ -1,6 +1,8 @@
 'use client';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
@@ -16,7 +18,7 @@ import {
 	Some,
 	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
-import { Date as PrettyDate } from '#root/ts/react/lang/date.js';
+import { PrettyDateTime } from '#root/ts/react/lang/date.js';
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
 import {
 	Err,
@@ -26,19 +28,34 @@ import {
 
 import style from './style.module.css';
 
-
 interface GrievanceEditorProps {
 	readonly Authorization: string;
 }
 
 type Grievance = components['schemas']['Grievance'];
 type NewGrievance = components['schemas']['NewGrievance'];
+type GrievanceWithTimeZone = Grievance & { readonly timeZone?: string | null };
 
-const defaultValues: NewGrievance = {
-	name: '',
-	description: '',
-	priority: 1,
-};
+function clientTimeZone(): string {
+	if (typeof Intl !== 'undefined') {
+		try {
+			const tz = new Intl.DateTimeFormat().resolvedOptions().timeZone;
+			if (tz) return tz;
+		} catch (error) {
+			console.warn('failed to resolve Intl timezone', error);
+		}
+	}
+	return Temporal.Now.zonedDateTimeISO().timeZoneId;
+}
+
+function makeDefaultGrievance(): NewGrievance {
+	return {
+		name: '',
+		description: '',
+		priority: 1,
+		timeZone: clientTimeZone(),
+	};
+}
 
 const severityMap = new Map<number, string>([
 	[1, 'Just logging a vibe check 😌'],
@@ -68,23 +85,98 @@ function backgroundPromise<A extends unknown[]>(
 	return (...a: A) => void f(...a);
 }
 
+function parseCreatedDate(
+	created: Grievance['created'],
+	timeZone?: string | null
+): Temporal.ZonedDateTime {
+	const fallbackZone = timeZone ?? Temporal.Now.zonedDateTimeISO().timeZoneId;
+	const normalized = created?.toString().trim() ?? '';
+	if (!normalized) {
+		return Temporal.Now.zonedDateTimeISO(fallbackZone);
+	}
+
+	const coerceToZone = (zoned: Temporal.ZonedDateTime): Temporal.ZonedDateTime =>
+		timeZone ? zoned.withTimeZone(timeZone) : zoned;
+
+	try {
+		return coerceToZone(Temporal.ZonedDateTime.from(normalized));
+	} catch {
+		try {
+			const bracket = normalized.indexOf('[');
+			const instantSource =
+				bracket >= 0 ? normalized.slice(0, bracket) : normalized;
+			const instant = Temporal.Instant.from(instantSource);
+			return instant.toZonedDateTimeISO(fallbackZone);
+		} catch {
+			return Temporal.Now.zonedDateTimeISO(fallbackZone);
+		}
+	}
+}
+
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 	const create = usePostGrievances(Authorization);
 	const del = useDeleteGrievances(Authorization);
-	const grievances = option_and_then(
-		queryResult(useGetGrievances(Authorization)),
-		r =>
-			result_or_else(r, e =>
-				Err(
-					(e as object) instanceof Error
-						? (e as Error)
-						: new Error(String(e))
-				)
+	const grievancesQuery = useGetGrievances(Authorization);
+	const grievances = option_and_then(queryResult(grievancesQuery), r =>
+		result_or_else(r, e =>
+			Err(
+				(e as object) instanceof Error
+					? (e as Error)
+					: new Error(String(e))
 			)
+		)
+	);
+
+
+	const [cachedGrievances, setCachedGrievances] = useState<Grievance[]>([]);
+
+	useEffect(() => {
+		if (grievancesQuery.data) {
+			setCachedGrievances(grievancesQuery.data);
+		}
+	}, [grievancesQuery.data]);
+
+	const renderGrievanceItems = (items: GrievanceWithTimeZone[]) =>
+		items
+			.slice()
+			.sort(
+				(a, b) =>
+					new Date(b.created).valueOf() -
+					new Date(a.created).valueOf()
+			)
+			.map((g: GrievanceWithTimeZone) => {
+				const createdAt = parseCreatedDate(g.created, g.timeZone);
+				return (
+					<li key={g.id}>
+						<strong>{g.name}</strong>
+						{' ('}
+						{severityMap.get(g.priority) ?? `level ${g.priority}`}
+						{')'}
+						<p>
+							<PrettyDateTime date={createdAt} />
+						</p>
+						<pre>{g.description}</pre>
+						<button
+							className={style.deleteButton}
+							onClick={() =>
+								void del.mutate({
+									params: { path: { id: g.id! } },
+									headers: { Authorization },
+								})
+							}
+						>
+							Delete
+						</button>
+					</li>
+				);
+			});
+
+	const renderedGrievances = renderGrievanceItems(
+		grievancesQuery.data ?? cachedGrievances
 	);
 
 	const { register, handleSubmit, reset } = useForm<NewGrievance>({
-		defaultValues,
+		defaultValues: makeDefaultGrievance(),
 		resolver: standardSchemaResolver(grievanceSchema),
 	});
 
@@ -94,11 +186,15 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 				className={style.formField}
 				onSubmit={backgroundPromise(
 					handleSubmit(d => {
+						const body: NewGrievance = {
+							...d,
+							timeZone: clientTimeZone(),
+						};
 						void create.mutate({
 							headers: { Authorization },
-							body: d,
+							body,
 						});
-						reset();
+						reset(makeDefaultGrievance());
 					})
 				)}
 			>
@@ -137,57 +233,14 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 				</fieldset>
 			</form>
 			<PendingPip value={Some(grievances)} />
-			<ul className={style.grievanceList}>
-				{option_unwrap_or(
-					option_and_then(grievances, r =>
-						result_unwrap_or(r, [])
-							.slice()
-							.sort(
-								(a, b) =>
-									new Date(b.created).valueOf() -
-									new Date(a.created).valueOf()
-							)
-							.map((g: Grievance) => (
-								<li key={g.id}>
-									<strong>{g.name}</strong>
-									{' ('}
-									{severityMap.get(g.priority) ??
-										`level ${g.priority}`}
-									{')'}
-									<p>
-										<PrettyDate
-											date={new Date(g.created)}
-										/>{' '}
-										{new Date(
-											g.created
-										).toLocaleTimeString()}
-									</p>
-									<pre>{g.description}</pre>
-									<button
-										className={style.deleteButton}
-										onClick={() =>
-											void del.mutate({
-												params: { path: { id: g.id! } },
-												headers: { Authorization },
-											})
-										}
-									>
-										Delete
-									</button>
-								</li>
-							))
-					),
-					null
-				)}
-			</ul>
+			<ul className={style.grievanceList}>{renderedGrievances}</ul>
 		</>
 	);
 }
 
 export default function GrievancePortal() {
-	const [idToken, requestURL, beginLogin, isAuthenticating, authError] = useOIDC(
-		'https://accounts.google.com'
-	);
+	const [idToken, requestURL, beginLogin, isAuthenticating, authError] =
+		useOIDC('https://accounts.google.com');
 
 	const isAuthenticated = idToken !== null;
 	const loginSection = isAuthenticated ? (
