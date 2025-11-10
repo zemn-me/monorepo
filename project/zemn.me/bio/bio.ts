@@ -788,6 +788,14 @@ export const Bio = {
 			description: en`Graduated Secondary School with GCSES in Biology, Chemistry, English, Geography, Electronics, Mathematics, ICT, BCS, Physics, German and English Literature.`,
 		},
 		{
+			date: date(7, 'nov', 2025),
+			title: en`Understanding prompt injections: a frontier security challenge`,
+			url: url`https://openai.com/index/prompt-injections/`,
+			id: '2bc4c96c-b278-4363-a3ec-2f6b6c031573',
+			description: en`Overview of OpenAI’s approach to prompt injection`,
+			tags: [writing, security, work],
+		},
+		{
 			date: date(13, 'may', 2024),
 			title: en`GPT4o`,
 			url: linkToHighlight(url`https://openai.com/gpt-4o-contributions/`, {
