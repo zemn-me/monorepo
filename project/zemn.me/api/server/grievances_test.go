@@ -9,20 +9,21 @@ import (
 func TestGrievanceCRUD(t *testing.T) {
 	s := newTestServer()
 	// create
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 5}
+	tz := "America/Los_Angeles"
+	body := NewGrievance{Name: "foo", Description: "bar", Priority: 5, TimeZone: &tz}
 	createReq := PostGrievancesRequestObject{Body: &body}
 	createResp, err := s.PostGrievances(context.Background(), createReq)
 	if err != nil {
 		t.Fatalf("create grievance: %v", err)
 	}
-       created := Grievance(createResp.(PostGrievances200JSONResponse))
-       if created.Id == nil {
-               t.Fatalf("expected id assigned")
-       }
-       if created.Created.IsZero() {
-               t.Fatalf("expected created time set")
-       }
-       id := uuid.UUID(*created.Id).String()
+	created := Grievance(createResp.(PostGrievances200JSONResponse))
+	if created.Id == nil {
+		t.Fatalf("expected id assigned")
+	}
+	if created.Created.IsZero() {
+		t.Fatalf("expected created time set")
+	}
+	id := uuid.UUID(*created.Id).String()
 
 	// read
 	getResp, err := s.GetGrievanceId(context.Background(), GetGrievanceIdRequestObject{Id: id})
@@ -30,37 +31,38 @@ func TestGrievanceCRUD(t *testing.T) {
 		t.Fatalf("get grievance: %v", err)
 	}
 	got := Grievance(getResp.(GetGrievanceId200JSONResponse))
-	if got.Name != "foo" || got.Description != "bar" || got.Priority != 5 {
+	if got.Name != "foo" || got.Description != "bar" || got.Priority != 5 || got.TimeZone == nil || *got.TimeZone != "America/Los_Angeles" {
 		t.Fatalf("unexpected grievance: %+v", got)
 	}
 
 	// update
-	updatedBody := NewGrievance{Name: "baz", Description: "qux", Priority: 3}
+	newTZ := "Asia/Tokyo"
+	updatedBody := NewGrievance{Name: "baz", Description: "qux", Priority: 3, TimeZone: &newTZ}
 	updReq := PutGrievanceIdRequestObject{Id: id, Body: &updatedBody}
 	updResp, err := s.PutGrievanceId(context.Background(), updReq)
 	if err != nil {
 		t.Fatalf("update grievance: %v", err)
 	}
-       upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
-       if upd.Name != "baz" || upd.Priority != 3 {
-               t.Fatalf("update failed: %+v", upd)
-       }
-       if !upd.Created.Equal(created.Created) {
-               t.Fatalf("created time changed on update: %v vs %v", upd.Created, created.Created)
-       }
+	upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
+	if upd.Name != "baz" || upd.Priority != 3 || upd.TimeZone == nil || *upd.TimeZone != "Asia/Tokyo" {
+		t.Fatalf("update failed: %+v", upd)
+	}
+	if !upd.Created.Equal(created.Created) {
+		t.Fatalf("created time changed on update: %v vs %v", upd.Created, created.Created)
+	}
 
 	// list
 	listResp, err := s.GetGrievances(context.Background(), GetGrievancesRequestObject{})
 	if err != nil {
 		t.Fatalf("list grievances: %v", err)
 	}
-       list := []Grievance(listResp.(GetGrievances200JSONResponse))
-       if len(list) != 1 {
-               t.Fatalf("expected 1 grievance, got %d", len(list))
-       }
-       if !list[0].Created.Equal(created.Created) {
-               t.Fatalf("list mismatch: %v vs %v", list[0].Created, created.Created)
-       }
+	list := []Grievance(listResp.(GetGrievances200JSONResponse))
+	if len(list) != 1 {
+		t.Fatalf("expected 1 grievance, got %d", len(list))
+	}
+	if !list[0].Created.Equal(created.Created) {
+		t.Fatalf("list mismatch: %v vs %v", list[0].Created, created.Created)
+	}
 
 	// delete
 	_, err = s.DeleteGrievanceId(context.Background(), DeleteGrievanceIdRequestObject{Id: id})
@@ -79,7 +81,8 @@ func TestGrievanceCRUD(t *testing.T) {
 
 func TestPutGrievanceNotFound(t *testing.T) {
 	s := newTestServer()
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 1}
+	tz2 := "America/Los_Angeles"
+	body := NewGrievance{Name: "foo", Description: "bar", Priority: 1, TimeZone: &tz2}
 	resp, err := s.PutGrievanceId(context.Background(), PutGrievanceIdRequestObject{Id: uuid.NewString(), Body: &body})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
