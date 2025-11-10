@@ -2,6 +2,9 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "monorepo",
 	"private": true,
+	"pnpm": {
+		"onlyBuiltDependencies": []
+	},
 	"devDependencies": {
 		"@actions/core": "1.11.1",
 		"@actions/github": "6.0.1",
