@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 import { useMemo } from 'react';
@@ -26,7 +26,15 @@ export function useZemnMeApi(Authorization?: string) {
 }
 
 export function useGetGrievances(Authorization: string) {
-	return useZemnMeApi(Authorization).useQuery("get", "/grievances");
+	const fetchClient = useFetchClient(Authorization);
+	return useQuery({
+		queryKey: ["get", "/grievances"],
+		queryFn: async () => {
+			const v = await fetchClient.GET("/grievances");
+			return v.data;
+		},
+		enabled: Authorization !== "",
+	});
 }
 
 function useinvalidateGrievances() {
@@ -47,4 +55,3 @@ export function useDeleteGrievances(Authorization: string) {
 		onSuccess: () => void invalidateGrievances(),
 	});
 }
-
