@@ -97,6 +97,7 @@ go_test(
         "phone_features_test.go",
         "salutation_test.go",
         "smoke_test.go",
+        "time_test.go",
         "token_exchange_test.go",
     ],
     embed = [":server"],
