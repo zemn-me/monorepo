@@ -433,8 +433,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 42.2.0
-        version: 42.2.0(encoding@0.1.13)(typanion@3.14.0)
+        specifier: 42.3.0
+        version: 42.3.0(encoding@0.1.13)(typanion@3.14.0)
       sharp:
         specifier: 0.34.5
         version: 0.34.5
@@ -8645,8 +8645,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@42.2.0:
-    resolution: {integrity: sha512-ZZBHEAj2BOsgC1J2g9C185MZsayf+TZgL8VkOPmrZ0qxZ8DIpigtrzaqtgeumXd4Secpj64wseiVygr3yCCWAg==}
+  renovate@42.3.0:
+    resolution: {integrity: sha512-Sh2trHhePOaisN143FIauSjhVy66R79ZU6rhmKGX9BofUj1euSCm/Tb+FyRErov0XOJn3KLqKY0nFBSZ9pYtGg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
 
@@ -12519,7 +12519,7 @@ snapshots:
 
   '@npmcli/fs@4.0.0':
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   '@npmcli/git@5.0.8':
     dependencies:
@@ -15076,7 +15076,7 @@ snapshots:
       hpagent: 1.2.0
       micromatch: 4.0.8
       p-limit: 2.3.0
-      semver: 7.7.2
+      semver: 7.7.3
       strip-ansi: 6.0.1
       tar: 6.2.1
       tinylogic: 2.0.0
@@ -16261,7 +16261,7 @@ snapshots:
       '@one-ini/wasm': 0.2.0
       commander: 14.0.2
       minimatch: 10.0.1
-      semver: 7.7.2
+      semver: 7.7.3
 
   ee-first@1.1.1: {}
 
@@ -17344,7 +17344,7 @@ snapshots:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.7.2
+      semver: 7.7.3
       serialize-error: 7.0.1
 
   global-modules@1.0.0:
@@ -19769,7 +19769,7 @@ snapshots:
 
   node-abi@3.80.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
     optional: true
 
   node-domexception@1.0.0: {}
@@ -19809,7 +19809,7 @@ snapshots:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 7.5.2
       tinyglobby: 0.2.15
       which: 5.0.0
@@ -21004,7 +21004,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@42.2.0(encoding@0.1.13)(typanion@3.14.0):
+  renovate@42.3.0(encoding@0.1.13)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.922.0
       '@aws-sdk/client-ec2': 3.922.0
@@ -22791,7 +22791,7 @@ snapshots:
 
   xmldoc@2.0.2:
     dependencies:
-      sax: 1.4.1
+      sax: 1.4.3
 
   xtend@4.0.2: {}
 
