@@ -162,8 +162,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       pnpm:
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 10.21.0
+        version: 10.21.0
       ramda:
         specifier: 0.32.0
         version: 0.32.0
@@ -8180,8 +8180,8 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  pnpm@10.0.0:
-    resolution: {integrity: sha512-uP71SUvT/ky9Ttq9B0XfLuW+PksLiwj6ZDqj5MZwLMwPANaPqKjJhYpzWgAySFpEmQ7SgQUmyHXkFvABsX3xKw==}
+  pnpm@10.21.0:
+    resolution: {integrity: sha512-2jM3Jn5AD909R5psaAeaxtsB2MpPZ1cgg+cid1p5Z4inqZVmE3SeAA+sINQktZT3p5Gl9OLhNYHF75R/JpaKQA==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -20326,7 +20326,7 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  pnpm@10.0.0: {}
+  pnpm@10.21.0: {}
 
   possible-typed-array-names@1.1.0: {}
 
