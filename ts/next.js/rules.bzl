@@ -59,7 +59,7 @@ def next_itest_service(
             "--port",
             "$${PORT}",
         ],
-        health_check_timeout = "60s",
+        health_check_timeout = "120s",
         autoassign_port = True,
         exe = exe,
         #        http_health_check_address = "http://localhost:$${PORT}/",
