@@ -1003,9 +1003,13 @@ paths:
         "200":
           description: The subject identifier.
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                type: object
+                required: [uid]
+                properties:
+                  uid:
+                    type: string
   /.well-known/webfinger:
     get:
       tags: [Discovery]
