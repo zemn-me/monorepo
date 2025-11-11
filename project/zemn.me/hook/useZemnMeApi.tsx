@@ -37,6 +37,21 @@ export function useGetGrievances(Authorization: string) {
 	});
 }
 
+export function useGetAdminUid(Authorization: string) {
+	const fetchClient = useFetchClient(Authorization);
+	return useQuery({
+		queryKey: ["get", "/admin/uid", Authorization],
+		queryFn: async () => {
+			const resp = await fetchClient.GET("/admin/uid");
+			if (!resp.data) {
+				throw new Error("/admin/uid returned unexpected payload");
+			}
+			return resp.data.uid;
+		},
+		enabled: Authorization !== "",
+	});
+}
+
 function useinvalidateGrievances() {
 	const queryClient = useQueryClient();
 	return () => void queryClient.invalidateQueries({ queryKey: ["get", "/grievances"] });

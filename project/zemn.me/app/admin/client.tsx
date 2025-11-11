@@ -1,7 +1,7 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useId } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -9,7 +9,10 @@ import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
-import { useZemnMeApi } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import {
+	useGetAdminUid,
+	useZemnMeApi,
+} from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import {
 	and_then as option_and_then,
 	Some,
@@ -59,6 +62,42 @@ const settingsSchema = z.object({
 	partyMode: z.boolean().optional(),
 });
 
+type NormalizedSettingsSnapshot = {
+	authorizers: readonly string[];
+	entryCodes: readonly string[];
+	fallbackPhone: string;
+	partyMode: boolean;
+};
+
+const normalizeSettingsSnapshot = (settings: CallboxSettings): NormalizedSettingsSnapshot => {
+	const authorizers = Array.isArray(settings.authorizers)
+		? settings.authorizers
+		: [];
+	const entryCodes = Array.isArray(settings.entryCodes)
+		? settings.entryCodes
+		: [];
+	const fallbackPhone =
+		typeof settings.fallbackPhone === 'string' ? settings.fallbackPhone : '';
+
+	return {
+		authorizers: authorizers.map(({ phoneNumber }) => phoneNumber.trim()),
+		entryCodes: entryCodes.map(({ code }) => code.trim()),
+		fallbackPhone: fallbackPhone.trim(),
+		partyMode: Boolean(settings.partyMode),
+	};
+};
+
+const settingsSnapshotsEqual = (
+	a: NormalizedSettingsSnapshot,
+	b: NormalizedSettingsSnapshot,
+): boolean =>
+	a.fallbackPhone === b.fallbackPhone &&
+		a.partyMode === b.partyMode &&
+		a.authorizers.length === b.authorizers.length &&
+		a.authorizers.every((value, index) => value === b.authorizers[index]) &&
+		a.entryCodes.length === b.entryCodes.length &&
+		a.entryCodes.every((value, index) => value === b.entryCodes[index]);
+
 function maybeMessage(m: string | undefined) {
 	if (m === undefined) return null;
 
@@ -84,10 +123,24 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 	const remoteSettingsKey = remoteSettingsParams;
 
+	const remoteSettingsQuery = $api.useQuery(...remoteSettingsParams);
+
 	const remoteSettings = option_and_then(
-		queryResult($api.useQuery(...remoteSettingsParams)),
+		queryResult(remoteSettingsQuery),
 		r => result_or_else(r, ({ cause }) => Err(new Error(cause)))
 	);
+
+	const remoteSettingsSnapshot = useMemo(
+		() =>
+			remoteSettingsQuery.data
+				? normalizeSettingsSnapshot(remoteSettingsQuery.data)
+				: null,
+		[remoteSettingsQuery.data]
+	);
+
+	const [lastSubmittedSnapshot, setLastSubmittedSnapshot] = useState<
+		NormalizedSettingsSnapshot | null
+	>(null);
 
 	const values = option_unwrap_or(
 		option_and_then(remoteSettings, r =>
@@ -126,10 +179,49 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	});
 
 
+	const syncStatus: 'loading' | 'saving' | 'waiting' | 'error' | 'synced' =
+		(() => {
+			if (
+				remoteSettingsQuery.status === 'error' ||
+				mutateRemoteSettings.status === 'error'
+			) {
+				return 'error';
+			}
+			if (remoteSettingsQuery.status === 'pending') {
+				return 'loading';
+			}
+			if (mutateRemoteSettings.status === 'pending') {
+				return 'saving';
+			}
+			if (
+				lastSubmittedSnapshot !== null &&
+				remoteSettingsSnapshot !== null
+			) {
+				return settingsSnapshotsEqual(
+					lastSubmittedSnapshot,
+					remoteSettingsSnapshot
+				)
+					? 'synced'
+					: 'waiting';
+			}
+			if (lastSubmittedSnapshot !== null) {
+				return 'waiting';
+			}
+			return 'synced';
+		})();
+
+	const ariaBusy =
+		syncStatus === 'loading' ||
+		syncStatus === 'saving' ||
+		syncStatus === 'waiting'
+			? 'true'
+			: 'false';
+
 	return (
 		<form
 			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			onSubmit={handleSubmit(d => {
+				setLastSubmittedSnapshot(normalizeSettingsSnapshot(d));
 				void mutateRemoteSettings.mutate({
 					headers: {
 						Authorization: Authorization,
@@ -273,6 +365,15 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					) : null}
 				</fieldset>
 				<input type="submit" />
+				<output
+					aria-atomic="true"
+					aria-busy={ariaBusy}
+					aria-label="Callbox settings status"
+					aria-live="polite"
+					role="status"
+				>
+					Sync status: {syncStatus}
+				</output>
 				<PendingPip value={Some(remoteSettings)} />
 			</fieldset>
 		</form>
@@ -318,20 +419,16 @@ function DisplayAdminUid({
 }: {
 	readonly Authorization: string;
 }) {
-	const $api = useZemnMeApi();
-	const uid = queryResult(
-		$api.useQuery('get', '/admin/uid', {
-			headers: { Authorization },
-		})
-	);
+	const uidQuery = useGetAdminUid(Authorization);
+	const uid = queryResult(uidQuery);
 
 	const el = option_and_then(uid, r =>
 		result_unwrap_or_else(
 			result_and_then(r, u => <code>{u}</code>),
-			({ cause }) => (
+			e => (
 				<details>
 					<summary>❌</summary>
-					{cause}
+					{e.toString()}
 				</details>
 			)
 		)
@@ -340,7 +437,7 @@ function DisplayAdminUid({
 	return (
 		<fieldset>
 			<legend>UID</legend>
-			<output>{option_unwrap_or(el, <>⏳</>)}</output>
+			<output aria-label="Admin UID value">{option_unwrap_or(el, <>⏳</>)}</output>
 		</fieldset>
 	);
 }
