@@ -1,7 +1,6 @@
 package selenium_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -66,6 +65,13 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
+	}
+
+	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
+	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
+	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+		t.Fatalf("initial settings sync: %v", err)
 	}
 
 	idToken, err := waitForOIDCToken(driver, expectedIssuer, 30*time.Second)
@@ -151,12 +157,12 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err := submit.Click(); err != nil {
 		t.Fatalf("submit admin form: %v", err)
 	}
-
-	if err := waitForCallboxSettings(api, idToken, fallbackValue, authorizerNumber, entryCodeValue, false, 20*time.Second); err != nil {
-		t.Fatalf("callbox settings verification failed: %v", err)
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorBusySelector, 5*time.Second); err != nil {
+		t.Fatalf("settings sync indicator did not enter pending state: %v", err)
 	}
-
-	time.Sleep(2 * time.Second)
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+		t.Fatalf("settings sync indicator did not return to synced: %v", err)
+	}
 
 	if err := driver.Get(adminURL.String()); err != nil {
 		t.Fatalf("reload admin after save: %v", err)
@@ -165,6 +171,9 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for login text post-save: %v (body snippet: %v)", err, body)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+		t.Fatalf("settings sync indicator after reload: %v", err)
 	}
 
 	reloadedFallback, err := waitForElement(driver, selenium.ByCSSSelector, "input[id$='fallbackPhone']", 10*time.Second)
@@ -241,63 +250,4 @@ func waitForAdminUID(api url.URL, token, expected string, timeout time.Duration)
 		time.Sleep(250 * time.Millisecond)
 	}
 	return fmt.Errorf("admin uid did not reach expected value: status %d body %q", lastStatus, lastBody)
-}
-
-func waitForCallboxSettings(api url.URL, token string, expectedFallback, expectedAuthorizer, expectedEntryCode string, expectedParty bool, timeout time.Duration) error {
-	deadline := time.Now().Add(timeout)
-	client := &http.Client{}
-
-	endpoint := api
-	endpoint.Path = "/callbox/settings"
-
-	var lastStatus int
-	var lastBody string
-
-	for time.Now().Before(deadline) {
-		req, err := http.NewRequest(http.MethodGet, endpoint.String(), nil)
-		if err != nil {
-			return err
-		}
-		req.Header.Set("Authorization", token)
-
-		resp, err := client.Do(req)
-		if err == nil {
-			if resp.StatusCode == http.StatusOK {
-				var body struct {
-					Authorizers []struct {
-						PhoneNumber string `json:"phoneNumber"`
-					} `json:"authorizers"`
-					EntryCodes []struct {
-						Code string `json:"code"`
-					} `json:"entryCodes"`
-					FallbackPhone string `json:"fallbackPhone"`
-					PartyMode     *bool  `json:"partyMode"`
-				}
-				if err := json.NewDecoder(resp.Body).Decode(&body); err == nil {
-					resp.Body.Close()
-					partyValue := false
-					if body.PartyMode != nil {
-						partyValue = *body.PartyMode
-					}
-					hasAuthorizer := len(body.Authorizers) > 0 && strings.TrimSpace(body.Authorizers[0].PhoneNumber) == expectedAuthorizer
-					hasEntryCode := len(body.EntryCodes) > 0 && strings.TrimSpace(body.EntryCodes[0].Code) == expectedEntryCode
-					if strings.TrimSpace(body.FallbackPhone) == expectedFallback && partyValue == expectedParty && hasAuthorizer && hasEntryCode {
-						return nil
-					}
-					lastStatus = resp.StatusCode
-					lastBody = fmt.Sprintf("fallback=%s partyMode=%v authorizers=%v entryCodes=%v", body.FallbackPhone, partyValue, body.Authorizers, body.EntryCodes)
-					time.Sleep(250 * time.Millisecond)
-					continue
-				}
-			}
-			if resp.Body != nil {
-				data, _ := io.ReadAll(resp.Body)
-				lastBody = strings.TrimSpace(string(data))
-			}
-			lastStatus = resp.StatusCode
-			resp.Body.Close()
-		}
-		time.Sleep(250 * time.Millisecond)
-	}
-	return fmt.Errorf("callbox settings did not reach expected state: status %d body %q", lastStatus, lastBody)
 }

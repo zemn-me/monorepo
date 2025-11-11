@@ -313,5 +313,7 @@ export function useOIDC(
 		return cachedToken;
 	}, [cachedToken]);
 
+	console.log(token, requestURL, beginLogin, isAuthenticating, authError);
+
 	return [token, requestURL, beginLogin, isAuthenticating, authError];
 }

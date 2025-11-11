@@ -11,6 +11,15 @@ Rather than injecting special classes or IDs, add information that would
 be useful to a screenreader (i.e. ARIA annotations) and select and navigate
 elements by that means.
 
+- Prefer ARIA-compliant hooks (e.g. `role`, `aria-label`, `aria-live`) over
+  `data-testid`/`data-*` selectors so we exercise the accessible surface the
+  user experiences. If you need to expose new state for tests, add a
+  screen-reader-friendly status element instead of a bespoke test attribute.
+
+- End-to-end tests should assert behaviour that is visible in the DOM. Avoid
+  polling internal APIs or databases to “confirm” state when the UI can expose
+  that state through an accessible indicator.
+
 ## Extensions to global objects
 
 Do not attempt to use global objects for testing or injecting content into

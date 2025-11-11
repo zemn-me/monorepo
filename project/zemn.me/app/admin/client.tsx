@@ -1,7 +1,7 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useId } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -59,6 +59,31 @@ const settingsSchema = z.object({
 	partyMode: z.boolean().optional(),
 });
 
+type NormalizedSettingsSnapshot = {
+	authorizers: readonly string[];
+	entryCodes: readonly string[];
+	fallbackPhone: string;
+	partyMode: boolean;
+};
+
+const normalizeSettingsSnapshot = (settings: CallboxSettings): NormalizedSettingsSnapshot => ({
+	authorizers: (settings.authorizers ?? []).map(({ phoneNumber }) => phoneNumber.trim()),
+	entryCodes: (settings.entryCodes ?? []).map(({ code }) => code.trim()),
+	fallbackPhone: (settings.fallbackPhone ?? '').trim(),
+	partyMode: Boolean(settings.partyMode),
+});
+
+const settingsSnapshotsEqual = (
+	a: NormalizedSettingsSnapshot,
+	b: NormalizedSettingsSnapshot,
+): boolean =>
+	a.fallbackPhone === b.fallbackPhone &&
+		a.partyMode === b.partyMode &&
+		a.authorizers.length === b.authorizers.length &&
+		a.authorizers.every((value, index) => value === b.authorizers[index]) &&
+		a.entryCodes.length === b.entryCodes.length &&
+		a.entryCodes.every((value, index) => value === b.entryCodes[index]);
+
 function maybeMessage(m: string | undefined) {
 	if (m === undefined) return null;
 
@@ -84,10 +109,24 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 
 	const remoteSettingsKey = remoteSettingsParams;
 
+	const remoteSettingsQuery = $api.useQuery(...remoteSettingsParams);
+
 	const remoteSettings = option_and_then(
-		queryResult($api.useQuery(...remoteSettingsParams)),
+		queryResult(remoteSettingsQuery),
 		r => result_or_else(r, ({ cause }) => Err(new Error(cause)))
 	);
+
+	const remoteSettingsSnapshot = useMemo(
+		() =>
+			remoteSettingsQuery.data
+				? normalizeSettingsSnapshot(remoteSettingsQuery.data)
+				: null,
+		[remoteSettingsQuery.data]
+	);
+
+	const [lastSubmittedSnapshot, setLastSubmittedSnapshot] = useState<
+		NormalizedSettingsSnapshot | null
+	>(null);
 
 	const values = option_unwrap_or(
 		option_and_then(remoteSettings, r =>
@@ -126,10 +165,49 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	});
 
 
+	const syncStatus: 'loading' | 'saving' | 'waiting' | 'error' | 'synced' =
+		(() => {
+			if (
+				remoteSettingsQuery.status === 'error' ||
+				mutateRemoteSettings.status === 'error'
+			) {
+				return 'error';
+			}
+			if (remoteSettingsQuery.status === 'pending') {
+				return 'loading';
+			}
+			if (mutateRemoteSettings.status === 'pending') {
+				return 'saving';
+			}
+			if (
+				lastSubmittedSnapshot !== null &&
+				remoteSettingsSnapshot !== null
+			) {
+				return settingsSnapshotsEqual(
+					lastSubmittedSnapshot,
+					remoteSettingsSnapshot
+				)
+					? 'synced'
+					: 'waiting';
+			}
+			if (lastSubmittedSnapshot !== null) {
+				return 'waiting';
+			}
+			return 'synced';
+		})();
+
+	const ariaBusy =
+		syncStatus === 'loading' ||
+		syncStatus === 'saving' ||
+		syncStatus === 'waiting'
+			? 'true'
+			: 'false';
+
 	return (
 		<form
 			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			onSubmit={handleSubmit(d => {
+				setLastSubmittedSnapshot(normalizeSettingsSnapshot(d));
 				void mutateRemoteSettings.mutate({
 					headers: {
 						Authorization: Authorization,
@@ -273,6 +351,15 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					) : null}
 				</fieldset>
 				<input type="submit" />
+				<output
+					aria-atomic="true"
+					aria-busy={ariaBusy}
+					aria-label="Callbox settings status"
+					aria-live="polite"
+					role="status"
+				>
+					Sync status: {syncStatus}
+				</output>
 				<PendingPip value={Some(remoteSettings)} />
 			</fieldset>
 		</form>
