@@ -425,10 +425,10 @@ function DisplayAdminUid({
 	const el = option_and_then(uid, r =>
 		result_unwrap_or_else(
 			result_and_then(r, u => <code>{u}</code>),
-			({ cause }) => (
+			e => (
 				<details>
 					<summary>❌</summary>
-					{cause}
+					{e.toString()}
 				</details>
 			)
 		)
