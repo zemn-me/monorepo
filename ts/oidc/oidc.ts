@@ -1,18 +1,24 @@
+import { useQuery } from '@tanstack/react-query';
 import b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
 
+import { openidConfiguration } from '#root/ts/oidc/configuration.js';
+import { option_result_result_flatten, option_result_transpose } from '#root/ts/option/types.js';
+import { queryResult } from '#root/ts/result/react-query/queryResult.js';
 import {
-	and_then as result_and_then,
 	Err,
-	flatten as result_flatten,
 	Ok,
 	Result,
-	result_promise_transpose,
-	zip as result_zip,
-} from '#root/ts/result_types.js';
-import { resultFromZod } from '#root/ts/zod/util.js';
+	and_then as result_and_then,
+} from '#root/ts/result/result.js';
 
+export function oidcConfigURLForIssuer(issuer: URL | string) {
+	const u = new URL(issuer);
+	u.pathname = ".well-known/openid-configuration"
+
+	return u;
+}
 
 /**
  * Parse a JSON string, then validate/shape it with `schema`.
@@ -48,7 +54,7 @@ async function getOpenidConfig(issuer: URL): Promise<Result<OpenIDProviderConfig
 
 	const configPromise = (async () => {
 		try {
-			const wellKnown = new URL('.well-known/openid-configuration', issuer);
+			const wellKnown = new URL('', issuer);
 			const response = await fetch(wellKnown.toString());
 			if (!response.ok) {
 				return Err(new Error(`failed to fetch openid configuration (${response.status})`));
@@ -84,38 +90,6 @@ const unsafeJwtIssParser = z.string().transform(
 	})
 ).transform(o => o.iss);
 
-function issuerForIdToken(
-	token: string
-) {
-	return resultFromZod(unsafeJwtIssParser.safeParse(token));
-}
-
-/**
- * Verifies an OIDC id_token *without* specifying the issuer.
- */
-export async function watch_out_i_am_verifying_the_id_token_with_no_specified_issuer<E> (
-	token: string,
-	getAudience: (iss: string) => Result<string, E>,
-	clockToleranceSeconds: number
-) {
-	const issuer =
-		issuerForIdToken(token);
-
-	const audience = result_flatten(result_and_then(
-		issuer,
-		issuer => getAudience(issuer)
-	));
-
-	return result_promise_transpose(result_and_then(
-		result_zip(audience, issuer),
-		([audience, issuer]) => verifyOIDCToken(
-			token,
-			issuer,
-			audience,
-			clockToleranceSeconds
-		)
-	)).then( v => result_promise_transpose( result_flatten(v) ))
-}
 
 /**
  * Verifies an OIDC token given audience, issuer etc.

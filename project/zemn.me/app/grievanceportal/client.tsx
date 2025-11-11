@@ -16,6 +16,9 @@ import {
 import {
 	and_then as option_and_then,
 	Some,
+	is_some as option_is_some,
+	unwrap as option_unwrap,
+	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
@@ -233,41 +236,42 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, requestURL, beginLogin, isAuthenticating, authError] =
-		useOIDC('https://accounts.google.com');
+	const [idToken, promptForLogin] = useOIDC();
+	const loginReady = option_is_some(promptForLogin);
 
-	const isAuthenticated = idToken !== null;
-	const loginSection = isAuthenticated ? (
-		<p>You are logged in.</p>
-	) : (
+	const handleLogin = () => {
+		if (!loginReady) return;
+		const beginLogin = option_unwrap(promptForLogin);
+		void beginLogin();
+	};
+
+	const loginSection = (
 		<div>
 			<button
-				data-request-url={requestURL}
-				data-testid="oidc-login-button"
-				disabled={!requestURL || isAuthenticating}
-				onClick={() => {
-					if (!requestURL) return;
-					void beginLogin();
-				}}
+				aria-label="Authenticate with OIDC"
+				disabled={!loginReady}
+				onClick={handleLogin}
 			>
 				Login with Google
 			</button>
-			{authError ? (
-				<p data-testid="oidc-error" role="alert">
-					{authError}
-				</p>
-			) : null}
 		</div>
+	);
+
+	const authenticatedSection = option_and_then(
+		idToken,
+		Authorization => (
+			<>
+				<p>You are logged in.</p>
+				<GrievanceEditor Authorization={Authorization} />
+			</>
+		)
 	);
 
 	return (
 		<div className={style.wrapper}>
 			<h1 className={style.header}>💖 Grievance Portal 💖</h1>
 			<p className={style.hearts}>we can fix it!</p>
-			{loginSection}
-			{isAuthenticated && idToken ? (
-				<GrievanceEditor Authorization={idToken} />
-			) : null}
+			{option_unwrap_or(authenticatedSection, loginSection)}
 		</div>
 	);
 }
