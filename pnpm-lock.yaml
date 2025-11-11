@@ -436,8 +436,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 42.6.0
-        version: 42.6.0(encoding@0.1.13)(typanion@3.14.0)
+        specifier: 42.6.1
+        version: 42.6.1(encoding@0.1.13)(typanion@3.14.0)
       sharp:
         specifier: 0.34.5
         version: 0.34.5
@@ -8648,8 +8648,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@42.6.0:
-    resolution: {integrity: sha512-J+XW27ONhGgZ4m+NAs2xd0IUKoQUe9L1wf8JWwLwl2rSX3rBmsxMNdmIDEXuBdL8BT05NX59JToQSizRnODktQ==}
+  renovate@42.6.1:
+    resolution: {integrity: sha512-pNyzUBczTxxUSR6HbBhV7B5SoYx5ooRHTQs0xMZqzW+74pDZRA/Mot15ROJqYz+wh7C0UZXh6GCA+uQPyr7WyQ==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
 
@@ -8787,9 +8787,6 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-
-  sax@1.4.2:
-    resolution: {integrity: sha512-FySGAa0RGcFiN6zfrO9JvK1r7TB59xuzCcTHOBXBNoKgDejlOQCR2KL/FGk3/iDlsqyYg1ELZpOmlg09B01Czw==}
 
   sax@1.4.3:
     resolution: {integrity: sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==}
@@ -21013,7 +21010,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@42.6.0(encoding@0.1.13)(typanion@3.14.0):
+  renovate@42.6.1(encoding@0.1.13)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.922.0
       '@aws-sdk/client-ec2': 3.922.0
@@ -21116,7 +21113,7 @@ snapshots:
       remark-gfm: 4.0.1
       remark-github: 12.0.0
       safe-stable-stringify: 2.5.0
-      sax: 1.4.2
+      sax: 1.4.3
       semver: 7.7.2
       semver-stable: 3.0.0
       semver-utils: 1.1.4
@@ -21276,8 +21273,6 @@ snapshots:
   safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
-
-  sax@1.4.2: {}
 
   sax@1.4.3: {}
 
