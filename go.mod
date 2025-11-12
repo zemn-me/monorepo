@@ -11,10 +11,10 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.39.6
 	github.com/aws/aws-sdk-go-v2/config v1.31.20
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.24
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.22
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.52.5
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.23
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.52.6
 	github.com/aws/aws-sdk-go-v2/service/kms v1.48.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.90.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.90.2
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.47.0
 	github.com/bazelbuild/bazel-watcher v0.27.0
@@ -58,7 +58,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.13 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.4 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.13 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.32.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.32.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.13 // indirect
