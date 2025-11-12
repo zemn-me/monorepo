@@ -101,5 +101,12 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         **kwargs
     )
 
+    native.filegroup(
+        name = name + "_typings",
+        srcs = [":" + name],
+        output_group = "types",
+        visibility = visibility,
+    )
+
     if lint:
         ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
