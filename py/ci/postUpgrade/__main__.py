@@ -35,6 +35,14 @@ def bazel_run(args: list[str] = [], env: dict[str, str] = {}, **kwargs):
 		**kwargs,
 	)
 
+def maven_repin():
+	return bazel(
+		["run", "@maven//:pin"],
+		environ={
+			"REPIN": "1"
+		}
+	)
+
 def cargo_repin():
 	if exists("WORKSPACE"):
 		return bazel(["sync", "--only=cargo"], env={
@@ -58,6 +66,7 @@ def bazel_update_modfile():
 
 def modify_non_bazel_lockfiles():
 	go_mod_tidy()
+	maven_repin()
 	autofix_all()
 
 def modify_bazel_lockfiles():
