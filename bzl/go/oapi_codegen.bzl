@@ -53,8 +53,7 @@ go_oapi_codegen = rule(
         "generate": attr.string_list(
             mandatory = False,
         ),
-        "package": attr.string(
-        ),
+        "package": attr.string(),
         "codegen_tool": attr.label(
             default = OAPI_CODEGEN_TOOL,
             allow_single_file = True,
