@@ -10,6 +10,7 @@ ts_project(
         "configuration.ts",
         "oidc.ts",
         "state.ts",
+        "validate_authentication_request.ts",
     ],
     visibility = [
         "//:__subpackages__",
@@ -19,8 +20,8 @@ ts_project(
         "//:node_modules/base64-js",
         "//:node_modules/jose",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/zod",
+        "//ts/option",
+        "//ts/result",
     ],
 )
 
@@ -39,6 +40,7 @@ filegroup(
         "configuration.ts",
         "oidc.ts",
         "state.ts",
+        "validate_authentication_request.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

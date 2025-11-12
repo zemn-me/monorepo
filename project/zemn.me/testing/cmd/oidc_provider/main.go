@@ -28,7 +28,12 @@ func main() {
 	}
 	issuer := fmt.Sprintf("http://localhost:%s", portString)
 
-	http.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, _ *http.Request) {
+	http.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		_ = json.NewEncoder(w).Encode(map[string]any{
 			"issuer":                   issuer,
 			"authorization_endpoint":   issuer + "/authorize",
@@ -40,7 +45,12 @@ func main() {
 		})
 	})
 
-	http.HandleFunc("/jwks", func(w http.ResponseWriter, _ *http.Request) {
+	http.HandleFunc("/jwks", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		_ = json.NewEncoder(w).Encode(oidc.JWKS())
 	})
 
@@ -133,15 +143,84 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 		return fmt.Errorf("invalid redirect_uri: %w", err)
 	}
 
-	fragment := url.Values{}
-	fragment.Set("id_token", token)
+	responseMode := values.Get("response_mode")
+	params := url.Values{}
+	params.Set("id_token", token)
 	if state := values.Get("state"); state != "" {
-		fragment.Set("state", state)
+		params.Set("state", state)
 	}
 
-	redirect.Fragment = fragment.Encode()
-	http.Redirect(w, r, redirect.String(), http.StatusFound)
+	switch responseMode {
+	case "", "fragment":
+		redirectWithFragment(w, r, redirect, params)
+	case "query":
+		redirectWithQuery(w, r, redirect, params)
+	case "form_post":
+		return respondFormPost(w, redirect.String(), params)
+	default:
+		return fmt.Errorf("unsupported response_mode %q", responseMode)
+	}
 	return nil
+}
+
+func redirectWithFragment(w http.ResponseWriter, r *http.Request, redirect *url.URL, params url.Values) {
+	existing := redirect.Fragment
+	combined := url.Values{}
+	if existing != "" {
+		if parsed, err := url.ParseQuery(existing); err == nil {
+			for k, vals := range parsed {
+				for _, v := range vals {
+					combined.Add(k, v)
+				}
+			}
+		}
+	}
+	for k, vals := range params {
+		for _, v := range vals {
+			combined.Set(k, v)
+		}
+	}
+	redirect.Fragment = combined.Encode()
+	http.Redirect(w, r, redirect.String(), http.StatusFound)
+}
+
+func redirectWithQuery(w http.ResponseWriter, r *http.Request, redirect *url.URL, params url.Values) {
+	query := redirect.Query()
+	for k, vals := range params {
+		for _, v := range vals {
+			query.Set(k, v)
+		}
+	}
+	redirect.RawQuery = query.Encode()
+	http.Redirect(w, r, redirect.String(), http.StatusFound)
+}
+
+func respondFormPost(w http.ResponseWriter, action string, params url.Values) error {
+	tmpl := `<html><head><title>OIDC Response</title></head><body>
+<form method="post" action="{{.Action}}" id="oidc-form">
+{{range $key, $vals := .Params}}{{range $vals}}
+<input type="hidden" name="{{$key}}" value="{{.}}">
+{{end}}{{end}}
+<noscript>
+<p>JavaScript is disabled. Click the button below to continue.</p>
+<button type="submit">Continue</button>
+</noscript>
+</form>
+<script>document.getElementById('oidc-form').submit();</script>
+</body></html>`
+	t, err := template.New("form_post").Parse(tmpl)
+	if err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	return t.Execute(w, struct {
+		Action string
+		Params url.Values
+	}{
+		Action: action,
+		Params: params,
+	})
 }
 
 func renderAuthorizeForm(w http.ResponseWriter, values url.Values, subject string, issuer string) {
