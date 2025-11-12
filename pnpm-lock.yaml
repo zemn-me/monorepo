@@ -436,8 +436,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 42.6.3
-        version: 42.6.3(encoding@0.1.13)(typanion@3.14.0)
+        specifier: 42.7.0
+        version: 42.7.0(encoding@0.1.13)(typanion@3.14.0)
       sharp:
         specifier: 0.34.5
         version: 0.34.5
@@ -8648,8 +8648,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@42.6.3:
-    resolution: {integrity: sha512-sGmG/SjpQu6IU6aWV05aa4mpnlmUvpdWNgfBlS+wxS+l9I2h+LXR330LMwtWiE25yf9HZ5fExIUqFGzRoSlaLA==}
+  renovate@42.7.0:
+    resolution: {integrity: sha512-NR+gmmUS02UBVbZhEX5Pht0M6oDW+y74jVN3NqmrdholqypauNuGnOs9fIuafKPsTy5Io+HaeJs/65QcX+UUiw==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
 
@@ -21010,7 +21010,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@42.6.3(encoding@0.1.13)(typanion@3.14.0):
+  renovate@42.7.0(encoding@0.1.13)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.922.0
       '@aws-sdk/client-ec2': 3.922.0
