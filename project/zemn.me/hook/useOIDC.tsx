@@ -1,317 +1,200 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { skipToken, useQuery } from '@tanstack/react-query';
 
-import type { components } from '#root/project/zemn.me/api/api_client.gen';
-import { ZEMN_ME_API_BASE } from '#root/project/zemn.me/constants/constants.js';
-import { useLocalStorageController } from '#root/project/zemn.me/hook/useLocalStorage.js';
+import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
+import { FOREIGN_ID_TOKEN_ISSUER } from '#root/project/zemn.me/constants/constants.js';
 import {
-	InvalidCallbackMessageError,
 	useWindowCallback,
 } from '#root/project/zemn.me/hook/useWindowCallback.js';
-import { clientSecret } from '#root/project/zemn.me/localStorage/localStorage.js';
+import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import {
-	Issuer,
 	OAuthClientByIssuer,
 } from '#root/project/zemn.me/OAuth/clients.js';
-import { fixedTimeStringEquals } from '#root/ts/crypto/fixed_time_string_comparison.js';
+import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
+import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
+import { openidConfiguration } from '#root/ts/oidc/configuration.js';
 import {
-	ID_Token,
-	oidcAuthorizeUri,
-	watchOutParseIdToken,
+	oidcConfigURLForIssuer,
 } from '#root/ts/oidc/oidc.js';
-import { stateStringForRequest } from '#root/ts/oidc/state.js';
-import { unwrap_or as option_unwrap_or } from '#root/ts/option/types.js';
-import { unwrap_or_else as result_unwrap_or_else } from '#root/ts/result/result.js';
+import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
+import { Option } from '#root/ts/option/types.js';
+import * as option from '#root/ts/option/types.js';
+import * as result from '#root/ts/result/result.js';
 
 
-function isUnexpiredIDToken(token: ID_Token): token is ID_Token {
-	return token.exp > Math.floor(Date.now() / 1000);
+
+export type useOIDCReturnType = [
+	id_token: Option<string>,
+	promptForLogin: Option<() => Promise<void>>,
+];
+
+async function fetchEntropy(): Promise<string> {
+  const bytes = new Uint8Array(128); // 1024 bits
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-type TokenResponse = components['schemas']['TokenResponse'];
 
-async function exchangeIdToken(subjectToken: string): Promise<string> {
-	const body = new URLSearchParams({
-		grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-		subject_token: subjectToken,
-		subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-		requested_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-	});
+export function useOIDC(): useOIDCReturnType {
+	const issuer =
+		FOREIGN_ID_TOKEN_ISSUER;
 
-	const response = await fetch(`${ZEMN_ME_API_BASE}/oauth2/token`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-		},
-		body: body.toString(),
-	});
+	const oauthClient = OAuthClientByIssuer(issuer);
+	const apiFetchClient = useFetchClient();
+	const oidc_config = useQuery({
+		queryFn: () => fetch(oidcConfigURLForIssuer(issuer))
+			.then(config => config.json())
+			.then(config =>
+				openidConfiguration
+					.parse(config)
+			),
+		queryKey: ["oidc-config", issuer],
+	})
 
-	if (!response.ok) {
-		const details = await response.text();
-		throw new Error(
-			`token exchange failed (${response.status}): ${details || 'no body'}`
-		);
-	}
+	const entropy = useQuery({
+		queryKey: ['useoidc state', issuer],
+		queryFn: fetchEntropy,
+		staleTime: Infinity
+	})
 
-	const payload = (await response.json()) as TokenResponse;
-	if (!payload.access_token) {
-		throw new Error('token exchange response missing access_token');
-	}
+	const authorizationEndpoint =
+		oidc_config.status === "success"
+			? option.Some(oidc_config.data.authorization_endpoint)
+			: option.None;
 
-	return payload.access_token;
-}
+	if (oidc_config.status == 'error') throw new Error(oidc_config.error.message);
 
-export function useOIDC(
-	issuer: Issuer
-): [string | null, string, () => Promise<void>, boolean, string | null] {
-	const controller = useLocalStorageController();
-	const queryClient = useQueryClient();
-	const [requestURL, setRequestURL] = useState('');
-	const [effectiveIssuer, setEffectiveIssuer] = useState<string>(issuer);
-	const [forceProductionIssuer, setForceProductionIssuer] = useState(false);
-	const testIssuer = process.env.NEXT_PUBLIC_ZEMN_TEST_OIDC_ISSUER ?? null;
-	const openWindowCallback = useWindowCallback();
-	const [isAuthenticating, setIsAuthenticating] = useState(false);
-	const [pendingState, setPendingState] = useState<string | null>(null);
-	const tokenQueryKey = useMemo(
-		() => ['oidc-id-token', effectiveIssuer] as const,
-		[effectiveIssuer]
+
+	const authRq: Option<OIDCAuthenticationRequest> =
+		entropy.status == 'success'
+			? option.Some<OIDCAuthenticationRequest>({
+				response_type: 'id_token',
+				client_id: oauthClient.clientId,
+				redirect_uri: `${window.location.origin}/callback`,
+				scope: 'openid',
+				state: entropy.data,
+			})
+			: option.None;
+
+	const validation =
+		option.flatten(oidc_config.status === 'success'
+			? option.and_then(authRq, authRq => validateAuthenticationRequest(authRq, oidc_config.data))
+			: option.None);
+
+	if (option.is_some(validation))
+		throw option.unwrap_unchecked(validation)
+
+	const targetURL =
+		option.and_then(
+			option.zip(authorizationEndpoint, authRq),
+			([endpoint, params]) => {
+				const u = new URL(endpoint);
+				u.search = (new URLSearchParams(params)).toString();
+				return u;
+			}
+		)
+
+	const [ callback, requestCallback ] = useWindowCallback();
+
+
+	const requestConsent = option.and_then(
+		targetURL, u => () => requestCallback(u)
 	);
-	const existingToken =
-		queryClient.getQueryData<string | null>(tokenQueryKey) ?? null;
-	let staleTime = 1000 * 60 * 55;
-	let gcTime = 1000 * 60 * 60;
-	if (existingToken) {
-		const parsed = watchOutParseIdToken.safeParse(existingToken);
-		if (parsed.success) {
-			const remainingMs = parsed.data.exp * 1000 - Date.now();
-			if (remainingMs > 0) {
-				staleTime = remainingMs;
-				gcTime = Math.max(remainingMs, 5 * 60 * 1000);
-			} else {
-				staleTime = 0;
-				gcTime = 5 * 60 * 1000;
-			}
+
+	const callbackV = option.and_then(
+		callback,
+		v => result.unwrap(v)
+	)
+
+	const authResponse = option.and_then(
+		callbackV,
+		v => {
+			const href = new URL(v);
+
+
+
+			const r = OIDCAuthenticationResponse.parse(
+				Object.fromEntries([
+					...href.searchParams,
+					...new URLSearchParams(
+						href.hash.slice(1)
+					)
+				])
+			);
+
+			return r;
 		}
-	}
-	const { data: cachedToken } = useQuery<string | null>({
-		queryKey: tokenQueryKey,
-		queryFn: async () => null,
-		initialData: () => existingToken,
-		staleTime,
-		gcTime,
-		refetchOnMount: false,
-		refetchOnWindowFocus: false,
-		refetchOnReconnect: false,
-		enabled: false,
+	);
+
+	if (entropy.status === "success")
+		option.and_then(
+			authResponse,
+			r => {
+			// this should be a fixed-time string comparison
+			// but all the fixed-time string comparisons are
+			// promises in webcrypto and if I have to do that
+			// rn I may kms
+				if (r.state != entropy.data)
+					throw new Error(["invalid state:", r.state, "!=", entropy.data].join(" "));
+			}
+		);
+
+	const authSuccessResponse =
+		option.and_then(
+			authResponse,
+			v =>
+				result.unwrap('error' in v ? result.Err(new Error(v.error)) : result.Ok(v))
+		)
+
+	const id_token = option.and_then(
+		authSuccessResponse,
+		v =>
+			result.unwrap(
+				v.id_token !== undefined
+					? result.Ok(v.id_token)
+					: result.Err(new Error('missing id_token'))
+			)
+	);
+
+	const request_body = option.and_then(
+		id_token,
+		(id_token: string): components['schemas']['TokenExchangeRequest'] => ({
+			grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+			requested_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+			subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+			subject_token: id_token,
+		})
+	)
+
+	const exchangeQueryFn = option.and_then(
+		request_body,
+		body => () => apiFetchClient
+			.POST('/oauth2/token', {
+				body,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			})
+			.then(response => {
+				if (response.error !== undefined) {
+					throw new Error(response.error.error);
+				}
+				const token = response.data.access_token;
+				if (!token) {
+					throw new Error('missing access_token');
+				}
+				return token;
+			})
+	);
+
+	const exchangedTokenRsp = useQuery({
+		queryKey: ['oidc-id-token', issuer],
+		queryFn: option.unwrap_or(exchangeQueryFn, skipToken),
+		staleTime: 100 * 60 * 55 // idk
 	});
-	const [authError, setAuthError] = useState<string | null>(null);
+	const exchangedToken =
+		exchangedTokenRsp.status === 'success'
+			? option.Some(exchangedTokenRsp.data)
+			: option.None
 
-	const beginLogin = useCallback(async () => {
-		if (!requestURL) {
-			return;
-		}
-
-		setIsAuthenticating(true);
-		setAuthError(null);
-
-		try {
-			const target = new URL(requestURL);
-			const href = await openWindowCallback(target);
-			const callbackUrl = new URL(href, window.location.origin);
-
-			if (callbackUrl.origin !== window.location.origin) {
-				throw new InvalidCallbackMessageError(
-					'unexpected callback origin'
-				);
-			}
-
-			const fragment = callbackUrl.hash.startsWith('#')
-				? callbackUrl.hash.slice(1)
-				: callbackUrl.hash;
-			const params = new URLSearchParams(fragment);
-			const idToken = params.get('id_token');
-			if (!idToken) {
-				throw new InvalidCallbackMessageError(
-					'callback missing id_token'
-				);
-			}
-
-			const returnedState = params.get('state');
-			if (pendingState && returnedState) {
-				const statesMatch = await fixedTimeStringEquals(
-					pendingState,
-					returnedState
-				);
-				if (!statesMatch) {
-					throw new InvalidCallbackMessageError(
-						`state mismatch: expected ${pendingState}, got ${returnedState}`
-					);
-				}
-			}
-
-			const exchangedToken = await exchangeIdToken(idToken);
-			queryClient.setQueryData(tokenQueryKey, exchangedToken);
-			setPendingState(null);
-			setAuthError(null);
-		} catch (error) {
-			setAuthError(error instanceof Error ? error.message : String(error));
-			queryClient.setQueryData(tokenQueryKey, null);
-		} finally {
-			setIsAuthenticating(false);
-		}
-	}, [openWindowCallback, pendingState, queryClient, requestURL, tokenQueryKey]);
-
-	useEffect(() => {
-			if (typeof window === 'undefined') {
-				return;
-			}
-			const updateForce = () => {
-				const hash = window.location.hash;
-				setForceProductionIssuer(hash.includes('useGoogleSSO'));
-			};
-			updateForce();
-			window.addEventListener('hashchange', updateForce);
-			return () => {
-			window.removeEventListener('hashchange', updateForce);
-		};
-	}, []);
-
-	useEffect(() => {
-		if (typeof window === 'undefined') {
-			return;
-		}
-		const host = window.location.hostname;
-		if (!forceProductionIssuer && testIssuer && (host === 'localhost' || host === '127.0.0.1')) {
-			setEffectiveIssuer(testIssuer);
-		} else {
-			setEffectiveIssuer(issuer);
-		}
-	}, [forceProductionIssuer, issuer, testIssuer]);
-
-	const useTestIssuer = effectiveIssuer !== issuer;
-	const client = OAuthClientByIssuer(effectiveIssuer);
-
-	useEffect(() => {
-		let cancelled = false;
-
-		async function computeRequestURL() {
-			if (typeof window === 'undefined') {
-				return;
-			}
-
-			const callback = new URL(window.location.origin);
-			callback.pathname = '/callback';
-			callback.search = '';
-			callback.hash = '';
-
-			const makeRandomState = () => {
-				if (
-					typeof window.crypto !== 'undefined' &&
-					typeof window.crypto.getRandomValues === 'function'
-				) {
-					const random = new Uint8Array(16);
-					window.crypto.getRandomValues(random);
-					return Array.from(random, b => b.toString(16).padStart(2, '0')).join('');
-				}
-				return Math.random().toString(36).slice(2);
-			};
-
-			try {
-				if (useTestIssuer && testIssuer) {
-					const nonce = makeRandomState();
-					const authUrl = new URL('/authorize', effectiveIssuer);
-					authUrl.search = new URLSearchParams({
-						response_type: 'id_token',
-						client_id: client.clientId,
-						redirect_uri: callback.toString(),
-						scope: 'openid',
-						nonce,
-						state: nonce,
-					}).toString();
-					setPendingState(nonce);
-					setRequestURL(authUrl.toString());
-					return;
-				}
-
-				const ctrl = option_unwrap_or(controller, null);
-				if (ctrl === null) {
-					const fallbackState = makeRandomState();
-					const authUrlResult = await oidcAuthorizeUri(
-						fallbackState,
-						fallbackState,
-						callback,
-						client.clientId,
-						new URL(effectiveIssuer)
-					);
-					const authUrl = result_unwrap_or_else(authUrlResult, () => callback);
-					if (!cancelled) {
-						setPendingState(fallbackState);
-						setRequestURL(authUrl.toString());
-					}
-					return;
-				}
-
-				const masterKey = await clientSecret(ctrl);
-				const state = await stateStringForRequest(await masterKey, {
-					issuer: effectiveIssuer,
-					clientId: client.clientId,
-					redirectUri: callback.toString(),
-				});
-
-				setPendingState(state);
-
-				const authUrlResult = await oidcAuthorizeUri(
-					state,
-					state,
-					callback,
-					client.clientId,
-					new URL(effectiveIssuer)
-				);
-
-				const authUrl = result_unwrap_or_else(authUrlResult, () => callback);
-
-				if (!cancelled) {
-					setRequestURL(authUrl.toString());
-				}
-			} catch (_error) {
-				if (!cancelled) {
-					setRequestURL('');
-					setPendingState(null);
-				}
-			}
-		}
-
-		void computeRequestURL();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [controller, effectiveIssuer, useTestIssuer, client.clientId, issuer]);
-
-	useEffect(() => {
-		if (!cachedToken) {
-			return;
-		}
-		const parsed = watchOutParseIdToken.safeParse(cachedToken);
-		if (!parsed.success || !isUnexpiredIDToken(parsed.data)) {
-			queryClient.setQueryData(tokenQueryKey, null);
-		}
-	}, [cachedToken, queryClient, tokenQueryKey]);
-
-	const token = useMemo(() => {
-		if (!cachedToken) {
-			return null;
-		}
-		const parsedToken = watchOutParseIdToken.safeParse(cachedToken);
-		if (!parsedToken.success) {
-			return null;
-		}
-		if (!isUnexpiredIDToken(parsedToken.data)) {
-			return null;
-		}
-		return cachedToken;
-	}, [cachedToken]);
-
-	return [token, requestURL, beginLogin, isAuthenticating, authError];
+	return [exchangedToken, requestConsent];
 }

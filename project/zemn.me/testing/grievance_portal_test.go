@@ -2,7 +2,6 @@ package selenium_test
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 	"time"
@@ -162,12 +161,11 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 		t.Logf("grievance portal hostname: %v", hostVal)
 	}
 
-	expectedIssuer := expectedPortalIssuer(t)
-	if _, err := waitForRequestURLFromButton(driver, expectedIssuer, 20*time.Second); err != nil {
+	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
-		t.Fatalf("oidc request url: %v", err)
+		t.Fatalf("oidc login readiness: %v", err)
 	}
 
 	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
@@ -184,21 +182,6 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
 	}
-}
-
-func expectedPortalIssuer(t *testing.T) string {
-	t.Helper()
-	ports, err := servicePorts()
-	if err != nil {
-		t.Fatalf("could not parse service ports: %v", err)
-	}
-	if ports.OIDCProvider != "" {
-		return "http://localhost:" + ports.OIDCProvider
-	}
-	if envIssuer := os.Getenv("ZEMN_TEST_OIDC_ISSUER"); envIssuer != "" {
-		return envIssuer
-	}
-	return "http://localhost:43111"
 }
 
 func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, name, description string) (selenium.WebElement, string) {

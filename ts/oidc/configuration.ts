@@ -1,4 +1,4 @@
-import { array, object, string, url } from 'zod/mini';
+import { array, object, output, string, url } from 'zod/mini';
 
 export const openidConfiguration = object({
 	issuer: string(),
@@ -6,8 +6,11 @@ export const openidConfiguration = object({
 	subject_types_supported: array(string()),
 	scopes_supported: array(string()),
 	claims_supported: array(string()),
-	authorization_endpoint: array(url()),
-	jwks_uri: array(url()),
+	authorization_endpoint: url(),
+	jwks_uri: url(),
 });
 
 export const openidConfigPathName = ".well-known/openid-configuration";
+
+
+export type OpenIDConfiguration = output<typeof openidConfiguration>;

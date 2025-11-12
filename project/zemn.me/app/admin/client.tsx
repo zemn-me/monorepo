@@ -5,7 +5,7 @@ import { useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { components } from '#root/project/zemn.me/api/api_client.gen';
+import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
@@ -15,7 +15,9 @@ import {
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import {
 	and_then as option_and_then,
+	is_some as option_is_some,
 	Some,
+	unwrap as option_unwrap,
 	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
@@ -27,6 +29,7 @@ import {
 	unwrap_or_else as result_unwrap_or_else,
 } from '#root/ts/result/result.js';
 import { e164 } from '#root/ts/zod/e164.js';
+
 
 interface SettingsEditorProps {
 	readonly Authorization: string;
@@ -443,46 +446,37 @@ function DisplayAdminUid({
 }
 
 export default function Admin() {
-	const [idToken, requestURL, beginLogin, isAuthenticating, authError] = useOIDC(
-		'https://accounts.google.com'
-	);
+	const [idToken, promptForLogin] = useOIDC();
+	const loginReady = option_is_some(promptForLogin);
 
-	const isAuthenticated = idToken !== null;
+	const handleLogin = () => {
+		if (!loginReady) return;
+		const beginLogin = option_unwrap(promptForLogin);
+		void beginLogin();
+	};
 
-	const loginSection = isAuthenticated ? (
-		<p>You are logged in.</p>
-	) : (
+	const login = (
 		<div>
 			<button
-				data-request-url={requestURL}
-				data-testid="oidc-login-button"
-				disabled={!requestURL || isAuthenticating}
-				onClick={() => {
-					if (!requestURL) return;
-					void beginLogin();
-				}}
+				aria-label="Authenticate with OIDC"
+				disabled={!loginReady}
+				onClick={handleLogin}
 			>
 				<p>You are not authenticated to perform this operation.</p>
 				<p>Please click here to authenticate.</p>
 			</button>
-			{authError ? (
-				<p data-testid="oidc-error" role="alert">
-					{authError}
-				</p>
-			) : null}
 		</div>
 	);
 
-	return (
-		<>
-			{loginSection}
-			{isAuthenticated && idToken ? (
-				<>
-					<DisplayAdminUid Authorization={idToken} />
-					<DisplayPhoneNumber Authorization={idToken} />
-					<SettingsEditor Authorization={idToken} />
-				</>
-			) : null}
-		</>
+	return option_unwrap_or(
+		option_and_then(idToken, Authorization => (
+			<>
+				<p>You are logged in.</p>
+				<DisplayAdminUid Authorization={Authorization} />
+				<DisplayPhoneNumber Authorization={Authorization} />
+				<SettingsEditor Authorization={Authorization} />
+			</>
+		)),
+		login
 	);
 }
