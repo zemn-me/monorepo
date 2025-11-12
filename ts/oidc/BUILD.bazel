@@ -10,17 +10,20 @@ ts_project(
         "configuration.ts",
         "oidc.ts",
         "state.ts",
+        "validate_authentication_request.ts",
     ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/node",
         "//:node_modules/base64-js",
         "//:node_modules/jose",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/zod",
+        "//ts/option",
+        "//ts/result",
+        "//ts/result/react-query",
     ],
 )
 
@@ -39,6 +42,7 @@ filegroup(
         "configuration.ts",
         "oidc.ts",
         "state.ts",
+        "validate_authentication_request.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

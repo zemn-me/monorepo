@@ -101,24 +101,21 @@ func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
 	return
 }
 
-func waitForRequestURLFromButton(driver selenium.WebDriver, expectedPrefix string, timeout time.Duration) (string, error) {
+const loginButtonSelector = "button[aria-label='Authenticate with OIDC']"
+
+func waitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
-	var lastValue string
 	for time.Now().Before(deadline) {
-		if button, err := driver.FindElement(selenium.ByCSSSelector, "button[data-testid='oidc-login-button']"); err == nil {
-			if attr, err := button.GetAttribute("data-request-url"); err == nil && attr != "" {
-				if strings.HasPrefix(attr, expectedPrefix) {
-					return attr, nil
-				}
-				return "", fmt.Errorf("unexpected authorization URL %q (expected prefix %q)", attr, expectedPrefix)
+		button, err := driver.FindElement(selenium.ByCSSSelector, loginButtonSelector)
+		if err == nil {
+			enabled, err := button.IsEnabled()
+			if err == nil && enabled {
+				return button, nil
 			}
 		}
 		time.Sleep(250 * time.Millisecond)
 	}
-	if lastValue == "" {
-		return "", fmt.Errorf("timed out waiting for OIDC request URL")
-	}
-	return "", fmt.Errorf("timed out waiting for OIDC request URL (last value %q)", lastValue)
+	return nil, fmt.Errorf("login button did not become enabled")
 }
 
 func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time.Duration) error {
@@ -132,9 +129,9 @@ func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time
 		return fmt.Errorf("list window handles: %w", err)
 	}
 
-	loginButton, err := waitForElement(driver, selenium.ByCSSSelector, "button[data-testid='oidc-login-button']", 10*time.Second)
+	loginButton, err := waitForLoginButtonReady(driver, timeout)
 	if err != nil {
-		return fmt.Errorf("find login button: %w", err)
+		return fmt.Errorf("prepare login button: %w", err)
 	}
 	if err := loginButton.Click(); err != nil {
 		return fmt.Errorf("click login button: %w", err)
@@ -194,81 +191,6 @@ func waitForNewWindow(driver selenium.WebDriver, existing []string, timeout time
 		time.Sleep(200 * time.Millisecond)
 	}
 	return "", fmt.Errorf("timed out waiting for login window")
-}
-
-func waitForOIDCToken(driver selenium.WebDriver, issuer string, timeout time.Duration) (string, error) {
-	deadline := time.Now().Add(timeout)
-	var lastErr error
-	for time.Now().Before(deadline) {
-		rawValue, err := driver.ExecuteScript("return localStorage.getItem('REACT_QUERY_OFFLINE_CACHE');", nil)
-		if err != nil {
-			lastErr = err
-			continue
-		}
-		rawString, ok := rawValue.(string)
-		if ok && rawString != "" {
-			token, matched, err := extractTokenFromCache(rawString, issuer)
-			if err != nil {
-				lastErr = err
-				continue
-			}
-			if matched {
-				return token, nil
-			}
-		}
-		lastErr = fmt.Errorf("no persisted token entries for issuer %s", issuer)
-		time.Sleep(200 * time.Millisecond)
-	}
-	if lastErr != nil {
-		return "", lastErr
-	}
-	return "", fmt.Errorf("timed out waiting for id_token")
-}
-
-func extractTokenFromCache(raw string, issuer string) (string, bool, error) {
-	var root map[string]any
-	if err := json.Unmarshal([]byte(raw), &root); err != nil {
-		return "", false, err
-	}
-	if token, ok := searchQueryList(root["queries"], issuer); ok {
-		return token, true, nil
-	}
-	if clientState, ok := root["clientState"].(map[string]any); ok {
-		if token, ok := searchQueryList(clientState["queries"], issuer); ok {
-			return token, true, nil
-		}
-	}
-	return "", false, nil
-}
-
-func searchQueryList(node any, issuer string) (string, bool) {
-	switch v := node.(type) {
-	case []any:
-		for _, entry := range v {
-			entryMap, ok := entry.(map[string]any)
-			if !ok {
-				continue
-			}
-			queryKeyVal, ok := entryMap["queryKey"].([]any)
-			if !ok || len(queryKeyVal) < 2 {
-				continue
-			}
-			if key0, ok := queryKeyVal[0].(string); !ok || key0 != "oidc-id-token" {
-				continue
-			}
-			if key1, ok := queryKeyVal[1].(string); !ok || key1 != issuer {
-				continue
-			}
-			if stateMap, ok := entryMap["state"].(map[string]any); ok {
-				if data, ok := stateMap["data"].(string); ok && data != "" {
-					return data, true
-				}
-			}
-		}
-	case map[string]any:
-		return searchQueryList(v["queries"], issuer)
-	}
-	return "", false
 }
 
 func waitForElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
