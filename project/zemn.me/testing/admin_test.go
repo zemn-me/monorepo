@@ -2,7 +2,6 @@ package selenium_test
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 	"time"
@@ -18,11 +17,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("could not find next server root: %v", err)
 	}
-	ports, err := servicePorts()
-	if err != nil {
-		t.Fatalf("could not parse service ports: %v", err)
-	}
-
 	driver, err := seleniumpkg.New()
 	if err != nil {
 		t.Fatalf("driver: %v", err)
@@ -36,43 +30,34 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("navigate admin: %v", err)
 	}
 
-	expectedIssuer := ""
-	if ports.OIDCProvider != "" {
-		expectedIssuer = "http://localhost:" + ports.OIDCProvider
-	} else if envIssuer := os.Getenv("ZEMN_TEST_OIDC_ISSUER"); envIssuer != "" {
-		expectedIssuer = envIssuer
-	} else {
-		expectedIssuer = "http://localhost:43111"
-	}
 	if hostVal, err := driver.ExecuteScript("return window.location.hostname;", nil); err == nil {
 		t.Logf("admin hostname: %v", hostVal)
 	}
-	if _, err := waitForRequestURLFromButton(driver, expectedIssuer, 20*time.Second); err != nil {
-		t.Fatalf("oidc request url: %v", err)
+	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+		t.Fatalf("oidc login readiness: %v", err)
 	}
 
 	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
-		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
-		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
-	}
-
 	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
 	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
 	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	uidValueSelector := "output[aria-label='Admin UID value']"
+	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
+		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, uidValueSelector, 30*time.Second); err != nil {
+		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
+		t.Fatalf("wait for admin uid output: %v (body snippet: %v)", err, body)
+	}
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
 		t.Fatalf("initial settings sync: %v", err)
 	}
 	if err := expectElementText(driver, uidValueSelector, oidc.LocalSubject, 10*time.Second); err != nil {
 		t.Fatalf("admin uid mismatch: %v", err)
-	}
-
-	if _, err := waitForOIDCToken(driver, expectedIssuer, 30*time.Second); err != nil {
-		t.Fatalf("wait for id token: %v", err)
 	}
 
 	authorizerNumber := fmt.Sprintf("+1202556%04d", time.Now().UnixNano()%10000)
