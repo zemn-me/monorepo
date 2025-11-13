@@ -50,8 +50,14 @@ export function useOIDC(): useOIDCReturnType {
 		queryKey: ["oidc-config", issuer],
 	})
 
-	const entropy = useQuery({
+	const stateQuery = useQuery({
 		queryKey: ['useoidc state', issuer],
+		queryFn: fetchEntropy,
+		staleTime: Infinity
+	})
+
+	const nonceQuery = useQuery({
+		queryKey: ['useoidc nonce', issuer],
 		queryFn: fetchEntropy,
 		staleTime: Infinity
 	})
@@ -65,13 +71,14 @@ export function useOIDC(): useOIDCReturnType {
 
 
 	const authRq: Option<OIDCAuthenticationRequest> =
-		entropy.status == 'success'
+		stateQuery.status === 'success' && nonceQuery.status === 'success'
 			? option.Some<OIDCAuthenticationRequest>({
 				response_type: 'id_token',
 				client_id: oauthClient.clientId,
 				redirect_uri: `${window.location.origin}/callback`,
 				scope: 'openid',
-				state: entropy.data,
+				state: stateQuery.data,
+				nonce: nonceQuery.data,
 			})
 			: option.None;
 
@@ -125,7 +132,7 @@ export function useOIDC(): useOIDCReturnType {
 		}
 	);
 
-	if (entropy.status === "success")
+	if (stateQuery.status === "success")
 		option.and_then(
 			authResponse,
 			r => {
@@ -133,8 +140,8 @@ export function useOIDC(): useOIDCReturnType {
 			// but all the fixed-time string comparisons are
 			// promises in webcrypto and if I have to do that
 			// rn I may kms
-				if (r.state != entropy.data)
-					throw new Error(["invalid state:", r.state, "!=", entropy.data].join(" "));
+				if (r.state != stateQuery.data)
+					throw new Error(["invalid state:", r.state, "!=", stateQuery.data].join(" "));
 			}
 		);
 
