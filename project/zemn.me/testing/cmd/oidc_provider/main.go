@@ -123,6 +123,11 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 		return fmt.Errorf("unsupported response_type %q", responseType)
 	}
 
+	nonce := values.Get("nonce")
+	if strings.Contains(responseType, "id_token") && nonce == "" {
+		return fmt.Errorf("Nonce required for response_type id_token.")
+	}
+
 	tokenAudience := "zemn.me"
 	extraClaims := map[string]any{}
 	if audience := values.Get("audience"); audience != "" {
@@ -133,7 +138,7 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 		extraClaims["aud"] = []string{tokenAudience, clientID}
 	}
 
-	token, err := oidc.MintIDToken(subject, tokenAudience, issuer, values.Get("nonce"), extraClaims)
+	token, err := oidc.MintIDToken(subject, tokenAudience, issuer, nonce, extraClaims)
 	if err != nil {
 		return fmt.Errorf("mint id token: %w", err)
 	}

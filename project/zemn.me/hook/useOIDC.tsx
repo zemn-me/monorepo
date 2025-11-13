@@ -51,7 +51,7 @@ export function useOIDC(): useOIDCReturnType {
 	})
 
 	const entropy = useQuery({
-		queryKey: ['useoidc state', issuer],
+		queryKey: ['useoidc entropy', issuer],
 		queryFn: fetchEntropy,
 		staleTime: Infinity
 	})
@@ -65,13 +65,14 @@ export function useOIDC(): useOIDCReturnType {
 
 
 	const authRq: Option<OIDCAuthenticationRequest> =
-		entropy.status == 'success'
+		entropy.status === 'success'
 			? option.Some<OIDCAuthenticationRequest>({
 				response_type: 'id_token',
 				client_id: oauthClient.clientId,
 				redirect_uri: `${window.location.origin}/callback`,
 				scope: 'openid',
 				state: entropy.data,
+				nonce: entropy.data,
 			})
 			: option.None;
 
