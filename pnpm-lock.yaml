@@ -30,8 +30,8 @@ importers:
         specifier: 16.0.3
         version: 16.0.3
       '@openai/codex':
-        specifier: 0.57.0
-        version: 0.57.0
+        specifier: 0.58.0
+        version: 0.58.0
       '@pulumi/command':
         specifier: 4.5.0
         version: 4.5.0(ts-node@10.9.2(@swc/core@1.15.1)(@types/node@24.10.1)(typescript@5.5.4))(typescript@5.5.4)
@@ -2027,8 +2027,8 @@ packages:
   '@one-ini/wasm@0.2.0':
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
 
-  '@openai/codex@0.57.0':
-    resolution: {integrity: sha512-0q+BWb9g7sPmnil5/DQ72LyraJ+vJ6p0av+83OX6kkf7NpzeF4R0YEzgCOe/kbeiJMwBIjBAbt7nQzJ0KTYubQ==}
+  '@openai/codex@0.58.0':
+    resolution: {integrity: sha512-9DufadP6GKJDV8vDvz8NR8q+0qM92wRPkQKfZT8BplSR0/h/p/ZesoPCQPdL8jVfRKDGX/+u5rGjVNM9ZyNIPw==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -12690,7 +12690,7 @@ snapshots:
 
   '@one-ini/wasm@0.2.0': {}
 
-  '@openai/codex@0.57.0': {}
+  '@openai/codex@0.58.0': {}
 
   '@opentelemetry/api-logs@0.207.0':
     dependencies:
