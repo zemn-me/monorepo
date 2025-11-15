@@ -44,6 +44,12 @@ def cargo_repin():
 def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
 
+
+def maven_repin():
+	return bazel_run(["@maven//:pin", "--"], {
+		"REPIN": "1"
+	})
+
 def bazel_update_lockfile():
 	return bazel(["mod", "deps", "--lockfile_mode=update"])
 
@@ -62,6 +68,7 @@ def modify_non_bazel_lockfiles():
 
 def modify_bazel_lockfiles():
 	bazel_update_modfile()
+	maven_repin()
 	cargo_repin()
 	bazel_update_lockfile()
 	# and one for luck
