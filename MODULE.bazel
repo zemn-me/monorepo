@@ -63,7 +63,7 @@ bazel_dep(name = "bazel_skylib", version = "1.8.2")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.8.2", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.1.0")
-bazel_dep(name = "rules_python", version = "1.6.3")
+bazel_dep(name = "rules_python", version = "1.7.0")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
@@ -88,12 +88,12 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.5.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "aspect_rules_js", version = "2.8.0")
+bazel_dep(name = "aspect_rules_js", version = "2.8.1")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
 # Optionally you can pin a different node version:
-bazel_dep(name = "rules_nodejs", version = "6.6.0")
+bazel_dep(name = "rules_nodejs", version = "6.6.1")
 #node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 
 #node.toolchain(node_version = "18.13.0")
