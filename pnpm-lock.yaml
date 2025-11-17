@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.11.0
-    version: 42.11.0(typanion@3.14.0)
+    specifier: 42.12.0
+    version: 42.12.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -561,7 +561,7 @@ packages:
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.922.0
+      '@aws-sdk/types': 3.930.0
       tslib: 2.8.1
     dev: true
 
@@ -569,7 +569,7 @@ packages:
     resolution: {integrity: sha512-+iWb8qaHLYKrNvGRbiYRHSdKRWhto5XlZUEBwDjYNf+ly5SVYG6zEoYIdxvf5R3zyeP16w4PLBn3rH1xc74Rag==}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.922.0
+      '@aws-sdk/types': 3.930.0
       tslib: 2.8.1
     dev: true
 
@@ -578,7 +578,7 @@ packages:
     dependencies:
       '@aws-crypto/supports-web-crypto': 5.2.0
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.922.0
+      '@aws-sdk/types': 3.930.0
       '@aws-sdk/util-locate-window': 3.893.0
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
@@ -7850,8 +7850,8 @@ packages:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: false
 
-  /@yarnpkg/core@4.4.4(typanion@3.14.0):
-    resolution: {integrity: sha512-0bcUFx4wzq0szvInY0PkzqjsAlM69lgzOsEbltbiyE6q/h0hRb1oOHWSBvq7rUGA+Ob5vuyhoDYWyyXY/1W4VQ==}
+  /@yarnpkg/core@4.5.0(typanion@3.14.0):
+    resolution: {integrity: sha512-jZnEYfP05k3KpBIWlNkPEuJ3E0QLnYTNALQOH+7x8LAQyzhnN9yuLZx8Ze80Y7mlU1Hnv5wUGtzzUFn1wyBAlQ==}
     engines: {node: '>=18.12.0'}
     dependencies:
       '@arcanis/slice-ansi': 1.1.1
@@ -15575,8 +15575,8 @@ packages:
       p-timeout: 7.0.1
     dev: true
 
-  /p-throttle@8.0.0:
-    resolution: {integrity: sha512-kvpi14SZClZqNTLevyhCNQano1LH4clozDZoOdxnxyvEl17kjEKxkgD6to7mQMcWE4fMKAwbH0rLqm6Gjj7b2Q==}
+  /p-throttle@8.1.0:
+    resolution: {integrity: sha512-c1wmXavsHZIC4g1OLhOsafK6jZSAeMo0Ap3yivj59PUcCkpacy5YgWdgIp/dB4vp1JZrfBSsPCR0YuADB+ENLQ==}
     engines: {node: '>=20'}
     dev: true
 
@@ -16327,8 +16327,8 @@ packages:
     dev: true
     optional: true
 
-  /re2@1.22.1:
-    resolution: {integrity: sha512-E4J0EtgyNLdIr0wTg0dQPefuiqNY29KaLacytiUAYYRzxCG+zOkWoUygt1rI+TA1LrhN49/njrfSO1DHtVC5Vw==}
+  /re2@1.22.3:
+    resolution: {integrity: sha512-002aE82U91DiaUA16U6vbiJusvPXn1OWiQukOxJkVUTXbzrSuQbFNHYKcGw8QK/uifRCfjl2Hd/vXYDanKkmaQ==}
     dependencies:
       install-artifact-from-github: 1.4.0
       nan: 2.23.1
@@ -16867,8 +16867,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.11.0(typanion@3.14.0):
-    resolution: {integrity: sha512-xD21sSS8tG6V+vlq9QkecthyFCSB1aAKNM4qXhN5zOTnNrNw9PVnfkw36tyqvOtvkerx7ENPvSb5lZeFlUmbxw==}
+  /renovate@42.12.0(typanion@3.14.0):
+    resolution: {integrity: sha512-xvjrMNRfkPHjnwvoOxFH9ZRnayLX7f8g+8WlYP7puMAJPVZIhRMNkSQ/O8HDqyGR1NttAX3iM48PnXj10GGyTg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16904,7 +16904,7 @@ packages:
       '@renovatebot/pgp': 1.1.1
       '@renovatebot/ruby-semver': 4.1.2
       '@sindresorhus/is': 7.1.1
-      '@yarnpkg/core': 4.4.4(typanion@3.14.0)
+      '@yarnpkg/core': 4.5.0(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       ae-cvss-calculator: 1.0.9
       agentkeepalive: 4.6.0
@@ -16963,7 +16963,7 @@ packages:
       p-all: 5.0.1
       p-map: 7.0.3
       p-queue: 9.0.0
-      p-throttle: 8.0.0
+      p-throttle: 8.1.0
       parse-link-header: 2.0.0
       prettier: 3.6.2
       protobufjs: 7.5.4
@@ -16993,7 +16993,7 @@ packages:
     optionalDependencies:
       better-sqlite3: 12.4.1
       openpgp: 6.2.2
-      re2: 1.22.1
+      re2: 1.22.3
     transitivePeerDependencies:
       - aws-crt
       - encoding
