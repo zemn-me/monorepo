@@ -247,3 +247,13 @@ export function option_result_option_result_flatten<T, E1, E2>(
 		v => option_result_transpose(v)
 	), v => result_flatten(v))), v => flatten(v)))
 }
+
+export function and_then_field<T, K extends keyof T>(
+	o: Option<T>,
+	k: K,
+): Option<T[K]> {
+	return and_then(
+		o,
+		v => v[k]
+	)
+}
