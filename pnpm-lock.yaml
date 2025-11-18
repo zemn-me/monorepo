@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.13.3
-    version: 42.13.3(typanion@3.14.0)
+    specifier: 42.13.4
+    version: 42.13.4(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -8887,7 +8887,7 @@ packages:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
-      p-map: 7.0.3
+      p-map: 7.0.4
       ssri: 12.0.0
       tar: 7.5.2
       unique-filename: 4.0.0
@@ -8906,7 +8906,7 @@ packages:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
-      p-map: 7.0.3
+      p-map: 7.0.4
       ssri: 12.0.0
       unique-filename: 4.0.0
     dev: true
@@ -15660,8 +15660,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /p-map@7.0.3:
-    resolution: {integrity: sha512-VkndIv2fIB99swvQoA65bm+fsmt6UNdGeIB0oxBs+WhAhdh08QA04JXpI7rbB9r08/nkbysKoya9rtDERYOYMA==}
+  /p-map@7.0.4:
+    resolution: {integrity: sha512-tkAQEw8ysMzmkhgw8k+1U/iPhWNhykKnSk4Rd5zLoPJCuJaGRPo6YposrZgaxHKzDHdDWWZvE/Sk7hsL2X/CpQ==}
     engines: {node: '>=18'}
     dev: true
 
@@ -16965,8 +16965,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.13.3(typanion@3.14.0):
-    resolution: {integrity: sha512-8rnNoOLGhvdLiBUwkyft/VDBHjD6cL+JuWl1VJ62MiLcyq1yV/PRazdDpr+WmwxlzTrmGzNqgpF+Nsz6w87cGA==}
+  /renovate@42.13.4(typanion@3.14.0):
+    resolution: {integrity: sha512-Dq2jCU61NZcLc+fOG0e8VSGP3d9WgksvuaCU5zWmyhHyNtKTGTmaHWgj7lsw/tjXdvnQcZ/fhG1Bj08NFzwWjg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17059,7 +17059,7 @@ packages:
       neotraverse: 0.6.18
       node-html-parser: 7.0.1
       p-all: 5.0.1
-      p-map: 7.0.3
+      p-map: 7.0.4
       p-queue: 9.0.0
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
