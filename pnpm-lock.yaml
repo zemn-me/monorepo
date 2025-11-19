@@ -140,8 +140,8 @@ dependencies:
     specifier: 0.4.17
     version: 0.4.17
   npm:
-    specifier: 11.6.2
-    version: 11.6.2
+    specifier: 11.6.3
+    version: 11.6.3
   nuqs:
     specifier: 1.20.0
     version: 1.20.0(next@13.4.10)
@@ -15300,8 +15300,8 @@ packages:
     dependencies:
       path-key: 3.1.1
 
-  /npm@11.6.2:
-    resolution: {integrity: sha512-7iKzNfy8lWYs3zq4oFPa8EXZz5xt9gQNKJZau3B1ErLBb6bF7sBJ00x09485DOvRT2l5Gerbl3VlZNT57MxJVA==}
+  /npm@11.6.3:
+    resolution: {integrity: sha512-QIWnYxYuDjrNGaTp0jrTqgl45QHM+UfdcjPBKmia4LsBkHY8TvEjZpkAVrNO7EOJA//tOP3k+9cioXwqdAfukg==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
     dev: false
@@ -15311,6 +15311,7 @@ packages:
       - '@npmcli/config'
       - '@npmcli/fs'
       - '@npmcli/map-workspaces'
+      - '@npmcli/metavuln-calculator'
       - '@npmcli/package-json'
       - '@npmcli/promise-spawn'
       - '@npmcli/redact'
