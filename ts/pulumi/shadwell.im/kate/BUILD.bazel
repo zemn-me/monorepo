@@ -1,12 +1,11 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
 
 next_project(
     name = "next",
-    srcs = [":pages"],
+    srcs = ["//ts/pulumi/shadwell.im/kate/pages"],
 )
 
 # bazel run //ts/pulumi/shadwell.im/kate
@@ -14,28 +13,6 @@ next_project(
 alias(
     name = "kate",
     actual = ":dev",
-)
-
-# moved here so kate can automerge without modifying any important bazel stuff
-ts_project(
-    name = "pages",
-    srcs = glob(
-        [
-            "pages/*.tsx",
-            "pages/*.ts",
-        ],
-        allow_empty = True,
-    ),
-    assets = glob(
-        ["pages/*.css"],
-        allow_empty = True,
-    ),
-    deps = [
-        "//:node_modules/@types/react",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//ts/next.js",
-    ],
 )
 
 bazel_lint(
