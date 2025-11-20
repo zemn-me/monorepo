@@ -25,6 +25,7 @@ import (
 const (
 	packageJSONExtKey  = "typescript.package_json"
 	rootTsConfigExtKey = "typescript.root_tsconfig"
+	cssModuleDepKey    = "typescript:has_css_modules"
 )
 
 type passthroughExpr struct {
@@ -57,6 +58,38 @@ func (d depSet) add(value string) {
 		return
 	}
 	d[value] = struct{}{}
+}
+
+func sortedKeys(set map[string]struct{}) []string {
+	keys := make([]string, 0, len(set))
+	for k := range set {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func mergeStringLists(lists ...[]string) []string {
+	seen := make(map[string]struct{})
+	for _, list := range lists {
+		for _, item := range list {
+			if item == "" {
+				continue
+			}
+			seen[item] = struct{}{}
+		}
+	}
+
+	if len(seen) == 0 {
+		return nil
+	}
+
+	merged := make([]string, 0, len(seen))
+	for item := range seen {
+		merged = append(merged, item)
+	}
+	sort.Strings(merged)
+	return merged
 }
 
 type packageJSONPartial struct {
@@ -480,18 +513,21 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 	}
 	modules := imports.(depSet)
 
-	if len(modules) == 0 {
-		if len(defaultDeps) == 0 {
-			return
-		}
-
-		r.SetAttr("deps", append([]string{}, defaultDeps...))
-		return
-	}
-
 	deps := make(map[string]struct{})
 	for _, d := range defaultDeps {
 		deps[d] = struct{}{}
+	}
+	if needsBaseDefs, ok := r.PrivateAttr(cssModuleDepKey).(bool); ok && needsBaseDefs {
+		deps["//:base_defs"] = struct{}{}
+	}
+
+	if len(modules) == 0 {
+		if len(deps) == 0 {
+			return
+		}
+
+		r.SetAttr("deps", sortedKeys(deps))
+		return
 	}
 
 	pkgJSON := ensurePackageJSON(c)
@@ -580,7 +616,12 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	)
 
 	needsJsdom := false
+	cssModules := make([]string, 0)
 	for _, f := range args.RegularFiles {
+		if strings.HasSuffix(f, ".module.css") {
+			cssModules = append(cssModules, f)
+		}
+
 		if !isTypeScriptFile(f) {
 			continue
 		}
@@ -635,11 +676,13 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 
 	sort.Strings(srcs)
 	sort.Strings(testSrcs)
+	sort.Strings(cssModules)
 
 	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
 	r.SetAttr("visibility", []string{"//:__subpackages__"})
-	if existing := findExistingRule(args, name); existing != nil {
+	existing := findExistingRule(args, name)
+	if existing != nil {
 		if attr := existing.Attr("srcs"); attr != nil {
 			if preserved, ok := shouldPreserveSrcs(attr); ok {
 				r.SetAttr("srcs", preserved)
@@ -657,6 +700,18 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		}
 	} else {
 		r.SetAttr("srcs", srcs)
+	}
+
+	if len(cssModules) > 0 {
+		existingAssets := []string{}
+		if existing != nil {
+			existingAssets = existing.AttrStrings("assets")
+		}
+		assets := mergeStringLists(existingAssets, cssModules)
+		if len(assets) > 0 {
+			r.SetAttr("assets", assets)
+		}
+		r.SetPrivateAttr(cssModuleDepKey, true)
 	}
 
 	gen := []*rule.Rule{r}
