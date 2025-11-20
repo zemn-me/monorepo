@@ -197,6 +197,28 @@ func TestGenerateRulesExampleSimple(t *testing.T) {
 	assertContains(t, deps, "//:node_modules/@types/node")
 }
 
+func TestGenerateAddsCssModulesAssetsAndDeps(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/cssmodule"
+	files := []string{"component.tsx", "style.module.css"}
+
+	rules := generateAndResolveAllRules(t, rel, files)
+
+	mainRule, ok := rules["cssmodule"]
+	if !ok {
+		t.Fatalf("expected cssmodule ts_project rule, got %v", rules)
+	}
+
+	assets := mainRule.AttrStrings("assets")
+	wantAssets := []string{"style.module.css"}
+	if !reflect.DeepEqual(assets, wantAssets) {
+		t.Fatalf("assets mismatch: got %v want %v", assets, wantAssets)
+	}
+
+	deps := mainRule.AttrStrings("deps")
+	assertContains(t, deps, "//:base_defs")
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
 func TestResolveAddsRepositoryDependencyFromAlias(t *testing.T) {
 	rel := "go/gazelle/ts/testdata/uses_option"
 	files := []string{"sample.ts"}

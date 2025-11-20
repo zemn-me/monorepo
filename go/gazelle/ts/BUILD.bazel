@@ -31,6 +31,7 @@ go_test(
         "//:tsconfig.json",
         "//go/gazelle/ts/example/duration:all_ts_srcs",
         "//go/gazelle/ts/example/simple:all_ts_srcs",
+        "//go/gazelle/ts/testdata/cssmodule:all_ts_srcs",
         "//go/gazelle/ts/testdata/dependency:all_ts_srcs",
         "//go/gazelle/ts/testdata/jsdom:all_ts_srcs",
         "//go/gazelle/ts/testdata/submodule:all_ts_srcs",
