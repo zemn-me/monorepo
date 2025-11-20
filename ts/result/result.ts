@@ -106,10 +106,10 @@ export function and_then_flatten<T, E, O, OE>(
 }
 
 /** Zip two Results (first Err wins) */
-/*#__NO_SIDE_EFFECTS__*/ export function zip<T, TT, E>(
+/*#__NO_SIDE_EFFECTS__*/ export function zip<T, TT, E, EE>(
 	a: Result<T, E>,
-	b: Result<TT, E>
-): Result<[T, TT], E> {
+	b: Result<TT, EE>
+): Result<[T, TT], E | EE> {
 	return zipped(a, b, (a, b) => [a, b])
 }
 
@@ -146,4 +146,13 @@ export function and_then_flatten<T, E, O, OE>(
 	return is_ok(v) ? Ok<V, E>(vv) : (v as Result<V, E>)
 }
 
-/** Return true if Ok or false if Err */
+export function and_then_field<T, E, K extends keyof T>(
+	o: Result<T, E>,
+	k: K,
+): Result<T[K], E> {
+	return and_then(
+		o,
+		v => v[k]
+	)
+}
+

@@ -1,12 +1,12 @@
 import { OIDCAuthenticationRequest } from "#root/ts/oidc/authentication_request.js";
 import { OpenIDConfiguration } from "#root/ts/oidc/configuration.js";
-import * as option from "#root/ts/option/types.js";
+import * as result from "#root/ts/result/result.js";
 
 
 export function validateAuthenticationRequest(
 	req: OIDCAuthenticationRequest,
 	config: OpenIDConfiguration
-): option.Option<Error> {
+): result.Result<OIDCAuthenticationRequest, Error> {
 	const requestedScopes = new Set(req.scope.split(' ').map(s => s.trim()).filter(Boolean));
 	const supportedScopesArray = (
 		Array.isArray(config.scopes_supported)
@@ -19,7 +19,7 @@ export function validateAuthenticationRequest(
 	);
 
 	if (missingScopes.size > 0) {
-		return option.Some(new Error(
+		return result.Err(new Error(
 			`missing scope support: ${[...missingScopes].join(", ")}.`
 		));
 	}
@@ -32,10 +32,10 @@ export function validateAuthenticationRequest(
 	const supportedResponseTypes = new Set(supportedResponseTypesArray);
 
 	if (!supportedResponseTypes.has(req.response_type)) {
-		return option.Some(new Error(
+		return result.Err(new Error(
 			`missing response type support: ${req.response_type}`
 		));
 	}
 
-	return option.None;
+	return result.Ok(req)
 }
