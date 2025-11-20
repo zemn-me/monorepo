@@ -4,9 +4,20 @@ export default function Main() {
 	return (
 		<>
 			<Head>
-				<title>Kate's art</title>
+				<title>Kate&apos;s art</title>
 			</Head>
-			<p>Hi this is Kate's art!</p>
+			<h1>Kate&apos;s art</h1>
+			<p>Some lovely trees native to the UK:</p>
+			<ul>
+				<li>English oak</li>
+				<li>Silver birch</li>
+				<li>Scots pine</li>
+				<li>Rowan (mountain ash)</li>
+				<li>Field maple</li>
+				<li>Hazel</li>
+				<li>Wild cherry</li>
+				<li>Aspen</li>
+			</ul>
 		</>
 	);
 }
