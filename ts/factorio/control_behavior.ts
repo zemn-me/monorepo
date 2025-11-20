@@ -151,6 +151,10 @@ export const ControlBehavior = z.strictObject({
 	read_recipe_finished: z.boolean().optional(),
 	/** Signal that receives recipe finished events. */
 	recipe_finished_signal: SignalID.optional(),
+	/** Whether to include this chest's contents when crafting via requests. */
+	include_in_crafting: z.boolean().optional(),
+	/** Whether to include this chest's contents as fuel via requests. */
+	include_fuel: z.boolean().optional(),
 	/** Signal representing working state. */
 	working_signal: SignalID.optional(),
 	/** Whether to read the moving-from station (for trains). */

@@ -14,6 +14,7 @@ import { cryoScience } from '#root/ts/factorio/testing/data/cryoScience.js';
 import { neoVortexTrainStations } from '#root/ts/factorio/testing/data/neoVortexTrainStations';
 import { powerBook } from '#root/ts/factorio/testing/data/powerBook';
 import { spaceScience } from '#root/ts/factorio/testing/data/spaceScience.js';
+import { spoilageToCarbonEnergyUpward } from '#root/ts/factorio/testing/data/spoilageToCarbonEnergyUpward.js';
 import { starterBase } from '#root/ts/factorio/testing/data/starterBase.js';
 import { renderBlueprintToBrailleString } from '#root/ts/factorio/testing/render_to_braille';
 
@@ -176,6 +177,9 @@ describe('blueprintSurroundedByWall', () => {
 });
 
 describe('some problematic blueprints', () => {
+	test('spoilageToCarbonEnergyUpward', () => {
+		expect(() => BlueprintString.parse(spoilageToCarbonEnergyUpward)).not.toThrow();
+	});
 	test('automatedAquiloRunner', () => {
 		expect(() => BlueprintString.parse(automatedAquiloRunner)).not.toThrow();
 	});
