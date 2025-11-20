@@ -59,6 +59,38 @@ func (d depSet) add(value string) {
 	d[value] = struct{}{}
 }
 
+func sortedKeys(set map[string]struct{}) []string {
+	keys := make([]string, 0, len(set))
+	for k := range set {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func mergeStringLists(lists ...[]string) []string {
+	seen := make(map[string]struct{})
+	for _, list := range lists {
+		for _, item := range list {
+			if item == "" {
+				continue
+			}
+			seen[item] = struct{}{}
+		}
+	}
+
+	if len(seen) == 0 {
+		return nil
+	}
+
+	merged := make([]string, 0, len(seen))
+	for item := range seen {
+		merged = append(merged, item)
+	}
+	sort.Strings(merged)
+	return merged
+}
+
 type packageJSONPartial struct {
 	Dependencies    map[string]string `json:"dependencies"`
 	DevDependencies map[string]string `json:"devDependencies"`
@@ -480,18 +512,18 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 	}
 	modules := imports.(depSet)
 
-	if len(modules) == 0 {
-		if len(defaultDeps) == 0 {
-			return
-		}
-
-		r.SetAttr("deps", append([]string{}, defaultDeps...))
-		return
-	}
-
 	deps := make(map[string]struct{})
 	for _, d := range defaultDeps {
 		deps[d] = struct{}{}
+	}
+
+	if len(modules) == 0 {
+		if len(deps) == 0 {
+			return
+		}
+
+		r.SetAttr("deps", sortedKeys(deps))
+		return
 	}
 
 	pkgJSON := ensurePackageJSON(c)
@@ -501,6 +533,40 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		if module == "" {
 			continue
 		}
+
+		if strings.HasSuffix(module, ".module.css") {
+			repoPath := ""
+			switch {
+			case strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/"):
+				repoPath = path.Clean(path.Join(from.Pkg, module))
+				repoPath = strings.TrimPrefix(repoPath, "/")
+			case strings.HasPrefix(module, "#"):
+				if resolved, ok := resolveModuleToRepoPath(module, rootConfig); ok {
+					repoPath = resolved
+				}
+			default:
+				repoPath = module
+			}
+
+			if repoPath != "" {
+				impSpec := resolve.ImportSpec{Lang: "css", Imp: repoPath}
+				matches := ix.FindRulesByImportWithConfig(c, impSpec, "css")
+				if len(matches) > 0 {
+					existingAssets := r.AttrStrings("assets")
+					assetPath := repoPath
+					if from.Pkg != "" && strings.HasPrefix(repoPath, from.Pkg+"/") {
+						assetPath = strings.TrimPrefix(repoPath, from.Pkg+"/")
+					}
+					r.SetAttr("assets", mergeStringLists(existingAssets, []string{assetPath}))
+					deps["//:base_defs"] = struct{}{}
+					for _, m := range matches {
+						deps[m.Label.String()] = struct{}{}
+					}
+					continue
+				}
+			}
+		}
+
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
 			continue
 		}
@@ -639,7 +705,8 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
 	r.SetAttr("visibility", []string{"//:__subpackages__"})
-	if existing := findExistingRule(args, name); existing != nil {
+	existing := findExistingRule(args, name)
+	if existing != nil {
 		if attr := existing.Attr("srcs"); attr != nil {
 			if preserved, ok := shouldPreserveSrcs(attr); ok {
 				r.SetAttr("srcs", preserved)

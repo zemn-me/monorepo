@@ -1,0 +1,44 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "pages",
+    srcs = [
+        "_app.tsx",
+        "index.tsx",
+    ],
+    assets = ["index.module.css"],
+    visibility = ["//ts/pulumi/shadwell.im/kate:__pkg__"],
+    deps = [
+        "//:base_defs",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//ts/next.js",
+    ],
+)
+
+filegroup(
+    name = "page_srcs",
+    srcs = [
+        "_app.tsx",
+        "index.tsx",
+    ],
+    visibility = ["//ts/pulumi/shadwell.im/kate:__pkg__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "_app.tsx",
+        "index.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
