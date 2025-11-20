@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["component.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "cssmodule",
+    srcs = ["component.tsx"],
+    assets = ["style.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:base_defs",
+        "//:node_modules/@types/node",
+    ],
+)
