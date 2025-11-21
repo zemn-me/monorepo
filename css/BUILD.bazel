@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["rules.bzl"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
