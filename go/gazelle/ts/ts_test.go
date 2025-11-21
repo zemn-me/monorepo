@@ -16,6 +16,7 @@ import (
 	bzl "github.com/bazelbuild/buildtools/build"
 	"github.com/bazelbuild/rules_go/go/runfiles"
 
+	css "github.com/zemn-me/monorepo/go/gazelle/css"
 	ts "github.com/zemn-me/monorepo/go/gazelle/ts"
 )
 
@@ -85,28 +86,60 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
-	lang.Configure(cfg, "", nil)
+	var (
+		tsLang  ts.Language
+		cssLang css.Language
+	)
+	tsLang.Configure(cfg, "", nil)
+	cssLang.Configure(cfg, "", nil)
 
-	dirCfg := cfg.Clone()
-	lang.Configure(dirCfg, rel, nil)
+	tsDirCfg := cfg.Clone()
+	tsLang.Configure(tsDirCfg, rel, nil)
+
+	cssDirCfg := cfg.Clone()
+	cssLang.Configure(cssDirCfg, rel, nil)
 
 	args := language.GenerateArgs{
-		Config:       dirCfg,
+		Config:       tsDirCfg,
 		Dir:          filepath.Join(cfg.RepoRoot, rel),
 		Rel:          rel,
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(language.GenerateArgs{
+		Config:       cssDirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: files,
+	})
 
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	result := tsLang.GenerateRules(args)
+
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver {
+		switch r.Kind() {
+		case "css_library":
+			return cssLang
+		case "ts_project", "jest_test", "filegroup", "bazel_lint":
+			return tsLang
+		default:
+			return nil
+		}
+	})
+
+	// Index CSS rules so TS can resolve imports against them.
+	f := &rule.File{Pkg: rel}
+	for _, generated := range cssResult.Gen {
+		idx.AddRule(cssDirCfg, generated, f)
+	}
+
+	idx.Finish()
+
 	all := make(map[string]*rule.Rule)
 	for i, generated := range result.Gen {
 		all[generated.Name()] = generated
 		if imports := result.Imports[i]; imports != nil {
 			lbl := label.New("", rel, generated.Name())
-			lang.Resolve(dirCfg, idx, nil, generated, imports, lbl)
+			tsLang.Resolve(tsDirCfg, idx, nil, generated, imports, lbl)
 		}
 	}
 
@@ -118,20 +151,34 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
-	lang.Configure(cfg, "", nil)
+	var (
+		tsLang  ts.Language
+		cssLang css.Language
+	)
+	tsLang.Configure(cfg, "", nil)
+	cssLang.Configure(cfg, "", nil)
 
-	dirCfg := cfg.Clone()
-	lang.Configure(dirCfg, rel, nil)
+	tsDirCfg := cfg.Clone()
+	tsLang.Configure(tsDirCfg, rel, nil)
+
+	cssDirCfg := cfg.Clone()
+	cssLang.Configure(cssDirCfg, rel, nil)
 
 	args := language.GenerateArgs{
-		Config:       dirCfg,
+		Config:       tsDirCfg,
 		Dir:          filepath.Join(cfg.RepoRoot, rel),
 		Rel:          rel,
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(language.GenerateArgs{
+		Config:       cssDirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: files,
+	})
+
+	result := tsLang.GenerateRules(args)
 	var (
 		projectRule    *rule.Rule
 		projectImports interface{}
@@ -152,9 +199,24 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 	imports := projectImports
 
 	lbl := label.New("", rel, r.Name())
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver {
+		switch r.Kind() {
+		case "css_library":
+			return cssLang
+		case "ts_project", "jest_test", "filegroup", "bazel_lint":
+			return tsLang
+		default:
+			return nil
+		}
+	})
 
-	lang.Resolve(dirCfg, idx, nil, r, imports, lbl)
+	f := &rule.File{Pkg: rel}
+	for _, generated := range cssResult.Gen {
+		idx.AddRule(cssDirCfg, generated, f)
+	}
+	idx.Finish()
+
+	tsLang.Resolve(tsDirCfg, idx, nil, r, imports, lbl)
 
 	srcs := r.AttrStrings("srcs")
 	deps := r.AttrStrings("deps")

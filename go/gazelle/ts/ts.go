@@ -530,6 +530,15 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		return
 	}
 
+	if len(modules) == 0 {
+		if len(deps) == 0 {
+			return
+		}
+
+		r.SetAttr("deps", sortedKeys(deps))
+		return
+	}
+
 	pkgJSON := ensurePackageJSON(c)
 	rootConfig := ensureRootTsConfig(c)
 
@@ -537,6 +546,40 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		if module == "" {
 			continue
 		}
+
+		if strings.HasSuffix(module, ".module.css") {
+			repoPath := ""
+			switch {
+			case strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/"):
+				repoPath = path.Clean(path.Join(from.Pkg, module))
+				repoPath = strings.TrimPrefix(repoPath, "/")
+			case strings.HasPrefix(module, "#"):
+				if resolved, ok := resolveModuleToRepoPath(module, rootConfig); ok {
+					repoPath = resolved
+				}
+			default:
+				repoPath = module
+			}
+
+			if repoPath != "" {
+				impSpec := resolve.ImportSpec{Lang: "css", Imp: repoPath}
+				matches := ix.FindRulesByImportWithConfig(c, impSpec, "css")
+				if len(matches) > 0 {
+					existingAssets := r.AttrStrings("assets")
+					assetPath := repoPath
+					if from.Pkg != "" && strings.HasPrefix(repoPath, from.Pkg+"/") {
+						assetPath = strings.TrimPrefix(repoPath, from.Pkg+"/")
+					}
+					r.SetAttr("assets", mergeStringLists(existingAssets, []string{assetPath}))
+					deps["//:base_defs"] = struct{}{}
+					for _, m := range matches {
+						deps[m.Label.String()] = struct{}{}
+					}
+					continue
+				}
+			}
+		}
+
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
 			continue
 		}
