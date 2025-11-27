@@ -23,8 +23,17 @@ import * as result from '#root/ts/result/result.js';
 
 
 export type useOIDCReturnType = [
-	id_token: Option<string>,
+	access_token: Option<string>,
 	promptForLogin: Option<() => Promise<void>>,
+];
+
+const ALL_SCOPES = [
+	'openid', // required by OP
+	'callbox.read',
+	'callbox.write',
+	'grievances.read',
+	'grievances.write',
+	'admin.read',
 ];
 
 async function fetchEntropy(): Promise<string> {
@@ -34,7 +43,7 @@ async function fetchEntropy(): Promise<string> {
 }
 
 
-export function useOIDC(): useOIDCReturnType {
+export function useOIDC(scopes: readonly string[] = ALL_SCOPES): useOIDCReturnType {
 	const issuer =
 		FOREIGN_ID_TOKEN_ISSUER;
 
@@ -160,9 +169,10 @@ export function useOIDC(): useOIDCReturnType {
 		id_token,
 		(id_token: string): components['schemas']['TokenExchangeRequest'] => ({
 			grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-			requested_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+			requested_token_type: 'urn:ietf:params:oauth:token-type:access_token',
 			subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
 			subject_token: id_token,
+			scope: scopes.join(' '),
 		})
 	)
 
@@ -188,7 +198,7 @@ export function useOIDC(): useOIDCReturnType {
 	);
 
 	const exchangedTokenRsp = useQuery({
-		queryKey: ['oidc-id-token', issuer],
+		queryKey: ['oidc-access-token', issuer, scopes.join(' ')],
 		queryFn: option.unwrap_or(exchangeQueryFn, skipToken),
 		staleTime: 100 * 60 * 55 // idk
 	});

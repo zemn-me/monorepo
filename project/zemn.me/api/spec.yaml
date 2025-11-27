@@ -16,6 +16,13 @@ components:
       type: openIdConnect
       # todo: own issuer!
       openIdConnectUrl: "https://api.zemn.me"
+      description: |
+        Supported API scopes:
+          - `callbox.read` — read current callbox/phone configuration
+          - `callbox.write` — update callbox/phone configuration
+          - `grievances.read` — read grievances
+          - `grievances.write` — create/update/delete grievances
+          - `admin.read` — read administrative metadata (e.g., caller UID)
   schemas:
     OIDCIssuer:
       type: string
@@ -30,6 +37,15 @@ components:
         The unique never reused identifier for a user.
     OAuthClientId:
       type: string
+    OAuthScope:
+      type: string
+      description: OAuth 2.0 scope string recognised by the API.
+      enum:
+        - callbox.read
+        - callbox.write
+        - grievances.read
+        - grievances.write
+        - admin.read
     TokenExchangeTokenType: # just the supported ones!
       type: string
       enum:
@@ -164,6 +180,14 @@ components:
             **Audience** — identifies recipients the token is intended for.
             Must include the RP’s OAuth `client_id`. Commonly a single string,
             but may be an array when multiple audiences are present.
+        scope:
+          type: string
+          description: Space-delimited list of OAuth scopes associated with this token.
+        scp:
+          type: array
+          description: List form of the scopes granted to this token.
+          items:
+            $ref: '#/components/schemas/OAuthScope'
         exp:
           type: integer
           format: int64
@@ -326,6 +350,8 @@ components:
         amr: ["pwd", "otp"]
         at_hash: "77QmUPtjPfzWtF2AnpK9RQ"
         c_hash: "LDktKdoQak3Pk0cnXxCltA"
+        scope: "callbox.read callbox.write grievances.read grievances.write admin.read"
+        scp: ["callbox.read", "callbox.write", "grievances.read", "grievances.write", "admin.read"]
 
     Address:
       type: object
@@ -813,7 +839,7 @@ paths:
       description: >
         Return the current callbox settings.
       security:
-        - OIDC: []
+        - OIDC: [callbox.write]
       requestBody:
         required: true
         content:
@@ -838,7 +864,7 @@ paths:
       description: >
         Returns the current settings for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox.read]
       responses:
         "500":
           description: >
@@ -859,7 +885,7 @@ paths:
     get:
       summary: Returns the current phone number for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox.read]
       responses:
         "200":
           description: It worked!
@@ -871,7 +897,7 @@ paths:
   /grievances:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievances.read]
       responses:
         "200":
           description: List grievances
@@ -883,7 +909,7 @@ paths:
                   $ref: '#/components/schemas/Grievance'
     post:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       requestBody:
         required: true
         content:
@@ -901,7 +927,7 @@ paths:
   /grievance/{id}:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievances.read]
       parameters:
         - name: id
           in: path
@@ -917,7 +943,7 @@ paths:
                 $ref: '#/components/schemas/Grievance'
     put:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       parameters:
         - name: id
           in: path
@@ -941,7 +967,7 @@ paths:
           description: Not found
     delete:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       parameters:
         - name: id
           in: path
@@ -998,7 +1024,7 @@ paths:
     get:
       summary: Returns the caller's OIDC subject ID.
       security:
-        - OIDC: []
+        - OIDC: [admin.read]
       responses:
         "200":
           description: The subject identifier.
