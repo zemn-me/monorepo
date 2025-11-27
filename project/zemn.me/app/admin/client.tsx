@@ -446,7 +446,7 @@ function DisplayAdminUid({
 }
 
 export default function Admin() {
-	const [idToken, promptForLogin] = useOIDC();
+	const [accessToken, promptForLogin] = useOIDC();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
@@ -469,7 +469,7 @@ export default function Admin() {
 	);
 
 	return option_unwrap_or(
-		option_and_then(idToken, Authorization => (
+		option_and_then(accessToken, Authorization => (
 			<>
 				<p>You are logged in.</p>
 				<DisplayAdminUid Authorization={Authorization} />

@@ -236,7 +236,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, promptForLogin] = useOIDC();
+	const [accessToken, promptForLogin] = useOIDC();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
@@ -258,7 +258,7 @@ export default function GrievancePortal() {
 	);
 
 	const authenticatedSection = option_and_then(
-		idToken,
+		accessToken,
 		Authorization => (
 			<>
 				<p>You are logged in.</p>
