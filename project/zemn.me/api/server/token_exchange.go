@@ -157,7 +157,12 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		requestedTokenType = *request.Body.RequestedTokenType
 	}
 
-	if requestedTokenType != UrnIetfParamsOauthTokenTypeIdToken {
+	supportedRequestedTypes := map[TokenExchangeTokenType]struct{}{
+		UrnIetfParamsOauthTokenTypeIdToken:      {},
+		UrnIetfParamsOauthTokenTypeAccessToken: {},
+	}
+
+	if _, ok := supportedRequestedTypes[requestedTokenType]; !ok {
 		e := fmt.Sprintf("Unsupported requested token type: %+q", requestedTokenType)
 		ro = PostOauth2Token400JSONResponse{
 			Error:            InvalidRequest,
@@ -232,7 +237,7 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 	ro = PostOauth2Token200JSONResponse{
 		AccessToken:     ourToken,
 		ExpiresIn:       int(expiresInSeconds),
-		IssuedTokenType: UrnIetfParamsOauthTokenTypeIdToken,
+		IssuedTokenType: requestedTokenType,
 		TokenType:       "Bearer",
 		Scope:           &scopeForResponse,
 	}
