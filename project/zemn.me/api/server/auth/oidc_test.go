@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -37,5 +38,21 @@ func TestIssuerFromSecurityScheme_StripsQueryAndFragment(t *testing.T) {
 	want := "https://issuer.example/.well-known/openid-configuration"
 	if got != want {
 		t.Fatalf("issuer mismatch: want %q, got %q", want, got)
+	}
+}
+
+func TestRequireScopes_AllPresent(t *testing.T) {
+	if err := requireScopes([]string{"callbox.read", "grievances.write"}, []string{"grievances.write"}); err != nil {
+		t.Fatalf("expected scopes to pass, got error: %v", err)
+	}
+}
+
+func TestRequireScopes_Missing(t *testing.T) {
+	err := requireScopes([]string{"callbox.read"}, []string{"grievances.write"})
+	if err == nil {
+		t.Fatalf("expected missing-scope error, got nil")
+	}
+	if !strings.Contains(err.Error(), "grievances.write") {
+		t.Fatalf("expected error to mention missing scope, got: %v", err)
 	}
 }

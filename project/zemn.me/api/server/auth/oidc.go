@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -16,6 +18,7 @@ import (
 type contextKey string
 
 const SubjectKey contextKey = "oidc_subject"
+const ScopesKey contextKey = "oidc_scopes"
 const securitySchemeOIDC = "OIDC"
 const (
 	googleIssuer        = "https://accounts.google.com"
@@ -72,9 +75,21 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 			continue
 		}
 
+		tokenScopes, err := scopesFromToken(verifiedToken)
+		if err != nil {
+			joined = errors.Join(joined, fmt.Errorf("issuer %s: parse scopes: %w", candidate.issuer, err))
+			continue
+		}
+
+		if err := requireScopes(tokenScopes, ai.Scopes); err != nil {
+			joined = errors.Join(joined, fmt.Errorf("issuer %s: %w", candidate.issuer, err))
+			continue
+		}
+
 		r := ai.RequestValidationInput.Request
-		ctx = context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
-		*ai.RequestValidationInput.Request = *r.WithContext(ctx)
+		reqCtx := context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
+		reqCtx = context.WithValue(reqCtx, ScopesKey, tokenScopes)
+		*ai.RequestValidationInput.Request = *r.WithContext(reqCtx)
 		return nil
 	}
 
@@ -157,4 +172,64 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	add(googleIssuer, googleClientID)
 
 	return candidates
+}
+
+type scopeClaims struct {
+	Scope string   `json:"scope,omitempty"`
+	Scp   []string `json:"scp,omitempty"`
+}
+
+func scopesFromToken(token *oidc.IDToken) ([]string, error) {
+	var claims scopeClaims
+	if err := token.Claims(&claims); err != nil {
+		return nil, fmt.Errorf("parse token claims: %w", err)
+	}
+
+	set := map[string]struct{}{}
+	for _, scope := range strings.Fields(claims.Scope) {
+		if scope == "" {
+			continue
+		}
+		set[scope] = struct{}{}
+	}
+
+	for _, scope := range claims.Scp {
+		if scope == "" {
+			continue
+		}
+		set[scope] = struct{}{}
+	}
+
+	out := make([]string, 0, len(set))
+	for scope := range set {
+		out = append(out, scope)
+	}
+	sort.Strings(out)
+
+	return out, nil
+}
+
+func requireScopes(tokenScopes []string, required []string) error {
+	if len(required) == 0 {
+		return nil
+	}
+
+	set := make(map[string]struct{}, len(tokenScopes))
+	for _, scope := range tokenScopes {
+		set[scope] = struct{}{}
+	}
+
+	missing := make([]string, 0, len(required))
+	for _, scope := range required {
+		if _, ok := set[scope]; !ok {
+			missing = append(missing, scope)
+		}
+	}
+
+	if len(missing) == 0 {
+		return nil
+	}
+
+	sort.Strings(missing)
+	return fmt.Errorf("token missing required scopes: %s", strings.Join(missing, " "))
 }
