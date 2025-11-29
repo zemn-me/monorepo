@@ -53,14 +53,14 @@ dependencies:
     specifier: 1.2.6
     version: 1.2.6
   '@tanstack/query-async-storage-persister':
-    specifier: 5.90.2
-    version: 5.90.2
+    specifier: 5.90.13
+    version: 5.90.13
   '@tanstack/react-query':
-    specifier: 5.79.2
-    version: 5.79.2(react@19.2.0)
+    specifier: 5.90.11
+    version: 5.90.11(react@19.2.0)
   '@tanstack/react-query-persist-client':
-    specifier: 5.90.2
-    version: 5.90.2(@tanstack/react-query@5.79.2)(react@19.2.0)
+    specifier: 5.90.13
+    version: 5.90.13(@tanstack/react-query@5.90.11)(react@19.2.0)
   '@types/bcryptjs':
     specifier: 3.0.0
     version: 3.0.0
@@ -150,7 +150,7 @@ dependencies:
     version: 0.15.0
   openapi-react-query:
     specifier: 0.5.0
-    version: 0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.0)
+    version: 0.5.0(@tanstack/react-query@5.90.11)(openapi-fetch@0.15.0)
   openapi-typescript:
     specifier: 7.10.1
     version: 7.10.1(typescript@5.5.4)
@@ -6455,44 +6455,40 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@tanstack/query-async-storage-persister@5.90.2:
-    resolution: {integrity: sha512-oyb7IHW85hsRdSZZNPu5dowQJFX3agOR/1O4M6Qc5V7s5dfnex5CqipEu0tbScNRMc2knna2ihQUiEQuTXWrEQ==}
+  /@tanstack/query-async-storage-persister@5.90.13:
+    resolution: {integrity: sha512-72/rRDlfXVJvd1mTyjvsWSU/obj+SoeitKwm1AM5YDId8aIMxGYnJscK7ZDilBFXud2p9DyV6+mRYEzcpPK0VA==}
     dependencies:
-      '@tanstack/query-core': 5.90.2
-      '@tanstack/query-persist-client-core': 5.90.2
+      '@tanstack/query-core': 5.90.11
+      '@tanstack/query-persist-client-core': 5.91.10
     dev: false
 
-  /@tanstack/query-core@5.79.2:
-    resolution: {integrity: sha512-kr+KQrBuqd6495eP9S41BoftFI1H50XA9O+6FmbnTx/Te6bjiq1mj8rt9rJjW3YZSO2aaUNUres0TWesJW1j1g==}
+  /@tanstack/query-core@5.90.11:
+    resolution: {integrity: sha512-f9z/nXhCgWDF4lHqgIE30jxLe4sYv15QodfdPDKYAk7nAEjNcndy4dHz3ezhdUaR23BpWa4I2EH4/DZ0//Uf8A==}
     dev: false
 
-  /@tanstack/query-core@5.90.2:
-    resolution: {integrity: sha512-k/TcR3YalnzibscALLwxeiLUub6jN5EDLwKDiO7q5f4ICEoptJ+n9+7vcEFy5/x/i6Q+Lb/tXrsKCggf5uQJXQ==}
-    dev: false
-
-  /@tanstack/query-persist-client-core@5.90.2:
-    resolution: {integrity: sha512-rgJRgqqziPc3KgK2mav2HNR4PoI5e7fkiIrkg85xZ5j29mHPzTp3A0QcceQXVaV9qcPp/SMDJA48A6BpGJGHZg==}
+  /@tanstack/query-persist-client-core@5.91.10:
+    resolution: {integrity: sha512-oZQk/kap5jHx2w+JcSI6CvDFXR5jmAldqJsH5IEQizVOEwaRlCyYEBZ3Df56HXNxW4spWX0cjhI/4o+mnCGtHw==}
     dependencies:
-      '@tanstack/query-core': 5.90.2
+      '@tanstack/query-core': 5.90.11
     dev: false
 
-  /@tanstack/react-query-persist-client@5.90.2(@tanstack/react-query@5.79.2)(react@19.2.0):
-    resolution: {integrity: sha512-ii5VbUlxv/zSPWbMT5Sr7VAsmvjup+xu7XeHj/umRiZ3cR7Ulc+6qwFhfehw7sUi1L6/K0RN5hXZjtzPBrUgjA==}
+  /@tanstack/react-query-persist-client@5.90.13(@tanstack/react-query@5.90.11)(react@19.2.0):
+    resolution: {integrity: sha512-04R+o/su8wuqlEvUl6dJLLI8auUCFCCJ2qGfELPSJSE4mF0HOh+ZtmsDRuLXA/jBMyV6X2RZLrZTMRWNgWM4gw==}
     peerDependencies:
-      '@tanstack/react-query': ^5.90.2
+      '@tanstack/react-query': ^5.90.11
       react: ^18 || ^19
     dependencies:
-      '@tanstack/query-persist-client-core': 5.90.2
-      '@tanstack/react-query': 5.79.2(react@19.2.0)
+      '@tanstack/query-persist-client-core': 5.91.10
+      '@tanstack/react-query': 5.90.11(react@19.2.0)
       react: 19.2.0
     dev: false
 
-  /@tanstack/react-query@5.79.2(react@19.2.0):
-    resolution: {integrity: sha512-kadeprsH6bWuhHCpqukXHRykJkxcLBxAaF0cQ05yawPmLZ/KiCpR1DyQenonF7A/70rnRUxhJD0RJejqk9wImQ==}
+  /@tanstack/react-query@5.90.11(react@19.2.0):
+    resolution: {integrity: sha512-3uyzz01D1fkTLXuxF3JfoJoHQMU2fxsfJwE+6N5hHy0dVNoZOvwKP8Z2k7k1KDeD54N20apcJnG75TBAStIrBA==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
-      '@tanstack/query-core': 5.79.2
+      '@tanstack/query-core': 5.90.11
       react: 19.2.0
     dev: false
 
@@ -15478,13 +15474,13 @@ packages:
       openapi-typescript-helpers: 0.0.15
     dev: false
 
-  /openapi-react-query@0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.0):
+  /openapi-react-query@0.5.0(@tanstack/react-query@5.90.11)(openapi-fetch@0.15.0):
     resolution: {integrity: sha512-VtyqiamsbWsdSWtXmj/fAR+m9nNxztsof6h8ZIsjRj8c8UR/x9AIwHwd60IqwgymmFwo7qfSJQ1ZzMJrtqjQVg==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
       openapi-fetch: ^0.14.0
     dependencies:
-      '@tanstack/react-query': 5.79.2(react@19.2.0)
+      '@tanstack/react-query': 5.90.11(react@19.2.0)
       openapi-fetch: 0.15.0
       openapi-typescript-helpers: 0.0.15
     dev: false
