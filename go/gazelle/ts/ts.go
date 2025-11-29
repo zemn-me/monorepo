@@ -543,6 +543,9 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		}
 
 		deps[fmt.Sprintf("//:node_modules/%s", moduleName)] = struct{}{}
+		if moduleName == "@tanstack/react-query" && pkgJSON.HasDep("@types/react") {
+			deps["//:node_modules/@types/react"] = struct{}{}
+		}
 		if !strings.HasPrefix(moduleName, "@") {
 			typePkg := "@types/" + moduleName
 			if pkgJSON.HasDep(typePkg) {

@@ -7,12 +7,12 @@ import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
 import {
 	useDeleteGrievances,
 	useGetGrievances,
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import {
 	and_then as option_and_then,
 	is_some as option_is_some,
@@ -236,7 +236,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, promptForLogin] = useOIDC();
+	const [accessToken, _idToken, promptForLogin] = useZemnMeAuth();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
@@ -258,7 +258,7 @@ export default function GrievancePortal() {
 	);
 
 	const authenticatedSection = option_and_then(
-		idToken,
+		accessToken,
 		Authorization => (
 			<>
 				<p>You are logged in.</p>

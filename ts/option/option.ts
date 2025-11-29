@@ -169,3 +169,4 @@ export type Option<T> = impl<types.Option<T>>
  * A value representing nothing.
  */
 export const None: None = /*#__NO_SIDE_EFFECTS__*/ new impl(types.None);
+

@@ -40,3 +40,15 @@ export class GuardFailedError<
 		return 'GuardFailedError';
 	}
 }
+
+/** human readable error. */
+export class HumanError<T> extends Error {
+	override cause: T
+	constructor(
+		message: string,
+		{ cause }: { cause: T }
+	) {
+		super(message, { cause });
+		this.cause = cause;
+	}
+}

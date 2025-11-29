@@ -266,7 +266,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"ts/reddit/response_example.ts":                                                                    true,
 	"ts/result.ts":                                                                                     true,
 	"ts/result/openapi-fetch/fetchResult.ts":                                                           true,
-	"ts/result/react-query/queryResult.ts":                                                             true,
 	"ts/result/result.ts":                                                                              true,
 	"ts/result/result_test.ts":                                                                         true,
 	"ts/result_types.ts":                                                                               true,

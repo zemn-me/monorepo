@@ -1,10 +1,40 @@
 import {
   enum as zenum,
+  literal,
   object,
   optional,
   output,
   string,
+  union,
 } from "zod/v4-mini";
+
+export const OIDCResponseTypeCode =
+	literal('code');
+
+export const OIDCResponseTypeIdToken =
+	literal('id_token');
+
+export const OIDCResponseTypeIdTokenToken =
+	literal('id_token token');
+
+export const OIDCResponseTypeCodeToken =
+	literal('code token');
+
+export const OIDCResponseTypeCodeIdTokenToken =
+	literal('code id_token token');
+
+// for some reason google changes the ordering
+export const OIDCResponseTypeCodeIdTokenTokenGoogle =
+	literal('code token id_token');
+
+export const OIDCResponseType = union([
+	OIDCResponseTypeCode,
+	OIDCResponseTypeIdToken,
+	OIDCResponseTypeIdTokenToken,
+	OIDCResponseTypeCodeToken,
+	OIDCResponseTypeCodeIdTokenToken,
+	OIDCResponseTypeCodeIdTokenTokenGoogle
+])
 
 /**
  * OpenID Connect Authentication Request
@@ -21,7 +51,7 @@ export const OIDCAuthenticationRequest = object({
    * Determines the flow and what tokens are returned.
    * Examples: "code", "id_token", "id_token token", "code id_token".
    */
-  response_type: string(),
+  response_type: OIDCResponseType,
 
   /** Client identifier issued during registration. */
   client_id: string(),

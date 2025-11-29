@@ -157,7 +157,12 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		requestedTokenType = *request.Body.RequestedTokenType
 	}
 
-	if requestedTokenType != UrnIetfParamsOauthTokenTypeIdToken {
+	supportedRequestedTypes := map[TokenExchangeTokenType]struct{}{
+		UrnIetfParamsOauthTokenTypeIdToken:     {},
+		UrnIetfParamsOauthTokenTypeAccessToken: {},
+	}
+
+	if _, ok := supportedRequestedTypes[requestedTokenType]; !ok {
 		e := fmt.Sprintf("Unsupported requested token type: %+q", requestedTokenType)
 		ro = PostOauth2Token400JSONResponse{
 			Error:            InvalidRequest,
@@ -166,6 +171,12 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 		return
 	}
+
+	requestedScopes := defaultTokenScopes()
+	if request.Body.Scope != nil {
+		requestedScopes = scopesFromString(*request.Body.Scope)
+	}
+	scopeString := scopesToString(requestedScopes)
 
 	issuer, err := issuerFromToken(rawToken)
 	if err != nil {
@@ -190,7 +201,7 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		clientID = *request.Body.ClientId
 	}
 
-	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
+	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s scope=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID, scopeString)
 
 	localId, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
 	if err != nil {
@@ -198,7 +209,7 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		return
 	}
 
-	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, localId)
+	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s scope=%s", issuer, localId, scopeString)
 
 	apiBase, err := ApiRoot()
 	if err != nil {
@@ -207,24 +218,45 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	expiresAt := time.Now().Add(time.Hour * 24 * 30)
 
-	ourToken, err := s.IssueIdToken(ctx, IdToken{
-		Aud: zemnMeClient,
-		Iat: time.Now().Unix(),
-		Sub: localId,
-		Iss: apiBase.String(),
-		Exp: expiresAt.Unix(),
-	})
+	issuedScopes := canonicaliseScopes(requestedScopes)
+
+	var ourToken string
+	if requestedTokenType == UrnIetfParamsOauthTokenTypeAccessToken {
+		claims := AccessToken{
+			Aud:   zemnMeClient,
+			Iat:   time.Now().Unix(),
+			Sub:   localId,
+			Iss:   apiBase.String(),
+			Exp:   expiresAt.Unix(),
+			Scope: scopeString,
+			Scp:   toOAuthScopes(issuedScopes),
+		}
+		ourToken, err = s.IssueJWT(ctx, claims)
+	} else {
+		ourToken, err = s.IssueIdToken(ctx, IdToken{
+			Aud: zemnMeClient,
+			Iat: time.Now().Unix(),
+			Sub: localId,
+			Iss: apiBase.String(),
+			Exp: expiresAt.Unix(),
+		})
+	}
 	if err != nil {
 		return
 	}
 
 	expiresInSeconds := time.Until(expiresAt) / time.Second
+	var scopeForResponse *string
+	if requestedTokenType == UrnIetfParamsOauthTokenTypeAccessToken {
+		scopeForResponse = &scopeString
+	}
 
 	ro = PostOauth2Token200JSONResponse{
 		AccessToken:     ourToken,
 		ExpiresIn:       int(expiresInSeconds),
-		IssuedTokenType: UrnIetfParamsOauthTokenTypeIdToken,
+		IssuedTokenType: requestedTokenType,
 		TokenType:       "Bearer",
+		Scope:           scopeForResponse,
 	}
 
 	return
