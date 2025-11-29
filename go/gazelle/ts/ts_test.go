@@ -246,6 +246,15 @@ func TestResolveAddsMeshDependencies(t *testing.T) {
 	assertContains(t, deps, "//:node_modules/@types/node")
 }
 
+func TestResolveAddsReactTypesForTanstackReactQuery(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/react_query"
+	files := []string{"query.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	assertContains(t, deps, "//:node_modules/@types/react")
+}
+
 func TestGenerateRulesSuppressedPackage(t *testing.T) {
 	rel := "project/cultist"
 	files := []string{"action.ts"}

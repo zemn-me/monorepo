@@ -1,5 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
+import type { Option } from '#root/ts/option/types.js';
 import {
 	and,
 	and_then,
@@ -8,12 +9,15 @@ import {
 	is_none,
 	is_some,
 	None,
+	option_result_option_result_flatten,
 	Some,
 	unwrap,
 	unwrap_or,
 	unwrap_or_else,
 	zip
 } from '#root/ts/option/types.js';
+import type { Result } from '#root/ts/result/result.js';
+import { Err, Ok, if_else as result_if_else, is_err, is_ok } from '#root/ts/result/result.js';
 
 const _: None = None;
 const some1 = Some(1 as const);
@@ -183,6 +187,46 @@ describe('Option Utilities', () => {
 		it('returns None if value is undefined', () => {
 			const noneVal = from(undefined);
 			expect(is_none(noneVal)).toBe(true);
+		});
+	});
+
+	describe('option_result_option_result_flatten', () => {
+		it('unwraps nested Some(Ok(Some(Ok(v)))) -> Some(Ok(v))', () => {
+			const input = Some(Ok(Some(Ok('value'))));
+			const out = option_result_option_result_flatten(input);
+			expect(is_some(out)).toBe(true);
+			const r = unwrap(out);
+			expect(is_ok(r)).toBe(true);
+			expect(result_if_else(r, v => v, e => e)).toBe('value');
+		});
+
+		it('propagates inner Result error (E1)', () => {
+			const input = Some(Ok(Some(Err<'e1', string>('e1'))));
+			const out = option_result_option_result_flatten(input);
+			expect(is_some(out)).toBe(true);
+			const r = unwrap(out);
+			expect(is_err(r)).toBe(true);
+			expect(result_if_else(r, v => v, e => e)).toBe('e1');
+		});
+
+		it('propagates outer Result error (E2)', () => {
+			const input = Some(Err<'e2', Option<Result<string, string>>>('e2'));
+			const out = option_result_option_result_flatten(input);
+			expect(is_some(out)).toBe(true);
+			const r = unwrap(out);
+			expect(is_err(r)).toBe(true);
+			expect(result_if_else(r, v => v, e => e)).toBe('e2');
+		});
+
+		it('collapses Some(Ok(None)) -> None', () => {
+			const input = Some(Ok(None as Option<Result<string, string>>));
+			const out = option_result_option_result_flatten(input);
+			expect(is_none(out)).toBe(true);
+		});
+
+		it('passes through None unchanged', () => {
+			const out = option_result_option_result_flatten<string, string, string>(None);
+			expect(is_none(out)).toBe(true);
 		});
 	});
 });
