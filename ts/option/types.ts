@@ -128,6 +128,20 @@ export function option_zipped<T1, T2, T3>(
 	))
 }
 
+
+export function zipped_3<T1, T2, T3, T4>(
+	o1: Option<T1>,
+	o2: Option<T2>,
+	o3: Option<T3>,
+	f: (a: T1, b: T2, c: T3) => T4
+): Option<T4> {
+	return option_zipped(option_zipped(
+		o1, o2, (a, b) => (c: T3) => f(a, b, c)
+	), o3, (f, b) => f(b))
+}
+
+export { option_zipped as zipped };
+
 export function option_result_zipped<T1, T2, T3, E1, E2>(
 	o1: Option<Result<T1, E1>>,
 	o2: Option<Result<T2, E2>>,
@@ -247,3 +261,58 @@ export function option_result_option_result_flatten<T, E1, E2>(
 		v => option_result_transpose(v)
 	), v => result_flatten(v))), v => flatten(v)))
 }
+
+export function if_or<T, O1, O2>(
+	o: Option<T>,
+	If: (v: T) => O1,
+	Else: O2,
+): O1 | O2 {
+	return unwrap_or(and_then(o, If), Else)
+}
+
+export function if_else<T, O1, O2>(
+	o: Option<T>,
+	If: (v: T) => O1,
+	Else: () => O2
+): O1 | O2 {
+	return unwrap_or_else(and_then(o, If), Else)
+}
+
+export function field<T, K extends keyof T>(
+	o: Option<T>,
+	k: K
+): Option<T[K]> {
+	return and_then(o, v => v[k])
+}
+
+export function eq<T1, T2>(
+	o1: Option<T1>,
+	o2: Option<T2>,
+	eq: (a: T1, b: T2) => a is T1 & T2
+): o1 is Option<T1 & T2> {
+	return if_else(
+		o1,
+		// Some(?)
+		s1 => if_else(
+			o2,
+			// Some(), Some()
+			s2 => eq(s1, s2),
+			// Some(?), None
+			() => false
+		),
+		// None
+		() => false
+	)
+}
+
+export function stringify<T>(
+	r: Option<T>,
+	stringify_t: (v: T) => string,
+): string {
+	return if_else(
+		r,
+		t => `Some(${stringify_t(t)})`,
+		() => `None`,
+	)
+}
+

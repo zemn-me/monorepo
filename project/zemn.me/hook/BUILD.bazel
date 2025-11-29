@@ -7,10 +7,10 @@ ts_project(
         "useAuthRedirect.ts",
         "useLocalSecret.ts",
         "useLocalStorage.tsx",
-        "useOIDC.tsx",
         "useOpenIDConfiguration.ts",
         "useWindowCallback.ts",
         "useZemnMeApi.tsx",
+        "useZemnMeAuth.tsx",
     ],
     visibility = [
         "//project/zemn.me:__subpackages__",
@@ -47,10 +47,10 @@ filegroup(
         "useAuthRedirect.ts",
         "useLocalSecret.ts",
         "useLocalStorage.tsx",
-        "useOIDC.tsx",
         "useOpenIDConfiguration.ts",
         "useWindowCallback.ts",
         "useZemnMeApi.tsx",
+        "useZemnMeAuth.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
