@@ -16,6 +16,13 @@ components:
       type: openIdConnect
       # todo: own issuer!
       openIdConnectUrl: "https://api.zemn.me"
+      description: |
+        Supported API scopes:
+          - `callbox.read` — read current callbox/phone configuration
+          - `callbox.write` — update callbox/phone configuration
+          - `grievances.read` — read grievances
+          - `grievances.write` — create/update/delete grievances
+          - `admin.read` — read administrative metadata (e.g., caller UID)
   schemas:
     OIDCIssuer:
       type: string
@@ -30,6 +37,15 @@ components:
         The unique never reused identifier for a user.
     OAuthClientId:
       type: string
+    OAuthScope:
+      type: string
+      description: OAuth 2.0 scope string recognised by the API.
+      enum:
+        - callbox.read
+        - callbox.write
+        - grievances.read
+        - grievances.write
+        - admin.read
     TokenExchangeTokenType: # just the supported ones!
       type: string
       enum:
@@ -326,6 +342,52 @@ components:
         amr: ["pwd", "otp"]
         at_hash: "77QmUPtjPfzWtF2AnpK9RQ"
         c_hash: "LDktKdoQak3Pk0cnXxCltA"
+
+    AccessToken:
+      type: object
+      description: >
+        JWT access token issued by api.zemn.me. Signed (JWS) and optionally encrypted.
+        Contains standard JWT registered claims and the granted OAuth scopes.
+      required:
+        - iss
+        - sub
+        - aud
+        - exp
+        - iat
+        - scope
+        - scp
+      properties:
+        iss:
+          $ref: '#/components/schemas/OIDCIssuer'
+        sub:
+          $ref: '#/components/schemas/OIDCSubject'
+        aud:
+          $ref: '#/components/schemas/OAuthClientId'
+        exp:
+          type: integer
+          format: int64
+        iat:
+          type: integer
+          format: int64
+        scope:
+          type: string
+          description: Space-delimited scopes granted to this access token.
+        scp:
+          type: array
+          description: List form of the granted scopes.
+          items:
+            $ref: '#/components/schemas/OAuthScope'
+        jti:
+          type: string
+          description: Optional unique token identifier.
+      example:
+        iss: "https://api.zemn.me"
+        sub: "user-123"
+        aud: "zemn.me"
+        exp: 1716447000
+        iat: 1713845000
+        scope: "callbox.read grievances.write"
+        scp: ["callbox.read", "grievances.write"]
 
     Address:
       type: object
@@ -813,7 +875,7 @@ paths:
       description: >
         Return the current callbox settings.
       security:
-        - OIDC: []
+        - OIDC: [callbox.write]
       requestBody:
         required: true
         content:
@@ -838,7 +900,7 @@ paths:
       description: >
         Returns the current settings for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox.read]
       responses:
         "500":
           description: >
@@ -859,7 +921,7 @@ paths:
     get:
       summary: Returns the current phone number for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox.read]
       responses:
         "200":
           description: It worked!
@@ -871,7 +933,7 @@ paths:
   /grievances:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievances.read]
       responses:
         "200":
           description: List grievances
@@ -883,7 +945,7 @@ paths:
                   $ref: '#/components/schemas/Grievance'
     post:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       requestBody:
         required: true
         content:
@@ -901,7 +963,7 @@ paths:
   /grievance/{id}:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievances.read]
       parameters:
         - name: id
           in: path
@@ -917,7 +979,7 @@ paths:
                 $ref: '#/components/schemas/Grievance'
     put:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       parameters:
         - name: id
           in: path
@@ -941,7 +1003,7 @@ paths:
           description: Not found
     delete:
       security:
-        - OIDC: []
+        - OIDC: [grievances.write]
       parameters:
         - name: id
           in: path
@@ -998,7 +1060,7 @@ paths:
     get:
       summary: Returns the caller's OIDC subject ID.
       security:
-        - OIDC: []
+        - OIDC: [admin.read]
       responses:
         "200":
           description: The subject identifier.

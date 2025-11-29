@@ -33,7 +33,7 @@ export function validateAuthenticationRequest(
 
 	if (!supportedResponseTypes.has(req.response_type)) {
 		return option.Some(new Error(
-			`missing response type support: ${req.response_type}`
+			`missing response type support: ${req.response_type}. server only supports ${[...supportedResponseTypes].join(", ")}`
 		));
 	}
 
