@@ -6,7 +6,7 @@
 ---
 manifest:
   modules_mapping:
-    7ae574991b77ef47acad__mypyc: mypy
+    4c842c94c09923bae9e4__mypyc: mypy
     IPython: ipython
     OpenSSL: pyopenssl
     aioquic: aioquic
@@ -78,6 +78,7 @@ manifest:
     kaitaistruct: kaitaistruct
     lark: lark
     ldap3: ldap3
+    librt.internal: librt
     markupsafe: markupsafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
@@ -89,7 +90,6 @@ manifest:
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
-    native_internal: mypy
     nbclient: nbclient
     nbconvert: nbconvert
     nbformat: nbformat
@@ -164,4 +164,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: a5e7a9b261194487459b0a307256b7af1090d941992fe7cfcbde7dd84edec8bf
+integrity: 07ed9d16930c65e67aee393cafc60d608e16eb5af0b5b42e27bfd33bde266b4f
