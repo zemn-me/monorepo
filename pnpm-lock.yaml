@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.28.0
-    version: 42.28.0(typanion@3.14.0)
+    specifier: 42.29.2
+    version: 42.29.2(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -4212,8 +4212,8 @@ packages:
       - supports-color
     dev: true
 
-  /@opentelemetry/instrumentation-redis@0.57.0(@opentelemetry/api@1.9.0):
-    resolution: {integrity: sha512-bCxTHQFXzrU3eU1LZnOZQ3s5LURxQPDlU3/upBzlWY77qOI1GZuGofazj3jtzjctMJeBEJhNwIFEgRPBX1kp/Q==}
+  /@opentelemetry/instrumentation-redis@0.57.1(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-iP564P8On9NPPi06T2MyL56sBN0RsF29DX/RC5fW0yOOFdUHcvCDmJnp11eZyymTvYj5HX8tvpoO+vDb6+Lv8A==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -16926,8 +16926,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.28.0(typanion@3.14.0):
-    resolution: {integrity: sha512-r9tlgeIPF40ZvQAHV9JkWs9zK844Myw2jPkOg9Ig1TwMNsRUagLUNO8t4h43yQk7sAzW2QhW3jE1agv6tk9SFA==}
+  /renovate@42.29.2(typanion@3.14.0):
+    resolution: {integrity: sha512-zCm3dZBcpurZcPAwhgjTz5qElrbMLHfrM43qrXSHAEMbAgomN7Qs48kak/YPmHDTUL3XxxrkR4NV72mAepPtpg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16947,7 +16947,7 @@ packages:
       '@opentelemetry/instrumentation': 0.208.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-bunyan': 0.54.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-http': 0.208.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-redis': 0.57.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-redis': 0.57.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/resource-detector-aws': 2.8.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resource-detector-azure': 0.16.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resource-detector-gcp': 0.43.0(@opentelemetry/api@1.9.0)
