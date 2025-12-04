@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.27.5
-    version: 42.27.5(typanion@3.14.0)
+    specifier: 42.28.0
+    version: 42.28.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3853,7 +3853,7 @@ packages:
     resolution: {integrity: sha512-/xGlezI6xfGO9NwuJlnwz/K14qD1kCSAGtacBHnGzeAIuJGazcp45KP5NuyARXoKb7cwulAGWVsbeSxdG/cb0Q==}
     engines: {node: ^18.17.0 || >=20.5.0}
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
     dev: true
 
   /@npmcli/git@5.0.8:
@@ -7923,7 +7923,7 @@ packages:
       hpagent: 1.2.0
       micromatch: 4.0.8
       p-limit: 2.3.0
-      semver: 7.7.2
+      semver: 7.7.3
       strip-ansi: 6.0.1
       tar: 6.2.1
       tinylogic: 2.0.0
@@ -8792,7 +8792,7 @@ packages:
   /builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
     dev: true
 
   /bunyan@1.8.15:
@@ -9860,7 +9860,7 @@ packages:
       '@one-ini/wasm': 0.2.0
       commander: 14.0.2
       minimatch: 10.0.1
-      semver: 7.7.2
+      semver: 7.7.3
     dev: true
 
   /ee-first@1.1.1:
@@ -11483,7 +11483,7 @@ packages:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.7.2
+      semver: 7.7.3
       serialize-error: 7.0.1
     dev: true
 
@@ -15007,7 +15007,7 @@ packages:
     resolution: {integrity: sha512-zsFhmbkAzwhTft6nd3VxcG0cvJsT70rL+BIGHWVq5fi6MwGrHwzqKaxXE+Hl2GmnGItnDKPPkO5/LQqjVkIdFg==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
     dev: true
     optional: true
 
@@ -15067,7 +15067,7 @@ packages:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 7.5.2
       tinyglobby: 0.2.15
       which: 5.0.0
@@ -15136,7 +15136,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.16.1
-      semver: 7.7.2
+      semver: 7.7.3
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -16926,8 +16926,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.27.5(typanion@3.14.0):
-    resolution: {integrity: sha512-VWMDSPSXk6PzI9br3q5fE0l6f0xcIlJxIP8U+GExSrI1HGopHWTe19+PZ7TMZUAL7GWzO/0zTY4LOZXIhXbigg==}
+  /renovate@42.28.0(typanion@3.14.0):
+    resolution: {integrity: sha512-r9tlgeIPF40ZvQAHV9JkWs9zK844Myw2jPkOg9Ig1TwMNsRUagLUNO8t4h43yQk7sAzW2QhW3jE1agv6tk9SFA==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
