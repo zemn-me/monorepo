@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.30.2
-    version: 42.30.2(typanion@3.14.0)
+    specifier: 42.38.1
+    version: 42.38.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3855,6 +3855,14 @@ packages:
     dependencies:
       semver: 7.7.3
     dev: true
+    optional: true
+
+  /@npmcli/fs@5.0.0:
+    resolution: {integrity: sha512-7OsC1gNORBEawOa5+j2pXN9vsicaIOH5cPXxoR6fJOmH6/EXpJB2CajXOu1fPRFun2m1lktEFX11+P89hqO/og==}
+    engines: {node: ^20.17.0 || >=22.9.0}
+    dependencies:
+      semver: 7.7.3
+    dev: true
 
   /@npmcli/git@5.0.8:
     resolution: {integrity: sha512-liASfw5cqhjNW9UFd+ruwwdEf/lbOAQjLL2XY2dFW/bkJheXDYZgOyul/4gVvEV4BWkTXjYGmDqMw9uegdbJNQ==}
@@ -5493,18 +5501,18 @@ packages:
       zod: 3.25.76
     dev: true
 
-  /@renovatebot/osv-offline-db@1.8.0:
-    resolution: {integrity: sha512-Ozy38+m/3BtO6hLZ1eHGkOsrGCaIl46VrZ0khFr73wP2pErJLeXpiP4CWF64hniA6nS6pDeoy/2XCyxVHOBxUQ==}
-    engines: {node: '>=18.12.0'}
+  /@renovatebot/osv-offline-db@2.0.0:
+    resolution: {integrity: sha512-qMcbkz/DRIhVEXnPzBdY3Dn7oraKLZ0tBLXwDkiuxsBjgDjKAXTjYHpUeZU+y8fd3I3GLLgLYqHPnbJ276ZBtA==}
+    engines: {node: '>=22.12.0'}
     dependencies:
       '@seald-io/nedb': 4.1.2
     dev: true
 
-  /@renovatebot/osv-offline@1.8.0:
-    resolution: {integrity: sha512-923TCQh5xOHAFObjLQDArgV8+hHY+WhXXtl4h1LA3x6ePEhW7W5YbIvXQo+/osCVmDZnvareBauRnxHVTbAomg==}
-    engines: {node: '>=18.12.0'}
+  /@renovatebot/osv-offline@2.0.0:
+    resolution: {integrity: sha512-Fq0uz1RBNWx3iJ+r1zYcT+29kvzc9L+fjGOK0wERCuMpGSJE48uJ8bEeH8XjWJtq190j2TuuBb11xm7spVCBKw==}
+    engines: {node: '>=22.12.0'}
     dependencies:
-      '@renovatebot/osv-offline-db': 1.8.0
+      '@renovatebot/osv-offline-db': 2.0.0
       adm-zip: 0.5.16
       debug: 4.4.3(supports-color@10.2.2)
       fs-extra: 11.3.2
@@ -8777,13 +8785,13 @@ packages:
     dev: true
     optional: true
 
-  /cacache@20.0.2:
-    resolution: {integrity: sha512-rVWvqtWcgSzB22wImrVto+7PmE+lUqv5dYzRHD0QJsfpSwTkW+GIqA4ykSt/CCjQlQle8USn8CO8vcWNrIqktg==}
+  /cacache@20.0.3:
+    resolution: {integrity: sha512-3pUp4e8hv07k1QlijZu6Kn7c9+ZpWWk4j3F8N3xPuCExULobqJydKYOTj1FTq58srkJsXvO7LbGAH4C0ZU3WGw==}
     engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
-      '@npmcli/fs': 4.0.0
+      '@npmcli/fs': 5.0.0
       fs-minipass: 3.0.3
-      glob: 11.1.0
+      glob: 13.0.0
       lru-cache: 11.2.4
       minipass: 7.1.2
       minipass-collect: 2.0.1
@@ -8791,7 +8799,7 @@ packages:
       minipass-pipeline: 1.2.4
       p-map: 7.0.4
       ssri: 13.0.0
-      unique-filename: 4.0.0
+      unique-filename: 5.0.0
     dev: true
 
   /cacheable-lookup@5.0.4:
@@ -16845,8 +16853,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.30.2(typanion@3.14.0):
-    resolution: {integrity: sha512-7Dq4yl6wfyN63T+dkrKG8SNb5wKVU6e7J5fY2yXsCNLwzYTv/COFnWRFvAYMQ6dJD47SIQpCihIXVoEZ/iiFvg==}
+  /renovate@42.38.1(typanion@3.14.0):
+    resolution: {integrity: sha512-COJiJ7LoKkN/tM0ZO09Sqlxp1v0yUNouI5NIdookWKBV+UgjstVE9uS5HM8QRpV1dRnUibnf5A16jP2y56ZSBA==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16878,7 +16886,7 @@ packages:
       '@pnpm/parse-overrides': 1001.0.3
       '@qnighy/marshal': 0.1.3
       '@renovatebot/detect-tools': 1.2.4
-      '@renovatebot/osv-offline': 1.8.0
+      '@renovatebot/osv-offline': 2.0.0
       '@renovatebot/pep440': 4.2.1
       '@renovatebot/pgp': 1.2.1
       '@renovatebot/ruby-semver': 4.1.2
@@ -16892,7 +16900,7 @@ packages:
       aws4: 1.13.2
       azure-devops-node-api: 15.1.1
       bunyan: 1.8.15
-      cacache: 20.0.2
+      cacache: 20.0.3
       chalk: 5.6.2
       changelog-filename-regex: 2.0.1
       clean-git-ref: 2.0.1
@@ -18878,6 +18886,14 @@ packages:
     dependencies:
       unique-slug: 5.0.0
     dev: true
+    optional: true
+
+  /unique-filename@5.0.0:
+    resolution: {integrity: sha512-2RaJTAvAb4owyjllTfXzFClJ7WsGxlykkPvCr9pA//LD9goVq+m4PPAeBgNodGZ7nSrntT/auWpJ6Y5IFXcfjg==}
+    engines: {node: ^20.17.0 || >=22.9.0}
+    dependencies:
+      unique-slug: 6.0.0
+    dev: true
 
   /unique-slug@4.0.0:
     resolution: {integrity: sha512-WrcA6AyEfqDX5bWige/4NQfPZMtASNVxdmWR76WESYQVAACSgWcR6e9i0mofqqBxYFtL4oAxPIptY73/0YE1DQ==}
@@ -18888,6 +18904,14 @@ packages:
   /unique-slug@5.0.0:
     resolution: {integrity: sha512-9OdaqO5kwqR+1kVgHAhsp5vPNU0hnxRa26rBFNfNgM7M6pNtgzeBn3s/xbyCQL3dcjzOatcef6UUHpB/6MaETg==}
     engines: {node: ^18.17.0 || >=20.5.0}
+    dependencies:
+      imurmurhash: 0.1.4
+    dev: true
+    optional: true
+
+  /unique-slug@6.0.0:
+    resolution: {integrity: sha512-4Lup7Ezn8W3d52/xBhZBVdx323ckxa7DEvd9kPQHppTkLoJXw6ltrBCyj5pnrxj0qKDxYMJ56CoxNuFCscdTiw==}
+    engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
       imurmurhash: 0.1.4
     dev: true
