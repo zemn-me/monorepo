@@ -15,6 +15,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 	emptyStrings := &[]string{}
 	emptyClaims := &[]OIDCConfigurationClaimTypesSupported{}
 	emptyAuth := &[]OIDCConfigurationTokenEndpointAuthMethodsSupported{}
+	scopesSupported := pointerCopy(defaultTokenScopes())
 
 	apiRoot, err := ApiRoot()
 	if err != nil {
@@ -50,7 +51,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		RequestObjectEncryptionEncValuesSupported:  emptyStrings,
 		RequestObjectSigningAlgValuesSupported:     emptyStrings,
 		ResponseModesSupported:                     emptyStrings,
-		ScopesSupported:                            &[]string{},
+		ScopesSupported:                            scopesSupported,
 		TokenEndpointAuthMethodsSupported:          emptyAuth,
 		TokenEndpointAuthSigningAlgValuesSupported: emptyStrings,
 		UiLocalesSupported:                         emptyStrings,

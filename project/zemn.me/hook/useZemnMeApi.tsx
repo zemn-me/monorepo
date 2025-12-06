@@ -3,8 +3,11 @@ import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 import { useMemo } from 'react';
 
-import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
+import type { components, paths } from "#root/project/zemn.me/api/api_client.gen.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
+import { EOAuthError } from "#root/ts/oidc/error.js";
+import * as future from "#root/ts/result/react-query/future.js";
+import { queryResult } from "#root/ts/result/react-query/queryResult.js";
 
 export function useFetchClient(Authorization?: string) {
 	return useMemo(
@@ -69,4 +72,46 @@ export function useDeleteGrievances(Authorization: string) {
 	return useZemnMeApi(Authorization).useMutation("delete", "/grievance/{id}", {
 		onSuccess: () => void invalidateGrievances(),
 	});
+}
+
+/**
+ * Hits the exchange token endpoint and automatically
+ * sets up expiry.
+ */
+export function useExchangeToken<E>(
+	params: future.Future<
+		components['schemas']['TokenExchangeRequest']
+	, E>,
+	queryKey: string[],
+) {
+	const fetchClient = useFetchClient();
+	const r = queryResult(useQuery({
+		queryFn: future.or_skip_query(
+			future.and_then(
+				params,
+				p =>
+					async () => {
+						const resp = await fetchClient.POST('/oauth2/token', {
+							body: p,
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+							}
+						})
+
+
+						return resp;
+					}
+			)
+		),
+		queryKey: queryKey,
+		staleTime: s => (s.state.data?.data?.expires_in ?? 0) * 1000
+	}));
+
+	return future.and_then_flatten(
+		r,
+		v =>
+			v.error?
+				future.error(new EOAuthError(v.error))
+				:future.success(v.data)
+	)
 }

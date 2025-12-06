@@ -7,20 +7,19 @@ import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
 import {
 	useDeleteGrievances,
 	useGetGrievances,
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import {
 	and_then as option_and_then,
-	is_some as option_is_some,
 	Some,
-	unwrap as option_unwrap,
-	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
+import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
+import * as future from '#root/ts/result/react-query/future.js';
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
 import {
 	Err,
@@ -236,42 +235,50 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, promptForLogin] = useOIDC();
-	const loginReady = option_is_some(promptForLogin);
+	const [accessToken, _idToken, promptForLogin] = useZemnMeAuth();
 
-	const handleLogin = () => {
-		if (!loginReady) return;
-		const beginLogin = option_unwrap(promptForLogin);
-		void beginLogin();
-	};
-
-	const loginSection = (
-		<div>
+	const loginButton = future.unpack(
+		promptForLogin,
+		cb => (
 			<button
 				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
-				onClick={handleLogin}
+				onClick={() => {
+					void cb();
+				}}
 			>
 				Login with Google
 			</button>
-		</div>
+		),
+		err => <ErrorDisplay error={err} />,
+		() => (
+			<button aria-label="Authenticate with OIDC" disabled>
+				Login with Google
+			</button>
+		)
 	);
 
-	const authenticatedSection = option_and_then(
-		idToken,
+	const content = future.unpack(
+		accessToken,
 		Authorization => (
 			<>
 				<p>You are logged in.</p>
 				<GrievanceEditor Authorization={Authorization} />
 			</>
-		)
+		),
+		err => (
+			<>
+				<ErrorDisplay error={err} />
+				{loginButton}
+			</>
+		),
+		() => loginButton
 	);
 
 	return (
 		<div className={style.wrapper}>
 			<h1 className={style.header}>💖 Grievance Portal 💖</h1>
 			<p className={style.hearts}>we can fix it!</p>
-			{option_unwrap_or(authenticatedSection, loginSection)}
+			{content}
 		</div>
 	);
 }

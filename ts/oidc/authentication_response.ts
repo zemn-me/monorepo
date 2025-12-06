@@ -1,4 +1,5 @@
 import {
+  extend,
   number,
   object,
   optional,
@@ -6,6 +7,8 @@ import {
   string,
   union,
 } from "zod/v4-mini";
+
+import { OAuthError } from "#root/ts/oidc/error.js";
 
 /**
  * OpenID Connect Authentication Success Response
@@ -32,7 +35,7 @@ export const OIDCAuthenticationSuccessResponse = object({
   token_type: optional(string()),
 
   /** Lifetime in seconds of the `access_token`. */
-  expires_in: optional(number()),
+  expires_in: optional(string()),
 
   /** Echo of request `state`, used for CSRF protection. */
   state: optional(string()),
@@ -46,16 +49,7 @@ export const OIDCAuthenticationSuccessResponse = object({
  *
  * Spec: OIDC Core §3.1.2.6
  */
-export const OIDCAuthenticationErrorResponse = object({
-  /** Machine-readable error code (e.g. "invalid_request", "login_required"). */
-  error: string(),
-
-  /** Human-readable text description of the error. */
-  error_description: optional(string()),
-
-  /** URI with additional information about the error. */
-  error_uri: optional(string()),
-
+export const OIDCAuthenticationErrorResponse = extend(OAuthError, {
   /** Echo of request `state`, if it was supplied. */
   state: optional(string()),
 });
@@ -74,3 +68,4 @@ export type OIDCAuthenticationErrorResponse = output<
 export type OIDCAuthenticationResponse = output<
   typeof OIDCAuthenticationResponse
 >;
+

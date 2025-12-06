@@ -51,6 +51,10 @@ export const reactConfig = {
 		'no-restricted-imports': [
 			'error',
 			{ name: 'next/link', message: '<NextLink> is dangerous. Please use the <Link> component instead.' },
+			{
+				name: '#root/ts/result/react-query/debug.js',
+				message: 'please do not commit debugging code.'
+			}
 		],
 		'react/prop-types': 'off',
 		'react/display-name': 'off',
