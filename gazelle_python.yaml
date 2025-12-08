@@ -78,7 +78,9 @@ manifest:
     kaitaistruct: kaitaistruct
     lark: lark
     ldap3: ldap3
+    librt.base64: librt
     librt.internal: librt
+    librt.strings: librt
     markupsafe: markupsafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
@@ -163,4 +165,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: a2c2d8d71aac40fca8a74ddae18aaf49a911763fa1b5f2852c05b0dbd01fdc8a
+integrity: cda60b2b133e61a50efaf255853cf56b9aa6818bae6a8f49ffe0559b68dadb4a
