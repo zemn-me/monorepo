@@ -232,8 +232,8 @@ dependencies:
 
 devDependencies:
   '@actions/core':
-    specifier: 1.11.1
-    version: 1.11.1
+    specifier: 2.0.0
+    version: 2.0.0
   '@actions/github':
     specifier: 6.0.1
     version: 6.0.1
@@ -481,11 +481,11 @@ packages:
     resolution: {integrity: sha512-G90x0VW+9nW4dFajtjCoT+NM0scAfH9Mb08IcjgFHYbfiL/lU04dTF9JuVOi3/OH+DJCQdcIseSXkdCB9Ky6JA==}
     dev: true
 
-  /@actions/core@1.11.1:
-    resolution: {integrity: sha512-hXJCSrkwfA46Vd9Z3q4cpEpHB1rL5NG04+/rbqW9d3+CSvtB1tYe8UTpAlixa1vj0m/ULglfEK2UKxMGxCxv5A==}
+  /@actions/core@2.0.0:
+    resolution: {integrity: sha512-iGW52/zqhPUFnYl0s1ioXfJu86LGs7b+GYuO38JMPpsh14FQrNj3n2JBpC+vZ2CFS4lERQyn5koLDopY+6V/PQ==}
     dependencies:
       '@actions/exec': 1.1.1
-      '@actions/http-client': 2.2.3
+      '@actions/http-client': 3.0.0
     dev: true
 
   /@actions/exec@1.1.1:
@@ -508,6 +508,13 @@ packages:
 
   /@actions/http-client@2.2.3:
     resolution: {integrity: sha512-mx8hyJi/hjFvbPokCg4uRd4ZX78t+YyRPtnKWwIl+RzNaVuFpQHfmlGVfsKEJN8LwTCvL+DfVgAM04XaHkm6bA==}
+    dependencies:
+      tunnel: 0.0.6
+      undici: 5.29.0
+    dev: true
+
+  /@actions/http-client@3.0.0:
+    resolution: {integrity: sha512-1s3tXAfVMSz9a4ZEBkXXRQD4QhY3+GAsWSbaYpeknPOKEeyRiU3lH+bHiLMZdo2x/fIeQ/hscL1wCkDLVM2DZQ==}
     dependencies:
       tunnel: 0.0.6
       undici: 5.29.0
