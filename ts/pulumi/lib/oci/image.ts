@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { createRequire } from "node:module";
 
 import { local } from '@pulumi/command';
 import { all, ComponentResource, ComponentResourceOptions, Input, Output, output } from "@pulumi/pulumi";
@@ -93,6 +95,27 @@ export class OCIImage extends ComponentResource {
 	 * URI uniquely identifying the image as landed in the repo.
 	 */
 	uri: Output<string>
+	private static require = createRequire(import.meta.url);
+	private static resolveRunfilesEnv(runfile: string): Record<string, string> {
+		try {
+			// @bazel/runfiles is present when executed from Bazel-built code.
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const { create } = OCIImage.require("@bazel/runfiles") as typeof import("@bazel/runfiles");
+			const r = create();
+			const env: Record<string, string> = {};
+
+			const manifest = r.rlocation(`${runfile}.runfiles_manifest`);
+			if (manifest && existsSync(manifest)) env.RUNFILES_MANIFEST_FILE = manifest;
+
+			const dir = r.rlocation(`${runfile}.runfiles`);
+			if (dir && existsSync(dir)) env.RUNFILES_DIR = dir;
+
+			return env;
+		} catch {
+			return {};
+		}
+	}
+
 	constructor(
 		name: string,
 		args: OciImageArgs,
@@ -108,9 +131,32 @@ export class OCIImage extends ComponentResource {
 		});
 
 		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
+			environment: all([output(authFile), args.push]).apply(([authPath, pushPath]) => {
+				const env: { [v: string]: string } = {};
+				if (authPath) env.DOCKER_CONFIG = authPath;
+
+				// Resolve runfiles information for the push shim when Pulumi is running outside Bazel.
+				if (pushPath) {
+					Object.assign(env, OCIImage.resolveRunfilesEnv(pushPath));
+					// If runfiles lib failed, fall back to best-effort relative paths.
+					if (!env.RUNFILES_DIR) {
+						const dir = path.resolve(`${pushPath}.runfiles`);
+						if (existsSync(dir)) env.RUNFILES_DIR = dir;
+					}
+					if (!env.RUNFILES_MANIFEST_FILE) {
+						const manifest = path.resolve(`${pushPath}.runfiles_manifest`);
+						if (existsSync(manifest)) env.RUNFILES_MANIFEST_FILE = manifest;
+					}
+				}
+
+				// Preserve Bazel runfiles context if present in the current process.
+				for (const key of ["RUNFILES_DIR", "RUNFILES_MANIFEST_FILE", "JAVA_RUNFILES", "PATH"]) {
+					const value = process.env[key];
+					if (value) env[key] = value;
+				}
+
+				return env;
+			}),
 			interpreter: [
 				args.push,
 				"--repository",
