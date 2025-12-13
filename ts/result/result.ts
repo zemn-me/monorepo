@@ -146,4 +146,29 @@ export function and_then_flatten<T, E, O, OE>(
 	return is_ok(v) ? Ok<V, E>(vv) : (v as Result<V, E>)
 }
 
-/** Return true if Ok or false if Err */
+export function if_else<T, E, O1, O2>(
+	r: Result<T, E>,
+	If: (v: T) => O1,
+	Else: (v: E) => O2,
+
+) {
+	return unwrap_or_else(
+		and_then(
+			r,
+			v => If(v)
+		),
+		Else
+	)
+}
+
+export function stringify<T, E>(
+	r: Result<T, E>,
+	stringify_t: (v: T) => string,
+	stringify_e: (v: E) => string,
+): string {
+	return if_else(
+		r,
+		t => `Ok(${stringify_t(t)})`,
+		e => `Err(${stringify_e(e)})`,
+	)
+}

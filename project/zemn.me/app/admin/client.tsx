@@ -8,18 +8,18 @@ import { z } from 'zod';
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
 import {
 	useGetAdminUid,
 	useZemnMeApi,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import {
 	and_then as option_and_then,
-	is_some as option_is_some,
 	Some,
-	unwrap as option_unwrap,
 	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
+import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
+import * as future from '#root/ts/result/react-query/future.js'
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
 import {
 	and_then as result_and_then,
@@ -446,37 +446,29 @@ function DisplayAdminUid({
 }
 
 export default function Admin() {
-	const [idToken, promptForLogin] = useOIDC();
-	const loginReady = option_is_some(promptForLogin);
+	const [accessToken, _idToken, promptForLogin] = useZemnMeAuth();
 
-	const handleLogin = () => {
-		if (!loginReady) return;
-		const beginLogin = option_unwrap(promptForLogin);
-		void beginLogin();
-	};
+	const loginButton = future.unpack(
+				promptForLogin,
+				cb => <button onClick={() => { void cb() }}>login</button>,
+				err => <ErrorDisplay error={err}/>,
+				() => 'please wait...'
+			)
 
-	const login = (
-		<div>
-			<button
-				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
-				onClick={handleLogin}
-			>
-				<p>You are not authenticated to perform this operation.</p>
-				<p>Please click here to authenticate.</p>
-			</button>
-		</div>
-	);
-
-	return option_unwrap_or(
-		option_and_then(idToken, Authorization => (
-			<>
+	return future.unpack(
+		accessToken,
+		// success
+		tok => <>
 				<p>You are logged in.</p>
-				<DisplayAdminUid Authorization={Authorization} />
-				<DisplayPhoneNumber Authorization={Authorization} />
-				<SettingsEditor Authorization={Authorization} />
-			</>
-		)),
-		login
-	);
+				<DisplayAdminUid Authorization={tok} />
+				<DisplayPhoneNumber Authorization={tok} />
+				<SettingsEditor Authorization={tok} />
+		</>,
+		// failure
+		err => <>
+			<ErrorDisplay error={err}/>
+			{loginButton}
+		</>,
+		() => <>{loginButton}</>
+	)
 }
