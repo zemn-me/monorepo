@@ -26,6 +26,7 @@ ts_project(
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/command",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
