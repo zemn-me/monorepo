@@ -108,9 +108,18 @@ export class OCIImage extends ComponentResource {
 		});
 
 		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
+			environment: output(authFile).apply(f => {
+				const env: { [v: string]: string } = {};
+				if (f) env.DOCKER_CONFIG = f;
+
+				// Preserve Bazel runfiles context so the push shim can locate runfiles.bash.
+				for (const key of ["RUNFILES_DIR", "RUNFILES_MANIFEST_FILE", "JAVA_RUNFILES", "PATH"]) {
+					const value = process.env[key];
+					if (value) env[key] = value;
+				}
+
+				return env;
+			}),
 			interpreter: [
 				args.push,
 				"--repository",
