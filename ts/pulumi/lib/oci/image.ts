@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -108,9 +109,29 @@ export class OCIImage extends ComponentResource {
 		});
 
 		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
+			environment: all([output(authFile), args.push]).apply(([authPath, pushPath]) => {
+				const env: { [v: string]: string } = {};
+				if (authPath) env.DOCKER_CONFIG = authPath;
+
+				// Preserve Bazel runfiles context if present in the current process.
+				for (const key of ["RUNFILES_DIR", "RUNFILES_MANIFEST_FILE", "JAVA_RUNFILES", "PATH"]) {
+					const value = process.env[key];
+					if (value) env[key] = value;
+				}
+
+				// When Pulumi runs outside Bazel, the push shim still expects runfiles.bash.
+				// Point RUNFILES_DIR / RUNFILES_MANIFEST_FILE at the shim's runfiles if they exist.
+				if (!env.RUNFILES_DIR && pushPath) {
+					const runfilesDir = `${pushPath}.runfiles`;
+					if (existsSync(runfilesDir)) env.RUNFILES_DIR = runfilesDir;
+				}
+				if (!env.RUNFILES_MANIFEST_FILE && pushPath) {
+					const manifest = `${pushPath}.runfiles_manifest`;
+					if (existsSync(manifest)) env.RUNFILES_MANIFEST_FILE = manifest;
+				}
+
+				return env;
+			}),
 			interpreter: [
 				args.push,
 				"--repository",
