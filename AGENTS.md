@@ -3,6 +3,7 @@
 This file is for robots... if you learn anything that would be important to remember next time, please commit it to this file!
 
 - Optional env vars like `NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID` / `_NAME` might be unset; add guards so TS sees guaranteed strings before wiring them into clients.
+- GitHub Actions now uses OIDC to assume AWS roles; workflows expect `AWS_PROD_ROLE_ARN` and `AWS_STAGING_ROLE_ARN` secrets instead of access keys.
 
 # tools
 
