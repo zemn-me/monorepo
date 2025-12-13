@@ -382,7 +382,7 @@ http_archive(
     ],
 )
 
-bazel_dep(name = "protobuf", version = "29.5", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "32.1", repo_name = "com_google_protobuf")
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
@@ -480,7 +480,7 @@ bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
 bazel_dep(name = "rules_itest", version = "0.0.41")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
-bazel_dep(name = "rules_java", version = "8.15.2")
+bazel_dep(name = "rules_java", version = "9.3.0")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(

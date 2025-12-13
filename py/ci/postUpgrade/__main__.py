@@ -32,6 +32,7 @@ def bazel(args: list[str] = [],  **kwargs):
 def bazel_run(args: list[str] = [], env: dict[str, str] = {}, **kwargs):
 	return bazel(
 		["run", "--tool_tag=postupgrade"] + args,
+		env=env,
 		**kwargs,
 	)
 
@@ -77,7 +78,6 @@ def modify_bazel_lockfiles():
 modify_non_bazel_lockfiles()
 modify_bazel_lockfiles()
 run(["rm", "-rf", "dist/"])
-
 
 
 
