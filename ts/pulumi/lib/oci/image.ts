@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -108,9 +109,27 @@ export class OCIImage extends ComponentResource {
 		});
 
 		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
+			environment: all([output(authFile), args.push]).apply(([authPath, pushPath]) => {
+				const env: { [v: string]: string } = {};
+				if (authPath) env.DOCKER_CONFIG = authPath;
+
+				// Resolve runfiles paths for the push shim when Pulumi runs outside Bazel.
+				if (pushPath) {
+					const absPush = path.resolve(pushPath);
+					const dir = `${absPush}.runfiles`;
+					const manifest = `${absPush}.runfiles_manifest`;
+					if (existsSync(dir)) env.RUNFILES_DIR = dir;
+					if (existsSync(manifest)) env.RUNFILES_MANIFEST_FILE = manifest;
+				}
+
+				// Preserve Bazel runfiles context if present in the current process.
+				for (const key of ["RUNFILES_DIR", "RUNFILES_MANIFEST_FILE", "JAVA_RUNFILES", "PATH"]) {
+					const value = process.env[key];
+					if (value) env[key] = value;
+				}
+
+				return env;
+			}),
 			interpreter: [
 				args.push,
 				"--repository",
