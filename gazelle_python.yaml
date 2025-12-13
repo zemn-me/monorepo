@@ -6,7 +6,7 @@
 ---
 manifest:
   modules_mapping:
-    7ae574991b77ef47acad__mypyc: mypy
+    4c842c94c09923bae9e4__mypyc: mypy
     IPython: ipython
     OpenSSL: pyopenssl
     aioquic: aioquic
@@ -23,7 +23,7 @@ manifest:
     bcrypt: bcrypt
     bleach: bleach
     blinker: blinker
-    brotli: Brotli
+    brotli: brotli
     bs4: beautifulsoup4
     build: build
     certifi: certifi
@@ -78,6 +78,9 @@ manifest:
     kaitaistruct: kaitaistruct
     lark: lark
     ldap3: ldap3
+    librt.base64: librt
+    librt.internal: librt
+    librt.strings: librt
     markupsafe: markupsafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
@@ -89,7 +92,6 @@ manifest:
     mypy: mypy
     mypy_extensions: mypy_extensions
     mypyc: mypy
-    native_internal: mypy
     nbclient: nbclient
     nbconvert: nbconvert
     nbformat: nbformat
@@ -134,7 +136,6 @@ manifest:
     service_identity: service_identity
     setuptools: setuptools
     six: six
-    sniffio: sniffio
     sortedcontainers: sortedcontainers
     soupsieve: soupsieve
     stack_data: stack_data
@@ -164,4 +165,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: df963cfb1c48b6e659723b4dbb14464b03ef384fa2dc0fcf7d8b4d56971a9cf1
+integrity: 9b188a044e96dfd8bf8440db150a27a69151d1b5e3e19f47e46ea23c8ad0ae3e

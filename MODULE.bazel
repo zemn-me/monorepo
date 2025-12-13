@@ -57,7 +57,7 @@ use_repo(
     "distroless_debian12_linux_s390x",
 )
 
-bazel_dep(name = "aspect_bazel_lib", version = "2.21.2")
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.8.2", dev_dependency = True)
@@ -71,7 +71,7 @@ python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 # 	datasource=python-version
 # 	versioning=python
 # 	depName=python
-PYTHON_VERSION = "3.13"
+PYTHON_VERSION = "3.14"
 
 python.toolchain(
     is_default = True,
@@ -88,7 +88,7 @@ use_repo(pip, "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.5.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "aspect_rules_js", version = "2.8.2")
+bazel_dep(name = "aspect_rules_js", version = "2.8.3")
 
 ####### Node.js version #########
 # By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
@@ -405,7 +405,7 @@ exports_files(glob(["**/*"]))""",
     ],
 )
 
-bazel_dep(name = "rules_rust", version = "0.67.0")
+bazel_dep(name = "rules_rust", version = "0.68.1")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
