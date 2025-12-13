@@ -21,6 +21,84 @@ export interface Args {
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
+interface AwsGitHubActionsOidcArgs {
+	tags: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
+}
+
+class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
+	provider: aws.iam.OpenIdConnectProvider;
+	role: aws.iam.Role;
+
+	constructor(name: string, args: AwsGitHubActionsOidcArgs, opts?: Pulumi.ComponentResourceOptions) {
+		super('ts:pulumi:AwsGitHubActionsOidc', name, args, opts);
+
+		const githubOidcUrl = 'https://token.actions.githubusercontent.com';
+
+		this.provider = new aws.iam.OpenIdConnectProvider(
+			`${name}_provider`,
+			{
+				clientIdLists: ['sts.amazonaws.com'],
+				thumbprintLists: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
+				url: githubOidcUrl,
+			},
+			{ parent: this }
+		);
+
+		const githubAssumeRolePolicy = (
+			subjects: Pulumi.Input<Pulumi.Input<string>[]>
+		) =>
+			Pulumi.all([this.provider.arn, subjects]).apply(
+				([arn, subjectPatterns]) =>
+					JSON.stringify({
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Principal: { Federated: arn },
+								Action: 'sts:AssumeRoleWithWebIdentity',
+								Condition: {
+									StringEquals: {
+										'token.actions.githubusercontent.com:aud':
+											'sts.amazonaws.com',
+									},
+									StringLike: {
+										'token.actions.githubusercontent.com:sub':
+											subjectPatterns,
+									},
+								},
+							},
+						],
+					})
+			);
+
+		this.role = new aws.iam.Role(
+			`${name}_role`,
+			{
+				assumeRolePolicy: githubAssumeRolePolicy([
+					'repo:zemn-me/monorepo:ref:refs/heads/main',
+					'repo:zemn-me/monorepo:ref:refs/heads/gh-readonly-queue/*',
+				]),
+				tags: args.tags,
+			},
+			{ parent: this }
+		);
+
+		new aws.iam.RolePolicyAttachment(
+			`${name}_admin`,
+			{
+				role: this.role.name,
+				policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
+			},
+			{ parent: this }
+		);
+
+		this.registerOutputs({
+			providerArn: this.provider.arn,
+			roleArn: this.role.arn,
+		});
+	}
+}
+
 /**
  * The Pulumi infrastructure.
  */
@@ -39,6 +117,14 @@ export class Component extends Pulumi.ComponentResource {
 		const tags = mergeTags(tagsa, tagTrue(
 			args.staging? 'staging': 'production'
 		))
+
+		const githubActionsOidc = args.staging
+			? undefined
+			: new AwsGitHubActionsOidc(
+				`${name}_github_actions`,
+				{ tags },
+				{ parent: this }
+			);
 
 		new CostAllocationTag(
 			`${name}_cost_tag`,
@@ -207,6 +293,8 @@ export class Component extends Pulumi.ComponentResource {
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
 			eggsForDogsDotComZoneId,
+			githubActionsRoleArn: githubActionsOidc?.role.arn,
+			githubOidcProviderArn: githubActionsOidc?.provider.arn,
 		});
 	}
 }
