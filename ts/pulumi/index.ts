@@ -40,6 +40,88 @@ export class Component extends Pulumi.ComponentResource {
 			args.staging? 'staging': 'production'
 		))
 
+		const accountId = Pulumi.output(aws.getCallerIdentity({})).accountId;
+
+		// Shared GitHub Actions OIDC provider and roles so CI can assume AWS
+		// credentials without long‑lived keys.
+		const githubOidcProvider = new aws.iam.OpenIdConnectProvider(
+			`${name}_github_oidc_provider`,
+			{
+				clientIdLists: ['sts.amazonaws.com'],
+				thumbprintLists: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
+				url: 'https://token.actions.githubusercontent.com',
+			},
+			{ parent: this }
+		);
+
+		const githubAssumeRolePolicy = (
+			subjects: Pulumi.Input<Pulumi.Input<string>[]>
+		) =>
+			Pulumi.all([githubOidcProvider.arn, subjects]).apply(
+				([providerArn, subjectPatterns]) =>
+					JSON.stringify({
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Principal: { Federated: providerArn },
+								Action: 'sts:AssumeRoleWithWebIdentity',
+								Condition: {
+									StringEquals: {
+										'token.actions.githubusercontent.com:aud':
+											'sts.amazonaws.com',
+									},
+									StringLike: {
+										'token.actions.githubusercontent.com:sub':
+											subjectPatterns,
+									},
+								},
+							},
+						],
+					})
+			);
+
+		const stagingSubjects = [
+			'repo:zemn-me/monorepo:ref:refs/heads/main',
+			'repo:zemn-me/monorepo:ref:refs/heads/gh-readonly-queue/*',
+		];
+
+		const productionSubjects = ['repo:zemn-me/monorepo:ref:refs/heads/main'];
+
+		const githubActionsStagingRole = new aws.iam.Role(
+			`${name}_github_actions_staging_role`,
+			{
+				assumeRolePolicy: githubAssumeRolePolicy(stagingSubjects),
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const githubActionsProdRole = new aws.iam.Role(
+			`${name}_github_actions_prod_role`,
+			{
+				assumeRolePolicy: githubAssumeRolePolicy(productionSubjects),
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const githubActionRoles: Array<{ label: 'staging' | 'prod'; role: aws.iam.Role }> = [
+			{ label: 'staging', role: githubActionsStagingRole },
+			{ label: 'prod', role: githubActionsProdRole },
+		];
+
+		githubActionRoles.forEach(({ label, role }) => {
+			new aws.iam.RolePolicyAttachment(
+				`${name}_github_actions_${label}_admin`,
+				{
+					role: role.name,
+					policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
+				},
+				{ parent: this }
+			);
+		});
+
 		new CostAllocationTag(
 			`${name}_cost_tag`,
 			{
@@ -207,6 +289,9 @@ export class Component extends Pulumi.ComponentResource {
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
 			eggsForDogsDotComZoneId,
+			githubActionsProdRoleArn: githubActionsProdRole.arn,
+			githubActionsStagingRoleArn: githubActionsStagingRole.arn,
+			awsAccountId: accountId,
 		});
 	}
 }
