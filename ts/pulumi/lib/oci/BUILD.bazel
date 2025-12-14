@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 exports_files(
     [
@@ -21,6 +21,7 @@ ts_project(
     name = "oci",
     srcs = [
         "image.ts",
+        "image_test.ts",
     ],
     visibility = [
         "//:__subpackages__",
@@ -29,5 +30,16 @@ ts_project(
         "//:node_modules/@pulumi/command",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+    ],
+)
+
+jest_test(
+    name = "oci_image_tests",
+    deps = [
+        ":oci",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
     ],
 )

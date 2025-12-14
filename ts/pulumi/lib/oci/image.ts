@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -93,6 +94,33 @@ export class OCIImage extends ComponentResource {
 	 * URI uniquely identifying the image as landed in the repo.
 	 */
 	uri: Output<string>
+
+	private resolvePushPath(pushPath: string): { path: string, runfilesDir?: string, runfilesManifest?: string } {
+		// Candidates where the Bazel-generated shim might live.
+		const candidates: string[] = [];
+
+		if (path.isAbsolute(pushPath)) {
+			candidates.push(pushPath);
+		} else {
+			candidates.push(path.resolve(pushPath));
+			const runfilesDir = process.env.RUNFILES_DIR;
+			if (runfilesDir) {
+				// Direct path inside the runfiles tree.
+				candidates.push(path.join(runfilesDir, pushPath));
+				// Most of our runfiles are nested under the workspace name `_main`.
+				candidates.push(path.join(runfilesDir, "_main", pushPath));
+			}
+		}
+
+		const resolved = candidates.find(candidate => existsSync(candidate)) ?? pushPath;
+
+		const runfilesDir = [`${resolved}.runfiles`, `${resolved}.exe.runfiles`]
+			.find(dir => existsSync(dir));
+		const runfilesManifest = [`${resolved}.runfiles_manifest`, `${resolved}.exe.runfiles_manifest`]
+			.find(manifest => existsSync(manifest));
+
+		return { path: resolved, runfilesDir, runfilesManifest };
+	}
 	constructor(
 		name: string,
 		args: OciImageArgs,
@@ -108,14 +136,36 @@ export class OCIImage extends ComponentResource {
 		});
 
 		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
-			interpreter: [
-				args.push,
-				"--repository",
-				args.repository
-			],
+			environment: all([output(authFile), args.push]).apply(([authPath, pushPath]) => {
+				const env: { [v: string]: string } = {};
+				if (authPath) env.DOCKER_CONFIG = authPath;
+
+				if (pushPath) {
+					const resolved = this.resolvePushPath(pushPath);
+					if (resolved.runfilesDir) env.RUNFILES_DIR = resolved.runfilesDir;
+					if (resolved.runfilesManifest) env.RUNFILES_MANIFEST_FILE = resolved.runfilesManifest;
+					// When resolver found a concrete path, make sure PATH includes its dir so any sibling tools resolve.
+					const pushDir = path.dirname(resolved.path);
+					env.PATH = [pushDir, process.env.PATH ?? ""].filter(Boolean).join(path.delimiter);
+				}
+
+				// Preserve Bazel runfiles context if present in the current process.
+				for (const key of ["RUNFILES_DIR", "RUNFILES_MANIFEST_FILE", "JAVA_RUNFILES", "PATH"]) {
+					if (env[key]) continue;
+					const value = process.env[key];
+					if (value) env[key] = value;
+				}
+
+				return env;
+			}),
+			interpreter: all([args.push]).apply(([pushPath]) => {
+				const resolved = pushPath ? this.resolvePushPath(pushPath) : { path: pushPath };
+				return [
+					resolved.path ?? pushPath,
+					"--repository",
+					args.repository
+				];
+			}),
 			triggers: [ args.digest ]
 		}, { parent: this });
 
