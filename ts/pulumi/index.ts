@@ -7,6 +7,7 @@ import * as random from "@pulumi/random";
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
+import { GitHubActionsOidc as GcpGitHubActionsOidc } from '#root/ts/pulumi/lib/gcp/github_actions_oidc.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
@@ -118,11 +119,28 @@ export class Component extends Pulumi.ComponentResource {
 			args.staging? 'staging': 'production'
 		))
 
+		const gcpProjectId = 'extreme-cycling-441523-a9';
+		const gcpProjectNumber = '845702659200';
+		const githubRepository = 'zemn-me/monorepo';
+
 		const githubActionsOidc = args.staging
 			? undefined
 			: new AwsGitHubActionsOidc(
 				`${name}_github_actions`,
 				{ tags },
+				{ parent: this }
+			);
+
+		const gcpGithubActionsOidc = args.staging
+			? undefined
+			: new GcpGitHubActionsOidc(
+				`${name}_gcp_github_actions`,
+				{
+					projectId: gcpProjectId,
+					projectNumber: gcpProjectNumber,
+					repository: githubRepository,
+					serviceAccountId: 'monorepo-root',
+				},
 				{ parent: this }
 			);
 
@@ -229,7 +247,7 @@ export class Component extends Pulumi.ComponentResource {
 				callboxPhoneNumber: phoneNumberInfo.phoneNumber,
 				tags,
 				protectDatabases: !args.staging,
-				gcpProjectId: 'extreme-cycling-441523-a9',
+				gcpProjectId,
 				twilioSharedSecret: twilioSharedSecret.result,
 			},
 			{ parent: this }
@@ -295,6 +313,8 @@ export class Component extends Pulumi.ComponentResource {
 			eggsForDogsDotComZoneId,
 			githubActionsRoleArn: githubActionsOidc?.role.arn,
 			githubOidcProviderArn: githubActionsOidc?.provider.arn,
+			gcpGithubOidcProviderName: gcpGithubActionsOidc?.provider.name,
+			gcpGithubServiceAccountEmail: gcpGithubActionsOidc?.serviceAccount.email,
 		});
 	}
 }
