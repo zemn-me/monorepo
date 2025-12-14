@@ -232,8 +232,8 @@ dependencies:
 
 devDependencies:
   '@actions/core':
-    specifier: 2.0.0
-    version: 2.0.0
+    specifier: 2.0.1
+    version: 2.0.1
   '@actions/github':
     specifier: 6.0.1
     version: 6.0.1
@@ -481,17 +481,17 @@ packages:
     resolution: {integrity: sha512-G90x0VW+9nW4dFajtjCoT+NM0scAfH9Mb08IcjgFHYbfiL/lU04dTF9JuVOi3/OH+DJCQdcIseSXkdCB9Ky6JA==}
     dev: true
 
-  /@actions/core@2.0.0:
-    resolution: {integrity: sha512-iGW52/zqhPUFnYl0s1ioXfJu86LGs7b+GYuO38JMPpsh14FQrNj3n2JBpC+vZ2CFS4lERQyn5koLDopY+6V/PQ==}
+  /@actions/core@2.0.1:
+    resolution: {integrity: sha512-oBfqT3GwkvLlo1fjvhQLQxuwZCGTarTE5OuZ2Wg10hvhBj7LRIlF611WT4aZS6fDhO5ZKlY7lCAZTlpmyaHaeg==}
     dependencies:
-      '@actions/exec': 1.1.1
+      '@actions/exec': 2.0.0
       '@actions/http-client': 3.0.0
     dev: true
 
-  /@actions/exec@1.1.1:
-    resolution: {integrity: sha512-+sCcHHbVdk93a0XT19ECtO/gIXoxvdsgQLzb2fE2/5sIZmWQuluYyjPQtrtTHdU1YzTZ7bAPN4sITq2xi1679w==}
+  /@actions/exec@2.0.0:
+    resolution: {integrity: sha512-k8ngrX2voJ/RIN6r9xB82NVqKpnMRtxDoiO+g3olkIUpQNqjArXrCQceduQZCQj3P3xm32pChRLqRrtXTlqhIw==}
     dependencies:
-      '@actions/io': 1.1.3
+      '@actions/io': 2.0.0
     dev: true
 
   /@actions/github@6.0.1:
@@ -520,8 +520,8 @@ packages:
       undici: 5.29.0
     dev: true
 
-  /@actions/io@1.1.3:
-    resolution: {integrity: sha512-wi9JjgKLYS7U/z8PPbco+PvTb/nRWjeoFlJ1Qer83k/3C5PHQi28hiVdeE2kHXmIL99mQFawx8qt/JPjZilJ8Q==}
+  /@actions/io@2.0.0:
+    resolution: {integrity: sha512-Jv33IN09XLO+0HS79aaODsvIRyduiF7NY/F6LYeK5oeUmrsz7aFdRphQjFoESF4jS7lMauDOttKALcpapVDIAg==}
     dev: true
 
   /@apidevtools/json-schema-ref-parser@11.9.3:
