@@ -48,6 +48,12 @@ jobs:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Configure AWS credentials via OIDC (staging)
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
+          role-session-name: github-actions-${{ github.run_id }}
+          aws-region: us-east-1
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
         # we test if the script exists so we don't fail as a result of it
@@ -63,8 +69,6 @@ jobs:
             --overwrite && \
             echo "::endgroup::"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
@@ -82,6 +86,12 @@ jobs:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Re-configure AWS credentials via OIDC (staging)
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
+          role-session-name: github-actions-${{ github.run_id }}
+          aws-region: us-east-1
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
         run: |
@@ -90,8 +100,6 @@ jobs:
          --skip-bazel-tests \
          --dirty
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}

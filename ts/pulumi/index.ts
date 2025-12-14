@@ -80,7 +80,7 @@ class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
 				]),
 				tags: args.tags,
 			},
-			{ parent: this }
+			{ parent: this, protect: true }
 		);
 
 		new aws.iam.RolePolicyAttachment(
