@@ -110,6 +110,7 @@ export class OCIImage extends ComponentResource {
 		const upload = new local.Command(`${name}_push`, {
 			environment: output(authFile).apply(f => ({
 				DOCKER_CONFIG: f,
+				...process.env,
 			}) as { [v: string]: string }),
 			interpreter: [
 				args.push,
