@@ -1,0 +1,46 @@
+load("//js:rules.bzl", "copy_to_bin", "js_library")
+
+filegroup(
+    name = "next_compiled",
+    srcs = ["next-compiled/index.d.ts"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "uuid",
+    srcs = [
+        "uuid/index.d.ts",
+        "uuid/package.json",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "next_compiled_lib",
+    srcs = ["next-compiled/index.d.ts"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "uuid_lib",
+    srcs = [
+        "uuid/index.d.ts",
+        "uuid/package.json",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+copy_to_bin(
+    name = "next_compiled_to_bin",
+    srcs = ["next-compiled/index.d.ts"],
+    visibility = ["//visibility:public"],
+)
+
+copy_to_bin(
+    name = "uuid_to_bin",
+    srcs = [
+        "uuid/index.d.ts",
+        "uuid/package.json",
+    ],
+    visibility = ["//visibility:public"],
+)

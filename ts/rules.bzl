@@ -79,7 +79,13 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     srcs = srcs + ["//:package_json"]
 
     # swc injects this
-    deps = deps + ["//:node_modules/regenerator-runtime"]
+    deps = deps + [
+        "//:node_modules/regenerator-runtime",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//types:next_compiled_lib",
+    ]
+    deps = depset(deps).to_list()
 
     _ts_project(
         name = name,

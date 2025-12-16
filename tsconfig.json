@@ -24,10 +24,46 @@
 			"ESNext"
 		],
 		"baseUrl": ".",
+		"typeRoots": [
+			"./types",
+			"../../types",
+			"./node_modules/@types",
+			"../../node_modules/@types",
+			"../../dist/bin/types"
+		],
+		"types": [
+			"node",
+			"jest"
+		],
 		"paths": {
 			"#root/*": [
 				"*",
 				"dist/bin/*"
+			],
+			"next/dist/compiled/webpack/webpack": [
+				"./types/next-compiled/index.d.ts",
+				"../../types/next-compiled/index.d.ts",
+				"../../dist/bin/types/next-compiled/index.d.ts"
+			],
+			"VAR_MODULE_GLOBAL_ERROR": [
+				"./types/next-compiled/index.d.ts",
+				"../../types/next-compiled/index.d.ts",
+				"../../dist/bin/types/next-compiled/index.d.ts"
+			],
+			"react-server-dom-webpack/server.edge": [
+				"./types/next-compiled/index.d.ts",
+				"../../types/next-compiled/index.d.ts",
+				"../../dist/bin/types/next-compiled/index.d.ts"
+			],
+			"next/dist/compiled/superstruct": [
+				"./types/next-compiled/index.d.ts",
+				"../../types/next-compiled/index.d.ts",
+				"../../dist/bin/types/next-compiled/index.d.ts"
+			],
+			"uuid": [
+				"./types/uuid",
+				"../../types/uuid",
+				"../../dist/bin/types/uuid"
 			]
 		}
 	},
