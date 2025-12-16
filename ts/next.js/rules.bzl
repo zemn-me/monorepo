@@ -46,6 +46,8 @@ def _next_srcset(
         "//:node_modules/next",
         "//:node_modules/sharp",
         "//:package_json",
+        "//types/next-compiled",
+        "//:node_modules/@types/jest",  # might not need this
     ]
 
 def next_itest_service(
