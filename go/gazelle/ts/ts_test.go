@@ -162,6 +162,16 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 	return srcs, deps
 }
 
+func TestResolveAddsNextShim(t *testing.T) {
+    rel := "go/gazelle/ts/testdata/next_dep"
+    files := []string{"page.tsx"}
+
+    _, deps := generateAndResolveRule(t, rel, files)
+
+    assertContains(t, deps, "//:node_modules/next")
+    assertContains(t, deps, "//ts/next.js/types/next-compiled")
+}
+
 func assertContains(t *testing.T, haystack []string, needle string) {
 	t.Helper()
 
