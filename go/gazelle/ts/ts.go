@@ -45,6 +45,7 @@ var (
 	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
 	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
 	defaultDeps           = []string{"//:node_modules/@types/node"}
+	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
 )
 
@@ -558,12 +559,17 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		deps[mainDep] = struct{}{}
 	}
 
-	labels := make([]string, 0, len(deps))
-	for dep := range deps {
-		labels = append(labels, dep)
-	}
-	sort.Strings(labels)
-	r.SetAttr("deps", labels)
+    // If a target depends on Next itself, it also needs the shimmed typings for Next's bundled deps.
+    if _, hasNext := deps["//:node_modules/next"]; hasNext {
+        deps[nextShimDep] = struct{}{}
+    }
+
+    labels := make([]string, 0, len(deps))
+    for dep := range deps {
+        labels = append(labels, dep)
+    }
+    sort.Strings(labels)
+    r.SetAttr("deps", labels)
 }
 
 func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResult {

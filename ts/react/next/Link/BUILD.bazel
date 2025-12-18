@@ -21,6 +21,7 @@ ts_project(
         "//:node_modules/classnames",
         "//:node_modules/next",
         "//ts/iter",
+        "//ts/next.js/types/next-compiled",
     ],
 )
 
