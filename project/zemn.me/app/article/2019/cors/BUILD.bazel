@@ -12,6 +12,7 @@ ts_project(
         "//:node_modules/next",
         "//mdx/article/2019/cors:cors_js",
         "//project/zemn.me/components/Article",
+        "//ts/next.js/types/next-compiled",
         "//ts/react/lang",
         "//ts/time",
     ],
