@@ -465,7 +465,6 @@ func (Language) Kinds() map[string]rule.KindInfo {
 
 func (Language) Loads() []rule.LoadInfo {
 	return []rule.LoadInfo{
-		{Name: "//bzl:rules.bzl", Symbols: []string{"bazel_lint"}},
 		{Name: "//ts:rules.bzl", Symbols: []string{"jest_test", "ts_project"}},
 	}
 }
@@ -688,12 +687,6 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		needsJsdom: needsJsdom,
 	}
 	testCfg.buildRules(args, &gen, &imports)
-
-	lint := rule.NewRule("bazel_lint", "bazel_lint")
-	lint.SetAttr("srcs", []string{"BUILD.bazel"})
-	lint.SetAttr("visibility", []string{"//:__subpackages__"})
-	gen = append(gen, lint)
-	imports = append(imports, nil)
 
 	return language.GenerateResult{
 		Gen:     gen,
