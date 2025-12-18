@@ -5,17 +5,9 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "next.js",
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
-        "//ts/trusted_types",
-    ],
+    srcs = ["types_shim.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
 )
 
 jest_test(
@@ -35,4 +27,11 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["types_shim.ts"],
+    visibility = ["//:__subpackages__"],
 )
