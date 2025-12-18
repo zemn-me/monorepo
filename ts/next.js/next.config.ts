@@ -11,8 +11,6 @@ export const output = 'export';
 
 export const productionBrowserSourceMaps = true;
 
-export const future = { webpack5: true };
-
 type StopGapConfigT = {
 	module: { rules: { test: RegExp; use: string[]; enforce: string }[] };
 };
