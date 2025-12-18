@@ -1,0 +1,22 @@
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("//bzl:rules.bzl", "bazel_lint")
+
+js_library(
+    name = "next-compiled",
+    srcs = ["index.d.ts"],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+exports_files(["index.d.ts"])
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.d.ts"],
+    visibility = ["//:__subpackages__"],
+)
