@@ -19,6 +19,7 @@ ts_project(
         "//:node_modules/react",
         "//ts",
         "//ts/next.js",
+        "//ts/next.js/types/next-compiled",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
     ],

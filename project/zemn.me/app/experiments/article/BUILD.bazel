@@ -18,6 +18,7 @@ ts_project(
         ":testarticle_js",
         "//:node_modules/next",
         "//project/zemn.me/components/Article",
+        "//ts/next.js/types/next-compiled",
     ],
 )
 

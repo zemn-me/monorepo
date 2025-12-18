@@ -28,6 +28,7 @@ def _next_next_config(name):
             "next.config.ts",
         ],
         deps = [
+            "//ts/next.js/types/next-compiled",
             "//:node_modules/source-map-loader",
         ],
     )
@@ -46,6 +47,8 @@ def _next_srcset(
         "//:node_modules/next",
         "//:node_modules/sharp",
         "//:package_json",
+        "//ts/next.js/types/next-compiled",
+        "//:node_modules/@types/jest",  # might not need this
     ]
 
 def next_itest_service(
