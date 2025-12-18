@@ -18,6 +18,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//ts/next.js",
+        "//ts/next.js/types/next-compiled",
     ],
 )
 

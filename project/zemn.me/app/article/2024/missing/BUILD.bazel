@@ -12,6 +12,7 @@ ts_project(
         "//:node_modules/next",
         "//mdx:mdx_js",
         "//project/zemn.me/components/Article",
+        "//ts/next.js/types/next-compiled",
         "//ts/react/lang",
         "//ts/time",
     ],
