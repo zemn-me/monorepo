@@ -234,6 +234,9 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 
 	if success {
 		s.log.Printf("Allowed access via party mode.")
+		if notifyErr := s.notifyPartyModeEntry(ctx, rq); notifyErr != nil {
+			s.log.Printf("Party mode notification failed: %v", notifyErr)
+		}
 		doc, response := twiml.CreateDocument()
 
 		response.CreateElement("Play").SetText(nook_phone_yes)
@@ -243,6 +246,29 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 	}
 
 	return
+}
+
+func (s *Server) notifyPartyModeEntry(ctx context.Context, rq PostPhoneInitRequestObject) error {
+	if s.sendText == nil {
+		return nil
+	}
+	to := os.Getenv("PERSONAL_PHONE_NUMBER")
+	if to == "" {
+		return nil
+	}
+	fromNumber := os.Getenv("CALLBOX_PHONE_NUMBER")
+	if fromNumber == "" {
+		return fmt.Errorf("CALLBOX_PHONE_NUMBER not set")
+	}
+	var caller string
+	if rq.Body != nil {
+		caller = strings.TrimSpace(rq.Body.From)
+	}
+	body := "Callbox party mode entry."
+	if caller != "" {
+		body = fmt.Sprintf("Callbox party mode entry from %s.", caller)
+	}
+	return s.sendText(ctx, to, fromNumber, body)
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
