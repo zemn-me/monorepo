@@ -20,6 +20,7 @@ func newTestServer() *Server {
 		settingsTableName:   "settings",
 		grievancesTableName: "grievances",
 		ddb:                 &inMemoryDDB{},
+		sendText:            func(_ context.Context, _, _, _ string) error { return nil },
 	}
 }
 
@@ -221,6 +222,44 @@ func TestHandleEntryViaAuthorizerRetriesOnNoAnswer(t *testing.T) {
 	}
 	if dial.SelectAttrValue("method", "") != "" {
 		t.Errorf("expected no method attribute on final attempt")
+	}
+}
+
+func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
+	s := newTestServer()
+	party := true
+	if err := s.postNewSettings(context.Background(), CallboxSettings{
+		PartyMode: &party,
+		FallbackPhone: "+15550001111",
+	}); err != nil {
+		t.Fatalf("failed to seed settings: %v", err)
+	}
+
+	t.Setenv("CALLBOX_PHONE_NUMBER", "+15559998888")
+
+	var gotTo, gotFrom, gotBody string
+	s.sendText = func(_ context.Context, to, from, body string) error {
+		gotTo = to
+		gotFrom = from
+		gotBody = body
+		return nil
+	}
+
+	rs, err := s.handleEntryViaPartyMode(context.Background(), PostPhoneInitRequestObject{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if rs == nil {
+		t.Fatalf("expected twiml response")
+	}
+	if gotTo != "+15550001111" {
+		t.Fatalf("unexpected to number: %q", gotTo)
+	}
+	if gotFrom != "+15559998888" {
+		t.Fatalf("unexpected from number: %q", gotFrom)
+	}
+	if gotBody != "Callbox party mode entry." {
+		t.Fatalf("unexpected body: %q", gotBody)
 	}
 }
 
