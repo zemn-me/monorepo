@@ -352,7 +352,8 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 						<p>
 							Whether the callbox is in party mode. In party mode,
 							the callbox will not ask for a code and will instead
-							immediately open the door.
+							immediately open the door. The fallback phone number
+							will receive a text when party mode is used.
 						</p>
 					</label>
 					<input
