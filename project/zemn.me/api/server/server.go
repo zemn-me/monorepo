@@ -54,6 +54,7 @@ type Server struct {
 	log                *log.Logger
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
+	sendText           func(ctx context.Context, to, from, body string) error
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -127,6 +128,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
+	}
+	s.sendText = func(ctx context.Context, to, from, body string) error {
+		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
 	}
 
 	s.signingKey, err = provisionSigningKey(ctx)
