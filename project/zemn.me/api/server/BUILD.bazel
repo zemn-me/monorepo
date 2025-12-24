@@ -49,6 +49,7 @@ go_library(
         "phone.go",
         "security_txt.go",
         "server.go",
+        "sms.go",
         "token_exchange.go",
         "uuid.go",
         "webfinger.go",
@@ -82,6 +83,7 @@ go_library(
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
         "@com_github_oapi_codegen_runtime//types",
         "@com_github_twilio_twilio_go//:twilio-go",
+        "@com_github_twilio_twilio_go//rest/api/v2010:go_default_library",
         "@com_github_twilio_twilio_go//twiml",
     ],
 )
