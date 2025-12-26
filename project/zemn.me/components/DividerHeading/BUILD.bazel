@@ -1,0 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "DividerHeading",
+    srcs = ["index.tsx"],
+    assets = ["index.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:base_defs",  # keep
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
