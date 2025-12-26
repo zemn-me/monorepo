@@ -8,6 +8,7 @@ import {
 	Ok,
 	Result,
 } from '#root/ts/result/result.js';
+import { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
 
 
 export function oidcConfigURLForIssuer(issuer: URL | string) {
@@ -108,18 +109,8 @@ const issuerSchema = z.string().url().refine(
 	"Issuer must be https:// or http://localhost"
 );
 
-export const idTokenSchema = z.object({
-	iss: issuerSchema,
-	sub: z.string().max(255),
-	aud: z.union([z.string(), z.array(z.string()).nonempty()]),
-	exp: z.number().int().positive(),
-	iat: z.number().int().positive(),
-	auth_time: z.number().int().positive().optional(),
-	nonce: z.string().optional(),
-	acr: z.string().optional(),
-	amr: z.array(z.string()).optional(),
-	azp: z.string().optional(),
-});
+export const idTokenSchema = OidcIdTokenClaimsSchema;
+
 
 export type ID_Token = z.TypeOf<typeof idTokenSchema>;
 

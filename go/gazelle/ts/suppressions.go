@@ -115,7 +115,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"project/zemn.me/components/Article/toc_context.ts":                                                true,
 	"project/zemn.me/components/Article/types/article_types.tsx":                                       true,
 	"project/zemn.me/components/DividerHeading/index.tsx":                                              true,
-	"project/zemn.me/components/Glade/glade.tsx":                                                       true,
 	"project/zemn.me/components/HeroVideo/hero_video.tsx":                                              true,
 	"project/zemn.me/components/Link/index.tsx":                                                        true,
 	"project/zemn.me/components/PendingPip/PendingPip.tsx":                                             true,
