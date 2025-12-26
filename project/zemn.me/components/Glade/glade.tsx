@@ -11,6 +11,7 @@ import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
 import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import { InlineLogin } from '#root/project/zemn.me/components/InlineLogin/inline_login.js';
 
 /*
 function ZemnmezLogoInline() {
@@ -69,7 +70,8 @@ export default function Glade(props: GladeProps) {
 						lang={bio.Bio.who.fullName.language}>
 					© {bio.Bio.who.fullName.text} <br /> {repoFirstCommitYear} — {
 						(new Date()).getFullYear()
-					}
+					} <br/>
+					<InlineLogin/>
 					</small>
 
 			</section>
