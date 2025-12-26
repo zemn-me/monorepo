@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "InlineLogin",
+    srcs = ["inline_login.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//project/zemn.me/hook",
+        "//ts/either",
+        "//ts/oidc",
+        "//ts/option",
+        "//ts/result",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["inline_login.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
