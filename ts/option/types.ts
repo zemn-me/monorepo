@@ -247,3 +247,6 @@ export function option_result_option_result_flatten<T, E1, E2>(
 		v => option_result_transpose(v)
 	), v => result_flatten(v))), v => flatten(v)))
 }
+
+
+)
