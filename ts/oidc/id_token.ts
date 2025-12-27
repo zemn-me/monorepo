@@ -15,8 +15,6 @@ const Issuer = z
 	.refine(u => {
 		try {
 			const url = new URL(u);
-			// eslint-disable-next-line no-console
-			console.error(url);
 			return (
 				(
 					url.protocol === "https:" ||
