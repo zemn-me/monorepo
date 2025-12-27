@@ -52,8 +52,8 @@ export function InlineLogin() {
 		loadedToken => either(
 			loadedToken,
 			_ => loginButton(true),
-			f => f.name
-				?<>Logged in as <i>{f.name}</i>.</>
+			f => (f.name ?? f.sub)
+				?<>Logged in as <i>{f.name ?? f.sub}</i>.</>
 				: <>Logged in.</>
 		),
 	)
