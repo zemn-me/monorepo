@@ -172,6 +172,35 @@ func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time
 	return fmt.Errorf("login window did not close")
 }
 
+func login(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	if alreadyLoggedIn(driver) {
+		return
+	}
+
+	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+		if alreadyLoggedIn(driver) {
+			return
+		}
+		t.Fatalf("oidc login readiness: %v", err)
+	}
+
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		if alreadyLoggedIn(driver) {
+			return
+		}
+		t.Fatalf("oidc login: %v", err)
+	}
+
+	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+		if alreadyLoggedIn(driver) {
+			return
+		}
+		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
+		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
+	}
+}
+
 func waitForNewWindow(driver selenium.WebDriver, existing []string, timeout time.Duration) (string, error) {
 	existingSet := make(map[string]struct{}, len(existing))
 	for _, h := range existing {
@@ -224,4 +253,11 @@ func waitForText(driver selenium.WebDriver, substr string, timeout time.Duration
 		text, _ := res.(string)
 		return strings.Contains(text, substr), nil
 	}, timeout)
+}
+
+func alreadyLoggedIn(driver selenium.WebDriver) bool {
+	if _, err := driver.FindElement(selenium.ByXPATH, "//*[contains(text(),'You are logged in.')]"); err == nil {
+		return true
+	}
+	return false
 }

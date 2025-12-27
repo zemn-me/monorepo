@@ -33,22 +33,12 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if hostVal, err := driver.ExecuteScript("return window.location.hostname;", nil); err == nil {
 		t.Logf("admin hostname: %v", hostVal)
 	}
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
-		t.Fatalf("oidc login readiness: %v", err)
-	}
-
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
-		t.Fatalf("oidc login: %v", err)
-	}
+	login(t, driver)
 
 	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
 	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
 	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	uidValueSelector := "output[aria-label='Admin UID value']"
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
-		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
-		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
-	}
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, uidValueSelector, 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for admin uid output: %v (body snippet: %v)", err, body)
