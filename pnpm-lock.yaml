@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.66.4
-    version: 42.66.4(typanion@3.14.0)
+    specifier: 42.66.5
+    version: 42.66.5(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5559,7 +5559,7 @@ packages:
   /@renovatebot/detect-tools@1.2.5:
     resolution: {integrity: sha512-es6Q+81BgRT0PiqmbqztSgmqWRg8lrLXmLRXC5HM34k2Xtt0AIJE46PjfoUugc5KwQvpIJv1TDCaKr1sm6fIJw==}
     dependencies:
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       toml-eslint-parser: 0.10.1
       upath: 2.0.1
       zod: 3.25.76
@@ -5579,7 +5579,7 @@ packages:
       '@renovatebot/osv-offline-db': 2.0.0
       adm-zip: 0.5.16
       debug: 4.4.3(supports-color@10.2.2)
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       got: 11.8.6
       luxon: 3.7.2
     transitivePeerDependencies:
@@ -11360,6 +11360,15 @@ packages:
       jsonfile: 6.2.0
       universalify: 2.0.1
 
+  /fs-extra@11.3.3:
+    resolution: {integrity: sha512-VWSRii4t0AFm6ixFFmLLx1t7wS1gh+ckoa84aOeapGum0h+EZd1EhEumSB+ZdDLnEPuucsVB9oB7cxJHap6Afg==}
+    engines: {node: '>=14.14'}
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.2.0
+      universalify: 2.0.1
+    dev: true
+
   /fs-minipass@2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
@@ -17129,8 +17138,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.66.4(typanion@3.14.0):
-    resolution: {integrity: sha512-X9C8LbMtgBfLBN3HgErVGn1RgS5w2x1Qlqqar5MXMjXUy+fH2NmrTKn/P/voSW5u5yLVDUoLNlozXyryTuHqeg==}
+  /renovate@42.66.5(typanion@3.14.0):
+    resolution: {integrity: sha512-cewRCQCMutaWziK6NSeBp97uPq7i2LJHO5E1Q3FR94AmgeSNilfeCpL7aAty/kTHTa35+5Ub08XcgkGSqtobDg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17196,7 +17205,7 @@ packages:
       extract-zip: 2.0.1
       find-packages: 10.0.4
       find-up: 7.0.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       git-url-parse: 16.1.0
       github-url-from-git: 1.5.0
       glob: 11.1.0
