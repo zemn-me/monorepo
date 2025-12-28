@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.66.6
-    version: 42.66.6(typanion@3.14.0)
+    specifier: 42.66.7
+    version: 42.66.7(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -17139,8 +17139,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.66.6(typanion@3.14.0):
-    resolution: {integrity: sha512-annTcdmXUTzM+zM8WWeDw2XKYxU7Alu0YmJbltMj0fET5HrBt3GwxJogtJUt4CrJoaAMcWj/ibtK4Rcm9KbC2Q==}
+  /renovate@42.66.7(typanion@3.14.0):
+    resolution: {integrity: sha512-Gknrl7HattT/d/T3BKk6pm7HD2PMpWjuy/g/++f3oca6n7v4kzbVOB2afIG/XWslbaR6cdGsMt33XUf7Vdgp6A==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17259,7 +17259,7 @@ packages:
       tslib: 2.8.1
       upath: 2.0.1
       url-join: 5.0.0
-      validate-npm-package-name: 7.0.0
+      validate-npm-package-name: 7.0.1
       xmldoc: 2.0.3
       yaml: 2.8.2
       zod: 3.25.76
@@ -19454,8 +19454,8 @@ packages:
     engines: {node: ^18.17.0 || >=20.5.0}
     dev: false
 
-  /validate-npm-package-name@7.0.0:
-    resolution: {integrity: sha512-bwVk/OK+Qu108aJcMAEiU4yavHUI7aN20TgZNBj9MR2iU1zPUl1Z1Otr7771ExfYTPTvfN8ZJ1pbr5Iklgt4xg==}
+  /validate-npm-package-name@7.0.1:
+    resolution: {integrity: sha512-BM0Upcemlce8/9+HE+/VpWqn3u3mYh6Om/FEC8yPMnEHwf710fW5Q6fhjT1SQyRlZD1G9CJbgfH+rWgAcIvjlQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
     dev: true
 
