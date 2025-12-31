@@ -199,3 +199,8 @@ export function useOIDC(): useOIDCReturnType {
 
 	return [exchangedToken, requestConsent];
 }
+
+export function useIsLoggedIn(): boolean {
+	const [token] = useOIDC();
+	return option.is_some(token);
+}
