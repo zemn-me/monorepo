@@ -8,7 +8,7 @@
 	height: 100%;
 }
 
-.banner { display: grid; pointer-events: none }
+.banner { display: grid; pointer-events: none; position: relative }
 
 .letterHead {
 	padding: 2em;
@@ -47,6 +47,8 @@
 	background-color: white;
 	margin: auto;
 }
+
+
 
 .content {
     grid-area: content;
