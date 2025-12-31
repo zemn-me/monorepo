@@ -3,10 +3,18 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "Glade",
-    srcs = ["glade.tsx"],
-    assets = ["style.module.css"],
+    srcs = [
+        "glade.tsx",
+        "menu.tsx",
+    ],
+    assets = [
+        "menu.module.css",
+        "style.module.css",
+    ],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/@fortawesome/free-solid-svg-icons",
+        "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/next",
@@ -18,6 +26,7 @@ ts_project(
         "//project/zemn.me/components/Link",
         "//project/zemn.me/components/TimeEye",
         "//project/zemn.me/components/ZemnmezLogo",
+        "//project/zemn.me/hook",
         "//ts/constants",
         "//ts/next.js/types/next-compiled",
         "//ts/react/lang",
@@ -31,6 +40,9 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["glade.tsx"],
+    srcs = [
+        "glade.tsx",
+        "menu.tsx",
+    ],
     visibility = ["//:__subpackages__"],
 )
