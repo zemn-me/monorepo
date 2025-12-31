@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import * as bio from '#root/project/zemn.me/bio/index.js';
 import { dividerHeadingClass } from '#root/project/zemn.me/components/DividerHeading/index.js';
+import { GladeMenu } from '#root/project/zemn.me/components/Glade/menu.js';
 import style from '#root/project/zemn.me/components/Glade/style.module.css';
 import { HeroVideo } from '#root/project/zemn.me/components/HeroVideo/hero_video.js';
 import { InlineLogin } from '#root/project/zemn.me/components/InlineLogin/inline_login.js';
@@ -12,6 +13,7 @@ import { TimeEye } from '#root/project/zemn.me/components/TimeEye/index.js';
 import ZemnmezLogo from '#root/project/zemn.me/components/ZemnmezLogo/ZemnmezLogo.js';
 import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
 import * as lang from '#root/ts/react/lang/index.js';
+
 
 /*
 function ZemnmezLogoInline() {
@@ -49,6 +51,7 @@ export default function Glade(props: GladeProps) {
 			<HeroVideo className={style.headerBgv}/>
 			<header className={style.banner}>
 				<LetterHead />
+				<GladeMenu />
 			</header>
 			<section className={style.content} >
 				{props.children}
@@ -78,4 +81,3 @@ export default function Glade(props: GladeProps) {
 		</main>
 	);
 }
-
