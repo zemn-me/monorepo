@@ -1,0 +1,84 @@
+.hamburgerNav {
+	position: absolute;
+	top: 1.5rem;
+	right: 1.5rem;
+	pointer-events: all;
+	z-index: 4;
+}
+
+.hamburgerDetails {
+	display: inline-block;
+	position: relative;
+}
+
+.hamburgerButton {
+	list-style: none;
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 999px;
+	border: 1px solid color-mix(in srgb, var(--foreground-color) 40%, transparent);
+	background: color-mix(in srgb, var(--background-color) 80%, transparent);
+	color: var(--foreground-color);
+	cursor: pointer;
+	box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--foreground-color) 15%, transparent);
+	position: relative;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.hamburgerIconClosed,
+.hamburgerIconOpen {
+	display: grid;
+	position: absolute;
+	inset: 0;
+	place-items: center;
+	transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.hamburgerIconOpen {
+	opacity: 0;
+	transform: rotate(-90deg) scale(0.75);
+}
+
+.hamburgerButton::-webkit-details-marker {
+	display: none;
+}
+
+.hamburgerDetails[open] .hamburgerButton {
+	background: color-mix(in srgb, var(--background-color) 90%, transparent);
+}
+
+.hamburgerDetails[open] .hamburgerIconClosed {
+	opacity: 0;
+	transform: rotate(90deg) scale(0.75);
+}
+
+.hamburgerDetails[open] .hamburgerIconOpen {
+	opacity: 1;
+	transform: rotate(0deg) scale(1);
+}
+
+.hamburgerMenu {
+	margin-top: 0.75rem;
+	padding: 0.75rem 1rem;
+	display: grid;
+	gap: 0.5rem;
+	min-width: 0;
+	width: max-content;
+	max-width: calc(100vw - 3rem);
+	position: absolute;
+	right: 0;
+	background: color-mix(in srgb, var(--background-color) 90%, transparent);
+	border: 1px solid color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	border-radius: 0.75rem;
+	box-shadow: 0 0.75rem 2.5rem color-mix(in srgb, var(--foreground-color) 15%, transparent);
+	box-sizing: border-box;
+}
+
+.hamburgerLink {
+	color: inherit;
+	letter-spacing: 0.02em;
+}
