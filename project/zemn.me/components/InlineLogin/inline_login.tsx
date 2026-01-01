@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
-import { useOIDC } from "#root/project/zemn.me/hook/useOIDC.js";
+import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { either } from "#root/ts/either/either.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import * as option from "#root/ts/option/types.js";
@@ -11,7 +11,7 @@ import * as result from "#root/ts/result/result.js";
 
 
 export function InlineLogin() {
-	const [idToken, promptForLogin] = useOIDC();
+	const [idToken, promptForLogin] = useZemnMeAuth();
 
 	const idTokenData = option.and_then(
 		idToken,

@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import {
 	useDeleteGrievances,
 	useGetGrievances,
@@ -236,7 +236,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, promptForLogin] = useOIDC();
+	const [idToken, promptForLogin] = useZemnMeAuth();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
