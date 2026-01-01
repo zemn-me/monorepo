@@ -1,8 +1,7 @@
 import { skipToken, useQuery } from '@tanstack/react-query';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
-import { FOREIGN_ID_TOKEN_ISSUER } from '#root/project/zemn.me/constants/constants.js';
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
+import { useGoogleAuth } from '#root/project/zemn.me/hook/useGoogleAuth.js';
 import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { Option } from '#root/ts/option/types.js';
 import * as option from '#root/ts/option/types.js';
@@ -15,9 +14,8 @@ export type useZemnMeAuthReturnType = [
 ];
 
 export function useZemnMeAuth(): useZemnMeAuthReturnType {
-	const issuer = FOREIGN_ID_TOKEN_ISSUER;
 	const apiFetchClient = useFetchClient();
-	const [id_token, promptForLogin] = useOIDC(issuer, []);
+	const [id_token, promptForLogin] = useGoogleAuth([]);
 
 	const request_body = option.and_then(
 		id_token,
@@ -51,7 +49,7 @@ export function useZemnMeAuth(): useZemnMeAuthReturnType {
 	);
 
 	const exchangedTokenRsp = useQuery({
-		queryKey: ['oidc-id-token', issuer],
+		queryKey: ['zemn-me-oidc-id-token'],
 		queryFn: option.unwrap_or(exchangeQueryFn, skipToken),
 		staleTime: 100 * 60 * 55 // idk
 	});
