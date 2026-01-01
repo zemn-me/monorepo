@@ -17,7 +17,7 @@ export type useZemnMeAuthReturnType = [
 export function useZemnMeAuth(): useZemnMeAuthReturnType {
 	const issuer = FOREIGN_ID_TOKEN_ISSUER;
 	const apiFetchClient = useFetchClient();
-	const [id_token, promptForLogin] = useOIDC();
+	const [id_token, promptForLogin] = useOIDC(issuer, []);
 
 	const request_body = option.and_then(
 		id_token,
