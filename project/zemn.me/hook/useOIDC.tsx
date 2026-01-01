@@ -1,12 +1,10 @@
-import { skipToken, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import { FOREIGN_ID_TOKEN_ISSUER } from '#root/project/zemn.me/constants/constants.js';
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/hook/useWindowCallback.js';
-import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import {
 	OAuthClientByIssuer,
 } from '#root/project/zemn.me/OAuth/clients.js';
@@ -18,40 +16,34 @@ import * as option from '#root/ts/option/types.js';
 import * as result from '#root/ts/result/result.js';
 
 
-
 export type useOIDCReturnType = [
 	id_token: Option<string>,
 	promptForLogin: Option<() => Promise<void>>,
 ];
 
 async function fetchEntropy(): Promise<string> {
-  const bytes = new Uint8Array(128); // 1024 bits
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+	const bytes = new Uint8Array(128); // 1024 bits
+	crypto.getRandomValues(bytes);
+	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-
 export function useOIDC(): useOIDCReturnType {
-	const issuer =
-		FOREIGN_ID_TOKEN_ISSUER;
-
+	const issuer = FOREIGN_ID_TOKEN_ISSUER;
 	const oauthClient = OAuthClientByIssuer(issuer);
-	const apiFetchClient = useFetchClient();
 	const oidc_config = useOIDCConfig(issuer);
 
 	const entropy = useQuery({
 		queryKey: ['useoidc entropy', issuer],
 		queryFn: fetchEntropy,
-		staleTime: Infinity
-	})
+		staleTime: Infinity,
+	});
 
 	const authorizationEndpoint =
-		oidc_config.status === "success"
+		oidc_config.status === 'success'
 			? option.Some(oidc_config.data.authorization_endpoint)
 			: option.None;
 
 	if (oidc_config.status == 'error') throw new Error(oidc_config.error.message);
-
 
 	const authRq: Option<OIDCAuthenticationRequest> =
 		entropy.status === 'success'
@@ -71,7 +63,7 @@ export function useOIDC(): useOIDCReturnType {
 			: option.None);
 
 	if (option.is_some(validation))
-		throw option.unwrap_unchecked(validation)
+		throw option.unwrap_unchecked(validation);
 
 	const targetURL =
 		option.and_then(
@@ -81,10 +73,9 @@ export function useOIDC(): useOIDCReturnType {
 				u.search = (new URLSearchParams(params)).toString();
 				return u;
 			}
-		)
+		);
 
-	const [ callback, requestCallback ] = useWindowCallback();
-
+	const [callback, requestCallback] = useWindowCallback();
 
 	const requestConsent = option.and_then(
 		targetURL, u => () => requestCallback(u)
@@ -93,21 +84,19 @@ export function useOIDC(): useOIDCReturnType {
 	const callbackV = option.and_then(
 		callback,
 		v => result.unwrap(v)
-	)
+	);
 
 	const authResponse = option.and_then(
 		callbackV,
 		v => {
 			const href = new URL(v);
 
-
-
 			const r = OIDCAuthenticationResponse.parse(
 				Object.fromEntries([
 					...href.searchParams,
 					...new URLSearchParams(
 						href.hash.slice(1)
-					)
+					),
 				])
 			);
 
@@ -115,14 +104,14 @@ export function useOIDC(): useOIDCReturnType {
 		}
 	);
 
-	if (entropy.status === "success")
+	if (entropy.status === 'success')
 		option.and_then(
 			authResponse,
 			r => {
-			// this should be a fixed-time string comparison
-			// but all the fixed-time string comparisons are
-			// promises in webcrypto and if I have to do that
-			// rn I may kms
+				// this should be a fixed-time string comparison
+				// but all the fixed-time string comparisons are
+				// promises in webcrypto and if I have to do that
+				// rn I may kms
 				if (r.state != entropy.data)
 					throw new Error(["invalid state:", r.state, "!=", entropy.data].join(" "));
 			}
@@ -133,7 +122,7 @@ export function useOIDC(): useOIDCReturnType {
 			authResponse,
 			v =>
 				result.unwrap('error' in v ? result.Err(new Error(v.error)) : result.Ok(v))
-		)
+		);
 
 	const id_token = option.and_then(
 		authSuccessResponse,
@@ -145,46 +134,5 @@ export function useOIDC(): useOIDCReturnType {
 			)
 	);
 
-	const request_body = option.and_then(
-		id_token,
-		(id_token: string): components['schemas']['TokenExchangeRequest'] => ({
-			grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-			requested_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-			subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-			subject_token: id_token,
-		})
-	)
-
-	const exchangeQueryFn = option.and_then(
-		request_body,
-		body => () => apiFetchClient
-			.POST('/oauth2/token', {
-				body,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-			})
-			.then(response => {
-				if (response.error !== undefined) {
-					throw new Error(response.error.error);
-				}
-				const token = response.data.access_token;
-				if (!token) {
-					throw new Error('missing access_token');
-				}
-				return token;
-			})
-	);
-
-	const exchangedTokenRsp = useQuery({
-		queryKey: ['oidc-id-token', issuer],
-		queryFn: option.unwrap_or(exchangeQueryFn, skipToken),
-		staleTime: 100 * 60 * 55 // idk
-	});
-	const exchangedToken =
-		exchangedTokenRsp.status === 'success'
-			? option.Some(exchangedTokenRsp.data)
-			: option.None
-
-	return [exchangedToken, requestConsent];
+	return [id_token, requestConsent];
 }
