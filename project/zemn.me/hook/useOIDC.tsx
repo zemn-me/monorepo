@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { FOREIGN_ID_TOKEN_ISSUER } from '#root/project/zemn.me/constants/constants.js';
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
@@ -27,10 +26,10 @@ async function fetchEntropy(): Promise<string> {
 	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function useOIDC(): useOIDCReturnType {
-	const issuer = FOREIGN_ID_TOKEN_ISSUER;
+export function useOIDC(issuer: string, scopes: string[]): useOIDCReturnType {
 	const oauthClient = OAuthClientByIssuer(issuer);
 	const oidc_config = useOIDCConfig(issuer);
+	const scope = ['openid', ...scopes].join(' ');
 
 	const entropy = useQuery({
 		queryKey: ['useoidc entropy', issuer],
@@ -51,7 +50,7 @@ export function useOIDC(): useOIDCReturnType {
 				response_type: 'id_token',
 				client_id: oauthClient.clientId,
 				redirect_uri: `${window.location.origin}/callback`,
-				scope: 'openid',
+				scope,
 				state: entropy.data,
 				nonce: entropy.data,
 			})
