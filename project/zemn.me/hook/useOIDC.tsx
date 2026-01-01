@@ -2,6 +2,7 @@ import { skipToken, useQuery } from '@tanstack/react-query';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import { FOREIGN_ID_TOKEN_ISSUER } from '#root/project/zemn.me/constants/constants.js';
+import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/hook/useWindowCallback.js';
@@ -11,10 +12,6 @@ import {
 } from '#root/project/zemn.me/OAuth/clients.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
-import { openidConfiguration } from '#root/ts/oidc/configuration.js';
-import {
-	oidcConfigURLForIssuer,
-} from '#root/ts/oidc/oidc.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import { Option } from '#root/ts/option/types.js';
 import * as option from '#root/ts/option/types.js';
@@ -40,15 +37,7 @@ export function useOIDC(): useOIDCReturnType {
 
 	const oauthClient = OAuthClientByIssuer(issuer);
 	const apiFetchClient = useFetchClient();
-	const oidc_config = useQuery({
-		queryFn: () => fetch(oidcConfigURLForIssuer(issuer))
-			.then(config => config.json())
-			.then(config =>
-				openidConfiguration
-					.parse(config)
-			),
-		queryKey: ["oidc-config", issuer],
-	})
+	const oidc_config = useOIDCConfig(issuer);
 
 	const entropy = useQuery({
 		queryKey: ['useoidc entropy', issuer],
