@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { openidConfiguration } from '#root/ts/oidc/configuration.js';
 import { oidcConfigURLForIssuer } from '#root/ts/oidc/oidc.js';
 
-
 export function useOIDCConfig(issuer: string) {
 	return useQuery({
 		queryFn: () => fetch(oidcConfigURLForIssuer(issuer))

@@ -1,7 +1,7 @@
-import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import * as option from '#root/ts/option/types.js';
 
 export function useIsLoggedIn(): boolean {
-	const [token] = useOIDC();
+	const [token] = useZemnMeAuth();
 	return option.is_some(token);
 }
