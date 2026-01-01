@@ -7,8 +7,6 @@ export interface Client {
 const clientMap = new Map<string, Client>();
 
 clientMap.set("https://accounts.google.com", {
-	issuer: "https://accounts.google.com",
-	clientId: "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com",
 	name: "Google",
 });
 

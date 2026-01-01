@@ -128,6 +128,8 @@ export function option_zipped<T1, T2, T3>(
 	))
 }
 
+export { option_zipped as zipped };
+
 export function option_result_zipped<T1, T2, T3, E1, E2>(
 	o1: Option<Result<T1, E1>>,
 	o2: Option<Result<T2, E2>>,
@@ -247,3 +249,38 @@ export function option_result_option_result_flatten<T, E1, E2>(
 		v => option_result_transpose(v)
 	), v => result_flatten(v))), v => flatten(v)))
 }
+
+
+export function option_and_result_zipped<T, T2, T3, E>(
+	option: Option<T>,
+	result: Result<T2, E>,
+	f: (a: T, b: T2) => T3
+): Option<Result<T3, E>> {
+	return and_then(
+		option,
+		a => result_and_then(
+			result,
+			b => f(a, b)
+		)
+	)
+}
+
+export { option_and_result_zipped as and_result_zipped }
+
+export function option_and_option_result_zipped<T, T2, T3, E>(
+	option: Option<T>,
+	result: Option<Result<T2, E>>,
+	f: (a: T, b: T2) => T3
+): Option<Result<T3, E>> {
+	return flatten(and_then(
+		result,
+		r => option_and_result_zipped(
+			option,
+			r,
+			f,
+		)
+	))
+}
+
+
+export { option_and_option_result_zipped as and_option_result_zipped }
