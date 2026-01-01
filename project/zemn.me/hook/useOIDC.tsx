@@ -4,9 +4,6 @@ import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/hook/useWindowCallback.js';
-import {
-	OAuthClientByIssuer,
-} from '#root/project/zemn.me/OAuth/clients.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
@@ -14,6 +11,19 @@ import { Option } from '#root/ts/option/types.js';
 import * as option from '#root/ts/option/types.js';
 import * as result from '#root/ts/result/result.js';
 
+
+export type OIDCImplicitRequest = Omit<
+	OIDCAuthenticationRequest,
+	'response_type'
+	| 'redirect_uri'
+	| 'state'
+	| 'nonce'
+	| 'display'
+	| 'id_token_hint'
+	| 'registration'
+	| 'request'
+	| 'request_uri'
+>;
 
 export type useOIDCReturnType = [
 	id_token: Option<string>,
@@ -26,10 +36,11 @@ async function fetchEntropy(): Promise<string> {
 	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function useOIDC(issuer: string, scopes: string[]): useOIDCReturnType {
-	const oauthClient = OAuthClientByIssuer(issuer);
+export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCReturnType {
 	const oidc_config = useOIDCConfig(issuer);
-	const scope = ['openid', ...scopes].join(' ');
+	const scope = params.scope.includes('openid')
+		? params.scope
+		: ['openid', params.scope].filter(Boolean).join(' ');
 
 	const entropy = useQuery({
 		queryKey: ['useoidc entropy', issuer],
@@ -48,11 +59,11 @@ export function useOIDC(issuer: string, scopes: string[]): useOIDCReturnType {
 		entropy.status === 'success'
 			? option.Some<OIDCAuthenticationRequest>({
 				response_type: 'id_token',
-				client_id: oauthClient.clientId,
+				...params,
 				redirect_uri: `${window.location.origin}/callback`,
-				scope,
 				state: entropy.data,
 				nonce: entropy.data,
+				scope,
 			})
 			: option.None;
 
