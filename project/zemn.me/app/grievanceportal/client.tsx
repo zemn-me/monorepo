@@ -12,6 +12,7 @@ import {
 	useGetGrievances,
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import {
 	and_then as option_and_then,
 	is_some as option_is_some,
