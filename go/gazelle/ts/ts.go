@@ -587,9 +587,11 @@ func applyImpliedDeps(modules depSet) {
 	if len(modules) == 0 {
 		return
 	}
-	for dep, implied := range impliedDeps {
-		if _, ok := modules[dep]; !ok {
-			continue
+
+	addImplied := func(dep string) {
+		implied, ok := impliedDeps[dep]
+		if !ok {
+			return
 		}
 		for _, extra := range implied {
 			modules.add(extra)
