@@ -5,13 +5,18 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "ErrorDisplay",
-    deps = [
-        "//:node_modules/@types/react",
-        "//ts",
-    ],
+    srcs = ["error_display.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["error_display.tsx"],
+    visibility = ["//:__subpackages__"],
 )

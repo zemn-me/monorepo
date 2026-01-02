@@ -5,17 +5,24 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "ts",
-    srcs = glob(
-        [
-            "**/*.ts",
-            "**/*.tsx",
-        ],
-        allow_empty = True,
-        exclude = ["*_test.ts"],
-    ),
+    srcs = [
+        "NewType.ts",
+        "errors.ts",
+        "guard.ts",
+        "guards.ts",
+        "json.ts",
+        "lens.ts",
+        "result.ts",
+        "result_types.ts",
+        "safely.ts",
+        "tree.ts",
+        "tuple.ts",
+        "typeadd.ts",
+        "util.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@types/memoizee",
-        "//:node_modules/memoizee",
+        "//:node_modules/@types/node",
         "//ts/result",
     ],
 )
@@ -35,8 +42,9 @@ jest_test(
     srcs = [
         "lens_test.js",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":lens_test",
+        ":ts_tests",
     ],
 )
 
@@ -45,5 +53,37 @@ bazel_lint(
     srcs = [
         "BUILD.bazel",
         "rules.bzl",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "NewType.ts",
+        "errors.ts",
+        "guard.ts",
+        "guards.ts",
+        "json.ts",
+        "lens.ts",
+        "lens_test.ts",
+        "result.ts",
+        "result_types.ts",
+        "safely.ts",
+        "tree.ts",
+        "tuple.ts",
+        "typeadd.ts",
+        "util.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "ts_tests",
+    srcs = ["lens_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":ts",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
     ],
 )
