@@ -6,30 +6,19 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "bio",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-            "*.json",
-        ],
-        allow_empty = True,
-    ),
+    srcs = [
+        "bio.ts",
+        "index.ts",
+    ],
     resolve_json_module = True,
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
-        "//:node_modules/schema-dts",
-        "//mdx:mdx_js",
+        "//:node_modules/@types/node",
+        "//:node_modules/zod",
         "//project/zemn.me/components/Article/types",
-        "//ts/iter",
-        "//ts/option",
         "//ts/react/lang",
         "//ts/react/next/Link:relative_url",
         "//ts/time",
-        "//ts/url",
     ],
 )
 
@@ -50,4 +39,13 @@ jest_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "bio.ts",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
