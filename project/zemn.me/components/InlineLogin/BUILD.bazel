@@ -9,7 +9,9 @@ ts_project(
     deps = [
         "//:base_defs",  # keep
         "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
         "//:node_modules/classnames",
+        "//:node_modules/react",
         "//project/zemn.me/hook",
         "//ts/either",
         "//ts/oidc",
