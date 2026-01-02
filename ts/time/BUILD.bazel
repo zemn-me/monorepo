@@ -67,3 +67,5 @@ ts_project(
         "//:node_modules/@types/node",
     ],
 )
+
+# gazelle:resolve typescript typescript #root/ts/time/hemisphere/is_hemisphere //ts/time/hemisphere

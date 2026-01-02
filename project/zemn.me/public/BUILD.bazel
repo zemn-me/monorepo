@@ -1,3 +1,4 @@
+#gazelle:ignore
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//js:rules.bzl", "js_library")

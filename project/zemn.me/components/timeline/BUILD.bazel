@@ -1,0 +1,41 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "timeline",
+    srcs = [
+        "index.tsx",
+        "timeline.tsx",
+    ],
+    assets = [
+        "timeline.module.css",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:base_defs",  #keep
+        "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/immutable",
+        "//:node_modules/memoizee",
+        "//:node_modules/react",
+        "//project/zemn.me/bio",
+        "//project/zemn.me/components/Link",
+        "//project/zemn.me/components/SectionLink",
+        "//ts/react/lang",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.tsx",
+        "timeline.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -3,6 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "Link",
+    srcs = ["index.tsx"],
     assets = [
         "link.module.css",
     ],
@@ -11,7 +12,11 @@ ts_project(
         "//ts/react/strudel:__subpackages__",  # whatever
     ],
     deps = [
-        "//:base_defs",
+        "//:base_defs",  #keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
         "//ts/react/next/Link",
     ],
 )
@@ -19,4 +24,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
 )

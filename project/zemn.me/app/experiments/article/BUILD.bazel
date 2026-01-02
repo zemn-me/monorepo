@@ -13,10 +13,15 @@ mdx_files(
 ts_project(
     name = "article",
     srcs = ["page.tsx"],
-    visibility = ["//project/zemn.me/app/experiments:__subpackages__"],
+    visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
-        ":testarticle_js",
+        ":testarticle_js",  # keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
         "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
         "//project/zemn.me/components/Article",
         "//ts/next.js/types/next-compiled",
     ],
@@ -25,4 +30,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
 )

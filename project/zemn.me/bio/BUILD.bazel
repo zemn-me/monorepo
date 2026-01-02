@@ -1,28 +1,25 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_binary")
+load("//js:rules.bzl", "js_binary", "js_library")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "bio",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-            "*.json",
-        ],
-        allow_empty = True,
-    ),
+    srcs = [
+        "bio.ts",
+        "index.ts",
+        "priority_sort.ts",
+        "schema.ts",
+    ],
     resolve_json_module = True,
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/react",
-        "//:node_modules/react-dom",
+        ":priority_json",  #keep
+        "//:node_modules/@types/node",
         "//:node_modules/schema-dts",
-        "//mdx:mdx_js",
+        "//:node_modules/zod",
+        "//mdx:mdx_js",  #keep
         "//project/zemn.me/components/Article/types",
         "//ts/iter",
         "//ts/option",
@@ -30,6 +27,13 @@ ts_project(
         "//ts/react/next/Link:relative_url",
         "//ts/time",
         "//ts/url",
+    ],
+)
+
+js_library(
+    name = "priority_json",
+    srcs = [
+        "priority.json",
     ],
 )
 
@@ -41,13 +45,37 @@ js_binary(
     entry_point = "priority_sort.js",
 )
 
-jest_test(
-    name = "test",
-    srcs = ["priority_test.js"],
-    deps = [":bio"],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "bio.ts",
+        "index.ts",
+        "priority_sort.ts",
+        "priority_test.ts",
+        "schema.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "bio_tests",
+    srcs = ["priority_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":bio",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["priority_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":bio_tests"],
 )

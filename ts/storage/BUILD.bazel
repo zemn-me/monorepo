@@ -3,10 +3,12 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "storage",
+    srcs = ["storage.ts"],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@types/node",
         "//ts",
         "//ts/option",
     ],
@@ -15,4 +17,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["storage.ts"],
+    visibility = ["//:__subpackages__"],
 )

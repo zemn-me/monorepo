@@ -12,7 +12,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/iter",
         "//ts/math",
-        "//ts/math/camera",
         "//ts/math/canvas/braille",
     ],
 )

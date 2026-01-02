@@ -5,31 +5,45 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "url",
-    srcs = glob(
-        [
-            "*.ts",
-            "*.tsx",
-        ],
-        allow_empty = True,
-    ),
-    resolve_json_module = True,
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
-        "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/react",
+    srcs = [
+        "index.ts",
+        "selection.ts",
     ],
+    resolve_json_module = True,
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
 )
 
 jest_test(
     name = "url_test",
     srcs = ["url_test.js"],
     jsdom = True,
-    deps = [":url"],
+    visibility = ["//:__subpackages__"],
+    deps = [":url_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.ts",
+        "selection.ts",
+        "url_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "url_tests",
+    srcs = ["url_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":url",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

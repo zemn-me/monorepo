@@ -1,3 +1,4 @@
+# gazelle:ignore
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
@@ -27,7 +28,6 @@ ts_project(
     deps = [
         ":bad_files",
         "//:node_modules/@types/react",
-        "//project/zemn.me/components",
         "//ts/factorio",
         "//ts/factorio/react",
     ],

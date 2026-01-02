@@ -3,6 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "factorio",
+    srcs = ["page.tsx"],
     assets = glob(
         [
             "**/*.css",
@@ -12,21 +13,25 @@ ts_project(
     ),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
         "//:node_modules/next",
-        "//:node_modules/nuqs",
-        "//project/zemn.me/app/experiments/factorio/blueprint/book",
-        "//project/zemn.me/components",
-        "//ts/constants",
-        "//ts/factorio",
-        "//ts/factorio/react",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/zemn.me/components/Link",
+        "//project/zemn.me/components/Prose",
         "//ts/next.js/types/next-compiled",
-        "//ts/react/ErrorDisplay",
-        "//ts/react/PrettyJSON",
-        "//ts/zod",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
 )

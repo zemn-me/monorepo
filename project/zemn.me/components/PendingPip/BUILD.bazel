@@ -8,14 +8,21 @@ ts_project(
         "//project/zemn.me:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//ts",
         "//ts/option",
+        "//ts/result",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["PendingPip.tsx"],
+    visibility = ["//:__subpackages__"],
 )

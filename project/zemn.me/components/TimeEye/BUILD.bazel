@@ -5,9 +5,15 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "TimeEye",
+    srcs = [
+        "TimeEye.tsx",
+        "index.ts",
+    ],
     assets = ["TimeEye.module.css"],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",
+        "//:base_defs",  #keep
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
@@ -17,4 +23,13 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "TimeEye.tsx",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )
