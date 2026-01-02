@@ -9,50 +9,17 @@ yaml_lint_test(
     name = "validate_yml",
 )
 
-ts_project(
-    name = "pulumi_ts",
-    data = [
-        ":pulumi_local",
-        "//project/zemn.me:next",
-        "//ts/pulumi/shadwell.im/thomas",
-        "//ts/pulumi/zemn.me/availability:next",
-        "//ts/pulumi/zemn.me/static",
-    ],
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@pulumi/random",
-        "//:node_modules/@types/cross-spawn",
-        "//:node_modules/@types/jest",
-        "//:node_modules/cross-spawn",
-        "//project/zemn.me/bio",
-        "//ts/github/actions",
-        "//ts/pulumi/baby.computer:pulumi_ts",
-        "//ts/pulumi/eggsfordogs.com:pulumi_ts",
-        "//ts/pulumi/github.com/zemn-me/do-sync",
-        "//ts/pulumi/lib",
-        "//ts/pulumi/lib/twilio",
-        "//ts/pulumi/lib/website",
-        "//ts/pulumi/lulu.computer:pulumi_ts",
-        "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
-        "//ts/pulumi/shadwell.im",
-        "//ts/pulumi/zemn.me/api",
-        "//ts/pulumi/zemn.me/forge",
-        "//ts/pulumi/zemn.me/hello_world:ts",
-    ],
-)
-
 jest_test(
     name = "tests",
     srcs = ["pulumi_test.js"],
-    deps = [":pulumi_ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [":pulumi_tests"],
 )
 
 js_binary(
     name = "preview",
     data = [
-        ":pulumi_ts",
+        ":pulumi",
     ],
     entry_point = "preview.js",
 )
@@ -60,7 +27,7 @@ js_binary(
 genrule(
     name = "pulumi_local",
     srcs = ["//bin/linux/pulumi"],
-    outs = ["pulumi"],
+    outs = ["pulumi_local_bin"],
     cmd = """
 cp $< $@
     """,
@@ -69,4 +36,56 @@ cp $< $@
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "pulumi",
+    srcs = [
+        "deploy_to_staging.ts",
+        "index.ts",
+        "preview.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/random",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/baby.computer",
+        "//ts/pulumi/eggsfordogs.com",
+        "//ts/pulumi/github.com/zemn-me/do-sync",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/twilio",
+        "//ts/pulumi/lulu.computer",
+        "//ts/pulumi/pleaseintroducemetoyour.dog",
+        "//ts/pulumi/shadwell.im",
+        "//ts/pulumi/zemn.me",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "deploy_to_staging.ts",
+        "index.ts",
+        "preview.ts",
+        "pulumi_test.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "pulumi_tests",
+    srcs = ["pulumi_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":pulumi",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
 )
