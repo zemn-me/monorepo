@@ -8,7 +8,6 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//ts/iter",
         "//ts/math",
         "//ts/math/canvas/braille",
         "//ts/math/canvas/geometry",
