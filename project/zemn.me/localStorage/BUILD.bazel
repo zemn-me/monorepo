@@ -3,9 +3,12 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "localStorage",
+    srcs = ["localStorage.ts"],
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/zod",
+        "//ts",
         "//ts/result",
         "//ts/serde",
         "//ts/storage",
@@ -16,4 +19,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["localStorage.ts"],
+    visibility = ["//:__subpackages__"],
 )

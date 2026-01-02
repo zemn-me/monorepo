@@ -6,6 +6,7 @@ import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
+import style from '#root/project/zemn.me/app/grievanceportal/style.module.css';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import {
 	useDeleteGrievances,
@@ -26,8 +27,6 @@ import {
 	Err,
 	or_else as result_or_else,
 } from '#root/ts/result/result.js';
-
-import style from './style.module.css';
 
 interface GrievanceEditorProps {
 	readonly Authorization: string;
