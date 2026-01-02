@@ -447,7 +447,7 @@ function DisplayAdminUid({
 }
 
 export default function Admin() {
-	const [idToken, promptForLogin] = useZemnMeAuth();
+	const [idToken, , promptForLogin] = useZemnMeAuth();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
