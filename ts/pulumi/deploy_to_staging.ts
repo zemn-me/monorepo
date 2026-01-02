@@ -37,8 +37,8 @@ async function waitForLock<T>(
 	const results: (T | Error)[] = [];
 	let lastResult: T | Error;
 	const startTime = +new Date();
-	const timeLimit = 10 * minute;
-	const step = 2 * minute;
+	const timeLimit = 45 * minute;
+	const step = 5 * minute;
 
         do {
                 lastResult = await attempt(f, cause);
