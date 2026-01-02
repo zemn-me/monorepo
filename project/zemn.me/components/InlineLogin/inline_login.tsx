@@ -11,7 +11,7 @@ import * as result from "#root/ts/result/result.js";
 
 
 export function InlineLogin() {
-	const [idToken, promptForLogin] = useZemnMeAuth();
+	const [idToken, , promptForLogin] = useZemnMeAuth();
 
 	const idTokenData = option.and_then(
 		idToken,

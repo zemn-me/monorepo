@@ -9,13 +9,16 @@ import * as option from '#root/ts/option/types.js';
 
 
 export type useZemnMeAuthReturnType = [
-	access_token: Option<string>,
+	zemn_me_id_token: Option<string>,
+	google_access_token: Option<string>,
 	promptForLogin: Option<() => Promise<void>>,
 ];
 
 export function useZemnMeAuth(): useZemnMeAuthReturnType {
 	const apiFetchClient = useFetchClient();
-	const [id_token, , promptForLogin] = useGoogleAuth([]);
+	const [id_token, google_access_token, promptForLogin] = useGoogleAuth([
+		'https://www.googleapis.com/auth/contacts.readonly',
+	]);
 
 	const request_body = option.and_then(
 		id_token,
@@ -58,5 +61,5 @@ export function useZemnMeAuth(): useZemnMeAuthReturnType {
 			? option.Some(exchangedTokenRsp.data)
 			: option.None;
 
-	return [exchangedToken, promptForLogin];
+	return [exchangedToken, google_access_token, promptForLogin];
 }
