@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
-} from '#root/project/zemn.me/hook/useWindowCallback.js';
+} from '#root/project/zemn.me/promise/window_callback.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
@@ -39,9 +39,6 @@ async function fetchEntropy(): Promise<string> {
 
 export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCReturnType {
 	const oidc_config = useOIDCConfig(issuer);
-	const scope = params.scope.includes('openid')
-		? params.scope
-		: ['openid', params.scope].filter(Boolean).join(' ');
 
 	const entropy = useQuery({
 		queryKey: ['useoidc entropy', issuer],
@@ -64,7 +61,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 				redirect_uri: `${window.location.origin}/callback`,
 				state: entropy.data,
 				nonce: entropy.data,
-				scope,
+				scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
 			})
 			: option.None;
 
@@ -86,16 +83,31 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 			}
 		);
 
-	const [callback, requestCallback] = useWindowCallback();
+	const cacheKeyArgs = [issuer, params];
+	const callbackQuery = useQuery({
+		queryKey: ['use-oidc', ...cacheKeyArgs],
+		queryFn: () => {
+			if (option.is_none(targetURL)) {
+				throw new Error('missing authorization endpoint');
+			}
+			return useWindowCallback(option.unwrap_unchecked(targetURL));
+		},
+		enabled: false,
+	});
 
 	const requestConsent = option.and_then(
-		targetURL, u => () => requestCallback(u)
+		targetURL, () => async () => {
+			const response = await callbackQuery.refetch();
+			if (response.error) {
+				throw response.error;
+			}
+		}
 	);
 
-	const callbackV = option.and_then(
-		callback,
-		v => result.unwrap(v)
-	);
+	const callbackV =
+		callbackQuery.status === 'success'
+			? option.Some(callbackQuery.data)
+			: option.None;
 
 	const authResponse = option.and_then(
 		callbackV,

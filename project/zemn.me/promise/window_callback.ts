@@ -1,10 +1,5 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-
-import { None, Option, Some } from '#root/ts/option/types.js';
-import { Err, Ok, Result } from '#root/ts/result/result.js';
-
 export class UnableToOpenWindowError extends Error {
 	constructor() {
 		super('unable to open window');
@@ -35,19 +30,15 @@ function isWindowCallbackMessage(value: unknown): value is WindowCallbackMessage
  * Opens a window to the `target` URL and resolves with the final `href` once the
  * popup navigates back to our callback endpoint and posts a message.
  */
-export function useWindowCallback() {
-	// idk why but it's evaling None()
-	const [value, setValue] = useState<Option<Result<string, Error>>>(() => None);
-
-	const openWindow = useCallback(async (target: URL) => {
+export function useWindowCallback(target: URL): Promise<string> {
+	return new Promise((resolve, reject) => {
 		const opened = window.open(target.toString(), '_blank');
 		if (!opened) {
-			throw new UnableToOpenWindowError();
+			reject(new UnableToOpenWindowError());
+			return;
 		}
 
 		const origin = window.location.origin;
-
-
 
 		function handler(event: MessageEvent) {
 			if (event.origin !== origin) {
@@ -63,18 +54,13 @@ export function useWindowCallback() {
 			opened?.close();
 
 			if (!event.data.href) {
-				return setValue(
-					() => Some(Err(new InvalidCallbackMessageError())));
+				reject(new InvalidCallbackMessageError());
+				return;
 			}
 
-			return setValue( () => Some(Ok(event.data.href)));
+			resolve(event.data.href);
 		}
 
-
-
-			window.addEventListener('message', handler);
-
-	}, [setValue]);
-
-	return [value, openWindow] as const;
+		window.addEventListener('message', handler);
+	});
 }
