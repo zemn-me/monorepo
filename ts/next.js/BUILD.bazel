@@ -15,7 +15,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/next",
         "//ts/next.js/types/next-compiled",
-        "//ts/trusted_types",
     ],
 )
 
