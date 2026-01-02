@@ -47,7 +47,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"project/cultist/state/state_test.ts":                      true,
 	"project/cultist/types.ts":                                 true,
 	"project/cultist/verb.ts":                                  true,
-	"project/zemn.me/OAuth/clients.ts":                         true,
 	"project/zemn.me/app/article/2014/csp/page.tsx":            true,
 	"project/zemn.me/app/article/2019/cors/page.tsx":           true,
 	"project/zemn.me/app/article/2024/clean/page.tsx":          true,
