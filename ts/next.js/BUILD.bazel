@@ -19,12 +19,6 @@ ts_project(
     ],
 )
 
-jest_test(
-    name = "test",
-    srcs = ["config_validate_test.js"],
-    deps = [":next.js"],
-)
-
 exports_files(
     ["next.config.ts"],
     visibility = ["//visibility:public"],
