@@ -62,9 +62,7 @@ ts_project(
         "//:node_modules/pako",
         "//:node_modules/zod",
         "//ts",
-        "//ts/iter",
         "//ts/math",
-        "//ts/result",
         "//ts/zod",
     ],
 )

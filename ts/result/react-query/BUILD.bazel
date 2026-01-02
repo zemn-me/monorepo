@@ -9,7 +9,7 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@tanstack/react-query",
-        "//:node_modules/@types/react",
+        "//:node_modules/@types/node",
         "//ts/option",
         "//ts/result",
     ],
@@ -18,4 +18,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["queryResult.ts"],
+    visibility = ["//:__subpackages__"],
 )
