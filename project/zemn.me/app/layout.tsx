@@ -47,7 +47,7 @@ export function RootLayout({ children }: Props) {
 						rel="apple-touch-icon"
 						type="image/svg+xml"
 					/>
-					<HeaderTagsAppRouter cspPolicy={csp} />
+					<HeaderTagsAppRouter cspPolicy={csp} domain="zemn.me" />
 				</head>
 				<body className={lora.className}>
 					<Glade>

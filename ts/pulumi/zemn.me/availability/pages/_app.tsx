@@ -8,7 +8,7 @@ import { HeaderTagsPagesRouter } from '#root/ts/next.js/index.js';
 export function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<HeaderTagsPagesRouter />
+			<HeaderTagsPagesRouter domain="availability.zemn.me" />
 			<Component {...pageProps} />
 			<Head>
 				<meta content="@zemnmez" name="twitter:site" />
