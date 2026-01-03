@@ -5,7 +5,7 @@ import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
 export function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<HeaderTagsAppRouter />
+			<HeaderTagsAppRouter domain="luke.shadwell.im" />
 			<Component {...pageProps} />
 		</>
 	);

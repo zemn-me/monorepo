@@ -1,0 +1,25 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "AnalyticsInitializer",
+    srcs = ["AnalyticsInitializer.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@plausible-analytics/tracker",  #keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["AnalyticsInitializer.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
