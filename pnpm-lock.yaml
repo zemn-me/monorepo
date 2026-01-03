@@ -439,8 +439,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.68.4
-    version: 42.68.4(typanion@3.14.0)
+    specifier: 42.68.5
+    version: 42.68.5(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3445,7 +3445,7 @@ packages:
       cli-table3: 0.6.5
       colors: 1.4.0
       fast-glob: 3.3.3
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       markdown-table: 2.0.0
       pug: 3.0.3
     dev: false
@@ -3454,7 +3454,7 @@ packages:
     resolution: {integrity: sha512-M9fFETNvXXuy4fWv0M2oMluxwrQUBtubxCHaWw21lb2G8A6SE19moe3dUkluZ/3V4BccywfeF9lSEUg84heLww==}
     dependencies:
       colors: 1.4.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       pug: 3.0.3
     dev: false
 
@@ -11373,7 +11373,6 @@ packages:
       graceful-fs: 4.2.11
       jsonfile: 6.2.0
       universalify: 2.0.1
-    dev: true
 
   /fs-minipass@2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
@@ -13255,7 +13254,7 @@ packages:
     resolution: {integrity: sha512-0T7KiWiDIVArvlBkvCorn2NFwQe7p7DJ37o4YFRuPLDpcr1jNHQlEfbFPw8hDdgJ4hpfby6A5YwyHqASKJ7drA==}
     dependencies:
       colors: 1.4.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       node-sarif-builder: 2.0.3
     dev: false
 
@@ -17193,8 +17192,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.68.4(typanion@3.14.0):
-    resolution: {integrity: sha512-zPXjBFk3mV7QCNrid9YLmhifGKa0ccV3k7bZN4wSjMDKW+wPqXpL4TmedaLzFfGCM7vsI0WuQtvtrkLWpdHSsg==}
+  /renovate@42.68.5(typanion@3.14.0):
+    resolution: {integrity: sha512-Z2lUQlA7ZDPiGLOepNaoyW7eX0gqvxcba622m1+rudaju0FheNa53Ul7KD59iPDZbBjf/1ymjiSjHC4oH52QIw==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
