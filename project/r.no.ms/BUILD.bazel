@@ -1,0 +1,46 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "ts",
+    assets = glob([
+        "**/*.css",
+        "**/*.svg",
+    ], allow_empty = True),
+    deps = [
+        "//project/r.no.ms/app",
+    ],
+)
+
+next_project(
+    name = "next",
+    srcs = [
+        ":ts",
+        "//project/r.no.ms/public:files",
+    ],
+)
+
+go_test(
+    name = "launch_server_test",
+    size = "small",
+    srcs = ["launch_server_test.go"],
+    data = [
+        ":dev",
+        ":start",
+    ],
+    env = {
+        "NEXT_SERVER_BINARY": "$(rlocationpath :dev)",
+        "NEXT_PROD_SERVER_BINARY": "$(rlocationpath :start)",
+        "BAZEL_BINDIR": "$(BINDIR)",
+    },
+    deps = ["@io_bazel_rules_go//go/runfiles"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
