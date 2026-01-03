@@ -12,8 +12,11 @@ ts_project(
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@plausible-analytics/tracker",
         "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
         "//:node_modules/next",
+        "//:node_modules/react",
         "//ts/next.js/types/next-compiled",
         "//ts/trusted_types",
     ],
