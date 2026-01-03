@@ -21,6 +21,7 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/random",
         "//:node_modules/@types/cross-spawn",
@@ -32,6 +33,7 @@ ts_project(
         "//ts/pulumi/eggsfordogs.com:pulumi_ts",
         "//ts/pulumi/github.com/zemn-me/do-sync",
         "//ts/pulumi/lib",
+        "//ts/pulumi/lib/gcp",
         "//ts/pulumi/lib/twilio",
         "//ts/pulumi/lib/website",
         "//ts/pulumi/lulu.computer:pulumi_ts",

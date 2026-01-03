@@ -1,0 +1,1 @@
+- GCP GitHub Actions federation now lives in code: pool `github`, provider `my-repo`, service account `monorepo-root` in project `extreme-cycling-441523-a9` (project number `845702659200`); branch allowlist matches AWS (main + gh-readonly-queue/*). If these resources already exist, import before the first `pulumi up`.
