@@ -1,5 +1,6 @@
 import Head from 'next/head';
 
+import { AnalyticsInitializer } from '#root/ts/next.js/component/AnalyticsInitializer/AnalyticsInitializer.js';
 import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
 
 export * as config from '#root/ts/next.js/next.config.js';
@@ -7,7 +8,7 @@ export * as config from '#root/ts/next.js/next.config.js';
 type scheme = 'https:' | 'data:';
 type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
-type keyword = 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
+type keyword = 'none' | 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
 type keywordSource = `'${keyword}'`;
 export type SourceExpression = schemeSource | hostSource | keywordSource;
 type sourceList = Set<SourceExpression>;
@@ -16,6 +17,7 @@ type directives =
 	| 'img-src'
 	| 'script-src'
 	| 'connect-src'
+	| 'base-uri'
 	| 'default-src'
 	| 'media-src'
 	| 'font-src'
@@ -27,6 +29,7 @@ export type CspPolicy = Partial<Record<directives, sourceList>>;
 const isDevMode = process.env.NODE_ENV === 'development';
 
 export const DefaultContentSecurityPolicy: CspPolicy = {
+	'base-uri': new Set(["'none'"]),
 	'style-src': new Set([
 		"'self'",
 		"'unsafe-inline'",
@@ -48,6 +51,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		"'self'",
 		'https://*.google-analytics.com',
 		'https://*.doubleclick.net',
+		'https://plausible.io',
 	]),
 
 	// temp disabled
@@ -78,6 +82,7 @@ export function HeaderTagsPagesRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
+			<AnalyticsInitializer/>
 			<DeclareTrustedTypesPolicy/>
 			<Head>
 				<meta
@@ -109,6 +114,7 @@ export function HeaderTagsAppRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
+			<AnalyticsInitializer/>
 			<DeclareTrustedTypesPolicy/>
 			<meta
 				content={Object.entries(cspPolicy)
