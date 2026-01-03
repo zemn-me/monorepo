@@ -439,8 +439,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.69.0
-    version: 42.69.0(typanion@3.14.0)
+    specifier: 42.69.1
+    version: 42.69.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -17192,8 +17192,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.69.0(typanion@3.14.0):
-    resolution: {integrity: sha512-TOqwg+GDHrMlZG8d3GvPFUxXchWt3FOpRNCzwilHxCFka0pBp8bUkZo52YzucJcpeIyZPmbV5/2CfgjJTa4DPQ==}
+  /renovate@42.69.1(typanion@3.14.0):
+    resolution: {integrity: sha512-wIPJoMUfu/zzreIcVkgtHDkmh9suOwQ/zlmdmMUWURBIQ2ryHcSb0mR8BgFC1nNOHnUquV8XQs9RCkBEyrDLyQ==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -19194,7 +19194,7 @@ packages:
       vfile-message: 4.0.3
       vfile-reporter: 8.1.1
       vfile-statistics: 3.0.0
-      yaml: 2.8.1
+      yaml: 2.8.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
