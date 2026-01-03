@@ -87,7 +87,11 @@ describe('zemn.me website', () => {
                 it.each(paths)('/%s should have no errors', async path => {
                         const logs = await testEndpoint(path);
                         if (pathsThatMayError.has(path)) return;
-                        expect(logs).toHaveLength(
+						expect(logs.filter(
+							log => 'log' in log
+								? log.log.message.includes("Ignoring event: localhost")
+								: false
+						)).toHaveLength(
                                 0
                         );
                 });

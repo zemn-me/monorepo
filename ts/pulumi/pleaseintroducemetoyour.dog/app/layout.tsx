@@ -38,7 +38,7 @@ export function RootLayout({ children }: Props) {
 		<html>
 			<body>
 				<ClientProviders>
-					<HeaderTagsAppRouter cspPolicy={csp_policy} />
+					<HeaderTagsAppRouter cspPolicy={csp_policy} domain="pleaseintroducemetoyour.dog" />
 					{children}
 				</ClientProviders>
 			</body>

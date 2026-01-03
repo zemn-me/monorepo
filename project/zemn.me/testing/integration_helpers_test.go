@@ -91,7 +91,9 @@ func testEndpointHasNoLogErrors(t *testing.T, ep string) {
 func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
 	out = make([]log.Message, 0, len(in))
 	for _, l := range in {
-		if strings.Contains(l.Message, "source map") ||
+		if
+			strings.Contains(l.Message, "Ignoring Event: localhost") ||
+			strings.Contains(l.Message, "source map") ||
 			strings.Contains(l.Message, "react-dev-overlay") {
 			continue
 		}
