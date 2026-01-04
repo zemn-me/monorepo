@@ -236,7 +236,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, promptForLogin] = useZemnMeAuth();
+	const [idToken, , promptForLogin] = useZemnMeAuth();
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {
