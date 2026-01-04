@@ -27,6 +27,7 @@ export type OIDCImplicitRequest = Omit<
 
 export type useOIDCReturnType = [
 	id_token: Option<string>,
+	access_token: Option<string>,
 	promptForLogin: Option<() => Promise<void>>,
 ];
 
@@ -58,7 +59,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 	const authRq: Option<OIDCAuthenticationRequest> =
 		entropy.status === 'success'
 			? option.Some<OIDCAuthenticationRequest>({
-				response_type: 'id_token',
+				response_type: 'id_token token',
 				...params,
 				redirect_uri: `${window.location.origin}/callback`,
 				state: entropy.data,
@@ -144,5 +145,15 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 			)
 	);
 
-	return [id_token, requestConsent];
+	const access_token = option.and_then(
+		authSuccessResponse,
+		v =>
+			result.unwrap(
+				v.access_token !== undefined
+					? result.Ok(v.access_token)
+					: result.Err(new Error('missing access_token'))
+			)
+	);
+
+	return [id_token, access_token, requestConsent];
 }
