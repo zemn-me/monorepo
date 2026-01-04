@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "promise",
+    srcs = ["window_callback.ts"],
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = ["//:node_modules/@types/node"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["window_callback.ts"],
+    visibility = ["//:__subpackages__"],
+)
