@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/fs"
 	"os"
 	"path"
 	"path/filepath"
@@ -471,7 +472,37 @@ func (Language) Loads() []rule.LoadInfo {
 }
 
 func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-	return nil
+	if r.Kind() != "ts_project" || f == nil {
+		return nil
+	}
+
+	rootConfig := ensureRootTsConfig(c)
+
+	files, err := expandSrcsExpr(c, f.Pkg, r.Attr("srcs"))
+	if err != nil || len(files) == 0 {
+		return nil
+	}
+
+	specs := make([]resolve.ImportSpec, 0, len(files))
+	seen := make(map[string]struct{})
+	for _, file := range files {
+		repoPath := path.Join(f.Pkg, file)
+		for _, spec := range moduleSpecsForRepoPath(rootConfig, repoPath) {
+			if _, ok := seen[spec]; ok {
+				continue
+			}
+			seen[spec] = struct{}{}
+			specs = append(specs, resolve.ImportSpec{
+				Lang: "typescript",
+				Imp:  spec,
+			})
+		}
+	}
+
+	if len(specs) == 0 {
+		return nil
+	}
+	return specs
 }
 
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
@@ -479,6 +510,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		return
 	}
 	modules := imports.(depSet)
+	applyImpliedDeps(modules)
 
 	if len(modules) == 0 {
 		if len(defaultDeps) == 0 {
@@ -494,9 +526,6 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		deps[d] = struct{}{}
 	}
 
-	pkgJSON := ensurePackageJSON(c)
-	rootConfig := ensureRootTsConfig(c)
-
 	for module := range modules {
 		if module == "" {
 			continue
@@ -511,7 +540,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		impSpec := resolve.ImportSpec{Lang: "typescript", Imp: module}
 		if override, ok := resolve.FindRuleWithOverride(c, impSpec, "typescript"); ok {
 			if !override.Equal(from) {
-				deps[override.String()] = struct{}{}
+				deps[formatLabel(override, from)] = struct{}{}
 			}
 			continue
 		}
@@ -520,33 +549,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 				if m.IsSelfImport(from) {
 					continue
 				}
-				deps[m.Label.String()] = struct{}{}
-			}
-			continue
-		}
-
-		if strings.HasPrefix(module, "#") {
-			if resolved, ok := resolveModuleToRepoPath(module, rootConfig); ok {
-				if label, ok := repoPathToLabel(c.RepoRoot, resolved, from); ok {
-					deps[label] = struct{}{}
-				}
-				continue
-			}
-		}
-
-		moduleName := nodeModulesModuleFromImportString(module)
-		if moduleName == "" {
-			continue
-		}
-		if !pkgJSON.HasDep(moduleName) {
-			continue
-		}
-
-		deps[fmt.Sprintf("//:node_modules/%s", moduleName)] = struct{}{}
-		if !strings.HasPrefix(moduleName, "@") {
-			typePkg := "@types/" + moduleName
-			if pkgJSON.HasDep(typePkg) {
-				deps[fmt.Sprintf("//:node_modules/%s", typePkg)] = struct{}{}
+				deps[formatLabel(m.Label, from)] = struct{}{}
 			}
 		}
 	}
@@ -559,17 +562,372 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		deps[mainDep] = struct{}{}
 	}
 
-    // If a target depends on Next itself, it also needs the shimmed typings for Next's bundled deps.
-    if _, hasNext := deps["//:node_modules/next"]; hasNext {
-        deps[nextShimDep] = struct{}{}
-    }
+	// If a target depends on Next itself, it also needs the shimmed typings for Next's bundled deps.
+	if _, hasNext := deps["//:node_modules/next"]; hasNext {
+		deps[nextShimDep] = struct{}{}
+	}
 
-    labels := make([]string, 0, len(deps))
-    for dep := range deps {
-        labels = append(labels, dep)
-    }
-    sort.Strings(labels)
-    r.SetAttr("deps", labels)
+	labels := make([]string, 0, len(deps))
+	for dep := range deps {
+		labels = append(labels, dep)
+	}
+	sort.Strings(labels)
+	r.SetAttr("deps", labels)
+}
+
+func formatLabel(target label.Label, from label.Label) string {
+	if target.Pkg == from.Pkg {
+		return ":" + target.Name
+	}
+	if target.Pkg != "" && path.Base(target.Pkg) == target.Name {
+		return "//" + target.Pkg
+	}
+	return target.String()
+}
+
+func applyImpliedDeps(modules depSet) {
+	if len(modules) == 0 {
+		return
+	}
+
+	addImplied := func(dep string) {
+		implied, ok := impliedDeps[dep]
+		if !ok {
+			return
+		}
+		for _, extra := range implied {
+			modules.add(extra)
+		}
+	}
+
+	for dep := range modules {
+		addImplied(dep)
+		if moduleName := nodeModulesModuleFromImportString(dep); moduleName != "" {
+			addImplied(moduleName)
+		}
+	}
+}
+
+func (Language) CrossResolve(c *config.Config, ix *resolve.RuleIndex, imp resolve.ImportSpec, lang string) []resolve.FindResult {
+	if lang != "typescript" || imp.Lang != "typescript" {
+		return nil
+	}
+	if imp.Imp == "" {
+		return nil
+	}
+	if strings.HasPrefix(imp.Imp, "#") || strings.HasPrefix(imp.Imp, ".") || strings.HasPrefix(imp.Imp, "/") {
+		return nil
+	}
+	if strings.HasPrefix(imp.Imp, builtinModulePrefix) {
+		return nil
+	}
+
+	pkgJSON := ensurePackageJSON(c)
+	moduleName := nodeModulesModuleFromImportString(imp.Imp)
+	if moduleName == "" || !pkgJSON.HasDep(moduleName) {
+		return nil
+	}
+
+	results := []resolve.FindResult{
+		{
+			Label: label.New("", "", "node_modules/"+moduleName),
+		},
+	}
+	if !strings.HasPrefix(moduleName, "@") {
+		typePkg := "@types/" + moduleName
+		if pkgJSON.HasDep(typePkg) {
+			results = append(results, resolve.FindResult{
+				Label: label.New("", "", "node_modules/"+typePkg),
+			})
+		}
+	}
+	return results
+}
+
+func expandSrcsExpr(c *config.Config, pkgRel string, expr bzl.Expr) ([]string, error) {
+	switch expr := expr.(type) {
+	case *bzl.ListExpr:
+		return stringListFromExpr(expr), nil
+	case *bzl.CallExpr:
+		if ident, ok := expr.X.(*bzl.LiteralExpr); ok && ident.Token == "glob" {
+			patterns, excludes := parseGlobArgs(expr.List)
+			if len(patterns) == 0 {
+				return nil, nil
+			}
+			return expandGlobPatterns(filepath.Join(c.RepoRoot, filepath.FromSlash(pkgRel)), patterns, excludes)
+		}
+	}
+	return nil, nil
+}
+
+func stringListFromExpr(expr bzl.Expr) []string {
+	list, ok := expr.(*bzl.ListExpr)
+	if !ok {
+		return nil
+	}
+	out := make([]string, 0, len(list.List))
+	for _, item := range list.List {
+		str, ok := item.(*bzl.StringExpr)
+		if !ok {
+			continue
+		}
+		if strings.HasPrefix(str.Value, ":") || strings.HasPrefix(str.Value, "//") {
+			continue
+		}
+		out = append(out, str.Value)
+	}
+	return out
+}
+
+func parseGlobArgs(args []bzl.Expr) (patterns []string, excludes []string) {
+	if len(args) == 0 {
+		return nil, nil
+	}
+	if list := stringListFromExpr(args[0]); len(list) > 0 {
+		patterns = append(patterns, list...)
+	}
+	for _, arg := range args[1:] {
+		assign, ok := arg.(*bzl.AssignExpr)
+		if !ok {
+			continue
+		}
+		ident, ok := assign.LHS.(*bzl.LiteralExpr)
+		if !ok || ident.Token != "exclude" {
+			continue
+		}
+		if list := stringListFromExpr(assign.RHS); len(list) > 0 {
+			excludes = append(excludes, list...)
+		}
+	}
+	return patterns, excludes
+}
+
+func expandGlobPatterns(pkgDir string, patterns []string, excludes []string) ([]string, error) {
+	includeMatchers := compileGlobMatchers(patterns)
+	if len(includeMatchers) == 0 {
+		return nil, nil
+	}
+	excludeMatchers := compileGlobMatchers(excludes)
+
+	matches := make(map[string]struct{})
+	err := filepath.WalkDir(pkgDir, func(pathname string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		rel, err := filepath.Rel(pkgDir, pathname)
+		if err != nil {
+			return err
+		}
+		rel = filepath.ToSlash(rel)
+		if !matchAnyGlob(includeMatchers, rel) {
+			return nil
+		}
+		if matchAnyGlob(excludeMatchers, rel) {
+			return nil
+		}
+		matches[rel] = struct{}{}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	out := make([]string, 0, len(matches))
+	for file := range matches {
+		out = append(out, file)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+type globMatcher struct {
+	pattern string
+	regex   *regexp.Regexp
+}
+
+func compileGlobMatchers(patterns []string) []globMatcher {
+	matchers := make([]globMatcher, 0, len(patterns))
+	for _, pattern := range patterns {
+		re := globToRegexp(pattern)
+		if re == nil {
+			continue
+		}
+		matchers = append(matchers, globMatcher{
+			pattern: pattern,
+			regex:   re,
+		})
+	}
+	return matchers
+}
+
+func matchAnyGlob(matchers []globMatcher, rel string) bool {
+	if len(matchers) == 0 {
+		return false
+	}
+	for _, m := range matchers {
+		if m.regex.MatchString(rel) {
+			return true
+		}
+	}
+	return false
+}
+
+func globToRegexp(pattern string) *regexp.Regexp {
+	var b strings.Builder
+	b.WriteString("^")
+	for i := 0; i < len(pattern); i++ {
+		ch := pattern[i]
+		switch ch {
+		case '*':
+			if i+1 < len(pattern) && pattern[i+1] == '*' {
+				b.WriteString(".*")
+				i++
+			} else {
+				b.WriteString("[^/]*")
+			}
+		case '?':
+			b.WriteString("[^/]")
+		case '.', '+', '(', ')', '|', '^', '$', '{', '}', '[', ']', '\\':
+			b.WriteByte('\\')
+			b.WriteByte(ch)
+		default:
+			b.WriteByte(ch)
+		}
+	}
+	b.WriteString("$")
+	return regexp.MustCompile(b.String())
+}
+
+func moduleSpecsForRepoPath(conf tsconfig.TsConfigPartial, repoPath string) []string {
+	repoPath = strings.TrimPrefix(repoPath, "./")
+	repoPath = path.Clean(repoPath)
+	if repoPath == "." || repoPath == "" {
+		return nil
+	}
+
+	candidates := repoPathVariants(repoPath)
+	if len(candidates) == 0 {
+		return nil
+	}
+
+	mappings := conf.PathMappings()
+	if len(mappings) == 0 {
+		return nil
+	}
+
+	var baseURL string
+	if conf.CompilerOptions.BaseURL != "" && conf.CompilerOptions.BaseURL != "." {
+		baseURL = path.Clean(conf.CompilerOptions.BaseURL)
+	}
+
+	specs := make(map[string]struct{})
+	for _, candidate := range candidates {
+		candidateNoBase := candidate
+		if baseURL != "" {
+			if strings.HasPrefix(candidate, baseURL+"/") {
+				candidateNoBase = strings.TrimPrefix(candidate, baseURL+"/")
+			} else if candidate == baseURL {
+				candidateNoBase = ""
+			} else {
+				continue
+			}
+		}
+
+		for pattern, replacements := range mappings {
+			for _, replacement := range replacements {
+				middle, ok := matchReplacementPattern(replacement, candidateNoBase)
+				if !ok {
+					continue
+				}
+				specs[applyPattern(pattern, middle)] = struct{}{}
+			}
+		}
+	}
+
+	if len(specs) == 0 {
+		return nil
+	}
+
+	out := make([]string, 0, len(specs))
+	for spec := range specs {
+		out = append(out, spec)
+	}
+	sort.Strings(out)
+	return out
+}
+
+func repoPathVariants(repoPath string) []string {
+	repoPath = path.Clean(repoPath)
+	ext := path.Ext(repoPath)
+	if ext == "" {
+		return []string{repoPath}
+	}
+
+	base := strings.TrimSuffix(repoPath, ext)
+	var variants []string
+
+	switch ext {
+	case ".ts", ".tsx":
+		variants = append(variants, base+".js")
+	case ".mts":
+		variants = append(variants, base+".mjs")
+	case ".cts":
+		variants = append(variants, base+".cjs")
+	default:
+		variants = append(variants, repoPath)
+	}
+
+	variants = append(variants, base)
+
+	if strings.HasSuffix(base, "/index") {
+		dir := strings.TrimSuffix(base, "/index")
+		if dir != "" {
+			variants = append(variants, dir)
+		}
+	}
+
+	uniq := make(map[string]struct{}, len(variants))
+	out := make([]string, 0, len(variants))
+	for _, v := range variants {
+		if v == "" || v == "." {
+			continue
+		}
+		if _, ok := uniq[v]; ok {
+			continue
+		}
+		uniq[v] = struct{}{}
+		out = append(out, v)
+	}
+	return out
+}
+
+func matchReplacementPattern(replacement, value string) (string, bool) {
+	first := strings.Index(replacement, "*")
+	last := strings.LastIndex(replacement, "*")
+	if first == -1 {
+		if value != replacement {
+			return "", false
+		}
+		return "", true
+	}
+
+	prefix := replacement[:first]
+	suffix := replacement[last+1:]
+	if !strings.HasPrefix(value, prefix) || !strings.HasSuffix(value, suffix) {
+		return "", false
+	}
+	middle := value[len(prefix) : len(value)-len(suffix)]
+	return middle, true
+}
+
+func applyPattern(pattern, middle string) string {
+	if strings.Contains(pattern, "*") {
+		return strings.ReplaceAll(pattern, "*", middle)
+	}
+	return pattern
 }
 
 func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResult {
@@ -620,6 +978,10 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		target := mainDeps
 		if isTest {
 			target = testDeps
+		}
+
+		if strings.HasSuffix(f, ".tsx") {
+			target.add("react")
 		}
 
 		for _, imp := range imports {
