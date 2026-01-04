@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -38,7 +41,7 @@ func main() {
 			"issuer":                   issuer,
 			"authorization_endpoint":   issuer + "/authorize",
 			"jwks_uri":                 issuer + "/jwks",
-			"response_types_supported": []string{"id_token"},
+			"response_types_supported": []string{"id_token", "id_token token"},
 			"subject_types_supported":  []string{"public"},
 			"scopes_supported":         []string{"openid"},
 			"claims_supported":         []string{},
@@ -119,12 +122,16 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 	}
 
 	responseType := values.Get("response_type")
-	if responseType != "" && responseType != "id_token" {
+	responseParts := parseResponseType(responseType)
+	if responseType != "" && len(responseParts) == 0 {
 		return fmt.Errorf("unsupported response_type %q", responseType)
 	}
 
+	requestsIDToken := responseType == "" || responseParts["id_token"]
+	requestsAccessToken := responseParts["token"]
+
 	nonce := values.Get("nonce")
-	if strings.Contains(responseType, "id_token") && nonce == "" {
+	if requestsIDToken && nonce == "" {
 		return fmt.Errorf("Nonce required for response_type id_token.")
 	}
 
@@ -136,6 +143,16 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 	if clientID != "" && clientID != tokenAudience {
 		extraClaims["azp"] = clientID
 		extraClaims["aud"] = []string{tokenAudience, clientID}
+	}
+
+	var accessToken string
+	if requestsAccessToken {
+		var err error
+		accessToken, err = mintAccessToken()
+		if err != nil {
+			return fmt.Errorf("mint access token: %w", err)
+		}
+		extraClaims["at_hash"] = accessTokenHash(accessToken)
 	}
 
 	token, err := oidc.MintIDToken(subject, tokenAudience, issuer, nonce, extraClaims)
@@ -150,7 +167,14 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 
 	responseMode := values.Get("response_mode")
 	params := url.Values{}
-	params.Set("id_token", token)
+	if requestsIDToken {
+		params.Set("id_token", token)
+	}
+	if requestsAccessToken {
+		params.Set("access_token", accessToken)
+		params.Set("token_type", "Bearer")
+		params.Set("expires_in", "300")
+	}
 	if state := values.Get("state"); state != "" {
 		params.Set("state", state)
 	}
@@ -276,4 +300,37 @@ func copyValues(in url.Values) url.Values {
 		out[k] = copied
 	}
 	return out
+}
+
+func parseResponseType(responseType string) map[string]bool {
+	parts := strings.Fields(responseType)
+	if len(parts) == 0 {
+		return map[string]bool{}
+	}
+	known := map[string]bool{}
+	for _, part := range parts {
+		switch part {
+		case "id_token", "token":
+			known[part] = true
+		default:
+			return map[string]bool{}
+		}
+	}
+	if !known["id_token"] {
+		return map[string]bool{}
+	}
+	return known
+}
+
+func mintAccessToken() (string, error) {
+	bytes := make([]byte, 32)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", err
+	}
+	return base64.RawURLEncoding.EncodeToString(bytes), nil
+}
+
+func accessTokenHash(accessToken string) string {
+	sum := sha256.Sum256([]byte(accessToken))
+	return base64.RawURLEncoding.EncodeToString(sum[:len(sum)/2])
 }
