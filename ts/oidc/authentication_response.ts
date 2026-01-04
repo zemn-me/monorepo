@@ -1,5 +1,4 @@
 import {
-  number,
   object,
   optional,
   output,
@@ -32,7 +31,7 @@ export const OIDCAuthenticationSuccessResponse = object({
   token_type: optional(string()),
 
   /** Lifetime in seconds of the `access_token`. */
-  expires_in: optional(number()),
+  expires_in: optional(string()),
 
   /** Echo of request `state`, used for CSRF protection. */
   state: optional(string()),

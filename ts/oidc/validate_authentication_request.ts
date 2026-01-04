@@ -2,6 +2,20 @@ import { OIDCAuthenticationRequest } from "#root/ts/oidc/authentication_request.
 import { OpenIDConfiguration } from "#root/ts/oidc/configuration.js";
 import * as option from "#root/ts/option/types.js";
 
+function spaceSeparatedArrayEqual(
+	a: string,
+	b: string,
+) {
+	const [as, bs] = [
+		new Set(a.split(' ')),
+		new Set(b.split(' '))
+	];
+
+	const all = new Set([...as, ...bs]);
+
+	return as.size === bs.size && as.size === all.size;
+}
+
 
 export function validateAuthenticationRequest(
 	req: OIDCAuthenticationRequest,
@@ -31,7 +45,7 @@ export function validateAuthenticationRequest(
 	);
 	const supportedResponseTypes = new Set(supportedResponseTypesArray);
 
-	if (!supportedResponseTypes.has(req.response_type)) {
+	if (![...supportedResponseTypes].some(t => spaceSeparatedArrayEqual(req.response_type, t))) {
 		return option.Some(new Error(
 			`missing response type support: ${req.response_type}`
 		));
