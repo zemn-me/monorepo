@@ -10,6 +10,20 @@ export function useOIDCConfig(issuer: string) {
 			.then(config =>
 				openidConfiguration
 					.parse(config)
+			).then(
+				config => {
+					if (issuer != "https://accounts.google.com")
+						return config;
+
+					// for some reason Google doesn't properly advertise
+					// its OAuth scopes.
+					config.scopes_supported = [...new Set([
+						...config.scopes_supported,
+						"https://www.googleapis.com/auth/contacts.readonly",
+					])]
+
+					return config;
+				}
 			),
 		queryKey: ['oidc-config', issuer],
 	});

@@ -43,7 +43,7 @@ func main() {
 			"jwks_uri":                 issuer + "/jwks",
 			"response_types_supported": []string{"id_token", "id_token token"},
 			"subject_types_supported":  []string{"public"},
-			"scopes_supported":         []string{"openid"},
+			"scopes_supported":         []string{"openid", "https://www.googleapis.com/auth/contacts.readonly"},
 			"claims_supported":         []string{},
 		})
 	})
