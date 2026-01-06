@@ -17,7 +17,6 @@ export type useZemnMeAuthReturnType = [
 export function useZemnMeAuth(): useZemnMeAuthReturnType {
 	const apiFetchClient = useFetchClient();
 	const [id_token, google_access_token, promptForLogin] = useGoogleAuth([
-		'https://www.googleapis.com/auth/contacts.readonly',
 	]);
 
 	const request_body = option.and_then(
