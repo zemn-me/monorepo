@@ -1,4 +1,5 @@
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import * as gcp from "@pulumi/gcp";
 import * as Pulumi from '@pulumi/pulumi';
 
 import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
@@ -32,6 +33,7 @@ export class Component extends Pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
+
 		new CostAllocationTag(
 			`${name}_cost_tag`,
 			{
@@ -44,6 +46,11 @@ export class Component extends Pulumi.ComponentResource {
 		new LambdaHelloWorld(`${name}_fargate`, {
 			tags: args.tags
 		});
+
+		const peopleService = new gcp.projects.Service("peopleservice", {
+			service: "people.googleapis.com",
+			disableOnDestroy: false,
+		}, { parent: this });
 
 		this.site = new Website(
 			`${name}_zemn_me`,
@@ -61,7 +68,12 @@ export class Component extends Pulumi.ComponentResource {
                                 tags,
                                 wellKnownOidcDomain: ['api', args.domain].join('.'),
                         },
-                        { parent: this }
+			{
+				parent: this, dependsOn: [
+					// for using contacts
+					peopleService
+				]
+			}
                 );
 
 		const availability = new Website(
