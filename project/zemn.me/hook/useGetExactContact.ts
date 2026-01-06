@@ -23,7 +23,8 @@ export function useGetExactContact(
 			}).GET("/v1/people:searchContacts", {
 				params: {
 					query: {
-						query: content
+						query: content,
+						readMask: "emailAddresses,phoneNumbers,nicknames,names"
 					}
 				}
 			}).then(
