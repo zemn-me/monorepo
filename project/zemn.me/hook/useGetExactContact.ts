@@ -18,7 +18,7 @@ export function useGetExactContact(
 			? async () => createFetchClient<paths>({
 				baseUrl: "https://people.googleapis.com",
 				headers: {
-					Authorization: option.unwrap_unchecked(access_token),
+					Authorization: `Bearer ${option.unwrap_unchecked(access_token)}`,
 				}
 			}).GET("/v1/people:searchContacts", {
 				params: {
