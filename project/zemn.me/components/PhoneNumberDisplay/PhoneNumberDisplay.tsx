@@ -12,7 +12,7 @@ export function PhoneNumberDisplay(props: PhoneNumberDisplayProps) {
 		props.number,
 	)
 
-	if (contacts.isLoading) return "⌛";
+	if (contacts.isLoading) return props.number;
 
 	if (!contacts.isSuccess) return props.number;
 
