@@ -5,6 +5,7 @@ ts_project(
     name = "hook",
     srcs = [
         "useAuthRedirect.ts",
+        "useGetExactContact.ts",
         "useGoogleAuth.tsx",
         "useIsLoggedIn.tsx",
         "useLocalSecret.ts",
@@ -29,6 +30,7 @@ ts_project(
         "//project/zemn.me/api:ts_client_dts",
         "//project/zemn.me/constants",
         "//project/zemn.me/promise",
+        "//third_party/com/googleapis/people:ts_client",
         "//ts",
         "//ts/oidc",
         "//ts/option",
@@ -48,6 +50,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "useAuthRedirect.ts",
+        "useGetExactContact.ts",
         "useGoogleAuth.tsx",
         "useIsLoggedIn.tsx",
         "useLocalSecret.ts",
