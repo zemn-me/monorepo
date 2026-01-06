@@ -8,6 +8,7 @@ import { z } from 'zod';
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
+import { PhoneNumberDisplay } from '#root/project/zemn.me/components/PhoneNumberDisplay/PhoneNumberDisplay.js';
 import {
 	useGetAdminUid,
 	useZemnMeApi,
@@ -399,7 +400,9 @@ function DisplayPhoneNumber({
 	const el = option_and_then(pn, r =>
 		result_unwrap_or_else(
 			result_and_then(r, ({ phoneNumber }) => (
-				<Link href={`tel:${phoneNumber}`}>{phoneNumber}</Link>
+				<Link href={`tel:${phoneNumber}`}>
+					<PhoneNumberDisplay number={phoneNumber}/>
+				</Link>
 			)),
 			({ cause }) => (
 				<details>

@@ -4,6 +4,9 @@ import { useOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
 export function useGoogleAuth(scopes: string[]) {
 	return useOIDC(GOOGLE_ISSUER_DOMAIN, {
 		client_id: GOOGLE_CLIENT_ID,
-		scope: scopes.join(' '),
+		scope: [
+			...scopes,
+			'https://www.googleapis.com/auth/contacts.readonly',
+		].join(' '),
 	});
 }
