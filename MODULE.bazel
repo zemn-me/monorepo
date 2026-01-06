@@ -507,3 +507,13 @@ http_archive(
     strip_prefix = "sqlite4java-7b55b3eab6901a0e49d6e1129431fa92c4206c0b",
     url = "https://github.com/ganadist/sqlite4java/archive/7b55b3eab6901a0e49d6e1129431fa92c4206c0b.tar.gz",
 )
+
+http_archive(
+    name = "apis.guru",
+    build_file_content = """
+exports_files(glob(["**/*"], allow_empty=True))
+""",
+    integrity = "sha256-4PltcQE7b8EjFEl23UmIaYaImmyfCrNPcTueyZQ5nd4=",
+    strip_prefix = "openapi-directory-f7207cf0a5c56081d275ebae4cf615249323385d",
+    url = "https://github.com/APIs-guru/openapi-directory/archive/f7207cf0a5c56081d275ebae4cf615249323385d.tar.gz",
+)
