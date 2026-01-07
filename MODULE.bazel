@@ -186,20 +186,6 @@ use_repo(
 bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
 
-go_deps_with_disabled_proto_generation = [
-    "github.com/hashicorp/go-plugin",
-]
-
-[
-    go_deps.gazelle_override(
-        directives = [
-            "gazelle:go_generate_proto false",
-        ],
-        path = path,
-    )
-    for path in go_deps_with_disabled_proto_generation
-]
-
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
