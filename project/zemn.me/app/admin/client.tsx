@@ -2,13 +2,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useId, useMemo, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import { PhoneNumberDisplay } from '#root/project/zemn.me/components/PhoneNumberDisplay/PhoneNumberDisplay.js';
+import { PhoneNumberInput } from '#root/project/zemn.me/components/PhoneNumberInput/PhoneNumberInput.js';
 import {
 	useGetAdminUid,
 	useZemnMeApi,
@@ -30,7 +31,6 @@ import {
 	unwrap_or_else as result_unwrap_or_else,
 } from '#root/ts/result/result.js';
 import { e164 } from '#root/ts/zod/e164.js';
-
 
 interface SettingsEditorProps {
 	readonly Authorization: string;
@@ -248,11 +248,16 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					</p>
 
 					{authorizerFields.fields.map((f, i) => (
-						<fieldset>
-							<input
-								id={f.id}
-								key={f.id}
+						<fieldset key={f.id}>
+							<Controller
+								control={control}
 								{...register(`authorizers.${i}.phoneNumber`)}
+								render={({ field: { onChange, onBlur, value, ref } }) => <PhoneNumberInput
+									onBlur={onBlur}
+									onChange={onChange}
+									ref={ref}
+									value={value}
+								/>}
 							/>
 
 							<button
@@ -292,7 +297,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					</p>
 
 					{entryCodesFields.fields.map((f, i) => (
-						<fieldset>
+						<fieldset key={f.id}>
 							<input
 								id={f.id}
 								key={f.id}
@@ -335,10 +340,16 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 							visitor in.
 						</p>
 					</label>
-					<input
-						id={id('fallbackPhone')}
-						type="tel"
-						{...register('fallbackPhone')}
+					<Controller
+						control={control}
+						{...register(`fallbackPhone`)}
+						render={({ field: { onChange, onBlur, value, ref } }) => <PhoneNumberInput
+							id={id('fallbackPhone')}
+							onBlur={onBlur}
+							onChange={onChange}
+							ref={ref}
+							value={value}
+						/>}
 					/>
 
 					{errors.fallbackPhone ? (
