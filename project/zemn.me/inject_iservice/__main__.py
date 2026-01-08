@@ -32,32 +32,36 @@ class AssignedPorts(BaseModel):
     model_config = ConfigDict(extra="ignore", populate_by_name=True)
 
 def main() -> None:
+    use_prod_env = os.getenv("ZEMN_ITEST_ENV", "").lower() in {"1", "true", "prod", "production"}
+
     assigned = os.getenv("ASSIGNED_PORTS")
     if not assigned:
         sys.exit("ASSIGNED_PORTS is not set")
 
     port_map = AssignedPorts.model_validate(json.loads(assigned))
 
-    os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = (
-        "http://localhost:" + str(port_map.api_service_port)
-    )
+    if not use_prod_env:
+        os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = (
+            "http://localhost:" + str(port_map.api_service_port)
+        )
 
-    issuer = None
-    if port_map.oidc_provider_port:
-        issuer = f"http://localhost:{port_map.oidc_provider_port}"
-        os.environ["ZEMN_TEST_OIDC_ISSUER"] = issuer
-        os.environ["ZEMN_TEST_OIDC_PROVIDER"] = issuer
-    else:
-        issuer = os.environ.get("ZEMN_TEST_OIDC_ISSUER", "http://localhost:43111")
-        os.environ.setdefault("ZEMN_TEST_OIDC_ISSUER", issuer)
-        os.environ.setdefault("ZEMN_TEST_OIDC_PROVIDER", issuer)
+    if not use_prod_env:
+        issuer = None
+        if port_map.oidc_provider_port:
+            issuer = f"http://localhost:{port_map.oidc_provider_port}"
+            os.environ["ZEMN_TEST_OIDC_ISSUER"] = issuer
+            os.environ["ZEMN_TEST_OIDC_PROVIDER"] = issuer
+        else:
+            issuer = os.environ.get("ZEMN_TEST_OIDC_ISSUER", "http://localhost:43111")
+            os.environ.setdefault("ZEMN_TEST_OIDC_ISSUER", issuer)
+            os.environ.setdefault("ZEMN_TEST_OIDC_PROVIDER", issuer)
 
-    os.environ.setdefault("ZEMN_TEST_OIDC_CLIENT_ID", "integration-test-client")
-    os.environ.setdefault("ZEMN_TEST_OIDC_SUBJECT", "integration-test-remote")
-    os.environ.setdefault("ZEMN_TEST_OIDC_LOCAL_SUBJECT", "integration-test-local")
-    os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_ISSUER", os.environ["ZEMN_TEST_OIDC_ISSUER"])
-    os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID", os.environ["ZEMN_TEST_OIDC_CLIENT_ID"])
-    os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_NAME", "Local Test IdP")
+        os.environ.setdefault("ZEMN_TEST_OIDC_CLIENT_ID", "integration-test-client")
+        os.environ.setdefault("ZEMN_TEST_OIDC_SUBJECT", "integration-test-remote")
+        os.environ.setdefault("ZEMN_TEST_OIDC_LOCAL_SUBJECT", "integration-test-local")
+        os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_ISSUER", os.environ["ZEMN_TEST_OIDC_ISSUER"])
+        os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID", os.environ["ZEMN_TEST_OIDC_CLIENT_ID"])
+        os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_NAME", "Local Test IdP")
 
     nextjs_bin_rlocation = os.getenv("NEXTJS_BINARY")
     if not nextjs_bin_rlocation:

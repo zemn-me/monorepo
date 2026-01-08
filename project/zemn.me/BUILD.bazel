@@ -51,9 +51,21 @@ next_itest_service_dev(
     ],
 )
 
+next_itest_service_dev(
+    name = "itest_service_dev_prod_env",
+    args = [
+        "project/zemn.me",
+    ],
+    exe = "//project/zemn.me/inject_iservice:inject_iservice_prod_env_bin",
+    deps = [
+        "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
+        "//project/zemn.me/testing:oidc_provider_itest_service",
+    ],
+)
+
 alias(
     name = "zemn.me",
-    actual = ":itest_service_dev",
+    actual = ":itest_service_dev_prod_env",
 )
 
 bazel_lint(
