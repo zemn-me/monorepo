@@ -112,7 +112,7 @@ def next_project(
     bin.next(
         name = "build",
         srcs = srcs,
-        args = ["build", native.package_name(), "--no-lint"],
+        args = ["build", native.package_name()],
         out_dirs = ["build"],
     )
 
