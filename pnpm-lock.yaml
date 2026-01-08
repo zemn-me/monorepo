@@ -136,6 +136,9 @@ dependencies:
   json-schema-to-typescript:
     specifier: 15.0.4
     version: 15.0.4
+  libphonenumber-js:
+    specifier: ^1.12.33
+    version: 1.12.33
   lodash:
     specifier: 4.17.21
     version: 4.17.21
@@ -13681,6 +13684,10 @@ packages:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
+
+  /libphonenumber-js@1.12.33:
+    resolution: {integrity: sha512-r9kw4OA6oDO4dPXkOrXTkArQAafIKAU71hChInV4FxZ69dxCfbwQGDPzqR5/vea94wU705/3AZroEbSoeVWrQw==}
+    dev: false
 
   /lie@3.1.1:
     resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==}
