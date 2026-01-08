@@ -89,6 +89,13 @@ export function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
 	for (const it of i) yield f(it);
 }
 
+export function* filter_map<I, O>(
+	i: Iterable<I>,
+	f: (i: I) => Option<O>
+): Iterable<O> {
+	yield* filter(map(i, f));
+}
+
 export function* range(start = 0, end = Infinity, step = 1) {
 	for (let i = start; i < end; i += step) {
 		yield i;
