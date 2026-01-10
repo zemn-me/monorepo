@@ -38,8 +38,8 @@ dependencies:
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/gcp':
-    specifier: 9.7.0
-    version: 9.7.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 9.9.0
+    version: 9.9.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/random':
     specifier: 4.18.5
     version: 4.18.5(ts-node@10.9.2)(typescript@5.5.4)
@@ -4818,8 +4818,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/gcp@9.7.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-3aOcgg/6LSoyp49Sc5oDMcA/4QW7aOlK3oODKpG4/gHzHNSY/DPUk6X/8fY4YzdXz0XuSiKGK9jgsekAhLSgdA==}
+  /@pulumi/gcp@9.9.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-1oLuuLeFqFyWbxta9RgqWMfLnpz+H6Xnqc34peG7fx9G2qUJo6nPFoKyfrxVpdeOtWbfV0r6Cx0P9kYQNy1Gww==}
     dependencies:
       '@npmcli/package-json': 6.2.0
       '@pulumi/pulumi': 3.214.1(ts-node@10.9.2)(typescript@5.5.4)
