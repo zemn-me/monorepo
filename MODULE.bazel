@@ -365,7 +365,7 @@ http_archive(
     ],
 )
 
-bazel_dep(name = "protobuf", version = "33.2", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "33.3.bcr.1", repo_name = "com_google_protobuf")
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
