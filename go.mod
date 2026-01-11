@@ -133,4 +133,4 @@ require (
 )
 
 // gopls needs this very specific version of tools.
-replace golang.org/x/tools => golang.org/x/tools v0.27.1-0.20241219162658-575221bfbda3
+replace golang.org/x/tools => golang.org/x/tools v0.27.0
