@@ -1,0 +1,20 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "react-query",
+    srcs = ["useQuery.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",  #keep
+        "//:node_modules/react",  #keep
+        "//ts/future",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["useQuery.ts"],
+    visibility = ["//:__subpackages__"],
+)
