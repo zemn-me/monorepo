@@ -10,6 +10,7 @@ import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentica
 import { Option } from '#root/ts/option/types.js';
 import * as option from '#root/ts/option/types.js';
 import * as result from '#root/ts/result/result.js';
+import { Second } from '#root/ts/time/duration.js';
 
 
 export type OIDCImplicitRequest = Omit<
@@ -86,12 +87,29 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 	const cacheKeyArgs = [issuer, params];
 	const callbackQuery = useQuery({
 		queryKey: ['use-oidc', ...cacheKeyArgs],
-		queryFn: () => {
+		queryFn: async () => {
 			if (option.is_none(targetURL)) {
 				throw new Error('missing authorization endpoint');
 			}
-			return useWindowCallback(option.unwrap_unchecked(targetURL));
+			const url = await useWindowCallback(option.unwrap_unchecked(targetURL));
+			const href = new URL(url);
+			return OIDCAuthenticationResponse.parse(
+				Object.fromEntries([
+					...href.searchParams,
+					...new URLSearchParams(
+						href.hash.slice(1)
+					),
+				])
+			);
 		},
+		staleTime: r => {
+				const rsp = r.state.data;
+
+				if (rsp !== undefined && !('expires_in' in rsp)) return 0;
+				if (rsp?.expires_in === undefined) return 0;
+
+				return parseInt(rsp.expires_in, 10) * Second;
+			},
 		enabled: false,
 	});
 
@@ -104,28 +122,10 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 		}
 	);
 
-	const callbackV =
+	const authResponse =
 		callbackQuery.status === 'success'
 			? option.Some(callbackQuery.data)
 			: option.None;
-
-	const authResponse = option.and_then(
-		callbackV,
-		v => {
-			const href = new URL(v);
-
-			const r = OIDCAuthenticationResponse.parse(
-				Object.fromEntries([
-					...href.searchParams,
-					...new URLSearchParams(
-						href.hash.slice(1)
-					),
-				])
-			);
-
-			return r;
-		}
-	);
 
 	if (entropy.status === 'success')
 		option.and_then(
