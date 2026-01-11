@@ -32,7 +32,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/itchyny/gojq v0.12.17
-	github.com/nyaruka/phonenumbers v1.6.7
+	github.com/nyaruka/phonenumbers v1.6.8
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
 	github.com/oapi-codegen/oapi-codegen/v2 v2.5.1
 	github.com/oapi-codegen/runtime v1.1.2
@@ -124,7 +124,7 @@ require (
 	golang.org/x/text v0.28.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	golang.org/x/vuln v1.0.4 // indirect
-	google.golang.org/protobuf v1.36.9 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
