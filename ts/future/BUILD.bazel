@@ -1,0 +1,14 @@
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "future",
+    srcs = ["future.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["future.ts"],
+    visibility = ["//:__subpackages__"],
+)
