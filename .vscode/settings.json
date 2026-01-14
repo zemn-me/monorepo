@@ -114,5 +114,6 @@
 	"typescript.preferences.autoImportFileExcludePatterns": [
 		"**/_*"
 	],
-	"bazel.buildifierExecutable": "./sh/bin/buildifier"
+	"bazel.buildifierExecutable": "./sh/bin/buildifier",
+	"python-envs.defaultEnvManager": "ms-python.python:system"
 }
