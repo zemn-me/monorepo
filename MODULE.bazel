@@ -501,9 +501,74 @@ exports_files(glob(["**/*"], allow_empty=True))
     url = "https://github.com/APIs-guru/openapi-directory/archive/f7207cf0a5c56081d275ebae4cf615249323385d.tar.gz",
 )
 
-http_archive(
-    name = "bazel",
-    integrity = "sha256-ee37rJDVse5AHQD6LVzY80tbBwkyEw+HdBS0wMzZtSA=",
-    strip_prefix = "bazel-8.5.1",
-    url = "https://github.com/bazelbuild/bazel/archive/8.5.1.tar.gz",
+http_file(
+    name = "build_event_stream_proto",
+    downloaded_file_path = "src/main/java/com/google/devtools/build/lib/buildeventstream/proto/build_event_stream.proto",
+    sha256 = "d950667f2caac6969491649d16052e061f3a46942489c05c48599e60e518c727",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/java/com/google/devtools/build/lib/buildeventstream/proto/build_event_stream.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_action_cache_proto",
+    downloaded_file_path = "src/main/protobuf/action_cache.proto",
+    sha256 = "dcc41240e4bed96a39359c57a1354f603b5b6f209d2b9e4be4fe4a19b2e3828a",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/action_cache.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_command_line_proto",
+    downloaded_file_path = "src/main/protobuf/command_line.proto",
+    sha256 = "a6fb6591aa50794431787169bc4fae16105ef5c401e7c30ecf0f775e0ab25c2c",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/command_line.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_failure_details_proto",
+    downloaded_file_path = "src/main/protobuf/failure_details.proto",
+    sha256 = "d790ff40dfaf3fdd2cf21c228e320b091dec2f25fbc7927463473c5e887cf988",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/failure_details.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_invocation_policy_proto",
+    downloaded_file_path = "src/main/protobuf/invocation_policy.proto",
+    sha256 = "d17bdf99a9df0169b6d011e457cf1a1783ce94bab30b61e9681384493a3b3e53",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/invocation_policy.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_option_filters_proto",
+    downloaded_file_path = "src/main/protobuf/option_filters.proto",
+    sha256 = "2059522a8e5a28d2e05561e42d76238e774229543fa64384c0762267673a4a23",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/option_filters.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_strategy_policy_proto",
+    downloaded_file_path = "src/main/protobuf/strategy_policy.proto",
+    sha256 = "39fa413ac63b91ea119f4d830dd17f9c28efb7a6529d1b366c8c4e927b24731c",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/protobuf/strategy_policy.proto",
+    ],
+)
+
+http_file(
+    name = "bazel_package_load_metrics_proto",
+    downloaded_file_path = "src/main/java/com/google/devtools/build/lib/packages/metrics/package_load_metrics.proto",
+    sha256 = "9dfdd36b1bdb15e7e0b212cd15d2f31c1e21607e4ba25afd334e33dd46feaef5",
+    urls = [
+        "https://raw.githubusercontent.com/bazelbuild/bazel/8.5.1/src/main/java/com/google/devtools/build/lib/packages/metrics/package_load_metrics.proto",
+    ],
 )
