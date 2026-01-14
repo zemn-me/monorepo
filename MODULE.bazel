@@ -500,3 +500,10 @@ exports_files(glob(["**/*"], allow_empty=True))
     strip_prefix = "openapi-directory-f7207cf0a5c56081d275ebae4cf615249323385d",
     url = "https://github.com/APIs-guru/openapi-directory/archive/f7207cf0a5c56081d275ebae4cf615249323385d.tar.gz",
 )
+
+http_archive(
+    name = "bazel",
+    integrity = "sha256-ee37rJDVse5AHQD6LVzY80tbBwkyEw+HdBS0wMzZtSA=",
+    strip_prefix = "bazel-8.5.1",
+    url = "https://github.com/bazelbuild/bazel/archive/8.5.1.tar.gz",
+)
