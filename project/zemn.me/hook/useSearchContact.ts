@@ -4,13 +4,11 @@ import createFetchClient from "openapi-fetch";
 
 import { useGoogleAuth } from "#root/project/zemn.me/hook/useGoogleAuth.js";
 import type { components, paths } from "#root/third_party/com/googleapis/people/api_client.gen.js";
+import { PeopleFieldMask } from "#root/ts/google/people/display.js";
 import * as option from "#root/ts/option/types.js";
 import { Minute } from "#root/ts/time/duration.js";
 
-export type ContactReadMaskField =
-	keyof components["schemas"]["Person"];
-
-
+export type Person = components["schemas"]["Person"];
 
 // google contacts uses an absolutely mad non-spec canonical form
 // for searching contacts (assumedly andriod is NOT using this API).
@@ -29,7 +27,7 @@ export function normalizePhoneNumberQuery(
 
 export function useSearchContact(
 	query: string | undefined,
-	readMask: Set<ContactReadMaskField>
+	readMask: Set<PeopleFieldMask>
 ) {
 	const normalized_query =
 		query ?
