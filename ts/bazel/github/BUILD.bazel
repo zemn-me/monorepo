@@ -1,0 +1,58 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "github",
+    srcs = [
+        "cli.ts",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//ts/bazel",
+        "//ts/github/actions",
+    ],
+)
+
+js_binary(
+    name = "bazel_github",
+    data = [":github"],
+    entry_point = "cli.js",
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "cli.ts",
+        "github_test.ts",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "github_tests",
+    srcs = ["github_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":github",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["github_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":github_tests"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
