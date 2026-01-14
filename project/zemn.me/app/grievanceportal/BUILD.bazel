@@ -24,6 +24,7 @@ ts_project(
         "//:node_modules/temporal-polyfill",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
+        "//project/zemn.me/components/EmailDisplay",
         "//project/zemn.me/components/PendingPip",
         "//project/zemn.me/hook",
         "//ts/next.js/types/next-compiled",

@@ -1,7 +1,11 @@
 package apiserver
 
-import "context"
+import (
+	"context"
 
-func (s *Server) GetHealthz(ctx context.Context, rq GetHealthzRequestObject) (rs GetHealthzResponseObject, err error) {
-	return GetHealthz200JSONResponse("OK"), nil
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
+)
+
+func (s *Server) GetHealthz(ctx context.Context, rq api_types.GetHealthzRequestObject) (rs api_types.GetHealthzResponseObject, err error) {
+	return api_types.GetHealthz200JSONResponse("OK"), nil
 }

@@ -25,13 +25,19 @@ export function normalizePhoneNumberQuery(
 	return pn.formatInternational().replace(/ /g, "");
 }
 
+export interface ContactSearchOptions {
+	readonly normalizeQuery?: (query: string) => string;
+}
+
 export function useSearchContact(
 	query: string | undefined,
-	readMask: Set<PeopleFieldMask>
+	readMask: Set<PeopleFieldMask>,
+	options: ContactSearchOptions = {}
 ) {
+	const normalizeQuery = options.normalizeQuery ?? normalizePhoneNumberQuery;
 	const normalized_query =
 		query ?
-			normalizePhoneNumberQuery(query)
+			normalizeQuery(query)
 			// intentionally an empty string due to recommendation
 			// from Google to warm up cache.
 			: "";

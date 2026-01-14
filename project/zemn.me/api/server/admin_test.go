@@ -5,16 +5,17 @@ import (
 	"testing"
 
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 func TestGetAdminUid(t *testing.T) {
 	s := newTestServer()
 	ctx := context.WithValue(context.Background(), auth.SubjectKey, "12345")
-	resp, err := s.GetAdminUid(ctx, GetAdminUidRequestObject{})
+	resp, err := s.GetAdminUid(ctx, api_types.GetAdminUidRequestObject{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	jsonResp, ok := resp.(GetAdminUid200JSONResponse)
+	jsonResp, ok := resp.(api_types.GetAdminUid200JSONResponse)
 	if !ok {
 		t.Fatalf("unexpected response type: %T", resp)
 	}
