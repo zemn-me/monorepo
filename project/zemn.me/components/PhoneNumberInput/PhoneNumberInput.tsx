@@ -1,9 +1,9 @@
 import { type ChangeEventHandler, type FocusEventHandler, forwardRef, type Ref, useId } from "react";
 
-import { useGetExactContact } from "#root/project/zemn.me/hook/useGetExactContact.js"
+import { useGetExactContactByPhoneNumber } from "#root/project/zemn.me/hook/useGetExactContactByPhoneNumber.js";
 import { either } from "#root/ts/either/either.js";
 import { displayPersonName } from "#root/ts/google/people/display.js";
-import { and_then, flatten } from "#root/ts/option/types.js";
+import {  None, option_and_then_flatten, Some } from "#root/ts/option/types.js";
 
 
 export type PhoneNumberInputProps = {
@@ -29,19 +29,22 @@ function _PhoneNumberInput(props: PhoneNumberInputProps, ref: Ref<HTMLInputEleme
 	} = props;
 
 
-	const contacts = useGetExactContact(
-		"phoneNumbers",
-		value,
+	const contact = useGetExactContactByPhoneNumber(
+		Some(value),
 		new Set([
 			"names",
 			"nicknames",
 		])
 	);
 
-	const displayName = flatten(and_then(
-		contacts.data,
-		person => displayPersonName(person)
-	))
+	const displayName = contact(
+			() => None, // ignore error for now
+			contact => option_and_then_flatten(
+				contact,
+				contact => displayPersonName(contact)
+			)
+	);
+
 
 
 	return (
