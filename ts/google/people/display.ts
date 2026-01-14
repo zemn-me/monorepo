@@ -8,6 +8,11 @@ export type PeopleName =
 		components["schemas"]["Person"]["names"]
 	>[number];
 
+export type PeopleFieldMask = keyof PeoplePerson;
+
+export type PeoplePhoneNumber =
+	NonNullable<PeoplePerson["phoneNumbers"]>[number];
+
 function formatPeopleName(
 	n: PeopleName
 ): string {
