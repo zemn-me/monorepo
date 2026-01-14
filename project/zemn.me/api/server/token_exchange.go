@@ -31,7 +31,7 @@ var upstreamOIDCIssuers = map[OIDCIssuer]*upstreamIssuerConfig{
 		Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{
 			googleClientID: {
 				"111669004071516300752": "thomas",
-				"100829149849397087770": "thomas2",
+				"100829149849397087770": "thomas",
 				"112149295011396650000": "keng",
 				"112149295011396651358": "keng",
 			},
