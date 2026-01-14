@@ -84,6 +84,13 @@ export const concat =
 			yield* ii;
 	}
 
+export const concatn =
+	<T>(iterables: Iterable<Iterable<T>>): Iterable<T> =>
+		fold<Iterable<T>, Iterable<T>>((p, c) => concat(p)(c)) ([])(iterables)
+
+// type inference for Iterable<Iterable<T>> isn't good for T[][] for some reason
+export const concatn_array =
+	<T>(iterables: T[][]): Iterable<T> => concatn(iterables)
 
 export function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
 	for (const it of i) yield f(it);
@@ -101,3 +108,4 @@ export function* range(start = 0, end = Infinity, step = 1) {
 		yield i;
 	}
 }
+

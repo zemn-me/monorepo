@@ -12,7 +12,10 @@ import { and_then as result_and_then, Err, flatten as result_flatten, Ok, Result
 /**
  * Option<T> ≔ Either<null, T>
  * - None  → Left(null)
- * - Some  → Right(value)
+ * - Some  a Right(value)
+  is_left,
+  is_right,
+  Left,
  */
 export type Option<T> = Either<null, T>
 
@@ -50,6 +53,8 @@ export function unwrap_or<T, T2>(o: Option<T>, fallback: T2): T | T2 {
   return either<null, T, T | T2>(o, () => fallback, v => v)
 }
 
+export { unwrap_or as option_unwrap_or }
+
 /** Get the value or call a fallback. */
 /*#__NO_SIDE_EFFECTS__*/
 export function unwrap_or_else<T, T2>(o: Option<T>, fallback: () => T2): T | T2 {
@@ -61,6 +66,8 @@ export function unwrap_or_else<T, T2>(o: Option<T>, fallback: () => T2): T | T2 
 export function and_then<T, O>(o: Option<T>, f: (v: T) => O): Option<O> {
   return either<null, T, Option<O>>(o, () => None, v => Some(f(v)))
 }
+
+export { and_then as option_and_then }
 
 /** Flatten Option<Option<T>> → Option<T>. */
 /*#__NO_SIDE_EFFECTS__*/
@@ -74,6 +81,8 @@ export function flatten<T>(o: Option<Option<T>>): Option<T> {
 export function and_then_flatten<T, O>(o: Option<T>, f: (v: T) => Option<O>): Option<O> {
   return either<null, T, Option<O>>(o, () => None, v => f(v))
 }
+
+export { and_then_flatten as option_and_then_flatten }
 
 /** Zip two Options. If both Some, returns Some([a,b]); otherwise None. */
 /*#__NO_SIDE_EFFECTS__*/
@@ -246,4 +255,10 @@ export function option_result_option_result_flatten<T, E1, E2>(
 		o,
 		v => option_result_transpose(v)
 	), v => result_flatten(v))), v => flatten(v)))
+}
+
+export function option_from_maybe_undefined<T>(
+	v: T | undefined
+): Option<T> {
+	return v === undefined ? None : Some(v);
 }
