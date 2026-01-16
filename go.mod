@@ -7,7 +7,7 @@ go 1.24.0
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
-	github.com/aws/aws-lambda-go v1.51.1
+	github.com/aws/aws-lambda-go v1.51.2
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
