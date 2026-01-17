@@ -442,8 +442,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.81.5
-    version: 42.81.5(typanion@3.14.0)
+    specifier: 42.81.6
+    version: 42.81.6(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -10080,11 +10080,6 @@ packages:
     resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
     engines: {node: '>=0.3.1'}
 
-  /diff@8.0.2:
-    resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
-    engines: {node: '>=0.3.1'}
-    dev: true
-
   /diff@8.0.3:
     resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
@@ -17346,8 +17341,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.81.5(typanion@3.14.0):
-    resolution: {integrity: sha512-pB4cHzcvqpggufVLb0Fr/US91vs6HmfdQlISiXDU6+FaC40ZpKjsvaYu+LQm+Q3Yv7I0UGpW9+ajqSsgXf/F5g==}
+  /renovate@42.81.6(typanion@3.14.0):
+    resolution: {integrity: sha512-xE6fcTymLAhdRSTtvvgq3vNcKP+Hrmsc8GuTPNWxzBz8Ug1nt9WvPbKEtfmD1zw7gR/SnybHGZKbcseRglb5Yg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17404,7 +17399,7 @@ packages:
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
-      diff: 8.0.2
+      diff: 8.0.3
       editorconfig: 3.0.1
       email-addresses: 5.0.0
       emoji-regex: 10.6.0
