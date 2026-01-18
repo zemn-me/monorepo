@@ -1,25 +1,11 @@
 load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
 load("//go:rules.bzl", "go_library")
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-)
-
-go_oapi_codegen(
-    name = "server_gen",
-    out = "api.gen.go",
-    generate = [
-        "chi-server",
-        "models",
-        "strict-server",
-        "skip-prune",
-    ],
-    package = "apiserver",
-    source = "//project/zemn.me/api:spec.yaml",
 )
 
 copy_file(
@@ -33,7 +19,6 @@ go_library(
     srcs = [
         "TestRemoveDuplicateDigits.go",
         "admin.go",
-        "api.gen.go",
         "callbox_settings.go",
         "constants.go",
         "date.go",
@@ -60,6 +45,7 @@ go_library(
     deps = [
         "//project/zemn.me/api",
         "//project/zemn.me/api/server/auth",
+        "//project/zemn.me/api/server/types",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_config//:config",
         "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
@@ -105,6 +91,7 @@ go_test(
     embed = [":server"],
     deps = [
         "//project/zemn.me/api/server/auth",
+        "//project/zemn.me/api/server/types",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",

@@ -6,6 +6,7 @@ export function useGoogleAuth(scopes: string[]) {
 		client_id: GOOGLE_CLIENT_ID,
 		scope: [
 			...scopes,
+			'email',
 			'https://www.googleapis.com/auth/contacts.readonly',
 		].join(' '),
 	});

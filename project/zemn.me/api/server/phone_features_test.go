@@ -11,6 +11,7 @@ import (
 
 	"github.com/beevik/etree"
 	"github.com/twilio/twilio-go/twiml"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 func newTestServer() *Server {
@@ -40,16 +41,16 @@ func TestTwilioError(t *testing.T) {
 
 func TestHandleEntryViaCode(t *testing.T) {
 	s := newTestServer()
-	err := s.postNewSettings(context.Background(), CallboxSettings{
-		EntryCodes: []EntryCodeEntry{{Code: "12345"}},
+	err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		EntryCodes: []api_types.EntryCodeEntry{{Code: "12345"}},
 	})
 	if err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
 	}
 
 	digits := "12345"
-	rq := GetPhoneHandleEntryRequestObject{
-		Params: GetPhoneHandleEntryParams{
+	rq := api_types.GetPhoneHandleEntryRequestObject{
+		Params: api_types.GetPhoneHandleEntryParams{
 			Digits: &digits,
 		},
 	}
@@ -75,14 +76,14 @@ func TestHandleEntryViaCode(t *testing.T) {
 
 func TestHandleEntryViaAuthorizerDefault(t *testing.T) {
 	s := newTestServer()
-	err := s.postNewSettings(context.Background(), CallboxSettings{
-		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		Authorizers: []api_types.Authorizer{{PhoneNumber: "+15551234567"}},
 	})
 	if err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
 	}
 
-	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{})
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), api_types.GetPhoneHandleEntryRequestObject{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -136,8 +137,8 @@ func TestHandleEntryViaAuthorizerDefault(t *testing.T) {
 
 func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
 	s := newTestServer()
-	err := s.postNewSettings(context.Background(), CallboxSettings{
-		Authorizers: []Authorizer{{PhoneNumber: "+15557654321"}},
+	err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		Authorizers: []api_types.Authorizer{{PhoneNumber: "+15557654321"}},
 	})
 	if err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
@@ -148,8 +149,8 @@ func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
 		t.Fatalf("failed to normalize phone number: %v", err)
 	}
 
-	rq := GetPhoneHandleEntryRequestObject{
-		Params: GetPhoneHandleEntryParams{
+	rq := api_types.GetPhoneHandleEntryRequestObject{
+		Params: api_types.GetPhoneHandleEntryParams{
 			Digits: &local,
 		},
 	}
@@ -179,8 +180,8 @@ func TestHandleEntryViaAuthorizerSelectedByDigits(t *testing.T) {
 
 func TestHandleEntryViaAuthorizerRetriesOnNoAnswer(t *testing.T) {
 	s := newTestServer()
-	err := s.postNewSettings(context.Background(), CallboxSettings{
-		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		Authorizers: []api_types.Authorizer{{PhoneNumber: "+15551234567"}},
 	})
 	if err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
@@ -188,8 +189,8 @@ func TestHandleEntryViaAuthorizerRetriesOnNoAnswer(t *testing.T) {
 
 	attempt := 2
 	status := "no-answer"
-	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{
-		Params: GetPhoneHandleEntryParams{
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), api_types.GetPhoneHandleEntryRequestObject{
+		Params: api_types.GetPhoneHandleEntryParams{
 			Secret:         "sekrit",
 			Attempt:        &attempt,
 			DialCallStatus: &status,
@@ -228,8 +229,8 @@ func TestHandleEntryViaAuthorizerRetriesOnNoAnswer(t *testing.T) {
 func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 	s := newTestServer()
 	party := true
-	if err := s.postNewSettings(context.Background(), CallboxSettings{
-		PartyMode: &party,
+	if err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		PartyMode:     &party,
 		FallbackPhone: "+15550001111",
 	}); err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
@@ -245,7 +246,7 @@ func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 		return nil
 	}
 
-	rs, err := s.handleEntryViaPartyMode(context.Background(), PostPhoneInitRequestObject{})
+	rs, err := s.handleEntryViaPartyMode(context.Background(), api_types.PostPhoneInitRequestObject{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -265,8 +266,8 @@ func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 
 func TestHandleEntryViaAuthorizerSkipsRedialOnCompletedCall(t *testing.T) {
 	s := newTestServer()
-	err := s.postNewSettings(context.Background(), CallboxSettings{
-		Authorizers: []Authorizer{{PhoneNumber: "+15551234567"}},
+	err := s.postNewSettings(context.Background(), api_types.CallboxSettings{
+		Authorizers: []api_types.Authorizer{{PhoneNumber: "+15551234567"}},
 	})
 	if err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
@@ -274,8 +275,8 @@ func TestHandleEntryViaAuthorizerSkipsRedialOnCompletedCall(t *testing.T) {
 
 	attempt := 2
 	status := "completed"
-	rs, err := s.handleEntryViaAuthorizer(context.Background(), GetPhoneHandleEntryRequestObject{
-		Params: GetPhoneHandleEntryParams{
+	rs, err := s.handleEntryViaAuthorizer(context.Background(), api_types.GetPhoneHandleEntryRequestObject{
+		Params: api_types.GetPhoneHandleEntryParams{
 			Secret:         "sekrit",
 			Attempt:        &attempt,
 			DialCallStatus: &status,

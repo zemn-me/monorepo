@@ -1,0 +1,38 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
+load("//go:rules.bzl", "go_library")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_oapi_codegen(
+    name = "types_gen",
+    out = "api.gen.go",
+    generate = [
+        "types",
+        "chi-server",
+        "strict-server",
+        "skip-prune",
+    ],
+    package = "types",
+    source = "//project/zemn.me/api:spec.yaml",
+    visibility = ["//project/zemn.me/api/server:__pkg__"],
+)
+
+go_library(
+    name = "types",
+    # gazelle:keep
+    srcs = ["api.gen.go"],
+    importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server/types",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_getkin_kin_openapi//openapi3",
+        "@com_github_go_chi_chi_v5//:chi",
+        "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
+        "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
+        "@com_github_oapi_codegen_runtime//types",
+    ],
+)

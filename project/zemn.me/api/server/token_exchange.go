@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-oidc"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 // exchange a Google id_token for an api.zemn.me refresh_token.
@@ -22,29 +23,34 @@ const (
 
 type upstreamIssuerConfig struct {
 	Provider string
-	Audience map[OAuthClientId]map[OIDCSubject]OIDCSubject
+	Audience map[api_types.OAuthClientId]map[api_types.OIDCSubject]api_types.OIDCSubject
 }
 
-var upstreamOIDCIssuers = map[OIDCIssuer]*upstreamIssuerConfig{
-	googleOIDCIssuer: {
+type upstreamIdTokenClaims struct {
+	Email         string `json:"email"`
+	EmailVerified *bool  `json:"email_verified,omitempty"`
+}
+
+var upstreamOIDCIssuers = map[api_types.OIDCIssuer]*upstreamIssuerConfig{
+	api_types.OIDCIssuer(googleOIDCIssuer): {
 		Provider: googleOIDCIssuer,
-		Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{
-			googleClientID: {
-				"111669004071516300752": "thomas",
-				"100829149849397087770": "thomas",
-				"112149295011396650000": "keng",
-				"112149295011396651358": "keng",
+		Audience: map[api_types.OAuthClientId]map[api_types.OIDCSubject]api_types.OIDCSubject{
+			api_types.OAuthClientId(googleClientID): {
+				api_types.OIDCSubject("111669004071516300752"): "thomas",
+				api_types.OIDCSubject("100829149849397087770"): "thomas",
+				api_types.OIDCSubject("112149295011396650000"): "keng",
+				api_types.OIDCSubject("112149295011396651358"): "keng",
 			},
 		},
 	},
 }
 
-func registerOIDCMapping(issuer OIDCIssuer, provider string, audience OAuthClientId, remoteSub OIDCSubject, localSub OIDCSubject) {
+func registerOIDCMapping(issuer api_types.OIDCIssuer, provider string, audience api_types.OAuthClientId, remoteSub api_types.OIDCSubject, localSub api_types.OIDCSubject) {
 	cfg, ok := upstreamOIDCIssuers[issuer]
 	if !ok {
 		cfg = &upstreamIssuerConfig{
 			Provider: provider,
-			Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{},
+			Audience: map[api_types.OAuthClientId]map[api_types.OIDCSubject]api_types.OIDCSubject{},
 		}
 		upstreamOIDCIssuers[issuer] = cfg
 	}
@@ -55,7 +61,7 @@ func registerOIDCMapping(issuer OIDCIssuer, provider string, audience OAuthClien
 
 	mapping, ok := cfg.Audience[audience]
 	if !ok {
-		mapping = map[OIDCSubject]OIDCSubject{}
+		mapping = map[api_types.OIDCSubject]api_types.OIDCSubject{}
 		cfg.Audience[audience] = mapping
 	}
 
@@ -82,15 +88,15 @@ func configureTestOIDCIssuerFromEnv() {
 	}
 
 	registerOIDCMapping(
-		OIDCIssuer(issuer),
+		api_types.OIDCIssuer(issuer),
 		provider,
-		OAuthClientId(clientID),
-		OIDCSubject(remoteSubject),
-		OIDCSubject(localSubject),
+		api_types.OAuthClientId(clientID),
+		api_types.OIDCSubject(remoteSubject),
+		api_types.OIDCSubject(localSubject),
 	)
 }
 
-func issuerFromToken(raw string) (OIDCIssuer, error) {
+func issuerFromToken(raw string) (api_types.OIDCIssuer, error) {
 	parts := strings.Split(raw, ".")
 	if len(parts) < 2 {
 		return "", errors.New("invalid token: not enough segments")
@@ -113,25 +119,25 @@ func issuerFromToken(raw string) (OIDCIssuer, error) {
 		return "", errors.New("token missing issuer")
 	}
 
-	return OIDCIssuer(claim.Iss), nil
+	return api_types.OIDCIssuer(claim.Iss), nil
 }
 
 var zemnMeClient = "zemn.me"
 
-func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenRequestObject) (ro PostOauth2TokenResponseObject, err error) {
+func (s *Server) PostOauth2Token(ctx context.Context, request api_types.PostOauth2TokenRequestObject) (ro api_types.PostOauth2TokenResponseObject, err error) {
 	if request.Body == nil {
 		e := "missing request body"
-		ro = PostOauth2Token400JSONResponse{
-			Error:            InvalidRequest,
+		ro = api_types.PostOauth2Token400JSONResponse{
+			Error:            api_types.InvalidRequest,
 			ErrorDescription: &e,
 		}
 		return
 	}
 
-	if request.Body.GrantType != UrnIetfParamsOauthGrantTypeTokenExchange {
+	if request.Body.GrantType != api_types.UrnIetfParamsOauthGrantTypeTokenExchange {
 		e := fmt.Sprintf("unsupported grant type: %q", request.Body.GrantType)
-		ro = PostOauth2Token400JSONResponse{
-			Error:            InvalidRequest,
+		ro = api_types.PostOauth2Token400JSONResponse{
+			Error:            api_types.InvalidRequest,
 			ErrorDescription: &e,
 		}
 
@@ -144,24 +150,24 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		return
 	}
 
-	if request.Body.SubjectTokenType != UrnIetfParamsOauthTokenTypeIdToken {
+	if request.Body.SubjectTokenType != api_types.UrnIetfParamsOauthTokenTypeIdToken {
 		e := fmt.Sprintf("unsupported subject token type: %s", request.Body.SubjectTokenType)
-		ro = PostOauth2Token400JSONResponse{
-			Error:            InvalidRequest,
+		ro = api_types.PostOauth2Token400JSONResponse{
+			Error:            api_types.InvalidRequest,
 			ErrorDescription: &e,
 		}
 		return
 	}
 
-	requestedTokenType := UrnIetfParamsOauthTokenTypeIdToken
+	requestedTokenType := api_types.UrnIetfParamsOauthTokenTypeIdToken
 	if request.Body.RequestedTokenType != nil {
 		requestedTokenType = *request.Body.RequestedTokenType
 	}
 
-	if requestedTokenType != UrnIetfParamsOauthTokenTypeIdToken {
+	if requestedTokenType != api_types.UrnIetfParamsOauthTokenTypeIdToken {
 		e := fmt.Sprintf("Unsupported requested token type: %+q", requestedTokenType)
-		ro = PostOauth2Token400JSONResponse{
-			Error:            InvalidRequest,
+		ro = api_types.PostOauth2Token400JSONResponse{
+			Error:            api_types.InvalidRequest,
 			ErrorDescription: &e,
 		}
 
@@ -193,7 +199,7 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
 
-	localId, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
+	localId, upstreamClaims, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
 	if err != nil {
 		s.log.Printf("Token exchange failed for issuer=%s: %v", issuer, err)
 		return
@@ -208,49 +214,53 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	expiresAt := time.Now().Add(time.Hour * 24 * 30)
 
-	ourToken, err := s.IssueIdToken(ctx, IdToken{
+	idToken := api_types.IdToken{
 		Aud: zemnMeClient,
 		Iat: time.Now().Unix(),
 		Sub: localId,
 		Iss: apiBase.String(),
 		Exp: expiresAt.Unix(),
-	})
+	}
+	if upstreamClaims.Email != "" {
+		idToken.Email = &upstreamClaims.Email
+		if upstreamClaims.EmailVerified != nil {
+			idToken.EmailVerified = upstreamClaims.EmailVerified
+		}
+	}
+
+	ourToken, err := s.IssueIdToken(ctx, idToken)
 	if err != nil {
 		return
 	}
 
 	expiresInSeconds := time.Until(expiresAt) / time.Second
 
-	ro = PostOauth2Token200JSONResponse{
+	ro = api_types.PostOauth2Token200JSONResponse{
 		AccessToken:     ourToken,
 		ExpiresIn:       int(expiresInSeconds),
-		IssuedTokenType: UrnIetfParamsOauthTokenTypeIdToken,
+		IssuedTokenType: api_types.UrnIetfParamsOauthTokenTypeIdToken,
 		TokenType:       "Bearer",
 	}
 
 	return
 }
 
-func audienceSummary(audience *TokenExchangeRequest_Audience) string {
+func audienceSummary(audience *api_types.TokenExchangeRequest_Audience) string {
 	if audience == nil {
 		return ""
 	}
 
-	if len(audience.union) == 0 {
-		return ""
-	}
-
-	var s string
 	if single, err := audience.AsTokenExchangeRequestAudience0(); err == nil && single != "" {
-		s = single
+		return single
 	} else if many, err := audience.AsTokenExchangeRequestAudience1(); err == nil && len(many) > 0 {
-		s = strings.Join(many, ",")
+		return strings.Join(many, ",")
 	}
-	return s
+	return ""
 }
 
-func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstreamIssuerConfig, rawToken string) (OIDCSubject, error) {
+func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstreamIssuerConfig, rawToken string) (api_types.OIDCSubject, upstreamIdTokenClaims, error) {
 	var lastErr error
+	var lastClaims upstreamIdTokenClaims
 	for audience, subjectMappings := range cfg.Audience {
 		verifier := provider.Verifier(&oidc.Config{ClientID: string(audience)})
 
@@ -260,13 +270,17 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 			continue
 		}
 
-		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
-			return subject, nil
+		var claims upstreamIdTokenClaims
+		_ = token.Claims(&claims)
+		lastClaims = claims
+
+		if subject, ok := subjectMappings[api_types.OIDCSubject(token.Subject)]; ok {
+			return subject, claims, nil
 		}
 
 		for _, mapped := range subjectMappings {
-			if mapped == OIDCSubject(token.Subject) {
-				return mapped, nil
+			if mapped == api_types.OIDCSubject(token.Subject) {
+				return mapped, claims, nil
 			}
 		}
 
@@ -274,8 +288,8 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 	}
 
 	if lastErr != nil {
-		return "", fmt.Errorf("token verification failed: %w", lastErr)
+		return "", lastClaims, fmt.Errorf("token verification failed: %w", lastErr)
 	}
 
-	return "", errors.New("token verification failed")
+	return "", lastClaims, errors.New("token verification failed")
 }

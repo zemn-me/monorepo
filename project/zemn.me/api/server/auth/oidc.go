@@ -11,11 +11,13 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 type contextKey string
 
 const SubjectKey contextKey = "oidc_subject"
+const ClaimsKey contextKey = "oidc_claims"
 const securitySchemeOIDC = "OIDC"
 const (
 	googleIssuer        = "https://accounts.google.com"
@@ -34,6 +36,18 @@ func SubjectFromContext(ctx context.Context) (string, bool) {
 	v := ctx.Value(SubjectKey)
 	s, ok := v.(string)
 	return s, ok
+}
+
+// IdTokenFromContext retrieves the verified ID token claims from the context if present.
+func IdTokenFromContext(ctx context.Context) (*types.IdToken, bool) {
+	v := ctx.Value(ClaimsKey)
+	claims, ok := v.(*types.IdToken)
+	return claims, ok
+}
+
+// WithIdToken returns a new context with the ID token claims attached.
+func WithIdToken(ctx context.Context, claims types.IdToken) context.Context {
+	return context.WithValue(ctx, ClaimsKey, &claims)
 }
 
 // suuper basic oidc auth that only checks if it's me via Google.
@@ -72,8 +86,12 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 			continue
 		}
 
+		var claims types.IdToken
+		_ = verifiedToken.Claims(&claims)
+
 		r := ai.RequestValidationInput.Request
 		ctx = context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
+		ctx = context.WithValue(ctx, ClaimsKey, &claims)
 		*ai.RequestValidationInput.Request = *r.WithContext(ctx)
 		return nil
 	}

@@ -733,6 +733,9 @@ components:
         timeZone:
           type: string
           description: Client IANA time zone
+        posterEmail:
+          type: string
+          description: Email address of the poster, if known.
     NewGrievance:
       type: object
       required:

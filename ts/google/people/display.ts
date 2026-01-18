@@ -13,6 +13,9 @@ export type PeopleFieldMask = keyof PeoplePerson;
 export type PeoplePhoneNumber =
 	NonNullable<PeoplePerson["phoneNumbers"]>[number];
 
+export type PeopleEmailAddress =
+	NonNullable<PeoplePerson["emailAddresses"]>[number];
+
 function formatPeopleName(
 	n: PeopleName
 ): string {

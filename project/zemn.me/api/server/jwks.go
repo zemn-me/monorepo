@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/go-jose/go-jose/v4"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 type KeySet struct {
@@ -12,7 +13,7 @@ type KeySet struct {
 }
 
 // Returns the local JWKS type as defined in our openapi spec.
-func (k KeySet) Local() (ks JWKS, err error) {
+func (k KeySet) Local() (ks api_types.JWKS, err error) {
 	// this is stupid im sorry
 	enc, err := json.Marshal(k.JSONWebKeySet)
 	if err != nil {
@@ -64,10 +65,10 @@ func (s *Server) keySet() (ks KeySet) {
 }
 
 // GetJWKS exposes the public key in JWK Set format.
-func (s *Server) GetJWKS(_ context.Context, _ GetJWKSRequestObject) (r GetJWKSResponseObject, err error) {
+func (s *Server) GetJWKS(_ context.Context, _ api_types.GetJWKSRequestObject) (r api_types.GetJWKSResponseObject, err error) {
 	ks, err := s.keySet().Local()
 	if err != nil {
 		return nil, err
 	}
-	return GetJWKS200JSONResponse(ks), nil
+	return api_types.GetJWKS200JSONResponse(ks), nil
 }

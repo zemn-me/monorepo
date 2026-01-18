@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 const (
@@ -14,9 +15,9 @@ const (
 )
 
 type SettingsRecord struct {
-	Id       string          `dynamodbav:"id"` // caps needed
-	When     Time            `dynamodbav:"when"`
-	Settings CallboxSettings `dynamodbav:"settings"`
+	Id       string                    `dynamodbav:"id"` // caps needed
+	When     Time                      `dynamodbav:"when"`
+	Settings api_types.CallboxSettings `dynamodbav:"settings"`
 }
 
 // getLatestSettings retrieves the most recent callbox settings record.
@@ -64,7 +65,7 @@ func (s *Server) inPartyMode(ctx context.Context) (inPartyMode bool, err error) 
 	return
 }
 
-func (s *Server) getLatestEntryCodes(ctx context.Context) (entryCodes []EntryCodeEntry, err error) {
+func (s *Server) getLatestEntryCodes(ctx context.Context) (entryCodes []api_types.EntryCodeEntry, err error) {
 	settings, err := s.getLatestSettings(ctx)
 	if err != nil {
 		return
@@ -73,7 +74,7 @@ func (s *Server) getLatestEntryCodes(ctx context.Context) (entryCodes []EntryCod
 	return settings.Settings.EntryCodes, nil
 }
 
-func (s *Server) getLatestAuthorizers(ctx context.Context) (authorizers []Authorizer, err error) {
+func (s *Server) getLatestAuthorizers(ctx context.Context) (authorizers []api_types.Authorizer, err error) {
 	settings, err := s.getLatestSettings(ctx)
 	if err != nil {
 		return
@@ -83,7 +84,7 @@ func (s *Server) getLatestAuthorizers(ctx context.Context) (authorizers []Author
 }
 
 // postNewSettings writes a new callbox settings record with the current timestamp.
-func (s Server) postNewSettings(ctx context.Context, settings CallboxSettings) (err error) {
+func (s Server) postNewSettings(ctx context.Context, settings api_types.CallboxSettings) (err error) {
 	rec := SettingsRecord{
 		Id:       PartitionKeyValue,
 		When:     Now(),
@@ -103,32 +104,32 @@ func (s Server) postNewSettings(ctx context.Context, settings CallboxSettings) (
 	return err
 }
 
-var _ StrictServerInterface = (*Server)(nil)
+var _ api_types.StrictServerInterface = (*Server)(nil)
 
 // getCallboxSettings handles GET /callbox/settings.
-func (s Server) GetCallboxSettings(ctx context.Context, rq GetCallboxSettingsRequestObject) (rs GetCallboxSettingsResponseObject, err error) {
+func (s Server) GetCallboxSettings(ctx context.Context, rq api_types.GetCallboxSettingsRequestObject) (rs api_types.GetCallboxSettingsResponseObject, err error) {
 	rec, err := s.getLatestSettings(ctx)
 	if err != nil {
 		return
 	}
 
 	// blank / default settings
-	var settings CallboxSettings
+	var settings api_types.CallboxSettings
 	if rec != nil {
 		settings = rec.Settings
 	}
 
-	return GetCallboxSettings200JSONResponse(settings), nil
+	return api_types.GetCallboxSettings200JSONResponse(settings), nil
 }
 
 // postCallboxSettings handles POST /callbox/settings.
-func (s Server) PostCallboxSettings(ctx context.Context, rq PostCallboxSettingsRequestObject) (rs PostCallboxSettingsResponseObject, err error) {
+func (s Server) PostCallboxSettings(ctx context.Context, rq api_types.PostCallboxSettingsRequestObject) (rs api_types.PostCallboxSettingsResponseObject, err error) {
 	// Write the new settings record.
 	if err = s.postNewSettings(ctx, *rq.Body); err != nil {
 		return
 	}
 
-	return PostCallboxSettings200JSONResponse(
+	return api_types.PostCallboxSettings200JSONResponse(
 		*rq.Body,
 	), nil
 }

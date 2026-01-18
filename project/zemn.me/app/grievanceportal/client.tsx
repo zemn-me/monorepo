@@ -6,6 +6,7 @@ import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
+import { EmailDisplay } from '#root/project/zemn.me/components/EmailDisplay/EmailDisplay.js';
 import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import {
 	useDeleteGrievances,
@@ -143,12 +144,22 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 			)
 			.map((g: GrievanceWithTimeZone) => {
 				const createdAt = parseCreatedDate(g.created, g.timeZone);
+				const poster =
+					g.posterEmail ?
+						(
+							<p className={style.poster}>
+								Posted by{' '}
+								<EmailDisplay email={g.posterEmail} />
+							</p>
+						)
+					: null;
 				return (
 					<li key={g.id}>
 						<strong>{g.name}</strong>
 						{' ('}
 						{severityMap.get(g.priority) ?? `level ${g.priority}`}
 						{')'}
+						{poster}
 						<p>
 							<PrettyDateTime date={createdAt} />
 						</p>

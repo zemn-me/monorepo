@@ -28,6 +28,7 @@ import (
 
 	apiSpec "github.com/zemn-me/monorepo/project/zemn.me/api"
 	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 // DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
@@ -138,7 +139,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		return nil, err
 	}
 
-	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
+	s.Handler = api_types.HandlerFromMux(api_types.NewStrictHandler(s, nil), r)
 	return s, nil
 }
 
