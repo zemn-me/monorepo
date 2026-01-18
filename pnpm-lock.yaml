@@ -26,11 +26,11 @@ dependencies:
     specifier: 3.1.1
     version: 3.1.1
   '@next/eslint-plugin-next':
-    specifier: 16.1.1
-    version: 16.1.1
+    specifier: 16.1.2
+    version: 16.1.2
   '@openai/codex':
-    specifier: 0.81.0
-    version: 0.81.0
+    specifier: 0.84.0
+    version: 0.84.0
   '@plausible-analytics/tracker':
     specifier: 0.4.4
     version: 0.4.4
@@ -376,8 +376,8 @@ devDependencies:
     specifier: 9.39.2
     version: 9.39.2
   eslint-config-next:
-    specifier: 16.1.1
-    version: 16.1.1(@typescript-eslint/parser@8.53.0)(eslint@9.39.2)(typescript@5.5.4)
+    specifier: 16.1.2
+    version: 16.1.2(@typescript-eslint/parser@8.53.0)(eslint@9.39.2)(typescript@5.5.4)
   eslint-config-prettier:
     specifier: 10.1.8
     version: 10.1.8(eslint@9.39.2)
@@ -418,8 +418,8 @@ devDependencies:
     specifier: 8.0.1
     version: 8.0.1
   prettier:
-    specifier: 3.7.4
-    version: 3.7.4
+    specifier: 3.8.0
+    version: 3.8.0
   puppeteer:
     specifier: 24.35.0
     version: 24.35.0(typescript@5.5.4)
@@ -442,8 +442,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.81.6
-    version: 42.81.6(typanion@3.14.0)
+    specifier: 42.81.8
+    version: 42.81.8(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3774,8 +3774,8 @@ packages:
   /@next/env@14.2.35:
     resolution: {integrity: sha512-DuhvCtj4t9Gwrx80dmz2F4t/zKQ4ktN8WrMwOuVzkJfBilwAwGr6v16M5eI8yCuZ63H9TTuEU09Iu2HqkzFPVQ==}
 
-  /@next/eslint-plugin-next@16.1.1:
-    resolution: {integrity: sha512-Ovb/6TuLKbE1UiPcg0p39Ke3puyTCIKN9hGbNItmpQsp+WX3qrjO3WaMVSi6JHr9X1NrmthqIguVHodMJbh/dw==}
+  /@next/eslint-plugin-next@16.1.2:
+    resolution: {integrity: sha512-jjO5BKDxZEXt2VCAnAG/ldULnpxeXspjCo9AZErV3Lm5HmNj8r2rS+eUMIAAj6mXPAOiPqAMgVPGnkyhPyDx4g==}
     dependencies:
       fast-glob: 3.3.1
 
@@ -4194,8 +4194,8 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.81.0:
-    resolution: {integrity: sha512-A9SB7BvUgJxOgPDeurr2BufO8S+krnjG34azR6784CEClAo+IKlTWpqtdue6JFhuFSz0KRE3EcIvqR2PMfaB+w==}
+  /@openai/codex@0.84.0:
+    resolution: {integrity: sha512-1reR4CV3Lqfm0iYSZM8Ka1XSuYEep1xpOfySGBWZU6+NTcHRH960pfIbGENL3GKsbrCyavcEM8Gz2XQEolp+uA==}
     engines: {node: '>=16'}
     hasBin: true
     dev: false
@@ -10534,8 +10534,8 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
 
-  /eslint-config-next@16.1.1(@typescript-eslint/parser@8.53.0)(eslint@9.39.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-55nTpVWm3qeuxoQKLOjQVciKZJUphKrNM0fCcQHAIOGl6VFXgaqeMfv0aKJhs7QtcnlAPhNVqsqRfRjeKBPIUA==}
+  /eslint-config-next@16.1.2(@typescript-eslint/parser@8.53.0)(eslint@9.39.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-y97rpFfUsaXdXlQc2FMl/yqRc5yfVVKtKRcv+7LeyBrKh83INFegJuZBE28dc9Chp4iKXwmjaW4sHHx/mgyDyA==}
     peerDependencies:
       eslint: '>=9.0.0'
       typescript: '>=3.3.1'
@@ -10543,7 +10543,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 16.1.1
+      '@next/eslint-plugin-next': 16.1.2
       eslint: 9.39.2
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2)
@@ -13545,7 +13545,7 @@ packages:
       js-yaml: 4.1.1
       lodash: 4.17.21
       minimist: 1.2.8
-      prettier: 3.7.4
+      prettier: 3.8.0
       tinyglobby: 0.2.15
     dev: false
 
@@ -16439,8 +16439,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier@3.7.4:
-    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
+  /prettier@3.8.0:
+    resolution: {integrity: sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -17341,8 +17341,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.81.6(typanion@3.14.0):
-    resolution: {integrity: sha512-xE6fcTymLAhdRSTtvvgq3vNcKP+Hrmsc8GuTPNWxzBz8Ug1nt9WvPbKEtfmD1zw7gR/SnybHGZKbcseRglb5Yg==}
+  /renovate@42.81.8(typanion@3.14.0):
+    resolution: {integrity: sha512-921v7WU9fN6mXCoM3frr8y/ItY3XWEiK8ILGykWUuVNQ3n17tW/ihGsmOz2FEU3zejeCLL4VBJqQW2laSuHXIQ==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
