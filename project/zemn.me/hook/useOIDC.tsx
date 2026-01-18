@@ -144,20 +144,8 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 		}
 	);
 
-	// validate entropy
-	// should be easy to do the fixed-time string comparison soon
-	// but im NOT doing it now!!!
-	// TODO(fixed-time compare)
-	// TODO(coincide_then_flatten)
-	const callbackQueryResultWithValidatedEntropy = future_flatten_then(coincide_then(
-		callbackQueryResult, entropy,
-		(resp, entropy) => resp.state === entropy
-			? resolve(resp)
-			: error(new Error(["invalid state:", resp.state, "!=", entropy].join(" ")))
-	));
-
 	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(future_and_then(
-		callbackQueryResultWithValidatedEntropy,
+		callbackQueryResult,
 		resp => 'error' in resp
 			? error(new Error(resp.error))
 			: resolve(resp)
