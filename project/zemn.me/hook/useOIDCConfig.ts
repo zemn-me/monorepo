@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { openidConfiguration } from '#root/ts/oidc/configuration.js';
 import { oidcConfigURLForIssuer } from '#root/ts/oidc/oidc.js';
 
 export function useOIDCConfig(issuer: string) {
-	return useQuery({
+	return useQueryFuture(useQuery({
 		queryFn: () => fetch(oidcConfigURLForIssuer(issuer))
 			.then(config => config.json())
 			.then(config =>
@@ -26,5 +27,5 @@ export function useOIDCConfig(issuer: string) {
 				}
 			),
 		queryKey: ['oidc-config', issuer],
-	});
+	}));
 }
