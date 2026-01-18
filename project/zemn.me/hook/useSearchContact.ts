@@ -35,8 +35,15 @@ export function useSearchContact(
 			// intentionally an empty string due to recommendation
 			// from Google to warm up cache.
 			: "";
-	const [, access_token] = useGoogleAuth([]);
+	// TODO: properly use futures here
+	const [, fut_access_token] = useGoogleAuth([]);
 	const read_mask = [...readMask].join(",");
+	const access_token = fut_access_token(
+		token => option.Some(token),
+		() => option.None,
+		() => option.None,
+	)
+
 
 	return useQuery({
 		queryKey: ["contacts-search", normalized_query, read_mask],
