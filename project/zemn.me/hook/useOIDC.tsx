@@ -1,9 +1,12 @@
+import { getTargetGroupOutput } from '@pulumi/aws/alb/getTargetGroup';
 import { useQuery } from '@tanstack/react-query';
 
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/promise/window_callback.js';
+import { coincide_then, error, future_and_then, future_flatten_then, loading, resolve } from '#root/ts/future/future.js';
+import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
@@ -41,50 +44,52 @@ async function fetchEntropy(): Promise<string> {
 export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCReturnType {
 	const oidc_config = useOIDCConfig(issuer);
 
-	const entropy = useQuery({
+	const entropy = useQueryFuture(useQuery({
 		queryKey: ['useoidc entropy', issuer],
 		queryFn: fetchEntropy,
 		staleTime: Infinity,
-	});
+	}));
 
-	const authorizationEndpoint =
-		oidc_config.status === 'success'
-			? option.Some(oidc_config.data.authorization_endpoint)
-			: option.None;
+	const authRq = future_and_then(
+		entropy,
+		(e: string): OIDCAuthenticationRequest => ({
+			response_type: 'id_token token',
+			...params,
+			redirect_uri: `${window.location.origin}/callback`,
+			state: e,
+			nonce: e,
+			scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
+		})
+	)
 
-	if (oidc_config.status == 'error') throw new Error(oidc_config.error.message);
+	const validated_authrq = future_flatten_then(coincide_then(
+		oidc_config, authRq,
+		(config, rq) =>
+			validateAuthenticationRequest(
+				rq, config
+			)(
+				() => resolve(config),
+				err => error(err),
+			)
+	));
 
-	const authRq: Option<OIDCAuthenticationRequest> =
-		entropy.status === 'success'
-			? option.Some<OIDCAuthenticationRequest>({
-				response_type: 'id_token token',
-				...params,
-				redirect_uri: `${window.location.origin}/callback`,
-				state: entropy.data,
-				nonce: entropy.data,
-				scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
-			})
-			: option.None;
-
-	const validation =
-		option.flatten(oidc_config.status === 'success'
-			? option.and_then(authRq, authRq => validateAuthenticationRequest(authRq, oidc_config.data))
-			: option.None);
-
-	if (option.is_some(validation))
-		throw option.unwrap_unchecked(validation);
-
-	const targetURL =
-		option.and_then(
-			option.zip(authorizationEndpoint, authRq),
-			([endpoint, params]) => {
-				const u = new URL(endpoint);
-				u.search = (new URLSearchParams(params)).toString();
-				return u;
-			}
-		);
-
+	const targetURL = coincide_then(
+		oidc_config, authRq,
+		(config, params) => {
+			const u = new URL(config.authorization_endpoint);
+			u.search = (new URLSearchParams(params)).toString();
+			return u;
+		}
+	)
 	const cacheKeyArgs = [issuer, params];
+
+	const callbackQuery = useQuery({
+		queryKey: ['use-oidc', ...cacheKeyArgs],
+		queryFn: async () => future_and_then(
+			targetURL,
+			u => useWindowCallback(u),
+		)
+	})
 	const callbackQuery = useQuery({
 		queryKey: ['use-oidc', ...cacheKeyArgs],
 		queryFn: async () => {
