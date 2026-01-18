@@ -16,8 +16,28 @@ export type useZemnMeAuthReturnType = [
 
 export function useZemnMeAuth(): useZemnMeAuthReturnType {
 	const apiFetchClient = useFetchClient();
-	const [id_token, google_access_token, promptForLogin] = useGoogleAuth([
+	const [fut_id_token, fut_google_access_token, fut_promptForLogin] = useGoogleAuth([
 	]);
+
+	// TODO -> pipe future properly
+	const id_token = fut_id_token(
+		token => option.Some(token),
+		() => option.None,
+		() => option.None,
+	)
+
+	// TODO -> pipe future properly
+	const google_access_token = fut_google_access_token(
+		token => option.Some(token),
+		() => option.None,
+		() => option.None,
+	);
+
+	const promptForLogin = fut_promptForLogin(
+		fn => option.Some(fn),
+		() => option.None,
+		() => option.None,
+	);
 
 	const request_body = option.and_then(
 		id_token,

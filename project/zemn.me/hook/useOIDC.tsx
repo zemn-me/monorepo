@@ -4,12 +4,12 @@ import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/promise/window_callback.js';
+import { coincide_then, error, Future, future_and_then, future_flatten_then, loading, resolve } from '#root/ts/future/future.js';
+import { useQueryFuture, useQueryFuture_flatten } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
-import { Option } from '#root/ts/option/types.js';
 import * as option from '#root/ts/option/types.js';
-import * as result from '#root/ts/result/result.js';
 import { Second } from '#root/ts/time/duration.js';
 
 
@@ -26,94 +26,98 @@ export type OIDCImplicitRequest = Omit<
 	| 'request_uri'
 >;
 
-export type useOIDCReturnType = [
-	id_token: Option<string>,
-	access_token: Option<string>,
-	promptForLogin: Option<() => Promise<void>>,
-];
-
 async function fetchEntropy(): Promise<string> {
 	const bytes = new Uint8Array(128); // 1024 bits
 	crypto.getRandomValues(bytes);
 	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCReturnType {
+export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
+	id_token: Future<string, void, Error>,
+	access_token: Future<string, void, Error>,
+	promptForLogin: Future<() => Promise<void>, void, Error>,
+] {
 	const oidc_config = useOIDCConfig(issuer);
 
-	const entropy = useQuery({
+	const entropy = useQueryFuture(useQuery({
 		queryKey: ['useoidc entropy', issuer],
 		queryFn: fetchEntropy,
 		staleTime: Infinity,
-	});
+	}));
 
-	const authorizationEndpoint =
-		oidc_config.status === 'success'
-			? option.Some(oidc_config.data.authorization_endpoint)
-			: option.None;
+	const authRq = future_and_then(
+		entropy,
+		(e: string): OIDCAuthenticationRequest => ({
+			response_type: 'id_token token',
+			...params,
+			redirect_uri: `${window.location.origin}/callback`,
+			state: e,
+			nonce: e,
+			scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
+		})
+	)
 
-	if (oidc_config.status == 'error') throw new Error(oidc_config.error.message);
+	const validated_authrq = future_flatten_then(coincide_then(
+		oidc_config, authRq,
+		(config, rq) =>
+			validateAuthenticationRequest(
+				rq, config
+			)(
+				() => resolve(rq),
+				err => error(err),
+			)
+	));
 
-	const authRq: Option<OIDCAuthenticationRequest> =
-		entropy.status === 'success'
-			? option.Some<OIDCAuthenticationRequest>({
-				response_type: 'id_token token',
-				...params,
-				redirect_uri: `${window.location.origin}/callback`,
-				state: entropy.data,
-				nonce: entropy.data,
-				scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
-			})
-			: option.None;
-
-	const validation =
-		option.flatten(oidc_config.status === 'success'
-			? option.and_then(authRq, authRq => validateAuthenticationRequest(authRq, oidc_config.data))
-			: option.None);
-
-	if (option.is_some(validation))
-		throw option.unwrap_unchecked(validation);
-
-	const targetURL =
-		option.and_then(
-			option.zip(authorizationEndpoint, authRq),
-			([endpoint, params]) => {
-				const u = new URL(endpoint);
-				u.search = (new URLSearchParams(params)).toString();
-				return u;
-			}
-		);
-
+	const targetURL = coincide_then(
+		oidc_config, validated_authrq,
+		(config, params) => {
+			const u = new URL(config.authorization_endpoint);
+			u.search = (new URLSearchParams(params)).toString();
+			return u;
+		}
+	)
 	const cacheKeyArgs = [issuer, params];
+
 	const callbackQuery = useQuery({
 		queryKey: ['use-oidc', ...cacheKeyArgs],
-		queryFn: async () => {
-			if (option.is_none(targetURL)) {
-				throw new Error('missing authorization endpoint');
-			}
-			const url = await useWindowCallback(option.unwrap_unchecked(targetURL));
-			const href = new URL(url);
-			return OIDCAuthenticationResponse.parse(
-				Object.fromEntries([
-					...href.searchParams,
-					...new URLSearchParams(
-						href.hash.slice(1)
-					),
-				])
-			);
-		},
-		staleTime: r => {
-				const rsp = r.state.data;
+		queryFn: async () => targetURL(
+			async u => {
+				// sadly must immediately parse to allow staleTime
+				// to be set correctly.
+				const href = new URL(await useWindowCallback(u));
 
-				if (rsp !== undefined && !('expires_in' in rsp)) return 0;
-				if (rsp?.expires_in === undefined) return 0;
 
-				return parseInt(rsp.expires_in, 10) * Second;
+
+				return resolve(OIDCAuthenticationResponse.parse(
+					Object.fromEntries([
+						...href.searchParams,
+						...new URLSearchParams(
+							href.hash.slice(1)
+						),
+					])
+				))
 			},
-		enabled: false,
+			async ld => loading(ld),
+			async err => error(err),
+
+		),
+		staleTime: r =>
+			option.option_from_maybe_undefined(r.state.data)(
+				(/*None*/) => 0,
+				fut => fut(
+					v => 'expires_in' in v && v.expires_in !== undefined
+						? parseInt(v.expires_in, 10) * Second
+						: 0,
+					() => 0, // loading
+					() => 0, // error
+				)
+			),
+		enabled: false
 	});
 
-	const requestConsent = option.and_then(
+	const callbackQueryResult = useQueryFuture_flatten(callbackQuery);
+
+	const requestConsent = future_and_then(
 		targetURL, () => async () => {
 			const response = await callbackQuery.refetch();
 			if (response.error) {
@@ -122,50 +126,40 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): useOIDCRet
 		}
 	);
 
-	const authResponse =
-		callbackQuery.status === 'success'
-			? option.Some(callbackQuery.data)
-			: option.None;
+	// validate entropy
+	// should be easy to do the fixed-time string comparison soon
+	// but im NOT doing it now!!!
+	// TODO(fixed-time compare)
+	// TODO(coincide_then_flatten)
+	const callbackQueryResultWithValidatedEntropy = future_flatten_then(coincide_then(
+		callbackQueryResult, entropy,
+		(resp, entropy) => resp.state === entropy
+			? resolve(resp)
+			: error(new Error(["invalid state:", resp.state, "!=", entropy].join(" ")))
+	));
 
-	if (entropy.status === 'success')
-		option.and_then(
-			authResponse,
-			r => {
-				// this should be a fixed-time string comparison
-				// but all the fixed-time string comparisons are
-				// promises in webcrypto and if I have to do that
-				// rn I may kms
-				if (r.state != entropy.data)
-					throw new Error(["invalid state:", r.state, "!=", entropy.data].join(" "));
-			}
-		);
+	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(future_and_then(
+		callbackQueryResultWithValidatedEntropy,
+		resp => 'error' in resp
+			? error(new Error(resp.error))
+			: resolve(resp)
+	));
 
-	const authSuccessResponse =
-		option.and_then(
-			authResponse,
-			v =>
-				result.unwrap('error' in v ? result.Err(new Error(v.error)) : result.Ok(v))
-		);
 
-	const id_token = option.and_then(
-		authSuccessResponse,
-		v =>
-			result.unwrap(
-				v.id_token !== undefined
-					? result.Ok(v.id_token)
-					: result.Err(new Error('missing id_token'))
-			)
-	);
+	const id_token = future_flatten_then(future_and_then(
+		callbackQueryResultWithHandledErrorCallback,
+		resp => resp.id_token !== undefined
+			? resolve(resp.id_token)
+			: error(new Error('missing id_token'))
+	));
 
-	const access_token = option.and_then(
-		authSuccessResponse,
-		v =>
-			result.unwrap(
-				v.access_token !== undefined
-					? result.Ok(v.access_token)
-					: result.Err(new Error('missing access_token'))
-			)
-	);
+	const access_token = future_flatten_then(future_and_then(
+		callbackQueryResultWithHandledErrorCallback,
+		resp => resp.access_token !== undefined
+			? resolve(resp.access_token)
+			: error(new Error('missing access_token'))
+	));
 
-	return [id_token, access_token, requestConsent];
+
+	return [id_token, access_token, requestConsent] as const;
 }
