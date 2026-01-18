@@ -7,7 +7,7 @@ go 1.24.0
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
-	github.com/aws/aws-lambda-go v1.51.1
+	github.com/aws/aws-lambda-go v1.51.2
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
@@ -22,9 +22,9 @@ require (
 	github.com/bazelbuild/rules_go v0.59.0
 	github.com/beevik/etree v1.6.0
 	github.com/blang/semver/v4 v4.0.0
-	github.com/coreos/go-oidc v2.4.0+incompatible
+	github.com/coreos/go-oidc v2.5.0+incompatible
 	github.com/getkin/kin-openapi v0.133.0
-	github.com/go-chi/chi/v5 v5.2.3
+	github.com/go-chi/chi/v5 v5.2.4
 	github.com/go-chi/cors v1.2.2
 	github.com/go-delve/delve v1.26.0
 	github.com/go-jose/go-jose/v4 v4.1.3
@@ -42,7 +42,7 @@ require (
 	github.com/twilio/twilio-go v1.29.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/sync v0.19.0
-	golang.org/x/tools v0.40.0
+	golang.org/x/tools v0.41.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.6.1
 )

@@ -66,3 +66,51 @@ export const future_and_then =
 		l => loading(l),
 		e => error(e)
 	)
+
+export const future_flatten_then =
+	<
+		Then, Loading1, Error1,
+		Loading2, Error2,
+	>(
+		a: Future<
+			Future<Then, Loading1, Error1>,
+			Loading2,
+			Error2
+		>
+	): Future<Then, Loading1 | Loading2, Error1 | Error2> => a(
+		then1 => then1(
+			then => resolve(then),
+			loading2 => loading(loading2),
+			error2 => error(error2),
+		),
+		loading1 => loading(loading1),
+		error1 => error(error1)
+	)
+
+
+export const coincide_then =
+	<
+		Then1, Loading1, Error1,
+		Then2, Loading2, Error2,
+		NewThen,
+	>(
+		future1: Future<Then1, Loading1, Error1>,
+		future2: Future<Then2, Loading2, Error2>,
+		then: (a: Then1, b: Then2) => NewThen,
+	): Future<NewThen, Loading1 | Loading2, Error1 | Error2> => future1(
+			then1 => future2(
+				then2 => resolve(then(then1, then2)),
+				loading2 => loading(loading2),
+				error2 => error(error2)
+			),
+			loading1 => future2(
+				() => loading(loading1),
+				() => loading(loading1),
+				error2 => error(error2)
+			),
+			error1 => future2(
+				() => error(error1),
+				() => error(error1),
+				() => error(error1),
+			)
+		)
