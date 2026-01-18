@@ -4,12 +4,14 @@ import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
 	useWindowCallback,
 } from '#root/project/zemn.me/promise/window_callback.js';
+import { fixedTimeStringEquals } from '#root/ts/crypto/fixed_time_string_comparison.js';
 import { coincide_then, error, Future, future_and_then, future_flatten_then, resolve } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import * as option from '#root/ts/option/types.js';
+import { Err, Ok } from '#root/ts/result/result.js';
 import { Second } from '#root/ts/time/duration.js';
 
 
@@ -88,16 +90,32 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 				// to be set correctly.
 				const href = new URL(await useWindowCallback(u));
 
-
-
-				return OIDCAuthenticationResponse.parse(
+				const params = OIDCAuthenticationResponse.parse(
 					Object.fromEntries([
 						...href.searchParams,
 						...new URLSearchParams(
 							href.hash.slice(1)
 						),
 					])
+				);
+
+
+				// perform state validation
+				(await option.option_from_maybe_undefined(params.state)(
+					() => Err(new Error('missing state in authentication response')),
+					state => entropy(
+						async e => await fixedTimeStringEquals(e, state)
+							? Ok(undefined)
+							: Err(new Error(["invalid state:", state, "!=", e].join(" "))),
+						() => Err(new Error('this should never happen')),
+						() => Err(new Error('this should never happen')),
+					)
+				))(
+					e => { throw e },
+					() => { }
 				)
+
+				return params;
 			},
 			(() => skipToken) as () => SkipToken,
 			(() => skipToken) as () => SkipToken,
@@ -124,20 +142,8 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 		}
 	);
 
-	// validate entropy
-	// should be easy to do the fixed-time string comparison soon
-	// but im NOT doing it now!!!
-	// TODO(fixed-time compare)
-	// TODO(coincide_then_flatten)
-	const callbackQueryResultWithValidatedEntropy = future_flatten_then(coincide_then(
-		callbackQueryResult, entropy,
-		(resp, entropy) => resp.state === entropy
-			? resolve(resp)
-			: error(new Error(["invalid state:", resp.state, "!=", entropy].join(" ")))
-	));
-
 	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(future_and_then(
-		callbackQueryResultWithValidatedEntropy,
+		callbackQueryResult,
 		resp => 'error' in resp
 			? error(new Error(resp.error))
 			: resolve(resp)
