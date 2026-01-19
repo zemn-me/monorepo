@@ -81,13 +81,13 @@ it('should be able to annotate a successful build', async () => {
 	await expect(
 		annotate(`
   INFO: Build completed, 1 test FAILED, 8634 total actions
-  //:validate_renovate_config_test                                         PASSED in 5.1s
+  //.github:validate_renovate_config_test                                  PASSED in 5.1s
   //.github:validation                                                     PASSED in 0.5s
   //.github/workflows:validation                                           NO STATUS in 1.0s
   //bin/host/ffmpeg:smoke                                                  FAILED in 0.1s`)
 	).resolves.toEqual(`
   INFO: Build completed, 1 test FAILED, 8634 total actions
-  //:validate_renovate_config_test                                         PASSED in 5.1s
+  //.github:validate_renovate_config_test                                  PASSED in 5.1s
   //.github:validation                                                     PASSED in 0.5s
 ::warning title=//.github/workflows%3Avalidation failed to build in 1.0s,file=.github/workflows/BUILD.bazel::  //.github/workflows:validation                                           NO STATUS in 1.0s
 ::error title=//bin/host/ffmpeg%3Asmoke failed in 0.1s,file=bin/host/ffmpeg/BUILD.bazel::  //bin/host/ffmpeg:smoke                                                  FAILED in 0.1s`);
