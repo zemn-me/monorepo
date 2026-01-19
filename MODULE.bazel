@@ -218,11 +218,17 @@ out = "chromium"
 )
 """
 
+# renovate:
+# 	datasource=custom.chrome_for_testing
+# 	versioning=loose
+# 	depName=chrome-for-testing
+CHROME_FOR_TESTING_VERSION = "114.0.5735.90"
+
 http_archive(
     name = "com_googleapis_storage_chromium_linux_x64",
     build_file_content = chromium_buildfile,
     sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/" + CHROME_FOR_TESTING_VERSION + "/linux64/chrome-linux64.zip",
 )
 
 # renovate:
@@ -253,28 +259,28 @@ http_archive(
     name = "com_googleapis_storage_chromedriver_linux_x64",
     build_file_content = chromedriver_buildfile,
     sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_linux64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac64",
     build_file_content = chromedriver_buildfile,
     sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_mac64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac_arm64",
     build_file_content = chromedriver_buildfile,
     sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_mac_arm64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_win32",
     build_file_content = chromedriver_buildfile,
     sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_win32.zip",
 )
 
 # renovate:
