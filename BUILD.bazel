@@ -107,7 +107,10 @@ copy_to_bin(
 
 bin.renovate_config_validator_test(
     name = "validate_renovate_config_test",
-    args = ["$(location renovate.json)"],
+    args = [
+        "$(location renovate.json)",
+        "--strict",
+    ],
     data = ["renovate.json"],
 )
 
