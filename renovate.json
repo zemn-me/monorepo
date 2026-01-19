@@ -64,6 +64,13 @@
 		}
 	],
 	"customDatasources": {
+		"chrome_for_testing": {
+			"defaultRegistryUrlTemplate": "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\":[{\"version\":data.channels.Stable.version,\"sourceUrl\":\"https://googlechromelabs.github.io/chrome-for-testing/\"}]}"
+			]
+		},
 		"johnvansickle_ffmpeg_old_releases": {
 			"defaultRegistryUrlTemplate": "https://www.johnvansickle.com/ffmpeg/old-releases/",
 			"format": "html"
