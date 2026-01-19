@@ -63,7 +63,38 @@
 			"depNameTemplate": "{{{depName}}}"
 		}
 	],
+	"customDatasources": {
+		"chrome_for_testing": {
+			"defaultRegistryUrlTemplate": "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\":[{\"version\":data.channels.Stable.version,\"sourceUrl\":\"https://googlechromelabs.github.io/chrome-for-testing/\"}]}"
+			]
+		},
+		"johnvansickle_ffmpeg_old_releases": {
+			"defaultRegistryUrlTemplate": "https://www.johnvansickle.com/ffmpeg/old-releases/",
+			"format": "html"
+		},
+		"evermeet_ffmpeg_pub": {
+			"defaultRegistryUrlTemplate": "https://evermeet.cx/pub/ffmpeg/",
+			"format": "html"
+		}
+	},
 	"packageRules": [
+		{
+			"matchDatasources": [
+				"custom.johnvansickle_ffmpeg_old_releases"
+			],
+			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)-(?:amd64|arm64|i686)-static\\.tar\\.xz$",
+			"versioning": "loose"
+		},
+		{
+			"matchDatasources": [
+				"custom.evermeet_ffmpeg_pub"
+			],
+			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\.zip$",
+			"versioning": "loose"
+		},
 		{
 			"matchManagers": [
 				"bazel-module"

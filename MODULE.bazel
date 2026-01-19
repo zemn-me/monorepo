@@ -218,11 +218,17 @@ out = "chromium"
 )
 """
 
+# renovate:
+# 	datasource=custom.chrome_for_testing
+# 	versioning=loose
+# 	depName=chrome-for-testing
+CHROME_FOR_TESTING_VERSION = "114.0.5735.90"
+
 http_archive(
     name = "com_googleapis_storage_chromium_linux_x64",
     build_file_content = chromium_buildfile,
     sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/" + CHROME_FOR_TESTING_VERSION + "/linux64/chrome-linux64.zip",
 )
 
 # renovate:
@@ -253,59 +259,71 @@ http_archive(
     name = "com_googleapis_storage_chromedriver_linux_x64",
     build_file_content = chromedriver_buildfile,
     sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_linux64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac64",
     build_file_content = chromedriver_buildfile,
     sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_mac64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac_arm64",
     build_file_content = chromedriver_buildfile,
     sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_mac_arm64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_win32",
     build_file_content = chromedriver_buildfile,
     sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    url = "https://chromedriver.storage.googleapis.com/" + CHROME_FOR_TESTING_VERSION + "/chromedriver_win32.zip",
 )
+
+# renovate:
+# 	datasource=custom.johnvansickle_ffmpeg_old_releases
+# 	versioning=loose
+# 	depName=ffmpeg-linux
+FFMPEG_LINUX_VERSION = "5.1.1"
 
 http_archive(
     name = "ffmpeg_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
-    strip_prefix = "ffmpeg-5.1.1-amd64-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
+    strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-amd64-static",
+    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-amd64-static.tar.xz",
 )
 
 http_archive(
     name = "ffmpeg_linux_i686",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "df4ff17a39758f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
-    strip_prefix = "ffmpeg-6.0-i686-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-i686-static.tar.xz",
+    strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-i686-static",
+    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-i686-static.tar.xz",
 )
 
 http_archive(
     name = "ffmpeg_linux_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "49f9beb7690afcbd4832d3577d9f0c87374d63c39cde5097dfd52d61b24b4855",
-    strip_prefix = "ffmpeg-5.1.1-arm64-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-arm64-static.tar.xz",
+    strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-arm64-static",
+    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-arm64-static.tar.xz",
 )
+
+# renovate:
+# 	datasource=custom.evermeet_ffmpeg_pub
+# 	versioning=loose
+# 	depName=ffmpeg-macos-x64
+FFMPEG_MACOS_X64_VERSION = "6.0"
 
 http_archive(
     name = "ffmpeg_macos_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "9a810d222862a7230fd7035c91e32beb605af7501c3517580f2bc1eb8faddacc",
-    url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-6.0.zip",
+    url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-" + FFMPEG_MACOS_X64_VERSION + ".zip",
 )
 
 http_archive(
@@ -422,14 +440,6 @@ http_archive(
 bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
-
-http_file(
-    name = "inkscape_linux",
-    downloaded_file_path = "bin",
-    executable = True,
-    sha256 = "b7a99b6c0ee2817706e77803643f4a6caf9e35bdec928e963c1d2ae86e5e4beb",
-    urls = ["https://inkscape.org/es/gallery/item/31669/Inkscape-0a00cf5-x86_64.AppImage"],
-)
 
 # renovate:
 # 	datasource=github-tags
