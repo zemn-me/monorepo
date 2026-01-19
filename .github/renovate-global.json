@@ -1,0 +1,11 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"autodiscover": true,
+	"autodiscoverFilter": [
+		"zemn-me/monorepo"
+	],
+	"allowScripts": true,
+	"allowedCommands": [
+		"^\\./sh/postUpgrade\\.sh$"
+	]
+}
