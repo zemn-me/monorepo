@@ -28,4 +28,4 @@ jobs:
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ secrets.GH_PAT }}
     env:
-      LOG_LEVEL: 'error'
+      LOG_LEVEL: 'debug'
