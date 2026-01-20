@@ -1,13 +1,13 @@
 load("//bzl:rules.bzl", "bazel_lint")
 
-"Tests if renovate.json is valid json."
+"Tests if the Renovate global config is valid json."
 
 load("//py:rules.bzl", "py_test")
 
 py_test(
     name = "renovate_json_is_valid_test",
     srcs = ["renovate_json_is_valid_test.py"],
-    data = ["//:renovate.json"],
+    data = ["//.github:renovate-global.json"],
 )
 
 bazel_lint(

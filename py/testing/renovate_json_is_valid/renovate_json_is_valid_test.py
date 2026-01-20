@@ -1,5 +1,4 @@
 import json
 
-with open("renovate.json") as f:
+with open(".github/renovate-global.json") as f:
 	json.load(f)
-
