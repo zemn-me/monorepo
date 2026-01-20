@@ -57,7 +57,8 @@
 				"#\\s*renovate:\\n#\\s*datasource\\s*=\\s*git-refs\\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\\n#\\s*depName\\s*=\\s*(?<depName>.*)\\n[^=]+=\\s*\"(?<currentDigest>[^\"]*)\""
 			],
 			"datasourceTemplate": "git-refs",
-			"currentValueTemplate": "HEAD",
+			"currentValueTemplate": "{{{currentDigest}}}",
+			"currentDigestTemplate": "{{{currentDigest}}}",
 			"versioningTemplate": "{{{versioning}}}",
 			"packageNameTemplate": "{{{depName}}}",
 			"depNameTemplate": "{{{depName}}}"
@@ -96,6 +97,15 @@
 				"rules_oci"
 			],
 			"allowedVersions": "!/1.8.0$/"
+		},
+		{
+			"matchManagers": [
+				"github-actions"
+			],
+			"matchPackageNames": [
+				"jlumbroso/free-disk-space"
+			],
+			"versioning": "loose"
 		},
 		{
 			"matchManagers": [
