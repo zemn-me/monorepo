@@ -17,7 +17,7 @@ oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 # Declare external images you need to pull, for example:
 oci.pull(
     name = "distroless_base",
-    digest = "sha256:280852156756ea3f39f9e774a30346f2e756244e1f432aea3061c4ac85d90a66",
+    digest = "sha256:0c70ab46409b94a96f4e98e32e7333050581e75f7038de2877a4bfc146dfc7ce",
     image = "gcr.io/distroless/base",
     platforms = [
         "linux/amd64",
