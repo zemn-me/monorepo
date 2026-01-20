@@ -1,9 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 ---
 
-env:
-  RENOVATE_VERSION: 38.140.2
-
 
 name: Renovate
 concurrency:
