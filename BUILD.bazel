@@ -105,12 +105,6 @@ copy_to_bin(
     srcs = ["package.json"],
 )
 
-bin.renovate_config_validator_test(
-    name = "validate_renovate_config_test",
-    args = ["$(location renovate.json)"],
-    data = ["renovate.json"],
-)
-
 npm_link_all_packages(name = "node_modules")
 
 go_version_sync(
