@@ -198,6 +198,7 @@ http_archive(
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     integrity = "sha256-P0PkXK8DEh56Z+S7dWMwxIpVxqmuDJTBuni5ZN/cSok=",
     strip_prefix = "openai-openapi-" + OPENAI_OPENAPI_COMMIT,
+    # auto-integrity
     url = "https://github.com/openai/openai-openapi/archive/" + OPENAI_OPENAPI_COMMIT + ".zip",
 )
 
@@ -238,6 +239,7 @@ http_archive(
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     integrity = "sha256-sr46XROs38AGASqEkUIKODVoLpDciRBRlJeNe+NvN2Q=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
+    # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
 )
 
@@ -342,6 +344,7 @@ http_archive(
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
     sha256 = "d6a1a41601ebb98d85742756b2847eda1781caa29c46ca66b1b0fb4c55c23072",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
+    # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
 )
 
@@ -442,7 +445,7 @@ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2025a"
+TZ_VERSION = "2025c"
 
 http_archive(
     name = "com_github_eggbert_tz",
@@ -568,6 +571,7 @@ http_archive(
     build_file = "//third_party:BUILD.sqlite4java",
     integrity = "sha256-zsZtCvre6it1fzl30RBHO15j2a5fbIKCZSKS7YPgPnw=",
     strip_prefix = "sqlite4java-" + SQLITE4JAVA_COMMIT,
+    # auto-integrity
     url = "https://github.com/ganadist/sqlite4java/archive/" + SQLITE4JAVA_COMMIT + ".tar.gz",
 )
 
@@ -585,5 +589,6 @@ exports_files(glob(["**/*"], allow_empty=True))
 """,
     integrity = "sha256-4PltcQE7b8EjFEl23UmIaYaImmyfCrNPcTueyZQ5nd4=",
     strip_prefix = "openapi-directory-" + OPENAPI_DIRECTORY_COMMIT,
+    # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
 )
