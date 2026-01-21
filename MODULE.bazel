@@ -442,7 +442,7 @@ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2025a"
+TZ_VERSION = "2025c"
 
 http_archive(
     name = "com_github_eggbert_tz",
