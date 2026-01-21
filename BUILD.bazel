@@ -12,7 +12,6 @@ load("//py:rules.bzl", "py_library")
 load("@aspect_rules_py//py:defs.bzl", "py_venv")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@npm//:defs.bzl", "npm_link_all_packages")
-load("@npm//:renovate/package_json.bzl", "bin")
 load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
@@ -222,8 +221,8 @@ py_venv(
         "//project/zemn.me/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",
-        "//py/ci/postUpgrade",
-        "//py/ci/postUpgrade:postUpgrade_bin",
+        "//py/ci/post_upgrade",
+        "//py/ci/post_upgrade:post_upgrade_bin",
         "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
         "//py/devtools/prep",
