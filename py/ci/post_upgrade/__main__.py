@@ -3,7 +3,7 @@ from subprocess import run as _run
 from os import environ, getenv
 from os.path import exists
 
-from py.ci.postUpgrade.integrity import update_git_refs_archives_file
+from py.ci.post_upgrade.integrity import update_git_refs_archives_file
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")

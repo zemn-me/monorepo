@@ -2,7 +2,7 @@ import base64
 import hashlib
 import unittest
 
-from py.ci.postUpgrade.integrity import update_module_bazel_text
+from py.ci.post_upgrade.integrity import update_module_bazel_text
 
 
 class TestAutoIntegrity(unittest.TestCase):

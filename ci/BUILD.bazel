@@ -21,7 +21,7 @@ ts_project(
 
 alias(
     name = "postupgrade",
-    actual = "@@//py/ci/postUpgrade:postUpgrade_bin",
+    actual = "@@//py/ci/post_upgrade:post_upgrade_bin",
 )
 
 jest_test(
