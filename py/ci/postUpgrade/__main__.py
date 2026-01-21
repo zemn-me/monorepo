@@ -3,6 +3,8 @@ from subprocess import run as _run
 from os import environ, getenv
 from os.path import exists
 
+from py.ci.postUpgrade.integrity import update_git_refs_archives_file
+
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
 
@@ -77,8 +79,5 @@ def modify_bazel_lockfiles():
 
 modify_non_bazel_lockfiles()
 modify_bazel_lockfiles()
+update_git_refs_archives_file(f"{wd}/MODULE.bazel")
 run(["rm", "-rf", "dist/"])
-
-
-
-
