@@ -190,6 +190,7 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/openai/openai-openapi
+# 	refs-from=refs/heads/master
 OPENAI_OPENAPI_COMMIT = "2577b8c9a889a61c1163075c2e71e3812d80aa83"
 
 http_archive(
@@ -229,6 +230,7 @@ http_archive(
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
+# 	refs-from=refs/heads/main
 FACTORIOLAB_COMMIT = "4ac80cb416e779819a73b871dd3e32ab7e0cda0c"
 
 http_archive(
@@ -332,6 +334,7 @@ http_archive(
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
+# 	refs-from=refs/heads/main
 MICROSOFT_JSON_SCHEMAS_COMMIT = "2b6ef3bfa6634bada05486040a36b81fccb23a24"
 
 http_archive(
@@ -557,6 +560,7 @@ use_repo(maven, "maven")
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/ganadist/sqlite4java
+# 	refs-from=refs/heads/master
 SQLITE4JAVA_COMMIT = "7b55b3eab6901a0e49d6e1129431fa92c4206c0b"
 
 http_archive(
@@ -571,6 +575,7 @@ http_archive(
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/APIs-guru/openapi-directory
+# 	refs-from=refs/heads/main
 OPENAPI_DIRECTORY_COMMIT = "f7207cf0a5c56081d275ebae4cf615249323385d"
 
 http_archive(
