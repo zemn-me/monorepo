@@ -1,14 +1,39 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
 py_binary(
     name = "postUpgrade_bin",
     srcs = ["__main__.py"],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
+    deps = [":post_upgrade"],
+)
+
+py_test(
+    name = "post_upgrade_test",
+    size = "small",
+    srcs = ["__test__.py"],
+    main = "__test__.py",
+    deps = [":post_upgrade"],
+)
+
+py_library(
+    name = "post_upgrade",
+    srcs = [
+        "__init__.py",
+        "integrity.py",
+    ],
+    visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+py_test(
+    name = "postUpgrade_test",
+    srcs = ["__test__.py"],
+    main = "__test__.py",
+    deps = [":post_upgrade"],
 )
