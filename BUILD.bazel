@@ -221,6 +221,8 @@ py_venv(
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/zemn.me/inject_iservice:inject_iservice_bin",
         "//py",
+        "//py/ci",
+        "//py/ci/postUpgrade",
         "//py/ci/postUpgrade:postUpgrade_bin",
         "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
