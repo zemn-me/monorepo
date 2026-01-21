@@ -47,6 +47,8 @@ set of tests!
   state to tests; prefer observing behaviour through the DOM, network
   responses, or existing APIs instead.
 
+- If Bazel fails while building `//project/zemn.me:build` with a `next/font` Google Fonts fetch error (e.g. `ETIMEDOUT` / “Failed to fetch … from Google Fonts”), it’s usually a transient network issue; retry rather than changing the font setup.
+
 
 # generated files
 
