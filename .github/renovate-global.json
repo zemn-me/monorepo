@@ -54,10 +54,10 @@
 				"/^sh/bin/bazel$/"
 			],
 			"matchStrings": [
-				"#\\s*renovate:\\n#\\s*datasource\\s*=\\s*git-refs\\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\\n#\\s*depName\\s*=\\s*(?<depName>.*)\\n[^=]+=\\s*\"(?<currentDigest>[^\"]*)\""
+				"#\\s*renovate:\\n#\\s*datasource\\s*=\\s*git-refs\\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\\n#\\s*depName\\s*=\\s*(?<depName>.*)\\n#\\s*refs-from\\s*=\\s*(?<refsFrom>.*)\\n[^=]+=\\s*\"(?<currentDigest>[^\"]*)\""
 			],
 			"datasourceTemplate": "git-refs",
-			"currentValueTemplate": "{{{currentDigest}}}",
+			"currentValueTemplate": "{{{refsFrom}}}",
 			"versioningTemplate": "{{{versioning}}}",
 			"packageNameTemplate": "{{{depName}}}",
 			"depNameTemplate": "{{{depName}}}"
