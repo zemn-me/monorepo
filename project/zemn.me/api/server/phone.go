@@ -15,6 +15,7 @@ import (
 	"github.com/beevik/etree"
 	"github.com/nyaruka/phonenumbers"
 	"github.com/twilio/twilio-go/twiml"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 // Salutation returns a greeting appropriate for the provided time.
@@ -65,7 +66,7 @@ type AllowedNumber struct {
 // in pairs so end-users can enter their numbers without faffing
 // with exit codes or +.
 func (s *Server) getAllowedNumbers(ctx context.Context) (numbers []AllowedNumber, err error) {
-	var allowedWithPrefix []Authorizer
+	var allowedWithPrefix []api_types.Authorizer
 	allowedWithPrefix, err = s.getLatestAuthorizers(ctx)
 
 	for _, num := range allowedWithPrefix {
@@ -80,7 +81,7 @@ func (s *Server) getAllowedNumbers(ctx context.Context) (numbers []AllowedNumber
 	return
 }
 
-func (s *Server) getAllowedEntryCodes(ctx context.Context) (entryCodes []EntryCodeEntry, err error) {
+func (s *Server) getAllowedEntryCodes(ctx context.Context) (entryCodes []api_types.EntryCodeEntry, err error) {
 	return s.getLatestEntryCodes(ctx)
 }
 
@@ -151,7 +152,7 @@ func (s Server) TestTwilioChallenge(challenge string) (err error) {
 // Prompts the user to enter a phone number (which may be on the list of
 // resident phone numbers). The user is still moved onto the next step if
 // they enter nothing.
-func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
+func (s *Server) postPhoneInit(ctx context.Context, rq api_types.PostPhoneInitRequestObject) (rs api_types.PostPhoneInitResponseObject, err error) {
 	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
 		return
 	}
@@ -192,7 +193,7 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 	return TwimlResponse{Document: doc}, nil
 }
 
-func (s *Server) PostPhoneInit(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
+func (s *Server) PostPhoneInit(ctx context.Context, rq api_types.PostPhoneInitRequestObject) (rs api_types.PostPhoneInitResponseObject, err error) {
 	rs, err = s.postPhoneInit(ctx, rq)
 	if err != nil {
 		doc, _ := twilioError(err)
@@ -225,7 +226,7 @@ func removeDuplicateDigits(input string) string {
 	return string(result)
 }
 
-func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
+func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq api_types.PostPhoneInitRequestObject) (rs api_types.PostPhoneInitResponseObject, err error) {
 	var success bool
 	success, err = s.inPartyMode(ctx)
 	if err != nil {
@@ -271,7 +272,7 @@ func (s *Server) notifyPartyModeEntry(ctx context.Context) error {
 	return s.sendText(ctx, to, fromNumber, body)
 }
 
-func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
+func (s *Server) handleEntryViaCode(ctx context.Context, rq api_types.GetPhoneHandleEntryRequestObject) (rsp api_types.GetPhoneHandleEntryResponseObject, err error) {
 	codes, err := s.getLatestEntryCodes(ctx)
 	if err != nil {
 		return
@@ -307,7 +308,7 @@ func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryR
 	return TwimlResponse{Document: doc}, nil
 }
 
-func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
+func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq api_types.GetPhoneHandleEntryRequestObject) (rs api_types.GetPhoneHandleEntryResponseObject, err error) {
 	allowedNumbers, err := s.getAllowedNumbers(ctx)
 	if err != nil {
 		return
@@ -391,7 +392,7 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 
 // Takes a param of a phone number to forward the call to (the owner of that
 // phone may then press 9 to open the door).
-func (s *Server) getPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
+func (s *Server) getPhoneHandleEntry(ctx context.Context, rq api_types.GetPhoneHandleEntryRequestObject) (rs api_types.GetPhoneHandleEntryResponseObject, err error) {
 	if err = s.TestTwilioChallenge(rq.Params.Secret); err != nil {
 		return
 	}
@@ -404,7 +405,7 @@ func (s *Server) getPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntry
 	return s.handleEntryViaAuthorizer(ctx, rq)
 }
 
-func (s *Server) GetPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
+func (s *Server) GetPhoneHandleEntry(ctx context.Context, rq api_types.GetPhoneHandleEntryRequestObject) (rs api_types.GetPhoneHandleEntryResponseObject, err error) {
 	rs, err = s.getPhoneHandleEntry(ctx, rq)
 	if err != nil {
 		doc, _ := twilioError(err)
@@ -418,8 +419,8 @@ func (s *Server) GetPhoneHandleEntry(ctx context.Context, rq GetPhoneHandleEntry
 	return
 }
 
-func (s *Server) GetPhoneNumber(ctx context.Context, rq GetPhoneNumberRequestObject) (rs GetPhoneNumberResponseObject, err error) {
-	response := GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
+func (s *Server) GetPhoneNumber(ctx context.Context, rq api_types.GetPhoneNumberRequestObject) (rs api_types.GetPhoneNumberResponseObject, err error) {
+	response := api_types.GetPhoneNumberResponse{PhoneNumber: os.Getenv("CALLBOX_PHONE_NUMBER")}
 
-	return GetPhoneNumber200JSONResponse(response), nil
+	return api_types.GetPhoneNumber200JSONResponse(response), nil
 }

@@ -1,17 +1,21 @@
 package apiserver
 
-import "testing"
+import (
+	"testing"
+
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
+)
 
 func TestConfigureTestOIDCIssuerFromEnv(t *testing.T) {
 	originalIssuers := upstreamOIDCIssuers
-	upstreamOIDCIssuers = map[OIDCIssuer]*upstreamIssuerConfig{}
+	upstreamOIDCIssuers = map[api_types.OIDCIssuer]*upstreamIssuerConfig{}
 	for issuer, cfg := range originalIssuers {
 		copyCfg := &upstreamIssuerConfig{
 			Provider: cfg.Provider,
-			Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{},
+			Audience: map[api_types.OAuthClientId]map[api_types.OIDCSubject]api_types.OIDCSubject{},
 		}
 		for audience, subjects := range cfg.Audience {
-			copySubjects := map[OIDCSubject]OIDCSubject{}
+			copySubjects := map[api_types.OIDCSubject]api_types.OIDCSubject{}
 			for remote, local := range subjects {
 				copySubjects[remote] = local
 			}
@@ -39,7 +43,7 @@ func TestConfigureTestOIDCIssuerFromEnv(t *testing.T) {
 
 	configureTestOIDCIssuerFromEnv()
 
-	cfg, ok := upstreamOIDCIssuers[OIDCIssuer(issuer)]
+	cfg, ok := upstreamOIDCIssuers[api_types.OIDCIssuer(issuer)]
 	if !ok {
 		t.Fatalf("expected issuer %s to be registered", issuer)
 	}
@@ -48,12 +52,12 @@ func TestConfigureTestOIDCIssuerFromEnv(t *testing.T) {
 		t.Fatalf("expected provider %q, got %q", provider, cfg.Provider)
 	}
 
-	subjectMap, ok := cfg.Audience[OAuthClientId(clientID)]
+	subjectMap, ok := cfg.Audience[api_types.OAuthClientId(clientID)]
 	if !ok {
 		t.Fatalf("expected audience %s to be registered", clientID)
 	}
 
-	if got := subjectMap[OIDCSubject(remoteSubject)]; got != OIDCSubject(localSubject) {
+	if got := subjectMap[api_types.OIDCSubject(remoteSubject)]; got != api_types.OIDCSubject(localSubject) {
 		t.Fatalf("expected remote subject to map to %q, got %q", localSubject, got)
 	}
 }

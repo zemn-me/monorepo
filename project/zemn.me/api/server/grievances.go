@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/google/uuid"
 	openapi_types "github.com/oapi-codegen/runtime/types"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
+	api_types "github.com/zemn-me/monorepo/project/zemn.me/api/server/types"
 )
 
 type grievanceRecord struct {
@@ -20,11 +22,12 @@ type grievanceRecord struct {
 	Priority    int    `dynamodbav:"priority"`
 	Created     Time   `dynamodbav:"created"`
 	TimeZone    string `dynamodbav:"time_zone"`
+	PosterEmail string `dynamodbav:"poster_email"`
 }
 
 var errGrievanceNotFound = errors.New("grievance not found")
 
-func grievanceFromRecord(r grievanceRecord) Grievance {
+func grievanceFromRecord(r grievanceRecord) api_types.Grievance {
 	uid := uuid.MustParse(r.Id)
 	id := openapi_types.UUID(uid)
 	var tz *string
@@ -32,13 +35,19 @@ func grievanceFromRecord(r grievanceRecord) Grievance {
 		tzVal := r.TimeZone
 		tz = &tzVal
 	}
-	return Grievance{
+	var posterEmail *string
+	if r.PosterEmail != "" {
+		posterEmailVal := r.PosterEmail
+		posterEmail = &posterEmailVal
+	}
+	return api_types.Grievance{
 		Id:          &id,
 		Name:        r.Name,
 		Description: r.Description,
 		Priority:    r.Priority,
 		Created:     r.Created.Time,
 		TimeZone:    tz,
+		PosterEmail: posterEmail,
 	}
 }
 
@@ -57,7 +66,7 @@ func resolveTimeZone(requested *string, fallback string) (string, *time.Location
 	return tzName, loc, nil
 }
 
-func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
+func (s Server) listGrievances(ctx context.Context) ([]api_types.Grievance, error) {
 	out, err := s.ddb.Scan(ctx, &dynamodb.ScanInput{
 		TableName: aws.String(s.grievancesTableName),
 	})
@@ -68,17 +77,22 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 	if err := attributevalue.UnmarshalListOfMaps(out.Items, &recs); err != nil {
 		return nil, err
 	}
-	gs := make([]Grievance, 0, len(recs))
+	gs := make([]api_types.Grievance, 0, len(recs))
 	for _, r := range recs {
 		gs = append(gs, grievanceFromRecord(r))
 	}
 	return gs, nil
 }
 
-func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
+func (s Server) createGrievance(ctx context.Context, g api_types.NewGrievance) (api_types.Grievance, error) {
 	tzName, tzLoc, err := resolveTimeZone(g.TimeZone, "")
 	if err != nil {
-		return Grievance{}, err
+		return api_types.Grievance{}, err
+	}
+
+	posterEmail := ""
+	if token, ok := auth.IdTokenFromContext(ctx); ok && token.Email != nil {
+		posterEmail = *token.Email
 	}
 
 	id := uuid.New()
@@ -91,10 +105,11 @@ func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance,
 		Priority:    g.Priority,
 		Created:     created,
 		TimeZone:    tzName,
+		PosterEmail: posterEmail,
 	}
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
-		return Grievance{}, err
+		return api_types.Grievance{}, err
 	}
 	_, err = s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(s.grievancesTableName),
@@ -103,21 +118,25 @@ func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance,
 	return grievanceFromRecord(rec), err
 }
 
-func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) (Grievance, error) {
+func (s Server) updateGrievance(ctx context.Context, id string, g api_types.NewGrievance) (api_types.Grievance, error) {
 	existing, err := s.getGrievance(ctx, id)
 	if err != nil {
-		return Grievance{}, err
+		return api_types.Grievance{}, err
 	}
 	if existing == nil {
-		return Grievance{}, errGrievanceNotFound
+		return api_types.Grievance{}, errGrievanceNotFound
 	}
 	var currentTZ string
 	if existing.TimeZone != nil {
 		currentTZ = *existing.TimeZone
 	}
+	var posterEmail string
+	if existing.PosterEmail != nil {
+		posterEmail = *existing.PosterEmail
+	}
 	tzName, _, err := resolveTimeZone(g.TimeZone, currentTZ)
 	if err != nil {
-		return Grievance{}, err
+		return api_types.Grievance{}, err
 	}
 	rec := grievanceRecord{
 		Id:          id,
@@ -126,10 +145,11 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
 		Priority:    g.Priority,
 		Created:     Time{Time: existing.Created},
 		TimeZone:    tzName,
+		PosterEmail: posterEmail,
 	}
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
-		return Grievance{}, err
+		return api_types.Grievance{}, err
 	}
 	_, err = s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(s.grievancesTableName),
@@ -138,7 +158,7 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
 	return grievanceFromRecord(rec), err
 }
 
-func (s Server) getGrievance(ctx context.Context, id string) (*Grievance, error) {
+func (s Server) getGrievance(ctx context.Context, id string) (*api_types.Grievance, error) {
 	out, err := s.ddb.GetItem(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(s.grievancesTableName),
 		Key: map[string]types.AttributeValue{
@@ -171,23 +191,23 @@ func (s Server) deleteGrievance(ctx context.Context, id string) error {
 
 // Handler implementations
 
-func (s Server) GetGrievances(ctx context.Context, rq GetGrievancesRequestObject) (GetGrievancesResponseObject, error) {
+func (s Server) GetGrievances(ctx context.Context, rq api_types.GetGrievancesRequestObject) (api_types.GetGrievancesResponseObject, error) {
 	list, err := s.listGrievances(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return GetGrievances200JSONResponse(list), nil
+	return api_types.GetGrievances200JSONResponse(list), nil
 }
 
-func (s Server) PostGrievances(ctx context.Context, rq PostGrievancesRequestObject) (PostGrievancesResponseObject, error) {
+func (s Server) PostGrievances(ctx context.Context, rq api_types.PostGrievancesRequestObject) (api_types.PostGrievancesResponseObject, error) {
 	g, err := s.createGrievance(ctx, *rq.Body)
 	if err != nil {
 		return nil, err
 	}
-	return PostGrievances200JSONResponse(g), nil
+	return api_types.PostGrievances200JSONResponse(g), nil
 }
 
-func (s Server) GetGrievanceId(ctx context.Context, rq GetGrievanceIdRequestObject) (GetGrievanceIdResponseObject, error) {
+func (s Server) GetGrievanceId(ctx context.Context, rq api_types.GetGrievanceIdRequestObject) (api_types.GetGrievanceIdResponseObject, error) {
 	g, err := s.getGrievance(ctx, rq.Id)
 	if err != nil {
 		return nil, err
@@ -195,23 +215,23 @@ func (s Server) GetGrievanceId(ctx context.Context, rq GetGrievanceIdRequestObje
 	if g == nil {
 		return nil, nil
 	}
-	return GetGrievanceId200JSONResponse(*g), nil
+	return api_types.GetGrievanceId200JSONResponse(*g), nil
 }
 
-func (s Server) PutGrievanceId(ctx context.Context, rq PutGrievanceIdRequestObject) (PutGrievanceIdResponseObject, error) {
+func (s Server) PutGrievanceId(ctx context.Context, rq api_types.PutGrievanceIdRequestObject) (api_types.PutGrievanceIdResponseObject, error) {
 	g, err := s.updateGrievance(ctx, rq.Id, *rq.Body)
 	if err == errGrievanceNotFound {
-		return PutGrievanceId404Response{}, nil
+		return api_types.PutGrievanceId404Response{}, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return PutGrievanceId200JSONResponse(g), nil
+	return api_types.PutGrievanceId200JSONResponse(g), nil
 }
 
-func (s Server) DeleteGrievanceId(ctx context.Context, rq DeleteGrievanceIdRequestObject) (DeleteGrievanceIdResponseObject, error) {
+func (s Server) DeleteGrievanceId(ctx context.Context, rq api_types.DeleteGrievanceIdRequestObject) (api_types.DeleteGrievanceIdResponseObject, error) {
 	if err := s.deleteGrievance(ctx, rq.Id); err != nil {
 		return nil, err
 	}
-	return DeleteGrievanceId200JSONResponse("ok"), nil
+	return api_types.DeleteGrievanceId200JSONResponse("ok"), nil
 }

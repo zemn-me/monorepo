@@ -8,6 +8,7 @@ go_library(
     importpath = "github.com/zemn-me/monorepo/project/zemn.me/api/server/auth",
     visibility = ["//visibility:public"],
     deps = [
+        "//project/zemn.me/api/server/types",
         "@com_github_coreos_go_oidc//:go-oidc",
         "@com_github_getkin_kin_openapi//openapi3",
         "@com_github_getkin_kin_openapi//openapi3filter",
