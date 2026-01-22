@@ -591,3 +591,10 @@ exports_files(glob(["**/*"], allow_empty=True))
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
 )
+
+http_archive(
+    name = "bazel",
+    integrity = "sha256-ee37rJDVse5AHQD6LVzY80tbBwkyEw+HdBS0wMzZtSA=",
+    strip_prefix = "bazel-8.5.1",
+    url = "https://github.com/bazelbuild/bazel/archive/8.5.1.tar.gz",
+)
