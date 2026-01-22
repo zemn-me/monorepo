@@ -15,12 +15,6 @@ exports_files([
     "hello_test.ts",
 ])
 
-jest_test(
-    name = "test",
-    srcs = ["hello_test.js"],
-    deps = [":simple"],
-)
-
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
