@@ -1,11 +1,10 @@
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { SkipToken, skipToken, useQuery } from "@tanstack/react-query";
 import parsePhoneNumber from "libphonenumber-js";
 import createFetchClient from "openapi-fetch";
 
 import { useGoogleAuth } from "#root/project/zemn.me/hook/useGoogleAuth.js";
 import type { components, paths } from "#root/third_party/com/googleapis/people/api_client.gen.js";
 import { PeopleFieldMask } from "#root/ts/google/people/display.js";
-import * as option from "#root/ts/option/types.js";
 import { Minute } from "#root/ts/time/duration.js";
 
 export type Person = components["schemas"]["Person"];
@@ -35,24 +34,17 @@ export function useSearchContact(
 			// intentionally an empty string due to recommendation
 			// from Google to warm up cache.
 			: "";
-	// TODO: properly use futures here
 	const [, fut_access_token] = useGoogleAuth([]);
 	const read_mask = [...readMask].join(",");
-	const access_token = fut_access_token(
-		token => option.Some(token),
-		() => option.None,
-		() => option.None,
-	)
-
 
 	return useQuery({
 		queryKey: ["contacts-search", normalized_query, read_mask],
 		staleTime: 2 * Minute,
-		queryFn: option.is_some(access_token)
-			? async () => createFetchClient<paths>({
+		queryFn: fut_access_token(
+			token => async () => createFetchClient<paths>({
 				baseUrl: "https://people.googleapis.com",
 				headers: {
-					Authorization: `Bearer ${option.unwrap_unchecked(access_token)}`,
+					Authorization: `Bearer ${token}`,
 				}
 			}).GET("/v1/people:searchContacts", {
 				params: {
@@ -61,7 +53,9 @@ export function useSearchContact(
 						readMask: read_mask,
 					}
 				}
-			}).then(v => v.data?.results ?? [])
-			: skipToken
+			}).then(v => v.data?.results ?? []),
+			(() => skipToken) as () => SkipToken,
+			(() => skipToken) as () => SkipToken,
+		)
 	});
 }
