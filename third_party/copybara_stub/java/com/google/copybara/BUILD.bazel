@@ -1,0 +1,14 @@
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+sh_binary(
+    name = "copybara",
+    srcs = ["copybara_stub.sh"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "copybara_runfiles",
+    data = [":copybara"],
+    visibility = ["//visibility:public"],
+)

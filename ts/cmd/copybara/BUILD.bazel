@@ -8,7 +8,7 @@ ts_project(
         "smoke_test.ts",
     ],
     data = [
-        "@copybara//java/com/google/copybara",
+        "@copybara//java/com/google/copybara:copybara_runfiles",
     ],
     visibility = [
         "//:__subpackages__",

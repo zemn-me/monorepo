@@ -1,0 +1,554 @@
+--- a/external/third_party/jcommander.BUILD
++++ b/external/third_party/jcommander.BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ package(
+     default_visibility = ["//visibility:public"],
+ )
+
+--- a/java/com/google/copybara/BUILD
++++ b/java/com/google/copybara/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/action/BUILD
++++ b/java/com/google/copybara/action/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2021 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/approval/BUILD
++++ b/java/com/google/copybara/approval/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/archive/BUILD
++++ b/java/com/google/copybara/archive/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/authoring/BUILD
++++ b/java/com/google/copybara/authoring/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/buildozer/BUILD
++++ b/java/com/google/copybara/buildozer/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/buildozer/testing/BUILD
++++ b/java/com/google/copybara/buildozer/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/checks/BUILD
++++ b/java/com/google/copybara/checks/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/compression/BUILD
++++ b/java/com/google/copybara/compression/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/config/BUILD
++++ b/java/com/google/copybara/config/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/configgen/BUILD
++++ b/java/com/google/copybara/configgen/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/credentials/BUILD
++++ b/java/com/google/copybara/credentials/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/doc/BUILD
++++ b/java/com/google/copybara/doc/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/docs.bzl
++++ b/java/com/google/copybara/docs.bzl
+@@ -14,6 +14,7 @@
+ 
+ """Bazel rule to generate copybara reference docs."""
+ 
++load("@rules_java//java:defs.bzl", "JavaInfo", "java_binary")
+ def _doc_generator_impl(ctx):
+     jars = []
+     for target in ctx.attr.targets:
+@@ -58,7 +59,7 @@
+     libraries: List of libraries for which to generate reference documentation.
+     template_file: Optional template file in which to insert the generated reference.
+     """
+-    native.java_binary(
++    java_binary(
+         name = "generator",
+         main_class = "com.google.copybara.doc.Generator",
+         runtime_deps = ["//java/com/google/copybara/doc:generator-lib"] + libraries,
+@@ -71,3 +72,4 @@
+         targets = libraries,
+         template_file = template_file,
+     )
++
+
+--- a/java/com/google/copybara/effect/BUILD
++++ b/java/com/google/copybara/effect/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/exception/BUILD
++++ b/java/com/google/copybara/exception/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/format/BUILD
++++ b/java/com/google/copybara/format/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/git/BUILD
++++ b/java/com/google/copybara/git/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/git/github/BUILD
++++ b/java/com/google/copybara/git/github/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/git/github/api/testing/BUILD
++++ b/java/com/google/copybara/git/github/api/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/git/testing/BUILD
++++ b/java/com/google/copybara/git/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/go/BUILD
++++ b/java/com/google/copybara/go/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/hashing/BUILD
++++ b/java/com/google/copybara/hashing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/hg/BUILD
++++ b/java/com/google/copybara/hg/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/hg/testing/BUILD
++++ b/java/com/google/copybara/hg/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/html/BUILD
++++ b/java/com/google/copybara/html/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/BUILD
++++ b/java/com/google/copybara/http/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/auth/BUILD
++++ b/java/com/google/copybara/http/auth/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/endpoint/BUILD
++++ b/java/com/google/copybara/http/endpoint/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/json/BUILD
++++ b/java/com/google/copybara/http/json/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/multipart/BUILD
++++ b/java/com/google/copybara/http/multipart/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/http/testing/BUILD
++++ b/java/com/google/copybara/http/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/jcommander/BUILD
++++ b/java/com/google/copybara/jcommander/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2017 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/json/BUILD
++++ b/java/com/google/copybara/json/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/monitor/BUILD
++++ b/java/com/google/copybara/monitor/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/onboard/BUILD
++++ b/java/com/google/copybara/onboard/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2021 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/onboard/core/BUILD
++++ b/java/com/google/copybara/onboard/core/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/profiler/BUILD
++++ b/java/com/google/copybara/profiler/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/python/BUILD
++++ b/java/com/google/copybara/python/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/re2/BUILD
++++ b/java/com/google/copybara/re2/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/remotefile/BUILD
++++ b/java/com/google/copybara/remotefile/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2020 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/remotefile/extractutil/BUILD
++++ b/java/com/google/copybara/remotefile/extractutil/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/revision/BUILD
++++ b/java/com/google/copybara/revision/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/rust/BUILD
++++ b/java/com/google/copybara/rust/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/starlark/BUILD
++++ b/java/com/google/copybara/starlark/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/templatetoken/BUILD
++++ b/java/com/google/copybara/templatetoken/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/testing/BUILD
++++ b/java/com/google/copybara/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/testing/git/BUILD
++++ b/java/com/google/copybara/testing/git/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2017 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/testing/profiler/BUILD
++++ b/java/com/google/copybara/testing/profiler/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/toml/BUILD
++++ b/java/com/google/copybara/toml/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/transform/BUILD
++++ b/java/com/google/copybara/transform/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/transform/debug/BUILD
++++ b/java/com/google/copybara/transform/debug/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2019 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/transform/patch/BUILD
++++ b/java/com/google/copybara/transform/patch/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2018 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/tsjs/npm/BUILD
++++ b/java/com/google/copybara/tsjs/npm/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2024 Google LLC.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/util/BUILD
++++ b/java/com/google/copybara/util/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/util/console/BUILD
++++ b/java/com/google/copybara/util/console/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/util/console/testing/BUILD
++++ b/java/com/google/copybara/util/console/testing/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/version/BUILD
++++ b/java/com/google/copybara/version/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/java/com/google/copybara/xml/BUILD
++++ b/java/com/google/copybara/xml/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2022 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/javatests/com/google/copybara/BUILD
++++ b/javatests/com/google/copybara/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2016 Google Inc.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/javatests/com/google/copybara/regenerate/BUILD
++++ b/javatests/com/google/copybara/regenerate/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ # Copyright 2023 Google LLC
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+
+--- a/javatests/com/google/copybara/test.bzl
++++ b/javatests/com/google/copybara/test.bzl
+@@ -15,6 +15,7 @@
+ """
+ This file contains macros used in the copybara project.
+ """
++load("@rules_java//java:defs.bzl", "java_test")
+ 
+ def all_tests(tests, deps, name, tags = [], shard_count = 1, data = [], env = {}):
+     """
+@@ -48,7 +49,7 @@
+             test_tags.append("req_dep=%s" % x)
+         test_deps = [dep for dep in deps if dep not in default_deps] + default_deps
+ 
+-        native.java_test(
++        java_test(
+             name = file[:-5] + "_" + name,
+             srcs = tests,
+             javacopts = [
+@@ -62,3 +63,4 @@
+             shard_count = shard_count,
+             env = env,
+         )
++
+
+--- a/third_party/BUILD
++++ b/third_party/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ licenses(["notice"])  # Apache 2.0
+ 
+ package_group(
+
+--- a/third_party/bazel/BUILD
++++ b/third_party/bazel/BUILD
+@@ -1,3 +1,4 @@
++load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test", "java_import", "java_plugin")
+ licenses(["notice"])  # Apache 2.0
+ 
+ package(
+

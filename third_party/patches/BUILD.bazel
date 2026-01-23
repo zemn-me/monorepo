@@ -1,0 +1,6 @@
+exports_files([
+    "copybara-bcr-add_module_bazel.patch",
+    "copybara-bcr-update_labels.patch",
+    "copybara-bcr-update_repos.patch",
+    "copybara-java-rules.patch",
+])
