@@ -118,3 +118,28 @@ export const coincide_then =
 			)
 		)
 
+
+/**
+ * Declare that a {@link Future} depends on another {@link Future}.
+ *
+ * This can be used when it's not possible to {@link future_and_then} pipeline
+ * the future but they're co-dependent, such as when using useQuery (which
+ * cannot have functions returned if using {@link localStorage}).
+ *
+ * If you *don't* use this function to declare the dependency,
+ * then the child future will often show a loading state if
+ * the parent future is in error.
+ */
+export function future_declare_dependency<
+	T1, T2,
+	L1, L2,
+	E1, E2,
+>(
+	parent: Future<T1, L1, E1>,
+	child: Future<T2, L2, E2>,
+): Future<T2, L1 | L2, E1 | E2> {
+	return coincide_then(
+		parent, child,
+		(_p, c) => c
+	)
+}
