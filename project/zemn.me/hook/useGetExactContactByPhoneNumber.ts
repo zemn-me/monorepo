@@ -1,7 +1,6 @@
 import {
 	useSearchContact,
 } from "#root/project/zemn.me/hook/useSearchContact.js";
-import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
 import { PeopleFieldMask, PeoplePhoneNumber } from "#root/ts/google/people/display.js";
 import { concatn_array, filter_map, iterator, map, nth, to_array } from "#root/ts/iter/iterable_functional.js";
 import { None, Option, option_and_then, option_and_then_flatten, option_unwrap_or, Some } from "#root/ts/option/types.js";
@@ -42,13 +41,13 @@ export function useGetExactContactByPhoneNumber(
 	);
 
 	const futures = map([intl_format, ntl_format],
-		formatted_number => useQueryFuture(useSearchContact(
+		formatted_number => useSearchContact(
 		option_unwrap_or(formatted_number, ""),
 		new Set([
 			"phoneNumbers",
 			...fields
 		]),
-	)));
+	));
 
 	const results = map(
 		futures,
