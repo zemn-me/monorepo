@@ -47,8 +47,6 @@ js_binary(
     data = [
         ":ci",
         "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
     ],
     entry_point = "postsubmit.js",
 )
@@ -58,8 +56,6 @@ js_binary(
     data = [
         ":ci",
         "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
     ],
     entry_point = "submit.js",
 )
