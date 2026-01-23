@@ -19,19 +19,6 @@ pkg_files(
     strip_prefix = strip_prefix.from_pkg(),
 )
 
-genrule(
-    name = "patch",
-    srcs = [
-        ":modded_game",
-        "//project/ck3/base_game",
-    ],
-    outs = ["mod.patch"],
-    cmd = """
-        LC_ALL=C diff -ur \\
-            project/ck3/base_game project/ck3/recursive-vassals | grep -v '^Only in' > $@ || true
-    """,
-    message = "Creating patch file...",
-)
 
 pkg_zip(
     name = "mod_zip",
