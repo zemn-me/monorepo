@@ -3,6 +3,7 @@ import classNames from "classnames";
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { either } from "#root/ts/either/either.js";
+import { future_to_option } from "#root/ts/future/option/future_to_option.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import * as option from "#root/ts/option/types.js";
 import { background } from "#root/ts/promise/ignore_result.js";
@@ -11,7 +12,9 @@ import * as result from "#root/ts/result/result.js";
 
 
 export function InlineLogin() {
-	const [idToken, , promptForLogin] = useZemnMeAuth();
+	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const idToken = future_to_option(fut_idToken);
+	const promptForLogin = future_to_option(fut_promptForLogin);
 
 	const idTokenData = option.and_then(
 		idToken,
