@@ -11,12 +11,9 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/classnames",
         "//project/zemn.me/hook",
-        "//ts/either",
-        "//ts/future/option",
+        "//ts/future",
         "//ts/oidc",
-        "//ts/option",
         "//ts/promise",
-        "//ts/result",
     ],
 )
 
