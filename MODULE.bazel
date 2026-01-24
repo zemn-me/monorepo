@@ -536,6 +536,12 @@ http_archive(
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
+
+local_path_override(
+    module_name = "copybara",
+    path = "third_party/copybara_stub",
+)
+
 bazel_dep(name = "rules_itest", version = "0.0.49")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
 bazel_dep(name = "rules_java", version = "9.3.0")
@@ -574,6 +580,7 @@ http_archive(
     url = "https://github.com/ganadist/sqlite4java/archive/" + SQLITE4JAVA_COMMIT + ".tar.gz",
 )
 
+
 # renovate:
 # 	datasource=git-refs
 # 	versioning=git
@@ -591,3 +598,6 @@ exports_files(glob(["**/*"], allow_empty=True))
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
 )
+
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "rules_cc", version = "0.2.16")

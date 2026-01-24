@@ -1,0 +1,10 @@
+diff --git a/java/com/google/copybara/docs.bzl b/java/com/google/copybara/docs.bzl
+index 4b7c9a9..2b6aa5c 100644
+--- a/java/com/google/copybara/docs.bzl
++++ b/java/com/google/copybara/docs.bzl
+@@ -15,3 +15,5 @@
+ """Bazel rule to generate copybara reference docs."""
+ 
++load("@rules_java//java:defs.bzl", "JavaInfo")
++
+ def _doc_generator_impl(ctx):

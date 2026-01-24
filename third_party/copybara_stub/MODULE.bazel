@@ -1,0 +1,4 @@
+module(name = "copybara", version = "0.0.0-stub")
+
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "aspect_rules_js", version = "2.9.2")

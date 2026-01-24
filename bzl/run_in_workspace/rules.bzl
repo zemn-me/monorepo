@@ -1,3 +1,5 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
 """
 Provider and macro to allow a binary to work in the
 working directory of the actual repo (for example for dev-time tooling).
@@ -56,10 +58,10 @@ def run_in_workspace(name, src, data = [], deps = [], args = None, **kwargs):
         deps = deps,
     )
 
-    native.sh_binary(
+    sh_binary(
         name = name,
         srcs = [out_file_name],
         data = data + [src],
-        deps = ["@bazel_tools//tools/bash/runfiles"],
+        deps = ["@rules_shell//shell/runfiles"],
         **kwargs
     )
