@@ -2,27 +2,19 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "InlineLogin",
-    srcs = ["inline_login.tsx"],
-    assets = ["inline_login.module.css"],
+    name = "option",
+    srcs = ["future_to_option.ts"],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",  # keep
         "//:node_modules/@types/node",
-        "//:node_modules/classnames",
-        "//project/zemn.me/hook",
-        "//ts/either",
-        "//ts/future/option",
-        "//ts/oidc",
+        "//ts/future",
         "//ts/option",
-        "//ts/promise",
-        "//ts/result",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["inline_login.tsx"],
+    srcs = ["future_to_option.ts"],
     visibility = ["//:__subpackages__"],
 )
 

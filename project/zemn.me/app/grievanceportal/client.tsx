@@ -6,26 +6,15 @@ import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
-import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingPip.js';
 import {
 	useDeleteGrievances,
 	useGetGrievances,
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
-import {
-	and_then as option_and_then,
-	is_some as option_is_some,
-	Some,
-	unwrap as option_unwrap,
-	unwrap_or as option_unwrap_or,
-} from '#root/ts/option/types.js';
+import { future_and_then, future_or_else } from '#root/ts/future/future.js';
+import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
-import { queryResult } from '#root/ts/result/react-query/queryResult.js';
-import {
-	Err,
-	or_else as result_or_else,
-} from '#root/ts/result/result.js';
 
 import style from './style.module.css';
 
@@ -114,24 +103,24 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 	const create = usePostGrievances(Authorization);
 	const del = useDeleteGrievances(Authorization);
 	const grievancesQuery = useGetGrievances(Authorization);
-	const grievances = option_and_then(queryResult(grievancesQuery), r =>
-		result_or_else(r, e =>
-			Err(
-				(e as object) instanceof Error
-					? (e as Error)
-					: new Error(String(e))
-			)
-		)
+	const grievances_a = future_or_else(useQueryFuture(grievancesQuery), e =>
+			(e as object) instanceof Error
+				? (e as Error)
+				: new Error(String(e))
 	);
+
+	const grievances = future_and_then(grievances_a,
+		g => g === undefined? [] : g
+	)
 
 
 	const [cachedGrievances, setCachedGrievances] = useState<Grievance[]>([]);
 
 	useEffect(() => {
-		if (grievancesQuery.data) {
-			setCachedGrievances(grievancesQuery.data);
-		}
-	}, [grievancesQuery.data]);
+		future_and_then(
+			grievances, g => setCachedGrievances(g)
+		)
+	}, [grievances]);
 
 	const renderGrievanceItems = (items: GrievanceWithTimeZone[]) =>
 		items
@@ -229,27 +218,38 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 					<input className={style.submitButton} type="submit" />
 				</fieldset>
 			</form>
-			<PendingPip value={Some(grievances)} />
+			{
+				grievances(
+					() => null,
+					() => <span>⌛</span>,
+					err => <span>Error: {err.message}</span>
+				)
+			}
 			<ul className={style.grievanceList}>{renderedGrievances}</ul>
 		</>
 	);
 }
 
 export default function GrievancePortal() {
-	const [idToken, , promptForLogin] = useZemnMeAuth();
-	const loginReady = option_is_some(promptForLogin);
+	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
 
 	const handleLogin = () => {
-		if (!loginReady) return;
-		const beginLogin = option_unwrap(promptForLogin);
-		void beginLogin();
+		void fut_promptForLogin(
+			prompt => prompt(),
+			() => { },
+			() => { },
+		)
 	};
 
 	const loginSection = (
 		<div>
 			<button
 				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
+				disabled={!fut_promptForLogin(
+					() => true,
+					() => false,
+					() => false,
+				)}
 				onClick={handleLogin}
 			>
 				Login with Google
@@ -257,21 +257,23 @@ export default function GrievancePortal() {
 		</div>
 	);
 
-	const authenticatedSection = option_and_then(
-		idToken,
-		Authorization => (
-			<>
-				<p>You are logged in.</p>
-				<GrievanceEditor Authorization={Authorization} />
-			</>
-		)
-	);
 
 	return (
 		<div className={style.wrapper}>
 			<h1 className={style.header}>💖 Grievance Portal 💖</h1>
 			<p className={style.hearts}>we can fix it!</p>
-			{option_unwrap_or(authenticatedSection, loginSection)}
+			{
+				fut_idToken(
+					Authorization => (
+						<>
+							<p>You are logged in.</p>
+							<GrievanceEditor Authorization={Authorization} />
+						</>
+					),
+					() => loginSection,
+					err => <>{loginSection} Error loading id_token: {err.message}</>,
+				)
+			}
 		</div>
 	);
 }
