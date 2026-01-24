@@ -1,46 +1,22 @@
-import { skipToken, useQuery } from '@tanstack/react-query';
+import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import { useGoogleAuth } from '#root/project/zemn.me/hook/useGoogleAuth.js';
 import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
-import { Option } from '#root/ts/option/types.js';
-import * as option from '#root/ts/option/types.js';
+import { future_and_then, future_declare_dependency } from '#root/ts/future/future.js';
+import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 
 
 
-export type useZemnMeAuthReturnType = [
-	zemn_me_id_token: Option<string>,
-	google_access_token: Option<string>,
-	promptForLogin: Option<() => Promise<void>>,
-];
 
-export function useZemnMeAuth(): useZemnMeAuthReturnType {
+
+export function useZemnMeAuth() {
 	const apiFetchClient = useFetchClient();
 	const [fut_id_token, fut_google_access_token, fut_promptForLogin] = useGoogleAuth([
 	]);
 
-	// TODO -> pipe future properly
-	const id_token = fut_id_token(
-		token => option.Some(token),
-		() => option.None,
-		() => option.None,
-	)
-
-	// TODO -> pipe future properly
-	const google_access_token = fut_google_access_token(
-		token => option.Some(token),
-		() => option.None,
-		() => option.None,
-	);
-
-	const promptForLogin = fut_promptForLogin(
-		fn => option.Some(fn),
-		() => option.None,
-		() => option.None,
-	);
-
-	const request_body = option.and_then(
-		id_token,
+	const request_body = future_and_then(
+		fut_id_token,
 		(id_token: string): components['schemas']['TokenExchangeRequest'] => ({
 			grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
 			requested_token_type: 'urn:ietf:params:oauth:token-type:id_token',
@@ -49,9 +25,12 @@ export function useZemnMeAuth(): useZemnMeAuthReturnType {
 		})
 	);
 
-	const exchangeQueryFn = option.and_then(
-		request_body,
-		body => () => apiFetchClient
+
+
+	const exchangedTokenRsp = useQueryFuture(useQuery({
+		queryKey: ['zemn-me-oidc-id-token'],
+		queryFn: request_body(
+			body => () => apiFetchClient
 			.POST('/oauth2/token', {
 				body,
 				headers: {
@@ -67,18 +46,17 @@ export function useZemnMeAuth(): useZemnMeAuthReturnType {
 					throw new Error('missing access_token');
 				}
 				return token;
-			})
-	);
-
-	const exchangedTokenRsp = useQuery({
-		queryKey: ['zemn-me-oidc-id-token'],
-		queryFn: option.unwrap_or(exchangeQueryFn, skipToken),
+			}),
+			(() => skipToken) as (() => SkipToken),
+			(() => skipToken) as (() => SkipToken),
+		),
 		staleTime: 100 * 60 * 55 // idk
-	});
-	const exchangedToken =
-		exchangedTokenRsp.status === 'success'
-			? option.Some(exchangedTokenRsp.data)
-			: option.None;
+	}));
 
-	return [exchangedToken, google_access_token, promptForLogin];
+	const exchangedToken = future_declare_dependency(
+		request_body,
+		exchangedTokenRsp
+	)
+
+	return [exchangedToken, fut_google_access_token, fut_promptForLogin] as const;
 }

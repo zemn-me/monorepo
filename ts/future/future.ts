@@ -40,6 +40,12 @@ export const loading =
 	<Loading, Then=never, Error = never>(loading_value: Loading): Future<Then, Loading, Error> =>
 		(_then, loading, _error) => loading(loading_value)
 
+export {
+	error as future_error,
+	loading as future_loading,
+	resolve as future_resolve,
+}
+
 /**
  * Execute a {@link Future} with a set of handlers.
  *
@@ -141,5 +147,16 @@ export function future_declare_dependency<
 	return coincide_then(
 		parent, child,
 		(_p, c) => c
+	)
+}
+
+export function future_or_else<T, L, E, E2>(
+	fut: Future<T, L, E>,
+	f: (e: E) => E2
+): Future<T, L, E2> {
+	return fut(
+		t => resolve(t),
+		l => loading(l),
+		e => error(f(e)),
 	)
 }
