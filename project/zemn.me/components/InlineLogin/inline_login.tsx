@@ -2,22 +2,17 @@ import classNames from "classnames";
 
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
-import { either } from "#root/ts/either/either.js";
-import { future_to_option } from "#root/ts/future/option/future_to_option.js";
+import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
-import * as option from "#root/ts/option/types.js";
 import { background } from "#root/ts/promise/ignore_result.js";
-import * as result from "#root/ts/result/result.js";
 
 
 
 export function InlineLogin() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
-	const idToken = future_to_option(fut_idToken);
-	const promptForLogin = future_to_option(fut_promptForLogin);
 
-	const idTokenData = option.and_then(
-		idToken,
+	const idTokenData = future_flatten_then(future_and_then(
+		fut_idToken,
 		tok => {
 			// "unsafely" (not really because on client)
 			// parse id_token
@@ -28,36 +23,44 @@ export function InlineLogin() {
 			);
 
 			return r.success
-				? result.Ok(r.data)
-				: result.Err(r.error)
+				? future_resolve(r.data)
+				: future_error(r.error)
 		}
-	)
+	))
 
 	const loginButton = (error: boolean) => <button
 		className={
 			classNames(
 				style.inlineLogin,
-				error? style.error: undefined,
+				error ? style.error : undefined,
 			)
 		}
-		disabled={option.is_none(promptForLogin)}
-		onClick={option.unwrap_or(
-			option.and_then(promptForLogin, background),
-		undefined)}
+		disabled={fut_promptForLogin(
+			() => false, () => true, () => true
+		)}
+		onClick={fut_promptForLogin(
+			p => background(p),
+			() => undefined,
+			() => undefined,
+		)}
 	>
-		{option.is_some(promptForLogin)? "Log in" : "Log in…"}
+		{fut_promptForLogin(
+			() => "Log in",
+			() => "⌛",
+			() => "Log in",
+		)}
 	</button>;
 
-	return either(
-		idTokenData,
-		// not loaded or logged out
-		() => loginButton(false),
-		loadedToken => either(
-			loadedToken,
-			_ => loginButton(true),
-			f => (f.name ?? f.sub)
+	return idTokenData(
+		f => (f.name ?? f.sub)
 				?<>Logged in as <i>{f.name ?? f.sub}</i>.</>
 				: <>Logged in.</>
-		),
+		,
+		() => loginButton(false),
+		err => {
+			// eslint-disable-next-line no-console
+			console.error(err);
+			return loginButton(true);
+		},
 	)
 }
