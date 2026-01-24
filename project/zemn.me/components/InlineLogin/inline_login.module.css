@@ -10,6 +10,11 @@
   text-decoration: underline;
 }
 
+.inlineLogin:disabled {
+  cursor: default;
+  text-decoration: none;
+}
+
 .error {
 	color: var(--error-color);
 }
