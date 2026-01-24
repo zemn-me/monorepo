@@ -13,6 +13,7 @@ import {
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
+import { future_to_option } from '#root/ts/future/option/future_to_option.js';
 import {
 	and_then as option_and_then,
 	is_some as option_is_some,
@@ -236,7 +237,9 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 }
 
 export default function GrievancePortal() {
-	const [idToken, , promptForLogin] = useZemnMeAuth();
+	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const idToken = future_to_option(fut_idToken);
+	const promptForLogin = future_to_option(fut_promptForLogin);
 	const loginReady = option_is_some(promptForLogin);
 
 	const handleLogin = () => {

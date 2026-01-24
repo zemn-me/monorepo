@@ -81,8 +81,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"project/zemn.me/app/experiments/rays/page.tsx":                                                    true,
 	"project/zemn.me/app/experiments/toc/page.tsx":                                                     true,
 	"project/zemn.me/app/github/page.tsx":                                                              true,
-	"project/zemn.me/app/grievanceportal/client.tsx":                                                   true,
-	"project/zemn.me/app/grievanceportal/page.tsx":                                                     true,
 	"project/zemn.me/app/healthcheck/bad/client.tsx":                                                   true,
 	"project/zemn.me/app/healthcheck/bad/page.tsx":                                                     true,
 	"project/zemn.me/app/healthz/page.tsx":                                                             true,
