@@ -591,3 +591,5 @@ exports_files(glob(["**/*"], allow_empty=True))
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
 )
+
+bazel_dep(name = "rules_shell", version = "0.6.1")
