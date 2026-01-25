@@ -38,6 +38,8 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	id_token: Future<string, void, Error>,
 	access_token: Future<string, void, Error>,
 	promptForLogin: Future<() => Promise<void>, void, Error>,
+	/** can use to cache bust dependent queries */
+	cacheKey: string[]
 ] {
 	const oidc_config = useOIDCConfig(issuer);
 
@@ -165,5 +167,10 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	));
 
 
-	return [id_token, access_token, requestConsent] as const;
+	return [
+		id_token,
+		access_token,
+		requestConsent,
+		cacheKeyArgs,
+	] as const;
 }
