@@ -13,7 +13,7 @@ import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
 export function useZemnMeAuth() {
 	const apiFetchClient = useFetchClient();
-	const [fut_id_token, fut_google_access_token, fut_promptForLogin] = useGoogleAuth([
+	const [fut_id_token, fut_google_access_token, fut_promptForLogin, cacheKey] = useGoogleAuth([
 	]);
 
 	const request_body = future_and_then(
@@ -29,7 +29,7 @@ export function useZemnMeAuth() {
 
 
 	const exchangedTokenRsp = useQueryFuture(useQuery({
-		queryKey: ['zemn-me-oidc-id-token'],
+		queryKey: ['zemn-me-oidc-id-token', ...cacheKey],
 		queryFn: request_body(
 			body => () => apiFetchClient
 			.POST('/oauth2/token', {

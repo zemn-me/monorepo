@@ -1,4 +1,4 @@
-import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+import { QueryKey, SkipToken, skipToken, useQuery } from '@tanstack/react-query';
 
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
@@ -38,6 +38,8 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	id_token: Future<string, void, Error>,
 	access_token: Future<string, void, Error>,
 	promptForLogin: Future<() => Promise<void>, void, Error>,
+	/** can use to cache bust dependent queries */
+	cacheKey: QueryKey
 ] {
 	const oidc_config = useOIDCConfig(issuer);
 
@@ -78,7 +80,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 			return u;
 		}
 	)
-	const cacheKeyArgs = [issuer, params];
+	const cacheKeyArgs: QueryKey = [issuer, params];
 
 	// very close but we need to abstract and pipeline this more cleanly.
 
@@ -165,5 +167,10 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	));
 
 
-	return [id_token, access_token, requestConsent] as const;
+	return [
+		id_token,
+		access_token,
+		requestConsent,
+		cacheKeyArgs,
+	] as const;
 }
