@@ -1,3 +1,4 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -69,7 +70,7 @@ sh_test(
         "CHROMEDRIVER_BINARY": "$(rlocationpath :chromedriver)",
     },
     deps = [
-        "@bazel_tools//tools/bash/runfiles",
+        "@rules_shell//shell/runfiles",
     ],
 )
 

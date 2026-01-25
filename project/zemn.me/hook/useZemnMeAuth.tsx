@@ -5,6 +5,7 @@ import { useGoogleAuth } from '#root/project/zemn.me/hook/useGoogleAuth.js';
 import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { future_and_then, future_declare_dependency } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
+import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
 
 
@@ -41,21 +42,29 @@ export function useZemnMeAuth() {
 				if (response.error !== undefined) {
 					throw new Error(response.error.error);
 				}
-				const token = response.data.access_token;
-				if (!token) {
-					throw new Error('missing access_token');
-				}
-				return token;
+
+				return response.data;
 			}),
 			(() => skipToken) as (() => SkipToken),
 			(() => skipToken) as (() => SkipToken),
 		),
-		staleTime: 100 * 60 * 55 // idk
+		staleTime: r => option_from_maybe_undefined(
+			r.state.data?.expires_in
+		)(
+			(/*None*/) => 0,
+			v => v * 1000
+		)
+
 	}));
+
+	const access_token = future_and_then(
+		exchangedTokenRsp,
+		r => r.access_token
+	);
 
 	const exchangedToken = future_declare_dependency(
 		request_body,
-		exchangedTokenRsp
+		access_token,
 	)
 
 	return [exchangedToken, fut_google_access_token, fut_promptForLogin] as const;

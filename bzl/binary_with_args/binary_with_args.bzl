@@ -1,7 +1,10 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
 def binary_with_args(name, binary, args, data = [], test = False, **kwargs):
-    rule = native.sh_binary
+    rule = sh_binary
     if test:
-        rule = native.sh_test
+        rule = sh_test
 
     rule(
         name = name,
@@ -13,7 +16,7 @@ def binary_with_args(name, binary, args, data = [], test = False, **kwargs):
             "$(rlocationpath " + binary + ")",
         ] + args,
         deps = [
-            "@bazel_tools//tools/bash/runfiles",
+            "@rules_shell//shell/runfiles",
         ],
         **kwargs
     )

@@ -465,7 +465,7 @@ rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.92.0"
+RUST_VERSION = "1.93.0"
 
 rust.toolchain(
     edition = "2021",
@@ -591,3 +591,5 @@ exports_files(glob(["**/*"], allow_empty=True))
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
 )
+
+bazel_dep(name = "rules_shell", version = "0.6.1")
