@@ -18,3 +18,10 @@
 .error {
 	color: var(--error-color);
 }
+
+.indicator {
+	display: inline-block;
+	height: 1em;
+	width: auto;
+	vertical-align: middle;
+}

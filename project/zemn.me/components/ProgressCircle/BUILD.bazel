@@ -2,27 +2,19 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "InlineLogin",
-    srcs = ["inline_login.tsx"],
-    assets = ["inline_login.module.css"],
+    name = "ProgressCircle",
+    srcs = ["ProgressCircle.tsx"],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/classnames",
         "//:node_modules/react",
-        "//project/zemn.me/components/ProgressCircle",
-        "//project/zemn.me/hook",
-        "//ts/future",
-        "//ts/oidc",
-        "//ts/promise",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["inline_login.tsx"],
+    srcs = ["ProgressCircle.tsx"],
     visibility = ["//:__subpackages__"],
 )
 
