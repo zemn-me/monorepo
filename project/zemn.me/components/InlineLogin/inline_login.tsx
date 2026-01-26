@@ -1,11 +1,51 @@
 import classNames from "classnames";
+import { useEffect, useState } from "react";
 
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
+import { ProgressCircle } from "#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js";
 import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import { background } from "#root/ts/promise/ignore_result.js";
 
+	const progressRatio = (
+		min: number, max: number, now: number
+	) => {
+		const range = max - min;
+		const norm = now - min;
+		return norm / range;
+	}
+
+
+interface TimeLeftIndicatorProps {
+	readonly start: Date;
+	readonly end: Date;
+}
+
+function TimeLeftIndicator(
+	{ start, end }: TimeLeftIndicatorProps
+) {
+	const [now, setNow] = useState(Date.now());
+
+	useEffect(
+		() => {
+			const interval = setInterval(
+				() => setNow(Date.now()),
+				1000
+			);
+			return () => clearInterval(interval);
+		}
+	)
+
+	return <ProgressCircle className={style.indicator} loss progress={
+					progressRatio(
+						start.getTime(),
+						end.getTime(),
+						+now,
+					)
+
+				} />
+}
 
 
 export function InlineLogin() {
@@ -51,10 +91,15 @@ export function InlineLogin() {
 		)}
 	</button>;
 
+
 	return idTokenData(
 		f => (f.name ?? f.sub)
-				?<>Logged in as <i>{f.name ?? f.sub}</i>.</>
-				: <>Logged in.</>
+			? <>Logged in as <i>{f.name ?? f.sub}</i>
+				<sup><TimeLeftIndicator
+				end={new Date(f.exp * 1000)}
+				start={new Date(f.iat * 1000)}
+				/></sup >.</>
+			: <>Logged in.</>
 		,
 		() => loginButton(false),
 		err => {
