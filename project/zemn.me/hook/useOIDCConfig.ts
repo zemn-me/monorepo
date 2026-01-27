@@ -20,6 +20,7 @@ export function useOIDCConfig(issuer: string) {
 					// its OAuth scopes.
 					config.scopes_supported = [...new Set([
 						...config.scopes_supported,
+						'https://www.googleapis.com/auth/contacts',
 						"https://www.googleapis.com/auth/contacts.readonly",
 					])]
 

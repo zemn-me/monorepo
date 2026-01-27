@@ -2,7 +2,7 @@ import {
 	useSearchContact,
 } from "#root/project/zemn.me/hook/useSearchContact.js";
 import { PeopleFieldMask, PeoplePhoneNumber } from "#root/ts/google/people/display.js";
-import { concatn_array, filter_map, iterator, map, nth, to_array } from "#root/ts/iter/iterable_functional.js";
+import { concatn_array, filter_map, iterator, nth, to_array } from "#root/ts/iter/iterable_functional.js";
 import { None, Option, option_and_then, option_and_then_flatten, option_unwrap_or, Some } from "#root/ts/option/types.js";
 import { format_phone_number_e164, parse_phone_number } from "#root/ts/phone/number.js";
 import { Err, Ok, result_and_then, result_collect } from "#root/ts/result/result.js";
@@ -25,38 +25,26 @@ export function useGetExactContactByPhoneNumber(
 	// try both formats as work-around for
 	// https://issuetracker.google.com/u/1/issues/390736547?pli=1
 
-	const intl_format = option_and_then(
-		parsed_phone_number,
-		p => p.formatInternational()
-	);
-
-	const ntl_format = option_and_then(
-		parsed_phone_number,
-		p => p.formatNational()
-	);
 
 	const e164_format = option_and_then(
 		parsed_phone_number,
 		p => format_phone_number_e164(p)
 	);
 
-	const futures = map([intl_format, ntl_format],
-		formatted_number => useSearchContact(
-		option_unwrap_or(formatted_number, ""),
+	const future = useSearchContact(
+		option_unwrap_or(e164_format, ""),
 		new Set([
 			"phoneNumbers",
 			...fields
 		]),
-	));
+	);
 
-	const results = map(
-		futures,
-		future => future(
-			contacts => Ok(contacts),
-			(/* loading */) => Ok([]),
-			e => Err(e),
-		)
-	)
+	const results = [future(
+		contacts => Ok(contacts),
+		(/* loading */) => Ok([]),
+		e => Err(e),
+	)]
+
 
 	const candidates = result_and_then(
 		result_collect(to_array(results)),
