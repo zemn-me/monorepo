@@ -839,6 +839,22 @@ export const Bio = {
 					id: `32dda71c-fa45-4652-b09d-3635a27b8f55`,
 					url: url`https://chatgpt.com/atlas`,
 					tags: [work, security]
+				},
+				{
+					date: date(28, 'jan', 2026),
+					title: en`Preventing URL-Based Data Exfiltration in Language-Model Agents`,
+					id: "8f87f6ca-2446-4a04-8218-2aa2493cb77d",
+					description: en`Paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
+					url: url`https://cdn.openai.com/pdf/dd8e7875-e606-42b4-80a1-f824e4e11cf4/prevent-url-data-exfil.pdf`,
+					tags: [work, security, writing],
+				},
+				{
+					date: date(28, 'jan', 2026),
+					title: en`Keeping your data safe when an AI agent clicks a link`,
+					id: "1a8b03ca-415a-4e30-bf2c-1f9969779e1a",
+					description: en`Blog post summarising paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
+					url: url`https://openai.com/index/ai-agent-link-safety/1`,
+					tags: [work, security, writing],
 				}
         ],
         who: {
