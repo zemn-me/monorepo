@@ -442,8 +442,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 42.92.3
-    version: 42.92.3(typanion@3.14.0)
+    specifier: 42.92.4
+    version: 42.92.4(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -11823,19 +11823,6 @@ packages:
       path-scurry: 2.0.1
     dev: true
 
-  /glob@11.1.0:
-    resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
-    engines: {node: 20 || >=22}
-    hasBin: true
-    dependencies:
-      foreground-child: 3.3.1
-      jackspeak: 4.1.1
-      minimatch: 10.1.1
-      minipass: 7.1.2
-      package-json-from-dist: 1.0.1
-      path-scurry: 2.0.1
-    dev: true
-
   /glob@13.0.0:
     resolution: {integrity: sha512-tvZgpqk6fz4BaNZ66ZsRaZnbHvP/jG3uKJvAZOwEVUL4RTA5nJeeLYfyN9/VA8NX/V3IBG+hkeuGpKjvELkVhA==}
     engines: {node: 20 || >=22}
@@ -17403,8 +17390,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@42.92.3(typanion@3.14.0):
-    resolution: {integrity: sha512-ajYAonoDBmMxOFLUKmJa4pOzZG7CVtoU0NAEelM/gR1A9gB8dISbGIYwvcYWtrzUpn6O364nxOIER1ej1QN13w==}
+  /renovate@42.92.4(typanion@3.14.0):
+    resolution: {integrity: sha512-ACJN2KDZx2TmV36gIRJHCDmZdmvhTM1L6PS6wPJe9SN9IA0ipJIp6+GIo2FgBSspPITzycBH5O513X8z8ySYdg==}
     engines: {node: ^22.13.0 || ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17473,7 +17460,7 @@ packages:
       fs-extra: 11.3.3
       git-url-parse: 16.1.0
       github-url-from-git: 1.5.0
-      glob: 11.1.0
+      glob: 13.0.0
       global-agent: 3.0.0
       good-enough-parser: 1.1.23
       google-auth-library: 10.5.0

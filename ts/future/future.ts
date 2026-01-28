@@ -135,6 +135,11 @@ export const coincide_then =
  * If you *don't* use this function to declare the dependency,
  * then the child future will often show a loading state if
  * the parent future is in error.
+ *
+ * (1)	if the child has loaded then child is always returned
+ * (2)	if child is in error and parent is in error,
+ * 		then parent error is returned
+ * usw
  */
 export function future_declare_dependency<
 	T1, T2,
@@ -143,11 +148,24 @@ export function future_declare_dependency<
 >(
 	parent: Future<T1, L1, E1>,
 	child: Future<T2, L2, E2>,
-): Future<T2, L1 | L2, E1 | E2> {
-	return coincide_then(
-		parent, child,
-		(_p, c) => c
-	)
+) {
+	return parent(
+		((/*parent_then*/) => child(
+			child_then => resolve(child_then),
+			child_loading => loading(child_loading),
+			child_error => error(child_error),
+		)),
+		(parent_loading => child(
+			child_then => resolve(child_then),
+			(/*child_loading*/) => loading(parent_loading),
+			(/*child_error*/) => loading(parent_loading)
+		)),
+		(parent_error => child(
+			child_then => resolve(child_then),
+			child_loading => loading(child_loading),
+			(/*child_error*/) => error(parent_error)
+		))
+	);
 }
 
 export function future_or_else<T, L, E, E2>(
