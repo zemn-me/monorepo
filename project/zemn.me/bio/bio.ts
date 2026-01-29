@@ -853,7 +853,7 @@ export const Bio = {
 					title: en`Keeping your data safe when an AI agent clicks a link`,
 					id: "1a8b03ca-415a-4e30-bf2c-1f9969779e1a",
 					description: en`Blog post summarising paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
-					url: url`https://openai.com/index/ai-agent-link-safety/1`,
+					url: url`https://openai.com/index/ai-agent-link-safety`,
 					tags: [work, security, writing],
 				}
         ],
