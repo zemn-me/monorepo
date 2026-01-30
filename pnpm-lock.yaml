@@ -238,8 +238,8 @@ dependencies:
 
 devDependencies:
   '@actions/core':
-    specifier: 2.0.2
-    version: 2.0.2
+    specifier: 2.0.3
+    version: 2.0.3
   '@actions/github':
     specifier: 7.0.0
     version: 7.0.0
@@ -487,11 +487,11 @@ packages:
     resolution: {integrity: sha512-G90x0VW+9nW4dFajtjCoT+NM0scAfH9Mb08IcjgFHYbfiL/lU04dTF9JuVOi3/OH+DJCQdcIseSXkdCB9Ky6JA==}
     dev: true
 
-  /@actions/core@2.0.2:
-    resolution: {integrity: sha512-Ast1V7yHbGAhplAsuVlnb/5J8Mtr/Zl6byPPL+Qjq3lmfIgWF1ak1iYfF/079cRERiuTALTXkSuEUdZeDCfGtA==}
+  /@actions/core@2.0.3:
+    resolution: {integrity: sha512-Od9Thc3T1mQJYddvVPM4QGiLUewdh+3txmDYHHxoNdkqysR1MbCT+rFOtNUxYAz+7+6RIsqipVahY2GJqGPyxA==}
     dependencies:
       '@actions/exec': 2.0.0
-      '@actions/http-client': 3.0.1
+      '@actions/http-client': 3.0.2
     dev: true
 
   /@actions/exec@2.0.0:
@@ -517,6 +517,13 @@ packages:
     dependencies:
       tunnel: 0.0.6
       undici: 5.29.0
+    dev: true
+
+  /@actions/http-client@3.0.2:
+    resolution: {integrity: sha512-JP38FYYpyqvUsz+Igqlc/JG6YO9PaKuvqjM3iGvaLqFnJ7TFmcLyy2IDrY0bI0qCQug8E9K+elv5ZNfw62ZJzA==}
+    dependencies:
+      tunnel: 0.0.6
+      undici: 6.23.0
     dev: true
 
   /@actions/io@2.0.0:
@@ -19384,6 +19391,11 @@ packages:
     engines: {node: '>=14.0'}
     dependencies:
       '@fastify/busboy': 2.1.1
+    dev: true
+
+  /undici@6.23.0:
+    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
+    engines: {node: '>=18.17'}
     dev: true
 
   /unicorn-magic@0.1.0:
