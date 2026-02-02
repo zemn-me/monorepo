@@ -1017,10 +1017,10 @@ mistune==3.2.0 \
 mitmproxy==12.2.1 \
     --hash=sha256:7a508cc9fb906253eb26460d99b3572bf5a7b4a185ab62534379ac1915677dd2
     # via -r requirements.in
-mitmproxy-linux==0.12.8 \
-    --hash=sha256:0bea9353c71ebfd2174f6730b3fd0fdff3adea1aa15450035bed3b83e36ef455 \
-    --hash=sha256:2238455e65970382825baed2e998601ea82d8dcaae51bd8ee0859d596524a822 \
-    --hash=sha256:fbcb25316e95d0b2b5ced4e0cc3d90fdb1b7169300a005cc79339894d665363a
+mitmproxy-linux==0.12.9 \
+    --hash=sha256:94b10fee02aa42287739623cef921e1a53955005d45c9e2fa309ae9f0bf8d37d \
+    --hash=sha256:b4413e27c692f30036ad6d73432826e728ede026fac8e51651d0c545dd0177f2 \
+    --hash=sha256:ee842865a05f69196004ddcb29d50af0602361d9d6acee04f370f7e01c3674e8
     # via mitmproxy-rs
 mitmproxy-rs==0.12.8 \
     --hash=sha256:14ea236d0950ab35d667b78b5fe15d43e7345e166e22144624a1283edc78443e \
