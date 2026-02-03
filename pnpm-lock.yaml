@@ -9,7 +9,7 @@ onlyBuiltDependencies: []
 dependencies:
   '@commander-js/extra-typings':
     specifier: 14.0.0
-    version: 14.0.0(commander@14.0.2)
+    version: 14.0.0(commander@14.0.3)
   '@eslint/compat':
     specifier: 2.0.2
     version: 2.0.2(eslint@9.39.2)
@@ -349,8 +349,8 @@ devDependencies:
     specifier: 2.5.1
     version: 2.5.1
   commander:
-    specifier: 14.0.2
-    version: 14.0.2
+    specifier: 14.0.3
+    version: 14.0.3
   concurrently:
     specifier: 9.2.1
     version: 9.2.1
@@ -2439,12 +2439,12 @@ packages:
     dev: false
     optional: true
 
-  /@commander-js/extra-typings@14.0.0(commander@14.0.2):
+  /@commander-js/extra-typings@14.0.0(commander@14.0.3):
     resolution: {integrity: sha512-hIn0ncNaJRLkZrxBIp5AsW/eXEHNKYQBh0aPdoUqNgD+Io3NIykQqpKFyKcuasZhicGaEZJX/JBSIkZ4e5x8Dg==}
     peerDependencies:
       commander: ~14.0.0
     dependencies:
-      commander: 14.0.2
+      commander: 14.0.3
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -9577,6 +9577,11 @@ packages:
   /commander@14.0.2:
     resolution: {integrity: sha512-TywoWNNRbhoD0BXs1P3ZEScW8W5iKrnbithIl0YH+uCmBd0QpPOA8yc82DS3BIE5Ma6FnBVUsJ7wVUDz4dvOWQ==}
     engines: {node: '>=20'}
+    dev: true
+
+  /commander@14.0.3:
+    resolution: {integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==}
+    engines: {node: '>=20'}
 
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -10223,7 +10228,7 @@ packages:
     hasBin: true
     dependencies:
       '@one-ini/wasm': 0.2.0
-      commander: 14.0.2
+      commander: 14.0.3
       minimatch: 10.0.1
       semver: 7.7.3
     dev: true
