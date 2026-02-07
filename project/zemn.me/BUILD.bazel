@@ -15,6 +15,31 @@ ts_project(
     ),
     deps = [
         "//project/zemn.me/app",
+        "//project/zemn.me/app/admin",
+        "//project/zemn.me/app/article",
+        "//project/zemn.me/app/article/2014/csp",
+        "//project/zemn.me/app/article/2019/cors",
+        "//project/zemn.me/app/article/2024/clean",
+        "//project/zemn.me/app/article/2024/missing",
+        "//project/zemn.me/app/callback",
+        "//project/zemn.me/app/experiments/article",
+        "//project/zemn.me/app/experiments/cultist",
+        "//project/zemn.me/app/experiments/cv",
+        "//project/zemn.me/app/experiments/emoji/flag",
+        "//project/zemn.me/app/experiments/factorio/blueprint/parse",
+        "//project/zemn.me/app/experiments/factorio/blueprint/request",
+        "//project/zemn.me/app/experiments/factorio/blueprint/wall",
+        "//project/zemn.me/app/experiments/frame",
+        "//project/zemn.me/app/experiments/geometry_of_music",
+        "//project/zemn.me/app/experiments/rays",
+        "//project/zemn.me/app/experiments/toc",
+        "//project/zemn.me/app/github",
+        "//project/zemn.me/app/grievanceportal",
+        "//project/zemn.me/app/healthcheck/bad",
+        "//project/zemn.me/app/healthz",
+        "//project/zemn.me/app/src/[[...slug]]",
+        "//project/zemn.me/app/tool/elastictabs",
+        "//project/zemn.me/app/twitter",
     ],
 )
 
@@ -75,3 +100,9 @@ bazel_lint(
 
 # gazelle:resolve typescript typescript #root/project/zemn.me/api/api_client.gen //project/zemn.me/api:ts_client_dts
 # gazelle:resolve typescript typescript #root/project/zemn.me/api/api_client.gen.js //project/zemn.me/api:ts_client_dts
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
