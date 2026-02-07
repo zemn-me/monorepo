@@ -1,0 +1,42 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "app",
+    srcs = [
+        "client.tsx",
+        "layout.tsx",
+        "page.tsx",
+    ],
+    assets = [
+        "base.css",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/seedrandom",
+        "//:node_modules/react",
+        "//:node_modules/seedrandom",
+        "//ts/iter",
+        "//ts/math",
+        "//ts/math/sim",
+        "//ts/option",
+        "//ts/time",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "layout.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -15,7 +15,7 @@ ts_project(
         "//:node_modules/mime",
         "//ts",
         "//ts/github/actions",
-        "//ts/pulumi:pulumi_ts",
+        "//ts/pulumi",
     ],
 )
 

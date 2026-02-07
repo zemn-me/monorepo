@@ -271,3 +271,5 @@ binary_with_args(
     tags = ["no-sandbox"],
     test = True,
 )
+
+# gazelle:resolve typescript typescript #root/project/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js //project/zemn.me/api/cmd/api:oci_image
