@@ -12,12 +12,17 @@ genrule(
     ],
     outs = ["api.go"],
     cmd = """
+GO="$${PWD}/$(execpath //bin/host/go)"
+export PATH=$$(dirname $$GO):$$PATH
 $(execpath //bin/host/oapi-codegen) \\
 	-config $(location codegen.yaml) \\
 	-o $(location api.go) \\
 	 $(location @com_github_openai_openai_openapi//:openapi.yaml)
 	""",
-    tools = ["//bin/host/oapi-codegen"],
+    tools = [
+        "//bin/host/go",
+        "//bin/host/oapi-codegen",
+    ],
 )
 
 bazel_lint(

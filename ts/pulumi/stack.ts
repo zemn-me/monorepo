@@ -8,7 +8,7 @@ import * as monorepo from '#root/ts/pulumi/index.js';
 // inject the pulumi binary into process.env; it is used by the pulumi automation API
 
 const pulumi_dir = path.join(process.cwd(), 'ts/pulumi');
-const pulumi_binary_path = path.join(pulumi_dir, 'pulumi');
+const pulumi_binary_path = path.join(pulumi_dir, 'pulumi_bin');
 
 process.env.PATH = [
 	process.env.PATH,
