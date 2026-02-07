@@ -5,10 +5,12 @@ package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "trusted_types",
+    srcs = ["trusted_types.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
         "//:node_modules/@types/trusted-types",
         "//:node_modules/memoizee",
         "//:node_modules/react",
@@ -21,4 +23,10 @@ bazel_lint(
     srcs = [
         "BUILD.bazel",
     ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["trusted_types.ts"],
+    visibility = ["//:__subpackages__"],
 )
