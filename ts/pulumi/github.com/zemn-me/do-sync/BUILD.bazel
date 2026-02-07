@@ -6,18 +6,27 @@ ts_project(
     srcs = [
         "do_sync.ts",
     ],
+    data = [
+        "//ts/do-sync:copy_bara_sky",
+    ],
     visibility = [
         "//ts/pulumi:__subpackages__",
     ],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/pulumi",
-        "//ts/do-sync:copy_bara_sky",
-        "//ts/pulumi/lib",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/lib/copybara",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["do_sync.ts"],
+    visibility = ["//:__subpackages__"],
 )
