@@ -9,6 +9,8 @@ ts_project(
     deps = [
         "//:base_defs",  # keep
         "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
     ],
 )
 

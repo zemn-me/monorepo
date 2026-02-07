@@ -80,3 +80,9 @@ go_test(
         "@com_github_tebeka_selenium//log",
     ],
 )
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["browser_test.ts"],
+    visibility = ["//:__subpackages__"],
+)
