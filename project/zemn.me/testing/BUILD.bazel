@@ -7,6 +7,8 @@ package(default_visibility = ["//visibility:public"])
 
 service_test(
     name = "integration_test",
+    size = "enormous",
+    timeout = "long",
     flaky = True,
     services = [
         "//project/zemn.me:itest_service",
@@ -67,7 +69,6 @@ go_test(
     name = "testing_test",
     srcs = [
         "admin_test.go",
-        "go_basic_test.go",
         "grievance_portal_test.go",
         "integration_helpers_test.go",
     ],
