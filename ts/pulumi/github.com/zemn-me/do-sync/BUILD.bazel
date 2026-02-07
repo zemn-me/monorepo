@@ -6,6 +6,9 @@ ts_project(
     srcs = [
         "do_sync.ts",
     ],
+    data = [
+        "//ts/do-sync:copy_bara_sky",
+    ],
     visibility = [
         "//ts/pulumi:__subpackages__",
     ],
