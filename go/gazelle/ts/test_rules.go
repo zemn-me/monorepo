@@ -32,7 +32,13 @@ func (cfg testRuleConfig) buildRules(args language.GenerateArgs, gen *[]*rule.Ru
 	}
 
 	testProjectName := cfg.mainName + "_tests"
-	j := rule.NewRule("jest_test", "tests")
+	testName := "tests"
+	if existingName, ok, multiple := findExistingJestTestName(args); multiple {
+		return
+	} else if ok {
+		testName = existingName
+	}
+	j := rule.NewRule("jest_test", testName)
 	j.SetAttr("srcs", testJS)
 	j.SetAttr("deps", []string{":" + testProjectName})
 	if cfg.needsJsdom {
@@ -41,4 +47,24 @@ func (cfg testRuleConfig) buildRules(args language.GenerateArgs, gen *[]*rule.Ru
 	j.SetAttr("visibility", []string{"//:__subpackages__"})
 	*gen = append(*gen, j)
 	*imports = append(*imports, nil)
+}
+
+func findExistingJestTestName(args language.GenerateArgs) (string, bool, bool) {
+	if args.File == nil {
+		return "", false, false
+	}
+	var existingName string
+	for _, r := range args.File.Rules {
+		if r.Kind() != "jest_test" {
+			continue
+		}
+		if existingName != "" {
+			return "", false, true
+		}
+		existingName = r.Name()
+	}
+	if existingName == "" {
+		return "", false, false
+	}
+	return existingName, true, false
 }

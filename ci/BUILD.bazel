@@ -4,6 +4,9 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "ci",
+    data = [
+        ":pulumi_local",
+    ],
     deps = [
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
@@ -15,13 +18,22 @@ ts_project(
         "//:node_modules/mime",
         "//ts",
         "//ts/github/actions",
-        "//ts/pulumi:pulumi_ts",
+        "//ts/pulumi",
     ],
 )
 
 alias(
     name = "postupgrade",
     actual = "@@//py/ci/post_upgrade:post_upgrade_bin",
+)
+
+genrule(
+    name = "pulumi_local",
+    srcs = ["//bin/linux/pulumi"],
+    outs = ["pulumi"],
+    cmd = """
+cp $< $@
+    """,
 )
 
 jest_test(
