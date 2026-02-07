@@ -3,6 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "toc",
+    srcs = ["page.tsx"],
     assets = glob(
         [
             "**/*.css",
@@ -12,6 +13,7 @@ ts_project(
     ),
     visibility = ["//project/zemn.me:__subpackages__"],
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//project/zemn.me/components/Article",
@@ -21,4 +23,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
 )
