@@ -100,7 +100,7 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 
 	result := lang.GenerateRules(args)
 
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	idx := buildRuleIndex(t, cfg, lang, defaultIndexPackages())
 	all := make(map[string]*rule.Rule)
 	for i, generated := range result.Gen {
 		all[generated.Name()] = generated
@@ -152,7 +152,7 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 	imports := projectImports
 
 	lbl := label.New("", rel, r.Name())
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	idx := buildRuleIndex(t, cfg, lang, defaultIndexPackages())
 
 	lang.Resolve(dirCfg, idx, nil, r, imports, lbl)
 
@@ -160,6 +160,71 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 	deps := r.AttrStrings("deps")
 
 	return srcs, deps
+}
+
+func defaultIndexPackages() []string {
+	return []string{
+		"go/gazelle/ts/testdata/dependency",
+		"ts",
+		"ts/iter",
+		"ts/math",
+		"ts/time",
+	}
+}
+
+func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, packages []string) *resolve.RuleIndex {
+	t.Helper()
+
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return lang }, lang)
+	for _, pkgRel := range packages {
+		ruleName := ruleNameForPackage(pkgRel)
+		if ruleName == "" {
+			t.Fatalf("no rule name for package %s", pkgRel)
+		}
+		srcs := packageSrcsForIndex(pkgRel)
+		r := rule.NewRule("ts_project", ruleName)
+		if len(srcs) > 0 {
+			r.SetAttr("srcs", srcs)
+		}
+		f := rule.EmptyFile("", pkgRel)
+		idx.AddRule(cfg, r, f)
+	}
+	idx.Finish()
+	return idx
+}
+
+func ruleNameForPackage(pkgRel string) string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return "dependency"
+	case "ts":
+		return "ts"
+	case "ts/iter":
+		return "iter"
+	case "ts/math":
+		return "math"
+	case "ts/time":
+		return "time"
+	default:
+		return ""
+	}
+}
+
+func packageSrcsForIndex(pkgRel string) []string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return []string{"dep.ts"}
+	case "ts":
+		return []string{"tuple.ts"}
+	case "ts/iter":
+		return []string{"index.ts"}
+	case "ts/math":
+		return []string{"cartesian.ts"}
+	case "ts/time":
+		return []string{"duration.ts"}
+	default:
+		return nil
+	}
 }
 
 func assertContains(t *testing.T, haystack []string, needle string) {

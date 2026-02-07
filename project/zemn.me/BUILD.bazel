@@ -75,3 +75,9 @@ bazel_lint(
 
 # gazelle:resolve typescript typescript #root/project/zemn.me/api/api_client.gen //project/zemn.me/api:ts_client_dts
 # gazelle:resolve typescript typescript #root/project/zemn.me/api/api_client.gen.js //project/zemn.me/api:ts_client_dts
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)

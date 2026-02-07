@@ -5,14 +5,18 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 ts_project(
     name = "shadwell.im",
+    srcs = ["index.ts"],
     data = [
         "//ts/pulumi/shadwell.im/anna:next",
         "//ts/pulumi/shadwell.im/kate:next",
         "//ts/pulumi/shadwell.im/lucy:next",
         "//ts/pulumi/shadwell.im/luke:next",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
         "//project/zemn.me/bio",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
@@ -22,4 +26,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
 )
