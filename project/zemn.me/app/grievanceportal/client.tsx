@@ -6,6 +6,7 @@ import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
+import style from '#root/project/zemn.me/app/grievanceportal/style.module.css';
 import {
 	useDeleteGrievances,
 	useGetGrievances,
@@ -15,8 +16,6 @@ import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import { future_and_then, future_or_else } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
-
-import style from './style.module.css';
 
 interface GrievanceEditorProps {
 	readonly Authorization: string;
