@@ -41,9 +41,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
-	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
-	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	uidValueSelector := "output[aria-label='Admin UID value']"
 	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
@@ -53,6 +50,9 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for admin uid output: %v (body snippet: %v)", err, body)
 	}
+	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
+	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
+	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
 		t.Fatalf("initial settings sync: %v", err)
 	}
