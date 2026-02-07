@@ -390,9 +390,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 					aria-label="Callbox settings status"
 					aria-live="polite"
 					role="status"
-				>
-					Sync status: {syncStatus}
-				</output>
+				/>
 				<PendingPip value={Some(remoteSettings)} />
 			</fieldset>
 		</form>
