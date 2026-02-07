@@ -1,0 +1,10 @@
+
+# this is a public repo so we are not concerned with exfil.
+search = "live"
+
+# codex versioning is managed by bazel.
+check_for_update_on_startup = false
+
+
+[sandbox_workspace_write]
+network_access = true # public repo
