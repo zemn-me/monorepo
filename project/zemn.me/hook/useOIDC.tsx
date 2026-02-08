@@ -86,6 +86,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 
 	const callbackQuery = useQuery({
 		queryKey: ['use-oidc', ...cacheKeyArgs],
+		cacheTime: Infinity, // don't evict auth tokens
 		queryFn: targetURL(
 			u => async () => {
 				// sadly must immediately parse to allow staleTime
