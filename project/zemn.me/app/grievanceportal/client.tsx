@@ -8,7 +8,6 @@ import { z } from 'zod';
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import style from '#root/project/zemn.me/app/grievanceportal/style.module.css';
 import {
-	useDeleteGrievances,
 	useGetGrievances,
 	usePostGrievances,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
@@ -100,7 +99,6 @@ function parseCreatedDate(
 
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 	const create = usePostGrievances(Authorization);
-	const del = useDeleteGrievances(Authorization);
 	const grievancesQuery = useGetGrievances(Authorization);
 	const grievances_a = future_or_else(useQueryFuture(grievancesQuery), e =>
 			(e as object) instanceof Error
@@ -141,17 +139,6 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 							<PrettyDateTime date={createdAt} />
 						</p>
 						<pre>{g.description}</pre>
-						<button
-							className={style.deleteButton}
-							onClick={() =>
-								void del.mutate({
-									params: { path: { id: g.id! } },
-									headers: { Authorization },
-								})
-							}
-						>
-							Delete
-						</button>
 					</li>
 				);
 			});

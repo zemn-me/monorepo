@@ -35,16 +35,7 @@ func TestGrievancePortalEndToEnd(t *testing.T) {
 
 	grievanceName := fmt.Sprintf("Integration grievance %d", time.Now().UnixNano())
 	grievanceDescription := "integration test grievance description"
-	entry, entryXPath := submitGrievanceForm(t, driver, grievanceName, grievanceDescription)
-	deleted := false
-	t.Cleanup(func() {
-		if deleted {
-			return
-		}
-		if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-			t.Logf("cleanup grievance %q: %v", grievanceName, err)
-		}
-	})
+	entry, _ := submitGrievanceForm(t, driver, grievanceName, grievanceDescription)
 
 	descriptionNode, err := entry.FindElement(selenium.ByXPATH, ".//pre")
 	if err != nil {
@@ -56,10 +47,6 @@ func TestGrievancePortalEndToEnd(t *testing.T) {
 		t.Fatalf("unexpected grievance description %q", text)
 	}
 
-	if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-		t.Fatalf("grievance entry was not removed: %v", err)
-	}
-	deleted = true
 }
 
 func TestGrievancePortalDisplaysClientTimeZone(t *testing.T) {
@@ -75,18 +62,9 @@ func TestGrievancePortalDisplaysClientTimeZone(t *testing.T) {
 
 	name := fmt.Sprintf("Integration grievance timezone %d", time.Now().UnixNano())
 	description := "verify timezone rendering"
-	entry, entryXPath := submitGrievanceForm(t, driver, name, description)
+	entry, _ := submitGrievanceForm(t, driver, name, description)
 	restore()
 	restore = func() {}
-	deleted := false
-	t.Cleanup(func() {
-		if deleted {
-			return
-		}
-		if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-			t.Logf("cleanup grievance %q: %v", name, err)
-		}
-	})
 
 	timeNode, err := entry.FindElement(selenium.ByCSSSelector, "time")
 	if err != nil {
@@ -100,10 +78,6 @@ func TestGrievancePortalDisplaysClientTimeZone(t *testing.T) {
 		t.Fatalf("grievance timestamp missing timezone label: %q", stamp)
 	}
 
-	if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-		t.Fatalf("remove grievance: %v", err)
-	}
-	deleted = true
 }
 
 func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
@@ -121,25 +95,12 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 
 	name := fmt.Sprintf("Integration grievance refresh %d", time.Now().UnixNano())
 	description := "list should update without refresh"
-	entry, entryXPath := submitGrievanceForm(t, driver, name, description)
-	deleted := false
-	t.Cleanup(func() {
-		if deleted {
-			return
-		}
-		if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-			t.Logf("cleanup grievance %q: %v", name, err)
-		}
-	})
+	entry, _ := submitGrievanceForm(t, driver, name, description)
 
 	if err := waitForGrievanceCount(driver, initialCount+1, 30*time.Second); err != nil {
 		t.Fatalf("grievance list did not update: %v", err)
 	}
 
-	if err := removeGrievanceEntry(driver, entryXPath); err != nil {
-		t.Fatalf("remove grievance: %v", err)
-	}
-	deleted = true
 	_ = entry
 }
 
@@ -207,21 +168,6 @@ func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, name, descript
 
 func grievanceEntryXPath(name string) string {
 	return fmt.Sprintf("//li[.//strong[normalize-space()='%s']]", name)
-}
-
-func removeGrievanceEntry(driver selenium.WebDriver, entryXPath string) error {
-	entry, err := driver.FindElement(selenium.ByXPATH, entryXPath)
-	if err != nil {
-		return nil
-	}
-	deleteButton, err := entry.FindElement(selenium.ByXPATH, ".//button[contains(normalize-space(.), 'Delete')]")
-	if err != nil {
-		return err
-	}
-	if err := deleteButton.Click(); err != nil {
-		return err
-	}
-	return waitForNoElement(driver, selenium.ByXPATH, entryXPath, 30*time.Second)
 }
 
 func forceGrievanceSubmissionTimeZone(t *testing.T, driver *seleniumpkg.Driver, zone string) (restore func()) {
