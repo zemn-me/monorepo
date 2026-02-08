@@ -21,7 +21,7 @@ function relativeArc(
 }
 
 export function ProgressCircle({className, loss, progress}: ProgressCircleProps) {
-	if (progress < 0 || progress > 1) throw new Error("Progress must be between 0 and 1");
+	if (progress < 0 || progress > 1) throw new Error("Progress must be between 0 and 1 (was instead " + progress + ")");
 	const width = 1000;
 	const height = 1000;
 	const outerMargin = 10;
