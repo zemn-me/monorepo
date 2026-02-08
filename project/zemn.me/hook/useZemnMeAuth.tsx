@@ -29,6 +29,7 @@ export function useZemnMeAuth() {
 
 
 	const exchangedTokenRsp = useQueryFuture(useQuery({
+		gcTime: Infinity, // don't evict auth tokens
 		queryKey: ['zemn-me-oidc-id-token', ...cacheKey],
 		queryFn: request_body(
 			body => () => apiFetchClient
