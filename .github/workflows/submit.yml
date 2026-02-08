@@ -43,7 +43,7 @@ jobs:
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
           role-session-name: github-actions-${{ github.run_id }}

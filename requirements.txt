@@ -641,8 +641,8 @@ frida==17.6.2 \
     --hash=sha256:e8544826fec0f592213b1c6d3b8a761850728bb06ac0112e872d3eb275804e69 \
     --hash=sha256:eb2cfa5a008448e1f2a69812b419a08424fdc4a8a9b9bf92359eb96b73b84c4d
     # via frida-tools
-frida-tools==14.5.1 \
-    --hash=sha256:32c22a9367c791c4124068644f26d5c6fa0a84bbdd4d66ed16aef0e87ca4c4bf
+frida-tools==14.5.2 \
+    --hash=sha256:c9a9f5de1a31babbfc714cef056f2212685e7523a6b3e9532e93a694915bcfd5
     # via -r requirements.in
 h11==0.16.0 \
     --hash=sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1 \
@@ -2132,9 +2132,9 @@ zstandard==0.25.0 \
     # via mitmproxy
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==26.0 \
-    --hash=sha256:3ce220a0a17915972fbf1ab451baae1521c4539e778b28127efa79b974aff0fa \
-    --hash=sha256:98436feffb9e31bc9339cf369fd55d3331b1580b6a6f1173bacacddcf9c34754
+pip==26.0.1 \
+    --hash=sha256:bdb1b08f4274833d62c1aa29e20907365a2ceb950410df15fc9521bad440122b \
+    --hash=sha256:c4037d8a277c89b320abe636d59f91e6d0922d08a05b60e85e53b296613346d8
     # via
     #   -r requirements.in
     #   pip-tools
