@@ -24,7 +24,7 @@ require (
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
 	github.com/getkin/kin-openapi v0.133.0
-	github.com/go-chi/chi/v5 v5.2.4
+	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-chi/cors v1.2.2
 	github.com/go-delve/delve v1.26.0
 	github.com/go-jose/go-jose/v4 v4.1.3
