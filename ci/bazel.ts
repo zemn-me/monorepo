@@ -1,9 +1,10 @@
 import child_process from 'node:child_process';
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 import {
 	Command,
-	FilePositionParams,
 	Summarize,
 } from '#root/ts/github/actions/index.js';
 
@@ -40,183 +41,143 @@ async function* byLine(r: NodeJS.ReadableStream) {
 	if (text.length !== 0) yield text;
 }
 
-function getWorkspaceRelativePath(path: string): FilePositionParams {
-	const m = /([^:]+)(?::(\d+))?(?::(\d+))?/.exec(path);
-
-	if (m === null) return {};
-
-	let [, filePath, line, column] = m;
-
-	const m2 =
-		/(?:.*bazel\/_bazel_runner\/[^/]+\/|.*runner\/work\/)(?:monorepo\/)*(.*)/.exec(
-			filePath!
-		);
-
-	if (m2 !== null) {
-		[, filePath] = m2;
-	}
-
-	return { file: filePath, line, col: column };
-}
-
-/*
-function buildTagToBuildFile(buildTag: string): string {
+function buildTagToBuildFile(buildTag: string): string | undefined {
 	const m = /^\/\/([^:]+):(.*)/.exec(buildTag);
 
-	if (m === null) return buildTag;
+	if (m === null) return undefined;
 
 	const [, packagePath] = m;
 
-	return Path.join(packagePath, 'BUILD.bazel');
+	return path.join(packagePath, 'BUILD.bazel');
 }
-*/
 
-async function* AnnotateDebugStatements(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m = /^\s*DEBUG: ([^ ]+)(?: WARNING: (.*))?/g.exec(line);
+type BuildEvent = {
+	id?: Record<string, unknown>;
+	payload?: Record<string, unknown>;
+};
 
-		if (m === null) {
-			yield line;
-			continue;
-		}
+type BuildAnnotations = {
+	annotations: string[];
+	failures: string[];
+	errorObserved: boolean;
+};
 
-		const [, filepath, warningMessage] = m;
-
-		if (warningMessage) {
-			yield Command('warning')({
-				...getWorkspaceRelativePath(filepath!),
-				title: warningMessage,
-			})(line);
-			continue;
-		}
-
-		yield Command('debug')(getWorkspaceRelativePath(filepath!))(line);
+function getIdLabel(id: BuildEvent['id']): string | undefined {
+	if (!id) return undefined;
+	const keys = Object.keys(id);
+	if (keys.length !== 1) return undefined;
+	const key = keys[0];
+	const value = id[key] as Record<string, unknown> | undefined;
+	if (value && typeof value === 'object' && 'label' in value) {
+		const label = value.label;
+		return typeof label === 'string' ? label : undefined;
 	}
+	return undefined;
 }
 
-async function* AnnotateNonCacheWarnings(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m =
-			/\s+WARNING: Fetching from [^\s]+ without an integrity hash. The result will not be cached/g.exec(
-				line
-			);
+function annotationForStatus(
+	label: string,
+	status: string,
+	title: string,
+	level: 'error' | 'warning'
+): string {
+	const buildFile = buildTagToBuildFile(label);
+	return Command(level)({
+		title,
+		file: buildFile,
+	})(`${label} ${status}`);
+}
 
-		if (m === null) {
-			yield line;
+export function annotationsFromBuildEvents(events: BuildEvent[]): BuildAnnotations {
+	const annotations: string[] = [];
+	const failures = new Set<string>();
+	let errorObserved = false;
+
+	for (const event of events) {
+		const payload = event.payload ?? {};
+		if ('aborted' in payload) {
+			const aborted = payload.aborted as Record<string, unknown>;
+			const description =
+				typeof aborted.description === 'string'
+					? aborted.description
+					: 'Build aborted';
+			const reason =
+				typeof aborted.reason === 'string' ? aborted.reason : 'UNKNOWN';
+			const line = Command('error')({
+				title: `Build aborted (${reason})`,
+			})(description);
+			annotations.push(line);
+			errorObserved = true;
 			continue;
 		}
 
-		yield Command('error')({
-			file: 'MODULE.bazel',
-		})(line);
-	}
-}
-
-async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
-	const failures: string[] = [];
-
-	const it = lines[Symbol.asyncIterator]();
-	let done: boolean | undefined = false;
-
-	const take = async (): Promise<string | undefined> => {
-		const resp = await it.next();
-
-		done = resp.done;
-
-		if (done) return undefined;
-
-		return resp.value;
-	};
-
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	while (!done) {
-		const line = await take();
-		if (line === undefined) continue;
-		// parse block of success / failure notices
-		const match =
-			/^\s*(\/\/([^:]*):[^ ]+)\s+(?:\(cached\))? (PASSED|FAILED|NO STATUS) in ([\d.]+s?)/.exec(
-				line
-			);
-
-		if (match === null) {
-			yield line;
-			continue;
-		}
-
-		const [, tag, packageName, status, time] = match;
-
-		const buildFile = packageName + '/BUILD.bazel';
-
-		switch (status) {
-			case 'PASSED':
-				yield line;
-				/*
-				yield Command('notice')({
-					title: `${tag} passed in ${time}`,
-					file: buildFile,
-				})(line);
-				*/
-				break;
-			case 'FAILED': {
-				failures.push(tag!);
-				const nextLine = (await take())?.trim();
-				yield Command('error')({
-					title: `${tag} failed in ${time}`,
-					file: buildFile,
-				})(
-					line +
-						(nextLine !== undefined && nextLine
-							? `\n${await fs.readFile(nextLine)}`
-							: '')
+		if ('testSummary' in payload) {
+			const summary = payload.testSummary as Record<string, unknown>;
+			const overallStatus =
+				typeof summary.overallStatus === 'string'
+					? summary.overallStatus
+					: 'UNKNOWN';
+			if (overallStatus !== 'PASSED') {
+				const label = getIdLabel(event.id) ?? '//:unknown';
+				const level =
+					overallStatus === 'FLAKY' || overallStatus === 'NO_STATUS'
+						? 'warning'
+						: 'error';
+				const line = annotationForStatus(
+					label,
+					overallStatus,
+					`${label} ${overallStatus.toLowerCase()}`,
+					level
 				);
-				break;
+				annotations.push(line);
+				if (level === 'error') {
+					failures.add(label);
+					errorObserved = true;
+				}
 			}
-			case 'NO STATUS':
-				yield Command('warning')({
-					title: `${tag} failed to build in ${time}`,
-					file: buildFile,
-				})(line);
-				break;
-			default:
-				yield line;
-				yield Command('error')({})(
-					`unknown build status: "${status}" in ${line}`
-				);
-		}
-	}
-
-	if (failures.length > 0)
-		await Summarize(`# Build failure.
-The failing tags can be retried on a local machine manually via:
-\`\`\`bash
-bazel test ${failures.join(' ')}
-\`\`\`
-`);
-}
-
-async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m = /ERROR:(\s+[^:]+.bazel:\d+:\d+):\s+.*/.exec(line);
-
-		if (m === null) {
-			yield line;
 			continue;
 		}
 
-		const [, filepath] = m;
+		if ('targetSummary' in payload) {
+			const summary = payload.targetSummary as Record<string, unknown>;
+			const overallBuildSuccess = summary.overallBuildSuccess;
+			if (overallBuildSuccess === false) {
+				const label = getIdLabel(event.id) ?? '//:unknown';
+				const line = annotationForStatus(
+					label,
+					'FAILED',
+					`${label} failed`,
+					'error'
+				);
+				annotations.push(line);
+				failures.add(label);
+				errorObserved = true;
+			}
+			continue;
+		}
 
-		yield Command('error')({
-			...getWorkspaceRelativePath(filepath!),
-		})(line);
+		if ('completed' in payload) {
+			const completed = payload.completed as Record<string, unknown>;
+			if (completed.success === false) {
+				const label = getIdLabel(event.id) ?? '//:unknown';
+				const line = annotationForStatus(
+					label,
+					'FAILED',
+					`${label} failed`,
+					'error'
+				);
+				annotations.push(line);
+				failures.add(label);
+				errorObserved = true;
+			}
+		}
 	}
-}
 
-export function AnnotateBazelLines(lines: AsyncGenerator<string>) {
-	return AnnotateBuildCompletion(
-		AnnotateBazelFailures(
-			AnnotateNonCacheWarnings(AnnotateDebugStatements(lines))
-		)
-	);
+	return {
+		annotations,
+		failures: Array.from(failures),
+		errorObserved,
+	};
 }
 
 /**
@@ -244,6 +205,26 @@ export async function* interleave<A, B>(
 }
 
 export async function Bazel(cwd: string, ...args: string[]) {
+	const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bazel-bep-'));
+	const bepPath = path.join(tempDir, 'bep.jsonl');
+	const hasBepFlag = args.some(arg =>
+		arg.startsWith('--build_event_json_file')
+	);
+	let bepPathToRead = bepPath;
+	if (!hasBepFlag) {
+		args = [...args, `--build_event_json_file=${bepPath}`];
+	} else {
+		const flag = args.find(arg =>
+			arg.startsWith('--build_event_json_file')
+		);
+		if (flag) {
+			const parts = flag.split('=');
+			if (parts.length === 2 && parts[1]) {
+				bepPathToRead = parts[1]!;
+			}
+		}
+	}
+
 	const process = child_process.spawn('bazelisk', args, { cwd });
 
 	const exitCode = new Promise<number | null>(ok =>
@@ -257,12 +238,42 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	let errorObserved = false;
 
 	for await (const line of interleave(
-		AnnotateBazelLines(byLine(process.stdout)),
-		AnnotateBazelLines(byLine(process.stderr))
+		byLine(process.stdout),
+		byLine(process.stderr)
 	)) {
-		if (!errorObserved && /^::error/.test(line)) errorObserved = true;
 		// eslint-disable-next-line no-console
 		console.log(line);
+	}
+
+	try {
+		const bepText = await fs.readFile(bepPathToRead, 'utf8');
+		const events = bepText
+			.split(/\r?\n/g)
+			.map(line => line.trim())
+			.filter(line => line.length > 0)
+			.map(line => JSON.parse(line) as BuildEvent);
+
+		const summary = annotationsFromBuildEvents(events);
+		for (const line of summary.annotations) {
+			if (!errorObserved && /^::error/.test(line)) errorObserved = true;
+			// eslint-disable-next-line no-console
+			console.log(line);
+		}
+		if (summary.failures.length > 0) {
+			await Summarize(`# Build failure.
+The failing tags can be retried on a local machine manually via:
+\`\`\`bash
+bazel test ${summary.failures.join(' ')}
+\`\`\`
+`);
+		}
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.warn(
+			`Failed to read build event json file at ${bepPathToRead}: ${error}`
+		);
+	} finally {
+		await fs.rm(tempDir, { recursive: true, force: true });
 	}
 
 	if ((await exitCode) !== 0)
