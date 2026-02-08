@@ -593,3 +593,10 @@ exports_files(glob(["**/*"], allow_empty=True))
 )
 
 bazel_dep(name = "rules_shell", version = "0.6.1")
+
+http_archive(
+    name = "bazel",
+    integrity = "sha256-ee37rJDVse5AHQD6LVzY80tbBwkyEw+HdBS0wMzZtSA=",
+    strip_prefix = "bazel-8.5.1",
+    url = "https://github.com/bazelbuild/bazel/archive/8.5.1.tar.gz",
+)
