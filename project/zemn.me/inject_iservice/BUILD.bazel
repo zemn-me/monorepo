@@ -19,13 +19,30 @@ py_binary(
 )
 
 py_binary(
+    name = "inject_iservice_start_bin",
+    srcs = ["__main__.py"],
+    data = [
+        "//project/zemn.me:start",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//project/zemn.me:start)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+py_binary(
     name = "inject_iservice_prod_env_bin",
     srcs = ["__main__.py"],
     data = [
-        "//project/zemn.me:dev",
+        "//project/zemn.me:start",
     ],
     env = {
-        "NEXTJS_BINARY": "$(rlocationpath @@//project/zemn.me:dev)",
+        "NEXTJS_BINARY": "$(rlocationpath @@//project/zemn.me:start)",
         "ZEMN_ITEST_ENV": "prod",
     },
     main = "__main__.py",
