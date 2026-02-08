@@ -1,6 +1,7 @@
 
 import 'project/zemn.me/app/base.css';
 
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
@@ -51,6 +52,7 @@ export function RootLayout({ children }: Props) {
 					<HeaderTagsAppRouter cspPolicy={csp} domain="zemn.me" />
 				</head>
 				<body className={lora.className}>
+					<ReactQueryDevtools initialIsOpen={false} />
 					<Glade>
 					{children}
 					</Glade>
