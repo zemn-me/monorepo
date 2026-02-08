@@ -37,14 +37,17 @@ function TimeLeftIndicator(
 		}
 	)
 
-	return <ProgressCircle className={style.indicator} loss progress={
-					progressRatio(
-						start.getTime(),
-						end.getTime(),
-						+now,
-					)
+	const done = now >= end.getTime();
+	const progress = progressRatio(
+		start.getTime(),
+		end.getTime(),
+		+now,
+	)
+	const clampedProgress = Math.min(1, Math.max(0, progress));
 
-				} />
+	return <ProgressCircle className={style.indicator} loss progress={
+		done ? 1 : clampedProgress
+	} />
 }
 
 
