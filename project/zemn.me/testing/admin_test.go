@@ -175,6 +175,13 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	} else if selected {
 		t.Fatalf("party mode checkbox unexpectedly selected after reload")
 	}
+
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Callbox Log']]", 30*time.Second); err != nil {
+		t.Fatalf("callbox log fieldset: %v", err)
+	}
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Callbox Log']]//ol/li", 30*time.Second); err != nil {
+		t.Fatalf("callbox log entries not found: %v", err)
+	}
 }
 
 func expectElementText(driver selenium.WebDriver, selector string, expected string, timeout time.Duration) error {

@@ -156,6 +156,17 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 		return
 	}
 
+	if rq.Body != nil {
+		from := strings.TrimSpace(rq.Body.From)
+		to := strings.TrimSpace(rq.Body.To)
+		s.appendCallboxLog(ctx, CallboxLogRecord{
+			Kind:    "call_received",
+			Message: "Callbox call received.",
+			From:    from,
+			To:      to,
+		})
+	}
+
 	rs, err = s.handleEntryViaPartyMode(ctx, rq)
 
 	if err != nil || rs != nil {
@@ -234,6 +245,10 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 
 	if success {
 		s.log.Printf("Allowed access via party mode.")
+		s.appendCallboxLog(ctx, CallboxLogRecord{
+			Kind:    "entry_party_mode",
+			Message: "Allowed access via party mode.",
+		})
 		if notifyErr := s.notifyPartyModeEntry(ctx); notifyErr != nil {
 			s.log.Printf("Party mode notification failed: %v", notifyErr)
 		}
@@ -295,10 +310,20 @@ func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryR
 
 	if !success {
 		s.log.Printf("Denied access via code entry: %+q is not a valid entry code.", digits)
+		s.appendCallboxLog(ctx, CallboxLogRecord{
+			Kind:    "entry_code_denied",
+			Message: "Denied access via code entry.",
+			Digits:  digits,
+		})
 		return
 	}
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
+	s.appendCallboxLog(ctx, CallboxLogRecord{
+		Kind:    "entry_code_allowed",
+		Message: "Allowed access via code entry.",
+		Digits:  digits,
+	})
 
 	doc, response := twiml.CreateDocument()
 	response.CreateElement("Play").SetText(nook_phone_yes)
@@ -354,6 +379,15 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 	}
 
 	if !shouldRetry {
+		if normalizedStatus != "" {
+			attemptVal := attempt
+			s.appendCallboxLog(ctx, CallboxLogRecord{
+				Kind:    "entry_authorizer_status",
+				Message: "Authorizer dial completed.",
+				Status:  normalizedStatus,
+				Attempt: &attemptVal,
+			})
+		}
 		doc, response := twiml.CreateDocument()
 		if normalizedStatus != "" {
 			if normalizedStatus == "completed" {
@@ -369,6 +403,13 @@ func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandle
 
 	doc, response := twiml.CreateDocument()
 	dial := response.CreateElement("Dial")
+	attemptVal := attempt
+	s.appendCallboxLog(ctx, CallboxLogRecord{
+		Kind:    "entry_authorizer_dial",
+		Message: "Dialing authorizer.",
+		Number:  selectedNumber,
+		Attempt: &attemptVal,
+	})
 	if attempt < maxAttempts {
 		nextAttempt := attempt + 1
 		actionURL := &url.URL{

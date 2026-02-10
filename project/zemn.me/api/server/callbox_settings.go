@@ -127,6 +127,12 @@ func (s Server) PostCallboxSettings(ctx context.Context, rq PostCallboxSettingsR
 	if err = s.postNewSettings(ctx, *rq.Body); err != nil {
 		return
 	}
+	settingsCopy := *rq.Body
+	s.appendCallboxLog(ctx, CallboxLogRecord{
+		Kind:     "settings_update",
+		Message:  "Settings updated.",
+		Settings: &settingsCopy,
+	})
 
 	return PostCallboxSettings200JSONResponse(
 		*rq.Body,
