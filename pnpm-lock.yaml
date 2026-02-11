@@ -158,11 +158,11 @@ dependencies:
     specifier: 1.20.0
     version: 1.20.0(next@14.2.35)
   openapi-fetch:
-    specifier: 0.15.0
-    version: 0.15.0
+    specifier: 0.15.2
+    version: 0.15.2
   openapi-react-query:
     specifier: 0.5.0
-    version: 0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.0)
+    version: 0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.2)
   openapi-typescript:
     specifier: 7.10.1
     version: 7.10.1(typescript@5.5.4)
@@ -15905,20 +15905,20 @@ packages:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  /openapi-fetch@0.15.0:
-    resolution: {integrity: sha512-OjQUdi61WO4HYhr9+byCPMj0+bgste/LtSBEcV6FzDdONTs7x0fWn8/ndoYwzqCsKWIxEZwo4FN/TG1c1rI8IQ==}
+  /openapi-fetch@0.15.2:
+    resolution: {integrity: sha512-rdYTzUmSsJevmNqg7fwUVGuKc2Gfb9h6ph74EVPkPfIGJaZTfqdIbJahtbJ3qg1LKinln30hqZniLnKpH0RJBg==}
     dependencies:
       openapi-typescript-helpers: 0.0.15
     dev: false
 
-  /openapi-react-query@0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.0):
+  /openapi-react-query@0.5.0(@tanstack/react-query@5.79.2)(openapi-fetch@0.15.2):
     resolution: {integrity: sha512-VtyqiamsbWsdSWtXmj/fAR+m9nNxztsof6h8ZIsjRj8c8UR/x9AIwHwd60IqwgymmFwo7qfSJQ1ZzMJrtqjQVg==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
       openapi-fetch: ^0.14.0
     dependencies:
       '@tanstack/react-query': 5.79.2(react@19.2.4)
-      openapi-fetch: 0.15.0
+      openapi-fetch: 0.15.2
       openapi-typescript-helpers: 0.0.15
     dev: false
 
