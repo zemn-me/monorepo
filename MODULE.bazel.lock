@@ -1436,7 +1436,7 @@
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
         "bzlTransitiveDigest": "jqUPXjan0vZHVg1NYCnn0/XiBzKgVl8/69PytVj6PEc=",
-        "usagesDigest": "lrj/WBShGoWoUpMDltcI4AjuxymwxubLVWsg5KyCVVA=",
+        "usagesDigest": "Wt/puDKyVmjxIXnsbFgMpne8/WDZniwWNV9HFWZHavY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1448,7 +1448,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platform": "linux/amd64",
               "target_name": "distroless_base_linux_amd64",
               "bazel_tags": []
@@ -1461,7 +1461,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platform": "linux/arm64/v8",
               "target_name": "distroless_base_linux_arm64_v8",
               "bazel_tags": []
@@ -1474,7 +1474,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platform": "linux/arm/v7",
               "target_name": "distroless_base_linux_arm_v7",
               "bazel_tags": []
@@ -1487,7 +1487,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platform": "linux/s390x",
               "target_name": "distroless_base_linux_s390x",
               "bazel_tags": []
@@ -1500,7 +1500,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platform": "linux/ppc64le",
               "target_name": "distroless_base_linux_ppc64le",
               "bazel_tags": []
@@ -1514,7 +1514,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base",
-              "identifier": "sha256:8c8b7cf2a01e2d1c683128b2488d77139fa90ec8cb807f0ae260d57f7022dedd",
+              "identifier": "sha256:9fc4940908fb9f2dadfccba39b28a69043c75db3cef810c5653eac319121fcc3",
               "platforms": {
                 "@@platforms//cpu:x86_64": "@distroless_base_linux_amd64",
                 "@@platforms//cpu:arm64": "@distroless_base_linux_arm64_v8",
