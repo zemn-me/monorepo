@@ -855,7 +855,16 @@ export const Bio = {
 					description: en`Blog post summarising paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
 					url: url`https://openai.com/index/ai-agent-link-safety`,
 					tags: [work, security, writing],
+				},
+				{
+				url: url`https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt`,
+					date: date(13, 'feb', 2026),
+					title: en`Introducing Lockdown Mode and Elevated Risk labels in ChatGPT`,
+					id: "68408DCB-0B05-451B-8CED-DAD64CDE41B7",
+					description: en`Blog post summarising a fully sandboxed mode which mitigates impacts from Prompt Injection.`,
+					tags: [work, security],
 				}
+
         ],
         who: {
                 handle: en`zemnmez`,
