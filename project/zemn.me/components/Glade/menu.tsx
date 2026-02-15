@@ -2,6 +2,7 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '#root/project/zemn.me/components/Glade/menu.module.css';
+import { InlineLogin } from '#root/project/zemn.me/components/InlineLogin/inline_login.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import { useIsLoggedIn } from '#root/project/zemn.me/hook/useIsLoggedIn.js';
 
@@ -37,6 +38,9 @@ export function GladeMenu() {
 							{link.label}
 						</Link>
 					))}
+					<div className={style.inlineLoginCopy}>
+						<InlineLogin />
+					</div>
 				</div>
 			</details>
 		</nav>
