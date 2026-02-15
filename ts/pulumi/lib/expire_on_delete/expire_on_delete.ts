@@ -142,7 +142,7 @@ export class S3ExpireOnDeletePolicy extends ComponentResource {
                             key: "expire_on_delete",
                             value: "true",
                         },
-						objectSizeGreaterThan: '0',
+						objectSizeGreaterThan: 0,
                     },
                     status: "Enabled",
                     expiration: {

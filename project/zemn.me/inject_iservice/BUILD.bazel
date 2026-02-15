@@ -20,7 +20,6 @@ py_binary(
 
 py_binary(
     name = "inject_iservice_prod_env_bin",
-    srcs = ["__main__.py"],
     data = [
         "//project/zemn.me:dev",
     ],
@@ -30,10 +29,6 @@ py_binary(
     },
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
-    deps = [
-        "@pip//pydantic",
-        "@rules_python//python/runfiles",
-    ],
 )
 
 bazel_lint(
