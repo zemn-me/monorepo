@@ -82,3 +82,10 @@
 	color: inherit;
 	letter-spacing: 0.02em;
 }
+
+.inlineLoginCopy {
+	margin-top: 0.25rem;
+	padding-top: 0.5rem;
+	border-top: 1px solid color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	font-size: 0.9rem;
+}
