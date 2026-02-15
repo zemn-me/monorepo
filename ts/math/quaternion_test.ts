@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
+import { point } from '#root/ts/math/cartesian.js';
 import { Quaternion } from '#root/ts/math/quaternion.js'; // Adjust the import path accordingly
 describe('Quaternion arithmetic', () => {
 	test('addition', () => {
@@ -24,14 +25,14 @@ describe('Quaternion arithmetic', () => {
 		expect(result.w).toBeCloseTo(3);
 	});
 
-	test.skip('multiplication', () => {
+	test('multiplication', () => {
 		const q1 = new Quaternion(1, 2, 3, 4);
 		const q2 = new Quaternion(4, 3, 2, 1);
 
 		const result = q1.multiply(q2);
-		expect(result.x).toBeCloseTo(-12);
-		expect(result.y).toBeCloseTo(6);
-		expect(result.z).toBeCloseTo(24);
+		expect(result.x).toBeCloseTo(12);
+		expect(result.y).toBeCloseTo(24);
+		expect(result.z).toBeCloseTo(6);
 		expect(result.w).toBeCloseTo(-12);
 	});
 
@@ -52,5 +53,27 @@ describe('Quaternion arithmetic', () => {
 		expect(normalizedQ.y).toBeCloseTo(expectedNormalizedQ.y, 4);
 		expect(normalizedQ.z).toBeCloseTo(expectedNormalizedQ.z, 4);
 		expect(normalizedQ.w).toBeCloseTo(expectedNormalizedQ.w, 4);
+	});
+
+	test('fromAxisAngle ignores axis scale', () => {
+		const ninetyDegrees = Math.PI / 2;
+		const unitAxis = point<3>(0, 1, 0);
+		const scaledAxis = point<3>(0, 5, 0);
+
+		const fromUnit = Quaternion.fromAxisAngle(unitAxis, ninetyDegrees);
+		const fromScaled = Quaternion.fromAxisAngle(scaledAxis, ninetyDegrees);
+
+		expect(fromScaled.x).toBeCloseTo(fromUnit.x);
+		expect(fromScaled.y).toBeCloseTo(fromUnit.y);
+		expect(fromScaled.z).toBeCloseTo(fromUnit.z);
+		expect(fromScaled.w).toBeCloseTo(fromUnit.w);
+	});
+
+	test('fromAxisAngle rejects a zero axis', () => {
+		const axis = point<3>(0, 0, 0);
+
+		expect(() => Quaternion.fromAxisAngle(axis, Math.PI / 4)).toThrow(
+			'Cannot construct a quaternion from a zero-length axis.'
+		);
 	});
 });
