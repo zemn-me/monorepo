@@ -37,7 +37,7 @@ export function Providers({ children }: ProviderProps) {
         client={queryClient}
         persistOptions={{
           persister: localStoragePersister,
-          maxAge: 1000 * 60 * 60 * 24,
+          maxAge: 1000 * 60 * 60 * 24 * 365,
           buster: 'v1',
         }}
       >
