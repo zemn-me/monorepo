@@ -4,7 +4,7 @@
  * for handling rotations in 3D space.
  */
 
-import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
+import { magnitude, point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
 
 export class Quaternion<
 	X extends number = number,
@@ -107,11 +107,17 @@ export class Quaternion<
 	static fromAxisAngle(axis: Point3D, angle: number): Quaternion {
 		const halfAngle = angle * 0.5;
 		const s = Math.sin(halfAngle);
+		const axisLength = magnitude(axis);
+
+		if (axisLength === 0) {
+			throw new Error('Cannot construct a quaternion from a zero-length axis.');
+		}
+
 		return new Quaternion(
-			x(axis)* s,
-			y(axis)* s,
-			z(axis)* s,
+			x(axis) / axisLength * s,
+			y(axis) / axisLength * s,
+			z(axis) / axisLength * s,
 			Math.cos(halfAngle)
-		).normalize();
+		);
 	}
 }
