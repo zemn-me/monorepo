@@ -501,7 +501,7 @@ use_repo(crate, "cargo")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.0"
+RUFF_VERSION = "0.15.1"
 
 # For Apple Silicon macOS
 http_archive(
