@@ -1,0 +1,44 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = [
+    "//:__subpackages__",
+    "//project/me/zemn:__subpackages__",
+    "//ts/pulumi/pleaseintroducemetoyour.dog:__subpackages__",
+])
+
+ts_project(
+    name = "components",
+    srcs = glob(
+        [
+            "**/*.ts",
+            "**/*.tsx",
+        ],
+        allow_empty = True,
+    ),
+    assets = glob(
+        ["**/*.css"],
+        allow_empty = True,
+    ),
+    deps = [
+        "//:base_defs",
+        "//:node_modules/@types/memoizee",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/immutable",
+        "//:node_modules/memoizee",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//project/me/zemn/bio",
+        "//project/me/zemn/components/Link",
+        "//ts/google/people",
+        "//ts/iter",
+        "//ts/next.js/types/next-compiled",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -13,7 +13,7 @@ ts_project(
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
-        "//project/zemn.me/api/cmd/api:oci_image",
+        "//project/me/zemn/api/cmd/api:oci_image",
         "//ts/pulumi/lib",
     ],
 )

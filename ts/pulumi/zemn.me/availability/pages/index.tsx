@@ -4,7 +4,7 @@
 
 import Head from 'next/head';
 
-import { Bio } from '#root/project/zemn.me/bio/bio.js';
+import { Bio } from '#root/project/me/zemn/bio/bio.js';
 import { filter, flatten, map } from '#root/ts/iter/index.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
 

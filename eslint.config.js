@@ -86,7 +86,7 @@ export const reactConfig = {
 			version: 'detect',
 		},
 		next: {
-			rootDir: ['project/zemn.me/'],
+			rootDir: ['project/me/zemn/'],
 		},
 	},
 

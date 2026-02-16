@@ -1,0 +1,41 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "grievanceportal",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+        "style.module.css",
+    ],
+    assets = ["style.module.css"],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        "//:base_defs",
+        "//:node_modules/@hookform/resolvers",
+        "//:node_modules/@standard-schema/spec",  # keep
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/react",  # keep
+        "//:node_modules/@types/react-dom",  # keep
+        "//:node_modules/next",
+        "//:node_modules/react-hook-form",
+        "//:node_modules/temporal-polyfill",
+        "//:node_modules/zod",
+        "//project/me/zemn/api:ts_client_dts",
+        "//project/me/zemn/components/PendingPip",
+        "//project/me/zemn/hook",
+        "//ts/next.js/types/next-compiled",
+        "//ts/oidc",
+        "//ts/option",
+        "//ts/react/lang",
+        "//ts/result",
+        "//ts/result/react-query",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

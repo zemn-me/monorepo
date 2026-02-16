@@ -16,7 +16,7 @@ ts_project(
     srcs = tsfiles,
     visibility = [
         "//project/cultist:__subpackages__",
-        "//project/zemn.me:__subpackages__",
+        "//project/me/zemn:__subpackages__",
     ],
 )
 

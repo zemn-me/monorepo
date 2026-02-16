@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "article",
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//project/me/zemn/app/article/2014/csp",
+        "//project/me/zemn/app/article/2019/cors",
+        "//project/me/zemn/app/article/2024/clean",
+        "//project/me/zemn/app/article/2024/missing",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -2,7 +2,7 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as gcp from "@pulumi/gcp";
 import * as Pulumi from '@pulumi/pulumi';
 
-import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
+import { bskyDid } from '#root/project/me/zemn/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
@@ -55,9 +55,9 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_zemn_me`,
 			{
-				index: 'project/zemn.me/out/index.html',
-				notFound: 'project/zemn.me/out/404.html',
-				directory: 'project/zemn.me/out',
+				index: 'project/me/zemn/out/index.html',
+				notFound: 'project/me/zemn/out/404.html',
+				directory: 'project/me/zemn/out',
 				zoneId: args.zoneId,
 				domain: args.domain,
                                 noIndex: args.noIndex,

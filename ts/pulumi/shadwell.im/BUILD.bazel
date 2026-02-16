@@ -13,7 +13,7 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@pulumi/pulumi",
-        "//project/zemn.me/bio",
+        "//project/me/zemn/bio",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
     ],

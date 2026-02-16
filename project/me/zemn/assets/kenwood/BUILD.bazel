@@ -1,0 +1,29 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//project/me/zemn:__subpackages__"])
+
+exports_files([
+    "kenwood.mp4",
+    "kenwood.jpg",
+])
+
+ts_project(
+    name = "kenwood",
+    srcs = [
+        "index.ts",
+        "kenwood.tsx",
+    ],
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//:base_defs",  # one day this should probably be separate for next.js
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/me/zemn/public:kenwood",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
