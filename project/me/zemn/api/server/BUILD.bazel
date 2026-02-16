@@ -1,0 +1,116 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
+load("//go:rules.bzl", "go_library")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_oapi_codegen(
+    name = "server_gen",
+    out = "api.gen.go",
+    generate = [
+        "chi-server",
+        "models",
+        "strict-server",
+        "skip-prune",
+    ],
+    package = "apiserver",
+    source = "//project/me/zemn/api:spec.yaml",
+)
+
+copy_file(
+    name = "security_txt",
+    src = "//ts/pulumi/lib/website:security.txt",
+    out = "security.txt",
+)
+
+go_library(
+    name = "server",
+    srcs = [
+        "TestRemoveDuplicateDigits.go",
+        "admin.go",
+        "api.gen.go",
+        "callbox_settings.go",
+        "constants.go",
+        "date.go",
+        "grievances.go",
+        "health.go",
+        "hostnames.go",
+        "imports.go",
+        "jwks.go",
+        "jwt.go",
+        "kms.go",
+        "oidc.go",
+        "oidc_configuration.go",
+        "phone.go",
+        "security_txt.go",
+        "server.go",
+        "sms.go",
+        "token_exchange.go",
+        "uuid.go",
+        "webfinger.go",
+    ],
+    embedsrcs = ["security.txt"],
+    importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//project/me/zemn/api",
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_aws_aws_sdk_go_v2_service_kms//:kms",
+        "@com_github_aws_aws_sdk_go_v2_service_kms//types",
+        "@com_github_beevik_etree//:etree",
+        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_getkin_kin_openapi//openapi3",
+        "@com_github_getkin_kin_openapi//openapi3filter",
+        "@com_github_go_chi_chi_v5//:chi",
+        "@com_github_go_chi_cors//:cors",
+        "@com_github_go_jose_go_jose_v4//:go-jose",
+        "@com_github_go_jose_go_jose_v4//cryptosigner",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
+        "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
+        "@com_github_oapi_codegen_runtime//types",
+        "@com_github_twilio_twilio_go//:twilio-go",
+        "@com_github_twilio_twilio_go//rest/api/v2010:api",
+        "@com_github_twilio_twilio_go//twiml",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = [
+        "admin_test.go",
+        "allow_empty_digits_test.go",
+        "cors_test.go",
+        "grievances_test.go",
+        "in_memory_ddb_test.go",
+        "phone_features_test.go",
+        "salutation_test.go",
+        "smoke_test.go",
+        "time_test.go",
+        "token_exchange_test.go",
+    ],
+    embed = [":server"],
+    deps = [
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_beevik_etree//:etree",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_twilio_twilio_go//twiml",
+    ],
+)

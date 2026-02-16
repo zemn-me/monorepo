@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "ts",
+    deps = [
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//project/me/zemn/bio",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["ensure_ids_unique_test.js"],
+    deps = [":ts"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

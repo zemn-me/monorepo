@@ -1,7 +1,7 @@
 import * as aws from "@pulumi/aws";
 import * as Pulumi from '@pulumi/pulumi';
 
-import { ApiZemnMeLambdaImage } from '#root/project/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js';
+import { ApiZemnMeLambdaImage } from '#root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js';
 import Certificate from "#root/ts/pulumi/lib/certificate.js";
 import { LambdaFunction } from "#root/ts/pulumi/lib/lambda_function.js";
 

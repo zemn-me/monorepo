@@ -13,7 +13,7 @@ ts_project(
     name = "pulumi_ts",
     data = [
         ":pulumi_local",
-        "//project/zemn.me:next",
+        "//project/me/zemn:next",
         "//ts/pulumi/shadwell.im/thomas",
         "//ts/pulumi/zemn.me/availability:next",
         "//ts/pulumi/zemn.me/static",
@@ -27,7 +27,7 @@ ts_project(
         "//:node_modules/@types/cross-spawn",
         "//:node_modules/@types/jest",
         "//:node_modules/cross-spawn",
-        "//project/zemn.me/bio",
+        "//project/me/zemn/bio",
         "//ts/github/actions",
         "//ts/pulumi/baby.computer:pulumi_ts",
         "//ts/pulumi/eggsfordogs.com:pulumi_ts",

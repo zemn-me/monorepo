@@ -1,0 +1,51 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+py_binary(
+    name = "inject_iservice_bin",
+    srcs = ["__main__.py"],
+    data = [
+        "//project/me/zemn:dev",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//project/me/zemn:dev)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":inject_iservice"],
+)
+
+py_binary(
+    name = "inject_iservice_prod_env_bin",
+    srcs = ["prod_env_main.py"],
+    data = [
+        "//project/me/zemn:dev",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//project/me/zemn:dev)",
+        "ZEMN_ITEST_ENV": "prod",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":inject_iservice",
+    ],
+)
+
+py_library(
+    name = "inject_iservice",
+    srcs = [
+        "inject_iservice.py",
+        "prod_env_main.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

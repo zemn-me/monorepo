@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Prose } from "#root/project/zemn.me/components/Prose/prose.js"
+import { Prose } from "#root/project/me/zemn/components/Prose/prose.js"
 import Link from "#root/ts/react/next/Link/Link.js";
 
 

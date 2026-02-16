@@ -1,0 +1,24 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "toc",
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/me/zemn/components/Article",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

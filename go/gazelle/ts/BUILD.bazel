@@ -35,7 +35,7 @@ go_test(
         "//go/gazelle/ts/testdata/jsdom:all_ts_srcs",
         "//go/gazelle/ts/testdata/submodule:all_ts_srcs",
         "//go/gazelle/ts/testdata/uses_option:all_ts_srcs",
-        "//project/zemn.me/app/admin:all_ts_srcs",
+        "//project/me/zemn/app/admin:all_ts_srcs",
         "//ts/math/mesh:all_ts_srcs",
         "//ts/math/shape:all_ts_srcs",
     ],

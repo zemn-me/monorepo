@@ -1,0 +1,28 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "HeroVideo",
+    assets = glob(
+        [
+            "**/*.css",
+        ],
+        allow_empty = True,
+    ),
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//:base_defs",
+        "//:node_modules/classnames",
+        "//project/me/zemn/assets/kenwood",
+        "//project/me/zemn/assets/kenwood_snow",
+        "//project/me/zemn/assets/mist_on_the_hills",
+        "//project/me/zemn/components/Link",
+        "//ts/react/Video",
+        "//ts/time",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

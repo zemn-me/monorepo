@@ -1,0 +1,74 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "hook",
+    srcs = [
+        "useAuthRedirect.ts",
+        "useGetExactContactByPhoneNumber.ts",
+        "useGoogleAuth.tsx",
+        "useIsLoggedIn.tsx",
+        "useLocalSecret.ts",
+        "useLocalStorage.tsx",
+        "useOIDC.tsx",
+        "useOIDCConfig.ts",
+        "useOpenIDConfiguration.ts",
+        "useSearchContact.ts",
+        "useZemnMeApi.tsx",
+        "useZemnMeAuth.tsx",
+    ],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/libphonenumber-js",
+        "//:node_modules/openapi-fetch",
+        "//:node_modules/openapi-react-query",
+        "//:node_modules/react",
+        "//:node_modules/zod",
+        "//project/me/zemn/api:ts_client_dts",
+        "//project/me/zemn/constants",
+        "//project/me/zemn/promise",
+        "//third_party/com/googleapis/people:ts_client",
+        "//ts",
+        "//ts/future",
+        "//ts/future/react-query",
+        "//ts/google/people",
+        "//ts/iter",
+        "//ts/oidc",
+        "//ts/option",
+        "//ts/phone",
+        "//ts/result",
+        "//ts/result/react-query",
+        "//ts/storage",
+        "//ts/time",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "useAuthRedirect.ts",
+        "useGetExactContactByPhoneNumber.ts",
+        "useGoogleAuth.tsx",
+        "useIsLoggedIn.tsx",
+        "useLocalSecret.ts",
+        "useLocalStorage.tsx",
+        "useOIDC.tsx",
+        "useOIDCConfig.ts",
+        "useOpenIDConfiguration.ts",
+        "useSearchContact.ts",
+        "useZemnMeApi.tsx",
+        "useZemnMeAuth.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
