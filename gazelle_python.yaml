@@ -105,7 +105,6 @@ manifest:
     pexpect: pexpect
     pip: pip
     piptools: pip_tools
-    pkg_resources: setuptools
     platformdirs: platformdirs
     prometheus_client: prometheus_client
     prompt_toolkit: prompt_toolkit
@@ -165,4 +164,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 4c69deebcb28f2023fea3a5d764e86d3678733a1a60acba0c89f33bac2e18008
+integrity: d3e14b081e03b3d5ec74f1a68bbfb8445a4d03cd56513728686722fee70283e5
