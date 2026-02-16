@@ -72,7 +72,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 				Service: "lambda.amazonaws.com",
 			}),
-			managedPolicyArns: [aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole],
+			managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
                         inlinePolicies: [{
                                 name: `${name}-dynamodb-inline-policy`,
                                 policy: Pulumi.all([dynamoTable.arn, grievancesTable.arn]).apply(
