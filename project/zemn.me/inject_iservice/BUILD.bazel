@@ -1,5 +1,11 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+# TODO: Gazelle can't auto-resolve local imports here because the package path
+# includes a dot ("zemn.me"), which isn't a valid Python package path. Keep
+# these resolves until we restructure the directory to a valid module path.
+# gazelle:resolve py inject_iservice //project/zemn.me/inject_iservice:inject_iservice
+# gazelle:resolve py inject_iservice.main //project/zemn.me/inject_iservice:inject_iservice
 
 py_binary(
     name = "inject_iservice_bin",
@@ -12,15 +18,12 @@ py_binary(
     },
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
-    deps = [
-        "@pip//pydantic",
-        "@rules_python//python/runfiles",
-    ],
+    deps = ["//project/zemn.me/inject_iservice"],
 )
 
 py_binary(
     name = "inject_iservice_prod_env_bin",
-    srcs = ["__main__.py"],
+    srcs = ["prod_env_main.py"],
     data = [
         "//project/zemn.me:dev",
     ],
@@ -29,6 +32,18 @@ py_binary(
         "ZEMN_ITEST_ENV": "prod",
     },
     main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":inject_iservice",
+    ],
+)
+
+py_library(
+    name = "inject_iservice",
+    srcs = [
+        "inject_iservice.py",
+        "prod_env_main.py",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         "@pip//pydantic",
