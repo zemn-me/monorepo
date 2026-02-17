@@ -81,6 +81,8 @@ manifest:
     librt.base64: librt
     librt.internal: librt
     librt.strings: librt
+    librt.time: librt
+    librt.vecs: librt
     markupsafe: markupsafe
     matplotlib_inline: matplotlib_inline
     mistune: mistune
@@ -164,4 +166,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: ca3b546bf14e884022a4312397edb507ea579bad441eecb096ff76a60c8af002
+integrity: cfd104d5be83313adf6df8be337981a93a504fe0855a07072e27914e0b30e3ec
