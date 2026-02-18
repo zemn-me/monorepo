@@ -38,8 +38,8 @@ dependencies:
     specifier: 4.5.0
     version: 4.5.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/gcp':
-    specifier: 9.11.0
-    version: 9.11.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 9.12.0
+    version: 9.12.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/random':
     specifier: 4.19.1
     version: 4.19.1(ts-node@10.9.2)(typescript@5.5.4)
@@ -4040,7 +4040,7 @@ packages:
     resolution: {integrity: sha512-7OsC1gNORBEawOa5+j2pXN9vsicaIOH5cPXxoR6fJOmH6/EXpJB2CajXOu1fPRFun2m1lktEFX11+P89hqO/og==}
     engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   /@npmcli/git@5.0.8:
     resolution: {integrity: sha512-liASfw5cqhjNW9UFd+ruwwdEf/lbOAQjLL2XY2dFW/bkJheXDYZgOyul/4gVvEV4BWkTXjYGmDqMw9uegdbJNQ==}
@@ -4069,7 +4069,7 @@ packages:
       npm-pick-manifest: 10.0.0
       proc-log: 5.0.0
       promise-retry: 2.0.1
-      semver: 7.7.3
+      semver: 7.7.4
       which: 5.0.0
     dev: false
 
@@ -4121,7 +4121,7 @@ packages:
       json-parse-even-better-errors: 5.0.0
       pacote: 21.3.1
       proc-log: 6.1.0
-      semver: 7.7.3
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
 
@@ -4162,7 +4162,7 @@ packages:
       hosted-git-info: 8.1.0
       json-parse-even-better-errors: 4.0.0
       proc-log: 5.0.0
-      semver: 7.7.3
+      semver: 7.7.4
       validate-npm-package-license: 3.0.4
     dev: false
 
@@ -4175,7 +4175,7 @@ packages:
       hosted-git-info: 9.0.2
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.7.3
+      semver: 7.7.4
       validate-npm-package-license: 3.0.4
 
   /@npmcli/promise-spawn@7.0.2:
@@ -4981,8 +4981,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/gcp@9.11.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-PMjKbpeKTeNIAzZf8nCF2MPlUinMtGfRUaG2E6ktAgiP7CNApebQ1+ThifExCYwJ3Uer9j7FA0ukd2x9yFoSmA==}
+  /@pulumi/gcp@9.12.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-qVZK2xDy7HnRs7TdToN0Ki7KfMTZp+fXT4vuFouwrS4dBDmxqgOSStvxQBJ6oN/V3Ot3Yco45UGnYpsUG335ow==}
     dependencies:
       '@npmcli/package-json': 6.2.0
       '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -7987,7 +7987,7 @@ packages:
       '@typescript-eslint/visitor-keys': 8.54.0
       debug: 4.4.3(supports-color@10.2.2)
       minimatch: 9.0.5
-      semver: 7.7.3
+      semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.5.4)
       typescript: 5.5.4
@@ -9210,7 +9210,7 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       bin-version: 6.0.0
-      semver: 7.7.3
+      semver: 7.7.4
       semver-truncate: 3.0.0
     dev: true
 
@@ -12736,7 +12736,7 @@ packages:
   /is-bun-module@2.0.0:
     resolution: {integrity: sha512-gNCGbnnnnFAUGKeZ9PdbyeGYJqewpmc2aKHUEMO5nQPWU9lOmv7jcmQIv+qHD8fXW6W7qfuCwX4rY9LNRjXrkQ==}
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
     dev: true
 
   /is-callable@1.2.7:
@@ -13475,7 +13475,7 @@ packages:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.7.3
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
 
@@ -15704,7 +15704,7 @@ packages:
     resolution: {integrity: sha512-ScAUdMpyzkbpxoNekQ3tNRdFI8SJ86wgKZSQZdUxT+bj0wVFpsEMWnkXP0twVe1gJyNF5apBWDJhhIbgrIViRA==}
     engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   /npm-normalize-package-bin@3.0.1:
     resolution: {integrity: sha512-dMxCf+zZ+3zeQZXKxmyuCKlIDPGuv8EF940xbkC4kQVDTtqoh6rJFO+JTKSA6/Rwi0getWmtuy4Itup0AMcaDQ==}
@@ -15746,7 +15746,7 @@ packages:
     dependencies:
       hosted-git-info: 9.0.2
       proc-log: 6.1.0
-      semver: 7.7.3
+      semver: 7.7.4
       validate-npm-package-name: 7.0.2
 
   /npm-packlist@10.0.3:
@@ -15773,7 +15773,7 @@ packages:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.2
-      semver: 7.7.3
+      semver: 7.7.4
 
   /npm-pick-manifest@9.1.0:
     resolution: {integrity: sha512-nkc+3pIIhqHVQr085X9d2JzPzLyjzQS96zbruppqC9aZRm/x8xx6xhI98gHtsfELP2bE+loHq8ZaHFHhe+NauA==}
