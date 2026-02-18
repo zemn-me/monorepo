@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "promise",
@@ -15,8 +15,29 @@ bazel_lint(
     srcs = ["BUILD.bazel"],
 )
 
+ts_project(
+    name = "promise_tests",
+    srcs = ["window_callback_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":promise",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["window_callback_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":promise_tests"],
+)
+
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["window_callback.ts"],
+    srcs = [
+        "window_callback.ts",
+        "window_callback_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
 )
