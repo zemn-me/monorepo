@@ -454,17 +454,17 @@ devDependencies:
     specifier: 0.34.5
     version: 0.34.5
   stylelint:
-    specifier: 17.1.1
-    version: 17.1.1(typescript@5.5.4)
+    specifier: 17.3.0
+    version: 17.3.0(typescript@5.5.4)
   stylelint-config-css-modules:
     specifier: 4.6.0
-    version: 4.6.0(stylelint@17.1.1)
+    version: 4.6.0(stylelint@17.3.0)
   stylelint-config-recommended:
     specifier: 18.0.0
-    version: 18.0.0(stylelint@17.1.1)
+    version: 18.0.0(stylelint@17.3.0)
   stylelint-config-standard:
     specifier: 40.0.0
-    version: 40.0.0(stylelint@17.1.1)
+    version: 40.0.0(stylelint@17.3.0)
   svgo:
     specifier: 4.0.0
     version: 4.0.0
@@ -2532,6 +2532,17 @@ packages:
       '@csstools/css-tokenizer': 3.0.4
     dev: true
 
+  /@csstools/css-calc@3.1.1(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0):
+    resolution: {integrity: sha512-HJ26Z/vmsZQqs/o3a6bgKslXGFAungXGbinULZO3eMsOyNJHeBBZfup5FiZInOghgoM4Hwnmw+OgbJCNg1wwUQ==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      '@csstools/css-parser-algorithms': ^4.0.0
+      '@csstools/css-tokenizer': ^4.0.0
+    dependencies:
+      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
+      '@csstools/css-tokenizer': 4.0.0
+    dev: true
+
   /@csstools/css-color-parser@3.1.0(@csstools/css-parser-algorithms@3.0.5)(@csstools/css-tokenizer@3.0.4):
     resolution: {integrity: sha512-nbtKwh3a6xNVIp/VRuXV64yTKnb1IjTAEEh3irzS+HkKjAOYLTGNb9pmVNntZ8iVBHcWDA2Dof0QtPgFI1BaTA==}
     engines: {node: '>=18'}
@@ -2566,6 +2577,10 @@ packages:
   /@csstools/css-syntax-patches-for-csstree@1.0.25:
     resolution: {integrity: sha512-g0Kw9W3vjx5BEBAF8c5Fm2NcB/Fs8jJXh85aXqwEXiL+tqtOut07TWgyaGzAAfTM+gKckrrncyeGEZPcaRgm2Q==}
     engines: {node: '>=18'}
+    dev: true
+
+  /@csstools/css-syntax-patches-for-csstree@1.0.27:
+    resolution: {integrity: sha512-sxP33Jwg1bviSUXAV43cVYdmjt2TLnLXNqCWl9xmxHawWVjGz/kEbdkr7F9pxJNBN2Mh+dq0crgItbW6tQvyow==}
     dev: true
 
   /@csstools/css-tokenizer@3.0.4:
@@ -18422,8 +18437,8 @@ packages:
       strip-ansi: 7.1.2
     dev: false
 
-  /string-width@8.1.0:
-    resolution: {integrity: sha512-Kxl3KJGb/gxkaUMOjRsQ8IrXiGW75O4E3RPjFIINOVH8AMl2SQ/yWdTzWwF3FevIX9LcMAjJW+GRwAlAbTSXdg==}
+  /string-width@8.1.1:
+    resolution: {integrity: sha512-KpqHIdDL9KwYk22wEOg/VIqYbrnLeSApsKT/bSj6Ez7pn3CftUiLAv2Lccpq1ALcpLV9UX1Ppn92npZWu2w/aw==}
     engines: {node: '>=20'}
     dependencies:
       get-east-asian-width: 1.4.0
@@ -18618,36 +18633,36 @@ packages:
       client-only: 0.0.1
       react: 19.2.4
 
-  /stylelint-config-css-modules@4.6.0(stylelint@17.1.1):
+  /stylelint-config-css-modules@4.6.0(stylelint@17.3.0):
     resolution: {integrity: sha512-LIgfzNmpiwf/eDxQva2g1mj+mqDpvP1XwOKJC7DSWY/iCQAZdIKnY42jbXuY8thcFN4yM/uF1xfCyfd7fJKh6w==}
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      stylelint: 17.1.1(typescript@5.5.4)
+      stylelint: 17.3.0(typescript@5.5.4)
     optionalDependencies:
-      stylelint-scss: 7.0.0(stylelint@17.1.1)
+      stylelint-scss: 7.0.0(stylelint@17.3.0)
     dev: true
 
-  /stylelint-config-recommended@18.0.0(stylelint@17.1.1):
+  /stylelint-config-recommended@18.0.0(stylelint@17.3.0):
     resolution: {integrity: sha512-mxgT2XY6YZ3HWWe3Di8umG6aBmWmHTblTgu/f10rqFXnyWxjKWwNdjSWkgkwCtxIKnqjSJzvFmPT5yabVIRxZg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^17.0.0
     dependencies:
-      stylelint: 17.1.1(typescript@5.5.4)
+      stylelint: 17.3.0(typescript@5.5.4)
     dev: true
 
-  /stylelint-config-standard@40.0.0(stylelint@17.1.1):
+  /stylelint-config-standard@40.0.0(stylelint@17.3.0):
     resolution: {integrity: sha512-EznGJxOUhtWck2r6dJpbgAdPATIzvpLdK9+i5qPd4Lx70es66TkBPljSg4wN3Qnc6c4h2n+WbUrUynQ3fanjHw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^17.0.0
     dependencies:
-      stylelint: 17.1.1(typescript@5.5.4)
-      stylelint-config-recommended: 18.0.0(stylelint@17.1.1)
+      stylelint: 17.3.0(typescript@5.5.4)
+      stylelint-config-recommended: 18.0.0(stylelint@17.3.0)
     dev: true
 
-  /stylelint-scss@7.0.0(stylelint@17.1.1):
+  /stylelint-scss@7.0.0(stylelint@17.3.0):
     resolution: {integrity: sha512-H88kCC+6Vtzj76NsC8rv6x/LW8slBzIbyeSjsKVlS+4qaEJoDrcJR4L+8JdrR2ORdTscrBzYWiiT2jq6leYR1Q==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
@@ -18661,17 +18676,18 @@ packages:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
-      stylelint: 17.1.1(typescript@5.5.4)
+      stylelint: 17.3.0(typescript@5.5.4)
     dev: true
     optional: true
 
-  /stylelint@17.1.1(typescript@5.5.4):
-    resolution: {integrity: sha512-SBHVcLEcRF1M9OkD3oT0hT2PayDNLw2hd+aovmzfNQ2ys4Xd3oS9ZNizILWqhQvW802AqKN/vUTMwJqQYMBlWw==}
+  /stylelint@17.3.0(typescript@5.5.4):
+    resolution: {integrity: sha512-1POV91lcEMhj6SLVaOeA0KlS9yattS+qq+cyWqP/nYzWco7K5jznpGH1ExngvPlTM9QF1Kjd2bmuzJu9TH2OcA==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     dependencies:
+      '@csstools/css-calc': 3.1.1(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
-      '@csstools/css-syntax-patches-for-csstree': 1.0.25
+      '@csstools/css-syntax-patches-for-csstree': 1.0.27
       '@csstools/css-tokenizer': 4.0.0
       '@csstools/media-query-list-parser': 5.0.0(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)
       '@csstools/selector-resolve-nested': 4.0.0(postcss-selector-parser@7.1.1)
@@ -18703,7 +18719,7 @@ packages:
       postcss-safe-parser: 7.0.1(postcss@8.5.6)
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
-      string-width: 8.1.0
+      string-width: 8.1.1
       supports-hyperlinks: 4.4.0
       svg-tags: 1.0.0
       table: 6.9.0
