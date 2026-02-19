@@ -13,7 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.32
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.55.0
-	github.com/aws/aws-sdk-go-v2/service/kms v1.49.5
+	github.com/aws/aws-sdk-go-v2/service/kms v1.50.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.47.0
