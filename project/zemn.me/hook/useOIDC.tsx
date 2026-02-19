@@ -1,4 +1,5 @@
-import { QueryKey, SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+import { SkipToken, skipToken, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
 import {
@@ -14,6 +15,34 @@ import * as option from '#root/ts/option/types.js';
 import { Err, Ok } from '#root/ts/result/result.js';
 import { Second } from '#root/ts/time/duration.js';
 
+
+
+export function useOIDCQueryKey(
+	issuer: string,
+	params:
+		option.Option<OIDCImplicitRequest>
+		= option.None
+) {
+	return params <
+		readonly ['use-oidc', string],
+		readonly ['use-oidc', string, OIDCImplicitRequest]
+	>(
+		() => ['use-oidc', issuer] as const,
+		v => ['use-oidc', issuer, v] as const,
+	);
+}
+
+export function useInvalidateOIDC(issuer: string) {
+	const queryClient = useQueryClient();
+	const queryKey = useOIDCQueryKey(issuer);
+
+	return useCallback(
+		() => queryClient.resetQueries({
+			queryKey,
+		}),
+		[queryClient, queryKey]
+	);
+}
 
 export type OIDCImplicitRequest = Omit<
 	OIDCAuthenticationRequest,
@@ -37,9 +66,7 @@ async function fetchEntropy(): Promise<string> {
 export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	id_token: Future<string, void, Error>,
 	access_token: Future<string, void, Error>,
-	promptForLogin: Future<() => Promise<void>, void, Error>,
-	/** can use to cache bust dependent queries */
-	cacheKey: QueryKey
+	promptForLogin: Future<() => Promise<void>, void, Error>
 ] {
 	const oidc_config = useOIDCConfig(issuer);
 
@@ -80,12 +107,9 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 			return u;
 		}
 	)
-	const cacheKeyArgs: QueryKey = [issuer, params];
-
-	// very close but we need to abstract and pipeline this more cleanly.
 
 	const callbackQuery = useQuery({
-		queryKey: ['use-oidc', ...cacheKeyArgs],
+		queryKey: useOIDCQueryKey(issuer, option.Some(params)),
 		gcTime: Infinity, // don't evict auth tokens
 		queryFn: targetURL(
 			u => async () => {
@@ -171,7 +195,6 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	return [
 		id_token,
 		access_token,
-		requestConsent,
-		cacheKeyArgs,
+		requestConsent
 	] as const;
 }

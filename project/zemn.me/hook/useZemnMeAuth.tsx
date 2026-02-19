@@ -1,19 +1,39 @@
-import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+import { SkipToken, skipToken, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
+import { GOOGLE_ISSUER_DOMAIN } from '#root/project/zemn.me/constants/constants.js';
 import { useGoogleAuth } from '#root/project/zemn.me/hook/useGoogleAuth.js';
+import { useInvalidateOIDC } from '#root/project/zemn.me/hook/useOIDC.js';
 import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { future_and_then, future_declare_dependency } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
+export function useZemnMeAuthQueryKey() {
+	return ['zemn-me-oidc-id-token'] as const;
+}
 
+/** Clears zemn.me auth state and underlying Google OIDC auth queries. */
+export function useInvalidateZemnMeAuth() {
+	const queryClient = useQueryClient();
+	const invalidateOIDC = useInvalidateOIDC(GOOGLE_ISSUER_DOMAIN);
+	const queryKey = useZemnMeAuthQueryKey();
 
-
+	return useCallback(
+		async () => {
+			await invalidateOIDC();
+			await queryClient.resetQueries({
+				queryKey,
+			});
+		},
+		[invalidateOIDC, queryClient, queryKey]
+	);
+}
 
 export function useZemnMeAuth() {
 	const apiFetchClient = useFetchClient();
-	const [fut_id_token, fut_google_access_token, fut_promptForLogin, cacheKey] = useGoogleAuth([
+	const [fut_id_token, fut_google_access_token, fut_promptForLogin] = useGoogleAuth([
 	]);
 
 	const request_body = future_and_then(
@@ -30,7 +50,7 @@ export function useZemnMeAuth() {
 
 	const exchangedTokenRsp = useQueryFuture(useQuery({
 		gcTime: Infinity, // don't evict auth tokens
-		queryKey: ['zemn-me-oidc-id-token', ...cacheKey],
+		queryKey: useZemnMeAuthQueryKey(),
 		queryFn: request_body(
 			body => () => apiFetchClient
 			.POST('/oauth2/token', {
