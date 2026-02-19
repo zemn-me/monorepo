@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.19.0
-    version: 43.19.0(typanion@3.14.0)
+    specifier: 43.19.1
+    version: 43.19.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -9718,12 +9718,12 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  /emojibase-regex@16.0.0:
-    resolution: {integrity: sha512-ZMp31BkzBWNW+T73of6NURL6nXQa5GkfKneOkr3cEwBDVllbW/2nuva7NO0J3RjaQ07+SZQNgPTGZ4JlIhmM2Q==}
+  /emojibase-regex@17.0.0:
+    resolution: {integrity: sha512-iWlqiz2l2zNf2lDqgN/7qjqKHVUX6H4D+8F5vDZkgjyWyRFXcA5K4rxkoTl7AJmyjHnoytw0m/do2SrGByui+g==}
     dev: true
 
-  /emojibase@16.0.0:
-    resolution: {integrity: sha512-Nw2m7JLIO4Ou2X/yZPRNscHQXVbbr6SErjkJ7EooG7MbR3yDZszCv9KTizsXFc7yZl0n3WF+qUKIC/Lw6H9xaQ==}
+  /emojibase@17.0.0:
+    resolution: {integrity: sha512-bXdpf4HPY3p41zK5swVKZdC/VynsMZ4LoLxdYDE+GucqkFwzcM1GVc4ODfYAlwoKaf2U2oNNUoOO78N96ovpBA==}
     engines: {node: '>=18.12.0'}
     dev: true
 
@@ -16795,8 +16795,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.19.0(typanion@3.14.0):
-    resolution: {integrity: sha512-6jzEgODQFcxJDTGJibi12UTWOGHbzq9xBkXsZwV+UXNrjmkL59LydNAYA1pjZey191qZ6ZWoYM0M7OjbiBzucQ==}
+  /renovate@43.19.1(typanion@3.14.0):
+    resolution: {integrity: sha512-yLYCvb2qleMHffCszTe30ym5xjoc8LfYAoU7MFE7udFV5SC0LxG+VPPQt2SVIJ1YXnyCfHmAMdBNrAnPuRE45Q==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16857,8 +16857,8 @@ packages:
       editorconfig: 3.0.1
       email-addresses: 5.0.0
       emoji-regex: 10.6.0
-      emojibase: 16.0.0
-      emojibase-regex: 16.0.0
+      emojibase: 17.0.0
+      emojibase-regex: 17.0.0
       execa: 8.0.1
       extract-zip: 2.0.1
       find-packages: 10.0.4
