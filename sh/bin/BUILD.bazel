@@ -125,6 +125,11 @@ alias(
     actual = "//bin/linux/pulumi",
 )
 
+alias(
+    name = "cargo",
+    actual = "@cargo//:cargo__cargo",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
