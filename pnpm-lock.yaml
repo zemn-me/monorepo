@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.18.0
-    version: 43.18.0(typanion@3.14.0)
+    specifier: 43.19.0
+    version: 43.19.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -15856,6 +15856,7 @@ packages:
   /prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
     dependencies:
       detect-libc: 2.1.2
@@ -16794,8 +16795,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.18.0(typanion@3.14.0):
-    resolution: {integrity: sha512-/U6mOw4gWBUqCtmBiquYZgLkumkLvpHFkqhDrMDFvwUxZlzXsQw3jPDtzet5Y3V6UcOKQFcRODSQ3nyx2WQW/A==}
+  /renovate@43.19.0(typanion@3.14.0):
+    resolution: {integrity: sha512-6jzEgODQFcxJDTGJibi12UTWOGHbzq9xBkXsZwV+UXNrjmkL59LydNAYA1pjZey191qZ6ZWoYM0M7OjbiBzucQ==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
