@@ -130,6 +130,11 @@ alias(
     actual = "@cargo//:cargo__cargo",
 )
 
+alias(
+    name = "rg",
+    actual = "@cargo//:ripgrep__rg",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
