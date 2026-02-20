@@ -31,7 +31,8 @@ func TestGrievancePortalEndToEnd(t *testing.T) {
 	}
 	defer driver.Close()
 
-	loginToGrievancePortal(t, driver)
+	openGrievancePortal(t, driver)
+	login(t, driver)
 
 	grievanceName := fmt.Sprintf("Integration grievance %d", time.Now().UnixNano())
 	grievanceDescription := "integration test grievance description"
@@ -56,7 +57,8 @@ func TestGrievancePortalDisplaysClientTimeZone(t *testing.T) {
 	}
 	defer driver.Close()
 
-	loginToGrievancePortal(t, driver)
+	openGrievancePortal(t, driver)
+	login(t, driver)
 	restore := forceGrievanceSubmissionTimeZone(t, driver, "Pacific/Honolulu")
 	defer restore()
 
@@ -87,7 +89,8 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 	}
 	defer driver.Close()
 
-	loginToGrievancePortal(t, driver)
+	openGrievancePortal(t, driver)
+	login(t, driver)
 	initialCount, err := grievanceCount(driver)
 	if err != nil {
 		t.Fatalf("initial grievance count: %v", err)
@@ -104,7 +107,7 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 	_ = entry
 }
 
-func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
+func openGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
 	portalURL, err := nextServerRoot()
 	if err != nil {
@@ -114,34 +117,8 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	if err := driver.Get(portalURL.String()); err != nil {
 		t.Fatalf("navigate grievance portal: %v", err)
 	}
-	if alreadyLoggedIn(driver) {
-		return
-	}
-
 	if hostVal, err := driver.ExecuteScript("return window.location.hostname;", nil); err == nil {
 		t.Logf("grievance portal hostname: %v", hostVal)
-	}
-
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
-		if alreadyLoggedIn(driver) {
-			return
-		}
-		t.Fatalf("oidc login readiness: %v", err)
-	}
-
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
-		if alreadyLoggedIn(driver) {
-			return
-		}
-		t.Fatalf("oidc login: %v", err)
-	}
-
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
-		if alreadyLoggedIn(driver) {
-			return
-		}
-		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
-		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
 	}
 }
 
@@ -262,13 +239,6 @@ func waitForGrievanceCount(driver selenium.WebDriver, want int, timeout time.Dur
 		}
 		return n >= want, nil
 	}, timeout)
-}
-
-func alreadyLoggedIn(driver selenium.WebDriver) bool {
-	if _, err := driver.FindElement(selenium.ByXPATH, "//*[contains(text(),'You are logged in.')]"); err == nil {
-		return true
-	}
-	return false
 }
 
 func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, timeout time.Duration) error {
