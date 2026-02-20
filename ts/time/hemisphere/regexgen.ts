@@ -29,7 +29,7 @@ const body =
 		northernHemiRes.length < southernHemiRes.length
 		? `\
 export const isNorthernHemisphereTz = (s: string) => ${northernHemiRes}.test(s);
-export const isSouthernHemisphereTz = (s: string) => !isNortherHemisphereTz(s);`
+export const isSouthernHemisphereTz = (s: string) => !isNorthernHemisphereTz(s);`
 		: `\
 export const isSouthernHemisphereTz = (s: string) => ${southernHemiRes}.test(s)
 export const isNorthernHemisphereTz = (s: string) => !isSouthernHemisphereTz(s)`
