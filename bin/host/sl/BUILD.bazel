@@ -1,0 +1,50 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "sl",
+    actual = select({
+        "@bazel_tools//src/conditions:linux_x86_64": ":sl_linux",
+        "@bazel_tools//src/conditions:darwin_arm64": "@sapling_darwin_arm64//:sl",
+        "@bazel_tools//src/conditions:windows_x64": "@sapling_windows_amd64//:sl.exe",
+        "//conditions:default": ":unsupported",
+    }),
+    visibility = ["//:__subpackages__"],
+)
+
+sh_binary(
+    name = "sl_linux",
+    srcs = ["sl_linux.sh"],
+    data = [
+        "@sapling_linux_amd64//:usr/bin/sl",
+        "@ubuntu2004_libpython3_8//:usr/lib/x86_64-linux-gnu/libpython3.8.so.1.0",
+        "@ubuntu2004_libpython3_8_minimal//:python38_minimal",
+        "@ubuntu2004_libpython3_8_minimal//:usr/lib/python3.8/encodings/__init__.py",
+        "@ubuntu2004_libpython3_8_stdlib//:python38_stdlib",
+        "@ubuntu2004_libpython3_8_stdlib//:usr/lib/python3.8/dataclasses.py",
+        "@ubuntu2004_libssl1_1//:usr/lib/x86_64-linux-gnu/libcrypto.so.1.1",
+        "@ubuntu2004_libssl1_1//:usr/lib/x86_64-linux-gnu/libssl.so.1.1",
+    ],
+)
+
+sh_binary(
+    name = "unsupported",
+    srcs = ["unsupported.sh"],
+)
+
+sh_test(
+    name = "smoke",
+    srcs = ["smoke.sh"],
+    data = [":sl"],
+    env = {
+        "SL_BINARY": "$(rlocationpath :sl)",
+    },
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
