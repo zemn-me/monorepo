@@ -1,7 +1,7 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -11,7 +11,9 @@ import { PendingPip } from '#root/project/zemn.me/components/PendingPip/PendingP
 import { PhoneNumberDisplay } from '#root/project/zemn.me/components/PhoneNumberDisplay/PhoneNumberDisplay.js';
 import { PhoneNumberInput } from '#root/project/zemn.me/components/PhoneNumberInput/PhoneNumberInput.js';
 import {
+	useFetchClient,
 	useGetAdminUid,
+	useInvalidateCallboxLogs,
 	useZemnMeApi,
 } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
@@ -38,6 +40,8 @@ interface SettingsEditorProps {
 }
 
 type CallboxSettings = components['schemas']['CallboxSettings'];
+type CallboxLogEntry = components['schemas']['CallboxLogEntry'];
+type CallboxLogPage = components['schemas']['CallboxLogPage'];
 
 const defaultValues = {
 	authorizers: [],
@@ -109,12 +113,167 @@ function maybeMessage(m: string | undefined) {
 	return m;
 }
 
+function formatLogWhen(value: CallboxLogEntry['when']) {
+	const date = value instanceof Date ? value : new Date(value);
+	if (Number.isNaN(date.getTime())) {
+		return String(value);
+	}
+	return date.toLocaleString();
+}
+
+function describeLogEntry(entry: CallboxLogEntry) {
+	switch (entry.kind) {
+		case 'call_received':
+			return {
+				details: {
+					from: entry.from,
+					to: entry.to,
+				},
+			};
+		case 'entry_party_mode':
+			return { details: null };
+		case 'entry_code_denied':
+		case 'entry_code_allowed':
+			return {
+				details: {
+					digits: entry.digits,
+				},
+			};
+		case 'entry_authorizer_dial':
+			return {
+				details: {
+					number: entry.number,
+					attempt: entry.attempt,
+				},
+			};
+		case 'entry_authorizer_status':
+			return {
+				details: {
+					status: entry.status,
+					attempt: entry.attempt,
+				},
+			};
+		case 'settings_update':
+			return {
+				details: {
+					settings: entry.settings,
+				},
+			};
+		default:
+			return { details: entry };
+	}
+}
+
+function CallboxLog({ Authorization }: { readonly Authorization: string }) {
+	const $api = useZemnMeApi(Authorization);
+	const fetchClient = useFetchClient(Authorization);
+	const logQuery = $api.useQuery('get', '/callbox/logs', {
+		headers: { Authorization },
+		params: {
+			query: {
+				limit: 100,
+			},
+		},
+	});
+	const [entries, setEntries] = useState<CallboxLogEntry[] | null>(null);
+	const [nextCursor, setNextCursor] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (logQuery.status !== 'success') return;
+		const data = logQuery.data as CallboxLogPage | undefined;
+		if (!data) return;
+		setEntries(data.items ?? []);
+		setNextCursor(data.nextCursor ?? null);
+	}, [logQuery.status, logQuery.data]);
+
+	if (logQuery.status === 'pending') {
+		return (
+			<fieldset>
+				<legend>Callbox Log</legend>
+				<output>Loading...</output>
+			</fieldset>
+		);
+	}
+
+	if (logQuery.status === 'error') {
+		return (
+			<fieldset>
+				<legend>Callbox Log</legend>
+				<details>
+					<summary>❌</summary>
+					{String(logQuery.error)}
+				</details>
+			</fieldset>
+		);
+	}
+
+	const logs = entries ?? [];
+
+	return (
+		<fieldset>
+			<legend>Callbox Log</legend>
+			{logs.length === 0 ? (
+				<output>No log entries yet.</output>
+			) : (
+				<ol>
+					{logs.map((entry, index) => {
+						const { details } = describeLogEntry(entry);
+						const detailsText =
+							details !== null ? JSON.stringify(details, null, 2) : null;
+						return (
+							<li key={`${entry.id}-${entry.kind}-${index}`}>
+								<div>
+									<time dateTime={String(entry.when)}>
+										{formatLogWhen(entry.when)}
+									</time>{' '}
+									<code>{entry.kind}</code> {entry.message}
+								</div>
+								{detailsText ? (
+									<details>
+										<summary>Details</summary>
+										<pre>{detailsText}</pre>
+									</details>
+								) : null}
+							</li>
+						);
+					})}
+				</ol>
+			)}
+			{nextCursor ? (
+				<button
+					onClick={async e => {
+						e.preventDefault();
+						const resp = await fetchClient.GET('/callbox/logs', {
+							params: {
+								query: {
+									limit: 100,
+									cursor: nextCursor,
+								},
+							},
+						});
+						if (resp.data) {
+							setEntries(prev => [
+								...(prev ?? []),
+								...(resp.data.items ?? []),
+							]);
+							setNextCursor(resp.data.nextCursor ?? null);
+						}
+					}}
+				>
+					Load more
+				</button>
+			) : null}
+		</fieldset>
+	);
+}
+
 function SettingsEditor({ Authorization }: SettingsEditorProps) {
 	const $api = useZemnMeApi(Authorization);
 	const idbase = useId();
 	const id = (...s: string[]) => [idbase, ...s].join('/');
 
 	const queryClient = useQueryClient();
+	const invalidateCallboxLogs = useInvalidateCallboxLogs();
 
 	const remoteSettingsParams = [
 		'get',
@@ -171,6 +330,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 			void queryClient.invalidateQueries({
 				queryKey: remoteSettingsKey,
 			});
+			invalidateCallboxLogs();
 		},
 	});
 	const authorizerFields = useFieldArray({
@@ -495,6 +655,7 @@ export default function Admin() {
 				<DisplayAdminUid Authorization={Authorization} />
 				<DisplayPhoneNumber Authorization={Authorization} />
 				<SettingsEditor Authorization={Authorization} />
+				<CallboxLog Authorization={Authorization} />
 			</>
 		)),
 		login

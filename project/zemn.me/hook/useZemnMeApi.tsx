@@ -57,6 +57,17 @@ function useinvalidateGrievances() {
 	return () => void queryClient.invalidateQueries({ queryKey: ["get", "/grievances"] });
 }
 
+export function useInvalidateCallboxLogs() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			predicate: query =>
+				Array.isArray(query.queryKey) &&
+				query.queryKey[0] === "get" &&
+				query.queryKey[1] === "/callbox/logs",
+		});
+}
+
 export function usePostGrievances(Authorization: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(Authorization).useMutation("post", "/grievances", {

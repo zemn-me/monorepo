@@ -687,6 +687,185 @@ components:
           items:
             $ref: "#/components/schemas/EntryCodeEntry"
 
+    CallboxLogEntryCallReceived:
+      description: >
+        Callbox received an inbound call.
+      type: object
+      required: [id, when, kind, message]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [call_received]
+        message:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+
+    CallboxLogEntryPartyMode:
+      description: >
+        Entry allowed via party mode.
+      type: object
+      required: [id, when, kind, message]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [entry_party_mode]
+        message:
+          type: string
+
+    CallboxLogEntryCodeDenied:
+      description: >
+        Entry denied because digits did not match an entry code.
+      type: object
+      required: [id, when, kind, message, digits]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [entry_code_denied]
+        message:
+          type: string
+        digits:
+          type: string
+
+    CallboxLogEntryCodeAllowed:
+      description: >
+        Entry allowed because digits matched an entry code.
+      type: object
+      required: [id, when, kind, message, digits]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [entry_code_allowed]
+        message:
+          type: string
+        digits:
+          type: string
+
+    CallboxLogEntryAuthorizerDial:
+      description: >
+        Callbox dialed an authorizer number.
+      type: object
+      required: [id, when, kind, message, number, attempt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [entry_authorizer_dial]
+        message:
+          type: string
+        number:
+          type: string
+        attempt:
+          type: integer
+
+    CallboxLogEntryAuthorizerStatus:
+      description: >
+        Authorizer dial completed with a status.
+      type: object
+      required: [id, when, kind, message, status, attempt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [entry_authorizer_status]
+        message:
+          type: string
+        status:
+          type: string
+        attempt:
+          type: integer
+
+    CallboxLogEntrySettingsUpdate:
+      description: >
+        Callbox settings were updated.
+      type: object
+      required: [id, when, kind, message, settings]
+      properties:
+        id:
+          type: string
+          format: uuid
+        when:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [settings_update]
+        message:
+          type: string
+        settings:
+          $ref: "#/components/schemas/CallboxSettings"
+
+    CallboxLogEntry:
+      description: >
+        Log entry describing callbox settings updates or entry activity.
+      oneOf:
+        - $ref: "#/components/schemas/CallboxLogEntryCallReceived"
+        - $ref: "#/components/schemas/CallboxLogEntryPartyMode"
+        - $ref: "#/components/schemas/CallboxLogEntryCodeDenied"
+        - $ref: "#/components/schemas/CallboxLogEntryCodeAllowed"
+        - $ref: "#/components/schemas/CallboxLogEntryAuthorizerDial"
+        - $ref: "#/components/schemas/CallboxLogEntryAuthorizerStatus"
+        - $ref: "#/components/schemas/CallboxLogEntrySettingsUpdate"
+      discriminator:
+        propertyName: kind
+        mapping:
+          call_received: "#/components/schemas/CallboxLogEntryCallReceived"
+          entry_party_mode: "#/components/schemas/CallboxLogEntryPartyMode"
+          entry_code_denied: "#/components/schemas/CallboxLogEntryCodeDenied"
+          entry_code_allowed: "#/components/schemas/CallboxLogEntryCodeAllowed"
+          entry_authorizer_dial: "#/components/schemas/CallboxLogEntryAuthorizerDial"
+          entry_authorizer_status: "#/components/schemas/CallboxLogEntryAuthorizerStatus"
+          settings_update: "#/components/schemas/CallboxLogEntrySettingsUpdate"
+    CallboxLogPage:
+      description: >
+        Page of callbox log entries.
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallboxLogEntry'
+        nextCursor:
+          type: string
+          description: Opaque cursor for the next page.
+
 
     Error:
       description: >
@@ -855,6 +1034,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CallboxSettings'
+  /callbox/logs:
+    get:
+      description: >
+        Returns log entries for callbox activity and settings updates.
+      security:
+        - OIDC: []
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of log entries to return.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+        - name: cursor
+          in: query
+          description: Opaque cursor for pagination.
+          required: false
+          schema:
+            type: string
+      responses:
+        "500":
+          description: >
+            Something went wrong.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "200":
+          description: >
+            Returns recent callbox log entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallboxLogPage'
   /phone/number:
     get:
       summary: Returns the current phone number for the callbox.
