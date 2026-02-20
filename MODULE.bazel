@@ -470,6 +470,8 @@ bazel_dep(name = "rules_rust", version = "0.68.1")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
+rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_tools")
+
 # renovate:
 # 	datasource=github-releases
 # 	versioning=rust
@@ -482,6 +484,12 @@ rust.toolchain(
 )
 use_repo(rust, "rust_toolchains")
 
+rust_host_tools.host_tools(
+    name = "rust_host_tools_nightly",
+    version = "nightly",
+)
+use_repo(rust_host_tools, "rust_host_tools_nightly")
+
 register_toolchains("@rust_toolchains//:all")
 
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
@@ -492,6 +500,23 @@ crate.from_cargo(
     manifests = ["//:Cargo.toml"],
 )
 use_repo(crate, "cargo")
+
+# Binary-only Cargo deps (e.g. ripgrep's `rg`) are managed separately as bindeps.
+bindeps = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")
+bindeps.spec(
+    artifact = "bin",
+    package = "ripgrep",
+    version = "=15.1.0",
+)
+bindeps.annotation(
+    crate = "ripgrep",
+    gen_all_binaries = True,
+)
+bindeps.from_specs(
+    name = "bindeps",
+    host_tools = "@rust_host_tools_nightly",
+)
+use_repo(bindeps, "bindeps")
 
 ###############################################################################
 #                                     ruff                                    #
