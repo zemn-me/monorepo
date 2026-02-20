@@ -3,6 +3,7 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
+import HTTPRedirect from '#root/ts/pulumi/lib/http_redirect/http_redirect.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
@@ -32,6 +33,17 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				status: 'Active',
 				tagKey: tag,
+			},
+			{ parent: this }
+		);
+
+		const rootRedirect = new HTTPRedirect(
+			`${name}_shadwell_im_redirect`,
+			{
+				zoneId: args.zoneId,
+				domain: args.domain,
+				tags,
+				redirectTo: 'https://zemn.me',
 			},
 			{ parent: this }
 		);
@@ -101,6 +113,13 @@ export class Component extends Pulumi.ComponentResource {
 			tags,
 		});
 
-		super.registerOutputs({ site: this.site, luke, kate, lucy, anna });
+		super.registerOutputs({
+			rootRedirect,
+			site: this.site,
+			luke,
+			kate,
+			lucy,
+			anna,
+		});
 	}
 }
