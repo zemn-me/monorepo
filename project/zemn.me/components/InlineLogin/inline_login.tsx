@@ -96,13 +96,29 @@ export function InlineLogin() {
 
 
 	return idTokenData(
-		f => (f.name ?? f.sub)
-			? <>Logged in as <i>{f.name ?? f.sub}</i>
+		f => {
+			const fullName = [f.given_name, f.family_name]
+				.filter((part): part is string => part !== undefined && part.length > 0)
+				.join(" ");
+			const displayName = f.name ?? (fullName || f.sub);
+
+			return displayName
+			? <span className={style.loggedIn}>
+				{f.picture
+					? <img
+						alt={`${displayName} profile picture`}
+						className={style.profilePicture}
+						src={f.picture}
+					/>
+					: undefined}
+				<span className={style.loggedInText}>Logged in as <i>{displayName}</i></span>
 				<sup><TimeLeftIndicator
 				end={new Date(f.exp * 1000)}
 				start={new Date(f.iat * 1000)}
-				/></sup >.</>
-			: <>Logged in.</>
+				/></sup >.
+			</span>
+			: <>Logged in.</>;
+		}
 		,
 		() => loginButton(false),
 		err => {

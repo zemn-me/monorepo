@@ -47,6 +47,7 @@ func main() {
 				"openid",
 				"https://www.googleapis.com/auth/contacts",
 				"https://www.googleapis.com/auth/contacts.readonly",
+				"profile",
 			},
 			"claims_supported":         []string{},
 		})

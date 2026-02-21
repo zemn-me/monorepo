@@ -118,6 +118,21 @@ func issuerFromToken(raw string) (OIDCIssuer, error) {
 
 var zemnMeClient = "zemn.me"
 
+type mappedIdentity struct {
+	Subject    OIDCSubject
+	Picture    string
+	GivenName  string
+	FamilyName string
+	Name       string
+}
+
+func strPtrIfNonEmpty(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return &value
+}
+
 func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenRequestObject) (ro PostOauth2TokenResponseObject, err error) {
 	if request.Body == nil {
 		e := "missing request body"
@@ -193,13 +208,13 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
 
-	localId, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
+	mappedIdentity, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
 	if err != nil {
 		s.log.Printf("Token exchange failed for issuer=%s: %v", issuer, err)
 		return
 	}
 
-	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, localId)
+	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, mappedIdentity.Subject)
 
 	apiBase, err := ApiRoot()
 	if err != nil {
@@ -209,11 +224,15 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 	expiresAt := time.Now().Add(time.Hour * 24 * 30)
 
 	ourToken, err := s.IssueIdToken(ctx, IdToken{
-		Aud: zemnMeClient,
-		Iat: time.Now().Unix(),
-		Sub: localId,
-		Iss: apiBase.String(),
-		Exp: expiresAt.Unix(),
+		Aud:        zemnMeClient,
+		Iat:        time.Now().Unix(),
+		Sub:        mappedIdentity.Subject,
+		Iss:        apiBase.String(),
+		Exp:        expiresAt.Unix(),
+		Picture:    strPtrIfNonEmpty(mappedIdentity.Picture),
+		GivenName:  strPtrIfNonEmpty(mappedIdentity.GivenName),
+		FamilyName: strPtrIfNonEmpty(mappedIdentity.FamilyName),
+		Name:       strPtrIfNonEmpty(mappedIdentity.Name),
 	})
 	if err != nil {
 		return
@@ -249,7 +268,7 @@ func audienceSummary(audience *TokenExchangeRequest_Audience) string {
 	return s
 }
 
-func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstreamIssuerConfig, rawToken string) (OIDCSubject, error) {
+func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstreamIssuerConfig, rawToken string) (mappedIdentity, error) {
 	var lastErr error
 	for audience, subjectMappings := range cfg.Audience {
 		verifier := provider.Verifier(&oidc.Config{ClientID: string(audience)})
@@ -260,13 +279,27 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 			continue
 		}
 
+		upstreamClaims := upstreamIdentityClaims(token)
+
 		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
-			return subject, nil
+			return mappedIdentity{
+				Subject:    subject,
+				Picture:    upstreamClaims.Picture,
+				GivenName:  upstreamClaims.GivenName,
+				FamilyName: upstreamClaims.FamilyName,
+				Name:       upstreamClaims.Name,
+			}, nil
 		}
 
 		for _, mapped := range subjectMappings {
 			if mapped == OIDCSubject(token.Subject) {
-				return mapped, nil
+				return mappedIdentity{
+					Subject:    mapped,
+					Picture:    upstreamClaims.Picture,
+					GivenName:  upstreamClaims.GivenName,
+					FamilyName: upstreamClaims.FamilyName,
+					Name:       upstreamClaims.Name,
+				}, nil
 			}
 		}
 
@@ -274,8 +307,28 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 	}
 
 	if lastErr != nil {
-		return "", fmt.Errorf("token verification failed: %w", lastErr)
+		return mappedIdentity{}, fmt.Errorf("token verification failed: %w", lastErr)
 	}
 
-	return "", errors.New("token verification failed")
+	return mappedIdentity{}, errors.New("token verification failed")
+}
+
+func upstreamIdentityClaims(token *oidc.IDToken) mappedIdentity {
+	var tokenClaims struct {
+		Picture    string `json:"picture"`
+		GivenName  string `json:"given_name"`
+		FamilyName string `json:"family_name"`
+		Name       string `json:"name"`
+	}
+
+	if err := token.Claims(&tokenClaims); err != nil {
+		return mappedIdentity{}
+	}
+
+	return mappedIdentity{
+		Picture:    tokenClaims.Picture,
+		GivenName:  tokenClaims.GivenName,
+		FamilyName: tokenClaims.FamilyName,
+		Name:       tokenClaims.Name,
+	}
 }
