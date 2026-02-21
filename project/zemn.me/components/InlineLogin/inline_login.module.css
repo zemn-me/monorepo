@@ -25,3 +25,23 @@
 	width: .6em;
 	vertical-align: middle;
 }
+
+.loggedIn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+}
+
+.loggedInText {
+	max-width: 16em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.profilePicture {
+	height: 1.2em;
+	width: 1.2em;
+	border-radius: 50%;
+	object-fit: cover;
+}
