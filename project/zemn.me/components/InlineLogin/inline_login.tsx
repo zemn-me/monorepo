@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { ProgressCircle } from "#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js";
-import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
+import { useInvalidateZemnMeAuth, useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import { background } from "#root/ts/promise/ignore_result.js";
@@ -53,6 +53,12 @@ function TimeLeftIndicator(
 
 export function InlineLogin() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const invalidateZemnMeAuth = useInvalidateZemnMeAuth();
+
+	const onLogout = useCallback(
+		() => void invalidateZemnMeAuth(),
+		[invalidateZemnMeAuth],
+	);
 
 	const idTokenData = future_flatten_then(future_and_then(
 		fut_idToken,
@@ -101,7 +107,9 @@ export function InlineLogin() {
 				<sup><TimeLeftIndicator
 				end={new Date(f.exp * 1000)}
 				start={new Date(f.iat * 1000)}
-				/></sup >.</>
+				/></sup>. <button aria-label="Logout" className={style.inlineLogin} onClick={onLogout} type="button">
+				↩
+			</button></>
 			: <>Logged in.</>
 		,
 		() => loginButton(false),

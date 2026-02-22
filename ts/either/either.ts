@@ -20,7 +20,7 @@
  */
 /*#__NO_SIDE_EFFECTS__*/
 export type Either<L, R> =
-	<T>(onLeft: (l: L) => T, onRight: (r: R) => T) => T
+	<T1, T2>(onLeft: (l: L) => T1, onRight: (r: R) => T2) => T1 | T2
 
 // if you are getting 'onRight is not a function' errors around here, it's
 // likely that you are using React and an Either function is being set as
