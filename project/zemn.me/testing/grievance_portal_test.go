@@ -33,9 +33,8 @@ func TestGrievancePortalEndToEnd(t *testing.T) {
 
 	loginToGrievancePortal(t, driver)
 
-	grievanceName := fmt.Sprintf("Integration grievance %d", time.Now().UnixNano())
-	grievanceDescription := "integration test grievance description"
-	entry, _ := submitGrievanceForm(t, driver, grievanceName, grievanceDescription)
+	grievanceDescription := fmt.Sprintf("integration test grievance %d", time.Now().UnixNano())
+	entry, _ := submitGrievanceForm(t, driver, grievanceDescription)
 
 	descriptionNode, err := entry.FindElement(selenium.ByXPATH, ".//pre")
 	if err != nil {
@@ -60,9 +59,8 @@ func TestGrievancePortalDisplaysClientTimeZone(t *testing.T) {
 	restore := forceGrievanceSubmissionTimeZone(t, driver, "Pacific/Honolulu")
 	defer restore()
 
-	name := fmt.Sprintf("Integration grievance timezone %d", time.Now().UnixNano())
-	description := "verify timezone rendering"
-	entry, _ := submitGrievanceForm(t, driver, name, description)
+	description := fmt.Sprintf("verify timezone rendering %d", time.Now().UnixNano())
+	entry, _ := submitGrievanceForm(t, driver, description)
 	restore()
 	restore = func() {}
 
@@ -93,9 +91,8 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 		t.Fatalf("initial grievance count: %v", err)
 	}
 
-	name := fmt.Sprintf("Integration grievance refresh %d", time.Now().UnixNano())
-	description := "list should update without refresh"
-	entry, _ := submitGrievanceForm(t, driver, name, description)
+	description := fmt.Sprintf("list should update without refresh %d", time.Now().UnixNano())
+	entry, _ := submitGrievanceForm(t, driver, description)
 
 	if err := waitForGrievanceCount(driver, initialCount+1, 30*time.Second); err != nil {
 		t.Fatalf("grievance list did not update: %v", err)
@@ -145,11 +142,8 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	}
 }
 
-func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, name, description string) (selenium.WebElement, string) {
+func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, description string) (selenium.WebElement, string) {
 	t.Helper()
-	if err := fillFieldWithRetry(driver, selenium.ByCSSSelector, "input[name='name']", name, 15*time.Second); err != nil {
-		t.Fatalf("fill grievance name: %v", err)
-	}
 	if err := fillFieldWithRetry(driver, selenium.ByCSSSelector, "textarea[name='description']", description, 15*time.Second); err != nil {
 		t.Fatalf("fill grievance description: %v", err)
 	}
@@ -157,8 +151,8 @@ func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, name, descript
 		t.Fatalf("submit grievance form: %v", err)
 	}
 
-	entryXPath := grievanceEntryXPath(name)
-	entry, err := waitForGrievanceElement(driver, name, 60*time.Second)
+	entryXPath := grievanceEntryXPath(description)
+	entry, err := waitForGrievanceElement(driver, description, 60*time.Second)
 	if err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("wait for grievance entry: %v", err)
@@ -166,8 +160,8 @@ func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, name, descript
 	return entry, entryXPath
 }
 
-func grievanceEntryXPath(name string) string {
-	return fmt.Sprintf("//li[.//strong[normalize-space()='%s']]", name)
+func grievanceEntryXPath(description string) string {
+	return fmt.Sprintf("//li[.//pre[normalize-space()='%s']]", description)
 }
 
 func forceGrievanceSubmissionTimeZone(t *testing.T, driver *seleniumpkg.Driver, zone string) (restore func()) {
@@ -335,7 +329,7 @@ func isStaleElementErr(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "stale element reference")
 }
 
-func waitForGrievanceElement(driver selenium.WebDriver, name string, timeout time.Duration) (selenium.WebElement, error) {
+func waitForGrievanceElement(driver selenium.WebDriver, description string, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
 	var lastErr error
 	for time.Now().Before(deadline) {
@@ -346,15 +340,15 @@ func waitForGrievanceElement(driver selenium.WebDriver, name string, timeout tim
 			continue
 		}
 		for _, item := range elements {
-			strong, err := item.FindElement(selenium.ByCSSSelector, "strong")
+			pre, err := item.FindElement(selenium.ByCSSSelector, "pre")
 			if err != nil {
 				continue
 			}
-			text, err := strong.Text()
+			text, err := pre.Text()
 			if err != nil {
 				continue
 			}
-			if strings.TrimSpace(text) == name {
+			if strings.TrimSpace(text) == description {
 				return item, nil
 			}
 		}
@@ -363,5 +357,5 @@ func waitForGrievanceElement(driver selenium.WebDriver, name string, timeout tim
 	if lastErr == nil {
 		lastErr = fmt.Errorf("no grievances rendered")
 	}
-	return nil, fmt.Errorf("grievance %q not found: %w", name, lastErr)
+	return nil, fmt.Errorf("grievance %q not found: %w", description, lastErr)
 }

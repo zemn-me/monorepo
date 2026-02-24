@@ -8,6 +8,7 @@ export function useGoogleAuth(scopes: string[]) {
 			...scopes,
 			'https://www.googleapis.com/auth/contacts',
 			'https://www.googleapis.com/auth/contacts.readonly',
+			'email',
 			'profile',
 		].join(' '),
 	});
