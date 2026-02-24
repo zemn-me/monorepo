@@ -1,8 +1,10 @@
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import type { z } from "zod";
 
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { ProgressCircle } from "#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js";
+import { usePosterDisplayName } from "#root/project/zemn.me/hook/usePosterDisplayName.js";
 import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
@@ -48,6 +50,34 @@ function TimeLeftIndicator(
 	return <ProgressCircle className={style.indicator} loss progress={
 		done ? 1 : clampedProgress
 	} />
+}
+
+type OidcIdTokenClaims = z.infer<typeof OidcIdTokenClaimsSchema>;
+
+function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) {
+	const displayName = usePosterDisplayName({
+		email_address: claims.email,
+		given_name: claims.given_name,
+		family_name: claims.family_name,
+		sub: claims.sub,
+	});
+
+	return displayName
+		? <span className={style.loggedIn}>
+			{claims.picture
+				? <img
+					alt={`${displayName} profile picture`}
+					className={style.profilePicture}
+					src={claims.picture}
+				/>
+				: undefined}
+			<span className={style.loggedInText}>Logged in as <i>{displayName}</i></span>
+			<sup><TimeLeftIndicator
+			end={new Date(claims.exp * 1000)}
+			start={new Date(claims.iat * 1000)}
+			/></sup >.
+		</span>
+		: <>Logged in.</>;
 }
 
 
@@ -96,30 +126,7 @@ export function InlineLogin() {
 
 
 	return idTokenData(
-		f => {
-			const fullName = [f.given_name, f.family_name]
-				.filter((part): part is string => part !== undefined && part.length > 0)
-				.join(" ");
-			const displayName = f.name ?? (fullName || f.sub);
-
-			return displayName
-			? <span className={style.loggedIn}>
-				{f.picture
-					? <img
-						alt={`${displayName} profile picture`}
-						className={style.profilePicture}
-						src={f.picture}
-					/>
-					: undefined}
-				<span className={style.loggedInText}>Logged in as <i>{displayName}</i></span>
-				<sup><TimeLeftIndicator
-				end={new Date(f.exp * 1000)}
-				start={new Date(f.iat * 1000)}
-				/></sup >.
-			</span>
-			: <>Logged in.</>;
-		}
-		,
+		f => <InlineLoginContent claims={f} />,
 		() => loginButton(false),
 		err => {
 			// eslint-disable-next-line no-console

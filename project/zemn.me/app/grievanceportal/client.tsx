@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import style from '#root/project/zemn.me/app/grievanceportal/style.module.css';
+import { usePosterDisplayName } from '#root/project/zemn.me/hook/usePosterDisplayName.js';
 import {
 	useGetGrievances,
 	usePostGrievances,
@@ -34,7 +35,6 @@ function clientTimeZone(): string {
 
 function makeDefaultGrievance(): NewGrievance {
 	return {
-		name: '',
 		description: '',
 		priority: 1,
 		timeZone: clientTimeZone(),
@@ -55,7 +55,6 @@ const severityMap = new Map<number, string>([
 ]);
 
 const grievanceSchema = z.object({
-	name: z.string(),
 	description: z.string(),
 	priority: z.coerce.number<number>().min(1).max(10),
 });
@@ -97,6 +96,18 @@ function parseCreatedDate(
 	}
 }
 
+function GrievanceAuthorLabel(props: {
+	readonly name?: string | null;
+	readonly poster?: Grievance['poster'] | null;
+}) {
+	if (props.name !== undefined && props.name !== null && props.name.trim() !== "") {
+		return <>{props.name}</>;
+	}
+
+	const displayName = usePosterDisplayName(props.poster);
+	return displayName ? <>{displayName}</> : null;
+}
+
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 	const create = usePostGrievances(Authorization);
 	const grievancesQuery = useGetGrievances(Authorization);
@@ -131,7 +142,12 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 				const createdAt = parseCreatedDate(g.created, g.timeZone);
 				return (
 					<li key={g.id}>
-						<strong>{g.name}</strong>
+						<strong>
+							<GrievanceAuthorLabel
+								name={g.name}
+								poster={g.poster}
+							/>
+						</strong>
 						{' ('}
 						{severityMap.get(g.priority) ?? `level ${g.priority}`}
 						{')'}
@@ -172,11 +188,6 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 			>
 				<fieldset>
 					<legend>New Grievance</legend>
-					<p className={style.formField}>
-						<label>
-							Name <input {...register('name')} />
-						</label>
-					</p>
 					<p className={style.formField}>
 						<label>
 							Description{' '}
