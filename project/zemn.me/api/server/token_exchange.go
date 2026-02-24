@@ -119,11 +119,13 @@ func issuerFromToken(raw string) (OIDCIssuer, error) {
 var zemnMeClient = "zemn.me"
 
 type mappedIdentity struct {
-	Subject    OIDCSubject
-	Picture    string
-	GivenName  string
-	FamilyName string
-	Name       string
+	Subject       OIDCSubject
+	Picture       string
+	GivenName     string
+	FamilyName    string
+	Name          string
+	Email         string
+	EmailVerified *bool
 }
 
 func strPtrIfNonEmpty(value string) *string {
@@ -224,15 +226,17 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 	expiresAt := time.Now().Add(time.Hour * 24 * 30)
 
 	ourToken, err := s.IssueIdToken(ctx, IdToken{
-		Aud:        zemnMeClient,
-		Iat:        time.Now().Unix(),
-		Sub:        mappedIdentity.Subject,
-		Iss:        apiBase.String(),
-		Exp:        expiresAt.Unix(),
-		Picture:    strPtrIfNonEmpty(mappedIdentity.Picture),
-		GivenName:  strPtrIfNonEmpty(mappedIdentity.GivenName),
-		FamilyName: strPtrIfNonEmpty(mappedIdentity.FamilyName),
-		Name:       strPtrIfNonEmpty(mappedIdentity.Name),
+		Aud:           zemnMeClient,
+		Iat:           time.Now().Unix(),
+		Sub:           mappedIdentity.Subject,
+		Iss:           apiBase.String(),
+		Exp:           expiresAt.Unix(),
+		Picture:       strPtrIfNonEmpty(mappedIdentity.Picture),
+		GivenName:     strPtrIfNonEmpty(mappedIdentity.GivenName),
+		FamilyName:    strPtrIfNonEmpty(mappedIdentity.FamilyName),
+		Name:          strPtrIfNonEmpty(mappedIdentity.Name),
+		Email:         strPtrIfNonEmpty(mappedIdentity.Email),
+		EmailVerified: mappedIdentity.EmailVerified,
 	})
 	if err != nil {
 		return
@@ -283,22 +287,26 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 
 		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
 			return mappedIdentity{
-				Subject:    subject,
-				Picture:    upstreamClaims.Picture,
-				GivenName:  upstreamClaims.GivenName,
-				FamilyName: upstreamClaims.FamilyName,
-				Name:       upstreamClaims.Name,
+				Subject:       subject,
+				Picture:       upstreamClaims.Picture,
+				GivenName:     upstreamClaims.GivenName,
+				FamilyName:    upstreamClaims.FamilyName,
+				Name:          upstreamClaims.Name,
+				Email:         upstreamClaims.Email,
+				EmailVerified: upstreamClaims.EmailVerified,
 			}, nil
 		}
 
 		for _, mapped := range subjectMappings {
 			if mapped == OIDCSubject(token.Subject) {
 				return mappedIdentity{
-					Subject:    mapped,
-					Picture:    upstreamClaims.Picture,
-					GivenName:  upstreamClaims.GivenName,
-					FamilyName: upstreamClaims.FamilyName,
-					Name:       upstreamClaims.Name,
+					Subject:       mapped,
+					Picture:       upstreamClaims.Picture,
+					GivenName:     upstreamClaims.GivenName,
+					FamilyName:    upstreamClaims.FamilyName,
+					Name:          upstreamClaims.Name,
+					Email:         upstreamClaims.Email,
+					EmailVerified: upstreamClaims.EmailVerified,
 				}, nil
 			}
 		}
@@ -315,10 +323,12 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 
 func upstreamIdentityClaims(token *oidc.IDToken) mappedIdentity {
 	var tokenClaims struct {
-		Picture    string `json:"picture"`
-		GivenName  string `json:"given_name"`
-		FamilyName string `json:"family_name"`
-		Name       string `json:"name"`
+		Picture       string `json:"picture"`
+		GivenName     string `json:"given_name"`
+		FamilyName    string `json:"family_name"`
+		Name          string `json:"name"`
+		Email         string `json:"email"`
+		EmailVerified *bool  `json:"email_verified"`
 	}
 
 	if err := token.Claims(&tokenClaims); err != nil {
@@ -326,9 +336,11 @@ func upstreamIdentityClaims(token *oidc.IDToken) mappedIdentity {
 	}
 
 	return mappedIdentity{
-		Picture:    tokenClaims.Picture,
-		GivenName:  tokenClaims.GivenName,
-		FamilyName: tokenClaims.FamilyName,
-		Name:       tokenClaims.Name,
+		Picture:       tokenClaims.Picture,
+		GivenName:     tokenClaims.GivenName,
+		FamilyName:    tokenClaims.FamilyName,
+		Name:          tokenClaims.Name,
+		Email:         tokenClaims.Email,
+		EmailVerified: tokenClaims.EmailVerified,
 	}
 }
