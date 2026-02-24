@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -11,15 +12,24 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/google/uuid"
 	openapi_types "github.com/oapi-codegen/runtime/types"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 type grievanceRecord struct {
-	Id          string `dynamodbav:"id"`
-	Name        string `dynamodbav:"name"`
-	Description string `dynamodbav:"description"`
-	Priority    int    `dynamodbav:"priority"`
-	Created     Time   `dynamodbav:"created"`
-	TimeZone    string `dynamodbav:"time_zone"`
+	Id          string                 `dynamodbav:"id"`
+	Name        *string                `dynamodbav:"name,omitempty"`
+	Poster      *grievancePosterRecord `dynamodbav:"poster,omitempty"`
+	Description string                 `dynamodbav:"description"`
+	Priority    int                    `dynamodbav:"priority"`
+	Created     Time                   `dynamodbav:"created"`
+	TimeZone    string                 `dynamodbav:"time_zone"`
+}
+
+type grievancePosterRecord struct {
+	Sub        string  `dynamodbav:"sub"`
+	Email      *string `dynamodbav:"email_address,omitempty"`
+	GivenName  *string `dynamodbav:"given_name,omitempty"`
+	FamilyName *string `dynamodbav:"family_name,omitempty"`
 }
 
 var errGrievanceNotFound = errors.New("grievance not found")
@@ -33,8 +43,27 @@ func grievanceFromRecord(r grievanceRecord) Grievance {
 		tz = &tzVal
 	}
 	return Grievance{
-		Id:          &id,
-		Name:        r.Name,
+		Id:   &id,
+		Name: r.Name,
+		Poster: func() *GrievancePoster {
+			if r.Poster == nil || r.Poster.Sub == "" {
+				return nil
+			}
+			poster := GrievancePoster{
+				Sub: r.Poster.Sub,
+			}
+			if r.Poster.Email != nil {
+				email := openapi_types.Email(*r.Poster.Email)
+				poster.EmailAddress = &email
+			}
+			if r.Poster.GivenName != nil {
+				poster.GivenName = r.Poster.GivenName
+			}
+			if r.Poster.FamilyName != nil {
+				poster.FamilyName = r.Poster.FamilyName
+			}
+			return &poster
+		}(),
 		Description: r.Description,
 		Priority:    r.Priority,
 		Created:     r.Created.Time,
@@ -76,9 +105,35 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 }
 
 func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
+	sub, _ := auth.SubjectFromContext(ctx)
+	posterEmail, _ := auth.EmailFromContext(ctx)
+	givenName, _ := auth.GivenNameFromContext(ctx)
+	familyName, _ := auth.FamilyNameFromContext(ctx)
 	tzName, tzLoc, err := resolveTimeZone(g.TimeZone, "")
 	if err != nil {
 		return Grievance{}, err
+	}
+	var name *string
+	if g.Name != nil {
+		trimmed := strings.TrimSpace(*g.Name)
+		if trimmed != "" {
+			name = &trimmed
+		}
+	}
+	var poster *grievancePosterRecord
+	if sub != "" {
+		poster = &grievancePosterRecord{
+			Sub: sub,
+		}
+		if posterEmail != "" {
+			poster.Email = &posterEmail
+		}
+		if givenName != "" {
+			poster.GivenName = &givenName
+		}
+		if familyName != "" {
+			poster.FamilyName = &familyName
+		}
 	}
 
 	id := uuid.New()
@@ -86,7 +141,8 @@ func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance,
 	created.Time = created.Time.In(tzLoc)
 	rec := grievanceRecord{
 		Id:          id.String(),
-		Name:        g.Name,
+		Name:        name,
+		Poster:      poster,
 		Description: g.Description,
 		Priority:    g.Priority,
 		Created:     created,
@@ -119,9 +175,41 @@ func (s Server) updateGrievance(ctx context.Context, id string, g NewGrievance) 
 	if err != nil {
 		return Grievance{}, err
 	}
+	var name *string
+	if existing != nil && existing.Name != nil {
+		existingName := strings.TrimSpace(*existing.Name)
+		if existingName != "" {
+			name = &existingName
+		}
+	}
+	if g.Name != nil {
+		trimmed := strings.TrimSpace(*g.Name)
+		if trimmed == "" {
+			name = nil
+		} else {
+			name = &trimmed
+		}
+	}
+	var poster *grievancePosterRecord
+	if existing != nil && existing.Poster != nil {
+		poster = &grievancePosterRecord{
+			Sub: existing.Poster.Sub,
+		}
+		if existing.Poster.EmailAddress != nil {
+			email := string(*existing.Poster.EmailAddress)
+			poster.Email = &email
+		}
+		if existing.Poster.GivenName != nil {
+			poster.GivenName = existing.Poster.GivenName
+		}
+		if existing.Poster.FamilyName != nil {
+			poster.FamilyName = existing.Poster.FamilyName
+		}
+	}
 	rec := grievanceRecord{
 		Id:          id,
-		Name:        g.Name,
+		Name:        name,
+		Poster:      poster,
 		Description: g.Description,
 		Priority:    g.Priority,
 		Created:     Time{Time: existing.Created},

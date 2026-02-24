@@ -45,11 +45,12 @@ func main() {
 			"subject_types_supported":  []string{"public"},
 			"scopes_supported": []string{
 				"openid",
+				"email",
 				"https://www.googleapis.com/auth/contacts",
 				"https://www.googleapis.com/auth/contacts.readonly",
 				"profile",
 			},
-			"claims_supported":         []string{},
+			"claims_supported": []string{},
 		})
 	})
 
@@ -148,6 +149,10 @@ func issueIDToken(w http.ResponseWriter, r *http.Request, issuer string, values 
 	if clientID != "" && clientID != tokenAudience {
 		extraClaims["azp"] = clientID
 		extraClaims["aud"] = []string{tokenAudience, clientID}
+	}
+	if strings.Contains(values.Get("scope"), "email") {
+		extraClaims["email"] = "integration-test@example.com"
+		extraClaims["email_verified"] = true
 	}
 
 	var accessToken string
