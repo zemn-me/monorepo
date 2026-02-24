@@ -2,17 +2,24 @@ package apiserver
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 func TestGrievanceCRUD(t *testing.T) {
 	s := newTestServer()
+	email := "tester@example.com"
+	ctx := context.WithValue(context.Background(), auth.EmailKey, email)
+	ctx = context.WithValue(ctx, auth.SubjectKey, "tester-subject")
+	ctx = context.WithValue(ctx, auth.GivenNameKey, "Testy")
+	ctx = context.WithValue(ctx, auth.FamilyNameKey, "McTestface")
 	// create
 	tz := "America/Los_Angeles"
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 5, TimeZone: &tz}
+	body := NewGrievance{Description: "bar", Priority: 5, TimeZone: &tz}
 	createReq := PostGrievancesRequestObject{Body: &body}
-	createResp, err := s.PostGrievances(context.Background(), createReq)
+	createResp, err := s.PostGrievances(ctx, createReq)
 	if err != nil {
 		t.Fatalf("create grievance: %v", err)
 	}
@@ -23,6 +30,9 @@ func TestGrievanceCRUD(t *testing.T) {
 	if created.Created.IsZero() {
 		t.Fatalf("expected created time set")
 	}
+	if created.Poster == nil || created.Poster.EmailAddress == nil || string(*created.Poster.EmailAddress) != email {
+		t.Fatalf("expected poster email %q, got %v", email, created.Poster)
+	}
 	id := uuid.UUID(*created.Id).String()
 
 	// read
@@ -31,21 +41,24 @@ func TestGrievanceCRUD(t *testing.T) {
 		t.Fatalf("get grievance: %v", err)
 	}
 	got := Grievance(getResp.(GetGrievanceId200JSONResponse))
-	if got.Name != "foo" || got.Description != "bar" || got.Priority != 5 || got.TimeZone == nil || *got.TimeZone != "America/Los_Angeles" {
+	if got.Description != "bar" || got.Priority != 5 || got.TimeZone == nil || *got.TimeZone != "America/Los_Angeles" || got.Poster == nil || got.Poster.EmailAddress == nil || string(*got.Poster.EmailAddress) != email {
 		t.Fatalf("unexpected grievance: %+v", got)
 	}
 
 	// update
 	newTZ := "Asia/Tokyo"
-	updatedBody := NewGrievance{Name: "baz", Description: "qux", Priority: 3, TimeZone: &newTZ}
+	updatedBody := NewGrievance{Description: "qux", Priority: 3, TimeZone: &newTZ}
 	updReq := PutGrievanceIdRequestObject{Id: id, Body: &updatedBody}
-	updResp, err := s.PutGrievanceId(context.Background(), updReq)
+	updResp, err := s.PutGrievanceId(ctx, updReq)
 	if err != nil {
 		t.Fatalf("update grievance: %v", err)
 	}
 	upd := Grievance(updResp.(PutGrievanceId200JSONResponse))
-	if upd.Name != "baz" || upd.Priority != 3 || upd.TimeZone == nil || *upd.TimeZone != "Asia/Tokyo" {
+	if upd.Priority != 3 || upd.TimeZone == nil || *upd.TimeZone != "Asia/Tokyo" {
 		t.Fatalf("update failed: %+v", upd)
+	}
+	if upd.Poster == nil || upd.Poster.EmailAddress == nil || string(*upd.Poster.EmailAddress) != email {
+		t.Fatalf("poster email changed on update: %v", upd.Poster)
 	}
 	if !upd.Created.Equal(created.Created) {
 		t.Fatalf("created time changed on update: %v vs %v", upd.Created, created.Created)
@@ -82,7 +95,7 @@ func TestGrievanceCRUD(t *testing.T) {
 func TestPutGrievanceNotFound(t *testing.T) {
 	s := newTestServer()
 	tz2 := "America/Los_Angeles"
-	body := NewGrievance{Name: "foo", Description: "bar", Priority: 1, TimeZone: &tz2}
+	body := NewGrievance{Description: "bar", Priority: 1, TimeZone: &tz2}
 	resp, err := s.PutGrievanceId(context.Background(), PutGrievanceIdRequestObject{Id: uuid.NewString(), Body: &body})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

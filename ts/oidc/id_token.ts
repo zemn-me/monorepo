@@ -80,6 +80,8 @@ export const OidcIdTokenClaimsSchema = z
 		nickname: z.string().optional(),
 		preferred_username: z.string().optional(),
 		picture: z.string().url().optional(),
+		email: z.string().email().optional(),
+		email_verified: z.boolean().optional(),
 	});
 
 /**

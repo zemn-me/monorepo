@@ -16,6 +16,9 @@ import (
 type contextKey string
 
 const SubjectKey contextKey = "oidc_subject"
+const EmailKey contextKey = "oidc_email"
+const GivenNameKey contextKey = "oidc_given_name"
+const FamilyNameKey contextKey = "oidc_family_name"
 const securitySchemeOIDC = "OIDC"
 const (
 	googleIssuer        = "https://accounts.google.com"
@@ -32,6 +35,27 @@ type issuerClient struct {
 // SubjectFromContext retrieves the subject ID from the context if present.
 func SubjectFromContext(ctx context.Context) (string, bool) {
 	v := ctx.Value(SubjectKey)
+	s, ok := v.(string)
+	return s, ok
+}
+
+// EmailFromContext retrieves the email address from the context if present.
+func EmailFromContext(ctx context.Context) (string, bool) {
+	v := ctx.Value(EmailKey)
+	s, ok := v.(string)
+	return s, ok
+}
+
+// GivenNameFromContext retrieves the given name from the context if present.
+func GivenNameFromContext(ctx context.Context) (string, bool) {
+	v := ctx.Value(GivenNameKey)
+	s, ok := v.(string)
+	return s, ok
+}
+
+// FamilyNameFromContext retrieves the family name from the context if present.
+func FamilyNameFromContext(ctx context.Context) (string, bool) {
+	v := ctx.Value(FamilyNameKey)
 	s, ok := v.(string)
 	return s, ok
 }
@@ -74,6 +98,22 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 
 		r := ai.RequestValidationInput.Request
 		ctx = context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
+		var claims struct {
+			Email      string `json:"email"`
+			GivenName  string `json:"given_name"`
+			FamilyName string `json:"family_name"`
+		}
+		if err := verifiedToken.Claims(&claims); err == nil {
+			if claims.Email != "" {
+				ctx = context.WithValue(ctx, EmailKey, claims.Email)
+			}
+			if claims.GivenName != "" {
+				ctx = context.WithValue(ctx, GivenNameKey, claims.GivenName)
+			}
+			if claims.FamilyName != "" {
+				ctx = context.WithValue(ctx, FamilyNameKey, claims.FamilyName)
+			}
+		}
 		*ai.RequestValidationInput.Request = *r.WithContext(ctx)
 		return nil
 	}
